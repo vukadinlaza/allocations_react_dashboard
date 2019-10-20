@@ -34,7 +34,7 @@ const NavBar = () => {
     <div className="nav-container">
       <Navbar color="light" light expand="md">
         <Container>
-          <NavbarBrand className="logo" />
+          <NavbarBrand > <img src="https://www.allocations.co/assets/img/brand.svg" /></NavbarBrand> 
           <NavbarToggler onClick={toggle} />
           <Collapse isOpen={isOpen} navbar>
             <Nav className="mr-auto" navbar>
@@ -48,6 +48,20 @@ const NavBar = () => {
                   Home
                 </NavLink>
               </NavItem>
+            </Nav>
+             <Nav className="mr-auto" navbar>
+              {isAuthenticated && (
+                <NavItem>
+                <NavLink
+                  tag={RouterNavLink}
+                  to="/main"
+                  exact
+                  activeClassName="router-link-exact-active"
+                >
+                  Deal
+                </NavLink>
+              </NavItem>
+              )}
             </Nav>
             <Nav className="d-none d-md-block" navbar>
               {!isAuthenticated && (

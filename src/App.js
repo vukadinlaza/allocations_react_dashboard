@@ -13,10 +13,20 @@ import history from "./utils/history";
 
 // styles
 import "./App.css";
-
+import { ApolloProvider } from '@apollo/react-hooks';
 // fontawesome
 import initFontAwesome from "./utils/initFontAwesome";
+import ApolloClient, { InMemoryCache } from "apollo-boost";
+import Deal from "./views/Deal";
 initFontAwesome();
+
+const cache = new InMemoryCache();
+
+const client = new ApolloClient({
+  uri: 'http://localhost:4000/graphql',
+  cache
+});
+
 
 const App = () => {
   const { loading } = useAuth0();
@@ -26,6 +36,7 @@ const App = () => {
   }
 
   return (
+    <ApolloProvider client={client}>
     <Router history={history}>
       <div id="app" className="d-flex flex-column h-100">
         <NavBar />
@@ -33,11 +44,13 @@ const App = () => {
           <Switch>
             <Route path="/" exact component={Home} />
             <PrivateRoute path="/profile" component={Profile} />
+             <PrivateRoute path="/main" component={Deal} />
           </Switch>
         </Container>
         <Footer />
       </div>
     </Router>
+    </ApolloProvider>
   );
 };
 
