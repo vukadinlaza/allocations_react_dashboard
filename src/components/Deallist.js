@@ -51,7 +51,7 @@ const DealList=()=>  {
                     <tbody>
                         {
                             data.GetDeals.map(d=>(
-                                <Deal item={d} />
+                                <Deal key={d._id} item={d} />
                             ))
                         }
                     </tbody>
