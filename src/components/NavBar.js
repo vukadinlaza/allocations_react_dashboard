@@ -34,7 +34,7 @@ const NavBar = () => {
     <div className="nav-container">
       <Navbar color="light" light expand="md">
         <Container>
-          <NavbarBrand > <img src="https://www.allocations.co/assets/img/brand.svg" /></NavbarBrand> 
+          <NavbarBrand  className=""> <img src="https://www.allocations.co/assets/img/brand.svg" style={{height:'40px'}} /> </NavbarBrand> 
           <NavbarToggler onClick={toggle} />
           <Collapse isOpen={isOpen} navbar>
             <Nav className="mr-auto" navbar>
@@ -54,11 +54,25 @@ const NavBar = () => {
                 <NavItem>
                 <NavLink
                   tag={RouterNavLink}
-                  to="/main"
+                  to="/deal"
                   exact
                   activeClassName="router-link-exact-active"
                 >
-                  Deal
+                  Deals
+                </NavLink>
+              </NavItem>
+              )}
+            </Nav>
+              <Nav className="mr-auto" navbar>
+              {isAuthenticated && (
+                <NavItem>
+                <NavLink
+                  tag={RouterNavLink}
+                  to="/investor"
+                  exact
+                  activeClassName="router-link-exact-active"
+                >
+                  Investors
                 </NavLink>
               </NavItem>
               )}

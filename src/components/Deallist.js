@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { Table } from 'reactstrap';
+
 const GetAllDeals = gql`
  {  GetDeals {
     _id
@@ -30,6 +31,7 @@ const Deal=(props)=>{
  )
 
 }
+
 const DealList=()=>  {
   const { loading, error, data } = useQuery(GetAllDeals);
 

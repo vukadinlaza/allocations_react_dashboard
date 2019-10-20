@@ -23,6 +23,7 @@ import {Observable} from 'rxjs';
 import {getTokenSilently} from "./react-auth0-spa";
 
 import Deal from "./views/Deal";
+import Investor from './views/Investor';
 initFontAwesome();
 
 const cache = new InMemoryCache();
@@ -111,7 +112,8 @@ const App = () => {
           <Switch>
             <Route path="/" exact component={Home} />
             <PrivateRoute path="/profile" component={Profile} />
-             <PrivateRoute path="/main" component={Deal} />
+             <PrivateRoute path="/deal" component={Deal} />
+             <PrivateRoute path="/investor" component={Investor} />
           </Switch>
         </Container>
         <Footer />
