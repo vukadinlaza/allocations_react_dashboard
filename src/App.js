@@ -24,6 +24,8 @@ import {getTokenSilently} from "./react-auth0-spa";
 
 import Deal from "./views/Deal";
 import Investor from './views/Investor';
+import AddDeal from './components/AddDeal';
+
 initFontAwesome();
 
 const cache = new InMemoryCache();
@@ -114,6 +116,7 @@ const App = () => {
             <PrivateRoute path="/profile" component={Profile} />
              <PrivateRoute path="/deal" component={Deal} />
              <PrivateRoute path="/investor" component={Investor} />
+             <PrivateRoute path="/addDeal" component={AddDeal} />
           </Switch>
         </Container>
         <Footer />

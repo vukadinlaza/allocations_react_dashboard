@@ -1,8 +1,10 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { Table } from 'reactstrap';
-
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Link } from "react-router-dom";
+import AddDeal from "./AddDeal"
 const GetAllDeals = gql`
  {  GetDeals {
     _id
@@ -15,7 +17,7 @@ const GetAllDeals = gql`
 `;
 
 
-const Deal=(props)=>{
+const DealRow=(props)=>{
  const  deal= props.item;
 
  return(
@@ -32,15 +34,45 @@ const Deal=(props)=>{
 
 }
 
-const DealList=()=>  {
+const CreateDealModal=(props)=>{
+
+    const { buttonLabel, className } = props;
+    const [modal, setModal] = useState(false);
+  
+    const toggle = () => setModal(!modal);
+    return(
+        <div>
+           <Button color="danger" onClick={toggle}>{buttonLabel}</Button>
+            <Modal isOpen={modal} toggle={toggle} className={className}>
+                <ModalHeader toggle={toggle}>Create Deal</ModalHeader>
+                <ModalBody>
+                   <AddDeal />
+                </ModalBody>
+                <ModalFooter>
+                
+                <Button color="success" onClick={toggle}>Cancel</Button>
+                </ModalFooter>
+            </Modal>
+        </div>
+    );
+}
+
+const DealList=(props)=>  {
   const { loading, error, data } = useQuery(GetAllDeals);
+
+
+
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
     return (
         <div>
-             <Table dark>
+
+          
+            <CreateDealModal buttonLabel="Add Deal"  className="add"  />
+             <br />
+             <Table striped>
                     <thead>
                         <tr>
                         <th>ID</th>
@@ -53,7 +85,7 @@ const DealList=()=>  {
                     <tbody>
                         {
                             data.GetDeals.map(d=>(
-                                <Deal key={d._id} item={d} />
+                                <DealRow key={d._id} item={d} />
                             ))
                         }
                     </tbody>
