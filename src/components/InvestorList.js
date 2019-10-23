@@ -58,7 +58,7 @@ const InvestorList = () =>{
 
     return (
         <div>
-             <Table dark>
+             <Table striped>
                     <thead>
                         <tr>
                         <th>ID</th>
