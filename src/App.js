@@ -31,7 +31,7 @@ initFontAwesome();
 const cache = new InMemoryCache();
 
 // const httpLink = new HttpLink({ uri: 'http://localhost:4000/graphql' });
-const httpLink = new HttpLink({ uri: 'http://api.allocations.co/graphql' });
+const httpLink = new HttpLink({ uri: 'https://api.allocations.co/graphql' });
 // Did not work 
 const authMiddleware = new ApolloLink((operation, forward) => {
   // add the authorization to the headers
