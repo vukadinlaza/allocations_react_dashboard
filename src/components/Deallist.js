@@ -5,6 +5,7 @@ import { Table } from 'reactstrap';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Link } from "react-router-dom";
 import AddDeal from "./AddDeal"
+import DeleteDeal from './DeleteDeal';
 const GetAllDeals = gql`
  {  GetDeals {
     _id
@@ -28,7 +29,8 @@ const DealRow=(props)=>{
         <td >{deal.entity_name}</td>
         <td> {deal.deal_name}</td>
         <td> {deal.amount_wired}</td>
-         <td> {deal.deal_complete_date}</td>
+        <td> {deal.deal_complete_date}</td>
+        <th><DeleteDeal id={deal._id} /></th>
       </tr>
  )
 
@@ -80,6 +82,7 @@ const DealList=(props)=>  {
                         <th>Deal Name</th>
                         <th>Amount Wired</th>
                         <th>Deal Complete Date</th>
+                        <th>#</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -2,6 +2,7 @@ import React from "react";
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
 import { Table } from 'reactstrap';
+import DeleteInvestor from './DeleteInvestor';
 
 const GetAllInvestors=gql`
  {  
@@ -40,11 +41,11 @@ const Investor=(props)=>{
         <td> {investor.accredited_type}</td>
         <td> {investor.accredidted_status}</td>
         <td> {investor.entity_name}</td>
-        <td> {investor.investor_type}</td>
+        {/* <td> {investor.investor_type}</td>
         <td> {investor.passport}</td>
-        <td> {investor.deal_complete_data}</td>
+        <td> {investor.deal_complete_data}</td> */}
         <td> {investor.total_invested}</td>
-       
+        <th><DeleteInvestor id={investor._id} /></th>
       </tr>
  )
 }
@@ -55,7 +56,7 @@ const InvestorList = () =>{
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
-
+  
     return (
         <div>
              <Table striped>
@@ -68,10 +69,11 @@ const InvestorList = () =>{
                         <th>Accredited Type </th>
                         <th>Accredidted Status</th>
                         <th>Entity Name</th>
-                        <th>Investor Type</th>
+                        {/* <th>Investor Type</th>
                         <th>Passport</th>
-                        <th>Deal Complete Date</th>
+                        <th>Deal Complete Date</th> */}
                         <th>Total Invested</th>
+                        <th>#</th>
                       
                         </tr>
                     </thead>
