@@ -7,7 +7,7 @@ import { Auth0Provider } from "./react-auth0-spa";
 import config from "./auth_config.json";
 import history from "./utils/history";
 
-const domain="login.allocations.co";
+const domain="allocations1.auth0.com";
 const clientId="R2iJsfjNPGNjIdPmRoE3IcKd9UvVrsp1";
 const audience="https://api.graphql.com"
 

@@ -29,12 +29,13 @@ export const getTokenSilently = async (...p) => {
   if(!_client) {
       _client = await getAuth0Client()
   }
-   _client.getTokenSilently(...p).then(token=>{
-     console.log(token);
-    return token
-  }).catch(err=>{
-    console.log(err);
-  })
+  return await _client.getTokenSilently(...p);
+  // _client.getTokenSilently(...p).then(token=>{
+  //    console.log(token);
+  //   return token
+  // }).catch(err=>{
+  //   console.log(err);
+  // })
   
 }
 
