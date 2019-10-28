@@ -7,9 +7,11 @@ import { Auth0Provider } from "./react-auth0-spa";
 import config from "./auth_config.json";
 import history from "./utils/history";
 
-const domain="allocations1.auth0.com";
-const clientId="R2iJsfjNPGNjIdPmRoE3IcKd9UvVrsp1";
+const domain="tanver-custom.eu.auth0.com";
+const clientId="oDBWyOaVWrGP93NSXsC6Akj4FCb45iyO";
 const audience="https://api.graphql.com"
+
+
 const onRedirectCallback = appState => {
   history.push(
     appState && appState.targetUrl
