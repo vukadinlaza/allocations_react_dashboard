@@ -70,7 +70,7 @@ const DealList=(props)=>  {
         <div>
 
           
-            <CreateDealModal buttonLabel="Create SPV"  className="add"  />
+            <CreateDealModal buttonLabel="Create new fund"  className="add"  />
              <br />
              <Table striped>
                     <thead>
