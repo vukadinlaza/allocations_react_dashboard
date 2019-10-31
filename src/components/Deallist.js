@@ -44,7 +44,7 @@ const CreateDealModal=(props)=>{
     const toggle = () => setModal(!modal);
     return(
         <div>
-           <Button color="danger" onClick={toggle}>{buttonLabel}</Button>
+           <Button color="success" onClick={toggle}>{buttonLabel}</Button>
             <Modal isOpen={modal} toggle={toggle} className={className}>
                 <ModalHeader toggle={toggle}>Create Deal</ModalHeader>
                 <ModalBody>
@@ -72,7 +72,7 @@ const DealList=(props)=>  {
         <div>
 
           
-            <CreateDealModal buttonLabel="Add Deal"  className="add"  />
+            <CreateDealModal buttonLabel="Create new fund"  className="add"  />
              <br />
              <Table striped>
                     <thead>
