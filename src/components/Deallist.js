@@ -1,21 +1,14 @@
 import React,{useState} from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
+
 import { Table } from 'reactstrap';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { Link } from "react-router-dom";
 import AddDeal from "./AddDeal"
 import DeleteDeal from './DeleteDeal';
-const GetAllDeals = gql`
- {  GetDeals {
-    _id
-    entity_name
-    deal_name
-    amount_wired
-    deal_complete_date
-  }
- }
-`;
+import { GetDeals } from '../api/query';
+
+
+
 
 
 const DealRow=(props)=>{
@@ -60,7 +53,7 @@ const CreateDealModal=(props)=>{
 }
 
 const DealList=(props)=>  {
-  const { loading, error, data } = useQuery(GetAllDeals);
+  const { loading, error, data } = useQuery(GetDeals);
 
 
 

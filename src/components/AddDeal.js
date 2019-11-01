@@ -1,30 +1,34 @@
-import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 import React, {useState} from "react";
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { Button, Form, FormGroup, Input } from 'reactstrap';
+import { GetDeals } from '../api/query';
+import { addDeal } from '../api/query';
 
-const createDealMutation = gql`
-  mutation createDeal($input: IDealInputType!) {
-    addDeal(input:$input){
-        _id
-        entity_name
-        amount_wired
-        total_investors
-    }
-}
-`;
 
 
 const AddDeal=(props)=>{
-   let deal;
-    let [createDeal, { data }, error, loading] = useMutation(createDealMutation);
+    let deal;
+    let [Add_DEAL, { data, loading: mutationLoading, error: mutationError}] = useMutation(addDeal,
+      {
+        refetchQueries:[{query:GetDeals}]
+        // update(cache,{data:{Add_DEAL}}){
+        //   const  deals = cache.readQuery({query: GetDeals});
+        //   console.log(deals);
+        //   if(deals){
+        //     cache.writeQuery({
+        //       query: GetDeals,
+        //       data:{ deals: deals.GetDeals.concat([Add_DEAL])}
+        //     })
+        //   }
+        // }
+      }
+      );
     const [entity_name, setEntityName]=useState("");
     const [deal_name,setDealName]= useState("");
     const [amount_wired, setAmountWired]=useState("");
     const [deal_complete_date, setDealCompleteDate]=useState("");
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error :(</p>;
+  
       
     function handleClick(e) {
         e.preventDefault();
@@ -36,17 +40,13 @@ const AddDeal=(props)=>{
             deal_complete_date: deal_complete_date
         }
 
-        createDeal({ variables: { input: deal } });
+          Add_DEAL({ variables: { input: deal } });
         
-        if(error){
-          console.log(data);
-          
-        }else{
           setEntityName("")
           setDealName("")
           setAmountWired("")
           setDealCompleteDate("")
-        }
+        
     }
 
   
@@ -72,12 +72,8 @@ const AddDeal=(props)=>{
         <Button >Create Deal</Button>
       </Form>
       <div>
-        {
-          error && (
-            <p> Something went wrong </p>
-          )
-          
-        }
+        {mutationLoading && <p>Loading...</p>}
+        {mutationError && <p>Error :( Please try again</p>}
       
       </div>
     </div>
