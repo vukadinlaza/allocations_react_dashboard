@@ -28,6 +28,16 @@ import AddDeal from './components/AddDeal';
 initFontAwesome();
 
 const cache = new InMemoryCache();
+cache.originalReadQuery = cache.readQuery;
+cache.readQuery = (...args) => {
+  try {
+    return cache.originalReadQuery(...args);
+  } catch (err) {
+    return undefined;
+  }
+};
+
+
 const request = async (operation) => {
   const token = await getTokenSilently();
   operation.setContext({
@@ -135,7 +145,7 @@ const client = new ApolloClient({
       cache
     }),
     new HttpLink({
-      uri: 'http://localhost:4000/graphql',
+      uri: 'https://api.allocations.co/graphql',
     // credentials: 'include'
     })
   ]),
