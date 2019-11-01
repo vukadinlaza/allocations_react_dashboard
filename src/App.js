@@ -13,13 +13,12 @@ import history from "./utils/history";
 import "./App.css";
 import { ApolloProvider } from '@apollo/react-hooks';
 import initFontAwesome from "./utils/initFontAwesome";
-
- import { InMemoryCache } from "apollo-boost";
- import { ApolloClient } from 'apollo-client';
+import { InMemoryCache } from "apollo-boost";
+import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
-import { ApolloLink, concat } from 'apollo-link';
-import {Observable} from 'rxjs';
-
+import { ApolloLink, Observable } from 'apollo-link';
+import { onError } from 'apollo-link-error';
+import { withClientState } from 'apollo-link-state';
 import {getTokenSilently} from "./react-auth0-spa";
 
 import Deal from "./views/Deal";
@@ -29,8 +28,44 @@ import AddDeal from './components/AddDeal';
 initFontAwesome();
 
 const cache = new InMemoryCache();
+cache.originalReadQuery = cache.readQuery;
+cache.readQuery = (...args) => {
+  try {
+    return cache.originalReadQuery(...args);
+  } catch (err) {
+    return undefined;
+  }
+};
 
 
+const request = async (operation) => {
+  const token = await getTokenSilently();
+  operation.setContext({
+    headers: {
+      authorization: token
+    }
+  });
+};
+
+const requestLink = new ApolloLink((operation, forward) =>
+  new Observable(observer => {
+    let handle;
+    Promise.resolve(operation)
+      .then(oper => request(oper))
+      .then(() => {
+        handle = forward(operation).subscribe({
+          next: observer.next.bind(observer),
+          error: observer.error.bind(observer),
+          complete: observer.complete.bind(observer),
+        });
+      })
+      .catch(observer.error.bind(observer));
+
+    return () => {
+      if (handle) handle.unsubscribe();
+    };
+  })
+);
 //const httpLink = new HttpLink({ uri: 'http://localhost:4000/graphql' });
 
 const httpLink = new HttpLink({ uri: 'https://api.allocations.co/graphql' });
@@ -78,11 +113,44 @@ const authLink = new ApolloLink((operation, forward) => {
     });
 });
 
+// const client = new ApolloClient({
+//   link: concat(authLink, httpLink),   // https://www.apollographql.com/docs/react/networking/network-layer/#middleware
+//   cache
+// });
 const client = new ApolloClient({
-  link: concat(authLink, httpLink),   // https://www.apollographql.com/docs/react/networking/network-layer/#middleware
+  link: ApolloLink.from([
+    onError(({ graphQLErrors, networkError }) => {
+      if (graphQLErrors) {
+        console.log("Graphqlerrors"+graphQLErrors)
+       // sendToLoggingService(graphQLErrors);
+      }
+      if (networkError) {
+        console.log("Network error"+networkError)
+       // logoutUser();
+      }
+    }),
+    requestLink,
+    withClientState({
+      defaults: {
+        isConnected: true
+      },
+      resolvers: {
+        Mutation: {
+          updateNetworkStatus: (_, { isConnected }, { cache }) => {
+            cache.writeData({ data: { isConnected }});
+            return null;
+          }
+        }
+      },
+      cache
+    }),
+    new HttpLink({
+      uri: 'https://api.allocations.co/graphql',
+    // credentials: 'include'
+    })
+  ]),
   cache
 });
-
 // const client = new ApolloClient({
 //   uri:"http://localhost:4000/graphql",
 //   request:async (operation=>{
