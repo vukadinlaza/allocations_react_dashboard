@@ -42,7 +42,7 @@ const request = async (operation) => {
   const token = await getTokenSilently();
   operation.setContext({
     headers: {
-      authorization: token
+      authorization: token ? `Bearer ${token}` : ''
     }
   });
 };
