@@ -26,10 +26,8 @@ import AddDeal from './components/AddDeal';
 
 initFontAwesome();
 
-let API_URL;
-if(process.env.NODE_ENV==="production"){
-  API_URL="https://api.allocations.co/graphql"
-}else{
+let API_URL="https://api.allocations.co/graphql";
+if(process.env.NODE_ENV==="development"){
   API_URL="http://localhost:4000/graphql"
 }
 
