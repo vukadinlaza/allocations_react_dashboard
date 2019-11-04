@@ -4,13 +4,14 @@ import { gql } from 'apollo-boost';
 import { Button } from 'reactstrap';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import React from "react"
-import { deleteInvestorById } from '../api/query';
-
-
-
+const MUTATION_QUERY=gql`
+mutation deleteInvestorById($id:ID!){
+  deleteInvestorById(id:$id)
+}
+`;
 const DeleteInvestor=(props)=>{
     const id=props.id;
- const [DELETE_INVESTOR_BY_ID, { data }, error, loading] = useMutation(deleteInvestorById);
+ const [deleteInvestorById, { data }, error, loading] = useMutation(MUTATION_QUERY);
 
  if (loading) return <p>Loading...</p>;
  if (error) return <p>Error :(</p>;
@@ -18,7 +19,7 @@ const DeleteInvestor=(props)=>{
 const handleDeleteButtonClick=()=>{
     console.log("deleted");
     console.log(id);
-    DELETE_INVESTOR_BY_ID({ variables: { id: id } });
+    deleteInvestorById({ variables: { id: id } });
 }
 
  return(
