@@ -6,23 +6,27 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import AddDeal from "./AddDeal"
 import DeleteDeal from './DeleteDeal';
 import { GetDeals } from '../api/query';
-import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+
+
+
 
 
 const DealRow=(props)=>{
-const  deal= props.item;
+ const  deal= props.item;
+
  return(
      <tr>
+        <td className="text-muted">
+          {deal._id} 
+        </td>
         <td >{deal.entity_name}</td>
         <td> {deal.deal_name}</td>
         <td> {deal.amount_wired}</td>
         <td> {deal.deal_complete_date}</td>
-        <td><a target="_blank" rel='noreferrer noopener'  href={deal.operations_agreement}><OpenInNewIcon /></a>  </td>
-        <td><a target="_blank" rel='noreferrer noopener'  href={deal.subscription_agreement}><OpenInNewIcon /></a></td>
-        <td><a target="_blank" rel='noreferrer noopener'  href={deal.private_placement_memorandum}> <OpenInNewIcon />  </a></td>
         <th><DeleteDeal id={deal._id} /></th>
       </tr>
  )
+
 }
 
 const CreateDealModal=(props)=>{
@@ -66,13 +70,11 @@ const DealList=(props)=>  {
              <Table striped>
                     <thead>
                         <tr>
-                        <th>Fund Name</th>
+                        <th>ID</th>
+                        <th>Entity Name</th>
                         <th>Deal Name</th>
-                        <th>Raise Amount</th>
+                        <th>Amount Wired</th>
                         <th>Deal Complete Date</th>
-                        <th>Operating Agreement</th>
-                        <th>Subscription Agreement </th>
-                        <th>Private Placement Memorandum </th>
                         <th>#</th>
                         </tr>
                     </thead>

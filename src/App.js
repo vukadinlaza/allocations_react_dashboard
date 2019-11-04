@@ -1,6 +1,7 @@
 import React from "react";
 import { Router, Route, Switch } from "react-router-dom";
 import { Container } from "reactstrap";
+
 import PrivateRoute from "./components/PrivateRoute";
 import Loading from "./components/Loading";
 import NavBar from "./components/NavBar";
@@ -25,11 +26,6 @@ import Investor from './views/Investor';
 import AddDeal from './components/AddDeal';
 
 initFontAwesome();
-
-let API_URL="https://api.allocations.co/graphql";
-if(process.env.NODE_ENV==="development"){
-  API_URL="http://localhost:4000/graphql"
-}
 
 const cache = new InMemoryCache();
 cache.originalReadQuery = cache.readQuery;
@@ -149,7 +145,7 @@ const client = new ApolloClient({
       cache
     }),
     new HttpLink({
-      uri: API_URL,
+      uri: 'https://api.allocations.co/graphql',
     // credentials: 'include'
     })
   ]),
