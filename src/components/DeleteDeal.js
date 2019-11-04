@@ -32,6 +32,7 @@ const DeleteDeal=(props)=>{
 const handleDeleteButtonClick=()=>{
     console.log("deleted");
     console.log(id);
+    window.confirm("Are you sure ?")
     DELETE_BY_ID({ variables: { id: id } });
 }
 

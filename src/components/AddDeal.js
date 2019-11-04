@@ -69,7 +69,7 @@ const AddDeal=(props)=>{
         <FormGroup>
             <Input name="deal_complete_date" value={deal_complete_date} onChange={e=>{setDealCompleteDate(e.target.value)}} placeholder="Enter deal complete date"/>
         </FormGroup>
-        <Button >Create Deal</Button>
+        <Button >Create Fund</Button>
       </Form>
       <div>
         {mutationLoading && <p>Loading...</p>}

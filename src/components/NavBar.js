@@ -58,7 +58,7 @@ const NavBar = () => {
                   exact
                   activeClassName="router-link-exact-active"
                 >
-                  Deals
+                  Funds
                 </NavLink>
               </NavItem>
               )}
