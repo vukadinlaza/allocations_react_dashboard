@@ -8,6 +8,11 @@ export const GetDeals = gql`
     deal_name
     amount_wired
     deal_complete_date
+    operations_agreement
+    subscription_agreement
+    private_placement_memorandum
+    createdAt
+    updatedAt
    }
  }
 `;
@@ -26,6 +31,16 @@ export const addDeal = gql`
 
 export const deleteDealById=gql`
 mutation deleteDealById($id: ID!){
-  deleteDealById(id:$id)
+  deleteDealById(id:$id){
+    _id
+  }
+}
+`;
+
+export const deleteInvestorById=gql`
+mutation deleteInvestorById($id:ID!){
+  deleteInvestorById(id:$id){
+    _id
+  }
 }
 `;
