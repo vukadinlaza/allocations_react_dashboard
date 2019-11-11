@@ -1,7 +1,7 @@
 
 import { useMutation } from '@apollo/react-hooks';
 import { Button } from 'reactstrap';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import {DeleteForeverIcon, AssignmentTurnedIn }from '@material-ui/icons';
 import React from "react"
 import { GetDeals, deleteDealById } from '../api/query';
 
@@ -38,7 +38,7 @@ const handleDeleteButtonClick=()=>{
 
  return(
      <div>
-          <Button onClick={handleDeleteButtonClick}> <DeleteForeverIcon /></Button>
+          <Button onClick={handleDeleteButtonClick}> <AssignmentTurnedIn /></Button>
      </div>
     
  )

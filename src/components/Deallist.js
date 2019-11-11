@@ -6,7 +6,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import AddDeal from "./AddDeal"
 import DeleteDeal from './DeleteDeal';
 import { GetDeals } from '../api/query';
-import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+import  { AssignmentTurnedIn } from '@material-ui/icons';
 
 
 const DealRow=(props)=>{
@@ -17,9 +17,17 @@ const  deal= props.item;
         <td> {deal.deal_name}</td>
         <td> {deal.amount_wired}</td>
         <td> {deal.deal_complete_date}</td>
-        <td><a target="_blank" rel='noreferrer noopener'  href={deal.operations_agreement}><OpenInNewIcon /></a>  </td>
-        <td><a target="_blank" rel='noreferrer noopener'  href={deal.subscription_agreement}><OpenInNewIcon /></a></td>
-        <td><a target="_blank" rel='noreferrer noopener'  href={deal.private_placement_memorandum}> <OpenInNewIcon />  </a></td>
+        <td><a target="_blank" rel='noreferrer noopener'  href={deal.operations_agreement}><AssignmentTurnedIn /></a>  </td>
+        <td><a target="_blank" rel='noreferrer noopener'  href={deal.subscription_agreement}><AssignmentTurnedIn /></a></td>
+        <td><a target="_blank" rel='noreferrer noopener'  href={deal.private_placement_memorandum}> <AssignmentTurnedIn />  </a></td>
+       
+        <td><a target="_blank" rel='noreferrer noopener'  href={deal.bank_account}> <AssignmentTurnedIn />  </a></td>
+        <td><a target="_blank" rel='noreferrer noopener'  href={deal.formation_certificate_filing}> <AssignmentTurnedIn />  </a></td>
+        <td><a target="_blank" rel='noreferrer noopener'  href={deal.ein_filing}> <AssignmentTurnedIn />  </a></td>
+        <td><a target="_blank" rel='noreferrer noopener'  href={deal.form_d_filing}> <AssignmentTurnedIn />  </a></td>
+        <td><a target="_blank" rel='noreferrer noopener'  href={deal.form_1065_filing}> <AssignmentTurnedIn />  </a></td>
+        <td><a target="_blank" rel='noreferrer noopener'  href={deal.w9_filing}> <AssignmentTurnedIn />  </a></td>
+       
         <th><DeleteDeal id={deal._id} /></th>
       </tr>
  )
@@ -73,6 +81,12 @@ const DealList=(props)=>  {
                         <th>Operating Agreement</th>
                         <th>Subscription Agreement </th>
                         <th>Private Placement Memorandum </th>
+                        <th>Bank account</th>
+                        <th>Formation certificate filing</th>
+                        <th>EIN filing</th>
+                        <th>Form D filing</th>
+                        <th>Form 1065 filing</th>
+                        <th>W9 filing</th>
                         <th>#</th>
                         </tr>
                     </thead>

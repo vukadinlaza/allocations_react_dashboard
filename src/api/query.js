@@ -11,6 +11,12 @@ export const GetDeals = gql`
     operations_agreement
     subscription_agreement
     private_placement_memorandum
+    bank_account
+    formation_certificate_filing
+    ein_filing
+    form_d_filing
+    form_1065_filing
+    w9_filing
     createdAt
     updatedAt
    }
