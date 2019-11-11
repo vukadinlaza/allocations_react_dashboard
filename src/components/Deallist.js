@@ -6,7 +6,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import AddDeal from "./AddDeal"
 import DeleteDeal from './DeleteDeal';
 import { GetDeals } from '../api/query';
-import  { AssignmentTurnedIn } from '@material-ui/icons';
+import   AssignmentTurnedIn   from '@material-ui/icons/AssignmentTurnedIn';
 
 
 const DealRow=(props)=>{

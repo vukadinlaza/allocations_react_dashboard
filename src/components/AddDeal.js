@@ -60,14 +60,14 @@ const AddDeal=(props)=>{
                 <Input name="entity_name" value={entity_name} onChange={e=>{setEntityName(e.target.value)}} placeholder="Enter entity name" required />
         </FormGroup>
         <FormGroup>
-            <Input name="deal_name" value={deal_name} onChange={e=>{setDealName(e.target.value)}} placeholder="Enter deal name" required/>
+            <Input name="deal_name" value={deal_name} onChange={e=>{setDealName(e.target.value)}} placeholder="Enter fund name" required/>
         </FormGroup>
        
         <FormGroup>
-            <Input type="number" name="amount_wired" value={amount_wired} onChange={e=>{setAmountWired(e.target.value)}} placeholder="Enter amount wired" required/>
+            <Input type="number" name="amount_wired" value={amount_wired} onChange={e=>{setAmountWired(e.target.value)}} placeholder="Enter raise amount" required/>
         </FormGroup>
         <FormGroup>
-            <Input name="deal_complete_date" value={deal_complete_date} onChange={e=>{setDealCompleteDate(e.target.value)}} placeholder="Enter deal complete date"/>
+            <Input name="deal_complete_date" value={deal_complete_date} onChange={e=>{setDealCompleteDate(e.target.value)}} placeholder="Enter closing date"/>
         </FormGroup>
         <Button >Create Fund</Button>
       </Form>
