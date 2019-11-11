@@ -1,12 +1,6 @@
 import React from "react";
-import {
-  Router,
-  Route,
-  Switch
-} from "react-router-dom";
-import {
-  Container
-} from "reactstrap";
+import { Router, Route, Switch } from "react-router-dom";
+import { Container } from "reactstrap";
 
 import PrivateRoute from "./components/PrivateRoute";
 import Loading from "./components/Loading";
@@ -14,37 +8,18 @@ import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Home from "./views/Home";
 import Profile from "./views/Profile";
-import {
-  useAuth0
-} from "./react-auth0-spa";
+import { useAuth0 } from "./react-auth0-spa";
 import history from "./utils/history";
 import "./App.css";
-import {
-  ApolloProvider
-} from '@apollo/react-hooks';
+import { ApolloProvider } from '@apollo/react-hooks';
 import initFontAwesome from "./utils/initFontAwesome";
-import {
-  InMemoryCache
-} from "apollo-boost";
-import {
-  ApolloClient
-} from 'apollo-client';
-import {
-  HttpLink
-} from 'apollo-link-http';
-import {
-  ApolloLink,
-  Observable
-} from 'apollo-link';
-import {
-  onError
-} from 'apollo-link-error';
-import {
-  withClientState
-} from 'apollo-link-state';
-import {
-  getTokenSilently
-} from "./react-auth0-spa";
+import { InMemoryCache } from "apollo-boost";
+import { ApolloClient } from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { ApolloLink, Observable } from 'apollo-link';
+import { onError } from 'apollo-link-error';
+import { withClientState } from 'apollo-link-state';
+import {getTokenSilently} from "./react-auth0-spa";
 
 import Deal from "./views/Deal";
 import Investor from './views/Investor';
@@ -53,12 +28,14 @@ import AddDeal from './components/AddDeal';
 initFontAwesome();
 
 
-let API_URL="https://api.allocations.co/graphql"
+let API_URL="https://api.allocations.co/graphql";
+// if(process.env.NODE_ENV==="development"){
+//   API_URL="http://localhost:4000/graphql"
+  
+// }else{
+//   API_URL="https://api.allocations.co/graphql"
+// }
 
-if (process.env.NODE_ENV === "development") {
-  API_URL = "http://localhost:4000/graphql"
-
-}
 const cache = new InMemoryCache();
 cache.originalReadQuery = cache.readQuery;
 cache.readQuery = (...args) => {
@@ -103,17 +80,14 @@ const requestLink = new ApolloLink((operation, forward) =>
 
 const client = new ApolloClient({
   link: ApolloLink.from([
-    onError(({
-      graphQLErrors,
-      networkError
-    }) => {
+    onError(({ graphQLErrors, networkError }) => {
       if (graphQLErrors) {
-        console.log("Graphqlerrors" + graphQLErrors)
-        // sendToLoggingService(graphQLErrors);
+        console.log("Graphqlerrors"+graphQLErrors)
+       // sendToLoggingService(graphQLErrors);
       }
       if (networkError) {
-        console.log("Network error" + networkError)
-        // logoutUser();
+        console.log("Network error"+networkError)
+       // logoutUser();
       }
     }),
     requestLink,
@@ -123,16 +97,8 @@ const client = new ApolloClient({
       },
       resolvers: {
         Mutation: {
-          updateNetworkStatus: (_, {
-            isConnected
-          }, {
-            cache
-          }) => {
-            cache.writeData({
-              data: {
-                isConnected
-              }
-            });
+          updateNetworkStatus: (_, { isConnected }, { cache }) => {
+            cache.writeData({ data: { isConnected }});
             return null;
           }
         }
@@ -141,7 +107,7 @@ const client = new ApolloClient({
     }),
     new HttpLink({
       uri: API_URL,
-      // credentials: 'include'
+    // credentials: 'include'
     })
   ]),
   cache
@@ -165,64 +131,30 @@ const client = new ApolloClient({
 
 
 const App = () => {
-  const {
-    loading
-  } = useAuth0();
+  const { loading } = useAuth0();
 
   if (loading) {
-    return <Loading / > ;
+    return <Loading />;
   }
 
-  return ( <
-    ApolloProvider client = {
-      client
-    } >
-    <
-    Router history = {
-      history
-    } >
-    <
-    div id = "app"
-    className = "d-flex flex-column h-100" >
-    <
-    NavBar / >
-    <
-    Container className = "flex-grow-1 mt-5" >
-    <
-    Switch >
-    <
-    Route path = "/"
-    exact component = {
-      Home
-    }
-    /> <
-    PrivateRoute path = "/profile"
-    component = {
-      Profile
-    }
-    /> <
-    PrivateRoute path = "/deal"
-    component = {
-      Deal
-    }
-    /> <
-    PrivateRoute path = "/investor"
-    component = {
-      Investor
-    }
-    /> <
-    PrivateRoute path = "/addDeal"
-    component = {
-      AddDeal
-    }
-    /> <
-    /Switch> <
-    /Container> <
-    Footer / >
-    <
-    /div> <
-    /Router> <
-    /ApolloProvider>
+  return (
+    <ApolloProvider client={client}>
+    <Router history={history}>
+      <div id="app" className="d-flex flex-column h-100">
+        <NavBar />
+        <Container className="flex-grow-1 mt-5">
+          <Switch>
+            <Route path="/" exact component={Home} />
+            <PrivateRoute path="/profile" component={Profile} />
+             <PrivateRoute path="/deal" component={Deal} />
+             <PrivateRoute path="/investor" component={Investor} />
+             <PrivateRoute path="/addDeal" component={AddDeal} />
+          </Switch>
+        </Container>
+        <Footer />
+      </div>
+    </Router>
+    </ApolloProvider>
   );
 };
 
