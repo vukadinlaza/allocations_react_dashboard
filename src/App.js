@@ -27,6 +27,14 @@ import AddDeal from './components/AddDeal';
 
 initFontAwesome();
 
+
+let API_URL;
+if(process.env.NODE_ENV==="production"){
+  API_URL="https://api.allocations.co/graphql"
+}else{
+  API_URL="http://localhost:4000/graphql"
+}
+
 const cache = new InMemoryCache();
 cache.originalReadQuery = cache.readQuery;
 cache.readQuery = (...args) => {
@@ -66,57 +74,9 @@ const requestLink = new ApolloLink((operation, forward) =>
     };
   })
 );
-//const httpLink = new HttpLink({ uri: 'http://localhost:4000/graphql' });
-
-const httpLink = new HttpLink({ uri: 'https://api.allocations.co/graphql' });
-// Did not work 
-const authMiddleware = new ApolloLink((operation, forward) => {
-  // add the authorization to the headers
-  console.log("Auth Middleware called");
-  return new Promise((resolve,reject)=>{
-    getTokenSilently().then(token=>{
-        console.log(token);
-        operation.setContext({
-            headers: {
-              authorization: token ? `Bearer ${token}` : ''
-            }
-          });
-          resolve();
-      })
-      
-  })
-// console.log("retured");
-})
 
 
-const authLink = new ApolloLink((operation, forward) => {
-    return new Observable(observable => {
-        let sub = null;
 
-        getTokenSilently().then(token => {
-            if (token) {
-                
-                    operation.setContext({
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    });
-
-                    sub = forward(operation).subscribe(observable);
-                
-            } else {
-                sub = forward(operation).subscribe(observable);
-            }
-        });
-
-        return () => (sub ? sub.unsubscribe() : null);
-    });
-});
-
-// const client = new ApolloClient({
-//   link: concat(authLink, httpLink),   // https://www.apollographql.com/docs/react/networking/network-layer/#middleware
-//   cache
-// });
 const client = new ApolloClient({
   link: ApolloLink.from([
     onError(({ graphQLErrors, networkError }) => {
@@ -145,7 +105,7 @@ const client = new ApolloClient({
       cache
     }),
     new HttpLink({
-      uri: 'https://api.allocations.co/graphql',
+      uri: API_URL,
     // credentials: 'include'
     })
   ]),

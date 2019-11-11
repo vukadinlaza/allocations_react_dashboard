@@ -43,7 +43,7 @@ const CreateDealModal=(props)=>{
         <div>
            <Button color="success" onClick={toggle}>{buttonLabel}</Button>
             <Modal isOpen={modal} toggle={toggle} className={className}>
-                <ModalHeader toggle={toggle}>Create Deal</ModalHeader>
+                <ModalHeader toggle={toggle}>Create fund</ModalHeader>
                 <ModalBody>
                    <AddDeal />
                 </ModalBody>
