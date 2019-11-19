@@ -15,7 +15,7 @@ Use `yarn` or `npm` to install the project dependencies:
 npm install
 
 # Using yarn..
-yarn install
+yarn
 ```
 
 ### Configuration
@@ -34,7 +34,7 @@ To do this, first copy `src/auth_config.json.example` into a new file in the sam
 ### Compiles and hot-reloads for development
 
 ```bash
-npm run start
+yarn start
 ```
 
 ## Deployment
@@ -42,7 +42,7 @@ npm run start
 ### Compiles and minifies for production
 
 ```bash
-npm run build
+yarn build
 ```
 
 ### Docker build
@@ -52,6 +52,6 @@ To build and run the Docker image, run `exec.sh`, or `exec.ps1` on Windows.
 ### Run your tests
 
 ```bash
-npm run test
+yarn test
 ```
 
