@@ -1,10 +1,14 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faLink, faPowerOff, faUser } from "@fortawesome/free-solid-svg-icons";
+import * as Solid from "@fortawesome/free-solid-svg-icons";
 
-function initFontAwesome() {
-  library.add(faLink);
-  library.add(faUser);
-  library.add(faPowerOff);
-}
+const icons = [
+  Solid.faLink,
+  Solid.faUser,
+  Solid.faPowerOff,
+  Solid.faFeather,
+  Solid.faInbox,
+  Solid.faFolderPlus,
+  Solid.faSearchDollar
+]
 
-export default initFontAwesome;
+export default library.add(...icons);
