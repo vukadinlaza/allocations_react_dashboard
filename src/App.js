@@ -1,16 +1,17 @@
 import React from "react";
 import { Router, Route, Switch } from "react-router-dom";
-import { Container } from "reactstrap";
+import { Container, Row, Col } from "reactstrap";
 
 import PrivateRoute from "./components/PrivateRoute";
 import Loading from "./components/Loading";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Home from "./views/Home";
+import Sidebar from './components/Sidebar';
 import Profile from "./views/Profile";
 import { useAuth0 } from "./react-auth0-spa";
 import history from "./utils/history";
-import "./App.css";
+import "./App.scss";
 import { ApolloProvider } from '@apollo/react-hooks';
 import initFontAwesome from "./utils/initFontAwesome";
 import { InMemoryCache } from "apollo-boost";
@@ -25,16 +26,9 @@ import Deal from "./views/Deal";
 import Investor from './views/Investor';
 import AddDeal from './components/AddDeal';
 
-initFontAwesome();
-
-
-let API_URL="https://api.allocations.co/graphql";
-// if(process.env.NODE_ENV==="development"){
-//   API_URL="http://localhost:4000/graphql"
-  
-// }else{
-//   API_URL="https://api.allocations.co/graphql"
-// }
+const API_URL = process.env.NODE_ENV === "production"
+  ? "https://api.allocations.co/graphql"
+  : "http://localhost:4000/graphql"
 
 const cache = new InMemoryCache();
 cache.originalReadQuery = cache.readQuery;
@@ -139,21 +133,24 @@ const App = () => {
 
   return (
     <ApolloProvider client={client}>
-    <Router history={history}>
-      <div id="app" className="d-flex flex-column h-100">
-        <NavBar />
-        <Container className="flex-grow-1 mt-5">
-          <Switch>
-            <Route path="/" exact component={Home} />
-            <PrivateRoute path="/profile" component={Profile} />
-             <PrivateRoute path="/deal" component={Deal} />
-             <PrivateRoute path="/investor" component={Investor} />
-             <PrivateRoute path="/addDeal" component={AddDeal} />
-          </Switch>
-        </Container>
-        <Footer />
-      </div>
-    </Router>
+      <Router history={history}>
+        <div id="app" className="d-flex flex-column h-100">
+          <Container fluid={true}>
+            <Row>
+              <Sidebar />
+              <Col xs="10" className="offset-2">
+                <Switch>
+                  <Route path="/" exact component={Home} />
+                  <PrivateRoute path="/profile" component={Profile} />
+                  <Route path="/deal/new" component={AddDeal} />
+                  <Route path="/deal" component={Deal} />
+                  <Route path="/investor" component={Investor} />
+                </Switch>
+              </Col>
+            </Row>
+          </Container>
+        </div>
+      </Router>
     </ApolloProvider>
   );
 };
