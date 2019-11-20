@@ -9,6 +9,7 @@ import Footer from "./components/Footer";
 import Home from "./views/Home";
 import Sidebar from './components/Sidebar';
 import UserHome from './components/UserHome';
+import Investments from './components/Investments';
 import Profile from "./views/Profile";
 import { useAuth0 } from "./react-auth0-spa";
 import history from "./utils/history";
@@ -151,6 +152,7 @@ const App = () => {
                   <Route path="/" exact component={Home} />
                   <PrivateRoute path="/home" component={UserHome} />
                   <PrivateRoute path="/profile" component={Profile} />
+                  <PrivateRoute path="/investments" component={Investments} />
                   <Route path="/deal/new" component={AddDeal} />
                   <Route path="/deal" component={Deal} />
                   <Route path="/investor" component={Investor} />
