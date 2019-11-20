@@ -8,6 +8,7 @@ import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Home from "./views/Home";
 import Sidebar from './components/Sidebar';
+import UserHome from './components/UserHome';
 import Profile from "./views/Profile";
 import { useAuth0 } from "./react-auth0-spa";
 import history from "./utils/history";
@@ -15,7 +16,7 @@ import "./App.scss";
 import { ApolloProvider } from '@apollo/react-hooks';
 import initFontAwesome from "./utils/initFontAwesome";
 import { InMemoryCache } from "apollo-boost";
-import { ApolloClient } from 'apollo-client';
+import ApolloClient from 'apollo-boost';
 import { HttpLink } from 'apollo-link-http';
 import { ApolloLink, Observable } from 'apollo-link';
 import { onError } from 'apollo-link-error';
@@ -72,40 +73,42 @@ const requestLink = new ApolloLink((operation, forward) =>
 
 
 
-const client = new ApolloClient({
-  link: ApolloLink.from([
-    onError(({ graphQLErrors, networkError }) => {
-      if (graphQLErrors) {
-        console.log("Graphqlerrors"+graphQLErrors)
-       // sendToLoggingService(graphQLErrors);
-      }
-      if (networkError) {
-        console.log("Network error"+networkError)
-       // logoutUser();
-      }
-    }),
-    requestLink,
-    withClientState({
-      defaults: {
-        isConnected: true
-      },
-      resolvers: {
-        Mutation: {
-          updateNetworkStatus: (_, { isConnected }, { cache }) => {
-            cache.writeData({ data: { isConnected }});
-            return null;
-          }
-        }
-      },
-      cache
-    }),
-    new HttpLink({
-      uri: API_URL,
-    // credentials: 'include'
-    })
-  ]),
-  cache
-});
+// const _client = new ApolloClient({
+//   link: ApolloLink.from([
+//     onError(({ graphQLErrors, networkError }) => {
+//       if (graphQLErrors) {
+//         console.log("Graphqlerrors"+graphQLErrors)
+//        // sendToLoggingService(graphQLErrors);
+//       }
+//       if (networkError) {
+//         console.log("Network error"+networkError)
+//        // logoutUser();
+//       }
+//     }),
+//     requestLink,
+//     withClientState({
+//       defaults: {
+//         isConnected: true
+//       },
+//       resolvers: {
+//         Mutation: {
+//           updateNetworkStatus: (_, { isConnected }, { cache }) => {
+//             cache.writeData({ data: { isConnected }});
+//             return null;
+//           }
+//         }
+//       },
+//       cache
+//     }),
+//     new HttpLink({
+//       uri: API_URL,
+//     // credentials: 'include'
+//     })
+//   ]),
+//   cache
+// });
+
+
 // const client = new ApolloClient({
 //   uri:"http://localhost:4000/graphql",
 //   request:async (operation=>{
@@ -122,6 +125,10 @@ const client = new ApolloClient({
 //   }),
 //   cache
 // });
+
+const client = new ApolloClient({
+  uri: "http://localhost:4000/graphql"
+})
 
 
 const App = () => {
@@ -142,6 +149,7 @@ const App = () => {
                 <NavBar />
                 <Switch>
                   <Route path="/" exact component={Home} />
+                  <PrivateRoute path="/home" component={UserHome} />
                   <PrivateRoute path="/profile" component={Profile} />
                   <Route path="/deal/new" component={AddDeal} />
                   <Route path="/deal" component={Deal} />
