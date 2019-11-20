@@ -66,6 +66,19 @@
       text-decoration: none;
     }
   }
-
-
 }
+
+// navbar
+.Navbar {
+  .navbar {
+    padding: 10px 0px 5px 0px;
+    background-color: transparent;
+    box-shadow: none;
+  }
+  ul {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+}
+

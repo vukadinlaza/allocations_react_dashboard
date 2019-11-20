@@ -139,6 +139,7 @@ const App = () => {
             <Row>
               <Sidebar />
               <Col xs="10" className="offset-2">
+                <NavBar />
                 <Switch>
                   <Route path="/" exact component={Home} />
                   <PrivateRoute path="/profile" component={Profile} />
