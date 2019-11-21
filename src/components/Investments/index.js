@@ -31,7 +31,11 @@ const GET_INVESTMENTS = gql`
 export default function Investments () {
   const { data, loading, error } = useQuery(GET_INVESTMENTS)
 
-  if (error) return <div>{error.message}</div>
+  if (error) {
+    console.log(error)
+    return <div>{error.message}</div>
+  }
+  
   if (!data) return <div>Loading...</div>
 
   const investments = data.GetDeals
