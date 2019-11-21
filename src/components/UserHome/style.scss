@@ -7,7 +7,6 @@
 
     .tile {
         padding: 20px 25px;
-        height: 200px;
         border-radius: 2px;
         box-shadow: 2px 2px 2px 2px #e6e6e6;
         .small-header {
@@ -17,10 +16,30 @@
         }
     }
 
+    .tile-top {
+        height: 275px;
+    }
+
+    .tile-bottom {
+        height: 225px;
+    }
+
     .welcome {
         .welcome-text {
             font-size: 1.7em;
+            padding: 10px 0px;
         }
+        .welcome-desc {
+            >div {
+                // text-align: right;
+                margin-top: 10px;
+            } 
+            a {
+                text-decoration: none;
+                color: black;
+            }
+        }
+        
     }
 
     .total-investments {
@@ -28,5 +47,31 @@
             text-align: center;
             font-size: 1.6em;
         }
+    }
+
+    .deal-stub {
+        padding: 5px 0px;
+        border-top: 1px solid #a7a7a7;
+        span {
+            display: inline-block;
+        }
+        span:nth-child(1) {
+            width: 30%;
+        }
+        span:nth-child(2) {
+            width: 30%;
+            text-align: right;
+            padding-right: 5px;
+        }
+        span:nth-child(3) {
+            width: 40%;
+            font-size: 0.9em;
+            color: #a7a7a7;
+            text-align: right;
+            padding-right: 5px;
+        }     
+    }
+
+    .last-deals {
     }
 }
