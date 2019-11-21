@@ -4,9 +4,7 @@ import { setContext } from 'apollo-link-context';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { getTokenSilently } from "./react-auth0-spa";
 
-const API_URL = process.env.NODE_ENV === "production"
-  ? "https://stagingapi.allocations.co/graphql"
-  : "http://localhost:4000/graphql"
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000/graphql"
 
 const httpLink = createHttpLink({ uri: API_URL });
 
