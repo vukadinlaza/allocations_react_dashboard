@@ -10,11 +10,16 @@ import "./style.scss";
 
 const GET_INVESTOR = gql`
   {
-    GetInvestorById(id: "5dab93fb596a72d5932f3994") {
+    GetInvestorById(id: "5dd6dcde6b131aa9d2d787b4") {
       first_name
       last_name
       accredited_type
       total_invested
+      deals {
+        company_name
+        amount
+        date_closed
+      }
     }
   }
 `
@@ -27,24 +32,9 @@ export default function UserHome () {
   if (!data) return <div>Loading...</div>
 
   const investor = data.GetInvestorById
-  if (investor) {
-    investor.deals = [
-      {
-        id: 1,
-        company_name: "OrbitFab",
-        amount: "5000",
-        date_closed: "November 2019",
-        description: "Gas Stations in Space"
-      },
-      {
-        id: 2,
-        company_name: "Oncosenx",
-        amount: "5000",
-        date_closed: "October 2019",
-        description: "Cancer Treatment Tech"
-      }
-    ]
+  const total_invested = 10000
 
+  if (investor) {
     investor.invited_deals = []
   }
 
@@ -67,7 +57,7 @@ export default function UserHome () {
         <div className="total-investments col-5">
           <div className="tile tile-top">
             <div className="small-header">Total Investments</div>
-            <div className="amount">${nWithCommas(investor.total_invested)}</div>
+            <div className="amount">${nWithCommas(total_invested)}</div>
           </div>
         </div>
       </Row>
@@ -75,20 +65,16 @@ export default function UserHome () {
         <div className="last-deals col-4 offset-2">
           <div className="tile tile-bottom">
             <div className="small-header">Most Recent Deals</div>
-            {investor.deals.map(deal => (
-              <div key={deal.id} className="deal-stub">
-                <span>{deal.company_name}</span>
-                <span>${nWithCommas(deal.amount)}</span>
-                <span>{deal.date_closed}</span>
-              </div>
+            {investor.deals.map((deal, i) => (
+              <DealStub key={i} deal={deal} />
             ))}
           </div>
         </div>
         <div className="last-deal col-4">
           <div className="tile tile-bottom">
             <div className="small-header">Invited Deals</div>
-            {investor.invited_deals.map(deal => (
-              <DealStub deal={deal} />
+            {investor.invited_deals.map((deal, i) => (
+              <DealStub key={i} deal={deal} />
             ))}
           </div>
         </div>
@@ -101,7 +87,7 @@ function DealStub ({ deal }) {
   return (
     <div key={deal.id} className="deal-stub">
       <span>{deal.company_name}</span>
-      <span>${nWithCommas(deal.amount)}</span>
+      <span>{nWithCommas(deal.amount)}</span>
       <span>{deal.date_closed}</span>
     </div>
   )
