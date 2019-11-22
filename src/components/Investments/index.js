@@ -49,9 +49,9 @@ export default function Investments () {
                 <TableRow>
                   <TableCell>Investor</TableCell>
                   <TableCell>Company</TableCell>
-                  <TableCell align="right">Description</TableCell>
+                  <TableCell>Description</TableCell>
                   <TableCell align="right">Amount</TableCell>
-                  <TableCell align="right">Date Closed</TableCell>
+                  <TableCell align="center">Date Closed</TableCell>
                   <TableCell align="right">Docs</TableCell>
                 </TableRow>
               </TableHead>
@@ -62,7 +62,7 @@ export default function Investments () {
                     <TableCell scope="row">{investment.company_name}</TableCell>
                     <TableCell>{investment.company_description}</TableCell>
                     <TableCell align="right">{investment.amount}</TableCell>
-                    <TableCell align="right">{investment.date_closed}</TableCell>
+                    <TableCell align="center">{investment.date_closed}</TableCell>
                     <TableCell align="right">
                       {investment.investment_documents ? <a href={investment.investment_documents} target="_blank">
                         <FontAwesomeIcon icon="external-link-alt" />
