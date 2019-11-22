@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { gql } from 'apollo-boost'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks';
@@ -6,38 +6,55 @@ import { useAuth0 } from "../../react-auth0-spa";
 import { Row, Container } from 'reactstrap'
 import { Button } from '@material-ui/core' 
 import { nWithCommas} from '../../utils/numbers'
+import Chart from 'chart.js'
 import "./style.scss";
 
-const GET_INVESTOR = gql`
-  {
-    GetInvestorById(id: "5dd6dcde6b131aa9d2d787b4") {
-      first_name
-      last_name
-      accredited_type
-      total_invested
-      deals {
-        company_name
-        amount
-        date_closed
+const data = {
+  first_name: "Nils",
+  last_name: "De Jonge",
+  deals: [
+    { company_name: "OrbitFab", amount: 5000 },
+    { company_name: "Oncosenx", amount: 5000 }
+  ]
+}
+
+function renderChart () {
+  var ctx = document.getElementById('chart').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: data.deals.map(d => d.company_name),
+      datasets: [{
+        data: data.deals.map(d => d.amount),
+        backgroundColor: ["red", "blue"]
+      }]
+    },
+    options: {
+      // responsive: true
+      legend: {
+        position: "bottom"
       }
     }
-  }
-`
+  })
+}
 
 export default function UserHome () {
   const { user } = useAuth0()
 
-  const { data, loading, error } = useQuery(GET_INVESTOR)
+  useEffect(() => {
+    if (data) {
+      renderChart()
+    }
+  }, [data])
 
   if (!data) return <div>Loading...</div>
 
-  const investor = data.GetInvestorById
+  const investor = data
   const total_invested = 10000
 
   if (investor) {
     investor.invited_deals = []
   }
-
   return (
     <Container fluid className="UserHome">
       <Row>
@@ -58,6 +75,9 @@ export default function UserHome () {
           <div className="tile tile-top">
             <div className="small-header">Total Investments</div>
             <div className="amount">${nWithCommas(total_invested)}</div>
+            <div className="chart-container">
+              <canvas id="chart" height="100px"></canvas>
+            </div>
           </div>
         </div>
       </Row>

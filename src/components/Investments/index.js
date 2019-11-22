@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'lodash'
 import { gql } from 'apollo-boost'
 import { useQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
@@ -28,13 +29,30 @@ const GET_INVESTMENTS = gql`
   }
 `
 
+// const GET_INVESTMENTS = gql`
+//   {
+//     investments {
+//       _id
+//       documents
+//       amount
+//       user {
+//         first_name
+//         last_name
+//       }
+//       deal {
+//         company_name
+//         company_description
+//         date_closed
+//         closed
+//       }
+//     }
+//   }
+// `
+
 export default function Investments () {
   const { data, loading, error } = useQuery(GET_INVESTMENTS)
 
-  if (error) {
-    console.log(error)
-    return <div>{error.message}</div>
-  }
+  if (error) return <div>{error.message}</div>
 
   if (!data) return <div>Loading...</div>
 
@@ -43,6 +61,14 @@ export default function Investments () {
     <div className="Investments">
       <Row>
         <Col sm="10" className="offset-sm-1">
+          <div className="investment-stats row">
+            <Col sm="6">
+              <Paper className="investments-n">Investments: <span>{investments.length}</span></Paper>
+            </Col>
+            <Col sm="6">
+              <Paper className="investments-sum">Total Invested: <span>${nWithCommas(_.sumBy(investments, ({amount}) => Number(amount.slice(1).split(',').join(""))))}</span></Paper>
+            </Col>
+          </div>
           <Paper className="table-wrapper">
             <Table>
               <TableHead>

@@ -1,5 +1,22 @@
 .Investments {
-    padding-top: 75px;
+    padding-top: 50px;
+
+    .investment-stats {
+        padding: 20px 0px 30px 0px;
+        font-size: 2em;
+        .investments-n {
+            padding: 10px;
+            span {
+                color: #5c2be2;
+            }
+        }
+        .investments-sum {
+            padding: 10px 20px;
+            span {
+                color: #53B987;
+            }
+        }
+    }
 
     .table-wrapper {
         border-radius: 10px;
