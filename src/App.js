@@ -48,8 +48,7 @@ const App = () => {
               <Col xs="10" className="offset-2">
                 <NavBar />
                 <Switch>
-                  <Route path="/" exact component={Home} />
-                  <PrivateRoute path="/home" component={UserHome} />
+                  <PrivateRoute path="/" component={UserHome} />
                   <PrivateRoute path="/profile" component={Profile} />
                   <PrivateRoute path="/investments" component={Investments} />
                   <Route path="/deal/new" component={AddDeal} />

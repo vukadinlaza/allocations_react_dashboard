@@ -35,7 +35,7 @@ export default function Investments () {
     console.log(error)
     return <div>{error.message}</div>
   }
-  
+
   if (!data) return <div>Loading...</div>
 
   const investments = data.GetDeals
@@ -60,7 +60,7 @@ export default function Investments () {
                   <TableRow key={investment._id}>
                     <TableCell>{investment.name}</TableCell>
                     <TableCell scope="row">{investment.company_name}</TableCell>
-                    <TableCell align="right">{investment.company_description}</TableCell>
+                    <TableCell>{investment.company_description}</TableCell>
                     <TableCell align="right">{investment.amount}</TableCell>
                     <TableCell align="right">{investment.date_closed}</TableCell>
                     <TableCell align="right">
