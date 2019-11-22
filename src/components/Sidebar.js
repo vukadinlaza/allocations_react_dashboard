@@ -10,7 +10,7 @@ export default function Sidebar () {
         <img src="https://www.allocations.co/assets/img/brand.svg" style={{height:'40px'}} /> 
       </div>
       <div className="sidebar-nav-item">
-        <Link to="/home"><span>Home</span></Link>
+        <Link to="/"><span>Home</span></Link>
       </div>
       <div className="sidebar-nav-item">
         <Link to="/investments">
