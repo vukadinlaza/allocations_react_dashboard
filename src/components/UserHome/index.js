@@ -6,7 +6,7 @@ import { useAuth0 } from "../../react-auth0-spa";
 import { Row, Container } from 'reactstrap'
 import { Button } from '@material-ui/core' 
 import { nWithCommas} from '../../utils/numbers'
-import Chart from 'chart.js'
+import Chart from "react-google-charts"
 import "./style.scss";
 
 const data = {
@@ -18,24 +18,28 @@ const data = {
   ]
 }
 
-function renderChart () {
-  var ctx = document.getElementById('chart').getContext('2d');
-  var myChart = new Chart(ctx, {
-    type: 'pie',
-    data: {
-      labels: data.deals.map(d => d.company_name),
-      datasets: [{
-        data: data.deals.map(d => d.amount),
-        backgroundColor: ["red", "blue"]
-      }]
-    },
-    options: {
-      // responsive: true
-      legend: {
-        position: "bottom"
-      }
-    }
-  })
+const purples = [
+  "#6200EE",
+  "#BB9FE6"
+]
+
+const chartOptions = {
+  minColor: purples[1],
+  maxColor: purples[0],
+  headerHeight: 0,
+  fontColor: "#fff",
+  highlightColor: "#fff",
+  showTooltips: false
+  // showScale: true
+};
+
+function formatData(deals) {
+  const d = deals.map((d, i) => [d.company_name, 'All', d.amount, d.amount - (i * 5000)])
+
+  return [
+    ['Company', 'Group', 'Amount Invested (size)', 'Company Color (color)'],
+    ['All', null, 0, 0]
+  ].concat(d)
 }
 
 export default function UserHome () {
@@ -43,7 +47,7 @@ export default function UserHome () {
 
   useEffect(() => {
     if (data) {
-      renderChart()
+      // renderChart()
     }
   }, [data])
 
@@ -76,7 +80,11 @@ export default function UserHome () {
             <div className="small-header">Total Investments</div>
             <div className="amount">${nWithCommas(total_invested)}</div>
             <div className="chart-container">
-              <canvas id="chart" height="100px"></canvas>
+              <Chart chartType="TreeMap"
+                width="100%"
+                height="125px"
+                data={formatData(data.deals)}
+                options={chartOptions} />
             </div>
           </div>
         </div>
