@@ -28,7 +28,7 @@ const NavBar = () => {
   const logoutWithRedirect = () => logout({ returnTo: window.location.origin });
 
   return (
-    <div className="Navbar nav-container">
+    <div className="Navbar nav-container hidden-sm-down">
       <Navbar expand="md">
         <Container>
           <Collapse isOpen={false} navbar>
