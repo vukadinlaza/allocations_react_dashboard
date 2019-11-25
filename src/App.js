@@ -6,6 +6,7 @@ import Loading from "./components/Loading";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Home from "./views/Home";
+import Funds from "./components/Funds";
 import Sidebar from './components/Sidebar';
 import UserHome from './components/UserHome';
 import Investments from './components/Investments';
@@ -45,7 +46,7 @@ const App = () => {
           <Container fluid={true}>
             <Row>
               <Sidebar />
-              <Col xs="10" className="offset-2">
+              <Col xs={{size: 12, offset: 0}} md={{size: 10, offset: 2}}>
                 <NavBar />
                 <Switch>
                   <PrivateRoute path="/" exact component={UserHome} />
@@ -54,6 +55,7 @@ const App = () => {
                   <Route path="/deal/new" component={AddDeal} />
                   <Route path="/deal" component={Deal} />
                   <Route path="/investor" component={Investor} />
+                  <Route path="/funds" component={Funds} />
                 </Switch>
               </Col>
             </Row>
