@@ -28,7 +28,7 @@ export default function Sidebar () {
           </Link>
         </div>
         {
-          user.admin &&
+          user && user.admin &&
           <div className={`sidebar-nav-item ${location.pathname === "/funds" ? "sidebar-nav-item-active" : ""}`}>
             <Link to="/funds">
               <span>Funds</span>
