@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import _ from 'lodash'
 import { gql } from 'apollo-boost'
-import { useQuery } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
 import { Row, Container, Col } from 'reactstrap'
 import { nWithCommas } from '../../utils/numbers'
@@ -11,52 +11,42 @@ import { Table, TableBody, TableCell, TableRow, TableHead, Paper } from '@materi
 
 import "./style.scss";
 
-const GET_INVESTMENTS = gql`
-  {
-    GetDeals {
+const GET_INVESTOR = gql`
+  query GetInvestor($email: String!) {
+    investor(email: $email) {
       _id
-      company_name
-      company_description
-      investment_documents
-      name
-      user_id
-      entity_name
-      amount
-      date_closed
-      deal_name
-      deal_complete_date
+      first_name
+      last_name
+      email
+      investments {
+        _id
+        amount
+        documents
+        deal {
+          company_name
+          company_description
+          date_closed
+        }
+      }
     }
   }
 `
 
-// const GET_INVESTMENTS = gql`
-//   {
-//     investments {
-//       _id
-//       documents
-//       amount
-//       user {
-//         first_name
-//         last_name
-//       }
-//       deal {
-//         company_name
-//         company_description
-//         date_closed
-//         closed
-//       }
-//     }
-//   }
-// `
-
 export default function Investments () {
-  const { data, loading, error } = useQuery(GET_INVESTMENTS)
+  const { user } = useAuth0()
+  const [getInvestor, { data, loading, error }] = useLazyQuery(GET_INVESTOR)
+
+  useEffect(() => {
+    if (user && user.email) {
+      getInvestor({ variables: { email: user.email }})
+    }
+  }, [user])
 
   if (error) return <div>{error.message}</div>
 
   if (!data) return <div>Loading...</div>
 
-  const investments = data.GetDeals
+  const investments = data.investor.investments
   return (
     <div className="Investments">
       <Row>
@@ -66,7 +56,7 @@ export default function Investments () {
               <Paper className="investments-n">Investments: <span>{investments.length}</span></Paper>
             </Col>
             <Col sm="6">
-              <Paper className="investments-sum">Total Invested: <span>${nWithCommas(_.sumBy(investments, ({amount}) => Number(amount.slice(1).split(',').join(""))))}</span></Paper>
+              <Paper className="investments-sum">Total Invested: <span>${nWithCommas(_.sumBy(investments, 'amount'))}</span></Paper>
             </Col>
           </div>
           <Paper className="table-wrapper">
@@ -84,13 +74,13 @@ export default function Investments () {
               <TableBody>
                 {investments.map(investment => (
                   <TableRow key={investment._id}>
-                    <TableCell>{investment.name}</TableCell>
-                    <TableCell scope="row">{investment.company_name}</TableCell>
-                    <TableCell>{investment.company_description}</TableCell>
+                    <TableCell>{data.investor.first_name} {data.investor.last_name}</TableCell>
+                    <TableCell scope="row">{investment.deal.company_name}</TableCell>
+                    <TableCell>{investment.deal.company_description}</TableCell>
                     <TableCell align="right">{investment.amount}</TableCell>
-                    <TableCell align="center">{investment.date_closed}</TableCell>
+                    <TableCell align="center">{investment.deal.date_closed}</TableCell>
                     <TableCell align="right">
-                      {investment.investment_documents ? <a href={investment.investment_documents} target="_blank">
+                      {investment.documents ? <a href={investment.documents} target="_blank">
                         <FontAwesomeIcon icon="external-link-alt" />
                       </a> : ""} 
                     </TableCell>
