@@ -1,17 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Col, NavbarBrand } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth0 } from "../react-auth0-spa";
+import { adminWhitelist } from "../auth/admin-route"
 
 export default function Sidebar () {
   const { user } = useAuth0()
   const location = useLocation()
+  const [admin, setAdmin] = useState(false)
 
   const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
   const [smallScreen, setSmallScreen] = useState(width < 768)
   const [active, setActive] = useState(width > 768)
+
+  useEffect(() => {
+    if (user && adminWhitelist.includes(user.email)) setAdmin(true)
+  }, [user])
 
   if (active) {
     return (
@@ -28,10 +34,18 @@ export default function Sidebar () {
           </Link>
         </div>
         {
-          false &&
+          admin &&
           <div className={`sidebar-nav-item ${location.pathname === "/funds" ? "sidebar-nav-item-active" : ""}`}>
             <Link to="/funds">
               <span>Funds</span>
+            </Link>
+          </div> 
+        }
+        {
+          admin &&
+          <div className={`sidebar-nav-item ${location.pathname === "/investors" ? "sidebar-nav-item-active" : ""}`}>
+            <Link to="/investors">
+              <span>Investors</span>
             </Link>
           </div> 
         }
