@@ -1,0 +1,57 @@
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Col, NavbarBrand } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useAuth0 } from "../../react-auth0-spa";
+import { adminWhitelist } from "../../auth/admin-route"
+import "./style.scss"
+
+export default function Sidebar ({ showSidebar, setShowSidebar }) {
+  const { user } = useAuth0()
+  const location = useLocation()
+  const [admin, setAdmin] = useState(false)
+
+  useEffect(() => {
+    if (user && adminWhitelist.includes(user.email)) setAdmin(true)
+  }, [user])
+
+  return (
+    <Col sm="2" className={`position-fixed h-100 Sidebar ${showSidebar ? "Sidebar-show" : "Sidebar-no-show"}`}>
+      <div className="brand"> 
+        <img src="https://www.allocations.co/assets/img/brand.svg" style={{height:'40px'}} />
+      </div>
+      <div className="toggle-wrapper">
+        <FontAwesomeIcon icon="times" className="toggle" onClick={() => setShowSidebar(false)} />
+      </div>
+      <div className={`sidebar-nav-item ${location.pathname === "/" ? "sidebar-nav-item-active" : ""}`}>
+        <Link to="/"><span>Home</span></Link>
+      </div>
+      <div className={`sidebar-nav-item ${location.pathname === "/investments" ? "sidebar-nav-item-active" : ""}`}>
+        <Link to="/investments">
+          <span>Investments</span>
+        </Link>
+      </div>
+      <div className={`sidebar-nav-item ${location.pathname === "/invited-deals" ? "sidebar-nav-item-active" : ""}`}>
+        <Link to="/invited-deals">
+          <span>Invited Deals</span>
+        </Link>
+      </div>
+      {
+        admin &&
+        <div className={`sidebar-nav-item ${location.pathname === "/funds" ? "sidebar-nav-item-active" : ""}`}>
+          <Link to="/funds">
+            <span>Funds</span>
+          </Link>
+        </div> 
+      }
+      {
+        admin &&
+        <div className={`sidebar-nav-item ${location.pathname === "/investors" ? "sidebar-nav-item-active" : ""}`}>
+          <Link to="/investors">
+            <span>Investors</span>
+          </Link>
+        </div> 
+      }
+    </Col>
+  )
+}

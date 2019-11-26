@@ -1,6 +1,12 @@
+$break-sm: 768px;
+$break-xs: 576px;
+
 .UserHome {
     .row {
         padding: 10px;
+        @media screen and (max-width: $break-sm) {
+            padding: 0px 10px;
+        }
     }
 
     .tile {
@@ -11,6 +17,9 @@
             color: #a7a7a7;
             text-align: center;
             padding-bottom: 10px;
+        }
+        @media screen and (max-width: $break-sm) {
+            margin-bottom: 15px;
         }
     }
 

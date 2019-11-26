@@ -10,7 +10,8 @@ const icons = [
   Solid.faFolderPlus,
   Solid.faSearchDollar,
   Solid.faExternalLinkAlt,
-  Solid.faBars
+  Solid.faBars,
+  Solid.faTimes
 ]
 
 export default library.add(...icons);

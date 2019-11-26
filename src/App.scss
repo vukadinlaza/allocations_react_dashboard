@@ -1,3 +1,6 @@
+$break-sm: 768px;
+$break-xs: 576px;
+
 .next-steps .fa-link {
   margin-right: 5px;
 }
@@ -31,61 +34,27 @@
   right: 0;
 }
 
-// Sidebar styles
-.Sidebar {
-  border-right: 1px solid #d6d6d6;
-  padding: 0px 0px;
-
-  .brand {
+.xs-navbar {
+  display: none;
+  @media screen and (max-width: $break-sm) {
+    display: block;
     text-align: center;
-    margin-bottom: 50px;
-    margin-top: 25px;
-    // margin: 20px 0px 50px 10px;
-  }
-
-  .brand-small-screen {
-    margin-bottom: 10px;
-    text-align: left;
-    padding: 0px 45px;
-
-    .toggle-sidebar {
-      float: right;
-      margin-top: 10px;
+    padding: 15px;
+    .hamburger {
+      position: absolute;
+      right: 45px;
+      top: 20px;
+      font-size: 1.5em;
     }
-  }
-
-  .sidebar-nav-item {
-    &:hover {
-      background-color: #b8c7f4;
-      transition: background-color 500ms linear;
-    }
-
-    padding: 10px 20px;
-    .svg-inline--fa {
-      font-size: 1.2em;
-      color: #333;
-    }
-    span {
-      margin-left: 10px;
-      font-size: 1.1em;
-      color: #333;
-    }
-    a { 
-      display: inline-block;
-      height: 100%;
-      width: 100%;
-      text-decoration: none;
-    }
-  }
-
-  .sidebar-nav-item-active {
-    background-color: #b8c7f4;
   }
 }
 
 // navbar
 .Navbar {
   height: 80px;
+  @media screen and (max-width: $break-sm) {
+    height: 0px;
+  }
   .navbar {
     padding: 10px 0px 5px 0px;
     background-color: transparent;
