@@ -51,6 +51,12 @@ const GET_INVESTOR = gql`
           date_closed
         }
       }
+      invitedDeals {
+        _id
+        company_name
+        company_description
+        date_closed
+      }
     }
   }
 `
@@ -75,9 +81,6 @@ export default function UserHome (props) {
 
   const total_invested = _.sumBy(investor.investments, 'amount') || 0
 
-  if (investor) {
-    investor.invited_deals = []
-  }
   return (
     <Container fluid className="UserHome">
       <Row>
@@ -119,10 +122,10 @@ export default function UserHome (props) {
             ))}
           </div>
         </Col>
-        <Col md="4" sm="6" className="last-deal">
+        <Col md="4" sm="6" className="invited-deals">
           <div className="tile tile-bottom">
             <div className="small-header">Invited Deals</div>
-            {investor.invited_deals.map((deal, i) => (
+            {investor.invitedDeals.map((deal, i) => (
               <DealStub key={i} deal={deal} />
             ))}
           </div>
@@ -144,9 +147,8 @@ function InvestmentStub ({ investment }) {
 
 function DealStub ({ deal }) {
   return (
-    <div key={deal._id} className="investment-stub">
+    <div key={deal._id} className="deal-stub">
       <span>{deal.company_name}</span>
-      <span>{nWithCommas(deal.amount)}</span>
       <span>{deal.date_closed}</span>
     </div>
   )

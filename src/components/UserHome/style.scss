@@ -84,6 +84,26 @@ $break-xs: 576px;
         }     
     }
 
-    .last-deals {
+    .invited-deals .tile {
+        overflow: scroll;
+    }
+
+    .deal-stub {
+        padding: 5px 0px;
+        color: #333;
+        border-top: 1px solid #a7a7a7;
+        span {
+            display: inline-block;
+        }
+        span:nth-child(1) {
+            width: 50%;
+        }
+        span:nth-child(2) {
+            width: 50%;
+            font-size: 0.9em;
+            color: #a7a7a7;
+            text-align: right;
+            padding-right: 5px;
+        }     
     }
 }
