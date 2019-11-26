@@ -9,6 +9,7 @@ import Home from "./views/Home";
 import Funds from "./components/Funds";
 import Sidebar from './components/Sidebar';
 import UserHome from './components/UserHome';
+import Investors from './components/Investors';
 import Investments from './components/Investments';
 import Profile from "./views/Profile";
 import history from "./utils/history";
@@ -21,7 +22,7 @@ import { ApolloLink, Observable } from 'apollo-link';
 import { onError } from 'apollo-link-error';
 import { withClientState } from 'apollo-link-state';
 
-
+import AdminRoute from "./auth/admin-route"
 import PrivateRoute from "./components/PrivateRoute";
 import {getTokenSilently, useAuth0} from "./react-auth0-spa";
 import { client } from './apollo-client';
@@ -54,8 +55,19 @@ const App = () => {
                   <PrivateRoute path="/investments" component={Investments} />
                   <Route path="/deal/new" component={AddDeal} />
                   <Route path="/deal" component={Deal} />
-                  <Route path="/investor" component={Investor} />
-                  <Route path="/funds" component={Funds} />
+
+                  <AdminRoute path="/investor/:id/home">
+                    <UserHome /> 
+                  </AdminRoute>
+                  <AdminRoute path="/investor/:id/investments">
+                    <Investments /> 
+                  </AdminRoute>
+                  <AdminRoute path="/investors" exact>
+                    <Investors /> 
+                  </AdminRoute>
+                  <AdminRoute path="/funds" exact>
+                    <Funds /> 
+                  </AdminRoute>
                 </Switch>
               </Col>
             </Row>

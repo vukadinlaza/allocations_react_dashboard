@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import _ from 'lodash'
+import { useParams } from 'react-router-dom';
 import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
@@ -12,16 +13,14 @@ import { Table, TableBody, TableCell, TableRow, TableHead, Paper } from '@materi
 import "./style.scss";
 
 const GET_INVESTOR = gql`
-  query GetInvestor($email: String!) {
-    investor(email: $email) {
+  query GetInvestor($email: String, $_id: String) {
+    investor(email: $email, _id: $_id) {
       _id
       first_name
       last_name
       email
       investments {
-        _id
         amount
-        documents
         deal {
           company_name
           company_description
@@ -33,11 +32,16 @@ const GET_INVESTOR = gql`
 `
 
 export default function Investments () {
+  const params = useParams()
+  const adminView = params && params.id
+
   const { user } = useAuth0()
   const [getInvestor, { data, loading, error }] = useLazyQuery(GET_INVESTOR)
 
   useEffect(() => {
-    if (user && user.email) {
+    if (adminView) {
+      getInvestor({ variables: { _id: params.id }})
+    } else if (user && user.email) {
       getInvestor({ variables: { email: user.email }})
     }
   }, [user])

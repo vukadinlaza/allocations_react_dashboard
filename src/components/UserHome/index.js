@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import _ from 'lodash'
 import { gql } from 'apollo-boost'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
 import { Row, Container, Col } from 'reactstrap'
@@ -37,8 +37,8 @@ function formatData(investments) {
 }
 
 const GET_INVESTOR = gql`
-  query GetInvestor($email: String!) {
-    investor(email: $email) {
+  query GetInvestor($email: String, $_id: String) {
+    investor(email: $email, _id: $_id) {
       _id
       first_name
       last_name
@@ -55,12 +55,17 @@ const GET_INVESTOR = gql`
   }
 `
 
-export default function UserHome () {
+export default function UserHome (props) {
+  const params = useParams()
+  const adminView = params && params.id
+
   const { user } = useAuth0()
   const [getInvestor, { data, error }] = useLazyQuery(GET_INVESTOR)
 
   useEffect(() => {
-    if (user && user.email) {
+    if (adminView) {
+      getInvestor({ variables: { _id: params.id }})
+    } else if (user && user.email) {
       getInvestor({ variables: { email: user.email }})
     }
   }, [user])
@@ -83,7 +88,7 @@ export default function UserHome () {
               🎉 Your Allocations account is ready for your use. Lets view your investments
               <div>
                 <Button className="button" variant="contained">
-                  <Link to="/investments">Investments</Link>
+                  <Link to={adminView ? `/investor/${params.id}/investments` : "/investments"}>Investments</Link>
                 </Button>
               </div>
             </div>
@@ -94,11 +99,13 @@ export default function UserHome () {
             <div className="small-header">Total Investments</div>
             <div className="amount">${nWithCommas(total_invested)}</div>
             <div className="chart-container">
-              <Chart chartType="TreeMap"
-                width="100%"
-                height="125px"
-                data={formatData(investor.investments)}
-                options={chartOptions} />
+              {investor.investments.length > 0 ? 
+                <Chart chartType="TreeMap"
+                  width="100%"
+                  height="125px"
+                  data={formatData(investor.investments)}
+                  options={chartOptions} /> : null
+              }
             </div>
           </div>
         </Col>
