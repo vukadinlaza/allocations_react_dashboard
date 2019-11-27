@@ -33,7 +33,7 @@ export default function Sidebar ({ showSidebar, setShowSidebar }) {
       </div>
       <div className={`sidebar-nav-item ${location.pathname === "/invited-deals" ? "sidebar-nav-item-active" : ""}`}>
         <Link to="/invited-deals">
-          <span>Invited Deals</span>
+          <span>Deals</span>
         </Link>
       </div>
       {
