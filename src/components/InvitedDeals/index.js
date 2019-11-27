@@ -7,6 +7,7 @@ import { useAuth0 } from "../../react-auth0-spa";
 import { Row, Container, Col } from 'reactstrap'
 import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { adminWhitelist } from "../../auth/admin-route"
 
 import { Table, TableBody, TableCell, TableRow, TableHead, Paper } from '@material-ui/core'
 
@@ -36,6 +37,7 @@ export default function Investments () {
   const adminView = params && params.id
 
   const { user } = useAuth0()
+  const isAdmin = user && adminWhitelist.includes(user.email)
   const [getInvestor, { data, loading, error }] = useLazyQuery(GET_INVESTOR)
 
   useEffect(() => {
@@ -51,7 +53,6 @@ export default function Investments () {
   if (!data) return <div>Loading...</div>
 
   const { investor } = data
-  console.log(investor)
   return (
     <div className="InvitedDeals">
       <Row>
@@ -66,6 +67,7 @@ export default function Investments () {
                   <TableCell>Lead</TableCell>
                   <TableCell align="center">Pledge</TableCell>
                   <TableCell align="center">Onboarding</TableCell>
+                  {isAdmin && <TableCell></TableCell>}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -81,6 +83,7 @@ export default function Investments () {
                       </a> : ""} 
                     </TableCell>
                     <TableCell align="center"></TableCell>
+                    {isAdmin && <TableCell align="center"><Link to={`/deals/${deal._id}/edit`}>edit</Link></TableCell>}
                   </TableRow>
                 ))}
               </TableBody>

@@ -6,6 +6,7 @@ import Loading from "./components/Loading";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Home from "./views/Home";
+import DealEdit from "./components/DealEdit";
 import Funds from "./components/Funds";
 import Sidebar from './components/Sidebar';
 import UserHome from './components/UserHome';
@@ -77,6 +78,9 @@ const App = () => {
                   </AdminRoute>
                   <AdminRoute path="/investors" exact>
                     <Investors /> 
+                  </AdminRoute>
+                  <AdminRoute path="/deals/:id/edit" exact>
+                    <DealEdit /> 
                   </AdminRoute>
                   <AdminRoute path="/funds" exact>
                     <Funds /> 

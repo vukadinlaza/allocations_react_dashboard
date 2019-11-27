@@ -11,7 +11,11 @@ const icons = [
   Solid.faSearchDollar,
   Solid.faExternalLinkAlt,
   Solid.faBars,
-  Solid.faTimes
+  Solid.faPlusCircle,
+  Solid.faPlusSquare,
+  Solid.faTimes,
+  Solid.faCircleNotch,
+  Solid.faCheck
 ]
 
 export default library.add(...icons);

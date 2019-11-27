@@ -1,0 +1,45 @@
+.DealEdit {
+    input {
+        // width: 100%;
+    }
+}
+
+.form-wrapper {
+    .form-title {
+        font-size: 1.5em;
+    }
+
+    .form-sub-title {
+        font-size: 1.2em;
+        color: #a7a7a7;
+    }
+
+    .row {
+        margin: 25px 0px;
+    }
+
+    .fa-plus-circle {
+        cursor: pointer;
+    }
+    .fa-times {
+        cursor: pointer;
+    }
+
+    .loading-table, .invited-investors-none {
+        padding: 10px;
+        text-align: center;
+        font-size: 1.5em;
+        color: #a7a7a7;
+    }
+
+    .invited-investor {
+        font-size: 0.8em;
+    }
+
+    .invited-investors {
+        font-size: 0.9em
+    }
+    .search-investors {
+        font-size: 0.9em;
+    }
+}
