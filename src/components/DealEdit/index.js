@@ -77,10 +77,7 @@ export default function DealEdit () {
 
   // updates deal when data returned from update mutation
   useEffect(() => {
-    console.log(updateDealRes.data)
-    if (updateDealRes && updateDealRes.data) {
-      setDeal(updateDealRes.data.deal)
-    }
+    if (updateDealRes && updateDealRes.data) setDeal(updateDealRes.data.deal)
   }, [updateDealRes])
 
   useEffect(() => {
@@ -88,12 +85,7 @@ export default function DealEdit () {
   }, [deal])
 
   const updateDealProp = ({ prop, newVal }) => {
-    setDeal(prev => {
-      return {
-        ...prev,
-        [prop]: newVal
-      }
-    })
+    setDeal(prev => ({ ...prev, [prop]: newVal }))
   }
 
   useEffect(() => {
