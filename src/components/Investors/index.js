@@ -50,18 +50,22 @@ export default function Investments () {
                   <TableCell>Investments</TableCell>
                   <TableCell>Total Invested</TableCell>
                   <TableCell></TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {investors.map(investor => (
+                {_.orderBy(investors, ({ investments }) => _.sumBy(investments, 'amount'), 'desc').map(investor => (
                   <TableRow key={investor._id}>
                     <TableCell>{investor.first_name} {investor.last_name}</TableCell>
                     <TableCell>{investor.investments.length}</TableCell>
-                    <TableCell>${_.sumBy(investor.investments, 'amount')}</TableCell>
+                    <TableCell>${nWithCommas(_.sumBy(investor.investments, 'amount'))}</TableCell>
                     <TableCell>
                       <Link to={`/investor/${investor._id}/home`}>
                         Use site as {investor.first_name}
                       </Link>
+                    </TableCell>
+                    <TableCell>
+                      <Link to={`/investor/${investor._id}/edit`}>Edit</Link>
                     </TableCell>
                   </TableRow>
                 ))}

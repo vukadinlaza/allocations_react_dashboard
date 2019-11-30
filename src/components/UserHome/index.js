@@ -117,7 +117,7 @@ export default function UserHome (props) {
         <Col md={{size: 4, offset: 2}} sm={{size: 6, offset: 0}} className="last-deals">
           <div className="tile tile-bottom">
             <div className="small-header">Most Recent Deals</div>
-            {investor.investments.map((investment, i) => (
+            {_.orderBy(investor.investments, i => new Date(i.deal.date_closed).getTime(), 'desc').map((investment, i) => (
               <InvestmentStub key={i} investment={investment} />
             ))}
           </div>
