@@ -1,6 +1,10 @@
-.Investments {
-    padding-top: 50px;
+@import "../../App.scss";
 
+.Investments {
+    @include sm-and-up {
+      padding-top: 50px;  
+    }
+    
     .investment-stats {
         padding: 20px 0px 30px 0px;
         font-size: 2em;
@@ -8,6 +12,9 @@
             padding: 10px;
             span {
                 color: #5c2be2;
+            }
+            @include xs-only {
+                margin-bottom: 10px; 
             }
         }
         .investments-sum {
@@ -20,5 +27,6 @@
 
     .table-wrapper {
         border-radius: 10px;
+        overflow-x: scroll;
     }
 }

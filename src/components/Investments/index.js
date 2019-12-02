@@ -20,6 +20,7 @@ const GET_INVESTOR = gql`
       last_name
       email
       investments {
+        _id
         amount
         deal {
           company_name
@@ -76,12 +77,12 @@ export default function Investments () {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {investments.map(investment => (
+                {_.orderBy(investments, i => new Date(i.deal.date_closed).getTime(), 'desc').map(investment => (
                   <TableRow key={investment._id}>
                     <TableCell>{data.investor.first_name} {data.investor.last_name}</TableCell>
                     <TableCell scope="row">{investment.deal.company_name}</TableCell>
                     <TableCell>{investment.deal.company_description}</TableCell>
-                    <TableCell align="right">{investment.amount}</TableCell>
+                    <TableCell align="right">${nWithCommas(investment.amount)}</TableCell>
                     <TableCell align="center">{investment.deal.date_closed}</TableCell>
                     <TableCell align="right">
                       {investment.documents ? <a href={investment.documents} target="_blank">
