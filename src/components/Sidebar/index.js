@@ -19,6 +19,7 @@ export default function Sidebar ({ showSidebar, setShowSidebar }) {
     <Col sm="2" className={`position-fixed h-100 Sidebar ${showSidebar ? "Sidebar-show" : "Sidebar-no-show"}`}>
       <div className="brand"> 
         <img src="https://www.allocations.co/assets/img/brand.svg" style={{height:'40px'}} />
+      {/**<span className="beta">beta</span>**/}
       </div>
       <div className="toggle-wrapper">
         <FontAwesomeIcon icon="times" className="toggle" onClick={() => setShowSidebar(false)} />
