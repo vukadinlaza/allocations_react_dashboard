@@ -6,6 +6,8 @@ import Loading from "./components/Loading";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Home from "./views/Home";
+import Deals from "./components/Deals";
+import DealNew from "./components/DealNew";
 import DealEdit from "./components/DealEdit";
 import InvestorEdit from "./components/InvestorEdit";
 import Funds from "./components/Funds";
@@ -91,9 +93,6 @@ const App = () => {
                   <PrivateRoute path="/investments" component={Investments} />
                   <PrivateRoute path="/invited-deals" component={InvitedDeals} />
 
-                  <Route path="/deal/new" component={AddDeal} />
-                  <Route path="/deal" component={Deal} />
-
                   <AdminRoute path="/investor/:id/home">
                     <UserHome /> 
                   </AdminRoute>
@@ -106,8 +105,14 @@ const App = () => {
                   <AdminRoute path="/investors" exact>
                     <Investors /> 
                   </AdminRoute>
+                  <AdminRoute path="/deals" exact>
+                    <Deals /> 
+                  </AdminRoute>
                   <AdminRoute path="/deals/:id/edit" exact>
                     <DealEdit /> 
+                  </AdminRoute>
+                  <AdminRoute path="/deal/new" exact>
+                    <DealNew /> 
                   </AdminRoute>
                   <AdminRoute path="/funds" exact>
                     <Funds /> 
