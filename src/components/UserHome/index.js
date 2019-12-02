@@ -33,7 +33,7 @@ function formatData(investments) {
     if (acc[inv.deal._id]) {
       acc[inv.deal._id].amount += inv.amount
     } else {
-      acc[inv.deal._id] = inv
+      acc[inv.deal._id] = {...inv}
     }
     return acc
   }, {})
