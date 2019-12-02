@@ -28,7 +28,16 @@ const chartOptions = {
 };
 
 function formatData(investments) {
-  const d = investments.map((d, i) => [d.deal.company_name, 'All', d.amount, d.amount - (i * 5000)])
+  const grouped = investments.reduce((acc, inv) => {
+    if (acc[inv.deal._id]) {
+      acc[inv.deal._id].amount += inv.amount
+    } else {
+      acc[inv.deal._id] = inv
+    }
+    return acc
+  }, {})
+
+  const d = Object.values(grouped).map((d, i) => [d.deal.company_name, 'All', d.amount, d.amount - (i * 5000)])
 
   return [
     ['Company', 'Group', 'Amount Invested (size)', 'Company Color (color)'],
@@ -46,6 +55,7 @@ const GET_INVESTOR = gql`
       investments {
         amount
         deal {
+          _id
           company_name
           company_description
           date_closed
