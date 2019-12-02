@@ -37,22 +37,30 @@ export default function Sidebar ({ showSidebar, setShowSidebar }) {
           <span>Deals</span>
         </Link>
       </div>
-      {
-        admin &&
-        <div className={`sidebar-nav-item ${location.pathname === "/funds" ? "sidebar-nav-item-active" : ""}`}>
-          <Link to="/funds">
-            <span>Funds</span>
-          </Link>
-        </div> 
-      }
-      {
-        admin &&
-        <div className={`sidebar-nav-item ${location.pathname === "/investors" ? "sidebar-nav-item-active" : ""}`}>
-          <Link to="/investors">
-            <span>Investors</span>
-          </Link>
-        </div> 
-      }
+      {admin && <AdminLinks location={location} />}
     </Col>
+  )
+}
+
+function AdminLinks ({ location }) {
+  return (
+    <div className="admin-links">
+      <div className="sidebar-admin-header">Admin</div>
+      <div className={`sidebar-nav-item ${location.pathname === "/funds" ? "sidebar-nav-item-active" : ""}`}>
+        <Link to="/funds">
+          <span>Funds</span>
+        </Link>
+      </div>
+      <div className={`sidebar-nav-item ${location.pathname === "/investors" ? "sidebar-nav-item-active" : ""}`}>
+        <Link to="/investors">
+          <span>Investors</span>
+        </Link>
+      </div>
+      <div className={`sidebar-nav-item ${location.pathname === "/deals" ? "sidebar-nav-item-active" : ""}`}>
+        <Link to="/deals">
+          <span>All Deals</span>
+        </Link>
+      </div>
+    </div>
   )
 }

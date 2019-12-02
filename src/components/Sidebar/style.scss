@@ -85,4 +85,14 @@ $break-xs: 576px;
   .sidebar-nav-item-active {
     background-color: #b8c7f4;
   }
+
+  .admin-links {
+    padding-top: 10px;
+  }
+
+  .sidebar-admin-header {
+    padding: 10px 30px;
+    color: #a7a7a7;
+    border-bottom: 1px solid #a7a7a7;
+  }
 }
