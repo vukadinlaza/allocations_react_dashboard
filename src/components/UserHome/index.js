@@ -7,6 +7,7 @@ import { useAuth0 } from "../../react-auth0-spa";
 import { Row, Container, Col } from 'reactstrap'
 import { Button } from '@material-ui/core' 
 import { nWithCommas} from '../../utils/numbers'
+import Loader from '../utils/Loader'
 import Chart from "react-google-charts"
 import "./style.scss";
 
@@ -86,7 +87,7 @@ export default function UserHome (props) {
     }
   }, [user])
 
-  if (!data) return <div>Loading...</div>
+  if (!data) return <div><Loader /></div>
   const investor = data.investor
 
   const total_invested = _.sumBy(investor.investments, 'amount') || 0

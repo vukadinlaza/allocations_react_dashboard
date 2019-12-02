@@ -22,7 +22,7 @@ import { useAuth0 } from "../react-auth0-spa";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { loading, user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
   const toggle = () => setIsOpen(!isOpen);
 
   const logoutWithRedirect = () => logout({ returnTo: window.location.origin });
@@ -43,8 +43,16 @@ const NavBar = () => {
 }
 
 function LoginOrProfile () {
-  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { loading, user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
   const logoutWithRedirect = () => logout({ returnTo: window.location.origin });
+
+  if (loading) {
+    return (
+      <UncontrolledDropdown nav inNavbar>
+        <span className="loading-user"></span>
+      </UncontrolledDropdown>
+    )
+  }
 
   if (isAuthenticated) {
     return (      

@@ -32,6 +32,7 @@ import {getTokenSilently, useAuth0} from "./react-auth0-spa";
 import { client } from './apollo-client';
 
 import Deal from "./views/Deal";
+import Loader from "./components/utils/Loader"
 import Investor from './views/Investor';
 import AddDeal from './components/AddDeal';
 
@@ -44,7 +45,29 @@ const App = () => {
   const [showSidebar, setShowSidebar] = useState(false)
 
   if (loading) {
-    return <Loading />;
+    return (
+      <ApolloProvider client={client}>
+        <Router history={history}>
+          <div id="app" className="d-flex flex-column h-100">
+            <Container fluid={true}>
+              <Row>
+                <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
+                <Col xs="12" className="xs-navbar">
+                  <img src="https://www.allocations.co/assets/img/brand.svg" style={{height:'40px'}} />
+                  <span className="hamburger" style={{ display: showSidebar ? 'none' : 'inline-block'}}>
+                    <FontAwesomeIcon icon="bars" onClick={() => setShowSidebar(true)} />
+                  </span>
+                </Col>
+                <Col xs={{size: 12, offset: 0}} md={{size: 10, offset: 2}}>
+                  <NavBar />
+                  <Loader />
+                </Col>
+              </Row>
+            </Container>
+          </div>
+        </Router>
+      </ApolloProvider>
+    )
   }
 
   return (

@@ -7,6 +7,7 @@ import { useAuth0 } from "../../react-auth0-spa";
 import { Row, Container, Col } from 'reactstrap'
 import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Loader from "../utils/Loader"
 
 import { Table, TableBody, TableCell, TableRow, TableHead, Paper } from '@material-ui/core'
 
@@ -35,7 +36,7 @@ export default function Investments () {
 
   if (error) return <div>{error.message}</div>
 
-  if (!data) return <div>Loading...</div>
+  if (!data) return <div><Loader /></div>
 
   const investors = data.allInvestors
   return (
