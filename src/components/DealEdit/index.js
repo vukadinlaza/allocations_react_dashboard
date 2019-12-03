@@ -19,6 +19,8 @@ const GET_DEAL = gql`
       company_description
       date_closed
       deal_lead
+      pledge_link
+      onboarding_link
       closed
       invitedInvestors {
         _id
@@ -31,13 +33,15 @@ const GET_DEAL = gql`
 `
 
 const UPDATE_DEAL = gql`
-  mutation UpdateDeal($_id: String!, $company_name: String, $company_description: String, $deal_lead: String, $date_closed: String) {
-    updateDeal(_id: $_id, company_name: $company_name, company_description: $company_description, deal_lead: $deal_lead, date_closed: $date_closed) {
+  mutation UpdateDeal($_id: String!, $company_name: String, $company_description: String, $deal_lead: String, $date_closed: String, $pledge_link: String, $onboarding_link: String) {
+    updateDeal(_id: $_id, company_name: $company_name, company_description: $company_description, deal_lead: $deal_lead, date_closed: $date_closed, pledge_link: $pledge_link, onboarding_link: $onboarding_link) {
       _id
       company_name
       company_description
       date_closed
       deal_lead
+      pledge_link
+      onboarding_link
       closed
       invitedInvestors {
         _id
@@ -129,6 +133,22 @@ export default function DealEdit () {
               value={get(deal, 'date_closed', "")}
               onChange={e => updateDealProp({ prop: "date_closed", newVal: e.target.value })} 
               label="Closing Date" 
+              variant="filled" />
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={{size: 4, offset: 1}}>
+            <TextField style={{width: "100%"}} 
+              value={get(deal, 'pledge_link', "")} 
+              onChange={e => updateDealProp({ prop: "pledge_link", newVal: e.target.value })}
+              label="Pledge Link" 
+              variant="filled" />
+          </Col>
+          <Col sm={{size: 4}}>
+            <TextField style={{width: "100%"}}
+              value={get(deal, 'onboarding_link', "")}
+              onChange={e => updateDealProp({ prop: "onboarding_link", newVal: e.target.value })} 
+              label="Onboarding Link" 
               variant="filled" />
           </Col>
         </Row>
