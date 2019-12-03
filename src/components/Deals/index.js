@@ -21,6 +21,7 @@ const GET_DEALS = gql`
       company_name
       company_description
       pledge_link
+      onboarding_link
       date_closed
       deal_lead
     }
@@ -83,7 +84,11 @@ export default function Deals () {
                         <FontAwesomeIcon icon="external-link-alt" />
                       </a> : ""} 
                     </TableCell>
-                    <TableCell align="center"></TableCell>
+                    <TableCell align="center">
+                      {deal.onboarding_link ? <a href={deal.onboarding_link} target="_blank">
+                        <FontAwesomeIcon icon="external-link-alt" />
+                      </a> : ""} 
+                    </TableCell>
                     {isAdmin && <TableCell align="center"><Link to={`/deals/${deal._id}/edit`}>edit</Link></TableCell>}
                   </TableRow>
                 ))}

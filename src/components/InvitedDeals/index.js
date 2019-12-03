@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import _ from 'lodash'
+import Loader from "../utils/Loader"
 import { useParams, Link } from 'react-router-dom';
 import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
@@ -25,6 +26,7 @@ const GET_INVESTOR = gql`
         company_name
         company_description
         pledge_link
+        onboarding_link
         date_closed
         deal_lead
       }
@@ -50,7 +52,7 @@ export default function InvitedDeals () {
 
   if (error) return <div>{error.message}</div>
 
-  if (!data) return <div>Loading...</div>
+  if (!data) return <div><Loader /></div>
 
   const { investor } = data
   return (
