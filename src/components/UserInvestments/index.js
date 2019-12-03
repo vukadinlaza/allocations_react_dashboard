@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import _ from 'lodash'
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
@@ -13,19 +13,21 @@ import { Table, TableBody, TableCell, TableRow, TableHead, Paper } from '@materi
 
 import "./style.scss";
 
-const GET_INVESTMENTS = gql`
-  {
-    allInvestments {
+const GET_INVESTOR = gql`
+  query GetInvestor($email: String, $_id: String) {
+    investor(email: $email, _id: $_id) {
       _id
-      amount
-      deal {
-        company_name
-        company_description
-        date_closed
-      }
-      investor {
-        first_name
-        last_name
+      first_name
+      last_name
+      email
+      investments {
+        _id
+        amount
+        deal {
+          company_name
+          company_description
+          date_closed
+        }
       }
     }
   }
@@ -36,17 +38,21 @@ export default function UserInvestments () {
   const adminView = params && params.id
 
   const { user } = useAuth0()
-  const [getInvestments, { data, loading, error }] = useLazyQuery(GET_INVESTMENTS)
+  const [getInvestor, { data, loading, error }] = useLazyQuery(GET_INVESTOR)
 
   useEffect(() => {
-    if (user && user.email) getInvestments()
+    if (adminView) {
+      getInvestor({ variables: { _id: params.id }})
+    } else if (user && user.email) {
+      getInvestor({ variables: { email: user.email }})
+    }
   }, [user])
 
   if (error) return <div>{error.message}</div>
 
   if (!data) return <div><Loader /></div>
 
-  const investments = data.allInvestments
+  const investments = data.investor.investments
   return (
     <div className="Investments">
       <Row>
@@ -69,13 +75,12 @@ export default function UserInvestments () {
                   <TableCell align="right">Amount</TableCell>
                   <TableCell align="center">Date Closed</TableCell>
                   <TableCell align="right">Docs</TableCell>
-                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {_.orderBy(investments, i => new Date(i.deal.date_closed).getTime(), 'desc').map(investment => (
                   <TableRow key={investment._id}>
-                    <TableCell>{investment.investor.first_name} {investment.investor.last_name}</TableCell>
+                    <TableCell>{data.investor.first_name} {data.investor.last_name}</TableCell>
                     <TableCell scope="row">{investment.deal.company_name}</TableCell>
                     <TableCell>{investment.deal.company_description}</TableCell>
                     <TableCell align="right">${nWithCommas(investment.amount)}</TableCell>
@@ -85,7 +90,6 @@ export default function UserInvestments () {
                         <FontAwesomeIcon icon="external-link-alt" />
                       </a> : ""} 
                     </TableCell>
-                    <TableCell align="center"><Link to={`/admin/investments/${investment._id}/edit`}>edit</Link></TableCell>
                   </TableRow>
                 ))}
               </TableBody>

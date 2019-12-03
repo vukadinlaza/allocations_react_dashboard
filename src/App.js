@@ -16,6 +16,7 @@ import UserHome from './components/UserHome';
 import Investors from './components/Investors';
 import InvitedDeals from './components/InvitedDeals';
 import Investments from './components/Investments';
+import UserInvestments from './components/UserInvestments';
 import Profile from "./views/Profile";
 import history from "./utils/history";
 import { ApolloProvider } from '@apollo/react-hooks';
@@ -90,13 +91,16 @@ const App = () => {
                 <Switch>
                   <PrivateRoute path="/" exact component={UserHome} />
                   <PrivateRoute path="/profile" component={Profile} />
-                  <PrivateRoute path="/investments" component={Investments} />
+                  <PrivateRoute path="/investments" component={UserInvestments} />
                   <PrivateRoute path="/invited-deals" component={InvitedDeals} />
 
                   <AdminRoute path="/investor/:id/home">
                     <UserHome /> 
                   </AdminRoute>
                   <AdminRoute path="/investor/:id/investments">
+                    <UserInvestments /> 
+                  </AdminRoute>
+                  <AdminRoute path="/admin/investments" exact>
                     <Investments /> 
                   </AdminRoute>
                   <AdminRoute path="/investor/:id/edit">

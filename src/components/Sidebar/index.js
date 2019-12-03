@@ -61,6 +61,11 @@ function AdminLinks ({ location }) {
           <span>All Deals</span>
         </Link>
       </div>
+      <div className={`sidebar-nav-item ${location.pathname === "/admin/investments" ? "sidebar-nav-item-active" : ""}`}>
+        <Link to="/admin/investments">
+          <span>All Investments</span>
+        </Link>
+      </div>
     </div>
   )
 }
