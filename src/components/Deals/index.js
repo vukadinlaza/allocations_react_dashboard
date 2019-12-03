@@ -72,7 +72,7 @@ export default function Deals () {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {deals.map(deal => (
+                {_.orderBy(deals, d => new Date(d.date_closed || Date.now()), 'desc').map(deal => (
                   <TableRow key={deal._id}>
                     <TableCell>{deal.company_name}</TableCell>
                     <TableCell>{deal.company_description}</TableCell>
