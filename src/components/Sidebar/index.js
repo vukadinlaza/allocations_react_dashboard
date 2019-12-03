@@ -48,12 +48,12 @@ function AdminLinks ({ location }) {
       <div className="sidebar-admin-header">Admin</div>
       <div className={`sidebar-nav-item ${location.pathname === "/funds" ? "sidebar-nav-item-active" : ""}`}>
         <Link to="/funds">
-          <span>Funds</span>
+          <span>All Funds</span>
         </Link>
       </div>
       <div className={`sidebar-nav-item ${location.pathname === "/investors" ? "sidebar-nav-item-active" : ""}`}>
         <Link to="/investors">
-          <span>Investors</span>
+          <span>All Investors</span>
         </Link>
       </div>
       <div className={`sidebar-nav-item ${location.pathname === "/deals" ? "sidebar-nav-item-active" : ""}`}>
