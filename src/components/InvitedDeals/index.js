@@ -32,7 +32,7 @@ const GET_INVESTOR = gql`
   }
 `
 
-export default function Investments () {
+export default function InvitedDeals () {
   const params = useParams()
   const adminView = params && params.id
 
