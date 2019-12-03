@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { get, isEqual } from "lodash"
-import { useParams } from "react-router-dom"
+import { useParams, Redirect } from "react-router-dom"
 import { TextField } from '@material-ui/core'
 import { Row, Col } from 'reactstrap'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,11 +15,6 @@ const CREATE_DEAL = gql`
   mutation CreateDeal($company_name: String, $company_description: String, $deal_lead: String, $date_closed: String) {
     createDeal(company_name: $company_name, company_description: $company_description, deal_lead: $deal_lead, date_closed: $date_closed) {
       _id
-      company_name
-      company_description
-      date_closed
-      deal_lead
-      closed
     }
   }
 `
@@ -36,6 +31,10 @@ export default function DealNew () {
 
   const updateDealProp = ({ prop, newVal }) => {
     setDeal(prev => ({ ...prev, [prop]: newVal }))
+  }
+
+  if (createDealRes.data) {
+    return <Redirect to={`/deals/${createDealRes.data.createDeal._id}/edit`} />
   }
   
   return (
@@ -75,6 +74,22 @@ export default function DealNew () {
               value={get(deal, 'date_closed', "")}
               onChange={e => updateDealProp({ prop: "date_closed", newVal: e.target.value })} 
               label="Closing Date" 
+              variant="filled" />
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={{size: 4, offset: 1}}>
+            <TextField style={{width: "100%"}} 
+              value={get(deal, 'pledge_link', "")} 
+              onChange={e => updateDealProp({ prop: "pledge_link", newVal: e.target.value })}
+              label="Pledge Link" 
+              variant="filled" />
+          </Col>
+          <Col sm={{size: 4}}>
+            <TextField style={{width: "100%"}}
+              value={get(deal, 'onboarding_link', "")}
+              onChange={e => updateDealProp({ prop: "onboarding_link", newVal: e.target.value })} 
+              label="Onboarding Link" 
               variant="filled" />
           </Col>
         </Row>
