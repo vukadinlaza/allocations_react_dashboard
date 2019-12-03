@@ -21,8 +21,10 @@ const GET_INVESTORS = gql`
       last_name
       email
       investments {
+        _id
         amount
         deal {
+          _id
           company_name
         }
       }
