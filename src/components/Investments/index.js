@@ -19,11 +19,13 @@ const GET_INVESTMENTS = gql`
       _id
       amount
       deal {
+        _id
         company_name
         company_description
         date_closed
       }
       investor {
+        _id
         first_name
         last_name
       }
