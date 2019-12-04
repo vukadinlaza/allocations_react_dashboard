@@ -1,7 +1,8 @@
 import { ApolloClient } from 'apollo-client';
 import { createHttpLink, HttpLink } from 'apollo-link-http';
+import { createUploadLink } from 'apollo-upload-client'
 import { setContext } from 'apollo-link-context';
-import { ApolloLink, Observable } from 'apollo-link';
+import { ApolloLink, Observable, concat } from 'apollo-link';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
 import { withClientState } from 'apollo-link-state';
@@ -10,6 +11,11 @@ import { getTokenSilently } from "./react-auth0-spa";
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000/graphql"
 
 const httpLink = createHttpLink({ uri: API_URL });
+
+const uploadLink = createUploadLink({
+  uri: API_URL,
+  headers: {"keep-alive": "true"}
+})
 
 const authLink = setContext(async (_, { headers }) => {
   // get the authentication token from local storage if it exists
@@ -97,10 +103,7 @@ export const client = new ApolloClient({
       },
       cache
     }),
-    new HttpLink({
-      uri: API_URL,
-    // credentials: 'include'
-    })
+    uploadLink
   ]),
   cache
 });

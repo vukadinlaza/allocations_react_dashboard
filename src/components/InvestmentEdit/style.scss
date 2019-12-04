@@ -1,0 +1,51 @@
+.InvestmentEdit {
+    .docs {
+        padding-top: 15px;
+    }
+
+    .doc-wrapper {
+        display: inline-block;
+        text-align: center;
+    }
+
+    .doc, .add-doc {
+        display: inline-block;
+        height: 90px;
+        width: 60px;
+        margin: 0px 20px;
+        border: 1px dotted gray;
+        border-radius: 5px;
+        vertical-align: top;
+    }
+
+    .doc {
+        position: relative;
+        .fa-times-circle {
+            position: absolute;
+            right: -5px;
+            top: -5px;
+            cursor: pointer;
+        }
+    }
+
+    .filename {
+        text-align: center;
+    }
+
+    .add-doc {
+        text-align: center;
+        
+        .fa-plus {
+            display: inline-block;
+            margin-top: 35px;
+            cursor: pointer;
+        }
+        .fa-file-upload {
+            display: inline-block;
+            margin-top: 35px;
+            cursor: pointer;
+        }
+    }
+
+
+}
