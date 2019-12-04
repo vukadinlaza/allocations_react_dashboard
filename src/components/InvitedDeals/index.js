@@ -69,7 +69,6 @@ export default function InvitedDeals () {
                   <TableCell>Lead</TableCell>
                   <TableCell align="center">Pledge</TableCell>
                   <TableCell align="center">Onboarding</TableCell>
-                  {isAdmin && <TableCell></TableCell>}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -85,7 +84,6 @@ export default function InvitedDeals () {
                       </a> : ""} 
                     </TableCell>
                     <TableCell align="center"></TableCell>
-                    {isAdmin && <TableCell align="center"><Link to={`/deals/${deal._id}/edit`}>edit</Link></TableCell>}
                   </TableRow>
                 ))}
               </TableBody>
