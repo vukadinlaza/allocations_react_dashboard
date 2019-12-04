@@ -29,14 +29,7 @@ export const getTokenSilently = async (...p) => {
   if(!_client) {
       _client = await getAuth0Client()
   }
-  return await _client.getTokenSilently(...p);
-  // _client.getTokenSilently(...p).then(token=>{
-  //    console.log(token);
-  //   return token
-  // }).catch(err=>{
-  //   console.log(err);
-  // })
-  
+  return await _client.getTokenSilently(...p);  
 }
 
 export const Auth0Provider = ({
@@ -59,7 +52,6 @@ export const Auth0Provider = ({
       // setAuth0(auth0FromHook);
 
       if (window.location.search.includes("code=")) {
-        console.log("Found code")
         const { appState } = await client.handleRedirectCallback();
         onRedirectCallback(appState);
       }
