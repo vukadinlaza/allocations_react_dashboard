@@ -50,6 +50,7 @@ export default function Investments () {
               <TableHead>
                 <TableRow>
                   <TableCell>Investor</TableCell>
+                  <TableCell>Email</TableCell>
                   <TableCell>Investments</TableCell>
                   <TableCell>Total Invested</TableCell>
                   <TableCell></TableCell>
@@ -60,6 +61,7 @@ export default function Investments () {
                 {_.orderBy(investors, ({ investments }) => _.sumBy(investments, 'amount'), 'desc').map(investor => (
                   <TableRow key={investor._id}>
                     <TableCell>{investor.first_name} {investor.last_name}</TableCell>
+                    <TableCell>{investor.email}</TableCell>
                     <TableCell>{investor.investments.length}</TableCell>
                     <TableCell>${nWithCommas(_.sumBy(investor.investments, 'amount'))}</TableCell>
                     <TableCell>
