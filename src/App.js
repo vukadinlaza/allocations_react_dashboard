@@ -121,6 +121,8 @@ const App = () => {
                   <AdminRoute path="/funds" exact>
                     <Funds /> 
                   </AdminRoute>
+
+                  <PrivateRoute path="/" component={UserHome} />
                 </Switch>
               </Col>
             </Row>
