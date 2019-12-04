@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Router, Route, Switch } from "react-router-dom";
+import { Router, Route, Switch, Redirect } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 
 import Loading from "./components/Loading";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
+import SignUp from "./components/SignUp";
 import Home from "./views/Home";
 import Deals from "./components/Deals";
 import DealNew from "./components/DealNew";
@@ -16,6 +17,7 @@ import UserHome from './components/UserHome';
 import Investors from './components/Investors';
 import InvitedDeals from './components/InvitedDeals';
 import Investments from './components/Investments';
+import InvestmentEdit from './components/InvestmentEdit';
 import UserInvestments from './components/UserInvestments';
 import Profile from "./views/Profile";
 import history from "./utils/history";
@@ -100,9 +102,6 @@ const App = () => {
                   <AdminRoute path="/investor/:id/investments">
                     <UserInvestments /> 
                   </AdminRoute>
-                  <AdminRoute path="/admin/investments" exact>
-                    <Investments /> 
-                  </AdminRoute>
                   <AdminRoute path="/investor/:id/edit">
                     <InvestorEdit /> 
                   </AdminRoute>
@@ -118,10 +117,18 @@ const App = () => {
                   <AdminRoute path="/deal/new" exact>
                     <DealNew /> 
                   </AdminRoute>
+                  <AdminRoute path="/admin/investments" exact>
+                    <Investments /> 
+                  </AdminRoute>
+                  {/**<AdminRoute path="/admin/investments/:id/edit" exact>
+                    <InvestmentEdit /> 
+                  </AdminRoute>**/}
                   <AdminRoute path="/funds" exact>
                     <Funds /> 
                   </AdminRoute>
-
+                  <Route path="/signup" exact>
+                    <SignUp />
+                  </Route>
                   <PrivateRoute path="/" component={UserHome} />
                 </Switch>
               </Col>
