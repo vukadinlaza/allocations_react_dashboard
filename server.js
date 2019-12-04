@@ -11,6 +11,8 @@ app.use(morgan("dev"));
 app.use(express.static(join(__dirname, "build")));
 app.use(sslRedirect());
 
+console.log("Starting Server: ", process.env.NODE_ENV)
+
 app.use((_, res) => {
   res.sendFile(join(__dirname, "build", "index.html"));
 });
