@@ -13,9 +13,12 @@ const icons = [
   Solid.faBars,
   Solid.faPlusCircle,
   Solid.faPlusSquare,
+  Solid.faPlus,
   Solid.faTimes,
   Solid.faCircleNotch,
-  Solid.faCheck
+  Solid.faCheck,
+  Solid.faFileUpload,
+  Solid.faTimesCircle
 ]
 
 export default library.add(...icons);
