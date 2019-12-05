@@ -9,7 +9,7 @@ import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from '../utils/Loader'
 
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core'
 
 import "./style.scss";
 
@@ -55,14 +55,20 @@ export default function UserInvestments () {
         <Col sm="10" className="offset-sm-1">
           <div className="investment-stats row">
             <Col sm="6">
-              <Paper className="investments-n">Investments: <span>{investments.length}</span></Paper>
+              <Paper className="investments-n">
+                Investments: <span>{investments.length}</span>
+                <Button variant="contained"
+                  color="secondary">
+                  <Link to="/admin/investment/new">Add Investment</Link>
+                </Button>
+              </Paper>
             </Col>
             <Col sm="6">
               <Paper className="investments-sum">Total Invested: <span>${nWithCommas(_.sumBy(investments, 'amount'))}</span></Paper>
             </Col>
           </div>
           <Paper className="table-wrapper">
-            <Table>
+            <Table className="investments-table">
               <TableHead>
                 <TableRow>
                   <TableCell>Investor</TableCell>
