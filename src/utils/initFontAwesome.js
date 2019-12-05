@@ -1,5 +1,6 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import * as Solid from "@fortawesome/free-solid-svg-icons";
+import * as Reg from "@fortawesome/free-regular-svg-icons";
 
 const icons = [
   Solid.faLink,
@@ -18,7 +19,8 @@ const icons = [
   Solid.faCircleNotch,
   Solid.faCheck,
   Solid.faFileUpload,
-  Solid.faTimesCircle
+  Solid.faTimesCircle,
+  Reg.faFilePdf
 ]
 
 export default library.add(...icons);
