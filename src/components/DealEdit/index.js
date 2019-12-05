@@ -3,6 +3,7 @@ import { get, isEqual } from "lodash"
 import { useParams } from "react-router-dom"
 import { TextField } from '@material-ui/core'
 import { Row, Col } from 'reactstrap'
+import { useAuth0 } from "../../react-auth0-spa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { gql } from 'apollo-boost'
@@ -65,6 +66,7 @@ const SEARCH_USERS = gql`
 `
 
 export default function DealEdit () {
+  const { user } = useAuth0()
   const params = useParams()
   const [searchQ, setSearchQ] = useState("")
   const [deal, setDeal] = useState(null)
@@ -107,14 +109,14 @@ export default function DealEdit () {
         <Row>
           <Col sm={{size: 4, offset: 1}}>
             <TextField style={{width: "100%"}} 
-              value={get(deal, 'company_name', "")} 
+              value={get(deal, 'company_name') || ""} 
               onChange={e => updateDealProp({ prop: "company_name", newVal: e.target.value })}
               label="Company Name" 
               variant="filled" />
           </Col>
           <Col sm={{size: 4}}>
             <TextField style={{width: "100%"}} 
-              value={get(deal, 'deal_lead', "")}
+              value={get(deal, 'deal_lead') || ""}
               onChange={e => updateDealProp({ prop: "deal_lead", newVal: e.target.value })}
               label="Deal Lead" 
               variant="filled" />
@@ -123,14 +125,14 @@ export default function DealEdit () {
         <Row>
           <Col sm={{size: 6, offset: 1}}>
             <TextField style={{width: "100%"}} 
-              value={get(deal, 'company_description', "")} 
+              value={get(deal, 'company_description') || ""} 
               onChange={e => updateDealProp({ prop: "company_description", newVal: e.target.value })}
               label="Company Description" 
               variant="filled" />
           </Col>
           <Col sm={{size: 2}}>
             <TextField style={{width: "100%"}} 
-              value={get(deal, 'date_closed', "")}
+              value={get(deal, 'date_closed') || ""}
               onChange={e => updateDealProp({ prop: "date_closed", newVal: e.target.value })} 
               label="Closing Date" 
               variant="filled" />
@@ -139,14 +141,14 @@ export default function DealEdit () {
         <Row>
           <Col sm={{size: 4, offset: 1}}>
             <TextField style={{width: "100%"}} 
-              value={get(deal, 'pledge_link', "")} 
+              value={get(deal, 'pledge_link') || ""} 
               onChange={e => updateDealProp({ prop: "pledge_link", newVal: e.target.value })}
               label="Pledge Link" 
               variant="filled" />
           </Col>
           <Col sm={{size: 4}}>
             <TextField style={{width: "100%"}}
-              value={get(deal, 'onboarding_link', "")}
+              value={get(deal, 'onboarding_link') || ""}
               onChange={e => updateDealProp({ prop: "onboarding_link", newVal: e.target.value })} 
               label="Onboarding Link" 
               variant="filled" />
