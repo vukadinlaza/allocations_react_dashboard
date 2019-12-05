@@ -14,13 +14,14 @@ console.log("Starting Server: ", process.env.NODE_ENV)
 
 if (process.env.NODE_ENV === "production") {
   console.log("In production - will redirect to https")
-  app.use (function (req, res, next) {
-    if (req.secure) {
-      // request was via https, so do no special handling
-      next();
-    } else {
+  app.use((req, res, next) => {
+    console.log("Secure?", req.secure, req.headers["x-forwarded-proto"])
+    if (!req.secure || req.headers["x-forwarded-proto"] == "http") {
       // request was via http, so redirect to https
       res.redirect('https://' + req.headers.host + req.url);
+    } else {
+      // request was via https, so do no special handling
+      next();
     }
   });
 }
