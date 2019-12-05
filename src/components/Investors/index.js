@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import _ from 'lodash'
 import { useParams, Link } from 'react-router-dom';
 import { gql } from 'apollo-boost'
-import { useQuery } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
 import { Row, Container, Col } from 'reactstrap'
 import { nWithCommas } from '../../utils/numbers'
@@ -34,7 +34,11 @@ const GET_INVESTORS = gql`
 
 export default function Investments () {
   const { user } = useAuth0()
-  const { data, loading, error } = useQuery(GET_INVESTORS)
+  const [getInvestors, { data, loading, error }] = useLazyQuery(GET_INVESTORS)
+
+  useEffect(() => {
+    if (user && user.email) getInvestors()
+  }, [user])
 
   if (error) return <div>{error.message}</div>
 
