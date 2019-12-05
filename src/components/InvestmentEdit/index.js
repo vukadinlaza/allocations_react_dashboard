@@ -107,14 +107,6 @@ export default function InvestmentEdit () {
         </Row>
         <Row>
           <Col sm={{size: 8, offset: 1}}>
-            <div className="form-sub-title">Documents</div>
-            <Docs investment={investment} setInvestment={setInvestment} />
-          </Col>
-        </Row>
-        <Row>
-        </Row>
-        <Row>
-          <Col sm={{size: 8, offset: 1}}>
             <Button disabled={!hasChanges} 
               variant="contained"
               onClick={() => createInvestment({ variables: investment })} 
@@ -122,6 +114,14 @@ export default function InvestmentEdit () {
               UPDATE
             </Button> 
           </Col>
+        </Row>
+        <Row>
+          <Col sm={{size: 8, offset: 1}}>
+            <div className="form-sub-title">Documents</div>
+            <Docs investment={investment} setInvestment={setInvestment} />
+          </Col>
+        </Row>
+        <Row>
         </Row>
       </form>
     </div>
@@ -131,7 +131,6 @@ export default function InvestmentEdit () {
 function Docs ({ investment, setInvestment }) {
   const [uploadedDoc, setUploadedDoc] = useState(null)
   const [addInvestmentDoc, {data, loading, error}] = useMutation(ADD_INVESTMENT_DOC)
-  const [rmInvestmentDoc, rmData] = useMutation(RM_INVESTMENT_DOC)
 
   useEffect(() => {
     if (uploadedDoc) {
@@ -144,7 +143,7 @@ function Docs ({ investment, setInvestment }) {
       setInvestment(prev => {
         return {
           ...prev,
-          documents: [...prev.documents, data]
+          documents: [...prev.documents, data.addInvestmentDoc]
         }
       })
     }
@@ -155,32 +154,51 @@ function Docs ({ investment, setInvestment }) {
   return (
     <div className="docs">
       <div className="doc-wrapper">
-        <label>
-          <div className="add-doc">
+        <div className="add-doc">
+          <label>
             <FontAwesomeIcon icon="plus" />
             <input type="file" 
               style={{display: "none"}} 
               onChange={({ target }) => {
                 if (target.validity.valid) setUploadedDoc(target.files[0])
               }} />
-          </div>
-        </label>
-      </div>
-      {docs.map(doc => (
-        <div className="doc-wrapper" key={doc}>
-          <div src={`https://${doc}`} className="doc">
-            <FontAwesomeIcon icon="times-circle" 
-              onClick={() => rmInvestmentDoc({ variables: { file: doc.split('/')[2].split('?')[0], investment_id: investment._id } })} />
-          </div>
-          <div className="filename">
-            <a href={`https://${doc}`} target="_blank">{doc.split('/')[2].split('?')[0]}</a>
-          </div>
+          </label>
         </div>
-      ))}
+        <div className="filename">&nbsp;</div>
+      </div>
+      {docs.map(doc => <Doc key={doc} doc={doc} investment={investment} />)}
     </div>
   )
 }
 
+function Doc ({ doc, investment }) {
+  const [done, setDone] = useState(false)
+  const file = doc.split('/')[2].split('?')[0]
+  const [rmInvestmentDoc, { data }] = useMutation(RM_INVESTMENT_DOC, { variables: { file, investment_id: investment._id }})
+
+  useEffect(() => {
+    if (data) setDone(true)
+  }, [data])
+
+  const rmDoc = () => {
+    if (window.confirm(`Delete ${file}?`)) rmInvestmentDoc()
+  }
+
+  if (done) return null
+
+  return (
+    <div className="doc-wrapper">
+      <div className="doc">
+        <FontAwesomeIcon icon="times-circle" 
+          onClick={rmDoc} />
+        <FontAwesomeIcon icon={["far", "file-pdf"]} />
+      </div>
+      <div className="filename">
+        <span><a href={`https://${doc}`} target="_blank">{file}</a></span>
+      </div>
+    </div>
+  )
+}
 
 
 

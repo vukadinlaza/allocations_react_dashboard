@@ -6,6 +6,8 @@
     .doc-wrapper {
         display: inline-block;
         text-align: center;
+        margin-right: 10px;
+        // width: 100px;
     }
 
     .doc, .add-doc {
@@ -13,12 +15,12 @@
         height: 90px;
         width: 60px;
         margin: 0px 20px;
-        border: 1px dotted gray;
         border-radius: 5px;
         vertical-align: top;
     }
 
     .doc {
+        border: 1px dotted gray;
         position: relative;
         .fa-times-circle {
             position: absolute;
@@ -26,14 +28,28 @@
             top: -5px;
             cursor: pointer;
         }
+        .fa-file-pdf {
+            color: #F48FB1;
+            font-size: 2em;
+            position: absolute;
+            right: 16px;
+            top: 29px;
+        }
     }
 
     .filename {
         text-align: center;
+        span {
+            // display: inline-block;
+            // max-width: 140px;
+            // overflow-wrap: anywhere;
+        }
     }
 
     .add-doc {
+        border: 2px dotted gray;
         text-align: center;
+        background-color: #90CAF9;
         
         .fa-plus {
             display: inline-block;
