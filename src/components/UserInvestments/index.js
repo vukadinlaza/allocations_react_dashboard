@@ -24,6 +24,7 @@ const GET_INVESTOR = gql`
         _id
         amount
         deal {
+          _id
           company_name
           company_description
           date_closed

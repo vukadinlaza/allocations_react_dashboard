@@ -16,12 +16,26 @@
             @include xs-only {
                 margin-bottom: 10px; 
             }
+            button {
+                float: right;
+                margin-top: 5px;
+                a {
+                    color: #fff;
+                }
+            }
         }
         .investments-sum {
             padding: 10px 20px;
             span {
                 color: #53B987;
             }
+        }
+    }
+
+    .investments-table {
+        tr:hover {
+            background-color: #e8eaf6;
+            cursor: pointer;
         }
     }
 }
