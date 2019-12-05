@@ -17,6 +17,7 @@ import UserHome from './components/UserHome';
 import Investors from './components/Investors';
 import InvitedDeals from './components/InvitedDeals';
 import Investments from './components/Investments';
+import InvestmentNew from './components/InvestmentNew';
 import InvestmentEdit from './components/InvestmentEdit';
 import UserInvestments from './components/UserInvestments';
 import Profile from "./views/Profile";
@@ -120,7 +121,10 @@ const App = () => {
                   <AdminRoute path="/admin/investments" exact>
                     <Investments /> 
                   </AdminRoute>
-                  {/**<AdminRoute path="/admin/investments/:id/edit" exact>
+                  {/**<<AdminRoute path="/admin/investment/new" exact>
+                    <InvestmentNew /> 
+                  </AdminRoute>
+                  <AdminRoute path="/admin/investments/:id/edit" exact>
                     <InvestmentEdit /> 
                   </AdminRoute>**/}
                   <AdminRoute path="/funds" exact>
