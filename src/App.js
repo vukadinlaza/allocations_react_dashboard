@@ -121,12 +121,12 @@ const App = () => {
                   <AdminRoute path="/admin/investments" exact>
                     <Investments /> 
                   </AdminRoute>
-                  {/**<<AdminRoute path="/admin/investment/new" exact>
+                  <AdminRoute path="/admin/investment/new" exact>
                     <InvestmentNew /> 
                   </AdminRoute>
                   <AdminRoute path="/admin/investments/:id/edit" exact>
                     <InvestmentEdit /> 
-                  </AdminRoute>**/}
+                  </AdminRoute>
                   <AdminRoute path="/funds" exact>
                     <Funds /> 
                   </AdminRoute>
