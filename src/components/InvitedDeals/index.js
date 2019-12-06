@@ -83,7 +83,11 @@ export default function InvitedDeals () {
                         <FontAwesomeIcon icon="external-link-alt" />
                       </a> : ""} 
                     </TableCell>
-                    <TableCell align="center"></TableCell>
+                    <TableCell align="center">
+                      {deal.onboarding_link ? <a href={deal.onboarding_link} target="_blank">
+                        <FontAwesomeIcon icon="external-link-alt" />
+                      </a> : ""} 
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
