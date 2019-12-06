@@ -8,6 +8,8 @@ import { Row, Container, Col } from 'reactstrap'
 import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from '../utils/Loader'
+import * as Chart from '../../utils/chart'
+import * as d3 from 'd3'
 
 import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core'
 
@@ -32,6 +34,39 @@ const GET_INVESTMENTS = gql`
     }
   }
 `
+
+function renderChart(investments) {
+  const margins = { top: 0, bottom: 0, left: 0, right: 0 }
+  const { g, chartWidth, chartHeight } = Chart.initResponsive("#investments-timeseries-chart", margins)
+
+  const { data } = investments.reduce((acc, i) => {
+    const cumsum = acc.cumsum + i.amount
+    return {
+      cumsum,
+      data: acc.data.concat([{...i, amount: cumsum}])
+    }
+  }, {data: [], cumsum: 0})
+
+  const x = d3.scaleTime()
+    .rangeRound([0, chartWidth])
+    .domain(d3.extent(data, d => new Date(d.date_closed)))
+
+  const y = d3.scaleLinear()
+    .range([chartHeight, 0])
+    .domain(d3.extent(data, d => new Date(d.date_closed)))
+
+  const line = d3.line()
+    .x(d => x(new Date(d.date_closed)))
+    .y(d => y(d.amount))
+    .curve(d3.curveMonotoneX)
+
+  g.append("path")
+    .datum(data)
+    .attr("stroke", "#00D394")
+    .attr("stroke-width", 1)
+    .attr("fill", "#00D394")
+    .attr("d", line)
+}
 
 export default function UserInvestments () {
   const params = useParams()
