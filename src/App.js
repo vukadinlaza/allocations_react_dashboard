@@ -14,6 +14,7 @@ import InvestorEdit from "./components/InvestorEdit";
 import Funds from "./components/Funds";
 import Sidebar from './components/Sidebar';
 import UserHome from './components/UserHome';
+import UserEdit from './components/UserEdit';
 import Investors from './components/Investors';
 import InvitedDeals from './components/InvitedDeals';
 import Investments from './components/Investments';
@@ -96,6 +97,8 @@ const App = () => {
                   <PrivateRoute path="/profile" component={Profile} />
                   <PrivateRoute path="/investments" component={UserInvestments} />
                   <PrivateRoute path="/invited-deals" component={InvitedDeals} />
+
+                  <PrivateRoute path="/complete-signup" component={UserEdit} />
 
                   <AdminRoute path="/investor/:id/home">
                     <UserHome /> 
