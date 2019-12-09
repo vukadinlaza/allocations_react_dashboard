@@ -1,3 +1,5 @@
+@import "../../App.scss";
+
 $break-sm: 768px;
 $break-xs: 576px;
 
@@ -29,7 +31,7 @@ $break-xs: 576px;
     }
 
     .tile-top {
-        height: 275px;
+        min-height: 284px;
     }
 
     .tile-bottom {

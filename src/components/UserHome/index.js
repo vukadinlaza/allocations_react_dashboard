@@ -95,7 +95,7 @@ export default function UserHome (props) {
   return (
     <Container fluid className="UserHome">
       <Row>
-        <Col md={{size: 3, offset: 2}} sm={{size: 5, offset: 0}} className="welcome">
+        <Col lg={{size: 3, offset: 2}} md={{size: 4, offset: 1}} sm={{size: 5, offset: 0}} className="welcome">
           <div className="tile tile-top">
             <div className="welcome-text">Welcome,<br></br>{investor.first_name}</div>
             <div className="welcome-desc">
@@ -108,7 +108,7 @@ export default function UserHome (props) {
             </div>
           </div>
         </Col>
-        <Col md="5" sm="7" className="total-investments">
+        <Col lg="5" md="6" sm="7" className="total-investments">
           <div className="tile tile-top">
             <div className="small-header">Total Investments</div>
             <div className="amount">${nWithCommas(total_invested)}</div>
@@ -125,7 +125,7 @@ export default function UserHome (props) {
         </Col>
       </Row>
       <Row>
-        <Col md={{size: 4, offset: 2}} sm={{size: 6, offset: 0}} className="last-deals">
+        <Col lg={{size: 4, offset: 2}} md={{size: 5, offset: 1}} sm={{size: 6, offset: 0}} className="last-deals">
           <div className="tile tile-bottom">
             <div className="small-header">Most Recent Deals</div>
             {_.orderBy(investor.investments, i => new Date(i.deal.date_closed).getTime(), 'desc').map((investment, i) => (
@@ -133,7 +133,7 @@ export default function UserHome (props) {
             ))}
           </div>
         </Col>
-        <Col md="4" sm="6" className="invited-deals">
+        <Col lg="4" md="5" sm="6" className="invited-deals">
           <div className="tile tile-bottom">
             <div className="small-header">Invited Deals</div>
             {investor.invitedDeals.map((deal, i) => (
