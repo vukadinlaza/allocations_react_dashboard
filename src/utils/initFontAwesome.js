@@ -20,6 +20,7 @@ const icons = [
   Solid.faCheck,
   Solid.faFileUpload,
   Solid.faTimesCircle,
+  Solid.faArrowRight,
   Reg.faFilePdf
 ]
 

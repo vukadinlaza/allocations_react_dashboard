@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react'
 import _ from 'lodash'
 import { gql } from 'apollo-boost'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams, useHistory } from 'react-router-dom'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
 import { Row, Container, Col } from 'reactstrap'
-import { Button } from '@material-ui/core' 
+import { Button, Fab, Paper } from '@material-ui/core' 
 import { nWithCommas} from '../../utils/numbers'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from '../utils/Loader'
 import Chart from "react-google-charts"
 import "./style.scss";
@@ -157,10 +158,17 @@ function InvestmentStub ({ investment }) {
 }
 
 function DealStub ({ deal }) {
+  const history = useHistory()
+
   return (
-    <div key={deal._id} className="deal-stub">
+    <Paper key={deal._id} className="deal-stub">
       <span>{deal.company_name}</span>
-      <span>{deal.date_closed}</span>
-    </div>
+      <span>{deal.date_closed || "TBD"}</span>
+      <span>
+        <Fab onClick={() => history.push("/invited-deals")} size="small" variant="contained" color="primary" style={{textAlign: 'center'}}>
+          <FontAwesomeIcon icon="arrow-right" size="xs" />
+        </Fab>
+      </span>
+    </Paper>
   )
 }

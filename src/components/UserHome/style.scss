@@ -87,26 +87,27 @@ $break-xs: 576px;
         }     
     }
 
-    .invited-deals .tile {
-        overflow: scroll;
+    .invited-deals {
+        .tile {
+            overflow: scroll;
+        }
     }
 
     .deal-stub {
-        padding: 5px 0px;
+        padding: 5px 15px;
         color: #333;
-        border-top: 1px solid #a7a7a7;
-        span {
+        >span {
             display: inline-block;
+            vertical-align: middle;
+            padding-right: 15px;
         }
-        span:nth-child(1) {
-            width: 50%;
-        }
-        span:nth-child(2) {
-            width: 50%;
+        >span:nth-child(2) {
             font-size: 0.9em;
             color: #a7a7a7;
             text-align: right;
-            padding-right: 5px;
-        }     
+        }
+        a:hover {
+            color: #fff;
+        }    
     }
 }
