@@ -54,9 +54,12 @@ export default function SignUp () {
 
   if (signedIn) {
     if (dataComplete(data.signUp)) {
-      return <Redirect to="/" />
+      return <Redirect to={key ? "/invited-deals" : "/"} />
     } else {
-      return <Redirect to={{ pathname: "/complete-signup", state: data.signUp }} />
+      return <Redirect to={{ 
+        pathname: "/complete-signup", 
+        state: { ...data.signUp, redirect: key ? "/invited-deals" : "/" } 
+      }} />
     }   
   }
 

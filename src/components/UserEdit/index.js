@@ -25,7 +25,7 @@ const UPDATE_USER = gql`
 
 export default function DealEdit () {
   const { user: auth0User } = useAuth0()
-  const { state } = useLocation()
+  const { state: {redirect, ...state} } = useLocation()
   const history = useHistory()
 
   const [user, setUser] = useState(null)
@@ -41,8 +41,7 @@ export default function DealEdit () {
   }, [user])
 
   useEffect(() => {
-    console.log(updateUsersRes.data)
-    if (updateUsersRes.data) return history.push("/")
+    if (updateUsersRes.data) return history.push(redirect || "/")
   }, [updateUsersRes])
 
   const updateUserProp = ({ prop, newVal }) => {
@@ -88,10 +87,7 @@ export default function DealEdit () {
           <Col sm={{size: 8, offset: 1}}>
             <Button disabled={!canSubmit} 
               variant="contained"
-              onClick={() => {
-                console.log(user)
-                updateUser({ variables: user })
-              }} 
+              onClick={() => updateUser({ variables: user })} 
               color="primary">
               UPDATE INFO
             </Button> 
