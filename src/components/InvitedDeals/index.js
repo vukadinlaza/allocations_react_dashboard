@@ -10,7 +10,7 @@ import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { adminWhitelist } from "../../auth/admin-route"
 
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core'
 
 import "./style.scss";
 
@@ -67,8 +67,8 @@ export default function InvitedDeals () {
                   <TableCell>Description</TableCell>
                   <TableCell>Closing</TableCell>
                   <TableCell>Lead</TableCell>
-                  <TableCell align="center">Pledge</TableCell>
-                  <TableCell align="center">Onboarding</TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -80,12 +80,16 @@ export default function InvitedDeals () {
                     <TableCell>{deal.deal_lead}</TableCell>
                     <TableCell align="center">
                       {deal.pledge_link ? <a href={deal.pledge_link} target="_blank">
-                        <FontAwesomeIcon icon="external-link-alt" />
+                        <Button variant="contained" color="primary">
+                          Pledge&nbsp;<FontAwesomeIcon icon="external-link-alt" />
+                        </Button>
                       </a> : ""} 
                     </TableCell>
                     <TableCell align="center">
                       {deal.onboarding_link ? <a href={deal.onboarding_link} target="_blank">
-                        <FontAwesomeIcon icon="external-link-alt" />
+                        <Button variant="contained" style={{backgroundColor: "#53B987", color: "#fff"}}>
+                          Invest&nbsp;<FontAwesomeIcon icon="external-link-alt" />
+                        </Button>
                       </a> : ""} 
                     </TableCell>
                   </TableRow>
