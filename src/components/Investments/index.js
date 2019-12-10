@@ -117,7 +117,7 @@ export default function UserInvestments () {
               </TableHead>
               <TableBody>
                 {_.orderBy(investments, i => new Date(i.deal.date_closed).getTime(), 'desc').map(investment => (
-                  <TableRow key={investment._id}>
+                  <TableRow key={investment._id} className="investment-row">
                     <TableCell>{investment.investor.first_name} {investment.investor.last_name}</TableCell>
                     <TableCell scope="row">{investment.deal.company_name}</TableCell>
                     <TableCell>{investment.deal.company_description}</TableCell>

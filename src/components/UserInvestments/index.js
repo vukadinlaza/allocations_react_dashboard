@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import _ from 'lodash'
 import { useParams } from 'react-router-dom';
 import { gql } from 'apollo-boost'
@@ -8,6 +8,7 @@ import { Row, Container, Col } from 'reactstrap'
 import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from '../utils/Loader'
+import Docs from '../utils/Docs'
 
 import { Table, TableBody, TableCell, TableRow, TableHead, Paper } from '@material-ui/core'
 
@@ -29,6 +30,7 @@ const GET_INVESTOR = gql`
           company_description
           date_closed
         }
+        documents
       }
     }
   }
@@ -37,6 +39,7 @@ const GET_INVESTOR = gql`
 export default function UserInvestments () {
   const params = useParams()
   const adminView = params && params.id
+  const [showDocs, setShowDocs] = useState(null)
 
   const { user } = useAuth0()
   const [getInvestor, { data, loading, error }] = useLazyQuery(GET_INVESTOR)
@@ -80,16 +83,14 @@ export default function UserInvestments () {
               </TableHead>
               <TableBody>
                 {_.orderBy(investments, i => new Date(i.deal.date_closed).getTime(), 'desc').map(investment => (
-                  <TableRow key={investment._id}>
+                  <TableRow key={investment._id} className="investment-row">
                     <TableCell>{data.investor.first_name} {data.investor.last_name}</TableCell>
                     <TableCell scope="row">{investment.deal.company_name}</TableCell>
                     <TableCell>{investment.deal.company_description}</TableCell>
                     <TableCell align="right">${nWithCommas(investment.amount)}</TableCell>
                     <TableCell align="center">{investment.deal.date_closed}</TableCell>
                     <TableCell align="right">
-                      {investment.documents ? <a href={investment.documents} target="_blank">
-                        <FontAwesomeIcon icon="external-link-alt" />
-                      </a> : ""} 
+                      <FontAwesomeIcon icon="info-circle" onClick={() => setShowDocs(investment)} /> 
                     </TableCell>
                   </TableRow>
                 ))}
@@ -98,6 +99,16 @@ export default function UserInvestments () {
           </Paper>
         </Col>
       </Row>
+    </div>
+  )
+}
+
+function ShowDocs ({ investment }) {
+  if (!investment) return null
+
+  return (
+    <div className="show-docs">
+      <Docs investment={investment} />
     </div>
   )
 }

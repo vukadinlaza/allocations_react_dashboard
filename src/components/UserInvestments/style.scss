@@ -32,6 +32,13 @@
         }
     }
 
+    .investment-row {
+        &:hover {
+            background-color: #e8eaf6;
+            cursor: pointer;
+        }
+    }
+
     .investments-table {
         tr:hover {
             background-color: #e8eaf6;
