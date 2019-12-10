@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 
-import Loading from "./components/Loading";
 import NavBar from "./components/NavBar";
-import Footer from "./components/Footer";
 import SignUp from "./components/SignUp";
 import Home from "./views/Home";
 import Deals from "./components/Deals";
@@ -21,16 +19,11 @@ import Investments from './components/Investments';
 import InvestmentNew from './components/InvestmentNew';
 import InvestmentEdit from './components/InvestmentEdit';
 import UserInvestments from './components/UserInvestments';
-import Profile from "./views/Profile";
+import Profile from './components/Profile';
+
 import history from "./utils/history";
 import { ApolloProvider } from '@apollo/react-hooks';
 import initFontAwesome from "./utils/initFontAwesome";
-import { InMemoryCache } from "apollo-boost";
-import ApolloClient from 'apollo-boost';
-import { HttpLink } from 'apollo-link-http';
-import { ApolloLink, Observable } from 'apollo-link';
-import { onError } from 'apollo-link-error';
-import { withClientState } from 'apollo-link-state';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AdminRoute from "./auth/admin-route"
