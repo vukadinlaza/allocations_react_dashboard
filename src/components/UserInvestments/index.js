@@ -90,7 +90,7 @@ export default function UserInvestments () {
                     <TableCell align="right">${nWithCommas(investment.amount)}</TableCell>
                     <TableCell align="center">{investment.deal.date_closed}</TableCell>
                     <TableCell align="right">
-                      <FontAwesomeIcon icon="info-circle" onClick={() => setShowDocs(investment)} /> 
+                      {/*<FontAwesomeIcon icon="info-circle" onClick={() => setShowDocs(investment)} />*/}
                     </TableCell>
                   </TableRow>
                 ))}
