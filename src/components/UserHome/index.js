@@ -165,7 +165,7 @@ function DealStub ({ deal }) {
       <span>{deal.company_name}</span>
       <span>{deal.date_closed || "TBD"}</span>
       <span>
-        <Fab onClick={() => history.push("/invited-deals")} size="small" variant="contained" color="primary" style={{textAlign: 'center'}}>
+        <Fab onClick={() => history.push("/invited-deals")} size="small" color="primary" style={{textAlign: 'center'}}>
           <FontAwesomeIcon icon="arrow-right" size="xs" />
         </Fab>
       </span>
