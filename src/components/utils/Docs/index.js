@@ -1,0 +1,100 @@
+import React, { useState, useEffect } from 'react'
+import { get } from 'lodash'
+import { useParams, Redirect } from "react-router-dom"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { gql } from 'apollo-boost'
+import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks'
+import "./style.scss"
+
+const ADD_INVESTMENT_DOC = gql`
+  mutation AddInvestmentDoc($doc: Upload!, $investment_id: String!) {
+    addInvestmentDoc(doc: $doc, investment_id: $investment_id)
+  }
+`
+
+const RM_INVESTMENT_DOC = gql`
+  mutation RmInvestmentDoc($file: String!, $investment_id: String!) {
+    rmInvestmentDoc(file: $file, investment_id: $investment_id)
+  }
+`
+
+const UPDATE_INVESTMENT = gql`
+  mutation UpdateInvestment($investment: InvestmentInput) {
+    updateInvestment(investment: $investment) {
+      _id
+    }
+  }
+`
+
+export default function Docs ({ investment, setInvestment }) {
+  const [uploadedDoc, setUploadedDoc] = useState(null)
+  const [addInvestmentDoc, {data, loading, error}] = useMutation(ADD_INVESTMENT_DOC)
+
+  useEffect(() => {
+    if (uploadedDoc) {
+      addInvestmentDoc({ variables: { doc: uploadedDoc, investment_id: investment._id }})
+    }
+  }, [uploadedDoc])
+
+  useEffect(() => {
+    if (data) {
+      setInvestment(prev => {
+        return {
+          ...prev,
+          documents: [...prev.documents, data.addInvestmentDoc]
+        }
+      })
+    }
+  }, [data])
+
+  const docs = get(investment, 'documents', [])
+
+  return (
+    <div className="docs">
+      <div className="doc-wrapper">
+        <div className="add-doc">
+          <label>
+            <FontAwesomeIcon icon="plus" />
+            <input type="file" 
+              style={{display: "none"}} 
+              onChange={({ target }) => {
+                if (target.validity.valid) setUploadedDoc(target.files[0])
+              }} />
+          </label>
+        </div>
+        <div className="filename">&nbsp;</div>
+      </div>
+      {docs.map(doc => <Doc key={doc} doc={doc} investment={investment} />)}
+    </div>
+  )
+}
+
+function Doc ({ doc, investment }) {
+  const [done, setDone] = useState(false)
+  const file = doc.split('/')[2].split('?')[0]
+  const [rmInvestmentDoc, { data }] = useMutation(RM_INVESTMENT_DOC, { variables: { file, investment_id: investment._id }})
+
+  useEffect(() => {
+    if (data) setDone(true)
+  }, [data])
+
+  const rmDoc = () => {
+    if (window.confirm(`Delete ${file}?`)) rmInvestmentDoc()
+  }
+
+  if (done) return null
+
+  return (
+    <div className="doc-wrapper">
+      <div className="doc">
+        <FontAwesomeIcon icon="times-circle" 
+          onClick={rmDoc} />
+        <FontAwesomeIcon icon={["far", "file-pdf"]} />
+      </div>
+      <div className="filename">
+        <span><a href={`https://${doc}`} target="_blank">{file}</a></span>
+      </div>
+    </div>
+  )
+}

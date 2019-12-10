@@ -21,6 +21,7 @@ const icons = [
   Solid.faFileUpload,
   Solid.faTimesCircle,
   Solid.faArrowRight,
+  Solid.faInfoCircle,
   Reg.faFilePdf
 ]
 
