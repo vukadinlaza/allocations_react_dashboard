@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useAuth } from "../auth/provider"
 
 import {
   Collapse,
@@ -22,7 +23,7 @@ import { useAuth0 } from "../react-auth0-spa";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { loading, user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { logout } = useAuth0();
   const toggle = () => setIsOpen(!isOpen);
 
   const logoutWithRedirect = () => logout({ returnTo: window.location.origin });
@@ -43,7 +44,7 @@ const NavBar = () => {
 }
 
 function LoginOrProfile () {
-  const { loading, user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { loading, user: auth0user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
   const logoutWithRedirect = () => logout({ returnTo: window.location.origin });
 
   if (loading) {
@@ -59,14 +60,14 @@ function LoginOrProfile () {
         <UncontrolledDropdown nav inNavbar>
             <DropdownToggle nav caret id="profileDropDown" className="profile-actions-toggle">
               <img
-                src={user.picture}
+                src={auth0user.picture}
                 alt="Profile"
                 className="nav-user-profile rounded-circle"
                 width="50"
               />
             </DropdownToggle>
             <DropdownMenu right className="profile-image">
-              <DropdownItem header>{user.name}</DropdownItem>
+              <DropdownItem header>{auth0user.name}</DropdownItem>
               <DropdownItem
                 tag={RouterNavLink}
                 to="/profile"
