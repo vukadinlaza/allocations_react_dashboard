@@ -10,7 +10,7 @@ import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { adminWhitelist } from "../../auth/admin-route"
 
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, Hidden } from '@material-ui/core'
 
 import "./style.scss";
 
@@ -33,6 +33,15 @@ const GET_INVESTOR = gql`
     }
   }
 `
+
+function formatDate (date) {
+  try {
+    const d = new Date(date)
+    return d.toLocaleString('en-US', { dateStyle: "short" })
+  } catch (e) {
+    return date
+  }
+}
 
 export default function InvitedDeals () {
   const params = useParams()
@@ -60,13 +69,13 @@ export default function InvitedDeals () {
       <Row>
         <Col sm="10" className="offset-sm-1">
           <Paper className="table-wrapper">
-            <Table>
+            <Table size={window.innerWidth > 768 ? "medium": "small"}>
               <TableHead>
                 <TableRow>
                   <TableCell>Deal</TableCell>
-                  <TableCell>Description</TableCell>
+                  <Hidden xsDown><TableCell>Description</TableCell></Hidden>
                   <TableCell>Closing</TableCell>
-                  <TableCell>Lead</TableCell>
+                  <Hidden xsDown><TableCell>Lead</TableCell></Hidden>
                   <TableCell></TableCell>
                   <TableCell></TableCell>
                 </TableRow>
@@ -75,9 +84,9 @@ export default function InvitedDeals () {
                 {investor.invitedDeals.map(deal => (
                   <TableRow key={deal._id}>
                     <TableCell>{deal.company_name}</TableCell>
-                    <TableCell>{deal.company_description}</TableCell>
-                    <TableCell>{deal.date_closed}</TableCell>
-                    <TableCell>{deal.deal_lead}</TableCell>
+                    <Hidden xsDown><TableCell>{deal.company_description}</TableCell></Hidden>
+                    <TableCell>{formatDate(deal.date_closed)}</TableCell>
+                    <Hidden xsDown><TableCell>{deal.deal_lead}</TableCell></Hidden>
                     <TableCell align="center">
                       {deal.pledge_link ? <a href={deal.pledge_link} target="_blank">
                         <Button variant="contained" color="primary">

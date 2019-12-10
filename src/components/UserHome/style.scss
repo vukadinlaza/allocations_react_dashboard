@@ -54,7 +54,9 @@ $break-xs: 576px;
                 color: black;
             }
         }
-        
+        .button {
+            background-color: $green;
+        }
     }
 
     .total-investments {

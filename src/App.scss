@@ -3,20 +3,22 @@ $break-sm: 768px;
 $break-xs: 576px;
 
 @mixin xs-only {
-  @media (max-width: $break-xs) { @content }
+  @media (max-width: $break-xs) { @content };
 }
 
 @mixin sm-only {
-  @media (max-width: $break-sm) { @content }
+  @media (max-width: $break-sm) { @content };
 }
 
 @mixin md-only {
-  @media (max-width: $break-md) { @content }
+  @media (max-width: $break-md) { @content };
 }
 
 @mixin sm-and-up {
-  @media (min-width: $break-sm) { @content }
+  @media (min-width: $break-sm) { @content };
 }
+
+$green: #53B987;
 
 .next-steps .fa-link {
   margin-right: 5px;
