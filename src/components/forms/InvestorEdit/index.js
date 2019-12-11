@@ -187,7 +187,7 @@ const statusOptions = {
     "I have over $5m in net assets, excluding my primary residence",
     "I have over $2m-$5m in net assets, excluding my primary residence",
     "I have over $1m-$2m in net assets, excluding my primary residence",
-    "I have had $200k in income for the past 2 years and expect...",
+    "I have had $200K in income (or $300K jointly with my spouse) for the past 2 years and expect the same this year",
     "N.A."
   ],
   entity: [
