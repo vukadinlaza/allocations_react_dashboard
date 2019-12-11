@@ -32,21 +32,42 @@
         }
     }
 
-    .investment-row {
-        &:hover {
-            background-color: #e8eaf6;
-            cursor: pointer;
-        }
-    }
-
-    .investments-table {
-        tr:hover {
-            background-color: #e8eaf6;
-            cursor: pointer;
-        }
-    }
-
     #investments-timeseries-chart {
         height: 200px;
+    }
+
+    .fa-info-circle, .fa-times {
+        cursor: pointer;
+    }
+
+    .doc-wrapper {
+        display: inline-block;
+        text-align: center;
+        margin-right: 10px;
+    }
+
+    .doc {
+        display: inline-block;
+        height: 50px;
+        width: 40px;
+        margin: 0px 20px;
+        border-radius: 5px;
+        vertical-align: top;
+    }
+
+    .doc {
+        position: relative;
+        .fa-file-pdf {
+            color: #F48FB1;
+            font-size: 3em;
+            position: absolute;
+            right: 3px;
+            top: 2px;
+        }
+    }
+
+    .filename {
+        text-align: center;
+        font-size: 0.8em;
     }
 }
