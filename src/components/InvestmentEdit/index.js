@@ -16,7 +16,10 @@ const GET_INVESTMENT = gql`
     investment(_id: $_id) {
       _id
       amount
-      documents
+      documents {
+        link
+        path
+      }
       deal {
         _id
         company_name
@@ -168,14 +171,14 @@ function Docs ({ investment, setInvestment }) {
         </div>
         <div className="filename">&nbsp;</div>
       </div>
-      {docs.map(doc => <Doc key={doc} doc={doc} investment={investment} />)}
+      {docs.map(doc => <Doc key={doc.path} doc={doc} investment={investment} />)}
     </div>
   )
 }
 
 function Doc ({ doc, investment }) {
   const [done, setDone] = useState(false)
-  const file = doc.split('/')[2].split('?')[0]
+  const file = doc.path.split('/')[1]
   const [rmInvestmentDoc, { data }] = useMutation(RM_INVESTMENT_DOC, { variables: { file, investment_id: investment._id }})
 
   useEffect(() => {
@@ -196,7 +199,7 @@ function Doc ({ doc, investment }) {
         <FontAwesomeIcon icon={["far", "file-pdf"]} />
       </div>
       <div className="filename">
-        <span><a href={`https://${doc}`} target="_blank">{file}</a></span>
+        <span><a href={`https://${doc.link}`} target="_blank">{file}</a></span>
       </div>
     </div>
   )
