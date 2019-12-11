@@ -9,16 +9,23 @@ const SIGNUP = gql`
   mutation SignUp($inviteKey: String) {
     signUp(inviteKey: $inviteKey) {
       _id
-      email
       first_name
       last_name
-      admin
+      country
+      investor_type
+      signer_full_name
+      accredited_investor_status
+      email
     }
   }
 `
 
+const required = ['first_name', 'last_name', 'country', 'investor_type', 'signer_full_name', 'accredited_investor_status', 'email']
 function dataComplete (user) {
-  return user.email && user.first_name && user.last_name
+  for (let i = 0; i < required.length; i++) {
+    if (!user[required[i]]) return false
+  }
+  return true
 }
 
 export default function SignUp () {

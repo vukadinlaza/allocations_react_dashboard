@@ -37,6 +37,11 @@ export default function Sidebar ({ showSidebar, setShowSidebar }) {
           <span>Deals</span>
         </Link>
       </div>
+      <div className={`sidebar-nav-item ${location.pathname === "/profile" ? "sidebar-nav-item-active" : ""}`}>
+        <Link to="/profile">
+          <span>Profile</span>
+        </Link>
+      </div>
       {admin && <AdminLinks location={location} />}
     </Col>
   )
