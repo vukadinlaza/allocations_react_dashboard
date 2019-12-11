@@ -127,7 +127,7 @@ export default function InvestorEditForm ({ investor, setInvestor, actionText, s
       </Row>
       <Row>
         <Col sm={{size: 6, offset: 1}}>
-          <TextField required
+          <TextField required disabled
             error={errors.includes("email")}
             style={{width: "100%"}} 
             value={get(investor, 'email') || ""}
