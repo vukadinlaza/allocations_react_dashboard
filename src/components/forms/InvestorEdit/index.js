@@ -55,7 +55,11 @@ export default function InvestorEditForm ({ investor, setInvestor, actionText, s
 
   const handleChange = (prop) => e => {
     e.persist()
-    return setInvestor(prev => ({ ...prev, [prop]: e.target.value }))
+    if (prop === "investor_type") {
+      return setInvestor(prev => ({ ...prev, [prop]: e.target.value, accredited_investor_status: "" }))
+    } else {
+      return setInvestor(prev => ({ ...prev, [prop]: e.target.value }))
+    }
   }
 
   const submit = () => {

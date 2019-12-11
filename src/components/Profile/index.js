@@ -31,7 +31,7 @@ export default function Profile () {
   const [editMode, setEditMode] = useState(true)
   const [investor, setInvestor] = useState(null)
   const [formStatus, setFormStatus] = useState("edit")
-  const [getInvestor, { data, error }] = useLazyQuery(GET_INVESTOR)
+  const [getInvestor, { data, error, refetch }] = useLazyQuery(GET_INVESTOR)
   const { user } = useAuth0()
 
   useEffect(() => {
@@ -44,6 +44,10 @@ export default function Profile () {
       setInvestor(rest)
     }
   }, [data])
+
+  useEffect(() => {
+    if (formStatus === "complete") refetch()
+  }, [formStatus])
   
   const icon = formStatus === "loading" 
     ? "circle-notch" 
@@ -60,7 +64,8 @@ export default function Profile () {
           </h4>
         </Col>
       </Row>
-      <InvestorEditForm investor={investor} 
+      <InvestorEditForm investor={investor}
+        refetch={refetch}
         setInvestor={setInvestor}
         setFormStatus={setFormStatus} 
         actionText="UPDATE PROFILE" />
