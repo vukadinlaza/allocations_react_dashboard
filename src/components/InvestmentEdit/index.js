@@ -58,6 +58,7 @@ export default function InvestmentEdit () {
   const params = useParams()
   const [investment, setInvestment] = useState(null)
   const [hasChanges, setHasChanges] = useState(false)
+
   const { data, loading, refetch, error } = useQuery(GET_INVESTMENT, { variables: { _id: params.id }})
   const [createInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT)
 
@@ -68,6 +69,11 @@ export default function InvestmentEdit () {
   useEffect(() => {
     if (data && !investment) setInvestment(data.investment)
   }, [data, investment])
+
+  // for document refetches
+  useEffect(() => {
+    if (data && investment) setInvestment(prev => ({...prev, documents: data.investment.documents }))
+  }, [data])
 
   const updateInvestmentProp = ({ prop, newVal }) => {
     setInvestment(prev => ({ ...prev, [prop]: newVal }))
@@ -123,7 +129,7 @@ export default function InvestmentEdit () {
         <Row>
           <Col sm={{size: 8, offset: 1}}>
             <div className="form-sub-title">Documents</div>
-            <Docs investment={investment} setInvestment={setInvestment} />
+            <Docs investment={investment} setInvestment={setInvestment} refetch={refetch} />
           </Col>
         </Row>
         <Row>
@@ -133,26 +139,15 @@ export default function InvestmentEdit () {
   )
 }
 
-function Docs ({ investment, setInvestment }) {
+function Docs ({ investment, setInvestment, refetch }) {
   const [uploadedDoc, setUploadedDoc] = useState(null)
-  const [addInvestmentDoc, {data, loading, error}] = useMutation(ADD_INVESTMENT_DOC)
+  const [addInvestmentDoc, {data, loading, error}] = useMutation(ADD_INVESTMENT_DOC, { onCompleted: refetch })
 
   useEffect(() => {
     if (uploadedDoc) {
       addInvestmentDoc({ variables: { doc: uploadedDoc, investment_id: investment._id }})
     }
   }, [uploadedDoc])
-
-  useEffect(() => {
-    if (data) {
-      setInvestment(prev => {
-        return {
-          ...prev,
-          documents: [...prev.documents, data.addInvestmentDoc]
-        }
-      })
-    }
-  }, [data])
 
   const docs = get(investment, 'documents', [])
 
@@ -171,25 +166,19 @@ function Docs ({ investment, setInvestment }) {
         </div>
         <div className="filename">&nbsp;</div>
       </div>
-      {docs.map(doc => <Doc key={doc.path} doc={doc} investment={investment} />)}
+      {docs.map(doc => <Doc key={doc.path} doc={doc} investment={investment} refetch={refetch} />)}
     </div>
   )
 }
 
-function Doc ({ doc, investment }) {
+function Doc ({ doc, investment, refetch }) {
   const [done, setDone] = useState(false)
   const file = doc.path.split('/')[1]
-  const [rmInvestmentDoc, { data }] = useMutation(RM_INVESTMENT_DOC, { variables: { file, investment_id: investment._id }})
-
-  useEffect(() => {
-    if (data) setDone(true)
-  }, [data])
+  const [rmInvestmentDoc, { data }] = useMutation(RM_INVESTMENT_DOC, { variables: { file, investment_id: investment._id }, onCompleted: refetch })
 
   const rmDoc = () => {
     if (window.confirm(`Delete ${file}?`)) rmInvestmentDoc()
   }
-
-  if (done) return null
 
   return (
     <div className="doc-wrapper">
