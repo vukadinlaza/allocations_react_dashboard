@@ -8,7 +8,6 @@ import { Row, Container, Col } from 'reactstrap'
 import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from '../utils/Loader'
-import Docs from '../utils/Docs'
 
 import { Table, TableBody, TableCell, TableRow, TableHead, Paper } from '@material-ui/core'
 
