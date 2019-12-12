@@ -9,7 +9,7 @@ import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from '../utils/Loader'
 
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Hidden } from '@material-ui/core'
 
 import "./style.scss";
 
@@ -78,9 +78,9 @@ export default function UserInvestments () {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Investor</TableCell>
+                  <Hidden xsDown><TableCell>Investor</TableCell></Hidden>
                   <TableCell>Company</TableCell>
-                  <TableCell>Description</TableCell>
+                  <Hidden xsDown><TableCell>Description</TableCell></Hidden>
                   <TableCell align="right">Amount</TableCell>
                   <TableCell align="center">Date Closed</TableCell>
                   <TableCell align="right">Docs</TableCell>
@@ -90,9 +90,9 @@ export default function UserInvestments () {
                 {investments.map((investment) => (
                   investment.showDocs ? <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents} />
                     : <TableRow key={investment._id} className="investment-row">
-                        <TableCell>{data.investor.first_name} {data.investor.last_name}</TableCell>
+                        <Hidden xsDown><TableCell>{data.investor.first_name} {data.investor.last_name}</TableCell></Hidden>
                         <TableCell scope="row">{investment.deal.company_name}</TableCell>
-                        <TableCell>{investment.deal.company_description}</TableCell>
+                        <Hidden xsDown><TableCell>{investment.deal.company_description}</TableCell></Hidden>
                         <TableCell align="right">${nWithCommas(investment.amount)}</TableCell>
                         <TableCell align="center">{investment.deal.date_closed}</TableCell>
                         <TableCell align="right">
