@@ -18,6 +18,7 @@ const GET_INVESTOR = gql`
       _id
       first_name
       last_name
+      entity_name
       country
       investor_type
       signer_full_name

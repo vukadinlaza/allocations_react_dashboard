@@ -20,6 +20,7 @@ const UPDATE_USER = gql`
       first_name
       last_name
       country
+      entity_name
       investor_type
       signer_full_name
       accredited_investor_status
@@ -34,6 +35,7 @@ const GET_INVESTOR = gql`
       _id
       first_name
       last_name
+      entity_name
       country
       investor_type
       signer_full_name
@@ -43,8 +45,12 @@ const GET_INVESTOR = gql`
   }
 `
 
+const reqs = ['country', 'investor_type', 'signer_full_name', 'accredited_investor_status', 'email']
+
 function validate(investor) {
-  const required = ['first_name', 'last_name', 'country', 'investor_type', 'signer_full_name', 'accredited_investor_status', 'email']
+  const required = investor.investor_type === "Entity" 
+    ? ['first_name', 'last_name', ...reqs]
+    : ['entity_name', ...reqs]
   return required.reduce((acc, attr) => investor[attr] ? acc : [...acc, attr], [])
 }
 
@@ -110,24 +116,7 @@ export default function InvestorEditForm ({ investor, setInvestor, actionText, s
         </Col>
       </Row>
       <Row>
-        <Col sm={{size: 3, offset: 1}}>
-          <TextField required
-            error={errors.includes("first_name")}
-            style={{width: "100%"}} 
-            value={get(investor, 'first_name') || ""} 
-            onChange={handleChange("first_name")}
-            label="Subscriber First Name" 
-            variant="filled" />
-        </Col>
-        <Col sm={{size: 3}}>
-          <TextField required
-            error={errors.includes("last_name")}
-            style={{width: "100%"}} 
-            value={get(investor, 'last_name') || ""}
-            onChange={handleChange("last_name")}
-            label="Subscriber Last Name" 
-            variant="filled" />
-        </Col>
+        <InvestorName investor={investor} errors={errors} handleChange={handleChange} />
       </Row>
       <Row>
         <Col sm={{size: 6, offset: 1}}>
@@ -184,6 +173,45 @@ export default function InvestorEditForm ({ investor, setInvestor, actionText, s
       </Row>*/}
     </form>
   )
+}
+
+function InvestorName ({ investor, errors, handleChange }) {
+  if (investor.investor_type === "entity") {
+    return (
+      <Col sm={{size: 6, offset: 1}}>
+        <TextField required
+          error={errors.includes("entity_name")}
+          style={{width: "100%"}} 
+          value={get(investor, 'entity_name') || ""} 
+          onChange={handleChange("entity_name")}
+          label="Subscriber Entity Name" 
+          variant="filled" />
+      </Col>
+    )
+  } else {
+    return (
+      <React.Fragment>
+        <Col sm={{size: 3, offset: 1}}>
+          <TextField required
+            error={errors.includes("first_name")}
+            style={{width: "100%"}} 
+            value={get(investor, 'first_name') || ""} 
+            onChange={handleChange("first_name")}
+            label="Subscriber First Name" 
+            variant="filled" />
+        </Col>
+        <Col sm={{size: 3}}>
+          <TextField required
+            error={errors.includes("last_name")}
+            style={{width: "100%"}} 
+            value={get(investor, 'last_name') || ""}
+            onChange={handleChange("last_name")}
+            label="Subscriber Last Name" 
+            variant="filled" />
+        </Col>
+      </React.Fragment>
+    )
+  }
 }
 
 const statusOptions = {

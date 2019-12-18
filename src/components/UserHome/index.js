@@ -53,6 +53,8 @@ const GET_INVESTOR = gql`
       _id
       first_name
       last_name
+      entity_name
+      investor_type
       email
       investments {
         amount
@@ -98,7 +100,7 @@ export default function UserHome (props) {
       <Row>
         <Col lg={{size: 3, offset: 2}} md={{size: 4, offset: 1}} sm={{size: 5, offset: 0}} className="welcome">
           <div className="tile tile-top">
-            <div className="welcome-text">Welcome,<br></br>{investor.first_name}</div>
+            <div className="welcome-text">Welcome,<br></br><Name investor={investor} /></div>
             <div className="welcome-desc">
               🎉 Your Allocations account is ready for your use. Lets view your investments
               <div>
@@ -145,6 +147,14 @@ export default function UserHome (props) {
       </Row>
     </Container>
   )
+}
+
+function Name ({ investor }) {
+  if (investor.investor_type === "entity") {
+    return investor.entity_name
+  } else {
+    return investor.first_name
+  }
 }
 
 function InvestmentStub ({ investment }) {
