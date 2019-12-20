@@ -20,6 +20,9 @@ const GET_INVESTORS = gql`
       first_name
       last_name
       email
+      passport {
+        link
+      }
       investments {
         _id
         amount
@@ -59,6 +62,7 @@ export default function Investments () {
                   <TableCell>Total Invested</TableCell>
                   <TableCell></TableCell>
                   <TableCell></TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -75,6 +79,9 @@ export default function Investments () {
                     </TableCell>
                     <TableCell>
                       <Link to={`/investor/${investor._id}/edit`}>Edit</Link>
+                    </TableCell>
+                    <TableCell>
+                      {investor.passport && <a href={"https://" + investor.passport.link} target="_blank">Passport</a>}   
                     </TableCell>
                   </TableRow>
                 ))}
