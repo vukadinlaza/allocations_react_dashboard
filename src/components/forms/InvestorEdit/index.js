@@ -25,6 +25,10 @@ const UPDATE_USER = gql`
       signer_full_name
       accredited_investor_status
       email
+      passport {
+        link
+        path
+      }
     }
   }
 `
@@ -48,9 +52,9 @@ const GET_INVESTOR = gql`
 const reqs = ['country', 'investor_type', 'signer_full_name', 'accredited_investor_status', 'email']
 
 function validate(investor) {
-  const required = investor.investor_type === "Entity" 
-    ? ['first_name', 'last_name', ...reqs]
-    : ['entity_name', ...reqs]
+  const required = investor.investor_type === "Entity"
+    ? ['entity_name', ...reqs]
+    : ['first_name', 'last_name', ...reqs]
   return required.reduce((acc, attr) => investor[attr] ? acc : [...acc, attr], [])
 }
 
@@ -69,7 +73,9 @@ export default function InvestorEditForm ({ investor, setInvestor, actionText, s
   }
 
   const submit = () => {
+    console.log("SUBMIT?")
     const validation = validate(investor)
+    console.log("VALID?", validation)
     setErrors(validation)
     if (validation.length === 0) {
       updateInvestor({ variables: { investor } })
@@ -84,7 +90,7 @@ export default function InvestorEditForm ({ investor, setInvestor, actionText, s
   if (!investor) return <Loader />
 
   return (
-    <form className="form" noValidate autoComplete="off">
+    <form className="form InvestorEditForm" noValidate autoComplete="off">
       <Row>
         <Col sm={{size: 6, offset: 1}}>
           <FormControl required error={errors.includes("investor_type")} variant="filled" style={{width: "100%"}}>
@@ -140,15 +146,6 @@ export default function InvestorEditForm ({ investor, setInvestor, actionText, s
             variant="filled" />
         </Col>
       </Row>
-      <Row>
-        <Col sm={{size: 6, offset: 1}} className="submit-row">
-          <Button variant="contained"
-            onClick={submit} 
-            color="primary">
-            {actionText}
-          </Button> 
-        </Col>
-      </Row>
       {/*<Row>
         <Col sm={{size: 3, offset: 1}}>
           <div className="file-uploader">
@@ -159,19 +156,49 @@ export default function InvestorEditForm ({ investor, setInvestor, actionText, s
             </Button>
           </div>
         </Col>
-      </Row>
+      </Row>*/}
       <Row>
         <Col sm={{size: 3, offset: 1}}>
-          <div className="file-uploader">
-            <span className="file-label"></span>
-            <Button variant="contained" component="label">
-              Upload Passport
-              <input type="file" style={{ display: "none" }} />
-            </Button>
-          </div>
+          <PassportUploader investor={investor} setInvestor={setInvestor} />
         </Col>
-      </Row>*/}
+      </Row>
+      <Row>
+        <Col sm={{size: 6, offset: 1}} className="submit-row">
+          <Button variant="contained"
+            onClick={submit} 
+            color="primary">
+            {actionText}
+          </Button> 
+        </Col>
+      </Row>
     </form>
+  )
+}
+
+function PassportUploader ({ investor, setInvestor }) {
+  if (investor.passport) {
+    return (
+      <div className="file-uploader">
+        <span className="file-label">Passport:</span>
+        {investor.passport.link 
+          ? <a href={"https://" + investor.passport.link} target="_blank"><FontAwesomeIcon icon="paperclip" /></a> 
+          : <FontAwesomeIcon icon="paperclip" /> }
+      </div>
+    )
+  }
+
+  return (
+    <div className="file-uploader">
+      <span className="file-label">Passport:</span>
+      <Button variant="contained" component="label">
+        Upload
+        <input type="file" 
+          style={{ display: "none" }} 
+          onChange={({ target }) => {
+            if (target.validity.valid) setInvestor(prev => ({ ...prev, passport: target.files[0] }))
+          }} />
+      </Button>
+    </div>
   )
 }
 
