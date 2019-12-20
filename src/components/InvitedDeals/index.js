@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import _ from 'lodash'
 import Loader from "../utils/Loader"
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, Redirect } from 'react-router-dom';
 import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
@@ -59,7 +59,12 @@ export default function InvitedDeals () {
     }
   }, [user])
 
-  if (error) return <div>{error.message}</div>
+  if (error) {
+    if (error.message === "GraphQL error: permission denied" && user && user.email) {
+      return <Redirect to="/signup" />
+    }
+    return <div>{error.message}</div>
+  }
 
   if (!data) return <div><Loader /></div>
 

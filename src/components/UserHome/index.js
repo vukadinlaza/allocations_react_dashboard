@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import _ from 'lodash'
 import { gql } from 'apollo-boost'
-import { Link, useLocation, useParams, useHistory } from 'react-router-dom'
+import { Link, useLocation, useParams, useHistory, Redirect } from 'react-router-dom'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
 import { Row, Container, Col } from 'reactstrap'
@@ -90,7 +90,14 @@ export default function UserHome (props) {
     }
   }, [user])
 
+  if (error) {
+    if (error.message === "GraphQL error: permission denied" && user && user.email) {
+      return <Redirect to="/signup" />
+    }
+  }
+
   if (!data) return <div><Loader /></div>
+
   const investor = data.investor
 
   const total_invested = _.sumBy(investor.investments, 'amount') || 0

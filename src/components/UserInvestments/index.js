@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import _ from 'lodash'
-import { useParams } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
@@ -54,7 +54,12 @@ export default function UserInvestments () {
     }
   }, [user])
 
-  if (error) return <div>{error.message}</div>
+  if (error) {
+    if (error.message === "GraphQL error: permission denied" && user && user.email) {
+      return <Redirect to="/signup" />
+    }
+    return <div>{error.message}</div>
+  }
 
   if (!data) return <div><Loader /></div>
 
