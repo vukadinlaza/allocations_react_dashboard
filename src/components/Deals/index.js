@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import _ from 'lodash'
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useHistory, Link } from 'react-router-dom';
 import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
@@ -29,6 +29,7 @@ const GET_DEALS = gql`
 `
 
 export default function Deals () {
+  const history = useHistory()
   const params = useParams()
   const adminView = params && params.id
 

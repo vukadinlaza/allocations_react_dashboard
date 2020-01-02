@@ -5,6 +5,7 @@ import { Container, Row, Col } from "reactstrap";
 import NavBar from "./components/NavBar";
 import SignUp from "./components/SignUp";
 import Home from "./views/Home";
+import Deal from "./components/Deal";
 import Deals from "./components/Deals";
 import DealNew from "./components/DealNew";
 import DealEdit from "./components/DealEdit";
@@ -31,7 +32,6 @@ import PrivateRoute from "./components/PrivateRoute";
 import {getTokenSilently, useAuth0} from "./react-auth0-spa";
 import { client } from './apollo-client';
 
-import Deal from "./views/Deal";
 import Loader from "./components/utils/Loader"
 import Investor from './views/Investor';
 import AddDeal from './components/AddDeal';
@@ -108,11 +108,14 @@ const App = () => {
                   <AdminRoute path="/deals" exact>
                     <Deals /> 
                   </AdminRoute>
-                  <AdminRoute path="/deals/:id/edit" exact>
-                    <DealEdit /> 
-                  </AdminRoute>
                   <AdminRoute path="/deal/new" exact>
                     <DealNew /> 
+                  </AdminRoute>
+                  <AdminRoute path="/deals/:id" exact>
+                    <Deal /> 
+                  </AdminRoute>
+                  <AdminRoute path="/deals/:id/edit" exact>
+                    <DealEdit /> 
                   </AdminRoute>
                   <AdminRoute path="/admin/investments" exact>
                     <Investments /> 
