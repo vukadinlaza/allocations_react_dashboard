@@ -73,9 +73,7 @@ export default function InvestorEditForm ({ investor, setInvestor, actionText, s
   }
 
   const submit = () => {
-    console.log("SUBMIT?")
     const validation = validate(investor)
-    console.log("VALID?", validation)
     setErrors(validation)
     if (validation.length === 0) {
       updateInvestor({ variables: { investor } })
