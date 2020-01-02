@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { get, isEqual } from "lodash"
-import { useParams, Redirect } from "react-router-dom"
+import { useHistory, Redirect } from "react-router-dom"
 import { TextField } from '@material-ui/core'
 import { Row, Col } from 'reactstrap'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,26 +10,51 @@ import * as API from "../../api"
 import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks'
 
 import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core'
-// import "./style.scss"
+import "./style.scss"
+
+const CREATE_INVESTMENT = gql`
+  mutation CreateInvestment($investment: InvestmentInput!) {
+    createInvestment(investment: $investment) {
+      _id
+    }
+  }
+`
+
+function validate({ investment, user, deal }) {
+  const errors = []
+  if (!investment.amount) errors.push("amount")
+  if (!user) errors.push("user")
+  if (!deal) errors.push("deal")
+  return errors
+}
 
 export default function InvestmentNew () {
-  const params = useParams()
+  const history = useHistory()
   const [investment, setInvestment] = useState({ amount: ""})
-  const [hasChanges, setHasChanges] = useState(false)
+  const [createInvestment, { data, error }] = useMutation(CREATE_INVESTMENT)
+  const [errors, setErrors] = useState([])
+
+  useEffect(() => {
+    if (data) history.push(`/admin/investments/${data.createInvestment._id}/edit`)
+  }, [data])
 
   const [user, setUser] = useState(null)
   const [deal, setDeal] = useState(null)
-
-  useEffect(() => {
-    setHasChanges(!isEqual(investment, {}))
-  }, [investment])
 
   const updateInvestmentProp = ({ prop, newVal }) => {
     setInvestment(prev => ({ ...prev, [prop]: newVal }))
   }
 
-  if (false) {
-    return <Redirect to={`/admin/investments/:id/edit`} />
+  const submit = () => {
+    const validation = validate({ investment, user, deal })
+    setErrors(validation)
+    if (validation.length === 0) {
+      createInvestment({ 
+        variables: { 
+          investment: { amount: Math.floor(investment.amount), user_id: user._id, deal_id: deal._id } 
+        }
+      })
+    }
   }
   
   return (
@@ -42,7 +67,7 @@ export default function InvestmentNew () {
       <form className="form" noValidate autoComplete="off">
         <Row>
           <Col sm={{size: 8, offset: 1}}>
-            <TextField style={{width: "100%"}} 
+            <TextField required error={errors.includes("amount")} style={{width: "100%"}} 
               value={investment.amount}
               onChange={e => updateInvestmentProp({ prop: "amount", newVal: e.target.value })}
               label="Amount" 
@@ -51,14 +76,16 @@ export default function InvestmentNew () {
         </Row>
         <Row>
           <Col sm={{size: 4, offset: 1}}>
-            <UserSearch />
+            <UserSearch user={user} setUser={setUser} errors={errors} />
+          </Col>
+          <Col sm={{size: 4}}>
+            <DealSearch deal={deal} setDeal={setDeal} errors={errors} />
           </Col>
         </Row>
         <Row>
           <Col sm={{size: 8, offset: 1}}>
-            <Button disabled={!hasChanges} 
-              variant="contained"
-              onClick={() => {}} 
+            <Button variant="contained"
+              onClick={submit} 
               color="primary">
               CREATE
             </Button> 
@@ -71,7 +98,7 @@ export default function InvestmentNew () {
   )
 }
 
-function UserSearch ({ user, setUser }) {
+function UserSearch ({ user, setUser, errors }) {
   const [q, setQ] = useState("")
   const [records, setRecords] = useState([])
   const [search, searchRes] = useLazyQuery(API.users.search)
@@ -90,6 +117,13 @@ function UserSearch ({ user, setUser }) {
     return (
       <Paper className="assoc-value">
         <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell>{user.first_name} {user.last_name}</TableCell>
+              <TableCell>{user.email}</TableCell>
+              <TableCell><FontAwesomeIcon icon="times" onClick={() => { setQ(""); setUser(null) }} /></TableCell>
+            </TableRow>
+          </TableBody>
         </Table>
       </Paper>
     )
@@ -98,15 +132,79 @@ function UserSearch ({ user, setUser }) {
   return (
     <div className="assoc-search">
       <TextField style={{width: "100%"}}
+        required
         value={q}
+        error={errors.includes("user")}
+        label="Investor"
+        variant="filled"
         onChange={e => setQ(e.target.value)} />
       <Paper className="assoc-search-results">
         <Table>
           <TableBody>
             {records.map(record => (
-              <TableRow key={record._id} onClick={() => setUser(record)}>
+              <TableRow key={record._id} 
+                className="assoc-option" 
+                onClick={() => setUser(record)}>
                 <TableCell>{record.first_name} {record.last_name}</TableCell>
                 <TableCell>{record.email}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
+    </div>
+  )
+}
+
+function DealSearch ({ deal, setDeal, errors }) {
+  const [q, setQ] = useState("")
+  const [records, setRecords] = useState([])
+  const [search, searchRes] = useLazyQuery(API.deals.search)
+
+  useEffect(() => {
+    search({ variables: { q } })
+  }, [q])
+
+  useEffect(() => {
+    if (searchRes.data && searchRes.data.searchDeals) {
+      setRecords(q === "" ? [] : searchRes.data.searchDeals)
+    } 
+  }, [searchRes.data])
+
+  if (deal) {
+    return (
+      <Paper className="assoc-value">
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell>{deal.company_name}</TableCell>
+              <TableCell>{deal.company_description}</TableCell>
+              <TableCell><FontAwesomeIcon icon="times" onClick={() => { setQ(""); setDeal(null) }} /></TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </Paper>
+    )
+  }
+
+  return (
+    <div className="assoc-search">
+      <TextField required 
+        style={{width: "100%"}}
+        value={q}
+        label="Deal"
+        variant="filled"
+        error={errors.includes("user")}
+        onChange={e => setQ(e.target.value)} />
+      <Paper className="assoc-search-results">
+        <Table>
+          <TableBody>
+            {records.map(record => (
+              <TableRow key={record._id} 
+                className="assoc-option" 
+                onClick={() => setDeal(record)}>
+                <TableCell>{record.company_name}</TableCell>
+                <TableCell>{record.company_description}</TableCell>
               </TableRow>
             ))}
           </TableBody>
