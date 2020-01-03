@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import { get, isEqual } from "lodash"
+import React, { useState, useEffect, useReducer } from 'react'
+import { useSimpleReducer } from '../../utils/hooks'
+import _, { get, isEqual } from "lodash"
 import { useParams } from "react-router-dom"
 import { TextField } from '@material-ui/core'
 import { Row, Col } from 'reactstrap'
 import { useAuth0 } from "../../react-auth0-spa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { nWithCommas } from '../../utils/numbers'
+import * as API from "../../api"
+import UserSearch from "../forms/UserSearch"
 
 import { gql } from 'apollo-boost'
 import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks'
@@ -23,6 +27,15 @@ const GET_DEAL = gql`
       pledge_link
       onboarding_link
       closed
+      investments {
+        _id
+        amount
+        investor {
+          _id
+          first_name
+          last_name
+        }
+      }
       invitedInvestors {
         _id
         first_name
@@ -54,37 +67,20 @@ const UPDATE_DEAL = gql`
   }
 `
 
-const SEARCH_USERS = gql`
-  query SearchUsers($q: String!) {
-    searchUsers(q: $q) {
-      _id
-      first_name
-      last_name
-      email
-    }
-  }
-`
-
 export default function DealEdit () {
   const { user } = useAuth0()
   const params = useParams()
   const [searchQ, setSearchQ] = useState("")
   const [deal, setDeal] = useState(null)
+  const [showAddInvestment, setShowAddInvestment] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
   const { data, loading, refetch } = useQuery(GET_DEAL, { variables: { id: params.id }})
   const [updateDeal, updateDealRes] = useMutation(UPDATE_DEAL)
-  const [search, searchRes] = useLazyQuery(SEARCH_USERS)
+  const [search, searchRes] = useLazyQuery(API.users.search)
 
   useEffect(() => {
-    if (data && !deal) {
-      setDeal(data.deal)
-    }
-  }, [data, deal])
-
-  // updates deal when data returned from update mutation
-  useEffect(() => {
-    if (updateDealRes && updateDealRes.data) setDeal(updateDealRes.data.deal)
-  }, [updateDealRes])
+    if (data) setDeal(data.deal)
+  }, [data])
 
   useEffect(() => {
     setHasChanges(data && !isEqual(deal, get(data, 'deal')))
@@ -165,22 +161,20 @@ export default function DealEdit () {
           </Col>
         </Row>
         <Row>
-          <Col sm={{size: 8, offset: 1}}>
+          <Col sm={{size: 4, offset: 1}}>
             <div className="form-sub-title">Invited Investors</div>
+          </Col>
+          <Col sm={4}>
+            <div className="form-sub-title">
+              Investments {showAddInvestment 
+                ? <FontAwesomeIcon icon="times" onClick={() => setShowAddInvestment(false)} /> 
+                : <Button variant="contained" color="secondary" onClick={() => setShowAddInvestment(true)}>Add +</Button>} 
+            </div>
           </Col>
         </Row>
         <Row>
-          <Col sm={{size: 4, offset: 1}} className="invited-investors">
-            <Paper className="table-wrapper">
-              <Table>
-                <TableBody>
-                  <InvitedInvestors data={data} refetch={refetch} />
-                </TableBody>
-              </Table>
-            </Paper>
-          </Col>
-          <Col sm={{size: 4}} className="search-investors">
-            <TextField style={{width: "100%"}} value={searchQ} onChange={e => setSearchQ(e.target.value)} label="Search Investors" variant="filled" />
+          <Col sm={{size: 4, offset: 1}} className="search-investors">
+            <TextField style={{width: "100%", marginBottom: "10px"}} value={searchQ} onChange={e => setSearchQ(e.target.value)} label="Search Investors" variant="filled" />
             <Paper className="table-wrapper">
               <Table>
                 <TableBody>
@@ -194,9 +188,83 @@ export default function DealEdit () {
                 </TableBody>
               </Table>
             </Paper>
+            <Paper className="table-wrapper">
+              <Table>
+                <TableBody>
+                  <InvitedInvestors data={data} refetch={refetch} />
+                </TableBody>
+              </Table>
+            </Paper>
+          </Col>
+          <Col sm={{size: 4}} className="investments">
+            <AddInvestment deal={deal} show={showAddInvestment} refetch={refetch} /> 
+            <Paper>
+              <Table>
+                <TableBody>
+                  {_.get(deal, 'investments', []).map(inv => (
+                    <TableRow key={inv._id} sm={{size: 4, offset: 1}} className="invited-inv">
+                      <TableCell>{inv.investor.first_name} {inv.investor.last_name}</TableCell>
+                      <TableCell>${nWithCommas(inv.amount)}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Paper>
           </Col>
         </Row>
       </form>
+    </div>
+  )
+}
+
+function validate (investment) {
+  return _.reject(['deal_id', 'user_id', 'amount'], prop => investment[prop])
+}
+
+function AddInvestment ({ deal, show, refetch }) {
+  const [investment, setInvestment] = useSimpleReducer({ amount: "" })
+  const [createInvestment, { data, error }] = useMutation(API.investments.create)
+  const [user, setUser] = useState(null)
+  const [errors, setErrors] = useState([])
+
+  useEffect(() => {
+    if (deal && !investment.deal_id) setInvestment({ deal_id: deal._id }) 
+  }, [deal, investment])
+
+  useEffect(() => {
+    if (user) setInvestment({ user_id: user._id })
+  }, [user])
+
+  useEffect(() => {
+    if (data) {
+      setInvestment({ deal_id: deal._id, amount: "", user_id: user._id })
+      refetch()
+    }
+  }, [data])
+
+  const submit = () => {
+    const validation = validate(investment)
+    setErrors(validation)
+    if (validation.length === 0) createInvestment({ variables: { investment } })
+  }
+
+  if (!show) return null
+
+  return (
+    <div className="AddInvestment">
+      <UserSearch user={user} setUser={setUser} errors={errors} />
+      <div>
+        <TextField required error={errors.includes("amount")} style={{width: "100%"}} 
+          value={investment.amount}
+          onChange={e => setInvestment({ amount: Math.floor(e.target.value) })}
+          label="Amount"
+          variant="filled" />
+      </div>
+      <Button variant="contained"
+        onClick={submit} 
+        color="primary">
+        ADD INVESTMENT
+      </Button>
     </div>
   )
 }
