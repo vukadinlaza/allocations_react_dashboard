@@ -49,6 +49,7 @@
     "react-chartjs-2": "^2.8.0",
     "react-country-region-selector": "^1.4.5",
     "react-dom": "^16.8.6",
+    "react-ga": "^2.7.0",
     "react-google-charts": "^3.0.15",
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.1",
