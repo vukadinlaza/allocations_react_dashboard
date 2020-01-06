@@ -7,3 +7,9 @@ export const create = gql`
     }
   }
 `
+
+export const destroy = gql`
+  mutation DeleteInvestment($id: String!) {
+    deleteInvestment(_id: $id)
+  }
+`

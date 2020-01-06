@@ -205,6 +205,7 @@ export default function DealEdit () {
                     <TableRow key={inv._id} sm={{size: 4, offset: 1}} className="invited-inv">
                       <TableCell>{inv.investor.first_name} {inv.investor.last_name}</TableCell>
                       <TableCell>${nWithCommas(inv.amount)}</TableCell>
+                      <TableCell><DeleteInvestment investment={inv} refetch={refetch} /></TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -215,6 +216,21 @@ export default function DealEdit () {
       </form>
     </div>
   )
+}
+
+function DeleteInvestment ({ investment, refetch }) {
+  const [delInvestment, { data, error }] = useMutation(API.investments.destroy)
+
+  useEffect(() => {
+    console.log({data})
+    if (data && data.deleteInvestment) refetch()
+  }, [data])
+
+  const submit = () => {
+    if (window.confirm("Delete Investment?")) delInvestment({ variables: { id: investment._id }})
+  }
+
+  return <FontAwesomeIcon icon="times" onClick={submit} />
 }
 
 function validate (investment) {
