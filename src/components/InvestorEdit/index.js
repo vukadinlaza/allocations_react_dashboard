@@ -2,130 +2,109 @@ import React, { useState, useEffect } from 'react'
 import { get, isEqual } from 'lodash'
 import { gql } from 'apollo-boost'
 import { Row, Col } from 'reactstrap'
-import { useParams } from 'react-router-dom'
-import { TextField, Button } from '@material-ui/core'
+import { useParams, useHistory } from 'react-router-dom'
 import { useAuth0 } from '../../react-auth0-spa'
+import { useSimpleReducer } from '../../utils/hooks'
 import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Paper, Button } from '@material-ui/core'
+
+import Loader from "../utils/Loader"
+import InvestorEditForm from "../forms/InvestorEdit"
 
 import './style.scss'
 
 const GET_INVESTOR = gql`
-  query GetInvestor($email: String, $_id: String) {
-    investor(email: $email, _id: $_id) {
+  query GetInvestor($id: String!) {
+    investor(_id: $id) {
       _id
       first_name
       last_name
+      entity_name
+      country
+      investor_type
+      signer_full_name
+      accredited_investor_status
       email
-      documents
+      passport {
+        link
+        path
+      }
     }
   }
 `
 
-const UPDATE_INVESTOR = gql`
-  mutation UpdateInvestor($_id: String!, $first_name: String, $last_name: String, $email: String, $documents: String) {
-    updateInvestor(_id: $_id, first_name: $first_name, last_name: $last_name, email: $email, documents: $documents) {
-      _id
-      first_name
-      last_name
-      email
-      documents
-    }
+const DELETE_INVESTOR = gql`
+  mutation DeleteInvestor($id: String!) {
+    deleteInvestor(_id: $id)
   }
 `
 
 export default function InvestorEdit () {
-  const urlParams = useParams()
-  const adminView = urlParams && urlParams.id
+  const params = useParams()
+  const [formStatus, setFormStatus] = useState("edit")
   const { user } = useAuth0()
-  const [hasChanges, setHasChanges] = useState(false)
   const [investor, setInvestor] = useState(null)
-  const [getInvestor, investorQuery] = useLazyQuery(GET_INVESTOR)
-  const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_INVESTOR)
+  const [getInvestor, { data, error, refetch }] = useLazyQuery(GET_INVESTOR)
 
   useEffect(() => {
-    if (user && !investorQuery.called) {
-      const params = adminView ? { _id: urlParams.id } : { email: user.email }
-      getInvestor({ variables: params })
-    }
+    if (user && user.email) getInvestor({ variables: { id: params.id }})
   }, [user])
 
   useEffect(() => {
-    setHasChanges(investorQuery.data && !isEqual(investor, get(investorQuery, 'data.investor')))
-  }, [investor])
+    if (data) {
+      const {__typename, ...rest} = data.investor
+      setInvestor(rest)
+    }
+  }, [data])
 
-  useEffect(() => {
-    if (investorQuery.data && !investor) setInvestor(investorQuery.data.investor)
-  }, [investorQuery])
+  const icon = formStatus === "loading" 
+    ? "circle-notch" 
+    : (formStatus === "complete" ? "check" : "edit")
 
-  // updates investor when data returned from update mutation
-  useEffect(() => {
-    if (updateInvestorRes && updateInvestorRes.data) setInvestor(updateInvestorRes.data.updateInvestor)
-  }, [updateInvestorRes])
-
-  const updateInvestorProp = ({ prop, newVal }) => setInvestor(prev => ({ ...prev, [prop]: newVal }))
+  if (!investor) return <Loader />
 
   return (
-    <div className="InvestorEdit form-wrapper">
+    <div className="InvestorEdit">
       <Row>
-        <Col sm={{size: 8, offset: 1}}>
-          <div className="form-title">Edit Profile</div>
+        <Col sm={{size: 9, offset: 1}}>
+          <h4>
+            Profile <FontAwesomeIcon icon={icon} spin={icon === "circle-notch"} />
+          </h4>
         </Col>
       </Row>
-      <form className="form" noValidate autoComplete="off">
-        <Row>
-          <Col sm={{size: 4, offset: 1}}>
-            <TextField style={{width: "100%"}} 
-              value={get(investor, 'first_name', "")} 
-              onChange={e => updateInvestorProp({ prop: "first_name", newVal: e.target.value })}
-              label="First Name"
-              variant="filled" />
-          </Col>
-          <Col sm="4">
-            <TextField style={{width: "100%"}} 
-              value={get(investor, 'last_name', "")} 
-              onChange={e => updateInvestorProp({ prop: "last_name", newVal: e.target.value })}
-              label="Last Name"
-              variant="filled" />
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={{size: 4, offset: 1}}>
-            <TextField style={{width: "100%"}} 
-              value={get(investor, 'email', "")} 
-              onChange={e => updateInvestorProp({ prop: "email", newVal: e.target.value })}
-              label="Email"
-              variant="filled" />
-          </Col>
-          <Col sm="4">
-            <DocumentsLink investor={investor} updateInvestorProp={updateInvestorProp} />
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={{size: 8, offset: 1}}>
-            <Button variant="contained" disabled={!hasChanges} color="primary" className="update-button" onClick={() => updateInvestor({ variables: investor })}>
-              UPDATE
-            </Button>
-          </Col>
-        </Row>
-      </form>
+      <InvestorEditForm investor={investor}
+        refetch={refetch}
+        setInvestor={setInvestor}
+        setFormStatus={setFormStatus} 
+        actionText="EDIT INVESTOR" />
+      <Row>
+        <DeleteInvestor investor={investor} />
+      </Row>
     </div>
   )
 }
 
-function DocumentsLink ({ investor, updateInvestorProp }) {
+function DeleteInvestor ({ investor }) {
+  const history = useHistory()
+  const [delInvestor, { data, error }] = useMutation(DELETE_INVESTOR)
+
+  useEffect(() => {
+    if (data && data.deleteInvestor) history.push('/investors')
+  }, [data])
+
+  const submit = () => {
+    if (window.confirm(`Delete ${investor.first_name} ${investor.last_name}?`)) {
+      delInvestor({ variables: { id: investor._id }})
+    }
+  }
+
   return (
-    <div className="documents-link">
-      <TextField style={{width: "75%"}} 
-        value={get(investor, 'documents') || ""} 
-        onChange={e => updateInvestorProp({ prop: "documents", newVal: e.target.value })}
-        label="Documents 🔗"
-        variant="filled" />
-      <div style={{display: "inline-block", width: "5%"}}></div>
-      <Button variant="contained" component="label" className="change-button" color="secondary" style={{width: "20%"}}>
-        Upload
-        <input type="file" onChange={e => updateInvestorProp({ prop: "documents", newVal: e.target.value })} style={{ display: "none" }} />
-      </Button>
-    </div>
+    <Col sm={{size: 6, offset: 1}}>
+      <Paper className="DeleteInvestor">
+        <div>DANGER ZONE</div>
+        <Button variant="contained" onClick={submit}>DELETE INVESTOR</Button>
+      </Paper>
+    </Col>
   )
 }

@@ -1,7 +1,14 @@
 .InvestorEdit {
-    .documents-link {
-        .change-button {
-            margin-top: 10px;
+    .row {
+        margin-bottom: 20px;
+    }
+
+    .DeleteInvestor {
+        padding: 25px;
+
+        >div {
+            margin-bottom: 10px;
         }
+        background-color: #ff8e7a;
     }
 }
