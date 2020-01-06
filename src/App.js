@@ -10,6 +10,7 @@ import Deals from "./components/Deals";
 import DealNew from "./components/DealNew";
 import DealEdit from "./components/DealEdit";
 import InvestorEdit from "./components/InvestorEdit";
+import InvestorNew from "./components/InvestorNew";
 import Funds from "./components/Funds";
 import Sidebar from './components/Sidebar';
 import UserHome from './components/UserHome';
@@ -98,6 +99,9 @@ const App = () => {
                   </AdminRoute>
                   <AdminRoute path="/investor/:id/investments">
                     <UserInvestments /> 
+                  </AdminRoute>
+                  <AdminRoute path="/investors/new" exact>
+                    <InvestorNew /> 
                   </AdminRoute>
                   <AdminRoute path="/investor/:id/edit">
                     <InvestorEdit /> 
