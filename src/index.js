@@ -11,12 +11,6 @@ const domain="login.allocations.co";
 const clientId="R2iJsfjNPGNjIdPmRoE3IcKd9UvVrsp1";
 const audience="https://api.graphql.com"
 
-// google analytics
-if (process.env.NODE_ENV === "production") {
-  const trackingId = 'UA-155298553-1'
-  ReactGa.initialize(trackingId)
-}
-
 const onRedirectCallback = appState => {
   history.push(
     appState && appState.targetUrl
