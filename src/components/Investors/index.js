@@ -9,7 +9,7 @@ import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from "../utils/Loader"
 
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core'
 
 import "./style.scss";
 
@@ -51,6 +51,13 @@ export default function Investments () {
   return (
     <div className="Investors">
       <Row>
+        <Col sm={{size: 10, offset: 1}}>
+          <Paper className="actions">
+            <Link to="/investors/new">
+              <Button variant="contained" color="secondary">CREATE INVESTOR</Button>
+            </Link>
+          </Paper>
+        </Col>
         <Col sm="10" className="offset-sm-1">
           <Paper className="table-wrapper">
             <Table>
