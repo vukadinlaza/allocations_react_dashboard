@@ -26,8 +26,6 @@ export default function InvestorNew () {
   const [email, setEmail] = useState("")
   const [createInvestor, { data }] = useMutation(CREATE_INVESTOR)
 
-  console.log({data})
-
   useEffect(() => {
     if (data && data.createInvestor._id) history.push(`/investor/${data.createInvestor._id}/edit`)
   }, [data])
