@@ -51,6 +51,7 @@
     "react-dom": "^16.8.6",
     "react-ga": "^2.7.0",
     "react-google-charts": "^3.0.15",
+    "react-hotjar": "^2.0.4",
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.1",
     "react-styleguidist": "^9.2.0",

@@ -6,10 +6,16 @@ import * as serviceWorker from "./serviceWorker";
 import { Auth0Provider } from "./react-auth0-spa";
 import history from "./utils/history";
 import ReactGa from 'react-ga'
+import { hotjar } from 'react-hotjar';
 
 const domain="login.allocations.co";
 const clientId="R2iJsfjNPGNjIdPmRoE3IcKd9UvVrsp1";
 const audience="https://api.graphql.com"
+
+if (process.env.NODE_ENV === "production") {
+  // initialize hotjar
+  hotjar.initialize(1630114, 6)
+}
 
 const onRedirectCallback = appState => {
   history.push(
