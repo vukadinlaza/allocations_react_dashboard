@@ -40,7 +40,7 @@ import AddDeal from './components/AddDeal';
 import "./App.scss";
 
 const App = () => {
-  const { loading } = useAuth0();
+  const { loading, user } = useAuth0();
 
   // currently only effects small screens
   const [showSidebar, setShowSidebar] = useState(false)

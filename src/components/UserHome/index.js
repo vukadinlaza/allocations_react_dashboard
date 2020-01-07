@@ -78,7 +78,6 @@ const GET_INVESTOR = gql`
 export default function UserHome (props) {
   const params = useParams()
   const adminView = params && params.id
-
   const { user } = useAuth0()
   const [getInvestor, { data, error }] = useLazyQuery(GET_INVESTOR)
 

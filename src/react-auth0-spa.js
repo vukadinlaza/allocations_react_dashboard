@@ -1,21 +1,37 @@
 import React, { useState, useEffect, useContext } from "react";
 import createAuth0Client from "@auth0/auth0-spa-js";
-import config from "./auth_config.json";
-
-const DEFAULT_REDIRECT_CALLBACK = () =>
-  window.history.replaceState({}, document.title, window.location.pathname);
+import history from "./utils/history";
 
 export const Auth0Context = React.createContext();
 export const useAuth0 = () => useContext(Auth0Context);
 let _initOptions, _client
 
+const domain="login.allocations.co";
+const client_id="R2iJsfjNPGNjIdPmRoE3IcKd9UvVrsp1";
+const audience="https://api.graphql.com"
+
+const onRedirectCallback = appState => {
+  history.push(
+    appState && appState.targetUrl
+      ? appState.targetUrl
+      : window.location.pathname
+  );
+};
+
+const options = {
+  domain,
+  client_id,
+  audience,
+  redirect_uri: window.location.origin,
+  onRedirectCallback
+}
+
 const getAuth0Client = () => {
   return new Promise(async (resolve, reject) => {
     let client
-    if (!client)  {
+    if (!client) {
       try {
-        
-        client = await createAuth0Client(_initOptions)
+        client = await createAuth0Client(options)
         resolve(client)
       } catch (e) {
         console.log(e);
@@ -27,16 +43,12 @@ const getAuth0Client = () => {
 
 export const getTokenSilently = async (...p) => {
   if(!_client) {
-      _client = await getAuth0Client()
+    _client = await getAuth0Client()
   }
-  return await _client.getTokenSilently(...p);  
+  return  _client.getTokenSilently(...p) 
 }
 
-export const Auth0Provider = ({
-  children,
-  onRedirectCallback = DEFAULT_REDIRECT_CALLBACK,
-  ...initOptions
-}) => {
+export const Auth0Provider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState();
   const [user, setUser] = useState();
   const [auth0Client, setAuth0] = useState();
@@ -45,11 +57,11 @@ export const Auth0Provider = ({
 
   useEffect(() => {
     const initAuth0 = async () => {
-       _initOptions = initOptions;
-       const client = await getAuth0Client(initOptions)
-       setAuth0(client)
-      // const auth0FromHook = await createAuth0Client(initOptions);
-      // setAuth0(auth0FromHook);
+      let start = Date.now()
+      const client = await getAuth0Client()
+      _client = client
+      setAuth0(client)
+      console.log("Got Auth0 Client in:", Date.now() - start, "ms")
 
       if (window.location.search.includes("code=")) {
         const { appState } = await client.handleRedirectCallback();
@@ -57,7 +69,6 @@ export const Auth0Provider = ({
       }
 
       const isAuthenticated = await client.isAuthenticated();
-
       setIsAuthenticated(isAuthenticated);
 
       if (isAuthenticated) {
