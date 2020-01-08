@@ -8,35 +8,18 @@ import history from "./utils/history";
 import ReactGa from 'react-ga'
 import { hotjar } from 'react-hotjar';
 
-const domain="login.allocations.co";
-const clientId="R2iJsfjNPGNjIdPmRoE3IcKd9UvVrsp1";
-const audience="https://api.graphql.com"
-
 if (process.env.NODE_ENV === "production") {
   // initialize hotjar
   hotjar.initialize(1630114, 6)
 }
 
-const onRedirectCallback = appState => {
-  history.push(
-    appState && appState.targetUrl
-      ? appState.targetUrl
-      : window.location.pathname
-  );
-};
-
 ReactDOM.render(
-  <Auth0Provider
-    domain={domain}
-    client_id={clientId}
-    redirect_uri={window.location.origin}
-    audience={audience}
-    onRedirectCallback={onRedirectCallback}
-  >
+  <Auth0Provider>
     <App />
   </Auth0Provider>,
   document.getElementById("root")
 );
+
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA

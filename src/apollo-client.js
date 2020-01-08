@@ -6,7 +6,6 @@ import { ApolloLink, Observable, concat } from 'apollo-link';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
 import { withClientState } from 'apollo-link-state';
-import { getTokenSilently } from "./react-auth0-spa";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000/graphql"
 
@@ -28,8 +27,8 @@ cache.readQuery = (...args) => {
 };
 
 
-const request = async (operation) => {
-  const token = await getTokenSilently();
+const request = (operation) => {
+  const token = localStorage.getItem("auth0-token");
   operation.setContext({
     headers: {
       authorization: token ? `Bearer ${token}` : ''
@@ -63,12 +62,10 @@ export const client = new ApolloClient({
       if (graphQLErrors) {
         console.log("Graphqlerrors")
         console.log(graphQLErrors)
-       // sendToLoggingService(graphQLErrors);
       }
       if (networkError) {
         console.log("Network error")
         console.log(networkError)
-       // logoutUser();
       }
     }),
     requestLink,
@@ -90,7 +87,3 @@ export const client = new ApolloClient({
   ]),
   cache
 });
-
-// const client = new ApolloClient({
-//   uri: "http://localhost:4000/graphql"
-// })

@@ -41,60 +41,67 @@ const getAuth0Client = () => {
   })
 }
 
-export const getTokenSilently = async (...p) => {
-  if(!_client) {
-    _client = await getAuth0Client()
-  }
-  return  _client.getTokenSilently(...p) 
-}
-
 export const Auth0Provider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState();
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [user, setUser] = useState();
   const [auth0Client, setAuth0] = useState();
   const [loading, setLoading] = useState(true);
   const [popupOpen, setPopupOpen] = useState(false);
+  const [clientPromise, setClientPromise] = useState(null)
 
   useEffect(() => {
-    const initAuth0 = async () => {
-      let start = Date.now()
-      const client = await getAuth0Client()
+    setIsAuthenticated(localStorage.getItem("auth0-token") ? true : null)
+  }, [])
+
+  useEffect(() => {
+    let start = Date.now()
+    const p = getAuth0Client()
+    setClientPromise(p)
+
+    p.then(client => {
       _client = client
       setAuth0(client)
       console.log("Got Auth0 Client in:", Date.now() - start, "ms")
-
-      if (window.location.search.includes("code=")) {
-        const { appState } = await client.handleRedirectCallback();
-        onRedirectCallback(appState);
-      }
-
-      const isAuthenticated = await client.isAuthenticated();
-      setIsAuthenticated(isAuthenticated);
-
-      if (isAuthenticated) {
-        const user = await client.getUser();
-        setUser(user);
-      }
-
-      setLoading(false);
-    };
-    initAuth0();
+    })
     // eslint-disable-next-line
   }, []);
 
-  const loginWithPopup = async (params = {}) => {
-    setPopupOpen(true);
-    try {
-      await auth0Client.loginWithPopup(params);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setPopupOpen(false);
+  useEffect(() => {
+    if (auth0Client) {
+      console.log("Auth0 Client Initialized")
+      if (window.location.search.includes("code=")) {
+        auth0Client.handleRedirectCallback()
+          .then(({ appState }) => onRedirectCallback(appState))
+      }
+
+      auth0Client.isAuthenticated()
+        .then(async val => {
+          if (val) {
+            const token = await auth0Client.getTokenSilently()
+            localStorage.setItem("auth0-token", token)
+            if (val) {
+              auth0Client.getUser().then(u => {
+                setUser(u)
+                setLoading(false)
+              })
+            }
+          }
+          setIsAuthenticated(val)          
+        })
     }
-    const user = await auth0Client.getUser();
-    setUser(user);
-    setIsAuthenticated(true);
-  };
+  }, [auth0Client])
+
+  const getTokenSilently = async () => {
+    const t = localStorage.getItem("auth0-token")
+    if (!t) {
+      // need to wait for the client to be ready
+      const client = await clientPromise()
+      const token = await client.getTokenSilently()
+      localStorage.setItem("auth0-token", token)
+      return token
+    }
+    return t
+  }
 
   const handleRedirectCallback = async () => {
     setLoading(true);
@@ -103,20 +110,24 @@ export const Auth0Provider = ({ children }) => {
     setLoading(false);
     setIsAuthenticated(true);
     setUser(user);
-  };
+  }
+
   return (
     <Auth0Context.Provider
       value={{
         isAuthenticated,
         user,
         loading,
-        popupOpen,
-        loginWithPopup,
+        getTokenSilently,
         handleRedirectCallback,
-        getIdTokenClaims: (...p) => auth0Client.getIdTokenClaims(...p),
-        loginWithRedirect: (...p) => auth0Client.loginWithRedirect(...p),
-        getTokenSilently: (...p) => auth0Client.getTokenSilently(...p),
-        getTokenWithPopup: (...p) => auth0Client.getTokenWithPopup(...p),
+        loginWithRedirect: async (...p) => {
+          // if (!auth0Client) {
+          //   const client = await clientPromise()
+          //   return client.loginWithRedirect(...p)
+          // }
+          console.log("LOGIN W/ Redirect?")
+          auth0Client.loginWithRedirect(...p)
+        },
         logout: (...p) => auth0Client.logout(...p)
       }}
     >

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 
@@ -40,36 +40,10 @@ import AddDeal from './components/AddDeal';
 import "./App.scss";
 
 const App = () => {
-  const { loading, user } = useAuth0();
+  const { loading, user, getTokenSilently } = useAuth0();
 
   // currently only effects small screens
   const [showSidebar, setShowSidebar] = useState(false)
-
-  if (loading) {
-    return (
-      <ApolloProvider client={client}>
-        <Router history={history}>
-          <div id="app" className="d-flex flex-column h-100">
-            <Container fluid={true}>
-              <Row>
-                <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
-                <Col xs="12" className="xs-navbar">
-                  <img src="https://www.allocations.co/assets/img/brand.svg" style={{height:'40px'}} />
-                  <span className="hamburger" style={{ display: showSidebar ? 'none' : 'inline-block'}}>
-                    <FontAwesomeIcon icon="bars" onClick={() => setShowSidebar(true)} />
-                  </span>
-                </Col>
-                <Col xs={{size: 12, offset: 0}} md={{size: 10, offset: 2}}>
-                  <NavBar />
-                  <Loader />
-                </Col>
-              </Row>
-            </Container>
-          </div>
-        </Router>
-      </ApolloProvider>
-    )
-  }
 
   return (
     <ApolloProvider client={client}>
