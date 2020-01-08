@@ -10,28 +10,19 @@ const domain="login.allocations.co";
 const client_id="R2iJsfjNPGNjIdPmRoE3IcKd9UvVrsp1";
 const audience="https://api.graphql.com"
 
-const onRedirectCallback = appState => {
-  history.push(
-    appState && appState.targetUrl
-      ? appState.targetUrl
-      : window.location.pathname
-  );
-};
-
-const options = {
+const defaultOptions = {
   domain,
   client_id,
   audience,
-  redirect_uri: window.location.origin,
-  onRedirectCallback
+  redirect_uri: window.location.origin
 }
 
-const getAuth0Client = () => {
+const getAuth0Client = (options) => {
   return new Promise(async (resolve, reject) => {
     let client
     if (!client) {
       try {
-        client = await createAuth0Client(options)
+        client = await createAuth0Client({ ...defaultOptions, ...options })
         resolve(client)
       } catch (e) {
         console.log(e);
@@ -49,13 +40,24 @@ export const Auth0Provider = ({ children }) => {
   const [popupOpen, setPopupOpen] = useState(false);
   const [clientPromise, setClientPromise] = useState(null)
 
+  const options = {
+    onRedirectCallback: appState => {
+      setIsAuthenticated(true)  
+      history.push(
+        appState && appState.targetUrl
+          ? appState.targetUrl
+          : window.location.pathname
+      )
+    }
+  }
+
   useEffect(() => {
     setIsAuthenticated(localStorage.getItem("auth0-token") ? true : null)
   }, [])
 
   useEffect(() => {
     let start = Date.now()
-    const p = getAuth0Client()
+    const p = getAuth0Client(options)
     setClientPromise(p)
 
     p.then(client => {
@@ -71,7 +73,7 @@ export const Auth0Provider = ({ children }) => {
       console.log("Auth0 Client Initialized")
       if (window.location.search.includes("code=")) {
         auth0Client.handleRedirectCallback()
-          .then(({ appState }) => onRedirectCallback(appState))
+          .then(({ appState }) => options.onRedirectCallback(appState))
       }
 
       auth0Client.isAuthenticated()
@@ -128,7 +130,10 @@ export const Auth0Provider = ({ children }) => {
           console.log("LOGIN W/ Redirect?")
           auth0Client.loginWithRedirect(...p)
         },
-        logout: (...p) => auth0Client.logout(...p)
+        logout: (...p) => {
+          localStorage.removeItem("auth0-token")
+          auth0Client.logout(...p)
+        }
       }}
     >
       {children}
