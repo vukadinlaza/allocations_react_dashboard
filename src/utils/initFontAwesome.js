@@ -24,6 +24,7 @@ const icons = [
   Solid.faInfoCircle,
   Solid.faEdit,
   Solid.faPaperclip,
+  Solid.faClock,
   Reg.faFilePdf
 ]
 

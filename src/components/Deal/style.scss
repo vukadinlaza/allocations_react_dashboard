@@ -1,0 +1,40 @@
+.Deal {
+    h2 {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    h4 {
+        text-align: center;
+        color: #5a5a5a;
+        margin-bottom: 20px;
+    }
+
+    .investment-details {
+        .small-header {
+            text-align: left;
+            color: #5a5a5a;
+        }
+
+        .closing-date {
+            padding: 10px 15px;
+            font-size: 1.2em;
+            .fa-clock {
+                color: #ffc107;
+            }
+            >span {
+                padding-left: 10px;
+            }
+            margin-bottom: 15px;
+        }
+
+        .deal-lead {
+            padding: 10px 15px;
+            font-size: 1.3em;
+            color: #333;
+            span {
+                padding-left: 15px;
+            }
+        }
+    }
+}

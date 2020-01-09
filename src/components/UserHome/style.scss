@@ -3,25 +3,25 @@
 $break-sm: 768px;
 $break-xs: 576px;
 
+.tile {
+    padding: 20px 25px;
+    border-radius: 2px;
+    box-shadow: 2px 2px 2px 2px #e6e6e6;
+    .small-header {
+        color: #a7a7a7;
+        text-align: center;
+        padding-bottom: 10px;
+    }
+    @media screen and (max-width: $break-sm) {
+        margin-bottom: 15px;
+    }
+}
+
 .UserHome {
     .row {
         padding: 10px;
         @media screen and (max-width: $break-sm) {
             padding: 0px 10px;
-        }
-    }
-
-    .tile {
-        padding: 20px 25px;
-        border-radius: 2px;
-        box-shadow: 2px 2px 2px 2px #e6e6e6;
-        .small-header {
-            color: #a7a7a7;
-            text-align: center;
-            padding-bottom: 10px;
-        }
-        @media screen and (max-width: $break-sm) {
-            margin-bottom: 15px;
         }
     }
 
