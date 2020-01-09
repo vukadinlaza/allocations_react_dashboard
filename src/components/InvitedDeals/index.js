@@ -43,21 +43,25 @@ function formatDate (date) {
   }
 }
 
+let start = Date.now()
+
 export default function InvitedDeals () {
   const params = useParams()
   const adminView = params && params.id
 
-  const { user } = useAuth0()
+  const { user, isAuthenticated } = useAuth0()
   const isAdmin = user && adminWhitelist.includes(user.email)
-  const [getInvestor, { data, loading, error }] = useLazyQuery(GET_INVESTOR)
+  const [getInvestor, { data, loading, error, called, refetch }] = useLazyQuery(GET_INVESTOR)
 
   useEffect(() => {
-    if (adminView) {
-      getInvestor({ variables: { _id: params.id }})
-    } else if (user && user.email) {
-      getInvestor({ variables: { email: user.email }})
+    if (isAuthenticated && !called) {
+      adminView ? getInvestor({ variables: { _id: params.id }}) : getInvestor()
     }
-  }, [user])
+  }, [isAuthenticated, called])
+
+  useEffect(() => {
+    if (error && user) refetch()
+  }, [error, user])
 
   if (error) {
     if (error.message === "GraphQL error: permission denied" && user && user.email) {
@@ -67,7 +71,7 @@ export default function InvitedDeals () {
   }
 
   if (!data) return <div><Loader /></div>
-
+  console.log("Ready in:", Date.now() - start)
   const { investor } = data
   return (
     <div className="InvitedDeals">

@@ -79,14 +79,17 @@ export default function UserHome (props) {
   const params = useParams()
   const adminView = params && params.id
   const { user, isAuthenticated } = useAuth0()
-  const [getInvestor, { data, error, called }] = useLazyQuery(GET_INVESTOR)
-
+  const [getInvestor, { data, error, called, refetch }] = useLazyQuery(GET_INVESTOR)
 
   useEffect(() => {
     if (isAuthenticated && !called) {
       adminView ? getInvestor({ variables: { _id: params.id }}) : getInvestor()
     }
   }, [isAuthenticated, called])
+
+  useEffect(() => {
+    if (error && user) refetch()
+  }, [error, user])
 
   if (error) {
     if (error.message === "GraphQL error: permission denied" && user && user.email) {
