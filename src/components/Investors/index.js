@@ -20,6 +20,8 @@ const GET_INVESTORS = gql`
       first_name
       last_name
       email
+      investor_type
+      entity_name
       passport {
         link
       }
@@ -75,13 +77,13 @@ export default function Investments () {
               <TableBody>
                 {_.orderBy(investors, ({ investments }) => _.sumBy(investments, 'amount'), 'desc').map(investor => (
                   <TableRow key={investor._id}>
-                    <TableCell>{investor.first_name} {investor.last_name}</TableCell>
+                    <TableCell>{investor.investor_type === "entity" ? investor.entity_name : `${investor.first_name} ${investor.last_name}`}</TableCell>
                     <TableCell>{investor.email}</TableCell>
                     <TableCell>{investor.investments.length}</TableCell>
                     <TableCell>${nWithCommas(_.sumBy(investor.investments, 'amount'))}</TableCell>
                     <TableCell>
                       <Link to={`/investor/${investor._id}/home`}>
-                        Use site as {investor.first_name}
+                        Use site as {investor.first_name || investor.entity_name}
                       </Link>
                     </TableCell>
                     <TableCell>

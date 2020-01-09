@@ -29,6 +29,8 @@ const GET_INVESTMENT = gql`
         _id
         first_name
         last_name
+        entity_name
+        investor_type
       }
     }
   }
@@ -82,6 +84,10 @@ export default function InvestmentEdit () {
   if (createInvestmentRes.data) {
     return <Redirect to={`/deals/${createInvestmentRes.data.createInvestment._id}/edit`} />
   }
+
+  const name = get(investment, "investor.investor_type") === "entity"
+    ? get(investment, "investor.entity_name") || ""
+    : `${get(investment, "investor.first_name")} ${get(investment, "investor.last_name")}`
   
   return (
     <div className="InvestmentEdit form-wrapper">
@@ -94,7 +100,7 @@ export default function InvestmentEdit () {
         <Row>
           <Col sm={{size: 4, offset: 1}}>
             <TextField style={{width: "100%"}} 
-              value={`${get(investment, 'investor.first_name', "")} ${get(investment, 'investor.last_name', "")}`}
+              value={name}
               label="Investor"
               disabled
               variant="filled" />
