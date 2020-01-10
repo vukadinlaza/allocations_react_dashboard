@@ -2,7 +2,6 @@ import React, { useState, useEffect, useReducer } from 'react'
 import { useSimpleReducer } from '../../utils/hooks'
 import _, { get, isEqual } from "lodash"
 import { useParams } from "react-router-dom"
-import { TextField } from '@material-ui/core'
 import { Row, Col } from 'reactstrap'
 import { useAuth0 } from "../../react-auth0-spa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,6 +13,7 @@ import { gql } from 'apollo-boost'
 import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks'
 
 import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core'
+import { FormControl, Select, MenuItem, InputLabel, TextField, InputAdornment } from "@material-ui/core"
 import "./style.scss"
 
 const GET_DEAL = gql`
@@ -27,6 +27,7 @@ const GET_DEAL = gql`
       pledge_link
       onboarding_link
       closed
+      inviteKey
       investments {
         _id
         amount
@@ -34,6 +35,8 @@ const GET_DEAL = gql`
           _id
           first_name
           last_name
+          entity_name
+          investor_type
         }
       }
       invitedInvestors {
@@ -47,8 +50,8 @@ const GET_DEAL = gql`
 `
 
 const UPDATE_DEAL = gql`
-  mutation UpdateDeal($_id: String!, $company_name: String, $company_description: String, $deal_lead: String, $date_closed: String, $pledge_link: String, $onboarding_link: String) {
-    updateDeal(_id: $_id, company_name: $company_name, company_description: $company_description, deal_lead: $deal_lead, date_closed: $date_closed, pledge_link: $pledge_link, onboarding_link: $onboarding_link) {
+  mutation UpdateDeal($deal: DealInput!) {
+    updateDeal(deal: $deal) {
       _id
       company_name
       company_description
@@ -57,6 +60,7 @@ const UPDATE_DEAL = gql`
       pledge_link
       onboarding_link
       closed
+      inviteKey
       invitedInvestors {
         _id
         first_name
@@ -66,6 +70,8 @@ const UPDATE_DEAL = gql`
     }
   }
 `
+
+const validInputs = ["_id","company_name","company_description","date_closed","deal_lead","pledge_link","onboarding_link","embed_code","status","closed","amount"]
 
 export default function DealEdit () {
   const { user } = useAuth0()
@@ -151,10 +157,33 @@ export default function DealEdit () {
           </Col>
         </Row>
         <Row>
+          <Col sm={{size: 4, offset: 1}}>
+            <FormControl variant="filled" style={{width: "100%"}}>
+              <InputLabel>Closed</InputLabel>
+              <Select value={(get(deal, "closed") === true).toString()}
+                onChange={e => updateDealProp({ prop: "closed", newVal: e.target.value === "true" })}
+                inputProps={{name: 'Type'}}>
+                <MenuItem value="false">False</MenuItem>
+                <MenuItem value="true">True</MenuItem>
+              </Select>
+            </FormControl>
+          </Col>
+          <Col sm="4">
+            <TextField disabled 
+              style={{width: "100%"}}
+              label="Invited Link" 
+              value={`dashboard.allocations.co/signup?key=${get(deal, "inviteKey")}`}
+              InputProps={{
+                endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(`dashboard.allocations.co/signup?key=${get(deal, "inviteKey")}`)} /></InputAdornment>,
+              }}
+              variant="filled" />
+          </Col>
+        </Row>
+        <Row>
           <Col sm={{size: 8, offset: 1}}>
             <Button disabled={!hasChanges} 
               variant="contained"
-              onClick={() => updateDeal({ variables: deal })} 
+              onClick={() => updateDeal({ variables: { deal: _.pick(deal, validInputs) } })} 
               color="primary">
               UPDATE DEAL
             </Button> 
@@ -203,7 +232,7 @@ export default function DealEdit () {
                 <TableBody>
                   {_.get(deal, 'investments', []).map(inv => (
                     <TableRow key={inv._id} sm={{size: 4, offset: 1}} className="invited-inv">
-                      <TableCell>{inv.investor.first_name} {inv.investor.last_name}</TableCell>
+                      <TableCell>{investmentName(inv)}</TableCell>
                       <TableCell>${nWithCommas(inv.amount)}</TableCell>
                       <TableCell><DeleteInvestment investment={inv} refetch={refetch} /></TableCell>
                     </TableRow>
@@ -216,6 +245,12 @@ export default function DealEdit () {
       </form>
     </div>
   )
+}
+
+function investmentName(investment) { 
+  return get(investment, "investor.investor_type") === "entity"
+    ? get(investment, "investor.entity_name") || ""
+    : `${get(investment, "investor.first_name")} ${get(investment, "investor.last_name")}`
 }
 
 function DeleteInvestment ({ investment, refetch }) {
