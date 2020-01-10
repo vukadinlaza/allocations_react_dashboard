@@ -34,6 +34,8 @@ const GET_INVESTMENTS = gql`
         _id
         first_name
         last_name
+        investor_type
+        entity_name
       }
     }
   }
@@ -72,7 +74,13 @@ function renderChart(investments) {
     .attr("d", line)
 }
 
-export default function UserInvestments () {
+function investorName (investment) {
+  return _.get(investment, "investor.investor_type") === "entity"
+    ? _.get(investment, "investor.entity_name") || ""
+    : `${_.get(investment, "investor.first_name")} ${_.get(investment, "investor.last_name")}`
+}
+
+export default function Investments () {
   const params = useParams()
   const adminView = params && params.id
   const [showDocs, setShowDocs] = useState(null)
@@ -128,7 +136,7 @@ export default function UserInvestments () {
                 {investments.map((investment) => (
                   investment.showDocs ? <DocsRow docs={showDocs.documents} />
                     : <TableRow key={investment._id} className="investment-row">
-                        <TableCell>{investment.investor.first_name} {investment.investor.last_name}</TableCell>
+                        <TableCell>{investorName(investment)}</TableCell>
                         <TableCell scope="row">{investment.deal.company_name}</TableCell>
                         <TableCell>{investment.deal.company_description}</TableCell>
                         <TableCell align="right">${nWithCommas(investment.amount)}</TableCell>
