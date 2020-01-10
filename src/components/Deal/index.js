@@ -14,6 +14,14 @@ const GET_INVESTOR_DEAL = gql`
   query Deal($company_name: String!) {
     investor {
       _id
+      first_name
+      last_name
+      entity_name
+      country
+      investor_type
+      signer_full_name
+      accredited_investor_status
+      email
       invitedDeal(company_name: $company_name) {
         company_name
         company_description
@@ -53,13 +61,19 @@ export default function Deal () {
 
       <Row>
         <Col sm="8">
-          <Paper className="investment-flow">
-            FLOW -> -> ->
+          <Paper className="investment-flow tile">
+            <Paper className="investment tile" style={{marginBottom: "10px"}}>
+              <div className="small-header">My Investment</div>
+              <span className="investment-amount">$10,000</span>
+              <span className={`investment-status investment-${"pledged"}`}>PLEDGED</span>
+            </Paper>
+
+            <InvestmentFlow investment={{status: "pledged"}} deal={deal} />
           </Paper>
         </Col>
         <Col sm="4">
           <Paper className="investment-details tile">
-            <div className="small-header">Status</div>
+            <div className="small-header">Round Filled</div>
             <Paper className="closing-date">
               <LinearProgress style={{height: "25px"}} variant="determinate" value={dealCompletion} color="secondary" />
             </Paper>
@@ -84,3 +98,25 @@ export default function Deal () {
     </div>
   )
 }
+
+function InvestmentFlow ({ investment, deal }) {
+  console.log(deal.onboarding_link)
+  const status = "onboarding"
+  return (
+    <Paper className="flow tile">
+      <div className="flow-steps">
+        <div className={`step step-pledge ${status === "pledge" ? "step-active" : ""}`}>Pledge</div>
+        <div className={`step step-onboard ${status === "onboarding" ? "step-active" : ""}`}>Onboard</div>
+        <div className={`step step-wire ${status === "wire" ? "step-active" : ""}`}>Wire</div>
+      </div>
+      <div className="document-iframe">
+        <div className="iframe-container">
+          <iframe src={deal.onboarding_link} />
+        </div>
+      </div>
+    </Paper>
+  )
+}
+
+
+

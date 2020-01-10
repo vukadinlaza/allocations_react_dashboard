@@ -1,3 +1,5 @@
+@import "../../App.scss";
+
 .Deal {
     h2 {
         text-align: center;
@@ -8,6 +10,78 @@
         text-align: center;
         color: #5a5a5a;
         margin-bottom: 20px;
+    }
+
+    .investment-flow {
+        .small-header {
+            text-align: left;
+        }
+        .investment {
+            .investment-amount {
+                display: inline-block;
+                font-size: 2em;
+                padding-right: 10px;
+            }
+            .investment-status {
+                display: inline-block;
+                padding: 5px 10px;
+                border-radius: 3px;
+                vertical-align: top;
+            }
+            .investment-pledged {
+                background-color: $green;
+                color: #fff;
+            }
+        }
+
+        .flow {
+            padding: 10px 0px;
+            .flow-steps {
+                text-align: center;
+                padding: 10px 0px;
+            }
+            .step {
+                display: inline-block; 
+                padding: 10px 20px;
+            }
+            .step-pledge {
+                border: 1px solid #a7a7a7;
+                border-radius: 5px 0px 0px 5px;
+                margin-right: -1px;
+            }
+            .step-onboard {
+                border-top: 1px solid #a7a7a7;
+                border-bottom: 1px solid #a7a7a7;
+            }
+            .step-wire {
+                border: 1px solid #a7a7a7;
+                border-radius: 0px 5px 5px 0px;
+                margin-left: -0px;
+            }
+            .step-active {
+                background-color: $brandblue;
+                color: #fff;
+            }
+        }
+
+        .document-iframe {
+            padding: 10px 20px;
+            .iframe-container {
+                overflow: hidden;
+                padding-top: 56.25%;
+                position: relative;
+                border: 1px solid #a7a7a7;
+                border-radius: 5px;
+                iframe {
+                    border: 0;
+                    height: 100%;
+                    left: 0;
+                    position: absolute;
+                    top: 0;
+                    width: 100%;
+                }
+            }        
+        }
     }
 
     .investment-details {
