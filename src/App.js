@@ -58,7 +58,7 @@ const App = () => {
                   <FontAwesomeIcon icon="bars" onClick={() => setShowSidebar(true)} />
                 </span>
               </Col>
-              <Col xs={{size: 12, offset: 0}} md={{size: 10, offset: 2}}>
+              <Col xs={{size: 12, offset: 0}} md={{size: 10, offset: 2}} className="app-body">
                 <NavBar />
                 <Switch>
                   <PrivateRoute path="/" exact component={UserHome} />
