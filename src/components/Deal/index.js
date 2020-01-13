@@ -23,6 +23,7 @@ const GET_INVESTOR_DEAL = gql`
       accredited_investor_status
       email
       invitedDeal(company_name: $company_name) {
+        _id
         company_name
         company_description
         date_closed
@@ -31,6 +32,11 @@ const GET_INVESTOR_DEAL = gql`
         onboarding_link
         status
         closed
+        investment {
+          _id
+          amount
+          status
+        }
       }
     } 
   }
@@ -38,21 +44,22 @@ const GET_INVESTOR_DEAL = gql`
 
 export default function Deal () {
   const params = useParams()
-  const [deal, setDeal] = useState(null) 
+  // const [deal, setDeal] = useState(null)
+  // const [investor, setInvestor] = useState(null) 
+  // const [investment, setInvestment] = useState(null)
   const { data, error, loading } = useQuery(GET_INVESTOR_DEAL, { variables: { company_name: params.id }})
   const [dealCompletion, setDealCompletion] = useState(0)
 
   useEffect(() => {
-    if (deal && !dealCompletion) {
+    if (data && !dealCompletion) {
       setDealCompletion(60)
     }
-  }, [deal])
+  }, [data])
 
-  useEffect(() => {
-    if (data && !deal) setDeal(data.investor.invitedDeal)
-  }, [deal, data])
+  if (!data) return <Loader />
 
-  if (!deal) return <Loader />
+  const { investor, investor: { invitedDeal: deal } } = data
+  const { investment } = deal
 
   return (
     <div className="Deal">
@@ -62,13 +69,9 @@ export default function Deal () {
       <Row>
         <Col sm="8">
           <Paper className="investment-flow tile">
-            <Paper className="investment tile" style={{marginBottom: "10px"}}>
-              <div className="small-header">My Investment</div>
-              <span className="investment-amount">$10,000</span>
-              <span className={`investment-status investment-${"pledged"}`}>PLEDGED</span>
-            </Paper>
-
-            <InvestmentFlow investment={{status: "pledged"}} deal={deal} />
+            <InvestmentFlow deal={deal}
+              investment={investment} 
+              investor={investor} />
           </Paper>
         </Col>
         <Col sm="4">
@@ -99,22 +102,81 @@ export default function Deal () {
   )
 }
 
-function InvestmentFlow ({ investment, deal }) {
-  console.log(deal.onboarding_link)
-  const status = "onboarding"
+function InvestmentFlow ({ investment, deal, investor }) {
+  if (!investment) return <Paper style={{padding: "25px"}}><Loader /></Paper>
+
+  // const { status } = investment
+  const status = "pledged"
+
   return (
-    <Paper className="flow tile">
-      <div className="flow-steps">
-        <div className={`step step-pledge ${status === "pledge" ? "step-active" : ""}`}>Pledge</div>
-        <div className={`step step-onboard ${status === "onboarding" ? "step-active" : ""}`}>Onboard</div>
-        <div className={`step step-wire ${status === "wire" ? "step-active" : ""}`}>Wire</div>
-      </div>
-      <div className="document-iframe">
-        <div className="iframe-container">
-          <iframe src={deal.onboarding_link} />
+    <React.Fragment>
+        <Paper className="investment tile" style={{marginBottom: "10px"}}>
+          <div className="small-header">My Investment</div>
+          <span className="investment-amount">$10,000</span>
+          {status !== "viewed" && <span className={`investment-status investment-${status}`}>{(status || "").toUpperCase()}</span>}
+        </Paper>
+      <Paper className="flow tile">
+        <div className="flow-steps">
+          <div className={`step step-pledge ${status === "viewed" ? "step-active" : ""}`}>Pledge</div>
+          <div className={`step step-onboard ${status === "pledged" ? "step-active" : ""}`}>Onboard</div>
+          <div className={`step step-wire ${status === "onboarded" ? "step-active" : ""}`}>Wire</div>
         </div>
+        {status === "pledged" && <Onboarding investment={investment} deal={deal} investor={investor} />}
+        {status === "viewed" && <Pledging investment={investment} deal={deal} />}
+        {status === "onboarded" && <Wire investment={investment} deal={deal} />}
+      </Paper>
+    </React.Fragment>
+  )
+}
+
+function Wire ({ investment, deal }) {
+  return (
+    <div className="pledging">
+      <div className="pledge-link">
+        <FontAwesomeIcon icon={["far", "file-pdf"]} />
+        <a href={deal.wire_link || "#"} target="_blank">Wire Instructions</a>
       </div>
-    </Paper>
+    </div>
+  )
+}
+
+function Pledging ({ investment, deal }) {
+  return (
+    <div className="pledging">
+      <div className="pledge-link">
+        <img src="https://img.icons8.com/color/48/000000/google-sheets.png" />
+        <a href={deal.pledge_link} target="_blank">Pledge Document</a>
+      </div>
+    </div>
+  )
+}
+
+const investorParams = ["country_of_residence"]
+
+function Onboarding ({ investment, deal, investor }) {
+  if (!deal.onboarding_link) {
+    return (
+      <div className="waiting tile">Hang tight! ⌛<br/>Onboarding link coming soon</div>
+    )
+  }
+
+  if (!investor) return <Loader />
+
+  // const params = {
+  //   // Member_Type: investor.investor_type,
+  //   Member_Email: investor.email,
+  //   Member_country_of_residence: investor.country
+  //   // Member_Subscriber_name: investor.
+  // }
+  // let urlParameters = Object.entries(params).map(e => e.join('=')).join('&')
+  // console.log(deal.onboarding_link)
+
+  return (
+    <div className="document-iframe">
+      <div className="iframe-container">
+        <iframe src={deal.onboarding_link} />
+      </div>
+    </div>
   )
 }
 

@@ -28,7 +28,17 @@
                 border-radius: 3px;
                 vertical-align: top;
             }
+
+
             .investment-pledged {
+                background-color: #FFC107;
+                color: #333;
+            }
+            .investment-onboarded {
+                background-color: $brandblue;
+                color: #fff;
+            }
+            .investment-complete {
                 background-color: $green;
                 color: #fff;
             }
@@ -43,6 +53,7 @@
             .step {
                 display: inline-block; 
                 padding: 10px 20px;
+                color: #a7a7a7;
             }
             .step-pledge {
                 border: 1px solid #a7a7a7;
@@ -64,14 +75,21 @@
             }
         }
 
+        .waiting {
+            margin: 10px 30px;
+            text-align: center;
+            font-size: 1.3em;
+            color: #333;
+            background-color: #FCFCFC;
+        }
+
         .document-iframe {
             padding: 10px 20px;
             .iframe-container {
                 overflow: hidden;
                 padding-top: 56.25%;
                 position: relative;
-                border: 1px solid #a7a7a7;
-                border-radius: 5px;
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
                 iframe {
                     border: 0;
                     height: 100%;
@@ -81,6 +99,23 @@
                     width: 100%;
                 }
             }        
+        }
+
+        .pledging {
+            text-align: center;
+        }
+
+        .pledge-link {
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            border-radius: 5px;
+            padding: 10px 25px;
+            margin: 25px 40px;
+            font-size: 1.3em;
+            text-align: center;
+            a {
+                margin-left: 15px;
+                color: #333;
+            }
         }
     }
 
