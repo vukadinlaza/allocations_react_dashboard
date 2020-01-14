@@ -159,12 +159,12 @@ export default function DealEdit () {
         <Row>
           <Col sm={{size: 4, offset: 1}}>
             <FormControl variant="filled" style={{width: "100%"}}>
-              <InputLabel>Closed</InputLabel>
+              <InputLabel>Status</InputLabel>
               <Select value={(get(deal, "closed") === true).toString()}
                 onChange={e => updateDealProp({ prop: "closed", newVal: e.target.value === "true" })}
                 inputProps={{name: 'Type'}}>
-                <MenuItem value="false">False</MenuItem>
-                <MenuItem value="true">True</MenuItem>
+                <MenuItem value="false">Open</MenuItem>
+                <MenuItem value="true">Closed</MenuItem>
               </Select>
             </FormControl>
           </Col>
