@@ -52,7 +52,7 @@ const GET_INVESTOR = gql`
 const reqs = ['country', 'investor_type', 'signer_full_name', 'accredited_investor_status', 'email']
 
 function validate(investor) {
-  const required = investor.investor_type === "Entity"
+  const required = investor.investor_type === "entity"
     ? ['entity_name', ...reqs]
     : ['first_name', 'last_name', ...reqs]
   return required.reduce((acc, attr) => investor[attr] ? acc : [...acc, attr], [])
