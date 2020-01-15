@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Loader from '../utils/Loader'
+import _ from "lodash"
 import { gql } from 'apollo-boost'
-import { useParams } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks';
+import { useParams, Link } from 'react-router-dom'
+import { useLazyQuery } from '@apollo/react-hooks';
 import { Container, Row, Col } from "reactstrap";
+import { useAuth0 } from "../../react-auth0-spa";
 import Gravatar from "react-gravatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper, LinearProgress } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableRow, TableHead, Paper, LinearProgress, TextField } from '@material-ui/core';
 
 import "./style.scss"
 
@@ -14,6 +16,7 @@ const GET_INVESTOR_DEAL = gql`
   query Deal($company_name: String!) {
     investor {
       _id
+      name
       first_name
       last_name
       entity_name
@@ -44,10 +47,8 @@ const GET_INVESTOR_DEAL = gql`
 
 export default function Deal () {
   const params = useParams()
-  // const [deal, setDeal] = useState(null)
-  // const [investor, setInvestor] = useState(null) 
-  // const [investment, setInvestment] = useState(null)
-  const { data, error, loading } = useQuery(GET_INVESTOR_DEAL, { variables: { company_name: params.id }})
+  const { user, isAuthenticated } = useAuth0()
+  const [getDeal, { data, error, loading, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL)
   const [dealCompletion, setDealCompletion] = useState(0)
 
   useEffect(() => {
@@ -55,6 +56,16 @@ export default function Deal () {
       setDealCompletion(60)
     }
   }, [data])
+
+  useEffect(() => {
+    if (isAuthenticated && !called) getDeal({ variables: { company_name: params.id }})
+  }, [isAuthenticated, called])
+
+  useEffect(() => {
+    if (error && user) {
+      refetch()
+    }
+  }, [error, user])
 
   if (!data) return <Loader />
 
@@ -96,9 +107,35 @@ export default function Deal () {
               <span>Hans Pizzinini</span>
             </Paper>
           </Paper>
+          <InvestorData investor={investor} />
         </Col>
       </Row>
     </div>
+  )
+}
+
+function InvestorData ({ investor }) {
+  if (!investor) return <Paper className="tile"><Loader /></Paper>
+
+  return (
+    <Paper className="investor-details tile">
+      <div className="small-header">My Info [<Link to="/profile">edit</Link>]</div>
+      <div>
+        <TextField style={{width: "100%"}} label="Investor Type" value={_.upperFirst(investor.investor_type)} disabled />
+      </div>
+      <div>
+        <TextField style={{width: "100%"}} label="Country" value={investor.country} disabled />
+      </div>
+      <div>
+        <TextField style={{width: "100%"}} label="Accreditation" value={investor.accredited_investor_status} disabled />
+      </div>
+      <div>
+        <TextField style={{width: "100%"}} label="Subscriber Name" value={investor.name} disabled />
+      </div>
+      <div>
+        <TextField style={{width: "100%"}} label="Signer Full Name" value={investor.signer_full_name} disabled />
+      </div>
+    </Paper>
   )
 }
 
@@ -162,19 +199,35 @@ function Onboarding ({ investment, deal, investor }) {
 
   if (!investor) return <Loader />
 
-  // const params = {
-  //   // Member_Type: investor.investor_type,
-  //   Member_Email: investor.email,
-  //   Member_country_of_residence: investor.country
-  //   // Member_Subscriber_name: investor.
-  // }
-  // let urlParameters = Object.entries(params).map(e => e.join('=')).join('&')
-  // console.log(deal.onboarding_link)
+  deal.onboarding_link = "https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=ea036281-201e-495f-aae3-e032bb40dd75&env=na3-eu1&acct=97ababd0-ed90-438a-a2c7-7162a7aa3d64"
+
+  const params = {
+    Member_Type: _.upperFirst(investor.investor_type),
+    Member_Email: investor.email,
+    "Name 7a634dac-6bba-4543-83c0-2aed22ddd047": investor.signer_full_name,
+    "Country of residence": investor.country,
+    "subscriber name": investor.name
+  }
+
+  const investorStatus = investor.accredited_investor_status
+  switch (investor.investor_type) {
+    case "entity": {
+      params["Accredited Entity"] = investorStatus
+      break
+    }
+    case "individual": {
+      params["Accredited individual"] = investorStatus
+      break
+    }
+  }
+
+  let urlParameters = Object.entries(params)
+    .map(e => e.map(encodeURI).join("=")).join('&')
 
   return (
     <div className="document-iframe">
       <div className="iframe-container">
-        <iframe src={deal.onboarding_link} />
+        <iframe src={`${deal.onboarding_link}&${urlParameters}`} />
       </div>
     </div>
   )

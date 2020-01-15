@@ -146,4 +146,14 @@
             }
         }
     }
+
+    .investor-details {
+        margin: 10px 0px;
+        >div {
+            margin-bottom: 5px;
+            input {
+                color: #333;
+            }
+        }
+    }
 }
