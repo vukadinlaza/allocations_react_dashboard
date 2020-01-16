@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { Table, TableBody, TableCell, TableRow, TableHead, Paper } from '@material-ui/core'
 
 const data = {

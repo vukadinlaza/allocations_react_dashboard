@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSimpleReducer } from '../../utils/hooks'
 import _, { get, isEqual } from "lodash"
 import { useParams } from "react-router-dom"
@@ -12,7 +12,7 @@ import UserSearch from "../forms/UserSearch"
 import { gql } from 'apollo-boost'
 import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks'
 
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableRow, Paper, Button } from '@material-ui/core'
 import { FormControl, Select, MenuItem, InputLabel, TextField, InputAdornment } from "@material-ui/core"
 import "./style.scss"
 
@@ -74,14 +74,13 @@ const UPDATE_DEAL = gql`
 const validInputs = ["_id","company_name","company_description","date_closed","deal_lead","pledge_link","onboarding_link","embed_code","status","closed","amount"]
 
 export default function DealEdit () {
-  const { user } = useAuth0()
   const params = useParams()
   const [searchQ, setSearchQ] = useState("")
   const [deal, setDeal] = useState(null)
   const [showAddInvestment, setShowAddInvestment] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
-  const { data, loading, refetch } = useQuery(GET_DEAL, { variables: { id: params.id }})
-  const [updateDeal, updateDealRes] = useMutation(UPDATE_DEAL)
+  const { data, refetch } = useQuery(GET_DEAL, { variables: { id: params.id }})
+  const [updateDeal] = useMutation(UPDATE_DEAL)
   const [search, searchRes] = useLazyQuery(API.users.search)
 
   useEffect(() => {

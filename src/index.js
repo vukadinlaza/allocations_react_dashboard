@@ -8,6 +8,8 @@ import history from "./utils/history";
 import ReactGa from 'react-ga'
 import { hotjar } from 'react-hotjar';
 
+console.warn = () => {}
+
 if (process.env.NODE_ENV === "production") {
   // initialize hotjar
   hotjar.initialize(1630114, 6)

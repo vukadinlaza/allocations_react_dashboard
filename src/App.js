@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Router, Route, Switch, Redirect } from "react-router-dom";
+import React, { useState } from "react";
+import { Router, Route, Switch } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 
 import NavBar from "./components/NavBar";
 import SignUp from "./components/SignUp";
-import Home from "./views/Home";
 import Deal from "./components/Deal";
 import Deals from "./components/Deals";
 import DealNew from "./components/DealNew";
@@ -30,18 +29,11 @@ import initFontAwesome from "./utils/initFontAwesome";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AdminRoute from "./auth/admin-route"
 import PrivateRoute from "./components/PrivateRoute";
-import {getTokenSilently, useAuth0} from "./react-auth0-spa";
 import { client } from './apollo-client';
-
-import Loader from "./components/utils/Loader"
-import Investor from './views/Investor';
-import AddDeal from './components/AddDeal';
 
 import "./App.scss";
 
 const App = () => {
-  const { loading, user, getTokenSilently } = useAuth0();
-
   // currently only effects small screens
   const [showSidebar, setShowSidebar] = useState(false)
 
@@ -53,7 +45,7 @@ const App = () => {
             <Row>
               <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
               <Col xs="12" className="xs-navbar">
-                <img src="https://www.allocations.co/assets/img/brand.svg" style={{height:'40px'}} />
+                <img src="https://www.allocations.co/assets/img/brand.svg" alt="#" style={{height:'40px'}} />
                 <span className="hamburger" style={{ display: showSidebar ? 'none' : 'inline-block'}}>
                   <FontAwesomeIcon icon="bars" onClick={() => setShowSidebar(true)} />
                 </span>
