@@ -7,6 +7,8 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import { Container, Row, Col } from "reactstrap";
 import { useAuth0 } from "../../react-auth0-spa";
 import Gravatar from "react-gravatar";
+import PledgeChart from "./PledgeChart"
+import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Table, TableBody, TableCell, TableRow, TableHead, Paper, LinearProgress, TextField } from '@material-ui/core';
 
@@ -87,24 +89,25 @@ export default function Deal () {
         </Col>
         <Col sm="4">
           <Paper className="investment-details tile">
-            <div className="small-header">Round Filled</div>
+            {/**<PledgeChart sheet={deal.pledge_link} />**/}
+            {/**<div className="small-header">Round Filled</div>
             <Paper className="closing-date">
               <LinearProgress style={{height: "25px"}} variant="determinate" value={dealCompletion} color="secondary" />
-            </Paper>
-            <div className="small-header">Closing Date [tentative]</div>
+            </Paper>**/}
+            <div className="small-header">Closing Date</div>
             <Paper className="closing-date">
               <FontAwesomeIcon icon="clock" size="lg" />
-              <span>January 12</span>
+              <span>{deal.date_closed}</span>
             </Paper>
             <div className="small-header">Lead</div>
             <Paper className="deal-lead">
-              <Gravatar
+              {/**<Gravatar
                 email="hanspaulpizzinini@gmail.com"
                 default="Profile"
                 className="nav-user-profile rounded-circle"
                 width="50"
-              />
-              <span>Hans Pizzinini</span>
+              />**/}
+              <span>{deal.deal_lead}</span>
             </Paper>
           </Paper>
           <InvestorData investor={investor} />
@@ -143,23 +146,23 @@ function InvestmentFlow ({ investment, deal, investor }) {
   if (!investment) return <Paper style={{padding: "25px"}}><Loader /></Paper>
 
   // const { status } = investment
-  const status = "pledged"
+  const status = "invited"
 
   return (
     <React.Fragment>
         <Paper className="investment tile" style={{marginBottom: "10px"}}>
           <div className="small-header">My Investment</div>
-          <span className="investment-amount">$10,000</span>
-          {status !== "viewed" && <span className={`investment-status investment-${status}`}>{(status || "").toUpperCase()}</span>}
+          <span className="investment-amount">{investment.amount ? "$" + nWithCommas(investment.amount) : ""}</span>
+          {status !== "invited" && <span className={`investment-status investment-${status}`}>{(status || "").toUpperCase()}</span>}
         </Paper>
       <Paper className="flow tile">
         <div className="flow-steps">
-          <div className={`step step-pledge ${status === "viewed" ? "step-active" : ""}`}>Pledge</div>
+          <div className={`step step-pledge ${status === "invited" ? "step-active" : ""}`}>Pledge</div>
           <div className={`step step-onboard ${status === "pledged" ? "step-active" : ""}`}>Onboard</div>
           <div className={`step step-wire ${status === "onboarded" ? "step-active" : ""}`}>Wire</div>
         </div>
         {status === "pledged" && <Onboarding investment={investment} deal={deal} investor={investor} />}
-        {status === "viewed" && <Pledging investment={investment} deal={deal} />}
+        {status === "invited" && <Pledging investment={investment} deal={deal} />}
         {status === "onboarded" && <Wire investment={investment} deal={deal} />}
       </Paper>
     </React.Fragment>
