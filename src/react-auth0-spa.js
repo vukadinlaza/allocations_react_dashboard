@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import createAuth0Client from "@auth0/auth0-spa-js";
 import history from "./utils/history";
+import { useSimpleReducer } from "./utils/hooks"
 
 export const Auth0Context = React.createContext();
 export const useAuth0 = () => useContext(Auth0Context);
-let _initOptions, _client
 
 const domain="login.allocations.co";
 const client_id="R2iJsfjNPGNjIdPmRoE3IcKd9UvVrsp1";
@@ -33,16 +33,15 @@ const getAuth0Client = (options) => {
 }
 
 export const Auth0Provider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
-  const [user, setUser] = useState();
-  const [auth0Client, setAuth0] = useState();
-  const [loading, setLoading] = useState(true);
-  const [popupOpen, setPopupOpen] = useState(false);
-  const [clientPromise, setClientPromise] = useState(null)
+  const [{ user, isAuthenticated, loading, auth0Client, clientPromise }, setState] = useSimpleReducer(
+    { user: null, isAuthenticated: null, loading: true, auth0Client: null, clientPromise: null }
+  )
 
   const options = {
-    onRedirectCallback: appState => {
-      setIsAuthenticated(true)  
+    onRedirectCallback: async ({ appState, client }) => {
+      const u = await client.getUser()
+      await getTokenSilently(client)
+      setState({ isAuthenticated: true, loading: false, user: u })
       history.push(
         appState && appState.targetUrl
           ? appState.targetUrl
@@ -51,53 +50,10 @@ export const Auth0Provider = ({ children }) => {
     }
   }
 
-  useEffect(() => {
-    setIsAuthenticated(localStorage.getItem("auth0-token") ? true : null)
-  }, [])
-
-  useEffect(() => {
-    let start = Date.now()
-    const p = getAuth0Client(options)
-    setClientPromise(p)
-
-    p.then(client => {
-      _client = client
-      setAuth0(client)
-      console.log("Got Auth0 Client in:", Date.now() - start, "ms")
-    })
-    // eslint-disable-next-line
-  }, []);
-
-  useEffect(() => {
-    if (auth0Client) {
-      console.log("Auth0 Client Initialized")
-      if (window.location.search.includes("code=")) {
-        auth0Client.handleRedirectCallback()
-          .then(({ appState }) => options.onRedirectCallback(appState))
-      }
-
-      auth0Client.isAuthenticated()
-        .then(async val => {
-          if (val) {
-            const token = await auth0Client.getTokenSilently()
-            localStorage.setItem("auth0-token", token)
-            if (val) {
-              auth0Client.getUser().then(u => {
-                setUser(u)
-                setLoading(false)
-              })
-            }
-          }
-          setIsAuthenticated(val)          
-        })
-    }
-  }, [auth0Client])
-
-  const getTokenSilently = async () => {
+  const getTokenSilently = async (client = auth0Client) => {
     const t = localStorage.getItem("auth0-token")
     if (!t) {
-      // need to wait for the client to be ready
-      const client = await clientPromise()
+      // const client = await clientPromise()
       const token = await client.getTokenSilently()
       localStorage.setItem("auth0-token", token)
       return token
@@ -105,14 +61,45 @@ export const Auth0Provider = ({ children }) => {
     return t
   }
 
-  const handleRedirectCallback = async () => {
-    setLoading(true);
-    await auth0Client.handleRedirectCallback();
-    const user = await auth0Client.getUser();
-    setLoading(false);
-    setIsAuthenticated(true);
-    setUser(user);
-  }
+  // check if auth is cached
+  useEffect(() => {
+    // init auth client
+    const p = getAuth0Client(options)
+    setState({ 
+      isAuthenticated: localStorage.getItem("auth0-token") ? true : null,
+      clientPromise: p 
+    }) 
+
+    p.then(client => {
+      setState({ auth0Client: client })
+
+      // this means we've been redirected back from login
+      if (window.location.search.includes("code=")) {
+        client.handleRedirectCallback()
+          .then(({ appState }) => {
+            options.onRedirectCallback({ appState, client })
+          })
+          .catch(e => console.error(e))
+      } else {
+        // this is the standard case
+        client.isAuthenticated()
+          .then(async val => {
+            if (val) {
+              const token = await client.getTokenSilently()
+              localStorage.setItem("auth0-token", token)
+              if (val) {
+                client.getUser().then(u => {
+                  setState({ user: u, loading: false })
+                })
+              }
+            }
+            setState({ isAuthenticated: val })         
+          })
+      }
+
+      
+    }).catch(console.error)
+  }, [])
 
   return (
     <Auth0Context.Provider
@@ -121,14 +108,13 @@ export const Auth0Provider = ({ children }) => {
         user,
         loading,
         getTokenSilently,
-        handleRedirectCallback,
         loginWithRedirect: async (...p) => {
-          // if (!auth0Client) {
-          //   const client = await clientPromise()
-          //   return client.loginWithRedirect(...p)
-          // }
-          console.log("LOGIN W/ Redirect?")
-          auth0Client.loginWithRedirect(...p)
+          if (!auth0Client) {
+            const auth0Client = await clientPromise()
+            return auth0Client.loginWithRedirect(...p)
+          } else {
+            return auth0Client.loginWithRedirect(...p)
+          }
         },
         logout: (...p) => {
           localStorage.removeItem("auth0-token")

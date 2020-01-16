@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Route } from "react-router-dom";
 import { useAuth0 } from "../react-auth0-spa";
@@ -9,11 +9,8 @@ const PrivateRoute = ({ component: Component, path, ...rest }) => {
   useEffect(() => {
     if (isAuthenticated === false) {
       loginWithRedirect({ appState: { targetUrl: path }, initialScreen: 'signIn' })
-        .then(() => {
-          console.log("Logged In")
-        })
     }
-  }, [isAuthenticated, loginWithRedirect, path]);
+  }, [isAuthenticated]);
 
   const render = props =>
     isAuthenticated === true ? <Component {...props} /> : null;
