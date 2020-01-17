@@ -19,6 +19,7 @@ const GET_INVESTMENTS = gql`
   {
     allInvestments {
       _id
+      status
       amount
       deal {
         _id
@@ -32,6 +33,7 @@ const GET_INVESTMENTS = gql`
       }
       investor {
         _id
+        name
         first_name
         last_name
         investor_type
@@ -127,6 +129,7 @@ export default function Investments () {
                   <TableCell>Company</TableCell>
                   <TableCell>Description</TableCell>
                   <TableCell align="right">Amount</TableCell>
+                  <TableCell>Status</TableCell>
                   <TableCell align="center">Date Closed</TableCell>
                   <TableCell align="right">Docs</TableCell>
                   <TableCell></TableCell>
@@ -136,10 +139,13 @@ export default function Investments () {
                 {investments.map((investment) => (
                   investment.showDocs ? <DocsRow docs={showDocs.documents} />
                     : <TableRow key={investment._id} className="investment-row">
-                        <TableCell>{investorName(investment)}</TableCell>
+                        <TableCell>{_.get(investment, 'investor.name')}</TableCell>
                         <TableCell scope="row">{investment.deal.company_name}</TableCell>
                         <TableCell>{investment.deal.company_description}</TableCell>
-                        <TableCell align="right">${nWithCommas(investment.amount)}</TableCell>
+                        <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) : "TBD"}</TableCell>
+                        <TableCell>
+                          <span className={`investment-status investment-status-${investment.status}`}>{investment.status}</span>
+                        </TableCell>
                         <TableCell align="center">{investment.deal.date_closed}</TableCell>
                         <TableCell align="right">
                           {_.get(investment, 'documents.length', 0) > 0

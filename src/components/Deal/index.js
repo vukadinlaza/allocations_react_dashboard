@@ -144,8 +144,7 @@ function InvestorData ({ investor }) {
 function InvestmentFlow ({ investment, deal, investor }) {
   if (!investment) return <Paper style={{padding: "25px"}}><Loader /></Paper>
 
-  // const { status } = investment
-  const status = "invited"
+  const { status } = investment
 
   return (
     <React.Fragment>
@@ -187,7 +186,7 @@ function Wire ({ investment, deal }) {
     <div className="pledging">
       <div className="pledge-link">
         <FontAwesomeIcon icon={["far", "file-pdf"]} />
-        <a href={deal.wire_link || "#"} target="_blank">Wire Instructions</a>
+        <a href={"https://allocations-public.s3.us-east-2.amazonaws.com/wire_instructions.pdf"} target="_blank">Wire Instructions</a>
       </div>
     </div>
   )
