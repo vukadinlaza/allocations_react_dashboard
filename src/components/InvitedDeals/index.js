@@ -23,6 +23,7 @@ const GET_INVESTOR = gql`
       email
       invitedDeals {
         _id
+        status
         company_name
         company_description
         pledge_link
@@ -71,7 +72,7 @@ export default function InvitedDeals () {
   }
 
   if (!data) return <div><Loader /></div>
-  console.log("Ready in:", Date.now() - start)
+
   const { investor } = data
   return (
     <div className="InvitedDeals">
@@ -83,9 +84,9 @@ export default function InvitedDeals () {
                 <TableRow>
                   <TableCell>Deal</TableCell>
                   <Hidden xsDown><TableCell>Description</TableCell></Hidden>
+                  <TableCell>Status</TableCell>
                   <TableCell>Closing</TableCell>
                   <Hidden xsDown><TableCell>Lead</TableCell></Hidden>
-                  <TableCell></TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               </TableHead>
@@ -94,21 +95,15 @@ export default function InvitedDeals () {
                   <TableRow key={deal._id}>
                     <TableCell>{deal.company_name}</TableCell>
                     <Hidden xsDown><TableCell>{deal.company_description}</TableCell></Hidden>
+                    <TableCell>{deal.status}</TableCell>
                     <TableCell>{formatDate(deal.date_closed)}</TableCell>
                     <Hidden xsDown><TableCell>{deal.deal_lead}</TableCell></Hidden>
                     <TableCell align="center">
-                      {deal.pledge_link ? <a href={deal.pledge_link} target="_blank">
-                        <Button variant="contained" color="primary">
-                          Pledge&nbsp;<FontAwesomeIcon icon="external-link-alt" />
-                        </Button>
-                      </a> : ""} 
-                    </TableCell>
-                    <TableCell align="center">
-                      {deal.onboarding_link ? <a href={deal.onboarding_link} target="_blank">
+                      <Link to={`/deals/${deal.company_name}`}>
                         <Button variant="contained" style={{backgroundColor: "#53B987", color: "#fff"}}>
-                          Invest&nbsp;<FontAwesomeIcon icon="external-link-alt" />
+                          Invest&nbsp;<FontAwesomeIcon icon="arrow-right" />
                         </Button>
-                      </a> : ""} 
+                      </Link> 
                     </TableCell>
                   </TableRow>
                 ))}
