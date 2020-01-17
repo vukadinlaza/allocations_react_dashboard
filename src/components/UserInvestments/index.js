@@ -22,6 +22,7 @@ const GET_INVESTOR = gql`
       email
       investments {
         _id
+        status
         amount
         deal {
           _id
@@ -87,6 +88,7 @@ export default function UserInvestments () {
                   <TableCell>Company</TableCell>
                   <Hidden xsDown><TableCell>Description</TableCell></Hidden>
                   <TableCell align="right">Amount</TableCell>
+                  <TableCell align="center">Status</TableCell>
                   <TableCell align="center">Date Closed</TableCell>
                   <TableCell align="right">Docs</TableCell>
                 </TableRow>
@@ -97,7 +99,8 @@ export default function UserInvestments () {
                     : <TableRow key={investment._id} className="investment-row">
                         <TableCell scope="row">{investment.deal.company_name}</TableCell>
                         <Hidden xsDown><TableCell>{investment.deal.company_description}</TableCell></Hidden>
-                        <TableCell align="right">${nWithCommas(investment.amount)}</TableCell>
+                        <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) : "TBD"}</TableCell>
+                        <TableCell align="center"><span className={`investment-status investment-status-${investment.status}`}>{investment.status}</span></TableCell>
                         <TableCell align="center">{investment.deal.date_closed}</TableCell>
                         <TableCell align="right">
                           {_.get(investment, 'documents.length', 0) > 0
