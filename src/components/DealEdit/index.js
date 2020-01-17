@@ -30,6 +30,7 @@ const GET_DEAL = gql`
       inviteKey
       investments {
         _id
+        status
         amount
         investor {
           _id
@@ -55,7 +56,7 @@ const UPDATE_DEAL = gql`
       deal_lead
       pledge_link
       onboarding_link
-      closed
+      status
       inviteKey
       invitedInvestors {
         _id
@@ -201,7 +202,9 @@ export default function DealEdit () {
                     <TableRow key={investor._id} sm={{size: 4, offset: 1}} className="invited-investor">
                       <TableCell>{investor.name}</TableCell>
                       <TableCell>{investor.email}</TableCell>
-                      <TableCell><AddInvestor investor={investor} deal={data.deal} setSearchQ={setSearchQ} refetch={refetch} /></TableCell>
+                      <TableCell>
+                        <AddInvestor investor={investor} deal={data.deal} setSearchQ={setSearchQ} refetch={refetch} />
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -215,17 +218,13 @@ export default function DealEdit () {
               </Table>
             </Paper>
           </Col>
-          <Col sm={{size: 4}} className="investments">
+          <Col sm={{size: 5}} className="investments">
             <AddInvestment deal={deal} show={showAddInvestment} refetch={refetch} /> 
             <Paper>
               <Table>
                 <TableBody>
                   {_.get(deal, 'investments', []).map(inv => (
-                    <TableRow key={inv._id} sm={{size: 4, offset: 1}} className="invited-inv">
-                      <TableCell>{get(inv, 'investor.name')}</TableCell>
-                      <TableCell>${nWithCommas(inv.amount)}</TableCell>
-                      <TableCell><DeleteInvestment investment={inv} refetch={refetch} /></TableCell>
-                    </TableRow>
+                    <Investment key={inv._id} investment={inv} refetch={refetch} />
                   ))}
                 </TableBody>
               </Table>
@@ -234,6 +233,84 @@ export default function DealEdit () {
         </Row>
       </form>
     </div>
+  )
+}
+
+const UPDATE_INVESTMENT = gql`
+  mutation UpdateInvestment($investment: InvestmentInput!) {
+    updateInvestment(investment: $investment) {
+      _id
+      status
+      amount
+      investor {
+        _id
+        name
+      }
+    }
+  }
+`
+
+function Investment ({ investment: i, refetch }) {
+  const [editing, setEditing] = useState(false)
+  const [changes, setChanges] = useSimpleReducer({})
+  const [updateInvestment, {data, error}] = useMutation(UPDATE_INVESTMENT)
+
+  const update = () => {
+    updateInvestment({ 
+      variables: { investment: { _id: i._id, ...changes } }
+    })
+  }
+
+  if (editing) {
+    return (
+      <TableRow>
+        <TableCell colSpan={4}>
+        <Paper className="investment-edit">
+          <div className="investor-name">
+            {get(i, 'investor.name')}
+            <FontAwesomeIcon icon="times" onClick={() => setEditing(false)} />
+          </div>
+
+          <TextField value={changes.amount ||i.amount || ""} onChange={e => setChanges({ amount: Number(e.target.value) })}
+            label="Amount" variant="filled" style={{width: "100%", marginBottom: "10px"}} />
+
+          <FormControl variant="filled" style={{width: "100%", marginBottom: "10px"}}>
+            <InputLabel>Status</InputLabel>
+            <Select value={changes.status || i.status || ""} 
+              onChange={e => setChanges({ status: e.target.value })}
+              inputProps={{name: 'Type'}}>
+              <MenuItem value="invited">Invited</MenuItem>
+              <MenuItem value="pledged">Pledged</MenuItem>
+              <MenuItem value="onboarded">Onboarded</MenuItem>
+              <MenuItem value="complete">Complete</MenuItem>
+            </Select>
+          </FormControl>
+          <div>
+            <Button 
+              variant="contained"
+              onClick={update} 
+              color="primary">
+              UPDATE
+            </Button>
+          </div>
+        </Paper>
+        </TableCell>
+      </TableRow>
+    )
+  }
+
+  return (
+    <TableRow className="invited-inv">
+      <TableCell>{get(i, 'investor.name')}</TableCell>
+      <TableCell>{i.amount ? "$" + nWithCommas(i.amount) : "TBD"}</TableCell>
+      <TableCell>
+        <span className={`investment-status investment-status-${i.status}`}>{i.status}</span>
+      </TableCell>
+      <TableCell>
+        [<span className="edit-button" onClick={() => setEditing(true)}>edit</span>]
+        &nbsp;<DeleteInvestment investment={i} refetch={refetch} />
+      </TableCell>
+    </TableRow>
   )
 }
 
@@ -252,11 +329,11 @@ function DeleteInvestment ({ investment, refetch }) {
 }
 
 function validate (investment) {
-  return _.reject(['deal_id', 'user_id', 'amount'], prop => investment[prop])
+  return _.reject(['deal_id', 'user_id', 'amount', 'status'], prop => investment[prop])
 }
 
 function AddInvestment ({ deal, show, refetch }) {
-  const [investment, setInvestment] = useSimpleReducer({ amount: "" })
+  const [investment, setInvestment] = useSimpleReducer({ amount: "", status: "complete" })
   const [createInvestment, { data, error }] = useMutation(API.investments.create)
   const [user, setUser] = useState(null)
   const [errors, setErrors] = useState([])
@@ -293,6 +370,19 @@ function AddInvestment ({ deal, show, refetch }) {
           onChange={e => setInvestment({ amount: Math.floor(e.target.value) })}
           label="Amount"
           variant="filled" />
+      </div>
+      <div>
+        <FormControl variant="filled" style={{width: "100%", marginBottom: "10px"}}>
+          <InputLabel>Status</InputLabel>
+          <Select value={investment.status || ""} 
+            onChange={e => setInvestment({ status: e.target.value })}
+            inputProps={{name: 'Type'}}>
+            <MenuItem value="invited">Invited</MenuItem>
+            <MenuItem value="pledged">Pledged</MenuItem>
+            <MenuItem value="onboarded">Onboarded</MenuItem>
+            <MenuItem value="complete">Complete</MenuItem>
+          </Select>
+        </FormControl>
       </div>
       <Button variant="contained"
         onClick={submit} 

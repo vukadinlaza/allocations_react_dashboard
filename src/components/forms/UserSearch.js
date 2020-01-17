@@ -25,7 +25,7 @@ export default function UserSearch ({ user, setUser, errors }) {
         <Table>
           <TableBody>
             <TableRow>
-              <TableCell>{user.first_name} {user.last_name}</TableCell>
+              <TableCell>{user.name}</TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell><FontAwesomeIcon icon="times" onClick={() => { setQ(""); setUser(null) }} /></TableCell>
             </TableRow>
@@ -51,7 +51,7 @@ export default function UserSearch ({ user, setUser, errors }) {
               <TableRow key={record._id} 
                 className="assoc-option" 
                 onClick={() => setUser(record)}>
-                <TableCell>{record.first_name} {record.last_name}</TableCell>
+                <TableCell>{record.name}</TableCell>
                 <TableCell>{record.email}</TableCell>
               </TableRow>
             ))}

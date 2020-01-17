@@ -37,26 +37,6 @@
         }
     }
 
-    .investment-status {
-        padding: 2px 6px;
-        border-radius: 2px;
-    }
-
-    .investment-status-invited {
-        background-color: #FFC107;
-        color: #333;
-    }
-
-    .investment-status-onboarded {
-        background-color: $brandblue;
-        color: #fff;
-    }
-
-    .investment-status-complete {
-        background-color: $green;
-        color: #fff;
-    }
-
     #investments-timeseries-chart {
         height: 200px;
     }
@@ -95,4 +75,29 @@
         text-align: center;
         font-size: 0.8em;
     }
+}
+
+.investment-status {
+    padding: 3px 6px;
+    border-radius: 2px;
+}
+
+.investment-status-invited {
+    background-color: #FFC107;
+    color: #333;
+}
+
+.investment-status-pledged {
+    background-color: lightblue;
+    color: #333;
+}
+
+.investment-status-onboarded {
+    background-color: $brandblue;
+    color: #fff;
+}
+
+.investment-status-complete {
+    background-color: $green;
+    color: #fff;
 }

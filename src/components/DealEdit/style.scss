@@ -8,6 +8,21 @@
             margin-bottom: 10px;
         }
     }
+
+    .edit-button {
+        color: blue;
+    }
+    .investment-edit {
+        padding: 15px 10px;
+
+        .investor-name {
+            text-align: center;
+            padding: 5px;
+            .fa-times {
+                margin-left: 5px;
+            }
+        }
+    }
 }
 
 .form-wrapper {
