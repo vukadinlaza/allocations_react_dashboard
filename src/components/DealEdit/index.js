@@ -26,23 +26,19 @@ const GET_DEAL = gql`
       deal_lead
       pledge_link
       onboarding_link
-      closed
+      status
       inviteKey
       investments {
         _id
         amount
         investor {
           _id
-          first_name
-          last_name
-          entity_name
-          investor_type
+          name
         }
       }
       invitedInvestors {
         _id
-        first_name
-        last_name
+        name
         email
       }
     } 
@@ -63,9 +59,7 @@ const UPDATE_DEAL = gql`
       inviteKey
       invitedInvestors {
         _id
-        first_name
-        last_name
-        email
+        name
       }
     }
   }
@@ -76,7 +70,7 @@ const validInputs = ["_id","company_name","company_description","date_closed","d
 export default function DealEdit () {
   const params = useParams()
   const [searchQ, setSearchQ] = useState("")
-  const [deal, setDeal] = useState(null)
+  const [deal, setDeal] = useSimpleReducer({})
   const [showAddInvestment, setShowAddInvestment] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
   const { data, refetch } = useQuery(GET_DEAL, { variables: { id: params.id }})
@@ -90,10 +84,6 @@ export default function DealEdit () {
   useEffect(() => {
     setHasChanges(data && !isEqual(deal, get(data, 'deal')))
   }, [deal])
-
-  const updateDealProp = ({ prop, newVal }) => {
-    setDeal(prev => ({ ...prev, [prop]: newVal }))
-  }
 
   useEffect(() => {
     search({ variables: { q: searchQ } })
@@ -110,15 +100,15 @@ export default function DealEdit () {
         <Row>
           <Col sm={{size: 4, offset: 1}}>
             <TextField style={{width: "100%"}} 
-              value={get(deal, 'company_name') || ""} 
-              onChange={e => updateDealProp({ prop: "company_name", newVal: e.target.value })}
+              value={deal.company_name || ""} 
+              onChange={e => setDeal({ company_name: e.target.value })}
               label="Company Name" 
               variant="filled" />
           </Col>
           <Col sm={{size: 4}}>
             <TextField style={{width: "100%"}} 
-              value={get(deal, 'deal_lead') || ""}
-              onChange={e => updateDealProp({ prop: "deal_lead", newVal: e.target.value })}
+              value={deal.deal_lead || ""}
+              onChange={e => setDeal({ deal_lead: e.target.value })}
               label="Deal Lead" 
               variant="filled" />
           </Col>
@@ -126,15 +116,15 @@ export default function DealEdit () {
         <Row>
           <Col sm={{size: 6, offset: 1}}>
             <TextField style={{width: "100%"}} 
-              value={get(deal, 'company_description') || ""} 
-              onChange={e => updateDealProp({ prop: "company_description", newVal: e.target.value })}
+              value={deal.company_description || ""}
+              onChange={e => setDeal({ company_description: e.target.value })} 
               label="Company Description" 
               variant="filled" />
           </Col>
           <Col sm={{size: 2}}>
             <TextField style={{width: "100%"}} 
-              value={get(deal, 'date_closed') || ""}
-              onChange={e => updateDealProp({ prop: "date_closed", newVal: e.target.value })} 
+              value={deal.date_closed || ""}
+              onChange={e => setDeal({ date_closed: e.target.value })}
               label="Closing Date" 
               variant="filled" />
           </Col>
@@ -142,15 +132,15 @@ export default function DealEdit () {
         <Row>
           <Col sm={{size: 4, offset: 1}}>
             <TextField style={{width: "100%"}} 
-              value={get(deal, 'pledge_link') || ""} 
-              onChange={e => updateDealProp({ prop: "pledge_link", newVal: e.target.value })}
+              value={deal.pledge_link || ""} 
+              onChange={e => setDeal({ pledge_link: e.target.value })}
               label="Pledge Link" 
               variant="filled" />
           </Col>
           <Col sm={{size: 4}}>
             <TextField style={{width: "100%"}}
-              value={get(deal, 'onboarding_link') || ""}
-              onChange={e => updateDealProp({ prop: "onboarding_link", newVal: e.target.value })} 
+              value={deal.onboarding_link || ""}
+              onChange={e => setDeal({ onboarding_link: e.target.value })}
               label="Onboarding Link" 
               variant="filled" />
           </Col>
@@ -159,11 +149,12 @@ export default function DealEdit () {
           <Col sm={{size: 4, offset: 1}}>
             <FormControl variant="filled" style={{width: "100%"}}>
               <InputLabel>Status</InputLabel>
-              <Select value={(get(deal, "closed") === true).toString()}
-                onChange={e => updateDealProp({ prop: "closed", newVal: e.target.value === "true" })}
+              <Select value={deal.status || ""}
+                onChange={e => setDeal({ status: e.target.value })}
                 inputProps={{name: 'Type'}}>
-                <MenuItem value="false">Open</MenuItem>
-                <MenuItem value="true">Closed</MenuItem>
+                <MenuItem value="onboarding">Onboarding</MenuItem>
+                <MenuItem value="closing">Closing</MenuItem>
+                <MenuItem value="closed">Closed</MenuItem>
               </Select>
             </FormControl>
           </Col>
@@ -208,7 +199,7 @@ export default function DealEdit () {
                 <TableBody>
                   {(searchQ !== "" ? get(searchRes, 'data.searchUsers', []) : []).map(investor => (
                     <TableRow key={investor._id} sm={{size: 4, offset: 1}} className="invited-investor">
-                      <TableCell>{investor.first_name} {investor.last_name}</TableCell>
+                      <TableCell>{investor.name}</TableCell>
                       <TableCell>{investor.email}</TableCell>
                       <TableCell><AddInvestor investor={investor} deal={data.deal} setSearchQ={setSearchQ} refetch={refetch} /></TableCell>
                     </TableRow>
@@ -231,7 +222,7 @@ export default function DealEdit () {
                 <TableBody>
                   {_.get(deal, 'investments', []).map(inv => (
                     <TableRow key={inv._id} sm={{size: 4, offset: 1}} className="invited-inv">
-                      <TableCell>{investmentName(inv)}</TableCell>
+                      <TableCell>{get(inv, 'investor.name')}</TableCell>
                       <TableCell>${nWithCommas(inv.amount)}</TableCell>
                       <TableCell><DeleteInvestment investment={inv} refetch={refetch} /></TableCell>
                     </TableRow>
@@ -246,17 +237,10 @@ export default function DealEdit () {
   )
 }
 
-function investmentName(investment) { 
-  return get(investment, "investor.investor_type") === "entity"
-    ? get(investment, "investor.entity_name") || ""
-    : `${get(investment, "investor.first_name")} ${get(investment, "investor.last_name")}`
-}
-
 function DeleteInvestment ({ investment, refetch }) {
   const [delInvestment, { data, error }] = useMutation(API.investments.destroy)
 
   useEffect(() => {
-    console.log({data})
     if (data && data.deleteInvestment) refetch()
   }, [data])
 
@@ -339,7 +323,7 @@ function InvitedInvestors ({ data, refetch }) {
   return (
     get(data, 'deal.invitedInvestors', []).map(investor => (
       <TableRow key={investor._id} sm={{size: 4, offset: 1}}>
-        <TableCell>{investor.first_name} {investor.last_name}</TableCell>
+        <TableCell>{investor.name}</TableCell>
         <TableCell>{investor.email}</TableCell>
         <TableCell><RmInvestor investor={investor} deal={get(data, 'deal', {})} refetch={refetch} /></TableCell>
       </TableRow>
