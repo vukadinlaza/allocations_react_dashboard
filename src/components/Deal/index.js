@@ -36,7 +36,6 @@ const GET_INVESTOR_DEAL = gql`
         pledge_link
         onboarding_link
         status
-        closed
         investment {
           _id
           amount
@@ -150,11 +149,7 @@ function InvestmentFlow ({ investment, deal, investor }) {
 
   return (
     <React.Fragment>
-        <Paper className="investment tile" style={{marginBottom: "10px"}}>
-          <div className="small-header">My Investment</div>
-          <span className="investment-amount">{investment.amount ? "$" + nWithCommas(investment.amount) : ""}</span>
-          {status !== "invited" && <span className={`investment-status investment-${status}`}>{(status || "").toUpperCase()}</span>}
-        </Paper>
+      <InvestmentOverview investment={investment} />
       <Paper className="flow tile">
         <div className="flow-steps">
           <div className={`step step-pledge ${status === "invited" ? "step-active" : ""}`}>Pledge</div>
@@ -166,6 +161,24 @@ function InvestmentFlow ({ investment, deal, investor }) {
         {status === "onboarded" && <Wire investment={investment} deal={deal} />}
       </Paper>
     </React.Fragment>
+  )
+}
+
+function InvestmentOverview ({ investment }) {
+  if (investment.status === "invited") {
+    return (
+      <Paper className="tile investment-invited">
+        <div>You've been invited to participate in this deal!<br />If you'd like to invest please fill out the pledging spreadsheet</div>
+      </Paper>
+    )
+  }
+
+  return (
+    <Paper className="investment tile" style={{marginBottom: "10px"}}>
+      <div className="small-header">My Investment</div>
+      <span className="investment-amount">{investment.amount ? "$" + nWithCommas(investment.amount) : ""}</span>
+      <span className={`investment-status investment-${investment.status}`}>{(investment.status || "").toUpperCase()}</span>
+    </Paper>
   )
 }
 
