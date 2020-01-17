@@ -4,8 +4,7 @@ export const search = gql`
   query SearchUsers($q: String!) {
     searchUsers(q: $q) {
       _id
-      first_name
-      last_name
+      name
       email
     }
   }
