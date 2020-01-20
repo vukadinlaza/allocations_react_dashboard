@@ -51,6 +51,7 @@ const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
     investor(email: $email, _id: $_id) {
       _id
+      name
       first_name
       last_name
       entity_name
@@ -58,6 +59,7 @@ const GET_INVESTOR = gql`
       email
       investments {
         amount
+        status
         deal {
           _id
           company_name
@@ -138,7 +140,7 @@ export default function UserHome (props) {
       <Row>
         <Col lg={{size: 4, offset: 2}} md={{size: 5, offset: 1}} sm={{size: 6, offset: 0}} className="last-deals">
           <div className="tile tile-bottom">
-            <div className="small-header">Most Recent Deals</div>
+            <div className="small-header">Most Recent Investments</div>
             {_.orderBy(investor.investments, i => new Date(i.deal.date_closed).getTime(), 'desc').map((investment, i) => (
               <InvestmentStub key={i} investment={investment} />
             ))}
@@ -158,20 +160,19 @@ export default function UserHome (props) {
 }
 
 function Name ({ investor }) {
-  if (investor.investor_type === "entity") {
-    return investor.entity_name
-  } else {
-    return investor.first_name
-  }
+  return investor.investor_type === "entity" ? investor.entity_name : investor.first_name
 }
 
 function InvestmentStub ({ investment }) {
+  if (investment.status === "invited") return null
   return (
-    <div key={investment._id} className="investment-stub">
+    <Paper key={investment._id} className="investment-stub">
       <span>{investment.deal.company_name}</span>
-      <span>${nWithCommas(investment.amount)}</span>
-      <span>{investment.deal.date_closed}</span>
-    </div>
+      <span>{investment.amount ? `$${nWithCommas(investment.amount)}` : <i>TBD</i> }</span>
+      <span>
+        <span className={`investment-status investment-status-${investment.status}`}>{investment.status}</span>
+      </span>
+    </Paper>
   )
 }
 
@@ -183,7 +184,7 @@ function DealStub ({ deal }) {
       <span>{deal.company_name}</span>
       <span>{deal.date_closed || "TBD"}</span>
       <span>
-        <Fab onClick={() => history.push("/invited-deals")} size="small" color="primary" style={{textAlign: 'center'}}>
+        <Fab onClick={() => history.push(`/deals/${deal.company_name}`)} size="small" color="primary" style={{textAlign: 'center'}}>
           <FontAwesomeIcon icon="arrow-right" size="xs" />
         </Fab>
       </span>
