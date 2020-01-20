@@ -93,6 +93,10 @@
 
         .document-iframe {
             padding: 10px 20px;
+            @include xs-only {
+                padding: 0px 0px;
+            }
+
             .iframe-container {
                 overflow: hidden;
                 padding-top: 56.25%;
