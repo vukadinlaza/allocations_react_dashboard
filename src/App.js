@@ -60,6 +60,8 @@ const App = () => {
 
                   <PrivateRoute path="/complete-signup" component={UserEdit} />
 
+                  <PrivateRoute path="/deals/:id" component={Deal} exact/>
+
                   <AdminRoute path="/investor/:id/home">
                     <UserHome /> 
                   </AdminRoute>
@@ -80,9 +82,6 @@ const App = () => {
                   </AdminRoute>
                   <AdminRoute path="/deal/new" exact>
                     <DealNew /> 
-                  </AdminRoute>
-                  <AdminRoute path="/deals/:id" exact>
-                    <Deal /> 
                   </AdminRoute>
                   <AdminRoute path="/deals/:id/edit" exact>
                     <DealEdit /> 

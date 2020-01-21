@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Loader from '../utils/Loader'
 import _ from "lodash"
 import { gql } from 'apollo-boost'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, useHistory, Link } from 'react-router-dom'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { Container, Row, Col } from "reactstrap";
 import { useAuth0 } from "../../react-auth0-spa";
@@ -48,6 +48,7 @@ const GET_INVESTOR_DEAL = gql`
 
 export default function Deal () {
   const params = useParams()
+  const history = useHistory()
   const { user, isAuthenticated } = useAuth0()
   const [getDeal, { data, error, loading, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL)
   const [dealCompletion, setDealCompletion] = useState(0)
@@ -63,6 +64,13 @@ export default function Deal () {
   }, [isAuthenticated, called])
 
   useEffect(() => {
+    console.log("---")
+    console.log(error)
+    console.log("MESSAGE", error ? error.message : "")
+    if (error && error.message === "GraphQL error: REDIRECT") {
+      return history.push(`/`)
+    }
+
     if (error && user) {
       refetch()
     }
