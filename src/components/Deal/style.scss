@@ -13,6 +13,11 @@
     }
 
     .investment-flow {
+        @include xs-only {
+            padding: 0px;
+            box-shadow: none;
+        }
+
         .investment-invited {
             margin-bottom: 10px;
             text-align: center;
@@ -54,6 +59,10 @@
 
         .flow {
             padding: 10px 0px;
+            @include xs-only {
+                padding: 0px 0px 5px 0px;
+            }
+
             .flow-steps {
                 text-align: center;
                 padding: 10px 0px;
@@ -62,6 +71,7 @@
                 display: inline-block; 
                 padding: 10px 20px;
                 color: #a7a7a7;
+                cursor: pointer;
             }
             .step-pledge {
                 border: 1px solid #a7a7a7;
@@ -91,10 +101,15 @@
             background-color: #FCFCFC;
         }
 
+
         .document-iframe {
             padding: 10px 20px;
             @include xs-only {
                 padding: 0px 0px;
+            }
+
+            .embed-responsive {
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
             }
 
             .iframe-container {

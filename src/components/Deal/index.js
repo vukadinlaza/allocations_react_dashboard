@@ -142,18 +142,25 @@ function InvestorData ({ investor }) {
 }
 
 function InvestmentFlow ({ investment, deal, investor }) {
-  if (!investment) return <Paper style={{padding: "25px"}}><Loader /></Paper>
+  const [status, setStatus] = useState(null)
 
-  const { status } = investment
+  useEffect(() => {
+    if (investment) setStatus(investment.status)
+  }, [investment])
+
+  if (!investment) return <Paper style={{padding: "25px"}}><Loader /></Paper>
 
   return (
     <React.Fragment>
       <InvestmentOverview investment={investment} />
       <Paper className="flow tile">
         <div className="flow-steps">
-          <div className={`step step-pledge ${status === "invited" ? "step-active" : ""}`}>Pledge</div>
-          <div className={`step step-onboard ${status === "pledged" ? "step-active" : ""}`}>Onboard</div>
-          <div className={`step step-wire ${status === "onboarded" ? "step-active" : ""}`}>Wire</div>
+          <div onClick={() => setStatus('invited')} 
+            className={`step step-pledge ${status === "invited" ? "step-active" : ""}`}>Pledge</div>
+          <div onClick={() => setStatus('pledged')}
+            className={`step step-onboard ${status === "pledged" ? "step-active" : ""}`}>Onboard</div>
+          <div onClick={() => setStatus('onboarded')}
+            className={`step step-wire ${status === "onboarded" ? "step-active" : ""}`}>Wire</div>
         </div>
         {status === "pledged" && <Onboarding investment={investment} deal={deal} investor={investor} />}
         {status === "invited" && <Pledging investment={investment} deal={deal} />}
@@ -241,8 +248,8 @@ function Onboarding ({ investment, deal, investor }) {
 
   return (
     <div className="document-iframe">
-      <div className="iframe-container">
-        <iframe src={`${deal.onboarding_link}&${urlParameters}`} />
+      <div className="embed-responsive embed-responsive-1by1">
+        <iframe className="embed-responsive-item" src={`${deal.onboarding_link}&${urlParameters}`}></iframe>
       </div>
     </div>
   )
