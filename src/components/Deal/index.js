@@ -64,12 +64,7 @@ export default function Deal () {
   }, [isAuthenticated, called])
 
   useEffect(() => {
-    console.log("---")
-    console.log(error)
-    console.log("MESSAGE", error ? error.message : "")
-    if (error && error.message === "GraphQL error: REDIRECT") {
-      return history.push(`/`)
-    }
+    if (error && error.message === "GraphQL error: REDIRECT") return history.push(`/`)
 
     if (error && user) {
       refetch()
