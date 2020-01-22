@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Router, Route, Switch } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 
+import Faq from "./components/Faq";
 import NavBar from "./components/NavBar";
 import SignUp from "./components/SignUp";
 import Deal from "./components/Deal";
@@ -61,6 +62,8 @@ const App = () => {
                   <PrivateRoute path="/complete-signup" component={UserEdit} />
 
                   <PrivateRoute path="/deals/:id" component={Deal} exact/>
+
+                  <Route to="/faq" exact><Faq /></Route>
 
                   <AdminRoute path="/investor/:id/home">
                     <UserHome /> 
