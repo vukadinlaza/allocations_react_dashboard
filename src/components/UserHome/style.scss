@@ -25,6 +25,14 @@ $break-xs: 576px;
         overflow: scroll;
     }
 
+    .complete-info-prompt {
+        background-color: #ffcedf;
+        border: 1px solid #ff7fad;
+        margin-bottom: 15px;
+        text-align: center;
+        font-size: 1.2em;
+    }
+
     .welcome {
         .welcome-text {
             font-size: 1.7em;
