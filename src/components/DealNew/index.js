@@ -3,6 +3,7 @@ import { get, isEqual } from "lodash"
 import { useParams, Redirect } from "react-router-dom"
 import { TextField } from '@material-ui/core'
 import { Row, Col } from 'reactstrap'
+import { useSimpleReducer } from '../../utils/hooks'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { gql } from 'apollo-boost'
@@ -12,8 +13,15 @@ import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from 
 import "./style.scss"
 
 const CREATE_DEAL = gql`
-  mutation CreateDeal($company_name: String, $company_description: String, $deal_lead: String, $date_closed: String) {
-    createDeal(company_name: $company_name, company_description: $company_description, deal_lead: $deal_lead, date_closed: $date_closed) {
+  mutation CreateDeal(
+    $company_name: String, 
+    $company_description: String, 
+    $deal_lead: String, 
+    $date_closed: String
+    $onboarding_link: String
+    $pledge_link: String
+  ) {
+    createDeal(company_name: $company_name, company_description: $company_description, deal_lead: $deal_lead, date_closed: $date_closed, onboarding_link: $onboarding_link, pledge_link: $pledge_link) {
       _id
     }
   }
@@ -21,17 +29,13 @@ const CREATE_DEAL = gql`
 
 export default function DealNew () {
   const params = useParams()
-  const [deal, setDeal] = useState(null)
+  const [deal, setDeal] = useSimpleReducer({})
   const [hasChanges, setHasChanges] = useState(false)
   const [createDeal, createDealRes] = useMutation(CREATE_DEAL)
 
   useEffect(() => {
     setHasChanges(!isEqual(deal, {}))
   }, [deal])
-
-  const updateDealProp = ({ prop, newVal }) => {
-    setDeal(prev => ({ ...prev, [prop]: newVal }))
-  }
 
   if (createDealRes.data) {
     return <Redirect to={`/deals/${createDealRes.data.createDeal._id}/edit`} />
@@ -48,15 +52,15 @@ export default function DealNew () {
         <Row>
           <Col sm={{size: 4, offset: 1}}>
             <TextField style={{width: "100%"}} 
-              value={get(deal, 'company_name', "")} 
-              onChange={e => updateDealProp({ prop: "company_name", newVal: e.target.value })}
+              value={deal.company_name}
+              onChange={e => setDeal({ company_name: e.target.value })} 
               label="Company Name" 
               variant="filled" />
           </Col>
           <Col sm={{size: 4}}>
             <TextField style={{width: "100%"}} 
-              value={get(deal, 'deal_lead', "")}
-              onChange={e => updateDealProp({ prop: "deal_lead", newVal: e.target.value })}
+              value={deal.deal_lead}
+              onChange={e => setDeal({ deal_lead: e.target.value })}
               label="Deal Lead" 
               variant="filled" />
           </Col>
@@ -64,15 +68,15 @@ export default function DealNew () {
         <Row>
           <Col sm={{size: 6, offset: 1}}>
             <TextField style={{width: "100%"}} 
-              value={get(deal, 'company_description', "")} 
-              onChange={e => updateDealProp({ prop: "company_description", newVal: e.target.value })}
+              value={deal.company_description} 
+              onChange={e => setDeal({ company_description: e.target.value })}
               label="Company Description" 
               variant="filled" />
           </Col>
           <Col sm={{size: 2}}>
             <TextField style={{width: "100%"}} 
-              value={get(deal, 'date_closed', "")}
-              onChange={e => updateDealProp({ prop: "date_closed", newVal: e.target.value })} 
+              value={deal.date_closed}
+              onChange={e => setDeal({ date_closed: e.target.value })} 
               label="Closing Date" 
               variant="filled" />
           </Col>
@@ -80,15 +84,15 @@ export default function DealNew () {
         <Row>
           <Col sm={{size: 4, offset: 1}}>
             <TextField style={{width: "100%"}} 
-              value={get(deal, 'pledge_link', "")} 
-              onChange={e => updateDealProp({ prop: "pledge_link", newVal: e.target.value })}
+              value={deal.pledge_link} 
+              onChange={e => setDeal({ pledge_link: e.target.value })}
               label="Pledge Link" 
               variant="filled" />
           </Col>
           <Col sm={{size: 4}}>
             <TextField style={{width: "100%"}}
-              value={get(deal, 'onboarding_link', "")}
-              onChange={e => updateDealProp({ prop: "onboarding_link", newVal: e.target.value })} 
+              value={deal.onboarding_link}
+              onChange={e => setDeal({ onboarding_link: e.target.value })} 
               label="Onboarding Link" 
               variant="filled" />
           </Col>
