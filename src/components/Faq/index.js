@@ -11,7 +11,7 @@ export default function Faq () {
         <h5>What is an SPV?</h5>
         <div>
           An SPV is a special purpose vehicle commonly used for group investment. It is a fenced organization having limited predefined purposes and a legal personality mainly used for a one off investment. 
-          &nbsp;<a href="https://www.investopedia.com/terms/s/spv.asp">More Information</a>
+          &nbsp;<a href="https://www.investopedia.com/terms/s/spv.asp"  target="_blank" rel="noopener noreferrer">More Information</a>
         </div>
       </Paper>
       <Paper className="Faq-entry">
@@ -48,9 +48,9 @@ export default function Faq () {
             <li>
               Each investor in the SPV will be required to complete one of the following tax forms within a few weeks after investing
               <ul>
-                <li><a href="https://www.irs.gov/pub/irs-pdf/fw9.pdf" target="_blank">W9 (US Persons)</a></li>
-                <li><a href="https://www.irs.gov/pub/irs-pdf/fw8ben.pdf">W8-BEN (non-USA individuals)</a></li>
-                <li><a href="https://www.irs.gov/pub/irs-pdf/fw8bene.pdf">W8-BENE (non-USA entities)</a></li>
+                <li><a href="https://www.irs.gov/pub/irs-pdf/fw9.pdf" target="_blank" rel="noopener noreferrer">W9 (US Persons)</a></li>
+                <li><a href="https://www.irs.gov/pub/irs-pdf/fw8ben.pdf" target="_blank" rel="noopener noreferrer">W8-BEN (non-USA individuals)</a></li>
+                <li><a href="https://www.irs.gov/pub/irs-pdf/fw8bene.pdf" target="_blank" rel="noopener noreferrer">W8-BENE (non-USA entities)</a></li>
               </ul>
             </li>
             <li>
