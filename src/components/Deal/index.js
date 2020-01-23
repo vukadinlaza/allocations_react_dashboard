@@ -161,7 +161,7 @@ function InvestmentFlow ({ investment, deal, investor }) {
           <div onClick={() => setStatus('invited')} 
             className={`step step-pledge ${status === "invited" ? "step-active" : ""}`}>Pledge</div>
           <div onClick={() => setStatus('pledged')}
-            className={`step step-onboard ${status === "pledged" ? "step-active" : ""}`}>Onboard</div>
+            className={`step step-onboard ${status === "pledged" ? "step-active" : ""}`}>Sign</div>
           <div onClick={() => setStatus('onboarded')}
             className={`step step-wire ${status === "onboarded" ? "step-active" : ""}`}>Wire</div>
         </div>
@@ -191,12 +191,18 @@ function InvestmentOverview ({ investment }) {
   )
 }
 
+const wireLink = "https://allocations-public.s3.us-east-2.amazonaws.com/wire_instructions.pdf"
 function Wire ({ investment, deal }) {
   return (
     <div className="pledging">
       <div className="pledge-link">
-        <FontAwesomeIcon icon={["far", "file-pdf"]} />
-        <a href={"https://allocations-public.s3.us-east-2.amazonaws.com/wire_instructions.pdf"} target="_blank">Wire Instructions</a>
+        <div style={{marginBottom: "15px"}}>
+          <FontAwesomeIcon icon={["far", "file-pdf"]} />
+          <a href={wireLink} target="_blank">Wire Instructions</a>
+        </div>
+        <div className="embed-responsive embed-responsive-1by1">
+          <iframe className="embed-responsive-item" src={wireLink}></iframe>
+        </div>
       </div>
     </div>
   )
@@ -251,6 +257,11 @@ function Onboarding ({ investment, deal, investor }) {
 
   return (
     <div className="document-iframe">
+      <div className="external-sign-link">
+        <a href={`${deal.onboarding_link}&${urlParameters}`} target="_blank" rel="noopener noreferrer">
+          <FontAwesomeIcon icon="signature" /> Open Directly
+        </a>
+      </div>
       <div className="embed-responsive embed-responsive-1by1">
         <iframe className="embed-responsive-item" src={`${deal.onboarding_link}&${urlParameters}`}></iframe>
       </div>
