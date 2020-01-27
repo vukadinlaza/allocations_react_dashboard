@@ -43,14 +43,14 @@ export default function UserInvestments () {
   const adminView = params && params.id
   const [showDocs, setShowDocs] = useState(null)
 
-  const { user, isAuthenticated } = useAuth0()
+  const { user, isAuthenticated, loading } = useAuth0()
   const [getInvestor, { data, error, called, refetch }] = useLazyQuery(GET_INVESTOR)
 
   useEffect(() => {
-    if (isAuthenticated && !called) {
+    if (!loading && isAuthenticated && !called) {
       adminView ? getInvestor({ variables: { _id: params.id }}) : getInvestor()
     }
-  }, [isAuthenticated, called])
+  }, [isAuthenticated, loading, called])
 
   useEffect(() => {
     if (error && user) refetch()

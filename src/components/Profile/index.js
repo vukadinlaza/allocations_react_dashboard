@@ -33,11 +33,11 @@ export default function Profile () {
   const [investor, setInvestor] = useState(null)
   const [formStatus, setFormStatus] = useState("edit")
   const [getInvestor, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR)
-  const { user, isAuthenticated } = useAuth0()
+  const { user, isAuthenticated, loading } = useAuth0()
 
   useEffect(() => {
-    if (isAuthenticated && !called) getInvestor()
-  }, [isAuthenticated, called])
+    if (!loading && isAuthenticated && !called) getInvestor()
+  }, [isAuthenticated, loading, called])
 
   useEffect(() => {
     if (error && user) refetch()

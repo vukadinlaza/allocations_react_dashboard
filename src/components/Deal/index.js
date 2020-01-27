@@ -47,7 +47,7 @@ const GET_INVESTOR_DEAL = gql`
 export default function Deal () {
   const params = useParams()
   const history = useHistory()
-  const { user, isAuthenticated } = useAuth0()
+  const { user, isAuthenticated, loading } = useAuth0()
   const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL)
   const [dealCompletion, setDealCompletion] = useState(0)
 
@@ -58,8 +58,10 @@ export default function Deal () {
   }, [data])
 
   useEffect(() => {
-    if (isAuthenticated && !called) getDeal({ variables: { company_name: params.id }})
-  }, [isAuthenticated, called])
+    if (!loading && isAuthenticated && !called) {
+      getDeal({ variables: { company_name: params.id }})
+    }
+  }, [isAuthenticated, loading, called])
 
   useEffect(() => {
     if (error && error.message === "GraphQL error: REDIRECT") return history.push(`/`)
