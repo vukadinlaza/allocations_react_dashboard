@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import createAuth0Client from "@auth0/auth0-spa-js";
-import history from "./utils/history";
+import { useHistory } from "react-router-dom"
+// import history from "./utils/history";
 import { useSimpleReducer } from "./utils/hooks"
 
 export const Auth0Context = React.createContext();
@@ -33,22 +34,10 @@ const getAuth0Client = (options) => {
 }
 
 export const Auth0Provider = ({ children }) => {
+  const history = useHistory()
   const [{ user, isAuthenticated, loading, auth0Client, clientPromise }, setState] = useSimpleReducer(
     { user: null, isAuthenticated: null, loading: true, auth0Client: null, clientPromise: null }
   )
-
-  const options = {
-    onRedirectCallback: async ({ appState, client }) => {
-      const u = await client.getUser()
-      await getTokenSilently(client)
-      setState({ isAuthenticated: true, loading: false, user: u })
-      history.push(
-        appState && appState.targetUrl
-          ? appState.targetUrl
-          : window.location.pathname
-      )
-    }
-  }
 
   const getTokenSilently = async (client = auth0Client) => {
     const t = localStorage.getItem("auth0-token")
@@ -61,13 +50,23 @@ export const Auth0Provider = ({ children }) => {
     return t
   }
 
-  // check if auth is cached
+  const options = {
+    onRedirectCallback: async ({ appState, client }) => {
+      const u = await client.getUser()
+      await getTokenSilently(client)
+      setState({ isAuthenticated: true, loading: false, user: u })
+      history.push(
+        (appState && appState.targetUrl) ? appState.targetUrl : window.location.pathname
+      )
+    }
+  }
+
   useEffect(() => {
     // init auth client
     const p = getAuth0Client(options)
     setState({ 
       isAuthenticated: localStorage.getItem("auth0-token") ? true : null,
-      clientPromise: p 
+      clientPromise: p
     }) 
 
     p.then(client => {
@@ -76,10 +75,8 @@ export const Auth0Provider = ({ children }) => {
       // this means we've been redirected back from login
       if (window.location.search.includes("code=")) {
         client.handleRedirectCallback()
-          .then(({ appState }) => {
-            options.onRedirectCallback({ appState, client })
-          })
-          .catch(e => console.error(e))
+          .then(({ appState }) => options.onRedirectCallback({ appState, client }))
+          .catch(console.error)
       } else {
         // this is the standard case
         client.isAuthenticated()
@@ -95,9 +92,7 @@ export const Auth0Provider = ({ children }) => {
             }
             setState({ isAuthenticated: val })         
           })
-      }
-
-      
+      }  
     }).catch(console.error)
   }, [])
 
@@ -107,6 +102,7 @@ export const Auth0Provider = ({ children }) => {
         isAuthenticated,
         user,
         loading,
+        auth0Client,
         getTokenSilently,
         loginWithRedirect: async (...p) => {
           if (!auth0Client) {

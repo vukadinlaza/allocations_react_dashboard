@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Router, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { Container, Row, Col } from "reactstrap";
 
 import Faq from "./components/Faq";
@@ -22,7 +22,6 @@ import InvestmentEdit from './components/InvestmentEdit';
 import UserInvestments from './components/UserInvestments';
 import Profile from './components/Profile';
 
-import history from "./utils/history";
 import { ApolloProvider } from '@apollo/react-hooks';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -31,6 +30,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import { client } from './apollo-client';
 
 import "./App.scss";
+import "./utils/initFontAwesome"
 
 const App = () => {
   // currently only effects small screens
@@ -42,7 +42,6 @@ const App = () => {
 
   return (
     <ApolloProvider client={client}>
-      <Router history={history}>
         <div id="app" className="d-flex flex-column h-100">
           <Container fluid={true}>
             <Row>
@@ -110,7 +109,6 @@ const App = () => {
             </Row>
           </Container>
         </div>
-      </Router>
     </ApolloProvider>
   );
 };
