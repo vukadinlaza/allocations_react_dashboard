@@ -99,7 +99,7 @@ export default function UserInvestments () {
                     : <TableRow key={investment._id} className="investment-row">
                         <TableCell scope="row">{investment.deal.company_name}</TableCell>
                         <Hidden xsDown><TableCell>{investment.deal.company_description}</TableCell></Hidden>
-                        <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) : "TBD"}</TableCell>
+                        <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) : <i>TBD</i>}</TableCell>
                         <TableCell align="center"><InvestmentStatus investment={investment} /></TableCell>
                         <TableCell align="center">{formatDate(investment.deal.date_closed)}</TableCell>
                         <TableCell align="right">

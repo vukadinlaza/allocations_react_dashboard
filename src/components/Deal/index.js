@@ -153,6 +153,12 @@ function InvestmentFlow ({ investment, deal, investor }) {
 
   if (!investment) return <Paper style={{padding: "25px"}}><Loader /></Paper>
 
+  console.log({status})
+
+  if (status === "complete") {
+    return <CompleteInvestment investment={investment} />
+  }
+
   return (
     <React.Fragment>
       <InvestmentOverview investment={investment} />
@@ -170,6 +176,12 @@ function InvestmentFlow ({ investment, deal, investor }) {
         {status === "onboarded" && <Wire investment={investment} deal={deal} />}
       </Paper>
     </React.Fragment>
+  )
+}
+
+function CompleteInvestment ({ investment }) {
+  return (
+    <InvestmentOverview investment={investment} />
   )
 }
 
