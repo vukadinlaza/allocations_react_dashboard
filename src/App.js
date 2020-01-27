@@ -38,6 +38,10 @@ const App = () => {
   // currently only effects small screens
   const [showSidebar, setShowSidebar] = useState(false)
 
+  const closeSidebar = () => {
+    if (showSidebar) setShowSidebar(false)
+  }
+
   return (
     <ApolloProvider client={client}>
       <Router history={history}>
@@ -51,7 +55,7 @@ const App = () => {
                   <FontAwesomeIcon icon="bars" onClick={() => setShowSidebar(true)} />
                 </span>
               </Col>
-              <Col xs={{size: 12, offset: 0}} md={{size: 10, offset: 2}} className="app-body">
+              <Col xs={{size: 12, offset: 0}} md={{size: 10, offset: 2}} className="app-body" onClick={closeSidebar}>
                 <NavBar />
                 <Switch>
                   <PrivateRoute path="/" exact component={UserHome} />
