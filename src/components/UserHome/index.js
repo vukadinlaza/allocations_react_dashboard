@@ -81,6 +81,11 @@ const GET_INVESTOR = gql`
   }
 `
 
+function orderInvestments (investments) {
+  const pastInvited = investments.filter(({status}) => status !== "invited")
+  return _.take(_.orderBy(pastInvited, i => new Date(i.deal.date_closed).getTime(), 'desc'), 3)
+}
+
 export default function UserHome (props) {
   const params = useParams()
   const adminView = params && params.id
@@ -113,11 +118,11 @@ export default function UserHome (props) {
     <Container fluid className="UserHome">
       <Row>
         <CompleteInfoPrompt investor={investor} />
-        <Col lg={{size: 3, offset: 2}} md={{size: 4, offset: 1}} sm={{size: 5, offset: 0}} className="welcome">
+        <Col lg={{size: 3, offset: 2}} md={{size: 5, offset: 0}} sm={{size: 5, offset: 0}} className="welcome">
           <div className="tile tile-top">
             <div className="welcome-text">Welcome,<br></br><Name investor={investor} /></div>
             <div className="welcome-desc">
-              🎉 Your Allocations account is ready for your use. Lets view your investments
+              🎉 Your Allocations account is ready for your use. Let's view your investments
               <div>
                 <Button className="button" variant="contained">
                   <Link to={adminView ? `/investor/${params.id}/investments` : "/investments"}>Investments</Link>
@@ -126,7 +131,7 @@ export default function UserHome (props) {
             </div>
           </div>
         </Col>
-        <Col lg="5" md="6" sm="7" className="total-investments">
+        <Col lg="5" md="7" sm="7" className="total-investments">
           <div className="tile tile-top">
             <div className="small-header">Total Investments</div>
             <div className="amount">${nWithCommas(total_invested)}</div>
@@ -143,15 +148,15 @@ export default function UserHome (props) {
         </Col>
       </Row>
       <Row>
-        <Col lg={{size: 4, offset: 2}} md={{size: 5, offset: 1}} sm={{size: 6, offset: 0}} className="last-deals">
+        <Col lg={{size: 4, offset: 2}} md={{size: 6, offset: 0}} sm={{size: 6, offset: 0}} className="last-deals">
           <div className="tile tile-bottom">
             <div className="small-header">Most Recent Investments</div>
-            {_.orderBy(investor.investments, i => new Date(i.deal.date_closed).getTime(), 'desc').map((investment, i) => (
+            {orderInvestments(investor.investments).map((investment, i) => (
               <InvestmentStub key={i} investment={investment} />
             ))}
           </div>
         </Col>
-        <Col lg="4" md="5" sm="6" className="invited-deals">
+        <Col lg="4" md="6" sm="6" className="invited-deals">
           <div className="tile tile-bottom">
             <div className="small-header">Invited Deals</div>
             {investor.invitedDeals.map((deal, i) => (
@@ -169,6 +174,7 @@ function Name ({ investor }) {
 }
 
 function InvestmentStub ({ investment }) {
+  console.log({investment})
   if (investment.status === "invited") return null
   return (
     <Paper key={investment._id} className="investment-stub">
