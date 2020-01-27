@@ -109,6 +109,15 @@
 
         .document-iframe {
             padding: 10px 20px;
+            position: relative;
+
+            .temp-loader {
+                position: absolute;
+                top: 150px;
+                width: 100%;
+                z-index: 1000;
+            }
+
             @include xs-only {
                 padding: 0px 0px;
             }

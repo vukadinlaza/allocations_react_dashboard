@@ -232,6 +232,14 @@ function Pledging ({ investment, deal }) {
 }
 
 function Onboarding ({ investment, deal, investor }) {
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false)
+    }, 5000)
+  }, [])
+
   if (!deal.onboarding_link) {
     return (
       <div className="waiting tile">Hang tight! ⌛<br/>Onboarding link coming soon</div>
@@ -270,6 +278,7 @@ function Onboarding ({ investment, deal, investor }) {
 
   return (
     <div className="document-iframe">
+      {loading && <div className="temp-loader"><Loader /></div>}
       <div className="external-sign-link">
         <a href={`${deal.onboarding_link}&${urlParameters}`} target="_blank" rel="noopener noreferrer">
           <FontAwesomeIcon icon="signature" /> Open Directly
