@@ -85,7 +85,7 @@ export default function InvitedDeals () {
                   <TableCell>Deal</TableCell>
                   <Hidden xsDown><TableCell>Description</TableCell></Hidden>
                   <TableCell>Status</TableCell>
-                  <TableCell>Closing</TableCell>
+                  <Hidden xsDown><TableCell>Closing</TableCell></Hidden>
                   <Hidden xsDown><TableCell>Lead</TableCell></Hidden>
                   <TableCell></TableCell>
                 </TableRow>
@@ -95,7 +95,7 @@ export default function InvitedDeals () {
                   <TableRow key={deal._id}>
                     <TableCell>{deal.company_name}</TableCell>
                     <Hidden xsDown><TableCell>{deal.company_description}</TableCell></Hidden>
-                    <TableCell>{deal.status}</TableCell>
+                    <Hidden xsDown><TableCell>{deal.status}</TableCell></Hidden>
                     <TableCell>{formatDate(deal.date_closed)}</TableCell>
                     <Hidden xsDown><TableCell>{deal.deal_lead}</TableCell></Hidden>
                     <TableCell align="center">
