@@ -174,7 +174,6 @@ function Name ({ investor }) {
 }
 
 function InvestmentStub ({ investment }) {
-  console.log({investment})
   if (investment.status === "invited") return null
   return (
     <Paper key={investment._id} className="investment-stub">
