@@ -6,9 +6,9 @@ import { Row, Col } from 'reactstrap'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { gql } from 'apollo-boost'
-import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 import "./style.scss"
 
 const GET_INVESTMENT = gql`
@@ -61,7 +61,7 @@ export default function InvestmentEdit () {
   const [investment, setInvestment] = useState(null)
   const [hasChanges, setHasChanges] = useState(false)
 
-  const { data, loading, refetch, error } = useQuery(GET_INVESTMENT, { variables: { _id: params.id }})
+  const { data, refetch } = useQuery(GET_INVESTMENT, { variables: { _id: params.id }})
   const [createInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT)
 
   useEffect(() => {
@@ -147,7 +147,7 @@ export default function InvestmentEdit () {
 
 function Docs ({ investment, setInvestment, refetch }) {
   const [uploadedDoc, setUploadedDoc] = useState(null)
-  const [addInvestmentDoc, {data, loading, error}] = useMutation(ADD_INVESTMENT_DOC, { onCompleted: refetch })
+  const [addInvestmentDoc] = useMutation(ADD_INVESTMENT_DOC, { onCompleted: refetch })
 
   useEffect(() => {
     if (uploadedDoc) {
@@ -178,9 +178,8 @@ function Docs ({ investment, setInvestment, refetch }) {
 }
 
 function Doc ({ doc, investment, refetch }) {
-  const [done, setDone] = useState(false)
   const file = doc.path.split('/')[1]
-  const [rmInvestmentDoc, { data }] = useMutation(RM_INVESTMENT_DOC, { variables: { file, investment_id: investment._id }, onCompleted: refetch })
+  const [rmInvestmentDoc] = useMutation(RM_INVESTMENT_DOC, { variables: { file, investment_id: investment._id }, onCompleted: refetch })
 
   const rmDoc = () => {
     if (window.confirm(`Delete ${file}?`)) rmInvestmentDoc()
@@ -194,7 +193,7 @@ function Doc ({ doc, investment, refetch }) {
         <FontAwesomeIcon icon={["far", "file-pdf"]} />
       </div>
       <div className="filename">
-        <span><a href={`https://${doc.link}`} target="_blank">{file}</a></span>
+        <span><a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">{file}</a></span>
       </div>
     </div>
   )

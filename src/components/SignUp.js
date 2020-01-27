@@ -31,8 +31,8 @@ function dataComplete (user) {
 export default function SignUp () {
   const { search } = useLocation()
   const [signedIn, setSignedIn] = useState(false)
-  const { user, isAuthenticated, loginWithRedirect } = useAuth0()
-  const [signUp, {data, loading, error, called}] = useMutation(SIGNUP)
+  const { isAuthenticated, loginWithRedirect } = useAuth0()
+  const [signUp, {data, called}] = useMutation(SIGNUP)
 
   const { key } = queryString.parse(search)
 
@@ -53,19 +53,11 @@ export default function SignUp () {
   }, [isAuthenticated])
 
   useEffect(() => {
-    if (data) {
-      console.log({data})
-      setSignedIn(true)
-    }
+    if (data) setSignedIn(true)
   }, [data])
 
   if (signedIn) {
     return <Redirect to={key ? "/invited-deals" : "/"} />
-    
-    // return <Redirect to={{ 
-    //   pathname: "/complete-signup", 
-    //   state: { ...data.signUp, redirect: key ? "/invited-deals" : "/" } 
-    // }} />
   }
 
   return null

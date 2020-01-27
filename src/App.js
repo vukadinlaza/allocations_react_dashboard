@@ -14,7 +14,6 @@ import InvestorNew from "./components/InvestorNew";
 import Funds from "./components/Funds";
 import Sidebar from './components/Sidebar';
 import UserHome from './components/UserHome';
-import UserEdit from './components/UserEdit';
 import Investors from './components/Investors';
 import InvitedDeals from './components/InvitedDeals';
 import Investments from './components/Investments';
@@ -25,7 +24,6 @@ import Profile from './components/Profile';
 
 import history from "./utils/history";
 import { ApolloProvider } from '@apollo/react-hooks';
-import initFontAwesome from "./utils/initFontAwesome";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AdminRoute from "./auth/admin-route"
@@ -62,8 +60,6 @@ const App = () => {
                   <PrivateRoute path="/profile" component={Profile} />
                   <PrivateRoute path="/investments" component={UserInvestments} />
                   <PrivateRoute path="/invited-deals" component={InvitedDeals} />
-
-                  <PrivateRoute path="/complete-signup" component={UserEdit} />
 
                   <PrivateRoute path="/deals/:id" component={Deal} exact/>
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import * as API from "../../api"
 import { useLazyQuery} from '@apollo/react-hooks'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { TextField, Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core'
+import { TextField, Table, TableBody, TableCell, TableRow, Paper } from '@material-ui/core'
 
 export default function UserSearch ({ user, setUser, errors }) {
   const [q, setQ] = useState("")

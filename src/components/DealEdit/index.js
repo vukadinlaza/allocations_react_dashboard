@@ -3,7 +3,6 @@ import { useSimpleReducer } from '../../utils/hooks'
 import _, { get, isEqual } from "lodash"
 import { useParams } from "react-router-dom"
 import { Row, Col } from 'reactstrap'
-import { useAuth0 } from "../../react-auth0-spa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { nWithCommas } from '../../utils/numbers'
 import * as API from "../../api"
@@ -253,7 +252,7 @@ const UPDATE_INVESTMENT = gql`
 function Investment ({ investment: i, refetch }) {
   const [editing, setEditing] = useState(false)
   const [changes, setChanges] = useSimpleReducer({})
-  const [updateInvestment, {data, error}] = useMutation(UPDATE_INVESTMENT)
+  const [updateInvestment] = useMutation(UPDATE_INVESTMENT)
 
   const update = () => {
     updateInvestment({ 
@@ -315,7 +314,7 @@ function Investment ({ investment: i, refetch }) {
 }
 
 function DeleteInvestment ({ investment, refetch }) {
-  const [delInvestment, { data, error }] = useMutation(API.investments.destroy)
+  const [delInvestment, { data }] = useMutation(API.investments.destroy)
 
   useEffect(() => {
     if (data && data.deleteInvestment) refetch()
@@ -334,7 +333,7 @@ function validate (investment) {
 
 function AddInvestment ({ deal, show, refetch }) {
   const [investment, setInvestment] = useSimpleReducer({ amount: "", status: "complete" })
-  const [createInvestment, { data, error }] = useMutation(API.investments.create)
+  const [createInvestment, { data }] = useMutation(API.investments.create)
   const [user, setUser] = useState(null)
   const [errors, setErrors] = useState([])
 

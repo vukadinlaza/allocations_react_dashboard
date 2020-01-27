@@ -4,13 +4,11 @@ import _ from "lodash"
 import { gql } from 'apollo-boost'
 import { useParams, useHistory, Link } from 'react-router-dom'
 import { useLazyQuery } from '@apollo/react-hooks';
-import { Container, Row, Col } from "reactstrap";
+import { Row, Col } from "reactstrap";
 import { useAuth0 } from "../../react-auth0-spa";
-import Gravatar from "react-gravatar";
-import PledgeChart from "./PledgeChart"
 import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper, LinearProgress, TextField } from '@material-ui/core';
+import { Paper, TextField } from '@material-ui/core';
 
 import "./style.scss"
 
@@ -50,7 +48,7 @@ export default function Deal () {
   const params = useParams()
   const history = useHistory()
   const { user, isAuthenticated } = useAuth0()
-  const [getDeal, { data, error, loading, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL)
+  const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL)
   const [dealCompletion, setDealCompletion] = useState(0)
 
   useEffect(() => {
@@ -210,10 +208,10 @@ function Wire ({ investment, deal }) {
       <div className="pledge-link">
         <div style={{marginBottom: "15px"}}>
           <FontAwesomeIcon icon={["far", "file-pdf"]} />
-          <a href={wireLink} target="_blank">Wire Instructions</a>
+          <a href={wireLink} target="_blank" rel="noopener noreferrer">Wire Instructions</a>
         </div>
         <div className="embed-responsive embed-responsive-1by1">
-          <iframe className="embed-responsive-item" src={wireLink}></iframe>
+          <iframe className="embed-responsive-item" title="Onboarding Document" src={wireLink}></iframe>
         </div>
       </div>
     </div>
@@ -225,13 +223,11 @@ function Pledging ({ investment, deal }) {
     <div className="pledging">
       <div className="pledge-link">
         <img src="https://img.icons8.com/color/48/000000/google-sheets.png" />
-        <a href={deal.pledge_link} target="_blank">Pledge Document</a>
+        <a href={deal.pledge_link} target="_blank" rel="noopener noreferrer">Pledge Document</a>
       </div>
     </div>
   )
 }
-
-const investorParams = ["country_of_residence"]
 
 function Onboarding ({ investment, deal, investor }) {
   if (!deal.onboarding_link) {
@@ -262,6 +258,9 @@ function Onboarding ({ investment, deal, investor }) {
       params["Accredited individual"] = investorStatus
       break
     }
+    default: {
+      break
+    }
   }
 
   let urlParameters = Object.entries(params)
@@ -275,7 +274,7 @@ function Onboarding ({ investment, deal, investor }) {
         </a>
       </div>
       <div className="embed-responsive embed-responsive-1by1">
-        <iframe className="embed-responsive-item" src={`${deal.onboarding_link}&${urlParameters}`}></iframe>
+        <iframe className="embed-responsive-item" title="Wire Instructions" src={`${deal.onboarding_link}&${urlParameters}`}></iframe>
       </div>
     </div>
   )

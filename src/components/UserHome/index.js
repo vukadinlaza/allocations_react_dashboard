@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import _ from 'lodash'
 import { gql } from 'apollo-boost'
-import { Link, useLocation, useParams, useHistory, Redirect } from 'react-router-dom'
+import { Link, useParams, useHistory, Redirect } from 'react-router-dom'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
 import { Row, Container, Col } from 'reactstrap'
@@ -122,7 +122,7 @@ export default function UserHome (props) {
           <div className="tile tile-top">
             <div className="welcome-text">Welcome,<br></br><Name investor={investor} /></div>
             <div className="welcome-desc">
-              🎉 Your Allocations account is ready for your use. Let's view your investments
+              <span role="img" aria-label="congrats">🎉</span> Your Allocations account is ready for your use. Let's view your investments
               <div>
                 <Button className="button" variant="contained">
                   <Link to={adminView ? `/investor/${params.id}/investments` : "/investments"}>Investments</Link>

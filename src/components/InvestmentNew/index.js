@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { get, isEqual } from "lodash"
-import { useHistory, Redirect } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import { TextField } from '@material-ui/core'
 import { Row, Col } from 'reactstrap'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { gql } from 'apollo-boost'
 import * as API from "../../api"
-import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks'
+import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableRow, Paper, Button } from '@material-ui/core'
 import "./style.scss"
 
 const CREATE_INVESTMENT = gql`
@@ -31,7 +30,7 @@ function validate({ investment, user, deal }) {
 export default function InvestmentNew () {
   const history = useHistory()
   const [investment, setInvestment] = useState({ amount: ""})
-  const [createInvestment, { data, error }] = useMutation(CREATE_INVESTMENT)
+  const [createInvestment, { data }] = useMutation(CREATE_INVESTMENT)
   const [errors, setErrors] = useState([])
 
   useEffect(() => {

@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Loader from '../utils/Loader'
-import { get } from "lodash"
-import { useLocation, Link } from 'react-router-dom';
 import { gql } from 'apollo-boost'
-import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import InvestorEditForm from "../forms/InvestorEdit"
 
 import { Col, Row } from "reactstrap"
-import { Paper, Button } from '@material-ui/core'
 import "./style.scss"
 
 const GET_INVESTOR = gql`
@@ -33,7 +30,6 @@ const GET_INVESTOR = gql`
 `
 
 export default function Profile () {
-  const [editMode, setEditMode] = useState(true)
   const [investor, setInvestor] = useState(null)
   const [formStatus, setFormStatus] = useState("edit")
   const [getInvestor, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR)

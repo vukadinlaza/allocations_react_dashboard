@@ -4,8 +4,6 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { Auth0Provider } from "./react-auth0-spa";
-import history from "./utils/history";
-import ReactGa from 'react-ga'
 import { hotjar } from 'react-hotjar';
 
 console.warn = () => {}

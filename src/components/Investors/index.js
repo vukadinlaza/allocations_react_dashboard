@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react'
 import _ from 'lodash'
-import { useParams, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
-import { Row, Container, Col } from 'reactstrap'
+import { Row, Col } from 'reactstrap'
 import { nWithCommas } from '../../utils/numbers'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from "../utils/Loader"
 
 import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core'
@@ -39,7 +38,7 @@ const GET_INVESTORS = gql`
 
 export default function Investments () {
   const { user } = useAuth0()
-  const [getInvestors, { data, loading, error }] = useLazyQuery(GET_INVESTORS)
+  const [getInvestors, { data, error }] = useLazyQuery(GET_INVESTORS)
 
   useEffect(() => {
     if (user && user.email) getInvestors()
@@ -90,7 +89,7 @@ export default function Investments () {
                       <Link to={`/investor/${investor._id}/edit`}>Edit</Link>
                     </TableCell>
                     <TableCell>
-                      {investor.passport && <a href={"https://" + investor.passport.link} target="_blank">Passport</a>}   
+                      {investor.passport && <a href={"https://" + investor.passport.link} target="_blank" rel="noopener noreferrer">Passport</a>}   
                     </TableCell>
                   </TableRow>
                 ))}

@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { get, isEqual } from 'lodash'
 import { gql } from 'apollo-boost'
 import { Row, Col } from 'reactstrap'
 import { useHistory } from 'react-router-dom'
-import { useAuth0 } from '../../react-auth0-spa'
-import { useLazyQuery, useMutation } from '@apollo/react-hooks'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useMutation } from '@apollo/react-hooks'
 import { TextField, Button } from '@material-ui/core'
-
-import Loader from "../utils/Loader"
-import InvestorEditForm from "../forms/InvestorEdit"
 
 const CREATE_INVESTOR = gql`
   mutation CreateInvestor($user: UserInput!) {
@@ -21,14 +15,13 @@ const CREATE_INVESTOR = gql`
 
 export default function InvestorNew () {
   const history = useHistory()
-  const { user } = useAuth0()
   const [error, setError] = useState(false)
   const [email, setEmail] = useState("")
   const [createInvestor, { data }] = useMutation(CREATE_INVESTOR)
 
   useEffect(() => {
     if (data && data.createInvestor._id) history.push(`/investor/${data.createInvestor._id}/edit`)
-  }, [data])
+  }, [data, history])
 
   const submit = () => {
     if (!email) return setError(true)

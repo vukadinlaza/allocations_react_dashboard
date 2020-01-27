@@ -1,12 +1,10 @@
 import React, { useEffect } from 'react'
-import _ from 'lodash'
 import Loader from "../utils/Loader"
 import { useParams, Link, Redirect } from 'react-router-dom';
 import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
-import { Row, Container, Col } from 'reactstrap'
-import { nWithCommas } from '../../utils/numbers'
+import { Row, Col } from 'reactstrap'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { adminWhitelist } from "../../auth/admin-route"
 
@@ -44,15 +42,12 @@ function formatDate (date) {
   }
 }
 
-let start = Date.now()
-
 export default function InvitedDeals () {
   const params = useParams()
   const adminView = params && params.id
 
   const { user, isAuthenticated } = useAuth0()
-  const isAdmin = user && adminWhitelist.includes(user.email)
-  const [getInvestor, { data, loading, error, called, refetch }] = useLazyQuery(GET_INVESTOR)
+  const [getInvestor, { data, error, called, refetch }] = useLazyQuery(GET_INVESTOR)
 
   useEffect(() => {
     if (isAuthenticated && !called) {

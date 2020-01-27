@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { get, isEqual } from 'lodash'
 import { gql } from 'apollo-boost'
 import { Row, Col } from 'reactstrap'
 import { useParams, useHistory } from 'react-router-dom'
 import { useAuth0 } from '../../react-auth0-spa'
-import { useSimpleReducer } from '../../utils/hooks'
 import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Paper, Button } from '@material-ui/core'
@@ -45,7 +43,7 @@ export default function InvestorEdit () {
   const [formStatus, setFormStatus] = useState("edit")
   const { user } = useAuth0()
   const [investor, setInvestor] = useState(null)
-  const [getInvestor, { data, error, refetch }] = useLazyQuery(GET_INVESTOR)
+  const [getInvestor, { data, refetch }] = useLazyQuery(GET_INVESTOR)
 
   useEffect(() => {
     if (user && user.email) getInvestor({ variables: { id: params.id }})

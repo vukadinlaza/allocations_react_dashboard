@@ -4,7 +4,7 @@ import { useParams, Redirect, Link } from 'react-router-dom';
 import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
-import { Row, Container, Col } from 'reactstrap'
+import { Row, Col } from 'reactstrap'
 import { nWithCommas, formatDate } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from '../utils/Loader'
@@ -44,7 +44,7 @@ export default function UserInvestments () {
   const [showDocs, setShowDocs] = useState(null)
 
   const { user, isAuthenticated } = useAuth0()
-  const [getInvestor, { data, loading, error, called, refetch }] = useLazyQuery(GET_INVESTOR)
+  const [getInvestor, { data, error, called, refetch }] = useLazyQuery(GET_INVESTOR)
 
   useEffect(() => {
     if (isAuthenticated && !called) {
@@ -148,7 +148,7 @@ function DocsRow ({ docs }) {
               <FontAwesomeIcon icon={["far", "file-pdf"]} />
             </div>
             <div className="filename">
-              <span><a href={`https://${doc.link}`} target="_blank">{filename(doc.path)}</a></span>
+              <span><a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">{filename(doc.path)}</a></span>
             </div>
           </div>
         ))}

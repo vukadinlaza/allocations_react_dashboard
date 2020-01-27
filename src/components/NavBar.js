@@ -1,17 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useAuth } from "../auth/provider"
 
 import {
   Collapse,
   Container,
   Navbar,
-  NavbarToggler,
-  NavbarBrand,
   Nav,
   NavItem,
-  NavLink,
   Button,
   UncontrolledDropdown,
   DropdownToggle,
@@ -22,12 +18,6 @@ import {
 import { useAuth0 } from "../react-auth0-spa";
 
 const NavBar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { logout } = useAuth0();
-  const toggle = () => setIsOpen(!isOpen);
-
-  const logoutWithRedirect = () => logout({ returnTo: window.location.origin });
-
   return (
     <div className="Navbar nav-container hidden-sm-down">
       <Navbar expand="md">
@@ -57,34 +47,34 @@ function LoginOrProfile () {
 
   if (isAuthenticated) {
     return (      
-        <UncontrolledDropdown nav inNavbar>
-            <DropdownToggle nav caret id="profileDropDown" className="profile-actions-toggle">
-              <img
-                src={auth0user.picture}
-                alt="Profile"
-                className="nav-user-profile rounded-circle"
-                width="50"
-              />
-            </DropdownToggle>
-            <DropdownMenu right className="profile-image">
-              <DropdownItem header>{auth0user.name}</DropdownItem>
-              <DropdownItem
-                tag={RouterNavLink}
-                to="/profile"
-                className="dropdown-profile"
-                activeClassName="router-link-exact-active"
-              >
-                <FontAwesomeIcon icon="user" className="mr-3" /> Profile
-              </DropdownItem>
-              <DropdownItem
-                id="qsLogoutBtn"
-                onClick={() => logoutWithRedirect()}
-              >
-                <FontAwesomeIcon icon="power-off" className="mr-3" /> Log
-                out
-              </DropdownItem>
-            </DropdownMenu>
-        </UncontrolledDropdown>
+      <UncontrolledDropdown nav inNavbar>
+        <DropdownToggle nav caret id="profileDropDown" className="profile-actions-toggle">
+          <img
+            src={auth0user.picture}
+            alt="Profile"
+            className="nav-user-profile rounded-circle"
+            width="50"
+          />
+        </DropdownToggle>
+        <DropdownMenu right className="profile-image">
+          <DropdownItem header>{auth0user.name}</DropdownItem>
+          <DropdownItem
+            tag={RouterNavLink}
+            to="/profile"
+            className="dropdown-profile"
+            activeClassName="router-link-exact-active"
+          >
+            <FontAwesomeIcon icon="user" className="mr-3" /> Profile
+          </DropdownItem>
+          <DropdownItem
+            id="qsLogoutBtn"
+            onClick={() => logoutWithRedirect()}
+          >
+            <FontAwesomeIcon icon="power-off" className="mr-3" /> Log
+            out
+          </DropdownItem>
+        </DropdownMenu>
+      </UncontrolledDropdown>
     )
   }
 

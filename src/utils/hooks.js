@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react'
+import { useReducer } from 'react'
 
 const reducer = (prev, updatedProp) => ({
   ...prev,

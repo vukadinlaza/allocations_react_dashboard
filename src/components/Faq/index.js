@@ -1,6 +1,5 @@
 import React from 'react'
 import { Paper } from '@material-ui/core';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./style.scss";
 
 export default function Faq () {

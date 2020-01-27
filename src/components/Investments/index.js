@@ -4,7 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
-import { Row, Container, Col } from 'reactstrap'
+import { Row, Col } from 'reactstrap'
 import { nWithCommas, formatDate } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from '../utils/Loader'
@@ -76,19 +76,12 @@ function renderChart(investments) {
     .attr("d", line)
 }
 
-function investorName (investment) {
-  return _.get(investment, "investor.investor_type") === "entity"
-    ? _.get(investment, "investor.entity_name") || ""
-    : `${_.get(investment, "investor.first_name")} ${_.get(investment, "investor.last_name")}`
-}
-
 export default function Investments () {
   const params = useParams()
-  const adminView = params && params.id
   const [showDocs, setShowDocs] = useState(null)
 
   const { user } = useAuth0()
-  const [getInvestments, { data, loading, error }] = useLazyQuery(GET_INVESTMENTS)
+  const [getInvestments, { data, error }] = useLazyQuery(GET_INVESTMENTS)
 
   useEffect(() => {
     if (user && user.email) getInvestments()
@@ -185,7 +178,7 @@ function DocsRow ({ docs }) {
               <FontAwesomeIcon icon={["far", "file-pdf"]} />
             </div>
             <div className="filename">
-              <span><a href={`https://${doc.link}`} target="_blank">{filename(doc.path)}</a></span>
+              <span><a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">{filename(doc.path)}</a></span>
             </div>
           </div>
         ))}

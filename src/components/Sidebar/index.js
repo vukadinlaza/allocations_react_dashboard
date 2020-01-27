@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Col, NavbarBrand } from 'reactstrap';
+import { Col } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth0 } from "../../react-auth0-spa";
 import { adminWhitelist } from "../../auth/admin-route"
@@ -18,7 +18,7 @@ export default function Sidebar ({ showSidebar, setShowSidebar }) {
   return (
     <Col sm="2" className={`position-fixed h-100 Sidebar ${showSidebar ? "Sidebar-show" : "Sidebar-no-show"}`}>
       <div className="brand"> 
-        <img src="https://www.allocations.co/assets/img/brand.svg" style={{height:'40px'}} />
+        <img src="https://www.allocations.co/assets/img/brand.svg" alt="allocations" style={{height:'40px'}} />
         <span className="beta">beta</span>
       </div>
       <div className="toggle-wrapper">

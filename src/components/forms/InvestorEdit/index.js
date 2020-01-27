@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Loader from '../../utils/Loader'
 import { get } from "lodash"
-import { useLocation } from 'react-router-dom';
 import { gql } from 'apollo-boost'
-import { useLazyQuery, useMutation } from '@apollo/react-hooks';
-import { useAuth0 } from "../../../react-auth0-spa";
+import { useMutation } from '@apollo/react-hooks';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { Col, Row } from "reactstrap"
-import { Paper, Button, TextField, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
+import { Button, TextField, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import "./style.scss"
 
 import countries from "country-region-data"
@@ -33,22 +31,6 @@ const UPDATE_USER = gql`
   }
 `
 
-const GET_INVESTOR = gql`
-  query GetInvestor($email: String, $_id: String) {
-    investor(email: $email, _id: $_id) {
-      _id
-      first_name
-      last_name
-      entity_name
-      country
-      investor_type
-      signer_full_name
-      accredited_investor_status
-      email
-    }
-  }
-`
-
 const reqs = ['country', 'investor_type', 'signer_full_name', 'accredited_investor_status', 'email']
 
 export function validate(investor) {
@@ -61,7 +43,6 @@ export function validate(investor) {
 export default function InvestorEditForm ({ investor, setInvestor, actionText, setFormStatus }) {
   const [errors, setErrors] = useState([])
   const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_USER)
-  const [valid, setValid] = useState(false)
 
   const handleChange = (prop) => e => {
     e.persist()
@@ -107,7 +88,7 @@ export default function InvestorEditForm ({ investor, setInvestor, actionText, s
       <Row>
         <Col sm={{size: 6, offset: 1}}>
           <FormControl required error={errors.includes("country")} variant="filled" style={{width: "100%"}}>
-            <InputLabel>🌎 Country of Residence or Place of Business</InputLabel>
+            <InputLabel><span role="img" aria-label="globe">🌎</span> Country of Residence or Place of Business</InputLabel>
             <Select value={investor.country || ""}
               onChange={handleChange("country")}
               inputProps={{name: 'Country'}}>

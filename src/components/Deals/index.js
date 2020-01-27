@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react'
 import _ from 'lodash'
-import { useParams, useHistory, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
-import { Row, Container, Col } from 'reactstrap'
-import { nWithCommas } from '../../utils/numbers'
+import { Row, Col } from 'reactstrap'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { adminWhitelist } from "../../auth/admin-route"
 import Loader from "../utils/Loader"
@@ -29,13 +28,9 @@ const GET_DEALS = gql`
 `
 
 export default function Deals () {
-  const history = useHistory()
-  const params = useParams()
-  const adminView = params && params.id
-
   const { user } = useAuth0()
   const isAdmin = user && adminWhitelist.includes(user.email)
-  const [getDeals, { data, loading, error }] = useLazyQuery(GET_DEALS)
+  const [getDeals, { data, error }] = useLazyQuery(GET_DEALS)
 
   useEffect(() => {
     if (user && user.email) getDeals()
@@ -81,12 +76,12 @@ export default function Deals () {
                     <TableCell>{deal.date_closed}</TableCell>
                     <TableCell>{deal.deal_lead}</TableCell>
                     <TableCell align="center">
-                      {deal.pledge_link ? <a href={deal.pledge_link} target="_blank">
+                      {deal.pledge_link ? <a href={deal.pledge_link} target="_blank" rel="noopener noreferrer">
                         <FontAwesomeIcon icon="external-link-alt" />
                       </a> : ""} 
                     </TableCell>
                     <TableCell align="center">
-                      {deal.onboarding_link ? <a href={deal.onboarding_link} target="_blank">
+                      {deal.onboarding_link ? <a href={deal.onboarding_link} target="_blank" rel="noopener noreferrer">
                         <FontAwesomeIcon icon="external-link-alt" />
                       </a> : ""} 
                     </TableCell>

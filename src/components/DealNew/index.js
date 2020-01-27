@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { get, isEqual } from "lodash"
-import { useParams, Redirect } from "react-router-dom"
+import { isEqual } from "lodash"
+import { Redirect } from "react-router-dom"
 import { TextField } from '@material-ui/core'
 import { Row, Col } from 'reactstrap'
 import { useSimpleReducer } from '../../utils/hooks'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { gql } from 'apollo-boost'
-import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/react-hooks'
 
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 import "./style.scss"
 
 const CREATE_DEAL = gql`
@@ -28,7 +27,6 @@ const CREATE_DEAL = gql`
 `
 
 export default function DealNew () {
-  const params = useParams()
   const [deal, setDeal] = useSimpleReducer({})
   const [hasChanges, setHasChanges] = useState(false)
   const [createDeal, createDealRes] = useMutation(CREATE_DEAL)
