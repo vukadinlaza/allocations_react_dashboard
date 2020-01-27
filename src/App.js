@@ -101,9 +101,8 @@ const App = () => {
                   <Route path="/signup" exact>
                     <SignUp />
                   </Route>
-                  <PrivateRoute path="/" component={UserHome} />
-
                   <Route path="/faq" exact><Faq /></Route>
+                  <PrivateRoute path="/" component={UserHome} />
                 </Switch>
               </Col>
             </Row>
