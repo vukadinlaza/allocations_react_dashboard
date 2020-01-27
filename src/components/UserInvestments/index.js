@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import _ from 'lodash'
-import { useParams, Redirect } from 'react-router-dom';
+import { useParams, Redirect, Link } from 'react-router-dom';
 import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
@@ -100,8 +100,8 @@ export default function UserInvestments () {
                         <TableCell scope="row">{investment.deal.company_name}</TableCell>
                         <Hidden xsDown><TableCell>{investment.deal.company_description}</TableCell></Hidden>
                         <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) : "TBD"}</TableCell>
-                        <TableCell align="center"><span className={`investment-status investment-status-${investment.status}`}>{investment.status}</span></TableCell>
-                        <TableCell align="center">{investment.deal.date_closed}</TableCell>
+                        <TableCell align="center"><InvestmentStatus investment={investment} /></TableCell>
+                        <TableCell align="center">{formatDate(investment.deal.date_closed)}</TableCell>
                         <TableCell align="right">
                           {_.get(investment, 'documents.length', 0) > 0
                             ? showDocs && (showDocs._id === investment._id) 
@@ -119,6 +119,18 @@ export default function UserInvestments () {
       </Row>
     </div>
   )
+}
+
+function InvestmentStatus ({ investment }) {
+  const { status } = investment
+  if (status !== "complete") {
+    return (
+      <Link to={`/deals/${investment.deal.company_name}`}>
+        <span className={`investment-status investment-status-${status}`}>{status}</span>
+      </Link>
+    )
+  }
+  return <span className={`investment-status investment-status-${status}`}>{status}</span>
 }
 
 function filename(path) {
