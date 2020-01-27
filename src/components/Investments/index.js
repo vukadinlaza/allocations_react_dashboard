@@ -5,7 +5,7 @@ import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
 import { Row, Container, Col } from 'reactstrap'
-import { nWithCommas } from '../../utils/numbers'
+import { nWithCommas, formatDate } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from '../utils/Loader'
 import * as Chart from '../../utils/chart'
@@ -130,7 +130,7 @@ export default function Investments () {
                   <TableCell>Description</TableCell>
                   <TableCell align="right">Amount</TableCell>
                   <TableCell>Status</TableCell>
-                  <TableCell align="center">Date Closed</TableCell>
+                  <TableCell align="center">Closing Date</TableCell>
                   <TableCell align="right">Docs</TableCell>
                   <TableCell></TableCell>
                 </TableRow>
@@ -146,7 +146,7 @@ export default function Investments () {
                         <TableCell>
                           <span className={`investment-status investment-status-${investment.status}`}>{investment.status}</span>
                         </TableCell>
-                        <TableCell align="center">{investment.deal.date_closed}</TableCell>
+                        <TableCell align="center">{formatDate(investment.deal.date_closed)}</TableCell>
                         <TableCell align="right">
                           {_.get(investment, 'documents.length', 0) > 0
                             ? showDocs && (showDocs._id === investment._id) 

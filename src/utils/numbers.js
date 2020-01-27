@@ -4,3 +4,12 @@ export function nWithCommas(x) {
 
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+export function formatDate (date) {
+  try {
+    const d = new Date(date)
+    return d.toLocaleString('en-US', { dateStyle: "short" })
+  } catch (e) {
+    return date
+  }
+}

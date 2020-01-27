@@ -5,7 +5,7 @@ import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
 import { Row, Container, Col } from 'reactstrap'
-import { nWithCommas } from '../../utils/numbers'
+import { nWithCommas, formatDate } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from '../utils/Loader'
 
@@ -89,7 +89,7 @@ export default function UserInvestments () {
                   <Hidden xsDown><TableCell>Description</TableCell></Hidden>
                   <TableCell align="right">Amount</TableCell>
                   <TableCell align="center">Status</TableCell>
-                  <TableCell align="center">Date Closed</TableCell>
+                  <TableCell align="center">Closing Date</TableCell>
                   <TableCell align="right">Docs</TableCell>
                 </TableRow>
               </TableHead>
