@@ -123,14 +123,11 @@ export default function UserInvestments () {
 
 function InvestmentStatus ({ investment }) {
   const { status } = investment
-  if (status !== "complete") {
-    return (
-      <Link to={`/deals/${investment.deal.company_name}`}>
-        <span className={`investment-status investment-status-${status}`}>{status}</span>
-      </Link>
-    )
-  }
-  return <span className={`investment-status investment-status-${status}`}>{status}</span>
+  return (
+    <Link to={`/deals/${investment.deal.company_name}`}>
+      <span className={`investment-status investment-status-${status}`}>{status}</span>
+    </Link>
+  )
 }
 
 function filename(path) {
