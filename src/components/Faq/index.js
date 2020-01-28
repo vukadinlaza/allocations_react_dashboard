@@ -5,7 +5,7 @@ import "./style.scss";
 export default function Faq () {
   return (
     <div className="Faq">
-      <div className="Faq-title">Frequently Asked Questions</div>
+      <div className="Faq-title">Getting Started</div>
       <Paper className="Faq-entry">
         <h5>What is an SPV?</h5>
         <div>
