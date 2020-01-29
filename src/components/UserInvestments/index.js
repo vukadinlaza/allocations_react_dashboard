@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import _ from 'lodash'
-import { useParams, Redirect, Link } from 'react-router-dom';
+import { useParams, Redirect, Link, useHistory } from 'react-router-dom';
 import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
@@ -40,6 +40,7 @@ const GET_INVESTOR = gql`
   }
 `
 export default function UserInvestments () {
+  const history = useHistory()
   const [showDocs, setShowDocs] = useState(null)
   const { data, error, refetch, user, params, adminView } = useAuth(GET_INVESTOR)
 
@@ -83,7 +84,7 @@ export default function UserInvestments () {
               <TableBody>
                 {investments.map((investment) => (
                   investment.showDocs ? <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents} />
-                    : <TableRow key={investment._id} className="investment-row">
+                    : <TableRow key={investment._id} className="investment-row" onClick={() => history.push(`/deals/${investment.deal.company_name}`)}>
                         <TableCell scope="row">{investment.deal.company_name}</TableCell>
                         <Hidden xsDown><TableCell>{investment.deal.company_description}</TableCell></Hidden>
                         <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) : <i>TBD</i>}</TableCell>
