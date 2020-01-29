@@ -86,6 +86,7 @@ function orderInvestments (investments) {
 }
 
 export default function UserHome (props) {
+  const history = useHistory()
   const { data, error, refetch, user, params, adminView } = useAuth(GET_INVESTOR)
 
   if (error) {
@@ -134,7 +135,7 @@ export default function UserHome (props) {
       </Row>
       <Row>
         <Col lg={{size: 4, offset: 2}} md={{size: 6, offset: 0}} sm={{size: 6, offset: 0}} className="last-deals">
-          <div className="tile tile-bottom">
+          <div className="tile tile-bottom" onClick={() => history.push('/investments')}>
             <div className="small-header">Most Recent Investments</div>
             {orderInvestments(investor.investments).map((investment, i) => (
               <InvestmentStub key={i} investment={investment} />
@@ -159,9 +160,14 @@ function Name ({ investor }) {
 }
 
 function InvestmentStub ({ investment }) {
+  const history = useHistory()
   if (investment.status === "invited") return null
   return (
-    <Paper key={investment._id} className="investment-stub">
+    <Paper key={investment._id} className="investment-stub" 
+      onClick={e => {
+        e.stopPropagation()
+        history.push(`/deals/${investment.deal.company_name}`)}
+      }>
       <span>{investment.deal.company_name}</span>
       <span>{investment.amount ? `$${nWithCommas(investment.amount)}` : <i>TBD</i> }</span>
       <span>
