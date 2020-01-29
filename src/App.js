@@ -50,7 +50,7 @@ const App = () => {
 
   return (
     <ApolloProvider client={client}>
-      <div id="app" className="d-flex flex-column h-100">
+      <div id="app" className="d-flex flex-column h-100" onClick={closeSidebar}>
         <Container fluid>
           <Row>
             <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
@@ -60,7 +60,7 @@ const App = () => {
                 <FontAwesomeIcon icon="bars" onClick={() => setShowSidebar(true)} />
               </span>
             </Col>
-            <Col xs={{size: 12, offset: 0}} md={{size: 10, offset: 2}} className="app-body" onClick={closeSidebar}>
+            <Col xs={{size: 12, offset: 0}} md={{size: 10, offset: 2}} className="app-body">
               <NavBar />
               <Switch>
                 <PrivateRoute path="/" exact component={UserHome} />
