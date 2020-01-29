@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import { Col } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth0 } from "../../react-auth0-spa";
@@ -8,6 +8,7 @@ import "./style.scss"
 
 export default function Sidebar ({ showSidebar, setShowSidebar }) {
   const { user } = useAuth0()
+  const history = useHistory()
   const location = useLocation()
   const [admin, setAdmin] = useState(false)
 
@@ -17,7 +18,7 @@ export default function Sidebar ({ showSidebar, setShowSidebar }) {
 
   return (
     <Col sm="2" className={`position-fixed h-100 Sidebar ${showSidebar ? "Sidebar-show" : "Sidebar-no-show"}`}>
-      <div className="brand"> 
+      <div className="brand" onClick={() => history.push('/')}> 
         <img src="https://www.allocations.co/assets/img/brand.svg" alt="allocations" style={{height:'40px'}} />
         <span className="beta">beta</span>
       </div>
