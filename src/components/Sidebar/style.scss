@@ -1,12 +1,16 @@
 $break-sm: 768px;
 $break-xs: 576px;
 
+@import "../../App.scss";
+
 .Sidebar {
   border-right: 1px solid #d6d6d6;
   padding: 0px 0px;
 
   @media screen and (max-width: $break-sm) {
-    background-color: #e7e7e7;
+    // background-color: #e7e7e7;
+    background-color: $softblue;
+    box-shadow: 4px 0 2px -2px $brandblue;
     .brand {
       display: none;
     }
@@ -62,6 +66,7 @@ $break-xs: 576px;
   .sidebar-nav-item {
     &:hover {
       background-color: #b8c7f4;
+      cursor: pointer;
       transition: background-color 500ms linear;
     }
 
