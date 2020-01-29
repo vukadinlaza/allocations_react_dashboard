@@ -95,4 +95,11 @@ $break-xs: 576px;
     color: #a7a7a7;
     border-bottom: 1px solid #a7a7a7;
   }
+
+  .Sidebar-footer {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    bottom: 10px;
+  }
 }

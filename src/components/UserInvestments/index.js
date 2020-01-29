@@ -4,6 +4,7 @@ import { useParams, Redirect, Link } from 'react-router-dom';
 import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
+import { useAuth } from "../../auth/useAuth";
 import { Row, Col } from 'reactstrap'
 import { nWithCommas, formatDate } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -39,22 +40,8 @@ const GET_INVESTOR = gql`
   }
 `
 export default function UserInvestments () {
-  const params = useParams()
-  const adminView = params && params.id
   const [showDocs, setShowDocs] = useState(null)
-
-  const { user, isAuthenticated, loading } = useAuth0()
-  const [getInvestor, { data, error, called, refetch }] = useLazyQuery(GET_INVESTOR)
-
-  useEffect(() => {
-    if (!loading && isAuthenticated && !called) {
-      adminView ? getInvestor({ variables: { _id: params.id }}) : getInvestor()
-    }
-  }, [isAuthenticated, loading, called])
-
-  useEffect(() => {
-    if (error && user) refetch()
-  }, [error, user])
+  const { data, error, refetch, user, params, adminView } = useAuth(GET_INVESTOR)
 
   if (error) {
     if (error.message === "GraphQL error: permission denied" && user && user.email) {

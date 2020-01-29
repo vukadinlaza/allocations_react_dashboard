@@ -9,14 +9,13 @@ import { Button, Fab, Paper } from '@material-ui/core'
 import { nWithCommas} from '../../utils/numbers'
 import { validate } from '../forms/InvestorEdit'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useAuth } from "../../auth/useAuth"
+
 import Loader from '../utils/Loader'
 import Chart from "react-google-charts"
 import "./style.scss";
 
-const purples = [
-  "#6200EE",
-  "#BB9FE6"
-]
+const purples = ["#6200EE", "#BB9FE6"]
 
 const chartOptions = {
   minColor: purples[1],
@@ -87,20 +86,7 @@ function orderInvestments (investments) {
 }
 
 export default function UserHome (props) {
-  const params = useParams()
-  const adminView = params && params.id
-  const { user, isAuthenticated, loading } = useAuth0()
-  const [getInvestor, { data, error, called, refetch }] = useLazyQuery(GET_INVESTOR)
-
-  useEffect(() => {
-    if (!loading && isAuthenticated && !called) {
-      adminView ? getInvestor({ variables: { _id: params.id }}) : getInvestor()
-    }
-  }, [isAuthenticated, loading, called])
-
-  useEffect(() => {
-    if (error && user) refetch()
-  }, [error, user])
+  const { data, error, refetch, user, params, adminView } = useAuth(GET_INVESTOR)
 
   if (error) {
     if (error.message === "GraphQL error: permission denied" && user && user.email) {
@@ -111,7 +97,6 @@ export default function UserHome (props) {
   if (!data) return <div><Loader /></div>
 
   const investor = data.investor
-
   const total_invested = _.sumBy(investor.investments, 'amount') || 0
 
   return (

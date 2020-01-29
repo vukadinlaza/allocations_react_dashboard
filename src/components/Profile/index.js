@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Loader from '../utils/Loader'
 import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
+import { useAuth } from "../../auth/useAuth";
 import { useAuth0 } from "../../react-auth0-spa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import InvestorEditForm from "../forms/InvestorEdit"
@@ -32,16 +33,7 @@ const GET_INVESTOR = gql`
 export default function Profile () {
   const [investor, setInvestor] = useState(null)
   const [formStatus, setFormStatus] = useState("edit")
-  const [getInvestor, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR)
-  const { user, isAuthenticated, loading } = useAuth0()
-
-  useEffect(() => {
-    if (!loading && isAuthenticated && !called) getInvestor()
-  }, [isAuthenticated, loading, called])
-
-  useEffect(() => {
-    if (error && user) refetch()
-  }, [error, user])
+  const { data, error, refetch, user, params, adminView } = useAuth(GET_INVESTOR)
 
   useEffect(() => {
     if (data) {

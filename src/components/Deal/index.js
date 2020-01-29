@@ -64,11 +64,12 @@ export default function Deal () {
   }, [isAuthenticated, loading, called])
 
   useEffect(() => {
-    if (error && error.message === "GraphQL error: REDIRECT") return history.push(`/`)
+    if (data) window._slaask.updateContact({name: data.investor.name})
+  }, [data])
 
-    if (error && user) {
-      refetch()
-    }
+  useEffect(() => {
+    if (error && error.message === "GraphQL error: REDIRECT") return history.push(`/`)
+    if (error && user) refetch()
   }, [error, user])
 
   if (!data) return <Loader />

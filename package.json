@@ -46,6 +46,7 @@
     "react-hotjar": "^2.0.4",
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.1",
+    "react-slaask": "^1.1.0",
     "reactstrap": "^8.0.0",
     "serve": "^11.2.0"
   },

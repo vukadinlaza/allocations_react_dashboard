@@ -43,7 +43,16 @@ export default function Sidebar ({ showSidebar, setShowSidebar }) {
         </Link>
       </div>
       {admin && <AdminLinks location={location} />}
+      <Footer />
     </Col>
+  )
+}
+
+function Footer () {
+  return (
+    <div className="Sidebar-footer">
+      <Link to="/getting-started">Getting Started</Link>
+    </div>
   )
 }
 
