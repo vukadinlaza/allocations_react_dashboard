@@ -3,7 +3,7 @@ import Loader from '../utils/Loader'
 import _ from "lodash"
 import { gql } from 'apollo-boost'
 import { useParams, useHistory, Link } from 'react-router-dom'
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { Row, Col } from "reactstrap";
 import { useAuth0 } from "../../react-auth0-spa";
 import { nWithCommas } from '../../utils/numbers'
@@ -44,11 +44,21 @@ const GET_INVESTOR_DEAL = gql`
   }
 `
 
+const CREATE_INVESTMENT = gql`
+  mutation CreateInvestment($investment: InvestmentInput!) {
+    createInvestment(investment: $investment) {
+      _id
+    }
+  }
+`
+
 export default function Deal () {
   const params = useParams()
   const history = useHistory()
   const { user, isAuthenticated, loading } = useAuth0()
   const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL)
+  const [createInvestment] = useMutation(CREATE_INVESTMENT, { onCompleted: () => refetch() })
+
   const [dealCompletion, setDealCompletion] = useState(0)
 
   useEffect(() => {
@@ -65,6 +75,13 @@ export default function Deal () {
 
   useEffect(() => {
     if (data) window._slaask.updateContact({name: data.investor.name})
+  }, [data])
+
+  useEffect(() => {
+    if (data && !data.investor.invitedDeal.investment) {
+      const investment = { deal_id: data.investor.invitedDeal._id, user_id: data.investor._id }
+      createInvestment({ variables: { investment }})
+    }
   }, [data])
 
   useEffect(() => {
@@ -153,8 +170,6 @@ function InvestmentFlow ({ investment, deal, investor }) {
   }, [investment])
 
   if (!investment) return <Paper style={{padding: "25px"}}><Loader /></Paper>
-
-  console.log({status})
 
   if (status === "complete") {
     return <CompleteInvestment investment={investment} />

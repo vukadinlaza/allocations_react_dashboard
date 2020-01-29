@@ -25,6 +25,7 @@ const GET_DEAL = gql`
       deal_lead
       pledge_link
       onboarding_link
+      allInvited
       status
       inviteKey
       investments {
@@ -56,6 +57,7 @@ const UPDATE_DEAL = gql`
       pledge_link
       onboarding_link
       status
+      allInvited
       inviteKey
       invitedInvestors {
         _id
@@ -65,7 +67,7 @@ const UPDATE_DEAL = gql`
   }
 `
 
-const validInputs = ["_id","company_name","company_description","date_closed","deal_lead","pledge_link","onboarding_link","embed_code","status","closed","amount"]
+const validInputs = ["_id","company_name","company_description","date_closed","deal_lead","pledge_link","onboarding_link","embed_code","status","closed","allInvited","amount"]
 
 export default function DealEdit () {
   const params = useParams()
@@ -167,6 +169,19 @@ export default function DealEdit () {
                 endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(`dashboard.allocations.co/signup?key=${get(deal, "inviteKey")}`)} /></InputAdornment>,
               }}
               variant="filled" />
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={{size: 4, offset: 1}}>
+            <FormControl variant="filled" style={{width: "100%"}}>
+              <InputLabel>All Invited</InputLabel>
+              <Select value={deal.allInvited || "false"}
+                onChange={e => setDeal({ allInvited: e.target.value === "true" })}
+                inputProps={{name: 'Type'}}>
+                <MenuItem value="false">False</MenuItem>
+                <MenuItem value="true">True</MenuItem>
+              </Select>
+            </FormControl>
           </Col>
         </Row>
         <Row>
@@ -397,6 +412,14 @@ function InvitedInvestors ({ data, refetch }) {
     return (
       <TableRow className="loading-table">
         <TableCell><FontAwesomeIcon icon="circle-notch" spin /></TableCell>
+      </TableRow>
+    )
+  }
+
+  if (data.deal.allInvited) {
+    return (
+      <TableRow className="loading-table">
+        <TableCell><FontAwesomeIcon icon="users" /> All Users Invited</TableCell>
       </TableRow>
     )
   }
