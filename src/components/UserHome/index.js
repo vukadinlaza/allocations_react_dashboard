@@ -172,9 +172,7 @@ function InvestmentStub ({ investment }) {
       }>
       <span>{investment.deal.company_name}</span>
       <span>{investment.amount ? `$${nWithCommas(investment.amount)}` : <i>TBD</i> }</span>
-      <span>
-        <span className={`investment-status investment-status-${investment.status}`}>{investment.status}</span>
-      </span>
+      <span className={`investment-status investment-status-${investment.status}`}>{investment.status}</span>
     </Paper>
   )
 }
