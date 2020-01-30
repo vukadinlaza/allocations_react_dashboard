@@ -3,6 +3,26 @@
 $break-sm: 768px;
 $break-xs: 576px;
 
+.deal-status {
+    color: #fff;
+    padding: 1px 4px;
+    font-size: 0.85em;
+    border-radius: 4px;
+    opacity: 0.7;
+}
+
+span[data-status="onboarding"] {
+    background-color: $brandblue;
+}
+
+span[data-status="closing"] {
+    background-color: tomato;
+}
+
+span[data-status="closed"] {
+    background-color: $green;
+}
+
 .UserHome {
     .row {
         padding: 10px;
@@ -91,22 +111,32 @@ $break-xs: 576px;
             overflow: scroll;
         }
         .deal-stub {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
     }
 
     .deal-stub {
         padding: 5px 10px;
+        cursor: pointer;
+        position: relative;
         color: #333;
+        &:hover {
+            background-color: $softblue;
+        }
         >span {
             display: inline-block;
             vertical-align: middle;
-            padding-right: 10px;
+            margin-right: 10px;
         }
         >span:nth-child(2) {
             font-size: 0.9em;
             color: #a7a7a7;
             text-align: right;
+        }
+        .deal-status {
+            position: absolute;
+            right: -5px;
+            top: -5px;
         }
         a:hover {
             color: #fff;

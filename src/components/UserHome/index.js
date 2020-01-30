@@ -68,6 +68,7 @@ const GET_INVESTOR = gql`
           company_name
           company_description
           date_closed
+          status
         }
       }
       invitedDeals {
@@ -75,6 +76,7 @@ const GET_INVESTOR = gql`
         company_name
         company_description
         date_closed
+        status
       }
     }
   }
@@ -199,14 +201,10 @@ function DealStub ({ deal }) {
   const history = useHistory()
 
   return (
-    <Paper key={deal._id} className="deal-stub">
+    <Paper key={deal._id} className="deal-stub" onClick={() => history.push(`/deals/${deal.company_name}`)}>
       <span>{deal.company_name}</span>
       <span>{deal.date_closed || "TBD"}</span>
-      <span>
-        <Fab onClick={() => history.push(`/deals/${deal.company_name}`)} size="small" color="primary" style={{textAlign: 'center'}}>
-          <FontAwesomeIcon icon="arrow-right" size="xs" />
-        </Fab>
-      </span>
+      <span className="deal-status" data-status={deal.status}>{deal.status}</span>
     </Paper>
   )
 }
