@@ -125,17 +125,11 @@ export default function InvestorEditForm ({ investor, setInvestor, actionText, s
             variant="filled" />
         </Col>
       </Row>
-      {/*<Row>
+      <Row>
         <Col sm={{size: 3, offset: 1}}>
-          <div className="file-uploader">
-            <span className="file-label">Accredidation</span>
-            <Button variant="contained" component="label">
-              Upload Accredidation
-              <input type="file" style={{ display: "none" }} />
-            </Button>
-          </div>
+          <AccredidationUploader investor={investor} setInvestor={setInvestor} />
         </Col>
-      </Row>*/}
+      </Row>
       <Row>
         <Col sm={{size: 3, offset: 1}}>
           <PassportUploader investor={investor} setInvestor={setInvestor} />
@@ -175,6 +169,33 @@ function PassportUploader ({ investor, setInvestor }) {
           style={{ display: "none" }} 
           onChange={({ target }) => {
             if (target.validity.valid) setInvestor(prev => ({ ...prev, passport: target.files[0] }))
+          }} />
+      </Button>
+    </div>
+  )
+}
+
+function AccredidationUploader ({ investor, setInvestor }) {
+  if (investor.accredidation_doc) {
+    return (
+      <div className="file-uploader">
+        <span className="file-label">Accredidation Doc:</span>
+        {investor.accredidation_doc.link 
+          ? <a href={"https://" + investor.accredidation_doc.link} target="_blank"><FontAwesomeIcon icon="paperclip" /></a> 
+          : <FontAwesomeIcon icon="paperclip" /> }
+      </div>
+    )
+  }
+
+  return (
+    <div className="file-uploader">
+      <span className="file-label">Accredidation Doc:</span>
+      <Button variant="contained" component="label">
+        Upload
+        <input type="file" 
+          style={{ display: "none" }} 
+          onChange={({ target }) => {
+            if (target.validity.valid) setInvestor(prev => ({ ...prev, accredidation_doc: target.files[0] }))
           }} />
       </Button>
     </div>

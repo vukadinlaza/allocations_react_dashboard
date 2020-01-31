@@ -24,6 +24,10 @@ const GET_INVESTOR = gql`
       signer_full_name
       accredited_investor_status
       email
+      accredidation_doc {
+        link
+        path
+      }
       passport {
         link
         path
