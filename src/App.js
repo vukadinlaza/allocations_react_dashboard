@@ -20,6 +20,7 @@ import Investments from './components/Investments';
 import InvestmentNew from './components/InvestmentNew';
 import InvestmentEdit from './components/InvestmentEdit';
 import UserInvestments from './components/UserInvestments';
+import AllocationsX from './allocationsX/Home';
 import Profile from './components/Profile';
 
 import { useAuth0 } from "./react-auth0-spa"
@@ -69,6 +70,7 @@ const App = () => {
                 <PrivateRoute path="/invited-deals" component={InvitedDeals} />
 
                 <PrivateRoute path="/deals/:id" component={Deal} exact/>
+                <PrivateRoute path="/exchange" component={AllocationsX} exact/>
 
                 <AdminRoute path="/investor/:id/home">
                   <UserHome /> 
