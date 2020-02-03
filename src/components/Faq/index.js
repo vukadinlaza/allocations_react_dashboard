@@ -93,7 +93,7 @@ export default function Faq () {
             <li>The research is new and unproven and may not lead to successful commercial products</li>
             <li>The portfolio company is an early-stage company with an unproven business strategy and may never achieve commercialization or profitability</li>
             <li>Competitors could outcompete the portfolio company on price</li>
-            <li>Regulations could change preventing the portfolio company from successfully launchin</li>
+            <li>Regulations could change preventing the portfolio company from successfully launching</li>
             <li>The portfolio company could experience collisions with asteroids, leading to extensive loss of capital</li>
           </ul>
         </div>
