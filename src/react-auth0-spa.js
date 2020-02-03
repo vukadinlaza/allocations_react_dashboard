@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import createAuth0Client from "@auth0/auth0-spa-js";
 import { useHistory } from "react-router-dom"
+import jwt from "jsonwebtoken"
 // import history from "./utils/history";
 import { useSimpleReducer } from "./utils/hooks"
 
@@ -31,6 +32,15 @@ const getAuth0Client = (options) => {
       }
     }
   })
+}
+
+const isAuthed = () => {
+  const token = localStorage.getItem("auth0-token")
+  if (token) {
+    const { exp } = jwt.decode(token)
+    return Date.now() < (exp * 1000) ? true : null
+  }
+  return null
 }
 
 export const Auth0Provider = ({ children }) => {
@@ -65,7 +75,7 @@ export const Auth0Provider = ({ children }) => {
     // init auth client
     const p = getAuth0Client(options)
     setState({ 
-      isAuthenticated: localStorage.getItem("auth0-token") ? true : null,
+      isAuthenticated: isAuthed(),
       clientPromise: p
     }) 
 

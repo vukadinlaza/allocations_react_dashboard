@@ -180,6 +180,8 @@ function InvestmentFlow ({ investment, deal, investor }) {
       <InvestmentOverview investment={investment} />
       <Paper className="flow tile">
         <div className="flow-steps">
+          <div onClick={() => setStatus('viewing')} 
+            className={`step step-pledge ${status === "viewing" ? "step-active" : ""}`}>Data Room</div>
           <div onClick={() => setStatus('invited')} 
             className={`step step-pledge ${status === "invited" ? "step-active" : ""}`}>Pledge</div>
           <div onClick={() => setStatus('pledged')}
