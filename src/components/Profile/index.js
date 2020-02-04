@@ -52,7 +52,7 @@ export default function Profile () {
   
   const icon = formStatus === "loading" 
     ? "circle-notch" 
-    : (formStatus === "complete" ? "check" : "edit")
+    : (formStatus === "complete" ? "check" : null)
 
   if (!investor) return <Loader />
 
@@ -61,7 +61,7 @@ export default function Profile () {
       <Row>
         <Col sm={{size: 9, offset: 1}}>
           <h4>
-            Profile <FontAwesomeIcon icon={icon} spin={icon === "circle-notch"} />
+            Profile {icon && <FontAwesomeIcon icon={icon} spin={icon === "circle-notch"} />}
           </h4>
         </Col>
       </Row>
