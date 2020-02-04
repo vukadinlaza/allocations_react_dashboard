@@ -1,3 +1,5 @@
+@import "../../App.scss";
+
 .DealEdit {
     input {
         // width: 100%;
@@ -20,6 +22,36 @@
             padding: 5px;
             .fa-times {
                 margin-left: 5px;
+            }
+        }
+    }
+
+    .edit-deal-data-room {
+        border-top: 1px solid $softblue;
+        border-bottom: 1px solid $softblue;
+        background-color: $offwhite;
+        padding: 15px 0px 5px 0px;
+
+        .add-doc {
+            padding: 10px 0px;
+            border-bottom: 1px solid $softblue;
+            >label, >span {
+                margin: 10px 20px 0px 0px;
+            }
+            >button {
+                margin-left: 15px;
+                margin-top: 10px;
+            }
+        }
+
+        .deal-data-room-docs {
+            padding: 10px;
+            >span {
+                display: inline-block;
+                background-color: $softblue;
+                padding: 10px;
+                font-size: 1.1em;
+                margin-right: 10px;
             }
         }
     }

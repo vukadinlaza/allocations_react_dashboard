@@ -12,6 +12,17 @@
         margin-bottom: 20px;
     }
 
+    .deal-data-room {
+        padding: 25px;
+        >span {
+            display: inline-block;
+            background-color: $softblue;
+            padding: 10px 15px;
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+    }
+
     .investment-flow {
         @include xs-only {
             padding: 0px;

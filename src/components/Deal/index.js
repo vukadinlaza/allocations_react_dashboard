@@ -34,6 +34,10 @@ const GET_INVESTOR_DEAL = gql`
         pledge_link
         onboarding_link
         status
+        documents {
+          path
+          link
+        }
         investment {
           _id
           amount
@@ -163,7 +167,7 @@ function InvestorData ({ investor }) {
 }
 
 function InvestmentFlow ({ investment, deal, investor }) {
-  const [status, setStatus] = useState(null)
+  const [status, setStatus] = useState("data-room")
 
   useEffect(() => {
     if (investment) setStatus(investment.status)
@@ -180,8 +184,8 @@ function InvestmentFlow ({ investment, deal, investor }) {
       <InvestmentOverview investment={investment} />
       <Paper className="flow tile">
         <div className="flow-steps">
-          {/**<div onClick={() => setStatus('viewing')} 
-            className={`step step-pledge ${status === "viewing" ? "step-active" : ""}`}>Data Room</div>**/}
+          <div onClick={() => setStatus('data-room')} 
+            className={`step step-pledge ${status === "data-room" ? "step-active" : ""}`}>Data Room</div>
           <div onClick={() => setStatus('invited')} 
             className={`step step-pledge ${status === "invited" ? "step-active" : ""}`}>Pledge</div>
           <div onClick={() => setStatus('pledged')}
@@ -189,11 +193,24 @@ function InvestmentFlow ({ investment, deal, investor }) {
           <div onClick={() => setStatus('onboarded')}
             className={`step step-wire ${status === "onboarded" ? "step-active" : ""}`}>Wire</div>
         </div>
+        {status === "data-room" && <DataRoom deal={deal} />}
         {status === "pledged" && <Onboarding investment={investment} deal={deal} investor={investor} />}
         {status === "invited" && <Pledging investment={investment} deal={deal} />}
         {status === "onboarded" && <Wire investment={investment} deal={deal} />}
       </Paper>
     </React.Fragment>
+  )
+}
+
+function DataRoom ({ deal }) {
+  return (
+    <div className="deal-data-room">
+      {deal.documents.map(doc => (
+        <span key={doc.path}>
+          <a href={doc.link}><FontAwesomeIcon icon="link" /> {doc.path}</a>
+        </span>
+      ))}
+    </div>
   )
 }
 

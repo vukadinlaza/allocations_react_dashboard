@@ -28,6 +28,10 @@ const GET_DEAL = gql`
       allInvited
       status
       inviteKey
+      documents {
+        path
+        link
+      }
       investments {
         _id
         status
@@ -195,6 +199,11 @@ export default function DealEdit () {
           </Col>
         </Row>
         <Row>
+          <Col sm={{size: 8, offset: 1}}>
+            <DataRoom refetch={refetch} deal={deal} />
+          </Col>
+        </Row>
+        <Row>
           <Col sm={{size: 4, offset: 1}}>
             <div className="form-sub-title">Invited Investors</div>
           </Col>
@@ -247,6 +256,68 @@ export default function DealEdit () {
         </Row>
       </form>
     </div>
+  )
+}
+
+const ADD_DOC = gql`
+  mutation AddDealDoc($deal_id: String!, $title: String!, $doc: Upload!) {
+    addDealDoc(deal_id: $deal_id, title: $title, doc: $doc) {
+      _id
+    }
+  }
+`
+
+function DataRoom ({ deal, refetch }) {
+  const [doc, setDoc] = useSimpleReducer({ title: "" })
+  const [addDoc, { data, error }] = useMutation(ADD_DOC)
+
+  useEffect(() => {
+    if (data) {
+      refetch()
+      setDoc({ title: "", doc: null })
+    }
+  }, [data])
+
+  const submit = () => {
+    if (doc.doc && doc.title) {
+      addDoc({ variables: { deal_id: deal._id, ...doc } })
+    }
+  }
+
+  return (
+    <div className="edit-deal-data-room">
+      <div className="form-sub-title">Data Room</div>
+      <div className="add-doc">
+        {doc.doc && <span><FontAwesomeIcon icon="link" /> {doc.doc.name}</span>}
+        {!doc.doc && <Button variant="contained" component="label">
+          Attach
+          <input type="file" 
+            style={{ display: "none" }}
+            accept="application/pdf" 
+            onChange={({ target }) => {
+              if (target.validity.valid) setDoc({ doc: target.files[0] })
+            }} />
+        </Button>}
+        <TextField required
+          variant="filled"
+          label="Title"
+          style={{width: "250px"}}
+          value={doc.title}
+          onChange={e => setDoc({ title: e.target.value })} />
+        <Button variant="contained" 
+          onClick={submit}
+          color="primary">
+          Upload to Data Room
+        </Button>
+      </div>
+      <div className="deal-data-room-docs">
+        {(deal.documents || []).map(doc => (
+          <span key={doc.path}>
+            <a href={`https://${doc.link}`} target="_blank"><FontAwesomeIcon icon="link" /> &nbsp;{doc.path}</a>
+          </span>
+        ))}
+      </div>
+    </div>  
   )
 }
 
@@ -353,8 +424,10 @@ function AddInvestment ({ deal, show, refetch }) {
   const [errors, setErrors] = useState([])
 
   useEffect(() => {
-    if (deal && !investment.deal_id) setInvestment({ deal_id: deal._id }) 
-  }, [deal, investment])
+    if (deal && !investment.deal_id) {
+      setInvestment({ deal_id: deal._id }) 
+    }
+  }, [deal])
 
   useEffect(() => {
     if (user) setInvestment({ user_id: user._id })

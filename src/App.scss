@@ -19,6 +19,7 @@ $break-xs: 576px;
 }
 
 $green: #53B987;
+$offwhite: #FCFCFC;
 $softblue: #eaeffc;
 $brandblue: #4169E1;
 
@@ -85,7 +86,7 @@ $brandblue: #4169E1;
 }
 
 .app-body {
-  background-color: #FCFCFC;
+  background-color: $offwhite;
 }
 
 // navbar
