@@ -205,7 +205,7 @@ function InvestmentFlow ({ investment, deal, investor }) {
 function DataRoom ({ deal }) {
   return (
     <div className="deal-data-room">
-      {deal.documents.map(doc => (
+      {(deal.documents || []).map(doc => (
         <span key={doc.path}>
           <a href={doc.link}><FontAwesomeIcon icon="link" /> {doc.path}</a>
         </span>
