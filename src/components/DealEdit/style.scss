@@ -52,6 +52,15 @@
                 padding: 10px;
                 font-size: 1.1em;
                 margin-right: 10px;
+
+                .fa-times {
+                    display: none;
+                }
+
+                &:hover .fa-times {
+                    display: inline-block;
+                    color: #8b0000;
+                }
             }
         }
     }

@@ -312,12 +312,42 @@ function DataRoom ({ deal, refetch }) {
       </div>
       <div className="deal-data-room-docs">
         {(deal.documents || []).map(doc => (
-          <span key={doc.path}>
-            <a href={`https://${doc.link}`} target="_blank"><FontAwesomeIcon icon="link" /> &nbsp;{doc.path}</a>
-          </span>
+          <Doc key={doc.path} doc={doc} deal={deal} refetch={refetch} />
         ))}
       </div>
     </div>  
+  )
+}
+
+const RM_DOC = gql`
+  mutation RmDoc($deal_id: String!, $title: String!) {
+    rmDealDoc(deal_id: $deal_id, title: $title) {
+      _id
+    }
+  }
+`
+
+function Doc ({ doc, deal, refetch }) {
+
+  const [rmDoc, { data, error }] = useMutation(RM_DOC)
+
+  useEffect(() => {
+    if (data) refetch()
+  }, [data])
+
+  const submit = () => {
+    if (window.confirm(`Delete ${doc.path} document?`)) {
+      rmDoc({ variables: { deal_id: deal._id, title: doc.path } })
+    }
+  }
+
+  return (
+    <span>
+      <a href={`https://${doc.link}`} target="_blank">
+        <FontAwesomeIcon icon="link" /> &nbsp;{doc.path} &nbsp;&nbsp;
+      </a>
+      <FontAwesomeIcon icon="times" onClick={submit} />
+    </span>
   )
 }
 
