@@ -50,14 +50,13 @@ export const Auth0Provider = ({ children }) => {
   )
 
   const getTokenSilently = async (client = auth0Client) => {
-    const t = localStorage.getItem("auth0-token")
-    if (!t) {
+    if (!isAuthed()) {
       // const client = await clientPromise()
       const token = await client.getTokenSilently()
       localStorage.setItem("auth0-token", token)
       return token
     }
-    return t
+    return localStorage.getItem("auth0-token")
   }
 
   const options = {
