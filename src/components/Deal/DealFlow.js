@@ -51,7 +51,7 @@ function DataRoom ({ deal }) {
           <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon="link" /> {doc.path}</a>
         </span>
       ))}
-      {deal.memo && <div className="deal-memo"><i>{deal.memo}</i></div>}
+      {deal.memo && <div className="deal-memo"><b>{deal.memo}</b></div>}
     </div>
   )
 }
