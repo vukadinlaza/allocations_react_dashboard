@@ -8,7 +8,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { Button } from '@material-ui/core';
 
-const API_URL = process.env.REACT_APP_PUBLIC_API_URL || "http://localhost:4000/graphql"
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000/graphql"
 const client = new ApolloClient({ 
   link: new HttpLink({ uri: API_URL }),
   cache: new InMemoryCache() 
