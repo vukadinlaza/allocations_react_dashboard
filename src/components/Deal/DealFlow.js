@@ -66,7 +66,7 @@ function InvestmentOverview ({ investment }) {
   if (investment.status === "invited") {
     return (
       <Paper className="tile investment-invited">
-        <div>You've been invited to participate in this deal!<br />Please review the signing docs and wire details below.</div>
+        <div>You have been invited to participate in this deal!<br />Please review the signing docs and wire details below.</div>
       </Paper>
     )
   }
