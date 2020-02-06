@@ -28,6 +28,7 @@ const GET_DEAL = gql`
       allInvited
       status
       inviteKey
+      memo
       documents {
         path
         link
@@ -63,6 +64,7 @@ const UPDATE_DEAL = gql`
       status
       allInvited
       inviteKey
+      memo
       invitedInvestors {
         _id
         name
@@ -71,7 +73,7 @@ const UPDATE_DEAL = gql`
   }
 `
 
-const validInputs = ["_id","company_name","company_description","date_closed","deal_lead","pledge_link","onboarding_link","embed_code","status","closed","allInvited","amount"]
+const validInputs = ["_id","company_name","company_description","date_closed","deal_lead","pledge_link","onboarding_link","embed_code","status","closed","allInvited","amount", "memo"]
 
 export default function DealEdit () {
   const params = useParams()
@@ -186,6 +188,18 @@ export default function DealEdit () {
                 <MenuItem value="true">True</MenuItem>
               </Select>
             </FormControl>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={{size: 8, offset: 1}}>
+            <TextField multiline
+              style={{width: "100%"}}
+              label="Memo"
+              rows="4"
+              value={deal.memo || ""}
+              onChange={e => setDeal({ memo: e.target.value })}
+              variant="outlined"
+            />
           </Col>
         </Row>
         <Row>

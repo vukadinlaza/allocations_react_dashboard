@@ -25,18 +25,18 @@ export default function InvestmentFlow ({ investment, deal, investor }) {
       <InvestmentOverview investment={investment} />
       <Paper className="flow tile">
         <div className="flow-steps">
-          <div onClick={() => setStatus('data-room')} 
-            className={`step step-pledge ${status === "data-room" ? "step-active" : ""}`}>Data Room</div>
           <div onClick={() => setStatus('invited')} 
-            className={`step step-pledge ${status === "invited" ? "step-active" : ""}`}>Pledge</div>
+            className={`step step-data-room ${status === "invited" ? "step-active" : ""}`}>Data Room</div>
+          <div onClick={() => setStatus('pledging')} 
+            className={`step step-pledge ${status === "pledging" ? "step-active" : ""}`}>Pledge</div>
           <div onClick={() => setStatus('pledged')}
             className={`step step-onboard ${status === "pledged" ? "step-active" : ""}`}>Sign</div>
           <div onClick={() => setStatus('onboarded')}
             className={`step step-wire ${status === "onboarded" ? "step-active" : ""}`}>Wire</div>
         </div>
-        {status === "data-room" && <DataRoom deal={deal} />}
+        {status === "invited" && <DataRoom deal={deal} />}
         {status === "pledged" && <Onboarding investment={investment} deal={deal} investor={investor} />}
-        {status === "invited" && <Pledging investment={investment} deal={deal} />}
+        {status === "pledging" && <Pledging investment={investment} deal={deal} />}
         {status === "onboarded" && <Wire investment={investment} deal={deal} />}
       </Paper>
     </React.Fragment>
@@ -51,6 +51,7 @@ function DataRoom ({ deal }) {
           <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon="link" /> {doc.path}</a>
         </span>
       ))}
+      {deal.memo && <div className="deal-memo"><i>{deal.memo}</i></div>}
     </div>
   )
 }

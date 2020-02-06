@@ -85,6 +85,14 @@ $brandblue: #4169E1;
   }
 }
 
+.public-navbar {
+  button {
+    float: right;
+    background-color: $brandblue;
+    margin-top: 20px;
+  }
+}
+
 .app-body {
   background-color: $offwhite;
 }

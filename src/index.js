@@ -1,12 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Router } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { Auth0Provider } from "./react-auth0-spa";
 import { hotjar } from 'react-hotjar';
 import history from "./utils/history";
+import PublicApp from "./PublicApp"
 
 console.warn = () => {}
 
@@ -16,10 +17,17 @@ if (process.env.NODE_ENV === "production") {
 }
 
 ReactDOM.render(
-  <Router history={history}>
-    <Auth0Provider>
-      <App />
-    </Auth0Provider>
+  <Router>
+    <Switch>
+      <Route path="/public">
+        <PublicApp />
+      </Route>
+      <Route path="/">
+        <Auth0Provider>
+          <App />
+        </Auth0Provider>
+      </Route>
+    </Switch>
   </Router>,
   document.getElementById("root")
 );

@@ -35,6 +35,7 @@ const GET_INVESTOR_DEAL = gql`
         pledge_link
         onboarding_link
         status
+        memo
         documents {
           path
           link
