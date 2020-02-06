@@ -65,14 +65,6 @@ export default function Deal () {
   const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL)
   const [createInvestment] = useMutation(CREATE_INVESTMENT, { onCompleted: () => refetch() })
 
-  const [dealCompletion, setDealCompletion] = useState(0)
-
-  useEffect(() => {
-    if (data && !dealCompletion) {
-      setDealCompletion(60)
-    }
-  }, [data])
-
   useEffect(() => {
     if (!loading && isAuthenticated && !called) {
       getDeal({ variables: { company_name: params.id }})

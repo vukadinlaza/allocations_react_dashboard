@@ -179,7 +179,7 @@ function AccredidationUploader ({ investor, setInvestor }) {
   if (investor.accredidation_doc) {
     return (
       <div className="file-uploader">
-        <span className="file-label">Accredidation Doc:</span>
+        <span className="file-label">Accreditation Doc:</span>
         {investor.accredidation_doc.link 
           ? <a href={"https://" + investor.accredidation_doc.link} target="_blank"><FontAwesomeIcon icon="paperclip" /></a> 
           : <FontAwesomeIcon icon="paperclip" /> }
@@ -189,7 +189,7 @@ function AccredidationUploader ({ investor, setInvestor }) {
 
   return (
     <div className="file-uploader">
-      <span className="file-label">Accredidation Doc:</span>
+      <span className="file-label">Accreditation Doc:</span>
       <Button variant="contained" component="label">
         Upload
         <input type="file" 
