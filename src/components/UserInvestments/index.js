@@ -84,7 +84,7 @@ export default function UserInvestments () {
               <TableBody>
                 {investments.map((investment) => (
                   investment.showDocs ? <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents} />
-                    : <TableRow key={investment._id} className="investment-row" onClick={() => history.push(`/deals/${investment.deal.company_name}`)}>
+                    : <TableRow key={investment._id} className="investment-row">
                         <TableCell scope="row">{investment.deal.company_name}</TableCell>
                         <Hidden xsDown><TableCell>{investment.deal.company_description}</TableCell></Hidden>
                         <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) : <i>TBD</i>}</TableCell>
