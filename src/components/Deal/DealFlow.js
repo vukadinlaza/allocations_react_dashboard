@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Loader from '../utils/Loader'
 import _ from "lodash"
 import { gql } from 'apollo-boost'
-import { useParams, useHistory, Link } from 'react-router-dom'
+import { useParams, useHistory, Link, useLocation } from 'react-router-dom'
 import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Paper, TextField } from '@material-ui/core';
@@ -115,6 +115,7 @@ function Pledging ({ investment, deal }) {
 
 function Onboarding ({ investment, deal, investor }) {
   const [loading, setLoading] = useState(true)
+  const location = useLocation()
 
   useEffect(() => {
     setTimeout(() => {
@@ -158,16 +159,20 @@ function Onboarding ({ investment, deal, investor }) {
   let urlParameters = Object.entries(params)
     .map(e => e.map(encodeURI).join("=")).join('&')
 
+  const link = location.pathname.includes('/public/')
+    ? deal.onboarding_link
+    : `${deal.onboarding_link}&${urlParameters}`
+
   return (
     <div className="document-iframe">
       {loading && <div className="temp-loader"><Loader /></div>}
       <div className="external-sign-link">
-        <a href={`${deal.onboarding_link}&${urlParameters}`} target="_blank" rel="noopener noreferrer">
+        <a href={link} target="_blank" rel="noopener noreferrer">
           <FontAwesomeIcon icon="signature" /> Open Directly
         </a>
       </div>
       <div className="embed-responsive embed-responsive-1by1">
-        <iframe className="embed-responsive-item" title="Wire Instructions" src={`${deal.onboarding_link}&${urlParameters}`}></iframe>
+        <iframe className="embed-responsive-item" title="Wire Instructions" src={link}></iframe>
       </div>
     </div>
   )
