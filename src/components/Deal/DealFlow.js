@@ -46,7 +46,7 @@ export default function InvestmentFlow ({ investment, deal, investor }) {
 function DataRoom ({ deal }) {
   return (
     <div className="deal-data-room">
-      {(deal.documents || []).map(doc => (
+      {(deal.documents || []).filter(d => d.path !== "wire-instructions").map(doc => (
         <span key={doc.path}>
           <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon="link" /> {doc.path}</a>
         </span>
@@ -80,17 +80,21 @@ function InvestmentOverview ({ investment }) {
   )
 }
 
-const wireLink = "https://allocations-public.s3.us-east-2.amazonaws.com/wire_instructions.pdf"
+const defaultWireLink = "https://allocations-public.s3.us-east-2.amazonaws.com/wire_instructions.pdf"
 function Wire ({ investment, deal }) {
+  const link = deal.documents && deal.documents.find(d => d.path === "wire-instructions") 
+    ? "https://" + deal.documents.find(d => d.path === "wire-instructions").link
+    : defaultWireLink
+
   return (
     <div className="pledging">
       <div className="pledge-link">
         <div style={{marginBottom: "15px"}}>
           <FontAwesomeIcon icon={["far", "file-pdf"]} />
-          <a href={wireLink} target="_blank" rel="noopener noreferrer">Wire Instructions</a>
+          <a href={link} target="_blank" rel="noopener noreferrer">Wire Instructions</a>
         </div>
         <div className="embed-responsive embed-responsive-1by1">
-          <iframe className="embed-responsive-item" title="Onboarding Document" src={wireLink}></iframe>
+          <iframe className="embed-responsive-item" title="Onboarding Document" src={link}></iframe>
         </div>
       </div>
     </div>
