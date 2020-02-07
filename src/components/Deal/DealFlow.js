@@ -6,6 +6,7 @@ import { useParams, useHistory, Link } from 'react-router-dom'
 import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Paper, TextField } from '@material-ui/core';
+import ReactHtmlParser from 'react-html-parser';
 
 export default function InvestmentFlow ({ investment, deal, investor }) {
   const [status, setStatus] = useState("data-room")
@@ -51,7 +52,7 @@ function DataRoom ({ deal }) {
           <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon="link" /> {doc.path}</a>
         </span>
       ))}
-      {deal.memo && <div className="deal-memo"><b>{deal.memo}</b></div>}
+      {deal.memo && <div className="deal-memo">{ReactHtmlParser(deal.memo)}</div>}
     </div>
   )
 }

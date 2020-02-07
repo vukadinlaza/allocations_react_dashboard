@@ -8,6 +8,9 @@ import { nWithCommas } from '../../utils/numbers'
 import * as API from "../../api"
 import UserSearch from "../forms/UserSearch"
 
+// wysiwyg editor
+import { Editor } from '@tinymce/tinymce-react';
+
 import { gql } from 'apollo-boost'
 import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks'
 
@@ -192,14 +195,32 @@ export default function DealEdit () {
         </Row>
         <Row>
           <Col sm={{size: 8, offset: 1}}>
-            <TextField multiline
+            {/**<TextField multiline
               style={{width: "100%"}}
               label="Memo"
               rows="4"
               value={deal.memo || ""}
               onChange={e => setDeal({ memo: e.target.value })}
               variant="outlined"
-            />
+            />**/}
+            <Editor
+              value={deal.memo}
+              apiKey="jlbrhzgo0m2myqdmbhaav8a0971vomza2smty20fpq6fs47j"
+              init={{
+               height: 500,
+               menubar: false,
+               plugins: [
+                 'advlist autolink lists link image charmap print preview anchor',
+                 'searchreplace visualblocks code fullscreen',
+                 'insertdatetime media table paste code help wordcount'
+               ],
+               toolbar:
+                 'undo redo | formatselect | bold italic backcolor | \
+                 alignleft aligncenter alignright alignjustify | \
+                 bullist numlist outdent indent | removeformat | help'
+               }}
+               onEditorChange={memo => setDeal({ memo })}
+             />
           </Col>
         </Row>
         <Row>
