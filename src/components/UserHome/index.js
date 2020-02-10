@@ -60,6 +60,12 @@ const GET_INVESTOR = gql`
       accredited_investor_status
       investor_type
       email
+      organizations
+      organizations_admin {
+        slug
+        name
+        logo
+      }
       investments {
         amount
         status
@@ -105,6 +111,7 @@ export default function UserHome (props) {
   return (
     <Container fluid className="UserHome">
       <Row>
+        <AdminLinksPrompt investor={investor} />
         <CompleteInfoPrompt investor={investor} />
         <Col lg={{size: 3, offset: 2}} md={{size: 5, offset: 0}} sm={{size: 5, offset: 0}} className="welcome">
           <div className="tile tile-top">
@@ -204,5 +211,17 @@ function DealStub ({ deal }) {
       <span>{deal.date_closed || "TBD"}</span>
       <span className="deal-status" data-status={deal.status}>{deal.status}</span>
     </Paper>
+  )
+}
+
+function AdminLinksPrompt ({ investor }) {
+  return (
+    <div className="admin-links">
+      {(investor.organizations_admin || []).map(org => {
+        <div className="admin-link">
+
+        </div>
+      })}
+    </div>
   )
 }
