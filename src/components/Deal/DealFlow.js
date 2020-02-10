@@ -131,8 +131,6 @@ function Onboarding ({ investment, deal, investor }) {
 
   if (!investor) return <Loader />
 
-  deal.onboarding_link = "https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=ea036281-201e-495f-aae3-e032bb40dd75&env=na3-eu1&acct=97ababd0-ed90-438a-a2c7-7162a7aa3d64"
-
   const params = {
     Member_Type: _.upperFirst(investor.investor_type),
     Member_Email: investor.email,
