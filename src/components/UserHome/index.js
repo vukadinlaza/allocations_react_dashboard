@@ -62,6 +62,7 @@ const GET_INVESTOR = gql`
       email
       organizations
       organizations_admin {
+        _id
         slug
         name
         logo
@@ -216,12 +217,16 @@ function DealStub ({ deal }) {
 
 function AdminLinksPrompt ({ investor }) {
   return (
-    <div className="admin-links">
-      {(investor.organizations_admin || []).map(org => {
-        <div className="admin-link">
-
-        </div>
-      })}
-    </div>
+    <Col sm={{size: 8, offset: 2}}>
+      <div className="admin-links">
+        {(investor.organizations_admin || []).map(org => (
+          <div key={org._id} className="admin-link">
+            <Link to={`/admin/${org.slug}`}>
+              {org.name} Admin <FontAwesomeIcon icon="arrow-right" />
+            </Link>
+          </div>
+        ))}
+      </div>
+    </Col>
   )
 }
