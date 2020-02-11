@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useHistory } from 'react-router-dom';
+import { Link, useLocation, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { Col } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth0 } from "../../react-auth0-spa";
@@ -19,8 +19,7 @@ export default function Sidebar ({ showSidebar, setShowSidebar }) {
   return (
     <Col sm="2" className={`position-fixed h-100 Sidebar ${showSidebar ? "Sidebar-show" : "Sidebar-no-show"}`}>
       <div className="brand" onClick={() => history.push('/')}> 
-        <img src="https://www.allocations.co/assets/img/brand.svg" alt="allocations" style={{height:'40px'}} />
-        <span className="beta">beta</span>
+        <Brand />
       </div>
       <div className="toggle-wrapper">
         <FontAwesomeIcon icon="times" className="toggle" onClick={() => setShowSidebar(false)} />
@@ -47,6 +46,21 @@ export default function Sidebar ({ showSidebar, setShowSidebar }) {
       <Footer />
     </Col>
   )
+}
+
+function Brand () {
+  const match = useRouteMatch('/admin/:organization')
+
+  if (match && match.params.organization) {
+    return <img height="60px" width="180px" alt={match.params.organization} src={`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${match.params.organization}.png`} />
+  }
+
+  return (
+    <React.Fragment>
+      <img src="https://www.allocations.co/assets/img/brand.svg" alt="allocations" style={{height:'40px'}} />
+      <span className="beta">beta</span>
+    </React.Fragment>
+  ) 
 }
 
 function Footer () {

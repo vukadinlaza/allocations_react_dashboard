@@ -28,6 +28,7 @@ const icons = [
   Solid.faCopy,
   Solid.faSignature,
   Solid.faUsers,
+  Solid.faUserShield,
   Reg.faFilePdf
 ]
 

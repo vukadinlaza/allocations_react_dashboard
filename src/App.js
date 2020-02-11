@@ -23,6 +23,8 @@ import UserInvestments from './components/UserInvestments';
 import AllocationsX from './allocationsX/Home';
 import Profile from './components/Profile';
 
+import AdminHome from './components/AdminHome'
+
 import { useAuth0 } from "./react-auth0-spa"
 import { ApolloProvider } from '@apollo/react-hooks';
 
@@ -105,6 +107,13 @@ const App = () => {
                 <AdminRoute path="/admin/investments/:id/edit" exact>
                   <InvestmentEdit /> 
                 </AdminRoute>
+
+                {/** Whitelabel Routes **/}
+                <AdminRoute path="/admin/:organization" exact>
+                  <AdminHome />
+                </AdminRoute>
+
+
                 <AdminRoute path="/funds" exact>
                   <Funds /> 
                 </AdminRoute>

@@ -1,0 +1,33 @@
+@import "../../App.scss";
+
+.AdminHome {
+    h2 {
+        margin-bottom: 20px;
+    }
+
+    .deal-info {
+        border: 1px solid green;
+        padding: 15px;
+        background-color: $green;
+        color: #fff;
+
+        .company-name {
+            font-size: 1.2em;
+        }
+    }
+
+    .deals-title {
+        span {
+            background-color: $softblue;
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+        }
+        padding: 5px;
+        font-size: 1.2em;
+        
+        // height:
+    }
+}
