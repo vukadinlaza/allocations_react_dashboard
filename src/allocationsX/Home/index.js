@@ -91,23 +91,23 @@ function Book () {
             <Table className="Book-bids Book-side">
               <TableHead>
                 <TableRow>
-                  <TableCell></TableCell>
-                  <TableCell className="text-right">Total</TableCell>
-                  <TableCell className="text-right">Shares</TableCell>
                   <TableCell className="text-right">Price</TableCell>
+                  <TableCell className="text-right">Amount</TableCell>
+                  <TableCell className="text-right">Value</TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {book.bids.map((bid, i) => (
                   <TableRow key={i} className="bid">
+                    <TableCell className="text-right">${bid.price.toFixed(2)}</TableCell>
+                    <TableCell className="text-right">{nWithCommas(bid.amount)}</TableCell>
+                    <TableCell className="text-right">${nWithCommas(bid.amount * bid.price)}</TableCell>
                     <TableCell className="text-center">
                       <Button variant="contained" color="secondary" className="sell-button">
                         SELL
                       </Button>
                     </TableCell>
-                    <TableCell className="text-right">${nWithCommas(bid.amount * bid.price)}</TableCell>
-                    <TableCell className="text-right">{nWithCommas(bid.amount)}</TableCell>
-                    <TableCell className="text-right">${bid.price.toFixed(2)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
