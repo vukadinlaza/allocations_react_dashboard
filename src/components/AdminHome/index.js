@@ -5,7 +5,7 @@ import { gql } from 'apollo-boost'
 import { useAuth } from "../../auth/useAuth"
 import { useParams, Link } from 'react-router-dom'
 import { nWithCommas, formatDate } from '../../utils/numbers'
-import { Paper, Table, TableBody, TableCell, TableRow, TableHead } from '@material-ui/core'
+import { Paper, Table, TableBody, TableCell, TableRow, TableHead, Button, LinearProgress } from '@material-ui/core'
 import { Col, Row } from 'reactstrap'
 import Loader from '../utils/Loader'
 
@@ -20,6 +20,7 @@ const ORG = gql`
       deals {
         _id
         status
+        date_closed
         company_name
         company_description
         investments {
@@ -29,6 +30,10 @@ const ORG = gql`
       investors {
         _id
         name
+        investments {
+          _id
+          amount
+        }
       }
       investments {
         _id
@@ -59,33 +64,70 @@ export default function AdminHome () {
   return (
     <div className="AdminHome">
       <Row>
-        <Col sm={{size: 8, offset: 2}}>
-          <h2>{org.name}</h2>
+        <Col sm={{size: 3, offset: 2}}>
+          <Paper className="welcome">
+            <h2>Welcome to, <br></br> <b>{org.name}</b> Admin!</h2> 
+            <div>This is where you can manage your deals and investors 🗃 🔮</div>
+            <Button className="create-deal-button" variant="contained">
+              <Link to="/">CREATE DEAL</Link>
+            </Button>
+          </Paper>
         </Col>
-      </Row>
-      <Row>
-        <Col sm={{size: 4, offset: 2}}>
-          <Paper style={{padding: "10px 15px"}}>
-            <div className="deals-title">Deals <span>{org.deals.length}</span></div>
+        <Col sm={{size: 5, offset: 0}}>
+          <Paper className="deals" style={{padding: "10px 15px"}}>
+            <div className="deals-title">💡 Active Deals &nbsp;<span>{org.deals.length}</span></div>
             <hr></hr>
-            {org.deals.map(deal => (
-              <Deal key={deal._id} deal={deal} />
-            ))}
+            <Paper className="deals-table" style={{marginBottom: "10px"}}>
+              <Table>
+                <TableBody>
+                  {org.deals.map(deal => (
+                    <Deal key={deal._id} deal={deal} />
+                  ))}
+                </TableBody>
+              </Table>
+            </Paper>
           </Paper>
         </Col>
         <Col sm={{size: 4, offset: 2}}>
-          <Paper>
-            <Table>
-              <TableBody>
-                {(org.investments || []).map(investment => (
-                  <TableRow>
-                    <TableCell>{investment.deal.company_name}</TableCell>
-                    <TableCell>{investment.investor.name}</TableCell>
-                    <TableCell>${nWithCommas(investment.amount)}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+          <Paper className="investors">
+            <div className="tile-header">Top Investors 🐳 <Button className="all-btn" variant="contained" color="secondary" style={{padding: "3px 4px"}}><Link to="/">All</Link></Button></div>
+            <hr></hr>
+            <Paper>
+              <div className="scroll-wrapper">
+                <Table>
+                  <TableBody>
+                    {_.orderBy((org.investors || []), i => _.sumBy(i.investments, 'amount'), 'desc').map((investor, i) => (
+                      <TableRow>
+                        <TableCell>{investor.name} {i === 0 && "👑"}</TableCell>
+                        <TableCell>${nWithCommas(_.sumBy(investor.investments, 'amount'))} invested</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </Paper>
+          </Paper>
+        </Col>
+        <Col sm={{size: 4, offset: 0}}>
+          <Paper className="investments">
+            <div className="tile-header">Recent Investments 💵 <Button className="all-btn" variant="contained" color="secondary" style={{padding: "3px 4px"}}><Link to="/">All</Link></Button></div>
+            <hr></hr>
+            <Paper>
+              <div className="scroll-wrapper">
+                <Table>
+                  <TableBody>
+                    {_.take((org.investments || []), 10).map(investment => (
+                      <TableRow>
+                        <TableCell>{investment.deal.company_name}</TableCell>
+                        <TableCell>{investment.investor.name}</TableCell>
+                        <TableCell>${nWithCommas(investment.amount || 0)}</TableCell>
+                        <TableCell>{investment.status}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </Paper>
           </Paper>
         </Col>
       </Row>
@@ -94,17 +136,17 @@ export default function AdminHome () {
 }
 
 function Deal ({ deal }) {
-  console.log(deal.investments)
+  const val = Math.random() * 100
 
   return (
-    <div className="deal-info">
-      <div className="company-name">
-        {deal.company_name}&nbsp;
-        <span className="deal-status">{deal.status}</span>
-      </div>
-      <div>
-      </div>
-    </div>
+    <TableRow className="deal-info">
+      <TableCell className="company-name">{deal.company_name}</TableCell>
+      <TableCell><i>closes: {formatDate(deal.date_closed)}</i></TableCell>
+      <TableCell>
+        <LinearProgress className="deal-progress" variant="determinate" color="secondary" value={val} />
+        <div className="text-center">{Math.round(val)}% of $300,000</div>
+      </TableCell>
+    </TableRow>
   )
 }
 
