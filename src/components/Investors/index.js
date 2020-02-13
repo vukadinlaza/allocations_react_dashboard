@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import _ from 'lodash'
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
@@ -13,23 +13,25 @@ import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from 
 import "./style.scss";
 
 const GET_INVESTORS = gql`
-  {
-    allInvestors {
-      _id
-      first_name
-      last_name
-      email
-      investor_type
-      entity_name
-      passport {
-        link
-      }
-      investments {
+  query GetOrg($slug: String!) {
+    organization(slug: $slug) {
+      investors {
         _id
-        amount
-        deal {
+        first_name
+        last_name
+        email
+        investor_type
+        entity_name
+        passport {
+          link
+        }
+        investments {
           _id
-          company_name
+          amount
+          deal {
+            _id
+            company_name
+          }
         }
       }
     }
@@ -37,8 +39,9 @@ const GET_INVESTORS = gql`
 `
 
 export default function Investments () {
+  const { organization } = useParams()
   const { user } = useAuth0()
-  const [getInvestors, { data, error }] = useLazyQuery(GET_INVESTORS)
+  const [getInvestors, { data, error }] = useLazyQuery(GET_INVESTORS, { variables: { slug: organization } })
 
   useEffect(() => {
     if (user && user.email) getInvestors()
@@ -48,7 +51,7 @@ export default function Investments () {
 
   if (!data) return <div><Loader /></div>
 
-  const investors = data.allInvestors
+  const { organization: { investors } } = data
   return (
     <div className="Investors">
       <Row>

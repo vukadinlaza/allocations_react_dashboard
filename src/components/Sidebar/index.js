@@ -72,27 +72,28 @@ function Footer () {
 }
 
 function AdminLinks ({ location }) {
+  const match = useRouteMatch('/admin/:organization')
+
+  if (!match) return null
+
+  const { params: { organization } } = match
+
   return (
     <div className="admin-links">
       <div className="sidebar-admin-header">Admin</div>
-      <div className={`sidebar-nav-item ${location.pathname === "/funds" ? "sidebar-nav-item-active" : ""}`}>
-        <Link to="/funds">
-          <span>All Funds</span>
+      <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/investors` ? "sidebar-nav-item-active" : ""}`}>
+        <Link to={`/admin/${organization}/investors`}>
+          <span>Investors</span>
         </Link>
       </div>
-      <div className={`sidebar-nav-item ${location.pathname === "/investors" ? "sidebar-nav-item-active" : ""}`}>
-        <Link to="/investors">
-          <span>All Investors</span>
+      <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/deals` ? "sidebar-nav-item-active" : ""}`}>
+        <Link to={`/admin/${organization}/deals`}>
+          <span>Deals</span>
         </Link>
       </div>
-      <div className={`sidebar-nav-item ${location.pathname === "/deals" ? "sidebar-nav-item-active" : ""}`}>
-        <Link to="/deals">
-          <span>All Deals</span>
-        </Link>
-      </div>
-      <div className={`sidebar-nav-item ${location.pathname === "/admin/investments" ? "sidebar-nav-item-active" : ""}`}>
-        <Link to="/admin/investments">
-          <span>All Investments</span>
+      <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/investments` ? "sidebar-nav-item-active" : ""}`}>
+        <Link to={`/admin/${organization}/investments`}>
+          <span>Investments</span>
         </Link>
       </div>
     </div>

@@ -97,9 +97,9 @@ export default function AdminHome () {
                 <Table>
                   <TableBody>
                     {_.orderBy((org.investors || []), i => _.sumBy(i.investments, 'amount'), 'desc').map((investor, i) => (
-                      <TableRow>
+                      <TableRow key={investor._id}>
                         <TableCell>{investor.name} {i === 0 && "👑"}</TableCell>
-                        <TableCell>${nWithCommas(_.sumBy(investor.investments, 'amount'))} invested</TableCell>
+                        <TableCell>${nWithCommas(_.sumBy(investor.investments, 'amount')) || 0} invested</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -117,10 +117,10 @@ export default function AdminHome () {
                 <Table>
                   <TableBody>
                     {_.take((org.investments || []), 10).map(investment => (
-                      <TableRow>
+                      <TableRow key={investment._id}>
                         <TableCell>{investment.deal.company_name}</TableCell>
                         <TableCell>{investment.investor.name}</TableCell>
-                        <TableCell>${nWithCommas(investment.amount || 0)}</TableCell>
+                        <TableCell>${nWithCommas(investment.amount)}</TableCell>
                         <TableCell>{investment.status}</TableCell>
                       </TableRow>
                     ))}

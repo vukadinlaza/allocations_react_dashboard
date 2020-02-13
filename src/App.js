@@ -86,20 +86,11 @@ const App = () => {
                 <AdminRoute path="/investor/:id/edit">
                   <InvestorEdit /> 
                 </AdminRoute>
-                <AdminRoute path="/investors" exact>
-                  <Investors /> 
-                </AdminRoute>
-                <AdminRoute path="/deals" exact>
-                  <Deals /> 
-                </AdminRoute>
                 <AdminRoute path="/deal/new" exact>
                   <DealNew /> 
                 </AdminRoute>
                 <AdminRoute path="/deals/:id/edit" exact>
                   <DealEdit /> 
-                </AdminRoute>
-                <AdminRoute path="/admin/investments" exact>
-                  <Investments /> 
                 </AdminRoute>
                 <AdminRoute path="/admin/investment/new" exact>
                   <InvestmentNew /> 
@@ -113,10 +104,18 @@ const App = () => {
                   <AdminHome />
                 </AdminRoute>
 
-
-                <AdminRoute path="/funds" exact>
-                  <Funds /> 
+                <AdminRoute path="/admin/:organization/deals" exact>
+                  <Deals /> 
                 </AdminRoute>
+
+                <AdminRoute path="/admin/:organization/investments" exact>
+                  <Investments /> 
+                </AdminRoute>
+
+                <AdminRoute path="/admin/:organization/investors" exact>
+                  <Investors /> 
+                </AdminRoute>
+
                 <Route path="/signup" exact>
                   <SignUp />
                 </Route>
