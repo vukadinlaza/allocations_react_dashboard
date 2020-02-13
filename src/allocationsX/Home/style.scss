@@ -9,15 +9,42 @@
     margin-top: -80px;
     padding: 30px 30px 15px 30px;
     margin-bottom: 15px;
+
+    p {
+        font-size: 1.3em;
+    }
+
+    .info {
+        // position: absolute;
+        // top: 20px;
+        // left: 100px;
+        display: inline-block;
+        margin-left: -10px;
+        >span {
+            display: inline-block;
+            font-size: 0.9em;
+            padding: 5px 10px;
+            div:nth-child(2) {
+                font-size: 1.2em;
+            }
+        }
+    }
 }
 
 .AllocationsX-home {
+    .Book-header {
+        // background-color: $softblue;
+        font-size: 1.3em;
+        padding: 10px 15px 10px 15px;
+    }
+
     .Book-side-wrapper {
         // margin: 10px;
     }
 
     .Book-side th {
-        background-color: $softblue;
+        padding-top: 4px;
+        padding-bottom: 4px;
     }
 
     .buy-button {

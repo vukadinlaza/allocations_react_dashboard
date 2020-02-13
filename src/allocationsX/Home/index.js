@@ -11,6 +11,32 @@ export default function AllocationsX () {
       <div className="AllocationsX-header">
         <h4>Volumetric</h4>
         <p>3d Printed Organs</p>
+        <div className="info">
+          <span>
+            <div>Your SPV shares</div>
+            <div>10,000</div>
+          </span>
+          <span>
+            <div>Nominal Value of Your Holding</div>
+            <div>$10,000</div>
+          </span>
+          <span>
+            <div>Estimated Current Value of your Holding</div>
+            <div>$65,000</div>
+          </span>
+          <span>
+            <div>Estimated Share Value</div>
+            <div>$6.50</div>
+          </span>
+          <span>
+            <div>Initial Share Price</div>
+            <div>$1</div>
+          </span>
+          <span>
+            <div>Last Trade Price</div>
+            <div>$3.50</div>
+          </span>
+        </div>
       </div>
       {/**<Row>
         <Col sm="5" md={{size: 4, offset: 1}}>
@@ -88,6 +114,7 @@ function Book () {
       <Row>
         <Col sm="6" md={{size: 5, offset: 1}}>
           <Paper className="Book-side-wrapper">
+            <div className="Book-header">Buy Orders</div>
             <Table className="Book-bids Book-side">
               <TableHead>
                 <TableRow>
@@ -116,6 +143,7 @@ function Book () {
         </Col>
         <Col sm="6" md="5">
           <Paper className="Book-side-wrapper">
+            <div className="Book-header">Sell Orders</div>
             <Table className="Book-asks Book-side">
               <TableHead>
                 <TableRow>
