@@ -17,10 +17,8 @@ export default function Sidebar ({ showSidebar, setShowSidebar }) {
   }, [user])
 
   return (
-    <Col sm="2" className={`position-fixed h-100 Sidebar ${showSidebar ? "Sidebar-show" : "Sidebar-no-show"}`}>
-      <div className="brand" onClick={() => history.push('/')}> 
-        <Brand />
-      </div>
+    <Col sm="2" className={`position-fixed h-100 Sidebar ${showSidebar ? "Sidebar-show" : "Sidebar-no-show"}`}> 
+      <Brand />
       <div className="toggle-wrapper">
         <FontAwesomeIcon icon="times" className="toggle" onClick={() => setShowSidebar(false)} />
       </div>
@@ -49,17 +47,24 @@ export default function Sidebar ({ showSidebar, setShowSidebar }) {
 }
 
 function Brand () {
+  const history = useHistory()
   const match = useRouteMatch('/admin/:organization')
 
   if (match && match.params.organization) {
-    return <img height="60px" width="180px" alt={match.params.organization} src={`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${match.params.organization}.png`} />
+    return (
+      <div className="brand" onClick={() => history.push(`/admin/${match.params.organization}`)}> 
+        <img height="60px" width="180px" 
+          alt={match.params.organization} 
+          src={`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${match.params.organization}.png`} />
+      </div>
+    )
   }
 
   return (
-    <React.Fragment>
+    <div className="brand" onClick={() => history.push('/')}>
       <img src="https://www.allocations.co/assets/img/brand.svg" alt="allocations" style={{height:'40px'}} />
       <span className="beta">beta</span>
-    </React.Fragment>
+    </div>
   ) 
 }
 
