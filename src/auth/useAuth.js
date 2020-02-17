@@ -16,7 +16,7 @@ export function useAuth (QUERY) {
   }, [isAuthenticated, loading, called])
 
   useEffect(() => {
-    if (data) window._slaask.updateContact({name: data.investor.name})
+    if (data && window._slaask) window._slaask.updateContact({name: data.investor.name})
   }, [data])
 
   useEffect(() => {
