@@ -71,55 +71,28 @@ const App = () => {
                 <PrivateRoute path="/investments" component={UserInvestments} />
                 <PrivateRoute path="/invited-deals" component={InvitedDeals} />
 
-                <PrivateRoute path="/deals/:id" component={Deal} exact/>
-                <PrivateRoute path="/exchange" component={AllocationsX} exact/>
+                <PrivateRoute path="/deals/:id" component={Deal} exact />
+                <PrivateRoute path="/exchange" component={AllocationsX} exact />
 
-                <AdminRoute path="/investor/:id/home">
-                  <UserHome /> 
-                </AdminRoute>
-                <AdminRoute path="/investor/:id/investments">
-                  <UserInvestments /> 
-                </AdminRoute>
-                <AdminRoute path="/investors/new" exact>
-                  <InvestorNew /> 
-                </AdminRoute>
-                <AdminRoute path="/investor/:id/edit">
-                  <InvestorEdit /> 
-                </AdminRoute>
-                <AdminRoute path="/deal/new" exact>
-                  <DealNew /> 
-                </AdminRoute>
-                <AdminRoute path="/deals/:id/edit" exact>
-                  <DealEdit /> 
-                </AdminRoute>
-                <AdminRoute path="/admin/investment/new" exact>
-                  <InvestmentNew /> 
-                </AdminRoute>
-                <AdminRoute path="/admin/investments/:id/edit" exact>
-                  <InvestmentEdit /> 
-                </AdminRoute>
+                <AdminRoute path="/investor/:id/home" component={UserHome} />
+                <AdminRoute path="/investor/:id/investments" component={UserInvestments} />
+                <AdminRoute path="/investors/new" component={InvestorNew} exact />
+                <AdminRoute path="/investor/:id/edit" component={InvestorEdit} />
+                <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
+                <AdminRoute path="/admin/investments/:id/edit" component={InvestmentEdit} exact />
 
                 {/** Whitelabel Routes **/}
-                <AdminRoute path="/admin/:organization" exact>
-                  <AdminHome />
-                </AdminRoute>
+                <AdminRoute path="/admin/:organization" component={AdminHome} exact />
 
-                <AdminRoute path="/admin/:organization/deals" exact>
-                  <Deals /> 
-                </AdminRoute>
+                <AdminRoute path="/admin/:organization/deals" component={Deals} exact />
+                <AdminRoute path="/admin/:organization/deal/new" component={DealNew} exact />
+                <AdminRoute path="/admin/:organization/deals/:id/edit" component={DealEdit} exact />
 
-                <AdminRoute path="/admin/:organization/investments" exact>
-                  <Investments /> 
-                </AdminRoute>
+                <AdminRoute path="/admin/:organization/investments" component={Investments} exact />
+                <AdminRoute path="/admin/:organization/investors" component={Investors} exact />
 
-                <AdminRoute path="/admin/:organization/investors" exact>
-                  <Investors /> 
-                </AdminRoute>
-
-                <Route path="/signup" exact>
-                  <SignUp />
-                </Route>
-                <Route path="/getting-started" exact><Faq /></Route>
+                <Route path="/signup" component={SignUp} exact />
+                <Route path="/getting-started" component={Faq} exact />
                 <PrivateRoute path="/" component={UserHome} />
               </Switch>
             </Col>

@@ -89,7 +89,7 @@ export default function Deals () {
                         <FontAwesomeIcon icon="external-link-alt" />
                       </a> : ""} 
                     </TableCell>
-                    {isAdmin && <TableCell align="center"><Link to={`/deals/${deal._id}/edit`}>edit</Link></TableCell>}
+                    {isAdmin && <TableCell align="center"><Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link></TableCell>}
                   </TableRow>
                 ))}
               </TableBody>

@@ -19,38 +19,41 @@ import { FormControl, Select, MenuItem, InputLabel, TextField, InputAdornment } 
 import "./style.scss"
 
 const GET_DEAL = gql`
-  query Deal($id: String!) {
-    deal(_id: $id) {
+  query Deal($id: String!, $slug: String!) {
+    organization(slug: $slug) {
       _id
-      company_name
-      company_description
-      date_closed
-      deal_lead
-      pledge_link
-      onboarding_link
-      allInvited
-      status
-      inviteKey
-      memo
-      documents {
-        path
-        link
-      }
-      investments {
+      deal(_id: $id) {
         _id
+        company_name
+        company_description
+        date_closed
+        deal_lead
+        pledge_link
+        onboarding_link
+        allInvited
         status
-        amount
-        investor {
+        inviteKey
+        memo
+        documents {
+          path
+          link
+        }
+        investments {
+          _id
+          status
+          amount
+          investor {
+            _id
+            name
+          }
+        }
+        invitedInvestors {
           _id
           name
+          email
         }
       }
-      invitedInvestors {
-        _id
-        name
-        email
-      }
-    } 
+    }
   }
 `
 
@@ -79,17 +82,24 @@ const UPDATE_DEAL = gql`
 const validInputs = ["_id","company_name","company_description","date_closed","deal_lead","pledge_link","onboarding_link","embed_code","status","closed","allInvited","amount", "memo"]
 
 export default function DealEdit () {
-  const params = useParams()
+  const { id, organization } = useParams()
+  const [errorMessage, setErrorMessage] = useState(null)
   const [searchQ, setSearchQ] = useState("")
   const [deal, setDeal] = useSimpleReducer({})
   const [showAddInvestment, setShowAddInvestment] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
-  const { data, refetch } = useQuery(GET_DEAL, { variables: { id: params.id }})
+  const { data, refetch, error } = useQuery(GET_DEAL, { variables: { id, slug: organization }})
   const [updateDeal] = useMutation(UPDATE_DEAL)
   const [search, searchRes] = useLazyQuery(API.users.search)
 
   useEffect(() => {
-    if (data) setDeal(data.deal)
+    if (data) {
+      if (data.organization.deal) {
+        setDeal(data.organization.deal)
+      } else {
+        setErrorMessage("Not Authorized to View this Deal")
+      }
+    }
   }, [data])
 
   useEffect(() => {
@@ -99,6 +109,8 @@ export default function DealEdit () {
   useEffect(() => {
     search({ variables: { q: searchQ } })
   }, [searchQ])
+
+  if (errorMessage) return <div className="Error">{errorMessage}</div>
   
   return (
     <div className="DealEdit form-wrapper">
@@ -566,7 +578,7 @@ function AddInvestment ({ deal, show, refetch }) {
 }
 
 function InvitedInvestors ({ data, refetch }) {
-  if (!data) {
+  if (!data || !data.deal) {
     return (
       <TableRow className="loading-table">
         <TableCell><FontAwesomeIcon icon="circle-notch" spin /></TableCell>
@@ -574,7 +586,7 @@ function InvitedInvestors ({ data, refetch }) {
     )
   }
 
-  if (data.deal.allInvited) {
+  if (data.organization.deal.allInvited) {
     return (
       <TableRow className="loading-table">
         <TableCell><FontAwesomeIcon icon="users" /> All Users Invited</TableCell>
