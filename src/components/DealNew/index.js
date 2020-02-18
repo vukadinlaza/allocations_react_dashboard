@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { isEqual } from "lodash"
-import { Redirect } from "react-router-dom"
+import { Redirect, useParams } from "react-router-dom"
 import { TextField } from '@material-ui/core'
 import { Row, Col } from 'reactstrap'
 import { useSimpleReducer } from '../../utils/hooks'
@@ -12,21 +12,15 @@ import { Button } from '@material-ui/core'
 import "./style.scss"
 
 const CREATE_DEAL = gql`
-  mutation CreateDeal(
-    $company_name: String, 
-    $company_description: String, 
-    $deal_lead: String, 
-    $date_closed: String
-    $onboarding_link: String
-    $pledge_link: String
-  ) {
-    createDeal(company_name: $company_name, company_description: $company_description, deal_lead: $deal_lead, date_closed: $date_closed, onboarding_link: $onboarding_link, pledge_link: $pledge_link) {
+  mutation CreateDeal($org: String!, $deal: DealInput!) {
+    createDeal(org: $org, deal: $deal) {
       _id
     }
   }
 `
 
 export default function DealNew () {
+  const { organization } = useParams()
   const [deal, setDeal] = useSimpleReducer({})
   const [hasChanges, setHasChanges] = useState(false)
   const [createDeal, createDealRes] = useMutation(CREATE_DEAL)
@@ -36,7 +30,7 @@ export default function DealNew () {
   }, [deal])
 
   if (createDealRes.data) {
-    return <Redirect to={`/deals/${createDealRes.data.createDeal._id}/edit`} />
+    return <Redirect to={`/admin/${organization}/deals/${createDealRes.data.createDeal._id}/edit`} />
   }
   
   return (
@@ -99,7 +93,7 @@ export default function DealNew () {
           <Col sm={{size: 8, offset: 1}}>
             <Button disabled={!hasChanges} 
               variant="contained"
-              onClick={() => createDeal({ variables: deal })} 
+              onClick={() => createDeal({ variables: { org: organization, deal } })} 
               color="primary">
               CREATE
             </Button> 

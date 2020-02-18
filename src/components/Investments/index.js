@@ -87,7 +87,6 @@ export default function Investments () {
   const [getInvestments, { data, error }] = useLazyQuery(GET_INVESTMENTS)
 
   useEffect(() => {
-    console.log({ variables: { slug: organization } })
     if (user && user.email) getInvestments({ variables: { slug: organization } })
   }, [user])
 

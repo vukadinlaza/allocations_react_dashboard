@@ -81,13 +81,20 @@
     }
 
     .deals-title {
-        span {
+        .deals-length {
             background-color: $softblue;
             display: inline-block;
             width: 30px;
             height: 30px;
             line-height: 30px;
             text-align: center;
+        }
+        .all-btn {
+            vertical-align: top;
+            margin-left: 15px;
+            a {
+                color: #fff;
+            }
         }
         padding: 5px;
         font-size: 1.2em;

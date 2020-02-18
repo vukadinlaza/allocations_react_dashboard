@@ -52,7 +52,7 @@ export default function Deals () {
           <Paper className="deal-data">
             <Button variant="contained"
               color="secondary">
-              <Link to="/deal/new">Create New Deal</Link>
+              <Link to={`/admin/${organization}/deal/new`}>Create New Deal</Link>
             </Button>
           </Paper>
         </Col>

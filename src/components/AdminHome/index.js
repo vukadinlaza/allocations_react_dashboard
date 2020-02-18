@@ -69,13 +69,13 @@ export default function AdminHome () {
             <h2>Welcome to, <br></br> <b>{org.name}</b> Admin!</h2> 
             <div>This is where you can manage your deals and investors 🗃 🔮</div>
             <Button className="create-deal-button" variant="contained">
-              <Link to="/">CREATE DEAL</Link>
+              <Link to={`/admin/${organization}/deal/new`}>CREATE DEAL</Link>
             </Button>
           </Paper>
         </Col>
         <Col sm={{size: 5, offset: 0}}>
           <Paper className="deals" style={{padding: "10px 15px"}}>
-            <div className="deals-title">💡 Active Deals &nbsp;<span>{org.deals.length}</span></div>
+            <div className="deals-title">💡 Active Deals &nbsp;<span className="deals-length">{org.deals.length}</span> <Button className="all-btn" variant="contained" color="secondary" style={{padding: "3px 4px"}}><Link to={`/admin/${organization}/deals`}>All</Link></Button></div>
             <hr></hr>
             <Paper className="deals-table" style={{marginBottom: "10px"}}>
               <Table>
@@ -90,7 +90,7 @@ export default function AdminHome () {
         </Col>
         <Col sm={{size: 4, offset: 2}}>
           <Paper className="investors">
-            <div className="tile-header">Top Investors 🐳 <Button className="all-btn" variant="contained" color="secondary" style={{padding: "3px 4px"}}><Link to="/">All</Link></Button></div>
+            <div className="tile-header">Top Investors 🐳 <Button className="all-btn" variant="contained" color="secondary" style={{padding: "3px 4px"}}><Link to={`/admin/${organization}/investors`}>All</Link></Button></div>
             <hr></hr>
             <Paper>
               <div className="scroll-wrapper">
@@ -110,7 +110,7 @@ export default function AdminHome () {
         </Col>
         <Col sm={{size: 4, offset: 0}}>
           <Paper className="investments">
-            <div className="tile-header">Recent Investments 💵 <Button className="all-btn" variant="contained" color="secondary" style={{padding: "3px 4px"}}><Link to="/">All</Link></Button></div>
+            <div className="tile-header">Recent Investments 💵 <Button className="all-btn" variant="contained" color="secondary" style={{padding: "3px 4px"}}><Link to={`/admin/${organization}/investments`}>All</Link></Button></div>
             <hr></hr>
             <Paper>
               <div className="scroll-wrapper">

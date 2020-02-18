@@ -15,6 +15,7 @@ import "./style.scss";
 const GET_INVESTORS = gql`
   query GetOrg($slug: String!) {
     organization(slug: $slug) {
+      _id
       investors {
         _id
         first_name
@@ -58,7 +59,7 @@ export default function Investments () {
         <Col sm={{size: 10, offset: 1}}>
           <Paper className="actions">
             <Link to="/investors/new">
-              <Button variant="contained" color="secondary">CREATE INVESTOR</Button>
+              <Button variant="contained" color="secondary">INVITE INVESTOR</Button>
             </Link>
           </Paper>
         </Col>
@@ -71,7 +72,6 @@ export default function Investments () {
                   <TableCell>Email</TableCell>
                   <TableCell>Investments</TableCell>
                   <TableCell>Total Invested</TableCell>
-                  <TableCell></TableCell>
                   <TableCell></TableCell>
                   <TableCell></TableCell>
                 </TableRow>
@@ -90,9 +90,6 @@ export default function Investments () {
                     </TableCell>
                     <TableCell>
                       <Link to={`/investor/${investor._id}/edit`}>Edit</Link>
-                    </TableCell>
-                    <TableCell>
-                      {investor.passport && <a href={"https://" + investor.passport.link} target="_blank" rel="noopener noreferrer">Passport</a>}   
                     </TableCell>
                   </TableRow>
                 ))}

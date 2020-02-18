@@ -33,6 +33,7 @@ const GET_DEAL = gql`
         allInvited
         status
         inviteKey
+        target
         memo
         documents {
           path
@@ -58,8 +59,8 @@ const GET_DEAL = gql`
 `
 
 const UPDATE_DEAL = gql`
-  mutation UpdateDeal($deal: DealInput!) {
-    updateDeal(deal: $deal) {
+  mutation UpdateDeal($org: String!, $deal: DealInput!) {
+    updateDeal(org: $org, deal: $deal) {
       _id
       company_name
       company_description
@@ -103,11 +104,11 @@ export default function DealEdit () {
   }, [data])
 
   useEffect(() => {
-    setHasChanges(data && !isEqual(deal, get(data, 'deal')))
+    setHasChanges(data && !isEqual(deal, get(data, 'organization.deal')))
   }, [deal])
 
   useEffect(() => {
-    search({ variables: { q: searchQ } })
+    search({ variables: { q: searchQ, org: organization } })
   }, [searchQ])
 
   if (errorMessage) return <div className="Error">{errorMessage}</div>
@@ -195,19 +196,12 @@ export default function DealEdit () {
         </Row>
         <Row>
           <Col sm={{size: 8, offset: 1}}>
-            {/**<TextField multiline
-              style={{width: "100%"}}
-              label="Memo"
-              rows="4"
-              value={deal.memo || ""}
-              onChange={e => setDeal({ memo: e.target.value })}
-              variant="outlined"
-            />**/}
+            <InputLabel>Deal Description</InputLabel>
             <Editor
               value={deal.memo}
               apiKey="jlbrhzgo0m2myqdmbhaav8a0971vomza2smty20fpq6fs47j"
               init={{
-               height: 500,
+               height: 350,
                menubar: false,
                plugins: [
                  'advlist autolink lists link image charmap print preview anchor',
@@ -227,7 +221,7 @@ export default function DealEdit () {
           <Col sm={{size: 8, offset: 1}}>
             <Button disabled={!hasChanges} 
               variant="contained"
-              onClick={() => updateDeal({ variables: { deal: _.pick(deal, validInputs) } })} 
+              onClick={() => updateDeal({ variables: { deal: _.pick(deal, validInputs), org: organization } })} 
               color="primary">
               UPDATE DEAL
             </Button> 
@@ -293,7 +287,7 @@ export default function DealEdit () {
                       <TableCell>{investor.name}</TableCell>
                       <TableCell>{investor.email}</TableCell>
                       <TableCell>
-                        <AddInvestor investor={investor} deal={data.deal} setSearchQ={setSearchQ} refetch={refetch} />
+                        <AddInvestor investor={investor} deal={deal} setSearchQ={setSearchQ} refetch={refetch} />
                       </TableCell>
                     </TableRow>
                   ))}
@@ -303,7 +297,7 @@ export default function DealEdit () {
             <Paper className="table-wrapper">
               <Table>
                 <TableBody>
-                  <InvitedInvestors data={data} refetch={refetch} />
+                  <InvitedInvestors deal={deal} refetch={refetch} />
                 </TableBody>
               </Table>
             </Paper>
@@ -577,8 +571,8 @@ function AddInvestment ({ deal, show, refetch }) {
   )
 }
 
-function InvitedInvestors ({ data, refetch }) {
-  if (!data || !data.deal) {
+function InvitedInvestors ({ deal, refetch }) {
+  if (_.isEmpty(deal)) {
     return (
       <TableRow className="loading-table">
         <TableCell><FontAwesomeIcon icon="circle-notch" spin /></TableCell>
@@ -586,7 +580,7 @@ function InvitedInvestors ({ data, refetch }) {
     )
   }
 
-  if (data.organization.deal.allInvited) {
+  if (deal.allInvited) {
     return (
       <TableRow className="loading-table">
         <TableCell><FontAwesomeIcon icon="users" /> All Users Invited</TableCell>
@@ -594,7 +588,7 @@ function InvitedInvestors ({ data, refetch }) {
     )
   }
 
-  if (get(data, 'deal.invitedInvestors.length', 0) === 0) {
+  if (get(deal, 'invitedInvestors.length', 0) === 0) {
     return (
       <TableRow className="invited-investors-none">
         <TableCell>None</TableCell>
@@ -603,35 +597,36 @@ function InvitedInvestors ({ data, refetch }) {
   }
 
   return (
-    get(data, 'deal.invitedInvestors', []).map(investor => (
+    (deal.invitedInvestors || []).map(investor => (
       <TableRow key={investor._id} sm={{size: 4, offset: 1}}>
         <TableCell>{investor.name}</TableCell>
         <TableCell>{investor.email}</TableCell>
-        <TableCell><RmInvestor investor={investor} deal={get(data, 'deal', {})} refetch={refetch} /></TableCell>
+        <TableCell><RmInvestor investor={investor} deal={deal} refetch={refetch} /></TableCell>
       </TableRow>
     ))
   )
 }
 
 const INVITE_INVESTOR = gql`
-  mutation InviteInvestor($user_id: String!, $deal_id: String!) {
-    inviteInvestor(user_id: $user_id, deal_id: $deal_id) {
+  mutation InviteInvestor($org: String!, $user_id: String!, $deal_id: String!) {
+    inviteInvestor(org: $org, user_id: $user_id, deal_id: $deal_id) {
       _id
     }
   }
 `
 
 const UNINVITE_INVESTOR = gql`
-  mutation UninviteInvestor($user_id: String!, $deal_id: String!) {
-    uninviteInvestor(user_id: $user_id, deal_id: $deal_id) {
+  mutation UninviteInvestor($org: String!, $user_id: String!, $deal_id: String!) {
+    uninviteInvestor(org: $org, user_id: $user_id, deal_id: $deal_id) {
       _id
     }
   }
 `
 
 function AddInvestor ({ investor, deal, setSearchQ, refetch }) {
+  const { organization: org } = useParams()
   const [status, setStatus] = useState(null)
-  const [addInvestor, { data, loading }] = useMutation(INVITE_INVESTOR, { variables: { user_id: investor._id, deal_id: deal._id }})
+  const [addInvestor, { data, loading }] = useMutation(INVITE_INVESTOR, { variables: { org, user_id: investor._id, deal_id: deal._id }})
 
   useEffect(() => {
     if (loading) setStatus("pending")
@@ -652,8 +647,9 @@ function AddInvestor ({ investor, deal, setSearchQ, refetch }) {
 }
 
 function RmInvestor ({ investor, deal, refetch }) {
+  const { organization: org } = useParams()
   const [status, setStatus] = useState(null)
-  const [rmInvestor, { data, loading }] = useMutation(UNINVITE_INVESTOR, { variables: { user_id: investor._id, deal_id: deal._id }})
+  const [rmInvestor, { data, loading }] = useMutation(UNINVITE_INVESTOR, { variables: { org, user_id: investor._id, deal_id: deal._id }})
 
   useEffect(() => {
     if (loading) setStatus("pending")

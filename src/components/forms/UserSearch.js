@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import * as API from "../../api"
+import { useParams } from 'react-router-dom'
 import { useLazyQuery} from '@apollo/react-hooks'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TextField, Table, TableBody, TableCell, TableRow, Paper } from '@material-ui/core'
 
 export default function UserSearch ({ user, setUser, errors }) {
+  const { organization: org } = useParams()
   const [q, setQ] = useState("")
   const [records, setRecords] = useState([])
   const [search, searchRes] = useLazyQuery(API.users.search)
 
   useEffect(() => {
-    search({ variables: { q } })
+    search({ variables: { q, org } })
   }, [q])
 
   useEffect(() => {
