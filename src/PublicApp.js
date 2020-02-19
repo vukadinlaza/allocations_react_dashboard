@@ -35,7 +35,7 @@ export default function PublicApp () {
           </Col>
           <Col xs={{size: 12, offset: 0}} md={{size: 10, offset: 1}} className="app-body">
             <Switch>
-              <Route path={`${path}/deals/:company_name`}>
+              <Route path={`${path}/:organization/deals/:company_name`}>
                 <PublicDeal />
               </Route>
             </Switch>
@@ -47,11 +47,12 @@ export default function PublicApp () {
 }
 
 function Brand () {
+  const match = useRouteMatch('/public/:organization/deals/:deal')
   const history = useHistory()
   const location = useLocation()
 
-  if (location.pathname === "/public/deals/Xplore") {
-    return <img height="60px" width="180px" src="https://allocations-public.s3.us-east-2.amazonaws.com/organizations/helios-capital.png" alt="#" style={{margin: "20px", cursor: "pointer"}} />
+  if (match) {
+    return <img height="60px" width="180px" src={`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${match.params.organization}.png`} alt="#" style={{margin: "20px", cursor: "pointer"}} />
   }
 
   return <img src="https://www.allocations.co/assets/img/brand.svg" onClick={() => history.push('/')} alt="#" style={{height:'40px', margin: "20px", cursor: "pointer"}} />

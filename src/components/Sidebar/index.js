@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useHistory } from 'react-router-dom';
+import { Link, useLocation, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { Col } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth0 } from "../../react-auth0-spa";
@@ -17,11 +17,8 @@ export default function Sidebar ({ showSidebar, setShowSidebar }) {
   }, [user])
 
   return (
-    <Col sm="2" className={`position-fixed h-100 Sidebar ${showSidebar ? "Sidebar-show" : "Sidebar-no-show"}`}>
-      <div className="brand" onClick={() => history.push('/')}> 
-        <img src="https://www.allocations.co/assets/img/brand.svg" alt="allocations" style={{height:'40px'}} />
-        <span className="beta">beta</span>
-      </div>
+    <Col sm="2" className={`position-fixed h-100 Sidebar ${showSidebar ? "Sidebar-show" : "Sidebar-no-show"}`}> 
+      <Brand />
       <div className="toggle-wrapper">
         <FontAwesomeIcon icon="times" className="toggle" onClick={() => setShowSidebar(false)} />
       </div>
@@ -49,6 +46,28 @@ export default function Sidebar ({ showSidebar, setShowSidebar }) {
   )
 }
 
+function Brand () {
+  const history = useHistory()
+  const match = useRouteMatch('/admin/:organization')
+
+  if (match && match.params.organization) {
+    return (
+      <div className="brand" onClick={() => history.push(`/admin/${match.params.organization}`)}> 
+        <img height="60px" width="180px" 
+          alt={match.params.organization} 
+          src={`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${match.params.organization}.png`} />
+      </div>
+    )
+  }
+
+  return (
+    <div className="brand" onClick={() => history.push('/')}>
+      <img src="https://www.allocations.co/assets/img/brand.svg" alt="allocations" style={{height:'40px'}} />
+      <span className="beta">beta</span>
+    </div>
+  ) 
+}
+
 function Footer () {
   return (
     <div className="Sidebar-footer">
@@ -58,27 +77,28 @@ function Footer () {
 }
 
 function AdminLinks ({ location }) {
+  const match = useRouteMatch('/admin/:organization')
+
+  if (!match) return null
+
+  const { params: { organization } } = match
+
   return (
     <div className="admin-links">
       <div className="sidebar-admin-header">Admin</div>
-      <div className={`sidebar-nav-item ${location.pathname === "/exchange" ? "sidebar-nav-item-active" : ""}`}>
-        <Link to="/exchange">
-          <span>Exchange</span>
+      <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/investors` ? "sidebar-nav-item-active" : ""}`}>
+        <Link to={`/admin/${organization}/investors`}>
+          <span>Investors</span>
         </Link>
       </div>
-      <div className={`sidebar-nav-item ${location.pathname === "/investors" ? "sidebar-nav-item-active" : ""}`}>
-        <Link to="/investors">
-          <span>All Investors</span>
+      <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/deals` ? "sidebar-nav-item-active" : ""}`}>
+        <Link to={`/admin/${organization}/deals`}>
+          <span>Deals</span>
         </Link>
       </div>
-      <div className={`sidebar-nav-item ${location.pathname === "/deals" ? "sidebar-nav-item-active" : ""}`}>
-        <Link to="/deals">
-          <span>All Deals</span>
-        </Link>
-      </div>
-      <div className={`sidebar-nav-item ${location.pathname === "/admin/investments" ? "sidebar-nav-item-active" : ""}`}>
-        <Link to="/admin/investments">
-          <span>All Investments</span>
+      <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/investments` ? "sidebar-nav-item-active" : ""}`}>
+        <Link to={`/admin/${organization}/investments`}>
+          <span>Investments</span>
         </Link>
       </div>
     </div>

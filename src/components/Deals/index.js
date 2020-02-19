@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import _ from 'lodash'
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
@@ -14,23 +14,27 @@ import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from 
 import "./style.scss";
 
 const GET_DEALS = gql`
-  {
-    allDeals {
+  query GetOrg($slug: String!) {
+    organization(slug: $slug) {
       _id
-      company_name
-      company_description
-      pledge_link
-      onboarding_link
-      date_closed
-      deal_lead
+      deals {
+        _id
+        company_name
+        company_description
+        pledge_link
+        onboarding_link
+        date_closed
+        deal_lead
+      }
     }
   }
 `
 
 export default function Deals () {
+  const { organization } = useParams()
   const { user } = useAuth0()
   const isAdmin = user && adminWhitelist.includes(user.email)
-  const [getDeals, { data, error }] = useLazyQuery(GET_DEALS)
+  const [getDeals, { data, error }] = useLazyQuery(GET_DEALS, { variables: { slug: organization }})
 
   useEffect(() => {
     if (user && user.email) getDeals()
@@ -40,7 +44,7 @@ export default function Deals () {
 
   if (!data) return <div><Loader /></div>
 
-  const { allDeals: deals } = data
+  const { organization: { deals } } = data
   return (
     <div className="AllDeals">
       <Row>
@@ -48,7 +52,7 @@ export default function Deals () {
           <Paper className="deal-data">
             <Button variant="contained"
               color="secondary">
-              <Link to="/deal/new">Create New Deal</Link>
+              <Link to={`/admin/${organization}/deal/new`}>Create New Deal</Link>
             </Button>
           </Paper>
         </Col>
@@ -85,7 +89,7 @@ export default function Deals () {
                         <FontAwesomeIcon icon="external-link-alt" />
                       </a> : ""} 
                     </TableCell>
-                    {isAdmin && <TableCell align="center"><Link to={`/deals/${deal._id}/edit`}>edit</Link></TableCell>}
+                    {isAdmin && <TableCell align="center"><Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link></TableCell>}
                   </TableRow>
                 ))}
               </TableBody>

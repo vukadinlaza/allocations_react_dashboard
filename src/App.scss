@@ -98,6 +98,7 @@ $brandblue: #4169E1;
 
 .app-body {
   background-color: $offwhite;
+  padding-bottom: 50px;
 }
 
 // navbar
@@ -131,5 +132,15 @@ $brandblue: #4169E1;
 .table-wrapper {
   border-radius: 10px;
   overflow-x: hidden;
+}
+
+// Error
+.Error {
+  background-color: tomato;
+  text-align: center;
+  padding: 25px;
+  border-radius: 10px;
+  font-size: 1em;
+  color: #fff;
 }
 

@@ -16,28 +16,31 @@ import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from 
 import "./style.scss";
 
 const GET_INVESTMENTS = gql`
-  {
-    allInvestments {
+  query GetOrg($slug: String!) {
+    organization(slug: $slug) {
       _id
-      status
-      amount
-      deal {
+      investments {
         _id
-        company_name
-        company_description
-        date_closed
-      }
-      documents {
-        path
-        link
-      }
-      investor {
-        _id
-        name
-        first_name
-        last_name
-        investor_type
-        entity_name
+        status
+        amount
+        deal {
+          _id
+          company_name
+          company_description
+          date_closed
+        }
+        documents {
+          path
+          link
+        }
+        investor {
+          _id
+          name
+          first_name
+          last_name
+          investor_type
+          entity_name
+        }
       }
     }
   }
@@ -77,21 +80,21 @@ function renderChart(investments) {
 }
 
 export default function Investments () {
-  const params = useParams()
+  const { organization } = useParams()
   const [showDocs, setShowDocs] = useState(null)
 
   const { user } = useAuth0()
   const [getInvestments, { data, error }] = useLazyQuery(GET_INVESTMENTS)
 
   useEffect(() => {
-    if (user && user.email) getInvestments()
+    if (user && user.email) getInvestments({ variables: { slug: organization } })
   }, [user])
 
   if (error) return <div>{error.message}</div>
 
   if (!data) return <div><Loader /></div>
 
-  const investments = _.orderBy(data.allInvestments, i => new Date(i.deal.date_closed).getTime(), 'desc')
+  const investments = _.orderBy(data.organization.investments, i => new Date(i.deal.date_closed).getTime(), 'desc')
   if (showDocs) {
     investments.splice(investments.findIndex(i => i._id === showDocs._id) + 1, 0, { showDocs })
   }
