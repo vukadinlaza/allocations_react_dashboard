@@ -72,6 +72,7 @@ const UPDATE_DEAL = gql`
       allInvited
       inviteKey
       memo
+      target
       invitedInvestors {
         _id
         name
@@ -80,7 +81,7 @@ const UPDATE_DEAL = gql`
   }
 `
 
-const validInputs = ["_id","company_name","company_description","date_closed","deal_lead","pledge_link","onboarding_link","embed_code","status","closed","allInvited","amount", "memo"]
+const validInputs = ["_id","company_name","company_description","date_closed","deal_lead","pledge_link","onboarding_link","embed_code","status","closed","allInvited","amount", "memo", "target"]
 
 export default function DealEdit () {
   const { id, organization } = useParams()
@@ -195,6 +196,18 @@ export default function DealEdit () {
           </Col>
         </Row>
         <Row>
+          <Col sm={{size: 4, offset: 1}}>
+            <TextField style={{width: "100%"}} 
+              value={deal.target || ""}
+              onChange={e => setDeal({ target: e.target.value })} 
+              label="Target Raise"
+              InputProps={{
+                startAdornment: <InputAdornment position="start"><FontAwesomeIcon icon="dollar-sign" /></InputAdornment>,
+              }} 
+              variant="filled" />
+          </Col>
+        </Row>
+        <Row>
           <Col sm={{size: 8, offset: 1}}>
             <InputLabel>Deal Description</InputLabel>
             <Editor
@@ -221,7 +234,10 @@ export default function DealEdit () {
           <Col sm={{size: 8, offset: 1}}>
             <Button disabled={!hasChanges} 
               variant="contained"
-              onClick={() => updateDeal({ variables: { deal: _.pick(deal, validInputs), org: organization } })} 
+              onClick={() => {
+                console.log(_.pick(deal, validInputs))
+                updateDeal({ variables: { deal: _.pick(deal, validInputs), org: organization } })
+              }} 
               color="primary">
               UPDATE DEAL
             </Button> 
