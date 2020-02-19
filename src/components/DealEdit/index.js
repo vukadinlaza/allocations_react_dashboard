@@ -234,19 +234,9 @@ export default function DealEdit () {
         </Row>
         <Row>
           <Col sm={{size: 8, offset: 1}} style={{marginBottom: "10px"}}>
-            <TextField disabled 
+            <TextField
               style={{width: "100%"}}
-              label="Link to invited Users without an account" 
-              value={`dashboard.allocations.co/signup?key=${get(deal, "inviteKey")}`}
-              InputProps={{
-                endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(`dashboard.allocations.co/signup?key=${get(deal, "inviteKey")}`)} /></InputAdornment>,
-              }}
-              variant="filled" />
-          </Col>
-          <Col sm={{size: 8, offset: 1}} style={{marginBottom: "10px"}}>
-            <TextField disabled 
-              style={{width: "100%"}}
-              label="Public Link" 
+              label="For Users without an Account!" 
               value={`dashboard.allocations.co/public/deals/${encodeURI(deal.company_name)}?invite_code=${deal.inviteKey}`}
               InputProps={{
                 endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(`dashboard.allocations.co/public/deals/${encodeURI(deal.company_name)}?invite_code=${deal.inviteKey}`)} /></InputAdornment>,
@@ -254,9 +244,9 @@ export default function DealEdit () {
               variant="filled" />
           </Col>
           <Col sm={{size: 8, offset: 1}}>
-            <TextField disabled 
+            <TextField 
               style={{width: "100%"}}
-              label="Link to for Existing Users who have been invited" 
+              label="For Existing Users who have been invited!" 
               value={`dashboard.allocations.co/deals/${encodeURI(deal.company_name)}`}
               InputProps={{
                 endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(`dashboard.allocations.co/deals/${encodeURI(deal.company_name)}`)} /></InputAdornment>,
