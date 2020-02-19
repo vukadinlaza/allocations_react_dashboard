@@ -235,7 +235,6 @@ export default function DealEdit () {
             <Button disabled={!hasChanges} 
               variant="contained"
               onClick={() => {
-                console.log(_.pick(deal, validInputs))
                 updateDeal({ variables: { deal: _.pick(deal, validInputs), org: organization } })
               }} 
               color="primary">
@@ -252,7 +251,7 @@ export default function DealEdit () {
           <Col sm={{size: 8, offset: 1}} style={{marginBottom: "10px"}}>
             <TextField
               style={{width: "100%"}}
-              label="For Users without an Account!" 
+              label="Public Link" 
               value={`dashboard.allocations.co/public/deals/${encodeURI(deal.company_name)}?invite_code=${deal.inviteKey}`}
               InputProps={{
                 endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(`dashboard.allocations.co/public/deals/${encodeURI(deal.company_name)}?invite_code=${deal.inviteKey}`)} /></InputAdornment>,
@@ -262,7 +261,7 @@ export default function DealEdit () {
           <Col sm={{size: 8, offset: 1}}>
             <TextField 
               style={{width: "100%"}}
-              label="For Existing Users who have been invited!" 
+              label="Existing user link" 
               value={`dashboard.allocations.co/deals/${encodeURI(deal.company_name)}`}
               InputProps={{
                 endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(`dashboard.allocations.co/deals/${encodeURI(deal.company_name)}`)} /></InputAdornment>,
