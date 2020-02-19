@@ -23,8 +23,11 @@ const ORG = gql`
         date_closed
         company_name
         company_description
+        target
         investments {
           _id
+          amount
+          status
         }
       }
       investors {
@@ -33,10 +36,14 @@ const ORG = gql`
         investments {
           _id
           amount
+          deal {
+            _id
+          }
         }
       }
       investments {
         _id
+        status
         amount
         deal {
           _id
@@ -51,6 +58,16 @@ const ORG = gql`
   }
 `
 
+function sumOrgInvestments ({ investor, deals }) {
+  const deal_ids = deals.map(d => d._id)
+  return investor.investments.reduce((acc, inv) => {
+    if (deal_ids.includes(inv.deal._id)) {
+      return acc + (inv.amount || 0)
+    }
+    return acc
+  }, 0)
+}
+
 export default function AdminHome () {
   const { organization } = useParams()
   const { data, error } = useQuery(ORG, { variables: { slug: organization } })
@@ -59,8 +76,7 @@ export default function AdminHome () {
 
   const org = data.organization
 
-  const { onboarding, closing, closed } = _.groupBy(org.deals, 'status')
-
+  console.log(data.organization)
   return (
     <div className="AdminHome">
       <Row>
@@ -96,10 +112,10 @@ export default function AdminHome () {
               <div className="scroll-wrapper">
                 <Table>
                   <TableBody>
-                    {_.orderBy((org.investors || []), i => _.sumBy(i.investments, 'amount'), 'desc').map((investor, i) => (
+                    {_.orderBy((org.investors || []), investor => sumOrgInvestments({ investor, deals: org.deals }), 'desc').map((investor, i) => (
                       <TableRow key={investor._id}>
                         <TableCell>{investor.name} {i === 0 && "👑"}</TableCell>
-                        <TableCell>${nWithCommas(_.sumBy(investor.investments, 'amount')) || 0} invested</TableCell>
+                        <TableCell>${nWithCommas(sumOrgInvestments({ investor, deals: org.deals })) || 0} invested</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -116,7 +132,7 @@ export default function AdminHome () {
               <div className="scroll-wrapper">
                 <Table>
                   <TableBody>
-                    {_.take((org.investments || []), 10).map(investment => (
+                    {_.take((org.investments || []), 10).filter(i => i.status !== "invited").map(investment => (
                       <TableRow key={investment._id}>
                         <TableCell>{investment.deal.company_name}</TableCell>
                         <TableCell>{investment.investor.name}</TableCell>
@@ -136,7 +152,14 @@ export default function AdminHome () {
 }
 
 function Deal ({ deal }) {
-  const val = Math.random() * 100
+  const amountRaised = (deal.investments || []).reduce((acc, inv) => {
+    if (inv.status !== "invited") {
+      return acc + inv.amount
+    }
+    return acc
+  }, 0)
+  console.log({ deal, amountRaised})
+  const val = (amountRaised / (Number(deal.target) || Infinity)) * 100
 
   return (
     <TableRow className="deal-info">
@@ -144,7 +167,7 @@ function Deal ({ deal }) {
       <TableCell><i>closes: {formatDate(deal.date_closed)}</i></TableCell>
       <TableCell>
         <LinearProgress className="deal-progress" variant="determinate" color="secondary" value={val} />
-        <div className="text-center">{Math.round(val)}% of $300,000</div>
+        <div className="text-center">{Math.round(val)}% of ${nWithCommas(deal.target)}</div>
       </TableCell>
     </TableRow>
   )
