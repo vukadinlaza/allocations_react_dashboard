@@ -255,19 +255,8 @@ export default function DealEdit () {
           </Col>
         </Row>
         <Row>
-          <Col sm={{size: 4, offset: 1}}>
+          <Col lg={{size: 4, offset: 1}} md={{size: 8, offset: 1}} className="search-investors">
             <div className="form-sub-title">Invited Investors</div>
-          </Col>
-          <Col sm={4}>
-            <div className="form-sub-title">
-              Investments {showAddInvestment 
-                ? <FontAwesomeIcon icon="times" onClick={() => setShowAddInvestment(false)} /> 
-                : <Button variant="contained" color="secondary" onClick={() => setShowAddInvestment(true)}>Add +</Button>} 
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={{size: 4, offset: 1}} className="search-investors">
             <TextField style={{width: "100%", marginBottom: "10px"}} value={searchQ} onChange={e => setSearchQ(e.target.value)} label="Search Investors" variant="filled" />
             <Paper className="table-wrapper">
               <Table>
@@ -292,7 +281,12 @@ export default function DealEdit () {
               </Table>
             </Paper>
           </Col>
-          <Col sm={{size: 5}} className="investments">
+          <Col lg={{size: 5, offset: 0}} md={{size: 8, offset: 1}} className="investments">
+            <div className="form-sub-title">
+              Investments {showAddInvestment 
+                ? <FontAwesomeIcon icon="times" onClick={() => setShowAddInvestment(false)} /> 
+                : <Button variant="contained" color="secondary" onClick={() => setShowAddInvestment(true)}>Add +</Button>} 
+            </div>
             <AddInvestment deal={deal} show={showAddInvestment} refetch={refetch} /> 
             <Paper>
               <Table>

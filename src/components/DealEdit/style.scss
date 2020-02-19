@@ -64,6 +64,18 @@
             }
         }
     }
+
+    .investments, .search-investors {
+        .form-sub-title {
+            padding: 5px;
+            margin: 10px 0px;
+        }
+    }
+    .search-investors {
+        .form-sub-title {
+            margin-bottom: 20px;
+        }
+    }
 }
 
 .form-wrapper {
