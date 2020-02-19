@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Container, Row, Col } from "reactstrap";
-import { Route, Switch, useRouteMatch, useHistory, useLocation } from "react-router-dom"
+import { Route, Switch, useRouteMatch, useHistory, useLocation, Redirect, useParams } from "react-router-dom"
 import PublicDeal from "./components/Deal/Public"
 import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
@@ -8,6 +8,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { Button } from '@material-ui/core';
 import createAuth0Client from '@auth0/auth0-spa-js';
+import queryString from 'query-string'
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000/graphql"
 const client = new ApolloClient({ 
@@ -38,12 +39,25 @@ export default function PublicApp () {
               <Route path={`${path}/:organization/deals/:company_name`}>
                 <PublicDeal />
               </Route>
+              <Route path={`${path}/deals/:company_name`}>
+                <Legacy />
+              </Route>
             </Switch>
           </Col>
         </Row>
       </Container>
     </ApolloProvider>
   )
+}
+
+function Legacy () {
+  const { company_name } = useParams()
+  const location = useLocation()
+  const { invite_code } = queryString.parse(location.search)
+  if (company_name === "Xplore") {
+    return <Redirect to={`/public/helios-capital/deals/${company_name}?invite_code=${invite_code}`} />
+  }
+  return <Redirect to="/" />
 }
 
 function Brand () {

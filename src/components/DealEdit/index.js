@@ -252,9 +252,9 @@ export default function DealEdit () {
             <TextField
               style={{width: "100%"}}
               label="Public Link" 
-              value={`dashboard.allocations.co/public/deals/${encodeURI(deal.company_name)}?invite_code=${deal.inviteKey}`}
+              value={`dashboard.allocations.co/public/${organization}/deals/${encodeURI(deal.company_name)}?invite_code=${deal.inviteKey}`}
               InputProps={{
-                endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(`dashboard.allocations.co/public/deals/${encodeURI(deal.company_name)}?invite_code=${deal.inviteKey}`)} /></InputAdornment>,
+                endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(`dashboard.allocations.co/public/${organization}/deals/${encodeURI(deal.company_name)}?invite_code=${deal.inviteKey}`)} /></InputAdornment>,
               }}
               variant="filled" />
           </Col>
