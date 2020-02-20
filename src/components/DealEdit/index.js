@@ -114,6 +114,8 @@ export default function DealEdit () {
 
   if (errorMessage) return <div className="Error">{errorMessage}</div>
   
+  console.log({deal})
+
   return (
     <div className="DealEdit form-wrapper">
       <Row>
