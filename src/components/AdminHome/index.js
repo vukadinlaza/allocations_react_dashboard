@@ -75,8 +75,6 @@ export default function AdminHome () {
   if (!data) return <Loader />
 
   const org = data.organization
-
-  console.log(data.organization)
   return (
     <div className="AdminHome">
       <Row>
@@ -152,13 +150,13 @@ export default function AdminHome () {
 }
 
 function Deal ({ deal }) {
+  const { organization } = useParams()
   const amountRaised = (deal.investments || []).reduce((acc, inv) => {
     if (inv.status !== "invited") {
       return acc + inv.amount
     }
     return acc
   }, 0)
-  console.log({ deal, amountRaised})
   const val = (amountRaised / (Number(deal.target) || Infinity)) * 100
 
   return (
@@ -168,6 +166,9 @@ function Deal ({ deal }) {
       <TableCell>
         <LinearProgress className="deal-progress" variant="determinate" color="secondary" value={val} />
         <div className="text-center">{Math.round(val)}% of ${nWithCommas(deal.target)}</div>
+      </TableCell>
+      <TableCell>
+        <Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link>
       </TableCell>
     </TableRow>
   )
