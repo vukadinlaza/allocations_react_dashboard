@@ -50,7 +50,7 @@ function Brand () {
   const history = useHistory()
   const match = useRouteMatch('/admin/:organization')
 
-  if (match && match.params.organization) {
+  if (match && match.params.organization && match.params.organization !== "allocations") {
     return (
       <div className="brand" onClick={() => history.push(`/admin/${match.params.organization}`)}> 
         <img height="60px" width="180px" 
