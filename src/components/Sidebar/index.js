@@ -46,11 +46,12 @@ export default function Sidebar ({ showSidebar, setShowSidebar }) {
   )
 }
 
+const whitelist = ["allocations", "organizations"]
 function Brand () {
   const history = useHistory()
   const match = useRouteMatch('/admin/:organization')
 
-  if (match && match.params.organization && match.params.organization !== "allocations") {
+  if (match && match.params.organization && !whitelist.includes(match.params.organization)) {
     return (
       <div className="brand" onClick={() => history.push(`/admin/${match.params.organization}`)}> 
         <img height="60px" width="180px" 

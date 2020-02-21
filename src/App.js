@@ -22,6 +22,7 @@ import InvestmentEdit from './components/InvestmentEdit';
 import UserInvestments from './components/UserInvestments';
 import AllocationsX from './allocationsX/Home';
 import Profile from './components/Profile';
+import OrganizationNew from './components/OrganizationNew'
 
 import AdminHome from './components/AdminHome'
 
@@ -80,16 +81,17 @@ const App = () => {
                 <AdminRoute path="/investor/:id/edit" component={InvestorEdit} />
                 <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
                 <AdminRoute path="/admin/investments/:id/edit" component={InvestmentEdit} exact />
+                <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
 
                 {/** Whitelabel Routes **/}
-                <AdminRoute path="/admin/:organization" component={AdminHome} exact />
+                <PrivateRoute path="/admin/:organization" component={AdminHome} exact />
 
-                <AdminRoute path="/admin/:organization/deals" component={Deals} exact />
-                <AdminRoute path="/admin/:organization/deal/new" component={DealNew} exact />
-                <AdminRoute path="/admin/:organization/deals/:id/edit" component={DealEdit} exact />
+                <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
+                <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />
+                <PrivateRoute path="/admin/:organization/deals/:id/edit" component={DealEdit} exact />
 
-                <AdminRoute path="/admin/:organization/investments" component={Investments} exact />
-                <AdminRoute path="/admin/:organization/investors" component={Investors} exact />
+                <PrivateRoute path="/admin/:organization/investments" component={Investments} exact />
+                <PrivateRoute path="/admin/:organization/investors" component={Investors} exact />
 
                 <Route path="/signup" component={SignUp} exact />
                 <Route path="/getting-started" component={Faq} exact />
