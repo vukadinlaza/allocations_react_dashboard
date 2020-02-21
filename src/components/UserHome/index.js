@@ -61,6 +61,7 @@ const GET_INVESTOR = gql`
       investor_type
       email
       organizations
+      admin
       organizations_admin {
         _id
         slug
@@ -112,6 +113,7 @@ export default function UserHome (props) {
   return (
     <Container fluid className="UserHome">
       <Row>
+        <SuperAdmin investor={investor} />
         <AdminLinksPrompt investor={investor} />
         <CompleteInfoPrompt investor={investor} />
         <Col lg={{size: 3, offset: 2}} md={{size: 5, offset: 0}} sm={{size: 5, offset: 0}} className="welcome">
@@ -201,6 +203,19 @@ function CompleteInfoPrompt ({ investor }) {
     )
   }
   return null
+}
+
+function SuperAdmin ({ investor }) {
+  if (!investor || !investor.admin) return null
+
+  return (
+    <Col lg={{size: 8, offset: 2}} md={{size: 10, offset: 1}} sm={{size: 12, offset: 0}}>
+      <div className="superadmin-cta">
+        <div>Super Admin</div>
+        <Button variant="contained" color="secondary"><Link to="/admin/organizations/new">CREATE FUND MANAGER</Link></Button>
+      </div>
+    </Col>
+  )
 }
 
 function DealStub ({ deal }) {
