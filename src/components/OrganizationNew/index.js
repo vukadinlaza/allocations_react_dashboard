@@ -55,7 +55,7 @@ export default function OrganizationNew () {
           <TextField style={{width: "100%"}} 
             value={organization.slug}
             onChange={e => setOrg({ slug: e.target.value.replace(" ", "") })} 
-            label="Slug (no spaces)"
+            label="URL (no spaces)"
             variant="filled" />
         </Col>
       </Row>
@@ -83,7 +83,7 @@ function LogoUpload ({ organization, setOrg }) {
 
   return (
     <Col md={{size: 4, offset: 1}}>
-      <span className="file-label">Logo &nbsp;&nbsp;</span>
+      <span className="file-label">Logo (3:1 width to height) &nbsp;&nbsp;</span>
       <Button variant="contained" component="label">
         Upload&nbsp;&nbsp;
         <input type="file" 

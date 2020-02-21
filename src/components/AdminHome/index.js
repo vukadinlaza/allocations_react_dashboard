@@ -159,8 +159,9 @@ function Deal ({ deal }) {
       <TableCell className="company-name">{deal.company_name}</TableCell>
       <TableCell><i>closes: {formatDate(deal.date_closed)}</i></TableCell>
       <TableCell>
+        <div className="text-center">{Math.round(val || 0)}%</div>
         <LinearProgress className="deal-progress" variant="determinate" color="secondary" value={val} />
-        <div className="text-center">{Math.round(val)}% of ${nWithCommas(deal.target)}</div>
+        <div className="text-center">${nWithCommas(deal.amount_raised)} of ${nWithCommas(deal.target)}</div>
       </TableCell>
       <TableCell>
         <Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link>

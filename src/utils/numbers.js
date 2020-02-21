@@ -1,6 +1,6 @@
 
 export function nWithCommas(x) {
-  if (!x) return null
+  if (!x) return 0
 
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
