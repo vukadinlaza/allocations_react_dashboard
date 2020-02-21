@@ -275,17 +275,11 @@ export default function DealEdit () {
           <Col lg={{size: 4, offset: 1}} md={{size: 8, offset: 1}} className="search-investors">
             <div className="form-sub-title">Invited Investors</div>
             <TextField style={{width: "100%", marginBottom: "10px"}} value={searchQ} onChange={e => setSearchQ(e.target.value)} label="Search Investors" variant="filled" />
-            <Paper className="table-wrapper">
+            <Paper className="table-wrapper" style={{marginBottom: "10px"}}>
               <Table>
                 <TableBody>
                   {(searchQ !== "" ? get(searchRes, 'data.searchUsers', []) : []).map(investor => (
-                    <TableRow key={investor._id} sm={{size: 4, offset: 1}} className="invited-investor">
-                      <TableCell>{investor.name}</TableCell>
-                      <TableCell>{investor.email}</TableCell>
-                      <TableCell>
-                        <AddInvestor investor={investor} deal={deal} setSearchQ={setSearchQ} refetch={refetch} />
-                      </TableCell>
-                    </TableRow>
+                    <AddInvestor key={investor._id} investor={investor} deal={deal} setSearchQ={setSearchQ} refetch={refetch} />
                   ))}
                 </TableBody>
               </Table>
@@ -638,13 +632,24 @@ function AddInvestor ({ investor, deal, setSearchQ, refetch }) {
     }
   }, [data, loading])
 
+  let icon;
   if (status === "pending") {
-    return <FontAwesomeIcon icon="circle-notch" spin />
+    icon = { icon: "circle-notch", spin: true }
   } else if (status === "done") {
-    return <FontAwesomeIcon icon="check" />
+    icon = { icon: "check" }
   } else {
-    return <FontAwesomeIcon icon="plus-circle" onClick={() => addInvestor()} />
+    icon = { icon: "plus-circle" }
   }
+
+  return (
+    <TableRow sm={{size: 4, offset: 1}} onClick={() => addInvestor()} className="invited-investor">
+      <TableCell>{investor.name}</TableCell>
+      <TableCell>{investor.email}</TableCell>
+      <TableCell>
+        <FontAwesomeIcon {...icon} />
+      </TableCell>
+    </TableRow>
+  )
 }
 
 function RmInvestor ({ investor, deal, refetch }) {

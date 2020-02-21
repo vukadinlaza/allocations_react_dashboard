@@ -111,6 +111,10 @@
 
     .invited-investor {
         font-size: 0.8em;
+        &:hover {
+            background-color: $softblue;
+            cursor: pointer;
+        }
     }
 
     .invited-investors {
