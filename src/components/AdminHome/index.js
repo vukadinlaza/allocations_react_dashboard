@@ -24,6 +24,7 @@ const ORG = gql`
         company_name
         company_description
         target
+        amount_raised
         investments {
           _id
           amount
@@ -151,13 +152,7 @@ export default function AdminHome () {
 
 function Deal ({ deal }) {
   const { organization } = useParams()
-  const amountRaised = (deal.investments || []).reduce((acc, inv) => {
-    if (inv.status !== "invited") {
-      return acc + inv.amount
-    }
-    return acc
-  }, 0)
-  const val = (amountRaised / (Number(deal.target) || Infinity)) * 100
+  const val = (Number(deal.amount_raised) / (Number(deal.target) || Infinity)) * 100
 
   return (
     <TableRow className="deal-info">

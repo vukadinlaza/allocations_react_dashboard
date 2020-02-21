@@ -34,6 +34,7 @@ const GET_DEAL = gql`
         status
         inviteKey
         target
+        amount_raised
         memo
         documents {
           path
@@ -73,6 +74,7 @@ const UPDATE_DEAL = gql`
       inviteKey
       memo
       target
+      amount_raised
       invitedInvestors {
         _id
         name
@@ -81,7 +83,7 @@ const UPDATE_DEAL = gql`
   }
 `
 
-const validInputs = ["_id","company_name","company_description","date_closed","deal_lead","pledge_link","onboarding_link","embed_code","status","closed","allInvited","amount", "memo", "target"]
+const validInputs = ["_id","company_name","company_description","date_closed","deal_lead","pledge_link","onboarding_link","embed_code","status","closed","allInvited","amount", "memo", "target", "amount_raised"]
 
 export default function DealEdit () {
   const { id, organization } = useParams()
@@ -114,8 +116,6 @@ export default function DealEdit () {
 
   if (errorMessage) return <div className="Error">{errorMessage}</div>
   
-  console.log({deal})
-
   return (
     <div className="DealEdit form-wrapper">
       <Row>
@@ -203,6 +203,16 @@ export default function DealEdit () {
               value={deal.target || ""}
               onChange={e => setDeal({ target: e.target.value })} 
               label="Target Raise"
+              InputProps={{
+                startAdornment: <InputAdornment position="start"><FontAwesomeIcon icon="dollar-sign" /></InputAdornment>,
+              }} 
+              variant="filled" />
+          </Col>
+          <Col sm={{size: 4}}>
+            <TextField style={{width: "100%"}} 
+              value={deal.amount_raised || ""}
+              onChange={e => setDeal({ amount_raised: e.target.value })} 
+              label="Amount Raised"
               InputProps={{
                 startAdornment: <InputAdornment position="start"><FontAwesomeIcon icon="dollar-sign" /></InputAdornment>,
               }} 
