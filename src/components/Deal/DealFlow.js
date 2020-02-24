@@ -36,9 +36,11 @@ export default function InvestmentFlow ({ investment, deal, investor }) {
             className={`step step-wire ${status === "onboarded" ? "step-active" : ""}`}>Wire</div>
         </div>
         {status === "invited" && <DataRoom deal={deal} />}
-        {status === "pledged" && <Onboarding investment={investment} deal={deal} investor={investor} />}
         {status === "pledging" && <Pledging investment={investment} deal={deal} />}
         {status === "onboarded" && <Wire investment={investment} deal={deal} />}
+
+        {/** Always render Onboarding so that the Docusign loads in... **/}
+        <Onboarding status={status} investment={investment} deal={deal} investor={investor} />
       </Paper>
     </React.Fragment>
   )
@@ -113,7 +115,7 @@ function Pledging ({ investment, deal }) {
   )
 }
 
-function Onboarding ({ investment, deal, investor }) {
+function Onboarding ({ investment, deal, investor, status }) {
   const [loading, setLoading] = useState(true)
   const location = useLocation()
 
@@ -162,7 +164,7 @@ function Onboarding ({ investment, deal, investor }) {
     : `${deal.onboarding_link}&${urlParameters}`
 
   return (
-    <div className="document-iframe">
+    <div className={status === "pledged" ? "document-iframe" : "document-iframe hide"}>
       {loading && <div className="temp-loader"><Loader /></div>}
       <div className="external-sign-link">
         <a href={link} target="_blank" rel="noopener noreferrer">

@@ -130,6 +130,10 @@
             font-size: 1.3em;
         }
 
+        .document-iframe.hide {
+            display: none;
+        }
+
         .document-iframe {
             padding: 10px 20px;
             position: relative;
