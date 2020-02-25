@@ -219,28 +219,29 @@ function DealStub ({ deal }) {
 }
 
 function AdminTile ({ investor }) {
-  if (!investor.admin || !investor.organizations_admin || (investor.organizations_admin.length === 0)) return null
-
-  return (
-    <Col sm={{size: 8, offset: 2}}>
-      <div className="tile admin-tile">
-        <div className="small-header text-left">Admin &nbsp;&nbsp;{investor.admin && <Button variant="contained" size="small" color="secondary"><Link to="/admin/organizations/new">CREATE FUND MANAGER</Link></Button>}</div>
-        <Paper className="admin-table">
-          <Table>
-            <TableBody>
-              {(investor.organizations_admin || []).map(org => (
-                <TableRow key={org._id} className="admin-link">
-                  <TableCell>
-                    <Link to={`/admin/${org.slug}`}>
-                      {org.name} Admin <FontAwesomeIcon icon="arrow-right" />
-                    </Link>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Paper>
-      </div>
-    </Col>
-  )
+  if (investor.admin || (investor.organizations_admin || []).length > 0) {
+    return (
+      <Col sm={{size: 8, offset: 2}}>
+        <div className="tile admin-tile">
+          <div className="small-header text-left">Admin &nbsp;&nbsp;{investor.admin && <Button variant="contained" size="small" color="secondary"><Link to="/admin/organizations/new">CREATE FUND MANAGER</Link></Button>}</div>
+          <Paper className="admin-table">
+            <Table>
+              <TableBody>
+                {(investor.organizations_admin || []).map(org => (
+                  <TableRow key={org._id} className="admin-link">
+                    <TableCell>
+                      <Link to={`/admin/${org.slug}`}>
+                        {org.name} Admin <FontAwesomeIcon icon="arrow-right" />
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Paper>
+        </div>
+      </Col>
+    )
+  }
+  return null
 }
