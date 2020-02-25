@@ -51,8 +51,10 @@ export default function OrganizationNew () {
             label="Organization Name" 
             variant="filled" />
         </Col>
-        <Col md="4" sm="8">
-          <TextField style={{width: "100%"}} 
+      </Row>
+      <Row>
+        <Col md={{size: 4, offset: 1}} sm={{size: 8, offset: 0}}>
+          <TextField style={{width: "100%", marginBottom: "15px"}} 
             value={organization.slug}
             onChange={e => setOrg({ slug: e.target.value.replace(" ", "") })} 
             label="URL (no spaces)"
@@ -64,7 +66,7 @@ export default function OrganizationNew () {
       </Row>
       <Row>
         <Col md={{size: 4, offset: 1}}>
-          <Button variant="contained" disabled={!valid(organization)} onClick={submit}>CREATE</Button>
+          <Button variant="contained" color="primary" disabled={!valid(organization)} onClick={submit}>CREATE</Button>
         </Col>
       </Row>
     </div>

@@ -54,7 +54,7 @@ function Brand () {
   if (match && match.params.organization && !whitelist.includes(match.params.organization)) {
     return (
       <div className="brand" onClick={() => history.push(`/admin/${match.params.organization}`)}> 
-        <img height="60px" width="180px" 
+        <img height="60px" width="180px"
           alt={match.params.organization} 
           src={`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${match.params.organization}.png`} />
       </div>
