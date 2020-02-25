@@ -45,12 +45,12 @@ export default function InviteInvestors ({ deal, refetch }) {
         onChange={e => setSearchQ(e.target.value)} 
         label="Search Investors" />
 
-      {/**<Paper style={{marginBottom: "10px"}}>
+      <Paper style={{marginBottom: "10px"}}>
         <div className="email-invite" onClick={() => setEmailInviting(prev => !prev)}>
           Email Invite for Non Allocations Users &nbsp;<FontAwesomeIcon icon={emailInviting ? "angle-up" : "angle-down"} />
         </div>
         {emailInviting && <SendEmailInvites deal={deal} />}
-      </Paper>**/}
+      </Paper>
 
       <Paper className="table-wrapper" style={{marginBottom: "10px"}}>
         <Table>
@@ -111,6 +111,19 @@ function SendEmailInvites ({ deal }) {
         style={{verticalAlign: "middle"}}>
         SEND
       </Button>
+
+      <Paper className="email-invites-table" style={{ padding: "10px 5px", margin: "10px 0px" }}>
+        <Table>
+          <TableBody>
+            {(deal.emailInvites || []).map(invite => (
+              <TableRow key={invite.sent_at}>
+                <TableCell>{invite.to}</TableCell>
+                <TableCell>{invite.opened ? "Opened" : "Sent"} &nbsp;<FontAwesomeIcon icon={invite.opened ? "envelope-open-text" : "paper-plane"} /></TableCell>
+              </TableRow>
+            ))} 
+          </TableBody>
+        </Table>
+      </Paper>
     </div>
   )
 }

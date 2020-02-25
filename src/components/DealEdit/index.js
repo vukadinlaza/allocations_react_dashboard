@@ -4,7 +4,7 @@ import _, { get, isEqual } from "lodash"
 import { useParams } from "react-router-dom"
 import { Row, Col } from 'reactstrap'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { nWithCommas } from '../../utils/numbers'
+import { nWithCommas, formatDate } from '../../utils/numbers'
 import * as API from "../../api"
 import UserSearch from "../forms/UserSearch"
 import InviteInvestors from './InviteInvestors'
@@ -54,6 +54,13 @@ const GET_DEAL = gql`
           _id
           name
           email
+        }
+        emailInvites {
+          status
+          sent_at
+          to
+          opened
+          opened_at
         }
       }
     }
