@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { nWithCommas } from '../../utils/numbers'
 import * as API from "../../api"
 import UserSearch from "../forms/UserSearch"
+import InviteInvestors from './InviteInvestors'
 
 // wysiwyg editor
 import { Editor } from '@tinymce/tinymce-react';
@@ -88,13 +89,11 @@ const validInputs = ["_id","company_name","company_description","date_closed","d
 export default function DealEdit () {
   const { id, organization } = useParams()
   const [errorMessage, setErrorMessage] = useState(null)
-  const [searchQ, setSearchQ] = useState("")
   const [deal, setDeal] = useSimpleReducer({})
   const [showAddInvestment, setShowAddInvestment] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
   const { data, refetch, error } = useQuery(GET_DEAL, { variables: { id, slug: organization }})
   const [updateDeal] = useMutation(UPDATE_DEAL)
-  const [search, searchRes] = useLazyQuery(API.users.search)
 
   useEffect(() => {
     if (data) {
@@ -109,10 +108,6 @@ export default function DealEdit () {
   useEffect(() => {
     setHasChanges(data && !isEqual(deal, get(data, 'organization.deal')))
   }, [deal])
-
-  useEffect(() => {
-    search({ variables: { q: searchQ, org: organization } })
-  }, [searchQ])
 
   if (errorMessage) return <div className="Error">{errorMessage}</div>
   
@@ -282,26 +277,7 @@ export default function DealEdit () {
           </Col>
         </Row>
         <Row>
-          <Col lg={{size: 4, offset: 1}} md={{size: 8, offset: 1}} className="search-investors">
-            <div className="form-sub-title">Invited Investors</div>
-            <TextField style={{width: "100%", marginBottom: "10px"}} value={searchQ} onChange={e => setSearchQ(e.target.value)} label="Search Investors" variant="filled" />
-            <Paper className="table-wrapper" style={{marginBottom: "10px"}}>
-              <Table>
-                <TableBody>
-                  {(searchQ !== "" ? get(searchRes, 'data.searchUsers', []) : []).map(investor => (
-                    <AddInvestor key={investor._id} investor={investor} deal={deal} setSearchQ={setSearchQ} refetch={refetch} />
-                  ))}
-                </TableBody>
-              </Table>
-            </Paper>
-            <Paper className="table-wrapper">
-              <Table>
-                <TableBody>
-                  <InvitedInvestors deal={deal} refetch={refetch} />
-                </TableBody>
-              </Table>
-            </Paper>
-          </Col>
+          <InviteInvestors deal={deal} refetch={refetch} />
           <Col lg={{size: 5, offset: 0}} md={{size: 8, offset: 1}} className="investments">
             <div className="form-sub-title">
               Investments {showAddInvestment 
@@ -574,112 +550,4 @@ function AddInvestment ({ deal, show, refetch }) {
       </Button>
     </div>
   )
-}
-
-function InvitedInvestors ({ deal, refetch }) {
-  if (_.isEmpty(deal)) {
-    return (
-      <TableRow className="loading-table">
-        <TableCell><FontAwesomeIcon icon="circle-notch" spin /></TableCell>
-      </TableRow>
-    )
-  }
-
-  if (deal.allInvited) {
-    return (
-      <TableRow className="loading-table">
-        <TableCell><FontAwesomeIcon icon="users" /> All Users Invited</TableCell>
-      </TableRow>
-    )
-  }
-
-  if (get(deal, 'invitedInvestors.length', 0) === 0) {
-    return (
-      <TableRow className="invited-investors-none">
-        <TableCell>None</TableCell>
-      </TableRow>
-    )
-  }
-
-  return (
-    (deal.invitedInvestors || []).map(investor => (
-      <TableRow key={investor._id} sm={{size: 4, offset: 1}}>
-        <TableCell>{investor.name}</TableCell>
-        <TableCell>{investor.email}</TableCell>
-        <TableCell><RmInvestor investor={investor} deal={deal} refetch={refetch} /></TableCell>
-      </TableRow>
-    ))
-  )
-}
-
-const INVITE_INVESTOR = gql`
-  mutation InviteInvestor($org: String!, $user_id: String!, $deal_id: String!) {
-    inviteInvestor(org: $org, user_id: $user_id, deal_id: $deal_id) {
-      _id
-    }
-  }
-`
-
-const UNINVITE_INVESTOR = gql`
-  mutation UninviteInvestor($org: String!, $user_id: String!, $deal_id: String!) {
-    uninviteInvestor(org: $org, user_id: $user_id, deal_id: $deal_id) {
-      _id
-    }
-  }
-`
-
-function AddInvestor ({ investor, deal, setSearchQ, refetch }) {
-  const { organization: org } = useParams()
-  const [status, setStatus] = useState(null)
-  const [addInvestor, { data, loading }] = useMutation(INVITE_INVESTOR, { variables: { org, user_id: investor._id, deal_id: deal._id }})
-
-  useEffect(() => {
-    if (loading) setStatus("pending")
-    if (data) {
-      setStatus("done")
-      setSearchQ("")
-      refetch()
-    }
-  }, [data, loading])
-
-  let icon;
-  if (status === "pending") {
-    icon = { icon: "circle-notch", spin: true }
-  } else if (status === "done") {
-    icon = { icon: "check" }
-  } else {
-    icon = { icon: "plus-circle" }
-  }
-
-  return (
-    <TableRow sm={{size: 4, offset: 1}} onClick={() => addInvestor()} className="invited-investor">
-      <TableCell>{investor.name}</TableCell>
-      <TableCell>{investor.email}</TableCell>
-      <TableCell>
-        <FontAwesomeIcon {...icon} />
-      </TableCell>
-    </TableRow>
-  )
-}
-
-function RmInvestor ({ investor, deal, refetch }) {
-  const { organization: org } = useParams()
-  const [status, setStatus] = useState(null)
-  const [rmInvestor, { data, loading }] = useMutation(UNINVITE_INVESTOR, { variables: { org, user_id: investor._id, deal_id: deal._id }})
-
-  useEffect(() => {
-    if (loading) setStatus("pending")
-    if (data) {
-      setStatus("done")
-      refetch()
-    }
-  }, [data, loading])
-
-  if (status === "pending") {
-    return <FontAwesomeIcon icon="circle-notch" spin />
-  } else if (status === "done") {
-    return <FontAwesomeIcon icon="check" />
-  } else {
-    return <FontAwesomeIcon icon="times" onClick={() => rmInvestor()} />
-  }
 }

@@ -30,6 +30,8 @@ const icons = [
   Solid.faUsers,
   Solid.faUserShield,
   Solid.faDollarSign,
+  Solid.faAngleDown,
+  Solid.faAngleUp,
   Reg.faFilePdf
 ]
 
