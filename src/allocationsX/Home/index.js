@@ -12,40 +12,40 @@ export default function AllocationsX () {
         <h4>Volumetric</h4>
         <p>3d Printed Organs</p>
         <div className="info">
-          <span>
+          <span className="header-card">
             <div>Your SPV shares</div>
             <div>10,000</div>
           </span>
-          <span>
+          <span className="header-card">
             <div>Nominal Value of Your Holding</div>
             <div>$10,000</div>
           </span>
-          <span>
+          {/**<span className="header-card">
             <div>Estimated Current Value of your Holding</div>
             <div>$65,000</div>
           </span>
-          <span>
+          <span className="header-card">
             <div>Estimated Share Value</div>
             <div>$6.50</div>
-          </span>
-          <span>
+          </span>**/}
+          <span className="header-card">
             <div>Initial Share Price</div>
             <div>$1</div>
           </span>
-          <span>
+          <span className="header-card">
             <div>Last Trade Price</div>
-            <div>$3.50</div>
+            <div>-</div>
           </span>
         </div>
       </div>
-      {/**<Row>
+      <Row>
         <Col sm="5" md={{size: 4, offset: 1}}>
           <OrderForm />
         </Col>
-        <Col sm="7" md="6">
+        {/**<Col sm="7" md="6">
           <Stats />
-        </Col>
-      </Row>**/}  
+        </Col>**/}
+      </Row>  
       <Book />
     </div>
   )
@@ -63,7 +63,7 @@ function OrderForm () {
 
   return (
     <div className="OrderForm">
-      <FormControl variant="filled" style={{width: "25%", marginRight: "5%"}}>
+      <FormControl style={{width: "25%", marginRight: "5%"}}>
         <InputLabel>Side</InputLabel>
         <Select value={order.direction}
           onChange={e => setOrder({ direction: e.target.value })}
@@ -76,13 +76,11 @@ function OrderForm () {
         style={{width: "70%", marginBottom: "10px"}}
         onChange={e => setOrder({ price: e.target.value })}
         label="Shares"
-        variant="filled"
       />
       <TextField value={order.price}
         style={{width: "100%", marginBottom: "10px"}}
         onChange={e => setOrder({ price: e.target.value })}
         label="Price"
-        variant="filled"
         InputProps={{
           startAdornment: <InputAdornment position="start">$</InputAdornment>,
         }}

@@ -15,18 +15,20 @@
     }
 
     .info {
-        // position: absolute;
-        // top: 20px;
-        // left: 100px;
         display: inline-block;
         margin-left: -10px;
-        >span {
+        .header-card {
             display: inline-block;
             font-size: 0.9em;
-            padding: 5px 10px;
+            padding: 10px 20px;
+            margin-right: 15px;
             div:nth-child(2) {
-                font-size: 1.2em;
+                font-size: 1.4em;
             }
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 1px 1px 1px 1px #333;
+            color: #333;
         }
     }
 }
