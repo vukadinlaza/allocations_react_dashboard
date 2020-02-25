@@ -219,6 +219,8 @@ function DealStub ({ deal }) {
 }
 
 function AdminTile ({ investor }) {
+  if (!investor.admin || !investor.organizations_admin || (investor.organizations_admin.length === 0)) return null
+
   return (
     <Col sm={{size: 8, offset: 2}}>
       <div className="tile admin-tile">
