@@ -50,13 +50,17 @@ const whitelist = ["allocations", "organizations"]
 function Brand () {
   const history = useHistory()
   const match = useRouteMatch('/admin/:organization')
+  const dealMatch = useRouteMatch('/deals/:organization/:id')
 
-  if (match && match.params.organization && !whitelist.includes(match.params.organization)) {
+  const adminMatches = match && match.params.organization && !whitelist.includes(match.params.organization)
+  const dealMatches = dealMatch && dealMatch.params.organization && !whitelist.includes(dealMatch.params.organization)
+  if (adminMatches || dealMatches) {
+    const m = adminMatches ? match.params.organization : dealMatch.params.organization
     return (
-      <div className="brand" onClick={() => history.push(`/admin/${match.params.organization}`)}> 
+      <div className="brand" onClick={() => history.push(`/admin/${m}`)}> 
         <img height="60px" width="180px"
-          alt={match.params.organization} 
-          src={`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${match.params.organization}.png`} />
+          alt={m} 
+          src={`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${m}.png`} />
       </div>
     )
   }

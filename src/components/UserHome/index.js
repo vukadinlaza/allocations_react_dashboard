@@ -5,11 +5,11 @@ import { Link, useParams, useHistory, Redirect } from 'react-router-dom'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../../react-auth0-spa";
 import { Row, Container, Col } from 'reactstrap'
-import { Button, Fab, Paper } from '@material-ui/core' 
 import { nWithCommas} from '../../utils/numbers'
 import { validate } from '../forms/InvestorEdit'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAuth } from "../../auth/useAuth"
+import { Paper, Table, TableBody, TableCell, TableRow, TableHead, Button, Fab } from '@material-ui/core'
 
 import Loader from '../utils/Loader'
 import Chart from "react-google-charts"
@@ -113,8 +113,9 @@ export default function UserHome (props) {
   return (
     <Container fluid className="UserHome">
       <Row>
-        <SuperAdmin investor={investor} />
-        <AdminLinksPrompt investor={investor} />
+        <AdminTile investor={investor} />
+      </Row>
+      <Row>
         <CompleteInfoPrompt investor={investor} />
         <Col lg={{size: 3, offset: 2}} md={{size: 5, offset: 0}} sm={{size: 5, offset: 0}} className="welcome">
           <div className="tile tile-top">
@@ -205,19 +206,6 @@ function CompleteInfoPrompt ({ investor }) {
   return null
 }
 
-function SuperAdmin ({ investor }) {
-  if (!investor || !investor.admin) return null
-
-  return (
-    <Col lg={{size: 8, offset: 2}} md={{size: 10, offset: 1}} sm={{size: 12, offset: 0}}>
-      <div className="superadmin-cta">
-        <div>Super Admin</div>
-        <Button variant="contained" color="secondary"><Link to="/admin/organizations/new">CREATE FUND MANAGER</Link></Button>
-      </div>
-    </Col>
-  )
-}
-
 function DealStub ({ deal }) {
   const history = useHistory()
 
@@ -230,17 +218,26 @@ function DealStub ({ deal }) {
   )
 }
 
-function AdminLinksPrompt ({ investor }) {
+function AdminTile ({ investor }) {
   return (
     <Col sm={{size: 8, offset: 2}}>
-      <div className="admin-links">
-        {(investor.organizations_admin || []).map(org => (
-          <div key={org._id} className="admin-link">
-            <Link to={`/admin/${org.slug}`}>
-              {org.name} Admin <FontAwesomeIcon icon="arrow-right" />
-            </Link>
-          </div>
-        ))}
+      <div className="tile admin-tile">
+        <div className="small-header text-left">Admin &nbsp;&nbsp;{investor.admin && <Button variant="contained" size="small" color="secondary"><Link to="/admin/organizations/new">CREATE FUND MANAGER</Link></Button>}</div>
+        <Paper className="admin-table">
+          <Table>
+            <TableBody>
+              {(investor.organizations_admin || []).map(org => (
+                <TableRow key={org._id} className="admin-link">
+                  <TableCell>
+                    <Link to={`/admin/${org.slug}`}>
+                      {org.name} Admin <FontAwesomeIcon icon="arrow-right" />
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
       </div>
     </Col>
   )
