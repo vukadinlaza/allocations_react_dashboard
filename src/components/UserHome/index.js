@@ -85,6 +85,9 @@ const GET_INVESTOR = gql`
         company_description
         date_closed
         status
+        organization {
+          slug
+        }
       }
     }
   }
@@ -208,9 +211,12 @@ function CompleteInfoPrompt ({ investor }) {
 
 function DealStub ({ deal }) {
   const history = useHistory()
+  const link = deal.organization 
+    ? `/deals/${deal.organization.slug}/${deal.company_name}`
+    : `/deals/${deal.company_name}`
 
   return (
-    <Paper key={deal._id} className="deal-stub" onClick={() => history.push(`/deals/${deal.company_name}`)}>
+    <Paper key={deal._id} className="deal-stub" onClick={() => history.push(link)}>
       <span>{deal.company_name}</span>
       <span>{deal.date_closed || "TBD"}</span>
       <span className="deal-status" data-status={deal.status}>{deal.status}</span>

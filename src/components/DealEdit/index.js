@@ -262,26 +262,7 @@ export default function DealEdit () {
           </Col>
         </Row>
         <Row>
-          <Col sm={{size: 8, offset: 1}} style={{marginBottom: "10px"}}>
-            <TextField
-              style={{width: "100%"}}
-              label="Public Link" 
-              value={`dashboard.allocations.co/public/${organization}/deals/${encodeURI(deal.company_name)}?invite_code=${deal.inviteKey}`}
-              InputProps={{
-                endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(`dashboard.allocations.co/public/${organization}/deals/${encodeURI(deal.company_name)}?invite_code=${deal.inviteKey}`)} /></InputAdornment>,
-              }}
-              variant="filled" />
-          </Col>
-          <Col sm={{size: 8, offset: 1}}>
-            <TextField 
-              style={{width: "100%"}}
-              label="Existing user link" 
-              value={`dashboard.allocations.co/deals/${encodeURI(deal.company_name)}`}
-              InputProps={{
-                endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(`dashboard.allocations.co/deals/${encodeURI(deal.company_name)}`)} /></InputAdornment>,
-              }}
-              variant="filled" />
-          </Col>
+          <DealLinks deal={deal} />
         </Row>
         <Row>
           <InviteInvestors deal={deal} refetch={refetch} />
@@ -305,6 +286,39 @@ export default function DealEdit () {
         </Row>
       </form>
     </div>
+  )
+}
+
+function DealLinks ({ deal }) {
+  const { organization } = useParams()
+  const pubLink = `dashboard.allocations.com/public/${organization}/deals/${encodeURI(deal.company_name)}?invite_code=${deal.inviteKey}`
+  const appLink = organization && organization !== "allocations"
+    ? `dashboard.allocations.com/deals/${organization}/${encodeURI(deal.company_name)}`
+    : `dashboard.allocations.com/deals/${encodeURI(deal.company_name)}`
+
+  return (
+    <React.Fragment>
+      <Col sm={{size: 8, offset: 1}} style={{marginBottom: "10px"}}>
+        <TextField
+          style={{width: "100%"}}
+          label="Public Link" 
+          value={pubLink}
+          InputProps={{
+            endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(pubLink)} /></InputAdornment>,
+          }}
+          variant="filled" />
+      </Col>
+      <Col sm={{size: 8, offset: 1}}>
+        <TextField 
+          style={{width: "100%"}}
+          label="Existing user link" 
+          value={appLink}
+          InputProps={{
+            endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(appLink)} /></InputAdornment>,
+          }}
+          variant="filled" />
+      </Col>
+    </React.Fragment>
   )
 }
 

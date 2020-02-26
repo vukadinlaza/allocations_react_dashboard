@@ -29,6 +29,9 @@ const GET_INVESTOR = gql`
         onboarding_link
         date_closed
         deal_lead
+        organization {
+          slug
+        }
       }
     }
   }
@@ -74,20 +77,7 @@ export default function InvitedDeals () {
               </TableHead>
               <TableBody>
                 {investor.invitedDeals.map(deal => (
-                  <TableRow key={deal._id}>
-                    <TableCell>{deal.company_name}</TableCell>
-                    <Hidden xsDown><TableCell>{deal.company_description}</TableCell></Hidden>
-                    <Hidden xsDown><TableCell>{deal.status}</TableCell></Hidden>
-                    <TableCell>{formatDate(deal.date_closed)}</TableCell>
-                    <Hidden xsDown><TableCell>{deal.deal_lead}</TableCell></Hidden>
-                    <TableCell align="center">
-                      <Link to={`/deals/${deal.company_name}`}>
-                        <Button variant="contained" style={{backgroundColor: "#53B987", color: "#fff"}}>
-                          Invest&nbsp;<FontAwesomeIcon icon="arrow-right" />
-                        </Button>
-                      </Link> 
-                    </TableCell>
-                  </TableRow>
+                  <DealRow key={deal._id} deal={deal} />
                 ))}
               </TableBody>
             </Table>
@@ -95,5 +85,27 @@ export default function InvitedDeals () {
         </Col>
       </Row>
     </div>
+  )
+}
+
+function DealRow ({ deal }) {
+  const link = deal.organization 
+    ? `/deals/${deal.organization.slug}/${deal.company_name}`
+    : `/deals/${deal.company_name}`
+  return (
+    <TableRow>
+      <TableCell>{deal.company_name}</TableCell>
+      <Hidden xsDown><TableCell>{deal.company_description}</TableCell></Hidden>
+      <Hidden xsDown><TableCell>{deal.status}</TableCell></Hidden>
+      <TableCell>{formatDate(deal.date_closed)}</TableCell>
+      <Hidden xsDown><TableCell>{deal.deal_lead}</TableCell></Hidden>
+      <TableCell align="center">
+        <Link to={link}>
+          <Button variant="contained" style={{backgroundColor: "#53B987", color: "#fff"}}>
+            Invest&nbsp;<FontAwesomeIcon icon="arrow-right" />
+          </Button>
+        </Link> 
+      </TableCell>
+    </TableRow>
   )
 }
