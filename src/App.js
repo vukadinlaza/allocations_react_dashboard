@@ -21,6 +21,8 @@ import InvestmentNew from './components/InvestmentNew';
 import InvestmentEdit from './components/InvestmentEdit';
 import UserInvestments from './components/UserInvestments';
 import AllocationsX from './allocationsX/Home';
+import DealExchange from './allocationsX/DealExchange'
+
 import Profile from './components/Profile';
 import OrganizationNew from './components/OrganizationNew'
 
@@ -74,7 +76,10 @@ const App = () => {
 
                 <PrivateRoute path="/deals/:id" component={Deal} exact />
                 <PrivateRoute path="/deals/:organization/:id" component={Deal} exact />
+
+                {/** AllocationsX **/}
                 <PrivateRoute path="/exchange" component={AllocationsX} exact />
+                <PrivateRoute path="/exchange/:deal" component={DealExchange} exact />
 
                 <AdminRoute path="/investor/:id/home" component={UserHome} />
                 <AdminRoute path="/investor/:id/investments" component={UserInvestments} />

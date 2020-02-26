@@ -1,61 +1,8 @@
-@import "../../App.scss";
-
-.AllocationsX-header {
-    background-color: $brandblue;
-    color: #fff;
-
-    margin-left: -15px;
-    margin-right: -15px;
-    margin-top: -80px;
-    padding: 30px 30px 15px 30px;
-    margin-bottom: 15px;
-
-    p {
-        font-size: 1.3em;
+.AllocationsX-Home {
+    .deal-org {
+        color: #a7a7a7;
     }
-
-    .info {
-        display: inline-block;
-        margin-left: -10px;
-        .header-card {
-            display: inline-block;
-            font-size: 0.9em;
-            padding: 10px 20px;
-            margin-right: 15px;
-            div:nth-child(2) {
-                font-size: 1.4em;
-            }
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 1px 1px 1px 1px #333;
-            color: #333;
-        }
-    }
-}
-
-.AllocationsX-home {
-    .Book-header {
-        // background-color: $softblue;
-        font-size: 1.3em;
-        padding: 10px 15px 10px 15px;
-    }
-
-    .Book-side-wrapper {
-        // margin: 10px;
-    }
-
-    .Book-side th {
-        padding-top: 4px;
-        padding-bottom: 4px;
-    }
-
-    .buy-button {
-        background-color: $green;
+    .trade-btn a {
         color: #fff;
-    }
-
-    .OrderForm {
-        // border: 1px solid ;
-        padding: 15px 0px;
     }
 }
