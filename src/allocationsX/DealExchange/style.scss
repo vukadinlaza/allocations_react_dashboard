@@ -33,6 +33,12 @@
     }
 }
 
+.Book {
+    .price {
+        font-size: 1.1em;
+    }
+}
+
 .AllocationsX-home {
     .Book-header {
         // background-color: $softblue;
@@ -56,6 +62,18 @@
 
     .OrderForm {
         // border: 1px solid ;
-        padding: 15px 0px;
+        padding: 15px 25px;
+        margin-bottom: 15px;
+
+        .order-details {
+            margin: 10px 0px;
+            text-align: center;
+            padding: 10px;
+            background-color: $softblue;
+            border-radius: 5px;
+            >span {
+                font-size: 1.2em;
+            }
+        }
     }
 }
