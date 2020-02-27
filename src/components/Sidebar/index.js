@@ -55,14 +55,8 @@ function Brand () {
   const adminMatches = match && match.params.organization && !whitelist.includes(match.params.organization)
   const dealMatches = dealMatch && dealMatch.params.organization && !whitelist.includes(dealMatch.params.organization)
   if (adminMatches || dealMatches) {
-    const m = adminMatches ? match.params.organization : dealMatch.params.organization
-    return (
-      <div className="brand" onClick={() => history.push(`/admin/${m}`)}> 
-        <img height="60px" width="180px"
-          alt={m} 
-          src={`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${m}.png`} />
-      </div>
-    )
+    const slug = adminMatches ? match.params.organization : dealMatch.params.organization
+    return <OrgLogo slug={slug} />
   }
 
   return (
@@ -71,6 +65,38 @@ function Brand () {
       <span className="beta">beta</span>
     </div>
   ) 
+}
+
+function deSlugify(slug) {
+  try {
+    return slug.split('-').map(str => `${str[0].toUpperCase()}${str.slice(1)}`).join(' ')
+  } catch (e) {
+    return slug
+  }
+}
+
+function OrgLogo ({ slug }) {
+  const history = useHistory()
+  const [img, setImg] = useState(`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${slug}.png`)
+
+  if (!img) {
+    return (
+      <div className="brand" onClick={() => history.push(`/admin/${slug}`)}> 
+        <span style={{height: "60px", width: "180px", textAlign: "center", fontSize: "1.5em"}}>
+          <b>{deSlugify(slug)}</b>
+        </span>
+      </div>
+    )
+  }
+
+  return (
+    <div className="brand" onClick={() => history.push(`/admin/${slug}`)}> 
+      <img height="60px" width="180px"
+        alt={slug}
+        onError={() => setImg(null)} 
+        src={img} />
+    </div>
+  )
 }
 
 function Footer () {
