@@ -34,7 +34,7 @@ export default function Funds () {
 
   return (
     <Col sm={{size: 8, offset: 2}}>
-      <Paper className="Funds" style={{paddingBottom: "25px"}}>
+      <div className="Funds" style={{paddingBottom: "25px"}}>
         <div className="small-header text-left">Funds Admin &nbsp;&nbsp;{investor.admin && <Button variant="contained" size="small" color="secondary"><Link to="/admin/organizations/new">CREATE FUND MANAGER</Link></Button>}</div>
         <Paper className="funds-table" style={{margin: "15px"}}>
           <Table>
@@ -52,7 +52,7 @@ export default function Funds () {
             </TableBody>
           </Table>
         </Paper>
-      </Paper>
+      </div>
     </Col>
   )
 }
