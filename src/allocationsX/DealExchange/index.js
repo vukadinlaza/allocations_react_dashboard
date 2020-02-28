@@ -171,7 +171,7 @@ function OrderForm () {
         }}
       />
       <div className="order-details">
-        <span>Cost: ${nWithCommas(order.cost.toFixed(0))}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+        <span>Total Amount: ${nWithCommas(order.cost.toFixed(0))}</span>&nbsp;&nbsp;&nbsp;&nbsp;
         <Button variant="contained" size="small" color="primary">SUBMIT</Button>
       </div>
     </Paper>
