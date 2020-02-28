@@ -91,6 +91,9 @@
                 padding: 10px 20px;
                 color: #a7a7a7;
                 cursor: pointer;
+                @include xs-only {
+                    padding: 6px 12px;
+                }
             }
             .step-data-room {
                 border: 1px solid #a7a7a7;
@@ -169,11 +172,19 @@
             }        
         }
 
-        .pledging {
+        .wire {
+            .wire-link {
+                @include xs-only {
+                    margin: 5px 10px;
+                }
+            }
+        }
+
+        .pledging, .wire {
             text-align: center;
         }
 
-        .pledge-link {
+        .pledge-link, .wire-link {
             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
             border-radius: 5px;
             padding: 10px 25px;

@@ -90,14 +90,16 @@ function Wire ({ investment, deal }) {
     : defaultWireLink
 
   return (
-    <div className="pledging">
-      <div className="pledge-link">
+    <div className="wire">
+      <div className="wire-link">
         <div style={{marginBottom: "15px"}}>
           <FontAwesomeIcon icon={["far", "file-pdf"]} />
           <a href={link} target="_blank" rel="noopener noreferrer">Wire Instructions</a>
         </div>
-        <div className="embed-responsive embed-responsive-1by1">
-          <iframe className="embed-responsive-item" title="Onboarding Document" src={link}></iframe>
+        <div className="wire-doc-iframe">
+          <div className="embed-responsive embed-responsive-1by1">
+            <iframe className="embed-responsive-item" title="Onboarding Document" src={link}></iframe>
+          </div>
         </div>
       </div>
     </div>
@@ -127,7 +129,7 @@ function Onboarding ({ investment, deal, investor, status }) {
 
   if (!deal.onboarding_link) {
     return (
-      <div className="waiting tile">Hang tight! ⌛<br/>Onboarding link coming soon</div>
+      <div className="waiting tile" style={{display: status === "pledged" ? "block" : "none"}}>Hang tight! ⌛<br/>Onboarding link coming soon</div>
     )
   }
 
