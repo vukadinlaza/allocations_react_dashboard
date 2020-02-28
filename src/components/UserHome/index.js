@@ -229,22 +229,12 @@ function AdminTile ({ investor }) {
     return (
       <Col sm={{size: 8, offset: 2}}>
         <div className="tile admin-tile">
-          <div className="small-header text-left">Admin &nbsp;&nbsp;{investor.admin && <Button variant="contained" size="small" color="secondary"><Link to="/admin/organizations/new">CREATE FUND MANAGER</Link></Button>}</div>
-          <Paper className="admin-table">
-            <Table>
-              <TableBody>
-                {(investor.organizations_admin || []).map(org => (
-                  <TableRow key={org._id} className="admin-link">
-                    <TableCell>
-                      <Link to={`/admin/${org.slug}`}>
-                        {org.name} Admin <FontAwesomeIcon icon="arrow-right" />
-                      </Link>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Paper>
+          <div className="text-center">
+            You are a Fund Manager &nbsp;&nbsp;
+            <Button variant="contained" size="small" color="secondary">
+              <Link to="/admin/funds">My Funds 🗂</Link>
+            </Button>
+          </div>
         </div>
       </Col>
     )

@@ -90,6 +90,7 @@ const App = () => {
                 <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
 
                 {/** Whitelabel Routes **/}
+                <PrivateRoute path="/admin/funds" component={Funds} exact />
                 <PrivateRoute path="/admin/:organization" component={AdminHome} exact />
 
                 <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />

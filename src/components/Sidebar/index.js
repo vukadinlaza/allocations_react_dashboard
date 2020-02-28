@@ -40,6 +40,11 @@ export default function Sidebar ({ showSidebar, setShowSidebar }) {
           <span>Profile</span>
         </Link>
       </div>
+      {admin && <div className={`sidebar-nav-item ${location.pathname === "/admin/funds" ? "sidebar-nav-item-active" : ""}`}>
+        <Link to="/admin/funds">
+          <span>Funds</span>
+        </Link>
+      </div>}
       {admin && <AdminLinks location={location} />}
       <Footer />
     </Col>
