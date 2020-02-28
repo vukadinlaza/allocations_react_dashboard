@@ -89,7 +89,7 @@ function Wire ({ investment, deal }) {
     : null
 
   if (!link) {
-    return <div className="wire">Contact For Wire Details</div>
+    return <div className="wire" style={{padding: "20px"}}>Contact For Wire Details</div>
   }
 
   return (
