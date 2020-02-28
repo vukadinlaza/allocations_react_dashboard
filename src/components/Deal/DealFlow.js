@@ -83,11 +83,14 @@ function InvestmentOverview ({ investment }) {
   )
 }
 
-const defaultWireLink = "https://allocations-public.s3.us-east-2.amazonaws.com/wire_instructions.pdf"
 function Wire ({ investment, deal }) {
   const link = deal.documents && deal.documents.find(d => d.path === "wire-instructions") 
     ? "https://" + deal.documents.find(d => d.path === "wire-instructions").link
-    : defaultWireLink
+    : null
+
+  if (!link) {
+    return <div className="wire">Contact For Wire Details</div>
+  }
 
   return (
     <div className="wire">
