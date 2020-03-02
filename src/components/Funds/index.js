@@ -43,7 +43,9 @@ export default function Funds () {
                 <TableRow key={org._id} className="admin-link">
                   <TableCell>
                     <OrgLogo org={org} />&nbsp;&nbsp;&nbsp;&nbsp;
-                      {org.name} Admin &nbsp;&nbsp;
+                      {org.name} Admin
+                  </TableCell>
+                  <TableCell>
                     <Button variant="contained" size="small" color="primary"><Link to={`/admin/${org.slug}`}>Manage</Link></Button>
                   </TableCell>
                 </TableRow>
