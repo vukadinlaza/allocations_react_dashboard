@@ -173,6 +173,11 @@
         }
 
         .wire {
+            .crypto-wire {
+                padding: 10px;
+                font-size: 1.1em;
+            }
+
             .wire-link {
                 @include xs-only {
                     margin: 5px 10px;

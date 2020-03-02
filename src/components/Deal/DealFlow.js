@@ -94,6 +94,9 @@ function Wire ({ investment, deal }) {
 
   return (
     <div className="wire">
+      <div className="crypto-wire">
+        If you would like to wire with crypto contact us on Slack
+      </div>
       <div className="wire-link">
         <div style={{marginBottom: "15px"}}>
           <FontAwesomeIcon icon={["far", "file-pdf"]} />
