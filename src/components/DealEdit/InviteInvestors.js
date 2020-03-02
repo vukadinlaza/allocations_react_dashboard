@@ -37,7 +37,7 @@ export default function InviteInvestors ({ deal, refetch }) {
   }, [searchQ])
 
   return (
-    <Col lg={{size: 4, offset: 1}} md={{size: 8, offset: 1}} className="search-investors">
+    <Col lg={{size: 5, offset: 1}} md={{size: 8, offset: 1}} className="search-investors">
       <div className="form-sub-title">Invited Investors</div>
       <TextField variant="filled"
         style={{width: "100%", marginBottom: "10px"}} 
@@ -49,7 +49,7 @@ export default function InviteInvestors ({ deal, refetch }) {
         <div className="email-invite" onClick={() => setEmailInviting(prev => !prev)}>
           Email Invite for Non Allocations Users &nbsp;<FontAwesomeIcon icon={emailInviting ? "angle-up" : "angle-down"} />
         </div>
-        {emailInviting && <SendEmailInvites deal={deal} />}
+        {emailInviting && <SendEmailInvites deal={deal} refetch={refetch} />}
       </Paper>
 
       <Paper className="table-wrapper" style={{marginBottom: "10px"}}>
@@ -80,14 +80,10 @@ const SEND_INVITE = gql`
   }
 `
 
-function SendEmailInvites ({ deal }) {
+function SendEmailInvites ({ deal, refetch }) {
   const { organization } = useParams()
   const [email, setEmail] = useState("")
-  const [sendInvite, { data, error }] = useMutation(SEND_INVITE)
-
-  useEffect(() => {
-
-  }, [data])
+  const [sendInvite, { data, error }] = useMutation(SEND_INVITE, { onCompleted: refetch })
 
   const submit = () => {
     if (/^.+@.+\..+$/.test(email)) {
@@ -97,6 +93,7 @@ function SendEmailInvites ({ deal }) {
 
   if (error) return <div>{error.message}</div>
 
+  const invitedInvestors = (_.get(deal, 'invitedInvestors') || []).map(i => i.email)
   return (
     <div className="send-email-invites">
       <TextField value={email} 
@@ -115,7 +112,9 @@ function SendEmailInvites ({ deal }) {
       <Paper className="email-invites-table" style={{ padding: "10px 5px", margin: "10px 0px" }}>
         <Table>
           <TableBody>
-            {(deal.emailInvites || []).map(invite => (
+            {(deal.emailInvites || []).filter(invite => {
+              return !invitedInvestors.includes(invite.to)
+            }).map(invite => (
               <TableRow key={invite.sent_at}>
                 <TableCell>{invite.to}</TableCell>
                 <TableCell>{invite.opened ? "Opened" : "Sent"} &nbsp;<FontAwesomeIcon icon={invite.opened ? "envelope-open-text" : "paper-plane"} /></TableCell>
@@ -155,12 +154,39 @@ function InvitedInvestors ({ deal, refetch }) {
 
   return (
     (deal.invitedInvestors || []).map(investor => (
-      <TableRow key={investor._id} sm={{size: 4, offset: 1}}>
-        <TableCell>{investor.name}</TableCell>
-        <TableCell>{investor.email}</TableCell>
-        <TableCell><RmInvestor investor={investor} deal={deal} refetch={refetch} /></TableCell>
-      </TableRow>
+      <InvitedInvestor key={investor._id} investor={investor} deal={deal} refetch={refetch} /> 
     ))
+  )
+}
+
+function InvitedInvestor ({ investor, deal, refetch }) {
+  const { organization } = useParams()
+  const [sendInvite, { data, error }] = useMutation(
+    SEND_INVITE, 
+    {
+      variables: { org: organization, deal_id: deal._id, email: investor.email },
+      onCompleted: refetch 
+    }
+  )
+
+  const invite = (deal.emailInvites || []).find(i => i.to === investor.email)
+  const emailSection = invite
+    ? <Button size="small" className="sent-invite" endIcon={<FontAwesomeIcon icon="paper-plane" />}>Sent </Button>
+    : <Button color="secondary" size="small" className="send-invite"
+        variant="contained" 
+        onClick={() => sendInvite()} 
+        endIcon={<FontAwesomeIcon icon="envelope" />}>
+        Send
+      </Button>
+    
+
+  return (
+    <TableRow sm={{size: 4, offset: 1}}>
+      <TableCell>{investor.name}</TableCell>
+      <TableCell>{investor.email}</TableCell>
+      <TableCell>{emailSection}</TableCell>
+      <TableCell><RmInvestor investor={investor} deal={deal} refetch={refetch} /></TableCell>
+    </TableRow>
   )
 }
 
