@@ -66,8 +66,7 @@ function Brand () {
 
   return (
     <div className="brand" onClick={() => history.push('/')}>
-      <img src="https://www.allocations.co/assets/img/brand.svg" alt="allocations" style={{height:'40px'}} />
-      <span className="beta">beta</span>
+      <img src="https://allocations-public.s3.us-east-2.amazonaws.com/logo.png" alt="allocations" style={{height: "70px", width: "210px"}} />
     </div>
   ) 
 }
