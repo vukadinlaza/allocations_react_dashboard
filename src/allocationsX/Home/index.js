@@ -27,16 +27,30 @@ export default function AllocationsX () {
 
   if (!data) return <Loader />
 
+  const sortedDeals = _.orderBy(data.exchangeDeals, ({ slug }) => slug === "oncosenx", "desc")
+
   return (
     <div className="AllocationsX-Home">
       <Row>
-        <Col md={{size: 6, offset: 2}} sm={{size: 10, offset: 1}}>
+        <Col md={{size: 8, offset: 1}} sm={{size: 10, offset: 1}}>
           <Paper>
             <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell className="text-center">Company</TableCell>
+                  <TableCell>Volume</TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
+              </TableHead>
               <TableBody>
-                {data.exchangeDeals.map(deal => (
+                {sortedDeals.map(deal => (
                   <TableRow key={deal._id}>
-                    <TableCell>{deal.company_name} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="deal-org">{_.get(deal, 'organization.name', 'Allocations')}</span></TableCell>
+                    <TableCell>
+                      <DealLogo deal={deal} />
+                    </TableCell>
+                    <TableCell>
+                      {deal.slug === "oncosenx" ? <span className="volume">$30,000</span> : ""}
+                    </TableCell>
                     <TableCell>
                       <Button variant="contained" className="trade-btn" style={{backgroundColor: "#53B987", color: "#fff"}}>
                         <Link to={`/exchange/${deal.slug}`}>Trade &nbsp;<FontAwesomeIcon icon="arrow-right" /></Link>
@@ -49,6 +63,28 @@ export default function AllocationsX () {
           </Paper>
         </Col>
       </Row>
+    </div>
+  )
+}
+
+const BASE_URL = "https://allocations-public.s3.us-east-2.amazonaws.com"
+function DealLogo ({ deal }) {
+  const [err, setErr] = useState(null)
+
+  if (err) {
+    return (
+      <div className="deal-logo"> 
+        <span style={{height: "30px", width: "150px"}}>
+          <b>{deal.company_name}</b>
+        </span>
+      </div>
+    )
+  }
+
+  return (
+    <div className="deal-logo">
+      <img width="150px" height="40px"
+        src={`${BASE_URL}/deals/${deal.slug}.png`} onError={setErr} />
     </div>
   )
 }
