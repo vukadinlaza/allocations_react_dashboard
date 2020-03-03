@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { isEqual } from "lodash"
-import { Redirect, useParams } from "react-router-dom"
+import { useParams, useHistory } from "react-router-dom"
 import { TextField } from '@material-ui/core'
 import { Row, Col } from 'reactstrap'
 import { useSimpleReducer } from '../../utils/hooks'
@@ -20,18 +20,18 @@ const CREATE_DEAL = gql`
 `
 
 export default function DealNew () {
+  const history = useHistory()
   const { organization } = useParams()
   const [deal, setDeal] = useSimpleReducer({})
   const [hasChanges, setHasChanges] = useState(false)
-  const [createDeal, createDealRes] = useMutation(CREATE_DEAL)
+  const [createDeal] = useMutation(CREATE_DEAL, { 
+    refetchQueries: ['GetOrg'],
+    onCompleted: ({createDeal}) => history.push(`/admin/${organization}/deals/${createDeal._id}/edit`) 
+  })
 
   useEffect(() => {
     setHasChanges(!isEqual(deal, {}))
   }, [deal])
-
-  if (createDealRes.data) {
-    return <Redirect to={`/admin/${organization}/deals/${createDealRes.data.createDeal._id}/edit`} />
-  }
   
   return (
     <div className="DealEdit form-wrapper">
