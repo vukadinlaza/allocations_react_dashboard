@@ -15,6 +15,7 @@ const GET_MEMBERS = gql`
     organizationMembers(slug: $slug) {
       _id
       name
+      email
       investor_type
       first_name
       last_name
@@ -66,6 +67,7 @@ export default function OrganizationMembers () {
                 {data.organizationMembers.map(member => (
                   <TableRow key={member._id}>
                     <TableCell>{member.name} {(member.first_name && member.investor_type === "entity") ? `[${member.first_name} ${member.last_name}]` : "" }</TableCell>
+                    <TableCell>{member.email}</TableCell>
                     <TableCell>
                       <Button color="secondary"
                         variant="contained"
