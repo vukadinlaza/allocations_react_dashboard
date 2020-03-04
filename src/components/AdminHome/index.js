@@ -56,6 +56,10 @@ const ORG = gql`
         }
       }
     }
+    investor {
+      _id
+      admin
+    }
   }
 `
 
@@ -78,6 +82,7 @@ export default function AdminHome () {
   const org = data.organization
   return (
     <div className="AdminHome">
+      {data.investor.admin && <SuperAdmin org={org} />}
       <Row>
         <Col sm={{size: 3, offset: 2}}>
           <Paper className="welcome">
@@ -147,6 +152,18 @@ export default function AdminHome () {
         </Col>
       </Row>
     </div>
+  )
+}
+
+function SuperAdmin ({ org }) {
+  return (
+    <Row>
+      <Col sm={{size: 8, offset: 2}}>
+        <Paper className="superadmin-section" style={{marginBottom: "20px", padding: "10px", textAlign: "center"}}>
+          You are a SuperAdmin &nbsp;<Button size="small" variant="contained" color="secondary"><Link to={`/admin/${org.slug}/members`}>Manage Admin Members</Link></Button>
+        </Paper>
+      </Col>
+    </Row>
   )
 }
 

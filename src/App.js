@@ -25,6 +25,7 @@ import DealExchange from './allocationsX/DealExchange'
 
 import Profile from './components/Profile';
 import OrganizationNew from './components/OrganizationNew'
+import OrganizationMembers from './components/OrganizationMembers'
 
 import AdminHome from './components/AdminHome'
 
@@ -92,6 +93,7 @@ const App = () => {
                 {/** Whitelabel Routes **/}
                 <PrivateRoute path="/admin/funds" component={Funds} exact />
                 <PrivateRoute path="/admin/:organization" component={AdminHome} exact />
+                <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
 
                 <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
                 <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />
