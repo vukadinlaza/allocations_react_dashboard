@@ -80,6 +80,9 @@ export default function AdminHome () {
   if (!data) return <Loader />
 
   const org = data.organization
+
+  const { active, closed } = _.groupBy(org.deals, d => d.status === "closed" ? "closed" : "active")
+
   return (
     <div className="AdminHome">
       {data.investor.admin && <SuperAdmin org={org} />}
@@ -95,12 +98,12 @@ export default function AdminHome () {
         </Col>
         <Col sm={{size: 5, offset: 0}}>
           <Paper className="deals" style={{padding: "10px 15px"}}>
-            <div className="deals-title">💡 Active Deals &nbsp;<span className="deals-length">{org.deals.length}</span> <Button className="all-btn" variant="contained" color="secondary" style={{padding: "3px 4px"}}><Link to={`/admin/${organization}/deals`}>All</Link></Button></div>
+            <div className="deals-title">💡 Active Deals &nbsp;<span className="deals-length">{active.length}</span> <Button className="all-btn" variant="contained" color="secondary" style={{padding: "3px 4px"}}><Link to={`/admin/${organization}/deals`}>All</Link></Button></div>
             <hr></hr>
             <Paper className="deals-table" style={{marginBottom: "10px"}}>
               <Table>
                 <TableBody>
-                  {org.deals.map(deal => (
+                  {active.map(deal => (
                     <Deal key={deal._id} deal={deal} />
                   ))}
                 </TableBody>
@@ -109,17 +112,18 @@ export default function AdminHome () {
           </Paper>
         </Col>
         <Col sm={{size: 4, offset: 2}}>
-          <Paper className="investors">
-            <div className="tile-header">Top Investors 🐳 <Button className="all-btn" variant="contained" color="secondary" style={{padding: "3px 4px"}}><Link to={`/admin/${organization}/investors`}>All</Link></Button></div>
+          <Paper className="deals-closed" style={{padding: "10px 15px", marginTop: "20px"}}>
+            <div className="deals-title">Closed Deals 🎉 &nbsp;<span className="deals-length">{closed.length}</span> <Button className="all-btn" variant="contained" color="secondary" style={{padding: "3px 4px"}}><Link to={`/admin/${organization}/deals`}>All</Link></Button></div>
             <hr></hr>
-            <Paper>
+            <Paper className="deals-table" style={{marginBottom: "10px"}}>
               <div className="scroll-wrapper">
                 <Table>
                   <TableBody>
-                    {_.orderBy((org.investors || []), investor => sumOrgInvestments({ investor, deals: org.deals }), 'desc').map((investor, i) => (
-                      <TableRow key={investor._id}>
-                        <TableCell>{investor.name} {i === 0 && "👑"}</TableCell>
-                        <TableCell>${nWithCommas(sumOrgInvestments({ investor, deals: org.deals })) || 0} invested</TableCell>
+                    {closed.map(deal => (
+                      <TableRow key={deal._id} className="deal-info">
+                        <TableCell className="company-name">{deal.company_name}</TableCell>
+                        <TableCell>${nWithCommas(deal.amount_raised)}</TableCell>
+                        <TableCell><i>closed {formatDate(deal.date_closed)}</i></TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
