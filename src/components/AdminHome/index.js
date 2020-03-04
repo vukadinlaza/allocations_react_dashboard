@@ -98,12 +98,12 @@ export default function AdminHome () {
         </Col>
         <Col sm={{size: 5, offset: 0}}>
           <Paper className="deals" style={{padding: "10px 15px"}}>
-            <div className="deals-title">💡 Active Deals &nbsp;<span className="deals-length">{active.length}</span> <Button className="all-btn" variant="contained" color="secondary" style={{padding: "3px 4px"}}><Link to={`/admin/${organization}/deals`}>All</Link></Button></div>
+            <div className="deals-title">💡 Active Deals &nbsp;<span className="deals-length">{(active || []).length}</span> <Button className="all-btn" variant="contained" color="secondary" style={{padding: "3px 4px"}}><Link to={`/admin/${organization}/deals`}>All</Link></Button></div>
             <hr></hr>
             <Paper className="deals-table" style={{marginBottom: "10px"}}>
               <Table>
                 <TableBody>
-                  {active.map(deal => (
+                  {(active || []).map(deal => (
                     <Deal key={deal._id} deal={deal} />
                   ))}
                 </TableBody>
@@ -113,13 +113,13 @@ export default function AdminHome () {
         </Col>
         <Col sm={{size: 4, offset: 2}}>
           <Paper className="deals-closed" style={{padding: "10px 15px", marginTop: "20px"}}>
-            <div className="deals-title">Closed Deals 🎉 &nbsp;<span className="deals-length">{closed.length}</span> <Button className="all-btn" variant="contained" color="secondary" style={{padding: "3px 4px"}}><Link to={`/admin/${organization}/deals`}>All</Link></Button></div>
+            <div className="deals-title">Closed Deals 🎉 &nbsp;<span className="deals-length">{(closed || []).length}</span> <Button className="all-btn" variant="contained" color="secondary" style={{padding: "3px 4px"}}><Link to={`/admin/${organization}/deals`}>All</Link></Button></div>
             <hr></hr>
             <Paper className="deals-table" style={{marginBottom: "10px"}}>
               <div className="scroll-wrapper">
                 <Table>
                   <TableBody>
-                    {closed.map(deal => (
+                    {(closed || []).map(deal => (
                       <TableRow key={deal._id} className="deal-info">
                         <TableCell className="company-name">{deal.company_name}</TableCell>
                         <TableCell>${nWithCommas(deal.amount_raised)}</TableCell>
