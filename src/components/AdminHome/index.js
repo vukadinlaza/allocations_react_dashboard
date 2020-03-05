@@ -146,7 +146,7 @@ export default function AdminHome () {
                     {_.take((org.investments || []), 10).filter(i => i.status !== "invited").map(investment => (
                       <TableRow key={investment._id}>
                         <TableCell>{investment.deal.company_name}</TableCell>
-                        <TableCell>{investment.investor.name}</TableCell>
+                        <TableCell>{_.get(investment, 'investor.name')}</TableCell>
                         <TableCell>${nWithCommas(investment.amount)}</TableCell>
                         <TableCell>{investment.status}</TableCell>
                       </TableRow>
