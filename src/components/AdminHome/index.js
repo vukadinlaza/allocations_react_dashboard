@@ -124,6 +124,9 @@ export default function AdminHome () {
                         <TableCell className="company-name">{deal.company_name}</TableCell>
                         <TableCell>${nWithCommas(deal.amount_raised)}</TableCell>
                         <TableCell><i>closed {formatDate(deal.date_closed)}</i></TableCell>
+                        <TableCell>
+                          <Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link>
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
