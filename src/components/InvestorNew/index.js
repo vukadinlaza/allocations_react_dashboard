@@ -6,15 +6,14 @@ import { useMutation } from '@apollo/react-hooks'
 import { TextField, Button } from '@material-ui/core'
 
 const CREATE_INVESTOR = gql`
-  mutation CreateInvestor($org: String!, $user: UserInput!) {
-    createInvestor(org: $org, user: $user) {
+  mutation CreateInvestor($user: UserInput!) {
+    createInvestor(user: $user) {
       _id
     }
   }
 `
 
 export default function InvestorNew () {
-  const { organization: org } = useParams()
   const history = useHistory()
   const [error, setError] = useState(false)
   const [email, setEmail] = useState("")
@@ -26,7 +25,7 @@ export default function InvestorNew () {
 
   const submit = () => {
     if (!email) return setError(true)
-    createInvestor({ variables: { user: { email }, org }})
+    createInvestor({ variables: { user: { email } }})
   }
 
   return (
