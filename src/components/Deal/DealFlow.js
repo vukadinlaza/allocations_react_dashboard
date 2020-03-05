@@ -7,6 +7,7 @@ import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Paper, TextField } from '@material-ui/core';
 import ReactHtmlParser from 'react-html-parser';
+import KYC from '../forms/KYC'
 
 export default function InvestmentFlow ({ investment, deal, investor }) {
   const [status, setStatus] = useState("data-room")
@@ -30,6 +31,8 @@ export default function InvestmentFlow ({ investment, deal, investor }) {
             className={`step step-data-room ${status === "invited" ? "step-active" : ""}`}>Data Room</div>
           <div onClick={() => setStatus('pledging')} 
             className={`step step-pledge ${status === "pledging" ? "step-active" : ""}`}>Pledge</div>
+          {/**<div onClick={() => setStatus('kyc')}
+            className={`step step-pledge ${status === "kyc" ? "step-active" : ""}`}>KYC</div>**/}
           <div onClick={() => setStatus('pledged')}
             className={`step step-onboard ${status === "pledged" ? "step-active" : ""}`}>Sign</div>
           <div onClick={() => setStatus('onboarded')}
@@ -37,6 +40,7 @@ export default function InvestmentFlow ({ investment, deal, investor }) {
         </div>
         {status === "invited" && <DataRoom deal={deal} />}
         {status === "pledging" && <Pledging investment={investment} deal={deal} />}
+        {status === "kyc" && <KYC investor={investor} setStatus={setStatus} />}
         {status === "onboarded" && <Wire investment={investment} deal={deal} />}
 
         {/** Always render Onboarding so that the Docusign loads in... **/}

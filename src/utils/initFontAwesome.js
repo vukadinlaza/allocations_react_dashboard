@@ -35,6 +35,7 @@ const icons = [
   Solid.faPaperPlane,
   Solid.faEnvelopeOpenText,
   Solid.faEnvelope,
+  Solid.faCheckCircle,
   Reg.faFilePdf
 ]
 

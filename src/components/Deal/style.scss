@@ -23,6 +23,17 @@
         }
     }
 
+    .KYC {
+        padding: 20px 50px;
+        margin: 0px 25px;
+        >div {
+            padding: 5px 0px;
+        }
+        .file-label {
+            margin-right: 10px;
+        }
+    }
+
     .investment-flow {
         @include xs-only {
             padding: 0px;
