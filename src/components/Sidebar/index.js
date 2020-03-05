@@ -115,8 +115,8 @@ function AdminLinks ({ location }) {
   const match = useRouteMatch('/admin/:organization')
 
   if (!match) return null
-
   const { params: { organization } } = match
+  if (organization === "funds") return null
 
   return (
     <div className="admin-links">
