@@ -48,6 +48,7 @@
 
     .Book-side-wrapper {
         // margin: 10px;
+        padding-bottom: 10px;
     }
 
     .Book-side th {
@@ -65,14 +66,34 @@
         padding: 15px 25px;
         margin-bottom: 15px;
 
+        .choose-direction {
+            margin-bottom: 15px;
+            .direction {
+                padding: 4px 12px;
+                border: 1px solid #ededed;
+                display: inline-block;
+                margin-right: 10px;
+                cursor: pointer;
+            }
+            .direction-buy[data-selected="true"] {
+                color: #469f95;
+                border-color: #469f95;
+                background-color: #DFF1EF
+            }
+            .direction-sell[data-selected="true"] {
+                color: tomato;
+                border-color: tomato;
+                background-color: #ffb6a9;
+            }
+        }
+
         .order-details {
-            margin: 10px 0px;
+            margin-bottom: 10px;
             text-align: center;
             padding: 10px;
             background-color: $softblue;
-            border-radius: 5px;
             >span {
-                font-size: 1.2em;
+                // font-size: 1.2em;
             }
         }
     }
