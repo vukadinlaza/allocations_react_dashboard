@@ -42,6 +42,10 @@ const CREATE_INVESTMENT = gql`
   }
 `
 
+function isLoggedIn() {
+  return localStorage.getItem("auth0-token")
+}
+
 export default function PublicDeal () {
   const params = useParams()
   const location = useLocation()
@@ -52,6 +56,13 @@ export default function PublicDeal () {
 
   useEffect(() => {
     const { invite_code } = queryString.parse(location.search)
+    // if (isLoggedIn()) {
+    //   history.push(params.organization === "allocations" 
+    //     ? `/deals/${params.company_name}?ref=public&invite_code=${invite_code}` 
+    //     : `/deals/${params.organization}/${params.company_name}?ref=public&invite_code=${invite_code}`
+    //   )
+    // }
+
     if (invite_code) {
       getDeal({ variables: { company_name: params.company_name, invite_code }})
     } else {

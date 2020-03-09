@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import Loader from '../utils/Loader'
 import _ from "lodash"
 import { gql } from 'apollo-boost'
-import { useParams, useHistory, Link } from 'react-router-dom'
+import { useParams, useHistory, Link, useLocation } from 'react-router-dom'
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { Row, Col } from "reactstrap";
 import { useAuth0 } from "../../react-auth0-spa";
 import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Paper, TextField } from '@material-ui/core';
+import queryString from 'query-string'
 import InvestmentFlow from './DealFlow'
 
 import "./style.scss"
@@ -60,6 +61,7 @@ const CREATE_INVESTMENT = gql`
 
 export default function Deal () {
   const params = useParams()
+  const location = useLocation()
   const history = useHistory()
   const { user, isAuthenticated, loading } = useAuth0()
   const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL)
@@ -83,8 +85,17 @@ export default function Deal () {
   }, [data])
 
   useEffect(() => {
-    if (error && error.message === "GraphQL error: REDIRECT") return history.push(`/`)
-    if (error && user) refetch()
+    // theres been an error
+    if (error) {
+      const q = queryString.parse(location.search)
+      if (q && q.ref && q.invite_code) {
+        // need to redir back to public link (haven't been invited)
+        return history.push(`/public/${params.organization}/deals/${encodeURI(params.id)}?invite_code=${q.invite_code}`) 
+      }
+
+      if (error.message === "GraphQL error: REDIRECT") return history.push(`/`)
+      if (user) refetch()
+    }
   }, [error, user])
 
   if (!data) return <Loader />
