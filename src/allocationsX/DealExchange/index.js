@@ -24,6 +24,7 @@ const DEAL = gql`
       }
       orders {
         _id
+        user_id
         side
         price
         amount
@@ -108,7 +109,7 @@ export default function ExchangeDeal () {
           <Stats />
         </Col>**/}
       </Row>  
-      <Book book={book} />
+      <Book book={book} investor={investor} refetch={refetch} />
     </div>
   )
 }
@@ -119,23 +120,6 @@ function Stats () {
     </div>
   )
 }
-
-// const book = {
-//   bids: [
-//     { price: 4.05, amount: 2500 },
-//     { price: 4.00, amount: 1000 },
-//     { price: 3.95, amount: 5000 },
-//     { price: 3.80, amount: 25000 },
-//     { price: 3.50, amount: 10000 },
-//     { price: 3.00, amount: 3000 }
-//   ],
-//   asks: [
-//     { price: 4.15, amount: 5000 },
-//     { price: 4.25, amount: 1500 },
-//     { price: 4.30, amount: 40000 },
-//     { price: 4.75, amount: 10000 }
-//   ]
-// }
 
 function getCost({ book, amount, direction }) {
   if (direction === "buy") {
@@ -231,7 +215,7 @@ function OrderForm ({ exchangeDeal, investor, refetch }) {
   )
 }
 
-function Book ({ book }) {
+function Book ({ book, investor, refetch }) {
   return (
     <div className="Book">
       <Row>
@@ -249,17 +233,8 @@ function Book ({ book }) {
               </TableHead>
               <TableBody>
                 {book.bids.length === 0 && <Empty />}
-                {book.bids.map((bid, i) => (
-                  <TableRow key={i} className="bid">
-                    <TableCell className="price">${bid.price.toFixed(2)}</TableCell>
-                    <TableCell className="text-right">{nWithCommas(bid.amount)}</TableCell>
-                    <TableCell className="text-right">${nWithCommas(bid.amount * bid.price)}</TableCell>
-                    <TableCell className="text-center">
-                      <Button variant="contained" color="secondary" className="sell-button">
-                        SELL
-                      </Button>
-                    </TableCell>
-                  </TableRow>
+                {book.bids.map(bid => (
+                  <Order key={bid._id} {...bid} investor={investor} refetch={refetch} />
                 ))}
               </TableBody>
             </Table>
@@ -279,17 +254,8 @@ function Book ({ book }) {
               </TableHead>
               <TableBody>
                 {book.asks.length === 0 && <Empty />}
-                {book.asks.map((ask, i) => (
-                  <TableRow key={i} className="ask">
-                    <TableCell className="price">${ask.price.toFixed(2)}</TableCell>
-                    <TableCell className="text-right">{nWithCommas(ask.amount)}</TableCell>
-                    <TableCell className="text-right">${nWithCommas(ask.amount * ask.price)}</TableCell>
-                    <TableCell className="text-center">
-                      <Button variant="contained" className="buy-button">
-                        BUY
-                      </Button>
-                    </TableCell>
-                  </TableRow>
+                {book.asks.map(ask => (
+                  <Order key={ask._id} {...ask} investor={investor} refetch={refetch} />
                 ))}
               </TableBody>
             </Table>
@@ -298,6 +264,51 @@ function Book ({ book }) {
       </Row>
     </div>
   )
+}
+
+const CANCEL_ORDER = gql`
+  mutation CancelOrder($order_id: String!) {
+    cancelOrder(order_id: $order_id) {
+      _id
+    }
+  }
+`
+
+function Order ({ investor, _id, user_id, refetch, side, price, amount }) {
+  const [cancel, { data, error }] = useMutation(CANCEL_ORDER, { 
+    variables: { order_id: _id },
+    onCompleted: refetch 
+  })
+
+  const rowStyle = investor._id === user_id
+    ? { backgroundColor: "#ffffe0" }
+    : {}
+
+  const actionButton = investor._id === user_id
+    ? <Button variant="contained" className="cancel-btn" onClick={cancel}>CANCEL</Button>
+    : <Button variant="contained" color="secondary" className={side === "ask" ? "buy-button" : "sell-button"}>
+        {side === "ask" ? "BUY" : "SELL"}
+      </Button>
+
+  if (side === "ask") {
+    return (
+      <TableRow key={_id} className="ask" style={rowStyle}>
+        <TableCell className="price">${price.toFixed(2)}</TableCell>
+        <TableCell className="text-right">{nWithCommas(amount)}</TableCell>
+        <TableCell className="text-right">${nWithCommas(amount * price)}</TableCell>
+        <TableCell className="text-center">{actionButton}</TableCell>
+      </TableRow>
+    )
+  } else {
+    return (
+      <TableRow key={_id} className="bid" style={rowStyle}>
+        <TableCell className="price">${price.toFixed(2)}</TableCell>
+        <TableCell className="text-right">{nWithCommas(amount)}</TableCell>
+        <TableCell className="text-right">${nWithCommas(amount * price)}</TableCell>
+        <TableCell className="text-center">{actionButton}</TableCell>
+      </TableRow>
+    )
+  }
 }
 
 function Empty () {
