@@ -56,13 +56,13 @@ export default function Investments () {
   return (
     <div className="Investors">
       <Row>
-        <Col sm={{size: 10, offset: 1}}>
+        {organization === "allocations" && <Col sm={{size: 10, offset: 1}}>
           <Paper className="actions">
             <Link to="/investors/new">
               <Button variant="contained" color="secondary">INVITE INVESTOR</Button>
             </Link>
           </Paper>
-        </Col>
+        </Col>}
         <Col sm="10" className="offset-sm-1">
           <Paper className="table-wrapper">
             <Table>
