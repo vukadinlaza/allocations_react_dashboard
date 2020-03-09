@@ -1,5 +1,25 @@
 @import "../../App.scss";
 
+@mixin order-btn {
+    padding: 4px 12px;
+    border: 1px solid #ededed;
+    display: inline-block;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+@mixin buy-btn {
+    color: #469f95;
+    border-color: #469f95;
+    background-color: #DFF1EF;
+}
+
+@mixin sell-btn {
+    color: tomato;
+    border-color: tomato;
+    background-color: #ffb6a9;
+}
+
 .AllocationsX-header {
     background-color: $brandblue;
     color: #fff;
@@ -31,6 +51,26 @@
             box-shadow: 1px 1px 1px 1px #333;
             color: #333;
         }
+    }
+}
+
+.MatchRequest {
+    >span {
+        margin-right: 15px;
+    }
+    .pending {
+        background-color: #ffe34d;
+        padding: 5px 10px;
+        border-radius: 4px;
+    }
+    .direction {
+        @include order-btn;
+    }
+    .direction-sell {
+        @include sell-btn;
+    }
+    .direction-buy {
+        @include buy-btn;
     }
 }
 
@@ -69,21 +109,13 @@
         .choose-direction {
             margin-bottom: 15px;
             .direction {
-                padding: 4px 12px;
-                border: 1px solid #ededed;
-                display: inline-block;
-                margin-right: 10px;
-                cursor: pointer;
+                @include order-btn
             }
             .direction-buy[data-selected="true"] {
-                color: #469f95;
-                border-color: #469f95;
-                background-color: #DFF1EF
+                @include buy-btn
             }
             .direction-sell[data-selected="true"] {
-                color: tomato;
-                border-color: tomato;
-                background-color: #ffb6a9;
+                @include sell-btn
             }
         }
 

@@ -8,6 +8,7 @@ import { gql } from 'apollo-boost'
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, TextField, InputAdornment, InputLabel } from '@material-ui/core'
 import Loader from '../../components/utils/Loader'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import "./style.scss"
 
 const DEAL = gql`
@@ -29,6 +30,17 @@ const DEAL = gql`
         price
         amount
         created_at
+      }
+      matchRequests {
+        _id
+        status
+        submitted_at
+        order {
+          _id
+          price
+          amount
+          side
+        }
       }
     }
     investor {
@@ -105,19 +117,31 @@ export default function ExchangeDeal () {
         <Col sm="5" md={{size: 4, offset: 1}}>
           <OrderForm exchangeDeal={exchangeDeal} investor={investor} refetch={refetch} />
         </Col>
-        {/**<Col sm="7" md="6">
-          <Stats />
-        </Col>**/}
+        <Col sm="7" md="6">
+          <MatchRequests matchRequests={exchangeDeal.matchRequests} />
+        </Col>
       </Row>  
       <Book book={book} investor={investor} refetch={refetch} />
     </div>
   )
 }
 
-function Stats () {
+function MatchRequests ({ matchRequests }) {
+  return matchRequests.map(req => (<MatchRequest key={req._id} req={req} />))
+}
+
+function MatchRequest ({ req }) {
+  const { order } = req
   return (
-    <div className="exchange-stats">
-    </div>
+    <Paper key={req._id} className="MatchRequest" style={{padding: "10px"}}>
+      <span>{order.side === "ask" 
+        ? <span className="direction direction-buy">BUY</span> 
+        : <span className="direction direction-buy">SELL</span>
+      }</span>
+      <span style={{fontSize: "1.2em"}}>{nWithCommas(order.amount)} shares</span>
+      <span>${order.price}/share</span>
+      <span className="pending"><i>PENDING</i> &nbsp;&nbsp;<FontAwesomeIcon icon="spinner" /></span>
+    </Paper>
   )
 }
 
@@ -274,11 +298,28 @@ const CANCEL_ORDER = gql`
   }
 `
 
+const MATCH_REQUEST = gql`
+  mutation MatchRequest($order_id: String!) {
+    newMatchRequest(order_id: $order_id) {
+      _id
+    }
+  }
+`
+
 function Order ({ investor, _id, user_id, refetch, side, price, amount }) {
   const [cancel, { data, error }] = useMutation(CANCEL_ORDER, { 
     variables: { order_id: _id },
     onCompleted: refetch 
   })
+
+  const [matchRequest] = useMutation(MATCH_REQUEST, {
+    variables: { order_id: _id },
+    onCompleted: refetch
+  })
+
+  const submitMatchRequest = () => {
+    matchRequest()
+  }
 
   const rowStyle = investor._id === user_id
     ? { backgroundColor: "#ffffe0" }
@@ -286,7 +327,9 @@ function Order ({ investor, _id, user_id, refetch, side, price, amount }) {
 
   const actionButton = investor._id === user_id
     ? <Button variant="contained" className="cancel-btn" onClick={cancel}>CANCEL</Button>
-    : <Button variant="contained" color="secondary" className={side === "ask" ? "buy-button" : "sell-button"}>
+    : <Button variant="contained" color="secondary" 
+        onClick={submitMatchRequest}
+        className={side === "ask" ? "buy-button" : "sell-button"}>
         {side === "ask" ? "BUY" : "SELL"}
       </Button>
 
