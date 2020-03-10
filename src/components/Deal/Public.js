@@ -55,13 +55,13 @@ export default function PublicDeal () {
   const [createInvestment] = useMutation(CREATE_INVESTMENT, { onCompleted: () => refetch() })
 
   useEffect(() => {
-    const { invite_code } = queryString.parse(location.search)
-    // if (isLoggedIn()) {
-    //   history.push(params.organization === "allocations" 
-    //     ? `/deals/${params.company_name}?ref=public&invite_code=${invite_code}` 
-    //     : `/deals/${params.organization}/${params.company_name}?ref=public&invite_code=${invite_code}`
-    //   )
-    // }
+    const { invite_code, no_redirect } = queryString.parse(location.search)
+    if (isLoggedIn() && !no_redirect) {
+      history.push(params.organization === "allocations" 
+        ? `/deals/${params.company_name}?ref=public&invite=${invite_code}` 
+        : `/deals/${params.organization}/${params.company_name}?ref=public&invite=${invite_code}`
+      )
+    }
 
     if (invite_code) {
       getDeal({ variables: { company_name: params.company_name, invite_code }})

@@ -88,9 +88,9 @@ export default function Deal () {
     // theres been an error
     if (error) {
       const q = queryString.parse(location.search)
-      if (q && q.ref && q.invite_code) {
+      if (q && q.ref === "public" && q.invite) {
         // need to redir back to public link (haven't been invited)
-        return history.push(`/public/${params.organization}/deals/${encodeURI(params.id)}?invite_code=${q.invite_code}`) 
+        return history.push(`/public/${params.organization || "allocations"}/deals/${encodeURI(params.id)}?invite_code=${q.invite}&no_redirect=true`) 
       }
 
       if (error.message === "GraphQL error: REDIRECT") return history.push(`/`)
