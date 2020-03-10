@@ -62,7 +62,7 @@ export default function InviteInvestors ({ deal, refetch }) {
         </Table>
       </Paper>
       <Paper className="table-wrapper">
-        <Table>
+        <Table size="small" className="invited-investors">
           <TableBody>
             <InvitedInvestors deal={deal} refetch={refetch} />
           </TableBody>
