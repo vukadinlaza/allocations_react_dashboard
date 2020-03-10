@@ -65,9 +65,9 @@ function Brand () {
   const history = useHistory()
   const location = useLocation()
 
-  if (match) {
+  if (match && match.params.organization !== "allocations") {
     return <img height="60px" width="180px" src={`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${match.params.organization}.png`} alt="#" style={{margin: "20px", cursor: "pointer"}} />
   }
 
-  return <img src="https://www.allocations.co/assets/img/brand.svg" onClick={() => history.push('/')} alt="#" style={{height:'40px', margin: "20px", cursor: "pointer"}} />
+  return <img src="https://allocations-public.s3.us-east-2.amazonaws.com/logo.png" onClick={() => history.push('/')} alt="allocations" style={{height: "70px", width: "210px", margin: "20px", cursor: "pointer"}} />
 }
