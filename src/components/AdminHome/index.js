@@ -167,7 +167,7 @@ function SuperAdmin ({ org }) {
     <Row>
       <Col sm={{size: 8, offset: 2}}>
         <Paper className="superadmin-section" style={{marginBottom: "20px", padding: "10px", textAlign: "center"}}>
-          You are a SuperAdmin &nbsp;<Button size="small" variant="contained" color="secondary"><Link to={`/admin/${org.slug}/members`}>Manage Admin Members</Link></Button>
+          You are a SuperAdmin &nbsp;<Button size="small" variant="contained" color="secondary"><Link to={`/admin/${org.slug}/manager`}>Manage</Link></Button>
         </Paper>
       </Col>
     </Row>
