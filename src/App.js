@@ -20,6 +20,8 @@ import Investments from './components/Investments';
 import InvestmentNew from './components/InvestmentNew';
 import InvestmentEdit from './components/InvestmentEdit';
 import UserInvestments from './components/UserInvestments';
+// admin
+import Compliance from './components/admin/Compliance'
 import AllocationsX from './allocationsX/Home';
 import DealExchange from './allocationsX/DealExchange'
 
@@ -100,6 +102,7 @@ const App = () => {
                 <PrivateRoute path="/admin/:organization/deals/:id/edit" component={DealEdit} exact />
 
                 <PrivateRoute path="/admin/:organization/investments" component={Investments} exact />
+                <PrivateRoute path="/admin/:organization/compliance" component={Compliance} exact />
                 <AdminRoute path="/admin/:organization/investors" component={Investors} exact />
 
                 <Route path="/signup" component={SignUp} exact />
