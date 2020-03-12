@@ -29,6 +29,11 @@ const GET_MEMBERS = gql`
         status
         sent_at
       }
+      complianceTasks {
+        _id
+        completed
+        task
+      }
     }
   }
 `
@@ -57,9 +62,8 @@ const ADD_MEMBERSHIP = gql`
   }
 `
 
-export default function OrganizationMembers () {
+export default function OrganizationMembers ({ data, error, refetch }) {
   const { organization } = useParams()
-  const { data, error, loading, refetch } = useQuery(GET_MEMBERS, { variables: { slug: organization }})
   const [revokeMembership] = useMutation(REVOKE_MEMBERSHIP, {
     variables: { slug: organization },
     onCompleted: refetch
@@ -76,7 +80,6 @@ export default function OrganizationMembers () {
     <div className="OrganizationMembers">
       <Row>
         <Col sm={{size: 8, offset: 1}}>
-          <h4>{data.organization.name} Admin Members</h4>
           <Paper style={{margin: "10px 0px"}}>
             <UserSearch refetch={refetch} />
           </Paper>
