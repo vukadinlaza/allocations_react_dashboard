@@ -126,6 +126,11 @@ function AdminLinks ({ location }) {
           <span>Investors</span>
         </Link>
       </div>}
+      <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/compliance` ? "sidebar-nav-item-active" : ""}`}>
+        <Link to={`/admin/${organization}/compliance`}>
+          <span>Compliance</span>
+        </Link>
+      </div>
       <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/deals` ? "sidebar-nav-item-active" : ""}`}>
         <Link to={`/admin/${organization}/deals`}>
           <span>Deals</span>
