@@ -18,6 +18,7 @@ const icons = [
   Solid.faTimes,
   Solid.faCircleNotch,
   Solid.faCheck,
+  Solid.faCheckSquare,
   Solid.faFileUpload,
   Solid.faTimesCircle,
   Solid.faArrowRight,
@@ -37,7 +38,8 @@ const icons = [
   Solid.faEnvelope,
   Solid.faCheckCircle,
   Solid.faSpinner,
-  Reg.faFilePdf
+  Reg.faFilePdf,
+  Reg.faSquare,
 ]
 
 export default library.add(...icons);
