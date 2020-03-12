@@ -20,10 +20,17 @@ import Investments from './components/Investments';
 import InvestmentNew from './components/InvestmentNew';
 import InvestmentEdit from './components/InvestmentEdit';
 import UserInvestments from './components/UserInvestments';
+
+// superadmin
+import SuperAdminManager from './components/superadmin/Manager'
+
 // admin
 import Compliance from './components/admin/Compliance'
+
+// allocationsX
 import AllocationsX from './allocationsX/Home';
-import DealExchange from './allocationsX/DealExchange'
+import DealExchange from './allocationsX/DealExchange';
+import AdminExchangeOverview from './allocationsX/AdminOverview';
 
 import Profile from './components/Profile';
 import OrganizationNew from './components/OrganizationNew'
@@ -83,6 +90,7 @@ const App = () => {
                 {/** AllocationsX **/}
                 <PrivateRoute path="/exchange" component={AllocationsX} exact />
                 <PrivateRoute path="/exchange/:deal" component={DealExchange} exact />
+                <AdminRoute path="/admin/:organization/exchange" component={AdminExchangeOverview} exact />
 
                 <AdminRoute path="/investor/:id/home" component={UserHome} />
                 <AdminRoute path="/investor/:id/investments" component={UserInvestments} />
@@ -91,6 +99,9 @@ const App = () => {
                 <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
                 <AdminRoute path="/admin/investments/:id/edit" component={InvestmentEdit} exact />
                 <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
+
+                {/** SuperAdmin **/}
+                <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
 
                 {/** Whitelabel Routes **/}
                 <PrivateRoute path="/admin/funds" component={Funds} exact />
