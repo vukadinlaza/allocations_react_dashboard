@@ -4,7 +4,7 @@ import { useMutation, useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import { useAuth } from "../../../auth/useAuth"
 import { useParams, Link } from 'react-router-dom'
-import { Paper, Table, TableBody, TableCell, TableRow, TableHead, Button, LinearProgress, Select, MenuItem, FormControl, InputLabel } from '@material-ui/core'
+import { Paper, Table, TableBody, TableCell, TableRow, TableHead, TextField, Button, LinearProgress, Select, MenuItem, FormControl, InputLabel } from '@material-ui/core'
 import { Col, Row } from 'reactstrap'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from '../../utils/Loader'
@@ -26,11 +26,25 @@ const ORG_COMPLIANCE = gql`
   }
 `
 
+const CREATE_TASK = gql`
+  mutation CreateTask($slug: String!, $complianceTask: ComplianceTaskInput!) {
+    createComplianceTask(slug: $slug, complianceTask: $complianceTask) {
+      _id
+    }
+  }
+`
+
 const UPDATE_TASK = gql`
   mutation UpdateTask($slug: String!, $complianceTask: ComplianceTaskInput!) {
     updateComplianceTask(slug: $slug, complianceTask: $complianceTask) {
       _id
     }
+  }
+`
+
+const DELETE_TASK = gql`
+  mutation DeleteTask($_id: String!) {
+    deleteComplianceTask(_id: $_id)
   }
 `
 
@@ -41,7 +55,8 @@ export default function Compliance ({ data, error, refetch }) {
     <Row>
       <Col sm={{size: 8, offset: 1}}>
         <Paper className="Compliance" style={{padding: "25px"}}>
-          <Paper>
+          <CreateTask refetch={refetch} />
+          <Paper style={{marginTop: "15px"}}>
             <Table>
               <TableBody>
                 {data.organization.complianceTasks.map(task => (
@@ -53,6 +68,28 @@ export default function Compliance ({ data, error, refetch }) {
         </Paper>
       </Col>
     </Row>
+  )
+}
+
+function CreateTask ({ refetch }) {
+  const [task, setTask] = useState("")
+  const { organization: slug } = useParams()
+  const [createTask] = useMutation(CREATE_TASK, {
+    variables: { slug },
+    onCompleted: refetch
+  })
+
+  return (
+    <div>
+      <TextField variant="outlined" 
+        label="New Compliance Task" 
+        value={task} 
+        onChange={e => setTask(e.target.value)} 
+        style={{width: "80%"}} />
+      <Button style={{width: "10%", marginLeft: "2%"}} color="primary" variant="contained" onClick={() => createTask({ variables: { complianceTask: { task, status: "not_started" } }})}>
+        ADD
+      </Button>
+    </div>
   )
 }
 
@@ -72,6 +109,10 @@ function Task ({ task, refetch }) {
     onCompleted: refetch
   })
 
+  const [deleteTask] = useMutation(DELETE_TASK, { 
+    onCompleted: refetch 
+  })
+
   useEffect(() => {
     if (task) setStatus(task.status)
   }, [task])
@@ -80,7 +121,7 @@ function Task ({ task, refetch }) {
     <TableRow>
       <TableCell style={{fontSize: "1.1em"}}>{task.task}</TableCell>
       <TableCell>
-        <FormControl variant="filled" size="small" style={{width: "100%"}}>
+        <FormControl variant="outlined" size="small" style={{width: "100%"}}>
           <InputLabel>
             Status
           </InputLabel>
@@ -95,6 +136,11 @@ function Task ({ task, refetch }) {
             ))}
           </Select>
         </FormControl>
+      </TableCell>
+      <TableCell>
+        <Button variant="contained" color="secondary" size="small" onClick={() => deleteTask({ variables: { _id: task._id } })}>
+          DELETE
+        </Button>
       </TableCell>
     </TableRow>
   )
