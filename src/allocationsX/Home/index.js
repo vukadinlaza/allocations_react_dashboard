@@ -4,6 +4,7 @@ import { gql } from 'apollo-boost'
 import { Row, Col } from 'reactstrap'
 import { Link, useParams, useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks';
+import { nWithCommas, formatDate } from '../../utils/numbers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Paper, Table, TableBody, TableCell, TableRow, TableHead, Button, Fab } from '@material-ui/core'
 import Loader from '../../components/utils/Loader'
@@ -15,6 +16,9 @@ const DEALS = gql`
       _id
       slug
       company_name
+      company_description
+      date_closed
+      volume
       organization {
         name
       }
@@ -27,32 +31,38 @@ export default function AllocationsX () {
 
   if (!data) return <Loader />
 
-  const sortedDeals = _.orderBy(data.exchangeDeals, ({ slug }) => slug === "oncosenx", "desc")
+  const sortedDeals = _.take(_.orderBy(data.exchangeDeals, ["volume", ({ date_closed }) => new Date(date_closed).getTime()], ["desc", "desc"]), 10)
 
   return (
     <div className="AllocationsX-Home">
       <Row>
-        <Col md={{size: 8, offset: 1}} sm={{size: 10, offset: 1}}>
+        <Col md={{size: 10, offset: 1}} sm={{size: 10, offset: 1}}>
           <Paper>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell className="text-center">Company</TableCell>
+                  <TableCell></TableCell>
+                  <TableCell>Company</TableCell>
+                  <TableCell>Description</TableCell>
+                  <TableCell>Last Valuation</TableCell>
+                  <TableCell>Closed Date</TableCell>
                   <TableCell>Volume</TableCell>
+                  <TableCell>Trades</TableCell>
                   <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {sortedDeals.map(deal => (
+                {sortedDeals.map((deal, i) => (
                   <TableRow key={deal._id}>
+                    <TableCell className="text-center"><span className="ranking">{i + 1}</span></TableCell>
+                    <TableCell>{deal.company_name}</TableCell>
+                    <TableCell>{deal.company_description}</TableCell>
+                    <TableCell>{deal.last_valuation}</TableCell>
+                    <TableCell>{formatDate(deal.date_closed)}</TableCell>
+                    <TableCell>${nWithCommas(deal.volume || 0)}</TableCell>
+                    <TableCell>{deal.nTrades}</TableCell>
                     <TableCell>
-                      <DealLogo deal={deal} />
-                    </TableCell>
-                    <TableCell>
-                      {deal.slug === "oncosenx" ? <span className="volume">$30,000</span> : ""}
-                    </TableCell>
-                    <TableCell>
-                      <Button variant="contained" className="trade-btn" style={{backgroundColor: "#53B987", color: "#fff"}}>
+                      <Button variant="contained" size="small" className="trade-btn" style={{backgroundColor: "#53B987", color: "#fff"}}>
                         <Link to={`/exchange/${deal.slug}`}>Trade &nbsp;<FontAwesomeIcon icon="arrow-right" /></Link>
                       </Button>
                     </TableCell>

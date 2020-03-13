@@ -1,4 +1,10 @@
+@import "../../App.scss";
+
 .AllocationsX-Home {
+    tr th {
+        font-weight: bold;
+    }
+
     .deal-org {
         color: #a7a7a7;
     }
@@ -11,5 +17,13 @@
     }
     .volume {
         font-size: 1.2em;
+    }
+    .ranking {
+        background-color: $softblue;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center; 
     }
 }
