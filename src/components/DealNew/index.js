@@ -7,7 +7,7 @@ import { useSimpleReducer } from '../../utils/hooks'
 
 import { gql } from 'apollo-boost'
 import { useMutation } from '@apollo/react-hooks'
-
+import { ORG_OVERVIEW } from '../AdminHome'
 import { Button } from '@material-ui/core'
 import "./style.scss"
 
@@ -25,7 +25,7 @@ export default function DealNew () {
   const [deal, setDeal] = useSimpleReducer({})
   const [hasChanges, setHasChanges] = useState(false)
   const [createDeal] = useMutation(CREATE_DEAL, { 
-    refetchQueries: ['GetOrg'],
+    refetchQueries: [{ query: ORG_OVERVIEW }],
     onCompleted: ({createDeal}) => history.push(`/admin/${organization}/deals/${createDeal._id}/edit`) 
   })
 

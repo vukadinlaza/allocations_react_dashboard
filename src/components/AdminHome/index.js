@@ -11,7 +11,7 @@ import Loader from '../utils/Loader'
 
 import "./style.scss"
 
-const ORG = gql`
+export const ORG_OVERVIEW = gql`
   query GetOrg($slug: String!) {
     organization(slug: $slug) {
       _id
@@ -75,7 +75,7 @@ function sumOrgInvestments ({ investor, deals }) {
 
 export default function AdminHome () {
   const { organization } = useParams()
-  const { data, error } = useQuery(ORG, { variables: { slug: organization } })
+  const { data, error } = useQuery(ORG_OVERVIEW, { variables: { slug: organization } })
 
   if (!data) return <Loader />
 
