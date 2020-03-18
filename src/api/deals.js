@@ -9,3 +9,13 @@ export const search = gql`
     }
   }
 `
+
+export const searchByOrg = gql`
+  query SearchDealsByOrg($q: String!, $org: String!) {
+    searchDealsByOrg(q: $q, org: $org) {
+      _id
+      company_name
+      company_description
+    }
+  }
+`
