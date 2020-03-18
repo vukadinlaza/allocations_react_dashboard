@@ -40,7 +40,7 @@ export function validate(investor) {
   return required.reduce((acc, attr) => investor[attr] ? acc : [...acc, attr], [])
 }
 
-export default function InvestorEditForm ({ investor, setInvestor, actionText, setFormStatus }) {
+export default function InvestorEditForm ({ investor, setInvestor, actionText, setFormStatus, noValidate = false }) {
   const [errors, setErrors] = useState([])
   const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_USER)
 
@@ -54,6 +54,9 @@ export default function InvestorEditForm ({ investor, setInvestor, actionText, s
   }
 
   const submit = () => {
+    // don't validate if noValidate flag passed 
+    if (noValidate) return updateInvestor({ variables: { investor } })
+      
     const validation = validate(investor)
     setErrors(validation)
     if (validation.length === 0) {

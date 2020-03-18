@@ -75,7 +75,8 @@ export default function InvestorEdit () {
           </h4>
         </Col>
       </Row>
-      <InvestorEditForm investor={investor}
+      <InvestorEditForm noValidate
+        investor={investor}
         refetch={refetch}
         setInvestor={setInvestor}
         setFormStatus={setFormStatus} 
