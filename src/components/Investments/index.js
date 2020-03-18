@@ -119,7 +119,7 @@ export default function Investments () {
           </div>
           <Paper className="table-wrapper">
             <Table className="investments-table">
-              <TableHead>
+              <TableHead style={{fontWeight: "bold"}}>
                 <TableRow>
                   <TableCell>Investor</TableCell>
                   <TableCell>Company</TableCell>
