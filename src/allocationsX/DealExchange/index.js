@@ -133,7 +133,7 @@ function MatchRequests ({ matchRequests }) {
 function MatchRequest ({ req }) {
   const { order } = req
   return (
-    <Paper key={req._id} className="MatchRequest" style={{padding: "10px"}}>
+    <Paper key={req._id} className="MatchRequest" style={{padding: "10px", marginBottom: "10px"}}>
       <span>{order.side === "ask" 
         ? <span className="direction direction-buy">BUY</span> 
         : <span className="direction direction-buy">SELL</span>
@@ -338,7 +338,7 @@ function Order ({ investor, _id, user_id, refetch, side, price, amount }) {
       <TableRow key={_id} className="ask" style={rowStyle}>
         <TableCell className="price">${price.toFixed(2)}</TableCell>
         <TableCell className="text-right">{nWithCommas(amount)}</TableCell>
-        <TableCell className="text-right">${nWithCommas(amount * price)}</TableCell>
+        <TableCell className="text-right">${nWithCommas((amount * price).toFixed(0))}</TableCell>
         <TableCell className="text-center">{actionButton}</TableCell>
       </TableRow>
     )
@@ -347,7 +347,7 @@ function Order ({ investor, _id, user_id, refetch, side, price, amount }) {
       <TableRow key={_id} className="bid" style={rowStyle}>
         <TableCell className="price">${price.toFixed(2)}</TableCell>
         <TableCell className="text-right">{nWithCommas(amount)}</TableCell>
-        <TableCell className="text-right">${nWithCommas(amount * price)}</TableCell>
+        <TableCell className="text-right">${nWithCommas((amount * price).toFixed(0))}</TableCell>
         <TableCell className="text-center">{actionButton}</TableCell>
       </TableRow>
     )
