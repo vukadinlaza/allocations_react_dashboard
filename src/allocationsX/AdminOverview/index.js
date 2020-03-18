@@ -208,7 +208,7 @@ function MatchRequest ({ req }) {
 
 function Trades ({ trades = [] }) {
   return (
-    <Paper padding={"20px"}>
+    <Paper padding={"20px"} className="Trades">
       <Table>
         <TableHead>
           <TableRow>
