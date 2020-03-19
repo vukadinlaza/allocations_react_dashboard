@@ -208,31 +208,34 @@ function MatchRequest ({ req }) {
 
 function Trades ({ trades = [] }) {
   return (
-    <Paper padding={"20px"} className="Trades">
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Deal</TableCell>
-            <TableCell>Price</TableCell>
-            <TableCell>Shares</TableCell>
-            <TableCell>Date</TableCell>
-            <TableCell>Buyer</TableCell>
-            <TableCell>Seller</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {trades.map(trade => (
-            <TableRow key={trade._id}>
-              <TableCell>{trade.deal.company_name}</TableCell>
-              <TableCell>${trade.price}</TableCell>
-              <TableCell>{nWithCommas(trade.amount)}</TableCell>
-              <TableCell>{trade.settled_at && formatDate(trade.settled_at)}</TableCell>
-              <TableCell>{trade.buyer.name}</TableCell>
-              <TableCell>{trade.seller.name}</TableCell>
+    <React.Fragment>
+    <h6>Completed Trades</h6>
+      <Paper padding={"20px"} className="Trades">
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Deal</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>Shares</TableCell>
+              <TableCell>Date</TableCell>
+              <TableCell>Buyer</TableCell>
+              <TableCell>Seller</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Paper>
+          </TableHead>
+          <TableBody>
+            {trades.map(trade => (
+              <TableRow key={trade._id}>
+                <TableCell>{trade.deal.company_name}</TableCell>
+                <TableCell>${trade.price}</TableCell>
+                <TableCell>{nWithCommas(trade.amount)}</TableCell>
+                <TableCell>{trade.settled_at && formatDate(trade.settled_at)}</TableCell>
+                <TableCell>{trade.buyer.name}</TableCell>
+                <TableCell>{trade.seller.name}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
+    </React.Fragment>
   )
 }
