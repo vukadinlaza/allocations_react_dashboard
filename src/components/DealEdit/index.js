@@ -37,6 +37,8 @@ const GET_DEAL = gql`
         target
         amount_raised
         memo
+        last_valuation
+        no_exchange
         documents {
           path
           link
@@ -91,7 +93,7 @@ const UPDATE_DEAL = gql`
   }
 `
 
-const validInputs = ["_id","company_name","company_description","date_closed","deal_lead","pledge_link","onboarding_link","embed_code","status","closed","allInvited","amount", "memo", "target", "amount_raised"]
+const validInputs = ["_id","company_name","company_description","date_closed","deal_lead","pledge_link","onboarding_link","embed_code","status","closed","allInvited","amount", "memo", "target", "amount_raised", "no_exchange", "last_valuation"]
 
 export default function DealEdit () {
   const { id, organization } = useParams()
@@ -242,6 +244,34 @@ export default function DealEdit () {
                }}
                onEditorChange={memo => setDeal({ memo })}
              />
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={{size: 8, offset: 1}}>
+            <h5>Exchange Data</h5>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={{size: 4, offset: 1}}>
+            <FormControl variant="filled" style={{width: "100%"}}>
+              <InputLabel>Exchange Options</InputLabel>
+              <Select value={deal.no_exchange || false}
+                onChange={e => setDeal({ no_exchange: e.target.value === "true" })}
+                inputProps={{name: 'Type'}}>
+                <MenuItem value="false">Exchange Allowed</MenuItem>
+                <MenuItem value="true">Do Not Allow Exchange</MenuItem>
+              </Select>
+            </FormControl>
+          </Col>
+          <Col sm={{size: 4}}>
+            <TextField style={{width: "100%"}}
+              value={deal.last_valuation || ""}
+              onChange={e => setDeal({ last_valuation: e.target.value })}
+              label="Last Valuation"
+              InputProps={{
+                startAdornment: <InputAdornment position="start"><FontAwesomeIcon icon="dollar-sign" /></InputAdornment>,
+              }}
+              variant="filled" />
           </Col>
         </Row>
         <Row>
