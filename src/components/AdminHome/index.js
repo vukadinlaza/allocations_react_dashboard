@@ -86,6 +86,7 @@ export default function AdminHome () {
   return (
     <div className="AdminHome">
       {data.investor.admin && <SuperAdmin org={org} />}
+      {["lemur-capital", "adastra-capital"].includes(org.slug) && <ProvisionOfServices />}
       <Row>
         <Col sm={{size: 3, offset: 2}}>
           <Paper className="welcome">
@@ -159,6 +160,18 @@ export default function AdminHome () {
         </Col>
       </Row>
     </div>
+  )
+}
+
+function ProvisionOfServices () {
+  return (
+    <Row>
+      <Col sm={{size: 8, offset: 2}}>
+        <Paper className="superadmin-section" style={{marginBottom: "20px", padding: "10px", textAlign: "center"}}>
+          Finish Fund Manager Onboarding &nbsp;<Button size="small" variant="contained" color="secondary"><a href="https://app.hellosign.com/s/gAEWjpt8" target="_blank">Sign Provision of Services</a></Button>
+        </Paper>
+      </Col>
+    </Row>
   )
 }
 
