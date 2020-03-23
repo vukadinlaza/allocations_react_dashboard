@@ -86,7 +86,7 @@ export default function AdminHome () {
   return (
     <div className="AdminHome">
       {data.investor.admin && <SuperAdmin org={org} />}
-      {["lemur-capital", "adastra-capital"].includes(org.slug) && <ProvisionOfServices />}
+      {[].includes(org.slug) && <ProvisionOfServices org={org} />}
       <Row>
         <Col sm={{size: 3, offset: 2}}>
           <Paper className="welcome">
