@@ -9,6 +9,15 @@
         }
     }
 
+    .closed-deals {
+        .closed-deal-row:hover {
+            td {
+                background-color: $graygreen;
+            }
+        }
+
+    }
+
     h5 {
         // background-color: #21ce99;
         background-color: $graygreen;
@@ -45,7 +54,7 @@
         }
         .CapitalAccount-pie {
             vertical-align: top;
-            height: 250px; 
+            height: 300px; 
             width: 60%; 
             display: inline-block;
         }

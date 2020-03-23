@@ -113,7 +113,7 @@ export default function Deals () {
       <Row style={{marginTop: "15px"}}>
         <Col sm={{size: 10, offset: 1}}>
           <h5>Closed Deals <span className="deals-length">{(closed || []).length}</span></h5>
-          <Paper className="table-wrapper">
+          <Paper className="table-wrapper closed-deals">
             <Table>
               <TableHead>
                 <TableRow>
@@ -129,7 +129,7 @@ export default function Deals () {
               <TableBody>
                 {_.orderBy(closed, d => new Date(d.date_closed || Date.now()), 'desc').map(deal => (
                   <Fragment key={deal._id}>
-                    <TableRow onClick={() => toggleCapitalAccount(deal._id)}>
+                    <TableRow onClick={() => toggleCapitalAccount(deal._id)} className="closed-deal-row">
                       <TableCell>{deal.company_name}</TableCell>
                       <TableCell>{deal.company_description}</TableCell>
                       <TableCell>{deal.deal_lead}</TableCell>

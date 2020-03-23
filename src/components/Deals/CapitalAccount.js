@@ -8,12 +8,11 @@ import randomColor from 'randomcolor'
 import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, LinearProgress } from '@material-ui/core'
 
 function percentageOfSPV(investment, total) {
-  const p = new BN(investment.amount).dividedBy(total).times(100).toFixed(0)
-  return p === 0 ? "<1" : p
+  return new BN(investment.amount).dividedBy(total).times(100).toFixed(2)
 }
 
 export default function CapitalAccount ({ deal }) {
-  const investments = _.orderBy(deal.investments, 'amount', 'desc')
+  const investments = _.orderBy(_.reject(deal.investments, i => i.status === "invited"), 'amount', 'desc')
   const totalRaised = _.sumBy(investments, 'amount')
   return (
     <TableRow>
@@ -31,15 +30,15 @@ export default function CapitalAccount ({ deal }) {
               {investments.map(investment => (
                 <TableRow key={investment._id}>
                   <TableCell>{investment.investor.name}</TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-center">
                     {percentageOfSPV(investment, totalRaised)}%
                   </TableCell>
-                  <TableCell>${nWithCommas(investment.amount)}</TableCell>
+                  <TableCell className="text-center">${nWithCommas(investment.amount)}</TableCell>
                 </TableRow>
               ))}
               <TableRow>
                 <TableCell></TableCell>
-                <TableCell></TableCell>
+                <TableCell className="text-right"><b>Total</b></TableCell>
                 <TableCell><b>${nWithCommas(totalRaised)}</b></TableCell>
               </TableRow>
             </TableBody>
@@ -65,7 +64,7 @@ function CapitalAccountPie ({ investments }) {
       <div className="CapitalAccount-pie">
         <ResponsivePie
             data={data}
-            margin={{ top: 20, right: 40, bottom: 20, left: 40 }}
+            margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
             innerRadius={0.5}
             padAngle={0.7}
             cornerRadius={3}
