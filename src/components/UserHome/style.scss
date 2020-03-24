@@ -59,8 +59,8 @@ span[data-status="closed"] {
     }
 
     .complete-info-prompt {
-        background-color: #ffcedf;
-        border: 1px solid #ff7fad;
+        background-color: $graygreen;
+        border: 1px solid $softgreen;
         margin-bottom: 15px;
         text-align: center;
         font-size: 1.1em;
