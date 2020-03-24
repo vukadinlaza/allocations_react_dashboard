@@ -38,7 +38,7 @@ export default function CapitalAccount ({ deal }) {
               ))}
               <TableRow>
                 <TableCell></TableCell>
-                <TableCell className="text-right"><b>Total</b></TableCell>
+                <TableCell className="text-center"><b>Total</b></TableCell>
                 <TableCell><b>${nWithCommas(totalRaised)}</b></TableCell>
               </TableRow>
             </TableBody>
