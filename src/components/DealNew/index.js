@@ -7,7 +7,7 @@ import { useSimpleReducer } from '../../utils/hooks'
 
 import { gql } from 'apollo-boost'
 import { useMutation } from '@apollo/react-hooks'
-import { ORG_OVERVIEW } from '../AdminHome'
+import { ORG_OVERVIEW } from '../admin/AdminHome'
 import { Button } from '@material-ui/core'
 import "./style.scss"
 

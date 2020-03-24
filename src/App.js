@@ -25,6 +25,7 @@ import UserInvestments from './components/UserInvestments';
 import SuperAdminManager from './components/superadmin/Manager'
 
 // admin
+import AdminHome from './components/admin/AdminHome'
 import Compliance from './components/admin/Compliance'
 
 // allocationsX
@@ -35,8 +36,6 @@ import AdminExchangeOverview from './allocationsX/AdminOverview';
 import Profile from './components/Profile';
 import OrganizationNew from './components/OrganizationNew'
 import OrganizationMembers from './components/OrganizationMembers'
-
-import AdminHome from './components/AdminHome'
 
 import { useAuth0 } from "./react-auth0-spa"
 import { ApolloProvider } from '@apollo/react-hooks';

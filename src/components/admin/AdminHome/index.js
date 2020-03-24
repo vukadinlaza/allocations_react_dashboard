@@ -1,15 +1,20 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import _ from 'lodash'
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
-import { useAuth } from "../../auth/useAuth"
+import { useAuth } from "../../../auth/useAuth"
 import { useParams, Link } from 'react-router-dom'
-import { nWithCommas, formatDate } from '../../utils/numbers'
+import { nWithCommas, formatDate } from '../../../utils/numbers'
 import { Paper, Table, TableBody, TableCell, TableRow, TableHead, Button, LinearProgress } from '@material-ui/core'
 import { Col, Row } from 'reactstrap'
-import Loader from '../utils/Loader'
+import Loader from '../../utils/Loader'
+import HelloSign from 'hellosign-embedded'
 
 import "./style.scss"
+
+const helloSign = new HelloSign({
+  clientId: 'eda2d58dfbeed4f5eaf8d94a545f7dc5'
+})
 
 export const ORG_OVERVIEW = gql`
   query GetOrg($slug: String!) {
@@ -54,6 +59,13 @@ export const ORG_OVERVIEW = gql`
           _id
           name
         }
+      }
+      signingRequests {
+        _id
+        title
+        url
+        status
+        due
       }
     }
     investor {
@@ -163,12 +175,32 @@ export default function AdminHome () {
   )
 }
 
-function ProvisionOfServices () {
+function ProvisionOfServices ({ org }) {
+  const { organization } = useParams()
+  const [request, setRequest] = useState(null)
+  const [url, setUrl] = useState(null)
+  const [showDoc, setShowDoc] = useState(false)
+
+  useEffect(() => {
+    setRequest(org.signingRequests.find(r => r.title === "Provision of Services"))
+  }, [org])
+
+  useEffect(() => {
+    if (showDoc) {
+      helloSign.open(request.url, { testMode: true })
+    }
+  }, [showDoc])
+
+  if (!request) return null
+
   return (
     <Row>
       <Col sm={{size: 8, offset: 2}}>
         <Paper className="superadmin-section" style={{marginBottom: "20px", padding: "10px", textAlign: "center"}}>
-          Finish Fund Manager Onboarding &nbsp;<Button size="small" variant="contained" color="secondary"><a href="https://app.hellosign.com/s/gAEWjpt8" target="_blank">Sign Provision of Services</a></Button>
+          Finish Fund Manager Onboarding &nbsp;
+          <Button size="small" variant="contained" color="secondary" onClick={() => setShowDoc(true)}>
+            Sign Provision of Services
+          </Button>
         </Paper>
       </Col>
     </Row>
