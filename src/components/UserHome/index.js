@@ -204,7 +204,7 @@ function NextSteps ({ investor }) {
         <h4>🚨 Next Steps</h4>
         <Paper style={{padding: "10px"}}>
           <div className="step" onClick={() => history.push(`/profile`)}>
-            <span>👱‍♂️ Complete Your Profile</span>
+            <span>📚 Complete Your Profile</span>
             {profileComplete && <span className="checkbox">✅</span>}
           </div>
           <div className="step">
