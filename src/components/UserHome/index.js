@@ -113,13 +113,13 @@ export default function UserHome (props) {
   const investor = data.investor
   const total_invested = _.sumBy(investor.investments, 'amount') || 0
 
+  const returningInvestor = total_invested === 0
   return (
     <Container fluid className="UserHome">
       <Row>
         <AdminTile investor={investor} />
       </Row>
       <Row>
-        <CompleteInfoPrompt investor={investor} />
         <Col lg={{size: 3, offset: 2}} md={{size: 5, offset: 0}} sm={{size: 5, offset: 0}} className="welcome">
           <div className="tile tile-top">
             <div className="welcome-text">Welcome,<br></br><Name investor={investor} /></div>
@@ -133,21 +133,24 @@ export default function UserHome (props) {
             </div>
           </div>
         </Col>
-        <Col lg="5" md="7" sm="7" className="total-investments">
-          <div className="tile tile-top">
-            <div className="small-header">Total Investments</div>
-            <div className="amount">${nWithCommas(total_invested)}</div>
-            <div className="chart-container">
-              {investor.investments.length > 0 ? 
-                <Chart chartType="TreeMap"
-                  width="100%"
-                  height="125px"
-                  data={formatData(investor.investments)}
-                  options={chartOptions} /> : null
-              }
+        {returningInvestor && 
+          <Col lg="5" md="7" sm="7" className="total-investments">
+            <div className="tile tile-top">
+              <div className="small-header">Total Investments</div>
+              <div className="amount">${nWithCommas(total_invested)}</div>
+              <div className="chart-container">
+                {investor.investments.length > 0 ? 
+                  <Chart chartType="TreeMap"
+                    width="100%"
+                    height="125px"
+                    data={formatData(investor.investments)}
+                    options={chartOptions} /> : null
+                }
+              </div>
             </div>
-          </div>
-        </Col>
+          </Col>
+        }
+        {!returningInvestor && <NextSteps investor={investor} />}
       </Row>
       <Row>
         <Col lg={{size: 4, offset: 2}} md={{size: 6, offset: 0}} sm={{size: 6, offset: 0}} className="last-deals">
@@ -191,22 +194,35 @@ function InvestmentStub ({ investment }) {
   )
 }
 
-function CompleteInfoPrompt ({ investor }) {
+function NextSteps ({ investor }) {
   const history = useHistory()
 
-  if (investor && validate(investor).length > 0) {
-    return (
-      <Col lg={{size: 8, offset: 2}} md={{size: 10, offset: 1}} sm={{size: 12, offset: 0}}>
-        <div className="tile complete-info-prompt">
-          Complete Your Info!&nbsp;&nbsp;
-          <Fab onClick={() => history.push('/profile')} size="small" style={{textAlign: 'center', backgroundColor: "#21ce99"}}>
-            <FontAwesomeIcon style={{color: "#fff"}} icon="arrow-right" size="xs" />
-          </Fab>
-        </div>
-      </Col>
-    )
-  }
-  return null
+  const profileComplete = investor && validate(investor).length === 0
+  return (
+    <Col lg="5" md="7" sm="7">
+      <div className="tile tile-top NextSteps">
+        <h4>🚨 Next Steps</h4>
+        <Paper style={{padding: "10px"}}>
+          <div className="step" onClick={() => history.push(`/profile`)}>
+            <span>👱‍♂️ Complete Your Profile</span>
+            {profileComplete && <span className="checkbox">✅</span>}
+          </div>
+          <div className="step">
+            <span>💵 Track My SPV Investment</span>
+            <span className="coming-soon">coming soon</span>
+          </div>
+          <div className="step">
+            <span>📬 Apply to Join a Fund</span>
+            <span className="coming-soon">coming soon</span>
+          </div>
+          <div className="step">
+            <span>🏦 Apply to be a Fund Manager</span>
+            <span className="coming-soon">coming soon</span>
+          </div>
+        </Paper>
+      </div>
+    </Col>
+  )
 }
 
 function DealStub ({ deal }) {

@@ -58,13 +58,32 @@ span[data-status="closed"] {
         padding: 20px 15px;
     }
 
-    .complete-info-prompt {
-        background-color: $graygreen;
-        border: 1px solid $softgreen;
-        margin-bottom: 15px;
-        text-align: center;
-        font-size: 1.1em;
-        padding: 10px;
+    .NextSteps {
+        .step {
+            padding: 10px 20px;
+            margin-bottom: 4px;
+            background-color: #fafafa;
+            &:hover {
+                background-color: $graygreen;
+                cursor: pointer;
+            }
+
+            .checkbox {
+                padding: 0px 4px;
+                font-size: 1.2em;
+            }
+            
+            .coming-soon {
+                margin-left: 15px;
+                font-size: 0.9em;
+                background-color: $softgreen;
+                opacity: 0.6;
+                color: #fff;
+                display: inline-block;
+                border-radius: 5px;
+                padding: 1px 5px;
+            }
+        }
     }
 
     .admin-link {
