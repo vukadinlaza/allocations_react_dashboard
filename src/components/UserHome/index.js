@@ -113,7 +113,7 @@ export default function UserHome (props) {
   const investor = data.investor
   const total_invested = _.sumBy(investor.investments, 'amount') || 0
 
-  const returningInvestor = total_invested === 0
+  const returningInvestor = total_invested !== 0
   return (
     <Container fluid className="UserHome">
       <Row>
