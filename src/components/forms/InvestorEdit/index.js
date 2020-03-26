@@ -91,7 +91,7 @@ export default function InvestorEditForm ({ investor, setInvestor, actionText, s
       <Row>
         <Col sm={{size: 6, offset: 1}}>
           <FormControl required error={errors.includes("country")} variant="filled" style={{width: "100%"}}>
-            <InputLabel><span role="img" aria-label="globe">🌎</span> Country of Residence or Place of Business</InputLabel>
+            <InputLabel>Country of Residence or Place of Business</InputLabel>
             <Select value={investor.country || ""}
               onChange={handleChange("country")}
               inputProps={{name: 'Country'}}>
@@ -128,16 +128,7 @@ export default function InvestorEditForm ({ investor, setInvestor, actionText, s
             variant="filled" />
         </Col>
       </Row>
-      <Row>
-        <Col sm={{size: 3, offset: 1}}>
-          <AccredidationUploader investor={investor} setInvestor={setInvestor} />
-        </Col>
-      </Row>
-      <Row>
-        <Col sm={{size: 3, offset: 1}}>
-          <PassportUploader investor={investor} setInvestor={setInvestor} />
-        </Col>
-      </Row>
+      <KYC investor={investor} setInvestor={setInvestor} />
       <Row>
         <Col sm={{size: 6, offset: 1}} className="submit-row">
           <Button variant="contained"
@@ -151,11 +142,30 @@ export default function InvestorEditForm ({ investor, setInvestor, actionText, s
   )
 }
 
+function KYC ({ investor, setInvestor }) {
+  return (
+    <Row>
+      <Col sm={{size: 6, offset: 1}}>
+        <h5>KYC</h5>
+        <p>In Order to Participate in Allocations Deals we Need to Collect to Verify your Identity</p>
+        <hr />
+      </Col>
+      <Col sm={5}></Col>
+      <Col sm={{size: 6, offset: 1}} style={{marginBottom: "15px"}}>
+        <AccredidationUploader investor={investor} setInvestor={setInvestor} />
+      </Col>
+      <Col sm={{size: 6, offset: 1}}>
+        <PassportUploader investor={investor} setInvestor={setInvestor} />
+      </Col>
+    </Row>
+  )
+}
+
 function PassportUploader ({ investor, setInvestor }) {
   if (investor.passport) {
     return (
       <div className="file-uploader">
-        <span className="file-label">Passport:</span>
+        <span className="file-label">Passport / Driver's License</span>
         {investor.passport.link 
           ? <a href={"https://" + investor.passport.link} target="_blank"><FontAwesomeIcon icon="paperclip" /></a> 
           : <FontAwesomeIcon icon="paperclip" /> }
@@ -165,7 +175,7 @@ function PassportUploader ({ investor, setInvestor }) {
 
   return (
     <div className="file-uploader">
-      <span className="file-label">Passport:</span>
+      <span className="file-label">Please Attach your ID for KYC (Passport / Driver's License)</span>
       <Button variant="contained" component="label">
         Upload
         <input type="file" 
@@ -182,7 +192,7 @@ function AccredidationUploader ({ investor, setInvestor }) {
   if (investor.accredidation_doc) {
     return (
       <div className="file-uploader">
-        <span className="file-label">Accreditation Doc:</span>
+        <span className="file-label">Accredited Investor Certificate</span>
         {investor.accredidation_doc.link 
           ? <a href={"https://" + investor.accredidation_doc.link} target="_blank"><FontAwesomeIcon icon="paperclip" /></a> 
           : <FontAwesomeIcon icon="paperclip" /> }
@@ -192,7 +202,7 @@ function AccredidationUploader ({ investor, setInvestor }) {
 
   return (
     <div className="file-uploader">
-      <span className="file-label">Accreditation Doc:</span>
+      <span className="file-label">Please Attach Accredited Investor Certificate (<a href="https://www.investopedia.com/terms/a/accreditedinvestor.asp" target="_blank">More Info</a>)</span>
       <Button variant="contained" component="label">
         Upload
         <input type="file" 
