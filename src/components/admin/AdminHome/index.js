@@ -60,13 +60,6 @@ export const ORG_OVERVIEW = gql`
           name
         }
       }
-      signingRequests {
-        _id
-        title
-        url
-        status
-        due
-      }
     }
     investor {
       _id
