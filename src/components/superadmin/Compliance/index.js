@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import _ from 'lodash'
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
+import { useSimpleReducer } from '../../../utils/hooks'
 import { useAuth } from "../../../auth/useAuth"
 import { useParams, Link } from 'react-router-dom'
-import { Paper, Table, TableBody, TableCell, TableRow, TableHead, TextField, Button, LinearProgress, Select, MenuItem, FormControl, InputLabel } from '@material-ui/core'
+import { Paper, Table, TableBody, TableCell, TableRow, TableHead, TextField, Button, LinearProgress, Select, MenuItem, FormControl, InputLabel, Radio, RadioGroup, FormControlLabel, FormLabel } from '@material-ui/core'
 import { Col, Row } from 'reactstrap'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from '../../utils/Loader'
@@ -20,6 +21,8 @@ const ORG_COMPLIANCE = gql`
         _id
         completed
         status
+        is_signature
+        signature_template
         task
       }
     }
@@ -51,11 +54,12 @@ const DELETE_TASK = gql`
 export default function Compliance ({ data, error, refetch }) {
   if (!data || !data.organization) return <Loader />
 
+  const { organization } = data
   return (
     <Row>
       <Col sm={{size: 8, offset: 1}}>
         <Paper className="Compliance" style={{padding: "25px"}}>
-          <CreateTask refetch={refetch} />
+          <CreateTask refetch={refetch} templates={organization.documentTemplates} />
           <Paper style={{marginTop: "15px"}}>
             <Table>
               <TableBody>
@@ -71,8 +75,8 @@ export default function Compliance ({ data, error, refetch }) {
   )
 }
 
-function CreateTask ({ refetch }) {
-  const [task, setTask] = useState("")
+function CreateTask ({ refetch, templates }) {
+  const [task, setTask] = useSimpleReducer({ task: "", is_signature: "false", signature_template: "" })
   const { organization: slug } = useParams()
   const [createTask] = useMutation(CREATE_TASK, {
     variables: { slug },
@@ -80,16 +84,34 @@ function CreateTask ({ refetch }) {
   })
 
   return (
-    <div>
-      <TextField variant="outlined" 
+    <Paper style={{padding: "10px"}}>
+      <TextField 
         label="New Compliance Task" 
-        value={task} 
-        onChange={e => setTask(e.target.value)} 
-        style={{width: "80%"}} />
-      <Button style={{width: "10%", marginLeft: "2%"}} color="primary" variant="contained" onClick={() => createTask({ variables: { complianceTask: { task, status: "not_started" } }})}>
+        value={task.task} 
+        onChange={e => setTask({ task: e.target.value })} 
+        style={{width: "100%", marginBottom: "20px"}} />
+      <FormControl size="small" style={{width: "30%"}}>
+        <InputLabel>Signature?</InputLabel>
+        <Select value={task.is_signature} onChange={e => setTask({ is_signature: e.target.value })}>
+          <MenuItem value="true">Yes</MenuItem>
+          <MenuItem value="false">No</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl size="small" style={{width: "65%", marginLeft: "5%"}}>
+        <InputLabel>Template</InputLabel>
+        <Select disabled={task.is_signature === "false"}
+          value={task.signature_template} 
+          onChange={e => setTask({ signature_template: e.target.value })}>
+          {(templates || []).map(template => (
+            <MenuItem key={template._id} value={template._id}>{template.title}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <Button style={{marginTop: "10px"}} color="primary" variant="contained" 
+        onClick={() => createTask({ variables: { complianceTask: { ...task, is_signature: task.is_signature === "true", status: "not_started" } }})}>
         ADD
       </Button>
-    </div>
+    </Paper>
   )
 }
 
@@ -121,7 +143,7 @@ function Task ({ task, refetch }) {
     <TableRow>
       <TableCell style={{fontSize: "1.1em"}}>{task.task}</TableCell>
       <TableCell>
-        <FormControl variant="outlined" size="small" style={{width: "100%"}}>
+        <FormControl size="small" style={{width: "100%"}}>
           <InputLabel>
             Status
           </InputLabel>
