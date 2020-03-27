@@ -9,6 +9,19 @@ import { Paper, TextField } from '@material-ui/core';
 import ReactHtmlParser from 'react-html-parser';
 import KYC from '../forms/KYC'
 
+function getOnboardingLinkType (link) {
+  try {
+    const url = new URL(link)
+    if (url.hostname === "na3.docusign.net") {
+      return "docusign"
+    } else if (url.hostname === "app.hellosign.com") {
+      return "hellosign"
+    }
+  } catch (e) {
+    return "docusign"
+  }
+}
+
 export default function InvestmentFlow ({ investment, deal, investor }) {
   const [status, setStatus] = useState("data-room")
 
@@ -21,6 +34,9 @@ export default function InvestmentFlow ({ investment, deal, investor }) {
   if (status === "complete") {
     return <CompleteInvestment investment={investment} />
   }
+
+  console.log(investment)
+  const onboardingLinkType = getOnboardingLinkType(deal.onboarding_link)
 
   return (
     <React.Fragment>
@@ -44,7 +60,8 @@ export default function InvestmentFlow ({ investment, deal, investor }) {
         {status === "onboarded" && <Wire investment={investment} deal={deal} />}
 
         {/** Always render Onboarding so that the Docusign loads in... **/}
-        <Onboarding status={status} investment={investment} deal={deal} investor={investor} />
+        {onboardingLinkType === "docusign" && <Onboarding status={status} investment={investment} deal={deal} investor={investor} />}
+        {onboardingLinkType === "hellosign" && <HelloSignOnboarding status={status} investment={investment} deal={deal} investor={investor} />}
       </Paper>
     </React.Fragment>
   )
@@ -122,6 +139,22 @@ function Pledging ({ investment, deal }) {
       <div className="pledge-link">
         <img src="https://img.icons8.com/color/48/000000/google-sheets.png" />
         <a href={deal.pledge_link} target="_blank" rel="noopener noreferrer">Pledge Document</a>
+      </div>
+    </div>
+  )
+}
+
+function HelloSignOnboarding ({ investment, deal, investor, status }) {
+  const location = useLocation()
+
+  if (!investor) return <Loader />
+
+  return (
+    <div className={status === "pledged" ? "document-iframe" : "document-iframe hide"}>
+      <div className="external-sign-link">
+        <a href={deal.onboarding_link} target="_blank" rel="noopener noreferrer">
+          <FontAwesomeIcon icon="signature" /> Onboarding Document
+        </a>
       </div>
     </div>
   )
