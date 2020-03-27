@@ -39,6 +39,10 @@ const ORG_SUPERADMIN = gql`
         task
         status
       }
+      documentTemplates {
+        _id
+        title
+      }
     }
   }
 `
