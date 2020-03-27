@@ -57,7 +57,7 @@ export default function Compliance () {
   )
 }
 
-const prettyStatus = (status) => status.split('_').join(' ') 
+const prettyStatus = (status) => (status || "not_started").split('_').join(' ') 
 function Task ({ task }) {
   return (
     <TableRow>

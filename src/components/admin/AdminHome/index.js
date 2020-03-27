@@ -8,13 +8,9 @@ import { nWithCommas, formatDate } from '../../../utils/numbers'
 import { Paper, Table, TableBody, TableCell, TableRow, TableHead, Button, LinearProgress } from '@material-ui/core'
 import { Col, Row } from 'reactstrap'
 import Loader from '../../utils/Loader'
-import HelloSign from 'hellosign-embedded'
+import NextSteps from './NextSteps'
 
 import "./style.scss"
-
-const helloSign = new HelloSign({
-  clientId: 'eda2d58dfbeed4f5eaf8d94a545f7dc5'
-})
 
 export const ORG_OVERVIEW = gql`
   query GetOrg($slug: String!) {
@@ -60,6 +56,15 @@ export const ORG_OVERVIEW = gql`
           name
         }
       }
+      complianceTasks {
+        _id
+        completed
+        status
+        is_signature
+        signature_template
+        signature_url
+        task
+      }
     }
     investor {
       _id
@@ -80,7 +85,7 @@ function sumOrgInvestments ({ investor, deals }) {
 
 export default function AdminHome () {
   const { organization } = useParams()
-  const { data, error } = useQuery(ORG_OVERVIEW, { variables: { slug: organization } })
+  const { data, error, refetch } = useQuery(ORG_OVERVIEW, { variables: { slug: organization } })
 
   if (!data) return <Loader />
 
@@ -91,7 +96,7 @@ export default function AdminHome () {
   return (
     <div className="AdminHome">
       {data.investor.admin && <SuperAdmin org={org} />}
-      {[].includes(org.slug) && <ProvisionOfServices org={org} />}
+      <NextSteps org={org} refetch={refetch} />
       <Row>
         <Col sm={{size: 3, offset: 2}}>
           <Paper className="welcome">
@@ -165,38 +170,6 @@ export default function AdminHome () {
         </Col>
       </Row>
     </div>
-  )
-}
-
-function ProvisionOfServices ({ org }) {
-  const { organization } = useParams()
-  const [request, setRequest] = useState(null)
-  const [url, setUrl] = useState(null)
-  const [showDoc, setShowDoc] = useState(false)
-
-  useEffect(() => {
-    setRequest(org.signingRequests.find(r => r.title === "Provision of Services"))
-  }, [org])
-
-  useEffect(() => {
-    if (showDoc) {
-      helloSign.open(request.url, { testMode: true })
-    }
-  }, [showDoc])
-
-  if (!request) return null
-
-  return (
-    <Row>
-      <Col sm={{size: 8, offset: 2}}>
-        <Paper className="superadmin-section" style={{marginBottom: "20px", padding: "10px", textAlign: "center"}}>
-          Finish Fund Manager Onboarding &nbsp;
-          <Button size="small" variant="contained" color="secondary" onClick={() => setShowDoc(true)}>
-            Sign Provision of Services
-          </Button>
-        </Paper>
-      </Col>
-    </Row>
   )
 }
 
