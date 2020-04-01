@@ -9,6 +9,7 @@ import { gql } from 'apollo-boost'
 import { useMutation } from '@apollo/react-hooks'
 import { ORG_OVERVIEW } from '../admin/AdminHome'
 import { Button } from '@material-ui/core'
+import FormError from '../forms/Error'
 import "./style.scss"
 
 const CREATE_DEAL = gql`
@@ -24,7 +25,7 @@ export default function DealNew () {
   const { organization } = useParams()
   const [deal, setDeal] = useSimpleReducer({})
   const [hasChanges, setHasChanges] = useState(false)
-  const [createDeal] = useMutation(CREATE_DEAL, { 
+  const [createDeal, { error }] = useMutation(CREATE_DEAL, { 
     refetchQueries: [{ query: ORG_OVERVIEW }],
     onCompleted: ({createDeal}) => history.push(`/admin/${organization}/deals/${createDeal._id}/edit`) 
   })
@@ -87,6 +88,9 @@ export default function DealNew () {
               onChange={e => setDeal({ onboarding_link: e.target.value })} 
               label="Onboarding Link" 
               variant="filled" />
+          </Col>
+          <Col sm={{size: 8, offset: 1}}>
+            <FormError error={error} />
           </Col>
         </Row>
         <Row>
