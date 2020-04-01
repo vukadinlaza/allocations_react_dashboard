@@ -23,7 +23,7 @@ export default function CapitalAccount ({ deal }) {
               <TableRow>
                 <TableCell>Investor</TableCell>
                 <TableCell>Share of SPV</TableCell>
-                <TableCell>Amount</TableCell>
+                <TableCell>Investment Amount</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
