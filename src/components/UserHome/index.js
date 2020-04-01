@@ -186,14 +186,21 @@ function Name ({ investor }) {
 
 function InvestmentStub ({ investment }) {
   const history = useHistory()
+
   if (investment.status === "invited") return null
+
+  const { deal } = investment
+  const link = deal.organization 
+    ? `/deals/${deal.organization.slug}/${deal.slug}`
+    : `/deals/${deal.slug}`
+
   return (
     <Paper key={investment._id} className="investment-stub" 
       onClick={e => {
         e.stopPropagation()
-        history.push(`/deals/${investment.deal.company_name}`)}
-      }>
-      <span>{investment.deal.company_name}</span>
+        history.push(link)
+      }}>
+      <span>{deal.company_name}</span>
       <span>{investment.amount ? `$${nWithCommas(investment.amount)}` : <i>TBD</i> }</span>
       <span className={`investment-status investment-status-${investment.status}`}>{investment.status}</span>
     </Paper>
@@ -234,8 +241,8 @@ function NextSteps ({ investor }) {
 function DealStub ({ deal }) {
   const history = useHistory()
   const link = deal.organization 
-    ? `/deals/${deal.organization.slug}/${deal.company_name}`
-    : `/deals/${deal.company_name}`
+    ? `/deals/${deal.organization.slug}/${deal.slug}`
+    : `/deals/${deal.slug}`
 
   return (
     <Paper key={deal._id} className="deal-stub" onClick={() => history.push(link)}>
