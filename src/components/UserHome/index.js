@@ -69,18 +69,24 @@ const GET_INVESTOR = gql`
         logo
       }
       investments {
+        _id
         amount
         status
         deal {
           _id
+          slug
           company_name
           company_description
           date_closed
           status
+          organization {
+            slug
+          }
         }
       }
       invitedDeals {
         _id
+        slug
         company_name
         company_description
         date_closed

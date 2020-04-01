@@ -23,6 +23,7 @@ import UserInvestments from './components/UserInvestments';
 
 // superadmin
 import SuperAdminManager from './components/superadmin/Manager'
+import SuperAdminOverview from './components/superadmin/Overview'
 
 // admin
 import AdminHome from './components/admin/AdminHome'
@@ -83,8 +84,9 @@ const App = () => {
                 <PrivateRoute path="/investments" component={UserInvestments} />
                 <PrivateRoute path="/invited-deals" component={InvitedDeals} />
 
-                <PrivateRoute path="/deals/:id" component={Deal} exact />
-                <PrivateRoute path="/deals/:organization/:id" component={Deal} exact />
+                {/** Deals **/}
+                <PrivateRoute path="/deals/:deal_slug" component={Deal} exact />
+                <PrivateRoute path="/deals/:organization/:deal_slug" component={Deal} exact />
 
                 {/** AllocationsX **/}
                 <PrivateRoute path="/exchange" component={AllocationsX} exact />
@@ -100,6 +102,7 @@ const App = () => {
                 <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
 
                 {/** SuperAdmin **/}
+                <AdminRoute path="/superadmin" component={SuperAdminOverview} exact />
                 <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
 
                 {/** Whitelabel Routes **/}

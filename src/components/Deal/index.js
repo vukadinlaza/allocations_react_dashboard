@@ -15,7 +15,7 @@ import InvestmentFlow from './DealFlow'
 import "./style.scss"
 
 const GET_INVESTOR_DEAL = gql`
-  query Deal($company_name: String!) {
+  query Deal($deal_slug: String!, $fund_slug: String!) {
     investor {
       _id
       name
@@ -27,7 +27,7 @@ const GET_INVESTOR_DEAL = gql`
       signer_full_name
       accredited_investor_status
       email
-      invitedDeal(company_name: $company_name) {
+      invitedDeal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
         _id
         company_name
         company_description
@@ -60,7 +60,7 @@ const CREATE_INVESTMENT = gql`
 `
 
 export default function Deal () {
-  const params = useParams()
+  const { organization, deal_slug } = useParams()
   const location = useLocation()
   const history = useHistory()
   const { user, isAuthenticated, loading } = useAuth0()
@@ -69,7 +69,7 @@ export default function Deal () {
 
   useEffect(() => {
     if (!loading && isAuthenticated && !called) {
-      getDeal({ variables: { company_name: params.id }})
+      getDeal({ variables: { deal_slug, fund_slug: organization || "allocations" }})
     }
   }, [isAuthenticated, loading, called])
 
@@ -90,7 +90,7 @@ export default function Deal () {
       const q = queryString.parse(location.search)
       if (q && q.ref === "public" && q.invite) {
         // need to redir back to public link (haven't been invited)
-        return history.push(`/public/${params.organization || "allocations"}/deals/${encodeURI(params.id)}?invite_code=${q.invite}&no_redirect=true`) 
+        return history.push(`/public/${organization || "allocations"}/deals/${deal_slug}?invite_code=${q.invite}&no_redirect=true`) 
       }
 
       if (error.message === "GraphQL error: REDIRECT") return history.push(`/`)

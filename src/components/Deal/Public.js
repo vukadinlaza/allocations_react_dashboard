@@ -15,9 +15,10 @@ import InvestmentFlow from './DealFlow'
 import "./style.scss"
 
 const GET_PUBLIC_DEAL = gql`
-  query PublicDeal($company_name: String!, $invite_code: String!) {
-    publicDeal(company_name: $company_name, invite_code: $invite_code) {
+  query PublicDeal($deal_slug: String!, $fund_slug: String!, $invite_code: String!) {
+    publicDeal(deal_slug: $deal_slug, fund_slug: $fund_slug, invite_code: $invite_code) {
       _id
+      slug
       company_name
       company_description
       date_closed
@@ -58,13 +59,13 @@ export default function PublicDeal () {
     const { invite_code, no_redirect } = queryString.parse(location.search)
     if (isLoggedIn() && !no_redirect) {
       history.push(params.organization === "allocations" 
-        ? `/deals/${params.company_name}?ref=public&invite=${invite_code}` 
-        : `/deals/${params.organization}/${params.company_name}?ref=public&invite=${invite_code}`
+        ? `/deals/${params.deal_slug}?ref=public&invite=${invite_code}` 
+        : `/deals/${params.organization}/${params.deal_slug}?ref=public&invite=${invite_code}`
       )
     }
 
     if (invite_code) {
-      getDeal({ variables: { company_name: params.company_name, invite_code }})
+      getDeal({ variables: { deal_slug: params.deal_slug, fund_slug: params.organization, invite_code }})
     } else {
       setError("You do not have permission to see this deal")
     }

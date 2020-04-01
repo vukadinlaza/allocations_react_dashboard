@@ -22,6 +22,7 @@ const GET_INVESTOR = gql`
       email
       invitedDeals {
         _id
+        slug
         status
         company_name
         company_description
@@ -90,8 +91,9 @@ export default function InvitedDeals () {
 
 function DealRow ({ deal }) {
   const link = deal.organization 
-    ? `/deals/${deal.organization.slug}/${deal.company_name}`
-    : `/deals/${deal.company_name}`
+    ? `/deals/${deal.organization.slug}/${deal.slug}`
+    : `/deals/${deal.slug}`
+    
   return (
     <TableRow>
       <TableCell>{deal.company_name}</TableCell>

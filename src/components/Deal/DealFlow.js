@@ -35,9 +35,7 @@ export default function InvestmentFlow ({ investment, deal, investor }) {
     return <CompleteInvestment investment={investment} />
   }
 
-  console.log(investment)
   const onboardingLinkType = getOnboardingLinkType(deal.onboarding_link)
-
   return (
     <React.Fragment>
       <InvestmentOverview investment={investment} />

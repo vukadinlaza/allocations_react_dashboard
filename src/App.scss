@@ -78,7 +78,7 @@ $graygreen: #e6f9f3;
   @media screen and (max-width: $break-sm) {
     display: block;
     text-align: center;
-    padding: 15px;
+    padding: 5px;
     .hamburger {
       position: absolute;
       right: 45px;
@@ -139,6 +139,21 @@ $graygreen: #e6f9f3;
 
 th {
   font-weight: bold;
+}
+
+.square-number {
+  background-color: $softblue;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+}
+
+.progress-bar {
+  height: 15px !important;
+  width: 150px;
+  text-align: center;
 }
 
 // Error

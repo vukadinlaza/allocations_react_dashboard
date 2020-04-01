@@ -36,7 +36,7 @@ export default function PublicApp () {
           </Col>
           <Col xs={{size: 12, offset: 0}} md={{size: 10, offset: 1}} className="app-body">
             <Switch>
-              <Route path={`${path}/:organization/deals/:company_name`}>
+              <Route path={`${path}/:organization/deals/:deal_slug`}>
                 <PublicDeal />
               </Route>
               <Route path={`${path}/deals/:company_name`}>

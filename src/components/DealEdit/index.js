@@ -25,6 +25,7 @@ const GET_DEAL = gql`
       _id
       deal(_id: $id) {
         _id
+        slug
         company_name
         company_description
         date_closed
@@ -321,10 +322,10 @@ export default function DealEdit () {
 
 function DealLinks ({ deal }) {
   const { organization } = useParams()
-  const pubLink = `dashboard.allocations.com/public/${organization}/deals/${encodeURI(deal.company_name)}?invite_code=${deal.inviteKey}`
+  const pubLink = `dashboard.allocations.com/public/${organization}/deals/${deal.slug}?invite_code=${deal.inviteKey}`
   const appLink = organization && organization !== "allocations"
-    ? `dashboard.allocations.com/deals/${organization}/${encodeURI(deal.company_name)}`
-    : `dashboard.allocations.com/deals/${encodeURI(deal.company_name)}`
+    ? `dashboard.allocations.com/deals/${organization}/${deal.slug}`
+    : `dashboard.allocations.com/deals/${deal.slug}`
 
   return (
     <React.Fragment>
