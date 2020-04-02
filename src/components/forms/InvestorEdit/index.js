@@ -4,6 +4,7 @@ import { get } from "lodash"
 import { gql } from 'apollo-boost'
 import { useMutation } from '@apollo/react-hooks';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CloudDone, HourglassEmpty, CheckCircle } from '@material-ui/icons'
 
 import { Col, Row } from "reactstrap"
 import { Button, TextField, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
@@ -143,11 +144,17 @@ export default function InvestorEditForm ({ investor, setInvestor, actionText, s
 }
 
 function KYC ({ investor, setInvestor }) {
+  const status = investor.passport && investor.accredidation_doc 
+    ? investor.is_kyced
+      ? <Button variant="contained" size="small" style={{backgroundColor: "#21ce99"}} startIcon={<CheckCircle />}>Approved</Button> 
+      : <Button variant="contained" size="small" color="secondary" startIcon={<HourglassEmpty />}>Pending</Button>
+    : null
+
   return (
     <Row>
       <Col sm={{size: 6, offset: 1}}>
-        <h5>KYC</h5>
-        <p>In Order to Participate in Allocations Deals we Need to Collect to Verify your Identity</p>
+        <h5>KYC &nbsp;&nbsp;&nbsp;&nbsp;{status}</h5>
+        <p>We require the following documents:</p>
         <hr />
       </Col>
       <Col sm={5}></Col>
@@ -165,17 +172,15 @@ function PassportUploader ({ investor, setInvestor }) {
   if (investor.passport) {
     return (
       <div className="file-uploader">
-        <span className="file-label">Passport / Driver's License</span>
-        {investor.passport.link 
-          ? <a href={"https://" + investor.passport.link} target="_blank"><FontAwesomeIcon icon="paperclip" /></a> 
-          : <FontAwesomeIcon icon="paperclip" /> }
+        <span className="file-label">ID for KYC (passport / drivers license)</span>
+        <Button variant="contained" size="small" startIcon={<CloudDone />}>Uploaded</Button>
       </div>
     )
   }
 
   return (
     <div className="file-uploader">
-      <span className="file-label">Please Attach your ID for KYC (Passport / Driver's License)</span>
+      <span className="file-label">ID for KYC (passport / drivers license)</span>
       <Button variant="contained" component="label">
         Upload
         <input type="file" 
@@ -192,17 +197,15 @@ function AccredidationUploader ({ investor, setInvestor }) {
   if (investor.accredidation_doc) {
     return (
       <div className="file-uploader">
-        <span className="file-label">Accredited Investor Certificate</span>
-        {investor.accredidation_doc.link 
-          ? <a href={"https://" + investor.accredidation_doc.link} target="_blank"><FontAwesomeIcon icon="paperclip" /></a> 
-          : <FontAwesomeIcon icon="paperclip" /> }
+        <span className="file-label">Accredited Investor Certificate (<a href="https://verifyinvestor.com" target="_blank" rel="noreferrer noopener">verifyinvestor.com</a>)</span>
+        <Button variant="contained" size="small" startIcon={<CloudDone />}>Uploaded</Button>
       </div>
     )
   }
 
   return (
     <div className="file-uploader">
-      <span className="file-label">Please Attach Accredited Investor Certificate (<a href="https://www.investopedia.com/terms/a/accreditedinvestor.asp" target="_blank">More Info</a>)</span>
+      <span className="file-label">Accredited Investor Certificate (<a href="https://verifyinvestor.com" target="_blank" rel="noreferrer noopener">verifyinvestor.com</a>)</span>
       <Button variant="contained" component="label">
         Upload
         <input type="file" 
