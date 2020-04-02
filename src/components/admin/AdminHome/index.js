@@ -192,7 +192,7 @@ function Deal ({ deal }) {
   return (
     <TableRow className="deal-info">
       <TableCell className="company-name">{deal.company_name}</TableCell>
-      <TableCell><i>closes: {formatDate(deal.date_closed)}</i></TableCell>
+      <TableCell><i>closes: {deal.date_closed ? formatDate(deal.date_closed) : "tbd"}</i></TableCell>
       <TableCell>
         <div className="text-center">{Math.round(val || 0)}%</div>
         <LinearProgress className="deal-progress" variant="determinate" color="secondary" value={val} />
