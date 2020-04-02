@@ -11,6 +11,7 @@ import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Paper, TextField } from '@material-ui/core';
 import InvestmentFlow from './DealFlow'
+import { legacySlugMap } from './'
 
 import "./style.scss"
 
@@ -55,17 +56,19 @@ export default function PublicDeal () {
   const [getDeal, { data, error: apiError, refetch, called }] = useLazyQuery(GET_PUBLIC_DEAL)
   const [createInvestment] = useMutation(CREATE_INVESTMENT, { onCompleted: () => refetch() })
 
+  const deal_slug = legacySlugMap[params.deal_slug] || params.deal_slug
+
   useEffect(() => {
     const { invite_code, no_redirect } = queryString.parse(location.search)
     if (isLoggedIn() && !no_redirect) {
       history.push(params.organization === "allocations" 
-        ? `/deals/${params.deal_slug}?ref=public&invite=${invite_code}` 
-        : `/deals/${params.organization}/${params.deal_slug}?ref=public&invite=${invite_code}`
+        ? `/deals/${deal_slug}?ref=public&invite=${invite_code}` 
+        : `/deals/${params.organization}/${deal_slug}?ref=public&invite=${invite_code}`
       )
     }
 
     if (invite_code) {
-      getDeal({ variables: { deal_slug: params.deal_slug, fund_slug: params.organization, invite_code }})
+      getDeal({ variables: { deal_slug, fund_slug: params.organization, invite_code }})
     } else {
       setError("You do not have permission to see this deal")
     }

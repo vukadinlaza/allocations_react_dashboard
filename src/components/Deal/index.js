@@ -59,6 +59,13 @@ const CREATE_INVESTMENT = gql`
   }
 `
 
+export const legacySlugMap = {
+  Xplore: "xplore",
+  Swarm: "swarm",
+  Volumetric: "volumetric",
+  Focusmate: "focusmate"
+}
+
 export default function Deal () {
   const { organization, deal_slug } = useParams()
   const location = useLocation()
@@ -69,7 +76,8 @@ export default function Deal () {
 
   useEffect(() => {
     if (!loading && isAuthenticated && !called) {
-      getDeal({ variables: { deal_slug, fund_slug: organization || "allocations" }})
+      const _deal_slug = legacySlugMap[deal_slug] || deal_slug
+      getDeal({ variables: { deal_slug: _deal_slug, fund_slug: organization || "allocations" }})
     }
   }, [isAuthenticated, loading, called])
 
