@@ -66,7 +66,7 @@ function OrgLogo ({ org }) {
   }
 
   if (org.name === "Allocations") {
-    return <img height="30px" width="90px" src={"https://www.allocations.co/assets/img/brand.svg"} />
+    return <img height="30px" width="90px" src={"https://allocations-public.s3.us-east-2.amazonaws.com/logo.png"} />
   }
 
   return <img height="30px" onError={() => setErr(true)} width="90px" src={`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${org.slug}.png`} />
