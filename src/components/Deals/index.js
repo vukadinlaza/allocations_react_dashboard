@@ -134,7 +134,7 @@ export default function Deals () {
                       <TableCell>{deal.company_description}</TableCell>
                       <TableCell>{deal.deal_lead}</TableCell>
                       <TableCell>{formatDate(deal.date_closed)}</TableCell>
-                      <TableCell>${nWithCommas(deal.amount_raised)}</TableCell>
+                      <TableCell>${nWithCommas(_.sumBy(deal.investments, 'amount'))}</TableCell>
                       <TableCell className="text-center">{deal.investments.length}</TableCell>
                       {isAdmin && <TableCell align="center"><Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link></TableCell>}
                     </TableRow>
