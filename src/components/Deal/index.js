@@ -63,7 +63,8 @@ export const legacySlugMap = {
   Xplore: "xplore",
   Swarm: "swarm",
   Volumetric: "volumetric",
-  Focusmate: "focusmate"
+  Focusmate: "focusmate",
+  "Focusmate%20SPV": "focusmate-spv"
 }
 
 export default function Deal () {
