@@ -11,6 +11,12 @@
         }
     }
 
+    .not-setup {
+        background-color: $graygreen;
+        border-radius: 5px;
+        padding: 10px 20px;
+    }
+
     .sub-category {
         // padding: 20px 15px;
         margin-bottom: 10px;

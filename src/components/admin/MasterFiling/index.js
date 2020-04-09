@@ -16,6 +16,7 @@ const MASTER_FILING = gql`
       name
       legal_name
       masterFiling {
+        _id
         step
         status
         subCategory
@@ -28,9 +29,42 @@ export default function MasterFiling () {
   const { organization } = useParams()
   const { data, error } = useQuery(MASTER_FILING, { variables: { slug: organization } })
 
-  if (!data) return <Loader />
+  if (!data) return (
+    <div className="MasterFiling">
+      <Row>
+        <Col sm={{size: 6, offset: 1}}>
+          <Paper style={{padding: "20px"}}>
+            <div className="filing-header">
+              <span>Master Filing Progress</span>
+            </div>
+            <hr />
+            <Loader />
+          </Paper>
+        </Col>
+      </Row>
+    </div>
+  )
 
   const { masterFiling } = data.organization
+
+  if (masterFiling.length === 0) {
+    return (
+      <div className="MasterFiling">
+        <Row>
+          <Col sm={{size: 6, offset: 1}}>
+            <Paper style={{padding: "20px"}}>
+              <div className="filing-header">
+                <span>Master Filing Progress</span>
+              </div>
+              <hr />
+              <p className="not-setup">Not yet setup, please ask to team to begin tracking your master filing steps!</p>
+            </Paper>
+          </Col>
+        </Row>
+      </div>
+    )
+  }
+
   const grouped = _.groupBy(masterFiling, 'subCategory')
 
   const progress = Math.round((masterFiling.filter(x => x.status === 1).length / masterFiling.length) * 100)
