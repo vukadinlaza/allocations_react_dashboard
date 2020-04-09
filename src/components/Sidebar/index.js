@@ -4,6 +4,7 @@ import { Col } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth0 } from "../../react-auth0-spa";
 import { adminWhitelist } from "../../auth/admin-route"
+import classNames from 'classnames'
 import "./style.scss"
 
 export default function Sidebar ({ showSidebar, setShowSidebar }) {
@@ -113,6 +114,7 @@ function Footer () {
 
 function AdminLinks ({ location }) {
   const match = useRouteMatch('/admin/:organization')
+  const [showAdministration, setShowAdministration] = useState(false)
 
   if (!match) return null
   const { params: { organization } } = match
@@ -126,11 +128,15 @@ function AdminLinks ({ location }) {
           <span>Investors</span>
         </Link>
       </div>}
-      <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/compliance` ? "sidebar-nav-item-active" : ""}`}>
-        <Link to={`/admin/${organization}/compliance`}>
-          <span>Compliance</span>
-        </Link>
+      <div className={classNames('sidebar-nav-item', {"sidebar-nav-item-active": showAdministration})}
+        onClick={() => setShowAdministration(true)}>
+        <span>Administration</span>
       </div>
+      {showAdministration && <div className={classNames("sidebar-nav-item", {"sidebar-nav-item-active": location.pathname === `/admin/${organization}/master-filing`})}>
+        <Link to={`/admin/${organization}/master-filing`}>
+          <span>Master Filing</span>
+        </Link>
+      </div>}
       <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/deals` ? "sidebar-nav-item-active" : ""}`}>
         <Link to={`/admin/${organization}/deals`}>
           <span>Deals</span>
