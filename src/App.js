@@ -28,6 +28,7 @@ import SuperAdminOverview from './components/superadmin/Overview'
 // admin
 import AdminHome from './components/admin/AdminHome'
 import Compliance from './components/admin/Compliance'
+import MasterFiling from './components/admin/MasterFiling'
 
 // allocationsX
 import AllocationsX from './allocationsX/Home';
@@ -116,6 +117,7 @@ const App = () => {
 
                 <PrivateRoute path="/admin/:organization/investments" component={Investments} exact />
                 <PrivateRoute path="/admin/:organization/compliance" component={Compliance} exact />
+                <PrivateRoute path="/admin/:organization/master-filing" component={MasterFiling} exact />
                 <AdminRoute path="/admin/:organization/investors" component={Investors} exact />
 
                 <Route path="/signup" component={SignUp} exact />
