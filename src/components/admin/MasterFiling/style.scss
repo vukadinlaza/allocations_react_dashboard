@@ -27,18 +27,20 @@
             margin-bottom: 0px;
             border-radius: 5px 5px 0px 0px;
             font-weight: 400;
-            position: relative;
+            display: flex;
+            justify-content: space-between;
 
             &.selected {
                 background-color: $graygreen;
             }
 
-            >span {
+            .progress-wrapper {
                 display: inline-block;
                 width: 20%;
                 margin-left: 20px;
                 padding-bottom: 3px;
                 vertical-align: middle;
+                text-align: right;
             }
 
             .fa-check-circle {

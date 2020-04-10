@@ -95,8 +95,8 @@ function SubCategory ({ subCat, steps }) {
   return (
     <Paper className="sub-category">
       <h4 onClick={() => setOpen(x => !x)} className={classNames({ selected: open })}>
-        {subCat} 
-        <span>
+        <span>{subCat}</span> 
+        <span className="progress-wrapper">
           {progress == 100 && <FontAwesomeIcon icon="check-circle" />}
           {progress < 100 && 
             <LinearProgress style={{height: "18px"}}
