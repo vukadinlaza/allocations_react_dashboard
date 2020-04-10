@@ -128,15 +128,15 @@ function AdminLinks ({ location }) {
           <span>Investors</span>
         </Link>
       </div>}
-      <div className={classNames('sidebar-nav-item', {"sidebar-nav-item-active": showAdministration})}
-        onClick={() => setShowAdministration(true)}>
+      {/**<div className={classNames('sidebar-nav-item', {"sidebar-nav-item-active": showAdministration})}
+        onClick={() => setShowAdministration(x => !x)}>
         <span>Administration</span>
       </div>
       {showAdministration && <div className={classNames("sidebar-nav-item", {"sidebar-nav-item-active": location.pathname === `/admin/${organization}/master-filing`})}>
         <Link to={`/admin/${organization}/master-filing`}>
           <span>Master Filing</span>
         </Link>
-      </div>}
+      </div>}**/}
       <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/deals` ? "sidebar-nav-item-active" : ""}`}>
         <Link to={`/admin/${organization}/deals`}>
           <span>Deals</span>
