@@ -8,7 +8,6 @@ import { nWithCommas, formatDate } from '../../../utils/numbers'
 import { Paper, Table, TableBody, TableCell, TableRow, TableHead, Button, LinearProgress } from '@material-ui/core'
 import { Col, Row } from 'reactstrap'
 import Loader from '../../utils/Loader'
-import NextSteps from './NextSteps'
 
 import "./style.scss"
 
@@ -96,7 +95,6 @@ export default function AdminHome () {
   return (
     <div className="AdminHome">
       {data.investor.admin && <SuperAdmin org={org} />}
-      <NextSteps org={org} refetch={refetch} />
       <Row>
         <Col sm={{size: 3, offset: 2}}>
           <Paper className="welcome">
