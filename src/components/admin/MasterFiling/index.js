@@ -13,6 +13,7 @@ import "./style.scss"
 const MASTER_FILING = gql`
   query MasterFiling($slug: String!) {
     organization(slug: $slug) {
+      _id
       name
       legal_name
       masterFiling {
