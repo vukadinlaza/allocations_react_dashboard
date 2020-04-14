@@ -84,7 +84,9 @@ function sumOrgInvestments ({ investor, deals }) {
 
 export default function AdminHome () {
   const { organization } = useParams()
-  const { data, error, refetch } = useQuery(ORG_OVERVIEW, { variables: { slug: organization } })
+  const { data, error, refetch } = useQuery(ORG_OVERVIEW, { 
+    variables: { slug: organization }
+  })
 
   if (!data) return <Loader />
 

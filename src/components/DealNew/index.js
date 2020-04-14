@@ -20,13 +20,22 @@ const CREATE_DEAL = gql`
   }
 `
 
+const emptyDeal = {
+  company_name: "", 
+  deal_lead: "", 
+  company_description: "", 
+  date_closed: "",
+  onboarding_link: "",
+  pledge_link: ""
+}
+
 export default function DealNew () {
   const history = useHistory()
   const { organization } = useParams()
-  const [deal, setDeal] = useSimpleReducer({})
+  const [deal, setDeal] = useSimpleReducer(emptyDeal)
   const [hasChanges, setHasChanges] = useState(false)
   const [createDeal, { error }] = useMutation(CREATE_DEAL, { 
-    refetchQueries: [{ query: ORG_OVERVIEW }],
+    refetchQueries: [{ query: ORG_OVERVIEW, variables: { slug: organization } }],
     onCompleted: ({createDeal}) => history.push(`/admin/${organization}/deals/${createDeal._id}/edit`) 
   })
 
