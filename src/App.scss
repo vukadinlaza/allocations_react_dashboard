@@ -151,6 +151,17 @@ th {
   text-align: center;
 }
 
+.circular-number {
+  background-color: $softgreen;
+  color: #fff;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  line-height: 30px;
+  text-align: center;
+}
+
 .progress-bar {
   height: 15px !important;
   width: 150px;
