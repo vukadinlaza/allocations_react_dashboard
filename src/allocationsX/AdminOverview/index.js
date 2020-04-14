@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import _ from 'lodash'
 import { Row, Col } from 'reactstrap'
 import { useParams, useHistory, useLocation } from 'react-router-dom'
-import { useSimpleReducer } from '../../utils/hooks'
+import { useSimpleReducer, useToggle } from '../../utils/hooks'
 import { nWithCommas, formatDate } from '../../utils/numbers'
 import { gql } from 'apollo-boost'
 import { useQuery, useMutation, useLazyQuery } from '@apollo/react-hooks';
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, TextField, InputAdornment, InputLabel } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, TextField, InputAdornment, InputLabel, Modal } from '@material-ui/core'
 import Loader from '../../components/utils/Loader'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import UserSearch from '../../components/forms/UserSearch'
@@ -61,35 +61,50 @@ const SAVE_TRADE = gql`
 `
 
 export default function AdminExchangeOverview () {
-  const { organization } = useParams()
-  const { data, error, refetch } = useQuery(EXCHANGE_OVERVIEW, { variables: { slug: organization } })
+  const [showInputTrade, toggleShow] = useToggle(false)
+  const { organization: slug } = useParams()
+  const { data, error, refetch } = useQuery(EXCHANGE_OVERVIEW, { variables: { slug } })
+
+  if (!data) return <Loader />
+  const { organization } = data
+  const trades = _.orderBy(organization.trades, t => new Date(t.settled_at).getTime(), 'desc')
 
   return (
     <div className="AdminExchangeOverview">
-      <Paper className="AdminExchangeOverview" style={{padding: "20px"}}>
-        <Row>
-          <Col sm={{size: 12}}>
-            <h4>Exchange Overview</h4>
-            <hr />
-            <div>
-              <MatchRequests matchRequests={_.get(data, 'organization.matchRequests')} />
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm="5">
-            <InputTrade refetch={refetch} />
-          </Col>
-          <Col sm="7">
-            <Trades trades={_.get(data, 'organization.trades')} />
-          </Col>
-        </Row>
-      </Paper>
+      <Modal open={showInputTrade}
+        onClose={toggleShow}>
+        <InputTrade toggleShow={toggleShow} />
+      </Modal>
+      <Row>
+        <Col sm={{size: 10, offset: 1}}>
+          <Paper className="header">
+            <h4>
+              Exchange Overview&nbsp;
+              <Button size="small"
+                variant="contained"
+                color="secondary"
+                onClick={toggleShow}>
+                Add Trade
+              </Button>
+            </h4>
+          </Paper>
+        </Col>
+      </Row>
+      <Row>
+        <Col sm={{size: 10, offset: 1}}>
+          <MatchRequests matchRequests={organization.matchRequests} />
+        </Col> 
+      </Row>
+      <Row>
+        <Col sm={{size: 10, offset: 1}}>
+          <Trades trades={trades} />
+        </Col>
+      </Row>
     </div>
   )
 }
 
-function InputTrade ({ refetch }) {
+function InputTrade ({ refetch, toggleShow }) {
   const { organization } = useParams()
   const [deal, setDeal] = useState(null)
   const [buyer, setBuyer] = useState(null)
@@ -117,57 +132,62 @@ function InputTrade ({ refetch }) {
   }
 
   return (
-    <Paper style={{padding: "20px"}}>
-      <h6>Input Completed Trade</h6>
-      <TextField label="shares"
-        style={{width: "100%", marginBottom: "10px"}}
-        variant="outlined"
-        value={trade.amount}
-        onChange={e => setTrade({ amount: e.target.value })} />
-      <TextField label="price"
-        style={{width: "100%", marginBottom: "10px"}}
-        variant="outlined"
-        value={trade.price}
-        onChange={e => setTrade({ price: e.target.value })} />
-      <UserSearch user={buyer} setUser={setBuyer} label="Buyer" showLabelOnSelect />
-      <hr />
-      <UserSearch user={seller} setUser={setSeller} label="Seller" showLabelOnSelect />
-      <hr />
-      <DealSearch deal={deal} setDeal={setDeal} />
-      <hr />
-      <TextField
-        label="Trade Date"
-        variant="outlined"
-        value={trade.settled_at}
-        onChange={e => setTrade({ settled_at: e.target.value })}
-        type="date"
-        style={{width: "70%"}}
-        InputLabelProps={{ shrink: true }}
-      />
-      <Button color="secondary"
-        style={{margin: "10px"}}
-        variant="contained" 
-        onClick={submit}>
-        SAVE
-      </Button>
-    </Paper>
+    <div className="InputTrade-wrapper" onClick={e => {
+      if (e.target == e.currentTarget) toggleShow()
+    }}>
+      <Paper className="InputTrade" style={{padding: "20px"}}>
+        <h6>Input Completed Trade</h6>
+        <TextField label="shares"
+          style={{width: "100%", marginBottom: "10px"}}
+          variant="outlined"
+          value={trade.amount}
+          onChange={e => setTrade({ amount: e.target.value })} />
+        <TextField label="price"
+          style={{width: "100%", marginBottom: "10px"}}
+          variant="outlined"
+          value={trade.price}
+          onChange={e => setTrade({ price: e.target.value })} />
+        <UserSearch user={buyer} setUser={setBuyer} label="Buyer" showLabelOnSelect />
+        <hr />
+        <UserSearch user={seller} setUser={setSeller} label="Seller" showLabelOnSelect />
+        <hr />
+        <DealSearch deal={deal} setDeal={setDeal} />
+        <hr />
+        <TextField
+          label="Trade Date"
+          variant="outlined"
+          value={trade.settled_at}
+          onChange={e => setTrade({ settled_at: e.target.value })}
+          type="date"
+          style={{width: "70%"}}
+          InputLabelProps={{ shrink: true }}
+        />
+        <Button color="secondary"
+          style={{margin: "10px"}}
+          variant="contained" 
+          onClick={submit}>
+          SAVE
+        </Button>
+      </Paper>
+    </div>
   )
 }
 
-function MatchRequests ({ matchRequests }) {
+function MatchRequests ({ matchRequests = [] }) {
   if (!matchRequests || matchRequests.length === 0) {
     return (
       <div className="MatchRequests">
-        <h6>Match Requests</h6>
-        <div>No Outstanding Match Requests</div>
+        <h5>Match Requests <span className="circular-number">{matchRequests.length}</span></h5>
+        <Paper className="table-wrapper">
+        </Paper>
       </div>
     )
   }
 
   return (
     <div className="MatchRequests">
-      <h6>Match Requests</h6>
-      <Paper style={{padding: "20px", margin: "10px 0px"}}>
+      <h5>Match Requests <span className="circular-number">{matchRequests.length}</span></h5>
+      <Paper className="table-wrapper">
         <Table>
           <TableHead>
             <TableRow>
@@ -200,7 +220,7 @@ function MatchRequest ({ req }) {
       <TableCell>{buyer.name}</TableCell>
       <TableCell>{seller.name}</TableCell>
       <TableCell className="text-center">
-        <Button variant="contained" color="primary">Execute</Button>
+        <Button variant="contained" color="primary" style={{backgroundColor: "#21ce99"}}>Execute</Button>
       </TableCell>
     </TableRow>
   )
@@ -209,8 +229,8 @@ function MatchRequest ({ req }) {
 function Trades ({ trades = [] }) {
   return (
     <React.Fragment>
-    <h6>Completed Trades</h6>
-      <Paper padding={"20px"} className="Trades">
+      <h5>Completed Trades <span className="circular-number">{trades.length}</span></h5>
+      <Paper className="Trades table-wrapper">
         <Table>
           <TableHead>
             <TableRow>
