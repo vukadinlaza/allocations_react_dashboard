@@ -143,7 +143,7 @@ export default function Deal () {
   )
 }
 
-function DealParams ({ deal }) {
+export function DealParams ({ deal }) {
   const { dealParams, date_closed, deal_lead } = deal
 
   const allocationPercent = dealParams.totalRoundSize && dealParams.allocation 

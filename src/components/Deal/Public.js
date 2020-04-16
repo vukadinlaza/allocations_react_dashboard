@@ -11,7 +11,7 @@ import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Paper, TextField } from '@material-ui/core';
 import InvestmentFlow from './DealFlow'
-import { legacySlugMap } from './'
+import { legacySlugMap, DealParams } from './'
 
 import "./style.scss"
 
@@ -31,6 +31,14 @@ const GET_PUBLIC_DEAL = gql`
       documents {
         path
         link
+      }
+      dealParams {
+        totalRoundSize
+        allocation
+        totalCarry
+        minimumInvestment
+        totalManagementFee
+        estimatedSetupCosts
       }
     }
   }
@@ -97,18 +105,8 @@ export default function PublicDeal () {
               investor={{}} />
           </Paper>
         </Col>
-        <Col sm="4">
-          <Paper className="investment-details tile">
-            <div className="small-header">Closing Date</div>
-            <Paper className="closing-date">
-              <FontAwesomeIcon icon="clock" size="lg" />
-              <span>{deal.date_closed}</span>
-            </Paper>
-            <div className="small-header">Lead</div>
-            <Paper className="deal-lead">
-              <span>{deal.deal_lead}</span>
-            </Paper>
-          </Paper>
+        <Col sm="4">         
+          <DealParams deal={deal} />
         </Col>
       </Row>
     </div>
