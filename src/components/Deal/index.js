@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Loader from '../utils/Loader'
 import _ from "lodash"
+import BN from 'bignumber.js'
 import { gql } from 'apollo-boost'
 import { useParams, useHistory, Link, useLocation } from 'react-router-dom'
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
@@ -45,6 +46,14 @@ const GET_INVESTOR_DEAL = gql`
           _id
           amount
           status
+        }
+        dealParams {
+          totalRoundSize
+          allocation
+          totalCarry
+          minimumInvestment
+          totalManagementFee
+          estimatedSetupCosts
         }
       }
     } 
@@ -126,21 +135,62 @@ export default function Deal () {
           </Paper>
         </Col>
         <Col sm="4">
-          <Paper className="investment-details tile">
-            <div className="small-header">Closing Date</div>
-            <Paper className="closing-date">
-              <FontAwesomeIcon icon="clock" size="lg" />
-              <span>{deal.date_closed}</span>
-            </Paper>
-            <div className="small-header">Lead</div>
-            <Paper className="deal-lead">
-              <span>{deal.deal_lead}</span>
-            </Paper>
-          </Paper>
+          <DealParams deal={deal} />
           <InvestorData investor={investor} />
         </Col>
       </Row>
     </div>
+  )
+}
+
+function DealParams ({ deal }) {
+  const { dealParams, date_closed, deal_lead } = deal
+
+  const allocationPercent = dealParams.totalRoundSize && dealParams.allocation 
+    ? new BN(dealParams.allocation).dividedBy(dealParams.totalRoundSize).times(100).toFixed(0)
+    : null
+
+  const setupCosts = dealParams.totalRoundSize && dealParams.estimatedSetupCosts
+    ? new BN(dealParams.estimatedSetupCosts).dividedBy(dealParams.totalRoundSize).times(100).toFixed(0)
+    : null
+
+  const show = allocationPercent || setupCosts || dealParams.totalCarry || dealParams.minimumInvestment || dealParams.totalManagementFee
+
+  return (
+    <Paper className="investment-details tile">
+      <div className="small-header">Closing Date</div>
+      <Paper className="closing-date">
+        <FontAwesomeIcon icon="clock" size="lg" />
+        <span>{deal.date_closed}</span>
+      </Paper>
+      <div className="small-header">Lead</div>
+      <Paper className="deal-lead">
+        <span>{deal.deal_lead}</span>
+      </Paper>
+
+      {show && <Paper className="deal-params">
+        {allocationPercent && <div className="allocation">
+          <span>Allocation</span>
+          <span>{allocationPercent}%</span>
+        </div>}
+        {dealParams.totalCarry && <div className="total-carry">
+          <span>Total Carry</span>
+          <span>{dealParams.totalCarry}%</span>
+        </div>}
+        {dealParams.minimumInvestment && <div className="min-investment">
+          <span>Min Investment</span>
+          <span>${nWithCommas(dealParams.minimumInvestment)}</span>
+        </div>}
+        {setupCosts && <div className="est-setup-costs">
+          <span>Estimated Setup Costs</span>
+          <span>{setupCosts}%</span>
+        </div>}
+        {dealParams.totalManagementFee && <div className="total-management-fee">
+          <span>Total Management Fee</span>
+          <span>${nWithCommas(dealParams.totalManagementFee)}</span>
+        </div>}
+      </Paper>}
+    </Paper>
   )
 }
 

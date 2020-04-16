@@ -65,6 +65,14 @@ const GET_DEAL = gql`
           opened
           opened_at
         }
+        dealParams {
+          totalRoundSize
+          allocation
+          totalCarry
+          minimumInvestment
+          totalManagementFee
+          estimatedSetupCosts
+        }
       }
     }
   }
@@ -90,16 +98,54 @@ const UPDATE_DEAL = gql`
         _id
         name
       }
+      dealParams {
+        totalRoundSize
+        allocation
+        totalCarry
+        minimumInvestment
+        totalManagementFee
+        estimatedSetupCosts
+      }
     }
   }
 `
 
-const validInputs = ["_id","company_name","company_description","date_closed","deal_lead","pledge_link","onboarding_link","embed_code","status","closed","allInvited","amount", "memo", "target", "amount_raised", "no_exchange", "last_valuation"]
+const validInputs = [
+  "_id",
+  "company_name",
+  "company_description",
+  "date_closed",
+  "deal_lead",
+  "pledge_link",
+  "onboarding_link",
+  "embed_code",
+  "status",
+  "closed",
+  "allInvited",
+  "amount",
+  "memo",
+  "target",
+  "amount_raised",
+  "no_exchange",
+  "last_valuation",
+  "dealParams"
+]
+
+const dealParamsValidInputs = [
+  "allocation",
+  "totalCarry",
+  "minimumInvestment",
+  "totalManagementFee",
+  "estimatedSetupCosts",
+  "totalRoundSize"
+]
 
 export default function DealEdit () {
   const { id, organization } = useParams()
   const [errorMessage, setErrorMessage] = useState(null)
-  const [deal, setDeal] = useSimpleReducer({})
+  const [deal, setDeal] = useSimpleReducer({
+    dealParams: {}
+  })
   const [showAddInvestment, setShowAddInvestment] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
   const { data, refetch, error } = useQuery(GET_DEAL, { variables: { id, slug: organization }})
@@ -226,6 +272,77 @@ export default function DealEdit () {
         </Row>
         <Row>
           <Col sm={{size: 8, offset: 1}}>
+            <h5>Deal Parameters</h5>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={{size: 4, offset: 1}}>
+            <TextField style={{width: "100%"}} 
+              value={deal.dealParams.totalRoundSize || ""}
+              onChange={e => setDeal({ dealParams: { ...deal.dealParams, totalRoundSize: e.target.value }})} 
+              label="Total Round Size"
+              InputProps={{
+                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+              }} 
+              variant="filled" />
+          </Col>
+          <Col sm={{size: 4}}>
+            <TextField style={{width: "100%"}} 
+              value={deal.dealParams.allocation || ""}
+              onChange={e => setDeal({ dealParams: { ...deal.dealParams, allocation: e.target.value }})} 
+              label="Allocation"
+              InputProps={{
+                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+              }} 
+              variant="filled" />
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={{size: 4, offset: 1}}>
+            <TextField style={{width: "100%"}} 
+              value={deal.dealParams.totalCarry || ""}
+              onChange={e => setDeal({ dealParams: { ...deal.dealParams, totalCarry: e.target.value }})} 
+              label="Total Carry"
+              InputProps={{
+                startAdornment: <InputAdornment position="start">%</InputAdornment>,
+              }} 
+              variant="filled" />
+          </Col>
+          <Col sm={{size: 4}}>
+            <TextField style={{width: "100%"}} 
+              value={deal.dealParams.totalManagementFee || ""}
+              onChange={e => setDeal({ dealParams: { ...deal.dealParams, totalManagementFee: e.target.value }})} 
+              label="Total Management Fee"
+              InputProps={{
+                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+              }} 
+              variant="filled" />
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={{size: 4, offset: 1}}>
+            <TextField style={{width: "100%"}} 
+              value={deal.dealParams.estimatedSetupCosts || ""}
+              onChange={e => setDeal({ dealParams: { ...deal.dealParams, estimatedSetupCosts: e.target.value }})} 
+              label="Estimated Setup Costs"
+              InputProps={{
+                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+              }} 
+              variant="filled" />
+          </Col>
+          <Col sm={{size: 4}}>
+            <TextField style={{width: "100%"}} 
+              value={deal.dealParams.minimumInvestment || ""}
+              onChange={e => setDeal({ dealParams: { ...deal.dealParams, minimumInvestment: e.target.value }})} 
+              label="Minimum Investment"
+              InputProps={{
+                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+              }} 
+              variant="filled" />
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={{size: 8, offset: 1}}>
             <InputLabel>Deal Description</InputLabel>
             <Editor
               value={deal.memo}
@@ -280,7 +397,7 @@ export default function DealEdit () {
             <Button disabled={!hasChanges} 
               variant="contained"
               onClick={() => {
-                updateDeal({ variables: { deal: _.pick(deal, validInputs), org: organization } })
+                updateDeal({ variables: { deal: {..._.pick(deal, validInputs), dealParams: _.pick(deal.dealParams, dealParamsValidInputs) }, org: organization } })
               }} 
               color="primary">
               UPDATE DEAL

@@ -240,6 +240,20 @@
                 padding-left: 15px;
             }
         }
+
+        .deal-params {
+            margin-top: 10px;
+            padding: 10px;
+            >div {
+                display: flex;
+                justify-content: space-between;
+                padding: 5px 0px;
+                border-bottom: 1px dotted lightgray;
+                >span {
+
+                }
+            }
+        }
     }
 
     .investor-details {
