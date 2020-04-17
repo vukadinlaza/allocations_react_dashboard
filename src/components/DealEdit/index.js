@@ -310,28 +310,6 @@ export default function DealEdit () {
           </Col>
           <Col sm={{size: 4}}>
             <TextField style={{width: "100%"}} 
-              value={deal.dealParams.totalManagementFee || ""}
-              onChange={e => setDeal({ dealParams: { ...deal.dealParams, totalManagementFee: e.target.value }})} 
-              label="Total Management Fee"
-              InputProps={{
-                startAdornment: <InputAdornment position="start">$</InputAdornment>,
-              }} 
-              variant="filled" />
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={{size: 4, offset: 1}}>
-            <TextField style={{width: "100%"}} 
-              value={deal.dealParams.estimatedSetupCosts || ""}
-              onChange={e => setDeal({ dealParams: { ...deal.dealParams, estimatedSetupCosts: e.target.value }})} 
-              label="Estimated Setup Costs"
-              InputProps={{
-                startAdornment: <InputAdornment position="start">$</InputAdornment>,
-              }} 
-              variant="filled" />
-          </Col>
-          <Col sm={{size: 4}}>
-            <TextField style={{width: "100%"}} 
               value={deal.dealParams.minimumInvestment || ""}
               onChange={e => setDeal({ dealParams: { ...deal.dealParams, minimumInvestment: e.target.value }})} 
               label="Minimum Investment"

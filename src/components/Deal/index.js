@@ -181,14 +181,6 @@ export function DealParams ({ deal }) {
           <span>Min Investment</span>
           <span>${nWithCommas(dealParams.minimumInvestment)}</span>
         </div>}
-        {setupCosts && <div className="est-setup-costs">
-          <span>Estimated Setup Costs</span>
-          <span>{setupCosts}%</span>
-        </div>}
-        {dealParams.totalManagementFee && <div className="total-management-fee">
-          <span>Total Management Fee</span>
-          <span>${nWithCommas(dealParams.totalManagementFee)}</span>
-        </div>}
       </Paper>}
     </Paper>
   )
