@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSimpleReducer } from '../../utils/hooks'
 import _, { get, isEqual } from "lodash"
-import { useParams } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 import { Row, Col } from 'reactstrap'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { nWithCommas, formatDate } from '../../utils/numbers'
@@ -40,6 +40,8 @@ const GET_DEAL = gql`
         memo
         last_valuation
         no_exchange
+        appLink
+        publicLink
         documents {
           path
           link
@@ -166,12 +168,15 @@ export default function DealEdit () {
   }, [deal])
 
   if (errorMessage) return <div className="Error">{errorMessage}</div>
-  
+
   return (
     <div className="DealEdit form-wrapper">
       <Row>
         <Col sm={{size: 8, offset: 1}}>
-          <div className="form-title">Edit Deal</div>
+          <div className="form-title">
+            Edit Deal&nbsp;&nbsp;
+            <Link to={deal.appLink || "#"}><Button variant="contained" color="primary">view</Button></Link>
+          </div>
         </Col>
       </Row>
       <form className="form" noValidate autoComplete="off">
@@ -388,7 +393,26 @@ export default function DealEdit () {
           </Col>
         </Row>
         <Row>
-          <DealLinks deal={deal} />
+          <Col sm={{size: 8, offset: 1}} style={{marginBottom: "10px"}}>
+            <TextField
+              style={{width: "100%"}}
+              label="Public Link" 
+              value={window.origin + (deal.publicLink || "")}
+              InputProps={{
+                endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(deal.publicLink)} /></InputAdornment>,
+              }}
+              variant="filled" />
+          </Col>
+          <Col sm={{size: 8, offset: 1}}>
+            <TextField 
+              style={{width: "100%"}}
+              label="Existing user link" 
+              value={window.origin + (deal.appLink || "")}
+              InputProps={{
+                endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(deal.appLink)} /></InputAdornment>,
+              }}
+              variant="filled" />
+          </Col>
         </Row>
         <Row>
           <InviteInvestors deal={deal} refetch={refetch} />
@@ -412,39 +436,6 @@ export default function DealEdit () {
         </Row>
       </form>
     </div>
-  )
-}
-
-function DealLinks ({ deal }) {
-  const { organization } = useParams()
-  const pubLink = `dashboard.allocations.com/public/${organization}/deals/${deal.slug}?invite_code=${deal.inviteKey}`
-  const appLink = organization && organization !== "allocations"
-    ? `dashboard.allocations.com/deals/${organization}/${deal.slug}`
-    : `dashboard.allocations.com/deals/${deal.slug}`
-
-  return (
-    <React.Fragment>
-      <Col sm={{size: 8, offset: 1}} style={{marginBottom: "10px"}}>
-        <TextField
-          style={{width: "100%"}}
-          label="Public Link" 
-          value={pubLink}
-          InputProps={{
-            endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(pubLink)} /></InputAdornment>,
-          }}
-          variant="filled" />
-      </Col>
-      <Col sm={{size: 8, offset: 1}}>
-        <TextField 
-          style={{width: "100%"}}
-          label="Existing user link" 
-          value={appLink}
-          InputProps={{
-            endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(appLink)} /></InputAdornment>,
-          }}
-          variant="filled" />
-      </Col>
-    </React.Fragment>
   )
 }
 
