@@ -399,7 +399,7 @@ export default function DealEdit () {
               label="Public Link" 
               value={window.origin + (deal.publicLink || "")}
               InputProps={{
-                endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(deal.publicLink)} /></InputAdornment>,
+                endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(window.origin + (deal.publicLink || ""))} /></InputAdornment>,
               }}
               variant="filled" />
           </Col>
@@ -409,7 +409,7 @@ export default function DealEdit () {
               label="Existing user link" 
               value={window.origin + (deal.appLink || "")}
               InputProps={{
-                endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(deal.appLink)} /></InputAdornment>,
+                endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(window.origin + (deal.appLink || ""))} /></InputAdornment>,
               }}
               variant="filled" />
           </Col>
