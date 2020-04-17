@@ -52,7 +52,7 @@ export default function Sidebar ({ showSidebar, setShowSidebar }) {
   )
 }
 
-const whitelist = ["allocations", "organizations", "funds"]
+const whitelist = ["allocations", "organizations", "funds", "investments"]
 function Brand () {
   const history = useHistory()
   const match = useRouteMatch('/admin/:organization')
