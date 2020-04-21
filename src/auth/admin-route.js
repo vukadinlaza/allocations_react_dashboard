@@ -3,7 +3,7 @@ import { Route, Redirect } from "react-router-dom"
 import { useAuth0 } from "../react-auth0-spa";
 import Loader from '../components/utils/Loader'
 
-export const adminWhitelist = ["will@allocations.com", "kadvani1@gmail.com", "michelle@allocations.co", "tim@allocations.com"]
+export const adminWhitelist = ["will@allocations.com", "kadvani1@gmail.com", "michelle@allocations.com", "tim@allocations.com"]
 
 export default function AdminRoute ({ component, ...rest }) {
   const { isAuthenticated, user } = useAuth0();
