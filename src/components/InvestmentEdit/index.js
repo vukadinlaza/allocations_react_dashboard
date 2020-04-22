@@ -178,7 +178,7 @@ function Docs ({ investment, setInvestment, refetch }) {
 }
 
 function Doc ({ doc, investment, refetch }) {
-  const file = doc.path.split('/')[1]
+  const file = doc.path.slice(0, 12) === "investments/" ? doc.path.split('/')[2] : doc.path.split('/')[1]
   const [rmInvestmentDoc] = useMutation(RM_INVESTMENT_DOC, { variables: { file, investment_id: investment._id }, onCompleted: refetch })
 
   const rmDoc = () => {
