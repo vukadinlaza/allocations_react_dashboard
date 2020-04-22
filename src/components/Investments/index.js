@@ -165,7 +165,7 @@ export default function Investments () {
 
 function filename(path) {
   try {
-    return path.split('/')[1]
+    return path.split('/')[2]
   } catch {
     return path
   }
