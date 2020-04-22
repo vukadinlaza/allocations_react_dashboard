@@ -86,9 +86,6 @@ const App = () => {
                 <PrivateRoute path="/invited-deals" component={InvitedDeals} />
 
                 {/** Deals **/}
-                {/** <PrivateRoute path="/deals/:deal_slug" component={Deal} exact /> **/}
-                {/**<PrivateRoute path="/deals/:organization/:deal_slug" component={Deal} exact />**/}
-
                 <Route path="/deals/:deal_slug" exact><Deal /></Route>
                 <Route path="/deals/:organization/:deal_slug" exact><Deal /></Route>
 
