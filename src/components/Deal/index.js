@@ -81,14 +81,20 @@ export default function Deal () {
   const { organization, deal_slug } = useParams()
   const location = useLocation()
   const history = useHistory()
-  const { user, isAuthenticated, loading } = useAuth0()
+  const { user, isAuthenticated, loading, loginWithRedirect, auth0Client } = useAuth0()
   const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL)
-  const [createInvestment] = useMutation(CREATE_INVESTMENT, { onCompleted: () => refetch() })
+  const [createInvestment] = useMutation(CREATE_INVESTMENT, { onCompleted: refetch })
 
   useEffect(() => {
-    if (!loading && isAuthenticated && !called) {
-      const _deal_slug = legacySlugMap[deal_slug] || deal_slug
-      getDeal({ variables: { deal_slug: _deal_slug, fund_slug: organization || "allocations" }})
+    if (auth0Client && !isAuthenticated) {
+      loginWithRedirect({ appState: { targetUrl: location.pathname }, initialScreen: 'signIn' })
+    }
+  }, [auth0Client, isAuthenticated])
+
+  useEffect(() => {
+    if (!loading && !called && isAuthenticated) {
+        const _deal_slug = legacySlugMap[deal_slug] || deal_slug
+        getDeal({ variables: { deal_slug: _deal_slug, fund_slug: organization || "allocations" }})
     }
   }, [isAuthenticated, loading, called])
 

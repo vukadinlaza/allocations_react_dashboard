@@ -6,7 +6,6 @@ import { gql } from 'apollo-boost'
 import { useParams, useHistory, useLocation, Link } from 'react-router-dom'
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { Row, Col } from "reactstrap";
-import { useAuth0 } from "../../react-auth0-spa";
 import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Paper, TextField } from '@material-ui/core';
@@ -62,7 +61,7 @@ export default function PublicDeal () {
   const history = useHistory()
   const [error, setError] = useState(null)
   const [getDeal, { data, error: apiError, refetch, called }] = useLazyQuery(GET_PUBLIC_DEAL)
-  const [createInvestment] = useMutation(CREATE_INVESTMENT, { onCompleted: () => refetch() })
+  const [createInvestment] = useMutation(CREATE_INVESTMENT, { onCompleted: refetch })
 
   const deal_slug = legacySlugMap[params.deal_slug] || params.deal_slug
 
