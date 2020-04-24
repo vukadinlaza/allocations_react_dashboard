@@ -85,7 +85,7 @@ export const Auth0Provider = ({ children }) => {
       if (window.location.search.includes("code=")) {
         client.handleRedirectCallback()
           .then(({ appState }) => options.onRedirectCallback({ appState, client }))
-          .catch(console.error)
+          .catch(err => console.error("Error Logging in"))
       } else {
         // this is the standard case
         client.isAuthenticated()
