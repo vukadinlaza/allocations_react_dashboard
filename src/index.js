@@ -18,16 +18,16 @@ if (process.env.NODE_ENV === "production") {
 
 ReactDOM.render(
   <Router>
-    <Switch>
-      <Route path="/public">
-        <PublicApp />
-      </Route>
-      <Route path="/">
-        <Auth0Provider>
+    <Auth0Provider>
+      <Switch>
+        <Route path="/public">
+          <PublicApp />
+        </Route>
+        <Route path="/">
           <App />
-        </Auth0Provider>
-      </Route>
-    </Switch>
+        </Route>
+      </Switch>
+    </Auth0Provider>
   </Router>,
   document.getElementById("root")
 );

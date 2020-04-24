@@ -7,8 +7,10 @@ import { HttpLink } from 'apollo-link-http';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { Button } from '@material-ui/core';
+import { useAuth0 } from './react-auth0-spa'
 import createAuth0Client from '@auth0/auth0-spa-js';
 import queryString from 'query-string'
+import _ from 'lodash'
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000/graphql"
 const client = new ApolloClient({ 
@@ -18,7 +20,6 @@ const client = new ApolloClient({
 
 export default function PublicApp () {
   const { path } = useRouteMatch()
-  const [auth0Client, setAuth0Client] = useState(null)
 
   return (
     <ApolloProvider client={client}>
@@ -26,13 +27,7 @@ export default function PublicApp () {
         <Row>
           <Col lg="12" className="public-navbar">
             <Brand />
-            
-            <Button
-              color="primary"
-              variant="contained"
-              className="login-btn">
-              <a href="/" target="_blank">Sign Up</a>
-            </Button>
+            <LoginOrAccount />
           </Col>
           <Col xs={{size: 12, offset: 0}} md={{size: 10, offset: 1}} className="app-body">
             <Switch>
@@ -47,6 +42,38 @@ export default function PublicApp () {
         </Row>
       </Container>
     </ApolloProvider>
+  )
+}
+
+function LoginOrAccount () {
+  const location = useLocation()
+  const { isAuthenticated, user, loginWithRedirect, loading, logoutWithRedirect } = useAuth0()
+
+  if (isAuthenticated && user) {
+    return (
+      <img src={user.picture}
+        style={{float: "right", marginTop: "20px"}}
+        alt="Profile"
+        className="nav-user-profile rounded-circle"
+        width="50"
+      />
+    )
+  }
+  
+  return (
+    <React.Fragment>
+      <Button color="primary" size="small" variant="contained" className="sign-up-btn" onClick={() =>
+        loginWithRedirect({ appState: { targetUrl: location.pathname + location.search }, initialScreen: 'signUp' })
+      }>
+        Sign Up
+      </Button>
+
+      <Button color="primary" size="small" className="sign-in-btn" onClick={() =>
+        loginWithRedirect({ appState: { targetUrl: location.pathname + location.search }, initialScreen: 'signIn' })
+      }>
+        Sign In
+      </Button>
+    </React.Fragment>
   )
 }
 
@@ -66,8 +93,8 @@ function Brand () {
   const location = useLocation()
 
   if (match && match.params.organization !== "allocations") {
-    return <img height="60px" width="180px" src={`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${match.params.organization}.png`} alt="#" style={{margin: "20px", cursor: "pointer"}} />
+    return <img className="public-brand" height="60px" width="180px" src={`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${match.params.organization}.png`} alt="#" />
   }
 
-  return <img src="https://allocations-public.s3.us-east-2.amazonaws.com/logo.png" onClick={() => history.push('/')} alt="allocations" style={{height: "70px", width: "210px", margin: "20px", cursor: "pointer"}} />
+  return <img className="public-brand-allocations" src="https://allocations-public.s3.us-east-2.amazonaws.com/logo.png" onClick={() => history.push('/')} alt="allocations" />
 }

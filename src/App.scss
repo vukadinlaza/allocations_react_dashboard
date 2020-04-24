@@ -90,12 +90,46 @@ $graygreen: #e6f9f3;
 }
 
 .public-navbar {
-  button {
+  .public-brand {
+    margin: 20px; 
+    cursor: pointer;
+  }
+
+  .public-brand-allocations {
+    height: 70px;
+    width: 210px;
+    margin: 20px;
+    cursor: pointer;
+  }
+
+  .sign-in-btn {
+    float: right;
+    margin-top: 20px;
+    margin-right: 10px;
+    color: $brandblue;
+  }
+
+  .sign-up-btn {
     float: right;
     background-color: $brandblue;
     margin-top: 20px;
-    a {
-      color: white;
+    margin-right: 10px;
+    color: white;
+  }
+
+  @media screen and (max-width: $break-sm) {
+    padding: 5px 10px;
+    .public-brand {
+      margin: 10px 0px;
+    }
+
+    .public-brand-allocations {
+      margin: 0px 0px 5px 0px;
+    }
+
+    .sign-in-btn, .sign-up-btn {
+      margin-right: 4px;
+      font-size: 0.8em;
     }
   }
 }
