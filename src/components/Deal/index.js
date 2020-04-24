@@ -15,7 +15,7 @@ import InvestmentFlow from './DealFlow'
 
 import "./style.scss"
 
-const GET_INVESTOR_DEAL = gql`
+export const GET_INVESTOR_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
     investor {
       _id
@@ -52,15 +52,13 @@ const GET_INVESTOR_DEAL = gql`
           allocation
           totalCarry
           minimumInvestment
-          totalManagementFee
-          estimatedSetupCosts
         }
       }
     } 
   }
 `
 
-const CREATE_INVESTMENT = gql`
+export const CREATE_INVESTMENT = gql`
   mutation CreateInvestment($investment: InvestmentInput!) {
     createInvestment(investment: $investment) {
       _id
@@ -76,6 +74,8 @@ export const legacySlugMap = {
   "Focusmate SPV": "focusmate-spv",
   'volumetric-spv%20seed%20round': "volumetric-spv-seed-round"
 }
+
+const { NODE_ENV } = process.env
 
 export default function Deal () {
   const { organization, deal_slug } = useParams()
@@ -93,7 +93,7 @@ export default function Deal () {
   }, [isAuthenticated, loading, called])
 
   useEffect(() => {
-    if (data) window._slaask.updateContact({name: data.investor.name})
+    if (data && NODE_ENV !== "test") window._slaask.updateContact({name: data.investor.name})
   }, [data])
 
   useEffect(() => {
