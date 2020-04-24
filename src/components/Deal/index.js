@@ -159,7 +159,7 @@ export function DealParams ({ deal }) {
 
   return (
     <Paper className="investment-details tile">
-      <div className="small-header">Closing Date</div>
+      <div className="small-header">Estimated Closing Date</div>
       <Paper className="closing-date">
         <FontAwesomeIcon icon="clock" size="lg" />
         <span>{deal.date_closed}</span>
