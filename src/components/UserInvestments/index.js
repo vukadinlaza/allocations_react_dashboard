@@ -30,6 +30,7 @@ const GET_INVESTOR = gql`
           company_name
           company_description
           date_closed
+          appLink
         }
         documents {
           link
@@ -112,7 +113,7 @@ export default function UserInvestments () {
 function InvestmentStatus ({ investment }) {
   const { status } = investment
   return (
-    <Link to={`/deals/${investment.deal.company_name}`}>
+    <Link to={_.get(investment, 'deal.appLink', "")}>
       <span className={`investment-status investment-status-${status}`}>{status}</span>
     </Link>
   )
