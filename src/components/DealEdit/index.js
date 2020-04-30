@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { useSimpleReducer } from '../../utils/hooks'
 import _, { get, isEqual } from "lodash"
-import { useParams, Link } from "react-router-dom"
+import { useParams, Link, useHistory } from "react-router-dom"
 import { Row, Col } from 'reactstrap'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { nWithCommas, formatDate } from '../../utils/numbers'
 import * as API from "../../api"
 import UserSearch from "../forms/UserSearch"
 import InviteInvestors from './InviteInvestors'
+import { ORG_OVERVIEW } from '../admin/AdminHome'
+import { isAdmin } from '../../auth/admin-route'
+import { useAuth0 } from "../../react-auth0-spa"
 
 // wysiwyg editor
 import { Editor } from '@tinymce/tinymce-react';
@@ -143,6 +146,7 @@ const dealParamsValidInputs = [
 ]
 
 export default function DealEdit () {
+  const { user } = useAuth0()
   const { id, organization } = useParams()
   const [errorMessage, setErrorMessage] = useState(null)
   const [deal, setDeal] = useSimpleReducer({
@@ -434,6 +438,11 @@ export default function DealEdit () {
             </Paper>
           </Col>
         </Row>
+        {isAdmin(user) && <Row>
+          <Col lg={{size: 6, offset: 1}} md={{size: 8, offset: 1}}>
+            <DeleteDeal deal={deal} />
+          </Col>
+        </Row>}
       </form>
     </div>
   )
@@ -686,6 +695,36 @@ function AddInvestment ({ deal, show, refetch }) {
         color="primary">
         ADD INVESTMENT
       </Button>
+    </div>
+  )
+}
+
+const DELETE_DEAL = gql`
+  mutation DeleteDeal($_id: String!) {
+    deleteDeal(_id: $_id)
+  }
+`
+
+function DeleteDeal ({ deal }) {
+  const { organization } = useParams()
+  const history = useHistory()
+  const [deleteDeal, { data, error }] = useMutation(DELETE_DEAL, {
+    variables: { _id: deal._id },
+    refetchQueries: [{ query: ORG_OVERVIEW, variables: { slug: organization } }],
+    onCompleted: () => history.push(`/admin/${organization}`)
+  })
+
+  const submit = () => {
+    if (window.confirm(`Are you sure you'd like to delete ${deal.company_name}`)) {
+      deleteDeal()
+    }
+  }
+
+  return (
+    <div className="danger-zone DeleteDeal">
+      <div>Danger Zone</div>
+      <hr />
+      <Button onClick={submit} variant="contained" color="secondary">DELETE DEAL</Button> 
     </div>
   )
 }

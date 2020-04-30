@@ -1,4 +1,5 @@
 import React from "react";
+import _ from 'lodash'
 import { Route, Redirect } from "react-router-dom"
 import { useAuth0 } from "../react-auth0-spa";
 import Loader from '../components/utils/Loader'
@@ -16,3 +17,5 @@ export default function AdminRoute ({ component, ...rest }) {
     return <Redirect to="/" />
   }
 }
+
+export const isAdmin = (user) => adminWhitelist.includes(_.get(user, 'email'))
