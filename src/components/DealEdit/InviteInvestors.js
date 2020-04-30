@@ -94,6 +94,7 @@ function SendEmailInvites ({ deal, refetch }) {
   if (error) return <div>{error.message}</div>
 
   const invitedInvestors = (_.get(deal, 'invitedInvestors') || []).map(i => i.email)
+
   return (
     <div className="send-email-invites">
       <TextField value={email} 
@@ -115,15 +116,21 @@ function SendEmailInvites ({ deal, refetch }) {
             {(deal.emailInvites || []).filter(invite => {
               return !invitedInvestors.includes(invite.to)
             }).map(invite => (
-              <TableRow key={invite.sent_at}>
-                <TableCell>{invite.to}</TableCell>
-                <TableCell>{invite.opened ? "Opened" : "Sent"} &nbsp;<FontAwesomeIcon icon={invite.opened ? "envelope-open-text" : "paper-plane"} /></TableCell>
-              </TableRow>
+              <PrivateInvite key={invite.sent_at} invite={invite} />
             ))} 
           </TableBody>
         </Table>
       </Paper>
     </div>
+  )
+}
+
+function PrivateInvite ({ invite }) {
+  return (
+    <TableRow key={invite.sent_at}>
+      <TableCell>{invite.to}</TableCell>
+      <TableCell>{invite.opened ? "Opened" : "Sent"} &nbsp;<FontAwesomeIcon icon={invite.opened ? "envelope-open-text" : "paper-plane"} /></TableCell>
+    </TableRow>
   )
 }
 
@@ -169,12 +176,15 @@ function InvitedInvestor ({ investor, deal, refetch }) {
     }
   )
 
-  const invite = (deal.emailInvites || []).find(i => i.to === investor.email)
-  const emailSection = invite
-    ? <Button size="small" className="sent-invite" endIcon={<FontAwesomeIcon icon="paper-plane" />}>Sent </Button>
+  const invites = (deal.emailInvites || []).filter(i => i.to === investor.email)
+  const emailSection = invites.length
+    ? <React.Fragment>
+        <Button size="small" className="sent-invite" endIcon={<FontAwesomeIcon icon="paper-plane" />}>Sent {invites.length}</Button>
+        <Button size="small" className="send-again" color="primary" variant="contained" onClick={sendInvite}>Resend</Button>
+      </React.Fragment>
     : <Button color="secondary" size="small" className="send-invite"
         variant="contained" 
-        onClick={() => sendInvite()} 
+        onClick={sendInvite} 
         endIcon={<FontAwesomeIcon icon="envelope" />}>
         Send
       </Button>
