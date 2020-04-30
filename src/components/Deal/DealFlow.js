@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react'
 import Loader from '../utils/Loader'
 import _ from "lodash"
 import { gql } from 'apollo-boost'
+import { useMutation } from '@apollo/react-hooks'
 import { useParams, useHistory, Link, useLocation } from 'react-router-dom'
 import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Paper, TextField } from '@material-ui/core';
+import { Paper, TextField, Button, Table, TableBody, TableCell, TableRow, TableHead } from '@material-ui/core';
 import ReactHtmlParser from 'react-html-parser';
+import Chart from 'chart.js'
 import KYC from '../forms/KYC'
 
 function getOnboardingLinkType (link) {
@@ -22,7 +24,7 @@ function getOnboardingLinkType (link) {
   }
 }
 
-export default function InvestmentFlow ({ investment, deal, investor }) {
+export default function InvestmentFlow ({ investment, deal, investor, refetch }) {
   const [status, setStatus] = useState("data-room")
 
   useEffect(() => {
@@ -53,7 +55,7 @@ export default function InvestmentFlow ({ investment, deal, investor }) {
             className={`step step-wire ${status === "onboarded" ? "step-active" : ""}`}>Wire</div>
         </div>
         {status === "invited" && <DataRoom deal={deal} />}
-        {status === "pledging" && <Pledging investment={investment} deal={deal} />}
+        {status === "pledging" && <Pledging investment={investment} deal={deal} refetch={refetch} />}
         {status === "kyc" && <KYC investor={investor} setStatus={setStatus} />}
         {status === "onboarded" && <Wire investment={investment} deal={deal} />}
 
@@ -131,7 +133,7 @@ function Wire ({ investment, deal }) {
   )
 }
 
-function Pledging ({ investment, deal }) {
+function PledgingLegacy ({ deal }) {
   return (
     <div className="pledging">
       <div className="pledge-link">
@@ -140,6 +142,152 @@ function Pledging ({ investment, deal }) {
       </div>
     </div>
   )
+}
+
+const PLEDGE = gql`
+  mutation Pledge($investment: InvestmentInput!) {
+    updateInvestment(investment: $investment) {
+      _id
+      amount
+      status
+    }
+  }
+`
+
+function Pledging ({ investment, deal, refetch }) {
+  const [amount, setAmount] = useState("")
+  const [updateInvestment, { data, error }] = useMutation(PLEDGE, {
+    onCompleted: refetch
+  })
+
+  useEffect(() => {
+    setAmount(investment.amount || "")
+  }, [])
+
+  const updateAmount = e => {
+    const val = e.target.value
+    if (!isNaN(Number(val))) setAmount(val)
+  }
+
+  const submit = () => {
+    // TODO - check that its over the min investment (if min investment exists)
+
+    updateInvestment({ variables: {
+      investment: {..._.omit(investment, '__typename'), status: "pledged", amount: Number(amount) }
+    }})
+  }
+
+  const unpledge = () => {
+    updateInvestment({ variables: {
+      investment: {..._.omit(investment, '__typename'), status: "invited", amount: null }
+    }})
+  }
+
+  return (
+    <div className="pledging">
+      <div className="pledge-data">
+        <PledgesViz deal={deal} />
+        <PledgesTable deal={deal} />
+      </div>
+
+      <hr />
+
+      {investment.status === "invited" && 
+        <div className="pledging-form">
+          <TextField variant="outlined" className="pledge-amount" label="Pledge Amount" value={amount} onChange={updateAmount} />
+          <Button variant="contained" className="pledge-btn" color="secondary" onClick={submit}>Pledge</Button>
+        </div>
+      }
+      {investment.status !== "invited" &&
+        <div className="edit-pledge">
+          <TextField variant="outlined" className="pledge-amount" label="Pledge Amount" value={amount} onChange={updateAmount} />
+          <Button variant="contained" className="edit-btn" color="primary" onClick={submit}>Edit</Button>
+          <Button variant="contained" className="unpledge-btn" color="secondary" onClick={unpledge}>Unpledge</Button>
+        </div>
+      }
+      <hr />
+
+      <div>or pledge via spreadsheet</div>
+
+      <PledgingLegacy deal={deal} />
+    </div>
+  )
+}
+
+function PledgesTable ({ deal }) {
+  if (!deal.pledges) return null
+
+  return (
+    <Paper className="pledges-table">
+      <Table size="small">  
+        <TableBody>
+          {deal.pledges.map(pledge => (
+            <TableRow key={pledge.timestamp}>
+              <TableCell>${nWithCommas(pledge.amount)}</TableCell>
+            </TableRow>
+          ))}
+          <TableRow>
+            <TableCell className="total">total - ${nWithCommas(_.sumBy(deal.pledges, 'amount'))}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </Paper>
+  )
+}
+
+function PledgesViz ({ deal }) {
+  const pledges = _.get(deal, 'pledges', null)
+
+  useEffect(() => {
+    if (!pledges || pledges.length === 0) return
+
+    const ctx = document.getElementById('pledges-viz').getContext('2d')
+    let formatted = []
+    deal.pledges.reduce((acc, p) => {
+      formatted.push({ timestamp: Number(p.timestamp), amount: acc + p.amount })
+      return acc + p.amount
+    }, 0)
+
+    // pop a 0 on 1 day before first pledge
+    formatted.unshift({ timestamp: formatted[0].timestamp - (60000 * 60 * 24), amount: 0 })
+    formatted = _.orderBy(formatted, '')
+
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: formatted.map(p => new Date(p.timestamp).toLocaleString({}, { dateStyle: "short" })),
+        datasets: [{
+          backgroundColor: '#e6f9f3',
+          borderColor: '#21ce99',
+          data: formatted.map(p => {
+            return { x: new Date(p.timestamp), y: p.amount }
+          })
+        }]
+      },
+      options: {
+        legend: {
+          display: false
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              callback: (label, index, labels) => `$${nWithCommas(label)}`
+            }
+          }]
+        }
+      }
+    })
+  }, [])
+
+  if (!pledges || pledges.length === 0) {
+    return (
+      <div className="pledges-viz-wrapper no-pledges">
+        <p>No Pledges yet, be the first to pledge to {deal.company_name}!</p>
+      </div>
+    )
+  }
+
+  return <div className="pledges-viz-wrapper"><canvas id="pledges-viz" /></div>
 }
 
 function HelloSignOnboarding ({ investment, deal, investor, status }) {

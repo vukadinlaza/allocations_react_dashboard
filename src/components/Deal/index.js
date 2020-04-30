@@ -42,6 +42,10 @@ export const GET_INVESTOR_DEAL = gql`
           path
           link
         }
+        pledges {
+          amount
+          timestamp
+        }
         investment {
           _id
           amount
@@ -138,7 +142,8 @@ export default function Deal () {
           <Paper className="investment-flow tile">
             <InvestmentFlow deal={deal}
               investment={investment} 
-              investor={investor} />
+              investor={investor} 
+              refetch={refetch} />
           </Paper>
         </Col>
         <Col sm="4">
