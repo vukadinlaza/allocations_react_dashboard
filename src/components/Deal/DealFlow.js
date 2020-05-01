@@ -195,9 +195,22 @@ function Pledging ({ investment, deal, refetch, investor }) {
 
   // old deal is deal created before May, 1
   const oldDeal = !deal.created_at || deal.created_at < 1588334400000
-  if (noInvestor || oldDeal) {
+  if (oldDeal) {
     return (
       <div className="pledging">
+        <PledgingLegacy deal={deal} />
+      </div>
+    )
+  }
+
+  if (noInvestor) {
+    return (
+      <div className="pledging">
+        <div className="pledge-data">
+          <PledgesViz deal={deal} />
+          <PledgesTable deal={deal} />
+        </div>
+        <hr />
         <PledgingLegacy deal={deal} />
       </div>
     )
