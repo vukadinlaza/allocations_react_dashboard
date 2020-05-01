@@ -30,6 +30,7 @@ export const GET_INVESTOR_DEAL = gql`
       email
       invitedDeal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
         _id
+        created_at
         company_name
         company_description
         date_closed
@@ -45,6 +46,7 @@ export const GET_INVESTOR_DEAL = gql`
         pledges {
           amount
           timestamp
+          initials
         }
         investment {
           _id

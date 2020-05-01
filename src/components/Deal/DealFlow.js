@@ -25,10 +25,17 @@ function getOnboardingLinkType (link) {
 }
 
 export default function InvestmentFlow ({ investment, deal, investor, refetch }) {
-  const [status, setStatus] = useState("data-room")
+  const [status, setStatus] = useState("invited")
 
   useEffect(() => {
-    if (investment) setStatus(investment.status)
+    // if just invited show data room otherwise show pledge page first
+    if (investment) {
+      if (investment.status === "invited") {
+        setStatus("invited")
+      } else {
+        setStatus("pledging")
+      }
+    }
   }, [investment])
 
   if (!investment) return <Paper style={{padding: "25px"}}><Loader /></Paper>
@@ -55,7 +62,7 @@ export default function InvestmentFlow ({ investment, deal, investor, refetch })
             className={`step step-wire ${status === "onboarded" ? "step-active" : ""}`}>Wire</div>
         </div>
         {status === "invited" && <DataRoom deal={deal} />}
-        {status === "pledging" && <Pledging investment={investment} deal={deal} refetch={refetch} />}
+        {status === "pledging" && <Pledging investment={investment} investor={investor} deal={deal} refetch={refetch} />}
         {status === "kyc" && <KYC investor={investor} setStatus={setStatus} />}
         {status === "onboarded" && <Wire investment={investment} deal={deal} />}
 
@@ -154,7 +161,7 @@ const PLEDGE = gql`
   }
 `
 
-function Pledging ({ investment, deal, refetch }) {
+function Pledging ({ investment, deal, refetch, investor }) {
   const [amount, setAmount] = useState("")
   const [updateInvestment, { data, error }] = useMutation(PLEDGE, {
     onCompleted: refetch
@@ -181,6 +188,19 @@ function Pledging ({ investment, deal, refetch }) {
     updateInvestment({ variables: {
       investment: {..._.omit(investment, '__typename'), status: "invited", amount: null }
     }})
+  }
+
+  // if no investor just show doc
+  const noInvestor = !investor || _.isEmpty(investor)
+
+  // old deal is deal created before May, 1
+  const oldDeal = !deal.created_at || deal.created_at < 1588334400000
+  if (noInvestor || oldDeal) {
+    return (
+      <div className="pledging">
+        <PledgingLegacy deal={deal} />
+      </div>
+    )
   }
 
   return (
@@ -223,11 +243,13 @@ function PledgesTable ({ deal }) {
         <TableBody>
           {deal.pledges.map(pledge => (
             <TableRow key={pledge.timestamp}>
+              <TableCell>{pledge.initials}</TableCell>
               <TableCell>${nWithCommas(pledge.amount)}</TableCell>
             </TableRow>
           ))}
-          <TableRow>
-            <TableCell className="total">total - ${nWithCommas(_.sumBy(deal.pledges, 'amount'))}</TableCell>
+          <TableRow className="total">
+            <TableCell>total</TableCell>
+            <TableCell>${nWithCommas(_.sumBy(deal.pledges, 'amount'))}</TableCell>
           </TableRow>
         </TableBody>
       </Table>
@@ -277,7 +299,7 @@ function PledgesViz ({ deal }) {
         }
       }
     })
-  }, [])
+  }, [deal])
 
   if (!pledges || pledges.length === 0) {
     return (

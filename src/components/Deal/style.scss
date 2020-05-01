@@ -227,9 +227,10 @@
                     text-align: right;
                 }
 
-                .total {
-                    background-color: $graygreen;
-                    color: $softgreen;
+                .total td {
+                    // background-color: $graygreen;
+                    color: $softgreen !important;
+                    // padding: 2px;
                 }
             }
 

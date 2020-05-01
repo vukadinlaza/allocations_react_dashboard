@@ -19,6 +19,7 @@ const GET_PUBLIC_DEAL = gql`
     publicDeal(deal_slug: $deal_slug, fund_slug: $fund_slug, invite_code: $invite_code) {
       _id
       slug
+      created_at
       company_name
       company_description
       date_closed
