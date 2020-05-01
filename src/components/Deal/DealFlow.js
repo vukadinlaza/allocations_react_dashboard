@@ -248,7 +248,7 @@ function PledgesTable ({ deal }) {
             </TableRow>
           ))}
           <TableRow className="total">
-            <TableCell>total</TableCell>
+            <TableCell>Total</TableCell>
             <TableCell>${nWithCommas(_.sumBy(deal.pledges, 'amount'))}</TableCell>
           </TableRow>
         </TableBody>
