@@ -67,7 +67,7 @@ function Brand () {
 
   return (
     <div className="brand" onClick={() => history.push('/')}>
-      <img src="https://allocations-public.s3.us-east-2.amazonaws.com/logo.png" alt="allocations" style={{height: "70px", width: "210px"}} />
+      <img src="https://allocations-public.s3.us-east-2.amazonaws.com/logo-new.png" alt="allocations" style={{height: "70px", width: "210px"}} />
     </div>
   ) 
 }

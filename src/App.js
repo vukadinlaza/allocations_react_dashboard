@@ -72,7 +72,7 @@ const App = () => {
           <Row>
             <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
             <Col xs="12" className="xs-navbar">
-              <img src="https://allocations-public.s3.us-east-2.amazonaws.com/logo.png" alt="#" style={{height:'70px'}} />
+              <img src="https://allocations-public.s3.us-east-2.amazonaws.com/logo-new.png" alt="#" style={{height:'70px'}} />
               <span className="hamburger" style={{ display: showSidebar ? 'none' : 'inline-block'}}>
                 <FontAwesomeIcon icon="bars" onClick={() => setShowSidebar(true)} />
               </span>
