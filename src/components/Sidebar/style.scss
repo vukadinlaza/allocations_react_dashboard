@@ -42,14 +42,6 @@ $break-xs: 576px;
     margin-bottom: 50px;
     margin-top: 25px;
     cursor: pointer;
-    // margin: 20px 0px 50px 10px;
-    .beta {
-      background-color: #2196f3;
-      border-radius: 3px;
-      padding: 2px 4px;
-      color: #fff;
-      font-size: 0.8em;
-    }
   }
 
   .brand-small-screen {
@@ -65,7 +57,7 @@ $break-xs: 576px;
 
   .sidebar-nav-item {
     &:hover {
-      background-color: #9defd6;
+      background-color: $newbluelight;
       cursor: pointer;
       transition: background-color 500ms linear;
     }
@@ -89,7 +81,7 @@ $break-xs: 576px;
   }
 
   .sidebar-nav-item-active {
-    background-color: #9defd6;
+    background-color: $newbluelight;
   }
 
   .admin-links {
