@@ -10,6 +10,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import classNames from 'classnames'
 import "./style.scss"
 
+/***
+ *
+ * Overview of steps for master filing (for fund admins)
+ *
+ **/
+
 const MASTER_FILING = gql`
   query MasterFiling($slug: String!) {
     organization(slug: $slug) {

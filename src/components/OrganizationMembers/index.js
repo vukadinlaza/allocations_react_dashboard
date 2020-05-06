@@ -11,6 +11,12 @@ import { Col, Row } from 'reactstrap'
 import Loader from '../utils/Loader'
 import "./style.scss"
 
+/***
+ *
+ * shows the admin members of a fund, superadmins can add/rm members from any fund
+ *
+ **/
+
 const GET_MEMBERS = gql`
   query GetMembers($slug: String!) {
     organizationMembers(slug: $slug) {

@@ -10,6 +10,12 @@ import InvestorEditForm from "../forms/InvestorEdit"
 import { Col, Row } from "reactstrap"
 import "./style.scss"
 
+/***
+ *
+ * investor profile / edit
+ *
+ **/
+
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
     investor(email: $email, _id: $_id) {

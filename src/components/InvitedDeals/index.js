@@ -13,6 +13,12 @@ import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, Hidden
 
 import "./style.scss";
 
+/***
+ *
+ * an investor view of all the deals they've been invited to
+ *
+ **/
+
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
     investor(email: $email, _id: $_id) {

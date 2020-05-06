@@ -15,6 +15,12 @@ import {
   DropdownItem
 } from "reactstrap";
 
+/***
+ *
+ * NavBar is the top bar that has the Auth0 profile in it
+ *
+ **/
+
 import { useAuth0 } from "../react-auth0-spa";
 
 const NavBar = () => {

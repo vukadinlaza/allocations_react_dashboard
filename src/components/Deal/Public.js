@@ -14,6 +14,13 @@ import { legacySlugMap, DealParams } from './'
 
 import "./style.scss"
 
+/***
+ *
+ * Public deal view, has same deal flow but hits
+ * the publicDeal() graphql endpoint
+ *
+ **/
+
 const GET_PUBLIC_DEAL = gql`
   query PublicDeal($deal_slug: String!, $fund_slug: String!, $invite_code: String!) {
     publicDeal(deal_slug: $deal_slug, fund_slug: $fund_slug, invite_code: $invite_code) {

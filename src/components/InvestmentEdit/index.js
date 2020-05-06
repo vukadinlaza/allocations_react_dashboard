@@ -11,6 +11,12 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 import { Button } from '@material-ui/core'
 import "./style.scss"
 
+/***
+ *
+ * investment edit and add docs for an investment
+ *
+ **/
+
 const GET_INVESTMENT = gql`
   query GetInvestment($_id: String!) {
     investment(_id: $_id) {

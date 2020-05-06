@@ -15,6 +15,12 @@ import InvestmentFlow from './DealFlow'
 
 import "./style.scss"
 
+/***
+ *
+ * Deal page shows a deal docs/pledging/onboarding/wiring flow
+ *
+ **/
+
 export const GET_INVESTOR_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
     investor {

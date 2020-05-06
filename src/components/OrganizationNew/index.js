@@ -8,6 +8,12 @@ import { Button, TextField } from '@material-ui/core'
 import { useSimpleReducer } from '../../utils/hooks'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
+/***
+ *
+ * create org for with name and logo (optional)
+ *
+ **/
+
 const CREATE_ORG = gql`
   mutation CreateOrg($organization: OrganizationInput!) {
     createOrganization(organization: $organization) {

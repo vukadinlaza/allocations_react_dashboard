@@ -11,6 +11,13 @@ import Loader from '../../utils/Loader'
 
 import "./style.scss"
 
+/***
+ *
+ * AdminHome is the overview of all a funds deals, investors, investments
+ * looks similar to the investor home page but for fund admins
+ *
+ **/
+
 export const ORG_OVERVIEW = gql`
   query GetOrg($slug: String!) {
     organization(slug: $slug) {

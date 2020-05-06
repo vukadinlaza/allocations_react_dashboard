@@ -12,6 +12,12 @@ import "./style.scss"
 
 import countries from "country-region-data"
 
+/***
+ *
+ * Investor edit form that is reusable
+ *
+ **/
+
 const UPDATE_USER = gql`
   mutation UpdateUser($investor: UserInput!) {
     updateUser(input: $investor) {

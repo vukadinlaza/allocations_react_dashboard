@@ -5,6 +5,12 @@ import { useHistory, useParams } from 'react-router-dom'
 import { useMutation } from '@apollo/react-hooks'
 import { TextField, Button } from '@material-ui/core'
 
+/***
+ *
+ * Create New investor (just email) & then redirects to investor edit
+ *
+ **/
+
 const CREATE_INVESTOR = gql`
   mutation CreateInvestor($user: UserInput!) {
     createInvestor(user: $user) {

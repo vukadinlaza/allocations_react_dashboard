@@ -9,6 +9,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth } from "../../auth/useAuth"
 import "./style.scss"
 
+/***
+ *
+ * Table view of Funds that a user is an admin on
+ *
+ **/
+
 const GET_INVESTOR = gql`
   {
     investor {

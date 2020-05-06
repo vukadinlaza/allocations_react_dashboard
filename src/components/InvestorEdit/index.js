@@ -12,6 +12,12 @@ import InvestorEditForm from "../forms/InvestorEdit"
 
 import './style.scss'
 
+/***
+ *
+ * superadmins interface to edit any investor
+ *
+ **/
+
 const GET_INVESTOR = gql`
   query GetInvestor($id: String!) {
     investor(_id: $id) {

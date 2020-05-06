@@ -12,6 +12,12 @@ import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from 
 
 import "./style.scss";
 
+/***
+ *
+ * All investors in table view for superadmins
+ *
+ **/
+
 const GET_INVESTORS = gql`
   query GetOrg($slug: String!) {
     organization(slug: $slug) {

@@ -11,6 +11,16 @@ import ReactHtmlParser from 'react-html-parser';
 import Chart from 'chart.js'
 import KYC from '../forms/KYC'
 
+/***
+ *
+ * All the pieces of the deal flow
+ * which includes showing the deal data room
+ * the pledging chart/actions
+ * the embedded docusign onboarding document
+ * the wiring document
+ *
+ **/
+
 function getOnboardingLinkType (link) {
   try {
     const url = new URL(link)

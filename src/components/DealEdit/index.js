@@ -22,6 +22,17 @@ import { Table, TableBody, TableCell, TableRow, Paper, Button } from '@material-
 import { FormControl, Select, MenuItem, InputLabel, TextField, InputAdornment } from "@material-ui/core"
 import "./style.scss"
 
+/***
+ *
+ * DealEdit is where a fund manager or superadmin can edit a deal, this includes
+ *  1) change parameters like name, round size etc...
+ *  2) add deal documents for data room
+ *  3) invite investors to a deal
+ *  4) update investments in the deal
+ *  5) delete the deal (if superadmin)
+ *
+ **/
+
 const GET_DEAL = gql`
   query Deal($id: String!, $slug: String!) {
     organization(slug: $slug) {

@@ -15,6 +15,13 @@ import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, Linear
 
 import "./style.scss";
 
+/***
+ *
+ * Fund manager's table view of all of their deals with capital accounts
+ * view when clicked
+ *
+ **/
+
 const GET_DEALS = gql`
   query GetOrg($slug: String!) {
     organization(slug: $slug) {

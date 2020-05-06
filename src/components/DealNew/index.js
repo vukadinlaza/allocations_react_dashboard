@@ -12,6 +12,12 @@ import { Button } from '@material-ui/core'
 import FormError from '../forms/Error'
 import "./style.scss"
 
+/***
+ *
+ * creat deal interface that redirects to DealEdit on creation
+ *
+ **/
+
 const CREATE_DEAL = gql`
   mutation CreateDeal($org: String!, $deal: DealInput!) {
     createDeal(org: $org, deal: $deal) {

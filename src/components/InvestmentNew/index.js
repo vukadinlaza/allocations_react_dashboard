@@ -11,6 +11,12 @@ import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 import { Table, TableBody, TableCell, TableRow, Paper, Button } from '@material-ui/core'
 import "./style.scss"
 
+/***
+ *
+ * create new investment form
+ *
+ **/
+
 const CREATE_INVESTMENT = gql`
   mutation CreateInvestment($investment: InvestmentInput!) {
     createInvestment(investment: $investment) {

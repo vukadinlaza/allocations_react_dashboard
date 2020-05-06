@@ -10,6 +10,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from '../../utils/Loader'
 import "./style.scss"
 
+/***
+ *
+ * list of outstanding compliance tasks
+ *
+ **/
+
 const ORG_COMPLIANCE = gql`
   query OrgCompliance($slug: String!) {
     organization(slug: $slug) {

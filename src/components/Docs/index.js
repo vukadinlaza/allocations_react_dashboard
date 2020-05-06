@@ -2,6 +2,12 @@ import React from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks'
 
+/***
+ *
+ * Document upload/delete interface - used for DealEdit
+ *
+ **/
+
 const ADD_INVESTMENT_DOC = gql`
   mutation AddInvestmentDoc($doc: Upload!, $investment_id: String!) {
     addInvestmentDoc(doc: $doc, investment_id: $investment_id)

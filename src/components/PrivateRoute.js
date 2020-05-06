@@ -4,6 +4,14 @@ import PropTypes from "prop-types";
 import { Route } from "react-router-dom";
 import { useAuth0 } from "../react-auth0-spa";
 
+/***
+ *
+ * Private route is a route a user must be logged in to view
+ * if they aren't logged in it sends them to login and automatically
+ * redirects back the page they originally requested
+ *
+ **/
+
 const PrivateRoute = ({ component: Component, path, ...rest }) => {
   const { isAuthenticated, loginWithRedirect, auth0Client } = useAuth0();
 

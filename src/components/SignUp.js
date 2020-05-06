@@ -5,6 +5,13 @@ import { useMutation } from '@apollo/react-hooks'
 import { useAuth0 } from "../react-auth0-spa"
 import queryString from 'query-string'
 
+/***
+ *
+ * sign up is just a route that redirects to sign in form if not
+ * already logged in
+ * 
+ **/
+
 const SIGNUP = gql`
   mutation SignUp($inviteKey: String) {
     signUp(inviteKey: $inviteKey) {

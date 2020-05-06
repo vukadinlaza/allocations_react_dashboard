@@ -15,6 +15,12 @@ import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from 
 
 import "./style.scss";
 
+/***
+ *
+ * Investments table for fund admin/superadmin
+ *
+ **/
+
 const GET_INVESTMENTS = gql`
   query GetOrg($slug: String!) {
     organization(slug: $slug) {
