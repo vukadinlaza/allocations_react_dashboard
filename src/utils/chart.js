@@ -1,5 +1,11 @@
 import * as d3 from 'd3'
 
+/***
+ *
+ * Some chart helpers for setting up and tearing down d3 charts
+ *
+ **/
+
 export function initResponsive(el, margins) {
     const wrapper = document.querySelector(el)
     const height = wrapper.clientHeight

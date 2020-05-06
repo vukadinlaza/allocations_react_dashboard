@@ -1,3 +1,8 @@
+/***
+ *
+ * Helpers that deal with parsing and displaying numbers
+ *
+ **/
 
 export function nWithCommas(x) {
   if (!x) return 0

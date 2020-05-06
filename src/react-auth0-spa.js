@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import createAuth0Client from "@auth0/auth0-spa-js";
 import { useHistory } from "react-router-dom"
 import jwt from "jsonwebtoken"
-// import history from "./utils/history";
 import { useSimpleReducer } from "./utils/hooks"
 
 export const Auth0Context = React.createContext();

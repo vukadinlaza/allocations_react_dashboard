@@ -6,7 +6,6 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { Auth0Provider } from "./react-auth0-spa";
 import { hotjar } from 'react-hotjar';
-import history from "./utils/history";
 import PublicApp from "./PublicApp"
 
 console.warn = () => {}
