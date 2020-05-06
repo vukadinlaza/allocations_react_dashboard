@@ -3,6 +3,14 @@ import { useParams } from 'react-router-dom';
 import { useAuth0 } from "../react-auth0-spa";
 import { useLazyQuery } from '@apollo/react-hooks';
 
+/***
+ *
+ * useAuth is a hook that is passed a gql QUERY and handles the auth flow
+ * automatically around when to send the request (once isAuthenticated)
+ * additionally inits slaask (the chatbox)
+ *
+ **/
+
 export function useAuth (QUERY) {
   const params = useParams()
   const adminView = params && params.id

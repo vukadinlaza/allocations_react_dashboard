@@ -3,6 +3,13 @@ import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from "../react-auth0-spa";
 
+/***
+ *
+ * This is the spec for an investor provider that holds investor context
+ * This hasn't actually been integrated this but in the future a flow like this will make sense
+ *
+ **/
+
 const GET_USER = gql`
   query GetUser($email: String) {
     investor(email: $email) {
