@@ -4,6 +4,22 @@ import { useHistory } from "react-router-dom"
 import jwt from "jsonwebtoken"
 import { useSimpleReducer } from "./utils/hooks"
 
+/***
+ *
+ * Setup for Auth0 integration
+ * the reason this is so complicated is that
+ *  1) the default @auth0/auth0-spa-js requires a lot of setup
+ *  2) the library doesn't enable caching so I had to manually
+ *      modify to store saved auth0-tokens in localStorage, 
+ *      auth0 claims this is insecure but they're wrong
+ *
+ * the general flow here is check if the token exists 
+ * - if it does and is valid, isAuthenticated = true
+ * - otherwise wait for auth0 to init and once inited save the token
+ * listeners therefore want to wait for isAuthenticated before hitting the backend
+ *
+ **/
+
 export const Auth0Context = React.createContext();
 export const useAuth0 = () => useContext(Auth0Context);
 

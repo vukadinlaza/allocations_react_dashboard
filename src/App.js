@@ -20,6 +20,7 @@ import Investments from './components/Investments';
 import InvestmentNew from './components/InvestmentNew';
 import InvestmentEdit from './components/InvestmentEdit';
 import UserInvestments from './components/UserInvestments';
+import FreeSPVOnboarding from './components/FreeSPVOnboarding';
 
 // superadmin
 import SuperAdminManager from './components/superadmin/Manager'
@@ -49,6 +50,13 @@ import { client } from './apollo-client';
 
 import "./App.scss";
 import "./utils/initFontAwesome"
+
+/***
+ *
+ * App.js sets up the routing for all the components, wrapping
+ * with auth where appropriate {AdminRoute, PrivateRoute}
+ *
+ **/
 
 const App = () => {
   // currently only effects small screens
@@ -85,6 +93,11 @@ const App = () => {
                 <PrivateRoute path="/investments" component={UserInvestments} />
                 <PrivateRoute path="/invited-deals" component={InvitedDeals} />
 
+                {/** Onboarding **/}
+                <Route path="/signup" component={SignUp} exact />
+                <Route path="/getting-started" component={Faq} exact />
+                <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact />
+
                 {/** Deals **/}
                 <Route path="/deals/:deal_slug" exact><Deal /></Route>
                 <Route path="/deals/:organization/:deal_slug" exact><Deal /></Route>
@@ -120,8 +133,7 @@ const App = () => {
                 <PrivateRoute path="/admin/:organization/master-filing" component={MasterFiling} exact />
                 <AdminRoute path="/admin/:organization/investors" component={Investors} exact />
 
-                <Route path="/signup" component={SignUp} exact />
-                <Route path="/getting-started" component={Faq} exact />
+                {/** catchall **/}
                 <PrivateRoute path="/" component={UserHome} />
               </Switch>
             </Col>

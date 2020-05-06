@@ -10,6 +10,13 @@ import PublicApp from "./PublicApp"
 
 console.warn = () => {}
 
+/***
+ *
+ * wraps App & PublicApp in the react-router context and 
+ * auth0 context, so that downstream hooks can read the auth and routing data
+ *
+ **/
+
 if (process.env.NODE_ENV === "production") {
   // initialize hotjar
   hotjar.initialize(1630114, 6)

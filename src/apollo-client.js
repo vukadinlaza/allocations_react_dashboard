@@ -5,6 +5,14 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
 import { withClientState } from 'apollo-link-state';
 
+/***
+ *
+ * Apollo Client is the custom apollo client setup
+ * that inject auth into the requests w/ "auth0-token"
+ * and prints errors more readably
+ *
+ **/
+
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000/graphql"
 
 const uploadLink = createUploadLink({

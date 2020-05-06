@@ -12,6 +12,14 @@ import createAuth0Client from '@auth0/auth0-spa-js';
 import queryString from 'query-string'
 import _ from 'lodash'
 
+/***
+ *
+ * PublicApp is pages that require no auth
+ * the main example is the public deal page
+ * it needs a separate apollo client that doesn't send auth
+ *
+ **/
+
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000/graphql"
 const client = new ApolloClient({ 
   link: new HttpLink({ uri: API_URL }),
