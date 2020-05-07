@@ -44,6 +44,7 @@ const icons = [
   Solid.faEnvelope,
   Solid.faCheckCircle,
   Solid.faSpinner,
+  Solid.faLock,
   Reg.faFilePdf,
   Reg.faSquare,
 ]

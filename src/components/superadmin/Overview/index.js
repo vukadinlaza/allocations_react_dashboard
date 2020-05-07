@@ -3,9 +3,9 @@ import _ from 'lodash'
 import { gql } from 'apollo-boost'
 import { Row, Col } from 'reactstrap'
 import { Link } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import { nWithCommas, formatDate } from '../../../utils/numbers'
-import { Paper, LinearProgress, Table, TableBody, TableCell, TableRow } from '@material-ui/core'
+import { Paper, LinearProgress, Table, TableBody, TableCell, TableRow, Button } from '@material-ui/core'
 import "./style.scss"
 
 const SUPERADMIN = gql`
@@ -26,6 +26,7 @@ const SUPERADMIN = gql`
       organizations {
         _id
         name
+        approved
         created_at
         slug
         n_deals
@@ -42,8 +43,22 @@ const SUPERADMIN = gql`
   }
 `
 
+const DELETE_ORG = gql`
+  mutation DeleteOrg($_id: String!) {
+    deleteOrganization(_id: $_id)
+  }
+`
+
+const APPROVE_ORG = gql`
+  mutation ApproveOrg($org: OrganizationInput!) {
+    updateOrganization(organization: $org) {
+      _id
+    }
+  }
+`
+
 export default function SuperAdminOverview () {
-  const { data } = useQuery(SUPERADMIN)
+  const { data, refetch } = useQuery(SUPERADMIN)
 
   if (!data) return null
 
@@ -60,7 +75,7 @@ export default function SuperAdminOverview () {
               <Table>
                 <TableBody>
                   {organizations.map(org => (
-                    <Org key={org._id} org={org} />
+                    <Org key={org._id} org={org} refetch={refetch} />
                   ))}
                 </TableBody>
               </Table>
@@ -87,10 +102,19 @@ export default function SuperAdminOverview () {
   )
 }
 
-function Org ({ org }) {
+function Org ({ org, refetch }) {
+  const [updateOrganization, { data }] = useMutation(APPROVE_ORG, { 
+    onCompleted: refetch 
+  })
+  const approve = () => {
+    updateOrganization({ variables: { org: { _id: org._id, approved: true } }})
+  }
+
   return (
     <TableRow className="org-info">
-      <TableCell className="name">{org.name} </TableCell>
+      <TableCell className="name">
+        {org.name}{!org.approved && <Button size="small" variant="contained" color="secondary" onClick={approve}>approve</Button>}
+      </TableCell>
       <TableCell><i>created: {org.created_at ? formatDate(Number(org.created_at)) : null}</i></TableCell>
       <TableCell>
         Deals: <b>{org.n_deals}</b>
