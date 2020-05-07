@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Paper, TextField, Button, Table, TableBody, TableCell, TableRow, TableHead } from '@material-ui/core';
 import ReactHtmlParser from 'react-html-parser';
 import Chart from 'chart.js'
+import classNames from 'classnames'
 import KYC from '../forms/KYC'
 
 /***
@@ -55,6 +56,8 @@ export default function InvestmentFlow ({ investment, deal, investor, refetch })
   }
 
   const onboardingLinkType = getOnboardingLinkType(deal.onboarding_link)
+  const { approved } = deal
+
   return (
     <React.Fragment>
       <InvestmentOverview investment={investment} />
@@ -66,10 +69,12 @@ export default function InvestmentFlow ({ investment, deal, investor, refetch })
             className={`step step-pledge ${status === "pledging" ? "step-active" : ""}`}>Pledge</div>
           {/**<div onClick={() => setStatus('kyc')}
             className={`step step-pledge ${status === "kyc" ? "step-active" : ""}`}>KYC</div>**/}
-          <div onClick={() => setStatus('pledged')}
-            className={`step step-onboard ${status === "pledged" ? "step-active" : ""}`}>Sign</div>
-          <div onClick={() => setStatus('onboarded')}
-            className={`step step-wire ${status === "onboarded" ? "step-active" : ""}`}>Wire</div>
+          <div onClick={() => approved && setStatus('pledged')}  className={classNames("step step-onboard", {"step-active": status === "pledged"})} style={{cursor: approved ? "cursor" : "not-allowed"}}>
+            Sign {!approved && <FontAwesomeIcon icon="lock" />}
+          </div>
+          <div onClick={() => approved && setStatus('onboarded')} className={classNames("step step-wire", {"step-active": status === "onboarded"})} style={{cursor: approved ? "cursor" : "not-allowed"}}>
+            Wire {!approved && <FontAwesomeIcon icon="lock" />}
+          </div>
         </div>
         {status === "invited" && <DataRoom deal={deal} />}
         {status === "pledging" && <Pledging investment={investment} investor={investor} deal={deal} refetch={refetch} />}

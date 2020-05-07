@@ -36,6 +36,7 @@ export const GET_INVESTOR_DEAL = gql`
       email
       invitedDeal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
         _id
+        approved
         created_at
         company_name
         company_description
@@ -139,6 +140,8 @@ export default function Deal () {
 
   const { investor, investor: { invitedDeal: deal } } = data
   const { investment } = deal
+
+  console.log("APPROVED?", deal.approved)
 
   return (
     <div className="Deal">
