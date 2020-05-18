@@ -23,15 +23,15 @@ import { useSimpleReducer } from "./utils/hooks"
 export const Auth0Context = React.createContext();
 export const useAuth0 = () => useContext(Auth0Context);
 
-const domain="login.allocations.co";
-const client_id="R2iJsfjNPGNjIdPmRoE3IcKd9UvVrsp1";
-const audience="https://api.graphql.com"
+const domain = process.env.REACT_APP_AUTH0_DOMAIN;
+const client_id = process.env.REACT_APP_AUTH0_KEY;
+const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
 
 const defaultOptions = {
   domain,
   client_id,
   audience,
-  redirect_uri: window.location.origin
+  redirect_uri: window.location.origin,
 }
 
 const getAuth0Client = (options) => {
@@ -90,7 +90,7 @@ export const Auth0Provider = ({ children }) => {
     const p = getAuth0Client(options)
     setState({ 
       isAuthenticated: isAuthed(),
-      clientPromise: p
+      clientPromise: p,
     }) 
 
     p.then(client => {
@@ -108,13 +108,11 @@ export const Auth0Provider = ({ children }) => {
             if (val) {
               const token = await client.getTokenSilently()
               localStorage.setItem("auth0-token", token)
-              if (val) {
-                client.getUser().then(u => {
-                  setState({ user: u, loading: false })
-                })
-              }
+              client.getUser().then(u => {
+                setState({ user: u, loading: false })
+              })
             }
-            setState({ isAuthenticated: val })         
+            setState({ isAuthenticated: val })
           })
       }  
     }).catch(console.error)

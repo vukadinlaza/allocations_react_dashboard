@@ -41,7 +41,7 @@ const NavBar = () => {
 
 function LoginOrProfile () {
   const { loading, user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-  const logoutWithRedirect = () => logout({ returnTo: "https://www.allocations.com" });
+  const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL, });
 
   if (loading) return <Auth0ProfileLoading /> 
 
