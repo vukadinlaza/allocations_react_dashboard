@@ -20,6 +20,7 @@ const DEALS = gql`
       date_closed
       volume
       organization {
+        _id
         name
       }
     }

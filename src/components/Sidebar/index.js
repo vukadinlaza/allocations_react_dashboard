@@ -23,29 +23,31 @@ export default function Sidebar ({ showSidebar, setShowSidebar }) {
       <div className="toggle-wrapper">
         <FontAwesomeIcon icon="times" className="toggle" onClick={() => setShowSidebar(false)} />
       </div>
-      <div className={`sidebar-nav-item ${location.pathname === "/" ? "sidebar-nav-item-active" : ""}`}>
-        <Link to="/"><span>Home</span></Link>
+      <Link to="/">
+        <div className={`sidebar-nav-item ${location.pathname === "/" ? "sidebar-nav-item-active" : ""}`}>
+        <span>Home</span>
       </div>
-      <div className={`sidebar-nav-item ${location.pathname === "/investments" ? "sidebar-nav-item-active" : ""}`}>
-        <Link to="/investments">
+      </Link>
+      <Link to="/investments">
+        <div className={`sidebar-nav-item ${location.pathname === "/investments" ? "sidebar-nav-item-active" : ""}`}>
           <span>Investments</span>
-        </Link>
       </div>
-      <div className={`sidebar-nav-item ${location.pathname === "/invited-deals" ? "sidebar-nav-item-active" : ""}`}>
-        <Link to="/invited-deals">
+      </Link>
+      <Link to="/invited-deals">
+        <div className={`sidebar-nav-item ${location.pathname === "/invited-deals" ? "sidebar-nav-item-active" : ""}`}>
           <span>Deals</span>
-        </Link>
       </div>
-      <div className={`sidebar-nav-item ${location.pathname === "/profile" ? "sidebar-nav-item-active" : ""}`}>
-        <Link to="/profile">
+      </Link>
+      <Link to="/profile">
+        <div className={`sidebar-nav-item ${location.pathname === "/profile" ? "sidebar-nav-item-active" : ""}`}>
           <span>Profile</span>
-        </Link>
       </div>
-      {admin && <div className={`sidebar-nav-item ${location.pathname === "/admin/funds" ? "sidebar-nav-item-active" : ""}`}>
-        <Link to="/admin/funds">
+      </Link>
+      {admin && <Link to="/admin/funds">
+        <div className={`sidebar-nav-item ${location.pathname === "/admin/funds" ? "sidebar-nav-item-active" : ""}`}>
           <span>Funds</span>
-        </Link>
-      </div>}
+      </div>
+      </Link>}
       {admin && <AdminLinks location={location} />}
       <Footer />
     </Col>
