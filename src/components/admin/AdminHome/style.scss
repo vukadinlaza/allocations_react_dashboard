@@ -3,8 +3,9 @@
 .AdminHome {
     margin-bottom: 50px;
     .welcome {
-        height: 375px;
+        min-height: 100px;
         padding: 30px 15px;
+        margin-bottom: 1rem;
         >div {
             font-size: 1.2em;
         }

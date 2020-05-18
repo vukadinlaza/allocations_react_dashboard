@@ -37,6 +37,7 @@ const GET_INVESTOR = gql`
         date_closed
         deal_lead
         organization {
+          _id
           slug
         }
       }
