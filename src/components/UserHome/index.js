@@ -128,9 +128,9 @@ export default function UserHome (props) {
         <AdminTile investor={investor} />
       </Row>
       <Row>
-        <Col lg={{size: 8, offset: 2}} md={{size: 8, offset: 2}} sm={{size: 8, offset: 2}} className="welcome">
+        <Col lg={{size: 3, offset: 2}} md={{size: 5, offset: 0}} sm={{size: 5, offset: 0}} className="welcome">
           <div className="tile tile-top">
-            <div className="welcome-text">Welcome, <Name investor={investor} /></div>
+            <div className="welcome-text">Welcome,<br></br><Name investor={investor} /></div>
             <div className="welcome-desc">
               <span role="img" aria-label="congrats">🎉</span> Your Allocations account is ready for your use. Let's view your investments
               <div>
@@ -214,7 +214,7 @@ function NextSteps ({ investor }) {
 
   const profileComplete = investor && validate(investor).length === 0
   return (
-    <Col lg={{size: 8, offset: 2}} md={{size: 8, offset: 2}} sm={{size: 8, offset: 2}}>
+    <Col lg="5" md="7" sm="7">
       <div className="tile tile-top NextSteps">
         <h4>🚨 Next Steps</h4>
         <Paper style={{padding: "10px"}}>

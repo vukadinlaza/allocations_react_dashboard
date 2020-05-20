@@ -105,7 +105,7 @@ export default function AdminHome () {
     <div className="AdminHome">
       {data.investor.admin && <SuperAdmin org={org} />}
       <Row>
-        <Col sm={{size: 8, offset: 2}}>
+        <Col sm={{size: 3, offset: 2}}>
           <Paper className="welcome">
             <h2>Welcome to, <br></br> <b>{org.name}</b> Admin!</h2> 
             <div>This is where you can manage your deals and investors 🗃 🔮</div>
@@ -114,7 +114,7 @@ export default function AdminHome () {
             </Button>
           </Paper>
         </Col>
-        <Col sm={{size: 8, offset: 2}}>
+        <Col sm={{size: 5, offset: 0}}>
           <Paper className="deals" style={{padding: "10px 15px"}}>
             <div className="deals-title">💡 Active Deals &nbsp;<span className="deals-length">{(active || []).length}</span> <Button className="all-btn" variant="contained" color="secondary" style={{padding: "3px 4px"}}><Link to={`/admin/${organization}/deals`}>All</Link></Button></div>
             <hr></hr>
