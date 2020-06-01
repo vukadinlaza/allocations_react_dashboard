@@ -96,7 +96,13 @@ export default function Deal () {
   const history = useHistory()
   const { user, isAuthenticated, loading, loginWithRedirect, auth0Client } = useAuth0()
   const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL)
-  const [createInvestment] = useMutation(CREATE_INVESTMENT, { onCompleted: refetch })
+  const [createInvestment] = useMutation(CREATE_INVESTMENT, 
+    { onCompleted: () => {
+    // alert('Mutation Succeeded!')
+    refetch()
+  }
+  }
+  )
 
   useEffect(() => {
     if (auth0Client && !isAuthenticated) {
