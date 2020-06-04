@@ -159,7 +159,7 @@ export default function UserHome(props) {
           <Paper className={classes.paper}>
             <Grid container spacing={4} alignItems="center">
               <Hidden only="xs">
-                <Grid item sm={12} md={6}>
+                <Grid item sm={12} md={4}>
                   <Typography variant="body1" className={classes.lightText}>
                     Welcome,
                   </Typography>
@@ -168,7 +168,7 @@ export default function UserHome(props) {
                   </Typography>
                 </Grid>
               </Hidden>
-              <Grid item sm={12} md={6}>
+              <Grid item sm={12} md={8}>
                 <div style={{display: "flex", justifyContent: "flex-end"}}>
                   <Hidden only="xs">
                     <Typography variant="body1" className={classes.lightText}
