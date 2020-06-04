@@ -77,7 +77,8 @@ export default function UserInvestments() {
     <>
       <Grid container
             direction="row"
-            justify="flex-end">
+            justify="flex-end"
+            style={{marginBottom: 16}}>
         <Grid item>
           <div className={classes.totalInvested}>
             Total Invested: <span>${nWithCommas(_.sumBy(investments, 'amount'))}</span>
@@ -86,7 +87,7 @@ export default function UserInvestments() {
       </Grid>
 
       <Grid container>
-        <Grid item>
+        <Grid item xs={12}>
           <Paper>
             <Table>
               <TableHead>

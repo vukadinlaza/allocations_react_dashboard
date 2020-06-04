@@ -89,6 +89,10 @@ export default function Sidebar(props) {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleDrawerClose = () => {
+    setMobileOpen(false);
+  };
+
   const menus = [
     {
       to: "/",
@@ -133,7 +137,7 @@ export default function Sidebar(props) {
              title,
              icon
            }) => (
-            <div key={`menu-${title}`} onClick={handleDrawerToggle}
+            <div key={`menu-${title}`} onClick={mobileOpen ? handleDrawerClose : null}
                  className={`sidebar-nav-item ${location.pathname === to ? "sidebar-nav-item-active" : ""}`}>
               <ListItem component={Link} to={to} button>
                 <ListItemIcon style={{paddingLeft: 8}}>{icon}</ListItemIcon>
