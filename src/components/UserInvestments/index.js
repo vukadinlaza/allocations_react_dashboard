@@ -75,32 +75,16 @@ export default function UserInvestments() {
   }
   return (
     <>
-      <Grid container
-            direction="row"
-            justify="flex-end"
-            style={{marginBottom: 16}}>
+      <Grid container spacing={2}>
         <Grid item>
           <div className={classes.totalInvested}>
             Total Invested: <span>${nWithCommas(_.sumBy(investments, 'amount'))}</span>
           </div>
         </Grid>
-      </Grid>
-
-      <Grid container>
         <Grid item xs={12}>
-          <Paper>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Company</TableCell>
-                  <Hidden xsDown><TableCell>Description</TableCell></Hidden>
-                  <TableCell align="right">Amount</TableCell>
-                  <TableCell align="center">Status</TableCell>
-                  <TableCell align="center">Closing Date</TableCell>
-                  <TableCell align="right">Docs</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
+          <Hidden smUp>
+            <Paper>
+              <Table dense>
                 {investments.map((investment) => (
                   investment.showDocs ? <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents}/>
                     : <TableRow key={investment._id} className="investment-row">
@@ -120,9 +104,46 @@ export default function UserInvestments() {
                       </TableCell>
                     </TableRow>
                 ))}
-              </TableBody>
-            </Table>
-          </Paper>
+              </Table>
+            </Paper>
+          </Hidden>
+          <Hidden only="xs">
+            <Paper>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Company</TableCell>
+                    <Hidden xsDown><TableCell>Description</TableCell></Hidden>
+                    <TableCell align="right">Amount</TableCell>
+                    <TableCell align="center">Status</TableCell>
+                    <TableCell align="center">Closing Date</TableCell>
+                    <TableCell align="right">Docs</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {investments.map((investment) => (
+                    investment.showDocs ? <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents}/>
+                      : <TableRow key={investment._id} className="investment-row">
+                        <TableCell scope="row">{investment.deal.company_name}</TableCell>
+                        <Hidden xsDown><TableCell>{investment.deal.company_description}</TableCell></Hidden>
+                        <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) :
+                          <i>TBD</i>}</TableCell>
+                        <TableCell align="center"><InvestmentStatus investment={investment}/></TableCell>
+                        <TableCell align="center">{formatDate(investment.deal.date_closed)}</TableCell>
+                        <TableCell align="right">
+                          {_.get(investment, 'documents.length', 0) > 0
+                            ? showDocs && (showDocs._id === investment._id)
+                              ? <FontAwesomeIcon icon="times" onClick={() => setShowDocs(null)}/>
+                              : <FontAwesomeIcon icon="info-circle" onClick={() => setShowDocs(investment)}/>
+                            : ""
+                          }
+                        </TableCell>
+                      </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Paper>
+          </Hidden>
         </Grid>
       </Grid>
 

@@ -4,6 +4,16 @@ import {createMuiTheme} from '@material-ui/core/styles';
 // A custom theme for this app
 const theme = createMuiTheme({
   overrides: {
+    MuiTableHead: {
+      root: {
+        background: "#f3f7f8",
+      }
+    },
+    MuiTableCell: {
+      root: {
+        color: "#7f8fa4 !important"
+      }
+    },
     MuiPaper: {
       root: {
         border: "1px solid #d8dce6",
