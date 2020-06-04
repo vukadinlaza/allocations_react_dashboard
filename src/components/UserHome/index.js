@@ -1,21 +1,46 @@
-import React, { useEffect } from 'react'
+import React, {useEffect} from 'react'
 import _ from 'lodash'
-import { gql } from 'apollo-boost'
-import { Link, useParams, useHistory, Redirect } from 'react-router-dom'
-import { useLazyQuery } from '@apollo/react-hooks';
-import { useAuth0 } from "../../react-auth0-spa";
-import { Row, Container, Col } from 'reactstrap'
-import { nWithCommas} from '../../utils/numbers'
-import { validate } from '../forms/InvestorEdit'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useAuth } from "../../auth/useAuth"
-import { Paper, Table, TableBody, TableCell, TableRow, TableHead, Button, Fab } from '@material-ui/core'
+import {gql} from 'apollo-boost'
+import {Link, useParams, useHistory, Redirect} from 'react-router-dom'
+import {useLazyQuery} from '@apollo/react-hooks';
+import {useAuth0} from "../../react-auth0-spa";
+import {Row, Container, Col} from 'reactstrap'
+import {nWithCommas} from '../../utils/numbers'
+import {validate} from '../forms/InvestorEdit'
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {useAuth} from "../../auth/useAuth"
+import {
+  Avatar,
+  Hidden,
+  Paper,
+  ListItem,
+  List,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHead,
+  Grid,
+  Button,
+  Fab,
+  Typography
+} from '@material-ui/core'
 
 import Loader from '../utils/Loader'
 import Chart from "react-google-charts"
 import "./style.scss";
+import {makeStyles} from "@material-ui/core/styles";
 
 const purples = ["#6200EE", "#BB9FE6"]
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    padding: theme.spacing(2),
+  },
+  lightText: {
+    color: "#7f8fa3",
+  }
+}));
 
 const chartOptions = {
   minColor: purples[1],
@@ -101,115 +126,174 @@ const GET_INVESTOR = gql`
   }
 `
 
-function orderInvestments (investments) {
+function orderInvestments(investments) {
   const pastInvited = investments.filter(({status}) => status !== "invited")
   return _.take(_.orderBy(pastInvited, i => new Date(i.deal.date_closed).getTime(), 'desc'), 3)
 }
 
-export default function UserHome (props) {
+export default function UserHome(props) {
+  const classes = useStyles();
+
   const history = useHistory()
-  const { data, error, refetch, user, params, adminView } = useAuth(GET_INVESTOR)
+  const {data, error, refetch, user, params, adminView} = useAuth(GET_INVESTOR)
 
   if (error) {
     if (error.message === "GraphQL error: permission denied" && user && user.email) {
-      return <Redirect to="/signup" />
+      return <Redirect to="/signup"/>
     }
   }
 
-  if (!data) return <div><Loader /></div>
+  if (!data) return <div><Loader/></div>
 
   const investor = data.investor
   const total_invested = _.sumBy(investor.investments, 'amount') || 0
 
   const returningInvestor = total_invested !== 0
   return (
-    <Container fluid className="UserHome">
-      <Row>
-        <AdminTile investor={investor} />
-      </Row>
-      <Row>
-        <Col lg={{size: 3, offset: 2}} md={{size: 5, offset: 0}} sm={{size: 5, offset: 0}} className="welcome">
-          <div className="tile tile-top">
-            <div className="welcome-text">Welcome,<br></br><Name investor={investor} /></div>
-            <div className="welcome-desc">
-              <span role="img" aria-label="congrats">🎉</span> Your Allocations account is ready for your use. Let's view your investments
-              <div>
-                <Button className="button" variant="contained">
-                  <Link to={adminView ? `/investor/${params.id}/investments` : "/investments"}>Investments</Link>
-                </Button>
-              </div>
+    <>
+      {/* TODO: Move to NavBar <AdminTile investor={investor}/>*/}
+
+      <Grid container spacing={4}>
+
+        <Grid item xs={12}>
+          <Paper className={classes.paper}>
+            <Grid container spacing={4} alignItems="center">
+              <Hidden only="xs">
+                <Grid item sm={12} md={6}>
+                  <Typography variant="body1" className={classes.lightText}>
+                    Welcome,
+                  </Typography>
+                  <Typography variant="h5">
+                    <Name investor={investor}/>
+                  </Typography>
+                </Grid>
+              </Hidden>
+              <Grid item sm={12} md={6}>
+                <div style={{display: "flex", justifyContent: "flex-end"}}>
+                  <Hidden only="xs">
+                    <Typography variant="body1" className={classes.lightText}
+                                style={{textAlign: "right", paddingRight: 16}}>
+                      Your Allocations account is ready for your use. <br/>
+                      Let's view your investment
+                    </Typography>
+                  </Hidden>
+                  <Button
+                    onClick={() => history.push(adminView ? `/investor/${params.id}/investments` : "/investments")}
+                    variant="contained" color="primary">
+                    Investments
+                  </Button>
+                </div>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+
+        {returningInvestor && <>
+          <Grid item sm={12} md={6}>
+            <Paper className={classes.paper} style={{height: "100%"}}>
+              <Typography variant="h6" style={{marginBottom: 16}}>
+                Total Investments
+              </Typography>
+              <Typography variant="h3">
+                ${nWithCommas(total_invested)}
+              </Typography>
+            </Paper>
+          </Grid>
+
+          <Grid item sm={12} md={6}>
+            <Paper className={classes.paper}>
+              <Typography variant="h6" style={{marginBottom: 16}}>
+                Portfolio
+              </Typography>
+              {investor.investments.length > 0 ?
+                <Chart chartType="TreeMap"
+                       width="100%"
+                       height="200px"
+                       data={formatData(investor.investments)}
+                       options={chartOptions}/> : null
+              }
+            </Paper>
+          </Grid>
+        </>}
+
+        {!returningInvestor && <Grid item xs={12}>
+          <NextSteps investor={investor}/>
+        </Grid>}
+
+        <Grid item xs={12} sm={6}>
+          <Paper className={classes.paper} style={{paddingBottom: 0}}>
+            <Typography variant="h6" style={{marginBottom: 16}}>
+              Most Recent Investments
+            </Typography>
+            <div style={{margin: "0px -16px", cursor: "pointer"}}>
+              <Table style={{marginBottom: "-1px"}}>
+                {orderInvestments(investor.investments).map((investment, i) => (
+                  <InvestmentStub key={i} investment={investment}/>
+                ))}
+              </Table>
             </div>
-          </div>
-        </Col>
-        {returningInvestor && 
-          <Col lg="5" md="7" sm="7" className="total-investments">
-            <div className="tile tile-top">
-              <div className="small-header">Total Investments</div>
-              <div className="amount">${nWithCommas(total_invested)}</div>
-              <div className="chart-container">
-                {investor.investments.length > 0 ? 
-                  <Chart chartType="TreeMap"
-                    width="100%"
-                    height="125px"
-                    data={formatData(investor.investments)}
-                    options={chartOptions} /> : null
-                }
-              </div>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <Paper className={classes.paper}>
+            <Typography variant="h6" style={{marginBottom: 16}}>
+              Invited Deals
+            </Typography>
+            <div style={{margin: "0px -16px", cursor: "pointer"}}>
+              <Table>
+                {investor.invitedDeals.map((deal, i) => (
+                  <DealStub key={i} deal={deal}/>
+                ))}
+              </Table>
             </div>
-          </Col>
-        }
-        {!returningInvestor && <NextSteps investor={investor} />}
-      </Row>
-      <Row>
-        <Col lg={{size: 4, offset: 2}} md={{size: 6, offset: 0}} sm={{size: 6, offset: 0}} className="last-deals">
-          <div className="tile tile-bottom" onClick={() => history.push('/investments')}>
-            <div className="small-header">Most Recent Investments</div>
-            {orderInvestments(investor.investments).map((investment, i) => (
-              <InvestmentStub key={i} investment={investment} />
-            ))}
-          </div>
-        </Col>
-        <Col lg="4" md="6" sm="6" className="invited-deals">
-          <div className="tile tile-bottom">
-            <div className="small-header">Invited Deals</div>
-            {investor.invitedDeals.map((deal, i) => (
-              <DealStub key={i} deal={deal} />
-            ))}
-          </div>
-        </Col>
-      </Row>
-    </Container>
+          </Paper>
+        </Grid>
+      </Grid>
+    </>
   )
 }
 
-function Name ({ investor }) {
+function Name({investor}) {
   return investor.investor_type === "entity" ? investor.entity_name : investor.first_name
 }
 
-function InvestmentStub ({ investment }) {
+function InvestmentStub({investment}) {
   const history = useHistory()
 
   if (investment.status === "invited") return null
 
-  const { deal } = investment
-  const link = deal.organization 
+  const {deal} = investment
+  const link = deal.organization
     ? `/deals/${deal.organization.slug}/${deal.slug}`
     : `/deals/${deal.slug}`
 
   return (
-    <Paper key={investment._id} className="investment-stub" 
-      onClick={e => {
-        e.stopPropagation()
-        history.push(link)
-      }}>
-      <span>{deal.company_name}</span>
-      <span>{investment.amount ? `$${nWithCommas(investment.amount)}` : <i>TBD</i> }</span>
-      <span className={`investment-status investment-status-${investment.status}`}>{investment.status}</span>
-    </Paper>
+    <TableRow hover style={{borderTop: "1px solid #dfe1e5"}} button key={investment._id}
+              className="investment-stub"
+              onClick={e => {
+                e.stopPropagation()
+                history.push(link)
+              }}>
+      <TableCell>
+        {/* TODO: Get Company Logo*/}
+        <Avatar alt={deal.company_name}>
+          {deal.company_name}
+        </Avatar>
+      </TableCell>
+      <TableCell>{deal.company_name}</TableCell>
+      <TableCell style={{color: "#7f8fa4", fontWeight: "500"}}>
+        {investment.amount ? `$${nWithCommas(investment.amount)}` :
+          <i>TBD</i>}
+      </TableCell>
+      <TableCell style={{textAlign: "right"}}>
+        <span className={`investment-status investment-status-${investment.status}`}>{investment.status}</span>
+      </TableCell>
+    </TableRow>
   )
 }
 
-function NextSteps ({ investor }) {
+function NextSteps({investor}) {
   const history = useHistory()
 
   const profileComplete = investor && validate(investor).length === 0
@@ -240,22 +324,22 @@ function NextSteps ({ investor }) {
   )
 }
 
-function DealStub ({ deal }) {
+function DealStub({deal}) {
   const history = useHistory()
-  const link = deal.organization 
+  const link = deal.organization
     ? `/deals/${deal.organization.slug}/${deal.slug}`
     : `/deals/${deal.slug}`
 
   return (
-    <Paper key={deal._id} className="deal-stub" onClick={() => history.push(link)}>
+    <TableRow hover button key={deal._id} className="deal-stub" onClick={() => history.push(link)}>
       <span>{deal.company_name}</span>
       <span>{deal.date_closed || "TBD"}</span>
       <span className="deal-status" data-status={deal.status}>{deal.status}</span>
-    </Paper>
+    </TableRow>
   )
 }
 
-function AdminTile ({ investor }) {
+function AdminTile({investor}) {
   if (investor.admin || (investor.organizations_admin || []).length > 0) {
     return (
       <Col sm={{size: 8, offset: 2}}>
@@ -264,8 +348,8 @@ function AdminTile ({ investor }) {
             You are a Fund Manager &nbsp;&nbsp;
             <Link to="/admin/funds">
               <Button variant="contained" size="small" color="secondary">
-              My Funds 🗂
-            </Button>
+                My Funds 🗂
+              </Button>
             </Link>
           </div>
         </div>

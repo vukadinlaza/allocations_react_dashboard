@@ -1,112 +1,120 @@
 @import "../../App.scss";
 
 .Investments {
-    @include sm-and-up {
-      padding-top: 50px;  
+  @include sm-and-up {
+    padding-top: 50px;
+  }
+
+  .investment-row:hover {
+    // background-color: $softblue;
+    // cursor: pointer;
+  }
+
+  th {
+    font-weight: bold;
+  }
+
+  .investment-stats {
+    padding: 20px 0px 30px 0px;
+    font-size: 2em;
+
+    @include xs-only {
+      font-size: 1.5em;
     }
 
-    .investment-row:hover {
-        // background-color: $softblue;
-        // cursor: pointer;
-    }
+    .investments-n {
+      padding: 10px;
 
-    th {
-        font-weight: bold;
-    }
-    
-    .investment-stats {
-        padding: 20px 0px 30px 0px;
-        font-size: 2em;
+      span {
+        color: #5c2be2;
+      }
 
-        @include xs-only {
-            font-size: 1.5em;
+      @include xs-only {
+        margin-bottom: 10px;
+      }
+
+      button {
+        float: right;
+        margin-top: 5px;
+
+        a {
+          color: #fff;
         }
-
-        .investments-n {
-            padding: 10px;
-            span {
-                color: #5c2be2;
-            }
-            @include xs-only {
-                margin-bottom: 10px; 
-            }
-            button {
-                float: right;
-                margin-top: 5px;
-                a {
-                    color: #fff;
-                }
-            }
-        }
-        .investments-sum {
-            padding: 10px;
-            span {
-                color: #53B987;
-            }
-        }
+      }
     }
 
-    #investments-timeseries-chart {
-        height: 200px;
-    }
+    .investments-sum {
+      padding: 10px;
 
-    .fa-info-circle, .fa-times {
-        cursor: pointer;
+      span {
+        color: #53B987;
+      }
     }
+  }
 
-    .doc-wrapper {
-        display: inline-block;
-        text-align: center;
-        margin-right: 10px;
-    }
+  #investments-timeseries-chart {
+    height: 200px;
+  }
 
-    .doc {
-        display: inline-block;
-        height: 50px;
-        width: 40px;
-        margin: 0px 20px;
-        border-radius: 5px;
-        vertical-align: top;
-    }
+  .fa-info-circle, .fa-times {
+    cursor: pointer;
+  }
 
-    .doc {
-        position: relative;
-        .fa-file-pdf {
-            color: #F48FB1;
-            font-size: 3em;
-            position: absolute;
-            right: 3px;
-            top: 2px;
-        }
-    }
+  .doc-wrapper {
+    display: inline-block;
+    text-align: center;
+    margin-right: 10px;
+  }
 
-    .filename {
-        text-align: center;
-        font-size: 0.8em;
+  .doc {
+    display: inline-block;
+    height: 50px;
+    width: 40px;
+    margin: 0px 20px;
+    border-radius: 5px;
+    vertical-align: top;
+  }
+
+  .doc {
+    position: relative;
+
+    .fa-file-pdf {
+      color: #F48FB1;
+      font-size: 3em;
+      position: absolute;
+      right: 3px;
+      top: 2px;
     }
+  }
+
+  .filename {
+    text-align: center;
+    font-size: 0.8em;
+  }
 }
 
 .investment-status {
-    padding: 2px 6px;
-    border-radius: 4px;
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
 .investment-status-invited {
-    background-color: #FFC107;
-    color: #333;
+  background-color: #FFC107;
+  color: #333;
 }
 
 .investment-status-pledged {
-    background-color: lightblue;
-    color: #333;
+  background-color: #7ac1e5;
+  color: #fff;
+  text-transform: uppercase;
 }
 
 .investment-status-onboarded {
-    background-color: $brandblue;
-    color: #fff;
+  background-color: $brandblue;
+  color: #fff;
 }
 
 .investment-status-complete {
-    background-color: $green;
-    color: #fff;
+  background-color: $green;
+  color: #fff;
 }
