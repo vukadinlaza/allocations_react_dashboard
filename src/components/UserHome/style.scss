@@ -5,10 +5,10 @@ $break-xs: 576px;
 
 .deal-status {
     color: #fff;
-    padding: 1px 4px;
-    font-size: 0.85em;
+    padding: 2px 6px;
     border-radius: 4px;
     opacity: 0.7;
+    text-transform: uppercase;
 }
 
 span[data-status="onboarding"] {
@@ -72,7 +72,7 @@ span[data-status="closed"] {
                 padding: 0px 4px;
                 font-size: 1.2em;
             }
-            
+
             .coming-soon {
                 margin-left: 15px;
                 font-size: 0.9em;
@@ -105,7 +105,7 @@ span[data-status="closed"] {
         .welcome-desc {
             >div {
                 margin-top: 10px;
-            } 
+            }
             a {
                 text-decoration: none;
                 color: black;
@@ -147,7 +147,7 @@ span[data-status="closed"] {
 
         i {
             color: #a7a7a7;
-        }    
+        }
     }
 
     .invited-deals {
@@ -184,6 +184,6 @@ span[data-status="closed"] {
         }
         a:hover {
             color: #fff;
-        }    
+        }
     }
 }

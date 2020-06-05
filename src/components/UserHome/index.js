@@ -236,12 +236,12 @@ export default function UserHome(props) {
         </Grid>
 
         <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper}>
+          <Paper className={classes.paper} style={{paddingBottom: 0}}>
             <Typography variant="h6" style={{marginBottom: 16}}>
               Invited Deals
             </Typography>
             <div style={{margin: "0px -16px", cursor: "pointer"}}>
-              <Table>
+              <Table style={{marginBottom: "-1px"}}>
                 {investor.invitedDeals.map((deal, i) => (
                   <DealStub key={i} deal={deal}/>
                 ))}
@@ -326,9 +326,11 @@ function DealStub({deal}) {
 
   return (
     <TableRow hover button key={deal._id} className="deal-stub" onClick={() => history.push(link)}>
-      <span>{deal.company_name}</span>
-      <span>{deal.date_closed || "TBD"}</span>
-      <span className="deal-status" data-status={deal.status}>{deal.status}</span>
+      <TableCell>{deal.company_name}</TableCell>
+      <TableCell>{deal.date_closed || "TBD"}</TableCell>
+      <TableCell style={{textAlign: "right"}}>
+        <span data-status={deal.status} className="deal-status">{deal.status}</span>
+      </TableCell>
     </TableRow>
   )
 }
