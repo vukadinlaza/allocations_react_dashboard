@@ -4,6 +4,20 @@ import {createMuiTheme} from '@material-ui/core/styles';
 // A custom theme for this app
 const theme = createMuiTheme({
   overrides: {
+    MuiInputLabel: {
+      /*fix bug in <Select /> with helper text, only works on white backgrounds
+      * https://github.com/mui-org/material-ui/issues/16954#issuecomment-580034129 */
+      outlined: {
+        backgroundColor: "#fff",
+        paddingLeft: 2,
+        paddingRight: 2
+      }
+    },
+    MuiTypography: {
+      subtitle2: {
+        color: "#9ea0a5"
+      }
+    },
     MuiTableHead: {
       root: {
         background: "#f3f7f8",

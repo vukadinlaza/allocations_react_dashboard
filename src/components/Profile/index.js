@@ -64,19 +64,29 @@ export default function Profile() {
   if (!investor) return <Loader/>
 
   return (
-    <div className="Profile">
-      <Row>
-        <Col sm={{size: 9, offset: 1}}>
-          <Typography variant="h4">
-            Profile {icon && <FontAwesomeIcon icon={icon} spin={icon === "circle-notch"}/>}
-          </Typography>
-        </Col>
-      </Row>
+    <>
       <InvestorEditForm investor={investor}
+                        icon={icon}
                         refetch={refetch}
                         setInvestor={setInvestor}
                         setFormStatus={setFormStatus}
-                        actionText="UPDATE PROFILE"/>
-    </div>
+                        actionText="Save Profile"/>
+      {/*
+      <div className="Profile">
+        <Row>
+          <Col sm={{size: 9, offset: 1}}>
+            <Typography variant="h4">
+              Profile {icon && <FontAwesomeIcon icon={icon} spin={icon === "circle-notch"}/>}
+            </Typography>
+          </Col>
+        </Row>
+        <InvestorEditForm investor={investor}
+                          refetch={refetch}
+                          setInvestor={setInvestor}
+                          setFormStatus={setFormStatus}
+                          actionText="UPDATE PROFILE"/>
+      </div>
+      */}
+    </>
   )
 }

@@ -105,11 +105,6 @@ export default function Sidebar(props) {
       icon: <BarChartIcon/>,
     },
     {
-      to: "/invited-deals",
-      title: "Deals",
-      icon: <StarIcon/>,
-    },
-    {
       to: "/profile",
       title: "Profile",
       icon: <PersonIcon/>,
@@ -129,7 +124,6 @@ export default function Sidebar(props) {
   const drawer = (
     <div>
       <div className={classes.toolbar}/>
-      <Divider/>
       <List>
         {menus.map(
           ({

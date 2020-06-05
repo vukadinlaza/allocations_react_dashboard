@@ -174,7 +174,7 @@ export default function UserHome(props) {
                     <Typography variant="body1" className={classes.lightText}
                                 style={{textAlign: "right", paddingRight: 16}}>
                       Your Allocations account is ready for your use. <br/>
-                      Let's view your investment
+                      Let's view your investments
                     </Typography>
                   </Hidden>
                   <Button
@@ -275,12 +275,6 @@ function InvestmentStub({investment}) {
                 e.stopPropagation()
                 history.push(link)
               }}>
-      <TableCell>
-        {/* TODO: Get Company Logo*/}
-        <Avatar alt={deal.company_name}>
-          {deal.company_name}
-        </Avatar>
-      </TableCell>
       <TableCell>{deal.company_name}</TableCell>
       <TableCell style={{color: "#7f8fa4", fontWeight: "500"}}>
         {investment.amount ? `$${nWithCommas(investment.amount)}` :
