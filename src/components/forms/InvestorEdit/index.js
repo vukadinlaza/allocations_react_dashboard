@@ -135,9 +135,9 @@ export default function InvestorEditForm({investor, setInvestor, actionText, ico
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={12} md={6}>
+          {investor.investor_type === "entity" && <Grid item xs={12} sm={12} md={6}>
             <AccreditedInvestorStatus investor={investor} handleChange={handleChange} errors={errors}/>
-          </Grid>
+          </Grid>}
 
           <Grid item xs={12} sm={12} md={6}>
             <FormControl required error={errors.includes("country")} variant="outlined" style={{width: "100%"}}>

@@ -161,11 +161,11 @@ export default function UserHome(props) {
               <Hidden only="xs">
                 <Grid item sm={12} md={4}>
                   <Typography variant="body1" className={classes.lightText}>
-                    Welcome,
+                    Welcome
                   </Typography>
-                  <Typography variant="h5">
+                  {returningInvestor && <Typography variant="h5">
                     <Name investor={investor}/>
-                  </Typography>
+                  </Typography>}
                 </Grid>
               </Hidden>
               <Grid item sm={12} md={8}>
@@ -216,39 +216,42 @@ export default function UserHome(props) {
           </Grid>
         </>}
 
-        {!returningInvestor && <Grid item xs={12}>
+        {!returningInvestor && <Grid item xs={12} sm={6}>
           <NextSteps investor={investor}/>
         </Grid>}
 
-        <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper} style={{paddingBottom: 0}}>
-            <Typography variant="h6" style={{marginBottom: 16}}>
-              Most Recent Investments
-            </Typography>
-            <div style={{margin: "0px -16px", cursor: "pointer"}}>
-              <Table style={{marginBottom: "-1px"}}>
-                {orderInvestments(investor.investments).map((investment, i) => (
-                  <InvestmentStub key={i} investment={investment}/>
-                ))}
-              </Table>
-            </div>
-          </Paper>
-        </Grid>
+        {returningInvestor && <>
+          <Grid item xs={12} sm={6}>
+            <Paper className={classes.paper} style={{paddingBottom: 0}}>
+              <Typography variant="h6" style={{marginBottom: 16}}>
+                Most Recent Investments
+              </Typography>
+              <div style={{margin: "0px -16px", cursor: "pointer"}}>
+                <Table style={{marginBottom: "-1px"}}>
+                  {orderInvestments(investor.investments).map((investment, i) => (
+                    <InvestmentStub key={i} investment={investment}/>
+                  ))}
+                </Table>
+              </div>
+            </Paper>
+          </Grid>
 
-        <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper} style={{paddingBottom: 0}}>
-            <Typography variant="h6" style={{marginBottom: 16}}>
-              Invited Deals
-            </Typography>
-            <div style={{margin: "0px -16px", cursor: "pointer"}}>
-              <Table style={{marginBottom: "-1px"}}>
-                {investor.invitedDeals.map((deal, i) => (
-                  <DealStub key={i} deal={deal}/>
-                ))}
-              </Table>
-            </div>
-          </Paper>
-        </Grid>
+          <Grid item xs={12} sm={6}>
+            <Paper className={classes.paper} style={{paddingBottom: 0}}>
+              <Typography variant="h6" style={{marginBottom: 16}}>
+                Invited Deals
+              </Typography>
+              <div style={{margin: "0px -16px", cursor: "pointer"}}>
+                <Table style={{marginBottom: "-1px"}}>
+                  {investor.invitedDeals.map((deal, i) => (
+                    <DealStub key={i} deal={deal}/>
+                  ))}
+                </Table>
+              </div>
+            </Paper>
+          </Grid>
+        </>}
+
       </Grid>
     </>
   )
@@ -292,29 +295,27 @@ function NextSteps({investor}) {
 
   const profileComplete = investor && validate(investor).length === 0
   return (
-    <Col lg="5" md="7" sm="7">
-      <div className="tile tile-top NextSteps">
-        <h4>🚨 Next Steps</h4>
-        <Paper style={{padding: "10px"}}>
-          <div className="step" onClick={() => history.push(`/profile`)}>
-            <span>📚 Complete Your Profile</span>
-            {profileComplete && <span className="checkbox">✅</span>}
-          </div>
-          <div className="step">
-            <span>💵 Track My SPV Investment</span>
-            <span className="coming-soon">coming soon</span>
-          </div>
-          <div className="step">
-            <span>📬 Apply to Join a Fund</span>
-            <span className="coming-soon">coming soon</span>
-          </div>
-          <div className="step">
-            <span>🏦 Apply to be a Fund Manager</span>
-            <span className="coming-soon">coming soon</span>
-          </div>
-        </Paper>
-      </div>
-    </Col>
+    <>
+      <Typography variant="h6">
+        🚨 Next Steps
+      </Typography>
+      <Paper style={{padding: "16px"}}>
+        <List>
+          <ListItem button onClick={() => history.push(`/profile`)}>
+            <span>📚 Complete Your Profile</span> {profileComplete && <span className="checkbox">✅</span>}
+          </ListItem>
+          <ListItem button disabled>
+            <span>💵 Track My SPV Investment <small className="coming-soon">coming soon</small></span>
+          </ListItem>
+          <ListItem button disabled>
+            <span>📬 Apply to Join a Fund <small className="coming-soon">coming soon</small></span>
+          </ListItem>
+          <ListItem button disabled>
+            <span>🏦 Apply to be a Fund Manager <small className="coming-soon">coming soon</small></span>
+          </ListItem>
+        </List>
+      </Paper>
+    </>
   )
 }
 
