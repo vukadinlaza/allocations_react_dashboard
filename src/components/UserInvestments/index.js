@@ -14,6 +14,7 @@ import {Table, TableBody, TableCell, Grid, TableRow, TableHead, Paper, Hidden} f
 
 import "./style.scss";
 import {makeStyles} from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
@@ -80,6 +81,11 @@ export default function UserInvestments() {
           <div className={classes.totalInvested}>
             Total Invested: <span>${nWithCommas(_.sumBy(investments, 'amount'))}</span>
           </div>
+          {/* Peer: Total amount of investments is not shown in the design anymore
+           <Typography variant="h6">
+            Investments: <span>{showDocs ? investments.length - 1 : investments.length}</span>
+          </Typography>
+          */}
         </Grid>
         <Grid item xs={12}>
           <Hidden smUp>
@@ -146,25 +152,6 @@ export default function UserInvestments() {
           </Hidden>
         </Grid>
       </Grid>
-
-      <div className="Investments">
-        <Row>
-          <Col sm="10" className="offset-sm-1">
-            <div className="investment-stats row">
-              <Col sm="6">
-                <Paper
-                  className="investments-n">Investments: <span>{showDocs ? investments.length - 1 : investments.length}</span></Paper>
-              </Col>
-              <Col sm="6">
-                <Paper className="investments-sum">Total
-                  Invested: <span>${nWithCommas(_.sumBy(investments, 'amount'))}</span></Paper>
-              </Col>
-            </div>
-            <Paper className="table-wrapper">
-            </Paper>
-          </Col>
-        </Row>
-      </div>
     </>
   )
 }
