@@ -12,7 +12,15 @@ import Loader from '../components/utils/Loader'
  *
  **/
 
-export const adminWhitelist = ["will@allocations.com", "kadvani1@gmail.com", "michelle@allocations.com", "tim@allocations.com", "joel@allocations.com", "joel+test2@allocations.com"]
+export const adminWhitelist = [
+  "kadvani1@gmail.com",
+  "michelle@allocations.com",
+  "tim@allocations.com",
+  "joel@allocations.com",
+  "thomas@allocations.com",
+  "olia@allocations.com",
+  "peeroke@gmail.com",
+]
 
 export default function AdminRoute ({ component, ...rest }) {
   const { isAuthenticated, user } = useAuth0();
