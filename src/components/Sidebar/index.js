@@ -271,8 +271,8 @@ export default function Sidebar(props) {
             </div>
 
             {/* Peer TODO: Migrate old NavBar Logic to Sidebar/index.js
-            <NavBar/>
             */}
+            <NavBar/>
 
             <div className={classes.sectionDesktop}>
               <IconButton aria-label="show 4 new mails" color="inherit">
