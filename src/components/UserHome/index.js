@@ -153,11 +153,11 @@ export default function UserHome(props) {
     <>
       {/* TODO: Move to NavBar <AdminTile investor={investor}/>*/}
 
-      <Grid container spacing={4}>
+      <Grid container spacing={2}>
 
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <Grid container spacing={4} alignItems="center">
+            <Grid container spacing={2} alignItems="center">
               <Hidden only="xs">
                 <Grid item sm={12} md={4}>
                   <Typography variant="body1" className={classes.lightText}>
