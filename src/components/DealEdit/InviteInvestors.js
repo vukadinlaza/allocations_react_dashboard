@@ -51,6 +51,7 @@ export default function InviteInvestors({deal, refetch}) {
 
       <SendEmailInvites deal={deal} refetch={refetch}/>
 
+      {/* TODO: Null State missing */}
 
       <Paper className="table-wrapper" style={{marginBottom: "10px"}}>
         <Table>
