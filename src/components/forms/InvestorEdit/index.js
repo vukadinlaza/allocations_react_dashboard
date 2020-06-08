@@ -111,7 +111,6 @@ export default function InvestorEditForm({investor, setInvestor, actionText, ico
     <>
       <form noValidate autoComplete="off">
         <Paper className={classes.paper}>
-
           <Typography variant="h6">
             Profile {icon && <FontAwesomeIcon icon={icon} spin={icon === "circle-notch"}/>}
           </Typography>
@@ -212,7 +211,7 @@ export default function InvestorEditForm({investor, setInvestor, actionText, ico
           </Button>
 
         </Paper>
-        
+
       </form>
     </>
   )
