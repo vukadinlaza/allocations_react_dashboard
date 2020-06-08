@@ -536,15 +536,15 @@ function DataRoom({deal, refetch}) {
 
   return (
     <>
-      <Grid item xs={10}>
+      <Grid item xs={12}>
         <Typography variant="h5">
           Data Room
         </Typography>
       </Grid>
 
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={3}>
         {doc.doc && <span><FontAwesomeIcon icon="link"/> {doc.doc.name}</span>}
-        {!doc.doc && <Button variant="contained" component="label">
+        {!doc.doc && <Button fullWidth variant="contained" component="label" style={{height: 39}}>
           Attach
           <input type="file"
                  style={{display: "none"}}
@@ -555,26 +555,36 @@ function DataRoom({deal, refetch}) {
         </Button>}
       </Grid>
 
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={5}>
         <TextField required
+                   margin="dense"
+                   size="small"
                    variant="outlined"
+                   style={{marginTop: 0}}
                    label="Title"
-                   style={{width: "250px"}}
+                   fullWidth
                    value={doc.title}
                    onChange={e => setDoc({title: e.target.value})}/>
       </Grid>
 
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={4}>
         <Button variant="contained"
                 onClick={submit}
+                style={{height: 39}}
+                fullWidth
                 color="primary">
           Upload to Data Room
         </Button>
       </Grid>
+
       <Grid item xs={12} sm={6}>
         {(deal.documents || []).map(doc => (
           <Doc key={doc.path} doc={doc} deal={deal} refetch={refetch}/>
         ))}
+      </Grid>
+
+      <Grid item xs={12}>
+        <Divider style={{marginBottom: 16}}/>
       </Grid>
     </>
   )
