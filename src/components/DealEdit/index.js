@@ -471,9 +471,13 @@ export default function DealEdit() {
                 variant="outlined"/>
             </Grid>
 
-            <Grid item xs={12} sm={6}>
-              <InviteInvestors deal={deal} refetch={refetch}/>
+          </Grid>
+        </Paper>
 
+        <Paper className={classes.paper}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <InviteInvestors deal={deal} refetch={refetch}/>
             </Grid>
 
             <Grid item xs={12} sm={6}>
@@ -505,309 +509,309 @@ export default function DealEdit() {
           </Grid>
         </Paper>
       </form>
-    </>
-  )
-}
+      < />
+      )
+      }
 
-const ADD_DOC = gql`
-  mutation AddDealDoc($deal_id: String!, $title: String!, $doc: Upload!) {
-    addDealDoc(deal_id: $deal_id, title: $title, doc: $doc) {
+      const ADD_DOC = gql`
+      mutation AddDealDoc($deal_id: String!, $title: String!, $doc: Upload!) {
+      addDealDoc(deal_id: $deal_id, title: $title, doc: $doc) {
       _id
     }
-  }
-`
+    }
+      `
 
-function DataRoom({deal, refetch}) {
-  const [doc, setDoc] = useSimpleReducer({title: ""})
-  const [addDoc, {data, error}] = useMutation(ADD_DOC)
+      function DataRoom({deal, refetch}) {
+      const [doc, setDoc] = useSimpleReducer({title: ""})
+      const [addDoc, {data, error}] = useMutation(ADD_DOC)
 
-  useEffect(() => {
-    if (data) {
+      useEffect(() => {
+      if (data) {
       refetch()
       setDoc({title: "", doc: null})
     }
-  }, [data])
+    }, [data])
 
-  const submit = () => {
-    if (doc.doc && doc.title) {
+      const submit = () => {
+      if (doc.doc && doc.title) {
       addDoc({variables: {deal_id: deal._id, ...doc}})
     }
-  }
+    }
 
-  return (
-    <>
+      return (
+      <>
       <Grid item xs={12}>
-        <Typography variant="h5">
-          Data Room
-        </Typography>
+      <Typography variant="h5">
+      Data Room
+      </Typography>
       </Grid>
 
       <Grid item xs={12} sm={3}>
-        {doc.doc && <span><FontAwesomeIcon icon="link"/> {doc.doc.name}</span>}
-        {!doc.doc && <Button fullWidth variant="contained" component="label" style={{height: 39}}>
-          Attach
-          <input type="file"
-                 style={{display: "none"}}
-                 accept="application/pdf"
-                 onChange={({target}) => {
-                   if (target.validity.valid) setDoc({doc: target.files[0]})
-                 }}/>
-        </Button>}
+      {doc.doc && <span><FontAwesomeIcon icon="link"/> {doc.doc.name}</span>}
+      {!doc.doc && <Button fullWidth variant="contained" component="label" style={{height: 39}}>
+        Attach
+        <input type="file"
+               style={{display: "none"}}
+               accept="application/pdf"
+               onChange={({target}) => {
+                 if (target.validity.valid) setDoc({doc: target.files[0]})
+               }}/>
+      </Button>}
       </Grid>
 
       <Grid item xs={12} sm={5}>
-        <TextField required
-                   margin="dense"
-                   size="small"
-                   variant="outlined"
-                   style={{marginTop: 0}}
-                   label="Title"
-                   fullWidth
-                   value={doc.title}
-                   onChange={e => setDoc({title: e.target.value})}/>
+      <TextField required
+      margin="dense"
+      size="small"
+      variant="outlined"
+      style={{marginTop: 0}}
+      label="Title"
+      fullWidth
+      value={doc.title}
+      onChange={e => setDoc({title: e.target.value})}/>
       </Grid>
 
       <Grid item xs={12} sm={4}>
-        <Button variant="contained"
-                onClick={submit}
-                style={{height: 39}}
-                fullWidth
-                color="primary">
-          Upload to Data Room
-        </Button>
+      <Button variant="contained"
+      onClick={submit}
+      style={{height: 39}}
+      fullWidth
+      color="primary">
+      Upload to Data Room
+      </Button>
       </Grid>
 
       <Grid item xs={12} sm={6}>
-        {(deal.documents || []).map(doc => (
-          <Doc key={doc.path} doc={doc} deal={deal} refetch={refetch}/>
-        ))}
+      {(deal.documents || []).map(doc => (
+        <Doc key={doc.path} doc={doc} deal={deal} refetch={refetch}/>
+      ))}
       </Grid>
 
       <Grid item xs={12}>
-        <Divider style={{marginBottom: 16}}/>
+      <Divider style={{marginBottom: 16}}/>
       </Grid>
-    </>
-  )
-}
+      </>
+      )
+    }
 
-const RM_DOC = gql`
-  mutation RmDoc($deal_id: String!, $title: String!) {
-    rmDealDoc(deal_id: $deal_id, title: $title) {
+      const RM_DOC = gql`
+      mutation RmDoc($deal_id: String!, $title: String!) {
+      rmDealDoc(deal_id: $deal_id, title: $title) {
       _id
     }
-  }
-`
+    }
+      `
 
-function Doc({doc, deal, refetch}) {
+      function Doc({doc, deal, refetch}) {
 
-  const [rmDoc, {data, error}] = useMutation(RM_DOC)
+      const [rmDoc, {data, error}] = useMutation(RM_DOC)
 
-  useEffect(() => {
-    if (data) refetch()
-  }, [data])
+      useEffect(() => {
+      if (data) refetch()
+    }, [data])
 
-  const submit = () => {
-    if (window.confirm(`Delete ${doc.path} document?`)) {
+      const submit = () => {
+      if (window.confirm(`Delete ${doc.path} document?`)) {
       rmDoc({variables: {deal_id: deal._id, title: doc.path}})
     }
-  }
+    }
 
-  return (
-    <span>
+      return (
+      <span>
       <a href={`https://${doc.link}`} target="_blank">
-        <FontAwesomeIcon icon="link"/> &nbsp;{doc.path} &nbsp;&nbsp;
+      <FontAwesomeIcon icon="link"/> &nbsp;{doc.path} &nbsp;&nbsp;
       </a>
       <FontAwesomeIcon icon="times" onClick={submit}/>
-    </span>
-  )
-}
+      </span>
+      )
+    }
 
-const UPDATE_INVESTMENT = gql`
-  mutation UpdateInvestment($investment: InvestmentInput!) {
-    updateInvestment(investment: $investment) {
+      const UPDATE_INVESTMENT = gql`
+      mutation UpdateInvestment($investment: InvestmentInput!) {
+      updateInvestment(investment: $investment) {
       _id
       status
       amount
       investor {
-        _id
-        name
-      }
+      _id
+      name
     }
-  }
-`
+    }
+    }
+      `
 
-function Investment({investment: i, refetch}) {
-  const [editing, setEditing] = useState(false)
-  const [changes, setChanges] = useSimpleReducer({})
-  const [updateInvestment] = useMutation(UPDATE_INVESTMENT)
+      function Investment({investment: i, refetch}) {
+      const [editing, setEditing] = useState(false)
+      const [changes, setChanges] = useSimpleReducer({})
+      const [updateInvestment] = useMutation(UPDATE_INVESTMENT)
 
-  const update = () => {
-    updateInvestment({
+      const update = () => {
+      updateInvestment({
       variables: {investment: {_id: i._id, ...changes}}
     })
-  }
+    }
 
-  if (editing) {
-    return (
+      if (editing) {
+      return (
       <TableRow>
-        <TableCell colSpan={4}>
-          <Paper className="investment-edit">
-            <div className="investor-name">
-              {get(i, 'investor.name')}
-              <FontAwesomeIcon icon="times" onClick={() => setEditing(false)}/>
-            </div>
+      <TableCell colSpan={4}>
+      <Paper className="investment-edit">
+      <div className="investor-name">
+      {get(i, 'investor.name')}
+      <FontAwesomeIcon icon="times" onClick={() => setEditing(false)}/>
+      </div>
 
-            <TextField value={changes.amount || i.amount || ""}
-                       onChange={e => setChanges({amount: Number(e.target.value)})}
-                       label="Amount" variant="outlined" style={{width: "100%", marginBottom: "10px"}}/>
+      <TextField value={changes.amount || i.amount || ""}
+      onChange={e => setChanges({amount: Number(e.target.value)})}
+      label="Amount" variant="outlined" style={{width: "100%", marginBottom: "10px"}}/>
 
-            <FormControl variant="outlined" style={{width: "100%", marginBottom: "10px"}}>
-              <InputLabel>Status</InputLabel>
-              <Select value={changes.status || i.status || ""}
-                      onChange={e => setChanges({status: e.target.value})}
-                      inputProps={{name: 'Type'}}>
-                <MenuItem value="invited">Invited</MenuItem>
-                <MenuItem value="pledged">Pledged</MenuItem>
-                <MenuItem value="onboarded">Onboarded</MenuItem>
-                <MenuItem value="complete">Complete</MenuItem>
-              </Select>
-            </FormControl>
-            <div>
-              <Button
-                variant="contained"
-                onClick={update}
-                color="primary">
-                UPDATE
-              </Button>
-            </div>
-          </Paper>
-        </TableCell>
+      <FormControl variant="outlined" style={{width: "100%", marginBottom: "10px"}}>
+      <InputLabel>Status</InputLabel>
+      <Select value={changes.status || i.status || ""}
+      onChange={e => setChanges({status: e.target.value})}
+      inputProps={{name: 'Type'}}>
+      <MenuItem value="invited">Invited</MenuItem>
+      <MenuItem value="pledged">Pledged</MenuItem>
+      <MenuItem value="onboarded">Onboarded</MenuItem>
+      <MenuItem value="complete">Complete</MenuItem>
+      </Select>
+      </FormControl>
+      <div>
+      <Button
+      variant="contained"
+      onClick={update}
+      color="primary">
+      UPDATE
+      </Button>
+      </div>
+      </Paper>
+      </TableCell>
       </TableRow>
-    )
-  }
+      )
+    }
 
-  return (
-    <TableRow className="invited-inv">
+      return (
+      <TableRow className="invited-inv">
       <TableCell>{get(i, 'investor.name')}</TableCell>
       <TableCell>{i.amount ? "$" + nWithCommas(i.amount) : "TBD"}</TableCell>
       <TableCell>
-        <span className={`investment-status investment-status-${i.status}`}>{i.status}</span>
+      <span className={`investment-status investment-status-${i.status}`}>{i.status}</span>
       </TableCell>
       <TableCell>
-        [<span className="edit-button" onClick={() => setEditing(true)}>edit</span>]
-        &nbsp;<DeleteInvestment investment={i} refetch={refetch}/>
+      [<span className="edit-button" onClick={() => setEditing(true)}>edit</span>]
+      &nbsp;<DeleteInvestment investment={i} refetch={refetch}/>
       </TableCell>
-    </TableRow>
-  )
-}
+      </TableRow>
+      )
+    }
 
-function DeleteInvestment({investment, refetch}) {
-  const [delInvestment, {data}] = useMutation(API.investments.destroy)
+      function DeleteInvestment({investment, refetch}) {
+      const [delInvestment, {data}] = useMutation(API.investments.destroy)
 
-  useEffect(() => {
-    if (data && data.deleteInvestment) refetch()
-  }, [data])
+      useEffect(() => {
+      if (data && data.deleteInvestment) refetch()
+    }, [data])
 
-  const submit = () => {
-    if (window.confirm("Delete Investment?")) delInvestment({variables: {id: investment._id}})
-  }
+      const submit = () => {
+      if (window.confirm("Delete Investment?")) delInvestment({variables: {id: investment._id}})
+    }
 
-  return <FontAwesomeIcon icon="times" onClick={submit}/>
-}
+      return <FontAwesomeIcon icon="times" onClick={submit}/>
+    }
 
-function validate(investment) {
-  return _.reject(['deal_id', 'user_id', 'amount', 'status'], prop => investment[prop])
-}
+      function validate(investment) {
+      return _.reject(['deal_id', 'user_id', 'amount', 'status'], prop => investment[prop])
+    }
 
-function AddInvestment({deal, show, refetch}) {
-  const [investment, setInvestment] = useSimpleReducer({amount: "", status: "complete"})
-  const [createInvestment, {data}] = useMutation(API.investments.create)
-  const [user, setUser] = useState(null)
-  const [errors, setErrors] = useState([])
+      function AddInvestment({deal, show, refetch}) {
+      const [investment, setInvestment] = useSimpleReducer({amount: "", status: "complete"})
+      const [createInvestment, {data}] = useMutation(API.investments.create)
+      const [user, setUser] = useState(null)
+      const [errors, setErrors] = useState([])
 
-  useEffect(() => {
-    if (deal && !investment.deal_id) {
+      useEffect(() => {
+      if (deal && !investment.deal_id) {
       setInvestment({deal_id: deal._id})
     }
-  }, [deal])
+    }, [deal])
 
-  useEffect(() => {
-    if (user) setInvestment({user_id: user._id})
-  }, [user])
+      useEffect(() => {
+      if (user) setInvestment({user_id: user._id})
+    }, [user])
 
-  useEffect(() => {
-    if (data) {
+      useEffect(() => {
+      if (data) {
       setInvestment({deal_id: deal._id, amount: "", user_id: user._id})
       refetch()
     }
-  }, [data])
+    }, [data])
 
-  const submit = () => {
-    const validation = validate(investment)
-    setErrors(validation)
-    if (validation.length === 0) createInvestment({variables: {investment}})
-  }
+      const submit = () => {
+      const validation = validate(investment)
+      setErrors(validation)
+      if (validation.length === 0) createInvestment({variables: {investment}})
+    }
 
-  if (!show) return null
+      if (!show) return null
 
-  return (
-    <div className="AddInvestment">
+      return (
+      <div className="AddInvestment">
       <UserSearch user={user} setUser={setUser} errors={errors}/>
       <div>
-        <TextField required error={errors.includes("amount")} style={{width: "100%"}}
-                   value={investment.amount}
-                   onChange={e => setInvestment({amount: Math.floor(e.target.value)})}
-                   label="Amount"
-                   variant="outlined"/>
+      <TextField required error={errors.includes("amount")} style={{width: "100%"}}
+      value={investment.amount}
+      onChange={e => setInvestment({amount: Math.floor(e.target.value)})}
+      label="Amount"
+      variant="outlined"/>
       </div>
       <div>
-        <FormControl variant="outlined" style={{width: "100%", marginBottom: "10px"}}>
-          <InputLabel>Status</InputLabel>
-          <Select value={investment.status || ""}
-                  onChange={e => setInvestment({status: e.target.value})}
-                  inputProps={{name: 'Type'}}>
-            <MenuItem value="invited">Invited</MenuItem>
-            <MenuItem value="pledged">Pledged</MenuItem>
-            <MenuItem value="onboarded">Onboarded</MenuItem>
-            <MenuItem value="complete">Complete</MenuItem>
-          </Select>
-        </FormControl>
+      <FormControl variant="outlined" style={{width: "100%", marginBottom: "10px"}}>
+      <InputLabel>Status</InputLabel>
+      <Select value={investment.status || ""}
+      onChange={e => setInvestment({status: e.target.value})}
+      inputProps={{name: 'Type'}}>
+      <MenuItem value="invited">Invited</MenuItem>
+      <MenuItem value="pledged">Pledged</MenuItem>
+      <MenuItem value="onboarded">Onboarded</MenuItem>
+      <MenuItem value="complete">Complete</MenuItem>
+      </Select>
+      </FormControl>
       </div>
       <Button variant="contained"
-              onClick={submit}
-              color="primary">
-        ADD INVESTMENT
+      onClick={submit}
+      color="primary">
+      ADD INVESTMENT
       </Button>
-    </div>
-  )
-}
+      </div>
+      )
+    }
 
-const DELETE_DEAL = gql`
-  mutation DeleteDeal($_id: String!) {
-    deleteDeal(_id: $_id)
-  }
-`
+      const DELETE_DEAL = gql`
+      mutation DeleteDeal($_id: String!) {
+      deleteDeal(_id: $_id)
+    }
+      `
 
-function DeleteDeal({deal}) {
-  const {organization} = useParams()
-  const history = useHistory()
-  const [deleteDeal, {data, error}] = useMutation(DELETE_DEAL, {
-    variables: {_id: deal._id},
-    refetchQueries: [{query: ORG_OVERVIEW, variables: {slug: organization}}],
-    onCompleted: () => history.push(`/admin/${organization}`)
-  })
+      function DeleteDeal({deal}) {
+      const {organization} = useParams()
+      const history = useHistory()
+      const [deleteDeal, {data, error}] = useMutation(DELETE_DEAL, {
+      variables: {_id: deal._id},
+      refetchQueries: [{query: ORG_OVERVIEW, variables: {slug: organization}}],
+      onCompleted: () => history.push(`/admin/${organization}`)
+    })
 
-  const submit = () => {
-    if (window.confirm(`Are you sure you'd like to delete ${deal.company_name}`)) {
+      const submit = () => {
+      if (window.confirm(`Are you sure you'd like to delete ${deal.company_name}`)) {
       deleteDeal()
     }
-  }
+    }
 
-  return (
-    <div className="danger-zone DeleteDeal">
+      return (
+      <div className="danger-zone DeleteDeal">
       <div>Danger Zone</div>
       <hr/>
       <Button onClick={submit} variant="contained" color="secondary">DELETE DEAL</Button>
-    </div>
-  )
-}
+      </div>
+      )
+    }
