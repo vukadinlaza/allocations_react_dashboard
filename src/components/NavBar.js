@@ -1,6 +1,6 @@
 import React from "react";
-import { NavLink as RouterNavLink } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {NavLink as RouterNavLink} from "react-router-dom";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 import {
   Collapse,
@@ -21,31 +21,21 @@ import {
  *
  **/
 
-import { useAuth0 } from "../react-auth0-spa";
+import {useAuth0} from "../react-auth0-spa";
 
 const NavBar = () => {
   return (
-    <div className="Navbar nav-container hidden-sm-down">
-      <Navbar expand="md">
-        <Container>
-          <Collapse isOpen={false} navbar>
-            <Nav navbar>
-              <LoginOrProfile />
-            </Nav>
-          </Collapse>
-        </Container>
-      </Navbar>
-    </div>
+    <LoginOrProfile/>
   )
 }
 
-function LoginOrProfile () {
-  const { loading, user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-  const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL, });
+function LoginOrProfile() {
+  const {loading, user, isAuthenticated, loginWithRedirect, logout} = useAuth0();
+  const logoutWithRedirect = () => logout({returnTo: process.env.REACT_APP_URL,});
 
-  if (loading) return <Auth0ProfileLoading /> 
+  if (loading) return <Auth0ProfileLoading/>
 
-  if (isAuthenticated) return <Auth0Profile user={user} logoutWithRedirect={logoutWithRedirect} />
+  if (isAuthenticated) return <Auth0Profile user={user} logoutWithRedirect={logoutWithRedirect}/>
 
   // not signed in - show login
   return (
@@ -62,7 +52,7 @@ function LoginOrProfile () {
   )
 }
 
-export function Auth0ProfileLoading () {
+export function Auth0ProfileLoading() {
   return (
     <UncontrolledDropdown nav inNavbar>
       <span className="loading-user"></span>
@@ -70,7 +60,7 @@ export function Auth0ProfileLoading () {
   )
 }
 
-export function Auth0Profile ({ user, logoutWithRedirect }) {
+export function Auth0Profile({user, logoutWithRedirect}) {
   return (
     <UncontrolledDropdown nav inNavbar>
       <DropdownToggle nav caret id="profileDropDown" className="profile-actions-toggle">
@@ -89,13 +79,13 @@ export function Auth0Profile ({ user, logoutWithRedirect }) {
           className="dropdown-profile"
           activeClassName="router-link-exact-active"
         >
-          <FontAwesomeIcon icon="user" className="mr-3" /> Profile
+          <FontAwesomeIcon icon="user" className="mr-3"/> Profile
         </DropdownItem>
         <DropdownItem
           id="qsLogoutBtn"
           onClick={() => logoutWithRedirect()}
         >
-          <FontAwesomeIcon icon="power-off" className="mr-3" /> Log
+          <FontAwesomeIcon icon="power-off" className="mr-3"/> Log
           out
         </DropdownItem>
       </DropdownMenu>

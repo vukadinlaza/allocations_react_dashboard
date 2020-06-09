@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import Loader from '../utils/Loader'
-import { gql } from 'apollo-boost'
-import { useLazyQuery } from '@apollo/react-hooks';
-import { useAuth } from "../../auth/useAuth";
-import { useAuth0 } from "../../react-auth0-spa";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {gql} from 'apollo-boost'
+import {useLazyQuery} from '@apollo/react-hooks';
+import {useAuth} from "../../auth/useAuth";
+import {useAuth0} from "../../react-auth0-spa";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import InvestorEditForm from "../forms/InvestorEdit"
+import Typography from '@material-ui/core/Typography';
 
-import { Col, Row } from "reactstrap"
+import {Col, Row} from "reactstrap"
 import "./style.scss"
 
 /***
@@ -40,10 +41,10 @@ const GET_INVESTOR = gql`
   }
 `
 
-export default function Profile () {
+export default function Profile() {
   const [investor, setInvestor] = useState(null)
   const [formStatus, setFormStatus] = useState("edit")
-  const { data, error, refetch, user, params, adminView } = useAuth(GET_INVESTOR)
+  const {data, error, refetch, user, params, adminView} = useAuth(GET_INVESTOR)
 
   useEffect(() => {
     if (data) {
@@ -55,27 +56,37 @@ export default function Profile () {
   useEffect(() => {
     if (formStatus === "complete") refetch()
   }, [formStatus])
-  
-  const icon = formStatus === "loading" 
-    ? "circle-notch" 
+
+  const icon = formStatus === "loading"
+    ? "circle-notch"
     : (formStatus === "complete" ? "check" : null)
 
-  if (!investor) return <Loader />
+  if (!investor) return <Loader/>
 
   return (
-    <div className="Profile">
-      <Row>
-        <Col sm={{size: 9, offset: 1}}>
-          <h4>
-            Profile {icon && <FontAwesomeIcon icon={icon} spin={icon === "circle-notch"} />}
-          </h4>
-        </Col>
-      </Row>
+    <>
       <InvestorEditForm investor={investor}
-        refetch={refetch}
-        setInvestor={setInvestor}
-        setFormStatus={setFormStatus} 
-        actionText="UPDATE PROFILE" />
-    </div>
+                        icon={icon}
+                        refetch={refetch}
+                        setInvestor={setInvestor}
+                        setFormStatus={setFormStatus}
+                        actionText="Save Profile"/>
+      {/*
+      <div className="Profile">
+        <Row>
+          <Col sm={{size: 9, offset: 1}}>
+            <Typography variant="h4">
+              Profile {icon && <FontAwesomeIcon icon={icon} spin={icon === "circle-notch"}/>}
+            </Typography>
+          </Col>
+        </Row>
+        <InvestorEditForm investor={investor}
+                          refetch={refetch}
+                          setInvestor={setInvestor}
+                          setFormStatus={setFormStatus}
+                          actionText="UPDATE PROFILE"/>
+      </div>
+      */}
+    </>
   )
 }

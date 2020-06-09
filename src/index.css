@@ -10,3 +10,32 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+/* BEGIN global css for Sidebar Nav Sidebar/index.js */
+.sidebar-nav-item a{
+  color: #8493a6;
+}
+
+.sidebar-nav-item:hover a{
+  text-decoration: none !important;
+}
+
+.sidebar-nav-item-active a{
+  color: #343f51 !important;
+  font-weight: bold;
+}
+
+.sidebar-nav-item-active span{
+  font-weight: 500;
+  margin-left: -2px;
+}
+
+.sidebar-nav-item-active{
+  border-left: 2px solid #00a0c6;
+}
+
+.sidebar-nav-item-active svg{
+  color: #00a0c6;
+  margin-left: -2px;
+}
+/* END global css for Sidebar Nav Sidebar/index.js */
