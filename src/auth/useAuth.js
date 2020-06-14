@@ -31,5 +31,13 @@ export function useAuth (QUERY) {
     if (error && user) refetch()
   }, [error, user])
 
-  return { data, error, refetch, user, params, adminView }
+  return {
+    data,
+    error,
+    refetch,
+    user,
+    params,
+    adminView,
+    isAdmin: data ? data.investor.admin : false,
+  }
 }

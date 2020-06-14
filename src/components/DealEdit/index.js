@@ -1,16 +1,15 @@
 import React, {useState, useEffect} from 'react'
 import {useSimpleReducer} from '../../utils/hooks'
-import _, {get, isEqual} from "lodash"
-import {useParams, Link, useHistory} from "react-router-dom"
+import _, {get, isEqual} from 'lodash'
+import {useParams, Link, useHistory} from 'react-router-dom'
 import {Row, Col} from 'reactstrap'
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {nWithCommas, formatDate} from '../../utils/numbers'
-import * as API from "../../api"
-import UserSearch from "../forms/UserSearch"
+import * as API from '../../api'
+import UserSearch from '../forms/UserSearch'
 import InviteInvestors from './InviteInvestors'
 import {ORG_OVERVIEW} from '../admin/AdminHome'
-import {isAdmin} from '../../auth/admin-route'
-import {useAuth0} from "../../react-auth0-spa"
+import {useAuth} from '../../auth/useAuth'
 
 // wysiwyg editor
 import {Editor} from '@tinymce/tinymce-react';
@@ -176,11 +175,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const GET_INVESTOR = gql`
+  {
+    investor {
+      _id
+      name
+      admin
+      organizations_admin {
+        _id
+        slug
+        name
+        logo
+      }
+    }
+  }
+`
+
 
 export default function DealEdit() {
   const history = useHistory()
   const classes = useStyles();
-  const {user} = useAuth0();
+  const {user, isAdmin} = useAuth(GET_INVESTOR);
   const {id, organization} = useParams()
   const [errorMessage, setErrorMessage] = useState(null)
   const [deal, setDeal] = useSimpleReducer({

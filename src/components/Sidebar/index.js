@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useHistory, useLocation, useRouteMatch} from 'react-router-dom';
-import {useAuth0} from "../../react-auth0-spa";
-import {adminWhitelist} from "../../auth/admin-route"
+import {useAuth} from '../../auth/useAuth'
+import {gql} from 'apollo-boost'
+
 import "./style.scss"
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -83,12 +84,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const GET_INVESTOR = gql`
+  {
+    investor {
+      _id
+      name
+      admin
+      organizations_admin {
+        _id
+        slug
+        name
+        logo
+      }
+    }
+  }
+`
+
 
 export default function Sidebar(props) {
-  const {user} = useAuth0();
+  const {user, isAdmin} = useAuth(GET_INVESTOR);
   const history = useHistory();
   const location = useLocation();
-  const [admin, setAdmin] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -231,7 +247,7 @@ export default function Sidebar(props) {
           )
         )}
       </List>
-      {admin && <>
+      {isAdmin && <>
         <Divider/>
         <List>
           <div className={`sidebar-nav-item ${location.pathname === "/admin/funds" ? "sidebar-nav-item-active" : ""}`}>
@@ -243,15 +259,11 @@ export default function Sidebar(props) {
             </ListItem>
           </div>
         </List></>}
-      {admin && <AdminLinks location={location}/>}
+      {isAdmin && <AdminLinks location={location}/>}
     </div>
   );
 
   const container = window !== undefined ? () => window().document.body : undefined;
-
-  useEffect(() => {
-    if (user && adminWhitelist.includes(user.email)) setAdmin(true)
-  }, [user])
 
   return (<>
       <div className={classes.root}>

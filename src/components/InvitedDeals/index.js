@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react'
 import Loader from "../utils/Loader"
-import { useParams, Link, Redirect } from 'react-router-dom';
+import { useParams, Link, Redirect } from 'react-router-dom'
 import { gql } from 'apollo-boost'
-import { useLazyQuery } from '@apollo/react-hooks';
-import { useAuth0 } from "../../react-auth0-spa";
+import { useLazyQuery } from '@apollo/react-hooks'
 import { useAuth } from "../../auth/useAuth"
 import { Row, Col } from 'reactstrap'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { adminWhitelist } from "../../auth/admin-route"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, Hidden } from '@material-ui/core'
 

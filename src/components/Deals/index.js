@@ -4,10 +4,9 @@ import { nWithCommas, formatDate } from '../../utils/numbers'
 import { Link, useParams } from 'react-router-dom';
 import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
-import { useAuth0 } from "../../react-auth0-spa";
 import { Row, Col } from 'reactstrap'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { adminWhitelist } from "../../auth/admin-route"
+import { useAuth } from "../../auth/useAuth"
 import Loader from "../utils/Loader"
 import CapitalAccount from './CapitalAccount'
 
@@ -51,16 +50,31 @@ const GET_DEALS = gql`
   }
 `
 
+const GET_INVESTOR = gql`
+  {
+    investor {
+      _id
+      name
+      admin
+      organizations_admin {
+        _id
+        slug
+        name
+        logo
+      }
+    }
+  }
+`
+
 export default function Deals () {
   const { organization } = useParams()
-  const { user } = useAuth0()
-  const isAdmin = user && adminWhitelist.includes(user.email)
+  const { user, isAdmin } = useAuth(GET_INVESTOR)
   const [getDeals, { data, error }] = useLazyQuery(GET_DEALS, { variables: { slug: organization }})
   const [capitalAccount, toggleCapitalAccount] = useReducer(
     (acc, _id) => {
       return acc === _id ? null : _id
     },
-    "5e553fb7e165e6d78c794097"
+    "5e553fb7e165e6d78c794097" // TODO: Remove this
   )
 
   useEffect(() => {
