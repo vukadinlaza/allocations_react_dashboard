@@ -2,6 +2,9 @@ import React from "react";
 import _ from 'lodash'
 import { Route, Redirect } from "react-router-dom"
 import { useAuth0 } from "../react-auth0-spa";
+import { useLazyQuery } from '@apollo/react-hooks';
+import { useEffect } from 'react';
+import {gql} from 'apollo-boost'
 import Loader from '../components/utils/Loader'
 
 /***
@@ -12,26 +15,37 @@ import Loader from '../components/utils/Loader'
  *
  **/
 
-export const adminWhitelist = [
-  "kadvani1@gmail.com",
-  "michelle@allocations.com",
-  "tim@allocations.com",
-  "joel@allocations.com",
-  "thomas@allocations.com",
-  "olia@allocations.com",
-  "peeroke@gmail.com",
-]
+const GET_INVESTOR = gql`
+  {
+    investor {
+      _id
+      name
+      admin
+      organizations_admin {
+        _id
+        slug
+        name
+        logo
+      }
+    }
+  }
+`
 
 export default function AdminRoute ({ component, ...rest }) {
-  const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated, user, loading } = useAuth0();
+  const [getInvestor, { data, error, called }] = useLazyQuery(GET_INVESTOR)
 
-  if (isAuthenticated === null || !user) return <Loader />
+  useEffect(() => {
+    if (!loading && isAuthenticated && !called) {
+      getInvestor()
+    }
+  }, [isAuthenticated, loading, called])
 
-  if (isAuthenticated === true && adminWhitelist.includes(user.email)) {
+  if (isAuthenticated === null || !data) return <Loader />
+
+  if (isAuthenticated === true && data.investor.admin) {
     return <Route {...rest} component={component} />
   } else {
     return <Redirect to="/" />
   }
 }
-
-export const isAdmin = (user) => adminWhitelist.includes(_.get(user, 'email'))
