@@ -193,18 +193,18 @@ const GET_INVESTOR = gql`
 
 
 export default function DealEdit() {
-  const history = useHistory()
+  const history = useHistory();
   const classes = useStyles();
   const {user, isAdmin} = useAuth(GET_INVESTOR);
-  const {id, organization} = useParams()
-  const [errorMessage, setErrorMessage] = useState(null)
+  const {id, organization} = useParams();
+  const [errorMessage, setErrorMessage] = useState(null);
   const [deal, setDeal] = useSimpleReducer({
     dealParams: {}
-  })
-  const [showAddInvestment, setShowAddInvestment] = useState(false)
-  const [hasChanges, setHasChanges] = useState(false)
-  const {data, refetch, error} = useQuery(GET_DEAL, {variables: {id, slug: organization}})
-  const [updateDeal] = useMutation(UPDATE_DEAL)
+  });
+  const [showAddInvestment, setShowAddInvestment] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+  const {data, refetch, error} = useQuery(GET_DEAL, {variables: {id, slug: organization}});
+  const [updateDeal] = useMutation(UPDATE_DEAL);
 
   useEffect(() => {
     if (data) {
@@ -407,7 +407,6 @@ export default function DealEdit() {
               />
             </Grid>
 
-
             <Grid item xs={10}>
               <Typography variant="h5">
                 Exchange Data
@@ -469,8 +468,7 @@ export default function DealEdit() {
                 label="Public Link"
                 value={window.origin + (deal.publicLink || "")}
                 InputProps={{
-                  endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy"
-                                                                                onClick={() => navigator.clipboard.writeText(window.origin + (deal.publicLink || ""))}/></InputAdornment>,
+                  endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(window.origin + (deal.publicLink || ""))}/></InputAdornment>,
                 }}
                 variant="outlined"/>
             </Grid>
@@ -480,8 +478,7 @@ export default function DealEdit() {
                 label="Existing user link"
                 value={window.origin + (deal.appLink || "")}
                 InputProps={{
-                  endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy"
-                                                                                onClick={() => navigator.clipboard.writeText(window.origin + (deal.appLink || ""))}/></InputAdornment>,
+                  endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(window.origin + (deal.appLink || ""))}/></InputAdornment>,
                 }}
                 variant="outlined"/>
             </Grid>
@@ -518,7 +515,7 @@ export default function DealEdit() {
               </Paper>
             </Grid>
             <Grid item xs={12} sm={6}>
-              {isAdmin(user) && <DeleteDeal deal={deal}/>}
+              {isAdmin && <DeleteDeal deal={deal}/>}
             </Grid>
           </Grid>
         </Paper>
