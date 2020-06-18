@@ -134,18 +134,17 @@ export default function UserHome(props) {
   const classes = useStyles();
 
   const history = useHistory()
-  const {data, error, refetch, user, params, adminView} = useAuth(GET_INVESTOR)
+  const {userProfile, error, params, adminView, } = useAuth(GET_INVESTOR)
 
   if (error) {
-    if (error.message === "GraphQL error: permission denied" && user && user.email) {
+    if (error.message === "GraphQL error: permission denied" && userProfile && userProfile.email) {
       return <Redirect to="/signup"/>
     }
   }
 
-  if (!data) return <div><Loader/></div>
+  if (!userProfile) return <div><Loader/></div>
 
-  const investor = data.investor
-  const total_invested = _.sumBy(investor.investments, 'amount') || 0
+  const total_invested = _.sumBy(userProfile.investments, 'amount') || 0
 
   const returningInvestor = total_invested !== 0
   return (
@@ -163,7 +162,7 @@ export default function UserHome(props) {
                     Welcome
                   </Typography>
                   {returningInvestor && <Typography variant="h5">
-                    <Name investor={investor}/>
+                    <Name investor={userProfile}/>
                   </Typography>}
                 </Grid>
               </Hidden>
@@ -204,11 +203,11 @@ export default function UserHome(props) {
               <Typography variant="h6" style={{marginBottom: 16}}>
                 Portfolio
               </Typography>
-              {investor.investments.length > 0 ?
+              {userProfile.investments.length > 0 ?
                 <Chart chartType="TreeMap"
                        width="100%"
                        height="200px"
-                       data={formatData(investor.investments)}
+                       data={formatData(userProfile.investments)}
                        options={chartOptions}/> : null
               }
             </Paper>
@@ -216,7 +215,7 @@ export default function UserHome(props) {
         </>}
 
         {!returningInvestor && <Grid item xs={12} sm={6}>
-          <NextSteps investor={investor}/>
+          <NextSteps investor={userProfile}/>
         </Grid>}
 
         {returningInvestor && <>
@@ -227,7 +226,7 @@ export default function UserHome(props) {
               </Typography>
               <div style={{margin: "0px -16px", cursor: "pointer"}}>
                 <Table style={{marginBottom: "-1px"}}>
-                  {orderInvestments(investor.investments).map((investment, i) => (
+                  {orderInvestments(userProfile.investments).map((investment, i) => (
                     <InvestmentStub key={i} investment={investment}/>
                   ))}
                 </Table>
@@ -242,7 +241,7 @@ export default function UserHome(props) {
               </Typography>
               <div style={{margin: "0px -16px", cursor: "pointer"}}>
                 <Table style={{marginBottom: "-1px"}}>
-                  {investor.invitedDeals.map((deal, i) => (
+                  {userProfile.invitedDeals.map((deal, i) => (
                     <DealStub key={i} deal={deal}/>
                   ))}
                 </Table>

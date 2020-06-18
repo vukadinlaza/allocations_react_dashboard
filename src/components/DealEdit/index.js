@@ -195,7 +195,7 @@ const GET_INVESTOR = gql`
 export default function DealEdit() {
   const history = useHistory();
   const classes = useStyles();
-  const {user, isAdmin} = useAuth(GET_INVESTOR);
+  const {userProfile} = useAuth(GET_INVESTOR);
   const {id, organization} = useParams();
   const [errorMessage, setErrorMessage] = useState(null);
   const [deal, setDeal] = useSimpleReducer({
@@ -515,7 +515,7 @@ export default function DealEdit() {
               </Paper>
             </Grid>
             <Grid item xs={12} sm={6}>
-              {isAdmin && <DeleteDeal deal={deal}/>}
+              {userProfile.admin && <DeleteDeal deal={deal}/>}
             </Grid>
           </Grid>
         </Paper>

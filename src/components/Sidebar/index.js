@@ -102,7 +102,7 @@ const GET_INVESTOR = gql`
 
 
 export default function Sidebar(props) {
-  const {user, isAdmin} = useAuth(GET_INVESTOR);
+  const {userProfile} = useAuth(GET_INVESTOR);
   const history = useHistory();
   const location = useLocation();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -247,7 +247,7 @@ export default function Sidebar(props) {
           )
         )}
       </List>
-      {isAdmin && <>
+      {userProfile.admin && <>
         <Divider/>
         <List>
           <div className={`sidebar-nav-item ${location.pathname === "/admin/funds" ? "sidebar-nav-item-active" : ""}`}>
@@ -259,7 +259,7 @@ export default function Sidebar(props) {
             </ListItem>
           </div>
         </List></>}
-      {isAdmin && <AdminLinks location={location}/>}
+      {Uint16Array.admin && <AdminLinks location={location}/>}
     </div>
   );
 

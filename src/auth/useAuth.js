@@ -39,12 +39,9 @@ export function useAuth (QUERY) {
 
   return {
     userProfile,
-    data,
     error,
     refetch,
-    user,
     params,
     adminView,
-    isAdmin: userProfile ? userProfile.admin : false,
   }
 }

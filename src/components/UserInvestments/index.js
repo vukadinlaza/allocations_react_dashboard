@@ -58,18 +58,18 @@ export default function UserInvestments() {
   const classes = useStyles();
   const history = useHistory()
   const [showDocs, setShowDocs] = useState(null)
-  const {data, error, refetch, user, params, adminView} = useAuth(GET_INVESTOR)
+  const {userProfile, error, } = useAuth(GET_INVESTOR)
 
   if (error) {
-    if (error.message === "GraphQL error: permission denied" && user && user.email) {
+    if (error.message === "GraphQL error: permission denied" && userProfile && userProfile.email) {
       return <Redirect to="/signup"/>
     }
     return <div>{error.message}</div>
   }
 
-  if (!data) return <div><Loader/></div>
+  if (!userProfile) return <div><Loader/></div>
 
-  const investments = _.orderBy(data.investor.investments, i => new Date(i.deal.date_closed).getTime(), 'desc')
+  const investments = _.orderBy(userProfile.investor.investments, i => new Date(i.deal.date_closed).getTime(), 'desc')
   if (showDocs) {
     investments.splice(investments.findIndex(i => i._id === showDocs._id) + 1, 0, {showDocs})
   }
