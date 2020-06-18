@@ -69,7 +69,7 @@ export default function UserInvestments() {
 
   if (!userProfile) return <div><Loader/></div>
 
-  const investments = _.orderBy(userProfile.investor.investments, i => new Date(i.deal.date_closed).getTime(), 'desc')
+  const investments = _.orderBy(userProfile.investments, i => new Date(i.deal.date_closed).getTime(), 'desc')
   if (showDocs) {
     investments.splice(investments.findIndex(i => i._id === showDocs._id) + 1, 0, {showDocs})
   }
