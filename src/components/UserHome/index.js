@@ -3,7 +3,6 @@ import _ from 'lodash'
 import {gql} from 'apollo-boost'
 import {Link, useParams, useHistory, Redirect} from 'react-router-dom'
 import {useLazyQuery} from '@apollo/react-hooks';
-import {useAuth0} from "../../react-auth0-spa";
 import {Row, Container, Col} from 'reactstrap'
 import {nWithCommas} from '../../utils/numbers'
 import {validate} from '../forms/InvestorEdit'

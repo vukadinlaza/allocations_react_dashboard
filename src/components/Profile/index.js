@@ -3,7 +3,6 @@ import Loader from '../utils/Loader'
 import {gql} from 'apollo-boost'
 import {useLazyQuery} from '@apollo/react-hooks';
 import {useAuth} from "../../auth/useAuth";
-import {useAuth0} from "../../react-auth0-spa";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import InvestorEditForm from "../forms/InvestorEdit"
 import Typography from '@material-ui/core/Typography';
