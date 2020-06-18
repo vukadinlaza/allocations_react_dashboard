@@ -16,6 +16,7 @@ export function useAuth (QUERY) {
   const adminView = params && params.id
   const { user, isAuthenticated, loading } = useAuth0()
   const [getInvestor, { data, error, called, refetch }] = useLazyQuery(QUERY)
+  const [userProfile, setUserProfile] = useState({})
 
   useEffect(() => {
     if (!loading && isAuthenticated && !called) {
@@ -24,7 +25,12 @@ export function useAuth (QUERY) {
   }, [isAuthenticated, loading, called])
 
   useEffect(() => {
-    if (data && window._slaask) window._slaask.updateContact({name: data.investor.name})
+    if (data) {
+      if (window.__slaask) {
+        window._slaask.updateContact({name: data.investor.name})
+      }
+      setUserProfile({ ...user, ...data.investor, })
+    }
   }, [data])
 
   useEffect(() => {
@@ -32,12 +38,13 @@ export function useAuth (QUERY) {
   }, [error, user])
 
   return {
+    userProfile,
     data,
     error,
     refetch,
     user,
     params,
     adminView,
-    isAdmin: data ? data.investor.admin : false,
+    isAdmin: userProfile ? userProfile.admin : false,
   }
 }
