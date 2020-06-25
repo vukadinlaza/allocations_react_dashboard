@@ -1,19 +1,19 @@
 import React from "react";
-import {NavLink as RouterNavLink} from "react-router-dom";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import Menu from '@material-ui/core/Menu';
+import Button from '@material-ui/core/Button';
+import MenuItem from '@material-ui/core/MenuItem';
+import Avatar from '@material-ui/core/Avatar';
+import Typography from "@material-ui/core/Typography";
+import ButtonBase from "@material-ui/core/ButtonBase";
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import {useHistory} from "react-router-dom"
 
 import {
-  Collapse,
-  Container,
-  Navbar,
-  Nav,
   NavItem,
-  Button,
   UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
 } from "reactstrap";
+import {useAuth0} from "../react-auth0-spa";
+import {makeStyles} from '@material-ui/core/styles';
 
 /***
  *
@@ -21,7 +21,14 @@ import {
  *
  **/
 
-import {useAuth0} from "../react-auth0-spa";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    alignItems: "center",
+    justifyContent: "center",
+  },
+}));
 
 const NavBar = () => {
   return (
@@ -61,35 +68,62 @@ export function Auth0ProfileLoading() {
 }
 
 export function Auth0Profile({user, logoutWithRedirect}) {
+  const [anchorElFunds, setAnchorElFunds] = React.useState(null);
+  const [anchorElProfile, setAnchorElProfile] = React.useState(null);
+  const classes = useStyles();
+  const history = useHistory();
+
+  const handleClickFunds = (event) => {
+    setAnchorElFunds(event.currentTarget);
+  };
+
+  const handleCloseFunds = () => {
+    setAnchorElFunds(null);
+  };
+
+  const handleClickProfile = (event) => {
+    setAnchorElProfile(event.currentTarget);
+  };
+
+  const handleCloseProfile = () => {
+    setAnchorElProfile(null);
+  };
+
   return (
-    <UncontrolledDropdown nav inNavbar>
-      <DropdownToggle nav caret id="profileDropDown" className="profile-actions-toggle">
-        <img
-          src={user.picture}
-          alt="Profile"
-          className="nav-user-profile rounded-circle"
-          width="50"
-        />
-      </DropdownToggle>
-      <DropdownMenu right className="profile-image">
-        <DropdownItem header>{user.name}</DropdownItem>
-        <DropdownItem
-          tag={RouterNavLink}
-          to="/profile"
-          className="dropdown-profile"
-          activeClassName="router-link-exact-active"
-        >
-          <FontAwesomeIcon icon="user" className="mr-3"/> Profile
-        </DropdownItem>
-        <DropdownItem
-          id="qsLogoutBtn"
-          onClick={() => logoutWithRedirect()}
-        >
-          <FontAwesomeIcon icon="power-off" className="mr-3"/> Log
-          out
-        </DropdownItem>
-      </DropdownMenu>
-    </UncontrolledDropdown>
+    <div className={classes.root}>
+      <Typography variant="subtitle1" style={{marginRight: 16}}>
+        You are a fund manager
+      </Typography>
+
+      <Button color="secondary" variant="outlined" aria-controls="simple-menu" aria-haspopup="true"
+              onClick={handleClickFunds} style={{marginRight: 16}}>
+        My Funds <KeyboardArrowDownIcon/>
+      </Button>
+      <Menu
+        id="funds-menu"
+        anchorEl={anchorElFunds}
+        keepMounted
+        open={Boolean(anchorElFunds)}
+        onClose={handleCloseFunds}
+      >
+        <MenuItem onClick={handleCloseFunds}>TODO</MenuItem>
+        <MenuItem onClick={handleCloseFunds}>TODO</MenuItem>
+        <MenuItem onClick={handleCloseFunds}>TODO</MenuItem>
+      </Menu>
+
+      <ButtonBase onClick={handleClickProfile}>
+        <Avatar src={user.picture} alt="Profile"/> <KeyboardArrowDownIcon/>
+      </ButtonBase>
+      <Menu
+        id="profile-menu"
+        anchorEl={anchorElProfile}
+        keepMounted
+        open={Boolean(anchorElProfile)}
+        onClose={handleCloseProfile}>
+        <MenuItem onClick={() => history.push(`/profile`)}>Profile</MenuItem>
+        <MenuItem onClick={() => logoutWithRedirect()}>Logout</MenuItem>
+      </Menu>
+    </div>
   )
 }
 
