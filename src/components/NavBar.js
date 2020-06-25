@@ -5,6 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from "@material-ui/core/Typography";
 import ButtonBase from "@material-ui/core/ButtonBase";
+import Hidden from "@material-ui/core/Hidden";
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import {useHistory} from "react-router-dom"
 
@@ -14,6 +15,8 @@ import {
 } from "reactstrap";
 import {useAuth0} from "../react-auth0-spa";
 import {makeStyles} from '@material-ui/core/styles';
+import IconButton from "@material-ui/core/IconButton";
+import MoreIcon from '@material-ui/icons/MoreVert';
 
 /***
  *
@@ -91,14 +94,18 @@ export function Auth0Profile({user, logoutWithRedirect}) {
 
   return (
     <div className={classes.root}>
-      <Typography variant="subtitle1" style={{marginRight: 16}}>
-        You are a fund manager
-      </Typography>
+      <Hidden smDown>
+        <Typography variant="subtitle1" style={{marginRight: 16}}>
+          You are a fund manager
+        </Typography>
+      </Hidden>
 
-      <Button color="secondary" variant="outlined" aria-controls="simple-menu" aria-haspopup="true"
-              onClick={handleClickFunds} style={{marginRight: 16}}>
-        My Funds <KeyboardArrowDownIcon/>
-      </Button>
+      <Hidden only="xs">
+        <Button color="secondary" variant="outlined" aria-controls="simple-menu" aria-haspopup="true"
+                onClick={handleClickFunds} style={{marginRight: 16}}>
+          My Funds <KeyboardArrowDownIcon/>
+        </Button>
+      </Hidden>
       <Menu
         id="funds-menu"
         anchorEl={anchorElFunds}
@@ -112,8 +119,17 @@ export function Auth0Profile({user, logoutWithRedirect}) {
       </Menu>
 
       <ButtonBase onClick={handleClickProfile}>
-        <Avatar src={user.picture} alt="Profile"/> <KeyboardArrowDownIcon/>
+        <Hidden only="xs">
+          <Avatar src={user.picture} alt="Profile"/> <KeyboardArrowDownIcon/>
+        </Hidden>
+        <Hidden smUp>
+          <IconButton>
+            <MoreIcon/>
+          </IconButton>
+        </Hidden>
       </ButtonBase>
+
+
       <Menu
         id="profile-menu"
         anchorEl={anchorElProfile}
