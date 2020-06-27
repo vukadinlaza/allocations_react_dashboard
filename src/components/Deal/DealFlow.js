@@ -6,11 +6,25 @@ import {useMutation} from '@apollo/react-hooks'
 import {useParams, useHistory, Link, useLocation} from 'react-router-dom'
 import {nWithCommas} from '../../utils/numbers'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {Paper, TextField, Button, Table, TableBody, TableCell, TableRow, TableHead} from '@material-ui/core';
+import {
+  Paper,
+  Grid,
+  TextField,
+  Button,
+  ButtonBase,
+  Table,
+  TableBody,
+  ButtonGroup,
+  TableCell,
+  TableRow,
+  Typography,
+  TableHead
+} from '@material-ui/core';
 import ReactHtmlParser from 'react-html-parser';
 import Chart from 'chart.js'
 import classNames from 'classnames'
 import KYC from '../forms/KYC'
+import {makeStyles} from "@material-ui/core/styles";
 
 /***
  *
@@ -35,8 +49,39 @@ function getOnboardingLinkType(link) {
   }
 }
 
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    padding: theme.spacing(2),
+    backgroundColor: "#f9fbfb",
+  },
+  divider: {
+    margin: "16px -16px"
+  },
+  tabs: {
+    borderTop: "1px solid #dfe3e9",
+    borderBottom: "1px solid #dfe3e9",
+    background: "#f7f9fa",
+    minHeight: 44,
+    margin: "40px 0",
+  },
+  text: {
+    color: "#7f8ea3"
+  },
+  tab: {
+    height: 44,
+    width: "100%"
+  },
+  activeTab: {
+    height: 44,
+    width: "100%",
+    borderBottom: "3px solid #25a9df",
+    outline: "0 !important",
+  }
+}));
+
 export default function InvestmentFlow({investment, deal, investor, refetch}) {
   const [status, setStatus] = useState("invited")
+  const classes = useStyles();
 
   useEffect(() => {
     // if just invited show data room otherwise show pledge page first
@@ -61,27 +106,50 @@ export default function InvestmentFlow({investment, deal, investor, refetch}) {
   return (
     <React.Fragment>
       <InvestmentOverview investment={investment}/>
-      <Paper className="flow tile">
-        <div className="flow-steps">
-          <div onClick={() => setStatus('invited')}
-               className={`step step-data-room ${status === "invited" ? "step-active" : ""}`}>Data Room
-          </div>
-          <div onClick={() => setStatus('pledging')}
-               className={`step step-pledge ${status === "pledging" ? "step-active" : ""}`}>Pledge
-          </div>
-          {/**<div onClick={() => setStatus('kyc')}
-           className={`step step-pledge ${status === "kyc" ? "step-active" : ""}`}>KYC</div>**/}
-          <div onClick={() => approved && setStatus('pledged')}
-               className={classNames("step step-onboard", {"step-active": status === "pledged"})}
-               style={{cursor: approved ? "cursor" : "not-allowed"}}>
-            Sign {!approved && <FontAwesomeIcon icon="lock"/>}
-          </div>
-          <div onClick={() => approved && setStatus('onboarded')}
-               className={classNames("step step-wire", {"step-active": status === "onboarded"})}
-               style={{cursor: approved ? "cursor" : "not-allowed"}}>
-            Wire {!approved && <FontAwesomeIcon icon="lock"/>}
-          </div>
-        </div>
+
+      <div className={classes.tabs}>
+        <Grid container>
+          <Grid item xs={12} sm={3}>
+            <ButtonBase className={status === "invited" ? classes.activeTab : classes.tab}
+                        style={{borderRight: "1px solid #e1e9ec"}}
+                        onClick={() => setStatus('invited')}>
+              Data Room
+            </ButtonBase>
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <ButtonBase className={status === "pledging" ? classes.activeTab : classes.tab}
+                        style={{borderRight: "1px solid #e1e9ec"}}
+                        onClick={() => setStatus('pledging')}>
+              Pledge
+            </ButtonBase>
+          </Grid>
+
+          {/**<Grid item xs={12} sm={3}>
+           <ButtonBase onClick={() => setStatus('kyc')}
+           className={`step step-pledge ${status === "kyc" ? "step-active" : ""}`}>KYC</ButtonBase>
+           </Grid>
+           **/}
+
+          <Grid item xs={12} sm={3}>
+            <ButtonBase className={status === "pledged" ? classes.activeTab : classes.tab}
+                        style={{borderRight: "1px solid #e1e9ec", cursor: approved ? "cursor" : "not-allowed"}}
+                        onClick={() => approved && setStatus('pledged')}>
+              Sign {!approved && <FontAwesomeIcon icon="lock"/>}
+            </ButtonBase>
+          </Grid>
+
+          <Grid item xs={12} sm={3}>
+            <ButtonBase className={status === "onboarded" ? classes.activeTab : classes.tab}
+                        style={{cursor: approved ? "cursor" : "not-allowed"}}
+                        onClick={() => approved && setStatus('onboarded')}>
+              Wire {!approved && <FontAwesomeIcon icon="lock"/>}
+            </ButtonBase>
+          </Grid>
+        </Grid>
+
+      </div>
+
+      <>
         {status === "invited" && <DataRoom deal={deal}/>}
         {status === "pledging" && <Pledging investment={investment} investor={investor} deal={deal} refetch={refetch}/>}
         {status === "kyc" && <KYC investor={investor} setStatus={setStatus}/>}
@@ -92,7 +160,7 @@ export default function InvestmentFlow({investment, deal, investor, refetch}) {
         <Onboarding status={status} investment={investment} deal={deal} investor={investor}/>}
         {onboardingLinkType === "hellosign" &&
         <HelloSignOnboarding status={status} investment={investment} deal={deal} investor={investor}/>}
-      </Paper>
+      </>
     </React.Fragment>
   )
 }
@@ -148,14 +216,14 @@ function Wire({investment, deal}) {
   }
 
   return (
-    <div className="wire">
-      <div className="crypto-wire">
+    <div className="wire" style={{textAlign: "center"}}>
+      <div>
         If you would like to wire with crypto contact us on Slack
       </div>
       <div className="wire-link">
         <div style={{marginBottom: "15px"}}>
           <FontAwesomeIcon icon={["far", "file-pdf"]}/>
-          <a href={link} target="_blank" rel="noopener noreferrer">Wire Instructions</a>
+          <a href={link} target="_blank" rel="noopener noreferrer"> Wire Instructions</a>
         </div>
         <div className="wire-doc-iframe">
           <div className="embed-responsive embed-responsive-1by1">
@@ -169,12 +237,22 @@ function Wire({investment, deal}) {
 
 function PledgingLegacy({deal}) {
   return (
-    <div className="pledging">
-      <div className="pledge-link">
-        <img src="https://img.icons8.com/color/48/000000/google-sheets.png"/>
-        <a href={deal.pledge_link} target="_blank" rel="noopener noreferrer">Pledge Document</a>
-      </div>
-    </div>
+    <a href={deal.pledge_link} target="_blank" rel="noopener noreferrer">
+      <svg style={{height: 18, margin: "0 8px"}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3800 4800">
+        <g>
+          <path fill="#0F9D57" d="M0 4800h3800V840L2960 0H0"/>
+          <path fill="#57BB8A" d="M2960 840h840L2960 0"/>
+          <path fill="#098540" d="M3800 1680V840h-840"/>
+        </g>
+        <g>
+          <path fill="#FFF"
+                d="M1695 2822h1023v424H1695v-424zm-635 0h459v424h-459v-424zm635-635h1023v459H1695v-459zm-635 0h459v459h-459v-459zm635-599h1023v458H1695v-458zm-635 0h459v458h-459v-458zM884 3422h2011V1411H884v2011z"/>
+        </g>
+      </svg>
+      <strong style={{color: "#4bc076"}}>
+        Pledge Document
+      </strong>
+    </a>
   )
 }
 
@@ -190,6 +268,7 @@ const PLEDGE = gql`
 
 function Pledging({investment, deal, refetch, investor}) {
   const [amount, setAmount] = useState("")
+  const classes = useStyles();
   const [updateInvestment, {data, error}] = useMutation(PLEDGE, {
     onCompleted: refetch
   })
@@ -248,43 +327,58 @@ function Pledging({investment, deal, refetch, investor}) {
   }
 
   return (
-    <div className="pledging">
-      <div className="pledge-data">
-        <PledgesViz deal={deal}/>
-        <PledgesTable deal={deal}/>
-      </div>
+    <>
 
-      <hr/>
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={7}>
+          <Paper className={classes.paper}>
+            {investment.status === "invited" &&
+            <>
+              <TextField fullWidth variant="outlined" style={{marginBottom: 16}} label="Pledge Amount" value={amount}
+                         onChange={updateAmount}/>
+              <Button size="large" fullWidth variant="contained" color="primary" onClick={submit}>Pledge</Button>
 
-      {investment.status === "invited" &&
-      <div className="pledging-form">
-        <TextField variant="outlined" className="pledge-amount" label="Pledge Amount" value={amount}
-                   onChange={updateAmount}/>
-        <Button variant="contained" className="pledge-btn" color="secondary" onClick={submit}>Pledge</Button>
-      </div>
-      }
-      {investment.status !== "invited" &&
-      <div className="edit-pledge">
-        <TextField variant="outlined" className="pledge-amount" label="Pledge Amount" value={amount}
-                   onChange={updateAmount}/>
-        <Button variant="contained" className="edit-btn" color="primary" onClick={submit}>Edit</Button>
-        <Button variant="contained" className="unpledge-btn" color="secondary" onClick={unpledge}>Unpledge</Button>
-      </div>
-      }
-      <hr/>
+              <Typography variant="body2" className={classes.text}
+                          style={{marginTop: 8, textAlign: "center", lineHeight: "34px"}}>or <br/>
+                pledge via spreadsheet <PledgingLegacy
+                  deal={deal}/>
 
-      <div>or pledge via spreadsheet</div>
+              </Typography>
 
-      <PledgingLegacy deal={deal}/>
-    </div>
+            </>
+            }
+            {investment.status !== "invited" &&
+            <>
+              <TextField fullWidth variant="outlined" className="pledge-amount" label="Pledge Amount" value={amount}
+                         onChange={updateAmount}/>
+              <ButtonGroup style={{marginTop: 16}}>
+                <Button variant="contained" color="primary" onClick={submit}>Edit</Button>
+                <Button color="primary" onClick={unpledge}>Unpledge</Button>
+              </ButtonGroup>
+            </>
+            }
+          </Paper>
+
+          <PledgesViz deal={deal}/>
+
+        </Grid>
+
+        <Grid item xs={12} sm={5}>
+          <PledgesTable deal={deal}/>
+        </Grid>
+
+      </Grid>
+    </>
   )
 }
 
 function PledgesTable({deal}) {
+  const classes = useStyles();
+
   if (!deal.pledges) return null
 
   return (
-    <Paper className="pledges-table">
+    <Paper className={classes.paper}>
       <Table size="small">
         <TableBody>
           {deal.pledges.map(pledge => (
@@ -304,6 +398,7 @@ function PledgesTable({deal}) {
 }
 
 function PledgesViz({deal}) {
+  const classes = useStyles();
   const pledges = _.get(deal, 'pledges', null)
 
   useEffect(() => {
@@ -349,15 +444,16 @@ function PledgesViz({deal}) {
 
   if (!pledges || pledges.length === 0) {
     return (
-      <div className="pledges-viz-wrapper no-pledges">
-        <p>No Pledges yet, be the first to pledge to {deal.company_name}!</p>
+      <div style={{marginTop: 16, textAlign: "center"}}><small>
+        No graph available yet, be the first to pledge to {deal.company_name}!
+      </small>
       </div>
     )
   }
 
-  return <div className="pledges-viz-wrapper">
+  return <Paper className={classes.paper} style={{marginTop: 16}}>
     <canvas id="pledges-viz"/>
-  </div>
+  </Paper>
 }
 
 function HelloSignOnboarding({investment, deal, investor, status}) {
@@ -388,7 +484,7 @@ function Onboarding({investment, deal, investor, status}) {
 
   if (!deal.onboarding_link) {
     return (
-      <div className="waiting tile" style={{display: status === "pledged" ? "block" : "none"}}>Hang tight! ⌛<br/>Onboarding
+      <div style={{display: status === "pledged" ? "block" : "none"}}>Hang tight! ⌛<br/>Onboarding
         link coming soon</div>
     )
   }
