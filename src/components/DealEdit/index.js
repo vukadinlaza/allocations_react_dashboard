@@ -212,7 +212,6 @@ export default function DealEdit() {
       <form noValidate autoComplete="off">
 
         <Paper className={classes.paper}>
-
           <Grid container>
             <Grid item xs={10}>
               <Typography variant="h6">
@@ -226,7 +225,6 @@ export default function DealEdit() {
           </Grid>
 
           <Divider className={classes.divider}/>
-
 
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
