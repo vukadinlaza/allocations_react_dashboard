@@ -7,8 +7,10 @@ import {useParams, useHistory, Link, useLocation} from 'react-router-dom'
 import {useLazyQuery, useMutation} from '@apollo/react-hooks';
 import {useAuth0} from "../../react-auth0-spa";
 import {nWithCommas} from '../../utils/numbers'
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {Paper, TextField, Typography} from '@material-ui/core';
+import {
+  Paper,
+  Typography, List, ListItem, ListItemText
+} from '@material-ui/core';
 import queryString from 'query-string'
 import InvestmentFlow from './DealFlow'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -226,27 +228,53 @@ function InvestorData({investor}) {
       <div style={{
         backgroundColor: "#f7f9fa",
         height: 44,
-        textAlign: "center",
-        paddingTop: 8,
+        display: "flex",
+        justifyContent: "space-between",
+        marginTop: 16,
+        textAlign: "left",
+        padding: "10px",
         borderTop: "1px solid #dfe3e9",
         borderBottom: "1px solid #dfe3e9"
-      }}>My Info [<Link to="/profile">edit</Link>]
+      }}>
+        <span>
+        My Info
+      </span>
+        <Link to="/profile">Edit</Link>
       </div>
-      <div>
-        <TextField style={{width: "100%"}} label="Investor Type" value={_.upperFirst(investor.investor_type)} disabled/>
-      </div>
-      <div>
-        <TextField style={{width: "100%"}} label="Country" value={investor.country} disabled/>
-      </div>
-      <div>
-        <TextField style={{width: "100%"}} label="Accreditation" value={investor.accredited_investor_status} disabled/>
-      </div>
-      <div>
-        <TextField style={{width: "100%"}} label="Subscriber Name" value={investor.name} disabled/>
-      </div>
-      <div>
-        <TextField style={{width: "100%"}} label="Signer Full Name" value={investor.signer_full_name} disabled/>
-      </div>
+
+
+      <List>
+        <ListItem>
+          <ListItemText
+            primary="Investor Type"
+            secondary={_.upperFirst(investor.investor_type)}
+          />
+        </ListItem>
+        <ListItem>
+          <ListItemText
+            primary="Country"
+            secondary={investor.country}
+          />
+        </ListItem>
+        <ListItem>
+          <ListItemText
+            primary="Accreditation"
+            secondary={investor.accredited_investor_status}
+          />
+        </ListItem>
+        <ListItem>
+          <ListItemText
+            primary="Subscriber Name"
+            secondary={investor.name}
+          />
+        </ListItem>
+        <ListItem>
+          <ListItemText
+            primary="Signer Full Name"
+            secondary={investor.signer_full_name}
+          />
+        </ListItem>
+      </List>
     </>
   )
 }
