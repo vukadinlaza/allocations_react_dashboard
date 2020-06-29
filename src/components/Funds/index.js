@@ -36,9 +36,7 @@ export default function Funds() {
   const {data, error, user} = useAuth(GET_INVESTOR)
   const history = useHistory();
 
-  if (!data) return <Loader/>
-
-  const {investor} = data
+  if (!userProfile) return <Loader/>
 
   return (
     <>
@@ -47,10 +45,11 @@ export default function Funds() {
               color="secondary">
         CREATE FUND MANAGER
       </Button>}</div>
+
       <Paper className="funds-table" style={{margin: "15px"}}>
         <Table>
           <TableBody>
-            {(investor.organizations_admin || []).map(org => (
+            {(userProfile.organizations_admin || []).map(org => (
               <TableRow key={org._id} className="admin-link">
                 <TableCell>
                   <OrgLogo org={org}/>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -79,9 +78,23 @@ function OrgLogo({org}) {
   }
 
   if (org.name === "Allocations") {
-    return <img height="30px" width="90px" src={"https://allocations-public.s3.us-east-2.amazonaws.com/logo.png"}/>
+    return (
+      <img
+        height="30px"
+        width="90px"
+        src={"https://allocations-public.s3.us-east-2.amazonaws.com/logo.png"}
+        alt="Allocations"
+      />
+    )
   }
 
-  return <img height="30px" onError={() => setErr(true)} width="90px"
-              src={`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${org.slug}.png`}/>
+  return (
+    <img
+      height="30px"
+      width="90px"
+      onError={() => setErr(true)}
+      src={`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${org.slug}.png`}
+      alt={`${org.slug}`}
+    />
+  )
 }

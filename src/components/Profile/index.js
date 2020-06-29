@@ -3,7 +3,6 @@ import Loader from '../utils/Loader'
 import {gql} from 'apollo-boost'
 import {useLazyQuery} from '@apollo/react-hooks';
 import {useAuth} from "../../auth/useAuth";
-import {useAuth0} from "../../react-auth0-spa";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import InvestorEditForm from "../forms/InvestorEdit"
 import Typography from '@material-ui/core/Typography';
@@ -44,14 +43,13 @@ const GET_INVESTOR = gql`
 export default function Profile() {
   const [investor, setInvestor] = useState(null)
   const [formStatus, setFormStatus] = useState("edit")
-  const {data, error, refetch, user, params, adminView} = useAuth(GET_INVESTOR)
+  const {userProfile, refetch } = useAuth(GET_INVESTOR)
 
   useEffect(() => {
-    if (data) {
-      const {__typename, ...rest} = data.investor
-      setInvestor(rest)
+    if (userProfile) {
+      setInvestor(userProfile)
     }
-  }, [data])
+  }, [userProfile])
 
   useEffect(() => {
     if (formStatus === "complete") refetch()
@@ -61,7 +59,7 @@ export default function Profile() {
     ? "circle-notch"
     : (formStatus === "complete" ? "check" : null)
 
-  if (!investor) return <Loader/>
+  if (!userProfile) return <Loader/>
 
   return (
     <>

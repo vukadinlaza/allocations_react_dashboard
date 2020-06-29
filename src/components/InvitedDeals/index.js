@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react'
 import Loader from "../utils/Loader"
-import { useParams, Link, Redirect } from 'react-router-dom';
+import { useParams, Link, Redirect } from 'react-router-dom'
 import { gql } from 'apollo-boost'
-import { useLazyQuery } from '@apollo/react-hooks';
-import { useAuth0 } from "../../react-auth0-spa";
+import { useLazyQuery } from '@apollo/react-hooks'
 import { useAuth } from "../../auth/useAuth"
 import { Row, Col } from 'reactstrap'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { adminWhitelist } from "../../auth/admin-route"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, Hidden } from '@material-ui/core'
 
@@ -55,18 +53,17 @@ function formatDate (date) {
 }
 
 export default function InvitedDeals () {
-  const { data, error, refetch, user, params, adminView } = useAuth(GET_INVESTOR)
+  const { userProfile, error } = useAuth(GET_INVESTOR)
 
   if (error) {
-    if (error.message === "GraphQL error: permission denied" && user && user.email) {
+    if (error.message === "GraphQL error: permission denied" && userProfile && userProfile.email) {
       return <Redirect to="/signup" />
     }
     return <div>{error.message}</div>
   }
 
-  if (!data) return <div><Loader /></div>
+  if (!userProfile) return <div><Loader /></div>
 
-  const { investor } = data
   return (
     <div className="InvitedDeals">
       <Row>
@@ -84,7 +81,7 @@ export default function InvitedDeals () {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {investor.invitedDeals.map(deal => (
+                {userProfile.invitedDeals.map(deal => (
                   <DealRow key={deal._id} deal={deal} />
                 ))}
               </TableBody>

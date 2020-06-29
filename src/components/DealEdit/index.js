@@ -1,16 +1,15 @@
 import React, {useState, useEffect} from 'react'
 import {useSimpleReducer} from '../../utils/hooks'
-import _, {get, isEqual} from "lodash"
-import {useParams, Link, useHistory} from "react-router-dom"
+import _, {get, isEqual} from 'lodash'
+import {useParams, Link, useHistory} from 'react-router-dom'
 import {Row, Col} from 'reactstrap'
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {nWithCommas, formatDate} from '../../utils/numbers'
-import * as API from "../../api"
-import UserSearch from "../forms/UserSearch"
+import * as API from '../../api'
+import UserSearch from '../forms/UserSearch'
 import InviteInvestors from './InviteInvestors'
 import {ORG_OVERVIEW} from '../admin/AdminHome'
-import {isAdmin} from '../../auth/admin-route'
-import {useAuth0} from "../../react-auth0-spa"
+import {useAuth} from '../../auth/useAuth'
 
 // wysiwyg editor
 import {Editor} from '@tinymce/tinymce-react';
@@ -176,20 +175,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const GET_INVESTOR = gql`
+  {
+    investor {
+      _id
+      name
+      admin
+      organizations_admin {
+        _id
+        slug
+        name
+        logo
+      }
+    }
+  }
+`
+
 
 export default function DealEdit() {
-  const history = useHistory()
+  const history = useHistory();
   const classes = useStyles();
-  const {user} = useAuth0();
-  const {id, organization} = useParams()
-  const [errorMessage, setErrorMessage] = useState(null)
+  const {userProfile} = useAuth(GET_INVESTOR);
+  const {id, organization} = useParams();
+  const [errorMessage, setErrorMessage] = useState(null);
   const [deal, setDeal] = useSimpleReducer({
     dealParams: {}
-  })
-  const [showAddInvestment, setShowAddInvestment] = useState(false)
-  const [hasChanges, setHasChanges] = useState(false)
-  const {data, refetch, error} = useQuery(GET_DEAL, {variables: {id, slug: organization}})
-  const [updateDeal] = useMutation(UPDATE_DEAL)
+  });
+  const [showAddInvestment, setShowAddInvestment] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+  const {data, refetch, error} = useQuery(GET_DEAL, {variables: {id, slug: organization}});
+  const [updateDeal] = useMutation(UPDATE_DEAL);
 
   useEffect(() => {
     if (data) {
@@ -390,7 +405,6 @@ export default function DealEdit() {
               />
             </Grid>
 
-
             <Grid item xs={10}>
               <Typography variant="h5">
                 Exchange Data
@@ -452,8 +466,7 @@ export default function DealEdit() {
                 label="Public Link"
                 value={window.origin + (deal.publicLink || "")}
                 InputProps={{
-                  endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy"
-                                                                                onClick={() => navigator.clipboard.writeText(window.origin + (deal.publicLink || ""))}/></InputAdornment>,
+                  endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(window.origin + (deal.publicLink || ""))}/></InputAdornment>,
                 }}
                 variant="outlined"/>
             </Grid>
@@ -463,8 +476,7 @@ export default function DealEdit() {
                 label="Existing user link"
                 value={window.origin + (deal.appLink || "")}
                 InputProps={{
-                  endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy"
-                                                                                onClick={() => navigator.clipboard.writeText(window.origin + (deal.appLink || ""))}/></InputAdornment>,
+                  endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy" onClick={() => navigator.clipboard.writeText(window.origin + (deal.appLink || ""))}/></InputAdornment>,
                 }}
                 variant="outlined"/>
             </Grid>
@@ -501,7 +513,7 @@ export default function DealEdit() {
               </Paper>
             </Grid>
             <Grid item xs={12} sm={6}>
-              {isAdmin(user) && <DeleteDeal deal={deal}/>}
+              {userProfile.admin && <DeleteDeal deal={deal}/>}
             </Grid>
           </Grid>
         </Paper>
