@@ -68,7 +68,7 @@ const GET_INVESTOR = gql`
 
 export default function Deals () {
   const { organization } = useParams()
-  const { user, isAdmin } = useAuth(GET_INVESTOR)
+  const { userProfile } = useAuth(GET_INVESTOR)
   const [getDeals, { data, error }] = useLazyQuery(GET_DEALS, { variables: { slug: organization }})
   const [capitalAccount, toggleCapitalAccount] = useReducer(
     (acc, _id) => {
@@ -78,8 +78,8 @@ export default function Deals () {
   )
 
   useEffect(() => {
-    if (user && user.email) getDeals()
-  }, [user])
+    if (userProfile && userProfile.email) getDeals()
+  }, [userProfile])
 
   if (error) return <div>{error.message}</div>
 
@@ -112,7 +112,7 @@ export default function Deals () {
                   <TableCell>Closing</TableCell>
                   <TableCell>Lead</TableCell>
                   <TableCell>Progress</TableCell>
-                  {isAdmin && <TableCell></TableCell>}
+                  {userProfile.admin && <TableCell></TableCell>}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -123,7 +123,7 @@ export default function Deals () {
                     <TableCell>{deal.date_closed}</TableCell>
                     <TableCell>{deal.deal_lead}</TableCell>
                     <DealProgress deal={deal} />
-                    {isAdmin && <TableCell align="center"><Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link></TableCell>}
+                    {userProfile.admin && <TableCell align="center"><Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link></TableCell>}
                   </TableRow>
                 ))}
               </TableBody>
@@ -144,7 +144,7 @@ export default function Deals () {
                   <TableCell>Closed</TableCell>
                   <TableCell>Size</TableCell>
                   <TableCell className="text-center">Investors</TableCell>
-                  {isAdmin && <TableCell></TableCell>}
+                  {userProfile.admin && <TableCell></TableCell>}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -157,7 +157,7 @@ export default function Deals () {
                       <TableCell>{formatDate(deal.date_closed)}</TableCell>
                       <TableCell>${nWithCommas(_.sumBy(deal.investments, 'amount'))}</TableCell>
                       <TableCell className="text-center">{deal.investments.length}</TableCell>
-                      {isAdmin && <TableCell align="center"><Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link></TableCell>}
+                      {userProfile.admin && <TableCell align="center"><Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link></TableCell>}
                     </TableRow>
                     {capitalAccount === deal._id && <CapitalAccount deal={deal} />}
                   </Fragment>
