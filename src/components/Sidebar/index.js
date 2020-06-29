@@ -259,7 +259,7 @@ export default function Sidebar(props) {
             </ListItem>
           </div>
         </List></>}
-      {Uint16Array.admin && <AdminLinks location={location}/>}
+      {userProfile.admin && <AdminLinks location={location}/>}
     </div>
   );
 
