@@ -29,14 +29,9 @@ ReactDOM.render(
   <ThemeProvider theme={theme}>
     <Router>
       <Auth0Provider>
-        <Switch>
-          <Route path="/public">
-            <PublicApp/>
-          </Route>
-          <Route path="/">
-            <App/>
-          </Route>
-        </Switch>
+        <Route path="/">
+          <App/>
+        </Route>
       </Auth0Provider>
     </Router>
   </ThemeProvider>,
