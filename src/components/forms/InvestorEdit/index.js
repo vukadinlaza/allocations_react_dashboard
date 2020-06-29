@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import Loader from '../../utils/Loader'
-import {get} from "lodash"
+import {get, pick} from "lodash"
 import {gql} from 'apollo-boost'
 import {useMutation} from '@apollo/react-hooks';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -66,11 +66,11 @@ const UPDATE_USER = gql`
   }
 `
 
-const reqs = ['country', 'investor_type', 'signer_full_name', 'accredited_investor_status', 'email']
+const reqs = ['country', 'investor_type', 'signer_full_name', 'email']
 
 export function validate(investor) {
   const required = investor.investor_type === "entity"
-    ? ['entity_name', ...reqs]
+    ? ['entity_name','accredited_investor_status', ...reqs]
     : ['first_name', 'last_name', ...reqs]
   return required.reduce((acc, attr) => investor[attr] ? acc : [...acc, attr], [])
 }
@@ -92,11 +92,12 @@ export default function InvestorEditForm({investor, setInvestor, actionText, ico
   const submit = () => {
     // don't validate if noValidate flag passed
     if (noValidate) return updateInvestor({variables: {investor}})
-
+    
     const validation = validate(investor)
+    const payload = pick(investor, [...reqs, '_id', 'entity_name']);
     setErrors(validation)
     if (validation.length === 0) {
-      updateInvestor({variables: {investor}})
+      updateInvestor({variables: { investor: payload }})
     }
   }
 

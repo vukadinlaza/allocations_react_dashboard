@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useHistory, useLocation, useRouteMatch} from 'react-router-dom';
 import {useAuth} from '../../auth/useAuth'
+import {useAuth0} from "../../react-auth0-spa"
+
 import {gql} from 'apollo-boost'
 
 import "./style.scss"
@@ -97,6 +99,7 @@ const GET_INVESTOR = gql`
 
 export default function Sidebar(props) {
   const {user} = useAuth0();
+  const {userProfile} = useAuth(GET_INVESTOR);
   const location = useLocation();
   const [admin, setAdmin] = useState(false);
 

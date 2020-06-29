@@ -60,7 +60,6 @@ export default function Profile() {
     : (formStatus === "complete" ? "check" : null)
 
   if (!userProfile) return <Loader/>
-
   return (
     <>
       <InvestorEditForm investor={investor}

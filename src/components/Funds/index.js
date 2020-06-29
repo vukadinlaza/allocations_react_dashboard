@@ -33,14 +33,13 @@ const GET_INVESTOR = gql`
 `
 
 export default function Funds() {
-  const {data, error, user} = useAuth(GET_INVESTOR)
+  const {userProfile, error} = useAuth(GET_INVESTOR)
   const history = useHistory();
-
   if (!userProfile) return <Loader/>
 
   return (
     <>
-      <div className="small-header text-left">Funds Admin &nbsp;&nbsp;{investor.admin &&
+      <div className="small-header text-left">Funds Admin &nbsp;&nbsp;{userProfile.admin &&
       <Button onClick={() => history.push("/admin/organizations/new")} size="small"
               color="secondary">
         CREATE FUND MANAGER
