@@ -128,11 +128,11 @@ export default function AdminHome() {
 
   return (
     <>
-      <Grid container>
+      <Grid container spacing={2}>
         {data.investor.admin && <Grid item xs={12}>
           <SuperAdmin org={org}/>
         </Grid>}
-        <Grid item>
+        <Grid item xs={12} sm={6}>
           <Paper className={classes.paper}>
             <Typography variant="h6">
               Welcome to <strong>{org.name}</strong>, Admin!
@@ -145,42 +145,45 @@ export default function AdminHome() {
             </Button>
           </Paper>
         </Grid>
-      </Grid>
 
-      <Paper className={classes.paper}>
-        <Grid container>
-          <Grid item xs={10}>
-            <Typography variant="h6">
-              💡 Active Deals: {(active || []).length}
-            </Typography>
-          </Grid>
-          <Grid item xs={2} style={{textAlign: "right"}}>
-            <Button
-              onClick={() => history.push(`/admin/${organization}/deals`)} className="all-btn"
-              color="primary"
-              style={{padding: "3px 4px"}}>See All</Button>
-          </Grid>
+        <Grid item xs={12} sm={6}>
+          <Paper className={classes.paper}>
+            <Grid container>
+              <Grid item xs={10}>
+                <Typography variant="h6">
+                  💡 Active Deals: {(active || []).length}
+                </Typography>
+              </Grid>
+              <Grid item xs={2} style={{textAlign: "right"}}>
+                <Button
+                  onClick={() => history.push(`/admin/${organization}/deals`)} className="all-btn"
+                  color="primary"
+                  style={{padding: "3px 4px"}}>View All</Button>
+              </Grid>
+            </Grid>
+
+            <Divider className={classes.divider} style={{marginBottom: -16}}/>
+
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Closes</TableCell>
+                  <TableCell>Progress</TableCell>
+                  <TableCell>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(active || []).map(deal => (
+                  <Deal key={deal._id} deal={deal}/>
+                ))}
+              </TableBody>
+            </Table>
+          </Paper>
+
         </Grid>
-
-        <Divider className={classes.divider} style={{marginBottom: -16}}/>
-
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Closes</TableCell>
-              <TableCell>Progress</TableCell>
-              <TableCell>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(active || []).map(deal => (
-              <Deal key={deal._id} deal={deal}/>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
+      </Grid>
 
       <Paper className={classes.paper}>
         <Grid container>
@@ -193,7 +196,7 @@ export default function AdminHome() {
             <Button
               onClick={() => history.push(`/admin/${organization}/deals`)}
               color="primary"
-              style={{padding: "3px 4px"}}>See All</Button>
+              style={{padding: "3px 4px"}}>View All</Button>
           </Grid>
         </Grid>
 
@@ -226,7 +229,7 @@ export default function AdminHome() {
             <Button onClick={() => history.push(`/admin/${organization}/investments`)} className="all-btn"
                     color="primary"
                     style={{padding: "3px 4px"}}>
-              See All</Button>
+              View All</Button>
           </Grid>
         </Grid>
 

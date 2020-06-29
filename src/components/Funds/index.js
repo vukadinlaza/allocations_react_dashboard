@@ -8,6 +8,7 @@ import Loader from '../../components/utils/Loader'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {useAuth} from "../../auth/useAuth"
 import "./style.scss"
+import {useHistory} from "react-router-dom"
 
 /***
  *
@@ -32,15 +33,19 @@ const GET_INVESTOR = gql`
 `
 
 export default function Funds() {
-  const {userProfile} = useAuth(GET_INVESTOR)
+  const {data, error, user} = useAuth(GET_INVESTOR)
+  const history = useHistory();
 
   if (!userProfile) return <Loader/>
 
   return (
     <>
-      <div className="small-header text-left">Funds Admin &nbsp;&nbsp;{userProfile.admin &&
-      <Button variant="contained" size="small" color="secondary"><Link to="/admin/organizations/new">CREATE FUND
-        MANAGER</Link></Button>}</div>
+      <div className="small-header text-left">Funds Admin &nbsp;&nbsp;{investor.admin &&
+      <Button onClick={() => history.push("/admin/organizations/new")} size="small"
+              color="secondary">
+        CREATE FUND MANAGER
+      </Button>}</div>
+
       <Paper className="funds-table" style={{margin: "15px"}}>
         <Table>
           <TableBody>
@@ -51,7 +56,10 @@ export default function Funds() {
                   {org.name} Admin
                 </TableCell>
                 <TableCell>
-                  <Button variant="contained" size="small" color="primary"><Link to={`/admin/${org.slug}`}>Manage</Link></Button>
+                  <Button onClick={() => history.push(`/admin/${org.slug}`)} variant="contained" size="small"
+                          color="primary">
+                    Manage
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
