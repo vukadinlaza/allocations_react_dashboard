@@ -97,7 +97,7 @@ export const Auth0Provider = ({ children }) => {
       setState({ auth0Client: client })
 
       // this means we've been redirected back from login
-      if (window.location.search.includes("code=")) {
+      if (window.location.search.includes("?code=")) {
         client.handleRedirectCallback()
           .then(({ appState }) => options.onRedirectCallback({ appState, client }))
           .catch(err => console.error("Error Logging in"))

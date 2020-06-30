@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from "react";
-import {Route, Switch} from "react-router-dom";
+import {Redirect, Route, Switch} from "react-router-dom";
 
 import Faq from "./components/Faq";
 import SignUp from "./components/SignUp";
-import PublicDeal from "./components/Deal/Public";
 import Deal from "./components/Deal";
 import Deals from "./components/Deals";
 import DealNew from "./components/DealNew";
@@ -84,9 +83,9 @@ const App = () => {
           <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact/>
 
           {/** Deals **/}
+          <Redirect from={`/public/:organization/deals/:deal_slug`} to="/deals/:deal_slug"/>
           <Route path="/deals/:deal_slug" exact><Deal/></Route>
           <Route path="/deals/:organization/:deal_slug" exact><Deal/></Route>
-          <PrivateRoute path={`/public/:organization/deals/:deal_slug`} component={PublicDeal}/>
 
           {/** AllocationsX **/}
           <PrivateRoute path="/exchange" component={AllocationsX} exact/>

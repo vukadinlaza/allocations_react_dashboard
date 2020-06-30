@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom"
-import { useAuth } from "useAuth";
+import { useAuth } from "./useAuth";
 import {gql} from 'apollo-boost'
 
 import Loader from '../components/utils/Loader'
