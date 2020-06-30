@@ -142,7 +142,7 @@ export default function UserHome(props) {
     }
   }
 
-  if (!userProfile) return <div><Loader/></div>
+  if .email) return <div><Loader/></div>
 
   const total_invested = _.sumBy(userProfile.investments, 'amount') || 0
 

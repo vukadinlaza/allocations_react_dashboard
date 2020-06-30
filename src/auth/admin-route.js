@@ -32,9 +32,9 @@ const GET_INVESTOR = gql`
 export default function AdminRoute ({ component, ...rest }) {
   const {userProfile} = useAuth(GET_INVESTOR);
 
-  if (!userProfile) return <Loader />
+  if (!userProfile.email) return <div><Loader/></div>
 
-  if (userProfile && userProfile.admin) {
+  if (userProfile.admin) {
     return <Route {...rest} component={component} />
   } else {
     return <Redirect to="/" />
