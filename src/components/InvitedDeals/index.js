@@ -62,7 +62,7 @@ export default function InvitedDeals () {
     return <div>{error.message}</div>
   }
 
-  if (!userProfile) return <div><Loader /></div>
+  if (!userProfile.email) return <div><Loader /></div>
 
   return (
     <div className="InvitedDeals">
