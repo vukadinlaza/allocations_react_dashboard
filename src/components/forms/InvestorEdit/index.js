@@ -94,7 +94,7 @@ export default function InvestorEditForm({investor, setInvestor, actionText, ico
     if (noValidate) return updateInvestor({variables: {investor}})
     
     const validation = validate(investor)
-    const payload = pick(investor, [...reqs, '_id', 'entity_name']);
+    const payload = pick(investor, [...reqs, '_id', 'entity_name', 'accredited_investor_status']);
     setErrors(validation)
     if (validation.length === 0) {
       updateInvestor({variables: { investor: payload }})
