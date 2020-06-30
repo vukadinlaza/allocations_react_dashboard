@@ -67,7 +67,7 @@ export default function UserInvestments() {
     return <div>{error.message}</div>
   }
 
-  if (!userProfile) return <div><Loader/></div>
+  if (!userProfile.email) return <div><Loader/></div>
 
   const investments = _.orderBy(userProfile.investments, i => new Date(i.deal.date_closed).getTime(), 'desc')
   if (showDocs) {

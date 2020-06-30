@@ -34,8 +34,9 @@ const GET_INVESTOR = gql`
 
 export default function Funds() {
   const {userProfile, error} = useAuth(GET_INVESTOR)
-  const history = useHistory();
-  if (!userProfile) return <Loader/>
+  const history = useHistory()
+
+  if (!userProfile.email) return <div><Loader/></div>
 
   return (
     <>

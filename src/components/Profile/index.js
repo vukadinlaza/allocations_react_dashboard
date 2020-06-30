@@ -59,7 +59,8 @@ export default function Profile() {
     ? "circle-notch"
     : (formStatus === "complete" ? "check" : null)
 
-  if (!userProfile) return <Loader/>
+  if (!userProfile.email) return <div><Loader/></div>
+
   return (
     <>
       <InvestorEditForm investor={investor}
