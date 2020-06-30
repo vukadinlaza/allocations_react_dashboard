@@ -1,10 +1,8 @@
 import React from "react";
-import _ from 'lodash'
 import { Route, Redirect } from "react-router-dom"
-import { useAuth0 } from "../react-auth0-spa";
-import { useLazyQuery } from '@apollo/react-hooks';
-import { useEffect } from 'react';
+import { useAuth } from "useAuth";
 import {gql} from 'apollo-boost'
+
 import Loader from '../components/utils/Loader'
 
 /***
@@ -32,18 +30,11 @@ const GET_INVESTOR = gql`
 `
 
 export default function AdminRoute ({ component, ...rest }) {
-  const { isAuthenticated, user, loading } = useAuth0();
-  const [getInvestor, { data, error, called }] = useLazyQuery(GET_INVESTOR)
+  const {userProfile} = useAuth(GET_INVESTOR);
 
-  useEffect(() => {
-    if (!loading && isAuthenticated && !called) {
-      getInvestor()
-    }
-  }, [isAuthenticated, loading, called])
+  if (!userProfile) return <Loader />
 
-  if (isAuthenticated === null || !data) return <Loader />
-
-  if (isAuthenticated === true && data.investor.admin) {
+  if (userProfile && userProfile.admin) {
     return <Route {...rest} component={component} />
   } else {
     return <Redirect to="/" />
