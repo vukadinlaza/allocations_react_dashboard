@@ -1,17 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import "./index.css";
+import {BrowserRouter as Router} from "react-router-dom";
+import {hotjar} from 'react-hotjar';
+import { ThemeProvider } from '@material-ui/core/styles';
+
+import {Auth0Provider} from "./react-auth0-spa";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import {Auth0Provider} from "./react-auth0-spa";
-import {hotjar} from 'react-hotjar';
-import PublicApp from "./PublicApp";
-import { ThemeProvider } from '@material-ui/core/styles';
-import theme from './theme';
 
-console.warn = () => {
-}
+
+import theme from './theme';
+import "./index.css";
 
 /***
  *
@@ -29,14 +28,7 @@ ReactDOM.render(
   <ThemeProvider theme={theme}>
     <Router>
       <Auth0Provider>
-        <Switch>
-          <Route path="/public">
-            <PublicApp/>
-          </Route>
-          <Route path="/">
-            <App/>
-          </Route>
-        </Switch>
+        <App/>
       </Auth0Provider>
     </Router>
   </ThemeProvider>,
