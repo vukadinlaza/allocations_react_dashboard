@@ -100,7 +100,7 @@ export default function Investments () {
 
   if (!data) return <div><Loader /></div>
 
-  const investments = _.orderBy(data.organization.investments, i => new Date(i.deal.date_closed).getTime(), 'desc')
+  const investments = _.orderBy(_.get(data, 'organization.investments', []), i => new Date(i.deal.date_closed).getTime(), 'desc')
   if (showDocs) {
     investments.splice(investments.findIndex(i => i._id === showDocs._id) + 1, 0, { showDocs })
   }
