@@ -132,16 +132,16 @@ export default function Sidebar(props) {
       title: "Profile",
       icon: <PersonIcon/>,
     },
-    {
-      to: "/funds",
-      title: "Funds",
-      icon: <FundsIcon/>,
-    },
-    {
-      to: "/help",
-      title: "Help",
-      icon: <HelpIcon/>,
-    },
+    // {
+    //   to: "/funds",
+    //   title: "Funds",
+    //   icon: <FundsIcon/>,
+    // },
+    // {
+    //   to: "/help",
+    //   title: "Help",
+    //   icon: <HelpIcon/>,
+    // },
   ];
 
   const drawer = (
