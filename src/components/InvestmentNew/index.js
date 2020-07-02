@@ -111,7 +111,7 @@ function UserSearch ({ user, setUser, errors, deal_id }) {
 
   useEffect(() => {
     search({ variables: { q, org: deal_id } })
-  }, [deal_id, q, search])
+  }, [deal_id, q])
 
   useEffect(() => {
     if (searchRes.data && searchRes.data.searchUsers) {
@@ -169,7 +169,7 @@ function DealSearch ({ deal, setDeal, errors }) {
 
   useEffect(() => {
     search({ variables: { q } })
-  }, [q, search])
+  }, [q])
 
   useEffect(() => {
     if (searchRes.data && searchRes.data.searchDeals) {
