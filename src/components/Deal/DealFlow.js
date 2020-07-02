@@ -108,7 +108,7 @@ export default function InvestmentFlow({investment, deal, investor, refetch}) {
       <InvestmentOverview investment={investment}/>
 
       <div className={classes.tabs}>
-        <Grid container>
+        <Grid container justify="center">
           <Grid item xs={12} sm={3}>
             <ButtonBase className={status === "invited" ? classes.activeTab : classes.tab}
                         style={{borderRight: "1px solid #e1e9ec"}}
@@ -116,13 +116,13 @@ export default function InvestmentFlow({investment, deal, investor, refetch}) {
               Data Room
             </ButtonBase>
           </Grid>
-          <Grid item xs={12} sm={3}>
+          {/* <Grid item xs={12} sm={3}>
             <ButtonBase className={status === "pledging" ? classes.activeTab : classes.tab}
                         style={{borderRight: "1px solid #e1e9ec"}}
                         onClick={() => setStatus('pledging')}>
               Pledge
             </ButtonBase>
-          </Grid>
+          </Grid> */}
 
           {/**<Grid item xs={12} sm={3}>
            <ButtonBase onClick={() => setStatus('kyc')}
@@ -146,7 +146,6 @@ export default function InvestmentFlow({investment, deal, investor, refetch}) {
             </ButtonBase>
           </Grid>
         </Grid>
-
       </div>
 
       <>
@@ -156,9 +155,9 @@ export default function InvestmentFlow({investment, deal, investor, refetch}) {
         {status === "onboarded" && <Wire investment={investment} deal={deal}/>}
 
         {/** Always render Onboarding so that the Docusign loads in... **/}
-        {onboardingLinkType === "docusign" &&
+        {onboardingLinkType === "docusign" && status === "pledged" &&
         <Onboarding status={status} investment={investment} deal={deal} investor={investor}/>}
-        {onboardingLinkType === "hellosign" &&
+        {onboardingLinkType === "hellosign" && status === "pledged" &&
         <HelloSignOnboarding status={status} investment={investment} deal={deal} investor={investor}/>}
       </>
     </React.Fragment>
@@ -275,7 +274,7 @@ function Pledging({investment, deal, refetch, investor}) {
 
   useEffect(() => {
     setAmount(investment.amount || "")
-  }, [])
+  }, [investment.amount])
 
   const updateAmount = e => {
     const val = e.target.value
@@ -440,7 +439,7 @@ function PledgesViz({deal}) {
         }
       }
     })
-  }, [deal])
+  }, [deal, pledges])
 
   if (!pledges || pledges.length === 0) {
     return (
