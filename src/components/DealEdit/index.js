@@ -300,10 +300,10 @@ export default function DealEdit() {
               <FormControl variant="outlined" style={{width: "100%"}}>
                 <InputLabel>All Invited</InputLabel>
                 <Select value={deal.allInvited || "false"}
-                        onChange={e => setDeal({allInvited: e.target.value === "true"})}
+                        onChange={e => setDeal({allInvited: e.target.value === "false"})}
                         inputProps={{name: 'Type'}}>
                   <MenuItem value="false">False</MenuItem>
-                  <MenuItem value="true">True</MenuItem>
+                  {/* <MenuItem value="true">True</MenuItem> */}
                 </Select>
               </FormControl>
             </Grid>
@@ -490,14 +490,14 @@ export default function DealEdit() {
               <InviteInvestors deal={deal} refetch={refetch}/>
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            {userProfile.admin && <Grid item xs={12} sm={6}>
               <>
                 Investments {showAddInvestment
                 ? <FontAwesomeIcon icon="times" onClick={() => setShowAddInvestment(false)}/>
                 :
                 <Button variant="contained" color="secondary" onClick={() => setShowAddInvestment(true)}>Add +</Button>}
               </>
-            </Grid>
+            </Grid>}
             <Grid item xs={12} sm={6}>
               <AddInvestment deal={deal} show={showAddInvestment} refetch={refetch}/>
             </Grid>

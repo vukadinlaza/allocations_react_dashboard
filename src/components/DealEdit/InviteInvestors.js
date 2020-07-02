@@ -43,11 +43,11 @@ export default function InviteInvestors({deal, refetch}) {
         Invited Investors
       </Typography>
 
-      <TextField variant="outlined"
+      {/* <TextField variant="outlined"
                  style={{width: "100%", marginBottom: "16px"}}
                  value={searchQ}
                  onChange={e => setSearchQ(e.target.value)}
-                 label="Search Investors"/>
+                 label="Search Investors"/> */}
 
       <SendEmailInvites deal={deal} refetch={refetch}/>
 
