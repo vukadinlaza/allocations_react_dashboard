@@ -2,7 +2,6 @@ import React, {useState, useEffect} from "react";
 import {Redirect, Route, Switch} from "react-router-dom";
 
 import Faq from "./components/Faq";
-import SignUp from "./components/SignUp";
 import Deal from "./components/Deal";
 import Deals from "./components/Deals";
 import DealNew from "./components/DealNew";
@@ -78,7 +77,6 @@ const App = () => {
           <PrivateRoute path="/invited-deals" component={InvitedDeals}/>
 
           {/** Onboarding **/}
-          <Route path="/signup" component={SignUp} exact/>
           <Route path="/getting-started" component={Faq} exact/>
           <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact/>
 
