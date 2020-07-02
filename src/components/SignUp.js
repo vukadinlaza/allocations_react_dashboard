@@ -26,8 +26,16 @@ const SIGNUP = gql`
     }
   }
 `
+const required = [
+  'first_name',
+  'last_name',
+  'country',
+  'investor_type',
+  'signer_full_name',
+  'accredited_investor_status',
+  'email',
+];
 
-const required = ['first_name', 'last_name', 'country', 'investor_type', 'signer_full_name', 'accredited_investor_status', 'email']
 function dataComplete (user) {
   for (let i = 0; i < required.length; i++) {
     if (!user[required[i]]) return false
@@ -56,14 +64,21 @@ export default function SignUp () {
   }, [isAuthenticated, loginWithRedirect]);
 
   useEffect(() => {
-    if (isAuthenticated && !called) signUp({ variables: { inviteKey: key }})
+    if (isAuthenticated && !called) {
+      console.log("HERE AGAIN")
+      signUp({ variables: { inviteKey: key }})
+    }
   }, [isAuthenticated])
 
   useEffect(() => {
-    if (data) setSignedIn(true)
+    if (data) {
+      console.log("HUURRR")
+      setSignedIn(true)
+    }
   }, [data])
 
   if (signedIn) {
+    console.log("DADDY WAS HERE")
     return <Redirect to={key ? "/invited-deals" : "/"} />
   }
 
