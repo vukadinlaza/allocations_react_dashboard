@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { get, isEqual, pick } from "lodash"
+import { get, isEqual, pick, omit } from "lodash"
 import { useParams, Redirect } from "react-router-dom"
 import { Row, Col } from 'reactstrap'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -35,6 +35,7 @@ const GET_INVESTMENT = gql`
     investment(_id: $_id) {
       _id
       amount
+      status
       documents {
         link
         path
@@ -78,6 +79,7 @@ export default function InvestmentEdit () {
   const classes = useStyles();
   const { data, refetch } = useQuery(GET_INVESTMENT, { variables: { _id: params.id }})
   const [createInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT)
+  
   useEffect(() => {
     setHasChanges(!isEqual(investment, {}))
   }, [investment])
@@ -92,7 +94,7 @@ export default function InvestmentEdit () {
   const updateInvestmentProp = ({ prop, newVal }) => {
     setInvestment(prev => ({ ...prev, [prop]: newVal }))
   }
-  if (createInvestmentRes.data) {
+  if (createInvestmentRes.data?.createInvestment?._id) {
     return <Redirect to={`/deals/${createInvestmentRes.data.createInvestment._id}/edit`} />
   }
   const name = get(investment, "investor.investor_type") === "entity"
@@ -100,13 +102,13 @@ export default function InvestmentEdit () {
     : `${get(investment, "investor.first_name")} ${get(investment, "investor.last_name")}`
 
 
-    console.log('INVESTMENT', investment)
+
   return (
     <div className="InvestmentEdit form-wrapper">
       <Paper className={classes.paper}>
         <Row>
           <Col sm={{size: 8, offset: 1}}>
-            <div className="form-title">Update Investment</div>
+            <div className="form-title">Update Investment  {createInvestmentRes.data &&   <FontAwesomeIcon icon='check'/>} </div>
           </Col>
         </Row>
           <Divider className={classes.divider}/>
@@ -132,8 +134,8 @@ export default function InvestmentEdit () {
                   style={{width: "100%"}}>
                 <TextField 
                   style={{width: "100%"}}
-                  value={get(investment, 'amount', "")}
-                  onChange={e => updateInvestmentProp({ prop: "amount", newVal: e.target.value })}
+                  value={get(investment, 'amount', '')}
+                  onChange={e => updateInvestmentProp({ prop: "amount", newVal: parseInt(e.target.value) })}
                   label="Amount" 
                   variant="outlined"/>
               </FormControl>
@@ -153,8 +155,14 @@ export default function InvestmentEdit () {
             <Grid item xs={12} sm={12} md={6}>
              <Button disabled={!hasChanges} 
                 variant="contained"
-                onClick={() => createInvestment({ variables: 
-                { investment: investment} })} 
+                onClick={() => createInvestment({ variables: { investment: {
+                  _id: investment._id,
+                  amount: investment.amount,
+                  deal_id: investment.deal._id,
+                  user_id: investment.investor._id,
+                  status: investment.status,
+                  documents: investment.documents
+                } }})} 
                 color="primary">
                 UPDATE
               </Button> 
