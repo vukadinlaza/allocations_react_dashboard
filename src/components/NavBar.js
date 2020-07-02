@@ -138,11 +138,17 @@ export function Auth0Profile({user, logoutWithRedirect}) {
         onClose={handleCloseFunds}
       >
       {organizations_admin.map(org => {
-        return <MenuItem onClick={() => { 
-          history.push(`/admin/${org.slug}`);
-          handleCloseFunds()
-           }}>{org.name}</MenuItem>
-
+        return (
+          <MenuItem
+            onClick={() => { 
+              history.push(`/admin/${org.slug}`);
+              handleCloseFunds();
+            }}
+            key={org.name}
+          >
+            {org.name}
+          </MenuItem>
+        )
       })}
       </Menu>
 
