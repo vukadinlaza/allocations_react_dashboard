@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { get } from 'lodash'
 import { useHistory } from "react-router-dom"
 import { TextField } from '@material-ui/core'
 import { Row, Col } from 'reactstrap'
@@ -41,7 +42,7 @@ export default function InvestmentNew () {
 
   useEffect(() => {
     if (data) history.push(`/admin/investments/${data.createInvestment._id}/edit`)
-  }, [data])
+  }, [data, history])
 
   const [user, setUser] = useState(null)
   const [deal, setDeal] = useState(null)
@@ -81,7 +82,7 @@ export default function InvestmentNew () {
         </Row>
         <Row>
           <Col sm={{size: 4, offset: 1}}>
-            <UserSearch user={user} setUser={setUser} errors={errors} />
+            <UserSearch user={user} setUser={setUser} errors={errors} deal_id={get(deal, '_id', '')} />
           </Col>
           <Col sm={{size: 4}}>
             <DealSearch deal={deal} setDeal={setDeal} errors={errors} />
@@ -103,20 +104,20 @@ export default function InvestmentNew () {
   )
 }
 
-function UserSearch ({ user, setUser, errors }) {
+function UserSearch ({ user, setUser, errors, deal_id }) {
   const [q, setQ] = useState("")
   const [records, setRecords] = useState([])
   const [search, searchRes] = useLazyQuery(API.users.search)
 
   useEffect(() => {
-    search({ variables: { q } })
-  }, [q])
+    search({ variables: { q, org: deal_id } })
+  }, [deal_id, q, search])
 
   useEffect(() => {
     if (searchRes.data && searchRes.data.searchUsers) {
       setRecords(q === "" ? [] : searchRes.data.searchUsers)
     } 
-  }, [searchRes.data])
+  }, [q, searchRes.data])
 
   if (user) {
     return (
@@ -168,13 +169,13 @@ function DealSearch ({ deal, setDeal, errors }) {
 
   useEffect(() => {
     search({ variables: { q } })
-  }, [q])
+  }, [q, search])
 
   useEffect(() => {
     if (searchRes.data && searchRes.data.searchDeals) {
       setRecords(q === "" ? [] : searchRes.data.searchDeals)
     } 
-  }, [searchRes.data])
+  }, [q, searchRes.data])
 
   if (deal) {
     return (
