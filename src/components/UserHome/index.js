@@ -146,7 +146,6 @@ export default function UserHome(props) {
 
   const total_invested = _.sumBy(userProfile.investments, 'amount') || 0
 
-  const returningInvestor = total_invested !== 0
   return (
     <>
       {/* TODO: Move to NavBar <AdminTile investor={investor}/>*/}
@@ -161,9 +160,9 @@ export default function UserHome(props) {
                   <Typography variant="body1" className={classes.lightText}>
                     Welcome
                   </Typography>
-                  {returningInvestor && <Typography variant="h5">
+                    <Typography variant="h5">
                     <Name investor={userProfile}/>
-                  </Typography>}
+                  </Typography>
                 </Grid>
               </Hidden>
               <Grid item sm={12} md={8}>
@@ -186,7 +185,7 @@ export default function UserHome(props) {
           </Paper>
         </Grid>
 
-        {returningInvestor && <>
+        <>
           <Grid item sm={12} md={6}>
             <Paper className={classes.paper} style={{height: "100%"}}>
               <Typography variant="h6" style={{marginBottom: 16}}>
@@ -199,7 +198,7 @@ export default function UserHome(props) {
           </Grid>
 
           <Grid item sm={12} md={6}>
-            <Paper className={classes.paper}>
+            <Paper className={classes.paper} style={{height: "100%"}}>
               <Typography variant="h6" style={{marginBottom: 16}}>
                 Portfolio
               </Typography>
@@ -212,13 +211,10 @@ export default function UserHome(props) {
               }
             </Paper>
           </Grid>
-        </>}
+        </>
 
-        {!returningInvestor && <Grid item xs={12} sm={6}>
-          <NextSteps investor={userProfile}/>
-        </Grid>}
 
-        {returningInvestor && <>
+         <>
           <Grid item xs={12} sm={6}>
             <Paper className={classes.paper} style={{paddingBottom: 0}}>
               <Typography variant="h6" style={{marginBottom: 16}}>
@@ -248,8 +244,8 @@ export default function UserHome(props) {
               </div>
             </Paper>
           </Grid>
-        </>}
-
+        </>
+        
       </Grid>
     </>
   )
