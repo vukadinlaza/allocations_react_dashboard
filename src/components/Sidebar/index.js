@@ -22,8 +22,10 @@ import {makeStyles, useTheme} from '@material-ui/core/styles';
 import HomeIcon from "@material-ui/icons/Home";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import PersonIcon from "@material-ui/icons/Person";
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import FundsIcon from "@material-ui/icons/AttachMoney";
 import HelpIcon from "@material-ui/icons/Help";
+import DonutLargeIcon from '@material-ui/icons/DonutLarge';
 import NavBar from "../NavBar";
 
 const drawerWidth = 240;
@@ -170,7 +172,7 @@ export default function Sidebar(props) {
           <div className={`sidebar-nav-item ${location.pathname === "/admin/funds" ? "sidebar-nav-item-active" : ""}`}>
             <ListItem component={Link} to="/admin/funds" button>
               <ListItemIcon style={{paddingLeft: 8}}>
-                <PersonIcon/>
+                <AccountBalanceIcon/>
               </ListItemIcon>
               <ListItemText primary="Funds"/>
             </ListItem>
@@ -312,7 +314,7 @@ function AdminLinks({location}) {
 
   return (
     <div className="admin-links">
-      <div className="sidebar-admin-header">Admin</div>
+      {/* <div className="sidebar-admin-header">Admin</div> */}
       {organization === "allocations" && <div
         className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/investors` ? "sidebar-nav-item-active" : ""}`}>
         <Link to={`/admin/${organization}/investors`}>
@@ -328,18 +330,26 @@ function AdminLinks({location}) {
           <span>Master Filing</span>
         </Link>
       </div>}**/}
-      <div
-        className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/deals` ? "sidebar-nav-item-active" : ""}`}>
-        <Link to={`/admin/${organization}/deals`}>
-          <span>Deals</span>
-        </Link>
+      <List>
+        <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/deals` ? "sidebar-nav-item-active" : ""}`}>
+        <ListItem component={Link} to={`/admin/${organization}/deals`} button>
+        <ListItemIcon style={{paddingLeft: 8}}>
+        <DonutLargeIcon/>
+          </ListItemIcon>
+          <ListItemText primary="Deals"/>
+        </ListItem>
       </div>
-      <div
-        className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/investments` ? "sidebar-nav-item-active" : ""}`}>
-        <Link to={`/admin/${organization}/investments`}>
-          <span>Investments</span>
-        </Link>
+      </List>
+      <List>
+        <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/investments` ? "sidebar-nav-item-active" : ""}`}>
+        <ListItem component={Link} to={`/admin/${organization}/investments`} button>
+        <ListItemIcon style={{paddingLeft: 8}}>
+        <BarChartIcon/>
+          </ListItemIcon>
+          <ListItemText primary="Investments"/>
+        </ListItem>
       </div>
+      </List>
     </div>
   )
 }
