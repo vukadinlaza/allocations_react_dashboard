@@ -5,9 +5,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from "@material-ui/core/Typography";
 import ButtonBase from "@material-ui/core/ButtonBase";
+import {gql} from 'apollo-boost'
 import Hidden from "@material-ui/core/Hidden";
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import {useHistory} from "react-router-dom"
+import Loader from './utils/Loader'
 
 import {
   NavItem,
@@ -18,12 +20,29 @@ import {makeStyles} from '@material-ui/core/styles';
 import IconButton from "@material-ui/core/IconButton";
 import MoreIcon from '@material-ui/icons/MoreVert';
 
+import {useAuth} from '../auth/useAuth'
+
 /***
  *
  * NavBar is the top bar that has the Auth0 profile in it
  *
  **/
 
+const GET_INVESTOR = gql`
+  {
+    investor {
+      _id
+      name
+      admin
+      organizations_admin {
+        _id
+        slug
+        name
+        logo
+      }
+    }
+  }
+`
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -73,6 +92,9 @@ export function Auth0ProfileLoading() {
 export function Auth0Profile({user, logoutWithRedirect}) {
   const [anchorElFunds, setAnchorElFunds] = React.useState(null);
   const [anchorElProfile, setAnchorElProfile] = React.useState(null);
+  const {userProfile} = useAuth(GET_INVESTOR)
+  const {organizations_admin} = userProfile;
+
   const classes = useStyles();
   const history = useHistory();
 
@@ -91,6 +113,8 @@ export function Auth0Profile({user, logoutWithRedirect}) {
   const handleCloseProfile = () => {
     setAnchorElProfile(null);
   };
+
+  if (!userProfile.email) return <div><Loader/></div>
 
   return (
     <div className={classes.root}>
@@ -113,9 +137,13 @@ export function Auth0Profile({user, logoutWithRedirect}) {
         open={Boolean(anchorElFunds)}
         onClose={handleCloseFunds}
       >
-        <MenuItem onClick={handleCloseFunds}>TODO</MenuItem>
-        <MenuItem onClick={handleCloseFunds}>TODO</MenuItem>
-        <MenuItem onClick={handleCloseFunds}>TODO</MenuItem>
+      {organizations_admin.map(org => {
+        return <MenuItem onClick={() => { 
+          history.push(`/admin/${org.slug}`);
+          handleCloseFunds()
+           }}>{org.name}</MenuItem>
+
+      })}
       </Menu>
 
       <ButtonBase onClick={handleClickProfile}>
