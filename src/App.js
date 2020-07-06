@@ -64,7 +64,7 @@ const App = () => {
     if (window._slaask && user) {
       window._slaask.updateContact({email: user.email})
     }
-  }, [window, user])
+  }, [user])
 
   return (
     <ApolloProvider client={client}>
@@ -95,7 +95,7 @@ const App = () => {
           <AdminRoute path="/investors/new" component={InvestorNew} exact/>
           <AdminRoute path="/investor/:id/edit" component={InvestorEdit}/>
           <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact/>
-          <AdminRoute path="/admin/investments/:id/edit" component={InvestmentEdit} exact/>
+          <AdminRoute path="/admin/:organization/investments/:id/edit" component={InvestmentEdit} exact/>
           <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact/>
 
           {/** SuperAdmin **/}

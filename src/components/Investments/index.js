@@ -34,6 +34,7 @@ const GET_INVESTMENTS = gql`
           company_name
           company_description
           date_closed
+          slug
         }
         documents {
           path
@@ -157,7 +158,7 @@ export default function Investments () {
                             : ""
                           } 
                         </TableCell>
-                        <TableCell align="center"><Link to={`/admin/investments/${investment._id}/edit`}>edit</Link></TableCell>
+                        <TableCell align="center"><Link to={`/admin/${organization}/investments/${investment._id}/edit`}>edit</Link></TableCell>
                       </TableRow>
                 ))}
               </TableBody>
