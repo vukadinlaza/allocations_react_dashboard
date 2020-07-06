@@ -91,6 +91,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     maxWidth: 800,
     marginBottom: theme.spacing(4),
+    minHeight: '100%'
   },
   divider: {
     margin: "16px -16px"
@@ -145,26 +146,21 @@ export default function AdminHome() {
             </Button>
           </Paper>
         </Grid>
-
-        <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={6}>
           <Paper className={classes.paper}>
-            <Grid container>
-              <Grid item xs={10}>
-                <Typography variant="h6">
-                  💡 Active Deals: {(active || []).length}
-                </Typography>
-              </Grid>
-              <Grid item xs={2} style={{textAlign: "right"}}>
-                <Button
-                  onClick={() => history.push(`/admin/${organization}/deals`)} className="all-btn"
-                  color="primary"
-                  style={{padding: "3px 4px"}}>View All</Button>
-              </Grid>
-            </Grid>
-
-            <Divider className={classes.divider} style={{marginBottom: -16}}/>
-
-            <Table className={classes.table}>
+                <Grid item xs={10}>
+                  <Typography variant="h6">
+                    💡 Active Deals: {(active || []).length}
+                  </Typography>
+                </Grid>
+                <Grid item xs={2} style={{textAlign: "right"}}>
+                  <Button
+                    onClick={() => history.push(`/admin/${organization}/deals`)} className="all-btn"
+                    color="primary"
+                    style={{padding: "3px 4px"}}>View All</Button>
+          </Grid>
+          <Divider className={classes.divider} style={{marginBottom: -16}}/>
+          <Table className={classes.table}>
               <TableHead>
                 <TableRow>
                   <TableCell>Name</TableCell>
@@ -182,72 +178,73 @@ export default function AdminHome() {
             </Table>
           </Paper>
 
+          </Grid>
+          <Grid item xs={12} sm={6}>
+          <Paper className={classes.paper}>
+          <Grid container>
+            <Grid item xs={10}>
+              <Typography variant="h6">
+                🎉 Closed Deals: {(closed || []).length}
+              </Typography>
+            </Grid>
+            <Grid item xs={2} style={{textAlign: "right"}}>
+              <Button
+                onClick={() => history.push(`/admin/${organization}/deals`)}
+                color="primary"
+                style={{padding: "3px 4px"}}>View All</Button>
+            </Grid>
+          </Grid>
+          <Divider className={classes.divider} style={{marginBottom: -16}}/>
+          <Table>
+            <TableBody>
+              {(closed || []).map(deal => (
+                <TableRow key={deal._id} className="deal-info">
+                  <TableCell className="company-name">{deal.company_name}</TableCell>
+                  <TableCell>${nWithCommas(deal.amount_raised)}</TableCell>
+                  <TableCell><i>closed {formatDate(deal.date_closed)}</i></TableCell>
+                  <TableCell>
+                    <Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+        <Paper className={classes.paper}>
+          <Grid container>
+            <Grid item xs={10}>
+              <Typography variant="h6">
+                💵 Recent Investments: {(closed || []).length}
+              </Typography>
+            </Grid>
+            <Grid item xs={2} style={{textAlign: "right"}}>
+              <Button onClick={() => history.push(`/admin/${organization}/investments`)} className="all-btn"
+                      color="primary"
+                      style={{padding: "3px 4px"}}>
+                View All</Button>
+            </Grid>
+          </Grid>
+
+          <Divider className={classes.divider} style={{marginBottom: -16}}/>
+
+          <Table>
+            <TableBody>
+              {_.take((org.investments || []), 10).filter(i => i.status !== "invited").map(investment => (
+                <TableRow key={investment._id}>
+                  <TableCell>{investment.deal.company_name}</TableCell>
+                  <TableCell>{_.get(investment, 'investor.name')}</TableCell>
+                  <TableCell>${nWithCommas(investment.amount)}</TableCell>
+                  <TableCell>{investment.status}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
         </Grid>
       </Grid>
-
-      <Paper className={classes.paper}>
-        <Grid container>
-          <Grid item xs={10}>
-            <Typography variant="h6">
-              🎉 Closed Deals: {(closed || []).length}
-            </Typography>
-          </Grid>
-          <Grid item xs={2} style={{textAlign: "right"}}>
-            <Button
-              onClick={() => history.push(`/admin/${organization}/deals`)}
-              color="primary"
-              style={{padding: "3px 4px"}}>View All</Button>
-          </Grid>
-        </Grid>
-
-        <Divider className={classes.divider} style={{marginBottom: -16}}/>
-
-        <Table>
-          <TableBody>
-            {(closed || []).map(deal => (
-              <TableRow key={deal._id} className="deal-info">
-                <TableCell className="company-name">{deal.company_name}</TableCell>
-                <TableCell>${nWithCommas(deal.amount_raised)}</TableCell>
-                <TableCell><i>closed {formatDate(deal.date_closed)}</i></TableCell>
-                <TableCell>
-                  <Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
-
-      <Paper className={classes.paper}>
-        <Grid container>
-          <Grid item xs={10}>
-            <Typography variant="h6">
-              💵 Recent Investments: {(closed || []).length}
-            </Typography>
-          </Grid>
-          <Grid item xs={2} style={{textAlign: "right"}}>
-            <Button onClick={() => history.push(`/admin/${organization}/investments`)} className="all-btn"
-                    color="primary"
-                    style={{padding: "3px 4px"}}>
-              View All</Button>
-          </Grid>
-        </Grid>
-
-        <Divider className={classes.divider} style={{marginBottom: -16}}/>
-
-        <Table>
-          <TableBody>
-            {_.take((org.investments || []), 10).filter(i => i.status !== "invited").map(investment => (
-              <TableRow key={investment._id}>
-                <TableCell>{investment.deal.company_name}</TableCell>
-                <TableCell>{_.get(investment, 'investor.name')}</TableCell>
-                <TableCell>${nWithCommas(investment.amount)}</TableCell>
-                <TableCell>{investment.status}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
     </>
   )
 }
