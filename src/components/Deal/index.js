@@ -195,12 +195,35 @@ export function DealParams({deal}) {
 
   return (
     <>
-      <Typography variant="h6">Estimated Closing Date</Typography>
-      <>
-        <span>{deal.date_closed}</span>
-      </>
-      <Typography>Lead</Typography>
-      <span>{deal.deal_lead}</span>
+      <div style={{
+        backgroundColor: "#f7f9fa",
+        height: 44,
+        display: "flex",
+        justifyContent: "space-between",
+        marginTop: 16,
+        textAlign: "left",
+        padding: "10px",
+        borderTop: "1px solid #dfe3e9",
+        borderBottom: "1px solid #dfe3e9"
+      }}>
+        <span>
+        Deal Info
+      </span>
+      </div>
+      <List>
+        <ListItem>
+          <ListItemText
+            primary="Est. Closing Date"
+            secondary={_.upperFirst(deal.date_closed)}
+          />
+        </ListItem>
+        <ListItem>
+          <ListItemText
+            primary="Deal Lead"
+            secondary={deal.deal_lead}
+          />
+        </ListItem>
+      </List>
 
       {show && <>
         {allocationPercent && <div className="allocation">

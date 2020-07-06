@@ -171,7 +171,7 @@ export default function UserHome(props) {
                     <Typography variant="body1" className={classes.lightText}
                                 style={{textAlign: "right", paddingRight: 16}}>
                       Your Allocations account is ready for your use. <br/>
-                      Let's view your investments
+                      Let's view your investments!
                     </Typography>
                   </Hidden>
                   <Button
