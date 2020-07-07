@@ -320,3 +320,22 @@
         }
     }        
 }
+.banner {
+    min-width: 100%;
+    min-height: 1.3rem;
+    font-size: .9rem;
+    margin: .3rem;
+    border-radius: .25rem;
+    padding: .25rem;
+    margin-bottom: .5rem;
+}
+.same-user-warning {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+}
+.bank-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;;
+}

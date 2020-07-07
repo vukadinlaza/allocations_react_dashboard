@@ -204,6 +204,8 @@ function Wire({investment, deal}) {
 
   return (
     <div className="wire" style={{textAlign: "center"}}>
+    <div className="banner same-user-warning">Please ensure to wire from the same entity you have signed from.</div>
+    <div className="banner bank-warning"> The address for the bank account recipient is: 8 The Green, Suite 7105, Dover, Delaware, 19901</div>
       <div className="wire-link">
         <div style={{marginBottom: "15px"}}>
           <FontAwesomeIcon icon={["far", "file-pdf"]}/>
