@@ -63,11 +63,11 @@ function formatData(investments) {
     return acc
   }, {})
 
-  const d = Object.values(grouped).map((d, i) => [d.deal.company_name, 'All', d.amount, d.amount - (i * 5000)])
+  const d = Object.values(grouped).map((d, i) => [d.deal.company_name, 'All', d.amount, d.amount - (i * 5000), d.deal._id])
 
   return [
-    ['Company', 'Group', 'Amount Invested (size)', 'Company Color (color)'],
-    ['All', null, 0, 0]
+    ['Company', 'Group', 'Amount Invested (size)', 'Company Color (color)', 'Deal ID'],
+    ['All', null, 0, 0, null]
   ].concat(d)
 }
 
@@ -145,6 +145,22 @@ export default function UserHome(props) {
   if (!userProfile.email) return <div><Loader/></div>
 
   const total_invested = _.sumBy(userProfile.investments, 'amount') || 0
+  const chartEvents = [
+    {
+      eventName: "select",
+      callback({ chartWrapper }) {
+        const deals = formatData(userProfile.investments)
+        const dealIndex = _.get(chartWrapper.getChart().getSelection(), '[0].row', null);
+        const dealId = _.get(deals[dealIndex + 1], '[4]', [])
+        const dealData = userProfile.investments.find(inv => {
+          return inv.deal._id === dealId
+        })  
+        if(dealData) {
+          history.push(`/deals/${dealData.deal.organization.slug}/${dealData.deal.slug}`)
+        } 
+      }
+    }
+  ];
 
   return (
     <>
@@ -206,8 +222,10 @@ export default function UserHome(props) {
                 <Chart chartType="TreeMap"
                        width="100%"
                        height="200px"
+                       chartEvents={chartEvents}
                        data={formatData(userProfile.investments)}
                        options={chartOptions}/> : null
+                       
               }
             </Paper>
           </Grid>
