@@ -144,45 +144,6 @@
             font-size: 1.3em;
         }
 
-        .document-iframe.hide {
-            display: none;
-        }
-
-        .document-iframe {
-            padding: 10px 20px;
-            position: relative;
-
-            .temp-loader {
-                position: absolute;
-                top: 150px;
-                width: 100%;
-                z-index: 1000;
-            }
-
-            @include xs-only {
-                padding: 0px 0px;
-            }
-
-            .embed-responsive {
-                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-            }
-
-            .iframe-container {
-                overflow: hidden;
-                padding-top: 56.25%;
-                position: relative;
-                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-                iframe {
-                    border: 0;
-                    height: 100%;
-                    left: 0;
-                    position: absolute;
-                    top: 0;
-                    width: 100%;
-                }
-            }        
-        }
-
         .wire {
             .crypto-wire {
                 padding: 10px;
@@ -318,4 +279,44 @@
             }
         }
     }
+}
+
+
+.document-iframe.hide {
+    display: none;
+}
+
+.document-iframe {
+    padding: 10px 20px;
+    position: relative;
+
+    .temp-loader {
+        position: absolute;
+        top: 150px;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    @include xs-only {
+        padding: 0px 0px;
+    }
+
+    .embed-responsive {
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    }
+
+    .iframe-container {
+        overflow: hidden;
+        padding-top: 56.25%;
+        position: relative;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        iframe {
+            border: 0;
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+    }        
 }
