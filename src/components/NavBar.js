@@ -118,11 +118,11 @@ export function Auth0Profile({user, logoutWithRedirect}) {
 
   return (
     <div className={classes.root}>
-      <Hidden smDown>
+      {organizations_admin.length >= 1 && <Hidden smDown>
         <Typography variant="subtitle1" style={{marginRight: 16}}>
           You are a fund manager
         </Typography>
-      </Hidden>
+      </Hidden>}
 
       <Hidden only="xs">
         <Button color="secondary" variant="outlined" aria-controls="simple-menu" aria-haspopup="true"
