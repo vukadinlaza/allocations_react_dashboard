@@ -142,12 +142,11 @@ export default function InvestmentFlow({investment, deal, investor, refetch}) {
         {status === "pledging" && <Pledging investment={investment} investor={investor} deal={deal} refetch={refetch}/>}
         {status === "kyc" && <KYC investor={investor} setStatus={setStatus}/>}
         {status === "onboarded" && <Wire investment={investment} deal={deal}/>}
-
-        {/** Always render Onboarding so that the Docusign loads in... **/}
-        {onboardingLinkType === "docusign" && status === "pledged" &&
-        <Onboarding status={status} investment={investment} deal={deal} investor={investor}/>}
-        {onboardingLinkType === "hellosign" && status === "pledged" &&
-        <HelloSignOnboarding status={status} investment={investment} deal={deal} investor={investor}/>}
+          {/** Always render Onboarding so that the Docusign loads in... **/}
+          {onboardingLinkType === "docusign" &&
+          <Onboarding status={status} investment={investment} deal={deal} investor={investor}/>}
+          {onboardingLinkType === "hellosign" &&
+          <HelloSignOnboarding status={status} investment={investment} deal={deal} investor={investor}/>}
       </>
     </React.Fragment>
   )
@@ -205,9 +204,6 @@ function Wire({investment, deal}) {
 
   return (
     <div className="wire" style={{textAlign: "center"}}>
-      <div>
-        If you would like to wire with crypto contact us on Slack
-      </div>
       <div className="wire-link">
         <div style={{marginBottom: "15px"}}>
           <FontAwesomeIcon icon={["far", "file-pdf"]}/>
@@ -467,7 +463,7 @@ function Onboarding({investment, deal, investor, status}) {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false)
-    }, 5000)
+    }, 2000)
   }, [])
 
   if (!deal.onboarding_link) {
