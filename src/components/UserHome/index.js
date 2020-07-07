@@ -38,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
   },
   lightText: {
     color: "#7f8fa3",
+  },
+  banner: {
+        minWidth: "100%"
   }
 }));
 
@@ -151,7 +154,7 @@ export default function UserHome(props) {
       {/* TODO: Move to NavBar <AdminTile investor={investor}/>*/}
 
       <Grid container spacing={2}>
-
+        {total_invested === 0 ?  <NoInvestmentBanner/> :
         <Grid item xs={12}>
           <Paper className={classes.paper}>
             <Grid container spacing={2} alignItems="center">
@@ -184,9 +187,10 @@ export default function UserHome(props) {
             </Grid>
           </Paper>
         </Grid>
+        }
 
         <>
-          <Grid item sm={12} md={6}>
+          <Grid item xs={12} sm={12} md={6}>
             <Paper className={classes.paper} style={{height: "100%"}}>
               <Typography variant="h6" style={{marginBottom: 16}}>
                 Total Investments
@@ -197,7 +201,7 @@ export default function UserHome(props) {
             </Paper>
           </Grid>
 
-          <Grid item sm={12} md={6}>
+          <Grid item xs={12} sm={12} md={6}>
             <Paper className={classes.paper} style={{height: "100%"}}>
               <Typography variant="h6" style={{marginBottom: 16}}>
                 Portfolio
@@ -212,7 +216,6 @@ export default function UserHome(props) {
             </Paper>
           </Grid>
         </>
-
 
          <>
           <Grid item xs={12} sm={6}>
@@ -348,4 +351,18 @@ function AdminTile({investor}) {
     )
   }
   return null
+}
+
+
+const NoInvestmentBanner = () => {
+  const classes = useStyles();
+  return (
+      <Grid item sm={12} md={6} className={classes.banner}>
+        <Paper className={classes.paper}>
+          <Typography variant="body1" className={classes.lightText}>
+                      Please contact your deal manager or Allocations if you are waiting for a unique link to join a private deal!
+          </Typography>
+        </Paper>
+      </Grid>
+  )
 }
