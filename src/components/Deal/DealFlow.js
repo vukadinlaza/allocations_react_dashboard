@@ -113,11 +113,13 @@ export default function InvestmentFlow({investment, deal, investor, refetch}) {
             </ButtonBase>
           </Grid> */}
 
-          {/**<Grid item xs={12} sm={3}>
-           <ButtonBase onClick={() => setStatus('kyc')}
-           className={`step step-pledge ${status === "kyc" ? "step-active" : ""}`}>KYC</ButtonBase>
-           </Grid>
-           **/}
+           <Grid item xs={12} sm={3}>
+            <ButtonBase className={status === "kyc" ? classes.activeTab : classes.tab}
+                        style={{borderRight: "1px solid #e1e9ec", cursor: approved ? "cursor" : "not-allowed"}}
+                        onClick={() => approved && setStatus('kyc')}>
+              KYC {!approved && <FontAwesomeIcon icon="lock"/>}
+            </ButtonBase>
+          </Grid>
 
           <Grid item xs={12} sm={3}>
             <ButtonBase className={status === "pledged" ? classes.activeTab : classes.tab}
@@ -140,11 +142,12 @@ export default function InvestmentFlow({investment, deal, investor, refetch}) {
       <>
         {status === "invited" && <DataRoom deal={deal}/>}
         {status === "pledging" && <Pledging investment={investment} investor={investor} deal={deal} refetch={refetch}/>}
-        {status === "kyc" && <KYC investor={investor} setStatus={setStatus}/>}
         {status === "onboarded" && <Wire investment={investment} deal={deal}/>}
           {/** Always render Onboarding so that the Docusign loads in... **/}
           {onboardingLinkType === "docusign" &&
           <Onboarding status={status} investment={investment} deal={deal} investor={investor}/>}
+          <KYCDocusign status={status} investment={investment} deal={deal} investor={investor}/>
+          {status === "kyc" && <KYC investor={investor} setStatus={setStatus}/>}
           {onboardingLinkType === "hellosign" &&
           <HelloSignOnboarding status={status} investment={investment} deal={deal} investor={investor}/>}
       </>
@@ -509,6 +512,73 @@ function Onboarding({investment, deal, investor, status}) {
     <div className={status === "pledged" ? "document-iframe" : "document-iframe hide"}>
       {loading && <div className="temp-loader"><Loader/></div>}
       <div className="external-sign-link">
+        <a href={link} target="_blank" rel="noopener noreferrer">
+          <FontAwesomeIcon icon="signature"/> Open Directly
+        </a>
+      </div>
+      <div className="embed-responsive embed-responsive-1by1">
+        <iframe className="embed-responsive-item" title="Wire Instructions" src={link}></iframe>
+      </div>
+    </div>
+  )
+}
+
+
+function KYCDocusign({investment, deal, investor, status}) {
+  const [loading, setLoading] = useState(true)
+  const location = useLocation()
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false)
+    }, 2000)
+  }, [])
+
+  if (!deal.onboarding_link) {
+    return (
+      <div style={{display: status === "kyc" ? "block" : "none"}}>Hang tight! ⌛<br/>Onboarding
+        link coming soon</div>
+    )
+  }
+
+  if (!investor) return <Loader/>
+
+  const params = {
+    Member_Type: _.upperFirst(investor.investor_type),
+    Member_Email: investor.email,
+    "Name 7a634dac-6bba-4543-83c0-2aed22ddd047": investor.signer_full_name,
+    "Country of residence": investor.country,
+    "subscriber name": investor.name
+  }
+
+  const investorStatus = investor.accredited_investor_status
+  switch (investor.investor_type) {
+    case "entity": {
+      params["Accredited Entity"] = investorStatus
+      break
+    }
+    case "individual": {
+      params["Accredited individual"] = investorStatus
+      break
+    }
+    default: {
+      break
+    }
+  }
+
+  let urlParameters = Object.entries(params)
+    .map(e => e.map(encodeURI).join("=")).join('&')
+
+  const link = location.pathname.includes('/public/')
+    ? deal.onboarding_link
+    : `${deal.onboarding_link}&${urlParameters}`
+
+  return (
+    <div className={status === "kyc" ? "document-iframe" : "document-iframe hide"}>
+      {loading && <div className="temp-loader"><Loader/></div>}
+      <div className="external-sign-link">
+
+      YUSSSSS
         <a href={link} target="_blank" rel="noopener noreferrer">
           <FontAwesomeIcon icon="signature"/> Open Directly
         </a>
