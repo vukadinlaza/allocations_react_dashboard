@@ -83,17 +83,6 @@ export default function InvestmentFlow({investment, deal, investor, refetch}) {
   const [status, setStatus] = useState("invited")
   const classes = useStyles();
 
-  useEffect(() => {
-    // if just invited show data room otherwise show pledge page first
-    if (investment) {
-      if (investment.status === "invited") {
-        setStatus("invited")
-      } else {
-        setStatus("pledging")
-      }
-    }
-  }, [investment])
-
   if (!investment) return <Paper style={{padding: "25px"}}><Loader/></Paper>
 
   if (status === "complete") {

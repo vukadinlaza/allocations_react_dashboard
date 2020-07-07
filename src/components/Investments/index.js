@@ -113,7 +113,7 @@ export default function Investments () {
           <div className="investment-stats row">
             <Col sm="6">
               <Paper className="investments-n">
-                Investments: <span>{investments.length}</span>
+                Investments: <span>{showDocs ? investments.length -1 : investments.length}</span>
                 <Button variant="contained"
                   color="secondary">
                   <Link to="/admin/investment/new">Add Investment</Link>
