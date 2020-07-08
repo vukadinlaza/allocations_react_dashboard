@@ -76,6 +76,9 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     borderBottom: "3px solid #25a9df",
     outline: "0 !important",
+  },
+  button: {
+    margin: ".5rem"
   }
 }));
 
@@ -146,8 +149,7 @@ export default function InvestmentFlow({investment, deal, investor, refetch}) {
           {/** Always render Onboarding so that the Docusign loads in... **/}
           {onboardingLinkType === "docusign" &&
           <Onboarding status={status} investment={investment} deal={deal} investor={investor}/>}
-          <KYCDocusign status={status} investment={investment} deal={deal} investor={investor}/>
-          {status === "kyc" && <KYC investor={investor} setStatus={setStatus}/>}
+          {status === 'kyc' && <KYCDocusign status={status} investment={investment} deal={deal} investor={investor}/>}
           {onboardingLinkType === "hellosign" &&
           <HelloSignOnboarding status={status} investment={investment} deal={deal} investor={investor}/>}
       </>
@@ -526,7 +528,36 @@ function Onboarding({investment, deal, investor, status}) {
 
 function KYCDocusign({investment, deal, investor, status}) {
   const [loading, setLoading] = useState(true)
-  const location = useLocation()
+  const [kycData, setKYCData] = useState({})
+  const classes = useStyles()
+
+  const kycDocuments = [
+    {
+    usCitizen: true,
+    formType: 'W-9 Entity',
+    entityType: 'entity',
+    link: 'https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=73701e05-fe58-4571-abf0-0dc3d339cc84&env=na3&acct=97ababd0-ed90-438a-a2c7-7162a7aa3d64'
+    },
+    {
+    usCitizen: true, 
+    formType: 'W-9 Individual',
+    entityType: 'individual',
+    link: 'https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=12e773d4-e5d3-4d06-8983-4b41b3d24f7a&env=na3&acct=97ababd0-ed90-438a-a2c7-7162a7aa3d64'
+    },
+    {
+    usCitizen: false, 
+    entityType: 'individual',
+    formType: 'W-8BEN Individual',
+    link: 'https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=80314990-f85e-4d13-8ecf-ebf0009f694e&env=na3&acct=97ababd0-ed90-438a-a2c7-7162a7aa3d64'
+    },
+    {
+    usCitizen: false, 
+    entityType: 'entity',
+    formType: 'W-8BEN-E Entity',
+    link: 'https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=5fea68a8-6750-4951-888a-c2c6901daf9e&env=na3&acct=97ababd0-ed90-438a-a2c7-7162a7aa3d64'
+    },     
+    ]
+
 
   useEffect(() => {
     setTimeout(() => {
@@ -534,58 +565,73 @@ function KYCDocusign({investment, deal, investor, status}) {
     }, 2000)
   }, [])
 
-  if (!deal.onboarding_link) {
-    return (
-      <div style={{display: status === "kyc" ? "block" : "none"}}>Hang tight! ⌛<br/>Onboarding
-        link coming soon</div>
-    )
-  }
-
   if (!investor) return <Loader/>
 
-  const params = {
-    Member_Type: _.upperFirst(investor.investor_type),
-    Member_Email: investor.email,
-    "Name 7a634dac-6bba-4543-83c0-2aed22ddd047": investor.signer_full_name,
-    "Country of residence": investor.country,
-    "subscriber name": investor.name
-  }
+  const linkData = kycDocuments.find(doc => {
+    return doc.usCitizen === kycData.usCitizen && doc.entityType === kycData.entityType
+  })
 
-  const investorStatus = investor.accredited_investor_status
-  switch (investor.investor_type) {
-    case "entity": {
-      params["Accredited Entity"] = investorStatus
-      break
-    }
-    case "individual": {
-      params["Accredited individual"] = investorStatus
-      break
-    }
-    default: {
-      break
-    }
-  }
-
-  let urlParameters = Object.entries(params)
-    .map(e => e.map(encodeURI).join("=")).join('&')
-
-  const link = location.pathname.includes('/public/')
-    ? deal.onboarding_link
-    : `${deal.onboarding_link}&${urlParameters}`
+  if(!linkData) return <KYCCheck kycData={kycData} setKYCData={setKYCData} />
 
   return (
-    <div className={status === "kyc" ? "document-iframe" : "document-iframe hide"}>
-      {loading && <div className="temp-loader"><Loader/></div>}
-      <div className="external-sign-link">
+    <Paper className={classes.paper}>
+      <div className={status === "kyc" ? "document-iframe" : "document-iframe hide"}>
+        {loading && <div className="temp-loader"><Loader/></div>}
+        <div className="external-sign-link">
 
-      YUSSSSS
-        <a href={link} target="_blank" rel="noopener noreferrer">
-          <FontAwesomeIcon icon="signature"/> Open Directly
-        </a>
+        <Typography variant="h4" align="center" >{linkData.formType}</Typography >
+          <a href={linkData.link} target="_blank" rel="noopener noreferrer">
+            <FontAwesomeIcon icon="signature"/> Open Directly
+          </a>
+        </div>
+        <div className="embed-responsive embed-responsive-1by1">
+          <iframe className="embed-responsive-item" title="Wire Instructions" src={linkData.link}></iframe>
+        </div>
       </div>
-      <div className="embed-responsive embed-responsive-1by1">
-        <iframe className="embed-responsive-item" title="Wire Instructions" src={link}></iframe>
-      </div>
-    </div>
+    </Paper>
   )
 }
+
+const KYCCheck = ({kycData, setKYCData}) => {
+  const classes = useStyles()
+
+  return (
+  <>
+    <Grid container justify="center" className="kyc-check">
+      <Paper className={`paper-container ${classes.paper}`}>
+        {(!kycData.entityType && !kycData.hasOwnProperty('usCitizen')) && <>
+         <Typography variant="subtitle1">
+        Are you a U.S. citizen? 
+        </Typography>
+         <Button variant="contained" size="medium" color="primary" className={classes.button}
+          onClick={() => setKYCData({...kycData, usCitizen: true })}>
+          Yes
+        </Button>
+         <Button variant="contained" size="medium" color="primary" className={classes.button}
+          onClick={() => setKYCData({...kycData, usCitizen: false })}
+         >
+          No
+        </Button> </>}
+
+
+       {kycData.hasOwnProperty('usCitizen') &&  <>
+        <Typography variant="subtitle1">
+        Are you an Entity or Individual investor? 
+        </Typography>
+        <Button variant="contained" size="medium" color="primary" className={classes.button} onClick={() => setKYCData({...kycData, entityType: 'entity' })} >
+          Entity
+        </Button>
+        <Button variant="contained" size="medium" color="primary" className={classes.button} onClick={() => setKYCData({...kycData, entityType: 'individual' })}>
+          Individual
+        </Button>
+          </>
+        }
+
+        {/* <Button variant="contained" color="secondary" size="small" className='reset-button'> Reset </Button> */}
+      </Paper>
+    </Grid>
+  </>
+  )
+}
+
+
