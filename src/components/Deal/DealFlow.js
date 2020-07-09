@@ -266,7 +266,7 @@ function Pledging({investment, deal, refetch, investor}) {
 
   useEffect(() => {
     setAmount(investment.amount || "")
-  }, [])
+  }, [investment.amount])
 
   const updateAmount = e => {
     const val = e.target.value
@@ -431,7 +431,7 @@ function PledgesViz({deal}) {
         }
       }
     })
-  }, [deal])
+  }, [deal, pledges])
 
   if (!pledges || pledges.length === 0) {
     return (
@@ -572,7 +572,9 @@ function KYCDocusign({investment, deal, investor, status}) {
   const linkData = kycDocuments.find(doc => {
     return doc.usCitizen === kycData.usCitizen && doc.entityType === kycData.entityType
   })
-  const kycDoc = investor.documents.find(d => d.documentName && (d.documentName.includes('W8') || d.documentName.includes('W9')))
+
+  const docs =  _.get(investor, 'documents') || []
+  const kycDoc = docs.find(d => d.documentName && (d.documentName.includes('W8') || d.documentName.includes('W9')))
 
   if(kycDoc) return (
     <Paper className={classes.paper}>
