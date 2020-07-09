@@ -266,7 +266,7 @@ function Pledging({investment, deal, refetch, investor}) {
 
   useEffect(() => {
     setAmount(investment.amount || "")
-  }, [investment.amount])
+  }, [])
 
   const updateAmount = e => {
     const val = e.target.value
@@ -431,7 +431,7 @@ function PledgesViz({deal}) {
         }
       }
     })
-  }, [deal, pledges])
+  }, [deal])
 
   if (!pledges || pledges.length === 0) {
     return (
