@@ -573,6 +573,17 @@ function KYCDocusign({investment, deal, investor, status}) {
     return doc.usCitizen === kycData.usCitizen && doc.entityType === kycData.entityType
   })
 
+  const docs =  _.get(investor, 'documents') || []
+  const kycDoc = docs.find(d => d.documentName && (d.documentName.includes('W8') || d.documentName.includes('W9')))
+
+  if(kycDoc) return (
+    <Paper className={classes.paper}>
+      <Typography variant="subtitle1">
+        We already have a W8/W9 document on file for you.
+      </Typography>
+    </Paper>)
+
+
   if(!linkData) return <KYCCheck kycData={kycData} setKYCData={setKYCData} />
 
   return (

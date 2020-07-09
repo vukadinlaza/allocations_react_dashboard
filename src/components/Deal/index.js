@@ -36,6 +36,7 @@ export const GET_INVESTOR_DEAL = gql`
       signer_full_name
       accredited_investor_status
       email
+      documents
       invitedDeal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
         _id
         approved
