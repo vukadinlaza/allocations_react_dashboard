@@ -223,22 +223,28 @@ export function DealParams({deal}) {
             secondary={deal.deal_lead}
           />
         </ListItem>
-      </List>
 
       {show && <>
-        {allocationPercent && <div className="allocation">
-          <span>Allocation</span>
-          <span>{allocationPercent}%</span>
-        </div>}
-        {dealParams.totalCarry && <div className="total-carry">
-          <span>Total Carry</span>
-          <span>{dealParams.totalCarry}%</span>
-        </div>}
-        {dealParams.minimumInvestment && <div className="min-investment">
-          <span>Min Investment</span>
-          <span>${nWithCommas(dealParams.minimumInvestment)}</span>
-        </div>}
+        {dealParams.allocation && <ListItem>
+          <ListItemText
+            primary="Allocation"
+            secondary={dealParams.allocation + '%'}
+          />
+        </ListItem>}
+        {dealParams.totalCarry && <ListItem>
+          <ListItemText
+            primary="Total Carry"
+            secondary={dealParams.totalCarry + '%'}
+          />
+        </ListItem>}
+        {dealParams.minimumInvestment && <ListItem>
+          <ListItemText
+            primary="Min Investment"
+            secondary={'$' + nWithCommas(dealParams.minimumInvestment)}
+          />
+        </ListItem>}
       </>}
+      </List>
     </>
   )
 }
