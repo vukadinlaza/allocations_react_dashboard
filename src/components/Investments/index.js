@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { useParams, Link } from 'react-router-dom';
 import { gql } from 'apollo-boost'
 import { useLazyQuery } from '@apollo/react-hooks';
-import { useAuth0 } from "../../react-auth0-spa";
+import { useAuth } from "../../auth/useAuth";
 import { Row, Col } from 'reactstrap'
 import { nWithCommas, formatDate } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -90,12 +90,12 @@ export default function Investments () {
   const { organization } = useParams()
   const [showDocs, setShowDocs] = useState(null)
 
-  const { user } = useAuth0()
+  const { userProfile } = useAuth()
   const [getInvestments, { data, error }] = useLazyQuery(GET_INVESTMENTS)
 
   useEffect(() => {
-    if (user && user.email) getInvestments({ variables: { slug: organization } })
-  }, [user])
+    if (userProfile && userProfile.email) getInvestments({ variables: { slug: organization } })
+  }, [userProfile])
 
   if (error) return <div>{error.message}</div>
 

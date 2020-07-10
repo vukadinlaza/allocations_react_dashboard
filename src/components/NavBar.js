@@ -15,7 +15,6 @@ import {
   NavItem,
   UncontrolledDropdown,
 } from "reactstrap";
-import {useAuth0} from "../react-auth0-spa";
 import {makeStyles} from '@material-ui/core/styles';
 import IconButton from "@material-ui/core/IconButton";
 import MoreIcon from '@material-ui/icons/MoreVert';
@@ -27,22 +26,6 @@ import {useAuth} from '../auth/useAuth'
  * NavBar is the top bar that has the Auth0 profile in it
  *
  **/
-
-const GET_INVESTOR = gql`
-  {
-    investor {
-      _id
-      name
-      admin
-      organizations_admin {
-        _id
-        slug
-        name
-        logo
-      }
-    }
-  }
-`
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,12 +42,24 @@ const NavBar = () => {
 }
 
 function LoginOrProfile() {
-  const {loading, user, isAuthenticated, loginWithRedirect, logout} = useAuth0();
+  const {
+    loading,
+    userProfile,
+    loginWithRedirect,
+    logout,
+  } = useAuth();
   const logoutWithRedirect = () => logout({returnTo: process.env.REACT_APP_URL,});
 
   if (loading) return <Auth0ProfileLoading/>
 
-  if (isAuthenticated) return <Auth0Profile user={user} logoutWithRedirect={logoutWithRedirect}/>
+  if (userProfile.email) {
+    return (
+      <Auth0Profile
+        user={userProfile}
+        logoutWithRedirect={logoutWithRedirect}
+      />
+    )
+  }
 
   // not signed in - show login
   return (
@@ -92,7 +87,7 @@ export function Auth0ProfileLoading() {
 export function Auth0Profile({user, logoutWithRedirect}) {
   const [anchorElFunds, setAnchorElFunds] = React.useState(null);
   const [anchorElProfile, setAnchorElProfile] = React.useState(null);
-  const {userProfile} = useAuth(GET_INVESTOR)
+  const {userProfile} = useAuth()
   const {organizations_admin} = userProfile;
 
   const classes = useStyles();
@@ -154,7 +149,7 @@ export function Auth0Profile({user, logoutWithRedirect}) {
 
       <ButtonBase onClick={handleClickProfile}>
         <Hidden only="xs">
-          <Avatar src={user.picture} alt="Profile"/> <KeyboardArrowDownIcon/>
+          <Avatar src={userProfile.picture} alt="Profile"/> <KeyboardArrowDownIcon/>
         </Hidden>
         <Hidden smUp>
           <IconButton>

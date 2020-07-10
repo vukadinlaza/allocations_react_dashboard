@@ -5,7 +5,7 @@ import BN from 'bignumber.js'
 import {gql} from 'apollo-boost'
 import {useParams, useHistory, Link, useLocation} from 'react-router-dom'
 import {useLazyQuery, useMutation} from '@apollo/react-hooks';
-import {useAuth0} from "../../react-auth0-spa";
+import {useAuth} from "../../auth/useAuth";
 import {nWithCommas} from '../../utils/numbers'
 import {
   Paper,
@@ -81,24 +81,22 @@ export const CREATE_INVESTMENT = gql`
     }
   }
 `
-
-export const legacySlugMap = {
-  Xplore: "xplore",
-  Swarm: "swarm",
-  Volumetric: "volumetric",
-  Focusmate: "focusmate",
-  "Focusmate SPV": "focusmate-spv",
-  'volumetric-spv%20seed%20round': "volumetric-spv-seed-round"
-}
-
-const {NODE_ENV} = process.env
+// TODO: Change the slug in the DB if needed
+// export const legacySlugMap = {
+//   Xplore: "xplore",
+//   Swarm: "swarm",
+//   Volumetric: "volumetric",
+//   Focusmate: "focusmate",
+//   "Focusmate SPV": "focusmate-spv",
+//   'volumetric-spv%20seed%20round': "volumetric-spv-seed-round"
+// }
 
 export default function Deal() {
   const mobile = useMediaQuery('(max-width:1200px)');
   const {organization, deal_slug} = useParams()
   const location = useLocation()
   const history = useHistory()
-  const {user, isAuthenticated, loading, loginWithRedirect, auth0Client} = useAuth0()
+  const {userProfile, isAuthenticated, loading } = useAuth()
   const [getDeal, {data, error, refetch, called}] = useLazyQuery(GET_INVESTOR_DEAL)
   const [createInvestment] = useMutation(CREATE_INVESTMENT,
     {
@@ -110,25 +108,23 @@ export default function Deal() {
   )
 
   useEffect(() => {
-    if (auth0Client && !isAuthenticated) {
-      loginWithRedirect({appState: {targetUrl: location.pathname}, initialScreen: 'signIn'})
-    }
-  }, [auth0Client, isAuthenticated])
-
-  useEffect(() => {
     if (!loading && !called && isAuthenticated) {
-      const _deal_slug = legacySlugMap[deal_slug] || deal_slug
-      getDeal({variables: {deal_slug: _deal_slug, fund_slug: organization || "allocations"}})
+      getDeal({
+        variables: {
+          deal_slug: deal_slug,
+          fund_slug: organization || "allocations"
+        }
+      })
     }
   }, [isAuthenticated, loading, called])
 
-  useEffect(() => {
-    if (data && NODE_ENV !== "test") window._slaask.updateContact({name: data.investor.name})
-  }, [data])
 
   useEffect(() => {
-    if (data && !data.investor.invitedDeal.investment) {
-      const investment = {deal_id: data.investor.invitedDeal._id, user_id: data.investor._id}
+    if (data && data.investor.invitedDeal.investment) {
+      const investment = {
+        deal_id: data.investor.invitedDeal._id,
+        user_id: data.investor._id,
+      }
       createInvestment({variables: {investment}})
     }
   }, [data])
@@ -143,16 +139,14 @@ export default function Deal() {
       }
 
       if (error.message === "GraphQL error: REDIRECT") return history.push(`/`)
-      if (user) refetch()
+      if (userProfile.email) refetch()
     }
-  }, [error, user])
+  }, [error, userProfile])
 
   if (!data) return <Loader/>
 
   const {investor, investor: {invitedDeal: deal}} = data
   const {investment} = deal
-
-  console.log("APPROVED?", deal.approved)
 
   return (
     <>

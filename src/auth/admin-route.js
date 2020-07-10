@@ -13,24 +13,9 @@ import Loader from '../components/utils/Loader'
  *
  **/
 
-const GET_INVESTOR = gql`
-  {
-    investor {
-      _id
-      name
-      admin
-      organizations_admin {
-        _id
-        slug
-        name
-        logo
-      }
-    }
-  }
-`
 
 export default function AdminRoute ({ component, ...rest }) {
-  const {userProfile} = useAuth(GET_INVESTOR);
+  const {userProfile} = useAuth();
 
   if (!userProfile.email) return <div><Loader/></div>
 

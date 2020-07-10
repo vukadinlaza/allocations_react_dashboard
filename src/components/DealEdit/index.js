@@ -175,27 +175,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const GET_INVESTOR = gql`
-  {
-    investor {
-      _id
-      name
-      admin
-      organizations_admin {
-        _id
-        slug
-        name
-        logo
-      }
-    }
-  }
-`
-
 
 export default function DealEdit() {
   const history = useHistory();
   const classes = useStyles();
-  const {userProfile} = useAuth(GET_INVESTOR);
+  const {userProfile} = useAuth();
   const {id, organization} = useParams();
   const [errorMessage, setErrorMessage] = useState(null);
   const [deal, setDeal] = useSimpleReducer({

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { gql } from 'apollo-boost'
 import { Row, Col } from 'reactstrap'
-import { useParams, useHistory } from 'react-router-dom'
-import { useAuth0 } from '../../react-auth0-spa'
-import { useLazyQuery, useMutation } from '@apollo/react-hooks'
+import { useHistory } from 'react-router-dom'
+import { useAuth } from '../../auth/useAuth'
+import { useMutation } from '@apollo/react-hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Paper, Button } from '@material-ui/core'
 
@@ -49,22 +49,15 @@ const DELETE_INVESTOR = gql`
 `
 
 export default function InvestorEdit () {
-  const params = useParams()
   const [formStatus, setFormStatus] = useState("edit")
-  const { user } = useAuth0()
+  const { userProfile, refetch } = useAuth(GET_INVESTOR)
   const [investor, setInvestor] = useState(null)
-  const [getInvestor, { data, refetch }] = useLazyQuery(GET_INVESTOR)
 
   useEffect(() => {
-    if (user && user.email) getInvestor({ variables: { id: params.id }})
-  }, [user])
-
-  useEffect(() => {
-    if (data) {
-      const {__typename, ...rest} = data.investor
-      setInvestor(rest)
+    if (userProfile.email) {
+      setInvestor(userProfile)
     }
-  }, [data])
+  }, [userProfile])
 
   const icon = formStatus === "loading" 
     ? "circle-notch" 
