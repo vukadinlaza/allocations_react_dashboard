@@ -2,6 +2,27 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth0 } from "../react-auth0-spa";
 import { useLazyQuery } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost'
+
+const {NODE_ENV} = process.env
+
+const GET_INVESTOR = gql`
+  {
+    investor {
+      _id
+      email
+      first_name
+      last_name
+      admin
+      organizations_admin {
+        _id
+        slug
+        name
+        logo
+      }
+    }
+  }
+`
 
 /***
  *
@@ -11,10 +32,17 @@ import { useLazyQuery } from '@apollo/react-hooks';
  *
  **/
 
-export function useAuth (QUERY) {
+export function useAuth (QUERY=GET_INVESTOR) {
   const params = useParams()
   const adminView = params && params.id
-  const { user, isAuthenticated, loading } = useAuth0()
+  const {
+    loading,
+    user,
+    isAuthenticated,
+    loginWithRedirect,
+    logout,
+    auth0Client,
+  } = useAuth0();
   const [getInvestor, { data, error, called, refetch }] = useLazyQuery(QUERY)
   const [userProfile, setUserProfile] = useState({})
 
@@ -26,10 +54,15 @@ export function useAuth (QUERY) {
 
   useEffect(() => {
     if (data) {
-      if (window.__slaask) {
-        window._slaask.updateContact({name: data.investor.name})
+      if (window._slaask && NODE_ENV === 'production') {
+        window._slaask.updateContact({
+          name: data.investor.first_name + ' ' + data.investor.last_name,
+          email: user.email,
+        })
       }
-      setUserProfile({ ...user, ...data.investor, })
+
+      const {__typename, ...rest} = data.investor
+      setUserProfile({ ...user, ...rest, })
     }
   }, [data])
 
@@ -43,5 +76,10 @@ export function useAuth (QUERY) {
     refetch,
     params,
     adminView,
+    loading,
+    isAuthenticated,
+    logout,
+    loginWithRedirect,
+    auth0Client,
   }
 }

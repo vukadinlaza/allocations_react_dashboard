@@ -16,24 +16,9 @@ import {useHistory} from "react-router-dom"
  *
  **/
 
-const GET_INVESTOR = gql`
-  {
-    investor {
-      _id
-      name
-      admin
-      organizations_admin {
-        _id
-        slug
-        name
-        logo
-      }
-    }
-  }
-`
 
 export default function Funds() {
-  const {userProfile, error} = useAuth(GET_INVESTOR)
+  const {userProfile} = useAuth()
   const history = useHistory()
 
   if (!userProfile.email) return <div><Loader/></div>

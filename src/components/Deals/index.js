@@ -50,25 +50,10 @@ const GET_DEALS = gql`
   }
 `
 
-const GET_INVESTOR = gql`
-  {
-    investor {
-      _id
-      name
-      admin
-      organizations_admin {
-        _id
-        slug
-        name
-        logo
-      }
-    }
-  }
-`
 
 export default function Deals () {
   const { organization } = useParams()
-  const { userProfile } = useAuth(GET_INVESTOR)
+  const { userProfile } = useAuth()
   const [getDeals, { data, error }] = useLazyQuery(GET_DEALS, { variables: { slug: organization }})
   const [capitalAccount, toggleCapitalAccount] = useReducer(
     (acc, _id) => {

@@ -1,5 +1,11 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import {Redirect, Route, Switch} from "react-router-dom";
+import {ApolloProvider} from '@apollo/react-hooks';
+
+import {client} from './apollo-client';
+
+import AdminRoute from "./auth/admin-route"
+import PrivateRoute from "./components/PrivateRoute";
 
 import Faq from "./components/Faq";
 import Deal from "./components/Deal";
@@ -18,6 +24,9 @@ import InvestmentNew from './components/InvestmentNew';
 import InvestmentEdit from './components/InvestmentEdit';
 import UserInvestments from './components/UserInvestments';
 import FreeSPVOnboarding from './components/FreeSPVOnboarding';
+import Profile from './components/Profile';
+import OrganizationNew from './components/OrganizationNew'
+import OrganizationMembers from './components/OrganizationMembers'
 
 // superadmin
 import SuperAdminManager from './components/superadmin/Manager'
@@ -33,18 +42,6 @@ import AllocationsX from './allocationsX/Home';
 import DealExchange from './allocationsX/DealExchange';
 import AdminExchangeOverview from './allocationsX/AdminOverview';
 
-import Profile from './components/Profile';
-import OrganizationNew from './components/OrganizationNew'
-import OrganizationMembers from './components/OrganizationMembers'
-
-import {useAuth0} from "./react-auth0-spa"
-import {ApolloProvider} from '@apollo/react-hooks';
-
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import AdminRoute from "./auth/admin-route"
-import PrivateRoute from "./components/PrivateRoute";
-import {client} from './apollo-client';
-
 import "./App.scss";
 import "./utils/initFontAwesome"
 
@@ -56,16 +53,6 @@ import "./utils/initFontAwesome"
  **/
 
 const App = () => {
-  // currently only effects small screens
-  const {user} = useAuth0()
-  const [showSidebar, setShowSidebar] = useState(false)
-
-  useEffect(() => {
-    if (window._slaask && user) {
-      window._slaask.updateContact({email: user.email})
-    }
-  }, [user])
-
   return (
     <ApolloProvider client={client}>
       {/* Sidebar should handle openState, not App.js */}
@@ -82,8 +69,8 @@ const App = () => {
 
           {/** Deals **/}
           <Redirect from={`/public/:organization/deals/:deal_slug`} to="/deals/:deal_slug"/>
-          <Route path="/deals/:deal_slug" exact><Deal/></Route>
-          <PrivateRoute path="/deals/:organization/:deal_slug"  component={Deal} exact/>
+          <PrivateRoute path="/deals/:deal_slug" component={Deal} exact/>
+          <PrivateRoute path="/deals/:organization/:deal_slug" component={Deal} exact/>
 
           {/** AllocationsX **/}
           <PrivateRoute path="/exchange" component={AllocationsX} exact/>
