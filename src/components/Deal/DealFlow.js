@@ -23,7 +23,7 @@ import {
 import ReactHtmlParser from 'react-html-parser';
 import Chart from 'chart.js'
 import classNames from 'classnames'
-import KYC from '../forms/KYC'
+import DocusignKYCEmbeddedForm from '../forms/w8W9'
 import {makeStyles} from "@material-ui/core/styles";
 
 /***
@@ -85,6 +85,7 @@ const useStyles = makeStyles((theme) => ({
 export default function InvestmentFlow({investment, deal, investor, refetch}) {
   const [status, setStatus] = useState("invited")
   const classes = useStyles();
+  console.log('DFDFDSF', investment)
 
   if (!investment) return <Paper style={{padding: "25px"}}><Loader/></Paper>
 
@@ -108,18 +109,18 @@ export default function InvestmentFlow({investment, deal, investor, refetch}) {
               Data Room
             </ButtonBase>
           </Grid>
-          {/* <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={3}>
             <ButtonBase className={status === "pledging" ? classes.activeTab : classes.tab}
                         style={{borderRight: "1px solid #e1e9ec"}}
                         onClick={() => setStatus('pledging')}>
               Pledge
             </ButtonBase>
-          </Grid> */}
+          </Grid>
 
            <Grid item xs={12} sm={3}>
             <ButtonBase className={status === "kyc" ? classes.activeTab : classes.tab}
-                        style={{borderRight: "1px solid #e1e9ec", cursor: approved ? "cursor" : "not-allowed"}}
-                        onClick={() => approved && setStatus('kyc')}>
+                        style={{borderRight: "1px solid #e1e9ec", cursor: !approved ? "cursor" : "not-allowed"}}
+                        onClick={() => !approved && setStatus('kyc')}>
               KYC {!approved && <FontAwesomeIcon icon="lock"/>}
             </ButtonBase>
           </Grid>
@@ -266,7 +267,7 @@ function Pledging({investment, deal, refetch, investor}) {
 
   useEffect(() => {
     setAmount(investment.amount || "")
-  }, [])
+  }, [investment.amount])
 
   const updateAmount = e => {
     const val = e.target.value
@@ -431,7 +432,7 @@ function PledgesViz({deal}) {
         }
       }
     })
-  }, [deal])
+  }, [deal, pledges])
 
   if (!pledges || pledges.length === 0) {
     return (
@@ -531,35 +532,8 @@ function Onboarding({investment, deal, investor, status}) {
 function KYCDocusign({investment, deal, investor, status}) {
   const [loading, setLoading] = useState(true)
   const [kycData, setKYCData] = useState({})
+  const [link, setLink] = useState()
   const classes = useStyles()
-
-  const kycDocuments = [
-    {
-    usCitizen: true,
-    formType: 'W-9 Entity',
-    entityType: 'entity',
-    link: 'https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=73701e05-fe58-4571-abf0-0dc3d339cc84&env=na3&acct=97ababd0-ed90-438a-a2c7-7162a7aa3d64'
-    },
-    {
-    usCitizen: true, 
-    formType: 'W-9 Individual',
-    entityType: 'individual',
-    link: 'https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=12e773d4-e5d3-4d06-8983-4b41b3d24f7a&env=na3&acct=97ababd0-ed90-438a-a2c7-7162a7aa3d64'
-    },
-    {
-    usCitizen: false, 
-    entityType: 'individual',
-    formType: 'W-8BEN Individual',
-    link: 'https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=80314990-f85e-4d13-8ecf-ebf0009f694e&env=na3&acct=97ababd0-ed90-438a-a2c7-7162a7aa3d64'
-    },
-    {
-    usCitizen: false, 
-    entityType: 'entity',
-    formType: 'W-8BEN-E Entity',
-    link: 'https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=5fea68a8-6750-4951-888a-c2c6901daf9e&env=na3&acct=97ababd0-ed90-438a-a2c7-7162a7aa3d64'
-    },     
-    ]
-
 
   useEffect(() => {
     setTimeout(() => {
@@ -568,13 +542,12 @@ function KYCDocusign({investment, deal, investor, status}) {
   }, [])
 
   if (!investor) return <Loader/>
-
-  const linkData = kycDocuments.find(doc => {
-    return doc.usCitizen === kycData.usCitizen && doc.entityType === kycData.entityType
-  })
+  console.log(investor)
 
   const docs =  _.get(investor, 'documents') || []
   const kycDoc = docs.find(d => d.documentName && (d.documentName.includes('W8') || d.documentName.includes('W9')))
+
+
 
   if(kycDoc) return (
     <Paper className={classes.paper}>
@@ -583,8 +556,10 @@ function KYCDocusign({investment, deal, investor, status}) {
       </Typography>
     </Paper>)
 
+  console.log('LINK MFER', link)
+  if(!link) return <DocusignKYCEmbeddedForm setLink={setLink}/>
 
-  if(!linkData) return <KYCCheck kycData={kycData} setKYCData={setKYCData} />
+
 
   return (
     <Paper className={classes.paper}>
@@ -592,13 +567,13 @@ function KYCDocusign({investment, deal, investor, status}) {
         {loading && <div className="temp-loader"><Loader/></div>}
         <div className="external-sign-link">
 
-        <Typography variant="h4" align="center" >{linkData.formType}</Typography >
-          <a href={linkData.link} target="_blank" rel="noopener noreferrer">
+        <Typography variant="h4" align="center" >Some Document Link</Typography >
+          <a href={link} target="_blank" rel="noopener noreferrer">
             <FontAwesomeIcon icon="signature"/> Open Directly
           </a>
         </div>
         <div className="embed-responsive embed-responsive-1by1">
-          <iframe className="embed-responsive-item" title="Wire Instructions" src={linkData.link}></iframe>
+          <iframe className="embed-responsive-item" title="Wire Instructions" src={link}></iframe>
         </div>
       </div>
     </Paper>
