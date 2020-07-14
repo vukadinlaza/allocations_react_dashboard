@@ -97,7 +97,7 @@ export default function InvestmentFlow({investment, deal, investor, refetch}) {
 
   return (
     <React.Fragment>
-      <InvestmentOverview investment={investment}/>
+      {/* <InvestmentOverview investment={investment}/> */}
 
       <div className={classes.tabs}>
         <Grid container justify="center">
