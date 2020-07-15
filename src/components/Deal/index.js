@@ -120,7 +120,7 @@ export default function Deal() {
 
 
   useEffect(() => {
-    if (data && data.investor.invitedDeal.investment) {
+    if (data && !data.investor.invitedDeal.investment) {
       const investment = {
         deal_id: data.investor.invitedDeal._id,
         user_id: data.investor._id,
@@ -144,6 +144,7 @@ export default function Deal() {
   }, [error, userProfile])
 
   if (!data) return <Loader/>
+  console.log(data)
 
   const {investor, investor: {invitedDeal: deal}} = data
   const {investment} = deal
