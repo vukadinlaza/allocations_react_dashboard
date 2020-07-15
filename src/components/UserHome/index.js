@@ -66,7 +66,19 @@ function formatData(investments) {
     return acc
   }, {})
 
-  const d = Object.values(grouped).map((d, i) => [d.deal.company_name, 'All', d.amount, d.amount - (i * 5000), d.deal._id])
+  const nameChecker = {}
+
+  const d = Object.values(grouped).map((d, i) => {
+    const dealName = d.deal.company_name
+    if (nameChecker[dealName]) {
+      nameChecker[dealName] += 1
+    } else {
+      nameChecker[dealName] = 1
+    }
+
+    const displayName = nameChecker[dealName] === 1 ? dealName : dealName + nameChecker[dealName]
+    return [displayName, 'All', d.amount, d.amount - (i * 5000), d.deal._id]
+  })
 
   return [
     ['Company', 'Group', 'Amount Invested (size)', 'Company Color (color)', 'Deal ID'],
@@ -229,7 +241,6 @@ export default function UserHome(props) {
                        chartEvents={chartEvents}
                        data={formatData(userProfile.investments)}
                        options={chartOptions}/> : null
-                       
               }
             </Paper>
           </Grid>
