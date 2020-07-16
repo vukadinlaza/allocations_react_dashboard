@@ -23,7 +23,7 @@ import {
 import ReactHtmlParser from 'react-html-parser';
 import Chart from 'chart.js'
 import classNames from 'classnames'
-import DocusignKYCEmbeddedForm from '../forms/w8W9'
+import DocusignKYCEmbeddedForm from '../forms/kycTab'
 import {makeStyles} from "@material-ui/core/styles";
 
 /***
@@ -120,7 +120,7 @@ export default function InvestmentFlow({investment, deal, investor, refetch}) {
             <ButtonBase className={status === "kyc" ? classes.activeTab : classes.tab}
                         style={{borderRight: "1px solid #e1e9ec", cursor: approved ? "cursor" : "not-allowed"}}
                         onClick={() => approved && setStatus('kyc')}>
-              KYC {approved && <FontAwesomeIcon icon="lock"/>}
+              KYC {!approved && <FontAwesomeIcon icon="lock"/>}
             </ButtonBase>
           </Grid>
 
@@ -541,8 +541,6 @@ function KYCDocusign({investment, deal, investor, status}) {
   }, [])
 
   if (!investor) return <Loader/>
-  console.log(investor)
-
   const docs =  _.get(investor, 'documents') || []
   const kycDoc = docs.find(d => d.documentName && (d.documentName.includes('W8') || d.documentName.includes('W9')))
 
@@ -555,7 +553,6 @@ function KYCDocusign({investment, deal, investor, status}) {
       </Typography>
     </Paper>)
 
-  console.log('LINK MFER', link)
   if(!link) return <DocusignKYCEmbeddedForm setLink={setLink}/>
 
 
