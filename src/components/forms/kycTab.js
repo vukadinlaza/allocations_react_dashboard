@@ -69,7 +69,7 @@ const GET_DOCUSIGN_FORM = gql`
   }
 `
 
-export default function DocusignKYCEmbeddedForm({setLink}) {
+export default function DocusignKYCEmbeddedForm({setLink, deal_slug, org }) {
     const { userProfile } = useAuth(GET_INVESTOR)
     const [investor, setInvestor] = useState({})
     const [getLink, {loading, data }] = useLazyQuery(GET_DOCUSIGN_FORM)
@@ -87,6 +87,7 @@ export default function DocusignKYCEmbeddedForm({setLink}) {
 
 
     const submit = () => {
+      investor.activeInvestment = {deal_slug, org};
         getLink({variables: {investor}})
     }
 
@@ -104,6 +105,7 @@ export default function DocusignKYCEmbeddedForm({setLink}) {
 
 
     if (!userProfile.email) return <Loader/>
+
     if(loading) return( <Paper className={classes.paper}>
 
           <Typography variant="h6">

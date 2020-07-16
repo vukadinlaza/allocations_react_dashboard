@@ -553,7 +553,7 @@ function KYCDocusign({investment, deal, investor, status}) {
       </Typography>
     </Paper>)
 
-  if(!link) return <DocusignKYCEmbeddedForm setLink={setLink}/>
+  if(!link) return <DocusignKYCEmbeddedForm setLink={setLink} deal_slug={deal.deal_slug} org={deal.organization}/>
 
 
 
