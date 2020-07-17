@@ -25,6 +25,8 @@ import {
 import {makeStyles} from "@material-ui/core/styles";
 
 import countries from "country-region-data"
+import MailingAddress from './kyc/mailing-address-form'
+import TaxTreaty from './kyc/tax-treaty-form'
 
 
  const useStyles = makeStyles((theme) => ({
@@ -185,16 +187,41 @@ export default function DocusignKYCEmbeddedForm({setLink, deal_slug, org }) {
                               variant="outlined"/>
                   </Grid>
 
+                  <Grid item xs={12} sm={12} md={6}>
+                  <TextField required
+                              error={errors.includes("ssn_itin")}
+                              style={{width: "100%"}}
+                              value={get(investor, 'ssn_itin') || ""}
+                              onChange={handleChange("ssn_itin")}
+                              label="SSN or ITIN"
+                              variant="outlined"/>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={6}>
+                  <TextField required
+                              error={errors.includes("foreign_tax_number")}
+                              style={{width: "100%"}}
+                              value={get(investor, 'foreign_tax_number') || ""}
+                              onChange={handleChange("foreign_tax_number")}
+                              label="Foreign Tax Number"
+                              variant="outlined"/>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={6}>
+                  <TextField required
+                              error={errors.includes("dob")}
+                              style={{width: "100%"}}
+                              value={get(investor, 'dob') || ""}
+                              onChange={handleChange("dob")}
+                              label="Date Of Birth (MM-DD-YYYY)"
+                              variant="outlined"/>
+                  </Grid>
+
                 </Grid>
 
 
               {/* GENERAL ADDRESS */}
-
-
-
                  <Divider className={classes.divider}/>
-                  <Typography variant="h7">
-                 Permanent Address
+                  <Typography variant="subtitle2">
+                    Permanent Address
                   </Typography>
                  
                  <Grid container spacing={3}>
@@ -235,62 +262,31 @@ export default function DocusignKYCEmbeddedForm({setLink, deal_slug, org }) {
                               label="Zip"
                               variant="outlined"/>
                   </Grid>
+                  <Grid item xs={12} sm={12} md={6}>
+                    <TextField required
+                              error={errors.includes("address_country")}
+                              style={{width: "100%"}}
+                              value={get(investor, 'address_country') || ""}
+                              onChange={handleChange("address_country")}
+                              label="Country"
+                              variant="outlined"/>
+                  </Grid>
             </Grid>
             {/* MAILING */}
 
-             { investor.country !== 'United States' ? <> <Divider className={classes.divider}/>
-                  <Typography variant="h7">
-                 Mailing Address is the same as above 
-                 <Checkbox
-                                  color="primary"
-                                  inputProps={{ 'aria-label': 'secondary checkbox' }}
-                                  onChange={(e) => setInvestor(prev => ({...prev, usePermAddressAsMailing: e.target.checked }))}
-                                />
-                  </Typography>
-                 
-              { !investor.usePermAddressAsMailing && <Grid container spacing={3}>
-                  <Grid item xs={12} sm={12} md={6}>
 
-                  <TextField required
-                              error={errors.includes("mail_street_address")}
-                              style={{width: "100%"}}
-                              value={get(investor, 'mail_street_address') || ""}
-                              onChange={handleChange("mail_street_address")}
-                              label="Street Address"
-                              variant="outlined"/>
-                  </Grid>
-                  <Grid item xs={12} sm={12} md={6}>
-                  <TextField required
-                              error={errors.includes("mail_city")}
-                              style={{width: "100%"}}
-                              value={get(investor, 'mail_city') || ""}
-                              onChange={handleChange("mail_city")}
-                              label="City"
-                              variant="outlined"/>
-                  </Grid>
-                  <Grid item xs={12} sm={12} md={6}>
-                  <TextField required
-                              error={errors.includes("mail_state")}
-                              style={{width: "100%"}}
-                              value={get(investor, 'mail_state') || ""}
-                              onChange={handleChange("mail_state")}
-                              label="State"
-                              variant="outlined"/>
-                  </Grid>
-                  <Grid item xs={12} sm={12} md={6}>
-                    <TextField required
-                              error={errors.includes("mail_zip")}
-                              style={{width: "100%"}}
-                              value={get(investor, 'mail_zip') || ""}
-                              onChange={handleChange("mail_zip")}
-                              label="Zip"
-                              variant="outlined"/>
-                  </Grid>
-            </Grid>}
-            </> : null
-            }
+           {investor.country !== 'United States' && <>
+              <Divider className={classes.divider}/>
+               <MailingAddress investor={investor} setInvestor={setInvestor} handleChange={handleChange} errors={errors} /> 
+            </>}
 
-            <Divider className={classes.divider}/>
+       
+           {investor.country !== 'United States' && <>
+              <Divider className={classes.divider}/>
+              <TaxTreaty investor={investor} setInvestor={setInvestor} handleChange={handleChange} errors={errors} />
+            </>}
+
+          <Divider className={classes.divider}/>
 
             <Button variant="contained"
                     onClick={submit}
