@@ -157,7 +157,7 @@ export default function Deal() {
       <div style={{width: mobile ? "100%" : "calc(100% - 300px)"}}>
         <h2 className="deal-header">{deal.company_name}</h2>
         <h4 className="deal-description">{deal.company_description}</h4>
-        <InvestmentFlow deal={deal}
+        <InvestmentFlow deal={{...deal, deal_slug, organization}}
                         investment={investment}
                         investor={investor}
                         refetch={refetch}/>
