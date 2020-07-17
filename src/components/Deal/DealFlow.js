@@ -108,13 +108,13 @@ export default function InvestmentFlow({investment, deal, investor, refetch}) {
               Data Room
             </ButtonBase>
           </Grid>
-        <Grid item xs={12} sm={3}>
+        {/* <Grid item xs={12} sm={3}>
           <ButtonBase className={status === "pledging" ? classes.activeTab : classes.tab}
                       style={{borderRight: "1px solid #e1e9ec"}}
                       onClick={() => setStatus('pledging')}>
             Pledge
           </ButtonBase>
-        </Grid>
+        </Grid> */}
 
           <Grid item xs={12} sm={3}>
             <ButtonBase className={status === "kyc" ? classes.activeTab : classes.tab}
