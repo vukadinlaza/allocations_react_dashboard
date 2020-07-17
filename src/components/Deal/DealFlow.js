@@ -542,7 +542,7 @@ function KYCDocusign({investment, deal, investor, status}) {
 
   if (!investor) return <Loader/>
   const docs =  _.get(investor, 'documents') || []
-  const kycDoc = docs.find(d => d.documentName && (d.documentName.includes('W8') || d.documentName.includes('W9')))
+  const kycDoc = docs.find(d => d.documentName && (d.documentName.includes('W-8') || d.documentName.includes('W-9')))
 
 
 

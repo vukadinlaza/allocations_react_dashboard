@@ -18,6 +18,8 @@ import {
   Typography,
   Checkbox
 } from '@material-ui/core'
+import countries from "country-region-data"
+
 
 
 
@@ -45,6 +47,22 @@ export default function MailingAddress({investor, errors, handleChange, setInves
             { !investor.usePermAddressAsMailing && <Grid container spacing={3}>
 
             {inputs.map(item => {
+              if(item.slug === 'mail_country') {
+                return (
+                   <FormControl required error={errors.includes(item.slug)} variant="outlined" style={{width: "100%"}}>
+                      <InputLabel>Country</InputLabel>
+                      <Select value={investor.mail_country || ""}
+                              onChange={handleChange(item.slug)}
+                              inputProps={{name: item.slug}}>
+                      <MenuItem value=""></MenuItem>
+                      {countries.map(({countryName}) => (
+                          <MenuItem key={countryName} value={countryName}>{countryName}</MenuItem>
+                      ))}
+                      </Select>
+                  </FormControl>
+                )
+              }
+
               return (
                 <Grid item xs={12} sm={12} md={6}>
                 <TextField required

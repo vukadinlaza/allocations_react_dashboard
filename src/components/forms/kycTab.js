@@ -27,6 +27,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import countries from "country-region-data"
 import MailingAddress from './kyc/mailing-address-form'
 import TaxTreaty from './kyc/tax-treaty-form'
+import ExtraWNine from './kyc/w9-extra'
 
 
  const useStyles = makeStyles((theme) => ({
@@ -207,6 +208,7 @@ export default function DocusignKYCEmbeddedForm({setLink, deal_slug, org }) {
                   </Grid>
                   <Grid item xs={12} sm={12} md={6}>
                   <TextField required
+                              type="date"
                               error={errors.includes("dob")}
                               style={{width: "100%"}}
                               value={get(investor, 'dob') || ""}
@@ -263,15 +265,26 @@ export default function DocusignKYCEmbeddedForm({setLink, deal_slug, org }) {
                               variant="outlined"/>
                   </Grid>
                   <Grid item xs={12} sm={12} md={6}>
-                    <TextField required
-                              error={errors.includes("address_country")}
-                              style={{width: "100%"}}
-                              value={get(investor, 'address_country') || ""}
+                   <FormControl required error={errors.includes("address_country")} variant="outlined" style={{width: "100%"}}>
+                      <InputLabel>Mailing Country</InputLabel>
+                      <Select value={investor.address_country || ""}
                               onChange={handleChange("address_country")}
-                              label="Country"
-                              variant="outlined"/>
+                              inputProps={{name: 'address-country'}}>
+                      <MenuItem value=""></MenuItem>
+                      {countries.map(({countryName}) => (
+                          <MenuItem key={countryName} value={countryName}>{countryName}</MenuItem>
+                      ))}
+                      </Select>
+                  </FormControl>
                   </Grid>
             </Grid>
+
+            {investor.country === 'United States' && <> 
+              <Divider className={classes.divider}/>
+              <ExtraWNine investor={investor} setInvestor={setInvestor} handleChange={handleChange} errors={errors} />
+             </>}
+
+
             {/* MAILING */}
 
 
