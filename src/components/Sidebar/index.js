@@ -312,12 +312,22 @@ function AdminLinks({location}) {
   return (
     <div className="admin-links">
       {/* <div className="sidebar-admin-header">Admin</div> */}
-      {organization === "allocations" && <div
+      {/* <div
         className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/investors` ? "sidebar-nav-item-active" : ""}`}>
         <Link to={`/admin/${organization}/investors`}>
           <span>Investors</span>
         </Link>
-      </div>}
+      </div> */}
+      <List>
+        <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/investors` ? "sidebar-nav-item-active" : ""}`}>
+        <ListItem component={Link} to={`/admin/${organization}/investors`} button>
+        <ListItemIcon style={{paddingLeft: 8}}>
+        <PersonIcon/>
+          </ListItemIcon>
+          <ListItemText primary="Investors"/>
+        </ListItem>
+      </div>
+      </List>
       {/**<div className={classNames('sidebar-nav-item', {"sidebar-nav-item-active": showAdministration})}
        onClick={() => setShowAdministration(x => !x)}>
        <span>Administration</span>

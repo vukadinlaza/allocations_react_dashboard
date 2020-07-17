@@ -517,7 +517,7 @@ function Onboarding({investment, deal, investor, status}) {
       {loading && <div className="temp-loader"><Loader/></div>}
       <div className="external-sign-link">
         <a href={link} target="_blank" rel="noopener noreferrer">
-          <FontAwesomeIcon icon="signature"/> Open Directly
+          <h3><FontAwesomeIcon icon="signature"/> Open Directly</h3>
         </a>
       </div>
       <div className="embed-responsive embed-responsive-1by1">
@@ -563,9 +563,9 @@ function KYCDocusign({investment, deal, investor, status}) {
         {loading && <div className="temp-loader"><Loader/></div>}
         <div className="external-sign-link">
 
-        <Typography variant="h4" align="center" >Some Document Link</Typography >
-          <a href={link} target="_blank" rel="noopener noreferrer">
-            <FontAwesomeIcon icon="signature"/> Open Directly
+        <Typography variant="h4" align="center" >{linkData.formType}</Typography >
+          <a href={linkData.link} target="_blank" rel="noopener noreferrer center">
+            <h3><FontAwesomeIcon icon="signature"/> Open Directly </h3>
           </a>
         </div>
         <div className="embed-responsive embed-responsive-1by1">

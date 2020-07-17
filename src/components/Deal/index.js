@@ -68,6 +68,10 @@ export const GET_INVESTOR_DEAL = gql`
           allocation
           totalCarry
           minimumInvestment
+          sign_deadline
+          wire_deadline
+          estimated_setup_costs
+          management_fees
         }
       }
     } 
@@ -234,8 +238,26 @@ export function DealParams({deal}) {
         </ListItem>}
         {dealParams.minimumInvestment && <ListItem>
           <ListItemText
-            primary="Min Investment"
+            primary="Min. Investment"
             secondary={'$' + nWithCommas(dealParams.minimumInvestment)}
+          />
+        </ListItem>}
+        {dealParams.totalCarry && <ListItem>
+          <ListItemText
+            primary="Signing Deadline"
+            secondary={dealParams.sign_deadline}
+          />
+        </ListItem>}
+        {dealParams.totalCarry && <ListItem>
+          <ListItemText
+            primary="Est. Setup Costs"
+            secondary={'$' + dealParams.estimated_setup_costs}
+          />
+        </ListItem>}
+        {dealParams.totalCarry && <ListItem>
+          <ListItemText
+            primary="Management Fees"
+            secondary={'$' + dealParams.management_fees}
           />
         </ListItem>}
       </>}

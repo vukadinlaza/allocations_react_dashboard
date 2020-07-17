@@ -40,7 +40,7 @@ export default function InviteInvestors({deal, refetch}) {
   return (
     <>
       <Typography variant="h5" style={{marginBottom: 16}}>
-        Invited Investors
+        Invites
       </Typography>
 
       {/* <TextField variant="outlined"
