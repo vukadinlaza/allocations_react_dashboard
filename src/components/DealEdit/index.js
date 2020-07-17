@@ -89,8 +89,10 @@ const GET_DEAL = gql`
           allocation
           totalCarry
           minimumInvestment
-          totalManagementFee
-          estimatedSetupCosts
+          sign_deadline
+          wire_deadline
+          estimated_setup_costs
+          management_fees
         }
       }
     }
@@ -122,8 +124,10 @@ const UPDATE_DEAL = gql`
         allocation
         totalCarry
         minimumInvestment
-        totalManagementFee
-        estimatedSetupCosts
+        sign_deadline
+        wire_deadline
+        estimated_setup_costs
+        management_fees
       }
     }
   }
@@ -156,7 +160,11 @@ const dealParamsValidInputs = [
   "minimumInvestment",
   "totalManagementFee",
   "estimatedSetupCosts",
-  "totalRoundSize"
+  "totalRoundSize",        
+  "sign_deadline",
+  "wire_deadline",
+  "estimated_setup_costs",
+  "management_fees"
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -218,10 +226,38 @@ export default function DealEdit() {
               </Typography>
             </Grid>
             <Grid item xs={2} style={{textAlign: "right"}}>
-              <Button onClick={() => history.push(deal.appLink || "#")} variant="contained"
-                      color="primary">view</Button>
+              <Button onClick={() => history.push(deal.appLink || "#")} variant="contained" color="primary">view</Button>
             </Grid>
           </Grid>
+        </Paper>
+
+        <Paper className={classes.paper}>
+          <Grid item xs={10} style={{marginBottom: "1rem"}}>
+              <Typography variant="h5">
+                Data Room
+              </Typography>
+            </Grid>
+            
+            <Grid item xs={12}>
+              <Editor
+                value={deal.memo}
+                apiKey="jlbrhzgo0m2myqdmbhaav8a0971vomza2smty20fpq6fs47j"
+                init={{
+                  height: 350,
+                  menubar: false,
+                  plugins: [
+                    'advlist autolink lists link image charmap print preview anchor',
+                    'searchreplace visualblocks code fullscreen',
+                    'insertdatetime media table paste code help wordcount'
+                  ],
+                  toolbar:
+                    'undo redo | formatselect | bold italic backcolor | \
+                    alignleft aligncenter alignright alignjustify | \
+                    bullist numlist outdent indent | removeformat | help'
+                }}
+                onEditorChange={memo => setDeal({memo})}
+              />
+            </Grid>
 
           <Divider className={classes.divider}/>
 
@@ -252,20 +288,7 @@ export default function DealEdit() {
                          value={deal.date_closed || ""}
                          onChange={e => setDeal({date_closed: e.target.value})}
                          label="Closing Date"
-                         variant="outlined"/>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField style={{width: "100%"}}
-                         value={deal.pledge_link || ""}
-                         onChange={e => setDeal({pledge_link: e.target.value})}
-                         label="Pledge Link"
-                         variant="outlined"/>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField style={{width: "100%"}}
-                         value={deal.onboarding_link || ""}
-                         onChange={e => setDeal({onboarding_link: e.target.value})}
-                         label="Onboarding Link"
+                         type="date"
                          variant="outlined"/>
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -314,12 +337,6 @@ export default function DealEdit() {
                          variant="outlined"/>
             </Grid>
 
-            <Grid item xs={10}>
-              <Typography variant="h5">
-                Deal Parameters
-              </Typography>
-            </Grid>
-
             <Grid item xs={12} sm={6}>
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.totalRoundSize || ""}
@@ -330,7 +347,6 @@ export default function DealEdit() {
                          }}
                          variant="outlined"/>
             </Grid>
-
             <Grid item xs={12} sm={6}>
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.allocation || ""}
@@ -351,6 +367,25 @@ export default function DealEdit() {
                          }}
                          variant="outlined"/>
             </Grid>
+            </Grid>
+
+            <Divider className={classes.divider}/>
+            <Grid container spacing={2}>
+            <Grid item xs={10} style={{marginBottom: "1rem"}}>
+              <Typography variant="h5">
+                Pledge
+              </Typography>
+            </Grid>
+            </Grid>
+            
+            <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField style={{width: "100%"}}
+                         value={deal.pledge_link || ""}
+                         onChange={e => setDeal({pledge_link: e.target.value})}
+                         label="Pledge Link"
+                         variant="outlined"/>
+            </Grid>
             <Grid item xs={12} sm={6}>
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.minimumInvestment || ""}
@@ -361,41 +396,113 @@ export default function DealEdit() {
                          }}
                          variant="outlined"/>
             </Grid>
+            </Grid>
 
-            <Grid item xs={10}>
+            <Divider className={classes.divider}/>
+            <Grid item xs={10} style={{marginBottom: "1rem"}}>
               <Typography variant="h5">
-                Deal Description
+                Sign
+              </Typography>
+            </Grid>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField style={{width: "100%"}}
+                          value={deal.onboarding_link || ""}
+                          onChange={e => setDeal({onboarding_link: e.target.value})}
+                          label="Onboarding Link"
+                          variant="outlined"/>
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField style={{width: "100%"}}
+                          value={deal.dealParams.sign_deadline || ""}
+                          onChange={e => setDeal({dealParams: {...deal.dealParams, sign_deadline: e.target.value}})}
+                          label="Signing Deadline"
+                          type="date"
+                          variant="outlined"/>
+              </Grid>
+            </Grid>
+            
+            <Divider className={classes.divider}/>
+            <Grid container spacing={2}>
+            <Grid item xs={10} style={{marginBottom: "1rem"}}>
+              <Typography variant="h5">
+                Wire
+              </Typography>
+            </Grid>
+            </Grid>
+            
+            <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField style={{width: "100%"}}
+                         value={deal.dealParams.wire_deadline || ""}
+                         onChange={e => setDeal({dealParams:  {...deal.dealParams, wire_deadline: e.target.value}})}
+                         label="Wire Deadline"
+                         type="date"
+                         variant="outlined"/>
+            </Grid>
+            </Grid>
+
+            <Divider className={classes.divider}/>
+
+            <Grid item xs={10} style={{marginBottom: "1rem"}}>
+              <Typography variant="h5">
+                Fees
               </Typography>
             </Grid>
 
-            <Grid item xs={12}>
-              <Editor
-                value={deal.memo}
-                apiKey="jlbrhzgo0m2myqdmbhaav8a0971vomza2smty20fpq6fs47j"
-                init={{
-                  height: 350,
-                  menubar: false,
-                  plugins: [
-                    'advlist autolink lists link image charmap print preview anchor',
-                    'searchreplace visualblocks code fullscreen',
-                    'insertdatetime media table paste code help wordcount'
-                  ],
-                  toolbar:
-                    'undo redo | formatselect | bold italic backcolor | \
-                    alignleft aligncenter alignright alignjustify | \
-                    bullist numlist outdent indent | removeformat | help'
-                }}
-                onEditorChange={memo => setDeal({memo})}
-              />
+            <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField style={{width: "100%"}}
+                         value={deal.dealParams.management_fees || ""}
+                         onChange={e => setDeal({dealParams: {...deal.dealParams, management_fees: e.target.value}})}
+                         label="Managment Fees"
+                         InputProps={{
+                           startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                         }}
+                         variant="outlined"/>
+            </Grid>
+            
+            <Grid item xs={12} sm={6}>
+              <TextField style={{width: "100%"}}
+                         value={deal.dealParams.estimated_setup_costs || ""}
+                         onChange={e => setDeal({dealParams: {...deal.dealParams, estimated_setup_costs: e.target.value}})}
+                         label="Estimated Setup Cost"
+                         InputProps={{
+                           startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                         }}
+                         variant="outlined"/>
+            </Grid>
             </Grid>
 
-            <Grid item xs={10}>
+            <hr/>
+
+            <Grid item xs={12}>
+              <Button disabled={!hasChanges}
+                      variant="contained"
+                      onClick={() => {
+                        updateDeal({
+                          variables: {
+                            deal: {
+                              ..._.pick(deal, validInputs),
+                              dealParams: _.pick(deal.dealParams, dealParamsValidInputs)
+                            }, org: organization
+                          }
+                        })
+                      }}
+                      color="primary">
+                Update Deal
+              </Button>
+            </Grid>
+        </Paper>
+
+        <Paper className={classes.paper} style={{display: "none"}}>
+        <Grid item xs={10}>
               <Typography variant="h5">
                 Exchange Data
               </Typography>
             </Grid>
-
-            <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6}>
               <FormControl variant="outlined" style={{width: "100%"}}>
                 <InputLabel>Exchange Options</InputLabel>
                 <Select value={deal.no_exchange || false}
@@ -417,26 +524,6 @@ export default function DealEdit() {
                          }}
                          variant="outlined"/>
             </Grid>
-
-            <Grid item xs={12}>
-              <Button disabled={!hasChanges}
-                      variant="contained"
-                      onClick={() => {
-                        updateDeal({
-                          variables: {
-                            deal: {
-                              ..._.pick(deal, validInputs),
-                              dealParams: _.pick(deal.dealParams, dealParamsValidInputs)
-                            }, org: organization
-                          }
-                        })
-                      }}
-                      color="primary">
-                Update Deal
-              </Button>
-            </Grid>
-
-          </Grid>
         </Paper>
 
         <Paper className={classes.paper}>
@@ -496,10 +583,11 @@ export default function DealEdit() {
                 </Table>
               </Paper>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              {userProfile.admin && <DeleteDeal deal={deal}/>}
-            </Grid>
           </Grid>
+        </Paper>
+
+        <Paper className={classes.paper}>
+              {userProfile.admin && <DeleteDeal deal={deal}/>}
         </Paper>
       </form>
     </>
@@ -535,7 +623,7 @@ function DataRoom({deal, refetch}) {
     <>
       <Grid item xs={12}>
         <Typography variant="h5">
-          Data Room
+          Wire Instructions
         </Typography>
       </Grid>
 
@@ -801,10 +889,15 @@ function DeleteDeal({deal}) {
   }
 
   return (
-    <div className="danger-zone DeleteDeal">
-      <div>Danger Zone</div>
-      <hr/>
-      <Button onClick={submit} variant="contained" color="secondary">DELETE DEAL</Button>
-    </div>
+            <Grid container className="danger-zone DeleteDeal">
+              <Grid item xs={10}>
+                <Typography variant="h5">
+                  Danger Zone - Delete Deal
+                </Typography>
+              </Grid>
+              <Grid item xs={2} style={{textAlign: "right"}}>
+                <Button onClick={submit} variant="contained" color="secondary" style={{width: "100%"}} >YES DELETE</Button>
+              </Grid>
+            </Grid>
   )
 }

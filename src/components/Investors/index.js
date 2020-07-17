@@ -58,6 +58,8 @@ export default function Investments () {
 
   if (!data) return <div><Loader /></div>
 
+  console.log(data)
+  
   const { organization: { investors } } = data
   return (
     <div className="Investors">
