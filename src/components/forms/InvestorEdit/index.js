@@ -199,7 +199,7 @@ export default function InvestorEditForm({investor, setInvestor, actionText, ico
             KYC
           </Typography>
           <Typography variant="subtitle2">
-            We require the following documents:
+            Optional information:
           </Typography>
 
           <Divider className={classes.divider}/>
