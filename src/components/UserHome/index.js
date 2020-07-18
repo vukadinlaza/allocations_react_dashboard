@@ -164,15 +164,7 @@ export default function UserHome(props) {
     {
       eventName: "select",
       callback({ chartWrapper }) {
-        const deals = formatData(userProfile.investments)
-        const dealIndex = _.get(chartWrapper.getChart().getSelection(), '[0].row', null);
-        const dealId = _.get(deals[dealIndex + 1], '[4]', [])
-        const dealData = userProfile.investments.find(inv => {
-          return inv.deal._id === dealId
-        })  
-        if(dealData) {
-          history.push(`/deals/${dealData.deal.organization.slug}/${dealData.deal.slug}`)
-        } 
+          history.push(`/investments`)
       }
     }
   ];
