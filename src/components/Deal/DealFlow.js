@@ -563,8 +563,8 @@ function KYCDocusign({investment, deal, investor, status}) {
         {loading && <div className="temp-loader"><Loader/></div>}
         <div className="external-sign-link">
 
-        <Typography variant="h4" align="center" >{linkData.formType}</Typography >
-          <a href={linkData.link} target="_blank" rel="noopener noreferrer center">
+        <Typography variant="h4" align="center" >Some link </Typography >
+          <a href={link} target="_blank" rel="noopener noreferrer center">
             <h3><FontAwesomeIcon icon="signature"/> Open Directly </h3>
           </a>
         </div>
