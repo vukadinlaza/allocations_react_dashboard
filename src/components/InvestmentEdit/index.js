@@ -14,6 +14,7 @@ import {
   FormControl
   } from '@material-ui/core'
 import {makeStyles} from "@material-ui/core/styles";
+import Loader from '../utils/Loader'
 import "./style.scss"
 /***
  *
@@ -180,7 +181,7 @@ export default function InvestmentEdit () {
 }
 function Docs ({ investment, setInvestment, refetch }) {
   const [uploadedDoc, setUploadedDoc] = useState(null)
-  const [addInvestmentDoc] = useMutation(ADD_INVESTMENT_DOC, {onCompleted: refetch})
+  const [addInvestmentDoc, {loading}] = useMutation(ADD_INVESTMENT_DOC, {onCompleted: refetch})
   const id  = get(investment, '_id', '')
   useEffect(() => {
     if (uploadedDoc) {
@@ -188,6 +189,9 @@ function Docs ({ investment, setInvestment, refetch }) {
     }
   }, [addInvestmentDoc, id, refetch, uploadedDoc])
   const docs = get(investment, 'documents', [])
+
+  if(loading || !investment) return <Loader/>
+
   return (
     <div className="docs">
       <div className="doc-wrapper">
