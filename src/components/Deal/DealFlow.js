@@ -553,9 +553,9 @@ function KYCDocusign({investment, deal, investor, status}) {
       </Typography>
     </Paper>)
 
-  if(!link) return <DocusignKYCEmbeddedForm setLink={setLink} deal_slug={deal.deal_slug} org={deal.organization}/>
+  if(!link?.redirectUrl) return <DocusignKYCEmbeddedForm setLink={setLink} deal_slug={deal.deal_slug} org={deal.organization}/>
 
-
+  console.log(link)
 
   return (
     <Paper className={classes.paper}>
@@ -563,13 +563,13 @@ function KYCDocusign({investment, deal, investor, status}) {
         {loading && <div className="temp-loader"><Loader/></div>}
         <div className="external-sign-link">
 
-        <Typography variant="h4" align="center" >Some link </Typography >
-          <a href={link} target="_blank" rel="noopener noreferrer center">
+        <Typography variant="h4" align="center" >{link.formName}</Typography >
+          <a href={link.redirectUrl} target="_blank" rel="noopener noreferrer center">
             <h3><FontAwesomeIcon icon="signature"/> Open Directly </h3>
           </a>
         </div>
         <div className="embed-responsive embed-responsive-1by1">
-          <iframe className="embed-responsive-item" title="Wire Instructions" src={link}></iframe>
+          <iframe className="embed-responsive-item" title="Wire Instructions" src={link.redirectUrl}></iframe>
         </div>
       </div>
     </Paper>
