@@ -68,10 +68,6 @@ export const GET_INVESTOR_DEAL = gql`
           allocation
           totalCarry
           minimumInvestment
-          sign_deadline
-          wire_deadline
-          estimated_setup_costs
-          management_fees
         }
       }
     } 

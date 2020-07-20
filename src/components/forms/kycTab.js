@@ -72,6 +72,9 @@ const GET_DOCUSIGN_FORM = gql`
   }
 `
 
+const required = ['country', 'investor_type', 'signer_full_name', 'dob', 'street_address' , 'city', 'state', 'zip']
+const optional = ['mail_country', 'mail_city', 'mail_zip', 'mail_state', 'mail_street_address']
+
 export default function DocusignKYCEmbeddedForm({setLink, deal_slug, org }) {
     const { userProfile } = useAuth(GET_INVESTOR)
     const [investor, setInvestor] = useState({})
@@ -88,15 +91,20 @@ export default function DocusignKYCEmbeddedForm({setLink, deal_slug, org }) {
         }
     }
 
-
     const submit = () => {
-      investor.activeInvestment = {deal_slug, org};
+      const reqs = investor.country !== 'United States' && !investor.usePermAddressAsMailing  ? [...required, ...optional] : required
+      const errors = reqs.reduce((acc, attr) => investor[attr] ? acc : [...acc, attr], [])
+      setErrors(errors)
+
+      if(errors.length === 0) {
+        investor.activeInvestment = {deal_slug, org};
         getLink({variables: {investor}})
+      }
     }
 
     useEffect(() => {
        if(data?.getLink?.redirectUrl && !loading) {
-           setLink(data?.getLink?.redirectUrl)
+           setLink(data?.getLink)
        }
     }, [data, loading, setLink])
 
@@ -105,7 +113,6 @@ export default function DocusignKYCEmbeddedForm({setLink, deal_slug, org }) {
             setInvestor(userProfile)
         }
     }, [userProfile])
-
 
     if (!userProfile.email) return <Loader/>
 
@@ -279,12 +286,6 @@ export default function DocusignKYCEmbeddedForm({setLink, deal_slug, org }) {
                   </Grid>
             </Grid>
 
-            {investor.country === 'United States' && <> 
-              <Divider className={classes.divider}/>
-              <ExtraWNine investor={investor} setInvestor={setInvestor} handleChange={handleChange} errors={errors} />
-             </>}
-
-
             {/* MAILING */}
 
 
@@ -293,12 +294,7 @@ export default function DocusignKYCEmbeddedForm({setLink, deal_slug, org }) {
                <MailingAddress investor={investor} setInvestor={setInvestor} handleChange={handleChange} errors={errors} /> 
             </>}
 
-       
-           {investor.country !== 'United States' && <>
-              <Divider className={classes.divider}/>
-              <TaxTreaty investor={investor} setInvestor={setInvestor} handleChange={handleChange} errors={errors} />
-            </>}
-
+      
           <Divider className={classes.divider}/>
 
             <Button variant="contained"
