@@ -19,14 +19,18 @@ const CREATE_INVESTOR = gql`
   }
 `
 
-export default function InvestorNew () {
+export default function InvestorNew ({ push, setNewUser }) {
   const history = useHistory()
   const [error, setError] = useState(false)
   const [email, setEmail] = useState("")
   const [createInvestor, { data }] = useMutation(CREATE_INVESTOR)
 
+
   useEffect(() => {
-    if (data && data.createInvestor._id) history.push(`/investor/${data.createInvestor._id}/edit`)
+    if(data && data.createInvestor._id && push) history.push(`/investor/${data.createInvestor._id}/edit`) 
+    if(data && data.createInvestor._id)  {
+      setNewUser(false)
+    }
   }, [data, history])
 
   const submit = () => {
@@ -38,9 +42,9 @@ export default function InvestorNew () {
     <div className="InvestorEdit">
       <Row>
         <Col sm={{size: 9, offset: 1}}>
-          <h4>
+          <h5>
             Create Investor
-          </h4>
+          </h5>
         </Col>
       </Row>
       <Col sm={{size: 4, offset: 1}} style={{marginBottom: "15px"}}>

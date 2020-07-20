@@ -9,7 +9,8 @@ import { gql } from 'apollo-boost'
 import * as API from "../../api"
 import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 
-import { Table, TableBody, TableCell, TableRow, Paper, Button } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableRow, Paper, Button, Checkbox, Typography, FormControlLabel } from '@material-ui/core'
+import InvestorNew from '../InvestorNew'
 import "./style.scss"
 
 /***
@@ -39,18 +40,20 @@ export default function InvestmentNew () {
   const [investment, setInvestment] = useState({ amount: ""})
   const [createInvestment, { data }] = useMutation(CREATE_INVESTMENT)
   const [errors, setErrors] = useState([])
+  const [newUser, setNewUser] = useState(false)
+  const [user, setUser] = useState(null)
+  const [deal, setDeal] = useState(null)
+
+
 
   useEffect(() => {
     if (data) history.push(`/admin/investments/${data.createInvestment._id}/edit`)
   }, [data, history])
 
-  const [user, setUser] = useState(null)
-  const [deal, setDeal] = useState(null)
-
   const updateInvestmentProp = ({ prop, newVal }) => {
     setInvestment(prev => ({ ...prev, [prop]: newVal }))
   }
-
+  
   const submit = () => {
     const validation = validate({ investment, user, deal })
     setErrors(validation)
@@ -64,6 +67,17 @@ export default function InvestmentNew () {
   }
   
   return (
+    <>
+      {newUser && <InvestorNew push={false} setNewUser={setNewUser} />}
+      {!newUser && <FormControlLabel
+        label="Create New user"
+        control={<Checkbox
+            color="primary"
+            checked={newUser}
+            inputProps={{ 'aria-label': 'secondary checkbox' }}
+            onChange={(e) => setNewUser(e.target.checked)}
+                        />}
+      />}
     <div className="InvestmentEdit form-wrapper">
       <Row>
         <Col sm={{size: 8, offset: 1}}>
@@ -82,7 +96,7 @@ export default function InvestmentNew () {
         </Row>
         <Row>
           <Col sm={{size: 4, offset: 1}}>
-            <UserSearch user={user} setUser={setUser} errors={errors} deal_id={get(deal, '_id', '')} />
+              <UserSearch user={user} setUser={setUser} errors={errors} deal_id={get(deal, '_id', '')} />
           </Col>
           <Col sm={{size: 4}}>
             <DealSearch deal={deal} setDeal={setDeal} errors={errors} />
@@ -101,6 +115,7 @@ export default function InvestmentNew () {
         </Row>
       </form>
     </div>
+    </>
   )
 }
 
