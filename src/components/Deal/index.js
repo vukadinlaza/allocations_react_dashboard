@@ -14,6 +14,7 @@ import {
 import queryString from 'query-string'
 import InvestmentFlow from './DealFlow'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import moment from 'moment'
 
 import "./style.scss"
 
@@ -192,6 +193,8 @@ export function DealParams({deal}) {
 
   const show = allocationPercent || setupCosts || dealParams.totalCarry || dealParams.minimumInvestment || dealParams.totalManagementFee
 
+  const formattedDate = moment(deal.date_closed).format('Do MMMM YYYY')
+
   return (
     <>
       <div style={{
@@ -213,7 +216,7 @@ export function DealParams({deal}) {
         <ListItem>
           <ListItemText
             primary="Est. Closing Date"
-            secondary={_.upperFirst(deal.date_closed)}
+            secondary={_.upperFirst(formattedDate)}
           />
         </ListItem>
         <ListItem>
@@ -242,22 +245,22 @@ export function DealParams({deal}) {
             secondary={'$' + nWithCommas(dealParams.minimumInvestment)}
           />
         </ListItem>}
-        {dealParams.totalCarry && <ListItem>
+        {dealParams.sign_deadline && <ListItem>
           <ListItemText
             primary="Signing Deadline"
             secondary={dealParams.sign_deadline}
           />
         </ListItem>}
-        {dealParams.totalCarry && <ListItem>
+        {dealParams.estimated_setup_costs && <ListItem>
           <ListItemText
             primary="Est. Setup Costs"
             secondary={'$' + dealParams.estimated_setup_costs}
           />
         </ListItem>}
-        {dealParams.totalCarry && <ListItem>
+        {dealParams.management_fees && <ListItem>
           <ListItemText
             primary="Management Fees"
-            secondary={'$' + dealParams.management_fees}
+            secondary={dealParams.management_fees + '%'}
           />
         </ListItem>}
       </>}
