@@ -361,7 +361,7 @@ export default function DealEdit() {
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.totalCarry || ""}
                          onChange={e => setDeal({dealParams: {...deal.dealParams, totalCarry: e.target.value}})}
-                         label="Total Carry"
+                         label="Total Carry (%)"
                          InputProps={{
                            startAdornment: <InputAdornment position="start">%</InputAdornment>,
                          }}
@@ -390,7 +390,7 @@ export default function DealEdit() {
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.minimumInvestment || ""}
                          onChange={e => setDeal({dealParams: {...deal.dealParams, minimumInvestment: e.target.value}})}
-                         label="Minimum Investment"
+                         label="Minimum Investment ($)"
                          InputProps={{
                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
                          }}
@@ -456,9 +456,9 @@ export default function DealEdit() {
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.management_fees || ""}
                          onChange={e => setDeal({dealParams: {...deal.dealParams, management_fees: e.target.value}})}
-                         label="Managment Fees"
+                         label="Managment Fees (%)"
                          InputProps={{
-                           startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                           startAdornment: <InputAdornment position="start">%</InputAdornment>,
                          }}
                          variant="outlined"/>
             </Grid>
@@ -467,7 +467,7 @@ export default function DealEdit() {
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.estimated_setup_costs || ""}
                          onChange={e => setDeal({dealParams: {...deal.dealParams, estimated_setup_costs: e.target.value}})}
-                         label="Estimated Setup Cost"
+                         label="Estimated Setup Cost ($)"
                          InputProps={{
                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
                          }}

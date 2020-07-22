@@ -220,7 +220,7 @@ export default function DocusignKYCEmbeddedForm({setLink, deal_slug, org }) {
                               style={{width: "100%"}}
                               value={get(investor, 'dob') || ""}
                               onChange={handleChange("dob")}
-                              label="Date Of Birth (MM-DD-YYYY)"
+                              label="Date Of Birth"
                               variant="outlined"/>
                   </Grid>
 
