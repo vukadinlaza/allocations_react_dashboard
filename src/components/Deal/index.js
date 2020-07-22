@@ -237,7 +237,7 @@ export function DealParams({deal}) {
         {dealParams.totalCarry && <ListItem>
           <ListItemText
             primary="Total Carry"
-            secondary={dealParams.totalCarry + '%'}
+            secondary={'$' + dealParams.totalCarry}
           />
         </ListItem>}
         {dealParams.minimumInvestment && <ListItem>
