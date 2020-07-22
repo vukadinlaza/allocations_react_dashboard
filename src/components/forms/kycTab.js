@@ -273,7 +273,7 @@ export default function DocusignKYCEmbeddedForm({setLink, deal_slug, org }) {
                   </Grid>
                   <Grid item xs={12} sm={12} md={6}>
                    <FormControl required error={errors.includes("address_country")} variant="outlined" style={{width: "100%"}}>
-                      <InputLabel>Mailing Country</InputLabel>
+                      <InputLabel>Country</InputLabel>
                       <Select value={investor.address_country || ""}
                               onChange={handleChange("address_country")}
                               inputProps={{name: 'address-country'}}>
