@@ -231,13 +231,13 @@ export function DealParams({deal}) {
         {dealParams.allocation && <ListItem>
           <ListItemText
             primary="Allocation"
-            secondary={dealParams.allocation + '%'}
+            secondary={'$' + dealParams.allocation}
           />
         </ListItem>}
         {dealParams.totalCarry && <ListItem>
           <ListItemText
             primary="Total Carry"
-            secondary={'$' + dealParams.totalCarry}
+            secondary={dealParams.totalCarry + '%'}
           />
         </ListItem>}
         {dealParams.minimumInvestment && <ListItem>
