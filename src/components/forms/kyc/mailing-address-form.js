@@ -49,6 +49,7 @@ export default function MailingAddress({investor, errors, handleChange, setInves
             {inputs.map(item => {
               if(item.slug === 'mail_country') {
                 return (
+                  <Grid item xs={12} sm={12} md={6}>
                    <FormControl required error={errors.includes(item.slug)} variant="outlined" style={{width: "100%"}}>
                       <InputLabel>Country</InputLabel>
                       <Select value={investor.mail_country || ""}
@@ -60,6 +61,7 @@ export default function MailingAddress({investor, errors, handleChange, setInves
                       ))}
                       </Select>
                   </FormControl>
+                  </Grid>
                 )
               }
 

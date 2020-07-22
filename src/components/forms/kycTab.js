@@ -196,31 +196,30 @@ export default function DocusignKYCEmbeddedForm({setLink, deal_slug, org }) {
                   </Grid>
 
                   <Grid item xs={12} sm={12} md={6}>
-                  <TextField required
+                  <TextField 
                               error={errors.includes("ssn_itin")}
                               style={{width: "100%"}}
                               value={get(investor, 'ssn_itin') || ""}
                               onChange={handleChange("ssn_itin")}
-                              label="SSN or ITIN"
+                              label="SSN or ITIN (optional)"
                               variant="outlined"/>
                   </Grid>
                   <Grid item xs={12} sm={12} md={6}>
-                  <TextField required
+                  <TextField 
                               error={errors.includes("foreign_tax_number")}
                               style={{width: "100%"}}
                               value={get(investor, 'foreign_tax_number') || ""}
                               onChange={handleChange("foreign_tax_number")}
-                              label="Foreign Tax Number"
+                              label="Foreign Tax Number (optional)"
                               variant="outlined"/>
                   </Grid>
                   <Grid item xs={12} sm={12} md={6}>
-                  <TextField required
-                              type="date"
+                  <TextField
                               error={errors.includes("dob")}
                               style={{width: "100%"}}
                               value={get(investor, 'dob') || ""}
                               onChange={handleChange("dob")}
-                              label="Date Of Birth"
+                              label="Year Of Birth"
                               variant="outlined"/>
                   </Grid>
 
