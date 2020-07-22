@@ -193,7 +193,8 @@ export function DealParams({deal}) {
 
   const show = allocationPercent || setupCosts || dealParams.totalCarry || dealParams.minimumInvestment || dealParams.totalManagementFee
 
-  const formattedDate = moment(deal.date_closed).format('Do MMMM YYYY')
+  const formattedDate_closed = moment(deal.date_closed).format('Do MMMM YYYY')
+  const formattedDate_sign = moment(dealParams.sign_deadline).format('Do MMMM YYYY')
 
   return (
     <>
@@ -216,7 +217,7 @@ export function DealParams({deal}) {
         <ListItem>
           <ListItemText
             primary="Est. Closing Date"
-            secondary={_.upperFirst(formattedDate)}
+            secondary={_.upperFirst(formattedDate_closed)}
           />
         </ListItem>
         <ListItem>
@@ -248,7 +249,7 @@ export function DealParams({deal}) {
         {dealParams.sign_deadline && <ListItem>
           <ListItemText
             primary="Signing Deadline"
-            secondary={dealParams.sign_deadline}
+            secondary={formattedDate_sign}
           />
         </ListItem>}
         {dealParams.estimated_setup_costs && <ListItem>
