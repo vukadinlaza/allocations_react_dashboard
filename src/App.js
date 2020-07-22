@@ -27,6 +27,7 @@ import FreeSPVOnboarding from './components/FreeSPVOnboarding';
 import Profile from './components/Profile';
 import OrganizationNew from './components/OrganizationNew'
 import OrganizationMembers from './components/OrganizationMembers'
+import ThankYou from './components/ThankYou/index'
 
 // superadmin
 import SuperAdminManager from './components/superadmin/Manager'
@@ -58,6 +59,8 @@ const App = () => {
       {/* Sidebar should handle openState, not App.js */}
       <Sidebar>
         <Switch>
+          <Route path="/cb/thankyou" component={ThankYou} exact/>
+
           <PrivateRoute path="/" exact component={UserHome}/>
           <PrivateRoute path="/profile" component={Profile}/>
           <PrivateRoute path="/investments" component={UserInvestments}/>
