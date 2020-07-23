@@ -159,7 +159,12 @@ export default function UserHome(props) {
 
   if (!userProfile.email) return <div><Loader/></div>
 
-  const userInvestments = userProfile.investments.filter(inv => inv.deal._id)
+  const userInvestments = userProfile.investments.filter(inv => {
+    if(!inv?.deal._id) {
+      console.log('deal with no deal _id', inv.deal)
+    }
+    return inv.deal._id
+  })
   const total_invested = _.sumBy(userInvestments, 'amount') || 0
   console.log('investment count', userInvestments.length, userProfile.investments.length)
   const chartEvents = [
