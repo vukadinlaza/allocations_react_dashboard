@@ -151,7 +151,7 @@ export default function UserHome(props) {
   const classes = useStyles();
 
   const history = useHistory()
-  const {userProfile, error, params, adminView, } = useAuth(GET_INVESTOR)
+  const {userProfile, error, params, adminView } = useAuth(GET_INVESTOR)
 
   if (error) {
     if (error.message === "GraphQL error: permission denied" && userProfile && userProfile.email) {
@@ -161,7 +161,9 @@ export default function UserHome(props) {
 
   if (!userProfile.email) return <div><Loader/></div>
 
-  const total_invested = _.sumBy(userProfile.investments, 'amount') || 0
+  const userInvestments = userProfile.investments.filter(inv => inv.deal._id)
+  const total_invested = _.sumBy(userInvestments, 'amount') || 0
+  console.log('investment count', userInvestments.length, userProfile.investments.length)
   const chartEvents = [
     {
       eventName: "select",
@@ -170,6 +172,7 @@ export default function UserHome(props) {
       }
     }
   ];
+
 
   return (
     <>
@@ -228,12 +231,12 @@ export default function UserHome(props) {
               <Typography variant="h6" style={{marginBottom: 16}}>
                 Portfolio
               </Typography>
-              {userProfile.investments.length > 0 ?
+              {userInvestments.length > 0 ?
                 <Chart chartType="TreeMap"
                        width="100%"
                        height="200px"
                        chartEvents={chartEvents}
-                       data={formatData(userProfile.investments)}
+                       data={formatData(userInvestments)}
                        options={chartOptions}/> : null
               }
             </Paper>
@@ -248,7 +251,7 @@ export default function UserHome(props) {
               </Typography>
               <div style={{margin: "0px -16px", cursor: "pointer"}}>
                 <Table style={{marginBottom: "-1px"}}>
-                  {orderInvestments(userProfile.investments).map((investment, i) => (
+                  {orderInvestments(userInvestments).map((investment, i) => (
                     <InvestmentStub key={i} investment={investment}/>
                   ))}
                 </Table>
