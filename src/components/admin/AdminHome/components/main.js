@@ -107,7 +107,7 @@ export default function OrganizationOverview({orgData}) {
 
       <>
         {tab === "active-deals" && <ActiveDeals orgData={orgData}/>}
-        {tab === "profile" && <OrgCards orgData={orgData}/>}
+        {tab === "profile" && <OrgCards organization={organization}/>}
       </>
     </>
   )

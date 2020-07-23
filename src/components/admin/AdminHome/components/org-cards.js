@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {makeStyles} from "@material-ui/core/styles";
 import {Grid, Typography, Paper} from "@material-ui/core";
 import PosIcon from '../../../../assets/undraw-pos.svg'
-
-
+import POSModal from './pos-modal'
 const data = [
         {
             title: 'Provision Of Services',
@@ -29,8 +28,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrgCards = ({}) => {
+const OrgCards = ({organization}) => {
     const classes = useStyles();
+    const [modal, setModal] = useState()
 
     return (
         <>
@@ -51,7 +51,7 @@ const OrgCards = ({}) => {
                                             <Typography variant="subtitle2">
                                                 {card.subTitle}
                                             </Typography>
-                                            <Typography variant="subtitle2">
+                                            <Typography variant="subtitle2" onClick={() => setModal(true)}>
                                                 {card.callToAction}
                                             </Typography>
                                         </Grid>
@@ -62,6 +62,7 @@ const OrgCards = ({}) => {
                     </Paper>
                 </Grid>
             </Grid>
+           <POSModal modal={modal} setModal={setModal} organization={organization}/>
         </>
     )
 }
