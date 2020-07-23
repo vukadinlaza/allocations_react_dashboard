@@ -58,8 +58,6 @@ const chartOptions = {
 
 function formatData(investments) {
   const grouped = investments.reduce((acc, inv) => {
-    if(!inv?.deal._id) return acc;
-
     if (acc[inv.deal._id]) {
       acc[inv.deal._id].amount += inv.amount
     } else {
@@ -172,7 +170,6 @@ export default function UserHome(props) {
       }
     }
   ];
-
 
   return (
     <>
