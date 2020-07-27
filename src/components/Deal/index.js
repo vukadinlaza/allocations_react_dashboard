@@ -69,10 +69,12 @@ export const GET_INVESTOR_DEAL = gql`
           allocation
           totalCarry
           minimumInvestment
-          sign_deadline
-          wire_deadline
-          estimated_setup_costs
-          management_fees
+          wireDeadline
+          estimatedSetupCosts
+          managementFees
+          portfolioTotalCarry
+          portfolioEstimatedSetupCosts
+          portfolioManagementFees
         }
       }
     } 
@@ -191,10 +193,10 @@ export function DealParams({deal}) {
     ? new BN(dealParams.estimatedSetupCosts).dividedBy(dealParams.totalRoundSize).times(100).toFixed(0)
     : null
 
-  const show = allocationPercent || setupCosts || dealParams.totalCarry || dealParams.minimumInvestment || dealParams.totalManagementFee
+  const show = allocationPercent || setupCosts || dealParams.totalCarry || dealParams.minimumInvestment || dealParams.totalManagementFee || dealParams.signDeadline || dealParams.wireDeadline || dealParams.estimatedSetupCosts || dealParams.managementFees || dealParams.portfolioTotalCarry || dealParams.portfolioEstimatedSetupCosts || dealParams.portfolioManagementFees 
 
-  const formattedDate_closed = moment(deal.date_closed).format('Do MMMM YYYY')
-  const formattedDate_sign = moment(dealParams.sign_deadline).format('Do MMMM YYYY')
+  const formattedDate_sign = moment(dealParams.signDeadline).format('Do MMMM YYYY')
+  const formattedDate_wire = moment(dealParams.wireDeadline).format('Do MMMM YYYY')
 
   return (
     <>
@@ -203,41 +205,59 @@ export function DealParams({deal}) {
         height: 44,
         display: "flex",
         justifyContent: "space-between",
-        marginTop: 16,
+        marginTop: 8,
         textAlign: "left",
         padding: "10px",
         borderTop: "1px solid #dfe3e9",
         borderBottom: "1px solid #dfe3e9"
       }}>
         <span>
-        Deal Info
+        Deadlines
       </span>
       </div>
       <List>
-        <ListItem>
+      {show && <> <ListItem>
           <ListItemText
-            primary="Est. Closing Date"
-            secondary={_.upperFirst(formattedDate_closed)}
+            primary="Sign By Date"
+            secondary={_.upperFirst(formattedDate_sign)}
           />
         </ListItem>
+        <ListItem>
+          <ListItemText
+            primary="Wire By Date"
+            secondary={_.upperFirst(formattedDate_wire)}
+          />
+        </ListItem>
+      </> }
+        </List>
+
+        <div style={{
+        backgroundColor: "#f7f9fa",
+        height: 44,
+        display: "flex",
+        justifyContent: "space-between",
+        marginTop: 8,
+        textAlign: "left",
+        padding: "10px",
+        borderTop: "1px solid #dfe3e9",
+        borderBottom: "1px solid #dfe3e9"
+      }}>
+        <span>
+        SPV Terms
+      </span>
+      </div>
+      <List>
         <ListItem>
           <ListItemText
             primary="Deal Lead"
             secondary={deal.deal_lead}
           />
         </ListItem>
-
       {show && <>
-        {dealParams.allocation && <ListItem>
+        {/* {dealParams.allocation && <ListItem>
           <ListItemText
             primary="Allocation"
             secondary={'$' + dealParams.allocation}
-          />
-        </ListItem>}
-        {dealParams.totalCarry && <ListItem>
-          <ListItemText
-            primary="Total Carry"
-            secondary={dealParams.totalCarry + '%'}
           />
         </ListItem>}
         {dealParams.minimumInvestment && <ListItem>
@@ -246,22 +266,60 @@ export function DealParams({deal}) {
             secondary={'$' + nWithCommas(dealParams.minimumInvestment)}
           />
         </ListItem>}
-        {dealParams.sign_deadline && <ListItem>
+        {dealParams.totalCarry && <ListItem>
           <ListItemText
-            primary="Signing Deadline"
-            secondary={formattedDate_sign}
+            primary="Total Carry"
+            secondary={dealParams.totalCarry + '%'}
           />
-        </ListItem>}
-        {dealParams.estimated_setup_costs && <ListItem>
+        </ListItem>} */}
+        {dealParams.estimatedSetupCosts && <ListItem>
           <ListItemText
             primary="Est. Setup Costs"
-            secondary={'$' + dealParams.estimated_setup_costs}
+            secondary={'$' + dealParams.estimatedSetupCosts + ' (excludes blue sky fees)'}
           />
         </ListItem>}
-        {dealParams.management_fees && <ListItem>
+        {dealParams.managementFees && <ListItem>
           <ListItemText
             primary="Management Fees"
-            secondary={dealParams.management_fees + '%'}
+            secondary={dealParams.managementFees + '%'}
+          />
+        </ListItem>}
+        </>}
+        </List>
+
+        <div style={{
+        backgroundColor: "#f7f9fa",
+        height: 44,
+        display: "flex",
+        justifyContent: "space-between",
+        marginTop: 8,
+        textAlign: "left",
+        padding: "10px",
+        borderTop: "1px solid #dfe3e9",
+        borderBottom: "1px solid #dfe3e9"
+      }}>
+        <span>
+        Portfolio Company Terms
+      </span>
+      </div>
+      <List>
+      {show && <>
+        {dealParams.portfolioTotalCarry && <ListItem>
+          <ListItemText
+            primary="Total Carry"
+            secondary={dealParams.portfolioTotalCarry + '%'}
+          />
+        </ListItem>}
+        {dealParams.portfolioEstimatedSetupCosts && <ListItem>
+          <ListItemText
+            primary="Est. Setup Costs"
+            secondary={'$' + dealParams.portfolioEstimatedSetupCosts}
+          />
+        </ListItem>}
+        {dealParams.portfolioManagementFees && <ListItem>
+          <ListItemText
+            primary="Management Fees"
+            secondary={dealParams.portfolioManagementFees + '%'}
           />
         </ListItem>}
       </>}
