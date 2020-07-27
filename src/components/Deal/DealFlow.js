@@ -555,8 +555,6 @@ function KYCDocusign({investment, deal, investor, status}) {
 
   if(!link?.redirectUrl) return <DocusignKYCEmbeddedForm setLink={setLink} deal_slug={deal.deal_slug} org={deal.organization}/>
 
-  console.log(link)
-
   return (
     <Paper className={classes.paper}>
       <div className={status === "kyc" ? "document-iframe" : "document-iframe hide"}>

@@ -4,18 +4,13 @@ import {Grid, Typography, Paper} from "@material-ui/core";
 import PosIcon from '../../../../assets/undraw-pos.svg'
 import POSModal from './pos-modal'
 const data = [
-        {
-            title: 'Provision Of Services',
-            subTitle: 'One click signing for your POS',
-            callToAction: 'Get Started',
-            icon: PosIcon
-        },
-        {
-            title: 'Statement Of Work',
-            subTitle: 'Space X SPV',
-            callToAction: 'Get Started'
-        }
-    ]
+    {
+        title: 'Provision Of Services',
+        subTitle: 'One click signing for your POS',
+        callToAction: 'Get Started',
+        icon: PosIcon
+    }
+];
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -42,7 +37,7 @@ const OrgCards = ({organization}) => {
                                 <Grid item xs={12} sm={6} key={card.title}>
                                     <Paper className={classes.paper}>
                                         <Grid item> 
-                                            <img src={PosIcon} className={classes.img}/>
+                                            <img src={PosIcon} className={classes.img} alt="modal icon"/>
                                         </Grid>
                                         <Grid item>
                                             <Typography variant="h6">

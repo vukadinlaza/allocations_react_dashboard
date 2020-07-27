@@ -6,17 +6,30 @@ import { Modal, Grid, TextField, Typography, Paper, Button } from '@material-ui/
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {makeStyles} from "@material-ui/core/styles";
 
+import Loader from '../../../utils/Loader'
+
 
 const useStyles = makeStyles((theme) => ({
     paper: {
         width: 800,
-        border: '2px solid #000',
+        border: '1px solid #000',
+        backgroundColor: "#f9fbfb",
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
-        marginTop: '10vh'
+        marginTop: '3vh',
+        maxHeight: '95vh',
+        overflow: 'scroll'
     },
     button: {
-        backgroundColor: '#00A0C6'
+        backgroundColor: '#00A0C6',
+        align: 'center',
+        marginTop: '1rem'
+    },
+    header: {
+        align: 'center',
+    },
+    subtext: {
+        marginBottom: '.5rem'
     }
 }));
 const GET_DOCUSIGN_FORM = gql`
@@ -30,6 +43,7 @@ const GET_DOCUSIGN_FORM = gql`
 const POSModal = ({modal, setModal, organization}) => {
     const classes = useStyles();
     const [formData, setFormData] = useState({})
+    const [link, setLink] = useState({})
     const [getLink, { loading, data }] = useLazyQuery(GET_DOCUSIGN_FORM)
 
     useEffect(() => {
@@ -38,9 +52,16 @@ const POSModal = ({modal, setModal, organization}) => {
         }
     }, [organization])
 
+     useEffect(() => {
+       if(data?.getLink?.redirectUrl && !loading) {
+           setLink(data?.getLink)
+       }
+    }, [data, loading, setLink])
+
 
     const inputs = [
         {tabLabel: 'Organization-Name', label: 'Organization Name', slug: 'organization_name'},
+        {tabLabel: 'Full-Name', label: 'Signer Name', slug: 'signer_full_name'},
     ]
 
     const handleChange = (prop) => e => {
@@ -48,6 +69,7 @@ const POSModal = ({modal, setModal, organization}) => {
         return setFormData(prev => ({...prev, [prop]: e.target.value}))
     }
     const submit = () => getLink({variables: { data: formData }})
+    const { redirectUrl, formName } = link
 
     return (
             <Modal
@@ -62,28 +84,46 @@ const POSModal = ({modal, setModal, organization}) => {
                     alignItems="center"
                 >
                 <Paper className={classes.paper}>
-                    <FontAwesomeIcon icon='check' pull="right" border onClick={() => setModal(false)}/>
-                    <Typography variant="h4">
-                        Organization Information
-                    </Typography>
-                    <Grid container spacing={3}>
-                        {inputs.map(item => {
-                        return (
-                            <Grid item xs={12} sm={12} md={6}>
-                            <TextField required
-                                        style={{width: "100%"}}
-                                        value={get(formData, item.slug) || ""}
-                                        onChange={handleChange(item.slug)}
-                                        label={item.label}
-                                        variant="outlined"/>
-                            </Grid>
-                            )
-                        })}
-                    </Grid>
+                    <FontAwesomeIcon icon={['fas', 'fa-times']} pull="right" border onClick={() => setModal(false)}/> 
+                    
+                    {!redirectUrl  ? <>
+                        <Typography variant="h5" align="center" className={classes.header}>
+                            Organization Information
+                        </Typography>
+                        <Typography variant="subtitle2" align="center" className={classes.subtext}>
+                            This information will be used to fill out Allocation's Provision Of Services Agreement. 
+                        </Typography>
+                        <Grid container spacing={2}>
+                            {inputs.map(item => {
+                            return (
+                                <Grid item xs={12} sm={12} md={6}>
+                                <TextField required
+                                            style={{width: "100%"}}
+                                            value={get(formData, item.slug) || ""}
+                                            onChange={handleChange(item.slug)}
+                                            label={item.label}
+                                            variant="outlined"/>
+                                </Grid>
+                                )
+                            })}
+                        </Grid>
+                        <Grid container justify="center">
+                            <Button onClick={submit} variant="contained" className={classes.button}>
+                                Next
+                            </Button>
+                        </Grid>
+                    </> : <>
+                    {loading && <div className="temp-loader"><Loader/></div>}
+                    <div className="external-sign-link">
 
-                    <Button onClick={submit} variant="contained" className={classes.button}>
-                        Submit
-                    </Button>
+                    <Typography variant="h5" align="center" >{formName}</Typography >
+                    <a href={redirectUrl} target="_blank" rel="noopener noreferrer center">
+                    </a>
+                    </div>
+                    <div className="embed-responsive embed-responsive-1by1">
+                        <iframe className="embed-responsive-item" title="Wire Instructions" src={redirectUrl}></iframe>
+                    </div>
+                     </>}
                 </Paper>
                 </Grid>
             </Modal>
