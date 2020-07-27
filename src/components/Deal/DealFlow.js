@@ -117,18 +117,18 @@ export default function InvestmentFlow({investment, deal, investor, refetch}) {
         </Grid> */}
 
           <Grid item xs={12} sm={3}>
-            <ButtonBase className={status === "kyc" ? classes.activeTab : classes.tab}
-                        style={{borderRight: "1px solid #e1e9ec", cursor: approved ? "cursor" : "not-allowed"}}
-                        onClick={() => approved && setStatus('kyc')}>
-              KYC {!approved && <FontAwesomeIcon icon="lock"/>}
-            </ButtonBase>
-          </Grid>
-
-          <Grid item xs={12} sm={3}>
             <ButtonBase className={status === "pledged" ? classes.activeTab : classes.tab}
                         style={{borderRight: "1px solid #e1e9ec", cursor: approved ? "cursor" : "not-allowed"}}
                         onClick={() => approved && setStatus('pledged')}>
               Sign {!approved && <FontAwesomeIcon icon="lock"/>}
+            </ButtonBase>
+          </Grid>
+
+          <Grid item xs={12} sm={3}>
+            <ButtonBase className={status === "kyc" ? classes.activeTab : classes.tab}
+                        style={{borderRight: "1px solid #e1e9ec", cursor: approved ? "cursor" : "not-allowed"}}
+                        onClick={() => approved && setStatus('kyc')}>
+              KYC {!approved && <FontAwesomeIcon icon="lock"/>}
             </ButtonBase>
           </Grid>
 
