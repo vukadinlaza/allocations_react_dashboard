@@ -48,7 +48,7 @@ const OrgCards = ({organization, investor}) => {
                                             <Typography variant="subtitle2">
                                                 {card.subTitle}
                                             </Typography>
-                                            <Typography variant="subtitle2" onClick={() => setModal(!hasDoc ? true : false)}>
+                                            <Typography variant="subtitle2" onClick={() => setModal(!hasDoc ? true : false)} style={{"cursor":"pointer", "color":"rgba(81,168,218,1)"}}>
                                                 {!hasDoc ? card.callToAction : 'You have a signed provision of service agreement.'}
                                             </Typography>
                                         </Grid>
