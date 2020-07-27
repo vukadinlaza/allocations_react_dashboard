@@ -16,6 +16,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
+import OrganizationOverview from './components/main'
 
 /***
  *
@@ -81,6 +82,7 @@ export const ORG_OVERVIEW = gql`
     investor {
       _id
       admin
+      documents
     }
   }
 `
@@ -129,7 +131,8 @@ export default function AdminHome() {
 
   return (
     <>
-      <Grid container spacing={2}>
+    <OrganizationOverview orgData={data}/>
+      {/* <Grid container spacing={2}>
         {data.investor.admin && <Grid item xs={12}>
           <SuperAdmin org={org}/>
         </Grid>}
@@ -244,7 +247,7 @@ export default function AdminHome() {
           </Table>
         </Paper>
         </Grid>
-      </Grid>
+      </Grid> */}
     </>
   )
 }
