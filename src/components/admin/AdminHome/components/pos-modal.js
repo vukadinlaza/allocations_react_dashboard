@@ -86,43 +86,48 @@ const POSModal = ({modal, setModal, organization}) => {
                 <Paper className={classes.paper}>
                     <FontAwesomeIcon icon={['fas', 'fa-times']} pull="right" border onClick={() => setModal(false)}/> 
                     
-                    {!redirectUrl  ? <>
+                    {!redirectUrl &&  <>
                         <Typography variant="h5" align="center" className={classes.header}>
                             Organization Information
                         </Typography>
-                        <Typography variant="subtitle2" align="center" className={classes.subtext}>
-                            This information will be used to fill out Allocation's Provision Of Services Agreement. 
-                        </Typography>
-                        <Grid container spacing={2}>
-                            {inputs.map(item => {
-                            return (
-                                <Grid item xs={12} sm={12} md={6}>
-                                <TextField required
-                                            style={{width: "100%"}}
-                                            value={get(formData, item.slug) || ""}
-                                            onChange={handleChange(item.slug)}
-                                            label={item.label}
-                                            variant="outlined"/>
-                                </Grid>
-                                )
-                            })}
-                        </Grid>
-                        <Grid container justify="center">
-                            <Button onClick={submit} variant="contained" className={classes.button}>
-                                Next
-                            </Button>
-                        </Grid>
-                    </> : <>
-                    {loading && <div className="temp-loader"><Loader/></div>}
-                    <div className="external-sign-link">
 
-                    <Typography variant="h5" align="center" >{formName}</Typography >
-                    <a href={redirectUrl} target="_blank" rel="noopener noreferrer center">
-                    </a>
-                    </div>
-                    <div className="embed-responsive embed-responsive-1by1">
-                        <iframe className="embed-responsive-item" title="Wire Instructions" src={redirectUrl}></iframe>
-                    </div>
+
+                        {loading ? <Loader/> :  
+                        <> 
+                            <Typography variant="subtitle2" align="center" className={classes.subtext}>
+                                This information will be used to fill out Allocation's Provision Of Services Agreement. 
+                            </Typography>
+                            <Grid container spacing={2}>
+                                {inputs.map(item => {
+                                return (
+                                    <Grid item xs={12} sm={12} md={6}>
+                                    <TextField required
+                                                style={{width: "100%"}}
+                                                value={get(formData, item.slug) || ""}
+                                                onChange={handleChange(item.slug)}
+                                                label={item.label}
+                                                variant="outlined"/>
+                                    </Grid>
+                                    )
+                                })}
+                            </Grid>
+                            <Grid container justify="center">
+                                <Button onClick={submit} variant="contained" className={classes.button}>
+                                    Next
+                                </Button>
+                            </Grid>
+                        </>}
+                    </>}
+
+                    {redirectUrl && !loading && <>
+                        <div className="external-sign-link">
+                            <Typography variant="h5" align="center" >{formName}</Typography >
+                            <a href={redirectUrl} target="_blank" rel="noopener noreferrer center">
+                            </a>
+                        </div>
+                        <div className="embed-responsive embed-responsive-1by1">
+                            <iframe className="embed-responsive-item" title="Wire Instructions" src={redirectUrl}></iframe>
+                        </div>
                      </>}
                 </Paper>
                 </Grid>

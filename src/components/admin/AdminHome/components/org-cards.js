@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import {toLower} from 'lodash'
 import {makeStyles} from "@material-ui/core/styles";
 import {Grid, Typography, Paper} from "@material-ui/core";
 import PosIcon from '../../../../assets/undraw-pos.svg'
@@ -23,16 +24,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrgCards = ({organization}) => {
+const OrgCards = ({organization, investor}) => {
     const classes = useStyles();
-    const [modal, setModal] = useState()
-
+    const [modal, setModal] = useState()  
     return (
         <>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <Paper className={classes.paper}>
                         {data.map(card => {
+                            const hasDoc = investor.documents.find(d => toLower(d.documentName).includes(toLower(card.title)))
                             return (
                                 <Grid item xs={12} sm={6} key={card.title}>
                                     <Paper className={classes.paper}>
@@ -46,8 +47,8 @@ const OrgCards = ({organization}) => {
                                             <Typography variant="subtitle2">
                                                 {card.subTitle}
                                             </Typography>
-                                            <Typography variant="subtitle2" onClick={() => setModal(true)}>
-                                                {card.callToAction}
+                                            <Typography variant="subtitle2" onClick={() => setModal(!hasDoc ? true : false)}>
+                                                {!hasDoc ? card.callToAction : 'You have a signed provision of service agreement.'}
                                             </Typography>
                                         </Grid>
                                     </Paper>

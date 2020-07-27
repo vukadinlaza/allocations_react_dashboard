@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function OrganizationOverview({orgData}) {
-  const [tab, setTab] = useState("closed-deals")
+  const [tab, setTab] = useState("profile")
   const classes = useStyles();
 
   if (!orgData) return <Paper style={{padding: "25px"}}><Loader/></Paper>
@@ -109,7 +109,7 @@ export default function OrganizationOverview({orgData}) {
       <>
         {tab === "active-deals" && <ActiveDeals orgData={orgData}/>}
         {tab === "closed-deals" && <ClosedDeals orgData={orgData}/>}
-        {tab === "profile" && <OrgCards organization={organization}/>}
+        {tab === "profile" && <OrgCards organization={organization} investor={orgData.investor}/>}
       </>
     </>
   )

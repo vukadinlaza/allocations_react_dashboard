@@ -82,6 +82,7 @@ export const ORG_OVERVIEW = gql`
     investor {
       _id
       admin
+      documents
     }
   }
 `
