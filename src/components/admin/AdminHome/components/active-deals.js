@@ -42,14 +42,13 @@ export default function ActiveDeals({orgData}) {
 
   const org = orgData.organization
 
-  const {active, closed} = _.groupBy(org.deals, d => d.status === "closed" ? "closed" : "active")
+  const {active} = _.groupBy(org.deals, d => d.status === "closed" ? "closed" : "active")
 
   return (
-    <>
-      <Grid container spacing={2}>
+      <Grid container>
           <Grid item xs={12}>
           <Paper className={classes.paper}>
-                <Grid item xs={10}>
+                <Grid item xs={12}>
                   <Typography variant="h6">
                     💡 Active Deals: {(active || []).length}
                   </Typography>
@@ -80,7 +79,6 @@ export default function ActiveDeals({orgData}) {
           </Paper>
           </Grid>
       </Grid>
-    </>
   )
 }
 

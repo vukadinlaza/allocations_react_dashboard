@@ -19,6 +19,7 @@ import {makeStyles} from "@material-ui/core/styles";
 
 import ActiveDeals from './active-deals'
 import OrgCards from './org-cards'
+import ClosedDeals from './closed-deals'
 import Loader from '../../../utils/Loader'
 
 
@@ -62,11 +63,11 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function OrganizationOverview({orgData}) {
-  const [tab, setTab] = useState("profile")
+  const [tab, setTab] = useState("closed-deals")
   const classes = useStyles();
 
   if (!orgData) return <Paper style={{padding: "25px"}}><Loader/></Paper>
-    const {organization, investor } = orgData
+    const {organization } = orgData
   return (
     <>
     <Typography variant="h3" className={classes.orgName}>
@@ -107,6 +108,7 @@ export default function OrganizationOverview({orgData}) {
 
       <>
         {tab === "active-deals" && <ActiveDeals orgData={orgData}/>}
+        {tab === "closed-deals" && <ClosedDeals orgData={orgData}/>}
         {tab === "profile" && <OrgCards organization={organization}/>}
       </>
     </>
