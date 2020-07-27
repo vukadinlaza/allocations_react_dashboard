@@ -84,7 +84,7 @@ const POSModal = ({modal, setModal, organization}) => {
                     alignItems="center"
                 >
                 <Paper className={classes.paper}>
-                    <FontAwesomeIcon icon={['fas', 'fa-times']} pull="right" border onClick={() => setModal(false)}/> 
+                    <FontAwesomeIcon icon='times' pull="right" border onClick={() => setModal(false)}/> 
                     
                     {!redirectUrl &&  <>
                         <Typography variant="h5" align="center" className={classes.header}>
