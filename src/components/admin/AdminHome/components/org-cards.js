@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {toLower} from 'lodash'
+import {toLower, get} from 'lodash'
 import {makeStyles} from "@material-ui/core/styles";
 import {Grid, Typography, Paper} from "@material-ui/core";
 import PosIcon from '../../../../assets/undraw-pos.svg'
@@ -33,7 +33,8 @@ const OrgCards = ({organization, investor}) => {
                 <Grid item xs={12}>
                     <Paper className={classes.paper}>
                         {data.map(card => {
-                            const hasDoc = investor.documents.find(d => toLower(d.documentName).includes(toLower(card.title)))
+                            const docs = investor.documents ? investor.documents : [];
+                            const hasDoc = docs.find(d => toLower(d.documentName).includes(toLower(card.title)))
                             return (
                                 <Grid item xs={12} sm={6} key={card.title}>
                                     <Paper className={classes.paper}>
