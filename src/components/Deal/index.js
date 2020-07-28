@@ -308,13 +308,13 @@ export function DealParams({deal}) {
         </ListItem>}
         {dealParams.managementFees && <ListItem>
           <ListItemText
-            primary="Management Fees"
+            primary="Management Fee"
             secondary={dealParams.managementFees + '% (annual)'}
           />
         </ListItem>}
         {dealParams.managementFeesDollar && <ListItem>
           <ListItemText
-            primary="Management Fees"
+            primary="Management Fee"
             secondary={'$' + dealParams.managementFeesDollar}
           />
         </ListItem>}
@@ -365,13 +365,13 @@ export function DealParams({deal}) {
         </ListItem>}
         {dealParams.portfolioManagementFees && <ListItem>
           <ListItemText
-            primary="Management Fees"
+            primary="Management Fee"
             secondary={dealParams.portfolioManagementFees + '%'}
           />
         </ListItem>}
         {dealParams.portfolioManagementFeesDollar && <ListItem>
           <ListItemText
-            primary="Management Fees"
+            primary="Management Fee"
             secondary={'$' + dealParams.portfolioManagementFeesDollar}
           />
         </ListItem>}
