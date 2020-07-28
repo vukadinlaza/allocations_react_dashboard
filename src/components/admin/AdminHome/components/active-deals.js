@@ -52,8 +52,13 @@ export default function ActiveDeals({orgData}) {
                   <Typography variant="h6">
                     💡 Active Deals: {(active || []).length}
                   </Typography>
+                    <Button color="primary"
+                    className="all-btn"
+                    style={{padding: "3px 4px"}} onClick={() => history.push(`/admin/${org.slug}/deal/new`)}>
+                    Create Deal
+                  </Button>
                 </Grid>
-                <Grid item xs={2} style={{textAlign: "right"}}>
+                <Grid item xs={2} style={{textAlign: "left"}}>
                   <Button
                     onClick={() => history.push(`/admin/${org.slug}/deals`)} className="all-btn"
                     color="primary"
