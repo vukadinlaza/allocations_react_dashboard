@@ -287,22 +287,22 @@ export function DealParams({deal}) {
             primary="Min. Investment"
             secondary={'$' + nWithCommas(dealParams.minimumInvestment)}
           />
-        </ListItem>}
+        </ListItem>}*/ }
         {dealParams.totalCarry && <ListItem>
           <ListItemText
             primary="Total Carry"
             secondary={dealParams.totalCarry + '%'}
           />
-        </ListItem>} */}
+        </ListItem>}
         {dealParams.estimatedSetupCosts && <ListItem>
           <ListItemText
-            primary="Est. Setup Costs"
+            primary="Estimated Setup Costs"
             secondary={dealParams.estimatedSetupCosts + '% (excludes blue sky fees)'}
           />
         </ListItem>}
         {dealParams.estimatedSetupCostsDollar && <ListItem>
           <ListItemText
-            primary="Est. Setup Costs"
+            primary="Estimated Setup Costs"
             secondary={'$' + dealParams.estimatedSetupCostsDollar + ' (excludes blue sky fees)'}
           />
         </ListItem>}
@@ -321,7 +321,7 @@ export function DealParams({deal}) {
         {dealParams.estimatedTerm && <ListItem>
           <ListItemText
             primary="Estimated Term"
-            secondary={dealParams.estimatedTerm}
+            secondary={dealParams.estimatedTerm + ' year(s)'}
           />
         </ListItem>}
         </>}
@@ -353,20 +353,20 @@ export function DealParams({deal}) {
         </ListItem>}
         {dealParams.portfolioEstimatedSetupCosts && <ListItem>
           <ListItemText
-            primary="Est. Setup Costs"
+            primary="Estimated Setup Costs"
             secondary={dealParams.portfolioEstimatedSetupCosts + '%'}
           />
         </ListItem>}
         {dealParams.portfolioEstimatedSetupCostsDollar && <ListItem>
           <ListItemText
-            primary="Est. Setup Costs"
+            primary="Estimated Setup Costs"
             secondary={'$' + dealParams.portfolioEstimatedSetupCostsDollar}
           />
         </ListItem>}
         {dealParams.portfolioManagementFees && <ListItem>
           <ListItemText
             primary="Management Fee"
-            secondary={dealParams.portfolioManagementFees + '%'}
+            secondary={dealParams.portfolioManagementFees + '% (annual)'}
           />
         </ListItem>}
         {dealParams.portfolioManagementFeesDollar && <ListItem>
