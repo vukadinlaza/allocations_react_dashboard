@@ -321,7 +321,7 @@ export function DealParams({deal}) {
         {dealParams.estimatedTerm && <ListItem>
           <ListItemText
             primary="Estimated Term"
-            secondary={dealParams.estimatedTerm + ' year(s)'}
+            secondary={dealParams.estimatedTerm + ' years'}
           />
         </ListItem>}
         </>}
