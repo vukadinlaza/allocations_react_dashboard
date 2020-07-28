@@ -206,7 +206,7 @@ export default function DealEdit() {
 
   useEffect(() => {
     if (data) {
-      if (data.organization.deal) {
+      if (data?.organization.deal) {
         setDeal(data.organization.deal)
       } else {
         setErrorMessage("Not Authorized to View this Deal")
