@@ -318,7 +318,7 @@ function AdminLinks({location}) {
           <span>Investors</span>
         </Link>
       </div> */}
-      <List>
+      {/* <List>
         <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/investors` ? "sidebar-nav-item-active" : ""}`}>
         <ListItem component={Link} to={`/admin/${organization}/investors`} button>
         <ListItemIcon style={{paddingLeft: 8}}>
@@ -327,7 +327,7 @@ function AdminLinks({location}) {
           <ListItemText primary="Investors"/>
         </ListItem>
       </div>
-      </List>
+      </List> */}
       {/**<div className={classNames('sidebar-nav-item', {"sidebar-nav-item-active": showAdministration})}
        onClick={() => setShowAdministration(x => !x)}>
        <span>Administration</span>
@@ -337,7 +337,7 @@ function AdminLinks({location}) {
           <span>Master Filing</span>
         </Link>
       </div>}**/}
-      <List>
+      {/* <List>
         <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/deals` ? "sidebar-nav-item-active" : ""}`}>
         <ListItem component={Link} to={`/admin/${organization}/deals`} button>
         <ListItemIcon style={{paddingLeft: 8}}>
@@ -346,7 +346,7 @@ function AdminLinks({location}) {
           <ListItemText primary="Deals"/>
         </ListItem>
       </div>
-      </List>
+      </List> */}
       <List>
         <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/investments` ? "sidebar-nav-item-active" : ""}`}>
         <ListItem component={Link} to={`/admin/${organization}/investments`} button>

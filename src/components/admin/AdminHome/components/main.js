@@ -97,10 +97,10 @@ export default function OrganizationOverview({orgData}) {
             </ButtonBase>
           </Grid>
           <Grid item xs={12} sm={3}>
-            <ButtonBase className={tab === "all-deals" ? classes.activeTab : classes.tab}
+            <ButtonBase className={tab === "all-investors" ? classes.activeTab : classes.tab}
                         style={{}}
-                        onClick={() => setTab('all-deals')}>
-              All Deals
+                        onClick={() => setTab('all-investors')}>
+              Investors
             </ButtonBase>
           </Grid>
         </Grid>

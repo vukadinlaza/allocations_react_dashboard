@@ -89,6 +89,7 @@ const GET_DEAL = gql`
           allocation
           totalCarry
           minimumInvestment
+          signDeadline
           wireDeadline
           estimatedSetupCosts
           managementFees
@@ -126,6 +127,7 @@ const UPDATE_DEAL = gql`
         allocation
         totalCarry
         minimumInvestment
+        signDeadline
         wireDeadline
         estimatedSetupCosts
         managementFees
@@ -164,7 +166,8 @@ const dealParamsValidInputs = [
   "minimumInvestment",
   "totalManagementFee",
   "estimatedSetupCosts",
-  "totalRoundSize",        
+  "totalRoundSize",
+  "signDeadline",        
   "wireDeadline",
   "estimatedSetupCosts",
   "managementFees",
@@ -282,14 +285,14 @@ export default function DealEdit() {
                          label="Company Description"
                          variant="outlined"/>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            {/* <Grid item xs={12} sm={6}>
               <TextField style={{width: "100%"}}
                          value={deal.date_closed || ""}
                          onChange={e => setDeal({date_closed: e.target.value})}
                          label="Closing Date"
                          type="date"
                          variant="outlined"/>
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} sm={6}>
               <FormControl variant="outlined" style={{width: "100%"}}>
                 <InputLabel>Status</InputLabel>
@@ -396,7 +399,7 @@ export default function DealEdit() {
                 <TextField style={{width: "100%"}}
                           value={deal.dealParams.signDeadline || ""}
                           onChange={e => setDeal({dealParams: {...deal.dealParams, signDeadline: e.target.value}})}
-                          label="Signed Deadline"
+                          label="Signing Deadline"
                           type="date"
                           variant="outlined"/>
             </Grid>
@@ -404,7 +407,7 @@ export default function DealEdit() {
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.wireDeadline || ""}
                          onChange={e => setDeal({dealParams:  {...deal.dealParams, wireDeadline: e.target.value}})}
-                         label="Wired Deadline"
+                         label="Wiring Deadline"
                          type="date"
                          variant="outlined"/>
             </Grid>
@@ -471,7 +474,7 @@ export default function DealEdit() {
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.portfolioManagementFees || ""}
                          onChange={e => setDeal({dealParams: {...deal.dealParams, portfolioManagementFees: e.target.value}})}
-                         label="Managment Fees (%)"
+                         label="Portfolio Managment Fees (%)"
                          InputProps={{
                            startAdornment: <InputAdornment position="start">%</InputAdornment>,
                          }}
@@ -481,7 +484,7 @@ export default function DealEdit() {
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.portfolioEstimatedSetupCosts || ""}
                          onChange={e => setDeal({dealParams: {...deal.dealParams, portfolioEstimatedSetupCosts: e.target.value}})}
-                         label="Estimated Setup Cost ($)"
+                         label="Portfolio Estimated Setup Cost ($)"
                          InputProps={{
                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
                          }}
@@ -491,7 +494,7 @@ export default function DealEdit() {
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.portfolioTotalCarry || ""}
                          onChange={e => setDeal({dealParams: {...deal.dealParams, portfolioTotalCarry: e.target.value}})}
-                         label="Total Carry (%)"
+                         label="Portfolio Total Carry (%)"
                          InputProps={{
                            startAdornment: <InputAdornment position="start">%</InputAdornment>,
                          }}
