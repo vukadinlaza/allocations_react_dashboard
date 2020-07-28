@@ -51,7 +51,7 @@ const GET_DEALS = gql`
 `
 
 
-export default function Deals () {
+export default function Deals ({showClosed}) {
   const { organization } = useParams()
   const { userProfile } = useAuth()
   const [getDeals, { data, error }] = useLazyQuery(GET_DEALS, { variables: { slug: organization }})
@@ -75,8 +75,8 @@ export default function Deals () {
 
   return (
     <div className="AllDeals">
-      <Row>
-        <Col sm={{size: 10, offset: 1}}>
+      {!showClosed && <Row>
+        <Col sm={{size: 12}}>
           <Paper className="deal-data">
             <Button variant="contained"
               color="secondary">
@@ -84,9 +84,9 @@ export default function Deals () {
             </Button>
           </Paper>
         </Col>
-      </Row>
-      <Row>
-        <Col sm="10" className="offset-sm-1">
+      </Row>}
+      {!showClosed && <Row>
+        <Col sm="12">
           <h5>Open Deals <span className="deals-length">{(open || []).length}</span></h5>
           <Paper className="table-wrapper">
             <Table>
@@ -116,8 +116,9 @@ export default function Deals () {
           </Paper>
         </Col>
       </Row>
+      }
       <Row style={{marginTop: "15px"}}>
-        <Col sm={{size: 10, offset: 1}}>
+        <Col sm={{size: 12}}>
           <h5>Closed Deals <span className="deals-length">{(closed || []).length}</span></h5>
           <Paper className="table-wrapper closed-deals">
             <Table>
