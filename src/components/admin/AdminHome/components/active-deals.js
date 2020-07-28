@@ -55,7 +55,7 @@ export default function ActiveDeals({orgData}) {
                 </Grid>
                 <Grid item xs={2} style={{textAlign: "right"}}>
                   <Button
-                    onClick={() => history.push(`/admin/${org}/deals`)} className="all-btn"
+                    onClick={() => history.push(`/admin/${org.slug}/deals`)} className="all-btn"
                     color="primary"
                     style={{padding: "3px 4px"}}>View All</Button>
           </Grid>
