@@ -4,6 +4,7 @@ import {Paper, Table, TableBody, TableCell, TableRow, Button, Grid, Typography, 
 import {useHistory} from "react-router-dom"
 import {makeStyles} from "@material-ui/core/styles";
 import {nWithCommas, formatDate} from '../../../../utils/numbers'
+import Deals from '../../../Deals/index'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,37 +28,6 @@ export default ({orgData}) => {
     const {closed } = _.groupBy(orgData.deals, d => d.status === "closed" ? "closed" : "active")
     const { organization } = orgData
     return (
-        <Grid container>
-          <Paper className={classes.paper}>
-            <Grid container>
-                <Grid item xs={10}>
-                <Typography variant="h6">
-                    🎉 Closed Deals: {(closed || []).length}
-                </Typography>
-                </Grid>
-                <Grid item xs={2} style={{textAlign: "right"}}>
-                <Button
-                    onClick={() => history.push(`/admin/${organization.slug}/deals`)}
-                    color="primary"
-                    style={{padding: "3px 4px"}}>View All</Button>
-                </Grid>
-            </Grid>
-            <Divider className={classes.divider} style={{marginBottom: -16}}/>
-            <Table>
-                <TableBody>
-                {(closed || []).map(deal => (
-                    <TableRow key={deal._id} className="deal-info">
-                    <TableCell className="company-name">{deal.company_name}</TableCell>
-                    <TableCell>${nWithCommas(deal.amount_raised)}</TableCell>
-                    <TableCell><i>closed {formatDate(deal.date_closed)}</i></TableCell>
-                    <Button color="primary" onClick={() => history.push(`/admin/${organization.slug}/deals/${deal._id}/edit`)}>
-                        edit
-                        </Button>
-                    </TableRow>
-                ))}
-                </TableBody>
-            </Table>
-            </Paper>
-        </Grid>
+          <Deals showClosed/>
     )
 }

@@ -49,7 +49,6 @@ const ORG_SUPERADMIN = gql`
 
 const tabs = [
   { id: '0', name: 'Admin Members', Component: OrganizationMembers },
-  { id: '1', name: 'Compliance Checklist', Component: Compliance }
 ]
 
 export default function SuperAdminManager () {
@@ -60,7 +59,6 @@ export default function SuperAdminManager () {
   const toggle = tab => {
     if(activeTab !== tab) setActiveTab(tab);
   }
-
   return (
     <div className="SuperAdminManager">
       <Row>
