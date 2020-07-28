@@ -11,6 +11,7 @@ import {useHistory} from "react-router-dom"
 import Typography from "@material-ui/core/Typography";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Divider from "@material-ui/core/Divider";
+import moment from 'moment'
 
 /***
  *
@@ -48,21 +49,17 @@ export default function ActiveDeals({orgData}) {
       <Grid container>
           <Grid item xs={12}>
           <Paper className={classes.paper}>
-                <Grid item xs={12}>
+                <Grid container xs={12} justify="space-between">
                   <Typography variant="h6">
                     💡 Active Deals: {(active || []).length}
                   </Typography>
-                    <Button color="primary"
-                    className="all-btn"
-                    style={{padding: "3px 4px"}} onClick={() => history.push(`/admin/${org.slug}/deal/new`)}>
+                  <Button color="primary"
+                    variant="contained"
+                    style={{padding: "5px"}} onClick={() => history.push(`/admin/${org.slug}/deal/new`)}>
                     Create Deal
                   </Button>
                 </Grid>
                 <Grid item xs={2} style={{textAlign: "left"}}>
-                  <Button
-                    onClick={() => history.push(`/admin/${org.slug}/deals`)} className="all-btn"
-                    color="primary"
-                    style={{padding: "3px 4px"}}>View All</Button>
           </Grid>
           <Divider className={classes.divider} style={{marginBottom: -16}}/>
           <Table className={classes.table}>
@@ -92,10 +89,12 @@ function Deal({deal}) {
   const {organization} = useParams();
   const val = (Number(deal.amount_raised) / (Number(deal.target) || Infinity)) * 100;
 
+  const formattedDate_closed = moment(deal.date_closed).format('Do MMMM YYYY')
+
   return (
     <TableRow hover>
       <TableCell><strong>{deal.company_name}</strong></TableCell>
-      <TableCell>{deal.date_closed ? formatDate(deal.date_closed) : "TBD"}</TableCell>
+      <TableCell>{formattedDate_closed ? formattedDate_closed : "TBD"}</TableCell>
       <TableCell>
         <div>{Math.round(val || 0)}%</div>
         <LinearProgress className="deal-progress" variant="determinate" color="secondary" value={val}/>

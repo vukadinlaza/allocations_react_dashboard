@@ -218,13 +218,13 @@ export function DealParams({deal}) {
       <List>
       {show && <> <ListItem>
           <ListItemText
-            primary="Sign By Date"
+            primary="Signing Date"
             secondary={_.upperFirst(formattedDate_sign)}
           />
         </ListItem>
         <ListItem>
           <ListItemText
-            primary="Wire By Date"
+            primary="Wiring Date"
             secondary={_.upperFirst(formattedDate_wire)}
           />
         </ListItem>
@@ -249,7 +249,7 @@ export function DealParams({deal}) {
       <List>
         <ListItem>
           <ListItemText
-            primary="Deal Lead"
+            primary="Organizer"
             secondary={deal.deal_lead}
           />
         </ListItem>
@@ -287,7 +287,7 @@ export function DealParams({deal}) {
         </>}
         </List>
 
-        <div style={{
+        {(dealParams.portfolioTotalCarry || dealParams.portfolioEstimatedSetupCosts || dealParams.portfolioManagementFees) && <div style={{
         backgroundColor: "#f7f9fa",
         height: 44,
         display: "flex",
@@ -302,6 +302,7 @@ export function DealParams({deal}) {
         Portfolio Company Terms
       </span>
       </div>
+        }
       <List>
       {show && <>
         {dealParams.portfolioTotalCarry && <ListItem>
@@ -327,6 +328,7 @@ export function DealParams({deal}) {
     </>
   )
 }
+
 
 function InvestorData({investor}) {
   if (!investor) return <Paper className="tile"><Loader/></Paper>
