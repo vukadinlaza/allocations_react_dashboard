@@ -12,6 +12,8 @@ import Typography from "@material-ui/core/Typography";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Divider from "@material-ui/core/Divider";
 import moment from 'moment'
+import InvestmentBoard from './investmentStatus/index'
+
 
 /***
  *
@@ -87,25 +89,31 @@ export default function ActiveDeals({orgData}) {
 function Deal({deal}) {
   const history = useHistory();
   const {organization} = useParams();
+  const [activeDeal, setActiveDeal] = useState();
   const val = (Number(deal.amount_raised) / (Number(deal.target) || Infinity)) * 100;
 
   const formattedDate_closed = moment(deal.date_closed).format('Do MMMM YYYY')
 
   return (
-    <TableRow hover>
-      <TableCell><strong>{deal.company_name}</strong></TableCell>
-      <TableCell>{formattedDate_closed ? formattedDate_closed : "TBD"}</TableCell>
-      <TableCell>
-        <div>{Math.round(val || 0)}%</div>
-        <LinearProgress className="deal-progress" variant="determinate" color="secondary" value={val}/>
-        <div>${nWithCommas(deal.amount_raised)} of ${nWithCommas(deal.target)}</div>
-      </TableCell>
-      <TableCell style={{textAlign: "right"}}>
-        <Button color="primary" onClick={() => history.push(`/admin/${organization}/deals/${deal._id}/edit`)}>
-          edit
-        </Button>
-      </TableCell>
-    </TableRow>
+    <>
+      <TableRow hover onClick={() => setActiveDeal(activeDeal ? false : deal)}>
+        <TableCell><strong>{deal.company_name}</strong></TableCell>
+        <TableCell>{formattedDate_closed ? formattedDate_closed : "TBD"}</TableCell>
+        <TableCell>
+          <div>{Math.round(val || 0)}%</div>
+          <LinearProgress className="deal-progress" variant="determinate" color="secondary" value={val}/>
+          <div>${nWithCommas(deal.amount_raised)} of ${nWithCommas(deal.target)}</div>
+        </TableCell>
+        <TableCell style={{textAlign: "right"}}>
+          <Button color="primary" onClick={() => history.push(`/admin/${organization}/deals/${deal._id}/edit`)}>
+            edit
+          </Button>
+        </TableCell>
+      </TableRow>
+      <>
+      {activeDeal && <InvestmentBoard deal={deal}/>}
+      </>
+    </>
   )
 }
 
