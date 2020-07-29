@@ -45,7 +45,7 @@ const GET_INVESTORS = gql`
   }
 `
 
-export default function Investments () {
+export default function Investors () {
   const { organization } = useParams()
   const { userProfile } = useAuth()
   const [getInvestors, { data, error }] = useLazyQuery(GET_INVESTORS, { variables: { slug: organization } })
@@ -58,20 +58,19 @@ export default function Investments () {
 
   if (!data) return <div><Loader /></div>
 
-  console.log(data)
   
   const { organization: { investors } } = data
   return (
     <div className="Investors">
       <Row>
-        {organization === "allocations" && <Col sm={{size: 10, offset: 1}}>
+        {organization === "allocations" && <Col sm={{size: 12}}>
           <Paper className="actions">
             <Link to="/investors/new">
               <Button variant="contained" color="secondary">INVITE INVESTOR</Button>
             </Link>
           </Paper>
         </Col>}
-        <Col sm="10" className="offset-sm-1">
+        <Col sm="12">
           <Paper className="table-wrapper">
             <Table>
               <TableHead>
