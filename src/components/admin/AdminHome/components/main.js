@@ -21,6 +21,7 @@ import ActiveDeals from './active-deals'
 import OrgCards from './org-cards'
 import ClosedDeals from './closed-deals'
 import Loader from '../../../utils/Loader'
+import Investors from '../../../Investors'
 
 
 
@@ -110,6 +111,7 @@ export default function OrganizationOverview({orgData}) {
         {tab === "active-deals" && <ActiveDeals orgData={orgData}/>}
         {tab === "closed-deals" && <ClosedDeals orgData={orgData}/>}
         {tab === "profile" && <OrgCards organization={organization} investor={orgData.investor}/>}
+        {tab === "all-investors" && <Investors />}
       </>
     </>
   )

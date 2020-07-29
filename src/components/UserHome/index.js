@@ -166,7 +166,6 @@ export default function UserHome(props) {
     return inv.deal._id
   })
   const total_invested = _.sumBy(userInvestments, 'amount') || 0
-  console.log('investment count', userInvestments.length, userProfile.investments.length)
   const chartEvents = [
     {
       eventName: "select",

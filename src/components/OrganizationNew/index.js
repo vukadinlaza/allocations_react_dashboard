@@ -116,7 +116,6 @@ function LogoUploadAlt ({ organization, setOrg }) {
           style={{ display: "none" }} 
           onChange={async ({ target }) => {
             if (target.validity.valid) {
-              console.log(target.files[0])
               setOrg({ logo: target.files[0], logoSrc: await readFile(target.files[0]) })
             }
           }} />
