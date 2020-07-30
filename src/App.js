@@ -68,6 +68,7 @@ const App = () => {
 
           {/** Onboarding **/}
           <Route path="/getting-started" component={Faq} exact/>
+          <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact/>
 
           {/** Deals **/}
           <Redirect from={`/public/:organization/deals/:deal_slug`} to="/deals/:deal_slug"/>
@@ -104,8 +105,6 @@ const App = () => {
           <PrivateRoute path="/admin/:organization/compliance" component={Compliance} exact/>
           <PrivateRoute path="/admin/:organization/master-filing" component={MasterFiling} exact/>
           <AdminRoute path="/admin/:organization/investors" component={Investors} exact/>
-
-          <Redirect from={`/spv-onboarding`} to="/"/>
 
           {/** catchall **/}
           <PrivateRoute path="/" component={UserHome}/>
