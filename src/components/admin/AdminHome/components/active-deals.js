@@ -46,7 +46,6 @@ export default function ActiveDeals({orgData}) {
   const org = orgData.organization
 
   const {active} = _.groupBy(org.deals, d => d.status === "closed" ? "closed" : "active")
-
   return (
       <Grid container>
           <Grid item xs={12}>
@@ -76,7 +75,7 @@ export default function ActiveDeals({orgData}) {
               </TableHead>
               <TableBody>
                 {(active || []).map(deal => (
-                  <Deal key={deal._id} deal={deal}/>
+                  <Deal key={deal._id} deal={deal} investments={org.investments}/>
                 ))}
               </TableBody>
             </Table>
@@ -86,7 +85,7 @@ export default function ActiveDeals({orgData}) {
   )
 }
 
-function Deal({deal}) {
+function Deal({deal, investments}) {
   const history = useHistory();
   const {organization} = useParams();
   const [activeDeal, setActiveDeal] = useState();
@@ -111,7 +110,7 @@ function Deal({deal}) {
         </TableCell>
       </TableRow>
       <>
-      {activeDeal && <InvestmentBoard deal={deal}/>}
+      {activeDeal && <InvestmentBoard deal={deal} investments={investments}/>}
       </>
     </>
   )
