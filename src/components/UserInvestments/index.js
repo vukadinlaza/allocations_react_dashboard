@@ -42,7 +42,6 @@ const GET_INVESTOR = gql`
   }
 `
 
-
 const useStyles = makeStyles((theme) => ({
   totalInvested: {
     padding: "8px 16px",
@@ -53,6 +52,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const TABLE_ORDER = {
+  "invited" : { status: 'invited', display : 'Invited', order: 0},
+  "pledged" : { status: 'pledged', display : 'Pledged', order: 1},
+  "onboarded" : { status: 'onboarded', display : 'Onboarded', order: 2},
+  "complete" : { status: 'complete', display : 'Complete', order: 3},
+}
+
+const TR = ({ investment, showDocs, setShowDocs }) => {
+  return (
+    <TableRow key={investment._id} className="investment-row">
+      <TableCell scope="row">{investment.deal.company_name}</TableCell>
+      <Hidden xsDown><TableCell>{investment.deal.company_description}</TableCell></Hidden>
+      <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) :
+        <i>TBD</i>}</TableCell>
+      <TableCell align="center"><InvestmentStatus investment={investment}/></TableCell>
+      <TableCell align="center">{formatDate(investment.deal.date_closed)}</TableCell>
+      <TableCell align="right">
+        {_.get(investment, 'documents.length', 0) > 0
+          ? showDocs && (showDocs._id === investment._id)
+            ? <FontAwesomeIcon icon="times" onClick={() => setShowDocs(null)}/>
+            : <FontAwesomeIcon icon="info-circle" onClick={() => setShowDocs(investment)}/>
+          : ""
+        }
+      </TableCell>
+    </TableRow>
+  )
+}
 
 export default function UserInvestments() {
   const classes = useStyles();
@@ -69,10 +95,19 @@ export default function UserInvestments() {
 
   if (!userProfile.email) return <div><Loader/></div>
 
-  const investments = _.orderBy(userProfile.investments, i => new Date(i.deal.date_closed).getTime(), 'desc')
+  const investments = _.orderBy(
+    userProfile.investments,
+    [
+      i => TABLE_ORDER[i.status].order,
+      i => new Date(i.deal.date_closed).getTime(),
+    ],
+    ['asc', 'desc'],
+  )
+
   if (showDocs) {
     investments.splice(investments.findIndex(i => i._id === showDocs._id) + 1, 0, {showDocs})
   }
+
   return (
     <>
       <Grid container spacing={2}>
@@ -88,31 +123,28 @@ export default function UserInvestments() {
         </Grid>
         <Grid item xs={12}>
           <Hidden smUp>
+            <h6>Pending Deals:</h6>
             <Paper>
               <Table dense>
-                {investments.map((investment) => (
+                {investments.filter(i => i.status !== 'complete').map((investment) => (
                   investment.showDocs ? <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents}/>
-                    : <TableRow key={investment._id} className="investment-row">
-                      <TableCell scope="row">{investment.deal.company_name}</TableCell>
-                      <Hidden xsDown><TableCell>{investment.deal.company_description}</TableCell></Hidden>
-                      <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) :
-                        <i>TBD</i>}</TableCell>
-                      <TableCell align="center"><InvestmentStatus investment={investment}/></TableCell>
-                      <TableCell align="center">{formatDate(investment.deal.date_closed)}</TableCell>
-                      <TableCell align="right">
-                        {_.get(investment, 'documents.length', 0) > 0
-                          ? showDocs && (showDocs._id === investment._id)
-                            ? <FontAwesomeIcon icon="times" onClick={() => setShowDocs(null)}/>
-                            : <FontAwesomeIcon icon="info-circle" onClick={() => setShowDocs(investment)}/>
-                          : ""
-                        }
-                      </TableCell>
-                    </TableRow>
+                    : <TR key={investment._id} investment={investment} showDocs={showDocs} setShowDocs={setShowDocs} />
+                ))}
+              </Table>
+            </Paper>
+            <br />
+            <h6>Completed:</h6>
+            <Paper>
+              <Table dense>
+                {investments.filter(i => i.status === 'complete').map((investment) => (
+                  investment.showDocs ? <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents}/>
+                    : <TR key={investment._id} investment={investment} showDocs={showDocs} setShowDocs={setShowDocs} />
                 ))}
               </Table>
             </Paper>
           </Hidden>
           <Hidden only="xs">
+            <h6>Pending Deals:</h6>
             <Paper>
               <Table>
                 <TableHead>
@@ -126,24 +158,31 @@ export default function UserInvestments() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {investments.map((investment) => (
+                  {investments.filter(i => i.status !== 'complete').map((investment) => (
                     investment.showDocs ? <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents}/>
-                      : <TableRow key={investment._id} className="investment-row">
-                        <TableCell scope="row">{investment.deal.company_name}</TableCell>
-                        <Hidden xsDown><TableCell>{investment.deal.company_description}</TableCell></Hidden>
-                        <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) :
-                          <i>TBD</i>}</TableCell>
-                        <TableCell align="center"><InvestmentStatus investment={investment}/></TableCell>
-                        <TableCell align="center">{formatDate(investment.deal.date_closed)}</TableCell>
-                        <TableCell align="right">
-                          {_.get(investment, 'documents.length', 0) > 0
-                            ? showDocs && (showDocs._id === investment._id)
-                              ? <FontAwesomeIcon icon="times" onClick={() => setShowDocs(null)}/>
-                              : <FontAwesomeIcon icon="info-circle" onClick={() => setShowDocs(investment)}/>
-                            : ""
-                          }
-                        </TableCell>
-                      </TableRow>
+                      : <TR key={investment._id} investment={investment} showDocs={showDocs} setShowDocs={setShowDocs} />
+                  ))}
+                </TableBody>
+              </Table>
+            </Paper>
+            <br />
+            <h6>Completed:</h6>
+            <Paper>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Company</TableCell>
+                    <Hidden xsDown><TableCell>Description</TableCell></Hidden>
+                    <TableCell align="right">Amount</TableCell>
+                    <TableCell align="center">Status</TableCell>
+                    <TableCell align="center">Closing Date</TableCell>
+                    <TableCell align="right">Docs</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {investments.filter(i => i.status === 'complete').map((investment) => (
+                    investment.showDocs ? <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents}/>
+                      : <TR key={investment._id} investment={investment} showDocs={showDocs} setShowDocs={setShowDocs} />
                   ))}
                 </TableBody>
               </Table>
