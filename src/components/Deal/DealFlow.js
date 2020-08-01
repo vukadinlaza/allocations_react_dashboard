@@ -92,7 +92,7 @@ export default function InvestmentFlow({investment, deal, investor, refetch}) {
     return <CompleteInvestment investment={investment}/>
   }
 
-  const onboardingLinkType = getOnboardingLinkType(deal.onboarding_link)
+  const onboardingLinkType = getOnboardingLinkType(deal.onboarding_link) || 'docusign'
   const {approved} = deal
 
   return (
@@ -504,12 +504,19 @@ function Onboarding({investment, deal, investor, status}) {
     }
   }
 
+
   let urlParameters = Object.entries(params)
     .map(e => e.map(encodeURI).join("=")).join('&')
 
-  const link = location.pathname.includes('/public/')
+  let link = location.pathname.includes('/public/')
     ? deal.onboarding_link
     : `${deal.onboarding_link}&${urlParameters}`
+
+    if(deal.onboarding_link.includes('demo')) {
+      link = deal.onboarding_link
+    }
+
+    console.log(deal.onboarding_link)
 
   return (
     <div className={status === "pledged" ? "document-iframe" : "document-iframe hide"}>
