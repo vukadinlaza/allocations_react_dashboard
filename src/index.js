@@ -8,9 +8,16 @@ import {Auth0Provider} from "./react-auth0-spa";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
-
 import theme from './theme';
 import "./index.css";
+
+import Bugsnag from '@bugsnag/js'
+import BugsnagPluginReact from '@bugsnag/plugin-react'
+
+Bugsnag.start({
+  apiKey: 'b6fcaf96aefe9b327e7db6e6d6178a2c',
+  plugins: [new BugsnagPluginReact()]
+})
 
 /***
  *
@@ -23,16 +30,21 @@ if (process.env.NODE_ENV === "production") {
   // initialize hotjar
   hotjar.initialize(1630114, 6)
 }
+const ErrorBoundary = Bugsnag.getPlugin('react')
+  .createErrorBoundary(React)
 
 ReactDOM.render(
-  <ThemeProvider theme={theme}>
+  <ErrorBoundary>
+    <ThemeProvider theme={theme}>
     <Router>
-      <Auth0Provider>
-        <App/>
-      </Auth0Provider>
-    </Router>
-  </ThemeProvider>,
+        <Auth0Provider>
+          <App/>
+        </Auth0Provider>
+      </Router>
+    </ThemeProvider>
+  </ErrorBoundary>,
   document.getElementById("root")
+   
 );
 
 // If you want your app to work offline and load faster, you can change
