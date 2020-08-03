@@ -438,7 +438,7 @@ export default function DealEdit() {
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.managementFees || ""}
                          onChange={e => setDeal({dealParams: {...deal.dealParams, managementFees: e.target.value}})}
-                         label="Managment Fee (%)"
+                         label="Management Fee (%)"
                          InputProps={{
                            startAdornment: <InputAdornment position="start">%</InputAdornment>,
                          }}
@@ -448,7 +448,7 @@ export default function DealEdit() {
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.managementFeesDollar || ""}
                          onChange={e => setDeal({dealParams: {...deal.dealParams, managementFeesDollar: e.target.value}})}
-                         label="Managment Fee ($)"
+                         label="Management Fee ($)"
                          InputProps={{
                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
                          }}
@@ -525,7 +525,7 @@ export default function DealEdit() {
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.portfolioManagementFees || ""}
                          onChange={e => setDeal({dealParams: {...deal.dealParams, portfolioManagementFees: e.target.value}})}
-                         label="Portfolio Managment Fee (%)"
+                         label="Portfolio Management Fee (%)"
                          InputProps={{
                            startAdornment: <InputAdornment position="start">%</InputAdornment>,
                          }}
@@ -535,7 +535,7 @@ export default function DealEdit() {
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.portfolioManagementFeesDollar || ""}
                          onChange={e => setDeal({dealParams: {...deal.dealParams, portfolioManagementFeesDollar: e.target.value}})}
-                         label="Portfolio Managment Fee ($)"
+                         label="Portfolio Management Fee ($)"
                          InputProps={{
                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
                          }}
