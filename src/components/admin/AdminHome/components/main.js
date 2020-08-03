@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function OrganizationOverview({orgData}) {
-  const [tab, setTab] = useState("profile")
+  const [tab, setTab] = useState("active-deals")
   const classes = useStyles();
 
   if (!orgData) return <Paper style={{padding: "25px"}}><Loader/></Paper>
@@ -76,13 +76,6 @@ export default function OrganizationOverview({orgData}) {
     </Typography>
       <div className={classes.tabs}>
         <Grid container justify="center">
-          <Grid item xs={12} sm={3}>
-            <ButtonBase className={tab === "profile" ? classes.activeTab : classes.tab}
-                        style={{borderRight: "1px solid #e1e9ec"}}
-                        onClick={() => setTab('profile')}>
-              Organization
-            </ButtonBase>
-          </Grid>
           <Grid item xs={12} sm={3}>
             <ButtonBase className={tab === "active-deals" ? classes.activeTab : classes.tab}
                         style={{}}
@@ -102,6 +95,13 @@ export default function OrganizationOverview({orgData}) {
                         style={{}}
                         onClick={() => setTab('all-investors')}>
               Investors
+            </ButtonBase>
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <ButtonBase className={tab === "setting" ? classes.activeTab : classes.tab}
+                        style={{borderRight: "1px solid #e1e9ec"}}
+                        onClick={() => setTab('setting')}>
+              Settings
             </ButtonBase>
           </Grid>
         </Grid>
