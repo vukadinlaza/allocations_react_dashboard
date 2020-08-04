@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import _ from 'lodash'
-import { useMutation, useQuery } from '@apollo/react-hooks'
-import { gql } from 'apollo-boost'
 import { useParams } from 'react-router-dom'
-import { nWithCommas, formatDate } from '../../../../utils/numbers'
+import { nWithCommas } from '../../../../utils/numbers'
 import { Paper, Table, TableBody, TableCell, TableRow, TableHead, Button, LinearProgress, Grid } from '@material-ui/core'
 import Loader from '../../../utils/Loader'
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom"
 import Typography from "@material-ui/core/Typography";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Divider from "@material-ui/core/Divider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from 'moment'
-import InvestmentBoard from './investmentFlow/index'
+import InvestmentFlow from './investmentFlow/index'
 
 
 /***
@@ -69,6 +67,7 @@ export default function ActiveDeals({ orgData }) {
                 <TableCell>Name</TableCell>
                 <TableCell>Closes</TableCell>
                 <TableCell>Progress</TableCell>
+                <TableCell>SOW</TableCell>
                 <TableCell>
                 </TableCell>
               </TableRow>
@@ -85,11 +84,15 @@ export default function ActiveDeals({ orgData }) {
   )
 }
 
+
+// clicking on the whole row opens the investment board
 function Deal({ deal, investments }) {
   const history = useHistory();
   const { organization } = useParams();
   const [activeDeal, setActiveDeal] = useState();
   const val = (Number(deal.amount_raised) / (Number(deal.target) || Infinity)) * 100;
+  // this isnt built into the app yet
+  const hasSOW = true;
 
   const formattedDate_closed = moment(deal.date_closed).format('Do MMMM YYYY')
 
@@ -103,6 +106,7 @@ function Deal({ deal, investments }) {
           <LinearProgress className="deal-progress" variant="determinate" color="secondary" value={val} />
           <div>${nWithCommas(deal.amount_raised)} of ${nWithCommas(deal.target)}</div>
         </TableCell>
+        <TableCell>{<FontAwesomeIcon icon={hasSOW ? 'check-circle' : 'times-circle'} size="lg" color="green" />}</TableCell>
         <TableCell style={{ textAlign: "right" }}>
           <Button color="primary" onClick={() => history.push(`/admin/${organization}/deals/${deal._id}/edit`)}>
             edit
@@ -110,7 +114,7 @@ function Deal({ deal, investments }) {
         </TableCell>
       </TableRow>
       <>
-        {activeDeal && <InvestmentBoard deal={deal} investments={investments} />}
+        {activeDeal && <InvestmentFlow deal={deal} investments={investments} />}
       </>
     </>
   )

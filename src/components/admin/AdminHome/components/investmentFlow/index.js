@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import { gql } from 'apollo-boost'
-import { Grid, Paper, Typography } from '@material-ui/core'
+import { Grid, Paper, Typography, Avatar } from '@material-ui/core'
 import { makeStyles } from "@material-ui/core/styles";
 import { useQuery } from '@apollo/react-hooks'
 import Loader from '../../../../utils/Loader'
@@ -11,7 +11,7 @@ import Loader from '../../../../utils/Loader'
 const useStyles = makeStyles((theme) => ({
     paper: {
         padding: theme.spacing(2),
-        backgroundColor: "#f9fbfb",
+        backgroundColor: "#FFFFFF",
         minWidth: '100%',
         minHeight: '400px'
     },
@@ -20,7 +20,12 @@ const useStyles = makeStyles((theme) => ({
     },
     innerPaper: {
         minWidth: '200px',
-        minHeight: '250px'
+        minHeight: '250px',
+        backgroundColor: "##FBFCFC",
+    },
+    avatar: {
+        margin: '0.25rem',
+        backgroundColor: 'blue',
     }
 }));
 
@@ -111,12 +116,11 @@ export default ({ deal }) => {
 
 
 const InvestmentSquare = ({ investment }) => {
-
+    const classes = useStyles();
     return (
-        <div>
-            {investment.status}
+        <Grid container justify="center" alignItems="center">
+            <Avatar alt={investment.investor.email} className={classes.avatar} />
             {investment.investor.email}
-        </div>
+        </Grid>
     )
-
 }
