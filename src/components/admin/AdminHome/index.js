@@ -40,9 +40,16 @@ export const ORG_OVERVIEW = gql`
         target
         amount_raised
         investments {
-          _id
-          amount
+        _id
           status
+          amount
+          deal {
+            _id
+            company_name
+          }
+          investor {
+            email
+          }
         }
       }
       investors {
@@ -63,6 +70,9 @@ export const ORG_OVERVIEW = gql`
         deal {
           _id
           company_name
+        }
+        investor {
+          email
         }
         investor {
           _id
