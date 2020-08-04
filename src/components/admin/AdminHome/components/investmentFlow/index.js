@@ -18,9 +18,6 @@ const useStyles = makeStyles((theme) => ({
     divider: {
         margin: "16px -16px"
     },
-    root: {
-        flexGrow: 1,
-    },
     innerPaper: {
         minWidth: '200px',
         minHeight: '250px'
@@ -33,11 +30,11 @@ const useStyles = makeStyles((theme) => ({
 // if investment status is 'wired' item should show in 'Complete' column
 
 const boardData = [
-    { title: 'View', key: '' },
-    { title: 'Sign', key: 'invited' },
-    { title: 'KYC', key: 'signed' },
-    { title: 'Wire', key: 'kyc' },
-    { title: 'Complete', key: 'wired' },
+    { title: 'View', key: 'invited' },
+    { title: 'Sign', key: 'sign' },
+    { title: 'KYC', key: 'kyc' },
+    { title: 'Wire', key: 'wire' },
+    { title: 'Complete', key: 'complete' },
 ]
 
 
@@ -57,57 +54,55 @@ export const DEAL_INVESTMENTS = gql`
   }
 `
 
-
 export default ({ deal }) => {
     const classes = useStyles()
     const { data, loading } = useQuery(DEAL_INVESTMENTS, {
         variables: { _id: deal._id },
         pollInterval: 500
     })
+    const investments = data?.deal?.investments.map(inv => {
+        const hasKycDoc = inv.investor?.documents?.find(d => d.documentName && (d.documentName.includes('W-8') || d.documentName.includes('W-9')))
+        if (inv.status === 'invited' && !hasKycDoc) {
+            inv.status = 'sign'
+            return inv
+        }
+        if (inv.status === 'signed' && !hasKycDoc) {
+            inv.status = 'kyc'
+            return inv
+        }
+        if (inv.status === 'signed' && hasKycDoc) {
+            inv.status = 'wire'
+            return inv
+        }
+        if (inv.status === 'wired') {
+            inv.status = 'complete'
+            return inv
+        }
+        return inv
+    })
+    const groupedInvestments = _.groupBy(investments, 'status')
+
     const categories = boardData.map(type => {
-        const categoryInvestments = data?.deal?.investments.filter(inv => {
-
-            const hasKycDoc = inv.investor.documents.find(d => d.documentName.includes('W8'))
-            console.log('has kyc doc', hasKycDoc)
-
-            // invited/seen deal but not yet signed SPV or KYC doc
-            if ((inv.status === 'invited' || inv.status === 'onboarding') && type.key === 'signed' && !hasKycDoc) {
-                return inv
-            }
-            // signed but no kyc doc => should in kyc column
-            if (inv.status === 'signed' && type.key === 'signed' && !hasKycDoc) {
-                return inv
-            }
-            // signed SPV and KYC doc needs to wire
-            if (inv.status === 'signed' && type.key === 'kyc' && hasKycDoc) {
-                return inv
-            }
-            if ((inv.status === 'complete' || inv.state === 'wired') && type.key === 'wired') {
-                return inv
-            }
-            return inv.status === type.key
-        })
+        const categoryInvestments = groupedInvestments[type.key]
         return { ...type, categoryInvestments }
     }) || []
 
     if (loading) return <Loader />
 
     return (
-        <Grid container className={classes.root}>
+        <Grid container>
             <Paper className={classes.paper}>
-                <Grid item>
-                    <Grid container justify="center" spacing={3}>
-                        {categories.map((value) => (
-                            <Grid key={value.title} item >
-                                <Typography variant="h6">
-                                    {value.title}
-                                </Typography>
-                                <Paper className={classes.innerPaper}>
-                                    {value?.categoryInvestments?.map(inv => <InvestmentSquare investment={inv} />)}
-                                </Paper>
-                            </Grid>
-                        ))}
-                    </Grid>
+                <Grid container justify="center" spacing={3}>
+                    {categories.map((value) => (
+                        <Grid key={value.title} item >
+                            <Typography variant="h6">
+                                {value.title}
+                            </Typography>
+                            <Paper className={classes.innerPaper}>
+                                {value?.categoryInvestments?.map(inv => <InvestmentSquare investment={inv} />)}
+                            </Paper>
+                        </Grid>
+                    ))}
                 </Grid>
             </Paper>
         </Grid>
