@@ -69,12 +69,18 @@ export const GET_INVESTOR_DEAL = gql`
           allocation
           totalCarry
           minimumInvestment
+          signDeadline
           wireDeadline
           estimatedSetupCosts
+          estimatedSetupCostsDollar
+          estimatedTerm
           managementFees
+          managementFeesDollar
           portfolioTotalCarry
           portfolioEstimatedSetupCosts
+          portfolioEstimatedSetupCostsDollar
           portfolioManagementFees
+          portfolioManagementFeesDollar
         }
       }
     } 
@@ -193,7 +199,23 @@ export function DealParams({deal}) {
     ? new BN(dealParams.estimatedSetupCosts).dividedBy(dealParams.totalRoundSize).times(100).toFixed(0)
     : null
 
-  const show = allocationPercent || setupCosts || dealParams.totalCarry || dealParams.minimumInvestment || dealParams.totalManagementFee || dealParams.signDeadline || dealParams.wireDeadline || dealParams.estimatedSetupCosts || dealParams.managementFees || dealParams.portfolioTotalCarry || dealParams.portfolioEstimatedSetupCosts || dealParams.portfolioManagementFees 
+  const show = allocationPercent || 
+                setupCosts || 
+                dealParams.totalCarry || 
+                dealParams.minimumInvestment || 
+                dealParams.totalManagementFee || 
+                dealParams.signDeadline || 
+                dealParams.wireDeadline ||
+                dealParams.estimatedSetupCosts ||
+                dealParams.estimatedSetupCostsDollar ||
+                dealParams.estimatedTerm || 
+                dealParams.managementFees ||
+                dealParams.managementFeesDollar || 
+                dealParams.portfolioTotalCarry || 
+                dealParams.portfolioEstimatedSetupCosts ||
+                dealParams.portfolioEstimatedSetupCostsDollar || 
+                dealParams.portfolioManagementFees ||
+                dealParams.portfolioManagementFeesDollar
 
   const formattedDate_sign = moment(dealParams.signDeadline).format('Do MMMM YYYY')
   const formattedDate_wire = moment(dealParams.wireDeadline).format('Do MMMM YYYY')
@@ -218,13 +240,13 @@ export function DealParams({deal}) {
       <List>
       {show && <> <ListItem>
           <ListItemText
-            primary="Signing Date"
+            primary="Signing Deadline"
             secondary={_.upperFirst(formattedDate_sign)}
           />
         </ListItem>
         <ListItem>
           <ListItemText
-            primary="Wiring Date"
+            primary="Wiring Deadline"
             secondary={_.upperFirst(formattedDate_wire)}
           />
         </ListItem>
@@ -265,23 +287,41 @@ export function DealParams({deal}) {
             primary="Min. Investment"
             secondary={'$' + nWithCommas(dealParams.minimumInvestment)}
           />
-        </ListItem>}
+        </ListItem>}*/ }
         {dealParams.totalCarry && <ListItem>
           <ListItemText
             primary="Total Carry"
             secondary={dealParams.totalCarry + '%'}
           />
-        </ListItem>} */}
+        </ListItem>}
         {dealParams.estimatedSetupCosts && <ListItem>
           <ListItemText
-            primary="Est. Setup Costs"
-            secondary={'$' + dealParams.estimatedSetupCosts + ' (excludes blue sky fees)'}
+            primary="Estimated Setup Costs"
+            secondary={dealParams.estimatedSetupCosts + '% (excludes blue sky fees)'}
+          />
+        </ListItem>}
+        {dealParams.estimatedSetupCostsDollar && <ListItem>
+          <ListItemText
+            primary="Estimated Setup Costs"
+            secondary={'$' + dealParams.estimatedSetupCostsDollar + ' (excludes blue sky fees)'}
           />
         </ListItem>}
         {dealParams.managementFees && <ListItem>
           <ListItemText
-            primary="Management Fees"
-            secondary={dealParams.managementFees + '%'}
+            primary="Management Fee"
+            secondary={dealParams.managementFees + '% (annual)'}
+          />
+        </ListItem>}
+        {dealParams.managementFeesDollar && <ListItem>
+          <ListItemText
+            primary="Management Fee"
+            secondary={'$' + dealParams.managementFeesDollar}
+          />
+        </ListItem>}
+        {dealParams.estimatedTerm && <ListItem>
+          <ListItemText
+            primary="Estimated Term"
+            secondary={dealParams.estimatedTerm + ' years'}
           />
         </ListItem>}
         </>}
@@ -313,14 +353,26 @@ export function DealParams({deal}) {
         </ListItem>}
         {dealParams.portfolioEstimatedSetupCosts && <ListItem>
           <ListItemText
-            primary="Est. Setup Costs"
-            secondary={'$' + dealParams.portfolioEstimatedSetupCosts}
+            primary="Estimated Setup Costs"
+            secondary={dealParams.portfolioEstimatedSetupCosts + '%'}
+          />
+        </ListItem>}
+        {dealParams.portfolioEstimatedSetupCostsDollar && <ListItem>
+          <ListItemText
+            primary="Estimated Setup Costs"
+            secondary={'$' + dealParams.portfolioEstimatedSetupCostsDollar}
           />
         </ListItem>}
         {dealParams.portfolioManagementFees && <ListItem>
           <ListItemText
-            primary="Management Fees"
-            secondary={dealParams.portfolioManagementFees + '%'}
+            primary="Management Fee"
+            secondary={dealParams.portfolioManagementFees + '% (annual)'}
+          />
+        </ListItem>}
+        {dealParams.portfolioManagementFeesDollar && <ListItem>
+          <ListItemText
+            primary="Management Fee"
+            secondary={'$' + dealParams.portfolioManagementFeesDollar}
           />
         </ListItem>}
       </>}

@@ -141,7 +141,11 @@ export default function AdminHome() {
 
   return (
     <>
+     {data.investor.admin && <Grid item xs={12}>
+          <SuperAdmin org={org}/>
+        </Grid>}
     <OrganizationOverview orgData={data}/>
+
       {/* <Grid container spacing={2}>
         {data.investor.admin && <Grid item xs={12}>
           <SuperAdmin org={org}/>
