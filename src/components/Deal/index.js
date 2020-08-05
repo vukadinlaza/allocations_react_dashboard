@@ -1,18 +1,23 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import Loader from '../utils/Loader'
 import _ from "lodash"
 import BN from 'bignumber.js'
-import {gql} from 'apollo-boost'
-import {useParams, useHistory, Link, useLocation} from 'react-router-dom'
-import {useLazyQuery, useMutation} from '@apollo/react-hooks';
-import {useAuth} from "../../auth/useAuth";
-import {nWithCommas} from '../../utils/numbers'
+import { gql } from 'apollo-boost'
+import { useParams, useHistory, Link, useLocation } from 'react-router-dom'
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useAuth } from "../../auth/useAuth";
+import { nWithCommas } from '../../utils/numbers'
 import {
   Paper,
-  Typography, List, ListItem, ListItemText
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  Grid
 } from '@material-ui/core';
 import queryString from 'query-string'
 import InvestmentFlow from './DealFlow'
+import Pledge from './pledge'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import moment from 'moment'
 
@@ -106,11 +111,11 @@ export const CREATE_INVESTMENT = gql`
 
 export default function Deal() {
   const mobile = useMediaQuery('(max-width:1200px)');
-  const {organization, deal_slug} = useParams()
+  const { organization, deal_slug } = useParams()
   const location = useLocation()
   const history = useHistory()
-  const {userProfile, isAuthenticated, loading } = useAuth()
-  const [getDeal, {data, error, refetch, called}] = useLazyQuery(GET_INVESTOR_DEAL)
+  const { userProfile, isAuthenticated, loading } = useAuth()
+  const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL)
   const [createInvestment] = useMutation(CREATE_INVESTMENT,
     {
       onCompleted: () => {
@@ -138,7 +143,7 @@ export default function Deal() {
         deal_id: data.investor.invitedDeal._id,
         user_id: data.investor._id,
       }
-      createInvestment({variables: {investment}})
+      createInvestment({ variables: { investment } })
     }
   }, [data])
 
@@ -156,20 +161,26 @@ export default function Deal() {
     }
   }, [error, userProfile])
 
-  if (!data) return <Loader/>
+  if (!data) return <Loader />
 
-  const {investor, investor: {invitedDeal: deal}} = data
-  const {investment} = deal
+  const { investor, investor: { invitedDeal: deal } } = data
+  const { investment } = deal
 
   return (
     <>
-      <div style={{width: mobile ? "100%" : "calc(100% - 300px)"}}>
-        <h2 className="deal-header">{deal.company_name}</h2>
-        <h4 className="deal-description">{deal.company_description}</h4>
-        <InvestmentFlow deal={{...deal, deal_slug, organization}}
-                        investment={investment}
-                        investor={investor}
-                        refetch={refetch}/>
+      <div style={{ width: mobile ? "100%" : "calc(100% - 300px)" }}>
+        <Grid container justify="space-between" alignItems="flex-end"
+        >
+          <Grid item>
+            <h2 className="deal-header">{deal.company_name}</h2>
+            <h4 className="deal-description">{deal.company_description}</h4>
+          </Grid>
+          <Pledge investment={investment} refetch={refetch} />
+        </Grid>
+        <InvestmentFlow deal={{ ...deal, deal_slug, organization }}
+          investment={investment}
+          investor={investor}
+          refetch={refetch} />
       </div>
 
       <div style={{
@@ -181,15 +192,15 @@ export default function Deal() {
         width: !mobile ? 300 : "100%",
         borderLeft: !mobile ? "1px solid #dfe2e5" : 0,
       }}>
-        <DealParams deal={deal}/>
-        <InvestorData investor={investor}/>
+        <DealParams deal={deal} />
+        <InvestorData investor={investor} />
       </div>
     </>
   )
 }
 
-export function DealParams({deal}) {
-  const {dealParams, date_closed, deal_lead} = deal
+export function DealParams({ deal }) {
+  const { dealParams, date_closed, deal_lead } = deal
 
   const allocationPercent = dealParams.totalRoundSize && dealParams.allocation
     ? new BN(dealParams.allocation).dividedBy(dealParams.totalRoundSize).times(100).toFixed(0)
@@ -199,23 +210,23 @@ export function DealParams({deal}) {
     ? new BN(dealParams.estimatedSetupCosts).dividedBy(dealParams.totalRoundSize).times(100).toFixed(0)
     : null
 
-  const show = allocationPercent || 
-                setupCosts || 
-                dealParams.totalCarry || 
-                dealParams.minimumInvestment || 
-                dealParams.totalManagementFee || 
-                dealParams.signDeadline || 
-                dealParams.wireDeadline ||
-                dealParams.estimatedSetupCosts ||
-                dealParams.estimatedSetupCostsDollar ||
-                dealParams.estimatedTerm || 
-                dealParams.managementFees ||
-                dealParams.managementFeesDollar || 
-                dealParams.portfolioTotalCarry || 
-                dealParams.portfolioEstimatedSetupCosts ||
-                dealParams.portfolioEstimatedSetupCostsDollar || 
-                dealParams.portfolioManagementFees ||
-                dealParams.portfolioManagementFeesDollar
+  const show = allocationPercent ||
+    setupCosts ||
+    dealParams.totalCarry ||
+    dealParams.minimumInvestment ||
+    dealParams.totalManagementFee ||
+    dealParams.signDeadline ||
+    dealParams.wireDeadline ||
+    dealParams.estimatedSetupCosts ||
+    dealParams.estimatedSetupCostsDollar ||
+    dealParams.estimatedTerm ||
+    dealParams.managementFees ||
+    dealParams.managementFeesDollar ||
+    dealParams.portfolioTotalCarry ||
+    dealParams.portfolioEstimatedSetupCosts ||
+    dealParams.portfolioEstimatedSetupCostsDollar ||
+    dealParams.portfolioManagementFees ||
+    dealParams.portfolioManagementFeesDollar
 
   const formattedDate_sign = moment(dealParams.signDeadline).format('Do MMMM YYYY')
   const formattedDate_wire = moment(dealParams.wireDeadline).format('Do MMMM YYYY')
@@ -234,26 +245,26 @@ export function DealParams({deal}) {
         borderBottom: "1px solid #dfe3e9"
       }}>
         <span>
-        Deadlines
+          Deadlines
       </span>
       </div>
       <List>
-      {show && <> <ListItem>
+        {show && <> <ListItem>
           <ListItemText
             primary="Signing Deadline"
             secondary={_.upperFirst(formattedDate_sign)}
           />
         </ListItem>
-        <ListItem>
-          <ListItemText
-            primary="Wiring Deadline"
-            secondary={_.upperFirst(formattedDate_wire)}
-          />
-        </ListItem>
-      </> }
-        </List>
+          <ListItem>
+            <ListItemText
+              primary="Wiring Deadline"
+              secondary={_.upperFirst(formattedDate_wire)}
+            />
+          </ListItem>
+        </>}
+      </List>
 
-        <div style={{
+      <div style={{
         backgroundColor: "#f7f9fa",
         height: 44,
         display: "flex",
@@ -265,7 +276,7 @@ export function DealParams({deal}) {
         borderBottom: "1px solid #dfe3e9"
       }}>
         <span>
-        SPV Terms
+          SPV Terms
       </span>
       </div>
       <List>
@@ -275,8 +286,8 @@ export function DealParams({deal}) {
             secondary={deal.deal_lead}
           />
         </ListItem>
-      {show && <>
-        {/* {dealParams.allocation && <ListItem>
+        {show && <>
+          {/* {dealParams.allocation && <ListItem>
           <ListItemText
             primary="Allocation"
             secondary={'$' + dealParams.allocation}
@@ -288,46 +299,46 @@ export function DealParams({deal}) {
             secondary={'$' + nWithCommas(dealParams.minimumInvestment)}
           />
         </ListItem>}*/ }
-        {dealParams.totalCarry && <ListItem>
-          <ListItemText
-            primary="Total Carry"
-            secondary={dealParams.totalCarry + '%'}
-          />
-        </ListItem>}
-        {dealParams.estimatedSetupCosts && <ListItem>
-          <ListItemText
-            primary="Estimated Setup Costs"
-            secondary={dealParams.estimatedSetupCosts + '% (excludes blue sky fees)'}
-          />
-        </ListItem>}
-        {dealParams.estimatedSetupCostsDollar && <ListItem>
-          <ListItemText
-            primary="Estimated Setup Costs"
-            secondary={'$' + dealParams.estimatedSetupCostsDollar + ' (excludes blue sky fees)'}
-          />
-        </ListItem>}
-        {dealParams.managementFees && <ListItem>
-          <ListItemText
-            primary="Management Fee"
-            secondary={dealParams.managementFees + '% (annual)'}
-          />
-        </ListItem>}
-        {dealParams.managementFeesDollar && <ListItem>
-          <ListItemText
-            primary="Management Fee"
-            secondary={'$' + dealParams.managementFeesDollar}
-          />
-        </ListItem>}
-        {dealParams.estimatedTerm && <ListItem>
-          <ListItemText
-            primary="Estimated Term"
-            secondary={dealParams.estimatedTerm + ' years'}
-          />
-        </ListItem>}
+          {dealParams.totalCarry && <ListItem>
+            <ListItemText
+              primary="Total Carry"
+              secondary={dealParams.totalCarry + '%'}
+            />
+          </ListItem>}
+          {dealParams.estimatedSetupCosts && <ListItem>
+            <ListItemText
+              primary="Estimated Setup Costs"
+              secondary={dealParams.estimatedSetupCosts + '% (excludes blue sky fees)'}
+            />
+          </ListItem>}
+          {dealParams.estimatedSetupCostsDollar && <ListItem>
+            <ListItemText
+              primary="Estimated Setup Costs"
+              secondary={'$' + dealParams.estimatedSetupCostsDollar + ' (excludes blue sky fees)'}
+            />
+          </ListItem>}
+          {dealParams.managementFees && <ListItem>
+            <ListItemText
+              primary="Management Fee"
+              secondary={dealParams.managementFees + '% (annual)'}
+            />
+          </ListItem>}
+          {dealParams.managementFeesDollar && <ListItem>
+            <ListItemText
+              primary="Management Fee"
+              secondary={'$' + dealParams.managementFeesDollar}
+            />
+          </ListItem>}
+          {dealParams.estimatedTerm && <ListItem>
+            <ListItemText
+              primary="Estimated Term"
+              secondary={dealParams.estimatedTerm + ' years'}
+            />
+          </ListItem>}
         </>}
-        </List>
+      </List>
 
-        {(dealParams.portfolioTotalCarry || dealParams.portfolioEstimatedSetupCosts || dealParams.portfolioManagementFees) && <div style={{
+      {(dealParams.portfolioTotalCarry || dealParams.portfolioEstimatedSetupCosts || dealParams.portfolioManagementFees) && <div style={{
         backgroundColor: "#f7f9fa",
         height: 44,
         display: "flex",
@@ -339,51 +350,51 @@ export function DealParams({deal}) {
         borderBottom: "1px solid #dfe3e9"
       }}>
         <span>
-        Portfolio Company Terms
+          Portfolio Company Terms
       </span>
       </div>
-        }
+      }
       <List>
-      {show && <>
-        {dealParams.portfolioTotalCarry && <ListItem>
-          <ListItemText
-            primary="Total Carry"
-            secondary={dealParams.portfolioTotalCarry + '%'}
-          />
-        </ListItem>}
-        {dealParams.portfolioEstimatedSetupCosts && <ListItem>
-          <ListItemText
-            primary="Estimated Setup Costs"
-            secondary={dealParams.portfolioEstimatedSetupCosts + '%'}
-          />
-        </ListItem>}
-        {dealParams.portfolioEstimatedSetupCostsDollar && <ListItem>
-          <ListItemText
-            primary="Estimated Setup Costs"
-            secondary={'$' + dealParams.portfolioEstimatedSetupCostsDollar}
-          />
-        </ListItem>}
-        {dealParams.portfolioManagementFees && <ListItem>
-          <ListItemText
-            primary="Management Fee"
-            secondary={dealParams.portfolioManagementFees + '% (annual)'}
-          />
-        </ListItem>}
-        {dealParams.portfolioManagementFeesDollar && <ListItem>
-          <ListItemText
-            primary="Management Fee"
-            secondary={'$' + dealParams.portfolioManagementFeesDollar}
-          />
-        </ListItem>}
-      </>}
+        {show && <>
+          {dealParams.portfolioTotalCarry && <ListItem>
+            <ListItemText
+              primary="Total Carry"
+              secondary={dealParams.portfolioTotalCarry + '%'}
+            />
+          </ListItem>}
+          {dealParams.portfolioEstimatedSetupCosts && <ListItem>
+            <ListItemText
+              primary="Estimated Setup Costs"
+              secondary={dealParams.portfolioEstimatedSetupCosts + '%'}
+            />
+          </ListItem>}
+          {dealParams.portfolioEstimatedSetupCostsDollar && <ListItem>
+            <ListItemText
+              primary="Estimated Setup Costs"
+              secondary={'$' + dealParams.portfolioEstimatedSetupCostsDollar}
+            />
+          </ListItem>}
+          {dealParams.portfolioManagementFees && <ListItem>
+            <ListItemText
+              primary="Management Fee"
+              secondary={dealParams.portfolioManagementFees + '% (annual)'}
+            />
+          </ListItem>}
+          {dealParams.portfolioManagementFeesDollar && <ListItem>
+            <ListItemText
+              primary="Management Fee"
+              secondary={'$' + dealParams.portfolioManagementFeesDollar}
+            />
+          </ListItem>}
+        </>}
       </List>
     </>
   )
 }
 
 
-function InvestorData({investor}) {
-  if (!investor) return <Paper className="tile"><Loader/></Paper>
+function InvestorData({ investor }) {
+  if (!investor) return <Paper className="tile"><Loader /></Paper>
 
   return (
     <>
@@ -399,7 +410,7 @@ function InvestorData({investor}) {
         borderBottom: "1px solid #dfe3e9"
       }}>
         <span>
-        My Info
+          My Info
       </span>
         <Link to="/profile">Edit</Link>
       </div>
