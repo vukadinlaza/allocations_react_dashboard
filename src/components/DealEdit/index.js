@@ -101,6 +101,13 @@ const GET_DEAL = gql`
           portfolioEstimatedSetupCostsDollar
           portfolioManagementFees
           portfolioManagementFeesDollar
+          fundTotalCarry
+          fundEstimatedSetupCosts
+          fundEstimatedSetupCostsDollar
+          fundManagementFees
+          fundManagementFeesDollar
+          fundGeneralPartner
+          fundEstimatedTerm
         }
       }
     }
@@ -144,6 +151,13 @@ const UPDATE_DEAL = gql`
         portfolioEstimatedSetupCostsDollar
         portfolioManagementFees
         portfolioManagementFeesDollar
+        fundTotalCarry
+        fundEstimatedSetupCosts
+        fundEstimatedSetupCostsDollar
+        fundManagementFees
+        fundManagementFeesDollar
+        fundGeneralPartner
+        fundEstimatedTerm
       }
     }
   }
@@ -187,7 +201,14 @@ const dealParamsValidInputs = [
   "portfolioEstimatedSetupCosts",
   "portfolioEstimatedSetupCostsDollar",
   "portfolioManagementFees",
-  "portfolioManagementFeesDollar"
+  "portfolioManagementFeesDollar",
+  "fundTotalCarry",
+  "fundEstimatedSetupCosts",
+  "fundEstimatedSetupCostsDollar",
+  "fundManagementFees",
+  "fundManagementFeesDollar",
+  "fundGeneralPartner",
+  "fundEstimatedTerm"
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -559,6 +580,80 @@ export default function DealEdit() {
                          InputProps={{
                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
                          }}
+                         variant="outlined"/>
+            </Grid>
+            </Grid>
+
+            <Divider className={classes.divider}/>
+            <Grid item xs={10} style={{marginBottom: "1rem"}}>
+              <Typography variant="h5">
+                Fund Terms
+              </Typography>
+            </Grid>
+
+            <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField style={{width: "100%"}}
+                         value={deal.dealParams.fundGeneralPartner || ""}
+                         onChange={e => setDeal({dealParams: {...deal.dealParams, fundGeneralPartner: e.target.value}})}
+                         label="General Partner"
+                         variant="outlined"/>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField style={{width: "100%"}}
+                         value={deal.dealParams.fundTotalCarry || ""}
+                         onChange={e => setDeal({dealParams: {...deal.dealParams, fundTotalCarry: e.target.value}})}
+                         label="Fund Total Carry (%)"
+                         InputProps={{
+                           startAdornment: <InputAdornment position="start">%</InputAdornment>,
+                         }}
+                         variant="outlined"/>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField style={{width: "100%"}}
+                         value={deal.dealParams.fundManagementFees || ""}
+                         onChange={e => setDeal({dealParams: {...deal.dealParams, fundManagementFees: e.target.value}})}
+                         label="Fund Management Fee (%)"
+                         InputProps={{
+                           startAdornment: <InputAdornment position="start">%</InputAdornment>,
+                         }}
+                         variant="outlined"/>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField style={{width: "100%"}}
+                         value={deal.dealParams.fundManagementFeesDollar || ""}
+                         onChange={e => setDeal({dealParams: {...deal.dealParams, fundManagementFeesDollar: e.target.value}})}
+                         label="Fund Management Fee ($)"
+                         InputProps={{
+                           startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                         }}
+                         variant="outlined"/>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField style={{width: "100%"}}
+                         value={deal.dealParams.fundEstimatedSetupCosts || ""}
+                         onChange={e => setDeal({dealParams: {...deal.dealParams, fundEstimatedSetupCosts: e.target.value}})}
+                         label="Fund Estimated Setup Cost (%)"
+                         InputProps={{
+                           startAdornment: <InputAdornment position="start">%</InputAdornment>,
+                         }}
+                         variant="outlined"/>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField style={{width: "100%"}}
+                         value={deal.dealParams.fundEstimatedSetupCostsDollar || ""}
+                         onChange={e => setDeal({dealParams: {...deal.dealParams, fundEstimatedSetupCostsDollar: e.target.value}})}
+                         label="Fund Estimated Setup Cost ($)"
+                         InputProps={{
+                           startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                         }}
+                         variant="outlined"/>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField style={{width: "100%"}}
+                         value={deal.dealParams.fundEstimatedTerm || ""}
+                         onChange={e => setDeal({dealParams: {...deal.dealParams, fundEstimatedTerm: e.target.value}})}
+                         label="Fund Estimated Term"
                          variant="outlined"/>
             </Grid>
             </Grid>
