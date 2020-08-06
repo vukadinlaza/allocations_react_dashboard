@@ -236,7 +236,8 @@ export function DealParams({deal}) {
 
   return (
     <>
-      <div style={{
+        {(dealParams.signDeadline || dealParams.wireDeadline) && 
+        <div style={{
         backgroundColor: "#f7f9fa",
         height: 44,
         display: "flex",
@@ -251,8 +252,10 @@ export function DealParams({deal}) {
         Deadlines
       </span>
       </div>
+      }
+      {show && <> 
       <List>
-      {show && <> <ListItem>
+        <ListItem>
           <ListItemText
             primary="Signing Deadline"
             secondary={_.upperFirst(formattedDate_sign)}
@@ -264,9 +267,15 @@ export function DealParams({deal}) {
             secondary={_.upperFirst(formattedDate_wire)}
           />
         </ListItem>
-      </> }
-        </List>
+    </List>
+    </> }
 
+        {(deal.deal_lead || 
+        dealParams.estimatedSetupCosts || 
+        dealParams.totalCarry ||
+        dealParams.estimatedTerm ||
+        dealParams.managementFees ||
+        dealParams.managementFeesDollar) && 
         <div style={{
         backgroundColor: "#f7f9fa",
         height: 44,
@@ -282,14 +291,15 @@ export function DealParams({deal}) {
         SPV Terms
       </span>
       </div>
+      }
+      {show && <>
       <List>
-        <ListItem>
+          {deal.deal_lead && <ListItem>
           <ListItemText
             primary="Organizer"
             secondary={deal.deal_lead}
           />
-        </ListItem>
-      {show && <>
+        </ListItem> }
         {/* {dealParams.allocation && <ListItem>
           <ListItemText
             primary="Allocation"
@@ -338,8 +348,8 @@ export function DealParams({deal}) {
             secondary={dealParams.estimatedTerm + ' years'}
           />
         </ListItem>}
-        </>}
         </List>
+        </>}
 
         {(dealParams.portfolioTotalCarry || 
         dealParams.portfolioEstimatedSetupCosts || 
@@ -362,8 +372,8 @@ export function DealParams({deal}) {
       </span>
       </div>
         }
-      <List>
       {show && <>
+      <List>
         {dealParams.portfolioTotalCarry && <ListItem>
           <ListItemText
             primary="Total Carry"
@@ -394,8 +404,8 @@ export function DealParams({deal}) {
             secondary={'$' + dealParams.portfolioManagementFeesDollar}
           />
         </ListItem>}
-      </>}
       </List>
+      </>}
 
       {(dealParams.fundTotalCarry || 
       dealParams.fundEstimatedSetupCosts ||
@@ -420,11 +430,11 @@ export function DealParams({deal}) {
       </span>
       </div>
         }
-      <List>
       {show && <>
+      <List>
         {dealParams.fundGeneralPartner && <ListItem>
           <ListItemText
-            primary="Fund General Partner"
+            primary="General Partner"
             secondary={dealParams.fundGeneralPartner}
           />
         </ListItem>}
@@ -460,12 +470,12 @@ export function DealParams({deal}) {
         </ListItem>}
         {dealParams.fundEstimatedTerm && <ListItem>
           <ListItemText
-            primary="Fund Estimated Term"
+            primary="Estimated Term"
             secondary={dealParams.fundEstimatedTerm + ' years'}
           />
         </ListItem>}
-      </>}
       </List>
+      </>}
     </>
   )
 }

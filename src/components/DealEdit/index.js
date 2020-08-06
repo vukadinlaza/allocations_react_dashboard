@@ -603,7 +603,7 @@ export default function DealEdit() {
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.fundTotalCarry || ""}
                          onChange={e => setDeal({dealParams: {...deal.dealParams, fundTotalCarry: e.target.value}})}
-                         label="Fund Total Carry (%)"
+                         label="Total Carry (%)"
                          InputProps={{
                            startAdornment: <InputAdornment position="start">%</InputAdornment>,
                          }}
@@ -613,7 +613,7 @@ export default function DealEdit() {
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.fundManagementFees || ""}
                          onChange={e => setDeal({dealParams: {...deal.dealParams, fundManagementFees: e.target.value}})}
-                         label="Fund Management Fee (%)"
+                         label="Management Fee (%)"
                          InputProps={{
                            startAdornment: <InputAdornment position="start">%</InputAdornment>,
                          }}
@@ -623,7 +623,7 @@ export default function DealEdit() {
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.fundManagementFeesDollar || ""}
                          onChange={e => setDeal({dealParams: {...deal.dealParams, fundManagementFeesDollar: e.target.value}})}
-                         label="Fund Management Fee ($)"
+                         label="Management Fee ($)"
                          InputProps={{
                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
                          }}
@@ -633,7 +633,7 @@ export default function DealEdit() {
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.fundEstimatedSetupCosts || ""}
                          onChange={e => setDeal({dealParams: {...deal.dealParams, fundEstimatedSetupCosts: e.target.value}})}
-                         label="Fund Estimated Setup Cost (%)"
+                         label="Estimated Setup Cost (%)"
                          InputProps={{
                            startAdornment: <InputAdornment position="start">%</InputAdornment>,
                          }}
@@ -643,7 +643,7 @@ export default function DealEdit() {
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.fundEstimatedSetupCostsDollar || ""}
                          onChange={e => setDeal({dealParams: {...deal.dealParams, fundEstimatedSetupCostsDollar: e.target.value}})}
-                         label="Fund Estimated Setup Cost ($)"
+                         label="Estimated Setup Cost ($)"
                          InputProps={{
                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
                          }}
@@ -653,7 +653,7 @@ export default function DealEdit() {
               <TextField style={{width: "100%"}}
                          value={deal.dealParams.fundEstimatedTerm || ""}
                          onChange={e => setDeal({dealParams: {...deal.dealParams, fundEstimatedTerm: e.target.value}})}
-                         label="Fund Estimated Term"
+                         label="Estimated Term"
                          variant="outlined"/>
             </Grid>
             </Grid>
