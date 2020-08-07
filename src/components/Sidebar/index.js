@@ -55,6 +55,15 @@ const useStyles = makeStyles((theme) => ({
       display: 'none',
     },
   },
+  icon: {
+    boxShadow: "0px 3px 6px #00000029",
+    width: 56,
+    height: 56,
+    borderRadius: "50%",
+    padding: 16,
+    marginRight: 16,
+    color: "#8593a6",
+  },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
@@ -156,7 +165,9 @@ export default function Sidebar(props) {
             <div key={`menu-${title}`} onClick={mobileOpen ? handleDrawerClose : null}
                  className={`sidebar-nav-item ${location.pathname === to ? "sidebar-nav-item-active" : ""}`}>
               <ListItem component={Link} to={to} button>
-                <ListItemIcon style={{paddingLeft: 8}}>{icon}</ListItemIcon>
+                <ListItemIcon className={classes.icon}>
+                  {icon}
+                </ListItemIcon>
                 <ListItemText primary={title}/>
               </ListItem>
             </div>
@@ -168,14 +179,15 @@ export default function Sidebar(props) {
         <List>
           <div className={`sidebar-nav-item ${location.pathname === "/admin/funds" ? "sidebar-nav-item-active" : ""}`}>
             <ListItem component={Link} to="/admin/funds" button>
-              <ListItemIcon style={{paddingLeft: 8}}>
+              <ListItemIcon className={classes.icon}>
                 <AccountBalanceIcon/>
               </ListItemIcon>
               <ListItemText primary="Funds"/>
             </ListItem>
           </div>
-        </List></>}
-      {userProfile.admin && <AdminLinks location={location}/>}
+          <AdminLinks location={location}/>
+        </List>
+      </>}
     </div>
   );
 
@@ -302,8 +314,12 @@ function Footer() {
 }
 
 function AdminLinks({location}) {
+
+
   const match = useRouteMatch('/admin/:organization')
   const [showAdministration, setShowAdministration] = useState(false)
+
+  const classes = useStyles();
 
   if (!match) return null
   const {params: {organization}} = match
@@ -321,7 +337,7 @@ function AdminLinks({location}) {
       {/* <List>
         <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/investors` ? "sidebar-nav-item-active" : ""}`}>
         <ListItem component={Link} to={`/admin/${organization}/investors`} button>
-        <ListItemIcon style={{paddingLeft: 8}}>
+        <ListItemIcon>
         <PersonIcon/>
           </ListItemIcon>
           <ListItemText primary="Investors"/>
@@ -340,23 +356,22 @@ function AdminLinks({location}) {
       {/* <List>
         <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/deals` ? "sidebar-nav-item-active" : ""}`}>
         <ListItem component={Link} to={`/admin/${organization}/deals`} button>
-        <ListItemIcon style={{paddingLeft: 8}}>
+        <ListItemIcon>
         <DonutLargeIcon/>
           </ListItemIcon>
           <ListItemText primary="Deals"/>
         </ListItem>
       </div>
       </List> */}
-      <List>
-        <div className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/investments` ? "sidebar-nav-item-active" : ""}`}>
+      <div
+        className={`sidebar-nav-item ${location.pathname === `/admin/${organization}/investments` ? "sidebar-nav-item-active" : ""}`}>
         <ListItem component={Link} to={`/admin/${organization}/investments`} button>
-        <ListItemIcon style={{paddingLeft: 8}}>
-        <BarChartIcon/>
+          <ListItemIcon className={classes.icon}>
+            <BarChartIcon/>
           </ListItemIcon>
           <ListItemText primary="Investments"/>
         </ListItem>
       </div>
-      </List>
     </div>
   )
 }
