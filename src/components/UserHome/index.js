@@ -2,20 +2,18 @@ import React, {useEffect} from 'react'
 import _ from 'lodash'
 import {gql} from 'apollo-boost'
 import {Link, useParams, useHistory, Redirect} from 'react-router-dom'
-import {useLazyQuery} from '@apollo/react-hooks';
 import {Row, Container, Col} from 'reactstrap'
 import {nWithCommas} from '../../utils/numbers'
 import {validate} from '../forms/InvestorEdit'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useAuth} from "../../auth/useAuth";
 import allocations_create_deal from '../../assets/allocations_create_deal.svg';
-import allocations_faq from '../../assets/allocations_create_deal.svg';
+import allocations_faq from '../../assets/allocations_faq.svg';
 import allocations_invite_deals from '../../assets/allocations_invite_deals.svg';
 import allocations_recent_investments from '../../assets/allocations_recent_investments.svg';
 import allocations_total_investments from '../../assets/allocations_total_investments.svg';
 import allocations_update_profile from '../../assets/allocations_update_profile.svg';
 import allocations_update from '../../assets/allocations_update.svg';
-
 
 import {
   Avatar,
@@ -61,8 +59,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const chartOptions = {
-  minColor: purples[1],
-  maxColor: purples[0],
+  minColor: "#51D5FD",
+  maxColor: "#0661A3",
   headerHeight: 0,
   fontColor: "#fff",
   highlightColor: "#fff",
@@ -238,18 +236,24 @@ export default function UserHome(props) {
           <Grid item xs={12}>
             <Paper className={classes.paper} style={{height: "100%"}}>
               <Grid container alignItems="center">
-                <Grid item xs={12} sm={3}>
-                  <img src={allocations_total_investments} style={{maxWidth: 200}}/>
+                <Grid item sm={12} md={6}>
+                  <Grid container>
+                    <Grid item xs={12} sm={5}>
+                      <img src={allocations_total_investments}
+                           style={{maxWidth: 200, width: "100%", paddingRight: 16}}/>
+                    </Grid>
+                    <Grid item xs={12} sm={7}>
+                      <Typography variant="h5" className={classes.grey}>
+                        <strong>Total Investments</strong>
+                      </Typography>
+                      <Typography variant="h5" style={{fontSize: "1.8rem"}} className={classes.blue}>
+                        <strong>${nWithCommas(total_invested)}</strong>
+                      </Typography>
+                    </Grid>
+                  </Grid>
+
                 </Grid>
-                <Grid item xs={12} sm={2}>
-                  <Typography variant="h5" className={classes.grey}>
-                    <strong>Total Investments</strong>
-                  </Typography>
-                  <Typography variant="h5" style={{fontSize: "1.8rem"}} className={classes.blue}>
-                    <strong>${nWithCommas(total_invested)}</strong>
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} sm={7}>
+                <Grid item sm={12} md={6}>
                   {userInvestments.length > 0 ?
                     <Chart chartType="TreeMap"
                            width="100%"
@@ -264,8 +268,7 @@ export default function UserHome(props) {
           </Grid>
         </>
 
-        <Grid item xs={12} sm={6}>
-
+        <Grid item xs={12} sm={12} md={6}>
           {isEmpty ? <NullPaper title="Recent Investments" text="Find your most recent investments"
                                 image={allocations_recent_investments} button="Get Started"/>
             :

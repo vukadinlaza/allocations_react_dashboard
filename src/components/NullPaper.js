@@ -13,6 +13,8 @@ const useStyles = makeStyles(() => ({
   img: {
     width: "100%",
     maxHeight: 150,
+    marginBottom: 16,
+    paddingRight: 16,
   },
   h5: {
     color: "#707070",
@@ -36,10 +38,10 @@ export default function NullPaper({title, text, image, button, onClick}) {
   return (
     <Paper className={classes.paper}>
       <Grid container alignItems="center">
-        <Grid item xs={12} sm={6}>
+        <Grid item sm={12} md={5}>
           <img src={image} className={classes.img}/>
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item sm={12} md={7}>
           <Typography variant="h5" className={classes.h5}>
             <strong>{title}</strong>
           </Typography>
