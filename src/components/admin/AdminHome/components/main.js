@@ -24,7 +24,6 @@ import Loader from '../../../utils/Loader'
 import Investors from '../../../Investors'
 
 
-
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
@@ -57,23 +56,33 @@ const useStyles = makeStyles((theme) => ({
     margin: ".5rem"
   },
   orgName: {
-      color: '#707070',
-      fontWeight: 'bolder'
+    color: '#3A506B',
+    fontWeight: 'bolder'
   }
 }));
 
 
-export default function OrganizationOverview({orgData}) {
+export default function OrganizationOverview({orgData, superAdmin}) {
   const [tab, setTab] = useState("active-deals")
   const classes = useStyles();
 
   if (!orgData) return <Paper style={{padding: "25px"}}><Loader/></Paper>
-    const {organization } = orgData
+  const {organization} = orgData
   return (
     <>
-    <Typography variant="h3" className={classes.orgName}>
-    {organization.name}
-    </Typography>
+      <Grid container>
+        <Grid item sm={12} md={6}>
+          <Typography variant="h4" className={classes.orgName}>
+            {organization.name}
+          </Typography>
+        </Grid>
+        <Grid item sm={12} md={6}>
+          <Typography variant="body2">
+            {superAdmin}
+          </Typography>
+        </Grid>
+      </Grid>
+
       <div className={classes.tabs}>
         <Grid container justify="center">
           <Grid item xs={12} sm={3}>
@@ -87,7 +96,7 @@ export default function OrganizationOverview({orgData}) {
             <ButtonBase className={tab === "closed-deals" ? classes.activeTab : classes.tab}
                         style={{}}
                         onClick={() => setTab('closed-deals')}>
-             Closed Deals
+              Closed Deals
             </ButtonBase>
           </Grid>
           <Grid item xs={12} sm={3}>
@@ -111,7 +120,7 @@ export default function OrganizationOverview({orgData}) {
         {tab === "active-deals" && <ActiveDeals orgData={orgData}/>}
         {tab === "closed-deals" && <ClosedDeals orgData={orgData}/>}
         {tab === "profile" && <OrgCards organization={organization} investor={orgData.investor}/>}
-        {tab === "all-investors" && <Investors />}
+        {tab === "all-investors" && <Investors/>}
       </>
     </>
   )
