@@ -43,13 +43,14 @@ const useStyles = makeStyles((theme) => ({
     color: "#7f8ea3"
   },
   tab: {
-    height: 44,
+    height: 75,
     width: "100%"
   },
   activeTab: {
-    height: 44,
+    height: 69,
+    marginTop: 6,
     width: "100%",
-    borderBottom: "3px solid #25a9df",
+    borderBottom: "6px solid #205DF5",
     outline: "0 !important",
   },
   button: {
@@ -70,14 +71,14 @@ export default function OrganizationOverview({orgData, superAdmin}) {
   const {organization} = orgData
   return (
     <>
-      <Grid container>
+      <Grid container justify="space-between">
         <Grid item sm={12} md={6}>
           <Typography variant="h4" className={classes.orgName}>
             {organization.name}
           </Typography>
         </Grid>
         <Grid item sm={12} md={6}>
-          <Typography variant="body2">
+          <Typography variant="body2" style={{textAlign: "right"}}>
             {superAdmin}
           </Typography>
         </Grid>

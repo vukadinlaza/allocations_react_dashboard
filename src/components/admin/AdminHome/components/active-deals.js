@@ -53,10 +53,7 @@ export default function ActiveDeals({ orgData }) {
               💡 Active Deals: {(active || []).length}
             </Typography>
             <Button color="primary"
-              variant="contained"
-              style={{ padding: "5px" }} onClick={() => history.push(`/admin/${org.slug}/deal/new`)}>
-              Create Deal
-                  </Button>
+              variant="contained" onClick={() => history.push(`/admin/${org.slug}/deal/new`)}>Create Deal</Button>
           </Grid>
           <Grid item xs={2} style={{ textAlign: "left" }}>
           </Grid>

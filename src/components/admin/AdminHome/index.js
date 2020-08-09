@@ -270,7 +270,7 @@ function SuperAdmin({org}) {
   const history = useHistory();
   return (
     <>
-      You are a SuperAdmin &nbsp;<Button onClick={() => history.push(`/admin/${org.slug}/manager`)} size="large"
+      You are a SuperAdmin <Button style={{marginLeft: 16}} onClick={() => history.push(`/admin/${org.slug}/manager`)} size="large"
                                          variant="contained" color="primary">Manage</Button>
     </>
   )

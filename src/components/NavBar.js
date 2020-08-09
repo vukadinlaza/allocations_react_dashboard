@@ -113,15 +113,16 @@ export function Auth0Profile({user, logoutWithRedirect}) {
   return (
     <div className={classes.root}>
       {organizations_admin.length >= 1 && <Hidden smDown>
-        <Typography variant="subtitle1" style={{marginRight: 16}}>
+        <Typography variant="subtitle1" style={{marginRight: 16, color: "#3A506B"}}>
           You are a fund manager
         </Typography>
       </Hidden>}
 
       <Hidden only="xs">
-        <Button color="secondary" variant="outlined" aria-controls="simple-menu" aria-haspopup="true"
+        <Button color="primary" endIcon={<KeyboardArrowDownIcon/>} variant="outlined" aria-controls="simple-menu"
+                aria-haspopup="true"
                 onClick={handleClickFunds} style={{marginRight: 16}}>
-          My Funds <KeyboardArrowDownIcon/>
+          My Funds
         </Button>
       </Hidden>
       <Menu

@@ -22,12 +22,9 @@ import HomeIcon from "@material-ui/icons/Home";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import PersonIcon from "@material-ui/icons/Person";
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-import FundsIcon from "@material-ui/icons/AttachMoney";
-import HelpIcon from "@material-ui/icons/Help";
-import DonutLargeIcon from '@material-ui/icons/DonutLarge';
 import NavBar from "../NavBar";
 
-const drawerWidth = 240;
+const drawerWidth = 293;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,10 +54,10 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     boxShadow: "0px 3px 6px #00000029",
-    width: 56,
-    height: 56,
+    width: 64,
+    height: 64,
     borderRadius: "50%",
-    padding: 16,
+    padding: 15,
     marginRight: 16,
     color: "#8593a6",
   },

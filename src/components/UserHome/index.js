@@ -44,9 +44,6 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
   },
-  lightText: {
-    color: "#7f8fa3",
-  },
   banner: {
     minWidth: "100%"
   },
@@ -199,36 +196,34 @@ export default function UserHome(props) {
       <Grid container spacing={2}>
         {total_invested === 0 ? <NoInvestmentBanner/> :
           <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              <Grid container spacing={2} alignItems="center">
-                <Hidden only="xs">
-                  <Grid item sm={12} md={4}>
-                    <Typography variant="body1" className={classes.lightText}>
-                      Welcome
-                    </Typography>
-                    <Typography variant="h5">
-                      <Name investor={userProfile}/>
-                    </Typography>
-                  </Grid>
-                </Hidden>
-                <Grid item sm={12} md={8}>
-                  <div style={{display: "flex", justifyContent: "flex-end"}}>
-                    <Hidden only="xs">
-                      <Typography variant="body1" className={classes.lightText}
-                                  style={{textAlign: "right", paddingRight: 16}}>
-                        Your Allocations account is ready for your use. <br/>
-                        Let's view your investments!
-                      </Typography>
-                    </Hidden>
-                    <Button
-                      onClick={() => history.push(adminView ? `/investor/${params.id}/investments` : "/investments")}
-                      variant="contained" color="primary">
-                      Investments
-                    </Button>
-                  </div>
+            <Grid container spacing={2} alignItems="center">
+              <Hidden only="xs">
+                <Grid item sm={12} md={4}>
+                  <Typography variant="body1" className={classes.grey}>
+                    Welcome
+                  </Typography>
+                  <Typography variant="h5">
+                    <Name investor={userProfile}/>
+                  </Typography>
                 </Grid>
+              </Hidden>
+              <Grid item sm={12} md={8}>
+                <div style={{display: "flex", justifyContent: "flex-end"}}>
+                  <Hidden only="xs">
+                    <Typography variant="body1" className={classes.grey}
+                                style={{textAlign: "right", paddingRight: 16}}>
+                      Your Allocations account is ready for your use. <br/>
+                      Let's view your investments!
+                    </Typography>
+                  </Hidden>
+                  <Button
+                    onClick={() => history.push(adminView ? `/investor/${params.id}/investments` : "/investments")}
+                    variant="contained" color="primary">
+                    My Investments
+                  </Button>
+                </div>
               </Grid>
-            </Paper>
+            </Grid>
           </Grid>
         }
 
@@ -307,8 +302,8 @@ export default function UserHome(props) {
         </Grid>
 
         <Grid item xs={12}>
-          <Typography variant="h6" className={classes.grey}>
-            Tools
+          <Typography variant="h5" className={classes.grey}>
+            <strong>Tools</strong>
           </Typography>
         </Grid>
 
@@ -424,7 +419,7 @@ function AdminTile({investor}) {
           <div className="text-center">
             You are a Fund Manager &nbsp;&nbsp;
             <Link to="/admin/funds">
-              <Button variant="contained" size="small" color="secondary">
+              <Button variant="contained" size="small" color="primary">
                 My Funds 🗂
               </Button>
             </Link>
@@ -442,7 +437,7 @@ const NoInvestmentBanner = () => {
   return (
     <Grid item sm={12} md={6} className={classes.banner}>
       <Paper className={classes.paper}>
-        <Typography variant="body1" className={classes.lightText}>
+        <Typography variant="body1" className={classes.grey}>
           Please contact your deal manager or Allocations if you are waiting for a unique link to join a private deal!
         </Typography>
       </Paper>

@@ -32,12 +32,8 @@ import {makeStyles} from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
-    maxWidth: 800,
     marginBottom: theme.spacing(4),
   },
-  divider: {
-    margin: "16px -16px"
-  }
 }));
 
 /***
@@ -92,7 +88,7 @@ export default function InvestorEditForm({investor, setInvestor, actionText, ico
   const submit = () => {
     // don't validate if noValidate flag passed
     if (noValidate) return updateInvestor({variables: {investor}})
-    
+
     const validation = validate(investor)
     const required = investor.investor_type === "entity"
     ? ['entity_name','accredited_investor_status', ...reqs]
@@ -114,18 +110,15 @@ export default function InvestorEditForm({investor, setInvestor, actionText, ico
   return (
     <>
       <form noValidate autoComplete="off">
-        <Paper className={classes.paper}>
+        <div className={classes.paper}>
           <Typography variant="h6">
             Profile {icon && <FontAwesomeIcon icon={icon} spin={icon === "circle-notch"}/>}
           </Typography>
-          <Typography variant="subtitle2">
+          <Typography variant="subtitle2" style={{marginBottom: 16}}>
             This information can be edited from your profile page.
           </Typography>
 
-          <Divider className={classes.divider}/>
-
           <Grid container spacing={3}>
-
             <Grid item xs={12} sm={12} md={6}>
               <FormControl required error={errors.includes("investor_type")} variant="outlined" style={{width: "100%"}}>
                 <InputLabel>Investor Type</InputLabel>
@@ -183,17 +176,15 @@ export default function InvestorEditForm({investor, setInvestor, actionText, ico
 
           </Grid>
 
-          <Divider className={classes.divider}/>
-
-          <Button variant="contained"
+          <Button variant="contained" style={{marginTop: 16}}
                   onClick={submit}
                   color="primary">
             {actionText}
           </Button>
 
-        </Paper>
+        </div>
 
-        <Paper className={classes.paper}>
+        <div className={classes.paper}>
 
           <Typography variant="h6">
             KYC
@@ -202,19 +193,16 @@ export default function InvestorEditForm({investor, setInvestor, actionText, ico
             Optional information:
           </Typography>
 
-          <Divider className={classes.divider}/>
-
           <KYC investor={investor} setInvestor={setInvestor}/>
 
-          <Divider className={classes.divider}/>
-
           <Button variant="contained"
+                  style={{marginTop: 16}}
                   onClick={submit}
                   color="primary">
             {actionText}
           </Button>
 
-        </Paper>
+        </div>
 
       </form>
     </>
@@ -230,9 +218,8 @@ function KYC({investor, setInvestor}) {
     : null
 
   return (
-    <List style={{marginLeft: -16}}>
+    <List>
       <AccredidationUploader investor={investor} setInvestor={setInvestor}/>
-      <Divider variant="inset" component="li"/>
       <PassportUploader investor={investor} setInvestor={setInvestor}/>
     </List>
   )
@@ -241,28 +228,31 @@ function KYC({investor, setInvestor}) {
 function PassportUploader({investor, setInvestor}) {
   if (investor.passport) {
     return (
-      <div className="file-uploader">
+      <Paper>
+        <div className="file-uploader">
         <ListItem>
           <ListItemText
             primary="ID for KYC"
             secondary="passport / drivers license"
           />
           <ListItemSecondaryAction>
-            <Button variant="outlined" size="small" startIcon={<CloudDone/>}>Uploaded</Button>
+            <Button variant="contained" color="secondary" size="small" startIcon={<CloudDone/>}>Uploaded</Button>
           </ListItemSecondaryAction>
         </ListItem>
       </div>
+    </Paper>
     )
   }
 
   return (
-    <ListItem>
+    <Paper>
+      <ListItem>
       <ListItemText
         primary="ID for KYC"
         secondary="passport / drivers license"
       />
       <ListItemSecondaryAction>
-        <Button startIcon={<CloudUploadIcon/>} variant="outlined" component="label">
+        <Button startIcon={<CloudUploadIcon/>} variant="contained" color="secondary" component="label">
           Upload
           <input type="file"
                  style={{display: "none"}}
@@ -272,33 +262,37 @@ function PassportUploader({investor, setInvestor}) {
         </Button>
       </ListItemSecondaryAction>
     </ListItem>
+    </Paper>
   )
 }
 
 function AccredidationUploader({investor, setInvestor}) {
   if (investor.accredidation_doc) {
     return (
-      <ListItem>
+      <Paper style={{marginBottom: 16}}>
+        <ListItem>
         <ListItemText
           primary="Accredited Investor Certificate"
           secondary="via verifyinvestor.com"
         />
         <ListItemSecondaryAction>
-          <Button variant="outlined" size="small" startIcon={<CloudDone/>}>Uploaded</Button>
+          <Button variant="contained" color="secondary" size="small" startIcon={<CloudDone/>}>Uploaded</Button>
         </ListItemSecondaryAction>
       </ListItem>
+      </Paper>
     )
   }
 
   return (
-    <ListItem>
+    <Paper style={{marginBottom: 16}}>
+      <ListItem>
       <ListItemText
         primary="Accredited Investor Certificate"
         secondary="via verifyinvestor.com"
       />
       <ListItemSecondaryAction>
         <Button startIcon={<CloudUploadIcon/>}
-                variant="outlined" component="label">
+                variant="contained" color="secondary" component="label">
           Upload
           <input type="file"
                  style={{display: "none"}}
@@ -308,6 +302,7 @@ function AccredidationUploader({investor, setInvestor}) {
         </Button>
       </ListItemSecondaryAction>
     </ListItem>
+    </Paper>
   )
 }
 
