@@ -18,6 +18,20 @@ const theme = createMuiTheme({
         color: "#9ea0a5"
       }
     },
+    MuiButton: {
+      containedPrimary: {
+        boxShadow: "none",
+        borderRadius: "12px",
+        textTransform: "capitalize",
+        fontWeight: "bolder"
+      },
+      containedSecondary: {
+        boxShadow: "none",
+        borderRadius: "12px",
+        color: "#fff",
+        textTransform: "capitalize"
+      },
+    },
     MuiTableHead: {
       root: {
         background: "#f3f7f8",
@@ -33,14 +47,19 @@ const theme = createMuiTheme({
         border: "1px solid #d8dce6",
         boxShadow: "0px 2px 1px -1px rgba(0,0,0,0.1), 0px 1px 1px 0px rgba(0,0,0,0.04), 0px 1px 3px 0px rgba(0,0,0,0.02) !important"
       },
+      rounded: {
+        border: "0px !important",
+        borderRadius: "10px",
+        boxShadow: "0px 3px 6px #00000029 !important"
+      }
     },
   },
   palette: {
     primary: {
-      main: '#00a0c6',
+      main: '#205DF5',
     },
     secondary: {
-      main: '#fdb858',
+      main: '#26C600',
     },
     error: {
       main: red.A400,

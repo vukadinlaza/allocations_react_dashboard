@@ -40,9 +40,16 @@ export const ORG_OVERVIEW = gql`
         target
         amount_raised
         investments {
-          _id
-          amount
+        _id
           status
+          amount
+          deal {
+            _id
+            company_name
+          }
+          investor {
+            email
+          }
         }
       }
       investors {
@@ -63,6 +70,9 @@ export const ORG_OVERVIEW = gql`
         deal {
           _id
           company_name
+        }
+        investor {
+          email
         }
         investor {
           _id
@@ -131,10 +141,10 @@ export default function AdminHome() {
 
   return (
     <>
-     {data.investor.admin && <Grid item xs={12}>
-          <SuperAdmin org={org}/>
-        </Grid>}
-    <OrganizationOverview orgData={data}/>
+
+      <OrganizationOverview orgData={data} superAdmin={data.investor.admin && <Grid item xs={12}>
+        <SuperAdmin org={org}/>
+      </Grid>}/>
 
       {/* <Grid container spacing={2}>
         {data.investor.admin && <Grid item xs={12}>
@@ -259,10 +269,10 @@ export default function AdminHome() {
 function SuperAdmin({org}) {
   const history = useHistory();
   return (
-    <Paper className="superadmin-section" style={{marginBottom: "20px", padding: "10px", textAlign: "center"}}>
-      You are a SuperAdmin &nbsp;<Button onClick={() => history.push(`/admin/${org.slug}/manager`)} size="small"
-                                         variant="contained" color="secondary">Manage</Button>
-    </Paper>
+    <>
+      You are a SuperAdmin <Button style={{marginLeft: 16}} onClick={() => history.push(`/admin/${org.slug}/manager`)} size="large"
+                                         variant="contained" color="primary">Manage</Button>
+    </>
   )
 }
 

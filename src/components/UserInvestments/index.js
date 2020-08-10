@@ -137,7 +137,8 @@ export default function UserInvestments() {
             </Paper>
           </Hidden>
           <Hidden only="xs">
-            <h6>Pending Deals:</h6>
+            <h6>
+              Pending Deals:</h6>
             <Paper>
               <Table>
                 <TableHead>
