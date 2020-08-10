@@ -195,6 +195,7 @@ function InvestmentStatus({ investment }) {
     </Link>
   )
 }
+
 function filename(path) {
   try {
     return path.split('/')[2]
@@ -202,7 +203,6 @@ function filename(path) {
     return path
   }
 }
-
 
 function DocsRow({ docs }) {
   return (
