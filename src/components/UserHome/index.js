@@ -2,12 +2,19 @@ import React, {useEffect} from 'react'
 import _ from 'lodash'
 import {gql} from 'apollo-boost'
 import {Link, useParams, useHistory, Redirect} from 'react-router-dom'
-import {useLazyQuery} from '@apollo/react-hooks';
 import {Row, Container, Col} from 'reactstrap'
 import {nWithCommas} from '../../utils/numbers'
 import {validate} from '../forms/InvestorEdit'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useAuth} from "../../auth/useAuth"
+import {useAuth} from "../../auth/useAuth";
+import allocations_create_deal from '../../assets/allocations_create_deal.svg';
+import allocations_faq from '../../assets/allocations_faq.svg';
+import allocations_invite_deals from '../../assets/allocations_invite_deals.svg';
+import allocations_recent_investments from '../../assets/allocations_recent_investments.svg';
+import allocations_total_investments from '../../assets/allocations_total_investments.svg';
+import allocations_update_profile from '../../assets/allocations_update_profile.svg';
+import allocations_update from '../../assets/allocations_update.svg';
+
 import {
   Avatar,
   Hidden,
@@ -29,6 +36,7 @@ import Loader from '../utils/Loader'
 import Chart from "react-google-charts"
 import "./style.scss";
 import {makeStyles} from "@material-ui/core/styles";
+import NullPaper from "../NullPaper";
 
 const purples = ["#6200EE", "#BB9FE6"]
 
@@ -36,17 +44,20 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
   },
-  lightText: {
-    color: "#7f8fa3",
-  },
   banner: {
-        minWidth: "100%"
+    minWidth: "100%"
+  },
+  blue: {
+    color: "#205DF5",
+  },
+  grey: {
+    color: "#707070"
   }
 }));
 
 const chartOptions = {
-  minColor: purples[1],
-  maxColor: purples[0],
+  minColor: "#51D5FD",
+  maxColor: "#0661A3",
   headerHeight: 0,
   fontColor: "#fff",
   highlightColor: "#fff",
@@ -149,7 +160,7 @@ export default function UserHome(props) {
   const classes = useStyles();
 
   const history = useHistory()
-  const {userProfile, error, params, adminView } = useAuth(GET_INVESTOR)
+  const {userProfile, error, params, adminView} = useAuth(GET_INVESTOR)
 
   if (error) {
     if (error.message === "GraphQL error: permission denied" && userProfile && userProfile.email) {
@@ -160,7 +171,7 @@ export default function UserHome(props) {
   if (!userProfile.email) return <div><Loader/></div>
 
   const userInvestments = userProfile.investments.filter(inv => {
-    if(!inv?.deal._id) {
+    if (!inv?.deal._id) {
       console.log('deal with no deal _id', inv.deal)
     }
     return inv.deal._id
@@ -169,27 +180,29 @@ export default function UserHome(props) {
   const chartEvents = [
     {
       eventName: "select",
-      callback({ chartWrapper }) {
-          history.push(`/investments`)
+      callback({chartWrapper}) {
+        history.push(`/investments`)
       }
     }
   ];
+
+  /*TODO: implement empty values for each paper */
+  const isEmpty = true;
 
   return (
     <>
       {/* TODO: Move to NavBar <AdminTile investor={investor}/>*/}
 
       <Grid container spacing={2}>
-        {total_invested === 0 ?  <NoInvestmentBanner/> :
-        <Grid item xs={12}>
-          <Paper className={classes.paper}>
+        {total_invested === 0 ? <NoInvestmentBanner/> :
+          <Grid item xs={12}>
             <Grid container spacing={2} alignItems="center">
               <Hidden only="xs">
                 <Grid item sm={12} md={4}>
-                  <Typography variant="body1" className={classes.lightText}>
+                  <Typography variant="body1" className={classes.grey}>
                     Welcome
                   </Typography>
-                    <Typography variant="h5">
+                  <Typography variant="h5">
                     <Name investor={userProfile}/>
                   </Typography>
                 </Grid>
@@ -197,7 +210,7 @@ export default function UserHome(props) {
               <Grid item sm={12} md={8}>
                 <div style={{display: "flex", justifyContent: "flex-end"}}>
                   <Hidden only="xs">
-                    <Typography variant="body1" className={classes.lightText}
+                    <Typography variant="body1" className={classes.grey}
                                 style={{textAlign: "right", paddingRight: 16}}>
                       Your Allocations account is ready for your use. <br/>
                       Let's view your investments!
@@ -206,50 +219,60 @@ export default function UserHome(props) {
                   <Button
                     onClick={() => history.push(adminView ? `/investor/${params.id}/investments` : "/investments")}
                     variant="contained" color="primary">
-                    Investments
+                    My Investments
                   </Button>
                 </div>
               </Grid>
             </Grid>
-          </Paper>
-        </Grid>
+          </Grid>
         }
 
         <>
-          <Grid item xs={12} sm={12} md={6}>
+          <Grid item xs={12}>
             <Paper className={classes.paper} style={{height: "100%"}}>
-              <Typography variant="h6" style={{marginBottom: 16}}>
-                Total Investments
-              </Typography>
-              <Typography variant="h3">
-                ${nWithCommas(total_invested)}
-              </Typography>
-            </Paper>
-          </Grid>
+              <Grid container alignItems="center">
+                <Grid item sm={12} md={6}>
+                  <Grid container>
+                    <Grid item xs={12} sm={5}>
+                      <img src={allocations_total_investments}
+                           style={{maxWidth: 200, width: "100%", paddingRight: 16}}/>
+                    </Grid>
+                    <Grid item xs={12} sm={7}>
+                      <Typography variant="h5" className={classes.grey}>
+                        <strong>Total Investments</strong>
+                      </Typography>
+                      <Typography variant="h5" style={{fontSize: "1.8rem"}} className={classes.blue}>
+                        <strong>${nWithCommas(total_invested)}</strong>
+                      </Typography>
+                    </Grid>
+                  </Grid>
 
-          <Grid item xs={12} sm={12} md={6}>
-            <Paper className={classes.paper} style={{height: "100%"}}>
-              <Typography variant="h6" style={{marginBottom: 16}}>
-                Portfolio
-              </Typography>
-              {userInvestments.length > 0 ?
-                <Chart chartType="TreeMap"
-                       width="100%"
-                       height="200px"
-                       chartEvents={chartEvents}
-                       data={formatData(userInvestments)}
-                       options={chartOptions}/> : null
-              }
+                </Grid>
+                <Grid item sm={12} md={6}>
+                  {userInvestments.length > 0 ?
+                    <Chart chartType="TreeMap"
+                           width="100%"
+                           height="200px"
+                           chartEvents={chartEvents}
+                           data={formatData(userInvestments)}
+                           options={chartOptions}/> : null
+                  }
+                </Grid>
+              </Grid>
             </Paper>
           </Grid>
         </>
 
-         <>
-          <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12} md={6}>
+          {isEmpty ? <NullPaper title="Recent Investments" text="Find your most recent investments"
+                                image={allocations_recent_investments} button="Get Started"/>
+            :
             <Paper className={classes.paper} style={{paddingBottom: 0}}>
               <Typography variant="h6" style={{marginBottom: 16}}>
                 Most Recent Investments
               </Typography>
+
+
               <div style={{margin: "0px -16px", cursor: "pointer"}}>
                 <Table style={{marginBottom: "-1px"}}>
                   {orderInvestments(userInvestments).map((investment, i) => (
@@ -257,10 +280,13 @@ export default function UserHome(props) {
                   ))}
                 </Table>
               </div>
-            </Paper>
-          </Grid>
+            </Paper>}
+        </Grid>
 
-          <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12} md={6}>
+          {isEmpty ? <NullPaper title="Invited Deals" text="Here are your invited deals"
+                                image={allocations_invite_deals} button="Get Started"/>
+            :
             <Paper className={classes.paper} style={{paddingBottom: 0}}>
               <Typography variant="h6" style={{marginBottom: 16}}>
                 Invited Deals
@@ -272,10 +298,35 @@ export default function UserHome(props) {
                   ))}
                 </Table>
               </div>
-            </Paper>
-          </Grid>
-        </>
-        
+            </Paper>}
+        </Grid>
+
+        <Grid item xs={12}>
+          <Typography variant="h5" className={classes.grey}>
+            <strong>Tools</strong>
+          </Typography>
+        </Grid>
+
+        <Grid item xs={12} sm={12} md={6}>
+          <NullPaper title="Update Profile" text="Update your user profile"
+                     image={allocations_update_profile} button="Get Started"/>
+        </Grid>
+
+        <Grid item xs={12} sm={12} md={6}>
+          <NullPaper title="Create New Deal" text="Setup your next deal in seconds"
+                     image={allocations_create_deal} button="Get Started"/>
+        </Grid>
+
+        <Grid item xs={12} sm={12} md={6}>
+          <NullPaper title="FAQ" text="Find all your answers here"
+                     image={allocations_faq} button="Get Started"/>
+        </Grid>
+
+        <Grid item xs={12} sm={12} md={6}>
+          <NullPaper title="Update My Account" text="Fund your account and start investing"
+                     image={allocations_update} button="Get Started"/>
+        </Grid>
+
       </Grid>
     </>
   )
@@ -368,7 +419,7 @@ function AdminTile({investor}) {
           <div className="text-center">
             You are a Fund Manager &nbsp;&nbsp;
             <Link to="/admin/funds">
-              <Button variant="contained" size="small" color="secondary">
+              <Button variant="contained" size="small" color="primary">
                 My Funds 🗂
               </Button>
             </Link>
@@ -384,12 +435,12 @@ function AdminTile({investor}) {
 const NoInvestmentBanner = () => {
   const classes = useStyles();
   return (
-      <Grid item sm={12} md={6} className={classes.banner}>
-        <Paper className={classes.paper}>
-          <Typography variant="body1" className={classes.lightText}>
-                      Please contact your deal manager or Allocations if you are waiting for a unique link to join a private deal!
-          </Typography>
-        </Paper>
-      </Grid>
+    <Grid item sm={12} md={6} className={classes.banner}>
+      <Paper className={classes.paper}>
+        <Typography variant="body1" className={classes.grey}>
+          Please contact your deal manager or Allocations if you are waiting for a unique link to join a private deal!
+        </Typography>
+      </Paper>
+    </Grid>
   )
 }

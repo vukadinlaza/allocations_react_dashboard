@@ -53,13 +53,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const TABLE_ORDER = {
-  "invited" : { status: 'invited', display : 'Invited', order: 0},
-  "pledged" : { status: 'pledged', display : 'Pledged', order: 1},
-  "onboarded" : { status: 'onboarded', display : 'Onboarded', order: 2},
-  "complete" : { status: 'complete', display : 'Complete', order: 3},
-}
+  "invited": {status: 'invited', display: 'Invited', order: 0},
+  "pledged": {status: 'pledged', display: 'Pledged', order: 1},
+  "onboarded": {status: 'onboarded', display: 'Onboarded', order: 2},
+  "signed": {status: 'signed', display: 'Signed', order: 3},
+  "wired": {status: 'wired', display: 'Wired', order: 4},
+  "complete": {status: 'complete', display: 'Complete', order: 5},
+};
 
-const TR = ({ investment, showDocs, setShowDocs }) => {
+const TR = ({investment, showDocs, setShowDocs}) => {
   return (
     <TableRow key={investment._id} className="investment-row">
       <TableCell scope="row">{investment.deal.company_name}</TableCell>
@@ -84,7 +86,7 @@ export default function UserInvestments() {
   const classes = useStyles();
   const history = useHistory()
   const [showDocs, setShowDocs] = useState(null)
-  const {userProfile, error, } = useAuth(GET_INVESTOR)
+  const {userProfile, error,} = useAuth(GET_INVESTOR)
 
   if (error) {
     if (error.message === "GraphQL error: permission denied" && userProfile && userProfile.email) {
@@ -94,6 +96,7 @@ export default function UserInvestments() {
   }
 
   if (!userProfile.email) return <div><Loader/></div>
+
 
   const investments = _.orderBy(
     userProfile.investments,
@@ -128,23 +131,24 @@ export default function UserInvestments() {
               <Table dense>
                 {investments.filter(i => i.status !== 'complete').map((investment) => (
                   investment.showDocs ? <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents}/>
-                    : <TR key={investment._id} investment={investment} showDocs={showDocs} setShowDocs={setShowDocs} />
+                    : <TR key={investment._id} investment={investment} showDocs={showDocs} setShowDocs={setShowDocs}/>
                 ))}
               </Table>
             </Paper>
-            <br />
+            <br/>
             <h6>Completed:</h6>
             <Paper>
               <Table dense>
                 {investments.filter(i => i.status === 'complete').map((investment) => (
                   investment.showDocs ? <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents}/>
-                    : <TR key={investment._id} investment={investment} showDocs={showDocs} setShowDocs={setShowDocs} />
+                    : <TR key={investment._id} investment={investment} showDocs={showDocs} setShowDocs={setShowDocs}/>
                 ))}
               </Table>
             </Paper>
           </Hidden>
           <Hidden only="xs">
-            <h6>Pending Deals:</h6>
+            <h6>
+              Pending Deals:</h6>
             <Paper>
               <Table>
                 <TableHead>
@@ -160,12 +164,12 @@ export default function UserInvestments() {
                 <TableBody>
                   {investments.filter(i => i.status !== 'complete').map((investment) => (
                     investment.showDocs ? <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents}/>
-                      : <TR key={investment._id} investment={investment} showDocs={showDocs} setShowDocs={setShowDocs} />
+                      : <TR key={investment._id} investment={investment} showDocs={showDocs} setShowDocs={setShowDocs}/>
                   ))}
                 </TableBody>
               </Table>
             </Paper>
-            <br />
+            <br/>
             <h6>Completed:</h6>
             <Paper>
               <Table>
@@ -182,7 +186,7 @@ export default function UserInvestments() {
                 <TableBody>
                   {investments.filter(i => i.status === 'complete').map((investment) => (
                     investment.showDocs ? <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents}/>
-                      : <TR key={investment._id} investment={investment} showDocs={showDocs} setShowDocs={setShowDocs} />
+                      : <TR key={investment._id} investment={investment} showDocs={showDocs} setShowDocs={setShowDocs}/>
                   ))}
                 </TableBody>
               </Table>

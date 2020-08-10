@@ -5,7 +5,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from "@material-ui/core/Typography";
 import ButtonBase from "@material-ui/core/ButtonBase";
-import {gql} from 'apollo-boost'
 import Hidden from "@material-ui/core/Hidden";
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import {useHistory} from "react-router-dom"
@@ -114,15 +113,16 @@ export function Auth0Profile({user, logoutWithRedirect}) {
   return (
     <div className={classes.root}>
       {organizations_admin.length >= 1 && <Hidden smDown>
-        <Typography variant="subtitle1" style={{marginRight: 16}}>
+        <Typography variant="subtitle1" style={{marginRight: 16, color: "#3A506B"}}>
           You are a fund manager
         </Typography>
       </Hidden>}
 
       <Hidden only="xs">
-        <Button color="secondary" variant="outlined" aria-controls="simple-menu" aria-haspopup="true"
+        <Button color="primary" endIcon={<KeyboardArrowDownIcon/>} variant="outlined" aria-controls="simple-menu"
+                aria-haspopup="true"
                 onClick={handleClickFunds} style={{marginRight: 16}}>
-          My Funds <KeyboardArrowDownIcon/>
+          My Funds
         </Button>
       </Hidden>
       <Menu
@@ -132,19 +132,19 @@ export function Auth0Profile({user, logoutWithRedirect}) {
         open={Boolean(anchorElFunds)}
         onClose={handleCloseFunds}
       >
-      {organizations_admin.map(org => {
-        return (
-          <MenuItem
-            onClick={() => { 
-              history.push(`/admin/${org.slug}`);
-              handleCloseFunds();
-            }}
-            key={org.name}
-          >
-            {org.name}
-          </MenuItem>
-        )
-      })}
+        {organizations_admin.map(org => {
+          return (
+            <MenuItem
+              onClick={() => {
+                history.push(`/admin/${org.slug}`);
+                handleCloseFunds();
+              }}
+              key={org.name}
+            >
+              {org.name}
+            </MenuItem>
+          )
+        })}
       </Menu>
 
       <ButtonBase onClick={handleClickProfile}>
