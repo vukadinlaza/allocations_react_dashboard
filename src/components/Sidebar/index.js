@@ -24,7 +24,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import NavBar from "../NavBar";
 
-const drawerWidth = 293;
+const drawerWidth = 250;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     width: 64,
     height: 64,
     borderRadius: "50%",
-    padding: 15,
+    padding: 20,
     marginRight: 16,
     color: "#8593a6",
   },

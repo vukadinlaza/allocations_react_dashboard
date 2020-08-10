@@ -3,9 +3,6 @@ import {createMuiTheme} from '@material-ui/core/styles';
 
 // A custom theme for this app
 const theme = createMuiTheme({
-  typography: {
-    fontSize: 19,
-  },
   overrides: {
     MuiInputLabel: {
       /*fix bug in <Select /> with helper text, only works on white backgrounds

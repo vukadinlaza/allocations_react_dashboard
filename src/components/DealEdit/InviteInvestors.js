@@ -39,10 +39,6 @@ export default function InviteInvestors({deal, refetch}) {
 
   return (
     <>
-      <Typography variant="h5" style={{marginBottom: 16}}>
-        Invites
-      </Typography>
-
       {/* <TextField variant="outlined"
                  style={{width: "100%", marginBottom: "16px"}}
                  value={searchQ}
@@ -52,24 +48,19 @@ export default function InviteInvestors({deal, refetch}) {
       <SendEmailInvites deal={deal} refetch={refetch}/>
 
       {/* TODO: Null State missing */}
-
-      <Paper className="table-wrapper" style={{marginBottom: "10px"}}>
-        <Table>
-          <TableBody>
-            {(searchQ !== "" ? _.get(searchRes, 'data.searchUsers', []) : []).map(investor => (
-              <AddInvestor key={investor._id} investor={investor} deal={deal} setSearchQ={setSearchQ}
-                           refetch={refetch}/>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
-      <Paper className="table-wrapper">
-        <Table size="small" className="invited-investors">
-          <TableBody>
-            <InvitedInvestors deal={deal} refetch={refetch}/>
-          </TableBody>
-        </Table>
-      </Paper>
+      <Table>
+        <TableBody>
+          {(searchQ !== "" ? _.get(searchRes, 'data.searchUsers', []) : []).map(investor => (
+            <AddInvestor key={investor._id} investor={investor} deal={deal} setSearchQ={setSearchQ}
+                         refetch={refetch}/>
+          ))}
+        </TableBody>
+      </Table>
+      <Table size="small" className="invited-investors">
+        <TableBody>
+          <InvitedInvestors deal={deal} refetch={refetch}/>
+        </TableBody>
+      </Table>
     </>
   )
 }
@@ -98,34 +89,34 @@ function SendEmailInvites({deal, refetch}) {
   const invitedInvestors = (_.get(deal, 'invitedInvestors') || []).map(i => i.email)
 
   return (
-    <div>
-      <TextField value={email}
-                 variant="outlined"
-                 onChange={e => setEmail(e.target.value)}
-                 label="Email Address"
-                 helperText="Invite Investor outside of Allocations by Email"
-      />
+    <>
+      <div style={{display: "flex"}}>
+        <TextField value={email}
+                   fullWidth
+                   variant="outlined"
+                   onChange={e => setEmail(e.target.value)}
+                   label="Email Address"
+                   helperText="Invite Investor outside of Allocations by Email"
+        />
 
-      <Button variant="contained"
-              color="secondary"
-              size="small"
-              onClick={submit}
-              style={{verticalAlign: "middle"}}>
-        Send
-      </Button>
-
-      <Paper className="email-invites-table" style={{padding: "10px 5px", margin: "10px 0px"}}>
-        <Table>
-          <TableBody>
-            {(deal.emailInvites || []).filter(invite => {
-              return !invitedInvestors.includes(invite.to)
-            }).map(invite => (
-              <PrivateInvite key={invite.sent_at} invite={invite}/>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
-    </div>
+        <Button variant="outlined"
+                color="primary"
+                size="large"
+                onClick={submit}
+                style={{verticalAlign: "middle", maxHeight: 56, marginLeft: 8}}>
+          Send
+        </Button>
+      </div>
+      <Table>
+        <TableBody>
+          {(deal.emailInvites || []).filter(invite => {
+            return !invitedInvestors.includes(invite.to)
+          }).map(invite => (
+            <PrivateInvite key={invite.sent_at} invite={invite}/>
+          ))}
+        </TableBody>
+      </Table>
+    </>
   )
 }
 
@@ -157,11 +148,7 @@ function InvitedInvestors({deal, refetch}) {
   }
 
   if (_.get(deal, 'invitedInvestors.length', 0) === 0) {
-    return (
-      <TableRow className="invited-investors-none">
-        <TableCell>None</TableCell>
-      </TableRow>
-    )
+    return <div/>
   }
 
   return (
