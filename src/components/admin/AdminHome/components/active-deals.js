@@ -20,23 +20,7 @@ import InvestmentFlow from './investmentFlow/index'
  *
  **/
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(2),
-    marginBottom: theme.spacing(4),
-    minHeight: '100%'
-  },
-  divider: {
-    margin: "16px -16px"
-  },
-  table: {
-    width: "calc(100% + 32px)",
-    margin: "16px -16px"
-  },
-}));
-
 export default function ActiveDeals({orgData}) {
-  const classes = useStyles();
   const history = useHistory();
 
   if (!orgData) return <Loader/>
@@ -49,31 +33,30 @@ export default function ActiveDeals({orgData}) {
       <Grid item xs={12}>
         <Grid container xs={12} justify="space-between">
           <Typography variant="h6">
-            💡 Active Deals: {(active || []).length}
+            Active Deals: {(active || []).length}
           </Typography>
           <Button color="primary"
                   variant="contained" onClick={() => history.push(`/admin/${org.slug}/deal/new`)}>Create Deal</Button>
         </Grid>
-        <Grid item xs={2} style={{textAlign: "left"}}>
-        </Grid>
-        <Divider className={classes.divider} style={{marginBottom: -16}}/>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Closes</TableCell>
-              <TableCell>Progress</TableCell>
-              <TableCell>SOW</TableCell>
-              <TableCell>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(active || []).map(deal => (
-              <Deal key={deal._id} deal={deal} investments={org.investments}/>
-            ))}
-          </TableBody>
-        </Table>
+        <Paper style={{marginTop: 16}}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Closes</TableCell>
+                <TableCell>Progress</TableCell>
+                <TableCell>SOW</TableCell>
+                <TableCell>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {(active || []).map(deal => (
+                <Deal key={deal._id} deal={deal} investments={org.investments}/>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
       </Grid>
     </Grid>
   )

@@ -16,18 +16,18 @@ const theme = createMuiTheme({
     MuiTypography: {
       subtitle2: {
         color: "#9ea0a5"
-      }
+      },
     },
     MuiButton: {
       containedPrimary: {
         boxShadow: "none",
         textTransform: "capitalize",
-        fontWeight: "bolder"
+        fontWeight: "bolder",
       },
       containedSecondary: {
         boxShadow: "none",
         color: "#fff",
-        textTransform: "capitalize"
+        textTransform: "capitalize",
       },
     },
     MuiTableHead: {
@@ -47,7 +47,7 @@ const theme = createMuiTheme({
       },
       rounded: {
         border: "0px !important",
-        borderRadius: "10px",
+        overflow: "hidden",
         boxShadow: "0px 3px 6px #00000029 !important"
       }
     },

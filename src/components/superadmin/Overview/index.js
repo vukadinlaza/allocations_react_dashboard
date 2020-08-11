@@ -1,11 +1,11 @@
 import React from 'react'
 import _ from 'lodash'
-import { gql } from 'apollo-boost'
-import { Row, Col } from 'reactstrap'
-import { Link } from 'react-router-dom'
-import { useQuery, useMutation } from '@apollo/react-hooks'
-import { nWithCommas, formatDate } from '../../../utils/numbers'
-import { Paper, LinearProgress, Table, TableBody, TableCell, TableRow, Button } from '@material-ui/core'
+import {gql} from 'apollo-boost'
+import {Row, Col} from 'reactstrap'
+import {Link} from 'react-router-dom'
+import {useQuery, useMutation} from '@apollo/react-hooks'
+import {nWithCommas, formatDate} from '../../../utils/numbers'
+import {Paper, LinearProgress, Table, TableBody, TableCell, TableRow, Button} from '@material-ui/core'
 import "./style.scss"
 
 const SUPERADMIN = gql`
@@ -57,25 +57,27 @@ const APPROVE_ORG = gql`
   }
 `
 
-export default function SuperAdminOverview () {
-  const { data, refetch } = useQuery(SUPERADMIN)
+export default function SuperAdminOverview() {
+  const {data, refetch} = useQuery(SUPERADMIN)
 
   if (!data) return null
 
-  const { deals, organizations, investors } = data.superadmin
+  const {deals, organizations, investors} = data.superadmin
   return (
     <div className="SuperAdmin">
       <h2 style={{marginBottom: "20px"}}>🔮 Superadmin</h2>
       <Row>
         <Col md={{size: 6}}>
           <Paper style={{padding: "20px"}}>
-            <div className="deals-title">🏦 Funds &nbsp;<span className="square-number">{organizations.length}</span></div>
-            <hr></hr>
+            <div>
+              Funds &nbsp;
+              <span className="square-number">{organizations.length}</span>
+            </div>
             <Paper style={{maxHeight: "500px", overflow: "scroll"}}>
               <Table>
                 <TableBody>
                   {organizations.map(org => (
-                    <Org key={org._id} org={org} refetch={refetch} />
+                    <Org key={org._id} org={org} refetch={refetch}/>
                   ))}
                 </TableBody>
               </Table>
@@ -84,13 +86,12 @@ export default function SuperAdminOverview () {
         </Col>
         <Col sm={{size: 6}}>
           <Paper style={{padding: "20px"}}>
-            <div className="deals-title">💡 Deals &nbsp;<span className="square-number">{deals.length}</span></div>
-            <hr></hr>
+            <div className="deals-title">Deals &nbsp;<span className="square-number">{deals.length}</span></div>
             <Paper style={{maxHeight: "500px", overflow: "scroll"}}>
               <Table size="small">
                 <TableBody>
                   {deals.map(deal => (
-                    <Deal key={deal._id} deal={deal} />
+                    <Deal key={deal._id} deal={deal}/>
                   ))}
                 </TableBody>
               </Table>
@@ -102,18 +103,19 @@ export default function SuperAdminOverview () {
   )
 }
 
-function Org ({ org, refetch }) {
-  const [updateOrganization, { data }] = useMutation(APPROVE_ORG, { 
-    onCompleted: refetch 
+function Org({org, refetch}) {
+  const [updateOrganization, {data}] = useMutation(APPROVE_ORG, {
+    onCompleted: refetch
   })
   const approve = () => {
-    updateOrganization({ variables: { org: { _id: org._id, approved: true } }})
+    updateOrganization({variables: {org: {_id: org._id, approved: true}}})
   }
 
   return (
     <TableRow className="org-info">
       <TableCell className="name">
-        {org.name}{!org.approved && <Button size="small" variant="contained" color="secondary" onClick={approve}>approve</Button>}
+        {org.name}{!org.approved &&
+      <Button size="small" variant="contained" color="secondary" onClick={approve}>approve</Button>}
       </TableCell>
       <TableCell><i>created: {org.created_at ? formatDate(Number(org.created_at)) : null}</i></TableCell>
       <TableCell>
@@ -126,7 +128,7 @@ function Org ({ org, refetch }) {
   )
 }
 
-function Deal ({ deal }) {
+function Deal({deal}) {
   const val = (Number(deal.amount_raised) / (Number(deal.target) || Infinity)) * 100
 
   const organization = _.get(deal, 'organization.name', 'allocations')
@@ -135,7 +137,7 @@ function Deal ({ deal }) {
       <TableCell className="company-name">{deal.company_name} <br/><small>({organization})</small></TableCell>
       <TableCell><i>closes: {deal.date_closed ? formatDate(deal.date_closed) : "unknown"}</i></TableCell>
       <TableCell>
-        <LinearProgress className="progress-bar" variant="determinate" color="secondary" value={val} />
+        <LinearProgress className="progress-bar" variant="determinate" color="secondary" value={val}/>
         <div className="text-center">${nWithCommas(deal.amount_raised)} of ${nWithCommas(deal.target)}</div>
       </TableCell>
       <TableCell>

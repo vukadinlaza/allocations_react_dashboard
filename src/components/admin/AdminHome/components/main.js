@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     color: "#7f8ea3"
   },
   tab: {
-    height: 75,
+    height: 42,
     width: "100%"
   },
   subtitle: {
@@ -43,10 +43,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 16
   },
   activeTab: {
-    height: 75,
-    paddingTop: 6,
+    height: 42,
+    paddingTop: 3,
     width: "100%",
-    borderBottom: "6px solid #205DF5",
+    borderBottom: "3px solid #205DF5",
     outline: "0 !important",
   },
   button: {
@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function OrganizationOverview({orgData, superAdmin}) {
-  const [tab, setTab] = useState("organization");
+  const [tab, setTab] = useState("active-deals");
   const classes = useStyles();
 
   if (!orgData) return <Paper style={{padding: "25px"}}><Loader/></Paper>
@@ -82,12 +82,6 @@ export default function OrganizationOverview({orgData, superAdmin}) {
 
       <div className={classes.tabs}>
         <Grid container>
-          <Grid item xs={12} sm={4} md={2}>
-            <ButtonBase className={tab === "organization" ? classes.activeTab : classes.tab}
-                        onClick={() => setTab('organization')}>
-              Organization
-            </ButtonBase>
-          </Grid>
           <Grid item xs={12} sm={4} md={2}>
             <ButtonBase className={tab === "active-deals" ? classes.activeTab : classes.tab}
                         onClick={() => setTab('active-deals')}>
@@ -123,17 +117,17 @@ export default function OrganizationOverview({orgData, superAdmin}) {
       </div>
 
       <>
-        {tab === "organization" && <Organization/>}
         {tab === "active-deals" && <ActiveDeals orgData={orgData}/>}
         {tab === "closed-deals" && <ClosedDeals orgData={orgData}/>}
         {tab === "profile" && <OrgCards organization={organization} investor={orgData.investor}/>}
         {tab === "all-investors" && <Investors/>}
+        {tab === "setting" && <Settings/>}
       </>
     </>
   )
 }
 
-function Organization() {
+function Settings() {
   const classes = useStyles();
 
   return <>
