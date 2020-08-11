@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom"
 import { TextField } from '@material-ui/core'
 import { Row, Col } from 'reactstrap'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import { toast } from 'react-toastify';
 import { gql } from 'apollo-boost'
 import * as API from "../../api"
 import { useLazyQuery, useMutation } from '@apollo/react-hooks'
@@ -35,9 +35,9 @@ function validate({ investment, user, deal }) {
   return errors
 }
 
-export default function InvestmentNew () {
+export default function InvestmentNew() {
   const history = useHistory()
-  const [investment, setInvestment] = useState({ amount: ""})
+  const [investment, setInvestment] = useState({ amount: "" })
   const [createInvestment, { data }] = useMutation(CREATE_INVESTMENT)
   const [errors, setErrors] = useState([])
   const [newUser, setNewUser] = useState(false)
@@ -53,73 +53,74 @@ export default function InvestmentNew () {
   const updateInvestmentProp = ({ prop, newVal }) => {
     setInvestment(prev => ({ ...prev, [prop]: newVal }))
   }
-  
+
   const submit = () => {
     const validation = validate({ investment, user, deal })
     setErrors(validation)
     if (validation.length === 0) {
-      createInvestment({ 
-        variables: { 
-          investment: { amount: Math.floor(investment.amount), user_id: user._id, deal_id: deal._id } 
-        }
+      createInvestment({
+        variables: {
+          investment: { amount: Math.floor(investment.amount), user_id: user._id, deal_id: deal._id }
+        },
+        onCompleted: toast.success('Sucess')
       })
     }
   }
-  
+
   return (
     <>
       {newUser && <InvestorNew push={false} setNewUser={setNewUser} />}
       {!newUser && <FormControlLabel
         label="Create New user"
         control={<Checkbox
-            color="primary"
-            checked={newUser}
-            inputProps={{ 'aria-label': 'secondary checkbox' }}
-            onChange={(e) => setNewUser(e.target.checked)}
-                        />}
+          color="primary"
+          checked={newUser}
+          inputProps={{ 'aria-label': 'secondary checkbox' }}
+          onChange={(e) => setNewUser(e.target.checked)}
+        />}
       />}
-    <div className="InvestmentEdit form-wrapper">
-      <Row>
-        <Col sm={{size: 8, offset: 1}}>
-          <div className="form-title">Create Investment</div>
-        </Col>
-      </Row>
-      <form className="form" noValidate autoComplete="off">
+      <div className="InvestmentEdit form-wrapper">
         <Row>
-          <Col sm={{size: 8, offset: 1}}>
-            <TextField required error={errors.includes("amount")} style={{width: "100%"}} 
-              value={investment.amount}
-              onChange={e => updateInvestmentProp({ prop: "amount", newVal: e.target.value })}
-              label="Amount" 
-              variant="filled" />
+          <Col sm={{ size: 8, offset: 1 }}>
+            <div className="form-title">Create Investment</div>
           </Col>
         </Row>
-        <Row>
-          <Col sm={{size: 4, offset: 1}}>
+        <form className="form" noValidate autoComplete="off">
+          <Row>
+            <Col sm={{ size: 8, offset: 1 }}>
+              <TextField required error={errors.includes("amount")} style={{ width: "100%" }}
+                value={investment.amount}
+                onChange={e => updateInvestmentProp({ prop: "amount", newVal: e.target.value })}
+                label="Amount"
+                variant="filled" />
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={{ size: 4, offset: 1 }}>
               <UserSearch user={user} setUser={setUser} errors={errors} deal_id={get(deal, '_id', '')} />
-          </Col>
-          <Col sm={{size: 4}}>
-            <DealSearch deal={deal} setDeal={setDeal} errors={errors} />
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={{size: 8, offset: 1}}>
-            <Button variant="contained"
-              onClick={submit} 
-              color="primary">
-              CREATE
-            </Button> 
-          </Col>
-        </Row>
-        <Row>
-        </Row>
-      </form>
-    </div>
+            </Col>
+            <Col sm={{ size: 4 }}>
+              <DealSearch deal={deal} setDeal={setDeal} errors={errors} />
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={{ size: 8, offset: 1 }}>
+              <Button variant="contained"
+                onClick={submit}
+                color="primary">
+                CREATE
+            </Button>
+            </Col>
+          </Row>
+          <Row>
+          </Row>
+        </form>
+      </div>
     </>
   )
 }
 
-function UserSearch ({ user, setUser, errors, deal_id }) {
+function UserSearch({ user, setUser, errors, deal_id }) {
   const [q, setQ] = useState("")
   const [records, setRecords] = useState([])
   const [search, searchRes] = useLazyQuery(API.users.search)
@@ -131,7 +132,7 @@ function UserSearch ({ user, setUser, errors, deal_id }) {
   useEffect(() => {
     if (searchRes.data && searchRes.data.searchUsers) {
       setRecords(q === "" ? [] : searchRes.data.searchUsers)
-    } 
+    }
   }, [q, searchRes.data])
 
   if (user) {
@@ -152,7 +153,7 @@ function UserSearch ({ user, setUser, errors, deal_id }) {
 
   return (
     <div className="assoc-search">
-      <TextField style={{width: "100%"}}
+      <TextField style={{ width: "100%" }}
         required
         value={q}
         error={errors.includes("user")}
@@ -163,8 +164,8 @@ function UserSearch ({ user, setUser, errors, deal_id }) {
         <Table>
           <TableBody>
             {records.map(record => (
-              <TableRow key={record._id} 
-                className="assoc-option" 
+              <TableRow key={record._id}
+                className="assoc-option"
                 onClick={() => setUser(record)}>
                 <TableCell>{record.first_name} {record.last_name}</TableCell>
                 <TableCell>{record.email}</TableCell>
@@ -177,7 +178,7 @@ function UserSearch ({ user, setUser, errors, deal_id }) {
   )
 }
 
-function DealSearch ({ deal, setDeal, errors }) {
+function DealSearch({ deal, setDeal, errors }) {
   const [q, setQ] = useState("")
   const [records, setRecords] = useState([])
   const [search, searchRes] = useLazyQuery(API.deals.search)
@@ -189,7 +190,7 @@ function DealSearch ({ deal, setDeal, errors }) {
   useEffect(() => {
     if (searchRes.data && searchRes.data.searchDeals) {
       setRecords(q === "" ? [] : searchRes.data.searchDeals)
-    } 
+    }
   }, [q, searchRes.data])
 
   if (deal) {
@@ -210,8 +211,8 @@ function DealSearch ({ deal, setDeal, errors }) {
 
   return (
     <div className="assoc-search">
-      <TextField required 
-        style={{width: "100%"}}
+      <TextField required
+        style={{ width: "100%" }}
         value={q}
         label="Deal"
         variant="filled"
@@ -221,8 +222,8 @@ function DealSearch ({ deal, setDeal, errors }) {
         <Table>
           <TableBody>
             {records.map(record => (
-              <TableRow key={record._id} 
-                className="assoc-option" 
+              <TableRow key={record._id}
+                className="assoc-option"
                 onClick={() => setDeal(record)}>
                 <TableCell>{record.company_name}</TableCell>
                 <TableCell>{record.company_description}</TableCell>

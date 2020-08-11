@@ -62,6 +62,7 @@
     "react-router-dom": "^5.0.0",
     "react-scripts": "^3.4.1",
     "react-slaask": "^1.1.0",
+    "react-toastify": "^6.0.8",
     "reactstrap": "^8.0.0",
     "serve": "^11.3.2"
   },

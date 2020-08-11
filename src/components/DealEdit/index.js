@@ -4,6 +4,7 @@ import _, { get, isEqual } from 'lodash'
 import { useParams, Link, useHistory } from 'react-router-dom'
 import { Row, Col } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { toast } from 'react-toastify';
 import { nWithCommas, formatDate } from '../../utils/numbers'
 import * as API from '../../api'
 import UserSearch from '../forms/UserSearch'
@@ -265,10 +266,7 @@ export default function DealEdit() {
 
   return (
     <>
-
       <form noValidate autoComplete="off">
-
-
         <Grid container spacing={2}>
 
           <Grid item xs={10}>
@@ -718,7 +716,8 @@ export default function DealEdit() {
                           ..._.pick(deal, validInputs),
                           dealParams: _.pick(deal.dealParams, dealParamsValidInputs)
                         }, org: organization
-                      }
+                      },
+                      onCompleted: toast.success('Success')
                     })
                   }}
                   color="primary">
