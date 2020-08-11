@@ -21,13 +21,11 @@ const theme = createMuiTheme({
     MuiButton: {
       containedPrimary: {
         boxShadow: "none",
-        borderRadius: "12px",
         textTransform: "capitalize",
         fontWeight: "bolder"
       },
       containedSecondary: {
         boxShadow: "none",
-        borderRadius: "12px",
         color: "#fff",
         textTransform: "capitalize"
       },
