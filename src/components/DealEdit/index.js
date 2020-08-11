@@ -1121,7 +1121,7 @@ function DeleteDeal({ deal }) {
   return (
     <Grid container className="danger-zone DeleteDeal">
       <Grid item xs={10}>
-        <Typography variant="h6">
+        <Typography variant="h6" gutterBottom>
           Danger Zone - Delete Deal
         </Typography>
       </Grid>

@@ -118,7 +118,7 @@ export default function DocusignKYCEmbeddedForm({setLink, deal_slug, org}) {
 
   if (loading) return (<Paper className={classes.paper}>
 
-      <Typography variant="h6">
+      <Typography variant="h6" gutterBottom>
         Fetching Document!
       </Typography>
       <Loader/>
@@ -128,7 +128,7 @@ export default function DocusignKYCEmbeddedForm({setLink, deal_slug, org}) {
   return (
     <>
       <form noValidate autoComplete="off">
-        <Typography variant="h6">
+        <Typography variant="h6" gutterBottom>
           KYC Information
         </Typography>
         <Typography variant="subtitle2">

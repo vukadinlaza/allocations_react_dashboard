@@ -32,7 +32,7 @@ export default function ActiveDeals({orgData}) {
     <Grid container>
       <Grid item xs={12}>
         <Grid container xs={12} justify="space-between">
-          <Typography variant="h6">
+          <Typography variant="h6" gutterBottom>
             Active Deals: {(active || []).length}
           </Typography>
           <Button color="primary"

@@ -115,7 +115,7 @@ export default function Deals({showClosed}) {
       </>
       }
       <>
-        <Typography variant="h6">
+        <Typography variant="h6" gutterBottom>
           Closed Deals: {(closed || []).length}
         </Typography>
         <Paper style={{marginTop: 16}}>

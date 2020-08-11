@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import _ from 'lodash'
-import { useParams, Link } from 'react-router-dom';
-import { gql } from 'apollo-boost'
-import { useLazyQuery } from '@apollo/react-hooks';
-import { useAuth } from "../../auth/useAuth";
-import { Row, Col } from 'reactstrap'
-import { nWithCommas, formatDate } from '../../utils/numbers'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {useParams, Link, useHistory} from 'react-router-dom';
+import {gql} from 'apollo-boost'
+import {useLazyQuery} from '@apollo/react-hooks';
+import {useAuth} from "../../auth/useAuth";
+import {Row, Col} from 'reactstrap'
+import {nWithCommas, formatDate} from '../../utils/numbers'
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Loader from '../utils/Loader'
 import * as Chart from '../../utils/chart'
 import * as d3 from 'd3'
 
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core'
+import {Grid, Table, TableBody, TableCell, TableRow, TableHead, Paper, Button} from '@material-ui/core'
+import Typography from "@material-ui/core/Typography";
+import {makeStyles} from "@material-ui/core/styles";
 
-import "./style.scss";
 
 /***
  *
@@ -54,10 +55,10 @@ const GET_INVESTMENTS = gql`
 `
 
 function renderChart(investments) {
-  const margins = { top: 0, bottom: 0, left: 0, right: 0 }
-  const { g, chartWidth, chartHeight } = Chart.initResponsive("#investments-timeseries-chart", margins)
+  const margins = {top: 0, bottom: 0, left: 0, right: 0}
+  const {g, chartWidth, chartHeight} = Chart.initResponsive("#investments-timeseries-chart", margins)
 
-  const { data } = investments.reduce((acc, i) => {
+  const {data} = investments.reduce((acc, i) => {
     const cumsum = acc.cumsum + i.amount
     return {
       cumsum,
@@ -86,87 +87,98 @@ function renderChart(investments) {
     .attr("d", line)
 }
 
-export default function Investments () {
-  const { organization } = useParams()
-  const [showDocs, setShowDocs] = useState(null)
+const useStyles = makeStyles((theme) => ({
+  green: {
+    color: theme.palette.secondary.main
+  },
+}));
 
-  const { userProfile } = useAuth()
-  const [getInvestments, { data, error }] = useLazyQuery(GET_INVESTMENTS)
+
+export default function Investments() {
+  const {organization} = useParams()
+  const [showDocs, setShowDocs] = useState(null)
+  const history = useHistory()
+  const classes = useStyles()
+
+  const {userProfile} = useAuth()
+  const [getInvestments, {data, error}] = useLazyQuery(GET_INVESTMENTS)
 
   useEffect(() => {
-    if (userProfile && userProfile.email) getInvestments({ variables: { slug: organization } })
+    if (userProfile && userProfile.email) getInvestments({variables: {slug: organization}})
   }, [userProfile])
 
   if (error) return <div>{error.message}</div>
 
-  if (!data) return <div><Loader /></div>
+  if (!data) return <div><Loader/></div>
 
   const investments = _.orderBy(_.get(data, 'organization.investments', []), i => new Date(i.deal.date_closed).getTime(), 'desc')
   if (showDocs) {
-    investments.splice(investments.findIndex(i => i._id === showDocs._id) + 1, 0, { showDocs })
+    investments.splice(investments.findIndex(i => i._id === showDocs._id) + 1, 0, {showDocs})
   }
 
   return (
-    <div className="Investments">
-      <Row>
-        <Col sm="10" className="offset-sm-1">
-          <div className="investment-stats row">
-            <Col sm="6">
-              <Paper className="investments-n">
-                Investments: <span>{showDocs ? investments.length -1 : investments.length}</span>
-                <Button variant="contained"
-                  color="secondary">
-                  <Link to="/admin/investment/new">Add Investment</Link>
-                </Button>
-              </Paper>
-            </Col>
-            <Col sm="6">
-              <Paper className="investments-sum">Total Invested: <span>${nWithCommas(_.sumBy(investments, 'amount'))}</span></Paper>
-            </Col>
-          </div>
-          <Paper className="table-wrapper">
-            <Table className="investments-table">
-              <TableHead style={{fontWeight: "bold"}}>
-                <TableRow>
-                  <TableCell>Investor</TableCell>
-                  <TableCell>Company</TableCell>
-                  <TableCell>Description</TableCell>
-                  <TableCell align="right">Amount</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell align="center">Closing Date</TableCell>
-                  <TableCell align="right">Docs</TableCell>
-                  <TableCell></TableCell>
+    <>
+      <Grid container>
+        <Grid item xs={12} sm={4}>
+          <Typography variant="h6" gutterBottom>
+            Investments: <span>{showDocs ? investments.length - 1 : investments.length}</span>
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={3}>
+          <Button variant="contained"
+                  color="secondary" onClick={() => history.push(`/admin/investment/new`)}>
+            Add Investment
+          </Button>
+        </Grid>
+        <Grid item xs={12} sm={5}>
+          <Typography variant="h6" gutterBottom>
+            Total Invested: <span className={classes.green}>${nWithCommas(_.sumBy(investments, 'amount'))}</span>
+          </Typography>
+        </Grid>
+      </Grid>
+      <Paper style={{marginTop: 16}}>
+        <Table>
+          <TableHead style={{fontWeight: "bold"}}>
+            <TableRow>
+              <TableCell>Investor</TableCell>
+              <TableCell>Company</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell align="right">Amount</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell align="center">Closing Date</TableCell>
+              <TableCell align="right">Docs</TableCell>
+              <TableCell></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {investments.map((investment) => (
+              investment.showDocs ? <DocsRow docs={showDocs.documents}/>
+                : <TableRow key={investment._id} className="investment-row">
+                  <TableCell>{_.get(investment, 'investor.name')}</TableCell>
+                  <TableCell scope="row">{investment.deal.company_name}</TableCell>
+                  <TableCell>{investment.deal.company_description}</TableCell>
+                  <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) : "TBD"}</TableCell>
+                  <TableCell>
+                    <span
+                      className={`investment-status investment-status-${investment.status}`}>{investment.status}</span>
+                  </TableCell>
+                  <TableCell align="center">{formatDate(investment.deal.date_closed)}</TableCell>
+                  <TableCell align="right">
+                    {_.get(investment, 'documents.length', 0) > 0
+                      ? showDocs && (showDocs._id === investment._id)
+                        ? <FontAwesomeIcon icon="times" onClick={() => setShowDocs(null)}/>
+                        : <FontAwesomeIcon icon="info-circle" onClick={() => setShowDocs(investment)}/>
+                      : ""
+                    }
+                  </TableCell>
+                  <TableCell align="center"><Link
+                    to={`/admin/${organization}/investments/${investment._id}/edit`}>edit</Link></TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {investments.map((investment) => (
-                  investment.showDocs ? <DocsRow docs={showDocs.documents} />
-                    : <TableRow key={investment._id} className="investment-row">
-                        <TableCell>{_.get(investment, 'investor.name')}</TableCell>
-                        <TableCell scope="row">{investment.deal.company_name}</TableCell>
-                        <TableCell>{investment.deal.company_description}</TableCell>
-                        <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) : "TBD"}</TableCell>
-                        <TableCell>
-                          <span className={`investment-status investment-status-${investment.status}`}>{investment.status}</span>
-                        </TableCell>
-                        <TableCell align="center">{formatDate(investment.deal.date_closed)}</TableCell>
-                        <TableCell align="right">
-                          {_.get(investment, 'documents.length', 0) > 0
-                            ? showDocs && (showDocs._id === investment._id) 
-                              ? <FontAwesomeIcon icon="times" onClick={() => setShowDocs(null)} /> 
-                              : <FontAwesomeIcon icon="info-circle" onClick={() => setShowDocs(investment)} />
-                            : ""
-                          } 
-                        </TableCell>
-                        <TableCell align="center"><Link to={`/admin/${organization}/investments/${investment._id}/edit`}>edit</Link></TableCell>
-                      </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Paper>
-        </Col>
-      </Row>
-    </div>
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
+    </>
   )
 }
 
@@ -178,17 +190,18 @@ function filename(path) {
   }
 }
 
-function DocsRow ({ docs }) {
+function DocsRow({docs}) {
   return (
     <TableRow>
       <TableCell colSpan={7}>
         {docs.map(doc => (
           <div className="doc-wrapper">
             <div className="doc">
-              <FontAwesomeIcon icon={["far", "file-pdf"]} />
+              <FontAwesomeIcon icon={["far", "file-pdf"]}/>
             </div>
             <div className="filename">
-              <span><a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">{filename(doc.path)}</a></span>
+              <span><a href={`https://${doc.link}`} target="_blank"
+                       rel="noopener noreferrer">{filename(doc.path)}</a></span>
             </div>
           </div>
         ))}

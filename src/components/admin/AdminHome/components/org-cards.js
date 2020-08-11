@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 const OrgCards = ({organization, investor}) => {
     const classes = useStyles();
-    const [modal, setModal] = useState()  
+    const [modal, setModal] = useState()
     return (
         <>
             <Grid container spacing={2}>
@@ -38,11 +38,11 @@ const OrgCards = ({organization, investor}) => {
                             return (
                                 <Grid item xs={12} sm={6} key={card.title}>
                                     <Paper className={classes.paper}>
-                                        <Grid item> 
+                                        <Grid item>
                                             <img src={PosIcon} className={classes.img} alt="modal icon"/>
                                         </Grid>
                                         <Grid item>
-                                            <Typography variant="h6">
+                                            <Typography variant="h6" gutterBottom>
                                                 {card.title}
                                             </Typography>
                                             <Typography variant="subtitle2">

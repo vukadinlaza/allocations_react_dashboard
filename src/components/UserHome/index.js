@@ -371,7 +371,7 @@ function NextSteps({investor}) {
   const profileComplete = investor && validate(investor).length === 0
   return (
     <>
-      <Typography variant="h6">
+      <Typography variant="h6" gutterBottom>
         🚨 Next Steps
       </Typography>
       <Paper style={{padding: "16px"}}>

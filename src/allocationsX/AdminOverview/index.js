@@ -1,14 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import _ from 'lodash'
-import { Row, Col } from 'reactstrap'
-import { useParams, useHistory, useLocation } from 'react-router-dom'
-import { useSimpleReducer, useToggle } from '../../utils/hooks'
-import { nWithCommas, formatDate } from '../../utils/numbers'
-import { gql } from 'apollo-boost'
-import { useQuery, useMutation, useLazyQuery } from '@apollo/react-hooks';
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, TextField, InputAdornment, InputLabel, Modal } from '@material-ui/core'
+import {Row, Col} from 'reactstrap'
+import {useParams, useHistory, useLocation} from 'react-router-dom'
+import {useSimpleReducer, useToggle} from '../../utils/hooks'
+import {nWithCommas, formatDate} from '../../utils/numbers'
+import {gql} from 'apollo-boost'
+import {useQuery, useMutation, useLazyQuery} from '@apollo/react-hooks';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHead,
+  Paper,
+  Button,
+  Typography,
+  TextField,
+  InputAdornment,
+  InputLabel,
+  Modal
+} from '@material-ui/core'
 import Loader from '../../components/utils/Loader'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import UserSearch from '../../components/forms/UserSearch'
 import DealSearch from '../../components/forms/DealSearch'
 
@@ -60,20 +73,20 @@ const SAVE_TRADE = gql`
   }
 `
 
-export default function AdminExchangeOverview () {
+export default function AdminExchangeOverview() {
   const [showInputTrade, toggleShow] = useToggle(false)
-  const { organization: slug } = useParams()
-  const { data, error, refetch } = useQuery(EXCHANGE_OVERVIEW, { variables: { slug } })
+  const {organization: slug} = useParams()
+  const {data, error, refetch} = useQuery(EXCHANGE_OVERVIEW, {variables: {slug}})
 
-  if (!data) return <Loader />
-  const { organization } = data
+  if (!data) return <Loader/>
+  const {organization} = data
   const trades = _.orderBy(organization.trades, t => new Date(t.settled_at).getTime(), 'desc')
 
   return (
     <div className="AdminExchangeOverview">
       <Modal open={showInputTrade}
-        onClose={toggleShow}>
-        <InputTrade toggleShow={toggleShow} />
+             onClose={toggleShow}>
+        <InputTrade toggleShow={toggleShow}/>
       </Modal>
       <Row>
         <Col sm={{size: 10, offset: 1}}>
@@ -81,9 +94,9 @@ export default function AdminExchangeOverview () {
             <h4>
               Exchange Overview&nbsp;
               <Button size="small"
-                variant="contained"
-                color="secondary"
-                onClick={toggleShow}>
+                      variant="contained"
+                      color="secondary"
+                      onClick={toggleShow}>
                 Add Trade
               </Button>
             </h4>
@@ -92,27 +105,27 @@ export default function AdminExchangeOverview () {
       </Row>
       <Row>
         <Col sm={{size: 10, offset: 1}}>
-          <MatchRequests matchRequests={organization.matchRequests} />
-        </Col> 
+          <MatchRequests matchRequests={organization.matchRequests}/>
+        </Col>
       </Row>
       <Row>
         <Col sm={{size: 10, offset: 1}}>
-          <Trades trades={trades} />
+          <Trades trades={trades}/>
         </Col>
       </Row>
     </div>
   )
 }
 
-function InputTrade ({ refetch, toggleShow }) {
-  const { organization } = useParams()
+function InputTrade({refetch, toggleShow}) {
+  const {organization} = useParams()
   const [deal, setDeal] = useState(null)
   const [buyer, setBuyer] = useState(null)
   const [seller, setSeller] = useState(null)
-  const [trade, setTrade] = useSimpleReducer({ amount: "", price: "", settled_at: "" })
+  const [trade, setTrade] = useSimpleReducer({amount: "", price: "", settled_at: ""})
   const [saveTrade] = useMutation(SAVE_TRADE, {
     onCompleted: refetch,
-    variables: { org: organization }
+    variables: {org: organization}
   })
 
   const submit = () => {
@@ -136,36 +149,36 @@ function InputTrade ({ refetch, toggleShow }) {
       if (e.target == e.currentTarget) toggleShow()
     }}>
       <Paper className="InputTrade" style={{padding: "20px"}}>
-        <h6>Input Completed Trade</h6>
+        <Typography variant="h6" gutterBottom>Input Completed Trade</Typography>
         <TextField label="shares"
-          style={{width: "100%", marginBottom: "10px"}}
-          variant="outlined"
-          value={trade.amount}
-          onChange={e => setTrade({ amount: e.target.value })} />
+                   style={{width: "100%", marginBottom: "10px"}}
+                   variant="outlined"
+                   value={trade.amount}
+                   onChange={e => setTrade({amount: e.target.value})}/>
         <TextField label="price"
-          style={{width: "100%", marginBottom: "10px"}}
-          variant="outlined"
-          value={trade.price}
-          onChange={e => setTrade({ price: e.target.value })} />
-        <UserSearch user={buyer} setUser={setBuyer} label="Buyer" showLabelOnSelect />
-        <hr />
-        <UserSearch user={seller} setUser={setSeller} label="Seller" showLabelOnSelect />
-        <hr />
-        <DealSearch deal={deal} setDeal={setDeal} />
-        <hr />
+                   style={{width: "100%", marginBottom: "10px"}}
+                   variant="outlined"
+                   value={trade.price}
+                   onChange={e => setTrade({price: e.target.value})}/>
+        <UserSearch user={buyer} setUser={setBuyer} label="Buyer" showLabelOnSelect/>
+        <hr/>
+        <UserSearch user={seller} setUser={setSeller} label="Seller" showLabelOnSelect/>
+        <hr/>
+        <DealSearch deal={deal} setDeal={setDeal}/>
+        <hr/>
         <TextField
           label="Trade Date"
           variant="outlined"
           value={trade.settled_at}
-          onChange={e => setTrade({ settled_at: e.target.value })}
+          onChange={e => setTrade({settled_at: e.target.value})}
           type="date"
           style={{width: "70%"}}
-          InputLabelProps={{ shrink: true }}
+          InputLabelProps={{shrink: true}}
         />
         <Button color="secondary"
-          style={{margin: "10px"}}
-          variant="contained" 
-          onClick={submit}>
+                style={{margin: "10px"}}
+                variant="contained"
+                onClick={submit}>
           SAVE
         </Button>
       </Paper>
@@ -173,7 +186,7 @@ function InputTrade ({ refetch, toggleShow }) {
   )
 }
 
-function MatchRequests ({ matchRequests = [] }) {
+function MatchRequests({matchRequests = []}) {
   if (!matchRequests || matchRequests.length === 0) {
     return (
       <div className="MatchRequests">
@@ -201,7 +214,7 @@ function MatchRequests ({ matchRequests = [] }) {
           </TableHead>
           <TableBody>
             {matchRequests.map(req => (
-              <MatchRequest key={req._id} req={req} />
+              <MatchRequest key={req._id} req={req}/>
             ))}
           </TableBody>
         </Table>
@@ -210,8 +223,8 @@ function MatchRequests ({ matchRequests = [] }) {
   )
 }
 
-function MatchRequest ({ req }) {
-  const { order, buyer, seller, deal } = req
+function MatchRequest({req}) {
+  const {order, buyer, seller, deal} = req
   return (
     <TableRow key={req._id} className="AdminMatchRequest" style={{padding: "10px", marginBottom: "15px"}}>
       <TableCell>{deal.company_name}</TableCell>
@@ -226,7 +239,7 @@ function MatchRequest ({ req }) {
   )
 }
 
-function Trades ({ trades = [] }) {
+function Trades({trades = []}) {
   return (
     <React.Fragment>
       <h5>Completed Trades <span className="circular-number">{trades.length}</span></h5>

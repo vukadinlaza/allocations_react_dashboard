@@ -96,7 +96,7 @@ export default ({deal}) => {
     <Grid container justify="center" spacing={3}>
       {categories.map((value) => (
         <Grid key={value.title} item>
-          <Typography variant="h6">
+          <Typography variant="h6" gutterBottom>
             {value.title}
           </Typography>
           <Paper className={classes.innerPaper}>
