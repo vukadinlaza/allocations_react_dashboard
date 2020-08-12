@@ -1,12 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Paper,
   Grid,
   ButtonBase,
   Typography,
+  TextField,
+  Button
 } from '@material-ui/core';
+import { useMutation } from '@apollo/react-hooks'
+import { toLower, get, pick } from 'lodash'
+import { gql } from 'apollo-boost'
 import { makeStyles } from "@material-ui/core/styles";
-
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useHistory } from "react-router-dom"
 import ActiveDeals from './active-deals'
 import OrgCards from './org-cards'
 import ClosedDeals from './closed-deals'
@@ -14,6 +21,7 @@ import Loader from '../../../utils/Loader'
 import Investors from '../../../Investors'
 import NullPaper from "../../../NullPaper";
 import Investments from '../../../Investments'
+import POSModal from './pos-modal'
 import allocations_statement_of_work from "../../../../assets/allocations_statement_of_work.svg";
 import allocations_provisions_of_services from "../../../../assets/allocations_provisions_of_services.svg";
 import allocations_company_profile from "../../../../assets/allocations_company_profile.svg";
@@ -60,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function OrganizationOverview({ orgData, superAdmin }) {
+export default function OrganizationOverview({ orgData, superAdmin, refetch }) {
   const [tab, setTab] = useState("active-deals");
   const classes = useStyles();
 
@@ -120,63 +128,43 @@ export default function OrganizationOverview({ orgData, superAdmin }) {
       <>
         {tab === "active-deals" && <ActiveDeals orgData={orgData} />}
         {tab === "closed-deals" && <ClosedDeals orgData={orgData} />}
-        {tab === "profile" && <OrgCards organization={organization} investor={orgData.investor} />}
         {tab === "all-investors" && <Investors />}
         {tab === "investments" && <Investments />}
-        {tab === "setting" && <Settings />}
+        {tab === "setting" && <Settings orgData={orgData.organization} investor={orgData.investor} refetch={refetch} />}
       </>
     </>
   )
 }
 
-function Settings() {
+function Settings({ investor, orgData, refetch }) {
   const classes = useStyles();
+  const [modal, setModal] = useState()
+
+  const docs = investor.documents ? investor.documents : [];
+  const hasDoc = docs.find(d => toLower(d.documentName).includes(toLower('Provision')))
+
+  console.log(investor)
 
   return <>
     <Paper className={classes.paper} style={{ marginBottom: 16 }}>
       <Grid container spacing={3}>
-        <Grid item sm={12} md={6}>
-          <Typography variant="subtitle1" className={classes.subtitle}>
-            Address
-          </Typography>
-          <Typography variant="body2">
-            8 The Green, Suite 7105<br />
-            Dover, Delaware 19901
-          </Typography>
-          <Typography variant="subtitle1" className={classes.subtitle}>
-            Admin Name
-          </Typography>
-          <Typography variant="body2">
-            Kingsley Advani
-          </Typography>
-        </Grid>
-
-        <Grid item sm={12} md={6}>
-          <Typography variant="subtitle1" className={classes.subtitle}>
-            Contact
-          </Typography>
-          <Typography variant="body2">
-            <a href="mailto:support@goldmount.com">
-              support@goldmount.com
-            </a>
-          </Typography>
-          <Typography variant="subtitle1" className={classes.subtitle}>
-            Website
-          </Typography>
-          <Typography variant="body2">
-            goldmount.com
-          </Typography>
-        </Grid>
+        <OrganizationEditForm orgData={orgData} refetch={refetch} />
+      </Grid>
+    </Paper>
+    <Paper className={classes.paper} style={{ marginBottom: 16 }}>
+      <Grid container>
         <Grid item sm={12} md={6}>
           <Typography variant="body2">
             Provision of Services
-          </Typography>
-          <Typography variant="body2">
-           Get Started
+            {hasDoc && <CheckCircleIcon color="secondary" style={{ marginLeft: 8 }} />}
+            {!hasDoc && <Typography variant="body2" onClick={() => setModal(!hasDoc ? true : false)}>
+              Get Started
+            </Typography>}
           </Typography>
         </Grid>
       </Grid>
     </Paper>
+    <POSModal modal={modal} setModal={setModal} organization={orgData} />
 
     {/* <Grid container spacing={3}>
       <Grid item xs={12} sm={12} md={6}>
@@ -195,4 +183,75 @@ function Settings() {
       </Grid>
     </Grid> */}
   </>;
+}
+
+
+const UPDATE_ORG = gql`
+mutation UpdateOrg($organization: OrganizationInput!) {
+  updateOrganization(organization: $organization) {
+    _id
+    name
+  }
+}
+`
+
+function OrganizationEditForm({ orgData, refetch }) {
+  const history = useHistory()
+  const [formStatus, setFormStatus] = useState("edit")
+  const [org, setOrganization] = useState(null)
+  const [updateOrg, updateOrgRes] = useMutation(UPDATE_ORG)
+
+  const handleChange = (prop) => e => {
+    e.persist()
+    return setOrganization(prev => ({ ...prev, [prop]: e.target.value }))
+  }
+
+  const submit = () => {
+    updateOrg({ variables: { organization: pick(org, ['name', '_id']) } })
+  }
+  useEffect(() => {
+    if (orgData) {
+      setOrganization(orgData)
+    }
+  }, [orgData])
+
+  useEffect(() => {
+    if (updateOrgRes.data) setFormStatus("complete")
+    if (updateOrgRes.loading) setFormStatus("loading")
+  }, [updateOrgRes])
+
+  const icon = formStatus === "loading"
+    ? "circle-notch"
+    : (formStatus === "complete" ? "check" : null)
+
+  if (!org) return <Loader />
+
+  return (
+    <>
+      <form noValidate autoComplete="off" style={{ padding: "16px" }}>
+        <Typography variant="h6" gutterBottom>
+          Organization {icon && <FontAwesomeIcon icon={icon} spin={icon === "circle-notch"} />}
+        </Typography>
+        <Typography variant="subtitle2" style={{ marginBottom: "16px" }}>
+          This information can be edited from your organization information.
+          </Typography>
+
+        <Grid>
+          <Grid item xs={12} sm={12} md={6}>
+            <TextField required
+              style={{ width: "100%" }}
+              value={get(org, 'name') || ""}
+              onChange={handleChange("name")}
+              label="Organization Name"
+              variant="outlined" />
+          </Grid>
+        </Grid>
+        <Button variant="contained" style={{ marginTop: 16 }}
+          onClick={submit}
+          color="primary">
+          Submit
+          </Button>
+      </form>
+    </>
+  )
 }
