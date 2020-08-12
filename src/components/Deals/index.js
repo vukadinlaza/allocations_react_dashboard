@@ -10,7 +10,7 @@ import { useAuth } from "../../auth/useAuth"
 import Loader from "../utils/Loader"
 import CapitalAccount from './CapitalAccount'
 
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, LinearProgress } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, LinearProgress, Typography, Grid } from '@material-ui/core'
 
 import "./style.scss";
 
@@ -117,42 +117,45 @@ export default function Deals({ showClosed }) {
         </Col>
       </Row>
       }
-      <Row style={{ marginTop: "15px" }}>
-        <Col sm={{ size: 12 }}>
-          <h5>Closed Deals <span className="deals-length">{(closed || []).length}</span></h5>
-          <Paper className="table-wrapper closed-deals">
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Deal</TableCell>
-                  <TableCell>Description</TableCell>
-                  <TableCell>Lead</TableCell>
-                  <TableCell>Closed</TableCell>
-                  <TableCell>Size</TableCell>
-                  <TableCell className="text-center">Investors</TableCell>
-                  {userProfile.admin && <TableCell></TableCell>}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {_.orderBy(closed, d => new Date(d.date_closed || Date.now()), 'desc').map(deal => (
-                  <Fragment key={deal._id}>
-                    <TableRow onClick={() => toggleCapitalAccount(deal._id)} className="closed-deal-row">
-                      <TableCell>{deal.company_name}</TableCell>
-                      <TableCell>{deal.company_description}</TableCell>
-                      <TableCell>{deal.deal_lead}</TableCell>
-                      <TableCell>{formatDate(deal.date_closed)}</TableCell>
-                      <TableCell>${nWithCommas(_.sumBy(deal.investments, 'amount'))}</TableCell>
-                      <TableCell className="text-center">{deal.investments.length}</TableCell>
-                      {userProfile.admin && <TableCell align="center"><Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link></TableCell>}
-                    </TableRow>
-                    {capitalAccount === deal._id && <CapitalAccount deal={deal} />}
-                  </Fragment>
-                ))}
-              </TableBody>
-            </Table>
-          </Paper>
-        </Col>
-      </Row>
+      <>
+        <Paper style={{ marginTop: 16 }}>
+          <Grid container xs={12} style={{ padding: "16px" }}>
+            <Typography variant="h6" gutterBottom>
+              Closed Deals: {(closed || []).length}
+            </Typography>
+          </Grid>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Deal</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell>Lead</TableCell>
+                <TableCell>Closed</TableCell>
+                <TableCell>Size</TableCell>
+                <TableCell className="text-center">Investors</TableCell>
+                {userProfile.admin && <TableCell></TableCell>}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {_.orderBy(closed, d => new Date(d.date_closed || Date.now()), 'desc').map(deal => (
+                <Fragment key={deal._id}>
+                  <TableRow onClick={() => toggleCapitalAccount(deal._id)} className="closed-deal-row">
+                    <TableCell>{deal.company_name}</TableCell>
+                    <TableCell>{deal.company_description}</TableCell>
+                    <TableCell>{deal.deal_lead}</TableCell>
+                    <TableCell>{formatDate(deal.date_closed)}</TableCell>
+                    <TableCell>${nWithCommas(_.sumBy(deal.investments, 'amount'))}</TableCell>
+                    <TableCell className="text-center">{deal.investments.length}</TableCell>
+                    {userProfile.admin && <TableCell align="center"><Link
+                      to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link></TableCell>}
+                  </TableRow>
+                  {capitalAccount === deal._id && <CapitalAccount deal={deal} />}
+                </Fragment>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+      </>
     </div>
   )
 }
