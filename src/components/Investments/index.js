@@ -122,28 +122,22 @@ export default function Investments() {
   return (
     <>
       <Paper className={classes.paper}>
-        <Grid container>
-          <Grid item xs={12} sm={4}>
-            <Typography variant="h6" gutterBottom>
-              Investments: <span>{showDocs ? investments.length - 1 : investments.length}</span>
+        <Grid container justify="space-between">
+          <Grid item>
+          <Typography variant="h6" gutterBottom>
+              Total Invested: <span className={classes.green}>${nWithCommas(_.sumBy(investments, 'amount'))}</span>
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={3} align="center">
+          <Grid item>
             <Button variant="contained"
               color="secondary" onClick={() => history.push(`/admin/investment/new`)}>
               Add Investment
           </Button>
           </Grid>
-          <Grid item xs={12} sm={5} align="right">
-            <Typography variant="h6" gutterBottom>
-              Total Invested: <span className={classes.green}>${nWithCommas(_.sumBy(investments, 'amount'))}</span>
-            </Typography>
-          </Grid>
         </Grid>
-      </Paper>
-      <Paper style={{ marginTop: 16 }}>
+
         <Table>
-          <TableHead style={{ fontWeight: "bold" }}>
+          <TableHead>
             <TableRow>
               <TableCell>Investor</TableCell>
               <TableCell>Company</TableCell>

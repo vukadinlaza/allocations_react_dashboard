@@ -32,7 +32,7 @@ const theme = createMuiTheme({
     },
     MuiTableHead: {
       root: {
-        background: "#f3f7f8",
+        background: "#ffffff",
       }
     },
     MuiTableCell: {

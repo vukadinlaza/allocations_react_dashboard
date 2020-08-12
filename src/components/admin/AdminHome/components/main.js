@@ -167,12 +167,20 @@ function Settings() {
             goldmount.com
           </Typography>
         </Grid>
+        <Grid item sm={12} md={6}>
+          <Typography variant="body2">
+            Provision of Services
+          </Typography>
+          <Typography variant="body2">
+           Get Started
+          </Typography>
+        </Grid>
       </Grid>
     </Paper>
 
-    <Grid container spacing={3}>
+    {/* <Grid container spacing={3}>
       <Grid item xs={12} sm={12} md={6}>
-        <NullPaper title="Statement of Work" text="TODO: SpaceX SPV" /*TODO Get Company SPV Description here */
+        <NullPaper title="Statement of Work" text="TODO: SpaceX SPV" 
           image={allocations_statement_of_work} button="Get Started" />
       </Grid>
       <Grid item xs={12} sm={12} md={6}>
@@ -182,9 +190,9 @@ function Settings() {
       </Grid>
       <Grid item xs={12} sm={12} md={6}>
         <NullPaper title="Company Profile"
-          text="Finish your company profile" /*TODO Get Company SPV Description here */
+          text="Finish your company profile"
           image={allocations_company_profile} button="Get Started" />
       </Grid>
-    </Grid>
+    </Grid> */}
   </>;
 }

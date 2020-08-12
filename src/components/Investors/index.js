@@ -8,9 +8,10 @@ import { Row, Col } from 'reactstrap'
 import { nWithCommas } from '../../utils/numbers'
 import Loader from "../utils/Loader"
 
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, Grid } from '@material-ui/core'
 
 import "./style.scss";
+import Typography from "@material-ui/core/Typography";
 
 /***
  *
@@ -62,16 +63,24 @@ export default function Investors() {
   }, []).filter(inv => inv), 'email')
   return (
     <div className="Investors">
-      <Row>
-        {organization === "allocations" && <Col sm={{ size: 12 }}>
+        {/* {organization === "allocations" && <Col sm={{ size: 12 }}>
           <Paper className="actions">
             <Link to="/investors/new">
               <Button variant="contained" color="secondary">INVITE INVESTOR</Button>
             </Link>
           </Paper>
-        </Col>}
-        <Col sm="12">
+        </Col>} */}
+    <Grid container>
+      <Grid item xs={12}>
           <Paper className="table-wrapper">
+          <Grid container xs={12} justify="space-between" style={{padding: "16px"}}>
+            <Typography variant="h6" gutterBottom>
+              Investors
+            </Typography>
+            {organization === "allocations" && <Link to="/investors/new">
+              <Button variant="contained" color="secondary">INVITE INVESTOR</Button>
+            </Link>}
+        </Grid>
             <Table>
               <TableHead>
                 <TableRow>
@@ -97,15 +106,15 @@ export default function Investors() {
                       }
                     </TableCell>
                     <TableCell>
-                      <Link to={`/investor/${investor._id}/edit`}>Edit</Link>
+                      <Link to={`/investor/${investor._id}/edit`}>edit</Link>
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </Paper>
-        </Col>
-      </Row>
+        </Grid>
+      </Grid>
     </div>
   )
 }

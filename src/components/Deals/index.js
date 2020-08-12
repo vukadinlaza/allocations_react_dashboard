@@ -9,7 +9,7 @@ import {useAuth} from "../../auth/useAuth"
 import Loader from "../utils/Loader"
 import CapitalAccount from './CapitalAccount'
 
-import {Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, LinearProgress} from '@material-ui/core'
+import {Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, LinearProgress, Grid} from '@material-ui/core'
 import Typography from "@material-ui/core/Typography";
 
 
@@ -115,10 +115,12 @@ export default function Deals({showClosed}) {
       </>
       }
       <>
-        <Typography variant="h6" gutterBottom>
-          Closed Deals: {(closed || []).length}
-        </Typography>
         <Paper style={{marginTop: 16}}>
+        <Grid container xs={12} style={{padding: "16px"}}>
+            <Typography variant="h6" gutterBottom>
+              Closed Deals: {(closed || []).length}
+            </Typography>
+        </Grid>
           <Table>
             <TableHead>
               <TableRow>
