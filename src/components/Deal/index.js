@@ -511,7 +511,7 @@ function InvestorData({ investor }) {
         <span>
           My Info
       </span>
-        <Link to="/profile">Edit</Link>
+        <Link to="/profile">edit</Link>
       </div>
 
 

@@ -4,9 +4,10 @@ import { useHistory } from 'react-router-dom'
 import { Col, Row } from 'reactstrap'
 import Cropper from 'react-easy-crop'
 import { useMutation } from '@apollo/react-hooks'
-import { Button, TextField } from '@material-ui/core'
+import { Button, TextField, Paper, Grid } from '@material-ui/core'
 import { useSimpleReducer } from '../../utils/hooks'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import Typography from "@material-ui/core/Typography";
 
 /***
  *
@@ -44,39 +45,37 @@ export default function OrganizationNew () {
   }
 
   return (
+    <Paper>
     <div className="OrganizationNew">
-      <Row style={{marginBottom: "20px", fontSize: "1.4em"}}>
-        <Col md={{size: 4, offset: 1}} sm={{size: 8, offset: 0}}>
-          <div>New Organization</div>
-        </Col>
-      </Row>
-      <Row style={{marginBottom: "20px"}}>
-        <Col md={{size: 4, offset: 1}} sm={{size: 8, offset: 0}}>
+      <Grid>
+      <Typography variant="h6" style={{paddingLeft: "16px", paddingTop: "16px"}} gutterBottom>
+              New Organization
+      </Typography>
+      <Grid style={{padding: "16px"}} >
+      <Grid style={{paddingBottom: "16px"}} >
           <TextField style={{width: "100%"}} 
             value={organization.name}
             onChange={e => setOrg({ name: e.target.value })} 
             label="Organization Name" 
-            variant="filled" />
-        </Col>
-      </Row>
-      <Row>
-        <Col md={{size: 4, offset: 1}} sm={{size: 8, offset: 0}}>
+            variant="outlined" />
+        </Grid>
+        <Grid style={{paddingBottom: "16px"}} >
           <TextField style={{width: "100%", marginBottom: "15px"}} 
             value={organization.slug}
             onChange={e => setOrg({ slug: e.target.value.replace(" ", "") })} 
             label="URL (no spaces)"
-            variant="filled" />
-        </Col>
-      </Row>
-      <Row style={{marginBottom: "20px"}}>
+            variant="outlined" />
+            </Grid>
+          </Grid>
+      </Grid>
+      <Grid>
         <LogoUpload organization={organization} setOrg={setOrg} />
-      </Row>
-      <Row>
-        <Col md={{size: 4, offset: 1}}>
+      </Grid>
+      <Grid style={{padding:"16px"}}>
           <Button variant="contained" color="primary" disabled={!valid(organization)} onClick={submit}>CREATE</Button>
-        </Col>
-      </Row>
+      </Grid>
     </div>
+    </Paper>
   )
 }
 
@@ -135,15 +134,15 @@ function readFile(file) {
 function LogoUpload ({ organization, setOrg }) {
   if (organization.logo) {
     return (
-      <Col md={{size: 4, offset: 1}}>
+      <Grid style={{padding:"16px"}}>
         <span className="file-label">Logo &nbsp;&nbsp;</span>
         <FontAwesomeIcon icon="check" />
-      </Col>
+      </Grid>
     )
   }
 
   return (
-    <Col md={{size: 4, offset: 1}}>
+    <Grid style={{padding:"16px"}}>
       <span className="file-label">Logo (3:1 width to height) &nbsp;&nbsp;</span>
       <Button variant="contained" component="label">
         Upload&nbsp;&nbsp;
@@ -153,6 +152,6 @@ function LogoUpload ({ organization, setOrg }) {
             if (target.validity.valid) setOrg({ logo: target.files[0] })
           }} />
       </Button>
-    </Col>
+    </Grid>
   )
 }

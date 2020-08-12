@@ -106,9 +106,9 @@ export default function UserInvestments() {
     <>
       <Grid container spacing={2}>
         <Grid item>
-          <div className={classes.totalInvested}>
+          {/* <div className={classes.totalInvested}>
             Total Invested: <span>${nWithCommas(_.sumBy(investments, 'amount'))}</span>
-          </div>
+          </div> */}
           {/* Peer: Total amount of investments is not shown in the design anymore
            <Typography variant="h6" gutterBottom>
             Investments: <span>{showDocs ? investments.length - 1 : investments.length}</span>
@@ -128,7 +128,7 @@ export default function UserInvestments() {
               </Table>
             </Paper>
             <br/>
-            <Typography variant="h6" gutterBottom>Completed:</Typography>
+            <Typography className="paperTitle" variant="h6" gutterBottom>Completed:</Typography>
             <Paper>
               <Table dense>
                 {completeInvestments.map((investment) => (
@@ -140,10 +140,13 @@ export default function UserInvestments() {
             </Paper>
           </Hidden>
           <Hidden only="xs">
-            <Typography variant="h6" gutterBottom>
-              Pending Deals:
-            </Typography>
             <Paper>
+              <Typography variant="h6" style={{paddingLeft: "16px", paddingTop: "16px", }} gutterBottom>
+                Pending Deals
+              </Typography>
+              <Typography variant="subtitle2" style={{paddingLeft: "16px", paddingBottom: "16px"}}>
+                Below is a list of your current pending and completed deals.
+              </Typography>
               <Table>
                 <TableHead>
                   <TableRow>
@@ -165,8 +168,10 @@ export default function UserInvestments() {
               </Table>
             </Paper>
             <br/>
-            <Typography variant="h6" gutterBottom>Completed:</Typography>
             <Paper>
+            <Typography variant="h6" style={{paddingLeft: "16px", paddingTop: "16px", }} gutterBottom>
+              Completed Deals
+            </Typography>
               <Table>
                 <TableHead>
                   <TableRow>

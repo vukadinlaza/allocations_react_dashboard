@@ -31,14 +31,14 @@ export default function ActiveDeals({orgData}) {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Grid container xs={12} justify="space-between">
-          <Typography variant="h6" gutterBottom>
-            Active Deals: {(active || []).length}
-          </Typography>
-          <Button color="primary"
+        <Paper>
+          <Grid container xs={12} justify="space-between" style={{padding: "16px"}}>
+            <Typography variant="h6" gutterBottom>
+              Active Deals: {(active || []).length}
+            </Typography>
+            <Button color="primary"
                   variant="contained" onClick={() => history.push(`/admin/${org.slug}/deal/new`)}>Create Deal</Button>
         </Grid>
-        <Paper style={{marginTop: 16}}>
           <Table>
             <TableHead>
               <TableRow>
@@ -87,7 +87,7 @@ function Deal({deal, investments}) {
         <TableCell>{<FontAwesomeIcon icon={hasSOW ? 'check-circle' : 'times-circle'} size="lg"
                                      color="green"/>}</TableCell>
         <TableCell style={{textAlign: "right"}}>
-          <Button color="primary" onClick={() => history.push(`/admin/${organization}/deals/${deal._id}/edit`)}>
+          <Button color="primary" onClick={() => history.push(`/admin/${organization}/deals/${deal._id}/edit`)} style={{ textTransform: 'lowercase'}}>
             edit
           </Button>
         </TableCell>
