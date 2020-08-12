@@ -148,7 +148,38 @@ function Settings({ investor, orgData, refetch }) {
   return <>
     <Paper className={classes.paper} style={{ marginBottom: 16 }}>
       <Grid container spacing={3}>
-        <OrganizationEditForm orgData={orgData} refetch={refetch} />
+        <Grid item sm={12} md={6}>
+          <Typography variant="subtitle1" className={classes.subtitle}>
+            Address
+          </Typography>
+          <Typography variant="body2">
+            8 The Green, Suite 7105<br />
+            Dover, Delaware 19901
+          </Typography>
+          <Typography variant="subtitle1" className={classes.subtitle}>
+            Admin Name
+          </Typography>
+          <Typography variant="body2">
+            Kingsley Advani
+          </Typography>
+        </Grid>
+
+        <Grid item sm={12} md={6}>
+          <Typography variant="subtitle1" className={classes.subtitle}>
+            Contact
+          </Typography>
+          <Typography variant="body2">
+            <a href="mailto:support@goldmount.com">
+              support@goldmount.com
+            </a>
+          </Typography>
+          <Typography variant="subtitle1" className={classes.subtitle}>
+            Website
+          </Typography>
+          <Typography variant="body2">
+            goldmount.com
+          </Typography>
+        </Grid>
       </Grid>
     </Paper>
     <Paper className={classes.paper} style={{ marginBottom: 16 }}>
