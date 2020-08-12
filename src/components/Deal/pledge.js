@@ -15,7 +15,7 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
     button: {
         marginLeft: theme.spacing(1),
-        backgroundColor: "#26C600",
+        backgroundColor: 'rgba(87, 204, 100, 1)',
         paddingX: theme.spacing(1),
         color: '#FFFFFF'
     },
