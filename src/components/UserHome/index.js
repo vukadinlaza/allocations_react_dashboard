@@ -265,13 +265,13 @@ export default function UserHome(props) {
 
         <Grid item xs={12} sm={12} md={6}>
           {isEmpty ? <NullPaper title="Recent Investments" text="Find your most recent investments"
-                                image={allocations_recent_investments} button="Get Started"/>
+                                image={allocations_recent_investments} button="Get Started" 
+                                onClick={() => history.push(`/investments`)} />
             :
             <Paper className={classes.paper} style={{paddingBottom: 0}}>
               <Typography variant="h6" style={{marginBottom: 16}}>
                 Most Recent Investments
               </Typography>
-
 
               <div style={{margin: "0px -16px", cursor: "pointer"}}>
                 <Table style={{marginBottom: "-1px"}}>
@@ -283,7 +283,7 @@ export default function UserHome(props) {
             </Paper>}
         </Grid>
 
-        <Grid item xs={12} sm={12} md={6}>
+        {/* <Grid item xs={12} sm={12} md={6}>
           {isEmpty ? <NullPaper title="Invited Deals" text="Here are your invited deals"
                                 image={allocations_invite_deals} button="Get Started"/>
             :
@@ -299,33 +299,38 @@ export default function UserHome(props) {
                 </Table>
               </div>
             </Paper>}
-        </Grid>
+        </Grid> */}
 
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <Typography variant="h5" className={classes.grey}>
             <strong>Tools</strong>
           </Typography>
-        </Grid>
+        </Grid> */}
 
         <Grid item xs={12} sm={12} md={6}>
           <NullPaper title="Update Profile" text="Update your user profile"
-                     image={allocations_update_profile} button="Get Started"/>
+                     image={allocations_update_profile} button="Get Started"
+                     onClick={() => history.push(`/profile`)}
+                     />
         </Grid>
 
         <Grid item xs={12} sm={12} md={6}>
           <NullPaper title="Create New Deal" text="Setup your next deal in seconds"
-                     image={allocations_create_deal} button="Get Started"/>
+                     image={allocations_create_deal} button="Get Started"
+                     onClick={() => history.push(`/spv-onboarding`)}/>
         </Grid>
 
         <Grid item xs={12} sm={12} md={6}>
           <NullPaper title="FAQ" text="Find all your answers here"
-                     image={allocations_faq} button="Get Started"/>
+                     image={allocations_faq} button="Get Started"
+                     onClick={() => `https://docs.allocations.com/`}/>
         </Grid>
 
-        <Grid item xs={12} sm={12} md={6}>
+
+        {/* <Grid item xs={12} sm={12} md={6}>
           <NullPaper title="Update My Account" text="Fund your account and start investing"
                      image={allocations_update} button="Get Started"/>
-        </Grid>
+        </Grid> */}
 
       </Grid>
     </>
