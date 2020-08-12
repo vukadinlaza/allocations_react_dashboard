@@ -22,22 +22,19 @@ const GET_INVESTORS = gql`
   query GetOrg($slug: String!) {
     organization(slug: $slug) {
       _id
-      investors {
+      deals {
         _id
-        first_name
-        last_name
-        email
-        investor_type
-        entity_name
-        passport {
-          link
-        }
         investments {
           _id
-          amount
-          deal {
+          investor {
             _id
-            company_name
+            first_name
+            last_name
+            email
+            investments {
+              _id
+              amount
+            }
           }
         }
       }
@@ -45,7 +42,7 @@ const GET_INVESTORS = gql`
   }
 `
 
-export default function Investors () {
+export default function Investors() {
   const { organization } = useParams()
   const { userProfile } = useAuth()
   const [getInvestors, { data, error }] = useLazyQuery(GET_INVESTORS, { variables: { slug: organization } })
@@ -56,14 +53,17 @@ export default function Investors () {
 
   if (error) return <div>{error.message}</div>
 
-  if (!data) return <div><Loader /></div>
+  if (!data?.organization?.deals) return <div><Loader /></div>
 
-  
-  const { organization: { investors } } = data
+  const { organization: { deals } } = data
+  const investors = deals.reduce((acc, deal) => {
+    const investors = deal.investments.map(investment => investment.investor)
+    return [...acc, ...investors]
+  }, []).filter(inv => inv)
   return (
     <div className="Investors">
       <Row>
-        {organization === "allocations" && <Col sm={{size: 12}}>
+        {organization === "allocations" && <Col sm={{ size: 12 }}>
           <Paper className="actions">
             <Link to="/investors/new">
               <Button variant="contained" color="secondary">INVITE INVESTOR</Button>
@@ -91,9 +91,10 @@ export default function Investors () {
                     <TableCell>{investor.investments.length}</TableCell>
                     <TableCell>${nWithCommas(_.sumBy(investor.investments, 'amount'))}</TableCell>
                     <TableCell>
-                      <Link to={`/investor/${investor._id}/home`}>
+                      {organization === "allocations" && <Link to={`/investor/${investor._id}/home`}>
                         Use site as {investor.first_name || investor.entity_name}
                       </Link>
+                      }
                     </TableCell>
                     <TableCell>
                       <Link to={`/investor/${investor._id}/edit`}>Edit</Link>
