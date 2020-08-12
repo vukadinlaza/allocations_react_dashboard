@@ -145,12 +145,16 @@ export default function Deal() {
 
 
   useEffect(() => {
-    if (data && !data.investor.invitedDeal.investment) {
+    const blocked = userProfile?.email?.includes('allocations')
+    if (data && !data.investor.invitedDeal.investment && !blocked) {
       const investment = {
         deal_id: data.investor.invitedDeal._id,
         user_id: data.investor._id,
       }
-      createInvestment({ variables: { investment } })
+
+      if (!blocked && userProfile?.email) {
+        createInvestment({ variables: { investment } })
+      }
     }
   }, [data])
 
@@ -167,7 +171,6 @@ export default function Deal() {
       if (userProfile.email) refetch()
     }
   }, [error, userProfile])
-
   if (!data) return <Loader />
 
   const { investor, investor: { invitedDeal: deal } } = data
@@ -182,7 +185,7 @@ export default function Deal() {
             <h2 className="deal-header">{deal.company_name}</h2>
             <h4 className="deal-description">{deal.company_description}</h4>
           </Grid>
-          <Pledge investment={investment} refetch={refetch} />
+          {investment?._id && <Pledge investment={investment} refetch={refetch} />}
         </Grid>
         <InvestmentFlow deal={{ ...deal, deal_slug, organization }}
           investment={investment}
@@ -511,7 +514,7 @@ function InvestorData({ investor }) {
         <span>
           My Info
       </span>
-        <Link to="/profile">Edit</Link>
+        <Link to="/profile">edit</Link>
       </div>
 
 

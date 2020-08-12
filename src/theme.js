@@ -16,25 +16,23 @@ const theme = createMuiTheme({
     MuiTypography: {
       subtitle2: {
         color: "#9ea0a5"
-      }
+      },
     },
     MuiButton: {
       containedPrimary: {
         boxShadow: "none",
-        borderRadius: "12px",
         textTransform: "capitalize",
-        fontWeight: "bolder"
+        fontWeight: "bolder",
       },
       containedSecondary: {
         boxShadow: "none",
-        borderRadius: "12px",
         color: "#fff",
-        textTransform: "capitalize"
+        textTransform: "capitalize",
       },
     },
     MuiTableHead: {
       root: {
-        background: "#f3f7f8",
+        background: "#ffffff",
       }
     },
     MuiTableCell: {
@@ -49,7 +47,7 @@ const theme = createMuiTheme({
       },
       rounded: {
         border: "0px !important",
-        borderRadius: "10px",
+        overflow: "hidden",
         boxShadow: "0px 3px 6px #00000029 !important"
       }
     },
@@ -59,7 +57,7 @@ const theme = createMuiTheme({
       main: '#205DF5',
     },
     secondary: {
-      main: '#26C600',
+      main: 'rgba(87, 204, 100, 1)',
     },
     error: {
       main: red.A400,

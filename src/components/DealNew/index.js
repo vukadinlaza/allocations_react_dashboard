@@ -71,7 +71,7 @@ export default function DealNew() {
 
   return (
     <Paper className={classes.paper}>
-      <Typography variant="h6">
+      <Typography variant="h6" gutterBottom>
         Create Deal
       </Typography>
       <Typography variant="subtitle2" style={{marginBottom: 16}}>

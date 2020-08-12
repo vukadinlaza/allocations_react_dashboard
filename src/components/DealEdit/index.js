@@ -4,7 +4,6 @@ import _, { get, isEqual } from 'lodash'
 import { useParams, Link, useHistory } from 'react-router-dom'
 import { Row, Col } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { toast } from 'react-toastify';
 import { nWithCommas, formatDate } from '../../utils/numbers'
 import * as API from '../../api'
 import UserSearch from '../forms/UserSearch'
@@ -268,7 +267,6 @@ export default function DealEdit() {
     <>
       <form noValidate autoComplete="off">
         <Grid container spacing={2}>
-
           <Grid item xs={10}>
             <Typography variant="h5" className={classes.h5}>
               <strong>Edit Deal</strong>
@@ -280,10 +278,7 @@ export default function DealEdit() {
           </Grid>
           <Grid item xs={12}>
             <Divider style={{ margin: "16px 0" }} />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <Typography variant="body2" style={{ marginBottom: 16 }}>
+            <Typography variant="body2" gutterBottom>
               <strong>Data Room</strong>
             </Typography>
             <Editor
@@ -357,8 +352,7 @@ export default function DealEdit() {
                   onChange={e => setDeal({ target: e.target.value })}
                   label="Target Raise"
                   InputProps={{
-                    startAdornment: <InputAdornment position="start"><FontAwesomeIcon
-                      icon="dollar-sign" /></InputAdornment>,
+                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
                   }}
                   variant="outlined" />
               </Grid>
@@ -368,8 +362,7 @@ export default function DealEdit() {
                   onChange={e => setDeal({ amount_raised: e.target.value })}
                   label="Amount Raised"
                   InputProps={{
-                    startAdornment: <InputAdornment position="start"><FontAwesomeIcon
-                      icon="dollar-sign" /></InputAdornment>,
+                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
                   }}
                   variant="outlined" />
               </Grid>
@@ -622,113 +615,6 @@ export default function DealEdit() {
             </Grid>
           </Grid>
 
-          <Grid item sm={12} md={6}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Typography variant="body2" style={{ marginBottom: 16 }}>
-                  <strong>Invites</strong>
-                </Typography>
-                <InviteInvestors deal={deal} refetch={refetch} />
-              </Grid>
-              <Divider className={classes.divider} />
-              <Grid item xs={10} style={{ marginBottom: "1rem" }}>
-                <Typography variant="h5">
-                  Fund Terms
-              </Typography>
-              </Grid>
-
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
-                  <TextField style={{ width: "100%" }}
-                    value={deal.dealParams.fundGeneralPartner || ""}
-                    onChange={e => setDeal({ dealParams: { ...deal.dealParams, fundGeneralPartner: e.target.value } })}
-                    label="General Partner"
-                    variant="outlined" />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField style={{ width: "100%" }}
-                    value={deal.dealParams.fundTotalCarry || ""}
-                    onChange={e => setDeal({ dealParams: { ...deal.dealParams, fundTotalCarry: e.target.value } })}
-                    label="Total Carry (%)"
-                    InputProps={{
-                      startAdornment: <InputAdornment position="start">%</InputAdornment>,
-                    }}
-                    variant="outlined" />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField style={{ width: "100%" }}
-                    value={deal.dealParams.fundManagementFees || ""}
-                    onChange={e => setDeal({ dealParams: { ...deal.dealParams, fundManagementFees: e.target.value } })}
-                    label="Management Fee (%)"
-                    InputProps={{
-                      startAdornment: <InputAdornment position="start">%</InputAdornment>,
-                    }}
-                    variant="outlined" />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField style={{ width: "100%" }}
-                    value={deal.dealParams.fundManagementFeesDollar || ""}
-                    onChange={e => setDeal({ dealParams: { ...deal.dealParams, fundManagementFeesDollar: e.target.value } })}
-                    label="Management Fee ($)"
-                    InputProps={{
-                      startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                    }}
-                    variant="outlined" />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField style={{ width: "100%" }}
-                    value={deal.dealParams.fundEstimatedSetupCosts || ""}
-                    onChange={e => setDeal({ dealParams: { ...deal.dealParams, fundEstimatedSetupCosts: e.target.value } })}
-                    label="Estimated Setup Cost (%)"
-                    InputProps={{
-                      startAdornment: <InputAdornment position="start">%</InputAdornment>,
-                    }}
-                    variant="outlined" />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField style={{ width: "100%" }}
-                    value={deal.dealParams.fundEstimatedSetupCostsDollar || ""}
-                    onChange={e => setDeal({ dealParams: { ...deal.dealParams, fundEstimatedSetupCostsDollar: e.target.value } })}
-                    label="Estimated Setup Cost ($)"
-                    InputProps={{
-                      startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                    }}
-                    variant="outlined" />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField style={{ width: "100%" }}
-                    value={deal.dealParams.fundEstimatedTerm || ""}
-                    onChange={e => setDeal({ dealParams: { ...deal.dealParams, fundEstimatedTerm: e.target.value } })}
-                    label="Estimated Term"
-                    variant="outlined" />
-                </Grid>
-              </Grid>
-
-              <hr />
-
-              <Grid item xs={12}>
-                <Button disabled={!hasChanges}
-                  variant="contained"
-                  onClick={() => {
-                    updateDeal({
-                      variables: {
-                        deal: {
-                          ..._.pick(deal, validInputs),
-                          dealParams: _.pick(deal.dealParams, dealParamsValidInputs)
-                        }, org: organization
-                      },
-                      onCompleted: toast.success('Success')
-                    })
-                  }}
-                  color="primary">
-                  Update Deal
-              </Button>
-              </Grid>
-            </Grid>
-
-
-          </Grid>
-
           <Grid item xs={12}>
             <Button disabled={!hasChanges}
               style={{ marginTop: 16 }}
@@ -745,44 +631,42 @@ export default function DealEdit() {
               }}
               color="primary">
               Update Deal
-          </Button>
+            </Button>
           </Grid>
 
-          <Paper className={classes.paper} style={{ display: "none" }}>
-            <Grid item xs={10}>
-              <Typography variant="h5">
+          <Grid item xs={10}>
+            <Typography variant="body2">
+              <strong>
                 Exchange Data
+              </strong>
             </Typography>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControl variant="outlined" style={{ width: "100%" }}>
-                <InputLabel>Exchange Options</InputLabel>
-                <Select value={deal.no_exchange || false}
-                  onChange={e => setDeal({ no_exchange: e.target.value === "true" })}
-                  inputProps={{ name: 'Type' }}>
-                  <MenuItem value="false">Exchange Allowed</MenuItem>
-                  <MenuItem value="true">Do Not Allow Exchange</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField style={{ width: "100%" }}
-                value={deal.last_valuation || ""}
-                onChange={e => setDeal({ last_valuation: e.target.value })}
-                label="Last Valuation"
-                InputProps={{
-                  startAdornment: <InputAdornment position="start"><FontAwesomeIcon
-                    icon="dollar-sign" /></InputAdornment>,
-                }}
-                variant="outlined" />
-            </Grid>
-          </Paper>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormControl variant="outlined" style={{ width: "100%" }}>
+              <InputLabel>Exchange Options</InputLabel>
+              <Select value={deal.no_exchange || false}
+                onChange={e => setDeal({ no_exchange: e.target.value === "true" })}
+                inputProps={{ name: 'Type' }}>
+                <MenuItem value="false">Exchange Allowed</MenuItem>
+                <MenuItem value="true">Do Not Allow Exchange</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField style={{ width: "100%" }}
+              value={deal.last_valuation || ""}
+              onChange={e => setDeal({ last_valuation: e.target.value })}
+              label="Last Valuation"
+              InputProps={{
+                startAdornment: <InputAdornment position="start"><FontAwesomeIcon
+                  icon="dollar-sign" /></InputAdornment>,
+              }}
+              variant="outlined" />
+          </Grid>
 
-          <Paper className={classes.paper}>
+          <Grid item sm={12}>
             <Grid container spacing={2}>
-
               <DataRoom refetch={refetch} deal={deal} />
-
               <Grid item xs={12} sm={6}>
                 <TextField
                   style={{ width: "100%" }}
@@ -805,13 +689,138 @@ export default function DealEdit() {
                   }}
                   variant="outlined" />
               </Grid>
-
             </Grid>
-          </Paper>
+          </Grid>
 
-          <Paper className={classes.paper}>
-            {userProfile.admin && <DeleteDeal deal={deal} />}
-          </Paper>
+          <Grid item xs={12}>
+            <Typography variant="body2" gutterBottom>
+              <strong>Invites</strong>
+            </Typography>
+            <InviteInvestors deal={deal} refetch={refetch} />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="body2" gutterBottom>
+              <strong>Fund Terms</strong>
+            </Typography>
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField style={{ width: "100%" }}
+              value={deal.dealParams.fundGeneralPartner || ""}
+              onChange={e => setDeal({
+                dealParams: {
+                  ...deal.dealParams,
+                  fundGeneralPartner: e.target.value
+                }
+              })}
+              label="General Partner"
+              variant="outlined" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField style={{ width: "100%" }}
+              value={deal.dealParams.fundTotalCarry || ""}
+              onChange={e => setDeal({ dealParams: { ...deal.dealParams, fundTotalCarry: e.target.value } })}
+              label="Total Carry (%)"
+              InputProps={{
+                startAdornment: <InputAdornment position="start">%</InputAdornment>,
+              }}
+              variant="outlined" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField style={{ width: "100%" }}
+              value={deal.dealParams.fundManagementFees || ""}
+              onChange={e => setDeal({
+                dealParams: {
+                  ...deal.dealParams,
+                  fundManagementFees: e.target.value
+                }
+              })}
+              label="Management Fee (%)"
+              InputProps={{
+                startAdornment: <InputAdornment position="start">%</InputAdornment>,
+              }}
+              variant="outlined" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField style={{ width: "100%" }}
+              value={deal.dealParams.fundManagementFeesDollar || ""}
+              onChange={e => setDeal({
+                dealParams: {
+                  ...deal.dealParams,
+                  fundManagementFeesDollar: e.target.value
+                }
+              })}
+              label="Management Fee ($)"
+              InputProps={{
+                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+              }}
+              variant="outlined" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField style={{ width: "100%" }}
+              value={deal.dealParams.fundEstimatedSetupCosts || ""}
+              onChange={e => setDeal({
+                dealParams: {
+                  ...deal.dealParams,
+                  fundEstimatedSetupCosts: e.target.value
+                }
+              })}
+              label="Estimated Setup Cost (%)"
+              InputProps={{
+                startAdornment: <InputAdornment position="start">%</InputAdornment>,
+              }}
+              variant="outlined" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField style={{ width: "100%" }}
+              value={deal.dealParams.fundEstimatedSetupCostsDollar || ""}
+              onChange={e => setDeal({
+                dealParams: {
+                  ...deal.dealParams,
+                  fundEstimatedSetupCostsDollar: e.target.value
+                }
+              })}
+              label="Estimated Setup Cost ($)"
+              InputProps={{
+                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+              }}
+              variant="outlined" />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField style={{ width: "100%" }}
+              value={deal.dealParams.fundEstimatedTerm || ""}
+              onChange={e => setDeal({
+                dealParams: {
+                  ...deal.dealParams,
+                  fundEstimatedTerm: e.target.value
+                }
+              })}
+              label="Estimated Term"
+              variant="outlined" />
+          </Grid>
+
+          <Grid item xs={12}>
+            <Button disabled={!hasChanges}
+              variant="contained"
+              onClick={() => {
+                updateDeal({
+                  variables: {
+                    deal: {
+                      ..._.pick(deal, validInputs),
+                      dealParams: _.pick(deal.dealParams, dealParamsValidInputs)
+                    }, org: organization
+                  }
+                })
+              }}
+              color="primary">
+              Update Deal
+            </Button>
+
+            {userProfile.admin && <Grid item xs={12}>
+              <Divider style={{ margin: "16px 0" }} />
+              <DeleteDeal deal={deal} />
+            </Grid>}
+          </Grid>
         </Grid>
       </form>
     </>
@@ -960,8 +969,8 @@ function Investment({ investment: i, refetch }) {
     return (
       <TableRow>
         <TableCell colSpan={4}>
-          <Paper className="investment-edit">
-            <div className="investor-name">
+          <Paper>
+            <div>
               {get(i, 'investor.name')}
               <FontAwesomeIcon icon="times" onClick={() => setEditing(false)} />
             </div>
@@ -1118,16 +1127,7 @@ function DeleteDeal({ deal }) {
   }
 
   return (
-    <Grid container className="danger-zone DeleteDeal">
-      <Grid item xs={10}>
-        <Typography variant="h6">
-          Danger Zone - Delete Deal
-        </Typography>
-      </Grid>
-      <Grid item xs={2} style={{ textAlign: "right" }}>
-        <Button onClick={submit} variant="default" style={{ width: "100%", color: "red" }}>YES
-          DELETE</Button>
-      </Grid>
-    </Grid>
+    <Button onClick={submit} variant="default" style={{ color: "red" }}>
+      Delete Deal</Button>
   )
 }

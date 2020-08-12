@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { gql } from 'apollo-boost'
-import { Row, Col } from 'reactstrap'
-import { useHistory, useParams } from 'react-router-dom'
-import { useMutation } from '@apollo/react-hooks'
-import { TextField, Button } from '@material-ui/core'
+import React, {useState, useEffect} from 'react'
+import {gql} from 'apollo-boost'
+import {useHistory, useParams} from 'react-router-dom'
+import {useMutation} from '@apollo/react-hooks'
+import {TextField, Button, Typography, Grid} from '@material-ui/core'
 
 /***
  *
@@ -19,50 +18,48 @@ const CREATE_INVESTOR = gql`
   }
 `
 
-export default function InvestorNew ({ push, setNewUser }) {
+export default function InvestorNew({push, setNewUser}) {
   const history = useHistory()
   const [error, setError] = useState(false)
   const [email, setEmail] = useState("")
-  const [createInvestor, { data }] = useMutation(CREATE_INVESTOR)
+  const [createInvestor, {data}] = useMutation(CREATE_INVESTOR)
 
 
   useEffect(() => {
-    if(data && data.createInvestor._id && push) history.push(`/investor/${data.createInvestor._id}/edit`) 
-    if(data && data.createInvestor._id)  {
+    if (data && data.createInvestor._id && push) history.push(`/investor/${data.createInvestor._id}/edit`)
+    if (data && data.createInvestor._id) {
       setNewUser(false)
     }
   }, [data, history])
 
   const submit = () => {
     if (!email) return setError(true)
-    createInvestor({ variables: { user: { email } }})
+    createInvestor({variables: {user: {email}}})
   }
 
   return (
-    <div className="InvestorEdit">
-      <Row>
-        <Col sm={{size: 9, offset: 1}}>
-          <h5>
-            Create Investor
-          </h5>
-        </Col>
-      </Row>
-      <Col sm={{size: 4, offset: 1}} style={{marginBottom: "15px"}}>
+    <Grid container>
+      <Grid item xs={12}>
+        <Typography variant="h6" gutterBottom>
+          Create Investor
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
         <TextField required
-            error={error}
-            style={{width: "100%"}} 
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            label="Email" 
-            variant="filled" />
-      </Col>
-      <Col sm={{size: 4, offset: 1}}>
+                   error={error}
+                   value={email}
+                   onChange={e => setEmail(e.target.value)}
+                   label="Email"
+                   variant="outlined"/>
+      </Grid>
+      <Grid item xs={12}>
         <Button variant="contained"
-          onClick={submit} 
-          color="primary">
+                style={{marginTop: 16}}
+                onClick={submit}
+                color="primary">
           CREATE INVESTOR
         </Button>
-      </Col>
-    </div>
+      </Grid>
+    </Grid>
   )
 }

@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 const boardData = [
   {title: 'View', key: 'invited'},
   {title: 'Sign', key: 'sign'},
-  {title: 'KYC', key: 'kyc'},
+  // {title: 'KYC', key: 'kyc'},
   {title: 'Wire', key: 'wire'},
   {title: 'Complete', key: 'complete'},
 ]
@@ -96,10 +96,10 @@ export default ({deal}) => {
     <Grid container justify="center" spacing={3}>
       {categories.map((value) => (
         <Grid key={value.title} item>
-          <Typography variant="h6">
+          <Paper className={classes.innerPaper}>
+          <Typography variant="h6" gutterBottom style={{padding:"8px"}}>
             {value.title}
           </Typography>
-          <Paper className={classes.innerPaper}>
             {value?.categoryInvestments?.map(inv => <InvestmentSquare investment={inv}/>)}
           </Paper>
         </Grid>

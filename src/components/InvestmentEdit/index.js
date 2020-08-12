@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from "@material-ui/core/styles";
 import Loader from '../utils/Loader'
-import "./style.scss"
+
 /***
  *
  * investment edit and add docs for an investment
@@ -104,15 +104,11 @@ export default function InvestmentEdit() {
     : `${get(investment, "investor.first_name")} ${get(investment, "investor.last_name")}`
 
 
-
   return (
     <div className="InvestmentEdit form-wrapper">
       <Paper className={classes.paper}>
-        <Row>
-          <Col sm={{ size: 8, offset: 1 }}>
-            <div className="form-title">Update Investment  {createInvestmentRes.data && <FontAwesomeIcon icon='check' />} </div>
-          </Col>
-        </Row>
+        <div className="form-title">Update Investment {createInvestmentRes.data &&
+          <FontAwesomeIcon icon='check' />} </div>
         <Divider className={classes.divider} />
         <form className="form" noValidate autoComplete="off">
           <Grid container spacing={3}>
@@ -167,8 +163,7 @@ export default function InvestmentEdit() {
                       status: investment.status,
                       documents: investment.documents
                     }
-                  },
-                  onCompleted: toast.success('Success!')
+                  }
                 })}
                 color="primary">
                 UPDATE
@@ -185,6 +180,7 @@ export default function InvestmentEdit() {
     </div>
   )
 }
+
 function Docs({ investment, setInvestment, refetch }) {
   const [uploadedDoc, setUploadedDoc] = useState(null)
   const [addInvestmentDoc, { loading }] = useMutation(ADD_INVESTMENT_DOC, { onCompleted: refetch })
@@ -217,9 +213,13 @@ function Docs({ investment, setInvestment, refetch }) {
     </div>
   )
 }
+
 function Doc({ doc, investment, refetch }) {
   const file = doc.path.slice(0, 12) === "investments/" ? doc.path.split('/')[2] : doc.path.split('/')[1]
-  const [rmInvestmentDoc] = useMutation(RM_INVESTMENT_DOC, { variables: { file, investment_id: investment._id }, onCompleted: refetch })
+  const [rmInvestmentDoc] = useMutation(RM_INVESTMENT_DOC, {
+    variables: { file, investment_id: investment._id },
+    onCompleted: refetch
+  })
   const rmDoc = () => {
     if (window.confirm(`Delete ${file}?`)) rmInvestmentDoc()
   }
