@@ -85,37 +85,36 @@ export default function Deals({ showClosed }) {
           </Paper>
         </Col>
       </Row>}
-      {!showClosed && <Row>
-        <Col sm="12">
-          <h5>Open Deals <span className="deals-length">{(open || []).length}</span></h5>
-          <Paper className="table-wrapper">
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Deal</TableCell>
-                  <TableCell>Description</TableCell>
-                  <TableCell>Closing</TableCell>
-                  <TableCell>Lead</TableCell>
-                  <TableCell>Progress</TableCell>
-                  {userProfile.admin && <TableCell></TableCell>}
+      {!showClosed && <>
+        <h5>Open Deals <span className="deals-length">{(open || []).length}</span></h5>
+        <Paper>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Deal</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell>Closing</TableCell>
+                <TableCell>Lead</TableCell>
+                <TableCell>Progress</TableCell>
+                {userProfile.admin && <TableCell></TableCell>}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {_.orderBy(open, d => new Date(d.date_closed || Date.now()), 'desc').map(deal => (
+                <TableRow key={deal._id}>
+                  <TableCell>{deal.company_name}</TableCell>
+                  <TableCell>{deal.company_description}</TableCell>
+                  <TableCell>{deal.date_closed}</TableCell>
+                  <TableCell>{deal.deal_lead}</TableCell>
+                  <DealProgress deal={deal} />
+                  {userProfile.admin && <TableCell align="center"><Link
+                    to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link></TableCell>}
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {_.orderBy(open, d => new Date(d.date_closed || Date.now()), 'desc').map(deal => (
-                  <TableRow key={deal._id}>
-                    <TableCell>{deal.company_name}</TableCell>
-                    <TableCell>{deal.company_description}</TableCell>
-                    <TableCell>{deal.date_closed}</TableCell>
-                    <TableCell>{deal.deal_lead}</TableCell>
-                    <DealProgress deal={deal} />
-                    {userProfile.admin && <TableCell align="center"><Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link></TableCell>}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Paper>
-        </Col>
-      </Row>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+      </>
       }
       <>
         <Paper style={{ marginTop: 16 }}>
