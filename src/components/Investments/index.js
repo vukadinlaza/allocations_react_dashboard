@@ -132,7 +132,7 @@ export default function Investments() {
             <Button variant="contained"
               color="secondary" onClick={() => history.push(`/admin/investment/new`)}>
               Add Investment
-          </Button>
+            </Button>
           </Grid>
         </Grid>
 
