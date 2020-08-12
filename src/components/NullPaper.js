@@ -5,16 +5,17 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import Hidden from "@material-ui/core/Hidden";
 
 const useStyles = makeStyles(() => ({
   paper: {
     padding: 32
   },
   img: {
-    width: "100%",
-    maxHeight: 150,
+    height: 150,
+    width: "90%",
     marginBottom: 16,
-    paddingRight: 16,
+    paddingRight: 32,
   },
   h5: {
     color: "#707070",
@@ -38,10 +39,12 @@ export default function NullPaper({title, text, image, button, onClick}) {
   return (
     <Paper className={classes.paper}>
       <Grid container alignItems="center">
-        <Grid item sm={12} md={5}>
-          <img src={image} className={classes.img}/>
-        </Grid>
-        <Grid item sm={12} md={7}>
+        <Hidden only="md">
+          <Grid item lg={5}>
+            <img src={image} className={classes.img}/>
+          </Grid>
+        </Hidden>
+        <Grid item md={12} lg={7}>
           <Typography variant="h5" className={classes.h5}>
             <strong>{title}</strong>
           </Typography>

@@ -241,23 +241,25 @@ export default function UserHome(props) {
                       <Typography variant="h5" className={classes.grey}>
                         <strong>Total Investments</strong>
                       </Typography>
-                      <Typography variant="h5" style={{fontSize: "1.8rem"}} className={classes.blue}>
+                      <Typography variant="h5" style={{fontSize: "1.8rem", marginBottom: 16}} className={classes.blue}>
                         <strong>${nWithCommas(total_invested)}</strong>
                       </Typography>
                     </Grid>
                   </Grid>
 
                 </Grid>
-                <Grid item sm={12} md={6}>
-                  {userInvestments.length > 0 ?
-                    <Chart chartType="TreeMap"
-                           width="100%"
-                           height="200px"
-                           chartEvents={chartEvents}
-                           data={formatData(userInvestments)}
-                           options={chartOptions}/> : null
-                  }
-                </Grid>
+                <Hidden mdDown>
+                  <Grid item sm={12} md={6}>
+                    {userInvestments.length > 0 ?
+                      <Chart chartType="TreeMap"
+                             width="100%"
+                             height="200px"
+                             chartEvents={chartEvents}
+                             data={formatData(userInvestments)}
+                             options={chartOptions}/> : null
+                    }
+                  </Grid>
+                </Hidden>
               </Grid>
             </Paper>
           </Grid>
