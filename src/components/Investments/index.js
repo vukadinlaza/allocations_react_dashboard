@@ -1,19 +1,19 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import _ from 'lodash'
-import {useParams, Link, useHistory} from 'react-router-dom';
-import {gql} from 'apollo-boost'
-import {useLazyQuery} from '@apollo/react-hooks';
-import {useAuth} from "../../auth/useAuth";
-import {Row, Col} from 'reactstrap'
-import {nWithCommas, formatDate} from '../../utils/numbers'
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { useParams, Link, useHistory } from 'react-router-dom';
+import { gql } from 'apollo-boost'
+import { useLazyQuery } from '@apollo/react-hooks';
+import { useAuth } from "../../auth/useAuth";
+import { Row, Col } from 'reactstrap'
+import { nWithCommas, formatDate } from '../../utils/numbers'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from '../utils/Loader'
 import * as Chart from '../../utils/chart'
 import * as d3 from 'd3'
 
-import {Grid, Table, TableBody, TableCell, TableRow, TableHead, Paper, Button} from '@material-ui/core'
+import { Grid, Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core'
 import Typography from "@material-ui/core/Typography";
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 
 /***
@@ -55,16 +55,16 @@ const GET_INVESTMENTS = gql`
 `
 
 function renderChart(investments) {
-  const margins = {top: 0, bottom: 0, left: 0, right: 0}
-  const {g, chartWidth, chartHeight} = Chart.initResponsive("#investments-timeseries-chart", margins)
+  const margins = { top: 0, bottom: 0, left: 0, right: 0 }
+  const { g, chartWidth, chartHeight } = Chart.initResponsive("#investments-timeseries-chart", margins)
 
-  const {data} = investments.reduce((acc, i) => {
+  const { data } = investments.reduce((acc, i) => {
     const cumsum = acc.cumsum + i.amount
     return {
       cumsum,
-      data: acc.data.concat([{...i, amount: cumsum}])
+      data: acc.data.concat([{ ...i, amount: cumsum }])
     }
-  }, {data: [], cumsum: 0})
+  }, { data: [], cumsum: 0 })
 
   const x = d3.scaleTime()
     .rangeRound([0, chartWidth])
@@ -91,54 +91,59 @@ const useStyles = makeStyles((theme) => ({
   green: {
     color: theme.palette.secondary.main
   },
+  paper: {
+    padding: theme.spacing(2)
+  }
 }));
 
 
 export default function Investments() {
-  const {organization} = useParams()
+  const { organization } = useParams()
   const [showDocs, setShowDocs] = useState(null)
   const history = useHistory()
   const classes = useStyles()
 
-  const {userProfile} = useAuth()
-  const [getInvestments, {data, error}] = useLazyQuery(GET_INVESTMENTS)
+  const { userProfile } = useAuth()
+  const [getInvestments, { data, error }] = useLazyQuery(GET_INVESTMENTS)
 
   useEffect(() => {
-    if (userProfile && userProfile.email) getInvestments({variables: {slug: organization}})
+    if (userProfile && userProfile.email) getInvestments({ variables: { slug: organization } })
   }, [userProfile])
 
   if (error) return <div>{error.message}</div>
 
-  if (!data) return <div><Loader/></div>
+  if (!data) return <div><Loader /></div>
 
   const investments = _.orderBy(_.get(data, 'organization.investments', []), i => new Date(i.deal.date_closed).getTime(), 'desc')
   if (showDocs) {
-    investments.splice(investments.findIndex(i => i._id === showDocs._id) + 1, 0, {showDocs})
+    investments.splice(investments.findIndex(i => i._id === showDocs._id) + 1, 0, { showDocs })
   }
 
   return (
     <>
-      <Grid container>
-        <Grid item xs={12} sm={4}>
-          <Typography variant="h6" gutterBottom>
-            Investments: <span>{showDocs ? investments.length - 1 : investments.length}</span>
-          </Typography>
-        </Grid>
-        <Grid item xs={12} sm={3}>
-          <Button variant="contained"
-                  color="secondary" onClick={() => history.push(`/admin/investment/new`)}>
-            Add Investment
+      <Paper className={classes.paper}>
+        <Grid container>
+          <Grid item xs={12} sm={4}>
+            <Typography variant="h6" gutterBottom>
+              Investments: <span>{showDocs ? investments.length - 1 : investments.length}</span>
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={3} align="center">
+            <Button variant="contained"
+              color="secondary" onClick={() => history.push(`/admin/investment/new`)}>
+              Add Investment
           </Button>
+          </Grid>
+          <Grid item xs={12} sm={5} align="right">
+            <Typography variant="h6" gutterBottom>
+              Total Invested: <span className={classes.green}>${nWithCommas(_.sumBy(investments, 'amount'))}</span>
+            </Typography>
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={5}>
-          <Typography variant="h6" gutterBottom>
-            Total Invested: <span className={classes.green}>${nWithCommas(_.sumBy(investments, 'amount'))}</span>
-          </Typography>
-        </Grid>
-      </Grid>
-      <Paper style={{marginTop: 16}}>
+      </Paper>
+      <Paper style={{ marginTop: 16 }}>
         <Table>
-          <TableHead style={{fontWeight: "bold"}}>
+          <TableHead style={{ fontWeight: "bold" }}>
             <TableRow>
               <TableCell>Investor</TableCell>
               <TableCell>Company</TableCell>
@@ -152,7 +157,7 @@ export default function Investments() {
           </TableHead>
           <TableBody>
             {investments.map((investment) => (
-              investment.showDocs ? <DocsRow docs={showDocs.documents}/>
+              investment.showDocs ? <DocsRow docs={showDocs.documents} />
                 : <TableRow key={investment._id} className="investment-row">
                   <TableCell>{_.get(investment, 'investor.name')}</TableCell>
                   <TableCell scope="row">{investment.deal.company_name}</TableCell>
@@ -166,8 +171,8 @@ export default function Investments() {
                   <TableCell align="right">
                     {_.get(investment, 'documents.length', 0) > 0
                       ? showDocs && (showDocs._id === investment._id)
-                        ? <FontAwesomeIcon icon="times" onClick={() => setShowDocs(null)}/>
-                        : <FontAwesomeIcon icon="info-circle" onClick={() => setShowDocs(investment)}/>
+                        ? <FontAwesomeIcon icon="times" onClick={() => setShowDocs(null)} />
+                        : <FontAwesomeIcon icon="info-circle" onClick={() => setShowDocs(investment)} />
                       : ""
                     }
                   </TableCell>
@@ -190,18 +195,18 @@ function filename(path) {
   }
 }
 
-function DocsRow({docs}) {
+function DocsRow({ docs }) {
   return (
     <TableRow>
       <TableCell colSpan={7}>
         {docs.map(doc => (
           <div className="doc-wrapper">
             <div className="doc">
-              <FontAwesomeIcon icon={["far", "file-pdf"]}/>
+              <FontAwesomeIcon icon={["far", "file-pdf"]} />
             </div>
             <div className="filename">
               <span><a href={`https://${doc.link}`} target="_blank"
-                       rel="noopener noreferrer">{filename(doc.path)}</a></span>
+                rel="noopener noreferrer">{filename(doc.path)}</a></span>
             </div>
           </div>
         ))}
