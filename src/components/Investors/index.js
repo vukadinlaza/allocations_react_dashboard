@@ -56,10 +56,10 @@ export default function Investors() {
   if (!data?.organization?.deals) return <div><Loader /></div>
 
   const { organization: { deals } } = data
-  const investors = deals.reduce((acc, deal) => {
+  const investors = _.uniq(deals.reduce((acc, deal) => {
     const investors = deal.investments.map(investment => investment.investor)
     return [...acc, ...investors]
-  }, []).filter(inv => inv)
+  }, []).filter(inv => inv), 'email')
   return (
     <div className="Investors">
       <Row>
