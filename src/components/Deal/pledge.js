@@ -39,12 +39,11 @@ const PLEDGE = gql`
 
 export default ({ investment, refetch }) => {
     const classes = useStyles()
-    const [invAmount, setInvAmount] = useState(investment.amount)
+    const [invAmount, setInvAmount] = useState(investment?.amount || 0)
     const [updateInvestment] = useMutation(PLEDGE, {
         onCompleted: refetch
     })
     const submit = () => {
-        console.log(invAmount)
         updateInvestment({
             variables: {
                 investment: { _id: investment._id, amount: Number(invAmount) }
