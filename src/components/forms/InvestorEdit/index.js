@@ -109,16 +109,15 @@ export default function InvestorEditForm({investor, setInvestor, actionText, ico
 
   return (
     <>
-      <form noValidate autoComplete="off">
-        <div className={classes.paper}>
-          <Typography variant="h6">
+      <Paper>
+        <form noValidate autoComplete="off" style={{padding:"16px"}}>
+          <Typography variant="h6" gutterBottom>
             Profile {icon && <FontAwesomeIcon icon={icon} spin={icon === "circle-notch"}/>}
           </Typography>
-          <Typography variant="subtitle2" style={{marginBottom: 16}}>
+          <Typography variant="subtitle2" style={{marginBottom: "16px"}}>
             This information can be edited from your profile page.
           </Typography>
-
-          <Grid container spacing={3}>
+          <Grid container spacing={3} style={{marginTop: "16px"}}>
             <Grid item xs={12} sm={12} md={6}>
               <FormControl required error={errors.includes("investor_type")} variant="outlined" style={{width: "100%"}}>
                 <InputLabel>Investor Type</InputLabel>
@@ -182,11 +181,9 @@ export default function InvestorEditForm({investor, setInvestor, actionText, ico
             {actionText}
           </Button>
 
-        </div>
+        {/* <div className={classes.paper}>
 
-        <div className={classes.paper}>
-
-          <Typography variant="h6">
+          <Typography variant="h6" gutterBottom>
             KYC
           </Typography>
           <Typography variant="subtitle2">
@@ -202,9 +199,9 @@ export default function InvestorEditForm({investor, setInvestor, actionText, ico
             {actionText}
           </Button>
 
-        </div>
-
+        </div> */}
       </form>
+      </Paper>
     </>
   )
 }

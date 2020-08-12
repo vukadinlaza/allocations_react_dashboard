@@ -9,6 +9,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {useAuth} from "../../auth/useAuth"
 import "./style.scss"
 import {useHistory} from "react-router-dom"
+import Typography from "@material-ui/core/Typography";
 
 /***
  *
@@ -25,19 +26,26 @@ export default function Funds() {
 
   return (
     <>
-      <div className="small-header text-left">Funds Admin &nbsp;&nbsp;{userProfile.admin &&
-      <Button onClick={() => history.push("/admin/organizations/new")} size="small"
-              color="secondary">
+      {/* <div className="small-header text-left">Funds Admin &nbsp;&nbsp;</div> */}
+      {/* {userProfile.admin &&
+      <Button onClick={() => history.push("/admin/organizations/new")}
+              color="primary">
         CREATE FUND MANAGER
-      </Button>}</div>
+      </Button>} */}
 
-      <Paper className="funds-table" style={{margin: "15px"}}>
+      <Paper>
+            <Typography variant="h6" style={{paddingLeft: "16px", paddingTop: "16px"}} gutterBottom>
+              Funds Admin
+            </Typography>
+            <Typography variant="subtitle2" style={{paddingLeft: "16px", paddingBottom: "16px"}}>
+              Below is a list of all the funds you have access to manage.
+            </Typography>
         <Table>
           <TableBody>
             {(userProfile.organizations_admin || []).map(org => (
               <TableRow key={org._id} className="admin-link">
                 <TableCell>
-                  <OrgLogo org={org}/>&nbsp;&nbsp;&nbsp;&nbsp;
+                  {/* funds-table */}
                   {org.name} Admin
                 </TableCell>
                 <TableCell>

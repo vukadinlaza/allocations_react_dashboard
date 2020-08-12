@@ -74,7 +74,7 @@ export default function FreeSPVOnboarding() {
       <Paper className={classes.paper}>
         <Grid container>
           <Grid item xs={12}>
-            <Typography variant="h6">
+            <Typography variant="h6" gutterBottom>
               Create Fund
             </Typography>
           </Grid>
@@ -98,7 +98,7 @@ export default function FreeSPVOnboarding() {
         <Paper className={classes.paper}>
           <Grid container>
             <Grid item xs={12}>
-              <Typography variant="h6">
+              <Typography variant="h6" gutterBottom>
                 Create SPV
               </Typography>
             </Grid>

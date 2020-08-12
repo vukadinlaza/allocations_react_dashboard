@@ -152,7 +152,7 @@ export default function AdminHome() {
         </Grid>}
         <Grid item xs={12} sm={6}>
           <Paper className={classes.paper}>
-            <Typography variant="h6">
+            <Typography variant="h6" gutterBottom>
               Welcome to <strong>{org.name}</strong>, Admin!
             </Typography>
             <Typography variant="subtitle2" style={{marginBottom: 16}}>
@@ -166,7 +166,7 @@ export default function AdminHome() {
           <Grid item xs={12} sm={6}>
           <Paper className={classes.paper}>
                 <Grid item xs={10}>
-                  <Typography variant="h6">
+                  <Typography variant="h6" gutterBottom>
                     💡 Active Deals: {(active || []).length}
                   </Typography>
                 </Grid>
@@ -200,7 +200,7 @@ export default function AdminHome() {
           <Paper className={classes.paper}>
           <Grid container>
             <Grid item xs={10}>
-              <Typography variant="h6">
+              <Typography variant="h6" gutterBottom>
                 🎉 Closed Deals: {(closed || []).length}
               </Typography>
             </Grid>
@@ -233,7 +233,7 @@ export default function AdminHome() {
         <Paper className={classes.paper}>
           <Grid container>
             <Grid item xs={10}>
-              <Typography variant="h6">
+              <Typography variant="h6" gutterBottom>
                 💵 Recent Investments: {(closed || []).length}
               </Typography>
             </Grid>
