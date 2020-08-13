@@ -239,7 +239,7 @@ export default function Sidebar(props) {
             </Drawer>
           </Hidden>
         </nav>
-        <main className={classes.content}>
+        <main className={classes.content} style={{background:"rgba(0,0,0,0.01)"}}>
           <div className={classes.toolbar}/>
           {props.children}
         </main>
