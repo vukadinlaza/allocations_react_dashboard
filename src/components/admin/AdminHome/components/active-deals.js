@@ -89,7 +89,7 @@ function Deal({ deal, investments }) {
   // this isnt built into the app yet
   const hasSOW = true;
 
-  const formattedDate_closed = moment(deal.date_closed).format('Do MMMM YYYY')
+  const formattedDate_closed = moment(deal.dealParams.wireDeadline).format('Do MMMM YYYY')
 
   return (
     <>
