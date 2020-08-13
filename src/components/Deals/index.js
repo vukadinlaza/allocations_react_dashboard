@@ -1,17 +1,18 @@
-import React, {useEffect, useReducer, Fragment} from 'react'
+import React, { useEffect, useReducer, Fragment } from 'react'
 import _ from 'lodash'
-import {nWithCommas, formatDate} from '../../utils/numbers'
-import {Link, useParams} from 'react-router-dom';
-import {gql} from 'apollo-boost'
-import {useLazyQuery} from '@apollo/react-hooks';
-import {Row, Col} from 'reactstrap'
-import {useAuth} from "../../auth/useAuth"
+import { nWithCommas, formatDate } from '../../utils/numbers'
+import { Link, useParams } from 'react-router-dom';
+import { gql } from 'apollo-boost'
+import { useLazyQuery } from '@apollo/react-hooks';
+import { Row, Col } from 'reactstrap'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useAuth } from "../../auth/useAuth"
 import Loader from "../utils/Loader"
 import CapitalAccount from './CapitalAccount'
 
-import {Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, LinearProgress, Grid} from '@material-ui/core'
-import Typography from "@material-ui/core/Typography";
+import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, LinearProgress, Typography, Grid } from '@material-ui/core'
 
+import "./style.scss";
 
 /***
  *
@@ -50,10 +51,10 @@ const GET_DEALS = gql`
 `
 
 
-export default function Deals({showClosed}) {
-  const {organization} = useParams()
-  const {userProfile} = useAuth()
-  const [getDeals, {data, error}] = useLazyQuery(GET_DEALS, {variables: {slug: organization}})
+export default function Deals({ showClosed }) {
+  const { organization } = useParams()
+  const { userProfile } = useAuth()
+  const [getDeals, { data, error }] = useLazyQuery(GET_DEALS, { variables: { slug: organization } })
   const [capitalAccount, toggleCapitalAccount] = useReducer(
     (acc, _id) => {
       return acc === _id ? null : _id
@@ -67,23 +68,24 @@ export default function Deals({showClosed}) {
 
   if (error) return <div>{error.message}</div>
 
-  if (!data) return <div><Loader/></div>
+  if (!data) return <div><Loader /></div>
 
-  const {organization: {deals}} = data
-  const {open, closed} = _.groupBy(deals, d => d.status === "closed" ? "closed" : "open")
+  const { organization: { deals } } = data
+  const { open, closed } = _.groupBy(deals, d => d.status === "closed" ? "closed" : "open")
 
   return (
-    <>
-      {!showClosed &&
-      <Paper>
-        <Button variant="contained"
-                color="secondary">
-          <Link to={`/admin/${organization}/deal/new`}>Create New Deal</Link>
-        </Button>
-      </Paper>
-      }
-      {!showClosed &&
-      <>
+    <div className="AllDeals">
+      {!showClosed && <Row>
+        <Col sm={{ size: 12 }}>
+          <Paper className="deal-data">
+            <Button variant="contained"
+              color="secondary">
+              <Link to={`/admin/${organization}/deal/new`}>Create New Deal</Link>
+            </Button>
+          </Paper>
+        </Col>
+      </Row>}
+      {!showClosed && <>
         <h5>Open Deals <span className="deals-length">{(open || []).length}</span></h5>
         <Paper>
           <Table>
@@ -104,7 +106,7 @@ export default function Deals({showClosed}) {
                   <TableCell>{deal.company_description}</TableCell>
                   <TableCell>{deal.date_closed}</TableCell>
                   <TableCell>{deal.deal_lead}</TableCell>
-                  <DealProgress deal={deal}/>
+                  <DealProgress deal={deal} />
                   {userProfile.admin && <TableCell align="center"><Link
                     to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link></TableCell>}
                 </TableRow>
@@ -115,12 +117,12 @@ export default function Deals({showClosed}) {
       </>
       }
       <>
-        <Paper style={{marginTop: 16}}>
-        <Grid container xs={12} style={{padding: "16px"}}>
+        <Paper style={{ marginTop: 16 }}>
+          <Grid container xs={12} style={{ padding: "16px" }}>
             <Typography variant="h6" gutterBottom>
               Closed Deals: {(closed || []).length}
             </Typography>
-        </Grid>
+          </Grid>
           <Table>
             <TableHead>
               <TableRow>
@@ -146,25 +148,25 @@ export default function Deals({showClosed}) {
                     {userProfile.admin && <TableCell align="center"><Link
                       to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link></TableCell>}
                   </TableRow>
-                  {capitalAccount === deal._id && <CapitalAccount deal={deal}/>}
+                  {capitalAccount === deal._id && <CapitalAccount deal={deal} />}
                 </Fragment>
               ))}
             </TableBody>
           </Table>
         </Paper>
       </>
-    </>
+    </div>
   )
 }
 
-function DealProgress({deal}) {
+function DealProgress({ deal }) {
   const progress = ((deal.amount_raised || 0) / (deal.target || Infinity)) * 100
   return (
     <TableCell>
-      <LinearProgress style={{height: "20px"}}
-                      variant="determinate"
-                      color="secondary"
-                      value={progress}/>
+      <LinearProgress style={{ height: "20px" }}
+        variant="determinate"
+        color="secondary"
+        value={progress} />
       <div className="text-center">
         ${nWithCommas(deal.amount_raised)} of ${nWithCommas(deal.target)}
       </div>

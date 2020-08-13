@@ -144,7 +144,7 @@ export default function Investments() {
               <TableCell>Description</TableCell>
               <TableCell align="right">Amount</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell align="center">Closing Date</TableCell>
+              {/* <TableCell align="center">Closing Date</TableCell> */}
               <TableCell align="right">Docs</TableCell>
               <TableCell></TableCell>
             </TableRow>
@@ -161,7 +161,7 @@ export default function Investments() {
                     <span
                       className={`investment-status investment-status-${investment.status}`}>{investment.status}</span>
                   </TableCell>
-                  <TableCell align="center">{formatDate(investment.deal.date_closed)}</TableCell>
+                  {/* <TableCell align="center">{formatDate(investment.deal.date_closed)}</TableCell> */}
                   <TableCell align="right">
                     {_.get(investment, 'documents.length', 0) > 0
                       ? showDocs && (showDocs._id === investment._id)
