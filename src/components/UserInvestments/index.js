@@ -30,6 +30,31 @@ const GET_INVESTOR = gql`
           company_description
           date_closed
           appLink
+          dealParams {
+            totalRoundSize
+            allocation
+            totalCarry
+            minimumInvestment
+            signDeadline
+            wireDeadline
+            estimatedSetupCosts
+            estimatedSetupCostsDollar
+            estimatedTerm
+            managementFees
+            managementFeesDollar
+            portfolioTotalCarry
+            portfolioEstimatedSetupCosts
+            portfolioEstimatedSetupCostsDollar
+            portfolioManagementFees
+            portfolioManagementFeesDollar
+            fundTotalCarry
+            fundEstimatedSetupCosts
+            fundEstimatedSetupCostsDollar
+            fundManagementFees
+            fundManagementFeesDollar
+            fundGeneralPartner
+            fundEstimatedTerm
+          }
         }
         documents {
           link
@@ -64,7 +89,7 @@ const TR = ({investment, showDocs, setShowDocs, type}) => {
       <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) :
         <i>TBD</i>}</TableCell>
       <TableCell align="center"><InvestmentStatus investment={investment}/></TableCell>
-      <TableCell align="center">{formatDate(investment.deal.date_closed)}</TableCell>
+      <TableCell align="center">{formatDate(investment.deal.dealParams.wireDeadline)}</TableCell>
       <TableCell align="right">
         {_.get(investment, 'documents.length', 0) > 0
           ? showDocs && (showDocs._id === investment._id)
@@ -92,7 +117,7 @@ export default function UserInvestments() {
     userProfile.investments,
     [
       i => TABLE_ORDER[i.status].order,
-      i => new Date(i.deal.date_closed).getTime(),
+      i => new Date(i.deal.dealParams.wireDeadline).getTime(),
     ],
     ['asc', 'desc'],
   )

@@ -170,9 +170,10 @@ function Settings() {
         <Grid item sm={12} md={6}>
           <Typography variant="body2">
             Provision of Services
-          </Typography>
-          <Typography variant="body2">
-           Get Started
+            {hasDoc && <CheckCircleIcon color="secondary" style={{ marginLeft: 8 }} />}
+            {!hasDoc && <Typography variant="body2" onClick={() => setModal(!hasDoc ? true : false)} style={{cursor:"pointer"}}>
+              Get Started
+            </Typography>}
           </Typography>
         </Grid>
       </Grid>
