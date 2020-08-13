@@ -244,7 +244,7 @@ export default function UserHome(props) {
                       </Typography>
                       <Typography variant="h5" style={{fontSize: "1.8rem"}} className={classes.blue}>
                         <strong>${nWithCommas(total_invested)}</strong>
-                      </Typography>
+                      </Typography> 
                     </Grid>
                   </Grid>
 
