@@ -117,7 +117,7 @@ function Deal({ deal, investments }) {
           </IconButton>
         </TableCell>
       </TableRow>
-      {activeDeal && <TableRow style={{ borderTop: "0" }}>
+      {activeDeal && <TableRow style={{ borderTop: "0", maxWidth: '300px' }}>
         <TableCell colspan="5">
           <InvestmentFlow deal={deal} investments={investments} />
         </TableCell>
