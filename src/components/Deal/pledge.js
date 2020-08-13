@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core'
 import _ from 'lodash'
 import { gql } from 'apollo-boost'
+import { toast } from 'react-toastify'
 import { useMutation } from '@apollo/react-hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { makeStyles } from "@material-ui/core/styles";
@@ -47,7 +48,8 @@ export default ({ investment, refetch }) => {
         updateInvestment({
             variables: {
                 investment: { _id: investment._id, amount: Number(invAmount) }
-            }
+            },
+            onCompleted: toast.success('Success! Investment Amount Updated!')
         })
     }
 
