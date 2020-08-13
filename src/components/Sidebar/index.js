@@ -72,6 +72,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing(4),
+    maxWidth: '100%'
   },
   sectionDesktop: {
     display: 'none',

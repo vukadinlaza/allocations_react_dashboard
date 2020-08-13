@@ -10,7 +10,7 @@ import { useAuth } from "../../auth/useAuth"
 import Loader from "../utils/Loader"
 import CapitalAccount from './CapitalAccount'
 
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, LinearProgress, Typography, Grid } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, LinearProgress, Typography, Grid, Hidden } from '@material-ui/core'
 
 import "./style.scss";
 
@@ -93,9 +93,13 @@ export default function Deals({ showClosed }) {
               <TableRow>
                 <TableCell>Deal</TableCell>
                 <TableCell>Description</TableCell>
-                <TableCell>Closing</TableCell>
+                <Hidden only="xs">
+                  <TableCell>Closing</TableCell>
+                </Hidden>
                 <TableCell>Lead</TableCell>
-                <TableCell>Progress</TableCell>
+                <Hidden only="xs">
+                  <TableCell>Progress</TableCell>
+                </Hidden>
                 {userProfile.admin && <TableCell></TableCell>}
               </TableRow>
             </TableHead>
@@ -104,9 +108,13 @@ export default function Deals({ showClosed }) {
                 <TableRow key={deal._id}>
                   <TableCell>{deal.company_name}</TableCell>
                   <TableCell>{deal.company_description}</TableCell>
-                  <TableCell>{deal.date_closed}</TableCell>
+                  <Hidden only="xs">
+                    <TableCell>{deal.date_closed}</TableCell>
+                  </Hidden>
                   <TableCell>{deal.deal_lead}</TableCell>
-                  <DealProgress deal={deal} />
+                  <Hidden only="xs">
+                    <DealProgress deal={deal} />
+                  </Hidden>
                   {userProfile.admin && <TableCell align="center"><Link
                     to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link></TableCell>}
                 </TableRow>
@@ -129,10 +137,12 @@ export default function Deals({ showClosed }) {
                 <TableCell>Deal</TableCell>
                 <TableCell>Description</TableCell>
                 <TableCell>Lead</TableCell>
-                <TableCell>Closed</TableCell>
-                <TableCell>Size</TableCell>
-                <TableCell className="text-center">Investors</TableCell>
-                {userProfile.admin && <TableCell></TableCell>}
+                <Hidden only="xs">
+                  <TableCell>Closed</TableCell>
+                  <TableCell>Size</TableCell>
+                  <TableCell className="text-center">Investors</TableCell>
+                  {userProfile.admin && <TableCell></TableCell>}
+                </Hidden>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -142,11 +152,13 @@ export default function Deals({ showClosed }) {
                     <TableCell>{deal.company_name}</TableCell>
                     <TableCell>{deal.company_description}</TableCell>
                     <TableCell>{deal.deal_lead}</TableCell>
-                    <TableCell>{formatDate(deal.date_closed)}</TableCell>
-                    <TableCell>${nWithCommas(_.sumBy(deal.investments, 'amount'))}</TableCell>
-                    <TableCell className="text-center">{deal.investments.length}</TableCell>
-                    {userProfile.admin && <TableCell align="center"><Link
-                      to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link></TableCell>}
+                    <Hidden only="xs">
+                      <TableCell>{formatDate(deal.date_closed)}</TableCell>
+                      <TableCell>${nWithCommas(_.sumBy(deal.investments, 'amount'))}</TableCell>
+                      <TableCell className="text-center">{deal.investments.length}</TableCell>
+                      {userProfile.admin && <TableCell align="center"><Link
+                        to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link></TableCell>}
+                    </Hidden>
                   </TableRow>
                   {capitalAccount === deal._id && <CapitalAccount deal={deal} />}
                 </Fragment>
