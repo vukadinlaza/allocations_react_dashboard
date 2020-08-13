@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import {Link, useHistory, useLocation, useRouteMatch} from 'react-router-dom';
-import {useAuth} from '../../auth/useAuth'
+import React, { useEffect, useState } from 'react';
+import { Link, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
+import { useAuth } from '../../auth/useAuth'
 
-import {gql} from 'apollo-boost'
+import { gql } from 'apollo-boost'
 
 import "./style.scss"
 import AppBar from '@material-ui/core/AppBar';
@@ -17,7 +17,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
-import {makeStyles, useTheme} from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import HomeIcon from "@material-ui/icons/Home";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import PersonIcon from "@material-ui/icons/Person";
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   drawer: {
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up('sm')]: {
       width: drawerWidth,
       flexShrink: 0,
     },
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up('sm')]: {
       display: 'none',
     },
   },
@@ -75,13 +75,13 @@ const useStyles = makeStyles((theme) => ({
   },
   sectionDesktop: {
     display: 'none',
-    [theme.breakpoints.up('lg')]: {
+    [theme.breakpoints.up('md')]: {
       display: 'flex',
     },
   },
   sectionMobile: {
     display: 'flex',
-    [theme.breakpoints.up('lg')]: {
+    [theme.breakpoints.up('md')]: {
       display: 'none',
     },
   },
@@ -105,10 +105,10 @@ const GET_INVESTOR = gql`
 
 
 export default function Sidebar(props) {
-  const {userProfile} = useAuth(GET_INVESTOR);
+  const { userProfile } = useAuth(GET_INVESTOR);
   const location = useLocation();
 
-  const {window} = props;
+  const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -125,17 +125,17 @@ export default function Sidebar(props) {
     {
       to: "/",
       title: "Home",
-      icon: <HomeIcon/>,
+      icon: <HomeIcon />,
     },
     {
       to: "/investments",
       title: "Investments",
-      icon: <BarChartIcon/>,
+      icon: <BarChartIcon />,
     },
     {
       to: "/profile",
       title: "Profile",
-      icon: <PersonIcon/>,
+      icon: <PersonIcon />,
     },
     // {
     //   to: "/funds",
@@ -151,38 +151,38 @@ export default function Sidebar(props) {
 
   const drawer = (
     <div>
-      <div className={classes.toolbar}/>
+      <div className={classes.toolbar} />
       <List>
         {menus.map(
           ({
-             to,
-             title,
-             icon
-           }) => (
-            <div key={`menu-${title}`} onClick={mobileOpen ? handleDrawerClose : null}
-                 className={`sidebar-nav-item ${location.pathname === to ? "sidebar-nav-item-active" : ""}`}>
-              <ListItem component={Link} to={to} button>
-                <ListItemIcon className={classes.icon}>
-                  {icon}
-                </ListItemIcon>
-                <ListItemText primary={title}/>
-              </ListItem>
-            </div>
-          )
+            to,
+            title,
+            icon
+          }) => (
+              <div key={`menu-${title}`} onClick={mobileOpen ? handleDrawerClose : null}
+                className={`sidebar-nav-item ${location.pathname === to ? "sidebar-nav-item-active" : ""}`}>
+                <ListItem component={Link} to={to} button>
+                  <ListItemIcon className={classes.icon}>
+                    {icon}
+                  </ListItemIcon>
+                  <ListItemText primary={title} />
+                </ListItem>
+              </div>
+            )
         )}
       </List>
       {userProfile.admin && <>
-        <Divider/>
+        <Divider />
         <List>
           <div className={`sidebar-nav-item ${location.pathname === "/admin/funds" ? "sidebar-nav-item-active" : ""}`}>
             <ListItem component={Link} to="/admin/funds" button>
               <ListItemIcon className={classes.icon}>
-                <AccountBalanceIcon/>
+                <AccountBalanceIcon />
               </ListItemIcon>
-              <ListItemText primary="Funds"/>
+              <ListItemText primary="Funds" />
             </ListItem>
           </div>
-          <AdminLinks location={location}/>
+          <AdminLinks location={location} />
         </List>
       </>}
     </div>
@@ -191,60 +191,60 @@ export default function Sidebar(props) {
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (<>
-      <div className={classes.root}>
-        <CssBaseline/>
-        <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              className={classes.menuButton}>
-              <MenuIcon/>
-            </IconButton>
-            <div className={classes.brand}>
-              <Brand/>
-            </div>
-            <NavBar/>
-          </Toolbar>
-        </AppBar>
-        <nav className={classes.drawer} aria-label="mailbox folders">
-          <Hidden mdUp implementation="css">
-            <Drawer
-              container={container}
-              variant="temporary"
-              anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-              open={mobileOpen}
-              onClose={handleDrawerToggle}
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-              ModalProps={{
-                keepMounted: true,
-              }}
-            >
-              {drawer}
-            </Drawer>
-          </Hidden>
-          <Hidden smDown implementation="css">
-            <Drawer
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-              variant="permanent"
-              open
-            >
-              {drawer}
-            </Drawer>
-          </Hidden>
-        </nav>
-        <main className={classes.content} style={{background:"rgba(0,0,0,0.01)"}}>
-          <div className={classes.toolbar}/>
-          {props.children}
-        </main>
-      </div>
-    </>
+    <div className={classes.root}>
+      <CssBaseline />
+      <AppBar position="fixed" className={classes.appBar}>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            className={classes.menuButton}>
+            <MenuIcon />
+          </IconButton>
+          <div className={classes.brand}>
+            <Brand />
+          </div>
+          <NavBar />
+        </Toolbar>
+      </AppBar>
+      <nav className={classes.drawer} aria-label="mailbox folders">
+        <Hidden mdUp implementation="css">
+          <Drawer
+            container={container}
+            variant="temporary"
+            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            ModalProps={{
+              keepMounted: true,
+            }}
+          >
+            {drawer}
+          </Drawer>
+        </Hidden>
+        <Hidden smDown implementation="css">
+          <Drawer
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            variant="permanent"
+            open
+          >
+            {drawer}
+          </Drawer>
+        </Hidden>
+      </nav>
+      <main className={classes.content} style={{ background: "rgba(0,0,0,0.01)" }}>
+        <div className={classes.toolbar} />
+        {props.children}
+      </main>
+    </div>
+  </>
   )
 }
 
@@ -259,14 +259,14 @@ function Brand() {
   const dealMatches = dealMatch && dealMatch.params.organization && !whitelist.includes(dealMatch.params.organization)
   if (adminMatches || dealMatches) {
     const slug = adminMatches ? match.params.organization : dealMatch.params.organization
-    return <OrgLogo slug={slug}/>
+    return <OrgLogo slug={slug} />
   }
 
   return (
     <img onClick={() => history.push('/')}
-         src="https://allocations-public.s3.us-east-2.amazonaws.com/allocations-logo.svg"
-         alt="allocations"
-         style={{height: "60px", width: "auto"}}/>
+      src="https://allocations-public.s3.us-east-2.amazonaws.com/allocations-logo.svg"
+      alt="allocations"
+      style={{ height: "60px", width: "auto" }} />
   )
 }
 
@@ -278,14 +278,14 @@ function deSlugify(slug) {
   }
 }
 
-function OrgLogo({slug}) {
+function OrgLogo({ slug }) {
   const history = useHistory()
   const [img, setImg] = useState(`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${slug}.png`)
 
   if (!img) {
     return (
       <div className="brand" onClick={() => history.push(`/admin/${slug}`)}>
-        <span style={{height: "60px", width: "180px", textAlign: "center", fontSize: "1.5em"}}>
+        <span style={{ height: "60px", width: "180px", textAlign: "center", fontSize: "1.5em" }}>
           <b>{deSlugify(slug)}</b>
         </span>
       </div>
@@ -295,9 +295,9 @@ function OrgLogo({slug}) {
   return (
     <div className="brand" onClick={() => history.push(`/admin/${slug}`)}>
       <img height="60px" width="180px"
-           alt={slug}
-           onError={() => setImg(null)}
-           src={img}/>
+        alt={slug}
+        onError={() => setImg(null)}
+        src={img} />
     </div>
   )
 }
@@ -310,7 +310,7 @@ function Footer() {
   )
 }
 
-function AdminLinks({location}) {
+function AdminLinks({ location }) {
 
 
   const match = useRouteMatch('/admin/:organization')
@@ -319,7 +319,7 @@ function AdminLinks({location}) {
   const classes = useStyles();
 
   if (!match) return null
-  const {params: {organization}} = match
+  const { params: { organization } } = match
   if (organization === "funds") return null
 
   return (
