@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     backgroundColor: "#FFFFFF",
     minWidth: '100%',
-    minHeight: '400px'
+    minHeight: '400px',
   },
   divider: {
     margin: "16px -16px"
@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: '200px',
     minHeight: '250px',
     backgroundColor: "##FBFCFC",
+    boxShadow: "none",
   },
   avatar: {
     margin: '0.25rem',
@@ -93,13 +94,13 @@ export default ({deal}) => {
   if (loading) return <Loader/>
 
   return (
-    <Grid container justify="center" spacing={3}>
+    <Grid container spacing={3}>
       {categories.map((value) => (
         <Grid key={value.title} item>
           <Paper className={classes.innerPaper}>
-          <Typography variant="h6" gutterBottom style={{padding:"8px"}}>
-            {value.title}
-          </Typography>
+            <Typography variant="h6" gutterBottom style={{padding: "8px"}}>
+              {value.title}
+            </Typography>
             {value?.categoryInvestments?.map(inv => <InvestmentSquare investment={inv}/>)}
           </Paper>
         </Grid>

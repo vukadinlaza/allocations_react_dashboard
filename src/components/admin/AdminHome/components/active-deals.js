@@ -37,8 +37,8 @@ export default function ActiveDeals({orgData}) {
               Active Deals: {(active || []).length}
             </Typography>
             <Button color="primary"
-                  variant="contained" onClick={() => history.push(`/admin/${org.slug}/deal/new`)}>Create Deal</Button>
-        </Grid>
+                    variant="contained" onClick={() => history.push(`/admin/${org.slug}/deal/new`)}>Create Deal</Button>
+          </Grid>
           <Table>
             <TableHead>
               <TableRow>
@@ -87,13 +87,16 @@ function Deal({deal, investments}) {
         <TableCell>{<FontAwesomeIcon icon={hasSOW ? 'check-circle' : 'times-circle'} size="lg"
                                      color="green"/>}</TableCell>
         <TableCell style={{textAlign: "right"}}>
-          <Button color="primary" onClick={() => history.push(`/admin/${organization}/deals/${deal._id}/edit`)} style={{ textTransform: 'lowercase'}}>
+          <Button color="primary" onClick={() => history.push(`/admin/${organization}/deals/${deal._id}/edit`)}
+                  style={{textTransform: 'lowercase'}}>
             edit
           </Button>
         </TableCell>
       </TableRow>
-      {activeDeal && <TableRow>
-        <InvestmentFlow deal={deal} investments={investments}/>
+      {activeDeal && <TableRow style={{borderTop: "0"}}>
+        <TableCell colspan="5">
+          <InvestmentFlow deal={deal} investments={investments}/>
+        </TableCell>
       </TableRow>
       }
     </>
