@@ -36,6 +36,31 @@ const GET_INVESTMENTS = gql`
           company_description
           date_closed
           slug
+          dealParams {
+            totalRoundSize
+            allocation
+            totalCarry
+            minimumInvestment
+            signDeadline
+            wireDeadline
+            estimatedSetupCosts
+            estimatedSetupCostsDollar
+            estimatedTerm
+            managementFees
+            managementFeesDollar
+            portfolioTotalCarry
+            portfolioEstimatedSetupCosts
+            portfolioEstimatedSetupCostsDollar
+            portfolioManagementFees
+            portfolioManagementFeesDollar
+            fundTotalCarry
+            fundEstimatedSetupCosts
+            fundEstimatedSetupCostsDollar
+            fundManagementFees
+            fundManagementFeesDollar
+            fundGeneralPartner
+            fundEstimatedTerm
+          }
         }
         documents {
           path
@@ -68,14 +93,14 @@ function renderChart(investments) {
 
   const x = d3.scaleTime()
     .rangeRound([0, chartWidth])
-    .domain(d3.extent(data, d => new Date(d.date_closed)))
+    .domain(d3.extent(data, d => new Date(d.dealParams.wireDeadline)))
 
   const y = d3.scaleLinear()
     .range([chartHeight, 0])
-    .domain(d3.extent(data, d => new Date(d.date_closed)))
+    .domain(d3.extent(data, d => new Date(d.dealParams.wireDeadline)))
 
   const line = d3.line()
-    .x(d => x(new Date(d.date_closed)))
+    .x(d => x(new Date(d.dealParams.wireDeadline)))
     .y(d => y(d.amount))
     .curve(d3.curveMonotoneX)
 
@@ -114,7 +139,7 @@ export default function Investments() {
 
   if (!data) return <div><Loader /></div>
 
-  const investments = _.orderBy(_.get(data, 'organization.investments', []), i => new Date(i.deal.date_closed).getTime(), 'desc')
+  const investments = _.orderBy(_.get(data, 'organization.investments', []), i => new Date(i.deal.dealParams.wireDeadline).getTime(), 'desc')
   if (showDocs) {
     investments.splice(investments.findIndex(i => i._id === showDocs._id) + 1, 0, { showDocs })
   }
@@ -144,7 +169,7 @@ export default function Investments() {
               <TableCell>Description</TableCell>
               <TableCell align="right">Amount</TableCell>
               <TableCell>Status</TableCell>
-              {/* <TableCell align="center">Closing Date</TableCell> */}
+              <TableCell align="center">Closing Date</TableCell>
               <TableCell align="right">Docs</TableCell>
               <TableCell></TableCell>
             </TableRow>
@@ -161,7 +186,7 @@ export default function Investments() {
                     <span
                       className={`investment-status investment-status-${investment.status}`}>{investment.status}</span>
                   </TableCell>
-                  {/* <TableCell align="center">{formatDate(investment.deal.date_closed)}</TableCell> */}
+                  <TableCell align="center">{formatDate(investment.deal.dealParams.wireDeadline)}</TableCell>
                   <TableCell align="right">
                     {_.get(investment, 'documents.length', 0) > 0
                       ? showDocs && (showDocs._id === investment._id)

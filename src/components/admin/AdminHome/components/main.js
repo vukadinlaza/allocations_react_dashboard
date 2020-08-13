@@ -188,7 +188,7 @@ function Settings({ investor, orgData, refetch }) {
           <Typography variant="body2">
             Provision of Services
             {hasDoc && <CheckCircleIcon color="secondary" style={{ marginLeft: 8 }} />}
-            {!hasDoc && <Typography variant="body2" onClick={() => setModal(!hasDoc ? true : false)}>
+            {!hasDoc && <Typography variant="body2" onClick={() => setModal(!hasDoc ? true : false)} style={{cursor:"pointer"}}>
               Get Started
             </Typography>}
           </Typography>
