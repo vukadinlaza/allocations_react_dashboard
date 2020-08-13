@@ -6,7 +6,12 @@ import {
   Typography,
 } from '@material-ui/core';
 import { makeStyles } from "@material-ui/core/styles";
-
+import { useMutation } from '@apollo/react-hooks'
+import { toLower, get, pick } from 'lodash'
+import { gql } from 'apollo-boost'
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useHistory } from "react-router-dom"
 import ActiveDeals from './active-deals'
 import OrgCards from './org-cards'
 import ClosedDeals from './closed-deals'
@@ -123,15 +128,18 @@ export default function OrganizationOverview({ orgData, superAdmin }) {
         {tab === "profile" && <OrgCards organization={organization} investor={orgData.investor} />}
         {tab === "all-investors" && <Investors />}
         {tab === "investments" && <Investments />}
-        {tab === "setting" && <Settings />}
+        {tab === "setting" && <Settings orgData={orgData.organization} investor={orgData.investor} />}
       </>
     </>
   )
 }
 
-function Settings() {
+function Settings({ investor, orgData }) {
   const classes = useStyles();
+  const [modal, setModal] = useState()
 
+  const docs = investor.documents ? investor.documents : [];
+  const hasDoc = docs.find(d => toLower(d.documentName).includes(toLower('Provision')))
   return <>
     <Paper className={classes.paper} style={{ marginBottom: 16 }}>
       <Grid container spacing={3}>
@@ -171,7 +179,7 @@ function Settings() {
           <Typography variant="body2">
             Provision of Services
             {hasDoc && <CheckCircleIcon color="secondary" style={{ marginLeft: 8 }} />}
-            {!hasDoc && <Typography variant="body2" onClick={() => setModal(!hasDoc ? true : false)} style={{cursor:"pointer"}}>
+            {!hasDoc && <Typography variant="body2" onClick={() => setModal(!hasDoc ? true : false)} style={{ cursor: "pointer" }}>
               Get Started
             </Typography>}
           </Typography>
