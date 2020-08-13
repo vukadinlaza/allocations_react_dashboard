@@ -12,7 +12,10 @@ import {
   Paper,
   Divider,
   Grid,
-  FormControl
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel
 } from '@material-ui/core'
 import { makeStyles } from "@material-ui/core/styles";
 import Loader from '../utils/Loader'
@@ -148,6 +151,21 @@ export default function InvestmentEdit() {
                   value={`${get(investment, 'deal.company_name', "")} ${get(investment, 'deal.company_description', "")}`}
                   label="Deal"
                   variant="outlined" />
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={12} md={6}>
+              <FormControl
+                variant="outlined"
+                style={{ width: "100%" }}>
+                <InputLabel>Status</InputLabel>
+                <Select value={investment?.status || ''}
+                  onChange={e => updateInvestmentProp({ prop: "status", newVal: e.target.value })}
+                  inputProps={{ name: 'status' }}>
+                  <MenuItem value="invited">Invited</MenuItem>
+                  <MenuItem value="signed">Signed</MenuItem>
+                  <MenuItem value="wired">Wired</MenuItem>
+                  <MenuItem value="complete">Complete</MenuItem>
+                </Select>
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={12} md={6}>

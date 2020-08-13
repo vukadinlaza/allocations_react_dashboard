@@ -1,6 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
-import {gql} from 'apollo-boost'
+import { gql } from 'apollo-boost'
 import {
   Grid,
   Typography,
@@ -11,13 +11,13 @@ import {
   ListItemText,
   ListItemSecondaryAction
 } from '@material-ui/core'
-import {makeStyles} from "@material-ui/core/styles";
-import {useQuery} from '@apollo/react-hooks'
+import { makeStyles } from "@material-ui/core/styles";
+import { useQuery } from '@apollo/react-hooks'
 import Loader from '../../../../utils/Loader'
 import Box from "@material-ui/core/Box";
 import CheckIcon from '@material-ui/icons/Check';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -51,11 +51,10 @@ const useStyles = makeStyles((theme) => ({
 // if investment status is 'wired' item should show in 'Complete' column
 
 const boardData = [
-  {title: 'Viewed', key: 'invited'},
-  {title: 'Signed', key: 'sign'},
-  // {title: 'KYC', key: 'kyc'},
-  {title: 'Wired', key: 'wire'},
-  {title: 'Completed', key: 'complete'},
+  { title: 'Viewed', key: 'invited' },
+  { title: 'Signed', key: 'signed' },
+  { title: 'Wired', key: 'wired' },
+  { title: 'Completed', key: 'complete' },
 ]
 
 
@@ -75,51 +74,35 @@ export const DEAL_INVESTMENTS = gql`
   }
 `
 
-export default ({deal}) => {
+export default ({ deal }) => {
   const classes = useStyles()
-  const {data, loading} = useQuery(DEAL_INVESTMENTS, {
-    variables: {_id: deal._id},
+  const { data, loading } = useQuery(DEAL_INVESTMENTS, {
+    variables: { _id: deal._id },
     pollInterval: 500
   })
   const investments = data?.deal?.investments.map(inv => {
     const hasKycDoc = inv.investor?.documents?.find(d => d.documentName && (d.documentName.includes('W-8') || d.documentName.includes('W-9')))
-    if (inv.status === 'invited' && !hasKycDoc) {
-      inv.status = 'sign'
-      return inv
-    }
-    /*if (inv.status === 'signed' && !hasKycDoc) {
-      inv.status = 'kyc'
-      return inv
-    }*/
-    if (inv.status === 'signed' && hasKycDoc) {
-      inv.status = 'wire'
-      return inv
-    }
-    if (inv.status === 'wired') {
-      inv.status = 'complete'
-      return inv
-    }
-    return inv
+    return { ...inv, hasKycDoc }
   })
   const groupedInvestments = _.groupBy(investments, 'status')
 
   const categories = boardData.map(type => {
     const categoryInvestments = groupedInvestments[type.key]
-    return {...type, categoryInvestments}
+    return { ...type, categoryInvestments }
   }) || []
 
-  if (loading) return <Loader/>
+  if (loading) return <Loader />
 
   return (
     <Grid container spacing={2} justify="space-between">
       {categories.map((value) => (
         <Grid key={value.title} item xs={12} sm={3}>
           <Box height="100%" className={classes.board}>
-            <Typography variant="h6" style={{padding: "8px", textTransform: "uppercase", fontSize: "16px"}}>
+            <Typography variant="h6" style={{ padding: "8px", textTransform: "uppercase", fontSize: "16px" }}>
               {value.title}
             </Typography>
             <List dense className={classes.list}>
-              {value?.categoryInvestments?.map(inv => <InvestmentSquare investment={inv}/>)}
+              {value?.categoryInvestments?.map(inv => <InvestmentSquare investment={inv} />)}
             </List>
           </Box>
         </Grid>
@@ -128,9 +111,7 @@ export default ({deal}) => {
   )
 }
 
-const checked = true;
-
-const InvestmentSquare = ({investment}) => {
+const InvestmentSquare = ({ investment }) => {
   const classes = useStyles();
   return (
     <ListItem disableGutters className={classes.listItem}>
@@ -139,10 +120,10 @@ const InvestmentSquare = ({investment}) => {
           {investment.investor.email.charAt(0).toUpperCase()}
         </Avatar>
       </ListItemAvatar>
-      <ListItemText style={{overflow: "hidden", textOverflow: "ellipsis"}} primary={investment.investor.email}/>
+      <ListItemText style={{ overflow: "hidden", textOverflow: "ellipsis" }} primary={investment.investor.email} />
       <ListItemSecondaryAction>
-        <FontAwesomeIcon icon={checked ? 'check-circle' : 'times-circle'} size="lg"
-                         color="#39BE53"/>
+        <FontAwesomeIcon icon={investment.hasKycDoc ? 'check-circle' : 'times-circle'} size="lg"
+          color="#39BE53" />
       </ListItemSecondaryAction>
     </ListItem>
   )
