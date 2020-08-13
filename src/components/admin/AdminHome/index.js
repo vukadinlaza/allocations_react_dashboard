@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, {useState, useEffect} from 'react'
 import _ from 'lodash'
-import { useMutation, useQuery } from '@apollo/react-hooks'
-import { gql } from 'apollo-boost'
-import { useAuth } from "../../../auth/useAuth"
-import { useParams, Link } from 'react-router-dom'
-import { nWithCommas, formatDate } from '../../../utils/numbers'
-import { Paper, Table, TableBody, TableCell, TableRow, TableHead, Button, LinearProgress } from '@material-ui/core'
-import { Col, Row } from 'reactstrap'
+import {useMutation, useQuery} from '@apollo/react-hooks'
+import {gql} from 'apollo-boost'
+import {useAuth} from "../../../auth/useAuth"
+import {useParams, Link} from 'react-router-dom'
+import {nWithCommas, formatDate} from '../../../utils/numbers'
+import {Paper, Table, TableBody, TableCell, TableRow, TableHead, Button, LinearProgress} from '@material-ui/core'
+import {Col, Row} from 'reactstrap'
 import Loader from '../../utils/Loader'
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import { useHistory } from "react-router-dom"
+import {useHistory} from "react-router-dom"
 import Typography from "@material-ui/core/Typography";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
@@ -93,9 +93,6 @@ export const ORG_OVERVIEW = gql`
       _id
       admin
       documents
-      first_name
-      last_name
-      name
     }
   }
 `
@@ -117,7 +114,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function sumOrgInvestments({ investor, deals }) {
+function sumOrgInvestments({investor, deals}) {
   const deal_ids = deals.map(d => d._id)
   return investor.investments.reduce((acc, inv) => {
     if (deal_ids.includes(inv.deal._id)) {
@@ -131,23 +128,23 @@ export default function AdminHome() {
   const classes = useStyles();
   const history = useHistory()
 
-  const { organization } = useParams()
-  const { data, error, refetch } = useQuery(ORG_OVERVIEW, {
-    variables: { slug: organization }
+  const {organization} = useParams()
+  const {data, error, refetch} = useQuery(ORG_OVERVIEW, {
+    variables: {slug: organization}
   })
 
-  if (!data) return <Loader />
+  if (!data) return <Loader/>
 
   const org = data.organization
 
-  const { active, closed } = _.groupBy(org.deals, d => d.status === "closed" ? "closed" : "active")
+  const {active, closed} = _.groupBy(org.deals, d => d.status === "closed" ? "closed" : "active")
 
   return (
     <>
 
-      <OrganizationOverview orgData={data} refetch={refetch} superAdmin={data.investor.admin && <Grid item xs={12}>
-        <SuperAdmin org={org} />
-      </Grid>} />
+      <OrganizationOverview orgData={data} superAdmin={data.investor.admin && <Grid item xs={12}>
+        <SuperAdmin org={org}/>
+      </Grid>}/>
 
       {/* <Grid container spacing={2}>
         {data.investor.admin && <Grid item xs={12}>
@@ -269,19 +266,19 @@ export default function AdminHome() {
   )
 }
 
-function SuperAdmin({ org }) {
+function SuperAdmin({org}) {
   const history = useHistory();
   return (
     <>
-      You are a SuperAdmin <Button style={{ marginLeft: 16 }} onClick={() => history.push(`/admin/${org.slug}/manager`)} size="large"
-        variant="contained" color="primary">Manage</Button>
+      You are a SuperAdmin <Button style={{marginLeft: 16}} onClick={() => history.push(`/admin/${org.slug}/manager`)} size="large"
+                                         variant="contained" color="primary">Manage</Button>
     </>
   )
 }
 
-function Deal({ deal }) {
+function Deal({deal}) {
   const history = useHistory();
-  const { organization } = useParams();
+  const {organization} = useParams();
   const val = (Number(deal.amount_raised) / (Number(deal.target) || Infinity)) * 100;
 
   return (
@@ -290,10 +287,10 @@ function Deal({ deal }) {
       <TableCell>{deal.date_closed ? formatDate(deal.date_closed) : "TBD"}</TableCell>
       <TableCell>
         <div>{Math.round(val || 0)}%</div>
-        <LinearProgress className="deal-progress" variant="determinate" color="secondary" value={val} />
+        <LinearProgress className="deal-progress" variant="determinate" color="secondary" value={val}/>
         <div>${nWithCommas(deal.amount_raised)} of ${nWithCommas(deal.target)}</div>
       </TableCell>
-      <TableCell style={{ textAlign: "right" }}>
+      <TableCell style={{textAlign: "right"}}>
         <Button color="primary" onClick={() => history.push(`/admin/${organization}/deals/${deal._id}/edit`)}>
           edit
         </Button>
