@@ -139,7 +139,7 @@ const InvestmentSquare = ({investment}) => {
           {investment.investor.email.charAt(0).toUpperCase()}
         </Avatar>
       </ListItemAvatar>
-      <ListItemText primary={investment.investor.email}/>
+      <ListItemText style={{overflow: "hidden", textOverflow: "ellipsis"}} primary={investment.investor.email}/>
       <ListItemSecondaryAction>
         <FontAwesomeIcon icon={checked ? 'check-circle' : 'times-circle'} size="lg"
                          color="#39BE53"/>
