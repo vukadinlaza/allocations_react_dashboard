@@ -2,7 +2,18 @@ import React, {useState} from 'react'
 import _ from 'lodash'
 import {useParams} from 'react-router-dom'
 import {nWithCommas} from '../../../../utils/numbers'
-import {Paper, Table, TableBody, TableCell, TableRow, TableHead, Button, LinearProgress, Grid} from '@material-ui/core'
+import {
+  Paper,
+  Table,
+  IconButton,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHead,
+  Button,
+  LinearProgress,
+  Grid, ListItemSecondaryAction
+} from '@material-ui/core'
 import Loader from '../../../utils/Loader'
 import {makeStyles} from "@material-ui/core/styles";
 import {useHistory} from "react-router-dom"
@@ -11,7 +22,10 @@ import Divider from "@material-ui/core/Divider";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import moment from 'moment'
 import InvestmentFlow from './investmentFlow/index'
-
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import CheckIcon from '@material-ui/icons/Check';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 /***
  *
@@ -84,13 +98,18 @@ function Deal({deal, investments}) {
           <LinearProgress className="deal-progress" variant="determinate" color="secondary" value={val}/>
           <div>${nWithCommas(deal.amount_raised)} of ${nWithCommas(deal.target)}</div>
         </TableCell>
-        <TableCell>{<FontAwesomeIcon icon={hasSOW ? 'check-circle' : 'times-circle'} size="lg"
-                                     color="green"/>}</TableCell>
+        <TableCell>
+          {<FontAwesomeIcon icon={hasSOW ? 'check-circle' : 'times-circle'} size="lg"
+                            color="#39BE53"/>}</TableCell>
         <TableCell style={{textAlign: "right"}}>
-          <Button color="primary" onClick={() => history.push(`/admin/${organization}/deals/${deal._id}/edit`)}
-                  style={{textTransform: 'lowercase'}}>
-            edit
+          <Button color="primary" onClick={() => history.push(`/admin/${organization}/deals/${deal._id}/edit`)}>
+            Edit
           </Button>
+          <IconButton>
+            {activeDeal ?
+              <ExpandLessIcon/> : <ExpandMoreIcon/>
+            }
+          </IconButton>
         </TableCell>
       </TableRow>
       {activeDeal && <TableRow style={{borderTop: "0"}}>

@@ -17,6 +17,7 @@ import Loader from '../../../../utils/Loader'
 import Box from "@material-ui/core/Box";
 import CheckIcon from '@material-ui/icons/Check';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -50,11 +51,11 @@ const useStyles = makeStyles((theme) => ({
 // if investment status is 'wired' item should show in 'Complete' column
 
 const boardData = [
-  {title: 'View', key: 'invited'},
-  {title: 'Sign', key: 'sign'},
+  {title: 'Viewed', key: 'invited'},
+  {title: 'Signed', key: 'sign'},
   // {title: 'KYC', key: 'kyc'},
-  {title: 'Wire', key: 'wire'},
-  {title: 'Complete', key: 'complete'},
+  {title: 'Wired', key: 'wire'},
+  {title: 'Completed', key: 'complete'},
 ]
 
 
@@ -132,7 +133,7 @@ const checked = true;
 const InvestmentSquare = ({investment}) => {
   const classes = useStyles();
   return (
-    <ListItem className={classes.listItem}>
+    <ListItem disableGutters className={classes.listItem}>
       <ListItemAvatar>
         <Avatar alt={investment.investor.email} className={classes.avatar}>
           {investment.investor.email.charAt(0).toUpperCase()}
@@ -140,20 +141,8 @@ const InvestmentSquare = ({investment}) => {
       </ListItemAvatar>
       <ListItemText primary={investment.investor.email}/>
       <ListItemSecondaryAction>
-        {checked &&
-        <CheckIcon style={{
-          color: "#39BE53",
-          position: "absolute",
-          left: 6,
-          top: 6,
-          height: 20,
-          width: 20
-        }}/>}
-        <FiberManualRecordIcon style={{
-          color: "white",
-          height: 32,
-          idth: 32
-        }}/>
+        <FontAwesomeIcon icon={checked ? 'check-circle' : 'times-circle'} size="lg"
+                         color="#39BE53"/>
       </ListItemSecondaryAction>
     </ListItem>
   )
