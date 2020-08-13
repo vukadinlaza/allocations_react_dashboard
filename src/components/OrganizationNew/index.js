@@ -3,6 +3,7 @@ import { gql } from 'apollo-boost'
 import { useHistory } from 'react-router-dom'
 import { Col, Row } from 'reactstrap'
 import Cropper from 'react-easy-crop'
+import { toast } from 'react-toastify'
 import { useMutation } from '@apollo/react-hooks'
 import { Button, TextField, Paper, Grid } from '@material-ui/core'
 import { useSimpleReducer } from '../../utils/hooks'
@@ -25,13 +26,13 @@ const CREATE_ORG = gql`
   }
 `
 
-function valid (org) {
+function valid(org) {
   return org.name && org.slug
 }
 
-export default function OrganizationNew () {
+export default function OrganizationNew() {
   const history = useHistory()
-  const [organization, setOrg] = useSimpleReducer({ name: "", slug: ""}) 
+  const [organization, setOrg] = useSimpleReducer({ name: "", slug: "" })
   const [createOrg, { data, error, loading }] = useMutation(CREATE_ORG)
 
   useEffect(() => {
@@ -40,46 +41,46 @@ export default function OrganizationNew () {
 
   const submit = () => {
     if (valid(organization)) {
-      createOrg({ variables: { organization }})
+      createOrg({ variables: { organization }, onCompleted: toast.success('Success!') })
     }
   }
 
   return (
     <Paper>
-    <div className="OrganizationNew">
-      <Grid>
-      <Typography variant="h6" style={{paddingLeft: "16px", paddingTop: "16px"}} gutterBottom>
-              New Organization
+      <div className="OrganizationNew">
+        <Grid>
+          <Typography variant="h6" style={{ paddingLeft: "16px", paddingTop: "16px" }} gutterBottom>
+            New Organization
       </Typography>
-      <Grid style={{padding: "16px"}} >
-      <Grid style={{paddingBottom: "16px"}} >
-          <TextField style={{width: "100%"}} 
-            value={organization.name}
-            onChange={e => setOrg({ name: e.target.value })} 
-            label="Organization Name" 
-            variant="outlined" />
-        </Grid>
-        <Grid style={{paddingBottom: "16px"}} >
-          <TextField style={{width: "100%", marginBottom: "15px"}} 
-            value={organization.slug}
-            onChange={e => setOrg({ slug: e.target.value.replace(" ", "") })} 
-            label="URL (no spaces)"
-            variant="outlined" />
+          <Grid style={{ padding: "16px" }} >
+            <Grid style={{ paddingBottom: "16px" }} >
+              <TextField style={{ width: "100%" }}
+                value={organization.name}
+                onChange={e => setOrg({ name: e.target.value })}
+                label="Organization Name"
+                variant="outlined" />
+            </Grid>
+            <Grid style={{ paddingBottom: "16px" }} >
+              <TextField style={{ width: "100%", marginBottom: "15px" }}
+                value={organization.slug}
+                onChange={e => setOrg({ slug: e.target.value.replace(" ", "") })}
+                label="URL (no spaces)"
+                variant="outlined" />
             </Grid>
           </Grid>
-      </Grid>
-      <Grid>
-        <LogoUpload organization={organization} setOrg={setOrg} />
-      </Grid>
-      <Grid style={{padding:"16px"}}>
+        </Grid>
+        <Grid>
+          <LogoUpload organization={organization} setOrg={setOrg} />
+        </Grid>
+        <Grid style={{ padding: "16px" }}>
           <Button variant="contained" color="primary" disabled={!valid(organization)} onClick={submit}>CREATE</Button>
-      </Grid>
-    </div>
+        </Grid>
+      </div>
     </Paper>
   )
 }
 
-function LogoUploadAlt ({ organization, setOrg }) {
+function LogoUploadAlt({ organization, setOrg }) {
   const [zoom, setZoom] = useState(0)
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
@@ -90,9 +91,9 @@ function LogoUploadAlt ({ organization, setOrg }) {
 
   if (organization.logoSrc) {
     return (
-      <Col md={{size: 8, offset: 1}}>
+      <Col md={{ size: 8, offset: 1 }}>
         <span className="file-label">Logo &nbsp;&nbsp;</span>
-        <div style={{ height: "360px", width: "100%", border: "1px dotted red", position: "relative"}}>
+        <div style={{ height: "360px", width: "100%", border: "1px dotted red", position: "relative" }}>
           <Cropper
             image={organization.logoSrc}
             crop={crop}
@@ -107,12 +108,12 @@ function LogoUploadAlt ({ organization, setOrg }) {
   }
 
   return (
-    <Col md={{size: 4, offset: 1}}>
-       <span className="file-label">Logo (3:1 width to height) &nbsp;&nbsp;</span>
-       <Button variant="contained" component="label">
-         Upload&nbsp;&nbsp;
-         <input type="file" 
-          style={{ display: "none" }} 
+    <Col md={{ size: 4, offset: 1 }}>
+      <span className="file-label">Logo (3:1 width to height) &nbsp;&nbsp;</span>
+      <Button variant="contained" component="label">
+        Upload&nbsp;&nbsp;
+         <input type="file"
+          style={{ display: "none" }}
           onChange={async ({ target }) => {
             if (target.validity.valid) {
               setOrg({ logo: target.files[0], logoSrc: await readFile(target.files[0]) })
@@ -131,10 +132,10 @@ function readFile(file) {
   })
 }
 
-function LogoUpload ({ organization, setOrg }) {
+function LogoUpload({ organization, setOrg }) {
   if (organization.logo) {
     return (
-      <Grid style={{padding:"16px"}}>
+      <Grid style={{ padding: "16px" }}>
         <span className="file-label">Logo &nbsp;&nbsp;</span>
         <FontAwesomeIcon icon="check" />
       </Grid>
@@ -142,12 +143,12 @@ function LogoUpload ({ organization, setOrg }) {
   }
 
   return (
-    <Grid style={{padding:"16px"}}>
+    <Grid style={{ padding: "16px" }}>
       <span className="file-label">Logo (3:1 width to height) &nbsp;&nbsp;</span>
       <Button variant="contained" component="label">
         Upload&nbsp;&nbsp;
-        <input type="file" 
-          style={{ display: "none" }} 
+        <input type="file"
+          style={{ display: "none" }}
           onChange={({ target }) => {
             if (target.validity.valid) setOrg({ logo: target.files[0] })
           }} />

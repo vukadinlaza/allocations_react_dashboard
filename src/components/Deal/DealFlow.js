@@ -86,12 +86,6 @@ export default function InvestmentFlow({ investment, deal, investor, refetch }) 
   const [status, setStatus] = useState("invited")
   const classes = useStyles();
 
-  if (!investment) return <Paper style={{ padding: "25px" }}><Loader /></Paper>
-
-  if (status === "complete") {
-    return <CompleteInvestment investment={investment} />
-  }
-
   const onboardingLinkType = getOnboardingLinkType(deal.onboarding_link) || 'docusign'
   const { approved } = deal
 
