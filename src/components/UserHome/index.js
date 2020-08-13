@@ -56,8 +56,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const chartOptions = {
-  minColor: "#51D5FD",
-  maxColor: "#0661A3",
+  minColor: '#A5BEFB',
+  midColor: '#628DF8',
+  maxColor: '#205df5',
   headerHeight: 0,
   fontColor: "#fff",
   highlightColor: "#fff",
@@ -235,7 +236,7 @@ export default function UserHome(props) {
                   <Grid container>
                     <Grid item xs={12} sm={5}>
                       <img src={allocations_total_investments}
-                           style={{maxWidth: 200, width: "100%", paddingRight: 16}}/>
+                           style={{maxWidth: 200, width: "100%", paddingLeft: 16}}/>
                     </Grid>
                     <Grid item xs={12} sm={7}>
                       <Typography variant="h5" className={classes.grey}>
@@ -321,9 +322,11 @@ export default function UserHome(props) {
         </Grid>
 
         <Grid item xs={12} sm={12} md={6}>
-          <NullPaper title="FAQ" text="Find all your answers here"
+        <a href="https://docs.allocations.com" target="_blank" rel="noopener noreferrer">
+        <NullPaper title="FAQ" text="Find all your answers here"
                      image={allocations_faq} button="Get Started"
-                     onClick={() => `https://docs.allocations.com/`}/>
+                     />
+        </a>
         </Grid>
 
 
