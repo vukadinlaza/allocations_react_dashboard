@@ -14,6 +14,7 @@ import * as d3 from 'd3'
 import { Grid, Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core'
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import { getDisplayName } from '../../utils/displayName';
 
 
 /***
@@ -73,6 +74,7 @@ const GET_INVESTMENTS = gql`
           last_name
           investor_type
           entity_name
+          email
         }
       }
     }
@@ -178,7 +180,7 @@ export default function Investments() {
             {investments.map((investment) => (
               investment.showDocs ? <DocsRow docs={showDocs.documents} />
                 : <TableRow key={investment._id} className="investment-row">
-                  <TableCell>{_.get(investment, 'investor.name')}</TableCell>
+                  <TableCell>{getDisplayName({ investor: investment.investor })}</TableCell>
                   <TableCell scope="row">{investment.deal.company_name}</TableCell>
                   <TableCell>{investment.deal.company_description}</TableCell>
                   <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) : "TBD"}</TableCell>

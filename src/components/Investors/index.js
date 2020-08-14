@@ -7,6 +7,7 @@ import { useAuth } from "../../auth/useAuth";
 import { Row, Col } from 'reactstrap'
 import { nWithCommas } from '../../utils/numbers'
 import Loader from "../utils/Loader"
+import { getDisplayName } from '../../utils/displayName';
 
 import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, Grid } from '@material-ui/core'
 
@@ -95,7 +96,7 @@ export default function Investors() {
               <TableBody>
                 {_.orderBy(investors, ({ investments }) => _.sumBy(investments, 'amount'), 'desc').map(investor => (
                   <TableRow key={investor._id}>
-                    <TableCell>{investor.investor_type === "entity" ? investor.entity_name : `${investor.first_name} ${investor.last_name}`}</TableCell>
+                    <TableCell>{getDisplayName({ investor })}</TableCell>
                     <TableCell>{investor.email}</TableCell>
                     <TableCell>{investor.investments.length}</TableCell>
                     <TableCell>${nWithCommas(_.sumBy(investor.investments, 'amount'))}</TableCell>
