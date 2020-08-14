@@ -149,7 +149,7 @@ export default function Investments() {
       <Paper className={classes.paper}>
         <Grid container justify="space-between">
           <Grid item>
-          <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" gutterBottom>
               Total Invested: <span className={classes.green}>${nWithCommas(_.sumBy(investments, 'amount'))}</span>
             </Typography>
           </Grid>

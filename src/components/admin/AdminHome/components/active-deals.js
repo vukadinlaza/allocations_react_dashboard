@@ -107,7 +107,7 @@ function Deal({ deal, investments }) {
               color="#39BE53" />}</TableCell>
         </Hidden>
         <TableCell style={{ textAlign: "right" }}>
-          <Button color="primary" onClick={() => history.push(`/admin/${organization}/deals/${deal._id}/edit`)}>
+          <Button color="primary" style={{ textTransform: 'lowercase' }} onClick={() => history.push(`/admin/${organization}/deals/${deal._id}/edit`)}>
             Edit
           </Button>
           <IconButton>

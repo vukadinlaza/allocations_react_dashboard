@@ -63,24 +63,24 @@ export default function Investors() {
   }, []).filter(inv => inv), 'email')
   return (
     <div className="Investors">
-        {/* {organization === "allocations" && <Col sm={{ size: 12 }}>
+      {/* {organization === "allocations" && <Col sm={{ size: 12 }}>
           <Paper className="actions">
             <Link to="/investors/new">
               <Button variant="contained" color="secondary">INVITE INVESTOR</Button>
             </Link>
           </Paper>
         </Col>} */}
-    <Grid container>
-      <Grid item xs={12}>
+      <Grid container>
+        <Grid item xs={12}>
           <Paper className="table-wrapper">
-          <Grid container xs={12} justify="space-between" style={{padding: "16px"}}>
-            <Typography variant="h6" gutterBottom>
-              Investors
+            <Grid container xs={12} justify="space-between" style={{ padding: "16px" }}>
+              <Typography variant="h6" gutterBottom>
+                Investors
             </Typography>
-            {organization === "allocations" && <Link to="/investors/new">
-              <Button variant="contained" color="secondary">INVITE INVESTOR</Button>
-            </Link>}
-        </Grid>
+              {organization === "allocations" && <Link to="/investors/new">
+                <Button variant="contained" color="secondary">INVITE INVESTOR</Button>
+              </Link>}
+            </Grid>
             <Table>
               <TableHead>
                 <TableRow>
@@ -106,7 +106,6 @@ export default function Investors() {
                       }
                     </TableCell>
                     <TableCell>
-                      <Link to={`/investor/${investor._id}/edit`}>edit</Link>
                     </TableCell>
                   </TableRow>
                 ))}

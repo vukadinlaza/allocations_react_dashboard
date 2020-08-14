@@ -669,9 +669,10 @@ export default function DealEdit() {
               <DataRoom refetch={refetch} deal={deal} />
               <Grid item xs={12} sm={6}>
                 <TextField
+                  disabled
                   style={{ width: "100%" }}
-                  label="Public Link"
-                  value={window.origin + (deal.publicLink || "")}
+                  label="Deal ID"
+                  value={(deal._id || "")}
                   InputProps={{
                     endAdornment: <InputAdornment position="end"><FontAwesomeIcon icon="copy"
                       onClick={() => navigator.clipboard.writeText(window.origin + (deal.publicLink || ""))} /></InputAdornment>,
