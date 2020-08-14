@@ -116,11 +116,11 @@ const InvestmentSquare = ({ investment }) => {
   return (
     <ListItem disableGutters className={classes.listItem}>
       <ListItemAvatar>
-        <Avatar alt={investment.investor.email} className={classes.avatar}>
-          {investment.investor.email.charAt(0).toUpperCase()}
+        <Avatar alt={investment?.investor?.email} className={classes.avatar}>
+          {investment?.investor?.email.charAt(0).toUpperCase()}
         </Avatar>
       </ListItemAvatar>
-      <ListItemText style={{ overflow: "hidden", textOverflow: "ellipsis" }} primary={investment.investor.email} />
+      <ListItemText style={{ overflow: "hidden", textOverflow: "ellipsis" }} primary={investment?.investor?.email} />
       <ListItemSecondaryAction>
         <FontAwesomeIcon icon={investment.hasKycDoc ? 'check-circle' : 'times-circle'} size="lg"
           color="#39BE53" />
