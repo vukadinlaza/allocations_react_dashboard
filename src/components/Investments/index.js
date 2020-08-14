@@ -149,7 +149,7 @@ export default function Investments() {
       <Paper className={classes.paper}>
         <Grid container justify="space-between">
           <Grid item>
-          <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" gutterBottom>
               Total Invested: <span className={classes.green}>${nWithCommas(_.sumBy(investments, 'amount'))}</span>
             </Typography>
           </Grid>
@@ -178,7 +178,7 @@ export default function Investments() {
             {investments.map((investment) => (
               investment.showDocs ? <DocsRow docs={showDocs.documents} />
                 : <TableRow key={investment._id} className="investment-row">
-                  <TableCell>{_.get(investment, 'investor.name')}</TableCell>
+                  <TableCell>{_.get(investment, 'investor.email')}</TableCell>
                   <TableCell scope="row">{investment.deal.company_name}</TableCell>
                   <TableCell>{investment.deal.company_description}</TableCell>
                   <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) : "TBD"}</TableCell>
