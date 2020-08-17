@@ -73,6 +73,7 @@ const GET_INVESTMENTS = gql`
           last_name
           investor_type
           entity_name
+          email
         }
       }
     }
