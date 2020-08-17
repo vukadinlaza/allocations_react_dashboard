@@ -476,41 +476,22 @@ function Onboarding({ investment, deal, investor, status }) {
   if (!investor) return <Loader />
 
   const params = {
-    Member_Type: _.upperFirst(investor.investor_type),
-    Member_Email: investor.email,
-    "Name 7a634dac-6bba-4543-83c0-2aed22ddd047": investor.signer_full_name,
-    "Country of residence": investor.country,
-    "subscriber name": investor.name
+    userEmail: investor.email,
   }
-
-  const investorStatus = investor.accredited_investor_status
-  switch (investor.investor_type) {
-    case "entity": {
-      params["Accredited Entity"] = investorStatus
-      break
-    }
-    case "individual": {
-      params["Accredited individual"] = investorStatus
-      break
-    }
-    default: {
-      break
-    }
-  }
-
 
   let urlParameters = Object.entries(params)
     .map(e => e.map(encodeURI).join("=")).join('&')
+  console.log('asdads', urlParameters)
 
   let link = location.pathname.includes('/public/')
     ? deal.onboarding_link
     : `${deal.onboarding_link}&${urlParameters}`
 
   if (deal.onboarding_link.includes('demo')) {
-    link = deal.onboarding_link
+    link = `${deal.onboarding_link}&${urlParameters}`
   }
 
-  console.log(deal.onboarding_link)
+  console.log(link)
 
   return (
     <div className={status === "pledged" ? "document-iframe" : "document-iframe hide"}>

@@ -61,7 +61,7 @@ export default function ActiveDeals({ orgData }) {
                 <TableCell>Closes</TableCell>
                 <Hidden only="xs">
                   <TableCell>Progress</TableCell>
-                  <TableCell>SOW</TableCell>
+                  <TableCell></TableCell>
                 </Hidden>
                 <TableCell>
                 </TableCell>
@@ -103,8 +103,7 @@ function Deal({ deal, investments }) {
             <div>${nWithCommas(deal.amount_raised)} of ${nWithCommas(deal.target)}</div>
           </TableCell>
           <TableCell>
-            {<FontAwesomeIcon icon={hasSOW ? 'check-circle' : 'times-circle'} size="lg"
-              color="#39BE53" />}</TableCell>
+          </TableCell>
         </Hidden>
         <TableCell style={{ textAlign: "right" }}>
           <Button color="primary" style={{ textTransform: 'lowercase' }} onClick={() => history.push(`/admin/${organization}/deals/${deal._id}/edit`)}>
