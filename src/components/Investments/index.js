@@ -14,6 +14,7 @@ import * as d3 from 'd3'
 import { Grid, Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core'
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import { getDisplayName } from '../../utils/displayName';
 
 
 /***

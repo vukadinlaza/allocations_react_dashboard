@@ -14,6 +14,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { useQuery } from '@apollo/react-hooks'
 import Loader from '../../../../utils/Loader'
+import { getDisplayName } from '../../../../../utils/displayName'
 import Box from "@material-ui/core/Box";
 import CheckIcon from '@material-ui/icons/Check';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
@@ -113,14 +114,15 @@ export default ({ deal }) => {
 
 const InvestmentSquare = ({ investment }) => {
   const classes = useStyles();
+  const name = getDisplayName({ investor: investment?.investor })
   return (
     <ListItem disableGutters className={classes.listItem}>
       <ListItemAvatar>
-        <Avatar alt={investment?.investor?.email} className={classes.avatar}>
-          {investment?.investor?.email.charAt(0).toUpperCase()}
+        <Avatar alt={name} className={classes.avatar}>
+          {name.charAt(0).toUpperCase()}
         </Avatar>
       </ListItemAvatar>
-      <ListItemText style={{ overflow: "hidden", textOverflow: "ellipsis" }} primary={investment?.investor?.email} />
+      <ListItemText style={{ overflow: "hidden", textOverflow: "ellipsis" }} primary={name} />
       <ListItemSecondaryAction>
         <FontAwesomeIcon icon={investment.hasKycDoc ? 'check-circle' : 'times-circle'} size="lg"
           color="#39BE53" />

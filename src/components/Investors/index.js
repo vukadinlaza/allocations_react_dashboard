@@ -7,6 +7,7 @@ import { useAuth } from "../../auth/useAuth";
 import { Row, Col } from 'reactstrap'
 import { nWithCommas } from '../../utils/numbers'
 import Loader from "../utils/Loader"
+import { getDisplayName } from '../../utils/displayName';
 
 import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, Grid } from '@material-ui/core'
 
@@ -108,7 +109,6 @@ export default function Investors() {
                       }
                     </TableCell>
                     <TableCell>
-                      {organization === "allocations" && <Link to={`/investor/${investor._id}/edit`}>edit</Link>}
                     </TableCell>
                   </TableRow>
                 ))}
