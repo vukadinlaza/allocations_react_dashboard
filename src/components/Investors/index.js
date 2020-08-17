@@ -97,7 +97,7 @@ export default function Investors() {
               <TableBody>
                 {_.orderBy(investors, ({ investments }) => _.sumBy(investments, 'amount'), 'desc').map(investor => (
                   <TableRow key={investor._id}>
-                    <TableCell>{investor.investor_type === "entity" ? investor.entity_name : investor.email}</TableCell>
+                    <TableCell>{investor.email}</TableCell>
                     <TableCell>{investor.email}</TableCell>
                     <TableCell>{investor.investments.filter(inv => inv.organization === data?.organization?._id).length}</TableCell>
                     <TableCell>${nWithCommas(_.sumBy(investor.investments.filter(inv => inv.organization === data?.organization?._id), 'amount'))}</TableCell>
@@ -108,7 +108,7 @@ export default function Investors() {
                       }
                     </TableCell>
                     <TableCell>
-                      <Link to={`/investor/${investor._id}/edit`}>edit</Link>
+                      {organization === "allocations" && <Link to={`/investor/${investor._id}/edit`}>edit</Link>}
                     </TableCell>
                   </TableRow>
                 ))}
