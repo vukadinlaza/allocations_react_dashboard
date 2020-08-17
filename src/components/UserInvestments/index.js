@@ -126,7 +126,7 @@ export default function UserInvestments() {
   const completeInvestments = investments.filter(i => i.status === 'complete')
   if (showDocs) {
     const type = showDocs.type === 'pending' ? pendingInvesments : completeInvestments
-    type.splice(investments.findIndex(i => i._id === showDocs._id) + 1, 0, { showDocs })
+    type.splice(type.findIndex(i => i._id === showDocs._id) + 1, 0, { showDocs })
   }
   return (
     <>

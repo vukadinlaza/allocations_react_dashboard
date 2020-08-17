@@ -180,7 +180,7 @@ export default function Investments() {
             {investments.map((investment) => (
               investment.showDocs ? <DocsRow docs={showDocs.documents} />
                 : <TableRow key={investment._id} className="investment-row">
-                  <TableCell>{getDisplayName({ investor: investment.investor })}</TableCell>
+                  <TableCell>{_.get(investment, 'investor.email')}</TableCell>
                   <TableCell scope="row">{investment.deal.company_name}</TableCell>
                   <TableCell>{investment.deal.company_description}</TableCell>
                   <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) : "TBD"}</TableCell>

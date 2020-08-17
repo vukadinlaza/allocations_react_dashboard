@@ -88,20 +88,20 @@ export default function InvestmentEdit() {
   useEffect(() => {
     setHasChanges(!isEqual(investment, {}))
   }, [investment])
+
   useEffect(() => {
     if (data && !investment) setInvestment(data.investment)
   }, [data, investment])
   // for document refetches
-  useEffect(() => {
-    if (data && investment) setInvestment(prev => ({ ...prev, documents: data.investment.documents }))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
+
   const updateInvestmentProp = ({ prop, newVal }) => {
     setInvestment(prev => ({ ...prev, [prop]: newVal }))
   }
+
   if (createInvestmentRes.data?.createInvestment?._id) {
     return <Redirect to={`/deals/${createInvestmentRes.data.createInvestment._id}/edit`} />
   }
+
   const name = get(investment, "investor.investor_type") === "entity"
     ? get(investment, "investor.entity_name") || ""
     : `${get(investment, "investor.first_name")} ${get(investment, "investor.last_name")}`
@@ -135,7 +135,9 @@ export default function InvestmentEdit() {
                 style={{ width: "100%" }}>
                 <TextField
                   style={{ width: "100%" }}
+                  type='number'
                   value={get(investment, 'amount', '')}
+                  defaultValue={0}
                   onChange={e => updateInvestmentProp({ prop: "amount", newVal: parseInt(e.target.value) })}
                   label="Amount"
                   variant="outlined" />
@@ -173,18 +175,11 @@ export default function InvestmentEdit() {
                 variant="contained"
                 onClick={() => createInvestment({
                   variables: {
-                    investment: {
-                      _id: investment._id,
-                      amount: investment.amount,
-                      deal_id: investment.deal._id,
-                      user_id: investment.investor._id,
-                      status: investment.status,
-                      documents: investment.documents
-                    }
+                    investment: { ...pick(investment, ['_id', 'status', 'amount']) }
                   }
                 })}
                 color="primary">
-                UPDATE
+                UPDATE 
               </Button>
             </Grid>
           </Grid>

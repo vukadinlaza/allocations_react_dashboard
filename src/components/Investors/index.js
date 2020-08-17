@@ -36,6 +36,7 @@ const GET_INVESTORS = gql`
             investments {
               _id
               amount
+              organization
             }
           }
         }
@@ -62,6 +63,7 @@ export default function Investors() {
     const investors = deal.investments.map(investment => investment.investor)
     return [...acc, ...investors]
   }, []).filter(inv => inv), 'email')
+
   return (
     <div className="Investors">
       {/* {organization === "allocations" && <Col sm={{ size: 12 }}>
@@ -96,10 +98,10 @@ export default function Investors() {
               <TableBody>
                 {_.orderBy(investors, ({ investments }) => _.sumBy(investments, 'amount'), 'desc').map(investor => (
                   <TableRow key={investor._id}>
-                    <TableCell>{getDisplayName({ investor })}</TableCell>
                     <TableCell>{investor.email}</TableCell>
-                    <TableCell>{investor.investments.length}</TableCell>
-                    <TableCell>${nWithCommas(_.sumBy(investor.investments, 'amount'))}</TableCell>
+                    <TableCell>{investor.email}</TableCell>
+                    <TableCell>{investor.investments.filter(inv => inv.organization === data?.organization?._id).length}</TableCell>
+                    <TableCell>${nWithCommas(_.sumBy(investor.investments.filter(inv => inv.organization === data?.organization?._id), 'amount'))}</TableCell>
                     <TableCell>
                       {organization === "allocations" && <Link to={`/investor/${investor._id}/home`}>
                         Use site as {investor.first_name || investor.entity_name}
