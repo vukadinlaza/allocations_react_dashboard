@@ -172,7 +172,8 @@ export default function Deals({ showClosed }) {
 }
 
 function DealProgress({ deal }) {
-  const progress = ((deal.amount_raised || 0) / (deal.target || Infinity)) * 100
+  const raised = _.sumBy(deal?.investments, 'amount')
+  const progress = ((raised || 0) / (deal.target || Infinity)) * 100
   return (
     <TableCell>
       <LinearProgress style={{ height: "20px" }}
@@ -180,7 +181,7 @@ function DealProgress({ deal }) {
         color="secondary"
         value={progress} />
       <div className="text-center">
-        ${nWithCommas(deal.amount_raised)} of ${nWithCommas(deal.target)}
+        ${nWithCommas(raised)} of ${nWithCommas(deal.target)}
       </div>
     </TableCell>
   )

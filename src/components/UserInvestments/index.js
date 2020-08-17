@@ -82,8 +82,10 @@ const TABLE_ORDER = {
   "complete": { status: 'complete', display: 'Complete', order: 5 }
 }
 const TR = ({ investment, showDocs, setShowDocs, type }) => {
+  const history = useHistory()
+
   return (
-    <TableRow key={investment._id} className="investment-row">
+    <TableRow key={investment._id} className="investment-row" onClick={() => history.push(_.get(investment, 'deal.appLink', ""))}>
       <TableCell scope="row">{investment.deal.company_name}</TableCell>
       <Hidden xsDown><TableCell>{investment.deal.company_description}</TableCell></Hidden>
       <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) :
@@ -103,7 +105,6 @@ const TR = ({ investment, showDocs, setShowDocs, type }) => {
 }
 export default function UserInvestments() {
   const classes = useStyles();
-  const history = useHistory()
   const [showDocs, setShowDocs] = useState(null)
   const { userProfile, error, } = useAuth(GET_INVESTOR)
   if (error) {
@@ -227,9 +228,7 @@ export default function UserInvestments() {
 function InvestmentStatus({ investment }) {
   const { status } = investment
   return (
-    <Link to={_.get(investment, 'deal.appLink', "")}>
-      <span className={`investment-status investment-status-${status}`}>{status}</span>
-    </Link>
+    <span className={`investment-status investment-status-${status}`}>{status}</span>
   )
 }
 

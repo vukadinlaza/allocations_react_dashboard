@@ -61,7 +61,7 @@ export default function ActiveDeals({ orgData }) {
                 <TableCell>Closes</TableCell>
                 <Hidden only="xs">
                   <TableCell>Progress</TableCell>
-                  <TableCell>SOW</TableCell>
+                  <TableCell></TableCell>
                 </Hidden>
                 <TableCell>
                 </TableCell>
@@ -85,7 +85,9 @@ function Deal({ deal, investments }) {
   const history = useHistory();
   const { organization } = useParams();
   const [activeDeal, setActiveDeal] = useState();
-  const val = (Number(deal.amount_raised) / (Number(deal.target) || Infinity)) * 100;
+  const raised = _.sumBy(deal?.investments, 'amount')
+
+  const val = (Number(raised) / (Number(deal.target) || Infinity)) * 100;
   // this isnt built into the app yet
   const hasSOW = true;
 
@@ -100,14 +102,13 @@ function Deal({ deal, investments }) {
           <TableCell>
             <div>{Math.round(val || 0)}%</div>
             <LinearProgress className="deal-progress" variant="determinate" color="secondary" value={val} />
-            <div>${nWithCommas(deal.amount_raised)} of ${nWithCommas(deal.target)}</div>
+            <div>${nWithCommas(raised)} of ${nWithCommas(deal.target)}</div>
           </TableCell>
           <TableCell>
-            {<FontAwesomeIcon icon={hasSOW ? 'check-circle' : 'times-circle'} size="lg"
-              color="#39BE53" />}</TableCell>
+          </TableCell>
         </Hidden>
         <TableCell style={{ textAlign: "right" }}>
-          <Button color="primary" onClick={() => history.push(`/admin/${organization}/deals/${deal._id}/edit`)}>
+          <Button color="primary" style={{ textTransform: 'lowercase' }} onClick={() => history.push(`/admin/${organization}/deals/${deal._id}/edit`)}>
             Edit
           </Button>
           <IconButton>
