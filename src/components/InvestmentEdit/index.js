@@ -179,7 +179,7 @@ export default function InvestmentEdit() {
                   }
                 })}
                 color="primary">
-                UPDATE
+                UPDATE 
               </Button>
             </Grid>
           </Grid>
