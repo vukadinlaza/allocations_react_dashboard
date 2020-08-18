@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100">
+
 <head>
-    <meta charset="utf-8"/>
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicons/favicon.ico"/>
-    <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/favicons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicons/favicon-16x16.png">
-    <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta property="og:title" content="Allocations">
-    <meta property="og:description" content="Create SPVs in seconds">
-    <meta name="theme-color" content="#000000"/>
-    <!--
+  <meta charset="utf-8" />
+  <link rel="shortcut icon" href="%PUBLIC_URL%/favicons/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicons/favicon-16x16.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta property="og:title" content="Allocations">
+  <meta property="og:description" content="Create SPVs in seconds">
+  <meta name="theme-color" content="#000000" />
+  <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json"/>
-    <!--
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -28,47 +26,61 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
 
-    <link
-            rel="stylesheet"
-            href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-            crossorigin="anonymous"
-    />
-    <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="%PUBLIC_URL%/fonts.css">
+  <link rel="stylesheet" href="%PUBLIC_URL%/fonts.css">
 
-    <link
-            rel="stylesheet"
-            href="https://cdn.auth0.com/js/auth0-samples-theme/1.0/css/auth0-theme.min.css"
-    />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+  <link rel="stylesheet" href="https://cdn.auth0.com/js/auth0-samples-theme/1.0/css/auth0-theme.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
-    <title>Allocations</title>
+  <title>Allocations</title>
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-155298553-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-155298553-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
 
-      function gtag() {
-        dataLayer.push(arguments);
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'UA-155298553-1');
+
+    window._slaaskSettings = {
+      key: "spk-f0df6972-1b96-47f4-805c-08dd2041191f",
+    };
+  </script>
+  <script src="https://cdn.slaask.com/chat_loader.js" async="true"></script>
+
+  <!-- Fresh Paint setup script-->
+  <script type="text/javascript">
+    (function (f, a) {
+      if (!a.__SV) {
+        var b = window; try { var d, m, j, k = b.location, c = k.hash; d = function (a, b) { return (m = a.match(RegExp(b + "=([^&]*)"))) ? m[1] : null }; c && d(c, "state") && (j = JSON.parse(decodeURIComponent(d(c, "state"))), "mpeditor" === j.action && (b.sessionStorage.setItem("_mpcehash", c), history.replaceState(j.desiredHash || "", f.title, k.pathname + k.search))) } catch (n) { } var l, h; window.freshpaint = a; a._i = []; a.init = function (b, d, g) {
+          function c(b, i) {
+            var a = i.split("."); 2 == a.length && (b = b[a[0]], i = a[1]); b[i] = function () {
+              b.push([i].concat(Array.prototype.slice.call(arguments,
+                0)))
+            }
+          } var e = a; "undefined" !== typeof g ? e = a[g] = [] : g = "freshpaint"; e.people = e.people || []; e.toString = function (b) { var a = "freshpaint"; "freshpaint" !== g && (a += "." + g); b || (a += " (stub)"); return a }; e.people.toString = function () { return e.toString(1) + ".people (stub)" }; l = "disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove people group page alias ready addEventProperties addInitialEventProperties removeEventProperty addPageviewProperties".split(" ");
+          for (h = 0; h < l.length; h++)c(e, l[h]); var f = "set set_once union unset remove delete".split(" "); e.get_group = function () { function a(c) { b[c] = function () { call2_args = arguments; call2 = [c].concat(Array.prototype.slice.call(call2_args, 0)); e.push([d, call2]) } } for (var b = {}, d = ["get_group"].concat(Array.prototype.slice.call(arguments, 0)), c = 0; c < f.length; c++)a(f[c]); return b }; a._i.push([b, d, g])
+        }; a.__SV = 1.4; b = f.createElement("script"); b.type = "text/javascript"; b.async = !0; b.src = "undefined" !== typeof FRESHPAINT_CUSTOM_LIB_URL ?
+          FRESHPAINT_CUSTOM_LIB_URL : "//perfalytics.com/static/js/freshpaint.js"; d = f.getElementsByTagName("script")[0]; d.parentNode.insertBefore(b, d)
       }
-
-      gtag('js', new Date());
-
-      gtag('config', 'UA-155298553-1');
-
-      window._slaaskSettings = {
-        key: "spk-f0df6972-1b96-47f4-805c-08dd2041191f",
-      };
-    </script>
-    <script src="https://cdn.slaask.com/chat_loader.js" async="true"></script>
+    })(document, window.freshpaint || []);
+    freshpaint.init("2cf2ab63-8213-4881-ae0a-aaf6ad13a2cd");
+    freshpaint.page();
+  </script>
 </head>
+
 <body class="h-100">
-<noscript>You need to enable JavaScript to run this app.</noscript>
-<div id="root" class="h-100"></div>
-<!--
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root" class="h-100"></div>
+  <!--
   This HTML file is a template.
   If you open it directly in the browser, you will see an empty page.
 
@@ -79,4 +91,5 @@
   To create a production bundle, use `npm run build` or `yarn build`.
 -->
 </body>
+
 </html>
