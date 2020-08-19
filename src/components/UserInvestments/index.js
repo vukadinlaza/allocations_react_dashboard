@@ -246,7 +246,7 @@ function DocsRow({ docs }) {
       <TableRow>
         <TableCell colSpan={6}>
           <Typography variant="subtitle2">
-            Signed documents many take up to 7 days to appear here after signing.
+            Documents may take up to 7 days to appear here after signing.
           </Typography>
         </TableCell>
       </TableRow>
