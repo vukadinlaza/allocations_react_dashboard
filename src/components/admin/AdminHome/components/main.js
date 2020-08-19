@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Paper,
   Grid,
   ButtonBase,
   Typography,
+  FormControl,
+  Button,
+  TextField
 } from '@material-ui/core';
 import { makeStyles } from "@material-ui/core/styles";
 import { useMutation } from '@apollo/react-hooks'
@@ -65,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function OrganizationOverview({ orgData, superAdmin }) {
+export default function OrganizationOverview({ orgData, superAdmin, refetch }) {
   const [tab, setTab] = useState("active-deals");
   const classes = useStyles();
 
@@ -128,80 +131,76 @@ export default function OrganizationOverview({ orgData, superAdmin }) {
         {tab === "profile" && <OrgCards organization={organization} investor={orgData.investor} />}
         {tab === "all-investors" && <Investors />}
         {tab === "investments" && <Investments />}
-        {tab === "setting" && <Settings orgData={orgData.organization} investor={orgData.investor} />}
+        {tab === "setting" && <Settings orgData={orgData.organization} investor={orgData.investor} refetch={refetch} />}
       </>
     </>
   )
 }
 
-function Settings({ investor, orgData }) {
-  const classes = useStyles();
-  const [modal, setModal] = useState()
 
+
+const UPDATE_ORG = gql`
+  mutation UpdateOrganization($organization: OrganizationInput!) {
+    updateOrganization(organization: $organization) {
+      _id
+      name
+      slug
+    }
+  }
+`
+function Settings({ investor, orgData, refetch }) {
+  const classes = useStyles();
+  const [organization, setOrganization] = useState(null)
+  const [updateOrganization] = useMutation(UPDATE_ORG)
+
+  useEffect(() => {
+    if (orgData) {
+      setOrganization(pick(orgData, ['name', '_id']))
+    }
+  }, [orgData])
+
+
+  const handleChange = (prop) => e => {
+    e.persist()
+    if (prop === "investor_type") {
+      return setOrganization(prev => ({ ...prev, [prop]: e.target.value, accredited_investor_status: "" }))
+    } else {
+      return setOrganization(prev => ({ ...prev, [prop]: e.target.value }))
+    }
+  }
   const docs = investor.documents ? investor.documents : [];
   const hasDoc = docs.find(d => toLower(d.documentName).includes(toLower('Provision')))
   return <>
     <Paper className={classes.paper} style={{ marginBottom: 16 }}>
       <Grid container spacing={3}>
         <Grid item sm={12} md={6}>
-          <Typography variant="subtitle1" className={classes.subtitle}>
-            Address
+          <form noValidate autoComplete="off" style={{ padding: "16px" }}>
+            <Typography variant="subtitle2" style={{ marginBottom: "16px" }}>
+              This information can be edited from your profile page.
           </Typography>
-          <Typography variant="body2">
-            8 The Green, Suite 7105<br />
-            Dover, Delaware 19901
-          </Typography>
-          <Typography variant="subtitle1" className={classes.subtitle}>
-            Admin Name
-          </Typography>
-          <Typography variant="body2">
-            Kingsley Advani
-          </Typography>
-        </Grid>
+            <Grid container spacing={3} style={{ marginTop: "16px" }}>
 
-        <Grid item sm={12} md={6}>
-          <Typography variant="subtitle1" className={classes.subtitle}>
-            Contact
-          </Typography>
-          <Typography variant="body2">
-            <a href="mailto:support@goldmount.com">
-              support@goldmount.com
-            </a>
-          </Typography>
-          <Typography variant="subtitle1" className={classes.subtitle}>
-            Website
-          </Typography>
-          <Typography variant="body2">
-            goldmount.com
-          </Typography>
-        </Grid>
-        <Grid item sm={12} md={6}>
-          <Typography variant="body2">
-            Provision of Services
-            {hasDoc && <CheckCircleIcon color="secondary" style={{ marginLeft: 8 }} />}
-            {!hasDoc && <Typography variant="body2" onClick={() => setModal(!hasDoc ? true : false)} style={{ cursor: "pointer" }}>
-              Get Started
-            </Typography>}
-          </Typography>
+              <Grid item xs={12} sm={12} md={6}>
+                <TextField required disabled
+                  style={{ width: "100%" }}
+                  value={get(organization, 'name') || ""}
+                  onChange={handleChange("name")}
+                  label="Organization Name"
+                  variant="outlined" />
+              </Grid>
+
+            </Grid>
+
+            <Button variant="contained" style={{ marginTop: 16 }}
+              onClick={() => updateOrganization({
+                variables: { organization }
+              })}
+              color="primary">
+              Submit
+            </Button>
+          </form>
         </Grid>
       </Grid>
     </Paper>
-
-    {/* <Grid container spacing={3}>
-      <Grid item xs={12} sm={12} md={6}>
-        <NullPaper title="Statement of Work" text="TODO: SpaceX SPV" 
-          image={allocations_statement_of_work} button="Get Started" />
-      </Grid>
-      <Grid item xs={12} sm={12} md={6}>
-        <NullPaper title="Provision of Services"
-          text="One click signing for your POS"
-          image={allocations_provisions_of_services} button="Get Started" />
-      </Grid>
-      <Grid item xs={12} sm={12} md={6}>
-        <NullPaper title="Company Profile"
-          text="Finish your company profile"
-          image={allocations_company_profile} button="Get Started" />
-      </Grid>
-    </Grid> */}
   </>;
 }
