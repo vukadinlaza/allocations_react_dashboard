@@ -85,13 +85,13 @@ const TR = ({ investment, showDocs, setShowDocs, type }) => {
   const history = useHistory()
 
   return (
-    <TableRow key={investment._id} className="investment-row" onClick={() => history.push(_.get(investment, 'deal.appLink', ""))}>
-      <TableCell scope="row">{investment.deal.company_name}</TableCell>
-      <Hidden xsDown><TableCell>{investment.deal.company_description}</TableCell></Hidden>
+    <TableRow key={investment._id} className="investment-row">
+      <TableCell scope="row" onClick={() => history.push(_.get(investment, 'deal.appLink', ""))}>{investment.deal.company_name}</TableCell>
+      <Hidden xsDown><TableCell onClick={() => history.push(_.get(investment, 'deal.appLink', ""))}>{investment.deal.company_description}</TableCell></Hidden>
       <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) :
         <i>TBD</i>}</TableCell>
-      <TableCell align="center"><InvestmentStatus investment={investment} /></TableCell>
-      <TableCell align="center">{formatDate(investment.deal.dealParams.wireDeadline)}</TableCell>
+      <TableCell align="center" onClick={() => history.push(_.get(investment, 'deal.appLink', ""))}><InvestmentStatus investment={investment} /></TableCell>
+      <TableCell align="center" onClick={() => history.push(_.get(investment, 'deal.appLink', ""))}>{formatDate(investment.deal.dealParams.wireDeadline)}</TableCell>
       <TableCell align="right">
         {_.get(investment, 'documents.length', 0) > 0
           ? showDocs && (showDocs._id === investment._id)
@@ -242,20 +242,29 @@ function filename(path) {
 
 function DocsRow({ docs }) {
   return (
-    <TableRow>
-      <TableCell colSpan={6}>
-        {docs.map(doc => (
-          <div key={doc.path} className="doc-wrapper">
-            <div className="doc">
-              <FontAwesomeIcon icon={["far", "file-pdf"]} />
+    <>
+      <TableRow>
+        <TableCell colSpan={6}>
+          <Typography variant="subtitle2">
+            Signed documents many take up to 7 days to appear here after signing.
+          </Typography>
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell colSpan={6}>
+          {docs.map(doc => (
+            <div key={doc.path} className="doc-wrapper">
+              <div className="doc">
+                <FontAwesomeIcon icon={["far", "file-pdf"]} />
+              </div>
+              <div className="filename">
+                <span><a href={`https://${doc.link}`} target="_blank"
+                  rel="noopener noreferrer">{filename(doc.path)}</a></span>
+              </div>
             </div>
-            <div className="filename">
-              <span><a href={`https://${doc.link}`} target="_blank"
-                rel="noopener noreferrer">{filename(doc.path)}</a></span>
-            </div>
-          </div>
-        ))}
-      </TableCell>
-    </TableRow>
+          ))}
+        </TableCell>
+      </TableRow>
+    </>
   )
 }
