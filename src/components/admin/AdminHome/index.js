@@ -145,7 +145,7 @@ export default function AdminHome() {
   return (
     <>
 
-      <OrganizationOverview orgData={data} superAdmin={data.investor.admin && <Grid item xs={12}>
+      <OrganizationOverview refetch={refetch} orgData={data} superAdmin={data.investor.admin && <Grid item xs={12}>
         <SuperAdmin org={org} />
       </Grid>} />
 
