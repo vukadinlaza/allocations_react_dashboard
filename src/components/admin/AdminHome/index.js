@@ -130,23 +130,15 @@ function sumOrgInvestments({ investor, deals }) {
 export default function AdminHome() {
   const classes = useStyles();
   const history = useHistory()
-  const [org, setOrg] = useState()
 
   const { organization } = useParams()
-  const { data, error, refetch, loading } = useQuery(ORG_OVERVIEW, {
+  const { data, error, refetch } = useQuery(ORG_OVERVIEW, {
     variables: { slug: organization }
   })
 
-  console.log(data)
+  if (!data) return <Loader />
 
-  useEffect(() => {
-    if (data && !loading) {
-      setOrg(data.organization)
-    }
-  }, [data])
-
-  if (!org) return <Loader />
-
+  const org = data.organization
 
   const { active, closed } = _.groupBy(org.deals, d => d.status === "closed" ? "closed" : "active")
 

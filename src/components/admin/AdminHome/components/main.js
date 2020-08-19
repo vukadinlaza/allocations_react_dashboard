@@ -74,7 +74,6 @@ export default function OrganizationOverview({ orgData, superAdmin, refetch }) {
 
   if (!orgData) return <Paper style={{ padding: "25px" }}><Loader /></Paper>
   const { organization } = orgData
-  console.log(organization)
   return (
     <>
       <Grid container justify="space-between">
@@ -182,7 +181,7 @@ function Settings({ investor, orgData, refetch }) {
             <Grid container spacing={3} style={{ marginTop: "16px" }}>
 
               <Grid item xs={12} sm={12} md={6}>
-                <TextField required
+                <TextField required disabled
                   style={{ width: "100%" }}
                   value={get(organization, 'name') || ""}
                   onChange={handleChange("name")}
@@ -194,9 +193,7 @@ function Settings({ investor, orgData, refetch }) {
 
             <Button variant="contained" style={{ marginTop: 16 }}
               onClick={() => updateOrganization({
-                variables: { organization }, onCompleted: () => {
-                  refetch()
-                }
+                variables: { organization }
               })}
               color="primary">
               Submit
