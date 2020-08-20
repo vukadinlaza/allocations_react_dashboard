@@ -14,6 +14,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { useQuery } from '@apollo/react-hooks'
 import Loader from '../../../../utils/Loader'
+import { nWithCommas } from '../../../../../utils/numbers'
 import { getDisplayName } from '../../../../../utils/displayName'
 import Box from "@material-ui/core/Box";
 import CheckIcon from '@material-ui/icons/Check';
@@ -89,7 +90,8 @@ export default ({ deal }) => {
 
   const categories = boardData.map(type => {
     const categoryInvestments = groupedInvestments[type.key]
-    return { ...type, categoryInvestments }
+    const totalAmount = _.sumBy(categoryInvestments, 'amount')
+    return { ...type, categoryInvestments, totalAmount }
   }) || []
 
   if (loading) return <Loader />
@@ -99,22 +101,31 @@ export default ({ deal }) => {
       {categories.map((value) => (
         <Grid key={value.title} item xs={12} sm={3}>
           <Box height="100%" className={classes.board}>
-            <Typography variant="h6" style={{ padding: "8px", textTransform: "uppercase", fontSize: "16px" }}>
-              {value.title}
-            </Typography>
+            <Grid container
+              direction="row"
+              justify="space-between">
+              <Typography variant="h6" display="inline" style={{ padding: "8px", textTransform: "uppercase", fontSize: "16px", maxWidth: '50%' }}>
+                {value.title}
+              </Typography>
+              <Typography variant="h6" display="inline" style={{ padding: "8px", textTransform: "uppercase", fontSize: "16px", maxWidth: '50%', color: "#39BE53" }}>
+                <FontAwesomeIcon icon="dollar-sign" size="sm" style={{ marginRight: '.15rem' }} />
+                {nWithCommas(value.totalAmount)}
+              </Typography>
+            </Grid>
             <List dense className={classes.list}>
               {value?.categoryInvestments?.map(inv => <InvestmentSquare investment={inv} />)}
             </List>
           </Box>
         </Grid>
-      ))}
-    </Grid>
+      ))
+      }
+    </Grid >
   )
 }
 
 const InvestmentSquare = ({ investment }) => {
   const classes = useStyles();
-  const name = getDisplayName({ investor: investment?.investor })
+  const name = _.get(getDisplayName({ investor: investment?.investor }).split('@'), [0])
   return (
     <ListItem disableGutters className={classes.listItem}>
       <ListItemAvatar>
@@ -124,8 +135,8 @@ const InvestmentSquare = ({ investment }) => {
       </ListItemAvatar>
       <ListItemText style={{ overflow: "hidden", textOverflow: "ellipsis" }} primary={name} />
       <ListItemSecondaryAction>
-        <FontAwesomeIcon icon={investment.hasKycDoc ? 'check-circle' : 'times-circle'} size="lg"
-          color="#39BE53" />
+        <FontAwesomeIcon icon="dollar-sign" size="sm" style={{ marginRight: '.15rem' }} />
+        {nWithCommas(investment.amount || '0')}
       </ListItemSecondaryAction>
     </ListItem>
   )
