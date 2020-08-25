@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Loader from '../utils/Loader'
 import _ from "lodash"
 import { gql } from 'apollo-boost'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation, useQuery } from '@apollo/react-hooks'
 import { useParams, useHistory, Link, useLocation } from 'react-router-dom'
 import { nWithCommas } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -35,6 +35,23 @@ import { makeStyles } from "@material-ui/core/styles";
  * the wiring document
  *
  **/
+
+export const DEAL_INVESTMENTS = gql`
+  query deal($_id: String!) {
+    deal(_id: $_id) {
+      _id
+      investments {
+          status
+          amount
+          investor {
+              _id
+              email
+              documents
+          }
+      }
+    }
+  }
+`
 
 function getOnboardingLinkType(link) {
   try {
@@ -458,13 +475,27 @@ function HelloSignOnboarding({ investment, deal, investor, status }) {
 
 function Onboarding({ investment, deal, investor, status }) {
   const [loading, setLoading] = useState(true)
+  const [signed, setSigned] = useState(false)
+  const classes = useStyles()
   const location = useLocation()
+  const { data, } = useQuery(DEAL_INVESTMENTS, {
+    variables: { _id: deal._id },
+    pollInterval: 1000
+  })
+
+  const hasSigned = data?.deal?.investments.find(inv => (inv.status === 'signed' && inv.investor._id === investor._id))
 
   useEffect(() => {
     setTimeout(() => {
       setLoading(false)
     }, 2000)
   }, [])
+
+  useEffect(() => {
+    if (hasSigned) {
+      setSigned(true)
+    }
+  }, [hasSigned])
 
   if (!deal.onboarding_link) {
     return (
@@ -481,7 +512,6 @@ function Onboarding({ investment, deal, investor, status }) {
 
   let urlParameters = Object.entries(params)
     .map(e => e.map(encodeURI).join("=")).join('&')
-  console.log('asdads', urlParameters)
 
   let link = location.pathname.includes('/public/')
     ? deal.onboarding_link
@@ -491,8 +521,16 @@ function Onboarding({ investment, deal, investor, status }) {
     link = `${deal.onboarding_link}&${urlParameters}`
   }
 
-  console.log(link)
-
+  if (signed) return (
+    <Paper className={classes.paper}>
+      <Typography variant="subtitle1">
+        Thanks for signing! Would you like to sign again?
+      </Typography>
+      <Button onClick={() => setSigned(false)} variant="contained"
+        color="primary">
+        Yes
+      </Button>
+    </Paper>)
   return (
     <div className={status === "pledged" ? "document-iframe" : "document-iframe hide"}>
       {loading && <div className="temp-loader"><Loader /></div>}
