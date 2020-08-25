@@ -88,10 +88,10 @@ export const Auth0Provider = ({ children }) => {
   useEffect(() => {
     // init auth client
     const p = getAuth0Client(options)
-    setState({ 
+    setState({
       isAuthenticated: isAuthed(),
       clientPromise: p,
-    }) 
+    })
 
     p.then(client => {
       setState({ auth0Client: client })
@@ -100,7 +100,7 @@ export const Auth0Provider = ({ children }) => {
       if (window.location.search.includes("?code=")) {
         client.handleRedirectCallback()
           .then(({ appState }) => options.onRedirectCallback({ appState, client }))
-          .catch(err => console.error("Error Logging in"))
+          .catch(err => console.error("Error Logging in", err))
       } else {
         // this is the standard case
         client.isAuthenticated()
@@ -114,7 +114,7 @@ export const Auth0Provider = ({ children }) => {
             }
             setState({ isAuthenticated: val })
           })
-      }  
+      }
     }).catch(console.error)
   }, [])
 

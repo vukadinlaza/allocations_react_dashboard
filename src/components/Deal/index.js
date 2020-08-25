@@ -59,11 +59,6 @@ export const GET_INVESTOR_DEAL = gql`
           path
           link
         }
-        pledges {
-          amount
-          timestamp
-          initials
-        }
         investment {
           _id
           amount
