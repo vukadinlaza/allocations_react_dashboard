@@ -1,7 +1,7 @@
 export const getDisplayName = ({ investor = {} }) => {
 
-    console.log(investor)
-    const { investorType, first_name, last_name, entity_name, email } = investor
+
+    const { investorType, first_name, last_name, entity_name, email } = investor = {}
     if (first_name && last_name) {
         return `${first_name} ${last_name}`
     }
