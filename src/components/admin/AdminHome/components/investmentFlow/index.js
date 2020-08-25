@@ -125,7 +125,8 @@ export default ({ deal }) => {
 
 const InvestmentSquare = ({ investment }) => {
   const classes = useStyles();
-  const name = _.get(getDisplayName({ investor: investment?.investor }).split('@'), [0])
+  const investor = investment?.investor === null ? {} : investment?.investor
+  const name = _.get(getDisplayName({ investor }).split('@'), [0])
   return (
     <ListItem disableGutters className={classes.listItem}>
       <ListItemAvatar>

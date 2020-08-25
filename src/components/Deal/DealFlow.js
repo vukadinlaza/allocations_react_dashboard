@@ -483,7 +483,7 @@ function Onboarding({ investment, deal, investor, status }) {
     pollInterval: 1000
   })
 
-  const hasSigned = data?.deal?.investments.find(inv => (inv.status === 'signed' && inv.investor._id === investor._id))
+  const hasSigned = data?.deal?.investments.find(inv => (inv.status === 'signed' && inv?.investor?._id === investor?._id))
 
   useEffect(() => {
     setTimeout(() => {
