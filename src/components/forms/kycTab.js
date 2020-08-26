@@ -92,7 +92,8 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org }) {
   }
 
   const submit = () => {
-    const reqs = investor.country !== 'United States' && !investor.usePermAddressAsMailing ? [...required, ...optional] : required
+    const tin = investor.investor_type === 'individual' ? 'ssn_itin' : 'ein'
+    const reqs = investor.country !== 'United States' && !investor.usePermAddressAsMailing ? [...required, ...optional, tin] : [...required, tin]
     const errors = reqs.reduce((acc, attr) => investor[attr] ? acc : [...acc, attr], [])
     setErrors(errors)
 
@@ -199,7 +200,7 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org }) {
               style={{ width: "100%" }}
               value={get(investor, 'ssn_itin') || ""}
               onChange={handleChange("ssn_itin")}
-              label="SSN or ITIN (optional)"
+              label="SSN or ITIN"
               variant="outlined" /> : <TextField
                 required
                 error={errors.includes("ein")}
@@ -215,7 +216,7 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org }) {
               style={{ width: "100%" }}
               value={get(investor, 'foreign_tax_number') || ""}
               onChange={handleChange("foreign_tax_number")}
-              label="Foreign Tax Number (optional)"
+              label="Foreign Tax Number"
               variant="outlined" />
           </Grid>
           <Grid item xs={12} sm={12} md={6}>
