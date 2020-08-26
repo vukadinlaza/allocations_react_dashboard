@@ -141,9 +141,9 @@ export default function Deal() {
 
   useEffect(() => {
     const blocked = userProfile?.email?.includes('allocations')
-    if (data && !data.investor.invitedDeal.investment && !blocked) {
+    if (data && !data.investor?.invitedDeal?.investment && !blocked) {
       const investment = {
-        deal_id: data.investor.invitedDeal._id,
+        deal_id: data.investor.invitedDeal?._id,
         user_id: data.investor._id,
       }
 

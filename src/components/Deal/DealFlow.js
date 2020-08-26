@@ -20,6 +20,8 @@ import {
   Typography,
   TableHead
 } from '@material-ui/core';
+import CheckIcon from '@material-ui/icons/Check';
+
 import ReactHtmlParser from 'react-html-parser';
 import Chart from 'chart.js'
 import classNames from 'classnames'
@@ -48,6 +50,10 @@ export const DEAL_INVESTMENTS = gql`
               email
               documents
           }
+        documents {
+          link
+          path
+        }
       }
     }
   }
@@ -105,7 +111,9 @@ export default function InvestmentFlow({ investment, deal, investor, refetch }) 
 
   const onboardingLinkType = getOnboardingLinkType(deal.onboarding_link) || 'docusign'
   const { approved } = deal
-
+  const hasSigned = investment.status === 'signed' || investment.status === 'wired' || investment.status === 'complete'
+  const hasWired = investment.status === 'wired' || investment.status === 'complete'
+  const hasKyc = _.get(investor, 'documents', []).find(d => d.documentName && (d.documentName.includes('W-8') || d.documentName.includes('W-9')))
   return (
     <React.Fragment>
       {/* <InvestmentOverview investment={investment}/> */}
@@ -116,7 +124,7 @@ export default function InvestmentFlow({ investment, deal, investor, refetch }) 
             <ButtonBase className={status === "invited" ? classes.activeTab : classes.tab}
               style={{ borderRight: "1px solid #e1e9ec" }}
               onClick={() => setStatus('invited')}>
-              Data Room
+              Data Room {investment && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
             </ButtonBase>
           </Grid>
           {/* <Grid item xs={12} sm={3}>
@@ -131,7 +139,7 @@ export default function InvestmentFlow({ investment, deal, investor, refetch }) 
             <ButtonBase className={status === "pledged" ? classes.activeTab : classes.tab}
               style={{ borderRight: "1px solid #e1e9ec", cursor: approved ? "cursor" : "not-allowed" }}
               onClick={() => approved && setStatus('pledged')}>
-              Sign {!approved && <FontAwesomeIcon icon="lock" />}
+              Sign {!approved && <FontAwesomeIcon icon="lock" />} {hasSigned && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
             </ButtonBase>
           </Grid>
 
@@ -139,7 +147,7 @@ export default function InvestmentFlow({ investment, deal, investor, refetch }) 
             <ButtonBase className={status === "kyc" ? classes.activeTab : classes.tab}
               style={{ borderRight: "1px solid #e1e9ec", cursor: approved ? "cursor" : "not-allowed" }}
               onClick={() => approved && setStatus('kyc')}>
-              KYC {!approved && <FontAwesomeIcon icon="lock" />}
+              KYC {!approved && <FontAwesomeIcon icon="lock" />} {hasKyc && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
             </ButtonBase>
           </Grid>
 
@@ -147,7 +155,7 @@ export default function InvestmentFlow({ investment, deal, investor, refetch }) 
             <ButtonBase className={status === "onboarded" ? classes.activeTab : classes.tab}
               style={{ cursor: approved ? "cursor" : "not-allowed" }}
               onClick={() => approved && setStatus('onboarded')}>
-              Wire {!approved && <FontAwesomeIcon icon="lock" />}
+              Wire {!approved && <FontAwesomeIcon icon="lock" />} {hasWired && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
             </ButtonBase>
           </Grid>
         </Grid>
@@ -158,8 +166,8 @@ export default function InvestmentFlow({ investment, deal, investor, refetch }) 
         {status === "pledging" && <Pledging investment={investment} investor={investor} deal={deal} refetch={refetch} />}
         {status === "onboarded" && <Wire investment={investment} deal={deal} />}
         {/** Always render Onboarding so that the Docusign loads in... **/}
-        {onboardingLinkType === "docusign" &&
-          <Onboarding status={status} investment={investment} deal={deal} investor={investor} />}
+        {(onboardingLinkType === "docusign" && status === 'pledged') &&
+          < Onboarding status={status} investment={investment} deal={deal} investor={investor} />}
         {status === 'kyc' && <KYCDocusign status={status} investment={investment} deal={deal} investor={investor} />}
         {onboardingLinkType === "hellosign" &&
           <HelloSignOnboarding status={status} investment={investment} deal={deal} investor={investor} />}
@@ -473,6 +481,14 @@ function HelloSignOnboarding({ investment, deal, investor, status }) {
   )
 }
 
+function filename(path) {
+  try {
+    return path.split('/')[2]
+  } catch {
+    return path
+  }
+}
+
 function Onboarding({ investment, deal, investor, status }) {
   const [loading, setLoading] = useState(true)
   const [signed, setSigned] = useState(false)
@@ -484,6 +500,8 @@ function Onboarding({ investment, deal, investor, status }) {
   })
 
   const hasSigned = data?.deal?.investments.find(inv => (inv.status === 'signed' && inv?.investor?._id === investor?._id))
+
+  const doc = _.get(hasSigned, 'documents[0]')
 
   useEffect(() => {
     setTimeout(() => {
@@ -524,12 +542,11 @@ function Onboarding({ investment, deal, investor, status }) {
   if (signed) return (
     <Paper className={classes.paper}>
       <Typography variant="subtitle1">
-        Thanks for signing! Would you like to sign again?
+        Thanks for signing! You can view your signed documents below.
       </Typography>
-      <Button onClick={() => setSigned(false)} variant="contained"
-        color="primary">
-        Yes
-      </Button>
+      <Typography variant="subtitle2">
+        <span><a href={`https://${doc.link}`} target="_blank"
+          rel="noopener noreferrer">{filename(doc.path)}</a></span>      </Typography>
     </Paper>)
   return (
     <div className={status === "pledged" ? "document-iframe" : "document-iframe hide"}>
