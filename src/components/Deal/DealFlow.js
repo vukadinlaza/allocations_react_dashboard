@@ -113,8 +113,8 @@ export default function InvestmentFlow({ investment, deal, investor, refetch }) 
   const { approved } = deal
   const hasSigned = investment?.status === 'signed' || investment?.status === 'wired' || investment?.status === 'complete'
   const hasWired = investment?.status === 'wired' || investment?.status === 'complete'
-  const hasKyc = _.get(investor, 'documents', []).find(d => d.documentName && (d.documentName.includes('W-8') || d.documentName.includes('W-9')))
-  return (
+  const docs = _.get(investor, 'documents') || []
+  const hasKyc = docs.find(d => d.documentName && (d.documentName.includes('W-8') || d.documentName.includes('W-9')))  return (
     <React.Fragment>
       {/* <InvestmentOverview investment={investment}/> */}
 
