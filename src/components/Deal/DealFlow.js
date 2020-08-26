@@ -540,7 +540,7 @@ function Onboarding({ investment, deal, investor, status }) {
     link = `${deal.onboarding_link}&${urlParameters}`
   }
 
-  if (signed) return (
+  if (signed && doc && doc.link && doc.path) return (
     <Paper className={classes.paper}>
       <Typography variant="subtitle1">
         Thanks for signing! You can view your signed documents below.
