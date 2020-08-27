@@ -63,10 +63,11 @@ export function useAuth(QUERY = GET_INVESTOR) {
 
       const { __typename, ...rest } = data.investor
       setUserProfile({ ...user, ...rest, })
-      console.log('window', window)
-      window.hj('indentity', userProfile?._id, {
-        email: 'test@tester.com'
-      })
+      if (window.hj) {
+        window.hj('indentity', userProfile?._id, {
+          email: 'test@tester.com'
+        })
+      }
 
     }
   }, [data])

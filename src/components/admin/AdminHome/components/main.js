@@ -176,7 +176,7 @@ function Settings({ investor, orgData, refetch }) {
         <Grid item sm={12} md={6}>
           <form noValidate autoComplete="off" style={{ padding: "16px" }}>
             <Typography variant="subtitle2" style={{ marginBottom: "16px" }}>
-              This information can be edited from your profile page.
+              This information can be edited from your organization settings page.
           </Typography>
             <Grid container spacing={3} style={{ marginTop: "16px" }}>
 

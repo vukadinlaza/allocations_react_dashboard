@@ -180,9 +180,7 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org }) {
                 variant="outlined" />
             </FormControl>
           </Grid>
-
           <InvestorName investor={investor} errors={errors} handleChange={handleChange} />
-
           <Grid item xs={12} sm={12} md={6}>
             <TextField required
               error={errors.includes("signer_full_name")}
