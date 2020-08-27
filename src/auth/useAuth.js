@@ -4,7 +4,7 @@ import { useAuth0 } from "../react-auth0-spa";
 import { useLazyQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost'
 
-const {NODE_ENV} = process.env
+const { NODE_ENV } = process.env
 
 const GET_INVESTOR = gql`
   {
@@ -32,7 +32,7 @@ const GET_INVESTOR = gql`
  *
  **/
 
-export function useAuth (QUERY=GET_INVESTOR) {
+export function useAuth(QUERY = GET_INVESTOR) {
   const params = useParams()
   const adminView = params && params.id
   const {
@@ -48,7 +48,7 @@ export function useAuth (QUERY=GET_INVESTOR) {
 
   useEffect(() => {
     if (!loading && isAuthenticated && !called) {
-      adminView ? getInvestor({ variables: { _id: params.id }}) : getInvestor()
+      adminView ? getInvestor({ variables: { _id: params.id } }) : getInvestor()
     }
   }, [isAuthenticated, loading, called])
 
@@ -61,8 +61,14 @@ export function useAuth (QUERY=GET_INVESTOR) {
         })
       }
 
-      const {__typename, ...rest} = data.investor
+      const { __typename, ...rest } = data.investor
       setUserProfile({ ...user, ...rest, })
+      if (window.hj) {
+        window.hj('indentity', userProfile?._id, {
+          email: 'test@tester.com'
+        })
+      }
+
     }
   }, [data])
 

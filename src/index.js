@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {BrowserRouter as Router} from "react-router-dom";
-import {hotjar} from 'react-hotjar';
+import { BrowserRouter as Router } from "react-router-dom";
+import { hotjar } from 'react-hotjar';
 import { ThemeProvider } from '@material-ui/core/styles';
 
-import {Auth0Provider} from "./react-auth0-spa";
+import { Auth0Provider } from "./react-auth0-spa";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
@@ -26,8 +26,9 @@ Bugsnag.start({
  *
  **/
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === 'staging') {
   // initialize hotjar
+  console.log('fires')
   hotjar.initialize(1630114, 6)
 }
 const ErrorBoundary = Bugsnag.getPlugin('react')
@@ -36,15 +37,15 @@ const ErrorBoundary = Bugsnag.getPlugin('react')
 ReactDOM.render(
   <ErrorBoundary>
     <ThemeProvider theme={theme}>
-    <Router>
+      <Router>
         <Auth0Provider>
-          <App/>
+          <App />
         </Auth0Provider>
       </Router>
     </ThemeProvider>
   </ErrorBoundary>,
   document.getElementById("root")
-   
+
 );
 
 // If you want your app to work offline and load faster, you can change
