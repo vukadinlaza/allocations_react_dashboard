@@ -31,6 +31,19 @@ if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === 'staging')
   console.log('fires')
   hotjar.initialize(1630114, 6)
 }
+
+var userId = "1" || null; // Replace your_user_id with your own if available.
+window.hj('identify', userId, {
+  "email":"test@test.com"
+    // Add your own custom attributes here. Some EXAMPLES:
+    // 'Signed up': '2019—06-20Z', // Signup date in ISO-8601 format.
+    // 'Last purchase category': 'Electronics', // Send strings with quotes around them.
+    // 'Total purchases': 15, // Send numbers without quotes.
+    // 'Last purchase date': '2019-06-20Z', // Send dates in ISO-8601 format.
+    // 'Last refund date': null, // Send null when no value exists for a user.
+});
+
+
 const ErrorBoundary = Bugsnag.getPlugin('react')
   .createErrorBoundary(React)
 
