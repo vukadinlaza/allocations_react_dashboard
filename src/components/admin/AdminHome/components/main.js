@@ -15,7 +15,7 @@ import { gql } from 'apollo-boost'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router-dom"
-import ActiveDeals from './active-deals'
+import { ActiveDeals } from './active-deals'
 import OrgCards from './org-cards'
 import ClosedDeals from './closed-deals'
 import Loader from '../../../utils/Loader'

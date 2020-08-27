@@ -35,7 +35,7 @@ import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
  *
  **/
 
-export default function ActiveDeals({ orgData }) {
+export const ActiveDeals = ({ orgData }) => {
   const history = useHistory();
 
   if (!orgData) return <Loader />
@@ -81,17 +81,16 @@ export default function ActiveDeals({ orgData }) {
 
 
 // clicking on the whole row opens the investment board
-function Deal({ deal, investments }) {
+export const Deal = ({ deal, investments }) => {
   const history = useHistory();
   const { organization } = useParams();
   const [activeDeal, setActiveDeal] = useState();
   const raised = _.sumBy(deal?.investments, 'amount')
-
   const val = (Number(raised) / (Number(deal.target) || Infinity)) * 100;
   // this isnt built into the app yet
   const hasSOW = true;
 
-  const formattedDate_closed = moment(deal.dealParams.wireDeadline).format('Do MMMM YYYY')
+  const formattedDate_closed = moment(deal?.dealParams?.wireDeadline).format('Do MMMM YYYY')
 
   return (
     <>
@@ -127,4 +126,3 @@ function Deal({ deal, investments }) {
     </>
   )
 }
-
