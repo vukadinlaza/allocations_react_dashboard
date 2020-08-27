@@ -34,7 +34,8 @@ if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === 'staging')
 
 var userId = "1" || null; // Replace your_user_id with your own if available.
 window.hj('identify', userId, {
-  "email":"test@test.com"
+    'email' : 'test@test.com',
+    'Signed up': '2019—06-20Z'
     // Add your own custom attributes here. Some EXAMPLES:
     // 'Signed up': '2019—06-20Z', // Signup date in ISO-8601 format.
     // 'Last purchase category': 'Electronics', // Send strings with quotes around them.
