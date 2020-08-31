@@ -33,6 +33,7 @@ export const ORG_OVERVIEW = gql`
       slug
       deals {
         _id
+        appLink
         status
         date_closed
         dealParams {
