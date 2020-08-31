@@ -51,6 +51,8 @@ const ALL_DEALS = gql`
         _id
         status
         date_closed
+        appLink
+        slug
         dealParams {
           wireDeadline
         }
