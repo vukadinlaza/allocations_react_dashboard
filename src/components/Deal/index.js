@@ -246,7 +246,6 @@ export function DealParams({ deal, deal_slug }) {
 
   const formattedDate_sign = moment(dealParams.signDeadline).format('Do MMMM YYYY')
   const formattedDate_wire = moment(dealParams.wireDeadline).format('Do MMMM YYYY')
-  console.log(userProfile)
   const isOrgAdmin = userProfile?.organizations_admin?.find(org => org.slug === deal_slug)
   return (
     <>
