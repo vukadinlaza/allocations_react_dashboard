@@ -107,9 +107,14 @@ export const Deal = ({ deal, investments }) => {
           </TableCell>
         </Hidden>
         <TableCell style={{ textAlign: "right" }}>
-          <Button color="primary" style={{ textTransform: 'lowercase' }} onClick={() => history.push(`/admin/${organization}/deals/${deal._id}/edit`)}>
-            Edit
+          <>
+            <Button color="primary" style={{ textTransform: 'lowercase' }} onClick={() => history.push(`/admin/${organization}/deals/${deal._id}/edit`)}>
+              Edit
           </Button>
+            <Button color="primary" style={{ textTransform: 'lowercase' }} onClick={() => history.push(deal.appLink || "#")}>
+              View
+          </Button>
+          </>
           <IconButton>
             {activeDeal ?
               <ExpandLessIcon /> : <ExpandMoreIcon />

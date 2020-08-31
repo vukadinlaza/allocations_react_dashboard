@@ -13,7 +13,8 @@ import {
   List,
   ListItem,
   ListItemText,
-  Grid
+  Grid,
+  Button
 } from '@material-ui/core';
 import queryString from 'query-string'
 import InvestmentFlow from './DealFlow'
@@ -190,22 +191,25 @@ export default function Deal() {
 
       <div style={{
         position: !mobile ? "absolute" : "relative",
-        padding: "100px 16px",
+        padding: "85px 16px",
         top: !mobile ? 0 : -32,
         bottom: 0,
         right: 0,
         width: !mobile ? 300 : "100%",
         borderLeft: !mobile ? "1px solid #dfe2e5" : 0,
       }}>
-        <DealParams deal={deal} />
+        <DealParams deal={deal} deal_slug={deal_slug} />
         <InvestorData investor={investor} />
       </div>
     </>
   )
 }
 
-export function DealParams({ deal }) {
+export function DealParams({ deal, deal_slug }) {
   const { dealParams, date_closed, deal_lead } = deal
+  const history = useHistory()
+  const { userProfile } = useAuth()
+
 
   const allocationPercent = dealParams.totalRoundSize && dealParams.allocation
     ? new BN(dealParams.allocation).dividedBy(dealParams.totalRoundSize).times(100).toFixed(0)
@@ -242,9 +246,22 @@ export function DealParams({ deal }) {
 
   const formattedDate_sign = moment(dealParams.signDeadline).format('Do MMMM YYYY')
   const formattedDate_wire = moment(dealParams.wireDeadline).format('Do MMMM YYYY')
-
+  console.log(userProfile)
+  const isOrgAdmin = userProfile?.organizations_admin?.find(org => org.slug === deal_slug)
   return (
     <>
+      {isOrgAdmin && <div style={{
+        minWidth: "100%",
+        display: "flex",
+        justifyContent: 'space-between'
+      }}>
+        <Button color="primary" style={{ minWidth: '105px' }} size="sm" onClick={() => history.push(`/admin/${deal_slug}/deals/${deal._id}/edit`)} variant="contained">
+          Edit Deal
+          </Button>
+        <Button color="primary" style={{ minWidth: '105px' }} size="sm" onClick={() => history.push(`/admin/${deal_slug}`)} variant="contained">
+          View Fund
+          </Button>
+      </div>}
       {(dealParams.signDeadline || dealParams.wireDeadline) &&
         <div style={{
           backgroundColor: "#f7f9fa",
