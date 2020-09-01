@@ -491,7 +491,8 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
   const classes = useStyles()
   const location = useLocation()
   const docs = dealInvestments.reduce((acc, inv) => {
-    return [...acc, ...inv?.documents]
+    const docs = _.get(inv, 'documents', [])
+    return [...acc, ...docs]
   }, [])
   useEffect(() => {
     setTimeout(() => {
