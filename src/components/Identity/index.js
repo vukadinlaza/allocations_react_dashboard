@@ -6,7 +6,8 @@ import { useAuth } from "../../auth/useAuth";
 import { useMutation } from '@apollo/react-hooks';
 import { toast } from 'react-toastify';
 import {
-    Button
+    Button,
+    Typography
 } from '@material-ui/core'
 import { PassportUploader } from '../forms/InvestorEdit/index'
 
@@ -83,6 +84,9 @@ const IdentityUpload = () => {
     if (!userProfile.email) return <div><Loader /></div>
     return (
         <>
+            <Typography variant="h6">
+                After uploading your file please press submit
+            </Typography>
             <PassportUploader investor={investor} setInvestor={setInvestor} />
             <Button variant="contained"
                 style={{ marginTop: 16 }}
