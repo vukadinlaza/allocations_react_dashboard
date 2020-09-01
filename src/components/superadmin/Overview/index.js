@@ -51,6 +51,8 @@ const ALL_DEALS = gql`
         _id
         status
         date_closed
+        appLink
+        slug
         dealParams {
           wireDeadline
         }
@@ -97,18 +99,27 @@ export default function SuperAdminOverview() {
   const { deals: allDealsData } = allDeals.superadmin
   const { deals, organizations, investors } = data.superadmin
 
-
-  console.log(allDealsData)
+  const groupedDeals = _.groupBy(allDealsData, 'status')
+  console.log(groupedDeals)
 
 
   return (
     <div className="SuperAdmin">
-      <h2 style={{ marginBottom: "20px" }}>🔮 Superadmin</h2>
       <div style={{ marginBottom: '4rem' }}>
+        <Row style={{ marginBottom: '1em' }}>
+          <Col md={{ size: "3" }}><Paper style={{ padding: "20px" }}><h6 style={{ color: "rgba(0,0,0,0.3)" }}>Funds</h6><h2 style={{ textAlign: "center" }}>1</h2></Paper></Col>
+
+          <Col md={{ size: "3" }}><Paper style={{ padding: "20px" }}><h6 style={{ color: "rgba(0,0,0,0.3)" }}>Deals</h6><h2 style={{ textAlign: "center" }}>{organizations?.length}</h2></Paper></Col>
+
+          <Col md={{ size: "3" }}><Paper style={{ padding: "20px" }}><h6 style={{ color: "rgba(0,0,0,0.3)" }}>Onboarding Deals</h6><h2 style={{ textAlign: "center" }}>{_.get(groupedDeals, 'onboarding', []).length}</h2></Paper></Col>
+
+          <Col md={{ size: "3" }}><Paper style={{ padding: "20px" }}><h6 style={{ color: "rgba(0,0,0,0.3)" }}>Closed Deals</h6><h2 style={{ textAlign: "center" }}>{_.get(groupedDeals, 'closed', []).length}</h2></Paper></Col>
+        </Row>
 
         <Grid container>
           <Grid item xs={12}>
             <Paper>
+              <h4 style={{ marginBottom: "20px", padding: "16px" }}>Deals</h4>
               <Table>
                 <TableHead>
                   <TableRow>

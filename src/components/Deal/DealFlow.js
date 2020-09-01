@@ -38,25 +38,23 @@ import { makeStyles } from "@material-ui/core/styles";
  *
  **/
 
-export const DEAL_INVESTMENTS = gql`
-  query deal($_id: String!) {
-    deal(_id: $_id) {
+export const GET_INVESTOR = gql`
+query GetInvestor($deal_id: String!, $_id: String) {
+  investor(_id: $_id) {
+    _id
+    email
+    documents
+    dealInvestments(deal_id: $deal_id) {
       _id
-      investments {
-          status
-          amount
-          investor {
-              _id
-              email
-              documents
-          }
-        documents {
-          link
-          path
-        }
+      status
+      amount
+      documents {
+        link
+        path
       }
     }
   }
+}
 `
 
 function getOnboardingLinkType(link) {
@@ -105,20 +103,25 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function InvestmentFlow({ investment, deal, investor, refetch }) {
+export default function InvestmentFlow({ deal, investor, refetch }) {
   const [status, setStatus] = useState("invited")
   const classes = useStyles();
+  const { data } = useQuery(GET_INVESTOR, {
+    variables: { deal_id: deal._id, _id: investor._id },
+    pollInterval: 1000
+  })
+  if (!data) return null
+  const { investor: polledInvestor } = data
+  const investment = _.get(polledInvestor, 'dealInvestments[0]', null)
 
   const onboardingLinkType = getOnboardingLinkType(deal.onboarding_link) || 'docusign'
   const { approved } = deal
   const hasSigned = investment?.status === 'signed' || investment?.status === 'wired' || investment?.status === 'complete'
   const hasWired = investment?.status === 'wired' || investment?.status === 'complete'
-  const docs = _.get(investor, 'documents') || []
+  const docs = _.get(polledInvestor, 'documents') || []
   const hasKyc = docs.find(d => d.documentName && (d.documentName.includes('W-8') || d.documentName.includes('W-9')));
   return (
     <React.Fragment>
-      {/* <InvestmentOverview investment={investment}/> */}
-
       <div className={classes.tabs}>
         <Grid container justify="center">
           <Grid item xs={12} sm={3}>
@@ -128,13 +131,6 @@ export default function InvestmentFlow({ investment, deal, investor, refetch }) 
               Data Room {investment && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
             </ButtonBase>
           </Grid>
-          {/* <Grid item xs={12} sm={3}>
-          <ButtonBase className={status === "pledging" ? classes.activeTab : classes.tab}
-                      style={{borderRight: "1px solid #e1e9ec"}}
-                      onClick={() => setStatus('pledging')}>
-            Pledge
-          </ButtonBase>
-        </Grid> */}
 
           <Grid item xs={12} sm={3}>
             <ButtonBase className={status === "pledged" ? classes.activeTab : classes.tab}
@@ -168,8 +164,8 @@ export default function InvestmentFlow({ investment, deal, investor, refetch }) 
         {status === "onboarded" && <Wire investment={investment} deal={deal} />}
         {/** Always render Onboarding so that the Docusign loads in... **/}
         {(onboardingLinkType === "docusign" && status === 'pledged') &&
-          < Onboarding status={status} investment={investment} deal={deal} investor={investor} />}
-        {status === 'kyc' && <KYCDocusign status={status} investment={investment} deal={deal} investor={investor} />}
+          < Onboarding status={status} dealInvestments={polledInvestor.dealInvestments} investment={investment} deal={deal} investor={investor} data={data} hasSigned={hasSigned} />}
+        {status === 'kyc' && <KYCDocusign status={status} investment={investment} deal={deal} investor={investor} hasKyc={hasKyc} />}
         {onboardingLinkType === "hellosign" &&
           <HelloSignOnboarding status={status} investment={investment} deal={deal} investor={investor} />}
       </>
@@ -184,10 +180,10 @@ function DataRoom({ deal }) {
         <span key={doc.path}>
           <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon
             icon="link" /> {doc.path}</a>
-        </span>
+        </span >
       ))}
       {deal.memo && <div className="deal-memo">{ReactHtmlParser(deal.memo)}</div>}
-    </div>
+    </div >
   )
 }
 
@@ -490,31 +486,20 @@ function filename(path) {
   }
 }
 
-function Onboarding({ investment, deal, investor, status }) {
+function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
   const [loading, setLoading] = useState(true)
-  const [signed, setSigned] = useState(false)
   const classes = useStyles()
   const location = useLocation()
-  const { data, } = useQuery(DEAL_INVESTMENTS, {
-    variables: { _id: deal._id },
-    pollInterval: 1000
-  })
-
-  const hasSigned = data?.deal?.investments.find(inv => (inv.status === 'signed' && inv?.investor?._id === investor?._id))
-
-  const doc = _.get(hasSigned, 'documents[0]')
-
+  const docs = dealInvestments.reduce((acc, inv) => {
+    const docs = _.get(inv, 'documents', [])
+    return [...acc, ...docs]
+  }, [])
   useEffect(() => {
     setTimeout(() => {
       setLoading(false)
     }, 2000)
   }, [])
 
-  useEffect(() => {
-    if (hasSigned) {
-      setSigned(true)
-    }
-  }, [hasSigned])
 
   if (!deal.onboarding_link) {
     return (
@@ -540,14 +525,16 @@ function Onboarding({ investment, deal, investor, status }) {
     link = `${deal.onboarding_link}&${urlParameters}`
   }
 
-  if (signed && doc && doc.link && doc.path) return (
+  if (hasSigned && docs.length >= 1) return (
     <Paper className={classes.paper}>
       <Typography variant="subtitle1">
         Thanks for signing! You can view your signed documents below.
       </Typography>
-      <Typography variant="subtitle2">
-        <span><a href={`https://${doc.link}`} target="_blank"
-          rel="noopener noreferrer">{filename(doc.path)}</a></span>      </Typography>
+      {docs.map(doc => {
+        return <Typography variant="subtitle2">
+          <span><a href={`https://${doc.link}`} target="_blank"
+            rel="noopener noreferrer">{filename(doc.path)}</a></span>      </Typography>
+      })}
     </Paper>)
   return (
     <div className={status === "pledged" ? "document-iframe" : "document-iframe hide"}>
@@ -565,9 +552,8 @@ function Onboarding({ investment, deal, investor, status }) {
 }
 
 
-function KYCDocusign({ deal, investor, status }) {
+function KYCDocusign({ deal, investor, status, hasKyc }) {
   const [loading, setLoading] = useState(true)
-  const [kycData, setKYCData] = useState({})
   const [link, setLink] = useState()
   const classes = useStyles()
 
@@ -577,13 +563,11 @@ function KYCDocusign({ deal, investor, status }) {
     }, 2000)
   }, [])
 
-  if (!investor) return <Loader />
-  const docs = _.get(investor, 'documents') || []
-  const kycDoc = docs.find(d => d.documentName && (d.documentName.includes('W-8') || d.documentName.includes('W-9')))
+  if (!deal) return <Loader />
 
 
 
-  if (kycDoc) return (
+  if (hasKyc) return (
     <Paper className={classes.paper}>
       <Typography variant="subtitle1">
         We already have a W8/W9 document on file for you.
