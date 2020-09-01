@@ -225,7 +225,7 @@ function KYC({ investor, setInvestor }) {
   )
 }
 
-function PassportUploader({ investor, setInvestor }) {
+export function PassportUploader({ investor, setInvestor }) {
   if (investor.passport) {
     return (
       <Paper>
