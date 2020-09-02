@@ -38,29 +38,7 @@ const GET_INVESTMENTS = gql`
           date_closed
           slug
           dealParams {
-            totalRoundSize
-            allocation
-            totalCarry
-            minimumInvestment
-            signDeadline
             wireDeadline
-            estimatedSetupCosts
-            estimatedSetupCostsDollar
-            estimatedTerm
-            managementFees
-            managementFeesDollar
-            portfolioTotalCarry
-            portfolioEstimatedSetupCosts
-            portfolioEstimatedSetupCostsDollar
-            portfolioManagementFees
-            portfolioManagementFeesDollar
-            fundTotalCarry
-            fundEstimatedSetupCosts
-            fundEstimatedSetupCostsDollar
-            fundManagementFees
-            fundManagementFeesDollar
-            fundGeneralPartner
-            fundEstimatedTerm
           }
         }
         documents {
