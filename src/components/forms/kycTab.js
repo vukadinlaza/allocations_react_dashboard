@@ -94,6 +94,10 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org }) {
   const submit = () => {
     const tin = investor.investor_type === 'individual' ? 'ssn_itin' : 'ein'
     const reqs = investor.country !== 'United States' && !investor.usePermAddressAsMailing ? [...required, ...optional, tin] : [...required, tin]
+    if (investor.country !== 'United States') {
+      const index = reqs.indexOf('ssn_itin');
+      reqs.splice(index, 1)
+    }
     const errors = reqs.reduce((acc, attr) => investor[attr] ? acc : [...acc, attr], [])
     setErrors(errors)
 
@@ -193,7 +197,7 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org }) {
 
           <Grid item xs={12} sm={12} md={6}>
             {investor.investor_type === 'individual' ? <TextField
-              required
+              required={investor?.country === 'United States'}
               error={errors.includes("ssn_itin")}
               style={{ width: "100%" }}
               value={get(investor, 'ssn_itin') || ""}
