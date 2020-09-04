@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { get } from 'lodash'
-import {useLazyQuery} from '@apollo/react-hooks';
-import {gql} from 'apollo-boost'
+import { useLazyQuery } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost'
 import { Modal, Grid, TextField, Typography, Paper, Button } from '@material-ui/core';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {makeStyles} from "@material-ui/core/styles";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { makeStyles } from "@material-ui/core/styles";
 
 import Loader from '../../../utils/Loader'
 
@@ -40,7 +40,7 @@ const GET_DOCUSIGN_FORM = gql`
 
 
 
-const POSModal = ({modal, setModal, organization}) => {
+const POSModal = ({ modal, setModal, organization }) => {
     const classes = useStyles();
     const [formData, setFormData] = useState({})
     const [link, setLink] = useState({})
@@ -48,75 +48,75 @@ const POSModal = ({modal, setModal, organization}) => {
 
     useEffect(() => {
         if (organization) {
-        setFormData({organization_name: organization.name, documentType: 'Provision Of Services'})
+            setFormData({ organization_name: organization.name })
         }
     }, [organization])
 
-     useEffect(() => {
-       if(data?.getLink?.redirectUrl && !loading) {
-           setLink(data?.getLink)
-       }
+    useEffect(() => {
+        if (data?.getLink?.redirectUrl && !loading) {
+            setLink(data?.getLink)
+        }
     }, [data, loading, setLink])
 
 
     const inputs = [
-        {tabLabel: 'Organization-Name', label: 'Organization Name', slug: 'organization_name'},
-        {tabLabel: 'Full-Name', label: 'Signer Name', slug: 'signer_full_name'},
+        { tabLabel: 'Organization-Name', label: 'Organization Name', slug: 'organization_name' },
+        { tabLabel: 'Full-Name', label: 'Signer Name', slug: 'signer_full_name' },
     ]
 
     const handleChange = (prop) => e => {
         e.persist()
-        return setFormData(prev => ({...prev, [prop]: e.target.value}))
+        return setFormData(prev => ({ ...prev, [prop]: e.target.value }))
     }
-    const submit = () => getLink({variables: { data: formData }})
+    const submit = () => getLink({ variables: { data: { ...formData, documentType: 'Provision Of Services' } } })
     const { redirectUrl, formName } = link
 
     return (
-            <Modal
+        <Modal
             open={modal}
             onClose={() => setModal(false)}
             aria-labelledby="pos-modal"
             aria-describedby="pos-modal"
+        >
+            <Grid
+                container xs={12}
+                justify="center"
+                alignItems="center"
             >
-                <Grid 
-                    container xs={12}
-                    justify="center"
-                    alignItems="center"
-                >
                 <Paper className={classes.paper}>
-                    <FontAwesomeIcon icon='times' pull="right" border onClick={() => setModal(false)}/> 
-                    
-                    {!redirectUrl &&  <>
+                    <FontAwesomeIcon icon='times' pull="right" border onClick={() => setModal(false)} />
+
+                    {!redirectUrl && <>
                         <Typography variant="h5" align="center" className={classes.header}>
                             Organization Information
                         </Typography>
 
 
-                        {loading ? <Loader/> :  
-                        <> 
-                            <Typography variant="subtitle2" align="center" className={classes.subtext}>
-                                This information will be used to fill out Allocation's Provision Of Services Agreement. 
+                        {loading ? <Loader /> :
+                            <>
+                                <Typography variant="subtitle2" align="center" className={classes.subtext}>
+                                    This information will be used to fill out Allocation's Provision Of Services Agreement.
                             </Typography>
-                            <Grid container spacing={2}>
-                                {inputs.map(item => {
-                                return (
-                                    <Grid item xs={12} sm={12} md={6}>
-                                    <TextField required
-                                                style={{width: "100%"}}
-                                                value={get(formData, item.slug) || ""}
-                                                onChange={handleChange(item.slug)}
-                                                label={item.label}
-                                                variant="outlined"/>
-                                    </Grid>
-                                    )
-                                })}
-                            </Grid>
-                            <Grid container justify="center">
-                                <Button onClick={submit} variant="contained" className={classes.button}>
-                                    Next
+                                <Grid container spacing={2}>
+                                    {inputs.map(item => {
+                                        return (
+                                            <Grid item xs={12} sm={12} md={6}>
+                                                <TextField required
+                                                    style={{ width: "100%" }}
+                                                    value={get(formData, item.slug) || ""}
+                                                    onChange={handleChange(item.slug)}
+                                                    label={item.label}
+                                                    variant="outlined" />
+                                            </Grid>
+                                        )
+                                    })}
+                                </Grid>
+                                <Grid container justify="center">
+                                    <Button onClick={submit} variant="contained" className={classes.button}>
+                                        Next
                                 </Button>
-                            </Grid>
-                        </>}
+                                </Grid>
+                            </>}
                     </>}
 
                     {redirectUrl && !loading && <>
@@ -128,10 +128,10 @@ const POSModal = ({modal, setModal, organization}) => {
                         <div className="embed-responsive embed-responsive-1by1">
                             <iframe className="embed-responsive-item" title="Wire Instructions" src={redirectUrl}></iframe>
                         </div>
-                     </>}
+                    </>}
                 </Paper>
-                </Grid>
-            </Modal>
+            </Grid>
+        </Modal>
     )
 }
 

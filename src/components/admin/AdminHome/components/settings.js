@@ -10,6 +10,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useMutation } from '@apollo/react-hooks'
 import { toLower, get, pick } from 'lodash'
 import { gql } from 'apollo-boost'
+import POSModal from './pos-modal'
+
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -64,6 +66,7 @@ const UPDATE_ORG = gql`
 function Settings({ investor, orgData, refetch }) {
     const classes = useStyles();
     const [organization, setOrganization] = useState(null)
+    const [modal, setModal] = useState(false)
     const [updateOrganization] = useMutation(UPDATE_ORG)
 
     useEffect(() => {
@@ -112,6 +115,12 @@ function Settings({ investor, orgData, refetch }) {
                             Submit
             </Button>
                     </form>
+                </Grid>
+                <Grid item sm={12} md={6}>
+                    <Typography variant="h6" style={{ marginBottom: "16px" }} onClick={() => setModal(true)}>
+                        Provision Of Service
+                     </Typography>
+                    <POSModal modal={modal} setModal={setModal} organization={organization} />
                 </Grid>
             </Grid>
         </Paper>
