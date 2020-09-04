@@ -12,21 +12,16 @@ import {
   TableHead,
   Button,
   LinearProgress,
-  Grid, ListItemSecondaryAction,
+  Grid,
   Hidden
 } from '@material-ui/core'
 import Loader from '../../../utils/Loader'
-import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom"
 import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from 'moment'
-import InvestmentFlow from './investmentFlow/index'
+import InvestmentFlow from './investment-flow'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import CheckIcon from '@material-ui/icons/Check';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 /***
  *
@@ -40,9 +35,7 @@ export const ActiveDeals = ({ orgData }) => {
 
   if (!orgData) return <Loader />
 
-  const org = orgData.organization
-
-  const { active } = _.groupBy(org.deals, d => d.status === "closed" ? "closed" : "active")
+  const { active } = _.groupBy(orgData.deals, d => d.status === "closed" ? "closed" : "active")
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -52,7 +45,7 @@ export const ActiveDeals = ({ orgData }) => {
               Active Deals: {(active || []).length}
             </Typography>
             <Button color="primary"
-              variant="contained" onClick={() => history.push(`/admin/${org.slug}/deal/new`)}>Create Deal</Button>
+              variant="contained" onClick={() => history.push(`/admin/${orgData.slug}/deal/new`)}>Create Deal</Button>
           </Grid>
           <Table>
             <TableHead>
@@ -69,7 +62,7 @@ export const ActiveDeals = ({ orgData }) => {
             </TableHead>
             <TableBody>
               {(active || []).map(deal => (
-                <Deal key={deal._id} deal={deal} investments={org.investments} />
+                <Deal key={deal._id} deal={deal} />
               ))}
             </TableBody>
           </Table>
@@ -81,11 +74,11 @@ export const ActiveDeals = ({ orgData }) => {
 
 
 // clicking on the whole row opens the investment board
-export const Deal = ({ deal, investments }) => {
+export const Deal = ({ deal }) => {
   const history = useHistory();
   const { organization } = useParams();
   const [activeDeal, setActiveDeal] = useState();
-  const raised = _.sumBy(deal?.investments, 'amount')
+  const raised = deal?.raised
   const val = (Number(raised) / (Number(deal.target) || Infinity)) * 100;
   // this isnt built into the app yet
   const hasSOW = true;
@@ -124,7 +117,7 @@ export const Deal = ({ deal, investments }) => {
       </TableRow>
       {activeDeal && <TableRow style={{ borderTop: "0", maxWidth: '300px' }}>
         <TableCell colspan="5">
-          <InvestmentFlow deal={deal} investments={investments} />
+          <InvestmentFlow dealId={deal._id} />
         </TableCell>
       </TableRow>
       }
