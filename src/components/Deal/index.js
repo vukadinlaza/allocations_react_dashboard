@@ -247,8 +247,8 @@ export function DealParams({ deal, deal_slug }) {
     dealParams.fundGeneralPartner ||
     dealParams.fundEstimatedTerm
 
-  const formattedDate_sign = moment(dealParams.signDeadline).format('Do MMMM YYYY')
-  const formattedDate_wire = moment(dealParams.wireDeadline).format('Do MMMM YYYY')
+  const formattedDate_sign = moment(dealParams.signDeadline).format('Do MMMM YYYY, h:mm a')
+  const formattedDate_wire = moment(dealParams.wireDeadline).format('Do MMMM YYYY, h:mm a')
   const isOrgAdmin = userProfile?.organizations_admin?.find(org => org.slug === deal_slug)
   return (
     <>
@@ -286,13 +286,13 @@ export function DealParams({ deal, deal_slug }) {
           <ListItem>
             <ListItemText
               primary="Signing Deadline"
-              secondary={_.upperFirst(formattedDate_sign)}
+              secondary={`${_.upperFirst(formattedDate_sign)} PST`}
             />
           </ListItem>
           <ListItem>
             <ListItemText
               primary="Wiring Deadline"
-              secondary={_.upperFirst(formattedDate_wire)}
+              secondary={`${_.upperFirst(formattedDate_wire)} PST`}
             />
           </ListItem>
         </List>
