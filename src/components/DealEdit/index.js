@@ -438,7 +438,7 @@ export default function DealEdit() {
                   value={deal.dealParams.signDeadline || ""}
                   onChange={e => setDeal({ dealParams: { ...deal.dealParams, signDeadline: e.target.value } })}
                   label="Signing Deadline"
-                  type="date"
+                  type="datetime-local"
                   variant="outlined" />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -446,7 +446,7 @@ export default function DealEdit() {
                   value={deal.dealParams.wireDeadline || ""}
                   onChange={e => setDeal({ dealParams: { ...deal.dealParams, wireDeadline: e.target.value } })}
                   label="Wiring Deadline"
-                  type="date"
+                  type="datetime-local"
                   variant="outlined" />
               </Grid>
 
@@ -486,7 +486,7 @@ export default function DealEdit() {
                 <FormControl variant="outlined" style={{ width: "100%" }}>
                   <InputLabel>Fee Type</InputLabel>
                   <Select value={deal.dealParams.managementFeeType || ""}
-                    onChange={e => setDeal({ 
+                    onChange={e => setDeal({
                       dealParams: {
                         ...deal.dealParams,
                         managementFeeType: e.target.value
@@ -613,7 +613,7 @@ export default function DealEdit() {
                 <FormControl variant="outlined" style={{ width: "100%" }}>
                   <InputLabel>Fee Type</InputLabel>
                   <Select value={deal.dealParams.portfolioManagementFeeType || ""}
-                    onChange={e => setDeal({ 
+                    onChange={e => setDeal({
                       dealParams: {
                         ...deal.dealParams,
                         portfolioManagementFeeType: e.target.value
@@ -717,21 +717,21 @@ export default function DealEdit() {
               variant="outlined" />
           </Grid>
           <Grid item xs={12} sm={6}>
-                <FormControl variant="outlined" style={{ width: "100%" }}>
-                  <InputLabel>Fee Type</InputLabel>
-                  <Select value={deal.dealParams.fundManagementFeeType || ""}
-                    onChange={e => setDeal({ 
-                      dealParams: {
-                        ...deal.dealParams,
-                        fundManagementFeeType: e.target.value
-                      }
-                    })}
-                    inputProps={{ name: 'Type' }}>
-                    <MenuItem value="Annual">Annual</MenuItem>
-                    <MenuItem value="One-Time">One-Time</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
+            <FormControl variant="outlined" style={{ width: "100%" }}>
+              <InputLabel>Fee Type</InputLabel>
+              <Select value={deal.dealParams.fundManagementFeeType || ""}
+                onChange={e => setDeal({
+                  dealParams: {
+                    ...deal.dealParams,
+                    fundManagementFeeType: e.target.value
+                  }
+                })}
+                inputProps={{ name: 'Type' }}>
+                <MenuItem value="Annual">Annual</MenuItem>
+                <MenuItem value="One-Time">One-Time</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
           <Grid item xs={12} sm={6}>
             <TextField style={{ width: "100%" }}
               value={deal.dealParams.fundEstimatedSetupCosts || ""}
