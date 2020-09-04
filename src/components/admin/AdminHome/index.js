@@ -99,7 +99,6 @@ export default function AdminHome({ }) {
 
   if (!data) return <Loader />
   const orgData = data.organization
-  console.log(orgData)
 
   if (!orgData) return <Paper style={{ padding: "25px" }}><Loader /></Paper>
   return (
@@ -160,7 +159,7 @@ export default function AdminHome({ }) {
         {tab === "closed-deals" && <ClosedDeals orgData={orgData} />}
         {tab === "all-investors" && <Investors />}
         {tab === "investments" && <Investments />}
-        {tab === "setting" && <Settings orgData={orgData.organization} investor={data.investor} refetch={refetch} />}
+        {tab === "setting" && <Settings orgData={orgData} investor={data.investor} refetch={refetch} />}
       </>
     </>
   )
