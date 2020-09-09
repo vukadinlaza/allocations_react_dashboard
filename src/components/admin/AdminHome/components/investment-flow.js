@@ -13,9 +13,9 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from "@material-ui/core/styles";
 import { useQuery } from '@apollo/react-hooks'
-import Loader from '../../../../utils/Loader'
-import { nWithCommas } from '../../../../../utils/numbers'
-import { getDisplayName } from '../../../../../utils/displayName'
+import Loader from '../../../utils/Loader'
+import { nWithCommas } from '../../../../utils/numbers'
+import { getDisplayName } from '../../../../utils/displayName'
 import Box from "@material-ui/core/Box";
 import CheckIcon from '@material-ui/icons/Check';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
@@ -48,10 +48,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-// if investment status is 'signed' item should show in 'KYC' column
-// if investmen status is 'signed' AND user has a KYC document, item should show in 'Wire' column
-// if investment status is 'wired' item should show in 'Complete' column
-
 const boardData = [
   { title: 'Viewed', key: 'invited' },
   { title: 'Signed', key: 'signed' },
@@ -76,10 +72,10 @@ export const DEAL_INVESTMENTS = gql`
   }
 `
 
-export default ({ deal }) => {
+export default ({ dealId }) => {
   const classes = useStyles()
   const { data, loading } = useQuery(DEAL_INVESTMENTS, {
-    variables: { _id: deal._id },
+    variables: { _id: dealId },
     pollInterval: 500
   })
   const investments = data?.deal?.investments.map(inv => {

@@ -145,7 +145,7 @@ export default function InvestorEditForm({ investor, setInvestor, actionText, ic
                   onChange={handleChange("country")}
                   inputProps={{ name: 'Country' }}>
                   <MenuItem value=""></MenuItem>
-                  {countries.map(({ countryName }) => (
+                  {[{ countryName: 'United States' }, ...countries].map(({ countryName }) => (
                     <MenuItem key={countryName} value={countryName}>{countryName}</MenuItem>
                   ))}
                 </Select>
