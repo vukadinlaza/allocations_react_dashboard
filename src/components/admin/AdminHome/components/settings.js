@@ -87,11 +87,8 @@ function Settings({ investor, orgData, refetch }) {
 
     const handleChange = (prop) => e => {
         e.persist()
-        if (prop === "investor_type") {
-            return setOrganization(prev => ({ ...prev, [prop]: e.target.value, accredited_investor_status: "" }))
-        } else {
-            return setOrganization(prev => ({ ...prev, [prop]: e.target.value }))
-        }
+        return setOrganization(prev => ({ ...prev, [prop]: e.target.value }))
+
     }
     const docs = investor.documents ? investor.documents : [];
     const hasDoc = docs.find(d => toLower(d.documentName).includes(toLower('Provision')))
