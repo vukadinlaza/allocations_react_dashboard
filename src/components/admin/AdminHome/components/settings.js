@@ -7,6 +7,7 @@ import {
     TextField
 } from '@material-ui/core';
 import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router-dom"
 import { useMutation } from '@apollo/react-hooks'
 import { toLower, get, pick } from 'lodash'
 import { gql } from 'apollo-boost'
@@ -65,24 +66,29 @@ const UPDATE_ORG = gql`
 `
 function Settings({ investor, orgData, refetch }) {
     const classes = useStyles();
+    const history = useHistory()
     const [organization, setOrganization] = useState(null)
     const [modal, setModal] = useState(false)
-    const [updateOrganization] = useMutation(UPDATE_ORG)
+    const [updateOrganization, { data }] = useMutation(UPDATE_ORG)
 
     useEffect(() => {
         if (orgData) {
-            setOrganization(pick(orgData, ['name', '_id']))
+            setOrganization(pick(orgData, ['name', '_id', 'slug']))
         }
     }, [orgData])
+    useEffect(() => {
+        console.log(data)
+        if (data?.updateOrganization?.slug) {
+            history.push(`/admin/${data?.updateOrganization?.slug}`)
+        }
+    }, [data])
+
 
 
     const handleChange = (prop) => e => {
         e.persist()
-        if (prop === "investor_type") {
-            return setOrganization(prev => ({ ...prev, [prop]: e.target.value, accredited_investor_status: "" }))
-        } else {
-            return setOrganization(prev => ({ ...prev, [prop]: e.target.value }))
-        }
+        return setOrganization(prev => ({ ...prev, [prop]: e.target.value }))
+
     }
     const docs = investor.documents ? investor.documents : [];
     const hasDoc = docs.find(d => toLower(d.documentName).includes(toLower('Provision')))
@@ -97,11 +103,19 @@ function Settings({ investor, orgData, refetch }) {
                         <Grid container spacing={3} style={{ marginTop: "16px" }}>
 
                             <Grid item xs={12} sm={12} md={6}>
-                                <TextField required disabled
+                                <TextField required
                                     style={{ width: "100%" }}
                                     value={get(organization, 'name') || ""}
                                     onChange={handleChange("name")}
                                     label="Organization Name"
+                                    variant="outlined" />
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={6}>
+                                <TextField required
+                                    style={{ width: "100%" }}
+                                    value={get(organization, 'slug') || ""}
+                                    onChange={handleChange("slug")}
+                                    label="Organization Slug (URL)"
                                     variant="outlined" />
                             </Grid>
 
