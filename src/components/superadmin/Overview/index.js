@@ -60,6 +60,9 @@ const ALL_DEALS = gql`
         company_description
         target
         amount_raised
+        organization {
+          slug
+        }
         investments {
         _id
           status
@@ -100,8 +103,7 @@ export default function SuperAdminOverview() {
   const { deals, organizations, investors } = data.superadmin
 
   const groupedDeals = _.groupBy(allDealsData, 'status')
-  console.log(groupedDeals)
-
+  console.log(allDealsData)
 
   return (
     <div className="SuperAdmin">

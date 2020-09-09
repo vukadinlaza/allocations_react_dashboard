@@ -101,7 +101,7 @@ export const Deal = ({ deal }) => {
         </Hidden>
         <TableCell style={{ textAlign: "right" }}>
           <>
-            <Button color="primary" style={{ textTransform: 'lowercase' }} onClick={() => history.push(`/admin/${organization || deal.slug}/deals/${deal._id}/edit`)}>
+            <Button color="primary" style={{ textTransform: 'lowercase' }} onClick={() => history.push(`/admin/${organization || deal.organization.slug}/deals/${deal._id}/edit`)}>
               Edit
           </Button>
             <Button color="primary" style={{ textTransform: 'lowercase' }} onClick={() => history.push(deal.appLink || "#")}>
