@@ -18,6 +18,7 @@ import {
 } from '@material-ui/core';
 import queryString from 'query-string'
 import InvestmentFlow from './DealFlow'
+import Helm from './helmet'
 import Pledge from './pledge'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import moment from 'moment'
@@ -177,6 +178,7 @@ export default function Deal() {
 
   return (
     <>
+      <Helm deal={deal} />
       <div style={{ width: mobile ? "100%" : "calc(100% - 300px)" }}>
         <Grid container justify="space-between" alignItems="flex-end"
         >

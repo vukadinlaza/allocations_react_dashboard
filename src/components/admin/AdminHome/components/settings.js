@@ -11,6 +11,8 @@ import { useHistory } from "react-router-dom"
 import { useMutation } from '@apollo/react-hooks'
 import { toLower, get, pick } from 'lodash'
 import { gql } from 'apollo-boost'
+import POSModal from './pos-modal'
+
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -66,6 +68,7 @@ function Settings({ investor, orgData, refetch }) {
     const classes = useStyles();
     const history = useHistory()
     const [organization, setOrganization] = useState(null)
+    const [modal, setModal] = useState(false)
     const [updateOrganization, { data }] = useMutation(UPDATE_ORG)
 
     useEffect(() => {
@@ -74,6 +77,7 @@ function Settings({ investor, orgData, refetch }) {
         }
     }, [orgData])
     useEffect(() => {
+        console.log(data)
         if (data?.updateOrganization?.slug) {
             history.push(`/admin/${data?.updateOrganization?.slug}`)
         }
@@ -91,7 +95,6 @@ function Settings({ investor, orgData, refetch }) {
     }
     const docs = investor.documents ? investor.documents : [];
     const hasDoc = docs.find(d => toLower(d.documentName).includes(toLower('Provision')))
-    console.log(orgData)
     return <>
         <Paper className={classes.paper} style={{ marginBottom: 16 }}>
             <Grid container spacing={3}>
@@ -129,6 +132,12 @@ function Settings({ investor, orgData, refetch }) {
                             Submit
             </Button>
                     </form>
+                </Grid>
+                <Grid item sm={12} md={6}>
+                    <Typography variant="h6" style={{ marginBottom: "16px" }} onClick={() => setModal(true)}>
+                        Provision Of Service
+                     </Typography>
+                    <POSModal modal={modal} setModal={setModal} organization={organization} />
                 </Grid>
             </Grid>
         </Paper>
