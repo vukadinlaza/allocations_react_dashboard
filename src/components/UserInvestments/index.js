@@ -8,7 +8,7 @@ import { Row, Col } from 'reactstrap'
 import { nWithCommas, formatDate } from '../../utils/numbers'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from '../utils/Loader'
-import { Table, TableBody, TableCell, Grid, TableRow, TableHead, Paper, Hidden } from '@material-ui/core'
+import { Table, TableBody, TableCell, Grid, TableRow, TableHead, Paper, Hidden, ButtonBase, Button } from '@material-ui/core'
 import "./style.scss";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -72,6 +72,44 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "20px",
     borderRadius: "10px"
   },
+  paper: {
+    padding: theme.spacing(2),
+  },
+  divider: {
+    margin: "16px -16px"
+  },
+  tabs: {
+    borderTop: "1px solid #dfe3e9",
+    borderBottom: "1px solid #dfe3e9",
+    background: "#f7f9fa",
+    minHeight: 44,
+    margin: "40px 0",
+  },
+  text: {
+    color: "#7f8ea3"
+  },
+  tab: {
+    height: 42,
+    width: "100%"
+  },
+  subtitle: {
+    color: "#3A506B",
+    marginTop: 16
+  },
+  activeTab: {
+    height: 42,
+    paddingTop: 3,
+    width: "100%",
+    borderBottom: "3px solid #205DF5",
+    outline: "0 !important",
+  },
+  button: {
+    margin: ".5rem"
+  },
+  orgName: {
+    color: '#3A506B',
+    fontWeight: 'bolder'
+  }
 }));
 const TABLE_ORDER = {
   "invited": { status: 'invited', display: 'Invited', order: 0 },
@@ -81,24 +119,21 @@ const TABLE_ORDER = {
   "wired": { status: 'wired', display: 'Wired', order: 4 },
   "complete": { status: 'complete', display: 'Complete', order: 5 }
 }
-const TR = ({ investment, showDocs, setShowDocs, type }) => {
+const TR = ({ investment, showDocs, setShowDocs }) => {
   const history = useHistory()
 
   return (
     <TableRow key={investment._id} className="investment-row">
-      <TableCell scope="row" onClick={() => history.push(_.get(investment, 'deal.appLink', ""))}>{investment.deal.company_name}</TableCell>
-      <Hidden xsDown><TableCell onClick={() => history.push(_.get(investment, 'deal.appLink', ""))}>{investment.deal.company_description}</TableCell></Hidden>
-      <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) :
+      <TableCell style={{ maxWidth: '200px', minWith: '200px', width: '200px' }} onClick={() => setShowDocs(showDocs ? null : investment)} scope="row">{investment.deal.company_name}</TableCell>
+      <Hidden xsDown><TableCell style={{ maxWidth: '300px', minWith: '300px', width: '300px' }} onClick={() => setShowDocs(showDocs ? null : investment)}>{_.truncate(investment.deal.company_description, { length: 35 })}</TableCell></Hidden>
+      <TableCell onClick={() => setShowDocs(showDocs ? null : investment)} align="right">{investment.amount ? "$" + nWithCommas(investment.amount) :
         <i>TBD</i>}</TableCell>
-      <TableCell align="center" onClick={() => history.push(_.get(investment, 'deal.appLink', ""))}><InvestmentStatus investment={investment} /></TableCell>
-      <TableCell align="center" onClick={() => history.push(_.get(investment, 'deal.appLink', ""))}>{formatDate(investment.deal.dealParams.wireDeadline)}</TableCell>
-      <TableCell align="right">
-        {_.get(investment, 'documents.length', 0) > 0
-          ? showDocs && (showDocs._id === investment._id)
-            ? <FontAwesomeIcon icon="times" onClick={() => setShowDocs(null)} />
-            : <FontAwesomeIcon icon="info-circle" onClick={() => setShowDocs({ ...investment, type })} />
-          : ""
-        }
+      <TableCell onClick={() => setShowDocs(showDocs ? null : investment)} align="center"><InvestmentStatus investment={investment} /></TableCell>
+      <TableCell onClick={() => setShowDocs(showDocs ? null : investment)} align="center">{formatDate(investment.deal.dealParams.wireDeadline)}</TableCell>
+      <TableCell align="right" onClick={() => history.push(_.get(investment, 'deal.appLink', ""))}>
+        <Button variant="contained" size="small" color="secondary">
+          View
+        </Button>
       </TableCell>
     </TableRow>
   )
@@ -106,14 +141,10 @@ const TR = ({ investment, showDocs, setShowDocs, type }) => {
 export default function UserInvestments() {
   const classes = useStyles();
   const [showDocs, setShowDocs] = useState(null)
-  const { userProfile, error, } = useAuth(GET_INVESTOR)
-  if (error) {
-    if (error.message === "GraphQL error: permission denied" && userProfile && userProfile.email) {
-      return <Redirect to="/signup" />
-    }
-    return <div>{error.message}</div>
-  }
-  if (!userProfile.email) return <div><Loader /></div>
+  const [activeInvestments, setActiveInvestments] = useState({ status: 'invited' })
+  const { userProfile, error } = useAuth(GET_INVESTOR)
+
+
   const investments = _.orderBy(
     userProfile.investments,
     [
@@ -122,106 +153,105 @@ export default function UserInvestments() {
     ],
     ['asc', 'desc'],
   )
-  const pendingInvesments = investments.filter(i => i.status !== 'complete')
+  const onboardingInvestments = investments.filter(i => !['invited', 'complete'].includes(i.status))
+  const invitedInvestments = investments.filter(i => i.status === 'invited')
   const completeInvestments = investments.filter(i => i.status === 'complete')
+
+
+  if (error) {
+    if (error.message === "GraphQL error: permission denied" && userProfile && userProfile.email) {
+      return <Redirect to="/signup" />
+    }
+    return <div>{error.message}</div>
+  }
+  if (!userProfile.email) return <div><Loader /></div>
+
+  let type = null
   if (showDocs) {
-    const type = showDocs.type === 'pending' ? pendingInvesments : completeInvestments
+    type = showDocs.status === 'complete' ? completeInvestments : showDocs.status === 'invited' ? invitedInvestments : onboardingInvestments
     type.splice(type.findIndex(i => i._id === showDocs._id) + 1, 0, { showDocs })
   }
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item>
-          {/* <div className={classes.totalInvested}>
-            Total Invested: <span>${nWithCommas(_.sumBy(investments, 'amount'))}</span>
-          </div> */}
-          {/* Peer: Total amount of investments is not shown in the design anymore
-           <Typography variant="h6" gutterBottom>
-            Investments: <span>{showDocs ? investments.length - 1 : investments.length}</span>
-          </Typography>
-          */}
+      <div className={classes.tabs}>
+        <Grid container>
+          <Grid item xs={12} sm={4} md={2}>
+            <ButtonBase className={activeInvestments.status === "invited" ? classes.activeTab : classes.tab}
+              onClick={() => setActiveInvestments({ status: 'invited', investments: invitedInvestments })}>
+              Invited
+            </ButtonBase>
+          </Grid>
+          <Grid item xs={12} sm={4} md={2}>
+            <ButtonBase className={activeInvestments.status === "onboarding" ? classes.activeTab : classes.tab}
+              onClick={() => setActiveInvestments({ status: 'onboarding', investments: onboardingInvestments })}>
+              Onboarding
+            </ButtonBase>
+          </Grid>
+          <Grid item xs={12} sm={4} md={2}>
+            <ButtonBase className={activeInvestments.status === "complete" ? classes.activeTab : classes.tab}
+              onClick={() => setActiveInvestments({ status: 'complete', investments: completeInvestments })}>
+              Completed
+            </ButtonBase>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <Hidden smUp>
-            <Typography variant="h6" gutterBottom>Pending Deals:</Typography>
-            <Paper>
-              <Table dense>
-                {pendingInvesments.map((investment) => (
-                  investment.showDocs ? <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents} />
-                    : <TR key={investment._id} investment={investment} type="pending" showDocs={showDocs}
-                      setShowDocs={setShowDocs} />
-                ))}
-              </Table>
-            </Paper>
-            <br />
-            <Typography className="paperTitle" variant="h6" gutterBottom>Completed:</Typography>
-            <Paper>
-              <Table dense>
-                {completeInvestments.map((investment) => (
-                  investment.showDocs ? <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents} />
-                    : <TR key={investment._id} investment={investment} type="complete" showDocs={showDocs}
-                      setShowDocs={setShowDocs} />
-                ))}
-              </Table>
-            </Paper>
-          </Hidden>
-          <Hidden only="xs">
-            <Paper>
-              <Typography variant="h6" style={{ paddingLeft: "16px", paddingTop: "16px", }} gutterBottom>
-                Pending Deals
-              </Typography>
-              <Typography variant="subtitle2" style={{ paddingLeft: "16px", paddingBottom: "16px" }}>
-                Below is a list of your current pending and completed deals.
-              </Typography>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Company</TableCell>
-                    <Hidden xsDown><TableCell>Description</TableCell></Hidden>
-                    <TableCell align="right">Amount</TableCell>
-                    <TableCell align="center">Status</TableCell>
-                    <TableCell align="center">Closing Date</TableCell>
-                    <TableCell align="right">Docs</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {pendingInvesments.map((investment) => (
-                    investment.showDocs ? <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents} />
-                      : <TR key={investment._id} investment={investment} type="pending" showDocs={showDocs}
-                        setShowDocs={setShowDocs} />
-                  ))}
-                </TableBody>
-              </Table>
-            </Paper>
-            <br />
-            <Paper>
-              <Typography variant="h6" style={{ paddingLeft: "16px", paddingTop: "16px", }} gutterBottom>
-                Completed Deals
-            </Typography>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Company</TableCell>
-                    <Hidden xsDown><TableCell>Description</TableCell></Hidden>
-                    <TableCell align="right">Amount</TableCell>
-                    <TableCell align="center">Status</TableCell>
-                    <TableCell align="center">Closing Date</TableCell>
-                    <TableCell align="right">Docs</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {completeInvestments.map((investment) => (
-                    investment.showDocs ? <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents} />
-                      : <TR key={investment._id} investment={investment} type="complete" showDocs={showDocs}
-                        setShowDocs={setShowDocs} />
-                  ))}
-                </TableBody>
-              </Table>
-            </Paper>
-          </Hidden>
-        </Grid>
-      </Grid>
+      </div>
+
+      <>
+        <Tab investments={showDocs ? type : (activeInvestments.investments || invitedInvestments)} showDocs={showDocs} setShowDocs={setShowDocs} type={activeInvestments.status} />
+      </>
     </>
+  )
+}
+
+
+const Tab = ({ investments, showDocs, setShowDocs, type }) => {
+  return (
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <Hidden smUp>
+          <Typography variant="h6" gutterBottom>{_.startCase(_.toLower(type))} Deals:</Typography>
+          <Paper>
+            <Table dense>
+              {investments.map((investment) => (
+                investment.showDocs ? <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents} />
+                  : <TR key={investment._id} investment={investment} showDocs={showDocs}
+                    setShowDocs={setShowDocs} />
+              ))}
+            </Table>
+          </Paper>
+          <br />
+        </Hidden>
+        <Hidden only="xs">
+          <Paper>
+            <Typography variant="h6" style={{ paddingLeft: "16px", paddingTop: "16px", }} gutterBottom>
+              {_.startCase(_.toLower(type))} Deals
+              </Typography>
+            <Typography variant="subtitle2" style={{ paddingLeft: "16px", paddingBottom: "16px" }}>
+              Below is a list of your investments.
+              </Typography>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Company</TableCell>
+                  <Hidden xsDown><TableCell>Description</TableCell></Hidden>
+                  <TableCell align="right">Amount</TableCell>
+                  <TableCell align="center">Status</TableCell>
+                  <TableCell align="center">Closing Date</TableCell>
+                  <TableCell align="right"></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {investments.map((investment) => (
+                  investment.showDocs ? <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents} />
+                    : <TR key={investment._id} investment={investment} showDocs={showDocs}
+                      setShowDocs={setShowDocs} />
+                ))}
+              </TableBody>
+            </Table>
+          </Paper>
+        </Hidden>
+      </Grid>
+    </Grid>
   )
 }
 
@@ -245,13 +275,9 @@ function DocsRow({ docs }) {
     <>
       <TableRow>
         <TableCell colSpan={6}>
-          <Typography variant="subtitle2">
+          <Typography variant="subtitle2" style={{ marginBottom: '1rem' }}>
             Documents may take up to 7 days to appear here after signing.
           </Typography>
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell colSpan={6}>
           {docs.map(doc => (
             <div key={doc.path} className="doc-wrapper">
               <div className="doc">
