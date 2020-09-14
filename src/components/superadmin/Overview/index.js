@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import _ from 'lodash'
 import { gql } from 'apollo-boost'
 import { Row, Col } from 'reactstrap'
+import moment from 'moment'
 import { Link, useHistory } from 'react-router-dom'
 import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
@@ -11,6 +12,7 @@ import FormModal from '../../Modal'
 import { Paper, LinearProgress, Table, TableBody, TableCell, TableRow, Button, Grid, TableHead, MenuItem, FormControl, Select, InputLabel, Typography } from '@material-ui/core'
 import { Deal } from '../../admin/AdminHome/components/active-deals'
 import EditOrg from '../../forms/editOrg'
+import EditInvestor from '../../forms/editInvestor'
 import "./style.scss"
 
 const SUPERADMIN = gql`
@@ -42,7 +44,25 @@ const SUPERADMIN = gql`
       investors {
         _id
         name
-        created_at
+        first_name
+        last_name
+        entity_name
+        country
+        investor_type
+        signer_full_name
+        accredited_investor_status
+        email
+        investments {
+          amount
+        }
+        accredidation_doc {
+          link
+          path
+        }
+        passport {
+          link
+          path
+        }
       }
     }
   }
@@ -81,6 +101,12 @@ const ALL_DEALS = gql`
           }
         }
       }
+      investors {
+        _id
+        first_name
+        last_name
+        email
+      }
     }
 }
 `
@@ -106,9 +132,8 @@ export default function SuperAdminOverview() {
   const [activeDeals, setActiveDeals] = useState([])
   const [open, setOpen] = useState(false);
   const [type, setType] = useState('all')
-  const [activeData, setActiveData] = useState({ type: 'orgs' })
+  const [activeData, setActiveData] = useState('orgs')
   const { data: allDeals } = useQuery(ALL_DEALS)
-  const modalBody = {};
 
   useEffect(() => {
     if (allDeals?.superadmin?.deals) {
@@ -137,31 +162,32 @@ export default function SuperAdminOverview() {
   }
 
   const formsMap = {
-    orgsForm: <EditOrg orgData={open.org} refetch={refetch} />
+    orgsForm: <EditOrg orgData={open.org} refetch={refetch} />,
+    usersForm: <EditInvestor data={open.investor} refetch={refetch} />
   }
 
   let form = null
   if (open) {
     form = formsMap[open.type]
   }
-  console.log(form)
+  console.log(investors)
 
   return (
     <div className="SuperAdmin">
       <div style={{ marginBottom: '4rem' }}>
         <Row style={{ marginBottom: '1em' }}>
-          <Col md={{ size: "3" }}><Paper onClick={() => setActiveData({ data: organizations, type: 'orgs' })} style={{ padding: "20px" }}><h6 style={{ color: "rgba(0,0,0,0.3)" }}>Funds</h6><h2 style={{ textAlign: "center" }}>{organizations?.length}</h2></Paper></Col>
+          <Col md={{ size: "3" }}><Paper onClick={() => setActiveData('orgs')} style={{ padding: "20px", backgroundColor: activeData === 'orgs' ? '#205DF5' : 'white' }}><h6 style={{ color: "rgba(0,0,0,0.3)" }}>Funds</h6><h2 style={{ textAlign: "center" }}>{organizations?.length}</h2></Paper></Col>
 
-          <Col md={{ size: "3" }}><Paper onClick={() => setActiveData({ data: allDealsData, type: 'deals' })} style={{ padding: "20px" }}><h6 style={{ color: "rgba(0,0,0,0.3)" }}>Deals</h6><h2 style={{ textAlign: "center" }}>{organizations?.length}</h2></Paper></Col>
+          <Col md={{ size: "3" }}><Paper onClick={() => setActiveData('deals')} style={{ padding: "20px", backgroundColor: activeData === 'deals' ? '#205DF5' : 'white' }}><h6 style={{ color: "rgba(0,0,0,0.3)" }}>Deals</h6><h2 style={{ textAlign: "center" }}>{organizations?.length}</h2></Paper></Col>
 
-          <Col md={{ size: "3" }}><Paper style={{ padding: "20px" }}><h6 style={{ color: "rgba(0,0,0,0.3)" }}>Onboarding Deals</h6><h2 style={{ textAlign: "center" }}>{_.get(groupedDeals, 'onboarding', []).length}</h2></Paper></Col>
+          <Col md={{ size: "3" }}><Paper onClick={() => setActiveData('investors')} style={{ padding: "20px", backgroundColor: activeData === 'investors' ? '#205DF5' : 'white' }}><h6 style={{ color: "rgba(0,0,0,0.3)" }}>Users</h6><h2 style={{ textAlign: "center" }}>{investors.length || 0}</h2></Paper></Col>
 
-          <Col md={{ size: "3" }}><Paper style={{ padding: "20px" }}><h6 style={{ color: "rgba(0,0,0,0.3)" }}>Closed Deals</h6><h2 style={{ textAlign: "center" }}>{_.get(groupedDeals, 'closed', []).length}</h2></Paper></Col>
         </Row>
 
         <Grid container>
-          {activeData.type === 'deals' && <DealsTabel activeDeals={activeDeals} type={type} filter={filter} />}
-          {activeData.type === 'orgs' && <FundsTabel organizations={organizations} type={type} filter={filter} setOpen={setOpen} />}
+          {activeData === 'orgs' && <FundsTabel organizations={organizations} type={type} filter={filter} setOpen={setOpen} />}
+          {activeData === 'deals' && <DealsTabel activeDeals={activeDeals} type={type} filter={filter} />}
+          {activeData === 'investors' && <InvestorsTabel investors={investors} type={type} filter={filter} setOpen={setOpen} />}
         </Grid>
       </div>
 
@@ -313,18 +339,6 @@ const FundsTabel = ({ organizations, setOpen }) => {
           <Grid item xs={12} sm={12} md={6}>
             <Typography variant="h4" style={{ marginBottom: "20px", padding: "16px", maxWidth: '50%' }}>Funds</Typography>
           </Grid>
-          {/* <Grid item xs={12} sm={12} md={6} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', paddingRight: '1rem' }}>
-            <FormControl variant="outlined" style={{ width: "60%" }}>
-              <InputLabel>Deal Status</InputLabel>
-              <Select value={type}
-                onChange={filter}
-              >
-                <MenuItem value="all">All</MenuItem>
-                <MenuItem value="closed">Closed</MenuItem>
-                <MenuItem value="onboarding">Onboarding</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid> */}
         </Grid>
         <Table>
           <TableHead>
@@ -345,5 +359,56 @@ const FundsTabel = ({ organizations, setOpen }) => {
         </Table>
       </Paper>
     </Grid>
+  )
+}
+
+const InvestorsTabel = ({ investors, setOpen }) => {
+  return (
+    <Grid item xs={12}>
+      <Paper>
+        <Grid container spacing={2} justify="space-between" >
+          <Grid item xs={12} sm={12} md={6}>
+            <Typography variant="h4" style={{ marginBottom: "20px", padding: "16px", maxWidth: '50%' }}>Users</Typography>
+          </Grid>
+        </Grid>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Date Added</TableCell>
+              <TableCell>Amount Invested</TableCell>
+              <TableCell>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {investors.map(investor => {
+              return <User investor={investor} setOpen={setOpen} />
+            })}
+          </TableBody>
+        </Table>
+      </Paper>
+    </Grid>
+  )
+}
+
+const User = ({ investor, setOpen }) => {
+  const timestamp = investor._id.toString().substring(0, 8)
+  const date = new Date(parseInt(timestamp, 16) * 1000)
+  const addedDate = moment(date).format('Do MMMM YYYY, h:mm a')
+
+  return (
+    <TableRow>
+      <TableCell > {investor.name}</TableCell>
+      <TableCell>{investor.email}</TableCell>
+      <TableCell>{addedDate}</TableCell>
+      <TableCell>${nWithCommas(_.sumBy(investor.investments, 'amount'))}</TableCell>
+      <TableCell>
+        <Button variant="contained" color="primary" onClick={() => {
+          setOpen({ type: 'usersForm', investor })
+        }}> Edit</Button>
+      </TableCell>
+    </TableRow>
   )
 }

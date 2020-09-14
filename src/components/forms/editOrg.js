@@ -7,6 +7,7 @@ import {
     TextField
 } from '@material-ui/core';
 import { makeStyles } from "@material-ui/core/styles";
+import { toast } from 'react-toastify'
 import { useHistory } from "react-router-dom"
 import { useMutation } from '@apollo/react-hooks'
 import { get, pick } from 'lodash'
@@ -119,7 +120,8 @@ function EditOrg({ orgData, refetch }) {
 
                         <Button variant="contained" style={{ marginTop: 16 }}
                             onClick={() => updateOrganization({
-                                variables: { organization }
+                                variables: { organization },
+                                onCompleted: toast.success('Success')
                             })}
                             color="primary">
                             Submit
