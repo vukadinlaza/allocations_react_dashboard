@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import _ from 'lodash'
 import { gql } from 'apollo-boost'
 import { Row, Col } from 'reactstrap'
 import { Link } from 'react-router-dom'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { nWithCommas, formatDate } from '../../../utils/numbers'
-import { Paper, LinearProgress, Table, TableBody, TableCell, TableRow, Button, Grid, TableHead } from '@material-ui/core'
+import { Paper, LinearProgress, Table, TableBody, TableCell, TableRow, Button, Grid, TableHead, MenuItem, FormControl, Select, InputLabel, Typography } from '@material-ui/core'
 import { Deal } from '../../admin/AdminHome/components/active-deals'
 import "./style.scss"
 
@@ -53,6 +53,7 @@ const ALL_DEALS = gql`
         date_closed
         appLink
         slug
+        raised
         dealParams {
           wireDeadline
         }
@@ -96,20 +97,43 @@ const APPROVE_ORG = gql`
 
 export default function SuperAdminOverview() {
   const { data, refetch } = useQuery(SUPERADMIN)
+  const [activeDeals, setActiveDeals] = useState([])
+  const [type, setType] = useState('all')
   const { data: allDeals, } = useQuery(ALL_DEALS)
+
+  useEffect(() => {
+    if (allDeals?.superadmin?.deals) {
+      setActiveDeals(allDeals.superadmin.deals)
+    }
+  }, [allDeals?.superadmin?.deals])
+
   if (!data) return null
   if (!allDeals) return null
+
+
   const { deals: allDealsData } = allDeals.superadmin
   const { deals, organizations, investors } = data.superadmin
 
   const groupedDeals = _.groupBy(allDealsData, 'status')
-  console.log(allDealsData)
+
+  const filter = (e) => {
+    const value = e.target.value
+    if (value === 'all') {
+      console.log(allDealsData)
+      setActiveDeals(allDealsData)
+    } else {
+      setActiveDeals(groupedDeals[value] || [])
+    }
+    setType(value)
+  }
+
+  console.log(activeDeals)
 
   return (
     <div className="SuperAdmin">
       <div style={{ marginBottom: '4rem' }}>
         <Row style={{ marginBottom: '1em' }}>
-          <Col md={{ size: "3" }}><Paper style={{ padding: "20px" }}><h6 style={{ color: "rgba(0,0,0,0.3)" }}>Funds</h6><h2 style={{ textAlign: "center" }}>1</h2></Paper></Col>
+          <Col md={{ size: "3" }}><Paper style={{ padding: "20px" }}><h6 style={{ color: "rgba(0,0,0,0.3)" }}>Funds</h6><h2 style={{ textAlign: "center" }}>{organizations?.length}</h2></Paper></Col>
 
           <Col md={{ size: "3" }}><Paper style={{ padding: "20px" }}><h6 style={{ color: "rgba(0,0,0,0.3)" }}>Deals</h6><h2 style={{ textAlign: "center" }}>{organizations?.length}</h2></Paper></Col>
 
@@ -121,7 +145,23 @@ export default function SuperAdminOverview() {
         <Grid container>
           <Grid item xs={12}>
             <Paper>
-              <h4 style={{ marginBottom: "20px", padding: "16px" }}>Deals</h4>
+              <Grid container spacing={2} justify="space-between" >
+                <Grid item xs={12} sm={12} md={6}>
+                  <Typography variant="h4" style={{ marginBottom: "20px", padding: "16px", maxWidth: '50%' }}>Deals</Typography>
+                </Grid>
+                <Grid item xs={12} sm={12} md={6} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', paddingRight: '1rem' }}>
+                  <FormControl variant="outlined" style={{ width: "60%" }}>
+                    <InputLabel>Deal Status</InputLabel>
+                    <Select value={type}
+                      onChange={filter}
+                    >
+                      <MenuItem value="all">All</MenuItem>
+                      <MenuItem value="closed">Closed</MenuItem>
+                      <MenuItem value="onboarding">Onboarding</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
               <Table>
                 <TableHead>
                   <TableRow>
@@ -134,7 +174,7 @@ export default function SuperAdminOverview() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {allDealsData.map(deal => {
+                  {activeDeals.map(deal => {
                     return <Deal deal={deal} investments={deal.investments} />
                   })}
                 </TableBody>
