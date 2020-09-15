@@ -34,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
 
 const FormModal = ({ open, setOpen, form }) => {
     const classes = useStyles();
-    console.log('fires', setOpen, form)
     return (
         <Modal
             open={open}
