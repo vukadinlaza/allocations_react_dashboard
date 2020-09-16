@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import { useAuth } from '../../auth/useAuth'
-
+import { get } from 'lodash'
 import { gql } from 'apollo-boost'
 
 import "./style.scss"
@@ -10,6 +10,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
+import { CircularProgress } from "@material-ui/core"
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -23,6 +24,7 @@ import BarChartIcon from "@material-ui/icons/BarChart";
 import PersonIcon from "@material-ui/icons/Person";
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import NavBar from "../NavBar";
+import Loader from '../utils/Loader'
 
 const drawerWidth = 250;
 
@@ -190,6 +192,7 @@ export default function Sidebar(props) {
   );
 
   const container = window !== undefined ? () => window().document.body : undefined;
+  if (!userProfile._id) return <div style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', marginTop: '5rem' }} ><CircularProgress /></div>
 
   return (<>
     <div className={classes.root}>
@@ -205,7 +208,7 @@ export default function Sidebar(props) {
             <MenuIcon />
           </IconButton>
           <div className={classes.brand}>
-            <Brand />
+            <Brand organizations_admin={userProfile.organizations_admin} />
           </div>
           <NavBar />
         </Toolbar>
@@ -251,7 +254,7 @@ export default function Sidebar(props) {
 
 const whitelist = ["allocations", "organizations", "funds", "investments"]
 
-function Brand() {
+function Brand({ organizations_admin }) {
   const history = useHistory()
   const match = useRouteMatch('/admin/:organization')
   const dealMatch = useRouteMatch('/deals/:organization/:id')
@@ -260,7 +263,8 @@ function Brand() {
   const dealMatches = dealMatch && dealMatch.params.organization && !whitelist.includes(dealMatch.params.organization)
   if (adminMatches || dealMatches) {
     const slug = adminMatches ? match.params.organization : dealMatch.params.organization
-    return <OrgLogo slug={slug} />
+    const orgName = get((organizations_admin || []).find(org => org.slug === slug), 'name', false)
+    return <OrgLogo slug={slug} name={orgName} />
   }
 
   return (
@@ -279,7 +283,7 @@ function deSlugify(slug) {
   }
 }
 
-function OrgLogo({ slug }) {
+function OrgLogo({ slug, name }) {
   const history = useHistory()
   const [img, setImg] = useState(`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${slug}.png`)
 
@@ -287,7 +291,7 @@ function OrgLogo({ slug }) {
     return (
       <div className="brand" onClick={() => history.push(`/admin/${slug}`)}>
         <span style={{ height: "60px", width: "180px", textAlign: "center", fontSize: "1.5em" }}>
-          <b>{deSlugify(slug)}</b>
+          <b>{name || deSlugify(slug)}</b>
         </span>
       </div>
     )
