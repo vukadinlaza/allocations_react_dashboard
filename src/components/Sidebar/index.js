@@ -192,7 +192,6 @@ export default function Sidebar(props) {
   );
 
   const container = window !== undefined ? () => window().document.body : undefined;
-  if (!userProfile._id) return <div style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', marginTop: '5rem' }} ><CircularProgress /></div>
 
   return (<>
     <div className={classes.root}>
@@ -208,7 +207,7 @@ export default function Sidebar(props) {
             <MenuIcon />
           </IconButton>
           <div className={classes.brand}>
-            <Brand organizations_admin={userProfile.organizations_admin} />
+            <Brand organizations_admin={userProfile.organizations_admin || []} />
           </div>
           <NavBar />
         </Toolbar>
