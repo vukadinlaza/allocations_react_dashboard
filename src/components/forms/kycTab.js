@@ -5,6 +5,7 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import { get } from 'lodash'
 import { useAuth } from "../../auth/useAuth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Helmet } from "react-helmet";
 import {
   Button,
   List,
@@ -130,8 +131,13 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org }) {
   </Paper>
   )
 
+  const url = "https://verifyinvestor-staging.herokuapp.com/verify-investor-embedded-api.min.js"
+
   return (
     <>
+      <Helmet>
+        <script async src={url}></script>
+      </Helmet>
       <form noValidate autoComplete="off">
         <Typography variant="h6" gutterBottom>
           KYC Information
@@ -172,7 +178,6 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org }) {
               </Select>
             </FormControl>
           </Grid>
-
           <Grid item xs={12} sm={12} md={6}>
             <FormControl required disabled error={errors.includes("email")} variant="outlined"
               style={{ width: "100%" }}>
@@ -295,13 +300,10 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org }) {
         </Grid>
 
         {/* MAILING */}
-
-
         {investor.country !== 'United States' && <>
 
           <MailingAddress investor={investor} setInvestor={setInvestor} handleChange={handleChange} errors={errors} />
         </>}
-
 
         <Button variant="contained"
           onClick={submit}
@@ -310,10 +312,20 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org }) {
         </Button>
 
       </form>
+      <hr/>
+      <div style={{ marginTop: "1rem", paddingTop:"1rem", paddingBottom:"1rem" }}>
+        <p>Verify your accredited investor status with VerifyInvestor.</p>
+          <Button id="invest" variant="contained" color="secondary" onClick={() => {
+              const token = "4YY9eiTQJrfxNieMIR-quA";
+              const identifier = "Allocations"; // optional
+              const portal_name = "Test_Allocations"; // optional
+              const deal_name = "Test Deal"; // optional
+              window.verifyInvestor(token, identifier, portal_name, deal_name);
+          }} >Verify Accredited Investor Status</Button>
+      </div>
     </>
   )
 }
-
 
 function InvestorName({ investor, errors, handleChange }) {
   if (investor.investor_type === "entity") {
