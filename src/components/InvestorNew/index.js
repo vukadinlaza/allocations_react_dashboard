@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { gql } from 'apollo-boost'
-import { Row, Col } from 'reactstrap'
+import { get } from 'lodash';
+import { toast } from 'react-toastify'
 import { useHistory, useParams } from 'react-router-dom'
 import { useMutation } from '@apollo/react-hooks'
-import { TextField, Button } from '@material-ui/core'
+import { TextField, Button, FormControl, Grid, Paper } from '@material-ui/core'
 
 /***
  *
@@ -19,50 +20,76 @@ const CREATE_INVESTOR = gql`
   }
 `
 
-export default function InvestorNew ({ push, setNewUser }) {
+export default function InvestorNew({ push, setNewUser }) {
   const history = useHistory()
-  const [error, setError] = useState(false)
-  const [email, setEmail] = useState("")
+  const [investor, setInvestor] = useState()
   const [createInvestor, { data }] = useMutation(CREATE_INVESTOR)
 
 
   useEffect(() => {
-    if(data && data.createInvestor._id && push) history.push(`/investor/${data.createInvestor._id}/edit`) 
-    if(data && data.createInvestor._id)  {
+    if (data && data.createInvestor._id && push) history.push(`/investor/${data.createInvestor._id}/edit`)
+    if (data && data.createInvestor._id) {
       setNewUser(false)
     }
   }, [data, history])
 
   const submit = () => {
-    if (!email) return setError(true)
-    createInvestor({ variables: { user: { email } }})
+    createInvestor({
+      variables: { user: investor }, onCompleted: toast.success('Success! Investor created!')
+    })
+  }
+
+  const handleChange = (prop) => e => {
+    e.persist()
+    if (prop === "investor_type") {
+      return setInvestor(prev => ({ ...prev, [prop]: e.target.value, accredited_investor_status: "" }))
+    } else {
+      return setInvestor(prev => ({ ...prev, [prop]: e.target.value }))
+    }
   }
 
   return (
-    <div className="InvestorEdit">
-      <Row>
-        <Col sm={{size: 9, offset: 1}}>
-          <h5>
+    <>
+      <Paper style={{ marginBottom: '2rem' }}>
+        <form noValidate autoComplete="off" style={{ padding: "16px" }}>
+          <Grid container spacing={3} style={{ marginTop: "16px" }}>
+            <Grid item xs={12} sm={12} md={6}>
+              <FormControl variant="outlined"
+                style={{ width: "100%" }}>
+                <TextField
+                  style={{ width: "100%" }}
+                  value={get(investor, 'email') || ""}
+                  onChange={handleChange("email")}
+                  label="Email"
+                  variant="outlined" />
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={12} md={6}>
+              <TextField required
+                style={{ width: "100%" }}
+                value={get(investor, 'first_name') || ""}
+                onChange={handleChange("first_name")}
+                label="First Name"
+                variant="outlined" />
+            </Grid>
+            <Grid item xs={12} sm={12} md={6}>
+              <TextField required
+                s style={{ width: "100%" }}
+                value={get(investor, 'last_name') || ""}
+                onChange={handleChange("last_name")}
+                label="Last Name"
+                variant="outlined" />
+            </Grid>
+
+          </Grid>
+
+          <Button variant="contained" style={{ marginTop: 16 }}
+            onClick={submit}
+            color="primary">
             Create Investor
-          </h5>
-        </Col>
-      </Row>
-      <Col sm={{size: 4, offset: 1}} style={{marginBottom: "15px"}}>
-        <TextField required
-            error={error}
-            style={{width: "100%"}} 
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            label="Email" 
-            variant="filled" />
-      </Col>
-      <Col sm={{size: 4, offset: 1}}>
-        <Button variant="contained"
-          onClick={submit} 
-          color="primary">
-          CREATE INVESTOR
-        </Button>
-      </Col>
-    </div>
+          </Button>
+        </form>
+      </Paper>
+    </>
   )
 }
