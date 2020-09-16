@@ -166,7 +166,6 @@ export default function AdminHome({ }) {
   )
 }
 
-
 function SuperAdmin({ org }) {
   const history = useHistory();
   return (
