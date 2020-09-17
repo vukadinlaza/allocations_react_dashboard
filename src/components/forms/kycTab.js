@@ -310,7 +310,7 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org }) {
         <p>Verify your accredited investor status with VerifyInvestor.</p>
         <Button id="invest" variant="contained" color="secondary" onClick={() => {
           const token = "4YY9eiTQJrfxNieMIR-quA";
-          const identifier = { _id: investor?._id }; // optional
+          const identifier = investor?._id; // optional
           const portal_name = "Test_Allocations"; // optional
           const deal_name = "Test Deal"; // optional
           window.verifyInvestor(token, identifier, portal_name, deal_name);
