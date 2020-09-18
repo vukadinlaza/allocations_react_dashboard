@@ -20,6 +20,8 @@ import Loader from '../../utils/Loader'
 import Investors from '../../Investors'
 import Settings from './components/settings'
 import Investments from '../../Investments'
+import Chart from "react-google-charts"
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -98,15 +100,59 @@ export default function AdminHome({ }) {
     variables: { slug: orgSug }
   })
 
+  const history = useHistory()
+  const chartEvents = [
+    {
+      eventName: "select",
+      callback({chartWrapper}) {
+        history.push(`/investments`)
+      }
+    }
+  ];
+
+  const chartOptionsA = {
+    title: '',
+    pieHole: 0.5,
+  };
+  const chartOptionsB = {
+    title: 'The decline of \'The 39 Steps\'',
+    vAxis: {title: 'Accumulated Rating'},
+    isStacked: true
+  };
+  var daters = ([
+    ['Director (Year)',  'Rotten Tomatoes', 'IMDB'],
+    ['Alfred Hitchcock (1935)', 8.4,         7.9],
+    ['Ralph Thomas (1959)',     6.9,         6.5],
+    ['Don Sharp (1978)',        6.5,         6.4],
+    ['James Hawes (2008)',      4.4,         6.2]
+  ]);
+  const dater = ([
+    ['Task', 'Hours per Day'],
+    ['Work',     11],
+    ['Eat',      2],
+    ['Commute',  2],
+    ['Watch TV', 2],
+    ['Sleep',    7]
+  ]);
+
   if (!data) return <Loader />
   const orgData = data.organization
 
   if (!orgData) return <Paper style={{ padding: "25px" }}><Loader /></Paper>
   return (
     <>
+    <div style={{ height: "320px", 
+    background: "blue", 
+    marginTop:"-30px", 
+    paddingTop: "30px",
+    paddingBottom: "60px", 
+    marginLeft: "-32px", 
+    paddingLeft: "32px", 
+    marginRight: "-32px", 
+    paddingRight: "32px" }}>
       <Grid container justify="space-between">
         <Grid item sm={12} md={6}>
-          <Typography variant="h4" className={classes.orgName}>
+          <Typography variant="h4" className={classes.orgName} style={{ color: "#fff"}}>
             {orgData.name}
           </Typography>
         </Grid>
@@ -119,7 +165,63 @@ export default function AdminHome({ }) {
         </Grid>
       </Grid>
 
-      <div className={classes.tabs}>
+      <Grid container justify="space-between" style={{ marginTop: "40px"}}>
+        <Grid item sm={12} md={3}>
+          <Paper style={{ minHeight: "100px"}}>
+            <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "5px"}}>Portfolio Value</p>
+            <h2 align="center" style={{ color: "rgba(0,0,0,0.8)" }}>$1,225,000</h2>
+            <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "5px"}}>50% realized | 50% unrealized</p>
+          </Paper>
+        </Grid>
+        <Grid item sm={12} md={3}>
+          <Paper style={{ minHeight: "100px"}}>
+            <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "5px"}}>Total Invested</p>
+            <h2 align="center" style={{ color: "rgba(0,0,0,0.8)" }}>$1,225,000</h2>
+            <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "5px"}}>8 Total Investments</p>
+          </Paper>
+        </Grid>
+        <Grid item sm={12} md={3}>
+          <Paper style={{ minHeight: "100px"}}>
+            <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "5px"}}>Multiple</p>
+            <h2 align="center" style={{ color: "rgba(0,0,0,0.8)" }}>1.02</h2>
+            <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "5px"}}>+ 1.2% IRR</p>
+          </Paper>
+        </Grid>
+      </Grid>
+
+      <Grid container justify="space-between" style={{ marginTop: "40px"}}>
+        <Grid item sm={12} md={5}>
+          <Paper style={{ minHeight: "300px"}}>
+            <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "5px"}}>Overview</p>
+            <h6 style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "5px"}}>Portfolio Management</h6>
+              <Grid item sm={12} md={12}>
+                        <Chart chartType="PieChart"
+                              width="100%"
+                              height="200px"
+                              chartEvents={chartEvents}
+                              data={dater}
+                              options={chartOptionsA}/>
+              </Grid>
+          </Paper>
+        </Grid>
+        <Grid item sm={12} md={5}>
+          <Paper style={{ minHeight: "300px"}}>
+          <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "5px"}}>Unrealized vs Realized</p>
+              <Grid item sm={12} md={12}>
+                      <Chart chartType="SteppedAreaChart"
+                             width="100%"
+                             height="200px"
+                             chartEvents={chartEvents}
+                             data={daters}
+                             optionsA={chartOptionsB}/>
+            </Grid>
+          </Paper>
+        </Grid>
+      </Grid>
+
+      </div>
+
+      <div className={classes.tabs} style={{ marginTop: "300px"}}>
         <Grid container>
           <Grid item xs={12} sm={4} md={2}>
             <ButtonBase className={tab === "active-deals" ? classes.activeTab : classes.tab}
@@ -170,8 +272,8 @@ function SuperAdmin({ org }) {
   const history = useHistory();
   return (
     <>
-      You are a SuperAdmin <Button style={{ marginLeft: 16 }} onClick={() => history.push(`/admin/${org.slug}/manager`)} size="large"
-        variant="contained" color="primary">Manage</Button>
+      <span style={{color: "#fff"}}>You are a SuperAdmin <Button style={{ marginLeft: 16 }} onClick={() => history.push(`/admin/${org.slug}/manager`)} size="large"
+        variant="contained" color="primary">Manage</Button></span>
     </>
   )
 }
