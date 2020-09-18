@@ -126,7 +126,7 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
   </Paper>
   )
 
-  const url = "https://verifyinvestor-staging.herokuapp.com/verify-investor-embedded-api.min.js"
+  const url = process.env.VERIFY_INVESTOR_URL
 
   return (
     <>
@@ -317,7 +317,7 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
         <div style={{ paddingTop: "1rem", paddingBottom: "1rem" }}>
           <Typography variant="subtitle1">Verify your accredited investor status with VerifyInvestor.</Typography>
           <Button id="invest" variant="contained" color="secondary" onClick={() => {
-            const token = "4YY9eiTQJrfxNieMIR-quA";
+            const token = process.env.VERIFY_INVESTOR_HOST_TOKEN;
             const identifier = investor?._id; // optional
             const portal_name = "Test_Allocations"; // optional
             const deal_name = "Test Deal"; // optional
