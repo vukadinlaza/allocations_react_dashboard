@@ -124,14 +124,18 @@ const TR = ({ investment, showDocs, setShowDocs }) => {
 
   return (
     <TableRow key={investment._id} className="investment-row">
-      <TableCell style={{ maxWidth: '200px', minWith: '200px', width: '200px' }} onClick={() => setShowDocs(showDocs ? null : investment)} scope="row">{investment.deal.company_name}</TableCell>
-      <Hidden xsDown><TableCell style={{ maxWidth: '300px', minWith: '300px', width: '300px' }} onClick={() => setShowDocs(showDocs ? null : investment)}>{_.truncate(investment.deal.company_description, { length: 35 })}</TableCell></Hidden>
-      <TableCell onClick={() => setShowDocs(showDocs ? null : investment)} align="right">{investment.amount ? "$" + nWithCommas(investment.amount) :
+      <TableCell style={{ maxWidth: '200px', minWith: '200px', width: '200px' }} scope="row">{investment.deal.company_name}</TableCell>
+      <Hidden xsDown><TableCell style={{ maxWidth: '300px', minWith: '300px', width: '300px' }}>{_.truncate(investment.deal.company_description, { length: 35 })}</TableCell></Hidden>
+      <TableCell align="right">{investment.amount ? "$" + nWithCommas(investment.amount) :
         <i>TBD</i>}</TableCell>
-      <TableCell onClick={() => setShowDocs(showDocs ? null : investment)} align="center"><InvestmentStatus investment={investment} /></TableCell>
-      <TableCell onClick={() => setShowDocs(showDocs ? null : investment)} align="center">{formatDate(investment.deal.dealParams.wireDeadline)}</TableCell>
-      <TableCell align="right" onClick={() => history.push(_.get(investment, 'deal.appLink', ""))}>
-        <Button variant="contained" size="small" color="secondary">
+      <TableCell align="center"><InvestmentStatus investment={investment} /></TableCell>
+      <TableCell align="center">{formatDate(investment.deal.dealParams.wireDeadline)}</TableCell>
+      <TableCell align="right" style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Button variant="contained" size="small" color="primary" onClick={() => setShowDocs(showDocs ? null : investment)}
+        >
+          Documents
+        </Button>
+        <Button variant="contained" size="small" color="secondary" onClick={() => history.push(_.get(investment, 'deal.appLink', ""))}>
           View
         </Button>
       </TableCell>
@@ -280,10 +284,8 @@ function DocsRow({ docs }) {
           </Typography>
           {docs.map(doc => (
             <div key={doc.path} className="doc-wrapper">
-              <div className="doc">
-                <FontAwesomeIcon icon={["far", "file-pdf"]} />
-              </div>
               <div className="filename">
+                <FontAwesomeIcon color="#F48FB1" icon={["far", "file-pdf"]} className="doc-icon" />
                 <span><a href={`https://${doc.link}`} target="_blank"
                   rel="noopener noreferrer">{filename(doc.path)}</a></span>
               </div>
