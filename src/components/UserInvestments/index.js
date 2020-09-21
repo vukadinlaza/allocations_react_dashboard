@@ -121,7 +121,6 @@ const TABLE_ORDER = {
 }
 const TR = ({ investment, showDocs, setShowDocs }) => {
   const history = useHistory()
-  console.log(investment)
   return (
     <TableRow key={investment._id} className="investment-row">
       <TableCell style={{ maxWidth: '200px', minWith: '200px', width: '200px' }} scope="row">{investment.deal.company_name}</TableCell>
