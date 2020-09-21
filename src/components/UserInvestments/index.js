@@ -121,7 +121,7 @@ const TABLE_ORDER = {
 }
 const TR = ({ investment, showDocs, setShowDocs }) => {
   const history = useHistory()
-
+  console.log(investment)
   return (
     <TableRow key={investment._id} className="investment-row">
       <TableCell style={{ maxWidth: '200px', minWith: '200px', width: '200px' }} scope="row">{investment.deal.company_name}</TableCell>
@@ -131,10 +131,10 @@ const TR = ({ investment, showDocs, setShowDocs }) => {
       <TableCell align="center"><InvestmentStatus investment={investment} /></TableCell>
       <TableCell align="center">{formatDate(investment.deal.dealParams.wireDeadline)}</TableCell>
       <TableCell align="right" style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Button variant="contained" size="small" color="primary" onClick={() => setShowDocs(showDocs ? null : investment)}
+        {investment?.documents?.length >= 1 && <Button variant="contained" size="small" color="primary" onClick={() => setShowDocs(showDocs ? null : investment)}
         >
           Documents
-        </Button>
+        </Button>}
         <Button variant="contained" size="small" color="secondary" onClick={() => history.push(_.get(investment, 'deal.appLink', ""))}>
           View
         </Button>
