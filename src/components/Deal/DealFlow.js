@@ -525,15 +525,15 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
     link = `${deal.onboarding_link}&${urlParameters}`
   }
 
-  if (hasSigned && docs.length >= 1) return (
+  if (hasSigned) return (
     <Paper className={classes.paper}>
       <Typography variant="subtitle1">
         Thanks for signing! You can view your signed documents below.
       </Typography>
       {docs.map(doc => {
         return <Typography variant="subtitle2">
-          <span><a href={`https://${doc.link}`} target="_blank"
-            rel="noopener noreferrer">{filename(doc.path)}</a></span>      </Typography>
+          <span><a href={`https://${doc?.link}`} target="_blank"
+            rel="noopener noreferrer">{filename(doc?.path)}</a></span>      </Typography>
       })}
     </Paper>)
   return (
