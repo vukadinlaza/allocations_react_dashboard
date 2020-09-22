@@ -566,7 +566,7 @@ function KYCDocusign({ deal, investor, status, hasKyc }) {
   if (!deal) return <Loader />
 
 
-  if (!link?.redirectUrl) return <DocusignKYCEmbeddedForm hasKyc={hasKyc} setLink={setLink} deal_slug={deal.deal_slug} org={deal.organization} />
+  if (!link?.redirectUrl) return <DocusignKYCEmbeddedForm hasKyc={hasKyc} setLink={setLink} deal_slug={deal.deal_slug} org={deal.organization} company_name={deal.company_name} />
 
   return (
     <Paper className={classes.paper}>
