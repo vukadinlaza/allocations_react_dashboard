@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     maxWidth: 800,
     marginBottom: theme.spacing(4),
+    minHeight: 150
   },
   divider: {
     margin: "16px -16px"
@@ -70,14 +71,13 @@ const GET_DOCUSIGN_FORM = gql`
 const required = ['country', 'investor_type', 'signer_full_name', 'dob', 'street_address', 'city', 'state', 'zip']
 const optional = ['mail_country', 'mail_city', 'mail_zip', 'mail_state', 'mail_street_address']
 
-export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKyc }) {
+export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKyc, company_name }) {
   const { userProfile } = useAuth(GET_INVESTOR)
   const [investor, setInvestor] = useState({})
   const [showForm, setShowForm] = useState(false)
   const [getLink, { loading, data }] = useLazyQuery(GET_DOCUSIGN_FORM)
   const [errors, setErrors] = useState([])
   const classes = useStyles();
-
   const handleChange = (prop) => e => {
     e.persist()
     if (prop === "investor_type") {
@@ -125,7 +125,6 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
     <Loader />
   </Paper>
   )
-
   const url = process.env.REACT_APP_VERIFY_INVESTOR_URL
 
   return (
@@ -133,14 +132,51 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
       <Helmet>
         <script async src={url}></script>
       </Helmet>
-      {!hasKyc ? <form noValidate autoComplete="off">
-        <Typography variant="h6" gutterBottom style={{ display: 'flex', justifyContent: 'space-between' }} onClick={() => setShowForm(showForm ? false : true)}>
+
+      <Grid container spacing={1}>
+        <Grid item xs={12} sm={12} md={6}>
+          <Paper className={classes.paper}>
+
+            <Typography variant="h6" gutterBottom style={{ display: 'flex', justifyContent: 'space-between' }}>
+              KYC Information
+          </Typography>
+            {!hasKyc ? <>
+              <Typography variant="subtitle2" style={{}} onClick={() => setShowForm(showForm ? false : true)}>
+                Fill out a form and sign a tax document (W8/W9).
+        </Typography>
+              <Button variant="contained" color="secondary" onClick={() => setShowForm(showForm ? false : true)}>{!showForm ? 'Click To Begin KYC Form' : 'Hide Form'}</Button>
+            </> : <Typography variant="subtitle1">
+                We already have a W8/W9 document on file for you.
+      </Typography>}
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={12} md={6}>
+          <Paper className={classes.paper}>
+
+            <Typography variant="h6" gutterBottom style={{ display: 'flex', justifyContent: 'space-between' }}>
+              Accredited Investor Verfication
+          </Typography>
+            <div style={{}}>
+              <Typography variant="subtitle2">Verify your accredited investor status with VerifyInvestor.</Typography>
+              <Button id="invest" variant="contained" color="secondary" onClick={() => {
+                const token = process.env.REACT_APP_VERIFY_INVESTOR_HOST_TOKEN;
+                const identifier = investor?._id; // optional
+                const portal_name = process.env.NODE_ENV === 'development' ? "Test_Allocations" : 'Allocations' // optional
+                const deal_name = company_name || ''; // optional
+                window.verifyInvestor(token, identifier, portal_name, deal_name);
+              }} >Click To Begin Verification</Button>
+            </div>
+          </Paper>
+        </Grid>
+      </Grid>
+      <form noValidate autoComplete="off">
+        {/* <Typography variant="h6" gutterBottom style={{ display: 'flex', justifyContent: 'space-between' }} onClick={() => setShowForm(showForm ? false : true)}>
           KYC Information  <div>{showForm ? <ExpandMoreIcon /> : <ExpandLessIcon />} </div>
         </Typography>
         {!showForm && <Typography variant="subtitle2" style={{}} onClick={() => setShowForm(showForm ? false : true)}>
           Click here to begin
-        </Typography>}
-        {showForm && <> <Typography variant="subtitle2" style={{ marginBottom: '1rem' }}>
+        </Typography>} */}
+        {showForm && <> <Typography variant="subtitle2" style={{ marginBottom: '1rem', marginTop: '1rem' }}>
           This information will only be used to populate your KYC documents.
         </Typography>
           <Grid container spacing={3}>
@@ -307,14 +343,10 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
         </Button>
         </>
         }
-      </form> : <Paper className={classes.paper}>
-          <Typography variant="subtitle1">
-            We already have a W8/W9 document on file for you.
-      </Typography>
-        </Paper>}
+      </form>
       <hr />
-      <Paper className={classes.paper}>
-        <div style={{ paddingTop: "1rem", paddingBottom: "1rem" }}>
+      {/* <Paper className={classes.paper}> */}
+      {/* <div style={{ paddingTop: "1rem", paddingBottom: "1rem" }}>
           <Typography variant="subtitle1">Verify your accredited investor status with VerifyInvestor.</Typography>
           <Button id="invest" variant="contained" color="secondary" onClick={() => {
             const token = process.env.REACT_APP_VERIFY_INVESTOR_HOST_TOKEN;
@@ -323,8 +355,8 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
             const deal_name = "Test Deal"; // optional
             window.verifyInvestor(token, identifier, portal_name, deal_name);
           }} >Verify Accredited Investor Status</Button>
-        </div>
-      </Paper>
+        </div> */}
+      {/* </Paper> */}
     </>
   )
 }
