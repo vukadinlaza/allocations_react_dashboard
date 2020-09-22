@@ -15,12 +15,12 @@ const fundData = {
         ['Sleep', 7]
     ],
     portfolioValue: {
-        value: 1225000,
+        value: "$1,225,000",
         realized: '50%',
         unrealized: '50%'
     },
     totalInvested: {
-        value: 1225000,
+        value: "$1,225,000",
         numInvestment: 8,
     },
     multiple: {

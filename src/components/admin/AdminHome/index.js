@@ -128,8 +128,8 @@ export default function AdminHome({ }) {
   return (
     <>
       <div style={{
-        height: "320px",
-        background: "blue",
+        height: "430px",
+        background: "#005EFF",
         marginTop: "-30px",
         paddingTop: "30px",
         paddingBottom: "60px",
@@ -154,51 +154,68 @@ export default function AdminHome({ }) {
         </Grid>
 
         <Grid container justify="space-between" style={{ marginTop: "40px" }}>
-          <Grid item sm={12} md={3}>
+          <Grid item sm={12} md={4} style={{ border: "1em solid transparent" }}>
             <Paper style={{ minHeight: "100px" }}>
-              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "5px" }}>Portfolio Value</p>
-              <h2 align="center" style={{ color: "rgba(0,0,0,0.8)" }}>{fundData.portfolioValue.value}</h2>
-              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "5px" }}>{fundData.portfolioValue.realized} realized | {fundData.portfolioValue.unrealized} unrealized</p>
+            <Grid container> 
+            <Grid item sm={8} md={8}>
+              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Portfolio Value</p>
+              <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>{fundData.portfolioValue.value}</h2>
+              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px"}}>{fundData.portfolioValue.realized} realized | {fundData.portfolioValue.unrealized} unrealized</p>
+              </Grid>
+              <Grid item sm={4} md={4} justify="center" align="center">
+                <img src="https://allocations-public.s3.us-east-2.amazonaws.com/money-sign.png" alt="oops" style={{width: "50px", height: "50px", marginTop:"30%"}} />
+              </Grid>
+              </Grid>
             </Paper>
           </Grid>
-          <Grid item sm={12} md={3}>
+          <Grid item sm={12} md={4} style={{ border: "1em solid transparent" }}>
             <Paper style={{ minHeight: "100px" }}>
-              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "5px" }}>Total Invested</p>
-              <h2 align="center" style={{ color: "rgba(0,0,0,0.8)" }}>{fundData.totalInvested.value}</h2>
-              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "5px" }}>{fundData.totalInvested.numInvestment} Total Investments</p>
+            <Grid item sm={8} md={8}>
+              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Total Invested</p>
+              <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>{fundData.totalInvested.value}</h2>
+              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>{fundData.totalInvested.numInvestment} Total Investments</p>
+              </Grid>
+              <Grid item sm={4} md={4}>
+
+              </Grid>
             </Paper>
           </Grid>
-          <Grid item sm={12} md={3}>
+          <Grid item sm={12} md={4} style={{ border: "1em solid transparent" }}>
             <Paper style={{ minHeight: "100px" }}>
-              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "5px" }}>Multiple</p>
-              <h2 align="center" style={{ color: "rgba(0,0,0,0.8)" }}>{fundData.multiple.value}</h2>
-              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "5px" }}>{fundData.multiple.irr}</p>
+              <Grid item sm={8} md={8}>
+              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
+              <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>{fundData.multiple.value}</h2>
+              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>{fundData.multiple.irr}</p>
+              </Grid>
+              <Grid item sm={4} md={4}>
+
+              </Grid>
             </Paper>
           </Grid>
         </Grid>
 
-        <Grid container justify="space-between" style={{ marginTop: "40px" }}>
-          <Grid item sm={12} md={5}>
-            <Paper style={{ minHeight: "300px" }}>
-              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "5px" }}>Overview</p>
-              <h6 style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "5px" }}>Portfolio Management</h6>
+        <Grid container justify="space-between" style={{ marginTop: "1em" }}>
+          <Grid item sm={12} md={6} style={{ border: "1em solid transparent" }}>
+            <Paper style={{ minHeight: "400px" }}>
+              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Overview</p>
+              <h6 style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "0px" }}>Portfolio Management</h6>
               <Grid item sm={12} md={12}>
                 <Chart chartType="PieChart"
                   width="100%"
-                  height="200px"
+                  height="300px"
                   chartEvents={chartEvents}
                   data={fundData.pieChart}
                   options={chartOptionsA} />
               </Grid>
             </Paper>
           </Grid>
-          <Grid item sm={12} md={5}>
-            <Paper style={{ minHeight: "300px" }}>
+          <Grid item sm={12} md={6} style={{ border: "1em solid transparent" }}>
+            <Paper style={{ minHeight: "400px" }}>
               <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "5px" }}>Unrealized vs Realized</p>
               <Grid item sm={12} md={12}>
                 <Chart chartType="SteppedAreaChart"
                   width="100%"
-                  height="200px"
+                  height="300px"
                   chartEvents={chartEvents}
                   data={fundData.stepChart}
                   optionsA={chartOptionsB} />
@@ -261,8 +278,8 @@ function SuperAdmin({ org }) {
   const history = useHistory();
   return (
     <>
-      <span style={{ color: "#fff" }}>You are a SuperAdmin <Button style={{ marginLeft: 16 }} onClick={() => history.push(`/admin/${org.slug}/manager`)} size="large"
-        variant="contained" color="primary">Manage</Button></span>
+      <span style={{ color: "#fff", marginTop: "5px" }}>You are a SuperAdmin <Button style={{ marginLeft: 16 }} onClick={() => history.push(`/admin/${org.slug}/manager`)} size="large"
+        variant="contained" color="secondary">Manage</Button></span>
     </>
   )
 }
