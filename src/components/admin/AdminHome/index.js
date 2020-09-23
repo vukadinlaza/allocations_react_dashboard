@@ -127,7 +127,7 @@ export default function AdminHome({ }) {
   if (!orgData) return <Paper style={{ padding: "25px" }}><Loader /></Paper>
   return (
     <>
-      <div style={{
+      {/* <div style={{
         height: "430px",
         background: "#005EFF",
         marginTop: "-30px",
@@ -224,10 +224,25 @@ export default function AdminHome({ }) {
           </Grid>
         </Grid>
 
-      </div>
+      </div> */}
 
       {/* //  */}
-      <div className={classes.tabs} style={{ marginTop: "300px" }}>
+
+      <Grid container justify="space-between">
+        <Grid item sm={12} md={6}>
+          <Typography variant="h4" className={classes.orgName} style={{ color: "black" }}>
+            {orgData.name}
+          </Typography>
+        </Grid>
+        <Grid item sm={12} md={6}>
+          <Typography variant="body2" style={{ textAlign: "right" }}>
+            <Grid item xs={12}>
+              {data.investor.admin && <SuperAdmin org={orgData} />}
+            </Grid>
+          </Typography>
+        </Grid>
+      </Grid>
+      <div className={classes.tabs} style={{}}>
         <Grid container>
           <Grid item xs={12} sm={4} md={2}>
             <ButtonBase className={tab === "active-deals" ? classes.activeTab : classes.tab}
@@ -278,7 +293,7 @@ function SuperAdmin({ org }) {
   const history = useHistory();
   return (
     <>
-      <span style={{ color: "#fff", marginTop: "5px" }}>You are a SuperAdmin <Button style={{ marginLeft: 16 }} onClick={() => history.push(`/admin/${org.slug}/manager`)} size="large"
+      <span style={{ marginTop: "5px" }}>You are a SuperAdmin <Button style={{ marginLeft: 16 }} onClick={() => history.push(`/admin/${org.slug}/manager`)} size="large"
         variant="contained" color="secondary">Manage</Button></span>
     </>
   )
