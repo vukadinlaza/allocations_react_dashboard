@@ -159,6 +159,7 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
             <div style={{}}>
               <Typography variant="subtitle2">Verify your accredited investor status with VerifyInvestor.</Typography>
               <Button id="invest" variant="contained" color="secondary" onClick={() => {
+                setShowForm(false)
                 const token = process.env.REACT_APP_VERIFY_INVESTOR_HOST_TOKEN;
                 const identifier = investor?._id; // optional
                 const portal_name = process.env.NODE_ENV === 'development' ? "Test_Allocations" : 'Allocations' // optional
