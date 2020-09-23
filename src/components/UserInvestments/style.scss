@@ -69,7 +69,6 @@
     border-radius: 5px;
     vertical-align: top;
   }
-
   .doc {
     position: relative;
 
@@ -126,4 +125,8 @@
 .investment-row:hover {
   background-color: $softblue;
   cursor: pointer;
+}
+
+.doc-icon {
+  margin-right: .5rem;
 }

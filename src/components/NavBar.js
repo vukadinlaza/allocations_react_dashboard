@@ -136,19 +136,20 @@ export function Auth0Profile({ user, logoutWithRedirect }) {
         open={Boolean(anchorElFunds)}
         onClose={handleCloseFunds}
       >
-        {organizations_admin.map(org => {
-          return (
-            <MenuItem
-              onClick={() => {
-                history.push(`/admin/${org.slug}`);
-                handleCloseFunds();
-              }}
-              key={org.name}
-            >
-              {org.name}
-            </MenuItem>
-          )
-        })}
+        {organizations_admin.sort((a, b) => a.name.localeCompare(b.name))
+          .map(org => {
+            return (
+              <MenuItem
+                onClick={() => {
+                  history.push(`/admin/${org.slug}`);
+                  handleCloseFunds();
+                }}
+                key={org.name}
+              >
+                {org.name}
+              </MenuItem>
+            )
+          })}
       </Menu>
 
       <ButtonBase onClick={handleClickProfile}>

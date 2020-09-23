@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import _ from 'lodash'
 import { useParams } from 'react-router-dom'
 import { nWithCommas } from '../../../../utils/numbers'
@@ -36,6 +36,7 @@ export const ActiveDeals = ({ orgData }) => {
   if (!orgData) return <Loader />
 
   const { active } = _.groupBy(orgData.deals, d => d.status === "closed" ? "closed" : "active")
+  const sortActive = active.sort((a, b) => new Date(b?.dealParams?.wireDeadline) - new Date(a?.dealParams?.wireDeadline))
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -61,8 +62,8 @@ export const ActiveDeals = ({ orgData }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {(active || []).map(deal => (
-                <Deal key={deal._id} deal={deal} />
+              {(sortActive || []).map((deal, index) => (
+                <Deal key={deal._id} deal={deal} index={index} />
               ))}
             </TableBody>
           </Table>
@@ -74,7 +75,7 @@ export const ActiveDeals = ({ orgData }) => {
 
 
 // clicking on the whole row opens the investment board
-export const Deal = ({ deal }) => {
+export const Deal = ({ deal, index }) => {
   const history = useHistory();
   const { organization } = useParams();
   const [activeDeal, setActiveDeal] = useState();
@@ -84,7 +85,11 @@ export const Deal = ({ deal }) => {
   const hasSOW = true;
 
   const formattedDate_closed = moment(deal?.dealParams?.wireDeadline).format('Do MMMM YYYY')
-
+  useEffect(() => {
+    if (index === 0) {
+      setActiveDeal(deal)
+    }
+  }, [])
   return (
     <>
       <TableRow hover onClick={() => setActiveDeal(activeDeal ? false : deal)}>

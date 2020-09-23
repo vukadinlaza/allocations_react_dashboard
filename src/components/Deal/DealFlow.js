@@ -525,15 +525,15 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
     link = `${deal.onboarding_link}&${urlParameters}`
   }
 
-  if (hasSigned && docs.length >= 1) return (
+  if (hasSigned) return (
     <Paper className={classes.paper}>
       <Typography variant="subtitle1">
         Thanks for signing! You can view your signed documents below.
       </Typography>
       {docs.map(doc => {
         return <Typography variant="subtitle2">
-          <span><a href={`https://${doc.link}`} target="_blank"
-            rel="noopener noreferrer">{filename(doc.path)}</a></span>      </Typography>
+          <span><a href={`https://${doc?.link}`} target="_blank"
+            rel="noopener noreferrer">{filename(doc?.path)}</a></span>      </Typography>
       })}
     </Paper>)
   return (
@@ -566,15 +566,7 @@ function KYCDocusign({ deal, investor, status, hasKyc }) {
   if (!deal) return <Loader />
 
 
-
-  if (hasKyc) return (
-    <Paper className={classes.paper}>
-      <Typography variant="subtitle1">
-        We already have a W8/W9 document on file for you.
-      </Typography>
-    </Paper>)
-
-  if (!link?.redirectUrl) return <DocusignKYCEmbeddedForm setLink={setLink} deal_slug={deal.deal_slug} org={deal.organization} />
+  if (!link?.redirectUrl) return <DocusignKYCEmbeddedForm hasKyc={hasKyc} setLink={setLink} deal_slug={deal.deal_slug} org={deal.organization} company_name={deal.company_name} />
 
   return (
     <Paper className={classes.paper}>
