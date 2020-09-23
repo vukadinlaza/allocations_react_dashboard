@@ -127,7 +127,7 @@ export default function AdminHome({ }) {
   if (!orgData) return <Paper style={{ padding: "25px" }}><Loader /></Paper>
   return (
     <>
-      {/* <div style={{
+      <div style={{
         height: "430px",
         background: "#005EFF",
         marginTop: "-30px",
@@ -156,24 +156,24 @@ export default function AdminHome({ }) {
         <Grid container justify="space-between" style={{ marginTop: "40px" }}>
           <Grid item sm={12} md={4} style={{ border: "1em solid transparent" }}>
             <Paper style={{ minHeight: "100px" }}>
-            <Grid container> 
-            <Grid item sm={8} md={8}>
-              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Portfolio Value</p>
-              <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>{fundData.portfolioValue.value}</h2>
-              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px"}}>{fundData.portfolioValue.realized} realized | {fundData.portfolioValue.unrealized} unrealized</p>
-              </Grid>
-              <Grid item sm={4} md={4} justify="center" align="center">
-                <img src="https://allocations-public.s3.us-east-2.amazonaws.com/money-sign.png" alt="oops" style={{width: "50px", height: "50px", marginTop:"30%"}} />
-              </Grid>
+              <Grid container>
+                <Grid item sm={8} md={8}>
+                  <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Portfolio Value</p>
+                  <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>{fundData.portfolioValue.value}</h2>
+                  <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>{fundData.portfolioValue.realized} realized | {fundData.portfolioValue.unrealized} unrealized</p>
+                </Grid>
+                <Grid item sm={4} md={4} justify="center" align="center">
+                  <img src="https://allocations-public.s3.us-east-2.amazonaws.com/money-sign.png" alt="oops" style={{ width: "50px", height: "50px", marginTop: "30%" }} />
+                </Grid>
               </Grid>
             </Paper>
           </Grid>
           <Grid item sm={12} md={4} style={{ border: "1em solid transparent" }}>
             <Paper style={{ minHeight: "100px" }}>
-            <Grid item sm={8} md={8}>
-              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Total Invested</p>
-              <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>{fundData.totalInvested.value}</h2>
-              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>{fundData.totalInvested.numInvestment} Total Investments</p>
+              <Grid item sm={8} md={8}>
+                <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Total Invested</p>
+                <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>{fundData.totalInvested.value}</h2>
+                <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>{fundData.totalInvested.numInvestment} Total Investments</p>
               </Grid>
               <Grid item sm={4} md={4}>
 
@@ -183,9 +183,9 @@ export default function AdminHome({ }) {
           <Grid item sm={12} md={4} style={{ border: "1em solid transparent" }}>
             <Paper style={{ minHeight: "100px" }}>
               <Grid item sm={8} md={8}>
-              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
-              <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>{fundData.multiple.value}</h2>
-              <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>{fundData.multiple.irr}</p>
+                <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
+                <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>{fundData.multiple.value}</h2>
+                <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>{fundData.multiple.irr}</p>
               </Grid>
               <Grid item sm={4} md={4}>
 
@@ -224,11 +224,11 @@ export default function AdminHome({ }) {
           </Grid>
         </Grid>
 
-      </div> */}
+      </div>
 
       {/* //  */}
 
-      <Grid container justify="space-between">
+      {/* <Grid container justify="space-between">
         <Grid item sm={12} md={6}>
           <Typography variant="h4" className={classes.orgName} style={{ color: "black" }}>
             {orgData.name}
@@ -241,8 +241,8 @@ export default function AdminHome({ }) {
             </Grid>
           </Typography>
         </Grid>
-      </Grid>
-      <div className={classes.tabs} style={{}}>
+      </Grid> */}
+      <div className={classes.tabs} style={{ marginTop: "300px" }}>
         <Grid container>
           <Grid item xs={12} sm={4} md={2}>
             <ButtonBase className={tab === "active-deals" ? classes.activeTab : classes.tab}
