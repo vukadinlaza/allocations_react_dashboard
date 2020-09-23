@@ -36,7 +36,7 @@ export const ActiveDeals = ({ orgData }) => {
   if (!orgData) return <Loader />
 
   const { active } = _.groupBy(orgData.deals, d => d.status === "closed" ? "closed" : "active")
-  const sortActive = active.sort((a, b) => new Date(b?.dealParams?.wireDeadline) - new Date(a?.dealParams?.wireDeadline))
+  const sortActive = (active || []).sort((a, b) => new Date(b?.dealParams?.wireDeadline) - new Date(a?.dealParams?.wireDeadline))
   return (
     <Grid container>
       <Grid item xs={12}>
