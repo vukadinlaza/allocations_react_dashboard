@@ -67,6 +67,7 @@ export const GET_INVESTOR_DEAL = gql`
           status
         }
         dealParams {
+          dealType
           totalRoundSize
           allocation
           totalCarry
