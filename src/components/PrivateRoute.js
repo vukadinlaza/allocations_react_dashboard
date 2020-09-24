@@ -1,43 +1,15 @@
-import React, { useEffect } from "react";
-import _ from 'lodash'
-import PropTypes from "prop-types";
+import React from "react";
 import { Route } from "react-router-dom";
+import { withAuthenticationRequired } from "@auth0/auth0-react";
+import Loader from "../components/utils/Loader";
 
-import { useAuth } from "../auth/useAuth";
-
-/***
- *
- * Private route is a route a user must be logged in to view
- * if they aren't logged in it sends them to login and automatically
- * redirects back the page they originally requested
- *
- **/
-
-const PrivateRoute = ({ component: Component, path, ...rest }) => {
-  const { isAuthenticated, loginWithRedirect, auth0Client } = useAuth();
-
-  useEffect(() => {
-    if (auth0Client && isAuthenticated === false) {
-      loginWithRedirect({
-        appState: { targetUrl: _.get(rest, 'location.pathname', '/') },
-        initialScreen: 'signIn',
-      })
-    }
-  }, [auth0Client, isAuthenticated]);
-
-  const render = props =>
-    isAuthenticated === true ? <Component {...props} /> : null;
-
-  return <Route path={path} render={render} {...rest} />;
-};
-
-PrivateRoute.propTypes = {
-  component: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
-    .isRequired,
-  path: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.string)
-  ]).isRequired
-};
+const PrivateRoute = ({ component, ...args }) => (
+  <Route
+    component={withAuthenticationRequired(component, {
+      onRedirecting: () => <Loader />,
+    })}
+    {...args}
+  />
+);
 
 export default PrivateRoute;
