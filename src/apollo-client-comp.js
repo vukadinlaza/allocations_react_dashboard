@@ -1,6 +1,6 @@
 import { ApolloClient } from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
-import { ApolloProvider } from 'react-apollo';
+import { ApolloProvider } from "@apollo/react-hooks"
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAuth0 } from "../react-auth0-spa";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useLazyQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost'
 
@@ -43,6 +43,7 @@ export function useAuth(QUERY = GET_INVESTOR) {
     logout,
     auth0Client,
   } = useAuth0();
+
   const [getInvestor, { data, error, called, refetch }] = useLazyQuery(QUERY)
   const [userProfile, setUserProfile] = useState({})
 
@@ -75,6 +76,8 @@ export function useAuth(QUERY = GET_INVESTOR) {
   useEffect(() => {
     if (error && user) refetch()
   }, [error, user])
+
+  if (loading) return null
 
   return {
     userProfile,

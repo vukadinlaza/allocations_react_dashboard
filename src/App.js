@@ -43,7 +43,7 @@ import MasterFiling from './components/admin/MasterFiling'
 import AllocationsX from './allocationsX/Home';
 import DealExchange from './allocationsX/DealExchange';
 import AdminExchangeOverview from './allocationsX/AdminOverview';
-
+import AuthorizedApolloProvider from './apollo-client-comp'
 import "./App.scss";
 import "./utils/initFontAwesome"
 
@@ -56,7 +56,7 @@ import "./utils/initFontAwesome"
 
 const App = () => {
   return (
-    <ApolloProvider client={client}>
+    <AuthorizedApolloProvider>
       {/* Sidebar should handle openState, not App.js */}
       <Sidebar>
         <Switch>
@@ -112,7 +112,7 @@ const App = () => {
           <PrivateRoute path="/" component={UserHome} />
         </Switch>
       </Sidebar>
-    </ApolloProvider>
+    </AuthorizedApolloProvider>
   );
 };
 
