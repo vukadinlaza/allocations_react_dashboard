@@ -71,7 +71,7 @@ const GET_DOCUSIGN_FORM = gql`
 const required = ['country', 'investor_type', 'signer_full_name', 'dob', 'street_address', 'city', 'state', 'zip']
 const optional = ['mail_country', 'mail_city', 'mail_zip', 'mail_state', 'mail_street_address']
 
-export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKyc, company_name }) {
+export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKyc, company_name, dealType }) {
   const { userProfile } = useAuth(GET_INVESTOR)
   const [investor, setInvestor] = useState({})
   const [showForm, setShowForm] = useState(false)
@@ -134,7 +134,7 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
       </Helmet>
 
       <Grid container spacing={1}>
-        <Grid item xs={12} sm={12} md={6}>
+        <Grid item xs={12} sm={12} md={dealType === '506c' ? 6 : 12}>
           <Paper className={classes.paper}>
 
             <Typography variant="h6" gutterBottom style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -150,7 +150,7 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
       </Typography>}
           </Paper>
         </Grid>
-        <Grid item xs={12} sm={12} md={6}>
+        {dealType === '506c' && <Grid item xs={12} sm={12} md={6}>
           <Paper className={classes.paper}>
 
             <Typography variant="h6" gutterBottom style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -168,7 +168,7 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
               }} >Click To Begin Verification</Button>
             </div>
           </Paper>
-        </Grid>
+        </Grid>}
       </Grid>
       <form noValidate autoComplete="off">
         {/* <Typography variant="h6" gutterBottom style={{ display: 'flex', justifyContent: 'space-between' }} onClick={() => setShowForm(showForm ? false : true)}>
