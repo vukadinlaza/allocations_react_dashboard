@@ -40,6 +40,7 @@ const GET_DEALS = gql`
           _id
           amount
           status
+          metaData
           investor {
             _id
             name
@@ -146,23 +147,29 @@ export default function Deals({ showClosed }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {_.orderBy(closed, d => new Date(d.date_closed || Date.now()), 'desc').map(deal => (
-                <Fragment key={deal._id}>
-                  <TableRow onClick={() => toggleCapitalAccount(deal._id)} className="closed-deal-row">
-                    <TableCell>{deal.company_name}</TableCell>
-                    <TableCell>{deal.company_description}</TableCell>
-                    <TableCell>{deal.deal_lead}</TableCell>
-                    <Hidden only="xs">
-                      <TableCell>{formatDate(deal.date_closed)}</TableCell>
-                      <TableCell>${nWithCommas(_.sumBy(deal.investments, 'amount'))}</TableCell>
-                      <TableCell className="text-center">{deal.investments.length}</TableCell>
-                      {userProfile.admin && <TableCell align="center"><Link
-                        to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link></TableCell>}
-                    </Hidden>
-                  </TableRow>
-                  {capitalAccount === deal._id && <CapitalAccount deal={deal} />}
-                </Fragment>
-              ))}
+              {_.orderBy(closed, d => new Date(d.date_closed || Date.now()), 'desc').map(deal => {
+                const investments = _.orderBy(_.reject(deal.investments, i => i.status === "invited"), 'amount', 'desc')
+                const totalRaised = _.sumBy(investments, 'amount')
+                const groupedInvestments = _.groupBy(investments, 'metaData.group')
+                return (
+                  <Fragment key={deal._id}>
+                    <TableRow onClick={() => toggleCapitalAccount(deal._id)} className="closed-deal-row">
+                      <TableCell>{deal.company_name}</TableCell>
+                      <TableCell>{deal.company_description}</TableCell>
+                      <TableCell>{deal.deal_lead}</TableCell>
+                      <Hidden only="xs">
+                        <TableCell>{formatDate(deal.date_closed)}</TableCell>
+                        <TableCell>${nWithCommas(_.sumBy(deal.investments, 'amount'))}</TableCell>
+                        <TableCell className="text-center">{deal.investments.length}</TableCell>
+                        {userProfile.admin && <TableCell align="center"><Link
+                          to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link></TableCell>}
+                      </Hidden>
+                    </TableRow>
+                    {capitalAccount === deal._id && <> {_.map(groupedInvestments, invs => <CapitalAccount deal={deal} investments={invs} totalRaised={totalRaised} />)}</>}
+                  </Fragment>
+                )
+              }
+              )}
             </TableBody>
           </Table>
         </Paper>
