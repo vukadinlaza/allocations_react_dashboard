@@ -12,7 +12,7 @@ function percentageOfSPV(investment, total) {
 }
 
 export default function CapitalAccount({ deal, investments }) {
-  const totalRaised = _.sumBy(investments, 'amount')
+  const totalRaised = _.sumBy(deal.investment, 'amount')
   return (
     <TableRow>
       <TableCell colSpan={7} className="CapitalAccount">
