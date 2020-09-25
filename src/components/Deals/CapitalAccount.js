@@ -37,7 +37,7 @@ export default function CapitalAccount({ deal, investments, totalRaised }) {
               <TableRow>
                 <TableCell></TableCell>
                 <TableCell className="text-center"><b>Total</b></TableCell>
-                <TableCell className="text-center"><b>${nWithCommas(totalRaised)}</b></TableCell>
+                <TableCell className="text-center"><b>${nWithCommas(_.sumBy(investments, 'amount'))}</b></TableCell>
               </TableRow>
             </TableBody>
           </Table>
