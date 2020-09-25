@@ -11,8 +11,7 @@ function percentageOfSPV(investment, total) {
   return new BN(investment.amount).dividedBy(total).times(100).toFixed(2)
 }
 
-export default function CapitalAccount({ deal, investments }) {
-  const totalRaised = _.sumBy(deal.investments, 'amount')
+export default function CapitalAccount({ deal, investments, totalRaised }) {
   return (
     <TableRow>
       <TableCell colSpan={7} className="CapitalAccount">
