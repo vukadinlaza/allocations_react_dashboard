@@ -149,6 +149,7 @@ export default function Deals({ showClosed }) {
             <TableBody>
               {_.orderBy(closed, d => new Date(d.date_closed || Date.now()), 'desc').map(deal => {
                 const investments = _.orderBy(_.reject(deal.investments, i => i.status === "invited"), 'amount', 'desc')
+                const totalRaised = _.sumBy(investments, 'amount')
                 const groupedInvestments = _.groupBy(investments, 'metaData.group')
                 return (
                   <Fragment key={deal._id}>
@@ -164,7 +165,7 @@ export default function Deals({ showClosed }) {
                           to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link></TableCell>}
                       </Hidden>
                     </TableRow>
-                    {capitalAccount === deal._id && <> {_.map(groupedInvestments, invs => <CapitalAccount deal={deal} investments={invs} />)}</>}
+                    {capitalAccount === deal._id && <> {_.map(groupedInvestments, invs => <CapitalAccount deal={deal} investments={invs} totalRaised={totalRaised} />)}</>}
                   </Fragment>
                 )
               }
