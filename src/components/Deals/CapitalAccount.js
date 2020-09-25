@@ -11,8 +11,7 @@ function percentageOfSPV(investment, total) {
   return new BN(investment.amount).dividedBy(total).times(100).toFixed(2)
 }
 
-export default function CapitalAccount({ deal }) {
-  const investments = _.orderBy(_.reject(deal.investments, i => i.status === "invited"), 'amount', 'desc')
+export default function CapitalAccount({ deal, investments }) {
   const totalRaised = _.sumBy(investments, 'amount')
   return (
     <TableRow>
@@ -29,7 +28,7 @@ export default function CapitalAccount({ deal }) {
             <TableBody>
               {investments.map(investment => (
                 <TableRow key={investment._id}>
-                  <TableCell>{investment.investor.name}</TableCell>
+                  <TableCell>{investment?.investor?.name}</TableCell>
                   <TableCell className="text-center">
                     {percentageOfSPV(investment, totalRaised)}%
                   </TableCell>
@@ -54,8 +53,8 @@ function CapitalAccountPie({ investments }) {
   const colors = randomColor({ count: investments.length, format: "hsl" })
   const data = investments.map((investment, i) => {
     return {
-      id: investment.investor.name,
-      label: `${investment.investor.name}`,
+      id: investment?.investor?.name,
+      label: `${investment?.investor?.name}`,
       value: investment.amount || 0,
       color: colors[i]
     }
