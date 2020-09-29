@@ -47,11 +47,13 @@ export default ({ data, children }) => {
 
             <Grid container justify="space-between" style={{ marginTop: "40px" }}>
                 <Grid item xs={12} sm={12} md={4} style={{ border: "1em solid transparent" }}>
+
                     <Paper style={{ minHeight: "100px" }}>
                         <Grid container>
                             <Grid item sm={8} md={8}>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Portfolio Value</p>
                                 <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>${nWithCommas(_.sumBy(data.map(inv => ({ ...inv, debit: _.toNumber(inv.Debit.replaceAll(',', '')) })), 'debit'))}</h2>
+
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>0% realized | 100% unrealized</p>
                             </Grid>
                             <Grid item sm={4} md={4} justify="center" align="center">
@@ -65,6 +67,7 @@ export default ({ data, children }) => {
                         <Grid item sm={8} md={8}>
                             <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Total Invested</p>
                             <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>${nWithCommas(_.sumBy(data.map(inv => ({ ...inv, debit: _.toNumber(inv.Debit.replaceAll(',', '')) })), 'debit'))}</h2>
+
                             <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>{data.length} Total Investments</p>
                         </Grid>
                         <Grid item sm={4} md={4}>
@@ -78,6 +81,7 @@ export default ({ data, children }) => {
                             <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
                             <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>1x</h2>
                             <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Last Update: 29th Sept 2020</p>
+
                         </Grid>
                         <Grid item sm={4} md={4}>
 
@@ -91,6 +95,7 @@ export default ({ data, children }) => {
                     <Paper style={{ minHeight: "400px" }}>
                         <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Portfolio Management</p>
                         {/* <h6 style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "0px" }}>Portfolio Management</h6> */}
+
                         <Grid item sm={12} md={12}>
                             <Chart chartType="PieChart"
                                 width="100%"
@@ -104,12 +109,14 @@ export default ({ data, children }) => {
                 <Grid item xs={6} sm={6} md={6} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "400px" }}>
                         <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
+
                         <Grid item sm={12} md={12}>
                             <Chart chartType="SteppedAreaChart"
                                 width="100%"
                                 height="300px"
                                 chartEvents={chartEvents}
                                 data={[['Amount', 'Invested', 'Value'], ['Amount', _.sumBy(data.map(inv => ({ ...inv, debit: _.toNumber(inv.Debit.replaceAll(',', '')) })), 'debit'), 0]]}
+
                                 optionsA={chartOptionsB} />
                         </Grid>
                     </Paper>
