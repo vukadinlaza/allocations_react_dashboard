@@ -370,7 +370,7 @@ export function DealParams({ deal, deal_slug }) {
           {dealParams.managementFeesDollar && <ListItem>
             <ListItemText
               primary="Management Fee"
-              secondary={'$' + dealParams.managementFeesDollar + '% (' + dealParams.managementFeeType + ')'}
+              secondary={'$' + dealParams.managementFeesDollar + ' (' + dealParams.managementFeeType + ')'}
             />
           </ListItem>}
           {dealParams.estimatedTerm && <ListItem>
@@ -432,7 +432,7 @@ export function DealParams({ deal, deal_slug }) {
           {dealParams.portfolioManagementFeesDollar && <ListItem>
             <ListItemText
               primary="Management Fee"
-              secondary={'$' + dealParams.portfolioManagementFeesDollar + '% (' + dealParams.portfolioManagementFeeType + ')'}
+              secondary={'$' + dealParams.portfolioManagementFeesDollar + ' (' + dealParams.portfolioManagementFeeType + ')'}
             />
           </ListItem>}
         </List>
@@ -496,7 +496,7 @@ export function DealParams({ deal, deal_slug }) {
           {dealParams.fundManagementFeesDollar && <ListItem>
             <ListItemText
               primary="Management Fee"
-              secondary={'$' + dealParams.fundManagementFeesDollar + '% (' + dealParams.fundManagementFeeType + ')'}
+              secondary={'$' + dealParams.fundManagementFeesDollar + ' (' + dealParams.fundManagementFeeType + ')'}
             />
           </ListItem>}
           {dealParams.fundEstimatedTerm && <ListItem>

@@ -1,11 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import { hotjar } from 'react-hotjar';
 import { ThemeProvider } from '@material-ui/core/styles';
-import { useAuth } from './auth/useAuth'
-import { Auth0Provider } from "@auth0/auth0-react";
-
+import Auth0ProviderWithHistory from './Auth0providerWithHistory'
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
@@ -31,36 +29,6 @@ if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === 'staging')
   // initialize hotjar
   hotjar.initialize(1630114, 6)
 }
-
-// let user = null
-
-// const GetUser = () => {
-//   const userProfile = useAuth()
-//   useEffect(() => {
-//     user = userProfile
-//   }, [userProfile])
-//   return <> </>
-// }
-
-// console.log('USER', user)
-
-// var userId = "1" || null; // Replace your_user_id with your own if available.
-// window.hj('identify', userId, {
-//   'email': 'test@test.com',
-//   'Signed up': '2019—06-20Z'
-// });
-
-const domain = process.env.REACT_APP_AUTH0_DOMAIN;
-const client_id = process.env.REACT_APP_AUTH0_KEY;
-const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
-
-const defaultOptions = {
-  domain,
-  client_id,
-  audience,
-  redirect_uri: window.location.origin,
-}
-
 const ErrorBoundary = Bugsnag.getPlugin('react')
   .createErrorBoundary(React)
 
@@ -68,13 +36,11 @@ ReactDOM.render(
   <ErrorBoundary>
     <ThemeProvider theme={theme}>
       <Router>
-        <Auth0Provider
-          domain={domain}
-          clientId={client_id}
-          audience={audience}
-          redirectUri={window.location.origin}>
+        <Auth0ProviderWithHistory
+
+        >
           <App />
-        </Auth0Provider>
+        </Auth0ProviderWithHistory>
       </Router>
     </ThemeProvider>
   </ErrorBoundary>,
@@ -86,3 +52,4 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
