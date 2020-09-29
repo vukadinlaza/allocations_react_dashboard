@@ -4,7 +4,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { hotjar } from 'react-hotjar';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { useAuth } from './auth/useAuth'
-import { Auth0Provider } from "./react-auth0-spa";
+import { Auth0Provider } from "@auth0/auth0-react";
+
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
@@ -49,6 +50,16 @@ if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === 'staging')
 //   'Signed up': '2019—06-20Z'
 // });
 
+const domain = process.env.REACT_APP_AUTH0_DOMAIN;
+const client_id = process.env.REACT_APP_AUTH0_KEY;
+const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
+
+const defaultOptions = {
+  domain,
+  client_id,
+  audience,
+  redirect_uri: window.location.origin,
+}
 
 const ErrorBoundary = Bugsnag.getPlugin('react')
   .createErrorBoundary(React)
@@ -57,7 +68,11 @@ ReactDOM.render(
   <ErrorBoundary>
     <ThemeProvider theme={theme}>
       <Router>
-        <Auth0Provider>
+        <Auth0Provider
+          domain={domain}
+          clientId={client_id}
+          audience={audience}
+          redirectUri={window.location.origin}>
           <App />
         </Auth0Provider>
       </Router>
