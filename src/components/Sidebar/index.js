@@ -3,6 +3,7 @@ import { Link, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import { useAuth } from '../../auth/useAuth'
 import { get } from 'lodash'
 import { gql } from 'apollo-boost'
+import { Helmet } from "react-helmet";
 
 import "./style.scss"
 import AppBar from '@material-ui/core/AppBar';
@@ -244,6 +245,9 @@ export default function Sidebar(props) {
       </nav>
       <main className={classes.content} style={{ background: "rgba(0,0,0,0.01)" }}>
         <div className={classes.toolbar} />
+        <Helmet>
+          <title>Allocations</title>
+        </Helmet>
         {props.children}
       </main>
     </div>
