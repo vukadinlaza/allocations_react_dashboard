@@ -115,7 +115,7 @@ export default function AdminHome({ }) {
   if (!orgData) return <Paper style={{ padding: "25px" }}><Loader /></Paper>
   const header = (<Grid container justify="space-between">
     <Grid item sm={12} md={6}>
-      <Typography variant="h4" className={classes.orgName} style={{ color: "#fff" }}>
+      <Typography variant="h4" className={classes.orgName} style={{ color: fundData ? '#fff' : '#000' }}>
         {orgData.name}
       </Typography>
     </Grid>
@@ -133,7 +133,7 @@ export default function AdminHome({ }) {
         {header}
       </FundOverview> : header
       }
-      <div className={classes.tabs} style={{ marginTop: fundData ? '300px' : 0 }}>
+      <div className={classes.tabs} style={{ marginTop: fundData ? '0px' : 0 }}>
         <Grid container>
           <Grid item xs={12} sm={4} md={2}>
             <ButtonBase className={tab === "active-deals" ? classes.activeTab : classes.tab}
