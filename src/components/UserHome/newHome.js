@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { gql } from 'apollo-boost'
 import Loader from '../utils/Loader'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     Paper,
     Grid,
@@ -9,9 +10,12 @@ import {
     TableCell,
     TableHead,
     TableRow,
-    Button
+    Button,
+    Typography
 } from '@material-ui/core';
 import _ from 'lodash'
+import moment from 'moment'
+
 import Chart from "react-google-charts"
 import { useHistory } from "react-router-dom"
 import { nWithCommas } from '../../utils/numbers'
@@ -51,6 +55,10 @@ const GET_INVESTOR = gql`
         amount
         status
         created_at
+        documents {
+            path
+            link
+          }
         deal {
           _id
           slug
@@ -72,6 +80,7 @@ const GET_INVESTOR = gql`
 export default ({ data, children }) => {
     const history = useHistory()
     const classes = useStyles();
+    const [showDocs, setShowDocs] = useState()
 
     const { userProfile, error, params, adminView } = useAuth(GET_INVESTOR)
 
@@ -92,12 +101,21 @@ export default ({ data, children }) => {
         vAxis: { title: 'Accumulated Rating' },
         legend: 'none'
     };
+
+
     if (!userProfile.email) return <Loader />
+    const graphData = userProfile?.investments.sort((a, b) => a.created_at - b.created_at).reduce((acc, inv, index) => {
+        const sum = index > 1 ? _.sumBy(acc, '[1]') : 0
+        const date = moment.unix(inv.created_at / 1000).format('DD/MM/YY')
+        const point = [date, sum + inv.amount]
+        return [...acc, point]
+    }, [])
+
     const investmentTotal = _.sumBy(userProfile.investments, 'amount')
     return (
         <div className="blue-container">
             <Grid container spacing={6} justify="space-between" style={{ marginTop: "40px", marginBottom: '1rem' }}>
-                <Grid item sm={12} md={4} style={{ border: "solid transparent" }}>
+                <Grid item sm={12} md={4} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "100px" }}>
                         <Grid container style={{ paddingLeft: '1rem' }}>
                             <Grid item sm={8} md={8}>
@@ -111,31 +129,31 @@ export default ({ data, children }) => {
                         </Grid>
                     </Paper>
                 </Grid>
-                <Grid item sm={12} md={4} style={{ border: "solid transparent" }}>
+                <Grid item sm={12} md={4} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "100px" }}>
-                    <Grid container style={{ paddingLeft: '1rem' }}>
-                        <Grid item sm={8} md={8}>
-                            <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Total Invested</p>
-                            <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>$ {nWithCommas(investmentTotal)}.00</h2>
-                            <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>{userProfile?.investments?.length} Total Investments</p>
-                        </Grid>
-                        <Grid item sm={4} md={4} justify="center" align="center">
+                        <Grid container style={{ paddingLeft: '1rem' }}>
+                            <Grid item sm={8} md={8}>
+                                <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Total Invested</p>
+                                <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>$ {nWithCommas(investmentTotal)}.00</h2>
+                                <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>{userProfile?.investments?.length} Total Investments</p>
+                            </Grid>
+                            <Grid item sm={4} md={4} justify="center" align="center">
                                 <img src="https://allocations-public.s3.us-east-2.amazonaws.com/icon-bar-chart.svg" alt="oops" style={{ width: "50px", height: "50px", marginTop: "30%" }} />
-                        </Grid>
+                            </Grid>
                         </Grid>
                     </Paper>
                 </Grid>
-                <Grid item sm={12} md={4} style={{ border: "solid transparent" }}>
+                <Grid item sm={12} md={4} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "100px" }}>
-                    <Grid container style={{ paddingLeft: '1rem' }}>
-                        <Grid item sm={8} md={8}>
-                            <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
-                            <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>1</h2>
-                            <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>1</p>
-                        </Grid>
-                        <Grid item sm={4} md={4} justify="center" align="center">
+                        <Grid container style={{ paddingLeft: '1rem' }}>
+                            <Grid item sm={8} md={8}>
+                                <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
+                                <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>1</h2>
+                                <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>1</p>
+                            </Grid>
+                            <Grid item sm={4} md={4} justify="center" align="center">
                                 <img src="https://allocations-public.s3.us-east-2.amazonaws.com/icon-mulitple.svg" alt="oops" style={{ width: "50px", height: "50px", marginTop: "30%" }} />
-                        </Grid>
+                            </Grid>
                         </Grid>
                     </Paper>
                 </Grid>
@@ -161,40 +179,49 @@ export default ({ data, children }) => {
                     <Paper style={{ minHeight: "400px" }}>
                         <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
                         <Grid item sm={12} md={12}>
-                            <Chart chartType="SteppedAreaChart"
+                            <Chart chartType="LineChart"
                                 width="100%"
                                 height="300px"
+                                data={[['Time', 'Amount'], ...graphData]}
                                 chartEvents={chartEvents}
                                 optionsA={chartOptionsB} />
                         </Grid>
                     </Paper>
                 </Grid>
             </Grid >
-            <Paper>
-                <Table>
-                    <TableHead>
-                        <TableRow style={{ borderBottom: 'solid black 1px' }}>
-                            <TableCell className={classes.tableHeader} align="center">Company/Fund</TableCell>
-                            <TableCell className={classes.tableHeader} align="center">Status</TableCell>
-                            <TableCell className={classes.tableHeader} align="center">Investment Date</TableCell>
-                            <TableCell className={classes.tableHeader} align="center">Investment Amount</TableCell>
-                            <TableCell className={classes.tableHeader} align="center">Value</TableCell>
-                            <TableCell className={classes.tableHeader} align="center">Mulitple</TableCell>
-                            <TableCell className={classes.tableHeader} align="center">Deal Page</TableCell>
-                            <TableCell className={classes.tableHeader} align="center">Documents</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {userProfile.investments.map((investment) => <TR investment={investment} />)}
-                    </TableBody>
-                </Table>
-            </Paper>
+            <Grid item sm={12} md={12} style={{ border: "1em solid transparent" }}>
+
+                <Paper>
+                    <Table>
+                        <TableHead>
+                            <TableRow style={{ borderBottom: 'solid black 1px' }}>
+                                <TableCell className={classes.tableHeader} align="center">Company/Fund</TableCell>
+                                <TableCell className={classes.tableHeader} align="center">Status</TableCell>
+                                <TableCell className={classes.tableHeader} align="center">Investment Date</TableCell>
+                                <TableCell className={classes.tableHeader} align="center">Investment Amount</TableCell>
+                                <TableCell className={classes.tableHeader} align="center">Value</TableCell>
+                                <TableCell className={classes.tableHeader} align="center">Mulitple</TableCell>
+                                <TableCell className={classes.tableHeader} align="center">Deal Page</TableCell>
+                                <TableCell className={classes.tableHeader} align="center">Documents</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {userProfile.investments.map((investment) =>
+                                showDocs?._id === investment?._id ?
+                                    <>
+                                        <TR investment={investment} setShowDocs={setShowDocs} showDocs={showDocs} />
+                                        <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents} />
+                                    </>
+                                    : <TR investment={investment} setShowDocs={setShowDocs} showDocs={showDocs} />)}
+                        </TableBody>
+                    </Table>
+                </Paper>
+            </Grid>
         </div >
     )
 }
 
-const TR = ({ investment }) => {
-    const classes = useStyles();
+const TR = ({ investment, setShowDocs, showDocs }) => {
     const history = useHistory()
     return (
         <TableRow key={investment._id} className="investment-row">
@@ -210,7 +237,7 @@ const TR = ({ investment }) => {
                 </Button>
             </TableCell>
             <TableCell align="center">
-                <Button variant="contained" size="small" color="primary">
+                <Button variant="contained" size="small" color="primary" onClick={() => setShowDocs(showDocs ? false : investment)}>
                     View
                 </Button>
             </TableCell>
@@ -221,5 +248,36 @@ function InvestmentStatus({ investment }) {
     const { status } = investment
     return (
         <span className={`investment-status investment-status-${status}`}>{status}</span>
+    )
+}
+
+function filename(path) {
+    try {
+        return path.split('/')[2]
+    } catch {
+        return path
+    }
+}
+
+function DocsRow({ docs }) {
+    return (
+        <>
+            <TableRow>
+                <TableCell colSpan={6}>
+                    <Typography variant="subtitle2" style={{ marginBottom: '1rem' }}>
+                        Documents may take up to 7 days to appear here after signing.
+            </Typography>
+                    {docs.map(doc => (
+                        <div key={doc.path} className="doc-wrapper">
+                            <div className="filename">
+                                <FontAwesomeIcon color="#F48FB1" icon={["far", "file-pdf"]} className="doc-icon" />
+                                <span><a href={`https://${doc.link}`} target="_blank"
+                                    rel="noopener noreferrer">{filename(doc.path)}</a></span>
+                            </div>
+                        </div>
+                    ))}
+                </TableCell>
+            </TableRow>
+        </>
     )
 }
