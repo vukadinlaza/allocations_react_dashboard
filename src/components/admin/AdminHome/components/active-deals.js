@@ -52,7 +52,7 @@ export const ActiveDeals = ({ orgData }) => {
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                <TableCell>Closes</TableCell>
+                <Hidden only="xs"><TableCell>Closes</TableCell></Hidden>
                 <Hidden only="xs">
                   <TableCell>Progress</TableCell>
                   <TableCell></TableCell>
@@ -94,7 +94,7 @@ export const Deal = ({ deal, index }) => {
     <>
       <TableRow hover onClick={() => setActiveDeal(activeDeal ? false : deal)}>
         <TableCell><strong>{deal.company_name}</strong></TableCell>
-        <TableCell>{formattedDate_closed ? formattedDate_closed : "TBD"}</TableCell>
+        <Hidden only="xs"><TableCell>{formattedDate_closed ? formattedDate_closed : "TBD"}</TableCell></Hidden>
         <Hidden only="xs">
           <TableCell>
             <div>{Math.round(val || 0)}%</div>

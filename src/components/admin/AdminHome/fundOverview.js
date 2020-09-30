@@ -32,17 +32,7 @@ export default ({ data, children }) => {
         isStacked: true
     };
     return (
-        <div style={{
-            height: "430px",
-            background: "#005EFF",
-            marginTop: "-30px",
-            paddingTop: "30px",
-            paddingBottom: "60px",
-            marginLeft: "-32px",
-            paddingLeft: "32px",
-            marginRight: "-32px",
-            paddingRight: "32px"
-        }}>
+        <div className="blue-container">
             {children}
 
             <Grid container justify="space-between" style={{ marginTop: "40px" }}>
@@ -95,7 +85,7 @@ export default ({ data, children }) => {
             </Grid>
 
             <Grid container justify="space-between" style={{ marginTop: "1em" }}>
-                <Grid item xs={6} sm={6} md={6} style={{ border: "1em solid transparent" }}>
+                <Grid item xs={12} sm={6} md={6} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "400px" }}>
                         <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Portfolio Overview</p>
                         {/* <h6 style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "0px" }}>Portfolio Management</h6> */}
@@ -110,7 +100,7 @@ export default ({ data, children }) => {
                         </Grid>
                     </Paper>
                 </Grid>
-                <Grid item xs={6} sm={6} md={6} style={{ border: "1em solid transparent" }}>
+                <Grid item xs={12} sm={6} md={6} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "400px" }}>
                         <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
 

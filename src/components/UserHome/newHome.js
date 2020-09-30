@@ -114,44 +114,44 @@ export default ({ data, children }) => {
     const investmentTotal = _.sumBy(userProfile.investments, 'amount')
     return (
         <div className="blue-container">
-            <Grid container spacing={6} justify="space-between" style={{ marginTop: "40px", marginBottom: '1rem' }}>
-                <Grid item sm={12} md={4} style={{ border: "1em solid transparent" }}>
+            <Grid container spacing={12} justify="space-between" style={{ marginTop: "40px", marginBottom: '1rem' }}>
+                <Grid item xs={12} sm={12} md={4} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "100px" }}>
-                        <Grid container style={{ paddingLeft: '1rem' }}>
+                        <Grid container style={{ paddingLeft: '1rem', justifyContent: 'space-between' }}>
                             <Grid item sm={8} md={8}>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Portfolio Value</p>
                                 <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>$ {nWithCommas(investmentTotal)}.00</h2>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>0% realized | 100% unrealized</p>
                             </Grid>
-                            <Grid item sm={4} md={4} justify="center" align="center">
+                            <Grid item sm={4} md={4}>
                                 <img src="https://allocations-public.s3.us-east-2.amazonaws.com/icon-dollar-sign.svg" alt="oops" style={{ width: "50px", height: "50px", marginTop: "30%" }} />
                             </Grid>
                         </Grid>
                     </Paper>
                 </Grid>
-                <Grid item sm={12} md={4} style={{ border: "1em solid transparent" }}>
+                <Grid item xs={12} sm={12} md={4} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "100px" }}>
-                        <Grid container style={{ paddingLeft: '1rem' }}>
+                        <Grid container style={{ paddingLeft: '1rem', justifyContent: 'space-between' }} >
                             <Grid item sm={8} md={8}>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Total Invested</p>
                                 <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>$ {nWithCommas(investmentTotal)}.00</h2>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>{userProfile?.investments?.length} Total Investments</p>
                             </Grid>
-                            <Grid item sm={4} md={4} justify="center" align="center">
+                            <Grid item sm={4} md={4}>
                                 <img src="https://allocations-public.s3.us-east-2.amazonaws.com/icon-bar-chart.svg" alt="oops" style={{ width: "50px", height: "50px", marginTop: "30%" }} />
                             </Grid>
                         </Grid>
                     </Paper>
                 </Grid>
-                <Grid item sm={12} md={4} style={{ border: "1em solid transparent" }}>
+                <Grid item xs={12} sm={12} md={4} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "100px" }}>
-                        <Grid container style={{ paddingLeft: '1rem' }}>
+                        <Grid container style={{ paddingLeft: '1rem', justifyContent: 'space-around' }}>
                             <Grid item sm={8} md={8}>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
                                 <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>1</h2>
-                                <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>1</p>
+    <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Last Updated: 30th Sept 2020 </p>
                             </Grid>
-                            <Grid item sm={4} md={4} justify="center" align="center">
+                            <Grid item sm={4} md={4}>
                                 <img src="https://allocations-public.s3.us-east-2.amazonaws.com/icon-mulitple.svg" alt="oops" style={{ width: "50px", height: "50px", marginTop: "30%" }} />
                             </Grid>
                         </Grid>
@@ -160,7 +160,7 @@ export default ({ data, children }) => {
             </Grid>
 
             <Grid container justify="space-between" style={{ marginTop: "1em" }}>
-                <Grid item sm={12} md={6} style={{ border: "1em solid transparent" }}>
+                <Grid item xs={12} sm={12} md={6} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "400px" }}>
                         <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Portfolio Overview</p>
                         {/* <h6 style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "0px" }}>Portfolio Management</h6> */}
@@ -175,7 +175,7 @@ export default ({ data, children }) => {
                     </Paper>
                 </Grid>
 
-                <Grid item sm={12} md={6} style={{ border: "1em solid transparent" }}>
+                <Grid item xs={12}  sm={12} md={6} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "400px" }}>
                         <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
                         <Grid item sm={12} md={12}>
