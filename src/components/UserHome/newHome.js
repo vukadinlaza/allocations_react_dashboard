@@ -148,8 +148,8 @@ export default ({ data, children }) => {
                         <Grid container style={{ paddingLeft: '1rem', justifyContent: 'space-around' }}>
                             <Grid item sm={8} md={8}>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
-                                <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>1</h2>
-    <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Last Updated: 30th Sept 2020 </p>
+                                <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>1x</h2>
+                                <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Last Update: 29th Sept 2020</p>
                             </Grid>
                             <Grid item sm={4} md={4}>
                                 <img src="https://allocations-public.s3.us-east-2.amazonaws.com/icon-mulitple.svg" alt="oops" style={{ width: "50px", height: "50px", marginTop: "30%" }} />
@@ -177,7 +177,7 @@ export default ({ data, children }) => {
 
                 <Grid item xs={12}  sm={12} md={6} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "400px" }}>
-                        <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
+                        <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Account Value</p>
                         <Grid item sm={12} md={12}>
                             <Chart chartType="LineChart"
                                 width="100%"
@@ -227,7 +227,7 @@ const TR = ({ investment, setShowDocs, showDocs }) => {
         <TableRow key={investment._id} className="investment-row">
             <TableCell align="center">{investment.deal.company_name}</TableCell>
             <TableCell align="center"><InvestmentStatus investment={investment} /></TableCell>
-            <TableCell align="center">{investment.created_at}</TableCell>
+            <TableCell align="center">{moment.unix(investment.created_at / 1000).format('Do MMM YYYY')}</TableCell>
             <TableCell align="center">${nWithCommas(investment.amount)}</TableCell>
             <TableCell align="center">${nWithCommas(investment.amount)}</TableCell>
             <TableCell align="center">1x</TableCell>
