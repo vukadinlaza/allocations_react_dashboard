@@ -213,11 +213,14 @@ export default ({ data, children }) => {
 
 const TR = ({ investment, setShowDocs, showDocs }) => {
     const history = useHistory()
+    const timestamp = investment._id.toString().substring(0, 8)
+    const date = new Date(parseInt(timestamp, 16) * 1000)
+    const addedDate = moment(date).format('Do MMM YYYY')
     return (
         <TableRow key={investment._id} className="investment-row">
             <TableCell align="left">{investment.deal.company_name}</TableCell>
             <TableCell align="center"><InvestmentStatus investment={investment} /></TableCell>
-            <TableCell align="center">{moment.unix((investment.created_at || investment.invited_at) / 1000).format('Do MMM YYYY')}</TableCell>
+            <TableCell align="center">{addedDate}</TableCell>
             <TableCell align="center">${nWithCommas(investment.amount)}</TableCell>
             <TableCell align="center">${nWithCommas(investment.amount)}</TableCell>
             <TableCell align="center">1x</TableCell>
