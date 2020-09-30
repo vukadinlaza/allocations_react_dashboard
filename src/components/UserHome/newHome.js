@@ -55,6 +55,7 @@ const GET_INVESTOR = gql`
         amount
         status
         created_at
+        invited_at
         documents {
             path
             link
