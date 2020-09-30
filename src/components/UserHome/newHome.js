@@ -97,8 +97,8 @@ export default ({ data, children }) => {
         pieHole: 0.5,
     };
     const chartOptionsB = {
-        title: 'The decline of \'The 39 Steps\'',
-        vAxis: { title: 'Accumulated Rating' },
+        title: '',
+        vAxis: { title: '' },
         legend: 'none'
     };
 
@@ -175,16 +175,16 @@ export default ({ data, children }) => {
                     </Paper>
                 </Grid>
 
-                <Grid item xs={12}  sm={12} md={6} style={{ border: "1em solid transparent" }}>
+                <Grid item xs={12} sm={12} md={6} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "400px" }}>
-                        <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Account Value</p>
+                        <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
                         <Grid item sm={12} md={12}>
                             <Chart chartType="LineChart"
                                 width="100%"
                                 height="300px"
-                                data={[['Time', 'Amount'], ...graphData]}
+                                data={[['Time', 'Multiple'], ['June 1st', 1], ['July 1st', 1], ['August 1st', 1], ['September 1st', 1]]}
                                 chartEvents={chartEvents}
-                                optionsA={chartOptionsB} />
+                                options={chartOptionsB} />
                         </Grid>
                     </Paper>
                 </Grid>
