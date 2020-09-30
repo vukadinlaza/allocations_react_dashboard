@@ -117,7 +117,7 @@ export default ({ data, children }) => {
             <Grid container spacing={12} justify="space-between" style={{ marginTop: "40px", marginBottom: '1rem' }}>
                 <Grid item xs={12} sm={12} md={4} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "100px" }}>
-                        <Grid container style={{ paddingLeft: '1rem', justifyContent: 'space-between' }}>
+                        <Grid container style={{ padding: '0.1rem', justifyContent: 'space-between' }} >
                             <Grid item sm={8} md={8}>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Portfolio Value</p>
                                 <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>$ {nWithCommas(investmentTotal)}.00</h2>
@@ -131,7 +131,7 @@ export default ({ data, children }) => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={4} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "100px" }}>
-                        <Grid container style={{ paddingLeft: '1rem', justifyContent: 'space-between' }} >
+                        <Grid container style={{ padding: '0.1rem', justifyContent: 'space-between' }} >
                             <Grid item sm={8} md={8}>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Total Invested</p>
                                 <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>$ {nWithCommas(investmentTotal)}.00</h2>
@@ -145,7 +145,7 @@ export default ({ data, children }) => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={4} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "100px" }}>
-                        <Grid container style={{ paddingLeft: '1rem', justifyContent: 'space-around' }}>
+                        <Grid container style={{ padding: '0.1rem', justifyContent: 'space-between' }} >
                             <Grid item sm={8} md={8}>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
                                 <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>1x</h2>
