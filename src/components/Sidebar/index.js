@@ -288,8 +288,10 @@ function deSlugify(slug) {
 
 function OrgLogo({ slug, name }) {
   const history = useHistory()
-  const [img, setImg] = useState(`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${slug}.png`)
-
+  const [img, setImg] = useState()
+  useEffect(() => {
+    setImg(`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${slug}.png`)
+  }, [slug])
   if (!img) {
     return (
       <div className="brand" onClick={() => history.push(`/admin/${slug}`)}>
