@@ -39,14 +39,14 @@ export default ({ data, children }) => {
                 <Grid item xs={12} sm={12} md={4} style={{ border: "1em solid transparent" }}>
 
                     <Paper style={{ minHeight: "100px" }}>
-                        <Grid container>
+                        <Grid container style={{ padding: '0.1rem', justifyContent: 'space-between' }} >
                             <Grid item sm={8} md={8}>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Portfolio Value</p>
                                 <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>${nWithCommas(_.sumBy(data.map(inv => ({ ...inv, debit: _.toNumber(inv.Debit.replaceAll(',', '')) })), 'debit'))}</h2>
 
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>0% realized | 100% unrealized</p>
                             </Grid>
-                            <Grid item sm={4} md={4} justify="center" align="center">
+                            <Grid item sm={4} md={4}>
                                 <img src="https://allocations-public.s3.us-east-2.amazonaws.com/icon-dollar-sign.svg" alt="oops" style={{ width: "50px", height: "50px", marginTop: "30%" }} />
                             </Grid>
                         </Grid>
@@ -54,7 +54,7 @@ export default ({ data, children }) => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={4} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "100px" }}>
-                    <Grid container>
+                    <Grid container style={{ padding: '0.1rem', justifyContent: 'space-between' }} >
                         <Grid item sm={8} md={8}>
                             <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Total Invested</p>
                             <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>${nWithCommas(_.sumBy(data.map(inv => ({ ...inv, debit: _.toNumber(inv.Debit.replaceAll(',', '')) })), 'debit'))}</h2>
@@ -69,7 +69,7 @@ export default ({ data, children }) => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={4} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "100px" }}>
-                    <Grid container>
+                    <Grid container style={{ padding: '0.1rem', justifyContent: 'space-between' }} >
                         <Grid item sm={8} md={8}>
                             <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
                             <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>1x</h2>
