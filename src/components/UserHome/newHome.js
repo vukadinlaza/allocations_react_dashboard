@@ -84,14 +84,6 @@ export default ({ data, children }) => {
 
     const { userProfile, error, params, adminView } = useAuth(GET_INVESTOR)
 
-    const chartEvents = [
-        {
-            eventName: "select",
-            callback({ chartWrapper }) {
-                history.push(`/investments`)
-            }
-        }
-    ];
     const chartOptionsA = {
         title: '',
         pieHole: 0.5,
@@ -169,7 +161,6 @@ export default ({ data, children }) => {
                                 width="100%"
                                 height="300px"
                                 data={[['Investment', 'Amount'], ...userProfile.investments.map(inv => ([inv.deal.company_name, inv.amount]))]}
-                                chartEvents={chartEvents}
                                 options={chartOptionsA} />
                         </Grid>
                     </Paper>
@@ -183,7 +174,6 @@ export default ({ data, children }) => {
                                 width="100%"
                                 height="300px"
                                 data={[['Time', 'Multiple'], ['June 1st', 1], ['July 1st', 1], ['August 1st', 1], ['September 1st', 1]]}
-                                chartEvents={chartEvents}
                                 options={chartOptionsB} />
                         </Grid>
                     </Paper>
@@ -195,11 +185,11 @@ export default ({ data, children }) => {
                     <Table>
                         <TableHead>
                             <TableRow style={{ borderBottom: 'solid black 1px' }}>
-                                <TableCell className={classes.tableHeader} align="center">Company/Fund</TableCell>
+                                <TableCell className={classes.tableHeader} align="left">Company/Fund</TableCell>
                                 <TableCell className={classes.tableHeader} align="center">Status</TableCell>
                                 <TableCell className={classes.tableHeader} align="center">Investment Date</TableCell>
                                 <TableCell className={classes.tableHeader} align="center">Investment Amount</TableCell>
-                                <TableCell className={classes.tableHeader} align="center">Value</TableCell>
+                                <TableCell className={classes.tableHeader} align="center">Investment Value</TableCell>
                                 <TableCell className={classes.tableHeader} align="center">Mulitple</TableCell>
                                 <TableCell className={classes.tableHeader} align="center">Deal Page</TableCell>
                                 <TableCell className={classes.tableHeader} align="center">Documents</TableCell>
@@ -225,9 +215,9 @@ const TR = ({ investment, setShowDocs, showDocs }) => {
     const history = useHistory()
     return (
         <TableRow key={investment._id} className="investment-row">
-            <TableCell align="center">{investment.deal.company_name}</TableCell>
+            <TableCell align="left">{investment.deal.company_name}</TableCell>
             <TableCell align="center"><InvestmentStatus investment={investment} /></TableCell>
-            <TableCell align="center">{moment.unix(investment.created_at / 1000).format('Do MMM YYYY')}</TableCell>
+            <TableCell align="center">{moment.unix((investment.created_at || investment.invited_at) / 1000).format('Do MMM YYYY')}</TableCell>
             <TableCell align="center">${nWithCommas(investment.amount)}</TableCell>
             <TableCell align="center">${nWithCommas(investment.amount)}</TableCell>
             <TableCell align="center">1x</TableCell>
