@@ -4,15 +4,32 @@ import Loader from '../utils/Loader'
 import {
     Paper,
     Grid,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Button
 } from '@material-ui/core';
 import _ from 'lodash'
 import Chart from "react-google-charts"
 import { useHistory } from "react-router-dom"
 import { nWithCommas } from '../../utils/numbers'
 import { useAuth } from "../../auth/useAuth";
-
+import { makeStyles } from '@material-ui/core/styles';
+import './style.scss'
 
 import { useQuery, useMutation, useLazyQuery } from '@apollo/react-hooks';
+
+
+const useStyles = makeStyles((theme) => ({
+    tableHeader: {
+        textTransform: 'uppercase !important',
+        color: '#3A506B !important',
+        fontSize: '.75rem',
+        fontWeight: 'bold'
+    },
+}));
 
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
@@ -33,6 +50,7 @@ const GET_INVESTOR = gql`
         _id
         amount
         status
+        created_at
         deal {
           _id
           slug
@@ -40,6 +58,7 @@ const GET_INVESTOR = gql`
           company_description
           date_closed
           status
+          appLink
           organization {
             _id
             slug
@@ -52,6 +71,8 @@ const GET_INVESTOR = gql`
 
 export default ({ data, children }) => {
     const history = useHistory()
+    const classes = useStyles();
+
     const { userProfile, error, params, adminView } = useAuth(GET_INVESTOR)
 
     const chartEvents = [
@@ -62,7 +83,6 @@ export default ({ data, children }) => {
             }
         }
     ];
-    console.log(userProfile)
     const chartOptionsA = {
         title: '',
         pieHole: 0.5,
@@ -70,26 +90,14 @@ export default ({ data, children }) => {
     const chartOptionsB = {
         title: 'The decline of \'The 39 Steps\'',
         vAxis: { title: 'Accumulated Rating' },
-        isStacked: true
+        legend: 'none'
     };
     if (!userProfile.email) return <Loader />
     const investmentTotal = _.sumBy(userProfile.investments, 'amount')
     return (
-        <div style={{
-            height: "430px",
-            background: "#005EFF",
-            marginTop: "-30px",
-            paddingTop: "30px",
-            paddingBottom: "60px",
-            marginLeft: "-32px",
-            paddingLeft: "32px",
-            marginRight: "-32px",
-            paddingRight: "32px"
-        }}>
-            {children}
-
-            <Grid container justify="space-between" style={{ marginTop: "40px" }}>
-                <Grid item sm={12} md={4} style={{ border: "1em solid transparent" }}>
+        <div className="blue-container">
+            <Grid container spacing={6} justify="space-between" style={{ marginTop: "40px", marginBottom: '1rem' }}>
+                <Grid item sm={12} md={4} style={{ border: "solid transparent" }}>
                     <Paper style={{ minHeight: "100px" }}>
                         <Grid container style={{ paddingLeft: '1rem' }}>
                             <Grid item sm={8} md={8}>
@@ -103,7 +111,7 @@ export default ({ data, children }) => {
                         </Grid>
                     </Paper>
                 </Grid>
-                <Grid item sm={12} md={4} style={{ border: "1em solid transparent" }}>
+                <Grid item sm={12} md={4} style={{ border: "solid transparent" }}>
                     <Paper style={{ minHeight: "100px" }}>
                     <Grid container style={{ paddingLeft: '1rem' }}>
                         <Grid item sm={8} md={8}>
@@ -117,7 +125,7 @@ export default ({ data, children }) => {
                         </Grid>
                     </Paper>
                 </Grid>
-                <Grid item sm={12} md={4} style={{ border: "1em solid transparent" }}>
+                <Grid item sm={12} md={4} style={{ border: "solid transparent" }}>
                     <Paper style={{ minHeight: "100px" }}>
                     <Grid container style={{ paddingLeft: '1rem' }}>
                         <Grid item sm={8} md={8}>
@@ -148,6 +156,7 @@ export default ({ data, children }) => {
                         </Grid>
                     </Paper>
                 </Grid>
+
                 <Grid item sm={12} md={6} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "400px" }}>
                         <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
@@ -160,7 +169,57 @@ export default ({ data, children }) => {
                         </Grid>
                     </Paper>
                 </Grid>
-            </Grid>
-        </div>
+            </Grid >
+            <Paper>
+                <Table>
+                    <TableHead>
+                        <TableRow style={{ borderBottom: 'solid black 1px' }}>
+                            <TableCell className={classes.tableHeader} align="center">Company/Fund</TableCell>
+                            <TableCell className={classes.tableHeader} align="center">Status</TableCell>
+                            <TableCell className={classes.tableHeader} align="center">Investment Date</TableCell>
+                            <TableCell className={classes.tableHeader} align="center">Investment Amount</TableCell>
+                            <TableCell className={classes.tableHeader} align="center">Value</TableCell>
+                            <TableCell className={classes.tableHeader} align="center">Mulitple</TableCell>
+                            <TableCell className={classes.tableHeader} align="center">Deal Page</TableCell>
+                            <TableCell className={classes.tableHeader} align="center">Documents</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {userProfile.investments.map((investment) => <TR investment={investment} />)}
+                    </TableBody>
+                </Table>
+            </Paper>
+        </div >
+    )
+}
+
+const TR = ({ investment }) => {
+    const classes = useStyles();
+    const history = useHistory()
+    return (
+        <TableRow key={investment._id} className="investment-row">
+            <TableCell align="center">{investment.deal.company_name}</TableCell>
+            <TableCell align="center"><InvestmentStatus investment={investment} /></TableCell>
+            <TableCell align="center">{investment.created_at}</TableCell>
+            <TableCell align="center">${nWithCommas(investment.amount)}</TableCell>
+            <TableCell align="center">${nWithCommas(investment.amount)}</TableCell>
+            <TableCell align="center">1x</TableCell>
+            <TableCell align="center">
+                <Button variant="contained" size="small" color="secondary" onClick={() => history.push(_.get(investment, 'deal.appLink', ""))}>
+                    View
+                </Button>
+            </TableCell>
+            <TableCell align="center">
+                <Button variant="contained" size="small" color="primary">
+                    View
+                </Button>
+            </TableCell>
+        </TableRow>
+    )
+}
+function InvestmentStatus({ investment }) {
+    const { status } = investment
+    return (
+        <span className={`investment-status investment-status-${status}`}>{status}</span>
     )
 }
