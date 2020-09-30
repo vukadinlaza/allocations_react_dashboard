@@ -1,12 +1,12 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import _ from 'lodash'
-import {gql} from 'apollo-boost'
-import {Link, useParams, useHistory, Redirect} from 'react-router-dom'
-import {Row, Container, Col} from 'reactstrap'
-import {nWithCommas} from '../../utils/numbers'
-import {validate} from '../forms/InvestorEdit'
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useAuth} from "../../auth/useAuth";
+import { gql } from 'apollo-boost'
+import { Link, useParams, useHistory, Redirect } from 'react-router-dom'
+import { Row, Container, Col } from 'reactstrap'
+import { nWithCommas } from '../../utils/numbers'
+import { validate } from '../forms/InvestorEdit'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useAuth } from "../../auth/useAuth";
 import allocations_create_deal from '../../assets/allocations_create_deal.svg';
 import allocations_faq from '../../assets/allocations_faq.svg';
 import allocations_invite_deals from '../../assets/allocations_invite_deals.svg';
@@ -14,7 +14,7 @@ import allocations_recent_investments from '../../assets/allocations_recent_inve
 import allocations_total_investments from '../../assets/allocations_total_investments.svg';
 import allocations_update_profile from '../../assets/allocations_update_profile.svg';
 import allocations_update from '../../assets/allocations_update.svg';
-
+import NewHome from './newHome'
 import {
   Avatar,
   Hidden,
@@ -35,7 +35,7 @@ import {
 import Loader from '../utils/Loader'
 import Chart from "react-google-charts"
 import "./style.scss";
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import NullPaper from "../NullPaper";
 
 const purples = ["#6200EE", "#BB9FE6"]
@@ -73,7 +73,7 @@ function formatData(investments) {
     if (acc[inv.deal._id]) {
       acc[inv.deal._id].amount += inv.amount
     } else {
-      acc[inv.deal._id] = {...inv}
+      acc[inv.deal._id] = { ...inv }
     }
     return acc
   }, {})
@@ -153,7 +153,7 @@ const GET_INVESTOR = gql`
 `
 
 function orderInvestments(investments) {
-  const pastInvited = investments.filter(({status}) => status !== "invited")
+  const pastInvited = investments.filter(({ status }) => status !== "invited")
   return _.take(_.orderBy(pastInvited, i => new Date(i.deal.date_closed).getTime(), 'desc'), 3)
 }
 
@@ -161,15 +161,15 @@ export default function UserHome(props) {
   const classes = useStyles();
 
   const history = useHistory()
-  const {userProfile, error, params, adminView} = useAuth(GET_INVESTOR)
+  const { userProfile, error, params, adminView } = useAuth(GET_INVESTOR)
 
   if (error) {
     if (error.message === "GraphQL error: permission denied" && userProfile && userProfile.email) {
-      return <Redirect to="/signup"/>
+      return <Redirect to="/signup" />
     }
   }
 
-  if (!userProfile.email) return <div><Loader/></div>
+  if (!userProfile.email) return <div><Loader /></div>
 
   const userInvestments = userProfile.investments.filter(inv => {
     if (!inv?.deal._id) {
@@ -181,7 +181,7 @@ export default function UserHome(props) {
   const chartEvents = [
     {
       eventName: "select",
-      callback({chartWrapper}) {
+      callback({ chartWrapper }) {
         history.push(`/investments`)
       }
     }
@@ -189,13 +189,13 @@ export default function UserHome(props) {
 
   /*TODO: implement empty values for each paper */
   const isEmpty = true;
-
+  return <NewHome />
   return (
     <>
       {/* TODO: Move to NavBar <AdminTile investor={investor}/>*/}
 
       <Grid container spacing={2}>
-        {total_invested === 0 ? <NoInvestmentBanner/> :
+        {total_invested === 0 ? <NoInvestmentBanner /> :
           <Grid item xs={12}>
             <Grid container spacing={2} alignItems="center">
               <Hidden only="xs">
@@ -204,16 +204,16 @@ export default function UserHome(props) {
                     Welcome
                   </Typography>
                   <Typography variant="h5">
-                    <Name investor={userProfile}/>
+                    <Name investor={userProfile} />
                   </Typography>
                 </Grid>
               </Hidden>
               <Grid item sm={12} md={8}>
-                <div style={{display: "flex", justifyContent: "flex-end"}}>
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
                   <Hidden only="xs">
                     <Typography variant="body1" className={classes.grey}
-                                style={{textAlign: "right", paddingRight: 16}}>
-                      Your Allocations account is ready for your use. <br/>
+                      style={{ textAlign: "right", paddingRight: 16 }}>
+                      Your Allocations account is ready for your use. <br />
                       Let's view your investments!
                     </Typography>
                   </Hidden>
@@ -230,21 +230,21 @@ export default function UserHome(props) {
 
         <>
           <Grid item xs={12}>
-            <Paper className={classes.paper} style={{height: "100%"}}>
+            <Paper className={classes.paper} style={{ height: "100%" }}>
               <Grid container alignItems="center">
                 <Grid item sm={12} md={6}>
                   <Grid container>
                     <Grid item xs={12} sm={5}>
                       <img src={allocations_total_investments}
-                           style={{maxWidth: 200, width: "100%", paddingLeft: 16}}/>
+                        style={{ maxWidth: 200, width: "100%", paddingLeft: 16 }} />
                     </Grid>
                     <Grid item xs={12} sm={7}>
                       <Typography variant="h5" className={classes.grey}>
                         <strong>Total Investments</strong>
                       </Typography>
-                      <Typography variant="h5" style={{fontSize: "1.8rem", marginBottom: 16}} className={classes.blue}>
+                      <Typography variant="h5" style={{ fontSize: "1.8rem", marginBottom: 16 }} className={classes.blue}>
                         <strong>${nWithCommas(total_invested)}</strong>
-                      </Typography> 
+                      </Typography>
                     </Grid>
                   </Grid>
 
@@ -253,11 +253,11 @@ export default function UserHome(props) {
                   <Grid item sm={12} md={6}>
                     {userInvestments.length > 0 ?
                       <Chart chartType="TreeMap"
-                             width="100%"
-                             height="200px"
-                             chartEvents={chartEvents}
-                             data={formatData(userInvestments)}
-                             options={chartOptions}/> : null
+                        width="100%"
+                        height="200px"
+                        chartEvents={chartEvents}
+                        data={formatData(userInvestments)}
+                        options={chartOptions} /> : null
                     }
                   </Grid>
                 </Hidden>
@@ -268,18 +268,18 @@ export default function UserHome(props) {
 
         <Grid item xs={12} sm={12} md={6}>
           {isEmpty ? <NullPaper title="Recent Investments" text="Find your most recent investments"
-                                image={allocations_recent_investments} button="Get Started" 
-                                onClick={() => history.push(`/investments`)} />
+            image={allocations_recent_investments} button="Get Started"
+            onClick={() => history.push(`/investments`)} />
             :
-            <Paper className={classes.paper} style={{paddingBottom: 0}}>
-              <Typography variant="h6" style={{marginBottom: 16}}>
+            <Paper className={classes.paper} style={{ paddingBottom: 0 }}>
+              <Typography variant="h6" style={{ marginBottom: 16 }}>
                 Most Recent Investments
               </Typography>
 
-              <div style={{margin: "0px -16px", cursor: "pointer"}}>
-                <Table style={{marginBottom: "-1px"}}>
+              <div style={{ margin: "0px -16px", cursor: "pointer" }}>
+                <Table style={{ marginBottom: "-1px" }}>
                   {orderInvestments(userInvestments).map((investment, i) => (
-                    <InvestmentStub key={i} investment={investment}/>
+                    <InvestmentStub key={i} investment={investment} />
                   ))}
                 </Table>
               </div>
@@ -312,23 +312,23 @@ export default function UserHome(props) {
 
         <Grid item xs={12} sm={12} md={6}>
           <NullPaper title="Update Profile" text="Update your user profile"
-                     image={allocations_update_profile} button="Get Started"
-                     onClick={() => history.push(`/profile`)}
-                     />
+            image={allocations_update_profile} button="Get Started"
+            onClick={() => history.push(`/profile`)}
+          />
         </Grid>
 
         <Grid item xs={12} sm={12} md={6}>
           <NullPaper title="Create New Deal" text="Setup your next deal in seconds"
-                     image={allocations_create_deal} button="Get Started"
-                     onClick={() => history.push(`/spv-onboarding`)}/>
+            image={allocations_create_deal} button="Get Started"
+            onClick={() => history.push(`/spv-onboarding`)} />
         </Grid>
 
         <Grid item xs={12} sm={12} md={6}>
-        <a href="https://docs.allocations.com" target="_blank" rel="noopener noreferrer">
-        <NullPaper title="FAQ" text="Find all your answers here"
-                     image={allocations_faq} button="Get Started"
-                     />
-        </a>
+          <a href="https://docs.allocations.com" target="_blank" rel="noopener noreferrer">
+            <NullPaper title="FAQ" text="Find all your answers here"
+              image={allocations_faq} button="Get Started"
+            />
+          </a>
         </Grid>
 
 
@@ -342,40 +342,40 @@ export default function UserHome(props) {
   )
 }
 
-function Name({investor}) {
+function Name({ investor }) {
   return investor.investor_type === "entity" ? investor.entity_name : investor.first_name
 }
 
-function InvestmentStub({investment}) {
+function InvestmentStub({ investment }) {
   const history = useHistory()
 
   if (investment.status === "invited") return null
 
-  const {deal} = investment
+  const { deal } = investment
   const link = deal.organization
     ? `/deals/${deal.organization.slug}/${deal.slug}`
     : `/deals/${deal.slug}`
 
   return (
-    <TableRow hover style={{borderTop: "1px solid #dfe1e5"}} button key={investment._id}
-              className="investment-stub"
-              onClick={e => {
-                e.stopPropagation()
-                history.push(link)
-              }}>
+    <TableRow hover style={{ borderTop: "1px solid #dfe1e5" }} button key={investment._id}
+      className="investment-stub"
+      onClick={e => {
+        e.stopPropagation()
+        history.push(link)
+      }}>
       <TableCell>{deal.company_name}</TableCell>
-      <TableCell style={{color: "#7f8fa4", fontWeight: "500"}}>
+      <TableCell style={{ color: "#7f8fa4", fontWeight: "500" }}>
         {investment.amount ? `$${nWithCommas(investment.amount)}` :
           <i>TBD</i>}
       </TableCell>
-      <TableCell style={{textAlign: "right"}}>
+      <TableCell style={{ textAlign: "right" }}>
         <span className={`investment-status investment-status-${investment.status}`}>{investment.status}</span>
       </TableCell>
     </TableRow>
   )
 }
 
-function NextSteps({investor}) {
+function NextSteps({ investor }) {
   const history = useHistory()
 
   const profileComplete = investor && validate(investor).length === 0
@@ -384,7 +384,7 @@ function NextSteps({investor}) {
       <Typography variant="h6" gutterBottom>
         🚨 Next Steps
       </Typography>
-      <Paper style={{padding: "16px"}}>
+      <Paper style={{ padding: "16px" }}>
         <List>
           <ListItem button onClick={() => history.push(`/profile`)}>
             <span>📚 Complete Your Profile</span> {profileComplete && <span className="checkbox">✅</span>}
@@ -404,7 +404,7 @@ function NextSteps({investor}) {
   )
 }
 
-function DealStub({deal}) {
+function DealStub({ deal }) {
   const history = useHistory()
   const link = deal.organization
     ? `/deals/${deal.organization.slug}/${deal.slug}`
@@ -414,17 +414,17 @@ function DealStub({deal}) {
     <TableRow hover button key={deal._id} className="deal-stub" onClick={() => history.push(link)}>
       <TableCell>{deal.company_name}</TableCell>
       <TableCell>{deal.date_closed || "TBD"}</TableCell>
-      <TableCell style={{textAlign: "right"}}>
+      <TableCell style={{ textAlign: "right" }}>
         <span data-status={deal.status} className="deal-status">{deal.status}</span>
       </TableCell>
     </TableRow>
   )
 }
 
-function AdminTile({investor}) {
+function AdminTile({ investor }) {
   if (investor.admin || (investor.organizations_admin || []).length > 0) {
     return (
-      <Col sm={{size: 8, offset: 2}}>
+      <Col sm={{ size: 8, offset: 2 }}>
         <div className="tile admin-tile">
           <div className="text-center">
             You are a Fund Manager &nbsp;&nbsp;
