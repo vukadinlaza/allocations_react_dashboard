@@ -52,6 +52,7 @@ const GET_INVESTOR = gql`
       admin
       investments {
         _id
+        value
         amount
         status
         created_at
@@ -67,6 +68,9 @@ const GET_INVESTOR = gql`
           date_closed
           status
           appLink
+          dealParams {
+            dealMultiple
+          }
           organization {
             _id
             slug
@@ -103,7 +107,7 @@ export default ({ data, children }) => {
         return addedDate.substring(0, 6);
     })
     const groupedData = _.mapValues(groupedByMonth, (monthData,) => {
-        const monthSum = _.sumBy(monthData, 'amount')
+        const monthSum = _.sumBy(monthData, 'value')
         return monthSum
     })
     const arrayData = Object.keys(groupedData).map((key, index) => {
@@ -116,7 +120,7 @@ export default ({ data, children }) => {
         }, 0)
         return [data[0], prevMonthsTotal + data[1]]
     })
-    const investmentTotal = _.sumBy(userProfile.investments, 'amount')
+    const investmentTotal = _.sumBy(userProfile.investments, 'value')
     return (
         <div className="blue-container">
             <Grid container spacing={12} justify="space-between" style={{ marginTop: "40px", marginBottom: '1rem' }}>
@@ -229,14 +233,15 @@ const TR = ({ investment, setShowDocs, showDocs }) => {
     const timestamp = investment._id.toString().substring(0, 8)
     const date = new Date(parseInt(timestamp, 16) * 1000)
     const addedDate = moment(date).format('Do MMM YYYY')
+    console.log(investment)
     return (
         <TableRow key={investment._id} className="investment-row">
             <TableCell align="left">{investment.deal.company_name}</TableCell>
             <TableCell align="center"><InvestmentStatus investment={investment} /></TableCell>
             <TableCell align="center">{addedDate}</TableCell>
             <TableCell align="center">${nWithCommas(investment.amount)}</TableCell>
-            <TableCell align="center">${nWithCommas(investment.amount)}</TableCell>
-            <TableCell align="center">1x</TableCell>
+            <TableCell align="center">${nWithCommas(investment.value)}</TableCell>
+            <TableCell align="center">{investment.deal.dealParams.dealMultiple}x</TableCell>
             <TableCell align="center">
                 <Button variant="contained" size="small" color="secondary" onClick={() => history.push(_.get(investment, 'deal.appLink', ""))}>
                     View
