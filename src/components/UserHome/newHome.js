@@ -96,12 +96,23 @@ export default ({ data, children }) => {
 
 
     if (!userProfile.email) return <Loader />
-    const graphData = userProfile?.investments.sort((a, b) => a.created_at - b.created_at).reduce((acc, inv, index) => {
-        const sum = index > 1 ? _.sumBy(acc, '[1]') : 0
-        const date = moment.unix(inv.created_at / 1000).format('DD/MM/YY')
-        const point = [date, sum + inv.amount]
-        return [...acc, point]
-    }, [])
+    const groupedByMonth = _.groupBy(userProfile?.investments, inv => {
+        const timestamp = inv?._id.toString().substring(0, 8)
+        const date = new Date(parseInt(timestamp, 16) * 1000)
+        const addedDate = moment(date).format('MMM YY')
+        return addedDate.substring(0, 6);
+    })
+    const groupedData = _.mapValues(groupedByMonth, (monthData,) => {
+        const monthSum = _.sumBy(monthData, 'amount')
+        return monthSum
+    })
+    const arrayData = Object.keys(groupedData).map((key, index) => {
+        return [key, groupedData[key]]
+    });
+    const graphBData = arrayData.map((data, index) => {
+        const prevAmount = arrayData[index - 1] ? _.toNumber(arrayData[index - 1][1]) : 0;
+        return [data[0], prevAmount + data[1]]
+    })
 
     const investmentTotal = _.sumBy(userProfile.investments, 'amount')
     return (
@@ -168,12 +179,12 @@ export default ({ data, children }) => {
 
                 <Grid item xs={12} sm={12} md={6} style={{ border: "1em solid transparent" }}>
                     <Paper style={{ minHeight: "400px" }}>
-                        <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
+                        <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Portfolio Value</p>
                         <Grid item sm={12} md={12}>
-                            <Chart chartType="LineChart"
+                            <Chart chartType="SteppedAreaChart"
                                 width="100%"
                                 height="300px"
-                                data={[['Time', 'Multiple'], ['June 1st', 1], ['July 1st', 1], ['August 1st', 1], ['September 1st', 1]]}
+                                data={[['Time', 'Value'], ...graphBData]}
                                 options={chartOptionsB} />
                         </Grid>
                     </Paper>
@@ -190,7 +201,7 @@ export default ({ data, children }) => {
                                 <TableCell className={classes.tableHeader} align="center">Investment Date</TableCell>
                                 <TableCell className={classes.tableHeader} align="center">Investment Amount</TableCell>
                                 <TableCell className={classes.tableHeader} align="center">Investment Value</TableCell>
-                                <TableCell className={classes.tableHeader} align="center">Mulitple</TableCell>
+                                <TableCell className={classes.tableHeader} align="center">Multiple</TableCell>
                                 <TableCell className={classes.tableHeader} align="center">Deal Page</TableCell>
                                 <TableCell className={classes.tableHeader} align="center">Documents</TableCell>
                             </TableRow>

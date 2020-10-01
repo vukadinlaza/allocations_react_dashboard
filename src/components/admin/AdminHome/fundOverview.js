@@ -9,6 +9,7 @@ import _ from 'lodash'
 import Chart from "react-google-charts"
 import { useHistory } from "react-router-dom"
 import { nWithCommas } from '../../../utils/numbers'
+import moment from 'moment'
 
 export default ({ data, children }) => {
     const history = useHistory()
@@ -27,10 +28,25 @@ export default ({ data, children }) => {
         pieHole: 0.5,
     };
     const chartOptionsB = {
-        title: 'The decline of \'The 39 Steps\'',
-        vAxis: { title: 'Accumulated Rating' },
+        title: '',
+        vAxis: { title: '' },
         isStacked: true
     };
+    const groupedByMonth = _.groupBy(data, (inv) => {
+        const addedDate = moment(inv.date).format('MMM YY')
+        return addedDate.substring(0, 6)
+    })
+    const groupedData = _.mapValues(groupedByMonth, (monthData) => {
+        const monthSum = _.sumBy(monthData.map(inv => ({ ...inv, amount: _.toNumber(inv.Debit.replaceAll(',', '')) })), 'amount')
+        return monthSum
+    })
+    const arrayData = Object.keys(groupedData).map((key, index) => {
+        return [key, groupedData[key]]
+    });
+    const graphBData = arrayData.map((data, index) => {
+        const prevAmount = arrayData[index - 1] ? _.toNumber(arrayData[index - 1][1]) : 0;
+        return [data[0], prevAmount + data[1]]
+    })
     return (
         <div className="blue-container">
             {children}
@@ -105,14 +121,14 @@ export default ({ data, children }) => {
                         <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
 
                         <Grid item sm={12} md={12}>
-                            <Chart chartType="LineChart"
+                            <Chart chartType="SteppedAreaChart"
                                 width="100%"
                                 height="300px"
                                 options={{
                                     legend: 'none'
                                 }}
                                 chartEvents={chartEvents}
-                                data={[['Amount', 'Time'], ['9/2020', _.sumBy(data.map(inv => ({ ...inv, debit: _.toNumber(inv.Debit.replaceAll(',', '')) })), 'debit')]]}
+                                data={[['Time', 'Value'], ...graphBData]}
                                 optionsA={chartOptionsB} />
                         </Grid>
                     </Paper>
@@ -122,3 +138,5 @@ export default ({ data, children }) => {
         </div>
     )
 }
+
+// '9/2020', _.sumBy(data.map(inv => ({ ...inv, debit: _.toNumber(inv.Debit.replaceAll(',', '')) })), 'debit')]
