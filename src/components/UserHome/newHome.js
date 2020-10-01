@@ -110,10 +110,12 @@ export default ({ data, children }) => {
         return [key, groupedData[key]]
     });
     const graphBData = arrayData.map((data, index) => {
-        const prevAmount = arrayData[index - 1] ? _.toNumber(arrayData[index - 1][1]) : 0;
-        return [data[0], prevAmount + data[1]]
+        const prevMonths = arrayData[index - 1] ? arrayData.slice(0, index) : []
+        const prevMonthsTotal = prevMonths.reduce((acc, m) => {
+            return acc + m[1]
+        }, 0)
+        return [data[0], prevMonthsTotal + data[1]]
     })
-
     const investmentTotal = _.sumBy(userProfile.investments, 'amount')
     return (
         <div className="blue-container">
