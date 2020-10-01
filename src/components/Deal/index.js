@@ -122,6 +122,8 @@ export default function Deal() {
   const { organization, deal_slug } = useParams()
   const location = useLocation()
   const history = useHistory()
+  const { search } = useLocation();
+  let p = new URLSearchParams(search);
   const { userProfile, isAuthenticated, loading } = useAuth()
   const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL)
   const [createInvestment] = useMutation(CREATE_INVESTMENT,
@@ -148,9 +150,11 @@ export default function Deal() {
   useEffect(() => {
     const blocked = userProfile?.email?.includes('allocations')
     if (data && !data.investor?.invitedDeal?.investment && !blocked) {
+      let amount = parseInt(p.get("amount")) || 0;
       const investment = {
         deal_id: data.investor.invitedDeal?._id,
         user_id: data.investor._id,
+        amount: amount
       }
 
       if (!blocked && userProfile?.email) {
@@ -162,7 +166,7 @@ export default function Deal() {
   useEffect(() => {
     // theres been an error
     if (error) {
-      const q = queryString.parse(location.search)
+      const q = queryString.parse(search)
       if (q && q.ref === "public" && q.invite) {
         // need to redir back to public link (haven't been invited)
         return history.push(`/public/${organization || "allocations"}/deals/${deal_slug}?invite_code=${q.invite}&no_redirect=true`)
