@@ -121,6 +121,10 @@ export default ({ data, children }) => {
         return [data[0], prevMonthsTotal + data[1]]
     })
     const investmentTotal = _.sumBy(userProfile.investments, 'value')
+    const multipleSum = (userProfile.investments.reduce((acc, inv) => {
+        return acc += parseInt(inv.deal.dealParams.dealMultiple)
+    }, 0) / userProfile.investments.length)
+    console.log(multipleSum)
     return (
         <div className="blue-container">
             <Grid container spacing={12} justify="space-between" style={{ marginTop: "40px", marginBottom: '1rem' }}>
@@ -157,7 +161,7 @@ export default ({ data, children }) => {
                         <Grid container style={{ padding: '0.1rem', justifyContent: 'space-between' }} >
                             <Grid item sm={8} md={8}>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
-                                <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>1x</h2>
+                                <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>{multipleSum}x</h2>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Last Update: 29th Sept 2020</p>
                             </Grid>
                             <Grid item sm={4} md={4}>
