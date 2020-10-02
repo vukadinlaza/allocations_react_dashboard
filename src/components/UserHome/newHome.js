@@ -123,8 +123,7 @@ export default ({ data, children }) => {
     const investmentTotal = _.sumBy(userProfile.investments, 'value')
     const multipleSum = (userProfile.investments.reduce((acc, inv) => {
         return acc += parseInt(inv.deal.dealParams.dealMultiple)
-    }, 0) / userProfile.investments.length)
-    console.log(multipleSum)
+    }, 0) / userProfile.investments.length).toFixed(2)
     return (
         <div className="blue-container">
             <Grid container spacing={12} justify="space-between" style={{ marginTop: "40px", marginBottom: '1rem' }}>
