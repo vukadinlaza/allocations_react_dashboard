@@ -489,7 +489,11 @@ function filename(path) {
 function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
   const [loading, setLoading] = useState(true)
   const classes = useStyles()
-  const location = useLocation()
+  const { search, pathname } = useLocation();
+
+  let p = new URLSearchParams(search);
+  let amount = parseInt(p.get("amount")); // is the number 123
+
   const docs = dealInvestments.reduce((acc, inv) => {
     const docs = _.get(inv, 'documents', [])
     return [...acc, ...docs]
@@ -509,15 +513,22 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
   }
 
   if (!investor) return <Loader />
-
+  // get param from URL
+  // plug param value into here
+  // add amount param to docusign doc
+  // plug param value into invest button
+  // prevent changing if using param
   const params = {
     userEmail: investor.email,
+  }
+  if (amount) {
+    params.investmentAmount = amount
   }
 
   let urlParameters = Object.entries(params)
     .map(e => e.map(encodeURI).join("=")).join('&')
 
-  let link = location.pathname.includes('/public/')
+  let link = pathname.includes('/public/')
     ? deal.onboarding_link
     : `${deal.onboarding_link}&${urlParameters}`
 

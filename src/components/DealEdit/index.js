@@ -89,6 +89,8 @@ const GET_DEAL = gql`
         }
         dealParams {
           totalRoundSize
+          dealType
+          dealMultiple
           allocation
           totalCarry
           minimumInvestment
@@ -142,6 +144,8 @@ const UPDATE_DEAL = gql`
       }
       dealParams {
         totalRoundSize
+        dealType
+        dealMultiple
         allocation
         totalCarry
         minimumInvestment
@@ -197,6 +201,8 @@ const validInputs = [
 
 const dealParamsValidInputs = [
   "allocation",
+  "dealType",
+  "dealMultiple",
   "totalCarry",
   "minimumInvestment",
   "totalManagementFee",
@@ -424,6 +430,28 @@ export default function DealEdit() {
                   value={deal.onboarding_link || ""}
                   onChange={e => setDeal({ onboarding_link: e.target.value })}
                   label="Onboarding Link"
+                  variant="outlined" />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField style={{ width: "100%" }}
+                  value={deal.dealParams.dealMultiple || ""}
+                  onChange={e => setDeal({ dealParams: { ...deal.dealParams, dealMultiple: e.target.value } })}
+                  label="Deal Multiple"
+                  inputProps={{
+                    startAdornment: <InputAdornment position="start"></InputAdornment>,
+                  }}
+                  variant="outlined" />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField style={{ width: "100%" }}
+                  value={deal.dealParams.dealType || ""}
+                  onChange={e => setDeal({ dealParams: { ...deal.dealParams, dealType: e.target.value } })}
+                  label="Deal Type (506c)"
+                  inputProps={{
+                    startAdornment: <InputAdornment position="start"></InputAdornment>,
+                  }}
                   variant="outlined" />
               </Grid>
 

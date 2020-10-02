@@ -52,6 +52,7 @@ const GET_INVESTOR = gql`
       admin
       investments {
         _id
+        value
         amount
         status
         created_at
@@ -67,6 +68,9 @@ const GET_INVESTOR = gql`
           date_closed
           status
           appLink
+          dealParams {
+            dealMultiple
+          }
           organization {
             _id
             slug
@@ -103,7 +107,7 @@ export default ({ data, children }) => {
         return addedDate.substring(0, 6);
     })
     const groupedData = _.mapValues(groupedByMonth, (monthData,) => {
-        const monthSum = _.sumBy(monthData, 'amount')
+        const monthSum = _.sumBy(monthData, 'value')
         return monthSum
     })
     const arrayData = Object.keys(groupedData).map((key, index) => {
@@ -116,7 +120,11 @@ export default ({ data, children }) => {
         }, 0)
         return [data[0], prevMonthsTotal + data[1]]
     })
-    const investmentTotal = _.sumBy(userProfile.investments, 'amount')
+    const investmentTotal = _.sumBy(userProfile.investments, 'value')
+    const multipleSum = (userProfile.investments.reduce((acc, inv) => {
+        return acc += parseInt(inv.deal.dealParams.dealMultiple)
+    }, 0) / userProfile.investments.length)
+    console.log(multipleSum)
     return (
         <div className="blue-container">
             <Grid container spacing={12} justify="space-between" style={{ marginTop: "40px", marginBottom: '1rem' }}>
@@ -153,7 +161,7 @@ export default ({ data, children }) => {
                         <Grid container style={{ padding: '0.1rem', justifyContent: 'space-between' }} >
                             <Grid item sm={8} md={8}>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
-                                <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>1x</h2>
+                                <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>{multipleSum}x</h2>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Last Update: 29th Sept 2020</p>
                             </Grid>
                             <Grid item sm={4} md={4}>
@@ -229,14 +237,15 @@ const TR = ({ investment, setShowDocs, showDocs }) => {
     const timestamp = investment._id.toString().substring(0, 8)
     const date = new Date(parseInt(timestamp, 16) * 1000)
     const addedDate = moment(date).format('Do MMM YYYY')
+    console.log(investment)
     return (
         <TableRow key={investment._id} className="investment-row">
             <TableCell align="left">{investment.deal.company_name}</TableCell>
             <TableCell align="center"><InvestmentStatus investment={investment} /></TableCell>
             <TableCell align="center">{addedDate}</TableCell>
             <TableCell align="center">${nWithCommas(investment.amount)}</TableCell>
-            <TableCell align="center">${nWithCommas(investment.amount)}</TableCell>
-            <TableCell align="center">1x</TableCell>
+            <TableCell align="center">${nWithCommas(investment.value)}</TableCell>
+            <TableCell align="center">{investment.deal.dealParams.dealMultiple}x</TableCell>
             <TableCell align="center">
                 <Button variant="contained" size="small" color="secondary" onClick={() => history.push(_.get(investment, 'deal.appLink', ""))}>
                     View
