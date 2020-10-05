@@ -29,6 +29,7 @@ import Profile from './components/Profile';
 import OrganizationNew from './components/OrganizationNew'
 import OrganizationMembers from './components/OrganizationMembers'
 import ThankYou from './components/ThankYou/index'
+import DealDocuments from './components/DealDocuments'
 
 // superadmin
 import SuperAdminManager from './components/superadmin/Manager'
@@ -67,6 +68,7 @@ const App = () => {
           <PrivateRoute path="/investments" component={UserInvestments} />
           <PrivateRoute path="/invited-deals" component={InvitedDeals} />
           <PrivateRoute path="/identity" component={Indentity} />
+          <PrivateRoute path="/dealdocs" component={DealDocuments} />
 
           {/** Onboarding **/}
           <Route path="/getting-started" component={Faq} exact />
