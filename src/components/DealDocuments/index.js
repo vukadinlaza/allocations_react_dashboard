@@ -47,6 +47,16 @@ const ADD_DOCS = gql`
     }
 `
 
+
+const ADD_DOC = gql`
+      mutation AddDealDoc($deal_id: String!, $title: String!, $doc: Upload!) {
+      addDealDoc(deal_id: $deal_id, title: $title, doc: $doc) {
+      _id
+    }
+    }
+      `
+
+
 const useStyles = makeStyles((theme) => ({
     formControl: {
         margin: theme.spacing(1),
@@ -62,10 +72,17 @@ function DealDocuments({ }) {
     const [docs, setDocs] = useState([])
     const [deal, setDeal] = useState()
     const { data: userData } = useQuery(GET_INVESTOR)
-    const [addDocs, { data, error }] = useMutation(ADD_DOCS)
+    const [addDoc, { data, error }] = useMutation(ADD_DOC)
     const classes = useStyles()
-    const submit = () => {
-        addDocs({ variables: { deal_id: deal._id, docs } })
+    const submit = async () => {
+        const d = await map(docs, doc => {
+            return addDoc({
+                variables: {
+                    deal_id: deal._id, title: doc.name, doc: doc
+                }
+            })
+        })
+        console.log(d)
     }
     if (!userData?.investor) return null
     const deals = userData?.investor?.organizations_admin.reduce((acc, org) => {
