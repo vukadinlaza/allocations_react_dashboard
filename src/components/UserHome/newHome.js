@@ -11,7 +11,8 @@ import {
     TableHead,
     TableRow,
     Button,
-    Typography
+    Typography,
+    Hidden
 } from '@material-ui/core';
 import _ from 'lodash'
 import moment from 'moment'
@@ -206,14 +207,14 @@ export default ({ data, children }) => {
                     <Table>
                         <TableHead>
                             <TableRow style={{ borderBottom: 'solid black 1px' }}>
-                                <TableCell className={classes.tableHeader} align="left">Company/Fund</TableCell>
-                                <TableCell className={classes.tableHeader} align="center">Status</TableCell>
-                                <TableCell className={classes.tableHeader} align="center">Investment Date</TableCell>
+                                <TableCell className={classes.tableHeader} align="left">Name</TableCell>
+                                <Hidden only="xs"><TableCell className={classes.tableHeader} align="center">Status</TableCell></Hidden>
+                                <Hidden only="xs"><TableCell className={classes.tableHeader} align="center">Investment Date</TableCell></Hidden>
                                 <TableCell className={classes.tableHeader} align="center">Investment Amount</TableCell>
-                                <TableCell className={classes.tableHeader} align="center">Investment Value</TableCell>
-                                <TableCell className={classes.tableHeader} align="center">Multiple</TableCell>
+                                <Hidden only="xs"><TableCell className={classes.tableHeader} align="center">Investment Value</TableCell></Hidden>
+                                <Hidden only="xs"><TableCell className={classes.tableHeader} align="center">Multiple</TableCell></Hidden>
                                 <TableCell className={classes.tableHeader} align="center">Deal Page</TableCell>
-                                <TableCell className={classes.tableHeader} align="center">Documents</TableCell>
+                                <Hidden only="xs"><TableCell className={classes.tableHeader} align="center">Documents</TableCell></Hidden>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -241,16 +242,16 @@ const TR = ({ investment, setShowDocs, showDocs }) => {
     return (
         <TableRow key={investment._id} className="investment-row">
             <TableCell align="left">{investment.deal.company_name}</TableCell>
-            <TableCell align="center"><InvestmentStatus investment={investment} /></TableCell>
-            <TableCell align="center">{addedDate}</TableCell>
+            <Hidden only="xs"><TableCell align="center"><InvestmentStatus investment={investment} /></TableCell></Hidden>
+            <Hidden only="xs"><TableCell align="center">{addedDate}</TableCell></Hidden>
             <TableCell align="center">${nWithCommas(investment.amount)}</TableCell>
-            <TableCell align="center">${nWithCommas(investment.value)}</TableCell>
-            <TableCell align="center">{investment.deal.dealParams.dealMultiple}x</TableCell>
-            <TableCell align="center">
+            <Hidden only="xs"><TableCell align="center">${nWithCommas(investment.value)}</TableCell></Hidden>
+            <Hidden only="xs"><TableCell align="center">{investment.deal.dealParams.dealMultiple}x</TableCell></Hidden>
+            <Hidden only="xs"><TableCell align="center">
                 <Button variant="contained" size="small" color="secondary" onClick={() => history.push(_.get(investment, 'deal.appLink', ""))}>
                     View
                 </Button>
-            </TableCell>
+            </TableCell></Hidden>
             <TableCell align="center">
                 <Button variant="contained" size="small" color="primary" onClick={() => setShowDocs(showDocs ? false : investment)}>
                     View
