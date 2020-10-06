@@ -238,7 +238,6 @@ const TR = ({ investment, setShowDocs, showDocs }) => {
     const timestamp = investment._id.toString().substring(0, 8)
     const date = new Date(parseInt(timestamp, 16) * 1000)
     const addedDate = moment(date).format('Do MMM YYYY')
-    console.log(investment)
     return (
         <TableRow key={investment._id} className="investment-row">
             <TableCell align="left">{investment.deal.company_name}</TableCell>
@@ -283,16 +282,11 @@ function DocsRow({ docs, investment }) {
                     <Typography variant="subtitle2" style={{ marginBottom: '1rem' }}>
                         Documents may take up to 7 days to appear here after signing.
             </Typography>
-                    {docs.map(doc => (
-                        <Document doc={doc} investment={investment} />
-                        // <div key={doc.path} className="doc-wrapper">
-                        //     <div className="filename">
-                        //         <FontAwesomeIcon color="#F48FB1" icon={["far", "file-pdf"]} className="doc-icon" />
-                        //         <span><a href={`https://${doc.link}`} target="_blank"
-                        //             rel="noopener noreferrer">{filename(doc.path)}</a></span>
-                        //     </div>
-                        // </div>
-                    ))}
+                    <Grid container xs={12} md={12} sm={12} lg={12} spacing={1}>
+                        {docs.map(doc => (
+                            <Document doc={doc} investment={investment} />
+                        ))}
+                    </Grid>
                 </TableCell>
             </TableRow>
         </>
