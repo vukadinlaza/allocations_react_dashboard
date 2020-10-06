@@ -107,10 +107,10 @@ function DealDocuments({ }) {
 
     useEffect(() => {
         refetch()
-        if (data.addDealDoc) {
-            setDeal(data.addDealDoc)
+        if (data?.addDealDoc) {
+            setDeal(data?.addDealDoc)
         }
-    }, [data.addDealDoc])
+    }, [data?.addDealDoc])
 
 
     if (!userData?.investor) return null
