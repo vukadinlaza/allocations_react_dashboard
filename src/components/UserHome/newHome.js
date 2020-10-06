@@ -283,16 +283,18 @@ function DocsRow({ docs, investment }) {
                     <Typography variant="subtitle2" style={{ marginBottom: '1rem' }}>
                         Documents may take up to 7 days to appear here after signing.
             </Typography>
-                    {docs.map(doc => (
-                        <Document doc={doc} investment={investment} />
-                        // <div key={doc.path} className="doc-wrapper">
-                        //     <div className="filename">
-                        //         <FontAwesomeIcon color="#F48FB1" icon={["far", "file-pdf"]} className="doc-icon" />
-                        //         <span><a href={`https://${doc.link}`} target="_blank"
-                        //             rel="noopener noreferrer">{filename(doc.path)}</a></span>
-                        //     </div>
-                        // </div>
-                    ))}
+                    <Grid xs={12} md={12} lg={12}>
+                        {docs.map(doc => (
+                            <Document doc={doc} investment={investment} />
+                            // <div key={doc.path} className="doc-wrapper">
+                            //     <div className="filename">
+                            //         <FontAwesomeIcon color="#F48FB1" icon={["far", "file-pdf"]} className="doc-icon" />
+                            //         <span><a href={`https://${doc.link}`} target="_blank"
+                            //             rel="noopener noreferrer">{filename(doc.path)}</a></span>
+                            //     </div>
+                            // </div>
+                        ))}
+                    </Grid>
                 </TableCell>
             </TableRow>
         </>
