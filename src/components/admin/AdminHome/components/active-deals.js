@@ -125,24 +125,26 @@ export const Deal = ({ deal, index, superadmin }) => {
       {activeDeal &&
         <>
           {superadmin && deal?.documents?.length >= 1 && <TableRow>
-            <Grid container xs={12} sm={12} md={12} lg={12}>
-              {deal?.documents.map(doc => {
-                const file = doc?.path.slice(0, 12) === "investments/" ? doc.path.split('/')[2] : doc.path.split('/')[1]
-                return (
-                  <Grid xs={12} sm={12} md={3} lg={3}>
-                    <a href={`https://${doc?.link}`} target="_blank" rel="noopener noreferrer">
+            <TableCell colspan="5">
+              <Grid container sm={12} md={12} lg={12}>
+                {deal?.documents.map(doc => {
+                  return (
+                    <Grid item xs={3} sm={3} md={3} lg={3}>
+                      <a href={`https://${doc?.link}`} target="_blank" rel="noopener noreferrer">
 
-                      <Paper style={{ margin: '.5rem', flexDirection: 'column', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '.5rem', minHeight: '8rem', borderRadius: '1rem' }}>
-                        <img src='https://allocations-public.s3.us-east-2.amazonaws.com/file-icon.svg' />
-                        <Typography variant="body2" style={{ wordBreak: 'break-all', fontSize: '.7rem', paddingLeft: '.75rem', paddingRight: '.75rem' }}>
-                          <span style={{ color: 'blue' }}>{doc.path}</span>
-                        </Typography>
-                      </Paper>
-                    </a>
-                  </Grid>
-                )
-              })}
-            </Grid>
+                        <Paper style={{ margin: '.5rem', flexDirection: 'column', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '.5rem', minHeight: '8rem', borderRadius: '1rem' }}>
+                          <img src='https://allocations-public.s3.us-east-2.amazonaws.com/file-icon.svg' />
+                          <Typography variant="body2" style={{ wordBreak: 'break-all', fontSize: '.7rem', paddingLeft: '.75rem', paddingRight: '.75rem' }}>
+                            <span style={{ color: 'blue' }}>{doc.path}</span>
+                          </Typography>
+                        </Paper>
+                      </a>
+                    </Grid>
+                  )
+                })}
+              </Grid>
+            </TableCell>
+
           </TableRow>}
           <TableRow style={{ borderTop: "0", maxWidth: '300px' }}>
             <TableCell colspan="5">
