@@ -106,11 +106,11 @@ function DealDocuments({ }) {
     }
 
     useEffect(() => {
-        refetch()
         if (data?.addDealDoc) {
+            console.log(data?.addDealDoc)
             setDeal(data?.addDealDoc)
         }
-    }, [data?.addDealDoc])
+    }, [loading])
 
 
     if (!userData?.investor) return null
