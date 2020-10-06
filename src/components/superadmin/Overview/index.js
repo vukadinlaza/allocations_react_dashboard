@@ -31,6 +31,10 @@ const SUPERADMIN = gql`
         organization {
           name
         }
+        documents {
+          link
+          path
+        }
       }
       organizations {
         _id
@@ -87,6 +91,10 @@ const ALL_DEALS = gql`
         company_description
         target
         amount_raised
+        documents {
+          link
+          path
+      }
         organization {
           slug
         }
@@ -150,7 +158,7 @@ export default function SuperAdminOverview() {
   const { deals, organizations, investors } = data.superadmin
 
   const groupedDeals = _.groupBy(allDealsData, 'status')
-
+  console.log(groupedDeals)
 
   const formsMap = {
     orgsForm: <EditOrg orgData={open.org} refetch={refetch} />,
@@ -288,6 +296,7 @@ const DealsTabel = ({ activeDeals }) => {
     setData(activeDeals)
   }, [activeDeals])
 
+  console.log(activeDeals, 'asdasdasd')
 
   const [sortParam, setSortParam] = useState({ direction: 'asce' })
 
@@ -332,7 +341,7 @@ const DealsTabel = ({ activeDeals }) => {
           </TableHead>
           <TableBody>
             {data.map(deal => {
-              return <Deal deal={deal} investments={deal.investments} />
+              return <Deal deal={deal} investments={deal.investments} superadmin />
             })}
           </TableBody>
         </Table>

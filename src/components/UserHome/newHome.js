@@ -22,6 +22,7 @@ import { useHistory } from "react-router-dom"
 import { nWithCommas } from '../../utils/numbers'
 import { useAuth } from "../../auth/useAuth";
 import { makeStyles } from '@material-ui/core/styles';
+import Document from '../utils/Document'
 import './style.scss'
 
 import { useQuery, useMutation, useLazyQuery } from '@apollo/react-hooks';
@@ -221,7 +222,7 @@ export default ({ data, children }) => {
                                 showDocs?._id === investment?._id ?
                                     <>
                                         <TR investment={investment} setShowDocs={setShowDocs} showDocs={showDocs} />
-                                        <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents} />
+                                        <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents} investment={investment} />
                                     </>
                                     : <TR investment={investment} setShowDocs={setShowDocs} showDocs={showDocs} />)}
                         </TableBody>
@@ -274,7 +275,7 @@ function filename(path) {
     }
 }
 
-function DocsRow({ docs }) {
+function DocsRow({ docs, investment }) {
     return (
         <>
             <TableRow>
@@ -283,13 +284,14 @@ function DocsRow({ docs }) {
                         Documents may take up to 7 days to appear here after signing.
             </Typography>
                     {docs.map(doc => (
-                        <div key={doc.path} className="doc-wrapper">
-                            <div className="filename">
-                                <FontAwesomeIcon color="#F48FB1" icon={["far", "file-pdf"]} className="doc-icon" />
-                                <span><a href={`https://${doc.link}`} target="_blank"
-                                    rel="noopener noreferrer">{filename(doc.path)}</a></span>
-                            </div>
-                        </div>
+                        <Document doc={doc} investment={investment} />
+                        // <div key={doc.path} className="doc-wrapper">
+                        //     <div className="filename">
+                        //         <FontAwesomeIcon color="#F48FB1" icon={["far", "file-pdf"]} className="doc-icon" />
+                        //         <span><a href={`https://${doc.link}`} target="_blank"
+                        //             rel="noopener noreferrer">{filename(doc.path)}</a></span>
+                        //     </div>
+                        // </div>
                     ))}
                 </TableCell>
             </TableRow>
