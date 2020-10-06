@@ -107,8 +107,8 @@ function DealDocuments({ }) {
 
     useEffect(() => {
         if (data?.addDealDoc) {
-            console.log(data?.addDealDoc)
             setDeal(data?.addDealDoc)
+            setDocs([])
         }
     }, [loading])
 
