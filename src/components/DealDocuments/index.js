@@ -56,7 +56,12 @@ const ADD_DOCS = gql`
 const ADD_DOC = gql`
       mutation AddDealDoc($deal_id: String!, $title: String!, $doc: Upload!) {
       addDealDoc(deal_id: $deal_id, title: $title, doc: $doc) {
-      _id
+        _id
+        company_name
+        documents {
+            link
+            path
+        }
     }
     }
       `
@@ -85,7 +90,7 @@ function DealDocuments({ }) {
     const [docs, setDocs] = useState([])
     const [deal, setDeal] = useState()
     const { data: userData, refetch } = useQuery(GET_INVESTOR)
-    const [addDoc, { data, error }] = useMutation(ADD_DOC)
+    const [addDoc, { data, error, loading }] = useMutation(ADD_DOC)
     const classes = useStyles()
     const submit = async () => {
         if (docs.length === 0) return null
@@ -99,6 +104,13 @@ function DealDocuments({ }) {
         })
         refetch()
     }
+
+    useEffect(() => {
+        refetch()
+        if (data.addDealDoc) {
+            setDeal(data.addDealDoc)
+        }
+    }, [data.addDealDoc])
 
 
     if (!userData?.investor) return null
