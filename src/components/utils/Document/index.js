@@ -17,13 +17,12 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const Document = ({ doc, investment, refetch, RM_DOC }) => {
     const file = doc?.path.slice(0, 12) === "investments/" ? doc.path.split('/')[2] : doc.path.split('/')[1]
-    console.log(doc, 'FILE')
     return (
-        <Grid lg={3} md={3} sm={12} xs={12}>
+        <Grid item lg={3} md={3} sm={12} xs={12}>
             <a href={`https://${doc?.link}`} target="_blank" rel="noopener noreferrer">
-                <Paper style={{ flexDirection: 'column', display: 'flex', alignItems: 'center', justifyContent: 'center', maxWidth: "20%", textAlign: 'center', padding: '.5rem', minHeight: '8rem', borderRadius: '1rem' }}>
+                <Paper style={{ flexDirection: 'column', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '.5rem', minHeight: '8rem', borderRadius: '1rem' }}>
                     <img src='https://allocations-public.s3.us-east-2.amazonaws.com/file-icon.svg' />
-                    <Typography variant="subtitle2" style={{ maxWith: '20%', wordBreak: 'break-all', fontSize: '.7rem', paddingLeft: '.75rem', paddingRight: '.75rem' }}>
+                    <Typography variant="subtitle2" style={{ wordBreak: 'break-all', fontSize: '.7rem', paddingLeft: '.75rem', paddingRight: '.75rem' }}>
                         <span style={{ color: 'blue' }}>{file || doc?.path}</span>
                     </Typography>
                 </Paper>
