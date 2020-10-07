@@ -16,7 +16,11 @@ import {
 } from '@material-ui/core';
 import _ from 'lodash'
 import moment from 'moment'
-
+import NullPaper from "../NullPaper";
+import allocations_update_profile from '../../assets/allocations_update_profile.svg';
+import allocations_invited_deals from '../../assets/allocations_invited_deals.svg';
+import allocations_create_deal from '../../assets/allocations_create_deal.svg';
+import allocations_faq from '../../assets/allocations_faq.svg';
 import Chart from "react-google-charts"
 import { useHistory } from "react-router-dom"
 import { nWithCommas } from '../../utils/numbers'
@@ -35,6 +39,18 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '.75rem',
         fontWeight: 'bold'
     },
+    paper: {
+        padding: theme.spacing(2),
+    },
+    banner: {
+        minWidth: "100%"
+    },
+    blue: {
+        color: "#205DF5",
+    },
+    grey: {
+        color: "#707070"
+    }
 }));
 
 const GET_INVESTOR = gql`
@@ -172,63 +188,95 @@ export default ({ data, children }) => {
                     </Paper>
                 </Grid>
             </Grid>
+            {userProfile.investments.length !== 0 ? <>
+                <Grid container justify="space-between" style={{ marginTop: "1em" }}>
+                    <Grid item xs={12} sm={12} md={6} style={{ border: "1em solid transparent" }}>
+                        <Paper style={{ minHeight: "400px" }}>
+                            <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Portfolio Overview</p>
+                            {/* <h6 style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "0px" }}>Portfolio Management</h6> */}
+                            <Grid item sm={12} md={12}>
+                                <Chart chartType="PieChart"
+                                    width="100%"
+                                    height="300px"
+                                    data={[['Investment', 'Amount'], ...userProfile.investments.map(inv => ([inv.deal.company_name, inv.amount]))]}
+                                    options={chartOptionsA} />
+                            </Grid>
+                        </Paper>
+                    </Grid>
 
-            <Grid container justify="space-between" style={{ marginTop: "1em" }}>
-                <Grid item xs={12} sm={12} md={6} style={{ border: "1em solid transparent" }}>
-                    <Paper style={{ minHeight: "400px" }}>
-                        <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Portfolio Overview</p>
-                        {/* <h6 style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "0px" }}>Portfolio Management</h6> */}
-                        <Grid item sm={12} md={12}>
-                            <Chart chartType="PieChart"
-                                width="100%"
-                                height="300px"
-                                data={[['Investment', 'Amount'], ...userProfile.investments.map(inv => ([inv.deal.company_name, inv.amount]))]}
-                                options={chartOptionsA} />
-                        </Grid>
+                    <Grid item xs={12} sm={12} md={6} style={{ border: "1em solid transparent" }}>
+                        <Paper style={{ minHeight: "400px" }}>
+                            <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Portfolio Value</p>
+                            <Grid item sm={12} md={12}>
+                                <Chart chartType="SteppedAreaChart"
+                                    width="100%"
+                                    height="300px"
+                                    data={[['Time', 'Value'], ...graphBData]}
+                                    options={chartOptionsB} />
+                            </Grid>
+                        </Paper>
+                    </Grid>
+                </Grid >
+                <Grid item sm={12} md={12} style={{ border: "1em solid transparent" }}>
+
+                    <Paper>
+                        <Table>
+                            <TableHead>
+                                <TableRow style={{ borderBottom: 'solid black 1px' }}>
+                                    <TableCell className={classes.tableHeader} align="left">Name</TableCell>
+                                    <Hidden only="xs"><TableCell className={classes.tableHeader} align="center">Status</TableCell></Hidden>
+                                    <Hidden only="xs"><TableCell className={classes.tableHeader} align="center">Investment Date</TableCell></Hidden>
+                                    <TableCell className={classes.tableHeader} align="center">Investment Amount</TableCell>
+                                    <Hidden only="xs"><TableCell className={classes.tableHeader} align="center">Investment Value</TableCell></Hidden>
+                                    <Hidden only="xs"><TableCell className={classes.tableHeader} align="center">Multiple</TableCell></Hidden>
+                                    <TableCell className={classes.tableHeader} align="center">Deal Page</TableCell>
+                                    <Hidden only="xs"><TableCell className={classes.tableHeader} align="center">Documents</TableCell></Hidden>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {userProfile.investments.map((investment) =>
+                                    showDocs?._id === investment?._id ?
+                                        <>
+                                            <TR investment={investment} setShowDocs={setShowDocs} showDocs={showDocs} />
+                                            <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents} investment={investment} />
+                                        </>
+                                        : <TR investment={investment} setShowDocs={setShowDocs} showDocs={showDocs} />)}
+                            </TableBody>
+                        </Table>
                     </Paper>
-                </Grid>
+                </Grid> </> : <Grid container>
+                    <Grid item xs={12}>
+                        <Typography style={{ marginLeft: '1rem', color: "#FFF" }} variant="h4">
+                            <strong>Get Started</strong>
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={6} style={{ border: "1em solid transparent" }}>
+                        <NullPaper title="Create New Deal" text="Setup your next deal in seconds"
+                            image={allocations_create_deal} button="Get Started"
+                            onClick={() => history.push(`/spv-onboarding`)} />
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={6} style={{ border: "1em solid transparent" }}>
+                        <NullPaper title="Invited Deals" text="View your invited deals"
+                            image={allocations_invited_deals} button="Get Started"
+                            onClick={() => history.push(`/investments`)}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={6} style={{ border: "1em solid transparent" }}>
+                        <NullPaper title="Update Profile" text="Update your user profile"
+                            image={allocations_update_profile} button="Get Started"
+                            onClick={() => history.push(`/profile`)}
+                        />
+                    </Grid>
 
-                <Grid item xs={12} sm={12} md={6} style={{ border: "1em solid transparent" }}>
-                    <Paper style={{ minHeight: "400px" }}>
-                        <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Portfolio Value</p>
-                        <Grid item sm={12} md={12}>
-                            <Chart chartType="SteppedAreaChart"
-                                width="100%"
-                                height="300px"
-                                data={[['Time', 'Value'], ...graphBData]}
-                                options={chartOptionsB} />
-                        </Grid>
-                    </Paper>
-                </Grid>
-            </Grid >
-            <Grid item sm={12} md={12} style={{ border: "1em solid transparent" }}>
 
-                <Paper>
-                    <Table>
-                        <TableHead>
-                            <TableRow style={{ borderBottom: 'solid black 1px' }}>
-                                <TableCell className={classes.tableHeader} align="left">Name</TableCell>
-                                <Hidden only="xs"><TableCell className={classes.tableHeader} align="center">Status</TableCell></Hidden>
-                                <Hidden only="xs"><TableCell className={classes.tableHeader} align="center">Investment Date</TableCell></Hidden>
-                                <TableCell className={classes.tableHeader} align="center">Investment Amount</TableCell>
-                                <Hidden only="xs"><TableCell className={classes.tableHeader} align="center">Investment Value</TableCell></Hidden>
-                                <Hidden only="xs"><TableCell className={classes.tableHeader} align="center">Multiple</TableCell></Hidden>
-                                <TableCell className={classes.tableHeader} align="center">Deal Page</TableCell>
-                                <Hidden only="xs"><TableCell className={classes.tableHeader} align="center">Documents</TableCell></Hidden>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {userProfile.investments.map((investment) =>
-                                showDocs?._id === investment?._id ?
-                                    <>
-                                        <TR investment={investment} setShowDocs={setShowDocs} showDocs={showDocs} />
-                                        <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents} investment={investment} />
-                                    </>
-                                    : <TR investment={investment} setShowDocs={setShowDocs} showDocs={showDocs} />)}
-                        </TableBody>
-                    </Table>
-                </Paper>
-            </Grid>
+                    <Grid item xs={12} sm={12} md={6} style={{ border: "1em solid transparent" }}>
+                        <a href="https://docs.allocations.com" target="_blank" rel="noopener noreferrer">
+                            <NullPaper title="FAQ" text="Find all your answers here"
+                                image={allocations_faq} button="Get Started"
+                            />
+                        </a>
+                    </Grid>
+                </Grid>}
         </div >
     )
 }
