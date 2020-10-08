@@ -117,7 +117,7 @@ export default function InvestmentFlow({ deal, investor, refetch }) {
   const { approved } = deal
   const docs = _.get(polledInvestor, 'documents') || []
   const spvDoc = investment?.documents.find(d => {
-    return d?.path.includes('SPV')
+    return d?.path.includes('SPV') || d?.path.includes('LPA')
   });
   const hasWired = investment?.status === 'wired' || investment?.status === 'complete'
   const hasSigned = (investment?.status === 'signed' || investment?.status === 'wired' || investment?.status === 'complete') && spvDoc;
