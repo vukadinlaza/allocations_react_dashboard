@@ -113,12 +113,14 @@ export default function InvestmentFlow({ deal, investor, refetch }) {
   if (!data) return null
   const { investor: polledInvestor } = data
   const investment = _.get(polledInvestor, 'dealInvestments[0]', null)
-
   const onboardingLinkType = getOnboardingLinkType(deal.onboarding_link) || 'docusign'
   const { approved } = deal
-  const hasSigned = investment?.status === 'signed' || investment?.status === 'wired' || investment?.status === 'complete'
-  const hasWired = investment?.status === 'wired' || investment?.status === 'complete'
   const docs = _.get(polledInvestor, 'documents') || []
+  const spvDoc = investment?.documents.find(d => {
+    return d?.path.includes('SPV')
+  });
+  const hasWired = investment?.status === 'wired' || investment?.status === 'complete'
+  const hasSigned = (investment?.status === 'signed' || investment?.status === 'wired' || investment?.status === 'complete') && spvDoc;
   const hasKyc = docs.find(d => d.documentName && (d.documentName.includes('W-8') || d.documentName.includes('W-9')));
   return (
     <React.Fragment>
