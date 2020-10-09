@@ -255,21 +255,22 @@ const TR = ({ investment, setShowDocs, showDocs }) => {
     const timestamp = investment._id.toString().substring(0, 8)
     const date = new Date(parseInt(timestamp, 16) * 1000)
     const addedDate = moment(date).format('Do MMM YYYY')
+    const showDocsFn = () => setShowDocs(showDocs ? false : investment)
     return (
         <TableRow key={investment._id} className="investment-row">
-            <TableCell align="left">{investment.deal.company_name}</TableCell>
-            <Hidden only="xs"><TableCell align="center"><InvestmentStatus investment={investment} /></TableCell></Hidden>
-            <Hidden only="xs"><TableCell align="center">{addedDate}</TableCell></Hidden>
-            <TableCell align="center">${nWithCommas(investment.amount)}</TableCell>
-            <Hidden only="xs"><TableCell align="center">${nWithCommas(investment.value)}</TableCell></Hidden>
-            <Hidden only="xs"><TableCell align="center">{investment.deal.dealParams.dealMultiple}x</TableCell></Hidden>
-            <Hidden only="xs"><TableCell align="center">
+            <TableCell align="left" onClick={showDocsFn}>{investment.deal.company_name}</TableCell>
+            <Hidden only="xs"><TableCell onClick={showDocsFn} align="center"><InvestmentStatus investment={investment} /></TableCell></Hidden>
+            <Hidden only="xs"><TableCell onClick={showDocsFn} align="center">{addedDate}</TableCell></Hidden>
+            <TableCell onClick={showDocsFn} align="center">${nWithCommas(investment.amount)}</TableCell>
+            <Hidden only="xs"><TableCell onClick={showDocsFn} align="center">${nWithCommas(investment.value)}</TableCell></Hidden>
+            <Hidden only="xs"><TableCell onClick={showDocsFn} align="center">{investment.deal.dealParams.dealMultiple}x</TableCell></Hidden>
+            <Hidden only="xs"><TableCell onClick={showDocsFn} align="center">
                 <Button variant="contained" size="small" color="secondary" onClick={() => history.push(_.get(investment, 'deal.appLink', ""))}>
                     View
                 </Button>
             </TableCell></Hidden>
             <TableCell align="center">
-                <Button variant="contained" size="small" color="primary" onClick={() => setShowDocs(showDocs ? false : investment)}>
+                <Button variant="contained" size="small" color="primary" onClick={showDocsFn}>
                     View
                 </Button>
             </TableCell>
