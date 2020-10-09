@@ -12,7 +12,12 @@ import {
     TableRow,
     Button,
     Typography,
-    Hidden
+    Hidden,
+    Modal,
+    FormControl,
+    Input,
+    InputLabel,
+    InputAdornment
 } from '@material-ui/core';
 import _ from 'lodash'
 import moment from 'moment'
@@ -50,7 +55,18 @@ const useStyles = makeStyles((theme) => ({
     },
     grey: {
         color: "#707070"
-    }
+    },
+    modal: {
+        display: 'flex',
+        // alignItems: 'center',
+        justifyContent: 'center',
+    },
+    modalPaper: {
+        marginTop: '12vh',
+        borderRadius: '1rem',
+        padding: theme.spacing(2),
+    },
+
 }));
 
 const GET_INVESTOR = gql`
@@ -103,6 +119,16 @@ export default ({ data, children }) => {
     const history = useHistory()
     const classes = useStyles();
     const [showDocs, setShowDocs] = useState()
+    // getModalStyle is not a pure function, we roll the style only on the first render
+    const [open, setOpen] = useState(false);
+
+    const handleOpen = (type) => {
+        setOpen(type);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     const { userProfile, error, params, adminView } = useAuth(GET_INVESTOR)
 
@@ -142,6 +168,8 @@ export default ({ data, children }) => {
     const multipleSum = (userProfile.investments.reduce((acc, inv) => {
         return acc += parseInt(inv.deal.dealParams.dealMultiple)
     }, 0) / userProfile.investments.length).toFixed(2)
+
+
     return (
         <div className="blue-container">
             <Grid container spacing={12} justify="space-between" style={{ marginTop: "40px", marginBottom: '1rem' }}>
@@ -231,26 +259,98 @@ export default ({ data, children }) => {
                                     <Hidden only="xs"><TableCell className={classes.tableHeader} align="center">Multiple</TableCell></Hidden>
                                     <TableCell className={classes.tableHeader} align="center">Deal Page</TableCell>
                                     <Hidden only="xs"><TableCell className={classes.tableHeader} align="center">Documents</TableCell></Hidden>
+                                    <TableCell className={classes.tableHeader} align="center">Buy </TableCell>
+                                    <TableCell className={classes.tableHeader} align="center">Sell</TableCell>
+
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {userProfile.investments.map((investment) =>
                                     showDocs?._id === investment?._id ?
                                         <>
-                                            <TR investment={investment} setShowDocs={setShowDocs} showDocs={showDocs} />
+                                            <TR investment={investment} setShowDocs={setShowDocs} showDocs={showDocs} handleOpen={handleOpen} />
                                             <DocsRow key={showDocs._id + "-docs"} docs={showDocs.documents} investment={investment} />
                                         </>
-                                        : <TR investment={investment} setShowDocs={setShowDocs} showDocs={showDocs} />)}
+                                        : <TR investment={investment} setShowDocs={setShowDocs} showDocs={showDocs} handleOpen={handleOpen} />)}
                             </TableBody>
                         </Table>
                     </Paper>
                 </Grid>
             </>
+
+            <Modal
+                open={open}
+                onClose={handleClose}
+                className={classes.modal}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+            >
+                <Grid style={{ maxWidth: "100%", minWidth: '50%' }}>
+                    <Paper className={classes.modalPaper}>
+                        {/* HEADER */}
+                        <Grid container spacing={3}>
+                            <Grid item sm={11} md={11} lg={11}>
+                                <Typography variant="h4" id="simple-modal-title" color={classes.grey} >Start A Trade</Typography>
+                            </Grid>
+                            <Grid item sm={1} md={1} lg={1}>
+                                x
+                            </Grid>
+                        </Grid>
+
+                        <Typography variant="h5" id="simple-modal-title" color={classes.grey} >You'll {_.startCase(_.toLower(open))} </Typography>
+
+                        <Grid container spacing={3}>
+                            <Grid item sm={6} md={6} lg={6}>
+                                <FormControl className={classes.margin}>
+                                    <Input
+                                        id="input-with-icon-adornment"
+                                        startAdornment={
+                                            <InputAdornment style={{ color: 'blue' }} position="end">
+                                                MAX
+                                            </InputAdornment>
+                                        }
+                                    />
+                                </FormControl>
+
+                            </Grid>
+                            <Grid item sm={5} md={5} lg={5}>
+                                {open.company_name || 'HELLO'}
+                            </Grid>
+                        </Grid>
+
+
+
+                        {/* FOOTER */}
+                        <Grid container
+                            style={{ marginTop: '2rem' }}
+                            direction="row"
+                            justify="space-between"
+                            alignItems="center">
+                            <Typography variant="subtitle2" color={classes.grey} >Trade Date:</Typography>
+                            <Typography variant="subtitle2" color={classes.grey} >{Date.now()}</Typography>
+                        </Grid>
+                        <Grid container
+                            direction="row"
+                            justify="space-between"
+                            alignItems="center">
+                            <Typography variant="subtitle2" color={classes.grey} >Trade Type:</Typography>
+                            <Typography variant="subtitle2" color={classes.grey} >{_.startCase(_.toLower(open))}</Typography>
+                        </Grid>
+                        <Grid container
+                            direction="row"
+                            justify="space-between"
+                            alignItems="center">
+                            <Typography variant="subtitle2" color={classes.grey} >Fees:</Typography>
+                            <Typography variant="subtitle2" color={classes.grey} >$0.00</Typography>
+                        </Grid>
+                    </Paper>
+                </Grid>
+            </Modal>
         </div >
     )
 }
 
-const TR = ({ investment, setShowDocs, showDocs }) => {
+const TR = ({ investment, setShowDocs, showDocs, handleOpen }) => {
     const history = useHistory()
     const timestamp = investment._id.toString().substring(0, 8)
     const date = new Date(parseInt(timestamp, 16) * 1000)
@@ -272,6 +372,16 @@ const TR = ({ investment, setShowDocs, showDocs }) => {
             <TableCell align="center">
                 <Button variant="contained" size="small" color="primary" onClick={showDocsFn}>
                     View
+                </Button>
+            </TableCell>
+            <TableCell align="center">
+                <Button variant="contained" size="small" color="primary" onClick={() => handleOpen('buy')}>
+                    Buy
+                </Button>
+            </TableCell>
+            <TableCell align="center">
+                <Button variant="contained" size="small" color="primary" onClick={() => handleOpen('sell')}>
+                    Sell
                 </Button>
             </TableCell>
         </TableRow>
