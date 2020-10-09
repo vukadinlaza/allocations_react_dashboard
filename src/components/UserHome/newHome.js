@@ -178,7 +178,7 @@ export default ({ data, children }) => {
                         <Grid container style={{ padding: '0.1rem', justifyContent: 'space-between' }} >
                             <Grid item sm={8} md={8}>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
-                                <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>{multipleSum}x</h2>
+                                <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>{_.isNumber(multipleSum) ? multipleSum : 0}x</h2>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Last Update: 29th Sept 2020</p>
                             </Grid>
                             <Grid item sm={4} md={4}>
@@ -188,18 +188,18 @@ export default ({ data, children }) => {
                     </Paper>
                 </Grid>
             </Grid>
-            {userProfile.investments.length !== 0 ? <>
+            <>
                 <Grid container justify="space-between" style={{ marginTop: "1em" }}>
                     <Grid item xs={12} sm={12} md={6} style={{ border: "1em solid transparent" }}>
                         <Paper style={{ minHeight: "400px" }}>
                             <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Portfolio Overview</p>
                             {/* <h6 style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "0px" }}>Portfolio Management</h6> */}
                             <Grid item sm={12} md={12}>
-                                <Chart chartType="PieChart"
+                                {userProfile.investments.length !== 0 ? <Chart chartType="PieChart"
                                     width="100%"
                                     height="300px"
                                     data={[['Investment', 'Amount'], ...userProfile.investments.map(inv => ([inv.deal.company_name, inv.amount]))]}
-                                    options={chartOptionsA} />
+                                    options={chartOptionsA} /> : null}
                             </Grid>
                         </Paper>
                     </Grid>
@@ -208,11 +208,11 @@ export default ({ data, children }) => {
                         <Paper style={{ minHeight: "400px" }}>
                             <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Portfolio Value</p>
                             <Grid item sm={12} md={12}>
-                                <Chart chartType="SteppedAreaChart"
+                                {userProfile.investments.length !== 0 ? <Chart chartType="SteppedAreaChart"
                                     width="100%"
                                     height="300px"
                                     data={[['Time', 'Value'], ...graphBData]}
-                                    options={chartOptionsB} />
+                                    options={chartOptionsB} /> : null}
                             </Grid>
                         </Paper>
                     </Grid>
@@ -244,39 +244,8 @@ export default ({ data, children }) => {
                             </TableBody>
                         </Table>
                     </Paper>
-                </Grid> </> : <Grid container>
-                    <Grid item xs={12}>
-                        <Typography style={{ marginLeft: '1rem', color: "#FFF" }} variant="h4">
-                            <strong>Get Started</strong>
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={12} md={6} style={{ border: "1em solid transparent" }}>
-                        <NullPaper title="Create New Deal" text="Setup your next deal in seconds"
-                            image={allocations_create_deal} button="Get Started"
-                            onClick={() => history.push(`/spv-onboarding`)} />
-                    </Grid>
-                    <Grid item xs={12} sm={12} md={6} style={{ border: "1em solid transparent" }}>
-                        <NullPaper title="Invited Deals" text="View your invited deals"
-                            image={allocations_invited_deals} button="Get Started"
-                            onClick={() => history.push(`/investments`)}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={12} md={6} style={{ border: "1em solid transparent" }}>
-                        <NullPaper title="Update Profile" text="Update your user profile"
-                            image={allocations_update_profile} button="Get Started"
-                            onClick={() => history.push(`/profile`)}
-                        />
-                    </Grid>
-
-
-                    <Grid item xs={12} sm={12} md={6} style={{ border: "1em solid transparent" }}>
-                        <a href="https://docs.allocations.com" target="_blank" rel="noopener noreferrer">
-                            <NullPaper title="FAQ" text="Find all your answers here"
-                                image={allocations_faq} button="Get Started"
-                            />
-                        </a>
-                    </Grid>
-                </Grid>}
+                </Grid>
+            </>
         </div >
     )
 }
