@@ -11,6 +11,8 @@ import { nWithCommas, formatDate } from '../../../utils/numbers'
 import FormModal from '../../Modal'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import CheckIcon from '@material-ui/icons/Check';
+
 import { Paper, LinearProgress, Table, TableBody, TableCell, TableRow, Button, Grid, TableHead, MenuItem, FormControl, Select, InputLabel, Typography, TextField } from '@material-ui/core'
 import { Deal } from '../../admin/AdminHome/components/active-deals'
 import EditOrg from '../../forms/editOrg'
@@ -57,6 +59,7 @@ const SUPERADMIN = gql`
         investor_type
         signer_full_name
         accredited_investor_status
+        accredidation_status
         email
         investments {
           amount
@@ -116,6 +119,7 @@ const ALL_DEALS = gql`
         first_name
         last_name
         email
+        accredidation_status
       }
     }
 }
@@ -449,6 +453,7 @@ const InvestorsTabel = ({ investors, setOpen }) => {
               })}
               <TableCell>Date Added</TableCell>
               <TableCell>Amount Invested</TableCell>
+              <TableCell>Accredidated Investor</TableCell>
               <TableCell>
               </TableCell>
             </TableRow>
@@ -475,6 +480,7 @@ const User = ({ investor, setOpen }) => {
       <TableCell>{investor.email}</TableCell>
       <TableCell>{addedDate}</TableCell>
       <TableCell>${nWithCommas(_.sumBy(investor.investments, 'amount'))}</TableCell>
+      <TableCell style={{ textAlign: 'center' }}>{investor.accredidation_status && <CheckCircleRoundedIcon color="secondary" style={{ marginRight: '.5rem' }} />}</TableCell>
       <TableCell>
         <Button color="primary" style={{ textTransform: 'lowercase' }} onClick={() => {
           setOpen({ type: 'usersForm', investor })

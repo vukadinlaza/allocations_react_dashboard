@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useAuth } from "../../auth/useAuth";
 import allocations_create_deal from '../../assets/allocations_create_deal.svg';
 import allocations_faq from '../../assets/allocations_faq.svg';
-import allocations_invite_deals from '../../assets/allocations_invite_deals.svg';
+import allocations_invited_deals from '../../assets/allocations_invited_deals.svg';
 import allocations_recent_investments from '../../assets/allocations_recent_investments.svg';
 import allocations_total_investments from '../../assets/allocations_total_investments.svg';
 import allocations_update_profile from '../../assets/allocations_update_profile.svg';
@@ -332,10 +332,10 @@ export default function UserHome(props) {
         </Grid>
 
 
-        {/* <Grid item xs={12} sm={12} md={6}>
+        <Grid item xs={12} sm={12} md={6}>
           <NullPaper title="Update My Account" text="Fund your account and start investing"
-                     image={allocations_update} button="Get Started"/>
-        </Grid> */}
+            image={allocations_update} button="Get Started" />
+        </Grid>
 
       </Grid>
     </>
