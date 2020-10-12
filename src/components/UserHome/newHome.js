@@ -234,7 +234,7 @@ export default ({ data, children }) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {userProfile.investments.map((investment) =>
+                                {userProfile.investments.filter(inv => inv.status !== 'invited').map((investment) =>
                                     showDocs?._id === investment?._id ?
                                         <>
                                             <TR investment={investment} setShowDocs={setShowDocs} showDocs={showDocs} />

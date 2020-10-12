@@ -131,11 +131,11 @@ export default function Sidebar(props) {
       title: "Home",
       icon: <HomeIcon />,
     },
-    {
-      to: "/investments",
-      title: "Investments",
-      icon: <BarChartIcon />,
-    },
+    // {
+    //   to: "/investments",
+    //   title: "Investments",
+    //   icon: <BarChartIcon />,
+    // },
     {
       to: "/profile",
       title: "Profile",
