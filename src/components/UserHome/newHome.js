@@ -138,8 +138,19 @@ export default ({ }) => {
     const [confirmation, setConfirmation] = useState(false)
     const [tradeData, setTradeData] = useSimpleReducer({ price: "", amount: "", direction: "sell", cost: 0 })
     const [createOrder, { data }] = useMutation(CREATE_ORDER, {
-        onCompleted: () => setConfirmation(false)
+        onCompleted: () => {
+            setConfirmation(false)
+            setTradeData({ showLoading: true })
+        }
     })
+
+    useEffect(() => {
+        if (tradeData.showLoading) {
+            setTimeout(() => {
+                setTradeData({ showFinal: true })
+            }, 2000);
+        }
+    }, [tradeData?.showLoading])
 
 
     const { userProfile, error, params, adminView } = useAuth(GET_INVESTOR)
@@ -188,15 +199,11 @@ export default ({ }) => {
     const orderConfirmDate = moment(orderDate).format('DD MMM YY')
     const handleInputChange = (e) => {
         const { target: { name, value } } = e
-        console.log('fires', value)
-        console.log('fires', isNaN(parseInt(value)))
-
         if (value === "") {
             setTradeData({ amount: 0 })
             setTradeData({ percent: 0.00 })
         }
         if (isNaN(parseInt(value))) return null
-        console.log('fires 2', value)
 
         switch (name) {
 
@@ -328,140 +335,156 @@ export default ({ }) => {
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
             >
-                <form noValidate autoComplete="off" style={{ maxWidth: "100%", minWidth: '30%' }}>
+                {tradeData.showLoading ? <div style={{ maxWidth: "100%", minWidth: '30%', height: '30vh' }}>
                     <Grid xs={12} sm={12} md={12} lg={12}>
-                        <Paper className={classes.modalPaper}>
-                            {/* HEADER */}
-                            <Grid container justify="space-between">
-                                <Grid item>
-                                    <Typography variant="h5" className={classes.grey} style={{ marginBottom: '1rem', fontWeight: 'bold' }}>Start A Trade</Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Typography variant="h5" onClick={() => setTradeData({ price: "", amount: "", direction: "sell", cost: 0, open: false })} className={classes.grey} style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>X</Typography>
-                                </Grid>
-                            </Grid>
-
-                            <Typography variant="h6" className={classes.grey} >You'll {_.startCase(_.toLower(tradeData?.type))} </Typography>
-
-                            <Grid container xs={12} sm={12} md={12} lg={12} className={classes.input}>
-                                <Grid item xs={6} sm={6} md={6} lg={6}>
-                                    {tradeData?.type === 'sell' && < FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
-                                        <Input
-                                            className="trade-input-amount"
-                                            id="input-with-icon-adornment"
-                                            placeholder="Percent"
-                                            variant="outlined"
-                                            disableUnderline
-                                            startAdornment={<InputAdornment position="start">%</InputAdornment>}
-                                            onChange={handleInputChange}
-                                            name="percent"
-                                            value={tradeData.percent}
-                                        />
-                                    </FormControl>}
-                                    <FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
-                                        <Input
-                                            className="trade-input-amount"
-                                            id="input-with-icon-adornment"
-                                            placeholder="Dollar Amount"
-                                            variant="outlined"
-                                            disableUnderline
-                                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                                            onChange={handleInputChange}
-                                            name="amount"
-                                            value={(tradeData?.amount)}
-                                        />
-                                    </FormControl>
-                                </Grid>
-
-                                <Grid item xs={6} sm={6} md={6} lg={6} className={classes.grey} style={{ display: 'flex', justifyContent: "flex-end", alignItems: 'center', fontSize: '.8rem', fontWeight: '50' }}>
-                                    {tradeData?.deal?.company_name || ''}
-                                </Grid>
-                            </Grid>
-                            <Grid container xs={12} sm={12} md={12} lg={12} style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }} >
-                                <Grid item xs={6} sm={6} md={6} lg={6} className={classes.grey} style={{ display: 'flex', justifyContent: "flex-start", alignItems: 'center', fontSize: '.6rem', fontWeight: '50' }}>
-                                    ONWERSHIP
-                                </Grid>
-
-                                <Grid item xs={6} sm={6} md={6} lg={6} style={{ display: 'flex', justifyContent: "flex-end", alignItems: 'center', fontSize: '.6rem', fontWeight: '50' }}>
-                                    DEAL
-                                </Grid>
-                            </Grid>
-                            <Grid container xs={12} sm={12} md={12} lg={12} style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }} >
-                                <Grid item xs={12} sm={12} md={12} lg={12} className={classes.grey} style={{ display: 'flex', justifyContent: "center", alignItems: 'center' }}>
-                                    <ArrowDownwardIcon color="primary" fontSize="large" style={{ marginTop: '0.5rem', marginBottom: "0.5rem" }} />
-                                </Grid>
-                            </Grid>
-
-                            <Typography variant="h6" className={classes.grey} >You'll {tradeData.type === 'buy' ? 'Pay' : 'Receive'} </Typography>
-
-                            <Grid container xs={12} sm={12} md={12} lg={12} className={classes.input}>
-                                <Grid item xs={6} sm={6} md={6} lg={6}>
-                                    <FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
-                                        <Input
-                                            className="trade-input-amount"
-                                            id="input-with-icon-adornment"
-                                            placeholder="0"
-                                            variant="outlined"
-                                            disableUnderline
-                                            readOnly
-                                            value={(tradeData?.amount || 0)}
-                                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
-
-                                        />
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={6} sm={6} md={6} lg={6} className={classes.grey} style={{ display: 'flex', justifyContent: "flex-end", alignItems: 'center', fontSize: '.8rem', fontWeight: '50' }}>
-                                    USD ($)
-                                </Grid>
-                            </Grid>
-                            <Grid container xs={12} sm={12} md={12} lg={12} style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }} >
-                                <Grid item xs={6} sm={6} md={6} lg={6} className={classes.grey} style={{ display: 'flex', justifyContent: "flex-start", alignItems: 'center', fontSize: '.6rem', fontWeight: '50' }}>
-                                    AMOUNT
-                                </Grid>
-
-                                <Grid item xs={6} sm={6} md={6} lg={6} style={{ display: 'flex', justifyContent: "flex-end", alignItems: 'center', fontSize: '.6rem', fontWeight: '50' }}>
-                                    CURRENCY
-                                </Grid>
-                            </Grid>
-
-                            {/* FOOTER */}
-                            <Grid>
-                                <Grid container
-                                    style={{ marginTop: '2rem' }}
-                                    direction="row"
-                                    justify="space-between"
-                                    alignItems="center">
-                                    <Typography variant="subtitle2" className={classes.grey} >Trade Date:</Typography>
-                                    <Typography variant="subtitle2" className={classes.grey} >{orderConfirmDate}</Typography>
-                                </Grid>
-                                <Grid container
-                                    direction="row"
-                                    justify="space-between"
-                                    alignItems="center">
-                                    <Typography variant="subtitle2" className={classes.grey} >Trade Type:</Typography>
-                                    <Typography variant="subtitle2" className={classes.grey} >{_.startCase(_.toLower(tradeData?.type))}</Typography>
-                                </Grid>
-                                <Grid container
-                                    direction="row"
-                                    justify="space-between"
-                                    alignItems="center">
-                                    <Typography variant="subtitle2" className={classes.grey} >Fees:</Typography>
-                                    <Typography variant="subtitle2" className={classes.grey} >$0.00</Typography>
-                                </Grid>
-                            </Grid>
-
-                            <Grid justify="center">
-                                <Button
-                                    variant="contained"
-                                    onClick={() => setConfirmation(true)}
-                                    color="secondary"
-                                    style={{ width: "100%", marginTop: "1rem", paddingTop: "5px", paddingBottom: "5px" }}>
-                                    Confirm Order
-                            </Button>
-                            </Grid>
+                        <Paper className={classes.modalPaper} style={{ minHeight: '40vh', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
+                            {tradeData.showFinal ? <div style={{ maxWidth: "100%", minWidth: '30%' }}>
+                                <Typography className={classes.grey} style={{ textAlign: 'center' }} variant="h5">Your trade request has been submitted</Typography>
+                                <Typography className={classes.grey} style={{ textAlign: 'center' }} variant="paragraph">An Allocations team member will reach out to you shortly about your trade request. Please give up to 30 days for a response. Thank you.</Typography>
+                            </div> : <div style={{ maxWidth: "100%", minWidth: '30%' }}><Loader />
+                                    <Typography className={classes.grey} style={{ textAlign: 'center' }} variant="h5">Creating your trade request</Typography> </div>}
                         </Paper>
-                    </Grid>
-                </form>
+                    </Grid >
+                </div> :
+                    <form noValidate autoComplete="off" style={{ maxWidth: "100%", minWidth: '30%' }}>
+                        <Grid xs={12} sm={12} md={12} lg={12}>
+                            <Paper className={classes.modalPaper}>
+                                {/* HEADER */}
+                                <Grid container justify="space-between">
+                                    <Grid item>
+                                        <Typography variant="h5" className={classes.grey} style={{ marginBottom: '1rem', fontWeight: 'bold' }}>Start A Trade</Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography variant="h5" onClick={() => setTradeData({ price: "", amount: "", direction: "sell", cost: 0, open: false })} className={classes.grey} style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>X</Typography>
+                                    </Grid>
+                                </Grid>
+
+                                <Typography variant="h6" className={classes.grey} >You'll {_.startCase(_.toLower(tradeData?.type))} </Typography>
+
+                                <Grid container xs={12} sm={12} md={12} lg={12} className={classes.input}>
+                                    <Grid item xs={6} sm={6} md={6} lg={6}>
+                                        {tradeData?.type === 'sell' && <FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
+                                            <Input
+                                                className="trade-input-amount"
+                                                id="input-with-icon-adornment"
+                                                placeholder="Percent"
+                                                variant="outlined"
+                                                disableUnderline
+                                                startAdornment={<InputAdornment position="start">%</InputAdornment>}
+                                                onChange={handleInputChange}
+                                                name="percent"
+                                                value={tradeData.percent}
+                                            />
+                                        </FormControl>}
+                                        <FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
+                                            <Input
+                                                className="trade-input-amount"
+                                                id="input-with-icon-adornment"
+                                                placeholder="Dollar Amount"
+                                                variant="outlined"
+                                                disableUnderline
+                                                startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                                                onChange={handleInputChange}
+                                                name="amount"
+                                                value={(tradeData?.amount)}
+                                            />
+                                        </FormControl>
+                                    </Grid>
+
+                                    <Grid item xs={6} sm={6} md={6} lg={6} className={classes.grey} style={{ display: 'flex', justifyContent: "space-between", alignItems: 'center', fontSize: '.8rem', fontWeight: '50' }}>
+                                        <div onClick={() => setTradeData({ amount: parseInt(tradeData.investment.amount).toFixed(2), percent: parseInt('100').toFixed(2) })} className="max-btn" style={{ backgroundColor: '#C8DCFF', padding: '.35rem', borderRadius: '1rem', fontSize: '1.1rem', paddingLeft: '1rem', paddingRight: '1rem' }}>
+                                            MAX
+                            </div>
+                                        {tradeData?.deal?.company_name || ''}
+                                    </Grid>
+                                </Grid>
+                                <Grid container xs={12} sm={12} md={12} lg={12} style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }} >
+                                    <Grid item xs={6} sm={6} md={6} lg={6} className={classes.grey} style={{ display: 'flex', justifyContent: "flex-start", alignItems: 'center', fontSize: '.6rem', fontWeight: '50' }}>
+                                        ONWERSHIP
+                        </Grid>
+
+                                    <Grid item xs={6} sm={6} md={6} lg={6} style={{ display: 'flex', justifyContent: "flex-end", alignItems: 'center', fontSize: '.6rem', fontWeight: '50' }}>
+                                        DEAL
+                        </Grid>
+                                </Grid>
+                                <Grid container xs={12} sm={12} md={12} lg={12} style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }} >
+                                    <Grid item xs={12} sm={12} md={12} lg={12} className={classes.grey} style={{ display: 'flex', justifyContent: "center", alignItems: 'center' }}>
+                                        <ArrowDownwardIcon color="primary" fontSize="large" style={{ marginTop: '0.5rem', marginBottom: "0.5rem" }} />
+                                    </Grid>
+                                </Grid>
+
+                                <Typography variant="h6" className={classes.grey} >You'll {tradeData.type === 'buy' ? 'Pay' : 'Receive'} </Typography>
+
+                                <Grid container xs={12} sm={12} md={12} lg={12} className={classes.input}>
+                                    <Grid item xs={6} sm={6} md={6} lg={6}>
+                                        <FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
+                                            <Input
+                                                className="trade-input-amount"
+                                                id="input-with-icon-adornment"
+                                                placeholder="0"
+                                                variant="outlined"
+                                                disableUnderline
+                                                readOnly
+                                                value={(tradeData?.amount || 0)}
+                                                startAdornment={<InputAdornment position="start">$</InputAdornment>}
+
+                                            />
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={6} sm={6} md={6} lg={6} className={classes.grey} style={{ display: 'flex', justifyContent: "flex-end", alignItems: 'center', fontSize: '.8rem', fontWeight: '50' }}>
+                                        USD ($)
+                        </Grid>
+                                </Grid>
+                                <Grid container xs={12} sm={12} md={12} lg={12} style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }} >
+                                    <Grid item xs={6} sm={6} md={6} lg={6} className={classes.grey} style={{ display: 'flex', justifyContent: "flex-start", alignItems: 'center', fontSize: '.6rem', fontWeight: '50' }}>
+                                        AMOUNT
+                        </Grid>
+
+                                    <Grid item xs={6} sm={6} md={6} lg={6} style={{ display: 'flex', justifyContent: "flex-end", alignItems: 'center', fontSize: '.6rem', fontWeight: '50' }}>
+                                        CURRENCY
+                        </Grid>
+                                </Grid>
+
+                                {/* FOOTER */}
+                                <Grid>
+                                    <Grid container
+                                        style={{ marginTop: '2rem' }}
+                                        direction="row"
+                                        justify="space-between"
+                                        alignItems="center">
+                                        <Typography variant="subtitle2" className={classes.grey} >Trade Date:</Typography>
+                                        <Typography variant="subtitle2" className={classes.grey} >{orderConfirmDate}</Typography>
+                                    </Grid>
+                                    <Grid container
+                                        direction="row"
+                                        justify="space-between"
+                                        alignItems="center">
+                                        <Typography variant="subtitle2" className={classes.grey} >Trade Type:</Typography>
+                                        <Typography variant="subtitle2" className={classes.grey} >{_.startCase(_.toLower(tradeData?.type))}</Typography>
+                                    </Grid>
+                                    <Grid container
+                                        direction="row"
+                                        justify="space-between"
+                                        alignItems="center">
+                                        <Typography variant="subtitle2" className={classes.grey} >Fees:</Typography>
+                                        <Typography variant="subtitle2" className={classes.grey} >$0.00</Typography>
+                                    </Grid>
+                                </Grid>
+
+                                <Grid justify="center">
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => setConfirmation(true)}
+                                        color="secondary"
+                                        style={{ width: "100%", marginTop: "1rem", paddingTop: "5px", paddingBottom: "5px" }}>
+                                        Confirm Order
+                    </Button>
+                                </Grid>
+                            </Paper>
+                        </Grid>
+                    </form>
+                }
+
             </Modal>
             <Modal
                 open={confirmation}
@@ -484,15 +507,16 @@ export default ({ }) => {
                                 </Grid>
                             </Grid>
 
-                            <Typography variant="h6" className={classes.grey} >You'll {_.startCase(_.toLower(tradeData?.type))} </Typography>
+                            <Typography variant="paragraph" className={classes.grey} >You'll {_.startCase(_.toLower(tradeData?.type))} </Typography>
 
-                            <Typography variant="paragraph" className={classes.grey} >$ {tradeData?.amount} of {tradeData?.deal?.company_name}</Typography>
+                            <Typography variant="h6" className={classes.grey} >$ {tradeData?.amount} of {tradeData?.deal?.company_name}</Typography>
                             <Grid container xs={12} sm={12} md={12} lg={12} style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }} >
                                 <Grid item xs={12} sm={12} md={12} lg={12} className={classes.grey} style={{ display: 'flex', justifyContent: "center", alignItems: 'center' }}>
                                     <ArrowDownwardIcon color="primary" fontSize="large" style={{ marginTop: '0.5rem', marginBottom: "0.5rem" }} />
                                 </Grid>
                             </Grid>
-                            <Typography variant="h6" className={classes.grey} >You'll {tradeData.type === 'buy' ? 'Pay' : 'Receive'}  $ {tradeData?.amount} for {tradeData?.deal?.company_name} </Typography>
+                            <Typography variant="paragraph" className={classes.grey} >You'll {tradeData.type === 'buy' ? 'Pay' : 'Receive'}  </Typography>
+                            <Typography variant="h6" className={classes.grey} >$ {tradeData?.amount} for {tradeData?.deal?.company_name}  </Typography>
                             <Typography variant="subtitle2" className={classes.grey} >Transaction may take up to 30 days to complete and is not guaranteed</Typography>
 
 
