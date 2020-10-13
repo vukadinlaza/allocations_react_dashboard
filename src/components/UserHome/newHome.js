@@ -169,6 +169,8 @@ export default ({ data, children }) => {
         return acc += parseInt(inv.deal.dealParams.dealMultiple)
     }, 0) / userProfile.investments.length).toFixed(2)
 
+    const orderDate = new Date()
+    const orderConfirmDate = moment(orderDate).format('DD MMM YY')
 
     return (
         <div className="blue-container">
@@ -285,49 +287,64 @@ export default ({ data, children }) => {
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
             >
-                <Grid style={{ maxWidth: "100%", minWidth: '50%' }}>
+                <form noValidate autoComplete="off" style={{ maxWidth: "100%", minWidth: '30%' }}>
+                <Grid xs={12} sm={12} md={12} lg={12}>
                     <Paper className={classes.modalPaper}>
                         {/* HEADER */}
-                        <Grid container spacing={3}>
-                            <Grid item sm={11} md={11} lg={11}>
-                                <Typography variant="h4" id="simple-modal-title" color={classes.grey} >Start A Trade</Typography>
+                        <Grid container justify="space-between">
+                            <Grid item>
+                                <Typography variant="h5" id="simple-modal-title" color={classes.grey} >Start A Trade</Typography>
                             </Grid>
-                            <Grid item sm={1} md={1} lg={1}>
+                            <Grid item>
                                 x
                             </Grid>
                         </Grid>
 
-                        <Typography variant="h5" id="simple-modal-title" color={classes.grey} >You'll {_.startCase(_.toLower(open))} </Typography>
+                        <Typography variant="h6" id="simple-modal-title" color={classes.grey} >You'll {_.startCase(_.toLower(open))} </Typography>
 
-                        <Grid container spacing={3}>
-                            <Grid item sm={6} md={6} lg={6}>
-                                <FormControl className={classes.margin}>
+                        <Grid container xs={12} sm={12} md={12} lg={12}>
+                            <Grid item xs={6} sm={6} md={6} lg={6}>
+                                <FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
                                     <Input
+                                        className="trade-input-amount"
                                         id="input-with-icon-adornment"
-                                        startAdornment={
-                                            <InputAdornment style={{ color: 'blue' }} position="end">
-                                                MAX
-                                            </InputAdornment>
-                                        }
+                                        placeholder="Percent"
+                                        // startAdornment={
+                                        //     <InputAdornment>
+                                        //         MAX
+                                        //     </InputAdornment>
+                                        // }
                                     />
                                 </FormControl>
-
+                                <FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
+                                    <Input
+                                        className="trade-input-amount"
+                                        id="input-with-icon-adornment"
+                                        placeholder="Dollar Amount"
+                                        // startAdornment={
+                                        //     <InputAdornment>
+                                        //         MAX
+                                        //     </InputAdornment>
+                                        // }
+                                    />
+                                </FormControl>
                             </Grid>
-                            <Grid item sm={5} md={5} lg={5}>
+
+                            <Grid item xs={6} sm={6} md={6} lg={6} style={{ textAlign:"center" }}>
                                 {open.company_name || 'HELLO'}
                             </Grid>
                         </Grid>
 
 
-
                         {/* FOOTER */}
+                        <Grid>
                         <Grid container
                             style={{ marginTop: '2rem' }}
                             direction="row"
                             justify="space-between"
                             alignItems="center">
                             <Typography variant="subtitle2" color={classes.grey} >Trade Date:</Typography>
-                            <Typography variant="subtitle2" color={classes.grey} >{Date.now()}</Typography>
+                            <Typography variant="subtitle2" color={classes.grey} >{orderConfirmDate}</Typography>
                         </Grid>
                         <Grid container
                             direction="row"
@@ -343,8 +360,29 @@ export default ({ data, children }) => {
                             <Typography variant="subtitle2" color={classes.grey} >Fees:</Typography>
                             <Typography variant="subtitle2" color={classes.grey} >$0.00</Typography>
                         </Grid>
+                        </Grid>
+
+                        <Grid justify="center">
+                        <Button
+                            variant="contained"
+                            // onClick={() => {
+                            //     updateDeal({
+                            //     variables: {
+                            //         deal: {
+                            //         ..._.pick(deal, validInputs),
+                            //         dealParams: _.pick(deal.dealParams, dealParamsValidInputs)
+                            //         }, org: organization
+                            //     }
+                            //     })
+                            // }}
+                            color="secondary"
+                            style={{ width:"100%", marginTop:"1rem", paddingTop:"5px", paddingBottom:"5px" }}>
+                            Confirm Order
+                            </Button>
+                        </Grid>
                     </Paper>
                 </Grid>
+                </form>
             </Modal>
         </div >
     )
