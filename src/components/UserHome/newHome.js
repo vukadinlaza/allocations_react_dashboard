@@ -201,8 +201,8 @@ export default ({ }) => {
         switch (name) {
 
             case 'amount':
-                setTradeData({ amount: parseInt(value).toFixed(2) })
-                setTradeData({ percent: ((parseInt(value) * 100) / parseInt(tradeData.investment.amount)) })
+                setTradeData({ amount: parseInt(value) })
+                setTradeData({ percent: ((parseInt(value) * 100) / parseInt(tradeData.investment.amount)).toFixed(2) })
                 break
             case 'percent':
                 setTradeData({ percent: parseInt(value) })
@@ -368,13 +368,13 @@ export default ({ }) => {
                                             startAdornment={<InputAdornment position="start">$</InputAdornment>}
                                             onChange={handleInputChange}
                                             name="amount"
-                                            value={(tradeData?.amount || 0)}
+                                            value={(tradeData?.amount)}
                                         />
                                     </FormControl>
                                 </Grid>
 
                                 <Grid item xs={6} sm={6} md={6} lg={6} className={classes.grey} style={{ display: 'flex', justifyContent: "flex-end", alignItems: 'center', fontSize: '.8rem', fontWeight: '50' }}>
-                                    {tradeData?.deal?.company_name || ''} (${tradeData?.deal?.valuation || 'TBD'})
+                                    {tradeData?.deal?.company_name || ''}
                                 </Grid>
                             </Grid>
                             <Grid container xs={12} sm={12} md={12} lg={12} style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }} >
@@ -486,8 +486,14 @@ export default ({ }) => {
 
                             <Typography variant="h6" className={classes.grey} >You'll {_.startCase(_.toLower(tradeData?.type))} </Typography>
 
-                            {/* FOOTER */}
-                            <Typography variant="paragraph" className={classes.grey} >$ {tradeData?.amount} of {tradeData?.deal?.company_name} at ${tradeData?.valuation} valuation</Typography>
+                            <Typography variant="paragraph" className={classes.grey} >$ {tradeData?.amount} of {tradeData?.deal?.company_name}</Typography>
+                            <Grid container xs={12} sm={12} md={12} lg={12} style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }} >
+                                <Grid item xs={12} sm={12} md={12} lg={12} className={classes.grey} style={{ display: 'flex', justifyContent: "center", alignItems: 'center' }}>
+                                    <ArrowDownwardIcon color="primary" fontSize="large" style={{ marginTop: '0.5rem', marginBottom: "0.5rem" }} />
+                                </Grid>
+                            </Grid>
+                            <Typography variant="h6" className={classes.grey} >You'll {tradeData.type === 'buy' ? 'Pay' : 'Receive'}  $ {tradeData?.amount} for {tradeData?.deal?.company_name} </Typography>
+                            <Typography variant="subtitle2" className={classes.grey} >Transaction may take up to 30 days to complete and is not guaranteed</Typography>
 
 
                             <Grid justify="center">
@@ -508,7 +514,7 @@ export default ({ }) => {
                                     }}
                                     color="secondary"
                                     style={{ width: "100%", marginTop: "1rem", paddingTop: "5px", paddingBottom: "5px" }}>
-                                    Confirm Order
+                                    Create Order
                             </Button>
                             </Grid>
                         </Paper>
