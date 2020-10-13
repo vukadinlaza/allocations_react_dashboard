@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { gql } from 'apollo-boost'
 import Loader from '../utils/Loader'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,6 +19,7 @@ import {
     InputLabel,
     InputAdornment
 } from '@material-ui/core';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import _ from 'lodash'
 import moment from 'moment'
 import NullPaper from "../NullPaper";
@@ -140,6 +141,7 @@ export default ({ }) => {
         onCompleted: () => setConfirmation(false)
     })
 
+
     const { userProfile, error, params, adminView } = useAuth(GET_INVESTOR)
 
     const chartOptionsA = {
@@ -184,6 +186,32 @@ export default ({ }) => {
 
     const orderDate = new Date()
     const orderConfirmDate = moment(orderDate).format('DD MMM YY')
+    const handleInputChange = (e) => {
+        const { target: { name, value } } = e
+        console.log('fires', value)
+        console.log('fires', isNaN(parseInt(value)))
+
+        if (value === "") {
+            setTradeData({ amount: 0 })
+            setTradeData({ percent: 0.00 })
+        }
+        if (isNaN(parseInt(value))) return null
+        console.log('fires 2', value)
+
+        switch (name) {
+
+            case 'amount':
+                setTradeData({ amount: parseInt(value).toFixed(2) })
+                setTradeData({ percent: ((parseInt(value) * 100) / parseInt(tradeData.investment.amount)) })
+                break
+            case 'percent':
+                setTradeData({ percent: parseInt(value) })
+                setTradeData({ amount: (parseInt(value) / 100) * parseInt(tradeData.investment.amount) })
+                break
+            default:
+                break
+        }
+    }
 
     return (
         <div className="blue-container">
@@ -295,7 +323,7 @@ export default ({ }) => {
 
             <Modal
                 open={tradeData?.open}
-                onClose={() => setTradeData({ open: false })}
+                onClose={() => setTradeData({ price: "", amount: "", direction: "sell", cost: 0, open: false })}
                 className={classes.modal}
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
@@ -309,7 +337,7 @@ export default ({ }) => {
                                     <Typography variant="h5" className={classes.grey} style={{ marginBottom: '1rem', fontWeight: 'bold' }}>Start A Trade</Typography>
                                 </Grid>
                                 <Grid item>
-                                    <Typography variant="h5" onClick={() => setTradeData({ open: false })} className={classes.grey} style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>X</Typography>
+                                    <Typography variant="h5" onClick={() => setTradeData({ price: "", amount: "", direction: "sell", cost: 0, open: false })} className={classes.grey} style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>X</Typography>
                                 </Grid>
                             </Grid>
 
@@ -324,6 +352,10 @@ export default ({ }) => {
                                             placeholder="Percent"
                                             variant="outlined"
                                             disableUnderline
+                                            startAdornment={<InputAdornment position="start">%</InputAdornment>}
+                                            onChange={handleInputChange}
+                                            name="percent"
+                                            value={tradeData.percent}
                                         />
                                     </FormControl>}
                                     <FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
@@ -333,7 +365,10 @@ export default ({ }) => {
                                             placeholder="Dollar Amount"
                                             variant="outlined"
                                             disableUnderline
-                                            onChange={(e) => setTradeData({ amount: parseInt(e.target.value) })}
+                                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                                            onChange={handleInputChange}
+                                            name="amount"
+                                            value={(tradeData?.amount || 0)}
                                         />
                                     </FormControl>
                                 </Grid>
@@ -342,7 +377,52 @@ export default ({ }) => {
                                     {tradeData?.deal?.company_name || ''} (${tradeData?.deal?.valuation || 'TBD'})
                                 </Grid>
                             </Grid>
+                            <Grid container xs={12} sm={12} md={12} lg={12} style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }} >
+                                <Grid item xs={6} sm={6} md={6} lg={6} className={classes.grey} style={{ display: 'flex', justifyContent: "flex-start", alignItems: 'center', fontSize: '.6rem', fontWeight: '50' }}>
+                                    ONWERSHIP
+                                </Grid>
 
+                                <Grid item xs={6} sm={6} md={6} lg={6} style={{ display: 'flex', justifyContent: "flex-end", alignItems: 'center', fontSize: '.6rem', fontWeight: '50' }}>
+                                    DEAL
+                                </Grid>
+                            </Grid>
+                            <Grid container xs={12} sm={12} md={12} lg={12} style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }} >
+                                <Grid item xs={12} sm={12} md={12} lg={12} className={classes.grey} style={{ display: 'flex', justifyContent: "center", alignItems: 'center' }}>
+                                    <ArrowDownwardIcon color="primary" fontSize="large" style={{ marginTop: '0.5rem', marginBottom: "0.5rem" }} />
+                                </Grid>
+                            </Grid>
+
+                            <Typography variant="h6" className={classes.grey} >You'll {tradeData.type === 'buy' ? 'Pay' : 'Receive'} </Typography>
+
+                            <Grid container xs={12} sm={12} md={12} lg={12} className={classes.input}>
+                                <Grid item xs={6} sm={6} md={6} lg={6}>
+                                    <FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
+                                        <Input
+                                            className="trade-input-amount"
+                                            id="input-with-icon-adornment"
+                                            placeholder="0"
+                                            variant="outlined"
+                                            disableUnderline
+                                            readOnly
+                                            value={(tradeData?.amount || 0)}
+                                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
+
+                                        />
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={6} sm={6} md={6} lg={6} className={classes.grey} style={{ display: 'flex', justifyContent: "flex-end", alignItems: 'center', fontSize: '.8rem', fontWeight: '50' }}>
+                                    USD ($)
+                                </Grid>
+                            </Grid>
+                            <Grid container xs={12} sm={12} md={12} lg={12} style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }} >
+                                <Grid item xs={6} sm={6} md={6} lg={6} className={classes.grey} style={{ display: 'flex', justifyContent: "flex-start", alignItems: 'center', fontSize: '.6rem', fontWeight: '50' }}>
+                                    AMOUNT
+                                </Grid>
+
+                                <Grid item xs={6} sm={6} md={6} lg={6} style={{ display: 'flex', justifyContent: "flex-end", alignItems: 'center', fontSize: '.6rem', fontWeight: '50' }}>
+                                    CURRENCY
+                                </Grid>
+                            </Grid>
 
                             {/* FOOTER */}
                             <Grid>
