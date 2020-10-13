@@ -117,7 +117,7 @@ export default function InvestmentFlow({ deal, investor, refetch }) {
   const { approved } = deal
   const docs = _.get(polledInvestor, 'documents') || []
   const spvDoc = investment?.documents.find(d => {
-    return d?.path.includes('SPV')
+    return d?.path.includes('SPV') || d?.path.includes('LPA')
   });
   const hasWired = investment?.status === 'wired' || investment?.status === 'complete'
   const hasSigned = (investment?.status === 'signed' || investment?.status === 'wired' || investment?.status === 'complete') && spvDoc;
@@ -178,6 +178,12 @@ export default function InvestmentFlow({ deal, investor, refetch }) {
 function DataRoom({ deal }) {
   return (
     <div className="deal-data-room">
+      {(deal.documents || []).filter(d => d.path !== "wire-instructions" && !d.path.includes('s-')).map(doc => (
+        <span key={doc.path}>
+          <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer"><FontAwesomeIcon
+            icon="link" /> {doc.path}</a>
+        </span>
+      ))}
       {deal.memo && <div className="deal-memo">{ReactHtmlParser(deal.memo)}</div>}
     </div >
   )

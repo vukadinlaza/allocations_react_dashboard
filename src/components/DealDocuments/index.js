@@ -97,7 +97,7 @@ function DealDocuments({ }) {
         const d = await map(docs, doc => {
             return addDoc({
                 variables: {
-                    deal_id: deal._id, title: doc.name, doc: doc
+                    deal_id: deal._id, title: `s-${doc.name}`, doc: doc
                 }
             })
 

@@ -144,7 +144,10 @@ export default ({ data, children }) => {
 
 
     if (!userProfile.email) return <Loader />
-    const groupedByMonth = _.groupBy(userProfile?.investments, inv => {
+
+    const investments = userProfile.investments.filter(inv => inv.status !== 'invited')
+
+    const groupedByMonth = _.groupBy(investments, inv => {
         const timestamp = inv?._id.toString().substring(0, 8)
         const date = new Date(parseInt(timestamp, 16) * 1000)
         const addedDate = moment(date).format('MMM YY')
@@ -164,10 +167,10 @@ export default ({ data, children }) => {
         }, 0)
         return [data[0], prevMonthsTotal + data[1]]
     })
-    const investmentTotal = _.sumBy(userProfile.investments, 'value')
-    const multipleSum = (userProfile.investments.reduce((acc, inv) => {
+    const investmentTotal = _.sumBy(investments, 'value')
+    const multipleSum = (investments.reduce((acc, inv) => {
         return acc += parseInt(inv.deal.dealParams.dealMultiple)
-    }, 0) / userProfile.investments.length).toFixed(2)
+    }, 0) / investments.length).toFixed(2)
 
     const orderDate = new Date()
     const orderConfirmDate = moment(orderDate).format('DD MMM YY')
@@ -195,7 +198,7 @@ export default ({ data, children }) => {
                             <Grid item sm={8} md={8}>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Total Invested</p>
                                 <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>$ {nWithCommas(investmentTotal)}.00</h2>
-                                <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>{userProfile?.investments?.length} Total Investments</p>
+                                <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>{investments?.length} Total Investments</p>
                             </Grid>
                             <Grid item sm={4} md={4}>
                                 <img src="https://allocations-public.s3.us-east-2.amazonaws.com/icon-bar-chart.svg" alt="oops" style={{ width: "50px", height: "50px", marginTop: "30%" }} />
@@ -208,7 +211,7 @@ export default ({ data, children }) => {
                         <Grid container style={{ padding: '0.1rem', justifyContent: 'space-between' }} >
                             <Grid item sm={8} md={8}>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Multiple</p>
-                                <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>{_.isNumber(multipleSum) ? multipleSum : 0}x</h2>
+                                <h2 align="left" style={{ color: "rgba(0,0,0,0.8)", paddingLeft: "10px" }}>{_.isNumber(multipleSum) ? multipleSum : 1}x</h2>
                                 <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Last Update: 29th Sept 2020</p>
                             </Grid>
                             <Grid item sm={4} md={4}>
@@ -225,10 +228,10 @@ export default ({ data, children }) => {
                             <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Portfolio Overview</p>
                             {/* <h6 style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "0px" }}>Portfolio Management</h6> */}
                             <Grid item sm={12} md={12}>
-                                {userProfile.investments.length !== 0 ? <Chart chartType="PieChart"
+                                {investments.length !== 0 ? <Chart chartType="PieChart"
                                     width="100%"
                                     height="300px"
-                                    data={[['Investment', 'Amount'], ...userProfile.investments.map(inv => ([inv.deal.company_name, inv.amount]))]}
+                                    data={[['Investment', 'Amount'], ...investments.map(inv => ([inv.deal.company_name, inv.amount]))]}
                                     options={chartOptionsA} /> : null}
                             </Grid>
                         </Paper>
@@ -238,7 +241,7 @@ export default ({ data, children }) => {
                         <Paper style={{ minHeight: "400px" }}>
                             <p style={{ color: "rgba(0,0,0,0.4)", paddingLeft: "10px", paddingTop: "10px" }}>Portfolio Value</p>
                             <Grid item sm={12} md={12}>
-                                {userProfile.investments.length !== 0 ? <Chart chartType="SteppedAreaChart"
+                                {investments.length !== 0 ? <Chart chartType="SteppedAreaChart"
                                     width="100%"
                                     height="300px"
                                     data={[['Time', 'Value'], ...graphBData]}
@@ -267,7 +270,7 @@ export default ({ data, children }) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {userProfile.investments.map((investment) =>
+                                {investments.filter(inv => inv.status !== 'invited').map((investment) =>
                                     showDocs?._id === investment?._id ?
                                         <>
                                             <TR investment={investment} setShowDocs={setShowDocs} showDocs={showDocs} handleOpen={handleOpen} />
