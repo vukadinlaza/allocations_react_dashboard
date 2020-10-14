@@ -148,7 +148,7 @@ export default ({ }) => {
         if (tradeData.showLoading) {
             setTimeout(() => {
                 setTradeData({ showFinal: true })
-            }, 2000);
+            }, 3000);
         }
     }, [tradeData?.showLoading])
 
@@ -335,17 +335,34 @@ export default ({ }) => {
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
             >
-                {tradeData.showLoading ? <div style={{ maxWidth: "100%", minWidth: '30%', height: '30vh' }}>
-                    <Grid xs={12} sm={12} md={12} lg={12}>
-                        <Paper className={classes.modalPaper} style={{ minHeight: '40vh', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-                            {tradeData.showFinal ? <div style={{ maxWidth: "100%", minWidth: '30%' }}>
-                                <Typography className={classes.grey} style={{ textAlign: 'center' }} variant="h5">Your trade request has been submitted</Typography>
-                                <Typography className={classes.grey} style={{ textAlign: 'center' }} variant="paragraph">An Allocations team member will reach out to you shortly about your trade request. Please give up to 30 days for a response. Thank you.</Typography>
-                            </div> : <div style={{ maxWidth: "100%", minWidth: '30%' }}><Loader />
-                                    <Typography className={classes.grey} style={{ textAlign: 'center' }} variant="h5">Creating your trade request</Typography> </div>}
-                        </Paper>
-                    </Grid >
-                </div> :
+                {tradeData.showLoading ?
+
+                    <Grid container style={{ maxWidth: "30%", minWidth: '30%', width: '30%', height: '30vh' }}>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                            <Paper className={classes.modalPaper}>
+                                {tradeData.showFinal ?
+                                    <Grid container style={{ maxWidth: "100%", minWidth: '30%', minHeight: '40vh', display: 'flex', flexDirection: 'column' }}>
+                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                            <Typography variant="h5" onClick={() => setTradeData({ price: "", amount: "", direction: "sell", cost: 0, open: false, showLoading: false, showFinal: false })} className={classes.grey} style={{ fontWeight: 'bold', fontSize: '1.5rem', textAlign: "end" }}>X</Typography>
+                                            <Typography className={classes.grey} style={{ textAlign: 'center', marginTop: '2rem' }} variant="h5">Your trade request has been submitted</Typography>
+                                            <Typography className={classes.grey} style={{ textAlign: 'center' }} variant="paragraph">An Allocations team member will reach out to you shortly about your trade request. Please give up to 30 days for a response. Thank you.</Typography>
+                                        </Grid>
+                                    </Grid>
+                                    :
+                                    <Grid container style={{ maxWidth: "100%", minWidth: '30%', minHeight: '40vh' }}>
+                                        <Grid item xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+                                            <Loader />
+                                        </Grid>
+                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                            <Typography className={classes.grey} style={{ textAlign: 'center' }} variant="h5">Creating your trade request</Typography>
+                                        </Grid>
+                                    </Grid>
+                                }
+                            </Paper>
+                        </Grid >
+                    </Grid> :
+
+
                     <form noValidate autoComplete="off" style={{ maxWidth: "100%", minWidth: '30%' }}>
                         <Grid xs={12} sm={12} md={12} lg={12}>
                             <Paper className={classes.modalPaper}>
@@ -493,7 +510,7 @@ export default ({ }) => {
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
             >
-                <div style={{ maxWidth: "100%", minWidth: '30%' }}>
+                <Grid style={{ maxWidth: "30%", minWidth: '30%', width: '30%', height: '30vh' }}>
 
                     <Grid xs={12} sm={12} md={12} lg={12}>
                         <Paper className={classes.modalPaper}>
@@ -543,7 +560,7 @@ export default ({ }) => {
                             </Grid>
                         </Paper>
                     </Grid>
-                </div>
+                </Grid>
             </Modal>
         </div >
     )
