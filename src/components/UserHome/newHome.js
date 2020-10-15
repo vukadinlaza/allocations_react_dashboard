@@ -166,10 +166,7 @@ export default () => {
 
   if (!userProfile.email) return <Loader />;
 
-  const investments = userProfile.investments.filter(
-    (inv) => inv.status !== 'invited',
-  );
-
+  const investments = userProfile.investments.filter((inv) => inv.status !== 'invited');
   const groupedByMonth = _.groupBy(investments, (inv) => {
     const timestamp = inv?._id.toString().substring(0, 8);
     const date = new Date(parseInt(timestamp, 16) * 1000);
@@ -192,9 +189,8 @@ export default () => {
   });
   const investmentTotal = _.sumBy(investments, 'value');
   const multipleSum = (
-    investments.reduce((acc, inv) => {
-      return (acc += parseInt(inv.deal.dealParams.dealMultiple));
-    }, 0) / investments.length
+    _.sum(investments.map((inv) => inv?.deal?.dealParams?.dealMultiple || 1).map((n) => _.toNumber(n))) /
+    investments.length
   ).toFixed(2);
 
   const orderDate = new Date();
@@ -213,17 +209,13 @@ export default () => {
       case 'amount':
         setTradeData({ amount: parseInt(value) });
         setTradeData({
-          percent: (
-            (parseInt(value) * 100) /
-            parseInt(tradeData.investment.amount)
-          ).toFixed(2),
+          percent: ((parseInt(value) * 100) / parseInt(tradeData.investment.amount)).toFixed(2),
         });
         break;
       case 'percent':
         setTradeData({ percent: parseInt(value) });
         setTradeData({
-          amount:
-            (parseInt(value) / 100) * parseInt(tradeData.investment.amount),
+          amount: (parseInt(value) / 100) * parseInt(tradeData.investment.amount),
         });
         break;
       default:
@@ -233,24 +225,10 @@ export default () => {
 
   return (
     <div className="blue-container">
-      <Grid
-        container
-        spacing={12}
-        justify="space-between"
-        style={{ marginTop: '40px', marginBottom: '1rem' }}
-      >
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={4}
-          style={{ border: '1em solid transparent' }}
-        >
+      <Grid container spacing={12} justify="space-between" style={{ marginTop: '40px', marginBottom: '1rem' }}>
+        <Grid item xs={12} sm={12} md={4} style={{ border: '1em solid transparent' }}>
           <Paper style={{ minHeight: '100px' }}>
-            <Grid
-              container
-              style={{ padding: '0.1rem', justifyContent: 'space-between' }}
-            >
+            <Grid container style={{ padding: '0.1rem', justifyContent: 'space-between' }}>
               <Grid item sm={8} md={8}>
                 <p
                   style={{
@@ -261,10 +239,7 @@ export default () => {
                 >
                   Portfolio Value
                 </p>
-                <h2
-                  align="left"
-                  style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}
-                >
+                <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
                   $ {nWithCommas(investmentTotal)}.00
                 </h2>
                 <p
@@ -287,18 +262,9 @@ export default () => {
             </Grid>
           </Paper>
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={4}
-          style={{ border: '1em solid transparent' }}
-        >
+        <Grid item xs={12} sm={12} md={4} style={{ border: '1em solid transparent' }}>
           <Paper style={{ minHeight: '100px' }}>
-            <Grid
-              container
-              style={{ padding: '0.1rem', justifyContent: 'space-between' }}
-            >
+            <Grid container style={{ padding: '0.1rem', justifyContent: 'space-between' }}>
               <Grid item sm={8} md={8}>
                 <p
                   style={{
@@ -309,10 +275,7 @@ export default () => {
                 >
                   Total Invested
                 </p>
-                <h2
-                  align="left"
-                  style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}
-                >
+                <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
                   $ {nWithCommas(investmentTotal)}.00
                 </h2>
                 <p
@@ -335,18 +298,9 @@ export default () => {
             </Grid>
           </Paper>
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={4}
-          style={{ border: '1em solid transparent' }}
-        >
+        <Grid item xs={12} sm={12} md={4} style={{ border: '1em solid transparent' }}>
           <Paper style={{ minHeight: '100px' }}>
-            <Grid
-              container
-              style={{ padding: '0.1rem', justifyContent: 'space-between' }}
-            >
+            <Grid container style={{ padding: '0.1rem', justifyContent: 'space-between' }}>
               <Grid item sm={8} md={8}>
                 <p
                   style={{
@@ -357,11 +311,8 @@ export default () => {
                 >
                   Multiple
                 </p>
-                <h2
-                  align="left"
-                  style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}
-                >
-                  {_.isNumber(multipleSum) ? multipleSum : 1}x
+                <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
+                  {multipleSum}x
                 </h2>
                 <p
                   style={{
@@ -386,13 +337,7 @@ export default () => {
       </Grid>
       <>
         <Grid container justify="space-between" style={{ marginTop: '1em' }}>
-          <Grid
-            item
-            xs={12}
-            sm={12}
-            md={6}
-            style={{ border: '1em solid transparent' }}
-          >
+          <Grid item xs={12} sm={12} md={6} style={{ border: '1em solid transparent' }}>
             <Paper style={{ minHeight: '400px' }}>
               <p
                 style={{
@@ -409,13 +354,7 @@ export default () => {
                     chartType="PieChart"
                     width="100%"
                     height="300px"
-                    data={[
-                      ['Investment', 'Amount'],
-                      ...investments.map((inv) => [
-                        inv.deal.company_name,
-                        inv.amount,
-                      ]),
-                    ]}
+                    data={[['Investment', 'Amount'], ...investments.map((inv) => [inv.deal.company_name, inv.amount])]}
                     options={chartOptionsA}
                   />
                 ) : null}
@@ -423,13 +362,7 @@ export default () => {
             </Paper>
           </Grid>
 
-          <Grid
-            item
-            xs={12}
-            sm={12}
-            md={6}
-            style={{ border: '1em solid transparent' }}
-          >
+          <Grid item xs={12} sm={12} md={6} style={{ border: '1em solid transparent' }}>
             <Paper style={{ minHeight: '400px' }}>
               <p
                 style={{
@@ -502,32 +435,26 @@ export default () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {investments
-                  .filter((inv) => inv.status !== 'invited')
-                  .map((investment) =>
-                    showDocs?._id === investment?._id ? (
-                      <>
-                        <TR
-                          investment={investment}
-                          setShowDocs={setShowDocs}
-                          showDocs={showDocs}
-                          setTradeData={setTradeData}
-                        />
-                        <DocsRow
-                          key={`${showDocs._id}-docs`}
-                          docs={showDocs.documents}
-                          investment={investment}
-                        />
-                      </>
-                    ) : (
+                {investments.map((investment) =>
+                  showDocs?._id === investment?._id ? (
+                    <>
                       <TR
                         investment={investment}
                         setShowDocs={setShowDocs}
                         showDocs={showDocs}
                         setTradeData={setTradeData}
                       />
-                    ),
-                  )}
+                      <DocsRow key={`${showDocs._id}-docs`} docs={showDocs.documents} investment={investment} />
+                    </>
+                  ) : (
+                    <TR
+                      investment={investment}
+                      setShowDocs={setShowDocs}
+                      showDocs={showDocs}
+                      setTradeData={setTradeData}
+                    />
+                  ),
+                )}
               </TableBody>
             </Table>
           </Paper>
@@ -621,9 +548,8 @@ export default () => {
                           style={{ textAlign: 'center', marginBottom: '2rem' }}
                           variant="paragraph"
                         >
-                          An Allocations team member will reach out to you
-                          shortly about your order request. Please give up to 30
-                          days for a response. Thank you.
+                          An Allocations team member will reach out to you shortly about your order request. Please give
+                          up to 30 days for a response. Thank you.
                         </Typography>
                       </Grid>
                     </Grid>
@@ -652,11 +578,7 @@ export default () => {
                       <Loader />
                     </Grid>
                     <Grid item xs={12} sm={12} md={12} lg={12}>
-                      <Typography
-                        className={classes.grey}
-                        style={{ textAlign: 'center' }}
-                        variant="h5"
-                      >
+                      <Typography className={classes.grey} style={{ textAlign: 'center' }} variant="h5">
                         Creating your trade request
                       </Typography>
                     </Grid>
@@ -704,14 +626,7 @@ export default () => {
                       You'll {_.startCase(_.toLower(tradeData?.type))}
                     </Typography>
 
-                    <Grid
-                      container
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      className={classes.input}
-                    >
+                    <Grid container xs={12} sm={12} md={12} lg={12} className={classes.input}>
                       <Grid
                         item
                         xs={6}
@@ -727,48 +642,28 @@ export default () => {
                         }}
                       >
                         {tradeData?.type === 'sell' && (
-                          <FormControl
-                            className={classes.margin}
-                            xs={6}
-                            sm={6}
-                            md={6}
-                            lg={6}
-                          >
+                          <FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
                             <Input
                               className="trade-input-amount"
                               id="input-with-icon-adornment"
                               placeholder="Percent"
                               variant="outlined"
                               disableUnderline
-                              startAdornment={
-                                <InputAdornment position="start">
-                                  %
-                                </InputAdornment>
-                              }
+                              startAdornment={<InputAdornment position="start">%</InputAdornment>}
                               onChange={handleInputChange}
                               name="percent"
                               value={tradeData.percent}
                             />
                           </FormControl>
                         )}
-                        <FormControl
-                          className={classes.margin}
-                          xs={6}
-                          sm={6}
-                          md={6}
-                          lg={6}
-                        >
+                        <FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
                           <Input
                             className="trade-input-amount"
                             id="input-with-icon-adornment"
                             placeholder="Dollar"
                             variant="outlined"
                             disableUnderline
-                            startAdornment={
-                              <InputAdornment position="start">
-                                $
-                              </InputAdornment>
-                            }
+                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
                             onChange={handleInputChange}
                             name="amount"
                             value={tradeData?.amount}
@@ -794,9 +689,7 @@ export default () => {
                         <div
                           onClick={() =>
                             setTradeData({
-                              amount: parseInt(
-                                tradeData.investment.amount,
-                              ).toFixed(2),
+                              amount: parseInt(tradeData.investment.amount).toFixed(2),
                               percent: parseInt('100').toFixed(2),
                             })
                           }
@@ -883,22 +776,9 @@ export default () => {
                       You'll {tradeData.type === 'buy' ? 'Pay' : 'Receive'}
                     </Typography>
 
-                    <Grid
-                      container
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      className={classes.input}
-                    >
+                    <Grid container xs={12} sm={12} md={12} lg={12} className={classes.input}>
                       <Grid item xs={6} sm={6} md={6} lg={6}>
-                        <FormControl
-                          className={classes.margin}
-                          xs={6}
-                          sm={6}
-                          md={6}
-                          lg={6}
-                        >
+                        <FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
                           <Input
                             className="trade-input-amount"
                             id="input-with-icon-adornment"
@@ -907,11 +787,7 @@ export default () => {
                             disableUnderline
                             readOnly
                             value={tradeData?.amount || 0}
-                            startAdornment={
-                              <InputAdornment position="start">
-                                $
-                              </InputAdornment>
-                            }
+                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
                           />
                         </FormControl>
                       </Grid>
@@ -1064,15 +940,9 @@ export default () => {
               <Typography variant="h6" className={classes.grey}>
                 $ {tradeData?.amount} for {tradeData?.deal?.company_name}
               </Typography>
-              <Typography
-                variant="subtitle2"
-                className={classes.grey}
-                style={{ marginTop: '1rem' }}
-              >
-                After you confirm your order an Allocations team member will
-                reachout with more information. Orders are open for 30 days
-                before expiring and you can contact us to cancel your open order
-                at anytime.
+              <Typography variant="subtitle2" className={classes.grey} style={{ marginTop: '1rem' }}>
+                After you confirm your order an Allocations team member will reachout with more information. Orders are
+                open for 30 days before expiring and you can contact us to cancel your open order at anytime.
               </Typography>
               {/* FOOTER */}
               <Grid>
@@ -1090,12 +960,7 @@ export default () => {
                     {orderConfirmDate}
                   </Typography>
                 </Grid>
-                <Grid
-                  container
-                  direction="row"
-                  justify="space-between"
-                  alignItems="center"
-                >
+                <Grid container direction="row" justify="space-between" alignItems="center">
                   <Typography variant="subtitle2" className={classes.grey}>
                     Trade Type:
                   </Typography>
@@ -1103,12 +968,7 @@ export default () => {
                     {_.startCase(_.toLower(tradeData?.type))}
                   </Typography>
                 </Grid>
-                <Grid
-                  container
-                  direction="row"
-                  justify="space-between"
-                  alignItems="center"
-                >
+                <Grid container direction="row" justify="space-between" alignItems="center">
                   <Typography variant="subtitle2" className={classes.grey}>
                     Fees:
                   </Typography>
@@ -1200,12 +1060,7 @@ const TR = ({ investment, setShowDocs, showDocs, setTradeData }) => {
         </TableCell>
       </Hidden>
       <TableCell align="center">
-        <Button
-          variant="contained"
-          size="small"
-          color="primary"
-          onClick={showDocsFn}
-        >
+        <Button variant="contained" size="small" color="primary" onClick={showDocsFn}>
           View
         </Button>
       </TableCell>
@@ -1249,11 +1104,7 @@ const TR = ({ investment, setShowDocs, showDocs, setTradeData }) => {
 };
 function InvestmentStatus({ investment }) {
   const { status } = investment;
-  return (
-    <span className={`investment-status investment-status-${status}`}>
-      {status}
-    </span>
-  );
+  return <span className={`investment-status investment-status-${status}`}>{status}</span>;
 }
 
 function DocsRow({ docs, investment }) {
