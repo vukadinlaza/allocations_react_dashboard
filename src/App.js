@@ -1,21 +1,16 @@
-import React from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
-import { ApolloProvider } from '@apollo/react-hooks';
-
-import { client } from './apollo-client';
-
-import AdminRoute from "./auth/admin-route"
-import PrivateRoute from "./components/PrivateRoute";
-
-import Faq from "./components/Faq";
-import Deal from "./components/Deal";
-import Deals from "./components/Deals";
-import DealNew from "./components/DealNew";
-import DealEdit from "./components/DealEdit";
-import InvestorEdit from "./components/InvestorEdit";
-import InvestorNew from "./components/InvestorNew";
-import Indentity from './components/Identity'
-import Funds from "./components/Funds";
+import React from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import AdminRoute from './auth/admin-route';
+import PrivateRoute from './components/PrivateRoute';
+import Faq from './components/Faq';
+import Deal from './components/Deal';
+import Deals from './components/Deals';
+import DealNew from './components/DealNew';
+import DealEdit from './components/DealEdit';
+import InvestorEdit from './components/InvestorEdit';
+import InvestorNew from './components/InvestorNew';
+import Indentity from './components/Identity';
+import Funds from './components/Funds';
 import Sidebar from './components/Sidebar';
 import UserHome from './components/UserHome';
 import Investors from './components/Investors';
@@ -26,34 +21,34 @@ import InvestmentEdit from './components/InvestmentEdit';
 import UserInvestments from './components/UserInvestments';
 import FreeSPVOnboarding from './components/FreeSPVOnboarding';
 import Profile from './components/Profile';
-import OrganizationNew from './components/OrganizationNew'
-import OrganizationMembers from './components/OrganizationMembers'
-import ThankYou from './components/ThankYou/index'
-import DealDocuments from './components/DealDocuments'
+import OrganizationNew from './components/OrganizationNew';
+import OrganizationMembers from './components/OrganizationMembers';
+import ThankYou from './components/ThankYou/index';
+import DealDocuments from './components/DealDocuments';
 
 // superadmin
-import SuperAdminManager from './components/superadmin/Manager'
-import SuperAdminOverview from './components/superadmin/Overview'
+import SuperAdminManager from './components/superadmin/Manager';
+import SuperAdminOverview from './components/superadmin/Overview';
 
 // admin
-import AdminHome from './components/admin/AdminHome'
-import Compliance from './components/admin/Compliance'
-import MasterFiling from './components/admin/MasterFiling'
+import AdminHome from './components/admin/AdminHome';
+import Compliance from './components/admin/Compliance';
+import MasterFiling from './components/admin/MasterFiling';
 
 // allocationsX
 import AllocationsX from './allocationsX/Home';
 import DealExchange from './allocationsX/DealExchange';
 import AdminExchangeOverview from './allocationsX/AdminOverview';
-import AuthorizedApolloProvider from './apollo-client-comp'
-import "./App.scss";
-import "./utils/initFontAwesome"
+import AuthorizedApolloProvider from './apollo-client-comp';
+import './App.scss';
+import './utils/initFontAwesome';
 
-/***
+/** *
  *
  * App.js sets up the routing for all the components, wrapping
  * with auth where appropriate {AdminRoute, PrivateRoute}
  *
- **/
+ * */
 
 const App = () => {
   return (
@@ -70,47 +65,117 @@ const App = () => {
           <PrivateRoute path="/identity" component={Indentity} />
           <PrivateRoute path="/dealdocs" component={DealDocuments} />
 
-          {/** Onboarding **/}
+          {/** Onboarding * */}
           <Route path="/getting-started" component={Faq} exact />
-          <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact />
+          <PrivateRoute
+            path="/spv-onboarding"
+            component={FreeSPVOnboarding}
+            exact
+          />
 
-          {/** Deals **/}
-          <Redirect from={`/public/:organization/deals/:deal_slug`} to="/deals/:deal_slug" />
+          {/** Deals * */}
+          <Redirect
+            from="/public/:organization/deals/:deal_slug"
+            to="/deals/:deal_slug"
+          />
           <PrivateRoute path="/deals/:deal_slug" component={Deal} exact />
-          <PrivateRoute path="/deals/:organization/:deal_slug" component={Deal} exact />
+          <PrivateRoute
+            path="/deals/:organization/:deal_slug"
+            component={Deal}
+            exact
+          />
 
-          {/** AllocationsX **/}
+          {/** AllocationsX * */}
           <PrivateRoute path="/exchange" component={AllocationsX} exact />
           <PrivateRoute path="/exchange/:deal" component={DealExchange} exact />
-          <AdminRoute path="/admin/:organization/exchange" component={AdminExchangeOverview} exact />
+          <AdminRoute
+            path="/admin/:organization/exchange"
+            component={AdminExchangeOverview}
+            exact
+          />
 
           <AdminRoute path="/investor/:id/home" component={UserHome} />
-          <AdminRoute path="/investor/:id/investments" component={UserInvestments} />
+          <AdminRoute
+            path="/investor/:id/investments"
+            component={UserInvestments}
+          />
           <AdminRoute path="/investors/new" component={InvestorNew} exact />
           <AdminRoute path="/investor/:id/edit" component={InvestorEdit} />
-          <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
-          <AdminRoute path="/admin/:organization/investments/:id/edit" component={InvestmentEdit} exact />
-          <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
+          <AdminRoute
+            path="/admin/investment/new"
+            component={InvestmentNew}
+            exact
+          />
+          <AdminRoute
+            path="/admin/:organization/investments/:id/edit"
+            component={InvestmentEdit}
+            exact
+          />
+          <AdminRoute
+            path="/admin/organizations/new"
+            component={OrganizationNew}
+            exact
+          />
 
-          {/** SuperAdmin **/}
+          {/** SuperAdmin * */}
           <AdminRoute path="/superadmin" component={SuperAdminOverview} exact />
-          <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
+          <AdminRoute
+            path="/admin/:organization/manager"
+            component={SuperAdminManager}
+            exact
+          />
 
-          {/** Whitelabel Routes **/}
+          {/** Whitelabel Routes * */}
           <PrivateRoute path="/admin/funds" component={Funds} exact />
-          <PrivateRoute path="/admin/:organization" component={AdminHome} exact />
-          <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
+          <PrivateRoute
+            path="/admin/:organization"
+            component={AdminHome}
+            exact
+          />
+          <AdminRoute
+            path="/admin/:organization/members"
+            component={OrganizationMembers}
+            exact
+          />
 
-          <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
-          <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />
-          <PrivateRoute path="/admin/:organization/deals/:id/edit" component={DealEdit} exact />
+          <PrivateRoute
+            path="/admin/:organization/deals"
+            component={Deals}
+            exact
+          />
+          <PrivateRoute
+            path="/admin/:organization/deal/new"
+            component={DealNew}
+            exact
+          />
+          <PrivateRoute
+            path="/admin/:organization/deals/:id/edit"
+            component={DealEdit}
+            exact
+          />
 
-          <PrivateRoute path="/admin/:organization/investments" component={Investments} exact />
-          <PrivateRoute path="/admin/:organization/compliance" component={Compliance} exact />
-          <PrivateRoute path="/admin/:organization/master-filing" component={MasterFiling} exact />
-          <AdminRoute path="/admin/:organization/investors" component={Investors} exact />
+          <PrivateRoute
+            path="/admin/:organization/investments"
+            component={Investments}
+            exact
+          />
+          <PrivateRoute
+            path="/admin/:organization/compliance"
+            component={Compliance}
+            exact
+          />
+          <PrivateRoute
+            path="/admin/:organization/master-filing"
+            component={MasterFiling}
+            exact
+          />
+          <AdminRoute
+            path="/admin/:organization/investors"
+            component={Investors}
+            exact
+          />
 
-          {/** catchall **/}
+          {/** catchall * */}
           <PrivateRoute path="/" component={UserHome} />
         </Switch>
       </Sidebar>
