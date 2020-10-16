@@ -82,13 +82,15 @@ export default ({ data, children, orgData }) => {
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
                   $
                   {nWithCommas(
-                    _.sumBy(
-                      data.map((inv) => ({
-                        ...inv,
-                        debit: _.toNumber(inv.Debit.replaceAll(',', '')),
-                      })),
-                      'debit',
-                    ) * (multipleSum === 0 ? 1 : multipleSum),
+                    (
+                      _.sumBy(
+                        data.map((inv) => ({
+                          ...inv,
+                          debit: _.toNumber(inv.Debit.replaceAll(',', '')),
+                        })),
+                        'debit',
+                      ) * (multipleSum === 0 ? 1 : multipleSum)
+                    ).toFixed(2),
                   )}
                 </h2>
 
@@ -172,7 +174,7 @@ export default ({ data, children, orgData }) => {
                   Multiple
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  {multipleSum || 1}
+                  {multipleSum.toFixed(2) || 1}
                 </h2>
                 <p
                   style={{
