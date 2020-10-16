@@ -17,10 +17,15 @@ export default ({ data, children, orgData }) => {
       },
     },
   ];
-  const multipleSum = (
-    _.sum(orgData?.deals.map((deal) => deal?.dealParams?.dealMultiple || 1).map((n) => _.toNumber(n))) /
-    orgData?.deals.length
-  ).toFixed(2);
+  const multipleSum =
+    _.sum(
+      orgData?.deals
+        .map((deal) => {
+          return deal?.dealParams?.dealMultiple || 1;
+        })
+        .map((n) => _.toNumber(n)),
+    ) / (orgData?.deals.length === 0 ? 1 : orgData?.deals.length);
+
   console.log(multipleSum);
   const chartOptionsA = {
     title: '',
@@ -83,7 +88,7 @@ export default ({ data, children, orgData }) => {
                         debit: _.toNumber(inv.Debit.replaceAll(',', '')),
                       })),
                       'debit',
-                    ),
+                    ) * (multipleSum === 0 ? 1 : multipleSum),
                   )}
                 </h2>
 
