@@ -188,7 +188,8 @@ export default () => {
     }, 0);
     return [data[0], prevMonthsTotal + data[1]];
   });
-  const investmentTotal = _.sumBy(investments, 'value');
+  const investmentTotal = _.sumBy(investments, 'amount');
+  const investmentsValue = _.sumBy(investments, 'value');
   const multipleSum = (
     _.sum(investments.map((inv) => inv?.deal?.dealParams?.dealMultiple || 1).map((n) => _.toNumber(n))) /
     investments.length
@@ -241,7 +242,7 @@ export default () => {
                   Portfolio Value
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  $ {nWithCommas(investmentTotal)}.00
+                  $ {nWithCommas(investmentsValue)}
                 </h2>
                 <p
                   style={{
@@ -277,7 +278,7 @@ export default () => {
                   Total Invested
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  $ {nWithCommas(investmentTotal)}.00
+                  $ {nWithCommas(investmentTotal)}
                 </h2>
                 <p
                   style={{
@@ -291,7 +292,7 @@ export default () => {
               </Grid>
               <Grid item sm={4} md={4}>
                 <img
-                  src="https://allocations-public.s3.us-east-2.amazonaws.com/icon-bar-chart.svg"
+                  src="https://allocations-public.s3.us-east-2.amazonaws.com/icon-dollar-sign.svg"
                   alt="oops"
                   style={{ width: '50px', height: '50px', marginTop: '30%' }}
                 />
