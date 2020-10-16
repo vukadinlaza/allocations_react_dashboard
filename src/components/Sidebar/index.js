@@ -23,6 +23,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import HomeIcon from "@material-ui/icons/Home";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import PersonIcon from "@material-ui/icons/Person";
+import StorefrontIcon from '@material-ui/icons/Storefront';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import NavBar from "../NavBar";
 import Loader from '../utils/Loader'
@@ -151,6 +152,11 @@ export default function Sidebar(props) {
     //   title: "Help",
     //   icon: <HelpIcon/>,
     // },
+    {
+      to: "/marketplace",
+      title: "Marketplace",
+      icon: <StorefrontIcon />,
+    },
   ];
 
   const drawer = (
