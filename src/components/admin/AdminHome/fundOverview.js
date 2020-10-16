@@ -174,7 +174,7 @@ export default ({ data, children, orgData }) => {
                   Multiple
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  {multipleSum.toFixed(2) || 1}
+                  {multipleSum.toFixed(2) || 1}x
                 </h2>
                 <p
                   style={{

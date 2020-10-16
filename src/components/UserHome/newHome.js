@@ -107,6 +107,7 @@ const GET_INVESTOR = gql`
           appLink
           dealParams {
             dealMultiple
+            wireDeadline
           }
           organization {
             _id
@@ -1015,9 +1016,9 @@ export default () => {
 
 const TR = ({ investment, setShowDocs, showDocs, setTradeData }) => {
   const history = useHistory();
-  const timestamp = investment._id.toString().substring(0, 8);
-  const date = new Date(parseInt(timestamp, 16) * 1000);
-  const addedDate = moment(date).format('Do MMM YYYY');
+  // const timestamp = investment._id.toString().substring(0, 8);
+  // const date = new Date(parseInt(timestamp, 16) * 1000);
+  const addedDate = moment(investment?.deal?.dealParams?.wireDeadline).format('Do MMM YYYY');
   const showDocsFn = () => setShowDocs(showDocs ? false : investment);
   return (
     <TableRow key={investment._id} className="investment-row">
