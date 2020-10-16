@@ -90,7 +90,7 @@ export default ({ data, children, orgData }) => {
                         })),
                         'debit',
                       ) * (multipleSum === 0 ? 1 : multipleSum)
-                    ).toFixed(2),
+                    ).toFixed(0),
                   )}
                 </h2>
 
@@ -152,7 +152,7 @@ export default ({ data, children, orgData }) => {
               </Grid>
               <Grid item sm={4} md={4}>
                 <img
-                  src="https://allocations-public.s3.us-east-2.amazonaws.com/icon-bar-chart.svg"
+                  src="https://allocations-public.s3.us-east-2.amazonaws.com/icon-dollar-sign.svg"
                   alt="oops"
                   style={{ width: '50px', height: '50px', marginTop: '30%' }}
                 />
