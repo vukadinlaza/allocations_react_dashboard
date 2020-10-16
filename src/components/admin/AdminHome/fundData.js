@@ -5,8 +5,7 @@ const data = [
       {
         date: '17 Aug 2020',
         Source: 'Spend Money',
-        Description:
-          'PLACEPULL CORP - PLACEPULL CORP O0R2Q Domestic Manual Wire',
+        Description: 'PLACEPULL CORP - PLACEPULL CORP O0R2Q Domestic Manual Wire',
         Debit: '25,000.00',
         'Running Balance': '25,000.00',
         Gross: '25,000.00',
@@ -33,8 +32,7 @@ const data = [
       {
         date: '02 Sep 2020',
         Source: 'Spend Money',
-        Description:
-          'MESH DIGITAL SERVICES INC. - MESH DIGITAL SERVICES INC. O2C1A Domestic Manual Wire',
+        Description: 'MESH DIGITAL SERVICES INC. - MESH DIGITAL SERVICES INC. O2C1A Domestic Manual Wire',
         Debit: '50,000.00',
         'Running Balance': '135,000.00',
         Gross: '50,000.00',
@@ -43,8 +41,7 @@ const data = [
       {
         date: '02 Sep 2020',
         Source: 'Spend Money',
-        Description:
-          'YOTTA TECHNOLOGIES INC - YOTTA TECHNOLOGIES INC O0H04 Domestic Manual Wire',
+        Description: 'YOTTA TECHNOLOGIES INC - YOTTA TECHNOLOGIES INC O0H04 Domestic Manual Wire',
         Debit: '25,000.00',
         'Running Balance': '160,000.00',
         Gross: '25,000.00',
@@ -62,8 +59,7 @@ const data = [
       {
         date: '14 Sep 2020',
         Source: 'Spend Money',
-        Description:
-          'AVRO LIFE SCIENCE INC - AVRO LIFE SCIENCE INC W2D1U Domestic Online Wire',
+        Description: 'AVRO LIFE SCIENCE INC - AVRO LIFE SCIENCE INC W2D1U Domestic Online Wire',
         Debit: '50,000.00',
         'Running Balance': '260,000.00',
         Gross: '50,000.00',
@@ -72,8 +68,7 @@ const data = [
       {
         date: '18 Sep 2020',
         Source: 'Spend Money',
-        Description:
-          'BRANCH TECHNOLOGIES INC. - BRANCH TECHNOLOGIES INC. U1Z1T Domestic Online Wire',
+        Description: 'BRANCH TECHNOLOGIES INC. - BRANCH TECHNOLOGIES INC. U1Z1T Domestic Online Wire',
         Debit: '100,000.00',
         'Running Balance': '360,000.00',
         Gross: '100,000.00',
@@ -106,18 +101,6 @@ const data = [
         Credit: '0.00',
         'Running Balance': '495,000.00',
         Gross: '10,000.00',
-        Tax: 0,
-        'Private Funds': 'Browder Capital LP I - Browder Capital',
-      },
-      {
-        date: '15 Oct 2020',
-        Source: 'Receive Money',
-        Description: 'Desai 2010 Children -  x',
-        Reference: '',
-        Debit: '0.00',
-        Credit: '50,000.00',
-        'Running Balance': '445,000.00',
-        Gross: '(50,000.00)',
         Tax: 0,
         'Private Funds': 'Browder Capital LP I - Browder Capital',
       },
