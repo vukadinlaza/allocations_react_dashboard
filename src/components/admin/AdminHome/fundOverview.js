@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import moment from 'moment';
 import { nWithCommas } from '../../../utils/numbers';
 
-export default ({ data, children }) => {
+export default ({ data, children, orgData }) => {
   const history = useHistory();
 
   const chartEvents = [
@@ -17,7 +17,11 @@ export default ({ data, children }) => {
       },
     },
   ];
-
+  const multipleSum = (
+    _.sum(orgData?.deals.map((deal) => deal?.dealParams?.dealMultiple || 1).map((n) => _.toNumber(n))) /
+    orgData?.deals.length
+  ).toFixed(2);
+  console.log(multipleSum);
   const chartOptionsA = {
     title: '',
     pieHole: 0.5,
@@ -163,7 +167,7 @@ export default ({ data, children }) => {
                   Multiple
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  1x
+                  {multipleSum || 1}
                 </h2>
                 <p
                   style={{
@@ -172,7 +176,7 @@ export default ({ data, children }) => {
                     paddingTop: '10px',
                   }}
                 >
-                  Last Update: 15th O 2020
+                  Last Update: 15th Oct 2020
                 </p>
               </Grid>
               <Grid item sm={4} md={4} justify="center" align="center">
