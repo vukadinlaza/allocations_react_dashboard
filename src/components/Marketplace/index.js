@@ -364,9 +364,11 @@ export default function Marketplace() {
                       >
                         LIKE
                       </Button>
-                      <Button variant="contained" color="primary" size="small" onClick="">
-                        PLEDGE
-                      </Button>
+                      <a href={to}>
+                        <Button variant="contained" color="primary" size="small" onClick="">
+                          PLEDGE
+                        </Button>
+                      </a>
                     </Grid>
                   </Grid>
 
