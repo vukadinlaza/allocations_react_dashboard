@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { gql } from 'apollo-boost';
+import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMutation } from '@apollo/react-hooks';
 import { Hidden, Paper, ListItem, List, Grid, Button, Typography } from '@material-ui/core';
@@ -87,7 +88,6 @@ export default function Marketplace() {
   }, [setMarketplaceLike, marketplaceLike.showLoading]);
 
   const { userProfile } = useAuth(GET_INVESTOR);
-
   const deals = [
     {
       to: 'https://docs.google.com/spreadsheets/d/1EJJgDbSm4pOPZ5zFkzek2atiYWAoYZTfZExakwppGxw/edit#gid=0',
@@ -358,6 +358,7 @@ export default function Marketplace() {
                                 name,
                                 round,
                               },
+                              onCompleted: toast.success('Success!'),
                             },
                           });
                         }}
