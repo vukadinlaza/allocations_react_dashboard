@@ -291,9 +291,6 @@ const whitelistEmails = [
     email: 'giacomo.mariotti@outlook.com',
   },
   {
-    email: 'gina@theventurecollective.com',
-  },
-  {
     email: 'startale.bomber@gmail.com',
   },
   {
@@ -546,9 +543,6 @@ const whitelistEmails = [
     email: 'nick@lumenadvisory.com',
   },
   {
-    email: 'nick@theventurecollective.com',
-  },
-  {
     email: 'nick@halfdomeventures.com',
   },
   {
@@ -556,9 +550,6 @@ const whitelistEmails = [
   },
   {
     email: 'Noufalhaqbani@gmail.com',
-  },
-  {
-    email: 'ollie@theventurecollective.com',
   },
   {
     email: 'peter@elysium.vc',
