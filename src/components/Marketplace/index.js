@@ -180,7 +180,7 @@ const deals = [
       luminosity: 'light',
       hue: 'blue',
     }),
-    to: 'https://docs.google.com/spreadsheets/d/1EJJgDbSm4pOPZ5zFkzek2atiYWAoYZTfZExakwppGxw/edit#gid=0',
+    to: 'https://docs.google.com/spreadsheets/d/1D-6DPq6OI4R7_qLUrLdIdE1N1M8Z0-NBR27HlqOd3Y4/edit#gid=0',
     name: 'Sana Health',
     tagline: 'Neuromodulation technology to end chronic pain',
     logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/sana-health.png',
