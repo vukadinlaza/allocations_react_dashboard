@@ -21,10 +21,12 @@ import InvestmentEdit from './components/InvestmentEdit';
 import UserInvestments from './components/UserInvestments';
 import FreeSPVOnboarding from './components/FreeSPVOnboarding';
 import Profile from './components/Profile';
-import OrganizationNew from './components/OrganizationNew';
-import OrganizationMembers from './components/OrganizationMembers';
-import ThankYou from './components/ThankYou/index';
-import DealDocuments from './components/DealDocuments';
+import Marketplace from './components/Marketplace';
+import OrganizationNew from './components/OrganizationNew'
+import OrganizationMembers from './components/OrganizationMembers'
+import ThankYou from './components/ThankYou/index'
+import DealDocuments from './components/DealDocuments'
+
 
 // superadmin
 import SuperAdminManager from './components/superadmin/Manager';
@@ -60,6 +62,7 @@ const App = () => {
 
           <PrivateRoute path="/" exact component={UserHome} />
           <PrivateRoute path="/profile" component={Profile} />
+          <PrivateRoute path="/marketplace" component={Marketplace} />
           <PrivateRoute path="/investments" component={UserInvestments} />
           <PrivateRoute path="/invited-deals" component={InvitedDeals} />
           <PrivateRoute path="/identity" component={Indentity} />
