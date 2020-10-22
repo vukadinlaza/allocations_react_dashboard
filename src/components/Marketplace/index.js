@@ -95,23 +95,6 @@ const deals = [
       luminosity: 'light',
       hue: 'blue',
     }),
-    to: 'https://docs.google.com/spreadsheets/d/1xKMQzP3mRvNLc6HsBiSFCDbxjoRASLVdgd7I4E6c2tQ/edit#gid=0',
-    name: 'Brex',
-    tagline: 'Corporate credit cards',
-    logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/brex.png',
-    est_personal_inv: '$5,000',
-    highlight_2: 'Financing alternatives for startups',
-    highlight_3: 'Offers corporate credit cards and cash management accounts to tech companies',
-    pledged: '$250,000',
-    deal_lead: 'Kingsley Advani',
-    closeDate: '10/31/2020',
-    round: 'Secondary',
-  },
-  {
-    color: randomColor({
-      luminosity: 'light',
-      hue: 'blue',
-    }),
     to: 'https://docs.google.com/spreadsheets/d/1A8kmlgjPoxtrlgdwUa6e5nY9bBisCjJBBi--Nc7JVa8/edit#gid=0',
     name: 'SpaceX',
     tagline: 'Advanced rockets and spacecrafts',
@@ -146,23 +129,6 @@ const deals = [
       luminosity: 'light',
       hue: 'blue',
     }),
-    to: 'https://docs.google.com/spreadsheets/u/2/d/1oI0TduSQcs2_Ya2ldbZ6rMZ2RbLE8h7StadJK-_E4c0/edit',
-    name: 'Mati',
-    tagline: 'Data infrastructure for the trust economy',
-    logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/mati-id.png',
-    est_personal_inv: 'TBD',
-    highlight_2: '5.8x YoY revenue growth, $1.85M ARR',
-    highlight_3: 'Raising an $8M Series A round at a $60M valuation',
-    pledged: '$100,000',
-    deal_lead: 'Tribe Capital',
-    closeDate: '10/31/2020',
-    round: 'Series A',
-  },
-  {
-    color: randomColor({
-      luminosity: 'light',
-      hue: 'blue',
-    }),
     to: 'https://docs.google.com/spreadsheets/d/1EJCO1SURyv-rbnhoo9EbkR2mFydKfPBBgI2XYIVURDM/edit#gid=0',
     name: 'Luminous',
     tagline: 'Photonics chip company backed by Bill Gates',
@@ -170,7 +136,7 @@ const deals = [
     est_personal_inv: '$150,000',
     highlight_2: 'Claims it has solved the current bottleneck in moving data around',
     highlight_3: 'Single chip may replace 3000 TPU boards',
-    pledged: '$69,000',
+    pledged: '$79,000',
     deal_lead: 'Joshua Browder',
     closeDate: '10/31/2020',
     round: 'Secondary',
@@ -181,7 +147,7 @@ const deals = [
       hue: 'blue',
     }),
     to: 'https://docs.google.com/spreadsheets/d/1ebS6A0bD8hb9RWpw94VLz_AVIQQByVTvUIEy2lAZKhs/edit#gid=0',
-    name: 'On Deck',
+    name: 'OnDeck Runway Fund',
     tagline: 'The first place the best talent looks when starting or joining a startup',
     logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/runway_fund.png',
     est_personal_inv: '$15,000',
@@ -191,6 +157,23 @@ const deals = [
     deal_lead: 'Don Ho',
     closeDate: '10/31/2020',
     round: 'N/A',
+  },
+  {
+    color: randomColor({
+      luminosity: 'light',
+      hue: 'blue',
+    }),
+    to: 'https://docs.google.com/spreadsheets/d/1xKMQzP3mRvNLc6HsBiSFCDbxjoRASLVdgd7I4E6c2tQ/edit#gid=0',
+    name: 'Brex',
+    tagline: 'Corporate credit cards',
+    logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/brex.png',
+    est_personal_inv: '$25,000',
+    highlight_2: 'Financing alternatives for startups',
+    highlight_3: 'Offers corporate credit cards and cash management accounts to tech companies',
+    pledged: '$25,000',
+    deal_lead: 'Kingsley Advani',
+    closeDate: '10/31/2020',
+    round: 'Secondary',
   },
   {
     color: randomColor({
@@ -225,6 +208,23 @@ const deals = [
     deal_lead: 'Kingsley Advani',
     closeDate: '10/31/2020',
     round: 'N/A',
+  },
+  {
+    color: randomColor({
+      luminosity: 'light',
+      hue: 'blue',
+    }),
+    to: 'https://docs.google.com/spreadsheets/u/2/d/1oI0TduSQcs2_Ya2ldbZ6rMZ2RbLE8h7StadJK-_E4c0/edit',
+    name: 'Mati',
+    tagline: 'Data infrastructure for the trust economy',
+    logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/mati-id.png',
+    est_personal_inv: 'TBD',
+    highlight_2: '5.8x YoY revenue growth, $1.85M ARR',
+    highlight_3: 'Raising an $8M Series A round at a $60M valuation',
+    pledged: '$5,000',
+    deal_lead: 'Tribe Capital',
+    closeDate: '10/31/2020',
+    round: 'Series A',
   },
   {
     color: randomColor({
@@ -400,7 +400,7 @@ export default function Marketplace() {
         </Grid>
 
         {/* ITEM 3 Personal Investment Amount */}
-        <Grid xs={12} sm={12} md={2} lg={2} style={{ justifyContent: 'center', alignContent: 'center' }}>
+        <Grid xs={12} sm={1} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
           <Typography
             style={{
               fontSize: '0.75rem',
@@ -447,7 +447,7 @@ export default function Marketplace() {
           </Typography>
         </Grid>
         {/* ITEM 6 */}
-        <Grid xs={12} sm={12} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
+        <Grid xs={12} sm={2} md={2} lg={2} style={{ justifyContent: 'center', alignContent: 'center' }}>
           <Typography
             style={{
               fontSize: '0.75rem',
@@ -566,10 +566,10 @@ export default function Marketplace() {
                 </HtmlTooltip>
 
                 {/* ITEM 3 Personal Investment Amount */}
-                <Grid xs={12} sm={12} md={2} lg={2} style={{ justifyContent: 'center', alignContent: 'center' }}>
+                <Grid xs={12} sm={1} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
                   <Typography
                     style={{
-                      fontSize: '1rem',
+                      fontSize: '0.9rem',
                       color: 'rgba(0,0,0,0.8)',
                       paddingTop: '1rem',
                     }}
@@ -582,8 +582,8 @@ export default function Marketplace() {
                 <Grid xs={12} sm={12} md={2} lg={2} style={{ justifyContent: 'center', alignContent: 'center' }}>
                   <Typography
                     style={{
-                      fontSize: '1rem',
-                      color: 'rgba(0,0,0,0.8)',
+                      fontSize: '0.9rem',
+                      color: 'rgba(255,255,255,0.9)',
                       paddingTop: '1rem',
                     }}
                   >
@@ -604,8 +604,8 @@ export default function Marketplace() {
                 <Grid xs={12} sm={12} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
                   <Typography
                     style={{
-                      fontSize: '1rem',
-                      color: 'rgba(0,0,0,0.8)',
+                      fontSize: '0.9rem',
+                      color: 'rgba(255,255,255,0.9)',
                       paddingTop: '1rem',
                     }}
                   >
@@ -626,7 +626,7 @@ export default function Marketplace() {
                 <Grid xs={12} sm={12} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
                   <Typography
                     style={{
-                      fontSize: '1rem',
+                      fontSize: '0.9rem',
                       color: 'rgba(0,0,0,0.8)',
                       paddingTop: '1rem',
                     }}
@@ -637,10 +637,10 @@ export default function Marketplace() {
 
                 {/* ITEM 7 */}
                 <Grid
-                  xs={1}
-                  sm={1}
-                  md={1}
-                  lg={1}
+                  xs={12}
+                  sm={2}
+                  md={2}
+                  lg={2}
                   style={{ justifyContent: 'center', alignContent: 'around', padding: '0.5rem' }}
                 >
                   <Button
