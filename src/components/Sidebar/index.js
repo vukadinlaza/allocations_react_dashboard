@@ -863,11 +863,11 @@ export default function Sidebar(props) {
     //   title: "Funds",
     //   icon: <FundsIcon/>,
     // },
-    // {
-    //   to: "/help",
-    //   title: "Help",
-    //   icon: <HelpIcon/>,
-    // },
+    {
+      to: '/invest',
+      title: 'Invest',
+      icon: <HomeIcon />,
+    },
     {
       to: '/marketplace',
       title: 'Marketplace',
