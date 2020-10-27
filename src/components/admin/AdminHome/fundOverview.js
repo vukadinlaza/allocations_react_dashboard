@@ -237,7 +237,7 @@ export default ({ data, children, orgData }) => {
                 paddingTop: '10px',
               }}
             >
-              Multiple
+              Value
             </p>
 
             <Grid item sm={12} md={12}>
