@@ -190,10 +190,16 @@ export default () => {
   });
   const investmentTotal = _.sumBy(investments, 'amount');
   const investmentsValue = _.sumBy(investments, 'value');
-  const multipleSum = (
-    _.sum(investments.map((inv) => inv?.deal?.dealParams?.dealMultiple || 1).map((n) => _.toNumber(n))) /
-    investments.length
-  ).toFixed(2);
+  const multipleSum = (investmentsValue / investmentTotal).toFixed(2);
+
+  // const weightedInvestments = investments.map((inv) => {
+  //   const dm = inv.value - inv.amount;
+  //   const x = dm / inv.amount;
+  //   const weight = inv.amount / investmentTotal;
+  //   return weight * x;
+  // });
+
+  // console.log('TOTAL', _.sum(weightedInvestments) + 1);
 
   const orderDate = new Date();
   const orderConfirmDate = moment(orderDate).format('DD MMM YY');
