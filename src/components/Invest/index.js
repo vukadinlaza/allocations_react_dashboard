@@ -5,6 +5,7 @@ import Divider from '@material-ui/core/Divider';
 import { useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { useAuth } from '../../auth/useAuth';
+import postToZap from '../../utils/zapierPost';
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -98,7 +99,7 @@ export default ({}) => {
               <Typography variant="h6">Deck</Typography>
               <Divider variant="middle" />
 
-              <Typography variant="subtitle">Allocations deck Last updated: October 2020</Typography>
+              <Typography variant="subtitle1">Allocations deck Last updated: October 2020</Typography>
               <Button color="secondary" variant="contained" style={{ marginTop: '2rem', width: '100%' }}>
                 View
               </Button>
@@ -114,7 +115,7 @@ export default ({}) => {
               <Typography variant="h6">Deck</Typography>
               <Divider variant="middle" />
 
-              <Typography variant="subtitle">Allocations deck Last updated: October 2020</Typography>
+              <Typography variant="subtitle1">Allocations deck Last updated: October 2020</Typography>
               <Button color="secondary" variant="contained" style={{ marginTop: '2rem', width: '100%' }}>
                 View
               </Button>
@@ -130,7 +131,7 @@ export default ({}) => {
               <Typography variant="h6">Deck</Typography>
               <Divider variant="middle" />
 
-              <Typography variant="subtitle">Allocations deck Last updated: October 2020</Typography>
+              <Typography variant="subtitle1">Allocations deck Last updated: October 2020</Typography>
               <Button color="secondary" variant="contained" style={{ marginTop: '2rem', width: '100%' }}>
                 View
               </Button>
@@ -146,7 +147,7 @@ export default ({}) => {
               <Typography variant="h6">Deck</Typography>
               <Divider variant="middle" />
 
-              <Typography variant="subtitle">Allocations deck Last updated: October 2020</Typography>
+              <Typography variant="subtitle1">Allocations deck Last updated: October 2020</Typography>
               <Button color="secondary" variant="contained" style={{ marginTop: '2rem', width: '100%' }}>
                 View
               </Button>
@@ -159,11 +160,16 @@ export default ({}) => {
                 alt="oops"
                 style={{ width: '50px', height: '50px', marginTop: '10%' }}
               />
-              <Typography variant="h6">Deck</Typography>
+              <Typography variant="h6">Fund Manager Demo</Typography>
               <Divider variant="middle" />
 
-              <Typography variant="subtitle">Allocations deck Last updated: October 2020</Typography>
-              <Button color="secondary" variant="contained" style={{ marginTop: '2rem', width: '100%' }}>
+              <Typography variant="subtitle1">Allocations deck Last updated: October 2020</Typography>
+              <Button
+                color="secondary"
+                variant="contained"
+                style={{ marginTop: '2rem', width: '100%' }}
+                onClick={() => postToZap({ name: userProfile.first_name, action: 'Viewed Fund manager Demo' })}
+              >
                 View
               </Button>
             </Paper>
