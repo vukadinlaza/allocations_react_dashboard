@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
-import { useAuth } from '../../auth/useAuth';
 import { get, toLower } from 'lodash';
 import { gql } from 'apollo-boost';
 import { Helmet } from 'react-helmet';
-
-import './style.scss';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
-import { CircularProgress } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -21,12 +17,12 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import HomeIcon from '@material-ui/icons/Home';
-import BarChartIcon from '@material-ui/icons/BarChart';
 import PersonIcon from '@material-ui/icons/Person';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import { useAuth } from '../../auth/useAuth';
 import NavBar from '../NavBar';
-import Loader from '../utils/Loader';
+import './style.scss';
 
 const whitelistEmails = [
   {
@@ -815,6 +811,7 @@ const GET_INVESTOR = gql`
       _id
       name
       admin
+      showInvestAndMrkPlc
       organizations_admin {
         _id
         slug
@@ -827,12 +824,18 @@ const GET_INVESTOR = gql`
 
 export default function Sidebar(props) {
   const { userProfile } = useAuth(GET_INVESTOR);
+  const [investTab, setInvestTab] = useState(false);
   const location = useLocation();
-
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  useEffect(() => {
+    if (userProfile.showInvestAndMrkPlc || location.pathname === '/invest') {
+      setInvestTab(true);
+    }
+  }, [userProfile.showInvestAndMrkPlc, location.pathname]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -848,37 +851,26 @@ export default function Sidebar(props) {
       title: 'Home',
       icon: <HomeIcon />,
     },
-    // {
-    //   to: "/investments",
-    //   title: "Investments",
-    //   icon: <BarChartIcon />,
-    // },
     {
       to: '/profile',
       title: 'Profile',
       icon: <PersonIcon />,
     },
-    // {
-    //   to: "/funds",
-    //   title: "Funds",
-    //   icon: <FundsIcon/>,
-    // },
-    {
-      to: '/invest',
-      title: 'Invest',
-      icon: <HomeIcon />,
-    },
-    {
+  ];
+
+  if (whitelistEmails.find((p) => toLower(p.email) === toLower(userProfile.email)) || investTab)
+    menus.push({
       to: '/marketplace',
       title: 'Marketplace',
       icon: <StorefrontIcon />,
-    },
-  ].filter((menu) => {
-    return (
-      menu.title !== 'Marketplace' ||
-      (menu.title === 'Marketplace' && whitelistEmails.find((p) => toLower(p.email) === toLower(userProfile.email)))
-    );
-  });
+    });
+
+  if (investTab)
+    menus.push({
+      to: '/invest',
+      title: 'Invest',
+      icon: <HomeIcon />,
+    });
 
   const drawer = (
     <div>
@@ -1003,6 +995,7 @@ function Brand({ organizations_admin }) {
   }
 
   return (
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <img
       onClick={() => history.push('/')}
       src="https://allocations-public.s3.us-east-2.amazonaws.com/allocations-logo.svg"
@@ -1046,19 +1039,19 @@ function OrgLogo({ slug, name }) {
   );
 }
 
-function Footer() {
-  return (
-    <div className="Sidebar-footer">
-      <Link to="/getting-started">Getting Started</Link>
-    </div>
-  );
-}
+// function Footer() {
+//   return (
+//     <div className="Sidebar-footer">
+//       <Link to="/getting-started">Getting Started</Link>
+//     </div>
+//   );
+// }
 
 function AdminLinks({ location }) {
   const match = useRouteMatch('/admin/:organization');
-  const [showAdministration, setShowAdministration] = useState(false);
+  // const [showAdministration, setShowAdministration] = useState(false);
 
-  const classes = useStyles();
+  // const classes = useStyles();
 
   if (!match) return null;
   const {

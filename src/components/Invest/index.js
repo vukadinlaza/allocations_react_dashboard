@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Paper, Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
+import { useMutation } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
+import { useAuth } from '../../auth/useAuth';
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -43,8 +46,40 @@ const useStyles = makeStyles(() => ({
     paddingRight: '32px',
   },
 }));
+
+const GET_INVESTOR = gql`
+  {
+    investor {
+      _id
+      email
+      first_name
+      last_name
+      admin
+      showInvestAndMrkPlc
+    }
+  }
+`;
+const UPDATE_USER = gql`
+  mutation UpdateUser($investor: UserInput!) {
+    updateUser(input: $investor) {
+      _id
+    }
+  }
+`;
 export default ({}) => {
   const classes = useStyles();
+  const { userProfile, loading } = useAuth(GET_INVESTOR);
+  const [updateInvestor] = useMutation(UPDATE_USER);
+
+  useEffect(() => {
+    if (!loading && userProfile._id) {
+      updateInvestor({
+        variables: {
+          investor: { showInvestAndMrkPlc: true, _id: userProfile._id },
+        },
+      });
+    }
+  }, [loading, updateInvestor, userProfile]);
 
   return (
     <>
