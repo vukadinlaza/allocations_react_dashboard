@@ -449,8 +449,8 @@ export default function Marketplace() {
           <Grid
             xs={12}
             sm={12}
-            md={3}
-            lg={3}
+            md={2}
+            lg={2}
             style={{ justifyContent: 'center', alignContent: 'center', paddingRight: '15px' }}
           >
             <Typography
@@ -508,7 +508,7 @@ export default function Marketplace() {
 
         {/* ITEM - Co-Investors */}
         <Hidden only="xs">
-          <Grid xs={12} sm={12} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
+          <Grid xs={12} sm={12} md={2} lg={2} style={{ justifyContent: 'center', alignContent: 'center' }}>
             <Typography
               style={{
                 fontSize: '0.75rem',
@@ -644,14 +644,15 @@ export default function Marketplace() {
                   <Grid
                     xs={6}
                     sm={3}
-                    md={3}
-                    lg={3}
+                    md={2}
+                    lg={2}
                     style={{ justifyContent: 'center', alignContent: 'center', paddingRight: '15px' }}
                   >
                     <Typography
                       style={{
                         fontSize: '1.1rem',
                         color: 'rgba(0,0,0,0.8)',
+                        padding: '0px',
                       }}
                     >
                       {name}
@@ -660,6 +661,7 @@ export default function Marketplace() {
                       style={{
                         fontSize: '0.75rem',
                         color: 'rgba(0,0,0,0.5)',
+                        padding: '0px',
                       }}
                     >
                       {tagline}
@@ -669,9 +671,21 @@ export default function Marketplace() {
 
                 {/* ITEM 5 */}
                 <Hidden only="xs">
-                  <Grid xs={12} sm={12} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
+                  <Grid
+                    xs={12}
+                    sm={12}
+                    md={1}
+                    lg={1}
+                    style={{ justifyContent: 'center', alignContent: 'around', padding: '0px' }}
+                  >
                     <a href={to} target="_blank" rel="noreferrer">
-                      <Button variant="contained" color="secondary" size="small" onClick="">
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        size="small"
+                        onClick=""
+                        style={{ justifyContent: 'center', alignContent: 'center' }}
+                      >
                         {pledged}
                       </Button>
                     </a>
@@ -683,9 +697,9 @@ export default function Marketplace() {
                   <Grid xs={12} sm={1} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
                     <Typography
                       style={{
-                        fontSize: '0.9rem',
+                        fontSize: '0.8rem',
                         color: 'rgba(255,255,255,0.9)',
-                        paddingTop: '1rem',
+                        paddingTop: '0px',
                       }}
                     >
                       <div
@@ -693,7 +707,8 @@ export default function Marketplace() {
                           backgroundColor: color,
                           maxWidth: 'fit-content',
                           borderRadius: '.5rem',
-                          padding: '.2rem',
+                          textAlign: 'center',
+                          minWidth: '90px',
                         }}
                       >
                         {deal_lead}
@@ -707,9 +722,9 @@ export default function Marketplace() {
                   <Grid xs={12} sm={1} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
                     <Typography
                       style={{
-                        fontSize: '0.9rem',
+                        fontSize: '0.8rem',
                         color: 'rgba(0,0,0,0.8)',
-                        paddingTop: '1rem',
+                        padding: '0px',
                       }}
                     >
                       {est_personal_inv}
@@ -719,12 +734,12 @@ export default function Marketplace() {
 
                 {/* ITEM 6 */}
                 <Hidden only="xs">
-                  <Grid xs={12} sm={12} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
+                  <Grid xs={12} sm={12} md={2} lg={2} style={{ justifyContent: 'center', alignContent: 'center' }}>
                     <Typography
                       style={{
-                        fontSize: '0.9rem',
+                        fontSize: '0.8rem',
                         color: 'rgba(0,0,0,0.8)',
-                        paddingTop: '1rem',
+                        padding: '0px',
                       }}
                     >
                       {coinvestors}
@@ -737,9 +752,9 @@ export default function Marketplace() {
                   <Grid xs={12} sm={12} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
                     <Typography
                       style={{
-                        fontSize: '0.9rem',
+                        fontSize: '0.8rem',
                         color: 'rgba(0,0,0,0.8)',
-                        paddingTop: '1rem',
+                        padding: '0px',
                       }}
                     >
                       {closeDate}
