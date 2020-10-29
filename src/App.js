@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import Cohere from 'cohere-js';
 import AdminRoute from './auth/admin-route';
 import PrivateRoute from './components/PrivateRoute';
 import Faq from './components/Faq';
@@ -44,6 +45,8 @@ import AdminExchangeOverview from './allocationsX/AdminOverview';
 import AuthorizedApolloProvider from './apollo-client-comp';
 import './App.scss';
 import './utils/initFontAwesome';
+
+Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
 /** *
  *
