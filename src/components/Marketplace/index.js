@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { gql } from 'apollo-boost';
+import _ from 'lodash';
 import { toast } from 'react-toastify';
 import randomColor from 'randomcolor'; // import the script
 import { withStyles } from '@material-ui/core/styles';
@@ -374,7 +375,7 @@ const deals = [
     round: 'Pre-seed',
     coinvestors: 'TBD',
   },
-];
+].sort((a, b) => _.toNumber(b.pledged.replaceAll(/[, $]/g, '')) - _.toNumber(a.pledged.replaceAll(/[, $]/g, '')));
 
 export default function Marketplace() {
   const [marketplaceLike, setMarketplaceLike] = useSimpleReducer({
