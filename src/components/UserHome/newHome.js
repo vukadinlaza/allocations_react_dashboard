@@ -25,7 +25,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import _ from 'lodash';
 import moment from 'moment';
 import Chart from 'react-google-charts';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Loader from '../utils/Loader';
 import { nWithCommas } from '../../utils/numbers';
@@ -129,6 +129,7 @@ const CREATE_ORDER = gql`
 
 export default () => {
   const classes = useStyles();
+  const location = useLocation();
   const [showDocs, setShowDocs] = useState();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [confirmation, setConfirmation] = useState(false);
@@ -138,6 +139,8 @@ export default () => {
     direction: 'sell',
     cost: 0,
   });
+  const demo = location.search === '?demo=true';
+  console.log(demo);
   const [createOrder] = useMutation(CREATE_ORDER, {
     onCompleted: () => {
       setConfirmation(false);
@@ -167,7 +170,27 @@ export default () => {
 
   if (!userProfile.email) return <Loader />;
 
-  const investments = userProfile.investments.filter((inv) => inv.status !== 'invited');
+  let investments = userProfile.investments.filter((inv) => inv.status !== 'invited');
+
+  if (demo) {
+    investments = investments.map((inv) => {
+      inv.deal.company_name = _.sample([
+        'Airbnb',
+        'Coinbase',
+        'Stripe',
+        'Tundra Trust',
+        'BlockFi',
+        'Instacart',
+        'SpaceX',
+        'Lightning Labs',
+        'Snowflake',
+        'Flexport',
+        'Pinterest',
+        'Discord',
+      ]);
+      return inv;
+    });
+  }
   const groupedByMonth = _.groupBy(investments, (inv) => {
     const timestamp = inv?._id.toString().substring(0, 8);
     const date = new Date(parseInt(timestamp, 16) * 1000);
