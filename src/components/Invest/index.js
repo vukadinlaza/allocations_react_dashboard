@@ -348,6 +348,7 @@ export default ({}) => {
                     <CloseIcon onClick={() => setSeedOptions(false)} />
                   </Grid>
                 </Grid>
+                <Typography variant="h6">How much would you like to invest?</Typography>
                 <Button
                   color="secondary"
                   variant="contained"
@@ -365,7 +366,7 @@ export default ({}) => {
                     variant="contained"
                     style={{ marginTop: '1.25rem', minWidth: '100%', fontSize: '1.25rem' }}
                   >
-                    Fund: $1m
+                    Fund: $100k
                   </Button>
                 </a>
                 <a
@@ -377,7 +378,7 @@ export default ({}) => {
                     variant="contained"
                     style={{ marginTop: '1.25rem', minWidth: '100%', fontSize: '1.25rem' }}
                   >
-                    Strategic: $2m
+                    Strategic: $200k
                   </Button>
                 </a>
               </Paper>
