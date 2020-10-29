@@ -84,7 +84,7 @@ const MARKETPLACE_LIKE = gql`
 
 const deals = [
   {
-    color: randomColor({ luminosity: 'dark', hue: 'blue' }),
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1D-6DPq6OI4R7_qLUrLdIdE1N1M8Z0-NBR27HlqOd3Y4/edit#gid=0',
     name: 'Sana Health',
     tagline: 'Neuromodulation technology to end chronic pain',
@@ -100,7 +100,7 @@ const deals = [
     coinvestors: 'Founders Fund, The Icahn School of Medicine at Mount Sinai, SOSV',
   },
   {
-    color: randomColor({ luminosity: 'dark', hue: 'blue' }),
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1xKMQzP3mRvNLc6HsBiSFCDbxjoRASLVdgd7I4E6c2tQ/edit#gid=0',
     name: 'Brex',
     tagline: 'Corporate credit cards',
@@ -116,7 +116,7 @@ const deals = [
     coinvestors: 'Ribbit Capital, DST, Peter Thiel, Max Levchin',
   },
   {
-    color: randomColor({ luminosity: 'dark', hue: 'blue' }),
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1A8kmlgjPoxtrlgdwUa6e5nY9bBisCjJBBi--Nc7JVa8/edit#gid=0',
     name: 'SpaceX',
     tagline: 'Advanced rockets and spacecrafts',
@@ -132,7 +132,7 @@ const deals = [
     coinvestors: 'Google, NASA, Space Angels, Fidelity, Valor',
   },
   {
-    color: randomColor({ luminosity: 'dark', hue: 'blue' }),
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1s_f6gMA5eGV-YIBAOoRpSB2u19KiHX2Ly4KdZn1vx0Y/edit#gid=0',
     name: 'Cognitive Space',
     tagline: 'Autonomous satellite systems',
@@ -148,7 +148,7 @@ const deals = [
     coinvestors: 'Techstars, Creative Destruction Lab',
   },
   {
-    color: randomColor({ luminosity: 'dark', hue: 'blue' }),
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/u/2/d/1oI0TduSQcs2_Ya2ldbZ6rMZ2RbLE8h7StadJK-_E4c0/edit',
     name: 'Mati',
     tagline: 'Data infrastructure for the trust economy',
@@ -164,7 +164,7 @@ const deals = [
     coinvestors: 'Tribe Capital, Kima Ventures, Blackthorn Ventures, Spero Ventures',
   },
   {
-    color: randomColor({ luminosity: 'dark', hue: 'blue' }),
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1EJCO1SURyv-rbnhoo9EbkR2mFydKfPBBgI2XYIVURDM/edit#gid=0',
     name: 'Luminous',
     tagline: 'Photonics chip company backed by Bill Gates',
@@ -180,7 +180,7 @@ const deals = [
     coinvestors: 'Bill Gates, Travis Kalanick, Gigafund, Dara Khosrowshahi',
   },
   {
-    color: randomColor({ luminosity: 'dark', hue: 'blue' }),
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1ebS6A0bD8hb9RWpw94VLz_AVIQQByVTvUIEy2lAZKhs/edit#gid=0',
     name: 'On Deck',
     tagline: 'The first place the best talent looks when starting or joining a startup',
@@ -196,7 +196,7 @@ const deals = [
     coinvestors: 'Naval, Dylan Wu, Eric Wu, Fred Esham, Andreessen',
   },
   {
-    color: randomColor({ luminosity: 'dark', hue: 'blue' }),
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1dlkEmnt7Ls9f5Pic7AgKSF4JwnZtVM3MreSgU1mm_VU/edit#gid=0',
     name: 'Venus Aerospace',
     tagline: 'Hypersonic travel',
@@ -212,7 +212,7 @@ const deals = [
     coinvestors: '',
   },
   {
-    color: randomColor({ luminosity: 'dark', hue: 'blue' }),
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1EJJgDbSm4pOPZ5zFkzek2atiYWAoYZTfZExakwppGxw/edit#gid=0',
     name: 'Agronomics',
     tagline: 'Sustainable investment in clean meat',
@@ -228,7 +228,7 @@ const deals = [
     coinvestors: 'Jim Mellon, public investors',
   },
   {
-    color: randomColor({ luminosity: 'dark', hue: 'blue' }),
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1o0joVOj-R-b5ZGZLyhIT3Ey-4bVQEOqZc0vwuVfk3IM/edit#gid=0',
     name: 'ArcType',
     tagline: 'Intuitive SQL client for developers and teams',
@@ -244,7 +244,7 @@ const deals = [
     coinvestors: 'Chamath Palihapitiya, Social Capital',
   },
   {
-    color: randomColor({ luminosity: 'dark', hue: 'blue' }),
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1w-rDxctNyycpcQBDi43-0VQglKvAlWJfqC7ETZz1EdM/edit#gid=0',
     name: 'Factmata',
     tagline: 'AI company for online content risk management',
@@ -260,7 +260,7 @@ const deals = [
     coinvestors: 'Mark Cuban, Sunil Paul, Seedcamp, Biz Stone, Ross Manson',
   },
   {
-    color: randomColor({ luminosity: 'dark', hue: 'blue' }),
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1ulnVK-O2lY3uGgOhc11rW0WDxcigONC858MLcCEPBG0/edit',
     name: 'Axiom Space',
     tagline: 'Building a commercial space station',
@@ -278,7 +278,7 @@ const deals = [
       'Helios Capital, Dylan Taylor, The Venture Collective, Starbridge Venture Capital, Hemisphere Ventures',
   },
   {
-    color: randomColor({ luminosity: 'dark', hue: 'blue' }),
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1rYovX8o5OqW2u40QlIKH3vru9t0fXAhnBPgxXjeZ_xw/edit#gid=0',
     name: 'Cheqout',
     tagline: 'A QR payments company for brick-and-mortar transactions',
@@ -294,7 +294,7 @@ const deals = [
     coinvestors: 'Wolfswood Partners, Talking to Bain, Sierra and Founders Collective',
   },
   {
-    color: randomColor({ luminosity: 'dark', hue: 'blue' }),
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1zpDZcwsqfT_B_B6WhyaNR1QUUtrBX0bRR4WBAYiowPI/edit#gid=0',
     name: 'Sen',
     tagline: 'Real-time videos from space',
@@ -310,7 +310,7 @@ const deals = [
     coinvestors: 'Eric Brook, Allan Gray, Tessa Dollar, Barry Ross, Charles Black',
   },
   {
-    color: randomColor({ luminosity: 'dark', hue: 'blue' }),
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1YmfOjkmFMa7x_az9nl8-QpE_uG9YeuJU57nLJCkMGdI/edit#gid=0',
     name: 'FTW Ventures',
     tagline: 'FTW Ventures nurtures the Food System for future generations',
@@ -326,7 +326,7 @@ const deals = [
     coinvestors: 'Creative Ventures',
   },
   {
-    color: randomColor({ luminosity: 'dark', hue: 'blue' }),
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1uAisbwQUV7_sUhwUfmIVnLDj7xOzT3YtEn9CNzl7nq4/edit#gid=0',
     name: 'MoneyMade',
     tagline: 'Intelligently Matching Millennials With Online Investment Products At Scale',
@@ -342,7 +342,7 @@ const deals = [
     coinvestors: 'Darling Ventures, Howard Lindzon, Stocktwits',
   },
   {
-    color: randomColor({ luminosity: 'dark', hue: 'blue' }),
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1pcRFqZ3Rqup3n_yPVfdLxcXZUP5RcOBXxTiQqrs19kA/edit#gid=0',
     name: 'MoneyMail',
     tagline: 'Social money for social networks',
@@ -358,7 +358,7 @@ const deals = [
     coinvestors: 'Talking to influencers and crypto VCs',
   },
   {
-    color: randomColor({ luminosity: 'dark', hue: 'blue' }),
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1UD2eNVGCeNVyADMtm6z8egllCh7weDGaYOOi0A-G7MA/edit#gid=0',
     name: 'London Cognition',
     tagline: 'Neuroscience and AI, to tackle real-world cognitive problems',
@@ -367,8 +367,8 @@ const deals = [
     highlight_1:
       'London Cognition applies artificial intelligence (AI) and gaming to neuroscience to understand how the brain works',
     highlight_2: 'Early detection of mental health issues',
-    highlight_3: 'Matching talent with opportunity',
-    pledged: '£7.5m pre-money, £10 m post-money valuation',
+    highlight_3: '£7.5m pre-money, £10 m post-money valuation',
+    pledged: '$0',
     deal_lead: 'Guillaume Bouchard',
     closeDate: '11/15/2020',
     round: 'Pre-seed',
@@ -670,24 +670,11 @@ export default function Marketplace() {
                 {/* ITEM 5 */}
                 <Hidden only="xs">
                   <Grid xs={12} sm={12} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
-                    <Typography
-                      style={{
-                        fontSize: '0.9rem',
-                        color: 'rgba(255,255,255,0.9)',
-                        paddingTop: '1rem',
-                      }}
-                    >
-                      <div
-                        style={{
-                          backgroundColor: '#85bb65',
-                          maxWidth: 'fit-content',
-                          borderRadius: '.5rem',
-                          padding: '.2rem',
-                        }}
-                      >
+                    <a href={to} target="_blank" rel="noreferrer">
+                      <Button variant="contained" color="secondary" size="small" onClick="">
                         {pledged}
-                      </div>
-                    </Typography>
+                      </Button>
+                    </a>
                   </Grid>
                 </Hidden>
 
