@@ -187,11 +187,11 @@ export default ({}) => {
                   alt="oops"
                   style={{ width: '50px', height: '50px' }}
                 />
-                <Typography variant="h6">Seed Extension</Typography>
+                <Typography variant="h6">Seed Round</Typography>
                 <Divider variant="middle" />
 
                 <Typography variant="subtitle2" style={{ fontSize: '.75rem' }}>
-                  The Allocations Board approved a $1m seed extension round on Friday 23rd October 2020
+                  The Allocations Board approved a $1m seed round on Friday 23rd October 2020
                 </Typography>
                 <Typography variant="subtitle2" style={{ fontSize: '.75rem', textAlign: 'start' }}>
                   <p
@@ -227,11 +227,11 @@ export default ({}) => {
                 alt="oops"
                 style={{ width: '50px', height: '50px' }}
               />
-              <Typography variant="h6">Series A</Typography>
+              <Typography variant="h6">Series A Round</Typography>
               <Divider variant="middle" />
 
               <Typography variant="subtitle2" style={{ fontSize: '.75rem' }}>
-                Apply to our Series A waitlist
+                Apply to our Series A round waitlist
               </Typography>
               <Button
                 color="secondary"
