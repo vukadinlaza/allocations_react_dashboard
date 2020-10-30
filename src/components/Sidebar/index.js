@@ -869,7 +869,13 @@ export default function Sidebar(props) {
     menus.push({
       to: '/invest',
       title: 'Invest',
-      icon: <HomeIcon />,
+      icon: (
+        <img
+          src="https://allocations-public.s3.us-east-2.amazonaws.com/money+(13).svg"
+          alt="oops"
+          // style={{ width: '50px', height: '50px' }}
+        />
+      ),
     });
 
   const drawer = (
