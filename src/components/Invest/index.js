@@ -352,7 +352,7 @@ export default ({}) => {
                 <Button
                   color="secondary"
                   variant="contained"
-                  onClick={() => history.push('/deals/allocations/allocations-seed-extension')}
+                  onClick={() => history.push('/deals/allocations/allocations-seed')}
                   style={{ marginTop: '1.25rem', minWidth: '100%', fontSize: '1.25rem' }}
                 >
                   Angel: $50k
