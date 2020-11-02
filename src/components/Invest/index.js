@@ -41,13 +41,13 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 8,
   },
   blueContainer: {
-    background: 'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 180px, rgba(255,255,255,1) 180px)',
+    background: 'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 160px, rgba(255,255,255,1) 160px)',
     marginTop: '-30px',
     paddingTop: '30px',
     paddingBottom: '60px',
-    marginLeft: -'32px',
+    marginLeft: '-32px',
     paddingLeft: '32px',
-    marginRight: -'32px',
+    marginRight: '-32px',
     paddingRight: '32px',
   },
   a: {
@@ -296,7 +296,8 @@ export default ({}) => {
                 <Divider variant="middle" />
 
                 <Typography variant="subtitle2" style={{ fontSize: '.75rem' }}>
-                  The Allocations Board approved a $1m seed round on Friday 23rd October 2020
+                  The Allocations Board approved a $1m seed round at $25m post money valuation cap on Friday 23rd
+                  October 2020
                 </Typography>
                 <Typography variant="subtitle2" style={{ fontSize: '.75rem', textAlign: 'start' }}>
                   <p

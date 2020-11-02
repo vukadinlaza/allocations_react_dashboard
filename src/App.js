@@ -6,6 +6,7 @@ import PrivateRoute from './components/PrivateRoute';
 import Faq from './components/Faq';
 import Deal from './components/Deal';
 import Deals from './components/Deals';
+import Credit from './components/Credit';
 import DealNew from './components/DealNew';
 import DealEdit from './components/DealEdit';
 import InvestorEdit from './components/InvestorEdit';
@@ -65,6 +66,7 @@ const App = () => {
 
           <PrivateRoute path="/" exact component={UserHome} />
           <PrivateRoute path="/invest" exact component={Invest} />
+          <PrivateRoute path="/credit" exact component={Credit} />
           <PrivateRoute path="/profile" component={Profile} />
           <PrivateRoute path="/marketplace" component={Marketplace} />
           <PrivateRoute path="/investments" component={UserInvestments} />
