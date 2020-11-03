@@ -470,6 +470,7 @@ export default () => {
                   showDocs?._id === investment?._id ? (
                     <>
                       <TR
+                        demo={demo}
                         investment={investment}
                         setShowDocs={setShowDocs}
                         showDocs={showDocs}
@@ -479,6 +480,7 @@ export default () => {
                     </>
                   ) : (
                     <TR
+                      demo={demo}
                       investment={investment}
                       setShowDocs={setShowDocs}
                       showDocs={showDocs}
@@ -1044,7 +1046,7 @@ export default () => {
   );
 };
 
-const TR = ({ investment, setShowDocs, showDocs, setTradeData }) => {
+const TR = ({ investment, setShowDocs, showDocs, setTradeData, demo }) => {
   const history = useHistory();
   // const timestamp = investment._id.toString().substring(0, 8);
   // const date = new Date(parseInt(timestamp, 16) * 1000);
@@ -1091,7 +1093,7 @@ const TR = ({ investment, setShowDocs, showDocs, setTradeData }) => {
         </TableCell>
       </Hidden>
       <TableCell align="center">
-        <Button variant="contained" size="small" color="primary" onClick={showDocsFn}>
+        <Button variant="contained" size="small" color="primary" onClick={showDocsFn} disabled={!!demo}>
           View
         </Button>
       </TableCell>

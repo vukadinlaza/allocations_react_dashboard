@@ -812,6 +812,7 @@ const GET_INVESTOR = gql`
       name
       admin
       showInvestAndMrkPlc
+      showCredit
       organizations_admin {
         _id
         slug
@@ -877,6 +878,20 @@ export default function Sidebar(props) {
         />
       ),
     });
+
+  if (userProfile.showCredit) {
+    menus.push({
+      to: '/invest',
+      title: 'Invest',
+      icon: (
+        <img
+          src="https://allocations-public.s3.us-east-2.amazonaws.com/museum+(1).svg"
+          alt="oops"
+          style={{ paddingRight: '.5rem' }}
+        />
+      ),
+    });
+  }
 
   const drawer = (
     <div>
