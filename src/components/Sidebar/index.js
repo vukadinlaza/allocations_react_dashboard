@@ -20,6 +20,9 @@ import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import MonetizationOnRoundedIcon from '@material-ui/icons/MonetizationOnRounded';
+import AccountBalanceRoundedIcon from '@material-ui/icons/AccountBalanceRounded';
+import CreditCardRoundedIcon from '@material-ui/icons/CreditCardRounded';
 import { useAuth } from '../../auth/useAuth';
 import NavBar from '../NavBar';
 import './style.scss';
@@ -826,6 +829,7 @@ const GET_INVESTOR = gql`
 export default function Sidebar(props) {
   const { userProfile } = useAuth(GET_INVESTOR);
   const [investTab, setInvestTab] = useState(false);
+  const [creditTab, setCreditTab] = useState(false);
   const location = useLocation();
   const { window } = props;
   const classes = useStyles();
@@ -836,7 +840,10 @@ export default function Sidebar(props) {
     if (userProfile.showInvestAndMrkPlc || location.pathname === '/invest') {
       setInvestTab(true);
     }
-  }, [userProfile.showInvestAndMrkPlc, location.pathname]);
+    if (userProfile.showCredit || location.pathname === '/credit') {
+      setCreditTab(true);
+    }
+  }, [userProfile.showInvestAndMrkPlc, userProfile.showCredit, location.pathname]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -870,26 +877,14 @@ export default function Sidebar(props) {
     menus.push({
       to: '/invest',
       title: 'Invest',
-      icon: (
-        <img
-          src="https://allocations-public.s3.us-east-2.amazonaws.com/money+(13).svg"
-          alt="oops"
-          // style={{ width: '50px', height: '50px' }}
-        />
-      ),
+      icon: <MonetizationOnRoundedIcon />,
     });
 
-  if (userProfile.showCredit) {
+  if (creditTab) {
     menus.push({
-      to: '/invest',
-      title: 'Invest',
-      icon: (
-        <img
-          src="https://allocations-public.s3.us-east-2.amazonaws.com/museum+(1).svg"
-          alt="oops"
-          style={{ paddingRight: '.5rem' }}
-        />
-      ),
+      to: '/credit',
+      title: 'Credit',
+      icon: <CreditCardRoundedIcon />,
     });
   }
 
@@ -919,7 +914,7 @@ export default function Sidebar(props) {
             >
               <ListItem component={Link} to="/admin/funds" button>
                 <ListItemIcon className={classes.icon}>
-                  <AccountBalanceIcon />
+                  <AccountBalanceRoundedIcon />
                 </ListItemIcon>
                 <ListItemText primary="Funds" />
               </ListItem>
