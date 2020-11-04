@@ -110,6 +110,13 @@ export default ({}) => {
     }
   }, [loading, updateInvestor, userProfile]);
 
+  useEffect(() => {
+    postZap({
+      variables: { body: { action: 'Viewed Invest Page' } },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <div className={classes.blueContainer}>
@@ -369,7 +376,12 @@ export default ({}) => {
                 <Button
                   color="secondary"
                   variant="contained"
-                  onClick={() => history.push('/deals/allocations/allocations-seed')}
+                  onClick={() => {
+                    postZap({
+                      variables: { body: { name: userProfile.first_name, action: 'Clicked Angel (50k) Button' } },
+                    });
+                    history.push('/deals/allocations/allocations-seed');
+                  }}
                   style={{ marginTop: '1.25rem', minWidth: '100%', fontSize: '1.25rem' }}
                 >
                   Angel: $50k
@@ -382,6 +394,11 @@ export default ({}) => {
                     color="secondary"
                     variant="contained"
                     style={{ marginTop: '1.25rem', minWidth: '100%', fontSize: '1.25rem' }}
+                    onClick={() => {
+                      postZap({
+                        variables: { body: { name: userProfile.first_name, action: 'Clicked Fund (100k) Button' } },
+                      });
+                    }}
                   >
                     Fund: $100k
                   </Button>
@@ -394,6 +411,13 @@ export default ({}) => {
                     color="secondary"
                     variant="contained"
                     style={{ marginTop: '1.25rem', minWidth: '100%', fontSize: '1.25rem' }}
+                    onClick={() => {
+                      postZap({
+                        variables: {
+                          body: { name: userProfile.first_name, action: 'Clicked Strategic (200k) Button' },
+                        },
+                      });
+                    }}
                   >
                     Strategic: $200k
                   </Button>
