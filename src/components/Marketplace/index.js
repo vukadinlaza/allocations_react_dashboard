@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { gql } from 'apollo-boost';
 import _ from 'lodash';
 import { toast } from 'react-toastify';
@@ -19,56 +19,8 @@ import {
   Hidden,
 } from '@material-ui/core';
 import { useSimpleReducer } from '../../utils/hooks';
-import { useAuth } from '../../auth/useAuth';
 
 import './style.scss';
-
-const GET_INVESTOR = gql`
-  query GetInvestor($email: String, $_id: String) {
-    investor(email: $email, _id: $_id) {
-      _id
-      name
-      first_name
-      last_name
-      entity_name
-      country
-      signer_full_name
-      accredited_investor_status
-      investor_type
-      email
-      organizations
-      admin
-      investments {
-        _id
-        value
-        amount
-        status
-        created_at
-        documents {
-          path
-          link
-        }
-        deal {
-          _id
-          slug
-          company_name
-          company_description
-          date_closed
-          status
-          appLink
-          dealParams {
-            dealMultiple
-            wireDeadline
-          }
-          organization {
-            _id
-            slug
-          }
-        }
-      }
-    }
-  }
-`;
 
 /** *
  *
@@ -94,28 +46,13 @@ const deals = [
     highlight_1: 'Visor product aiming to end chronic pain through audio and light stimuli',
     highlight_2: 'Improved quality of life for 90% of subjects with fibromyalgia',
     highlight_3: '3x times reduction in pain level in a 75-person pain study ',
-    pledged: '$7,000',
+    pledged: '$15,000',
     deal_lead: 'Daniel Weiss Pick',
     closeDate: '11/16/2020',
     round: 'Seed extension',
     coinvestors: 'Founders Fund, The Icahn School of Medicine at Mount Sinai, SOSV',
   },
-  {
-    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
-    to: 'https://docs.google.com/spreadsheets/d/1xKMQzP3mRvNLc6HsBiSFCDbxjoRASLVdgd7I4E6c2tQ/edit#gid=0',
-    name: 'Brex',
-    tagline: 'Corporate credit cards',
-    logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/brex.png',
-    est_personal_inv: '$5,000',
-    highlight_1: 'Valuation: $2.9B',
-    highlight_2: 'Financing alternatives for startups',
-    highlight_3: 'Offers corporate credit cards and cash management accounts to tech companies',
-    pledged: '$35,000',
-    deal_lead: 'Kingsley Advani',
-    closeDate: '11/16/2020',
-    round: 'Secondary',
-    coinvestors: 'Ribbit Capital, DST, Peter Thiel, Max Levchin',
-  },
+
   {
     color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1A8kmlgjPoxtrlgdwUa6e5nY9bBisCjJBBi--Nc7JVa8/edit#gid=0',
@@ -126,7 +63,7 @@ const deals = [
     highlight_1: 'Space company started by Elon Musk',
     highlight_2: 'Currently deploying Starlink satellite internet network',
     highlight_3: '$46B valuation',
-    pledged: '$167,000',
+    pledged: '$2,181,000',
     deal_lead: 'Ryan Kriser',
     closeDate: '11/16/2020',
     round: 'Series N',
@@ -142,7 +79,7 @@ const deals = [
     highlight_1: 'Developing AI product to coordinate satellites, drones and IIOT devices',
     highlight_2: 'Secured Air Force grants and has several government partnerships in place',
     highlight_3: '6.5M valuation',
-    pledged: '$156,000',
+    pledged: '$170,000',
     deal_lead: 'Meagan Crawford',
     closeDate: '11/10/2020',
     round: 'Seed',
@@ -174,7 +111,7 @@ const deals = [
     highlight_1: 'Supercomputer on a single chip',
     highlight_2: 'Claims it has solved the current bottleneck in moving data around',
     highlight_3: 'Single chip may replace 3000 TPU boards',
-    pledged: '$90,000',
+    pledged: '$95,000',
     deal_lead: 'Joshua Browder',
     closeDate: '11/16/2020',
     round: 'Secondary',
@@ -190,7 +127,7 @@ const deals = [
     highlight_1: 'Investing in promising pre-seed founders',
     highlight_2: '450 Fellows have so far started 160 companies',
     highlight_3: 'Raising a $5M fund, which invests in 80-100 companies over the next 12-18 months',
-    pledged: '$80,000',
+    pledged: '$85,000',
     deal_lead: 'Don Ho',
     closeDate: '10/31/2020',
     round: 'N/A',
@@ -206,7 +143,7 @@ const deals = [
     highlight_1: 'Novel detonation engine technology for hypersonic travel',
     highlight_2: 'Concept verified by NASA',
     highlight_3: 'The fastest way in history to get-door-to-door',
-    pledged: '$22,000',
+    pledged: '$27,000',
     deal_lead: 'Jai Malik',
     closeDate: '10/31/2020',
     round: 'Seed',
@@ -238,7 +175,7 @@ const deals = [
     highlight_1: 'The easiest and most intuitive SQL client for developers and teams',
     highlight_2: 'Previous investors include Chamath Palihapitiya',
     highlight_3: 'Pre-revenue; 400+ signups and approx 50 WAUs',
-    pledged: '$7,000',
+    pledged: '$12,000',
     deal_lead: 'Jai Malik',
     closeDate: '11/16/2020',
     round: 'Pre-seed',
@@ -254,7 +191,7 @@ const deals = [
     highlight_1: 'Natural language AI to help businesses and consumers deal with the risks of online content',
     highlight_2: '~£20-30k MRR revenue',
     highlight_3: 'Raising £1.5M at £5M pre-money valuation',
-    pledged: '$2,000',
+    pledged: '$6,000',
     deal_lead: 'Giacomo Marriotti',
     closeDate: '11/16/2020',
     round: 'Bridge to A',
@@ -278,22 +215,7 @@ const deals = [
     coinvestors:
       'Helios Capital, Dylan Taylor, The Venture Collective, Starbridge Venture Capital, Hemisphere Ventures',
   },
-  {
-    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
-    to: 'https://docs.google.com/spreadsheets/d/1rYovX8o5OqW2u40QlIKH3vru9t0fXAhnBPgxXjeZ_xw/edit#gid=0',
-    name: 'Cheqout',
-    tagline: 'A QR payments company for brick-and-mortar transactions',
-    logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/cheqout.png',
-    est_personal_inv: 'TBD',
-    highlight_1: 'Restaurant customers can start tab or pay using QR codes without an app',
-    highlight_2: 'Crossed $1M in processed payments last month, 3 months after launch',
-    highlight_3: 'TAM is $800B in restaurant revenues, SOM is $170B in full service—CheqOut takes 1.8% of revenue',
-    pledged: '$0',
-    deal_lead: 'Jerry Chang',
-    closeDate: '11/16/2020',
-    round: 'Series A',
-    coinvestors: 'Wolfswood Partners, Talking to Bain, Sierra and Founders Collective',
-  },
+
   {
     color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1zpDZcwsqfT_B_B6WhyaNR1QUUtrBX0bRR4WBAYiowPI/edit#gid=0',
@@ -310,29 +232,14 @@ const deals = [
     round: 'Seed',
     coinvestors: 'Eric Brook, Allan Gray, Tessa Dollar, Barry Ross, Charles Black, Dylan Taylor',
   },
-  {
-    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
-    to: 'https://docs.google.com/spreadsheets/d/1YmfOjkmFMa7x_az9nl8-QpE_uG9YeuJU57nLJCkMGdI/edit#gid=0',
-    name: 'FTW Ventures',
-    tagline: 'FTW Ventures nurtures the Food System for future generations',
-    logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/ftw_ventures.png',
-    est_personal_inv: '1% of fund size',
-    highlight_1: 'FTW Ventures is an investment & advisory group for early-stage Food & Ag Tech startups',
-    highlight_2: 'Fund comprised of promising foodtech and agtech companies',
-    highlight_3: 'Backed by co-founder of Oatly',
-    pledged: '$25,000',
-    deal_lead: 'Brian Frank',
-    closeDate: '11/15/2020',
-    round: 'N/A',
-    coinvestors: 'Creative Ventures',
-  },
+
   {
     color: randomColor({ luminosity: 'bright', hue: 'blue' }),
     to: 'https://docs.google.com/spreadsheets/d/1uAisbwQUV7_sUhwUfmIVnLDj7xOzT3YtEn9CNzl7nq4/edit#gid=0',
     name: 'MoneyMade',
     tagline: 'Intelligently Matching Millennials With Online Investment Products At Scale',
     logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/money-made.png',
-    est_personal_inv: '$20,000',
+    est_personal_inv: '$44,000',
     highlight_1: 'Glassdoor meets Expedia for alt investing',
     highlight_2: '$5M post-money valuation',
     highlight_3: '750,000 unique monthly visitors in August',
@@ -376,6 +283,37 @@ const deals = [
     round: 'Seed',
     coinvestors: 'APA Venture Partners',
   },
+  {
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
+    to: 'https://docs.google.com/spreadsheets/d/1_GZ_m7Sn_pIRWY8uuuF3pvwvEDYE-godgtqFJNGDNXY/edit',
+    name: 'Boom Supersonic',
+    logo: 'Making supersonic passenger travel a reality',
+    est_personal_inv: 'TBD',
+    highlight_1: 'Boom Supersonic is building planes that cut travel time in half',
+    highlight_2: 'They recently unveiled their first XB-1 prototype plane',
+    highlight_3: 'Ultimately they want to construct a Mach 2.2 (1,300 kn; 2,300 km/h), 55-passenger supersonic plane',
+    pledged: '$10,000',
+    deal_lead: 'Ryan Metzger',
+    closeDate: '11/15/2020',
+    round: 'Series C',
+    coinvestors: '',
+  },
+
+  {
+    color: randomColor({ luminosity: 'bright', hue: 'blue' }),
+    to: 'https://docs.google.com/spreadsheets/d/1_GZ_m7Sn_pIRWY8uuuF3pvwvEDYE-godgtqFJNGDNXY/edit',
+    name: 'Boom Supersonic',
+    logo: 'Making supersonic passenger travel a reality',
+    est_personal_inv: 'TBD',
+    highlight_1: 'Boom Supersonic is building planes that cut travel time in half',
+    highlight_2: 'They recently unveiled their first XB-1 prototype plane',
+    highlight_3: 'Ultimately they want to construct a Mach 2.2 (1,300 kn; 2,300 km/h), 55-passenger supersonic plane',
+    pledged: '$10,000',
+    deal_lead: 'Ryan Metzger',
+    closeDate: '11/15/2020',
+    round: 'Series C',
+    coinvestors: '',
+  },
 ].sort((a, b) => _.toNumber(b.pledged.replaceAll(/[, $]/g, '')) - _.toNumber(a.pledged.replaceAll(/[, $]/g, '')));
 
 export default function Marketplace() {
@@ -396,8 +334,6 @@ export default function Marketplace() {
       }, 3000);
     }
   }, [setMarketplaceLike, marketplaceLike.showLoading]);
-
-  const { userProfile } = useAuth(GET_INVESTOR);
 
   const HtmlTooltip = withStyles((theme) => ({
     tooltip: {
