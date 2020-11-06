@@ -36,7 +36,7 @@ const MARKETPLACE_LIKE = gql`
 `;
 
 const BASE = 'appI9kFJSiLbjnGl3';
-const TABEL_NAME = 'table%201';
+const TABEL_NAME = 'Marketplace';
 export default function Marketplace() {
   const { data } = useFetch(BASE, TABEL_NAME);
   const [marketplaceLike, setMarketplaceLike] = useSimpleReducer({
@@ -66,7 +66,7 @@ export default function Marketplace() {
       border: '1px solid #dadde9',
     },
   }))(Tooltip);
-  if (!data) return;
+  if (!data) return null;
 
   const deals = data
     .map((r) => r.fields)

@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default ({}) => {
   const classes = useStyles();
-  const [step, setStep] = useState();
+  const [step, setStep] = useState('build');
   const itemDone = false;
 
   return (

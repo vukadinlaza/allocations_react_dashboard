@@ -40,3 +40,33 @@ export const useFetch = (base, tableName) => {
 
   return { status, data };
 };
+
+export const usePostAirtable = (base, tableName, inputData) => {
+  const [status, setStatus] = useState('idle');
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const postData = async () => {
+      const payload = {
+        records: [
+          {
+            fields: inputData,
+          },
+        ],
+      };
+      setStatus('fetching');
+      const response = await fetch(`https://api.airtable.com/v0/${base}/${tableName}`, {
+        method: 'post', // make sure it is a "POST request"
+        body: JSON.stringify(payload),
+        headers: {
+          Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`, // API key
+          'Content-Type': 'application/json', // we will recive a json object
+        },
+      });
+      const data = response.json();
+      setData(data.records);
+      setStatus('fetched');
+    };
+    postData();
+  }, [base, inputData, tableName]);
+  return { status, data };
+};

@@ -1,781 +1,717 @@
 import React, { useEffect, useState } from 'react';
-import { gql } from 'apollo-boost';
-import { useLazyQuery } from '@apollo/react-hooks';
-import { get } from 'lodash';
-import { Helmet } from 'react-helmet';
-import {
-  Button,
-  TextField,
-  Paper,
-  Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Typography,
-} from '@material-ui/core';
+import { Button, TextField, Paper, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import countries from 'country-region-data';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import InfoIcon from '@material-ui/icons/Info';
+import { useSimpleReducer, usePostAirtable } from '../../utils/hooks';
+import './style.scss';
 
-import { useAuth } from '../../auth/useAuth';
-import Loader from '../utils/Loader';
-
+const useStyles = makeStyles((theme) => ({
+  button: {
+    border: 'solid 2px #2676FF',
+    minWidth: '90%',
+    width: '90%',
+    color: '#2676FF',
+  },
+  sidebar: {
+    postion: 'sticky',
+    top: '30vh !important',
+  },
+}));
+const BASE = 'appdPrRjapx8iYnIn';
+const TABEL_NAME = 'Deals';
 export default () => {
+  const classes = useStyles();
+  const [page, setPage] = useState(1);
+  const [data, setData] = useSimpleReducer({});
+  const submitData = async () => {
+    if (!data.airTableId) {
+      const response = await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
+        method: 'post', // make sure it is a "POST request"
+        body: JSON.stringify({ fields: data }),
+        headers: {
+          Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`, // API key
+          'Content-Type': 'application/json', // we will recive a json object
+        },
+      });
+      return setData({ airTableId: response.id });
+    }
+
+    const payload = {
+      records: [
+        {
+          id: data.airTableId,
+          fields: data,
+        },
+      ],
+    };
+
+    await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
+      method: 'patch', // make sure it is a "PATCH request"
+      body: JSON.stringify(payload),
+      headers: {
+        Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`, // API key
+        'Content-Type': 'application/json', // we will recive a json object
+      },
+    });
+  };
+
   return (
     <>
+      <Grid container spacing={2} style={{ maxWidth: '50%', marginTop: '-4rem' }}>
+        {['Basic', 'Intermediate', 'Materials', 'Advanced'].map((t) => (
+          <Grid item xs={3} sm={3} md={3} lg={3}>
+            <Typography variant="h6" style={{ color: 'white', borderBottom: '5px solid white' }}>
+              {t}
+            </Typography>
+          </Grid>
+        ))}
+      </Grid>
       <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', margin: '0' }}>
         {/* Left Column */}
-
         <Grid xs={12} sm={8} md={8} lg={8} style={{ border: '1rem solid transparent' }}>
           {/* Page 1 */}
           {/* Question 1 */}
-          <Paper style={{ marginBottom: '1rem', marginTop: '1rem', padding: '0.5rem' }}>
-            <Grid xs={12} sm={12} md={12} lg={12}>
-              <Grid xs={12} sm={12} md={12} lg={12}>
-                <Grid
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  style={{ marginBottom: '1rem', padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                >
-                  <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                    Would you like to create an SPV or a Fund?
-                  </Typography>
-                  <InfoIcon />
+          {page === 1 && (
+            <>
+              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                <Grid xs={12} sm={12} md={12} lg={12}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid
+                      xs={12}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        Would you like to create an SPV or a Fund?
+                      </Typography>
+                      <InfoIcon />
+                    </Grid>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+                    {['SPV', 'FUND'].map((t) => (
+                      <Grid xs={4} sm={4} md={4} lg={4}>
+                        <Button
+                          variant="outline"
+                          color="#2676FF"
+                          className={classes.button}
+                          style={{
+                            background: data.deal_type === t ? '#2676FF' : 'white',
+                            color: data.deal_type === t ? 'white' : '#2676FF',
+                          }}
+                          onClick={() => setData({ deal_type: t })}
+                        >
+                          {t}
+                        </Button>
+                      </Grid>
+                    ))}
+                    {/* Spacing */}
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                style={{ marginBottom: '1rem', display: 'flex', padding: '0.5rem' }}
-              >
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'blue',
-                      borderRadius: '4px',
-                      color: 'white',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    SPV
-                  </div>
-                </Grid>
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'transparent',
-                      borderRadius: '4px',
-                      color: 'black',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    Fund
-                  </div>
-                </Grid>
-                {/* Spacing */}
-                <Grid xs={4} sm={4} md={4} lg={4} />
-                <Grid xs={4} sm={4} md={4} lg={4} />
-              </Grid>
-            </Grid>
-          </Paper>
+              </Paper>
 
-          <Paper style={{ marginBottom: '1rem', marginTop: '1rem', padding: '0.5rem' }}>
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-              <Grid xs={12} sm={12} md={12} lg={12}>
-                <Grid
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  style={{ marginBottom: '1rem', padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                >
-                  <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                    Which type of asset are you investing in?
-                  </Typography>
-                  <InfoIcon />
+              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid
+                      xs={12}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        Which type of asset are you investing in?
+                      </Typography>
+                      <InfoIcon />
+                    </Grid>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+                    {['Startup', 'Crypto', 'Real Estate', 'Oil/Gas'].map((t) => (
+                      <Grid xs={4} sm={4} md={4} lg={4}>
+                        <Button
+                          variant="outline"
+                          color="#2676FF"
+                          className={classes.button}
+                          style={{
+                            background: data.asset_type === t ? '#2676FF' : 'white',
+                            color: data.asset_type === t ? 'white' : '#2676FF',
+                          }}
+                          onClick={() => setData({ asset_type: t })}
+                        >
+                          {t}
+                        </Button>
+                      </Grid>
+                    ))}
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                style={{ marginBottom: '1rem', display: 'flex', padding: '0.5rem' }}
-              >
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'blue',
-                      borderRadius: '4px',
-                      color: 'white',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    Startup
-                  </div>
-                </Grid>
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'transparent',
-                      borderRadius: '4px',
-                      color: 'black',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    Crypto
-                  </div>
-                </Grid>
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'transparent',
-                      borderRadius: '4px',
-                      color: 'black',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    Real Estate
-                  </div>
-                </Grid>
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'transparent',
-                      borderRadius: '4px',
-                      color: 'black',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    Gas / Oil
-                  </div>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Paper>
+              </Paper>
 
-          <Paper style={{ marginBottom: '1rem', marginTop: '1rem', padding: '0.5rem' }}>
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-              <Grid xs={12} sm={12} md={12} lg={12}>
-                <Grid
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  style={{ marginBottom: '1rem', padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                >
-                  <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                    What is the name of the company?
-                  </Typography>
-                  <InfoIcon />
+              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid
+                      xs={12}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        What is the name of the company?
+                      </Typography>
+                      <InfoIcon />
+                    </Grid>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
+                    <TextField
+                      required
+                      style={{ width: '100%' }}
+                      variant="outlined"
+                      label="Company Name"
+                      value={data.company_name || ''}
+                      onChange={(e) => setData({ company_name: e.target.value })}
+                    />
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid xs={12} sm={12} md={12} lg={12} style={{ marginBottom: '1rem', display: 'flex' }}>
-                <TextField
-                  required
-                  style={{ width: '100%' }}
-                  value=""
-                  label="Subscriber First Name"
-                  variant="outlined"
-                />
-              </Grid>
-            </Grid>
-          </Paper>
+              </Paper>
 
-          <Paper style={{ marginBottom: '1rem', marginTop: '1rem', padding: '0.5rem' }}>
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-              <Grid xs={12} sm={12} md={12} lg={12}>
-                <Grid
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  style={{ marginBottom: '1rem', padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                >
-                  <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                    How soon do you need to close the SPV?
-                  </Typography>
-                  <InfoIcon />
+              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid
+                      xs={12}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        How soon do you need to close the SPV?
+                      </Typography>
+                      <InfoIcon />
+                    </Grid>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+                    {['1 Week', '2 Weeks', '3 Weeks', '4 Weeks'].map((t) => (
+                      <Grid xs={4} sm={4} md={4} lg={4}>
+                        <Button
+                          variant="outline"
+                          color="#2676FF"
+                          className={classes.button}
+                          style={{
+                            background: data.closing_time === t ? '#2676FF' : 'white',
+                            color: data.closing_time === t ? 'white' : '#2676FF',
+                          }}
+                          onClick={() => setData({ closing_time: t })}
+                        >
+                          {t}
+                        </Button>
+                      </Grid>
+                    ))}
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                style={{ marginBottom: '1rem', display: 'flex', padding: '0.5rem' }}
-              >
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'blue',
-                      borderRadius: '4px',
-                      color: 'white',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    1 Week
-                  </div>
-                </Grid>
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'transparent',
-                      borderRadius: '4px',
-                      color: 'black',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    2 Weeks
-                  </div>
-                </Grid>
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'transparent',
-                      borderRadius: '4px',
-                      color: 'black',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    3 Weeks
-                  </div>
-                </Grid>
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'transparent',
-                      borderRadius: '4px',
-                      color: 'black',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    4 Weeks
-                  </div>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Paper>
+              </Paper>
 
-          <Paper style={{ marginBottom: '1rem', marginTop: '1rem', padding: '0.5rem' }}>
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-              <Grid xs={12} sm={12} md={12} lg={12}>
-                <Grid
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  style={{ marginBottom: '1rem', padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                >
-                  <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                    What is the expected wiring date to the company?
-                  </Typography>
-                  <InfoIcon />
+              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid
+                      xs={12}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        What is the expected wiring date to the company?
+                      </Typography>
+                      <InfoIcon />
+                    </Grid>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
+                    <TextField
+                      required
+                      style={{ width: '100%' }}
+                      onChange={(e) => setData({ wiring_date: e.target.value })}
+                      label="Wiring Date"
+                      type="date"
+                      variant="outlined"
+                    />
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid xs={12} sm={12} md={12} lg={12} style={{ marginBottom: '1rem', display: 'flex' }}>
-                <TextField
-                  required
-                  style={{ width: '100%' }}
-                  value=""
-                  label="Subscriber First Name"
-                  variant="outlined"
-                />
-              </Grid>
-            </Grid>
-          </Paper>
+              </Paper>
 
-          <Paper style={{ marginBottom: '1rem', marginTop: '1rem', padding: '0.5rem' }}>
-            <Grid xs={12} sm={12} md={12} lg={12}>
-              <Grid xs={12} sm={12} md={12} lg={12}>
-                <Grid
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  style={{ marginBottom: '1rem', padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                >
-                  <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                    Is this a one off SPV or do you plan to do multiple SPVs?
-                  </Typography>
-                  <InfoIcon />
+              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                <Grid xs={12} sm={12} md={12} lg={12}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid
+                      xs={12}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        Is this a one off SPV or do you plan to do multiple SPVs?
+                      </Typography>
+                      <InfoIcon />
+                    </Grid>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+                    {['One Off', 'Multiple'].map((t) => (
+                      <Grid xs={4} sm={4} md={4} lg={4}>
+                        <Button
+                          variant="outline"
+                          color="#2676FF"
+                          className={classes.button}
+                          style={{
+                            background: data.num_spvs === t ? '#2676FF' : 'white',
+                            color: data.num_spvs === t ? 'white' : '#2676FF',
+                          }}
+                          onClick={() => setData({ num_spvs: t })}
+                        >
+                          {t}
+                        </Button>
+                      </Grid>
+                    ))}
+                    {/* Spacing */}
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                style={{ marginBottom: '1rem', display: 'flex', padding: '0.5rem' }}
-              >
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'blue',
-                      borderRadius: '4px',
-                      color: 'white',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    One-Off
-                  </div>
-                </Grid>
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'transparent',
-                      borderRadius: '4px',
-                      color: 'black',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    Multiple
-                  </div>
-                </Grid>
-                {/* Spacing */}
-                <Grid xs={4} sm={4} md={4} lg={4} />
-                <Grid xs={4} sm={4} md={4} lg={4} />
-              </Grid>
-            </Grid>
-          </Paper>
-
+              </Paper>
+            </>
+          )}
           {/* Page 2 */}
-          <Paper style={{ marginBottom: '1rem', marginTop: '1rem', padding: '0.5rem' }}>
-            <Grid xs={12} sm={12} md={12} lg={12}>
-              <Grid xs={12} sm={12} md={12} lg={12}>
-                <Grid
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  style={{ marginBottom: '1rem', padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                >
-                  <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                    Will the Organizer charge any management fees?
-                  </Typography>
-                  <InfoIcon />
+          {page === 2 && (
+            <>
+              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                <Grid xs={12} sm={12} md={12} lg={12}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid
+                      xs={12}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        Will the Organizer charge any management fees?
+                      </Typography>
+                      <InfoIcon />
+                    </Grid>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+                    {['Yes', 'No'].map((t) => (
+                      <Grid xs={4} sm={4} md={4} lg={4}>
+                        <Button
+                          variant="outline"
+                          color="#2676FF"
+                          className={classes.button}
+                          style={{
+                            background: data.org_charge_mgmt_fee === t ? '#2676FF' : 'white',
+                            color: data.org_charge_mgmt_fee === t ? 'white' : '#2676FF',
+                          }}
+                          onClick={() => setData({ org_charge_mgmt_fee: t })}
+                        >
+                          {t}
+                        </Button>
+                      </Grid>
+                    ))}
+                    {/* Spacing */}
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                style={{ marginBottom: '1rem', display: 'flex', padding: '0.5rem' }}
-              >
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'blue',
-                      borderRadius: '4px',
-                      color: 'white',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    Yes
-                  </div>
+              </Paper>
+              {data.org_charge_mgmt_fee === 'Yes' && (
+                <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid xs={12} sm={12} md={12} lg={12}>
+                      <Grid
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        style={{
+                          padding: '0.5rem',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                        }}
+                      >
+                        <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                          How much will the Organizer charge as management fees?
+                        </Typography>
+                        <InfoIcon />
+                      </Grid>
+                    </Grid>
+                    <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+                      <TextField
+                        required
+                        style={{ width: '100%' }}
+                        type="number"
+                        variant="outlined"
+                        label="Fee Amount"
+                        value={data.org_charge_mgmt_fee_amount || ''}
+                        onChange={(e) => setData({ org_charge_mgmt_fee_amount: e.target.value })}
+                      />
+                      {/* Spacing */}
+                    </Grid>
+                  </Grid>
+                </Paper>
+              )}
+              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                <Grid xs={12} sm={12} md={12} lg={12}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid
+                      xs={12}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        Will the Organizer receive any carried interest from profits?
+                      </Typography>
+                      <InfoIcon />
+                    </Grid>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+                    {['Yes', 'No'].map((t) => (
+                      <Grid xs={4} sm={4} md={4} lg={4}>
+                        <Button
+                          variant="outline"
+                          color="#2676FF"
+                          className={classes.button}
+                          style={{
+                            background: data.org_recieve_carry === t ? '#2676FF' : 'white',
+                            color: data.org_recieve_carry === t ? 'white' : '#2676FF',
+                          }}
+                          onClick={() => setData({ org_recieve_carry: t })}
+                        >
+                          {t}
+                        </Button>
+                      </Grid>
+                    ))}
+                    {/* Spacing */}
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                  </Grid>
                 </Grid>
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'transparent',
-                      borderRadius: '4px',
-                      color: 'black',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    No
-                  </div>
+              </Paper>
+              {data.org_recieve_carry === 'Yes' && (
+                <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid xs={12} sm={12} md={12} lg={12}>
+                      <Grid
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        style={{
+                          padding: '0.5rem',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                        }}
+                      >
+                        <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                          Will the Organizer receive any carried interest from profits?
+                        </Typography>
+                        <InfoIcon />
+                      </Grid>
+                    </Grid>
+                    <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+                      <TextField
+                        required
+                        style={{ width: '100%' }}
+                        type="number"
+                        variant="outlined"
+                        label="Fee Amount"
+                        value={data.org_recieve_carry_amount || ''}
+                        onChange={(e) => setData({ org_recieve_carry_amount: e.target.value })}
+                      />
+                    </Grid>
+                  </Grid>
+                </Paper>
+              )}
+              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid
+                      xs={12}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        Please enter a name for your SPV Series
+                      </Typography>
+                      <InfoIcon />
+                    </Grid>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
+                    <TextField
+                      required
+                      style={{ width: '100%' }}
+                      label="SPV Series Name"
+                      variant="outlined"
+                      value={data.master_series_name || ''}
+                      onChange={(e) => setData({ master_series_name: e.target.value })}
+                    />
+                  </Grid>
                 </Grid>
-                {/* Spacing */}
-                <Grid xs={4} sm={4} md={4} lg={4} />
-                <Grid xs={4} sm={4} md={4} lg={4} />
-              </Grid>
-            </Grid>
-          </Paper>
-
-          <Paper style={{ marginBottom: '1rem', marginTop: '1rem', padding: '0.5rem' }}>
-            <Grid xs={12} sm={12} md={12} lg={12}>
-              <Grid xs={12} sm={12} md={12} lg={12}>
-                <Grid
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  style={{ marginBottom: '1rem', padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                >
-                  <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                    Will the Organizer receive any carried interest from profits?
-                  </Typography>
-                  <InfoIcon />
+              </Paper>
+              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid
+                      xs={12}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        What is the name of the Organizer of the SPV?
+                      </Typography>
+                      <InfoIcon />
+                    </Grid>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
+                    <TextField
+                      required
+                      style={{ width: '100%' }}
+                      label="Organizer Name"
+                      variant="outlined"
+                      value={data.organizer_name || ''}
+                      onChange={(e) => setData({ organizer_name: e.target.value })}
+                    />
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                style={{ marginBottom: '1rem', display: 'flex', padding: '0.5rem' }}
-              >
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'blue',
-                      borderRadius: '4px',
-                      color: 'white',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    Yes
-                  </div>
+              </Paper>
+              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                <Grid xs={12} sm={12} md={12} lg={12}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid
+                      xs={12}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        Do you already have the investment agreement for the Portfolio Company?
+                      </Typography>
+                      <InfoIcon />
+                    </Grid>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+                    {['Yes', 'No'].map((t) => (
+                      <Grid xs={4} sm={4} md={4} lg={4}>
+                        <Button
+                          variant="outline"
+                          color="#2676FF"
+                          className={classes.button}
+                          style={{
+                            background: data.has_investment_agreement === t ? '#2676FF' : 'white',
+                            color: data.has_investment_agreement === t ? 'white' : '#2676FF',
+                          }}
+                          onClick={() => setData({ has_investment_agreement: t })}
+                        >
+                          {t}
+                        </Button>
+                      </Grid>
+                    ))}
+                    {/* Spacing */}
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                  </Grid>
                 </Grid>
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'transparent',
-                      borderRadius: '4px',
-                      color: 'black',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    No
-                  </div>
-                </Grid>
-                {/* Spacing */}
-                <Grid xs={4} sm={4} md={4} lg={4} />
-                <Grid xs={4} sm={4} md={4} lg={4} />
-              </Grid>
-            </Grid>
-          </Paper>
-
-          <Paper style={{ marginBottom: '1rem', marginTop: '1rem', padding: '0.5rem' }}>
-            <Grid xs={12} sm={12} md={12} lg={12}>
-              <Grid xs={12} sm={12} md={12} lg={12}>
-                <Grid
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  style={{ marginBottom: '1rem', padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                >
-                  <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                    Will the Organizer receive any carried interest from profits?
-                  </Typography>
-                  <InfoIcon />
-                </Grid>
-              </Grid>
-              <Grid
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                style={{ marginBottom: '1rem', display: 'flex', padding: '0.5rem' }}
-              >
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'blue',
-                      borderRadius: '4px',
-                      color: 'white',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    Direct
-                  </div>
-                </Grid>
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'transparent',
-                      borderRadius: '4px',
-                      color: 'black',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    Secondary
-                  </div>
-                </Grid>
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'transparent',
-                      borderRadius: '4px',
-                      color: 'black',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    SPV in SPV
-                  </div>
-                </Grid>
-                {/* Spacing */}
-                <Grid xs={4} sm={4} md={4} lg={4} />
-              </Grid>
-            </Grid>
-          </Paper>
-
-          <Paper style={{ marginBottom: '1rem', marginTop: '1rem', padding: '0.5rem' }}>
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-              <Grid xs={12} sm={12} md={12} lg={12}>
-                <Grid
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  style={{ marginBottom: '1rem', padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                >
-                  <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                    Please enter a name for your SPV Series
-                  </Typography>
-                  <InfoIcon />
-                </Grid>
-              </Grid>
-              <Grid xs={12} sm={12} md={12} lg={12} style={{ marginBottom: '1rem', display: 'flex' }}>
-                <TextField
-                  required
-                  style={{ width: '100%' }}
-                  value=""
-                  label="Subscriber First Name"
-                  variant="outlined"
-                />
-              </Grid>
-            </Grid>
-          </Paper>
-
-          <Paper style={{ marginBottom: '1rem', marginTop: '1rem', padding: '0.5rem' }}>
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-              <Grid xs={12} sm={12} md={12} lg={12}>
-                <Grid
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  style={{ marginBottom: '1rem', padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                >
-                  <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                    What is the name of the Organizer of the SPV?
-                  </Typography>
-                  <InfoIcon />
-                </Grid>
-              </Grid>
-              <Grid xs={12} sm={12} md={12} lg={12} style={{ marginBottom: '1rem', display: 'flex' }}>
-                <TextField
-                  required
-                  style={{ width: '100%' }}
-                  value=""
-                  label="Subscriber First Name"
-                  variant="outlined"
-                />
-              </Grid>
-            </Grid>
-          </Paper>
-          <Paper style={{ marginBottom: '1rem', marginTop: '1rem', padding: '0.5rem' }}>
-            <Grid xs={12} sm={12} md={12} lg={12}>
-              <Grid xs={12} sm={12} md={12} lg={12}>
-                <Grid
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  style={{ marginBottom: '1rem', padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                >
-                  <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                    Do you already have the investment agreement for the Portfolio Company?
-                  </Typography>
-                  <InfoIcon />
-                </Grid>
-              </Grid>
-              <Grid
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                style={{ marginBottom: '1rem', display: 'flex', padding: '0.5rem' }}
-              >
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'blue',
-                      borderRadius: '4px',
-                      color: 'white',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    Yes
-                  </div>
-                </Grid>
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'transparent',
-                      borderRadius: '4px',
-                      color: 'black',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    No
-                  </div>
-                </Grid>
-                {/* Spacing */}
-                <Grid xs={4} sm={4} md={4} lg={4} />
-                <Grid xs={4} sm={4} md={4} lg={4} />
-              </Grid>
-            </Grid>
-          </Paper>
-
+              </Paper>
+            </>
+          )}
           {/* Page 3 */}
 
-          <Paper style={{ marginBottom: '1rem', marginTop: '1rem', padding: '0.5rem' }}>
-            <Grid xs={12} sm={12} md={12} lg={12}>
-              <Grid xs={12} sm={12} md={12} lg={12}>
-                <Grid
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  style={{ marginBottom: '1rem', padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                >
-                  <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                    Do you have a deck or other marketing material from the Portfolio Company?
-                  </Typography>
-                  <InfoIcon />
+          {page === 3 && (
+            <>
+              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                <Grid xs={12} sm={12} md={12} lg={12}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid
+                      xs={12}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        Do you have a deck or other marketing material from the Portfolio Company?
+                      </Typography>
+                      <InfoIcon />
+                    </Grid>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+                    <Grid xs={4} sm={4} md={4} lg={4}>
+                      <Button variant="outline" color="#2676FF" className={classes.button} onClick={() => setData({})}>
+                        Upload File(s)
+                      </Button>
+                    </Grid>
+                    {/* Spacing */}
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                style={{ marginBottom: '1rem', display: 'flex', padding: '0.5rem' }}
-              >
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'blue',
-                      borderRadius: '4px',
-                      color: 'white',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    Upload File(s)
-                  </div>
+              </Paper>
+              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                <Grid xs={12} sm={12} md={12} lg={12}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid
+                      xs={12}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        Please attach deck or marketing material{' '}
+                      </Typography>
+                      <InfoIcon />
+                    </Grid>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+                    <Grid xs={4} sm={4} md={4} lg={4}>
+                      <Button variant="outline" color="#2676FF" className={classes.button} onClick={() => setData({})}>
+                        Upload File(s)
+                      </Button>
+                    </Grid>
+                    {/* Spacing */}
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                  </Grid>
                 </Grid>
-                {/* Spacing */}
-                <Grid xs={4} sm={4} md={4} lg={4} />
-                <Grid xs={4} sm={4} md={4} lg={4} />
-                <Grid xs={4} sm={4} md={4} lg={4} />
-              </Grid>
-            </Grid>
-          </Paper>
-
-          <Paper style={{ marginBottom: '1rem', marginTop: '1rem', padding: '0.5rem' }}>
-            <Grid xs={12} sm={12} md={12} lg={12}>
-              <Grid xs={12} sm={12} md={12} lg={12}>
-                <Grid
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  style={{ marginBottom: '1rem', padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                >
-                  <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                    Please attach deck or marketing material{' '}
-                  </Typography>
-                  <InfoIcon />
-                </Grid>
-              </Grid>
-              <Grid
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                style={{ marginBottom: '1rem', display: 'flex', padding: '0.5rem' }}
-              >
-                <Grid xs={4} sm={4} md={4} lg={4}>
-                  <div
-                    style={{
-                      background: 'blue',
-                      borderRadius: '4px',
-                      color: 'white',
-                      padding: '0.5rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    Upload File(s)
-                  </div>
-                </Grid>
-                {/* Spacing */}
-                <Grid xs={4} sm={4} md={4} lg={4} />
-                <Grid xs={4} sm={4} md={4} lg={4} />
-                <Grid xs={4} sm={4} md={4} lg={4} />
-              </Grid>
-            </Grid>
-          </Paper>
+              </Paper>
+            </>
+          )}
         </Grid>
 
         {/* Right Column */}
         <Grid xs={12} sm={4} md={4} lg={4} style={{ border: '1rem solid transparent' }}>
-          <Paper style={{ marginBottom: '1rem', marginTop: '1rem', padding: '0.5rem' }}>
-            <Grid xs={12} sm={12} md={12} lg={12} style={{}}>
-              <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h5">
-                Services Agreement
-              </Typography>
-              <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Type: SPV</Typography>
-              <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Asset type: Startup</Typography>
-              <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Portfolio Company: SpaceX</Typography>
-              <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Closing time: 1 week</Typography>
-              <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Exp. wiring date: 12/21/2020</Typography>
-              <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}># of SPVs: One off</Typography>
-              <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Management fees: No</Typography>
-              <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Carried interest: No</Typography>
-              <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>SPV type: Direct</Typography>
-              <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Series name: Browder Capital</Typography>
-              <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Organizer: Joshua Browder</Typography>
-              <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Investment agreement: No</Typography>
-            </Grid>
+          <div className={classes.sidebar}>
+            <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem' }}>
+              <Grid
+                xs={12}
+                sm={12}
+                md={12}
+                lg={12}
+                style={{ padding: '0.75rem', height: '350px', maxHeight: '350px', overflow: 'scroll' }}
+              >
+                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h5">
+                  Services Agreement
+                </Typography>
+                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Type: {data.deal_type}</Typography>
+                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                  Asset type: {data.asset_type}
+                </Typography>
+                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                  Portfolio Company: {data.company_name}
+                </Typography>
+                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                  Closing time: {data.closing_time}
+                </Typography>
+                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                  Exp. wiring date: {data.wiring_date}
+                </Typography>
+                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}># of SPVs: {data.num_spvs}</Typography>
+                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                  Management fees: {data.org_charge_mgmt_fee}
+                </Typography>
+                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                  Management fee amount: {data.org_charge_mgmt_fee_amount}
+                </Typography>
+                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                  Carried interest: {data.org_recieve_carry}
+                </Typography>
+                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                  Carried amount: {data.org_recieve_carry_amount}
+                </Typography>
+                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>SPV type: WHAT DO</Typography>
+                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                  Series name: {data.master_series_name}
+                </Typography>
+                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                  Organizer: {data.organizer_name}
+                </Typography>
+                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                  Investment agreement: {data.has_investment_agreement}
+                </Typography>
+              </Grid>
+              <Grid
+                xs={12}
+                sm={12}
+                md={12}
+                lg={12}
+                style={{
+                  background: '#2676FF',
+                  paddingTop: '1em',
+                  paddingBottom: '1em',
+                  color: 'white',
+                  padding: '.75rem',
+                }}
+              >
+                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Subtotal: $0</Typography>
+                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Blue Sky Fees: $0</Typography>
+                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Grand Total: $0</Typography>
+                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Estimated Delivery: 3 Weeks</Typography>
+              </Grid>
+            </Paper>
             <Grid
+              container
               xs={12}
               sm={12}
               md={12}
               lg={12}
-              style={{ background: 'blue', paddingTop: '1em', paddingBottom: '1em', color: 'white', margin: '0' }}
+              style={{ display: 'flex', justifyContent: 'space-between' }}
             >
-              <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Subtotal: $0</Typography>
-              <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Bluesky Fees: $0</Typography>
-              <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Grand Total: $0</Typography>
-              <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Estimated Delivery: 3 Weeks</Typography>
+              {page > 1 && (
+                <Grid item xs={6} sm={6} md={6} lg={6}>
+                  <Button
+                    onClick={() => setPage(page - 1)}
+                    variant="contained"
+                    style={{ backgroundColor: '#2676FF', color: 'white', width: '100%', textTransform: 'capitalize' }}
+                  >
+                    Previous
+                  </Button>
+                </Grid>
+              )}
+              <Grid item xs={6} sm={6} md={6} lg={6}>
+                {page < 3 ? (
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    style={{ width: '100%' }}
+                    onClick={() => {
+                      submitData();
+                      setPage(page + 1);
+                    }}
+                  >
+                    Next
+                  </Button>
+                ) : (
+                  <Button variant="contained" color="secondary" style={{ width: '100%' }}>
+                    Finish
+                  </Button>
+                )}
+              </Grid>
             </Grid>
-          </Paper>
+          </div>
         </Grid>
-
         {/* end grid */}
       </Grid>
     </>
