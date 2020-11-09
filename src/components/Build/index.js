@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Paper, Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { gql } from 'apollo-boost';
 import BuildStep from './build';
+import { useFetch } from '../../utils/hooks';
+import { useAuth } from '../../auth/useAuth';
+import Loader from '../utils/Loader';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -60,11 +64,44 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(4),
   },
 }));
+const GET_INVESTOR = gql`
+  {
+    investor {
+      _id
+      email
+      first_name
+      last_name
+      admin
+      deals {
+        company_name
+        airtableId
+        status
+      }
+    }
+  }
+`;
 
+const BASE = 'appdPrRjapx8iYnIn';
+const TABEL_NAME = 'Deals';
 export default ({}) => {
   const classes = useStyles();
-  const [step, setStep] = useState('build');
+  const [step, setStep] = useState('');
   const itemDone = false;
+  const [deal, setDeal] = useState();
+  const { data: allATDeals } = useFetch(BASE, TABEL_NAME);
+
+  const { userProfile } = useAuth(GET_INVESTOR);
+
+  useEffect(() => {
+    if (allATDeals && userProfile) {
+      const tableDeals = allATDeals.map((r) => ({ id: r.id, ...r.fields }));
+      const dbDeal = userProfile?.deals?.find((d) => d?.airtableId && d?.status === 'draft');
+      const activeDeal = tableDeals?.find((d) => d.id === dbDeal?.airtableId) || {};
+      setDeal(activeDeal);
+    }
+  }, [allATDeals, userProfile]);
+
+  if (!userProfile || !allATDeals) return <Loader />;
 
   return (
     <>
@@ -73,7 +110,7 @@ export default ({}) => {
           Build
         </Typography>
         {step && <div style={{ marginTop: '4rem' }} />}
-        {step === 'build' && <BuildStep />}
+        {step === 'build' && <BuildStep deal={deal} user={userProfile} />}
         {!step && (
           <>
             <Typography variant="h6" style={{ color: 'black', marginTop: '100px' }}>

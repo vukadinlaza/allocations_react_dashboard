@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button, TextField, Paper, Grid, Typography } from '@material-ui/core';
+import { Button, TextField, Paper, Grid, Typography, Input } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
-import { useSimpleReducer, usePostAirtable } from '../../utils/hooks';
+import { gql } from 'apollo-boost';
+import { useMutation } from '@apollo/react-hooks';
+import { useSimpleReducer } from '../../utils/hooks';
+
 import './style.scss';
 
 const useStyles = makeStyles((theme) => ({
@@ -17,14 +20,33 @@ const useStyles = makeStyles((theme) => ({
     top: '30vh !important',
   },
 }));
+const CREATE_ORG_AND_DEAL = gql`
+  mutation CreateOrgAndDeal($orgName: String!, $deal: DealInput!) {
+    createOrgAndDeal(orgName: $orgName, deal: $deal) {
+      _id
+      organization {
+        _id
+        slug
+      }
+    }
+  }
+`;
 const BASE = 'appdPrRjapx8iYnIn';
 const TABEL_NAME = 'Deals';
-export default () => {
+export default ({ deal, user }) => {
   const classes = useStyles();
   const [page, setPage] = useState(1);
   const [data, setData] = useSimpleReducer({});
+
+  useEffect(() => {
+    if (deal) {
+      setData(deal);
+    }
+  }, [deal, setData]);
+  const [createOrgAndDeal, {}] = useMutation(CREATE_ORG_AND_DEAL, {});
+
   const submitData = async () => {
-    if (!data.airTableId) {
+    if (!data.airtableId) {
       const response = await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
         method: 'post', // make sure it is a "POST request"
         body: JSON.stringify({ fields: data }),
@@ -33,13 +55,24 @@ export default () => {
           'Content-Type': 'application/json', // we will recive a json object
         },
       });
-      return setData({ airTableId: response.id });
+      const res = await response.json();
+      console.log(res);
+      createOrgAndDeal({
+        variables: {
+          orgName: `${user.email}'s Fund - ${
+            res.id || Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+          }`,
+          deal: { airtableId: res.id, status: 'draft' },
+        },
+      });
+
+      return setData({ airtableId: res.id });
     }
 
     const payload = {
       records: [
         {
-          id: data.airTableId,
+          id: data.airtableId,
           fields: data,
         },
       ],
@@ -53,6 +86,10 @@ export default () => {
         'Content-Type': 'application/json', // we will recive a json object
       },
     });
+  };
+  const handleChange = (data) => {
+    setData(data);
+    submitData();
   };
 
   return (
@@ -557,38 +594,13 @@ export default () => {
                   </Grid>
                   <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
                     <Grid xs={4} sm={4} md={4} lg={4}>
-                      <Button variant="outline" color="#2676FF" className={classes.button} onClick={() => setData({})}>
-                        Upload File(s)
-                      </Button>
-                    </Grid>
-                    {/* Spacing */}
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                  </Grid>
-                </Grid>
-              </Paper>
-              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                <Grid xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        Please attach deck or marketing material{' '}
-                      </Typography>
-                      <InfoIcon />
-                    </Grid>
-                  </Grid>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
-                    <Grid xs={4} sm={4} md={4} lg={4}>
-                      <Button variant="outline" color="#2676FF" className={classes.button} onClick={() => setData({})}>
-                        Upload File(s)
-                      </Button>
+                      <Input
+                        type="file"
+                        onChange={({ target }) => {
+                          if (target.validity.valid) setData({ passport: target.files[0] });
+                        }}
+                      />
+                      Upload File(s)
                     </Grid>
                     {/* Spacing */}
                     <Grid xs={4} sm={4} md={4} lg={4} />
