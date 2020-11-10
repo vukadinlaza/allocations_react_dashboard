@@ -113,7 +113,7 @@ export default ({}) => {
         {step === 'build' && (
           <BuildStep deal={data} user={userProfile} setData={setData} data={data} setStep={setStep} />
         )}
-        {step === 'sign' && <SignStep deal={data} />}
+        {step === 'sign' && <SignStep deal={data} user={userProfile} />}
         {!step && (
           <>
             <Typography variant="h6" style={{ color: 'black', marginTop: '100px' }}>
