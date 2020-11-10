@@ -96,12 +96,11 @@ export default ({}) => {
   useEffect(() => {
     if (allATDeals && userProfile) {
       const tableDeals = allATDeals.map((r) => ({ id: r.id, ...r.fields }));
-      const dbDeal = userProfile?.deals?.find((d) => d?.airtableId && d?.status === 'draft');
-      const activeDeal = tableDeals?.find((d) => d.id === dbDeal?.airtableId) || {};
+      // const dbDeal = userProfile?.deals?.find((d) => d?.airtableId && d?.status === 'draft');
+      const activeDeal = tableDeals?.find((d) => d.userId === userProfile._id) || {};
       setData({ airtableId: activeDeal.id, ...activeDeal });
     }
   }, [allATDeals, setData, userProfile]);
-
   if (!userProfile || !allATDeals) return <Loader />;
   return (
     <>
@@ -134,7 +133,12 @@ export default ({}) => {
                     <Grid style={{ width: '50px' }}>
                       <CheckCircleIcon
                         color="secondary"
-                        style={{ marginLeft: '1rem', width: '40px', height: '40px', opacity: itemDone ? '1' : '.25' }}
+                        style={{
+                          marginLeft: '1rem',
+                          width: '40px',
+                          height: '40px',
+                          opacity: data['Build Phase'] ? '1' : '.25',
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -163,7 +167,12 @@ export default ({}) => {
                     <Grid style={{ width: '50px' }}>
                       <CheckCircleIcon
                         color="secondary"
-                        style={{ marginLeft: '1rem', width: '40px', height: '40px', opacity: itemDone ? '1' : '.25' }}
+                        style={{
+                          marginLeft: '1rem',
+                          width: '40px',
+                          height: '40px',
+                          opacity: data.Review ? '1' : '.25',
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -187,7 +196,12 @@ export default ({}) => {
                     <Grid style={{ width: '50px' }}>
                       <CheckCircleIcon
                         color="secondary"
-                        style={{ marginLeft: '1rem', width: '40px', height: '40px', opacity: itemDone ? '1' : '.25' }}
+                        style={{
+                          marginLeft: '1rem',
+                          width: '40px',
+                          height: '40px',
+                          opacity: data['Signed Provision of Service'] ? '1' : '.25',
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -197,6 +211,7 @@ export default ({}) => {
                     variant="contained"
                     style={{ marginTop: '1rem', minWidth: '100%' }}
                     onClick={() => setStep('sign')}
+                    disabled={data['Signed Provision of Service']}
                   >
                     Sign
                   </Button>

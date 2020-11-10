@@ -42,22 +42,21 @@ export default ({ deal, user, data, setData, setStep }) => {
     if (!data.airtableId) {
       const response = await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
         method: 'post', // make sure it is a "POST request"
-        body: JSON.stringify({ fields: data }),
+        body: JSON.stringify({ fields: { userId: user._id, ...data } }),
         headers: {
           Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`, // API key
           'Content-Type': 'application/json', // we will recive a json object
         },
       });
       const res = await response.json();
-      console.log(res);
-      createOrgAndDeal({
-        variables: {
-          orgName: `${user.email}'s Fund - ${
-            res.id || Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-          }`,
-          deal: { airtableId: res.id, status: 'draft' },
-        },
-      });
+      // createOrgAndDeal({
+      //   variables: {
+      //     orgName: `${user.email}'s Fund - ${
+      //       res.id || Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+      //     }`,
+      //     deal: { airtableId: res.id, status: 'draft' },
+      //   },
+      // });
 
       return setData({ airtableId: res.id });
     }
@@ -84,10 +83,16 @@ export default ({ deal, user, data, setData, setStep }) => {
   return (
     <>
       <Grid container spacing={2} style={{ maxWidth: '50%', marginTop: '-4rem' }}>
-        {['Basic', 'Intermediate', 'Materials', 'Advanced'].map((t) => (
-          <Grid item xs={3} sm={3} md={3} lg={3}>
-            <Typography variant="h6" style={{ color: 'white', borderBottom: '5px solid white' }}>
-              {t}
+        {[
+          { display: 'Step 1', page: 1 },
+          { display: 'Step 2', page: 2 },
+        ].map((t) => (
+          <Grid item xs={3} sm={3} md={3} lg={3} onClick={() => setPage(t.page)}>
+            <Typography
+              variant="h6"
+              style={{ color: 'white', borderBottom: t.page === page ? '5px solid white' : '5px solid transparent' }}
+            >
+              {t.display}
             </Typography>
           </Grid>
         ))}
@@ -853,7 +858,7 @@ export default ({ deal, user, data, setData, setStep }) => {
                 </Grid>
               )}
               <Grid item xs={6} sm={6} md={6} lg={6}>
-                {page < 3 ? (
+                {page < 2 ? (
                   <Button
                     variant="contained"
                     color="secondary"
