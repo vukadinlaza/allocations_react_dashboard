@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, TextField, Paper, Grid, Typography, Input } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
-import { useSimpleReducer } from '../../utils/hooks';
 
 import './style.scss';
 
@@ -33,16 +32,10 @@ const CREATE_ORG_AND_DEAL = gql`
 `;
 const BASE = 'appdPrRjapx8iYnIn';
 const TABEL_NAME = 'Deals';
-export default ({ deal, user }) => {
+export default ({ deal, user, data, setData, setStep }) => {
   const classes = useStyles();
   const [page, setPage] = useState(1);
-  const [data, setData] = useSimpleReducer({});
 
-  useEffect(() => {
-    if (deal) {
-      setData(deal);
-    }
-  }, [deal, setData]);
   const [createOrgAndDeal, {}] = useMutation(CREATE_ORG_AND_DEAL, {});
 
   const submitData = async () => {
@@ -86,10 +79,6 @@ export default ({ deal, user }) => {
         'Content-Type': 'application/json', // we will recive a json object
       },
     });
-  };
-  const handleChange = (data) => {
-    setData(data);
-    submitData();
   };
 
   return (
@@ -716,7 +705,12 @@ export default ({ deal, user }) => {
                     Next
                   </Button>
                 ) : (
-                  <Button variant="contained" color="secondary" style={{ width: '100%' }}>
+                  <Button
+                    variant="contained"
+                    onClick={() => setStep('sign')}
+                    color="secondary"
+                    style={{ width: '100%' }}
+                  >
                     Finish
                   </Button>
                 )}

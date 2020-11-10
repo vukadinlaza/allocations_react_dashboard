@@ -3,10 +3,11 @@ import { Paper, Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { gql } from 'apollo-boost';
-import BuildStep from './build';
-import { useFetch } from '../../utils/hooks';
+import { useFetch, useSimpleReducer } from '../../utils/hooks';
 import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
+import BuildStep from './build';
+import SignStep from './sign';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -87,8 +88,8 @@ export default ({}) => {
   const classes = useStyles();
   const [step, setStep] = useState('');
   const itemDone = false;
-  const [deal, setDeal] = useState();
   const { data: allATDeals } = useFetch(BASE, TABEL_NAME);
+  const [data, setData] = useSimpleReducer({});
 
   const { userProfile } = useAuth(GET_INVESTOR);
 
@@ -97,12 +98,11 @@ export default ({}) => {
       const tableDeals = allATDeals.map((r) => ({ id: r.id, ...r.fields }));
       const dbDeal = userProfile?.deals?.find((d) => d?.airtableId && d?.status === 'draft');
       const activeDeal = tableDeals?.find((d) => d.id === dbDeal?.airtableId) || {};
-      setDeal(activeDeal);
+      setData({ airtableId: activeDeal.id, ...activeDeal });
     }
-  }, [allATDeals, userProfile]);
+  }, [allATDeals, setData, userProfile]);
 
   if (!userProfile || !allATDeals) return <Loader />;
-
   return (
     <>
       <div className={classes.blueContainer}>
@@ -110,7 +110,10 @@ export default ({}) => {
           Build
         </Typography>
         {step && <div style={{ marginTop: '4rem' }} />}
-        {step === 'build' && <BuildStep deal={deal} user={userProfile} />}
+        {step === 'build' && (
+          <BuildStep deal={data} user={userProfile} setData={setData} data={data} setStep={setStep} />
+        )}
+        {step === 'sign' && <SignStep deal={data} />}
         {!step && (
           <>
             <Typography variant="h6" style={{ color: 'black', marginTop: '100px' }}>
@@ -189,7 +192,12 @@ export default ({}) => {
                     </Grid>
                   </Grid>
                   <Typography variant="h6">Service Agreement</Typography>
-                  <Button color="secondary" variant="contained" style={{ marginTop: '1rem', minWidth: '100%' }}>
+                  <Button
+                    color="secondary"
+                    variant="contained"
+                    style={{ marginTop: '1rem', minWidth: '100%' }}
+                    onClick={() => setStep('sign')}
+                  >
                     Sign
                   </Button>
                 </Paper>
