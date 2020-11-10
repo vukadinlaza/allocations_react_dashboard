@@ -112,7 +112,7 @@ export default ({ deal, user, data, setData, setStep }) => {
                       <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
                         Would you like to create an SPV or a Fund?
                       </Typography>
-                      <InfoIcon />
+                      <InfoIcon stye={{ background: 'rgba(0,0,0,0.4)' }} />
                     </Grid>
                   </Grid>
                   <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
@@ -613,45 +613,121 @@ export default ({ deal, user, data, setData, setStep }) => {
                 lg={12}
                 style={{ padding: '0.75rem', height: '350px', maxHeight: '350px', overflow: 'scroll' }}
               >
-                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h5">
-                  Services Agreement
-                </Typography>
-                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Type: {data.deal_type}</Typography>
-                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                  Asset type: {data.asset_type}
-                </Typography>
-                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                  Portfolio Company: {data.company_name}
-                </Typography>
-                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                  Closing time: {data.closing_time}
-                </Typography>
-                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                  Exp. wiring date: {data.wiring_date}
-                </Typography>
-                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}># of SPVs: {data.num_spvs}</Typography>
-                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                  Management fees: {data.org_charge_mgmt_fee}
-                </Typography>
-                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                  Management fee amount: {data.org_charge_mgmt_fee_amount}
-                </Typography>
-                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                  Carried interest: {data.org_recieve_carry}
-                </Typography>
-                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                  Carried amount: {data.org_recieve_carry_amount}
-                </Typography>
-                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>SPV type: WHAT DO</Typography>
-                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                  Series name: {data.master_series_name}
-                </Typography>
-                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                  Organizer: {data.organizer_name}
-                </Typography>
-                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                  Investment agreement: {data.has_investment_agreement}
-                </Typography>
+                <Grid xs={12} sm={12} md={12} lg={12}>
+                  <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h5">
+                    Services Agreement
+                  </Typography>
+                </Grid>
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    Type
+                  </Typography>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    {data.deal_type}
+                  </Typography>
+                </Grid>
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    Asset type:
+                  </Typography>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    {data.asset_type}
+                  </Typography>
+                </Grid>
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    Portfolio Company:
+                  </Typography>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    {data.company_name}
+                  </Typography>
+                </Grid>
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    Closing time:
+                  </Typography>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    {data.closing_time}
+                  </Typography>
+                </Grid>
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    Exp. wiring date:
+                  </Typography>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    {data.wiring_date}
+                  </Typography>
+                </Grid>
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    # of SPVs:
+                  </Typography>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    {data.num_spvs}
+                  </Typography>
+                </Grid>
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    Management fees:
+                  </Typography>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    {data.org_charge_mgmt_fee}
+                  </Typography>
+                </Grid>
+
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    Management fee amount:
+                  </Typography>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    {data.org_charge_mgmt_fee_amount}
+                  </Typography>
+                </Grid>
+
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    Carried interest:
+                  </Typography>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    {data.org_recieve_carry}
+                  </Typography>
+                </Grid>
+
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    SPV type:
+                  </Typography>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    What Do?
+                  </Typography>
+                </Grid>
+
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    Series name:
+                  </Typography>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    {data.master_series_name}
+                  </Typography>
+                </Grid>
+
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    Organizer:
+                  </Typography>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    {data.organizer_name}
+                  </Typography>
+                </Grid>
+
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    Investment agreement:
+                  </Typography>
+                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+                    {data.has_investment_agreement}
+                  </Typography>
+                </Grid>
               </Grid>
               <Grid
                 xs={12}
@@ -666,10 +742,95 @@ export default ({ deal, user, data, setData, setStep }) => {
                   padding: '.75rem',
                 }}
               >
-                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Subtotal: $0</Typography>
-                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Blue Sky Fees: $0</Typography>
-                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Grand Total: $0</Typography>
-                <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }}>Estimated Delivery: 3 Weeks</Typography>
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography
+                    xs={6}
+                    sm={6}
+                    md={6}
+                    lg={6}
+                    style={{ textAlign: 'left', marginTop: '0.5rem' }}
+                    variant="h5"
+                  >
+                    Subtotal:
+                  </Typography>
+                  <Typography
+                    xs={6}
+                    sm={6}
+                    md={6}
+                    lg={6}
+                    style={{ textAlign: 'left', marginTop: '0.5rem' }}
+                    variant="h5"
+                  >
+                    $0
+                  </Typography>
+                </Grid>
+
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography
+                    xs={6}
+                    sm={6}
+                    md={6}
+                    lg={6}
+                    style={{ textAlign: 'left', marginTop: '0.5rem' }}
+                    variant="h5"
+                  >
+                    Blussky Fees:
+                  </Typography>
+                  <Typography
+                    xs={6}
+                    sm={6}
+                    md={6}
+                    lg={6}
+                    style={{ textAlign: 'left', marginTop: '0.5rem' }}
+                    variant="h5"
+                  >
+                    $0
+                  </Typography>
+                </Grid>
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography
+                    xs={6}
+                    sm={6}
+                    md={6}
+                    lg={6}
+                    style={{ textAlign: 'left', marginTop: '0.5rem' }}
+                    variant="h5"
+                  >
+                    Grand Total:
+                  </Typography>
+                  <Typography
+                    xs={6}
+                    sm={6}
+                    md={6}
+                    lg={6}
+                    style={{ textAlign: 'left', marginTop: '0.5rem' }}
+                    variant="h5"
+                  >
+                    $0
+                  </Typography>
+                </Grid>
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography
+                    xs={6}
+                    sm={6}
+                    md={6}
+                    lg={6}
+                    style={{ textAlign: 'left', marginTop: '0.5rem' }}
+                    variant="h5"
+                  >
+                    Estimated Delivery:
+                  </Typography>
+                  <Typography
+                    xs={6}
+                    sm={6}
+                    md={6}
+                    lg={6}
+                    style={{ textAlign: 'left', marginTop: '0.5rem' }}
+                    variant="h5"
+                  >
+                    3 Weeks
+                  </Typography>
+                </Grid>
               </Grid>
             </Paper>
             <Grid
