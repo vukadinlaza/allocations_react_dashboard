@@ -70,6 +70,9 @@ export default function Marketplace() {
 
   const deals = data
     .map((r) => r.fields)
+    .filter((d) => {
+      return d[`Deal Name`];
+    })
     .sort((a, b) => _.toNumber(b.pledged.replaceAll(/[, $]/g, '')) - _.toNumber(a.pledged.replaceAll(/[, $]/g, '')));
 
   return (
