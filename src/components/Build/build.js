@@ -14,9 +14,15 @@ const images = {
   SPV1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/blank-platform.svg',
   SPVStartup1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-1.svg',
   SPVStartup2: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-2.svg',
-  SPVStartup3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-3.svg',
-  SPVStartup4: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom.svg',
+  SPVStartup3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom.svg',
+  SPVCrypto1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-2.svg',
+  SPVCrypto2: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-3.svg',
+  SPVCrypto3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-custom.svg',
+  SPVRealEstate1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-1.svg',
+  SPVRealEstate2: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-3.svg',
+  SPVRealEstate3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-custom.svg',
 };
+const zapierWebhook = 'https://hooks.zapier.com/hooks/catch/7904699/ol1c7go/';
 const useStyles = makeStyles((theme) => ({
   button: {
     border: 'solid 2px #2676FF',
@@ -40,11 +46,19 @@ const CREATE_ORG_AND_DEAL = gql`
     }
   }
 `;
+const POST_ZAP = gql`
+  mutation PostZap($body: Object) {
+    postZap(data: $body) {
+      _id
+    }
+  }
+`;
 const BASE = 'appdPrRjapx8iYnIn';
 const TABEL_NAME = 'Deals';
 export default ({ deal, user, data, setData, setStep }) => {
   const classes = useStyles();
   const [page, setPage] = useState(1);
+  const [postZap, {}] = useMutation(POST_ZAP);
 
   const fields = [
     'deal_type',
@@ -107,15 +121,13 @@ export default ({ deal, user, data, setData, setStep }) => {
     });
   };
   if (!deal) return null;
-  console.log(`${(data.deal_type || '').concat(data.asset_type || '', page.toString())}`);
   return (
     <>
       <Grid container spacing={2} style={{ maxWidth: '50%', marginTop: '-4rem' }}>
         {[
           { display: 'Step 1', page: 1 },
           { display: 'Step 2', page: 2 },
-          { display: 'Step 3', page: 3 },
-          { display: 'Custom', page: 4 },
+          { display: 'Custom', page: 3 },
         ].map((t) => (
           <Grid
             item
@@ -156,7 +168,9 @@ export default ({ deal, user, data, setData, setStep }) => {
               src={
                 !deal.deal_type
                   ? images.basic
-                  : images[`${(data.deal_type || '').concat(data.asset_type || '', page.toString())}`]
+                  : images[
+                      `${(data.deal_type || '').concat(data.asset_type.replaceAll(' ', '') || '', page.toString())}`
+                    ]
               }
               alt="oops"
               style={{ width: '80%', height: '80%' }}
@@ -633,7 +647,7 @@ export default ({ deal, user, data, setData, setStep }) => {
           )}
           {/* Page 3 */}
 
-          {page === 3 && (
+          {page === 10 && (
             <>
               <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
                 <Grid xs={12} sm={12} md={12} lg={12}>
@@ -670,7 +684,7 @@ export default ({ deal, user, data, setData, setStep }) => {
               </Paper>
             </>
           )}
-          {page === 4 && (
+          {page === 3 && (
             <>
               <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
                 <Grid xs={12} sm={12} md={12} lg={12}>
@@ -944,11 +958,20 @@ export default ({ deal, user, data, setData, setStep }) => {
               padding: '.25rem',
             }}
             onClick={() => {
-              submitData();
-              setPage(page + 1);
+              if (page < 3) {
+                submitData();
+                setPage(page + 1);
+                return;
+              }
+              if (page === 3) {
+                submitData();
+                postZap({
+                  variables: { body: { zapUrl: zapierWebhook, ...data } },
+                });
+              }
             }}
           >
-            Next
+            {page === 3 ? 'Finish' : 'Next'}
           </div>
         </Grid>
       </Grid>
