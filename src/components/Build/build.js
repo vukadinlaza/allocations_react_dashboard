@@ -11,16 +11,16 @@ import './style.scss';
 
 const images = {
   basic: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/graphic-bg.svg',
-  SPV1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/blank-platform.svg',
-  SPVStartup1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-1.svg',
-  SPVStartup2: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-2.svg',
-  SPVStartup3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom.svg',
-  SPVCrypto1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-2.svg',
-  SPVCrypto2: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-3.svg',
-  SPVCrypto3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-custom.svg',
-  SPVRealEstate1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-1.svg',
-  SPVRealEstate2: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-3.svg',
-  SPVRealEstate3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-custom.svg',
+  1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/blank-platform.svg',
+  Startup1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-1.svg',
+  Startup2: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-2.svg',
+  Startup3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom.svg',
+  Crypto1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-2.svg',
+  Crypto2: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-3.svg',
+  Crypto3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-custom.svg',
+  RealEstate1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-1.svg',
+  RealEstate2: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-3.svg',
+  RealEstate3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-custom.svg',
 };
 const zapierWebhook = 'https://hooks.zapier.com/hooks/catch/7904699/ol1c7go/';
 const useStyles = makeStyles((theme) => ({
@@ -168,9 +168,7 @@ export default ({ deal, user, data, setData, setStep }) => {
               src={
                 !deal.deal_type
                   ? images.basic
-                  : images[
-                      `${(data.deal_type || '').concat(data.asset_type.replaceAll(' ', '') || '', page.toString())}`
-                    ]
+                  : images[`${''.concat(data.asset_type.replaceAll(' ', '') || '', page.toString())}`]
               }
               alt="oops"
               style={{ width: '80%', height: '80%' }}
