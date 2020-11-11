@@ -98,8 +98,19 @@ export default ({ deal, user, data, setData, setStep }) => {
         ))}
       </Grid>
       <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', margin: '0' }}>
+        <Grid xs={12} sm={4} md={4} lg={4} style={{ border: '1rem solid transparent' }}>
+          <Paper
+            style={{ width: '100%', height: '56vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+          >
+            <img
+              src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
+              alt="oops"
+              style={{ width: '80%', height: '80%' }}
+            />
+          </Paper>
+        </Grid>
         {/* Left Column */}
-        <Grid xs={12} sm={8} md={8} lg={8} style={{ border: '1rem solid transparent' }}>
+        <Grid xs={12} sm={8} md={8} lg={8} style={{ border: '1rem solid transparent', marginBottom: '2rem' }}>
           {/* Page 1 */}
           {/* Question 1 */}
           {page === 1 && (
@@ -606,286 +617,367 @@ export default ({ deal, user, data, setData, setStep }) => {
             </>
           )}
         </Grid>
-
-        {/* Right Column */}
-        <Grid xs={12} sm={4} md={4} lg={4} style={{ border: '1rem solid transparent' }}>
-          <div className={classes.sidebar}>
-            <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem' }}>
-              <Grid
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                style={{ padding: '0.75rem', height: '350px', maxHeight: '350px', overflow: 'scroll' }}
-              >
-                <Grid xs={12} sm={12} md={12} lg={12}>
-                  <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h5">
-                    Services Agreement
-                  </Typography>
-                </Grid>
-                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    Type
-                  </Typography>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    {data.deal_type}
-                  </Typography>
-                </Grid>
-                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    Asset type:
-                  </Typography>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    {data.asset_type}
-                  </Typography>
-                </Grid>
-                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    Portfolio Company:
-                  </Typography>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    {data.company_name}
-                  </Typography>
-                </Grid>
-                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    Closing time:
-                  </Typography>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    {data.closing_time}
-                  </Typography>
-                </Grid>
-                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    Exp. wiring date:
-                  </Typography>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    {data.wiring_date}
-                  </Typography>
-                </Grid>
-                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    # of SPVs:
-                  </Typography>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    {data.num_spvs}
-                  </Typography>
-                </Grid>
-                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    Management fees:
-                  </Typography>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    {data.org_charge_mgmt_fee}
-                  </Typography>
-                </Grid>
-
-                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    Management fee amount:
-                  </Typography>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    {data.org_charge_mgmt_fee_amount}
-                  </Typography>
-                </Grid>
-
-                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    Carried interest:
-                  </Typography>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    {data.org_recieve_carry}
-                  </Typography>
-                </Grid>
-
-                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    SPV type:
-                  </Typography>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    What Do?
-                  </Typography>
-                </Grid>
-
-                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    Series name:
-                  </Typography>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    {data.master_series_name}
-                  </Typography>
-                </Grid>
-
-                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    Organizer:
-                  </Typography>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    {data.organizer_name}
-                  </Typography>
-                </Grid>
-
-                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    Investment agreement:
-                  </Typography>
-                  <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
-                    {data.has_investment_agreement}
-                  </Typography>
-                </Grid>
-              </Grid>
-              <Grid
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                style={{
-                  background: '#2676FF',
-                  paddingTop: '1em',
-                  paddingBottom: '1em',
-                  color: 'white',
-                  padding: '.75rem',
-                }}
-              >
-                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography
-                    xs={6}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    style={{ textAlign: 'left', marginTop: '0.5rem' }}
-                    variant="h5"
-                  >
-                    Subtotal:
-                  </Typography>
-                  <Typography
-                    xs={6}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    style={{ textAlign: 'left', marginTop: '0.5rem' }}
-                    variant="h5"
-                  >
-                    $0
-                  </Typography>
-                </Grid>
-
-                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography
-                    xs={6}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    style={{ textAlign: 'left', marginTop: '0.5rem' }}
-                    variant="h5"
-                  >
-                    Blussky Fees:
-                  </Typography>
-                  <Typography
-                    xs={6}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    style={{ textAlign: 'left', marginTop: '0.5rem' }}
-                    variant="h5"
-                  >
-                    $0
-                  </Typography>
-                </Grid>
-                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography
-                    xs={6}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    style={{ textAlign: 'left', marginTop: '0.5rem' }}
-                    variant="h5"
-                  >
-                    Grand Total:
-                  </Typography>
-                  <Typography
-                    xs={6}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    style={{ textAlign: 'left', marginTop: '0.5rem' }}
-                    variant="h5"
-                  >
-                    $0
-                  </Typography>
-                </Grid>
-                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography
-                    xs={6}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    style={{ textAlign: 'left', marginTop: '0.5rem' }}
-                    variant="h5"
-                  >
-                    Estimated Delivery:
-                  </Typography>
-                  <Typography
-                    xs={6}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    style={{ textAlign: 'left', marginTop: '0.5rem' }}
-                    variant="h5"
-                  >
-                    3 Weeks
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Paper>
+        {/* end grid */}
+      </Grid>
+      <Grid
+        xs={12}
+        sm={12}
+        md={12}
+        lg={12}
+        style={{
+          display: 'flex',
+          margin: '0',
+          backgroundColor: '#2676FF',
+          color: 'white',
+          position: 'fixed',
+          bottom: '0',
+          width: '90%',
+          marginLeft: '-2rem',
+          padding: '1rem',
+          paddingBottom: '1.5rem',
+        }}
+      >
+        <Grid xs={3} sm={3} md={3} lg={3}>
+          <Grid container>
             <Grid
-              container
-              xs={12}
-              sm={12}
-              md={12}
-              lg={12}
-              style={{ display: 'flex', justifyContent: 'space-between' }}
+              xs={4}
+              sm={4}
+              md={4}
+              lg={4}
+              style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}
             >
-              {page > 1 && (
-                <Grid item xs={6} sm={6} md={6} lg={6}>
-                  <Button
-                    onClick={() => setPage(page - 1)}
-                    variant="contained"
-                    style={{ backgroundColor: '#2676FF', color: 'white', width: '100%', textTransform: 'capitalize' }}
-                  >
-                    Previous
-                  </Button>
-                </Grid>
-              )}
-              <Grid item xs={6} sm={6} md={6} lg={6}>
-                {page < 2 ? (
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    style={{ width: '100%' }}
-                    onClick={() => {
-                      submitData();
-                      setPage(page + 1);
-                    }}
-                  >
-                    Next
-                  </Button>
-                ) : (
-                  <Button
-                    variant="contained"
-                    onClick={() => setStep('sign')}
-                    color="secondary"
-                    style={{ width: '100%' }}
-                  >
-                    Finish
-                  </Button>
-                )}
-              </Grid>
+              <Typography variant="body1">
+                <span style={{ minWidth: '120px' }}> Subtotal </span>
+              </Typography>
+              <Typography variant="body1">
+                <span style={{ minWidth: '120px' }}> Blue Sky Fees </span>
+              </Typography>
             </Grid>
+            <Grid xs={8} sm={8} md={8} lg={8}>
+              <div style={{ fontSize: '1.75rem', fontWeight: '900', marginLeft: '1rem' }}> $8,000</div>
+              <div style={{ fontSize: '1.75rem', fontWeight: '900', marginLeft: '1rem' }}> $500</div>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid xs={3} sm={3} md={3} lg={3}>
+          <Grid container style={{ marginTop: '1rem' }}>
+            <Grid
+              xs={4}
+              sm={4}
+              md={4}
+              lg={4}
+              style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}
+            >
+              <Typography variant="body1">
+                <span style={{ minWidth: '120px' }}> Grand Total </span>
+              </Typography>
+            </Grid>
+            <Grid xs={8} sm={8} md={8} lg={8}>
+              <span style={{ fontSize: '2.5rem', fontWeight: '900', marginLeft: '1rem' }}> $8,500</span>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid xs={2} sm={2} md={2} lg={2} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Typography variant="body1"> Estimated Delivery: {data.closing_time}</Typography>
+        </Grid>
+        <Grid xs={2} sm={2} md={2} lg={2} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div
+            style={{
+              width: '140px',
+              border: 'solid 2px white',
+              borderRadius: '1rem',
+              fontSize: '1.5rem',
+              textAlign: 'center',
+              padding: '.25rem',
+            }}
+            onClick={() => {
+              submitData();
+              setPage(page + 1);
+            }}
+          >
+            Next
           </div>
         </Grid>
-        {/* end grid */}
       </Grid>
     </>
   );
 };
+
+{
+  /* <Grid xs={12} sm={4} md={4} lg={4} style={{ border: '1rem solid transparent' }}>
+<div className={classes.sidebar}>
+  <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem' }}>
+    <Grid
+      xs={12}
+      sm={12}
+      md={12}
+      lg={12}
+      style={{ padding: '0.75rem', height: '350px', maxHeight: '350px', overflow: 'scroll' }}
+    >
+      <Grid xs={12} sm={12} md={12} lg={12}>
+        <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h5">
+          Services Agreement
+        </Typography>
+      </Grid>
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          Type
+        </Typography>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          {data.deal_type}
+        </Typography>
+      </Grid>
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          Asset type:
+        </Typography>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          {data.asset_type}
+        </Typography>
+      </Grid>
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          Portfolio Company:
+        </Typography>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          {data.company_name}
+        </Typography>
+      </Grid>
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          Closing time:
+        </Typography>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          {data.closing_time}
+        </Typography>
+      </Grid>
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          Exp. wiring date:
+        </Typography>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          {data.wiring_date}
+        </Typography>
+      </Grid>
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          # of SPVs:
+        </Typography>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          {data.num_spvs}
+        </Typography>
+      </Grid>
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          Management fees:
+        </Typography>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          {data.org_charge_mgmt_fee}
+        </Typography>
+      </Grid>
+
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          Management fee amount:
+        </Typography>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          {data.org_charge_mgmt_fee_amount}
+        </Typography>
+      </Grid>
+
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          Carried interest:
+        </Typography>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          {data.org_recieve_carry}
+        </Typography>
+      </Grid>
+
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          SPV type:
+        </Typography>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          What Do?
+        </Typography>
+      </Grid>
+
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          Series name:
+        </Typography>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          {data.master_series_name}
+        </Typography>
+      </Grid>
+
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          Organizer:
+        </Typography>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          {data.organizer_name}
+        </Typography>
+      </Grid>
+
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          Investment agreement:
+        </Typography>
+        <Typography xs={6} sm={6} md={6} lg={6} style={{ textAlign: 'left', marginTop: '0.5rem' }}>
+          {data.has_investment_agreement}
+        </Typography>
+      </Grid>
+    </Grid>
+    <Grid
+      xs={12}
+      sm={12}
+      md={12}
+      lg={12}
+      style={{
+        background: '#2676FF',
+        paddingTop: '1em',
+        paddingBottom: '1em',
+        color: 'white',
+        padding: '.75rem',
+      }}
+    >
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography
+          xs={6}
+          sm={6}
+          md={6}
+          lg={6}
+          style={{ textAlign: 'left', marginTop: '0.5rem' }}
+          variant="h5"
+        >
+          Subtotal:
+        </Typography>
+        <Typography
+          xs={6}
+          sm={6}
+          md={6}
+          lg={6}
+          style={{ textAlign: 'left', marginTop: '0.5rem' }}
+          variant="h5"
+        >
+          $0
+        </Typography>
+      </Grid>
+
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography
+          xs={6}
+          sm={6}
+          md={6}
+          lg={6}
+          style={{ textAlign: 'left', marginTop: '0.5rem' }}
+          variant="h5"
+        >
+          Blussky Fees:
+        </Typography>
+        <Typography
+          xs={6}
+          sm={6}
+          md={6}
+          lg={6}
+          style={{ textAlign: 'left', marginTop: '0.5rem' }}
+          variant="h5"
+        >
+          $0
+        </Typography>
+      </Grid>
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography
+          xs={6}
+          sm={6}
+          md={6}
+          lg={6}
+          style={{ textAlign: 'left', marginTop: '0.5rem' }}
+          variant="h5"
+        >
+          Grand Total:
+        </Typography>
+        <Typography
+          xs={6}
+          sm={6}
+          md={6}
+          lg={6}
+          style={{ textAlign: 'left', marginTop: '0.5rem' }}
+          variant="h5"
+        >
+          $0
+        </Typography>
+      </Grid>
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography
+          xs={6}
+          sm={6}
+          md={6}
+          lg={6}
+          style={{ textAlign: 'left', marginTop: '0.5rem' }}
+          variant="h5"
+        >
+          Estimated Delivery:
+        </Typography>
+        <Typography
+          xs={6}
+          sm={6}
+          md={6}
+          lg={6}
+          style={{ textAlign: 'left', marginTop: '0.5rem' }}
+          variant="h5"
+        >
+          3 Weeks
+        </Typography>
+      </Grid>
+    </Grid>
+  </Paper>
+  <Grid
+    container
+    xs={12}
+    sm={12}
+    md={12}
+    lg={12}
+    style={{ display: 'flex', justifyContent: 'space-between' }}
+  >
+    {page > 1 && (
+      <Grid item xs={6} sm={6} md={6} lg={6}>
+        <Button
+          onClick={() => setPage(page - 1)}
+          variant="contained"
+          style={{ backgroundColor: '#2676FF', color: 'white', width: '100%', textTransform: 'capitalize' }}
+        >
+          Previous
+        </Button>
+      </Grid>
+    )}
+    <Grid item xs={6} sm={6} md={6} lg={6}>
+      {page < 2 ? (
+        <Button
+          variant="contained"
+          color="secondary"
+          style={{ width: '100%' }}
+          onClick={() => {
+            submitData();
+            setPage(page + 1);
+          }}
+        >
+          Next
+        </Button>
+      ) : (
+        <Button
+          variant="contained"
+          onClick={() => setStep('sign')}
+          color="secondary"
+          style={{ width: '100%' }}
+        >
+          Finish
+        </Button>
+      )}
+    </Grid>
+  </Grid>
+</div>
+</Grid> */
+}

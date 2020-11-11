@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 8,
   },
   blueContainer: {
-    background: 'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 140px, rgba(255,255,255,1) 140px)',
+    background: 'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 120px, rgba(255,255,255,1) 120px)',
     marginTop: '-30px',
     paddingTop: '30px',
     paddingBottom: '60px',
@@ -86,7 +86,7 @@ const BASE = 'appdPrRjapx8iYnIn';
 const TABEL_NAME = 'Deals';
 export default ({}) => {
   const classes = useStyles();
-  const [step, setStep] = useState('');
+  const [step, setStep] = useState('build');
   const itemDone = false;
   const { data: allATDeals } = useFetch(BASE, TABEL_NAME);
   const [data, setData] = useSimpleReducer({});
@@ -105,7 +105,7 @@ export default ({}) => {
   return (
     <>
       <div className={classes.blueContainer}>
-        <Typography variant="h3" style={{ color: 'white' }}>
+        <Typography variant="h6" style={{ color: 'white' }}>
           Build
         </Typography>
         {step && <div style={{ marginTop: '4rem' }} />}
