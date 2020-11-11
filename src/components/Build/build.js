@@ -138,9 +138,19 @@ export default ({ deal, user, data, setData, setStep }) => {
         ))}
       </Grid>
       <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', margin: '0' }}>
-        <Grid xs={12} sm={4} md={4} lg={4} style={{ border: '1rem solid transparent' }}>
+        <Grid xs={12} sm={4} md={4} lg={4} style={{ border: '1rem solid transparent', position: 'relative' }}>
           <Paper
-            style={{ width: '100%', height: '56vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+            xs={12}
+            sm={12}
+            md={12}
+            lg={12}
+            style={{
+              height: '56vh',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              position: 'fixed',
+            }}
           >
             <img
               src={
