@@ -1,12 +1,22 @@
+/* eslint-disable max-len */
 import React, { useState } from 'react';
 import { Button, TextField, Paper, Grid, Typography, Input } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
 import { gql } from 'apollo-boost';
+import { pick } from 'lodash';
 import { useMutation } from '@apollo/react-hooks';
 
 import './style.scss';
 
+const images = {
+  basic: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/graphic-bg.svg',
+  SPV1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/blank-platform.svg',
+  SPVStartup1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-1.svg',
+  SPVStartup2: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-2.svg',
+  SPVStartup3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-3.svg',
+  SPVStartup4: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom.svg',
+};
 const useStyles = makeStyles((theme) => ({
   button: {
     border: 'solid 2px #2676FF',
@@ -36,28 +46,45 @@ export default ({ deal, user, data, setData, setStep }) => {
   const classes = useStyles();
   const [page, setPage] = useState(1);
 
-  const [createOrgAndDeal, {}] = useMutation(CREATE_ORG_AND_DEAL, {});
+  const fields = [
+    'deal_type',
+    'asset_type',
+    'company_name',
+    'closing_time',
+    'wiring_date',
+    'org_charge_mgmt_fee',
+    'org_charge_mgmt_amount',
+    'org_receive_carry',
+    'org_receive_carry_amount',
+    'master_series_name',
+    'organizer_name',
+    'has_investment_agreement',
+    'num_spvs',
+    'airtableId',
+    'userId',
+    'id',
+    'Build Phase',
+    'Review',
+    'Signed Provision Of Service',
+    'doc_type',
+    'min_investment_amount',
+    'same_fees_for_all_investors',
+    'investment_advisor_type',
+    'advertise_investment',
+    'attachments',
+  ];
 
   const submitData = async () => {
     if (!data.airtableId) {
       const response = await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
         method: 'post', // make sure it is a "POST request"
-        body: JSON.stringify({ fields: { userId: user._id, ...data } }),
+        body: JSON.stringify({ fields: { userId: user._id, ...pick(data, fields) } }),
         headers: {
           Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`, // API key
           'Content-Type': 'application/json', // we will recive a json object
         },
       });
       const res = await response.json();
-      // createOrgAndDeal({
-      //   variables: {
-      //     orgName: `${user.email}'s Fund - ${
-      //       res.id || Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-      //     }`,
-      //     deal: { airtableId: res.id, status: 'draft' },
-      //   },
-      // });
-
       return setData({ airtableId: res.id });
     }
 
@@ -79,15 +106,28 @@ export default ({ deal, user, data, setData, setStep }) => {
       },
     });
   };
-
+  if (!deal) return null;
+  console.log(`${(data.deal_type || '').concat(data.asset_type || '', page.toString())}`);
   return (
     <>
       <Grid container spacing={2} style={{ maxWidth: '50%', marginTop: '-4rem' }}>
         {[
           { display: 'Step 1', page: 1 },
           { display: 'Step 2', page: 2 },
+          { display: 'Step 3', page: 3 },
+          { display: 'Custom', page: 4 },
         ].map((t) => (
-          <Grid item xs={3} sm={3} md={3} lg={3} onClick={() => setPage(t.page)}>
+          <Grid
+            item
+            xs={3}
+            sm={3}
+            md={3}
+            lg={3}
+            onClick={() => {
+              submitData();
+              setPage(t.page);
+            }}
+          >
             <Typography
               variant="h6"
               style={{ color: 'white', borderBottom: t.page === page ? '5px solid white' : '5px solid transparent' }}
@@ -103,7 +143,11 @@ export default ({ deal, user, data, setData, setStep }) => {
             style={{ width: '100%', height: '56vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
           >
             <img
-              src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
+              src={
+                !deal.deal_type
+                  ? images.basic
+                  : images[`${(data.deal_type || '').concat(data.asset_type || '', page.toString())}`]
+              }
               alt="oops"
               style={{ width: '80%', height: '80%' }}
             />
@@ -602,13 +646,212 @@ export default ({ deal, user, data, setData, setStep }) => {
                       <Input
                         type="file"
                         onChange={({ target }) => {
-                          if (target.validity.valid) setData({ passport: target.files[0] });
+                          if (target.validity.valid) setData({ attachments: target.files[0] });
                         }}
                       />
                       Upload File(s)
                     </Grid>
                     {/* Spacing */}
                     <Grid xs={4} sm={4} md={4} lg={4} />
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                  </Grid>
+                </Grid>
+              </Paper>
+            </>
+          )}
+          {page === 4 && (
+            <>
+              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                <Grid xs={12} sm={12} md={12} lg={12}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid
+                      xs={12}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        Standard or custom SPV documents?{' '}
+                      </Typography>
+                      <InfoIcon />
+                    </Grid>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+                    {['Standard', 'Custom'].map((t) => (
+                      <Grid xs={4} sm={4} md={4} lg={4}>
+                        <Button
+                          variant="outline"
+                          color="#2676FF"
+                          className={classes.button}
+                          style={{
+                            background: data.doc_type === t ? '#2676FF' : 'white',
+                            color: data.doc_type === t ? 'white' : '#2676FF',
+                          }}
+                          onClick={() => setData({ doc_type: t })}
+                        >
+                          {t}
+                        </Button>
+                      </Grid>
+                    ))}
+                    {/* Spacing */}
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                  </Grid>
+                </Grid>
+              </Paper>
+              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                <Grid xs={12} sm={12} md={12} lg={12}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid
+                      xs={12}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        What would you like the minimum investment for the SPV to be?{' '}
+                      </Typography>
+                      <InfoIcon />
+                    </Grid>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+                    {['Standard ($5,000)', 'Custom'].map((t) => (
+                      <Grid xs={4} sm={4} md={4} lg={4}>
+                        <Button
+                          variant="outline"
+                          color="#2676FF"
+                          className={classes.button}
+                          style={{
+                            background: data.min_investment_amount === t ? '#2676FF' : 'white',
+                            color: data.min_investment_amount === t ? 'white' : '#2676FF',
+                          }}
+                          onClick={() => setData({ min_investment_amount: t })}
+                        >
+                          {t}
+                        </Button>
+                      </Grid>
+                    ))}
+                    {/* Spacing */}
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                  </Grid>
+                </Grid>
+              </Paper>
+              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                <Grid xs={12} sm={12} md={12} lg={12}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid
+                      xs={12}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        Do you have the same fees for all investors in the SPV?{' '}
+                      </Typography>
+                      <InfoIcon />
+                    </Grid>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+                    {['Standard', 'Custom'].map((t) => (
+                      <Grid xs={4} sm={4} md={4} lg={4}>
+                        <Button
+                          variant="outline"
+                          color="#2676FF"
+                          className={classes.button}
+                          style={{
+                            background: data.same_fees_for_all_investors === t ? '#2676FF' : 'white',
+                            color: data.same_fees_for_all_investors === t ? 'white' : '#2676FF',
+                          }}
+                          onClick={() => setData({ same_fees_for_all_investors: t })}
+                        >
+                          {t}
+                        </Button>
+                      </Grid>
+                    ))}
+                    {/* Spacing */}
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                  </Grid>
+                </Grid>
+              </Paper>
+              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                <Grid xs={12} sm={12} md={12} lg={12}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid
+                      xs={12}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        Standard or custom for the SPV’s investment adviser?
+                      </Typography>
+                      <InfoIcon />
+                    </Grid>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+                    {['Standard (In-house)', 'Custom'].map((t) => (
+                      <Grid xs={4} sm={4} md={4} lg={4}>
+                        <Button
+                          variant="outline"
+                          color="#2676FF"
+                          className={classes.button}
+                          style={{
+                            background: data.investment_advisor_type === t ? '#2676FF' : 'white',
+                            color: data.investment_advisor_type === t ? 'white' : '#2676FF',
+                          }}
+                          onClick={() => setData({ investment_advisor_type: t })}
+                        >
+                          {t}
+                        </Button>
+                      </Grid>
+                    ))}
+                    {/* Spacing */}
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                    <Grid xs={4} sm={4} md={4} lg={4} />
+                  </Grid>
+                </Grid>
+              </Paper>
+              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+                <Grid xs={12} sm={12} md={12} lg={12}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Grid
+                      xs={12}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+                    >
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        Would you like to do advertising for this offering? (506(c) offering)
+                      </Typography>
+                      <InfoIcon />
+                    </Grid>
+                  </Grid>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+                    {['Yes', 'No'].map((t) => (
+                      <Grid xs={4} sm={4} md={4} lg={4}>
+                        <Button
+                          variant="outline"
+                          color="#2676FF"
+                          className={classes.button}
+                          style={{
+                            background: data.advertise_investment === t ? '#2676FF' : 'white',
+                            color: data.advertise_investment === t ? 'white' : '#2676FF',
+                          }}
+                          onClick={() => setData({ advertise_investment: t })}
+                        >
+                          {t}
+                        </Button>
+                      </Grid>
+                    ))}
+                    {/* Spacing */}
                     <Grid xs={4} sm={4} md={4} lg={4} />
                     <Grid xs={4} sm={4} md={4} lg={4} />
                   </Grid>
@@ -650,7 +893,7 @@ export default ({ deal, user, data, setData, setStep }) => {
                 <span style={{ minWidth: '120px' }}> Subtotal </span>
               </Typography>
               <Typography variant="body1">
-                <span style={{ minWidth: '120px' }}> Blue Sky Fees </span>
+                <span style={{ minWidth: '120px', marginTop: '1rem' }}> Estimated blue sky fees </span>
               </Typography>
             </Grid>
             <Grid xs={8} sm={8} md={8} lg={8}>
@@ -703,8 +946,7 @@ export default ({ deal, user, data, setData, setStep }) => {
   );
 };
 
-{
-  /* <Grid xs={12} sm={4} md={4} lg={4} style={{ border: '1rem solid transparent' }}>
+/* <Grid xs={12} sm={4} md={4} lg={4} style={{ border: '1rem solid transparent' }}>
 <div className={classes.sidebar}>
   <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem' }}>
     <Grid
@@ -980,4 +1222,3 @@ export default ({ deal, user, data, setData, setStep }) => {
   </Grid>
 </div>
 </Grid> */
-}
