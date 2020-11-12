@@ -8,6 +8,7 @@ import { pick } from 'lodash';
 import { useMutation } from '@apollo/react-hooks';
 
 import './style.scss';
+import { toast } from 'react-toastify';
 
 const images = {
   basic: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/graphic-bg.svg',
@@ -955,6 +956,8 @@ export default ({ deal, user, data, setData, setStep }) => {
               }
               if (page === 3) {
                 submitData();
+                setStep('');
+                toast.success('Success!');
                 postZap({
                   variables: { body: { zapUrl: zapierWebhook, ...data } },
                 });
