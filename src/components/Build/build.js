@@ -6,7 +6,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import { gql } from 'apollo-boost';
 import { pick } from 'lodash';
 import { useMutation } from '@apollo/react-hooks';
-
+import Questions from './questions';
 import './style.scss';
 import { toast } from 'react-toastify';
 
@@ -172,708 +172,7 @@ export default ({ deal, user, data, setData, setStep }) => {
         <Grid xs={12} sm={8} md={8} lg={8} style={{ border: '1rem solid transparent', marginBottom: '2rem' }}>
           {/* Page 1 */}
           {/* Question 1 */}
-          {page === 1 && (
-            <>
-              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                <Grid xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        What would you like to build?{' '}
-                      </Typography>
-                      <InfoIcon stye={{ background: 'rgba(0,0,0,0.4)' }} />
-                    </Grid>
-                  </Grid>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
-                    {['SPV', 'FUND'].map((t) => (
-                      <Grid xs={4} sm={4} md={4} lg={4}>
-                        <Button
-                          variant="outline"
-                          color="#2676FF"
-                          className={classes.button}
-                          style={{
-                            background: data.deal_type === t ? '#2676FF' : 'white',
-                            color: data.deal_type === t ? 'white' : '#2676FF',
-                          }}
-                          onClick={() => setData({ deal_type: t })}
-                        >
-                          {t}
-                        </Button>
-                      </Grid>
-                    ))}
-                    {/* Spacing */}
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                  </Grid>
-                </Grid>
-              </Paper>
-
-              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        What are you investing in?
-                      </Typography>
-                      <InfoIcon />
-                    </Grid>
-                  </Grid>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
-                    {['Startup', 'Crypto', 'Real Estate', 'Custom'].map((t) => (
-                      <Grid xs={4} sm={4} md={4} lg={4}>
-                        <Button
-                          variant="outline"
-                          color="#2676FF"
-                          className={classes.button}
-                          style={{
-                            background: data.asset_type === t ? '#2676FF' : 'white',
-                            color: data.asset_type === t ? 'white' : '#2676FF',
-                          }}
-                          onClick={() => setData({ asset_type: t })}
-                        >
-                          {t}
-                        </Button>
-                      </Grid>
-                    ))}
-                  </Grid>
-                </Grid>
-              </Paper>
-
-              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        What is the name of the portfolio company?
-                      </Typography>
-                      <InfoIcon />
-                    </Grid>
-                  </Grid>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
-                    <TextField
-                      required
-                      style={{ width: '100%' }}
-                      variant="outlined"
-                      label="Company Name"
-                      value={data.company_name || ''}
-                      onChange={(e) => setData({ company_name: e.target.value })}
-                    />
-                  </Grid>
-                </Grid>
-              </Paper>
-
-              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        How soon do you need to close?
-                      </Typography>
-                      <InfoIcon />
-                    </Grid>
-                  </Grid>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
-                    {['1 Week', '2 Weeks', '3 Weeks', '4 Weeks'].map((t) => (
-                      <Grid xs={4} sm={4} md={4} lg={4}>
-                        <Button
-                          variant="outline"
-                          color="#2676FF"
-                          className={classes.button}
-                          style={{
-                            background: data.closing_time === t ? '#2676FF' : 'white',
-                            color: data.closing_time === t ? 'white' : '#2676FF',
-                          }}
-                          onClick={() => setData({ closing_time: t })}
-                        >
-                          {t}
-                        </Button>
-                      </Grid>
-                    ))}
-                  </Grid>
-                </Grid>
-              </Paper>
-
-              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        What is the expected wiring date?
-                      </Typography>
-                      <InfoIcon />
-                    </Grid>
-                  </Grid>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
-                    <TextField
-                      required
-                      style={{ width: '100%' }}
-                      onChange={(e) => setData({ wiring_date: e.target.value })}
-                      label="Wiring Date"
-                      type="date"
-                      variant="outlined"
-                    />
-                  </Grid>
-                </Grid>
-              </Paper>
-
-              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                <Grid xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        Is this a one off SPV or do you plan to do multiple SPVs?
-                      </Typography>
-                      <InfoIcon />
-                    </Grid>
-                  </Grid>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
-                    {['One Off', 'Multiple'].map((t) => (
-                      <Grid xs={4} sm={4} md={4} lg={4}>
-                        <Button
-                          variant="outline"
-                          color="#2676FF"
-                          className={classes.button}
-                          style={{
-                            background: data.num_spvs === t ? '#2676FF' : 'white',
-                            color: data.num_spvs === t ? 'white' : '#2676FF',
-                          }}
-                          onClick={() => setData({ num_spvs: t })}
-                        >
-                          {t}
-                        </Button>
-                      </Grid>
-                    ))}
-                    {/* Spacing */}
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                  </Grid>
-                </Grid>
-              </Paper>
-            </>
-          )}
-          {/* Page 2 */}
-          {page === 2 && (
-            <>
-              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                <Grid xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        Will the Organizer charge any management fees?
-                      </Typography>
-                      <InfoIcon />
-                    </Grid>
-                  </Grid>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
-                    {['Yes', 'No'].map((t) => (
-                      <Grid xs={4} sm={4} md={4} lg={4}>
-                        <Button
-                          variant="outline"
-                          color="#2676FF"
-                          className={classes.button}
-                          style={{
-                            background: data.org_charge_mgmt_fee === t ? '#2676FF' : 'white',
-                            color: data.org_charge_mgmt_fee === t ? 'white' : '#2676FF',
-                          }}
-                          onClick={() => setData({ org_charge_mgmt_fee: t })}
-                        >
-                          {t}
-                        </Button>
-                      </Grid>
-                    ))}
-                    {/* Spacing */}
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                  </Grid>
-                </Grid>
-              </Paper>
-              {data.org_charge_mgmt_fee === 'Yes' && (
-                <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid xs={12} sm={12} md={12} lg={12}>
-                      <Grid
-                        xs={12}
-                        sm={12}
-                        md={12}
-                        lg={12}
-                        style={{
-                          padding: '0.5rem',
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                          How much will the Organizer charge as management fees?
-                        </Typography>
-                        <InfoIcon />
-                      </Grid>
-                    </Grid>
-                    <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
-                      <TextField
-                        required
-                        style={{ width: '100%' }}
-                        type="number"
-                        variant="outlined"
-                        label="Fee Amount"
-                        value={data.org_charge_mgmt_fee_amount || ''}
-                        onChange={(e) => setData({ org_charge_mgmt_fee_amount: e.target.value })}
-                      />
-                      {/* Spacing */}
-                    </Grid>
-                  </Grid>
-                </Paper>
-              )}
-              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                <Grid xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        Will the Organizer receive any carried interest from profits?
-                      </Typography>
-                      <InfoIcon />
-                    </Grid>
-                  </Grid>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
-                    {['Yes', 'No'].map((t) => (
-                      <Grid xs={4} sm={4} md={4} lg={4}>
-                        <Button
-                          variant="outline"
-                          color="#2676FF"
-                          className={classes.button}
-                          style={{
-                            background: data.org_recieve_carry === t ? '#2676FF' : 'white',
-                            color: data.org_recieve_carry === t ? 'white' : '#2676FF',
-                          }}
-                          onClick={() => setData({ org_recieve_carry: t })}
-                        >
-                          {t}
-                        </Button>
-                      </Grid>
-                    ))}
-                    {/* Spacing */}
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                  </Grid>
-                </Grid>
-              </Paper>
-              {data.org_recieve_carry === 'Yes' && (
-                <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid xs={12} sm={12} md={12} lg={12}>
-                      <Grid
-                        xs={12}
-                        sm={12}
-                        md={12}
-                        lg={12}
-                        style={{
-                          padding: '0.5rem',
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                          Will the Organizer receive any carried interest from profits?
-                        </Typography>
-                        <InfoIcon />
-                      </Grid>
-                    </Grid>
-                    <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
-                      <TextField
-                        required
-                        style={{ width: '100%' }}
-                        type="number"
-                        variant="outlined"
-                        label="Fee Amount"
-                        value={data.org_recieve_carry_amount || ''}
-                        onChange={(e) => setData({ org_recieve_carry_amount: e.target.value })}
-                      />
-                    </Grid>
-                  </Grid>
-                </Paper>
-              )}
-              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        Please enter a name for your SPV Series
-                      </Typography>
-                      <InfoIcon />
-                    </Grid>
-                  </Grid>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
-                    <TextField
-                      required
-                      style={{ width: '100%' }}
-                      label="SPV Series Name"
-                      variant="outlined"
-                      value={data.master_series_name || ''}
-                      onChange={(e) => setData({ master_series_name: e.target.value })}
-                    />
-                  </Grid>
-                </Grid>
-              </Paper>
-              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        What is the name of the Organizer of the SPV?
-                      </Typography>
-                      <InfoIcon />
-                    </Grid>
-                  </Grid>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
-                    <TextField
-                      required
-                      style={{ width: '100%' }}
-                      label="Organizer Name"
-                      variant="outlined"
-                      value={data.organizer_name || ''}
-                      onChange={(e) => setData({ organizer_name: e.target.value })}
-                    />
-                  </Grid>
-                </Grid>
-              </Paper>
-              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                <Grid xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        Do you already have the investment agreement for the Portfolio Company?
-                      </Typography>
-                      <InfoIcon />
-                    </Grid>
-                  </Grid>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
-                    {['Yes', 'No'].map((t) => (
-                      <Grid xs={4} sm={4} md={4} lg={4}>
-                        <Button
-                          variant="outline"
-                          color="#2676FF"
-                          className={classes.button}
-                          style={{
-                            background: data.has_investment_agreement === t ? '#2676FF' : 'white',
-                            color: data.has_investment_agreement === t ? 'white' : '#2676FF',
-                          }}
-                          onClick={() => setData({ has_investment_agreement: t })}
-                        >
-                          {t}
-                        </Button>
-                      </Grid>
-                    ))}
-                    {/* Spacing */}
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                  </Grid>
-                </Grid>
-              </Paper>
-            </>
-          )}
-          {/* Page 3 */}
-
-          {page === 10 && (
-            <>
-              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                <Grid xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        Do you have a deck or other marketing material from the Portfolio Company?
-                      </Typography>
-                      <InfoIcon />
-                    </Grid>
-                  </Grid>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
-                    <Grid xs={4} sm={4} md={4} lg={4}>
-                      <Input
-                        type="file"
-                        onChange={({ target }) => {
-                          if (target.validity.valid) setData({ attachments: target.files[0] });
-                        }}
-                      />
-                      Upload File(s)
-                    </Grid>
-                    {/* Spacing */}
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                  </Grid>
-                </Grid>
-              </Paper>
-            </>
-          )}
-          {page === 3 && (
-            <>
-              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                <Grid xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        Standard or custom SPV documents?{' '}
-                      </Typography>
-                      <InfoIcon />
-                    </Grid>
-                  </Grid>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
-                    {['Standard', 'Custom'].map((t) => (
-                      <Grid xs={4} sm={4} md={4} lg={4}>
-                        <Button
-                          variant="outline"
-                          color="#2676FF"
-                          className={classes.button}
-                          style={{
-                            background: data.doc_type === t ? '#2676FF' : 'white',
-                            color: data.doc_type === t ? 'white' : '#2676FF',
-                          }}
-                          onClick={() => setData({ doc_type: t })}
-                        >
-                          {t}
-                        </Button>
-                      </Grid>
-                    ))}
-                    {/* Spacing */}
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                  </Grid>
-                </Grid>
-              </Paper>
-              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                <Grid xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        What would you like the minimum investment for the SPV to be?{' '}
-                      </Typography>
-                      <InfoIcon />
-                    </Grid>
-                  </Grid>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
-                    {['Standard ($5,000)', 'Custom'].map((t) => (
-                      <Grid xs={4} sm={4} md={4} lg={4}>
-                        <Button
-                          variant="outline"
-                          color="#2676FF"
-                          className={classes.button}
-                          style={{
-                            background: data.min_investment_amount === t ? '#2676FF' : 'white',
-                            color: data.min_investment_amount === t ? 'white' : '#2676FF',
-                          }}
-                          onClick={() => setData({ min_investment_amount: t })}
-                        >
-                          {t}
-                        </Button>
-                      </Grid>
-                    ))}
-                    {/* Spacing */}
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                  </Grid>
-                </Grid>
-              </Paper>
-              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                <Grid xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        Do you have the same fees for all investors in the SPV?{' '}
-                      </Typography>
-                      <InfoIcon />
-                    </Grid>
-                  </Grid>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
-                    {['Standard', 'Custom'].map((t) => (
-                      <Grid xs={4} sm={4} md={4} lg={4}>
-                        <Button
-                          variant="outline"
-                          color="#2676FF"
-                          className={classes.button}
-                          style={{
-                            background: data.same_fees_for_all_investors === t ? '#2676FF' : 'white',
-                            color: data.same_fees_for_all_investors === t ? 'white' : '#2676FF',
-                          }}
-                          onClick={() => setData({ same_fees_for_all_investors: t })}
-                        >
-                          {t}
-                        </Button>
-                      </Grid>
-                    ))}
-                    {/* Spacing */}
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                  </Grid>
-                </Grid>
-              </Paper>
-              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                <Grid xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        Standard or custom for the SPV’s investment adviser?
-                      </Typography>
-                      <InfoIcon />
-                    </Grid>
-                  </Grid>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
-                    {['Standard (In-house)', 'Custom'].map((t) => (
-                      <Grid xs={4} sm={4} md={4} lg={4}>
-                        <Button
-                          variant="outline"
-                          color="#2676FF"
-                          className={classes.button}
-                          style={{
-                            background: data.investment_advisor_type === t ? '#2676FF' : 'white',
-                            color: data.investment_advisor_type === t ? 'white' : '#2676FF',
-                          }}
-                          onClick={() => setData({ investment_advisor_type: t })}
-                        >
-                          {t}
-                        </Button>
-                      </Grid>
-                    ))}
-                    {/* Spacing */}
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                  </Grid>
-                </Grid>
-              </Paper>
-              <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
-                <Grid xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12}>
-                    <Grid
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
-                    >
-                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        Would you like to do advertising for this offering? (506(c) offering)
-                      </Typography>
-                      <InfoIcon />
-                    </Grid>
-                  </Grid>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
-                    {['Yes', 'No'].map((t) => (
-                      <Grid xs={4} sm={4} md={4} lg={4}>
-                        <Button
-                          variant="outline"
-                          color="#2676FF"
-                          className={classes.button}
-                          style={{
-                            background: data.advertise_investment === t ? '#2676FF' : 'white',
-                            color: data.advertise_investment === t ? 'white' : '#2676FF',
-                          }}
-                          onClick={() => setData({ advertise_investment: t })}
-                        >
-                          {t}
-                        </Button>
-                      </Grid>
-                    ))}
-                    {/* Spacing */}
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                    <Grid xs={4} sm={4} md={4} lg={4} />
-                  </Grid>
-                </Grid>
-              </Paper>
-            </>
-          )}
+          <Questions setData={setData} answers={data} classes={classes} activePage={page} />
         </Grid>
         {/* end grid */}
       </Grid>
@@ -1248,3 +547,708 @@ export default ({ deal, user, data, setData, setStep }) => {
   </Grid>
 </div>
 </Grid> */
+
+// HARD CODED QUESTIONS
+
+// {page === 1 && (
+//   <>
+//     <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+//       <Grid xs={12} sm={12} md={12} lg={12}>
+//         <Grid xs={12} sm={12} md={12} lg={12}>
+//           <Grid
+//             xs={12}
+//             sm={12}
+//             md={12}
+//             lg={12}
+//             style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+//           >
+//             <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+//               What would you like to build?{' '}
+//             </Typography>
+//             <InfoIcon stye={{ background: 'rgba(0,0,0,0.4)' }} />
+//           </Grid>
+//         </Grid>
+//         <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+//           {['SPV', 'FUND'].map((t) => (
+//             <Grid xs={4} sm={4} md={4} lg={4}>
+//               <Button
+//                 variant="outline"
+//                 color="#2676FF"
+//                 className={classes.button}
+//                 style={{
+//                   background: data.deal_type === t ? '#2676FF' : 'white',
+//                   color: data.deal_type === t ? 'white' : '#2676FF',
+//                 }}
+//                 onClick={() => setData({ deal_type: t })}
+//               >
+//                 {t}
+//               </Button>
+//             </Grid>
+//           ))}
+//           {/* Spacing */}
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//         </Grid>
+//       </Grid>
+//     </Paper>
+
+//     <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+//       <Grid item xs={12} sm={12} md={12} lg={12}>
+//         <Grid xs={12} sm={12} md={12} lg={12}>
+//           <Grid
+//             xs={12}
+//             sm={12}
+//             md={12}
+//             lg={12}
+//             style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+//           >
+//             <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+//               What are you investing in?
+//             </Typography>
+//             <InfoIcon />
+//           </Grid>
+//         </Grid>
+//         <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+//           {['Startup', 'Crypto', 'Real Estate', 'Custom'].map((t) => (
+//             <Grid xs={4} sm={4} md={4} lg={4}>
+//               <Button
+//                 variant="outline"
+//                 color="#2676FF"
+//                 className={classes.button}
+//                 style={{
+//                   background: data.asset_type === t ? '#2676FF' : 'white',
+//                   color: data.asset_type === t ? 'white' : '#2676FF',
+//                 }}
+//                 onClick={() => setData({ asset_type: t })}
+//               >
+//                 {t}
+//               </Button>
+//             </Grid>
+//           ))}
+//         </Grid>
+//       </Grid>
+//     </Paper>
+
+//     <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+//       <Grid item xs={12} sm={12} md={12} lg={12}>
+//         <Grid xs={12} sm={12} md={12} lg={12}>
+//           <Grid
+//             xs={12}
+//             sm={12}
+//             md={12}
+//             lg={12}
+//             style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+//           >
+//             <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+//               What is the name of the portfolio company?
+//             </Typography>
+//             <InfoIcon />
+//           </Grid>
+//         </Grid>
+//         <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
+//           <TextField
+//             required
+//             style={{ width: '100%' }}
+//             variant="outlined"
+//             label="Company Name"
+//             value={data.company_name || ''}
+//             onChange={(e) => setData({ company_name: e.target.value })}
+//           />
+//         </Grid>
+//       </Grid>
+//     </Paper>
+
+//     <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+//       <Grid item xs={12} sm={12} md={12} lg={12}>
+//         <Grid xs={12} sm={12} md={12} lg={12}>
+//           <Grid
+//             xs={12}
+//             sm={12}
+//             md={12}
+//             lg={12}
+//             style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+//           >
+//             <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+//               How soon do you need to close?
+//             </Typography>
+//             <InfoIcon />
+//           </Grid>
+//         </Grid>
+//         <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+//           {['1 Week', '2 Weeks', '3 Weeks', '4 Weeks'].map((t) => (
+//             <Grid xs={4} sm={4} md={4} lg={4}>
+//               <Button
+//                 variant="outline"
+//                 color="#2676FF"
+//                 className={classes.button}
+//                 style={{
+//                   background: data.closing_time === t ? '#2676FF' : 'white',
+//                   color: data.closing_time === t ? 'white' : '#2676FF',
+//                 }}
+//                 onClick={() => setData({ closing_time: t })}
+//               >
+//                 {t}
+//               </Button>
+//             </Grid>
+//           ))}
+//         </Grid>
+//       </Grid>
+//     </Paper>
+
+//     <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+//       <Grid item xs={12} sm={12} md={12} lg={12}>
+//         <Grid xs={12} sm={12} md={12} lg={12}>
+//           <Grid
+//             xs={12}
+//             sm={12}
+//             md={12}
+//             lg={12}
+//             style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+//           >
+//             <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+//               What is the expected wiring date?
+//             </Typography>
+//             <InfoIcon />
+//           </Grid>
+//         </Grid>
+//         <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
+//           <TextField
+//             required
+//             style={{ width: '100%' }}
+//             onChange={(e) => setData({ wiring_date: e.target.value })}
+//             label="Wiring Date"
+//             type="date"
+//             variant="outlined"
+//           />
+//         </Grid>
+//       </Grid>
+//     </Paper>
+
+//     <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+//       <Grid xs={12} sm={12} md={12} lg={12}>
+//         <Grid xs={12} sm={12} md={12} lg={12}>
+//           <Grid
+//             xs={12}
+//             sm={12}
+//             md={12}
+//             lg={12}
+//             style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+//           >
+//             <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+//               Is this a one off SPV or do you plan to do multiple SPVs?
+//             </Typography>
+//             <InfoIcon />
+//           </Grid>
+//         </Grid>
+//         <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+//           {['One Off', 'Multiple'].map((t) => (
+//             <Grid xs={4} sm={4} md={4} lg={4}>
+//               <Button
+//                 variant="outline"
+//                 color="#2676FF"
+//                 className={classes.button}
+//                 style={{
+//                   background: data.num_spvs === t ? '#2676FF' : 'white',
+//                   color: data.num_spvs === t ? 'white' : '#2676FF',
+//                 }}
+//                 onClick={() => setData({ num_spvs: t })}
+//               >
+//                 {t}
+//               </Button>
+//             </Grid>
+//           ))}
+//           {/* Spacing */}
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//         </Grid>
+//       </Grid>
+//     </Paper>
+//   </>
+// )}
+// {/* Page 2 */}
+// {page === 2 && (
+//   <>
+//     <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+//       <Grid xs={12} sm={12} md={12} lg={12}>
+//         <Grid xs={12} sm={12} md={12} lg={12}>
+//           <Grid
+//             xs={12}
+//             sm={12}
+//             md={12}
+//             lg={12}
+//             style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+//           >
+//             <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+//               Will the Organizer charge any management fees?
+//             </Typography>
+//             <InfoIcon />
+//           </Grid>
+//         </Grid>
+//         <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+//           {['Yes', 'No'].map((t) => (
+//             <Grid xs={4} sm={4} md={4} lg={4}>
+//               <Button
+//                 variant="outline"
+//                 color="#2676FF"
+//                 className={classes.button}
+//                 style={{
+//                   background: data.org_charge_mgmt_fee === t ? '#2676FF' : 'white',
+//                   color: data.org_charge_mgmt_fee === t ? 'white' : '#2676FF',
+//                 }}
+//                 onClick={() => setData({ org_charge_mgmt_fee: t })}
+//               >
+//                 {t}
+//               </Button>
+//             </Grid>
+//           ))}
+//           {/* Spacing */}
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//         </Grid>
+//       </Grid>
+//     </Paper>
+//     {data.org_charge_mgmt_fee === 'Yes' && (
+//       <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+//         <Grid xs={12} sm={12} md={12} lg={12}>
+//           <Grid xs={12} sm={12} md={12} lg={12}>
+//             <Grid
+//               xs={12}
+//               sm={12}
+//               md={12}
+//               lg={12}
+//               style={{
+//                 padding: '0.5rem',
+//                 display: 'flex',
+//                 justifyContent: 'space-between',
+//               }}
+//             >
+//               <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+//                 How much will the Organizer charge as management fees?
+//               </Typography>
+//               <InfoIcon />
+//             </Grid>
+//           </Grid>
+//           <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+//             <TextField
+//               required
+//               style={{ width: '100%' }}
+//               type="number"
+//               variant="outlined"
+//               label="Fee Amount"
+//               value={data.org_charge_mgmt_fee_amount || ''}
+//               onChange={(e) => setData({ org_charge_mgmt_fee_amount: e.target.value })}
+//             />
+//             {/* Spacing */}
+//           </Grid>
+//         </Grid>
+//       </Paper>
+//     )}
+//     <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+//       <Grid xs={12} sm={12} md={12} lg={12}>
+//         <Grid xs={12} sm={12} md={12} lg={12}>
+//           <Grid
+//             xs={12}
+//             sm={12}
+//             md={12}
+//             lg={12}
+//             style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+//           >
+//             <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+//               Will the Organizer receive any carried interest from profits?
+//             </Typography>
+//             <InfoIcon />
+//           </Grid>
+//         </Grid>
+//         <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+//           {['Yes', 'No'].map((t) => (
+//             <Grid xs={4} sm={4} md={4} lg={4}>
+//               <Button
+//                 variant="outline"
+//                 color="#2676FF"
+//                 className={classes.button}
+//                 style={{
+//                   background: data.org_recieve_carry === t ? '#2676FF' : 'white',
+//                   color: data.org_recieve_carry === t ? 'white' : '#2676FF',
+//                 }}
+//                 onClick={() => setData({ org_recieve_carry: t })}
+//               >
+//                 {t}
+//               </Button>
+//             </Grid>
+//           ))}
+//           {/* Spacing */}
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//         </Grid>
+//       </Grid>
+//     </Paper>
+//     {data.org_recieve_carry === 'Yes' && (
+//       <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+//         <Grid xs={12} sm={12} md={12} lg={12}>
+//           <Grid xs={12} sm={12} md={12} lg={12}>
+//             <Grid
+//               xs={12}
+//               sm={12}
+//               md={12}
+//               lg={12}
+//               style={{
+//                 padding: '0.5rem',
+//                 display: 'flex',
+//                 justifyContent: 'space-between',
+//               }}
+//             >
+//               <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+//                 Will the Organizer receive any carried interest from profits?
+//               </Typography>
+//               <InfoIcon />
+//             </Grid>
+//           </Grid>
+//           <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+//             <TextField
+//               required
+//               style={{ width: '100%' }}
+//               type="number"
+//               variant="outlined"
+//               label="Fee Amount"
+//               value={data.org_recieve_carry_amount || ''}
+//               onChange={(e) => setData({ org_recieve_carry_amount: e.target.value })}
+//             />
+//           </Grid>
+//         </Grid>
+//       </Paper>
+//     )}
+//     <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+//       <Grid item xs={12} sm={12} md={12} lg={12}>
+//         <Grid xs={12} sm={12} md={12} lg={12}>
+//           <Grid
+//             xs={12}
+//             sm={12}
+//             md={12}
+//             lg={12}
+//             style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+//           >
+//             <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+//               Please enter a name for your SPV Series
+//             </Typography>
+//             <InfoIcon />
+//           </Grid>
+//         </Grid>
+//         <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
+//           <TextField
+//             required
+//             style={{ width: '100%' }}
+//             label="SPV Series Name"
+//             variant="outlined"
+//             value={data.master_series_name || ''}
+//             onChange={(e) => setData({ master_series_name: e.target.value })}
+//           />
+//         </Grid>
+//       </Grid>
+//     </Paper>
+//     <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+//       <Grid item xs={12} sm={12} md={12} lg={12}>
+//         <Grid xs={12} sm={12} md={12} lg={12}>
+//           <Grid
+//             xs={12}
+//             sm={12}
+//             md={12}
+//             lg={12}
+//             style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+//           >
+//             <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+//               What is the name of the Organizer of the SPV?
+//             </Typography>
+//             <InfoIcon />
+//           </Grid>
+//         </Grid>
+//         <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
+//           <TextField
+//             required
+//             style={{ width: '100%' }}
+//             label="Organizer Name"
+//             variant="outlined"
+//             value={data.organizer_name || ''}
+//             onChange={(e) => setData({ organizer_name: e.target.value })}
+//           />
+//         </Grid>
+//       </Grid>
+//     </Paper>
+//     <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+//       <Grid xs={12} sm={12} md={12} lg={12}>
+//         <Grid xs={12} sm={12} md={12} lg={12}>
+//           <Grid
+//             xs={12}
+//             sm={12}
+//             md={12}
+//             lg={12}
+//             style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+//           >
+//             <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+//               Do you already have the investment agreement for the Portfolio Company?
+//             </Typography>
+//             <InfoIcon />
+//           </Grid>
+//         </Grid>
+//         <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+//           {['Yes', 'No'].map((t) => (
+//             <Grid xs={4} sm={4} md={4} lg={4}>
+//               <Button
+//                 variant="outline"
+//                 color="#2676FF"
+//                 className={classes.button}
+//                 style={{
+//                   background: data.has_investment_agreement === t ? '#2676FF' : 'white',
+//                   color: data.has_investment_agreement === t ? 'white' : '#2676FF',
+//                 }}
+//                 onClick={() => setData({ has_investment_agreement: t })}
+//               >
+//                 {t}
+//               </Button>
+//             </Grid>
+//           ))}
+//           {/* Spacing */}
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//         </Grid>
+//       </Grid>
+//     </Paper>
+//   </>
+// )}
+// {/* Page 3 */}
+
+// {page === 10 && (
+//   <>
+//     <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+//       <Grid xs={12} sm={12} md={12} lg={12}>
+//         <Grid xs={12} sm={12} md={12} lg={12}>
+//           <Grid
+//             xs={12}
+//             sm={12}
+//             md={12}
+//             lg={12}
+//             style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+//           >
+//             <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+//               Do you have a deck or other marketing material from the Portfolio Company?
+//             </Typography>
+//             <InfoIcon />
+//           </Grid>
+//         </Grid>
+//         <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+//           <Grid xs={4} sm={4} md={4} lg={4}>
+//             <Input
+//               type="file"
+//               onChange={({ target }) => {
+//                 if (target.validity.valid) setData({ attachments: target.files[0] });
+//               }}
+//             />
+//             Upload File(s)
+//           </Grid>
+//           {/* Spacing */}
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//         </Grid>
+//       </Grid>
+//     </Paper>
+//   </>
+// )}
+// {page === 3 && (
+//   <>
+//     <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+//       <Grid xs={12} sm={12} md={12} lg={12}>
+//         <Grid xs={12} sm={12} md={12} lg={12}>
+//           <Grid
+//             xs={12}
+//             sm={12}
+//             md={12}
+//             lg={12}
+//             style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+//           >
+//             <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+//               Standard or custom SPV documents?{' '}
+//             </Typography>
+//             <InfoIcon />
+//           </Grid>
+//         </Grid>
+//         <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+//           {['Standard', 'Custom'].map((t) => (
+//             <Grid xs={4} sm={4} md={4} lg={4}>
+//               <Button
+//                 variant="outline"
+//                 color="#2676FF"
+//                 className={classes.button}
+//                 style={{
+//                   background: data.doc_type === t ? '#2676FF' : 'white',
+//                   color: data.doc_type === t ? 'white' : '#2676FF',
+//                 }}
+//                 onClick={() => setData({ doc_type: t })}
+//               >
+//                 {t}
+//               </Button>
+//             </Grid>
+//           ))}
+//           {/* Spacing */}
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//         </Grid>
+//       </Grid>
+//     </Paper>
+//     <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+//       <Grid xs={12} sm={12} md={12} lg={12}>
+//         <Grid xs={12} sm={12} md={12} lg={12}>
+//           <Grid
+//             xs={12}
+//             sm={12}
+//             md={12}
+//             lg={12}
+//             style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+//           >
+//             <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+//               What would you like the minimum investment for the SPV to be?{' '}
+//             </Typography>
+//             <InfoIcon />
+//           </Grid>
+//         </Grid>
+//         <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+//           {['Standard ($5,000)', 'Custom'].map((t) => (
+//             <Grid xs={4} sm={4} md={4} lg={4}>
+//               <Button
+//                 variant="outline"
+//                 color="#2676FF"
+//                 className={classes.button}
+//                 style={{
+//                   background: data.min_investment_amount === t ? '#2676FF' : 'white',
+//                   color: data.min_investment_amount === t ? 'white' : '#2676FF',
+//                 }}
+//                 onClick={() => setData({ min_investment_amount: t })}
+//               >
+//                 {t}
+//               </Button>
+//             </Grid>
+//           ))}
+//           {/* Spacing */}
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//         </Grid>
+//       </Grid>
+//     </Paper>
+//     <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+//       <Grid xs={12} sm={12} md={12} lg={12}>
+//         <Grid xs={12} sm={12} md={12} lg={12}>
+//           <Grid
+//             xs={12}
+//             sm={12}
+//             md={12}
+//             lg={12}
+//             style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+//           >
+//             <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+//               Do you have the same fees for all investors in the SPV?{' '}
+//             </Typography>
+//             <InfoIcon />
+//           </Grid>
+//         </Grid>
+//         <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+//           {['Standard', 'Custom'].map((t) => (
+//             <Grid xs={4} sm={4} md={4} lg={4}>
+//               <Button
+//                 variant="outline"
+//                 color="#2676FF"
+//                 className={classes.button}
+//                 style={{
+//                   background: data.same_fees_for_all_investors === t ? '#2676FF' : 'white',
+//                   color: data.same_fees_for_all_investors === t ? 'white' : '#2676FF',
+//                 }}
+//                 onClick={() => setData({ same_fees_for_all_investors: t })}
+//               >
+//                 {t}
+//               </Button>
+//             </Grid>
+//           ))}
+//           {/* Spacing */}
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//         </Grid>
+//       </Grid>
+//     </Paper>
+//     <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+//       <Grid xs={12} sm={12} md={12} lg={12}>
+//         <Grid xs={12} sm={12} md={12} lg={12}>
+//           <Grid
+//             xs={12}
+//             sm={12}
+//             md={12}
+//             lg={12}
+//             style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+//           >
+//             <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+//               Standard or custom for the SPV’s investment adviser?
+//             </Typography>
+//             <InfoIcon />
+//           </Grid>
+//         </Grid>
+//         <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+//           {['Standard (In-house)', 'Custom'].map((t) => (
+//             <Grid xs={4} sm={4} md={4} lg={4}>
+//               <Button
+//                 variant="outline"
+//                 color="#2676FF"
+//                 className={classes.button}
+//                 style={{
+//                   background: data.investment_advisor_type === t ? '#2676FF' : 'white',
+//                   color: data.investment_advisor_type === t ? 'white' : '#2676FF',
+//                 }}
+//                 onClick={() => setData({ investment_advisor_type: t })}
+//               >
+//                 {t}
+//               </Button>
+//             </Grid>
+//           ))}
+//           {/* Spacing */}
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//         </Grid>
+//       </Grid>
+//     </Paper>
+//     <Paper style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}>
+//       <Grid xs={12} sm={12} md={12} lg={12}>
+//         <Grid xs={12} sm={12} md={12} lg={12}>
+//           <Grid
+//             xs={12}
+//             sm={12}
+//             md={12}
+//             lg={12}
+//             style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
+//           >
+//             <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+//               Would you like to do advertising for this offering? (506(c) offering)
+//             </Typography>
+//             <InfoIcon />
+//           </Grid>
+//         </Grid>
+//         <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+//           {['Yes', 'No'].map((t) => (
+//             <Grid xs={4} sm={4} md={4} lg={4}>
+//               <Button
+//                 variant="outline"
+//                 color="#2676FF"
+//                 className={classes.button}
+//                 style={{
+//                   background: data.advertise_investment === t ? '#2676FF' : 'white',
+//                   color: data.advertise_investment === t ? 'white' : '#2676FF',
+//                 }}
+//                 onClick={() => setData({ advertise_investment: t })}
+//               >
+//                 {t}
+//               </Button>
+//             </Grid>
+//           ))}
+//           {/* Spacing */}
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//           <Grid xs={4} sm={4} md={4} lg={4} />
+//         </Grid>
+//       </Grid>
+//     </Paper>
+//   </>
+// )}
