@@ -197,7 +197,12 @@ export default ({}) => {
                     </Grid>
                   </Grid>
                   <Typography variant="h6">Preview</Typography>
-                  <Button color="secondary" variant="contained" style={{ marginTop: '1rem', minWidth: '100%' }}>
+                  <Button
+                    disabled="true"
+                    color="secondary"
+                    variant="contained"
+                    style={{ marginTop: '1rem', minWidth: '100%' }}
+                  >
                     Review
                   </Button>
                 </Paper>
@@ -231,7 +236,7 @@ export default ({}) => {
                     variant="contained"
                     style={{ marginTop: '1rem', minWidth: '100%' }}
                     onClick={() => setStep('sign')}
-                    disabled={data['Signed Provision of Service']}
+                    disabled="true"
                   >
                     Sign
                   </Button>
