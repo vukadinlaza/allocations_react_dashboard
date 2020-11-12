@@ -3,6 +3,7 @@ import { Paper, Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { gql } from 'apollo-boost';
+import { useMutation } from '@apollo/react-hooks';
 import { useFetch, useSimpleReducer } from '../../utils/hooks';
 import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 8,
   },
   blueContainer: {
-    background: 'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 140px, rgba(255,255,255,1) 140px)',
+    background: 'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 120px, rgba(255,255,255,1) 120px)',
     marginTop: '-30px',
     paddingTop: '30px',
     paddingBottom: '60px',
@@ -81,6 +82,13 @@ const GET_INVESTOR = gql`
     }
   }
 `;
+const UPDATE_USER = gql`
+  mutation UpdateUser($investor: UserInput!) {
+    updateUser(input: $investor) {
+      _id
+    }
+  }
+`;
 
 const BASE = 'appdPrRjapx8iYnIn';
 const TABEL_NAME = 'Deals';
@@ -89,24 +97,35 @@ export default ({}) => {
   const [step, setStep] = useState('');
   const itemDone = false;
   const { data: allATDeals } = useFetch(BASE, TABEL_NAME);
+  const [updateInvestor] = useMutation(UPDATE_USER);
+
   const [data, setData] = useSimpleReducer({});
 
-  const { userProfile } = useAuth(GET_INVESTOR);
+  const { userProfile, loading } = useAuth(GET_INVESTOR);
+
+  useEffect(() => {
+    if (!loading && userProfile._id) {
+      updateInvestor({
+        variables: {
+          investor: { showBuild: true, _id: userProfile._id },
+        },
+      });
+    }
+  }, [loading, updateInvestor, userProfile]);
 
   useEffect(() => {
     if (allATDeals && userProfile) {
       const tableDeals = allATDeals.map((r) => ({ id: r.id, ...r.fields }));
-      const dbDeal = userProfile?.deals?.find((d) => d?.airtableId && d?.status === 'draft');
-      const activeDeal = tableDeals?.find((d) => d.id === dbDeal?.airtableId) || {};
+      // const dbDeal = userProfile?.deals?.find((d) => d?.airtableId && d?.status === 'draft');
+      const activeDeal = tableDeals?.find((d) => d.userId === userProfile._id) || {};
       setData({ airtableId: activeDeal.id, ...activeDeal });
     }
   }, [allATDeals, setData, userProfile]);
-
   if (!userProfile || !allATDeals) return <Loader />;
   return (
     <>
       <div className={classes.blueContainer}>
-        <Typography variant="h3" style={{ color: 'white' }}>
+        <Typography variant="h6" style={{ color: 'white' }}>
           Build
         </Typography>
         {step && <div style={{ marginTop: '4rem' }} />}
@@ -134,7 +153,12 @@ export default ({}) => {
                     <Grid style={{ width: '50px' }}>
                       <CheckCircleIcon
                         color="secondary"
-                        style={{ marginLeft: '1rem', width: '40px', height: '40px', opacity: itemDone ? '1' : '.25' }}
+                        style={{
+                          marginLeft: '1rem',
+                          width: '40px',
+                          height: '40px',
+                          opacity: data['Build Phase'] ? '1' : '.25',
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -163,7 +187,12 @@ export default ({}) => {
                     <Grid style={{ width: '50px' }}>
                       <CheckCircleIcon
                         color="secondary"
-                        style={{ marginLeft: '1rem', width: '40px', height: '40px', opacity: itemDone ? '1' : '.25' }}
+                        style={{
+                          marginLeft: '1rem',
+                          width: '40px',
+                          height: '40px',
+                          opacity: data.Review ? '1' : '.25',
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -187,7 +216,12 @@ export default ({}) => {
                     <Grid style={{ width: '50px' }}>
                       <CheckCircleIcon
                         color="secondary"
-                        style={{ marginLeft: '1rem', width: '40px', height: '40px', opacity: itemDone ? '1' : '.25' }}
+                        style={{
+                          marginLeft: '1rem',
+                          width: '40px',
+                          height: '40px',
+                          opacity: data['Signed Provision of Service'] ? '1' : '.25',
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -197,6 +231,7 @@ export default ({}) => {
                     variant="contained"
                     style={{ marginTop: '1rem', minWidth: '100%' }}
                     onClick={() => setStep('sign')}
+                    disabled={data['Signed Provision of Service']}
                   >
                     Sign
                   </Button>
