@@ -19,7 +19,6 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import StorefrontIcon from '@material-ui/icons/Storefront';
-import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import BuildIcon from '@material-ui/icons/Build';
 import MonetizationOnRoundedIcon from '@material-ui/icons/MonetizationOnRounded';
 import AccountBalanceRoundedIcon from '@material-ui/icons/AccountBalanceRounded';
@@ -832,6 +831,7 @@ export default function Sidebar(props) {
   const { userProfile } = useAuth(GET_INVESTOR);
   const [investTab, setInvestTab] = useState(false);
   const [creditTab, setCreditTab] = useState(false);
+  const [buildTab, setBuildTab] = useState(false);
   const location = useLocation();
   const { window } = props;
   const classes = useStyles();
@@ -845,7 +845,10 @@ export default function Sidebar(props) {
     if (userProfile.showCredit || location.pathname === '/credit') {
       setCreditTab(true);
     }
-  }, [userProfile.showInvestAndMrkPlc, userProfile.showCredit, location.pathname]);
+    if (userProfile.showBuild || location.pathname === '/build') {
+      setBuildTab(true);
+    }
+  }, [userProfile.showInvestAndMrkPlc, userProfile.showCredit, location.pathname, userProfile.showBuild]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -889,7 +892,7 @@ export default function Sidebar(props) {
       icon: <CreditCardRoundedIcon />,
     });
   }
-  if (creditTab) {
+  if (buildTab) {
     menus.push({
       to: '/build',
       title: 'Build',
