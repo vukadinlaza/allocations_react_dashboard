@@ -21,6 +21,9 @@ const images = {
   RealEstate1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-1.svg',
   RealEstate2: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-3.svg',
   RealEstate3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-custom.svg',
+  Custom1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-setup.svg',
+  Custom2: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-details.svg',
+  Custom3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-custom.svg',
 };
 const zapierWebhook = 'https://hooks.zapier.com/hooks/catch/7904699/ol1c7go/';
 const useStyles = makeStyles((theme) => ({
@@ -35,17 +38,6 @@ const useStyles = makeStyles((theme) => ({
     top: '30vh !important',
   },
 }));
-const CREATE_ORG_AND_DEAL = gql`
-  mutation CreateOrgAndDeal($orgName: String!, $deal: DealInput!) {
-    createOrgAndDeal(orgName: $orgName, deal: $deal) {
-      _id
-      organization {
-        _id
-        slug
-      }
-    }
-  }
-`;
 const POST_ZAP = gql`
   mutation PostZap($body: Object) {
     postZap(data: $body) {
@@ -192,7 +184,7 @@ export default ({ deal, user, data, setData, setStep }) => {
                       style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
                     >
                       <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        Would you like to create an SPV or a Fund?
+                        What would you like to build?{' '}
                       </Typography>
                       <InfoIcon stye={{ background: 'rgba(0,0,0,0.4)' }} />
                     </Grid>
@@ -232,13 +224,13 @@ export default ({ deal, user, data, setData, setStep }) => {
                       style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
                     >
                       <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        Which type of asset are you investing in?
+                        What are you investing in?
                       </Typography>
                       <InfoIcon />
                     </Grid>
                   </Grid>
                   <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
-                    {['Startup', 'Crypto', 'Real Estate', 'Oil/Gas'].map((t) => (
+                    {['Startup', 'Crypto', 'Real Estate', 'Custom'].map((t) => (
                       <Grid xs={4} sm={4} md={4} lg={4}>
                         <Button
                           variant="outline"
@@ -269,7 +261,7 @@ export default ({ deal, user, data, setData, setStep }) => {
                       style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
                     >
                       <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        What is the name of the company?
+                        What is the name of the portfolio company?
                       </Typography>
                       <InfoIcon />
                     </Grid>
@@ -298,7 +290,7 @@ export default ({ deal, user, data, setData, setStep }) => {
                       style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
                     >
                       <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        How soon do you need to close the SPV?
+                        How soon do you need to close?
                       </Typography>
                       <InfoIcon />
                     </Grid>
@@ -335,7 +327,7 @@ export default ({ deal, user, data, setData, setStep }) => {
                       style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
                     >
                       <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                        What is the expected wiring date to the company?
+                        What is the expected wiring date?
                       </Typography>
                       <InfoIcon />
                     </Grid>

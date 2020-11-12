@@ -3,6 +3,7 @@ import { Paper, Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { gql } from 'apollo-boost';
+import { useMutation } from '@apollo/react-hooks';
 import { useFetch, useSimpleReducer } from '../../utils/hooks';
 import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
@@ -81,6 +82,13 @@ const GET_INVESTOR = gql`
     }
   }
 `;
+const UPDATE_USER = gql`
+  mutation UpdateUser($investor: UserInput!) {
+    updateUser(input: $investor) {
+      _id
+    }
+  }
+`;
 
 const BASE = 'appdPrRjapx8iYnIn';
 const TABEL_NAME = 'Deals';
@@ -89,9 +97,21 @@ export default ({}) => {
   const [step, setStep] = useState('');
   const itemDone = false;
   const { data: allATDeals } = useFetch(BASE, TABEL_NAME);
+  const [updateInvestor] = useMutation(UPDATE_USER);
+
   const [data, setData] = useSimpleReducer({});
 
-  const { userProfile } = useAuth(GET_INVESTOR);
+  const { userProfile, loading } = useAuth(GET_INVESTOR);
+
+  useEffect(() => {
+    if (!loading && userProfile._id) {
+      updateInvestor({
+        variables: {
+          investor: { showBuild: true, _id: userProfile._id },
+        },
+      });
+    }
+  }, [loading, updateInvestor, userProfile]);
 
   useEffect(() => {
     if (allATDeals && userProfile) {

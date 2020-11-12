@@ -20,6 +20,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import BuildIcon from '@material-ui/icons/Build';
 import MonetizationOnRoundedIcon from '@material-ui/icons/MonetizationOnRounded';
 import AccountBalanceRoundedIcon from '@material-ui/icons/AccountBalanceRounded';
 import CreditCardRoundedIcon from '@material-ui/icons/CreditCardRounded';
@@ -816,6 +817,7 @@ const GET_INVESTOR = gql`
       admin
       showInvestAndMrkPlc
       showCredit
+      showBuild
       organizations_admin {
         _id
         slug
@@ -885,6 +887,13 @@ export default function Sidebar(props) {
       to: '/credit',
       title: 'Credit',
       icon: <CreditCardRoundedIcon />,
+    });
+  }
+  if (creditTab) {
+    menus.push({
+      to: '/build',
+      title: 'Build',
+      icon: <BuildIcon />,
     });
   }
 
