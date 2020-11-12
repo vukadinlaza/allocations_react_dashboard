@@ -160,7 +160,7 @@ export default ({ deal, user, data, setData, setStep }) => {
               src={
                 !deal.deal_type
                   ? images.basic
-                  : images[`${''.concat(data.asset_type.replaceAll(' ', '') || '', page.toString())}`]
+                  : images[`${''.concat((data?.asset_type || '').replaceAll(' ', '') || '', page.toString())}`]
               }
               alt="oops"
               style={{ width: '80%', height: '80%' }}
