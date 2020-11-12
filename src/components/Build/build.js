@@ -155,6 +155,7 @@ export default ({ deal, user, data, setData, setStep }) => {
               justifyContent: 'center',
               alignItems: 'center',
               position: 'fixed',
+              width: '24%',
             }}
           >
             <img
@@ -164,7 +165,7 @@ export default ({ deal, user, data, setData, setStep }) => {
                   : images[`${''.concat((data?.asset_type || '').replaceAll(' ', '') || '', page.toString())}`]
               }
               alt="oops"
-              style={{ width: '80%', height: '80%' }}
+              style={{ width: '100%', height: '100%' }}
             />
           </Paper>
         </Grid>
