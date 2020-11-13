@@ -92,13 +92,18 @@ const UPDATE_USER = gql`
 
 const BASE = 'appdPrRjapx8iYnIn';
 const TABEL_NAME = 'Deals';
+const QUESTIONS_BASE = 'appD85EnbTN8tKWB9';
+const SPV_TABLE_NAME = 'SPVs';
 export default ({}) => {
   const classes = useStyles();
   const [step, setStep] = useState('build');
   const itemDone = false;
   const { data: allATDeals } = useFetch(BASE, TABEL_NAME);
   const [updateInvestor] = useMutation(UPDATE_USER);
+  const { data: atQuestions } = useFetch(BASE, SPV_TABLE_NAME);
 
+  const atQuestionsData = (atQuestions || []).map((r) => ({ id: r.id, ...r.fields }));
+  const fields = atQuestionsData.map((q) => q.Question);
   const [data, setData] = useSimpleReducer({});
 
   const { userProfile, loading } = useAuth(GET_INVESTOR);
@@ -116,7 +121,6 @@ export default ({}) => {
   useEffect(() => {
     if (allATDeals && userProfile) {
       const tableDeals = allATDeals.map((r) => ({ id: r.id, ...r.fields }));
-      // const dbDeal = userProfile?.deals?.find((d) => d?.airtableId && d?.status === 'draft');
       const activeDeal = tableDeals?.find((d) => d.userId === userProfile._id) || {};
       setData({ airtableId: activeDeal.id, ...activeDeal });
     }
@@ -130,7 +134,7 @@ export default ({}) => {
         </Typography>
         {step && <div style={{ marginTop: '4rem' }} />}
         {step === 'build' && (
-          <BuildStep deal={data} user={userProfile} setData={setData} data={data} setStep={setStep} />
+          <BuildStep deal={data} user={userProfile} setData={setData} data={data} setStep={setStep} fields={fields} />
         )}
         {step === 'sign' && <SignStep deal={data} user={userProfile} />}
         {!step && (

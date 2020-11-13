@@ -48,39 +48,11 @@ const POST_ZAP = gql`
 `;
 const BASE = 'appdPrRjapx8iYnIn';
 const TABEL_NAME = 'Deals';
-export default ({ deal, user, data, setData, setStep }) => {
+export default ({ deal, user, data, setData, setStep, fields }) => {
   const classes = useStyles();
   const [page, setPage] = useState(1);
   const [postZap, {}] = useMutation(POST_ZAP);
-
-  const fields = [
-    'deal_type',
-    'asset_type',
-    'company_name',
-    'closing_time',
-    'wiring_date',
-    'org_charge_mgmt_fee',
-    'org_charge_mgmt_amount',
-    'org_receive_carry',
-    'org_receive_carry_amount',
-    'master_series_name',
-    'organizer_name',
-    'has_investment_agreement',
-    'num_spvs',
-    'airtableId',
-    'userId',
-    'id',
-    'Build Phase',
-    'Review',
-    'Signed Provision Of Service',
-    'doc_type',
-    'min_investment_amount',
-    'same_fees_for_all_investors',
-    'investment_advisor_type',
-    'advertise_investment',
-    'attachments',
-  ];
-
+  console.log(data);
   const submitData = async () => {
     if (!data.airtableId) {
       const response = await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {

@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { groupBy, map } from 'lodash';
 import { Button, TextField, Paper, Grid, Typography, Slider } from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
 import { withStyles } from '@material-ui/core/styles';
 import { useFetch } from '../../utils/hooks';
+import { nWithCommas } from '../../utils/numbers';
 
 const BASE = 'appD85EnbTN8tKWB9';
 const TABLE = 'SPVs';
+
 export default ({ setData, classes, answers, activePage }) => {
   const { data } = useFetch(BASE, TABLE);
-  console.log('ANSERS', answers);
   const PrettoSlider = withStyles({
     root: {
-      color: '#52af77',
+      color: '#205DF5',
       height: 8,
     },
     thumb: {
@@ -40,6 +41,7 @@ export default ({ setData, classes, answers, activePage }) => {
     },
   })(Slider);
   const atQuestions = (data || []).map((r) => ({ id: r.id, ...r.fields }));
+
   const questionsByPage = groupBy(atQuestions, 'Page');
   const questions = map(questionsByPage, (page) => {
     return page.map((question) => {
@@ -71,10 +73,10 @@ export default ({ setData, classes, answers, activePage }) => {
                         color="#2676FF"
                         className={classes.button}
                         style={{
-                          background: answers[question.slug] === t ? '#2676FF' : 'white',
-                          color: answers[question.slug] === t ? 'white' : '#2676FF',
+                          background: answers[question.Question] === t ? '#2676FF' : 'white',
+                          color: answers[question.Question] === t ? 'white' : '#2676FF',
                         }}
-                        onClick={() => setData({ [question.slug]: t })}
+                        onClick={() => setData({ [question.Question]: t })}
                       >
                         {t}
                       </Button>
@@ -112,8 +114,8 @@ export default ({ setData, classes, answers, activePage }) => {
                     style={{ width: '100%' }}
                     variant="outlined"
                     label={question.Question}
-                    value={answers[question.slug] || ''}
-                    onChange={(e) => setData({ [question.slug]: e.target.value })}
+                    value={answers[question.Question] || ''}
+                    onChange={(e) => setData({ [question.Question]: e.target.value })}
                   />
                 </Grid>
               </Grid>
@@ -142,7 +144,7 @@ export default ({ setData, classes, answers, activePage }) => {
                   <TextField
                     required
                     style={{ width: '100%' }}
-                    onChange={(e) => setData({ [question.slug]: e.target.value })}
+                    onChange={(e) => setData({ [question.Question]: e.target.value })}
                     label={question.Question}
                     type="date"
                     variant="outlined"
@@ -164,9 +166,19 @@ export default ({ setData, classes, answers, activePage }) => {
                     lg={12}
                     style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
                   >
-                    <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
-                      {question.Question}
-                    </Typography>
+                    {question.valueType === '$' ? (
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        {question.Question} {question.ValueType}
+                        {nWithCommas(answers[question.Question])}
+                      </Typography>
+                    ) : (
+                      <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
+                        {question.Question}
+                        <span style={{ marginLeft: '1rem' }} />
+                        {nWithCommas(answers[question.Question])}
+                        {question.ValueType}
+                      </Typography>
+                    )}
                     <InfoIcon />
                   </Grid>
                 </Grid>
@@ -175,10 +187,12 @@ export default ({ setData, classes, answers, activePage }) => {
                     defaultValue={0}
                     aria-labelledby="discrete-slider"
                     valueLabelDisplay="auto"
-                    step={question.Step}
-                    marks
+                    step={question?.Steps ? true : question.Step}
+                    value={answers[question.Question]}
+                    marks={question?.Steps ? question.Steps.map((s) => ({ value: s, label: s })) : true}
                     min={question.Minimum}
                     max={question.Maximum}
+                    onChange={(e, v) => setData({ [question.Question]: v.toString() })}
                   />
                 </Grid>
               </Grid>
