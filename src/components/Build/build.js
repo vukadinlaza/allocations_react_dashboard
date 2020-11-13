@@ -220,6 +220,7 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
               textAlign: 'center',
               padding: '.25rem',
             }}
+            className="nextBtn"
             onClick={() => {
               if (page < tabs.length) {
                 submitData();

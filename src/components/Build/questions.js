@@ -166,7 +166,7 @@ export default ({ setData, classes, answers, activePage }) => {
                     lg={12}
                     style={{ padding: '0.5rem', display: 'flex', justifyContent: 'space-between' }}
                   >
-                    {question.valueType === '$' ? (
+                    {question.ValueType === '$' ? (
                       <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
                         {question.Question} {question.ValueType}
                         {nWithCommas(answers[question.Question])}
@@ -187,9 +187,9 @@ export default ({ setData, classes, answers, activePage }) => {
                     defaultValue={0}
                     aria-labelledby="discrete-slider"
                     valueLabelDisplay="auto"
-                    step={question?.Steps ? true : question.Step}
+                    step={question?.Steps ? null : question.Step}
                     value={answers[question.Question]}
-                    marks={question?.Steps ? question.Steps.map((s) => ({ value: s, label: s })) : true}
+                    marks={question?.Steps ? question.Steps.map((s) => ({ value: s })) : true}
                     min={question.Minimum}
                     max={question.Maximum}
                     onChange={(e, v) => setData({ [question.Question]: v.toString() })}
