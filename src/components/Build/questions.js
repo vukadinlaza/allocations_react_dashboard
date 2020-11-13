@@ -169,7 +169,7 @@ export default ({ setData, classes, answers, activePage }) => {
                     {question.ValueType === '$' ? (
                       <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
                         {question.Question} {question.ValueType}
-                        {nWithCommas(answers[question.Question])}
+                        {nWithCommas(answers[question.Question] || question.Minimum)}
                       </Typography>
                     ) : (
                       <Typography style={{ textAlign: 'left', marginTop: '0.5rem' }} variant="h6">
@@ -184,7 +184,7 @@ export default ({ setData, classes, answers, activePage }) => {
                 </Grid>
                 <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '.5rem' }}>
                   <PrettoSlider
-                    defaultValue={0}
+                    defaultValue={question.Minimum}
                     aria-labelledby="discrete-slider"
                     valueLabelDisplay="auto"
                     step={question?.Steps ? null : question.Step}
