@@ -100,10 +100,9 @@ export default ({}) => {
   const itemDone = false;
   const { data: allATDeals } = useFetch(BASE, TABEL_NAME);
   const [updateInvestor] = useMutation(UPDATE_USER);
-  const { data: atQuestions } = useFetch(BASE, SPV_TABLE_NAME);
+  const { data: atQuestions } = useFetch(QUESTIONS_BASE, SPV_TABLE_NAME);
 
   const atQuestionsData = (atQuestions || []).map((r) => ({ id: r.id, ...r.fields }));
-  const fields = atQuestionsData.map((q) => q.Question);
   const [data, setData] = useSimpleReducer({});
 
   const { userProfile, loading } = useAuth(GET_INVESTOR);
@@ -134,7 +133,14 @@ export default ({}) => {
         </Typography>
         {step && <div style={{ marginTop: '4rem' }} />}
         {step === 'build' && (
-          <BuildStep deal={data} user={userProfile} setData={setData} data={data} setStep={setStep} fields={fields} />
+          <BuildStep
+            deal={data}
+            user={userProfile}
+            setData={setData}
+            data={data}
+            setStep={setStep}
+            atQuestionsData={atQuestionsData}
+          />
         )}
         {step === 'sign' && <SignStep deal={data} user={userProfile} />}
         {!step && (

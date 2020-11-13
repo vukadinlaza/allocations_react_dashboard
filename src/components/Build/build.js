@@ -1,14 +1,14 @@
 /* eslint-disable max-len */
 import React, { useState } from 'react';
-import { Button, TextField, Paper, Grid, Typography, Input } from '@material-ui/core';
+import { Paper, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import InfoIcon from '@material-ui/icons/Info';
+import { groupBy, pick, map, get, toNumber } from 'lodash';
 import { gql } from 'apollo-boost';
-import { pick } from 'lodash';
+
 import { useMutation } from '@apollo/react-hooks';
+import { toast } from 'react-toastify';
 import Questions from './questions';
 import './style.scss';
-import { toast } from 'react-toastify';
 
 const images = {
   basic: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/graphic-bg.svg',
@@ -48,11 +48,16 @@ const POST_ZAP = gql`
 `;
 const BASE = 'appdPrRjapx8iYnIn';
 const TABEL_NAME = 'Deals';
-export default ({ deal, user, data, setData, setStep, fields }) => {
+export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
   const classes = useStyles();
   const [page, setPage] = useState(1);
   const [postZap, {}] = useMutation(POST_ZAP);
-  console.log(data);
+  const fields = atQuestionsData.map((q) => q.Question);
+  const fieldData = groupBy(atQuestionsData, 'Page');
+  const tabs = map(fieldData, (page, index) => ({
+    display: get(page, '[0].Stage', `Step ${index + 1}`),
+    page: toNumber(index),
+  }));
   const submitData = async () => {
     if (!data.airtableId) {
       const response = await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
@@ -89,11 +94,7 @@ export default ({ deal, user, data, setData, setStep, fields }) => {
   return (
     <>
       <Grid container spacing={2} style={{ maxWidth: '50%', marginTop: '-4rem' }}>
-        {[
-          { display: 'Step 1', page: 1 },
-          { display: 'Step 2', page: 2 },
-          { display: 'Custom', page: 3 },
-        ].map((t) => (
+        {tabs.map((t) => (
           <Grid
             item
             xs={3}
@@ -220,12 +221,12 @@ export default ({ deal, user, data, setData, setStep, fields }) => {
               padding: '.25rem',
             }}
             onClick={() => {
-              if (page < 3) {
+              if (page < tabs.length) {
                 submitData();
                 setPage(page + 1);
                 return;
               }
-              if (page === 3) {
+              if (page === tabs.length) {
                 submitData();
                 setStep('');
                 toast.success('Success!');
@@ -235,7 +236,7 @@ export default ({ deal, user, data, setData, setStep, fields }) => {
               }
             }}
           >
-            {page === 3 ? 'Finish' : 'Next'}
+            {page === tabs.length ? 'Finish' : 'Next'}
           </div>
         </Grid>
       </Grid>
