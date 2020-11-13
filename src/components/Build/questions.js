@@ -182,7 +182,7 @@ export default ({ setData, classes, answers, activePage }) => {
                     <InfoIcon />
                   </Grid>
                 </Grid>
-                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '.5rem' }}>
                   <PrettoSlider
                     defaultValue={0}
                     aria-labelledby="discrete-slider"
