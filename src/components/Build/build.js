@@ -58,6 +58,7 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
     display: get(page, '[0].Stage', `Step ${index + 1}`),
     page: toNumber(index),
   }));
+  console.log(tabs);
   const submitData = async () => {
     if (!data.airtableId) {
       const response = await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
@@ -93,22 +94,26 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
   if (!deal) return null;
   return (
     <>
-      <Grid container spacing={2} style={{ maxWidth: '50%', marginTop: '-4rem' }}>
+      <Grid container spacing={2} style={{ maxWidth: '80%', marginTop: '-4rem' }}>
         {tabs.map((t) => (
           <Grid
             item
-            xs={3}
-            sm={3}
-            md={3}
-            lg={3}
+            xs={2}
+            sm={2}
+            md={2}
+            lg={2}
             onClick={() => {
               submitData();
               setPage(t.page);
             }}
           >
             <Typography
-              variant="h6"
-              style={{ color: 'white', borderBottom: t.page === page ? '5px solid white' : '5px solid transparent' }}
+              variant="body1"
+              style={{
+                color: 'white',
+                borderBottom: t.page === page ? '5px solid white' : '5px solid transparent',
+                textAlign: 'center',
+              }}
             >
               {t.display}
             </Typography>
