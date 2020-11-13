@@ -130,7 +130,7 @@ export default ({}) => {
                     Interest rate:
                   </Box>
                   <Box fontWeight="fontWeightBold" m={1}>
-                    20.37%
+                    4.99%
                   </Box>
                 </Typography>
 
@@ -182,7 +182,7 @@ export default ({}) => {
                     Interest rate:
                   </Box>
                   <Box fontWeight="fontWeightBold" m={1}>
-                    20.29%{' '}
+                    4.99%
                   </Box>
                 </Typography>
 
@@ -234,7 +234,7 @@ export default ({}) => {
                     Interest rate:
                   </Box>
                   <Box fontWeight="fontWeightBold" m={1}>
-                    20.27%
+                    4.99%
                   </Box>
                 </Typography>
 
@@ -286,7 +286,7 @@ export default ({}) => {
                     Interest rate:
                   </Box>
                   <Box fontWeight="fontWeightBold" m={1}>
-                    20.27%
+                    4.99%
                   </Box>
                 </Typography>
 
