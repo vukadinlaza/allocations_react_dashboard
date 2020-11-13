@@ -22,9 +22,9 @@ const images = {
   RealEstate1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-1.svg',
   RealEstate2: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-3.svg',
   RealEstate3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-custom.svg',
-  Custom1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-setup.svg',
-  Custom2: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-details.svg',
-  Custom3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-custom.svg',
+  Other1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-setup.svg',
+  Other2: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-details.svg',
+  Other3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-custom.svg',
 };
 const zapierWebhook = 'https://hooks.zapier.com/hooks/catch/7904699/ol1c7go/';
 const useStyles = makeStyles((theme) => ({
@@ -133,9 +133,14 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
           >
             <img
               src={
-                !deal.deal_type
+                !deal['What would you like to build?']
                   ? images.basic
-                  : images[`${''.concat((data?.asset_type || '').replaceAll(' ', '') || '', page.toString())}`]
+                  : images[
+                      `${''.concat(
+                        (data['What are you investing in?'] || '').replaceAll(' ', '') || '',
+                        page >= 3 ? '3' : page.toString(),
+                      )}`
+                    ]
               }
               alt="oops"
               style={{ width: '100%', height: '100%' }}
