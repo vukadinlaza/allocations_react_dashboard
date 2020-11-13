@@ -3,6 +3,7 @@ import { groupBy, map } from 'lodash';
 import { Button, TextField, Paper, Grid, Typography, Slider } from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
 import { withStyles } from '@material-ui/core/styles';
+import moment from 'moment';
 import { useFetch } from '../../utils/hooks';
 import { nWithCommas } from '../../utils/numbers';
 
@@ -46,6 +47,8 @@ export default ({ setData, classes, answers, activePage }) => {
   const questions = map(questionsByPage, (page) => {
     return page.map((question) => {
       let x = null;
+      const d = moment(new Date()).format('YYYY-MM-DD');
+
       switch (question.Type) {
         case 'Multiple choice':
           x = activePage === question.Page && (
@@ -142,7 +145,8 @@ export default ({ setData, classes, answers, activePage }) => {
                 </Grid>
                 <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
                   <TextField
-                    required
+                    defaultValue={d}
+                    value={moment(new Date(answers[question.Question])).format('YYYY-MM-DD')}
                     style={{ width: '100%' }}
                     onChange={(e) => setData({ [question.Question]: e.target.value })}
                     label={question.Question}
