@@ -58,7 +58,6 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
     display: get(page, '[0].Stage', `Step ${index + 1}`),
     page: toNumber(index),
   }));
-  console.log(tabs);
   const submitData = async () => {
     if (!data.airtableId) {
       const response = await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
@@ -195,7 +194,14 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
               </Typography>
             </Grid>
             <Grid xs={8} sm={8} md={8} lg={8}>
-              <div style={{ fontSize: '1.75rem', fontWeight: '900', marginLeft: '1rem' }}> $8,000</div>
+              <div style={{ fontSize: '1.75rem', fontWeight: '900', marginLeft: '1rem' }}>
+                {' '}
+                {deal['What would you like to build?'] === 'Fund'
+                  ? deal['Will you advertise the offering? (506c offering)'] === 'Yes'
+                    ? '$31,000'
+                    : '$26,000'
+                  : '$8,000'}
+              </div>
               <div style={{ fontSize: '1.75rem', fontWeight: '900', marginLeft: '1rem' }}> $500</div>
             </Grid>
           </Grid>
@@ -214,12 +220,19 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
               </Typography>
             </Grid>
             <Grid xs={8} sm={8} md={8} lg={8}>
-              <span style={{ fontSize: '2.5rem', fontWeight: '900', marginLeft: '1rem' }}> $8,500</span>
+              <span style={{ fontSize: '2.5rem', fontWeight: '900', marginLeft: '1rem' }}>
+                {' '}
+                {deal['What would you like to build?'] === 'Fund'
+                  ? deal['Will you advertise the offering? (506c offering)'] === 'Yes'
+                    ? '$31,500'
+                    : '$26,500'
+                  : '$8,500'}
+              </span>
             </Grid>
           </Grid>
         </Grid>
         <Grid xs={2} sm={2} md={2} lg={2} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Typography variant="body1"> Estimated Delivery: {data.closing_time}</Typography>
+          <Typography variant="body1"> Estimated Delivery: {data['How soon do you need to close?']}</Typography>
         </Grid>
         <Grid xs={2} sm={2} md={2} lg={2} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div
