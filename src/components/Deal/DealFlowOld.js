@@ -17,7 +17,6 @@ import {
   TableRow,
   Typography,
   TableHead,
-  Hidden,
 } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 
@@ -127,54 +126,52 @@ export default function InvestmentFlow({ deal, investor, refetch }) {
   const hasKyc = docs.find((d) => d.documentName && (d.documentName.includes('W-8') || d.documentName.includes('W-9')));
   return (
     <>
-      {/* <Hidden>
-        <div className={classes.tabs}>
-          <Grid container justify="center">
-            <Grid item xs={12} sm={3}>
-              <ButtonBase
-                className={status === 'invited' ? classes.activeTab : classes.tab}
-                style={{ borderRight: '1px solid #e1e9ec' }}
-                onClick={() => setStatus('invited')}
-              >
-                Data Room {investment && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
-              </ButtonBase>
-            </Grid>
-
-            <Grid item xs={12} sm={3}>
-              <ButtonBase
-                className={status === 'pledged' ? classes.activeTab : classes.tab}
-                style={{ borderRight: '1px solid #e1e9ec', cursor: approved ? 'cursor' : 'not-allowed' }}
-                onClick={() => approved && setStatus('pledged')}
-              >
-                Sign {!approved && <FontAwesomeIcon icon="lock" />}{' '}
-                {hasSigned && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
-              </ButtonBase>
-            </Grid>
-
-            <Grid item xs={12} sm={3}>
-              <ButtonBase
-                className={status === 'kyc' ? classes.activeTab : classes.tab}
-                style={{ borderRight: '1px solid #e1e9ec', cursor: approved ? 'cursor' : 'not-allowed' }}
-                onClick={() => approved && setStatus('kyc')}
-              >
-                KYC {!approved && <FontAwesomeIcon icon="lock" />}{' '}
-                {hasKyc && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
-              </ButtonBase>
-            </Grid>
-
-            <Grid item xs={12} sm={3}>
-              <ButtonBase
-                className={status === 'onboarded' ? classes.activeTab : classes.tab}
-                style={{ cursor: approved ? 'cursor' : 'not-allowed' }}
-                onClick={() => approved && setStatus('onboarded')}
-              >
-                Wire {!approved && <FontAwesomeIcon icon="lock" />}{' '}
-                {hasWired && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
-              </ButtonBase>
-            </Grid>
+      <div className={classes.tabs}>
+        <Grid container justify="center">
+          <Grid item xs={12} sm={3}>
+            <ButtonBase
+              className={status === 'invited' ? classes.activeTab : classes.tab}
+              style={{ borderRight: '1px solid #e1e9ec' }}
+              onClick={() => setStatus('invited')}
+            >
+              Data Room {investment && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
+            </ButtonBase>
           </Grid>
-        </div>
-      </Hidden> */}
+
+          <Grid item xs={12} sm={3}>
+            <ButtonBase
+              className={status === 'pledged' ? classes.activeTab : classes.tab}
+              style={{ borderRight: '1px solid #e1e9ec', cursor: approved ? 'cursor' : 'not-allowed' }}
+              onClick={() => approved && setStatus('pledged')}
+            >
+              Sign {!approved && <FontAwesomeIcon icon="lock" />}{' '}
+              {hasSigned && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
+            </ButtonBase>
+          </Grid>
+
+          <Grid item xs={12} sm={3}>
+            <ButtonBase
+              className={status === 'kyc' ? classes.activeTab : classes.tab}
+              style={{ borderRight: '1px solid #e1e9ec', cursor: approved ? 'cursor' : 'not-allowed' }}
+              onClick={() => approved && setStatus('kyc')}
+            >
+              KYC {!approved && <FontAwesomeIcon icon="lock" />}{' '}
+              {hasKyc && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
+            </ButtonBase>
+          </Grid>
+
+          <Grid item xs={12} sm={3}>
+            <ButtonBase
+              className={status === 'onboarded' ? classes.activeTab : classes.tab}
+              style={{ cursor: approved ? 'cursor' : 'not-allowed' }}
+              onClick={() => approved && setStatus('onboarded')}
+            >
+              Wire {!approved && <FontAwesomeIcon icon="lock" />}{' '}
+              {hasWired && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
+            </ButtonBase>
+          </Grid>
+        </Grid>
+      </div>
 
       <>
         {status === 'invited' && <DataRoom deal={deal} />}
