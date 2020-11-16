@@ -187,13 +187,13 @@ export default ({ setData, classes, answers, activePage }) => {
                   </Grid>
                 </Grid>
                 <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '.5rem' }}>
-                  <PrettoSlider
+                  <Slider
                     defaultValue={question.Minimum}
-                    aria-labelledby="discrete-slider"
-                    valueLabelDisplay="auto"
-                    step={question?.Steps ? null : question.Step}
+                    // aria-labelledby="discrete-slider"
+                    // valueLabelDisplay="auto"
+                    // step={question?.Steps ? null : question.Step}
                     value={answers[question.Question]}
-                    marks={question?.Steps ? question.Steps.map((s) => ({ value: s })) : true}
+                    // marks={question?.Steps ? question.Steps.map((s) => ({ value: s })) : true}
                     min={question.Minimum}
                     max={question.Maximum}
                     onChange={(e, v) => setData({ [question.Question]: v.toString() })}

@@ -1,10 +1,11 @@
 /* eslint-disable max-len */
 import React, { useState } from 'react';
-import { Paper, Grid, Typography } from '@material-ui/core';
+import { Paper, Grid, Typography, Modal } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { groupBy, pick, map, get, toNumber } from 'lodash';
 import { gql } from 'apollo-boost';
-
+// import useWindowSize from 'react-use/lib/useWindowSize';
+import Confetti from 'react-confetti';
 import { useMutation } from '@apollo/react-hooks';
 import { toast } from 'react-toastify';
 import Questions from './questions';
@@ -50,6 +51,9 @@ const BASE = 'appdPrRjapx8iYnIn';
 const TABEL_NAME = 'Deals';
 export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
   const classes = useStyles();
+
+  // const { width, height } = useWindowSize();
+  const [showConfetti, setShowConfetti] = useState(true);
   const [page, setPage] = useState(1);
   const [postZap, {}] = useMutation(POST_ZAP);
   const fields = atQuestionsData.map((q) => q.Question);
@@ -142,7 +146,7 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
                   : images[
                       `${''.concat(
                         (data['What are you investing in?'] || '').replaceAll(' ', '') || '',
-                        page >= 3 ? '3' : page.toString(),
+                        page >= tabs.length ? '3' : page.toString(),
                       )}`
                     ]
               }
@@ -156,6 +160,7 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
           {/* Page 1 */}
           {/* Question 1 */}
           <Questions setData={setData} answers={data} classes={classes} activePage={page} />
+          {showConfetti && <div> yes </div>}
         </Grid>
         {/* end grid */}
       </Grid>
@@ -243,6 +248,8 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
               fontSize: '1.5rem',
               textAlign: 'center',
               padding: '.25rem',
+              backgroundColor: 'white',
+              color: '#2676FF',
             }}
             className="nextBtn"
             onClick={() => {
@@ -253,19 +260,34 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
               }
               if (page === tabs.length) {
                 submitData();
-                setStep('');
                 toast.success('Success!');
+                setShowConfetti(true);
                 postZap({
                   variables: { body: { zapUrl: zapierWebhook, ...data } },
                 });
               }
             }}
           >
-            {page === tabs.length ? 'Finish' : 'Next'}
+            {page === tabs.length ? 'Submit' : 'Next'}
           </div>
         </Grid>
       </Grid>
+      {showConfetti && <ConfirmationModal showConfetti={showConfetti} />}
     </>
+  );
+};
+const ConfirmationModal = ({ showConfetti }) => {
+  return (
+    <Modal open={showConfetti} aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description">
+      <Grid xs={12} sm={12} md={4} lg={4} style={{ display: 'flex', justifyContent: 'center', marginTop: '20vh' }}>
+        <Paper>
+          <Typography>
+            Thanks for Submitting your proposal. SOmeone from Allocations will reach out shortly to confirm your SPV.
+          </Typography>
+          <Confetti />
+        </Paper>
+      </Grid>
+    </Modal>
   );
 };
 
