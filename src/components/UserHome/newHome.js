@@ -17,12 +17,13 @@ import {
   FormControl,
   Input,
   InputAdornment,
+  TextField,
 } from '@material-ui/core';
 import { useMutation } from '@apollo/react-hooks';
 import CancelIcon from '@material-ui/icons/Cancel';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import _ from 'lodash';
+import _, { isNumber, toNumber } from 'lodash';
 import moment from 'moment';
 import Chart from 'react-google-charts';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
@@ -33,6 +34,7 @@ import { useAuth } from '../../auth/useAuth';
 import Document from '../utils/Document';
 import { useSimpleReducer } from '../../utils/hooks';
 import './style.scss';
+import { toast } from 'react-toastify';
 
 const useStyles = makeStyles((theme) => ({
   tableHeader: {
@@ -126,11 +128,21 @@ const CREATE_ORDER = gql`
     }
   }
 `;
+const POST_ZAP = gql`
+  mutation PostZap($body: Object) {
+    postZap(data: $body) {
+      _id
+    }
+  }
+`;
 
 export default () => {
   const classes = useStyles();
   const location = useLocation();
   const [showDocs, setShowDocs] = useState();
+  const [text, setText] = useState('');
+  const [postZap, {}] = useMutation(POST_ZAP);
+
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [confirmation, setConfirmation] = useState(false);
   const [tradeData, setTradeData] = useSimpleReducer({
@@ -214,6 +226,7 @@ export default () => {
   const investmentTotal = _.sumBy(investments, 'amount');
   const investmentsValue = _.sumBy(investments, 'value');
   const multipleSum = (investmentsValue / investmentTotal).toFixed(2);
+  console.log(multipleSum, investments);
 
   // const weightedInvestments = investments.map((inv) => {
   //   const dm = inv.value - inv.amount;
@@ -271,7 +284,7 @@ export default () => {
                   Portfolio Value
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  $ {nWithCommas(investmentsValue)}
+                  $ {investmentsValue === 0 ? `${nWithCommas(investmentTotal)}.00` : nWithCommas(investmentsValue)}
                 </h2>
                 <p
                   style={{
@@ -307,7 +320,7 @@ export default () => {
                   Total Invested
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  $ {nWithCommas(investmentTotal)}
+                  $ {investmentsValue === 0 ? `${nWithCommas(investmentTotal)}.00` : nWithCommas(investmentsValue)}
                 </h2>
                 <p
                   style={{
@@ -343,7 +356,7 @@ export default () => {
                   Multiple
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  {multipleSum}x
+                  {!isNaN(multipleSum) ? multipleSum : '0.00'}x
                 </h2>
                 <p
                   style={{
@@ -352,7 +365,7 @@ export default () => {
                     paddingTop: '10px',
                   }}
                 >
-                  Last Update: 29th Sept 2020
+                  Last Update: 4th Nov 2020
                 </p>
               </Grid>
               <Grid item sm={4} md={4}>
@@ -366,109 +379,123 @@ export default () => {
           </Paper>
         </Grid>
       </Grid>
-      <>
-        <Grid container justify="space-between" style={{ marginTop: '1em' }}>
-          <Grid item xs={12} sm={12} md={6} style={{ border: '1em solid transparent' }}>
-            <Paper style={{ minHeight: '400px' }}>
-              <p
-                style={{
-                  color: 'rgba(0,0,0,0.4)',
-                  paddingLeft: '10px',
-                  paddingTop: '10px',
-                }}
-              >
-                Portfolio Overview
-              </p>
-              <Grid item sm={12} md={12}>
-                {investments.length !== 0 ? (
-                  <Chart
-                    chartType="PieChart"
-                    width="100%"
-                    height="300px"
-                    data={[['Investment', 'Amount'], ...investments.map((inv) => [inv.deal.company_name, inv.amount])]}
-                    options={chartOptionsA}
-                  />
-                ) : null}
-              </Grid>
-            </Paper>
-          </Grid>
+      {investments.length >= 1 ? (
+        <>
+          <Grid container justify="space-between" style={{ marginTop: '1em' }}>
+            <Grid item xs={12} sm={12} md={6} style={{ border: '1em solid transparent' }}>
+              <Paper style={{ minHeight: '400px' }}>
+                <p
+                  style={{
+                    color: 'rgba(0,0,0,0.4)',
+                    paddingLeft: '10px',
+                    paddingTop: '10px',
+                  }}
+                >
+                  Portfolio Overview
+                </p>
+                <Grid item sm={12} md={12}>
+                  {investments.length !== 0 ? (
+                    <Chart
+                      chartType="PieChart"
+                      width="100%"
+                      height="300px"
+                      data={[
+                        ['Investment', 'Amount'],
+                        ...investments.map((inv) => [inv.deal.company_name, inv.amount]),
+                      ]}
+                      options={chartOptionsA}
+                    />
+                  ) : null}
+                </Grid>
+              </Paper>
+            </Grid>
 
-          <Grid item xs={12} sm={12} md={6} style={{ border: '1em solid transparent' }}>
-            <Paper style={{ minHeight: '400px' }}>
-              <p
-                style={{
-                  color: 'rgba(0,0,0,0.4)',
-                  paddingLeft: '10px',
-                  paddingTop: '10px',
-                }}
-              >
-                Portfolio Value
-              </p>
-              <Grid item sm={12} md={12}>
-                {investments.length !== 0 ? (
-                  <Chart
-                    chartType="SteppedAreaChart"
-                    width="100%"
-                    height="300px"
-                    data={[['Time', 'Value'], ...graphBData]}
-                    options={chartOptionsB}
-                  />
-                ) : null}
-              </Grid>
-            </Paper>
+            <Grid item xs={12} sm={12} md={6} style={{ border: '1em solid transparent' }}>
+              <Paper style={{ minHeight: '400px' }}>
+                <p
+                  style={{
+                    color: 'rgba(0,0,0,0.4)',
+                    paddingLeft: '10px',
+                    paddingTop: '10px',
+                  }}
+                >
+                  Portfolio Value
+                </p>
+                <Grid item sm={12} md={12}>
+                  {investments.length !== 0 ? (
+                    <Chart
+                      chartType="SteppedAreaChart"
+                      width="100%"
+                      height="300px"
+                      data={[['Time', 'Value'], ...graphBData]}
+                      options={chartOptionsB}
+                    />
+                  ) : null}
+                </Grid>
+              </Paper>
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid item sm={12} md={12} style={{ border: '1em solid transparent' }}>
-          <Paper>
-            <Table>
-              <TableHead>
-                <TableRow style={{ borderBottom: 'solid black 1px' }}>
-                  <TableCell className={classes.tableHeader} align="left">
-                    Name
-                  </TableCell>
-                  <Hidden only="xs">
-                    <TableCell className={classes.tableHeader} align="center">
-                      Status
+          <Grid item sm={12} md={12} style={{ border: '1em solid transparent' }}>
+            <Paper>
+              <Table>
+                <TableHead>
+                  <TableRow style={{ borderBottom: 'solid black 1px' }}>
+                    <TableCell className={classes.tableHeader} align="left">
+                      Name
                     </TableCell>
-                  </Hidden>
-                  <Hidden only="xs">
+                    <Hidden only="xs">
+                      <TableCell className={classes.tableHeader} align="center">
+                        Status
+                      </TableCell>
+                    </Hidden>
+                    <Hidden only="xs">
+                      <TableCell className={classes.tableHeader} align="center">
+                        Investment Date
+                      </TableCell>
+                    </Hidden>
                     <TableCell className={classes.tableHeader} align="center">
-                      Investment Date
+                      Investment Amount
                     </TableCell>
-                  </Hidden>
-                  <TableCell className={classes.tableHeader} align="center">
-                    Investment Amount
-                  </TableCell>
-                  <Hidden only="xs">
+                    <Hidden only="xs">
+                      <TableCell className={classes.tableHeader} align="center">
+                        Investment Value
+                      </TableCell>
+                    </Hidden>
+                    <Hidden only="xs">
+                      <TableCell className={classes.tableHeader} align="center">
+                        Multiple
+                      </TableCell>
+                    </Hidden>
                     <TableCell className={classes.tableHeader} align="center">
-                      Investment Value
+                      Deal Page
                     </TableCell>
-                  </Hidden>
-                  <Hidden only="xs">
+                    <Hidden only="xs">
+                      <TableCell className={classes.tableHeader} align="center">
+                        Documents
+                      </TableCell>
+                    </Hidden>
                     <TableCell className={classes.tableHeader} align="center">
-                      Multiple
+                      Buy
                     </TableCell>
-                  </Hidden>
-                  <TableCell className={classes.tableHeader} align="center">
-                    Deal Page
-                  </TableCell>
-                  <Hidden only="xs">
                     <TableCell className={classes.tableHeader} align="center">
-                      Documents
+                      Sell
                     </TableCell>
-                  </Hidden>
-                  <TableCell className={classes.tableHeader} align="center">
-                    Buy
-                  </TableCell>
-                  <TableCell className={classes.tableHeader} align="center">
-                    Sell
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {investments.map((investment) =>
-                  showDocs?._id === investment?._id ? (
-                    <>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {investments.map((investment) =>
+                    showDocs?._id === investment?._id ? (
+                      <>
+                        <TR
+                          demo={demo}
+                          investment={investment}
+                          setShowDocs={setShowDocs}
+                          showDocs={showDocs}
+                          setTradeData={setTradeData}
+                        />
+                        <DocsRow key={`${showDocs._id}-docs`} docs={showDocs.documents} investment={investment} />
+                      </>
+                    ) : (
                       <TR
                         demo={demo}
                         investment={investment}
@@ -476,23 +503,62 @@ export default () => {
                         showDocs={showDocs}
                         setTradeData={setTradeData}
                       />
-                      <DocsRow key={`${showDocs._id}-docs`} docs={showDocs.documents} investment={investment} />
-                    </>
-                  ) : (
-                    <TR
-                      demo={demo}
-                      investment={investment}
-                      setShowDocs={setShowDocs}
-                      showDocs={showDocs}
-                      setTradeData={setTradeData}
-                    />
-                  ),
-                )}
-              </TableBody>
-            </Table>
-          </Paper>
-        </Grid>
-      </>
+                    ),
+                  )}
+                </TableBody>
+              </Table>
+            </Paper>
+          </Grid>
+        </>
+      ) : (
+        <Paper style={{ margin: '1rem', padding: '2rem' }}>
+          <Typography variant="h6" style={{ color: '#5C6E84', textAlign: 'center', padding: '1rem' }}>
+            Having trouble finding your investment?
+          </Typography>
+          <Grid container sm={12} md={12} lg={12}>
+            <Grid item xs={12} sm={12} md={8} lg={8}>
+              <Typography variant="subtitle2" style={{ color: '#5C6E84', padding: '.25rem' }}>
+                Enter your deal name
+              </Typography>
+              <TextField
+                style={{ width: '100%', padding: '.5rem', marginBottom: '1rem' }}
+                size="lg"
+                type="text"
+                onChange={(e) => {
+                  setText(e.target.value);
+                }}
+                label="Deal Name"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={4}
+              lg={4}
+              style={{ display: 'flex', alignItems: 'flex-end', marginBottom: '.5rem' }}
+            >
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ width: '100%', height: '50%', margin: '1rem' }}
+                size="medium"
+                onClick={() => {
+                  toast.success('Success! Allocations has been notified');
+                  postZap({
+                    variables: {
+                      body: { zapUrl: 'https://hooks.zapier.com/hooks/catch/7904699/ola4wwb', dealName: text },
+                    },
+                  });
+                }}
+              >
+                Find Investment
+              </Button>
+            </Grid>
+          </Grid>
+        </Paper>
+      )}
 
       <Modal
         open={tradeData?.open}
