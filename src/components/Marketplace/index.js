@@ -31,6 +31,7 @@ const MARKETPLACE_LIKE = gql`
   mutation CreateMarketplaceLike($like: MarketplaceLikeInput!) {
     createMarketplaceLike(like: $like) {
       name
+      round
     }
   }
 `;
@@ -228,7 +229,6 @@ export default function Marketplace() {
 
         {/*  Start looping through deals */}
         {deals.map((deal) => {
-          console.log(deal.deal_lead);
           const {
             close_date,
             coinvestors,
@@ -244,6 +244,7 @@ export default function Marketplace() {
             round,
             to,
           } = deal;
+
           return (
             <Grid container style={{ background: 'rgba(255, 255, 255, 1)' }}>
               {/* Row 1 */}
@@ -323,7 +324,7 @@ export default function Marketplace() {
                         padding: '0px',
                       }}
                     >
-                      {deal_name}
+                      {deal['Deal Name']}
                     </Typography>
                     <Typography
                       style={{
@@ -448,8 +449,8 @@ export default function Marketplace() {
                       createMarketplaceLike({
                         variables: {
                           like: {
-                            deal_name,
-                            round,
+                            name: deal['Deal Name'] || '',
+                            round: round[0] || '',
                           },
                           onCompleted: toast.success('Success!'),
                         },
