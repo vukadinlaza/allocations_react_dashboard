@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
 import React, { useState } from 'react';
-import { Paper, Grid, Typography } from '@material-ui/core';
+import { Paper, Grid, Typography, Modal, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { groupBy, pick, map, get, toNumber } from 'lodash';
 import { gql } from 'apollo-boost';
-
+import Confetti from 'react-confetti';
 import { useMutation } from '@apollo/react-hooks';
 import { toast } from 'react-toastify';
 import Questions from './questions';
@@ -50,6 +50,8 @@ const BASE = 'appdPrRjapx8iYnIn';
 const TABEL_NAME = 'Deals';
 export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
   const classes = useStyles();
+
+  const [showConfetti, setShowConfetti] = useState(false);
   const [page, setPage] = useState(1);
   const [postZap, {}] = useMutation(POST_ZAP);
   const fields = atQuestionsData.map((q) => q.Question);
@@ -142,7 +144,7 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
                   : images[
                       `${''.concat(
                         (data['What are you investing in?'] || '').replaceAll(' ', '') || '',
-                        page >= 3 ? '3' : page.toString(),
+                        page >= tabs.length ? '3' : page.toString(),
                       )}`
                     ]
               }
@@ -156,6 +158,7 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
           {/* Page 1 */}
           {/* Question 1 */}
           <Questions setData={setData} answers={data} classes={classes} activePage={page} />
+          {showConfetti && <div> yes </div>}
         </Grid>
         {/* end grid */}
       </Grid>
@@ -243,6 +246,8 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
               fontSize: '1.5rem',
               textAlign: 'center',
               padding: '.25rem',
+              backgroundColor: 'white',
+              color: '#2676FF',
             }}
             className="nextBtn"
             onClick={() => {
@@ -253,19 +258,66 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
               }
               if (page === tabs.length) {
                 submitData();
-                setStep('');
                 toast.success('Success!');
+                setShowConfetti(true);
                 postZap({
                   variables: { body: { zapUrl: zapierWebhook, ...data } },
                 });
               }
             }}
           >
-            {page === tabs.length ? 'Finish' : 'Next'}
+            {page === tabs.length ? 'Submit' : 'Next'}
           </div>
         </Grid>
       </Grid>
+      <ConfirmationModal showConfetti={showConfetti} setShowConfetti={setShowConfetti} />
     </>
+  );
+};
+const ConfirmationModal = ({ showConfetti, setShowConfetti }) => {
+  return (
+    <Modal open={showConfetti}>
+      <Grid
+        container
+        xs={12}
+        sm={12}
+        md={12}
+        lg={12}
+        style={{
+          display: 'flex',
+          margin: '0',
+          marginTop: '20vh',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Grid xs={12} sm={12} md={4} lg={4}>
+          <Paper style={{ padding: '1rem' }}>
+            <Typography variant="h4" style={{ textAlign: 'center', color: '#5C6E84' }} center>
+              Thanks for submitting your SPV!
+            </Typography>
+            <Typography
+              variant="h6"
+              style={{ textAlign: 'center', color: '#5C6E84', marginTop: '1rem', marginBottom: '1rem' }}
+              center
+            >
+              Someone from Allocations will reach out shortly to confirm your details.
+            </Typography>
+            <Grid style={{ display: 'flex', justifyContent: 'center' }}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => setShowConfetti(false)}
+                style={{ width: '30%', padding: '1rem', margin: '1rem', textSize: '1.5rem' }}
+              >
+                Close
+              </Button>
+            </Grid>
+            <Confetti />
+          </Paper>
+        </Grid>
+      </Grid>
+    </Modal>
   );
 };
 
