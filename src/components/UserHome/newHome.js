@@ -284,7 +284,7 @@ export default () => {
                   Portfolio Value
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  $ {investmentsValue === 0 ? `${nWithCommas(investmentTotal)}.00` : nWithCommas(investmentsValue)}
+                  $ {investmentsValue === 0 ? `${nWithCommas(investmentsValue)}.00` : nWithCommas(investmentsValue)}
                 </h2>
                 <p
                   style={{
@@ -320,7 +320,7 @@ export default () => {
                   Total Invested
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  $ {investmentsValue === 0 ? `${nWithCommas(investmentTotal)}.00` : nWithCommas(investmentsValue)}
+                  $ {investmentTotal === 0 ? `${nWithCommas(investmentTotal)}.00` : nWithCommas(investmentTotal)}
                 </h2>
                 <p
                   style={{
