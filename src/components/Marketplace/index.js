@@ -449,7 +449,7 @@ export default function Marketplace() {
                         variables: {
                           like: {
                             deal_name,
-                            round,
+                            round: round[0] || '',
                           },
                           onCompleted: toast.success('Success!'),
                         },
