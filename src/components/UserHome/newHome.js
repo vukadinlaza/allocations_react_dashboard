@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable radix */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { gql } from 'apollo-boost';
 import {
   Paper,
@@ -141,7 +141,9 @@ export default () => {
   const location = useLocation();
   const [showDocs, setShowDocs] = useState();
   const [text, setText] = useState('');
+  const [demo, setDemo] = useState(false);
   const [postZap, {}] = useMutation(POST_ZAP);
+  const investmentsRef = React.useRef(null);
 
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [confirmation, setConfirmation] = useState(false);
@@ -151,8 +153,6 @@ export default () => {
     direction: 'sell',
     cost: 0,
   });
-  const demo = location.search === '?demo=true';
-  console.log(demo);
   const [createOrder] = useMutation(CREATE_ORDER, {
     onCompleted: () => {
       setConfirmation(false);
@@ -169,7 +169,29 @@ export default () => {
   }, [setTradeData, tradeData.showLoading]);
 
   const { userProfile } = useAuth(GET_INVESTOR);
-
+  useEffect(() => {
+    const demo = location.search === '?demo=true';
+    if (demo && userProfile.investments) {
+      investmentsRef.current = userProfile?.investments.map((inv) => {
+        inv.deal.company_name = _.sample([
+          'Airbnb',
+          'Coinbase',
+          'Stripe',
+          'Tundra Trust',
+          'BlockFi',
+          'Instacart',
+          'SpaceX',
+          'Lightning Labs',
+          'Snowflake',
+          'Flexport',
+          'Pinterest',
+          'Discord',
+        ]);
+        return inv;
+      });
+      setDemo(true);
+    }
+  }, [demo, location.search, userProfile, userProfile.investments]);
   const chartOptionsA = {
     title: '',
     pieHole: 0.5,
@@ -184,24 +206,9 @@ export default () => {
 
   let investments = userProfile.investments.filter((inv) => inv.status !== 'invited');
 
-  if (demo) {
-    investments = investments.map((inv) => {
-      inv.deal.company_name = _.sample([
-        'Airbnb',
-        'Coinbase',
-        'Stripe',
-        'Tundra Trust',
-        'BlockFi',
-        'Instacart',
-        'SpaceX',
-        'Lightning Labs',
-        'Snowflake',
-        'Flexport',
-        'Pinterest',
-        'Discord',
-      ]);
-      return inv;
-    });
+  if (demo && investmentsRef.current) {
+    investments = investmentsRef.current;
+    console.log('INVES', investments);
   }
   const groupedByMonth = _.groupBy(investments, (inv) => {
     const timestamp = inv?._id.toString().substring(0, 8);
@@ -226,7 +233,6 @@ export default () => {
   const investmentTotal = _.sumBy(investments, 'amount');
   const investmentsValue = _.sumBy(investments, 'value');
   const multipleSum = (investmentsValue / investmentTotal).toFixed(2);
-  console.log(multipleSum, investments);
 
   // const weightedInvestments = investments.map((inv) => {
   //   const dm = inv.value - inv.amount;

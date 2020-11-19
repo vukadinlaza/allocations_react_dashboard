@@ -121,11 +121,11 @@ export default ({}) => {
     <>
       <div className={classes.blueContainer}>
         <Typography variant="h3" style={{ color: 'white' }}>
-          Invest
-        </Typography>
-        <Typography variant="h6" style={{ color: 'black', marginTop: '100px' }}>
           Demo
         </Typography>
+        {/* <Typography variant="h6" style={{ color: 'black', marginTop: '100px' }}>
+          Demo
+        </Typography> */}
         <Grid container spacing={12} justify="space-between" style={{ marginTop: '40px', marginBottom: '1rem' }}>
           <Grid item>
             <Paper className={classes.paper}>
@@ -145,9 +145,9 @@ export default ({}) => {
                 variant="contained"
                 style={{ marginTop: '1rem', minWidth: '100%' }}
                 onClick={() => {
-                  postZap({
-                    variables: { body: { name: userProfile.first_name, action: 'Viewed Investor Demo' } },
-                  });
+                  // postZap({
+                  //   variables: { body: { name: userProfile.first_name, action: 'Viewed Investor Demo' } },
+                  // });
                   history.push({
                     pathname: `/investor/${
                       // If true use Kingsley's ID otherwise Joel for Staging ENV
@@ -179,9 +179,9 @@ export default ({}) => {
                 variant="contained"
                 style={{ marginTop: '1rem', minWidth: '100%' }}
                 onClick={() => {
-                  postZap({
-                    variables: { body: { name: userProfile.first_name, action: 'Viewed Marketplace Demo' } },
-                  });
+                  // postZap({
+                  //   variables: { body: { name: userProfile.first_name, action: 'Viewed Marketplace Demo' } },
+                  // });
                   history.push({ pathname: `/marketplace` });
                 }}
               >
@@ -207,9 +207,9 @@ export default ({}) => {
                 variant="contained"
                 style={{ marginTop: '1rem', minWidth: '100%' }}
                 onClick={() => {
-                  postZap({
-                    variables: { body: { name: userProfile.first_name, action: 'Viewed Fund Manager Demo' } },
-                  });
+                  // postZap({
+                  //   variables: { body: { name: userProfile.first_name, action: 'Viewed Fund Manager Demo' } },
+                  // });
                   history.push({ pathname: `/admin/demo-fund` });
                 }}
               >
@@ -219,7 +219,7 @@ export default ({}) => {
           </Grid>
         </Grid>
 
-        <Typography variant="h6" style={{ color: 'black', marginTop: '20px' }}>
+        {/* <Typography variant="h6" style={{ color: 'black', marginTop: '20px' }}>
           Data Room
         </Typography>
         <Grid container spacing={12} justify="space-between" style={{ marginTop: '40px', marginBottom: '1rem' }}>
@@ -425,7 +425,7 @@ export default ({}) => {
               </Paper>
             </Grid>
           </Grid>
-        </Modal>
+        </Modal> */}
       </div>
     </>
   );
