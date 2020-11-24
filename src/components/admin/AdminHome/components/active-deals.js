@@ -68,7 +68,7 @@ export const ActiveDeals = ({ orgData }) => {
             </TableHead>
             <TableBody>
               {(sortActive || []).map((deal, index) => (
-                <Deal key={deal._id} deal={deal} index={index} />
+                <Deal key={deal._id} deal={deal} index={index} slug={orgData.slug} />
               ))}
             </TableBody>
           </Table>
@@ -79,11 +79,14 @@ export const ActiveDeals = ({ orgData }) => {
 };
 
 // clicking on the whole row opens the investment board
-export const Deal = ({ deal, index, superadmin }) => {
+export const Deal = ({ deal, index, superadmin, slug }) => {
   const history = useHistory();
   const { organization } = useParams();
   const [activeDeal, setActiveDeal] = useState();
-  const raised = deal?.raised;
+  let raised = deal?.raised;
+  if (slug === 'vitalize') {
+    raised = _.sumBy(_.uniqBy(deal.investments, 'investor.investingAs'), 'amount');
+  }
   const val = (Number(raised) / (Number(deal.target) || Number(raised))) * 100;
   const formattedDate_closed = moment(deal?.dealParams?.wireDeadline).format('Do MMMM YYYY');
   useEffect(() => {
