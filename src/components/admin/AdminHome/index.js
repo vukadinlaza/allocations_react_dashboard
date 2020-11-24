@@ -78,6 +78,12 @@ export const ORG_OVERVIEW = gql`
         company_name
         company_description
         target
+        investments {
+          amount
+          investor {
+            investingAs
+          }
+        }
       }
     }
     investor {

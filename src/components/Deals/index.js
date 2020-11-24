@@ -58,6 +58,7 @@ const GET_DEALS = gql`
           investor {
             _id
             name
+            investingAs
           }
         }
       }
@@ -75,7 +76,9 @@ export default function Deals({ showClosed }) {
     },
     '5e553fb7e165e6d78c794097', // TODO: Remove this
   );
-
+  console.log(organization);
+  const useInvestingAs = organization === 'vitalize';
+  console.log(useInvestingAs);
   useEffect(() => {
     if (userProfile && userProfile.email) getDeals();
   }, [getDeals, userProfile]);
@@ -175,11 +178,14 @@ export default function Deals({ showClosed }) {
             </TableHead>
             <TableBody>
               {_.orderBy(closed, (d) => new Date(d.dealParams.wireDeadline || Date.now()), 'desc').map((deal) => {
-                const investments = _.orderBy(
+                let investments = _.orderBy(
                   _.reject(deal.investments, (i) => i.status === 'invited'),
                   'amount',
                   'desc',
                 );
+                if (useInvestingAs) {
+                  investments = _.uniqBy(investments, 'investor.investingAs');
+                }
                 const totalRaised = _.sumBy(investments, 'amount');
                 const groupedInvestments = _.groupBy(investments, 'metaData.group');
                 return (
@@ -190,7 +196,7 @@ export default function Deals({ showClosed }) {
                       <TableCell>{deal.deal_lead}</TableCell>
                       <Hidden only="xs">
                         <TableCell>{formatDate(deal.dealParams.wireDeadline)}</TableCell>
-                        <TableCell>${nWithCommas(_.sumBy(deal.investments, 'amount'))}</TableCell>
+                        <TableCell>${nWithCommas(totalRaised)}</TableCell>
                         <TableCell className="text-center">{deal.investments.length}</TableCell>
                         {userProfile.admin && (
                           <TableCell align="center">
@@ -203,7 +209,12 @@ export default function Deals({ showClosed }) {
                       <>
                         {' '}
                         {_.map(groupedInvestments, (invs) => (
-                          <CapitalAccount deal={deal} investments={invs} totalRaised={totalRaised} />
+                          <CapitalAccount
+                            deal={deal}
+                            investments={invs}
+                            totalRaised={totalRaised}
+                            useInvestingAs={useInvestingAs}
+                          />
                         ))}
                       </>
                     )}

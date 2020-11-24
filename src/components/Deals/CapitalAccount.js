@@ -1,17 +1,17 @@
-import React from 'react'
-import BN from 'bignumber.js'
-import _ from 'lodash'
-import { nWithCommas } from '../../utils/numbers'
-import { ResponsivePie } from '@nivo/pie'
-import randomColor from 'randomcolor'
+import React from 'react';
+import BN from 'bignumber.js';
+import _ from 'lodash';
+import { ResponsivePie } from '@nivo/pie';
+import randomColor from 'randomcolor';
 
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, LinearProgress } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableRow, TableHead, Paper } from '@material-ui/core';
+import { nWithCommas } from '../../utils/numbers';
 
 function percentageOfSPV(investment, total) {
-  return new BN(investment.amount).dividedBy(total).times(100).toFixed(2)
+  return new BN(investment.amount).dividedBy(total).times(100).toFixed(2);
 }
 
-export default function CapitalAccount({ deal, investments, totalRaised }) {
+export default function CapitalAccount({ deal, investments, totalRaised, useInvestingAs }) {
   return (
     <TableRow>
       <TableCell colSpan={7} className="CapitalAccount">
@@ -25,19 +25,23 @@ export default function CapitalAccount({ deal, investments, totalRaised }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {investments.map(investment => (
+              {investments.map((investment) => (
                 <TableRow key={investment._id}>
-                  <TableCell>{investment?.investor?.name}</TableCell>
-                  <TableCell className="text-center">
-                    {percentageOfSPV(investment, totalRaised)}%
+                  <TableCell>
+                    {useInvestingAs ? investment?.investor?.investingAs : investment?.investor?.name}
                   </TableCell>
+                  <TableCell className="text-center">{percentageOfSPV(investment, totalRaised)}%</TableCell>
                   <TableCell className="text-center">${nWithCommas(investment.amount)}</TableCell>
                 </TableRow>
               ))}
               <TableRow>
-                <TableCell></TableCell>
-                <TableCell className="text-center"><b>Total</b></TableCell>
-                <TableCell className="text-center"><b>${nWithCommas(_.sumBy(investments, 'amount'))}</b></TableCell>
+                <TableCell />
+                <TableCell className="text-center">
+                  <b>Total</b>
+                </TableCell>
+                <TableCell className="text-center">
+                  <b>${nWithCommas(_.sumBy(investments, 'amount'))}</b>
+                </TableCell>
               </TableRow>
             </TableBody>
           </Table>
@@ -45,19 +49,19 @@ export default function CapitalAccount({ deal, investments, totalRaised }) {
         <CapitalAccountPie investments={investments} />
       </TableCell>
     </TableRow>
-  )
+  );
 }
 
 function CapitalAccountPie({ investments }) {
-  const colors = randomColor({ count: investments.length, format: "hsl" })
+  const colors = randomColor({ count: investments.length, format: 'hsl' });
   const data = investments.map((investment, i) => {
     return {
       id: investment?.investor?.name,
       label: `${investment?.investor?.name}`,
       value: investment.amount || 0,
-      color: colors[i]
-    }
-  })
+      color: colors[i],
+    };
+  });
   return (
     <div className="CapitalAccount-pie">
       <ResponsivePie
@@ -79,5 +83,5 @@ function CapitalAccountPie({ investments }) {
         legends={[]}
       />
     </div>
-  )
+  );
 }
