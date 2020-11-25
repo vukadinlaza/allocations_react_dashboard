@@ -118,7 +118,12 @@ export default function InvestmentFlow({ deal, investor, refetch }) {
   const { approved } = deal;
   const docs = _.get(polledInvestor, 'documents') || [];
   const spvDoc = investment?.documents.find((d) => {
-    return d?.path.includes('SPV') || d?.path.includes('LPA') || d?.path.toLowerCase().includes('final');
+    return (
+      d?.path.includes('SPV') ||
+      d?.path.includes('LPA') ||
+      d?.path.toLowerCase().includes('fund') ||
+      d?.path.toLowerCase().includes('final')
+    );
   });
   const hasWired = investment?.status === 'wired' || investment?.status === 'complete';
   const hasSigned =
