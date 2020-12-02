@@ -130,20 +130,22 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
           </Paper>
         </Grid>
         {/* Left Column */}
-        <Paper style={{ marginTop: '1rem', maxHeight: '450px', overflow: 'scroll' }}>
-          <Grid
-            xs={12}
-            sm={12}
-            md={12}
-            lg={12}
-            style={{ border: '1rem solid transparent', marginBottom: '2rem', maxHeight: '100%' }}
-          >
-            {/* <Questions setData={setData} answers={data} classes={classes} activePage={page} /> */}
-            <QuestionsTwo setData={setData} data={data} />
+        <Grid
+          xs={12}
+          sm={6}
+          md={6}
+          lg={6}
+          style={{ border: '1rem solid transparent', position: 'relative', height: '90%' }}
+        >
+          <Paper style={{ padding: '1rem', maxHeight: '70vh', overflow: 'scroll' }}>
+            <Grid xs={12} sm={12} md={12} lg={12} style={{ marginBottom: '2rem', maxHeight: '100%' }}>
+              {/* <Questions setData={setData} answers={data} classes={classes} activePage={page} /> */}
+              <QuestionsTwo setData={setData} data={data} />
 
-            {showConfetti && <div> yes </div>}
-          </Grid>
-        </Paper>
+              {showConfetti && <div> yes </div>}
+            </Grid>
+          </Paper>
+        </Grid>
         {/* end grid */}
       </Grid>
 
