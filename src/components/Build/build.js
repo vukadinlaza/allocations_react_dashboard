@@ -239,19 +239,18 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
           </Grid>
         </Grid>
         <Grid xs={2} sm={2} md={2} lg={2} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Typography variant="body1"> Estimated Delivery: {data['How soon do you need to close?']}</Typography>
+          <Typography variant="body1"> Estimated Delivery: {data['Choose your wiring date']}</Typography>
         </Grid>
         <Grid xs={2} sm={2} md={2} lg={2} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div
             style={{
-              width: '140px',
-              border: 'solid 2px white',
+              width: '180px',
               borderRadius: '1rem',
-              fontSize: '1.5rem',
+              fontSize: '1.2rem',
               textAlign: 'center',
               padding: '.25rem',
               backgroundColor: 'white',
-              color: '#2676FF',
+              color: 'black',
               border: '1px solid black',
             }}
             className="nextBtn"
@@ -264,7 +263,7 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
               // });
             }}
           >
-            Review and Submit
+            Review & Submit
           </div>
         </Grid>
       </Grid>
