@@ -148,7 +148,14 @@ export default ({ setData, data }) => {
         <Grid>
           {[
             { type: 'Standard', subtext: 'Wire in 14 business days', price: 0 },
-            { type: 'Express', subtext: 'Wire in 7 business days', price: 0 },
+            {
+              type: 'Express',
+              subtext: 'Wire in 7 business days',
+              price: 0,
+              warningTitle: 'Warning',
+              warning:
+                'If you select express, the SPV will be formed under Sharding Holdings Management LLC with a bank account already set up. We also require the portfolio company investment agreement in draft or final form.',
+            },
             { type: 'No Rush', subtext: 'Select Wire Date', price: 0 },
           ].map((item) => {
             return (
@@ -174,6 +181,10 @@ export default ({ setData, data }) => {
                       </Typography>
                       <Typography variant="subtitle2" style={{ color: 'grey' }}>
                         {item.subtext}
+                      </Typography>
+                      <Typography variant="subtitle2" style={{ color: 'grey', marginTop: '10px' }}>
+                        <span style={{ color: 'red', fontWeight: '900', marginRight: '5px' }}>{item.warningTitle}</span>
+                        {item.warning}
                       </Typography>
                     </Grid>
                     <Grid
@@ -399,8 +410,22 @@ export default ({ setData, data }) => {
         </Typography>
         <Grid>
           {[
-            { type: 'Yes', subtext: '', price: 2000 },
-            { type: 'No', subtext: '', price: 0 },
+            {
+              type: 'Yes',
+              subtext: '',
+              price: 2000,
+              warningTitle: 'Warning',
+              warning:
+                'Allocations or one of its affiliates will act as the exempt reporting adviser on the SPV. You will be required to upload the investment agreement and materials at least 48 hours before investing.',
+            },
+            {
+              type: 'No',
+              subtext: '',
+              price: 0,
+              warningTitle: 'Warning',
+              warning:
+                'Failure to comply with SEC / FINRA exempt reporting adviser requirements can result in fines and penalties.',
+            },
           ].map((item) => {
             return (
               <>
@@ -428,6 +453,10 @@ export default ({ setData, data }) => {
                       </Typography>
                       <Typography variant="subtitle2" style={{ color: 'grey' }}>
                         {item.subtext}
+                      </Typography>
+                      <Typography variant="subtitle2" style={{ color: 'grey', marginTop: '10px' }}>
+                        <span style={{ color: 'red', fontWeight: '900', marginRight: '5px' }}>{item.warningTitle}</span>
+                        {item.warning}
                       </Typography>
                     </Grid>
                     <Grid
@@ -493,8 +522,22 @@ export default ({ setData, data }) => {
         </Typography>
         <Grid>
           {[
-            { type: '506b', subtext: '', price: 0 },
-            { type: '506c (Advertising)', subtext: '+$69 per investor', price: 0 },
+            {
+              type: '506b',
+              subtext: '',
+              price: 0,
+              warningTitle: 'Warning',
+              warning:
+                'If you select express, the SPV will be formed under Sharding Holdings Management LLC with a bank account already set up. We also require the portfolio company investment agreement in draft or final form.',
+            },
+            {
+              type: '506c (Advertising)',
+              subtext: '+$69 per investor',
+              price: 0,
+              warningTitle: 'Warning',
+              warning:
+                'Your investors will be required to complete accredited investor verification (+$69 per investor)',
+            },
           ].map((item) => {
             return (
               <>
@@ -519,6 +562,10 @@ export default ({ setData, data }) => {
                       </Typography>
                       <Typography variant="subtitle2" style={{ color: 'grey' }}>
                         {item.subtext}
+                      </Typography>
+                      <Typography variant="subtitle2" style={{ color: 'grey', marginTop: '10px' }}>
+                        <span style={{ color: 'red', fontWeight: '900', marginRight: '5px' }}>{item.warningTitle}</span>
+                        {item.warning}
                       </Typography>
                     </Grid>
                     <Grid
@@ -610,8 +657,21 @@ export default ({ setData, data }) => {
         </Typography>
         <Grid>
           {[
-            { type: 'Yes', subtext: '', price: 1200 },
-            { type: 'No', subtext: '', price: 0 },
+            {
+              type: 'Yes',
+              subtext: '',
+              price: 1200,
+              warningTitle: 'Warning',
+              warning:
+                'If you do include New York investors at a later time, there will be additional fee and filings associated.',
+            },
+            {
+              type: 'No',
+              subtext: '',
+              price: 0,
+              warningTitle: 'Warning',
+              warning: 'If you include New York investors, there will be additional fee and filings associated.',
+            },
           ].map((item) => {
             return (
               <>
@@ -637,6 +697,10 @@ export default ({ setData, data }) => {
                       </Typography>
                       <Typography variant="subtitle2" style={{ color: 'grey' }}>
                         {item.subtext}
+                      </Typography>
+                      <Typography variant="subtitle2" style={{ color: 'grey', marginTop: '10px' }}>
+                        <span style={{ color: 'red', fontWeight: '900', marginRight: '5px' }}>{item.warningTitle}</span>
+                        {item.warning}
                       </Typography>
                     </Grid>
                     <Grid
