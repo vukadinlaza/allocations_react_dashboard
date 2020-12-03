@@ -49,17 +49,23 @@ export function useAuth(QUERY = GET_INVESTOR) {
 
   useEffect(() => {
     if (data) {
-      if (window._slaask && NODE_ENV === 'production') {
-        window._slaask.updateContact({
-          name: `${data.investor.first_name} ${data.investor.last_name}`,
-          email: user.email,
-        });
-      }
+      // if (window._slaask && NODE_ENV === 'production') {
+      //   window._slaask.updateContact({
+      //     name: `${data.investor.first_name} ${data.investor.last_name}`,
+      //     email: user.email,
+      //   });
+      // }
 
       const { __typename, ...rest } = data.investor;
       setUserProfile({ ...user, ...rest });
 
       const userData = { ...rest } || null; // Replace your_user_id with your own if available.
+      window.Intercom('boot', {
+        app_id: 't8cjlj0f',
+        email: userData?.email,
+        user_id: userData?._id,
+        created_at: new Date(),
+      });
       window.hj('identify', userData?._id, {
         email: userData?.email,
         testAttr: 'this is a test',
