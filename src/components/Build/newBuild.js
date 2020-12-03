@@ -680,14 +680,15 @@ export default ({ setData, data }) => {
               subtext: '',
               price: 1200,
               warningTitle: 'Warning',
-              warning:
-                'If you do include New York investors at a later time, there will be additional fee and filings associated.',
+              warning: 'If you include New York investors, there will be additional fee and filings associated.',
             },
             {
               type: 'No',
               subtext: '',
               price: 0,
               warningTitle: 'Warning',
+              warning:
+                'If you do include New York investors at a later time, there will be additional fee and filings associated.',
               warning: 'If you include New York investors, there will be additional fee and filings associated.',
             },
           ].map((item) => {
