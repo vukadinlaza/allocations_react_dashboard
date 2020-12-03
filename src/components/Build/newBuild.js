@@ -84,19 +84,19 @@ export default ({ setData, data }) => {
         <Grid container spacing={1}>
           {[
             {
-              item: 'Startup',
+              type: 'Startup',
               url: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/bitcoin.svg',
             },
             {
-              item: 'Crypto',
+              type: 'Crypto',
               url: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/bitcoin.svg',
             },
             {
-              item: 'Real estate',
+              type: 'Real estate',
               url: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/bitcoin.svg',
             },
             {
-              item: 'Custom',
+              type: 'Custom',
               url: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/bitcoin.svg',
             },
           ].map((item) => {
@@ -107,7 +107,7 @@ export default ({ setData, data }) => {
                     border: 'solid 1px #2576FF',
                   }}
                   onClick={() => {
-                    setData({ 'Choose your asset type': item.item });
+                    setData({ 'Choose your asset type': item.type });
                   }}
                 >
                   <Grid
@@ -121,12 +121,12 @@ export default ({ setData, data }) => {
                       flexDirection: 'column',
                       justifyContent: 'center',
                       alignItems: 'center',
-                      border: data['Choose your asset type'] === item.item ? '4px solid #2576FF' : '',
+                      border: data['Choose your asset type'] === item.type ? '4px solid #2576FF' : '',
                     }}
                   >
-                    <img src={item.url} alt={item.item} />
+                    <img src={item.url} alt={item.type} />
                     <Typography variant="h6" style={{ color: 'black', paddingTop: '.5rem', paddingBottom: '.5rem' }}>
-                      {item.item}
+                      {item.type}
                     </Typography>
                   </Grid>
                 </Paper>
