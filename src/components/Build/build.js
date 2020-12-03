@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Paper, Grid, Typography, Modal, Button, TextField, Slider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { groupBy, pick, map, get, toNumber } from 'lodash';
@@ -8,23 +8,24 @@ import Confetti from 'react-confetti';
 import { useMutation } from '@apollo/react-hooks';
 import { toast } from 'react-toastify';
 import QuestionsTwo from './newBuild';
+import { nWithCommas } from '../../utils/numbers';
 import './style.scss';
 
 const images = {
   basic: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/graphic-bg.svg',
   1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/blank-platform.svg',
-  Startup1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-1.svg',
-  Startup2: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-2.svg',
-  Startup3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom.svg',
-  Crypto1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-2.svg',
-  Crypto2: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-3.svg',
-  Crypto3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-custom.svg',
-  RealEstate1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-1.svg',
-  RealEstate2: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-3.svg',
-  RealEstate3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-custom.svg',
-  Other1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-setup.svg',
-  Other2: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-details.svg',
-  Other3: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-custom.svg',
+  Startup: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-1.svg',
+  Startup: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-2.svg',
+  Startup: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom.svg',
+  Crypto: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-2.svg',
+  Crypto: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-3.svg',
+  Crypto: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-custom.svg',
+  RealEstate: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-1.svg',
+  RealEstate: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-3.svg',
+  RealEstate: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-custom.svg',
+  Custom: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-setup.svg',
+  Custom: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-details.svg',
+  Custom: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-custom.svg',
 };
 const zapierWebhook = 'https://hooks.zapier.com/hooks/catch/7904699/ol1c7go/';
 const useStyles = makeStyles((theme) => ({
@@ -52,7 +53,6 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
   const classes = useStyles();
 
   const [showConfetti, setShowConfetti] = useState(false);
-  const [page, setPage] = useState(1);
   const [postZap, {}] = useMutation(POST_ZAP);
   const fields = atQuestionsData.map((q) => q.Question);
   const fieldData = groupBy(atQuestionsData, 'Page');
@@ -93,7 +93,34 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
     });
   };
   if (!deal) return null;
-  console.log('DATA', data);
+
+  let price = 0;
+  if (data['Choose your fund type'] === 'SPV') {
+    price += 8000;
+  }
+  if (data['Choose your fund type'] === 'Fund') {
+    price += 26000;
+  }
+  if (data['Would you like to hire Allocations as the exempt reporting advisor?'] === 'Yes') {
+    price += 2000;
+  }
+  if (data['Will you invite any investors from New York?'] === 'Yes') {
+    price += 1200;
+  }
+  if (data['Will you charge same fees for all investors?'] === 'No') {
+    price += 2000;
+  }
+  if (!data['Choose your fund type']) {
+    price = 0;
+  }
+  let blueSkyFees = 500;
+
+  if (data['Will you invite any investors from New York?'] === 'Yes') {
+    blueSkyFees += 1200;
+  }
+
+  console.log(price);
+  if (!deal) return null;
   return (
     <>
       <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', margin: '0' }}>
@@ -117,12 +144,9 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
               src={
                 !deal['Choose your fund type']
                   ? images.basic
-                  : images[
-                      `${''.concat(
-                        (data['Choose your asset type'] || '').replaceAll(' ', '') || '',
-                        page >= tabs.length ? '3' : page.toString(),
-                      )}`
-                    ]
+                  : !deal['Choose your asset type']
+                  ? images.basic
+                  : images[`${''.concat((data['Choose your asset type'] || '').replaceAll(' ', ''))}`]
               }
               alt="oops"
               style={{ width: '100%', height: '100%' }}
@@ -185,15 +209,11 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
               </Typography>
             </Grid>
             <Grid xs={8} sm={8} md={8} lg={8}>
+              <div style={{ fontSize: '1.75rem', fontWeight: '900', marginLeft: '1rem' }}> ${nWithCommas(price)}</div>
               <div style={{ fontSize: '1.75rem', fontWeight: '900', marginLeft: '1rem' }}>
                 {' '}
-                {deal['What would you like to build?'] === 'Fund'
-                  ? deal['Will you advertise the offering? (506c offering)'] === 'Yes'
-                    ? '$31,000'
-                    : '$26,000'
-                  : '$8,000'}
+                ${nWithCommas(blueSkyFees)}
               </div>
-              <div style={{ fontSize: '1.75rem', fontWeight: '900', marginLeft: '1rem' }}> $500</div>
             </Grid>
           </Grid>
         </Grid>
@@ -211,14 +231,7 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
               </Typography>
             </Grid>
             <Grid xs={8} sm={8} md={8} lg={8}>
-              <span style={{ fontSize: '2.5rem', fontWeight: '900', marginLeft: '1rem' }}>
-                {' '}
-                {deal['What would you like to build?'] === 'Fund'
-                  ? deal['Will you advertise the offering? (506c offering)'] === 'Yes'
-                    ? '$31,500'
-                    : '$26,500'
-                  : '$8,500'}
-              </span>
+              <span style={{ fontSize: '2.5rem', fontWeight: '900', marginLeft: '1rem' }}> ${nWithCommas(price)}</span>
             </Grid>
           </Grid>
         </Grid>
