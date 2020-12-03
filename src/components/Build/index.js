@@ -141,8 +141,10 @@ export default ({}) => {
           activeStep={activeStep}
           style={{
             border: 'none',
-            boxShadow: '0px 0px white',
             padding: '0',
+            marginLeft: '1rem',
+            marginRight: '1rem',
+            background: '#fff',
           }}
         >
           {steps.map((label) => (

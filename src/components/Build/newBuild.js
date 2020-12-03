@@ -85,7 +85,7 @@ export default ({ setData, data }) => {
           {[
             {
               type: 'Startup',
-              url: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/bitcoin.svg',
+              url: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/rocket.svg',
             },
             {
               type: 'Crypto',
@@ -93,11 +93,11 @@ export default ({ setData, data }) => {
             },
             {
               type: 'Real estate',
-              url: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/bitcoin.svg',
+              url: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/house.svg',
             },
             {
               type: 'Custom',
-              url: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/bitcoin.svg',
+              url: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/settings.svg',
             },
           ].map((item) => {
             return (
@@ -124,7 +124,7 @@ export default ({ setData, data }) => {
                       border: data['Choose your asset type'] === item.type ? '4px solid #2576FF' : '',
                     }}
                   >
-                    <img src={item.url} alt={item.type} />
+                    <img src={item.url} alt={item.type} style={{ width: '60px' }} />
                     <Typography variant="h6" style={{ color: 'black', paddingTop: '.5rem', paddingBottom: '.5rem' }}>
                       {item.type}
                     </Typography>
@@ -182,10 +182,14 @@ export default ({ setData, data }) => {
                       <Typography variant="subtitle2" style={{ color: 'grey' }}>
                         {item.subtext}
                       </Typography>
-                      <Typography variant="subtitle2" style={{ color: 'grey', marginTop: '10px' }}>
-                        <span style={{ color: 'red', fontWeight: '900', marginRight: '5px' }}>{item.warningTitle}</span>
-                        {item.warning}
-                      </Typography>
+                      {data['Choose your speed'] === item.type && (
+                        <Typography variant="subtitle2" style={{ color: 'grey', marginTop: '10px' }}>
+                          <span style={{ color: 'red', fontWeight: '900', marginRight: '5px' }}>
+                            {item.warningTitle}
+                          </span>
+                          {item.warning}
+                        </Typography>
+                      )}
                     </Grid>
                     <Grid
                       xs={6}
@@ -454,10 +458,14 @@ export default ({ setData, data }) => {
                       <Typography variant="subtitle2" style={{ color: 'grey' }}>
                         {item.subtext}
                       </Typography>
-                      <Typography variant="subtitle2" style={{ color: 'grey', marginTop: '10px' }}>
-                        <span style={{ color: 'red', fontWeight: '900', marginRight: '5px' }}>{item.warningTitle}</span>
-                        {item.warning}
-                      </Typography>
+                      {data['Would you like to hire Allocations as the exempt reporting advisor?'] === item.type && (
+                        <Typography variant="subtitle2" style={{ color: 'grey', marginTop: '10px' }}>
+                          <span style={{ color: 'red', fontWeight: '900', marginRight: '5px' }}>
+                            {item.warningTitle}
+                          </span>
+                          {item.warning}
+                        </Typography>
+                      )}
                     </Grid>
                     <Grid
                       xs={6}
@@ -532,7 +540,7 @@ export default ({ setData, data }) => {
             },
             {
               type: '506c (Advertising)',
-              subtext: '+$69 per investor',
+              subtext: '+$69.00 per investor',
               price: 0,
               warningTitle: 'Warning',
               warning:
@@ -561,12 +569,16 @@ export default ({ setData, data }) => {
                         {item.type}
                       </Typography>
                       <Typography variant="subtitle2" style={{ color: 'grey' }}>
-                        {item.subtext}
+                        {!item.type === '506c (Advertising)' && item.subtext}
                       </Typography>
-                      <Typography variant="subtitle2" style={{ color: 'grey', marginTop: '10px' }}>
-                        <span style={{ color: 'red', fontWeight: '900', marginRight: '5px' }}>{item.warningTitle}</span>
-                        {item.warning}
-                      </Typography>
+                      {data['Choose offering type'] === item.type && (
+                        <Typography variant="subtitle2" style={{ color: 'grey', marginTop: '10px' }}>
+                          <span style={{ color: 'red', fontWeight: '900', marginRight: '5px' }}>
+                            {item.warningTitle}
+                          </span>
+                          {item.warning}
+                        </Typography>
+                      )}
                     </Grid>
                     <Grid
                       xs={6}
@@ -575,9 +587,15 @@ export default ({ setData, data }) => {
                       lg={6}
                       style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
                     >
-                      <Typography variant="h6" style={{ color: 'grey', marginRight: '2rem' }}>
-                        + ${nWithCommas(item.price)}.00
-                      </Typography>
+                      {item.type === '506c (Advertising)' ? (
+                        <Typography variant="h6" style={{ color: 'grey', marginRight: '2rem' }}>
+                          {item.subtext}
+                        </Typography>
+                      ) : (
+                        <Typography variant="h6" style={{ color: 'grey', marginRight: '2rem' }}>
+                          + ${nWithCommas(item.price)}.00
+                        </Typography>
+                      )}
                     </Grid>
                   </Grid>
                 </Paper>
@@ -698,10 +716,14 @@ export default ({ setData, data }) => {
                       <Typography variant="subtitle2" style={{ color: 'grey' }}>
                         {item.subtext}
                       </Typography>
-                      <Typography variant="subtitle2" style={{ color: 'grey', marginTop: '10px' }}>
-                        <span style={{ color: 'red', fontWeight: '900', marginRight: '5px' }}>{item.warningTitle}</span>
-                        {item.warning}
-                      </Typography>
+                      {data['Will you invite any investors from New York?'] === item.type && (
+                        <Typography variant="subtitle2" style={{ color: 'grey', marginTop: '10px' }}>
+                          <span style={{ color: 'red', fontWeight: '900', marginRight: '5px' }}>
+                            {item.warningTitle}
+                          </span>
+                          {item.warning}
+                        </Typography>
+                      )}
                     </Grid>
                     <Grid
                       xs={6}

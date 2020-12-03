@@ -20,9 +20,9 @@ const images = {
   Crypto: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-2.svg',
   Crypto: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-3.svg',
   Crypto: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-custom.svg',
-  RealEstate: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-1.svg',
-  RealEstate: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-3.svg',
-  RealEstate: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-custom.svg',
+  Realestate: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-1.svg',
+  Realestate: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-3.svg',
+  Realestate: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-custom.svg',
   Custom: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-setup.svg',
   Custom: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-details.svg',
   Custom: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-custom.svg',
@@ -231,7 +231,10 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
               </Typography>
             </Grid>
             <Grid xs={8} sm={8} md={8} lg={8}>
-              <span style={{ fontSize: '2.5rem', fontWeight: '900', marginLeft: '1rem' }}> ${nWithCommas(price)}</span>
+              <span style={{ fontSize: '2.5rem', fontWeight: '900', marginLeft: '1rem' }}>
+                {' '}
+                ${nWithCommas(price + blueSkyFees)}
+              </span>
             </Grid>
           </Grid>
         </Grid>
@@ -253,7 +256,6 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
             }}
             className="nextBtn"
             onClick={() => {
-              console.log('DATA', data);
               submitData();
               toast.success('Success!');
               setShowConfetti(true);
