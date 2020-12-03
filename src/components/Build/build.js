@@ -16,16 +16,16 @@ const images = {
   1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/blank-platform.svg',
   Startup: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-1.svg',
   Startup: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-2.svg',
-  Startup: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom.svg',
+  // Startup: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom.svg',
   Crypto: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-2.svg',
   Crypto: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-3.svg',
-  Crypto: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-custom.svg',
+  // Crypto: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-custom.svg',
   Realestate: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-1.svg',
   Realestate: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-3.svg',
-  Realestate: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-custom.svg',
+  // Realestate: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-custom.svg',
   Custom: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-setup.svg',
   Custom: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-details.svg',
-  Custom: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-custom.svg',
+  // Custom: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-custom.svg',
 };
 const zapierWebhook = 'https://hooks.zapier.com/hooks/catch/7904699/ol1c7go/';
 const useStyles = makeStyles((theme) => ({
@@ -148,7 +148,7 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
                   : images[`${''.concat((data['Choose your asset type'] || '').replaceAll(' ', ''))}`]
               }
               alt="oops"
-              style={{ width: '100%', height: '100%' }}
+              style={{ width: '100%', height: '100%', padding: '8rem' }}
             />
           </Paper>
         </Grid>
