@@ -536,7 +536,7 @@ export default ({ setData, data }) => {
               price: 0,
               warningTitle: 'Warning',
               warning:
-                'If you select express, the SPV will be formed under Sharding Holdings Management LLC with a bank account already set up. We also require the portfolio company investment agreement in draft or final form.',
+                'You may not generally solicit or advertise to investors for which you do not have a pre-existing relationship',
             },
             {
               type: '506c (Advertising)',

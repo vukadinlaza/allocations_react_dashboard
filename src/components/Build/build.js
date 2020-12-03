@@ -54,7 +54,6 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
 
   const [showConfetti, setShowConfetti] = useState(false);
   const [postZap, {}] = useMutation(POST_ZAP);
-  const fields = atQuestionsData.map((q) => q.Question);
   const fieldData = groupBy(atQuestionsData, 'Page');
   const tabs = map(fieldData, (page, index) => ({
     display: get(page, '[0].Stage', `Step ${index + 1}`),
@@ -64,7 +63,7 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
     if (!data.airtableId) {
       const response = await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
         method: 'post', // make sure it is a "POST request"
-        body: JSON.stringify({ fields: { userId: user._id, ...pick(data, fields) } }),
+        body: JSON.stringify({ fields: { userId: user._id, ...data } }),
         headers: {
           Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`, // API key
           'Content-Type': 'application/json', // we will recive a json object
