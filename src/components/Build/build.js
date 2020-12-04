@@ -112,13 +112,8 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
   if (!data['Choose your fund type']) {
     price = 0;
   }
-  let blueSkyFees = 500;
+  const blueSkyFees = 500;
 
-  if (data['Will you invite any investors from New York?'] === 'Yes') {
-    blueSkyFees += 1200;
-  }
-
-  console.log(price);
   if (!deal) return null;
   return (
     <>
