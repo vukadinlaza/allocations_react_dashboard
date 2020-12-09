@@ -1,6 +1,7 @@
 import React from 'react';
 import { Paper, Grid, Typography, TextField, Slider } from '@material-ui/core';
 import {} from '@material-ui/core/styles';
+import { get } from 'lodash';
 import InfoIcon from '@material-ui/icons/Info';
 import moment from 'moment';
 import { nWithCommas } from '../../utils/numbers';
@@ -295,7 +296,7 @@ export default ({ setData, data }) => {
                 defaultValue={0}
                 // aria-labelledby="discrete-slider"
                 // valueLabelDisplay="auto"
-                // step={question?.Steps ? null : question.Step}
+                step={0.1}
                 value={data['Choose your management fee'] || 0}
                 // marks={question?.Steps ? question.Steps.map((s) => ({ value: s })) : true}
                 min={0}
@@ -329,7 +330,7 @@ export default ({ setData, data }) => {
                 defaultValue={0}
                 // aria-labelledby="discrete-slider"
                 // valueLabelDisplay="auto"
-                // step={question?.Steps ? null : question.Step}
+                step={0.1}
                 value={data['Choose your carry'] || 0}
                 // marks={question?.Steps ? question.Steps.map((s) => ({ value: s })) : true}
                 min={0}
@@ -512,11 +513,70 @@ export default ({ setData, data }) => {
                 value={data['Choose your minimum investment'] || 0}
                 // marks={question?.Steps ? question.Steps.map((s) => ({ value: s })) : true}
                 min={0}
-                max={1000000}
+                max={100000}
                 onChange={(e, v) => setData({ 'Choose your minimum investment': v.toString() })}
               />
             </Grid>
           </Paper>
+        </Grid>
+        <hr className="solid" />
+      </Grid>
+      <Grid justify="space-between">
+        <Typography
+          variant="h6"
+          style={{ color: 'black', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}
+        >
+          <>How much do you plan to raise?</>
+          <span style={{ marginLeft: '1rem' }} />${nWithCommas(data['How much do you plan to raise?'] || 0)}
+          <InfoIcon />
+        </Typography>
+        <Grid container spacing={1}>
+          {[
+            {
+              type: '100000',
+            },
+            {
+              type: '250000',
+            },
+            {
+              type: '500000',
+            },
+            {
+              type: '1000000',
+            },
+          ].map((item) => {
+            return (
+              <Grid item xs={6} sm={6} md={6} lg={6}>
+                <Paper
+                  style={{
+                    border: 'solid 1px #2576FF',
+                  }}
+                  onClick={() => {
+                    setData({ 'How much do you plan to raise?': item.type });
+                  }}
+                >
+                  <Grid
+                    xs={12}
+                    sm={12}
+                    md={12}
+                    lg={12}
+                    style={{
+                      padding: '1.25rem',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      border: data['How much do you plan to raise?'] === item.type ? '4px solid #2576FF' : '',
+                    }}
+                  >
+                    <Typography variant="h6" style={{ color: 'black', paddingTop: '.5rem', paddingBottom: '.5rem' }}>
+                      About ${nWithCommas(Number(item.type))}
+                    </Typography>
+                  </Grid>
+                </Paper>
+              </Grid>
+            );
+          })}
         </Grid>
         <hr className="solid" />
       </Grid>
@@ -665,87 +725,89 @@ export default ({ setData, data }) => {
         </Grid>
         <hr className="solid" />
       </Grid>
-      <Grid justify="space-between">
-        <Typography
-          variant="h6"
-          style={{ color: 'black', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}
-        >
-          <>Will you invite any investors from New York?</>
-          <InfoIcon />
-        </Typography>
-        <Grid>
-          {[
-            {
-              type: 'Yes',
-              subtext: '',
-              price: 1200,
-              warningTitle: 'Warning',
-              warning: 'If you include New York investors, there will be additional fee and filings associated.',
-            },
-            {
-              type: 'No',
-              subtext: '',
-              price: 0,
-              warningTitle: 'Warning',
-              warning:
-                'If you do include New York investors at a later time, there will be additional fee and filings associated.',
-              warning: 'If you include New York investors, there will be additional fee and filings associated.',
-            },
-          ].map((item) => {
-            return (
-              <>
-                <Paper
-                  onClick={() => {
-                    setData({ 'Will you invite any investors from New York?': item.type });
-                  }}
-                >
-                  <Grid
-                    xs={12}
-                    sm={12}
-                    md={12}
-                    lg={12}
-                    style={{
-                      display: 'flex',
-                      border:
-                        data['Will you invite any investors from New York?'] === item.type ? '4px solid #2576FF' : '',
+      {(data['How much do you plan to raise?'] === '500000' ||
+        data['How much do you plan to raise?'] === '1000000') && (
+        <Grid justify="space-between">
+          <Typography
+            variant="h6"
+            style={{ color: 'black', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}
+          >
+            <>Will you invite any investors from New York?</>
+            <InfoIcon />
+          </Typography>
+          <Grid>
+            {[
+              {
+                type: 'Yes',
+                subtext: '',
+                price: 1200,
+                warningTitle: 'Warning',
+                warning: 'If you include New York investors, there will be additional fee and filings associated.',
+              },
+              {
+                type: 'No',
+                subtext: '',
+                price: 0,
+                warningTitle: 'Warning',
+                warning:
+                  'If you do include New York investors at a later time, there will be additional fee and filings associated.',
+              },
+            ].map((item) => {
+              return (
+                <>
+                  <Paper
+                    onClick={() => {
+                      setData({ 'Will you invite any investors from New York?': item.type });
                     }}
                   >
-                    <Grid xs={6} sm={6} md={6} lg={6} style={{ padding: '1.25rem' }}>
-                      <Typography variant="h6" style={{ color: 'black' }}>
-                        {item.type}
-                      </Typography>
-                      <Typography variant="subtitle2" style={{ color: 'grey' }}>
-                        {item.subtext}
-                      </Typography>
-                      {data['Will you invite any investors from New York?'] === item.type && (
-                        <Typography variant="subtitle2" style={{ color: 'grey', marginTop: '10px' }}>
-                          <span style={{ color: 'red', fontWeight: '900', marginRight: '5px' }}>
-                            {item.warningTitle}
-                          </span>
-                          {item.warning}
-                        </Typography>
-                      )}
-                    </Grid>
                     <Grid
-                      xs={6}
-                      sm={6}
-                      md={6}
-                      lg={6}
-                      style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
+                      xs={12}
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      style={{
+                        display: 'flex',
+                        border:
+                          data['Will you invite any investors from New York?'] === item.type ? '4px solid #2576FF' : '',
+                      }}
                     >
-                      <Typography variant="h6" style={{ color: 'grey', marginRight: '2rem' }}>
-                        + ${nWithCommas(item.price)}.00
-                      </Typography>
+                      <Grid xs={6} sm={6} md={6} lg={6} style={{ padding: '1.25rem' }}>
+                        <Typography variant="h6" style={{ color: 'black' }}>
+                          {item.type}
+                        </Typography>
+                        <Typography variant="subtitle2" style={{ color: 'grey' }}>
+                          {item.subtext}
+                        </Typography>
+                        {data['Will you invite any investors from New York?'] === item.type && (
+                          <Typography variant="subtitle2" style={{ color: 'grey', marginTop: '10px' }}>
+                            <span style={{ color: 'red', fontWeight: '900', marginRight: '5px' }}>
+                              {item.warningTitle}
+                            </span>
+                            {item.warning}
+                          </Typography>
+                        )}
+                      </Grid>
+                      <Grid
+                        xs={6}
+                        sm={6}
+                        md={6}
+                        lg={6}
+                        style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
+                      >
+                        <Typography variant="h6" style={{ color: 'grey', marginRight: '2rem' }}>
+                          + ${nWithCommas(item.price)}.00
+                        </Typography>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </Paper>
-                <div style={{ minHeight: '1rem' }} />
-              </>
-            );
-          })}
+                  </Paper>
+                  <div style={{ minHeight: '1rem' }} />
+                </>
+              );
+            })}
+          </Grid>
+          <hr className="solid" />
         </Grid>
-        <hr className="solid" />
-      </Grid>
+      )}
       <Grid justify="space-between">
         <Typography
           variant="h6"
