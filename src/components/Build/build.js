@@ -1,16 +1,25 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
-import { Paper, Grid, Typography, Modal, Button, TextField, Slider } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { groupBy, pick, map, get, toNumber } from 'lodash';
+import React, { useState } from 'react';
+import { Paper, Grid, Typography, Modal, Button } from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { groupBy, map, get, toNumber } from 'lodash';
 import { gql } from 'apollo-boost';
 import Confetti from 'react-confetti';
+import StepConnector from '@material-ui/core/StepConnector';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
 import { useMutation } from '@apollo/react-hooks';
 import { toast } from 'react-toastify';
 import QuestionsTwo from './newBuild';
-import { nWithCommas } from '../../utils/numbers';
 import './style.scss';
 
+const initialState = {
+  username: '',
+  email: '',
+  password: '',
+  passwordConfirmation: '',
+};
 const images = {
   basic: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/graphic-bg.svg',
   1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/blank-platform.svg',
@@ -40,6 +49,12 @@ const useStyles = makeStyles((theme) => ({
     top: '30vh !important',
   },
 }));
+const ColorlibConnector = withStyles({
+  line: {
+    minHeight: '100%',
+    borderLeftWidth: '2px',
+  },
+})(StepConnector);
 const POST_ZAP = gql`
   mutation PostZap($body: Object) {
     postZap(data: $body) {
@@ -49,16 +64,19 @@ const POST_ZAP = gql`
 `;
 const BASE = 'appdPrRjapx8iYnIn';
 const TABEL_NAME = 'Deals';
+
+function getSteps() {
+  return ['Fund info', 'Delivery speed', 'Fees', 'Compliance'];
+}
+
 export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
-  const classes = useStyles();
+  const steps = getSteps();
+  const [activeStep, setActiveStep] = useState(3);
 
   const [showConfetti, setShowConfetti] = useState(false);
   const [postZap, {}] = useMutation(POST_ZAP);
   const fieldData = groupBy(atQuestionsData, 'Page');
-  const tabs = map(fieldData, (page, index) => ({
-    display: get(page, '[0].Stage', `Step ${index + 1}`),
-    page: toNumber(index),
-  }));
+
   const submitData = async () => {
     if (!data.airtableId) {
       const response = await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
@@ -93,72 +111,105 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
   };
   if (!deal) return null;
 
-  let price = 0;
-  if (data['Choose your fund type'] === 'SPV') {
-    price += 8000;
-  }
-  if (data['Choose your fund type'] === 'Fund') {
-    price += 26000;
-  }
-  if (data['Would you like to hire Allocations as the exempt reporting advisor?'] === 'Yes') {
-    price += 2000;
-  }
-  if (data['Will you invite any investors from New York?'] === 'Yes') {
-    price += 1200;
-  }
-  if (data['Will you charge same fees for all investors?'] === 'No') {
-    price += 2000;
-  }
-  if (!data['Choose your fund type']) {
-    price = 0;
-  }
-  const blueSkyFees = 500;
+  // let price = 0;
+  // if (data['Choose your fund type'] === 'SPV') {
+  //   price += 8000;
+  // }
+  // if (data['Choose your fund type'] === 'Fund') {
+  //   price += 26000;
+  // }
+  // if (data['Would you like to hire Allocations as the exempt reporting advisor?'] === 'Yes') {
+  //   price += 2000;
+  // }
+  // if (data['Will you invite any investors from New York?'] === 'Yes') {
+  //   price += 1200;
+  // }
+  // if (data['Will you charge same fees for all investors?'] === 'No') {
+  //   price += 2000;
+  // }
+  // if (!data['Choose your fund type']) {
+  //   price = 0;
+  // }
+  // const blueSkyFees = 500;
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
 
   if (!deal) return null;
   return (
     <>
-      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', margin: '0' }}>
+      <Grid
+        xs={12}
+        sm={12}
+        md={12}
+        lg={12}
+        style={{ display: 'flex', marginTop: '3rem', marginLeft: '6rem', marginRight: '6rem' }}
+      >
         <Grid
           xs={12}
-          sm={6}
-          md={6}
-          lg={6}
-          style={{ border: '1rem solid transparent', position: 'relative', height: '90%' }}
+          sm={4}
+          md={4}
+          lg={4}
+          style={{ border: '1rem solid transparent', position: 'relative', minHeight: '100%' }}
         >
-          <Paper
-            xs={12}
-            sm={12}
-            md={12}
-            lg={12}
-            style={{
-              height: '90%',
-            }}
-          >
-            <img
-              src={
-                !deal['Choose your fund type']
-                  ? images.basic
-                  : !deal['Choose your asset type']
-                  ? images.basic
-                  : images[`${''.concat((data['Choose your asset type'] || '').replaceAll(' ', ''))}`]
-              }
-              alt="oops"
-              style={{ width: '100%', height: '100%', padding: '8rem' }}
-            />
+          <Paper xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
+            <div
+              style={{
+                marginTop: '1.5rem',
+                marginLeft: '1.5rem',
+              }}
+            >
+              <div>
+                <span style={{ fontSize: '4rem', color: '#2576FF' }}>{activeStep + 1}</span>{' '}
+                <span style={{ fontWeight: 'bolder', fontSize: '1.25rem' }}>/4</span>
+              </div>
+            </div>
+            <Stepper
+              activeStep={activeStep}
+              orientation="vertical"
+              style={{ height: '85%', border: 'none', boxShadow: '0', paddingBottom: '30%' }}
+              connector={<ColorlibConnector />}
+            >
+              {steps.map((label, index) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
           </Paper>
         </Grid>
         {/* Left Column */}
         <Grid
           xs={12}
-          sm={6}
-          md={6}
-          lg={6}
+          sm={8}
+          md={8}
+          lg={8}
           style={{ border: '1rem solid transparent', position: 'relative', height: '90%' }}
         >
-          <Paper style={{ padding: '1rem', maxHeight: '70vh', overflow: 'scroll' }}>
-            <Grid xs={12} sm={12} md={12} lg={12} style={{ marginBottom: '2rem', maxHeight: '100%' }}>
+          <Paper style={{ padding: '1rem', height: '95vh', maxHeight: '95vh' }}>
+            <Grid
+              xs={12}
+              sm={12}
+              md={12}
+              lg={12}
+              style={{ marginBottom: '2rem', minHeight: '100%', maxHeight: '100%' }}
+            >
               {/* <Questions setData={setData} answers={data} classes={classes} activePage={page} /> */}
-              <QuestionsTwo setData={setData} data={data} />
+              <Typography variant="title1" style={{ margin: '1rem', marginBottom: '1.5rem', fontSize: '2rem' }}>
+                {steps[activeStep]}
+              </Typography>
+              <QuestionsTwo
+                setData={setData}
+                data={data}
+                activeStep={activeStep}
+                handleNext={handleNext}
+                handleBack={handleBack}
+              />
 
               {showConfetti && <div> yes </div>}
             </Grid>
@@ -167,7 +218,7 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
         {/* end grid */}
       </Grid>
 
-      <Grid
+      {/* <Grid
         xs={12}
         sm={12}
         md={12}
@@ -252,6 +303,7 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
               submitData();
               toast.success('Success!');
               setShowConfetti(true);
+              setData(initialState);
               // postZap({
               //   variables: { body: { zapUrl: zapierWebhook, ...data } },
               // });
@@ -260,7 +312,7 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
             Review & Submit
           </div>
         </Grid>
-      </Grid>
+      </Grid> */}
       <ConfirmationModal showConfetti={showConfetti} setShowConfetti={setShowConfetti} />
     </>
   );

@@ -615,7 +615,7 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
           </Grid>
           <Grid xs={2} sm={2} md={2} lg={2}>
             <a href={link} target="_blank" rel="noopener noreferrer">
-              <Button variant="contained" color="primary" size="small">
+              <Button color="primary" size="small">
                 Click to re-sign
               </Button>
             </a>
