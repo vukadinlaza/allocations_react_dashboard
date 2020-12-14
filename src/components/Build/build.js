@@ -197,10 +197,14 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
               sm={12}
               md={12}
               lg={12}
-              style={{ marginBottom: '2rem', minHeight: '100%', maxHeight: '100%' }}
+              style={{
+                marginBottom: '2rem',
+                minHeight: '100%',
+                maxHeight: '100%',
+              }}
             >
               {/* <Questions setData={setData} answers={data} classes={classes} activePage={page} /> */}
-              <Typography variant="title1" style={{ margin: '1rem', marginBottom: '1.5rem', fontSize: '2rem' }}>
+              <Typography variant="title1" style={{ marginTop: '1rem', marginBottom: '1.5rem', fontSize: '2rem' }}>
                 {steps[activeStep]}
               </Typography>
               <QuestionsTwo
