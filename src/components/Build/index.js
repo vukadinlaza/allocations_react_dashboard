@@ -133,33 +133,13 @@ export default ({}) => {
       setData({ airtableId: activeDeal.id, ...activeDeal });
     }
   }, [allATDeals, setData, userProfile]);
-  const steps = ['Build', 'Setup Phase', 'Investment review', 'Pre-signing', 'Live deal'];
-  const activeStep = 0;
   if (!userProfile || !allATDeals) return <Loader />;
   return (
     <>
-      {/* <>
-        <Typography variant="h6" style={{ color: 'black' }}>
-          Allocations Build
-        </Typography>
-        <Stepper
-          alternativeLabel
-          activeStep={activeStep}
-          style={{
-            border: 'none',
-            padding: '0',
-            marginLeft: '1rem',
-            marginRight: '1rem',
-            background: '#fff',
-          }}
-        >
-          {steps.map((label) => (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-      </> */}
+      <img
+        src="https://allocations-public.s3.us-east-2.amazonaws.com/allocations-logo.svg"
+        style={{ position: 'fixed', width: '15%', marginLeft: '1rem' }}
+      />
       <Landing Link={Link} />
       <Element id="anchor">
         <div />

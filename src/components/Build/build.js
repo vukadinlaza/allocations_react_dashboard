@@ -143,13 +143,14 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
   if (!deal) return null;
   return (
     <>
-      <Grid
-        xs={12}
-        sm={12}
-        md={12}
-        lg={12}
-        style={{ display: 'flex', marginTop: '3rem', marginLeft: '6rem', marginRight: '6rem' }}
-      >
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', marginTop: '3rem', marginRight: '5%' }}>
+        <Grid
+          xs={0}
+          sm={3}
+          md={3}
+          lg={3}
+          style={{ border: '1rem solid transparent', position: 'relative', minHeight: '100%' }}
+        />
         <Grid
           xs={12}
           sm={4}
@@ -186,9 +187,9 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
         {/* Left Column */}
         <Grid
           xs={12}
-          sm={8}
-          md={8}
-          lg={8}
+          sm={7}
+          md={7}
+          lg={7}
           style={{ border: '1rem solid transparent', position: 'relative', height: '90%' }}
         >
           <Paper style={{ padding: '1rem', height: '95vh', maxHeight: '95vh' }}>

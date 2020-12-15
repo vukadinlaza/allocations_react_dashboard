@@ -1,30 +1,33 @@
 import React from 'react';
 import { Paper, Grid, Typography, TextField, Slider, Button } from '@material-ui/core';
-import {} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { get } from 'lodash';
-import InfoIcon from '@material-ui/icons/Info';
 import moment from 'moment';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { nWithCommas } from '../../utils/numbers';
 
+const useStyles = makeStyles((theme) => ({
+  questionHeader: {
+    color: 'black',
+    marginTop: '.5rem',
+    marginBottom: '.5rem',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    fontSize: '1rem',
+    fontWeight: 'bolder',
+  },
+}));
 export default ({ setData, data, activeStep, handleNext, handleBack }) => {
+  const classes = useStyles();
   return (
     <>
       {activeStep === 0 && (
         <>
           <Grid justify="space-between">
-            <Typography
-              variant="h6"
-              style={{
-                color: 'black',
-                marginTop: '.5rem',
-                marginBottom: '.5rem',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-              }}
-            >
+            <Typography className={classes.questionHeader}>
               <>Choose your fund type</>
-              <InfoIcon />
+              <CheckCircleIcon style={{ color: data['Choose your fund type'] ? '#26C604' : '#00000029' }} />
             </Typography>
             <Grid container spacing={1}>
               {[
@@ -39,7 +42,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                         minWidth: '100%',
                       }}
                       onClick={() => {
-                        setData({ 'Choose your asset type': item.type });
+                        setData({ 'Choose your fund type': item.type });
                       }}
                     >
                       <Grid
@@ -53,7 +56,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                           flexDirection: 'column',
                           justifyContent: 'center',
                           alignItems: 'center',
-                          border: data['Choose your asset type'] === item.type ? '4px solid #2576FF' : '',
+                          border: data['Choose your fund type'] === item.type ? '2px solid #2576FF' : '',
                         }}
                       >
                         {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
@@ -77,19 +80,9 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
             {/* <hr className="solid" /> */}
           </Grid>
           <Grid justify="space-between">
-            <Typography
-              variant="h6"
-              style={{
-                color: 'black',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-                marginTop: '.5rem',
-                marginBottom: '.5rem',
-              }}
-            >
+            <Typography className={classes.questionHeader}>
               <>Choose your asset type</>
-              <InfoIcon />
+              <CheckCircleIcon style={{ color: data['Choose your asset type'] ? '#26C604' : '#00000029' }} />
             </Typography>
             <Grid container spacing={1}>
               {[
@@ -132,7 +125,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                           flexDirection: 'column',
                           justifyContent: 'center',
                           alignItems: 'center',
-                          border: data['Choose your asset type'] === item.type ? '4px solid #2576FF' : '',
+                          border: data['Choose your asset type'] === item.type ? '2px solid #2576FF' : '',
                         }}
                       >
                         {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
@@ -157,19 +150,9 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
             {/* <hr className="solid" /> */}
           </Grid>
           <Grid justify="space-between">
-            <Typography
-              variant="h6"
-              style={{
-                color: 'black',
-                marginTop: '.5rem',
-                marginBottom: '.5rem',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-              }}
-            >
+            <Typography className={classes.questionHeader}>
               <>Enter name of portfolio company</>
-              <InfoIcon />
+              <CheckCircleIcon style={{ color: data['Enter name of portfolio company'] ? '#26C604' : '#00000029' }} />
             </Typography>
             <Grid>
               <Paper
@@ -195,19 +178,11 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
             {/* <hr className="solid" /> */}
           </Grid>
           <Grid justify="space-between">
-            <Typography
-              variant="h6"
-              style={{
-                color: 'black',
-                marginTop: '.5rem',
-                marginBottom: '.5rem',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-              }}
-            >
+            <Typography className={classes.questionHeader}>
               <>Choose the name of your private fund</>
-              <InfoIcon />
+              <CheckCircleIcon
+                style={{ color: data['Choose the name of your private fund'] ? '#26C604' : '#00000029' }}
+              />
             </Typography>
             <Grid>
               <Paper
@@ -233,19 +208,9 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
             {/* <hr className="solid" /> */}
           </Grid>
           <Grid justify="space-between">
-            <Typography
-              variant="h6"
-              style={{
-                color: 'black',
-                marginTop: '.5rem',
-                marginBottom: '.5rem',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-              }}
-            >
+            <Typography className={classes.questionHeader}>
               <>Choose the name of your manager</>
-              <InfoIcon />
+              <CheckCircleIcon style={{ color: data['Choose the name of your manager'] ? '#26C604' : '#00000029' }} />
             </Typography>
             <Grid>
               <Paper
@@ -261,8 +226,8 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                       style={{ width: '100%' }}
                       variant="outlined"
                       label="Organizer Name"
-                      value={data['Choose the name of your organizer'] || ''}
-                      onChange={(e) => setData({ 'Choose the name of your organizer': e.target.value })}
+                      value={data['Choose the name of your manager'] || ''}
+                      onChange={(e) => setData({ 'Choose the name of your manager': e.target.value })}
                     />
                   </Grid>
                 </Grid>
@@ -275,62 +240,55 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
       {activeStep === 1 && (
         <>
           <Grid justify="space-between">
-            <Typography
-              variant="h6"
-              style={{
-                color: 'black',
-                marginTop: '.5rem',
-                marginBottom: '.5rem',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-              }}
-            >
+            <Typography className={classes.questionHeader}>
               <>Choose your speed</>
-              <InfoIcon />
+              <CheckCircleIcon style={{ color: data['Choose your speed'] ? '#26C604' : '#00000029' }} />
             </Typography>
-            <Grid
-              container
-              xs={12}
-              sm={12}
-              md={12}
-              lg={12}
-              spacing={1}
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                margin: '1rem',
-              }}
-            >
+            <Grid container spacing={1}>
               {[
-                { type: 'Standard', subtext: 'Wire in 14 business days', price: 0 },
-                {
-                  type: 'Express',
-                  subtext: 'Wire in 7 business days',
-                  price: 0,
-                  warningTitle: 'Warning',
-                  warning:
-                    'If you select express, the SPV will be formed under Sharding Holdings Management LLC with a bank account already set up. We also require the portfolio company investment agreement in draft or final form.',
-                },
-                { type: 'No Rush', subtext: 'Select Wire Date', price: 0 },
+                { type: 'Standard', price: 8000 },
+                { type: 'Express', price: 26000 },
+                { type: 'No rush delivery', price: 26000 },
               ].map((item) => {
                 return (
                   <Grid item xs={4} sm={4} md={4} lg={4}>
                     <Paper
+                      style={{
+                        border: 'solid 1px #2576FF',
+                        minWidth: '100%',
+                      }}
                       onClick={() => {
                         setData({ 'Choose your speed': item.type });
                       }}
-                      style={{
-                        padding: '1rem',
-                        textAlign: 'center',
-                        border: data['Choose your speed'] === item.type ? '4px solid #2576FF' : '',
-                      }}
                     >
-                      <Typography variant="subtitle2" style={{ fontSize: '1rem' }}>
-                        {item.type}
-                      </Typography>
+                      <Grid
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        style={{
+                          padding: '.25rem',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          border: data['Choose your speed'] === item.type ? '2px solid #2576FF' : '',
+                        }}
+                      >
+                        {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
+                        <Typography
+                          variant="subtitle2"
+                          style={{
+                            paddingTop: '.5rem',
+                            paddingBottom: '.5rem',
+                            textAlign: 'center',
+                            fontSize: '1rem',
+                          }}
+                        >
+                          {item.type}
+                        </Typography>
+                      </Grid>
                     </Paper>
-                    <div style={{ minHeight: '1rem' }} />
                   </Grid>
                 );
               })}
@@ -338,19 +296,9 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
             {/* <hr className="solid" /> */}
           </Grid>
           <Grid justify="space-between">
-            <Typography
-              variant="h6"
-              style={{
-                color: 'black',
-                marginTop: '.5rem',
-                marginBottom: '.5rem',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-              }}
-            >
+            <Typography className={classes.questionHeader}>
               <>Choose your wiring date</>
-              <InfoIcon />
+              <CheckCircleIcon style={{ color: data['Choose your wiring date'] ? '#26C604' : '#00000029' }} />
             </Typography>
             <Grid>
               <Paper
@@ -381,21 +329,11 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
       {activeStep === 2 && (
         <>
           <Grid justify="space-between">
-            <Typography
-              variant="h6"
-              style={{
-                color: 'black',
-                marginTop: '.5rem',
-                marginBottom: '.5rem',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-              }}
-            >
+            <Typography className={classes.questionHeader}>
               <>Choose your management fee</>
               <span style={{ marginLeft: '1rem' }} />
               {nWithCommas(data['Choose your management fee'] || 0)} %
-              <InfoIcon />
+              <CheckCircleIcon style={{ color: data['Choose your management fee'] ? '#26C604' : '#00000029' }} />
             </Typography>
             <Grid>
               <Paper
@@ -422,21 +360,11 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
             {/* <hr className="solid" /> */}
           </Grid>
           <Grid justify="space-between">
-            <Typography
-              variant="h6"
-              style={{
-                color: 'black',
-                marginTop: '.5rem',
-                marginBottom: '.5rem',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-              }}
-            >
+            <Typography className={classes.questionHeader}>
               <>Choose your carry</>
               <span style={{ marginLeft: '1rem' }} />
               {nWithCommas(data['Choose your carry'] || 0)} %
-              <InfoIcon />
+              <CheckCircleIcon style={{ color: data['Choose your carry'] ? '#26C604' : '#00000029' }} />
             </Typography>
             <Grid>
               <Paper
@@ -463,19 +391,11 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
             {/* <hr className="solid" /> */}
           </Grid>
           <Grid justify="space-between">
-            <Typography
-              variant="h6"
-              style={{
-                color: 'black',
-                marginTop: '.5rem',
-                marginBottom: '.5rem',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-              }}
-            >
+            <Typography className={classes.questionHeader}>
               <>Will you charge same fees for all investors?</>
-              <InfoIcon />
+              <CheckCircleIcon
+                style={{ color: data['Will you charge same fees for all investors?'] ? '#26C604' : '#00000029' }}
+              />
             </Typography>
             <Grid container spacing={1}>
               {[
@@ -490,7 +410,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                         minWidth: '100%',
                       }}
                       onClick={() => {
-                        setData({ 'Choose your asset type': item.type });
+                        setData({ 'Will you charge same fees for all investors?': item.type });
                       }}
                     >
                       <Grid
@@ -504,7 +424,10 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                           flexDirection: 'column',
                           justifyContent: 'center',
                           alignItems: 'center',
-                          border: data['Choose your asset type'] === item.type ? '4px solid #2576FF' : '',
+                          border:
+                            data['Will you charge same fees for all investors?'] === item.type
+                              ? '2px solid #2576FF'
+                              : '',
                         }}
                       >
                         {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
@@ -532,28 +455,14 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
       {activeStep === 3 && (
         <>
           <Grid justify="space-between">
-            <Typography
-              variant="h6"
-              style={{
-                color: 'black',
-                marginTop: '.5rem',
-                marginBottom: '.5rem',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-              }}
-            >
+            <Typography className={classes.questionHeader}>
               <>Enter your minimum investment amount</>
               <span style={{ marginLeft: '1rem' }} />${nWithCommas(data['Enter your minimum investment amount'] || 0)}
-              <InfoIcon />
+              <CheckCircleIcon
+                style={{ color: data['Enter your minimum investment amount'] ? '#26C604' : '#00000029' }}
+              />
             </Typography>
             <Grid>
-              {/* <Paper
-                style={{
-                  border: 'solid 1px #2576FF',
-                }}
-                style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '1.5rem' }}
-              > */}
               <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
                 {/* <Slider
                     defaultValue={0}
@@ -585,19 +494,15 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
               margin: '.5rem',
             }}
           >
-            <Typography
-              variant="h6"
-              style={{
-                color: 'black',
-                marginTop: '.5rem',
-                marginBottom: '.5rem',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-              }}
-            >
+            <Typography className={classes.questionHeader}>
               <>Would you like to hire Allocations as the exempt reporting advisor?</>
-              <InfoIcon />
+              <CheckCircleIcon
+                style={{
+                  color: data['Would you like to hire Allocations as the exempt reporting advisor?']
+                    ? '#26C604'
+                    : '#00000029',
+                }}
+              />
             </Typography>
             <Grid container spacing={1} justify="space-around">
               {[
@@ -618,7 +523,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                         minWidth: '100%',
                       }}
                       onClick={() => {
-                        setData({ 'Choose your asset type': item.type });
+                        setData({ 'Would you like to hire Allocations as the exempt reporting advisor?': item.type });
                       }}
                     >
                       <Grid
@@ -632,7 +537,10 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                           flexDirection: 'column',
                           justifyContent: 'center',
                           alignItems: 'center',
-                          border: data['Choose your asset type'] === item.type ? '4px solid #2576FF' : '',
+                          border:
+                            data['Would you like to hire Allocations as the exempt reporting advisor?'] === item.type
+                              ? '2px solid #2576FF'
+                              : '',
                         }}
                       >
                         {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
@@ -656,19 +564,9 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
             </Grid>
           </Grid>
           <Grid justify="space-between">
-            <Typography
-              variant="h6"
-              style={{
-                color: 'black',
-                marginTop: '.5rem',
-                marginBottom: '.5rem',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-              }}
-            >
+            <Typography className={classes.questionHeader}>
               <>Choose offering type</>
-              <InfoIcon />
+              <CheckCircleIcon style={{ color: data['Choose offering type'] ? '#26C604' : '#00000029' }} />
             </Typography>
             <Grid container spacing={1} justify="space-around">
               {[
@@ -689,7 +587,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                         minWidth: '100%',
                       }}
                       onClick={() => {
-                        setData({ 'Choose your asset type': item.type });
+                        setData({ 'Choose offering type': item.type });
                       }}
                     >
                       <Grid
@@ -703,7 +601,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                           flexDirection: 'column',
                           justifyContent: 'center',
                           alignItems: 'center',
-                          border: data['Choose your asset type'] === item.type ? '4px solid #2576FF' : '',
+                          border: data['Choose offering type'] === item.type ? '2px solid #2576FF' : '',
                         }}
                       >
                         {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
@@ -728,19 +626,11 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
             {/* <hr className="solid" /> */}
           </Grid>
           <Grid justify="space-between">
-            <Typography
-              variant="h6"
-              style={{
-                color: 'black',
-                marginTop: '.5rem',
-                marginBottom: '.5rem',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-              }}
-            >
+            <Typography className={classes.questionHeader}>
               <>Has your attorney already provided SPV docs?</>
-              <InfoIcon />
+              <CheckCircleIcon
+                style={{ color: data['Has your attorney already provided SPV docs?'] ? '#26C604' : '#00000029' }}
+              />
             </Typography>
             <Grid container spacing={1} justify="space-around">
               {[
@@ -761,7 +651,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                         minWidth: '100%',
                       }}
                       onClick={() => {
-                        setData({ 'Choose your asset type': item.type });
+                        setData({ 'Has your attorney already provided SPV docs?': item.type });
                       }}
                     >
                       <Grid
@@ -775,7 +665,10 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                           flexDirection: 'column',
                           justifyContent: 'center',
                           alignItems: 'center',
-                          border: data['Choose your asset type'] === item.type ? '4px solid #2576FF' : '',
+                          border:
+                            data['Has your attorney already provided SPV docs?'] === item.type
+                              ? '2px solid #2576FF'
+                              : '',
                         }}
                       >
                         {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
@@ -800,19 +693,11 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
             {/* <hr className="solid" /> */}
           </Grid>
           <Grid justify="space-between">
-            <Typography
-              variant="h6"
-              style={{
-                color: 'black',
-                marginTop: '.5rem',
-                marginBottom: '.5rem',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-              }}
-            >
+            <Typography className={classes.questionHeader}>
               <>Will you invite any investors from New York?</>
-              <InfoIcon />
+              <CheckCircleIcon
+                style={{ color: data['Will you invite any investors from New York?'] ? '#26C604' : '#00000029' }}
+              />
             </Typography>
             <Grid container spacing={1} justify="space-around">
               {[
@@ -833,7 +718,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                         minWidth: '100%',
                       }}
                       onClick={() => {
-                        setData({ 'Choose your asset type': item.type });
+                        setData({ 'Will you invite any investors from New York?': item.type });
                       }}
                     >
                       <Grid
@@ -847,7 +732,10 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                           flexDirection: 'column',
                           justifyContent: 'center',
                           alignItems: 'center',
-                          border: data['Choose your asset type'] === item.type ? '4px solid #2576FF' : '',
+                          border:
+                            data['Will you invite any investors from New York?'] === item.type
+                              ? '2px solid #2576FF'
+                              : '',
                         }}
                       >
                         {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
