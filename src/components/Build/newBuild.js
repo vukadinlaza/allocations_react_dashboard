@@ -309,9 +309,11 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
         <>
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
-              <>Choose your management fee</>
-              <span style={{ marginLeft: '1rem' }} />
-              {nWithCommas(data['Choose your management fee'] || 0)} %
+              <span>
+                <>Choose your management fee:</>
+                <span style={{ marginLeft: '1rem' }} />
+                {nWithCommas(data['Choose your management fee'] || 0)} %
+              </span>
               <CheckCircleIcon style={{ color: data['Choose your management fee'] ? '#26C604' : '#00000029' }} />
             </Typography>
             <Grid>
@@ -340,9 +342,11 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
           </Grid>
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
-              <>Choose your carry</>
-              <span style={{ marginLeft: '1rem' }} />
-              {nWithCommas(data['Choose your carry'] || 0)} %
+              <span>
+                <>Choose your carry:</>
+                <span style={{ marginLeft: '1rem' }} />
+                {nWithCommas(data['Choose your carry'] || 0)} %
+              </span>
               <CheckCircleIcon style={{ color: data['Choose your carry'] ? '#26C604' : '#00000029' }} />
             </Typography>
             <Grid>
@@ -425,8 +429,10 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
         <>
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
-              <>Enter your minimum investment amount</>
-              <span style={{ marginLeft: '1rem' }} />${nWithCommas(data['Enter your minimum investment amount'] || 0)}
+              <span>
+                <>Enter your minimum investment amount:</>
+                <span style={{ marginLeft: '1rem' }} />${nWithCommas(data['Enter your minimum investment amount'] || 0)}
+              </span>
               <CheckCircleIcon
                 style={{ color: data['Enter your minimum investment amount'] ? '#26C604' : '#00000029' }}
               />

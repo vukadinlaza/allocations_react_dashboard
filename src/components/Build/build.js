@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React from 'react';
 import { Paper, Grid, Typography, Modal, Button } from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -11,7 +11,6 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import { useMutation } from '@apollo/react-hooks';
-import { toast } from 'react-toastify';
 import QuestionsTwo from './newBuild';
 import './style.scss';
 
@@ -238,7 +237,7 @@ export default ({ deal, user, data, setData, setActiveStep, activeStep, atQuesti
             >
               {/* <Questions setData={setData} answers={data} classes={classes} activePage={page} /> */}
               <Typography variant="title1" style={{ marginTop: '1rem', marginBottom: '1.5rem', fontSize: '2rem' }}>
-                {steps[activeStep]}
+                {activeStep === 1 ? 'Tell us about your SPV/Fund' : steps[activeStep - 1]}
               </Typography>
               <QuestionsTwo
                 setData={setData}

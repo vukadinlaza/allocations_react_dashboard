@@ -28,10 +28,10 @@ export default ({ Link }) => {
           variant="title1"
           style={{ color: 'white', marginTop: '1rem', marginBottom: '.25rem', fontSize: '2rem' }}
         >
-          Welcome to Allocations Build
+          Allocations is the fastest fund administration experience ever made
         </Typography>
         <Typography style={{ color: 'white', fontSize: '1rem' }}>
-          The fastest way to set up your SPV or Fund.{' '}
+          Get started, raise captial and close your next private fund{' '}
         </Typography>
         <Link activeClass="active" to="anchor" spy smooth offset={50} duration={500}>
           <Button

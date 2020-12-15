@@ -13,9 +13,9 @@ import Completion from './completion';
 
 const Block = (props) => {
   const { inViewport, forwardedRef } = props;
-  const text = !inViewport
-    ? 'https://allocations-public.s3.us-east-2.amazonaws.com/allocations-logo.svg'
-    : 'https://allocations-public.s3.us-east-2.amazonaws.com/Allocations_Logo_Final-white%402x%402x.png';
+  const text = inViewport
+    ? 'https://allocations-public.s3.us-east-2.amazonaws.com/Allocations_Logo_Final-white%402x.svg'
+    : 'https://allocations-public.s3.us-east-2.amazonaws.com/allocations-logo.svg';
   useEffect(() => {
     props.setImg(text);
   });
@@ -114,7 +114,9 @@ const SPV_TABLE_NAME = 'SPVs';
 export default ({}) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(1);
-  const [img, setImg] = useState('');
+  const [img, setImg] = useState(
+    'https://allocations-public.s3.us-east-2.amazonaws.com/Allocations_Logo_Final-white%402x.svg',
+  );
   const { data: allATDeals } = useFetch(BASE, TABEL_NAME);
   const [updateInvestor] = useMutation(UPDATE_USER);
   const { data: atQuestions } = useFetch(QUESTIONS_BASE, SPV_TABLE_NAME);
@@ -143,7 +145,6 @@ export default ({}) => {
     }
   }, [allATDeals, setData, userProfile]);
   if (!userProfile || !allATDeals) return <Loader />;
-  console.log('SDASDASD', img);
   return (
     <>
       <img src={img} style={{ position: 'fixed', width: '15%', marginLeft: '1rem' }} />
