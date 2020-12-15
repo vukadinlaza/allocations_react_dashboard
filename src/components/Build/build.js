@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Paper, Grid, Typography, Modal, Button } from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { groupBy, map, get, toNumber } from 'lodash';
+import clsx from 'clsx';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { gql } from 'apollo-boost';
 import Confetti from 'react-confetti';
 import StepConnector from '@material-ui/core/StepConnector';
@@ -49,12 +51,63 @@ const useStyles = makeStyles((theme) => ({
     top: '30vh !important',
   },
 }));
-const ColorlibConnector = withStyles({
+
+const QontoConnector = withStyles({
+  alternativeLabel: {
+    top: 22,
+  },
+  active: {
+    '& $line': {},
+  },
+  completed: {
+    '& $line': {
+      backgroundColor: '#26C604',
+    },
+  },
   line: {
+    width: 6,
+    border: 0,
+    backgroundColor: '#00000029',
+    borderRadius: 0,
     minHeight: '100%',
-    borderLeftWidth: '2px',
+  },
+  vertical: {
+    margin: '0 11px',
+    padding: 0,
   },
 })(StepConnector);
+const useQontoStepIconStyles = makeStyles({
+  root: {
+    display: 'flex',
+    height: 22,
+    alignItems: 'center',
+  },
+  inactive: {
+    fontSize: 28,
+    color: '#00000029',
+  },
+  completed: {
+    color: '#26C604',
+    zIndex: 1,
+    fontSize: 28,
+  },
+});
+
+function QontoStepIcon(props) {
+  const classes = useQontoStepIconStyles();
+  const { active, completed } = props;
+
+  return (
+    <div
+      className={clsx(classes.root, {
+        [classes.active]: active,
+      })}
+    >
+      {completed ? <CheckCircleIcon className={classes.completed} /> : <CheckCircleIcon className={classes.inactive} />}
+    </div>
+  );
+}
+
 const POST_ZAP = gql`
   mutation PostZap($body: Object) {
     postZap(data: $body) {
@@ -69,10 +122,8 @@ function getSteps() {
   return ['Fund info', 'Delivery speed', 'Fees', 'Compliance'];
 }
 
-export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
+export default ({ deal, user, data, setData, setActiveStep, activeStep, atQuestionsData }) => {
   const steps = getSteps();
-  const [activeStep, setActiveStep] = useState(3);
-
   const [showConfetti, setShowConfetti] = useState(false);
   const [postZap, {}] = useMutation(POST_ZAP);
   const fieldData = groupBy(atQuestionsData, 'Page');
@@ -111,27 +162,6 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
   };
   if (!deal) return null;
 
-  // let price = 0;
-  // if (data['Choose your fund type'] === 'SPV') {
-  //   price += 8000;
-  // }
-  // if (data['Choose your fund type'] === 'Fund') {
-  //   price += 26000;
-  // }
-  // if (data['Would you like to hire Allocations as the exempt reporting advisor?'] === 'Yes') {
-  //   price += 2000;
-  // }
-  // if (data['Will you invite any investors from New York?'] === 'Yes') {
-  //   price += 1200;
-  // }
-  // if (data['Will you charge same fees for all investors?'] === 'No') {
-  //   price += 2000;
-  // }
-  // if (!data['Choose your fund type']) {
-  //   price = 0;
-  // }
-  // const blueSkyFees = 500;
-
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -166,7 +196,7 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
               }}
             >
               <div>
-                <span style={{ fontSize: '4rem', color: '#2576FF' }}>{activeStep + 1}</span>{' '}
+                <span style={{ fontSize: '4rem', color: '#2576FF' }}>{activeStep}</span>{' '}
                 <span style={{ fontWeight: 'bolder', fontSize: '1.25rem' }}>/4</span>
               </div>
             </div>
@@ -174,11 +204,11 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
               activeStep={activeStep}
               orientation="vertical"
               style={{ height: '85%', border: 'none', boxShadow: '0', paddingBottom: '30%' }}
-              connector={<ColorlibConnector />}
+              connector={<QontoConnector />}
             >
               {steps.map((label, index) => (
                 <Step key={label}>
-                  <StepLabel>{label}</StepLabel>
+                  <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
                 </Step>
               ))}
             </Stepper>

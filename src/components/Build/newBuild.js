@@ -1,6 +1,6 @@
 import React from 'react';
-import { Paper, Grid, Typography, TextField, Slider, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Paper, Grid, Typography, TextField, Slider, Button, Tooltip } from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { get } from 'lodash';
 import moment from 'moment';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -17,12 +17,25 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '1rem',
     fontWeight: 'bolder',
   },
+  warning: {
+    color: '#FF0000',
+  },
+  warningTxt: {},
 }));
+const HtmlTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#273560',
+    color: 'white',
+    maxWidth: '400px',
+    fontSize: '1rem',
+    padding: '.5rem',
+  },
+}))(Tooltip);
 export default ({ setData, data, activeStep, handleNext, handleBack }) => {
   const classes = useStyles();
   return (
     <>
-      {activeStep === 0 && (
+      {activeStep === 1 && (
         <>
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
@@ -237,7 +250,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
           </Grid>
         </>
       )}
-      {activeStep === 1 && (
+      {activeStep === 2 && (
         <>
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
@@ -247,7 +260,12 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
             <Grid container spacing={1}>
               {[
                 { type: 'Standard', price: 8000 },
-                { type: 'Express', price: 26000 },
+                {
+                  type: 'Express',
+                  price: 26000,
+                  warning:
+                    'If you select express, the SPV will be formed under Sharding Holdings Management LLC with a bank account already set up. We also require the portfolio company investment agreement in draft or final form.',
+                },
                 { type: 'No rush delivery', price: 26000 },
               ].map((item) => {
                 return (
@@ -276,17 +294,42 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                         }}
                       >
                         {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
-                        <Typography
-                          variant="subtitle2"
-                          style={{
-                            paddingTop: '.5rem',
-                            paddingBottom: '.5rem',
-                            textAlign: 'center',
-                            fontSize: '1rem',
-                          }}
-                        >
-                          {item.type}
-                        </Typography>
+                        {item.warning ? (
+                          <HtmlTooltip
+                            title={
+                              <>
+                                <span className={classes.warning}>Warning: </span>
+                                <span className={classes.warningTxt}>{item.warning}</span>
+                              </>
+                            }
+                          >
+                            <Typography
+                              variant="subtitle2"
+                              style={{
+                                paddingTop: '.5rem',
+                                paddingBottom: '.5rem',
+                                minWidth: '100%',
+                                textAlign: 'center',
+                                fontSize: '1rem',
+                              }}
+                            >
+                              {item.type}
+                            </Typography>
+                          </HtmlTooltip>
+                        ) : (
+                          <Typography
+                            variant="subtitle2"
+                            style={{
+                              paddingTop: '.5rem',
+                              paddingBottom: '.5rem',
+                              minWidth: '100%',
+                              textAlign: 'center',
+                              fontSize: '1rem',
+                            }}
+                          >
+                            {item.type}
+                          </Typography>
+                        )}
                       </Grid>
                     </Paper>
                   </Grid>
@@ -326,7 +369,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
           </Grid>
         </>
       )}
-      {activeStep === 2 && (
+      {activeStep === 3 && (
         <>
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
@@ -452,7 +495,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
           </Grid>{' '}
         </>
       )}
-      {activeStep === 3 && (
+      {activeStep === 4 && (
         <>
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
@@ -488,12 +531,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
             </Grid>
             {/* <hr className="solid" /> */}
           </Grid>
-          <Grid
-            justify="space-between"
-            style={{
-              margin: '.5rem',
-            }}
-          >
+          <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
               <>Would you like to hire Allocations as the exempt reporting advisor?</>
               <CheckCircleIcon
@@ -508,11 +546,11 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
               {[
                 {
                   type: 'Yes',
-                  url: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/rocket.svg',
                 },
                 {
                   type: 'No',
-                  url: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/bitcoin.svg',
+                  warning:
+                    'Failure to comply with SEC / FINRA exempt reporting adviser requirements can result in fines and penalties.',
                 },
               ].map((item) => {
                 return (
@@ -543,19 +581,42 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                               : '',
                         }}
                       >
-                        {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
-                        <Typography
-                          variant="subtitle2"
-                          style={{
-                            paddingTop: '.5rem',
-                            paddingBottom: '.5rem',
-                            minWidth: '100%',
-                            textAlign: 'center',
-                            fontSize: '1rem',
-                          }}
-                        >
-                          {item.type}
-                        </Typography>
+                        {item.warning ? (
+                          <HtmlTooltip
+                            title={
+                              <>
+                                <span className={classes.warning}>Warning: </span>
+                                <span className={classes.warningTxt}>{item.warning}</span>
+                              </>
+                            }
+                          >
+                            <Typography
+                              variant="subtitle2"
+                              style={{
+                                paddingTop: '.5rem',
+                                paddingBottom: '.5rem',
+                                minWidth: '100%',
+                                textAlign: 'center',
+                                fontSize: '1rem',
+                              }}
+                            >
+                              {item.type}
+                            </Typography>
+                          </HtmlTooltip>
+                        ) : (
+                          <Typography
+                            variant="subtitle2"
+                            style={{
+                              paddingTop: '.5rem',
+                              paddingBottom: '.5rem',
+                              minWidth: '100%',
+                              textAlign: 'center',
+                              fontSize: '1rem',
+                            }}
+                          >
+                            {item.type}
+                          </Typography>
+                        )}
                       </Grid>
                     </Paper>
                   </Grid>
@@ -572,11 +633,12 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
               {[
                 {
                   type: '506b',
-                  url: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/rocket.svg',
+                  warning:
+                    'You may not generally solicit or advertise to investors for which you don’t have a pre-existing relationship',
                 },
                 {
                   type: '506c',
-                  url: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/bitcoin.svg',
+                  warning: 'Your investors will be required to complete accredited investor verification',
                 },
               ].map((item) => {
                 return (
@@ -605,18 +667,42 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                         }}
                       >
                         {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
-                        <Typography
-                          variant="subtitle2"
-                          style={{
-                            paddingTop: '.5rem',
-                            paddingBottom: '.5rem',
-                            minWidth: '100%',
-                            textAlign: 'center',
-                            fontSize: '1rem',
-                          }}
-                        >
-                          {item.type}
-                        </Typography>
+                        {item.warning ? (
+                          <HtmlTooltip
+                            title={
+                              <>
+                                <span className={classes.warning}>Warning: </span>
+                                <span className={classes.warningTxt}>{item.warning}</span>
+                              </>
+                            }
+                          >
+                            <Typography
+                              variant="subtitle2"
+                              style={{
+                                paddingTop: '.5rem',
+                                paddingBottom: '.5rem',
+                                minWidth: '100%',
+                                textAlign: 'center',
+                                fontSize: '1rem',
+                              }}
+                            >
+                              {item.type}
+                            </Typography>
+                          </HtmlTooltip>
+                        ) : (
+                          <Typography
+                            variant="subtitle2"
+                            style={{
+                              paddingTop: '.5rem',
+                              paddingBottom: '.5rem',
+                              minWidth: '100%',
+                              textAlign: 'center',
+                              fontSize: '1rem',
+                            }}
+                          >
+                            {item.type}
+                          </Typography>
+                        )}
                       </Grid>
                     </Paper>
                   </Grid>
@@ -702,12 +788,14 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
             <Grid container spacing={1} justify="space-around">
               {[
                 {
-                  type: '506b',
-                  url: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/rocket.svg',
+                  type: 'Yes',
+                  warning:
+                    'Warning: If you include New York investors, there will be additional Blue sky filings and fees associated for their access.',
                 },
                 {
-                  type: '506c',
-                  url: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/bitcoin.svg',
+                  type: 'No',
+                  warning:
+                    'If you do include New York investors at a later time, there will be additional Blue sky fees and filings associated.',
                 },
               ].map((item) => {
                 return (
@@ -738,26 +826,48 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                               : '',
                         }}
                       >
-                        {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
-                        <Typography
-                          variant="subtitle2"
-                          style={{
-                            paddingTop: '.5rem',
-                            paddingBottom: '.5rem',
-                            minWidth: '100%',
-                            textAlign: 'center',
-                            fontSize: '1rem',
-                          }}
-                        >
-                          {item.type}
-                        </Typography>
+                        {item.warning ? (
+                          <HtmlTooltip
+                            title={
+                              <>
+                                <span className={classes.warning}>Warning: </span>
+                                <span className={classes.warningTxt}>{item.warning}</span>
+                              </>
+                            }
+                          >
+                            <Typography
+                              variant="subtitle2"
+                              style={{
+                                paddingTop: '.5rem',
+                                paddingBottom: '.5rem',
+                                minWidth: '100%',
+                                textAlign: 'center',
+                                fontSize: '1rem',
+                              }}
+                            >
+                              {item.type}
+                            </Typography>
+                          </HtmlTooltip>
+                        ) : (
+                          <Typography
+                            variant="subtitle2"
+                            style={{
+                              paddingTop: '.5rem',
+                              paddingBottom: '.5rem',
+                              minWidth: '100%',
+                              textAlign: 'center',
+                              fontSize: '1rem',
+                            }}
+                          >
+                            {item.type}
+                          </Typography>
+                        )}
                       </Grid>
                     </Paper>
                   </Grid>
                 );
               })}
             </Grid>
-            {/* <hr className="solid" /> */}
           </Grid>
         </>
       )}

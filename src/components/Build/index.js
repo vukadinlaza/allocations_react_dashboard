@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import { Link, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll';
+import { Link, Element, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll';
 import { useFetch, useSimpleReducer } from '../../utils/hooks';
 import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
 import BuildStep from './build';
-import SignStep from './sign';
 import Landing from './landing';
+import Completion from './completion';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -105,8 +100,7 @@ const QUESTIONS_BASE = 'appD85EnbTN8tKWB9';
 const SPV_TABLE_NAME = 'SPVs';
 export default ({}) => {
   const classes = useStyles();
-  const [step, setStep] = useState('build');
-  const itemDone = false;
+  const [activeStep, setActiveStep] = useState(1);
   const { data: allATDeals } = useFetch(BASE, TABEL_NAME);
   const [updateInvestor] = useMutation(UPDATE_USER);
   const { data: atQuestions } = useFetch(QUESTIONS_BASE, SPV_TABLE_NAME);
@@ -140,25 +134,24 @@ export default ({}) => {
         src="https://allocations-public.s3.us-east-2.amazonaws.com/allocations-logo.svg"
         style={{ position: 'fixed', width: '15%', marginLeft: '1rem' }}
       />
-      <Landing Link={Link} />
+      {activeStep > 4 ? <Completion /> : <Landing Link={Link} />}
       <Element id="anchor">
         <div />
       </Element>
-      <div className={classes.buildContainer}>
-        {step === 'build' && (
-          <>
-            <BuildStep
-              Element={Element}
-              deal={data}
-              user={userProfile}
-              setData={setData}
-              data={data}
-              setStep={setStep}
-              atQuestionsData={atQuestionsData}
-            />
-          </>
-        )}
-      </div>
+      {activeStep < 5 && (
+        <div className={classes.buildContainer}>
+          <BuildStep
+            Element={Element}
+            deal={data}
+            user={userProfile}
+            setData={setData}
+            data={data}
+            atQuestionsData={atQuestionsData}
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+          />
+        </div>
+      )}
     </>
   );
 };
