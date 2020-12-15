@@ -2,6 +2,7 @@ import React from 'react';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
+import Confetti from 'react-confetti';
 
 const useStyles = makeStyles((theme) => ({
   landingContainer: {
@@ -24,6 +25,8 @@ export default ({}) => {
   return (
     <div className={classes.landingContainer}>
       <Grid className={classes.centerGrid}>
+        <Confetti />
+
         <img src="https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom+(1).svg" />
         <Typography
           variant="title1"

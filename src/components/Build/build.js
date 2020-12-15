@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Paper, Grid, Typography, Modal, Button } from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import { groupBy, map, get, toNumber } from 'lodash';
 import clsx from 'clsx';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { gql } from 'apollo-boost';
@@ -124,46 +123,49 @@ function getSteps() {
 
 export default ({ deal, user, data, setData, setActiveStep, activeStep, atQuestionsData }) => {
   const steps = getSteps();
-  const [showConfetti, setShowConfetti] = useState(false);
-  const [postZap, {}] = useMutation(POST_ZAP);
-  const fieldData = groupBy(atQuestionsData, 'Page');
+  // const [postZap, {}] = useMutation(POST_ZAP);
 
   const submitData = async () => {
-    if (!data.airtableId) {
-      const response = await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
-        method: 'post', // make sure it is a "POST request"
-        body: JSON.stringify({ fields: { userId: user._id, ...data } }),
+    try {
+      if (!data.airtableId) {
+        const response = await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
+          method: 'post', // make sure it is a "POST request"
+          body: JSON.stringify({ fields: { userId: user._id, activeStep, email: user.email, ...data } }),
+          headers: {
+            Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`, // API key
+            'Content-Type': 'application/json', // we will recive a json object
+          },
+        });
+        const res = await response.json();
+        return setData({ airtableId: res.id });
+      }
+
+      const payload = {
+        records: [
+          {
+            id: data.airtableId,
+            fields: { ...data, activeStep },
+          },
+        ],
+      };
+
+      await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
+        method: 'patch', // make sure it is a "PATCH request"
+        body: JSON.stringify(payload),
         headers: {
           Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`, // API key
           'Content-Type': 'application/json', // we will recive a json object
         },
       });
-      const res = await response.json();
-      return setData({ airtableId: res.id });
+    } catch (e) {
+      console.log(JSON(e));
     }
-
-    const payload = {
-      records: [
-        {
-          id: data.airtableId,
-          fields: data,
-        },
-      ],
-    };
-
-    await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
-      method: 'patch', // make sure it is a "PATCH request"
-      body: JSON.stringify(payload),
-      headers: {
-        Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`, // API key
-        'Content-Type': 'application/json', // we will recive a json object
-      },
-    });
   };
   if (!deal) return null;
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    submitData();
   };
 
   const handleBack = () => {
@@ -244,9 +246,8 @@ export default ({ deal, user, data, setData, setActiveStep, activeStep, atQuesti
                 activeStep={activeStep}
                 handleNext={handleNext}
                 handleBack={handleBack}
+                submitData={submitData}
               />
-
-              {showConfetti && <div> yes </div>}
             </Grid>
           </Paper>
         </Grid>
@@ -348,7 +349,6 @@ export default ({ deal, user, data, setData, setActiveStep, activeStep, atQuesti
           </div>
         </Grid>
       </Grid> */}
-      <ConfirmationModal showConfetti={showConfetti} setShowConfetti={setShowConfetti} />
     </>
   );
 };

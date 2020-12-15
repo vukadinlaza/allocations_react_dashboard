@@ -1,14 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
-import { Link, Element, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll';
+import { Link, Element } from 'react-scroll';
+import handleViewport from 'react-in-viewport';
 import { useFetch, useSimpleReducer } from '../../utils/hooks';
 import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
 import BuildStep from './build';
 import Landing from './landing';
 import Completion from './completion';
+
+const Block = (props) => {
+  const { inViewport, forwardedRef } = props;
+  const text = !inViewport
+    ? 'https://allocations-public.s3.us-east-2.amazonaws.com/allocations-logo.svg'
+    : 'https://allocations-public.s3.us-east-2.amazonaws.com/Allocations_Logo_Final-white%402x%402x.png';
+  useEffect(() => {
+    props.setImg(text);
+  });
+  return <div className="viewport-block" ref={forwardedRef} />;
+};
+const ViewportBlock = handleViewport(Block);
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -101,6 +114,7 @@ const SPV_TABLE_NAME = 'SPVs';
 export default ({}) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(1);
+  const [img, setImg] = useState('');
   const { data: allATDeals } = useFetch(BASE, TABEL_NAME);
   const [updateInvestor] = useMutation(UPDATE_USER);
   const { data: atQuestions } = useFetch(QUESTIONS_BASE, SPV_TABLE_NAME);
@@ -125,18 +139,21 @@ export default ({}) => {
       const tableDeals = allATDeals.map((r) => ({ id: r.id, ...r.fields }));
       const activeDeal = tableDeals?.find((d) => d.userId === userProfile._id) || {};
       setData({ airtableId: activeDeal.id, ...activeDeal });
+      setActiveStep(activeDeal.activeStep === 4 ? 1 : activeDeal.activeStep || 1);
     }
   }, [allATDeals, setData, userProfile]);
   if (!userProfile || !allATDeals) return <Loader />;
+  console.log('SDASDASD', img);
   return (
     <>
-      <img
-        src="https://allocations-public.s3.us-east-2.amazonaws.com/allocations-logo.svg"
-        style={{ position: 'fixed', width: '15%', marginLeft: '1rem' }}
-      />
+      <img src={img} style={{ position: 'fixed', width: '15%', marginLeft: '1rem' }} />
       {activeStep > 4 ? <Completion /> : <Landing Link={Link} />}
       <Element id="anchor">
-        <div />
+        <ViewportBlock
+          setImg={setImg}
+          onEnterViewport={() => console.log('enter')}
+          onLeaveViewport={() => console.log('leave')}
+        />
       </Element>
       {activeStep < 5 && (
         <div className={classes.buildContainer}>

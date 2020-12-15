@@ -1,21 +1,27 @@
 import React from 'react';
 import { Paper, Grid, Typography, TextField, Slider, Button, Tooltip } from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import { get } from 'lodash';
 import moment from 'moment';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { nWithCommas } from '../../utils/numbers';
 
 const useStyles = makeStyles((theme) => ({
   questionHeader: {
-    color: 'black',
-    marginTop: '.5rem',
-    marginBottom: '.5rem',
+    color: '#3A506B',
+    marginTop: '1.75rem',
+    marginBottom: '.75rem',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
     fontSize: '1rem',
     fontWeight: 'bolder',
+  },
+  answerText: {
+    color: '#3A506B',
+    paddingTop: '.5rem',
+    paddingBottom: '.5rem',
+    textAlign: 'center',
+    fontSize: '1rem',
   },
   warning: {
     color: '#FF0000',
@@ -73,17 +79,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                         }}
                       >
                         {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
-                        <Typography
-                          variant="subtitle2"
-                          style={{
-                            paddingTop: '.5rem',
-                            paddingBottom: '.5rem',
-                            textAlign: 'center',
-                            fontSize: '1rem',
-                          }}
-                        >
-                          {item.type}
-                        </Typography>
+                        <Typography className={classes.answerText}>{item.type}</Typography>
                       </Grid>
                     </Paper>
                   </Grid>
@@ -142,17 +138,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                         }}
                       >
                         {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
-                        <Typography
-                          variant="subtitle2"
-                          style={{
-                            paddingTop: '.5rem',
-                            paddingBottom: '.5rem',
-                            textAlign: 'center',
-                            fontSize: '1rem',
-                          }}
-                        >
-                          {item.type}
-                        </Typography>
+                        <Typography className={classes.answerText}>{item.type}</Typography>
                       </Grid>
                     </Paper>
                   </Grid>
@@ -168,25 +154,18 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
               <CheckCircleIcon style={{ color: data['Enter name of portfolio company'] ? '#26C604' : '#00000029' }} />
             </Typography>
             <Grid>
-              <Paper
-                style={{
-                  border: 'solid 1px #2576FF',
-                }}
-                style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}
-              >
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
-                    <TextField
-                      required
-                      style={{ width: '100%' }}
-                      variant="outlined"
-                      label="Company Name"
-                      value={data['Enter name of portfolio company'] || ''}
-                      onChange={(e) => setData({ 'Enter name of portfolio company': e.target.value })}
-                    />
-                  </Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
+                  <TextField
+                    required
+                    style={{ width: '100%' }}
+                    variant="outlined"
+                    label="Company Name"
+                    value={data['Enter name of portfolio company'] || ''}
+                    onChange={(e) => setData({ 'Enter name of portfolio company': e.target.value })}
+                  />
                 </Grid>
-              </Paper>
+              </Grid>
             </Grid>
             {/* <hr className="solid" /> */}
           </Grid>
@@ -198,25 +177,18 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
               />
             </Typography>
             <Grid>
-              <Paper
-                style={{
-                  border: 'solid 1px #2576FF',
-                }}
-                style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}
-              >
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
-                    <TextField
-                      required
-                      style={{ width: '100%' }}
-                      variant="outlined"
-                      label="Fund Name"
-                      value={data['Choose the name of your private fund'] || ''}
-                      onChange={(e) => setData({ 'Choose the name of your private fund': e.target.value })}
-                    />
-                  </Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
+                  <TextField
+                    required
+                    style={{ width: '100%' }}
+                    variant="outlined"
+                    label="Fund Name"
+                    value={data['Choose the name of your private fund'] || ''}
+                    onChange={(e) => setData({ 'Choose the name of your private fund': e.target.value })}
+                  />
                 </Grid>
-              </Paper>
+              </Grid>
             </Grid>
             {/* <hr className="solid" /> */}
           </Grid>
@@ -226,25 +198,18 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
               <CheckCircleIcon style={{ color: data['Choose the name of your manager'] ? '#26C604' : '#00000029' }} />
             </Typography>
             <Grid>
-              <Paper
-                style={{
-                  border: 'solid 1px #2576FF',
-                }}
-                style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}
-              >
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
-                    <TextField
-                      required
-                      style={{ width: '100%' }}
-                      variant="outlined"
-                      label="Organizer Name"
-                      value={data['Choose the name of your manager'] || ''}
-                      onChange={(e) => setData({ 'Choose the name of your manager': e.target.value })}
-                    />
-                  </Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
+                  <TextField
+                    required
+                    style={{ width: '100%' }}
+                    variant="outlined"
+                    label="Organizer Name"
+                    value={data['Choose the name of your manager'] || ''}
+                    onChange={(e) => setData({ 'Choose the name of your manager': e.target.value })}
+                  />
                 </Grid>
-              </Paper>
+              </Grid>
             </Grid>
             {/* <hr className="solid" /> */}
           </Grid>
@@ -303,32 +268,10 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                               </>
                             }
                           >
-                            <Typography
-                              variant="subtitle2"
-                              style={{
-                                paddingTop: '.5rem',
-                                paddingBottom: '.5rem',
-                                minWidth: '100%',
-                                textAlign: 'center',
-                                fontSize: '1rem',
-                              }}
-                            >
-                              {item.type}
-                            </Typography>
+                            <Typography className={classes.answerText}>{item.type}</Typography>
                           </HtmlTooltip>
                         ) : (
-                          <Typography
-                            variant="subtitle2"
-                            style={{
-                              paddingTop: '.5rem',
-                              paddingBottom: '.5rem',
-                              minWidth: '100%',
-                              textAlign: 'center',
-                              fontSize: '1rem',
-                            }}
-                          >
-                            {item.type}
-                          </Typography>
+                          <Typography className={classes.answerText}>{item.type}</Typography>
                         )}
                       </Grid>
                     </Paper>
@@ -344,26 +287,19 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
               <CheckCircleIcon style={{ color: data['Choose your wiring date'] ? '#26C604' : '#00000029' }} />
             </Typography>
             <Grid>
-              <Paper
-                style={{
-                  border: 'solid 1px #2576FF',
-                }}
-                style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '0.5rem' }}
-              >
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
-                    <TextField
-                      defaultValue={moment(new Date()).format('YYYY-MM-DD')}
-                      value={moment(new Date(data['Choose your wiring date'])).format('YYYY-MM-DD')}
-                      style={{ width: '100%' }}
-                      onChange={(e) => setData({ 'Choose your wiring date': e.target.value })}
-                      label="Choose your wiring date"
-                      type="date"
-                      variant="outlined"
-                    />
-                  </Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
+                  <TextField
+                    defaultValue={moment(new Date()).format('YYYY-MM-DD')}
+                    value={moment(new Date(data['Choose your wiring date'])).format('YYYY-MM-DD')}
+                    style={{ width: '100%' }}
+                    onChange={(e) => setData({ 'Choose your wiring date': e.target.value })}
+                    label="Choose your wiring date"
+                    type="date"
+                    variant="outlined"
+                  />
                 </Grid>
-              </Paper>
+              </Grid>
             </Grid>
             {/* <hr className="solid" /> */}
           </Grid>
@@ -474,17 +410,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                         }}
                       >
                         {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
-                        <Typography
-                          variant="subtitle2"
-                          style={{
-                            paddingTop: '.5rem',
-                            paddingBottom: '.5rem',
-                            textAlign: 'center',
-                            fontSize: '1rem',
-                          }}
-                        >
-                          {item.type}
-                        </Typography>
+                        <Typography className={classes.answerText}>{item.type}</Typography>
                       </Grid>
                     </Paper>
                   </Grid>
@@ -522,7 +448,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                   required
                   style={{ width: '100%' }}
                   variant="outlined"
-                  label="minimum Investment"
+                  label="Minimum investment"
                   value={data['Enter your minimum investment amount'] || ''}
                   onChange={(e) => setData({ 'Enter your minimum investment amount': e.target.value })}
                 />
@@ -590,32 +516,10 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                               </>
                             }
                           >
-                            <Typography
-                              variant="subtitle2"
-                              style={{
-                                paddingTop: '.5rem',
-                                paddingBottom: '.5rem',
-                                minWidth: '100%',
-                                textAlign: 'center',
-                                fontSize: '1rem',
-                              }}
-                            >
-                              {item.type}
-                            </Typography>
+                            <Typography className={classes.answerText}>{item.type}</Typography>
                           </HtmlTooltip>
                         ) : (
-                          <Typography
-                            variant="subtitle2"
-                            style={{
-                              paddingTop: '.5rem',
-                              paddingBottom: '.5rem',
-                              minWidth: '100%',
-                              textAlign: 'center',
-                              fontSize: '1rem',
-                            }}
-                          >
-                            {item.type}
-                          </Typography>
+                          <Typography className={classes.answerText}>{item.type}</Typography>
                         )}
                       </Grid>
                     </Paper>
@@ -676,32 +580,10 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                               </>
                             }
                           >
-                            <Typography
-                              variant="subtitle2"
-                              style={{
-                                paddingTop: '.5rem',
-                                paddingBottom: '.5rem',
-                                minWidth: '100%',
-                                textAlign: 'center',
-                                fontSize: '1rem',
-                              }}
-                            >
-                              {item.type}
-                            </Typography>
+                            <Typography className={classes.answerText}>{item.type}</Typography>
                           </HtmlTooltip>
                         ) : (
-                          <Typography
-                            variant="subtitle2"
-                            style={{
-                              paddingTop: '.5rem',
-                              paddingBottom: '.5rem',
-                              minWidth: '100%',
-                              textAlign: 'center',
-                              fontSize: '1rem',
-                            }}
-                          >
-                            {item.type}
-                          </Typography>
+                          <Typography className={classes.answerText}>{item.type}</Typography>
                         )}
                       </Grid>
                     </Paper>
@@ -758,18 +640,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                         }}
                       >
                         {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
-                        <Typography
-                          variant="subtitle2"
-                          style={{
-                            paddingTop: '.5rem',
-                            paddingBottom: '.5rem',
-                            minWidth: '100%',
-                            textAlign: 'center',
-                            fontSize: '1rem',
-                          }}
-                        >
-                          {item.type}
-                        </Typography>
+                        <Typography className={classes.answerText}>{item.type}</Typography>
                       </Grid>
                     </Paper>
                   </Grid>
@@ -835,32 +706,10 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                               </>
                             }
                           >
-                            <Typography
-                              variant="subtitle2"
-                              style={{
-                                paddingTop: '.5rem',
-                                paddingBottom: '.5rem',
-                                minWidth: '100%',
-                                textAlign: 'center',
-                                fontSize: '1rem',
-                              }}
-                            >
-                              {item.type}
-                            </Typography>
+                            <Typography className={classes.answerText}>{item.type}</Typography>
                           </HtmlTooltip>
                         ) : (
-                          <Typography
-                            variant="subtitle2"
-                            style={{
-                              paddingTop: '.5rem',
-                              paddingBottom: '.5rem',
-                              minWidth: '100%',
-                              textAlign: 'center',
-                              fontSize: '1rem',
-                            }}
-                          >
-                            {item.type}
-                          </Typography>
+                          <Typography className={classes.answerText}>{item.type}</Typography>
                         )}
                       </Grid>
                     </Paper>
@@ -872,42 +721,44 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
         </>
       )}
 
-      <Grid style={{ display: 'flex', justifyContent: 'space-between' }}>
-        {activeStep > 0 ? (
+      <Grid style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <>
+          {activeStep > 1 && (
+            <Button
+              variant="contained"
+              onClick={handleBack}
+              style={{
+                fontSize: '1rem',
+                backgroundColor: 'white',
+                color: '#273560',
+                borderRadius: '2rem',
+                paddingLeft: '1.5rem',
+                paddingRight: '1.5rem',
+                border: 'solid 2px #273560',
+                margin: '1rem',
+                height: '35px',
+              }}
+            >
+              Previous{' '}
+            </Button>
+          )}
           <Button
             variant="contained"
-            onClick={handleBack}
+            onClick={handleNext}
             style={{
               fontSize: '1rem',
-              backgroundColor: 'white',
-              color: '#273560',
+              color: 'white',
+              backgroundColor: '#273560',
               marginTop: '1rem',
               borderRadius: '2rem',
               paddingLeft: '1.5rem',
               paddingRight: '1.5rem',
-              border: 'solid 2px #273560',
+              height: '35px',
             }}
           >
-            Previous{' '}
+            {activeStep >= 4 ? 'Submit' : 'Next'}
           </Button>
-        ) : (
-          <div />
-        )}
-        <Button
-          variant="contained"
-          onClick={handleNext}
-          style={{
-            fontSize: '1rem',
-            color: 'white',
-            backgroundColor: '#273560',
-            marginTop: '1rem',
-            borderRadius: '2rem',
-            paddingLeft: '1.5rem',
-            paddingRight: '1.5rem',
-          }}
-        >
-          Next{' '}
-        </Button>
+        </>
       </Grid>
     </>
   );
