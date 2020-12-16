@@ -37,7 +37,7 @@ const HtmlTooltip = withStyles((theme) => ({
     padding: '.5rem',
   },
 }))(Tooltip);
-export default ({ setData, data, activeStep, handleNext, handleBack }) => {
+export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) => {
   const classes = useStyles();
   return (
     <>

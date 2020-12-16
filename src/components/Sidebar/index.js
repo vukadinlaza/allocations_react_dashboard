@@ -939,7 +939,7 @@ export default function Sidebar(props) {
   );
 
   const container = window !== undefined ? () => window().document.body : undefined;
-  const onboarding = location.pathname === '/build';
+  const onboarding = location.pathname === '/get-started';
   return (
     <>
       <div className={classes.root}>

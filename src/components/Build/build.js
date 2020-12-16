@@ -14,41 +14,7 @@ import { useMutation } from '@apollo/react-hooks';
 import QuestionsTwo from './newBuild';
 import './style.scss';
 
-const initialState = {
-  username: '',
-  email: '',
-  password: '',
-  passwordConfirmation: '',
-};
-const images = {
-  basic: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/graphic-bg.svg',
-  1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/blank-platform.svg',
-  Startup: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-1.svg',
-  Startup: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-2.svg',
-  // Startup: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom.svg',
-  Crypto: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-2.svg',
-  Crypto: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-3.svg',
-  // Crypto: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-custom.svg',
-  Realestate: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-1.svg',
-  Realestate: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-3.svg',
-  // Realestate: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-custom.svg',
-  Custom: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-setup.svg',
-  Custom: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-details.svg',
-  // Custom: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-custom.svg',
-};
 const zapierWebhook = 'https://hooks.zapier.com/hooks/catch/7904699/ol1c7go/';
-const useStyles = makeStyles((theme) => ({
-  button: {
-    border: 'solid 2px #2676FF',
-    minWidth: '90%',
-    width: '90%',
-    color: '#2676FF',
-  },
-  sidebar: {
-    postion: 'sticky',
-    top: '30vh !important',
-  },
-}));
 
 const QontoConnector = withStyles({
   alternativeLabel: {
@@ -122,7 +88,7 @@ function getSteps() {
 
 export default ({ deal, user, data, setData, setActiveStep, activeStep, atQuestionsData }) => {
   const steps = getSteps();
-  // const [postZap, {}] = useMutation(POST_ZAP);
+  const [postZap, {}] = useMutation(POST_ZAP);
 
   const submitData = async () => {
     try {
@@ -165,6 +131,11 @@ export default ({ deal, user, data, setData, setActiveStep, activeStep, atQuesti
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     submitData();
+    if (activeStep >= 4) {
+      postZap({
+        variables: { body: { zapUrl: zapierWebhook, ...data } },
+      });
+    }
   };
 
   const handleBack = () => {
@@ -242,6 +213,7 @@ export default ({ deal, user, data, setData, setActiveStep, activeStep, atQuesti
               <QuestionsTwo
                 setData={setData}
                 data={data}
+                postZap={postZap}
                 activeStep={activeStep}
                 handleNext={handleNext}
                 handleBack={handleBack}
