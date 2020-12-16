@@ -613,13 +613,13 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
           <Grid xs={10} sm={10} md={10} lg={10}>
             <Typography variant="subtitle1">Thanks for signing! You can view your signed documents below.</Typography>
           </Grid>
-          <Grid xs={2} sm={2} md={2} lg={2}>
+          {/* <Grid xs={2} sm={2} md={2} lg={2}>
             <a href={link} target="_blank" rel="noopener noreferrer">
               <Button color="primary" size="small">
                 Click to re-sign
               </Button>
             </a>
-          </Grid>
+          </Grid> */}
         </Grid>
         {docs.map((doc) => {
           return (
