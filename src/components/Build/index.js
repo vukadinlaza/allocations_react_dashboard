@@ -1,17 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { Paper, Grid, Typography, Button } from '@material-ui/core';
+import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
+import { Link, Element } from 'react-scroll';
+import handleViewport from 'react-in-viewport';
+import { useHistory } from 'react-router-dom';
 import { useFetch, useSimpleReducer } from '../../utils/hooks';
 import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
 import BuildStep from './build';
-import SignStep from './sign';
+import Landing from './landing';
+import Completion from './completion';
+
+const Block = (props) => {
+  const { inViewport, forwardedRef } = props;
+  const text = inViewport
+    ? 'https://allocations-public.s3.us-east-2.amazonaws.com/Allocations_Logo_Final-white%402x.svg'
+    : 'https://allocations-public.s3.us-east-2.amazonaws.com/allocations-logo.svg';
+  useEffect(() => {
+    props.setImg(text);
+  });
+  return <div className="viewport-block" ref={forwardedRef} />;
+};
+const ViewportBlock = handleViewport(Block);
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -68,6 +79,10 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(4),
     margin: theme.spacing(4),
   },
+  buildContainer: {
+    minWidth: '100vw',
+    minHeight: '100vh',
+  },
 }));
 const GET_INVESTOR = gql`
   {
@@ -99,8 +114,11 @@ const QUESTIONS_BASE = 'appD85EnbTN8tKWB9';
 const SPV_TABLE_NAME = 'SPVs';
 export default ({}) => {
   const classes = useStyles();
-  const [step, setStep] = useState('build');
-  const itemDone = false;
+  const [activeStep, setActiveStep] = useState(1);
+  const history = useHistory();
+  const [img, setImg] = useState(
+    'https://allocations-public.s3.us-east-2.amazonaws.com/Allocations_Logo_Final-white%402x.svg',
+  );
   const { data: allATDeals } = useFetch(BASE, TABEL_NAME);
   const [updateInvestor] = useMutation(UPDATE_USER);
   const { data: atQuestions } = useFetch(QUESTIONS_BASE, SPV_TABLE_NAME);
@@ -125,314 +143,305 @@ export default ({}) => {
       const tableDeals = allATDeals.map((r) => ({ id: r.id, ...r.fields }));
       const activeDeal = tableDeals?.find((d) => d.userId === userProfile._id) || {};
       setData({ airtableId: activeDeal.id, ...activeDeal });
+      setActiveStep(activeDeal.activeStep === 4 ? 1 : activeDeal.activeStep || 1);
     }
   }, [allATDeals, setData, userProfile]);
-  const steps = ['Build', 'Setup Phase', 'Investment review', 'Pre-signing', 'Live deal'];
-  const activeStep = 0;
   if (!userProfile || !allATDeals) return <Loader />;
   return (
     <>
-      <>
-        <Typography variant="h6" style={{ color: 'black' }}>
-          Allocations Build
-        </Typography>
-        <Stepper
-          alternativeLabel
-          activeStep={activeStep}
-          style={{
-            border: 'none',
-            padding: '0',
-            marginLeft: '1rem',
-            marginRight: '1rem',
-            background: '#fff',
-          }}
-        >
-          {steps.map((label) => (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-      </>
-
-      {step === 'build' && (
-        <BuildStep
-          deal={data}
-          user={userProfile}
-          setData={setData}
-          data={data}
-          setStep={setStep}
-          atQuestionsData={atQuestionsData}
-        />
-      )}
-      {step === 'sign' && <SignStep deal={data} user={userProfile} />}
-      {!step && (
-        <>
-          <Typography variant="h6" style={{ color: 'black', marginTop: '100px' }}>
-            Build Phase
-          </Typography>
-          <Grid container spacing={12} justify="space-between" style={{ marginTop: '10px', marginBottom: '1rem' }}>
-            <Grid item>
-              <Paper className={classes.paper}>
-                <Grid container justify="space-between">
-                  <Grid item style={{ width: '50px' }} />
-                  <Grid item>
-                    <img
-                      src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
-                      alt="oops"
-                      style={{ width: '50px', height: '50px' }}
-                    />
-                  </Grid>
-                  <Grid style={{ width: '50px' }}>
-                    <CheckCircleIcon
-                      color="secondary"
-                      style={{
-                        marginLeft: '1rem',
-                        width: '40px',
-                        height: '40px',
-                        opacity: data['Build Phase'] ? '1' : '.25',
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-                <Typography variant="h6">Scope & Build</Typography>
-                <Button
-                  onClick={() => setStep('build')}
-                  color="secondary"
-                  variant="contained"
-                  style={{ marginTop: '1rem', minWidth: '100%' }}
-                >
-                  Build
-                </Button>
-              </Paper>
-            </Grid>
-            <Grid item>
-              <Paper className={classes.paper}>
-                <Grid container justify="space-between">
-                  <Grid item style={{ width: '50px' }} />
-                  <Grid item>
-                    <img
-                      src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
-                      alt="oops"
-                      style={{ width: '50px', height: '50px' }}
-                    />
-                  </Grid>
-                  <Grid style={{ width: '50px' }}>
-                    <CheckCircleIcon
-                      color="secondary"
-                      style={{
-                        marginLeft: '1rem',
-                        width: '40px',
-                        height: '40px',
-                        opacity: data.Review ? '1' : '.25',
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-                <Typography variant="h6">Preview</Typography>
-                <Button
-                  disabled="true"
-                  color="secondary"
-                  variant="contained"
-                  style={{ marginTop: '1rem', minWidth: '100%' }}
-                >
-                  Review
-                </Button>
-              </Paper>
-            </Grid>
-            <Grid item>
-              <Paper className={classes.paper}>
-                <Grid container justify="space-between">
-                  <Grid item style={{ width: '50px' }} />
-                  <Grid item>
-                    <img
-                      src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
-                      alt="oops"
-                      style={{ width: '50px', height: '50px' }}
-                    />
-                  </Grid>
-                  <Grid style={{ width: '50px' }}>
-                    <CheckCircleIcon
-                      color="secondary"
-                      style={{
-                        marginLeft: '1rem',
-                        width: '40px',
-                        height: '40px',
-                        opacity: data['Signed Provision of Service'] ? '1' : '.25',
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-                <Typography variant="h6">Service Agreement</Typography>
-                <Button
-                  color="secondary"
-                  variant="contained"
-                  style={{ marginTop: '1rem', minWidth: '100%' }}
-                  onClick={() => setStep('sign')}
-                  disabled="true"
-                >
-                  Sign
-                </Button>
-              </Paper>
-            </Grid>
-          </Grid>
-
-          <Typography variant="h6" style={{ color: 'black' }}>
-            Set Up Phase
-          </Typography>
-          <Grid container spacing={12} justify="space-between" style={{ marginTop: '10px', marginBottom: '1rem' }}>
-            <Grid item>
-              <Paper className={classes.paper}>
-                <Grid container justify="space-between">
-                  <Grid item style={{ width: '50px' }} />
-                  <Grid item>
-                    <img
-                      src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
-                      alt="oops"
-                      style={{ width: '50px', height: '50px' }}
-                    />
-                  </Grid>
-                  <Grid style={{ width: '50px' }}>
-                    <CheckCircleIcon
-                      color="secondary"
-                      style={{ marginLeft: '1rem', width: '40px', height: '40px', opacity: itemDone ? '1' : '.25' }}
-                    />
-                  </Grid>
-                </Grid>
-                <Typography variant="h6">Entity & bank status</Typography>
-                <Button color="secondary" variant="contained" style={{ marginTop: '1rem', minWidth: '100%' }}>
-                  View Status
-                </Button>
-              </Paper>
-            </Grid>
-            <Grid item>
-              <Paper className={classes.paper}>
-                <Grid container justify="space-between">
-                  <Grid item style={{ width: '50px' }} />
-                  <Grid item>
-                    <img
-                      src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
-                      alt="oops"
-                      style={{ width: '50px', height: '50px' }}
-                    />
-                  </Grid>
-                  <Grid style={{ width: '50px' }}>
-                    <CheckCircleIcon
-                      color="secondary"
-                      style={{ marginLeft: '1rem', width: '40px', height: '40px', opacity: itemDone ? '1' : '.25' }}
-                    />
-                  </Grid>
-                </Grid>
-                <Typography variant="h6">Investment docs & materials</Typography>
-                <Button color="secondary" variant="contained" style={{ marginTop: '1rem', minWidth: '100%' }}>
-                  View Status
-                </Button>
-              </Paper>
-            </Grid>
-            <Grid item>
-              <Paper className={classes.paper}>
-                <Grid container justify="space-between">
-                  <Grid item style={{ width: '50px' }} />
-                  <Grid item>
-                    <img
-                      src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
-                      alt="oops"
-                      style={{ width: '50px', height: '50px' }}
-                    />
-                  </Grid>
-                  <Grid style={{ width: '50px' }}>
-                    <CheckCircleIcon
-                      color="secondary"
-                      style={{ marginLeft: '1rem', width: '40px', height: '40px', opacity: itemDone ? '1' : '.25' }}
-                    />
-                  </Grid>
-                </Grid>
-                <Typography variant="h6">Interal review</Typography>
-                <Button color="secondary" variant="contained" style={{ marginTop: '1rem', minWidth: '100%' }}>
-                  View Status
-                </Button>
-              </Paper>
-            </Grid>
-          </Grid>
-          <Typography variant="h6" style={{ color: 'black' }}>
-            Onboarding Phase
-          </Typography>
-          <Grid container spacing={12} justify="space-between" style={{ marginTop: '10px', marginBottom: '1rem' }}>
-            <Grid item>
-              <Paper className={classes.paper}>
-                <Grid container justify="space-between">
-                  <Grid item style={{ width: '50px' }} />
-                  <Grid item>
-                    <img
-                      src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
-                      alt="oops"
-                      style={{ width: '50px', height: '50px' }}
-                    />
-                  </Grid>
-                  <Grid style={{ width: '50px' }}>
-                    <CheckCircleIcon
-                      color="secondary"
-                      style={{ marginLeft: '1rem', width: '40px', height: '40px', opacity: itemDone ? '1' : '.25' }}
-                    />
-                  </Grid>
-                </Grid>
-                <Typography variant="h6">Final client review</Typography>
-                <Button color="secondary" variant="contained" style={{ marginTop: '1rem', minWidth: '100%' }}>
-                  View
-                </Button>
-              </Paper>
-            </Grid>
-            <Grid item>
-              <Paper className={classes.paper}>
-                <Grid container justify="space-between">
-                  <Grid item style={{ width: '50px' }} />
-                  <Grid item>
-                    <img
-                      src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
-                      alt="oops"
-                      style={{ width: '50px', height: '50px' }}
-                    />
-                  </Grid>
-                  <Grid style={{ width: '50px' }}>
-                    <CheckCircleIcon
-                      color="secondary"
-                      style={{ marginLeft: '1rem', width: '40px', height: '40px', opacity: itemDone ? '1' : '.25' }}
-                    />
-                  </Grid>
-                </Grid>
-                <Typography variant="h6">Final pre-signing</Typography>
-                <Button color="secondary" variant="contained" style={{ marginTop: '1rem', minWidth: '100%' }}>
-                  View
-                </Button>
-              </Paper>
-            </Grid>
-            <Grid item>
-              <Paper className={classes.paper}>
-                <Grid container justify="space-between">
-                  <Grid item style={{ width: '50px' }} />
-                  <Grid item>
-                    <img
-                      src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
-                      alt="oops"
-                      style={{ width: '50px', height: '50px' }}
-                    />
-                  </Grid>
-                  <Grid style={{ width: '50px' }}>
-                    <CheckCircleIcon
-                      color="secondary"
-                      style={{ marginLeft: '1rem', width: '40px', height: '40px', opacity: itemDone ? '1' : '.25' }}
-                    />
-                  </Grid>
-                </Grid>
-                <Typography variant="h6">Live deal</Typography>
-                <Button color="secondary" variant="contained" style={{ marginTop: '1rem', minWidth: '100%' }}>
-                  View{' '}
-                </Button>
-              </Paper>
-            </Grid>
-          </Grid>
-        </>
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
+      <img
+        src={img}
+        style={{ position: 'fixed', width: '15%', marginLeft: '1rem' }}
+        onClick={() => history.push('/')}
+      />
+      {activeStep > 4 ? <Completion /> : <Landing Link={Link} />}
+      <Element id="anchor">
+        <ViewportBlock setImg={setImg} />
+      </Element>
+      {activeStep < 5 && (
+        <div className={classes.buildContainer}>
+          <BuildStep
+            Element={Element}
+            deal={data}
+            user={userProfile}
+            setData={setData}
+            data={data}
+            atQuestionsData={atQuestionsData}
+            activeStep={activeStep}
+            setActiveStep={setActiveStep}
+          />
+        </div>
       )}
     </>
   );
 };
+
+// {step === 'sign' && <SignStep deal={data} user={userProfile} />}
+// {!step && (
+//   <>
+//     <Typography variant="h6" style={{ color: 'black', marginTop: '100px' }}>
+//       Build Phase
+//     </Typography>
+//     <Grid container spacing={12} justify="space-between" style={{ marginTop: '10px', marginBottom: '1rem' }}>
+//       <Grid item>
+//         <Paper className={classes.paper}>
+//           <Grid container justify="space-between">
+//             <Grid item style={{ width: '50px' }} />
+//             <Grid item>
+//               <img
+//                 src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
+//                 alt="oops"
+//                 style={{ width: '50px', height: '50px' }}
+//               />
+//             </Grid>
+//             <Grid style={{ width: '50px' }}>
+//               <CheckCircleIcon
+//                 color="secondary"
+//                 style={{
+//                   marginLeft: '1rem',
+//                   width: '40px',
+//                   height: '40px',
+//                   opacity: data['Build Phase'] ? '1' : '.25',
+//                 }}
+//               />
+//             </Grid>
+//           </Grid>
+//           <Typography variant="h6">Scope & Build</Typography>
+//           <Button
+//             onClick={() => setStep('build')}
+//             color="secondary"
+//             variant="contained"
+//             style={{ marginTop: '1rem', minWidth: '100%' }}
+//           >
+//             Build
+//           </Button>
+//         </Paper>
+//       </Grid>
+//       <Grid item>
+//         <Paper className={classes.paper}>
+//           <Grid container justify="space-between">
+//             <Grid item style={{ width: '50px' }} />
+//             <Grid item>
+//               <img
+//                 src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
+//                 alt="oops"
+//                 style={{ width: '50px', height: '50px' }}
+//               />
+//             </Grid>
+//             <Grid style={{ width: '50px' }}>
+//               <CheckCircleIcon
+//                 color="secondary"
+//                 style={{
+//                   marginLeft: '1rem',
+//                   width: '40px',
+//                   height: '40px',
+//                   opacity: data.Review ? '1' : '.25',
+//                 }}
+//               />
+//             </Grid>
+//           </Grid>
+//           <Typography variant="h6">Preview</Typography>
+//           <Button
+//             disabled="true"
+//             color="secondary"
+//             variant="contained"
+//             style={{ marginTop: '1rem', minWidth: '100%' }}
+//           >
+//             Review
+//           </Button>
+//         </Paper>
+//       </Grid>
+//       <Grid item>
+//         <Paper className={classes.paper}>
+//           <Grid container justify="space-between">
+//             <Grid item style={{ width: '50px' }} />
+//             <Grid item>
+//               <img
+//                 src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
+//                 alt="oops"
+//                 style={{ width: '50px', height: '50px' }}
+//               />
+//             </Grid>
+//             <Grid style={{ width: '50px' }}>
+//               <CheckCircleIcon
+//                 color="secondary"
+//                 style={{
+//                   marginLeft: '1rem',
+//                   width: '40px',
+//                   height: '40px',
+//                   opacity: data['Signed Provision of Service'] ? '1' : '.25',
+//                 }}
+//               />
+//             </Grid>
+//           </Grid>
+//           <Typography variant="h6">Service Agreement</Typography>
+//           <Button
+//             color="secondary"
+//             variant="contained"
+//             style={{ marginTop: '1rem', minWidth: '100%' }}
+//             onClick={() => setStep('sign')}
+//             disabled="true"
+//           >
+//             Sign
+//           </Button>
+//         </Paper>
+//       </Grid>
+//     </Grid>
+
+//     <Typography variant="h6" style={{ color: 'black' }}>
+//       Set Up Phase
+//     </Typography>
+//     <Grid container spacing={12} justify="space-between" style={{ marginTop: '10px', marginBottom: '1rem' }}>
+//       <Grid item>
+//         <Paper className={classes.paper}>
+//           <Grid container justify="space-between">
+//             <Grid item style={{ width: '50px' }} />
+//             <Grid item>
+//               <img
+//                 src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
+//                 alt="oops"
+//                 style={{ width: '50px', height: '50px' }}
+//               />
+//             </Grid>
+//             <Grid style={{ width: '50px' }}>
+//               <CheckCircleIcon
+//                 color="secondary"
+//                 style={{ marginLeft: '1rem', width: '40px', height: '40px', opacity: itemDone ? '1' : '.25' }}
+//               />
+//             </Grid>
+//           </Grid>
+//           <Typography variant="h6">Entity & bank status</Typography>
+//           <Button color="secondary" variant="contained" style={{ marginTop: '1rem', minWidth: '100%' }}>
+//             View Status
+//           </Button>
+//         </Paper>
+//       </Grid>
+//       <Grid item>
+//         <Paper className={classes.paper}>
+//           <Grid container justify="space-between">
+//             <Grid item style={{ width: '50px' }} />
+//             <Grid item>
+//               <img
+//                 src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
+//                 alt="oops"
+//                 style={{ width: '50px', height: '50px' }}
+//               />
+//             </Grid>
+//             <Grid style={{ width: '50px' }}>
+//               <CheckCircleIcon
+//                 color="secondary"
+//                 style={{ marginLeft: '1rem', width: '40px', height: '40px', opacity: itemDone ? '1' : '.25' }}
+//               />
+//             </Grid>
+//           </Grid>
+//           <Typography variant="h6">Investment docs & materials</Typography>
+//           <Button color="secondary" variant="contained" style={{ marginTop: '1rem', minWidth: '100%' }}>
+//             View Status
+//           </Button>
+//         </Paper>
+//       </Grid>
+//       <Grid item>
+//         <Paper className={classes.paper}>
+//           <Grid container justify="space-between">
+//             <Grid item style={{ width: '50px' }} />
+//             <Grid item>
+//               <img
+//                 src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
+//                 alt="oops"
+//                 style={{ width: '50px', height: '50px' }}
+//               />
+//             </Grid>
+//             <Grid style={{ width: '50px' }}>
+//               <CheckCircleIcon
+//                 color="secondary"
+//                 style={{ marginLeft: '1rem', width: '40px', height: '40px', opacity: itemDone ? '1' : '.25' }}
+//               />
+//             </Grid>
+//           </Grid>
+//           <Typography variant="h6">Interal review</Typography>
+//           <Button color="secondary" variant="contained" style={{ marginTop: '1rem', minWidth: '100%' }}>
+//             View Status
+//           </Button>
+//         </Paper>
+//       </Grid>
+//     </Grid>
+//     <Typography variant="h6" style={{ color: 'black' }}>
+//       Onboarding Phase
+//     </Typography>
+//     <Grid container spacing={12} justify="space-between" style={{ marginTop: '10px', marginBottom: '1rem' }}>
+//       <Grid item>
+//         <Paper className={classes.paper}>
+//           <Grid container justify="space-between">
+//             <Grid item style={{ width: '50px' }} />
+//             <Grid item>
+//               <img
+//                 src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
+//                 alt="oops"
+//                 style={{ width: '50px', height: '50px' }}
+//               />
+//             </Grid>
+//             <Grid style={{ width: '50px' }}>
+//               <CheckCircleIcon
+//                 color="secondary"
+//                 style={{ marginLeft: '1rem', width: '40px', height: '40px', opacity: itemDone ? '1' : '.25' }}
+//               />
+//             </Grid>
+//           </Grid>
+//           <Typography variant="h6">Final client review</Typography>
+//           <Button color="secondary" variant="contained" style={{ marginTop: '1rem', minWidth: '100%' }}>
+//             View
+//           </Button>
+//         </Paper>
+//       </Grid>
+//       <Grid item>
+//         <Paper className={classes.paper}>
+//           <Grid container justify="space-between">
+//             <Grid item style={{ width: '50px' }} />
+//             <Grid item>
+//               <img
+//                 src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
+//                 alt="oops"
+//                 style={{ width: '50px', height: '50px' }}
+//               />
+//             </Grid>
+//             <Grid style={{ width: '50px' }}>
+//               <CheckCircleIcon
+//                 color="secondary"
+//                 style={{ marginLeft: '1rem', width: '40px', height: '40px', opacity: itemDone ? '1' : '.25' }}
+//               />
+//             </Grid>
+//           </Grid>
+//           <Typography variant="h6">Final pre-signing</Typography>
+//           <Button color="secondary" variant="contained" style={{ marginTop: '1rem', minWidth: '100%' }}>
+//             View
+//           </Button>
+//         </Paper>
+//       </Grid>
+//       <Grid item>
+//         <Paper className={classes.paper}>
+//           <Grid container justify="space-between">
+//             <Grid item style={{ width: '50px' }} />
+//             <Grid item>
+//               <img
+//                 src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
+//                 alt="oops"
+//                 style={{ width: '50px', height: '50px' }}
+//               />
+//             </Grid>
+//             <Grid style={{ width: '50px' }}>
+//               <CheckCircleIcon
+//                 color="secondary"
+//                 style={{ marginLeft: '1rem', width: '40px', height: '40px', opacity: itemDone ? '1' : '.25' }}
+//               />
+//             </Grid>
+//           </Grid>
+//           <Typography variant="h6">Live deal</Typography>
+//           <Button color="secondary" variant="contained" style={{ marginTop: '1rem', minWidth: '100%' }}>
+//             View{' '}
+//           </Button>
+//         </Paper>
+//       </Grid>
+//     </Grid>
+//   </>
+// )}

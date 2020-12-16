@@ -17,6 +17,7 @@ import {
   TableRow,
   Typography,
   TableHead,
+  Modal,
 } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 
@@ -27,6 +28,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import DocusignKYCEmbeddedForm from '../forms/kycTab';
 import { nWithCommas } from '../../utils/numbers';
 import Loader from '../utils/Loader';
+import EditInvestor from '../forms/editInvestor';
 
 /** *
  *
@@ -555,6 +557,7 @@ function filename(path) {
 
 function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
   const [loading, setLoading] = useState(true);
+  const [showEditInvestor, setShowEditInvestor] = useState(false);
   const classes = useStyles();
   const { search, pathname } = useLocation();
 
@@ -570,6 +573,11 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
       setLoading(false);
     }, 2000);
   }, []);
+  useEffect(() => {
+    if (investor && !investor.first_name) {
+      setShowEditInvestor(true);
+    }
+  }, [investor]);
 
   if (!deal.onboarding_link) {
     return (
@@ -581,11 +589,6 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
   }
 
   if (!investor) return <Loader />;
-  // get param from URL
-  // plug param value into here
-  // add amount param to docusign doc
-  // plug param value into invest button
-  // prevent changing if using param
   const params = {
     userEmail: investor.email,
   };
@@ -606,7 +609,18 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
   if (hasSigned)
     return (
       <Paper className={classes.paper}>
-        <Typography variant="subtitle1">Thanks for signing! You can view your signed documents below.</Typography>
+        <Grid container>
+          <Grid xs={10} sm={10} md={10} lg={10}>
+            <Typography variant="subtitle1">Thanks for signing! You can view your signed documents below.</Typography>
+          </Grid>
+          {/* <Grid xs={2} sm={2} md={2} lg={2}>
+            <a href={link} target="_blank" rel="noopener noreferrer">
+              <Button color="primary" size="small">
+                Click to re-sign
+              </Button>
+            </a>
+          </Grid> */}
+        </Grid>
         {docs.map((doc) => {
           return (
             <Typography variant="subtitle2">
@@ -620,6 +634,31 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
         })}
       </Paper>
     );
+
+  if (showEditInvestor) {
+    return (
+      <Modal open={showEditInvestor}>
+        <Grid
+          container
+          xs={12}
+          sm={12}
+          md={12}
+          lg={12}
+          style={{
+            display: 'flex',
+            margin: '0',
+            marginTop: '20vh',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Grid xs={12} sm={12} md={6} lg={6}>
+            <EditInvestor data={investor} refetch={() => setShowEditInvestor(false)} />
+          </Grid>
+        </Grid>
+      </Modal>
+    );
+  }
   return (
     <div className={status === 'pledged' ? 'document-iframe' : 'document-iframe hide'}>
       {loading && (
@@ -635,7 +674,7 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
         </a>
       </div>
       <div className="embed-responsive embed-responsive-1by1">
-        <iframe className="embed-responsive-item" title="Wire Instructions" src={link} />
+        <iframe className="embed-responsive-item" title="Wire Instructions" data-hj-allow-iframe="" src={link} />
       </div>
     </div>
   );

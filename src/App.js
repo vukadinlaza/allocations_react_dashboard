@@ -69,7 +69,7 @@ const App = () => {
           <PrivateRoute path="/invest" exact component={Invest} />
           <PrivateRoute path="/credit" exact component={Credit} />
           <PrivateRoute path="/profile" component={Profile} />
-          <PrivateRoute path="/build" component={Build} />
+          <PrivateRoute path="/get-started" component={Build} />
           <PrivateRoute path="/marketplace" component={Marketplace} />
           <PrivateRoute path="/investments" component={UserInvestments} />
           <PrivateRoute path="/invited-deals" component={InvitedDeals} />

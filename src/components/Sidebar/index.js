@@ -845,7 +845,7 @@ export default function Sidebar(props) {
     if (userProfile.showCredit || location.pathname === '/credit') {
       setCreditTab(true);
     }
-    if (userProfile.showBuild || location.pathname === '/build') {
+    if (userProfile.showBuild || location.pathname === '/get-started') {
       setBuildTab(true);
     }
   }, [userProfile.showInvestAndMrkPlc, userProfile.showCredit, location.pathname, userProfile.showBuild]);
@@ -864,12 +864,19 @@ export default function Sidebar(props) {
       title: 'Home',
       icon: <HomeIcon />,
     },
-    {
-      to: '/profile',
-      title: 'Profile',
-      icon: <PersonIcon />,
-    },
   ];
+  if (buildTab) {
+    menus.push({
+      to: '/get-started',
+      title: 'Get Started',
+      icon: <BuildIcon />,
+    });
+  }
+  menus.push({
+    to: '/profile',
+    title: 'Profile',
+    icon: <PersonIcon />,
+  });
 
   if (whitelistEmails.find((p) => toLower(p.email) === toLower(userProfile.email)) || investTab)
     menus.push({
@@ -890,13 +897,6 @@ export default function Sidebar(props) {
       to: '/credit',
       title: 'Credit',
       icon: <CreditCardRoundedIcon />,
-    });
-  }
-  if (buildTab) {
-    menus.push({
-      to: '/build',
-      title: 'Build',
-      icon: <BuildIcon />,
     });
   }
 
@@ -939,65 +939,76 @@ export default function Sidebar(props) {
   );
 
   const container = window !== undefined ? () => window().document.body : undefined;
-
+  const onboarding = location.pathname === '/get-started';
   return (
     <>
       <div className={classes.root}>
-        <CssBaseline />
-        <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              className={classes.menuButton}
-            >
-              <MenuIcon />
-            </IconButton>
-            <div className={classes.brand}>
-              <Brand organizations_admin={userProfile.organizations_admin || []} />
-            </div>
-            <NavBar />
-          </Toolbar>
-        </AppBar>
-        <nav className={classes.drawer} aria-label="mailbox folders">
-          <Hidden mdUp implementation="css">
-            <Drawer
-              container={container}
-              variant="temporary"
-              anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-              open={mobileOpen}
-              onClose={handleDrawerToggle}
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-              ModalProps={{
-                keepMounted: true,
-              }}
-            >
-              {drawer}
-            </Drawer>
-          </Hidden>
-          <Hidden smDown implementation="css">
-            <Drawer
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-              variant="permanent"
-              open
-            >
-              {drawer}
-            </Drawer>
-          </Hidden>
-        </nav>
-        <main className={classes.content} style={{ background: 'rgba(0,0,0,0.01)' }}>
-          <div className={classes.toolbar} />
-          <Helmet>
-            <title>Allocations</title>
-          </Helmet>
-          {props.children}
-        </main>
+        {!onboarding && <CssBaseline />}
+        {!onboarding ? (
+          <>
+            <AppBar position="fixed" className={classes.appBar}>
+              <Toolbar>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="start"
+                  onClick={handleDrawerToggle}
+                  className={classes.menuButton}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <div className={classes.brand}>
+                  <Brand organizations_admin={userProfile.organizations_admin || []} />
+                </div>
+                <NavBar />
+              </Toolbar>
+            </AppBar>
+            <nav className={classes.drawer} aria-label="mailbox folders">
+              <Hidden mdUp implementation="css">
+                <Drawer
+                  container={container}
+                  variant="temporary"
+                  anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                  open={mobileOpen}
+                  onClose={handleDrawerToggle}
+                  classes={{
+                    paper: classes.drawerPaper,
+                  }}
+                  ModalProps={{
+                    keepMounted: true,
+                  }}
+                >
+                  {drawer}
+                </Drawer>
+              </Hidden>
+              <Hidden smDown implementation="css">
+                <Drawer
+                  classes={{
+                    paper: classes.drawerPaper,
+                  }}
+                  variant="permanent"
+                  open
+                >
+                  {drawer}
+                </Drawer>
+              </Hidden>
+            </nav>
+            <main className={classes.content} style={{ background: 'rgba(0,0,0,0.01)' }}>
+              <div className={classes.toolbar} />
+              <Helmet>
+                <title>Allocations</title>
+              </Helmet>
+              {props.children}
+            </main>
+          </>
+        ) : (
+          <main style={{}}>
+            <Helmet>
+              <title>Allocations</title>
+            </Helmet>
+            {props.children}
+          </main>
+        )}
       </div>
     </>
   );

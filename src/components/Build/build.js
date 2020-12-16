@@ -1,45 +1,77 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
-import { Paper, Grid, Typography, Modal, Button, TextField, Slider } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { groupBy, pick, map, get, toNumber } from 'lodash';
+import React from 'react';
+import { Paper, Grid, Typography, Modal, Button } from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { gql } from 'apollo-boost';
 import Confetti from 'react-confetti';
+import StepConnector from '@material-ui/core/StepConnector';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
 import { useMutation } from '@apollo/react-hooks';
-import { toast } from 'react-toastify';
 import QuestionsTwo from './newBuild';
-import { nWithCommas } from '../../utils/numbers';
 import './style.scss';
 
-const images = {
-  basic: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/graphic-bg.svg',
-  1: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/blank-platform.svg',
-  Startup: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-1.svg',
-  Startup: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-2.svg',
-  // Startup: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom.svg',
-  Crypto: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-2.svg',
-  Crypto: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-3.svg',
-  // Crypto: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/crypto-step-custom.svg',
-  Realestate: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-1.svg',
-  Realestate: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-3.svg',
-  // Realestate: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/real-estate-step-custom.svg',
-  Custom: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-setup.svg',
-  Custom: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-details.svg',
-  // Custom: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-custom.svg',
-};
 const zapierWebhook = 'https://hooks.zapier.com/hooks/catch/7904699/ol1c7go/';
-const useStyles = makeStyles((theme) => ({
-  button: {
-    border: 'solid 2px #2676FF',
-    minWidth: '90%',
-    width: '90%',
-    color: '#2676FF',
+
+const QontoConnector = withStyles({
+  alternativeLabel: {
+    top: 22,
   },
-  sidebar: {
-    postion: 'sticky',
-    top: '30vh !important',
+  active: {
+    '& $line': {},
   },
-}));
+  completed: {
+    '& $line': {
+      backgroundColor: '#26C604',
+    },
+  },
+  line: {
+    width: 6,
+    border: 0,
+    backgroundColor: '#00000029',
+    borderRadius: 0,
+    minHeight: '100%',
+  },
+  vertical: {
+    margin: '0 11px',
+    padding: 0,
+  },
+})(StepConnector);
+const useQontoStepIconStyles = makeStyles({
+  root: {
+    display: 'flex',
+    height: 22,
+    alignItems: 'center',
+  },
+  inactive: {
+    fontSize: 28,
+    color: '#00000029',
+  },
+  completed: {
+    color: '#26C604',
+    zIndex: 1,
+    fontSize: 28,
+  },
+});
+
+function QontoStepIcon(props) {
+  const classes = useQontoStepIconStyles();
+  const { active, completed } = props;
+
+  return (
+    <div
+      className={clsx(classes.root, {
+        [classes.active]: active,
+      })}
+    >
+      {completed ? <CheckCircleIcon className={classes.completed} /> : <CheckCircleIcon className={classes.inactive} />}
+    </div>
+  );
+}
+
 const POST_ZAP = gql`
   mutation PostZap($body: Object) {
     postZap(data: $body) {
@@ -49,125 +81,151 @@ const POST_ZAP = gql`
 `;
 const BASE = 'appdPrRjapx8iYnIn';
 const TABEL_NAME = 'Deals';
-export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
-  const classes = useStyles();
 
-  const [showConfetti, setShowConfetti] = useState(false);
+function getSteps() {
+  return ['Fund info', 'Delivery speed', 'Fees', 'Compliance'];
+}
+
+export default ({ deal, user, data, setData, setActiveStep, activeStep, atQuestionsData }) => {
+  const steps = getSteps();
   const [postZap, {}] = useMutation(POST_ZAP);
-  const fieldData = groupBy(atQuestionsData, 'Page');
-  const tabs = map(fieldData, (page, index) => ({
-    display: get(page, '[0].Stage', `Step ${index + 1}`),
-    page: toNumber(index),
-  }));
+
   const submitData = async () => {
-    if (!data.airtableId) {
-      const response = await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
-        method: 'post', // make sure it is a "POST request"
-        body: JSON.stringify({ fields: { userId: user._id, ...data } }),
+    try {
+      if (!data.airtableId) {
+        const response = await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
+          method: 'post', // make sure it is a "POST request"
+          body: JSON.stringify({ fields: { userId: user?._id, activeStep, email: user.email, ...data } }),
+          headers: {
+            Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`, // API key
+            'Content-Type': 'application/json', // we will recive a json object
+          },
+        });
+        const res = await response.json();
+        return setData({ airtableId: res.id });
+      }
+
+      const payload = {
+        records: [
+          {
+            id: data.airtableId,
+            fields: { ...data, activeStep, userId: user?._id },
+          },
+        ],
+      };
+
+      await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
+        method: 'patch', // make sure it is a "PATCH request"
+        body: JSON.stringify(payload),
         headers: {
           Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`, // API key
           'Content-Type': 'application/json', // we will recive a json object
         },
       });
-      const res = await response.json();
-      return setData({ airtableId: res.id });
+    } catch (e) {
+      console.log(JSON(e));
     }
-
-    const payload = {
-      records: [
-        {
-          id: data.airtableId,
-          fields: data,
-        },
-      ],
-    };
-
-    await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
-      method: 'patch', // make sure it is a "PATCH request"
-      body: JSON.stringify(payload),
-      headers: {
-        Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`, // API key
-        'Content-Type': 'application/json', // we will recive a json object
-      },
-    });
   };
   if (!deal) return null;
 
-  let price = 0;
-  if (data['Choose your fund type'] === 'SPV') {
-    price += 8000;
-  }
-  if (data['Choose your fund type'] === 'Fund') {
-    price += 26000;
-  }
-  if (data['Would you like to hire Allocations as the exempt reporting advisor?'] === 'Yes') {
-    price += 2000;
-  }
-  if (data['Will you invite any investors from New York?'] === 'Yes') {
-    price += 1200;
-  }
-  if (data['Will you charge same fees for all investors?'] === 'No') {
-    price += 2000;
-  }
-  if (!data['Choose your fund type']) {
-    price = 0;
-  }
-  const blueSkyFees = 500;
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    submitData();
+    if (activeStep >= 4) {
+      postZap({
+        variables: { body: { zapUrl: zapierWebhook, ...data } },
+      });
+    }
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
 
   if (!deal) return null;
   return (
     <>
-      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', margin: '0' }}>
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', marginTop: '3rem', marginRight: '5%' }}>
+        <Grid
+          xs={0}
+          sm={3}
+          md={3}
+          lg={3}
+          style={{ border: '1rem solid transparent', position: 'relative', minHeight: '100%' }}
+        />
         <Grid
           xs={12}
-          sm={6}
-          md={6}
-          lg={6}
-          style={{ border: '1rem solid transparent', position: 'relative', height: '90%' }}
+          sm={4}
+          md={4}
+          lg={4}
+          style={{ border: '1rem solid transparent', position: 'relative', minHeight: '100%' }}
         >
-          <Paper
-            xs={12}
-            sm={12}
-            md={12}
-            lg={12}
-            style={{
-              height: '90%',
-            }}
-          >
-            <img
-              src={
-                !deal['Choose your fund type']
-                  ? images.basic
-                  : !deal['Choose your asset type']
-                  ? images.basic
-                  : images[`${''.concat((data['Choose your asset type'] || '').replaceAll(' ', ''))}`]
-              }
-              alt="oops"
-              style={{ width: '100%', height: '100%', padding: '8rem' }}
-            />
+          <Paper xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
+            <div
+              style={{
+                marginTop: '1.5rem',
+                marginLeft: '1.5rem',
+              }}
+            >
+              <div>
+                <span style={{ fontSize: '4rem', color: '#2576FF' }}>{activeStep}</span>{' '}
+                <span style={{ fontWeight: 'bolder', fontSize: '1.25rem' }}>/4</span>
+              </div>
+            </div>
+            <Stepper
+              activeStep={activeStep}
+              orientation="vertical"
+              style={{ height: '85%', border: 'none', boxShadow: '0', paddingBottom: '30%' }}
+              connector={<QontoConnector />}
+            >
+              {steps.map((label, index) => (
+                <Step key={label}>
+                  <StepLabel StepIconComponent={QontoStepIcon}>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
           </Paper>
         </Grid>
         {/* Left Column */}
         <Grid
           xs={12}
-          sm={6}
-          md={6}
-          lg={6}
+          sm={7}
+          md={7}
+          lg={7}
           style={{ border: '1rem solid transparent', position: 'relative', height: '90%' }}
         >
-          <Paper style={{ padding: '1rem', maxHeight: '70vh', overflow: 'scroll' }}>
-            <Grid xs={12} sm={12} md={12} lg={12} style={{ marginBottom: '2rem', maxHeight: '100%' }}>
+          <Paper style={{ padding: '1rem', height: '95vh', maxHeight: '95vh' }}>
+            <Grid
+              xs={12}
+              sm={12}
+              md={12}
+              lg={12}
+              style={{
+                marginBottom: '2rem',
+                minHeight: '100%',
+                maxHeight: '100%',
+              }}
+            >
               {/* <Questions setData={setData} answers={data} classes={classes} activePage={page} /> */}
-              <QuestionsTwo setData={setData} data={data} />
-
-              {showConfetti && <div> yes </div>}
+              <Typography variant="title1" style={{ marginTop: '1rem', marginBottom: '1.5rem', fontSize: '2rem' }}>
+                {activeStep === 1 ? 'Tell us about your SPV/Fund' : steps[activeStep - 1]}
+              </Typography>
+              <QuestionsTwo
+                setData={setData}
+                data={data}
+                postZap={postZap}
+                activeStep={activeStep}
+                handleNext={handleNext}
+                handleBack={handleBack}
+                submitData={submitData}
+              />
             </Grid>
           </Paper>
         </Grid>
         {/* end grid */}
       </Grid>
 
-      <Grid
+      {/* <Grid
         xs={12}
         sm={12}
         md={12}
@@ -252,6 +310,7 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
               submitData();
               toast.success('Success!');
               setShowConfetti(true);
+              setData(initialState);
               // postZap({
               //   variables: { body: { zapUrl: zapierWebhook, ...data } },
               // });
@@ -260,8 +319,7 @@ export default ({ deal, user, data, setData, setStep, atQuestionsData }) => {
             Review & Submit
           </div>
         </Grid>
-      </Grid>
-      <ConfirmationModal showConfetti={showConfetti} setShowConfetti={setShowConfetti} />
+      </Grid> */}
     </>
   );
 };

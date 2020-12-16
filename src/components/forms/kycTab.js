@@ -157,7 +157,7 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
           <Grid item xs={12} sm={12} md={6}>
             <Paper className={classes.paper}>
               <Typography variant="h6" gutterBottom style={{ display: 'flex', justifyContent: 'space-between' }}>
-                Accredited Investor Cerification
+                Accredited Investor Certification
               </Typography>
               <div style={{}}>
                 <Typography variant="subtitle2">Verify your accredited investor status with VerifyInvestor.</Typography>
