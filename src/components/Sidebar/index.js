@@ -865,13 +865,11 @@ export default function Sidebar(props) {
       icon: <HomeIcon />,
     },
   ];
-  if (buildTab) {
-    menus.push({
-      to: '/get-started',
-      title: 'Get Started',
-      icon: <BuildIcon />,
-    });
-  }
+  menus.push({
+    to: '/get-started',
+    title: 'Get Started',
+    icon: <BuildIcon />,
+  });
   menus.push({
     to: '/profile',
     title: 'Profile',
