@@ -431,7 +431,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
             <Typography className={classes.questionHeader}>
               <span>
                 <>Enter your minimum investment amount:</>
-                <span style={{ marginLeft: '1rem' }} />${nWithCommas(data['Enter your minimum investment amount'] || 0)}
+                {/* <span style={{ marginLeft: '1rem' }} />${nWithCommas(data['Enter your minimum investment amount'] || 0)} */}
               </span>
               <CheckCircleIcon
                 style={{ color: data['Enter your minimum investment amount'] ? '#26C604' : '#00000029' }}

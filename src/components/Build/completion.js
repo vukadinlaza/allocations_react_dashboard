@@ -27,7 +27,7 @@ export default ({}) => {
       <Grid className={classes.centerGrid}>
         <Confetti />
 
-        <img src="https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom+(1).svg" />
+        <img src="https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom+(3).svg" />
         <Typography
           variant="title1"
           style={{ color: 'white', marginTop: '1rem', marginBottom: '.25rem', fontSize: '2rem' }}
