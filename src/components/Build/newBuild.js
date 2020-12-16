@@ -204,7 +204,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
                     required
                     style={{ width: '100%' }}
                     variant="outlined"
-                    label="Organizer Name"
+                    label="Manager Name"
                     value={data['Choose the name of your manager'] || ''}
                     onChange={(e) => setData({ 'Choose the name of your manager': e.target.value })}
                   />
@@ -430,7 +430,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack }) => {
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
               <span>
-                <>Enter your minimum investment amount:</>
+                <>Enter your minimum investment amount</>
                 {/* <span style={{ marginLeft: '1rem' }} />${nWithCommas(data['Enter your minimum investment amount'] || 0)} */}
               </span>
               <CheckCircleIcon

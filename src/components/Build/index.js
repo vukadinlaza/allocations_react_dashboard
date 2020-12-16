@@ -4,6 +4,7 @@ import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import { Link, Element } from 'react-scroll';
 import handleViewport from 'react-in-viewport';
+import { useHistory } from 'react-router-dom';
 import { useFetch, useSimpleReducer } from '../../utils/hooks';
 import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
@@ -114,6 +115,7 @@ const SPV_TABLE_NAME = 'SPVs';
 export default ({}) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(1);
+  const history = useHistory();
   const [img, setImg] = useState(
     'https://allocations-public.s3.us-east-2.amazonaws.com/Allocations_Logo_Final-white%402x.svg',
   );
@@ -147,14 +149,15 @@ export default ({}) => {
   if (!userProfile || !allATDeals) return <Loader />;
   return (
     <>
-      <img src={img} style={{ position: 'fixed', width: '15%', marginLeft: '1rem' }} />
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
+      <img
+        src={img}
+        style={{ position: 'fixed', width: '15%', marginLeft: '1rem' }}
+        onClick={() => history.push('/')}
+      />
       {activeStep > 4 ? <Completion /> : <Landing Link={Link} />}
       <Element id="anchor">
-        <ViewportBlock
-          setImg={setImg}
-          onEnterViewport={() => console.log('enter')}
-          onLeaveViewport={() => console.log('leave')}
-        />
+        <ViewportBlock setImg={setImg} />
       </Element>
       {activeStep < 5 && (
         <div className={classes.buildContainer}>
