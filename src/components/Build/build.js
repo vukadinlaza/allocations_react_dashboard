@@ -95,7 +95,7 @@ export default ({ deal, user, data, setData, setActiveStep, activeStep, atQuesti
       if (!data.airtableId) {
         const response = await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
           method: 'post', // make sure it is a "POST request"
-          body: JSON.stringify({ fields: { userId: user._id, activeStep, email: user.email, ...data } }),
+          body: JSON.stringify({ fields: { userId: user?._id, activeStep, email: user.email, ...data } }),
           headers: {
             Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`, // API key
             'Content-Type': 'application/json', // we will recive a json object
@@ -109,7 +109,7 @@ export default ({ deal, user, data, setData, setActiveStep, activeStep, atQuesti
         records: [
           {
             id: data.airtableId,
-            fields: { ...data, activeStep },
+            fields: { ...data, activeStep, userId: user?._id },
           },
         ],
       };
