@@ -131,11 +131,11 @@ export default ({ deal, user, data, setData, setActiveStep, activeStep, atQuesti
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     submitData();
-    if (activeStep >= 4) {
-      postZap({
-        variables: { body: { zapUrl: zapierWebhook, ...data } },
-      });
-    }
+    // if (activeStep >= 4) {
+    //   postZap({
+    //     variables: { body: { zapUrl: zapierWebhook, ...data } },
+    //   });
+    // }
   };
 
   const handleBack = () => {

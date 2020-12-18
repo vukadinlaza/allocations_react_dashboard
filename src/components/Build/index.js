@@ -155,7 +155,7 @@ export default ({}) => {
         style={{ position: 'fixed', width: '15%', marginLeft: '1rem' }}
         onClick={() => history.push('/')}
       />
-      {activeStep > 4 ? <Completion /> : <Landing Link={Link} />}
+      {activeStep ? <Completion deal={data} user={userProfile} /> : <Landing Link={Link} />}
       <Element id="anchor">
         <ViewportBlock setImg={setImg} />
       </Element>
