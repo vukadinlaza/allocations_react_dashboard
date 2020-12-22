@@ -105,8 +105,12 @@ export default function AdminHome({}) {
     variables: { slug: orgSlug },
   });
   const x = atFundData.map((d) => d.fields);
+  let slug = orgSlug;
+  if (orgSlug === 'demo-fund') {
+    slug = 'browder-capital';
+  }
   const fundInvestments = x.filter((inv) => {
-    return toLower(inv.Fund).includes(orgSlug.replace('-', ' '));
+    return toLower(inv.Fund).includes(slug.replace('-', ' '));
   });
   const fundData = fundInvestments;
 
