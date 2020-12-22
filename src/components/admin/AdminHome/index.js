@@ -113,7 +113,7 @@ export default function AdminHome({}) {
     return toLower(inv.Fund).includes(slug.replace('-', ' '));
   });
   const fundData = fundInvestments;
-
+  const isFund = fundData.length >= 1;
   if (!data) return <Loader />;
   const orgData = data.organization;
 
@@ -141,14 +141,14 @@ export default function AdminHome({}) {
   );
   return (
     <>
-      {fundData ? (
+      {isFund ? (
         <FundOverview data={fundData} orgData={orgData}>
           {header}
         </FundOverview>
       ) : (
         header
       )}
-      <div className={classes.tabs} style={{ marginTop: fundData ? '0px' : 0 }}>
+      <div className={classes.tabs} style={{ marginTop: isFund ? '0px' : 0 }}>
         <Grid container>
           <Grid item xs={12} sm={4} md={2}>
             <ButtonBase
