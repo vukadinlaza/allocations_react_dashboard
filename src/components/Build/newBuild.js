@@ -45,6 +45,90 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
         <>
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
+              <>Name</>
+              <CheckCircleIcon style={{ color: data.Name ? '#26C604' : '#00000029' }} />
+            </Typography>
+            <Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
+                  <TextField
+                    required
+                    style={{ width: '100%' }}
+                    variant="outlined"
+                    label="Name"
+                    value={data.Name || ''}
+                    onChange={(e) => setData({ Name: e.target.value })}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid justify="space-between">
+            <Typography className={classes.questionHeader}>
+              <>Company name (if applicable)</>
+              <CheckCircleIcon style={{ color: data['Company name'] ? '#26C604' : '#00000029' }} />
+            </Typography>
+            <Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
+                  <TextField
+                    required
+                    style={{ width: '100%' }}
+                    variant="outlined"
+                    label="Company name"
+                    value={data['Company name'] || ''}
+                    onChange={(e) => setData({ 'Company name': e.target.value })}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid justify="space-between">
+            <Typography className={classes.questionHeader}>
+              <>Address</>
+              <CheckCircleIcon style={{ color: data.Address ? '#26C604' : '#00000029' }} />
+            </Typography>
+            <Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
+                  <TextField
+                    required
+                    style={{ width: '100%' }}
+                    variant="outlined"
+                    label="Address"
+                    value={data.Address || ''}
+                    onChange={(e) => setData({ Address: e.target.value })}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid justify="space-between">
+            <Typography className={classes.questionHeader}>
+              <>Phone number</>
+              <CheckCircleIcon style={{ color: data['Phone number'] ? '#26C604' : '#00000029' }} />
+            </Typography>
+            <Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
+                  <TextField
+                    required
+                    style={{ width: '100%' }}
+                    variant="outlined"
+                    label="Phone number"
+                    value={data['Phone number'] || ''}
+                    onChange={(e) => setData({ 'Phone number': e.target.value })}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </>
+      )}
+      {activeStep === 2 && (
+        <>
+          <Grid justify="space-between">
+            <Typography className={classes.questionHeader}>
               <>Choose your fund type</>
               <CheckCircleIcon style={{ color: data['Choose your fund type'] ? '#26C604' : '#00000029' }} />
             </Typography>
@@ -215,7 +299,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
           </Grid>
         </>
       )}
-      {activeStep === 2 && (
+      {activeStep === 3 && (
         <>
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
@@ -305,7 +389,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
           </Grid>
         </>
       )}
-      {activeStep === 3 && (
+      {activeStep === 4 && (
         <>
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
@@ -343,7 +427,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
               <span>
-                <>Choose your carry:</>
+                <>Choose Carry:</>
                 <span style={{ marginLeft: '1rem' }} />
                 {nWithCommas(data['Choose your carry'] || 0)} %
               </span>
@@ -425,7 +509,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
           </Grid>{' '}
         </>
       )}
-      {activeStep === 4 && (
+      {activeStep === 5 && (
         <>
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
@@ -534,6 +618,32 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
               })}
             </Grid>
           </Grid>
+          {data['Would you like to hire Allocations as the exempt reporting advisor?'] === 'No' && (
+            <>
+              <Grid justify="space-between">
+                <Typography className={classes.questionHeader}>
+                  <>Intended investment adviser name</>
+                  <CheckCircleIcon
+                    style={{ color: data['Intended investment adviser name'] ? '#26C604' : '#00000029' }}
+                  />
+                </Typography>
+                <Grid>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>
+                    <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
+                      <TextField
+                        required
+                        style={{ width: '100%' }}
+                        variant="outlined"
+                        label="Intended investment adviser name"
+                        value={data['Intended investment adviser name'] || ''}
+                        onChange={(e) => setData({ 'Intended investment adviser name': e.target.value })}
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </>
+          )}
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
               <>Choose offering type</>
@@ -762,7 +872,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
               height: '35px',
             }}
           >
-            {activeStep >= 4 ? 'Submit' : 'Next'}
+            {activeStep >= 5 ? 'Submit' : 'Next'}
           </Button>
         </>
       </Grid>

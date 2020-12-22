@@ -159,7 +159,7 @@ export default ({}) => {
       <Element id="anchor">
         <ViewportBlock setImg={setImg} />
       </Element>
-      {activeStep < 5 && (
+      {activeStep <= 5 && (
         <div className={classes.buildContainer}>
           <BuildStep
             Element={Element}

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Grid, Typography, Button, Modal, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
+import CloseIcon from '@material-ui/icons/Close';
 // import Confetti from 'react-confetti';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
 export default ({ deal, user }) => {
   const classes = useStyles();
   const history = useHistory();
+  const [showModal, setShowModal] = useState(false);
   if (!user.email || !deal) {
     return null;
   }
@@ -38,12 +40,11 @@ export default ({ deal, user }) => {
     (deal['Would you like to hire Allocations as the exempt reporting advisor?'] || '').trim() === 'Yes'
       ? '$2000.00'
       : '$0.00';
+  const clientInfo = `${deal.Address || ''}. ${user.email || ''} ${deal['Phone number'] || ''}`;
 
   const fees = `Management Fee: ${deal['Choose your management fee']}%. Carry: ${deal['Choose your carry']}%.`;
   const masterPartnerName = deal['Choose your speed'] === 'Express' ? 'Sharding Holdings Management LLC' : '';
   const params = {
-    signer_Email: user.email || 'lance@allocations.com',
-    signer_UserName: `${user.first_name} ${user.last_name}`,
     'build-asset-type': deal['Choose your asset type'] || '',
     'build-offering-type': deal['Choose offering type'] || '',
     'build-adviser-name': advisorName || '',
@@ -54,12 +55,16 @@ export default ({ deal, user }) => {
     'build-master-limit-partner-company-name': masterPartnerName || '',
     'build-advisor-quantity': adviserQTY || '',
     'build-adviser-subtotal': adviserCost || '0.00',
+    'build-client-company-name': deal['Company name'],
+    'client-info': clientInfo,
+    'build-company-individual': `${deal['Company name']} (${deal.Name})`,
   };
   const urlParameters = Object.entries(params)
     .map((e) => e.map(encodeURI).join('='))
     .join('&');
-  const link = `${powerFormLink}${urlParameters}`;
-  console.log(link);
+  const link = `${powerFormLink}&signer_UserName=${user.first_name || ''} ${user.last_name || ''}&signer_Email=${
+    user.email
+  }&${urlParameters}`;
   return (
     <div className={classes.landingContainer}>
       <Grid className={classes.centerGrid}>
@@ -92,8 +97,26 @@ export default ({ deal, user }) => {
         >
           Go back to Allocations Home
         </Button>
+        <Typography style={{ color: 'white', fontSize: '2rem', marginTop: '.25rem' }}>Or</Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setShowModal(true)}
+          style={{
+            fontSize: '1.5rem',
+            margin: '1rem',
+            backgroundColor: '#2576FF',
+            borderRadius: '2rem',
+            padding: '.5rem',
+            paddingLeft: '2rem',
+            paddingRight: '2rem',
+            marginTop: '2rem',
+          }}
+        >
+          Sign Services Agreement
+        </Button>
         <Modal
-          open={false}
+          open={showModal}
           // onClose={handleClose}
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"

@@ -83,7 +83,7 @@ const BASE = 'appdPrRjapx8iYnIn';
 const TABEL_NAME = 'Deals';
 
 function getSteps() {
-  return ['Fund info', 'Delivery speed', 'Fees', 'Compliance'];
+  return ['Welcome', 'Fund info', 'Delivery speed', 'Fees', 'Compliance'];
 }
 
 export default ({ deal, user, data, setData, setActiveStep, activeStep, atQuestionsData }) => {
@@ -169,7 +169,7 @@ export default ({ deal, user, data, setData, setActiveStep, activeStep, atQuesti
             >
               <div>
                 <span style={{ fontSize: '4rem', color: '#2576FF' }}>{activeStep}</span>{' '}
-                <span style={{ fontWeight: 'bolder', fontSize: '1.25rem' }}>/4</span>
+                <span style={{ fontWeight: 'bolder', fontSize: '1.25rem' }}>/5</span>
               </div>
             </div>
             <Stepper
@@ -208,7 +208,7 @@ export default ({ deal, user, data, setData, setActiveStep, activeStep, atQuesti
             >
               {/* <Questions setData={setData} answers={data} classes={classes} activePage={page} /> */}
               <Typography variant="title1" style={{ marginTop: '1rem', marginBottom: '1.5rem', fontSize: '2rem' }}>
-                {activeStep === 1 ? 'Tell us about your SPV/Fund' : steps[activeStep - 1]}
+                {activeStep === 2 ? 'Tell us about your SPV/Fund' : steps[activeStep - 1]}
               </Typography>
               <QuestionsTwo
                 setData={setData}
