@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { gql } from 'apollo-boost';
 
 import { Paper, Grid, ButtonBase, Typography, FormControl, Button, TextField } from '@material-ui/core';
-import _ from 'lodash';
+import _, { toLower } from 'lodash';
 import { useQuery } from '@apollo/react-hooks';
 import { useParams, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-
 import Chart from 'react-google-charts';
+import { useFetch } from '../../../utils/hooks';
 import { ActiveDeals } from './components/active-deals';
 import ClosedDeals from './components/closed-deals';
 import Loader from '../../utils/Loader';
@@ -16,7 +16,6 @@ import Settings from './components/settings';
 import Investments from '../../Investments';
 import allFundData from './fundData.js';
 import FundOverview from './fundOverview';
-import { nWithCommas } from '../../../utils/numbers';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -94,16 +93,22 @@ export const ORG_OVERVIEW = gql`
   }
 `;
 
+const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
+const INVESTMENTS_TABLE = 'Investments';
+
 export default function AdminHome({}) {
+  const { data: atFundData } = useFetch(OPS_ACCOUNTING, INVESTMENTS_TABLE);
   const { organization: orgSlug } = useParams();
   const [tab, setTab] = useState('active-deals');
-  const fundData = allFundData.find((d) => d.slug === orgSlug);
   const classes = useStyles();
-  const { data, error, refetch } = useQuery(ORG_OVERVIEW, {
+  const { data, refetch } = useQuery(ORG_OVERVIEW, {
     variables: { slug: orgSlug },
   });
-
-  const history = useHistory();
+  const x = atFundData.map((d) => d.fields);
+  const fundInvestments = x.filter((inv) => {
+    return toLower(inv.Fund).includes(orgSlug.replace('-', ' '));
+  });
+  const fundData = fundInvestments;
 
   if (!data) return <Loader />;
   const orgData = data.organization;
@@ -133,7 +138,7 @@ export default function AdminHome({}) {
   return (
     <>
       {fundData ? (
-        <FundOverview data={fundData.data} orgData={orgData}>
+        <FundOverview data={fundData} orgData={orgData}>
           {header}
         </FundOverview>
       ) : (

@@ -8,7 +8,7 @@ import { nWithCommas } from '../../../utils/numbers';
 
 export default ({ data, children, orgData }) => {
   const history = useHistory();
-
+  if (!data) return null;
   const chartEvents = [
     {
       eventName: 'select',
@@ -26,7 +26,6 @@ export default ({ data, children, orgData }) => {
         .map((n) => _.toNumber(n)),
     ) / (orgData?.deals.length === 0 ? 1 : orgData?.deals.length);
 
-  console.log(multipleSum);
   const chartOptionsA = {
     title: '',
     pieHole: 0.5,
@@ -37,29 +36,36 @@ export default ({ data, children, orgData }) => {
     isStacked: true,
   };
   const groupedByMonth = _.groupBy(data, (inv) => {
-    const addedDate = moment(inv.date).format('MMM YY');
-    return addedDate.substring(0, 6);
+    const addedDate = moment(inv.Date).format('MMM YYYY DD');
+    return addedDate.substring(0, 8);
   });
+
   const groupedData = _.mapValues(groupedByMonth, (monthData) => {
     const monthSum = _.sumBy(
       monthData.map((inv) => ({
         ...inv,
-        amount: _.toNumber(inv.Debit.replaceAll(',', '')),
+        amount: inv.Invested,
       })),
       'amount',
     );
     return monthSum;
   });
 
-  const arrayData = Object.keys(groupedData).map((key, index) => {
-    return [key, groupedData[key]];
-  });
+  const arrayData = Object.keys(groupedData)
+    .map((key, index) => {
+      return [key, groupedData[key]];
+    })
+    .map((a) => {
+      return [new Date(a[0]), a[1]];
+    })
+    .sort((a, b) => a[0] - b[0]);
+
   const graphBData = arrayData.map((data, index) => {
     const prevMonths = arrayData[index - 1] ? arrayData.slice(0, index) : [];
     const prevMonthsTotal = prevMonths.reduce((acc, m) => {
       return acc + m[1];
     }, 0);
-    return [data[0], prevMonthsTotal + data[1]];
+    return [moment(data[0]).format('MMM YY'), prevMonthsTotal + data[1]];
   });
   return (
     <div className="blue-container">
@@ -80,18 +86,7 @@ export default ({ data, children, orgData }) => {
                   Portfolio Value
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  $
-                  {nWithCommas(
-                    (
-                      _.sumBy(
-                        data.map((inv) => ({
-                          ...inv,
-                          debit: _.toNumber(inv.Debit.replaceAll(',', '')),
-                        })),
-                        'debit',
-                      ) * (multipleSum === 0 ? 1 : multipleSum)
-                    ).toFixed(0),
-                  )}
+                  ${nWithCommas((_.sumBy(data, 'Invested') * (multipleSum === 0 ? 1 : multipleSum)).toFixed(0))}
                 </h2>
 
                 <p
@@ -128,16 +123,7 @@ export default ({ data, children, orgData }) => {
                   Total Invested
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  $
-                  {nWithCommas(
-                    _.sumBy(
-                      data.map((inv) => ({
-                        ...inv,
-                        debit: _.toNumber(inv.Debit.replaceAll(',', '')),
-                      })),
-                      'debit',
-                    ),
-                  )}
+                  ${nWithCommas(_.sumBy(data, 'Invested').toFixed(0))}
                 </h2>
 
                 <p
@@ -147,7 +133,7 @@ export default ({ data, children, orgData }) => {
                     paddingTop: '10px',
                   }}
                 >
-                  {data.length} Total Investments
+                  {(data || []).length} Total Investments
                 </p>
               </Grid>
               <Grid item sm={4} md={4}>
@@ -218,10 +204,7 @@ export default ({ data, children, orgData }) => {
                 chartEvents={chartEvents}
                 data={[
                   ['Investment', 'Amount'],
-                  ...data.map((investment) => [
-                    investment.Description.split('-')[0],
-                    _.toNumber(investment.Debit.replaceAll(',', '')),
-                  ]),
+                  ...data.map((investment) => [investment.Investment, investment.Invested]),
                 ]}
                 options={chartOptionsA}
               />
