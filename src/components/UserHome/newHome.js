@@ -208,7 +208,6 @@ export default () => {
 
   if (demo && investmentsRef.current) {
     investments = investmentsRef.current;
-    console.log('INVES', investments);
   }
   const groupedByMonth = _.groupBy(investments, (inv) => {
     const timestamp = inv?._id.toString().substring(0, 8);
@@ -499,7 +498,12 @@ export default () => {
                           showDocs={showDocs}
                           setTradeData={setTradeData}
                         />
-                        <DocsRow key={`${showDocs._id}-docs`} docs={showDocs.documents} investment={investment} />
+                        <DocsRow
+                          key={`${showDocs._id}-docs`}
+                          docs={showDocs.documents}
+                          investment={investment}
+                          demo={demo}
+                        />
                       </>
                     ) : (
                       <TR
@@ -1212,7 +1216,7 @@ function InvestmentStatus({ investment }) {
   return <span className={`investment-status investment-status-${status}`}>{status}</span>;
 }
 
-function DocsRow({ docs, investment }) {
+function DocsRow({ docs, investment, demo }) {
   return (
     <>
       <TableRow>
@@ -1221,9 +1225,7 @@ function DocsRow({ docs, investment }) {
             Documents may take up to 7 days to appear here after signing.
           </Typography>
           <Grid container xs={12} md={12} sm={12} lg={12} spacing={1}>
-            {docs.map((doc) => (
-              <Document doc={doc} investment={investment} />
-            ))}
+            {demo ? [] : docs.map((doc) => <Document doc={doc} investment={investment} />)}
           </Grid>
         </TableCell>
       </TableRow>
