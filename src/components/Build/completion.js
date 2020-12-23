@@ -97,24 +97,28 @@ export default ({ deal, user }) => {
         >
           Go back to Allocations Home
         </Button>
-        <Typography style={{ color: 'white', fontSize: '2rem', marginTop: '.25rem' }}>Or</Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setShowModal(true)}
-          style={{
-            fontSize: '1.5rem',
-            margin: '1rem',
-            backgroundColor: '#2576FF',
-            borderRadius: '2rem',
-            padding: '.5rem',
-            paddingLeft: '2rem',
-            paddingRight: '2rem',
-            marginTop: '2rem',
-          }}
-        >
-          Sign Services Agreement
-        </Button>
+        {deal['Choose your fund type'] === 'SPV' && (
+          <>
+            <Typography style={{ color: 'white', fontSize: '2rem', marginTop: '.25rem' }}>Or</Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setShowModal(true)}
+              style={{
+                fontSize: '1.5rem',
+                margin: '1rem',
+                backgroundColor: '#2576FF',
+                borderRadius: '2rem',
+                padding: '.5rem',
+                paddingLeft: '2rem',
+                paddingRight: '2rem',
+                marginTop: '2rem',
+              }}
+            >
+              Sign Services Agreement
+            </Button>
+          </>
+        )}
         <Modal
           open={showModal}
           // onClose={handleClose}
@@ -134,6 +138,9 @@ export default ({ deal, user }) => {
               overflow: 'scroll',
             }}
           >
+            <Grid style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <CloseIcon style={{ padding: '.5rem', width: '2rem' }} />
+            </Grid>
             <div>
               <div className="external-sign-link">
                 <a href={link} target="_blank" rel="noopener noreferrer">
