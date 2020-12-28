@@ -108,8 +108,8 @@ const UPDATE_USER = gql`
   }
 `;
 
-const BASE = 'app3sJv6438pX7pzD';
-const TABEL_NAME = 'Build output';
+const BASE = 'appdPrRjapx8iYnIn';
+const TABEL_NAME = 'Deals';
 export default ({}) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(1);
