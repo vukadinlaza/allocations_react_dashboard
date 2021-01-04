@@ -5,7 +5,7 @@ import Loader from './utils/Loader';
 
 const PrivateRoute = ({ component, ...args }) => {
   const history = useHistory();
-  const tvc = history.location.pathname.includes('tvc') ? 'theventurecollective' : '';
+  const tvc = history.location.pathname.includes('tvc') ? 'tvc' : '';
   console.log({ tvc });
   return (
     <Route
