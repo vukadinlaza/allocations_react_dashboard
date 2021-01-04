@@ -12,7 +12,7 @@ const PrivateRoute = ({ component, ...args }) => {
       component={withAuthenticationRequired(component, {
         onRedirecting: () => <Loader />,
         loginOptions: {
-          connection: tvc,
+          connection: 'tvc',
         },
       })}
       {...args}
