@@ -106,6 +106,7 @@ export default function AdminHome({}) {
   });
   const x = atFundData.map((d) => d.fields);
   let slug = orgSlug;
+  const isDemo = orgSlug === 'demo-fund';
   if (orgSlug === 'demo-fund') {
     slug = 'browder-capital';
   }
@@ -142,7 +143,7 @@ export default function AdminHome({}) {
   return (
     <>
       {isFund ? (
-        <FundOverview data={fundData} orgData={orgData}>
+        <FundOverview data={fundData} orgData={orgData} isDemo={isDemo}>
           {header}
         </FundOverview>
       ) : (
@@ -195,7 +196,7 @@ export default function AdminHome({}) {
       </div>
 
       <>
-        {tab === 'active-deals' && <ActiveDeals orgData={orgData} />}
+        {tab === 'active-deals' && <ActiveDeals orgData={orgData} isDemo={isDemo} />}
         {tab === 'closed-deals' && <ClosedDeals orgData={orgData} />}
         {tab === 'all-investors' && <Investors />}
         {tab === 'investments' && <Investments />}

@@ -31,7 +31,7 @@ import Document from '../../../utils/Document';
  *
  * */
 
-export const ActiveDeals = ({ orgData }) => {
+export const ActiveDeals = ({ orgData, isDemo }) => {
   const history = useHistory();
 
   if (!orgData) return <Loader />;
@@ -68,7 +68,7 @@ export const ActiveDeals = ({ orgData }) => {
             </TableHead>
             <TableBody>
               {(sortActive || []).map((deal, index) => (
-                <Deal key={deal._id} deal={deal} index={index} slug={orgData.slug} />
+                <Deal key={deal._id} deal={deal} index={index} slug={orgData.slug} isDemo={isDemo} />
               ))}
             </TableBody>
           </Table>
@@ -79,7 +79,7 @@ export const ActiveDeals = ({ orgData }) => {
 };
 
 // clicking on the whole row opens the investment board
-export const Deal = ({ deal, index, superadmin, slug }) => {
+export const Deal = ({ deal, index, superadmin, slug, isDemo }) => {
   const history = useHistory();
   const { organization } = useParams();
   const [activeDeal, setActiveDeal] = useState();
@@ -179,7 +179,7 @@ export const Deal = ({ deal, index, superadmin, slug }) => {
           )}
           <TableRow style={{ borderTop: '0', maxWidth: '300px' }}>
             <TableCell colspan="5">
-              <InvestmentFlow dealId={deal._id} />
+              <InvestmentFlow dealId={deal._id} isDemo={isDemo} />
             </TableCell>
           </TableRow>
         </>
