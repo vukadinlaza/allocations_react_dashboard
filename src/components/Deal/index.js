@@ -383,7 +383,9 @@ export function DealParams({ deal, deal_slug }) {
               <ListItem>
                 <ListItemText
                   primary="Management Fee"
-                  secondary={`${dealParams.managementFees}% (${dealParams.managementFeeType})`}
+                  secondary={`${dealParams.managementFees}% ${
+                    dealParams.managementFeeType === null ? '' : `(${dealParams.managementFeeType})`
+                  }`}
                 />
               </ListItem>
             )}
@@ -391,7 +393,9 @@ export function DealParams({ deal, deal_slug }) {
               <ListItem>
                 <ListItemText
                   primary="Management Fee"
-                  secondary={`$${dealParams.managementFeesDollar} (${dealParams.managementFeeType})`}
+                  secondary={`$${dealParams.managementFeesDollar} ${
+                    dealParams.managementFeeType === null ? '' : `(${dealParams.managementFeeType})`
+                  }`}
                 />
               </ListItem>
             )}
