@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import moment from 'moment';
 import { nWithCommas } from '../../../utils/numbers';
 
-export default ({ data, children, orgData }) => {
+export default ({ data, children, orgData, isDemo }) => {
   const history = useHistory();
   if (!data) return null;
   const chartEvents = [
@@ -204,7 +204,25 @@ export default ({ data, children, orgData }) => {
                 chartEvents={chartEvents}
                 data={[
                   ['Investment', 'Amount'],
-                  ...data.map((investment) => [investment.Investment, investment.Invested]),
+                  ...data.map((investment) => [
+                    isDemo
+                      ? _.sample([
+                          'Airbnb',
+                          'Coinbase',
+                          'Stripe',
+                          'Tundra Trust',
+                          'BlockFi',
+                          'Instacart',
+                          'SpaceX',
+                          'Lightning Labs',
+                          'Snowflake',
+                          'Flexport',
+                          'Pinterest',
+                          'Discord',
+                        ])
+                      : investment.Investment,
+                    investment.Invested,
+                  ]),
                 ]}
                 options={chartOptionsA}
               />
