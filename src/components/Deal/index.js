@@ -118,7 +118,7 @@ export default function Deal() {
   const p = new URLSearchParams(search);
   const { userProfile, isAuthenticated, loading } = useAuth();
   const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL);
-  const [createInvestment] = useMutation(CREATE_INVESTMENT, {
+  const [createInvestment, { called: didCreateInvestment }] = useMutation(CREATE_INVESTMENT, {
     onCompleted: () => {
       // alert('Mutation Succeeded!')
       refetch();
@@ -145,12 +145,11 @@ export default function Deal() {
         user_id: data.investor._id,
         amount,
       };
-
-      if (!blocked && userProfile?.email) {
+      if (userProfile?.email && !didCreateInvestment) {
         createInvestment({ variables: { investment } });
       }
     }
-  }, [createInvestment, data, p, userProfile]);
+  }, [called, createInvestment, data, didCreateInvestment, p, userProfile]);
 
   useEffect(() => {
     // theres been an error
