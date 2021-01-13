@@ -6,7 +6,6 @@ import _, { toLower } from 'lodash';
 import { useQuery } from '@apollo/react-hooks';
 import { useParams, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import Chart from 'react-google-charts';
 import { useFetch } from '../../../utils/hooks';
 import { ActiveDeals } from './components/active-deals';
 import ClosedDeals from './components/closed-deals';
@@ -14,7 +13,6 @@ import Loader from '../../utils/Loader';
 import Investors from '../../Investors';
 import Settings from './components/settings';
 import Investments from '../../Investments';
-import allFundData from './fundData.js';
 import FundOverview from './fundOverview';
 
 const useStyles = makeStyles((theme) => ({
@@ -59,12 +57,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const ORG_OVERVIEW = gql`
-  query GetOrg($slug: String!) {
+  query GetOrg($slug: String!, $status: String) {
     organization(slug: $slug) {
       _id
       name
       slug
-      deals {
+      deals(status: $status) {
         _id
         raised
         appLink
@@ -102,7 +100,7 @@ export default function AdminHome({}) {
   const [tab, setTab] = useState('active-deals');
   const classes = useStyles();
   const { data, refetch } = useQuery(ORG_OVERVIEW, {
-    variables: { slug: orgSlug },
+    variables: { slug: orgSlug, status: 'active' },
   });
   const x = atFundData.map((d) => d.fields);
   let slug = orgSlug;
