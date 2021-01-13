@@ -110,8 +110,6 @@ const UPDATE_USER = gql`
 
 const BASE = 'appdPrRjapx8iYnIn';
 const TABEL_NAME = 'Deals';
-const QUESTIONS_BASE = 'appD85EnbTN8tKWB9';
-const SPV_TABLE_NAME = 'SPVs';
 export default ({}) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(1);
@@ -121,9 +119,7 @@ export default ({}) => {
   );
   const { data: allATDeals } = useFetch(BASE, TABEL_NAME);
   const [updateInvestor] = useMutation(UPDATE_USER);
-  const { data: atQuestions } = useFetch(QUESTIONS_BASE, SPV_TABLE_NAME);
 
-  const atQuestionsData = (atQuestions || []).map((r) => ({ id: r.id, ...r.fields }));
   const [data, setData] = useSimpleReducer({});
 
   const { userProfile, loading } = useAuth(GET_INVESTOR);
@@ -155,11 +151,11 @@ export default ({}) => {
         style={{ position: 'fixed', width: '15%', marginLeft: '1rem' }}
         onClick={() => history.push('/')}
       />
-      {activeStep > 4 ? <Completion /> : <Landing Link={Link} />}
+      {activeStep ? <Completion deal={data} user={userProfile} /> : <Landing Link={Link} />}
       <Element id="anchor">
         <ViewportBlock setImg={setImg} />
       </Element>
-      {activeStep < 5 && (
+      {activeStep <= 5 && (
         <div className={classes.buildContainer}>
           <BuildStep
             Element={Element}
@@ -167,7 +163,6 @@ export default ({}) => {
             user={userProfile}
             setData={setData}
             data={data}
-            atQuestionsData={atQuestionsData}
             activeStep={activeStep}
             setActiveStep={setActiveStep}
           />

@@ -866,7 +866,7 @@ export default function Sidebar(props) {
     },
   ];
   menus.push({
-    to: '/get-started',
+    to: 'https://allocations.typeform.com/to/iaP6QXYF',
     title: 'Get Started',
     icon: <BuildIcon />,
   });
@@ -908,10 +908,19 @@ export default function Sidebar(props) {
             onClick={mobileOpen ? handleDrawerClose : null}
             className={`sidebar-nav-item ${location.pathname === to ? 'sidebar-nav-item-active' : ''}`}
           >
-            <ListItem component={Link} to={to} button>
-              <ListItemIcon className={classes.icon}>{icon}</ListItemIcon>
-              <ListItemText primary={title} />
-            </ListItem>
+            {title !== 'Get Started' ? (
+              <ListItem component={Link} to={to} button>
+                <ListItemIcon className={classes.icon}>{icon}</ListItemIcon>
+                <ListItemText primary={title} />
+              </ListItem>
+            ) : (
+              <a href={to}>
+                <ListItem button>
+                  <ListItemIcon className={classes.icon}>{icon}</ListItemIcon>
+                  <ListItemText primary={title} />
+                </ListItem>
+              </a>
+            )}
           </div>
         ))}
       </List>

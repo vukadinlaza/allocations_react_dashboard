@@ -1,7 +1,9 @@
-import React, { useEffect, useReducer, Fragment } from 'react';
+import React, { useEffect, useReducer, Fragment, useState } from 'react';
 import _ from 'lodash';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
 import { gql } from 'apollo-boost';
+import queryString from 'query-string';
+
 import { useLazyQuery } from '@apollo/react-hooks';
 import { Row, Col } from 'reactstrap';
 import {
@@ -31,12 +33,15 @@ import './style.scss';
  * view when clicked
  *
  * */
+const OFFSET = 10;
+const LIMIT = 10;
 
 const GET_DEALS = gql`
-  query GetOrg($slug: String!) {
-    organization(slug: $slug) {
+  query GetOrg($slug: String!, $offset: Int, $limit: Int) {
+    organization(slug: $slug, offset: $offset, limit: $limit) {
       _id
-      deals {
+      n_deals
+      deals(offset: $offset, limit: $limit) {
         _id
         status
         amount_raised
@@ -69,19 +74,30 @@ const GET_DEALS = gql`
 export default function Deals({ showClosed }) {
   const { organization } = useParams();
   const { userProfile } = useAuth();
-  const [getDeals, { data, error }] = useLazyQuery(GET_DEALS, { variables: { slug: organization } });
+  const [page, setPage] = useState(0);
+
+  const [getDeals, { data, error }] = useLazyQuery(GET_DEALS, {
+    variables: { slug: organization, offset: 0, limit: LIMIT },
+  });
   const [capitalAccount, toggleCapitalAccount] = useReducer(
     (acc, _id) => {
       return acc === _id ? null : _id;
     },
     '5e553fb7e165e6d78c794097', // TODO: Remove this
   );
-  console.log(organization);
   const useInvestingAs = organization === 'vitalize';
-  console.log(useInvestingAs);
   useEffect(() => {
     if (userProfile && userProfile.email) getDeals();
   }, [getDeals, userProfile]);
+
+  useEffect(() => {
+    getDeals({
+      variables: {
+        offset: page * 10,
+        limit: LIMIT,
+      },
+    });
+  }, [getDeals, page]);
 
   if (error) return <div>{error.message}</div>;
 
@@ -97,6 +113,7 @@ export default function Deals({ showClosed }) {
   } = data;
   const { open, closed } = _.groupBy(deals, (d) => (d.status === 'closed' ? 'closed' : 'open'));
 
+  const maxPages = Math.ceil(data.organization.n_deals / OFFSET);
   return (
     <div className="AllDeals">
       {!showClosed && (
@@ -159,7 +176,7 @@ export default function Deals({ showClosed }) {
         <Paper style={{ marginTop: 16 }}>
           <Grid container xs={12} style={{ padding: '16px' }}>
             <Typography variant="h6" gutterBottom>
-              Closed Deals: {(closed || []).length}
+              Closed Deals: {data?.organization?.n_deals}
             </Typography>
           </Grid>
           <Table>
@@ -223,6 +240,33 @@ export default function Deals({ showClosed }) {
               })}
             </TableBody>
           </Table>
+          <Grid style={{ margin: '1rem', display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              color="primary"
+              variant="contained"
+              style={{ marginLeft: '1rem', marginRight: '1rem' }}
+              onClick={() => {
+                setPage(page - 1);
+              }}
+              disabled={page === 0}
+            >
+              Previous
+            </Button>
+            <Typography style={{ fontSize: '1.25rem', marginLeft: '1rem', marginRight: '1rem' }}>
+              {page + 1} / {maxPages}
+            </Typography>
+            <Button
+              color="primary"
+              variant="contained"
+              style={{ marginLeft: '1rem', marginRight: '1rem' }}
+              onClick={() => {
+                setPage(page + 1);
+              }}
+              disabled={page + 1 >= maxPages}
+            >
+              Next
+            </Button>
+          </Grid>
         </Paper>
       </>
     </div>
