@@ -475,11 +475,11 @@ export default () => {
                         Documents
                       </TableCell>
                     </Hidden>
-                    <Hidden only="xs">
+                    {/* <Hidden only="xs">
                       <TableCell className={classes.tableHeader} align="center">
                         Capital Accounts
                       </TableCell>
-                    </Hidden>
+                    </Hidden> */}
                     <TableCell className={classes.tableHeader} align="center">
                       Buy
                     </TableCell>
@@ -1182,7 +1182,7 @@ const TR = ({ investment, setShowDocs, showDocs, setTradeData, demo, setShowCapt
           View
         </Button>
       </TableCell>
-      <TableCell align="center">
+      {/* <TableCell align="center">
         <Button
           variant="contained"
           size="small"
@@ -1192,7 +1192,7 @@ const TR = ({ investment, setShowDocs, showDocs, setTradeData, demo, setShowCapt
         >
           View
         </Button>
-      </TableCell>
+      </TableCell> */}
       <TableCell align="center">
         <Button
           variant="contained"
