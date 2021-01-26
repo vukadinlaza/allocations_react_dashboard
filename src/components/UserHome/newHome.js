@@ -475,11 +475,11 @@ export default () => {
                         Documents
                       </TableCell>
                     </Hidden>
-                    {/* <Hidden only="xs">
+                    <Hidden only="xs">
                       <TableCell className={classes.tableHeader} align="center">
                         Capital Accounts
                       </TableCell>
-                    </Hidden> */}
+                    </Hidden>
                     <TableCell className={classes.tableHeader} align="center">
                       Buy
                     </TableCell>
@@ -499,6 +499,7 @@ export default () => {
                           showDocs={showDocs}
                           setTradeData={setTradeData}
                           setShowCaptialAccounts={setShowCaptialAccounts}
+                          capitalAccounts={capitalAccounts}
                         />
                         <DocsRow
                           key={`${showDocs._id}-docs`}
@@ -515,6 +516,7 @@ export default () => {
                         showDocs={showDocs}
                         setTradeData={setTradeData}
                         setShowCaptialAccounts={setShowCaptialAccounts}
+                        capitalAccounts={capitalAccounts}
                       />
                     ),
                   )}
@@ -1124,17 +1126,18 @@ export default () => {
 
       <CapitalAccountModal
         showCapitalAccounts={showCapitalAccounts}
-        setShowCaptialAccounts={showCapitalAccounts}
+        setShowCaptialAccounts={setShowCaptialAccounts}
         classes={classes}
       />
     </div>
   );
 };
 
-const TR = ({ investment, setShowDocs, showDocs, setTradeData, demo, setShowCaptialAccounts }) => {
+const TR = ({ investment, setShowDocs, showDocs, setTradeData, demo, setShowCaptialAccounts, capitalAccounts }) => {
   const history = useHistory();
-  // const timestamp = investment._id.toString().substring(0, 8);
-  // const date = new Date(parseInt(timestamp, 16) * 1000);
+  const capFields = capitalAccounts.map((r) => r.fields);
+  console.log(investment.deal.company_name);
+  const capitalAccountInfo = capFields.find((r) => r['Portfolio Company Name'] === investment.deal.company_name);
   const addedDate = moment(investment?.deal?.dealParams?.wireDeadline).format('Do MMM YYYY');
   const showDocsFn = () => setShowDocs(showDocs ? false : investment);
   return (
@@ -1182,17 +1185,17 @@ const TR = ({ investment, setShowDocs, showDocs, setTradeData, demo, setShowCapt
           View
         </Button>
       </TableCell>
-      {/* <TableCell align="center">
+      <TableCell align="center">
         <Button
           variant="contained"
           size="small"
           color="primary"
-          onClick={() => setShowCaptialAccounts(true)}
-          disabled={!!demo}
+          onClick={() => setShowCaptialAccounts(capitalAccountInfo)}
+          disabled={!capitalAccountInfo || !demo}
         >
           View
         </Button>
-      </TableCell> */}
+      </TableCell>
       <TableCell align="center">
         <Button
           variant="contained"
