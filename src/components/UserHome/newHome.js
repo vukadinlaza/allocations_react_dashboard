@@ -32,7 +32,7 @@ import Loader from '../utils/Loader';
 import { nWithCommas } from '../../utils/numbers';
 import { useAuth } from '../../auth/useAuth';
 import Document from '../utils/Document';
-import { useSimpleReducer, useFetch } from '../../utils/hooks';
+import { useSimpleReducer, useFetch, useFetchWithEmail } from '../../utils/hooks';
 import CapitalAccountModal from './capitalAccountsModal';
 import './style.scss';
 import { toast } from 'react-toastify';
@@ -145,7 +145,6 @@ export default () => {
   const [text, setText] = useState('');
   const [demo, setDemo] = useState(false);
   const [showCapitalAccounts, setShowCaptialAccounts] = useState(false);
-  const { data: capitalAccounts } = useFetch(BASE, TABLE);
   const [postZap, {}] = useMutation(POST_ZAP);
   const investmentsRef = React.useRef(null);
 
@@ -173,7 +172,9 @@ export default () => {
   }, [setTradeData, tradeData.showLoading]);
 
   const { userProfile } = useAuth(GET_INVESTOR);
-  console.log('capitalAccounts', capitalAccounts);
+
+  const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile.email);
+
   useEffect(() => {
     const demo = location.search === '?demo=true';
     if (demo && userProfile.investments) {
@@ -208,7 +209,6 @@ export default () => {
   };
 
   if (!userProfile.email) return <Loader />;
-
   let investments = userProfile.investments.filter((inv) => inv.status !== 'invited');
 
   if (demo && investmentsRef.current) {
@@ -500,6 +500,7 @@ export default () => {
                           setTradeData={setTradeData}
                           setShowCaptialAccounts={setShowCaptialAccounts}
                           capitalAccounts={capitalAccounts}
+                          userProfile={userProfile}
                         />
                         <DocsRow
                           key={`${showDocs._id}-docs`}
@@ -517,6 +518,7 @@ export default () => {
                         setTradeData={setTradeData}
                         setShowCaptialAccounts={setShowCaptialAccounts}
                         capitalAccounts={capitalAccounts}
+                        userProfile={userProfile}
                       />
                     ),
                   )}
@@ -1133,11 +1135,25 @@ export default () => {
   );
 };
 
-const TR = ({ investment, setShowDocs, showDocs, setTradeData, demo, setShowCaptialAccounts, capitalAccounts }) => {
+const TR = ({
+  investment,
+  setShowDocs,
+  showDocs,
+  setTradeData,
+  demo,
+  setShowCaptialAccounts,
+  capitalAccounts,
+  userProfile,
+}) => {
   const history = useHistory();
-  const capFields = capitalAccounts.map((r) => r.fields);
-  console.log(investment.deal.company_name);
-  const capitalAccountInfo = capFields.find((r) => r['Portfolio Company Name'] === investment.deal.company_name);
+  const capFields = (capitalAccounts || []).map((r) => r.fields);
+
+  const capitalAccountInfo =
+    capFields.find(
+      (r) => r.Email === userProfile.email && r['Porfolio Company Name'] === investment.deal.company_name,
+    ) || {};
+  console.log(capitalAccountInfo);
+
   const addedDate = moment(investment?.deal?.dealParams?.wireDeadline).format('Do MMM YYYY');
   const showDocsFn = () => setShowDocs(showDocs ? false : investment);
   return (
@@ -1191,7 +1207,7 @@ const TR = ({ investment, setShowDocs, showDocs, setTradeData, demo, setShowCapt
           size="small"
           color="primary"
           onClick={() => setShowCaptialAccounts(capitalAccountInfo)}
-          disabled={!capitalAccountInfo || !demo}
+          disabled={false}
         >
           View
         </Button>

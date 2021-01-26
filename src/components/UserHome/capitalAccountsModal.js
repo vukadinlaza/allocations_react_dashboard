@@ -24,16 +24,17 @@ const useStyles = makeStyles((theme) => ({
   },
   rightVaue: {
     marginRight: '1.75rem',
+    textAlign: 'left',
+    minWidth: '15%',
   },
 }));
 
 export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
-  console.log(showCapitalAccounts);
   const classes = useStyles();
   return (
     <>
       <Modal
-        open={showCapitalAccounts}
+        open
         onClose={() => {}}
         className={classes.modal}
         aria-labelledby="simple-modal-title"
@@ -118,10 +119,11 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                 <Typography className={classes.rightVaue}>3.39%</Typography>
               </Grid>
               <hr className="solid" />
+              <Typography> Disclaimer: </Typography>
               <Typography variant="subtitle2">
-                Disclaimer: This is a provisional capital account statement reflecting initial set up and investment
-                information. Annual tax returns and financial statements will provide more complete information
-                including future expenses, if any.
+                This is a provisional capital account statement reflecting initial set up and investment information.
+                Annual tax returns and financial statements will provide more complete information including future
+                expenses, if any.
               </Typography>
               <div style={{ marginBottom: '2rem' }} />
             </Paper>

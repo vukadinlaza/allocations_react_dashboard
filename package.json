@@ -28,6 +28,7 @@
     "@material-ui/icons": "^4.5.1",
     "@nivo/pie": "^0.61.1",
     "@tinymce/tinymce-react": "^3.4.0",
+    "airtable": "^0.10.1",
     "apollo-boost": "^0.4.4",
     "apollo-cache-inmemory": "^1.6.3",
     "apollo-client": "^2.6.4",
