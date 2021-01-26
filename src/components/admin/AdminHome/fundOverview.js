@@ -1,6 +1,6 @@
 import React from 'react';
 import { Paper, Grid } from '@material-ui/core';
-import _ from 'lodash';
+import _, { isNumber } from 'lodash';
 import Chart from 'react-google-charts';
 import { useHistory } from 'react-router-dom';
 import moment from 'moment';
@@ -17,7 +17,7 @@ export default ({ data, children, orgData, isDemo }) => {
       },
     },
   ];
-  const multipleSum =
+  let multipleSum =
     _.sum(
       orgData?.deals
         .map((deal) => {
@@ -25,6 +25,10 @@ export default ({ data, children, orgData, isDemo }) => {
         })
         .map((n) => _.toNumber(n)),
     ) / (orgData?.deals.length === 0 ? 1 : orgData?.deals.length);
+
+  if (isDemo) {
+    multipleSum = 3;
+  }
 
   const chartOptionsA = {
     title: '',
@@ -39,17 +43,19 @@ export default ({ data, children, orgData, isDemo }) => {
     const addedDate = moment(inv.Date).format('MMM YYYY DD');
     return addedDate.substring(0, 8);
   });
+  console.log(groupedByMonth);
 
   const groupedData = _.mapValues(groupedByMonth, (monthData) => {
     const monthSum = _.sumBy(
-      monthData.map((inv) => ({
+      monthData.map((inv, index) => ({
         ...inv,
-        amount: inv.Invested,
+        amount: !isNumber(inv.Invested) ? monthData[index - 1].Invested * multipleSum : multipleSum * inv.Invested,
       })),
       'amount',
     );
     return monthSum;
   });
+  console.log(groupedData);
 
   const arrayData = Object.keys(groupedData)
     .map((key, index) => {
@@ -65,6 +71,7 @@ export default ({ data, children, orgData, isDemo }) => {
     const prevMonthsTotal = prevMonths.reduce((acc, m) => {
       return acc + m[1];
     }, 0);
+    console.log(prevMonthsTotal + data[1]);
     return [moment(data[0]).format('MMM YY'), prevMonthsTotal + data[1]];
   });
   return (
