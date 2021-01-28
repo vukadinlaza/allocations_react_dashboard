@@ -1148,11 +1148,9 @@ const TR = ({
   const history = useHistory();
   const capFields = (capitalAccounts || []).map((r) => r.fields);
 
-  const capitalAccountInfo =
-    capFields.find(
-      (r) => r.Email === userProfile.email && r['Porfolio Company Name'] === investment.deal.company_name,
-    ) || {};
-  console.log(capitalAccountInfo);
+  const capitalAccountInfo = capFields.find(
+    (r) => r.Email === userProfile.email && r['Porfolio Company Name'] === investment.deal.company_name,
+  );
 
   const addedDate = moment(investment?.deal?.dealParams?.wireDeadline).format('Do MMM YYYY');
   const showDocsFn = () => setShowDocs(showDocs ? false : investment);
@@ -1207,7 +1205,7 @@ const TR = ({
           size="small"
           color="primary"
           onClick={() => setShowCaptialAccounts(capitalAccountInfo)}
-          disabled={false}
+          disabled={!capitalAccountInfo?.Email}
         >
           View
         </Button>

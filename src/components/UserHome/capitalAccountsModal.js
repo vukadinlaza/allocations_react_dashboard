@@ -1,7 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { camelCase } from 'lodash';
+import CloseIcon from '@material-ui/icons/Close';
 import { Paper, Grid, Typography, Modal } from '@material-ui/core';
 import './style.scss';
+import { nWithCommas } from '../../utils/numbers';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -31,10 +34,20 @@ const useStyles = makeStyles((theme) => ({
 
 export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
   const classes = useStyles();
+  const camelCaseKeys = (obj) =>
+    Object.keys(obj).reduce(
+      (ccObj, field) => ({
+        ...ccObj,
+        [camelCase(field)]: obj[field],
+      }),
+      {},
+    );
+  const data = camelCaseKeys(showCapitalAccounts);
+  console.log('DATA', data);
   return (
     <>
       <Modal
-        open
+        open={showCapitalAccounts.Email}
         onClose={() => {}}
         className={classes.modal}
         aria-labelledby="simple-modal-title"
@@ -43,10 +56,15 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
         <Grid container xs={12} sm={12} md={4} lg={5}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Paper className={classes.modalPaper}>
-              {/* HEADER */}
+              <Grid
+                onClick={() => setShowCaptialAccounts(false)}
+                style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer' }}
+              >
+                <CloseIcon />
+              </Grid>
               <Grid container justify="space-between">
                 <div>
-                  <Typography className={classes.header}>Boom C, a series of Woah Opportunities, LLC.</Typography>
+                  <Typography className={classes.header}> {data.spvName}</Typography>
                   <Typography className={classes.subHeader}>Private Fund Capital Account Statement</Typography>
                 </div>
               </Grid>
@@ -54,7 +72,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
 
               <Grid container justify="space-between">
                 <Typography>Name</Typography>
-                <Typography className={classes.rightVaue}>Lance Merrill</Typography>
+                <Typography className={classes.rightVaue}>{data.investorNameEntity}</Typography>
               </Grid>
               <hr className="solid" />
               <Grid container justify="space-between">
@@ -62,7 +80,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                   <Typography>Effective Date</Typography>
                   <Typography variant="subtitle2">(Date funds received By Private Fund's bank)</Typography>
                 </div>
-                <Typography className={classes.rightVaue}>12/12/2021</Typography>
+                <Typography className={classes.rightVaue}>{data.effectiveDate}</Typography>
               </Grid>
               <hr className="solid" />
               <Grid container justify="space-between">
@@ -70,24 +88,23 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                   <Typography>Subscription Amount</Typography>
                   <Typography variant="subtitle2">(Amount wired into Private Fund)</Typography>
                 </div>
-                <Typography className={classes.rightVaue}>$10,000</Typography>
+                <Typography className={classes.rightVaue}>${nWithCommas(data.subscriptionAmount)}</Typography>
               </Grid>
               <hr className="solid" />
               <Grid container justify="space-between">
                 <div>
                   <Typography>Private Fund Expenses</Typography>
-                  <Typography variant="subtitle2">
-                    (Fees based on your percent ownership in the Private Fund)
-                  </Typography>
+                  <Typography variant="subtitle2">(Legal, accounting, administration and compliance fees) </Typography>
                 </div>
-                <Typography className={classes.rightVaue}>$271</Typography>
+                <Typography className={classes.rightVaue}>${nWithCommas(data.privateFundExpenses)}</Typography>
               </Grid>
               <hr className="solid" />
               <Grid container justify="space-between">
                 <div>
                   <Typography>Managament Fee</Typography>
+                  <Typography variant="subtitle2">(Pro rata share of management fee) </Typography>
                 </div>
-                <Typography className={classes.rightVaue}>$0</Typography>
+                <Typography className={classes.rightVaue}>${nWithCommas(data.managementFee)}</Typography>
               </Grid>
               <hr className="solid" />
               <Grid container justify="space-between">
@@ -97,26 +114,26 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                     (Share of the profits of an investment paid to the manager)
                   </Typography>
                 </div>
-                <Typography className={classes.rightVaue}>10%</Typography>
+                <Typography className={classes.rightVaue}>{data.carry || 0}%</Typography>
               </Grid>
               <hr className="solid" />
               <Grid container justify="space-between">
                 <div>
                   <Typography>Net Investment Amount</Typography>
-                  <Typography variant="subtitle2">(Amount going directly into th private fund)</Typography>
+                  <Typography variant="subtitle2">(Amount going directly into the private fund)</Typography>
                 </div>
-                <Typography className={classes.rightVaue}>$9,687</Typography>
+                <Typography className={classes.rightVaue}>${nWithCommas(data.netInvestment)}</Typography>
               </Grid>
               <hr className="solid" />
               <Grid container justify="space-between">
                 <div style={{ maxWidth: '80%' }}>
                   <Typography>Ownership Percentage *</Typography>
                   <Typography variant="subtitle2">
-                    (* As of the effective date. This percentage does not take into account any carry percentage (if
-                    applicable).)
+                    *As of the effective date. This percentage does not take into account any carry percentage (if
+                    applicable).
                   </Typography>
                 </div>
-                <Typography className={classes.rightVaue}>3.39%</Typography>
+                <Typography className={classes.rightVaue}>{data.ownership}%</Typography>
               </Grid>
               <hr className="solid" />
               <Typography> Disclaimer: </Typography>
