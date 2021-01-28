@@ -101,7 +101,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
               <hr className="solid" />
               <Grid container justify="space-between">
                 <div>
-                  <Typography>Managament Fee</Typography>
+                  <Typography>Management Fee</Typography>
                   <Typography variant="subtitle2">(Pro rata share of management fee) </Typography>
                 </div>
                 <Typography className={classes.rightVaue}>${nWithCommas(data.managementFee)}</Typography>
@@ -114,7 +114,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                     (Share of the profits of an investment paid to the manager)
                   </Typography>
                 </div>
-                <Typography className={classes.rightVaue}>{data.carry || 0}%</Typography>
+                <Typography className={classes.rightVaue}>{data.carry * 100 || 0}%</Typography>
               </Grid>
               <hr className="solid" />
               <Grid container justify="space-between">
