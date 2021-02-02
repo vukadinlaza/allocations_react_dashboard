@@ -133,7 +133,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                     applicable).
                   </Typography>
                 </div>
-                <Typography className={classes.rightVaue}>{data.ownership}%</Typography>
+                <Typography className={classes.rightVaue}>{Math.round(data.ownership / 100) * 100}%</Typography>
               </Grid>
               <hr className="solid" />
               <Typography> Disclaimer: </Typography>
