@@ -23,7 +23,7 @@ import { useMutation } from '@apollo/react-hooks';
 import CancelIcon from '@material-ui/icons/Cancel';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import _, { isNumber, toNumber } from 'lodash';
+import _, { isNumber, toNumber, toLower } from 'lodash';
 import moment from 'moment';
 import Chart from 'react-google-charts';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
@@ -1149,7 +1149,10 @@ const TR = ({
   const capFields = (capitalAccounts || []).map((r) => r.fields);
 
   const capitalAccountInfo = capFields.find(
-    (r) => r.Email === userProfile.email && r['Porfolio Company Name'] === investment.deal.company_name,
+    (r) =>
+      r.Email === userProfile.email &&
+      (toLower(investment.deal.company_name).includes(toLower(r['Porfolio Company Name'])) ||
+        toLower(r['Porfolio Company Name']).includes(toLower(investment.deal.company_name))),
   );
 
   const addedDate = moment(investment?.deal?.dealParams?.wireDeadline).format('Do MMM YYYY');
