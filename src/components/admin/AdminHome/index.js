@@ -110,7 +110,7 @@ export default function AdminHome({}) {
     slug = 'browder-capital';
   }
   const fundInvestments = x.filter((inv) => {
-    return toLower(inv.Fund).includes(slug.replace('-', ' '));
+    return toLower(inv['Fund Name']).includes(slug.replace('-', ' '));
   });
   const fundData = fundInvestments;
   const isFund = fundData.length >= 1;
