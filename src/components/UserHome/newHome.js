@@ -32,7 +32,8 @@ import Loader from '../utils/Loader';
 import { nWithCommas } from '../../utils/numbers';
 import { useAuth } from '../../auth/useAuth';
 import Document from '../utils/Document';
-import { useSimpleReducer } from '../../utils/hooks';
+import { useSimpleReducer, useFetch, useFetchWithEmail } from '../../utils/hooks';
+import CapitalAccountModal from './capitalAccountsModal';
 import './style.scss';
 import { toast } from 'react-toastify';
 
@@ -135,13 +136,15 @@ const POST_ZAP = gql`
     }
   }
 `;
-
+const BASE = 'appLhEikZfHgNQtrL';
+const TABLE = 'Ledger';
 export default () => {
   const classes = useStyles();
   const location = useLocation();
   const [showDocs, setShowDocs] = useState();
   const [text, setText] = useState('');
   const [demo, setDemo] = useState(false);
+  const [showCapitalAccounts, setShowCaptialAccounts] = useState(false);
   const [postZap, {}] = useMutation(POST_ZAP);
   const investmentsRef = React.useRef(null);
 
@@ -169,6 +172,9 @@ export default () => {
   }, [setTradeData, tradeData.showLoading]);
 
   const { userProfile } = useAuth(GET_INVESTOR);
+
+  const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile.email);
+
   useEffect(() => {
     const demo = location.search === '?demo=true';
     if (demo && userProfile.investments) {
@@ -203,7 +209,6 @@ export default () => {
   };
 
   if (!userProfile.email) return <Loader />;
-
   let investments = userProfile.investments.filter((inv) => inv.status !== 'invited');
 
   if (demo && investmentsRef.current) {
@@ -232,15 +237,6 @@ export default () => {
   const investmentTotal = _.sumBy(investments, 'amount');
   const investmentsValue = _.sumBy(investments, 'value');
   const multipleSum = (investmentsValue / investmentTotal).toFixed(2);
-
-  // const weightedInvestments = investments.map((inv) => {
-  //   const dm = inv.value - inv.amount;
-  //   const x = dm / inv.amount;
-  //   const weight = inv.amount / investmentTotal;
-  //   return weight * x;
-  // });
-
-  // console.log('TOTAL', _.sum(weightedInvestments) + 1);
 
   const orderDate = new Date();
   const orderConfirmDate = moment(orderDate).format('DD MMM YY');
@@ -479,6 +475,11 @@ export default () => {
                         Documents
                       </TableCell>
                     </Hidden>
+                    <Hidden only="xs">
+                      <TableCell className={classes.tableHeader} align="center">
+                        Capital Accounts
+                      </TableCell>
+                    </Hidden>
                     <TableCell className={classes.tableHeader} align="center">
                       Buy
                     </TableCell>
@@ -497,6 +498,9 @@ export default () => {
                           setShowDocs={setShowDocs}
                           showDocs={showDocs}
                           setTradeData={setTradeData}
+                          setShowCaptialAccounts={setShowCaptialAccounts}
+                          capitalAccounts={capitalAccounts}
+                          userProfile={userProfile}
                         />
                         <DocsRow
                           key={`${showDocs._id}-docs`}
@@ -512,6 +516,9 @@ export default () => {
                         setShowDocs={setShowDocs}
                         showDocs={showDocs}
                         setTradeData={setTradeData}
+                        setShowCaptialAccounts={setShowCaptialAccounts}
+                        capitalAccounts={capitalAccounts}
+                        userProfile={userProfile}
                       />
                     ),
                   )}
@@ -1118,14 +1125,33 @@ export default () => {
           </Grid>
         </Grid>
       </Modal>
+
+      <CapitalAccountModal
+        showCapitalAccounts={showCapitalAccounts}
+        setShowCaptialAccounts={setShowCaptialAccounts}
+        classes={classes}
+      />
     </div>
   );
 };
 
-const TR = ({ investment, setShowDocs, showDocs, setTradeData, demo }) => {
+const TR = ({
+  investment,
+  setShowDocs,
+  showDocs,
+  setTradeData,
+  demo,
+  setShowCaptialAccounts,
+  capitalAccounts,
+  userProfile,
+}) => {
   const history = useHistory();
-  // const timestamp = investment._id.toString().substring(0, 8);
-  // const date = new Date(parseInt(timestamp, 16) * 1000);
+  const capFields = (capitalAccounts || []).map((r) => r.fields);
+
+  const capitalAccountInfo = capFields.find(
+    (r) => r.Email === userProfile.email && r['Porfolio Company Name'] === investment.deal.company_name,
+  );
+
   const addedDate = moment(investment?.deal?.dealParams?.wireDeadline).format('Do MMM YYYY');
   const showDocsFn = () => setShowDocs(showDocs ? false : investment);
   return (
@@ -1170,6 +1196,17 @@ const TR = ({ investment, setShowDocs, showDocs, setTradeData, demo }) => {
       </Hidden>
       <TableCell align="center">
         <Button variant="contained" size="small" color="primary" onClick={showDocsFn} disabled={!!demo}>
+          View
+        </Button>
+      </TableCell>
+      <TableCell align="center">
+        <Button
+          variant="contained"
+          size="small"
+          color="primary"
+          onClick={() => setShowCaptialAccounts(capitalAccountInfo)}
+          disabled={!capitalAccountInfo?.Email}
+        >
           View
         </Button>
       </TableCell>

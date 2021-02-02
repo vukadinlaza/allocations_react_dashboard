@@ -867,7 +867,7 @@ export default function Sidebar(props) {
   ];
   menus.push({
     to: 'https://allocations.typeform.com/to/iaP6QXYF',
-    title: 'Get Started',
+    title: 'Launch new fund',
     icon: <BuildIcon />,
   });
   menus.push({

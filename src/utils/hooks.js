@@ -1,5 +1,5 @@
 import { useReducer, useEffect, useState } from 'react';
-
+import Airtable from 'airtable';
 /** *
  *
  * simple helper hooks
@@ -26,6 +26,7 @@ export const useFetch = (base, tableName) => {
   const [data, setData] = useState([]);
   useEffect(() => {
     if (!base || !tableName) return;
+
     const url = `https://api.airtable.com/v0/${base}/${tableName}?api_key=${process.env.REACT_APP_AIRTABLE_API_KEY}`;
     const fetchData = async () => {
       setStatus('fetching');
@@ -68,5 +69,25 @@ export const usePostAirtable = (base, tableName, inputData) => {
     };
     postData();
   }, [base, inputData, tableName]);
+  return { status, data };
+};
+
+export const useFetchWithEmail = (base, tableName, email) => {
+  const [status, setStatus] = useState('idle');
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    if (!base || !tableName) return;
+    const url = `https://api.airtable.com/v0/${base}/${tableName}?api_key=${process.env.REACT_APP_AIRTABLE_API_KEY}&filterByFormula={Email}="${email}"`;
+    const fetchData = async () => {
+      setStatus('fetching');
+      const response = await fetch(url);
+      const data = await response.json();
+      setData(data.records);
+      setStatus('fetched');
+    };
+
+    fetchData();
+  }, [base, email, tableName]);
+
   return { status, data };
 };
