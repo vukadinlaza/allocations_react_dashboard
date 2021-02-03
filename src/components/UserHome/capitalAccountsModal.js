@@ -43,7 +43,6 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
       {},
     );
   const data = camelCaseKeys(showCapitalAccounts);
-  console.log('DATA', data);
   return (
     <>
       <Modal
@@ -120,7 +119,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
               <Grid container justify="space-between">
                 <div>
                   <Typography>Net Investment Amount</Typography>
-                  <Typography variant="subtitle2">(Amount going directly into the private fund)</Typography>
+                  <Typography variant="subtitle2">(Subscription amount minus initial expenses)</Typography>
                 </div>
                 <Typography className={classes.rightVaue}>${nWithCommas(data.netInvestment)}</Typography>
               </Grid>
@@ -133,7 +132,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                     applicable).
                   </Typography>
                 </div>
-                <Typography className={classes.rightVaue}>{Math.round(data.ownership / 100) * 100}%</Typography>
+                <Typography className={classes.rightVaue}>{data.ownership * 100}%</Typography>
               </Grid>
               <hr className="solid" />
               <Typography> Disclaimer: </Typography>
