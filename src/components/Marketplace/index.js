@@ -74,7 +74,7 @@ export default function Marketplace() {
     .filter((d) => {
       return d[`Deal Name`];
     })
-    .sort((a, b) => _.toNumber(b.pledged.replaceAll(/[, $]/g, '')) - _.toNumber(a.pledged.replaceAll(/[, $]/g, '')));
+    .sort((a, b) => _.toNumber(b.pledged?.replaceAll(/[, $]/g, '')) - _.toNumber(a.pledged?.replaceAll(/[, $]/g, '')));
 
   return (
     <div className="blue-container">
