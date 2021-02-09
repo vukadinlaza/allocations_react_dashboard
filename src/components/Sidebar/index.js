@@ -960,7 +960,7 @@ export default function Sidebar(props) {
                   <MenuIcon />
                 </IconButton>
                 <div className={classes.brand}>
-                  <Brand organizations_admin={userProfile.organizations_admin || []} />
+                  <Brand organizations_admin={userProfile.organizations_admin || []} admin={userProfile.admin} />
                 </div>
                 <NavBar />
               </Toolbar>
@@ -1018,10 +1018,16 @@ export default function Sidebar(props) {
 
 const whitelist = ['allocations', 'organizations', 'funds', 'investments'];
 
-function Brand({ organizations_admin }) {
+function Brand({ organizations_admin, admin }) {
   const history = useHistory();
   const match = useRouteMatch('/admin/:organization');
   const dealMatch = useRouteMatch('/deals/:organization/:id');
+  let isAdmin = organizations_admin.find((org) => {
+    return org.slug === match?.params?.organization;
+  });
+  if (admin) {
+    isAdmin = true;
+  }
 
   const adminMatches = match && match.params.organization && !whitelist.includes(match.params.organization);
   const dealMatches = dealMatch && dealMatch.params.organization && !whitelist.includes(dealMatch.params.organization);
@@ -1032,7 +1038,7 @@ function Brand({ organizations_admin }) {
       'name',
       false,
     );
-    return <OrgLogo slug={slug} name={orgName} />;
+    return <OrgLogo slug={slug} name={orgName} isAdmin={isAdmin} />;
   }
 
   return (
@@ -1057,15 +1063,16 @@ function deSlugify(slug) {
   }
 }
 
-function OrgLogo({ slug, name }) {
+function OrgLogo({ slug, name, isAdmin }) {
   const history = useHistory();
   const [img, setImg] = useState();
   useEffect(() => {
     setImg(`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${slug}.png`);
   }, [slug]);
+  const pushfn = isAdmin ? () => history.push(`/admin/${slug}`) : () => {};
   if (!img) {
     return (
-      <div className="brand" onClick={() => history.push(`/admin/${slug}`)}>
+      <div className="brand" onClick={pushfn}>
         <span style={{ height: '60px', width: '180px', textAlign: 'center', fontSize: '1.5em' }}>
           <b>{name || deSlugify(slug)}</b>
         </span>

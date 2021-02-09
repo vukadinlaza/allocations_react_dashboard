@@ -209,8 +209,10 @@ export default () => {
   };
 
   if (!userProfile.email) return <Loader />;
-  let investments = userProfile.investments.filter((inv) => inv.status !== 'invited');
-
+  let { investments } = userProfile;
+  if (userProfile.email === 'kadvani1@gmail.com') {
+    investments = investments.filter((i) => i.status !== 'invited');
+  }
   if (demo && investmentsRef.current) {
     investments = investmentsRef.current;
   }
@@ -380,136 +382,114 @@ export default () => {
           </Paper>
         </Grid>
       </Grid>
-      {investments.length >= 1 ? (
-        <>
-          <Grid container justify="space-between" style={{ marginTop: '1em' }}>
-            <Grid item xs={12} sm={12} md={6} style={{ border: '1em solid transparent' }}>
-              <Paper style={{ minHeight: '400px' }}>
-                <p
-                  style={{
-                    color: 'rgba(0,0,0,0.4)',
-                    paddingLeft: '10px',
-                    paddingTop: '10px',
-                  }}
-                >
-                  Portfolio Overview
-                </p>
-                <Grid item sm={12} md={12}>
-                  {investments.length !== 0 ? (
-                    <Chart
-                      chartType="PieChart"
-                      width="100%"
-                      height="300px"
-                      data={[
-                        ['Investment', 'Amount'],
-                        ...investments.map((inv) => [inv.deal.company_name, inv.amount]),
-                      ]}
-                      options={chartOptionsA}
-                    />
-                  ) : null}
-                </Grid>
-              </Paper>
-            </Grid>
-
-            <Grid item xs={12} sm={12} md={6} style={{ border: '1em solid transparent' }}>
-              <Paper style={{ minHeight: '400px' }}>
-                <p
-                  style={{
-                    color: 'rgba(0,0,0,0.4)',
-                    paddingLeft: '10px',
-                    paddingTop: '10px',
-                  }}
-                >
-                  Portfolio Value
-                </p>
-                <Grid item sm={12} md={12}>
-                  {investments.length !== 0 ? (
-                    <Chart
-                      chartType="SteppedAreaChart"
-                      width="100%"
-                      height="300px"
-                      data={[['Time', 'Value'], ...graphBData]}
-                      options={chartOptionsB}
-                    />
-                  ) : null}
-                </Grid>
-              </Paper>
-            </Grid>
+      <>
+        <Grid container justify="space-between" style={{ marginTop: '1em' }}>
+          <Grid item xs={12} sm={12} md={6} style={{ border: '1em solid transparent' }}>
+            <Paper style={{ minHeight: '400px' }}>
+              <p
+                style={{
+                  color: 'rgba(0,0,0,0.4)',
+                  paddingLeft: '10px',
+                  paddingTop: '10px',
+                }}
+              >
+                Portfolio Overview
+              </p>
+              <Grid item sm={12} md={12}>
+                {investments.length !== 0 ? (
+                  <Chart
+                    chartType="PieChart"
+                    width="100%"
+                    height="300px"
+                    data={[['Investment', 'Amount'], ...investments.map((inv) => [inv.deal.company_name, inv.amount])]}
+                    options={chartOptionsA}
+                  />
+                ) : null}
+              </Grid>
+            </Paper>
           </Grid>
-          <Grid item sm={12} md={12} style={{ border: '1em solid transparent' }}>
-            <Paper>
-              <Table>
-                <TableHead>
-                  <TableRow style={{ borderBottom: 'solid black 1px' }}>
-                    <TableCell className={classes.tableHeader} align="left">
-                      Name
-                    </TableCell>
-                    <Hidden only="xs">
-                      <TableCell className={classes.tableHeader} align="center">
-                        Status
-                      </TableCell>
-                    </Hidden>
-                    <Hidden only="xs">
-                      <TableCell className={classes.tableHeader} align="center">
-                        Investment Date
-                      </TableCell>
-                    </Hidden>
+
+          <Grid item xs={12} sm={12} md={6} style={{ border: '1em solid transparent' }}>
+            <Paper style={{ minHeight: '400px' }}>
+              <p
+                style={{
+                  color: 'rgba(0,0,0,0.4)',
+                  paddingLeft: '10px',
+                  paddingTop: '10px',
+                }}
+              >
+                Portfolio Value
+              </p>
+              <Grid item sm={12} md={12}>
+                {investments.length !== 0 ? (
+                  <Chart
+                    chartType="SteppedAreaChart"
+                    width="100%"
+                    height="300px"
+                    data={[['Time', 'Value'], ...graphBData]}
+                    options={chartOptionsB}
+                  />
+                ) : null}
+              </Grid>
+            </Paper>
+          </Grid>
+        </Grid>
+        <Grid item sm={12} md={12} style={{ border: '1em solid transparent' }}>
+          <Paper>
+            <Table>
+              <TableHead>
+                <TableRow style={{ borderBottom: 'solid black 1px' }}>
+                  <TableCell className={classes.tableHeader} align="left">
+                    Name
+                  </TableCell>
+                  <Hidden only="xs">
                     <TableCell className={classes.tableHeader} align="center">
-                      Investment Amount
+                      Status
                     </TableCell>
-                    <Hidden only="xs">
-                      <TableCell className={classes.tableHeader} align="center">
-                        Investment Value
-                      </TableCell>
-                    </Hidden>
-                    <Hidden only="xs">
-                      <TableCell className={classes.tableHeader} align="center">
-                        Multiple
-                      </TableCell>
-                    </Hidden>
+                  </Hidden>
+                  <Hidden only="xs">
                     <TableCell className={classes.tableHeader} align="center">
-                      Deal Page
+                      Investment Date
                     </TableCell>
-                    <Hidden only="xs">
-                      <TableCell className={classes.tableHeader} align="center">
-                        Documents
-                      </TableCell>
-                    </Hidden>
-                    <Hidden only="xs">
-                      <TableCell className={classes.tableHeader} align="center">
-                        Capital Accounts
-                      </TableCell>
-                    </Hidden>
+                  </Hidden>
+                  <TableCell className={classes.tableHeader} align="center">
+                    Investment Amount
+                  </TableCell>
+                  <Hidden only="xs">
                     <TableCell className={classes.tableHeader} align="center">
-                      Buy
+                      Investment Value
                     </TableCell>
+                  </Hidden>
+                  <Hidden only="xs">
                     <TableCell className={classes.tableHeader} align="center">
-                      Sell
+                      Multiple
                     </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {investments.map((investment) =>
-                    showDocs?._id === investment?._id ? (
-                      <>
-                        <TR
-                          demo={demo}
-                          investment={investment}
-                          setShowDocs={setShowDocs}
-                          showDocs={showDocs}
-                          setTradeData={setTradeData}
-                          setShowCaptialAccounts={setShowCaptialAccounts}
-                          capitalAccounts={capitalAccounts}
-                          userProfile={userProfile}
-                        />
-                        <DocsRow
-                          key={`${showDocs._id}-docs`}
-                          docs={showDocs.documents}
-                          investment={investment}
-                          demo={demo}
-                        />
-                      </>
-                    ) : (
+                  </Hidden>
+                  <TableCell className={classes.tableHeader} align="center">
+                    Deal Page
+                  </TableCell>
+                  <Hidden only="xs">
+                    <TableCell className={classes.tableHeader} align="center">
+                      Documents
+                    </TableCell>
+                  </Hidden>
+                  <Hidden only="xs">
+                    <TableCell className={classes.tableHeader} align="center">
+                      Capital Accounts
+                    </TableCell>
+                  </Hidden>
+                  <TableCell className={classes.tableHeader} align="center">
+                    Buy
+                  </TableCell>
+                  <TableCell className={classes.tableHeader} align="center">
+                    Sell
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {investments.map((investment) =>
+                  showDocs?._id === investment?._id ? (
+                    <>
                       <TR
                         demo={demo}
                         investment={investment}
@@ -520,62 +500,31 @@ export default () => {
                         capitalAccounts={capitalAccounts}
                         userProfile={userProfile}
                       />
-                    ),
-                  )}
-                </TableBody>
-              </Table>
-            </Paper>
-          </Grid>
-        </>
-      ) : (
-        <Paper style={{ margin: '1rem', padding: '2rem' }}>
-          <Typography variant="h6" style={{ color: '#5C6E84', textAlign: 'center', padding: '1rem' }}>
-            Having trouble finding your investment?
-          </Typography>
-          <Grid container sm={12} md={12} lg={12}>
-            <Grid item xs={12} sm={12} md={8} lg={8}>
-              <Typography variant="subtitle2" style={{ color: '#5C6E84', padding: '.25rem' }}>
-                Enter your deal name
-              </Typography>
-              <TextField
-                style={{ width: '100%', padding: '.5rem', marginBottom: '1rem' }}
-                size="lg"
-                type="text"
-                onChange={(e) => {
-                  setText(e.target.value);
-                }}
-                label="Deal Name"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{ display: 'flex', alignItems: 'flex-end', marginBottom: '.5rem' }}
-            >
-              <Button
-                variant="contained"
-                color="primary"
-                style={{ width: '100%', height: '50%', margin: '1rem' }}
-                size="medium"
-                onClick={() => {
-                  toast.success('Success! Allocations has been notified');
-                  postZap({
-                    variables: {
-                      body: { zapUrl: 'https://hooks.zapier.com/hooks/catch/7904699/ola4wwb', dealName: text },
-                    },
-                  });
-                }}
-              >
-                Find Investment
-              </Button>
-            </Grid>
-          </Grid>
-        </Paper>
-      )}
+                      <DocsRow
+                        key={`${showDocs._id}-docs`}
+                        docs={showDocs.documents}
+                        investment={investment}
+                        demo={demo}
+                      />
+                    </>
+                  ) : (
+                    <TR
+                      demo={demo}
+                      investment={investment}
+                      setShowDocs={setShowDocs}
+                      showDocs={showDocs}
+                      setTradeData={setTradeData}
+                      setShowCaptialAccounts={setShowCaptialAccounts}
+                      capitalAccounts={capitalAccounts}
+                      userProfile={userProfile}
+                    />
+                  ),
+                )}
+              </TableBody>
+            </Table>
+          </Paper>
+        </Grid>
+      </>
 
       <Modal
         open={tradeData?.open}
