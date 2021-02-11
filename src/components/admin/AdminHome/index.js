@@ -195,7 +195,7 @@ export default function AdminHome({}) {
       </div>
 
       <>
-        {tab === 'active-deals' && <ActiveDeals orgData={orgData} isDemo={isDemo} />}
+        {tab === 'active-deals' && <ActiveDeals orgData={orgData} isDemo={isDemo} superadmin={data?.investor?.admin} />}
         {tab === 'closed-deals' && <ClosedDeals orgData={orgData} />}
         {tab === 'all-investors' && <Investors />}
         {tab === 'investments' && <Investments />}
