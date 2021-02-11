@@ -30,6 +30,7 @@ import OrganizationNew from './components/OrganizationNew';
 import OrganizationMembers from './components/OrganizationMembers';
 import ThankYou from './components/ThankYou/index';
 import DealDocuments from './components/DealDocuments';
+import NewMember from './components/Newmember';
 import TVC from './components/TVC';
 
 // superadmin
@@ -77,6 +78,7 @@ const App = () => {
           <PrivateRoute path="/identity" component={Indentity} />
           <PrivateRoute path="/dealdocs" component={DealDocuments} />
           <PrivateRoute path="/tvclogin" component={TVC} />
+          <PrivateRoute path="/newMember/:accountId" component={NewMember} />
 
           {/** Onboarding * */}
           <Route path="/getting-started" component={Faq} exact />

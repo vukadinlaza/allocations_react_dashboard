@@ -7,8 +7,8 @@ import { useMutation } from '@apollo/react-hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CloudDone, HourglassEmpty, CheckCircle } from '@material-ui/icons';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import { UsaStates } from 'usa-states';
 
-import { Col, Row } from 'reactstrap';
 import {
   Button,
   List,
@@ -73,43 +73,47 @@ export function validate(investor) {
   return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
 }
 
-export default function InvestorEditForm({
+export default function EntityEditForm({
   investor,
   setInvestor,
   actionText,
   icon,
   setFormStatus,
   noValidate = false,
+  submitfn,
 }) {
-  const classes = useStyles();
   const [errors, setErrors] = useState([]);
   const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_USER);
 
   const handleChange = (prop) => (e) => {
     e.persist();
     if (prop === 'investor_type') {
-      return setInvestor((prev) => ({ ...prev, [prop]: e.target.value, accredited_investor_status: '' }));
+      return setInvestor({ [prop]: e.target.value, accredited_investor_status: '' });
     }
-    return setInvestor((prev) => ({ ...prev, [prop]: e.target.value }));
+    return setInvestor({ [prop]: e.target.value });
   };
+  const usStates = new UsaStates();
 
+  // const submit = () => {
+  //   // don't validate if noValidate flag passed
+  //   if (noValidate) return updateInvestor({ variables: { investor } });
+
+  //   const validation = validate(investor);
+  //   const required =
+  //     investor.investor_type === 'entity'
+  //       ? ['entity_name', 'accredited_investor_status', ...reqs]
+  //       : ['first_name', 'last_name', ...reqs];
+  //   const payload = pick(investor, [...required, '_id']);
+  //   setErrors(validation);
+  //   if (validation.length === 0) {
+  //     updateInvestor({
+  //       variables: { investor: payload },
+  //       onCompleted: toast.success('Success'),
+  //     });
+  //   }
+  // };
   const submit = () => {
-    // don't validate if noValidate flag passed
-    if (noValidate) return updateInvestor({ variables: { investor } });
-
-    const validation = validate(investor);
-    const required =
-      investor.investor_type === 'entity'
-        ? ['entity_name', 'accredited_investor_status', ...reqs]
-        : ['first_name', 'last_name', ...reqs];
-    const payload = pick(investor, [...required, '_id']);
-    setErrors(validation);
-    if (validation.length === 0) {
-      updateInvestor({
-        variables: { investor: payload },
-        onCompleted: toast.success('Success'),
-      });
-    }
+    return submitfn();
   };
 
   useEffect(() => {
@@ -121,118 +125,111 @@ export default function InvestorEditForm({
 
   return (
     <>
-      <Paper>
-        <form noValidate autoComplete="off" style={{ padding: '16px' }}>
-          <Typography variant="h6" gutterBottom>
-            Profile {icon && <FontAwesomeIcon icon={icon} spin={icon === 'circle-notch'} />}
-          </Typography>
-          <Typography variant="subtitle2" style={{ marginBottom: '16px' }}>
-            This information can be edited from your profile page.
-          </Typography>
-          <Grid container spacing={3} style={{ marginTop: '16px' }}>
+      <form noValidate autoComplete="off" style={{ padding: '16px' }}>
+        <Typography variant="h6" gutterBottom>
+          Add A New Entity {icon && <FontAwesomeIcon icon={icon} spin={icon === 'circle-notch'} />}
+        </Typography>
+        <Typography variant="subtitle2" style={{ marginBottom: '16px' }}>
+          This information is used to prepopulate documents.
+        </Typography>
+        <Grid container spacing={3} style={{ marginTop: '16px' }}>
+          <Grid item xs={12} sm={12} md={6}>
+            <FormControl required error={errors.includes('investor_type')} variant="outlined" style={{ width: '100%' }}>
+              <InputLabel>Investor Type</InputLabel>
+              <Select
+                value={investor.investor_type || ''}
+                onChange={handleChange('investor_type')}
+                inputProps={{ name: 'Type' }}
+              >
+                <MenuItem value="" />
+                <MenuItem value="individual">Individual</MenuItem>
+                <MenuItem value="entity">Entity</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+
+          {investor.investor_type === 'entity' && (
             <Grid item xs={12} sm={12} md={6}>
+              <AccreditedInvestorStatus investor={investor} handleChange={handleChange} errors={errors} />
+            </Grid>
+          )}
+
+          <Grid item xs={12} sm={12} md={6}>
+            <FormControl required error={errors.includes('country')} variant="outlined" style={{ width: '100%' }}>
+              <InputLabel>Country of Residence or Place of Business</InputLabel>
+              <Select
+                value={investor.country || ''}
+                onChange={handleChange('country')}
+                inputProps={{ name: 'Country' }}
+              >
+                <MenuItem value="" />
+                {[{ countryName: 'United States' }, ...countries].map(({ countryName }) => (
+                  <MenuItem key={countryName} value={countryName}>
+                    {countryName}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={6}>
+            <FormControl
+              required
+              disabled
+              error={errors.includes('country')}
+              variant="outlined"
+              style={{ width: '100%' }}
+            >
+              <TextField
+                error={errors.includes('email')}
+                style={{ width: '100%' }}
+                value={get(investor, 'email') || ''}
+                onChange={handleChange('email')}
+                label="Email"
+                variant="outlined"
+              />
+            </FormControl>
+          </Grid>
+          {investor.country === 'United States' && (
+            <Grid item xs={6} sm={6} md={6}>
               <FormControl
                 required
-                error={errors.includes('investor_type')}
+                //   error={errors.includes('country')}
                 variant="outlined"
                 style={{ width: '100%' }}
               >
-                <InputLabel>Investor Type</InputLabel>
-                <Select
-                  value={investor.investor_type || ''}
-                  onChange={handleChange('investor_type')}
-                  inputProps={{ name: 'Type' }}
-                >
+                <InputLabel>State</InputLabel>
+                <Select value={investor.state || ''} onChange={handleChange('state')} inputProps={{ name: 'state' }}>
                   <MenuItem value="" />
-                  <MenuItem value="individual">Individual</MenuItem>
-                  <MenuItem value="entity">Entity</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-
-            {investor.investor_type === 'entity' && (
-              <Grid item xs={12} sm={12} md={6}>
-                <AccreditedInvestorStatus investor={investor} handleChange={handleChange} errors={errors} />
-              </Grid>
-            )}
-
-            <Grid item xs={12} sm={12} md={6}>
-              <FormControl required error={errors.includes('country')} variant="outlined" style={{ width: '100%' }}>
-                <InputLabel>Country of Residence or Place of Business</InputLabel>
-                <Select
-                  value={investor.country || ''}
-                  onChange={handleChange('country')}
-                  inputProps={{ name: 'Country' }}
-                >
-                  <MenuItem value="" />
-                  {[{ countryName: 'United States' }, ...countries].map(({ countryName }) => (
-                    <MenuItem key={countryName} value={countryName}>
-                      {countryName}
+                  {usStates.states.map(({ name }) => (
+                    <MenuItem key={name} value={name}>
+                      {name}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
             </Grid>
+          )}
 
-            <Grid item xs={12} sm={12} md={6}>
-              <FormControl
-                required
-                disabled
-                error={errors.includes('country')}
-                variant="outlined"
-                style={{ width: '100%' }}
-              >
-                <TextField
-                  error={errors.includes('email')}
-                  style={{ width: '100%' }}
-                  value={get(investor, 'email') || ''}
-                  onChange={handleChange('email')}
-                  label="Email"
-                  variant="outlined"
-                />
-              </FormControl>
-            </Grid>
+          <InvestorName investor={investor} errors={errors} handleChange={handleChange} />
 
-            <InvestorName investor={investor} errors={errors} handleChange={handleChange} />
-
-            <Grid item xs={12} sm={12} md={6}>
-              <TextField
-                required
-                error={errors.includes('signer_full_name')}
-                style={{ width: '100%' }}
-                value={get(investor, 'signer_full_name') || ''}
-                onChange={handleChange('signer_full_name')}
-                label="Full Name of Signer"
-                variant="outlined"
-              />
-            </Grid>
+          <Grid item xs={12} sm={12} md={6}>
+            <TextField
+              required
+              error={errors.includes('signer_full_name')}
+              style={{ width: '100%' }}
+              value={get(investor, 'signer_full_name') || ''}
+              onChange={handleChange('signer_full_name')}
+              label="Full Name of Signer"
+              variant="outlined"
+            />
           </Grid>
+        </Grid>
 
-          <Button variant="contained" style={{ marginTop: 16 }} onClick={submit} color="primary">
-            {actionText}
-          </Button>
-
-          {/* <div className={classes.paper}>
-
-          <Typography variant="h6" gutterBottom>
-            KYC
-          </Typography>
-          <Typography variant="subtitle2">
-            Optional information:
-          </Typography>
-
-          <KYC investor={investor} setInvestor={setInvestor} />
-
-          <Button variant="contained"
-            style={{ marginTop: 16 }}
-            onClick={submit}
-            color="primary">
-            {actionText}
-          </Button>
-
-        </div> */}
-        </form>
-      </Paper>
+        <Button variant="contained" style={{ marginTop: 16 }} onClick={submit} color="primary">
+          {actionText}
+        </Button>
+      </form>
     </>
   );
 }
