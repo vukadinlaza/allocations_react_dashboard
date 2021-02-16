@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Typography, Paper, Grid, Button, Table, TableBody, TableHead, TableCell, TableRow } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { capitalize } from 'lodash';
+import { toast } from 'react-toastify';
+import SettingsIcon from '@material-ui/icons/Settings';
 import InvestorEditForm from '../forms/InvestorEdit';
 import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
@@ -64,6 +66,33 @@ const CREATE_ENTITY = gql`
     createEntity(payload: $payload)
   }
 `;
+
+const REMOVE_ACCT_ENTITY = gql`
+  mutation DeleteEntity($accountId: String, $entityId: String!) {
+    deleteEntity(accountId: $accountId, entityId: $entityId)
+  }
+`;
+
+const UPDATE_ENTITY = gql`
+  mutation UpdateEntity($payload: EntityInput!) {
+    updateEntity(payload: $payload) {
+      _id
+      first_name
+      last_name
+      country
+      entity_name
+      investor_type
+      signer_full_name
+      accredited_investor_status
+      email
+      passport {
+        link
+        path
+      }
+    }
+  }
+`;
+
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -78,6 +107,8 @@ export default function Profile() {
   const { userProfile, refetch: refetchUser } = useAuth(GET_INVESTOR);
   const { data, refetch: refetchAccountUsers } = useQuery(GET_ACCOUNT_USERS);
   const [createEntity, { data: createEntityRes }] = useMutation(CREATE_ENTITY);
+  const [deleteEntity, { data: deleteEntityRes }] = useMutation(REMOVE_ACCT_ENTITY);
+  const [updateEntity, { data: updateEntityRes }] = useMutation(UPDATE_ENTITY);
   const { data: accountEntities, refetch: refetchAccountEntities } = useQuery(GET_ACCOUNT_ENTITIES, {
     variables: { accountId: data?.accountId },
   });
@@ -103,10 +134,10 @@ export default function Profile() {
     }
   }, [formStatus, refetchAccountUsers, refetchUser]);
   useEffect(() => {
-    if (createEntityRes) {
+    if (createEntityRes || deleteEntityRes || updateEntityRes) {
       refetchAccountEntities();
     }
-  }, [createEntityRes, refetchAccountEntities]);
+  }, [createEntityRes, refetchAccountEntities, deleteEntityRes, updateEntityRes]);
 
   const icon = formStatus === 'loading' ? 'circle-notch' : formStatus === 'complete' ? 'check' : null;
 
@@ -141,7 +172,7 @@ export default function Profile() {
         userProfile={userProfile}
         data={data}
         setShowEntityModal={setShowEntityModal}
-        removeUser={removeUser}
+        deleteEntity={deleteEntity}
         refetchAccountUsers={refetchAccountUsers}
         accountEntities={accountEntities}
       />
@@ -152,6 +183,8 @@ export default function Profile() {
         accountId={data?.accountId}
         refetchAccountEntities={refetchAccountEntities}
         createEntity={createEntity}
+        updateEntity={updateEntity}
+        deleteEntity={deleteEntity}
       />
     </>
   );
@@ -240,7 +273,7 @@ const AccountEntities = ({
   userProfile,
   data,
   setShowEntityModal,
-  removeUser,
+  deleteEntity,
   refetchAccountUsers,
   accountEntities,
 }) => {
@@ -249,6 +282,10 @@ const AccountEntities = ({
       return investor.entity_name;
     }
     return investor.signer_full_name;
+  };
+  const handleDelete = () => {
+    refetchAccountUsers();
+    toast.success('Success! Entity removed');
   };
   if (!accountEntities?.getEntities) return null;
   return (
@@ -281,21 +318,16 @@ const AccountEntities = ({
               <TableCell align="center">{row.email}</TableCell>
               <TableCell align="center">{row.country}</TableCell>
               <TableCell align="center">
-                <Button
+                <SettingsIcon
                   color="primary"
-                  variant="contained"
-                  disabled={data?.rootAdmin !== userProfile._id || data.rootAdmin === row._id}
+                  style={{ cursor: 'pointer' }}
                   onClick={() => {
-                    removeUser({
-                      onCompleted: refetchAccountUsers(),
-                      variables: { userId: row._id, accountId: data?.accountId },
-                      notifyOnNetworkStatusChange: true,
-                      fetchPolicy: 'no-cache',
-                    });
+                    if (data?.rootAdmin !== userProfile._id || data.rootAdmin === row._id) {
+                      return;
+                    }
+                    setShowEntityModal(row);
                   }}
-                >
-                  Delete
-                </Button>
+                />
               </TableCell>
             </TableRow>
           ))}

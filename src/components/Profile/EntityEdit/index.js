@@ -43,26 +43,6 @@ const useStyles = makeStyles((theme) => ({
  *
  * */
 
-const UPDATE_USER = gql`
-  mutation UpdateUser($investor: UserInput!) {
-    updateUser(input: $investor) {
-      _id
-      first_name
-      last_name
-      country
-      entity_name
-      investor_type
-      signer_full_name
-      accredited_investor_status
-      email
-      passport {
-        link
-        path
-      }
-    }
-  }
-`;
-
 const reqs = ['country', 'investor_type', 'signer_full_name', 'email'];
 
 export function validate(investor) {
@@ -81,9 +61,11 @@ export default function EntityEditForm({
   setFormStatus,
   noValidate = false,
   submitfn,
+  deleteEntity,
+  isEdit,
+  handleClose,
 }) {
   const [errors, setErrors] = useState([]);
-  const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_USER);
 
   const handleChange = (prop) => (e) => {
     e.persist();
@@ -93,33 +75,6 @@ export default function EntityEditForm({
     return setInvestor({ [prop]: e.target.value });
   };
   const usStates = new UsaStates();
-
-  // const submit = () => {
-  //   // don't validate if noValidate flag passed
-  //   if (noValidate) return updateInvestor({ variables: { investor } });
-
-  //   const validation = validate(investor);
-  //   const required =
-  //     investor.investor_type === 'entity'
-  //       ? ['entity_name', 'accredited_investor_status', ...reqs]
-  //       : ['first_name', 'last_name', ...reqs];
-  //   const payload = pick(investor, [...required, '_id']);
-  //   setErrors(validation);
-  //   if (validation.length === 0) {
-  //     updateInvestor({
-  //       variables: { investor: payload },
-  //       onCompleted: toast.success('Success'),
-  //     });
-  //   }
-  // };
-  const submit = () => {
-    return submitfn();
-  };
-
-  useEffect(() => {
-    if (updateInvestorRes.data) setFormStatus('complete');
-    if (updateInvestorRes.loading) setFormStatus('loading');
-  }, [setFormStatus, updateInvestorRes]);
 
   if (!investor) return <Loader />;
 
@@ -225,10 +180,29 @@ export default function EntityEditForm({
             />
           </Grid>
         </Grid>
-
-        <Button variant="contained" style={{ marginTop: 16 }} onClick={submit} color="primary">
-          {actionText}
-        </Button>
+        <Grid style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Button variant="contained" style={{ marginTop: 16 }} onClick={submitfn} color="primary">
+            {actionText}
+          </Button>
+          {isEdit && (
+            <Button
+              variant="contained"
+              style={{ marginTop: 16, backgroundColor: '#E31919' }}
+              onClick={() => {
+                return deleteEntity({
+                  variables: {
+                    accountId: investor.accountId,
+                    entityId: investor._id,
+                  },
+                  onCompleted: handleClose(),
+                });
+              }}
+              color="red"
+            >
+              Delete
+            </Button>
+          )}
+        </Grid>
       </form>
     </>
   );

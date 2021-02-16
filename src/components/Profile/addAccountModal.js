@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { camelCase } from 'lodash';
 import { gql } from 'apollo-boost';
 import CloseIcon from '@material-ui/icons/Close';
 import { useMutation } from '@apollo/react-hooks';
 import { Paper, Grid, Typography, Modal, TextField, Button } from '@material-ui/core';
-import { nWithCommas } from '../../utils/numbers';
+import { toast } from 'react-toastify';
 import './style.scss';
 
 const useStyles = makeStyles((theme) => ({
@@ -40,16 +39,22 @@ const SEND_ADMIN_INVITE = gql`
 export default ({ showAddAccountModal, setAddAccountModal }) => {
   const classes = useStyles();
   const [userData, setData] = useState({});
-  const [sendAccountInvite, { data }] = useMutation(SEND_ADMIN_INVITE, {
+  const [sendAccountInvite, {}] = useMutation(SEND_ADMIN_INVITE, {
     variables: { payload: {} },
   });
   const handleChange = (prop) => (e) => {
     e.persist();
-    console.log(prop);
     return setData((prev) => ({ ...prev, [prop]: e.target.value }));
   };
+  const handleClose = () => {
+    setAddAccountModal(false);
+    toast.success('Success! Email sent');
+  };
   const handleSubmit = () => {
-    sendAccountInvite({ variables: { payload: userData }, onComplete: setAddAccountModal(false) });
+    sendAccountInvite({
+      variables: { payload: userData },
+      onComplete: handleClose(),
+    });
   };
   return (
     <>
@@ -65,10 +70,15 @@ export default ({ showAddAccountModal, setAddAccountModal }) => {
             <Paper className={classes.modalPaper}>
               <Grid
                 onClick={() => setAddAccountModal(false)}
-                style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer' }}
+                style={{ display: 'flex', justifyContent: 'space-between', cursor: 'pointer' }}
               >
+                <Typography variant="h6">Add New User</Typography>
                 <CloseIcon />
               </Grid>
+              <Typography variant="subtitle2" style={{ marginTop: '.5rem', marginBottom: '1rem' }}>
+                To add a user to your account, enter their email and click the send invite button. Tell them to check
+                their email!
+              </Typography>
               <form className={classes.root} noValidate autoComplete="off">
                 <Grid style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem' }}>
                   <TextField
@@ -78,7 +88,7 @@ export default ({ showAddAccountModal, setAddAccountModal }) => {
                     onChange={handleChange('newUserEmail')}
                   />
                   <Button color="primary" variant="contained" onClick={handleSubmit}>
-                    Add new
+                    Send Invite
                   </Button>
                 </Grid>
               </form>

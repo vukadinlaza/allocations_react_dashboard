@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { camelCase } from 'lodash';
+import { camelCase, pick } from 'lodash';
 import { gql } from 'apollo-boost';
 import CloseIcon from '@material-ui/icons/Close';
 import { useMutation } from '@apollo/react-hooks';
@@ -19,6 +19,7 @@ import {
 } from '@material-ui/core';
 import countries from 'country-region-data';
 import { UsaStates } from 'usa-states';
+import { toast } from 'react-toastify';
 import { nWithCommas } from '../../utils/numbers';
 import EntityEditForm from './EntityEdit/index';
 
@@ -61,21 +62,70 @@ const entityInfo = {
   'Name 4a0d1cec-823e-4580-94a0-75605f445380': 'User full name',
 };
 
-export default ({ showEntityModal, setShowEntityModal, accountId, refetchAccountEntities, createEntity }) => {
+const INITIAL_STATE = {
+  _id: '',
+  investor_type: '',
+  country: '',
+  first_name: '',
+  last_name: '',
+  entity_name: '',
+  signer_full_name: '',
+  email: '',
+  accredited_investor_status: '',
+};
+
+export default ({
+  showEntityModal,
+  setShowEntityModal,
+  accountId,
+  refetchAccountEntities,
+  createEntity,
+  updateEntity,
+  deleteEntity,
+}) => {
   const classes = useStyles();
   const [entityData, setEntityData] = useSimpleReducer({ accountId });
   const [formStatus, setFormStatus] = useState('edit');
 
+  useEffect(() => {
+    if (showEntityModal?._id) {
+      setEntityData(showEntityModal);
+    }
+  }, [setEntityData, showEntityModal, showEntityModal?._id]);
+
   const icon = formStatus === 'loading' ? 'circle-notch' : formStatus === 'complete' ? 'check' : null;
+  const isEdit = showEntityModal?._id;
+
+  const handleClose = (isEdit) => {
+    refetchAccountEntities();
+    toast.success(`Success!`);
+    setShowEntityModal(false);
+    setEntityData({ ...INITIAL_STATE, accountId });
+  };
   const submit = () => {
-    return createEntity({
-      variables: { payload: entityData },
+    const payload = pick(entityData, [
+      'investor_type',
+      'country',
+      'first_name',
+      'last_name',
+      'entity_name',
+      'signer_full_name',
+      'email',
+      'accredited_investor_status',
+    ]);
+    const fn = isEdit ? updateEntity : createEntity;
+    if (isEdit) {
+      payload._id = isEdit;
+    } else {
+      payload.accountId = accountId;
+    }
+    return fn({
+      variables: { payload },
       notifyOnNetworkStatusChange: true,
       fetchPolicy: 'no-cache',
-      onCompleted: refetchAccountEntities(),
+      onCompleted: handleClose(isEdit),
     });
   };
-
   return (
     <>
       <Modal
@@ -88,12 +138,13 @@ export default ({ showEntityModal, setShowEntityModal, accountId, refetchAccount
         <Grid container xs={12} sm={12} md={4} lg={5}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Paper className={classes.modalPaper}>
-              <Typography>Add A New Entity</Typography>
-              <Grid
-                onClick={() => setShowEntityModal(false)}
-                style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer' }}
-              >
-                <CloseIcon />
+              <Grid style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer' }}>
+                <CloseIcon
+                  onClick={() => {
+                    setEntityData({ ...INITIAL_STATE, accountId });
+                    setShowEntityModal(false);
+                  }}
+                />
               </Grid>
               <EntityEditForm
                 investor={entityData}
@@ -102,117 +153,10 @@ export default ({ showEntityModal, setShowEntityModal, accountId, refetchAccount
                 setFormStatus={setFormStatus}
                 actionText="Save Entity"
                 submitfn={submit}
+                deleteEntity={deleteEntity}
+                isEdit={isEdit}
+                handleClose={handleClose}
               />
-              {/* <form className={classes.root} noValidate autoComplete="off">
-                <Grid
-                  container
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  spacing={3}
-                  style={{ display: 'flex', justifyContent: 'space-btween' }}
-                >
-                  <Grid item xs={6} sm={6} md={6}>
-                    <FormControl
-                      required
-                      //   error={errors.includes('investor_type')}
-                      variant="outlined"
-                      style={{ width: '100%' }}
-                    >
-                      <InputLabel>Investor Type</InputLabel>
-                      <Select
-                        value={entityData.investor_type || ''}
-                        onChange={handleChange('investor_type')}
-                        inputProps={{ name: 'Type' }}
-                      >
-                        <MenuItem value="" />
-                        <MenuItem value="individual">Individual</MenuItem>
-                        <MenuItem value="entity">Entity</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={6} sm={6} md={6}>
-                    <TextField
-                      id="standard-basic"
-                      label="Entity name"
-                      className={classes.textInput}
-                      variant="outlined"
-                      onChange={handleChange('MemberName')}
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6} md={6}>
-                    <FormControl
-                      required
-                      //   error={errors.includes('country')}
-                      variant="outlined"
-                      style={{ width: '100%' }}
-                    >
-                      <InputLabel>Country of Residence</InputLabel>
-                      <Select
-                        value={entityData[entityResidence] || ''}
-                        onChange={handleChange(entityResidence)}
-                        inputProps={{ name: entityResidence }}
-                      >
-                        <MenuItem value="" />
-                        {[{ countryName: 'United States' }, ...countries].map(({ countryName }) => (
-                          <MenuItem key={countryName} value={countryName}>
-                            {countryName}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                  {((entityData.individualCountry === 'United States' && entityData.investor_type === 'individual') ||
-                    (entityData.entityCountry === 'United States' && entityData.investor_type === 'entity')) && (
-                    <Grid item xs={6} sm={6} md={6}>
-                      <FormControl
-                        required
-                        //   error={errors.includes('country')}
-                        variant="outlined"
-                        style={{ width: '100%' }}
-                      >
-                        <InputLabel>State</InputLabel>
-                        <Select
-                          value={entityData.entityState || ''}
-                          onChange={handleChange('entityState')}
-                          inputProps={{ name: 'entityState' }}
-                        >
-                          <MenuItem value="" />
-                          {usStates.states.map(({ name }) => (
-                            <MenuItem key={name} value={name}>
-                              {name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                  )}
-                  <Grid item xs={6} sm={6} md={6}>
-                    <AccreditedInvestorStatus investor={entityData} handleChange={handleChange} errors={[]} />
-                  </Grid>
-                  <Grid item xs={6} sm={6} md={6}>
-                    <TextField
-                      id="standard-basic"
-                      label="Email"
-                      className={classes.textInput}
-                      variant="outlined"
-                      onChange={handleChange('Email')}
-                    />
-                  </Grid>
-                  <Grid item xs={6} sm={6} md={6}>
-                    <TextField
-                      id="standard-basic"
-                      label="Signer Full Name"
-                      className={classes.textInput}
-                      variant="outlined"
-                      onChange={handleChange('signer_full_name')}
-                    />
-                  </Grid>
-                </Grid>
-                <Button color="primary" variant="contained" onClick={handleSubmit} style={{ margin: '1rem' }}>
-                  Add new
-                </Button>
-              </form> */}
             </Paper>
           </Grid>
         </Grid>
