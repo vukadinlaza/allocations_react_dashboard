@@ -8,13 +8,13 @@ import { Paper, Typography, List, ListItem, ListItemText, Grid, Button } from '@
 import queryString from 'query-string';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import moment from 'moment';
+import base64 from 'base-64';
 import { useAuth } from '../../auth/useAuth';
 import { nWithCommas } from '../../utils/numbers';
 import InvestmentFlow from './DealFlow';
 import Helm from './helmet';
 import Pledge from './pledge';
 import Loader from '../utils/Loader';
-
 import './style.scss';
 
 /** *
@@ -112,12 +112,11 @@ export const CREATE_INVESTMENT = gql`
 export default function Deal() {
   const mobile = useMediaQuery('(max-width:1200px)');
   const { organization, deal_slug } = useParams();
-  const location = useLocation();
   const history = useHistory();
   const { search } = useLocation();
-  const p = new URLSearchParams(search);
   const { userProfile, isAuthenticated, loading } = useAuth();
   const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL);
+  const [allowEdit, setAllowEdit] = useState(true);
   const [createInvestment, { called: didCreateInvestment }] = useMutation(CREATE_INVESTMENT, {
     onCompleted: () => {
       // alert('Mutation Succeeded!')
@@ -139,6 +138,11 @@ export default function Deal() {
   useEffect(() => {
     const blocked = userProfile?.email?.includes('allocations');
     if (data && !data.investor?.invitedDeal?.investment && !blocked) {
+      const decodedParams = base64.decode(search.substring(1));
+      const isTvc = organization === 'theventurecollective';
+      const paramsToUse = isTvc ? decodedParams : search;
+      const p = new URLSearchParams(paramsToUse);
+      // eslint-disable-next-line radix
       const amount = parseInt(p.get('amount')) || 0;
       const investment = {
         deal_id: data.investor.invitedDeal?._id,
@@ -148,8 +152,11 @@ export default function Deal() {
       if (userProfile?.email && !didCreateInvestment) {
         createInvestment({ variables: { investment } });
       }
+      if (isTvc) {
+        setAllowEdit(false);
+      }
     }
-  }, [called, createInvestment, data, didCreateInvestment, p, userProfile]);
+  }, [called, createInvestment, data, didCreateInvestment, organization, search, userProfile]);
 
   useEffect(() => {
     // theres been an error
@@ -183,7 +190,7 @@ export default function Deal() {
             <h2 className="deal-header">{deal.company_name}</h2>
             <h4 className="deal-description">{deal.company_description}</h4>
           </Grid>
-          {investment?._id && <Pledge investment={investment} refetch={refetch} />}
+          {investment?._id && <Pledge investment={investment} refetch={refetch} allowEdit={allowEdit} />}
         </Grid>
         <InvestmentFlow
           deal={{ ...deal, deal_slug, organization }}
