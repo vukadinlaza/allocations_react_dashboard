@@ -187,7 +187,7 @@ export default function Deals({ showClosed }) {
                   <TableCell>Closed</TableCell>
                   <TableCell>Size</TableCell>
                   <TableCell className="text-center">Investors</TableCell>
-                  {userProfile.admin && <TableCell />}
+                  <TableCell />
                 </Hidden>
               </TableRow>
             </TableHead>
@@ -213,11 +213,9 @@ export default function Deals({ showClosed }) {
                         <TableCell>{formatDate(deal.dealParams.wireDeadline)}</TableCell>
                         <TableCell>${nWithCommas(totalRaised)}</TableCell>
                         <TableCell className="text-center">{deal.investments.length}</TableCell>
-                        {userProfile.admin && (
-                          <TableCell align="center">
-                            <Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link>
-                          </TableCell>
-                        )}
+                        <TableCell align="center">
+                          <Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link>
+                        </TableCell>
                       </Hidden>
                     </TableRow>
                     {capitalAccount === deal._id && (
