@@ -145,7 +145,7 @@ export default function Deals({ showClosed }) {
                   <Hidden only="xs">
                     <TableCell>Progress</TableCell>
                   </Hidden>
-                  {userProfile.admin && <TableCell />}
+                  <TableCell />
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -160,11 +160,9 @@ export default function Deals({ showClosed }) {
                     <Hidden only="xs">
                       <DealProgress deal={deal} />
                     </Hidden>
-                    {userProfile.admin && (
-                      <TableCell align="center">
-                        <Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link>
-                      </TableCell>
-                    )}
+                    <TableCell align="center">
+                      <Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
