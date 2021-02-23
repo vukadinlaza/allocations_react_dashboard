@@ -90,6 +90,34 @@ const GET_INVESTOR = gql`
       email
       organizations
       admin
+      accountInvestments {
+        _id
+        value
+        amount
+        status
+        created_at
+        documents {
+          path
+          link
+        }
+        deal {
+          _id
+          slug
+          company_name
+          company_description
+          date_closed
+          status
+          appLink
+          dealParams {
+            dealMultiple
+            wireDeadline
+          }
+          organization {
+            _id
+            slug
+          }
+        }
+      }
       investments {
         _id
         value
@@ -172,6 +200,7 @@ export default () => {
   }, [setTradeData, tradeData.showLoading]);
 
   const { userProfile } = useAuth(GET_INVESTOR);
+  console.log(userProfile);
 
   const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile.email);
 
@@ -210,6 +239,7 @@ export default () => {
 
   if (!userProfile.email) return <Loader />;
   let { investments } = userProfile;
+  investments = userProfile.accountInvestments;
   if (userProfile.email === 'kadvani1@gmail.com') {
     investments = investments.filter((i) => i.status !== 'invited');
   }

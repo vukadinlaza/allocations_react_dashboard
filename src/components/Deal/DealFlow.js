@@ -29,6 +29,8 @@ import DocusignKYCEmbeddedForm from '../forms/kycTab';
 import { nWithCommas } from '../../utils/numbers';
 import Loader from '../utils/Loader';
 import EditInvestor from '../forms/editInvestor';
+import InvestorEditForm from '../forms/InvestorEdit';
+import { useSimpleReducer } from '../../utils/hooks';
 
 /** *
  *
@@ -46,6 +48,7 @@ export const GET_INVESTOR = gql`
       _id
       email
       documents
+      country
       dealInvestments(deal_id: $deal_id) {
         _id
         status
@@ -555,9 +558,22 @@ function filename(path) {
   }
 }
 
+const INITIAL_STATE = {
+  _id: '',
+  investor_type: '',
+  country: '',
+  first_name: '',
+  last_name: '',
+  entity_name: '',
+  signer_full_name: '',
+  email: '',
+  accredited_investor_status: '',
+};
+
 function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
   const [loading, setLoading] = useState(true);
   const [showEditInvestor, setShowEditInvestor] = useState(false);
+  const [investorData, setInvestor] = useState(null);
   const classes = useStyles();
   const { search, pathname } = useLocation();
 
@@ -571,13 +587,20 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 1000);
   }, []);
   useEffect(() => {
-    if (investor && !investor.first_name) {
-      setShowEditInvestor(true);
-    }
-  }, [investor]);
+    setInvestor({ ...investor });
+  }, [investor, setInvestor]);
+  // useEffect(() => {
+  //   const isProfileComplete = ['last_name', 'first_name', 'email'].every(
+  //     (i) => Object.keys(investor).includes(i) && investor[i] !== null,
+  //   );
+  //   console.log(investor);
+  //   if (investor.email && !isProfileComplete) {
+  //     setShowEditInvestor(true);
+  //   }
+  // }, [investor]);
 
   if (!deal.onboarding_link) {
     return (
@@ -605,6 +628,14 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
   if (deal.onboarding_link.includes('demo')) {
     link = `${deal.onboarding_link}&${urlParameters}`;
   }
+  const handleSubmit = (res) => {
+    if (res === 'complete') {
+      setShowEditInvestor(false);
+    }
+  };
+  const isProfileComplete = ['last_name', 'first_name', 'email'].every(
+    (i) => Object.keys(investor).includes(i) && investor[i] !== null,
+  );
 
   if (hasSigned)
     return (
@@ -627,31 +658,16 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
         })}
       </Paper>
     );
-
-  // if (showEditInvestor) {
-  //   return (
-  //     <Modal open={showEditInvestor}>
-  //       <Grid
-  //         container
-  //         xs={12}
-  //         sm={12}
-  //         md={12}
-  //         lg={12}
-  //         style={{
-  //           display: 'flex',
-  //           margin: '0',
-  //           marginTop: '20vh',
-  //           alignItems: 'center',
-  //           justifyContent: 'center',
-  //         }}
-  //       >
-  //         <Grid xs={12} sm={12} md={6} lg={6}>
-  //           <EditInvestor data={investor} refetch={() => setShowEditInvestor(false)} />
-  //         </Grid>
-  //       </Grid>
-  //     </Modal>
-  //   );
-  // }
+  if (!isProfileComplete || showEditInvestor) {
+    return (
+      <InvestorEditForm
+        investor={investorData}
+        actionText="Save"
+        setInvestor={setInvestor}
+        setFormStatus={handleSubmit}
+      />
+    );
+  }
   return (
     <div className={status === 'pledged' ? 'document-iframe' : 'document-iframe hide'}>
       {loading && (
