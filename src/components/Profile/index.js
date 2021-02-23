@@ -32,6 +32,9 @@ const GET_INVESTOR = gql`
       signer_full_name
       accredited_investor_status
       email
+      account {
+        _id
+      }
       accredidation_doc {
         link
         path
@@ -110,8 +113,10 @@ export default function Profile() {
   const [deleteEntity, { data: deleteEntityRes }] = useMutation(REMOVE_ACCT_ENTITY);
   const [updateEntity, { data: updateEntityRes }] = useMutation(UPDATE_ENTITY);
   const { data: accountEntities, refetch: refetchAccountEntities } = useQuery(GET_ACCOUNT_ENTITIES, {
-    variables: { accountId: data?.accountId },
+    variables: { accountId: userProfile?.account?._id },
   });
+
+  console.log(userProfile);
 
   const [removeUser, { data: removeRes, called }] = useMutation(REMOVE_ACCT_USER);
   const classes = useStyles();
@@ -140,8 +145,7 @@ export default function Profile() {
   }, [createEntityRes, refetchAccountEntities, deleteEntityRes, updateEntityRes]);
 
   const icon = formStatus === 'loading' ? 'circle-notch' : formStatus === 'complete' ? 'check' : null;
-
-  if (!userProfile.email || !data?.accountId)
+  if (!userProfile.email || !userProfile?.account)
     return (
       <div>
         <Loader />
@@ -264,6 +268,7 @@ const GET_ACCOUNT_ENTITIES = gql`
       investor_type
       signer_full_name
       country
+      isPrimaryEntity
     }
   }
 `;
@@ -319,10 +324,10 @@ const AccountEntities = ({
               <TableCell align="center">{row.country}</TableCell>
               <TableCell align="center">
                 <SettingsIcon
-                  color="primary"
+                  color={row.isPrimaryEntity ? 'grey' : 'primary'}
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
-                    if (data?.rootAdmin !== userProfile._id || data.rootAdmin === row._id) {
+                    if (row.isPrimaryEntity) {
                       return;
                     }
                     setShowEntityModal(row);
