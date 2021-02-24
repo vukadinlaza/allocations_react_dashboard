@@ -23,21 +23,16 @@ const GET_INVESTORS = gql`
   query GetOrg($slug: String!) {
     organization(slug: $slug) {
       _id
-      deals {
+      orgInvestors {
         _id
+        first_name
+        last_name
+        email
+        name
         investments {
           _id
-          investor {
-            _id
-            first_name
-            last_name
-            email
-            investments {
-              _id
-              amount
-              organization
-            }
-          }
+          amount
+          organization
         }
       }
     }
@@ -48,14 +43,14 @@ export default function Investors() {
   const { organization } = useParams();
   const { userProfile } = useAuth();
   const [getInvestors, { data, error }] = useLazyQuery(GET_INVESTORS, { variables: { slug: organization } });
-
+  console.log('HELLO', data);
   useEffect(() => {
     if (userProfile && userProfile.email) getInvestors();
   }, [getInvestors, userProfile]);
 
   if (error) return <div>{error.message}</div>;
 
-  if (!data?.organization?.deals)
+  if (!data?.organization?.orgInvestors)
     return (
       <div>
         <Loader />
@@ -63,18 +58,10 @@ export default function Investors() {
     );
 
   const {
-    organization: { deals },
+    organization: { orgInvestors },
   } = data;
-  const investors = _.uniq(
-    deals
-      .reduce((acc, deal) => {
-        const investors = deal.investments.map((investment) => investment.investor);
-        return [...acc, ...investors];
-      }, [])
-      .filter((inv) => inv),
-    'email',
-  );
 
+  console.log(orgInvestors.filter((i) => i.first_name === 'Brian'));
   return (
     <div className="Investors">
       {/* {organization === "allocations" && <Col sm={{ size: 12 }}>
@@ -111,32 +98,34 @@ export default function Investors() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {_.orderBy(investors, ({ investments }) => _.sumBy(investments, 'amount'), 'desc').map((investor) => (
-                  <TableRow key={investor._id}>
-                    <TableCell>{investor.email}</TableCell>
-                    <TableCell>{investor.email}</TableCell>
-                    <TableCell>
-                      {investor.investments.filter((inv) => inv.organization === data?.organization?._id).length}
-                    </TableCell>
-                    <TableCell>
-                      $
-                      {nWithCommas(
-                        _.sumBy(
-                          investor.investments.filter((inv) => inv.organization === data?.organization?._id),
-                          'amount',
-                        ),
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {(organization === 'allocations' || organization === 'vitalize') && (
-                        <Link to={`/investor/${investor._id}/home`} target="_blank">
-                          View dashboard as {investor.first_name || investor.entity_name}
-                        </Link>
-                      )}
-                    </TableCell>
-                    <TableCell />
-                  </TableRow>
-                ))}
+                {_.orderBy(orgInvestors, ({ investments }) => _.sumBy(investments, 'amount'), 'desc').map(
+                  (investor) => (
+                    <TableRow key={investor._id}>
+                      <TableCell>{investor.name || investor.email}</TableCell>
+                      <TableCell>{investor.email}</TableCell>
+                      <TableCell>
+                        {investor.investments.filter((inv) => inv.organization === data?.organization?._id).length}
+                      </TableCell>
+                      <TableCell>
+                        $
+                        {nWithCommas(
+                          _.sumBy(
+                            investor.investments.filter((inv) => inv.organization === data?.organization?._id),
+                            'amount',
+                          ),
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {(organization === 'allocations' || organization === 'vitalize') && (
+                          <Link to={`/investor/${investor._id}/home`} target="_blank">
+                            View dashboard as {investor.first_name || investor.entity_name}
+                          </Link>
+                        )}
+                      </TableCell>
+                      <TableCell />
+                    </TableRow>
+                  ),
+                )}
               </TableBody>
             </Table>
           </Paper>
