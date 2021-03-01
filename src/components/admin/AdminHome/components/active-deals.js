@@ -91,7 +91,7 @@ export const Deal = ({ deal, index, superadmin, slug, isDemo }) => {
   const { organization } = useParams();
   const [activeDeal, setActiveDeal] = useState();
   let raised = deal?.raised;
-  if (slug === 'vitalize') {
+  if (slug === 'vitalize-venture-group') {
     raised = _.sumBy(_.uniqBy(deal.investments, 'investor.investingAs'), 'amount');
   }
   const val = (Number(raised) / (Number(deal.target) || Number(raised))) * 100;
