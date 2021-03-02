@@ -29,6 +29,8 @@ import DocusignKYCEmbeddedForm from '../forms/kycTab';
 import { nWithCommas } from '../../utils/numbers';
 import Loader from '../utils/Loader';
 import EditInvestor from '../forms/editInvestor';
+import InvestorEditForm from '../forms/InvestorEdit';
+import { useSimpleReducer } from '../../utils/hooks';
 
 /** *
  *
@@ -46,6 +48,7 @@ export const GET_INVESTOR = gql`
       _id
       email
       documents
+      country
       dealInvestments(deal_id: $deal_id) {
         _id
         status
@@ -196,6 +199,7 @@ export default function InvestmentFlow({ deal, investor, refetch }) {
             investor={investor}
             data={data}
             hasSigned={hasSigned}
+            refetch={refetch}
           />
         )}
         {status === 'kyc' && (
@@ -555,9 +559,22 @@ function filename(path) {
   }
 }
 
-function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
+const INITIAL_STATE = {
+  _id: '',
+  investor_type: '',
+  country: '',
+  first_name: '',
+  last_name: '',
+  entity_name: '',
+  signer_full_name: '',
+  email: '',
+  accredited_investor_status: '',
+};
+
+function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetch }) {
   const [loading, setLoading] = useState(true);
   const [showEditInvestor, setShowEditInvestor] = useState(false);
+  const [investorData, setInvestor] = useState(null);
   const classes = useStyles();
   const { search, pathname } = useLocation();
 
@@ -571,13 +588,20 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 1000);
   }, []);
   useEffect(() => {
-    if (investor && !investor.first_name) {
-      setShowEditInvestor(true);
-    }
-  }, [investor]);
+    setInvestor({ ...investor });
+  }, [investor, setInvestor]);
+  // useEffect(() => {
+  //   const isProfileComplete = ['last_name', 'first_name', 'email'].every(
+  //     (i) => Object.keys(investor).includes(i) && investor[i] !== null,
+  //   );
+  //   console.log(investor);
+  //   if (investor.email && !isProfileComplete) {
+  //     setShowEditInvestor(true);
+  //   }
+  // }, [investor]);
 
   if (!deal.onboarding_link) {
     return (
@@ -591,6 +615,14 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
   if (!investor) return <Loader />;
   const params = {
     userEmail: investor.email,
+    'Dropdown 84e664a2-e6d4-4511-a646-169964198709': investor.investor_type === 'individual' ? 'Individual' : 'Entity',
+    MemberName: investor.investor_type === 'individual' ? investor.name : investor.entity_name,
+    CountryResIndividual: investor.investor_type === 'individual' ? investor.country : '',
+    PlaceBusinessEntity: investor.investor_type === 'entity' ? investor.country : '',
+    'Email c48a98a1-28ed-4a97-bd59-3d6e5b4d8acb': investor.email,
+    'Name 1cc9972f-8da1-4868-9a23-02c50f5e0880': investor.name,
+    Member_UserName: investor.name,
+    'Radio Group ce3ecba5-3c7c-4e7c-b886-981a8bdf3b1b': 'Radio1',
   };
   if (amount) {
     params.investmentAmount = amount;
@@ -605,6 +637,14 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
   if (deal.onboarding_link.includes('demo')) {
     link = `${deal.onboarding_link}&${urlParameters}`;
   }
+  const handleSubmit = (res) => {
+    if (res === 'complete') {
+      refetch();
+    }
+  };
+  const isProfileComplete = ['last_name', 'first_name', 'email'].every(
+    (i) => Object.keys(investor).includes(i) && investor[i] !== null,
+  );
 
   if (hasSigned)
     return (
@@ -627,31 +667,16 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned }) {
         })}
       </Paper>
     );
-
-  // if (showEditInvestor) {
-  //   return (
-  //     <Modal open={showEditInvestor}>
-  //       <Grid
-  //         container
-  //         xs={12}
-  //         sm={12}
-  //         md={12}
-  //         lg={12}
-  //         style={{
-  //           display: 'flex',
-  //           margin: '0',
-  //           marginTop: '20vh',
-  //           alignItems: 'center',
-  //           justifyContent: 'center',
-  //         }}
-  //       >
-  //         <Grid xs={12} sm={12} md={6} lg={6}>
-  //           <EditInvestor data={investor} refetch={() => setShowEditInvestor(false)} />
-  //         </Grid>
-  //       </Grid>
-  //     </Modal>
-  //   );
-  // }
+  if (!isProfileComplete) {
+    return (
+      <InvestorEditForm
+        investor={investorData}
+        actionText="Save"
+        setInvestor={setInvestor}
+        setFormStatus={handleSubmit}
+      />
+    );
+  }
   return (
     <div className={status === 'pledged' ? 'document-iframe' : 'document-iframe hide'}>
       {loading && (
