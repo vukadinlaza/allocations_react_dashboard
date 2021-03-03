@@ -642,9 +642,11 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
       refetch();
     }
   };
-  const isProfileComplete = ['last_name', 'first_name', 'email'].every(
-    (i) => Object.keys(investor).includes(i) && investor[i] !== null,
-  );
+  const reqs =
+    investor.investor_type === 'individual'
+      ? ['last_name', 'first_name', 'email']
+      : ['entity_name', 'email', 'signer_full_name'];
+  const isProfileComplete = reqs.every((i) => Object.keys(investor).includes(i) && investor[i] !== null);
 
   if (hasSigned)
     return (
