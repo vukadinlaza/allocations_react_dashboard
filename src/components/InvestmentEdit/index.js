@@ -105,7 +105,7 @@ export default function InvestmentEdit({ investmentId = false }) {
       </div>
       <Divider className={classes.divider} />
       <form className="form" noValidate autoComplete="off">
-        <Grid container spacing={3}>
+        <Grid container spacing={3} direction="row" justify="flex-end">
           <Grid item xs={12} sm={12} md={6}>
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
               <TextField style={{ width: '100%' }} value={name || ''} disabled label="Investor" variant="outlined" />
@@ -149,10 +149,11 @@ export default function InvestmentEdit({ investmentId = false }) {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={12} md={6} style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button
+          <Grid item xs={12} sm={12} md={6} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <Button
               disabled={!hasChanges}
               variant="contained"
+              style={{ width: '5rem' }}
               onClick={() =>
                 createInvestment({
                   variables: {
@@ -164,13 +165,13 @@ export default function InvestmentEdit({ investmentId = false }) {
             >
               UPDATE
             </Button>
-          </Grid>
-          <Grid item xs={12} sm={12} md={6} style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Button
               variant="contained"
-              style={{ backgroundColor: 'red' }}
+              style={{ backgroundColor: 'red', width: '5rem', marginTop: '5px' }}
               onClick={() => {
-                return deleteInvestment({ variables: { id: investmentId } });
+                if(window.confirm("Are you sure you want to delete this investment?")) {
+                  return deleteInvestment({ variables: { id: investmentId } });
+                }
               }}
             >
               Delete
