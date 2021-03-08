@@ -580,6 +580,7 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
 
   const p = new URLSearchParams(search);
   const amount = parseInt(p.get('amount')); // is the number 123
+  const shares = parseInt(p.get('shares')) || 0; // is the number 123
 
   const docs = dealInvestments.reduce((acc, inv) => {
     const docs = _.get(inv, 'documents', []);
@@ -626,6 +627,8 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
   };
   if (amount) {
     params.investmentAmount = amount;
+    params.SubAmount = amount;
+    params.MomentusPCS = shares;
   }
 
   const urlParameters = Object.entries(params)
