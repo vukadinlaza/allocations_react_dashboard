@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import _ from 'lodash';
+import _, { toNumber } from 'lodash';
 import { gql } from 'apollo-boost';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useParams, useHistory, Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import base64 from 'base-64';
 import {
   Paper,
   Grid,
@@ -573,13 +574,16 @@ const INITIAL_STATE = {
 
 function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetch }) {
   const [loading, setLoading] = useState(true);
-  const [showEditInvestor, setShowEditInvestor] = useState(false);
   const [investorData, setInvestor] = useState(null);
+  const [resign, setResign] = useState(false);
   const classes = useStyles();
   const { search, pathname } = useLocation();
-
-  const p = new URLSearchParams(search);
-  const amount = parseInt(p.get('amount')); // is the number 123
+  const decodedParams = base64.decode(search.substring(1));
+  const isTvc = deal.organization === 'theventurecollective';
+  const paramsToUse = isTvc ? decodedParams : search;
+  const p = new URLSearchParams(paramsToUse);
+  const amount = toNumber(p.get('amount')); // is the number 123
+  const shares = toNumber(p.get('shares')) || 0; // is the number 123
 
   const docs = dealInvestments.reduce((acc, inv) => {
     const docs = _.get(inv, 'documents', []);
@@ -626,6 +630,8 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
   };
   if (amount) {
     params.investmentAmount = amount;
+    params.SubAmount = amount;
+    params.MomentusPCS = shares;
   }
 
   const urlParameters = Object.entries(params)
@@ -648,12 +654,23 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
       : ['entity_name', 'email', 'signer_full_name'];
   const isProfileComplete = reqs.every((i) => Object.keys(investor).includes(i) && investor[i] !== null);
 
-  if (hasSigned)
+  if (hasSigned && !resign)
     return (
       <Paper className={classes.paper}>
         <Grid container>
           <Grid xs={10} sm={10} md={10} lg={10}>
             <Typography variant="subtitle1">Thanks for signing! You can view your signed documents below.</Typography>
+          </Grid>
+          <Grid xs={2} sm={2} md={2} lg={2}>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                setResign(true);
+              }}
+            >
+              Re-sign Documents
+            </Button>
           </Grid>
         </Grid>
         {docs.map((doc) => {
