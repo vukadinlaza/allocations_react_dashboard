@@ -152,11 +152,15 @@ export default function Deal() {
       if (userProfile?.email && !didCreateInvestment) {
         createInvestment({ variables: { investment } });
       }
-      if (isTvc) {
-        setAllowEdit(false);
-      }
     }
   }, [called, createInvestment, data, didCreateInvestment, organization, search, userProfile]);
+  useEffect(() => {
+    const isTvc = organization === 'theventurecollective';
+    console.log('IS TVC', isTvc, organization);
+    if (isTvc) {
+      setAllowEdit(false);
+    }
+  }, [organization]);
 
   useEffect(() => {
     // theres been an error
@@ -180,7 +184,7 @@ export default function Deal() {
     investor: { invitedDeal: deal },
   } = data;
   const { investment } = deal;
-
+  console.log('ALLOW EDIT', allowEdit);
   return (
     <>
       <Helm deal={deal} />
