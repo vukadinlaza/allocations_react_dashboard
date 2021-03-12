@@ -7,9 +7,9 @@ const PORT = process.env.PORT || 3000;
 
 const app = express()
 
-app.use(express.static(path.join(__dirname, "build")));
+app.use(express.static(path.join(__dirname, "/build")));
 
-console.log('req above route')
+
 app.get("*", async(req, res) => {
   const { params } = req;
   const isDealPage = params['0'].includes('/deals/');
@@ -53,7 +53,6 @@ app.get("*", async(req, res) => {
 
 });
 
-app.use(express.static(path.resolve(__dirname, './build')));
 
 app.listen(PORT, () => {
   console.log('Listening on port: ', PORT)
