@@ -12,7 +12,6 @@ import base64 from 'base-64';
 import { useAuth } from '../../auth/useAuth';
 import { nWithCommas } from '../../utils/numbers';
 import InvestmentFlow from './DealFlow';
-import Helm from './helmet';
 import Pledge from './pledge';
 import Loader from '../utils/Loader';
 import './style.scss';
@@ -187,7 +186,6 @@ export default function Deal() {
   console.log('ALLOW EDIT', allowEdit);
   return (
     <>
-      <Helm deal={deal} />
       <div style={{ width: mobile ? '100%' : 'calc(100% - 300px)' }}>
         <Grid container justify="space-between" alignItems="flex-end">
           <Grid item>
