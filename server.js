@@ -19,28 +19,24 @@ app.get("*", async(req, res) => {
   const organizationSlug = urlParams[0]
   const dealSlug = urlParams[1]
 
-  console.log('slugs', organizationSlug, dealSlug)
-  console.log('in routeee!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-  console.log('api url', `${process.env.REACT_APP_EXPRESS_URL}/api/deal`)
-
   const response = await axios.post(`${process.env.REACT_APP_EXPRESS_URL}/api/deal`, {
     dealSlug: dealSlug,
     organizationSlug: organizationSlug,
     API_KEY: '12345'
   })
 
-  const companyName = response?.data?.company_name;
-  const companyDescription = response?.data?.company_description;
-
   fs.readFile(filePath, 'utf8', (err, data) => {
     if(err) {
       return console.log(err)
     }
 
-    if (isDealPage) {
+    if (isDealPage && response.data) {
+      const companyName = response.data.company_name;
+      const companyDescription = response.data.company_description;
+
       if(companyName) {
         data = data
-        .replace(/"Allocations"/g, `'${companyName }'`)
+        .replace(/"Allocations"/g, `'${companyName}'`)
       }
       if(companyDescription) {
         data = data
