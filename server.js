@@ -19,6 +19,9 @@ app.get("*", async(req, res) => {
   const organizationSlug = urlParams[0]
   const dealSlug = urlParams[1]
 
+  console.log('slugs', organizationSlug, dealSlug)
+  console.log('api url', `${process.env.REACT_APP_EXPRESS_URL}/api/deal`)
+  
   const response = await axios.post(`${process.env.REACT_APP_EXPRESS_URL}/api/deal`, {
     dealSlug: dealSlug,
     organizationSlug: organizationSlug,
