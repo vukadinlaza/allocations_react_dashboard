@@ -9,7 +9,7 @@ const app = express()
 
 app.use(express.static(path.join(__dirname, "build")));
 
-
+console.log('req above route')
 app.get("*", async(req, res) => {
   const { params } = req;
   const isDealPage = params['0'].includes('/deals/');
@@ -20,8 +20,9 @@ app.get("*", async(req, res) => {
   const dealSlug = urlParams[1]
 
   console.log('slugs', organizationSlug, dealSlug)
+  console.log('in routeee!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
   console.log('api url', `${process.env.REACT_APP_EXPRESS_URL}/api/deal`)
-  
+
   const response = await axios.post(`${process.env.REACT_APP_EXPRESS_URL}/api/deal`, {
     dealSlug: dealSlug,
     organizationSlug: organizationSlug,
