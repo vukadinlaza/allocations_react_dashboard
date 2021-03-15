@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import { get, toLower } from 'lodash';
 import { gql } from 'apollo-boost';
-import { Helmet } from 'react-helmet';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
@@ -997,17 +996,11 @@ export default function Sidebar(props) {
             </nav>
             <main className={classes.content} style={{ background: 'rgba(0,0,0,0.01)' }}>
               <div className={classes.toolbar} />
-              <Helmet>
-                <title>Allocations</title>
-              </Helmet>
               {props.children}
             </main>
           </>
         ) : (
           <main style={{}}>
-            <Helmet>
-              <title>Allocations</title>
-            </Helmet>
             {props.children}
           </main>
         )}

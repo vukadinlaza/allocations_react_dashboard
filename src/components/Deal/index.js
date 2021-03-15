@@ -12,7 +12,6 @@ import base64 from 'base-64';
 import { useAuth } from '../../auth/useAuth';
 import { nWithCommas } from '../../utils/numbers';
 import InvestmentFlow from './DealFlow';
-import Helm from './helmet';
 import Pledge from './pledge';
 import Loader from '../utils/Loader';
 import './style.scss';
@@ -152,11 +151,15 @@ export default function Deal() {
       if (userProfile?.email && !didCreateInvestment) {
         createInvestment({ variables: { investment } });
       }
-      if (isTvc) {
-        setAllowEdit(false);
-      }
     }
   }, [called, createInvestment, data, didCreateInvestment, organization, search, userProfile]);
+  useEffect(() => {
+    const isTvc = organization === 'theventurecollective';
+    console.log('IS TVC', isTvc, organization);
+    if (isTvc) {
+      setAllowEdit(false);
+    }
+  }, [organization]);
 
   useEffect(() => {
     // theres been an error
@@ -180,10 +183,9 @@ export default function Deal() {
     investor: { invitedDeal: deal },
   } = data;
   const { investment } = deal;
-
+  console.log('ALLOW EDIT', allowEdit);
   return (
     <>
-      <Helm deal={deal} />
       <div style={{ width: mobile ? '100%' : 'calc(100% - 300px)' }}>
         <Grid container justify="space-between" alignItems="flex-end">
           <Grid item>

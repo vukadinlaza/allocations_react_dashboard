@@ -29,6 +29,7 @@ import './style.scss';
 import countries from 'country-region-data';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import { useAuth } from '../../../auth/useAuth';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -80,10 +81,21 @@ export default function InvestorEditForm({
   icon,
   setFormStatus,
   noValidate = false,
+  userProfile
 }) {
   const classes = useStyles();
   const [errors, setErrors] = useState([]);
-  const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_USER);
+  const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_USER, { onCompleted: data => {
+    if(userProfile.email !== investor.email) {
+      logoutWithRedirect()
+    } else {
+      toast.success('Success')
+    }
+  }});
+
+  const { logout } = useAuth()
+  const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL, });
+
 
   const handleChange = (prop) => (e) => {
     e.persist();
@@ -96,7 +108,6 @@ export default function InvestorEditForm({
   const submit = () => {
     // don't validate if noValidate flag passed
     if (noValidate) return updateInvestor({ variables: { investor } });
-
     const validation = validate(investor);
     const required =
       investor.investor_type === 'entity'
@@ -104,11 +115,21 @@ export default function InvestorEditForm({
         : ['first_name', 'last_name', ...reqs];
     const payload = pick(investor, [...required, '_id']);
     setErrors(validation);
+
+
+
     if (validation.length === 0) {
-      updateInvestor({
-        variables: { investor: payload },
-        onCompleted: toast.success('Success'),
-      });
+      if(get(investor, 'email') !== userProfile.email) {
+        if (window.confirm('Changing your email will log you out, continue?')) {
+          updateInvestor({
+            variables: { investor: payload }
+          });
+        }
+      } else {
+        updateInvestor({
+          variables: { investor: payload }
+        });
+      }
     }
   };
 
