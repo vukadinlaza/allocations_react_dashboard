@@ -86,8 +86,7 @@ export default function InvestorEditForm({
   const classes = useStyles();
   const [errors, setErrors] = useState([]);
   const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_USER, { onCompleted: data => {
-
-    if(data.updateUser.email !== userProfile.email) {
+    if(userProfile.email !== investor.email) {
       logoutWithRedirect()
     } else {
       toast.success('Success')
