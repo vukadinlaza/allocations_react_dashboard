@@ -116,8 +116,6 @@ export default function Profile() {
     variables: { accountId: userProfile?.account?._id },
   });
 
-  console.log(userProfile);
-
   const [removeUser, { data: removeRes, called }] = useMutation(REMOVE_ACCT_USER);
   const classes = useStyles();
 
@@ -156,6 +154,7 @@ export default function Profile() {
     <>
       <InvestorEditForm
         investor={investor}
+        userProfile={userProfile}
         icon={icon}
         setInvestor={setInvestor}
         setFormStatus={setFormStatus}
