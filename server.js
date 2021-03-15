@@ -24,6 +24,7 @@ app.get("*", async(req, res) => {
     organizationSlug: organizationSlug,
     API_KEY: '12345'
   })
+  
 
   fs.readFile(filePath, 'utf8', (err, data) => {
     if(err) {
