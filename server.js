@@ -30,6 +30,7 @@ app.get('*', async (req, res) => {
 
     if (isDealPage) {
       if (response && response.data) {
+
         const companyName = response.data.company_name;
         const companyDescription = response.data.company_description;
 
