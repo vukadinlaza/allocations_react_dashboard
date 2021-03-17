@@ -197,11 +197,18 @@ export default function InvestmentEdit({ investmentId = false, isK1 = false }) {
 
 function Docs({ investment, setInvestment, refetch, isK1 }) {
   const [uploadedDoc, setUploadedDoc] = useState(null);
-  const [addInvestmentDoc, { loading }] = useMutation(ADD_INVESTMENT_DOC, { onCompleted: refetch() });
+  const [addInvestmentDoc, { loading }] = useMutation(ADD_INVESTMENT_DOC);
   const id = get(investment, '_id', '');
   useEffect(() => {
     if (uploadedDoc) {
-      addInvestmentDoc({ variables: { doc: uploadedDoc, investment_id: id, isK1 } });
+      addInvestmentDoc({
+        variables: { doc: uploadedDoc, investment_id: id, isK1 },
+        onCompleted: () => {
+          console.log('Doc is uploaed');
+          refetch();
+          toast.success('Sucess!');
+        },
+      });
     }
   }, [addInvestmentDoc, id, isK1, refetch, uploadedDoc]);
   const docs = get(investment, 'documents', []);
