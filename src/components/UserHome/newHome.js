@@ -21,8 +21,10 @@ import {
 } from '@material-ui/core';
 import { useMutation } from '@apollo/react-hooks';
 import CancelIcon from '@material-ui/icons/Cancel';
+import EditIcon from '@material-ui/icons/Edit';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import CloseIcon from '@material-ui/icons/Close';
 import _, { isNumber, toNumber, toLower } from 'lodash';
 import moment from 'moment';
 import Chart from 'react-google-charts';
@@ -32,10 +34,10 @@ import Loader from '../utils/Loader';
 import { nWithCommas } from '../../utils/numbers';
 import { useAuth } from '../../auth/useAuth';
 import Document from '../utils/Document';
-import { useSimpleReducer, useFetch, useFetchWithEmail } from '../../utils/hooks';
+import InvestmentEdit from '../InvestmentEdit';
+import { useSimpleReducer, useFetchWithEmail } from '../../utils/hooks';
 import CapitalAccountModal from './capitalAccountsModal';
 import './style.scss';
-import { toast } from 'react-toastify';
 
 const useStyles = makeStyles((theme) => ({
   tableHeader: {
@@ -170,7 +172,12 @@ export default () => {
   const classes = useStyles();
   const location = useLocation();
   const [showDocs, setShowDocs] = useState();
-  const [text, setText] = useState('');
+  //
+
+  const [editInvestmentModal, setEditInvestmentModal] = useState({});
+  const [investmentUpdated, setInvestmentUpdated] = useState();
+
+  //
   const [demo, setDemo] = useState(false);
   const [showCapitalAccounts, setShowCaptialAccounts] = useState(false);
   const [postZap, {}] = useMutation(POST_ZAP);
@@ -200,7 +207,6 @@ export default () => {
   }, [setTradeData, tradeData.showLoading]);
 
   const { userProfile } = useAuth(GET_INVESTOR);
-  console.log(userProfile);
 
   const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile.email);
 
@@ -535,6 +541,8 @@ export default () => {
                         docs={showDocs.documents}
                         investment={investment}
                         demo={demo}
+                        setEditInvestmentModal={setEditInvestmentModal}
+                        isAdmin={userProfile.admin}
                       />
                     </>
                   ) : (
@@ -1110,6 +1118,12 @@ export default () => {
         setShowCaptialAccounts={setShowCaptialAccounts}
         classes={classes}
       />
+      <EditInvestmentModal
+        editInvestmentModal={editInvestmentModal}
+        setEditInvestmentModal={setEditInvestmentModal}
+        investmentUpdated={investmentUpdated}
+        setInvestmentUpdated={setInvestmentUpdated}
+      />
     </div>
   );
 };
@@ -1235,7 +1249,7 @@ function InvestmentStatus({ investment }) {
   return <span className={`investment-status investment-status-${status}`}>{status}</span>;
 }
 
-function DocsRow({ docs, investment, demo }) {
+function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin }) {
   return (
     <>
       <TableRow>
@@ -1245,9 +1259,57 @@ function DocsRow({ docs, investment, demo }) {
           </Typography>
           <Grid container xs={12} md={12} sm={12} lg={12} spacing={1}>
             {demo ? [] : docs.map((doc) => <Document doc={doc} investment={investment} />)}
+            {isAdmin && (
+              <Grid
+                item
+                lg={3}
+                md={3}
+                sm={12}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  border: 'solid 1px black',
+                  padding: '2rem',
+                  margin: '.5rem',
+                  borderRadius: '1rem',
+                  cursor: 'pointer',
+                }}
+                onClick={() => {
+                  setEditInvestmentModal(investment);
+                }}
+              >
+                <EditIcon fontSize="large" />
+              </Grid>
+            )}
           </Grid>
         </TableCell>
       </TableRow>
     </>
   );
 }
+
+const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal }) => {
+  const classes = useStyles();
+
+  return (
+    <>
+      <Modal open={editInvestmentModal._id} onClose={() => {}} className={classes.modal}>
+        <Grid container xs={12} sm={12} md={4} lg={5}>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Paper className={classes.modalPaper}>
+              <Grid
+                onClick={() => setEditInvestmentModal(false)}
+                style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer' }}
+              >
+                <CloseIcon />
+              </Grid>
+              <Grid container justify="space-between" />
+              <InvestmentEdit investmentId={editInvestmentModal._id} isK1={true} />
+            </Paper>
+          </Grid>
+        </Grid>
+      </Modal>
+    </>
+  );
+};
