@@ -8,6 +8,19 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
+let env = process.env.NODE_ENV || 'development';
+
+const forceSsl = (req, res, next) => {
+  if (req.headers['x-forwarded-proto'] !== 'https') {
+    return res.redirect(['https://', req.get('Host'), req.url].join(''));
+  }
+  return next();
+};
+
+if (env === 'production') {
+  app.use(forceSsl);
+}
+
 app.use(express.static(path.join(__dirname, '/build')));
 
 app.get('*', async (req, res) => {
