@@ -46,13 +46,14 @@ const GET_INVESTMENT = gql`
         last_name
         entity_name
         investor_type
+        investingAs
       }
     }
   }
 `;
 const ADD_INVESTMENT_DOC = gql`
-  mutation AddInvestmentDoc($doc: Upload!, $investment_id: String!) {
-    addInvestmentDoc(doc: $doc, investment_id: $investment_id)
+  mutation AddInvestmentDoc($doc: Upload!, $investment_id: String!, $isK1: Boolean) {
+    addInvestmentDoc(doc: $doc, investment_id: $investment_id, isK1: $isK1)
   }
 `;
 const RM_INVESTMENT_DOC = gql`
@@ -67,7 +68,7 @@ const UPDATE_INVESTMENT = gql`
     }
   }
 `;
-export default function InvestmentEdit({ investmentId = false }) {
+export default function InvestmentEdit({ investmentId = false, isK1 = false }) {
   const params = useParams();
   const [investment, setInvestment] = useState(null);
   const [hasChanges, setHasChanges] = useState(false);
@@ -149,8 +150,14 @@ export default function InvestmentEdit({ investmentId = false }) {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={12} md={6} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-          <Button
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={6}
+            style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
+          >
+            <Button
               disabled={!hasChanges}
               variant="contained"
               style={{ width: '5rem' }}
@@ -169,7 +176,7 @@ export default function InvestmentEdit({ investmentId = false }) {
               variant="contained"
               style={{ backgroundColor: 'red', width: '5rem', marginTop: '5px' }}
               onClick={() => {
-                if(window.confirm("Are you sure you want to delete this investment?")) {
+                if (window.confirm('Are you sure you want to delete this investment?')) {
                   return deleteInvestment({ variables: { id: investmentId } });
                 }
               }}
@@ -181,22 +188,22 @@ export default function InvestmentEdit({ investmentId = false }) {
         <Divider className={classes.divider} />
         <Grid item xs={12} sm={12} md={6}>
           <div className="form-sub-title">Documents</div>
-          <Docs investment={investment} setInvestment={setInvestment} refetch={refetch} />
+          <Docs investment={investment} setInvestment={setInvestment} refetch={refetch} isK1={isK1} />
         </Grid>
       </form>
     </div>
   );
 }
 
-function Docs({ investment, setInvestment, refetch }) {
+function Docs({ investment, setInvestment, refetch, isK1 }) {
   const [uploadedDoc, setUploadedDoc] = useState(null);
-  const [addInvestmentDoc, { loading }] = useMutation(ADD_INVESTMENT_DOC, { onCompleted: refetch });
+  const [addInvestmentDoc, { loading }] = useMutation(ADD_INVESTMENT_DOC, { onCompleted: refetch() });
   const id = get(investment, '_id', '');
   useEffect(() => {
     if (uploadedDoc) {
-      addInvestmentDoc({ variables: { doc: uploadedDoc, investment_id: id } });
+      addInvestmentDoc({ variables: { doc: uploadedDoc, investment_id: id, isK1 } });
     }
-  }, [addInvestmentDoc, id, refetch, uploadedDoc]);
+  }, [addInvestmentDoc, id, isK1, refetch, uploadedDoc]);
   const docs = get(investment, 'documents', []);
 
   if (loading || !investment) return <Loader />;
