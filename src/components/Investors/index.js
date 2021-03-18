@@ -118,7 +118,7 @@ export default function Investors() {
                       <TableCell>
                         {(organization === 'allocations' ||
                           organization === 'vitalize' ||
-                          organization === 'vitalize-venture-group') && (
+                          organization === 'irishangels') && (
                           <Link to={`/investor/${investor._id}/home`} target="_blank">
                             View dashboard as {investor.first_name || investor.entity_name}
                           </Link>
