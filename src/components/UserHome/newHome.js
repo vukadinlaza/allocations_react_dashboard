@@ -542,7 +542,7 @@ export default () => {
                         investment={investment}
                         demo={demo}
                         setEditInvestmentModal={setEditInvestmentModal}
-                        isAdmin={userProfile.admin}
+                        isAdmin={userProfile.admin || location.pathname.includes('investor')}
                       />
                     </>
                   ) : (
