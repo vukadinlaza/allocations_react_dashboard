@@ -1,0 +1,159 @@
+.DealOneClick {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding-top: 1rem;
+
+  .deal-title {
+    font-size: 1.5rem;
+  }
+
+  .deal-description {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .deal-image {
+    width: 100%;
+    height: 80%;
+    background-size: cover;
+  }
+
+  section {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-radius: 5px;
+
+    .section-label {
+      background: white;
+      padding: 10px;
+      margin: 0;
+      width: 100%;
+      font-size: 1rem;
+      border: 1px solid rgb(232, 232, 232);
+      border-radius: 5px 5px 0px 0px;
+
+    }
+  }
+
+
+  .deal-header, .container {
+    width: 60%;
+  }
+
+
+  .invest-panel, .terms-panel {
+    width: 37.5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #FBFCFF;
+    box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
+
+    ul {
+      list-style: none;
+      padding: 10px 0;
+      width: 100%;
+
+      li {
+        width: 100%;
+        padding-left: 10px;
+        margin: 10px 0;
+
+        p {
+          margin: 0;
+        }
+
+        h2 {
+          margin: 0;
+          padding: 0;
+          font-size: 1.25rem;
+        }
+
+        h3 {
+          font-size: 18px;
+        }
+      }
+    }
+
+    button {
+      background-color: #3AC522;
+      color: white;
+      width: 95%;
+      height: 3rem;
+      outline: none;
+    }
+  }
+
+
+  .container {
+    padding: 0;
+    margin: 0;
+
+    .coinvestors-panel {
+      width: 100%;
+      background-color: #FBFCFF;
+      height: max-content;
+      box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
+
+      ul {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-start;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+
+        li {
+          margin: 10px 10px;
+          padding: 5px 15px;
+          border-radius: 20px;
+          width: max-content;
+          white-space:nowrap;
+          text-align: center;
+
+          &:nth-child(5n+1) {
+            color: rgb(4, 97, 255);
+            background: none rgba(4, 97, 255, 0.25)
+          }
+          &:nth-child(5n+2)  {
+            color: rgb(0, 158, 25);
+            background: none rgba(0, 255, 41, 0.25)
+          }
+          &:nth-child(5n+3)  {
+            color: rgb(245, 60, 86);
+            background: none rgba(245, 60, 86, 0.25);
+          }
+          &:nth-child(5n+4)  {
+            color: rgb(144, 2, 255);
+            background: none rgba(144, 2, 255, 0.25);
+          }
+          &:nth-child(5n+5)  {
+            color: rgb(155, 135, 20);
+            background: none rgba(255, 251, 2, 0.25);
+          }
+        }
+      }
+    }
+  }
+}
+
+
+@media screen and (max-width: 960px) {
+
+  // TODO: handle sidebar issue/hamburger menu
+  nav {
+    display: none;
+  }
+
+  .DealOneClick {
+
+    .deal-header, .container, .invest-panel, .terms {
+      width: 100%;
+    }
+  }
+}
