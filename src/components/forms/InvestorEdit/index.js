@@ -81,21 +81,21 @@ export default function InvestorEditForm({
   icon,
   setFormStatus,
   noValidate = false,
-  userProfile
 }) {
   const classes = useStyles();
   const [errors, setErrors] = useState([]);
-  const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_USER, { onCompleted: data => {
-    if(userProfile.email !== investor.email) {
-      logoutWithRedirect()
-    } else {
-      toast.success('Success')
-    }
-  }});
+  const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_USER, {
+    onCompleted: (data) => {
+      if (userProfile.email !== investor.email) {
+        logoutWithRedirect();
+      } else {
+        toast.success('Success');
+      }
+    },
+  });
 
-  const { logout } = useAuth()
-  const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL, });
-
+  const { logout, userProfile } = useAuth();
+  const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
 
   const handleChange = (prop) => (e) => {
     e.persist();
@@ -116,18 +116,16 @@ export default function InvestorEditForm({
     const payload = pick(investor, [...required, '_id']);
     setErrors(validation);
 
-
-
     if (validation.length === 0) {
-      if(get(investor, 'email') !== userProfile.email) {
+      if (get(investor, 'email') !== userProfile.email) {
         if (window.confirm('Changing your email will log you out, continue?')) {
           updateInvestor({
-            variables: { investor: payload }
+            variables: { investor: payload },
           });
         }
       } else {
         updateInvestor({
-          variables: { investor: payload }
+          variables: { investor: payload },
         });
       }
     }
@@ -138,7 +136,7 @@ export default function InvestorEditForm({
     if (updateInvestorRes.loading) setFormStatus('loading');
   }, [setFormStatus, updateInvestorRes]);
 
-  if (!investor) return <Loader />;
+  if (!investor || !userProfile.email) return <Loader />;
 
   return (
     <>
