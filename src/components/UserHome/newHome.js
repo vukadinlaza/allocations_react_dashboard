@@ -207,7 +207,7 @@ export default () => {
   }, [setTradeData, tradeData.showLoading]);
 
   const { userProfile } = useAuth(GET_INVESTOR);
-
+  console.log('USER PROFILE', userProfile);
   const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile.email);
 
   useEffect(() => {
@@ -1250,6 +1250,7 @@ function InvestmentStatus({ investment }) {
 }
 
 function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin }) {
+  console.log('IS ADMIN', isAdmin);
   return (
     <>
       <TableRow>
@@ -1305,7 +1306,7 @@ const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal }) =>
                 <CloseIcon />
               </Grid>
               <Grid container justify="space-between" />
-              <InvestmentEdit investmentId={editInvestmentModal._id} isK1={true} />
+              <InvestmentEdit investmentId={editInvestmentModal._id} isK1 />
             </Paper>
           </Grid>
         </Grid>
