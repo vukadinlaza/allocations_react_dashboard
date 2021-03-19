@@ -1,23 +1,33 @@
-import React, { useState, useEffect } from 'react'
-import { get } from 'lodash'
-import { useHistory } from "react-router-dom"
-import { TextField } from '@material-ui/core'
-import { Row, Col } from 'reactstrap'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState, useEffect } from 'react';
+import { get } from 'lodash';
+import { useHistory } from 'react-router-dom';
+import {
+  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Paper,
+  Button,
+  Checkbox,
+  Typography,
+  FormControlLabel,
+} from '@material-ui/core';
+import { Row, Col } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
-import { gql } from 'apollo-boost'
-import * as API from "../../api"
-import { useLazyQuery, useMutation } from '@apollo/react-hooks'
+import { gql } from 'apollo-boost';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import * as API from '../../api';
 
-import { Table, TableBody, TableCell, TableRow, Paper, Button, Checkbox, Typography, FormControlLabel } from '@material-ui/core'
-import InvestorNew from '../InvestorNew'
-import "./style.scss"
+import InvestorNew from '../InvestorNew';
+import './style.scss';
 
-/***
+/** *
  *
  * create new investment form
  *
- **/
+ * */
 
 const CREATE_INVESTMENT = gql`
   mutation CreateInvestment($investment: InvestmentInput!) {
@@ -25,60 +35,62 @@ const CREATE_INVESTMENT = gql`
       _id
     }
   }
-`
+`;
 
 function validate({ investment, user, deal }) {
-  const errors = []
-  if (!investment.amount) errors.push("amount")
-  if (!user) errors.push("user")
-  if (!deal) errors.push("deal")
-  return errors
+  const errors = [];
+  if (!investment.amount) errors.push('amount');
+  if (!user) errors.push('user');
+  if (!deal) errors.push('deal');
+  return errors;
 }
 
 export default function InvestmentNew() {
-  const history = useHistory()
-  const [investment, setInvestment] = useState({ amount: "" })
-  const [createInvestment, { data }] = useMutation(CREATE_INVESTMENT)
-  const [errors, setErrors] = useState([])
-  const [newUser, setNewUser] = useState(false)
-  const [user, setUser] = useState(null)
-  const [deal, setDeal] = useState(null)
+  const history = useHistory();
+  const [investment, setInvestment] = useState({ amount: '' });
+  const [createInvestment, { data }] = useMutation(CREATE_INVESTMENT);
+  const [errors, setErrors] = useState([]);
+  const [newUser, setNewUser] = useState(false);
+  const [user, setUser] = useState(null);
+  const [deal, setDeal] = useState(null);
 
-
-
-  useEffect(() => {
-    if (data) history.push(`/admin/investments/${data.createInvestment._id}/edit`)
-  }, [data, history])
+  // useEffect(() => {
+  //   if (data) history.push(`/admin/investments/${data.createInvestment._id}/edit`);
+  // }, [data, history]);
 
   const updateInvestmentProp = ({ prop, newVal }) => {
-    setInvestment(prev => ({ ...prev, [prop]: newVal }))
-  }
+    setInvestment((prev) => ({ ...prev, [prop]: newVal }));
+  };
 
   const submit = () => {
-    const validation = validate({ investment, user, deal })
-    setErrors(validation)
+    const validation = validate({ investment, user, deal });
+    setErrors(validation);
     if (validation.length === 0) {
       createInvestment({
         variables: {
-          investment: { amount: Math.floor(investment.amount), user_id: user._id, deal_id: deal._id }
+          investment: { amount: Math.floor(investment.amount), user_id: user._id, deal_id: deal._id },
         },
-        onCompleted: toast.success('Sucess')
-      })
+        onCompleted: toast.success('Sucess'),
+      });
     }
-  }
+  };
 
   return (
     <>
       {newUser && <InvestorNew push={false} setNewUser={setNewUser} />}
-      {!newUser && <FormControlLabel
-        label="Create New user"
-        control={<Checkbox
-          color="primary"
-          checked={newUser}
-          inputProps={{ 'aria-label': 'secondary checkbox' }}
-          onChange={(e) => setNewUser(e.target.checked)}
-        />}
-      />}
+      {!newUser && (
+        <FormControlLabel
+          label="Create New user"
+          control={
+            <Checkbox
+              color="primary"
+              checked={newUser}
+              inputProps={{ 'aria-label': 'secondary checkbox' }}
+              onChange={(e) => setNewUser(e.target.checked)}
+            />
+          }
+        />
+      )}
       <Paper>
         <div className="InvestmentEdit form-wrapper">
           <Row>
@@ -89,11 +101,15 @@ export default function InvestmentNew() {
           <form className="form" noValidate autoComplete="off">
             <Row>
               <Col sm={{ size: 8, offset: 1 }}>
-                <TextField required error={errors.includes("amount")} style={{ width: "100%" }}
+                <TextField
+                  required
+                  error={errors.includes('amount')}
+                  style={{ width: '100%' }}
                   value={investment.amount}
-                  onChange={e => updateInvestmentProp({ prop: "amount", newVal: e.target.value })}
+                  onChange={(e) => updateInvestmentProp({ prop: 'amount', newVal: e.target.value })}
                   label="Amount"
-                  variant="filled" />
+                  variant="filled"
+                />
               </Col>
             </Row>
             <Row>
@@ -106,36 +122,33 @@ export default function InvestmentNew() {
             </Row>
             <Row>
               <Col sm={{ size: 8, offset: 1 }}>
-                <Button variant="contained"
-                  onClick={submit}
-                  color="primary">
+                <Button variant="contained" onClick={submit} color="primary">
                   CREATE
-            </Button>
+                </Button>
               </Col>
             </Row>
-            <Row>
-            </Row>
+            <Row />
           </form>
         </div>
       </Paper>
     </>
-  )
+  );
 }
 
 function UserSearch({ user, setUser, errors, deal_id }) {
-  const [q, setQ] = useState("")
-  const [records, setRecords] = useState([])
-  const [search, searchRes] = useLazyQuery(API.users.search)
+  const [q, setQ] = useState('');
+  const [records, setRecords] = useState([]);
+  const [search, searchRes] = useLazyQuery(API.users.search);
 
   useEffect(() => {
-    search({ variables: { q, org: deal_id } })
-  }, [deal_id, q])
+    search({ variables: { q, org: deal_id } });
+  }, [deal_id, q, search]);
 
   useEffect(() => {
     if (searchRes.data && searchRes.data.searchUsers) {
-      setRecords(q === "" ? [] : searchRes.data.searchUsers)
+      setRecords(q === '' ? [] : searchRes.data.searchUsers);
     }
-  }, [q, searchRes.data])
+  }, [q, searchRes.data]);
 
   if (user) {
     return (
@@ -143,33 +156,45 @@ function UserSearch({ user, setUser, errors, deal_id }) {
         <Table>
           <TableBody>
             <TableRow>
-              <TableCell>{user.first_name} {user.last_name}</TableCell>
+              <TableCell>
+                {user.first_name} {user.last_name}
+              </TableCell>
               <TableCell>{user.email}</TableCell>
-              <TableCell><FontAwesomeIcon icon="times" onClick={() => { setQ(""); setUser(null) }} /></TableCell>
+              <TableCell>
+                <FontAwesomeIcon
+                  icon="times"
+                  onClick={() => {
+                    setQ('');
+                    setUser(null);
+                  }}
+                />
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </Paper>
-    )
+    );
   }
 
   return (
     <div className="assoc-search">
-      <TextField style={{ width: "100%" }}
+      <TextField
+        style={{ width: '100%' }}
         required
         value={q}
-        error={errors.includes("user")}
+        error={errors.includes('user')}
         label="Investor"
         variant="filled"
-        onChange={e => setQ(e.target.value)} />
+        onChange={(e) => setQ(e.target.value)}
+      />
       <Paper className="assoc-search-results">
         <Table>
           <TableBody>
-            {records.map(record => (
-              <TableRow key={record._id}
-                className="assoc-option"
-                onClick={() => setUser(record)}>
-                <TableCell>{record.first_name} {record.last_name}</TableCell>
+            {records.map((record) => (
+              <TableRow key={record._id} className="assoc-option" onClick={() => setUser(record)}>
+                <TableCell>
+                  {record.first_name} {record.last_name}
+                </TableCell>
                 <TableCell>{record.email}</TableCell>
               </TableRow>
             ))}
@@ -177,23 +202,23 @@ function UserSearch({ user, setUser, errors, deal_id }) {
         </Table>
       </Paper>
     </div>
-  )
+  );
 }
 
 function DealSearch({ deal, setDeal, errors }) {
-  const [q, setQ] = useState("")
-  const [records, setRecords] = useState([])
-  const [search, searchRes] = useLazyQuery(API.deals.search)
+  const [q, setQ] = useState('');
+  const [records, setRecords] = useState([]);
+  const [search, searchRes] = useLazyQuery(API.deals.search);
 
   useEffect(() => {
-    search({ variables: { q } })
-  }, [q])
+    search({ variables: { q } });
+  }, [q, search]);
 
   useEffect(() => {
     if (searchRes.data && searchRes.data.searchDeals) {
-      setRecords(q === "" ? [] : searchRes.data.searchDeals)
+      setRecords(q === '' ? [] : searchRes.data.searchDeals);
     }
-  }, [q, searchRes.data])
+  }, [q, searchRes.data]);
 
   if (deal) {
     return (
@@ -203,30 +228,38 @@ function DealSearch({ deal, setDeal, errors }) {
             <TableRow>
               <TableCell>{deal.company_name}</TableCell>
               <TableCell>{deal.company_description}</TableCell>
-              <TableCell><FontAwesomeIcon icon="times" onClick={() => { setQ(""); setDeal(null) }} /></TableCell>
+              <TableCell>
+                <FontAwesomeIcon
+                  icon="times"
+                  onClick={() => {
+                    setQ('');
+                    setDeal(null);
+                  }}
+                />
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </Paper>
-    )
+    );
   }
 
   return (
     <div className="assoc-search">
-      <TextField required
-        style={{ width: "100%" }}
+      <TextField
+        required
+        style={{ width: '100%' }}
         value={q}
         label="Deal"
         variant="filled"
-        error={errors.includes("user")}
-        onChange={e => setQ(e.target.value)} />
+        error={errors.includes('user')}
+        onChange={(e) => setQ(e.target.value)}
+      />
       <Paper className="assoc-search-results">
         <Table>
           <TableBody>
-            {records.map(record => (
-              <TableRow key={record._id}
-                className="assoc-option"
-                onClick={() => setDeal(record)}>
+            {records.map((record) => (
+              <TableRow key={record._id} className="assoc-option" onClick={() => setDeal(record)}>
                 <TableCell>{record.company_name}</TableCell>
                 <TableCell>{record.company_description}</TableCell>
               </TableRow>
@@ -235,5 +268,5 @@ function DealSearch({ deal, setDeal, errors }) {
         </Table>
       </Paper>
     </div>
-  )
+  );
 }
