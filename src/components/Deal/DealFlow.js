@@ -619,15 +619,8 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
   if (!investor) return <Loader />;
   const params = {
     userEmail: investor.email,
-    'Dropdown 84e664a2-e6d4-4511-a646-169964198709': investor.investor_type === 'individual' ? 'Individual' : 'Entity',
-    MemberName: investor.investor_type === 'individual' ? investor.name : investor.entity_name,
-    CountryResIndividual: investor.investor_type === 'individual' ? investor.country : '',
-    PlaceBusinessEntity: investor.investor_type === 'entity' ? investor.country : '',
-    'Email c48a98a1-28ed-4a97-bd59-3d6e5b4d8acb': investor.email,
-    'Name 1cc9972f-8da1-4868-9a23-02c50f5e0880': investor.name,
-    Member_UserName: investor.name,
-    'Radio Group ce3ecba5-3c7c-4e7c-b886-981a8bdf3b1b': 'Radio1',
   };
+
   if (amount) {
     params.investmentAmount = amount;
     params.SubAmount = amount;
