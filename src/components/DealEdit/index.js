@@ -24,6 +24,10 @@ import {
   InputLabel,
   TextField,
   InputAdornment,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
 } from '@material-ui/core';
 
 import './style.scss';
@@ -101,6 +105,8 @@ const GET_DEAL = gql`
           opened_at
         }
         dealParams {
+          risks
+          coinvestors
           totalRoundSize
           dealType
           dealMultiple
@@ -129,6 +135,7 @@ const GET_DEAL = gql`
           fundManagementFeeType
           fundGeneralPartner
           fundEstimatedTerm
+          dealLogo
         }
       }
     }
@@ -242,6 +249,9 @@ const dealParamsValidInputs = [
   'fundManagementFeeType',
   'fundGeneralPartner',
   'fundEstimatedTerm',
+  'coinvestors',
+  'risks',
+  'dealLogo',
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -271,7 +281,6 @@ export default function DealEdit() {
   const [deal, setDeal] = useSimpleReducer({
     dealParams: {},
   });
-  const [showAddInvestment, setShowAddInvestment] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const { data, refetch, error } = useQuery(GET_DEAL, { variables: { id, slug: organization } });
   const [updateDeal] = useMutation(UPDATE_DEAL);
@@ -925,7 +934,11 @@ export default function DealEdit() {
               variant="outlined"
             />
           </Grid>
-
+          <Grid item xs={12} sm={6}>
+            <AddCoInvestor deal={deal} setDeal={setDeal} />
+            <AddRisk deal={deal} setDeal={setDeal} />
+            <AddDealLogo deal={deal} refetch={refetch} />
+          </Grid>
           <Grid item xs={12}>
             <Button
               disabled={!hasChanges}
@@ -1032,7 +1045,6 @@ export default function DealEdit() {
               </Grid>
             </Grid>
           </Grid>
-
           <Grid item xs={12}>
             <Button
               disabled={!hasChanges}
@@ -1380,5 +1392,142 @@ function DeleteDeal({ deal }) {
     <Button onClick={submit} variant="default" style={{ color: 'red' }}>
       Delete Deal
     </Button>
+  );
+}
+
+const AddCoInvestor = ({ deal, setDeal }) => {
+  const [coinvestor, setCoinvestor] = useState('');
+  const addCoInvestor = () => {
+    setDeal({
+      ...deal,
+      dealParams: { ...deal.dealParams, coinvestors: [...(deal?.dealParams?.coinvestors || []), coinvestor] },
+    });
+    setCoinvestor('');
+  };
+  return (
+    <>
+      <Grid item xs={12}>
+        <Typography variant="body2">
+          <strong>CoInvestors</strong>
+        </Typography>
+      </Grid>
+
+      <TextField
+        style={{ width: '100%' }}
+        value={coinvestor || ''}
+        onChange={(e) => setCoinvestor(e.target.value)}
+        label="CoInvestor"
+        type="text"
+        variant="outlined"
+      />
+      <Button onClick={() => addCoInvestor()}> Add</Button>
+
+      <List dense>
+        {(deal?.dealParams?.coinvestors || []).map((i) => {
+          return (
+            <ListItem>
+              <ListItemIcon>
+                <CloseIcon />
+              </ListItemIcon>
+              <ListItemText primary={i} />
+            </ListItem>
+          );
+        })}
+      </List>
+    </>
+  );
+};
+const AddRisk = ({ deal, setDeal }) => {
+  const [risk, setrisk] = useState('');
+  const addrisk = () => {
+    setDeal({
+      ...deal,
+      dealParams: { ...deal.dealParams, risks: [...(deal?.dealParams?.risks || []), risk] },
+    });
+    setrisk('');
+  };
+  return (
+    <>
+      <Grid item xs={12}>
+        <Typography variant="body2">
+          <strong>Risks</strong>
+        </Typography>
+      </Grid>
+      <TextField
+        style={{ width: '100%' }}
+        value={risk || ''}
+        onChange={(e) => setrisk(e.target.value)}
+        label="risk"
+        type="text"
+        variant="outlined"
+      />
+      <Button onClick={() => addrisk()}> Add</Button>
+
+      <List dense>
+        {(deal?.dealParams?.risks || []).map((i) => {
+          return (
+            <ListItem>
+              <ListItemIcon>
+                <CloseIcon />
+              </ListItemIcon>
+              <ListItemText primary={i} />
+            </ListItem>
+          );
+        })}
+      </List>
+    </>
+  );
+};
+function AddDealLogo({ deal, refetch }) {
+  const [doc, setDoc] = useSimpleReducer({ title: 'DealLogo' });
+  const [addDoc, { data, error }] = useMutation(ADD_DOC);
+
+  useEffect(() => {
+    if (data) {
+      refetch();
+      setDoc({ title: '', doc: null });
+    }
+  }, [data, refetch, setDoc]);
+
+  const submit = () => {
+    if (doc.doc && doc.title) {
+      addDoc({ variables: { deal_id: deal._id, ...doc } });
+    }
+  };
+
+  return (
+    <>
+      <Grid item xs={12}>
+        <Typography variant="body2">Deal Logo</Typography>
+      </Grid>
+
+      <Grid item xs={12} sm={3}>
+        <Button fullWidth variant="contained" component="label" style={{ height: 39 }}>
+          Attach
+          <input
+            type="file"
+            style={{ display: 'none' }}
+            accept="application/pdf"
+            onChange={({ target }) => {
+              if (target.validity.valid) setDoc({ doc: target.files[0] });
+            }}
+          />
+        </Button>
+      </Grid>
+
+      <Grid item xs={12} sm={4}>
+        <Button variant="contained" onClick={submit} style={{ height: 39 }} fullWidth color="primary">
+          Upload Logo
+        </Button>
+      </Grid>
+
+      <Grid item xs={12} sm={6}>
+        <img src={deal.dealParams.dealLogo} />
+      </Grid>
+
+      <Grid item xs={12}>
+        <Divider style={{ marginBottom: 16 }} />
+      </Grid>
+    </>
   );
 }
