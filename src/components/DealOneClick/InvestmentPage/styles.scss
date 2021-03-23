@@ -1,8 +1,39 @@
-.DealOneClick {
+.InvestmentPage {
+  position: relative;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  padding-top: 1rem;
+  padding-top: 2rem;
+
+  .investment-header {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .back-button {
+    font-size: .75rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    text-transform: none;
+    background-color: #FBFCFF;
+    box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
+    border: 1px solid rgba(128, 128, 128, 0.166);
+    color: grey;
+    position: absolute;
+    top: -30px;
+    transition: color .25s ease-out;
+
+    &:hover {
+      color: black;
+      transition: color .25s ease-in;
+    }
+
+    svg {
+      transform: scale(.75);
+    }
+  }
+
 
   section {
     margin-bottom: 20px;
@@ -66,31 +97,5 @@
     width: 100%;
 
 
-  }
-}
-
-
-@media screen and (max-width: 960px) {
-
-  // TODO: handle sidebar issue/hamburger menu
-  nav {
-    display: none;
-  }
-
-  .DealOneClick {
-
-    .deal-header,
-    .container,
-    .InvestPanel,
-    .TermsPanel {
-      width: 100%;
-    }
-
-    .flex-container {
-      main, aside {
-        height: max-content;
-        width: 100%;
-      }
-    }
   }
 }

@@ -1,0 +1,48 @@
+.CoinvestorsPanel {
+  width: 100%;
+  background-color: #FBFCFF;
+  height: max-content;
+  box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
+
+  ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+
+    li {
+      margin: 10px 10px;
+      padding: 5px 15px;
+      border-radius: 20px;
+      width: max-content;
+      white-space:nowrap;
+      text-align: center;
+
+      &:nth-child(5n+1) {
+        color: rgb(4, 97, 255);
+        background: none rgba(4, 97, 255, 0.25)
+      }
+      &:nth-child(5n+2)  {
+        color: rgb(0, 158, 25);
+        background: none rgba(0, 255, 41, 0.25)
+      }
+      &:nth-child(5n+3)  {
+        color: rgb(245, 60, 86);
+        background: none rgba(245, 60, 86, 0.25);
+      }
+      &:nth-child(5n+4)  {
+        color: rgb(144, 2, 255);
+        background: none rgba(144, 2, 255, 0.25);
+      }
+      &:nth-child(5n+5)  {
+        color: rgb(155, 135, 20);
+        background: none rgba(255, 251, 2, 0.25);
+      }
+    }
+  }
+}

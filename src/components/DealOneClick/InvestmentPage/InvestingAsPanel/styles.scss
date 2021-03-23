@@ -1,0 +1,25 @@
+.InvestingAsPanel {
+  width: 100%;
+  height: 47.5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #FBFCFF;
+  box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
+
+  button {
+    width: 90%;
+    display: flex;
+    justify-content: flex-start;
+    outline: none;
+    background-color: white;
+    margin: 10px 0;
+    text-transform: none;
+
+    svg {
+      fill: #D2F0CD;
+      margin: 0px 5px;
+    }
+
+  }
+}

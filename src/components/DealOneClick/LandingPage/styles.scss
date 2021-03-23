@@ -1,8 +1,8 @@
-.DealOneClick {
+.LandingPage {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  padding-top: 1rem;
+  width: 100%;
 
   section {
     margin-bottom: 20px;
@@ -31,7 +31,6 @@
     flex-wrap: wrap;
     justify-content: space-between;
     width: 100%;
-    height: max-content;
     margin-bottom: 20px;
 
     main {
@@ -49,8 +48,6 @@
 
   }
 
-
-
   .confirm-investment-button {
     background-color: #3AC522;
     width: 35%;
@@ -65,7 +62,10 @@
     margin-bottom: 20px;
     width: 100%;
 
-
+    .investment-header {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
   }
 }
 

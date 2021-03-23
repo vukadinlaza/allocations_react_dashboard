@@ -1,0 +1,262 @@
+.PaymentInformationPanel {
+  height: 40%;
+  min-height: 15rem;
+  box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
+
+  .tabs-container {
+    background-color: white;
+    width: 100%;
+    box-shadow: none;
+    border: none;
+    outline: none;
+
+    .tab {
+      text-align: center;
+      font-family: 'Circula-Medium' !important;
+      font-weight: 500;
+      font-size: 12px;
+      color: rgb(135, 135, 135);
+      width: 33.33%;
+      text-transform: none;
+      background-color: #FBFCFF;
+      border-width: 0px;
+      outline: none;
+    }
+
+    .Mui-selected {
+      font-weight: 800;
+      color: #0561FF;
+      background-color: white;
+    }
+
+  }
+  .MuiPaper-root {
+    border: none;
+  }
+
+  .payment-buttons {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+
+    .plaid-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 40%;
+      margin: 0px 10px;
+
+      .plaid-button {
+        white-space: nowrap;
+        width: 100%;
+        color: white;
+        text-transform: none;
+        height: 3rem;
+        background-color: #0561FF;
+      }
+
+      img {
+        margin-top: 10px;
+        width: 150px;
+      }
+
+    }
+
+
+    .manual-payment-button {
+      margin: 0px 10px;
+      white-space: nowrap;
+      text-transform: none;
+      width: 40%;
+      height: 3rem;
+      background-color: white;
+      border: 1px solid rgb(240, 237, 237);
+    }
+  }
+
+  .card-information {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    input {
+      padding: 15px;
+    }
+
+    .card-number {
+      width: 100%;
+      margin-bottom: 2.5%;
+    }
+
+    .expiration {
+      width: 48.75%
+    }
+
+    .cvv {
+      width: 48.75%
+    }
+  }
+
+  .bank-wire {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+
+    input {
+      padding: 15px;
+    }
+
+    .bank-name {
+      width: 100%;
+      margin-bottom: 2.5%;
+    }
+
+    .routing-number {
+      width: 48.75%
+    }
+
+    .account-number {
+      width: 48.75%
+    }
+  }
+
+}
+
+
+@media screen and (max-width: 960px) {
+
+  .PaymentInformationPanel {
+
+    .tabs-container {
+      background-color: white;
+      width: 100%;
+      box-shadow: none;
+      border: none;
+      outline: none;
+
+      .tab {
+        text-align: center;
+        font-family: 'Circula-Medium' !important;
+        font-weight: 500;
+        font-size: 12px;
+        color: rgb(135, 135, 135);
+        width: 33.33%;
+        text-transform: none;
+        background-color: #FBFCFF;
+        border-width: 0px;
+        outline: none;
+      }
+
+      .Mui-selected {
+        font-weight: 800;
+        color: #0561FF;
+        background-color: white;
+      }
+
+    }
+    .MuiPaper-root {
+      border: none;
+    }
+
+
+    .payment-buttons {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      border: 2px solid red;
+      justify-content: space-between;
+      align-items: center;
+      flex-direction: column;
+
+      .plaid-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 90%;
+        height: 50%;
+        margin: 0px 10px;
+
+        .plaid-button {
+          white-space: nowrap;
+          width: 100%;
+          color: white;
+          text-transform: none;
+          height: 3rem;
+          background-color: #0561FF;
+        }
+
+        img {
+          margin-top: 10px;
+          width: 150px;
+        }
+
+      }
+
+
+      .manual-payment-button {
+        margin-top: 20px;
+        white-space: nowrap;
+        text-transform: none;
+        width: 90%;
+        height: 3rem;
+        background-color: white;
+        border: 1px solid rgb(240, 237, 237);
+      }
+    }
+
+    .card-information {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+
+      input {
+        padding: 15px;
+      }
+
+      .card-number {
+        width: 100%;
+      }
+
+      .expiration {
+        width: 48.75%;
+      }
+
+      .cvv {
+        width: 48.75%;
+      }
+    }
+
+    .bank-wire {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+
+      input {
+        padding: 15px;
+      }
+
+      .bank-name {
+        width: 100%;
+        margin-bottom: 2.5%;
+      }
+
+      .routing-number {
+        width: 48.75%
+      }
+
+      .account-number {
+        width: 48.75%
+      }
+    }
+
+  }
+
+}

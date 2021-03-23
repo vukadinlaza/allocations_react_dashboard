@@ -1,15 +1,40 @@
 import React, { useState } from 'react'
 import { Tabs, Tab, AppBar, Box, Typography } from '@material-ui/core'
-import TabPanel from './TabPanel'
 import './styles.scss'
+import ReactHtmlParser from 'react-html-parser';
 
-function TabMenuPanel() {
+
+const TabPanel = props => {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      { value === index && (
+        <Box p={3}>
+          <Typography>
+            {children}
+          </Typography>
+        </Box>
+      )}
+    </div>
+  )
+}
+
+function TabMenuPanel({ deal }) {
 
   const [currentTab, setCurrentTab] = useState(0)
   const handleTabChange = (event, newValue) => {
     setCurrentTab(newValue);
   };
 
+  const { memo } = deal;
+  console.log(memo)
 
   return (
     <section className="TabMenuPanel">
@@ -32,7 +57,7 @@ function TabMenuPanel() {
         <p>GPs are successful active Founders ($250m + in valuation)</p>
       </TabPanel>
       <TabPanel value={currentTab} index={1}>
-        <p>These are some memos about this deal...</p>
+        <div>{ ReactHtmlParser(memo) }</div>
       </TabPanel>
       <TabPanel className="tab-panel" value={currentTab} index={2}>
         <p>These are some risks about this deal...</p>
