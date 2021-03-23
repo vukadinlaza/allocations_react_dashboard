@@ -1,0 +1,46 @@
+.TermsAndConditions {
+
+  width: 100%;
+  background-color: #FBFCFF;
+  box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 0;
+  border-radius: 5px;
+
+  .MuiBox-root {
+    padding: 15px;
+  }
+
+  p {
+    margin-bottom: 10px;
+    font-size: 11.75px;
+  }
+
+
+
+  .terms-checkbox {
+    height: 35px;
+    width: 35px;
+    margin: 0 10px;
+  }
+
+  label {
+    color: white;
+    width: 100%;
+    background-color: #9194AA;
+    padding: 10px 0;
+    margin: 0;
+    border-radius: 0px 0px 5px 5px;
+
+    .MuiCheckbox-root{
+      color: white;
+    }
+
+    .Mui-checked {
+      color: #0375FF;
+    }
+  }
+
+}

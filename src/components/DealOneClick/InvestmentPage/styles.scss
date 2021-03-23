@@ -1,0 +1,101 @@
+.InvestmentPage {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding-top: 2rem;
+
+  .investment-header {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .back-button {
+    font-size: .75rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    text-transform: none;
+    background-color: #FBFCFF;
+    box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
+    border: 1px solid rgba(128, 128, 128, 0.166);
+    color: grey;
+    position: absolute;
+    top: -30px;
+    transition: color .25s ease-out;
+
+    &:hover {
+      color: black;
+      transition: color .25s ease-in;
+    }
+
+    svg {
+      transform: scale(.75);
+    }
+  }
+
+
+  section {
+    margin-bottom: 20px;
+    border-radius: 5px;
+
+    .section-label {
+      background: white;
+      padding: 15px;
+      margin: 0;
+      width: 100%;
+      font-size: 1rem;
+      border: 1px solid rgb(232, 232, 232);
+      border-radius: 5px 5px 0px 0px;
+
+    }
+  }
+
+  .container {
+    width: 60%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    height: max-content;
+    margin-bottom: 20px;
+
+    main {
+      width: 67.5%;
+      height: 100%;
+    }
+
+    aside {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 30%;
+      height: max-content;
+    }
+
+  }
+
+
+
+  .confirm-investment-button {
+    background-color: #3AC522;
+    width: 35%;
+    height: 3rem;
+    color: white;
+    text-transform: none;
+    font-weight: 700;
+  }
+
+  .flex-container {
+    padding: 0;
+    margin-bottom: 20px;
+    width: 100%;
+
+
+  }
+}
