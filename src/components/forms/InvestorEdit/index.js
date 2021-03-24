@@ -427,6 +427,7 @@ export function AccreditedInvestorStatus({ investor, handleChange, errors }) {
   return (
     <FormControl
       required
+      className='accredited-investor-status'
       error={errors.includes('accredited_investor_status')}
       variant="outlined"
       fullWidth

@@ -10,10 +10,12 @@ function DealDocumentsPanel({ deal }) {
 
   const documentItems = (documents || []).map(doc => {
     return (
-      <Button>
-        <InsertDriveFileIcon />
-        {doc.path}
-      </Button>
+      <a href={`https://${doc.link}`} target="_blank">
+        <Button>
+          <InsertDriveFileIcon />
+          {doc.path}
+        </Button>
+      </a>
     )
   })
   return (

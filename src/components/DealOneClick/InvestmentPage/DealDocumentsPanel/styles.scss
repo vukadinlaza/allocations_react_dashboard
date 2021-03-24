@@ -7,21 +7,23 @@
   background-color: #FBFCFF;
   box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
 
-  button {
+  a {
     width: 90%;
-    display: flex;
-    justify-content: flex-start;
-    outline: none;
-    background-color: white;
-    margin: 10px 0;
-    text-transform: none;
-    flex-wrap: wrap;
-    overflow: hidden;
+    button {
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      outline: none;
+      background-color: white;
+      margin: 10px 0;
+      text-transform: none;
+      flex-wrap: wrap;
+      overflow: hidden;
 
-    svg {
-      fill: #B3B1FE;
-      margin: 0px 5px;
+      svg {
+        fill: #B3B1FE;
+        margin: 0px 5px;
+      }
     }
-
   }
 }

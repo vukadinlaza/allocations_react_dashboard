@@ -5,14 +5,26 @@
   background-color: #FBFCFF;
   box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
 
+  label, input {
+    font-size: .8rem;
+  }
+
   .personal-information-input {
-    margin: 10px 0;
+    margin-top: 15px;
     left: 20px;
     padding: 5px;
     width: 90%;
   }
 
+  .accredited-investor-status {
+    margin-top: 15px;
+    max-width: 90%;
+    left: 20px;
+    padding: 5px;
+  }
+
   .information-notice {
+    margin-top: 20px;
     position: relative;
     font-size: 12px;
     color: rgb(117, 117, 117);

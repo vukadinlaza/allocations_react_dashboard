@@ -53,8 +53,6 @@ function PersonalInformation({ investor, setInvestor, errors }) {
       />
 
       {/* Country */}
-      <Grid container style={{ display: 'flex', justifyContent: 'space-around' }}>
-        <Grid item xs={12} sm={12} md={5} lg={5}>
           <FormControl
             className="personal-information-input"
             required
@@ -71,9 +69,7 @@ function PersonalInformation({ investor, setInvestor, errors }) {
               ))}
             </Select>
           </FormControl>
-        </Grid>
         {investor.country === 'United States' && (
-          <Grid item xs={12} sm={12} md={5} lg={5}>
             <FormControl
               className="personal-information-input"
               required
@@ -91,13 +87,9 @@ function PersonalInformation({ investor, setInvestor, errors }) {
                 ))}
               </Select>
             </FormControl>
-          </Grid>
         )}
-      </Grid>
       {/* Accreditation status */}
-      <Grid item xs={12} sm={12} md={6}>
-        <AccreditedInvestorStatus investor={investor} handleChange={handleChange} errors={errors} />
-      </Grid>
+      <AccreditedInvestorStatus investor={investor} handleChange={handleChange} errors={errors} />
       {investor.investor_type && investor.investor_type !== 'individual' && (
         <TextField
           className="personal-information-input"
