@@ -21,16 +21,6 @@ function PersonalInformation({ investor, setInvestor, errors }) {
   return (
     <section className="PersonalInformationPanel">
       <p className="section-label">Personal Information</p>
-      {/* Legal Name */}
-      <TextField
-        className="personal-information-input"
-        variant="outlined"
-        required
-        placeholder="Legal name of entity or individual"
-        error={errors.includes('legalName')}
-        value={get(investor, 'legalName') || ''}
-        onChange={handleChange('legalName')}
-      />
 
       {/* Investor Type */}
       <FormControl
@@ -50,6 +40,18 @@ function PersonalInformation({ investor, setInvestor, errors }) {
           <MenuItem value="entity">Entity</MenuItem>
         </Select>
       </FormControl>
+
+      {/* Legal Name */}
+      <TextField
+        className="personal-information-input"
+        variant="outlined"
+        required
+        placeholder="Legal name of entity or individual"
+        error={errors.includes('legalName')}
+        value={get(investor, 'legalName') || ''}
+        onChange={handleChange('legalName')}
+      />
+
       {/* Country */}
       <Grid container style={{ display: 'flex', justifyContent: 'space-around' }}>
         <Grid item xs={12} sm={12} md={5} lg={5}>
@@ -93,19 +95,19 @@ function PersonalInformation({ investor, setInvestor, errors }) {
         )}
       </Grid>
       {/* Accreditation status */}
-      {investor.investor_type === 'entity' && (
-        <Grid item xs={12} sm={12} md={6}>
-          <AccreditedInvestorStatus investor={investor} handleChange={handleChange} errors={errors} />
-        </Grid>
+      <Grid item xs={12} sm={12} md={6}>
+        <AccreditedInvestorStatus investor={investor} handleChange={handleChange} errors={errors} />
+      </Grid>
+      {investor.investor_type && investor.investor_type !== 'individual' && (
+        <TextField
+          className="personal-information-input"
+          variant="outlined"
+          placeholder="Signer's Full Name"
+          error={errors.includes('fullName')}
+          value={get(investor, 'fullName') || ''}
+          onChange={handleChange('fullName')}
+        />
       )}
-      <TextField
-        className="personal-information-input"
-        variant="outlined"
-        placeholder="Signer's Full Name"
-        error={errors.includes('fullName')}
-        value={get(investor, 'fullName') || ''}
-        onChange={handleChange('fullName')}
-      />
       {/* <TextField className="personal-information-input" variant="outlined" placeholder="Full Address" />
       <TextField className="personal-information-input" variant="outlined" placeholder="Phone number" /> */}
       <p className="information-notice">

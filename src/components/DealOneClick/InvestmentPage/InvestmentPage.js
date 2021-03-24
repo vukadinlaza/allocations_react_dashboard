@@ -12,6 +12,7 @@ import InvestmentAmountPanel from './InvestmentAmount';
 import PersonalInformation from './PersonalInformation';
 import PaymentInformation from './PaymentInformation';
 import './styles.scss';
+import Loader from '../../utils/Loader';
 
 const CONFIRM_INVESTMENT = gql`
   mutation ConfirmInvestment($payload: Object) {
@@ -20,8 +21,10 @@ const CONFIRM_INVESTMENT = gql`
     }
   }
 `;
+
+// if individual remove signfull name
 const validate = (investor) => {
-  const required = ['legalName', 'investor_type', 'country', 'fullName'];
+  const required = ['legalName', 'investor_type', 'country'];
   if (investor.country && investor.country === 'United States') {
     required.push('state');
   }
@@ -39,7 +42,7 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage }) {
   const [investorFormData, setInvestor] = useState({});
   const [errors, setErrors] = useState([]);
 
-  const [submitConfirmation, { data, error }] = useMutation(CONFIRM_INVESTMENT);
+  const [submitConfirmation, { data, error, called }] = useMutation(CONFIRM_INVESTMENT);
 
   const submitInvestmentConfirmation = () => {
     const validation = validate(investorFormData);
@@ -57,6 +60,8 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage }) {
     submitConfirmation({ variables: { payload } });
   };
 
+  const isLoading = !data && called;
+
   return (
     <section className="InvestmentPage">
       <Button className="back-button" onClick={() => history.push()}>
@@ -71,7 +76,7 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage }) {
         <main>
           <InvestmentAmountPanel setAmount={setAmount} amount={amount} />
           <PersonalInformation errors={errors} investor={investorFormData} setInvestor={setInvestor} />
-          <PaymentInformation />
+          {/* <PaymentInformation /> */}
         </main>
         <aside>
           <InvestingAsPanel />
@@ -79,9 +84,11 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage }) {
         </aside>
       </div>
       <TermsAndConditionsPanel investor={investor} deal={deal} setCheckedTAT={setCheckedTAT} />
+
       <Button className="confirm-investment-button" disabled={!checkedTAT} onClick={submitInvestmentConfirmation}>
         Confirm investment
       </Button>
+      {isLoading && <Loader />}
     </section>
   );
 }
