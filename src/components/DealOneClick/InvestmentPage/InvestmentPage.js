@@ -14,6 +14,7 @@ import PaymentInformation from './PaymentInformation';
 import './styles.scss';
 import Loader from '../../utils/Loader';
 import WireInstructions from './WireInstructions';
+import YourDocumentsPanel from './YourDocumentsPanel';
 
 const CONFIRM_INVESTMENT = gql`
   mutation ConfirmInvestment($payload: Object) {
@@ -43,7 +44,7 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
   const [investorFormData, setInvestor] = useState({});
   const [errors, setErrors] = useState([]);
 
-  const [submitConfirmation, { data, called }] = useMutation(CONFIRM_INVESTMENT);
+  const [submitConfirmation, { data, called }] = useMutation(CONFIRM_INVESTMENT, { onCompleted: () => { refetch(); toast.success('Investment created successfully.')  }});
 
   const submitInvestmentConfirmation = () => {
     const validation = validate(investorFormData);
@@ -62,7 +63,7 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
       investmentAmount: amount,
     };
 
-    submitConfirmation({ variables: { payload }, onCompeted: refetch() });
+    submitConfirmation({ variables: { payload } });
   };
 
   console.log('INVESTMENT', investment);
@@ -86,6 +87,7 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
         <aside>
           <InvestingAsPanel />
           <DealDocumentsPanel deal={deal} />
+          <YourDocumentsPanel investment={investment} />
         </aside>
       </div>
       <TermsAndConditionsPanel investor={investor} deal={deal} setCheckedTAT={setCheckedTAT} />

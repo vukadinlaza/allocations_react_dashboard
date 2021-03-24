@@ -59,7 +59,7 @@ function PersonalInformation({ investor, setInvestor, errors }) {
             error={errors.includes('country')}
             variant="outlined"
           >
-            <InputLabel>Country of Residence or Place of Business</InputLabel>
+            <InputLabel>Country</InputLabel>
             <Select value={investor.country || ''} onChange={handleChange('country')} inputProps={{ name: 'Country' }}>
               <MenuItem value="" />
               {[{ countryName: 'United States' }, ...countries].map(({ countryName }) => (

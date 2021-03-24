@@ -33,8 +33,18 @@ function TabMenuPanel({ deal }) {
     setCurrentTab(newValue);
   };
 
-  const { memo } = deal;
-  console.log(memo)
+  const { company_name, memo, dealParams: { keyHighlights, risks } } = deal;
+
+  const keyHighlightItems = (keyHighlights || []).map((item, i) => {
+    return (
+      <li key={i}>{item}</li>
+    );
+  })
+  const riskItems = (risks || []).map((item, i) => {
+    return (
+      <li key={i}>{item}</li>
+    );
+  })
 
   return (
     <section className="TabMenuPanel">
@@ -51,16 +61,19 @@ function TabMenuPanel({ deal }) {
         </Tabs>
       </AppBar>
       <TabPanel value={currentTab} index={0}>
-        <p>Miami-focused VC fund founded by 4 Miami based tech CEOs</p>
-        <p>Goal to fund and support the next 100 unicorns in Miami</p>
-        <p>$2m target size of Fund 1</p>
-        <p>GPs are successful active Founders ($250m + in valuation)</p>
+        {keyHighlightItems.length > 0 ?
+          keyHighlightItems :
+          <p>There are no key highlights listed for <b>{company_name}.</b></p>
+        }
       </TabPanel>
       <TabPanel value={currentTab} index={1}>
-        <div>{ ReactHtmlParser(memo) }</div>
+        <div>{ReactHtmlParser(memo)}</div>
       </TabPanel>
       <TabPanel className="tab-panel" value={currentTab} index={2}>
-        <p>These are some risks about this deal...</p>
+      {riskItems.length > 0 ?
+          riskItems :
+          <p>There are no risks listed for <b>{company_name}.</b></p>
+        }
       </TabPanel>
     </section>
   )

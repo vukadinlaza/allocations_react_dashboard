@@ -42,6 +42,10 @@ export const GET_INVESTOR_DEAL = gql`
           _id
           amount
           status
+          documents {
+            path
+            link
+          }
         }
         dealParams {
           dealType
