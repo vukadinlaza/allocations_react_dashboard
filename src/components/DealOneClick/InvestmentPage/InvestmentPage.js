@@ -24,12 +24,12 @@ const CONFIRM_INVESTMENT = gql`
 
 // if individual remove signfull name
 const validate = (investor) => {
-  const required = ['legalName', 'investor_type', 'country'];
+  const required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
   if (investor.country && investor.country === 'United States') {
     required.push('state');
   }
-  if (investor.investor_type && investor.investor_type === 'entity') {
-    required.push('accredited_investor_status');
+  if(investor.investor_type === 'entity' && !investor.fullName) {
+    required.push('fullName');
   }
   return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
 };
@@ -50,6 +50,10 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage }) {
 
     if (validation.length > 0) {
       return toast.warning('Incomplete Form');
+    }
+
+    if(!amount) {
+      return toast.warning('Please enter a valid investment amount.')
     }
     const payload = {
       ...investorFormData,
