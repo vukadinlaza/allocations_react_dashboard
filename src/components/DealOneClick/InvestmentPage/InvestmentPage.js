@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { Button } from '@material-ui/core';
@@ -30,7 +30,7 @@ const validate = (investor) => {
   if (investor.country && investor.country === 'United States') {
     required.push('state');
   }
-  if(investor.investor_type === 'entity' && !investor.fullName) {
+  if (investor.investor_type === 'entity' && !investor.fullName) {
     required.push('fullName');
   }
   return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
@@ -44,8 +44,19 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
   const [investorFormData, setInvestor] = useState({});
   const [errors, setErrors] = useState([]);
 
-  const [submitConfirmation, { data, called }] = useMutation(CONFIRM_INVESTMENT, { onCompleted: () => { refetch(); toast.success('Investment created successfully.')  }});
+  const [submitConfirmation, { data, called }] = useMutation(CONFIRM_INVESTMENT, {
+    onCompleted: () => {
+      refetch();
+      toast.success('Investment created successfully.');
+    },
+  });
 
+  useEffect(() => {
+    if (called && data) {
+      console.log('fires refetch');
+      refetch();
+    }
+  });
   const submitInvestmentConfirmation = () => {
     const validation = validate(investorFormData);
     setErrors(validation);
@@ -54,8 +65,8 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
       return toast.warning('Incomplete Form');
     }
 
-    if(!amount) {
-      return toast.warning('Please enter a valid investment amount.')
+    if (!amount) {
+      return toast.warning('Please enter a valid investment amount.');
     }
     const payload = {
       ...investorFormData,
