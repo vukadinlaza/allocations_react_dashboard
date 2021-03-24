@@ -94,7 +94,7 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
         Confirm investment
       </Button>
       {(investment.status === 'signed' || investment.status === 'wired') && (
-        <div className="container">
+        <div className="wire-container">
           <WireInstructions deal={deal} />{' '}
         </div>
       )}
