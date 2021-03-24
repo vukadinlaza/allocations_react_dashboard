@@ -1,12 +1,11 @@
-
-import React, { useState, useEffect } from 'react'
-import { useHistory, useLocation, useParams } from 'react-router'
-import { useAuth } from '../../auth/useAuth';
+import React, { useState, useEffect } from 'react';
+import { useHistory, useLocation, useParams } from 'react-router';
 import { gql } from 'apollo-boost';
-import { useLazyQuery } from 'react-apollo';
+import { useLazyQuery } from '@apollo/react-hooks';
+import { useAuth } from '../../auth/useAuth';
 import LandingPage from './LandingPage/LandingPage';
 import InvestmentPage from './InvestmentPage/InvestmentPage';
-import './style.scss'
+import './style.scss';
 import Loader from '../utils/Loader';
 
 export const GET_INVESTOR_DEAL = gql`
@@ -94,17 +93,13 @@ export const CREATE_INVESTMENT = gql`
   }
 `;
 
-
-
 function DealOneClick() {
-
   const [investmentPage, toggleInvestmentPage] = useState(false);
   const { organization, deal_slug } = useParams();
-  const history = useHistory()
-  const { search } = useLocation()
+  const history = useHistory();
+  const { search } = useLocation();
   const { userProfile, isAuthenticated, loading } = useAuth();
   const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL);
-
 
   useEffect(() => {
     if (!loading && !called && isAuthenticated) {
@@ -131,20 +126,13 @@ function DealOneClick() {
 
   return (
     <div className="DealOneClick">
-      { investmentPage ?
-        <InvestmentPage
-          deal={deal}
-          investor={investor}
-          toggleInvestmentPage={toggleInvestmentPage}
-        />
-        :
-        <LandingPage
-          deal={deal}
-          toggleInvestmentPage={toggleInvestmentPage}
-        />
-      }
+      {investmentPage ? (
+        <InvestmentPage deal={deal} investor={investor} toggleInvestmentPage={toggleInvestmentPage} />
+      ) : (
+        <LandingPage deal={deal} toggleInvestmentPage={toggleInvestmentPage} />
+      )}
     </div>
-  )
+  );
 }
 
-export default DealOneClick
+export default DealOneClick;
