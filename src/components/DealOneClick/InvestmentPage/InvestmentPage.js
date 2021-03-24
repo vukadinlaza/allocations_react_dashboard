@@ -13,6 +13,7 @@ import PersonalInformation from './PersonalInformation';
 import PaymentInformation from './PaymentInformation';
 import './styles.scss';
 import Loader from '../../utils/Loader';
+import WireInstructions from './WireInstructions';
 
 const CONFIRM_INVESTMENT = gql`
   mutation ConfirmInvestment($payload: Object) {
@@ -34,7 +35,7 @@ const validate = (investor) => {
   return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
 };
 
-function InvestmentPage({ deal, investor, toggleInvestmentPage }) {
+function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investment }) {
   const history = useHistory();
   const { company_name } = deal;
   const [checkedTAT, setCheckedTAT] = useState(false);
@@ -42,7 +43,7 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage }) {
   const [investorFormData, setInvestor] = useState({});
   const [errors, setErrors] = useState([]);
 
-  const [submitConfirmation, { data, error, called }] = useMutation(CONFIRM_INVESTMENT);
+  const [submitConfirmation, { data, called }] = useMutation(CONFIRM_INVESTMENT);
 
   const submitInvestmentConfirmation = () => {
     const validation = validate(investorFormData);
@@ -57,14 +58,14 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage }) {
     }
     const payload = {
       ...investorFormData,
-      investmentId: investor.invitedDeal.investment._id,
+      investmentId: investment._id,
       investmentAmount: amount,
     };
 
-    submitConfirmation({ variables: { payload } });
+    submitConfirmation({ variables: { payload }, onCompeted: refetch() });
   };
 
-  const isLoading = !data && called;
+  console.log('INVESTMENT', investment);
 
   return (
     <section className="InvestmentPage">
@@ -92,7 +93,11 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage }) {
       <Button className="confirm-investment-button" disabled={!checkedTAT} onClick={submitInvestmentConfirmation}>
         Confirm investment
       </Button>
-      {isLoading && <Loader />}
+      {(investment.status === 'signed' || investment.status === 'wired') && (
+        <div className="container">
+          <WireInstructions deal={deal} />{' '}
+        </div>
+      )}
     </section>
   );
 }

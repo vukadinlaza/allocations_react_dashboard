@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { gql } from 'apollo-boost';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { useAuth } from '../../auth/useAuth';
 import LandingPage from './LandingPage/LandingPage';
 import InvestmentPage from './InvestmentPage/InvestmentPage';
@@ -100,7 +100,11 @@ function DealOneClick() {
   const { search } = useLocation();
   const { userProfile, isAuthenticated, loading } = useAuth();
   const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL);
-
+  const [createInvestment, { called: didCreateInvestment }] = useMutation(CREATE_INVESTMENT, {
+    onCompleted: () => {
+      refetch();
+    },
+  });
   useEffect(() => {
     if (!loading && !called && isAuthenticated) {
       getDeal({
@@ -112,6 +116,20 @@ function DealOneClick() {
     }
   }, [isAuthenticated, loading, called, getDeal, deal_slug, organization]);
 
+  useEffect(() => {
+    const blocked = userProfile?.email?.includes('allocations');
+    if (data && !data.investor?.invitedDeal?.investment && !blocked) {
+      const investment = {
+        deal_id: data.investor.invitedDeal?._id,
+        user_id: data.investor._id,
+        amount: 0,
+      };
+      if (userProfile?.email && !didCreateInvestment) {
+        createInvestment({ variables: { investment } });
+      }
+    }
+  }, [called, createInvestment, data, didCreateInvestment, organization, search, userProfile]);
+
   if (!data) return <Loader />;
 
   const {
@@ -122,12 +140,17 @@ function DealOneClick() {
   const { investment } = deal;
 
   console.log('investment', investment);
-  console.log('deal', deal);
 
   return (
     <div className="DealOneClick">
       {investmentPage ? (
-        <InvestmentPage deal={deal} investor={investor} toggleInvestmentPage={toggleInvestmentPage} />
+        <InvestmentPage
+          deal={deal}
+          investor={investor}
+          toggleInvestmentPage={toggleInvestmentPage}
+          refetch={refetch}
+          investment={investment}
+        />
       ) : (
         <LandingPage deal={deal} toggleInvestmentPage={toggleInvestmentPage} />
       )}

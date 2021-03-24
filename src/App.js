@@ -88,8 +88,9 @@ const App = () => {
           {/** Deals * */}
           <Redirect from="/public/:organization/deals/:deal_slug" to="/deals/:deal_slug" />
           <PrivateRoute path="/deals/:deal_slug" component={Deal} exact />
-          <PrivateRoute path="/deal-one-click/:organization/:deal_slug" component={DealOneClick} exact />
           <PrivateRoute path="/deals/:organization/:deal_slug" component={Deal} exact />
+          <PrivateRoute path="/oc/:deal_slug" component={DealOneClick} exact />
+          <PrivateRoute path="/oc/:organization/:deal_slug" component={DealOneClick} exact />
 
           {/** AllocationsX * */}
           <PrivateRoute path="/exchange" component={AllocationsX} exact />

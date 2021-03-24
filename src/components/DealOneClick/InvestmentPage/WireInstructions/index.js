@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-function WireInstructions({ deal, investor }) {
+function WireInstructions({ deal }) {
+  console.log('RENDERS WIRE INSR');
   const link =
     deal.documents && deal.documents.find((d) => d.path === 'wire-instructions')
       ? `https://${deal.documents.find((d) => d.path === 'wire-instructions').link}`
