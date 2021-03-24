@@ -156,11 +156,16 @@ export default function Deal() {
   }, [called, createInvestment, data, didCreateInvestment, organization, search, userProfile]);
   useEffect(() => {
     const isTvc = organization === 'theventurecollective';
-    console.log('IS TVC', isTvc, organization);
     if (isTvc) {
       setAllowEdit(false);
     }
   }, [organization]);
+
+  useEffect(() => {
+    if (deal_slug === 'allocations-60-m-round-spv') {
+      history.push(`/oc/${deal_slug}`);
+    }
+  });
 
   useEffect(() => {
     // theres been an error
