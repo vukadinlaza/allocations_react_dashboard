@@ -3,6 +3,18 @@ import React from 'react';
 import './styles.scss';
 
 function TermsAndConditionsPanel({ deal, investor, setCheckedTAT }) {
+  const doc = (deal.documents || []).find((d) => {
+    return d.path.includes('Subscription');
+  });
+  console.log('LINK', doc);
+  const anchor = doc ? (
+    <a href={`https://${doc.link}`} target="_blank">
+      SPV Documents (Operating Agreement, Private Placement Memorandum and Subscription Agreement)
+    </a>
+  ) : (
+    'SPV Documents (Operating Agreement, Private Placement Memorandum and Subscription Agreement'
+  );
+
   return (
     <section className="TermsAndConditions">
       <p className="section-label">Terms and Conditions</p>
@@ -11,8 +23,7 @@ function TermsAndConditionsPanel({ deal, investor, setCheckedTAT }) {
           I consent to electronic delivery of all documents, notices and agreements as related to my investment;
         </Typography>
         <Typography>
-          I have read and agree to the issuer’s SPV Documents (Operating Agreement, Private Placement Memorandum and
-          Subscription Agreement) and hereby authorize my signature to the SPV Documents; and
+          I have read and agree to the issuer’s {anchor} and hereby authorize my signature to the SPV Documents; and
         </Typography>
         <Typography>
           I have read and agree to the Portfolio Company’s investment agreement, which is attached to the SPV Documents
