@@ -400,18 +400,23 @@ function InvestorName({ investor, errors, handleChange }) {
 
 const statusOptions = {
   individual: [
-    'I have over $5m in net assets, excluding my primary residence',
-    'I have over $2m-$5m in net assets, excluding my primary residence',
-    'I have over $1m-$2m in net assets, excluding my primary residence',
-    'I have had $200K in income (or $300K jointly with my spouse) for the past 2 years and expect the same this year',
-    'N.A.',
+    'I have individual/joint net worth in excess of $1m',
+    'I have had $200K+ income in each of the two most recent years',
+    'I’ve had $300K+ joint income in each of the two most recent years',
+    'My professional certification qualifies me as an accredited investor',
+    'I am a director or executive officer of the Fund’s General Partner',
+    'I am a “knowledgeable employee" of the private fund or its managers',
+    'I am a foreigner within the meaning of Section 1446(e) of the Code',
   ],
   entity: [
-    'My entity has over $25m in assets',
-    'My entity has $5m-$25m in assets',
-    'All owners of my entity are qualified purchasers',
-    'All owners of my entity are accredited',
-    'N.A.',
+    'Each equity owner of my entity is an accredited investor',
+    'My entity has total assets in excess of $5m',
+    'I am a “family office” with $5m+ in assets under management',
+    'I am an Investment Advisor',
+    'I am an Exempt Investment Adviser',
+    'I am a private business development company',
+    'I am an investment company or a business development company',
+    'I am a Small Business Investment Company',
   ],
 };
 
@@ -422,6 +427,7 @@ export function AccreditedInvestorStatus({ investor, handleChange, errors }) {
   return (
     <FormControl
       required
+      className='accredited-investor-status'
       error={errors.includes('accredited_investor_status')}
       variant="outlined"
       fullWidth

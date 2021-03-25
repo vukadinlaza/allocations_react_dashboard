@@ -1,0 +1,37 @@
+.TabMenuPanel {
+  width: 100%;
+  min-height: 20rem;
+  box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
+
+  .tabs-container {
+    background-color: white;
+    width: 100%;
+    box-shadow: none;
+    border: none;
+    outline: none;
+
+    .tab {
+      text-align: center;
+      font-family: 'Circula-Medium' !important;
+      font-weight: 500;
+      font-size: 12px;
+      color: rgb(135, 135, 135);
+      width: 33.33%;
+      text-transform: none;
+      background-color: #FBFCFF;
+      border-width: 0px;
+      outline: none;
+      white-space: nowrap;
+    }
+
+    .Mui-selected {
+      font-weight: 800;
+      color: #0561FF;
+      background-color: white;
+    }
+
+  }
+  .MuiPaper-root {
+    border: none;
+  }
+}
