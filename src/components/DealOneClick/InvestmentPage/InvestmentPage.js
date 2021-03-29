@@ -27,10 +27,10 @@ const CONFIRM_INVESTMENT = gql`
 // if individual remove signfull name
 const validate = (investor) => {
   const required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
-  if (investor.country && investor.country === 'United States') {
+  if(investor.country && investor.country === 'United States') {
     required.push('state');
   }
-  if (investor.investor_type === 'entity' && !investor.fullName) {
+  if(investor.investor_type === 'entity' && !investor.fullName) {
     required.push('fullName');
   }
   return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
@@ -52,7 +52,7 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
   });
 
   useEffect(() => {
-    if (called && data) {
+    if(called && data) {
       console.log('fires refetch');
       refetch();
     }
@@ -61,11 +61,11 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
     const validation = validate(investorFormData);
     setErrors(validation);
 
-    if (validation.length > 0) {
+    if(validation.length > 0) {
       return toast.warning('Incomplete Form');
     }
 
-    if (!amount) {
+    if(!amount) {
       return toast.warning('Please enter a valid investment amount.');
     }
     const payload = {
@@ -79,6 +79,8 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
 
   console.log('INVESTMENT', investment);
 
+  const { dealParams: { minimumInvestment, maximumInvestment } } = deal;
+
   return (
     <section className="InvestmentPage">
       <Button className="back-button" onClick={() => history.push()}>
@@ -91,7 +93,12 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
 
       <div className="flex-container">
         <main>
-          <InvestmentAmountPanel setAmount={setAmount} amount={amount} />
+          <InvestmentAmountPanel
+            setAmount={setAmount}
+            amount={amount}
+            minimumInvestment={minimumInvestment}
+            maximumInvestment={maximumInvestment}
+          />
           <PersonalInformation errors={errors} investor={investorFormData} setInvestor={setInvestor} />
           {/* <PaymentInformation /> */}
         </main>
@@ -106,7 +113,7 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
       <Button className="confirm-investment-button" disabled={!checkedTAT} onClick={submitInvestmentConfirmation}>
         Confirm investment
       </Button>
-      {(investment.status === 'signed' || investment.status === 'wired') && (
+      {(investment?.status === 'signed' || investment?.status === 'wired') && (
         <div className="wire-container">
           <WireInstructions deal={deal} />{' '}
         </div>
