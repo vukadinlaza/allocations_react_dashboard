@@ -51,7 +51,6 @@ export const GET_INVESTOR_DEAL = gql`
           dealType
           coinvestors
           risks
-          keyHighlights
           termsAndConditions
           valuation
           runRate
