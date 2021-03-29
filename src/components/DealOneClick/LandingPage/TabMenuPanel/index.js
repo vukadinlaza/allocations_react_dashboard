@@ -10,6 +10,7 @@ const TabPanel = props => {
   return (
     <div
       role="tabpanel"
+      classname="tab-panel"
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
@@ -63,16 +64,19 @@ function TabMenuPanel({ deal }) {
       <TabPanel value={currentTab} index={0}>
         {keyHighlightItems.length > 0 ?
           keyHighlightItems :
-          <p>There are no key highlights listed for <b>{company_name}.</b></p>
+          <p className="no-data">No key highlights listed for <b>{company_name}.</b></p>
         }
       </TabPanel>
       <TabPanel value={currentTab} index={1}>
-        <div>{ReactHtmlParser(memo)}</div>
+        {memo.length > 0 ?
+          ReactHtmlParser(memo) :
+          <p className="no-data">No memos listed for <b>{company_name}.</b></p>
+        }
       </TabPanel>
       <TabPanel className="tab-panel" value={currentTab} index={2}>
-      {riskItems.length > 0 ?
+        {riskItems.length > 0 ?
           riskItems :
-          <p>There are no risks listed for <b>{company_name}.</b></p>
+          <p className="no-data">No risks listed for <b>{company_name}.</b></p>
         }
       </TabPanel>
     </section>
