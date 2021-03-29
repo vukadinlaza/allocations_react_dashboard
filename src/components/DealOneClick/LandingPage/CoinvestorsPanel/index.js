@@ -19,7 +19,7 @@ function CoinvestorsPanel({ coinvestors, deal }) {
       <ul>
         { coinvestorItems.length > 0
           ? coinvestorItems
-          : <li>There are currently no coinvestors listed for <b>{company_name}</b>.</li>
+          : <li>No coinvestors listed for <b>{company_name}</b>.</li>
         }
       </ul>
     </section>
