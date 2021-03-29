@@ -4,6 +4,11 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import './styles.scss';
 
 function YourDocumentsPanel({ investment }) {
+
+  if(!investment) {
+    return null;
+  }
+
   const { documents } = investment;
 
   const signedDocuments = (documents || []).map((doc) => {
