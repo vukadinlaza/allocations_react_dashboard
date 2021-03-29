@@ -156,7 +156,10 @@ function DealOneClick() {
           investment={investment}
         />
       ) : (
-        <LandingPage deal={deal} toggleInvestmentPage={toggleInvestmentPage} />
+        <LandingPage
+          deal={deal}
+          toggleInvestmentPage={toggleInvestmentPage}
+        />
       )}
     </div>
   );
