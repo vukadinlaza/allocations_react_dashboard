@@ -15,6 +15,7 @@ import './styles.scss';
 import Loader from '../../utils/Loader';
 import WireInstructions from './WireInstructions';
 import YourDocumentsPanel from './YourDocumentsPanel';
+import SPVDocumentModal from './SpvDocumentModal';
 
 const CONFIRM_INVESTMENT = gql`
   mutation ConfirmInvestment($payload: Object) {
@@ -40,6 +41,7 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
   const history = useHistory();
   const { company_name } = deal;
   const [checkedTAT, setCheckedTAT] = useState(false);
+  const [showSpvModal, setShowSpvModal] = useState(false);
   const [amount, setAmount] = useState('');
   const [investorFormData, setInvestor] = useState({});
   const [errors, setErrors] = useState([]);
@@ -57,7 +59,7 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
       refetch();
     }
   });
-  const submitInvestmentConfirmation = () => {
+  const confirmInvestment = () => {
     const validation = validate(investorFormData);
     setErrors(validation);
 
@@ -68,6 +70,9 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
     if (!amount) {
       return toast.warning('Please enter a valid investment amount.');
     }
+    setShowSpvModal(true);
+  };
+  const submitInvestment = () => {
     const payload = {
       ...investorFormData,
       investmentId: investment._id,
@@ -75,6 +80,7 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
     };
 
     submitConfirmation({ variables: { payload } });
+    setShowSpvModal(false);
   };
 
   console.log('INVESTMENT', investment);
@@ -103,9 +109,10 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
       </div>
       <TermsAndConditionsPanel investor={investor} deal={deal} setCheckedTAT={setCheckedTAT} />
 
-      <Button className="confirm-investment-button" disabled={!checkedTAT} onClick={submitInvestmentConfirmation}>
+      <Button className="confirm-investment-button" disabled={!checkedTAT} onClick={confirmInvestment}>
         Confirm investment
       </Button>
+      <SPVDocumentModal open={showSpvModal} setOpen={setShowSpvModal} deal={deal} submitInvestment={submitInvestment} />
       {(investment.status === 'signed' || investment.status === 'wired') && (
         <div className="wire-container">
           <WireInstructions deal={deal} />{' '}
