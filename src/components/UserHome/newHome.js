@@ -25,7 +25,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import CloseIcon from '@material-ui/icons/Close';
-import _, { isNumber, toNumber, toLower } from 'lodash';
+import _, { isNumber, toNumber, toLower, sortBy, orderBy } from 'lodash';
 import moment from 'moment';
 import Chart from 'react-google-charts';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
@@ -207,7 +207,6 @@ export default () => {
   }, [setTradeData, tradeData.showLoading]);
 
   const { userProfile } = useAuth(GET_INVESTOR);
-  console.log('USER PROFILE', userProfile);
   const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile.email);
 
   useEffect(() => {
@@ -523,7 +522,7 @@ export default () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {investments.map((investment) =>
+                {orderBy(investments, (inv) => inv.deal.company_name, ['asc']).map((investment) =>
                   showDocs?._id === investment?._id ? (
                     <>
                       <TR
@@ -1250,7 +1249,6 @@ function InvestmentStatus({ investment }) {
 }
 
 function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin }) {
-  console.log('IS ADMIN', isAdmin);
   return (
     <>
       <TableRow>
