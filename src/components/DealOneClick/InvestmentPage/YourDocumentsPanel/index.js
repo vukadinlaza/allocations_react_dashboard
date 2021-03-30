@@ -11,11 +11,11 @@ function YourDocumentsPanel({ investment }) {
 
   const { documents } = investment;
 
-  const signedDocuments = (documents || []).map((doc) => {
+  const signedDocuments = (documents || []).map((doc, i) => {
     const file = doc?.path.slice(0, 12) === 'investments/' ? doc.path.split('/')[2] : doc.path.split('/')[1];
 
     return (
-      <a href={`https://${doc.link}`} target="_blank">
+      <a key={i} href={`https://${doc.link}`} target="_blank">
         <Button>
           <InsertDriveFileIcon />
           {file}
