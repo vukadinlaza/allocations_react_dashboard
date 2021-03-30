@@ -1,0 +1,42 @@
+.WireInstructions {
+  width: 100%;
+  border-radius: 5px;
+  background-color: #FBFCFF;
+  box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
+  border: 1px solid rgb(232, 232, 232);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+
+  .wire-warning {
+    width: 90%;
+    padding: 5px;
+    text-align: center;
+    border-radius: 5px;
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+  }
+
+  .wire-doc-iframe {
+    padding: 10px 0;
+    border-radius: 5px;
+    width: 95%;
+    position: relative;
+
+    iframe {
+      border-radius: 5px;
+      border: 2px solid gray;
+      position: absolute;
+      top: -60px;
+      height: calc(100% + 60px);
+      overflow-y: scroll;
+    }
+
+    .embed-responsive {
+      border-radius: 5px;
+    }
+  }
+
+}

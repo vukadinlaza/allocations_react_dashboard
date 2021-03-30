@@ -6,9 +6,12 @@
   flex-direction: column;
   background-color: #FBFCFF;
   box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
+  border: 1px solid rgb(232, 232, 232);
+
 
   a {
     width: 90%;
+
     button {
       width: 100%;
       display: flex;
@@ -19,6 +22,10 @@
       text-transform: none;
       flex-wrap: wrap;
       overflow: hidden;
+
+      span {
+        text-align: left;
+      }
 
       svg {
         fill: #B3B1FE;

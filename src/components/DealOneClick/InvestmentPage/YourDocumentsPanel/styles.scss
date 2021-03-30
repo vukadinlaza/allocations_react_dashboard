@@ -10,7 +10,7 @@
   .no-docs {
     padding: 10px;
   }
-  
+
   a {
     width: 90%;
     button {
@@ -23,6 +23,11 @@
       text-transform: none;
       flex-wrap: wrap;
       overflow: hidden;
+
+      span {
+        text-align: left;
+      }
+
 
       svg {
         fill: #B3B1FE;

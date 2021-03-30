@@ -13,7 +13,7 @@
     box-shadow: none;
     border: none;
     outline: none;
-    border-radius: 5px;
+    border-radius: 3px 3px 0px 0px;
 
 
     .tab {
@@ -22,14 +22,18 @@
       font-weight: 500;
       font-size: 12px;
       color: rgb(135, 135, 135);
-      width: 33.33%;
+      width: 100%;
       text-transform: none;
       background-color: #FBFCFF;
       border-width: 0px;
       outline: none;
-
       white-space: nowrap;
     }
+
+    .MuiButtonBase-root, .MuiTabs-indicator {
+      width: 100%;
+    }
+
 
     .Mui-selected {
       font-weight: 800;

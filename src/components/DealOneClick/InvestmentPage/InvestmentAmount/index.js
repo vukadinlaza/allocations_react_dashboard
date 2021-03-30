@@ -4,11 +4,6 @@ import './styles.scss';
 
 function InvestmentAmountPanel({ setAmount, amount, minimumInvestment, maximumInvestment }) {
 
-  const handleClick = ({ target }) => {
-    maximumInvestment && target.name === 'max-investment' && setAmount(maximumInvestment)
-    minimumInvestment && target.name === 'min-investment' && setAmount(minimumInvestment)
-  }
-
   return (
     <section className="InvestmentAmountPanel">
       <p className="section-label">Investment Amount</p>
@@ -23,17 +18,19 @@ function InvestmentAmountPanel({ setAmount, amount, minimumInvestment, maximumIn
         />
         <div className="buttons">
           <Button
-            onClick={handleClick}
+            disabled={minimumInvestment === null}
+            onClick={() => setAmount(minimumInvestment)}
             name="min-investment"
-            className="min-investment-button"
+            className={`min-investment-button ${maximumInvestment === null && 'disabled'}`}
           >
             Min investment
           </Button>
 
           <Button
-            onClick={handleClick}
+            disabled={maximumInvestment === null}
+            onClick={() => setAmount(maximumInvestment)}
             name="max-investment"
-            className="max-investment-button"
+            className={`max-investment-button ${maximumInvestment === null && 'disabled'}`}
           >
             Max investment
           </Button>

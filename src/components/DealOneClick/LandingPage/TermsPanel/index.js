@@ -3,7 +3,7 @@ import './styles.scss'
 
 const TermsPanel = ({ deal }) => {
 
-  const { deal_lead, maximumInvestment } = deal
+  const { deal_lead, dealParams: { totalCarry, managementFees } } = deal
 
   return (
     <section className="TermsPanel">
@@ -14,8 +14,12 @@ const TermsPanel = ({ deal }) => {
           <h3>{deal_lead}</h3>
         </li>
         <li>
-          <p>Maximum investment:</p>
-          <h3>{maximumInvestment ? maximumInvestment : 'No maximum investment amount set.'}</h3>
+          <p>Total carry:</p>
+          <h3>{totalCarry ? totalCarry : 'Not specified.'}</h3>
+        </li>
+        <li>
+          <p>Total management fee:</p>
+          <h3>{managementFees ? managementFees : 'Not specified.'}</h3>
         </li>
       </ul>
     </section>

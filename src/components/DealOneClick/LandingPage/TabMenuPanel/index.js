@@ -39,31 +39,17 @@ function TabMenuPanel({ deal }) {
       <AppBar position="static">
         <Tabs
           centered
-          TabIndicatorProps={{ style: { background: '#0561FF', height: '3px' } }}
+          TabIndicatorProps={{ style: { background: '#0561FF', height: '3px', width: '100%', left: '0' } }}
           className="tabs-container" value={currentTab}
           onChange={handleTabChange}
         >
-          <Tab className="tab" label="Key Highlights" />
-          <Tab className="tab" label="Memos" />
-          <Tab className="tab" label="Risks" />
+          <Tab className="tab" label="Memo" />
         </Tabs>
       </AppBar>
       <TabPanel value={currentTab} index={0}>
-        {keyHighlights && keyHighlights.length > 0 ?
-          ReactHtmlParser(keyHighlights) :
-          <span className="no-data">No key highlights listed for <b>{company_name}.</b></span>
-        }
-      </TabPanel>
-      <TabPanel value={currentTab} index={1}>
         {memo && memo.length > 0 ?
           ReactHtmlParser(memo) :
           <span className="no-data">No memos listed for <b>{company_name}.</b></span>
-        }
-      </TabPanel>
-      <TabPanel className="tab-panel" value={currentTab} index={2}>
-        {risks && risks.length > 0 ?
-          ReactHtmlParser(risks) :
-          <span className="no-data">No risks listed for <b>{company_name}.</b></span>
         }
       </TabPanel>
     </section>

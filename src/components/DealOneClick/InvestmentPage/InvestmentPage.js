@@ -93,7 +93,7 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
 
   return (
     <section className="InvestmentPage">
-      <Button className="back-button" onClick={() => history.push()}>
+      <Button className="back-button" onClick={() => toggleInvestmentPage(open => !open)}>
         <ArrowBackIcon />
         Back to Deal Page
       </Button>
@@ -111,24 +111,26 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
           />
           <PersonalInformation errors={errors} investor={investorFormData} setInvestor={setInvestor} />
           {/* <PaymentInformation /> */}
+          <TermsAndConditionsPanel
+            confirmInvestment={confirmInvestment}
+            investor={investor}
+            deal={deal}
+            checkedTAT={checkedTAT}
+            setCheckedTAT={setCheckedTAT} />
         </main>
         <aside>
           <InvestingAsPanel />
           <DealDocumentsPanel deal={deal} />
           <YourDocumentsPanel investment={investment} />
+          {(investment && investment.status === 'signed' || investment && investment.status === 'wired') && (
+            <div className="wire-container">
+              <WireInstructions deal={deal} />
+            </div>
+          )}
         </aside>
       </div>
-      <TermsAndConditionsPanel investor={investor} deal={deal} setCheckedTAT={setCheckedTAT} />
 
-      <Button className="confirm-investment-button" disabled={!checkedTAT} onClick={confirmInvestment}>
-        Confirm investment
-      </Button>
       <SPVDocumentModal open={showSpvModal} setOpen={setShowSpvModal} deal={deal} submitInvestment={submitInvestment} />
-      {(investment.status === 'signed' || investment.status === 'wired') && (
-        <div className="wire-container">
-          <WireInstructions deal={deal} />{' '}
-        </div>
-      )}
     </section>
   );
 }

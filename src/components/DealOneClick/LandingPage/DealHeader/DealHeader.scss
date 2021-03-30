@@ -30,7 +30,7 @@
     padding: 0;
     overflow: hidden;
     background-size: cover;
-    background-image: url('../../../../assets/default-deal-header.png');
+    background-image: url('https://allocations-public.s3.us-east-2.amazonaws.com/deals/default.png');
     background-position: center;
     background-repeat: no-repeat;
   }
@@ -50,8 +50,7 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-size: cover;
-    background-image: url('../../../../assets/default-deal-header.png');
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
   }

@@ -16,7 +16,7 @@ function YourDocumentsPanel({ investment }) {
 
     return (
       <a key={i} href={`https://${doc.link}`} target="_blank">
-        <Button>
+        <Button >
           <InsertDriveFileIcon />
           {file}
         </Button>

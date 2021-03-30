@@ -343,7 +343,6 @@ export default function DealEdit() {
   }, [data, deal]);
 
 
-
   const {
     memo,
     dealParams: {
@@ -351,6 +350,46 @@ export default function DealEdit() {
       risks
     }
   } = deal;
+
+  const TabEditor = ({ tab }) => {
+
+    const tabValueMap = {
+      'keyHighlights' : keyHighlights,
+      'memo': memo,
+      'risks': risks
+    }
+
+    console.log('tab', tabValueMap[tab])
+
+    return !loading ? <Editor
+        value={tabValueMap[tab]}
+        apiKey="jlbrhzgo0m2myqdmbhaav8a0971vomza2smty20fpq6fs47j"
+        init={{
+          height: 350,
+          menubar: false,
+          plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste code help wordcount',
+          ],
+          toolbar:
+            'undo redo | formatselect | bold italic backcolor | \
+          alignleft aligncenter alignright alignjustify | \
+          bullist numlist outdent indent | removeformat | help',
+        }}
+        onEditorChange={value => {
+
+          setDeal({
+            dealParams: {
+              ...deal.dealParams,
+              keyHighlights: value
+            }
+          })
+
+        }}
+      /> : <Loader />
+  }
+
 
   if(errorMessage) return <div className="Error">{errorMessage}</div>;
 
@@ -387,36 +426,7 @@ export default function DealEdit() {
             </AppBar>
 
             <TabPanel value={currentEditTab} index={0}>
-              {
-                !loading ? <Editor
-                  value={keyHighlights}
-                  apiKey="jlbrhzgo0m2myqdmbhaav8a0971vomza2smty20fpq6fs47j"
-                  init={{
-                    height: 350,
-                    menubar: false,
-                    plugins: [
-                      'advlist autolink lists link image charmap print preview anchor',
-                      'searchreplace visualblocks code fullscreen',
-                      'insertdatetime media table paste code help wordcount',
-                    ],
-                    toolbar:
-                      'undo redo | formatselect | bold italic backcolor | \
-                    alignleft aligncenter alignright alignjustify | \
-                    bullist numlist outdent indent | removeformat | help',
-                  }}
-                  onEditorChange={value => {
-
-                    setDeal({
-                      dealParams: {
-                        ...deal.dealParams,
-                        keyHighlights: value
-                      }
-                    })
-
-                  }}
-                /> : <Loader />
-              }
-
+              <TabEditor tab={'keyHighlights'} />
             </TabPanel>
             <TabPanel value={currentEditTab} index={1}>
             </TabPanel>

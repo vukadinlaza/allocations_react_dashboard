@@ -22,7 +22,7 @@ function LandingPage({ deal, toggleInvestmentPage }) {
         />
       </div>
       <div className="container">
-        <CoinvestorsPanel deal={deal} coinvestors={coinvestors}/>
+        {/* <CoinvestorsPanel deal={deal} coinvestors={coinvestors}/> */}
         <TabMenuPanel deal={deal} />
       </div>
       <TermsPanel deal={deal}/>
