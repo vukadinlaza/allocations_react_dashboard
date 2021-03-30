@@ -10,7 +10,7 @@ const TabPanel = props => {
   return (
     <div
       role="tabpanel"
-      classname="tab-panel"
+      className="tab-panel"
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
@@ -18,9 +18,7 @@ const TabPanel = props => {
     >
       { value === index && (
         <Box p={3}>
-          <Typography>
-            {children}
-          </Typography>
+          {children}
         </Box>
       )}
     </div>
@@ -35,17 +33,6 @@ function TabMenuPanel({ deal }) {
   };
 
   const { company_name, memo, dealParams: { keyHighlights, risks } } = deal;
-
-  const keyHighlightItems = (keyHighlights || []).map((item, i) => {
-    return (
-      <li key={i}>{item}</li>
-    );
-  })
-  const riskItems = (risks || []).map((item, i) => {
-    return (
-      <li key={i}>{item}</li>
-    );
-  })
 
   return (
     <section className="TabMenuPanel">
@@ -62,21 +49,21 @@ function TabMenuPanel({ deal }) {
         </Tabs>
       </AppBar>
       <TabPanel value={currentTab} index={0}>
-        {keyHighlightItems.length > 0 ?
-          keyHighlightItems :
-          <p className="no-data">No key highlights listed for <b>{company_name}.</b></p>
+        {keyHighlights && keyHighlights.length > 0 ?
+          ReactHtmlParser(keyHighlights) :
+          <span className="no-data">No key highlights listed for <b>{company_name}.</b></span>
         }
       </TabPanel>
       <TabPanel value={currentTab} index={1}>
-        {memo.length > 0 ?
+        {memo && memo.length > 0 ?
           ReactHtmlParser(memo) :
-          <p className="no-data">No memos listed for <b>{company_name}.</b></p>
+          <span className="no-data">No memos listed for <b>{company_name}.</b></span>
         }
       </TabPanel>
       <TabPanel className="tab-panel" value={currentTab} index={2}>
-        {riskItems.length > 0 ?
-          riskItems :
-          <p className="no-data">No risks listed for <b>{company_name}.</b></p>
+        {risks && risks.length > 0 ?
+          ReactHtmlParser(risks) :
+          <span className="no-data">No risks listed for <b>{company_name}.</b></span>
         }
       </TabPanel>
     </section>
