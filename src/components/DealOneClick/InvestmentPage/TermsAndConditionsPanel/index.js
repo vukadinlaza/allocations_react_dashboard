@@ -6,7 +6,6 @@ function TermsAndConditionsPanel({ deal, investor, setCheckedTAT }) {
   const doc = (deal.documents || []).find((d) => {
     return d.path.includes('Subscription');
   });
-  console.log('LINK', doc);
   const anchor = doc ? (
     <a href={`https://${doc.link}`} target="_blank">
       SPV Documents (Operating Agreement, Private Placement Memorandum and Subscription Agreement)

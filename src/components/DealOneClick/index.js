@@ -51,7 +51,6 @@ export const GET_INVESTOR_DEAL = gql`
           dealType
           coinvestors
           risks
-          keyHighlights
           termsAndConditions
           valuation
           runRate
@@ -98,7 +97,7 @@ export const CREATE_INVESTMENT = gql`
 `;
 
 function DealOneClick() {
-  const [investmentPage, toggleInvestmentPage] = useState(false);
+  const [investmentPage, toggleInvestmentPage] = useState(true);
   const { organization, deal_slug } = useParams();
   const history = useHistory();
   const { search } = useLocation();
