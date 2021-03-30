@@ -16,6 +16,7 @@ import Loader from '../../utils/Loader';
 import WireInstructions from './WireInstructions';
 import YourDocumentsPanel from './YourDocumentsPanel';
 import SPVDocumentModal from './SpvDocumentModal';
+import { getClientIp } from '../../../utils/ip';
 
 const CONFIRM_INVESTMENT = gql`
   mutation ConfirmInvestment($payload: Object) {
@@ -72,11 +73,14 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
     }
     setShowSpvModal(true);
   };
-  const submitInvestment = () => {
+  const submitInvestment = async () => {
+    const ip = await getClientIp();
+    console.log('IP', ip);
     const payload = {
       ...investorFormData,
       investmentId: investment._id,
       investmentAmount: amount,
+      clientIp: ip,
     };
 
     submitConfirmation({ variables: { payload } });
