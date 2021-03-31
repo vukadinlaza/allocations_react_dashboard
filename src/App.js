@@ -4,7 +4,6 @@ import Cohere from 'cohere-js';
 import AdminRoute from './auth/admin-route';
 import PrivateRoute from './components/PrivateRoute';
 import Faq from './components/Faq';
-import Deal from './components/Deal';
 import DealOneClick from './components/DealOneClick';
 import Deals from './components/Deals';
 import Credit from './components/Credit';
@@ -87,10 +86,8 @@ const App = () => {
 
           {/** Deals * */}
           <Redirect from="/public/:organization/deals/:deal_slug" to="/deals/:deal_slug" />
-          <PrivateRoute path="/deals/:deal_slug" component={Deal} exact />
-          <PrivateRoute path="/deals/:organization/:deal_slug" component={Deal} exact />
-          <PrivateRoute path="/oc/:deal_slug" component={DealOneClick} exact />
-          <PrivateRoute path="/oc/:organization/:deal_slug" component={DealOneClick} exact />
+          <PrivateRoute path="/deals/:deal_slug" component={DealOneClick} exact />
+          <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
 
           {/** AllocationsX * */}
           <PrivateRoute path="/exchange" component={AllocationsX} exact />
