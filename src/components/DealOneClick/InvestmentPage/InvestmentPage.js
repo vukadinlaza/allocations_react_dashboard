@@ -17,6 +17,7 @@ import WireInstructions from './WireInstructions';
 import YourDocumentsPanel from './YourDocumentsPanel';
 import SPVDocumentModal from './SpvDocumentModal';
 import { getClientIp } from '../../../utils/ip';
+import Confetti from 'react-confetti'
 
 const CONFIRM_INVESTMENT = gql`
   mutation ConfirmInvestment($payload: Object) {
@@ -46,11 +47,17 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
   const [amount, setAmount] = useState('');
   const [investorFormData, setInvestor] = useState({});
   const [errors, setErrors] = useState([]);
+  const [confetti, showConfetti] = useState(false)
+
 
   const [submitConfirmation, { data, called }] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       refetch();
       toast.success('Investment created successfully.');
+      showConfetti(true)
+      setTimeout(() => {
+        showConfetti(false)
+      }, 5000);
     },
   });
 
@@ -87,7 +94,6 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
     setShowSpvModal(false);
   };
 
-  console.log('INVESTMENT', investment);
 
   const { dealParams: { minimumInvestment, maximumInvestment } } = deal;
 
@@ -131,6 +137,8 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
       </div>
 
       <SPVDocumentModal open={showSpvModal} setOpen={setShowSpvModal} deal={deal} submitInvestment={submitInvestment} />
+
+      { confetti && <Confetti className="confetti" />}
     </section>
   );
 }

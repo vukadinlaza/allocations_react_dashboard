@@ -3,8 +3,8 @@ import TermsPanel from './TermsPanel'
 import InvestPanel from './InvestPanel'
 import DealHeader from './DealHeader'
 import CoinvestorsPanel from './CoinvestorsPanel'
-import TabMenuPanel from './TabMenuPanel'
 import './styles.scss'
+import KeyHighlights from './KeyHighlightsPanel'
 
 function LandingPage({ deal, toggleInvestmentPage }) {
 
@@ -21,11 +21,11 @@ function LandingPage({ deal, toggleInvestmentPage }) {
           toggleInvestmentPage={toggleInvestmentPage}
         />
       </div>
-      <div className="container">
-        {/* <CoinvestorsPanel deal={deal} coinvestors={coinvestors}/> */}
-        <TabMenuPanel deal={deal} />
+      <div className="flex-container">
+        <CoinvestorsPanel deal={deal} coinvestors={coinvestors} />
+        <KeyHighlights deal={deal} />
+        <TermsPanel deal={deal} />
       </div>
-      <TermsPanel deal={deal}/>
     </section>
   )
 }

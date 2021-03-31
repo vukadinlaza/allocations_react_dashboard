@@ -7,6 +7,9 @@ import LandingPage from './LandingPage/LandingPage';
 import InvestmentPage from './InvestmentPage/InvestmentPage';
 import './style.scss';
 import Loader from '../utils/Loader';
+import Deal from '../Deal';
+import moment from 'moment'
+
 
 export const GET_INVESTOR_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
@@ -97,7 +100,7 @@ export const CREATE_INVESTMENT = gql`
 `;
 
 function DealOneClick() {
-  const [investmentPage, toggleInvestmentPage] = useState(true);
+  const [investmentPage, toggleInvestmentPage] = useState(false);
   const { organization, deal_slug } = useParams();
   const history = useHistory();
   const { search } = useLocation();
@@ -109,7 +112,7 @@ function DealOneClick() {
     },
   });
   useEffect(() => {
-    if (!loading && !called && isAuthenticated) {
+    if(!loading && !called && isAuthenticated) {
       getDeal({
         variables: {
           deal_slug,
@@ -121,34 +124,43 @@ function DealOneClick() {
 
   useEffect(() => {
     const blocked = userProfile?.email?.includes('allocations');
-    if (data && !data.investor?.invitedDeal?.investment && !blocked) {
+    if(data && !data.investor?.invitedDeal?.investment && !blocked) {
       const investment = {
         deal_id: data.investor.invitedDeal?._id,
         user_id: data.investor._id,
         amount: 0,
       };
-      if (userProfile?.email && !didCreateInvestment) {
+      if(userProfile?.email && !didCreateInvestment) {
         createInvestment({ variables: { investment } });
       }
     }
   }, [called, createInvestment, data, didCreateInvestment, organization, search, userProfile]);
 
-  if (!data) return <Loader />;
+  if(!data) return <Loader />;
 
   const {
     investor,
-    investor: { invitedDeal: deal },
+    investor: { invitedDeal },
   } = data;
 
-  const { investment } = deal;
+  const { investment } = invitedDeal;
 
-  console.log('investment', investment);
+
+  const idTimestamp = invitedDeal._id.toString().substring(0, 8);
+  const dealTimestamp = moment.unix(new Date(parseInt(idTimestamp, 16) * 1000));
+  const rolloverTimestamp = moment.unix(new Date('2021-04-02'))
+
+
+  if(data && moment(dealTimestamp).isBefore(rolloverTimestamp)) {
+    return <Deal />
+  }
+
 
   return (
     <div className="DealOneClick">
       {investmentPage ? (
         <InvestmentPage
-          deal={deal}
+          deal={invitedDeal}
           investor={investor}
           toggleInvestmentPage={toggleInvestmentPage}
           refetch={refetch}
@@ -156,7 +168,7 @@ function DealOneClick() {
         />
       ) : (
         <LandingPage
-          deal={deal}
+          deal={invitedDeal}
           toggleInvestmentPage={toggleInvestmentPage}
         />
       )}

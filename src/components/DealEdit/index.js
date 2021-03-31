@@ -351,18 +351,10 @@ export default function DealEdit() {
     }
   } = deal;
 
-  const TabEditor = ({ tab }) => {
-
-    const tabValueMap = {
-      'keyHighlights' : keyHighlights,
-      'memo': memo,
-      'risks': risks
-    }
-
-    console.log('tab', tabValueMap[tab])
+  const TabEditor = () => {
 
     return !loading ? <Editor
-        value={tabValueMap[tab]}
+        value={memo}
         apiKey="jlbrhzgo0m2myqdmbhaav8a0971vomza2smty20fpq6fs47j"
         init={{
           height: 350,
@@ -382,7 +374,7 @@ export default function DealEdit() {
           setDeal({
             dealParams: {
               ...deal.dealParams,
-              keyHighlights: value
+              memo: value
             }
           })
 
@@ -420,17 +412,11 @@ export default function DealEdit() {
                 onChange={handleEditTabChange}
               >
                 <Tab className="tab" label="Key Highlights" />
-                <Tab className="tab" label="Memos" />
-                <Tab className="tab" label="Risks" />
               </Tabs>
             </AppBar>
 
             <TabPanel value={currentEditTab} index={0}>
-              <TabEditor tab={'keyHighlights'} />
-            </TabPanel>
-            <TabPanel value={currentEditTab} index={1}>
-            </TabPanel>
-            <TabPanel value={currentEditTab} index={2}>
+              <TabEditor />
             </TabPanel>
 
             <Grid container spacing={2} style={{ marginTop: 16 }}>

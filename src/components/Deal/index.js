@@ -162,12 +162,6 @@ export default function Deal() {
   }, [organization]);
 
   useEffect(() => {
-    if (deal_slug === 'allocations-60-m-round-spv') {
-      history.push(`/oc/${deal_slug}`);
-    }
-  });
-
-  useEffect(() => {
     // theres been an error
     if (error) {
       const q = queryString.parse(search);

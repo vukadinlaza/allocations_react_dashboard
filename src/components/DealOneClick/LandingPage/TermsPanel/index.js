@@ -11,15 +11,15 @@ const TermsPanel = ({ deal }) => {
       <ul>
         <li>
           <p>Deal lead:</p>
-          <h3>{deal_lead}</h3>
+          <h3>{deal_lead ? deal_lead : 'No deal lead specified.'}</h3>
         </li>
         <li>
           <p>Total carry:</p>
-          <h3>{totalCarry ? totalCarry : 'Not specified.'}</h3>
+          <h3>{totalCarry ? totalCarry + '%' : 'Not specified.'}</h3>
         </li>
         <li>
           <p>Total management fee:</p>
-          <h3>{managementFees ? managementFees : 'Not specified.'}</h3>
+          <h3>{managementFees ? managementFees + '%' : 'Not specified.'}</h3>
         </li>
       </ul>
     </section>
