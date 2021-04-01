@@ -37,6 +37,7 @@ export const GET_INVESTOR_DEAL = gql`
         status
         slug
         memo
+        docSpringTemplateId
         documents {
           path
           link
