@@ -5,6 +5,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import './index.scss';
 
 function AllPagesPDFViewer({ document, handleClose }) {
+  console.log('doc in pdf viewer', document)
   const { link } = document;
 
   if (!link) {

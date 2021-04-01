@@ -105,10 +105,14 @@ function DealOneClick() {
   const history = useHistory();
   const { search } = useLocation();
   const { userProfile, isAuthenticated, loading } = useAuth();
+
   const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL);
+
   const [createInvestment, { called: didCreateInvestment }] = useMutation(CREATE_INVESTMENT, {
     onCompleted: () => {
       refetch();
+
+      history.push(`/deals/${organization}/${deal_slug}/next-steps`)
     },
   });
   useEffect(() => {
@@ -142,16 +146,14 @@ function DealOneClick() {
     investor,
     investor: { invitedDeal },
   } = data;
-
   const { investment } = invitedDeal;
-
-
   const idTimestamp = invitedDeal._id.toString().substring(0, 8);
   const dealTimestamp = moment.unix(new Date(parseInt(idTimestamp, 16) * 1000));
   const rolloverTimestamp = moment.unix(new Date('2021-04-02'))
 
+  const exemptDealSlugs = ['allocations-60-m-round-spv', 'allocations-spv-100m', 'space-x']
 
-  if(data && moment(dealTimestamp).isBefore(rolloverTimestamp)) {
+  if(data && moment(dealTimestamp).isBefore(rolloverTimestamp) && !exemptDealSlugs.includes(deal_slug)) {
     return <Deal />
   }
 

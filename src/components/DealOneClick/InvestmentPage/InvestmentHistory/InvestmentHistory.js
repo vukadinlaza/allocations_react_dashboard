@@ -3,7 +3,7 @@ import React from 'react'
 function InvestmentHistory() {
   return (
     <section>
-      <p className="section-label">Investment history</p>
+      <p className="section-label">My Investment History</p>
     </section>
   )
 }

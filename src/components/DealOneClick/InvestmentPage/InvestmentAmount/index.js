@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField, InputAdornment } from '@material-ui/core';
 import './styles.scss';
 
 function InvestmentAmountPanel({ setAmount, amount, minimumInvestment, maximumInvestment }) {
@@ -14,6 +14,7 @@ function InvestmentAmountPanel({ setAmount, amount, minimumInvestment, maximumIn
           variant="outlined"
           placeholder="Enter investment amount"
           value={amount}
+          startAdornment={<InputAdornment position="start">$</InputAdornment>}
           onChange={(e) => setAmount(e.target.value)}
         />
         <div className="buttons">

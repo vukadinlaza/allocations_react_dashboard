@@ -25,7 +25,7 @@ function YourDocumentsPanel({ investment }) {
   });
   return (
     <section className="DealDocumentsPanel">
-      <p className="section-label">Your signed documents</p>
+      <p className="section-label">My Signed Documents</p>
       {signedDocuments.length > 0 ? signedDocuments : <p className="no-docs">You do not have any signed documents.</p>}
     </section>
   );

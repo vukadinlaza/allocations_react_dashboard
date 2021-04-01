@@ -33,6 +33,8 @@ const useStyles = makeStyles((theme) => ({
 export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment }) {
   const classes = useStyles();
 
+  console.log(deal.documents)
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -40,6 +42,8 @@ export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment
   const document = deal.documents.find((doc) => {
     return doc.path.includes('Agreement');
   });
+
+  console.log('doc', document)
 
   return (
     <Modal
