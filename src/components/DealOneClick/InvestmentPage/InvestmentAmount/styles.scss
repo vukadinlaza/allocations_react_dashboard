@@ -9,54 +9,42 @@
   .investment-amount-container {
     width: 90%;
     height: max-content;
-    margin: 10px 0;
+    margin: 20px 0;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     height: max-content;
     position: relative;
     left: 20px;
 
     .investment-amount-input {
+      width: 75%;
       padding: 0;
-      width: 50%;
       background-color: rgb(252, 252, 252);
       margin: 0;
       padding: 5px;
+      text-align: left;
 
+      .MuiTypography-root {
+        color: #3CB345;
+        font-weight: 600;
+        font-size: .8rem;
+        margin: 0px 5px;
+        background-color: #D8FFDE;
+        padding: 2.5px 10px;
+        border-radius: 2.5px;
+      }
     }
 
-    .buttons {
-      display: flex;
-      justify-content: space-around;
-      width: 50%;
-
-      .min-investment-button {
-        width: 47.5%;
-        padding: 15px 0;
-        white-space: nowrap;
-        background-color: rgb(4, 97, 255);
-        color: white;
-        text-transform: none;
-        font-weight: 700;
-        outline: none;
-        font-size: 12px;
-      }
-
-      .max-investment-button {
-        font-size: 12px;
-        width: 47.5%;
-        outline: none;
-        white-space: nowrap;
-        text-transform: none;
-        background-color: #3AC522;
-        color: white;
-        font-weight: 700;
-      }
-
-      .disabled {
-        opacity: .5;
-      }
+    .min-investment-button {
+      padding: 1rem 2rem;
+      white-space: nowrap;
+      background-color: #28C600;
+      color: white;
+      text-transform: none;
+      font-weight: 700;
+      outline: none;
+      font-size: 14px;
     }
 
   }
@@ -65,24 +53,5 @@
 @media screen and (max-width: 960px) {
   .InvestmentAmountPanel {
 
-    .investment-amount-container {
-      flex-direction: column;
-      .investment-amount-input {
-        width: 100%;
-      }
-
-      .buttons {
-        width: 100%;
-        margin: 10px 0;
-
-        .min-investment-button {
-
-        }
-        .max-investment-button {
-
-        }
-      }
-
-    }
   }
 }

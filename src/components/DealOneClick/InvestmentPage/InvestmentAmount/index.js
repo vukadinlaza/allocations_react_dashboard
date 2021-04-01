@@ -1,39 +1,39 @@
 import React from 'react';
-import { Button, TextField, InputAdornment } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import './styles.scss';
+import CurrencyTextField from '@unicef/material-ui-currency-textfield'
+
 
 function InvestmentAmountPanel({ setAmount, amount, minimumInvestment, maximumInvestment }) {
+
+  const [value, setValue] = React.useState();
+
 
   return (
     <section className="InvestmentAmountPanel">
       <p className="section-label">Investment Amount</p>
 
       <div className="investment-amount-container">
-        <TextField
+        <CurrencyTextField
           className="investment-amount-input"
           variant="outlined"
-          placeholder="Enter investment amount"
           value={amount}
-          startAdornment={<InputAdornment position="start">$</InputAdornment>}
-          onChange={(e) => setAmount(e.target.value)}
+          currencySymbol="$"
+          //minimumValue="0"
+          textAlign="left"
+          outputFormat="string"
+          decimalCharacter="."
+          digitGroupSeparator=","
+          onChange={(event, value) => setAmount(value)}
         />
+
         <div className="buttons">
           <Button
-            disabled={minimumInvestment === null}
-            onClick={() => setAmount(minimumInvestment)}
+            onClick={() => setAmount(1000)}
             name="min-investment"
-            className={`min-investment-button ${maximumInvestment === null && 'disabled'}`}
+            className={'min-investment-button'}
           >
             Min investment
-          </Button>
-
-          <Button
-            disabled={maximumInvestment === null}
-            onClick={() => setAmount(maximumInvestment)}
-            name="max-investment"
-            className={`max-investment-button ${maximumInvestment === null && 'disabled'}`}
-          >
-            Max investment
           </Button>
         </div>
       </div>
