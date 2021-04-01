@@ -29,35 +29,38 @@ const CONFIRM_INVESTMENT = gql`
 // if individual remove signfull name
 const validate = (investor) => {
   const required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
-  if(investor.country && investor.country === 'United States') {
+  if (investor.country && investor.country === 'United States') {
     required.push('state');
   }
-  if(investor.investor_type === 'entity' && !investor.fullName) {
+  if (investor.investor_type === 'entity' && !investor.fullName) {
     required.push('fullName');
   }
   return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
 };
 
-function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investment }) {
+function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investment, organzation }) {
   const history = useHistory();
-  const { company_name } = deal;
+  const { company_name, slug } = deal;
   const [checkedTAT, setCheckedTAT] = useState(false);
   const [showSpvModal, setShowSpvModal] = useState(false);
   const [amount, setAmount] = useState('');
   const [investorFormData, setInvestor] = useState({});
   const [errors, setErrors] = useState([]);
 
-
   const [submitConfirmation, { data, called }] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       refetch();
       toast.success('Investment created successfully.');
 
+      setTimeout(() => {
+        const path = organzation ? `/next-steps/${organzation}/${slug}` : `/next-steps/${slug}`;
+        history.push(path);
+      }, 2000);
     },
   });
 
   useEffect(() => {
-    if(called && data) {
+    if (called && data) {
       console.log('fires refetch');
       refetch();
     }
@@ -66,11 +69,11 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
     const validation = validate(investorFormData);
     setErrors(validation);
 
-    if(validation.length > 0) {
+    if (validation.length > 0) {
       return toast.warning('Incomplete Form');
     }
 
-    if(!amount) {
+    if (!amount) {
       return toast.warning('Please enter a valid investment amount.');
     }
     setShowSpvModal(true);
@@ -89,12 +92,13 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
     setShowSpvModal(false);
   };
 
-
-  const { dealParams: { minimumInvestment, maximumInvestment } } = deal;
+  const {
+    dealParams: { minimumInvestment, maximumInvestment },
+  } = deal;
 
   return (
     <section className="InvestmentPage">
-      <Button className="back-button" onClick={() => toggleInvestmentPage(open => !open)}>
+      <Button className="back-button" onClick={() => toggleInvestmentPage((open) => !open)}>
         <ArrowBackIcon />
         Back to Deal Page
       </Button>
@@ -117,13 +121,14 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
             investor={investor}
             deal={deal}
             checkedTAT={checkedTAT}
-            setCheckedTAT={setCheckedTAT} />
+            setCheckedTAT={setCheckedTAT}
+          />
         </main>
         <aside>
           <InvestingAsPanel />
           <DealDocumentsPanel deal={deal} />
           <YourDocumentsPanel investment={investment} />
-          {(investment && investment.status === 'signed' || investment && investment.status === 'wired') && (
+          {((investment && investment.status === 'signed') || (investment && investment.status === 'wired')) && (
             <div className="wire-container">
               <WireInstructions deal={deal} />
             </div>
@@ -132,7 +137,6 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
       </div>
 
       <SPVDocumentModal open={showSpvModal} setOpen={setShowSpvModal} deal={deal} submitInvestment={submitInvestment} />
-
     </section>
   );
 }

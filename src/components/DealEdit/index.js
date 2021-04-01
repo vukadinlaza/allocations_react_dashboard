@@ -84,6 +84,7 @@ const GET_DEAL = gql`
         no_exchange
         appLink
         publicLink
+        docSpringTemplateId
         documents {
           path
           link
@@ -111,15 +112,12 @@ const GET_DEAL = gql`
         }
         dealParams {
           risks
-          keyHighlights
           coinvestors
           totalRoundSize
           dealType
           dealMultiple
           allocation
           totalCarry
-          minimumInvestment
-          maximumInvestment
           minimumInvestment
           signDeadline
           wireDeadline
@@ -143,7 +141,6 @@ const GET_DEAL = gql`
           fundManagementFeeType
           fundGeneralPartner
           fundEstimatedTerm
-          dealLogo
         }
       }
     }
@@ -166,20 +163,19 @@ const UPDATE_DEAL = gql`
       memo
       target
       amount_raised
+      docSpringTemplateId
       invitedInvestors {
         _id
         name
       }
       dealParams {
         risks
-        keyHighlights
         totalRoundSize
         dealType
         dealMultiple
         allocation
         totalCarry
         minimumInvestment
-        maximumInvestment
         signDeadline
         wireDeadline
         estimatedSetupCosts
@@ -228,6 +224,7 @@ const validInputs = [
   'dealParams',
   'Annual',
   'One-Time',
+  'docSpringTemplateId',
 ];
 
 const dealParamsValidInputs = [
@@ -267,29 +264,26 @@ const dealParamsValidInputs = [
   'dealLogo',
 ];
 
-const TabPanel = props => {
+const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
 
   return (
     <div
       role="tabpanel"
-      classname="tab-panel"
+      className="tab-panel"
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      { value === index && (
+      {value === index && (
         <Box p={3}>
-          <Typography>
-            {children}
-          </Typography>
+          <Typography>{children}</Typography>
         </Box>
       )}
     </div>
-  )
-}
-
+  );
+};
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -308,7 +302,6 @@ const useStyles = makeStyles((theme) => ({
     margin: '16px -16px',
   },
 }));
-
 
 export default function DealEdit() {
   const history = useHistory();
@@ -329,8 +322,8 @@ export default function DealEdit() {
   };
 
   useEffect(() => {
-    if(data) {
-      if(data?.organization?.deal) {
+    if (data) {
+      if (data?.organization?.deal) {
         setDeal(data.organization.deal);
       } else {
         setErrorMessage('Not Authorized to View this Deal');
@@ -342,18 +335,14 @@ export default function DealEdit() {
     setHasChanges(data && !isEqual(deal, get(data, 'organization.deal')));
   }, [data, deal]);
 
-
   const {
     memo,
-    dealParams: {
-      keyHighlights,
-      risks
-    }
+    dealParams: { keyHighlights, risks },
   } = deal;
 
   const TabEditor = () => {
-
-    return !loading ? <Editor
+    return !loading ? (
+      <Editor
         value={memo}
         apiKey="jlbrhzgo0m2myqdmbhaav8a0971vomza2smty20fpq6fs47j"
         init={{
@@ -369,21 +358,21 @@ export default function DealEdit() {
           alignleft aligncenter alignright alignjustify | \
           bullist numlist outdent indent | removeformat | help',
         }}
-        onEditorChange={value => {
-
+        onEditorChange={(value) => {
           setDeal({
             dealParams: {
               ...deal.dealParams,
-              memo: value
-            }
-          })
-
+              memo: value,
+            },
+          });
         }}
-      /> : <Loader />
-  }
+      />
+    ) : (
+      <Loader />
+    );
+  };
 
-
-  if(errorMessage) return <div className="Error">{errorMessage}</div>;
+  if (errorMessage) return <div className="Error">{errorMessage}</div>;
 
   return (
     <div className="DealEdit">
@@ -408,7 +397,8 @@ export default function DealEdit() {
               <Tabs
                 centered
                 TabIndicatorProps={{ style: { background: '#0561FF', height: '3px' } }}
-                className="tabs-container" value={currentEditTab}
+                className="tabs-container"
+                value={currentEditTab}
                 onChange={handleEditTabChange}
               >
                 <Tab className="tab" label="Key Highlights" />
@@ -611,6 +601,21 @@ export default function DealEdit() {
                   onChange={(e) => setDeal({ dealParams: { ...deal.dealParams, wireDeadline: e.target.value } })}
                   label="Wiring Deadline"
                   type="datetime-local"
+                  variant="outlined"
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <Typography variant="body2">
+                  <strong> Doc Spring Template ID</strong>
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  style={{ width: '100%' }}
+                  value={deal.docSpringTemplateId || ''}
+                  onChange={(e) => setDeal({ docSpringTemplateId: e.target.value })}
+                  label="DocSpring Template ID"
                   variant="outlined"
                 />
               </Grid>
@@ -1171,14 +1176,14 @@ function DataRoom({ deal, refetch }) {
   const [addDoc, { data, error }] = useMutation(ADD_DOC);
 
   useEffect(() => {
-    if(data) {
+    if (data) {
       refetch();
       setDoc({ title: '', doc: null });
     }
   }, [data, refetch, setDoc]);
 
   const submit = () => {
-    if(doc.doc && doc.title) {
+    if (doc.doc && doc.title) {
       addDoc({ variables: { deal_id: deal._id, ...doc } });
     }
   };
@@ -1203,7 +1208,7 @@ function DataRoom({ deal, refetch }) {
               style={{ display: 'none' }}
               accept="application/pdf"
               onChange={({ target }) => {
-                if(target.validity.valid) setDoc({ doc: target.files[0] });
+                if (target.validity.valid) setDoc({ doc: target.files[0] });
               }}
             />
           </Button>
@@ -1255,11 +1260,11 @@ function Doc({ doc, deal, refetch }) {
   const [rmDoc, { data, error }] = useMutation(RM_DOC);
 
   useEffect(() => {
-    if(data) refetch();
+    if (data) refetch();
   }, [data, refetch]);
 
   const submit = () => {
-    if(window.confirm(`Delete ${doc.path} document?`)) {
+    if (window.confirm(`Delete ${doc.path} document?`)) {
       rmDoc({ variables: { deal_id: deal._id, title: doc.path } });
     }
   };
@@ -1299,7 +1304,7 @@ function Investment({ investment: i, refetch }) {
     });
   };
 
-  if(editing) {
+  if (editing) {
     return (
       <TableRow>
         <TableCell colSpan={4}>
@@ -1362,11 +1367,11 @@ function DeleteInvestment({ investment, refetch }) {
   const [delInvestment, { data }] = useMutation(API.investments.destroy);
 
   useEffect(() => {
-    if(data && data.deleteInvestment) refetch();
+    if (data && data.deleteInvestment) refetch();
   }, [data, refetch]);
 
   const submit = () => {
-    if(window.confirm('Delete Investment?')) delInvestment({ variables: { id: investment._id } });
+    if (window.confirm('Delete Investment?')) delInvestment({ variables: { id: investment._id } });
   };
 
   return (
@@ -1387,17 +1392,17 @@ function AddInvestment({ deal, show, refetch }) {
   const [errors, setErrors] = useState([]);
 
   useEffect(() => {
-    if(deal && !investment.deal_id) {
+    if (deal && !investment.deal_id) {
       setInvestment({ deal_id: deal._id });
     }
   }, [deal, investment.deal_id, setInvestment]);
 
   useEffect(() => {
-    if(user) setInvestment({ user_id: user._id });
+    if (user) setInvestment({ user_id: user._id });
   }, [setInvestment, user]);
 
   useEffect(() => {
-    if(data) {
+    if (data) {
       setInvestment({ deal_id: deal._id, amount: '', user_id: user._id });
       refetch();
     }
@@ -1406,10 +1411,10 @@ function AddInvestment({ deal, show, refetch }) {
   const submit = () => {
     const validation = validate(investment);
     setErrors(validation);
-    if(validation.length === 0) createInvestment({ variables: { investment } });
+    if (validation.length === 0) createInvestment({ variables: { investment } });
   };
 
-  if(!show) return null;
+  if (!show) return null;
 
   return (
     <>
@@ -1463,7 +1468,7 @@ function DeleteDeal({ deal }) {
   });
 
   const submit = () => {
-    if(window.confirm(`Are you sure you'd like to delete ${deal.company_name}`)) {
+    if (window.confirm(`Are you sure you'd like to delete ${deal.company_name}`)) {
       deleteDeal();
     }
   };
@@ -1563,14 +1568,14 @@ function AddDealLogo({ deal, refetch }) {
   const [addDoc, { data, error }] = useMutation(ADD_DOC);
 
   useEffect(() => {
-    if(data) {
+    if (data) {
       refetch();
       setDoc({ title: '', doc: null });
     }
   }, [data, refetch, setDoc]);
 
   const submit = () => {
-    if(doc.doc && doc.title) {
+    if (doc.doc && doc.title) {
       addDoc({ variables: { deal_id: deal._id, ...doc } });
     }
   };
@@ -1589,7 +1594,7 @@ function AddDealLogo({ deal, refetch }) {
             style={{ display: 'none' }}
             accept="application/pdf"
             onChange={({ target }) => {
-              if(target.validity.valid) setDoc({ doc: target.files[0] });
+              if (target.validity.valid) setDoc({ doc: target.files[0] });
             }}
           />
         </Button>

@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { gql } from 'apollo-boost';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import moment from 'moment';
 import { useAuth } from '../../auth/useAuth';
 import LandingPage from './LandingPage/LandingPage';
 import InvestmentPage from './InvestmentPage/InvestmentPage';
 import './style.scss';
 import Loader from '../utils/Loader';
 import Deal from '../Deal';
-import moment from 'moment'
-
 
 export const GET_INVESTOR_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
@@ -111,12 +110,10 @@ function DealOneClick() {
   const [createInvestment, { called: didCreateInvestment }] = useMutation(CREATE_INVESTMENT, {
     onCompleted: () => {
       refetch();
-
-      history.push(`/deals/${organization}/${deal_slug}/next-steps`)
     },
   });
   useEffect(() => {
-    if(!loading && !called && isAuthenticated) {
+    if (!loading && !called && isAuthenticated) {
       getDeal({
         variables: {
           deal_slug,
@@ -128,19 +125,19 @@ function DealOneClick() {
 
   useEffect(() => {
     const blocked = userProfile?.email?.includes('allocations');
-    if(data && !data.investor?.invitedDeal?.investment && !blocked) {
+    if (data && !data.investor?.invitedDeal?.investment && !blocked) {
       const investment = {
         deal_id: data.investor.invitedDeal?._id,
         user_id: data.investor._id,
         amount: 0,
       };
-      if(userProfile?.email && !didCreateInvestment) {
+      if (userProfile?.email && !didCreateInvestment) {
         createInvestment({ variables: { investment } });
       }
     }
   }, [called, createInvestment, data, didCreateInvestment, organization, search, userProfile]);
 
-  if(!data) return <Loader />;
+  if (!data) return <Loader />;
 
   const {
     investor,
@@ -149,14 +146,13 @@ function DealOneClick() {
   const { investment } = invitedDeal;
   const idTimestamp = invitedDeal._id.toString().substring(0, 8);
   const dealTimestamp = moment.unix(new Date(parseInt(idTimestamp, 16) * 1000));
-  const rolloverTimestamp = moment.unix(new Date('2021-04-02'))
+  const rolloverTimestamp = moment.unix(new Date('2021-04-02'));
 
-  const exemptDealSlugs = ['allocations-60-m-round-spv', 'allocations-spv-100m', 'space-x']
+  const exemptDealSlugs = ['allocations-60-m-round-spv', 'allocations-spv-100m', 'space-x'];
 
-  if(data && moment(dealTimestamp).isBefore(rolloverTimestamp) && !exemptDealSlugs.includes(deal_slug)) {
-    return <Deal />
+  if (data && moment(dealTimestamp).isBefore(rolloverTimestamp) && !exemptDealSlugs.includes(deal_slug)) {
+    return <Deal />;
   }
-
 
   return (
     <div className="DealOneClick">
@@ -167,12 +163,10 @@ function DealOneClick() {
           toggleInvestmentPage={toggleInvestmentPage}
           refetch={refetch}
           investment={investment}
+          organzation={organization}
         />
       ) : (
-        <LandingPage
-          deal={invitedDeal}
-          toggleInvestmentPage={toggleInvestmentPage}
-        />
+        <LandingPage deal={invitedDeal} toggleInvestmentPage={toggleInvestmentPage} />
       )}
     </div>
   );

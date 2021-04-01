@@ -4,8 +4,9 @@ import './styles.scss';
 
 function TermsAndConditionsPanel({ deal, investor, checkedTAT, setCheckedTAT, confirmInvestment }) {
   const doc = (deal.documents || []).find((d) => {
-    return d.path.includes('Subscription');
+    return d.path === 'SPV Agreement';
   });
+
   const anchor = doc ? (
     <a href={`https://${doc.link}`} target="_blank">
       SPV Documents (Operating Agreement, Private Placement Memorandum and Subscription Agreement)
@@ -26,16 +27,16 @@ function TermsAndConditionsPanel({ deal, investor, checkedTAT, setCheckedTAT, co
             I have read and agree to the issuer’s {anchor} and hereby authorize my signature to the SPV Documents; and
           </Typography>
           <Typography>
-            I have read and agree to the Portfolio Company’s investment agreement, which is attached to the SPV Documents
-            and will be entered between the Portfolio Company and the SPV.
+            I have read and agree to the Portfolio Company’s investment agreement, which is attached to the SPV
+            Documents and will be entered between the Portfolio Company and the SPV.
           </Typography>
         </Box>
         <label>
-          <Checkbox className="terms-checkbox" onChange={(e) => setCheckedTAT(e.target.checked)} />I have read and accept
-          the terms of the investment.
+          <Checkbox className="terms-checkbox" onChange={(e) => setCheckedTAT(e.target.checked)} />I have read and
+          accept the terms of the investment.
         </label>
       </div>
-      <Button className="confirm-investment-button" disabled={!checkedTAT} onClick={confirmInvestment}>
+      <Button className="confirm-investment-button" disabled={!checkedTAT || !doc} onClick={confirmInvestment}>
         Confirm investment
       </Button>
     </section>
