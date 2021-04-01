@@ -20,7 +20,7 @@ function InvestPanel({ toggleInvestmentPage, deal }) {
   } = deal;
 
   const getDeadline = (date) => {
-    return moment(date).format("MMMM Do YYYY, h:mma") + ' PST' // February 21st 1997, 3:25:50 pm
+    return moment(date).format("dddd, MMMM Do YYYY, h:mm")
   }
   //if no signing deadline but wire dealine, set signing as wire, if neither null state
   return (
