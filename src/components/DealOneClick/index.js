@@ -35,6 +35,7 @@ export const GET_INVESTOR_DEAL = gql`
         pledge_link
         onboarding_link
         status
+        slug
         memo
         documents {
           path
