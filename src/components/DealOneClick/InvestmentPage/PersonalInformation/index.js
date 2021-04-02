@@ -37,8 +37,6 @@ function PersonalInformation({ investor, setInvestor, errors }) {
     return setInvestor((prev) => ({ ...prev, [prop]: e.target.value }));
   };
 
-  console.log('investor form', investor)
-
   return (
     <section className="PersonalInformationPanel">
       <p className="section-label">Personal Information</p>
@@ -82,7 +80,7 @@ function PersonalInformation({ investor, setInvestor, errors }) {
       >
 
         <Autocomplete
-          value={investor.country}
+          value={investor.country || ''}
           onChange={(event, newInputValue) => handleChange('country')(event, newInputValue)}
           inputValue={investor.country_search || ''}
           onInputChange={(event, newInputValue) => {
@@ -108,7 +106,7 @@ function PersonalInformation({ investor, setInvestor, errors }) {
 
 
           <Autocomplete
-            value={investor.state}
+            value={investor.state || ''}
             onChange={(event, newInputValue) => handleChange('state')(event, newInputValue)}
             inputValue={investor.state_search || ''}
             onInputChange={(event, newInputValue) => {

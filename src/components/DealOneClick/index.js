@@ -101,11 +101,12 @@ export const CREATE_INVESTMENT = gql`
 `;
 
 function DealOneClick() {
-  const [investmentPage, toggleInvestmentPage] = useState(false);
+  const { state } = useLocation()
+  const [investmentPage, toggleInvestmentPage] = useState(state?.isInvestPage || false);
   const { organization, deal_slug } = useParams();
-  const history = useHistory();
   const { search } = useLocation();
   const { userProfile, isAuthenticated, loading } = useAuth();
+  const history = useHistory();
 
   const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL);
 

@@ -3,7 +3,6 @@ import { Button } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import './styles.scss';
 import Confetti from 'react-confetti';
-import { useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import completeKycYes from '../../assets/complete-kyc-yes.svg';
@@ -15,6 +14,7 @@ import submitTaxInfoYes from '../../assets/submit-tax-info-yes.svg';
 import submitTaxInfoNo from '../../assets/submit-tax-info-no.svg';
 import AllocationsRocket from './AllocationsRocket/AllocationsRocket';
 import KYCModal from './KYCModal.js';
+import { useHistory, useParams } from 'react-router';
 
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
@@ -38,8 +38,20 @@ function DealNextSteps() {
 
   const { location } = useHistory();
   const [open, setOpen] = useState(false);
+  const { deal_slug, organization } = useParams()
+  const history = useHistory()
+
+  const path = organization ? `/deals/${organization}/${deal_slug}` : `/deals/${deal_slug}`
 
   useEffect(() => {
+
+
+    window.scrollTo({
+      top: 0,
+      left: 100,
+      behavior: 'smooth'
+    });
+
     setTimeout(() => {
       showConfetti(true);
     }, 1000);
@@ -47,7 +59,7 @@ function DealNextSteps() {
       showConfetti(false);
     }, 5000);
   }, []);
-  if (loading || !data) return null;
+  if(loading || !data) return null;
   console.log('DATA', data.investor);
 
   const investorFormData = location?.state?.investorFormData;
@@ -56,14 +68,14 @@ function DealNextSteps() {
     investorFormData.country === 'United States'
       ? 'tpl_dM4QcQbyLckdPXgtyx'
       : investorFormData.investor_type === 'individual'
-      ? 'tpl_qDaxDLgRkFpHJD2cFX'
-      : 'tpl_mXPLm5EXAyHJKhQekf';
+        ? 'tpl_qDaxDLgRkFpHJD2cFX'
+        : 'tpl_mXPLm5EXAyHJKhQekf';
   const kycTemplateName =
     investorFormData.country === 'United States'
       ? 'W-9'
       : investorFormData.investor_type === 'individual'
-      ? 'W-8BEN'
-      : 'W-8BENE';
+        ? 'W-8BEN'
+        : 'W-8BENE';
 
   const userDocs = data?.investor?.documents || [];
   const hasKyc = userDocs.find((doc) => {
@@ -72,10 +84,12 @@ function DealNextSteps() {
 
   return (
     <section className="DealNextSteps">
-      <Button className="back-button">
+
+      <Button className="back-button" onClick={() => history.push(path, { isInvestPage: true })}>
         <ArrowBackIcon />
         Back to Invest Page
       </Button>
+
       <h1 className="header">Next Steps</h1>
       <h3 className="sub-header">Please complete the following steps to finish your investment.</h3>
 
