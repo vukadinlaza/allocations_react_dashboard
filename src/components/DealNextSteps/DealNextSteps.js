@@ -15,7 +15,6 @@ import submitTaxInfoYes from '../../assets/submit-tax-info-yes.svg';
 import submitTaxInfoNo from '../../assets/submit-tax-info-no.svg';
 import AllocationsRocket from './AllocationsRocket/AllocationsRocket';
 import KYCModal from './KYCModal.js';
-import { useAuth } from '../../auth/useAuth';
 
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
