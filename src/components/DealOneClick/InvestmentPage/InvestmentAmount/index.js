@@ -4,22 +4,19 @@ import './styles.scss';
 import CurrencyTextField from '@unicef/material-ui-currency-textfield'
 
 
-function InvestmentAmountPanel({ setAmount, amount, minimumInvestment, maximumInvestment }) {
-
-  const [value, setValue] = React.useState();
+function InvestmentAmountPanel({ setAmount, amount, minimumInvestment, maximumInvestment, errors }) {
 
 
   return (
     <section className="InvestmentAmountPanel">
       <p className="section-label">Investment Amount</p>
-
       <div className="investment-amount-container">
         <CurrencyTextField
           className="investment-amount-input"
           variant="outlined"
           value={amount}
+          placeholder="1,000.00"
           currencySymbol="$"
-          //minimumValue="0"
           textAlign="left"
           outputFormat="string"
           decimalCharacter="."
@@ -27,15 +24,13 @@ function InvestmentAmountPanel({ setAmount, amount, minimumInvestment, maximumIn
           onChange={(event, value) => setAmount(value)}
         />
 
-        <div className="buttons">
-          <Button
-            onClick={() => setAmount(1000)}
-            name="min-investment"
-            className={'min-investment-button'}
-          >
-            Min investment
-          </Button>
-        </div>
+        <Button
+          onClick={() => setAmount(1000)}
+          name="min-investment"
+          className={'min-investment-button'}
+        >
+          Minimum investment
+        </Button>
       </div>
     </section>
   );

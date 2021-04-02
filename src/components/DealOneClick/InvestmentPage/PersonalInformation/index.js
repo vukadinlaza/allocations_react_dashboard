@@ -9,15 +9,35 @@ import './styles.scss';
 import { AccreditedInvestorStatus } from '../../../forms/InvestorEdit';
 
 const usStates = new UsaStates();
+const countryNames = countries.map(c => c.countryName)
+const stateNames = usStates.states.map(s => s.name)
 
 function PersonalInformation({ investor, setInvestor, errors }) {
-  const handleChange = (prop) => (e) => {
-    e.persist();
+  const handleChange = (prop) => (e, newValue) => {
+    if(e) {
+      e.persist();
+    }
     if(prop === 'investor_type') {
       return setInvestor((prev) => ({ ...prev, [prop]: e.target.value, accredited_investor_status: '' }));
     }
+    if(prop === 'country') {
+      if(newValue) {
+        return setInvestor((prev) => ({ ...prev, [prop]: newValue }))
+      }
+    }
+    if(prop === 'country_search') {
+      return setInvestor((prev) => ({ ...prev, [prop]: newValue }))
+    }
+    if(prop === 'state') {
+      return setInvestor((prev) => ({ ...prev, [prop]: newValue }))
+    }
+    if(prop === 'state_search') {
+      return setInvestor((prev) => ({ ...prev, [prop]: newValue }))
+    }
     return setInvestor((prev) => ({ ...prev, [prop]: e.target.value }));
   };
+
+  console.log('investor form', investor)
 
   return (
     <section className="PersonalInformationPanel">
@@ -60,22 +80,22 @@ function PersonalInformation({ investor, setInvestor, errors }) {
         error={errors.includes('country')}
         variant="outlined"
       >
-        <InputLabel>Country</InputLabel>
-        <Select value={investor.country || ''} onChange={handleChange('country')} inputProps={{ name: 'Country' }}>
-          <MenuItem value="" />
-          {[{ countryName: 'United States' }, ...countries].map(({ countryName }) => (
-            <MenuItem key={countryName} value={countryName}>
-              {countryName}
-            </MenuItem>
-          ))}
-        </Select>
-        {/* <Autocomplete
-          id="combo-box-demo"
-          options={countries}
-          getOptionLabel={(option) => option.countryName}
+
+        <Autocomplete
+          value={investor.country}
+          onChange={(event, newInputValue) => handleChange('country')(event, newInputValue)}
+          inputValue={investor.country_search || ''}
+          onInputChange={(event, newInputValue) => {
+            handleChange('country_search')(event, newInputValue);
+          }}
+          id="country-select"
+          options={countryNames}
+          getOptionLabel={(option) => option}
           style={{ width: 300 }}
           renderInput={(params) => <TextField {...params} label="Country" variant="outlined" />}
-        /> */}
+        />
+
+
       </FormControl>
       {investor.country === 'United States' && (
         <FormControl
@@ -85,15 +105,22 @@ function PersonalInformation({ investor, setInvestor, errors }) {
           variant="outlined"
           disabled={!investor.country || get(investor, 'country') !== 'United States'}
         >
-          <InputLabel>State</InputLabel>
-          <Select value={investor.state || ''} onChange={handleChange('state')} inputProps={{ name: 'state' }}>
-            <MenuItem value="" />
-            {usStates.states.map(({ name }) => (
-              <MenuItem key={name} value={name}>
-                {name}
-              </MenuItem>
-            ))}
-          </Select>
+
+
+          <Autocomplete
+            value={investor.state}
+            onChange={(event, newInputValue) => handleChange('state')(event, newInputValue)}
+            inputValue={investor.state_search || ''}
+            onInputChange={(event, newInputValue) => {
+              handleChange('state_search')(event, newInputValue);
+            }}
+            id="state-select"
+            options={stateNames}
+            getOptionLabel={(option) =>option}
+            style={{ width: 300 }}
+            renderInput={(params) => <TextField {...params} label="State" variant="outlined" />}
+          />
+
         </FormControl>
       )}
       {/* Accreditation status */}
