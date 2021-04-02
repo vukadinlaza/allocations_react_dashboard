@@ -56,7 +56,6 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
     onCompleted: () => {
       refetch();
       toast.success('Investment created successfully.');
-
       setTimeout(() => {
         const path = organzation ? `/next-steps/${organzation}/${slug}` : `/next-steps/${slug}`;
         history.push(path);
@@ -89,12 +88,13 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
   };
   const submitInvestment = async () => {
     const ip = await getClientIp();
-    console.log('IP', ip);
     const payload = {
       ...investorFormData,
       investmentId: investment._id,
       investmentAmount: amount,
       clientIp: ip,
+      dealId: deal._id,
+      docSpringTemplateId: deal.docSpringTemplateId,
     };
 
     submitConfirmation({ variables: { payload } });
