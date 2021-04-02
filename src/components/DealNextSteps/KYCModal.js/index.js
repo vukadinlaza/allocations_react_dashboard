@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Grid, Paper } from '@material-ui/core';
+import { Modal, Grid, Paper, Typography } from '@material-ui/core';
 import CancelPresentationIcon from '@material-ui/icons/CancelPresentation';
 import { makeStyles } from '@material-ui/core/styles';
-import { Helmet } from 'react-helmet';
+import { gql } from 'apollo-boost';
+import { useMutation } from '@apollo/react-hooks';
+import { toast } from 'react-toastify';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -27,22 +29,48 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '.5rem',
   },
 }));
-const optionsAndCallBacks = {
-  onSubmit: (formData) => {
-    console.log('FORM DATA', formData);
-  },
-};
+const UPDATE_USER = gql`
+  mutation UpdateUser($investor: UserInput!) {
+    updateUser(input: $investor) {
+      _id
+    }
+  }
+`;
 
-const KYCModal = ({ open, setOpen }) => {
+const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, investor, refetch }) => {
   const classes = useStyles();
+  const [updateInvestor] = useMutation(UPDATE_USER, {
+    onCompleted: () => {
+      console.log('REFETCH FIRES');
+      refetch();
+      setOpen(false);
+      toast.success('Sucess! Tax form completed');
+    },
+  });
+
+  const optionsAndCallBacks = {
+    onSubmit: (formData) => {
+      const payload = {
+        _id: investor._id,
+        kycDoc: {
+          kycTemplateId,
+          documentName: kycTemplateName,
+        },
+      };
+      updateInvestor({
+        variables: { investor: payload },
+      });
+    },
+  };
+
   return (
     <Modal open={open} onClose={() => setOpen(false)} aria-labelledby="modal" aria-describedby="modal">
       <Grid container xs={12} justify="center" alignItems="center">
         <Paper className={classes.paper}>
           <CancelPresentationIcon color="black" onClick={() => setOpen(false)} style={{ marginLeft: '100%' }} />
-
+          <Typography variant="h5">{kycTemplateName}</Typography>
           <div className="dsp-form" />
-          {window.DocSpring.createSimpleForm('.dsp-form', 'tpl_dM4QcQbyLckdPXgtyx', optionsAndCallBacks)}
+          {window.DocSpring.createSimpleForm('.dsp-form', kycTemplateId, optionsAndCallBacks)}
         </Paper>
       </Grid>
     </Modal>
