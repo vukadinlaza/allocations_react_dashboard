@@ -58,7 +58,7 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
       toast.success('Investment created successfully.');
       setTimeout(() => {
         const path = organzation ? `/next-steps/${organzation}/${slug}` : `/next-steps/${slug}`;
-        history.push(path);
+        history.push(path, { investorFormData });
       }, 2000);
     },
   });
