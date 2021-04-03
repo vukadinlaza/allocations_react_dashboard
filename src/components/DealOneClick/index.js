@@ -101,7 +101,7 @@ export const CREATE_INVESTMENT = gql`
 `;
 
 function DealOneClick() {
-  const { state } = useLocation()
+  const { state } = useLocation();
   const [investmentPage, toggleInvestmentPage] = useState(state?.isInvestPage || false);
   const { organization, deal_slug } = useParams();
   const { search } = useLocation();
@@ -155,7 +155,6 @@ function DealOneClick() {
     'allocations-60-m-round-spv',
     'allocations-spv-100m',
     'space-x',
-    '305-ventures',
     'mondrian-hotel-spv',
     'cronos-capital-i',
     'allocations-200-m',
