@@ -1,7 +1,7 @@
 .PersonalInformationPanel {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 70%;
   background-color: #FBFCFF;
   box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
   border: 1px solid rgb(232, 232, 232);
@@ -10,6 +10,26 @@
   // label, input {
   //   font-size: .8rem;
   // }
+
+  .country-input {
+    margin-top: 15px;
+    max-width: 90%;
+    left: 20px;
+    padding: 5px;
+    .country-select {
+      width: 100%;
+    }
+  }
+
+  .state-input {
+    margin-top: 15px;
+    max-width: 90%;
+    left: 20px;
+    padding: 5px;
+    .state-select {
+      width: 100%;
+    }
+  }
 
   .personal-information-input {
     margin-top: 15px;
@@ -32,5 +52,13 @@
     color: rgb(117, 117, 117);
     left: 20px;
     width: 90%;
+  }
+}
+
+@media screen and(max-width: 960px) {
+  .PersonalInformationPanel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
   }
 }

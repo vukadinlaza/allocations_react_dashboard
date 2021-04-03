@@ -5,7 +5,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import './index.scss';
 
 function AllPagesPDFViewer({ document, handleClose }) {
-  console.log('doc in pdf viewer', document)
   const { link } = document;
 
   if (!link) {
@@ -17,7 +16,7 @@ function AllPagesPDFViewer({ document, handleClose }) {
   }
   return (
     <section className="root-container-spv-viewer">
-      <div style={{ marginBottom: '5px', display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
         <div />
         <div>
           <FontAwesomeIcon icon={['far', 'file-pdf']} />

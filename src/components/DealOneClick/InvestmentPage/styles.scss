@@ -2,6 +2,7 @@
   position: relative;
   width: 100%;
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
   flex-wrap: wrap;
   padding-top: 2rem;
@@ -65,21 +66,15 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    align-items: flex-start;
     width: 100%;
     height: max-content;
     margin-bottom: 20px;
 
-    main {
-      width: 67.5%;
-      height: 100%;
-    }
-
-    aside {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      width: 30%;
-      height: max-content;
+    .side-panel {
+      width: 27.5%;
+      right: 0;
+      position: absolute;
     }
 
   }
@@ -91,4 +86,16 @@
   }
 
 
+}
+
+@media screen and (max-width: 960px) {
+  .InvestmentPage {
+    .flex-container {
+
+      .side-panel {
+        width: 100%;
+        position: initial;
+      }
+    }
+  }
 }

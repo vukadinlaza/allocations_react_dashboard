@@ -17,6 +17,7 @@ import WireInstructions from './WireInstructions';
 import YourDocumentsPanel from './YourDocumentsPanel';
 import SPVDocumentModal from './SpvDocumentModal';
 import { getClientIp } from '../../../utils/ip';
+import { nWithCommas } from '../../../utils/numbers'
 
 const CONFIRM_INVESTMENT = gql`
   mutation ConfirmInvestment($payload: Object) {
@@ -28,6 +29,7 @@ const CONFIRM_INVESTMENT = gql`
 
 // if individual remove signfull name
 const validate = (investor) => {
+  console.log('investor in validation', investor)
   const required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
   if(investor.country && investor.country === 'United States') {
     required.push('state');
@@ -91,7 +93,7 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
     const payload = {
       ...investorFormData,
       investmentId: investment._id,
-      investmentAmount: amount,
+      investmentAmount: nWithCommas(amount),
       clientIp: ip,
       dealId: deal._id,
       docSpringTemplateId: deal.docSpringTemplateId,
@@ -116,33 +118,31 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
       </div>
 
       <div className="flex-container">
-        <main>
-          <InvestmentAmountPanel
-            setAmount={setAmount}
-            amount={amount}
-            minimumInvestment={minimumInvestment}
-            maximumInvestment={maximumInvestment}
-          />
-          <PersonalInformation errors={errors} investor={investorFormData} setInvestor={setInvestor} />
-          {/* <PaymentInformation /> */}
-          <TermsAndConditionsPanel
-            confirmInvestment={confirmInvestment}
-            investor={investor}
-            deal={deal}
-            checkedTAT={checkedTAT}
-            setCheckedTAT={setCheckedTAT}
-          />
-        </main>
-        <aside>
+        <InvestmentAmountPanel
+          setAmount={setAmount}
+          amount={amount}
+          minimumInvestment={minimumInvestment}
+          maximumInvestment={maximumInvestment}
+        />
+        <div className="side-panel">
           <InvestingAsPanel />
           <DealDocumentsPanel deal={deal} />
           <YourDocumentsPanel investment={investment} />
-          {((investment && investment.status === 'signed') || (investment && investment.status === 'wired')) && (
+          {/* {((investment && investment.status === 'signed') || (investment && investment.status === 'wired')) && (
             <div className="wire-container">
               <WireInstructions deal={deal} />
             </div>
-          )}
-        </aside>
+          )} */}
+        </div>
+        <PersonalInformation errors={errors} investor={investorFormData} setInvestor={setInvestor} />
+        {/* <PaymentInformation /> */}
+        <TermsAndConditionsPanel
+          confirmInvestment={confirmInvestment}
+          investor={investor}
+          deal={deal}
+          checkedTAT={checkedTAT}
+          setCheckedTAT={setCheckedTAT}
+        />
       </div>
 
       <SPVDocumentModal open={showSpvModal} setOpen={setShowSpvModal} deal={deal} submitInvestment={submitInvestment} />

@@ -4,8 +4,8 @@ import './styles.scss';
 import CurrencyTextField from '@unicef/material-ui-currency-textfield'
 
 
-function InvestmentAmountPanel({ setAmount, amount, minimumInvestment, maximumInvestment, errors }) {
-
+function InvestmentAmountPanel({ setAmount, amount }) {
+  console.log('amount', amount)
 
   return (
     <section className="InvestmentAmountPanel">
@@ -21,11 +21,11 @@ function InvestmentAmountPanel({ setAmount, amount, minimumInvestment, maximumIn
           outputFormat="string"
           decimalCharacter="."
           digitGroupSeparator=","
-          onChange={(event, value) => setAmount(value)}
+          onChange={(event, value) => setAmount(value.toString())}
         />
 
         <Button
-          onClick={() => setAmount(1000)}
+          onClick={() => setAmount('1000')}
           name="min-investment"
           className={'min-investment-button'}
         >

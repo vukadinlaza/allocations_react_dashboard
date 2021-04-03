@@ -73,13 +73,13 @@ function PersonalInformation({ investor, setInvestor, errors }) {
 
       {/* Country */}
       <FormControl
-        className="personal-information-input"
+        className="country-input"
         required
-        error={errors.includes('country')}
         variant="outlined"
       >
 
         <Autocomplete
+          className="country-select"
           value={investor.country || ''}
           onChange={(event, newInputValue) => handleChange('country')(event, newInputValue)}
           inputValue={investor.country_search || ''}
@@ -89,23 +89,23 @@ function PersonalInformation({ investor, setInvestor, errors }) {
           id="country-select"
           options={countryNames}
           getOptionLabel={(option) => option}
-          style={{ width: 300 }}
-          renderInput={(params) => <TextField {...params} label="Country" variant="outlined" />}
+          renderInput={(params) => <TextField {...params} error={errors.includes('country')}
+            label="Country" variant="outlined" />}
         />
 
 
       </FormControl>
       {investor.country === 'United States' && (
         <FormControl
-          className="personal-information-input"
+          className="state-input"
           required
-          error={errors.includes('state')}
           variant="outlined"
           disabled={!investor.country || get(investor, 'country') !== 'United States'}
         >
 
 
           <Autocomplete
+            className="state-select"
             value={investor.state || ''}
             onChange={(event, newInputValue) => handleChange('state')(event, newInputValue)}
             inputValue={investor.state_search || ''}
@@ -114,9 +114,9 @@ function PersonalInformation({ investor, setInvestor, errors }) {
             }}
             id="state-select"
             options={stateNames}
-            getOptionLabel={(option) =>option}
-            style={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="State" variant="outlined" />}
+            getOptionLabel={(option) => option}
+            renderInput={(params) => <TextField {...params} error={errors.includes('state')}
+              label="State" variant="outlined" />}
           />
 
         </FormControl>

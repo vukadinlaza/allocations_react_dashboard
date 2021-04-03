@@ -65,7 +65,7 @@ const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, investor, ref
 
   return (
     <Modal open={open} onClose={() => setOpen(false)} aria-labelledby="modal" aria-describedby="modal">
-      <Grid container xs={12} justify="center" alignItems="center">
+      <Grid container justify="center" alignItems="center">
         <Paper className={classes.paper}>
           <CancelPresentationIcon color="black" onClick={() => setOpen(false)} style={{ marginLeft: '100%' }} />
           <Typography variant="h5">{kycTemplateName}</Typography>

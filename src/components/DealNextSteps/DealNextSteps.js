@@ -3,7 +3,7 @@ import { Button } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import './styles.scss';
 import Confetti from 'react-confetti';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useLazyQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import completeKycYes from '../../assets/complete-kyc-yes.svg';
 import completeKycNo from '../../assets/complete-kyc-no.svg';
@@ -15,6 +15,8 @@ import submitTaxInfoNo from '../../assets/submit-tax-info-no.svg';
 import AllocationsRocket from './AllocationsRocket/AllocationsRocket';
 import KYCModal from './KYCModal.js';
 import { useHistory, useParams } from 'react-router';
+import WireInstructionsModal from './WireInstructionsModal/WireInstructionsModal';
+import { useAuth } from '../../auth/useAuth';
 
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
@@ -32,19 +34,47 @@ const GET_INVESTOR = gql`
     }
   }
 `;
+
+
+export const GET_INVESTOR_DEAL = gql`
+  query Deal($deal_slug: String!, $fund_slug: String!) {
+    investor {
+      invitedDeal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
+        documents {
+          path
+          link
+        }
+      }
+    }
+  }
+`;
+
 function DealNextSteps() {
   const [confetti, showConfetti] = useState(false);
   const { data, loading, refetch } = useQuery(GET_INVESTOR);
-
-  const { location } = useHistory();
+  const [getDeal, { data: dealData, error: dealError, refetch: refetchDeal, called: calledDeal }] = useLazyQuery(GET_INVESTOR_DEAL);
   const [open, setOpen] = useState(false);
   const { deal_slug, organization } = useParams()
+  const [wireInstructionsOpen, setWireInstructionsOpen] = useState(false)
+  const { userProfile, isAuthenticated, loading: authLoading } = useAuth()
+
   const history = useHistory()
+
+  useEffect(() => {
+    if(!authLoading && !calledDeal && isAuthenticated) {
+      getDeal({
+        variables: {
+          deal_slug,
+          fund_slug: organization || 'allocations',
+        },
+      });
+    }
+  }, [isAuthenticated, authLoading, calledDeal, getDeal, deal_slug, organization]);
+
 
   const path = organization ? `/deals/${organization}/${deal_slug}` : `/deals/${deal_slug}`
 
   useEffect(() => {
-
 
     window.scrollTo({
       top: 0,
@@ -60,27 +90,28 @@ function DealNextSteps() {
     }, 5000);
   }, []);
   if(loading || !data) return null;
-  console.log('DATA', data.investor);
 
-  const investorFormData = location?.state?.investorFormData;
+  const investorFormData = history?.location?.state?.investorFormData || {};
 
   const kycTemplateId =
-    investorFormData.country === 'United States'
+    investorFormData?.country === 'United States'
       ? 'tpl_dM4QcQbyLckdPXgtyx'
-      : investorFormData.investor_type === 'individual'
+      : investorFormData?.investor_type === 'individual'
         ? 'tpl_qDaxDLgRkFpHJD2cFX'
         : 'tpl_mXPLm5EXAyHJKhQekf';
   const kycTemplateName =
-    investorFormData.country === 'United States'
+    investorFormData?.country === 'United States'
       ? 'W-9'
-      : investorFormData.investor_type === 'individual'
+      : investorFormData?.investor_type === 'individual'
         ? 'W-8BEN'
         : 'W-8BENE';
 
   const userDocs = data?.investor?.documents || [];
   const hasKyc = userDocs.find((doc) => {
-    return doc.documentName.includes('W-9') || doc.documentName.includes('W-9');
+    return doc.documentName.includes('W-9') || doc.documentName.includes('W-8');
   });
+
+  const docs = dealData?.investor?.invitedDeal?.documents;
 
   return (
     <section className="DealNextSteps">
@@ -93,14 +124,46 @@ function DealNextSteps() {
       <h1 className="header">Next Steps</h1>
       <h3 className="sub-header">Please complete the following steps to finish your investment.</h3>
 
-      <div className="action-item">
-        <img className="action-icon" src={signInvestmentYes} />
-        <div className="action-instructions">
-          <p className="action-header">Sign for Investment</p>
-        </div>
-        <Button class="completed-step-button" disabled>
-          Completed
+
+      <div className="action-items">
+        <div className="action-item">
+          <img className="action-icon" src={signInvestmentYes} />
+          <div className="action-instructions">
+            <p className="action-header">Sign for Investment</p>
+          </div>
+          <Button className="completed-step-button" disabled>
+            Completed
         </Button>
+        </div>
+
+        <div className="action-item">
+          <img className="action-icon" src={hasKyc ? submitTaxInfoYes : submitTaxInfoNo} />
+          <div className="action-instructions">
+            <p className="action-header">Submit Tax Information</p>
+            <p className="action-sub-header">Complete your W8/W9 forms here</p>
+          </div>
+          <Button
+            className={!!hasKyc ? 'completed-step-button' : 'next-step-button'}
+            onClick={() => setOpen(true)}
+            disabled={!!hasKyc}
+          >
+            {hasKyc ? 'Completed' : 'Submit Tax Info'}
+          </Button>
+        </div>
+
+        <div className={`action-item ${!hasKyc && 'disabled'}`}>
+          <img className="action-icon" src={wireFundsNo} />
+          <div className="action-instructions">
+            <p className="action-header">View Wire Instructions</p>
+            <p className="action-sub-header">Required to complete your investment</p>
+          </div>
+          <Button
+            disabled={!hasKyc}
+            onClick={() => setWireInstructionsOpen(true)}
+            className="next-step-button">
+            View Wire Instructions
+          </Button>
+        </div>
       </div>
 
       <KYCModal
@@ -111,32 +174,7 @@ function DealNextSteps() {
         investor={data?.investor}
         refetch={refetch}
       />
-
-      <div className="action-item">
-        <img className="action-icon" src={hasKyc ? submitTaxInfoYes : submitTaxInfoNo} />
-        <div className="action-instructions">
-          <p className="action-header">Submit Tax Information</p>
-          <p className="action-sub-header">Complete your W8/W9 forms here</p>
-        </div>
-        <Button
-          class={hasKyc ? 'completed-step-button' : 'next-step-button'}
-          onClick={() => setOpen(true)}
-          disabled={hasKyc}
-        >
-          {hasKyc ? 'Completed' : 'Submit Tax Info'}
-        </Button>
-      </div>
-
-      {hasKyc && (
-        <div className="action-item">
-          <img className="action-icon" src={wireFundsNo} />
-          <div className="action-instructions">
-            <p className="action-header">View Wire Instructions</p>
-            <p className="action-sub-header">Required to complete your investment</p>
-          </div>
-          <Button class="next-step-button">View Wire Instructions</Button>
-        </div>
-      )}
+      <WireInstructionsModal open={wireInstructionsOpen} setOpen={setWireInstructionsOpen} docs={docs} />
       <AllocationsRocket />
       <Confetti className={`confetti ${!confetti && 'hidden'}`} />
     </section>

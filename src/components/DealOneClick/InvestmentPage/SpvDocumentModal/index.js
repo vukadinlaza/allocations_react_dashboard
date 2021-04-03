@@ -5,33 +5,12 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import AllPagesPDFViewer from '../../../PDFViewer';
+import './styles.scss'
 
-const useStyles = makeStyles((theme) => ({
-  modal: {
-    display: 'flex',
-    marginTop: '5vh',
-    alignItems: 'start',
-    justifyContent: 'center',
-  },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: '.75rem',
-    minWidth: '40%',
-    borderRadius: '.5rem',
-  },
-  buttonContainer: {
-    marginTop: '1rem',
-    marginBottom: '1rem',
-  },
-  declineBtn: {
-    background: 'grey',
-    marginLeft: '30%',
-  },
-}));
+
+
 
 export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment }) {
-  const classes = useStyles();
 
   console.log(deal.documents)
 
@@ -43,13 +22,13 @@ export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment
     return doc.path.includes('Agreement');
   });
 
-  console.log('doc', document)
+  console.log(document)
 
   return (
     <Modal
       aria-labelledby="transition-modal-title"
       aria-describedby="transition-modal-description"
-      className={classes.modal}
+      className='SPVDocumentModal'
       open={open}
       onClose={handleClose}
       closeAfterTransition
@@ -59,13 +38,13 @@ export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment
       }}
     >
       <Fade in={open}>
-        <div className={classes.paper}>
+        <div className='paper'>
           <AllPagesPDFViewer document={document} handleClose={handleClose} />
-          <div className={classes.buttonContainer}>
-            <Button variant="contained" color="secondary" onClick={submitInvestment}>
+          <div className='buttonContainer'>
+            <Button variant="contained" color="secondary" className='button' onClick={submitInvestment}>
               I Agree
             </Button>
-            <Button variant="contained" color="secondary" className={classes.declineBtn} onClick={handleClose}>
+            <Button variant="contained" color="secondary" className='button declineBtn' onClick={handleClose}>
               I Decline
             </Button>
           </div>

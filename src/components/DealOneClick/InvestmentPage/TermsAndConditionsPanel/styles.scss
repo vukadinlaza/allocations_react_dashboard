@@ -1,5 +1,5 @@
 .TermsAndConditions {
-  width: 100%;
+  width: 70%;
 
   .terms-container {
     border-radius: 5px;
@@ -31,9 +31,11 @@
 
   label {
     color: white;
+    display: flex;
+    align-items: center;
     width: 100%;
     background-color: #9194AA;
-    padding: 10px 0;
+    padding: 10px;
     margin: 0;
     border-radius: 0px 0px 5px 5px;
 
@@ -59,4 +61,9 @@
 
 
 
+}
+@media screen and (max-width: 960px) {
+  .TermsAndConditions {
+    width: 100%;
+  }
 }

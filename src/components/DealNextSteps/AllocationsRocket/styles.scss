@@ -14,8 +14,8 @@ $animationtime:.75s;
 
 .AllocationsRocket {
   position: absolute;
-  bottom: 80px;
   width: 80px;
+  bottom: 120px;
   left: calc(50% - 40px);
   animation: fade-in .5s ease-in forwards;
   animation: hide .5s ease-in forwards 5s;
@@ -27,10 +27,10 @@ $animationtime:.75s;
     animation:
       fade-in .75s ease-in forwards,
       bounce 0.5s infinite,
-      takeoff 2s ease-in forwards 1.75s;
+      takeoff 2s ease-in forwards 2.2s;
     position: relative;
-    top: 5px;
-    transform: translateY(0%);
+    top: 20px;
+    transform: translateY(50%);
 
 
     .body {
@@ -74,7 +74,7 @@ $animationtime:.75s;
     align-items: center;
 
     .window-logo {
-      width: 20px;
+      width: 25px;
     }
   }
 
@@ -129,7 +129,7 @@ $animationtime:.75s;
       height: 120px;
       left: -40px;
       top: 330px;
-      animation: fumes 3s 1s infinite;
+      animation: fumes2 3s 1s infinite;
     }
     &:nth-child(4) {
       width: 100px;
@@ -143,7 +143,7 @@ $animationtime:.75s;
       height: 130px;
       left: -120px;
       top: 350px;
-      animation: fumes 5s infinite;
+      animation: fumes3 5s infinite;
     }
     &:nth-child(6) {
       width: 200px;
@@ -236,7 +236,7 @@ $animationtime:.75s;
     transform: scale(0.8);
   }
   100% {
-    background-color: rgba(128, 128, 128, 0.13);
+    background-color: rgba(145, 145, 145, 0.13);
     transform: scale(1)
   }
 }
@@ -253,20 +253,17 @@ $animationtime:.75s;
   }
 }
 
-@keyframes exhaust {
-  0% {
-    background: linear-gradient(to bottom, transparent 10%, $white 100%);
-  }
+@keyframes fumes2 {
   50% {
-    background: linear-gradient(to bottom, transparent 8%, $white 100%);
-  }
-  75% {
-    background: linear-gradient(to bottom, transparent 12%, $white 100%);
+    background-color: rgba(175, 175, 175, 0.719);
+    transform: scale(1.1);
   }
 }
 
-@keyframes fumes2 {
+
+@keyframes fumes3 {
   50% {
+    background-color: rgba(117, 115, 115, 0.719);
     transform: scale(1.1);
   }
 }
@@ -364,5 +361,11 @@ $animationtime:.75s;
   }
   100% {
     opacity: 1;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .AllocationsRocket {
+    bottom: 20%;
   }
 }
