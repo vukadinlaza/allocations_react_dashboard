@@ -4,7 +4,6 @@ import Cohere from 'cohere-js';
 import AdminRoute from './auth/admin-route';
 import PrivateRoute from './components/PrivateRoute';
 import Faq from './components/Faq';
-import Deal from './components/Deal';
 import DealOneClick from './components/DealOneClick';
 import Deals from './components/Deals';
 import Credit from './components/Credit';
@@ -50,6 +49,8 @@ import AdminExchangeOverview from './allocationsX/AdminOverview';
 import AuthorizedApolloProvider from './apollo-client-comp';
 import './App.scss';
 import './utils/initFontAwesome';
+import TeamMap from './components/TeamMap/TeamMap';
+import DealNextSteps from './components/DealNextSteps/DealNextSteps';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -87,10 +88,10 @@ const App = () => {
 
           {/** Deals * */}
           <Redirect from="/public/:organization/deals/:deal_slug" to="/deals/:deal_slug" />
-          <PrivateRoute path="/deals/:deal_slug" component={Deal} exact />
-          <PrivateRoute path="/deals/:organization/:deal_slug" component={Deal} exact />
-          <PrivateRoute path="/oc/:deal_slug" component={DealOneClick} exact />
-          <PrivateRoute path="/oc/:organization/:deal_slug" component={DealOneClick} exact />
+          <PrivateRoute path="/deals/:deal_slug" component={DealOneClick} exact />
+          <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
+          <PrivateRoute path="/next-steps/:deal_slug" component={DealNextSteps} exact />
+          <PrivateRoute path="/next-steps/:organization/:deal_slug" component={DealNextSteps} exact />
 
           {/** AllocationsX * */}
           <PrivateRoute path="/exchange" component={AllocationsX} exact />
@@ -104,6 +105,7 @@ const App = () => {
           <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
           <AdminRoute path="/admin/:organization/investments/:id/edit" component={InvestmentEdit} exact />
           <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
+          <AdminRoute path="/admin/employee-map" component={TeamMap} exact />
 
           {/** SuperAdmin * */}
           <AdminRoute path="/superadmin" component={SuperAdminOverview} exact />

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from '@material-ui/core'
 import './styles.scss'
+import moment from 'moment'
 
 function InvestPanel({ toggleInvestmentPage, deal }) {
 
@@ -14,25 +15,45 @@ function InvestPanel({ toggleInvestmentPage, deal }) {
     });
   }
 
+  const {
+    dealParams: { wireDeadline, signDeadline }
+  } = deal;
+
+  const getDeadline = (date) => {
+    return moment(date).format("dddd, MMMM Do YYYY, h:mm a")
+  }
+  //if no signing deadline but wire dealine, set signing as wire, if neither null state
   return (
     <section className="InvestPanel">
       <p className="section-label">One click invest</p>
       <ul>
         <li>
-          <p>Run rate revenue:</p>
-          <h2>$250,000.00</h2>
+          <p>Signing deadline:</p>
+          <h2>
+            {
+              signDeadline ?
+                getDeadline(signDeadline) :
+                wireDeadline ?
+                  getDeadline(wireDeadline)
+                  : 'No signing deadline has been set.'
+            }
+          </h2>
         </li>
         <li>
-          <p>Minimum Investment:</p>
-          <h2>$25,000.00</h2>
-        </li>
-        <li>
-          <p>Days left to invest:</p>
-          <h2>39 days</h2>
+          <p>Wire deadline:</p>
+          <h2>
+            {
+              wireDeadline ?
+                getDeadline(wireDeadline) :
+                signDeadline ?
+                  getDeadline(signDeadline)
+                  : 'No wire deadline has been set.'
+            }
+          </h2>
         </li>
       </ul>
       <Button onClick={handleClick}>Invest</Button>
-  </section>
+    </section>
   )
 }
 

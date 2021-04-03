@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, '/build')));
 
 app.get('*', async (req, res) => {
   const { params } = req;
-  const isDealPage = params['0'].includes('/deals/');
+  const isDealPage = params['0'].includes('/deals/') || params['0'].includes('/oc/');
   const urlParams = params['0'].split('/').slice(2, 4);
   const filePath = path.resolve(__dirname, './build', 'index.html');
   const organizationSlug = urlParams.length > 1 ? urlParams[0] : 'allocations';

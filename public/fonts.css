@@ -1,13 +1,5 @@
-/* font converted using font-converter.net. thank you! */
-@font-face {
-    font-family: "Circula-Medium";
-    src: url("./fonts/Circular.eot"); /* IE9 Compat Modes */
-    src: url("./fonts/Circular.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("./fonts/Circular.otf") format("opentype"), /* Open Type Font */ url("./fonts/Circular.svg") format("svg"), /* Legacy iOS */ url("./fonts/Circular.ttf") format("truetype"), /* Safari, Android, iOS */ url("./fonts/Circular.woff") format("woff"), /* Modern Browsers */ url("./fonts/Circular.woff2") format("woff2"); /* Modern Browsers */
-    font-weight: normal;
-    font-style: normal;
-}
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap');
 
 * {
-    font-family: 'Circula-Medium', 'Roboto', Arial, Helvetica, sans-serif !important
+    font-family: 'Roboto', Arial, Helvetica, sans-serif !important
 }

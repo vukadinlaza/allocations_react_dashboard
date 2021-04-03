@@ -28,15 +28,19 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
+  Box,
+  AppBar,
+  Tab,
+  Tabs,
+  Typography,
+  Grid,
+  Divider,
+  IconButton,
 } from '@material-ui/core';
 
 import './style.scss';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import Divider from '@material-ui/core/Divider';
 import EditIcon from '@material-ui/icons/Edit';
-import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { useAuth } from '../../auth/useAuth';
 import { ORG_OVERVIEW } from '../admin/AdminHome';
@@ -44,6 +48,7 @@ import InviteInvestors from './InviteInvestors';
 import UserSearch from '../forms/UserSearch';
 import * as API from '../../api';
 import { nWithCommas, formatDate } from '../../utils/numbers';
+import Loader from '../utils/Loader';
 
 /** *
  *
@@ -79,6 +84,7 @@ const GET_DEAL = gql`
         no_exchange
         appLink
         publicLink
+        docSpringTemplateId
         documents {
           path
           link
@@ -155,11 +161,13 @@ const UPDATE_DEAL = gql`
       memo
       target
       amount_raised
+      docSpringTemplateId
       invitedInvestors {
         _id
         name
       }
       dealParams {
+        risks
         totalRoundSize
         dealType
         dealMultiple
@@ -214,6 +222,7 @@ const validInputs = [
   'dealParams',
   'Annual',
   'One-Time',
+  'docSpringTemplateId',
 ];
 
 const dealParamsValidInputs = [
@@ -221,7 +230,10 @@ const dealParamsValidInputs = [
   'dealType',
   'dealMultiple',
   'totalCarry',
+  'keyHighlights',
+  'risks',
   'minimumInvestment',
+  'maximumInvestment',
   'totalManagementFee',
   'totalRoundSize',
   'signDeadline',
@@ -247,9 +259,29 @@ const dealParamsValidInputs = [
   'fundGeneralPartner',
   'fundEstimatedTerm',
   'coinvestors',
-  'risks',
   'dealLogo',
 ];
+
+const TabPanel = (props) => {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      className="tab-panel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+};
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -279,8 +311,13 @@ export default function DealEdit() {
     dealParams: {},
   });
   const [hasChanges, setHasChanges] = useState(false);
-  const { data, refetch, error } = useQuery(GET_DEAL, { variables: { id, slug: organization } });
+  const { data, refetch, error, loading } = useQuery(GET_DEAL, { variables: { id, slug: organization } });
   const [updateDeal] = useMutation(UPDATE_DEAL);
+
+  const [currentEditTab, setEditTab] = useState(0);
+  const handleEditTabChange = (event, newValue) => {
+    setEditTab(newValue);
+  };
 
   useEffect(() => {
     if (data) {
@@ -296,10 +333,47 @@ export default function DealEdit() {
     setHasChanges(data && !isEqual(deal, get(data, 'organization.deal')));
   }, [data, deal]);
 
+  const {
+    memo,
+    dealParams: { keyHighlights, risks },
+  } = deal;
+
+  const TabEditor = () => {
+    return !loading ? (
+      <Editor
+        value={memo}
+        apiKey="jlbrhzgo0m2myqdmbhaav8a0971vomza2smty20fpq6fs47j"
+        init={{
+          height: 350,
+          menubar: false,
+          plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste code help wordcount',
+          ],
+          toolbar:
+            'undo redo | formatselect | bold italic backcolor | \
+          alignleft aligncenter alignright alignjustify | \
+          bullist numlist outdent indent | removeformat | help',
+        }}
+        onEditorChange={(value) => {
+          setDeal({
+            dealParams: {
+              ...deal.dealParams,
+              memo: value,
+            },
+          });
+        }}
+      />
+    ) : (
+      <Loader />
+    );
+  };
+
   if (errorMessage) return <div className="Error">{errorMessage}</div>;
 
   return (
-    <>
+    <div className="DealEdit">
       <form noValidate autoComplete="off">
         <Grid container spacing={2}>
           <Grid item xs={10}>
@@ -317,24 +391,21 @@ export default function DealEdit() {
             <Typography variant="body2" gutterBottom>
               <strong>Data Room</strong>
             </Typography>
-            <Editor
-              value={deal.memo}
-              apiKey="jlbrhzgo0m2myqdmbhaav8a0971vomza2smty20fpq6fs47j"
-              init={{
-                height: 350,
-                menubar: false,
-                plugins: [
-                  'advlist autolink lists link image charmap print preview anchor',
-                  'searchreplace visualblocks code fullscreen',
-                  'insertdatetime media table paste code help wordcount',
-                ],
-                toolbar:
-                  'undo redo | formatselect | bold italic backcolor | \
-                  alignleft aligncenter alignright alignjustify | \
-                  bullist numlist outdent indent | removeformat | help',
-              }}
-              onEditorChange={(memo) => setDeal({ memo })}
-            />
+            <AppBar position="static">
+              <Tabs
+                centered
+                TabIndicatorProps={{ style: { background: '#0561FF', height: '3px' } }}
+                className="tabs-container"
+                value={currentEditTab}
+                onChange={handleEditTabChange}
+              >
+                <Tab className="tab" label="Key Highlights" />
+              </Tabs>
+            </AppBar>
+
+            <TabPanel value={currentEditTab} index={0}>
+              <TabEditor />
+            </TabPanel>
 
             <Grid container spacing={2} style={{ marginTop: 16 }}>
               <Grid item xs={12} sm={6}>
@@ -528,6 +599,21 @@ export default function DealEdit() {
                   onChange={(e) => setDeal({ dealParams: { ...deal.dealParams, wireDeadline: e.target.value } })}
                   label="Wiring Deadline"
                   type="datetime-local"
+                  variant="outlined"
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <Typography variant="body2">
+                  <strong> Doc Spring Template ID</strong>
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  style={{ width: '100%' }}
+                  value={deal.docSpringTemplateId || ''}
+                  onChange={(e) => setDeal({ docSpringTemplateId: e.target.value })}
+                  label="DocSpring Template ID"
                   variant="outlined"
                 />
               </Grid>
@@ -1071,7 +1157,7 @@ export default function DealEdit() {
           </Grid>
         </Grid>
       </form>
-    </>
+    </div>
   );
 }
 

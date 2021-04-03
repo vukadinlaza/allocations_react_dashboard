@@ -1,11 +1,8 @@
 import React from 'react'
 import './styles.scss'
 
-function CoinvestorsPanel({ coinvestors, deal }) {
+function CoinvestorsPanel({ coinvestors }) {
 
-  const {
-    company_name
-  } = deal
 
   const coinvestorItems = (coinvestors || []).map(item => {
     return (
@@ -13,17 +10,16 @@ function CoinvestorsPanel({ coinvestors, deal }) {
     )
   })
 
-  return (
-    <section className="CoinvestorsPanel">
-      <p className="section-label">Coinvestors</p>
-      <ul>
-        { coinvestorItems.length > 0
-          ? coinvestorItems
-          : <li>There are currently no coinvestors listed for <b>{company_name}</b>.</li>
-        }
-      </ul>
-    </section>
-  )
+  return coinvestorItems.length > 0 ?
+    (
+      <section className="CoinvestorsPanel">
+        <p className="section-label">Coinvestors</p>
+        <ul>
+          {coinvestorItems}
+        </ul>
+      </section>
+
+    ) : null;
 }
 
 export default CoinvestorsPanel

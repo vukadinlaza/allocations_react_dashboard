@@ -1,6 +1,19 @@
 @import "../../App.scss";
 
 .DealEdit {
+
+
+    .tabs-container {
+        outline: none;
+        .tab {
+            color: white;
+            min-width: 33.33%;
+            outline: none;
+            text-transform: none;
+            font-family: 'Roboto';
+        }
+    }
+
     input {
         // width: 100%;
     }
@@ -79,21 +92,21 @@
 
     .email-invite {
         text-align: center;
-        padding: 10px;  
-        cursor: pointer;    
+        padding: 10px;
+        cursor: pointer;
     }
 
     .send-email-invites {
         padding: 15px 20px;
 
-    } 
+    }
 
     .invited-investors {
         font-size: 0.9em;
         td {
             padding: 8px;
         }
-    } 
+    }
 }
 
 .form-wrapper {

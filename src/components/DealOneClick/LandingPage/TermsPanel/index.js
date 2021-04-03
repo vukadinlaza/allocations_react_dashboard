@@ -3,21 +3,30 @@ import './styles.scss'
 
 const TermsPanel = ({ deal }) => {
 
-  console.log(deal)
+  const { deal_lead, dealParams: { totalCarry, managementFees, spvName } } = deal
+
   return (
     <section className="TermsPanel">
-    <p className="section-label">Terms</p>
-    <ul>
-      <li>
-        <p>Deal lead:</p>
-        <h3>Kingsley Advani</h3>
-      </li>
-      <li>
-        <p>Maximum investment:</p>
-        <h3>$100,000.00</h3>
-      </li>
-    </ul>
-  </section>
+      <p className="section-label">Terms</p>
+      <ul>
+        <li>
+          <p>Manager:</p>
+          <h3>{deal_lead ? deal_lead : 'No deal manager specified.'}</h3>
+        </li>
+        <li>
+          <p>SPV Name:</p>
+          <h3>{spvName ? spvName : 'Not specified.'}</h3>
+        </li>
+        <li>
+          <p>Total carry:</p>
+          <h3>{totalCarry ? totalCarry + '%' : 'Not specified.'}</h3>
+        </li>
+        <li>
+          <p>Total management fee:</p>
+          <h3>{managementFees ? managementFees + '%' : 'Not specified.'}</h3>
+        </li>
+      </ul>
+    </section>
   )
 }
 

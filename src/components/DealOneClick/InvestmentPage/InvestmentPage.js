@@ -15,6 +15,9 @@ import './styles.scss';
 import Loader from '../../utils/Loader';
 import WireInstructions from './WireInstructions';
 import YourDocumentsPanel from './YourDocumentsPanel';
+import SPVDocumentModal from './SpvDocumentModal';
+import { getClientIp } from '../../../utils/ip';
+import { nWithCommas } from '../../../utils/numbers'
 
 const CONFIRM_INVESTMENT = gql`
   mutation ConfirmInvestment($payload: Object) {
@@ -26,62 +29,87 @@ const CONFIRM_INVESTMENT = gql`
 
 // if individual remove signfull name
 const validate = (investor) => {
+  console.log('investor in validation', investor)
   const required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
-  if (investor.country && investor.country === 'United States') {
+  if(investor.country && investor.country === 'United States') {
     required.push('state');
   }
-  if (investor.investor_type === 'entity' && !investor.fullName) {
+  if(investor.investor_type === 'entity' && !investor.fullName) {
     required.push('fullName');
   }
   return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
 };
 
-function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investment }) {
+function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investment, organzation }) {
   const history = useHistory();
-  const { company_name } = deal;
+  const { company_name, slug } = deal;
   const [checkedTAT, setCheckedTAT] = useState(false);
+  const [showSpvModal, setShowSpvModal] = useState(false);
   const [amount, setAmount] = useState('');
-  const [investorFormData, setInvestor] = useState({});
+  const [investorFormData, setInvestor] = useState({
+    country: '',
+    country_search: '',
+    state: '',
+    state_search: ''
+  });
   const [errors, setErrors] = useState([]);
 
   const [submitConfirmation, { data, called }] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       refetch();
       toast.success('Investment created successfully.');
+      setTimeout(() => {
+        const path = organzation ? `/next-steps/${organzation}/${slug}` : `/next-steps/${slug}`;
+        history.push(path, { investorFormData });
+      }, 2000);
     },
   });
 
   useEffect(() => {
-    if (called && data) {
+    if(called && data) {
       console.log('fires refetch');
       refetch();
     }
   });
-  const submitInvestmentConfirmation = () => {
+  const confirmInvestment = () => {
     const validation = validate(investorFormData);
     setErrors(validation);
 
-    if (validation.length > 0) {
+    if(validation.length > 0) {
       return toast.warning('Incomplete Form');
     }
 
-    if (!amount) {
+    if(!amount) {
       return toast.warning('Please enter a valid investment amount.');
     }
+
+    if(parseInt(amount) < 1000) {
+      return toast.warning('Please enter an investment amount greater than $1000.');
+    }
+    setShowSpvModal(true);
+  };
+  const submitInvestment = async () => {
+    const ip = await getClientIp();
     const payload = {
       ...investorFormData,
       investmentId: investment._id,
-      investmentAmount: amount,
+      investmentAmount: nWithCommas(amount),
+      clientIp: ip,
+      dealId: deal._id,
+      docSpringTemplateId: deal.docSpringTemplateId,
     };
 
     submitConfirmation({ variables: { payload } });
+    setShowSpvModal(false);
   };
 
-  console.log('INVESTMENT', investment);
+  const {
+    dealParams: { minimumInvestment, maximumInvestment },
+  } = deal;
 
   return (
     <section className="InvestmentPage">
-      <Button className="back-button" onClick={() => history.push()}>
+      <Button className="back-button" onClick={() => toggleInvestmentPage((open) => !open)}>
         <ArrowBackIcon />
         Back to Deal Page
       </Button>
@@ -90,27 +118,34 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
       </div>
 
       <div className="flex-container">
-        <main>
-          <InvestmentAmountPanel setAmount={setAmount} amount={amount} />
-          <PersonalInformation errors={errors} investor={investorFormData} setInvestor={setInvestor} />
-          {/* <PaymentInformation /> */}
-        </main>
-        <aside>
+        <InvestmentAmountPanel
+          setAmount={setAmount}
+          amount={amount}
+          minimumInvestment={minimumInvestment}
+          maximumInvestment={maximumInvestment}
+        />
+        <div className="side-panel">
           <InvestingAsPanel />
           <DealDocumentsPanel deal={deal} />
           <YourDocumentsPanel investment={investment} />
-        </aside>
-      </div>
-      <TermsAndConditionsPanel investor={investor} deal={deal} setCheckedTAT={setCheckedTAT} />
-
-      <Button className="confirm-investment-button" disabled={!checkedTAT} onClick={submitInvestmentConfirmation}>
-        Confirm investment
-      </Button>
-      {(investment.status === 'signed' || investment.status === 'wired') && (
-        <div className="wire-container">
-          <WireInstructions deal={deal} />{' '}
+          {/* {((investment && investment.status === 'signed') || (investment && investment.status === 'wired')) && (
+            <div className="wire-container">
+              <WireInstructions deal={deal} />
+            </div>
+          )} */}
         </div>
-      )}
+        <PersonalInformation errors={errors} investor={investorFormData} setInvestor={setInvestor} />
+        {/* <PaymentInformation /> */}
+        <TermsAndConditionsPanel
+          confirmInvestment={confirmInvestment}
+          investor={investor}
+          deal={deal}
+          checkedTAT={checkedTAT}
+          setCheckedTAT={setCheckedTAT}
+        />
+      </div>
+
+      <SPVDocumentModal open={showSpvModal} setOpen={setShowSpvModal} deal={deal} submitInvestment={submitInvestment} />
     </section>
   );
 }

@@ -14,7 +14,7 @@
       margin: 0;
       width: 100%;
       font-size: 1rem;
-      border: 1px solid rgb(232, 232, 232);
+      border-bottom: 1px solid rgb(232, 232, 232);
       border-radius: 5px 5px 0px 0px;
 
     }
@@ -49,23 +49,10 @@
 
   }
 
-
-
-  .confirm-investment-button {
-    background-color: #3AC522;
-    width: 35%;
-    height: 3rem;
-    color: white;
-    text-transform: none;
-    font-weight: 700;
-  }
-
   .flex-container {
     padding: 0;
     margin-bottom: 20px;
     width: 100%;
-
-
   }
 }
 

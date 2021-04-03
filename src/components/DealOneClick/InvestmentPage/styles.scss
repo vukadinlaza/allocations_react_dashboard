@@ -2,6 +2,7 @@
   position: relative;
   width: 100%;
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
   flex-wrap: wrap;
   padding-top: 2rem;
@@ -34,7 +35,6 @@
     }
   }
 
-
   section {
     margin-bottom: 20px;
     border-radius: 5px;
@@ -45,7 +45,7 @@
       margin: 0;
       width: 100%;
       font-size: 1rem;
-      border: 1px solid rgb(232, 232, 232);
+      border-bottom: 1px solid rgb(232, 232, 232);
       border-radius: 5px 5px 0px 0px;
 
     }
@@ -60,52 +60,42 @@
     width: 100%;
     padding: 0;
     margin: 0;
-
-    .WireInstructions {
-      width: 100%;
-      margin-top: 3rem;
-    }
   }
 
   .flex-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    align-items: flex-start;
     width: 100%;
     height: max-content;
     margin-bottom: 20px;
 
-    main {
-      width: 67.5%;
-      height: 100%;
+    .side-panel {
+      width: 27.5%;
+      right: 0;
+      position: absolute;
     }
 
-    aside {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      width: 30%;
-      height: max-content;
-    }
-
-  }
-
-
-
-  .confirm-investment-button {
-    background-color: #3AC522;
-    width: 35%;
-    height: 3rem;
-    color: white;
-    text-transform: none;
-    font-weight: 700;
   }
 
   .flex-container {
     padding: 0;
     margin-bottom: 20px;
     width: 100%;
+  }
 
 
+}
+
+@media screen and (max-width: 960px) {
+  .InvestmentPage {
+    .flex-container {
+
+      .side-panel {
+        width: 100%;
+        position: initial;
+      }
+    }
   }
 }
