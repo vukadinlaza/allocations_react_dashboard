@@ -1,5 +1,6 @@
+/* eslint-disable radix */
 import React, { useState, useEffect } from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
@@ -17,7 +18,7 @@ import WireInstructions from './WireInstructions';
 import YourDocumentsPanel from './YourDocumentsPanel';
 import SPVDocumentModal from './SpvDocumentModal';
 import { getClientIp } from '../../../utils/ip';
-import { nWithCommas } from '../../../utils/numbers'
+import { nWithCommas } from '../../../utils/numbers';
 
 const CONFIRM_INVESTMENT = gql`
   mutation ConfirmInvestment($payload: Object) {
@@ -26,15 +27,31 @@ const CONFIRM_INVESTMENT = gql`
     }
   }
 `;
+const GET_INVESTOR = gql`
+  {
+    investor {
+      _id
+      email
+      first_name
+      last_name
+      admin
+      investments {
+        amount
+      }
+    }
+  }
+`;
+
+const userMax = 10000;
 
 // if individual remove signfull name
 const validate = (investor) => {
-  console.log('investor in validation', investor)
+  console.log('investor in validation', investor);
   const required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
-  if(investor.country && investor.country === 'United States') {
+  if (investor.country && investor.country === 'United States') {
     required.push('state');
   }
-  if(investor.investor_type === 'entity' && !investor.fullName) {
+  if (investor.investor_type === 'entity' && !investor.fullName) {
     required.push('fullName');
   }
   return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
@@ -43,6 +60,7 @@ const validate = (investor) => {
 function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investment, organzation }) {
   const history = useHistory();
   const { company_name, slug } = deal;
+  const { data: userInvestments } = useQuery(GET_INVESTOR);
   const [checkedTAT, setCheckedTAT] = useState(false);
   const [showSpvModal, setShowSpvModal] = useState(false);
   const [amount, setAmount] = useState('');
@@ -50,9 +68,15 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
     country: '',
     country_search: '',
     state: '',
-    state_search: ''
+    state_search: '',
   });
   const [errors, setErrors] = useState([]);
+
+  const totalInvested = (userInvestments?.investor?.investments || []).reduce((acc, i) => {
+    return acc + i.amount;
+  }, 0);
+
+  console.log('TOTAL INVESTED', totalInvested);
 
   const [submitConfirmation, { data, called }] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
@@ -66,8 +90,7 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
   });
 
   useEffect(() => {
-    if(called && data) {
-      console.log('fires refetch');
+    if (called && data) {
       refetch();
     }
   });
@@ -75,21 +98,27 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
     const validation = validate(investorFormData);
     setErrors(validation);
 
-    if(validation.length > 0) {
+    if (validation.length > 0) {
       return toast.warning('Incomplete Form');
     }
 
-    if(!amount) {
+    if (!amount) {
       return toast.warning('Please enter a valid investment amount.');
     }
 
-    if(parseInt(amount) < 1000) {
-      return toast.warning('Please enter an investment amount greater than $1000.');
+    if (parseInt(amount) < 100) {
+      return toast.warning('Minimum investment amount is 100.00.');
+    }
+    if (totalInvested + parseInt(amount) > userMax) {
+      return toast.warning(
+        `Investing this amount would exceed your limit. You can invest $${nWithCommas(userMax - totalInvested)}.00`,
+      );
     }
     setShowSpvModal(true);
   };
   const submitInvestment = async () => {
     const ip = await getClientIp();
+    g;
     const payload = {
       ...investorFormData,
       investmentId: investment._id,
@@ -123,6 +152,8 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
           amount={amount}
           minimumInvestment={minimumInvestment}
           maximumInvestment={maximumInvestment}
+          totalInvested={totalInvested}
+          userMax={userMax}
         />
         <div className="side-panel">
           <InvestingAsPanel />
