@@ -160,6 +160,7 @@ function DealOneClick() {
     'allocations-200-m',
     'navier',
     'simplebet',
+    'luna-mega',
   ];
 
   if (data && moment(dealTimestamp).isBefore(rolloverTimestamp) && !exemptDealSlugs.includes(deal_slug)) {
