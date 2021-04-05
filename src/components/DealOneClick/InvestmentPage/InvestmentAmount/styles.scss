@@ -5,8 +5,6 @@
   box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
   border: 1px solid rgb(232, 232, 232);
   overflow: hidden;
-
-
   .investment-amount-container {
     width: 90%;
     height: max-content;
@@ -36,6 +34,7 @@
         border-radius: 2.5px;
       }
     }
+ 
 
     .min-investment-button {
       overflow: hidden;
@@ -52,6 +51,12 @@
     }
 
   }
+}
+
+.subtitleText {
+  text-align: left;
+  padding-bottom: 1rem;
+  margin-left: 20px;
 }
 
 @media screen and (max-width: 960px) {
