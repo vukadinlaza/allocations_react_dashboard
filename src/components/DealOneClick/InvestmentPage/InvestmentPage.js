@@ -118,7 +118,6 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
   };
   const submitInvestment = async () => {
     const ip = await getClientIp();
-    g;
     const payload = {
       ...investorFormData,
       investmentId: investment._id,
