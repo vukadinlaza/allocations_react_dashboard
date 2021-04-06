@@ -108,6 +108,7 @@ const exemptDealSlugs = [
   'allocations-200-m',
   'navier',
   'simplebet',
+  '305-ventures',
 ];
 function DealOneClick() {
   const { state } = useLocation();
