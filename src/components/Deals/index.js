@@ -37,11 +37,11 @@ const OFFSET = 10;
 const LIMIT = 10;
 
 const GET_DEALS = gql`
-  query GetOrg($slug: String!, $offset: Int, $limit: Int) {
+  query GetOrg($slug: String!, $offset: Int, $limit: Int, $status: String) {
     organization(slug: $slug, offset: $offset, limit: $limit) {
       _id
       n_deals
-      deals(offset: $offset, limit: $limit) {
+      deals(offset: $offset, limit: $limit, status: $status) {
         _id
         status
         amount_raised
@@ -77,7 +77,7 @@ export default function Deals({ showClosed }) {
   const [page, setPage] = useState(0);
 
   const [getDeals, { data, error }] = useLazyQuery(GET_DEALS, {
-    variables: { slug: organization, offset: 0, limit: LIMIT },
+    variables: { slug: organization, offset: 0, limit: LIMIT, status: showClosed ? 'closed' : '' },
   });
   const [capitalAccount, toggleCapitalAccount] = useReducer(
     (acc, _id) => {
