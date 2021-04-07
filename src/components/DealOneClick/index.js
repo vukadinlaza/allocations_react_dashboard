@@ -99,7 +99,16 @@ export const CREATE_INVESTMENT = gql`
     }
   }
 `;
-
+const exemptDealSlugs = [
+  'allocations-60-m-round-spv',
+  'allocations-spv-100m',
+  'space-x',
+  'mondrian-hotel-spv',
+  'cronos-capital-i',
+  'allocations-200-m',
+  'navier',
+  'simplebet',
+];
 function DealOneClick() {
   const { state } = useLocation();
   const [investmentPage, toggleInvestmentPage] = useState(state?.isInvestPage || false);
@@ -127,8 +136,14 @@ function DealOneClick() {
   }, [isAuthenticated, loading, called, getDeal, deal_slug, organization]);
 
   useEffect(() => {
+    const idTimestamp = data?.investor?.invitedDeal?._id.toString().substring(0, 8);
+    const dealTimestamp = moment.unix(new Date(parseInt(idTimestamp, 16) * 1000));
+    const rolloverTimestamp = moment.unix(new Date('2021-04-20'));
+
+    const isOldDeal = moment(dealTimestamp).isBefore(rolloverTimestamp) && !exemptDealSlugs.includes(deal_slug);
+
     const blocked = userProfile?.email?.includes('allocations');
-    if (data && !data.investor?.invitedDeal?.investment && !blocked) {
+    if (data && !data.investor?.invitedDeal?.investment && !blocked && !isOldDeal) {
       const investment = {
         deal_id: data.investor.invitedDeal?._id,
         user_id: data.investor._id,
@@ -138,7 +153,7 @@ function DealOneClick() {
         createInvestment({ variables: { investment } });
       }
     }
-  }, [called, createInvestment, data, didCreateInvestment, organization, search, userProfile]);
+  }, [called, createInvestment, data, deal_slug, didCreateInvestment, organization, search, userProfile]);
 
   if (!data) return <Loader />;
 
@@ -151,16 +166,6 @@ function DealOneClick() {
   const dealTimestamp = moment.unix(new Date(parseInt(idTimestamp, 16) * 1000));
   const rolloverTimestamp = moment.unix(new Date('2021-04-20'));
 
-  const exemptDealSlugs = [
-    'allocations-60-m-round-spv',
-    'allocations-spv-100m',
-    'space-x',
-    'mondrian-hotel-spv',
-    'cronos-capital-i',
-    'allocations-200-m',
-    'navier',
-    'simplebet',
-  ];
 
   if (data && moment(dealTimestamp).isBefore(rolloverTimestamp) && !exemptDealSlugs.includes(deal_slug)) {
     return <Deal />;
