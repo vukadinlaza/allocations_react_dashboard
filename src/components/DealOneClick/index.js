@@ -167,7 +167,6 @@ function DealOneClick() {
   const dealTimestamp = moment.unix(new Date(parseInt(idTimestamp, 16) * 1000));
   const rolloverTimestamp = moment.unix(new Date('2021-04-20'));
 
-
   if (data && moment(dealTimestamp).isBefore(rolloverTimestamp) && !exemptDealSlugs.includes(deal_slug)) {
     return <Deal />;
   }
