@@ -183,7 +183,6 @@ export default function Deal() {
     investor: { invitedDeal: deal },
   } = data;
   const { investment } = deal;
-  console.log('ALLOW EDIT', allowEdit);
   return (
     <>
       <div style={{ width: mobile ? '100%' : 'calc(100% - 300px)' }}>

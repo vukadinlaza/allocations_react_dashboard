@@ -111,8 +111,6 @@ const GET_DEAL = gql`
           opened_at
         }
         dealParams {
-          risks
-          coinvestors
           totalRoundSize
           dealType
           dealMultiple
