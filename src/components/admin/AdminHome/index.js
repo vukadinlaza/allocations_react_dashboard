@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { gql } from 'apollo-boost';
 
 import { Paper, Grid, ButtonBase, Typography, FormControl, Button, TextField } from '@material-ui/core';
-import _, { toLower } from 'lodash';
+import _, { toLower, groupBy } from 'lodash';
 import { useQuery } from '@apollo/react-hooks';
 import { useParams, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -109,9 +109,11 @@ export default function AdminHome({}) {
   if (orgSlug === 'demo-fund') {
     slug = 'browder-capital';
   }
+  console.log('X', x);
   const fundInvestments = x.filter((inv) => {
-    return toLower(inv['Fund Name']).includes(slug.replace('-', ' '));
+    return toLower(inv.Organization).includes(slug.replace('-', ' '));
   });
+
   const fundData = fundInvestments;
   const isFund = fundData.length >= 1;
   if (!data) return <Loader />;
