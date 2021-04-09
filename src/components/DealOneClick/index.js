@@ -63,7 +63,6 @@ export const GET_INVESTOR_DEAL = gql`
           totalRoundSize
           allocation
           totalCarry
-          minimumInvestment
           signDeadline
           wireDeadline
           estimatedSetupCosts
