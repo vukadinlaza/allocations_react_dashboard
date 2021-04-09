@@ -1538,22 +1538,33 @@ const AddRisk = ({ deal, setDeal }) => {
     </>
   );
 };
-function AddDealLogo({ deal, refetch }) {
-  const [doc, setDoc] = useSimpleReducer({ title: 'DealLogo' });
-  const [addDoc, { data, error }] = useMutation(ADD_DOC);
 
+const ADD_LOGO = gql`
+  mutation AddDealLogo($deal_id: String!, $title: String!, $logo: Upload!) {
+    addDealLogo(deal_id: $deal_id, title: $title, logo: $logo) {
+      _id
+    }
+  }
+`;
+
+function AddDealLogo({ deal, refetch }) {
+  const [logo, setLogo] = useSimpleReducer({ title: 'DealLogo' });
+  const [addLogo, { data, error }] = useMutation(ADD_LOGO);
+  console.log(data, error);
   useEffect(() => {
     if (data) {
       refetch();
-      setDoc({ title: '', doc: null });
+      setLogo({ title: 'DealLogo', logo: null });
     }
-  }, [data, refetch, setDoc]);
+  }, [data, refetch, setLogo]);
 
   const submit = () => {
-    if (doc.doc && doc.title) {
-      addDoc({ variables: { deal_id: deal._id, ...doc } });
+    if (logo.logo && logo.title) {
+      addLogo({ variables: { deal_id: deal._id, ...logo } });
     }
   };
+
+  console.log('LOGO', logo);
 
   return (
     <>
@@ -1567,11 +1578,12 @@ function AddDealLogo({ deal, refetch }) {
           <input
             type="file"
             style={{ display: 'none' }}
-            accept="application/pdf"
+            accept="image/*"
             onChange={({ target }) => {
-              if (target.validity.valid) setDoc({ doc: target.files[0] });
+              if (target.validity.valid) setLogo({ logo: target.files[0] });
             }}
           />
+          {logo && <span> {logo?.logo?.name}</span>}
         </Button>
       </Grid>
 
