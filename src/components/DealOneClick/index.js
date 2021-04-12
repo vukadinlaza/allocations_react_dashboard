@@ -38,6 +38,7 @@ export const GET_INVESTOR_DEAL = gql`
         slug
         memo
         docSpringTemplateId
+        dealCoverImageKey
         documents {
           path
           link

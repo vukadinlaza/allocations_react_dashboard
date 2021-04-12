@@ -1548,19 +1548,22 @@ const ADD_LOGO = gql`
 `;
 
 function AddDealLogo({ deal, refetch }) {
-  const [logo, setLogo] = useSimpleReducer({ title: 'DealLogo' });
+  const [logo, setLogo] = useSimpleReducer({ title: 'dealCoverImage' });
   const [addLogo, { data, error }] = useMutation(ADD_LOGO);
   console.log(data, error);
   useEffect(() => {
     if (data) {
       refetch();
-      setLogo({ title: 'DealLogo', logo: null });
+      setLogo({ title: 'dealCoverImage', logo: null });
     }
   }, [data, refetch, setLogo]);
 
   const submit = () => {
     if (logo.logo && logo.title) {
-      addLogo({ variables: { deal_id: deal._id, ...logo } });
+      const type = logo?.logo?.type.split('/')[1];
+      console.log('type', type);
+      console.log('XXX', `${logo.title}.${type}`);
+      addLogo({ variables: { deal_id: deal._id, ...logo, title: `${logo.title}.${type}` } });
     }
   };
 
