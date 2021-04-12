@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSimpleReducer } from '../../utils/hooks';
 import _, { get, isEqual } from 'lodash';
-import { useParams, Link, useHistory } from 'react-router-dom';
-import { Row, Col } from 'reactstrap';
+import { useParams, useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // wysiwyg editor
@@ -85,6 +84,7 @@ const GET_DEAL = gql`
         appLink
         publicLink
         docSpringTemplateId
+        dealCoverImageKey
         documents {
           path
           link
@@ -1550,7 +1550,6 @@ const ADD_LOGO = gql`
 function AddDealLogo({ deal, refetch }) {
   const [logo, setLogo] = useSimpleReducer({ title: 'dealCoverImage' });
   const [addLogo, { data, error }] = useMutation(ADD_LOGO);
-  console.log(data, error);
   useEffect(() => {
     if (data) {
       refetch();
@@ -1567,39 +1566,50 @@ function AddDealLogo({ deal, refetch }) {
     }
   };
 
-  console.log('LOGO', logo);
-
   return (
     <>
       <Grid item xs={12}>
-        <Typography variant="body2">Deal Logo</Typography>
+        <Typography variant="h6">Deal Logo</Typography>
       </Grid>
+      <Grid container justify="space-between">
+        <Grid item xs={12} sm={3}>
+          <Button fullWidth variant="contained" component="label" style={{ height: 39 }}>
+            Attach
+            <input
+              type="file"
+              style={{ display: 'none' }}
+              accept="image/*"
+              onChange={({ target }) => {
+                if (target.validity.valid) setLogo({ logo: target.files[0] });
+              }}
+            />
+          </Button>
+        </Grid>
 
-      <Grid item xs={12} sm={3}>
-        <Button fullWidth variant="contained" component="label" style={{ height: 39 }}>
-          Attach
-          <input
-            type="file"
-            style={{ display: 'none' }}
-            accept="image/*"
-            onChange={({ target }) => {
-              if (target.validity.valid) setLogo({ logo: target.files[0] });
-            }}
-          />
-          {logo && <span> {logo?.logo?.name}</span>}
-        </Button>
-      </Grid>
-
-      <Grid item xs={12} sm={4}>
-        <Button variant="contained" onClick={submit} style={{ height: 39 }} fullWidth color="primary">
-          Upload Logo
-        </Button>
+        <Grid item xs={12} sm={4}>
+          <Button
+            variant="contained"
+            disabled={!logo?.logo?.name}
+            onClick={submit}
+            style={{ height: 39 }}
+            fullWidth
+            color="primary"
+          >
+            Upload Logo
+          </Button>
+        </Grid>
+        <Grid item xs={12} sm={3}>
+          {logo && <Typography variant="subtitle2"> New Image: {logo?.logo?.name}</Typography>}
+        </Grid>
       </Grid>
 
       <Grid item xs={12} sm={6}>
-        <img src={deal.dealParams.dealLogo} />
+        <img
+          alt="No Image Available"
+          src={`https://allocations-public.s3.us-east-2.amazonaws.com/${deal.dealCoverImageKey}`}
+          style={{ width: '300px', height: '200px' }}
+        />
       </Grid>
-
       <Grid item xs={12}>
         <Divider style={{ marginBottom: 16 }} />
       </Grid>

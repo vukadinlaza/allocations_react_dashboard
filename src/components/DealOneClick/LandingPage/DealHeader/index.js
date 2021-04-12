@@ -3,7 +3,6 @@ import './DealHeader.scss';
 
 function DealHeader({ deal }) {
   const { company_name, company_description, slug, dealCoverImageKey } = deal;
-  console.log('FROM HEADER', `https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`);
   const [img, setImg] = useState(`https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`);
   useEffect(() => {
     setImg(`https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`);
