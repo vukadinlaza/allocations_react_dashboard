@@ -1140,12 +1140,9 @@ const TR = ({
   const history = useHistory();
   const capFields = (capitalAccounts || []).map((r) => r.fields);
 
-  const capitalAccountInfo = capFields.find(
-    (r) =>
-      r.Email === userProfile.email &&
-      (toLower(investment.deal.company_name).includes(toLower(r['Porfolio Company Name'])) ||
-        toLower(r['Porfolio Company Name']).includes(toLower(investment.deal.company_name))),
-  );
+  const capitalAccountInfo = capFields.find((r) => {
+    return _.get(r, 'Deal Name (webapp)[0]') === investment.deal.company_name;
+  });
 
   const addedDate = moment(investment?.deal?.dealParams?.wireDeadline).format('Do MMM YYYY');
   const showDocsFn = () => setShowDocs(showDocs ? false : investment);

@@ -1,10 +1,19 @@
 import React from 'react';
 import './styles.scss';
+import { nWithCommas } from '../../../../utils/numbers';
 
 const TermsPanel = ({ deal }) => {
   const {
     deal_lead,
-    dealParams: { totalCarry, managementFees, spvName, fundGeneralPartner, fundTotalCarry, fundManagementFees },
+    dealParams: {
+      minimumInvestment,
+      totalCarry,
+      managementFees,
+      spvName,
+      fundGeneralPartner,
+      fundTotalCarry,
+      fundManagementFees,
+    },
   } = deal;
 
   const dealLead = fundGeneralPartner || deal_lead || '';
@@ -36,6 +45,12 @@ const TermsPanel = ({ deal }) => {
           <li>
             <p>Total management fee:</p>
             <h3>{fees}%</h3>
+          </li>
+        )}
+        {minimumInvestment && (
+          <li>
+            <p>Minimum Investment:</p>
+            <h3>${nWithCommas(minimumInvestment)}.00</h3>
           </li>
         )}
       </ul>
