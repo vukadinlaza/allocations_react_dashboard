@@ -25,7 +25,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import CloseIcon from '@material-ui/icons/Close';
-import _, { isNumber, toNumber, toLower, sortBy, orderBy } from 'lodash';
+import _, { isNumber, toNumber, toLower, sortBy, orderBy, get } from 'lodash';
 import moment from 'moment';
 import Chart from 'react-google-charts';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
@@ -172,6 +172,7 @@ export default () => {
   const classes = useStyles();
   const location = useLocation();
   const [showDocs, setShowDocs] = useState();
+  const [sortByProp, setSortByProp] = useState({ prop: 'deal.company_name', direction: 'asc' });
   //
 
   const [editInvestmentModal, setEditInvestmentModal] = useState({});
@@ -305,6 +306,9 @@ export default () => {
     }
   };
 
+  const sortedInvestments = (investments) => {
+    return orderBy(investments, (inv) => get(inv, sortByProp.prop), [sortByProp.direction]);
+  };
   return (
     <div className="blue-container">
       <Grid container spacing={12} justify="space-between" style={{ marginTop: '40px', marginBottom: '1rem' }}>
@@ -484,7 +488,10 @@ export default () => {
                   </Hidden>
                   <Hidden only="xs">
                     <TableCell className={classes.tableHeader} align="center">
-                      Investment Date
+                      Investment Date{' '}
+                      <span onClick={() => setSortByProp({ prop: 'deal.dealParams.wireDeadline', direction: 'asc' })}>
+                        sort by
+                      </span>
                     </TableCell>
                   </Hidden>
                   <TableCell className={classes.tableHeader} align="center">
@@ -522,7 +529,7 @@ export default () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {orderBy(investments, (inv) => inv.deal.company_name, ['asc']).map((investment) =>
+                {sortedInvestments(investments).map((investment) =>
                   showDocs?._id === investment?._id ? (
                     <>
                       <TR
