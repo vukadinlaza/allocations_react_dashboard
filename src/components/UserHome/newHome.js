@@ -1,7 +1,8 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable radix */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { gql } from 'apollo-boost';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import {
   Paper,
   Grid,
@@ -17,18 +18,18 @@ import {
   FormControl,
   Input,
   InputAdornment,
-  TextField,
 } from '@material-ui/core';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import { useMutation } from '@apollo/react-hooks';
 import CancelIcon from '@material-ui/icons/Cancel';
 import EditIcon from '@material-ui/icons/Edit';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import CloseIcon from '@material-ui/icons/Close';
-import _, { isNumber, toNumber, toLower, sortBy, orderBy, get } from 'lodash';
+import _, { toLower, orderBy, get } from 'lodash';
 import moment from 'moment';
 import Chart from 'react-google-charts';
-import { useHistory, useParams, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Loader from '../utils/Loader';
 import { nWithCommas } from '../../utils/numbers';
@@ -479,7 +480,18 @@ export default () => {
               <TableHead>
                 <TableRow style={{ borderBottom: 'solid black 1px' }}>
                   <TableCell className={classes.tableHeader} align="left">
-                    Name
+                    <div className="sort-btns">
+                      <div>Name</div>
+                      {sortByProp.direction !== 'asc' ? (
+                        <ArrowDropUpIcon
+                          onClick={() => setSortByProp({ prop: 'deal.company_name', direction: 'asc' })}
+                        />
+                      ) : (
+                        <ArrowDropDownIcon
+                          onClick={() => setSortByProp({ prop: 'deal.company_name', direction: 'desc' })}
+                        />
+                      )}
+                    </div>
                   </TableCell>
                   <Hidden only="xs">
                     <TableCell className={classes.tableHeader} align="center">
@@ -488,10 +500,18 @@ export default () => {
                   </Hidden>
                   <Hidden only="xs">
                     <TableCell className={classes.tableHeader} align="center">
-                      Investment Date{' '}
-                      <span onClick={() => setSortByProp({ prop: 'deal.dealParams.wireDeadline', direction: 'asc' })}>
-                        sort by
-                      </span>
+                      <div className="sort-btns">
+                        <div>Investment Date</div>
+                        {sortByProp.direction !== 'asc' ? (
+                          <ArrowDropUpIcon
+                            onClick={() => setSortByProp({ prop: 'deal.dealParams.wireDeadline', direction: 'asc' })}
+                          />
+                        ) : (
+                          <ArrowDropDownIcon
+                            onClick={() => setSortByProp({ prop: 'deal.dealParams.wireDeadline', direction: 'desc' })}
+                          />
+                        )}
+                      </div>
                     </TableCell>
                   </Hidden>
                   <TableCell className={classes.tableHeader} align="center">
