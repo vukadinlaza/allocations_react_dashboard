@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useLazyQuery, useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { Button } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { toast } from 'react-toastify';
 import TermsAndConditionsPanel from './TermsAndConditionsPanel';
@@ -13,11 +13,92 @@ import PersonalInformation from './PersonalInformation';
 import PaymentInformation from './PaymentInformation';
 import './styles.scss';
 import Loader from '../../utils/Loader';
-import WireInstructions from './WireInstructions';
 import YourDocumentsPanel from './YourDocumentsPanel';
 import SPVDocumentModal from './SpvDocumentModal';
 import { getClientIp } from '../../../utils/ip';
 import { nWithCommas } from '../../../utils/numbers';
+
+const GET_INVESTOR_DEAL = gql`
+  query Deal($deal_slug: String!, $fund_slug: String!) {
+    investor {
+      _id
+      name
+      first_name
+      last_name
+      entity_name
+      country
+      investor_type
+      signer_full_name
+      accredited_investor_status
+      email
+      documents
+      invitedDeal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
+        _id
+        approved
+        created_at
+        company_name
+        company_description
+        date_closed
+        deal_lead
+        pledge_link
+        onboarding_link
+        status
+        slug
+        memo
+        docSpringTemplateId
+        dealCoverImageKey
+        documents {
+          path
+          link
+        }
+        investment {
+          _id
+          amount
+          status
+          documents {
+            path
+            link
+          }
+        }
+        dealParams {
+          dealType
+          coinvestors
+          risks
+          termsAndConditions
+          valuation
+          runRate
+          minimumInvestment
+          maximumInvestment
+          totalRoundSize
+          allocation
+          totalCarry
+          signDeadline
+          wireDeadline
+          estimatedSetupCosts
+          estimatedSetupCostsDollar
+          estimatedTerm
+          managementFees
+          managementFeesDollar
+          managementFeeType
+          portfolioTotalCarry
+          portfolioEstimatedSetupCosts
+          portfolioEstimatedSetupCostsDollar
+          portfolioManagementFees
+          portfolioManagementFeesDollar
+          portfolioManagementFeeType
+          fundTotalCarry
+          fundEstimatedSetupCosts
+          fundEstimatedSetupCostsDollar
+          fundManagementFees
+          fundManagementFeesDollar
+          fundManagementFeeType
+          fundGeneralPartner
+          fundEstimatedTerm
+        }
+      }
+    }
+  }
+`;
 
 const CONFIRM_INVESTMENT = gql`
   mutation ConfirmInvestment($payload: Object) {
@@ -29,7 +110,6 @@ const CONFIRM_INVESTMENT = gql`
 
 // if individual remove signfull name
 const validate = (investor) => {
-  console.log('investor in validation', investor);
   const required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
   if (investor.country && investor.country === 'United States') {
     required.push('state');
@@ -40,9 +120,17 @@ const validate = (investor) => {
   return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
 };
 
-function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investment, organzation }) {
+function InvestmentPage({}) {
   const history = useHistory();
-  const { company_name, slug } = deal;
+  const { organization, deal_slug } = useParams();
+
+  const { data, refetch, called, loading, isAuthenticated } = useQuery(GET_INVESTOR_DEAL, {
+    variables: {
+      deal_slug,
+      fund_slug: organization || 'allocations',
+    },
+  });
+
   const [checkedTAT, setCheckedTAT] = useState(false);
   const [showSpvModal, setShowSpvModal] = useState(false);
   const [amount, setAmount] = useState('');
@@ -54,21 +142,15 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
   });
   const [errors, setErrors] = useState([]);
 
-  const [submitConfirmation, { data, called }] = useMutation(CONFIRM_INVESTMENT, {
+  const [submitConfirmation] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       refetch();
       toast.success('Investment created successfully.');
-      const path = organzation ? `/next-steps/${organzation}/${slug}` : `/next-steps/${slug}`;
+      const path = organization ? `/next-steps/${organization}/${deal_slug}` : `/next-steps/${deal_slug}`;
       history.push(path, { investorFormData });
     },
   });
 
-  useEffect(() => {
-    if (called && data) {
-      console.log('fires refetch');
-      refetch();
-    }
-  });
   const confirmInvestment = () => {
     const validation = validate(investorFormData);
     setErrors(validation);
@@ -101,13 +183,21 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
     setShowSpvModal(false);
   };
 
+  if (!data) return <Loader />;
+
   const {
-    dealParams: { minimumInvestment, maximumInvestment },
+    investor,
+    investor: { invitedDeal: deal },
+  } = data;
+  const {
+    investment,
+    company_name,
+    dealParams: { minimumInvestment },
   } = deal;
 
   return (
     <section className="InvestmentPage">
-      <Button className="back-button" onClick={() => toggleInvestmentPage((open) => !open)}>
+      <Button className="back-button" onClick={() => history.push(`/deals/${organization}/${deal_slug}`)}>
         <ArrowBackIcon />
         Back to Deal Page
       </Button>
@@ -121,11 +211,6 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
           <InvestingAsPanel />
           <DealDocumentsPanel deal={deal} />
           <YourDocumentsPanel investment={investment} />
-          {/* {((investment && investment.status === 'signed') || (investment && investment.status === 'wired')) && (
-            <div className="wire-container">
-              <WireInstructions deal={deal} />
-            </div>
-          )} */}
         </div>
         <PersonalInformation errors={errors} investor={investorFormData} setInvestor={setInvestor} />
         {/* <PaymentInformation /> */}

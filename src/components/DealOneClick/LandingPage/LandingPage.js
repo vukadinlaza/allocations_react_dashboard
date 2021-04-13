@@ -1,7 +1,7 @@
 import React from 'react';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import TermsPanel from './TermsPanel';
 import InvestPanel from './InvestPanel';
 import DealHeader from './DealHeader';
@@ -73,7 +73,6 @@ const GET_DEAL = gql`
 
 function DealLandingPage() {
   const { deal_slug, organization } = useParams();
-
   const { data } = useQuery(GET_DEAL, {
     variables: {
       deal_slug,
@@ -86,7 +85,7 @@ function DealLandingPage() {
     <section className="LandingPage">
       <div className="flex-container">
         <DealHeader deal={deal} />
-        <InvestPanel deal={deal} />
+        <InvestPanel deal={deal} deal_slug={deal_slug} organization={organization} />
       </div>
       <div className="flex-container">
         <CoinvestorsPanel deal={deal} />

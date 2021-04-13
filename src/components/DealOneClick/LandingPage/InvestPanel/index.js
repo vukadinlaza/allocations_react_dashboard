@@ -2,8 +2,10 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 import './styles.scss';
 import moment from 'moment';
+import { useHistory } from 'react-router-dom';
 
-function InvestPanel({ deal }) {
+function InvestPanel({ deal, deal_slug, organization }) {
+  const history = useHistory();
   const handleClick = () => {
     window.scrollTo({
       top: 0,
@@ -45,7 +47,7 @@ function InvestPanel({ deal }) {
           </h2>
         </li>
       </ul>
-      <Button onClick={handleClick}>Invest</Button>
+      <Button onClick={() => history.push(`/invest/${organization}/${deal_slug}`)}>Invest</Button>
     </section>
   );
 }
