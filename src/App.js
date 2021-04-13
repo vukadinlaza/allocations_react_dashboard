@@ -51,6 +51,7 @@ import './App.scss';
 import './utils/initFontAwesome';
 import TeamMap from './components/TeamMap/TeamMap';
 import DealNextSteps from './components/DealNextSteps/DealNextSteps';
+import DealLandingPage from './components/DealOneClick/LandingPage/LandingPage';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -87,7 +88,7 @@ const App = () => {
           <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact />
 
           {/** Deals * */}
-          <Redirect from="/public/:organization/deals/:deal_slug" to="/deals/:deal_slug" />
+          <Route path="/public/:organization/:deal_slug" component={DealLandingPage} exact />
           <PrivateRoute path="/deals/:deal_slug" component={DealOneClick} exact />
           <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
           <PrivateRoute path="/next-steps/:deal_slug" component={DealNextSteps} exact />

@@ -1,28 +1,25 @@
-import React from 'react'
-import { Button } from '@material-ui/core'
-import './styles.scss'
-import moment from 'moment'
+import React from 'react';
+import { Button } from '@material-ui/core';
+import './styles.scss';
+import moment from 'moment';
 
-function InvestPanel({ toggleInvestmentPage, deal }) {
-
+function InvestPanel({ deal }) {
   const handleClick = () => {
-    toggleInvestmentPage(open => !open)
-
     window.scrollTo({
       top: 0,
       left: 100,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
-  }
+  };
 
   const {
-    dealParams: { wireDeadline, signDeadline }
+    dealParams: { wireDeadline, signDeadline },
   } = deal;
 
   const getDeadline = (date) => {
-    return moment(date).format("dddd, MMMM Do YYYY, h:mm a")
-  }
-  //if no signing deadline but wire dealine, set signing as wire, if neither null state
+    return moment(date).format('dddd, MMMM Do YYYY, h:mm a');
+  };
+  // if no signing deadline but wire dealine, set signing as wire, if neither null state
   return (
     <section className="InvestPanel">
       <p className="section-label">One click invest</p>
@@ -30,31 +27,27 @@ function InvestPanel({ toggleInvestmentPage, deal }) {
         <li>
           <p>Signing deadline:</p>
           <h2>
-            {
-              signDeadline ?
-                getDeadline(signDeadline) :
-                wireDeadline ?
-                  getDeadline(wireDeadline)
-                  : 'No signing deadline has been set.'
-            }
+            {signDeadline
+              ? getDeadline(signDeadline)
+              : wireDeadline
+              ? getDeadline(wireDeadline)
+              : 'No signing deadline has been set.'}
           </h2>
         </li>
         <li>
           <p>Wire deadline:</p>
           <h2>
-            {
-              wireDeadline ?
-                getDeadline(wireDeadline) :
-                signDeadline ?
-                  getDeadline(signDeadline)
-                  : 'No wire deadline has been set.'
-            }
+            {wireDeadline
+              ? getDeadline(wireDeadline)
+              : signDeadline
+              ? getDeadline(signDeadline)
+              : 'No wire deadline has been set.'}
           </h2>
         </li>
       </ul>
       <Button onClick={handleClick}>Invest</Button>
     </section>
-  )
+  );
 }
 
 export default InvestPanel;
