@@ -1,12 +1,9 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
 import './styles.scss';
-import CurrencyTextField from '@unicef/material-ui-currency-textfield'
+import CurrencyTextField from '@unicef/material-ui-currency-textfield';
 
-
-function InvestmentAmountPanel({ setAmount, amount }) {
-  console.log('amount', amount)
-
+function InvestmentAmountPanel({ setAmount, amount, minimumInvestment }) {
   return (
     <section className="InvestmentAmountPanel">
       <p className="section-label">Investment Amount</p>
@@ -25,9 +22,9 @@ function InvestmentAmountPanel({ setAmount, amount }) {
         />
 
         <Button
-          onClick={() => setAmount('1000')}
+          onClick={() => setAmount(minimumInvestment !== null && minimumInvestment ? minimumInvestment : '1000')}
           name="min-investment"
-          className={'min-investment-button'}
+          className="min-investment-button"
         >
           Minimum investment
         </Button>

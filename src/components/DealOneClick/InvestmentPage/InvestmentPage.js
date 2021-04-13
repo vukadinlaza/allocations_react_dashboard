@@ -17,7 +17,7 @@ import WireInstructions from './WireInstructions';
 import YourDocumentsPanel from './YourDocumentsPanel';
 import SPVDocumentModal from './SpvDocumentModal';
 import { getClientIp } from '../../../utils/ip';
-import { nWithCommas } from '../../../utils/numbers'
+import { nWithCommas } from '../../../utils/numbers';
 
 const CONFIRM_INVESTMENT = gql`
   mutation ConfirmInvestment($payload: Object) {
@@ -29,12 +29,12 @@ const CONFIRM_INVESTMENT = gql`
 
 // if individual remove signfull name
 const validate = (investor) => {
-  console.log('investor in validation', investor)
+  console.log('investor in validation', investor);
   const required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
-  if(investor.country && investor.country === 'United States') {
+  if (investor.country && investor.country === 'United States') {
     required.push('state');
   }
-  if(investor.investor_type === 'entity' && !investor.fullName) {
+  if (investor.investor_type === 'entity' && !investor.fullName) {
     required.push('fullName');
   }
   return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
@@ -50,7 +50,7 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
     country: '',
     country_search: '',
     state: '',
-    state_search: ''
+    state_search: '',
   });
   const [errors, setErrors] = useState([]);
 
@@ -58,15 +58,13 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
     onCompleted: () => {
       refetch();
       toast.success('Investment created successfully.');
-      setTimeout(() => {
-        const path = organzation ? `/next-steps/${organzation}/${slug}` : `/next-steps/${slug}`;
-        history.push(path, { investorFormData });
-      }, 2000);
+      const path = organzation ? `/next-steps/${organzation}/${slug}` : `/next-steps/${slug}`;
+      history.push(path, { investorFormData });
     },
   });
 
   useEffect(() => {
-    if(called && data) {
+    if (called && data) {
       console.log('fires refetch');
       refetch();
     }
@@ -75,15 +73,15 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
     const validation = validate(investorFormData);
     setErrors(validation);
 
-    if(validation.length > 0) {
+    if (validation.length > 0) {
       return toast.warning('Incomplete Form');
     }
 
-    if(!amount) {
+    if (!amount) {
       return toast.warning('Please enter a valid investment amount.');
     }
 
-    if(parseInt(amount) < 1000) {
+    if (parseInt(amount) < 1000) {
       return toast.warning('Please enter an investment amount greater than $1000.');
     }
     setShowSpvModal(true);
@@ -118,12 +116,7 @@ function InvestmentPage({ deal, investor, toggleInvestmentPage, refetch, investm
       </div>
 
       <div className="flex-container">
-        <InvestmentAmountPanel
-          setAmount={setAmount}
-          amount={amount}
-          minimumInvestment={minimumInvestment}
-          maximumInvestment={maximumInvestment}
-        />
+        <InvestmentAmountPanel setAmount={setAmount} amount={amount} minimumInvestment={minimumInvestment} />
         <div className="side-panel">
           <InvestingAsPanel />
           <DealDocumentsPanel deal={deal} />

@@ -38,6 +38,7 @@ export const GET_INVESTOR_DEAL = gql`
         slug
         memo
         docSpringTemplateId
+        dealCoverImageKey
         documents {
           path
           link
@@ -63,7 +64,6 @@ export const GET_INVESTOR_DEAL = gql`
           totalRoundSize
           allocation
           totalCarry
-          minimumInvestment
           signDeadline
           wireDeadline
           estimatedSetupCosts
