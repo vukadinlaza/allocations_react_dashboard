@@ -14,24 +14,26 @@ const stateNames = usStates.states.map(s => s.name)
 
 function PersonalInformation({ investor, setInvestor, errors }) {
   const handleChange = (prop) => (e, newValue) => {
-    if(e) {
+    if (e) {
       e.persist();
     }
-    if(prop === 'investor_type') {
+    if (prop === 'investor_type') {
       return setInvestor((prev) => ({ ...prev, [prop]: e.target.value, accredited_investor_status: '' }));
     }
-    if(prop === 'country') {
-      if(newValue) {
-        return setInvestor((prev) => ({ ...prev, [prop]: newValue }))
+    if (prop === 'country') {
+      if (newValue) {
+        let countryValue = newValue === 'U.S.' || newValue === 'USA' ? 'United States' : newValue;
+
+        return setInvestor((prev) => ({ ...prev, [prop]: countryValue }))
       }
     }
-    if(prop === 'country_search') {
+    if (prop === 'country_search') {
       return setInvestor((prev) => ({ ...prev, [prop]: newValue }))
     }
-    if(prop === 'state') {
+    if (prop === 'state') {
       return setInvestor((prev) => ({ ...prev, [prop]: newValue }))
     }
-    if(prop === 'state_search') {
+    if (prop === 'state_search') {
       return setInvestor((prev) => ({ ...prev, [prop]: newValue }))
     }
     return setInvestor((prev) => ({ ...prev, [prop]: e.target.value }));
@@ -87,7 +89,7 @@ function PersonalInformation({ investor, setInvestor, errors }) {
             handleChange('country_search')(event, newInputValue);
           }}
           id="country-select"
-          options={countryNames}
+          options={[...countryNames, 'USA', 'U.S.',]}
           getOptionLabel={(option) => option}
           renderInput={(params) => <TextField {...params} error={errors.includes('country')}
             label="Country" variant="outlined" />}

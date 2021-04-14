@@ -1,0 +1,139 @@
+.W9Entity {
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+  border-radius: 10px;
+  position: relative;
+  
+  .form-header {
+    border-radius: 10px 10px 0px 0px;
+    background: #FFFFFF;
+    width: 100%;
+    padding: 20px 0;
+
+
+    h2 {
+      font-size: 1.75rem;
+      padding-left: 1rem;
+    }
+    h3 {
+      font-weight: 400;
+      font-size: 1rem;
+      padding-left: 1rem;
+    }
+
+    border-bottom: 2px solid #E3E4E7;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #FBFCFF;
+    width: 100%;
+    border-radius: 0px 0px 10px 10px;
+
+    .form-field {
+      width: 95%;
+      margin-top: 5px;
+      label {
+        display: flex;
+        flex-direction: column;
+      }
+  
+    }
+
+    .container {
+      padding: 0;
+      width: 95%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+
+
+    .region {
+      padding: 0;
+      width: 95%;
+
+      .city {
+        width: 60%;
+      }
+
+      .state {
+        width: 17.5%;
+      }
+      
+      .zip {
+        width: 20%;
+      }
+    }
+
+    .date-signed {
+      width: 50%;
+    }
+
+
+    .ein {
+      width: 47.5%;
+  
+      .container {
+        padding: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+  
+        .ein-one {
+          width: 27.5%;
+        }
+        .ein-two {
+          width: 70%;
+        }
+      }
+    }
+
+    .form-button {
+      width: 95%;
+      height: 3rem;
+      text-transform: none;
+      outline: none;
+      margin-bottom: 10px;
+    }
+
+        
+    .signature {
+    
+      input {
+        font-family: 'Great Vibes', cursive !important;
+        color: black;
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+    }
+
+
+    .accept {
+      background-color: #99E090;
+      color: white;
+      
+      &:hover {
+        background-color: #83e176;
+      }
+    }
+    
+    .decline {
+      background-color: #FBFCFF;
+      &:hover {
+        background-color: #eaebed;
+      }
+    }
+
+
+  }
+
+  .close-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+}
