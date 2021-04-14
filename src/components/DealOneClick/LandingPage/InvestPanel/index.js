@@ -47,7 +47,9 @@ function InvestPanel({ deal, deal_slug, organization }) {
           </h2>
         </li>
       </ul>
-      <Button onClick={() => history.push(`/invest/${organization}/${deal_slug}`)}>Invest</Button>
+      <Button onClick={() => history.push(`/invest${organization ? `/${organization}` : ''}/${deal_slug}`)}>
+        Invest
+      </Button>
     </section>
   );
 }

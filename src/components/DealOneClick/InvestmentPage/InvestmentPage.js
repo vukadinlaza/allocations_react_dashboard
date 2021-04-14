@@ -17,84 +17,63 @@ import YourDocumentsPanel from './YourDocumentsPanel';
 import SPVDocumentModal from './SpvDocumentModal';
 import { getClientIp } from '../../../utils/ip';
 import { nWithCommas } from '../../../utils/numbers';
+import InvestmentHistory from './InvestmentHistory/InvestmentHistory';
 
-const GET_INVESTOR_DEAL = gql`
+const GET_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
-    investor {
+    deal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
       _id
-      name
-      first_name
-      last_name
-      entity_name
-      country
-      investor_type
-      signer_full_name
-      accredited_investor_status
-      email
-      documents
-      invitedDeal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
-        _id
-        approved
-        created_at
-        company_name
-        company_description
-        date_closed
-        deal_lead
-        pledge_link
-        onboarding_link
-        status
-        slug
-        memo
-        docSpringTemplateId
-        dealCoverImageKey
-        documents {
-          path
-          link
-        }
-        investment {
-          _id
-          amount
-          status
-          documents {
-            path
-            link
-          }
-        }
-        dealParams {
-          dealType
-          coinvestors
-          risks
-          termsAndConditions
-          valuation
-          runRate
-          minimumInvestment
-          maximumInvestment
-          totalRoundSize
-          allocation
-          totalCarry
-          signDeadline
-          wireDeadline
-          estimatedSetupCosts
-          estimatedSetupCostsDollar
-          estimatedTerm
-          managementFees
-          managementFeesDollar
-          managementFeeType
-          portfolioTotalCarry
-          portfolioEstimatedSetupCosts
-          portfolioEstimatedSetupCostsDollar
-          portfolioManagementFees
-          portfolioManagementFeesDollar
-          portfolioManagementFeeType
-          fundTotalCarry
-          fundEstimatedSetupCosts
-          fundEstimatedSetupCostsDollar
-          fundManagementFees
-          fundManagementFeesDollar
-          fundManagementFeeType
-          fundGeneralPartner
-          fundEstimatedTerm
-        }
+      approved
+      created_at
+      company_name
+      company_description
+      date_closed
+      deal_lead
+      pledge_link
+      onboarding_link
+      status
+      slug
+      memo
+      docSpringTemplateId
+      dealCoverImageKey
+      documents {
+        path
+        link
+      }
+      dealParams {
+        dealType
+        coinvestors
+        risks
+        termsAndConditions
+        valuation
+        runRate
+        minimumInvestment
+        maximumInvestment
+        totalRoundSize
+        allocation
+        totalCarry
+        signDeadline
+        wireDeadline
+        estimatedSetupCosts
+        estimatedSetupCostsDollar
+        estimatedTerm
+        managementFees
+        managementFeesDollar
+        managementFeeType
+        portfolioTotalCarry
+        portfolioEstimatedSetupCosts
+        portfolioEstimatedSetupCostsDollar
+        portfolioManagementFees
+        portfolioManagementFeesDollar
+        portfolioManagementFeeType
+        fundTotalCarry
+        fundEstimatedSetupCosts
+        fundEstimatedSetupCostsDollar
+        fundManagementFees
+        fundManagementFeesDollar
+        fundManagementFeeType
+        fundGeneralPartner
+        fundEstimatedTerm
       }
     }
   }
@@ -124,7 +103,7 @@ function InvestmentPage({}) {
   const history = useHistory();
   const { organization, deal_slug } = useParams();
 
-  const { data, refetch, called, loading, isAuthenticated } = useQuery(GET_INVESTOR_DEAL, {
+  const { data, refetch } = useQuery(GET_DEAL, {
     variables: {
       deal_slug,
       fund_slug: organization || 'allocations',
@@ -134,6 +113,7 @@ function InvestmentPage({}) {
   const [checkedTAT, setCheckedTAT] = useState(false);
   const [showSpvModal, setShowSpvModal] = useState(false);
   const [amount, setAmount] = useState('');
+
   const [investorFormData, setInvestor] = useState({
     country: '',
     country_search: '',
@@ -172,12 +152,13 @@ function InvestmentPage({}) {
     const ip = await getClientIp();
     const payload = {
       ...investorFormData,
-      investmentId: investment._id,
       investmentAmount: nWithCommas(amount),
       clientIp: ip,
       dealId: deal._id,
       docSpringTemplateId: deal.docSpringTemplateId,
     };
+
+    console.log('PAYLOAD', payload);
 
     submitConfirmation({ variables: { payload } });
     setShowSpvModal(false);
@@ -185,12 +166,8 @@ function InvestmentPage({}) {
 
   if (!data) return <Loader />;
 
+  const { deal } = data;
   const {
-    investor,
-    investor: { invitedDeal: deal },
-  } = data;
-  const {
-    investment,
     company_name,
     dealParams: { minimumInvestment },
   } = deal;
@@ -209,14 +186,13 @@ function InvestmentPage({}) {
         <InvestmentAmountPanel setAmount={setAmount} amount={amount} minimumInvestment={minimumInvestment} />
         <div className="side-panel">
           <InvestingAsPanel />
+          <InvestmentHistory deal={deal} setInvestor={setInvestor} investor={investorFormData} />
           <DealDocumentsPanel deal={deal} />
-          <YourDocumentsPanel investment={investment} />
+          {/* <YourDocumentsPanel investment={investment} /> */}
         </div>
         <PersonalInformation errors={errors} investor={investorFormData} setInvestor={setInvestor} />
-        {/* <PaymentInformation /> */}
         <TermsAndConditionsPanel
           confirmInvestment={confirmInvestment}
-          investor={investor}
           deal={deal}
           checkedTAT={checkedTAT}
           setCheckedTAT={setCheckedTAT}
