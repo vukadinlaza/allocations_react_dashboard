@@ -22,17 +22,19 @@ function PersonalInformation({ investor, setInvestor, errors }) {
     }
     if (prop === 'country') {
       if (newValue) {
-        return setInvestor((prev) => ({ ...prev, [prop]: newValue }));
+        let countryValue = newValue === 'U.S.' || newValue === 'USA' ? 'United States' : newValue;
+
+        return setInvestor((prev) => ({ ...prev, [prop]: countryValue }))
       }
     }
     if (prop === 'country_search') {
-      return setInvestor((prev) => ({ ...prev, [prop]: newValue }));
+      return setInvestor((prev) => ({ ...prev, [prop]: newValue }))
     }
     if (prop === 'state') {
-      return setInvestor((prev) => ({ ...prev, [prop]: newValue }));
+      return setInvestor((prev) => ({ ...prev, [prop]: newValue }))
     }
     if (prop === 'state_search') {
-      return setInvestor((prev) => ({ ...prev, [prop]: newValue }));
+      return setInvestor((prev) => ({ ...prev, [prop]: newValue }))
     }
     return setInvestor((prev) => ({ ...prev, [prop]: e.target.value }));
   };
@@ -82,7 +84,7 @@ function PersonalInformation({ investor, setInvestor, errors }) {
             handleChange('country_search')(event, newInputValue);
           }}
           id="country-select"
-          options={countryNames}
+          options={[...countryNames, 'USA', 'U.S.',]}
           getOptionLabel={(option) => option}
           renderInput={(params) => (
             <TextField {...params} error={errors.includes('country')} label="Country" variant="outlined" />
