@@ -572,9 +572,10 @@ const INITIAL_STATE = {
   accredited_investor_status: '',
 };
 
-function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetch }) {
+function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetch, investment }) {
   const [loading, setLoading] = useState(true);
   const [investorData, setInvestor] = useState(null);
+  const [numDocs, setNumDocs] = useState(0);
   const [resign, setResign] = useState(false);
   const classes = useStyles();
   const { search, pathname } = useLocation();
@@ -597,15 +598,14 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
   useEffect(() => {
     setInvestor({ ...investor });
   }, [investor, setInvestor]);
-  // useEffect(() => {
-  //   const isProfileComplete = ['last_name', 'first_name', 'email'].every(
-  //     (i) => Object.keys(investor).includes(i) && investor[i] !== null,
-  //   );
-  //   console.log(investor);
-  //   if (investor.email && !isProfileComplete) {
-  //     setShowEditInvestor(true);
-  //   }
-  // }, [investor]);
+
+  useEffect(() => {
+    setNumDocs(docs.length);
+
+    if (docs.length > numDocs) {
+      setResign(false);
+    }
+  }, [docs.length, investment, numDocs]);
 
   if (!deal.onboarding_link) {
     return (

@@ -38,6 +38,7 @@ export const GET_INVESTOR_DEAL = gql`
         slug
         memo
         docSpringTemplateId
+        dealCoverImageKey
         documents {
           path
           link
@@ -63,7 +64,6 @@ export const GET_INVESTOR_DEAL = gql`
           totalRoundSize
           allocation
           totalCarry
-          minimumInvestment
           signDeadline
           wireDeadline
           estimatedSetupCosts
@@ -108,6 +108,7 @@ const exemptDealSlugs = [
   'allocations-200-m',
   'navier',
   'simplebet',
+  '305-ventures',
 ];
 function DealOneClick() {
   const { state } = useLocation();
@@ -165,7 +166,6 @@ function DealOneClick() {
   const idTimestamp = invitedDeal._id.toString().substring(0, 8);
   const dealTimestamp = moment.unix(new Date(parseInt(idTimestamp, 16) * 1000));
   const rolloverTimestamp = moment.unix(new Date('2021-04-20'));
-
 
   if (data && moment(dealTimestamp).isBefore(rolloverTimestamp) && !exemptDealSlugs.includes(deal_slug)) {
     return <Deal />;

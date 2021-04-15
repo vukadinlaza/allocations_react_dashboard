@@ -128,6 +128,9 @@ export const DEAL_INVESTMENTS = gql`
           _id
           email
           documents
+          first_name
+          last_name
+          name
         }
       }
     }
@@ -239,8 +242,7 @@ export default ({ dealId, isDemo, superadmin }) => {
 };
 const InvestmentSquare = ({ investment, isDemo, setEditInvestmentModal, superadmin }) => {
   const classes = useStyles();
-  const n = _.get(investment, 'investor.email', '').split('@');
-  const name = _.get(n, '[0]', '');
+  const n = _.get(investment, 'investor.name', '');
   return (
     <div
       onClick={() => {
@@ -251,11 +253,11 @@ const InvestmentSquare = ({ investment, isDemo, setEditInvestmentModal, superadm
     >
       <ListItem disableGutters className={classes.listItem}>
         <ListItemAvatar>
-          <Avatar alt={name} className={classes.avatar}>
-            {name.charAt(0).toUpperCase()}
+          <Avatar alt={n} className={classes.avatar}>
+            {n.charAt(0).toUpperCase()}
           </Avatar>
         </ListItemAvatar>
-        <ListItemText style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} primary={name} />
+        <ListItemText style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} primary={n} />
         <ListItemSecondaryAction>
           <FontAwesomeIcon icon="dollar-sign" size="sm" style={{ marginRight: '.15rem' }} />
           {nWithCommas(investment.amount || '0')}

@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import './DealHeader.scss';
 
 function DealHeader({ deal }) {
-  const { company_name, company_description, slug } = deal;
-  const [img, setImg] = useState();
+  const { company_name, company_description, slug, dealCoverImageKey } = deal;
+  const [img, setImg] = useState(`https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`);
   useEffect(() => {
-    setImg(`https://allocations-public.s3.us-east-2.amazonaws.com/deals/${slug}.png`);
-  }, [slug]);
+    setImg(`https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`);
+  }, [dealCoverImageKey, slug]);
   return (
     <section className="DealHeader">
       <h1 className="deal-title">{company_name}</h1>

@@ -1,7 +1,8 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable radix */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { gql } from 'apollo-boost';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import {
   Paper,
   Grid,
@@ -17,18 +18,18 @@ import {
   FormControl,
   Input,
   InputAdornment,
-  TextField,
 } from '@material-ui/core';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import { useMutation } from '@apollo/react-hooks';
 import CancelIcon from '@material-ui/icons/Cancel';
 import EditIcon from '@material-ui/icons/Edit';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import CloseIcon from '@material-ui/icons/Close';
-import _, { isNumber, toNumber, toLower } from 'lodash';
+import _, { toLower, orderBy, get } from 'lodash';
 import moment from 'moment';
 import Chart from 'react-google-charts';
-import { useHistory, useParams, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Loader from '../utils/Loader';
 import { nWithCommas } from '../../utils/numbers';
@@ -172,6 +173,7 @@ export default () => {
   const classes = useStyles();
   const location = useLocation();
   const [showDocs, setShowDocs] = useState();
+  const [sortByProp, setSortByProp] = useState({ prop: 'deal.company_name', direction: 'asc' });
   //
 
   const [editInvestmentModal, setEditInvestmentModal] = useState({});
@@ -207,7 +209,6 @@ export default () => {
   }, [setTradeData, tradeData.showLoading]);
 
   const { userProfile } = useAuth(GET_INVESTOR);
-  console.log('USER PROFILE', userProfile);
   const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile.email);
 
   useEffect(() => {
@@ -306,6 +307,9 @@ export default () => {
     }
   };
 
+  const sortedInvestments = (investments) => {
+    return orderBy(investments, (inv) => get(inv, sortByProp.prop), [sortByProp.direction]);
+  };
   return (
     <div className="blue-container">
       <Grid container spacing={12} justify="space-between" style={{ marginTop: '40px', marginBottom: '1rem' }}>
@@ -476,7 +480,18 @@ export default () => {
               <TableHead>
                 <TableRow style={{ borderBottom: 'solid black 1px' }}>
                   <TableCell className={classes.tableHeader} align="left">
-                    Name
+                    <div className="sort-btns">
+                      <div>Name</div>
+                      {sortByProp.direction !== 'asc' ? (
+                        <ArrowDropUpIcon
+                          onClick={() => setSortByProp({ prop: 'deal.company_name', direction: 'asc' })}
+                        />
+                      ) : (
+                        <ArrowDropDownIcon
+                          onClick={() => setSortByProp({ prop: 'deal.company_name', direction: 'desc' })}
+                        />
+                      )}
+                    </div>
                   </TableCell>
                   <Hidden only="xs">
                     <TableCell className={classes.tableHeader} align="center">
@@ -485,7 +500,18 @@ export default () => {
                   </Hidden>
                   <Hidden only="xs">
                     <TableCell className={classes.tableHeader} align="center">
-                      Investment Date
+                      <div className="sort-btns">
+                        <div>Investment Date</div>
+                        {sortByProp.direction !== 'asc' ? (
+                          <ArrowDropUpIcon
+                            onClick={() => setSortByProp({ prop: 'deal.dealParams.wireDeadline', direction: 'asc' })}
+                          />
+                        ) : (
+                          <ArrowDropDownIcon
+                            onClick={() => setSortByProp({ prop: 'deal.dealParams.wireDeadline', direction: 'desc' })}
+                          />
+                        )}
+                      </div>
                     </TableCell>
                   </Hidden>
                   <TableCell className={classes.tableHeader} align="center">
@@ -514,10 +540,16 @@ export default () => {
                       Capital Accounts
                     </TableCell>
                   </Hidden>
+                  <TableCell className={classes.tableHeader} align="center">
+                    Buy
+                  </TableCell>
+                  <TableCell className={classes.tableHeader} align="center">
+                    Sell
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {investments.map((investment) =>
+                {sortedInvestments(investments).map((investment) =>
                   showDocs?._id === investment?._id ? (
                     <>
                       <TR
@@ -1135,12 +1167,9 @@ const TR = ({
   const history = useHistory();
   const capFields = (capitalAccounts || []).map((r) => r.fields);
 
-  const capitalAccountInfo = capFields.find(
-    (r) =>
-      r.Email === userProfile.email &&
-      (toLower(investment.deal.company_name).includes(toLower(r['Porfolio Company Name'])) ||
-        toLower(r['Porfolio Company Name']).includes(toLower(investment.deal.company_name))),
-  );
+  const capitalAccountInfo = capFields.find((r) => {
+    return _.get(r, 'Deal Name (webapp)[0]') === investment.deal.company_name;
+  });
 
   const addedDate = moment(investment?.deal?.dealParams?.wireDeadline).format('Do MMM YYYY');
   const showDocsFn = () => setShowDocs(showDocs ? false : investment);
@@ -1200,6 +1229,41 @@ const TR = ({
           View
         </Button>
       </TableCell>
+      <TableCell align="center">
+        <Button
+          variant="contained"
+          size="small"
+          color="secondary"
+          onClick={() =>
+            setTradeData({
+              open: true,
+              type: 'buy',
+              deal: investment.deal,
+              investment,
+            })
+          }
+        >
+          Buy
+        </Button>
+      </TableCell>
+      <TableCell align="center">
+        <Button
+          variant="contained"
+          size="small"
+          color="secondary"
+          style={{ backgroundColor: '#F53C56', color: '#ffffff' }}
+          onClick={() =>
+            setTradeData({
+              open: true,
+              type: 'sell',
+              deal: investment.deal,
+              investment,
+            })
+          }
+        >
+          sell
+        </Button>
+      </TableCell>
     </TableRow>
   );
 };
@@ -1209,7 +1273,6 @@ function InvestmentStatus({ investment }) {
 }
 
 function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin }) {
-  console.log('IS ADMIN', isAdmin);
   return (
     <>
       <TableRow>
