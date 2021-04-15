@@ -51,6 +51,8 @@ import './App.scss';
 import './utils/initFontAwesome';
 import TeamMap from './components/TeamMap/TeamMap';
 import DealNextSteps from './components/DealNextSteps/DealNextSteps';
+import DealLandingPage from './components/DealOneClick/LandingPage/LandingPage';
+import InvestmentPage from './components/DealOneClick/InvestmentPage/InvestmentPage';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -87,9 +89,19 @@ const App = () => {
           <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact />
 
           {/** Deals * */}
-          <Redirect from="/public/:organization/deals/:deal_slug" to="/deals/:deal_slug" />
-          <PrivateRoute path="/deals/:deal_slug" component={DealOneClick} exact />
-          <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
+          {/* PUBLIC Landing Page */}
+          <Route path="/public/:organization/:deal_slug" component={DealLandingPage} exact />
+          <Route path="/public/:deal_slug" component={DealLandingPage} exact />
+
+          {/* Private Landing Page */}
+          <PrivateRoute path="/deals/:deal_slug" component={DealLandingPage} exact />
+          <PrivateRoute path="/deals/:organization/:deal_slug" component={DealLandingPage} exact />
+
+          {/* Private Invest Page */}
+          <PrivateRoute path="/invest/:deal_slug" component={InvestmentPage} exact />
+          <PrivateRoute path="/invest/:organization/:deal_slug" component={InvestmentPage} exact />
+
+          {/* Private Next Steps page */}
           <PrivateRoute path="/next-steps/:deal_slug" component={DealNextSteps} exact />
           <PrivateRoute path="/next-steps/:organization/:deal_slug" component={DealNextSteps} exact />
 

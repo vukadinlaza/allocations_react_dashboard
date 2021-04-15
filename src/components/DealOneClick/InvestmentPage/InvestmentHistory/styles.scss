@@ -1,0 +1,38 @@
+.InvestmentHistoryPanel {
+	width: 100%;
+	height: max-content;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: #FBFCFF;
+	box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
+	border: 1px solid rgb(232, 232, 232);
+  
+  
+	button {
+	  width: 100%;
+	  display: flex;
+	  justify-content: space-between;
+	  text-align: center;
+	  outline: none;
+	  background-color: white;
+	  margin: 2px 0;
+	  text-transform: none;
+	  font-size: .7rem;
+	  .itemHeader {
+		  font-size: .5rem;
+	  }
+  
+	}
+	.addNewbtn {
+		width: 100%;
+		display: flex;
+		justify-content: space-around;
+		outline: none;
+		background-color: white;
+		margin: 2px 0;
+		text-transform: none;
+		font-size: .8rem;
+	}
+  }
+  
