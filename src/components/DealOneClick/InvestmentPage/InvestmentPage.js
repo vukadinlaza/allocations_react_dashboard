@@ -4,6 +4,7 @@ import { gql } from 'apollo-boost';
 import { Button } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import { toast } from 'react-toastify';
 import TermsAndConditionsPanel from './TermsAndConditionsPanel';
 import DealDocumentsPanel from './DealDocumentsPanel';
@@ -101,7 +102,8 @@ const validate = (investor) => {
 
 function InvestmentPage({}) {
   const history = useHistory();
-  const { organization, deal_slug } = useParams();
+  const { organization: org, deal_slug } = useParams();
+  const organization = org || 'allocations';
 
   const { data, refetch } = useQuery(GET_DEAL, {
     variables: {
@@ -122,7 +124,7 @@ function InvestmentPage({}) {
   });
   const [errors, setErrors] = useState([]);
 
-  const [submitConfirmation] = useMutation(CONFIRM_INVESTMENT, {
+  const [submitConfirmation, {}] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       refetch();
       toast.success('Investment created successfully.');
@@ -174,10 +176,16 @@ function InvestmentPage({}) {
 
   return (
     <section className="InvestmentPage">
-      <Button className="back-button" onClick={() => history.push(`/deals/${organization}/${deal_slug}`)}>
-        <ArrowBackIcon />
-        Back to Deal Page
-      </Button>
+      <div className="nav-btn-container">
+        <Button className="back-button" onClick={() => history.push(`/deals/${organization}/${deal_slug}`)}>
+          <ArrowBackIcon />
+          Back to Deal Page
+        </Button>
+        <Button className="next-button" onClick={() => history.push(`/next-steps/${organization}/${deal_slug}`)}>
+          Next Steps
+          <ArrowForwardIcon />
+        </Button>
+      </div>
       <div>
         <h1 className="investment-header">Invest in {company_name}</h1>
       </div>

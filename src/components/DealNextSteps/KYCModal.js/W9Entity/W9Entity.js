@@ -62,7 +62,6 @@ function W9Entity({ toggleOpen, createDoc }) {
     delete payload.state;
     delete payload.zip;
     payload.city_state_and_zip_code = `${city}, ${state} ${zip}`;
-
     createDoc(payload);
   };
 
@@ -102,10 +101,29 @@ function W9Entity({ toggleOpen, createDoc }) {
               <MenuItem value="Partnership">Partnership</MenuItem>
               <MenuItem value="SMLLC">Invidivual/sole proprietor or single-member LLC</MenuItem>
               <MenuItem value="Trust/estate">Trust/estate</MenuItem>
-              <MenuItem value="M/A">N/A</MenuItem>
+              <MenuItem value="Limited Liability Company">Limited Liability Company</MenuItem>
+              <MenuItem value="N/A">N/A</MenuItem>
             </Select>
           </label>
         </FormControl>
+        {formData.tax_classification === 'Limited Liability Company' && (
+          <FormControl className="form-field address">
+            <label>
+              What is your entity taxed as?
+              <Select
+                onChange={handleChange}
+                name="taxed_as"
+                error={errors.includes('taxed_as')}
+                value={formData.taxed_as}
+                variant="outlined"
+              >
+                <MenuItem value="C">C Corporation</MenuItem>
+                <MenuItem value="S">S Corporation</MenuItem>
+                <MenuItem value="P">Partnership</MenuItem>
+              </Select>
+            </label>
+          </FormControl>
+        )}
 
         <FormControl className="form-field address">
           <label>

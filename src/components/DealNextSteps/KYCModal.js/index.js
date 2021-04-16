@@ -9,6 +9,7 @@ import W9Indivdual from './W9Individual/W9Individual';
 import W9Entity from './W9Entity/W9Entity';
 import W8BEN from './W8BEN/W8BEN';
 import W8BENE from './W8BENE/W8BENE';
+import Loader from '../../utils/Loader';
 import './styles.scss';
 
 const UPDATE_USER = gql`
@@ -20,7 +21,7 @@ const UPDATE_USER = gql`
 `;
 
 const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, investor, refetch }) => {
-  const [submitTaxDocument] = useMutation(UPDATE_USER, {
+  const [submitTaxDocument, { called, loading }] = useMutation(UPDATE_USER, {
     onCompleted: (data) => {
       refetch();
       // setOpen(false);
@@ -58,7 +59,7 @@ const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, investor, ref
       aria-describedby="modal"
     >
       <>
-        <div className="form-container">{getForm(kycTemplateName)}</div>
+        <div className="form-container">{called && loading ? <Loader /> : getForm(kycTemplateName)}</div>
       </>
     </Modal>
   );
