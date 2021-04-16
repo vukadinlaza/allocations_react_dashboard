@@ -276,7 +276,6 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
                   />
                 ) : (
                   <TextField
-                    error={errors.includes('ein')}
                     style={{ width: '100%' }}
                     value={get(investor, 'ein') || ''}
                     onChange={handleChange('ein')}
