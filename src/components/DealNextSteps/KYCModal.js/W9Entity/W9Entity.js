@@ -1,58 +1,70 @@
-import { FormControl, TextField, Button, Select, MenuItem, Tooltip } from '@material-ui/core'
+import { FormControl, TextField, Button, Select, MenuItem, Tooltip } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import React, { useState } from 'react'
-import moment from 'moment'
-import './styles.scss'
+import React, { useState } from 'react';
+import moment from 'moment';
+import './styles.scss';
 import { toast } from 'react-toastify';
+import { snakeCase } from 'lodash';
 
 const validate = (formData) => {
-  const required = ['tax_classification', 'city', 'state', 'zip', 'date_signed', 'signature', 'Employer ID/f1_15', 'Employer ID/f1_14', 'address/address_number_street_and_apt_or_suite_no_see_instructions', 'name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank'];
+  const required = [
+    'tax_classification',
+    'city',
+    'state',
+    'zip',
+    'date_signed',
+    'signature',
+    'f1_15',
+    'f1_14',
+    'address_number_street_and_apt_or_suite_no_see_instructions',
+    'name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank',
+  ];
   return required.reduce((acc, attr) => (formData[attr] ? acc : [...acc, attr]), []);
 };
 
 function W9Entity({ toggleOpen, createDoc }) {
-
   const [errors, setErrors] = useState([]);
 
   const [formData, setFormData] = useState({
-    ['name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank']: '',
-    ['address/address_number_street_and_apt_or_suite_no_see_instructions']: '',
-    ['Employer ID/f1_14']: '',
-    ['Employer ID/f1_15']: '',
+    name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank: '',
+    address_number_street_and_apt_or_suite_no_see_instructions: '',
+    f1_14: '',
+    f1_15: '',
     tax_classification: '',
     state: '',
     city: '',
     signature: '',
     zip: '',
     date_signed: moment().format('YYYY-MM-DD'),
-  })
+  });
 
   const handleChange = ({ target }) => {
-    console.log('target', target.value)
-    setFormData(prevData => ({ ...prevData, [target.name]: target.value }))
-  }
+    setFormData((prevData) => ({ ...prevData, [target.name]: target.value }));
+  };
 
   const handleSubmit = () => {
     const { city, state, zip } = formData;
-    const validation = validate(formData)
-    console.log(validation)
-    setErrors(validation)
+    const validation = validate(formData);
+    setErrors(validation);
 
     if (validation.length > 0) {
       return toast.warning('Incomplete Form');
     }
 
-    const payload = { ...formData };
-    //format city/state/zip
+    const payload = {
+      ...formData,
+      federalclassification: {
+        tax_classification: formData.tax_classification,
+      },
+    };
+    // format city/state/zip
     delete payload.city;
     delete payload.state;
     delete payload.zip;
-    payload['address/city_state_and_zip_code'] = `${city}, ${state} ${zip}`
+    payload.city_state_and_zip_code = `${city}, ${state} ${zip}`;
 
-    createDoc(payload)
-  }
-
-  console.log(formData)
+    createDoc(payload);
+  };
 
   return (
     <section className="W9Entity">
@@ -61,14 +73,15 @@ function W9Entity({ toggleOpen, createDoc }) {
         <h3>Please complete this W-9 in order to complete your tax requirements.</h3>
       </div>
       <form className="form">
-
         <FormControl className="form-field name">
           <label>
             Legal Entity Name
             <TextField
               variant="outlined"
               onChange={handleChange}
-              error={errors.includes('name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank')}
+              error={errors.includes(
+                'name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank',
+              )}
               name="name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank"
             />
           </label>
@@ -81,7 +94,7 @@ function W9Entity({ toggleOpen, createDoc }) {
               onChange={handleChange}
               name="tax_classification"
               error={errors.includes('tax_classification')}
-              value={formData['tax_classification']}
+              value={formData.tax_classification}
               variant="outlined"
             >
               <MenuItem value="C Corporation">C Corporation</MenuItem>
@@ -100,15 +113,14 @@ function W9Entity({ toggleOpen, createDoc }) {
             <TextField
               onChange={handleChange}
               variant="outlined"
-              value={formData['address/address_number_street_and_apt_or_suite_no_see_instructions']}
-              error={errors.includes('address/address_number_street_and_apt_or_suite_no_see_instructions')}
-              name="address/address_number_street_and_apt_or_suite_no_see_instructions"
+              value={formData.address_number_street_and_apt_or_suite_no_see_instructions}
+              error={errors.includes('address_number_street_and_apt_or_suite_no_see_instructions')}
+              name="address_number_street_and_apt_or_suite_no_see_instructions"
             />
           </label>
         </FormControl>
 
         <div className="region container ">
-
           <FormControl className="form-field city">
             <label>
               City
@@ -147,7 +159,6 @@ function W9Entity({ toggleOpen, createDoc }) {
               />
             </label>
           </FormControl>
-
         </div>
 
         <div className="social container">
@@ -160,19 +171,19 @@ function W9Entity({ toggleOpen, createDoc }) {
                     variant="outlined"
                     className="ein-one"
                     onChange={handleChange}
-                    name="Employer ID/f1_14"
+                    name="f1_14"
                     inputProps={{ maxLength: '2' }}
-                    error={errors.includes('Employer ID/f1_14')}
+                    error={errors.includes('f1_14')}
                   />
                 </Tooltip>
                 <Tooltip title="Last 7 digits of EIN.">
                   <TextField
                     variant="outlined"
                     onChange={handleChange}
-                    name="Employer ID/f1_15"
+                    name="f1_15"
                     className="ein-two"
                     inputProps={{ maxLength: '7' }}
-                    error={errors.includes('Employer ID/f1_15')}
+                    error={errors.includes('f1_15')}
                   />
                 </Tooltip>
               </div>
@@ -182,12 +193,13 @@ function W9Entity({ toggleOpen, createDoc }) {
             <label>
               Date signed
               <TextField
-                value={formData['date_signed']}
+                value={formData.date_signed}
                 name="date_signed"
                 onChange={handleChange}
                 type="date"
                 error={errors.includes('date_signed')}
-                variant="outlined" />
+                variant="outlined"
+              />
             </label>
           </FormControl>
         </div>
@@ -210,18 +222,16 @@ function W9Entity({ toggleOpen, createDoc }) {
           I accept
         </Button>
 
-        <Button onClick={() => toggleOpen(open => !open)} className="form-button decline">
+        <Button onClick={() => toggleOpen((open) => !open)} className="form-button decline">
           I decline
         </Button>
-
       </form>
 
-      <Button onClick={() => toggleOpen(open => !open)} className="close-button">
+      <Button onClick={() => toggleOpen((open) => !open)} className="close-button">
         <CloseIcon />
       </Button>
-
     </section>
-  )
+  );
 }
 
-export default W9Entity
+export default W9Entity;
