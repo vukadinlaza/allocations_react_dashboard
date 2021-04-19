@@ -33,7 +33,7 @@ const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, investor, ref
 
   const createDoc = (formData) => {
     // TODO: handle form data submit and create DocSpring docs w/ Lance
-    console.log('form submitted: ', formData);
+    console.log('form submitted: ', kycTemplateId);
     submitTaxDocument({ variables: { payload: { ...formData, kycTemplateId, kycTemplateName } } });
   };
 

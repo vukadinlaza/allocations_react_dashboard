@@ -95,11 +95,11 @@ function DealNextSteps() {
   const templateInfo =
     investorFormData?.country === 'United States'
       ? investorFormData?.investor_type === 'individual'
-        ? { templateName: 'W-9', tempalteId: 'tpl_dM4QcQbyLckdPXgtyx' }
+        ? { templateName: 'W-9', templateId: 'tpl_dM4QcQbyLckdPXgtyx' }
         : { templateName: 'W-9-E', templateId: 'tpl_HSJjJ9c9jb2N4GXFkt' }
       : investorFormData?.investor_type === 'individual'
-      ? { templateName: 'W-8BEN', templateId: 'tpl_qDaxDLgRkFpHJD2cFX' }
-      : { templateName: 'W-8BENE', templateId: 'tpl_mXPLm5EXAyHJKhQekf' };
+      ? { templateName: 'W-8-BEN', templateId: 'tpl_qDaxDLgRkFpHJD2cFX' }
+      : { templateName: 'W-8-BEN-E', templateId: 'tpl_mXPLm5EXAyHJKhQekf' };
 
   const userDocs = data?.investor?.documents || [];
   const hasKyc = userDocs.find((doc) => {
