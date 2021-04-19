@@ -1000,16 +1000,14 @@ export default function Sidebar(props) {
             </main>
           </>
         ) : (
-          <main style={{}}>
-            {props.children}
-          </main>
+          <main style={{}}>{props.children}</main>
         )}
       </div>
     </>
   );
 }
 
-const whitelist = ['allocations', 'organizations', 'funds', 'investments'];
+const whitelist = ['allocations', 'organizations', 'funds', 'investments', 'invest'];
 
 function Brand({ organizations_admin, admin }) {
   const history = useHistory();
