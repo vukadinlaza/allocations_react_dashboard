@@ -106,7 +106,10 @@ function DealNextSteps() {
     return doc.documentName.includes('W-9') || doc.documentName.includes('W-8');
   });
 
+  console.log('HAS KYC', hasKyc, data?.investor);
+
   const docs = dealData?.investor?.invitedDeal?.documents;
+  console.log('DEAL DOCS', docs);
 
   return (
     <section className="DealNextSteps">

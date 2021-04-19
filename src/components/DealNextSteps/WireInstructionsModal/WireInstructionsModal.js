@@ -1,33 +1,24 @@
-import { Backdrop, Fade, Modal } from '@material-ui/core';
-import React from 'react'
-import { Button } from '@material-ui/core';
+import { Backdrop, Fade, Modal, Button } from '@material-ui/core';
+import React from 'react';
+
 import CloseIcon from '@material-ui/icons/Close';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './styles.scss'
+import './styles.scss';
 
 function WireInstructionsModal({ open, setOpen, docs }) {
-
   const link =
     docs && docs.find((d) => d.path === 'wire-instructions')
       ? `https://${docs.find((d) => d.path === 'wire-instructions').link}`
       : null;
 
-  if(!link) {
-    return (
-      <div className="wire" style={{ padding: '20px' }}>
-        Contact For Wire Details
-      </div>
-    );
-  }
-
   const handleClose = () => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
   return (
     <Modal
       aria-labelledby="transition-modal-title"
       aria-describedby="transition-modal-description"
-      className='WireInstructionsModal'
+      className="WireInstructionsModal"
       open={open}
       onClose={handleClose}
       closeAfterTransition
@@ -44,18 +35,20 @@ function WireInstructionsModal({ open, setOpen, docs }) {
               <FontAwesomeIcon icon={['far', 'file-pdf']} />
               <a href={link} target="_blank" rel="noopener noreferrer">
                 {' '}
-              Open in new tab
-            </a>
+                Open in new tab
+              </a>
             </div>
           </div>
           <div className="embed-responsive embed-responsive-1by1">
             <iframe className="embed-responsive-item" title="Onboarding Document" src={link} />
           </div>
-          <Button onClick={handleClose} className="close-button"><CloseIcon /></Button>
+          <Button onClick={handleClose} className="close-button">
+            <CloseIcon />
+          </Button>
         </div>
       </Fade>
     </Modal>
   );
 }
 
-export default WireInstructionsModal
+export default WireInstructionsModal;
