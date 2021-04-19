@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
 import { useParams, useHistory } from 'react-router-dom';
@@ -9,7 +9,6 @@ import CoinvestorsPanel from './CoinvestorsPanel';
 import './styles.scss';
 import KeyHighlights from './KeyHighlightsPanel';
 
-import './styles.scss';
 import Loader from '../../utils/Loader';
 
 const GET_DEAL = gql`
@@ -80,6 +79,7 @@ function DealLandingPage() {
       fund_slug: organization || 'allocations',
     },
   });
+
   if (!data) return <Loader />;
   const { publicDeal: deal } = data;
   return (
