@@ -1,18 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import AllPagesPDFViewer from '../../../PDFViewer';
-import './styles.scss'
+import './styles.scss';
+import Loader from '../../../utils/Loader';
 
-
-
-
-export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment }) {
-
-  console.log(deal.documents)
+export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment, previewData, loadingPreview }) {
+  console.log(deal.documents);
 
   const handleClose = () => {
     setOpen(false);
@@ -22,13 +19,14 @@ export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment
     return doc.path.includes('Agreement');
   });
 
-  console.log(document)
+  const previewLink = previewData?.getInvestmentPreview?.previewLink;
+  console.log(previewLink);
 
   return (
     <Modal
       aria-labelledby="transition-modal-title"
       aria-describedby="transition-modal-description"
-      className='SPVDocumentModal'
+      className="SPVDocumentModal"
       open={open}
       onClose={handleClose}
       closeAfterTransition
@@ -38,16 +36,22 @@ export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment
       }}
     >
       <Fade in={open}>
-        <div className='paper'>
-          <AllPagesPDFViewer document={document} handleClose={handleClose} />
-          <div className='buttonContainer'>
-            <Button variant="contained" color="secondary" className='button' onClick={submitInvestment}>
-              I Agree
-            </Button>
-            <Button variant="contained" color="secondary" className='button declineBtn' onClick={handleClose}>
-              I Decline
-            </Button>
-          </div>
+        <div className="paper">
+          {loadingPreview ? (
+            <Loader />
+          ) : (
+            <>
+              <AllPagesPDFViewer document={{ link: previewLink } || document} handleClose={handleClose} />
+              <div className="buttonContainer">
+                <Button variant="contained" color="secondary" className="button" onClick={submitInvestment}>
+                  I Agree
+                </Button>
+                <Button variant="contained" color="secondary" className="button declineBtn" onClick={handleClose}>
+                  I Decline
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       </Fade>
     </Modal>
