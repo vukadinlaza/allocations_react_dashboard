@@ -5,6 +5,7 @@ import Loader from '../../../utils/Loader';
 import './styles.scss';
 import moment from 'moment';
 import { toast } from 'react-toastify';
+import { useLocation } from 'react-router';
 
 const validate = (formData) => {
   const required = [
@@ -23,9 +24,10 @@ const validate = (formData) => {
 
 function W9Individual({ toggleOpen, createDoc, called, loading }) {
   const [errors, setErrors] = useState([]);
+  const { state } = useLocation()
 
   const [formData, setFormData] = useState({
-    name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank: '',
+    name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank: state?.investorFormData?.legalName || '',
     address_number_street_and_apt_or_suite_no_see_instructions: '',
     f1_11: '',
     f1_12: '',

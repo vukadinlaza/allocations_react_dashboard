@@ -6,6 +6,7 @@ import './styles.scss';
 import { toast } from 'react-toastify';
 import Loader from '../../../utils/Loader';
 import { snakeCase } from 'lodash';
+import { useLocation } from 'react-router';
 
 const validate = (formData) => {
   const required = [
@@ -25,9 +26,9 @@ const validate = (formData) => {
 
 function W9Entity({ toggleOpen, createDoc, called, loading }) {
   const [errors, setErrors] = useState([]);
-
+  const { state } = useLocation()
   const [formData, setFormData] = useState({
-    name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank: '',
+    name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank: state?.investorFormData?.legalName || '',
     address_number_street_and_apt_or_suite_no_see_instructions: '',
     f1_14: '',
     f1_15: '',
@@ -83,6 +84,7 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
             <TextField
               variant="outlined"
               onChange={handleChange}
+              value={formData['name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank']}
               error={errors.includes(
                 'name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank',
               )}
