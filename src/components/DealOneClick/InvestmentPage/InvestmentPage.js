@@ -194,7 +194,7 @@ function InvestmentPage({}) {
         <InvestmentAmountPanel setAmount={setAmount} amount={amount} minimumInvestment={minimumInvestment} />
         <div className="side-panel">
           <InvestingAsPanel />
-          <InvestmentHistory deal={deal} setInvestor={setInvestor} investor={investorFormData} setAmount={setAmount} />
+          {/* <InvestmentHistory deal={deal} setInvestor={setInvestor} investor={investorFormData} setAmount={setAmount} /> */}
           <DealDocumentsPanel deal={deal} />
           {/* <YourDocumentsPanel investment={investment} /> */}
         </div>
