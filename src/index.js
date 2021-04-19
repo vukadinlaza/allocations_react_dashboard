@@ -12,6 +12,7 @@ import "./index.css";
 
 import Bugsnag from '@bugsnag/js'
 import BugsnagPluginReact from '@bugsnag/plugin-react'
+import { ToastContainer } from 'react-toastify';
 
 Bugsnag.start({
   apiKey: 'b6fcaf96aefe9b327e7db6e6d6178a2c',
@@ -39,6 +40,7 @@ ReactDOM.render(
         <Auth0ProviderWithHistory
 
         >
+          <ToastContainer />
           <App />
         </Auth0ProviderWithHistory>
       </Router>
@@ -52,4 +54,3 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
-
