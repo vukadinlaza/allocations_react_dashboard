@@ -5,7 +5,6 @@ import './styles.scss';
 import Confetti from 'react-confetti';
 import { useQuery, useLazyQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
-import { useHistory, useParams } from 'react-router';
 import completeKycYes from '../../assets/complete-kyc-yes.svg';
 import completeKycNo from '../../assets/complete-kyc-no.svg';
 import signInvestmentYes from '../../assets/sign-investment-yes.svg';
@@ -15,6 +14,7 @@ import submitTaxInfoYes from '../../assets/submit-tax-info-yes.svg';
 import submitTaxInfoNo from '../../assets/submit-tax-info-no.svg';
 import AllocationsRocket from './AllocationsRocket/AllocationsRocket';
 import KYCModal from './KYCModal.js';
+import { useHistory, useParams } from 'react-router';
 import WireInstructionsModal from './WireInstructionsModal/WireInstructionsModal';
 import { useAuth } from '../../auth/useAuth';
 
@@ -35,6 +35,7 @@ const GET_INVESTOR = gql`
   }
 `;
 
+
 export const GET_INVESTOR_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
     investor {
@@ -51,18 +52,16 @@ export const GET_INVESTOR_DEAL = gql`
 function DealNextSteps() {
   const [confetti, showConfetti] = useState(false);
   const { data, loading, refetch } = useQuery(GET_INVESTOR);
-  const [getDeal, { data: dealData, error: dealError, refetch: refetchDeal, called: calledDeal }] = useLazyQuery(
-    GET_INVESTOR_DEAL,
-  );
+  const [getDeal, { data: dealData, error: dealError, refetch: refetchDeal, called: calledDeal }] = useLazyQuery(GET_INVESTOR_DEAL);
   const [open, setOpen] = useState(false);
-  const { deal_slug, organization } = useParams();
-  const [wireInstructionsOpen, setWireInstructionsOpen] = useState(false);
-  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { deal_slug, organization } = useParams()
+  const [wireInstructionsOpen, setWireInstructionsOpen] = useState(false)
+  const { userProfile, isAuthenticated, loading: authLoading } = useAuth()
 
-  const history = useHistory();
+  const history = useHistory()
 
   useEffect(() => {
-    if (!authLoading && !calledDeal && isAuthenticated) {
+    if(!authLoading && !calledDeal && isAuthenticated) {
       getDeal({
         variables: {
           deal_slug,
@@ -72,13 +71,15 @@ function DealNextSteps() {
     }
   }, [isAuthenticated, authLoading, calledDeal, getDeal, deal_slug, organization]);
 
-  const path = organization ? `/deals/${organization}/${deal_slug}` : `/deals/${deal_slug}`;
+
+  const path = organization ? `/deals/${organization}/${deal_slug}` : `/deals/${deal_slug}`
 
   useEffect(() => {
+
     window.scrollTo({
       top: 0,
       left: 100,
-      behavior: 'smooth',
+      behavior: 'smooth'
     });
 
     setTimeout(() => {
@@ -88,18 +89,22 @@ function DealNextSteps() {
       showConfetti(false);
     }, 5000);
   }, []);
-  if (loading || !data) return null;
+  if(loading || !data) return null;
 
   const investorFormData = history?.location?.state?.investorFormData || {};
 
-  const templateInfo =
+  const kycTemplateId =
     investorFormData?.country === 'United States'
-      ? investorFormData?.investor_type === 'individual'
-        ? { templateName: 'W-9', templateId: 'tpl_dM4QcQbyLckdPXgtyx' }
-        : { templateName: 'W-9-E', templateId: 'tpl_HSJjJ9c9jb2N4GXFkt' }
+      ? 'tpl_dM4QcQbyLckdPXgtyx'
       : investorFormData?.investor_type === 'individual'
-      ? { templateName: 'W-8-BEN', templateId: 'tpl_qDaxDLgRkFpHJD2cFX' }
-      : { templateName: 'W-8-BEN-E', templateId: 'tpl_mXPLm5EXAyHJKhQekf' };
+        ? 'tpl_qDaxDLgRkFpHJD2cFX'
+        : 'tpl_mXPLm5EXAyHJKhQekf';
+  const kycTemplateName =
+    investorFormData?.country === 'United States'
+      ? 'W-9'
+      : investorFormData?.investor_type === 'individual'
+        ? 'W-8BEN'
+        : 'W-8BENE';
 
   const userDocs = data?.investor?.documents || [];
   const hasKyc = userDocs.find((doc) => {
@@ -110,6 +115,7 @@ function DealNextSteps() {
 
   return (
     <section className="DealNextSteps">
+
       <Button className="back-button" onClick={() => history.push(path, { isInvestPage: true })}>
         <ArrowBackIcon />
         Back to Invest Page
@@ -117,6 +123,7 @@ function DealNextSteps() {
 
       <h1 className="header">Next Steps</h1>
       <h3 className="sub-header">Please complete the following steps to finish your investment.</h3>
+
 
       <div className="action-items">
         <div className="action-item">
@@ -126,7 +133,7 @@ function DealNextSteps() {
           </div>
           <Button className="completed-step-button" disabled>
             Completed
-          </Button>
+        </Button>
         </div>
 
         <div className="action-item">
@@ -136,7 +143,7 @@ function DealNextSteps() {
             <p className="action-sub-header">Complete your W8/W9 forms here</p>
           </div>
           <Button
-            className={hasKyc ? 'completed-step-button' : 'next-step-button'}
+            className={!!hasKyc ? 'completed-step-button' : 'next-step-button'}
             onClick={() => setOpen(true)}
             disabled={!!hasKyc}
           >
@@ -147,10 +154,13 @@ function DealNextSteps() {
         <div className={`action-item ${!hasKyc && 'disabled'}`}>
           <img className="action-icon" src={wireFundsNo} />
           <div className="action-instructions">
-            <p className="action-header">Wire Funds</p>
+            <p className="action-header">View Wire Instructions</p>
             <p className="action-sub-header">Required to complete your investment</p>
           </div>
-          <Button disabled={!hasKyc} onClick={() => setWireInstructionsOpen(true)} className="next-step-button">
+          <Button
+            disabled={!hasKyc}
+            onClick={() => setWireInstructionsOpen(true)}
+            className="next-step-button">
             View Wire Instructions
           </Button>
         </div>
@@ -159,8 +169,8 @@ function DealNextSteps() {
       <KYCModal
         open={open}
         setOpen={setOpen}
-        kycTemplateId={templateInfo.templateId}
-        kycTemplateName={templateInfo.templateName}
+        kycTemplateId={kycTemplateId}
+        kycTemplateName={kycTemplateName}
         investor={data?.investor}
         refetch={refetch}
       />
