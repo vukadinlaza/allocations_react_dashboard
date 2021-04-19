@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import './styles.scss';
 import { toast } from 'react-toastify';
+import Loader from '../../../utils/Loader';
 import { snakeCase } from 'lodash';
 
 const validate = (formData) => {
@@ -22,7 +23,7 @@ const validate = (formData) => {
   return required.reduce((acc, attr) => (formData[attr] ? acc : [...acc, attr]), []);
 };
 
-function W9Entity({ toggleOpen, createDoc }) {
+function W9Entity({ toggleOpen, createDoc, called, loading }) {
   const [errors, setErrors] = useState([]);
 
   const [formData, setFormData] = useState({
@@ -39,6 +40,10 @@ function W9Entity({ toggleOpen, createDoc }) {
   });
 
   const handleChange = ({ target }) => {
+    if (target.name.includes('f1')) {
+      const onlyNumbers = target.value.replace(/\D+/g, '');
+      return setFormData((prevData) => ({ ...prevData, [target.name]: onlyNumbers }));
+    }
     setFormData((prevData) => ({ ...prevData, [target.name]: target.value }));
   };
 
@@ -236,9 +241,11 @@ function W9Entity({ toggleOpen, createDoc }) {
           </label>
         </FormControl>
 
-        <Button onClick={handleSubmit} className="form-button accept">
-          I accept
-        </Button>
+        {called && loading ? <Loader /> :
+          <Button onClick={handleSubmit} className="form-button accept">
+            I accept
+          </Button>
+        }
 
         <Button onClick={() => toggleOpen((open) => !open)} className="form-button decline">
           I decline

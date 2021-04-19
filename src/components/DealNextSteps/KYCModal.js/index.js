@@ -24,8 +24,8 @@ const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, investor, ref
   const [submitTaxDocument, { called, loading }] = useMutation(UPDATE_USER, {
     onCompleted: (data) => {
       refetch();
-      // setOpen(false);
-      toast.success('Sucess! Tax form completed');
+      setOpen(false);
+      toast.success('Sucess! Tax form completed.');
     },
   });
   // console.log('kyc templateName', kycTemplateName)
@@ -40,10 +40,10 @@ const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, investor, ref
   const getForm = (templateName) => {
     // TODO: use actual templateName to get correct form
     const formMap = {
-      'W-9': <W9Indivdual toggleOpen={setOpen} createDoc={createDoc} />,
-      'W-9-E': <W9Entity toggleOpen={setOpen} createDoc={createDoc} />,
-      'W-8-BEN': <W8BEN toggleOpen={setOpen} createDoc={createDoc} />,
-      'W-8-BEN-E': <W8BENE toggleOpen={setOpen} createDoc={createDoc} />,
+      'W-9': <W9Indivdual called={called} loading={loading} toggleOpen={setOpen} createDoc={createDoc} />,
+      'W-9-E': <W9Entity called={called} loading={loading} toggleOpen={setOpen} createDoc={createDoc} />,
+      'W-8-BEN': <W8BEN called={called} loading={loading} toggleOpen={setOpen} createDoc={createDoc} />,
+      'W-8-BEN-E': <W8BENE called={called} loading={loading} toggleOpen={setOpen} createDoc={createDoc} />,
     };
 
     // Change template name here for testing
@@ -58,9 +58,9 @@ const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, investor, ref
       aria-labelledby="modal"
       aria-describedby="modal"
     >
-      <>
-        <div className="form-container">{called && loading ? <Loader /> : getForm(kycTemplateName)}</div>
-      </>
+      <div className="form-container">
+        {getForm(kycTemplateName)}
+      </div>
     </Modal>
   );
 };

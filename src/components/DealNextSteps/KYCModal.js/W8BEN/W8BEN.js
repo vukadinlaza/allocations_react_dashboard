@@ -6,6 +6,7 @@ import './styles.scss'
 import countries from 'country-region-data';
 import { toast } from 'react-toastify';
 import moment from 'moment'
+import Loader from '../../../utils/Loader';
 
 
 
@@ -25,7 +26,7 @@ const validate = (formData) => {
 };
 
 
-function W8BEN({ toggleOpen, createDoc }) {
+function W8BEN({ toggleOpen, createDoc, called, loading }) {
 
   const [errors, setErrors] = useState([]);
   const [differentMailing, setDifferentMailing] = useState(false);
@@ -67,6 +68,11 @@ function W8BEN({ toggleOpen, createDoc }) {
 
 
   const handleChange = ({ target }) => {
+    if (target.name === 'ssn' || target.name === 'foreign_tax_identifying_number_see_instructions') {
+      const onlyNumbers = target.value.replace(/\D+/g, '');
+      return setFormData((prevData) => ({ ...prevData, [target.name]: onlyNumbers }));
+    }
+
     if (target.name === 'print_name_of_signer') {
       return setFormData(prevData => ({ ...prevData, [target.name]: target.value, signature: target.value }))
 
@@ -314,6 +320,7 @@ function W8BEN({ toggleOpen, createDoc }) {
                   variant="outlined"
                   className="ssn-tin"
                   onChange={handleChange}
+                  inputProps={{ maxLength: '9' }}
                   name="ssn_or_itin"
                   error={errors.includes('ssn_or_itin')}
                 />
@@ -390,9 +397,12 @@ function W8BEN({ toggleOpen, createDoc }) {
           </label>
         </FormControl>
 
-        <Button onClick={handleSubmit} className="form-button accept">
-          I accept
-        </Button>
+        {called && loading ? <Loader /> :
+          <Button onClick={handleSubmit} className="form-button accept">
+            I accept
+          </Button>
+        }
+
         <Button className="form-button decline">
           I decline
         </Button>

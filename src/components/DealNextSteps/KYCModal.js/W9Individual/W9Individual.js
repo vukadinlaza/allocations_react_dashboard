@@ -1,6 +1,7 @@
 import { FormControl, TextField, Button } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React, { useState } from 'react';
+import Loader from '../../../utils/Loader';
 import './styles.scss';
 import moment from 'moment';
 import { toast } from 'react-toastify';
@@ -20,7 +21,7 @@ const validate = (formData) => {
   return required.reduce((acc, attr) => (formData[attr] ? acc : [...acc, attr]), []);
 };
 
-function W9Individual({ toggleOpen, createDoc }) {
+function W9Individual({ toggleOpen, createDoc, called, loading }) {
   const [errors, setErrors] = useState([]);
 
   const [formData, setFormData] = useState({
@@ -57,8 +58,14 @@ function W9Individual({ toggleOpen, createDoc }) {
   };
 
   const handleChange = ({ target }) => {
+    if (target.name.includes('f1')) {
+      const onlyNumbers = target.value.replace(/\D+/g, '');
+      return setFormData((prevData) => ({ ...prevData, [target.name]: onlyNumbers }));
+    }
     setFormData((prevData) => ({ ...prevData, [target.name]: target.value }));
   };
+
+  console.log('formData', formData)
 
   return (
     <section className="W9Individual">
@@ -204,11 +211,11 @@ function W9Individual({ toggleOpen, createDoc }) {
             />
           </label>
         </FormControl>
-
-        <Button onClick={handleSubmit} className="form-button accept">
-          I accept
-        </Button>
-
+        {called && loading ? <Loader /> :
+          <Button onClick={handleSubmit} className="form-button accept">
+            I accept
+          </Button>
+        }
         <Button onClick={() => toggleOpen((open) => !open)} className="form-button decline">
           I decline
         </Button>
