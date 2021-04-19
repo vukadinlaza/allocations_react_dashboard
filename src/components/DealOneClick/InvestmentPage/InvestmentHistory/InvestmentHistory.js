@@ -26,7 +26,7 @@ const GET_INVESTOR = gql`
           legalName
           fullName
           investor_type
-          accredited_investor_type
+          accredited_investor_status
         }
       }
     }
@@ -41,27 +41,29 @@ function InvestmentHistory({ deal, setInvestor, investor, setAmount }) {
     fetchPolicy: 'no-cache',
   });
 
-  useEffect(() => {
-    if (data?.investor?.dealInvestments !== null && (data?.investor?.dealInvestments || []).length > 0) {
-      const firstInv = get(data, 'investor.dealInvestments[0]');
-      if (firstInv) {
-        setInvestor({
-          ...investor,
-          ...pick(firstInv?.submissionData, [
-            'fullName',
-            'legalName',
-            'country',
-            'state',
-            'investor_type',
-            'accredited_investor_status',
-          ]),
-          investmentId: firstInv?._id,
-        });
-        setAmount(firstInv?.amount);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  // useEffect(() => {
+  //   if (data?.investor?.dealInvestments !== null && (data?.investor?.dealInvestments || []).length > 0) {
+  //     const firstInv = get(data, 'investor.dealInvestments[0]');
+  //     console.log('FIRST', data?.investor?.dealInvestments);
+  //     if (firstInv) {
+  //       console.log('FIRES AGAIN');
+  //       setInvestor({
+  //         ...investor,
+  //         ...pick(firstInv?.submissionData, [
+  //           'fullName',
+  //           'legalName',
+  //           'country',
+  //           'state',
+  //           'investor_type',
+  //           'accredited_investor_status',
+  //         ]),
+  //         investmentId: firstInv?._id,
+  //       });
+  //       setAmount(firstInv?.amount);
+  //     }
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [data]);
 
   const investments = data?.investor?.dealInvestments.map((inv) => {
     const timestamp = inv._id.toString().substring(0, 8);
@@ -103,6 +105,7 @@ function InvestmentHistory({ deal, setInvestor, investor, setAmount }) {
       </Button>
     );
   });
+  return null;
   return (
     <section className="InvestmentHistoryPanel">
       <p className="section-label">My Investment History</p>
