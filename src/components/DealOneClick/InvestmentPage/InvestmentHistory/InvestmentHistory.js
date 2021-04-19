@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
 import { useParams } from 'react-router-dom';
@@ -7,7 +7,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import EditIcon from '@material-ui/icons/Edit';
 import moment from 'moment';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-import { pick } from 'lodash';
+import { pick, get } from 'lodash';
 import { nWithCommas } from '../../../../utils/numbers';
 import './styles.scss';
 
@@ -33,15 +33,36 @@ const GET_INVESTOR = gql`
   }
 `;
 
-function InvestmentHistory({ deal, setInvestor, investor }) {
+function InvestmentHistory({ deal, setInvestor, investor, setAmount }) {
   const { data } = useQuery(GET_INVESTOR, {
     variables: {
       deal_id: deal._id,
     },
+    fetchPolicy: 'no-cache',
   });
 
-  console.log(investor);
-  console.log('data?.investor?.dealInvestments', data?.investor?.dealInvestments);
+  useEffect(() => {
+    if (data?.investor?.dealInvestments !== null && (data?.investor?.dealInvestments || []).length > 0) {
+      const firstInv = get(data, 'investor.dealInvestments[0]');
+      if (firstInv) {
+        setInvestor({
+          ...investor,
+          ...pick(firstInv?.submissionData, [
+            'fullName',
+            'legalName',
+            'country',
+            'state',
+            'investor_type',
+            'accredited_investor_status',
+          ]),
+          investmentId: firstInv?._id,
+        });
+        setAmount(firstInv?.amount);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
   const investments = data?.investor?.dealInvestments.map((inv) => {
     const timestamp = inv._id.toString().substring(0, 8);
     const date = new Date(parseInt(timestamp, 16) * 1000);
@@ -50,7 +71,7 @@ function InvestmentHistory({ deal, setInvestor, investor }) {
       <Button
         className="invButton"
         style={{ border: investor?.investmentId === inv._id ? 'solid 2px #3AC522' : '' }}
-        onClick={() =>
+        onClick={() => {
           setInvestor({
             ...investor,
             ...pick(inv?.submissionData, [
@@ -59,11 +80,12 @@ function InvestmentHistory({ deal, setInvestor, investor }) {
               'country',
               'state',
               'investor_type',
-              'accredited_investor_type',
+              'accredited_investor_status',
             ]),
             investmentId: inv?._id,
-          })
-        }
+          });
+          setAmount(inv?.amount);
+        }}
       >
         <div>
           <div className="itemHeader">Date</div>
@@ -77,7 +99,7 @@ function InvestmentHistory({ deal, setInvestor, investor }) {
           <div className="itemHeader">Amount</div>
           <div>${nWithCommas(inv.amount)}.00</div>
         </div>
-        <EditIcon />
+        <EditIcon style={{ color: investor?.investmentId === inv._id ? '#3AC522' : 'grey' }} />
       </Button>
     );
   });
@@ -86,6 +108,7 @@ function InvestmentHistory({ deal, setInvestor, investor }) {
       <p className="section-label">My Investment History</p>
       {investments}
       <Button
+        style={{ border: !investor?.investmentId ? 'solid 2px #3AC522' : '' }}
         className="addNewbtn"
         onClick={() =>
           setInvestor({
@@ -96,7 +119,7 @@ function InvestmentHistory({ deal, setInvestor, investor }) {
           })
         }
       >
-        <AddCircleIcon />
+        <AddCircleIcon style={{ color: !investor?.investmentId ? '#3AC522' : 'grey' }} />
         <Typography>Add a new investment</Typography>
       </Button>
     </section>
