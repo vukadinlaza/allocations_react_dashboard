@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import moment from 'moment';
 import TermsPanel from './TermsPanel';
 import InvestPanel from './InvestPanel';
@@ -87,19 +87,37 @@ const exemptDealSlugs = [
 
 function DealLandingPage() {
   const { deal_slug, organization } = useParams();
-  const { data } = useQuery(GET_DEAL, {
+  const history = useHistory();
+  const { pathname } = useLocation();
+  const { data, error } = useQuery(GET_DEAL, {
     variables: {
       deal_slug,
       fund_slug: organization || 'allocations',
     },
   });
+  useEffect(() => {
+    if (data?.publicDeal) {
+      const { publicDeal: deal } = data;
+      const idTimestamp = deal._id.toString().substring(0, 8);
+      const dealTimestamp = moment.unix(new Date(parseInt(idTimestamp, 16) * 1000));
+      const rolloverTimestamp = moment.unix(new Date('2021-05-10'));
+      if (
+        moment(dealTimestamp).isBefore(rolloverTimestamp) &&
+        !exemptDealSlugs.includes(deal_slug) &&
+        pathname.includes('/public/')
+      ) {
+        history.push(`/deals/${organization || 'allocations'}/${deal_slug}`);
+      }
+    }
+  });
+
+  console.log('ERROR', error);
 
   if (!data) return <Loader />;
   const { publicDeal: deal } = data;
   const idTimestamp = deal._id.toString().substring(0, 8);
   const dealTimestamp = moment.unix(new Date(parseInt(idTimestamp, 16) * 1000));
   const rolloverTimestamp = moment.unix(new Date('2021-05-10'));
-
   if (data && moment(dealTimestamp).isBefore(rolloverTimestamp) && !exemptDealSlugs.includes(deal_slug)) {
     return <Deal />;
   }

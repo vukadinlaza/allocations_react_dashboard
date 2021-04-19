@@ -45,3 +45,9 @@
     outline: none;
   }
 }
+
+@media screen and (max-width: 960px) {
+  .TermsPanel {
+    width: 100%;
+  }
+}
