@@ -32,7 +32,7 @@ cache.readQuery = (...args) => {
 };
 
 const AuthorizedApolloProvider = ({ children }) => {
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 
   /**
    * Adding fix to improve logRocket recording
@@ -41,6 +41,13 @@ const AuthorizedApolloProvider = ({ children }) => {
 
   const request = async (operation) => {
     if (!window.location.pathname.includes('/public/')) {
+      const token = await getAccessTokenSilently();
+      operation.setContext({
+        headers: {
+          authorization: token ? `Bearer ${token}` : '',
+        },
+      });
+    } else if (window.location.pathname.includes('/public/') && isAuthenticated) {
       const token = await getAccessTokenSilently();
       operation.setContext({
         headers: {
