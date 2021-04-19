@@ -2,7 +2,7 @@ import { Box, Checkbox, Typography, Button } from '@material-ui/core';
 import React from 'react';
 import './styles.scss';
 
-function TermsAndConditionsPanel({ deal, checkedTAT, setCheckedTAT, confirmInvestment }) {
+function TermsAndConditionsPanel({ deal, investor, checkedTAT, setCheckedTAT, confirmInvestment }) {
   const doc = (deal.documents || []).find((d) => {
     return d.path.includes('Agreement');
   });

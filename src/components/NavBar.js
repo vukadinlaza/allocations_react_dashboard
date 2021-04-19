@@ -114,6 +114,7 @@ export function Auth0Profile({ user, logoutWithRedirect }) {
 
   return (
     <div className={classes.root}>
+      <ToastContainer />
 
       {organizations_admin.length >= 1 && <Hidden smDown>
         <Typography variant="subtitle1" style={{ marginRight: 16, color: "#3A506B" }}>

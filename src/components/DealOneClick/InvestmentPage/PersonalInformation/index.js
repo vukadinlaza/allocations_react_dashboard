@@ -9,31 +9,29 @@ import './styles.scss';
 import { AccreditedInvestorStatus } from '../../../forms/InvestorEdit';
 
 const usStates = new UsaStates();
-const countryNames = countries.map((c) => c.countryName);
-const stateNames = usStates.states.map((s) => s.name);
+const countryNames = countries.map(c => c.countryName)
+const stateNames = usStates.states.map(s => s.name)
 
 function PersonalInformation({ investor, setInvestor, errors }) {
   const handleChange = (prop) => (e, newValue) => {
-    if (e) {
+    if(e) {
       e.persist();
     }
-    if (prop === 'investor_type') {
+    if(prop === 'investor_type') {
       return setInvestor((prev) => ({ ...prev, [prop]: e.target.value, accredited_investor_status: '' }));
     }
-    if (prop === 'country') {
-      if (newValue) {
-        let countryValue = newValue === 'U.S.' || newValue === 'USA' ? 'United States' : newValue;
-
-        return setInvestor((prev) => ({ ...prev, [prop]: countryValue }))
+    if(prop === 'country') {
+      if(newValue) {
+        return setInvestor((prev) => ({ ...prev, [prop]: newValue }))
       }
     }
-    if (prop === 'country_search') {
+    if(prop === 'country_search') {
       return setInvestor((prev) => ({ ...prev, [prop]: newValue }))
     }
-    if (prop === 'state') {
+    if(prop === 'state') {
       return setInvestor((prev) => ({ ...prev, [prop]: newValue }))
     }
-    if (prop === 'state_search') {
+    if(prop === 'state_search') {
       return setInvestor((prev) => ({ ...prev, [prop]: newValue }))
     }
     return setInvestor((prev) => ({ ...prev, [prop]: e.target.value }));
@@ -74,7 +72,12 @@ function PersonalInformation({ investor, setInvestor, errors }) {
       />
 
       {/* Country */}
-      <FormControl className="country-input" required variant="outlined">
+      <FormControl
+        className="country-input"
+        required
+        variant="outlined"
+      >
+
         <Autocomplete
           className="country-select"
           value={investor.country || ''}
@@ -84,12 +87,13 @@ function PersonalInformation({ investor, setInvestor, errors }) {
             handleChange('country_search')(event, newInputValue);
           }}
           id="country-select"
-          options={[...countryNames, 'USA', 'U.S.',]}
+          options={countryNames}
           getOptionLabel={(option) => option}
-          renderInput={(params) => (
-            <TextField {...params} error={errors.includes('country')} label="Country" variant="outlined" />
-          )}
+          renderInput={(params) => <TextField {...params} error={errors.includes('country')}
+            label="Country" variant="outlined" />}
         />
+
+
       </FormControl>
       {investor.country === 'United States' && (
         <FormControl
@@ -98,6 +102,8 @@ function PersonalInformation({ investor, setInvestor, errors }) {
           variant="outlined"
           disabled={!investor.country || get(investor, 'country') !== 'United States'}
         >
+
+
           <Autocomplete
             className="state-select"
             value={investor.state || ''}
@@ -109,10 +115,10 @@ function PersonalInformation({ investor, setInvestor, errors }) {
             id="state-select"
             options={stateNames}
             getOptionLabel={(option) => option}
-            renderInput={(params) => (
-              <TextField {...params} error={errors.includes('state')} label="State" variant="outlined" />
-            )}
+            renderInput={(params) => <TextField {...params} error={errors.includes('state')}
+              label="State" variant="outlined" />}
           />
+
         </FormControl>
       )}
       {/* Accreditation status */}
