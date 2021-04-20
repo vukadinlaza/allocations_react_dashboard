@@ -46,6 +46,7 @@ app.get('*', async (req, res) => {
         const companyName = response.data.company_name;
         const companyDescription = response.data.company_description;
         const coverImageKey = response.data.dealCoverImageKey;
+        console.log('Cover Image KEY', coverImageKey);
 
         if (companyName) {
           data = data.replace(/"Allocations"/g, `'${companyName}'`);
@@ -54,7 +55,10 @@ app.get('*', async (req, res) => {
           data = data.replace(/"Create SPVs in seconds"/g, `'${companyDescription}'`);
         }
         if (coverImageKey) {
-          data = data.replace(/"deals\/default.png"/g, `'${coverImageKey}'`);
+          console.log('Fires Within CoverImageKey If Statement');
+          const reg = data.replace(/"deals\/default.png"/g, `${coverImageKey}`);
+          console.log('REG', reg);
+          data = reg;
         }
       }
     }
