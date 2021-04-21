@@ -167,7 +167,6 @@ function InvestmentPage({}) {
     setShowSpvModal(true);
   };
 
-  const handleOpen = () => {};
   const submitInvestment = async () => {
     const ip = await getClientIp();
     const payload = {
@@ -222,7 +221,6 @@ function InvestmentPage({}) {
           deal={deal}
           checkedTAT={checkedTAT}
           setCheckedTAT={setCheckedTAT}
-          handleOpen={handleOpen}
         />
       </div>
 

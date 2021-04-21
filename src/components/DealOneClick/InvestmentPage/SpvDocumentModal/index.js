@@ -7,6 +7,7 @@ import Fade from '@material-ui/core/Fade';
 import AllPagesPDFViewer from '../../../PDFViewer';
 import './styles.scss';
 import Loader from '../../../utils/Loader';
+import { Grid, Typography } from '@material-ui/core';
 
 export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment, previewData, loadingPreview }) {
   console.log(deal.documents);
@@ -15,12 +16,12 @@ export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment
     setOpen(false);
   };
 
-  const document = deal.documents.find((doc) => {
+  const spvDoc = deal.documents.find((doc) => {
     return doc.path.includes('Agreement');
   });
 
   const previewLink = previewData?.getInvestmentPreview?.previewLink;
-  console.log(previewLink);
+  const document = previewLink ? { link: previewLink } : spvDoc;
 
   return (
     <Modal
@@ -38,10 +39,15 @@ export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment
       <Fade in={open}>
         <div className="paper">
           {loadingPreview ? (
-            <Loader />
+            <Grid style={{ display: 'flex', justifyContent: 'center', marginTop: '10%', flexDirection: 'column' }}>
+              <Typography variant="h4" style={{ marginBottom: '10%' }}>
+                Sit tight while we generate your preview!
+              </Typography>
+              <Loader />
+            </Grid>
           ) : (
             <>
-              <AllPagesPDFViewer document={{ link: previewLink } || document} handleClose={handleClose} />
+              <AllPagesPDFViewer document={document} usePreview={!!previewLink} handleClose={handleClose} />
               <div className="buttonContainer">
                 <Button variant="contained" color="secondary" className="button" onClick={submitInvestment}>
                   I Agree
