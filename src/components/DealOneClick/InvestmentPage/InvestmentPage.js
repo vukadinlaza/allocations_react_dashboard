@@ -87,6 +87,13 @@ const CONFIRM_INVESTMENT = gql`
     }
   }
 `;
+const GET_PREVIEW = gql`
+  mutation getInvestmentPreview($payload: Object) {
+    getInvestmentPreview(payload: $payload) {
+      previewLink
+    }
+  }
+`;
 
 // if individual remove signfull name
 const validate = (investor) => {
@@ -132,6 +139,7 @@ function InvestmentPage({}) {
       history.push(path, { investorFormData });
     },
   });
+  const [getInvestmentPreview, { data: previewData, loading: loadingPreview }] = useMutation(GET_PREVIEW);
 
   const confirmInvestment = () => {
     const validation = validate(investorFormData);
@@ -148,8 +156,17 @@ function InvestmentPage({}) {
     if (parseInt(amount) < 1000) {
       return toast.warning('Please enter an investment amount greater than $1000.');
     }
+    const payload = {
+      ...investorFormData,
+      investmentAmount: nWithCommas(amount),
+      dealId: deal._id,
+      docSpringTemplateId: deal.docSpringTemplateId,
+    };
+
+    getInvestmentPreview({ variables: { payload } });
     setShowSpvModal(true);
   };
+
   const submitInvestment = async () => {
     const ip = await getClientIp();
     const payload = {
@@ -207,7 +224,14 @@ function InvestmentPage({}) {
         />
       </div>
 
-      <SPVDocumentModal open={showSpvModal} setOpen={setShowSpvModal} deal={deal} submitInvestment={submitInvestment} />
+      <SPVDocumentModal
+        open={showSpvModal}
+        setOpen={setShowSpvModal}
+        deal={deal}
+        submitInvestment={submitInvestment}
+        previewData={previewData}
+        loadingPreview={loadingPreview}
+      />
     </section>
   );
 }
