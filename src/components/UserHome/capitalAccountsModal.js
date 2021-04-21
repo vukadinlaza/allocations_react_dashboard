@@ -87,7 +87,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                   <Typography>Subscription Amount</Typography>
                   <Typography variant="subtitle2">(Amount wired into Private Fund)</Typography>
                 </div>
-                <Typography className={classes.rightVaue}>${nWithCommas(data.subscriptionAmount)}</Typography>
+                <Typography className={classes.rightVaue}>${nWithCommas(data.subscriptionAmount)}.00</Typography>
               </Grid>
               <hr className="solid" />
               <Grid container justify="space-between">
@@ -95,7 +95,9 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                   <Typography>Private Fund Expenses</Typography>
                   <Typography variant="subtitle2">(Legal, accounting, administration and compliance fees) </Typography>
                 </div>
-                <Typography className={classes.rightVaue}>${nWithCommas(data.privateFundExpenses)}</Typography>
+                <Typography className={classes.rightVaue}>
+                  ${parseFloat(nWithCommas(data.privateFundExpenses)).toFixed(2)}
+                </Typography>
               </Grid>
               <hr className="solid" />
               <Grid container justify="space-between">
@@ -121,7 +123,9 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                   <Typography>Net Investment Amount</Typography>
                   <Typography variant="subtitle2">(Subscription amount minus initial expenses)</Typography>
                 </div>
-                <Typography className={classes.rightVaue}>${nWithCommas(data.netInvestment)}</Typography>
+                <Typography className={classes.rightVaue}>
+                  ${Number(nWithCommas(data.netInvestment)).toFixed(2)}
+                </Typography>
               </Grid>
               <hr className="solid" />
               <Grid container justify="space-between">
@@ -132,7 +136,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                     applicable).
                   </Typography>
                 </div>
-                <Typography className={classes.rightVaue}>{data.ownership * 100}%</Typography>
+                <Typography className={classes.rightVaue}>{(data.ownership * 100).toFixed(2)}%</Typography>
               </Grid>
               <hr className="solid" />
               <Typography> Disclaimer: </Typography>
