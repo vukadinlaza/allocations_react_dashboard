@@ -35,14 +35,13 @@ const GET_INVESTOR = gql`
   }
 `;
 
-export const GET_INVESTOR_DEAL = gql`
+const GET_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
-    investor {
-      invitedDeal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
-        documents {
-          path
-          link
-        }
+    deal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
+      _id
+      documents {
+        path
+        link
       }
     }
   }
@@ -52,7 +51,7 @@ function DealNextSteps() {
   const [confetti, showConfetti] = useState(false);
   const { data, loading, refetch } = useQuery(GET_INVESTOR);
   const [getDeal, { data: dealData, error: dealError, refetch: refetchDeal, called: calledDeal }] = useLazyQuery(
-    GET_INVESTOR_DEAL,
+    GET_DEAL,
   );
   const [open, setOpen] = useState(false);
   const { deal_slug, organization } = useParams();
@@ -68,6 +67,7 @@ function DealNextSteps() {
           deal_slug,
           fund_slug: organization || 'allocations',
         },
+        fetchPolicy: 'network-only',
       });
     }
   }, [isAuthenticated, authLoading, calledDeal, getDeal, deal_slug, organization]);
@@ -103,13 +103,10 @@ function DealNextSteps() {
 
   const userDocs = data?.investor?.documents || [];
   const hasKyc = userDocs.find((doc) => {
-    return doc.documentName.includes('W-9') || doc.documentName.includes('W-8');
+    return doc?.documentName.includes('W-9') || doc?.documentName.includes('W-8');
   });
 
-  console.log('HAS KYC', hasKyc, data?.investor);
-
-  const docs = dealData?.investor?.invitedDeal?.documents;
-  console.log('DEAL DOCS', docs);
+  const docs = dealData?.deal?.documents;
 
   return (
     <section className="DealNextSteps">
