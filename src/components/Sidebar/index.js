@@ -879,8 +879,8 @@ export default function Sidebar(props) {
 
   if (investTab)
     menus.push({
-      to: '/invest',
-      title: 'Invest',
+      to: '/demo',
+      title: 'Demo',
       icon: <MonetizationOnRoundedIcon />,
     });
 

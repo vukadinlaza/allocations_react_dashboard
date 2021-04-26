@@ -16,7 +16,7 @@ import Funds from './components/Funds';
 import Build from './components/Build';
 import Sidebar from './components/Sidebar';
 import UserHome from './components/UserHome';
-import Invest from './components/Invest';
+import Demo from './components/Invest';
 import Investors from './components/Investors';
 import InvitedDeals from './components/InvitedDeals';
 import Investments from './components/Investments';
@@ -72,7 +72,7 @@ const App = () => {
           <Route path="/cb/thankyou" component={ThankYou} exact />
 
           <PrivateRoute path="/" exact component={UserHome} />
-          <PrivateRoute path="/invest" exact component={Invest} />
+          <PrivateRoute path="/demo" exact component={Demo} />
           <PrivateRoute path="/credit" exact component={Credit} />
           <PrivateRoute path="/profile" component={Profile} />
           <PrivateRoute path="/get-started" component={Build} />
