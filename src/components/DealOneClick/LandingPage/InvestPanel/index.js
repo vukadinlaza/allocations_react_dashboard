@@ -3,8 +3,11 @@ import { Button } from '@material-ui/core';
 import './styles.scss';
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useAuth } from '../../../../auth/useAuth';
 
 function InvestPanel({ deal, deal_slug, organization }) {
+  const { userProfile, isAuthenticated } = useAuth();
   const history = useHistory();
   const handleClick = () => {
     window.scrollTo({
@@ -12,6 +15,21 @@ function InvestPanel({ deal, deal_slug, organization }) {
       left: 100,
       behavior: 'smooth',
     });
+  };
+  const handleWaitlistSubmit = async () => {
+    await fetch('https://hooks.zapier.com/hooks/catch/7904699/ov0jofs', {
+      method: 'post',
+      body: JSON.stringify({
+        'Deal Name': deal.company_name,
+        'User Email': userProfile.email,
+        'Deal ID': deal._id,
+        'User First Name': userProfile.first_name || 'N/A',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return toast.success('Successfully added to the waitlist!');
   };
 
   const {
@@ -21,7 +39,7 @@ function InvestPanel({ deal, deal_slug, organization }) {
   const getDeadline = (date) => {
     return moment(date).format('dddd, MMMM Do YYYY, h:mm a');
   };
-  // if no signing deadline but wire dealine, set signing as wire, if neither null state
+  const isClosed = moment(signDeadline).isBefore(new Date());
   return (
     <section className="InvestPanel">
       <p className="section-label">One click invest</p>
@@ -47,8 +65,15 @@ function InvestPanel({ deal, deal_slug, organization }) {
           </h2>
         </li>
       </ul>
-      <Button onClick={() => history.push(`/invest${organization ? `/${organization}` : ''}/${deal_slug}`)}>
-        Invest
+      <Button
+        onClick={() => {
+          if (isClosed && isAuthenticated) {
+            return handleWaitlistSubmit();
+          }
+          history.push(`/invest${organization ? `/${organization}` : ''}/${deal_slug}`);
+        }}
+      >
+        {isClosed ? 'Join Waitlist' : 'Invest'}
       </Button>
     </section>
   );
