@@ -540,12 +540,6 @@ export default () => {
                       Capital Accounts
                     </TableCell>
                   </Hidden>
-                  <TableCell className={classes.tableHeader} align="center">
-                    Buy
-                  </TableCell>
-                  <TableCell className={classes.tableHeader} align="center">
-                    Sell
-                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -1227,41 +1221,6 @@ const TR = ({
           disabled={!capitalAccountInfo?.Email}
         >
           View
-        </Button>
-      </TableCell>
-      <TableCell align="center">
-        <Button
-          variant="contained"
-          size="small"
-          color="secondary"
-          onClick={() =>
-            setTradeData({
-              open: true,
-              type: 'buy',
-              deal: investment.deal,
-              investment,
-            })
-          }
-        >
-          Buy
-        </Button>
-      </TableCell>
-      <TableCell align="center">
-        <Button
-          variant="contained"
-          size="small"
-          color="secondary"
-          style={{ backgroundColor: '#F53C56', color: '#ffffff' }}
-          onClick={() =>
-            setTradeData({
-              open: true,
-              type: 'sell',
-              deal: investment.deal,
-              investment,
-            })
-          }
-        >
-          sell
         </Button>
       </TableCell>
     </TableRow>
