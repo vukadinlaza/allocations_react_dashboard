@@ -39,6 +39,7 @@ const GET_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
     deal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
       _id
+      isDemo
       documents {
         path
         link
@@ -51,6 +52,7 @@ function DealNextSteps() {
   const [confetti, showConfetti] = useState(false);
   const { data, loading, refetch } = useQuery(GET_INVESTOR);
   const [getDeal, { data: dealData, called: calledDeal }] = useLazyQuery(GET_DEAL);
+  const [showTaxAsCompleted, setShowTaxAsCompleted] = useState(false);
   const [open, setOpen] = useState(false);
   const { deal_slug, organization } = useParams();
   const [wireInstructionsOpen, setWireInstructionsOpen] = useState(false);
@@ -59,7 +61,7 @@ function DealNextSteps() {
   const history = useHistory();
 
   useEffect(() => {
-    if (!authLoading && !calledDeal && isAuthenticated) {
+    if (!authLoading && !calledDeal && isAuthenticated && deal_slug) {
       getDeal({
         variables: {
           deal_slug,
@@ -86,7 +88,7 @@ function DealNextSteps() {
       showConfetti(false);
     }, 5000);
   }, []);
-  if (loading || !data) return null;
+  if (loading || !data || !dealData) return null;
 
   const investorFormData = history?.location?.state?.investorFormData || {};
 
@@ -100,9 +102,10 @@ function DealNextSteps() {
       : { templateName: 'W-8-BEN-E', templateId: 'tpl_mXPLm5EXAyHJKhQekf' };
 
   const userDocs = data?.investor?.documents || [];
-  const hasKyc = userDocs.find((doc) => {
-    return doc?.documentName.includes('W-9') || doc?.documentName.includes('W-8');
-  });
+  const hasKyc =
+    userDocs.find((doc) => {
+      return doc?.documentName.includes('W-9') || doc?.documentName.includes('W-8');
+    }) || showTaxAsCompleted;
 
   const docs = dealData?.deal?.documents;
 
@@ -148,7 +151,11 @@ function DealNextSteps() {
             <p className="action-header">Wire Funds</p>
             <p className="action-sub-header">Required to complete your investment</p>
           </div>
-          <Button disabled={!hasKyc} onClick={() => setWireInstructionsOpen(true)} className="next-step-button">
+          <Button
+            disabled={dealData.deal.isDemo ? false : !hasKyc}
+            onClick={() => setWireInstructionsOpen(true)}
+            className="next-step-button"
+          >
             View Wire Instructions
           </Button>
         </div>
@@ -161,6 +168,8 @@ function DealNextSteps() {
         kycTemplateName={templateInfo.templateName}
         investor={data?.investor}
         refetch={refetch}
+        deal={dealData.deal || {}}
+        setShowTaxAsCompleted={setShowTaxAsCompleted}
       />
       <WireInstructionsModal open={wireInstructionsOpen} setOpen={setWireInstructionsOpen} docs={docs} />
       <AllocationsRocket />

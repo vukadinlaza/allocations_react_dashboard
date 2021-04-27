@@ -20,12 +20,15 @@ const UPDATE_USER = gql`
   }
 `;
 
-const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, investor, refetch }) => {
+const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, refetch, setShowTaxAsCompleted, deal }) => {
   const [submitTaxDocument, { called, loading }] = useMutation(UPDATE_USER, {
     onCompleted: (data) => {
       refetch();
       setOpen(false);
       toast.success('Sucess! Tax form completed.');
+      if (deal.isDemo) {
+        setShowTaxAsCompleted(true);
+      }
     },
   });
   // console.log('kyc templateName', kycTemplateName)
@@ -34,7 +37,9 @@ const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, investor, ref
   const createDoc = (formData) => {
     // TODO: handle form data submit and create DocSpring docs w/ Lance
     console.log('form submitted: ', kycTemplateId);
-    submitTaxDocument({ variables: { payload: { ...formData, kycTemplateId, kycTemplateName } } });
+    submitTaxDocument({
+      variables: { payload: { ...formData, kycTemplateId, kycTemplateName, isDemo: deal.isDemo === true } },
+    });
   };
 
   const getForm = (templateName) => {
@@ -58,9 +63,7 @@ const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, investor, ref
       aria-labelledby="modal"
       aria-describedby="modal"
     >
-      <div className="form-container">
-        {getForm(kycTemplateName)}
-      </div>
+      <div className="form-container">{getForm(kycTemplateName)}</div>
     </Modal>
   );
 };
