@@ -25,9 +25,6 @@ function InvestPanel({ deal, deal_slug, organization }) {
         'Deal ID': deal._id,
         'User First Name': userProfile.first_name || 'N/A',
       }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
     return toast.success('Successfully added to the waitlist!');
   };
