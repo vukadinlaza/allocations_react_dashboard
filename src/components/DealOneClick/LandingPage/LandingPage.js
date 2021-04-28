@@ -83,6 +83,7 @@ const exemptDealSlugs = [
   'navier',
   'simplebet',
   '305-ventures',
+  'type-one-fund-I',
 ];
 
 function DealLandingPage() {
