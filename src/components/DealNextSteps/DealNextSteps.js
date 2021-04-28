@@ -6,6 +6,7 @@ import Confetti from 'react-confetti';
 import { useQuery, useLazyQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { useHistory, useParams } from 'react-router';
+import { Helmet } from 'react-helmet';
 import completeKycYes from '../../assets/complete-kyc-yes.svg';
 import completeKycNo from '../../assets/complete-kyc-no.svg';
 import signInvestmentYes from '../../assets/sign-investment-yes.svg';
@@ -31,6 +32,7 @@ const GET_INVESTOR = gql`
       accredited_investor_status
       email
       documents
+      accredidation_status
     }
   }
 `;
@@ -40,6 +42,10 @@ const GET_DEAL = gql`
     deal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
       _id
       isDemo
+      dealParams {
+        dealType
+      }
+      company_name
       documents {
         path
         link
@@ -108,73 +114,103 @@ function DealNextSteps() {
     }) || showTaxAsCompleted;
 
   const docs = dealData?.deal?.documents;
+  console.log('dealData?.dealParams?', dealData);
 
   return (
-    <section className="DealNextSteps">
-      <Button className="back-button" onClick={() => history.push(path, { isInvestPage: true })}>
-        <ArrowBackIcon />
-        Back to Invest Page
-      </Button>
+    <>
+      <Helmet>
+        <script async src={process.env.REACT_APP_VERIFY_INVESTOR_URL} />
+      </Helmet>
+      <section className="DealNextSteps">
+        <Button className="back-button" onClick={() => history.push(path, { isInvestPage: true })}>
+          <ArrowBackIcon />
+          Back to Invest Page
+        </Button>
 
-      <h1 className="header">Next Steps</h1>
-      <h3 className="sub-header">Please complete the following steps to finish your investment.</h3>
+        <h1 className="header">Next Steps</h1>
+        <h3 className="sub-header">Please complete the following steps to finish your investment.</h3>
 
-      <div className="action-items">
-        <div className="action-item">
-          <img className="action-icon" src={signInvestmentYes} />
-          <div className="action-instructions">
-            <p className="action-header">Sign for Investment</p>
+        <div className="action-items">
+          <div className="action-item">
+            <img className="action-icon" src={signInvestmentYes} />
+            <div className="action-instructions">
+              <p className="action-header">Sign for Investment</p>
+            </div>
+            <Button className="completed-step-button" disabled>
+              Completed
+            </Button>
           </div>
-          <Button className="completed-step-button" disabled>
-            Completed
-          </Button>
+
+          <div className="action-item">
+            <img className="action-icon" src={hasKyc ? submitTaxInfoYes : submitTaxInfoNo} />
+            <div className="action-instructions">
+              <p className="action-header">Submit Tax Information</p>
+              <p className="action-sub-header">Complete your W8/W9 forms here</p>
+            </div>
+            <Button
+              className={hasKyc ? 'completed-step-button' : 'next-step-button'}
+              onClick={() => setOpen(true)}
+              disabled={!!hasKyc}
+            >
+              {hasKyc ? 'Completed' : 'Submit Tax Info'}
+            </Button>
+          </div>
+          {dealData?.deal?.dealParams?.dealType === '506c' && (
+            <div className="action-item">
+              <img
+                className="action-icon"
+                src={data?.investor.accredidation_status === true ? submitTaxInfoYes : submitTaxInfoNo}
+              />
+              <div className="action-instructions">
+                <p className="action-header">Accredited Investor Status</p>
+                <p className="action-sub-header">Complete your Accredited Investor application here</p>
+              </div>
+              <Button
+                className={data?.investor.accredidation_status === true ? 'completed-step-button' : 'next-step-button'}
+                onClick={() => {
+                  const token = process.env.REACT_APP_VERIFY_INVESTOR_HOST_TOKEN;
+                  const identifier = data?.investor?._id; // optional
+                  const portal_name = process.env.NODE_ENV === 'development' ? 'Test_Allocations' : 'Allocations'; // optional
+                  const deal_name = dealData?.deal.company_name || ''; // optional
+                  window.verifyInvestor(token, identifier, portal_name, deal_name);
+                }}
+              >
+                {data?.investor.accredidation_status === true ? 'Completed' : 'Submit your application'}
+              </Button>
+            </div>
+          )}
+
+          <div className={`action-item ${!hasKyc && 'disabled'}`}>
+            <img className="action-icon" src={wireFundsNo} />
+            <div className="action-instructions">
+              <p className="action-header">Wire Funds</p>
+              <p className="action-sub-header">Required to complete your investment</p>
+            </div>
+            <Button
+              disabled={dealData.deal.isDemo ? false : !hasKyc}
+              onClick={() => setWireInstructionsOpen(true)}
+              className="next-step-button"
+            >
+              View Wire Instructions
+            </Button>
+          </div>
         </div>
 
-        <div className="action-item">
-          <img className="action-icon" src={hasKyc ? submitTaxInfoYes : submitTaxInfoNo} />
-          <div className="action-instructions">
-            <p className="action-header">Submit Tax Information</p>
-            <p className="action-sub-header">Complete your W8/W9 forms here</p>
-          </div>
-          <Button
-            className={hasKyc ? 'completed-step-button' : 'next-step-button'}
-            onClick={() => setOpen(true)}
-            disabled={!!hasKyc}
-          >
-            {hasKyc ? 'Completed' : 'Submit Tax Info'}
-          </Button>
-        </div>
-
-        <div className={`action-item ${!hasKyc && 'disabled'}`}>
-          <img className="action-icon" src={wireFundsNo} />
-          <div className="action-instructions">
-            <p className="action-header">Wire Funds</p>
-            <p className="action-sub-header">Required to complete your investment</p>
-          </div>
-          <Button
-            disabled={dealData.deal.isDemo ? false : !hasKyc}
-            onClick={() => setWireInstructionsOpen(true)}
-            className="next-step-button"
-          >
-            View Wire Instructions
-          </Button>
-        </div>
-      </div>
-
-      <KYCModal
-        open={open}
-        setOpen={setOpen}
-        kycTemplateId={templateInfo.templateId}
-        kycTemplateName={templateInfo.templateName}
-        investor={data?.investor}
-        refetch={refetch}
-        deal={dealData.deal || {}}
-        setShowTaxAsCompleted={setShowTaxAsCompleted}
-      />
-      <WireInstructionsModal open={wireInstructionsOpen} setOpen={setWireInstructionsOpen} docs={docs} />
-      <AllocationsRocket />
-      <Confetti className={`confetti ${!confetti && 'hidden'}`} />
-    </section>
+        <KYCModal
+          open={open}
+          setOpen={setOpen}
+          kycTemplateId={templateInfo.templateId}
+          kycTemplateName={templateInfo.templateName}
+          investor={data?.investor}
+          refetch={refetch}
+          deal={dealData.deal || {}}
+          setShowTaxAsCompleted={setShowTaxAsCompleted}
+        />
+        <WireInstructionsModal open={wireInstructionsOpen} setOpen={setWireInstructionsOpen} docs={docs} />
+        <AllocationsRocket />
+        <Confetti className={`confetti ${!confetti && 'hidden'}`} />
+      </section>
+    </>
   );
 }
 
