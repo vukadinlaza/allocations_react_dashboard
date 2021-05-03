@@ -51,7 +51,7 @@ function TermsAndConditionsPanel({ deal, checkedTAT, setCheckedTAT, confirmInves
           accept the terms of the investment.
         </label>
       </div>
-      <Button className="confirm-investment-button" disabled={!checkedTAT || !doc} onClick={confirmInvestment}>
+      <Button className="confirm-investment-button" disabled={!checkedTAT} onClick={confirmInvestment}>
         Confirm investment
       </Button>
     </section>
