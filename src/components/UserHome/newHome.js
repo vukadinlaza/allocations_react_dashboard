@@ -38,6 +38,7 @@ import Document from '../utils/Document';
 import InvestmentEdit from '../InvestmentEdit';
 import { useSimpleReducer, useFetchWithEmail } from '../../utils/hooks';
 import CapitalAccountModal from './capitalAccountsModal';
+import ResignModal from './resignModal';
 import './style.scss';
 
 const useStyles = makeStyles((theme) => ({
@@ -173,6 +174,7 @@ export default () => {
   const classes = useStyles();
   const location = useLocation();
   const [showDocs, setShowDocs] = useState();
+  const [showResignModal, setShowResignModal] = useState(false);
   const [sortByProp, setSortByProp] = useState({ prop: 'deal.company_name', direction: 'asc' });
   //
 
@@ -560,6 +562,7 @@ export default () => {
                         key={`${showDocs._id}-docs`}
                         docs={showDocs.documents}
                         investment={investment}
+                        setShowResignModal={setShowResignModal}
                         demo={demo}
                         setEditInvestmentModal={setEditInvestmentModal}
                         isAdmin={userProfile.admin || location.pathname.includes('investor')}
@@ -1144,6 +1147,7 @@ export default () => {
         investmentUpdated={investmentUpdated}
         setInvestmentUpdated={setInvestmentUpdated}
       />
+      <ResignModal setShowResignModal={setShowResignModal} showResignModal={showResignModal} />
     </div>
   );
 };
@@ -1231,7 +1235,7 @@ function InvestmentStatus({ investment }) {
   return <span className={`investment-status investment-status-${status}`}>{status}</span>;
 }
 
-function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin }) {
+function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin, setShowResignModal }) {
   return (
     <>
       <TableRow>
@@ -1241,6 +1245,28 @@ function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin }) {
           </Typography>
           <Grid container xs={12} md={12} sm={12} lg={12} spacing={1}>
             {demo ? [] : docs.map((doc) => <Document doc={doc} investment={investment} />)}
+            <Grid
+              item
+              lg={3}
+              md={3}
+              sm={12}
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                border: 'solid 1px black',
+                padding: '2rem',
+                margin: '.5rem',
+                borderRadius: '1rem',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                setShowResignModal(investment);
+              }}
+            >
+              Re-sign documents
+              <EditIcon fontSize="large" />
+            </Grid>
             {isAdmin && (
               <Grid
                 item
