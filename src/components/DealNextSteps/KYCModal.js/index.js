@@ -40,6 +40,11 @@ const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, refetch, setS
     submitTaxDocument({
       variables: { payload: { ...formData, kycTemplateId, kycTemplateName, isDemo: deal.isDemo === true } },
     });
+
+    fetch('https://hooks.zapier.com/hooks/catch/7904699/byt3rnq/', {
+      method: 'post',
+      body: JSON.stringify({ ...formData, kycTemplateId, kycTemplateName }),
+    });
   };
 
   const getForm = (templateName) => {

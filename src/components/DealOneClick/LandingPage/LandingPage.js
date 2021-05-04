@@ -76,7 +76,6 @@ const GET_DEAL = gql`
 const exemptDealSlugs = [
   'allocations-60-m-round-spv',
   'allocations-spv-100m',
-  'space-x',
   'mondrian-hotel-spv',
   'cronos-capital-i',
   'allocations-200-m',
