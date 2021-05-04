@@ -120,6 +120,15 @@ export const DEAL_INVESTMENTS = gql`
   query deal($_id: String!) {
     deal(_id: $_id) {
       _id
+      docSpringTemplateId
+      viewedUsers {
+        _id
+        email
+        documents
+        first_name
+        last_name
+        name
+      }
       investments {
         _id
         status
@@ -187,48 +196,71 @@ export default ({ dealId, isDemo, superadmin }) => {
   }
 
   if (loading) return <Loader />;
+  console.log(
+    'ASdadsadsad',
+    data?.deal?.docSpringTemplateId,
+    data?.deal?.docSpringTemplateId !== null && data?.deal?.docSpringTemplateId.length > 1,
+  );
+
   return (
     <>
       <Grid container spacing={2} justify="space-between">
-        {categories.map((value) => (
-          <Grid key={value.title} item xs={12} sm={3}>
-            <Box height="100%" className={classes.board}>
-              <Grid container direction="row" justify="space-between">
-                <Typography
-                  variant="h6"
-                  display="inline"
-                  style={{ padding: '8px', textTransform: 'uppercase', fontSize: '16px', maxWidth: '50%' }}
-                >
-                  {value.title}
-                </Typography>
-                <Typography
-                  variant="h6"
-                  display="inline"
-                  style={{
-                    padding: '8px',
-                    textTransform: 'uppercase',
-                    fontSize: '16px',
-                    maxWidth: '50%',
-                    color: '#39BE53',
-                  }}
-                >
-                  <FontAwesomeIcon icon="dollar-sign" size="sm" style={{ marginRight: '.15rem' }} />
-                  {nWithCommas(value.totalAmount)}
-                </Typography>
-              </Grid>
-              <List dense className={classes.list}>
-                {value?.categoryInvestments?.map((inv) => (
-                  <InvestmentSquare
-                    investment={inv}
-                    isDemo={isDemo}
-                    setEditInvestmentModal={setEditInvestmentModal}
-                    superadmin={superadmin}
-                  />
-                ))}
-              </List>
-            </Box>
-          </Grid>
-        ))}
+        {categories
+          .map((d) => {
+            if (d.key === 'invited' && data?.deal?.viewedUsers.length > 0) {
+              const invs = data?.deal?.viewedUsers.map((user) => {
+                return {
+                  investor: user,
+                  amount: 0,
+                };
+              });
+              const cInvs = _.uniqBy([...invs, ...d.categoryInvestments], 'investor._id');
+              return {
+                ...d,
+                categoryInvestments: cInvs,
+              };
+            }
+            return d;
+          })
+          .map((value) => (
+            <Grid key={value.title} item xs={12} sm={3}>
+              <Box height="100%" className={classes.board}>
+                <Grid container direction="row" justify="space-between">
+                  <Typography
+                    variant="h6"
+                    display="inline"
+                    style={{ padding: '8px', textTransform: 'uppercase', fontSize: '16px', maxWidth: '50%' }}
+                  >
+                    {value.title}
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    display="inline"
+                    style={{
+                      padding: '8px',
+                      textTransform: 'uppercase',
+                      fontSize: '16px',
+                      maxWidth: '50%',
+                      color: '#39BE53',
+                    }}
+                  >
+                    <FontAwesomeIcon icon="dollar-sign" size="sm" style={{ marginRight: '.15rem' }} />
+                    {nWithCommas(value.totalAmount)}
+                  </Typography>
+                </Grid>
+                <List dense className={classes.list}>
+                  {value?.categoryInvestments?.map((inv) => (
+                    <InvestmentSquare
+                      investment={inv}
+                      isDemo={isDemo}
+                      setEditInvestmentModal={setEditInvestmentModal}
+                      superadmin={superadmin}
+                    />
+                  ))}
+                </List>
+              </Box>
+            </Grid>
+          ))}
       </Grid>
       <EditInvestmentModal
         editInvestmentModal={editInvestmentModal}
@@ -246,7 +278,7 @@ const InvestmentSquare = ({ investment, isDemo, setEditInvestmentModal, superadm
   return (
     <div
       onClick={() => {
-        if (superadmin) {
+        if (superadmin && investment._id) {
           setEditInvestmentModal(investment);
         }
       }}

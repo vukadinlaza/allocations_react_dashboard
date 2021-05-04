@@ -19,6 +19,7 @@ import SPVDocumentModal from './SpvDocumentModal';
 import { getClientIp } from '../../../utils/ip';
 import { nWithCommas } from '../../../utils/numbers';
 import InvestmentHistory from './InvestmentHistory/InvestmentHistory';
+import { useAuth } from '../../../auth/useAuth';
 
 const GET_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
@@ -94,6 +95,13 @@ const GET_PREVIEW = gql`
     }
   }
 `;
+const ADD_USER_AS_VIEWED = gql`
+  mutation addUserAsViewed($user_id: String!, $deal_id: String!) {
+    addUserAsViewed(user_id: $user_id, deal_id: $deal_id) {
+      _id
+    }
+  }
+`;
 
 // if individual remove signfull name
 const validate = (investor) => {
@@ -110,6 +118,8 @@ const validate = (investor) => {
 function InvestmentPage({}) {
   const history = useHistory();
   const { organization: org, deal_slug } = useParams();
+  const [addUserAsViewed, { called }] = useMutation(ADD_USER_AS_VIEWED);
+  const { userProfile } = useAuth();
   const organization = org || 'allocations';
 
   const { data, refetch } = useQuery(GET_DEAL, {
@@ -117,6 +127,18 @@ function InvestmentPage({}) {
       deal_slug,
       fund_slug: organization || 'allocations',
     },
+  });
+
+  useEffect(() => {
+    if (data?.deal?._id && userProfile?._id && !called) {
+      console.log('asdadad', userProfile._id);
+      addUserAsViewed({
+        variables: {
+          user_id: userProfile._id,
+          deal_id: data?.deal?._id,
+        },
+      });
+    }
   });
 
   const [checkedTAT, setCheckedTAT] = useState(false);
@@ -210,7 +232,7 @@ function InvestmentPage({}) {
       <div className="flex-container">
         <InvestmentAmountPanel setAmount={setAmount} amount={amount} minimumInvestment={minimumInvestment} />
         <div className="side-panel">
-          <InvestingAsPanel />
+          {/* <InvestingAsPanel /> */}
           {/* <InvestmentHistory deal={deal} setInvestor={setInvestor} investor={investorFormData} setAmount={setAmount} /> */}
           <DealDocumentsPanel deal={deal} />
           {/* <YourDocumentsPanel investment={investment} /> */}

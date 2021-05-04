@@ -41,7 +41,7 @@ export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment
           {loadingPreview ? (
             <Grid style={{ display: 'flex', justifyContent: 'center', marginTop: '10%', flexDirection: 'column' }}>
               <Typography variant="h4" style={{ marginBottom: '10%' }}>
-                Sit tight while we generate your preview!
+                We are generating your documents.
               </Typography>
               <Loader />
             </Grid>
