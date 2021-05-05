@@ -100,6 +100,9 @@ const GET_INVESTOR = gql`
         amount
         status
         created_at
+        submissionData {
+          investmentId
+        }
         documents {
           path
           link
@@ -1245,28 +1248,30 @@ function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin, setS
           </Typography>
           <Grid container xs={12} md={12} sm={12} lg={12} spacing={1}>
             {demo ? [] : docs.map((doc) => <Document doc={doc} investment={investment} />)}
-            <Grid
-              item
-              lg={3}
-              md={3}
-              sm={12}
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                border: 'solid 1px black',
-                padding: '2rem',
-                margin: '.5rem',
-                borderRadius: '1rem',
-                cursor: 'pointer',
-              }}
-              onClick={() => {
-                setShowResignModal(investment);
-              }}
-            >
-              Re-sign documents
-              <EditIcon fontSize="large" />
-            </Grid>
+            {investment?.submissionData?.investmentId && (
+              <Grid
+                item
+                lg={3}
+                md={3}
+                sm={12}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  border: 'solid 1px black',
+                  padding: '2rem',
+                  margin: '.5rem',
+                  borderRadius: '1rem',
+                  cursor: 'pointer',
+                }}
+                onClick={() => {
+                  setShowResignModal(investment);
+                }}
+              >
+                Re-sign documents
+                <EditIcon fontSize="large" />
+              </Grid>
+            )}
             {isAdmin && (
               <Grid
                 item
@@ -1287,6 +1292,7 @@ function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin, setS
                   setEditInvestmentModal(investment);
                 }}
               >
+                Edit Investment
                 <EditIcon fontSize="large" />
               </Grid>
             )}

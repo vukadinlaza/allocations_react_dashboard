@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { get } from 'lodash';
 import CloseIcon from '@material-ui/icons/Close';
 import { Paper, Grid, Modal, TextField, FormControl, InputLabel, Select, MenuItem, Button } from '@material-ui/core';
-
+import CurrencyTextField from '@unicef/material-ui-currency-textfield';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import countries from 'country-region-data';
 import { UsaStates } from 'usa-states';
 import './style.scss';
+import gql from 'graphql-tag';
+import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { toast } from 'react-toastify';
 import { AccreditedInvestorStatus } from '../forms/InvestorEdit';
+import { getClientIp } from '../../utils/ip';
+import { nWithCommas } from '../../utils/numbers';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -36,11 +41,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const GET_INVESTMENT = gql`
+  query GetInvestment($_id: String!) {
+    investment(_id: $_id) {
+      _id
+      status
+      amount
+      submissionData {
+        country
+        state
+        legalName
+        fullName
+        investor_type
+        accredited_investor_status
+      }
+      deal {
+        _id
+        docSpringTemplateId
+      }
+    }
+  }
+`;
+
+const CONFIRM_INVESTMENT = gql`
+  mutation ConfirmInvestment($payload: Object) {
+    confirmInvestment(payload: $payload) {
+      _id
+    }
+  }
+`;
+
 const usStates = new UsaStates();
 const countryNames = countries.map((c) => c.countryName);
 const stateNames = usStates.states.map((s) => s.name);
 
 const ResignModal = ({ showResignModal, setShowResignModal }) => {
+  const [getInvestment, { data, called, loading }] = useLazyQuery(GET_INVESTMENT);
   const classes = useStyles();
   const [investor, setInvestor] = useState({
     country: '',
@@ -48,8 +84,37 @@ const ResignModal = ({ showResignModal, setShowResignModal }) => {
     state: '',
     state_search: '',
   });
+  const [amount, setAmount] = useState('');
+
+  const [submitConfirmation, {}] = useMutation(CONFIRM_INVESTMENT, {
+    onCompleted: () => {
+      toast.success('Investment Updated.');
+    },
+  });
   const [errors, setErrors] = useState([]);
   console.log(showResignModal, 'XXXXX');
+  console.log('DATA', data);
+  useEffect(() => {
+    if (showResignModal._id && !called) {
+      getInvestment({
+        variables: {
+          _id: showResignModal?._id,
+        },
+      });
+    }
+  });
+
+  useEffect(() => {
+    if (data?.investment && !loading && !investor.country) {
+      setInvestor({
+        ...investor,
+        ...data?.investment?.submissionData,
+        country_search: data?.investment?.submissionData.country,
+        state_search: data?.investment?.submissionData.state,
+      });
+      setAmount(data?.investment?.amount);
+    }
+  }, [data, investor, loading]);
 
   const handleChange = (prop) => (e, newValue) => {
     if (e) {
@@ -77,6 +142,23 @@ const ResignModal = ({ showResignModal, setShowResignModal }) => {
     return setInvestor((prev) => ({ ...prev, [prop]: e.target.value }));
   };
 
+  const submitInvestment = async () => {
+    const ip = await getClientIp();
+    const payload = {
+      ...investor,
+      investmentAmount: nWithCommas(amount),
+      investmentId: data?.investment?._id,
+      clientIp: ip,
+      dealId: data?.investment?.deal?._id,
+      docSpringTemplateId: data?.investment?.deal.docSpringTemplateId,
+    };
+
+    console.log('PAYLOAD', payload);
+
+    submitConfirmation({ variables: { payload } });
+    setShowResignModal(false);
+  };
+
   return (
     <>
       <Modal
@@ -97,7 +179,20 @@ const ResignModal = ({ showResignModal, setShowResignModal }) => {
               </Grid>
               <Grid item sm={12} md={12} lg={12}>
                 <section className="PersonalInformationPanel" style={{ width: '100%' }}>
-                  <p className="section-label">Personal Information</p>
+                  <p style={{ fontSize: '1.25rem', marginLeft: '1rem' }}>Investment Information</p>
+                  <CurrencyTextField
+                    label="Investment Amount"
+                    className="personal-information-input"
+                    variant="outlined"
+                    value={amount}
+                    placeholder="1,000.00"
+                    currencySymbol="$"
+                    textAlign="left"
+                    outputFormat="string"
+                    decimalCharacter="."
+                    digitGroupSeparator=","
+                    onChange={(event, value) => setAmount(value.toString())}
+                  />
 
                   {/* Investor Type */}
                   <FormControl
@@ -183,15 +278,13 @@ const ResignModal = ({ showResignModal, setShowResignModal }) => {
                       onChange={handleChange('fullName')}
                     />
                   )}
-                  {/* <TextField className="personal-information-input" variant="outlined" placeholder="Full Address" />
-      <TextField className="personal-information-input" variant="outlined" placeholder="Phone number" /> */}
                   <p className="information-notice">
                     Required by United States banking laws. This information is transmitted securely and will never be
                     used for any purpose beyond executing your investment.
                   </p>
                 </section>{' '}
                 <Grid item style={{ justifyContent: 'center', display: 'flex', margin: '1rem' }}>
-                  <Button variant="contained" color="secondary">
+                  <Button variant="contained" color="secondary" onClick={submitInvestment}>
                     Update
                   </Button>
                 </Grid>
