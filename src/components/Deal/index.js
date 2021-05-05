@@ -107,6 +107,7 @@ export const CREATE_INVESTMENT = gql`
 //   "Focusmate SPV": "focusmate-spv",
 //   'volumetric-spv%20seed%20round': "volumetric-spv-seed-round"
 // }
+const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
 
 export default function Deal() {
   const mobile = useMediaQuery('(max-width:1200px)');
@@ -138,7 +139,10 @@ export default function Deal() {
   useEffect(() => {
     const blocked = userProfile?.email?.includes('allocations');
     if (data && !data.investor?.invitedDeal?.investment && !blocked) {
-      const decodedParams = base64.decode(search.substring(1));
+      let decodedParams = {};
+      if (base64regex.test(search.substring(1)) && search && !search.includes('amount')) {
+        decodedParams = base64.decode(search.substring(1));
+      }
       const isTvc = organization === 'theventurecollective';
       const paramsToUse = isTvc ? decodedParams : search;
       const p = new URLSearchParams(paramsToUse);
@@ -155,11 +159,11 @@ export default function Deal() {
     }
   }, [called, createInvestment, data, didCreateInvestment, organization, search, userProfile]);
   useEffect(() => {
-    const isTvc = organization === 'theventurecollective';
-    if (isTvc) {
+    const isEncoded = base64regex.test(search.substring(1)) && search.substring(1).length > 0;
+    if (isEncoded) {
       setAllowEdit(false);
     }
-  }, [organization]);
+  }, [organization, search]);
 
   useEffect(() => {
     // theres been an error
