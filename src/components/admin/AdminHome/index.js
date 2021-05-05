@@ -184,7 +184,7 @@ export default function AdminHome({}) {
               Investments
             </ButtonBase>
           </Grid>
-          <Grid item xs={12} sm={4} md={2}>
+          {/* <Grid item xs={12} sm={4} md={2}>
             <ButtonBase
               className={tab === 'setting' ? classes.activeTab : classes.tab}
               style={{ borderRight: '1px solid #e1e9ec' }}
@@ -192,7 +192,7 @@ export default function AdminHome({}) {
             >
               Settings
             </ButtonBase>
-          </Grid>
+          </Grid> */}
         </Grid>
       </div>
 
