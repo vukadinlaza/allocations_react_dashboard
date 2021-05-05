@@ -196,11 +196,20 @@ export default ({ dealId, isDemo, superadmin }) => {
   }
 
   if (loading) return <Loader />;
-  console.log(
-    'ASdadsadsad',
-    data?.deal?.docSpringTemplateId,
-    data?.deal?.docSpringTemplateId !== null && data?.deal?.docSpringTemplateId.length > 1,
-  );
+
+  const viewedInvestments = data?.deal?.viewedUsers
+    .map((user) => {
+      return {
+        investor: user,
+        amount: 0,
+      };
+    })
+    .filter((viewedUser) => {
+      const userInOtherCatagory = data?.deal?.investments.find(
+        (inv) => inv.status !== 'invited' && inv.investor._id === viewedUser.investor._id,
+      );
+      return !userInOtherCatagory;
+    });
 
   return (
     <>
@@ -208,13 +217,7 @@ export default ({ dealId, isDemo, superadmin }) => {
         {categories
           .map((d) => {
             if (d.key === 'invited' && data?.deal?.viewedUsers.length > 0) {
-              const invs = data?.deal?.viewedUsers.map((user) => {
-                return {
-                  investor: user,
-                  amount: 0,
-                };
-              });
-              const cInvs = _.uniqBy([...invs, ...d.categoryInvestments], 'investor._id');
+              const cInvs = _.uniqBy([...viewedInvestments, ...d.categoryInvestments], 'investor._id');
               return {
                 ...d,
                 categoryInvestments: cInvs,
