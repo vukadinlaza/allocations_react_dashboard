@@ -16,7 +16,7 @@ export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment
     setOpen(false);
   };
 
-  const spvDoc = deal.documents.find((doc) => {
+  const spvDoc = (deal.documents || []).find((doc) => {
     return doc.path.includes('Agreement');
   });
 

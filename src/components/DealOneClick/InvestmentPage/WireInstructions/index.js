@@ -4,7 +4,7 @@ import './styles.scss';
 
 function WireInstructions({ deal }) {
   const link =
-    deal.documents && (deal.documents || []).find((d) => d.path === 'wire-instructions')
+    deal.documents && deal.documents !== null && (deal.documents || []).find((d) => d.path === 'wire-instructions')
       ? `https://${deal.documents.find((d) => d.path === 'wire-instructions').link}`
       : null;
 
