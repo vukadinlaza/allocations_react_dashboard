@@ -102,6 +102,7 @@ const GET_INVESTOR = gql`
         created_at
         submissionData {
           investmentId
+          submissionId
         }
         documents {
           path
@@ -1253,7 +1254,7 @@ function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin, setS
           </Typography>
           <Grid container xs={12} md={12} sm={12} lg={12} spacing={1}>
             {demo ? [] : docs.map((doc) => <Document doc={doc} investment={investment} />)}
-            {investment?.submissionData?.investmentId && !isClosed && (
+            {investment?.submissionData?.submissionId && !isClosed && (
               <Grid
                 item
                 lg={3}
