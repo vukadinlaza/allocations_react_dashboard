@@ -21,7 +21,7 @@ import {
 } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import CancelIcon from '@material-ui/icons/Cancel';
 import EditIcon from '@material-ui/icons/Edit';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -179,18 +179,15 @@ export default () => {
   const [showDocs, setShowDocs] = useState();
   const [showResignModal, setShowResignModal] = useState(false);
   const [sortByProp, setSortByProp] = useState({ prop: 'deal.company_name', direction: 'asc' });
-  //
-
   const [editInvestmentModal, setEditInvestmentModal] = useState({});
   const [investmentUpdated, setInvestmentUpdated] = useState();
-
-  //
+  const { userProfile, refetch } = useAuth(GET_INVESTOR);
+  const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile?.email || '');
   const [demo, setDemo] = useState(false);
   const [showCapitalAccounts, setShowCaptialAccounts] = useState(false);
   const [postZap, {}] = useMutation(POST_ZAP);
   const investmentsRef = React.useRef(null);
 
-  // getModalStyle is not a pure function, we roll the style only on the first render
   const [confirmation, setConfirmation] = useState(false);
   const [tradeData, setTradeData] = useSimpleReducer({
     price: '',
@@ -213,12 +210,9 @@ export default () => {
     }
   }, [setTradeData, tradeData.showLoading]);
 
-  const { userProfile } = useAuth(GET_INVESTOR);
-  const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile.email);
-
   useEffect(() => {
     const demo = location.search === '?demo=true';
-    if (demo && userProfile.investments) {
+    if (demo && userProfile?.investments) {
       investmentsRef.current = userProfile?.investments.map((inv) => {
         inv.deal.company_name = _.sample([
           'Airbnb',
@@ -238,7 +232,7 @@ export default () => {
       });
       setDemo(true);
     }
-  }, [demo, location.search, userProfile, userProfile.investments]);
+  }, [demo, location.search, userProfile, userProfile?.investments]);
   const chartOptionsA = {
     title: '',
     pieHole: 0.5,
@@ -249,9 +243,10 @@ export default () => {
     legend: 'none',
   };
 
-  if (!userProfile.email) return <Loader />;
-  let { investments } = userProfile;
-  investments = userProfile.accountInvestments;
+  if (!userProfile?.email) return <Loader />;
+  let { investments } = userProfile || {};
+  investments = userProfile?.accountInvestments;
+
   if (userProfile.email === 'kadvani1@gmail.com') {
     investments = investments.filter((i) => i.status !== 'invited');
   }
@@ -1150,7 +1145,12 @@ export default () => {
         investmentUpdated={investmentUpdated}
         setInvestmentUpdated={setInvestmentUpdated}
       />
-      <ResignModal setShowResignModal={setShowResignModal} showResignModal={showResignModal} />
+      <ResignModal
+        setShowDocs={setShowDocs}
+        setShowResignModal={setShowResignModal}
+        showResignModal={showResignModal}
+        refetch={refetch}
+      />
     </div>
   );
 };
@@ -1171,6 +1171,8 @@ const TR = ({
   const capitalAccountInfo = capFields.find((r) => {
     return _.get(r, 'Deal Name (webapp)[0]') === investment.deal.company_name;
   });
+
+  console.log('TD RE RENDERS');
 
   const addedDate = moment(investment?.deal?.dealParams?.wireDeadline).format('Do MMM YYYY');
   const showDocsFn = () => setShowDocs(showDocs ? false : investment);

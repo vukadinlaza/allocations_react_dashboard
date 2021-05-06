@@ -71,11 +71,22 @@ const CONFIRM_INVESTMENT = gql`
   }
 `;
 
+const validate = (investor) => {
+  const required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
+  if (investor.country && investor.country === 'United States') {
+    required.push('state');
+  }
+  if (investor.investor_type === 'entity' && !investor.fullName) {
+    required.push('fullName');
+  }
+  return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
+};
+
 const usStates = new UsaStates();
 const countryNames = countries.map((c) => c.countryName);
 const stateNames = usStates.states.map((s) => s.name);
 
-const ResignModal = ({ showResignModal, setShowResignModal }) => {
+const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs }) => {
   const [getInvestment, { data, called, loading }] = useLazyQuery(GET_INVESTMENT);
   const classes = useStyles();
   const [investor, setInvestor] = useState({
@@ -88,12 +99,15 @@ const ResignModal = ({ showResignModal, setShowResignModal }) => {
 
   const [submitConfirmation, {}] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
-      toast.success('Investment Updated.');
+      setTimeout(() => {
+        refetch();
+        toast.success('Investment Updated.');
+        setShowResignModal(false);
+        setShowDocs(false);
+      }, 1000);
     },
   });
   const [errors, setErrors] = useState([]);
-  console.log(showResignModal, 'XXXXX');
-  console.log('DATA', data);
   useEffect(() => {
     if (showResignModal._id && !called) {
       getInvestment({
@@ -143,6 +157,11 @@ const ResignModal = ({ showResignModal, setShowResignModal }) => {
   };
 
   const submitInvestment = async () => {
+    const validation = validate(investor);
+    setErrors(validation);
+    if (validation.length > 0) {
+      return toast.warning('Please complete the form before continuing.');
+    }
     const ip = await getClientIp();
     const payload = {
       ...investor,
@@ -152,8 +171,6 @@ const ResignModal = ({ showResignModal, setShowResignModal }) => {
       dealId: data?.investment?.deal?._id,
       docSpringTemplateId: data?.investment?.deal.docSpringTemplateId,
     };
-
-    console.log('PAYLOAD', payload);
 
     submitConfirmation({ variables: { payload } });
     setShowResignModal(false);
@@ -282,7 +299,7 @@ const ResignModal = ({ showResignModal, setShowResignModal }) => {
                     Required by United States banking laws. This information is transmitted securely and will never be
                     used for any purpose beyond executing your investment.
                   </p>
-                </section>{' '}
+                </section>
                 <Grid item style={{ justifyContent: 'center', display: 'flex', margin: '1rem' }}>
                   <Button variant="contained" color="secondary" onClick={submitInvestment}>
                     Update
