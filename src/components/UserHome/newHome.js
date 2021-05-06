@@ -118,6 +118,7 @@ const GET_INVESTOR = gql`
           dealParams {
             dealMultiple
             wireDeadline
+            signDeadline
           }
           organization {
             _id
@@ -1241,6 +1242,8 @@ function InvestmentStatus({ investment }) {
 }
 
 function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin, setShowResignModal }) {
+  const isClosed = moment(investment?.deal?.dealParams?.signDeadline).isBefore(new Date());
+
   return (
     <>
       <TableRow>
@@ -1250,7 +1253,7 @@ function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin, setS
           </Typography>
           <Grid container xs={12} md={12} sm={12} lg={12} spacing={1}>
             {demo ? [] : docs.map((doc) => <Document doc={doc} investment={investment} />)}
-            {investment?.submissionData?.investmentId && (
+            {investment?.submissionData?.investmentId && !isClosed && (
               <Grid
                 item
                 lg={3}
