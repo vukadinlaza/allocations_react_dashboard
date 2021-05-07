@@ -10,7 +10,7 @@ function AllocationsRocket() {
         <div className="fin fin-left"></div>
         <div className="fin fin-right"></div>
         <div className="window">
-          <img className="window-logo" src={allocationsBarLogo} />
+          <img className="window-logo" src={allocationsBarLogo} alt="allocations-bar-logo"/>
         </div>
         <div className="fire">
           <div className="flames">

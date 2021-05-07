@@ -9,7 +9,7 @@ import countries from 'country-region-data';
 import { UsaStates } from 'usa-states';
 import './style.scss';
 import gql from 'graphql-tag';
-import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { toast } from 'react-toastify';
 import { AccreditedInvestorStatus } from '../forms/InvestorEdit';
 import { getClientIp } from '../../utils/ip';

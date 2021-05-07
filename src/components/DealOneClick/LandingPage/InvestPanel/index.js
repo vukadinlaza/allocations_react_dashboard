@@ -9,13 +9,6 @@ import { useAuth } from '../../../../auth/useAuth';
 function InvestPanel({ deal, deal_slug, organization }) {
   const { userProfile, isAuthenticated } = useAuth();
   const history = useHistory();
-  const handleClick = () => {
-    window.scrollTo({
-      top: 0,
-      left: 100,
-      behavior: 'smooth',
-    });
-  };
   const handleWaitlistSubmit = async () => {
     await fetch('https://hooks.zapier.com/hooks/catch/7904699/ov0jofs', {
       method: 'post',
