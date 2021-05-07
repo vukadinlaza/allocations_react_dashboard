@@ -131,7 +131,6 @@ function InvestmentPage({}) {
 
   useEffect(() => {
     if (data?.deal?._id && userProfile?._id && !called) {
-      console.log('asdadad', userProfile._id);
       addUserAsViewed({
         variables: {
           user_id: userProfile._id,
@@ -230,7 +229,11 @@ function InvestmentPage({}) {
       </div>
 
       <div className="flex-container">
-        <InvestmentAmountPanel setAmount={setAmount} amount={amount} minimumInvestment={minimumInvestment} />
+        <InvestmentAmountPanel
+          setAmount={setAmount}
+          amount={amount}
+          minimumInvestment={nWithCommas(minimumInvestment)}
+        />
         <div className="side-panel">
           {/* <InvestingAsPanel /> */}
           {/* <InvestmentHistory deal={deal} setInvestor={setInvestor} investor={investorFormData} setAmount={setAmount} /> */}
