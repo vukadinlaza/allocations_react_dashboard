@@ -43,7 +43,6 @@ export default ({ data, children, orgData, isDemo }) => {
     const addedDate = moment(inv.Date).format('MMM YYYY DD');
     return addedDate.substring(0, 8);
   });
-  console.log(groupedByMonth);
 
   const groupedData = _.mapValues(groupedByMonth, (monthData) => {
     const monthSum = _.sumBy(
@@ -55,7 +54,6 @@ export default ({ data, children, orgData, isDemo }) => {
     );
     return monthSum;
   });
-  console.log(groupedData);
 
   const arrayData = Object.keys(groupedData)
     .map((key, index) => {
@@ -71,7 +69,6 @@ export default ({ data, children, orgData, isDemo }) => {
     const prevMonthsTotal = prevMonths.reduce((acc, m) => {
       return acc + m[1];
     }, 0);
-    console.log(prevMonthsTotal + data[1]);
     return [moment(data[0]).format('MMM YY'), prevMonthsTotal + data[1]];
   });
   return (
@@ -164,7 +161,7 @@ export default ({ data, children, orgData, isDemo }) => {
                     paddingTop: '10px',
                   }}
                 >
-                  Multiple
+                  Estimated Multiple
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
                   {multipleSum.toFixed(2) || 1}x
