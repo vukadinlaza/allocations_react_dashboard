@@ -123,9 +123,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                   <Typography>Net Investment Amount</Typography>
                   <Typography variant="subtitle2">(Subscription amount minus initial expenses)</Typography>
                 </div>
-                <Typography className={classes.rightVaue}>
-                  ${Number(nWithCommas(data.netInvestment)).toFixed(2)}
-                </Typography>
+                <Typography className={classes.rightVaue}>${data.netInvestment}</Typography>
               </Grid>
               <hr className="solid" />
               <Grid container justify="space-between">
