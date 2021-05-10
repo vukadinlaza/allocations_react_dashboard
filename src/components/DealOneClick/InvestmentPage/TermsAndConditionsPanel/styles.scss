@@ -24,9 +24,25 @@
 
 
   .terms-checkbox {
-    height: 35px;
-    width: 35px;
+    height: 0.5em;
+    width: 0.5em;
     margin: 0 10px;
+  }
+
+
+  .terms-checkbox-checked {
+    height: 0.5em;
+    width: 0.5em;
+    margin: 0 10px;
+    background-color: #0375FF;
+    color: white !important;
+    border-radius: 5px;
+  }
+
+
+  .terms-checkbox-checked:hover {
+    background-color: #0375FF !important;
+    color: white !important;
   }
 
   label {
@@ -35,7 +51,7 @@
     align-items: center;
     width: 100%;
     background-color: #9194AA;
-    padding: 10px;
+    padding: 20px;
     margin: 0;
     border-radius: 0px 0px 5px 5px;
 
@@ -57,6 +73,11 @@
     color: white;
     text-transform: none;
     font-weight: 700;
+  }
+
+
+  .confirm-investment-button:hover {
+    background-color: #42d828;
   }
 
 

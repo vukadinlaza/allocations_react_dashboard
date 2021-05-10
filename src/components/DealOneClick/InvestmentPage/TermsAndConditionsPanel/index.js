@@ -47,8 +47,14 @@ function TermsAndConditionsPanel({ deal, checkedTAT, setCheckedTAT, confirmInves
           </Typography>
         </Box>
         <label>
-          <Checkbox className="terms-checkbox" onChange={(e) => setCheckedTAT(e.target.checked)} />I have read and
-          accept the terms of the investment.
+          <Checkbox
+            className="terms-checkbox"
+            onChange={(e) => setCheckedTAT(e.target.checked)}
+            classes={{
+              checked: "terms-checkbox-checked"
+            }}
+            />
+          I have read and accept the terms of the investment.
         </label>
       </div>
       <Button className="confirm-investment-button" disabled={!checkedTAT} onClick={confirmInvestment}>

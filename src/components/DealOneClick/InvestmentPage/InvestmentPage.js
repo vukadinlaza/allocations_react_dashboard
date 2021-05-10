@@ -212,7 +212,7 @@ function InvestmentPage({}) {
     company_name,
     dealParams: { minimumInvestment },
   } = deal;
-
+  console.log({previewData});
   return (
     <section className="InvestmentPage">
       <div className="nav-btn-container">
