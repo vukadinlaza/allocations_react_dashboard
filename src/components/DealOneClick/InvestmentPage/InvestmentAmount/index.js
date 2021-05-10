@@ -12,12 +12,15 @@ function InvestmentAmountPanel({ setAmount, amount, minimumInvestment }) {
           className="investment-amount-input"
           variant="outlined"
           value={amount}
-          placeholder="1,000.00"
+          placeholder={minimumInvestment}
           currencySymbol="$"
           textAlign="left"
           outputFormat="string"
           decimalCharacter="."
           digitGroupSeparator=","
+          onKeyDown={(e) => {
+            if (e.key === 'Backspace' && amount === minimumInvestment) setAmount('');
+          }}
           onChange={(event, value) => setAmount(value.toString())}
         />
 
