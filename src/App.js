@@ -9,6 +9,7 @@ import Deals from './components/Deals';
 import Credit from './components/Credit';
 import DealNew from './components/DealNew';
 import DealEdit from './components/DealEdit';
+import DealEditNew from './components/DealEditNew'
 import InvestorEdit from './components/InvestorEdit';
 import InvestorNew from './components/InvestorNew';
 import Indentity from './components/Identity';
@@ -131,6 +132,7 @@ const App = () => {
           <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
           <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />
           <PrivateRoute path="/admin/:organization/deals/:id/edit" component={DealEdit} exact />
+          <PrivateRoute path="/admin/:organization/deals/:id/edit-new" component={DealEditNew} exact />
 
           <PrivateRoute path="/admin/:organization/investments" component={Investments} exact />
           <PrivateRoute path="/admin/:organization/compliance" component={Compliance} exact />
