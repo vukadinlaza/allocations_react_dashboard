@@ -1,0 +1,43 @@
+.DeadlineSettings {
+  width: 90%;
+
+  h2 {
+    margin-bottom: 1rem;
+  }
+
+  .form-fields {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+
+    .field {
+      width: 48.5%;
+      margin-bottom: .75rem;
+
+      .field-label {
+        display: flex;
+        flex-direction: column;
+        font-size: 1.2rem;
+
+        .text-input {
+          margin: 5px 0;
+          height: 3.5rem;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .DeadlineSettings {
+    width: 100%;
+ 
+    .form-fields {
+      flex-direction: column;
+      .field {
+        width: 100%;
+      }
+    }
+  }
+}
