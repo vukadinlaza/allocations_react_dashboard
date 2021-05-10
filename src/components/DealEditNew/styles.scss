@@ -1,0 +1,97 @@
+.DealEditNew {
+
+
+  h1, h2 {
+    font-size: 1.6rem;
+    margin: 10px 0 ;
+  }
+
+  .section-header {
+    width: 70%;
+    
+    .tabs-container {
+      margin: 1.75rem 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+
+      .tab-button {
+        white-space: nowrap;
+        outline: none;
+        border: none;
+        padding: 5px;
+        color: #0561FF;
+        background: transparent;
+        outline: none;
+        border-radius: 0%;
+        font-weight: 700;
+        text-transform: none;
+        font-size: 1.25rem;
+        letter-spacing: 0px;
+        transition: all .25s ease-out;
+        border-bottom: 3px solid transparent;
+
+        &.active {
+          border-bottom: 3px solid #0561FF;
+          transition: all .25s ease-in;
+        }
+      }
+    }
+  }
+
+  .save-changes {
+    margin-top: .25rem;
+    margin-bottom: .75rem;
+    display: flex;
+
+
+
+    .continue {
+      text-transform: none;
+      background-color: #2A2B54;
+      color: white;
+      width: 12rem;
+      height: 3rem;
+      margin-right: 10px;
+    }
+    
+    .save-and-exit {
+      text-transform: none;
+      background-color: #0561FF;
+      color: white;
+      width: 12rem;
+      height: 3rem;
+    }
+
+    .delete-deal {
+      text-transform: none;
+      background-color: red;
+      color: white;
+      width: 12rem;
+      height: 3rem;
+      margin: 1rem 0;
+    }
+
+    &.lastPage {
+      flex-direction: column;
+    }
+  }
+
+}
+
+@media screen and (max-width: 960px) {
+  .DealEditNew {
+  
+    .section-header {
+      width: 95%;
+      
+      .tabs-container {
+
+        .tab-button {
+          font-size: 1rem;
+        }
+      }
+    }  
+  }
+  
+}
