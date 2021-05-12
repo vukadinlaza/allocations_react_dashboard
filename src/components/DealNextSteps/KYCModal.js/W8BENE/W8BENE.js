@@ -22,6 +22,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
   const [mailingCountrySearch, setMailingCountrySearch] = useState('')
 
   const [chapter3Status, setChapter3Status] = useState('')
+  const [chapter4Status, setChapter4Status] = useState('')
   const [section14Select, setSection14Select] = useState('')
 
 
@@ -301,19 +302,21 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
   }
 
 
-  const handleChapter3Change = (field, value) => {
+  const handleDropdownChange = (field, value) => {
 
     const fieldMap = {
       '14_b_select': section14Select,
+      'chapter4Status': chapter4Status,
       'chapter3Status': chapter3Status
     }
 
     const fieldUpdateMap = {
       '14_b_select': setSection14Select,
+      'chapter4Status': setChapter4Status,
       'chapter3Status': setChapter3Status
     }
 
-    const prev = fieldMap[value].length > 0 ? fieldMap[value] : null;
+    const prev = fieldMap[value]?.length > 0 ? fieldMap[value] : null;
 
     if (prev) {
       setFormData(prevData => ({
@@ -412,7 +415,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
               name="chapter3Status"
               variant="outlined"
               className="chapter-3-select"
-              onChange={({ target }) => handleChapter3Change(target.value)}
+              onChange={({ target }) => handleDropdownChange('chapter3Status', target.value)}
               error={errors.includes('chapter3Status')}
               value={chapter3Status}
             >
@@ -515,35 +518,36 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                     <Select
                       variant="outlined"
                       name="14_b_select"
-                      onChange={({ target }) => handleChapter3Change('14_b_select', target.value)}
+                      value={section14Select}
+                      onChange={({ target }) => handleDropdownChange('14_b_select', target.value)}
                     >
 
-                      <MenuItem value="government">Government</MenuItem>
-                      <MenuItem value="tax_exempt_pension_trust_or_pension_fund">
+                      <MenuItem value="14b_government">Government</MenuItem>
+                      <MenuItem value="14b_tax_exempt_pension">
                         Tax exempt pension trust or pension fund
                       </MenuItem>
-                      <MenuItem value="other_tax_exempt_organization">
+                      <MenuItem value="14b_other_tax_exempt">
                         Other tax exempt organization
                       </MenuItem>
-                      <MenuItem value="publicly_traded_corporation">
+                      <MenuItem value="14b_publicly">
                         Publicly traded corporation
                       </MenuItem>
-                      <MenuItem value="subsidiary_of_a_publicly_traded_corporation">
+                      <MenuItem value="14b_subsidiary">
                         Subsidiary of a publicly traded corporation
                       </MenuItem>
-                      <MenuItem value="company_that_meets_the_ownership_and_base_erosion_test">
+                      <MenuItem value="14b_base_erosion">
                         Company that meets the ownership and base erosion test
                       </MenuItem>
-                      <MenuItem value="company_that_meets_the_derivative_benefits_test">
+                      <MenuItem value="14b_derivative_benefits">
                         Company that meets the derivative benefits test
                       </MenuItem>
-                      <MenuItem value="company_with_an_item_of_income_that_meets_active_trade_or_business_test">
+                      <MenuItem value="14b_active_trade">
                         Company with an item of income that meets active trade or business test
                       </MenuItem>
-                      <MenuItem value="favorable_discretionary_determination_by_the_u_s_competent_authority_received">
+                      <MenuItem value="14b_favorable">
                         Favorable discretionary determination by the U.S. competent authority received
                       </MenuItem>
-                      <MenuItem value="other_specify_article_and_paragraph">
+                      <MenuItem value="14b_other">
                         Other (specify Article and paragraph):
                       </MenuItem>
 
@@ -560,7 +564,9 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                   <FormControl className="form-field">
                     <label className="form-label">
                       <TextField
+                        onChange={handleChange}
                         variant="outlined"
+                        name="14b_other_input"
                         placeholder="Other (please specify Article and paragraph):"
                       />
                     </label>
@@ -636,8 +642,8 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
             <Select
               name="chapter4Status"
               error={errors.includes('chapter4Status')}
-              value={formData['chapter4Status']}
-              onChange={handleChange}
+              value={chapter4Status}
+              onChange={({ target }) => handleDropdownChange('chapter4Status', target.value)}
               variant="outlined"
               className="chapter-3-select">
               <MenuItem value="active_nffe">Active NFFE</MenuItem>
