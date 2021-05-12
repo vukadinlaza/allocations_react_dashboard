@@ -17,6 +17,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment, previewData, loadingPreview }) {
 
   const [numPages, setNumPages] = useState(null);
+  const [pagesRendered, setPagesRendered] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
 
   const onDocumentLoadSuccess = ({ numPages }) => {
@@ -32,9 +33,15 @@ export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment
     return doc.path.includes('Agreement');
   });
 
+  const onRenderSuccess = () => {
+    let newPagesRendered = pagesRendered + 1;
+    setPagesRendered(newPagesRendered);
+  }
+
 
   const previewLink = previewData?.getInvestmentPreview?.previewLink;
   const document = previewLink ? previewLink : spvDoc;
+  const pagesRenderedPlusOne = Math.min(pagesRendered + 1, numPages);
 
   return (
     <Modal
@@ -65,16 +72,29 @@ export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment
               className="document"
               >
               <div className="pages-container">
-                { Array.apply(null, Array(numPages))
-                    .map((x, i) => i + 1 )
-                    .map((page, idx) => <Page
-                                          pageNumber={idx + 1}
-                                          key={`page-${idx}`}
-                                          style={{color: "red"}}
-                                          className="page"
-                                          renderAnnotationLayer={false}
-                                          />
-                    )
+                {
+                  Array.from(
+                    new Array(pagesRenderedPlusOne),
+                    (el, index) => {
+                      const isCurrentlyRendering = pagesRenderedPlusOne === index + 1;
+                      const isLastPage = numPages === index + 1;
+                      const needsCallbackToRenderNextPage = isCurrentlyRendering && !isLastPage;
+
+                      return (
+                        <Page
+                          pageNumber={index + 1}
+                          key={`page-${index}`}
+                          style={{color: "red"}}
+                          onRenderSuccess={
+                            needsCallbackToRenderNextPage ? onRenderSuccess : null
+                          }
+                          wrap={false}
+                          className="page"
+                          renderAnnotationLayer={false}
+                          />
+                      );
+                    },
+                  )
                 }
               </div>
               <div className="actions">
