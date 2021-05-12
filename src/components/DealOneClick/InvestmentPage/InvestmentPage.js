@@ -8,17 +8,13 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import { toast } from 'react-toastify';
 import TermsAndConditionsPanel from './TermsAndConditionsPanel';
 import DealDocumentsPanel from './DealDocumentsPanel';
-import InvestingAsPanel from './InvestingAsPanel';
 import InvestmentAmountPanel from './InvestmentAmount';
 import PersonalInformation from './PersonalInformation';
-import PaymentInformation from './PaymentInformation';
 import './styles.scss';
 import Loader from '../../utils/Loader';
-import YourDocumentsPanel from './YourDocumentsPanel';
 import SPVDocumentModal from './SpvDocumentModal';
 import { getClientIp } from '../../../utils/ip';
 import { nWithCommas } from '../../../utils/numbers';
-import InvestmentHistory from './InvestmentHistory/InvestmentHistory';
 import { useAuth } from '../../../auth/useAuth';
 
 const GET_DEAL = gql`
@@ -38,6 +34,18 @@ const GET_DEAL = gql`
       memo
       docSpringTemplateId
       dealCoverImageKey
+      investments {
+        investor {
+          _id
+        }
+        submissionData {
+          country
+          investor_type
+          legalName
+          accredited_investor_status
+          fullName
+        }
+      }
       documents {
         path
         link
@@ -131,7 +139,6 @@ function InvestmentPage({}) {
 
   useEffect(() => {
     if (data?.deal?._id && userProfile?._id && !called) {
-      console.log('asdadad', userProfile._id);
       addUserAsViewed({
         variables: {
           user_id: userProfile._id,
@@ -144,7 +151,7 @@ function InvestmentPage({}) {
   const [checkedTAT, setCheckedTAT] = useState(false);
   const [showSpvModal, setShowSpvModal] = useState(false);
   const [amount, setAmount] = useState('');
-
+  const [populated, setPopulated] = useState(false);
   const [investorFormData, setInvestor] = useState({
     country: '',
     country_search: '',
@@ -152,6 +159,27 @@ function InvestmentPage({}) {
     state_search: '',
   });
   const [errors, setErrors] = useState([]);
+
+
+  const populateInvestorData = (deal) => {
+    const hasSubmissionData = deal.investments?.filter(
+      (investment) => investment.investor._id === userProfile._id && 'submissionData' in investment,
+    );
+    if (hasSubmissionData?.length) {
+      const lastSubmission = hasSubmissionData[hasSubmissionData.length - 1].submissionData;
+      const inverstorData = { ...investorFormData };
+      for (const key in lastSubmission) {
+        if ({}.hasOwnProperty.call(lastSubmission, key)) {
+          inverstorData[key] = lastSubmission[key];
+        }
+      }
+      setInvestor(inverstorData);
+    }
+    setPopulated(true);
+  }
+
+
+
 
   const [submitConfirmation, {}] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
@@ -199,8 +227,6 @@ function InvestmentPage({}) {
       docSpringTemplateId: deal.docSpringTemplateId,
     };
 
-    console.log('PAYLOAD', payload);
-
     submitConfirmation({ variables: { payload } });
     setShowSpvModal(false);
   };
@@ -212,7 +238,9 @@ function InvestmentPage({}) {
     company_name,
     dealParams: { minimumInvestment },
   } = deal;
-  console.log({previewData});
+
+  if(deal && !populated) populateInvestorData(deal)
+
   return (
     <section className="InvestmentPage">
       <div className="nav-btn-container">
