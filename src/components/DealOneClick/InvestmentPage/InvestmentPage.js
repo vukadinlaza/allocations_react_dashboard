@@ -89,6 +89,25 @@ const GET_DEAL = gql`
   }
 `;
 
+const GET_PERSONAL_INFO = gql`
+  query InvestorPersonalInfo {
+    investor {
+      investorPersonalInfo {
+        investor {
+          _id
+        }
+        submissionData {
+          country
+          state
+          investor_type
+          legalName
+          accredited_investor_status
+          fullName
+        }
+      }
+    }
+  }`
+
 const CONFIRM_INVESTMENT = gql`
   mutation ConfirmInvestment($payload: Object) {
     confirmInvestment(payload: $payload) {
@@ -137,6 +156,8 @@ function InvestmentPage({}) {
     },
   });
 
+  const { data: personalInfo } = useQuery(GET_PERSONAL_INFO);
+
   useEffect(() => {
     if (data?.deal?._id && userProfile?._id && !called) {
       addUserAsViewed({
@@ -161,24 +182,13 @@ function InvestmentPage({}) {
   const [errors, setErrors] = useState([]);
 
 
-  const populateInvestorData = (deal) => {
-    const hasSubmissionData = deal.investments?.filter(
-      (investment) => investment.investor._id === userProfile._id && 'submissionData' in investment,
-    );
-    if (hasSubmissionData?.length) {
-      const lastSubmission = hasSubmissionData[hasSubmissionData.length - 1].submissionData;
-      const inverstorData = { ...investorFormData };
-      for (const key in lastSubmission) {
-        if ({}.hasOwnProperty.call(lastSubmission, key)) {
-          inverstorData[key] = lastSubmission[key];
-        }
-      }
-      setInvestor(inverstorData);
-    }
+  const populateInvestorData = () => {
+    let personalData = personalInfo?.investor?.investorPersonalInfo?.submissionData;
+    if(!personalData) return;
+    let updatedInvestorData = {...investorFormData, ...personalData}
+    setInvestor(updatedInvestorData);
     setPopulated(true);
   }
-
-
 
 
   const [submitConfirmation, {}] = useMutation(CONFIRM_INVESTMENT, {
@@ -239,7 +249,7 @@ function InvestmentPage({}) {
     dealParams: { minimumInvestment },
   } = deal;
 
-  if(deal && !populated) populateInvestorData(deal)
+  if(!populated) populateInvestorData(deal)
 
   return (
     <section className="InvestmentPage">
