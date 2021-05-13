@@ -17,6 +17,7 @@ function InvestmentAmountPanel({ setAmount, amount, minimumInvestment }) {
           textAlign="left"
           outputFormat="string"
           decimalCharacter="."
+          decimalPlaces={0}
           digitGroupSeparator=","
           onKeyDown={(e) => {
             if (e.key === 'Backspace' && amount === minimumInvestment) setAmount('');
