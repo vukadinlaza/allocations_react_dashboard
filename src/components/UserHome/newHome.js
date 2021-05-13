@@ -477,7 +477,7 @@ export default () => {
           </Grid>
         </Grid>
         <Grid item sm={12} md={12} style={{ border: '1em solid transparent' }}>
-          <Paper>
+          <Paper style={{ overflowX: 'scroll' }}>
             <Table>
               <TableHead>
                 <TableRow style={{ borderBottom: 'solid black 1px' }}>
@@ -1206,34 +1206,36 @@ const TR = ({
           {investment.deal.dealParams.dealMultiple}x
         </TableCell>
       </Hidden>
-      <Hidden only="xs">
-        <TableCell onClick={showDocsFn} align="center">
-          <Button
-            variant="contained"
-            size="small"
-            color="primary"
-            onClick={() => history.push(_.get(investment, 'deal.appLink', ''))}
-          >
-            View
-          </Button>
-        </TableCell>
-      </Hidden>
-      <TableCell align="center">
-        <Button variant="contained" size="small" color="primary" onClick={showDocsFn} disabled={!!demo}>
-          View
-        </Button>
-      </TableCell>
-      <TableCell align="center">
+      <TableCell onClick={showDocsFn} align="center">
         <Button
           variant="contained"
           size="small"
           color="primary"
-          onClick={() => setShowCaptialAccounts(capitalAccountInfo)}
-          disabled={!capitalAccountInfo?.Email}
+          onClick={() => history.push(_.get(investment, 'deal.appLink', ''))}
         >
           View
-        </Button>
+          </Button>
       </TableCell>
+      <Hidden only="xs">
+        <TableCell align="center">
+          <Button variant="contained" size="small" color="primary" onClick={showDocsFn} disabled={!!demo}>
+            View
+        </Button>
+        </TableCell>
+      </Hidden>
+      <Hidden only="xs">
+        <TableCell align="center">
+          <Button
+            variant="contained"
+            size="small"
+            color="primary"
+            onClick={() => setShowCaptialAccounts(capitalAccountInfo)}
+            disabled={!capitalAccountInfo?.Email}
+          >
+            View
+        </Button>
+        </TableCell>
+      </Hidden>
     </TableRow>
   );
 };
