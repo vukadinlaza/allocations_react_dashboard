@@ -30,7 +30,7 @@ function InvestPanel({ deal, deal_slug, organization }) {
   const getDeadline = (date) => {
     return moment(date).format('dddd, MMMM D YYYY, h:mm a [EST]');
   };
-  const isClosed = moment(signDeadline).isBefore(new Date());
+  const isClosed = moment(signDeadline).add(2, 'days').isBefore(new Date());
 
   return (
     <section className="InvestPanel">
