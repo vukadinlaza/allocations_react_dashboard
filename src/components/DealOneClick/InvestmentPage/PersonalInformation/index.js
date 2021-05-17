@@ -39,6 +39,11 @@ function PersonalInformation({ investor, setInvestor, errors }) {
     return setInvestor((prev) => ({ ...prev, [prop]: e.target.value }));
   };
 
+
+  const usIndex = countryNames.indexOf('United States');
+  countryNames.splice(usIndex, 1);
+  countryNames.unshift('United States')
+
   return (
     <section className="PersonalInformationPanel">
       <p className="section-label">Personal Information</p>
