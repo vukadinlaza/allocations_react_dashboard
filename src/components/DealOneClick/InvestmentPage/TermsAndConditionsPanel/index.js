@@ -8,7 +8,7 @@ function TermsAndConditionsPanel({ deal, checkedTAT, setCheckedTAT, confirmInves
   });
 
   const anchor = doc ? (
-    <a href={`https://${doc.link}`} target="_blank">
+    <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">
       SPV Documents (Operating Agreement, Private Placement Memorandum and Subscription Agreement)
     </a>
   ) : (

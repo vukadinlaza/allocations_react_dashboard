@@ -8,13 +8,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CloudDone, HourglassEmpty, CheckCircle } from '@material-ui/icons';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
-import { Col, Row } from 'reactstrap';
 import {
   Button,
   List,
   TextField,
   Paper,
-  Divider,
   Grid,
   ListItem,
   ListItemText,
@@ -82,7 +80,6 @@ export default function InvestorEditForm({
   setFormStatus,
   noValidate = false,
 }) {
-  const classes = useStyles();
   const [errors, setErrors] = useState([]);
   const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_USER, {
     onCompleted: (data) => {

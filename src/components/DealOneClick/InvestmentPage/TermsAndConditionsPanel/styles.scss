@@ -75,6 +75,10 @@
     font-weight: 700;
   }
 
+  .confirm-investment-button:focus {
+    outline: none;
+  }
+
 
   .confirm-investment-button:hover {
     background-color: #42d828;
