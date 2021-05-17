@@ -7,10 +7,7 @@ import { useQuery, useLazyQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { useHistory, useParams } from 'react-router';
 import { Helmet } from 'react-helmet';
-import completeKycYes from '../../assets/complete-kyc-yes.svg';
-import completeKycNo from '../../assets/complete-kyc-no.svg';
 import signInvestmentYes from '../../assets/sign-investment-yes.svg';
-import wireFundsYes from '../../assets/wire-funds-yes.svg';
 import wireFundsNo from '../../assets/wire-funds-no.svg';
 import submitTaxInfoYes from '../../assets/submit-tax-info-yes.svg';
 import submitTaxInfoNo from '../../assets/submit-tax-info-no.svg';
@@ -114,7 +111,6 @@ function DealNextSteps() {
     }) || showTaxAsCompleted;
 
   const docs = dealData?.deal?.documents;
-  console.log('dealData?.dealParams?', dealData);
 
   return (
     <>
@@ -132,7 +128,7 @@ function DealNextSteps() {
 
         <div className="action-items">
           <div className="action-item">
-            <img className="action-icon" src={signInvestmentYes} />
+            <img className="action-icon" src={signInvestmentYes} alt="sign-investment-yes"/>
             <div className="action-instructions">
               <p className="action-header">Sign for Investment</p>
             </div>
@@ -142,7 +138,7 @@ function DealNextSteps() {
           </div>
 
           <div className="action-item">
-            <img className="action-icon" src={hasKyc ? submitTaxInfoYes : submitTaxInfoNo} />
+            <img className="action-icon" src={hasKyc ? submitTaxInfoYes : submitTaxInfoNo} alt="tax-info"/>
             <div className="action-instructions">
               <p className="action-header">Submit Tax Information</p>
               <p className="action-sub-header">Complete your W8/W9 forms here</p>
@@ -160,6 +156,7 @@ function DealNextSteps() {
               <img
                 className="action-icon"
                 src={data?.investor.accredidation_status === true ? submitTaxInfoYes : submitTaxInfoNo}
+                alt="submit-tax-img"
               />
               <div className="action-instructions">
                 <p className="action-header">Accredited Investor Status</p>
@@ -181,7 +178,7 @@ function DealNextSteps() {
           )}
 
           <div className={`action-item ${!hasKyc && 'disabled'}`}>
-            <img className="action-icon" src={wireFundsNo} />
+            <img className="action-icon" src={wireFundsNo} alt="wire-funds-no"/>
             <div className="action-instructions">
               <p className="action-header">Wire Funds</p>
               <p className="action-sub-header">Required to complete your investment</p>

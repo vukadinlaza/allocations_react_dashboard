@@ -6,7 +6,6 @@ import './index.scss';
 
 function AllPagesPDFViewer({ document, handleClose, usePreview }) {
   const { link } = document;
-  console.log('LINK', document);
 
   if (!link) {
     return (

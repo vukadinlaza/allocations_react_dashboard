@@ -116,9 +116,8 @@ function DealOneClick() {
   const { organization, deal_slug } = useParams();
   const { search } = useLocation();
   const { userProfile, isAuthenticated, loading } = useAuth();
-  const history = useHistory();
 
-  const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL);
+  const [getDeal, { data, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL);
 
   const [createInvestment, { called: didCreateInvestment }] = useMutation(CREATE_INVESTMENT, {
     onCompleted: () => {

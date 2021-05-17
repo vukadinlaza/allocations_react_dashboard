@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react'
-import { gql } from 'apollo-boost'
-import { Row, Col } from 'reactstrap'
-import { useHistory } from 'react-router-dom'
-import { useAuth } from '../../auth/useAuth'
-import { useMutation } from '@apollo/react-hooks'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Paper, Button } from '@material-ui/core'
+import React, { useState, useEffect } from 'react';
+import { gql } from 'apollo-boost';
+import { Row, Col } from 'reactstrap';
+import { useHistory } from 'react-router-dom';
+import { useMutation } from '@apollo/react-hooks';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Paper, Button } from '@material-ui/core';
+import { useAuth } from '../../auth/useAuth';
 
-import Loader from "../utils/Loader"
-import InvestorEditForm from "../forms/InvestorEdit"
+import Loader from '../utils/Loader';
+import InvestorEditForm from '../forms/InvestorEdit';
 
-import './style.scss'
+import './style.scss';
 
 /***
  *
@@ -48,8 +48,8 @@ const DELETE_INVESTOR = gql`
   }
 `
 
-export default function InvestorEdit () {
-  const [formStatus, setFormStatus] = useState("edit")
+export default function InvestorEdit() {
+  const [formStatus, setFormStatus] = useState('edit');
   const { userProfile, refetch } = useAuth(GET_INVESTOR)
   const [investor, setInvestor] = useState(null)
 
@@ -59,8 +59,8 @@ export default function InvestorEdit () {
     }
   }, [userProfile])
 
-  const icon = formStatus === "loading" 
-    ? "circle-notch" 
+  const icon = formStatus === "loading"
+    ? "circle-notch"
     : (formStatus === "complete" ? "check" : "edit")
 
   if (!investor) return <Loader />
@@ -78,7 +78,7 @@ export default function InvestorEdit () {
         investor={investor}
         refetch={refetch}
         setInvestor={setInvestor}
-        setFormStatus={setFormStatus} 
+        setFormStatus={setFormStatus}
         actionText="EDIT INVESTOR" />
       <Row>
         <DeleteInvestor investor={investor} />
