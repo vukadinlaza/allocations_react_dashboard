@@ -70,6 +70,10 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid #70707040',
     borderRadius: '12px',
   },
+  avatarContainer: {
+    minWidth: 0,
+    marginRight: "5%"
+  },
   avatar: {
     margin: '0.25rem',
     height: 26,
@@ -83,6 +87,13 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#F7F9FA',
     borderRadius: '12px',
     marginBottom: 6,
+    display: "inline-flex",
+    padding: "0.25em 0.75em",
+    cursor: "pointer",
+    transition: "0.2s",
+    "&:hover": {
+      backgroundColor: '#edf1f4'
+    }
   },
   modal: {
     display: 'flex',
@@ -107,6 +118,27 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'left',
     minWidth: '15%',
   },
+  investorName: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    marginRight: "5%",
+    "&>span": {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      // marginRight: "1.5em",
+      whiteSpace: "nowrap"
+    }
+  },
+  investmentAmount: {
+    minWidth: "20px",
+    whiteSpace: "nowrap",
+    display: "inline-table",
+    "&>span": {
+      display: "flex",
+      justifyContent: "flex-end",
+      alignItems: "center"
+    }
+  }
 }));
 
 const boardData = [
@@ -206,7 +238,7 @@ export default ({ dealId, isDemo, superadmin }) => {
     })
     .filter((viewedUser) => {
       const userInOtherCatagory = data?.deal?.investments.find(
-        (inv) => inv.status !== 'invited' && inv.investor._id === viewedUser.investor._id,
+        (inv) => inv.status !== 'invited' && inv?.investor?._id === viewedUser?.investor?._id,
       );
       return !userInOtherCatagory;
     });
@@ -287,16 +319,16 @@ const InvestmentSquare = ({ investment, isDemo, setEditInvestmentModal, superadm
       }}
     >
       <ListItem disableGutters className={classes.listItem}>
-        <ListItemAvatar>
+        <ListItemAvatar className={classes.avatarContainer}>
           <Avatar alt={n} className={classes.avatar}>
             {n.charAt(0).toUpperCase()}
           </Avatar>
         </ListItemAvatar>
-        <ListItemText style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} primary={n} />
-        <ListItemSecondaryAction>
+        <ListItemText className={classes.investorName} primary={n} />
+        <ListItemText className={classes.investmentAmount}>
           <FontAwesomeIcon icon="dollar-sign" size="sm" style={{ marginRight: '.15rem' }} />
           {nWithCommas(investment.amount || '0')}
-        </ListItemSecondaryAction>
+        </ListItemText>
       </ListItem>
     </div>
   );
