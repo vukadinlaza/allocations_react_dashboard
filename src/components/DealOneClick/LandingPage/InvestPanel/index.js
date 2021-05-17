@@ -9,13 +9,7 @@ import { useAuth } from '../../../../auth/useAuth';
 function InvestPanel({ deal, deal_slug, organization }) {
   const { userProfile, isAuthenticated } = useAuth();
   const history = useHistory();
-  const handleClick = () => {
-    window.scrollTo({
-      top: 0,
-      left: 100,
-      behavior: 'smooth',
-    });
-  };
+
   const handleWaitlistSubmit = async () => {
     await fetch('https://hooks.zapier.com/hooks/catch/7904699/ov0jofs', {
       method: 'post',
@@ -34,9 +28,10 @@ function InvestPanel({ deal, deal_slug, organization }) {
   } = deal;
 
   const getDeadline = (date) => {
-    return moment(date).format('dddd, MMMM Do YYYY, h:mm a');
+    return moment(date).format('dddd, MMMM D YYYY, h:mm a [EST]');
   };
   const isClosed = moment(signDeadline).isBefore(new Date());
+
   return (
     <section className="InvestPanel">
       <p className="section-label">One click invest</p>
