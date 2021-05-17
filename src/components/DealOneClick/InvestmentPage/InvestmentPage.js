@@ -229,11 +229,7 @@ function InvestmentPage({}) {
       </div>
 
       <div className="flex-container">
-        <InvestmentAmountPanel
-          setAmount={setAmount}
-          amount={amount}
-          minimumInvestment={nWithCommas(minimumInvestment)}
-        />
+        <InvestmentAmountPanel setAmount={setAmount} amount={amount} minimumInvestment={minimumInvestment} />
         <div className="side-panel">
           {/* <InvestingAsPanel /> */}
           {/* <InvestmentHistory deal={deal} setInvestor={setInvestor} investor={investorFormData} setAmount={setAmount} /> */}

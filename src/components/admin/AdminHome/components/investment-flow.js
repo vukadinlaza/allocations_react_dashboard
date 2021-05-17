@@ -238,7 +238,7 @@ export default ({ dealId, isDemo, superadmin }) => {
     })
     .filter((viewedUser) => {
       const userInOtherCatagory = data?.deal?.investments.find(
-        (inv) => inv.status !== 'invited' && inv.investor._id === viewedUser.investor._id,
+        (inv) => inv.status !== 'invited' && inv?.investor?._id === viewedUser?.investor?._id,
       );
       return !userInOtherCatagory;
     });
