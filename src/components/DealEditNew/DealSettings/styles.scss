@@ -1,3 +1,77 @@
 .DealSettings {
 
+  .form-fields {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+
+    .field {
+      width: 48.5%;
+      margin-bottom: .75rem;
+
+      .field-label {
+        display: flex;
+        flex-direction: column;
+        font-size: 1.2rem;
+
+        .text-input {
+          margin: 5px 0;
+          height: 3.5rem;
+
+          .copy-button {
+            width: max-content;
+            padding: 7.5px;
+          }
+        }
+      }
+    }
+
+    .upload {
+      width: 100%;
+      margin: .5rem 0;
+      
+      .field-label {
+        display: flex;
+        flex-direction: column;
+        font-size: 1.2rem;
+
+        .upload-container {
+          display: flex;
+          justify-content: space-between;
+
+          .button-container {
+            display: flex;
+            align-items: center;
+            width: max-content;
+  
+            .attach-button {
+              margin-top: .5rem;
+              width: 12rem;
+              height: 3rem;
+              background-color: #0561FF;
+              color: white;
+              text-transform: none;
+            }
+  
+            p {
+              margin: 0 1rem;
+            }
+  
+          }
+
+          .upload-button {
+            margin-top: .5rem;
+            width: 13rem;
+            height: 3rem;
+            background-color: #2A2B54;
+            color: white;
+            text-transform: none;
+          }
+
+        }
+      }
+
+    }
+  }
 }
