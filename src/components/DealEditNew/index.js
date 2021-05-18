@@ -1,14 +1,128 @@
 import React, { useState } from 'react'
-import { Button } from '@material-ui/core'
-import './styles.scss'
+import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useParams, useHistory } from 'react-router-dom';
+import { gql } from 'apollo-boost';
 import BasicInfoSettings from './BasicInfoSettings'
 import DeadlineSettings from './DeadlineSettings'
 import SPVTermSettings from './SPVTermSettings'
 import DealSettings from './DealSettings'
+import './styles.scss'
+
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Paper,
+  Button,
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel,
+  TextField,
+  InputAdornment,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  Typography,
+  Grid,
+  Divider,
+  IconButton,
+} from '@material-ui/core';
+
+
+
+const GET_DEAL = gql`
+  query Deal($id: String!, $slug: String!) {
+    organization(slug: $slug) {
+      _id
+      deal(_id: $id) {
+        _id
+        slug
+        company_name
+        company_description
+        date_closed
+        deal_lead
+        pledge_link
+        onboarding_link
+        allInvited
+        status
+        inviteKey
+        target
+        amount_raised
+        memo
+        last_valuation
+        no_exchange
+        appLink
+        publicLink
+        docSpringTemplateId
+        dealCoverImageKey
+        documents {
+          path
+          link
+        }
+        investments {
+          _id
+          status
+          amount
+          investor {
+            _id
+            name
+          }
+        }
+        invitedInvestors {
+          _id
+          name
+          email
+        }
+        emailInvites {
+          status
+          sent_at
+          to
+          opened
+          opened_at
+        }
+        dealParams {
+          totalRoundSize
+          dealType
+          dealMultiple
+          allocation
+          totalCarry
+          minimumInvestment
+          signDeadline
+          wireDeadline
+          estimatedSetupCosts
+          estimatedSetupCostsDollar
+          estimatedTerm
+          managementFees
+          managementFeesDollar
+          managementFeeType
+          portfolioTotalCarry
+          portfolioEstimatedSetupCosts
+          portfolioEstimatedSetupCostsDollar
+          portfolioManagementFees
+          portfolioManagementFeesDollar
+          portfolioManagementFeeType
+          fundTotalCarry
+          fundEstimatedSetupCosts
+          fundEstimatedSetupCostsDollar
+          fundManagementFees
+          fundManagementFeesDollar
+          fundManagementFeeType
+          fundGeneralPartner
+          fundEstimatedTerm
+        }
+      }
+    }
+  }
+`;
 
 function DealEditNew() {
 
-  const [activeTab, setActiveTab] = useState('basic')
+
+  const [activeTab, setActiveTab] = useState('deal')
 
   const handleTabClick = (tab) => {
     setActiveTab(tab)
@@ -77,6 +191,7 @@ function DealEditNew() {
       </div>
 
       <div className={`save-changes ${activeTab === 'deal' && 'lastPage'}`}>
+
         {
           activeTab !== 'deal' && (
             <Button onClick={handleContinueClick} className="continue">
