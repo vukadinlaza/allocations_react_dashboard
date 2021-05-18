@@ -1,7 +1,7 @@
 import { FormControl, TextField, Button } from '@material-ui/core'
 import React from 'react'
 import './styles.scss'
-import CopyIcon from './copy-icon.svg'
+import CopyIcon from '../../../assets/copy-icon.svg'
 import { toast } from 'react-toastify';
 
 function DealSettings() {
