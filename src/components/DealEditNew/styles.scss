@@ -1,6 +1,7 @@
 .DealEditNew {
 
 
+
   h1, h2 {
     font-size: 1.6rem;
     margin: 10px 0 ;
@@ -83,12 +84,19 @@
   .DealEditNew {
   
     .section-header {
-      width: 95%;
+      width: 100%;
       
       .tabs-container {
+        flex-direction: column;
 
         .tab-button {
           font-size: 1rem;
+
+
+        &.active {
+          background: rgb(238, 238, 238);
+          transition: all .25s ease-in;
+        }
         }
       }
     }  
