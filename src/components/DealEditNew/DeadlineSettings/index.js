@@ -13,7 +13,7 @@ function DeadlineSettings() {
           <label className="field-label">
             Signing deadline
             <TextField
-              type="date"
+              type="datetime-local"
               className="text-input"
               variant="outlined"
             />
@@ -24,7 +24,7 @@ function DeadlineSettings() {
           <label className="field-label">
             Wiring deadline
             <TextField
-              type="date"
+              type="datetime-local"
               className="text-input"
               variant="outlined"
             />
