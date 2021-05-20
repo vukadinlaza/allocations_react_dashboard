@@ -1,109 +1,8 @@
-
 .SPVDocumentModal {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-
-  .document-container{
-    width: calc(100% - 10%);
-    max-width: 1110px;
-    // margin-top: calc(var(--component-height) / -2);
-    // margin-bottom: 4em;
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    justify-content: center;
-    font-size: 19px;
-    position: absolute;
-
-
-    .creating {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding-top: 30px
-    }
-
-
-    .document {
-      opacity: 1;
-      max-height: 85%;
-      box-shadow: #00000080 0px 15px 40px 0px;
-      transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-      border-radius: 8px;
-      max-width: 100%;
-      position: relative;
-      background-color: white;
-      min-width: 612px;
-      min-height: 792px;
-      height: 792px;
-      overflow: hidden;
-
-
-      .pages-container {
-        overflow-y: scroll;
-        height: calc(100% - 3em);
-        .page > * {
-          border-radius: 8px;
-          transition: 0.5s;
-        }
-      }
-
-
-      .actions {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: white;
-        box-shadow: 0px 3px 17px 5px #d4d4d4;
-        height: 3em;
-        position: absolute;
-        z-index: 1;
-        padding: 0.5em 1em;
-        width: 100%;
-        bottom: 0;
-        // opacity: 0;
-        // transition: opacity ease-in-out 0.2s;
-
-
-        .link-container {
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
-        }
-
-
-        .buttonContainer {
-          display: flex;
-          justify-content: space-evenly;
-          align-items: center;
-
-          .button {
-            text-transform: none;
-            margin: 0 10px;
-            width: 5em;
-          }
-
-          .button > span {
-            font-size: 14px;
-          }
-
-          .declineBtn {
-            background: grey;
-            color: white;
-          }
-        }
-      }
-
-
-      .actions *{
-        font-size: 16px
-      }
-    }
-  }
-
 
   .paper {
     height: 95vh;
@@ -146,6 +45,23 @@
         .closed-icon {
           cursor: pointer;
         }
+      }
+    }
+
+    .buttonContainer {
+      display: flex;
+      width: 20rem;
+      justify-content: space-evenly;
+      align-items: center;
+      margin-top: 1rem;
+
+      .button {
+        height: 60%;
+        height: 3rem;
+      }
+
+      .declineBtn {
+        background: grey;
       }
     }
   }

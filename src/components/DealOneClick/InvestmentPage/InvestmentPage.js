@@ -92,6 +92,7 @@ const GET_DEAL = gql`
 const GET_PERSONAL_INFO = gql`
   query InvestorPersonalInfo {
     investor {
+      _id
       investorPersonalInfo {
         investor {
           _id
@@ -106,7 +107,8 @@ const GET_PERSONAL_INFO = gql`
         }
       }
     }
-  }`
+  }
+`;
 
 const CONFIRM_INVESTMENT = gql`
   mutation ConfirmInvestment($payload: Object) {
@@ -181,15 +183,13 @@ function InvestmentPage({}) {
   });
   const [errors, setErrors] = useState([]);
 
-
   const populateInvestorData = () => {
-    let personalData = personalInfo?.investor?.investorPersonalInfo?.submissionData;
-    if(!personalData) return;
-    let updatedInvestorData = {...investorFormData, ...personalData}
+    const personalData = personalInfo?.investor?.investorPersonalInfo?.submissionData;
+    if (!personalData) return;
+    const updatedInvestorData = { ...investorFormData, ...personalData };
     setInvestor(updatedInvestorData);
     setPopulated(true);
-  }
-
+  };
 
   const [submitConfirmation, {}] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
@@ -249,7 +249,7 @@ function InvestmentPage({}) {
     dealParams: { minimumInvestment },
   } = deal;
 
-  if(!populated) populateInvestorData(deal)
+  if (!populated) populateInvestorData(deal);
 
   return (
     <section className="InvestmentPage">
