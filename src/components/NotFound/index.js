@@ -1,14 +1,20 @@
 import React from 'react';
-import { useLocation } from "react-router-dom";
-
+import './styles.scss';
+import { useHistory } from 'react-router-dom';
+import { Button, Grid } from '@material-ui/core';
+import rocket from '../../assets/rocket.png';
 export default function NotFound() {
-  let location = useLocation();
+
+  const history = useHistory();
 
   return (
-    <div>
-      <h3>
-        No match for <code>{location.pathname}</code>
-      </h3>
+    <div className="err-page">
+      <img className="rocket-logo" src={rocket} alt="rocket-logo"/>
+      <h1 className="err-header">
+        Oh no! 404 error.
+      </h1>
+      <div className="err-text">The page was not found. Let's take your rocket back to safety.</div>
+      <Button className="err-button" onClick={() => history.push(`/`)} variant="contained" color="primary">Go to homepage</Button>
     </div>
   );
 }
