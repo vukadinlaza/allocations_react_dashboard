@@ -128,7 +128,7 @@ function DealNextSteps() {
 
         <div className="action-items">
           <div className="action-item">
-            <img className="action-icon" src={signInvestmentYes} alt="sign-investment-yes"/>
+            <img className="action-icon" src={signInvestmentYes} alt="sign-investment-yes" />
             <div className="action-instructions">
               <p className="action-header">Sign for Investment</p>
             </div>
@@ -138,7 +138,7 @@ function DealNextSteps() {
           </div>
 
           <div className="action-item">
-            <img className="action-icon" src={hasKyc ? submitTaxInfoYes : submitTaxInfoNo} alt="tax-info"/>
+            <img className="action-icon" src={hasKyc ? submitTaxInfoYes : submitTaxInfoNo} alt="tax-info" />
             <div className="action-instructions">
               <p className="action-header">Submit Tax Information</p>
               <p className="action-sub-header">Complete your W8/W9 forms here</p>
@@ -165,11 +165,8 @@ function DealNextSteps() {
               <Button
                 className={data?.investor.accredidation_status === true ? 'completed-step-button' : 'next-step-button'}
                 onClick={() => {
-                  const token = process.env.REACT_APP_VERIFY_INVESTOR_HOST_TOKEN;
-                  const identifier = data?.investor?._id; // optional
-                  const portal_name = process.env.NODE_ENV === 'development' ? 'Test_Allocations' : 'Allocations'; // optional
-                  const deal_name = dealData?.deal.company_name || ''; // optional
-                  window.verifyInvestor(token, identifier, portal_name, deal_name);
+                  const win = window.open('https://bridge.parallelmarkets.com/allocations', '_blank');
+                  win.focus();
                 }}
               >
                 {data?.investor.accredidation_status === true ? 'Completed' : 'Submit your application'}
@@ -178,7 +175,7 @@ function DealNextSteps() {
           )}
 
           <div className={`action-item ${!hasKyc && 'disabled'}`}>
-            <img className="action-icon" src={wireFundsNo} alt="wire-funds-no"/>
+            <img className="action-icon" src={wireFundsNo} alt="wire-funds-no" />
             <div className="action-instructions">
               <p className="action-header">Wire Funds</p>
               <p className="action-sub-header">Required to complete your investment</p>
