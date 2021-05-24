@@ -15,13 +15,14 @@ import {
   Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import Box from '@material-ui/core/Box';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { toast } from 'react-toastify';
 import InvestmentEdit from '../../../InvestmentEdit';
 import { getDisplayName } from '../../../../utils/displayName';
 import { nWithCommas } from '../../../../utils/numbers';
@@ -307,9 +308,10 @@ export default ({ dealId, isDemo, superadmin }) => {
         investmentUpdated={investmentUpdated}
         setInvestmentUpdated={setInvestmentUpdated}
       />
-      <DeleteVieweduser
+      <DeleteViewedUser
         deleteViewedUserModal={deleteViewedUserModal}
         setDeleteViewedUserModal={setDeleteViewedUserModal}
+        dealId={dealId}
       />
     </>
   );
@@ -368,9 +370,23 @@ const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal }) =>
     </>
   );
 };
-const DeleteVieweduser = ({ deleteViewedUserModal, setDeleteViewedUserModal }) => {
-  const classes = useStyles();
 
+const DELETE_VIEWED_USER = gql`
+  mutation deleteUserAsViewed($user_id: String!, $deal_id: String!) {
+    deleteUserAsViewed(user_id: $user_id, deal_id: $deal_id) {
+      _id
+    }
+  }
+`;
+
+const DeleteViewedUser = ({ deleteViewedUserModal, setDeleteViewedUserModal, dealId }) => {
+  const classes = useStyles();
+  const [deleteViewedUser, {}] = useMutation(DELETE_VIEWED_USER, {
+    onCompleted: () => {
+      setDeleteViewedUserModal(false);
+      toast.success('Investment Removed');
+    },
+  });
   return (
     <>
       <Modal open={deleteViewedUserModal.investor} onClose={() => {}} className={classes.modal}>
@@ -383,10 +399,23 @@ const DeleteVieweduser = ({ deleteViewedUserModal, setDeleteViewedUserModal }) =
               >
                 <CloseIcon />
               </Grid>
-              <Grid container justify="space-between" />
-              <Button variant="contained" color="red">
-                Delete
-              </Button>
+              <Grid container style={{ padding: '2rem', flexDirection: 'column', alignItems: 'center' }}>
+                <Typography variant="h6">Remove Investment</Typography>
+                <Button
+                  variant="contained"
+                  style={{ backgroundColor: 'red', maxWidth: '30%', marginTop: '1rem' }}
+                  onClick={() => {
+                    deleteViewedUser({
+                      variables: {
+                        deal_id: dealId,
+                        user_id: deleteViewedUserModal.investor._id,
+                      },
+                    });
+                  }}
+                >
+                  Delete
+                </Button>
+              </Grid>
             </Paper>
           </Grid>
         </Grid>
