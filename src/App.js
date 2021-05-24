@@ -32,6 +32,7 @@ import ThankYou from './components/ThankYou/index';
 import DealDocuments from './components/DealDocuments';
 import NewMember from './components/Newmember';
 import TVC from './components/TVC';
+import NotFound from './components/NotFound';
 
 // superadmin
 import SuperAdminManager from './components/superadmin/Manager';
@@ -71,7 +72,7 @@ const App = () => {
         <Switch>
           <Route path="/cb/thankyou" component={ThankYou} exact />
 
-          <PrivateRoute path="/" exact component={UserHome} />
+          <PrivateRoute exact path="/" exact component={UserHome} />
           <PrivateRoute path="/demo" exact component={Demo} />
           <PrivateRoute path="/credit" exact component={Credit} />
           <PrivateRoute path="/profile" component={Profile} />
@@ -138,7 +139,8 @@ const App = () => {
           <AdminRoute path="/admin/:organization/investors" component={Investors} exact />
 
           {/** catchall * */}
-          <PrivateRoute path="/" component={UserHome} />
+          <PrivateRoute exact path="/" component={UserHome} />
+          <Route path="*" component={NotFound} />
         </Switch>
       </Sidebar>
     </AuthorizedApolloProvider>
