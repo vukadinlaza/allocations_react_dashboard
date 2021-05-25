@@ -13,9 +13,12 @@ function DeadlineSettings() {
           <label className="field-label">
             Signing deadline
             <TextField
+              autoFocus={true}
               type="datetime-local"
               className="text-input"
               variant="outlined"
+              open={true}
+              orientation='landscape'
             />
           </label>
         </FormControl>

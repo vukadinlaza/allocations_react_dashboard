@@ -11,6 +11,7 @@
     flex-wrap: wrap;
     justify-content: space-between;
     margin-top: 1.5rem;
+    font-weight: 500;
 
     .field {
       width: 48.5%;
@@ -57,9 +58,56 @@
             width: 10rem;
             font-size: 1rem;
             text-transform: none;
+
+            &.selected {
+              border: 2px solid #0461FF;
+            }
           }
         }
       }
     }
   }
+}
+
+@media screen and (max-width: 960px) {
+  .SPVTermSettings {
+
+    width: 100%;
+
+  
+    .form-fields {
+
+      .field {
+        width: 100%;
+      }
+  
+      .wide-field {
+        width: 100%;
+      }
+  
+      .wide-field, .field {
+  
+        .field-label {
+          
+          .management-fee {
+
+            .percentage, .fixed {
+              width: 15%;
+            }
+          }
+  
+          .button-options {
+
+            justify-content: space-between;
+  
+            .option-button {
+              margin: 0px;
+              width: 48.5%;
+            }
+          }
+        }
+      }
+    }
+  }
+  
 }

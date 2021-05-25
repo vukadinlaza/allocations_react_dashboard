@@ -44,8 +44,7 @@
     margin-top: .25rem;
     margin-bottom: .75rem;
     display: flex;
-
-
+    align-items: center;
 
     .continue {
       text-transform: none;
@@ -62,6 +61,7 @@
       color: white;
       width: 12rem;
       height: 3rem;
+      margin: 1rem 0;
     }
 
     .delete-deal {
@@ -75,6 +75,7 @@
 
     &.lastPage {
       flex-direction: column;
+      align-items: flex-start;
     }
   }
 
@@ -91,15 +92,36 @@
 
         .tab-button {
           font-size: 1rem;
+          text-align: left;
 
-
-        &.active {
-          background: rgb(238, 238, 238);
-          transition: all .25s ease-in;
-        }
+          &.active {
+            background: rgb(238, 238, 238);
+            transition: all .25s ease-in;
+          }
         }
       }
-    }  
-  }
+    }
+
+    .save-changes {
+      flex-direction: column;
+
+      .continue {
+        width: 100%;
+      }
+      
+      .save-and-exit {
+        width: 100%;
+      }
   
+      .delete-deal {
+        width: 100%;
+      }
+  
+      &.lastPage {
+        flex-direction: column;
+      }
+    }
+
+
+  }
 }

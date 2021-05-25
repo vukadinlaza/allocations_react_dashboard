@@ -6,6 +6,8 @@ import BasicInfoSettings from './BasicInfoSettings'
 import DeadlineSettings from './DeadlineSettings'
 import SPVTermSettings from './SPVTermSettings'
 import DealSettings from './DealSettings'
+import PortfolioCompanySettings from './PortfolioCompanySettings'
+import FundTerms from './FundTerms';
 import './styles.scss'
 
 
@@ -122,7 +124,14 @@ const GET_DEAL = gql`
 function DealEditNew() {
 
 
-  const [activeTab, setActiveTab] = useState('deal')
+  const [activeTab, setActiveTab] = useState('spv')
+  const [differentSPVTerms, toggleDifferentSPVTerms] = useState(false)
+
+  const [formData, setFormData] = useState({
+    status: 'onboarding',
+    dealType: '506b',
+    investmentType: 'spv'
+  })
 
   const handleTabClick = (tab) => {
     setActiveTab(tab)
@@ -131,21 +140,52 @@ function DealEditNew() {
   const getTabClassName = tab => `tab-button ${activeTab === tab && 'active'}`
 
   const handleContinueClick = () => {
+
+    window.scrollTo({
+      top: 0,
+      left: 100,
+      behavior: 'smooth',
+    });
+
     switch (activeTab) {
       case 'basic':
         return setActiveTab('deadline')
       case 'deadline':
-        return setActiveTab('spv')
+        {
+          if (formData.investmentType === 'spv') {
+            return setActiveTab('spv')
+          } else {
+            return setActiveTab('fund')
+          }
+        }
       case 'spv':
+        if (differentSPVTerms) {
+          return setActiveTab('portfolio')
+        } else {
+          return setActiveTab('deal')
+        }
+      case 'portfolio':
+        return setActiveTab('deal')
+      case 'fund':
         return setActiveTab('deal')
     }
   }
 
+  const handleDeleteDeal = () => {
+    if (window.confirm('Are you sure you want to delete this deal?')) {
+      // handle deal delete here
+    }
+  }
+
+  console.log('active tab', activeTab)
+
   const settingsComponentMap = {
-    'basic': <BasicInfoSettings />,
+    'basic': <BasicInfoSettings formData={formData} setFormData={setFormData} />,
     'deadline': <DeadlineSettings />,
-    'spv': <SPVTermSettings />,
+    'spv': <SPVTermSettings differentSPVTerms={differentSPVTerms} toggleDifferentSPVTerms={toggleDifferentSPVTerms} />,
     'deal': <DealSettings />,
+    'fund': <FundTerms />,
+    'portfolio': <PortfolioCompanySettings />
   }
 
   return (
@@ -169,12 +209,33 @@ function DealEditNew() {
             Deadlines
           </button>
 
-          <button
-            onClick={() => handleTabClick('spv')}
-            className={getTabClassName('spv')}
-          >
-            SPV Terms
-          </button>
+          {
+            formData.investmentType === 'spv' ?
+              (<button
+                onClick={() => handleTabClick('spv')}
+                className={getTabClassName('spv')}
+              >
+                SPV Terms
+              </button>) :
+              (<button
+                onClick={() => handleTabClick('fund')}
+                className={getTabClassName('fund')}
+              >
+                Fund Terms
+              </button>)
+          }
+
+          {
+            differentSPVTerms && formData.investmentType === 'spv' && 
+              (
+                <button
+                  onClick={() => handleTabClick('portfolio')}
+                  className={getTabClassName('portfolio')}
+                >
+                  Portfolio Company Terms
+              </button>
+              )
+          }
 
           <button
             onClick={() => handleTabClick('deal')}
@@ -206,7 +267,7 @@ function DealEditNew() {
 
         {
           activeTab === 'deal' && (
-            <Button onClick={handleContinueClick} className="delete-deal">
+            <Button onClick={handleDeleteDeal} className="delete-deal">
               Delete deal
             </Button>
           )
