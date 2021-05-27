@@ -29,7 +29,7 @@ function InvestPanel({ deal, deal_slug, organization }) {
   } = deal;
 
   const getDeadline = (date) => {
-    return moment(date).format('dddd, MMMM D YYYY, h:mm a [EST]');
+    return moment(date).format('dddd, MMMM D, YYYY h:mm a [EST]');
   };
 
   const isClosed = status === 'closed';
