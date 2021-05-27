@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { get, isEqual, pick, omit } from 'lodash';
+import { get, isEqual, pick } from 'lodash';
 import { useParams, Redirect } from 'react-router-dom';
-import { Row, Col } from 'reactstrap';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { gql } from 'apollo-boost';
@@ -68,22 +67,30 @@ const UPDATE_INVESTMENT = gql`
     }
   }
 `;
-export default function InvestmentEdit({ investmentId = false, isK1 = false }) {
+export default function InvestmentEdit({ investmentId = false, isK1 = false, setEditInvestmentModal }) {
   const params = useParams();
   const [investment, setInvestment] = useState(null);
   const [hasChanges, setHasChanges] = useState(false);
   const id = investmentId || params.id;
   const classes = useStyles();
-  const { data, refetch } = useQuery(GET_INVESTMENT, { variables: { _id: id } });
+  const { data, refetch, loading } = useQuery(GET_INVESTMENT, { variables: { _id: id } });
   const [createInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT);
-  const [deleteInvestment, {}] = useMutation(destroy);
+  const [deleteInvestment, {}] = useMutation(destroy, {
+    onCompleted: () => {
+      toast.success('Sucess! Investment Deleted.');
+      setEditInvestmentModal(false);
+    },
+    onError: (e) => {
+      toast.error('Looks like we encountered an error.')
+    }
+  });
 
   useEffect(() => {
     setHasChanges(!isEqual(investment, {}));
   }, [investment]);
 
   useEffect(() => {
-    if (data && !investment) setInvestment(data.investment);
+    if (data && !loading) setInvestment(data.investment);
   }, [data, investment]);
 
   const updateInvestmentProp = ({ prop, newVal }) => {
@@ -117,8 +124,7 @@ export default function InvestmentEdit({ investmentId = false, isK1 = false }) {
               <TextField
                 style={{ width: '100%' }}
                 type="number"
-                value={get(investment, 'amount', '')}
-                defaultValue={0}
+                value={get(investment, 'amount', '') || 0}
                 onChange={(e) => updateInvestmentProp({ prop: 'amount', newVal: parseInt(e.target.value) })}
                 label="Amount"
                 variant="outlined"
@@ -243,11 +249,18 @@ function Doc({ doc, investment, refetch }) {
   const file = doc.path.slice(0, 12) === 'investments/' ? doc.path.split('/')[2] : doc.path.split('/')[1];
   const [rmInvestmentDoc] = useMutation(RM_INVESTMENT_DOC, {
     variables: { file, investment_id: investment._id },
-    onCompleted: refetch,
+    onCompleted: () => {
+      refetch()
+      toast.success('File has been deleted');
+    },
+    onError: () => {
+      toast.error('Looks like we encountered an error.')
+    }
   });
   const rmDoc = () => {
     if (window.confirm(`Delete ${file}?`)) rmInvestmentDoc();
   };
+
   return (
     <div className="doc-wrapper">
       <div className="doc">

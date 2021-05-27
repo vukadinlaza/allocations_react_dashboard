@@ -109,7 +109,7 @@ export default function AdminHome({}) {
   if (orgSlug === 'demo-fund') {
     slug = 'browder-capital';
   }
-  console.log('X', x);
+  
   const fundInvestments = x.filter((inv) => {
     return toLower(inv.Organization).includes(slug.replace('-', ' '));
   });
@@ -125,6 +125,7 @@ export default function AdminHome({}) {
         <Loader />
       </Paper>
     );
+
   const header = (
     <Grid container justify="space-between">
       <Grid item sm={12} md={6}>
@@ -133,11 +134,11 @@ export default function AdminHome({}) {
         </Typography>
       </Grid>
       <Grid item sm={12} md={6}>
-        <Typography variant="body2" style={{ textAlign: 'right' }}>
+        <div style={{ textAlign: 'right' }}>
           <Grid item xs={12}>
             {data.investor.admin && <SuperAdmin org={orgData} />}
           </Grid>
-        </Typography>
+        </div>
       </Grid>
     </Grid>
   );

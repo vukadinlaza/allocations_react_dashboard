@@ -9,22 +9,18 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-  ListItemSecondaryAction,
   Paper,
   Modal,
   Button,
+  Container,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import Box from '@material-ui/core/Box';
-import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
-
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
 import InvestmentEdit from '../../../InvestmentEdit';
-import { getDisplayName } from '../../../../utils/displayName';
 import { nWithCommas } from '../../../../utils/numbers';
 import Loader from '../../../utils/Loader';
 
@@ -99,7 +95,6 @@ const useStyles = makeStyles((theme) => ({
   },
   modal: {
     display: 'flex',
-    // alignItems: 'center',
     justifyContent: 'center',
   },
   modalPaper: {
@@ -127,7 +122,6 @@ const useStyles = makeStyles((theme) => ({
     '&>span': {
       overflow: 'hidden',
       textOverflow: 'ellipsis',
-      // marginRight: "1.5em",
       whiteSpace: 'nowrap',
     },
   },
@@ -182,7 +176,8 @@ export const DEAL_INVESTMENTS = gql`
 
 export default ({ dealId, isDemo, superadmin }) => {
   const classes = useStyles();
-  const [editInvestmentModal, setEditInvestmentModal] = useState({});
+  const [editInvestmentModal, setEditInvestmentModal] = useState(false);
+  const [dataToEdit, setDataToEdit] = useState({});
   const [deleteViewedUserModal, setDeleteViewedUserModal] = useState({});
   const [investmentUpdated, setInvestmentUpdated] = useState();
   const { data, loading, refetch } = useQuery(DEAL_INVESTMENTS, {
@@ -289,9 +284,11 @@ export default ({ dealId, isDemo, superadmin }) => {
                 <List dense className={classes.list}>
                   {value?.categoryInvestments?.map((inv) => (
                     <InvestmentSquare
+                      key={inv._id || inv.investor._id}
                       investment={inv}
                       isDemo={isDemo}
                       setEditInvestmentModal={setEditInvestmentModal}
+                      setDataToEdit={setDataToEdit}
                       superadmin={superadmin}
                       setDeleteViewedUserModal={setDeleteViewedUserModal}
                     />
@@ -304,9 +301,7 @@ export default ({ dealId, isDemo, superadmin }) => {
       <EditInvestmentModal
         editInvestmentModal={editInvestmentModal}
         setEditInvestmentModal={setEditInvestmentModal}
-        refetchInvestments={refetch}
-        investmentUpdated={investmentUpdated}
-        setInvestmentUpdated={setInvestmentUpdated}
+        dataToEdit={dataToEdit}
       />
       <DeleteViewedUser
         deleteViewedUserModal={deleteViewedUserModal}
@@ -316,17 +311,18 @@ export default ({ dealId, isDemo, superadmin }) => {
     </>
   );
 };
-const InvestmentSquare = ({ investment, isDemo, setEditInvestmentModal, superadmin, setDeleteViewedUserModal }) => {
+const InvestmentSquare = ({ investment, setEditInvestmentModal, superadmin, setDataToEdit, setDeleteViewedUserModal }) => {
   const classes = useStyles();
   const n = _.get(investment, 'investor.name', '');
   return (
     <div
       onClick={() => {
         if (superadmin && investment._id) {
-          return setEditInvestmentModal(investment);
+          setDataToEdit(investment);
+          setEditInvestmentModal(true);
         }
         if (superadmin && !investment._id) {
-          return setDeleteViewedUserModal(investment);
+          setDeleteViewedUserModal(investment);
         }
       }}
     >
@@ -346,26 +342,28 @@ const InvestmentSquare = ({ investment, isDemo, setEditInvestmentModal, superadm
   );
 };
 
-const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal }) => {
+const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal, dataToEdit }) => {
   const classes = useStyles();
 
   return (
     <>
-      <Modal open={editInvestmentModal._id} onClose={() => {}} className={classes.modal}>
-        <Grid container xs={12} sm={12} md={4} lg={5}>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Paper className={classes.modalPaper}>
-              <Grid
-                onClick={() => setEditInvestmentModal(false)}
-                style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer' }}
-              >
-                <CloseIcon />
-              </Grid>
-              <Grid container justify="space-between" />
-              <InvestmentEdit investmentId={editInvestmentModal._id} />
-            </Paper>
+      <Modal open={editInvestmentModal} className={classes.modal}>
+        <Container maxWidth="sm">
+          <Grid container style={{ minHeight: '100vh' }}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Paper className={classes.modalPaper}>
+                <Grid
+                  onClick={() => setEditInvestmentModal(false)}
+                  style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer' }}
+                >
+                  <CloseIcon />
+                </Grid>
+                <Grid container justify="space-between" />
+                <InvestmentEdit investmentId={dataToEdit._id} setEditInvestmentModal={setEditInvestmentModal} />
+              </Paper>
+            </Grid>
           </Grid>
-        </Grid>
+        </Container>
       </Modal>
     </>
   );
@@ -389,15 +387,15 @@ const DeleteViewedUser = ({ deleteViewedUserModal, setDeleteViewedUserModal, dea
   });
   return (
     <>
-      <Modal open={deleteViewedUserModal.investor} onClose={() => {}} className={classes.modal}>
-        <Grid container xs={12} sm={12} md={4} lg={5}>
+      <Modal open={Boolean(deleteViewedUserModal.investor)} className={classes.modal}>
+      <Container maxWidth="sm">
+        <Grid container style={{ minHeight: '100vh' }}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Paper className={classes.modalPaper}>
-              <Grid
-                onClick={() => setDeleteViewedUserModal(false)}
-                style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer' }}
-              >
-                <CloseIcon />
+              <Grid container justify="flex-end">
+                <Box onClick={() => setDeleteViewedUserModal(false)} style={{cursor: 'pointer'}}>
+                  <CloseIcon />
+                </Box>
               </Grid>
               <Grid container style={{ padding: '2rem', flexDirection: 'column', alignItems: 'center' }}>
                 <Typography variant="h6">Remove Investment</Typography>
@@ -419,6 +417,7 @@ const DeleteViewedUser = ({ deleteViewedUserModal, setDeleteViewedUserModal, dea
             </Paper>
           </Grid>
         </Grid>
+        </Container>
       </Modal>
     </>
   );
