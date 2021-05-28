@@ -1,8 +1,43 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FormControl, TextField, Button } from '@material-ui/core';
 import './styles.scss'
 
-function SPVTermSettings({ differentSPVTerms, toggleDifferentSPVTerms }) {
+function SPVTermSettings({ formData, setFormData, differentSPVTerms, toggleDifferentSPVTerms }) {
+
+  const {
+    dealParams: {
+      managementFees,
+      managementFeeType,
+      estimatedTerm,
+      totalCarry,
+      estimatedSetupCosts,
+    },
+    deal_lead
+  } = formData;
+
+  const handleFormChange = ({ target }) => {
+    const dealParamFields = ['managementFees', 'managementFeeType', 'estimatedTerm', 'totalCarry', 'estimatedSetupCosts']
+
+    if (dealParamFields.includes(target.name)) {
+      return setFormData(prevData => ({
+        ...prevData,
+        dealParams: {
+          ...prevData.dealParams,
+          [target.name]: target.value
+        }
+      }))
+    }
+
+    return setFormData(prevData => ({
+      ...prevData,
+      [target.name]: target.value
+    }))
+  }
+
+  const handleManagementFeeChange = () => {
+
+  }
+
   return (
     <section className="SPVTermSettings">
       <h2>SPV Terms</h2>
@@ -15,15 +50,22 @@ function SPVTermSettings({ differentSPVTerms, toggleDifferentSPVTerms }) {
             <div className="management-fee">
               <TextField
                 className="fee-input"
+                name="managementFees"
                 variant="outlined"
+                onChange={handleFormChange}
+                value={managementFees}
               />
               <Button
-                className="percentage"
+                onClick={() => handleManagementFeeChange({})}
+                className={`percentage ${managementFeeType === '%' && 'selected'}`}
+                name='managementFeeType'
                 variant="outlined">
                 %
               </Button>
               <Button
-                className="fixed"
+                onClick={() => handleManagementFeeChange({})}
+                className={`fixed ${managementFeeType === '$' && 'selected'}`}
+                name='managementFeeType'
                 variant="outlined">
                 $
               </Button>
@@ -36,11 +78,13 @@ function SPVTermSettings({ differentSPVTerms, toggleDifferentSPVTerms }) {
             Fee type
             <div className="button-options">
               <Button
+                onClick={() => { }}
                 className="option-button"
                 variant="outlined">
                 Annual
               </Button>
               <Button
+                onClick={() => { }}
                 className="option-button"
                 variant="outlined">
                 One-time
@@ -49,12 +93,16 @@ function SPVTermSettings({ differentSPVTerms, toggleDifferentSPVTerms }) {
           </label>
         </FormControl>
 
+        {/* TODO: estimatedSetupCosts || estimatedSetupCostsDollar */}
         <FormControl className="field">
           <label className="field-label">
             Estimated setup cost
             <TextField
               className="text-input"
               variant="outlined"
+              value={estimatedSetupCosts || ''}
+              name="estimatedSetupCosts"
+              onChange={handleFormChange}
             />
           </label>
         </FormControl>
@@ -63,16 +111,23 @@ function SPVTermSettings({ differentSPVTerms, toggleDifferentSPVTerms }) {
           <label className="field-label">
             Total carry (%)
             <TextField
+              value={totalCarry || ''}
+              name="totalCarry"
+              onChange={handleFormChange}
               className="text-input"
               variant="outlined"
             />
           </label>
         </FormControl>
 
+        {/* TODO: deal_lead or organizer? */}
         <FormControl className="field">
           <label className="field-label">
             Organizer
             <TextField
+              value={deal_lead || ''}
+              onChange={handleFormChange}
+              name='deal_lead'
               className="text-input"
               variant="outlined"
             />
@@ -83,6 +138,9 @@ function SPVTermSettings({ differentSPVTerms, toggleDifferentSPVTerms }) {
           <label className="field-label">
             Estimated term
             <TextField
+              value={estimatedTerm || ''}
+              name='estimatedTerm'
+              onChange={handleFormChange}
               className="text-input"
               variant="outlined"
               placeholder="10 years"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { useParams, useHistory } from 'react-router-dom';
 import { gql } from 'apollo-boost';
@@ -7,7 +7,7 @@ import DeadlineSettings from './DeadlineSettings'
 import SPVTermSettings from './SPVTermSettings'
 import DealSettings from './DealSettings'
 import PortfolioCompanySettings from './PortfolioCompanySettings'
-import FundTerms from './FundTerms';
+import FundTerms from './FundTermSettings';
 import './styles.scss'
 
 
@@ -123,15 +123,31 @@ const GET_DEAL = gql`
 
 function DealEditNew() {
 
+  const { id, organization } = useParams();
+  const { data, refetch, error, loading } = useQuery(GET_DEAL, { variables: { id, slug: organization } });
+  const [errorMessage, setErrorMessage] = useState(null)
 
-  const [activeTab, setActiveTab] = useState('spv')
+  useEffect(() => {
+    if (data) {
+      if (data?.organization?.deal) {
+        setFormData(prevState => ({ ...prevState, ...data.organization.deal }))
+      } else {
+        setErrorMessage('Not Authorized to View this Deal');
+      }
+    }
+  }, [data]);
+
+
+  const [activeTab, setActiveTab] = useState('fund')
   const [differentSPVTerms, toggleDifferentSPVTerms] = useState(false)
-
   const [formData, setFormData] = useState({
-    status: 'onboarding',
-    dealType: '506b',
-    investmentType: 'spv'
+    investmentType: 'fund',
+    dealParams: {
+      dealType: '506b'
+    }
   })
+
+  console.log('formdata', formData)
 
   const handleTabClick = (tab) => {
     setActiveTab(tab)
@@ -181,11 +197,11 @@ function DealEditNew() {
 
   const settingsComponentMap = {
     'basic': <BasicInfoSettings formData={formData} setFormData={setFormData} />,
-    'deadline': <DeadlineSettings />,
-    'spv': <SPVTermSettings differentSPVTerms={differentSPVTerms} toggleDifferentSPVTerms={toggleDifferentSPVTerms} />,
-    'deal': <DealSettings />,
-    'fund': <FundTerms />,
-    'portfolio': <PortfolioCompanySettings />
+    'deadline': <DeadlineSettings formData={formData} setFormData={setFormData} />,
+    'spv': <SPVTermSettings formData={formData} setFormData={setFormData} differentSPVTerms={differentSPVTerms} toggleDifferentSPVTerms={toggleDifferentSPVTerms} />,
+    'deal': <DealSettings formData={formData} setFormData={setFormData} />,
+    'fund': <FundTerms formData={formData} setFormData={setFormData} />,
+    'portfolio': <PortfolioCompanySettings formData={formData} setFormData={setFormData} />
   }
 
   return (
@@ -226,15 +242,15 @@ function DealEditNew() {
           }
 
           {
-            differentSPVTerms && formData.investmentType === 'spv' && 
-              (
-                <button
-                  onClick={() => handleTabClick('portfolio')}
-                  className={getTabClassName('portfolio')}
-                >
-                  Portfolio Company Terms
+            differentSPVTerms && formData.investmentType === 'spv' &&
+            (
+              <button
+                onClick={() => handleTabClick('portfolio')}
+                className={getTabClassName('portfolio')}
+              >
+                Portfolio Company Terms
               </button>
-              )
+            )
           }
 
           <button

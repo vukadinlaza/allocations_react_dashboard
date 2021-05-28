@@ -52,7 +52,7 @@
       color: white;
       width: 12rem;
       height: 3rem;
-      margin-right: 10px;
+      margin-right: .5rem;
     }
     
     .save-and-exit {
@@ -107,6 +107,7 @@
 
       .continue {
         width: 100%;
+        margin: 0;
       }
       
       .save-and-exit {

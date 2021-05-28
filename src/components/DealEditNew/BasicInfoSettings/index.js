@@ -3,10 +3,27 @@ import { Editor } from '@tinymce/tinymce-react';
 import './styles.scss'
 import { FormControl, TextField, Button } from '@material-ui/core';
 import CurrencyTextField from '@unicef/material-ui-currency-textfield';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+
 
 function BasicInfoSettings({ formData, setFormData }) {
 
   const handleFormChange = (field, value) => {
+
+    console.log('in form change', field, value)
+    const dealParamFields = ['dealType', 'minimumInvestment', 'target']
+
+    if (dealParamFields.includes(field)) {
+      return setFormData(prevState => ({
+        ...prevState,
+        dealParams: {
+          ...prevState.dealParams,
+          [field]: value
+        }
+      }))
+    }
+
     return setFormData(prevState => ({
       ...prevState,
       [field]: value
@@ -15,8 +32,8 @@ function BasicInfoSettings({ formData, setFormData }) {
 
   const {
     investmentType,
-    dealType,
-    status
+    status,
+    dealParams
   } = formData;
 
   return (
@@ -24,7 +41,7 @@ function BasicInfoSettings({ formData, setFormData }) {
       <h2>Key highlights</h2>
 
       <Editor
-        value={'hello world'}
+        value={formData.memo}
         apiKey="jlbrhzgo0m2myqdmbhaav8a0971vomza2smty20fpq6fs47j"
         init={{
           height: 300,
@@ -65,7 +82,10 @@ function BasicInfoSettings({ formData, setFormData }) {
           },
         }}
         onEditorChange={(value) => {
-          console.log('edit change', value)
+          setFormData(prevData => ({
+            ...prevData,
+            memo: value
+          }))
         }}
       />
 
@@ -75,6 +95,7 @@ function BasicInfoSettings({ formData, setFormData }) {
           <label className="field-label">
             Company name
             <TextField
+              value={formData.company_name}
               className="text-input"
               variant="outlined"
             />
@@ -85,6 +106,7 @@ function BasicInfoSettings({ formData, setFormData }) {
           <label className="field-label">
             Company description
             <TextField
+              value={formData.company_description}
               className="text-input"
               variant="outlined"
             />
@@ -94,16 +116,19 @@ function BasicInfoSettings({ formData, setFormData }) {
         <FormControl className="field">
           <label className="field-label">
             Target raise
-            <CurrencyTextField
+
+            <TextField
               className="currency-text-input"
-              variant="outlined"
-              // value={amount}
-              currencySymbol="$"
-              textAlign="left"
-              outputFormat="string"
-              decimalCharacter="."
-              digitGroupSeparator=","
-              onChange={(event, value) => console.log(value.toString())}
+              value={formData.target}
+              onChange={({ target }) => handleFormChange('target', target.value)}
+              variant='outlined'
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AttachMoneyIcon />
+                  </InputAdornment>
+                ),
+              }}
             />
           </label>
         </FormControl>
@@ -131,16 +156,19 @@ function BasicInfoSettings({ formData, setFormData }) {
         <FormControl className="field">
           <label className="field-label">
             Minumum investment
-            <CurrencyTextField
+
+            <TextField
+              onChange={({ target }) => handleFormChange('minimumInvestment', target.value)}
               className="currency-text-input"
-              variant="outlined"
-              // value={amount}
-              currencySymbol="$"
-              textAlign="left"
-              outputFormat="string"
-              decimalCharacter="."
-              digitGroupSeparator=","
-              onChange={(event, value) => console.log(value.toString())}
+              value={dealParams.minimumInvestment}
+              variant='outlined'
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AttachMoneyIcon />
+                  </InputAdornment>
+                ),
+              }}
             />
           </label>
         </FormControl>
@@ -151,13 +179,13 @@ function BasicInfoSettings({ formData, setFormData }) {
             <div className="button-options">
               <Button
                 onClick={() => handleFormChange('dealType', '506b')}
-                className={`option-button ${dealType === '506b' && 'selected'}`}
+                className={`option-button ${dealParams.dealType === '506b' && 'selected'}`}
                 variant="outlined">
                 506b
               </Button>
               <Button
                 onClick={() => handleFormChange('dealType', '506c')}
-                className={`option-button ${dealType === '506c' && 'selected'}`}
+                className={`option-button ${dealParams.dealType === '506c' && 'selected'}`}
                 variant="outlined">
                 506c
               </Button>
