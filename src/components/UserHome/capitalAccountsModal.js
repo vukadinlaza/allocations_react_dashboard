@@ -4,7 +4,7 @@ import { camelCase } from 'lodash';
 import CloseIcon from '@material-ui/icons/Close';
 import { Paper, Grid, Typography, Modal } from '@material-ui/core';
 import './style.scss';
-import { nWithCommas } from '../../utils/numbers';
+import { nWithCommas, amountFormat } from '../../utils/numbers';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -43,6 +43,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
       {},
     );
   const data = camelCaseKeys(showCapitalAccounts);
+
   return (
     <>
       <Modal
@@ -87,7 +88,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                   <Typography>Subscription Amount</Typography>
                   <Typography variant="subtitle2">(Amount wired into Private Fund)</Typography>
                 </div>
-                <Typography className={classes.rightVaue}>${nWithCommas(data.subscriptionAmount)}.00</Typography>
+                <Typography className={classes.rightVaue}>${amountFormat(data.subscriptionAmount)}</Typography>
               </Grid>
               <hr className="solid" />
               <Grid container justify="space-between">
@@ -96,7 +97,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                   <Typography variant="subtitle2">(Legal, accounting, administration and compliance fees) </Typography>
                 </div>
                 <Typography className={classes.rightVaue}>
-                  ${parseFloat(nWithCommas(data.privateFundExpenses)).toFixed(2)}
+                  ${amountFormat(data.privateFundExpenses)}
                 </Typography>
               </Grid>
               <hr className="solid" />
@@ -123,7 +124,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                   <Typography>Net Investment Amount</Typography>
                   <Typography variant="subtitle2">(Subscription amount minus initial expenses)</Typography>
                 </div>
-                <Typography className={classes.rightVaue}>${data.netInvestment}</Typography>
+                <Typography className={classes.rightVaue}>${amountFormat(data.netInvestment)}</Typography>
               </Grid>
               <hr className="solid" />
               <Grid container justify="space-between">
