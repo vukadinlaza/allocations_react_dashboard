@@ -10,6 +10,12 @@ export function nWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+export const amountFormat = (amount) => {
+  if(!amount) return 0;
+  let floatAmount = parseFloat(amount).toFixed(2);
+  return nWithCommas(floatAmount)
+}
+
 export function formatDate (date) {
   try {
     const d = new Date(date)
