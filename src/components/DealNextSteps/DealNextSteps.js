@@ -195,7 +195,6 @@ function DealNextSteps() {
           setOpen={setOpen}
           kycTemplateId={templateInfo.templateId}
           kycTemplateName={templateInfo.templateName}
-          investor={data?.investor}
           refetch={refetch}
           deal={dealData.deal || {}}
           setShowTaxAsCompleted={setShowTaxAsCompleted}
