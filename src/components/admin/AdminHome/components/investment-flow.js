@@ -169,6 +169,11 @@ export const DEAL_INVESTMENTS = gql`
           last_name
           name
         }
+        submissionData {
+          investor_type
+          legalName
+          fullName
+        }
       }
     }
   }
@@ -311,9 +316,18 @@ export default ({ dealId, isDemo, superadmin }) => {
     </>
   );
 };
-const InvestmentSquare = ({ investment, setEditInvestmentModal, superadmin, setDataToEdit, setDeleteViewedUserModal }) => {
+const InvestmentSquare = ({
+  investment,
+  setEditInvestmentModal,
+  superadmin,
+  setDataToEdit,
+  setDeleteViewedUserModal,
+}) => {
   const classes = useStyles();
   const n = _.get(investment, 'investor.name', '');
+
+  const name = investment?.submissionData?.legalName ? investment?.submissionData?.legalName : n;
+  console.log('NAME', name);
   return (
     <div
       onClick={() => {
@@ -329,10 +343,10 @@ const InvestmentSquare = ({ investment, setEditInvestmentModal, superadmin, setD
       <ListItem disableGutters className={classes.listItem}>
         <ListItemAvatar className={classes.avatarContainer}>
           <Avatar alt={n} className={classes.avatar}>
-            {n.charAt(0).toUpperCase()}
+            {name.charAt(0).toUpperCase()}
           </Avatar>
         </ListItemAvatar>
-        <ListItemText className={classes.investorName} primary={n} />
+        <ListItemText className={classes.investorName} primary={name} />
         <ListItemText className={classes.investmentAmount}>
           <FontAwesomeIcon icon="dollar-sign" size="sm" style={{ marginRight: '.15rem' }} />
           {nWithCommas(investment.amount || '0')}
@@ -388,35 +402,35 @@ const DeleteViewedUser = ({ deleteViewedUserModal, setDeleteViewedUserModal, dea
   return (
     <>
       <Modal open={Boolean(deleteViewedUserModal.investor)} className={classes.modal}>
-      <Container maxWidth="sm">
-        <Grid container style={{ minHeight: '100vh' }}>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Paper className={classes.modalPaper}>
-              <Grid container justify="flex-end">
-                <Box onClick={() => setDeleteViewedUserModal(false)} style={{cursor: 'pointer'}}>
-                  <CloseIcon />
-                </Box>
-              </Grid>
-              <Grid container style={{ padding: '2rem', flexDirection: 'column', alignItems: 'center' }}>
-                <Typography variant="h6">Remove Investment</Typography>
-                <Button
-                  variant="contained"
-                  style={{ backgroundColor: 'red', maxWidth: '30%', marginTop: '1rem' }}
-                  onClick={() => {
-                    deleteViewedUser({
-                      variables: {
-                        deal_id: dealId,
-                        user_id: deleteViewedUserModal.investor._id,
-                      },
-                    });
-                  }}
-                >
-                  Delete
-                </Button>
-              </Grid>
-            </Paper>
+        <Container maxWidth="sm">
+          <Grid container style={{ minHeight: '100vh' }}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Paper className={classes.modalPaper}>
+                <Grid container justify="flex-end">
+                  <Box onClick={() => setDeleteViewedUserModal(false)} style={{ cursor: 'pointer' }}>
+                    <CloseIcon />
+                  </Box>
+                </Grid>
+                <Grid container style={{ padding: '2rem', flexDirection: 'column', alignItems: 'center' }}>
+                  <Typography variant="h6">Remove Investment</Typography>
+                  <Button
+                    variant="contained"
+                    style={{ backgroundColor: 'red', maxWidth: '30%', marginTop: '1rem' }}
+                    onClick={() => {
+                      deleteViewedUser({
+                        variables: {
+                          deal_id: dealId,
+                          user_id: deleteViewedUserModal.investor._id,
+                        },
+                      });
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </Grid>
+              </Paper>
+            </Grid>
           </Grid>
-        </Grid>
         </Container>
       </Modal>
     </>
