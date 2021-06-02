@@ -125,20 +125,19 @@ export default function AdminHome({}) {
         <Loader />
       </Paper>
     );
-
   const header = (
     <Grid container justify="space-between">
       <Grid item sm={12} md={6}>
-        <Typography variant="h4" className={classes.orgName} style={{ color: fundData ? '#fff' : '#000' }}>
+        <Typography variant="h4" className={classes.orgName} style={{ color: fundData.length === 0 ? '#000' : '#fff' }}>
           {orgData.name}
         </Typography>
       </Grid>
       <Grid item sm={12} md={6}>
-        <div style={{ textAlign: 'right' }}>
+        <Typography variant="body2" style={{ textAlign: 'right' }}>
           <Grid item xs={12}>
             {data.investor.admin && <SuperAdmin org={orgData} />}
           </Grid>
-        </div>
+        </Typography>
       </Grid>
     </Grid>
   );
