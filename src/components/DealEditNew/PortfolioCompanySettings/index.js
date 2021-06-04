@@ -7,8 +7,6 @@ function PortfolioCompanySettings({ formData, setFormData }) {
   const [feeType, setFeeType] = useState('percentage')
   const [setupCostType, setSetupCostType] = useState('percentage')
 
-  console.log('port fee type', feeType)
-
   const {
     dealParams: {
       portfolioEstimatedSetupCosts,

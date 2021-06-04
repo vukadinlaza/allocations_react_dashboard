@@ -62,7 +62,6 @@ function FundTerms({ formData, setFormData }) {
     }
   }
 
-
   const getSetupCosts = () => {
     if (fundEstimatedSetupCosts?.length > 0 && setupCostType === 'percentage') {
       return fundEstimatedSetupCosts;
@@ -266,7 +265,6 @@ function FundTerms({ formData, setFormData }) {
         </FormControl>
 
       </div>
-
     </section>
   )
 }

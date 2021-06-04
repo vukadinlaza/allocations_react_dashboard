@@ -230,9 +230,7 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
             </div>
           </label>
         </FormControl>
-
       </div >
-
     </section >
   )
 }

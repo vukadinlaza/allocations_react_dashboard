@@ -25,11 +25,7 @@ const ADD_LOGO = gql`
   }
 `;
 
-
-
-
 function DealSettings({ formData, setFormData, refetch }) {
-
 
   const [addDoc, { data, error }] = useMutation(ADD_DOC);
   const [doc, setDoc] = useState(null);
@@ -81,11 +77,8 @@ function DealSettings({ formData, setFormData, refetch }) {
   }
 
 
-
-
   function AddDealLogo() {
     const [addLogo, { data, error }] = useMutation(ADD_LOGO);
-
 
     const [upImg, setUpImg] = useState(null);
     const imgRef = useRef(null)
@@ -94,7 +87,6 @@ function DealSettings({ formData, setFormData, refetch }) {
     const [completedCrop, setCompletedCrop] = useState(null);
     const [croppedImage, setCroppedImage] = useState(null);
     const [cropperOpen, setCropperOpen] = useState(false)
-
 
     const submitCrop = (canvas, crop) => {
       if (!crop || !canvas) {
@@ -109,7 +101,6 @@ function DealSettings({ formData, setFormData, refetch }) {
         1
       );
     }
-
 
     const submitLogo = () => {
       if (croppedImage.logo && croppedImage.title) {
@@ -229,7 +220,6 @@ function DealSettings({ formData, setFormData, refetch }) {
             Crop Image
           </Button>
         </div>)}
-
       </div>
     );
   }

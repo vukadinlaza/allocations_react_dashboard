@@ -240,10 +240,7 @@ function BasicInfoSettings({ formData, setFormData }) {
             </div>
           </label>
         </FormControl>
-
       </div>
-
-
     </section>
   )
 }

@@ -56,7 +56,6 @@ function DeadlineSettings({ formData, setFormData }) {
         </FormControl>
 
       </div>
-
     </section>
   )
 }

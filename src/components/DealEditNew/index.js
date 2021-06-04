@@ -243,8 +243,6 @@ function DealEditNew() {
 
   const { data, refetch, error, loading } = useQuery(GET_DEAL, { variables: { id, slug: organization } });
 
-  console.log('data', formData)
-
   const [updateDeal] = useMutation(UPDATE_DEAL, {
     onCompleted: () => toast.success('Deal updated successfully.')
   });
@@ -405,7 +403,6 @@ function DealEditNew() {
       </div>
 
       <div className={`save-changes ${activeTab === 'deal' && 'lastPage'}`}>
-
         {
           activeTab !== 'deal' && (
             <Button onClick={handleContinueClick} className="continue">
@@ -427,9 +424,7 @@ function DealEditNew() {
             </Button>
           )
         }
-
       </div>
-
     </section>
   )
 }
