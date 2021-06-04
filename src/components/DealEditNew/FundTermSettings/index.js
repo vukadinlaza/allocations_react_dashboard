@@ -66,7 +66,7 @@ function FundTerms({ formData, setFormData }) {
   const getSetupCosts = () => {
     if (fundEstimatedSetupCosts?.length > 0 && setupCostType === 'percentage') {
       return fundEstimatedSetupCosts;
-    }
+    } 
 
     if (fundEstimatedSetupCostsDollar?.length > 0 && setupCostType === 'fixed') {
       return fundEstimatedSetupCostsDollar;
@@ -145,14 +145,34 @@ function FundTerms({ formData, setFormData }) {
                 variant="outlined"
               />
               <Button
-                onClick={() => setFeeType('percentage')}
+                onClick={() => {
+                  setFeeType('percentage')
+                  setFormData(prevData => ({
+                    ...prevData,
+                    dealParams: {
+                      ...prevData.dealParams,
+                      fundManagementFees: fundManagementFeesDollar,
+                      fundManagementFeesDollar: ''
+                    }
+                  }))
+                }}
                 className={`percentage ${feeType === 'percentage' && 'selected'}`}
                 variant="outlined">
                 %
               </Button>
               <Button
-                onClick={() => setFeeType('fixed')}
-                className={`percentage ${feeType === 'fixed' && 'selected'}`}
+                onClick={() => {
+                  setFeeType('fixed')
+                  setFormData(prevData => ({
+                    ...prevData,
+                    dealParams: {
+                      ...prevData.dealParams,
+                      fundManagementFeesDollar: fundManagementFees,
+                      fundManagementFees: ''
+                    }
+                  }))
+                }}
+                className={`fixed ${feeType === 'fixed' && 'selected'}`}
                 variant="outlined">
                 $
               </Button>
@@ -185,7 +205,7 @@ function FundTerms({ formData, setFormData }) {
             Total carry (%)
             <TextField
               onChange={handleFormChange}
-              value={fundTotalCarry}
+              value={fundTotalCarry || ''}
               name='fundTotalCarry'
               className="text-input"
               variant="outlined"
@@ -198,7 +218,7 @@ function FundTerms({ formData, setFormData }) {
             General partner
             <TextField
               onChange={handleFormChange}
-              value={fundGeneralPartner}
+              value={fundGeneralPartner || ''}
               name='fundGeneralPartner'
               className="text-input"
               variant="outlined"
@@ -237,7 +257,7 @@ function FundTerms({ formData, setFormData }) {
             Estimated term
             <TextField
               onChange={handleFormChange}
-              value={fundEstimatedTerm}
+              value={fundEstimatedTerm || ''}
               name='fundEstimatedTerm'
               className="text-input"
               variant="outlined"

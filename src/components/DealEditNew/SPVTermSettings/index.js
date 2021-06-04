@@ -2,16 +2,20 @@ import React, { useState } from 'react'
 import { FormControl, TextField, Button } from '@material-ui/core';
 import './styles.scss'
 
-function SPVTermSettings({ formData, setFormData, differentSPVTerms, toggleDifferentSPVTerms }) {
+function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
+
+  const [feeType, setFeeType] = useState('percentage')
 
   const {
     dealParams: {
       managementFees,
+      managementFeesDollar,
       managementFeeType,
       estimatedTerm,
       totalCarry,
       estimatedSetupCosts,
     },
+    differentPortfolioTerms,
     deal_lead
   } = formData;
 
@@ -34,8 +38,47 @@ function SPVTermSettings({ formData, setFormData, differentSPVTerms, toggleDiffe
     }))
   }
 
-  const handleManagementFeeChange = () => {
+  const getManagementFee = () => {
+    if (managementFees?.length > 0 && feeType === 'percentage') {
+      return managementFees;
+    }
 
+    if (managementFeesDollar?.length > 0 && feeType === 'fixed') {
+      return managementFeesDollar;
+    }
+  }
+
+
+  const changeFeeType = type => {
+    setFormData(prevData => ({
+      ...prevData,
+      dealParams: {
+        ...prevData.dealParams,
+        managementFeeType: type
+      }
+    }))
+  }
+
+  const handleFeeChange = ({ target }) => {
+    if (feeType === 'fixed') {
+      setFormData(prevData => ({
+        ...prevData,
+        dealParams: {
+          ...prevData.dealParams,
+          managementFeesDollar: target.value,
+          managementFees: ''
+        }
+      }))
+    } else {
+      setFormData(prevData => ({
+        ...prevData,
+        dealParams: {
+          ...prevData.dealParams,
+          managementFees: target.value,
+          managementFeesDollar: ''
+        }
+      }))
+    }
   }
 
   return (
@@ -50,21 +93,41 @@ function SPVTermSettings({ formData, setFormData, differentSPVTerms, toggleDiffe
             <div className="management-fee">
               <TextField
                 className="fee-input"
-                name="managementFees"
+                name={feeType === 'percentage' ? 'managementFees' : 'managementFeesDollar'}
                 variant="outlined"
-                onChange={handleFormChange}
-                value={managementFees}
+                onChange={handleFeeChange}
+                value={getManagementFee()}
               />
               <Button
-                onClick={() => handleManagementFeeChange({})}
-                className={`percentage ${managementFeeType === '%' && 'selected'}`}
+                onClick={() => {
+                  setFeeType('percentage')
+                  setFormData(prevData => ({
+                    ...prevData,
+                    dealParams: {
+                      ...prevData.dealParams,
+                      managementFees: managementFeesDollar,
+                      managementFeesDollar: ''
+                    }
+                  }))
+                }}
+                className={`percentage ${feeType === 'percentage' && 'selected'}`}
                 name='managementFeeType'
                 variant="outlined">
                 %
               </Button>
               <Button
-                onClick={() => handleManagementFeeChange({})}
-                className={`fixed ${managementFeeType === '$' && 'selected'}`}
+                onClick={() => {
+                  setFeeType('fixed')
+                  setFormData(prevData => ({
+                    ...prevData,
+                    dealParams: {
+                      ...prevData.dealParams,
+                      managementFeesDollar: managementFees,
+                      managementFees: ''
+                    }
+                  }))
+                }}
+                className={`fixed ${feeType === 'fixed' && 'selected'}`}
                 name='managementFeeType'
                 variant="outlined">
                 $
@@ -78,14 +141,14 @@ function SPVTermSettings({ formData, setFormData, differentSPVTerms, toggleDiffe
             Fee type
             <div className="button-options">
               <Button
-                onClick={() => { }}
-                className="option-button"
+                onClick={() => changeFeeType('Annual')}
+                className={`option-button ${managementFeeType === 'Annual' && 'selected'}`}
                 variant="outlined">
                 Annual
               </Button>
               <Button
-                onClick={() => { }}
-                className="option-button"
+                onClick={() => changeFeeType('One-Time')}
+                className={`option-button ${managementFeeType === 'One-Time' && 'selected'}`}
                 variant="outlined">
                 One-time
               </Button>
@@ -153,14 +216,14 @@ function SPVTermSettings({ formData, setFormData, differentSPVTerms, toggleDiffe
             Does your portfolio company have different terms than your SPV? (SPV into an SPV)
             <div className="button-options">
               <Button
-                onClick={() => toggleDifferentSPVTerms(prevState => !prevState)}
-                className={`option-button ${differentSPVTerms && 'selected'}`}
+                onClick={() => toggleDifferentSPVTerms(true)}
+                className={`option-button ${differentPortfolioTerms && 'selected'}`}
                 variant="outlined">
                 Yes
               </Button>
               <Button
-                onClick={() => toggleDifferentSPVTerms(prevState => !prevState)}
-                className={`option-button ${!differentSPVTerms && 'selected'}`}
+                onClick={() => toggleDifferentSPVTerms(false)}
+                className={`option-button ${!differentPortfolioTerms && 'selected'}`}
                 variant="outlined">
                 No
               </Button>
@@ -168,9 +231,9 @@ function SPVTermSettings({ formData, setFormData, differentSPVTerms, toggleDiffe
           </label>
         </FormControl>
 
-      </div>
+      </div >
 
-    </section>
+    </section >
   )
 }
 
