@@ -8,33 +8,136 @@ import SPVTermSettings from './SPVTermSettings'
 import DealSettings from './DealSettings'
 import PortfolioCompanySettings from './PortfolioCompanySettings'
 import FundTerms from './FundTermSettings';
+import _ from 'lodash';
 import './styles.scss'
+import { Button } from '@material-ui/core';
+import { toast } from 'react-toastify';
+import { ORG_OVERVIEW } from '../admin/AdminHome'
 
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  Paper,
-  Button,
-  FormControl,
-  Select,
-  MenuItem,
-  InputLabel,
-  TextField,
-  InputAdornment,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Typography,
-  Grid,
-  Divider,
-  IconButton,
-} from '@material-ui/core';
 
 
+const validInputs = [
+  '_id',
+  'company_name',
+  'company_description',
+  'date_closed',
+  'deal_lead',
+  'pledge_link',
+  'onboarding_link',
+  'embed_code',
+  'status',
+  'closed',
+  'allInvited',
+  'amount',
+  'memo',
+  'investmentType',
+  'differentPortfolioTerms',
+  'target',
+  'amount_raised',
+  'no_exchange',
+  'last_valuation',
+  'dealParams',
+  'Annual',
+  'One-Time',
+  'docSpringTemplateId',
+];
+
+const dealParamsValidInputs = [
+  'allocation',
+  'dealType',
+  'dealMultiple',
+  'totalCarry',
+  'keyHighlights',
+  'risks',
+  'minimumInvestment',
+  'maximumInvestment',
+  'totalManagementFee',
+  'totalRoundSize',
+  'signDeadline',
+  'wireDeadline',
+  'estimatedSetupCosts',
+  'estimatedSetupCostsDollar',
+  'estimatedTerm',
+  'managementFees',
+  'managementFeesDollar',
+  'managementFeeType',
+  'portfolioTotalCarry',
+  'portfolioEstimatedSetupCosts',
+  'portfolioEstimatedSetupCostsDollar',
+  'portfolioManagementFees',
+  'portfolioManagementFeeType',
+  'portfolioManagementFeesDollar',
+  'fundTotalCarry',
+  'fundEstimatedSetupCosts',
+  'fundEstimatedSetupCostsDollar',
+  'fundManagementFees',
+  'fundManagementFeesDollar',
+  'fundManagementFeeType',
+  'fundGeneralPartner',
+  'fundEstimatedTerm',
+  'coinvestors',
+  'dealLogo',
+];
+
+
+const UPDATE_DEAL = gql`
+  mutation UpdateDeal($org: String!, $deal: DealInput!) {
+    updateDeal(org: $org, deal: $deal) {
+      _id
+      company_name
+      company_description
+      date_closed
+      deal_lead
+      pledge_link
+      onboarding_link
+      status
+      allInvited
+      investmentType
+      differentPortfolioTerms
+      inviteKey
+      memo
+      target
+      amount_raised
+      docSpringTemplateId
+      invitedInvestors {
+        _id
+        name
+      }
+      dealParams {
+        risks
+        totalRoundSize
+        dealType
+        dealMultiple
+        allocation
+        totalCarry
+        minimumInvestment
+        signDeadline
+        wireDeadline
+        estimatedSetupCosts
+        estimatedSetupCostsDollar
+        estimatedTerm
+        managementFees
+        managementFeesDollar
+        managementFeeType
+        portfolioTotalCarry
+        portfolioEstimatedSetupCosts
+        portfolioEstimatedSetupCostsDollar
+        portfolioManagementFees
+        portfolioManagementFeesDollar
+        portfolioManagementFeeType
+        fundTotalCarry
+        fundEstimatedSetupCosts
+        fundEstimatedSetupCostsDollar
+        fundManagementFees
+        fundManagementFeesDollar
+        fundManagementFeeType
+        fundGeneralPartner
+        fundEstimatedTerm
+      }
+    }
+  }
+`;
 
 const GET_DEAL = gql`
   query Deal($id: String!, $slug: String!) {
@@ -61,6 +164,8 @@ const GET_DEAL = gql`
         publicLink
         docSpringTemplateId
         dealCoverImageKey
+        investmentType
+        differentPortfolioTerms
         documents {
           path
           link
@@ -121,11 +226,34 @@ const GET_DEAL = gql`
   }
 `;
 
-function DealEditNew() {
+const DELETE_DEAL = gql`
+  mutation DeleteDeal($_id: String!) {
+    deleteDeal(_id: $_id)
+  }
+`;
 
+function DealEditNew() {
   const { id, organization } = useParams();
-  const { data, refetch, error, loading } = useQuery(GET_DEAL, { variables: { id, slug: organization } });
+  const history = useHistory()
   const [errorMessage, setErrorMessage] = useState(null)
+  const [activeTab, setActiveTab] = useState('basic')
+  const [formData, setFormData] = useState({
+    dealParams: {}
+  })
+
+  const { data, refetch, error, loading } = useQuery(GET_DEAL, { variables: { id, slug: organization } });
+
+  console.log('data', formData)
+
+  const [updateDeal] = useMutation(UPDATE_DEAL, {
+    onCompleted: () => toast.success('Deal updated successfully.')
+  });
+
+  const [deleteDeal] = useMutation(DELETE_DEAL, {
+    variables: { _id: formData._id },
+    refetchQueries: [{ query: ORG_OVERVIEW, variables: { slug: organization } }],
+    onCompleted: () => history.push(`/admin/${organization}`),
+  });
 
   useEffect(() => {
     if (data) {
@@ -138,16 +266,12 @@ function DealEditNew() {
   }, [data]);
 
 
-  const [activeTab, setActiveTab] = useState('fund')
-  const [differentSPVTerms, toggleDifferentSPVTerms] = useState(false)
-  const [formData, setFormData] = useState({
-    investmentType: 'fund',
-    dealParams: {
-      dealType: '506b'
-    }
-  })
-
-  console.log('formdata', formData)
+  const toggleDifferentSPVTerms = value => {
+    setFormData(prevData => ({
+      ...prevData,
+      differentPortfolioTerms: value
+    }))
+  }
 
   const handleTabClick = (tab) => {
     setActiveTab(tab)
@@ -175,7 +299,7 @@ function DealEditNew() {
           }
         }
       case 'spv':
-        if (differentSPVTerms) {
+        if (formData.differentPortfolioTerms) {
           return setActiveTab('portfolio')
         } else {
           return setActiveTab('deal')
@@ -187,22 +311,35 @@ function DealEditNew() {
     }
   }
 
-  const handleDeleteDeal = () => {
-    if (window.confirm('Are you sure you want to delete this deal?')) {
-      // handle deal delete here
-    }
+  const handleFormSubmit = () => {
+    updateDeal({
+      variables: {
+        deal: {
+          ..._.pick(formData, validInputs),
+          dealParams: _.pick(formData.dealParams, dealParamsValidInputs),
+        },
+        org: organization,
+      },
+    });
   }
 
-  console.log('active tab', activeTab)
+  const handleDeleteDeal = () => {
+    if (window.confirm(`Are you sure you'd like to delete ${formData.company_name}`)) {
+      deleteDeal();
+    }
+  }
 
   const settingsComponentMap = {
     'basic': <BasicInfoSettings formData={formData} setFormData={setFormData} />,
     'deadline': <DeadlineSettings formData={formData} setFormData={setFormData} />,
-    'spv': <SPVTermSettings formData={formData} setFormData={setFormData} differentSPVTerms={differentSPVTerms} toggleDifferentSPVTerms={toggleDifferentSPVTerms} />,
-    'deal': <DealSettings formData={formData} setFormData={setFormData} />,
+    'spv': <SPVTermSettings formData={formData} setFormData={setFormData} toggleDifferentSPVTerms={toggleDifferentSPVTerms} />,
+    'deal': <DealSettings formData={formData} setFormData={setFormData} refetch={refetch} />,
     'fund': <FundTerms formData={formData} setFormData={setFormData} />,
     'portfolio': <PortfolioCompanySettings formData={formData} setFormData={setFormData} />
   }
+
+  if (errorMessage) return <div className="Error">{errorMessage}</div>;
+
 
   return (
     <section className="DealEditNew">
@@ -242,7 +379,7 @@ function DealEditNew() {
           }
 
           {
-            differentSPVTerms && formData.investmentType === 'spv' &&
+            formData.differentPortfolioTerms && formData.investmentType === 'spv' &&
             (
               <button
                 onClick={() => handleTabClick('portfolio')}
@@ -277,7 +414,9 @@ function DealEditNew() {
           )
         }
 
-        <Button className="save-and-exit">
+        <Button
+          onClick={handleFormSubmit}
+          className="save-and-exit">
           Save and Exit
         </Button>
 
