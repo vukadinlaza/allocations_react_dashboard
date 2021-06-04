@@ -45,6 +45,11 @@
           
           .percentage, .fixed {
             width: 20%;
+            outline: none;
+
+            &.selected {
+              border: 2px solid #0461FF;
+            }
           }
           
           .option-button {
