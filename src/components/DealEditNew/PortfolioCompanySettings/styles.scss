@@ -45,15 +45,21 @@
 
           .percentage, .fixed {
             width: 20%;
+            outline: none;
+            
+            &.selected {
+              border: 2px solid #0461FF;
+            }
           }
         }
-
+        
         .button-options {
           margin: 5px 0;
           display: flex;
-
+          
           .option-button {
             margin-right: 10px;
+            outline: none;
             height: 3.5rem;
             width: 10rem;
             font-size: 1rem;
@@ -92,7 +98,7 @@
           .management-fee {
 
             .percentage, .fixed {
-              width: 15%;
+              width: 20%;
             }
           }
   

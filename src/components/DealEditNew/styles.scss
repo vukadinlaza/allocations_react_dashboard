@@ -4,22 +4,23 @@
 
   h1, h2 {
     font-size: 1.6rem;
-    margin: 10px 0 ;
+    margin: 10px 0;
   }
 
   .section-header {
-    width: 70%;
+    width: 80%;
     
     .tabs-container {
       margin: 1.75rem 0;
       width: 100%;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
 
       .tab-button {
         white-space: nowrap;
         outline: none;
         border: none;
+        margin-right: 1.5rem;
         padding: 5px;
         color: #0561FF;
         background: transparent;
@@ -95,7 +96,7 @@
           text-align: left;
 
           &.active {
-            background: rgb(238, 238, 238);
+            background-color: #f1f1f1;
             transition: all .25s ease-in;
           }
         }
