@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import _ from 'lodash';
+import _, { sample } from 'lodash';
 import { gql } from 'apollo-boost';
 import {
   Grid,
@@ -322,12 +322,15 @@ const InvestmentSquare = ({
   superadmin,
   setDataToEdit,
   setDeleteViewedUserModal,
+  isDemo,
 }) => {
   const classes = useStyles();
   const n = _.get(investment, 'investor.name', '');
 
-  const name = investment?.submissionData?.legalName ? investment?.submissionData?.legalName : n;
-  console.log('NAME', name);
+  let name = investment?.submissionData?.legalName ? investment?.submissionData?.legalName : n;
+  if (isDemo) {
+    name = _.sample(demoNames);
+  }
   return (
     <div
       onClick={() => {
