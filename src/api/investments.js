@@ -1,4 +1,4 @@
-import { gql } from 'apollo-boost'
+import { gql } from 'apollo-boost';
 
 export const create = gql`
   mutation CreateInvestment($investment: InvestmentInput!) {
@@ -6,10 +6,10 @@ export const create = gql`
       _id
     }
   }
-`
+`;
 
 export const destroy = gql`
   mutation DeleteInvestment($id: String!) {
     deleteInvestment(_id: $id)
   }
-`
+`;

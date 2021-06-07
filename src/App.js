@@ -9,7 +9,7 @@ import Deals from './components/Deals';
 import Credit from './components/Credit';
 import DealNew from './components/DealNew';
 import DealEdit from './components/DealEdit';
-import DealEditNew from './components/DealEditNew'
+import DealEditNew from './components/DealEditNew';
 import InvestorEdit from './components/InvestorEdit';
 import InvestorNew from './components/InvestorNew';
 import Indentity from './components/Identity';
@@ -73,7 +73,7 @@ const App = () => {
         <Switch>
           <Route path="/cb/thankyou" component={ThankYou} exact />
 
-          <PrivateRoute exact path="/" exact component={UserHome} />
+          <PrivateRoute path="/" exact component={UserHome} />
           <PrivateRoute path="/demo" exact component={Demo} />
           <PrivateRoute path="/credit" exact component={Credit} />
           <PrivateRoute path="/profile" component={Profile} />

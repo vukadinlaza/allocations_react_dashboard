@@ -256,7 +256,6 @@ const dealParamsValidInputs = [
   'dealLogo',
 ];
 
-
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
@@ -305,7 +304,6 @@ export default function DealEdit() {
   }, [data, deal]);
 
   if (errorMessage) return <div className="Error">{errorMessage}</div>;
-
 
   return (
     <div className="DealEdit">
@@ -1218,7 +1216,7 @@ function Doc({ doc, deal, refetch }) {
 
   return (
     <span>
-      <a href={`https://${doc.link}`} target="_blank">
+      <a href={`https://${doc.link}`} target="_blank" rel="noreferrer">
         <FontAwesomeIcon icon="link" /> &nbsp;{doc.path} &nbsp;&nbsp;
       </a>
       <FontAwesomeIcon icon="times" onClick={submit} />

@@ -12,11 +12,11 @@ import InvestorEditForm from '../forms/InvestorEdit';
 
 import './style.scss';
 
-/***
+/** *
  *
  * superadmins interface to edit any investor
  *
- **/
+ * */
 
 const GET_INVESTOR = gql`
   query GetInvestor($id: String!) {
@@ -40,73 +40,75 @@ const GET_INVESTOR = gql`
       }
     }
   }
-`
+`;
 
 const DELETE_INVESTOR = gql`
   mutation DeleteInvestor($id: String!) {
     deleteInvestor(_id: $id)
   }
-`
+`;
 
 export default function InvestorEdit() {
   const [formStatus, setFormStatus] = useState('edit');
-  const { userProfile, refetch } = useAuth(GET_INVESTOR)
-  const [investor, setInvestor] = useState(null)
+  const { userProfile, refetch } = useAuth(GET_INVESTOR);
+  const [investor, setInvestor] = useState(null);
 
   useEffect(() => {
     if (userProfile.email) {
-      setInvestor(userProfile)
+      setInvestor(userProfile);
     }
-  }, [userProfile])
+  }, [userProfile]);
 
-  const icon = formStatus === "loading"
-    ? "circle-notch"
-    : (formStatus === "complete" ? "check" : "edit")
+  const icon = formStatus === 'loading' ? 'circle-notch' : formStatus === 'complete' ? 'check' : 'edit';
 
-  if (!investor) return <Loader />
+  if (!investor) return <Loader />;
 
   return (
     <div className="InvestorEdit">
       <Row>
-        <Col sm={{size: 9, offset: 1}}>
+        <Col sm={{ size: 9, offset: 1 }}>
           <h4>
-            Profile <FontAwesomeIcon icon={icon} spin={icon === "circle-notch"} />
+            Profile <FontAwesomeIcon icon={icon} spin={icon === 'circle-notch'} />
           </h4>
         </Col>
       </Row>
-      <InvestorEditForm noValidate
+      <InvestorEditForm
+        noValidate
         investor={investor}
         refetch={refetch}
         setInvestor={setInvestor}
         setFormStatus={setFormStatus}
-        actionText="EDIT INVESTOR" />
+        actionText="EDIT INVESTOR"
+      />
       <Row>
         <DeleteInvestor investor={investor} />
       </Row>
     </div>
-  )
+  );
 }
 
-function DeleteInvestor ({ investor }) {
-  const history = useHistory()
-  const [delInvestor, { data, error }] = useMutation(DELETE_INVESTOR)
+function DeleteInvestor({ investor }) {
+  const history = useHistory();
+  const [delInvestor, { data, error }] = useMutation(DELETE_INVESTOR);
 
   useEffect(() => {
-    if (data && data.deleteInvestor) history.push('/investors')
-  }, [data])
+    if (data && data.deleteInvestor) history.push('/investors');
+  }, [data]);
 
   const submit = () => {
     if (window.confirm(`Delete ${investor.first_name} ${investor.last_name}?`)) {
-      delInvestor({ variables: { id: investor._id }})
+      delInvestor({ variables: { id: investor._id } });
     }
-  }
+  };
 
   return (
-    <Col sm={{size: 6, offset: 1}}>
+    <Col sm={{ size: 6, offset: 1 }}>
       <Paper className="DeleteInvestor">
         <div>DANGER ZONE</div>
-        <Button variant="contained" onClick={submit}>DELETE INVESTOR</Button>
+        <Button variant="contained" onClick={submit}>
+          DELETE INVESTOR
+        </Button>
       </Paper>
     </Col>
-  )
+  );
 }

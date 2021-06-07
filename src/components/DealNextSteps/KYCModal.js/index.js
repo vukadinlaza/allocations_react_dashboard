@@ -23,10 +23,12 @@ const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, refetch, deal
     onCompleted: (data) => {
       const { submitTaxDocument } = data;
       refetch();
-      if(submitTaxDocument?.documents.find((doc) => doc.documentName.includes('W-9') || doc.documentName.includes('W-8'))) {
+      if (
+        submitTaxDocument?.documents.find((doc) => doc.documentName.includes('W-9') || doc.documentName.includes('W-8'))
+      ) {
         toast.success('Success! Tax form completed.');
       } else {
-        toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com')
+        toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com');
       }
       setOpen(false);
       if (deal.isDemo) {
@@ -34,8 +36,8 @@ const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, refetch, deal
       }
     },
     onError: () => {
-      toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com')
-    }
+      toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com');
+    },
   });
 
   const createDoc = (formData) => {

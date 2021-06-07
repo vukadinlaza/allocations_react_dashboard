@@ -96,9 +96,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                   <Typography>Private Fund Expenses</Typography>
                   <Typography variant="subtitle2">(Legal, accounting, administration and compliance fees) </Typography>
                 </div>
-                <Typography className={classes.rightVaue}>
-                  ${amountFormat(data.privateFundExpenses)}
-                </Typography>
+                <Typography className={classes.rightVaue}>${amountFormat(data.privateFundExpenses)}</Typography>
               </Grid>
               <hr className="solid" />
               <Grid container justify="space-between">

@@ -81,8 +81,8 @@ export default function InvestmentEdit({ investmentId = false, isK1 = false, set
       setEditInvestmentModal(false);
     },
     onError: (e) => {
-      toast.error('Looks like we encountered an error.')
-    }
+      toast.error('Looks like we encountered an error.');
+    },
   });
 
   useEffect(() => {
@@ -250,12 +250,12 @@ function Doc({ doc, investment, refetch }) {
   const [rmInvestmentDoc] = useMutation(RM_INVESTMENT_DOC, {
     variables: { file, investment_id: investment._id },
     onCompleted: () => {
-      refetch()
+      refetch();
       toast.success('File has been deleted');
     },
     onError: () => {
-      toast.error('Looks like we encountered an error.')
-    }
+      toast.error('Looks like we encountered an error.');
+    },
   });
   const rmDoc = () => {
     if (window.confirm(`Delete ${file}?`)) rmInvestmentDoc();
