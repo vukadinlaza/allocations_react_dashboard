@@ -132,8 +132,7 @@ const App = () => {
 
           <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
           <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />
-          <PrivateRoute path="/admin/:organization/deals/:id/edit" component={DealEdit} exact />
-          <PrivateRoute path="/admin/:organization/deals/:id/edit-new" component={DealEditNew} exact />
+          <PrivateRoute path="/admin/:organization/deals/:id/edit" component={DealEditNew} exact />
 
           <PrivateRoute path="/admin/:organization/investments" component={Investments} exact />
           <PrivateRoute path="/admin/:organization/compliance" component={Compliance} exact />
