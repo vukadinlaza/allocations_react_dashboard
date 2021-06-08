@@ -255,7 +255,7 @@ function DealSettings({ formData, setFormData, refetch }) {
                       if (target.validity.valid) {
                         setWireInstructions({
                           doc: target.files[0],
-                          title: 'wire-instructions.pdf',
+                          title: 'wire-instructions',
                         });
                       }
                     }}
