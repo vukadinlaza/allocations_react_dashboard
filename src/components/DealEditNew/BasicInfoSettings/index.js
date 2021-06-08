@@ -5,8 +5,9 @@ import { FormControl, TextField, Button } from '@material-ui/core';
 import CurrencyTextField from '@unicef/material-ui-currency-textfield';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import { nWithCommas } from '../../../utils/numbers.js';
 
-function BasicInfoSettings({ formData, setFormData }) {
+function BasicInfoSettings({ formData, setFormData, loading }) {
   const handleFormChange = ({ target }) => {
     const dealParamFields = ['dealType', 'minimumInvestment'];
 
@@ -47,6 +48,9 @@ function BasicInfoSettings({ formData, setFormData }) {
 
   const { investmentType, status, dealParams } = formData;
 
+  const minimumInvesmentPlaceholder = dealParams.minimumInvestment !== null && dealParams.minimumInvestment ? nWithCommas(dealParams.minimumInvestment) : '1,000';
+
+
   return (
     <section className="BasicInfoSettings">
       <h2 className="key-highlights">Key highlights</h2>
@@ -68,16 +72,16 @@ function BasicInfoSettings({ formData, setFormData }) {
                     alignleft aligncenter alignright alignjustify | \
                     bullist numlist outdent indent | removeformat | help',
           file_picker_types: 'image',
-          file_picker_callback: function (cb, value, meta) {
+          file_picker_callback: function(cb, value, meta) {
             const input = document.createElement('input');
             input.setAttribute('type', 'file');
             input.setAttribute('accept', 'image/*');
 
-            input.onchange = function () {
+            input.onchange = function() {
               const file = this.files[0];
 
               const reader = new FileReader();
-              reader.onload = function () {
+              reader.onload = function() {
                 const id = `blobid${new Date().getTime()}`;
                 const blobCache = window.tinymce.activeEditor.editorUpload.blobCache;
                 const base64 = reader.result.split(',')[1];
@@ -176,12 +180,27 @@ function BasicInfoSettings({ formData, setFormData }) {
         <FormControl className="field">
           <label className="field-label">
             Minumum investment
-            <TextField
-              onChange={handleFormChange}
-              name="minimumInvestment"
+            <CurrencyTextField
               className="currency-text-input"
-              value={dealParams.minimumInvestment || ''}
               variant="outlined"
+              value={dealParams.minimumInvestment}
+              placeholder={minimumInvesmentPlaceholder}
+              currencySymbol="$"
+              textAlign="left"
+              name="minimumInvestment"
+              outputFormat="string"
+              decimalCharacter="."
+              decimalPlaces={0}
+              digitGroupSeparator=","
+              onChange={(event, value) => {
+                setFormData(prev => ({
+                  ...prev,
+                  dealParams: {
+                    ...prev.dealParams,
+                    minimumInvestment: value.toString()
+                  }
+                }))
+              }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
