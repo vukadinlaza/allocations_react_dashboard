@@ -122,14 +122,24 @@ function PersonalInformation({ investor, setInvestor, errors }) {
       {/* Accreditation status */}
       <AccreditedInvestorStatus investor={investor} handleChange={handleChange} errors={errors} />
       {investor.investor_type && investor.investor_type !== 'individual' && (
-        <TextField
-          className="personal-information-input"
-          variant="outlined"
-          placeholder="Signer's Full Name"
-          error={errors.includes('fullName')}
-          value={get(investor, 'fullName') || ''}
-          onChange={handleChange('fullName')}
-        />
+        <>
+          <TextField
+            className="personal-information-input"
+            variant="outlined"
+            placeholder="Signer's Full Name"
+            error={errors.includes('fullName')}
+            value={get(investor, 'fullName') || ''}
+            onChange={handleChange('fullName')}
+          />
+          <TextField
+            className="personal-information-input"
+            variant="outlined"
+            placeholder="Title"
+            error={errors.includes('title')}
+            value={get(investor, 'title') || ''}
+            onChange={handleChange('title')}
+          />
+        </>
       )}
       {/* <TextField className="personal-information-input" variant="outlined" placeholder="Full Address" />
       <TextField className="personal-information-input" variant="outlined" placeholder="Phone number" /> */}
