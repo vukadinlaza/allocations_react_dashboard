@@ -1,39 +1,99 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
-import MailIcon from '@material-ui/icons/Mail';
-import { SimpleBox, ChartBox, FlatBox, ListBox } from './widgets'
+import { Tabs, Tab } from '@material-ui/core';
+import { FlatBox } from './widgets'
 import AllocationsTable from '../../utils/AllocationsTable'
 import { nWithCommas } from '../../../utils/numbers'
+import Setup from './sections/Setup';
+import Highlights from './sections/Highlights';
+import InvestorStatus from './sections/InvestorStatus';
 
 const styles = theme => ({
   dashboardContainer: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
-    width: "100%"
+    width: "100%",
+    position: "absolute",
+    width: "100%",
+    left: "0",
+    top: "0",
+    background: "white"
+  },
+  section: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+    padding: "40px"
   },
   sectionTitle: {
     fontSize: "32px",
     fontWeight: "bold",
     marginBottom: "35px"
   },
-  section: {
-    display: "flex",
-    flexDirection: "column",
-    width: "100%",
-    marginBottom: "40px"
+  selectedTab: {
+    color: "#2A2B54 !important",
+    fontWeight: "bold",
+    "& $tabWrapper":{
+        backgroundColor: "#8493A61A",
+        borderRadius: "10px",
+      }
   },
-  widgetRow: {
+  setupStep: {
+    display: "flex",
+    alignItems: "center",
+    padding: "8px 10px",
+    "&:not(:first-child)": {
+      borderTop: '1px solid #8493A640'
+    },
+    "&>*": {
+      fontSize: "18px"
+    },
+    "&>p": {
+      fontSize: "14px"
+    }
+  },
+  subSection: {
     width: "100%",
     display: "flex",
     justifyContent: "space-between",
     flexWrap: "wrap"
-  }
+  },
+  tab: {
+    textTransform: "none",
+    "&:focus": {
+      outline: "none"
+    }
+  },
+  tabs: {
+    // position: "absolute",
+    // top: "0",
+    // left: "0",
+    width: "100%",
+    border: "none",
+    height: "60px",
+    "& *": {
+      height: "100%"
+    }
+  },
+  tabsIndicator: {
+    display: "none"
+  },
+  tabWrapper: {
+    padding: "0 10px",
+  },
 });
 
+
+const dashboardTabs = ["Setup", "Highlights", "Investments", "Investor Onboarding Status", "Activity Log", "Deal Page"]
+
+
+
 const FundManagerDashboard = ({ classes }) => {
+
+  const [tabIndex, setTabIndex] = useState(0)
 
   const highlightsHeaders = [
     { value: 'name', label: 'NAME' },
@@ -62,84 +122,81 @@ const FundManagerDashboard = ({ classes }) => {
     console.log('HEY');
   }
 
+  const handleTabChange = (event, newValue) => {
+    setTabIndex(newValue)
+  }
+
+  const getTabContent = () => {
+    switch (tabIndex) {
+      case 0:
+        return(
+          <Setup
+            classes={classes}
+            />
+        )
+      case 1:
+        return(
+          <Highlights
+            classes={classes}
+            />
+        )
+      case 2:
+        return(
+          <div className={classes.section}>
+            <AllocationsTable
+              data={highlightsData}
+              headers={highlightsHeaders}
+              getCellContent={getCellContent}
+              />
+          </div>
+        )
+      case 3:
+        return(
+          <InvestorStatus
+            classes={classes}
+            buttonAction={buttonAction}
+            />
+        )
+      case 5:
+        return(
+          <div className={classes.section}>
+            <FlatBox title="SHARE" info="Explanation">Child</FlatBox>
+          </div>
+        )
+      default:
+        <p>No Data</p>
+    }
+  }
+
   return (
     <div className={classes.dashboardContainer}>
-      <div className={classes.section}>
-        <Typography className={classes.sectionTitle}>Setup</Typography>
-        <div className={classes.widgetRow}>
-          <SimpleBox size="third" title="Initial Build" info="Explanation">Child</SimpleBox>
-          <SimpleBox size="third" title="Pre-onboarding" info="Explanation">Child</SimpleBox>
-          <SimpleBox size="third" title="Ready To Onboard Investors" info="Explanation">Child</SimpleBox>
-          <SimpleBox size="third" title="Target Raise" info="Explanation">Child</SimpleBox>
-          <SimpleBox size="third" title="Next Close Date" info="Explanation">Child</SimpleBox>
-          <SimpleBox size="third" title="Final Close Date" info="Explanation">Child</SimpleBox>
-          <SimpleBox size="third" title="Management Fee" info="Explanation">Child</SimpleBox>
-          <SimpleBox size="third" title="Carry" info="Explanation">Child</SimpleBox>
-          <SimpleBox size="third" title="Raise Type" info="Explanation">Child</SimpleBox>
-        </div>
-      </div>
-
-      <div className={classes.section}>
-        <Typography className={classes.sectionTitle}>Highlights</Typography>
-        <div className={classes.widgetRow}>
-          <SimpleBox size="half" title="Committed" info="Explanation">Child</SimpleBox>
-          <SimpleBox size="half" title="Closed" info="Explanation">Child</SimpleBox>
-          <SimpleBox size="third" title="Portfolio Value" info="Explanation">Child</SimpleBox>
-          <SimpleBox size="third" title="Total Invested" info="Explanation">Child</SimpleBox>
-          <SimpleBox size="third" title="Multiple" info="Explanation">Child</SimpleBox>
-          <div style={{width: "100%", display: "flex", justifyContent: "space-between"}}>
-            <ChartBox title="Portfolio Overview" info="Explanation">Child</ChartBox>
-            <ChartBox title="Value" info="Explanation">Child</ChartBox>
-          </div>
-        </div>
-      </div>
-
-      <div className={classes.section}>
-        <Typography className={classes.sectionTitle}>Highlights</Typography>
-        <div className={classes.widgetRow}>
-          <AllocationsTable
-            data={highlightsData}
-            headers={highlightsHeaders}
-            getCellContent={getCellContent}
-            />
-        </div>
-      </div>
-
-      <div className={classes.section}>
-        <Typography className={classes.sectionTitle}>Investor Onboarding Status</Typography>
-        <div className={classes.widgetRow}>
-          <ListBox
-            title="VIEWED"
-            total="$0"
-            size="third"
-            buttonText={<div><MailIcon style={{color: "white", marginRight: "0.5em"}}/>Send Reminder</div>}
-            buttonAction={buttonAction}
-            >
-            
-          </ListBox>
-          <ListBox
-            title="SIGNED"
-            total="$400,000"
-            size="third"
-            buttonText={<div><MailIcon style={{color: "white", marginRight: "0.5em"}}/>Send Reminder</div>}
-            buttonAction={buttonAction}
-            >
-          </ListBox>
-          <ListBox
-            title="WIRED"
-            total="$0"
-            size="third"
-            >
-          </ListBox>
-        </div>
-      </div>
-
-      <div className={classes.section}>
-        <Typography className={classes.sectionTitle}>Deal Page</Typography>
-        <div className={classes.widgetRow}>
-          <FlatBox title="SHARE" info="Explanation">Child</FlatBox>
-        </div>
-      </div>
+     <Tabs
+       value={tabIndex}
+       indicatorColor="primary"
+       textColor="primary"
+       onChange={handleTabChange}
+       classes={{
+         root: classes.tabs,
+         indicator: classes.tabsIndicator
+       }}
+       variant="fullWidth"
+     >
+       {dashboardTabs.map((tab, index) =>
+         <Tab
+           label={tab}
+           className={classes.tab}
+           key={`tab-${index}`}
+           classes={{
+             root: classes.tab,
+             selected: classes.selectedTab,
+             wrapper: classes.tabWrapper
+           }}
+           disableRipple
+           />
+       )}
+       {/*}<Tab label="Disabled" disabled />*/}
+     </Tabs>
+     {getTabContent()}
     </div>
   );
 }

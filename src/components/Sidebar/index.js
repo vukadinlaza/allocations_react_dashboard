@@ -748,6 +748,7 @@ const drawerWidth = 250;
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+    flexDirection: "column"
   },
   brand: {
     flexGrow: 1,
@@ -764,6 +765,10 @@ const useStyles = makeStyles((theme) => ({
     background: '#fff',
     color: '#868c97',
     boxShadow: 'none !important',
+    position: "relative",
+    height: "70px",
+    border: "none",
+    borderBottom: "1px solid #d8dce6"
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -772,12 +777,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   icon: {
-    boxShadow: '0px 3px 6px #00000029',
-    width: 64,
-    height: 64,
-    borderRadius: '50%',
-    padding: 20,
-    marginRight: 16,
+    minWidth: "40px",
     color: '#8593a6',
   },
   // necessary for content to be below app bar
@@ -785,13 +785,28 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: drawerWidth,
     paddingTop: 8,
+    border: "none",
     borderRight: '1px solid #dfe2e5',
     borderLeft: 0,
+    position: "relative",
+    height: "calc(100vh - 70px)"
+  },
+  contentContainer: {
+    display:"flex",
+    justifyContent:"space-between",
+    alignItems:"flex-start",
+    height:"calc(100vh - 70px)",
+    overflow:"hidden"
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(4),
-    maxWidth: '100%',
+    maxWidth: 'calc(100% - 250px)',
+    width: "calc(100% - 250px)",
+    overflowY: "scroll",
+    height: "calc(100vh - 70px)",
+    paddingBottom: "0",
+    position: "relative"
   },
   sectionDesktop: {
     display: 'none',
@@ -894,7 +909,6 @@ export default function Sidebar(props) {
 
   const drawer = (
     <div>
-      <div className={classes.toolbar} />
       <List>
         {menus.map(({ to, title, icon }) => (
           <div
@@ -947,7 +961,7 @@ export default function Sidebar(props) {
         {!onboarding && <CssBaseline />}
         {!onboarding ? (
           <>
-            <AppBar position="fixed" className={classes.appBar}>
+            <AppBar className={classes.appBar}>
               <Toolbar>
                 <IconButton
                   color="inherit"
@@ -964,40 +978,41 @@ export default function Sidebar(props) {
                 <NavBar />
               </Toolbar>
             </AppBar>
-            <nav className={classes.drawer} aria-label="mailbox folders">
-              <Hidden mdUp implementation="css">
-                <Drawer
-                  container={container}
-                  variant="temporary"
-                  anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                  open={mobileOpen}
-                  onClose={handleDrawerToggle}
-                  classes={{
-                    paper: classes.drawerPaper,
-                  }}
-                  ModalProps={{
-                    keepMounted: true,
-                  }}
-                >
-                  {drawer}
-                </Drawer>
-              </Hidden>
-              <Hidden smDown implementation="css">
-                <Drawer
-                  classes={{
-                    paper: classes.drawerPaper,
-                  }}
-                  variant="permanent"
-                  open
-                >
-                  {drawer}
-                </Drawer>
-              </Hidden>
-            </nav>
-            <main className={classes.content} style={{ background: 'rgba(0,0,0,0.01)' }}>
-              <div className={classes.toolbar} />
-              {props.children}
-            </main>
+            <div className={classes.contentContainer} style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start"}}>
+              <nav className={classes.drawer} aria-label="mailbox folders">
+                <Hidden mdUp implementation="css">
+                  <Drawer
+                    container={container}
+                    variant="temporary"
+                    anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
+                    classes={{
+                      paper: classes.drawerPaper,
+                    }}
+                    ModalProps={{
+                      keepMounted: true,
+                    }}
+                    >
+                    {drawer}
+                  </Drawer>
+                </Hidden>
+                <Hidden smDown implementation="css">
+                  <Drawer
+                    classes={{
+                      paper: classes.drawerPaper,
+                    }}
+                    variant="permanent"
+                    open
+                    >
+                    {drawer}
+                  </Drawer>
+                </Hidden>
+              </nav>
+              <main className={classes.content} style={{ background: 'rgba(0,0,0,0.01)' }}>
+                {props.children}
+              </main>
+            </div>
           </>
         ) : (
           <main style={{}}>{props.children}</main>

@@ -21,7 +21,7 @@ const styles = theme => ({
 		},
 	},
 	boxContent: {
-		padding: "16px"
+		padding: "16px",
 	},
 	boxTitle: {
 		fontSize: "20px",
@@ -38,6 +38,10 @@ const styles = theme => ({
 		display: "flex",
 		alignItems: "center",
 		padding: "16px"
+	},
+	boxTitleText: {
+		display: "flex",
+		alignItems: "center",
 	},
 	dynamicHeight: {
 		height: "auto"
@@ -70,18 +74,38 @@ const getDimensions = (size) => {
 }
 
 
-export const SimpleBox = withStyles(styles)(({ classes, title, info, size, children }) => {
+export const SimpleBox = withStyles(styles)(({ classes,
+	title,
+	info,
+	size,
+	autoHeight,
+	titleData,
+	fontSize,
+	buttonAction,
+	buttonText,
+	fullWidthContent,
+	children
+}) => {
   return(
-		<div className={classes.box} style={getDimensions(size)}>
-			<div className={classes.boxTitleContainer}>
-				<Typography className={classes.boxTitle}>{title}</Typography>
-				<Tooltip title={info}>
-					<InfoIcon className={classes.infoIcon}/>
-				</Tooltip>
+		<div className={`${classes.box} ${autoHeight? classes.dynamicHeight : ''}`} style={getDimensions(size)}>
+			<div className={classes.boxTitleContainer} style={{justifyContent: "space-between"}}>
+				<div className={classes.boxTitleText}>
+					<Typography className={classes.boxTitle} style={fontSize === "small"? {fontSize: "14px"} : {}}>{title}</Typography>
+					{info &&
+						<Tooltip title={info}>
+							<InfoIcon className={classes.infoIcon}/>
+						</Tooltip>
+					}
+				</div>
+				<div>{titleData}</div>
 			</div>
-			<div className={classes.boxContent}>
+			<div className={classes.boxContent} style={fullWidthContent? {padding: 0} : {}}>
 				{children}
 			</div>
+			{buttonText?
+				<Button variant="contained" className={classes.listButton} onClick={buttonAction}>{buttonText}</Button>
+				:''
+			}
 		</div>
 	)
 })
@@ -118,26 +142,6 @@ export const FlatBox = withStyles(styles)(({ classes, title, info, children }) =
 			<div className={classes.boxContent}>
 				{children}
 			</div>
-		</div>
-	)
-})
-
-
-
-export const ListBox = withStyles(styles)(({ classes, title, total, size, buttonText, buttonAction, children }) => {
-	return(
-		<div className={`${classes.box} ${classes.dynamicHeight}`} style={getDimensions(size)}>
-			<div className={classes.boxTitleContainer} style={{height: "60px", justifyContent: "space-between"}}>
-				<Typography className={classes.boxTitle} style={{fontSize: "14px"}}>{title}</Typography>
-				<Typography className={classes.boxTitle} style={{fontSize: "14px", color: "#39C522", fontWeight: "bold"}}>{total}</Typography>
-			</div>
-			<div className={classes.boxContent}>
-				{children}
-			</div>
-			{buttonText?
-				<Button variant="contained" className={classes.listButton} onClick={buttonAction}>{buttonText}</Button>
-				:''
-			}
 		</div>
 	)
 })
