@@ -149,9 +149,7 @@ export function Auth0Profile({ user, logoutWithRedirect }) {
           <Avatar src={userProfile.picture} alt="Profile" /> <KeyboardArrowDownIcon />
         </Hidden>
         <Hidden smUp>
-          <IconButton>
-            <MoreIcon />
-          </IconButton>
+          <MoreIcon />
         </Hidden>
       </ButtonBase>
 
