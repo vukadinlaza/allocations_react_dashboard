@@ -38,6 +38,8 @@ import NotFound from './components/NotFound';
 // superadmin
 import SuperAdminManager from './components/superadmin/Manager';
 import SuperAdminOverview from './components/superadmin/Overview';
+import Settings from './components/Settings/Settings';
+import UserEdit from './components/Settings/UserEdit'
 
 // admin
 import AdminHome from './components/admin/AdminHome';
@@ -124,6 +126,8 @@ const App = () => {
           {/** SuperAdmin * */}
           <AdminRoute path="/superadmin" component={SuperAdminOverview} exact />
           <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
+          <AdminRoute path="/admin/settings" component={Settings} exact />
+          <AdminRoute path="/admin/users/:userId" component={UserEdit} exact />
 
           {/** Whitelabel Routes * */}
           <PrivateRoute path="/admin/funds" component={Funds} exact />
