@@ -8,8 +8,28 @@ import { nWithCommas } from '../../../utils/numbers'
 import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
+import ActivityLog from './sections/ActivityLog';
 
 const styles = theme => ({
+  avatar: {
+    background: "#0461FF",
+    fontSize: "14px",
+    width: "30px",
+    height: "30px",
+    marginRight: "1em"
+  },
+  bar: {
+    borderRadius: 5,
+    backgroundColor: '#39C522',
+  },
+  boxEditButton: {
+    backgroundColor: "#0461FF",
+    borderRadius: '100%',
+    padding: "8px",
+    "& *": {
+      color: "white"
+    }
+  },
   dashboardContainer: {
     display: "flex",
     flexDirection: "column",
@@ -20,6 +40,45 @@ const styles = theme => ({
     left: "0",
     top: "0",
     background: "white"
+  },
+  investorBox: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    background: "white",
+    borderRadius: "5px",
+    background: "#ffffff",
+    marginBottom: "10px",
+    borderRadius: "10px",
+    padding: "10px"
+  },
+  investorBoxName: {
+    display: "flex",
+    alignItems: "center"
+  },
+  investorCheck: {
+    borderRadius: "20px",
+    background: "#39C522",
+    marginLeft: "0.5em",
+    display: "flex",
+    alignItems: "center",
+    padding: "2px 5px",
+    "& svg": {
+      fontSize: "10px",
+    }
+  },
+  logType: {
+    width: "fit-content",
+    padding: "2px 12px",
+    borderRadius: "20px"
+  },
+  progress: {
+    backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
+  },
+  progressContainer: {
+    height: 10,
+    borderRadius: 5,
+    width: "90%"
   },
   section: {
     width: "100%",
@@ -54,6 +113,13 @@ const styles = theme => ({
     "&>p": {
       fontSize: "14px"
     }
+  },
+  simpleBoxDataRow: {
+    marginBottom: "15px",
+    display: 'flex',
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%"
   },
   subSection: {
     width: "100%",
@@ -155,6 +221,12 @@ const FundManagerDashboard = ({ classes }) => {
           <InvestorStatus
             classes={classes}
             buttonAction={buttonAction}
+            />
+        )
+      case 4:
+        return(
+          <ActivityLog
+            classes={classes}
             />
         )
       case 5:

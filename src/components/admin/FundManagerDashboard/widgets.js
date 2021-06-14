@@ -43,8 +43,17 @@ const styles = theme => ({
 		display: "flex",
 		alignItems: "center",
 	},
+	dynamicBoxContent: {
+		height: "calc(100% - 110px)"
+	},
 	dynamicHeight: {
 		height: "auto"
+	},
+	fixedBoxContent: {
+		height: "calc(100% - 71px)",
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center"
 	},
 	infoIcon: {
 		marginLeft: "0.5em"
@@ -61,13 +70,12 @@ const getDimensions = (size) => {
 	switch (size) {
 		case 'full':
 			return {minWidth: "100%"}
-			break;
 		case 'half':
 			return {minWidth: '430px', maxWidth: '49%'}
-			break;
 		case 'third':
 			return {minWidth: '430px', maxWidth: '32%'};
-			break;
+		case 'fourth':
+			return {minWidth: '300px', maxWidth: '24%'};
 		default:
 			return {}
 	}
@@ -99,7 +107,7 @@ export const SimpleBox = withStyles(styles)(({ classes,
 				</div>
 				<div>{titleData}</div>
 			</div>
-			<div className={classes.boxContent} style={fullWidthContent? {padding: 0} : {}}>
+			<div className={`${classes.boxContent} ${autoHeight? classes.dynamicBoxContent : classes.fixedBoxContent}`} style={fullWidthContent? {padding: 0} : {}}>
 				{children}
 			</div>
 			{buttonText?
