@@ -176,7 +176,7 @@ export default ({ data, children, orgData, isDemo }) => {
                   Last Update: 15th Oct 2020
                 </p>
               </Grid>
-              <Grid item sm={4} md={4} justify="center" align="center">
+              <Grid item sm={4} md={4} align="center">
                 <img
                   src="https://allocations-public.s3.us-east-2.amazonaws.com/icon-mulitple.svg"
                   alt="oops"

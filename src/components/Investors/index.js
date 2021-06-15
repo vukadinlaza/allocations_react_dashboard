@@ -74,7 +74,7 @@ export default function Investors() {
       <Grid container>
         <Grid item xs={12}>
           <Paper className="table-wrapper">
-            <Grid container xs={12} justify="space-between" style={{ padding: '16px' }}>
+            <Grid container justify="space-between" style={{ padding: '16px' }}>
               <Typography variant="h6" gutterBottom>
                 Investors
               </Typography>
