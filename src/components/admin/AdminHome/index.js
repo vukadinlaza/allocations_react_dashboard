@@ -134,9 +134,7 @@ export default function AdminHome({}) {
       </Grid>
       <Grid item sm={12} md={6}>
         <Typography variant="body2" style={{ textAlign: 'right' }}>
-          <Grid item xs={12}>
-            {data.investor.admin && <SuperAdmin org={orgData} />}
-          </Grid>
+          {data.investor.admin && <SuperAdmin org={orgData} />}
         </Typography>
       </Grid>
     </Grid>
