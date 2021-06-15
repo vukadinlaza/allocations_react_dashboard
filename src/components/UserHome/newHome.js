@@ -71,6 +71,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '12vh',
     borderRadius: '1rem',
     padding: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      maxHeight: '70%',
+      overflow: 'scroll',
+    },
   },
   input: {
     border: '1px solid #707070',
