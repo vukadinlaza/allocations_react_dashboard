@@ -73,6 +73,11 @@ const styles = theme => ({
 				type: 'typeName', //only if something particular is needed for a cell
 				keyNotInData: Boolean // only if content of a cell is not included in data, i.e  button
 				align: 'right' optional
+				alignHeader: Boolean optional
+
+				nestedKey: nested key optional (needs nestedCollection & localFieldKey)
+				nestedCollection: String (collection for lookup) (needs nestedKey localFieldKey)
+				localFieldKey: key in db collection (needs nestedKey and nestedCollection)
 			}
     ]
 */
@@ -129,10 +134,10 @@ const AllocationsTable = ({
 		setSelected(newSelected);
 	};
 
-	const handleRequestSort = (event, property) => {
+	const handleRequestSort = (event, property, nested, nestedCollection, localFieldKey) => {
 		const isAsc = orderBy === property && order === 'asc';
 		if(getSortProps){
-			getSortProps(property, !isAsc)
+			getSortProps(property, !isAsc, nested, nestedCollection, localFieldKey)
 		}
 		setOrder(isAsc ? 'desc' : 'asc');
 		setOrderBy(property);
@@ -234,11 +239,12 @@ const AllocationsTable = ({
 									key={`${header.label}-${index}`}
 									className={classes.headerText}
 									sortDirection={orderBy === header.value ? order : false}
+									align={header.alignHeader? header.align : ''}
 								>
 									<TableSortLabel
 										active={orderBy === header.value}
 										direction={orderBy === header.value ? order : 'asc'}
-										onClick={e => handleRequestSort(e, header.value)}
+										onClick={e => handleRequestSort(e, header.value, header.nestedKey, header.nestedCollection, header.localFieldKey)}
 									>
 										{header.label}
 									</TableSortLabel>

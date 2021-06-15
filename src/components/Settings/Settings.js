@@ -12,8 +12,8 @@ import {
   Paper
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import Loader from '../utils/Loader';
-import Users from './Users'
+import Users from './Users/Users'
+import Investments from './Investments/Investments'
 
 
 const styles = theme => ({
@@ -47,12 +47,15 @@ const Settings = ({ classes }) => {
   const [pagination, setPagination] = useState(25);
   const [searchFilter, setSearchFilter] = useState({});
   const [sortField, setSortField] = useState('');
-  const [sortOrder, setSortOrder] = useState()
+  const [sortOrder, setSortOrder] = useState();
+  const [nestedKey, setNestedKey] = useState('');
+  const [nestedCollection, setNestedCollection] = useState('');
+  const [localFieldKey, setLocalFieldKey] = useState('');
   const [headers, setHeaders] = useState([])
 
   useEffect(() => {
     headers.forEach((header, i) => {
-      const headerLength = header.value.length;
+      const headerLength = header.label.length + 4;
       if(headerLength > selectWidth){
         setSelectWidth(headerLength)
       }
@@ -68,20 +71,52 @@ const Settings = ({ classes }) => {
   }
 
   const handleSearch = () => {
+    // we retrieve this values like this so the refetch triggers when we click the search button
     let searchFilter = document.getElementById('search-field').value
     let field = document.getElementById('field-filter').value
     setCurrentPage(0);
     setSearchFilter({searchFilter, field});
+
+    const fieldHeader = headers.find(header => header.value === field);
+    console.log({fieldHeader});
+    //allowing search for nested keys
+    if(fieldHeader.nestedKey && fieldHeader.nestedCollection && fieldHeader.localFieldKey){
+      setNestedKey(fieldHeader.nestedKey)
+      setNestedCollection(fieldHeader.nestedCollection)
+      setLocalFieldKey(fieldHeader.localFieldKey)
+    }else{
+      // if you change the field from a nested one to a normal one (we dont want to keep the previous state)
+      setNestedKey('')
+      setNestedCollection('')
+      setLocalFieldKey('')
+    }
+    setSortField(field)
   }
 
-  const onChangeSort = (sortField, isAsc) => {
+  const onChangeSort = (sortField, isAsc, nestedKey, nestedCollection, localFieldKey) => {
     let order = isAsc? 1 : -1
+    if(nestedKey && nestedCollection && localFieldKey){
+      setNestedKey(nestedKey)
+      setNestedCollection(nestedCollection)
+      setLocalFieldKey(localFieldKey)
+    }
     setSortField(sortField);
     setSortOrder(order)
   }
 
   const handleChangeTab = (event, newIndex) => {
-    setTabIndex(newIndex)
+    setTabIndex(newIndex);
+
+    //clear state
+    setCurrentPage(0)
+    setPagination(25)
+    setSearchFilter({})
+    setSortField('')
+    setSortOrder(1)
+    setNestedKey('')
+    setNestedCollection('')
+    setLocalFieldKey('')
+    document.getElementById('search-field').value = ''
   }
 
 
@@ -102,9 +137,23 @@ const Settings = ({ classes }) => {
             onChangeSort={onChangeSort}
             />
         )
-      case 0:
+      case 1:
         return(
-          <div></div>
+          <Investments
+            classes={classes}
+            searchFilter={searchFilter}
+            setHeaders={setHeaders}
+            pagination={pagination}
+            currentPage={currentPage}
+            sortField={sortField}
+            sortOrder={sortOrder}
+            onChangePage={onChangePage}
+            onChangeRowsPerPage={onChangeRowsPerPage}
+            onChangeSort={onChangeSort}
+            nestedKey={nestedKey}
+            nestedCollection={nestedCollection}
+            localFieldKey={localFieldKey}
+            />
         )
       default:
         <p>No data</p>
@@ -128,7 +177,7 @@ const Settings = ({ classes }) => {
       </Paper>
 
       <div className={classes.searchContainer}>
-        <FormControl variant="outlined" style={{width: `${selectWidth + 2}em`}} size="small">
+        <FormControl variant="outlined" style={{width: `${selectWidth}em`}} size="small">
           <InputLabel htmlFor="field-filter">Field</InputLabel>
           <Select
             native
@@ -137,7 +186,7 @@ const Settings = ({ classes }) => {
               id: 'field-filter',
             }}
             >
-            {headers.map((header, index) =>
+            {headers.filter(header => header.isFilter).map((header, index) =>
               <option value={header.value} key={`header-${index}`}>{header.label}</option>
             )}
           </Select>

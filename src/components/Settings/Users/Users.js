@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { gql } from 'apollo-boost';
 import { withRouter } from "react-router";
 import { useQuery } from '@apollo/react-hooks';
-import AllocationsTable from '../utils/AllocationsTable';
-import Loader from '../utils/Loader';
+import AllocationsTable from '../../utils/AllocationsTable';
+import Loader from '../../utils/Loader';
 
 
 const ALL_USERS = gql`
@@ -14,15 +14,20 @@ const ALL_USERS = gql`
       last_name
       email
       entity_name
+      investments{
+        _id
+      }
     }
   }
 `;
 
 const headers = [
-  { value: 'first_name', label: 'First Name' },
-  { value: 'last_name', label: 'Last Name' },
-  { value: 'email', label: 'Email' },
-  { value: 'entity_name', label: 'Entity' }
+  { value: 'first_name', label: 'First Name', isFilter: true },
+  { value: 'last_name', label: 'Last Name', isFilter: true },
+  { value: 'email', label: 'Email', isFilter: true },
+  { value: 'entity_name', label: 'Entity', isFilter: true },
+  { value: 'investments', label: 'Investments', type: 'count', align: 'center', alignHeader: true },
+  { value: 'dashboard', label: 'Dashboard', keyNotInData: true, type: 'link', align: 'center', alignHeader: true },
 ]
 
 
@@ -39,7 +44,6 @@ const Users = ({
   onChangeSort,
   history
 }) => {
-  console.log({sortField, sortOrder});
   if(!Object.keys(searchFilter).length) searchFilter = { field: "first_name" }
   const { data } = useQuery(ALL_USERS,
     {
@@ -56,8 +60,15 @@ const Users = ({
 
   useEffect(() => setHeaders(headers), [])
 
-  const getCellContent = () => {
-    return 1
+  const getCellContent = (type, row, headerValue) => {
+    switch (type) {
+      case 'count':
+        return row[headerValue].length
+      case 'link':
+        return <a href={`/investor/${row._id}/home`}>Link</a>
+      default:
+        <div></div>
+    }
   }
 
   const handleRowDetailPage = (row) => {

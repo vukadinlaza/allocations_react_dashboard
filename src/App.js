@@ -39,7 +39,7 @@ import NotFound from './components/NotFound';
 import SuperAdminManager from './components/superadmin/Manager';
 import SuperAdminOverview from './components/superadmin/Overview';
 import Settings from './components/Settings/Settings';
-import UserEdit from './components/Settings/UserEdit'
+import UserEdit from './components/Settings/Users/UserEdit'
 
 // admin
 import AdminHome from './components/admin/AdminHome';

@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
-import { withRouter } from "react-router";
+import { withRouter } from "react-router-dom";
 import { withStyles } from '@material-ui/core/styles';
 import {
   Paper,
   Typography
 } from '@material-ui/core';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
-import AllocationsTable from '../utils/AllocationsTable';
-import Loader from '../utils/Loader';
-import { nWithCommas } from '../../utils/numbers'
+import AllocationsTable from '../../utils/AllocationsTable';
+import Loader from '../../utils/Loader';
+import { nWithCommas } from '../../../utils/numbers'
 
 
 const GET_USER = gql`
