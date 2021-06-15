@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
-import { Tabs, Tab } from '@material-ui/core';
+import { Tabs, Tab, Typography } from '@material-ui/core';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import EditIcon from '@material-ui/icons/Edit';
+import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import { FlatBox } from './widgets'
 import AllocationsTable from '../../utils/AllocationsTable'
 import { nWithCommas } from '../../../utils/numbers'
@@ -71,6 +74,25 @@ const styles = theme => ({
     width: "fit-content",
     padding: "2px 12px",
     borderRadius: "20px"
+  },
+  pageIcons: {
+    width: "170px",
+    display: "flex",
+    justifyContent: "space-between",
+    paddingRight: "50px"
+  },
+  pageIcon: {
+    backgroundColor: "#0461FF",
+    borderRadius: '100%',
+    width: "30px",
+    height: "30px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    "& *": {
+      color: "white",
+      fontSize: "18px"
+    }
   },
   progress: {
     backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
@@ -232,7 +254,14 @@ const FundManagerDashboard = ({ classes }) => {
       case 5:
         return(
           <div className={classes.section}>
-            <FlatBox title="SHARE" info="Explanation">Child</FlatBox>
+            <FlatBox title="SHARE" info="Explanation">
+              <Typography>dashboard.allocations.com/funds/305-ventures</Typography>
+              <div className={classes.pageIcons}>
+                <div className={classes.pageIcon}><ChevronRightIcon/></div>
+                <div className={classes.pageIcon}><EditIcon/></div>
+                <div className={classes.pageIcon}><FileCopyOutlinedIcon/></div>
+              </div>
+            </FlatBox>
           </div>
         )
       default:

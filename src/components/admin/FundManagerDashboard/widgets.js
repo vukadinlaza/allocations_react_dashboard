@@ -43,6 +43,10 @@ const styles = theme => ({
 		display: "flex",
 		alignItems: "center",
 	},
+	chartBoxContent: {
+		height: "calc(100% - 71px)",
+		paddinig: "40px"
+	},
 	dynamicBoxContent: {
 		height: "calc(100% - 110px)"
 	},
@@ -54,6 +58,11 @@ const styles = theme => ({
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "center"
+	},
+	flatBoxContent: {
+		display: "flex",
+		justifyContent: "space-between",
+		alignItems: "center"
 	},
 	infoIcon: {
 		marginLeft: "0.5em"
@@ -129,7 +138,7 @@ export const ChartBox = withStyles(styles)(({ classes, title, info, children }) 
 					<InfoIcon className={classes.infoIcon}/>
 				</Tooltip>
 			</div>
-			<div className={classes.boxContent}>
+			<div className={`${classes.boxContent} ${classes.chartBoxContent}`}>
 				{children}
 			</div>
 		</div>
@@ -147,7 +156,7 @@ export const FlatBox = withStyles(styles)(({ classes, title, info, children }) =
 					<InfoIcon className={classes.infoIcon}/>
 				</Tooltip>
 			</div>
-			<div className={classes.boxContent}>
+			<div className={`${classes.boxContent} ${classes.flatBoxContent}`}>
 				{children}
 			</div>
 		</div>
