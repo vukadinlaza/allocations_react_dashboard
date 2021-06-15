@@ -1,20 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import Loader from '../../utils/Loader';
-import { get, pick } from 'lodash';
-import { gql } from 'apollo-boost';
-import { toast } from 'react-toastify';
-import { useMutation } from '@apollo/react-hooks';
+import React, { useState } from 'react';
+import { get } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CloudDone, HourglassEmpty, CheckCircle } from '@material-ui/icons';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { UsaStates } from 'usa-states';
-
 import {
   Button,
   List,
   TextField,
   Paper,
-  Divider,
   Grid,
   ListItem,
   ListItemText,
@@ -25,17 +19,9 @@ import {
   MenuItem,
 } from '@material-ui/core';
 import './style.scss';
-
 import countries from 'country-region-data';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(2),
-    marginBottom: theme.spacing(4),
-  },
-}));
+import Loader from '../../utils/Loader';
 
 /** *
  *
@@ -59,7 +45,6 @@ export default function EntityEditForm({
   actionText,
   icon,
   setFormStatus,
-  noValidate = false,
   submitfn,
   deleteEntity,
   isEdit,
@@ -197,7 +182,6 @@ export default function EntityEditForm({
                   onCompleted: handleClose(),
                 });
               }}
-              color="red"
             >
               Delete
             </Button>
