@@ -161,7 +161,7 @@ const User = ({
       case 'amount':
         return nWithCommas(row[headerValue])
       default:
-        <div></div>
+        return <div></div>
     }
   }
 
