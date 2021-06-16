@@ -24,6 +24,16 @@ npm install
 npm run dev
 ```
 
+## Creating Branches
+
+We create branches from `staging` and make PRs using GitHub
+
+### Use these conventions when creating a new branch
+
+Bugs: fix/BRANCH-NAME
+
+Features: feat/BRANCH-NAME
+
 ## Deployment
 
 ### Compiles and minifies for production
