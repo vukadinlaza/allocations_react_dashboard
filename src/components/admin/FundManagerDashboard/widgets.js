@@ -43,6 +43,14 @@ const styles = theme => ({
 		display: "flex",
 		alignItems: "center",
 	},
+	chartBox: {
+		minWidth: '430px',
+		maxWidth: '49%',
+		height: "450px",
+		[theme.breakpoints.down(phone)]: {
+			height: "300px"
+		},
+	},
 	chartBoxContent: {
 		height: "calc(100% - 71px)",
 		paddinig: "40px"
@@ -62,7 +70,11 @@ const styles = theme => ({
 	flatBoxContent: {
 		display: "flex",
 		justifyContent: "space-between",
-		alignItems: "center"
+		alignItems: "center",
+		[theme.breakpoints.down(phone)]: {
+			flexWrap: "wrap",
+			justifyContent: "center"
+		},
 	},
 	infoIcon: {
 		marginLeft: "0.5em"
@@ -131,7 +143,7 @@ export const SimpleBox = withStyles(styles)(({ classes,
 
 export const ChartBox = withStyles(styles)(({ classes, title, info, children }) => {
   return(
-		<div className={classes.box} style={{minWidth: '49%', maxWidth: '49%', height: "450px"}}>
+		<div className={`${classes.box} ${classes.chartBox}`}>
 			<div className={classes.boxTitleContainer}>
 				<Typography className={classes.boxTitle}>{title}</Typography>
 				<Tooltip title={info}>
@@ -149,7 +161,7 @@ export const ChartBox = withStyles(styles)(({ classes, title, info, children }) 
 
 export const FlatBox = withStyles(styles)(({ classes, title, info, children }) => {
 	return(
-		<div className={classes.box} style={{width: "100%", height: "120px"}}>
+		<div className={classes.box} style={{width: "100%", height: "auto", minHeight: "120px"}}>
 			<div className={classes.boxTitleContainer} style={{height: "60px"}}>
 				<Typography className={classes.boxTitle} style={{fontSize: "14px"}}>{title}</Typography>
 				<Tooltip title={info}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography } from '@material-ui/core';
@@ -7,11 +7,15 @@ import EditIcon from '@material-ui/icons/Edit';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import { FlatBox } from './widgets'
 import AllocationsTable from '../../utils/AllocationsTable'
+import { useViewport } from '../../utils/hooks'
 import { nWithCommas } from '../../../utils/numbers'
 import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
 import ActivityLog from './sections/ActivityLog';
+
+export const tablet = "1024"
+export const phone = "650"
 
 const styles = theme => ({
   avatar: {
@@ -79,7 +83,10 @@ const styles = theme => ({
     width: "170px",
     display: "flex",
     justifyContent: "space-between",
-    paddingRight: "50px"
+    paddingRight: "50px",
+    [theme.breakpoints.down(phone)]: {
+      width: "200px"
+    },
   },
   pageIcon: {
     backgroundColor: "#0461FF",
@@ -92,7 +99,12 @@ const styles = theme => ({
     "& *": {
       color: "white",
       fontSize: "18px"
-    }
+    },
+    [theme.breakpoints.down(phone)]: {
+      width: "40px",
+      height: "40px",
+      marginTop: "15px"
+    },
   },
   progress: {
     backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
@@ -107,7 +119,10 @@ const styles = theme => ({
     display: "flex",
     justifyContent: "space-between",
     flexWrap: "wrap",
-    padding: "40px"
+    padding: "40px",
+    [theme.breakpoints.down(phone)]: {
+      padding: "4vw"
+    },
   },
   sectionTitle: {
     fontSize: "32px",
@@ -166,6 +181,12 @@ const styles = theme => ({
       height: "100%"
     }
   },
+  tabsContainer: {
+    [theme.breakpoints.down(phone)]: {
+      overflowX: 'scroll',
+      display: "block"
+    },
+  },
   tabsIndicator: {
     display: "none"
   },
@@ -181,16 +202,19 @@ const dashboardTabs = ["Setup", "Highlights", "Investments", "Investor Onboardin
 
 const FundManagerDashboard = ({ classes }) => {
 
+  const { width } = useViewport();
   const [tabIndex, setTabIndex] = useState(0)
 
-  const highlightsHeaders = [
+  const investmentsHeaders = [
     { value: 'name', label: 'NAME' },
-    { value: 'tagline', label: 'TAGLINE' },
     { value: 'date', label: 'DATE', type: 'date' },
     { value: 'investment', label: 'INVESTMENT', type: 'amount' },
   ]
+  // add or remove tagline column depending on viewport width
+  if(width > phone) investmentsHeaders.splice(1, 0, { value: 'tagline', label: 'TAGLINE' })
+  if(investmentsHeaders.map(h => h.value).includes('tagline') && (width < phone)) investmentsHeaders.splice(1, 1)
 
-  const highlightsData = [
+  const investmentsData = [
     { name: 'Luminous Computing', tagline: 'Photonics chips to tackle AI workloads', date: new Date(), investment: 25000},
     { name: 'Browder Capital LP', tagline: 'Early stage technology fund', date: new Date(), investment: 50000},
   ]
@@ -205,6 +229,7 @@ const FundManagerDashboard = ({ classes }) => {
         return
     }
   }
+
 
   const buttonAction = () => {
     console.log('HEY');
@@ -232,8 +257,8 @@ const FundManagerDashboard = ({ classes }) => {
         return(
           <div className={classes.section}>
             <AllocationsTable
-              data={highlightsData}
-              headers={highlightsHeaders}
+              data={investmentsData}
+              headers={investmentsHeaders}
               getCellContent={getCellContent}
               />
           </div>
@@ -278,7 +303,8 @@ const FundManagerDashboard = ({ classes }) => {
        onChange={handleTabChange}
        classes={{
          root: classes.tabs,
-         indicator: classes.tabsIndicator
+         indicator: classes.tabsIndicator,
+         flexContainer: classes.tabsContainer
        }}
        variant="fullWidth"
      >

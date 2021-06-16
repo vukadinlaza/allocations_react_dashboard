@@ -4,6 +4,9 @@ import { withStyles, withTheme } from '@material-ui/core/styles';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { nWithCommas } from '../../utils/numbers'
+import { useViewport } from './hooks'
+
+const phone = 650
 
 const styles = theme => ({
 
@@ -13,6 +16,43 @@ const styles = theme => ({
 export const DoughnutChart = withStyles(styles)(({ series }) => {
 
 	Chart.plugins.register(ChartDataLabels);
+
+	const { width } = useViewport();
+
+	let legendOptions = {
+		display: true,
+		position: "right",
+		labels: {
+			fontSize: 18,
+			usePointStyle: true,
+			pointStyle: "circle",
+			boxWidth: 12,
+			padding: 20
+		}
+	}
+
+	let dataLabels = {
+		title: {
+			font: {
+				weight: 'bold',
+				size: 18,
+				family: "'Roboto'"
+			}
+		}
+	}
+
+	const setFontSizes = (chart) => {
+		chart.legend.options.labels.fontSize = 12
+		chart.options.plugins.datalabels.labels.title.font.size = 12
+		chart.update()
+	}
+
+	if(width < phone) {
+		legendOptions.labels.fontSize = 12;
+		dataLabels.title.font.size = 12
+	}
+
+	
 
 	if (!series) {
 		return <div></div>
@@ -27,21 +67,19 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
 					}] || []
 				}}
 				options={{
+					responsive: true,
+					onResize: (chart, size) => {
+						if(size.height < 250){
+							setFontSizes(chart, size)
+						}
+					},
 					plugins: {
 						datalabels: {
 							display: true,
 							color: 'white',
-							labels: {
-								title: {
-									font: {
-										weight: 'bold',
-										size: 18,
-										family: "'Roboto'"
-									}
-								}
-							},
+							labels: dataLabels,
 							formatter: function(value, ctx, els) {
-								const total = ctx.dataset?._meta[0]?.total
+								const total = ctx.dataset?._meta[0]?.total;
 								return Math.round((value * 100) / total) + '%';
 							},
 						}
@@ -51,17 +89,7 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
 							radius: 2
 						}
 					},
-					legend: {
-						display: true,
-						position: "right",
-						labels: {
-							fontSize: 18,
-							usePointStyle: true,
-							pointStyle: "circle",
-							boxWidth: 12,
-							padding: 20
-						}
-					},
+					legend: legendOptions,
 					tooltips: {
 						enabled: true
 					},

@@ -46,7 +46,7 @@ const InvestorStatus = ({ classes, buttonAction }) => {
         buttonAction={buttonAction}
         >
         {investors.filter(investor => investor.status === 'viewed').map((investor, index) =>
-          <InvestorBox investor={investor} classes={classes} index={index} />
+          <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`} />
         )}
       </SimpleBox>
       <SimpleBox

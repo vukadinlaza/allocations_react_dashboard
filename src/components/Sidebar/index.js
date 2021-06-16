@@ -27,6 +27,9 @@ import { useAuth } from '../../auth/useAuth';
 import NavBar from '../NavBar';
 import './style.scss';
 
+export const tablet = "1024"
+export const phone = "650"
+
 const whitelistEmails = [
   {
     email: 'adam@collider.vc',
@@ -807,7 +810,12 @@ const useStyles = makeStyles((theme) => ({
     overflowY: "scroll",
     height: "calc(100vh - 70px)",
     paddingBottom: "0",
-    position: "relative"
+    position: "relative",
+    [theme.breakpoints.down(phone)]: {
+      width: "100vw",
+      maxWidth: "none",
+      padding: "20px"
+    },
   },
   sectionDesktop: {
     display: 'none',
