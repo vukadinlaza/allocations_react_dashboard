@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -45,24 +45,40 @@ const styles = theme => ({
 	PROPS NEEDED (example):
 		data={tableData}
 		headers={tableHeaders}
+		tableSize="small" optional
+
 		pagination={Boolean} optional
+		serverPagination={Boolean} optional
+		rowsQuantity={10} optional
+		currentPage={0} optional
+		onChangePage={this.onChangePage} optional
+		onChangeRowsPerPage={this.onChangeRowsPerPage} optional
+
 		includeCheckbox={Boolean} optional
 		rowSelector="rowSelector" - property name that identifies each row Optional
 		rowDetailPage={true} - true if when clicking on row takes you to row specific page optional
 		handleRowDetailPage={this.handleDetailPage} - function to tell where to go when clickin on a row (only if rowDetailPage is true)
-		tableSize="small" optional
-		getCellContent={functionThatReturnsSpecifiedValueForCell} only needed it a type is provided in the header - optional
+
 		withTitle={true} //add title to table - optional
 		titleComponent={<div></div>} JSX that goes as the title - optional
 
-		** if something particular is needed for a column cells, like a button, just add the type property in the header.
+		getSortProps={sortFunction} optional
+		sortField="field" optional
 
+		getCellContent={functionThatReturnsSpecifiedValueForCell} only needed it a type is provided in the header - optional
+		** if something particular is needed for a column cells, like a button, just add the type property in the header.
 		const headersExample = [
       {
 				value: 'cellValue',
 				label: 'cellLabel',
 				type: 'typeName', //only if something particular is needed for a cell
 				keyNotInData: Boolean // only if content of a cell is not included in data, i.e  button
+				align: 'right' optional
+				alignHeader: Boolean optional
+
+				nestedKey: nested key optional (needs nestedCollection & localFieldKey)
+				nestedCollection: String (collection for lookup) (needs nestedKey localFieldKey)
+				localFieldKey: key in db collection (needs nestedKey and nestedCollection)
 			}
     ]
 */
@@ -76,20 +92,30 @@ const AllocationsTable = ({
 	rowSelector,
 	rowDetailPage,
 	pagination,
+	serverPagination,
+	rowsQuantity = 25,
+	currentPage = 0,
+	onChangePage,
+	onChangeRowsPerPage,
 	handleRowDetailPage,
 	noShadow = false,
 	includeCheckBox,
-	rowsQuantity = 25,
 	tableSize,
 	getCellContent,
 	withTitle,
-	titleComponent
+	titleComponent,
+	getSortProps,
+	sortField
 }) => {
 	const [selected, setSelected] = useState([]);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(rowsQuantity);
-	const [orderBy, setOrderBy] = React.useState(headers[0].value);
+	const [orderBy, setOrderBy] = React.useState(sortField? sortField : headers[0].value);
 	const [order, setOrder] = React.useState('asc');
+
+	useEffect(() => {
+		setPage(currentPage)
+	}, [currentPage])
 
 	const handleClick = (event, value) => {
 		const selectedIndex = selected.indexOf(value);
@@ -110,8 +136,11 @@ const AllocationsTable = ({
 		setSelected(newSelected);
 	};
 
-	const handleRequestSort = (event, property) => {
+	const handleRequestSort = (event, property, sortNestedKey, sortNestedCollection, sortLocalFieldKey) => {
 		const isAsc = orderBy === property && order === 'asc';
+		if(getSortProps){
+			getSortProps(property, !isAsc, sortNestedKey, sortNestedCollection, sortLocalFieldKey)
+		}
 		setOrder(isAsc ? 'desc' : 'asc');
 		setOrderBy(property);
 	};
@@ -126,10 +155,16 @@ const AllocationsTable = ({
 	};
 
 	const handleChangePage = (event, newPage) => {
+		if(serverPagination){
+			onChangePage(newPage)
+		}
 		setPage(newPage);
 	};
 
 	const handleChangeRowsPerPage = (event) => {
+		if(serverPagination){
+			onChangeRowsPerPage(event)
+		}
 		setRowsPerPage(parseInt(event.target.value, 10));
 		setPage(0);
 	};
@@ -206,11 +241,12 @@ const AllocationsTable = ({
 									key={`${header.label}-${index}`}
 									className={classes.headerText}
 									sortDirection={orderBy === header.value ? order : false}
+									align={header.alignHeader? header.align : 'center'}
 								>
 									<TableSortLabel
 										active={orderBy === header.value}
 										direction={orderBy === header.value ? order : 'asc'}
-										onClick={e => handleRequestSort(e, header.value)}
+										onClick={e => handleRequestSort(e, header.value, header.nestedKey, header.nestedCollection, header.localFieldKey)}
 									>
 										{header.label}
 									</TableSortLabel>
@@ -248,6 +284,7 @@ const AllocationsTable = ({
 												scope="row"
 												className={classes.cellText}
 												id={`${row[rowSelector]}-${idx}`}
+												align={header.align}
 											>
 												{header.type ?
 													getCellContent(header.type, row, header.value, row[rowSelector]) :
@@ -264,12 +301,12 @@ const AllocationsTable = ({
 						}
 					</TableBody>
 				</Table>
-				{pagination ?
+				{pagination || serverPagination ?
 					<TablePagination
 						rowsPerPageOptions={[5, 10, 25]}
 						component="div"
-						count={data ? data.length : 0}
-						rowsPerPage={25}
+						count={serverPagination? -1 : (data ? data.length : 0)}
+						rowsPerPage={rowsPerPage}
 						page={page}
 						onChangePage={handleChangePage}
 						onChangeRowsPerPage={handleChangeRowsPerPage}

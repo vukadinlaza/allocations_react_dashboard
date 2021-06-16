@@ -1,21 +1,21 @@
-import React, { useEffect } from 'react'
-import Loader from "../utils/Loader"
-import { useParams, Link, Redirect } from 'react-router-dom'
-import { gql } from 'apollo-boost'
-import { useLazyQuery } from '@apollo/react-hooks'
-import { useAuth } from "../../auth/useAuth"
-import { Row, Col } from 'reactstrap'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import React, { useEffect } from 'react';
+import { useParams, Link, Redirect } from 'react-router-dom';
+import { gql } from 'apollo-boost';
+import { useLazyQuery } from '@apollo/react-hooks';
+import { Row, Col } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, Hidden } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, Hidden } from '@material-ui/core';
+import { useAuth } from '../../auth/useAuth';
+import Loader from '../utils/Loader';
 
-import "./style.scss";
+import './style.scss';
 
-/***
+/** *
  *
  * an investor view of all the deals they've been invited to
  *
- **/
+ * */
 
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
@@ -41,47 +41,58 @@ const GET_INVESTOR = gql`
       }
     }
   }
-`
+`;
 
-function formatDate (date) {
+function formatDate(date) {
   try {
-    const d = new Date(date)
-    return d.toLocaleString('en-US', { dateStyle: "short" })
+    const d = new Date(date);
+    return d.toLocaleString('en-US', { dateStyle: 'short' });
   } catch (e) {
-    return date
+    return date;
   }
 }
 
-export default function InvitedDeals () {
-  const { userProfile, error } = useAuth(GET_INVESTOR)
+export default function InvitedDeals() {
+  const { userProfile, error } = useAuth(GET_INVESTOR);
 
   if (error) {
-    if (error.message === "GraphQL error: permission denied" && userProfile && userProfile.email) {
-      return <Redirect to="/signup" />
+    if (error.message === 'GraphQL error: permission denied' && userProfile && userProfile.email) {
+      return <Redirect to="/signup" />;
     }
-    return <div>{error.message}</div>
+    return <div>{error.message}</div>;
   }
 
-  if (!userProfile.email) return <div><Loader /></div>
+  if (!userProfile.email)
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
 
   return (
     <div className="InvitedDeals">
       <Row>
         <Col sm="10" className="offset-sm-1">
           <Paper className="table-wrapper">
-            <Table size={window.innerWidth > 768 ? "medium": "small"}>
+            <Table size={window.innerWidth > 768 ? 'medium' : 'small'}>
               <TableHead>
                 <TableRow>
                   <TableCell>Deal</TableCell>
-                  <Hidden xsDown><TableCell>Description</TableCell></Hidden>
+                  <Hidden xsDown>
+                    <TableCell>Description</TableCell>
+                  </Hidden>
                   <TableCell>Status</TableCell>
-                  <Hidden xsDown><TableCell>Closing</TableCell></Hidden>
-                  <Hidden xsDown><TableCell>Lead</TableCell></Hidden>
-                  <TableCell></TableCell>
+                  <Hidden xsDown>
+                    <TableCell>Closing</TableCell>
+                  </Hidden>
+                  <Hidden xsDown>
+                    <TableCell>Lead</TableCell>
+                  </Hidden>
+                  <TableCell />
                 </TableRow>
               </TableHead>
               <TableBody>
-                {userProfile.invitedDeals.map(deal => (
+                {userProfile.invitedDeals.map((deal) => (
                   <DealRow key={deal._id} deal={deal} />
                 ))}
               </TableBody>
@@ -90,28 +101,33 @@ export default function InvitedDeals () {
         </Col>
       </Row>
     </div>
-  )
+  );
 }
 
-function DealRow ({ deal }) {
-  const link = deal.organization 
-    ? `/deals/${deal.organization.slug}/${deal.slug}`
-    : `/deals/${deal.slug}`
-    
+function DealRow({ deal }) {
+  const link = deal.organization ? `/deals/${deal.organization.slug}/${deal.slug}` : `/deals/${deal.slug}`;
+
   return (
     <TableRow>
       <TableCell>{deal.company_name}</TableCell>
-      <Hidden xsDown><TableCell>{deal.company_description}</TableCell></Hidden>
-      <Hidden xsDown><TableCell>{deal.status}</TableCell></Hidden>
+      <Hidden xsDown>
+        <TableCell>{deal.company_description}</TableCell>
+      </Hidden>
+      <Hidden xsDown>
+        <TableCell>{deal.status}</TableCell>
+      </Hidden>
       <TableCell>{formatDate(deal.date_closed)}</TableCell>
-      <Hidden xsDown><TableCell>{deal.deal_lead}</TableCell></Hidden>
+      <Hidden xsDown>
+        <TableCell>{deal.deal_lead}</TableCell>
+      </Hidden>
       <TableCell align="center">
         <Link to={link}>
-          <Button variant="contained" style={{backgroundColor: "#53B987", color: "#fff"}}>
-            Invest&nbsp;<FontAwesomeIcon icon="arrow-right" />
+          <Button variant="contained" style={{ backgroundColor: '#53B987', color: '#fff' }}>
+            Invest&nbsp;
+            <FontAwesomeIcon icon="arrow-right" />
           </Button>
-        </Link> 
+        </Link>
       </TableCell>
     </TableRow>
-  )
+  );
 }

@@ -1174,7 +1174,6 @@ const TR = ({
     return _.get(r, 'Deal Name (webapp)[0]') === investment.deal.company_name;
   });
 
-
   const addedDate = moment(investment?.deal?.dealParams?.wireDeadline).format('Do MMM YYYY');
   const showDocsFn = () => setShowDocs(showDocs ? false : investment);
   return (
@@ -1213,13 +1212,13 @@ const TR = ({
           onClick={() => history.push(_.get(investment, 'deal.appLink', ''))}
         >
           View
-          </Button>
+        </Button>
       </TableCell>
       <Hidden only="xs">
         <TableCell align="center">
           <Button variant="contained" size="small" color="primary" onClick={showDocsFn} disabled={!!demo}>
             View
-        </Button>
+          </Button>
         </TableCell>
       </Hidden>
       <Hidden only="xs">
@@ -1232,7 +1231,7 @@ const TR = ({
             disabled={!capitalAccountInfo?.Email}
           >
             View
-        </Button>
+          </Button>
         </TableCell>
       </Hidden>
     </TableRow>

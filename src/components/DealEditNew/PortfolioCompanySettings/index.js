@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { FormControl, TextField, Button } from '@material-ui/core';
-import './styles.scss'
+import './styles.scss';
 
 function PortfolioCompanySettings({ formData, setFormData }) {
-
-  const [feeType, setFeeType] = useState('percentage')
-  const [setupCostType, setSetupCostType] = useState('percentage')
+  const [feeType, setFeeType] = useState('percentage');
+  const [setupCostType, setSetupCostType] = useState('percentage');
 
   const {
     dealParams: {
@@ -15,61 +14,61 @@ function PortfolioCompanySettings({ formData, setFormData }) {
       portfolioManagementFees,
       portfolioManagementFeesDollar,
       portfolioTotalCarry,
-    }
-  } = formData
+    },
+  } = formData;
 
   useEffect(() => {
-    getFeeType()
-    getSetupCostType()
-  }, [portfolioManagementFees, portfolioManagementFeesDollar])
+    getFeeType();
+    getSetupCostType();
+  }, [portfolioManagementFees, portfolioManagementFeesDollar]);
 
   const getFeeType = () => {
     if (portfolioManagementFees?.length > 0) {
-      setFeeType('percentage')
+      setFeeType('percentage');
     } else if (portfolioManagementFeesDollar?.length > 0) {
-      setFeeType('fixed')
+      setFeeType('fixed');
     }
-  }
+  };
 
   const getSetupCostType = () => {
     if (portfolioEstimatedSetupCosts?.length > 0) {
-      setFeeType('percentage')
+      setFeeType('percentage');
     } else if (portfolioEstimatedSetupCostsDollar?.length > 0) {
-      setFeeType('fixed')
+      setFeeType('fixed');
     }
-  }
+  };
 
   const handleFormChange = ({ target }) => {
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       dealParams: {
         ...prevData.dealParams,
-        [target.name]: target.value
-      }
-    }))
-  }
+        [target.name]: target.value,
+      },
+    }));
+  };
 
   const handleFeeChange = ({ target }) => {
     if (feeType === 'fixed') {
-      setFormData(prevData => ({
+      setFormData((prevData) => ({
         ...prevData,
         dealParams: {
           ...prevData.dealParams,
           portfolioManagementFeesDollar: target.value,
-          portfolioManagementFees: ''
-        }
-      }))
+          portfolioManagementFees: '',
+        },
+      }));
     } else {
-      setFormData(prevData => ({
+      setFormData((prevData) => ({
         ...prevData,
         dealParams: {
           ...prevData.dealParams,
           portfolioManagementFees: target.value,
-          portfolioManagementFeesDollar: ''
-        }
-      }))
+          portfolioManagementFeesDollar: '',
+        },
+      }));
     }
-  }
+  };
 
   const getManagementFee = () => {
     if (portfolioManagementFees?.length > 0 && feeType === 'percentage') {
@@ -79,8 +78,7 @@ function PortfolioCompanySettings({ formData, setFormData }) {
     if (portfolioManagementFeesDollar?.length > 0 && feeType === 'fixed') {
       return portfolioManagementFeesDollar;
     }
-  }
-
+  };
 
   const getSetupCosts = () => {
     if (portfolioEstimatedSetupCosts?.length > 0 && setupCostType === 'percentage') {
@@ -90,47 +88,45 @@ function PortfolioCompanySettings({ formData, setFormData }) {
     if (portfolioEstimatedSetupCostsDollar?.length > 0 && setupCostType === 'fixed') {
       return portfolioEstimatedSetupCostsDollar;
     }
-  }
+  };
 
   const handleSetupCostChange = ({ target }) => {
     if (setupCostType === 'fixed') {
-      setFormData(prevData => ({
+      setFormData((prevData) => ({
         ...prevData,
         dealParams: {
           ...prevData.dealParams,
           portfolioEstimatedSetupCostsDollar: target.value,
-          portfolioEstimatedSetupCosts: ''
-        }
-      }))
+          portfolioEstimatedSetupCosts: '',
+        },
+      }));
     } else {
-      setFormData(prevData => ({
+      setFormData((prevData) => ({
         ...prevData,
         dealParams: {
           ...prevData.dealParams,
           portfolioEstimatedSetupCosts: target.value,
-          portfolioEstimatedSetupCostsDollar: ''
-        }
-      }))
+          portfolioEstimatedSetupCostsDollar: '',
+        },
+      }));
     }
-  }
+  };
 
-  const changeFeeType = type => {
-    setFormData(prevData => ({
+  const changeFeeType = (type) => {
+    setFormData((prevData) => ({
       ...prevData,
       dealParams: {
         ...prevData.dealParams,
-        portfolioManagementFeeType: type
-      }
-    }))
-  }
+        portfolioManagementFeeType: type,
+      },
+    }));
+  };
 
   return (
-
     <section className="PortfolioCompanySettings">
       <h2>SPV Terms</h2>
 
       <div className="form-fields">
-
         <FormControl className="field">
           <label className="field-label">
             Portfolio management fee
@@ -143,34 +139,36 @@ function PortfolioCompanySettings({ formData, setFormData }) {
               />
               <Button
                 onClick={() => {
-                  setFeeType('fixed')
-                  setFormData(prevData => ({
+                  setFeeType('fixed');
+                  setFormData((prevData) => ({
                     ...prevData,
                     dealParams: {
                       ...prevData.dealParams,
                       portfolioManagementFees: portfolioManagementFeesDollar,
-                      portfolioManagementFeesDollar: ''
-                    }
-                  }))
+                      portfolioManagementFeesDollar: '',
+                    },
+                  }));
                 }}
                 className={`percentage ${feeType === 'percentage' && 'selected'}`}
-                variant="outlined">
+                variant="outlined"
+              >
                 %
               </Button>
               <Button
                 onClick={() => {
-                  setFeeType('fixed')
-                  setFormData(prevData => ({
+                  setFeeType('fixed');
+                  setFormData((prevData) => ({
                     ...prevData,
                     dealParams: {
                       ...prevData.dealParams,
                       portfolioManagementFeesDollar: portfolioManagementFees,
-                      portfolioManagementFees: ''
-                    }
-                  }))
+                      portfolioManagementFees: '',
+                    },
+                  }));
                 }}
                 className={`fixed ${feeType === 'fixed' && 'selected'}`}
-                variant="outlined">
+                variant="outlined"
+              >
                 $
               </Button>
             </div>
@@ -184,13 +182,15 @@ function PortfolioCompanySettings({ formData, setFormData }) {
               <Button
                 onClick={() => changeFeeType('Annual')}
                 className={`option-button ${portfolioManagementFeeType === 'Annual' && 'selected'}`}
-                variant="outlined">
+                variant="outlined"
+              >
                 Annual
               </Button>
               <Button
                 onClick={() => changeFeeType('One-Time')}
                 className={`option-button ${portfolioManagementFeeType === 'One-Time' && 'selected'}`}
-                variant="outlined">
+                variant="outlined"
+              >
                 One-time
               </Button>
             </div>
@@ -223,22 +223,23 @@ function PortfolioCompanySettings({ formData, setFormData }) {
               <Button
                 onClick={() => setSetupCostType('percentage')}
                 className={`percentage ${setupCostType === 'percentage' && 'selected'}`}
-                variant="outlined">
+                variant="outlined"
+              >
                 %
               </Button>
               <Button
                 onClick={() => setSetupCostType('fixed')}
                 className={`fixed ${setupCostType === 'fixed' && 'selected'}`}
-                variant="outlined">
+                variant="outlined"
+              >
                 $
               </Button>
             </div>
           </label>
         </FormControl>
-
       </div>
     </section>
-  )
+  );
 }
 
-export default PortfolioCompanySettings
+export default PortfolioCompanySettings;

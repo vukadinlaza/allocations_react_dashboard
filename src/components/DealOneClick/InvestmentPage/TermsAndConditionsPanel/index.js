@@ -54,21 +54,22 @@ function TermsAndConditionsPanel({ deal: { documents, signDeadline }, checkedTAT
             className="terms-checkbox"
             onChange={(e) => setCheckedTAT(e.target.checked)}
             classes={{
-              checked: "terms-checkbox-checked"
+              checked: 'terms-checkbox-checked',
             }}
-            />
+          />
           I have read and accept the terms of the investment.
         </label>
       </div>
-      {isClosed?
-        <Typography style={{color: "red", fontSize: "1em"}}>
-          You can no longer invest in this deal. This deal's deadline was: {moment(signDeadline).format('dddd, MMMM D YYYY, h:mm a [EST]')}.
+      {isClosed ? (
+        <Typography style={{ color: 'red', fontSize: '1em' }}>
+          You can no longer invest in this deal. This deal's deadline was:{' '}
+          {moment(signDeadline).format('dddd, MMMM D YYYY, h:mm a [EST]')}.
         </Typography>
-        :
+      ) : (
         <Button className="confirm-investment-button" disabled={!checkedTAT} onClick={confirmInvestment}>
           Confirm investment
         </Button>
-      }
+      )}
     </section>
   );
 }

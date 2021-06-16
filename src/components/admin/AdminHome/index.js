@@ -109,7 +109,7 @@ export default function AdminHome({}) {
   if (orgSlug === 'demo-fund') {
     slug = 'browder-capital';
   }
-  
+
   const fundInvestments = x.filter((inv) => {
     return toLower(inv.Organization).includes(slug.replace('-', ' '));
   });

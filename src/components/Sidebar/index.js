@@ -18,6 +18,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import StorefrontIcon from '@material-ui/icons/Storefront';
+import SettingsIcon from '@material-ui/icons/Settings';
 import BuildIcon from '@material-ui/icons/Build';
 import MonetizationOnRoundedIcon from '@material-ui/icons/MonetizationOnRounded';
 import AccountBalanceRoundedIcon from '@material-ui/icons/AccountBalanceRounded';
@@ -944,6 +945,12 @@ export default function Sidebar(props) {
                   <AccountBalanceRoundedIcon />
                 </ListItemIcon>
                 <ListItemText primary="Funds" />
+              </ListItem>
+              <ListItem component={Link} to="/admin/settings" button>
+                <ListItemIcon className={classes.icon}>
+                  <SettingsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Settings" />
               </ListItem>
             </div>
             <AdminLinks location={location} />

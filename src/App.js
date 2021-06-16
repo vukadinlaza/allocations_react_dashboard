@@ -9,7 +9,7 @@ import Deals from './components/Deals';
 import Credit from './components/Credit';
 import DealNew from './components/DealNew';
 import DealEdit from './components/DealEdit';
-import DealEditNew from './components/DealEditNew'
+import DealEditNew from './components/DealEditNew';
 import InvestorEdit from './components/InvestorEdit';
 import InvestorNew from './components/InvestorNew';
 import Indentity from './components/Identity';
@@ -38,6 +38,9 @@ import NotFound from './components/NotFound';
 // superadmin
 import SuperAdminManager from './components/superadmin/Manager';
 import SuperAdminOverview from './components/superadmin/Overview';
+import Settings from './components/Settings/Settings';
+import User from './components/Settings/User';
+import Investment from './components/Settings/Investment';
 
 // admin
 import FundManagerDashboard from './components/admin/FundManagerDashboard';
@@ -73,7 +76,7 @@ const App = () => {
         <Switch>
           <Route path="/cb/thankyou" component={ThankYou} exact />
 
-          <PrivateRoute exact path="/" exact component={UserHome} />
+          <PrivateRoute path="/" exact component={UserHome} />
           <PrivateRoute path="/demo" exact component={Demo} />
           <PrivateRoute path="/credit" exact component={Credit} />
           <PrivateRoute path="/profile" component={Profile} />
@@ -124,6 +127,9 @@ const App = () => {
           {/** SuperAdmin * */}
           <AdminRoute path="/superadmin" component={SuperAdminOverview} exact />
           <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
+          <AdminRoute path="/admin/settings" component={Settings} exact />
+          <AdminRoute path="/admin/users/:userId" component={User} exact />
+          <AdminRoute path="/admin/invesments/:investmentId" component={Investment} exact />
 
           {/** Whitelabel Routes * */}
           <PrivateRoute path="/admin/funds" component={Funds} exact />
@@ -132,8 +138,7 @@ const App = () => {
 
           <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
           <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />
-          <PrivateRoute path="/admin/:organization/deals/:id/edit" component={DealEdit} exact />
-          <PrivateRoute path="/admin/:organization/deals/:id/edit-new" component={DealEditNew} exact />
+          <PrivateRoute path="/admin/:organization/deals/:id/edit" component={DealEditNew} exact />
 
           <PrivateRoute path="/admin/:organization/investments" component={Investments} exact />
           <PrivateRoute path="/admin/:organization/compliance" component={Compliance} exact />

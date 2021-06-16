@@ -1,8 +1,7 @@
-import React from 'react'
-import { Button } from '@material-ui/core'
+import React from 'react';
+import { Button } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import './styles.scss'
-
+import './styles.scss';
 
 function InvestingAsPanel() {
   return (
@@ -29,7 +28,7 @@ function InvestingAsPanel() {
         Trust
       </Button> */}
     </section>
-  )
+  );
 }
 
-export default InvestingAsPanel
+export default InvestingAsPanel;

@@ -1,34 +1,34 @@
-import * as d3 from 'd3'
+import * as d3 from 'd3';
 
-/***
+/** *
  *
  * Some chart helpers for setting up and tearing down d3 charts
  *
- **/
+ * */
 
 export function initResponsive(el, margins) {
-    const wrapper = document.querySelector(el)
-    const height = wrapper.clientHeight
-    const width = wrapper.clientWidth
+  const wrapper = document.querySelector(el);
+  const height = wrapper.clientHeight;
+  const width = wrapper.clientWidth;
 
-    d3.selectAll(`${el} svg`).remove()
+  d3.selectAll(`${el} svg`).remove();
 
-    const svg = d3.select(el)
-        .append("svg")
-        .attr("width", '100%')
-        .attr("height", '100%')
-        .attr('viewBox', '0 0 ' + Math.min(width, height) + ' ' + Math.min(width, height))
-        .attr('preserveAspectRatio', 'xMinYMin')
+  const svg = d3
+    .select(el)
+    .append('svg')
+    .attr('width', '100%')
+    .attr('height', '100%')
+    .attr('viewBox', `0 0 ${Math.min(width, height)} ${Math.min(width, height)}`)
+    .attr('preserveAspectRatio', 'xMinYMin');
 
-    const chartWidth = width - margins.left - margins.right
-    const chartHeight = height - margins.top - margins.bottom
+  const chartWidth = width - margins.left - margins.right;
+  const chartHeight = height - margins.top - margins.bottom;
 
-    const g = svg.append("g")
-        .attr("transform", "translate(" + margins.left + "," + margins.top + ")")
+  const g = svg.append('g').attr('transform', `translate(${margins.left},${margins.top})`);
 
-    return { g, chartHeight, chartWidth, svg }
+  return { g, chartHeight, chartWidth, svg };
 }
 
 export function clearChart(el) {
-    return d3.selectAll(`el > *`).remove()
+  return d3.selectAll(`el > *`).remove();
 }

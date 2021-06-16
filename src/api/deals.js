@@ -1,4 +1,4 @@
-import { gql } from 'apollo-boost'
+import { gql } from 'apollo-boost';
 
 export const search = gql`
   query SearchDeals($q: String!) {
@@ -8,7 +8,7 @@ export const search = gql`
       company_description
     }
   }
-`
+`;
 
 export const searchByOrg = gql`
   query SearchDealsByOrg($q: String!, $org: String!) {
@@ -18,4 +18,4 @@ export const searchByOrg = gql`
       company_description
     }
   }
-`
+`;

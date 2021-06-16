@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import Loader from '../utils/Loader'
-import { gql } from 'apollo-boost'
-import { pick } from 'lodash'
-import { useAuth } from "../../auth/useAuth";
+import React, { useEffect, useState } from 'react';
+import { gql } from 'apollo-boost';
+import { pick } from 'lodash';
 import { useMutation } from '@apollo/react-hooks';
 import { toast } from 'react-toastify';
-import {
-    Button,
-    Typography
-} from '@material-ui/core'
-import { PassportUploader } from '../forms/InvestorEdit/index'
+import { Button, Typography } from '@material-ui/core';
+import { useAuth } from '../../auth/useAuth';
+import Loader from '../utils/Loader';
+import { PassportUploader } from '../forms/InvestorEdit/index';
 
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
@@ -33,7 +30,7 @@ const GET_INVESTOR = gql`
       }
     }
   }
-`
+`;
 
 const UPDATE_USER = gql`
   mutation UpdateUser($investor: UserInput!) {
@@ -53,50 +50,48 @@ const UPDATE_USER = gql`
       }
     }
   }
-`
+`;
 
 const IdentityUpload = () => {
-    const [investor, setInvestor] = useState(null);
-    const [formStatus, setFormStatus] = useState("edit");
-    const [updateInvestor, { data }] = useMutation(UPDATE_USER);
-    const { userProfile, refetch } = useAuth(GET_INVESTOR);
+  const [investor, setInvestor] = useState(null);
+  const [formStatus, setFormStatus] = useState('edit');
+  const [updateInvestor, { data }] = useMutation(UPDATE_USER);
+  const { userProfile, refetch } = useAuth(GET_INVESTOR);
 
-
-    useEffect(() => {
-        if (userProfile) {
-            setInvestor(userProfile)
-        }
-    }, [userProfile])
-
-    useEffect(() => {
-        if (formStatus === "complete") refetch()
-    }, [formStatus])
-
-    const submit = () => {
-        return updateInvestor({
-            variables: {
-                investor: pick(investor, ['_id', 'email', 'passport'])
-            },
-            onCompleted: toast.success('Success')
-        })
+  useEffect(() => {
+    if (userProfile) {
+      setInvestor(userProfile);
     }
+  }, [userProfile]);
 
-    if (!userProfile.email) return <div><Loader /></div>
+  useEffect(() => {
+    if (formStatus === 'complete') refetch();
+  }, [formStatus]);
+
+  const submit = () => {
+    return updateInvestor({
+      variables: {
+        investor: pick(investor, ['_id', 'email', 'passport']),
+      },
+      onCompleted: toast.success('Success'),
+    });
+  };
+
+  if (!userProfile.email)
     return (
-        <>
-            <Typography variant="h6">
-                After uploading your file please press submit
-            </Typography>
-            <PassportUploader investor={investor} setInvestor={setInvestor} />
-            <Button variant="contained"
-                style={{ marginTop: 16 }}
-                onClick={submit}
-                color="primary">
-                Submit
-            </Button>
+      <div>
+        <Loader />
+      </div>
+    );
+  return (
+    <>
+      <Typography variant="h6">After uploading your file please press submit</Typography>
+      <PassportUploader investor={investor} setInvestor={setInvestor} />
+      <Button variant="contained" style={{ marginTop: 16 }} onClick={submit} color="primary">
+        Submit
+      </Button>
+    </>
+  );
+};
 
-        </>
-    )
-}
-
-export default IdentityUpload
+export default IdentityUpload;

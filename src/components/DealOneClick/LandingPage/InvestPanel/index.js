@@ -25,7 +25,7 @@ function InvestPanel({ deal, deal_slug, organization }) {
 
   const {
     dealParams: { wireDeadline, signDeadline },
-    status
+    status,
   } = deal;
 
   const getDeadline = (date) => {

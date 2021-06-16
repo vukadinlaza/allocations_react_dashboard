@@ -1,12 +1,12 @@
-import { library } from "@fortawesome/fontawesome-svg-core";
-import * as Solid from "@fortawesome/free-solid-svg-icons";
-import * as Reg from "@fortawesome/free-regular-svg-icons";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import * as Solid from '@fortawesome/free-solid-svg-icons';
+import * as Reg from '@fortawesome/free-regular-svg-icons';
 
-/***
+/** *
  *
  * imports all font awesome icons we use
  *
- **/
+ * */
 
 const icons = [
   Solid.faLink,
@@ -47,6 +47,6 @@ const icons = [
   Solid.faLock,
   Reg.faFilePdf,
   Reg.faSquare,
-]
+];
 
 export default library.add(...icons);

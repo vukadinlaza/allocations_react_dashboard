@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { FormControl, TextField, Button } from '@material-ui/core';
-import './styles.scss'
+import './styles.scss';
 
 function FundTerms({ formData, setFormData }) {
-
-  const [feeType, setFeeType] = useState('percentage')
-  const [setupCostType, setSetupCostType] = useState('percentage')
+  const [feeType, setFeeType] = useState('percentage');
+  const [setupCostType, setSetupCostType] = useState('percentage');
 
   const {
     dealParams: {
@@ -16,41 +15,40 @@ function FundTerms({ formData, setFormData }) {
       fundGeneralPartner,
       fundEstimatedSetupCosts,
       fundEstimatedSetupCostsDollar,
-      fundEstimatedTerm
-    }
+      fundEstimatedTerm,
+    },
   } = formData;
 
   const getFeeType = () => {
     if (fundManagementFees?.length > 0) {
-      setFeeType('percentage')
+      setFeeType('percentage');
     } else if (fundManagementFeesDollar?.length > 0) {
-      setFeeType('fixed')
+      setFeeType('fixed');
     }
-  }
+  };
 
   const getSetupCostType = () => {
     if (fundEstimatedSetupCosts?.length > 0) {
-      setFeeType('percentage')
+      setFeeType('percentage');
     } else if (fundEstimatedSetupCostsDollar?.length > 0) {
-      setFeeType('fixed')
+      setFeeType('fixed');
     }
-  }
+  };
 
   useEffect(() => {
-    getFeeType()
-    getSetupCostType()
-  }, [fundManagementFees, fundManagementFeesDollar])
-
+    getFeeType();
+    getSetupCostType();
+  }, [fundManagementFees, fundManagementFeesDollar]);
 
   const handleFormChange = ({ target }) => {
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       dealParams: {
         ...prevData.dealParams,
-        [target.name]: target.value
-      }
-    }))
-  }
+        [target.name]: target.value,
+      },
+    }));
+  };
 
   const getManagementFee = () => {
     if (fundManagementFees?.length > 0 && feeType === 'percentage') {
@@ -60,79 +58,77 @@ function FundTerms({ formData, setFormData }) {
     if (fundManagementFeesDollar?.length > 0 && feeType === 'fixed') {
       return fundManagementFeesDollar;
     }
-  }
+  };
 
   const getSetupCosts = () => {
     if (fundEstimatedSetupCosts?.length > 0 && setupCostType === 'percentage') {
       return fundEstimatedSetupCosts;
-    } 
+    }
 
     if (fundEstimatedSetupCostsDollar?.length > 0 && setupCostType === 'fixed') {
       return fundEstimatedSetupCostsDollar;
     }
-  }
+  };
 
   const handleFeeChange = ({ target }) => {
     if (feeType === 'fixed') {
-      setFormData(prevData => ({
+      setFormData((prevData) => ({
         ...prevData,
         dealParams: {
           ...prevData.dealParams,
           fundManagementFeesDollar: target.value,
-          fundManagementFees: ''
-        }
-      }))
+          fundManagementFees: '',
+        },
+      }));
     } else {
-      setFormData(prevData => ({
+      setFormData((prevData) => ({
         ...prevData,
         dealParams: {
           ...prevData.dealParams,
           fundManagementFees: target.value,
-          fundManagementFeesDollar: ''
-        }
-      }))
+          fundManagementFeesDollar: '',
+        },
+      }));
     }
-  }
+  };
 
   const handleSetupCostChange = ({ target }) => {
     if (setupCostType === 'fixed') {
-      setFormData(prevData => ({
+      setFormData((prevData) => ({
         ...prevData,
         dealParams: {
           ...prevData.dealParams,
           fundEstimatedSetupCostsDollar: target.value,
-          fundEstimatedSetupCosts: ''
-        }
-      }))
+          fundEstimatedSetupCosts: '',
+        },
+      }));
     } else {
-      setFormData(prevData => ({
+      setFormData((prevData) => ({
         ...prevData,
         dealParams: {
           ...prevData.dealParams,
           fundEstimatedSetupCosts: target.value,
-          fundEstimatedSetupCostsDollar: ''
-        }
-      }))
+          fundEstimatedSetupCostsDollar: '',
+        },
+      }));
     }
-  }
+  };
 
-  const changeFundFeeType = type => {
-    setFormData(prevData => ({
+  const changeFundFeeType = (type) => {
+    setFormData((prevData) => ({
       ...prevData,
       dealParams: {
         ...prevData.dealParams,
-        fundManagementFeeType: type
-      }
-    }))
-  }
-
+        fundManagementFeeType: type,
+      },
+    }));
+  };
 
   return (
     <section className="FundTerms">
       <h2>Fund Terms</h2>
 
       <div className="form-fields">
-
         <FormControl className="field">
           <label className="field-label">
             Management fee
@@ -145,34 +141,36 @@ function FundTerms({ formData, setFormData }) {
               />
               <Button
                 onClick={() => {
-                  setFeeType('percentage')
-                  setFormData(prevData => ({
+                  setFeeType('percentage');
+                  setFormData((prevData) => ({
                     ...prevData,
                     dealParams: {
                       ...prevData.dealParams,
                       fundManagementFees: fundManagementFeesDollar,
-                      fundManagementFeesDollar: ''
-                    }
-                  }))
+                      fundManagementFeesDollar: '',
+                    },
+                  }));
                 }}
                 className={`percentage ${feeType === 'percentage' && 'selected'}`}
-                variant="outlined">
+                variant="outlined"
+              >
                 %
               </Button>
               <Button
                 onClick={() => {
-                  setFeeType('fixed')
-                  setFormData(prevData => ({
+                  setFeeType('fixed');
+                  setFormData((prevData) => ({
                     ...prevData,
                     dealParams: {
                       ...prevData.dealParams,
                       fundManagementFeesDollar: fundManagementFees,
-                      fundManagementFees: ''
-                    }
-                  }))
+                      fundManagementFees: '',
+                    },
+                  }));
                 }}
                 className={`fixed ${feeType === 'fixed' && 'selected'}`}
-                variant="outlined">
+                variant="outlined"
+              >
                 $
               </Button>
             </div>
@@ -186,13 +184,15 @@ function FundTerms({ formData, setFormData }) {
               <Button
                 onClick={() => changeFundFeeType('Annual')}
                 className={`option-button ${fundManagementFeeType === 'Annual' && 'selected'}`}
-                variant="outlined">
+                variant="outlined"
+              >
                 Annual
               </Button>
               <Button
                 onClick={() => changeFundFeeType('One-Time')}
                 className={`option-button ${fundManagementFeeType === 'One-Time' && 'selected'}`}
-                variant="outlined">
+                variant="outlined"
+              >
                 One-time
               </Button>
             </div>
@@ -205,7 +205,7 @@ function FundTerms({ formData, setFormData }) {
             <TextField
               onChange={handleFormChange}
               value={fundTotalCarry || ''}
-              name='fundTotalCarry'
+              name="fundTotalCarry"
               className="text-input"
               variant="outlined"
             />
@@ -218,7 +218,7 @@ function FundTerms({ formData, setFormData }) {
             <TextField
               onChange={handleFormChange}
               value={fundGeneralPartner || ''}
-              name='fundGeneralPartner'
+              name="fundGeneralPartner"
               className="text-input"
               variant="outlined"
             />
@@ -238,13 +238,15 @@ function FundTerms({ formData, setFormData }) {
               <Button
                 onClick={() => setSetupCostType('percentage')}
                 className={`percentage ${setupCostType === 'percentage' && 'selected'}`}
-                variant="outlined">
+                variant="outlined"
+              >
                 %
               </Button>
               <Button
                 onClick={() => setSetupCostType('fixed')}
                 className={`percentage ${setupCostType === 'fixed' && 'selected'}`}
-                variant="outlined">
+                variant="outlined"
+              >
                 $
               </Button>
             </div>
@@ -257,16 +259,15 @@ function FundTerms({ formData, setFormData }) {
             <TextField
               onChange={handleFormChange}
               value={fundEstimatedTerm || ''}
-              name='fundEstimatedTerm'
+              name="fundEstimatedTerm"
               className="text-input"
               variant="outlined"
             />
           </label>
         </FormControl>
-
       </div>
     </section>
-  )
+  );
 }
 
-export default FundTerms
+export default FundTerms;

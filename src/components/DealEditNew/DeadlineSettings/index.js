@@ -1,32 +1,27 @@
-import React from 'react'
+import React from 'react';
 import { FormControl, TextField } from '@material-ui/core';
-import './styles.scss'
+import './styles.scss';
 
 function DeadlineSettings({ formData, setFormData }) {
-
   const {
-    dealParams: {
-      signDeadline,
-      wireDeadline
-    }
+    dealParams: { signDeadline, wireDeadline },
   } = formData;
 
   const handleFormChange = ({ target }) => {
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       dealParams: {
         ...prevData.dealParams,
-        [target.name]: target.value
-      }
-    }))
-  }
+        [target.name]: target.value,
+      },
+    }));
+  };
 
   return (
     <section className="DeadlineSettings">
       <h2>Deadlines</h2>
 
       <div className="form-fields">
-
         <FormControl className="field">
           <label className="field-label">
             Signing deadline
@@ -54,10 +49,9 @@ function DeadlineSettings({ formData, setFormData }) {
             />
           </label>
         </FormControl>
-
       </div>
     </section>
-  )
+  );
 }
 
-export default DeadlineSettings
+export default DeadlineSettings;
