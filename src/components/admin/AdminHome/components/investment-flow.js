@@ -98,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   modalPaper: {
-    marginTop: '8vh',
+    marginTop: '12vh',
     borderRadius: '1rem',
     padding: theme.spacing(2),
     maxHeight: '70%',
@@ -361,7 +361,6 @@ const InvestmentSquare = ({
 
 const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal, dataToEdit }) => {
   const classes = useStyles();
-
   return (
     <>
       <Modal open={editInvestmentModal} className={classes.modal}>
@@ -369,11 +368,10 @@ const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal, data
           <Grid container style={{ minHeight: '100vh' }}>
             <Grid item xs={12} sm={12} md={12} lg={12}>
               <Paper className={classes.modalPaper}>
-                <Grid
-                  onClick={() => setEditInvestmentModal(false)}
-                  style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer' }}
-                >
-                  <CloseIcon />
+                <Grid style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Box onClick={() => setEditInvestmentModal(false)} style={{ cursor: 'pointer' }}>
+                    <CloseIcon />
+                  </Box>
                 </Grid>
                 <Grid container justify="space-between" />
                 <InvestmentEdit investmentId={dataToEdit._id} setEditInvestmentModal={setEditInvestmentModal} />

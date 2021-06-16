@@ -71,10 +71,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '12vh',
     borderRadius: '1rem',
     padding: theme.spacing(2),
-    [theme.breakpoints.down('sm')]: {
-      maxHeight: '70%',
-      overflow: 'scroll',
-    },
+    maxHeight: '70%',
+    overflow: 'scroll',
   },
   input: {
     border: '1px solid #707070',
@@ -1296,12 +1294,11 @@ function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin, setS
 
 const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal }) => {
   const classes = useStyles();
-
   return (
     <>
       <Modal open={Boolean(editInvestmentModal._id)} onClose={() => {}} className={classes.modal}>
         <Container maxWidth="sm">
-          <Grid container>
+          <Grid container style={{ minHeight: '100vh' }}>
             <Grid item xs={12} sm={12} md={12} lg={12}>
               <Paper className={classes.modalPaper}>
                 <Grid style={{ display: 'flex', justifyContent: 'flex-end' }}>
