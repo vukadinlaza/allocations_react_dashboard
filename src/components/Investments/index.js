@@ -169,7 +169,7 @@ export default function Investments() {
           <TableBody>
             {investments.map((investment) =>
               investment.showDocs ? (
-                <DocsRow docs={showDocs.documents} />
+                <DocsRow key={showDocs._id} docs={showDocs.documents} />
               ) : (
                 <TableRow key={investment._id} className="investment-row">
                   <TableCell>{_.get(investment, 'investor.email')}</TableCell>
@@ -221,7 +221,7 @@ function DocsRow({ docs }) {
     <TableRow>
       <TableCell colSpan={7}>
         {docs.map((doc) => (
-          <div className="doc-wrapper">
+          <div key={doc.link} className="doc-wrapper">
             <div className="doc">
               <FontAwesomeIcon icon={['far', 'file-pdf']} />
             </div>
