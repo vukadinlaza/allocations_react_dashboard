@@ -10,10 +10,10 @@ function TermsAndConditionsPanel({ deal: { documents, signDeadline }, checkedTAT
 
   const anchor = doc ? (
     <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">
-      SPV Documents (Operating Agreement, Private Placement Memorandum and Subscription Agreement)
+      Private Fund Documents (Operating Agreement, Private Placement Memorandum and Subscription Agreement)
     </a>
   ) : (
-    'SPV Documents (Operating Agreement, Private Placement Memorandum and Subscription Agreement'
+    'Private Fund Documents (Operating Agreement, Private Placement Memorandum and Subscription Agreement'
   );
 
   const isClosed = moment(signDeadline).add(2, 'days').isBefore(new Date());
