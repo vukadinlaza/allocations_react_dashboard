@@ -43,7 +43,7 @@ export default function Investors() {
   const { organization } = useParams();
   const { userProfile } = useAuth();
   const [getInvestors, { data, error }] = useLazyQuery(GET_INVESTORS, { variables: { slug: organization } });
-  console.log('HELLO', data);
+
   useEffect(() => {
     if (userProfile && userProfile.email) getInvestors();
   }, [getInvestors, userProfile]);
@@ -61,7 +61,6 @@ export default function Investors() {
     organization: { orgInvestors },
   } = data;
 
-  console.log(orgInvestors.filter((i) => i.first_name === 'Brian'));
   return (
     <div className="Investors">
       {/* {organization === "allocations" && <Col sm={{ size: 12 }}>
