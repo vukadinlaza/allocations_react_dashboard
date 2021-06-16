@@ -63,6 +63,7 @@ const styles = theme => ({
 		titleComponent={<div></div>} JSX that goes as the title - optional
 
 		getSortProps={sortFunction} optional
+		sortField="field" optional
 
 		getCellContent={functionThatReturnsSpecifiedValueForCell} only needed it a type is provided in the header - optional
 		** if something particular is needed for a column cells, like a button, just add the type property in the header.
@@ -104,11 +105,12 @@ const AllocationsTable = ({
 	withTitle,
 	titleComponent,
 	getSortProps,
+	sortField
 }) => {
 	const [selected, setSelected] = useState([]);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(rowsQuantity);
-	const [orderBy, setOrderBy] = React.useState(headers[0].value);
+	const [orderBy, setOrderBy] = React.useState(sortField? sortField : headers[0].value);
 	const [order, setOrder] = React.useState('asc');
 
 	useEffect(() => {
@@ -134,10 +136,10 @@ const AllocationsTable = ({
 		setSelected(newSelected);
 	};
 
-	const handleRequestSort = (event, property, nested, nestedCollection, localFieldKey) => {
+	const handleRequestSort = (event, property, sortNestedKey, sortNestedCollection, sortLocalFieldKey) => {
 		const isAsc = orderBy === property && order === 'asc';
 		if(getSortProps){
-			getSortProps(property, !isAsc, nested, nestedCollection, localFieldKey)
+			getSortProps(property, !isAsc, sortNestedKey, sortNestedCollection, sortLocalFieldKey)
 		}
 		setOrder(isAsc ? 'desc' : 'asc');
 		setOrderBy(property);
@@ -239,7 +241,7 @@ const AllocationsTable = ({
 									key={`${header.label}-${index}`}
 									className={classes.headerText}
 									sortDirection={orderBy === header.value ? order : false}
-									align={header.alignHeader? header.align : ''}
+									align={header.alignHeader? header.align : 'center'}
 								>
 									<TableSortLabel
 										active={orderBy === header.value}

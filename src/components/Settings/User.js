@@ -8,9 +8,10 @@ import {
   Typography
 } from '@material-ui/core';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
-import AllocationsTable from '../../utils/AllocationsTable';
-import Loader from '../../utils/Loader';
-import { nWithCommas } from '../../../utils/numbers'
+import AllocationsTable from '../utils/AllocationsTable';
+import Loader from '../utils/Loader';
+import { nWithCommas } from '../../utils/numbers'
+import { GridSection, Section } from './common.js'
 
 
 const GET_USER = gql`
@@ -86,6 +87,7 @@ const styles = theme => ({
     alignItems: "center",
     flexWrap: 'wrap',
     width: "100%",
+    paddingBottom: "30px"
   },
   sectionTitle: {
     fontSize: "20px",
@@ -102,14 +104,21 @@ const styles = theme => ({
   },
 });
 
-const fields = [
-  {label: 'First Name', value: 'first_name'},
-  {label: 'Last Name', value: 'last_name'},
-  {label: 'Email', value: 'email'},
-  {label: 'Entity', value: 'entity_name'},
-  {label: 'Country', value: 'country'},
-  {label: 'Is Admin', value: 'admin'},
-]
+const fields = {
+  investor: [
+    {label: 'First Name', value: 'first_name'},
+    {label: 'Last Name', value: 'last_name'},
+    {label: 'Email', value: 'email'},
+    {label: 'Entity', value: 'entity_name'},
+    {label: 'Country', value: 'country'},
+    {label: 'Is Admin', value: 'admin'},
+  ],
+  account: [
+    {label: 'Root Admin', value: 'rootAdmin'},
+    {label: 'Users', value: 'users'}
+  ]
+}
+
 
 const investmentsHeaders = [
   {label: 'Deal', value: 'deal', type: "deal"},
@@ -118,7 +127,7 @@ const investmentsHeaders = [
 ]
 
 
-const UserEdit = ({
+const User = ({
   classes,
   history,
   match: {
@@ -148,7 +157,6 @@ const UserEdit = ({
   const getCellContent = (type, row, headerValue, value) => {
     switch (type) {
       case 'deal':
-        console.log({type, row, headerValue, value});
         return row[headerValue].company_name
       case 'amount':
         return nWithCommas(row[headerValue])
@@ -161,7 +169,7 @@ const UserEdit = ({
 
   const { investor } = data;
   const { account } = investor;
-  console.log({investor, account});
+
   const title = investor?.first_name && investor?.last_name? `${investor.first_name} ${investor.last_name}` : investor.email;
 
   return (
@@ -175,38 +183,17 @@ const UserEdit = ({
         </div>
       </Paper>
       <Paper square className={classes.userInformation}>
-        <div className={classes.section}>
-          <Typography className={classes.sectionTitle}>Personal Information</Typography>
-          <div className={classes.sectionContent}>
-            {fields.map((field, index) =>
-              <div className={classes.dataContainer} key={`field-${index}`}>
-                <Typography className={classes.fieldTitle}>{field.label}</Typography>
-                {field.value === "admin"?
-                  <Typography className={classes.fieldValue}>{investor[field.value]? 'Yes' : 'No'}</Typography>
-                  :
-                  <Typography className={classes.fieldValue}>{investor[field.value] === undefined? 'N/A' : investor[field.value]}</Typography>
-                }
-              </div>
-            )}
-          </div>
-        </div>
-        <div className={classes.section}>
-          <Typography className={classes.sectionTitle}>Related Account</Typography>
-          <div className={classes.sectionContent}>
-            <div className={classes.dataContainer}>
-              <Typography className={classes.fieldTitle}>Root Admin:</Typography>
-              <Typography className={classes.fieldValue}>{investor.account.rootAdmin.email}</Typography>
-            </div>
-            <div className={classes.dataContainer}>
-              <Typography className={classes.fieldTitle}>Users:</Typography>
-              <Typography className={classes.fieldValue}>
-                {account.users? account.users.map(user => user.email).reduce((acc, n) => acc + `, ${n}`) : account.rootAdmin.email}
-              </Typography>
-            </div>
-          </div>
-        </div>
-        <div className={classes.section} style={{paddingBottom: "30px", border: "none"}}>
-          <Typography className={classes.sectionTitle}>Investments</Typography>
+        <GridSection
+          title="Personal Information"
+          fields={fields.investor}
+          item={investor}
+          />
+        <GridSection
+          title="Related Account"
+          fields={fields.account}
+          item={account}
+          />
+        <Section title="Investments">
           <div className={classes.sectionContent}>
             <AllocationsTable
               data={investor.investments}
@@ -216,10 +203,10 @@ const UserEdit = ({
               getCellContent={getCellContent}
               />
           </div>
-        </div>
+        </Section>
       </Paper>
     </div>
   );
 }
 
-export default withStyles(styles)(withRouter(UserEdit));
+export default withStyles(styles)(withRouter(User));
