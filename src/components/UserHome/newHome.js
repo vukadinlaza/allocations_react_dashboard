@@ -314,7 +314,7 @@ export default () => {
   };
   return (
     <div className="blue-container">
-      <Grid container spacing={12} justify="space-between" style={{ marginTop: '40px', marginBottom: '1rem' }}>
+      <Grid container spacing={0} justify="space-between" style={{ marginTop: '40px', marginBottom: '1rem' }}>
         <Grid item xs={12} sm={12} md={4} style={{ border: '1em solid transparent' }}>
           <Paper style={{ minHeight: '100px' }}>
             <Grid container style={{ padding: '0.1rem', justifyContent: 'space-between' }}>
