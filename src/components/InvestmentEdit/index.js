@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { Button, TextField, Paper, Divider, Grid, FormControl, Select, MenuItem, InputLabel } from '@material-ui/core';
+import { Button, TextField, Divider, Grid, FormControl, Select, MenuItem, InputLabel } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Loader from '../utils/Loader';
 import { destroy } from '../../api/investments';
@@ -75,7 +75,7 @@ export default function InvestmentEdit({ investmentId = false, isK1 = false, set
   const classes = useStyles();
   const { data, refetch, loading } = useQuery(GET_INVESTMENT, { variables: { _id: id } });
   const [createInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT);
-  const [deleteInvestment, {}] = useMutation(destroy, {
+  const [deleteInvestment] = useMutation(destroy, {
     onCompleted: () => {
       toast.success('Sucess! Investment Deleted.');
       setEditInvestmentModal(false);
@@ -91,7 +91,7 @@ export default function InvestmentEdit({ investmentId = false, isK1 = false, set
 
   useEffect(() => {
     if (data && !loading) setInvestment(data.investment);
-  }, [data, investment]);
+  }, [data, investment, loading]);
 
   const updateInvestmentProp = ({ prop, newVal }) => {
     setInvestment((prev) => ({ ...prev, [prop]: newVal }));
