@@ -90,11 +90,11 @@ const UPDATE_USER = gql`
     }
   }
 `;
-export default ({}) => {
+export default () => {
   const classes = useStyles();
   const { userProfile, loading } = useAuth(GET_INVESTOR);
   const [updateInvestor] = useMutation(UPDATE_USER);
-  const [postZap, {}] = useMutation(POST_ZAP);
+
 
   useEffect(() => {
     if (!loading && userProfile._id) {

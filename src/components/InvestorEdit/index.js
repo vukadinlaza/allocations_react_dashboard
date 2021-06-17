@@ -89,11 +89,11 @@ export default function InvestorEdit() {
 
 function DeleteInvestor({ investor }) {
   const history = useHistory();
-  const [delInvestor, { data, error }] = useMutation(DELETE_INVESTOR);
+  const [delInvestor, { data }] = useMutation(DELETE_INVESTOR);
 
   useEffect(() => {
     if (data && data.deleteInvestor) history.push('/investors');
-  }, [data]);
+  }, [data, history]);
 
   const submit = () => {
     if (window.confirm(`Delete ${investor.first_name} ${investor.last_name}?`)) {
