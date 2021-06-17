@@ -97,7 +97,7 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
   });
   const [amount, setAmount] = useState('');
 
-  const [submitConfirmation, {}] = useMutation(CONFIRM_INVESTMENT, {
+  const [submitConfirmation] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       setTimeout(() => {
         refetch();
