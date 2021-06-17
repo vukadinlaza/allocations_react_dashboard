@@ -115,7 +115,6 @@ function DealLandingPage() {
 
   if (!data) return <Loader />;
   const { publicDeal: deal } = data;
-  const idTimestamp = deal._id.toString().substring(0, 8);
   
   if (data && deal?.docSpringTemplateId === null) {
     return <Deal />;
