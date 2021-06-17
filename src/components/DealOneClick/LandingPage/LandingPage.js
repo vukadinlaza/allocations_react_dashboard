@@ -116,8 +116,7 @@ function DealLandingPage() {
   if (!data) return <Loader />;
   const { publicDeal: deal } = data;
   const idTimestamp = deal._id.toString().substring(0, 8);
-  const dealTimestamp = moment.unix(new Date(parseInt(idTimestamp, 16) * 1000));
-  const rolloverTimestamp = moment.unix(new Date('2021-05-05 17:00'));
+  
   if (data && deal?.docSpringTemplateId === null) {
     return <Deal />;
   }
