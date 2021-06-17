@@ -6,7 +6,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Hidden from '@material-ui/core/Hidden';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import { useHistory } from 'react-router-dom';
