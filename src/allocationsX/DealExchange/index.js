@@ -14,7 +14,6 @@ import {
   Button,
   TextField,
   InputAdornment,
-  InputLabel,
 } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Loader from '../../components/utils/Loader';
@@ -79,7 +78,7 @@ function orders2Book(orders) {
 export default function ExchangeDeal() {
   const { deal } = useParams();
   const [book, setBook] = useState({ asks: [], bids: [] });
-  const { data, error, refetch } = useQuery(DEAL, { variables: { slug: deal } });
+  const { data, refetch } = useQuery(DEAL, { variables: { slug: deal } });
 
   useEffect(() => {
     if (data) setBook(orders2Book(data.exchangeDeal.orders));
@@ -162,40 +161,40 @@ function MatchRequest({ req }) {
   );
 }
 
-function getCost({ book, amount, direction }) {
-  if (direction === 'buy') {
-    let left = amount;
-    let cost = 0;
-    for (let i = 0; i < book.asks.length; i++) {
-      const ask = book.asks[i];
-      if (ask.amount < left) {
-        left -= ask.amount;
-        cost += ask.amount * ask.price;
-      } else {
-        cost += left * ask.price;
-        break;
-      }
-    }
-    return cost;
-  }
-  let left = amount;
-  let cost = 0;
-  for (let i = 0; i < book.bids.length; i++) {
-    const bid = book.bids[i];
-    if (bid.amount < left) {
-      left -= bid.amount;
-      cost += bid.amount * bid.price;
-    } else {
-      cost += left * bid.price;
-      break;
-    }
-  }
-  return cost;
-}
+// function getCost({ book, amount, direction }) {
+//   if (direction === 'buy') {
+//     let left = amount;
+//     let cost = 0;
+//     for (let i = 0; i < book.asks.length; i++) {
+//       const ask = book.asks[i];
+//       if (ask.amount < left) {
+//         left -= ask.amount;
+//         cost += ask.amount * ask.price;
+//       } else {
+//         cost += left * ask.price;
+//         break;
+//       }
+//     }
+//     return cost;
+//   }
+//   let left = amount;
+//   let cost = 0;
+//   for (let i = 0; i < book.bids.length; i++) {
+//     const bid = book.bids[i];
+//     if (bid.amount < left) {
+//       left -= bid.amount;
+//       cost += bid.amount * bid.price;
+//     } else {
+//       cost += left * bid.price;
+//       break;
+//     }
+//   }
+//   return cost;
+// }
 
 function OrderForm({ exchangeDeal, investor, refetch }) {
   const [order, setOrder] = useSimpleReducer({ price: '', amount: '', direction: 'sell', cost: 0 });
-  const [createOrder, { data, error }] = useMutation(CREATE_ORDER, {
+  const [createOrder] = useMutation(CREATE_ORDER, {
     onCompleted: () => {
       setOrder({ price: '', amount: '', direction: 'sell', cost: 0 });
       refetch();
