@@ -115,7 +115,6 @@ export default function Deal() {
   const { search } = useLocation();
   const { userProfile, isAuthenticated, loading } = useAuth();
   const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL);
-  console.log('deal', data);
   const [allowEdit, setAllowEdit] = useState(true);
   const [createInvestment, { called: didCreateInvestment }] = useMutation(CREATE_INVESTMENT, {
     onCompleted: () => {

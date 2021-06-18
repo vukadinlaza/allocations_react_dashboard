@@ -44,7 +44,7 @@ export const ActiveDeals = ({ orgData, isDemo, superadmin }) => {
     <Grid container>
       <Grid item xs={12}>
         <Paper>
-          <Grid container xs={12} justify="space-between" style={{ padding: '16px' }}>
+          <Grid container justify="space-between" style={{ padding: '16px' }}>
             <Typography variant="h6" gutterBottom>
               Active Deals: {(active || []).length}
             </Typography>
