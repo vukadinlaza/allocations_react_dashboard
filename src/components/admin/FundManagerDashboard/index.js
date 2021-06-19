@@ -1,18 +1,59 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import _, { toLower, groupBy } from 'lodash';
+import { gql } from 'apollo-boost';
+import { useQuery } from '@apollo/react-hooks';
+import { useParams, useHistory } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import EditIcon from '@material-ui/icons/Edit';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
-import { FlatBox } from './widgets'
-import AllocationsTable from '../../utils/AllocationsTable'
-import { useViewport } from '../../utils/hooks'
-import { nWithCommas } from '../../../utils/numbers'
 import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
 import ActivityLog from './sections/ActivityLog';
+import AllocationsTable from '../../utils/AllocationsTable';
+import { FlatBox } from './widgets';
+import { nWithCommas } from '../../../utils/numbers';
+import { useFetch, useViewport } from '../../../utils/hooks';
+
+
+export const ORG_OVERVIEW = gql`
+  query GetOrg($slug: String!, $status: String) {
+    organization(slug: $slug) {
+      _id
+      name
+      slug
+      deals(status: $status) {
+        _id
+        raised
+        appLink
+        status
+        date_closed
+        dealParams {
+          wireDeadline
+          dealMultiple
+        }
+        company_name
+        company_description
+        target
+        investments {
+          amount
+          investor {
+            investingAs
+          }
+        }
+      }
+    }
+    investor {
+      _id
+      admin
+      documents
+    }
+  }
+`;
+
 
 export const tablet = "1024"
 export const phone = "650"
@@ -36,6 +77,11 @@ const styles = theme => ({
     "& *": {
       color: "white"
     }
+  },
+  chartContainer: {
+    width: '70%',
+    width: '60%',
+    padding: '5% 0'
   },
   dashboardContainer: {
     display: "flex",
@@ -170,6 +216,22 @@ const styles = theme => ({
       outline: "none"
     }
   },
+  tableContainer: {
+    maxHeight: '100%',
+    width: '35%',
+    display:'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    '& table *': {
+      display: 'flex'
+    },
+    '& tr':{
+      width: '100%',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: '8px'
+    }
+  },
   tabs: {
     // position: "absolute",
     // top: "0",
@@ -197,12 +259,18 @@ const styles = theme => ({
 
 
 const dashboardTabs = ["Setup", "Highlights", "Investments", "Investor Onboarding Status", "Activity Log", "Deal Page"]
-
+const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
+const INVESTMENTS_TABLE = 'Investments';
 
 
 const FundManagerDashboard = ({ classes }) => {
 
   const { width } = useViewport();
+  const { data: atFundData } = useFetch(OPS_ACCOUNTING, INVESTMENTS_TABLE);
+  const { organization: orgSlug } = useParams();
+  const { data: orgOverview, refetch } = useQuery(ORG_OVERVIEW, {
+    variables: { slug: orgSlug, status: 'active' },
+  });
   const [tabIndex, setTabIndex] = useState(0)
 
   const investmentsHeaders = [
@@ -218,6 +286,22 @@ const FundManagerDashboard = ({ classes }) => {
     { name: 'Luminous Computing', tagline: 'Photonics chips to tackle AI workloads', date: new Date(), investment: 25000},
     { name: 'Browder Capital LP', tagline: 'Early stage technology fund', date: new Date(), investment: 50000},
   ]
+
+  let slug = orgSlug;
+  const isDemo = orgSlug === 'demo-fund';
+
+  if (orgSlug === 'demo-fund') {
+    slug = 'browder-capital';
+  }
+
+  const fundData = atFundData
+                      .map((d) => d.fields)
+                      .filter((inv) => {
+                        return toLower(inv.Organization).includes(slug.replace('-', ' '));
+                      });
+
+  const orgData = orgOverview?.organization;
+
 
   const getCellContent = (type, row, value) => {
     switch (type) {
@@ -251,6 +335,9 @@ const FundManagerDashboard = ({ classes }) => {
         return(
           <Highlights
             classes={classes}
+            data={fundData}
+            orgData={orgData}
+            isDemo={isDemo}
             />
         )
       case 2:

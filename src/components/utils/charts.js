@@ -3,14 +3,165 @@ import { Doughnut, Line } from 'react-chartjs-2';
 import { withStyles, withTheme } from '@material-ui/core/styles';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { nWithCommas } from '../../utils/numbers'
-import { useViewport } from './hooks'
+import { nWithCommas } from '../../utils/numbers';
+import { titleCase } from '../../utils/helpers';
+import { useViewport } from '../../utils/hooks'
 
 const phone = 650
 
 const styles = theme => ({
-
+	dataTable: {
+		height: '250px',
+		width: '100%',
+		position: 'relative',
+		overflowY: 'hidden',
+		overflowX: 'hidden',
+		display: 'flex',
+		flexDirection: 'column',
+	},
+	header: {
+		position: 'sticky',
+		top: '0',
+		backgroundColor: 'white',
+		color: theme.palette.text.secondary
+	},
+	rowColor: {
+		borderRadius: '100%',
+		width: '10px',
+		height: '10px',
+		marginRight: '10px',
+		alignSelf: 'center',
+	},
+	secondColumnHeader: {
+		position: 'sticky',
+		top: '0',
+		backgroundColor: 'white',
+		paddingRight: '15px',
+		textAlign: 'right',
+		justifyContent: 'flex-end',
+		color: theme.palette.text.secondary
+	},
+	seriesAmount: {
+		paddingRight: '15px',
+		width:'35%',
+		justifyContent: 'flex-end',
+		color: '#0040FE',
+		fontWeight: 'bold'
+	},
+	seriesLabel: {
+		width: '100%',
+		display: 'block',
+		whiteSpace: 'nowrap',
+		overflow: 'hidden',
+		textOverflow: 'ellipsis',
+		paddingRight: "0.5em"
+	},
+	seriesTotal: {
+		position: 'sticky',
+		top: 0,
+		backgroundColor: "white",
+		borderTop: "1px solid rgba(0, 0, 0, 0.1)"
+	},
+	sLabel: {
+		width: '90%',
+		display: 'block',
+		whiteSpace: 'nowrap',
+		overflow: 'hidden',
+		textOverflow: 'ellipsis',
+	},
+	sTotal: {
+		paddingRight: '15px',
+		width:'35%',
+		justifyContent: 'flex-end'
+	},
+	tableBody: {
+		maxHeight: '190px',
+		maxWidth: '100%',
+		overflowY: 'scroll',
+		flexDirection: 'column',
+		'& tr': {
+			borderBottom: `solid 1px rgba(0, 0, 0, 0.1)`,
+			minHeight: '40px'
+		},
+		'&::-webkit-scrollbar':{
+			display: 'none'
+		}
+	}
 });
+
+
+ export const DefaultChartTable = withStyles(styles)(({
+	classes,
+	series,
+	title,
+	secondColumnHeader,
+	sumLabel,
+	seriesTotal,
+	firstColumnToolTip, //JSX
+	secondColumnToolTip, //JSX
+	seriesLabelKey, //String
+}) => {
+
+	if(!series){
+		return <div></div>
+	}else{
+		return(
+				<table className={classes.dataTable}>
+					<thead style={{width: '100%'}}>
+						<tr>
+							<th className={classes.header}>{title}</th>
+							<th className={classes.secondColumnHeader}>{secondColumnHeader}</th>
+						</tr>
+					</thead>
+					<tbody className={classes.tableBody}>
+						<tr className={classes.seriesTotal}>
+							<td align="left" style={{width: '65%'}}>
+								<div className={classes.seriesLabel}>
+									{sumLabel}
+								</div>
+							</td>
+							<td align="right" className={classes.seriesAmount}>
+								{nWithCommas(seriesTotal)}
+							</td>
+						</tr>
+					{series.map((s, i) => (
+						<tr key={`series_${i}`}>
+							{!!firstColumnToolTip?
+								<HtmlTooltip title={<React.Fragment>{firstColumnToolTip(s)}</React.Fragment>}>
+									<td align="left" style={{width: '65%'}}>
+										<div style={{backgroundColor: s.borderColor? s.borderColor : s.backgroundColor}} className={classes.rowColor}/>
+										<div className={classes.sLabel}>
+											{s[seriesLabelKey] && titleCase(s[seriesLabelKey].replace(/_/g, ' '))}
+										</div>
+									</td>
+								</HtmlTooltip>
+								:
+								<td align="left" style={{width: '65%'}}>
+									<div style={{backgroundColor: s.backgroundColor}} className={classes.rowColor}/>
+									<div className={classes.sLabel}>
+										{s[seriesLabelKey] && titleCase(s[seriesLabelKey].replace(/_/g, ' '))}
+									</div>
+								</td>
+
+							}
+							{!!secondColumnToolTip?
+								<HtmlTooltip title={<React.Fragment><p>{!!secondColumnToolTip && secondColumnToolTip(s)}</p></React.Fragment>}>
+									<td align="right" className={classes.sTotal}>
+										{nWithCommas(s.total)}
+									</td>
+								</HtmlTooltip>
+								:
+								<td align="right" className={classes.sTotal}>
+									{nWithCommas(s.total)}
+								</td>
+							}
+					</tr>
+					))}
+				</tbody>
+			</table>
+		)
+	}
+})
 
 
 export const DoughnutChart = withStyles(styles)(({ series }) => {
@@ -20,7 +171,7 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
 	const { width } = useViewport();
 
 	let legendOptions = {
-		display: true,
+		display: false,
 		position: "right",
 		labels: {
 			fontSize: 18,
@@ -51,8 +202,6 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
 		legendOptions.labels.fontSize = 12;
 		dataLabels.title.font.size = 12
 	}
-
-	
 
 	if (!series) {
 		return <div></div>
@@ -103,20 +252,29 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
 })
 
 
-export const LineChart = withStyles(styles)(({ }) => {
-	const series = true
 
-	if (!series) {
+export const LineChart = withStyles(styles)(({ dataset: { data, labels } }) => {
+
+	const getMaxValue = () => {
+		let max = 200000;
+		let dataMaxValue = data[data.length - 1];
+		while(max < dataMaxValue){
+			max += 200000
+		}
+		return max
+	}
+
+	if (!data) {
 		return <div></div>
 	} else {
 		return (
 			<Line
 				data={{
-					labels: ['Jan 2021', 'Feb 2021', 'Mar 2021', 'Apr 2021'],
+					labels: labels,
 					datasets: [
 						{
 							label: 'Dataset',
-							data: [700000, 900000, 1600000, 1900000],
+							data: data,
 							borderColor: '#0461FF',
 							backgroundColor: 'rgba(4, 97, 255, 0.2)',
 							fill: true,
@@ -147,15 +305,21 @@ export const LineChart = withStyles(styles)(({ }) => {
 					responsive: true,
 					maintainAspectRatio: false,
 					scales: {
-						xAxes: [
+						xAxes: [{
+							position: 'right',
+							ticks: {
 
-						],
+							},
+							scaleBeginAtZero : false,
+							beginAtZero: false
+						}],
 						yAxes: [{
 							gridLines: {
 								borderDash: [8, 4]
 							},
 							ticks: {
-			          stepSize: 1000000,
+			          stepSize: 200000,
+								max: getMaxValue(),
 								callback: function(val, index) {
 			            return nWithCommas(val);
 			          },

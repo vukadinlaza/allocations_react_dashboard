@@ -53,7 +53,13 @@ const styles = theme => ({
 	},
 	chartBoxContent: {
 		height: "calc(100% - 71px)",
-		paddinig: "40px"
+		padding: "40px",
+		display: 'flex',
+		flexWrap: "wrap",
+		justifyContent: 'space-between',
+		'& *': {
+			color: theme.palette.text.secondary
+		}
 	},
 	dynamicBoxContent: {
 		height: "calc(100% - 110px)"

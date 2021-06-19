@@ -954,6 +954,10 @@ export default function Sidebar(props) {
                 </ListItemIcon>
                 <ListItemText primary="Funds" />
               </ListItem>
+            </div>
+            <div
+              className={`sidebar-nav-item ${location.pathname === '/admin/funds' ? 'sidebar-nav-item-active' : ''}`}
+              >
               <ListItem component={Link} to="/admin/settings" button>
                 <ListItemIcon className={classes.icon}>
                   <SettingsIcon />
