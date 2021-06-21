@@ -1236,7 +1236,7 @@ function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin, setS
             Documents may take up to 7 days to appear here after signing.
           </Typography>
           <Grid container spacing={1}>
-            {demo ? [] : docs.map((doc) => <Document key={doc.path} doc={doc} investment={investment} />)}
+            {demo ? [] : docs.map((doc) => <Document key={doc?.path} doc={doc} investment={investment} />)}
             {investment?.submissionData?.submissionId && !isClosed && (
               <Grid
                 item
@@ -1296,7 +1296,7 @@ const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal }) =>
   const classes = useStyles();
   return (
     <>
-      <Modal open={Boolean(editInvestmentModal._id)} onClose={() => {}} className={classes.modal}>
+      <Modal open={Boolean(editInvestmentModal?._id)} onClose={() => {}} className={classes.modal}>
         <Container maxWidth="sm">
           <Grid container style={{ minHeight: '100vh' }}>
             <Grid item xs={12} sm={12} md={12} lg={12}>
