@@ -12,7 +12,6 @@ import { useHistory } from 'react-router-dom';
 
 import { NavItem, UncontrolledDropdown } from 'reactstrap';
 import { makeStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Loader from './utils/Loader';
 
