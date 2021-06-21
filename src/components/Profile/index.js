@@ -115,7 +115,7 @@ export default function Profile() {
     variables: { accountId: userProfile?.account?._id },
   });
 
-  const [removeUser, { data: removeRes, called }] = useMutation(REMOVE_ACCT_USER);
+  const [removeUser, { data: removeRes }] = useMutation(REMOVE_ACCT_USER);
   const classes = useStyles();
 
   useEffect(() => {
@@ -286,10 +286,7 @@ const AccountEntities = ({
     }
     return investor.signer_full_name;
   };
-  const handleDelete = () => {
-    refetchAccountUsers();
-    toast.success('Success! Entity removed');
-  };
+
   if (!accountEntities?.getEntities) return null;
   return (
     <Paper className="account-paper">
