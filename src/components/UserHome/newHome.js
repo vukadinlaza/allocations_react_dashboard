@@ -170,13 +170,7 @@ const CREATE_ORDER = gql`
     }
   }
 `;
-const POST_ZAP = gql`
-  mutation PostZap($body: Object) {
-    postZap(data: $body) {
-      _id
-    }
-  }
-`;
+
 const BASE = 'appLhEikZfHgNQtrL';
 const TABLE = 'Ledger';
 export default () => {
@@ -191,9 +185,7 @@ export default () => {
   const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile?.email || '');
   const [demo, setDemo] = useState(false);
   const [showCapitalAccounts, setShowCaptialAccounts] = useState(false);
-  const [postZap, {}] = useMutation(POST_ZAP);
   const investmentsRef = React.useRef(null);
-
   const [confirmation, setConfirmation] = useState(false);
   const [tradeData, setTradeData] = useSimpleReducer({
     price: '',
@@ -216,10 +208,13 @@ export default () => {
     }
   }, [setTradeData, tradeData.showLoading]);
 
+  const userProfileInvestments = userProfile?.investments;
+
   useEffect(() => {
     const demo = location.search === '?demo=true';
-    if (demo && userProfile?.investments) {
-      investmentsRef.current = userProfile?.investments.map((inv) => {
+    
+    if (demo && userProfileInvestments) {
+      investmentsRef.current = userProfileInvestments.map((inv) => {
         inv.deal.company_name = _.sample([
           'Airbnb',
           'Coinbase',
@@ -238,7 +233,7 @@ export default () => {
       });
       setDemo(true);
     }
-  }, [demo, location.search, userProfile, userProfile?.investments]);
+  }, [demo, location.search, userProfile, userProfileInvestments]);
   const chartOptionsA = {
     title: '',
     pieHole: 0.5,
