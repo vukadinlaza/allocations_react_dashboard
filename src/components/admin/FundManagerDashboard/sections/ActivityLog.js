@@ -21,7 +21,7 @@ const data = [
 ]
 
 
-const Highlights = ({ classes }) => {
+const ActivityLog = ({ classes }) => {
 
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
@@ -57,4 +57,4 @@ const Highlights = ({ classes }) => {
   );
 }
 
-export default Highlights;
+export default ActivityLog;

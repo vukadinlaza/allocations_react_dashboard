@@ -2,19 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import { get, toLower } from 'lodash';
 import { gql } from 'apollo-boost';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
-import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuIcon from '@material-ui/icons/Menu';
-import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import {
+  Toolbar,
+  AppBar,
+  CssBaseline,
+  Divider,
+  Drawer,
+  Hidden,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText
+} from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import StorefrontIcon from '@material-ui/icons/Storefront';
@@ -25,10 +27,9 @@ import AccountBalanceRoundedIcon from '@material-ui/icons/AccountBalanceRounded'
 import CreditCardRoundedIcon from '@material-ui/icons/CreditCardRounded';
 import { useAuth } from '../../auth/useAuth';
 import NavBar from '../NavBar';
+import { phone } from '../../utils/helpers'
 import './style.scss';
 
-export const tablet = "1024"
-export const phone = "650"
 
 const whitelistEmails = [
   {
@@ -956,7 +957,7 @@ export default function Sidebar(props) {
               </ListItem>
             </div>
             <div
-              className={`sidebar-nav-item ${location.pathname === '/admin/funds' ? 'sidebar-nav-item-active' : ''}`}
+              className={`sidebar-nav-item ${location.pathname === '/admin/settings' ? 'sidebar-nav-item-active' : ''}`}
               >
               <ListItem component={Link} to="/admin/settings" button>
                 <ListItemIcon className={classes.icon}>

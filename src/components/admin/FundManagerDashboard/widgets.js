@@ -2,8 +2,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
 import { Typography, Tooltip, Button } from '@material-ui/core';
-
-const phone = "650"
+import { phone, tablet } from '../../../utils/helpers'
 
 const styles = theme => ({
 	box: {
@@ -47,19 +46,21 @@ const styles = theme => ({
 		minWidth: '430px',
 		maxWidth: '49%',
 		height: "450px",
-		[theme.breakpoints.down(phone)]: {
-			height: "300px"
+		[theme.breakpoints.down(tablet)]: {
+			height: "auto"
 		},
 	},
 	chartBoxContent: {
 		height: "calc(100% - 71px)",
 		padding: "40px",
 		display: 'flex',
-		flexWrap: "wrap",
 		justifyContent: 'space-between',
 		'& *': {
 			color: theme.palette.text.secondary
-		}
+		},
+		[theme.breakpoints.down(tablet)]: {
+			flexWrap: "wrap"
+		},
 	},
 	dynamicBoxContent: {
 		height: "calc(100% - 110px)"

@@ -4,6 +4,10 @@
  *
  * */
 
+
+export const phone = "650";
+export const tablet = "1024";
+
 export const titleCase = (str) => {
   if(!str) return str
 

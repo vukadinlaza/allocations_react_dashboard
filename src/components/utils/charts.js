@@ -4,10 +4,9 @@ import { withStyles, withTheme } from '@material-ui/core/styles';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { nWithCommas } from '../../utils/numbers';
-import { titleCase } from '../../utils/helpers';
+import { titleCase, phone } from '../../utils/helpers';
 import { useViewport } from '../../utils/hooks'
 
-const phone = 650
 
 const styles = theme => ({
 	dataTable: {
@@ -115,7 +114,7 @@ const styles = theme => ({
 					</thead>
 					<tbody className={classes.tableBody}>
 						<tr className={classes.seriesTotal}>
-							<td align="left" style={{width: '65%'}}>
+							<td align="left" style={{width: '65%', minWidth: "65%"}}>
 								<div className={classes.seriesLabel}>
 									{sumLabel}
 								</div>
@@ -128,7 +127,7 @@ const styles = theme => ({
 						<tr key={`series_${i}`}>
 							{!!firstColumnToolTip?
 								<HtmlTooltip title={<React.Fragment>{firstColumnToolTip(s)}</React.Fragment>}>
-									<td align="left" style={{width: '65%'}}>
+									<td align="left" style={{width: '65%', minWidth: "65%"}}>
 										<div style={{backgroundColor: s.borderColor? s.borderColor : s.backgroundColor}} className={classes.rowColor}/>
 										<div className={classes.sLabel}>
 											{s[seriesLabelKey] && titleCase(s[seriesLabelKey].replace(/_/g, ' '))}
@@ -136,7 +135,7 @@ const styles = theme => ({
 									</td>
 								</HtmlTooltip>
 								:
-								<td align="left" style={{width: '65%'}}>
+								<td align="left" style={{width: '65%', minWidth: "65%"}}>
 									<div style={{backgroundColor: s.backgroundColor}} className={classes.rowColor}/>
 									<div className={classes.sLabel}>
 										{s[seriesLabelKey] && titleCase(s[seriesLabelKey].replace(/_/g, ' '))}
@@ -228,7 +227,8 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
 							color: 'white',
 							labels: dataLabels,
 							formatter: function(value, ctx, els) {
-								const total = ctx.dataset?._meta[0]?.total;
+								const chartId = ctx.chart?.id
+								const total = ctx.dataset?._meta[chartId]?.total;
 								return Math.round((value * 100) / total) + '%';
 							},
 						}

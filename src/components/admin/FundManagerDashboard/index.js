@@ -13,9 +13,10 @@ import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
 import ActivityLog from './sections/ActivityLog';
-import AllocationsTable from '../../utils/AllocationsTable';
+import Investments from './sections/Investments';
 import { FlatBox } from './widgets';
 import { nWithCommas } from '../../../utils/numbers';
+import { phone, tablet } from '../../../utils/helpers';
 import { useFetch, useViewport } from '../../../utils/hooks';
 
 
@@ -55,9 +56,6 @@ export const ORG_OVERVIEW = gql`
 `;
 
 
-export const tablet = "1024"
-export const phone = "650"
-
 const styles = theme => ({
   avatar: {
     background: "#0461FF",
@@ -81,7 +79,13 @@ const styles = theme => ({
   chartContainer: {
     width: '70%',
     width: '60%',
-    padding: '5% 0'
+    padding: '5% 0',
+    [theme.breakpoints.down(tablet)]: {
+      padding: 0,
+      width: "100%",
+      marginBottom: "20px",
+      height: "250px"
+    },
   },
   dashboardContainer: {
     display: "flex",
@@ -126,7 +130,7 @@ const styles = theme => ({
     borderRadius: "20px"
   },
   pageIcons: {
-    width: "170px",
+    width: "125px",
     display: "flex",
     justifyContent: "space-between",
     paddingRight: "50px",
@@ -219,17 +223,27 @@ const styles = theme => ({
   tableContainer: {
     maxHeight: '100%',
     width: '35%',
+    minWidth: "175px",
     display:'flex',
     flexDirection: 'column',
     justifyContent: 'space-around',
     '& table *': {
-      display: 'flex'
     },
     '& tr':{
+      display: 'flex',
       width: '100%',
       justifyContent: 'space-between',
       alignItems: 'center',
-      padding: '8px'
+      padding: '8px',
+      "& > *": {
+        display: "flex"
+      },
+      "& > *:first-child": {
+        marginRight: "1em"
+      }
+    },
+    [theme.breakpoints.down(tablet)]: {
+      width: "100%"
     }
   },
   tabs: {
@@ -273,20 +287,6 @@ const FundManagerDashboard = ({ classes }) => {
   });
   const [tabIndex, setTabIndex] = useState(0)
 
-  const investmentsHeaders = [
-    { value: 'name', label: 'NAME' },
-    { value: 'date', label: 'DATE', type: 'date' },
-    { value: 'investment', label: 'INVESTMENT', type: 'amount' },
-  ]
-  // add or remove tagline column depending on viewport width
-  if(width > phone) investmentsHeaders.splice(1, 0, { value: 'tagline', label: 'TAGLINE' })
-  if(investmentsHeaders.map(h => h.value).includes('tagline') && (width < phone)) investmentsHeaders.splice(1, 1)
-
-  const investmentsData = [
-    { name: 'Luminous Computing', tagline: 'Photonics chips to tackle AI workloads', date: new Date(), investment: 25000},
-    { name: 'Browder Capital LP', tagline: 'Early stage technology fund', date: new Date(), investment: 50000},
-  ]
-
   let slug = orgSlug;
   const isDemo = orgSlug === 'demo-fund';
 
@@ -301,18 +301,6 @@ const FundManagerDashboard = ({ classes }) => {
                       });
 
   const orgData = orgOverview?.organization;
-
-
-  const getCellContent = (type, row, value) => {
-    switch (type) {
-      case 'date':
-        return moment(row[value]).format('MM/DD/YYYY');
-      case 'amount':
-        return `$${nWithCommas(row[value])}`
-      default:
-        return
-    }
-  }
 
 
   const buttonAction = () => {
@@ -342,13 +330,10 @@ const FundManagerDashboard = ({ classes }) => {
         )
       case 2:
         return(
-          <div className={classes.section}>
-            <AllocationsTable
-              data={investmentsData}
-              headers={investmentsHeaders}
-              getCellContent={getCellContent}
-              />
-          </div>
+          <Investments
+            classes={classes}
+            width={width}
+            />
         )
       case 3:
         return(
@@ -370,7 +355,6 @@ const FundManagerDashboard = ({ classes }) => {
               <Typography>dashboard.allocations.com/funds/305-ventures</Typography>
               <div className={classes.pageIcons}>
                 <div className={classes.pageIcon}><ChevronRightIcon/></div>
-                <div className={classes.pageIcon}><EditIcon/></div>
                 <div className={classes.pageIcon}><FileCopyOutlinedIcon/></div>
               </div>
             </FlatBox>

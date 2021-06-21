@@ -33,14 +33,6 @@ export function formatDoughnutSeries(series) {
   })
 }
 
-// const series = [
-//   {label: 'SpaceX', total: 0.45},
-//   {label: 'Volumetric SPV', total: 0.3},
-//   {label: 'Turn Bio', total: 0.20},
-//   {label: 'Retrotope SPV', total: 0.05},
-// ]
-
-
 const Highlights = ({ classes, data, orgData, isDemo }) => {
 
   const [multipleAvg, setMultipleAvg] = useState(1);
