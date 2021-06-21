@@ -103,14 +103,6 @@ export default function ExchangeDeal() {
                 <div>Nominal Value of Your Holding</div>
                 <div>${nWithCommas(exchangeDeal.shares)}</div>
               </span>
-              {/** <span className="header-card">
-                <div>Estimated Current Value of your Holding</div>
-                <div>$65,000</div>
-              </span>
-              <span className="header-card">
-                <div>Estimated Share Value</div>
-                <div>$6.50</div>
-              </span>* */}
               <span className="header-card">
                 <div>Initial Share Price</div>
                 <div>$1</div>
@@ -160,37 +152,6 @@ function MatchRequest({ req }) {
     </Paper>
   );
 }
-
-// function getCost({ book, amount, direction }) {
-//   if (direction === 'buy') {
-//     let left = amount;
-//     let cost = 0;
-//     for (let i = 0; i < book.asks.length; i++) {
-//       const ask = book.asks[i];
-//       if (ask.amount < left) {
-//         left -= ask.amount;
-//         cost += ask.amount * ask.price;
-//       } else {
-//         cost += left * ask.price;
-//         break;
-//       }
-//     }
-//     return cost;
-//   }
-//   let left = amount;
-//   let cost = 0;
-//   for (let i = 0; i < book.bids.length; i++) {
-//     const bid = book.bids[i];
-//     if (bid.amount < left) {
-//       left -= bid.amount;
-//       cost += bid.amount * bid.price;
-//     } else {
-//       cost += left * bid.price;
-//       break;
-//     }
-//   }
-//   return cost;
-// }
 
 function OrderForm({ exchangeDeal, investor, refetch }) {
   const [order, setOrder] = useSimpleReducer({ price: '', amount: '', direction: 'sell', cost: 0 });
