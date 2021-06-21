@@ -110,7 +110,7 @@ const UPDATE_USER = gql`
 
 const BASE = 'appdPrRjapx8iYnIn';
 const TABEL_NAME = 'Deals';
-export default ({}) => {
+export default () => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(1);
   const history = useHistory();
@@ -150,6 +150,7 @@ export default ({}) => {
         src={img}
         style={{ position: 'fixed', width: '15%', marginLeft: '1rem' }}
         onClick={() => history.push('/')}
+        alt=''
       />
       {activeStep ? <Completion deal={data} user={userProfile} /> : <Landing Link={Link} />}
       <Element id="anchor">

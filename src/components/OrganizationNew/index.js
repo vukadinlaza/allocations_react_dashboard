@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { gql } from 'apollo-boost';
 import { useHistory } from 'react-router-dom';
-import { Col, Row } from 'reactstrap';
+import { Col } from 'reactstrap';
 import Cropper from 'react-easy-crop';
 import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/react-hooks';
@@ -33,7 +33,7 @@ function valid(org) {
 export default function OrganizationNew() {
   const history = useHistory();
   const [organization, setOrg] = useSimpleReducer({ name: '', slug: '' });
-  const [createOrg, { data, error, loading }] = useMutation(CREATE_ORG);
+  const [createOrg, { data }] = useMutation(CREATE_ORG);
 
   useEffect(() => {
     if (data) history.push(`/admin/${organization.slug}`);

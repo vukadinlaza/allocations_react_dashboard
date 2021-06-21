@@ -19,7 +19,7 @@ function W8BENE({ toggleOpen }) {
   const [country, setCountry] = useState('');
   const [countrySearch, setCountrySearch] = useState('');
 
-  const [formState, setFormState] = useState({
+  const [formState] = useState({
     chapter3Status: '',
   });
 

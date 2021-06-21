@@ -50,7 +50,7 @@ export default function EntityEditForm({
   isEdit,
   handleClose,
 }) {
-  const [errors, setErrors] = useState([]);
+  const [errors] = useState([]);
 
   const handleChange = (prop) => (e) => {
     e.persist();
@@ -192,28 +192,6 @@ export default function EntityEditForm({
   );
 }
 
-function KYC({ investor, setInvestor }) {
-  const status =
-    investor.passport && investor.accredidation_doc ? (
-      investor.is_kyced ? (
-        <Button variant="contained" size="small" style={{ backgroundColor: '#21ce99' }} startIcon={<CheckCircle />}>
-          Approved
-        </Button>
-      ) : (
-        <Button variant="contained" size="small" color="secondary" startIcon={<HourglassEmpty />}>
-          Pending
-        </Button>
-      )
-    ) : null;
-
-  return (
-    <List>
-      <AccredidationUploader investor={investor} setInvestor={setInvestor} />
-      <PassportUploader investor={investor} setInvestor={setInvestor} />
-    </List>
-  );
-}
-
 export function PassportUploader({ investor, setInvestor }) {
   if (investor.passport) {
     return (
@@ -244,43 +222,6 @@ export function PassportUploader({ investor, setInvestor }) {
               style={{ display: 'none' }}
               onChange={({ target }) => {
                 if (target.validity.valid) setInvestor((prev) => ({ ...prev, passport: target.files[0] }));
-              }}
-            />
-          </Button>
-        </ListItemSecondaryAction>
-      </ListItem>
-    </Paper>
-  );
-}
-
-function AccredidationUploader({ investor, setInvestor }) {
-  if (investor.accredidation_doc) {
-    return (
-      <Paper style={{ marginBottom: 16 }}>
-        <ListItem>
-          <ListItemText primary="Accredited Investor Certificate" secondary="via verifyinvestor.com" />
-          <ListItemSecondaryAction>
-            <Button variant="contained" color="secondary" size="small" startIcon={<CloudDone />}>
-              Uploaded
-            </Button>
-          </ListItemSecondaryAction>
-        </ListItem>
-      </Paper>
-    );
-  }
-
-  return (
-    <Paper style={{ marginBottom: 16 }}>
-      <ListItem>
-        <ListItemText primary="Accredited Investor Certificate" secondary="via verifyinvestor.com" />
-        <ListItemSecondaryAction>
-          <Button startIcon={<CloudUploadIcon />} variant="contained" color="secondary" component="label">
-            Upload
-            <input
-              type="file"
-              style={{ display: 'none' }}
-              onChange={({ target }) => {
-                if (target.validity.valid) setInvestor((prev) => ({ ...prev, accredidation_doc: target.files[0] }));
               }}
             />
           </Button>

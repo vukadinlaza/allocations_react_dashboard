@@ -233,7 +233,6 @@ export default function Marketplace() {
             close_date,
             coinvestors,
             deal_lead,
-            deal_name,
             deal_tagline,
             est_personal_investment,
             highlight_1,

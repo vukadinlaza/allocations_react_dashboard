@@ -22,7 +22,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Loader from '../../../utils/Loader';
 import { nWithCommas } from '../../../../utils/numbers';
 import InvestmentFlow from './investment-flow';
-import Document from '../../../utils/Document';
 
 /** *
  *

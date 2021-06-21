@@ -309,7 +309,7 @@ const MATCH_REQUEST = gql`
 `;
 
 function Order({ investor, _id, user_id, refetch, side, price, amount }) {
-  const [cancel, { data, error }] = useMutation(CANCEL_ORDER, {
+  const [cancel] = useMutation(CANCEL_ORDER, {
     variables: { order_id: _id },
     onCompleted: refetch,
   });
