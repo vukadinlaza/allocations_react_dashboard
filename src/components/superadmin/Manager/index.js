@@ -1,30 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import _ from 'lodash';
-import { useMutation, useQuery, useLazyQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
-import { useParams, Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TextField,
-  TableRow,
-  Button,
-  InputAdornment,
-  Tab,
-  Tabs,
-  AppBar,
-  TabPanel,
-} from '@material-ui/core';
+import { useParams } from 'react-router-dom';
 import { Col, Row, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
-import Loader from '../../utils/Loader';
-import { nWithCommas, formatDate } from '../../../utils/numbers';
 import * as API from '../../../api';
-
-import Compliance from '../Compliance';
 import OrganizationMembers from '../../OrganizationMembers';
 import './style.scss';
 

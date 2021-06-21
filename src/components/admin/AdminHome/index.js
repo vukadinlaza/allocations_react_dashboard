@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { gql } from 'apollo-boost';
 
-import { Paper, Grid, ButtonBase, Typography, FormControl, Button, TextField } from '@material-ui/core';
-import _, { toLower, groupBy } from 'lodash';
+import { Paper, Grid, ButtonBase, Typography, Button } from '@material-ui/core';
+import _, { toLower } from 'lodash';
 import { useQuery } from '@apollo/react-hooks';
 import { useParams, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';

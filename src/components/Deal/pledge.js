@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Grid, TextField, InputAdornment, Button } from '@material-ui/core';
 import _ from 'lodash';
 import { gql } from 'apollo-boost';
