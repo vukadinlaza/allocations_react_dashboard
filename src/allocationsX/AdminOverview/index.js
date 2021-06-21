@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import _ from 'lodash';
 import { Row, Col } from 'reactstrap';
-import { useParams, useHistory, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { gql } from 'apollo-boost';
-import { useQuery, useMutation, useLazyQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import {
   Table,
   TableBody,
@@ -14,11 +14,8 @@ import {
   Button,
   Typography,
   TextField,
-  InputAdornment,
-  InputLabel,
   Modal,
 } from '@material-ui/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Loader from '../../components/utils/Loader';
 import { nWithCommas, formatDate } from '../../utils/numbers';
 import { useSimpleReducer, useToggle } from '../../utils/hooks';
@@ -82,7 +79,7 @@ const SAVE_TRADE = gql`
 export default function AdminExchangeOverview() {
   const [showInputTrade, toggleShow] = useToggle(false);
   const { organization: slug } = useParams();
-  const { data, error, refetch } = useQuery(EXCHANGE_OVERVIEW, { variables: { slug } });
+  const { data } = useQuery(EXCHANGE_OVERVIEW, { variables: { slug } });
 
   if (!data) return <Loader />;
   const { organization } = data;
@@ -150,7 +147,7 @@ function InputTrade({ refetch, toggleShow }) {
     <div
       className="InputTrade-wrapper"
       onClick={(e) => {
-        if (e.target == e.currentTarget) toggleShow();
+        if (e.target === e.currentTarget) toggleShow();
       }}
     >
       <Paper className="InputTrade" style={{ padding: '20px' }}>
