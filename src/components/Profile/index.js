@@ -310,7 +310,7 @@ const AccountEntities = ({
         </TableHead>
         <TableBody>
           {accountEntities?.getEntities.map((row) => (
-            <TableRow key={row._id}>
+            <TableRow key={row?._id}>
               <TableCell component="th" scope="row">
                 {capitalize(row.investor_type)}
               </TableCell>
@@ -319,8 +319,8 @@ const AccountEntities = ({
               <TableCell align="center">{row.country}</TableCell>
               <TableCell align="center">
                 <SettingsIcon
-                  color={row.isPrimaryEntity ? 'disabled' : 'primary'}
-                  style={{ cursor: row.isPrimaryEntity ? 'not-allowed' : 'pointer' }}
+                  color={row?.isPrimaryEntity ? 'disabled' : 'primary'}
+                  style={{ cursor: row?.isPrimaryEntity ? 'not-allowed' : 'pointer' }}
                   onClick={() => {
                     if (row.isPrimaryEntity) {
                       return;

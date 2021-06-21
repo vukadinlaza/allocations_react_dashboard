@@ -221,7 +221,7 @@ function DocsRow({ docs }) {
     <TableRow>
       <TableCell colSpan={7}>
         {docs.map((doc) => (
-          <div key={doc.link} className="doc-wrapper">
+          <div key={doc?.link} className="doc-wrapper">
             <div className="doc">
               <FontAwesomeIcon icon={['far', 'file-pdf']} />
             </div>
