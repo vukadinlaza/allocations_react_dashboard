@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import './styles.scss';
 import { FormControl, TextField, Button } from '@material-ui/core';
