@@ -1,23 +1,18 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import _ from 'lodash';
 import { gql } from 'apollo-boost';
-import { Link, useParams, useHistory, Redirect } from 'react-router-dom';
-import { Row, Container, Col } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link, useHistory, Redirect } from 'react-router-dom';
+import { Col } from 'reactstrap';
 import {
-  Avatar,
   Hidden,
   Paper,
   ListItem,
   List,
   Table,
-  TableBody,
   TableCell,
   TableRow,
-  TableHead,
   Grid,
   Button,
-  Fab,
   Typography,
 } from '@material-ui/core';
 import Chart from 'react-google-charts';
@@ -27,7 +22,6 @@ import { validate } from '../forms/InvestorEdit';
 import { useAuth } from '../../auth/useAuth';
 import allocations_create_deal from '../../assets/allocations_create_deal.svg';
 import allocations_faq from '../../assets/allocations_faq.svg';
-import allocations_invited_deals from '../../assets/allocations_invited_deals.svg';
 import allocations_recent_investments from '../../assets/allocations_recent_investments.svg';
 import allocations_total_investments from '../../assets/allocations_total_investments.svg';
 import allocations_update_profile from '../../assets/allocations_update_profile.svg';
@@ -37,8 +31,6 @@ import NewHome from './newHome';
 import Loader from '../utils/Loader';
 import './style.scss';
 import NullPaper from '../NullPaper';
-
-const purples = ['#6200EE', '#BB9FE6'];
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -195,186 +187,7 @@ export default function UserHome(props) {
     },
   ];
 
-  /* TODO: implement empty values for each paper */
-  const isEmpty = true;
   return <NewHome />;
-  return (
-    <>
-      {/* TODO: Move to NavBar <AdminTile investor={investor}/> */}
-
-      <Grid container spacing={2}>
-        {total_invested === 0 ? (
-          <NoInvestmentBanner />
-        ) : (
-          <Grid item xs={12}>
-            <Grid container spacing={2} alignItems="center">
-              <Hidden only="xs">
-                <Grid item sm={12} md={4}>
-                  <Typography variant="body1" className={classes.grey}>
-                    Welcome
-                  </Typography>
-                  <Typography variant="h5">
-                    <Name investor={userProfile} />
-                  </Typography>
-                </Grid>
-              </Hidden>
-              <Grid item sm={12} md={8}>
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <Hidden only="xs">
-                    <Typography
-                      variant="body1"
-                      className={classes.grey}
-                      style={{ textAlign: 'right', paddingRight: 16 }}
-                    >
-                      Your Allocations account is ready for your use. <br />
-                      Let's view your investments!
-                    </Typography>
-                  </Hidden>
-                  <Button
-                    onClick={() => history.push(adminView ? `/investor/${params.id}/investments` : '/investments')}
-                    variant="contained"
-                    color="primary"
-                  >
-                    My Investments
-                  </Button>
-                </div>
-              </Grid>
-            </Grid>
-          </Grid>
-        )}
-
-        <>
-          <Grid item xs={12}>
-            <Paper className={classes.paper} style={{ height: '100%' }}>
-              <Grid container alignItems="center">
-                <Grid item sm={12} md={6}>
-                  <Grid container>
-                    <Grid item xs={12} sm={5}>
-                      <img
-                        src={allocations_total_investments}
-                        style={{ maxWidth: 200, width: '100%', paddingLeft: 16 }}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={7}>
-                      <Typography variant="h5" className={classes.grey}>
-                        <strong>Total Investments</strong>
-                      </Typography>
-                      <Typography
-                        variant="h5"
-                        style={{ fontSize: '1.8rem', marginBottom: 16 }}
-                        className={classes.blue}
-                      >
-                        <strong>${nWithCommas(total_invested)}</strong>
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Hidden mdDown>
-                  <Grid item sm={12} md={6}>
-                    {userInvestments.length > 0 ? (
-                      <Chart
-                        chartType="TreeMap"
-                        width="100%"
-                        height="200px"
-                        chartEvents={chartEvents}
-                        data={formatData(userInvestments)}
-                        options={chartOptions}
-                      />
-                    ) : null}
-                  </Grid>
-                </Hidden>
-              </Grid>
-            </Paper>
-          </Grid>
-        </>
-
-        <Grid item xs={12} sm={12} md={6}>
-          {isEmpty ? (
-            <NullPaper
-              title="Recent Investments"
-              text="Find your most recent investments"
-              image={allocations_recent_investments}
-              button="Get Started"
-              onClick={() => history.push(`/investments`)}
-            />
-          ) : (
-            <Paper className={classes.paper} style={{ paddingBottom: 0 }}>
-              <Typography variant="h6" style={{ marginBottom: 16 }}>
-                Most Recent Investments
-              </Typography>
-
-              <div style={{ margin: '0px -16px', cursor: 'pointer' }}>
-                <Table style={{ marginBottom: '-1px' }}>
-                  {orderInvestments(userInvestments).map((investment, i) => (
-                    <InvestmentStub key={i} investment={investment} />
-                  ))}
-                </Table>
-              </div>
-            </Paper>
-          )}
-        </Grid>
-
-        {/* <Grid item xs={12} sm={12} md={6}>
-          {isEmpty ? <NullPaper title="Invited Deals" text="Here are your invited deals"
-                                image={allocations_invite_deals} button="Get Started"/>
-            :
-            <Paper className={classes.paper} style={{paddingBottom: 0}}>
-              <Typography variant="h6" style={{marginBottom: 16}}>
-                Invited Deals
-              </Typography>
-              <div style={{margin: "0px -16px", cursor: "pointer"}}>
-                <Table style={{marginBottom: "-1px"}}>
-                  {userProfile.invitedDeals.map((deal, i) => (
-                    <DealStub key={i} deal={deal}/>
-                  ))}
-                </Table>
-              </div>
-            </Paper>}
-        </Grid> */}
-
-        {/* <Grid item xs={12}>
-          <Typography variant="h5" className={classes.grey}>
-            <strong>Tools</strong>
-          </Typography>
-        </Grid> */}
-
-        <Grid item xs={12} sm={12} md={6}>
-          <NullPaper
-            title="Update Profile"
-            text="Update your user profile"
-            image={allocations_update_profile}
-            button="Get Started"
-            onClick={() => history.push(`/profile`)}
-          />
-        </Grid>
-
-        <Grid item xs={12} sm={12} md={6}>
-          <NullPaper
-            title="Create New Deal"
-            text="Setup your next deal in seconds"
-            image={allocations_create_deal}
-            button="Get Started"
-            onClick={() => history.push(`/spv-onboarding`)}
-          />
-        </Grid>
-
-        <Grid item xs={12} sm={12} md={6}>
-          <a href="https://docs.allocations.com" target="_blank" rel="noopener noreferrer">
-            <NullPaper title="FAQ" text="Find all your answers here" image={allocations_faq} button="Get Started" />
-          </a>
-        </Grid>
-
-        <Grid item xs={12} sm={12} md={6}>
-          <NullPaper
-            title="Update My Account"
-            text="Fund your account and start investing"
-            image={allocations_update}
-            button="Get Started"
-          />
-        </Grid>
-      </Grid>
-    </>
-  );
 }
 
 function Name({ investor }) {
@@ -419,25 +232,27 @@ function NextSteps({ investor }) {
   return (
     <>
       <Typography variant="h6" gutterBottom>
-        🚨 Next Steps
+        <span role='img' aria-label='siren'>
+          🚨 Next Steps
+        </span>
       </Typography>
       <Paper style={{ padding: '16px' }}>
         <List>
           <ListItem button onClick={() => history.push(`/profile`)}>
-            <span>📚 Complete Your Profile</span> {profileComplete && <span className="checkbox">✅</span>}
+            <span role='img' aria-label='books'>📚 Complete Your Profile</span> {profileComplete && <span className="checkbox"role='img' aria-label='checkbox'>✅</span>}
           </ListItem>
           <ListItem button disabled>
-            <span>
+            <span role='img' aria-label='money'>
               💵 Track My SPV Investment <small className="coming-soon">coming soon</small>
             </span>
           </ListItem>
           <ListItem button disabled>
-            <span>
+            <span role='img' aria-label='mailbox'>
               📬 Apply to Join a Fund <small className="coming-soon">coming soon</small>
             </span>
           </ListItem>
           <ListItem button disabled>
-            <span>
+            <span role='img' aria-label='bank'>
               🏦 Apply to be a Fund Manager <small className="coming-soon">coming soon</small>
             </span>
           </ListItem>
