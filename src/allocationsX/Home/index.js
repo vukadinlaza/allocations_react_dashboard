@@ -89,7 +89,4 @@ export default function AllocationsX() {
       </Row>
     </div>
   );
-}
-
-const BASE_URL = 'https://allocations-public.s3.us-east-2.amazonaws.com';
-
+};

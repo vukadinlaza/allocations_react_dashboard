@@ -92,11 +92,6 @@ const SUPERADMIN = gql`
     }
   }
 `;
-const DELETE_ORG = gql`
-  mutation DeleteOrg($_id: String!) {
-    deleteOrganization(_id: $_id)
-  }
-`;
 
 const APPROVE_ORG = gql`
   mutation ApproveOrg($org: OrganizationInput!) {

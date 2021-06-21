@@ -94,7 +94,7 @@ export const ORG_OVERVIEW = gql`
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 
-export default function AdminHome({}) {
+export default function AdminHome() {
   const { data: atFundData } = useFetch(OPS_ACCOUNTING, INVESTMENTS_TABLE);
   const { organization: orgSlug } = useParams();
   const [tab, setTab] = useState('active-deals');

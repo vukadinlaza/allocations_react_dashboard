@@ -60,11 +60,14 @@ export default ({
   const [entityData, setEntityData] = useSimpleReducer({ accountId });
   const [formStatus, setFormStatus] = useState('edit');
 
+  // created variable so it can be statically checked by useEffect. useEffect dependency doesnt like complex expressions.
+const showEntityModalID = showEntityModal?._id;
+
   useEffect(() => {
-    if (showEntityModal?._id) {
+    if (showEntityModalID) {
       setEntityData(showEntityModal);
     }
-  }, [setEntityData, showEntityModal, showEntityModal?._id]);
+  }, [setEntityData, showEntityModal, showEntityModalID]);
 
   const icon = formStatus === 'loading' ? 'circle-notch' : formStatus === 'complete' ? 'check' : null;
   const isEdit = showEntityModal?._id;

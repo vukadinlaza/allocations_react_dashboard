@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 import ReactCrop from 'react-image-crop';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
-import { useSimpleReducer } from '../../../utils/hooks';
 import CopyIcon from '../../../assets/copy-icon.svg';
 import 'react-image-crop/lib/ReactCrop.scss';
 

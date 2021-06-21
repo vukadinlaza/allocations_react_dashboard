@@ -76,13 +76,6 @@ const GET_INVESTOR = gql`
     }
   }
 `;
-const POST_ZAP = gql`
-  mutation PostZap($body: Object) {
-    postZap(data: $body) {
-      _id
-    }
-  }
-`;
 const UPDATE_USER = gql`
   mutation UpdateUser($investor: UserInput!) {
     updateUser(input: $investor) {

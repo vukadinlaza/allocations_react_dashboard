@@ -4,7 +4,6 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 import { Typography, Paper, Grid, Button, Table, TableBody, TableHead, TableCell, TableRow } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { capitalize } from 'lodash';
-import { toast } from 'react-toastify';
 import SettingsIcon from '@material-ui/icons/Settings';
 import InvestorEditForm from '../forms/InvestorEdit';
 import { useAuth } from '../../auth/useAuth';

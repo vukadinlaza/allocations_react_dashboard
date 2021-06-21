@@ -3,13 +3,11 @@ import _ from 'lodash';
 import { Link, useParams } from 'react-router-dom';
 import { gql } from 'apollo-boost';
 import { useLazyQuery } from '@apollo/react-hooks';
-import { Row, Col } from 'reactstrap';
 import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, Grid } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { useAuth } from '../../auth/useAuth';
 import { nWithCommas } from '../../utils/numbers';
 import Loader from '../utils/Loader';
-import { getDisplayName } from '../../utils/displayName';
 
 import './style.scss';
 

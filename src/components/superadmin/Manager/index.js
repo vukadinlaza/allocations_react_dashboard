@@ -5,7 +5,6 @@ import { gql } from 'apollo-boost';
 import { useParams } from 'react-router-dom';
 import { Col, Row, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
-import * as API from '../../../api';
 import OrganizationMembers from '../../OrganizationMembers';
 import './style.scss';
 
@@ -45,7 +44,7 @@ const tabs = [{ id: '0', name: 'Admin Members', Component: OrganizationMembers }
 
 export default function SuperAdminManager() {
   const { organization } = useParams();
-  const { data, error, loading, refetch } = useQuery(ORG_SUPERADMIN, { variables: { slug: organization } });
+  const { data, error, refetch } = useQuery(ORG_SUPERADMIN, { variables: { slug: organization } });
   const [activeTab, setActiveTab] = useState('0');
 
   const toggle = (tab) => {
