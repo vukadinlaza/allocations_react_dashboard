@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import _ from 'lodash';
 import { gql } from 'apollo-boost';
 import { Row, Col } from 'reactstrap';
-import { Link, useParams, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Paper, Table, TableBody, TableCell, TableRow, TableHead, Button, Fab } from '@material-ui/core';
+import { Paper, Table, TableBody, TableCell, TableRow, TableHead, Button } from '@material-ui/core';
 import { nWithCommas, formatDate } from '../../utils/numbers';
 import Loader from '../../components/utils/Loader';
 import './style.scss';
@@ -28,7 +28,7 @@ const DEALS = gql`
 `;
 
 export default function AllocationsX() {
-  const { data, error, loading } = useQuery(DEALS);
+  const { data } = useQuery(DEALS);
 
   if (!data) return <Loader />;
 
@@ -92,22 +92,4 @@ export default function AllocationsX() {
 }
 
 const BASE_URL = 'https://allocations-public.s3.us-east-2.amazonaws.com';
-function DealLogo({ deal }) {
-  const [err, setErr] = useState(null);
 
-  if (err) {
-    return (
-      <div className="deal-logo">
-        <span style={{ height: '30px', width: '150px' }}>
-          <b>{deal.company_name}</b>
-        </span>
-      </div>
-    );
-  }
-
-  return (
-    <div className="deal-logo">
-      <img width="150px" height="40px" src={`${BASE_URL}/deals/${deal.slug}.png`} onError={setErr} />
-    </div>
-  );
-}
