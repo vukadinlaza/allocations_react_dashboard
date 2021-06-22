@@ -275,7 +275,7 @@ function InvestmentPage({}) {
           <DealDocumentsPanel deal={deal} />
           {/* <YourDocumentsPanel investment={investment} /> */}
         </div>
-        <PersonalInformation errors={errors} investor={investorFormData} setInvestor={setInvestor} />
+        <PersonalInformation org={org} errors={errors} investor={investorFormData} setInvestor={setInvestor} />
         <TermsAndConditionsPanel
           confirmInvestment={confirmInvestment}
           deal={deal}
