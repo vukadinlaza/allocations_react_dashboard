@@ -6,53 +6,78 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import { nWithCommas } from '../../../../utils/numbers';
 import { phone } from '../../../../utils/helpers';
 import { useAuth } from '../../../../auth/useAuth';
-import AllocationsTable from '../../../utils/AllocationsTable'
+import ServerTable from '../../../utils/ServerTable'
 import Loader from '../../../utils/Loader'
 
 
-const GET_INVESTMENTS = gql`
-  query GetOrg($slug: String!) {
-    organization(slug: $slug) {
-      _id
-      investments {
+const tableVariables = {
+  gqlQuery: `
+    query GetOrg($slug: String!, $pagination: PaginationInput!) {
+      pagOrganization(slug: $slug, pagination: $pagination) {
         _id
-        amount
-        created_at
-        deal {
+        pagInvestments {
           _id
-          company_name
-          company_description
-          date_closed
-        }
-        investor {
-          _id
+          amount
+          created_at
+          deal {
+            _id
+            company_name
+            company_description
+            date_closed
+          }
+          investor {
+            _id
+          }
         }
       }
-    }
-  }
-`;
+    }`,
+  headers: [
+    {
+      value: 'deal',
+      label: 'NAME',
+      align: 'left',
+      alignHeader: true,
+      isFilter: true,
+      nestedKey: 'company_name',
+      nestedCollection: 'deals',
+      localFieldKey: 'deal_id',
+      type: 'company',
+      keyNotInData: true
+    },{
+      value: 'date',
+      label: 'DATE',
+      type: 'date',
+      align: 'left',
+      alignHeader: true,
+      keyNotInData: true
+    },{
+      value: 'amount',
+      label: 'INVESTMENT',
+      type: 'amount',
+      align: 'right',
+      alignHeader: true
+    },
+  ],
+  dataVariable: 'pagOrganization.pagInvestments',
+  defaultSortField: "company_name"
+}
 
 const Investments = ({ classes, width }) => {
 
   const { organization } = useParams();
-  const [getInvestments, { data, error }] = useLazyQuery(GET_INVESTMENTS);
 
-  useEffect(() => {
-    getInvestments({ variables: { slug: organization } });
-  }, []);
-
-  const headers = [
-    { value: 'company_name', label: 'NAME', align: 'left', alignHeader: true },
-    { value: 'date', label: 'DATE', type: 'date', align: 'left', alignHeader: true },
-    { value: 'amount', label: 'INVESTMENT', type: 'amount', align: 'right', alignHeader: true },
-  ]
   // add or remove tagline column depending on viewport width
-  if(width > phone) headers.splice(1, 0, { value: 'company_description', label: 'TAGLINE', align: 'left', alignHeader: true })
-  if(headers.map(h => h.value).includes('company_description') && (width < phone)) headers.splice(1, 1)
+  const taglineInHeaders = tableVariables.headers.map(h => h.value).includes('company_description')
+  if(width > phone && !taglineInHeaders) tableVariables.headers.splice(1, 0, { value: 'company_description', label: 'TAGLINE', align: 'left', alignHeader: true , type: 'tagline', keyNotInData: true})
+  if(taglineInHeaders && (width < phone)) tableVariables.headers.splice(1, 1)
 
 
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
+      case 'company':
+        return row.deal.company_name
+      case 'tagline':
+        return row.deal.company_description
       case 'date':
         return moment(row[headerValue]).format('MM/DD/YYYY')
       case 'amount':
@@ -63,26 +88,17 @@ const Investments = ({ classes, width }) => {
   }
 
 
-  if(!data?.organization?.investments){
+  if(!tableVariables){
     return <Loader/>
   }
 
-  const { investments } = data.organization;
-  const investmentsData = investments.map(inv => {
-    return {
-      company_name: inv.deal.company_name,
-      company_description: inv.deal.company_description,
-      amount: inv.amount,
-      date: inv.created_at
-    }
-  })
-
   return (
     <div className={classes.section}>
-      <AllocationsTable
-        data={investmentsData}
-        headers={headers}
+      <ServerTable
+        tableVariables={tableVariables}
         getCellContent={getCellContent}
+        queryVariables={{ slug: organization }}
+        tablePagination={5}
         />
     </div>
   );

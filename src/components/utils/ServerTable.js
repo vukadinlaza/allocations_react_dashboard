@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { gql } from 'apollo-boost';
+import _, { get } from 'lodash'
 import { useQuery } from '@apollo/react-hooks';
 import { withStyles } from '@material-ui/core/styles';
 import {
@@ -16,6 +17,9 @@ import Loader from './Loader';
 
 
 const styles = theme => ({
+  root: {
+    width: "100%"
+  },
   loaderContainer: {
     position:"absolute",
     width: "100%",
@@ -41,11 +45,39 @@ const styles = theme => ({
   },
 });
 
-const ServerTable = ({ classes, tableVariables, getCellContent, handleRowDetailPage }) => {
+
+
+/* PROPS Needed (example)
+tableVariables = {
+  gqlQuery =`
+  query MyQuery($pagination: PaginationInput!) {
+  myQuery(pagination: $pagination) {
+  _id
+  }
+  }`,
+  headers = [
+    { value: 'investor', label: 'Investor', isFilter: true, type: 'investor', nestedKey: 'email', nestedCollection: 'users', localFieldKey: 'user_id' },
+    { value: 'deal', label: 'Deal', isFilter: true, type: 'deal', nestedKey: 'company_name', nestedCollection: 'deals', localFieldKey: 'deal_id' },
+    { value: 'status', label: 'Status', isFilter: true },
+    { value: 'amount', label: 'Amount', type: 'amount', align: 'right', isFilter: true },
+  ],
+  dataVariable = 'investmentsList', response from server data[dataVariable]
+  defaultSortField = "status"
+}
+getCellContent={function} // get specific cell content to format it - optional
+handleRowDetailPage={function} // route app on row click - optional
+queryVariables={object} //optional
+tablePagination={number} // optional
+*/
+
+
+
+
+const ServerTable = ({ classes, tableVariables, getCellContent, handleRowDetailPage, queryVariables, tablePagination = 25 }) => {
 
   const [selectWidth, setSelectWidth] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
-  const [pagination, setPagination] = useState(25);
+  const [pagination, setPagination] = useState(tablePagination);
   const [searchFilter, setSearchFilter] = useState({});
   const [sortField, setSortField] = useState('');
   const [sortOrder, setSortOrder] = useState();
@@ -59,8 +91,10 @@ const ServerTable = ({ classes, tableVariables, getCellContent, handleRowDetailP
 
   const getCurrentSort = () => (!sortField? defaultSortField : sortField)
 
+
   const { data, loading } = useQuery(gql`${gqlQuery}`,
     {
+      fetchPolicy: "network-only",
       variables: {
         pagination: {
           pagination,
@@ -75,7 +109,8 @@ const ServerTable = ({ classes, tableVariables, getCellContent, handleRowDetailP
           sortNestedKey,
           sortNestedCollection,
           sortLocalFieldKey
-        }
+        },
+        ...queryVariables
       }
     }
   );
@@ -94,7 +129,7 @@ const ServerTable = ({ classes, tableVariables, getCellContent, handleRowDetailP
   useEffect(() => {
     //clear state (mostly for tabs parent components)
     setCurrentPage(0)
-    setPagination(25)
+    setPagination(tablePagination)
     setSearchFilter({})
     setSortField('')
     setSortOrder(1)
@@ -208,7 +243,7 @@ const ServerTable = ({ classes, tableVariables, getCellContent, handleRowDetailP
       </div>
       :
       <AllocationsTable
-        data={data[dataVariable]}
+        data={_.get(data, dataVariable)}
         headers={headers}
         serverPagination={true}
         rowsQuantity={pagination}

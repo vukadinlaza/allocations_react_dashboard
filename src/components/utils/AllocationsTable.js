@@ -73,7 +73,7 @@ const styles = theme => ({
 				value: 'cellValue',
 				label: 'cellLabel',
 				type: 'typeName', //only if something particular is needed for a cell
-				keyNotInData: Boolean // only if content of a cell is not included in data, i.e  button
+				keyNotInData: Boolean // only if content of a cell is not included in data's first level, i.e  button
 				align: 'right' optional
 				alignHeader: Boolean optional
 
