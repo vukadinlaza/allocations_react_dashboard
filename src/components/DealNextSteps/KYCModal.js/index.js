@@ -31,9 +31,10 @@ const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, refetch, deal
         toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com');
       }
       setOpen(false);
-      if (deal.isDemo) {
-        setShowTaxAsCompleted(true);
-      }
+      setShowTaxAsCompleted(true);
+      setTimeout(() => {
+        refetch()
+      }, 3000)
     },
     onError: () => {
       toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com');

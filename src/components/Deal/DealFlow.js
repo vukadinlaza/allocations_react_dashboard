@@ -579,12 +579,17 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
   const [resign, setResign] = useState(false);
   const classes = useStyles();
   const { search, pathname } = useLocation();
-  const decodedParams = base64.decode(search.substring(1));
   const isTvc = deal.organization === 'theventurecollective';
+  let decodedParams = {}
+  if (isTvc) {
+    base64.decode(search.substring(1));
+  }
   const paramsToUse = isTvc ? decodedParams : search;
   const p = new URLSearchParams(paramsToUse);
   const amount = toNumber(p.get('amount')); // is the number 123
   const shares = toNumber(p.get('shares')) || 0; // is the number 123
+  const units = toNumber(p.get('units')) || ''; // is the number 123
+  const purchasePrice = toNumber(p.get('purchasePrice')) || ''; // is the number 123
 
   const docs = dealInvestments.reduce((acc, inv) => {
     const docs = _.get(inv, 'documents', []);
@@ -625,6 +630,12 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
     params.investmentAmount = amount;
     params.SubAmount = amount;
     params.MomentusPCS = shares;
+  }
+  if (units) {
+    params.Units = units
+  }
+  if (purchasePrice) {
+    params.PurchasePrice = purchasePrice
   }
 
   const urlParameters = Object.entries(params)
