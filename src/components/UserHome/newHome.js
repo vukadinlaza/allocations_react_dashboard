@@ -187,7 +187,7 @@ export default () => {
   const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile?.email || '');
   const [demo, setDemo] = useState(false);
   const [showCapitalAccounts, setShowCaptialAccounts] = useState(false);
-  const [postZap, {}] = useMutation(POST_ZAP);
+  const [postZap, { }] = useMutation(POST_ZAP);
   const investmentsRef = React.useRef(null);
 
   const [confirmation, setConfirmation] = useState(false);
@@ -489,10 +489,10 @@ export default () => {
                           onClick={() => setSortByProp({ prop: 'deal.company_name', direction: 'asc' })}
                         />
                       ) : (
-                        <ArrowDropDownIcon
-                          onClick={() => setSortByProp({ prop: 'deal.company_name', direction: 'desc' })}
-                        />
-                      )}
+                          <ArrowDropDownIcon
+                            onClick={() => setSortByProp({ prop: 'deal.company_name', direction: 'desc' })}
+                          />
+                        )}
                     </div>
                   </TableCell>
                   <Hidden only="xs">
@@ -509,10 +509,10 @@ export default () => {
                             onClick={() => setSortByProp({ prop: 'deal.dealParams.wireDeadline', direction: 'asc' })}
                           />
                         ) : (
-                          <ArrowDropDownIcon
-                            onClick={() => setSortByProp({ prop: 'deal.dealParams.wireDeadline', direction: 'desc' })}
-                          />
-                        )}
+                            <ArrowDropDownIcon
+                              onClick={() => setSortByProp({ prop: 'deal.dealParams.wireDeadline', direction: 'desc' })}
+                            />
+                          )}
                       </div>
                     </TableCell>
                   </Hidden>
@@ -569,17 +569,17 @@ export default () => {
                       />
                     </>
                   ) : (
-                    <TR
-                      demo={demo}
-                      investment={investment}
-                      setShowDocs={setShowDocs}
-                      showDocs={showDocs}
-                      setTradeData={setTradeData}
-                      setShowCaptialAccounts={setShowCaptialAccounts}
-                      capitalAccounts={capitalAccounts}
-                      userProfile={userProfile}
-                    />
-                  ),
+                      <TR
+                        demo={demo}
+                        investment={investment}
+                        setShowDocs={setShowDocs}
+                        showDocs={showDocs}
+                        setTradeData={setTradeData}
+                        setShowCaptialAccounts={setShowCaptialAccounts}
+                        capitalAccounts={capitalAccounts}
+                        userProfile={userProfile}
+                      />
+                    ),
                 )}
               </TableBody>
             </Table>
@@ -681,326 +681,326 @@ export default () => {
                     </Grid>
                   </Grid>
                 ) : (
-                  <Grid
-                    container
-                    style={{
-                      maxWidth: '100%',
-                      minWidth: '30%',
-                      minHeight: '40vh',
-                    }}
-                  >
                     <Grid
-                      item
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
+                      container
                       style={{
-                        display: 'flex',
-                        alignItems: 'flex-end',
-                        justifyContent: 'center',
+                        maxWidth: '100%',
+                        minWidth: '30%',
+                        minHeight: '40vh',
                       }}
                     >
-                      <Loader />
-                    </Grid>
-                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                      <Typography className={classes.grey} style={{ textAlign: 'center' }} variant="h5">
-                        Creating your trade request
+                      <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'flex-end',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Loader />
+                      </Grid>
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <Typography className={classes.grey} style={{ textAlign: 'center' }} variant="h5">
+                          Creating your trade request
                       </Typography>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                )}
+                  )}
               </Paper>
             </Grid>
           ) : (
-            <Grid container xs={12} sm={12} md={12} lg={12}>
-              <form noValidate autoComplete="off" style={{ width: '100%' }}>
-                <Grid xs={12} sm={12} md={12} lg={12}>
-                  <Paper className={classes.modalPaper}>
-                    {/* HEADER */}
-                    <Grid container justify="space-between">
-                      <Grid item>
-                        <Typography
-                          variant="h5"
-                          className={classes.grey}
-                          style={{ marginBottom: '1rem', fontWeight: 'bold' }}
-                        >
-                          Create Your Order
+              <Grid container xs={12} sm={12} md={12} lg={12}>
+                <form noValidate autoComplete="off" style={{ width: '100%' }}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <Paper className={classes.modalPaper}>
+                      {/* HEADER */}
+                      <Grid container justify="space-between">
+                        <Grid item>
+                          <Typography
+                            variant="h5"
+                            className={classes.grey}
+                            style={{ marginBottom: '1rem', fontWeight: 'bold' }}
+                          >
+                            Create Your Order
                         </Typography>
+                        </Grid>
+                        <Grid item>
+                          <Typography
+                            variant="h5"
+                            onClick={() =>
+                              setTradeData({
+                                price: '',
+                                amount: '',
+                                direction: 'sell',
+                                cost: 0,
+                                open: false,
+                              })
+                            }
+                            className={classes.grey}
+                            style={{ fontWeight: 'bold', fontSize: '1.5rem' }}
+                          >
+                            <CancelIcon color="black" fontSize="medium" />
+                          </Typography>
+                        </Grid>
                       </Grid>
-                      <Grid item>
-                        <Typography
-                          variant="h5"
-                          onClick={() =>
-                            setTradeData({
-                              price: '',
-                              amount: '',
-                              direction: 'sell',
-                              cost: 0,
-                              open: false,
-                            })
-                          }
-                          className={classes.grey}
-                          style={{ fontWeight: 'bold', fontSize: '1.5rem' }}
+
+                      <Typography variant="h6" className={classes.grey}>
+                        You'll {_.startCase(_.toLower(tradeData?.type))}
+                      </Typography>
+
+                      <Grid container xs={12} sm={12} md={12} lg={12} className={classes.input}>
+                        <Grid
+                          item
+                          xs={6}
+                          sm={6}
+                          md={6}
+                          lg={6}
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            fontSize: '.8rem',
+                            fontWeight: '50',
+                          }}
                         >
-                          <CancelIcon color="black" fontSize="medium" />
-                        </Typography>
-                      </Grid>
-                    </Grid>
-
-                    <Typography variant="h6" className={classes.grey}>
-                      You'll {_.startCase(_.toLower(tradeData?.type))}
-                    </Typography>
-
-                    <Grid container xs={12} sm={12} md={12} lg={12} className={classes.input}>
-                      <Grid
-                        item
-                        xs={6}
-                        sm={6}
-                        md={6}
-                        lg={6}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          fontSize: '.8rem',
-                          fontWeight: '50',
-                        }}
-                      >
-                        {tradeData?.type === 'sell' && (
+                          {tradeData?.type === 'sell' && (
+                            <FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
+                              <Input
+                                className="trade-input-amount"
+                                id="input-with-icon-adornment"
+                                placeholder="Percent"
+                                variant="outlined"
+                                disableUnderline
+                                startAdornment={<InputAdornment position="start">%</InputAdornment>}
+                                onChange={handleInputChange}
+                                name="percent"
+                                value={tradeData.percent}
+                              />
+                            </FormControl>
+                          )}
                           <FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
                             <Input
                               className="trade-input-amount"
                               id="input-with-icon-adornment"
-                              placeholder="Percent"
+                              placeholder="Dollar"
                               variant="outlined"
                               disableUnderline
-                              startAdornment={<InputAdornment position="start">%</InputAdornment>}
+                              startAdornment={<InputAdornment position="start">$</InputAdornment>}
                               onChange={handleInputChange}
-                              name="percent"
-                              value={tradeData.percent}
+                              name="amount"
+                              value={tradeData?.amount}
                             />
                           </FormControl>
-                        )}
-                        <FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
-                          <Input
-                            className="trade-input-amount"
-                            id="input-with-icon-adornment"
-                            placeholder="Dollar"
-                            variant="outlined"
-                            disableUnderline
-                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                            onChange={handleInputChange}
-                            name="amount"
-                            value={tradeData?.amount}
-                          />
-                        </FormControl>
-                      </Grid>
+                        </Grid>
 
-                      <Grid
-                        item
-                        xs={6}
-                        sm={6}
-                        md={6}
-                        lg={6}
-                        className={classes.grey}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          fontSize: '1rem',
-                          fontWeight: '50',
-                        }}
-                      >
-                        <div
-                          onClick={() =>
-                            setTradeData({
-                              amount: parseInt(tradeData.investment.amount).toFixed(2),
-                              percent: parseInt('100').toFixed(2),
-                            })
-                          }
-                          className="max-btn"
+                        <Grid
+                          item
+                          xs={6}
+                          sm={6}
+                          md={6}
+                          lg={6}
+                          className={classes.grey}
                           style={{
-                            backgroundColor: '#C8DCFF',
-                            borderRadius: '1rem',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
                             fontSize: '1rem',
-                            paddingLeft: '1rem',
-                            paddingRight: '1rem',
+                            fontWeight: '50',
                           }}
                         >
-                          MAX
+                          <div
+                            onClick={() =>
+                              setTradeData({
+                                amount: parseInt(tradeData.investment.amount).toFixed(2),
+                                percent: parseInt('100').toFixed(2),
+                              })
+                            }
+                            className="max-btn"
+                            style={{
+                              backgroundColor: '#C8DCFF',
+                              borderRadius: '1rem',
+                              fontSize: '1rem',
+                              paddingLeft: '1rem',
+                              paddingRight: '1rem',
+                            }}
+                          >
+                            MAX
                         </div>
-                        {tradeData?.deal?.company_name || ''}
+                          {tradeData?.deal?.company_name || ''}
+                        </Grid>
                       </Grid>
-                    </Grid>
-                    <Grid
-                      container
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}
-                    >
                       <Grid
-                        item
-                        xs={6}
-                        sm={6}
-                        md={6}
-                        lg={6}
-                        className={classes.grey}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'flex-start',
-                          alignItems: 'center',
-                          fontSize: '.6rem',
-                          fontWeight: '50',
-                        }}
+                        container
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}
                       >
-                        OWNERSHIP
+                        <Grid
+                          item
+                          xs={6}
+                          sm={6}
+                          md={6}
+                          lg={6}
+                          className={classes.grey}
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            fontSize: '.6rem',
+                            fontWeight: '50',
+                          }}
+                        >
+                          OWNERSHIP
                       </Grid>
 
-                      <Grid
-                        item
-                        xs={6}
-                        sm={6}
-                        md={6}
-                        lg={6}
-                        className={classes.grey}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'flex-end',
-                          alignItems: 'center',
-                          fontSize: '.6rem',
-                          fontWeight: '50',
-                        }}
-                      >
-                        DEAL
+                        <Grid
+                          item
+                          xs={6}
+                          sm={6}
+                          md={6}
+                          lg={6}
+                          className={classes.grey}
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            alignItems: 'center',
+                            fontSize: '.6rem',
+                            fontWeight: '50',
+                          }}
+                        >
+                          DEAL
                       </Grid>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      className={classes.grey}
-                      style={{
-                        display: 'flex',
-                      }}
-                    >
-                      <ArrowDownwardIcon
-                        color="primary"
-                        fontSize="large"
-                        style={{
-                          marginTop: '0.5rem',
-                          marginBottom: '0.5rem',
-                        }}
-                      />
-                    </Grid>
-
-                    <Typography variant="h6" className={classes.grey}>
-                      You'll {tradeData.type === 'buy' ? 'Pay' : 'Receive'}
-                    </Typography>
-
-                    <Grid container xs={12} sm={12} md={12} lg={12} className={classes.input}>
-                      <Grid item xs={6} sm={6} md={6} lg={6}>
-                        <FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
-                          <Input
-                            className="trade-input-amount"
-                            id="input-with-icon-adornment"
-                            placeholder="0"
-                            variant="outlined"
-                            disableUnderline
-                            readOnly
-                            value={tradeData?.amount || 0}
-                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                          />
-                        </FormControl>
                       </Grid>
                       <Grid
                         item
-                        xs={6}
-                        sm={6}
-                        md={6}
-                        lg={6}
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={12}
                         className={classes.grey}
                         style={{
                           display: 'flex',
-                          justifyContent: 'flex-end',
-                          alignItems: 'center',
-                          fontSize: '1rem',
-                          fontWeight: '50',
                         }}
                       >
-                        USD ($)
-                      </Grid>
-                    </Grid>
-                    <Grid
-                      container
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}
-                    >
-                      <Grid
-                        item
-                        xs={6}
-                        sm={6}
-                        md={6}
-                        lg={6}
-                        className={classes.grey}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'flex-start',
-                          alignItems: 'center',
-                          fontSize: '.6rem',
-                          fontWeight: '50',
-                        }}
-                      >
-                        AMOUNT
+                        <ArrowDownwardIcon
+                          color="primary"
+                          fontSize="large"
+                          style={{
+                            marginTop: '0.5rem',
+                            marginBottom: '0.5rem',
+                          }}
+                        />
                       </Grid>
 
-                      <Grid
-                        item
-                        xs={6}
-                        sm={6}
-                        md={6}
-                        lg={6}
-                        className={classes.grey}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'flex-end',
-                          alignItems: 'center',
-                          fontSize: '.6rem',
-                          fontWeight: '50',
-                        }}
-                      >
-                        CURRENCY
-                      </Grid>
-                    </Grid>
+                      <Typography variant="h6" className={classes.grey}>
+                        You'll {tradeData.type === 'buy' ? 'Pay' : 'Receive'}
+                      </Typography>
 
-                    <Grid justify="center">
-                      <Button
-                        variant="contained"
-                        onClick={() => setConfirmation(true)}
-                        color="secondary"
-                        style={{
-                          width: '100%',
-                          marginTop: '1rem',
-                          paddingTop: '0.5rem',
-                          paddingBottom: '0.5rem',
-                          fontSize: '1rem',
-                        }}
+                      <Grid container xs={12} sm={12} md={12} lg={12} className={classes.input}>
+                        <Grid item xs={6} sm={6} md={6} lg={6}>
+                          <FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
+                            <Input
+                              className="trade-input-amount"
+                              id="input-with-icon-adornment"
+                              placeholder="0"
+                              variant="outlined"
+                              disableUnderline
+                              readOnly
+                              value={tradeData?.amount || 0}
+                              startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                            />
+                          </FormControl>
+                        </Grid>
+                        <Grid
+                          item
+                          xs={6}
+                          sm={6}
+                          md={6}
+                          lg={6}
+                          className={classes.grey}
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            alignItems: 'center',
+                            fontSize: '1rem',
+                            fontWeight: '50',
+                          }}
+                        >
+                          USD ($)
+                      </Grid>
+                      </Grid>
+                      <Grid
+                        container
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}
                       >
-                        Create Order
+                        <Grid
+                          item
+                          xs={6}
+                          sm={6}
+                          md={6}
+                          lg={6}
+                          className={classes.grey}
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            fontSize: '.6rem',
+                            fontWeight: '50',
+                          }}
+                        >
+                          AMOUNT
+                      </Grid>
+
+                        <Grid
+                          item
+                          xs={6}
+                          sm={6}
+                          md={6}
+                          lg={6}
+                          className={classes.grey}
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            alignItems: 'center',
+                            fontSize: '.6rem',
+                            fontWeight: '50',
+                          }}
+                        >
+                          CURRENCY
+                      </Grid>
+                      </Grid>
+
+                      <Grid justify="center">
+                        <Button
+                          variant="contained"
+                          onClick={() => setConfirmation(true)}
+                          color="secondary"
+                          style={{
+                            width: '100%',
+                            marginTop: '1rem',
+                            paddingTop: '0.5rem',
+                            paddingBottom: '0.5rem',
+                            fontSize: '1rem',
+                          }}
+                        >
+                          Create Order
                       </Button>
-                    </Grid>
-                  </Paper>
-                </Grid>
-              </form>
-            </Grid>
-          )}
+                      </Grid>
+                    </Paper>
+                  </Grid>
+                </form>
+              </Grid>
+            )}
         </Grid>
       </Modal>
       <Modal
@@ -1243,7 +1243,7 @@ function InvestmentStatus({ investment }) {
 }
 
 function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin, setShowResignModal }) {
-  const isClosed = moment(investment?.deal?.dealParams?.signDeadline).isBefore(new Date());
+  const isClosed = investment?.deal?.status === 'closed';
 
   return (
     <>
@@ -1314,7 +1314,7 @@ const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal }) =>
 
   return (
     <>
-      <Modal open={editInvestmentModal._id} onClose={() => {}} className={classes.modal}>
+      <Modal open={editInvestmentModal._id} onClose={() => { }} className={classes.modal}>
         <Grid container xs={12} sm={12} md={4} lg={5}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Paper className={classes.modalPaper}>
