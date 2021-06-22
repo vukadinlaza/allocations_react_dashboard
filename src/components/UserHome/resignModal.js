@@ -54,6 +54,7 @@ const GET_INVESTMENT = gql`
         fullName
         investor_type
         accredited_investor_status
+        title
       }
       deal {
         _id
@@ -97,7 +98,7 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
   });
   const [amount, setAmount] = useState('');
 
-  const [submitConfirmation, {}] = useMutation(CONFIRM_INVESTMENT, {
+  const [submitConfirmation, { }] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       setTimeout(() => {
         refetch();
@@ -125,6 +126,7 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
         ...data?.investment?.submissionData,
         country_search: data?.investment?.submissionData.country,
         state_search: data?.investment?.submissionData.state,
+        title: data?.investment?.submissionData.title || ''
       });
       setAmount(data?.investment?.amount);
     }
@@ -180,7 +182,7 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
     <>
       <Modal
         open={showResignModal}
-        onClose={() => {}}
+        onClose={() => { }}
         className={classes.modal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"

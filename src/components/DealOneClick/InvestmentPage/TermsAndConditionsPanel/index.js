@@ -3,7 +3,7 @@ import { Box, Checkbox, Typography, Button } from '@material-ui/core';
 import React from 'react';
 import './styles.scss';
 
-function TermsAndConditionsPanel({ deal: { documents, signDeadline }, checkedTAT, setCheckedTAT, confirmInvestment }) {
+function TermsAndConditionsPanel({ deal: { documents, signDeadline, status}, checkedTAT, setCheckedTAT, confirmInvestment }) {
   const doc = (documents || []).find((d) => {
     return d.path.includes('Agreement');
   });
@@ -16,7 +16,7 @@ function TermsAndConditionsPanel({ deal: { documents, signDeadline }, checkedTAT
     'Private Fund Documents (Operating Agreement, Private Placement Memorandum and Subscription Agreement'
   );
 
-  const isClosed = moment(signDeadline).add(2, 'days').isBefore(new Date());
+  const isClosed = status === 'closed';
 
   return (
     <section className="TermsAndConditions">
