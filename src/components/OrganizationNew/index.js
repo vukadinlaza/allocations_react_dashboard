@@ -86,52 +86,6 @@ export default function OrganizationNew() {
   );
 }
 
-function LogoUploadAlt({ organization, setOrg }) {
-  const [zoom, setZoom] = useState(0);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-
-  const onCropComplete = (_croppedArea, _croppedAreaPixels) => {
-    setCroppedAreaPixels(_croppedAreaPixels);
-  };
-
-  if (organization.logoSrc) {
-    return (
-      <Col md={{ size: 8, offset: 1 }}>
-        <span className="file-label">Logo &nbsp;&nbsp;</span>
-        <div style={{ height: '360px', width: '100%', border: '1px dotted red', position: 'relative' }}>
-          <Cropper
-            image={organization.logoSrc}
-            crop={crop}
-            aspect={3}
-            onCropChange={setCrop}
-            onCropComplete={onCropComplete}
-            onZoomChange={setZoom}
-          />
-        </div>
-      </Col>
-    );
-  }
-
-  return (
-    <Col md={{ size: 4, offset: 1 }}>
-      <span className="file-label">Logo (3:1 width to height) &nbsp;&nbsp;</span>
-      <Button variant="contained" component="label">
-        Upload&nbsp;&nbsp;
-        <input
-          type="file"
-          style={{ display: 'none' }}
-          onChange={async ({ target }) => {
-            if (target.validity.valid) {
-              setOrg({ logo: target.files[0], logoSrc: await readFile(target.files[0]) });
-            }
-          }}
-        />
-      </Button>
-    </Col>
-  );
-}
-
 function readFile(file) {
   return new Promise((resolve) => {
     const reader = new FileReader();

@@ -4,12 +4,9 @@ import { useParams, Link, useHistory } from 'react-router-dom';
 import { gql } from 'apollo-boost';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as d3 from 'd3';
-
 import { Grid, Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import * as Chart from '../../utils/chart';
 import Loader from '../utils/Loader';
 import { nWithCommas, formatDate } from '../../utils/numbers';
 import { useAuth } from '../../auth/useAuth';

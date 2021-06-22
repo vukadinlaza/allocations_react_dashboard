@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { get } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CloudDone, HourglassEmpty, CheckCircle } from '@material-ui/icons';
+import { CloudDone } from '@material-ui/icons';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { UsaStates } from 'usa-states';
 import {
   Button,
-  List,
   TextField,
   Paper,
   Grid,

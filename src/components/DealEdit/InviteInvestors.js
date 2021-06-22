@@ -72,7 +72,7 @@ const SEND_INVITE = gql`
 function SendEmailInvites({ deal, refetch }) {
   const { organization } = useParams();
   const [email, setEmail] = useState('');
-  const [sendInvite, { data, error }] = useMutation(SEND_INVITE, { onCompleted: refetch });
+  const [sendInvite, { error }] = useMutation(SEND_INVITE, { onCompleted: refetch });
 
   const submit = () => {
     if (/^.+@.+\..+$/.test(email)) {
@@ -165,7 +165,7 @@ function InvitedInvestors({ deal, refetch }) {
 
 function InvitedInvestor({ investor, deal, refetch }) {
   const { organization } = useParams();
-  const [sendInvite, { data, error }] = useMutation(SEND_INVITE, {
+  const [sendInvite] = useMutation(SEND_INVITE, {
     variables: { org: organization, deal_id: deal._id, email: investor.email },
     onCompleted: refetch,
   });

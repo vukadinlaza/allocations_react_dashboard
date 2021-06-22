@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { gql } from 'apollo-boost';
 import { Row, Col } from 'reactstrap';
 import moment from 'moment';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
 import { useQuery, useMutation } from '@apollo/react-hooks';
@@ -11,7 +11,6 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import {
   Paper,
-  LinearProgress,
   Table,
   TableBody,
   TableCell,
