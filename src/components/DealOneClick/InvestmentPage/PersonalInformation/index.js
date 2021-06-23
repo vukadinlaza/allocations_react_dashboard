@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { get } from 'lodash';
-import { TextField, FormControl, InputLabel, Select, MenuItem, Checkbox } from '@material-ui/core';
+import { TextField, FormControl, InputLabel, Select, MenuItem, Checkbox, Typography } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import countries from 'country-region-data';
 import { UsaStates } from 'usa-states';
@@ -15,9 +15,8 @@ const stateNames = usStates.states.map((s) => s.name);
 function PersonalInformation({ investor, setInvestor, errors, org }) {
 
   const [mailingDifferent, toggleMailingDifferent] = useState(false);
-  const [entityDesignation, setEntityDesignation] = useState('sole_member');
+  const [entityDesignation, setEntityDesignation] = useState('');
   const [individualDesignation, setIndividualDesignation] = useState('');
-
   const handleChange = (prop) => (e, newValue) => {
     if (e) {
       e.persist();
@@ -150,8 +149,8 @@ function PersonalInformation({ investor, setInvestor, errors, org }) {
         </FormControl>
       )}
       {/* Accreditation status */}
-      <AccreditedInvestorStatus investor={investor} handleChange={handleChange} errors={errors} />
-
+      {org !== 'irishangels' && <AccreditedInvestorStatus investor={investor} handleChange={handleChange} errors={errors} />
+      }
 
       {investor.investor_type && investor.investor_type !== 'individual' && org !== 'irishangels' && (
         <>
@@ -176,6 +175,23 @@ function PersonalInformation({ investor, setInvestor, errors, org }) {
 
       {/* Custom ENTITY fields for Irish Angels deals */}
 
+      {org === 'irishangels' && (
+        <>
+          <Typography variant="subtitle2" style={{ marginBottom: '-.5rem', paddingLeft: '1rem', paddingRight: '1rem' }}>
+            Please initial below to certify that you are still an Accredited Investor, per SEC criteria, as detailed in
+            Exhibit D of the IrishAngels Membership Agreement previously executed by you.
+        </Typography>
+          <TextField
+            className="personal-information-input"
+            variant="outlined"
+            placeholder="Initials"
+            error={errors.includes('initials')}
+            value={get(investor, 'initials') || ''}
+            onChange={handleChange('initials')}
+            label="Please initial here"
+          />
+        </>
+      )}
       {investor.investor_type && investor.investor_type === 'entity' && org === 'irishangels' && (
         <>
           <TextField
@@ -230,15 +246,6 @@ function PersonalInformation({ investor, setInvestor, errors, org }) {
             value={get(investor, 'title') || ''}
             onChange={handleChange('title')}
           />
-
-          <TextField
-            className="personal-information-input"
-            variant="outlined"
-            placeholder="Initials"
-            error={errors.includes('initials')}
-            value={get(investor, 'initials') || ''}
-            onChange={handleChange('initials')}
-          />
         </>
       )}
 
@@ -280,7 +287,7 @@ function PersonalInformation({ investor, setInvestor, errors, org }) {
         </>
       )}
 
-      { org === 'irishangels' && (
+      {org === 'irishangels' && (
         <FormControl
           required
           error={errors.includes('investor_type')}
