@@ -133,8 +133,11 @@ const ADD_USER_AS_VIEWED = gql`
 `;
 
 // if individual remove signfull name
-const validate = (investor) => {
-  const required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
+const validate = (investor, org) => {
+  let required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
+  if (org === 'irishangels') {
+    required = required.filter(d => d !== 'accredited_investor_status')
+  }
   if (investor.country && investor.country === 'United States') {
     required.push('state');
   }
@@ -144,7 +147,7 @@ const validate = (investor) => {
   return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
 };
 
-function InvestmentPage({}) {
+function InvestmentPage({ }) {
   const history = useHistory();
   const { organization: org, deal_slug } = useParams();
   const [addUserAsViewed, { called }] = useMutation(ADD_USER_AS_VIEWED);
@@ -191,7 +194,7 @@ function InvestmentPage({}) {
     setPopulated(true);
   };
 
-  const [submitConfirmation, {}] = useMutation(CONFIRM_INVESTMENT, {
+  const [submitConfirmation, { }] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       refetch();
       toast.success('Investment created successfully.');
@@ -202,7 +205,8 @@ function InvestmentPage({}) {
   const [getInvestmentPreview, { data: previewData, loading: loadingPreview }] = useMutation(GET_PREVIEW);
 
   const confirmInvestment = () => {
-    const validation = validate(investorFormData);
+    const validation = validate(investorFormData, organization);
+    console.log('validation', validation)
     setErrors(validation);
 
     if (validation.length > 0) {
