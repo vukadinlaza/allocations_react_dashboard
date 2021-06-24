@@ -309,6 +309,7 @@ const FundManagerDashboard = ({ classes }) => {
   const { width } = useViewport();
   const { organization: orgSlug, deal: dealSlug } = useParams();
   const [tabIndex, setTabIndex] = useState(0)
+  console.log({orgSlug, dealSlug});
 
   const [dealName, setDealName] = useState('')
   const [atDealData, setAtDealData] = useState({})
