@@ -229,7 +229,9 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
 							formatter: function(value, ctx, els) {
 								const chartId = ctx.chart?.id
 								const total = ctx.dataset?._meta[chartId]?.total;
-								return Math.round((value * 100) / total) + '%';
+								const percentage = Math.round((value * 100) / total)
+								if(percentage >= 5) return percentage + '%';
+								return ''
 							},
 						}
 					},

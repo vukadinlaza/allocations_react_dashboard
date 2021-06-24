@@ -189,7 +189,9 @@ const ServerTable = ({ classes, tableVariables, getCellContent, handleRowDetailP
     setSortOrder(order)
   }
 
-  if (!data) return <Loader />;
+  if (!data) return <div className={classes.loaderContainer} style={{padding: "30px", height: "300px"}}>
+                      <Loader/>
+                    </div>;
 
   return (
     <div className={classes.root}>

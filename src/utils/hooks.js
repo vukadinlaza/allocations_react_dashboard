@@ -21,13 +21,16 @@ export function useToggle(init) {
   return useReducer((prev) => !prev, init);
 }
 
-export const useFetch = (base, tableName) => {
+export const useFetch = (base, tableName, filter) => {
   const [status, setStatus] = useState('idle');
   const [data, setData] = useState([]);
+
   useEffect(() => {
     if (!base || !tableName) return;
 
-    const url = `https://api.airtable.com/v0/${base}/${tableName}?api_key=${process.env.REACT_APP_AIRTABLE_API_KEY}`;
+    let url = `https://api.airtable.com/v0/${base}/${tableName}?api_key=${process.env.REACT_APP_AIRTABLE_API_KEY}`;
+    if(filter) url += `&filterByFormula=${filter}`
+
     const fetchData = async () => {
       setStatus('fetching');
       const response = await fetch(url);
@@ -37,8 +40,11 @@ export const useFetch = (base, tableName) => {
     };
 
     fetchData();
-  }, [base, tableName]);
+  }, [base, tableName, filter]);
 
+  //Differentiate an Airtable reponse with no results, from an invalid query
+  if(!base || !tableName) return { status, data: null }
+  
   return { status, data };
 };
 

@@ -1,59 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import moment from 'moment';
-import _, { toLower, groupBy } from 'lodash';
+import _, { toLower } from 'lodash';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import EditIcon from '@material-ui/icons/Edit';
+// import EditIcon from '@material-ui/icons/Edit';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
-import ActivityLog from './sections/ActivityLog';
+// import ActivityLog from './sections/ActivityLog';
 import Investments from './sections/Investments';
 import { FlatBox } from './widgets';
-import { nWithCommas } from '../../../utils/numbers';
 import { phone, tablet } from '../../../utils/helpers';
-import { useFetch, useViewport } from '../../../utils/hooks';
-
-
-export const ORG_OVERVIEW = gql`
-  query GetOrg($slug: String!, $status: String) {
-    organization(slug: $slug) {
-      _id
-      name
-      slug
-      deals(status: $status) {
-        _id
-        raised
-        appLink
-        status
-        date_closed
-        dealParams {
-          wireDeadline
-          dealMultiple
-        }
-        company_name
-        company_description
-        target
-        investments {
-          amount
-          investor {
-            investingAs
-          }
-        }
-      }
-    }
-    investor {
-      _id
-      admin
-      documents
-    }
-  }
-`;
+import { useViewport } from '../../../utils/hooks';
+import { useFetch } from '../../../utils/hooks';
+import Loader from '../../utils/Loader';
 
 
 const styles = theme => ({
@@ -123,6 +87,19 @@ const styles = theme => ({
     "& svg": {
       fontSize: "10px",
     }
+  },
+  loaderContainer: {
+    position:"absolute",
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    top: 0,
+    left: 0,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    paddingTop: "250px",
+    zIndex: "10"
   },
   logType: {
     width: "fit-content",
@@ -269,38 +246,85 @@ const styles = theme => ({
   tabWrapper: {
     padding: "0 10px",
   },
+  titleDataText: {
+    margin: "0",
+    fontSize: "14px",
+    color: "#39C522",
+    fontWeight: "bold"
+  }
 });
 
 
-const dashboardTabs = ["Setup", "Highlights", "Investments", "Investor Onboarding Status", "Activity Log", "Deal Page"]
+export const GET_DEAL = gql`
+  query GetDeal($fund_slug: String, $deal_slug: String) {
+    deal(fund_slug: $fund_slug, deal_slug: $deal_slug) {
+      _id
+      company_name
+      company_description
+      organization {
+        name
+      }
+      dealParams {
+        dealMultiple
+      }
+    }
+  }
+`;
+
+
+const dashboardTabs = [
+  "Setup",
+  "Highlights",
+  "Investments",
+  "Investor Onboarding Status",
+  // "Activity Log",
+  "Deal Page"
+]
+
+
+
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
+const DEALS_TABLE = 'Deals';
 
 
 const FundManagerDashboard = ({ classes }) => {
 
   const { width } = useViewport();
-  const { data: atFundData } = useFetch(OPS_ACCOUNTING, INVESTMENTS_TABLE);
-  const { organization: orgSlug } = useParams();
-  const { data: orgOverview, refetch } = useQuery(ORG_OVERVIEW, {
-    variables: { slug: orgSlug, status: 'active' },
-  });
+  const { organization: orgSlug, deal: dealSlug } = useParams();
   const [tabIndex, setTabIndex] = useState(0)
 
-  let slug = orgSlug;
-  const isDemo = orgSlug === 'demo-fund';
+  const [dealName, setDealName] = useState('')
+  const [atDealData, setAtDealData] = useState({})
+  const { data: dealData } = useQuery(GET_DEAL, {
+    variables: { fund_slug: orgSlug, deal_slug: dealSlug },
+    fetchPolicy: "network-only"
+  });
+  const { data: atDeal } = useFetch(OPS_ACCOUNTING, dealName && DEALS_TABLE, dealName && `({Deal Name}="${dealName}")`);
+  const { data: atFundData, status } = useFetch(OPS_ACCOUNTING, atDealData?.name && INVESTMENTS_TABLE, atDealData?.name && `(FIND("${atDealData.name}", {Deals}))`);
 
-  if (orgSlug === 'demo-fund') {
-    slug = 'browder-capital';
-  }
 
-  const fundData = atFundData
-                      .map((d) => d.fields)
-                      .filter((inv) => {
-                        return toLower(inv.Organization).includes(slug.replace('-', ' '));
-                      });
+  useEffect(() => {
+    if(dealData){
+      const dealName = dealData?.deal?.company_name;
+      setDealName(dealName)
+    }
+  }, [dealData])
 
-  const orgData = orgOverview?.organization;
+  useEffect(() => {
+
+    if(atDeal && atDeal.length){
+      let data = atDeal[0].fields;
+      setAtDealData({name: data['Deal Name'], id: atDeal[0].id})
+    }else if(atDeal){
+      setAtDealData({name: 'Deal Name Not found in AirTable', id: ''})
+    }
+  }, [atDeal])
+
+
+  if(!dealData || !atFundData) return <Loader/>
+
+  const fundData = atFundData.map((d) => d.fields)
 
 
   const buttonAction = () => {
@@ -323,9 +347,10 @@ const FundManagerDashboard = ({ classes }) => {
         return(
           <Highlights
             classes={classes}
+            orgSlug={orgSlug}
+            dealSlug={dealSlug}
             data={fundData}
-            orgData={orgData}
-            isDemo={isDemo}
+            dealData={dealData}
             />
         )
       case 2:
@@ -333,6 +358,8 @@ const FundManagerDashboard = ({ classes }) => {
           <Investments
             classes={classes}
             width={width}
+            data={fundData}
+            dealId={dealData?.deal?.company_description}
             />
         )
       case 3:
@@ -343,12 +370,11 @@ const FundManagerDashboard = ({ classes }) => {
             />
         )
       case 4:
-        return(
-          <ActivityLog
-            classes={classes}
-            />
-        )
-      case 5:
+        // return(
+        //   <ActivityLog
+        //     classes={classes}
+        //     />
+        // )
         return(
           <div className={classes.section}>
             <FlatBox title="SHARE" info="Explanation">
@@ -364,6 +390,8 @@ const FundManagerDashboard = ({ classes }) => {
         <p>No Data</p>
     }
   }
+
+  if(status === "fetching") return <Loader/>
 
   return (
     <div className={classes.dashboardContainer}>

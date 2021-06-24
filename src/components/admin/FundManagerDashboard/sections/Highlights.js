@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import _, { isNumber } from 'lodash';
+import { gql } from 'apollo-boost';
+import { useQuery } from '@apollo/react-hooks';
+import _, { toLower } from 'lodash';
 import moment from 'moment'
 import { Typography } from '@material-ui/core';
 import {
@@ -9,6 +11,7 @@ import {
 } from '../../../utils/charts';
 import { SimpleBox, ChartBox } from '../widgets'
 import { nWithCommas } from '../../../../utils/numbers';
+import { useFetch } from '../../../../utils/hooks';
 import { nestedSort } from '../../../../utils/helpers';
 import Loader from '../../../utils/Loader';
 import 'chartjs-plugin-datalabels';
@@ -33,28 +36,19 @@ export function formatDoughnutSeries(series) {
   })
 }
 
-const Highlights = ({ classes, data, orgData, isDemo }) => {
 
-  const [multipleAvg, setMultipleAvg] = useState(1);
+const Highlights = ({ classes, orgSlug, dealSlug, data, dealData }) => {
 
-  useEffect(() => {
-    if(orgData) getMultipleAvg()
-  }, [orgData])
+  //
+  //
+  // let organiztionSlug = orgSlug;
+  // if (orgSlug === 'demo-fund') {
+  //   organiztionSlug = 'browder-capital';
+  // }
 
-  const getMultipleAvg = () => {
-    if(isDemo){
-      setMultipleAvg(3);
-    }else{
-      const dealsMultiples = orgData?.deals.map(deal => _.toNumber(deal?.dealParams?.dealMultiple || 1))
-      const multiplesSum = _.sum(dealsMultiples);
-      const dealsLength = (dealsMultiples.length === 0 ? 1 : dealsMultiples.length)
-      const multipleAvg = multiplesSum/dealsLength;
 
-      setMultipleAvg(multipleAvg);
-    }
-  }
+  //Charts methods
 
-  if(!orgData) return <Loader/>
 
   const setMonthsToShow = (data) => {
     let monthsArray = [];
@@ -67,6 +61,7 @@ const Highlights = ({ classes, data, orgData, isDemo }) => {
 
     return monthsArray
   }
+
 
   const setLabelsAndData = (data, monthsArray) => {
     let labels = [];
@@ -92,6 +87,7 @@ const Highlights = ({ classes, data, orgData, isDemo }) => {
     return { labels, chartData }
   }
 
+
   const getSteppedChartData = () => {
     const monthsArray = setMonthsToShow(data)
     const { labels, chartData } = setLabelsAndData(data, monthsArray)
@@ -105,25 +101,35 @@ const Highlights = ({ classes, data, orgData, isDemo }) => {
     return steppedChartData;
   }
 
+
+  if(!data) return <Loader/>
+
+
   let series = data.map(s => { return {label: s['Investment'], total: s['Invested'] } }).sort((a, b) => nestedSort(a, b, 'total', 'desc'))
-  let seriesTotal = series.map(s => s.total).reduce((acc, n) => acc + n)
+  let seriesTotal = series.length? series.map(s => s.total).reduce((acc, n) => acc + n) : 0
   let steppedChartData = getSteppedChartData()
+  let dealMultiple = _.toNumber(dealData?.deal?.dealParams?.dealMultiple || 1)
+
 
   return (
     <div className={classes.section}>
-      {/*
-        <SimpleBox size="half" title="Committed" info="Explanation">Child</SimpleBox>
-        <SimpleBox size="half" title="Closed" info="Explanation">Child</SimpleBox>
-      */}
-      <SimpleBox size="third" title="Portfolio Value" info="Explanation">
+      {status === "fetching"?
+        <div style={{position: "absolute", width: "100%", height: "100%"}}>
+          <div className={classes.loaderContainer}>
+            <Loader/>
+          </div>
+        </div>
+        : ''
+      }
+      <SimpleBox size="third" title="Portfolio Value" info="This is the estimated value of the portfolio">
         <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
           <Typography style={{fontSize: "26px"}}>
-            ${nWithCommas((_.sumBy(data, 'Invested') * (multipleAvg === 0 ? 1 : multipleAvg)).toFixed(0))}
+            ${nWithCommas((_.sumBy(data, 'Invested') * (dealMultiple === 0 ? 1 : dealMultiple)).toFixed(0))}
           </Typography>
           <Typography style={{fontSize: "10px"}}>0% Realized | 100% Unrealized</Typography>
         </div>
       </SimpleBox>
-      <SimpleBox size="third" title="Total Invested" info="Explanation">
+      <SimpleBox size="third" title="Total Invested" info="This is the total amount invested on the platform">
         <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
           <Typography style={{fontSize: "26px"}}>
             ${nWithCommas(_.sumBy(data, 'Invested').toFixed(0))}
@@ -133,10 +139,10 @@ const Highlights = ({ classes, data, orgData, isDemo }) => {
           </Typography>
         </div>
       </SimpleBox>
-      <SimpleBox size="third" title="Multiple" info="Explanation">
+      <SimpleBox size="third" title="Multiple" info="This is the estimated multiple IRR based on estimate data inputted by the fund manager. Subject to change and not to be relied upon.">
         <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
           <Typography style={{fontSize: "26px"}}>
-            {multipleAvg.toFixed(2) || 1}x
+            {dealMultiple.toFixed(2) || 1}x
           </Typography>
           <Typography style={{fontSize: "10px"}}>Last Updated: June 1st, 2021</Typography>
         </div>

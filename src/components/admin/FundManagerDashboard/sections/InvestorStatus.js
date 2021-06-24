@@ -6,14 +6,14 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import MailIcon from '@material-ui/icons/Mail';
 import { Avatar, Typography } from '@material-ui/core';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
-import { SimpleBox } from '../widgets';
+import { ScrollableBox } from '../widgets';
 import { nWithCommas } from '../../../../utils/numbers'
 import Loader from '../../../utils/Loader'
 
 
 const GET_INVESTMENTS = gql`
-  query GetOrg($slug: String!) {
-    organization(slug: $slug) {
+  query GetDeal($fund_slug: String!, $deal_slug: String!) {
+    deal(fund_slug: $fund_slug, deal_slug: $deal_slug) {
       _id
       investments {
         _id
@@ -52,19 +52,19 @@ const InvestorBox = ({classes, investor, index}) => {
 
 const InvestorStatus = ({ classes, buttonAction }) => {
 
-  const { organization } = useParams();
+  const { deal: dealSlug, organization: orgSlug } = useParams();
   const [getInvestments, { data, error }] = useLazyQuery(GET_INVESTMENTS);
 
   useEffect(() => {
-    getInvestments({ variables: { slug: organization } });
+    getInvestments({ variables: { deal_slug: dealSlug, fund_slug: orgSlug } });
   }, []);
 
-  if(!data?.organization?.investments){
+  if(!data?.deal?.investments){
     return <Loader/>
   }
 
 
-  const { investments } = data.organization;
+  const { investments } = data.deal;
   const investors = investments.map(inv => {
     const firstName = _.get(inv, 'investor.first_name', '');
     const n = _.get(inv, 'investor.name', '');
@@ -85,42 +85,42 @@ const InvestorStatus = ({ classes, buttonAction }) => {
     return { investors: columnInvestors, total}
   }
 
-  const { investors: viewedInvestors, total: viewedTotal } = getColumnData('viewed');
+  const { investors: viewedInvestors, total: viewedTotal } = getColumnData('invited');
   const { investors: signedInvestors, total: signedTotal } = getColumnData('signed');
   const { investors: wiredInvestors, total: wiredTotal } = getColumnData('wired');
 
 
   return (
     <div className={classes.section}>
-      <SimpleBox
+      <ScrollableBox
         title="VIEWED"
-        titleData={<p style={{fontSize: "14px", color: "#39C522", fontWeight: "bold"}}>${nWithCommas(viewedTotal)}</p>}
+        titleData={<p className={classes.titleDataText}>${nWithCommas(viewedTotal)}</p>}
         autoHeight={true}
         fontSize="small"
         size="third"
-        buttonText={<div><MailIcon style={{color: "white", marginRight: "0.5em"}}/>Send Reminder</div>}
+        buttonText={true? '' : <div><MailIcon style={{color: "white", marginRight: "0.5em"}}/>Send Reminder</div>}
         buttonAction={buttonAction}
         >
         {viewedInvestors.map((investor, index) =>
           <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`} />
         )}
-      </SimpleBox>
-      <SimpleBox
+      </ScrollableBox>
+      <ScrollableBox
         title="SIGNED"
-        titleData={<p style={{fontSize: "14px", color: "#39C522", fontWeight: "bold"}}>${nWithCommas(signedTotal)}</p>}
+        titleData={<p className={classes.titleDataText}>${nWithCommas(signedTotal)}</p>}
         autoHeight={true}
         fontSize="small"
         size="third"
-        buttonText={<div><MailIcon style={{color: "white", marginRight: "0.5em"}}/>Send Reminder</div>}
+        buttonText={true? '' : <div><MailIcon style={{color: "white", marginRight: "0.5em"}}/>Send Reminder</div>}
         buttonAction={buttonAction}
         >
         {signedInvestors.filter(investor => investor.status === 'signed').map((investor, index) =>
           <InvestorBox investor={investor} classes={classes} index={index} />
         )}
-      </SimpleBox>
-      <SimpleBox
+      </ScrollableBox>
+      <ScrollableBox
         title="WIRED"
-        titleData={<p style={{fontSize: "14px", color: "#39C522", fontWeight: "bold"}}>${nWithCommas(wiredTotal)}</p>}
+        titleData={<p className={classes.titleDataText}>${nWithCommas(wiredTotal)}</p>}
         autoHeight={true}
         fontSize="small"
         size="third"
@@ -128,7 +128,7 @@ const InvestorStatus = ({ classes, buttonAction }) => {
         {wiredInvestors.filter(investor => investor.status === 'wired').map((investor, index) =>
           <InvestorBox investor={investor} classes={classes} index={index} />
         )}
-      </SimpleBox>
+      </ScrollableBox>
     </div>
   );
 }

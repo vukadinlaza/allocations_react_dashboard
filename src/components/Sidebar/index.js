@@ -27,7 +27,9 @@ import AccountBalanceRoundedIcon from '@material-ui/icons/AccountBalanceRounded'
 import CreditCardRoundedIcon from '@material-ui/icons/CreditCardRounded';
 import { useAuth } from '../../auth/useAuth';
 import NavBar from '../NavBar';
+import NewNavBar from '../NewNavBar';
 import { phone } from '../../utils/helpers'
+import Loader from '../utils/Loader'
 import './style.scss';
 
 
@@ -856,6 +858,8 @@ export default function Sidebar(props) {
   const [investTab, setInvestTab] = useState(false);
   const [creditTab, setCreditTab] = useState(false);
   const [buildTab, setBuildTab] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const pathMatch = useRouteMatch('/admin/:organization');
   const location = useLocation();
   const { window } = props;
   const classes = useStyles();
@@ -975,6 +979,13 @@ export default function Sidebar(props) {
 
   const container = window !== undefined ? () => window().document.body : undefined;
   const onboarding = location.pathname === '/get-started';
+
+  let atFMDashboard = false;
+  if(pathMatch){
+    let organization = pathMatch.params.organization;
+    atFMDashboard = (pathMatch.path === '/admin/:organization' || pathMatch.path === '/admin/:organization/:deal') && (organization !== 'funds');
+  }
+
   return (
     <>
       <div className={classes.root}>
@@ -995,7 +1006,11 @@ export default function Sidebar(props) {
                 <div className={classes.brand}>
                   <Brand organizations_admin={userProfile.organizations_admin || []} admin={userProfile.admin} />
                 </div>
-                <NavBar />
+                {atFMDashboard?
+                  <NewNavBar setLoading={setLoading}/>
+                  :
+                  <NavBar />
+                }
               </Toolbar>
             </AppBar>
             <div className={classes.contentContainer} style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start"}}>
@@ -1030,7 +1045,11 @@ export default function Sidebar(props) {
                 </Hidden>
               </nav>
               <main className={classes.content} style={{ background: 'rgba(0,0,0,0.01)' }}>
-                {props.children}
+                {loading?
+                  <Loader/>
+                  :
+                  props.children
+                }
               </main>
             </div>
           </>

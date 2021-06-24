@@ -4,6 +4,7 @@ import Cohere from 'cohere-js';
 import AdminRoute from './auth/admin-route';
 import PrivateRoute from './components/PrivateRoute';
 import Faq from './components/Faq';
+import Loader from './components/utils/Loader'
 import DealOneClick from './components/DealOneClick';
 import Deals from './components/Deals';
 import Credit from './components/Credit';
@@ -133,7 +134,8 @@ const App = () => {
 
           {/** Whitelabel Routes * */}
           <PrivateRoute path="/admin/funds" component={Funds} exact />
-          <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
+          <PrivateRoute path="/admin/:organization" component={Loader} exact />
+          <PrivateRoute path="/admin/:organization/:deal" component={FundManagerDashboard} exact />
           <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
 
           <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />

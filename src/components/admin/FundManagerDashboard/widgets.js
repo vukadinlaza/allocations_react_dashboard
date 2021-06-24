@@ -89,8 +89,22 @@ const styles = theme => ({
 	listButton: {
 		backgroundColor: "#2A2B54",
 		color: "white",
-		width: "100%",
-		textTransform: "none"
+		width: "calc(100% - 32px)",
+		textTransform: "none",
+		margin: "0 16px"
+	},
+	scrollableBox: {
+		height: "635px"
+		// height: "620px"
+	},
+	scrollableBoxContent: {
+		height: "calc(100% - 71px)",
+		// height: "calc(100% - 130px)",
+	  overflowY: "scroll",
+	  // marginBottom: "10px"
+	},
+	tooltip: {
+		fontSize: "14px"
 	}
 });
 
@@ -128,7 +142,12 @@ export const SimpleBox = withStyles(styles)(({ classes,
 				<div className={classes.boxTitleText}>
 					<Typography className={classes.boxTitle} style={fontSize === "small"? {fontSize: "14px"} : {}}>{title}</Typography>
 					{info &&
-						<Tooltip title={info}>
+						<Tooltip
+							title={info}
+							classes={{
+								tooltip: classes.tooltip
+							}}
+							>
 							<InfoIcon className={classes.infoIcon}/>
 						</Tooltip>
 					}
@@ -153,7 +172,12 @@ export const ChartBox = withStyles(styles)(({ classes, title, info, children }) 
 		<div className={`${classes.box} ${classes.chartBox}`}>
 			<div className={classes.boxTitleContainer}>
 				<Typography className={classes.boxTitle}>{title}</Typography>
-				<Tooltip title={info}>
+				<Tooltip
+					title={info}
+					classes={{
+						tooltip: classes.tooltip
+					}}
+					>
 					<InfoIcon className={classes.infoIcon}/>
 				</Tooltip>
 			</div>
@@ -171,13 +195,50 @@ export const FlatBox = withStyles(styles)(({ classes, title, info, children }) =
 		<div className={classes.box} style={{width: "100%", height: "auto", minHeight: "120px"}}>
 			<div className={classes.boxTitleContainer} style={{height: "60px"}}>
 				<Typography className={classes.boxTitle} style={{fontSize: "14px"}}>{title}</Typography>
-				<Tooltip title={info}>
+				<Tooltip
+					title={info}
+					classes={{
+						tooltip: classes.tooltip
+					}}
+					>
 					<InfoIcon className={classes.infoIcon}/>
 				</Tooltip>
 			</div>
 			<div className={`${classes.boxContent} ${classes.flatBoxContent}`}>
 				{children}
 			</div>
+		</div>
+	)
+})
+
+
+
+export const ScrollableBox = withStyles(styles)(({
+	classes,
+	title,
+	size,
+	titleData,
+	fontSize,
+	buttonAction,
+	buttonText,
+	fullWidthContent,
+	children
+}) => {
+  return(
+		<div className={`${classes.box} ${classes.scrollableBox}`} style={getDimensions(size)}>
+			<div className={classes.boxTitleContainer} style={{justifyContent: "space-between"}}>
+				<div className={classes.boxTitleText}>
+					<Typography className={classes.boxTitle} style={fontSize === "small"? {fontSize: "14px"} : {}}>{title}</Typography>
+				</div>
+				<div>{titleData}</div>
+			</div>
+			<div className={`${classes.boxContent} ${classes.scrollableBoxContent}`} style={fullWidthContent? {padding: 0} : {}}>
+				{children}
+			</div>
+			{buttonText?
+				<Button variant="contained" className={classes.listButton} onClick={buttonAction}>{buttonText}</Button>
+				:''
+			}
 		</div>
 	)
 })

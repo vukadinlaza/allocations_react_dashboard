@@ -7,6 +7,7 @@ import { nWithCommas } from '../../../../utils/numbers';
 import { phone } from '../../../../utils/helpers';
 import { useAuth } from '../../../../auth/useAuth';
 import ServerTable from '../../../utils/ServerTable'
+import AllocationsTable from '../../../utils/AllocationsTable'
 import Loader from '../../../utils/Loader'
 
 
@@ -62,14 +63,21 @@ const tableVariables = {
   defaultSortField: "company_name"
 }
 
-const Investments = ({ classes, width }) => {
+const Investments = ({ classes, width, data, tagline }) => {
 
   const { organization } = useParams();
 
+
+  const headers = [
+    { value: 'Investment', label: 'NAME', align: 'left', alignHeader: true },
+    { value: 'Date', label: 'DATE', type: 'date', align: 'left', alignHeader: true },
+    { value: 'Invested', label: 'INVESTMENT', type: 'amount', align: 'right', alignHeader: true },
+  ]
+
   // add or remove tagline column depending on viewport width
-  const taglineInHeaders = tableVariables.headers.map(h => h.value).includes('company_description')
-  if(width > phone && !taglineInHeaders) tableVariables.headers.splice(1, 0, { value: 'company_description', label: 'TAGLINE', align: 'left', alignHeader: true , type: 'tagline', keyNotInData: true})
-  if(taglineInHeaders && (width < phone)) tableVariables.headers.splice(1, 1)
+  const taglineInHeaders = headers.map(h => h.value).includes('company_description')
+  if(width > phone && !taglineInHeaders) headers.splice(1, 0, { value: 'company_description', label: 'TAGLINE', align: 'left', alignHeader: true , type: 'tagline', keyNotInData: true})
+  if(taglineInHeaders && (width < phone)) headers.splice(1, 1)
 
 
   const getCellContent = (type, row, headerValue) => {
@@ -77,7 +85,7 @@ const Investments = ({ classes, width }) => {
       case 'company':
         return row.deal.company_name
       case 'tagline':
-        return row.deal.company_description
+        return tagline
       case 'date':
         return moment(row[headerValue]).format('MM/DD/YYYY')
       case 'amount':
@@ -88,18 +96,27 @@ const Investments = ({ classes, width }) => {
   }
 
 
-  if(!tableVariables){
+  if(!data){
     return <Loader/>
   }
 
+  // const { investments } = data.organization;
+  // const investmentsData = investments.map(inv => {
+  //   return {
+  //     company_name: inv.deal.company_name,
+  //     company_description: inv.deal.company_description,
+  //     amount: inv.amount,
+  //     date: inv.created_at
+  //   }
+  // })
+
   return (
     <div className={classes.section}>
-      <ServerTable
-        tableVariables={tableVariables}
-        getCellContent={getCellContent}
-        queryVariables={{ slug: organization }}
-        tablePagination={5}
-        />
+      <AllocationsTable
+         data={data}
+         headers={headers}
+         getCellContent={getCellContent}
+         />
     </div>
   );
 }

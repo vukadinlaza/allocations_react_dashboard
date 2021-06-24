@@ -7,10 +7,10 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { SimpleBox } from '../widgets'
 
-const buildSteps = ['Initial Build', 'Term Sheet', 'Deck', 'Services Agreement', 'Investor Onboarding List Provided', 'Portfolio Company Wire Instructions', 'Identification'];
-const preOnboardingSteps = ['Entity', 'Bank Account', 'Pre-Sign Private Fund Docs'];
-const onboardingSteps = ['Investor Onboarding List Provided', 'Onboarding Email Sent', 'Investor Follow Up Sent', 'Blue Sky Fees Finalized', '506c Review', 'KYC Review', 'Invoice Sent']
-const closingSteps = ['Investor Ledger Reconciliation', 'Blue Sky Fees Review', 'Signing Portfolio Company Documents', 'Wire Approval Review', 'Invoice Copy Sent', 'Reg D Filing']
+const buildSteps = ['Initial Build', 'Services Agreement Signed', 'ID', 'Investment Docs', 'Portfolio Company Deck'];
+const preOnboardingSteps = ['SS4 Signature', 'Entity Formation', 'Bank Account', 'Private Fund Docs Review & Signing'];
+const onboardingSteps = ['Investor Onboarding List Provided', 'Carry & Management Fee Review', 'Onboarding Email Sent', 'Investor Follow Up Sent', '506b/c Review', 'KYC Review']
+const closingSteps = ['Portfolio Company Wire Instructions', 'Investor Ledger Reconciliation', 'Blue Sky Fees Review', 'Signing Portfolio Company Documents', 'Wire Approval Review', 'Invoice Receipt Sent', 'Reg D Filing', 'Management fee distribution']
 
 const Setup = ({ classes }) => {
   return (
@@ -21,7 +21,7 @@ const Setup = ({ classes }) => {
           titleData={<CheckCircleIcon style={{color: "#39C522", opacity: "25%"}}/>}
           autoHeight={true}
           size="fourth"
-          info="Explanation"
+          info="The process of submitting a build request for an SPV / Fund"
           fullWidthContent
           >
           {buildSteps.map((step, idx) =>
@@ -36,7 +36,7 @@ const Setup = ({ classes }) => {
           titleData={<CheckCircleIcon style={{color: "#39C522", opacity: "25%"}}/>}
           autoHeight={true}
           size="fourth"
-          info="Explanation"
+          info="The setup process for an SPV / Fund"
           fullWidthContent
           >
           {preOnboardingSteps.map((step, idx) =>
@@ -51,7 +51,7 @@ const Setup = ({ classes }) => {
           titleData={<CheckCircleIcon style={{color: "#39C522", opacity: "25%"}}/>}
           autoHeight={true}
           size="fourth"
-          info="Explanation"
+          info="The process of onboarding investors and finalizing terms"
           fullWidthContent
           >
           {onboardingSteps.map((step, idx) =>
@@ -66,7 +66,7 @@ const Setup = ({ classes }) => {
           titleData={<CheckCircleIcon style={{color: "#39C522", opacity: "25%"}}/>}
           autoHeight={true}
           size="fourth"
-          info="Explanation"
+          info="The process of closing and post-closing the SPV / Fund "
           fullWidthContent
           >
           {closingSteps.map((step, idx) =>
@@ -77,10 +77,10 @@ const Setup = ({ classes }) => {
           )}
         </SimpleBox>
       </div>
-      <SimpleBox size="third" title="Target Raise" info="Explanation">
+      <SimpleBox size="third" title="Target Raise" info="This is how much you plan to raise. This is important specifically for Funds as the target raise is material to the offering and its performance to investors.">
         <div className={classes.simpleBoxDataRow}>
           <Typography style={{fontSize: "26px"}}>$5,000,000</Typography>
-          <div className={classes.boxEditButton}><EditIcon/></div>
+          {/*<div className={classes.boxEditButton}><EditIcon/></div>*/}
         </div>
         <div className={classes.simpleBoxDataRow} style={{margin: 0}}>
           <LinearProgress
@@ -95,47 +95,47 @@ const Setup = ({ classes }) => {
           <Typography>50%</Typography>
         </div>
       </SimpleBox>
-      <SimpleBox size="third" title="Next Close Date" info="Explanation">
+      <SimpleBox size="third" title="Next Close Date" info="This is the expected next close date for the offering">
         <div className={classes.simpleBoxDataRow}>
           <div style={{display: "flex", alignItems: "center"}}>
             <CalendarTodayIcon style={{marginRight: "0.5em"}}/>
             <Typography style={{fontSize: "20px"}}>June 15th, 2021</Typography>
           </div>
-          <div className={classes.boxEditButton}><EditIcon/></div>
+          {/*<div className={classes.boxEditButton}><EditIcon/></div>*/}
         </div>
       </SimpleBox>
-      <SimpleBox size="third" title="Final Close Date" info="Explanation">
+      <SimpleBox size="third" title="Final Close Date" info="This is the expected final close date for the offering">
         <div className={classes.simpleBoxDataRow}>
           <div style={{display: "flex", alignItems: "center"}}>
             <CalendarTodayIcon style={{marginRight: "0.5em"}}/>
             <Typography style={{fontSize: "20px"}}>June 15th, 2021</Typography>
           </div>
-          <div className={classes.boxEditButton}><EditIcon/></div>
+          {/*<div className={classes.boxEditButton}><EditIcon/></div>*/}
         </div>
       </SimpleBox>
-      <SimpleBox size="third" title="Management Fee" info="Explanation">
+      <SimpleBox size="third" title="Management Fee" info="This is the management fee chosen by the Fund Manager">
         <div className={classes.simpleBoxDataRow}>
           <div style={{display: "flex", alignItems: "center"}}>
             <Typography style={{fontSize: "26px"}}>2% <span style={{fontSize: "14px"}}>per annum</span></Typography>
-            <ExpandMoreIcon style={{marginLeft: "0.5em"}}/>
+            {/*<ExpandMoreIcon style={{marginLeft: "0.5em"}}/>*/}
           </div>
-          <div className={classes.boxEditButton}><EditIcon/></div>
+          {/*<div className={classes.boxEditButton}><EditIcon/></div>*/}
         </div>
       </SimpleBox>
-      <SimpleBox size="third" title="Carry" info="Explanation">
+      <SimpleBox size="third" title="Carry" info="This is the carry fee chosen by the Fund Manager">
         <div className={classes.simpleBoxDataRow}>
           <div style={{display: "flex", alignItems: "center"}}>
             <Typography style={{fontSize: "20px"}}>20%</Typography>
           </div>
-          <div className={classes.boxEditButton}><EditIcon/></div>
+          {/*<div className={classes.boxEditButton}><EditIcon/></div>*/}
         </div>
       </SimpleBox>
-      <SimpleBox size="third" title="Raise Type" info="Explanation">
+      <SimpleBox size="third" title="Raise Type" info="This is the offering type chosen by the Fund Manager">
         <div className={classes.simpleBoxDataRow}>
           <div style={{display: "flex", alignItems: "center"}}>
             <Typography style={{fontSize: "20px"}}>506c</Typography>
           </div>
-          <div className={classes.boxEditButton}><EditIcon/></div>
+          {/*<div className={classes.boxEditButton}><EditIcon/></div>*/}
         </div>
       </SimpleBox>
     </div>
