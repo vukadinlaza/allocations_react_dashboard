@@ -75,7 +75,7 @@ export default function InvestmentEdit({ investmentId = false, isK1 = false, set
   const classes = useStyles();
   const { data, refetch, loading } = useQuery(GET_INVESTMENT, { variables: { _id: id } });
   const [createInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT);
-  const [deleteInvestment, {}] = useMutation(destroy, {
+  const [deleteInvestment, { }] = useMutation(destroy, {
     onCompleted: () => {
       toast.success('Sucess! Investment Deleted.');
       setEditInvestmentModal(false);
@@ -85,12 +85,14 @@ export default function InvestmentEdit({ investmentId = false, isK1 = false, set
     },
   });
 
+  console.log('INVESTMENT', investment)
+
   useEffect(() => {
     setHasChanges(!isEqual(investment, {}));
   }, [investment]);
 
   useEffect(() => {
-    if (data && !loading) setInvestment(data.investment);
+    if (data && !investment) setInvestment(data.investment);
   }, [data, investment]);
 
   const updateInvestmentProp = ({ prop, newVal }) => {
