@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import _, { toLower } from 'lodash';
 import { gql } from 'apollo-boost';
-import { useQuery } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/react-hooks';
 import { useParams } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography } from '@material-ui/core';
@@ -312,7 +312,7 @@ const FundManagerDashboard = ({ classes }) => {
 
   const [dealName, setDealName] = useState('')
   const [atDealData, setAtDealData] = useState({})
-  const { data: dealData } = useQuery(GET_DEAL, {
+  const [getDeal, { data: dealData }] = useLazyQuery(GET_DEAL, {
     variables: { fund_slug: orgSlug, deal_slug: dealSlug },
     fetchPolicy: "network-only"
   });
@@ -326,6 +326,10 @@ const FundManagerDashboard = ({ classes }) => {
       setDealName(dealName)
     }
   }, [dealData])
+
+  useEffect(() => {
+    getDeal()
+  }, [dealSlug])
 
   useEffect(() => {
 
