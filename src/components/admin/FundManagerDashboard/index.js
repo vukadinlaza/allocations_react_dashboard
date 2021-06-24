@@ -331,6 +331,7 @@ const FundManagerDashboard = ({ classes }) => {
   }, [dealData])
 
   useEffect(() => {
+    console.log("HERE", dealSlug);
     getDeal()
   }, [dealSlug])
 
