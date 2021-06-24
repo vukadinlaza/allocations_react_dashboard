@@ -43,9 +43,9 @@ export const useFetch = (base, tableName, filter) => {
   }, [base, tableName, filter]);
 
   //Differentiate an Airtable reponse with no results, from an invalid query
-  // console.log("would log if data is null");
+  console.log("would log if data is null");
   if(!base || !tableName) return { status, data: null }
-  // console.log(`AT Data: ${data} from ${tableName} table with this filter: ${filter}`);
+  console.log(`AT Data: ${data} from ${tableName} table with this filter: ${filter}`);
   return { status, data };
 };
 

@@ -337,7 +337,7 @@ const FundManagerDashboard = ({ classes }) => {
     }
   }, [atDeal])
 
-
+  console.log({dealData, atFundData});
   if(!dealData || !atFundData) return <Loader/>
 
   const fundData = atFundData.map((d) => d.fields)
