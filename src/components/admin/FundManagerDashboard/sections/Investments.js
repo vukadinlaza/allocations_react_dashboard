@@ -75,9 +75,9 @@ const Investments = ({ classes, width, data, tagline }) => {
   ]
 
   // add or remove tagline column depending on viewport width
-  const taglineInHeaders = headers.map(h => h.value).includes('company_description')
-  if(width > phone && !taglineInHeaders) headers.splice(1, 0, { value: 'company_description', label: 'TAGLINE', align: 'left', alignHeader: true , type: 'tagline', keyNotInData: true})
-  if(taglineInHeaders && (width < phone)) headers.splice(1, 1)
+  // const taglineInHeaders = headers.map(h => h.value).includes('company_description')
+  // if(width > phone && !taglineInHeaders) headers.splice(1, 0, { value: 'company_description', label: 'TAGLINE', align: 'left', alignHeader: true , type: 'tagline', keyNotInData: true})
+  // if(taglineInHeaders && (width < phone)) headers.splice(1, 1)
 
 
   const getCellContent = (type, row, headerValue) => {

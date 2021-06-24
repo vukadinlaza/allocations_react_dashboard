@@ -145,11 +145,11 @@ const styles = theme => ({
 
 							}
 							{!!secondColumnToolTip?
-								<HtmlTooltip title={<React.Fragment><p>{!!secondColumnToolTip && secondColumnToolTip(s)}</p></React.Fragment>}>
+								<Tooltip title={<React.Fragment><p>{!!secondColumnToolTip && secondColumnToolTip(s)}</p></React.Fragment>}>
 									<td align="right" className={classes.sTotal}>
 										{nWithCommas(s.total)}
 									</td>
-								</HtmlTooltip>
+								</Tooltip>
 								:
 								<td align="right" className={classes.sTotal}>
 									{nWithCommas(s.total)}
