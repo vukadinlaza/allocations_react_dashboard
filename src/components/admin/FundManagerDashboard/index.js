@@ -278,6 +278,7 @@ export const GET_DEAL = gql`
       company_name
       company_description
       organization {
+        id
         name
       }
       dealParams {
