@@ -152,7 +152,7 @@ const styles = theme => ({
 								</Tooltip>
 								:
 								<td align="right" className={classes.sTotal}>
-									{nWithCommas(s.total)}
+									${nWithCommas(s.total)}
 								</td>
 							}
 					</tr>

@@ -158,7 +158,7 @@ const Highlights = ({ classes, orgSlug, dealSlug, data, dealData }) => {
             <DefaultChartTable
               series={formatDoughnutSeries(series)}
               title="Investments"
-              secondColumnHeader="$us"
+              secondColumnHeader="USD"
               sumLabel="Total"
               seriesTotal={seriesTotal}
               seriesLabelKey="label"

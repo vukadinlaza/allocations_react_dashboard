@@ -44,7 +44,7 @@ export const useFetch = (base, tableName, filter) => {
 
   //Differentiate an Airtable reponse with no results, from an invalid query
   if(!base || !tableName) return { status, data: null }
-  
+  console.log(`AT Data: ${data} from ${tableName} table with this filter: ${filter}`);
   return { status, data };
 };
 
