@@ -387,7 +387,7 @@ const FundManagerDashboard = ({ classes }) => {
           </div>
         )
       default:
-        <p>No Data</p>
+        return <p>No Data</p>
     }
   }
 

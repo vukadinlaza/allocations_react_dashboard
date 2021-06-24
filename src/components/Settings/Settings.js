@@ -49,7 +49,7 @@ const Settings = ({ classes, history }) => {
       case 'link':
         return <a href={`/investor/${row._id}/home`}>Link</a>
       default:
-        <div></div>
+        return <div></div>
     }
   }
 
