@@ -113,14 +113,14 @@ const Highlights = ({ classes, orgSlug, dealSlug, data, dealData }) => {
 
   return (
     <div className={classes.section}>
-      {status === "fetching"?
+      {/*status === "fetching"?
         <div style={{position: "absolute", width: "100%", height: "100%"}}>
           <div className={classes.loaderContainer}>
             <Loader/>
           </div>
         </div>
         : ''
-      }
+      */}
       <SimpleBox size="third" title="Portfolio Value" info="This is the estimated value of the portfolio">
         <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
           <Typography style={{fontSize: "26px"}}>
