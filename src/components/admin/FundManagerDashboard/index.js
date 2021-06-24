@@ -322,8 +322,10 @@ const FundManagerDashboard = ({ classes }) => {
 
 
   useEffect(() => {
+    console.log({dealData});
     if(dealData){
       const dealName = dealData?.deal?.company_name;
+      console.log({dealName});
       setDealName(dealName)
     }
   }, [dealData])
