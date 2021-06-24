@@ -85,8 +85,6 @@ export default function InvestmentEdit({ investmentId = false, isK1 = false, set
     },
   });
 
-  console.log('INVESTMENT', investment)
-
   useEffect(() => {
     setHasChanges(!isEqual(investment, {}));
   }, [investment]);
