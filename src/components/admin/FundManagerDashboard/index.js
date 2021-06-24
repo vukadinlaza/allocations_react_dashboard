@@ -310,7 +310,6 @@ const FundManagerDashboard = ({ classes }) => {
   const { width } = useViewport();
   const { organization: orgSlug, deal: dealSlug } = useParams();
   const [tabIndex, setTabIndex] = useState(0)
-  console.log({orgSlug, dealSlug});
 
   const [dealName, setDealName] = useState('')
   const [atDealData, setAtDealData] = useState({})
@@ -323,16 +322,13 @@ const FundManagerDashboard = ({ classes }) => {
 
 
   useEffect(() => {
-    console.log({dealData});
     if(dealData){
       const dealName = dealData?.deal?.company_name;
-      console.log({dealName});
       setDealName(dealName)
     }
   }, [dealData])
 
   useEffect(() => {
-    console.log("HERE", dealSlug);
     getDeal()
   }, [dealSlug])
 
@@ -346,7 +342,6 @@ const FundManagerDashboard = ({ classes }) => {
     }
   }, [atDeal])
 
-  console.log({dealData, atFundData});
   if(!dealData || !atFundData) return <Loader/>
 
   const fundData = atFundData.map((d) => d.fields)
