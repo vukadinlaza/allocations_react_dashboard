@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'lodash';
 import { gql } from 'apollo-boost';
 import { Redirect } from 'react-router-dom';
 import { useAuth } from '../../auth/useAuth';

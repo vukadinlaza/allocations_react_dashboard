@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { gql } from 'apollo-boost';
-import { pick, map } from 'lodash';
+import { map } from 'lodash';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { toast } from 'react-toastify';
 import { Button, Typography, Grid, FormControl, InputLabel, Select, MenuItem, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import Loader from '../utils/Loader';
 
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
@@ -30,14 +28,6 @@ const GET_INVESTOR = gql`
           }
         }
       }
-    }
-  }
-`;
-
-const ADD_DOCS = gql`
-  mutation AddDealDocs($deal_id: String!, $docs: Upload) {
-    addDealDocs(deal_id: $deal_id, docs: $docs) {
-      _id
     }
   }
 `;
@@ -73,11 +63,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function DealDocuments({}) {
+function DealDocuments() {
   const [docs, setDocs] = useState([]);
   const [deal, setDeal] = useState();
   const { data: userData, refetch } = useQuery(GET_INVESTOR);
-  const [addDoc, { data, error, loading }] = useMutation(ADD_DOC);
+  const [addDoc, { data, loading }] = useMutation(ADD_DOC);
   const classes = useStyles();
   const submit = async () => {
     if (docs.length === 0) return null;
@@ -153,7 +143,7 @@ function DealDocuments({}) {
                       borderRadius: '1rem',
                     }}
                   >
-                    <img src="https://allocations-public.s3.us-east-2.amazonaws.com/file-icon.svg" />
+                    <img src="https://allocations-public.s3.us-east-2.amazonaws.com/file-icon.svg" alt='' />
                     <Typography
                       variant="body2"
                       style={{
@@ -187,8 +177,6 @@ function DealDocuments({}) {
           <Paper className={classes.paper}>
             <Grid container>
               {map(deal?.documents, (doc) => {
-                const file =
-                  doc?.path.slice(0, 12) === 'investments/' ? doc.path.split('/')[2] : doc.path.split('/')[1];
                 return (
                   <Grid lg={6} md={6} xs={12}>
                     <a href={`https://${doc?.link}`} target="_blank" rel="noopener noreferrer">
@@ -205,7 +193,7 @@ function DealDocuments({}) {
                           borderRadius: '1rem',
                         }}
                       >
-                        <img src="https://allocations-public.s3.us-east-2.amazonaws.com/file-icon.svg" />
+                        <img src="https://allocations-public.s3.us-east-2.amazonaws.com/file-icon.svg" alt='' />
                         <Typography
                           variant="body2"
                           style={{

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { get } from 'lodash';
-import { useHistory } from 'react-router-dom';
 import {
   TextField,
   Table,

@@ -831,7 +831,7 @@ export default function Sidebar(props) {
   const { userProfile } = useAuth(GET_INVESTOR);
   const [investTab, setInvestTab] = useState(false);
   const [creditTab, setCreditTab] = useState(false);
-  const [buildTab, setBuildTab] = useState(false);
+  const [setBuildTab] = useState(false);
   const location = useLocation();
   const { window } = props;
   const classes = useStyles();

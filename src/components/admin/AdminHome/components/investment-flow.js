@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import _, { sample } from 'lodash';
+import _ from 'lodash';
 import { gql } from 'apollo-boost';
 import {
   Grid,
@@ -394,7 +394,7 @@ const DELETE_VIEWED_USER = gql`
 
 const DeleteViewedUser = ({ deleteViewedUserModal, setDeleteViewedUserModal, dealId }) => {
   const classes = useStyles();
-  const [deleteViewedUser, {}] = useMutation(DELETE_VIEWED_USER, {
+  const [deleteViewedUser] = useMutation(DELETE_VIEWED_USER, {
     onCompleted: () => {
       setDeleteViewedUserModal(false);
       toast.success('Investment Removed');

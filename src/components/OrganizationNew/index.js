@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect  } from 'react';
 import { gql } from 'apollo-boost';
 import { useHistory } from 'react-router-dom';
-import { Col } from 'reactstrap';
-import Cropper from 'react-easy-crop';
 import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/react-hooks';
 import { Button, TextField, Paper, Grid } from '@material-ui/core';
@@ -84,14 +82,6 @@ export default function OrganizationNew() {
       </div>
     </Paper>
   );
-}
-
-function readFile(file) {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => resolve(reader.result), false);
-    reader.readAsDataURL(file);
-  });
 }
 
 function LogoUpload({ organization, setOrg }) {

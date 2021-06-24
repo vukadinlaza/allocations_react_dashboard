@@ -37,7 +37,7 @@ const SEND_ADMIN_INVITE = gql`
 export default ({ showAddAccountModal, setAddAccountModal }) => {
   const classes = useStyles();
   const [userData, setData] = useState({});
-  const [sendAccountInvite, {}] = useMutation(SEND_ADMIN_INVITE, {
+  const [sendAccountInvite] = useMutation(SEND_ADMIN_INVITE, {
     variables: { payload: {} },
   });
   const handleChange = (prop) => (e) => {

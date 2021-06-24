@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useMutation, useLazyQuery, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { Button } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
@@ -144,7 +144,7 @@ const validate = (investor) => {
   return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
 };
 
-function InvestmentPage({}) {
+function InvestmentPage() {
   const history = useHistory();
   const { organization: org, deal_slug } = useParams();
   const [addUserAsViewed, { called }] = useMutation(ADD_USER_AS_VIEWED);
@@ -191,7 +191,7 @@ function InvestmentPage({}) {
     setPopulated(true);
   };
 
-  const [submitConfirmation, {}] = useMutation(CONFIRM_INVESTMENT, {
+  const [submitConfirmation] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       refetch();
       toast.success('Investment created successfully.');

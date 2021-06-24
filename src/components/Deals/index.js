@@ -1,8 +1,7 @@
 import React, { useEffect, useReducer, Fragment, useState } from 'react';
 import _ from 'lodash';
-import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { gql } from 'apollo-boost';
-import queryString from 'query-string';
 
 import { useLazyQuery } from '@apollo/react-hooks';
 import { Row, Col } from 'reactstrap';

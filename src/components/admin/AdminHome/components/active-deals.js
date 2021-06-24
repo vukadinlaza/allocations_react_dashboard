@@ -162,7 +162,7 @@ export const Deal = ({ deal, index, superadmin, slug, isDemo }) => {
                               borderRadius: '1rem',
                             }}
                           >
-                            <img src="https://allocations-public.s3.us-east-2.amazonaws.com/file-icon.svg" />
+                            <img src="https://allocations-public.s3.us-east-2.amazonaws.com/file-icon.svg" alt='' />
                             <Typography
                               variant="body2"
                               style={{

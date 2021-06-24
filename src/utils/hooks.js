@@ -1,5 +1,4 @@
 import { useReducer, useEffect, useState } from 'react';
-import Airtable from 'airtable';
 /** *
  *
  * simple helper hooks
