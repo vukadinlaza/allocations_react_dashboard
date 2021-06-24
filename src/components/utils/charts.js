@@ -121,7 +121,7 @@ const styles = theme => ({
 								</div>
 							</td>
 							<td align="right" className={classes.seriesAmount}>
-								{nWithCommas(seriesTotal)}
+								${nWithCommas(seriesTotal)}
 							</td>
 						</tr>
 					{series.map((s, i) => (

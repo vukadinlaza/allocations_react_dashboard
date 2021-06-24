@@ -126,7 +126,7 @@ const Highlights = ({ classes, orgSlug, dealSlug, data, dealData }) => {
           <Typography style={{fontSize: "26px"}}>
             ${nWithCommas((_.sumBy(data, 'Invested') * (dealMultiple === 0 ? 1 : dealMultiple)).toFixed(0))}
           </Typography>
-          <Typography style={{fontSize: "10px"}}>0% Realized | 100% Unrealized</Typography>
+          <Typography className={classes.footerData}>0% Realized | 100% Unrealized</Typography>
         </div>
       </SimpleBox>
       <SimpleBox size="third" title="Total Invested" info="This is the total amount invested on the platform">
@@ -134,7 +134,7 @@ const Highlights = ({ classes, orgSlug, dealSlug, data, dealData }) => {
           <Typography style={{fontSize: "26px"}}>
             ${nWithCommas(_.sumBy(data, 'Invested').toFixed(0))}
           </Typography>
-          <Typography style={{fontSize: "10px"}}>
+          <Typography className={classes.footerData}>
             {(data || []).length} Total Investments
           </Typography>
         </div>
@@ -144,7 +144,7 @@ const Highlights = ({ classes, orgSlug, dealSlug, data, dealData }) => {
           <Typography style={{fontSize: "26px"}}>
             {dealMultiple.toFixed(2) || 1}x
           </Typography>
-          <Typography style={{fontSize: "10px"}}>Last Updated: June 1st, 2021</Typography>
+          <Typography className={classes.footerData}>Last Updated: June 1st, 2021</Typography>
         </div>
       </SimpleBox>
       <div className={classes.subSection}>

@@ -1,91 +1,36 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import { useParams } from 'react-router-dom';
-import { gql } from 'apollo-boost';
-import { useLazyQuery } from '@apollo/react-hooks';
+import {
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  Button,
+  InputAdornment
+} from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
 import { nWithCommas } from '../../../../utils/numbers';
-import { phone } from '../../../../utils/helpers';
-import { useAuth } from '../../../../auth/useAuth';
-import ServerTable from '../../../utils/ServerTable'
+import { nestedSort } from '../../../../utils/helpers';
 import AllocationsTable from '../../../utils/AllocationsTable'
 import Loader from '../../../utils/Loader'
 
 
-const tableVariables = {
-  gqlQuery: `
-    query GetOrg($slug: String!, $pagination: PaginationInput!) {
-      pagOrganization(slug: $slug, pagination: $pagination) {
-        _id
-        pagInvestments {
-          _id
-          amount
-          created_at
-          deal {
-            _id
-            company_name
-            company_description
-            date_closed
-          }
-          investor {
-            _id
-          }
-        }
-      }
-    }`,
-  headers: [
-    {
-      value: 'deal',
-      label: 'NAME',
-      align: 'left',
-      alignHeader: true,
-      isFilter: true,
-      nestedKey: 'company_name',
-      nestedCollection: 'deals',
-      localFieldKey: 'deal_id',
-      type: 'company',
-      keyNotInData: true
-    },{
-      value: 'date',
-      label: 'DATE',
-      type: 'date',
-      align: 'left',
-      alignHeader: true,
-      keyNotInData: true
-    },{
-      value: 'amount',
-      label: 'INVESTMENT',
-      type: 'amount',
-      align: 'right',
-      alignHeader: true
-    },
-  ],
-  dataVariable: 'pagOrganization.pagInvestments',
-  defaultSortField: "company_name"
-}
-
-const Investments = ({ classes, width, data, tagline }) => {
-
-  const { organization } = useParams();
+const headers = [
+  { value: 'Investment', label: 'NAME', align: 'left', alignHeader: true },
+  { value: 'Date', label: 'DATE', type: 'date', align: 'left', alignHeader: true },
+  { value: 'Invested', label: 'INVESTMENT', type: 'amount', align: 'right', alignHeader: true },
+]
 
 
-  const headers = [
-    { value: 'Investment', label: 'NAME', align: 'left', alignHeader: true },
-    { value: 'Date', label: 'DATE', type: 'date', align: 'left', alignHeader: true },
-    { value: 'Invested', label: 'INVESTMENT', type: 'amount', align: 'right', alignHeader: true },
-  ]
+const Investments = ({ classes, data }) => {
 
-  // add or remove tagline column depending on viewport width
-  // const taglineInHeaders = headers.map(h => h.value).includes('company_description')
-  // if(width > phone && !taglineInHeaders) headers.splice(1, 0, { value: 'company_description', label: 'TAGLINE', align: 'left', alignHeader: true , type: 'tagline', keyNotInData: true})
-  // if(taglineInHeaders && (width < phone)) headers.splice(1, 1)
+  const [searchTerm, setSearchTerm] = useState('');
 
 
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
       case 'company':
         return row.deal.company_name
-      case 'tagline':
-        return tagline
       case 'date':
         return moment(row[headerValue]).format('MM/DD/YYYY')
       case 'amount':
@@ -95,28 +40,41 @@ const Investments = ({ classes, width, data, tagline }) => {
     }
   }
 
-
-  if(!data){
-    return <Loader/>
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value)
   }
 
-  // const { investments } = data.organization;
-  // const investmentsData = investments.map(inv => {
-  //   return {
-  //     company_name: inv.deal.company_name,
-  //     company_description: inv.deal.company_description,
-  //     amount: inv.amount,
-  //     date: inv.created_at
-  //   }
-  // })
+  let investmentsData = data.map(investment => {return {...investment, Date: new Date(investment["Date"])}})
+
+  if(!investmentsData) return <Loader/>
+
+  if(searchTerm) investmentsData = investmentsData.filter(investment => investment['Investment'].toUpperCase().includes(searchTerm.toUpperCase()))
 
   return (
     <div className={classes.section}>
-      <AllocationsTable
-         data={data}
-         headers={headers}
-         getCellContent={getCellContent}
-         />
+      <div className={classes.searchContainer}>
+        <TextField
+          label="Search"
+          placeholder="Seach by company name"
+          id="search-field"
+          fullWidth
+          onChange={handleSearch}
+          value={searchTerm || ''}
+          InputProps={{
+            startAdornment: <InputAdornment position="start">
+            <SearchIcon style={{color: "rgba(0, 0, 0, 0.54)"}}/>
+          </InputAdornment>,
+        }}
+        style={{margin: "0 1em"}}
+        />
+    </div>
+    <AllocationsTable
+      data={investmentsData}
+      headers={headers}
+      getCellContent={getCellContent}
+      sortField="Date"
+      sortOrder="desc"
+      />
     </div>
   );
 }

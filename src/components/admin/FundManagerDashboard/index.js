@@ -21,6 +21,18 @@ import Loader from '../../utils/Loader';
 
 
 const styles = theme => ({
+  accredited: {
+    borderRadius: "20px",
+    background: "#39C522",
+    marginLeft: "0.5em",
+    display: "flex",
+    alignItems: "center",
+    padding: "2px 5px",
+    minWidth: "50px",
+    "& svg": {
+      fontSize: "10px",
+    }
+  },
   avatar: {
     background: "#0461FF",
     fontSize: "14px",
@@ -62,6 +74,9 @@ const styles = theme => ({
     top: "0",
     background: "white"
   },
+  footerData: {
+    fontSize: "14px"
+  },
   investorBox: {
     display: "flex",
     justifyContent: "space-between",
@@ -76,17 +91,6 @@ const styles = theme => ({
   investorBoxName: {
     display: "flex",
     alignItems: "center"
-  },
-  investorCheck: {
-    borderRadius: "20px",
-    background: "#39C522",
-    marginLeft: "0.5em",
-    display: "flex",
-    alignItems: "center",
-    padding: "2px 5px",
-    "& svg": {
-      fontSize: "10px",
-    }
   },
   loaderContainer: {
     position:"absolute",
@@ -140,6 +144,18 @@ const styles = theme => ({
     height: 10,
     borderRadius: 5,
     width: "90%"
+  },
+  searchContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    marginBottom: "25px",
+    background: "white",
+    padding: "15px 20px",
+    border: "solid 1px #dadada",
+    boxShadow: "0px 3px 5px -5px",
+    borderRadius: "3px"
   },
   section: {
     width: "100%",
@@ -359,7 +375,6 @@ const FundManagerDashboard = ({ classes }) => {
             classes={classes}
             width={width}
             data={fundData}
-            dealId={dealData?.deal?.company_description}
             />
         )
       case 3:

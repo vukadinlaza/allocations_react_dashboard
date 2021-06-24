@@ -27,6 +27,7 @@ const GET_INVESTMENTS = gql`
           first_name
           last_name
           name
+          accredidation_status
         }
       }
     }
@@ -39,9 +40,9 @@ const InvestorBox = ({classes, investor, index}) => {
     <div className={classes.investorBox} key={`investor-${index}`}>
       <div className={classes.investorBoxName}>
         <Avatar className={classes.avatar}>{investor.name.charAt(0).toUpperCase()}</Avatar>
-        <Typography style={{fontSize: "14px"}}>{investor.name}</Typography>
-        <div className={classes.investorCheck}>
-          <Typography style={{color: "white", fontSize: "8px"}}><VerifiedUserIcon/> 506c</Typography>
+        <Typography style={{fontSize: "14px", width: "auto", overflow: "hidden", whiteSpace: "pre", textOverflow: "ellipsis"}}>{investor.name}</Typography>
+        <div className={classes.accredited} style={investor.accredidation_status? {} : {background: "#bbc5ba"}}>
+          <Typography style={{color: "white", fontSize: "12px"}}><VerifiedUserIcon/> 506c</Typography>
         </div>
       </div>
       <Typography>${nWithCommas(investor.amount)}</Typography>
@@ -72,7 +73,8 @@ const InvestorStatus = ({ classes, buttonAction }) => {
     return {
       name,
       amount: inv.amount,
-      status: inv.status
+      status: inv.status,
+      accredidation_status:inv.investor.accredidation_status
     }
   })
 
@@ -115,7 +117,7 @@ const InvestorStatus = ({ classes, buttonAction }) => {
         buttonAction={buttonAction}
         >
         {signedInvestors.filter(investor => investor.status === 'signed').map((investor, index) =>
-          <InvestorBox investor={investor} classes={classes} index={index} />
+          <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`}/>
         )}
       </ScrollableBox>
       <ScrollableBox
