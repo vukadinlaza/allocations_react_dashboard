@@ -3,6 +3,7 @@ import { Doughnut, Line } from 'react-chartjs-2';
 import { withStyles, withTheme } from '@material-ui/core/styles';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import Tooltip from '@material-ui/core/Tooltip';
 import { nWithCommas } from '../../utils/numbers';
 import { titleCase, phone } from '../../utils/helpers';
 import { useViewport } from '../../utils/hooks'
@@ -126,14 +127,14 @@ const styles = theme => ({
 					{series.map((s, i) => (
 						<tr key={`series_${i}`}>
 							{!!firstColumnToolTip?
-								<HtmlTooltip title={<React.Fragment>{firstColumnToolTip(s)}</React.Fragment>}>
+								<Tooltip title={<React.Fragment>{firstColumnToolTip(s)}</React.Fragment>}>
 									<td align="left" style={{width: '65%', minWidth: "65%"}}>
 										<div style={{backgroundColor: s.borderColor? s.borderColor : s.backgroundColor}} className={classes.rowColor}/>
 										<div className={classes.sLabel}>
 											{s[seriesLabelKey] && titleCase(s[seriesLabelKey].replace(/_/g, ' '))}
 										</div>
 									</td>
-								</HtmlTooltip>
+								</Tooltip>
 								:
 								<td align="left" style={{width: '65%', minWidth: "65%"}}>
 									<div style={{backgroundColor: s.backgroundColor}} className={classes.rowColor}/>
