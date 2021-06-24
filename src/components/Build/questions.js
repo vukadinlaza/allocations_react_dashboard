@@ -204,6 +204,7 @@ export default ({ setData, classes, answers, activePage }) => {
           );
           break;
         default:
+        return
         // code block
       }
       return x;
