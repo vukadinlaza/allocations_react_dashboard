@@ -184,42 +184,6 @@ export default function SuperAdminOverview() {
           {activeData === 'investors' && <InvestorsTabel investors={investors} setOpen={setOpen} />}
         </Grid>
       </div>
-
-      {/* <Row>
-        <Col md={{ size: 6 }}>
-          <Paper style={{ padding: '20px' }}>
-            <div>
-              Funds &nbsp;
-              <span className="square-number">{organizations.length}</span>
-            </div>
-            <Paper style={{ maxHeight: '500px', overflow: 'scroll' }}>
-              <Table>
-                <TableBody>
-                  {organizations.map((org) => (
-                    <Org key={org._id} org={org} refetch={refetch} />
-                  ))}
-                </TableBody>
-              </Table>
-            </Paper>
-          </Paper>
-        </Col>
-        <Col sm={{ size: 6 }}>
-          <Paper style={{ padding: '20px' }}>
-            <div className="deals-title">
-              Deals &nbsp;<span className="square-number">{deals.length}</span>
-            </div>
-            <Paper style={{ maxHeight: '500px', overflow: 'scroll' }}>
-              <Table size="small">
-                <TableBody>
-                  {deals.map((deal) => (
-                    <LegacyDeal key={deal._id} deal={deal} />
-                  ))}
-                </TableBody>
-              </Table>
-            </Paper>
-          </Paper>
-        </Col>
-      </Row> */}
       <FormModal open={open} setOpen={setOpen} form={form} />
     </div>
   );
