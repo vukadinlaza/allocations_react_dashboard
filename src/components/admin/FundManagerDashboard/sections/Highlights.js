@@ -103,7 +103,6 @@ const Highlights = ({ classes, orgSlug, dealSlug, data, dealData }) => {
 
 
   if(!data) return <Loader/>
-  console.log('');
 
   let series = data.map(s => { return {label: s['Investment'], total: s['Invested'] } }).sort((a, b) => nestedSort(a, b, 'total', 'desc'))
   let seriesTotal = series.length? series.map(s => s.total).reduce((acc, n) => acc + n) : 0

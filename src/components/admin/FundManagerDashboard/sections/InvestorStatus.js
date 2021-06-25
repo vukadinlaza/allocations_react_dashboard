@@ -51,10 +51,10 @@ const InvestorBox = ({classes, investor, index}) => {
 }
 
 
-const InvestorStatus = ({ classes, buttonAction }) => {
+const InvestorStatus = ({ classes }) => {
 
   const { deal: dealSlug, organization: orgSlug } = useParams();
-  const [getInvestments, { data, error }] = useLazyQuery(GET_INVESTMENTS);
+  const [getInvestments, { data }] = useLazyQuery(GET_INVESTMENTS);
 
   useEffect(() => {
     getInvestments({ variables: { deal_slug: dealSlug, fund_slug: orgSlug } });
@@ -101,7 +101,6 @@ const InvestorStatus = ({ classes, buttonAction }) => {
         fontSize="small"
         size="third"
         buttonText={true? '' : <div><MailIcon style={{color: "white", marginRight: "0.5em"}}/>Send Reminder</div>}
-        buttonAction={buttonAction}
         >
         {viewedInvestors.map((investor, index) =>
           <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`} />
@@ -114,7 +113,6 @@ const InvestorStatus = ({ classes, buttonAction }) => {
         fontSize="small"
         size="third"
         buttonText={true? '' : <div><MailIcon style={{color: "white", marginRight: "0.5em"}}/>Send Reminder</div>}
-        buttonAction={buttonAction}
         >
         {signedInvestors.filter(investor => investor.status === 'signed').map((investor, index) =>
           <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`}/>
@@ -128,7 +126,7 @@ const InvestorStatus = ({ classes, buttonAction }) => {
         size="third"
         >
         {wiredInvestors.filter(investor => investor.status === 'wired').map((investor, index) =>
-          <InvestorBox investor={investor} classes={classes} index={index} />
+          <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`}/>
         )}
       </ScrollableBox>
     </div>

@@ -12,7 +12,11 @@ const preOnboardingSteps = ['SS4 Signature', 'Entity Formation', 'Bank Account',
 const onboardingSteps = ['Investor Onboarding List Provided', 'Carry & Management Fee Review', 'Onboarding Email Sent', 'Investor Follow Up Sent', '506b/c Review', 'KYC Review']
 const closingSteps = ['Portfolio Company Wire Instructions', 'Investor Ledger Reconciliation', 'Blue Sky Fees Review', 'Signing Portfolio Company Documents', 'Wire Approval Review', 'Invoice Receipt Sent', 'Reg D Filing', 'Management Fee Distribution']
 
-const Setup = ({ classes }) => {
+const Setup = ({ classes, data }) => {
+
+  const isTargetANumber = !isNaN(data.target)
+  const raisedPercentage = isTargetANumber? (data.raised/data.target) * 100 : 0
+
   return (
     <div className={classes.section}>
       <div className={classes.subSection}>
@@ -79,27 +83,27 @@ const Setup = ({ classes }) => {
       </div>
       <SimpleBox size="third" title="Target Raise" info="This is how much you plan to raise. This is important specifically for Funds as the target raise is material to the offering and its performance to investors.">
         <div className={classes.simpleBoxDataRow}>
-          <Typography style={{fontSize: "26px"}}>$5,000,000</Typography>
+          <Typography style={{fontSize: "26px"}}>${data.target}</Typography>
           {/*<div className={classes.boxEditButton}><EditIcon/></div>*/}
         </div>
         <div className={classes.simpleBoxDataRow} style={{margin: 0}}>
           <LinearProgress
             variant="determinate"
-            value={50}
+            value={raisedPercentage}
             classes={{
               root: classes.progressContainer,
               colorPrimary: classes.progress,
               bar: classes.bar
             }}
             />
-          <Typography>50%</Typography>
+          <Typography>{raisedPercentage}%</Typography>
         </div>
       </SimpleBox>
       <SimpleBox size="third" title="Next Close Date" info="This is the expected next close date for the offering">
         <div className={classes.simpleBoxDataRow}>
           <div style={{display: "flex", alignItems: "center"}}>
             <CalendarTodayIcon style={{marginRight: "0.5em"}}/>
-            <Typography style={{fontSize: "20px"}}>June 15th, 2021</Typography>
+            <Typography style={{fontSize: "20px"}}>{data?.date_closed || 'No date available'}</Typography>
           </div>
           {/*<div className={classes.boxEditButton}><EditIcon/></div>*/}
         </div>
@@ -108,7 +112,7 @@ const Setup = ({ classes }) => {
         <div className={classes.simpleBoxDataRow}>
           <div style={{display: "flex", alignItems: "center"}}>
             <CalendarTodayIcon style={{marginRight: "0.5em"}}/>
-            <Typography style={{fontSize: "20px"}}>June 15th, 2021</Typography>
+            <Typography style={{fontSize: "20px"}}>{data?.date_closed || 'No date available'}</Typography>
           </div>
           {/*<div className={classes.boxEditButton}><EditIcon/></div>*/}
         </div>
@@ -116,7 +120,7 @@ const Setup = ({ classes }) => {
       <SimpleBox size="third" title="Management Fee" info="This is the management fee chosen by the Fund Manager">
         <div className={classes.simpleBoxDataRow}>
           <div style={{display: "flex", alignItems: "center"}}>
-            <Typography style={{fontSize: "26px"}}>2% <span style={{fontSize: "14px"}}>per annum</span></Typography>
+            <Typography style={{fontSize: "26px"}}>{data?.dealParams?.totalManagementFee? `${data.dealParams.totalManagementFee}%` : 'No Management Fee'} {data?.dealParams?.totalManagementFee? <span style={{fontSize: "14px"}}>per annum</span> : ''}</Typography>
             {/*<ExpandMoreIcon style={{marginLeft: "0.5em"}}/>*/}
           </div>
           {/*<div className={classes.boxEditButton}><EditIcon/></div>*/}
@@ -125,7 +129,7 @@ const Setup = ({ classes }) => {
       <SimpleBox size="third" title="Carry" info="This is the carry fee chosen by the Fund Manager">
         <div className={classes.simpleBoxDataRow}>
           <div style={{display: "flex", alignItems: "center"}}>
-            <Typography style={{fontSize: "20px"}}>20%</Typography>
+            <Typography style={{fontSize: "20px"}}>{data?.dealParams?.totalCarry? `${data.dealParams.totalCarry}%` : 'No carry'}</Typography>
           </div>
           {/*<div className={classes.boxEditButton}><EditIcon/></div>*/}
         </div>
@@ -133,7 +137,7 @@ const Setup = ({ classes }) => {
       <SimpleBox size="third" title="Raise Type" info="This is the offering type chosen by the Fund Manager">
         <div className={classes.simpleBoxDataRow}>
           <div style={{display: "flex", alignItems: "center"}}>
-            <Typography style={{fontSize: "20px"}}>506c</Typography>
+            <Typography style={{fontSize: "20px"}}>{data?.dealParams?.dealType || 'No raise type'}</Typography>
           </div>
           {/*<div className={classes.boxEditButton}><EditIcon/></div>*/}
         </div>

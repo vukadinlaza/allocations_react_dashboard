@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import _, { toLower } from 'lodash';
 import { gql } from 'apollo-boost';
 import { useLazyQuery } from '@apollo/react-hooks';
-import { useParams } from 'react-router-dom';
+import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -277,12 +278,18 @@ export const GET_DEAL = gql`
       _id
       company_name
       company_description
+      target
+      raised
+      date_closed
       organization {
         _id
         name
       }
       dealParams {
+        dealType
         dealMultiple
+        totalCarry
+        totalManagementFee
       }
     }
   }
@@ -305,7 +312,7 @@ const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
 
 
-const FundManagerDashboard = ({ classes }) => {
+const FundManagerDashboard = ({ classes, location }) => {
 
   const { width } = useViewport();
   const { organization: orgSlug, deal: dealSlug } = useParams();
@@ -333,7 +340,6 @@ const FundManagerDashboard = ({ classes }) => {
   }, [dealSlug])
 
   useEffect(() => {
-
     if(atDeal && atDeal.length){
       let data = atDeal[0].fields;
       setAtDealData({name: data['Deal Name'], id: atDeal[0].id})
@@ -346,10 +352,10 @@ const FundManagerDashboard = ({ classes }) => {
 
   const fundData = atFundData.map((d) => d.fields)
 
-
-  const buttonAction = () => {
-    console.log('HEY');
-  }
+  const handleLinkCopy = () => {
+    navigator.clipboard.writeText(window.origin + (location.pathname || ''));
+    toast.success('Copied deal link to clipboard.');
+  };
 
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue)
@@ -361,6 +367,7 @@ const FundManagerDashboard = ({ classes }) => {
         return(
           <Setup
             classes={classes}
+            data={dealData?.deal}
             />
         )
       case 1:
@@ -383,10 +390,7 @@ const FundManagerDashboard = ({ classes }) => {
         )
       case 3:
         return(
-          <InvestorStatus
-            classes={classes}
-            buttonAction={buttonAction}
-            />
+          <InvestorStatus classes={classes} />
         )
       case 4:
         // return(
@@ -397,10 +401,10 @@ const FundManagerDashboard = ({ classes }) => {
         return(
           <div className={classes.section}>
             <FlatBox title="SHARE" info="Explanation">
-              <Typography>dashboard.allocations.com/funds/305-ventures</Typography>
+              <Typography>dashboard.allocations.com{location.pathname}</Typography>
               <div className={classes.pageIcons}>
                 <div className={classes.pageIcon}><ChevronRightIcon/></div>
-                <div className={classes.pageIcon}><FileCopyOutlinedIcon/></div>
+                <div className={classes.pageIcon} onClick={handleLinkCopy}><FileCopyOutlinedIcon/></div>
               </div>
             </FlatBox>
           </div>
@@ -446,4 +450,4 @@ const FundManagerDashboard = ({ classes }) => {
   );
 }
 
-export default withStyles(styles)(FundManagerDashboard);
+export default withStyles(styles)(withRouter(FundManagerDashboard))
