@@ -58,7 +58,10 @@ const styles = theme => ({
   },
   section: {
     padding: "30px 40px 0px 40px",
-    borderBottom: "solid 1px rgba(0, 0, 0, 0.12)"
+    borderBottom: "solid 1px rgba(0, 0, 0, 0.12)",
+    "&:last-child": {
+      border: "none"
+    }
   },
   sectionTitle: {
     fontSize: "20px",

@@ -102,6 +102,9 @@ const styles = theme => ({
     padding: "15px",
     marginBottom: "25px"
   },
+  userInformation: {
+    marginBottom: "40px"
+  }
 });
 
 const fields = {

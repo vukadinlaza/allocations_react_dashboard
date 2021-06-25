@@ -3,9 +3,23 @@ $break-xs: 576px;
 
 @import "../../App.scss";
 
+
+.sidebar-nav-item {
+  padding: 0 10px;
+}
+
+.sidebar-nav-item:hover {
+  a{
+    div:first-child{
+      color: #0461FF
+    }
+  }
+}
+
 .Sidebar {
   border-right: 1px solid #d6d6d6;
   padding: 0px 0px;
+
 
   @media screen and (max-width: $break-sm) {
     // background-color: #e7e7e7;
@@ -72,7 +86,7 @@ $break-xs: 576px;
       font-size: 1.1em;
       color: #333;
     }
-    a { 
+    a {
       display: inline-block;
       height: 100%;
       width: 100%;

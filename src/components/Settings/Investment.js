@@ -80,6 +80,9 @@ const styles = theme => ({
     padding: "15px",
     marginBottom: "25px"
   },
+  investmentInformation: {
+    marginBottom: "40px"
+  }
 });
 
 const fields = {
@@ -152,7 +155,7 @@ const Investment = ({
           <Typography className={classes.button} onClick={handleDelete}>Delete</Typography>
         </div>
       </Paper>
-      <Paper square className={classes.userInformation}>
+      <Paper square className={classes.investmentInformation}>
         <GridSection
           title="Investor Information"
           fields={fields.investor}

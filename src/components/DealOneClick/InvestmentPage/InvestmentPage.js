@@ -133,8 +133,11 @@ const ADD_USER_AS_VIEWED = gql`
 `;
 
 // if individual remove signfull name
-const validate = (investor) => {
-  const required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
+const validate = (investor, org) => {
+  let required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
+  if (org === 'irishangels') {
+    required = required.filter(d => d !== 'accredited_investor_status')
+  }
   if (investor.country && investor.country === 'United States') {
     required.push('state');
   }
@@ -191,7 +194,7 @@ function InvestmentPage() {
     setPopulated(true);
   };
 
-  const [submitConfirmation] = useMutation(CONFIRM_INVESTMENT, {
+  const [submitConfirmation, { }] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       refetch();
       toast.success('Investment created successfully.');
@@ -202,7 +205,8 @@ function InvestmentPage() {
   const [getInvestmentPreview, { data: previewData, loading: loadingPreview }] = useMutation(GET_PREVIEW);
 
   const confirmInvestment = () => {
-    const validation = validate(investorFormData);
+    const validation = validate(investorFormData, organization);
+    console.log('validation', validation)
     setErrors(validation);
 
     if (validation.length > 0) {
@@ -275,7 +279,7 @@ function InvestmentPage() {
           <DealDocumentsPanel deal={deal} />
           {/* <YourDocumentsPanel investment={investment} /> */}
         </div>
-        <PersonalInformation errors={errors} investor={investorFormData} setInvestor={setInvestor} />
+        <PersonalInformation org={org} errors={errors} investor={investorFormData} setInvestor={setInvestor} />
         <TermsAndConditionsPanel
           confirmInvestment={confirmInvestment}
           deal={deal}

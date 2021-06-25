@@ -64,6 +64,7 @@ const styles = theme => ({
 
 		getSortProps={sortFunction} optional
 		sortField="field" optional
+		sortOrder="asc/desc" optional
 
 		getCellContent={functionThatReturnsSpecifiedValueForCell} only needed it a type is provided in the header - optional
 		** if something particular is needed for a column cells, like a button, just add the type property in the header.
@@ -72,7 +73,7 @@ const styles = theme => ({
 				value: 'cellValue',
 				label: 'cellLabel',
 				type: 'typeName', //only if something particular is needed for a cell
-				keyNotInData: Boolean // only if content of a cell is not included in data, i.e  button
+				keyNotInData: Boolean // only if content of a cell is not included in data's first level, i.e  button
 				align: 'right' optional
 				alignHeader: Boolean optional
 
@@ -105,13 +106,14 @@ const AllocationsTable = ({
 	withTitle,
 	titleComponent,
 	getSortProps,
-	sortField
+	sortField,
+	sortOrder
 }) => {
 	const [selected, setSelected] = useState([]);
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(rowsQuantity);
 	const [orderBy, setOrderBy] = React.useState(sortField? sortField : headers[0].value);
-	const [order, setOrder] = React.useState('asc');
+	const [order, setOrder] = React.useState(sortOrder? sortOrder : 'asc');
 
 	useEffect(() => {
 		setPage(currentPage)
@@ -141,7 +143,8 @@ const AllocationsTable = ({
 		if(getSortProps){
 			getSortProps(property, !isAsc, sortNestedKey, sortNestedCollection, sortLocalFieldKey)
 		}
-		setOrder(isAsc ? 'desc' : 'asc');
+		let newOrder = isAsc ? 'desc' : 'asc';
+		setOrder(newOrder);
 		setOrderBy(property);
 	};
 

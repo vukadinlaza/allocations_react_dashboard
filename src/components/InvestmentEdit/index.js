@@ -75,7 +75,7 @@ export default function InvestmentEdit({ investmentId = false, isK1 = false, set
   const classes = useStyles();
   const { data, refetch } = useQuery(GET_INVESTMENT, { variables: { _id: id } });
   const [createInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT);
-  const [deleteInvestment, {}] = useMutation(destroy, {
+  const [deleteInvestment, { }] = useMutation(destroy, {
     onCompleted: () => {
       toast.success('Sucess! Investment Deleted.');
       setEditInvestmentModal(false);
