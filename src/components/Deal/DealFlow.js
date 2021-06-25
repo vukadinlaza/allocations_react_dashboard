@@ -26,7 +26,6 @@ import { nWithCommas } from '../../utils/numbers';
 import Loader from '../utils/Loader';
 import InvestorEditForm from '../forms/InvestorEdit';
 
-
 /** *
  *
  * All the pieces of the deal flow
@@ -225,7 +224,7 @@ function DataRoom({ deal }) {
   );
 }
 
-function Wire({ investment, deal }) {
+function Wire({ deal }) {
   const link =
     deal.documents && deal.documents.find((d) => d.path === 'wire-instructions')
       ? `https://${deal.documents.find((d) => d.path === 'wire-instructions').link}`
@@ -454,7 +453,6 @@ function PledgesViz({ deal }) {
     // pop a 0 on 1 day before first pledge
     formatted.unshift({ timestamp: formatted[0].timestamp - 60000 * 60 * 24, amount: 0 });
     formatted = _.orderBy(formatted, '');
-
   }, [deal, pledges]);
 
   if (!pledges || pledges.length === 0) {
@@ -472,8 +470,7 @@ function PledgesViz({ deal }) {
   );
 }
 
-function HelloSignOnboarding({ investment, deal, investor, status }) {
-
+function HelloSignOnboarding({ deal, investor, status }) {
   if (!investor) return <Loader />;
 
   return (
@@ -493,7 +490,7 @@ function filename(path) {
   } catch {
     return path;
   }
-};
+}
 
 function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetch, investment }) {
   const [loading, setLoading] = useState(true);
@@ -502,12 +499,17 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
   const [resign, setResign] = useState(false);
   const classes = useStyles();
   const { search, pathname } = useLocation();
-  const decodedParams = base64.decode(search.substring(1));
   const isTvc = deal.organization === 'theventurecollective';
+  const decodedParams = {};
+  if (isTvc) {
+    base64.decode(search.substring(1));
+  }
   const paramsToUse = isTvc ? decodedParams : search;
   const p = new URLSearchParams(paramsToUse);
   const amount = toNumber(p.get('amount')); // is the number 123
   const shares = toNumber(p.get('shares')) || 0; // is the number 123
+  const units = toNumber(p.get('units')) || ''; // is the number 123
+  const purchasePrice = toNumber(p.get('purchasePrice')) || ''; // is the number 123
 
   const docs = dealInvestments.reduce((acc, inv) => {
     const docs = _.get(inv, 'documents', []);
@@ -533,8 +535,8 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
   if (!deal.onboarding_link) {
     return (
       <div style={{ display: status === 'pledged' ? 'block' : 'none' }}>
-        Hang tight! 
-        <span role='img' aria-label='hour glass'>
+        Hang tight!
+        <span role="img" aria-label="hour glass">
           ⌛
         </span>
         <br />
@@ -552,6 +554,12 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
     params.investmentAmount = amount;
     params.SubAmount = amount;
     params.MomentusPCS = shares;
+  }
+  if (units) {
+    params.Units = units;
+  }
+  if (purchasePrice) {
+    params.PurchasePrice = purchasePrice;
   }
 
   const urlParameters = Object.entries(params)
@@ -686,4 +694,4 @@ function KYCDocusign({ deal, investor, status, hasKyc }) {
       </div>
     </Paper>
   );
-};
+}
