@@ -74,7 +74,7 @@ function Settings({ investor, orgData, refetch }) {
     if (data?.updateOrganization?.slug) {
       history.push(`/admin/${data?.updateOrganization?.slug}`);
     }
-  }, [data, history]);
+  }, [data]);
 
   const handleChange = (prop) => (e) => {
     e.persist();
