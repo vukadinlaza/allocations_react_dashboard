@@ -105,7 +105,7 @@ const Settings = ({ classes, history }) => {
         }
       });
     }
-  }, [headers, selectWidth])
+  }, [headers])
 
   const onChangePage = (newPage) => {
     setCurrentPage(newPage);

@@ -91,7 +91,7 @@ export default function InvestmentEdit({ investmentId = false, isK1 = false, set
 
   useEffect(() => {
     if (data && !loading) setInvestment(data.investment);
-  }, [data, investment, loading]);
+  }, [data, investment]);
 
   const updateInvestmentProp = ({ prop, newVal }) => {
     setInvestment((prev) => ({ ...prev, [prop]: newVal }));

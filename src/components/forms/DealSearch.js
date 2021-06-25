@@ -13,7 +13,7 @@ export default function DealSearch({ deal, setDeal, errors = [], label = 'Deal' 
 
   useEffect(() => {
     search({ variables: { q, org } });
-  }, [q, org, search]);
+  }, [q]);
 
   useEffect(() => {
     if (searchRes.data && searchRes.data.searchDealsByOrg) {

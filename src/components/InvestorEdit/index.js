@@ -93,7 +93,7 @@ function DeleteInvestor({ investor }) {
 
   useEffect(() => {
     if (data && data.deleteInvestor) history.push('/investors');
-  }, [data, history]);
+  }, [data]);
 
   const submit = () => {
     if (window.confirm(`Delete ${investor.first_name} ${investor.last_name}?`)) {

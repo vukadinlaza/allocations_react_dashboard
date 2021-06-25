@@ -13,7 +13,7 @@ export default function UserSearch({ user, setUser, errors = [], label = 'Invest
 
   useEffect(() => {
     search({ variables: { q, org } });
-  }, [q, org, search]);
+  }, [q]);
 
   useEffect(() => {
     if (searchRes.data && searchRes.data.searchUsers) {
