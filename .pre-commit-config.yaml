@@ -18,5 +18,5 @@ repos:
         language: script
         entry: scripts/eslint --fix
         types: [file]
-        files: \.[js]
+        files: \.[jt]sx?$
         require_serial: true
