@@ -61,7 +61,7 @@ export default ({
   const [formStatus, setFormStatus] = useState('edit');
 
   // created variable so it can be statically checked by useEffect. useEffect dependency doesnt like complex expressions.
-const showEntityModalID = showEntityModal?._id;
+  const showEntityModalID = showEntityModal?._id;
 
   useEffect(() => {
     if (showEntityModalID) {

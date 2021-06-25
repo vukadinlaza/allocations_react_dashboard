@@ -318,7 +318,7 @@ function DealSettings({ formData, setFormData, refetch }) {
               InputProps={{
                 endAdornment: (
                   <Button onClick={handleLinkCopy} className="copy-button">
-                    <img src={CopyIcon} alt='' />
+                    <img src={CopyIcon} alt='Copy Icon' />
                   </Button>
                 ),
               }}
