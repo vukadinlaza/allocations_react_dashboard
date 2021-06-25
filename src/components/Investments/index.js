@@ -73,7 +73,7 @@ export default function Investments() {
 
   useEffect(() => {
     if (userProfile && userProfile.email) getInvestments({ variables: { slug: organization } });
-  }, [userProfile, getInvestments, organization]);
+  }, [userProfile]);
 
   if (error) return <div>{error.message}</div>;
 
