@@ -95,7 +95,7 @@ export default () => {
   const history = useHistory();
   const { userProfile, loading } = useAuth(GET_INVESTOR);
   const [updateInvestor] = useMutation(UPDATE_USER);
-  const [postZap] = useMutation(POST_ZAP);
+  const [postZap, {}] = useMutation(POST_ZAP);
 
   useEffect(() => {
     if (!loading && userProfile._id) {
