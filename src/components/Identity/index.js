@@ -66,7 +66,7 @@ const IdentityUpload = () => {
 
   useEffect(() => {
     if (formStatus === 'complete') refetch();
-  }, [formStatus, refetch]);
+  }, [formStatus]);
 
   const submit = () => {
     return updateInvestor({
