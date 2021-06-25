@@ -39,7 +39,7 @@ const ADD_MEMBERSHIP = gql`
   }
 `;
 
-export default function OrganizationMembers({ data, error, refetch }) {
+export default function OrganizationMembers({ data, refetch }) {
   const { organization } = useParams();
   const [revokeMembership] = useMutation(REVOKE_MEMBERSHIP, {
     variables: { slug: organization },
