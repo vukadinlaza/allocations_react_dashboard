@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { gql } from 'apollo-boost';
-import { useQuery } from '@apollo/react-hooks';
-import _, { toLower } from 'lodash';
+import React from 'react';
+import _  from 'lodash';
 import moment from 'moment'
 import { Typography } from '@material-ui/core';
 import {
@@ -11,7 +9,6 @@ import {
 } from '../../../utils/charts';
 import { SimpleBox, ChartBox } from '../widgets'
 import { nWithCommas } from '../../../../utils/numbers';
-import { useFetch } from '../../../../utils/hooks';
 import { nestedSort } from '../../../../utils/helpers';
 import Loader from '../../../utils/Loader';
 import 'chartjs-plugin-datalabels';

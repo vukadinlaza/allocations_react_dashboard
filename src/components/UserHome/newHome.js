@@ -187,7 +187,6 @@ export default () => {
   const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile?.email || '');
   const [demo, setDemo] = useState(false);
   const [showCapitalAccounts, setShowCaptialAccounts] = useState(false);
-  const [postZap, { }] = useMutation(POST_ZAP);
   const investmentsRef = React.useRef(null);
 
   const [confirmation, setConfirmation] = useState(false);

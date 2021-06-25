@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Doughnut, Line } from 'react-chartjs-2';
-import { withStyles, withTheme } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -245,7 +245,6 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
 					tooltips: {
 						enabled: true
 					},
-					responsive: true,
 					maintainAspectRatio: false,
 					cutoutPercentage: 65,
 				}}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { gql } from 'apollo-boost';
-import _, { get } from 'lodash'
+import _ from 'lodash'
 import { useQuery } from '@apollo/react-hooks';
 import { withStyles } from '@material-ui/core/styles';
 import {

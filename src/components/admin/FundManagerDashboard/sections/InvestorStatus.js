@@ -54,7 +54,7 @@ const InvestorBox = ({classes, investor, index}) => {
 const InvestorStatus = ({ classes, buttonAction }) => {
 
   const { deal: dealSlug, organization: orgSlug } = useParams();
-  const [getInvestments, { data, error }] = useLazyQuery(GET_INVESTMENTS);
+  const [getInvestments, { data }] = useLazyQuery(GET_INVESTMENTS);
 
   useEffect(() => {
     getInvestments({ variables: { deal_slug: dealSlug, fund_slug: orgSlug } });

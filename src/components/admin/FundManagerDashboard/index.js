@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import _, { toLower } from 'lodash';
+import _ from 'lodash';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
 import { useParams } from 'react-router-dom';
@@ -54,7 +54,6 @@ const styles = theme => ({
   },
   chartContainer: {
     width: '70%',
-    width: '60%',
     padding: '5% 0',
     [theme.breakpoints.down(tablet)]: {
       padding: 0,
@@ -69,7 +68,6 @@ const styles = theme => ({
     justifyContent: "flex-start",
     width: "100%",
     position: "absolute",
-    width: "100%",
     left: "0",
     top: "0",
     background: "white"
@@ -82,8 +80,6 @@ const styles = theme => ({
     justifyContent: "space-between",
     alignItems: "center",
     background: "white",
-    borderRadius: "5px",
-    background: "#ffffff",
     marginBottom: "10px",
     borderRadius: "10px",
     padding: "10px"

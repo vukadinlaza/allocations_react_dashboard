@@ -1,9 +1,7 @@
 import React from 'react';
 import { Typography, LinearProgress } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import EditIcon from '@material-ui/icons/Edit';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { SimpleBox } from '../widgets'
 
