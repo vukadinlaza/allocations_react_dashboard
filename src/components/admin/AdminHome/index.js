@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { gql } from 'apollo-boost';
-
 import { Paper, Grid, ButtonBase, Typography, Button } from '@material-ui/core';
 import { toLower } from 'lodash';
 import { useQuery } from '@apollo/react-hooks';

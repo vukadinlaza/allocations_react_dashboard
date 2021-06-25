@@ -71,7 +71,7 @@ function EditOrg({ orgData, refetch }) {
     if (data?.updateOrganization?.slug) {
       refetch();
     }
-  }, [data, refetch]);
+  }, [data]);
 
   const handleChange = (prop) => (e) => {
     e.persist();
