@@ -18,7 +18,8 @@ import {
   FormControl,
   Input,
   InputAdornment,
-  Container
+  Container,
+  Box,
 } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
@@ -316,7 +317,7 @@ export default () => {
   };
   return (
     <div className="blue-container">
-      <Grid container spacing={12} justify="space-between" style={{ marginTop: '40px', marginBottom: '1rem' }}>
+      <Grid container justify="space-between" style={{ marginTop: '40px', marginBottom: '1rem' }}>
         <Grid item xs={12} sm={12} md={4} style={{ border: '1em solid transparent' }}>
           <Paper style={{ minHeight: '100px' }}>
             <Grid container style={{ padding: '0.1rem', justifyContent: 'space-between' }}>
@@ -591,7 +592,7 @@ export default () => {
       </>
 
       <Modal
-        open={tradeData?.open}
+        open={Boolean(tradeData?.open)}
         onClose={() =>
           setTradeData({
             price: '',
@@ -605,7 +606,7 @@ export default () => {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <Grid container xs={12} sm={12} md={4} lg={4}>
+        <Container maxWidth="sm">
           {tradeData.showLoading ? (
             <Grid item xs={12} sm={12} md={12} lg={12}>
               <Paper className={classes.modalPaper}>
@@ -718,7 +719,7 @@ export default () => {
           ) : (
             <Container maxWidth="sm">
               <form noValidate autoComplete="off" style={{ width: '100%' }}>
-                <Grid xs={12} sm={12} md={12} lg={12}>
+                <Box>
                   <Paper className={classes.modalPaper}>
                     {/* HEADER */}
                     <Grid container justify="space-between">
@@ -836,10 +837,7 @@ export default () => {
                         {tradeData?.deal?.company_name || ''}
                       </Grid>
                     </Grid>
-                    <Grid
-                      container
-                      style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}
-                    >
+                    <Grid container style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}>
                       <Grid
                         item
                         xs={6}
@@ -934,10 +932,7 @@ export default () => {
                         USD ($)
                       </Grid>
                     </Grid>
-                    <Grid
-                      container
-                      style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}
-                    >
+                    <Grid container style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}>
                       <Grid
                         item
                         xs={6}
@@ -975,7 +970,7 @@ export default () => {
                       </Grid>
                     </Grid>
 
-                    <Grid justify="center">
+                    <Box>
                       <Button
                         variant="contained"
                         onClick={() => setConfirmation(true)}
@@ -990,13 +985,13 @@ export default () => {
                       >
                         Create Order
                       </Button>
-                    </Grid>
+                    </Box>
                   </Paper>
-                </Grid>
+                </Box>
               </form>
             </Container>
           )}
-        </Grid>
+        </Container>
       </Modal>
       <Modal
         open={confirmation}
@@ -1005,7 +1000,7 @@ export default () => {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <Grid container xs={12} sm={12} md={4} lg={4}>
+        <Container maxWidth="sm">
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Paper className={classes.modalPaper}>
               {/* HEADER */}
@@ -1099,7 +1094,7 @@ export default () => {
                 </Grid>
               </Grid>
 
-              <Grid justify="center">
+              <Box>
                 <Button
                   variant="contained"
                   onClick={() => {
@@ -1125,10 +1120,10 @@ export default () => {
                 >
                   Confirm Order
                 </Button>
-              </Grid>
+              </Box>
             </Paper>
           </Grid>
-        </Grid>
+        </Container>
       </Modal>
 
       <CapitalAccountModal
@@ -1309,8 +1304,8 @@ const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal }) =>
 
   return (
     <>
-      <Modal open={editInvestmentModal._id} onClose={() => {}} className={classes.modal}>
-        <Grid container xs={12} sm={12} md={4} lg={5}>
+      <Modal open={Boolean(editInvestmentModal?._id)} onClose={() => {}} className={classes.modal}>
+        <Container maxWidth="sm">
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Paper className={classes.modalPaper}>
               <Grid
@@ -1323,7 +1318,7 @@ const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal }) =>
               <InvestmentEdit investmentId={editInvestmentModal._id} isK1 />
             </Paper>
           </Grid>
-        </Grid>
+        </Container>
       </Modal>
     </>
   );
