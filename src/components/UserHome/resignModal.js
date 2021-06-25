@@ -109,7 +109,7 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
   });
   const [amount, setAmount] = useState('');
 
-  const [submitConfirmation, { }] = useMutation(CONFIRM_INVESTMENT, {
+  const [submitConfirmation, {}] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       setTimeout(() => {
         refetch();
@@ -137,7 +137,7 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
         ...data?.investment?.submissionData,
         country_search: data?.investment?.submissionData.country,
         state_search: data?.investment?.submissionData.state,
-        title: data?.investment?.submissionData.title || ''
+        title: data?.investment?.submissionData.title || '',
       });
       setAmount(data?.investment?.amount);
     }
@@ -192,8 +192,8 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
   return (
     <>
       <Modal
-        open={showResignModal}
-        onClose={() => { }}
+        open={Boolean(showResignModal)}
+        onClose={() => {}}
         className={classes.modal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"

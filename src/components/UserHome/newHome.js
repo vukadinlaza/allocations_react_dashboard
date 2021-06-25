@@ -18,8 +18,8 @@ import {
   FormControl,
   Input,
   InputAdornment,
-  Container,
   Box,
+  Container,
 } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
@@ -71,6 +71,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '12vh',
     borderRadius: '1rem',
     padding: theme.spacing(2),
+    maxHeight: '70%',
+    overflow: 'scroll',
   },
   input: {
     border: '1px solid #707070',
@@ -189,6 +191,7 @@ export default () => {
   const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile?.email || '');
   const [demo, setDemo] = useState(false);
   const [showCapitalAccounts, setShowCaptialAccounts] = useState(false);
+  const [postZap, {}] = useMutation(POST_ZAP);
   const investmentsRef = React.useRef(null);
 
   const [confirmation, setConfirmation] = useState(false);
@@ -550,8 +553,9 @@ export default () => {
               <TableBody>
                 {sortedInvestments(investments).map((investment) =>
                   showDocs?._id === investment?._id ? (
-                    <>
+                    <React.Fragment key={investment._id}>
                       <TR
+                        key={investment._id}
                         demo={demo}
                         investment={investment}
                         setShowDocs={setShowDocs}
@@ -570,7 +574,7 @@ export default () => {
                         setEditInvestmentModal={setEditInvestmentModal}
                         isAdmin={userProfile.admin || location.pathname.includes('investor')}
                       />
-                    </>
+                    </React.Fragment>
                   ) : (
                     <TR
                       key={investment._id}
@@ -641,7 +645,7 @@ export default () => {
                             textAlign: 'end',
                           }}
                         >
-                          <CancelIcon color="black" fontSize="medium" />
+                          <CancelIcon />
                         </Typography>
                       </Grid>
                       <Grid>
@@ -747,7 +751,7 @@ export default () => {
                           className={classes.grey}
                           style={{ fontWeight: 'bold', fontSize: '1.5rem' }}
                         >
-                          <CancelIcon color="black" fontSize="medium" />
+                          <CancelIcon />
                         </Typography>
                       </Grid>
                     </Grid>
@@ -781,8 +785,8 @@ export default () => {
                               disableUnderline
                               startAdornment={<InputAdornment position="start">%</InputAdornment>}
                               onChange={handleInputChange}
-                              name="percent"
-                              value={tradeData.percent}
+                              name="amount"
+                              value={tradeData.amount}
                             />
                           </FormControl>
                         )}
@@ -1021,12 +1025,12 @@ export default () => {
                     className={classes.grey}
                     style={{ fontWeight: 'bold', fontSize: '1.5rem' }}
                   >
-                    <CancelIcon color="black" fontSize="medium" />
+                    <CancelIcon />
                   </Typography>
                 </Grid>
               </Grid>
 
-              <Typography variant="paragraph" className={classes.grey}>
+              <Typography variant="body2" className={classes.grey}>
                 You'll {_.startCase(_.toLower(tradeData?.type))}
               </Typography>
 
@@ -1050,7 +1054,7 @@ export default () => {
                   style={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}
                 />
               </Grid>
-              <Typography variant="paragraph" className={classes.grey}>
+              <Typography variant="body2" className={classes.grey}>
                 You'll {tradeData.type === 'buy' ? 'Pay' : 'Receive'}
               </Typography>
               <Typography variant="h6" className={classes.grey}>
@@ -1147,16 +1151,7 @@ export default () => {
   );
 };
 
-const TR = ({
-  investment,
-  setShowDocs,
-  showDocs,
-  setTradeData,
-  demo,
-  setShowCaptialAccounts,
-  capitalAccounts,
-  userProfile,
-}) => {
+const TR = ({ investment, setShowDocs, showDocs, demo, setShowCaptialAccounts, capitalAccounts }) => {
   const history = useHistory();
   const capFields = (capitalAccounts || []).map((r) => r.fields);
 
@@ -1242,8 +1237,8 @@ function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin, setS
           <Typography variant="subtitle2" style={{ marginBottom: '1rem' }}>
             Documents may take up to 7 days to appear here after signing.
           </Typography>
-          <Grid container xs={12} md={12} sm={12} lg={12} spacing={1}>
-            {demo ? [] : docs.map((doc) => <Document doc={doc} investment={investment} />)}
+          <Grid container spacing={1}>
+            {demo ? [] : docs.map((doc) => <Document key={doc?.path} doc={doc} investment={investment} />)}
             {investment?.submissionData?.submissionId && !isClosed && (
               <Grid
                 item
@@ -1301,22 +1296,22 @@ function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin, setS
 
 const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal }) => {
   const classes = useStyles();
-
   return (
     <>
       <Modal open={Boolean(editInvestmentModal?._id)} onClose={() => {}} className={classes.modal}>
         <Container maxWidth="sm">
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Paper className={classes.modalPaper}>
-              <Grid
-                onClick={() => setEditInvestmentModal(false)}
-                style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer' }}
-              >
-                <CloseIcon />
-              </Grid>
-              <Grid container justify="space-between" />
-              <InvestmentEdit investmentId={editInvestmentModal._id} isK1 />
-            </Paper>
+          <Grid container style={{ minHeight: '100vh' }}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Paper className={classes.modalPaper}>
+                <Grid style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Box onClick={() => setEditInvestmentModal(false)} style={{ cursor: 'pointer' }}>
+                    <CloseIcon />
+                  </Box>
+                </Grid>
+                <Grid container justify="space-between" />
+                <InvestmentEdit investmentId={editInvestmentModal._id} isK1 />
+              </Paper>
+            </Grid>
           </Grid>
         </Container>
       </Modal>
