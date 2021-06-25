@@ -19,10 +19,6 @@ function W8BENE({ toggleOpen }) {
   const [country, setCountry] = useState('');
   const [countrySearch, setCountrySearch] = useState('');
 
-  const [formState] = useState({
-    chapter3Status: '',
-  });
-
   const [sameMailing, setSameMailing] = useState(false);
 
   const handleChange = (prop) => (e, newValue) => {
@@ -41,8 +37,6 @@ function W8BENE({ toggleOpen }) {
       return setCountrySearch(newValue);
     }
   };
-
-  console.log('W8 BENE form state: ', formState);
 
   return (
     <section className="W8BENE">

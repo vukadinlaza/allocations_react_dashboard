@@ -54,7 +54,6 @@ const UPDATE_USER = gql`
 
 const IdentityUpload = () => {
   const [investor, setInvestor] = useState(null);
-  const [formStatus] = useState('edit');
   const [updateInvestor] = useMutation(UPDATE_USER);
   const { userProfile, refetch } = useAuth(GET_INVESTOR);
 
@@ -63,10 +62,6 @@ const IdentityUpload = () => {
       setInvestor(userProfile);
     }
   }, [userProfile]);
-
-  useEffect(() => {
-    if (formStatus === 'complete') refetch();
-  }, [formStatus]);
 
   const submit = () => {
     return updateInvestor({
