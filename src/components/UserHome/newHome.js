@@ -18,6 +18,7 @@ import {
   FormControl,
   Input,
   InputAdornment,
+  Container
 } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
@@ -571,6 +572,7 @@ export default () => {
                     </>
                   ) : (
                     <TR
+                      key={investment._id}
                       demo={demo}
                       investment={investment}
                       setShowDocs={setShowDocs}
@@ -714,7 +716,7 @@ export default () => {
               </Paper>
             </Grid>
           ) : (
-            <Grid container xs={12} sm={12} md={12} lg={12}>
+            <Container maxWidth="sm">
               <form noValidate autoComplete="off" style={{ width: '100%' }}>
                 <Grid xs={12} sm={12} md={12} lg={12}>
                   <Paper className={classes.modalPaper}>
@@ -753,7 +755,7 @@ export default () => {
                       You'll {_.startCase(_.toLower(tradeData?.type))}
                     </Typography>
 
-                    <Grid container xs={12} sm={12} md={12} lg={12} className={classes.input}>
+                    <Grid container className={classes.input}>
                       <Grid
                         item
                         xs={6}
@@ -836,10 +838,6 @@ export default () => {
                     </Grid>
                     <Grid
                       container
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
                       style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}
                     >
                       <Grid
@@ -903,7 +901,7 @@ export default () => {
                       You'll {tradeData.type === 'buy' ? 'Pay' : 'Receive'}
                     </Typography>
 
-                    <Grid container xs={12} sm={12} md={12} lg={12} className={classes.input}>
+                    <Grid container className={classes.input}>
                       <Grid item xs={6} sm={6} md={6} lg={6}>
                         <FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
                           <Input
@@ -938,10 +936,6 @@ export default () => {
                     </Grid>
                     <Grid
                       container
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
                       style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}
                     >
                       <Grid
@@ -1000,7 +994,7 @@ export default () => {
                   </Paper>
                 </Grid>
               </form>
-            </Grid>
+            </Container>
           )}
         </Grid>
       </Modal>
