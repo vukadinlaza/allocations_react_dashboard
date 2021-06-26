@@ -6,6 +6,20 @@ This sample demonstrates:
 - Accessing profile information that has been provided in the ID token
 - Gated content. The `/profile` route is not accessible without having first logged in
 
+## Pre-Commit hooks
+
+You should first install `pre-commit` via `brew` if you haven't already:
+
+```bash
+brew install pre-commit
+```
+
+Then from the project root of our app run:
+
+```bash
+pre-commit install
+```
+
 ## Project setup
 
 `npm` to install the project dependencies:
