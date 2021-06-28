@@ -101,6 +101,7 @@ const styles = theme => ({
 		height: "calc(100% - 71px)",
 		// height: "calc(100% - 130px)",
 	  overflowY: "scroll",
+	  overflowX: "hidden",
 	  // marginBottom: "10px"
 	},
 	tooltip: {
@@ -195,14 +196,18 @@ export const FlatBox = withStyles(styles)(({ classes, title, info, children }) =
 		<div className={classes.box} style={{width: "100%", height: "auto", minHeight: "120px"}}>
 			<div className={classes.boxTitleContainer} style={{height: "60px"}}>
 				<Typography className={classes.boxTitle} style={{fontSize: "14px"}}>{title}</Typography>
-				<Tooltip
-					title={info}
-					classes={{
-						tooltip: classes.tooltip
-					}}
-					>
-					<InfoIcon className={classes.infoIcon}/>
-				</Tooltip>
+				{info?
+					<Tooltip
+						title={info}
+						classes={{
+							tooltip: classes.tooltip
+						}}
+						>
+						<InfoIcon className={classes.infoIcon}/>
+					</Tooltip>
+					:
+					''
+				}
 			</div>
 			<div className={`${classes.boxContent} ${classes.flatBoxContent}`}>
 				{children}

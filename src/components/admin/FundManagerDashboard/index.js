@@ -19,6 +19,7 @@ import { phone, tablet } from '../../../utils/helpers';
 import { useViewport } from '../../../utils/hooks';
 import { useFetch } from '../../../utils/hooks';
 import Loader from '../../utils/Loader';
+import DealsTabs from './sections/DealsTabs'
 
 
 const styles = theme => ({
@@ -30,8 +31,13 @@ const styles = theme => ({
     alignItems: "center",
     padding: "2px 5px",
     minWidth: "50px",
+    whiteSpace: 'nowrap',
+    margin: "0 0.5em",
     "& svg": {
       fontSize: "10px",
+    },
+    [theme.breakpoints.down(phone)]: {
+      margin: 0
     }
   },
   avatar: {
@@ -87,11 +93,40 @@ const styles = theme => ({
     background: "#ffffff",
     marginBottom: "10px",
     borderRadius: "10px",
-    padding: "10px"
+    padding: "10px",
+    width: "100%",
+    maxWidth: "100%",
+    overflowX: "hidden"
+  },
+  investorBoxAmount: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    [theme.breakpoints.down(phone)]: {
+      flexWrap: "wrap",
+      width: "100%"
+    },
   },
   investorBoxName: {
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
+    width: "calc(100% - 80px)",
+    [theme.breakpoints.down(phone)]: {
+      width: "100%",
+      marginBottom: "1em"
+    },
+  },
+  investorName: {
+    fontSize: "14px",
+    width: "calc(100% - 108px)",
+    maxWidth: "calc(100% - 108px)",
+    overflow: "hidden",
+    whiteSpace: "pre",
+    textOverflow: "ellipsis",
+    [theme.breakpoints.down(phone)]: {
+      width: "100%",
+      marginBottom: "0.5em"
+    },
   },
   loaderContainer: {
     position:"absolute",
@@ -111,6 +146,11 @@ const styles = theme => ({
     padding: "2px 12px",
     borderRadius: "20px"
   },
+  mainTitle: {
+    fontSize: "28px",
+    fontWeight: "700",
+    padding: "20px 40px"
+  },
   pageIcons: {
     width: "125px",
     display: "flex",
@@ -128,6 +168,7 @@ const styles = theme => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    cursor: "pointer",
     "& *": {
       color: "white",
       fontSize: "18px"
@@ -174,10 +215,9 @@ const styles = theme => ({
     marginBottom: "35px"
   },
   selectedTab: {
-    color: "#2A2B54 !important",
-    fontWeight: "bold",
+    fontWeight: "bold !important",
     "& $tabWrapper":{
-        backgroundColor: "#8493A61A",
+        backgroundColor: "rgb(32 93 245 / 16%)",
         borderRadius: "10px",
       }
   },
@@ -210,6 +250,8 @@ const styles = theme => ({
   },
   tab: {
     textTransform: "none",
+    minWidth: 0,
+    fontWeight: "400",
     "&:focus": {
       outline: "none"
     }
@@ -246,7 +288,8 @@ const styles = theme => ({
     // left: "0",
     width: "100%",
     border: "none",
-    height: "60px",
+    height: "50px",
+    padding: "0 28px",
     "& *": {
       height: "100%"
     }
@@ -261,7 +304,7 @@ const styles = theme => ({
     display: "none"
   },
   tabWrapper: {
-    padding: "0 10px",
+    padding: "0 20px",
   },
   titleDataText: {
     margin: "0",
@@ -272,24 +315,39 @@ const styles = theme => ({
 });
 
 
-export const GET_DEAL = gql`
-  query GetDeal($fund_slug: String, $deal_slug: String) {
-    deal(fund_slug: $fund_slug, deal_slug: $deal_slug) {
+export const ORG_OVERVIEW = gql`
+  query GetOrg($slug: String!, $status: String) {
+    organization(slug: $slug) {
       _id
-      company_name
-      company_description
-      target
-      raised
-      date_closed
-      organization {
+      name
+      slug
+      deals(status: $status) {
         _id
-        name
-      }
-      dealParams {
-        dealType
-        dealMultiple
-        totalCarry
-        totalManagementFee
+        company_name
+        company_description
+        target
+        raised
+        slug
+        date_closed
+        investmentType
+        organization {
+          _id
+          name
+        }
+        dealParams {
+          signDeadline
+          wireDeadline
+          dealType
+          dealMultiple
+          totalCarry
+          fundTotalCarry
+          totalManagementFee
+          managementFeesDollar
+          fundManagementFeesDollar
+          fundManagementFees
+          managementFeeType
+          fundManagementFeeType
+        }
       }
     }
   }
@@ -312,34 +370,40 @@ const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
 
 
-const FundManagerDashboard = ({ classes, location }) => {
+const FundManagerDashboard = ({ classes, location, history }) => {
 
   const { width } = useViewport();
   const { organization: orgSlug, deal: dealSlug } = useParams();
   const [tabIndex, setTabIndex] = useState(0)
-
+  const [dealData, setDealData] = useState({});
   const [dealName, setDealName] = useState('')
   const [atDealData, setAtDealData] = useState({})
-  const [getDeal, { data: dealData }] = useLazyQuery(GET_DEAL, {
-    variables: { fund_slug: orgSlug, deal_slug: dealSlug },
+  const [getOrgDeals, { data: orgDeals }] = useLazyQuery(ORG_OVERVIEW, {
+    variables: { slug: orgSlug, status: "active" },
     fetchPolicy: "network-only"
   });
   const { data: atDeal } = useFetch(OPS_ACCOUNTING, dealName && DEALS_TABLE, dealName && `({Deal Name}="${dealName}")`);
   const { data: atFundData, status } = useFetch(OPS_ACCOUNTING, atDealData?.name && INVESTMENTS_TABLE, atDealData?.name && `(FIND("${atDealData.name}", {Deals}))`);
 
+  useEffect(() => {
+    getOrgDeals()
+  }, [dealSlug, orgSlug])
 
   useEffect(() => {
-    if(dealData){
-      const dealName = dealData?.deal?.company_name;
+    if(orgDeals?.organization?.deals?.length && !dealSlug){
+      let slug = orgDeals.organization.deals[0].slug;
+      history.push(`/admin/${orgSlug}/${slug}`)
+    }else if(orgDeals){
+      let currentDeal = orgDeals.organization?.deals?.find(deal => dealSlug === deal.slug)
+      let dealName = currentDeal.company_name
+      // console.log({currentDeal, dealSlug});
+      setDealData(currentDeal)
       setDealName(dealName)
     }
-  }, [dealData])
+  }, [orgDeals])
 
   useEffect(() => {
-    getDeal()
-  }, [dealSlug])
-
-  useEffect(() => {
+    // console.log({atDeal});
     if(atDeal && atDeal.length){
       let data = atDeal[0].fields;
       setAtDealData({name: data['Deal Name'], id: atDeal[0].id})
@@ -353,9 +417,17 @@ const FundManagerDashboard = ({ classes, location }) => {
   const fundData = atFundData.map((d) => d.fields)
 
   const handleLinkCopy = () => {
-    navigator.clipboard.writeText(window.origin + (location.pathname || ''));
-    toast.success('Copied deal link to clipboard.');
+    if(orgSlug && dealSlug){
+      navigator.clipboard.writeText(window.origin + (`/deals/${orgSlug}/${dealSlug}` || ''));
+      toast.success('Copied deal link to clipboard.');
+    }
   };
+
+  const goToDeal = () => {
+    if(orgSlug && dealSlug){
+      history.push(`/deals/${orgSlug}/${dealSlug}`)
+    }
+  }
 
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue)
@@ -367,7 +439,7 @@ const FundManagerDashboard = ({ classes, location }) => {
         return(
           <Setup
             classes={classes}
-            data={dealData?.deal}
+            data={dealData}
             />
         )
       case 1:
@@ -390,7 +462,7 @@ const FundManagerDashboard = ({ classes, location }) => {
         )
       case 3:
         return(
-          <InvestorStatus classes={classes} />
+          <InvestorStatus classes={classes} width={width}/>
         )
       case 4:
         // return(
@@ -400,10 +472,10 @@ const FundManagerDashboard = ({ classes, location }) => {
         // )
         return(
           <div className={classes.section}>
-            <FlatBox title="SHARE" info="Explanation">
-              <Typography>dashboard.allocations.com{location.pathname}</Typography>
+            <FlatBox title="SHARE">
+              <Typography>dashboard.allocations.com{orgSlug && dealSlug? `/deals/${orgSlug}/${dealSlug}` : ''}</Typography>
               <div className={classes.pageIcons}>
-                <div className={classes.pageIcon}><ChevronRightIcon/></div>
+                <div className={classes.pageIcon} onClick={goToDeal}><ChevronRightIcon/></div>
                 <div className={classes.pageIcon} onClick={handleLinkCopy}><FileCopyOutlinedIcon/></div>
               </div>
             </FlatBox>
@@ -418,34 +490,40 @@ const FundManagerDashboard = ({ classes, location }) => {
 
   return (
     <div className={classes.dashboardContainer}>
-     <Tabs
-       value={tabIndex}
-       indicatorColor="primary"
-       textColor="primary"
-       onChange={handleTabChange}
-       classes={{
-         root: classes.tabs,
-         indicator: classes.tabsIndicator,
-         flexContainer: classes.tabsContainer
-       }}
-       variant="fullWidth"
-     >
-       {dashboardTabs.map((tab, index) =>
-         <Tab
-           label={tab}
-           className={classes.tab}
-           key={`tab-${index}`}
-           classes={{
-             root: classes.tab,
-             selected: classes.selectedTab,
-             wrapper: classes.tabWrapper
-           }}
-           disableRipple
-           />
-       )}
-       {/*}<Tab label="Disabled" disabled />*/}
-     </Tabs>
-     {getTabContent()}
+      <Typography className={classes.mainTitle}>Funds</Typography>
+      <DealsTabs
+        dealSlug={dealSlug}
+        orgSlug={orgSlug}
+        data={orgDeals}
+        width={width}
+        />
+      <Tabs
+        value={tabIndex}
+        indicatorColor="primary"
+        textColor="primary"
+        onChange={handleTabChange}
+        classes={{
+          root: classes.tabs,
+          indicator: classes.tabsIndicator,
+          flexContainer: classes.tabsContainer
+        }}
+        >
+        {dashboardTabs.map((tab, index) =>
+          <Tab
+            label={tab}
+            className={classes.tab}
+            key={`tab-${index}`}
+            classes={{
+              root: classes.tab,
+              selected: classes.selectedTab,
+              wrapper: classes.tabWrapper
+            }}
+            disableRipple
+            />
+        )}
+        {/*}<Tab label="Disabled" disabled />*/}
+      </Tabs>
+      {getTabContent()}
     </div>
   );
 }

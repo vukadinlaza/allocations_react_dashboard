@@ -37,18 +37,7 @@ export function formatDoughnutSeries(series) {
 }
 
 
-const Highlights = ({ classes, orgSlug, dealSlug, data, dealData }) => {
-
-  //
-  //
-  // let organiztionSlug = orgSlug;
-  // if (orgSlug === 'demo-fund') {
-  //   organiztionSlug = 'browder-capital';
-  // }
-
-
-  //Charts methods
-
+const Highlights = ({ classes, data, dealData }) => {
 
   const setMonthsToShow = (data) => {
     let monthsArray = [];
@@ -107,7 +96,7 @@ const Highlights = ({ classes, orgSlug, dealSlug, data, dealData }) => {
   let series = data.map(s => { return {label: s['Investment'], total: s['Invested'] } }).sort((a, b) => nestedSort(a, b, 'total', 'desc'))
   let seriesTotal = series.length? series.map(s => s.total).reduce((acc, n) => acc + n) : 0
   let steppedChartData = getSteppedChartData()
-  let dealMultiple = _.toNumber(dealData?.deal?.dealParams?.dealMultiple || 1)
+  let dealMultiple = _.toNumber(dealData?.dealParams?.dealMultiple || 1)
 
 
   return (

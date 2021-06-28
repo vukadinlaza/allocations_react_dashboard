@@ -24,7 +24,7 @@ export function useToggle(init) {
 export const useFetch = (base, tableName, filter) => {
   const [status, setStatus] = useState('idle');
   const [data, setData] = useState([]);
-
+  // console.log({tableName, filter});
   useEffect(() => {
     if (!base || !tableName) return;
 
@@ -44,7 +44,7 @@ export const useFetch = (base, tableName, filter) => {
 
   //Differentiate an Airtable reponse with no results, from an invalid query
   if(!base || !tableName) return { status, data: null }
-  
+
   return { status, data };
 };
 

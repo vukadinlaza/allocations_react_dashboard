@@ -27,9 +27,9 @@ import AccountBalanceRoundedIcon from '@material-ui/icons/AccountBalanceRounded'
 import CreditCardRoundedIcon from '@material-ui/icons/CreditCardRounded';
 import { useAuth } from '../../auth/useAuth';
 import NavBar from '../NavBar';
-import NewNavBar from '../NewNavBar';
 import { phone } from '../../utils/helpers'
 import Loader from '../utils/Loader'
+import { useViewport } from '../../utils/hooks';
 import './style.scss';
 
 
@@ -798,6 +798,15 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     height: "calc(100vh - 70px)"
   },
+  newDrawerPaper: {
+    width: drawerWidth,
+    paddingTop: 8,
+    border: "none",
+    borderRight: '1px solid #dfe2e5',
+    borderLeft: 0,
+    position: "relative",
+    height: "100vh"
+  },
   contentContainer: {
     display:"flex",
     justifyContent:"space-between",
@@ -858,13 +867,13 @@ export default function Sidebar(props) {
   const [investTab, setInvestTab] = useState(false);
   const [creditTab, setCreditTab] = useState(false);
   const [buildTab, setBuildTab] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const pathMatch = useRouteMatch('/admin/:organization');
+  const fundMatch = useRouteMatch('/admin/:organization/:deal')
   const location = useLocation();
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const { width } = useViewport();
 
   useEffect(() => {
     if (userProfile.showInvestAndMrkPlc || location.pathname === '/invest') {
@@ -979,12 +988,7 @@ export default function Sidebar(props) {
 
   const container = window !== undefined ? () => window().document.body : undefined;
   const onboarding = location.pathname === '/get-started';
-
-  let atFMDashboard = false;
-  if(pathMatch){
-    let organization = pathMatch.params.organization;
-    atFMDashboard = (pathMatch.path === '/admin/:organization' || pathMatch.path === '/admin/:organization/:deal') && (organization !== 'funds');
-  }
+  const isFundMatch = fundMatch?.path === "/admin/:organization/:deal";
 
   return (
     <>
@@ -992,28 +996,28 @@ export default function Sidebar(props) {
         {!onboarding && <CssBaseline />}
         {!onboarding ? (
           <>
-            <AppBar className={classes.appBar}>
-              <Toolbar>
-                <IconButton
-                  color="inherit"
-                  aria-label="open drawer"
-                  edge="start"
-                  onClick={handleDrawerToggle}
-                  className={classes.menuButton}
-                >
-                  <MenuIcon />
-                </IconButton>
-                <div className={classes.brand}>
-                  <Brand organizations_admin={userProfile.organizations_admin || []} admin={userProfile.admin} />
-                </div>
-                {atFMDashboard?
-                  <NewNavBar setLoading={setLoading}/>
-                  :
+            {isFundMatch && width > phone?
+              ''
+              :
+              <AppBar className={classes.appBar}>
+                <Toolbar>
+                  <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    edge="start"
+                    onClick={handleDrawerToggle}
+                    className={classes.menuButton}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <div className={classes.brand}>
+                    <Brand organizations_admin={userProfile.organizations_admin || []} admin={userProfile.admin} />
+                  </div>
                   <NavBar />
-                }
-              </Toolbar>
-            </AppBar>
-            <div className={classes.contentContainer} style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start"}}>
+                </Toolbar>
+              </AppBar>
+            }
+            <div className={classes.contentContainer} style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start", height: isFundMatch? "100vh" : "calc(100vh - 70px)"}}>
               <nav className={classes.drawer} aria-label="mailbox folders">
                 <Hidden mdUp implementation="css">
                   <Drawer
@@ -1035,7 +1039,7 @@ export default function Sidebar(props) {
                 <Hidden smDown implementation="css">
                   <Drawer
                     classes={{
-                      paper: classes.drawerPaper,
+                      paper: isFundMatch? classes.newDrawerPaper : classes.drawerPaper,
                     }}
                     variant="permanent"
                     open
@@ -1044,12 +1048,8 @@ export default function Sidebar(props) {
                   </Drawer>
                 </Hidden>
               </nav>
-              <main className={classes.content} style={{ background: 'rgba(0,0,0,0.01)' }}>
-                {loading?
-                  <Loader/>
-                  :
-                  props.children
-                }
+              <main className={classes.content} style={{ background: 'rgba(0,0,0,0.01)', height: isFundMatch? "100vh" : "calc(100vh - 70px)" }}>
+                {props.children}
               </main>
             </div>
           </>

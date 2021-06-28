@@ -9,6 +9,7 @@ import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import { ScrollableBox } from '../widgets';
 import { nWithCommas } from '../../../../utils/numbers'
 import Loader from '../../../utils/Loader'
+import { phone } from '../../../../utils/helpers'
 
 
 const GET_INVESTMENTS = gql`
@@ -35,23 +36,36 @@ const GET_INVESTMENTS = gql`
 `;
 
 
-const InvestorBox = ({classes, investor, index}) => {
+const InvestorBox = ({classes, investor, index, width}) => {
   return(
-    <div className={classes.investorBox} key={`investor-${index}`}>
-      <div className={classes.investorBoxName}>
+    width > phone?
+      <div className={classes.investorBox} key={`investor-${index}`}>
+        <div className={classes.investorBoxName}>
+          <Avatar className={classes.avatar}>{investor.name.charAt(0).toUpperCase()}</Avatar>
+          <Typography className={classes.investorName}>{investor.name}</Typography>
+          <div className={classes.accredited} style={investor.accredidation_status? {} : {background: "#bbc5ba"}}>
+            <Typography style={{color: "white", fontSize: "12px"}}><VerifiedUserIcon/> 506c</Typography>
+          </div>
+        </div>
+        <Typography style={{width: "80px", textAlign: "right"}}>${nWithCommas(investor.amount)}</Typography>
+      </div>
+      :
+      <div className={classes.investorBox} key={`investor-${index}`}>
         <Avatar className={classes.avatar}>{investor.name.charAt(0).toUpperCase()}</Avatar>
-        <Typography style={{fontSize: "14px", width: "auto", overflow: "hidden", whiteSpace: "pre", textOverflow: "ellipsis"}}>{investor.name}</Typography>
-        <div className={classes.accredited} style={investor.accredidation_status? {} : {background: "#bbc5ba"}}>
-          <Typography style={{color: "white", fontSize: "12px"}}><VerifiedUserIcon/> 506c</Typography>
+        <div className={classes.investorBoxAmount}>
+          <Typography className={classes.investorName}>{investor.name}</Typography>
+          <div className={classes.accredited} style={investor.accredidation_status? {} : {background: "#bbc5ba"}}>
+            <Typography style={{color: "white", fontSize: "12px"}}><VerifiedUserIcon/> 506c</Typography>
+          </div>
+          <Typography style={{textAlign: "right"}}>${nWithCommas(investor.amount)}</Typography>
         </div>
       </div>
-      <Typography>${nWithCommas(investor.amount)}</Typography>
-    </div>
+
   )
 }
 
 
-const InvestorStatus = ({ classes }) => {
+const InvestorStatus = ({ classes, width }) => {
 
   const { deal: dealSlug, organization: orgSlug } = useParams();
   const [getInvestments, { data }] = useLazyQuery(GET_INVESTMENTS);
@@ -103,7 +117,7 @@ const InvestorStatus = ({ classes }) => {
         buttonText={true? '' : <div><MailIcon style={{color: "white", marginRight: "0.5em"}}/>Send Reminder</div>}
         >
         {viewedInvestors.map((investor, index) =>
-          <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`} />
+          <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`} width={width}/>
         )}
       </ScrollableBox>
       <ScrollableBox
@@ -115,7 +129,7 @@ const InvestorStatus = ({ classes }) => {
         buttonText={true? '' : <div><MailIcon style={{color: "white", marginRight: "0.5em"}}/>Send Reminder</div>}
         >
         {signedInvestors.filter(investor => investor.status === 'signed').map((investor, index) =>
-          <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`}/>
+          <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`} width={width}/>
         )}
       </ScrollableBox>
       <ScrollableBox
@@ -126,7 +140,7 @@ const InvestorStatus = ({ classes }) => {
         size="third"
         >
         {wiredInvestors.filter(investor => investor.status === 'wired').map((investor, index) =>
-          <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`}/>
+          <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`} width={width}/>
         )}
       </ScrollableBox>
     </div>
