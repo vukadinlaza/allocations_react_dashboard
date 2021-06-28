@@ -85,27 +85,20 @@ const styles = theme => ({
 
 
 
-const DealsTabs = ({ classes, history, orgSlug, dealSlug, data, width }) => {
-
-  const [tabIndex, setTabIndex] = useState(0);
+const DealsTabs = ({ classes, history, orgSlug, data, width, tabIndex, setTabIndex }) => {
   const [deals, setDeals] = useState([]);
 
   const handleTabChange = (e, newIndex, fromClick = false) => {
+    console.log({newIndex});
     setTabIndex(newIndex);
-    if(deals.length && fromClick){
-      const { slug } = deals[newIndex]
-      history.push(`/admin/${orgSlug}/${slug}`)
-    }
   }
 
   useEffect(() => {
     if(data?.organization?.deals?.length){
       const deals = data.organization.deals
-      const currentDealIndex = deals.map(deal => deal.slug).indexOf(dealSlug)
       setDeals(deals)
-      handleTabChange('', currentDealIndex)
     }
-  }, [dealSlug])
+  }, [orgSlug])
 
 
   if(!data) return <Loader/>

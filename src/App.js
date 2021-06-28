@@ -135,7 +135,6 @@ const App = () => {
           {/** Whitelabel Routes * */}
           <PrivateRoute path="/admin/funds" component={Funds} exact />
           <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
-          <PrivateRoute path="/admin/:organization/:deal" component={FundManagerDashboard} exact />
           <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
 
           <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />

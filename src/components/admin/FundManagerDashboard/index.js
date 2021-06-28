@@ -374,7 +374,8 @@ const FundManagerDashboard = ({ classes, location, history }) => {
 
   const { width } = useViewport();
   const { organization: orgSlug, deal: dealSlug } = useParams();
-  const [tabIndex, setTabIndex] = useState(0)
+  const [tabIndex, setTabIndex] = useState(0);
+  const [dealTab, setDealTab] = useState(0);
   const [dealData, setDealData] = useState({});
   const [dealName, setDealName] = useState('')
   const [atDealData, setAtDealData] = useState({})
@@ -387,20 +388,15 @@ const FundManagerDashboard = ({ classes, location, history }) => {
 
   useEffect(() => {
     getOrgDeals()
-  }, [dealSlug, orgSlug])
+  }, [orgSlug])
 
   useEffect(() => {
-    if(orgDeals?.organization?.deals?.length && !dealSlug){
-      let slug = orgDeals.organization.deals[0].slug;
-      history.push(`/admin/${orgSlug}/${slug}`)
-    }else if(orgDeals){
-      let currentDeal = orgDeals.organization?.deals?.find(deal => dealSlug === deal.slug)
-      let dealName = currentDeal.company_name
-      // console.log({currentDeal, dealSlug});
-      setDealData(currentDeal)
-      setDealName(dealName)
-    }
+    handleDealData(0)
   }, [orgDeals])
+
+  useEffect(() => {
+    handleDealData(dealTab)
+  }, [dealTab])
 
   useEffect(() => {
     // console.log({atDeal});
@@ -412,21 +408,32 @@ const FundManagerDashboard = ({ classes, location, history }) => {
     }
   }, [atDeal])
 
-  if(!dealData || !atFundData) return <Loader/>
 
-  const fundData = atFundData.map((d) => d.fields)
+  const handleDealData = (index) => {
+    if(orgDeals){
+      let currentDeal = orgDeals.organization?.deals?.length && orgDeals.organization.deals[index]
+      let dealName = currentDeal.company_name
+      setDealData(currentDeal)
+      setDealName(dealName)
+    }
+  }
+
 
   const handleLinkCopy = () => {
-    if(orgSlug && dealSlug){
-      navigator.clipboard.writeText(window.origin + (`/deals/${orgSlug}/${dealSlug}` || ''));
+    if(orgSlug && dealData?.slug){
+      navigator.clipboard.writeText(window.origin + (`/deals/${orgSlug}/${dealData.Slug}` || ''));
       toast.success('Copied deal link to clipboard.');
     }
   };
 
   const goToDeal = () => {
-    if(orgSlug && dealSlug){
-      history.push(`/deals/${orgSlug}/${dealSlug}`)
+    if(orgSlug && dealData?.slug){
+      history.push(`/deals/${orgSlug}/${dealData.slug}`)
     }
+  }
+
+  const handleDealsTabChange = (newValue) => {
+    setDealTab(newValue)
   }
 
   const handleTabChange = (event, newValue) => {
@@ -434,6 +441,8 @@ const FundManagerDashboard = ({ classes, location, history }) => {
   }
 
   const getTabContent = () => {
+    const fundData = atFundData.map((d) => d.fields);
+
     switch (tabIndex) {
       case 0:
         return(
@@ -486,7 +495,7 @@ const FundManagerDashboard = ({ classes, location, history }) => {
     }
   }
 
-  if(status === "fetching") return <Loader/>
+  if(!orgDeals) return <Loader/>
 
   return (
     <div className={classes.dashboardContainer}>
@@ -496,6 +505,8 @@ const FundManagerDashboard = ({ classes, location, history }) => {
         orgSlug={orgSlug}
         data={orgDeals}
         width={width}
+        tabIndex={dealTab}
+        setTabIndex={handleDealsTabChange}
         />
       <Tabs
         value={tabIndex}
@@ -523,7 +534,11 @@ const FundManagerDashboard = ({ classes, location, history }) => {
         )}
         {/*}<Tab label="Disabled" disabled />*/}
       </Tabs>
-      {getTabContent()}
+      {!dealData || !atFundData || status === "fetching"?
+        <Loader/>
+          :
+         getTabContent()
+       }
     </div>
   );
 }
