@@ -261,11 +261,14 @@ export const LineChart = withStyles(styles)(({ dataset: { data, labels } }) => {
 	const getMaxValue = () => {
 		let max = 200000;
 		let dataMaxValue = data[data.length - 1];
+		if(dataMaxValue < 10000) return 10000
 		while(max < dataMaxValue){
 			max += 200000
 		}
 		return max
 	}
+
+	const maxValue = getMaxValue()
 
 	if (!data) {
 		return <div></div>
@@ -321,8 +324,8 @@ export const LineChart = withStyles(styles)(({ dataset: { data, labels } }) => {
 								borderDash: [8, 4]
 							},
 							ticks: {
-			          stepSize: 200000,
-								max: getMaxValue(),
+			          stepSize: maxValue/5,
+								max: maxValue,
 								callback: function(val, index) {
 			            return nWithCommas(val);
 			          },

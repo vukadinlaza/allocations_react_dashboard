@@ -1,102 +1,24 @@
-import React, { useEffect } from 'react';
-import _ from 'lodash';
+import React, { useEffect, useState } from 'react';
 import { gql } from 'apollo-boost';
-import { Link, useParams, useHistory, Redirect } from 'react-router-dom';
-import { Row, Container, Col } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  Avatar,
-  Hidden,
-  Paper,
-  ListItem,
-  List,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  TableHead,
-  Grid,
-  Button,
-  Fab,
-  Typography,
-} from '@material-ui/core';
-import Chart from 'react-google-charts';
-import { makeStyles } from '@material-ui/core/styles';
-import { nWithCommas } from '../../utils/numbers';
-import { validate } from '../forms/InvestorEdit';
+import { useQuery } from '@apollo/react-hooks';
+import { withStyles } from '@material-ui/core/styles';
+import _, { toLower } from 'lodash';
+import moment from 'moment'
+import { Typography } from '@material-ui/core';
 import { useAuth } from '../../auth/useAuth';
-import allocations_create_deal from '../../assets/allocations_create_deal.svg';
-import allocations_faq from '../../assets/allocations_faq.svg';
-import allocations_invited_deals from '../../assets/allocations_invited_deals.svg';
-import allocations_recent_investments from '../../assets/allocations_recent_investments.svg';
-import allocations_total_investments from '../../assets/allocations_total_investments.svg';
-import allocations_update_profile from '../../assets/allocations_update_profile.svg';
-import allocations_update from '../../assets/allocations_update.svg';
-import NewHome from './newHome';
-
+import {
+  DefaultChartTable,
+  DoughnutChart,
+  LineChart
+} from '../utils/charts';
+import { SimpleBox, ChartBox } from '../admin/FundManagerDashboard/widgets'
+import { nWithCommas } from '../../utils/numbers';
+import { useFetch } from '../../utils/hooks';
+import { nestedSort, tablet, phone } from '../../utils/helpers';
 import Loader from '../utils/Loader';
-import './style.scss';
-import NullPaper from '../NullPaper';
+import 'chartjs-plugin-datalabels';
+import InvestorTable from './InvestorTable'
 
-const purples = ['#6200EE', '#BB9FE6'];
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(2),
-  },
-  banner: {
-    minWidth: '100%',
-  },
-  blue: {
-    color: '#205DF5',
-  },
-  grey: {
-    color: '#707070',
-  },
-}));
-
-const chartOptions = {
-  minColor: '#A5BEFB',
-  midColor: '#628DF8',
-  maxColor: '#205df5',
-  headerHeight: 0,
-  fontColor: '#fff',
-  highlightColor: '#fff',
-  showTooltips: false,
-  maxDepth: 1,
-  maxPostDepth: 2,
-  // showScale: true
-};
-
-function formatData(investments) {
-  const grouped = investments.reduce((acc, inv) => {
-    if (acc[inv.deal._id]) {
-      acc[inv.deal._id].amount += inv.amount;
-    } else {
-      acc[inv.deal._id] = { ...inv };
-    }
-    return acc;
-  }, {});
-
-  const nameChecker = {};
-
-  const d = Object.values(grouped).map((d, i) => {
-    const dealName = d.deal.company_name;
-    if (nameChecker[dealName]) {
-      nameChecker[dealName] += 1;
-    } else {
-      nameChecker[dealName] = 1;
-    }
-
-    const displayName = nameChecker[dealName] === 1 ? dealName : dealName + nameChecker[dealName];
-    return [displayName, 'All', d.amount, d.amount - i * 5000, d.deal._id];
-  });
-
-  return [
-    ['Company', 'Group', 'Amount Invested (size)', 'Company Color (color)', 'Deal ID'],
-    ['All', null, 0, 0, null],
-  ].concat(d);
-}
 
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
@@ -121,8 +43,14 @@ const GET_INVESTOR = gql`
       }
       investments {
         _id
+        value
         amount
         status
+        created_at
+        documents {
+          path
+          link
+        }
         deal {
           _id
           slug
@@ -130,6 +58,9 @@ const GET_INVESTOR = gql`
           company_description
           date_closed
           status
+          dealParams{
+            dealMultiple
+          }
           organization {
             _id
             slug
@@ -152,347 +83,221 @@ const GET_INVESTOR = gql`
   }
 `;
 
-function orderInvestments(investments) {
-  const pastInvited = investments.filter(({ status }) => status !== 'invited');
-  return _.take(
-    _.orderBy(pastInvited, (i) => new Date(i.deal.date_closed).getTime(), 'desc'),
-    3,
-  );
-}
 
-export default function UserHome(props) {
-  const classes = useStyles();
-
-  const history = useHistory();
-  const { userProfile, error, params, adminView } = useAuth(GET_INVESTOR);
-
-  if (error) {
-    if (error.message === 'GraphQL error: permission denied' && userProfile && userProfile.email) {
-      return <Redirect to="/signup" />;
-    }
-  }
-
-  if (!userProfile.email)
-    return (
-      <div>
-        <Loader />
-      </div>
-    );
-
-  const userInvestments = userProfile.investments.filter((inv) => {
-    if (!inv?.deal._id) {
-      console.log('deal with no deal _id', inv.deal);
-    }
-    return inv.deal._id;
-  });
-  const total_invested = _.sumBy(userInvestments, 'amount') || 0;
-  const chartEvents = [
-    {
-      eventName: 'select',
-      callback({ chartWrapper }) {
-        history.push(`/investments`);
-      },
+const styles = theme => ({
+  chartContainer: {
+    width: '70%',
+    width: '60%',
+    padding: '5% 0',
+    [theme.breakpoints.down(tablet)]: {
+      padding: 0,
+      width: "100%",
+      marginBottom: "20px",
+      height: "250px"
     },
-  ];
+  },
+  footerData: {
+    fontSize: "14px"
+  },
+  section: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+    // padding: "40px",
+    [theme.breakpoints.down(phone)]: {
+      padding: "4vw"
+    },
+  },
+  simpleBoxDataRow: {
+    marginBottom: "15px",
+    display: 'flex',
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%"
+  },
+  subSection: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "space-between",
+    flexWrap: "wrap"
+  },
+  tableContainer: {
+    maxHeight: '100%',
+    width: '35%',
+    minWidth: "175px",
+    display:'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    '& table *': {
+    },
+    '& tr':{
+      display: 'flex',
+      width: '100%',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: '8px',
+      "& > *": {
+        display: "flex"
+      },
+      "& > *:first-child": {
+        marginRight: "1em"
+      }
+    },
+    [theme.breakpoints.down(tablet)]: {
+      width: "100%"
+    }
+  },
+});
 
-  /* TODO: implement empty values for each paper */
-  const isEmpty = true;
-  return <NewHome />;
-  return (
-    <>
-      {/* TODO: Move to NavBar <AdminTile investor={investor}/> */}
 
-      <Grid container spacing={2}>
-        {total_invested === 0 ? (
-          <NoInvestmentBanner />
-        ) : (
-          <Grid item xs={12}>
-            <Grid container spacing={2} alignItems="center">
-              <Hidden only="xs">
-                <Grid item sm={12} md={4}>
-                  <Typography variant="body1" className={classes.grey}>
-                    Welcome
-                  </Typography>
-                  <Typography variant="h5">
-                    <Name investor={userProfile} />
-                  </Typography>
-                </Grid>
-              </Hidden>
-              <Grid item sm={12} md={8}>
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <Hidden only="xs">
-                    <Typography
-                      variant="body1"
-                      className={classes.grey}
-                      style={{ textAlign: 'right', paddingRight: 16 }}
-                    >
-                      Your Allocations account is ready for your use. <br />
-                      Let's view your investments!
-                    </Typography>
-                  </Hidden>
-                  <Button
-                    onClick={() => history.push(adminView ? `/investor/${params.id}/investments` : '/investments')}
-                    variant="contained"
-                    color="primary"
-                  >
-                    My Investments
-                  </Button>
-                </div>
-              </Grid>
-            </Grid>
-          </Grid>
-        )}
 
-        <>
-          <Grid item xs={12}>
-            <Paper className={classes.paper} style={{ height: '100%' }}>
-              <Grid container alignItems="center">
-                <Grid item sm={12} md={6}>
-                  <Grid container>
-                    <Grid item xs={12} sm={5}>
-                      <img
-                        src={allocations_total_investments}
-                        style={{ maxWidth: 200, width: '100%', paddingLeft: 16 }}
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={7}>
-                      <Typography variant="h5" className={classes.grey}>
-                        <strong>Total Investments</strong>
-                      </Typography>
-                      <Typography
-                        variant="h5"
-                        style={{ fontSize: '1.8rem', marginBottom: 16 }}
-                        className={classes.blue}
-                      >
-                        <strong>${nWithCommas(total_invested)}</strong>
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Hidden mdDown>
-                  <Grid item sm={12} md={6}>
-                    {userInvestments.length > 0 ? (
-                      <Chart
-                        chartType="TreeMap"
-                        width="100%"
-                        height="200px"
-                        chartEvents={chartEvents}
-                        data={formatData(userInvestments)}
-                        options={chartOptions}
-                      />
-                    ) : null}
-                  </Grid>
-                </Hidden>
-              </Grid>
-            </Paper>
-          </Grid>
-        </>
-
-        <Grid item xs={12} sm={12} md={6}>
-          {isEmpty ? (
-            <NullPaper
-              title="Recent Investments"
-              text="Find your most recent investments"
-              image={allocations_recent_investments}
-              button="Get Started"
-              onClick={() => history.push(`/investments`)}
-            />
-          ) : (
-            <Paper className={classes.paper} style={{ paddingBottom: 0 }}>
-              <Typography variant="h6" style={{ marginBottom: 16 }}>
-                Most Recent Investments
-              </Typography>
-
-              <div style={{ margin: '0px -16px', cursor: 'pointer' }}>
-                <Table style={{ marginBottom: '-1px' }}>
-                  {orderInvestments(userInvestments).map((investment, i) => (
-                    <InvestmentStub key={i} investment={investment} />
-                  ))}
-                </Table>
-              </div>
-            </Paper>
-          )}
-        </Grid>
-
-        {/* <Grid item xs={12} sm={12} md={6}>
-          {isEmpty ? <NullPaper title="Invited Deals" text="Here are your invited deals"
-                                image={allocations_invite_deals} button="Get Started"/>
-            :
-            <Paper className={classes.paper} style={{paddingBottom: 0}}>
-              <Typography variant="h6" style={{marginBottom: 16}}>
-                Invited Deals
-              </Typography>
-              <div style={{margin: "0px -16px", cursor: "pointer"}}>
-                <Table style={{marginBottom: "-1px"}}>
-                  {userProfile.invitedDeals.map((deal, i) => (
-                    <DealStub key={i} deal={deal}/>
-                  ))}
-                </Table>
-              </div>
-            </Paper>}
-        </Grid> */}
-
-        {/* <Grid item xs={12}>
-          <Typography variant="h5" className={classes.grey}>
-            <strong>Tools</strong>
-          </Typography>
-        </Grid> */}
-
-        <Grid item xs={12} sm={12} md={6}>
-          <NullPaper
-            title="Update Profile"
-            text="Update your user profile"
-            image={allocations_update_profile}
-            button="Get Started"
-            onClick={() => history.push(`/profile`)}
-          />
-        </Grid>
-
-        <Grid item xs={12} sm={12} md={6}>
-          <NullPaper
-            title="Create New Deal"
-            text="Setup your next deal in seconds"
-            image={allocations_create_deal}
-            button="Get Started"
-            onClick={() => history.push(`/spv-onboarding`)}
-          />
-        </Grid>
-
-        <Grid item xs={12} sm={12} md={6}>
-          <a href="https://docs.allocations.com" target="_blank" rel="noopener noreferrer">
-            <NullPaper title="FAQ" text="Find all your answers here" image={allocations_faq} button="Get Started" />
-          </a>
-        </Grid>
-
-        <Grid item xs={12} sm={12} md={6}>
-          <NullPaper
-            title="Update My Account"
-            text="Fund your account and start investing"
-            image={allocations_update}
-            button="Get Started"
-          />
-        </Grid>
-      </Grid>
-    </>
-  );
+export function getColor(i) {
+  const colors = ["#A6CEE3","#1F78B4","#B2DF8A","#33A02C"]
+  let modulo = i % colors.length
+  let color = colors[modulo]
+  return color
 }
 
-function Name({ investor }) {
-  return investor.investor_type === 'entity' ? investor.entity_name : investor.first_name;
+
+export function formatDoughnutSeries(series) {
+  return series.map((s, i) => {
+    return {
+      backgroundColor: getColor(i),
+      label: s.label,
+      total: s.total
+    }
+  })
 }
 
-function InvestmentStub({ investment }) {
-  const history = useHistory();
 
-  if (investment.status === 'invited') return null;
+const UserHome = ({ classes, dealData }) => {
 
-  const { deal } = investment;
-  const link = deal.organization ? `/deals/${deal.organization.slug}/${deal.slug}` : `/deals/${deal.slug}`;
+  const { userProfile, refetch } = useAuth(GET_INVESTOR);
 
-  return (
-    <TableRow
-      hover
-      style={{ borderTop: '1px solid #dfe1e5' }}
-      button
-      key={investment._id}
-      className="investment-stub"
-      onClick={(e) => {
-        e.stopPropagation();
-        history.push(link);
-      }}
-    >
-      <TableCell>{deal.company_name}</TableCell>
-      <TableCell style={{ color: '#7f8fa4', fontWeight: '500' }}>
-        {investment.amount ? `$${nWithCommas(investment.amount)}` : <i>TBD</i>}
-      </TableCell>
-      <TableCell style={{ textAlign: 'right' }}>
-        <span className={`investment-status investment-status-${investment.status}`}>{investment.status}</span>
-      </TableCell>
-    </TableRow>
-  );
-}
+  const setMonthsToShow = (data) => {
+    let monthsArray = [];
 
-function NextSteps({ investor }) {
-  const history = useHistory();
+    data.forEach(item => {
+      let itemMonth = moment(item['Date']).format('YYYYMM');
+      if(!monthsArray.includes(itemMonth)) monthsArray.push(itemMonth);
+    })
+    monthsArray.sort()
 
-  const profileComplete = investor && validate(investor).length === 0;
-  return (
-    <>
-      <Typography variant="h6" gutterBottom>
-        🚨 Next Steps
-      </Typography>
-      <Paper style={{ padding: '16px' }}>
-        <List>
-          <ListItem button onClick={() => history.push(`/profile`)}>
-            <span>📚 Complete Your Profile</span> {profileComplete && <span className="checkbox">✅</span>}
-          </ListItem>
-          <ListItem button disabled>
-            <span>
-              💵 Track My SPV Investment <small className="coming-soon">coming soon</small>
-            </span>
-          </ListItem>
-          <ListItem button disabled>
-            <span>
-              📬 Apply to Join a Fund <small className="coming-soon">coming soon</small>
-            </span>
-          </ListItem>
-          <ListItem button disabled>
-            <span>
-              🏦 Apply to be a Fund Manager <small className="coming-soon">coming soon</small>
-            </span>
-          </ListItem>
-        </List>
-      </Paper>
-    </>
-  );
-}
-
-function DealStub({ deal }) {
-  const history = useHistory();
-  const link = deal.organization ? `/deals/${deal.organization.slug}/${deal.slug}` : `/deals/${deal.slug}`;
-
-  return (
-    <TableRow hover button key={deal._id} className="deal-stub" onClick={() => history.push(link)}>
-      <TableCell>{deal.company_name}</TableCell>
-      <TableCell>{deal.date_closed || 'TBD'}</TableCell>
-      <TableCell style={{ textAlign: 'right' }}>
-        <span data-status={deal.status} className="deal-status">
-          {deal.status}
-        </span>
-      </TableCell>
-    </TableRow>
-  );
-}
-
-function AdminTile({ investor }) {
-  if (investor.admin || (investor.organizations_admin || []).length > 0) {
-    return (
-      <Col sm={{ size: 8, offset: 2 }}>
-        <div className="tile admin-tile">
-          <div className="text-center">
-            You are a Fund Manager &nbsp;&nbsp;
-            <Link to="/admin/funds">
-              <Button variant="contained" size="small" color="primary">
-                My Funds 🗂
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </Col>
-    );
+    return monthsArray
   }
-  return null;
+
+
+  const setLabelsAndData = (data, monthsArray) => {
+    let labels = [];
+    let chartData = []
+
+    data.forEach(item => {
+      let itemMonth = moment(item['Date']).format('YYYYMM');
+      let monthsIndex = monthsArray.indexOf(itemMonth);
+      let itemLabel = moment(item['Date']).format('MMM YYYY');
+      let itemAmount = item['amount'];
+      if(labels.includes(itemLabel)){
+        chartData[monthsIndex] += itemAmount
+      }else{
+        labels[monthsIndex] = itemLabel;
+        chartData[monthsIndex] = itemAmount
+      }
+    })
+    let nextMonth = moment(monthsArray[monthsArray.length - 1]).add(1, 'month').format('MMM YYYY')
+
+    labels.push(nextMonth)
+    chartData.push(0)
+
+    return { labels, chartData }
+  }
+
+
+  const getSteppedChartData = (data) => {
+    const monthsArray = setMonthsToShow(data)
+    const { labels, chartData } = setLabelsAndData(data, monthsArray)
+    let accAmount = 0;
+
+    let steppedData = chartData.map((item, i) => {
+      accAmount += item;
+      return accAmount
+    })
+    let steppedChartData = { labels, data: steppedData };
+    return steppedChartData;
+  }
+
+  const data = userProfile.investments
+
+  if(!data || !data.length) return <Loader/>
+
+  let series = data.map(s => { return {label: s.deal?.company_name, total: s['amount'] } }).sort((a, b) => nestedSort(a, b, 'total', 'desc'))
+  let seriesTotal = series.length? series.map(s => s.total).reduce((acc, n) => acc + n) : 0
+  let steppedChartData = getSteppedChartData(data)
+  let multiplesTotal = data.reduce((acc, n) => {
+    let dealMultiple = _.toNumber(n.deal?.dealData?.dealParams?.dealMultiple || 1);
+    return acc + dealMultiple;
+  }, 0);
+  let avgMultiple = multiplesTotal/data.length
+
+
+  return (
+    <div className={classes.section}>
+      <SimpleBox size="third" title="Portfolio Value" info="This is the estimated value of the portfolio">
+        <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
+          <Typography style={{fontSize: "26px"}}>
+            ${nWithCommas((_.sumBy(data, 'amount') * (avgMultiple === 0 ? 1 : avgMultiple)).toFixed(0))}
+          </Typography>
+          <Typography className={classes.footerData}>0% Realized | 100% Unrealized</Typography>
+        </div>
+      </SimpleBox>
+      <SimpleBox size="third" title="Total amount" info="This is the total amount invested on the platform">
+        <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
+          <Typography style={{fontSize: "26px"}}>
+            ${nWithCommas(_.sumBy(data, 'amount').toFixed(0))}
+          </Typography>
+          <Typography className={classes.footerData}>
+            {(data || []).length} Total Investments
+          </Typography>
+        </div>
+      </SimpleBox>
+      <SimpleBox size="third" title="Multiple" info="Explanation">
+        <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
+          <Typography style={{fontSize: "26px"}}>
+            {avgMultiple.toFixed(2) || 1}x
+          </Typography>
+          <Typography className={classes.footerData}>Last Updated: June 1st, 2021</Typography>
+        </div>
+      </SimpleBox>
+      <div className={classes.subSection}>
+        <ChartBox title="Portfolio Overview" info="Explanation">
+          <div className={classes.chartContainer}>
+            <DoughnutChart
+              series={formatDoughnutSeries(series)}
+              />
+          </div>
+          <div className={classes.tableContainer}>
+            <DefaultChartTable
+              series={formatDoughnutSeries(series)}
+              title="Investments"
+              secondColumnHeader="USD"
+              sumLabel="Total"
+              seriesTotal={seriesTotal}
+              seriesLabelKey="label"
+              />
+          </div>
+        </ChartBox>
+        <ChartBox title="Value" info="Explanation">
+          <LineChart
+            dataset={steppedChartData}
+            />
+        </ChartBox>
+        <InvestorTable
+          userProfile={userProfile}
+          refetch={refetch}
+          />
+      </div>
+    </div>
+  );
 }
 
-const NoInvestmentBanner = () => {
-  const classes = useStyles();
-  return (
-    <Grid item sm={12} md={6} className={classes.banner}>
-      <Paper className={classes.paper}>
-        <Typography variant="body1" className={classes.grey}>
-          Please contact your deal manager or Allocations if you are waiting for a unique link to join a private deal!
-        </Typography>
-      </Paper>
-    </Grid>
-  );
-};
+export default withStyles(styles)(UserHome);
