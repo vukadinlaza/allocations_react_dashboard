@@ -867,7 +867,7 @@ export default function Sidebar(props) {
   const [investTab, setInvestTab] = useState(false);
   const [creditTab, setCreditTab] = useState(false);
   const [buildTab, setBuildTab] = useState(false);
-  const fundMatch = useRouteMatch('/admin/:organization/:deal')
+  const fundMatch = useRouteMatch('/admin/:organization')
   const location = useLocation();
   const { window } = props;
   const classes = useStyles();
@@ -988,7 +988,7 @@ export default function Sidebar(props) {
 
   const container = window !== undefined ? () => window().document.body : undefined;
   const onboarding = location.pathname === '/get-started';
-  const isFundMatch = fundMatch?.path === "/admin/:organization/:deal";
+  const isFundMatch = fundMatch?.path === "/admin/:organization";
 
   return (
     <>

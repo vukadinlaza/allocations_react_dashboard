@@ -14,7 +14,7 @@ const preOnboardingSteps = ['SS4 Signature', 'Entity Formation', 'Bank Account',
 const onboardingSteps = ['Investor Onboarding List Provided', 'Carry & Management Fee Review', 'Onboarding Email Sent', 'Investor Follow Up Sent', '506b/c Review', 'KYC Review']
 const closingSteps = ['Portfolio Company Wire Instructions', 'Investor Ledger Reconciliation', 'Blue Sky Fees Review', 'Signing Portfolio Company Documents', 'Wire Approval Review', 'Invoice Receipt Sent', 'Reg D Filing', 'Management Fee Distribution']
 
-const Setup = ({ classes, data }) => {
+const Setup = ({ classes, data, openTooltip, handleTooltip }) => {
 
   if(!data) return <Loader/>
 
@@ -72,8 +72,11 @@ const Setup = ({ classes, data }) => {
           titleData={<CheckCircleIcon style={{color: "#39C522", opacity: "25%"}}/>}
           autoHeight={true}
           size="fourth"
-          info="The process of submitting a build request for an SPV / Fund"
           fullWidthContent
+          openTooltip={openTooltip}
+          handleTooltip={handleTooltip}
+          id="build"
+          tooltipContent={<Typography color="inherit" >The process of submitting a build request for an SPV / Fund</Typography>}
           >
           {buildSteps.map((step, idx) =>
             <div className={classes.setupStep} key={`step-${idx}`}>
@@ -87,8 +90,11 @@ const Setup = ({ classes, data }) => {
           titleData={<CheckCircleIcon style={{color: "#39C522", opacity: "25%"}}/>}
           autoHeight={true}
           size="fourth"
-          info="The setup process for an SPV / Fund"
           fullWidthContent
+          handleTooltip={handleTooltip}
+          openTooltip={openTooltip}
+          id="preOnboarding"
+          tooltipContent={<Typography color="inherit" >The setup process for an SPV / Fund</Typography>}
           >
           {preOnboardingSteps.map((step, idx) =>
             <div className={classes.setupStep} key={`step-${idx}`}>
@@ -102,8 +108,11 @@ const Setup = ({ classes, data }) => {
           titleData={<CheckCircleIcon style={{color: "#39C522", opacity: "25%"}}/>}
           autoHeight={true}
           size="fourth"
-          info="The process of onboarding investors and finalizing terms"
           fullWidthContent
+          handleTooltip={handleTooltip}
+          openTooltip={openTooltip}
+          id="onboarding"
+          tooltipContent={<Typography color="inherit" >The process of onboarding investors and finalizing terms</Typography>}
           >
           {onboardingSteps.map((step, idx) =>
             <div className={classes.setupStep} key={`step-${idx}`}>
@@ -117,8 +126,11 @@ const Setup = ({ classes, data }) => {
           titleData={<CheckCircleIcon style={{color: "#39C522", opacity: "25%"}}/>}
           autoHeight={true}
           size="fourth"
-          info="The process of closing and post-closing the SPV / Fund "
           fullWidthContent
+          handleTooltip={handleTooltip}
+          openTooltip={openTooltip}
+          id="closing"
+          tooltipContent={<Typography color="inherit" >The process of closing and post-closing the SPV / Fund</Typography>}
           >
           {closingSteps.map((step, idx) =>
             <div className={classes.setupStep} key={`step-${idx}`}>
@@ -128,7 +140,14 @@ const Setup = ({ classes, data }) => {
           )}
         </SimpleBox>
       </div>
-      <SimpleBox size="third" title="Target Raise" info="This is how much you plan to raise. This is important specifically for Funds as the target raise is material to the offering and its performance to investors.">
+      <SimpleBox
+        size="third"
+        title="Target Raise"
+        handleTooltip={handleTooltip}
+        openTooltip={openTooltip}
+        id="target"
+        tooltipContent={<Typography color="inherit" >This is how much you plan to raise. This is important specifically for Funds as the target raise is material to the offering and its performance to investors.</Typography>}
+        >
         <div className={classes.simpleBoxDataRow}>
           <Typography style={{fontSize: "26px"}}>${setupData.target}</Typography>
           {/*<div className={classes.boxEditButton}><EditIcon/></div>*/}
@@ -146,7 +165,14 @@ const Setup = ({ classes, data }) => {
           <Typography>{setupData.raisedPercentage}%</Typography>
         </div>
       </SimpleBox>
-      <SimpleBox size="third" title="Next Close Date" info="This is the expected next close date for the offering">
+      <SimpleBox
+        size="third"
+        title="Next Close Date"
+        handleTooltip={handleTooltip}
+        openTooltip={openTooltip}
+        id="nextClose"
+        tooltipContent={<Typography color="inherit" >This is the expected next close date for the offering</Typography>}
+        >
         <div className={classes.simpleBoxDataRow}>
           <div style={{display: "flex", alignItems: "center"}}>
             <CalendarTodayIcon style={{marginRight: "0.5em"}}/>
@@ -155,7 +181,14 @@ const Setup = ({ classes, data }) => {
           {/*<div className={classes.boxEditButton}><EditIcon/></div>*/}
         </div>
       </SimpleBox>
-      <SimpleBox size="third" title="Final Close Date" info="This is the expected final close date for the offering">
+      <SimpleBox
+        size="third"
+        title="Final Close Date"
+        handleTooltip={handleTooltip}
+        openTooltip={openTooltip}
+        id="finalClose"
+        tooltipContent={<Typography color="inherit" >This is the expected final close date for the offering</Typography>}
+        >
         <div className={classes.simpleBoxDataRow}>
           <div style={{display: "flex", alignItems: "center"}}>
             <CalendarTodayIcon style={{marginRight: "0.5em"}}/>
@@ -164,7 +197,14 @@ const Setup = ({ classes, data }) => {
           {/*<div className={classes.boxEditButton}><EditIcon/></div>*/}
         </div>
       </SimpleBox>
-      <SimpleBox size="third" title="Management Fee" info="This is the management fee chosen by the Fund Manager">
+      <SimpleBox
+        size="third"
+        title="Management Fee"
+        handleTooltip={handleTooltip}
+        openTooltip={openTooltip}
+        id="managementFee"
+        tooltipContent={<Typography color="inherit" >This is the management fee chosen by the Fund Manager</Typography>}
+        >
         <div className={classes.simpleBoxDataRow}>
           <div style={{display: "flex", alignItems: "center"}}>
             <Typography style={{fontSize: "26px"}}>{setupData.managementFee? setupData.managementFee : 'No Management Fee'} {setupData.managementFee? <span style={{fontSize: "14px"}}>per annum</span> : ''}</Typography>
@@ -173,7 +213,14 @@ const Setup = ({ classes, data }) => {
           {/*<div className={classes.boxEditButton}><EditIcon/></div>*/}
         </div>
       </SimpleBox>
-      <SimpleBox size="third" title="Carry" info="This is the carry fee chosen by the Fund Manager">
+      <SimpleBox
+        size="third"
+        title="Carry"
+        handleTooltip={handleTooltip}
+        openTooltip={openTooltip}
+        id="carry"
+        tooltipContent={<Typography color="inherit" >This is the carry fee chosen by the Fund Manager</Typography>}
+        >
         <div className={classes.simpleBoxDataRow}>
           <div style={{display: "flex", alignItems: "center"}}>
             <Typography style={{fontSize: "20px"}}>{setupData.carry? `${setupData.carry}%` : 'No carry'}</Typography>
@@ -181,7 +228,14 @@ const Setup = ({ classes, data }) => {
           {/*<div className={classes.boxEditButton}><EditIcon/></div>*/}
         </div>
       </SimpleBox>
-      <SimpleBox size="third" title="Raise Type" info="This is the offering type chosen by the Fund Manager">
+      <SimpleBox
+        size="third"
+        title="Raise Type"
+        handleTooltip={handleTooltip}
+        openTooltip={openTooltip}
+        id="raiseType"
+        tooltipContent={<Typography color="inherit" >This is the offering type chosen by the Fund Manager</Typography>}
+        >
         <div className={classes.simpleBoxDataRow}>
           <div style={{display: "flex", alignItems: "center"}}>
             <Typography style={{fontSize: "20px"}}>{setupData.dealType || 'No raise type'}</Typography>

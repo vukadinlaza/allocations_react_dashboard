@@ -37,7 +37,7 @@ export function formatDoughnutSeries(series) {
 }
 
 
-const Highlights = ({ classes, data, dealData }) => {
+const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => {
 
   const setMonthsToShow = (data) => {
     let monthsArray = [];
@@ -109,7 +109,14 @@ const Highlights = ({ classes, data, dealData }) => {
         </div>
         : ''
       */}
-      <SimpleBox size="third" title="Portfolio Value" info="This is the estimated value of the portfolio">
+      <SimpleBox
+        size="third"
+        title="Portfolio Value"
+        openTooltip={openTooltip}
+        handleTooltip={handleTooltip}
+        id="portfolioValue"
+        tooltipContent={<Typography color="inherit" >This is the estimated value of the portfolio</Typography>}
+        >
         <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
           <Typography style={{fontSize: "26px"}}>
             ${nWithCommas((_.sumBy(data, 'Invested') * (dealMultiple === 0 ? 1 : dealMultiple)).toFixed(0))}
@@ -117,7 +124,14 @@ const Highlights = ({ classes, data, dealData }) => {
           <Typography className={classes.footerData}>0% Realized | 100% Unrealized</Typography>
         </div>
       </SimpleBox>
-      <SimpleBox size="third" title="Total Invested" info="This is the total amount invested on the platform">
+      <SimpleBox
+        size="third"
+        title="Total Invested"
+        openTooltip={openTooltip}
+        handleTooltip={handleTooltip}
+        id="totalInvested"
+        tooltipContent={<Typography color="inherit" >This is the total amount invested on the platform</Typography>}
+        >
         <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
           <Typography style={{fontSize: "26px"}}>
             ${nWithCommas(_.sumBy(data, 'Invested').toFixed(0))}
@@ -127,7 +141,14 @@ const Highlights = ({ classes, data, dealData }) => {
           </Typography>
         </div>
       </SimpleBox>
-      <SimpleBox size="third" title="Multiple" info="This is the estimated multiple IRR based on estimate data inputted by the fund manager. Subject to change and not to be relied upon.">
+      <SimpleBox
+        size="third"
+        title="Multiple"
+        openTooltip={openTooltip}
+        handleTooltip={handleTooltip}
+        id="multiple"
+        tooltipContent={<Typography color="inherit" >This is the estimated multiple IRR based on estimate data inputted by the fund manager. Subject to change and not to be relied upon.</Typography>}
+        >
         <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
           <Typography style={{fontSize: "26px"}}>
             {dealMultiple.toFixed(2) || 1}x

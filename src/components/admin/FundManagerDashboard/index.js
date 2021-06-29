@@ -5,10 +5,11 @@ import { gql } from 'apollo-boost';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Tabs, Tab, Typography } from '@material-ui/core';
+import { Tabs, Tab, Typography, Button } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 // import EditIcon from '@material-ui/icons/Edit';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
@@ -70,6 +71,13 @@ const styles = theme => ({
       height: "250px"
     },
   },
+  createButton: {
+    backgroundColor: "#39C522",
+    display: "flex",
+    alignItems: 'center',
+    color: "white",
+    textTransform: "none"
+  },
   dashboardContainer: {
     display: "flex",
     flexDirection: "column",
@@ -118,7 +126,7 @@ const styles = theme => ({
   },
   investorName: {
     fontSize: "14px",
-    width: "calc(100% - 108px)",
+    // width: "calc(100% - 108px)",
     maxWidth: "calc(100% - 108px)",
     overflow: "hidden",
     whiteSpace: "pre",
@@ -149,7 +157,22 @@ const styles = theme => ({
   mainTitle: {
     fontSize: "28px",
     fontWeight: "700",
-    padding: "20px 40px"
+    padding: "20px 0px"
+  },
+  mainTitleContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    margin: "0 40px"
+  },
+  modalBackground: {
+    position: "fixed",
+    left: "0",
+    top: "0",
+    height: "100vh",
+    width: "100vw",
+    zIndex: "1099",
+    backgroundColor: "rgba(26, 26, 26, 0.30)"
   },
   pageIcons: {
     width: "125px",
@@ -354,12 +377,17 @@ export const ORG_OVERVIEW = gql`
 `;
 
 
-const dashboardTabs = [
+const fundTabs = [
   "Setup",
   "Highlights",
   "Investments",
   "Investor Onboarding Status",
-  // "Activity Log",
+  "Deal Page"
+]
+
+const spvTabs = [
+  "Setup",
+  "Investor Onboarding Status",
   "Deal Page"
 ]
 
@@ -375,16 +403,19 @@ const FundManagerDashboard = ({ classes, location, history }) => {
   const { width } = useViewport();
   const { organization: orgSlug, deal: dealSlug } = useParams();
   const [tabIndex, setTabIndex] = useState(0);
+  const [tabName, setTabName] = useState(spvTabs[0]);
   const [dealTab, setDealTab] = useState(0);
   const [dealData, setDealData] = useState({});
   const [dealName, setDealName] = useState('')
   const [atDealData, setAtDealData] = useState({})
+  const [openTooltip, setOpenTooltip] = useState('');
   const [getOrgDeals, { data: orgDeals }] = useLazyQuery(ORG_OVERVIEW, {
     variables: { slug: orgSlug, status: "active" },
     fetchPolicy: "network-only"
   });
   const { data: atDeal } = useFetch(OPS_ACCOUNTING, dealName && DEALS_TABLE, dealName && `({Deal Name}="${dealName}")`);
   const { data: atFundData, status } = useFetch(OPS_ACCOUNTING, atDealData?.name && INVESTMENTS_TABLE, atDealData?.name && `(FIND("${atDealData.name}", {Deals}))`);
+  const dashboardTabs = dealData?.investmentType === 'fund'? fundTabs : spvTabs;
 
   useEffect(() => {
     getOrgDeals()
@@ -399,7 +430,6 @@ const FundManagerDashboard = ({ classes, location, history }) => {
   }, [dealTab])
 
   useEffect(() => {
-    // console.log({atDeal});
     if(atDeal && atDeal.length){
       let data = atDeal[0].fields;
       setAtDealData({name: data['Deal Name'], id: atDeal[0].id})
@@ -407,6 +437,11 @@ const FundManagerDashboard = ({ classes, location, history }) => {
       setAtDealData({name: 'Deal Name Not found in AirTable', id: ''})
     }
   }, [atDeal])
+
+  useEffect(() => {
+    const newTabIndex = dashboardTabs.indexOf(tabName);
+    setTabIndex(newTabIndex)
+  }, [dashboardTabs])
 
 
   const handleDealData = (index) => {
@@ -418,10 +453,9 @@ const FundManagerDashboard = ({ classes, location, history }) => {
     }
   }
 
-
   const handleLinkCopy = () => {
     if(orgSlug && dealData?.slug){
-      navigator.clipboard.writeText(window.origin + (`/deals/${orgSlug}/${dealData.Slug}` || ''));
+      navigator.clipboard.writeText(window.origin + (`/deals/${orgSlug}/${dealData.slug}` || ''));
       toast.success('Copied deal link to clipboard.');
     }
   };
@@ -437,21 +471,30 @@ const FundManagerDashboard = ({ classes, location, history }) => {
   }
 
   const handleTabChange = (event, newValue) => {
+    let tabName = dashboardTabs[newValue];
+    setTabName(tabName)
     setTabIndex(newValue)
+  }
+
+  const handleTooltip = (id) => {
+    console.log({id});
+    setOpenTooltip(id)
   }
 
   const getTabContent = () => {
     const fundData = atFundData.map((d) => d.fields);
 
-    switch (tabIndex) {
-      case 0:
+    switch (tabName) {
+      case "Setup":
         return(
           <Setup
             classes={classes}
             data={dealData}
+            openTooltip={openTooltip}
+            handleTooltip={handleTooltip}
             />
         )
-      case 1:
+      case "Highlights":
         return(
           <Highlights
             classes={classes}
@@ -459,9 +502,11 @@ const FundManagerDashboard = ({ classes, location, history }) => {
             dealSlug={dealSlug}
             data={fundData}
             dealData={dealData}
+            openTooltip={openTooltip}
+            handleTooltip={handleTooltip}
             />
         )
-      case 2:
+      case "Investments":
         return(
           <Investments
             classes={classes}
@@ -469,20 +514,19 @@ const FundManagerDashboard = ({ classes, location, history }) => {
             data={fundData}
             />
         )
-      case 3:
+      case "Investor Onboarding Status":
         return(
-          <InvestorStatus classes={classes} width={width}/>
+          <InvestorStatus
+            classes={classes}
+            width={width}
+            dealSlug={dealData.slug}
+            />
         )
-      case 4:
-        // return(
-        //   <ActivityLog
-        //     classes={classes}
-        //     />
-        // )
+      case "Deal Page":
         return(
           <div className={classes.section}>
             <FlatBox title="SHARE">
-              <Typography>dashboard.allocations.com{orgSlug && dealSlug? `/deals/${orgSlug}/${dealSlug}` : ''}</Typography>
+              <Typography>dashboard.allocations.com{orgSlug && dealData?.slug? `/deals/${orgSlug}/${dealData.slug}` : ''}</Typography>
               <div className={classes.pageIcons}>
                 <div className={classes.pageIcon} onClick={goToDeal}><ChevronRightIcon/></div>
                 <div className={classes.pageIcon} onClick={handleLinkCopy}><FileCopyOutlinedIcon/></div>
@@ -496,10 +540,16 @@ const FundManagerDashboard = ({ classes, location, history }) => {
   }
 
   if(!orgDeals) return <Loader/>
-
   return (
     <div className={classes.dashboardContainer}>
-      <Typography className={classes.mainTitle}>Funds</Typography>
+      {openTooltip? <div className={classes.modalBackground} onClick={e => handleTooltip('')}/> : ''}
+      <div className={classes.mainTitleContainer}>
+        <Typography className={classes.mainTitle}>Funds</Typography>
+        <Button className={classes.createButton}>
+          <AddCircleIcon style={{marginRight: "5px", fontSize: "20px"}}/>
+          Create New
+        </Button>
+      </div>
       <DealsTabs
         dealSlug={dealSlug}
         orgSlug={orgSlug}
@@ -535,7 +585,9 @@ const FundManagerDashboard = ({ classes, location, history }) => {
         {/*}<Tab label="Disabled" disabled />*/}
       </Tabs>
       {!dealData || !atFundData || status === "fetching"?
-        <Loader/>
+        <div className={classes.loaderContainer}>
+          <Loader/>
+        </div>
           :
          getTabContent()
        }

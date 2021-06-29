@@ -65,9 +65,9 @@ const InvestorBox = ({classes, investor, index, width}) => {
 }
 
 
-const InvestorStatus = ({ classes, width }) => {
+const InvestorStatus = ({ classes, width, dealSlug }) => {
 
-  const { deal: dealSlug, organization: orgSlug } = useParams();
+  const { organization: orgSlug } = useParams();
   const [getInvestments, { data }] = useLazyQuery(GET_INVESTMENTS);
 
   useEffect(() => {
@@ -75,7 +75,11 @@ const InvestorStatus = ({ classes, width }) => {
   }, []);
 
   if(!data?.deal?.investments){
-    return <Loader/>
+    return (
+      <div className={classes.loaderContainer}>
+        <Loader/>
+      </div>
+    )
   }
 
 

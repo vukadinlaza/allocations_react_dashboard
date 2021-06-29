@@ -1,7 +1,8 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import InfoIcon from '@material-ui/icons/Info';
 import { Typography, Tooltip, Button } from '@material-ui/core';
+import HelpIcon from '@material-ui/icons/Help';
+import CloseIcon from '@material-ui/icons/Close';
 import { phone, tablet } from '../../../utils/helpers'
 
 const styles = theme => ({
@@ -62,6 +63,14 @@ const styles = theme => ({
 			flexWrap: "wrap"
 		},
 	},
+	closeModal: {
+		right: "20px",
+		display: "flex",
+		justifyContent: "flex-end",
+		alignItems: "center",
+		marginBottom: "15px",
+		fontSize: "14px"
+	},
 	dynamicBoxContent: {
 		height: "calc(100% - 110px)"
 	},
@@ -84,7 +93,10 @@ const styles = theme => ({
 		},
 	},
 	infoIcon: {
-		marginLeft: "0.5em"
+		marginLeft: "0.5em",
+		cursor: "pointer",
+		color: "#205DF5",
+		fontSize: "20px"
 	},
 	listButton: {
 		backgroundColor: "#2A2B54",
@@ -92,6 +104,9 @@ const styles = theme => ({
 		width: "calc(100% - 32px)",
 		textTransform: "none",
 		margin: "0 16px"
+	},
+	modal: {
+		padding: "20px"
 	},
 	scrollableBox: {
 		height: "635px"
@@ -105,7 +120,10 @@ const styles = theme => ({
 	  // marginBottom: "10px"
 	},
 	tooltip: {
-		fontSize: "14px"
+		fontSize: "14px",
+		zIndex: "2000",
+		background: "white",
+		color: "black"
 	}
 });
 
@@ -127,7 +145,6 @@ const getDimensions = (size) => {
 
 export const SimpleBox = withStyles(styles)(({ classes,
 	title,
-	info,
 	size,
 	autoHeight,
 	titleData,
@@ -135,21 +152,34 @@ export const SimpleBox = withStyles(styles)(({ classes,
 	buttonAction,
 	buttonText,
 	fullWidthContent,
-	children
+	children,
+	openTooltip,
+	handleTooltip,
+	id,
+	tooltipContent
 }) => {
+
   return(
 		<div className={`${classes.box} ${autoHeight? classes.dynamicHeight : ''}`} style={getDimensions(size)}>
 			<div className={classes.boxTitleContainer} style={{justifyContent: "space-between"}}>
 				<div className={classes.boxTitleText}>
 					<Typography className={classes.boxTitle} style={fontSize === "small"? {fontSize: "14px"} : {}}>{title}</Typography>
-					{info &&
+					{tooltipContent &&
 						<Tooltip
-							title={info}
+							title={<div className={classes.modal}>
+											<Typography className={classes.closeModal} onClick={e => handleTooltip('')}>
+												Close<CloseIcon style={{fontSize: "14px"}}/>
+											</Typography>
+											{tooltipContent}
+										</div>}
+							open={openTooltip === id}
+							disableHoverListener
 							classes={{
+								popper: classes.popper,
 								tooltip: classes.tooltip
 							}}
 							>
-							<InfoIcon className={classes.infoIcon}/>
+							<HelpIcon className={classes.infoIcon} onClick={(e) => handleTooltip(id)}/>
 						</Tooltip>
 					}
 				</div>
@@ -173,14 +203,16 @@ export const ChartBox = withStyles(styles)(({ classes, title, info, children }) 
 		<div className={`${classes.box} ${classes.chartBox}`}>
 			<div className={classes.boxTitleContainer}>
 				<Typography className={classes.boxTitle}>{title}</Typography>
-				<Tooltip
-					title={info}
-					classes={{
-						tooltip: classes.tooltip
-					}}
-					>
-					<InfoIcon className={classes.infoIcon}/>
-				</Tooltip>
+				{false &&
+					<Tooltip
+						title={info}
+						classes={{
+							tooltip: classes.tooltip
+						}}
+						>
+						<HelpIcon className={classes.infoIcon}/>
+					</Tooltip>
+				}
 			</div>
 			<div className={`${classes.boxContent} ${classes.chartBoxContent}`}>
 				{children}
@@ -203,7 +235,7 @@ export const FlatBox = withStyles(styles)(({ classes, title, info, children }) =
 							tooltip: classes.tooltip
 						}}
 						>
-						<InfoIcon className={classes.infoIcon}/>
+						<HelpIcon className={classes.infoIcon}/>
 					</Tooltip>
 					:
 					''
