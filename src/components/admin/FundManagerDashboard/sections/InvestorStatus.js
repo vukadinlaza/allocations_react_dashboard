@@ -199,15 +199,17 @@ const InvestorStatus = ({ classes, width, dealSlug }) => {
     return { investors: columnInvestors, total}
   }
 
-  const { investors: viewedInvestors, total: viewedTotal } = getColumnData('invited');
-  const { investors: signedInvestors, total: signedTotal } = getColumnData('signed');
-  const { investors: wiredInvestors, total: wiredTotal } = getColumnData('wired');
+  let { investors: viewedInvestors, total: viewedTotal } = getColumnData('invited');
+  let { investors: signedInvestors, total: signedTotal } = getColumnData('signed');
+  let { investors: wiredInvestors, total: wiredTotal } = getColumnData('wired');
 
   const demoViewedArray = Array(15).fill('').map(i => {return {accredidation_status: _.sample(demoBool), amount: _.sample(demoAmounts), name: _.sample(demoNames), status: "invited"}})
   const demoSignedArray = Array(15).fill('').map(i => {return {accredidation_status: _.sample(demoBool), amount: _.sample(demoAmounts), name: _.sample(demoNames), status: "signed"}})
   const demoWiredArray = Array(25).fill('').map(i => {return {accredidation_status: _.sample(demoBool), amount: _.sample(demoAmounts), name: _.sample(demoNames), status: "wired"}})
+  viewedTotal += demoViewedArray.map(i => i.amount).reduce((acc, n) => acc + n)
+  signedTotal += demoSignedArray.map(i => i.amount).reduce((acc, n) => acc + n)
+  wiredTotal += demoWiredArray.map(i => i.amount).reduce((acc, n) => acc + n)
   const isDemo = window?.origin?.includes('vercel') || window?.origin?.includes('localhost')
-  console.log(isDemo, window.origin, window.origin.includes('localhost'));
 
   return (
     <div className={classes.section}>
