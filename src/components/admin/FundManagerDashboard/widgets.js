@@ -146,7 +146,8 @@ const getDimensions = (size) => {
 		case 'third':
 			return {minWidth: '430px', maxWidth: '32%'};
 		case 'fourth':
-			return {minWidth: '300px', maxWidth: '24%'};
+			return {minWidth: '265px', maxWidth: '24%'};
+			// return {minWidth: '300px', maxWidth: '24%'};
 		default:
 			return {}
 	}
