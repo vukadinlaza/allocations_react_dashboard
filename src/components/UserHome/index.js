@@ -99,6 +99,12 @@ const styles = theme => ({
   footerData: {
     fontSize: "14px"
   },
+  mainTitle: {
+    fontSize: "28px",
+    fontWeight: "700",
+    padding: "20px 0px",
+    margin: "10px 0 20px 0"
+  },
   section: {
     width: "100%",
     display: "flex",
@@ -242,32 +248,35 @@ const UserHome = ({ classes, dealData }) => {
 
   return (
     <div className={classes.section}>
-      <SimpleBox size="third" title="Portfolio Value" info="This is the estimated value of the portfolio">
-        <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
-          <Typography style={{fontSize: "26px"}}>
-            ${nWithCommas((_.sumBy(data, 'amount') * (avgMultiple === 0 ? 1 : avgMultiple)).toFixed(0))}
-          </Typography>
-          <Typography className={classes.footerData}>0% Realized | 100% Unrealized</Typography>
-        </div>
-      </SimpleBox>
-      <SimpleBox size="third" title="Total amount" info="This is the total amount invested on the platform">
-        <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
-          <Typography style={{fontSize: "26px"}}>
-            ${nWithCommas(_.sumBy(data, 'amount').toFixed(0))}
-          </Typography>
-          <Typography className={classes.footerData}>
-            {(data || []).length} Total Investments
-          </Typography>
-        </div>
-      </SimpleBox>
-      <SimpleBox size="third" title="Multiple" info="Explanation">
-        <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
-          <Typography style={{fontSize: "26px"}}>
-            {avgMultiple.toFixed(2) || 1}x
-          </Typography>
-          <Typography className={classes.footerData}>Last Updated: June 1st, 2021</Typography>
-        </div>
-      </SimpleBox>
+      <Typography className={classes.mainTitle}>Overview</Typography>
+      <div className={classes.section}>
+        <SimpleBox size="third" title="Portfolio Value" info="This is the estimated value of the portfolio">
+          <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
+            <Typography style={{fontSize: "26px"}}>
+              ${nWithCommas((_.sumBy(data, 'amount') * (avgMultiple === 0 ? 1 : avgMultiple)).toFixed(0))}
+            </Typography>
+            <Typography className={classes.footerData}>0% Realized | 100% Unrealized</Typography>
+          </div>
+        </SimpleBox>
+        <SimpleBox size="third" title="Total amount" info="This is the total amount invested on the platform">
+          <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
+            <Typography style={{fontSize: "26px"}}>
+              ${nWithCommas(_.sumBy(data, 'amount').toFixed(0))}
+            </Typography>
+            <Typography className={classes.footerData}>
+              {(data || []).length} Total Investments
+            </Typography>
+          </div>
+        </SimpleBox>
+        <SimpleBox size="third" title="Multiple" info="Explanation">
+          <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
+            <Typography style={{fontSize: "26px"}}>
+              {avgMultiple.toFixed(2) || 1}x
+            </Typography>
+            <Typography className={classes.footerData}>Last Updated: June 1st, 2021</Typography>
+          </div>
+        </SimpleBox>
+      </div>
       <div className={classes.subSection}>
         <ChartBox title="Portfolio Overview" info="Explanation">
           <div className={classes.chartContainer}>
@@ -291,6 +300,7 @@ const UserHome = ({ classes, dealData }) => {
             dataset={steppedChartData}
             />
         </ChartBox>
+        <Typography className={classes.mainTitle}>Investments</Typography>
         <InvestorTable
           userProfile={userProfile}
           refetch={refetch}

@@ -68,7 +68,6 @@ const styles = theme => ({
 		display: "flex",
 		justifyContent: "flex-end",
 		alignItems: "center",
-		marginBottom: "15px",
 		fontSize: "14px"
 	},
 	dynamicBoxContent: {
@@ -107,6 +106,17 @@ const styles = theme => ({
 	},
 	modal: {
 		padding: "20px"
+	},
+	modalTitle: {
+		fontWeight: "bold",
+		fontSize: "1.2em"
+	},
+	modalTitleContainer: {
+		display: "flex",
+		justifyContent: "space-between",
+		alignItems: "center",
+		width: "100%",
+		marginBottom: "15px",
 	},
 	scrollableBox: {
 		height: "635px"
@@ -167,9 +177,14 @@ export const SimpleBox = withStyles(styles)(({ classes,
 					{tooltipContent &&
 						<Tooltip
 							title={<div className={classes.modal}>
-											<Typography className={classes.closeModal} onClick={e => handleTooltip('')}>
-												Close<CloseIcon style={{fontSize: "14px"}}/>
-											</Typography>
+											<div className={classes.modalTitleContainer}>
+												<Typography className={classes.modalTitle}>
+													{title}
+												</Typography>
+												<Typography className={classes.closeModal} onClick={e => handleTooltip('')}>
+													Close<CloseIcon style={{fontSize: "14px"}}/>
+												</Typography>
+											</div>
 											{tooltipContent}
 										</div>}
 							open={openTooltip === id}

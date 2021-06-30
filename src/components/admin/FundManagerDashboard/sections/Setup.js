@@ -6,6 +6,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Loader from '../../../utils/Loader'
+import { nWithCommas } from '../../../../utils/numbers'
 
 import { SimpleBox } from '../widgets'
 
@@ -41,8 +42,8 @@ const Setup = ({ classes, data, openTooltip, handleTooltip }) => {
 
   const getRaisedPercentage = () => {
     const isRaisedANumber = raised && !isNaN(raised);
-    const isTargetANumber = target && !isNaN(target);
-    return  isTargetANumber && isRaisedANumber? (raised/target) * 100 : 0;
+    const isTargetANumber = target && !isNaN(target)
+    return  isTargetANumber && isRaisedANumber? Math.round((raised/target) * 100) : 0;
   }
 
 
@@ -63,7 +64,6 @@ const Setup = ({ classes, data, openTooltip, handleTooltip }) => {
   }
 
   const setupData = getSetupData()
-
   return (
     <div className={classes.section}>
       <div className={classes.subSection}>
@@ -149,7 +149,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip }) => {
         tooltipContent={<Typography color="inherit" >This is how much you plan to raise. This is important specifically for Funds as the target raise is material to the offering and its performance to investors.</Typography>}
         >
         <div className={classes.simpleBoxDataRow}>
-          <Typography style={{fontSize: "26px"}}>${setupData.target}</Typography>
+          <Typography style={{fontSize: "26px"}}>${nWithCommas(setupData.target)}</Typography>
           {/*<div className={classes.boxEditButton}><EditIcon/></div>*/}
         </div>
         <div className={classes.simpleBoxDataRow} style={{margin: 0}}>

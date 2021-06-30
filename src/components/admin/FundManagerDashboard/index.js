@@ -352,12 +352,12 @@ const styles = theme => ({
 
 
 export const ORG_OVERVIEW = gql`
-  query GetOrg($slug: String!, $status: String) {
+  query GetOrg($slug: String!) {
     organization(slug: $slug) {
       _id
       name
       slug
-      deals(status: $status) {
+      deals {
         _id
         company_name
         company_description
@@ -366,6 +366,7 @@ export const ORG_OVERVIEW = gql`
         slug
         date_closed
         investmentType
+        status
         organization {
           _id
           name
@@ -423,7 +424,7 @@ const FundManagerDashboard = ({ classes, location, history }) => {
   const [atDealData, setAtDealData] = useState({})
   const [openTooltip, setOpenTooltip] = useState('');
   const [getOrgDeals, { data: orgDeals }] = useLazyQuery(ORG_OVERVIEW, {
-    variables: { slug: orgSlug, status: "active" },
+    variables: { slug: orgSlug },
     fetchPolicy: "network-only"
   });
   const { data: atDeal } = useFetch(OPS_ACCOUNTING, dealName && DEALS_TABLE, dealName && `({Deal Name}="${dealName}")`);
