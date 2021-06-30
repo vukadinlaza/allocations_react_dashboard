@@ -927,6 +927,7 @@ export default function Sidebar(props) {
     const userIsOrgAdmin = userProfile?.organizations_admin?.length;
     const defaultAccount = userIsOrgAdmin? userProfile.organizations_admin[0].name : userProfile.name;
     const defaultUrl = userIsOrgAdmin? `/admin/${userProfile.organizations_admin[0].slug}` : '/'
+    setCurrentHomeUrl(defaultUrl)
     setCurrentAccount(defaultAccount);
     history.push(defaultUrl)
   }, [userProfile])
@@ -939,8 +940,11 @@ export default function Sidebar(props) {
     setMobileOpen(false);
   };
 
-  const handleAccountChange = (account) => {
-    console.log({account});
+  const handleAccountChange = (e) => {
+    const org = userProfile?.organizations_admin?.find(org => org.name === e.target.value);
+    const account = org? org.name : userProfile?.name;
+    const currentHomePath = org? `/admin/${org.slug}` : '/'
+    setCurrentHomeUrl(currentHomePath)
     setCurrentAccount(account)
   }
 
@@ -1050,7 +1054,7 @@ export default function Sidebar(props) {
   // const isFundMatch = fundMatch?.path === "/admin/:organization"
   // // || homeMatch?.path === "/";
   // console.log({fundMatch, isFundMatch});
-
+  console.log({currentAccount});
   return (
     <>
       <div className={classes.root}>
@@ -1108,7 +1112,7 @@ export default function Sidebar(props) {
                     <FormControl className={classes.formControl}>
                       <Select
                         labelId="accounts-select"
-                        value={currentAccount}
+                        value={currentAccount || ''}
                         onChange={handleAccountChange}
                         className={classes.input}
                         classes={{
@@ -1123,7 +1127,8 @@ export default function Sidebar(props) {
                         >
                         <MenuItem
                           onClick={() => history.push(`/`)}
-                          value={userProfile}
+                          value={userProfile?.name}
+                          style={{borderBottom: "1px solid rgb(204, 204, 204)", fontWeight: "500"}}
                         >
                           {userProfile?.name}
                         </MenuItem>
@@ -1131,7 +1136,7 @@ export default function Sidebar(props) {
                           .map(org =>
                             <MenuItem
                               onClick={() => history.push(`/admin/${org.slug}`)}
-                              value={org}
+                              value={org.name}
                               key={org.name}
                             >
                               {org.name}
