@@ -153,6 +153,41 @@ const getDimensions = (size) => {
 }
 
 
+export const ModalTooltip = withStyles(styles)(({
+	classes,
+	children,
+	title,
+	handleTooltip,
+	tooltipContent,
+	openTooltip,
+	id
+}) => {
+	return (
+		<Tooltip
+			title={<div className={classes.modal}>
+							<div className={classes.modalTitleContainer}>
+								<Typography className={classes.modalTitle}>
+									{title}
+								</Typography>
+								<Typography className={classes.closeModal} onClick={e => handleTooltip('')}>
+									Close<CloseIcon style={{fontSize: "14px"}}/>
+								</Typography>
+							</div>
+							{tooltipContent}
+						</div>}
+			open={openTooltip === id}
+			disableHoverListener
+			classes={{
+				popper: classes.popper,
+				tooltip: classes.tooltip
+			}}
+			>
+			{children}
+		</Tooltip>
+	)
+})
+
+
 export const SimpleBox = withStyles(styles)(({ classes,
 	title,
 	size,
@@ -175,27 +210,15 @@ export const SimpleBox = withStyles(styles)(({ classes,
 				<div className={classes.boxTitleText}>
 					<Typography className={classes.boxTitle} style={fontSize === "small"? {fontSize: "14px"} : {}}>{title}</Typography>
 					{tooltipContent &&
-						<Tooltip
-							title={<div className={classes.modal}>
-											<div className={classes.modalTitleContainer}>
-												<Typography className={classes.modalTitle}>
-													{title}
-												</Typography>
-												<Typography className={classes.closeModal} onClick={e => handleTooltip('')}>
-													Close<CloseIcon style={{fontSize: "14px"}}/>
-												</Typography>
-											</div>
-											{tooltipContent}
-										</div>}
-							open={openTooltip === id}
-							disableHoverListener
-							classes={{
-								popper: classes.popper,
-								tooltip: classes.tooltip
-							}}
+						<ModalTooltip
+							title={title}
+							handleTooltip={handleTooltip}
+							tooltipContent={tooltipContent}
+							openTooltip={openTooltip}
+							id={id}
 							>
 							<HelpIcon className={classes.infoIcon} onClick={(e) => handleTooltip(id)}/>
-						</Tooltip>
+						</ModalTooltip>
 					}
 				</div>
 				<div>{titleData}</div>

@@ -8,12 +8,39 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Loader from '../../../utils/Loader'
 import { nWithCommas } from '../../../../utils/numbers'
 
-import { SimpleBox } from '../widgets'
+import { SimpleBox, ModalTooltip } from '../widgets'
 
-const buildSteps = ['Initial Build', 'Services Agreement Signed', 'ID', 'Investment Docs', 'Portfolio Company Deck'];
-const preOnboardingSteps = ['SS4 Signature', 'Entity Formation', 'Bank Account', 'Private Fund Docs Review & Signing'];
-const onboardingSteps = ['Investor Onboarding List Provided', 'Carry & Management Fee Review', 'Onboarding Email Sent', 'Investor Follow Up Sent', '506b/c Review', 'KYC Review']
-const closingSteps = ['Portfolio Company Wire Instructions', 'Investor Ledger Reconciliation', 'Blue Sky Fees Review', 'Signing Portfolio Company Documents', 'Wire Approval Review', 'Invoice Receipt Sent', 'Reg D Filing', 'Management Fee Distribution']
+const buildSteps = [
+  {value: 'Initial Build',tooltip: 'Completed http://build.allocations.com/'},
+  {value: 'Services Agreement Signed', tooltip: 'Signed the Services Agreement'},
+  {value: 'ID', tooltip: 'This is a KYC requirement internally reviewed by the Allocations compliance team'},
+  {value: 'Investment Docs', tooltip: 'Uploaded investment documents for Portfolio Company. This is internally reviewed by the Allocations compliance team to determine whether Allocations can power the deal.'},
+  {value: 'Portfolio Company Deck', tooltip: 'Uploaded Deck for Portfolio Company. This is internally reviewed by the Allocations compliance team to determine whether Allocations can power the deal.'},
+];
+const preOnboardingSteps = [
+  {value: 'SS4 Signature', tooltip: 'The process to request an EIN for the entity using the SSN of the fund manager'},
+  {value: 'Entity Formation', tooltip: 'The process of establishing the entity in Delaware'},
+  {value: 'Bank Account', tooltip: 'The process of setting up a bank account. The ETA is dependent on KYC / AML checks made by the bank'},
+  {value: 'Private Fund Docs Review & Signing', tooltip: 'The process of reviewing the documents for the private fund and pre-signature from the fund manager.'},
+];
+const onboardingSteps = [
+  {value: 'Investor Onboarding List Provided', tooltip: 'This is the list of investors and proposed investment amounts provided by the fund manager in Google Sheets'},
+  {value: 'Carry & Management Fee Review', tooltip: 'This is the process for the fund manager to review carry & management fees'},
+  {value: 'Onboarding Email Sent', tooltip: 'This is the investor onboarding email sent to the investors'},
+  {value: 'Investor Follow Up Sent', tooltip: 'This is the follow up investor onboarding email sent to investors'},
+  {value: '506b/c Review', tooltip: 'This is the process for the fund manager to review 506b/506c investor status'},
+  {value: 'KYC Review', tooltip: 'This is the process for Allocations to perform a soft KYC check on investors'}
+]
+const closingSteps = [
+  {value: 'Portfolio Company Wire Instructions', tooltip: 'Uploaded Portfolio Company Wire Instructions'},
+  {value: 'Investor Ledger Reconciliation', tooltip: 'The process of reconciling wires from investors. E.g. double checking wire fees'},
+  {value: 'Blue Sky Fees Review', tooltip: 'The process of reviewing blue sky fees'},
+  {value: 'Signing Portfolio Company Documents', tooltip: 'The process for signing portfolio company documents'},
+  {value: 'Wire Approval Review', tooltip: 'The process to approval the wire to the portfolio company. 12pm EST cutoff time.'},
+  {value: 'Invoice Receipt Sent', tooltip: 'The process of sending invoice receipt to the fund manager'},
+  {value: 'Reg D Filing', tooltip: 'The process of filing a Reg D for the offering'},
+  {value: 'Management Fee Distribution', tooltip: 'The process of distributing the management fee to the Fund Manager'}
+]
 
 const Setup = ({ classes, data, openTooltip, handleTooltip }) => {
 
@@ -79,10 +106,19 @@ const Setup = ({ classes, data, openTooltip, handleTooltip }) => {
           tooltipContent={<Typography color="inherit" >The process of submitting a build request for an SPV / Fund</Typography>}
           >
           {buildSteps.map((step, idx) =>
-            <div className={classes.setupStep} key={`step-${idx}`}>
-              <CheckCircleIcon style={{color: "#0461FF", opacity: "25%", marginRight: "0.5em"}}/>
-              <Typography>{step}</Typography>
-            </div>
+            <ModalTooltip
+              title={step.value}
+              handleTooltip={handleTooltip}
+              tooltipContent={<Typography color="inherit">{step.tooltip}</Typography>}
+              openTooltip={openTooltip}
+              id={step.value.split(' ').join()}
+              key={`step-${idx}`}
+              >
+              <div className={classes.setupStep} onClick={(e) => handleTooltip(step.value.split(' ').join())}>
+                <CheckCircleIcon style={{color: "#0461FF", opacity: "25%", marginRight: "0.5em"}}/>
+                <Typography>{step.value}</Typography>
+              </div>
+            </ModalTooltip>
           )}
         </SimpleBox>
         <SimpleBox
@@ -97,10 +133,19 @@ const Setup = ({ classes, data, openTooltip, handleTooltip }) => {
           tooltipContent={<Typography color="inherit" >The setup process for an SPV / Fund</Typography>}
           >
           {preOnboardingSteps.map((step, idx) =>
-            <div className={classes.setupStep} key={`step-${idx}`}>
-              <CheckCircleIcon style={{color: "#0461FF", opacity: "25%", marginRight: "0.5em"}}/>
-              <Typography>{step}</Typography>
-            </div>
+            <ModalTooltip
+              title={step.value}
+              handleTooltip={handleTooltip}
+              tooltipContent={<Typography color="inherit">{step.tooltip}</Typography>}
+              openTooltip={openTooltip}
+              id={step.value.split(' ').join()}
+              key={`step-${idx}`}
+              >
+              <div className={classes.setupStep} onClick={(e) => handleTooltip(step.value.split(' ').join())}>
+                <CheckCircleIcon style={{color: "#0461FF", opacity: "25%", marginRight: "0.5em"}}/>
+                <Typography>{step.value}</Typography>
+              </div>
+            </ModalTooltip>
           )}
         </SimpleBox>
         <SimpleBox
@@ -115,10 +160,19 @@ const Setup = ({ classes, data, openTooltip, handleTooltip }) => {
           tooltipContent={<Typography color="inherit" >The process of onboarding investors and finalizing terms</Typography>}
           >
           {onboardingSteps.map((step, idx) =>
-            <div className={classes.setupStep} key={`step-${idx}`}>
-              <CheckCircleIcon style={{color: "#0461FF", opacity: "25%", marginRight: "0.5em"}}/>
-              <Typography>{step}</Typography>
-            </div>
+            <ModalTooltip
+              title={step.value}
+              handleTooltip={handleTooltip}
+              tooltipContent={<Typography color="inherit">{step.tooltip}</Typography>}
+              openTooltip={openTooltip}
+              id={step.value.split(' ').join()}
+              key={`step-${idx}`}
+              >
+              <div className={classes.setupStep} onClick={(e) => handleTooltip(step.value.split(' ').join())}>
+                <CheckCircleIcon style={{color: "#0461FF", opacity: "25%", marginRight: "0.5em"}}/>
+                <Typography>{step.value}</Typography>
+              </div>
+            </ModalTooltip>
           )}
         </SimpleBox>
         <SimpleBox
@@ -133,10 +187,19 @@ const Setup = ({ classes, data, openTooltip, handleTooltip }) => {
           tooltipContent={<Typography color="inherit" >The process of closing and post-closing the SPV / Fund</Typography>}
           >
           {closingSteps.map((step, idx) =>
-            <div className={classes.setupStep} key={`step-${idx}`}>
-              <CheckCircleIcon style={{color: "#0461FF", opacity: "25%", marginRight: "0.5em"}}/>
-              <Typography>{step}</Typography>
-            </div>
+            <ModalTooltip
+              title={step.value}
+              handleTooltip={handleTooltip}
+              tooltipContent={<Typography color="inherit">{step.tooltip}</Typography>}
+              openTooltip={openTooltip}
+              id={step.value.split(' ').join()}
+              key={`step-${idx}`}
+              >
+              <div className={classes.setupStep}  onClick={(e) => handleTooltip(step.value.split(' ').join())}>
+                <CheckCircleIcon style={{color: "#0461FF", opacity: "25%", marginRight: "0.5em"}}/>
+                <Typography>{step.value}</Typography>
+              </div>
+            </ModalTooltip>
           )}
         </SimpleBox>
       </div>

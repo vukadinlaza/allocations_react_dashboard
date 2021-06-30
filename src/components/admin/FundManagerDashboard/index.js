@@ -261,6 +261,7 @@ const styles = theme => ({
     display: "flex",
     alignItems: "center",
     padding: "8px 10px",
+    cursor: "pointer",
     "&:not(:first-child)": {
       borderTop: '1px solid #8493A640'
     },
@@ -269,6 +270,9 @@ const styles = theme => ({
     },
     "&>p": {
       fontSize: "14px"
+    },
+    "&:hover": {
+      backgroundColor: "#edf1fb"
     }
   },
   simpleBoxDataRow: {
