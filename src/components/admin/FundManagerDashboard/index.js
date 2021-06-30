@@ -382,7 +382,7 @@ export const ORG_OVERVIEW = gql`
           dealMultiple
           totalCarry
           fundTotalCarry
-          totalManagementFee
+          managementFees
           managementFeesDollar
           fundManagementFeesDollar
           fundManagementFees

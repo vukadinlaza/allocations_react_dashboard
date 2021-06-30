@@ -83,7 +83,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, atDeal }) => {
     dealType,
     totalCarry,
     fundTotalCarry,
-    totalManagementFee,
+    managementFees,
     managementFeesDollar,
     fundManagementFeesDollar,
     fundManagementFees,
@@ -92,12 +92,12 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, atDeal }) => {
   } = dealParams;
 
   const getManagementFee = () => {
-    const managementFees = investmentType === 'fund' ? fundManagementFees : totalManagementFee;
+    const managementFee = investmentType === 'fund' ? fundManagementFees : managementFees;
     const managementFeeDollar = investmentType === 'fund' ? fundManagementFeesDollar : managementFeesDollar;
     const feeType = investmentType === 'fund' ? fundManagementFeeType : managementFeeType;
-
-    if (managementFees?.length > 0 && feeType === 'percentage') {
-      return `${managementFees}%`;
+    console.log({managementFee, investmentType, dealParams});
+    if ((managementFee || managementFee === "0") && feeType === 'percentage') {
+      return `${managementFee}%`;
     }
     if (managementFeeDollar?.length > 0 && feeType === 'fixed') {
       return `$${managementFeeDollar}`;
