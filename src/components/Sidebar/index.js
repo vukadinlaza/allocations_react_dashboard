@@ -926,8 +926,6 @@ export default function Sidebar(props) {
   const isUserAuthenticated = isAuthenticated && userProfile
 
   useEffect(() => {
-    console.log('path', homeMatch.path, location);
-    console.log('here');
     const userIsOrgAdmin = userProfile?.organizations_admin?.length;
     const defaultAccount = userIsOrgAdmin? userProfile.organizations_admin[0].name : userProfile.name;
     const defaultUrl = userIsOrgAdmin? `/admin/${userProfile.organizations_admin[0].slug}` : '/'

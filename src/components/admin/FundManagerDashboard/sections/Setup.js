@@ -90,16 +90,13 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, atDeal }) => {
     managementFeeType,
     fundManagementFeeType,
   } = dealParams;
-
   const getManagementFee = () => {
     const managementFee = investmentType === 'fund' ? fundManagementFees : managementFees;
     const managementFeeDollar = investmentType === 'fund' ? fundManagementFeesDollar : managementFeesDollar;
     const feeType = investmentType === 'fund' ? fundManagementFeeType : managementFeeType;
-    console.log({managementFee, investmentType, dealParams});
     if ((managementFee || managementFee === "0") && feeType === 'percentage') {
       return `${managementFee}%`;
-    }
-    if (managementFeeDollar?.length > 0 && feeType === 'fixed') {
+    }else if (managementFeeDollar?.length > 0) {
       return `$${managementFeeDollar}`;
     }
   };
