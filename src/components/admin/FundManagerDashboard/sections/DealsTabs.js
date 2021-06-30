@@ -12,7 +12,7 @@ import Loader from '../../../utils/Loader'
 
 
 const styles = theme => ({
-  dealBadge: {
+  dealTag: {
     borderRadius: "20px",
     color: "white",
     fontSize: "10px",
@@ -140,7 +140,7 @@ const DealsTabs = ({ classes, history, orgSlug, data, width, tabIndex, setTabInd
               label={
                 <div style={{display: "flex", alignItems: "center"}}>
                   {deal.company_name}
-                  <span style={{backgroundColor: isFund? "#2A2B54" : "#0461FF"}} className={classes.dealBadge}>
+                  <span style={{backgroundColor: isFund? "#2A2B54" : "#0461FF"}} className={classes.dealTag}>
                     {isFund? <AccountBalanceIcon style={{marginRight: "2px"}}/> : <NearMeIcon style={{marginRight: "2px"}}/>}
                     {isFund? "FUND" : "SPV" }
                     <FiberManualRecordIcon style={{color: closed? "#d0d0d0" : "#39C522", marginLeft: "2px"}}/>
