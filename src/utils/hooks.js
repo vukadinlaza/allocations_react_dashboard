@@ -25,9 +25,6 @@ export function useToggle(init) {
 export const useFetch = (base, tableName, filter) => {
   const [status, setStatus] = useState('idle');
   const [data, setData] = useState([]);
-  const fn = () => {};
-  // const [refetch, setRefetch] = useState(fn);
-  // console.log({tableName, filter});
   useEffect(() => {
     if (!base || !tableName) return;
 
@@ -40,13 +37,7 @@ export const useFetch = (base, tableName, filter) => {
       const res = await response.json();
       setData(res.records);
       setStatus('fetched');
-      console.log(res.records, data);
-      console.log('IS EQUAL', isEqual(res.records || [], data));
-      if (status === 'fetched' && !isEqual(res.records, data)) {
-        setTimeout(fetchData, 3000);
-      }
     };
-    // setRefetch(fetchData);
     fetchData();
   }, [base, tableName, filter]);
 
