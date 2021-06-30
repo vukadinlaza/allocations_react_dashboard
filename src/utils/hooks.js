@@ -1,5 +1,6 @@
 import { useReducer, useEffect, useState } from 'react';
 import Airtable from 'airtable';
+import { isEqual } from 'lodash';
 /** *
  *
  * simple helper hooks
@@ -24,26 +25,33 @@ export function useToggle(init) {
 export const useFetch = (base, tableName, filter) => {
   const [status, setStatus] = useState('idle');
   const [data, setData] = useState([]);
+  const fn = () => {};
+  // const [refetch, setRefetch] = useState(fn);
   // console.log({tableName, filter});
   useEffect(() => {
     if (!base || !tableName) return;
 
     let url = `https://api.airtable.com/v0/${base}/${tableName}?api_key=${process.env.REACT_APP_AIRTABLE_API_KEY}`;
-    if(filter) url += `&filterByFormula=${filter}`
+    if (filter) url += `&filterByFormula=${filter}`;
 
     const fetchData = async () => {
       setStatus('fetching');
       const response = await fetch(url);
-      const data = await response.json();
-      setData(data.records);
+      const res = await response.json();
+      setData(res.records);
       setStatus('fetched');
+      console.log(res.records, data);
+      console.log('IS EQUAL', isEqual(res.records || [], data));
+      if (status === 'fetched' && !isEqual(res.records, data)) {
+        setTimeout(fetchData, 3000);
+      }
     };
-
+    // setRefetch(fetchData);
     fetchData();
   }, [base, tableName, filter]);
 
-  //Differentiate an Airtable reponse with no results, from an invalid query
-  if(!base || !tableName) return { status, data: null }
+  // Differentiate an Airtable reponse with no results, from an invalid query
+  if (!base || !tableName) return { status, data: null };
 
   return { status, data };
 };
@@ -98,7 +106,7 @@ export const useFetchWithEmail = (base, tableName, email) => {
   return { status, data };
 };
 
-//PURPOSE: getting height and width of viewport for responsive frontend
+// PURPOSE: getting height and width of viewport for responsive frontend
 export const useViewport = () => {
   const [width, setWidth] = useState(window.innerWidth);
   // Add a second state variable "height" and default it to the current window height
@@ -109,12 +117,12 @@ export const useViewport = () => {
       setWidth(window.innerWidth);
       // Set the height in state as well as the width
       setHeight(window.innerHeight);
-    }
+    };
 
-    window.addEventListener("resize", handleWindowResize);
-    return () => window.removeEventListener("resize", handleWindowResize);
+    window.addEventListener('resize', handleWindowResize);
+    return () => window.removeEventListener('resize', handleWindowResize);
   }, []);
 
   // Return both the height and width
   return { width, height };
-}
+};
