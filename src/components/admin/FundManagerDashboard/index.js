@@ -7,7 +7,7 @@ import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography, Button } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-// import EditIcon from '@material-ui/icons/Edit';
+import EditIcon from '@material-ui/icons/Edit';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Setup from './sections/Setup';
@@ -187,10 +187,10 @@ const styles = (theme) => ({
     backgroundColor: 'rgba(26, 26, 26, 0.30)',
   },
   pageIcons: {
-    width: '125px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    paddingRight: '50px',
+    width: "150px",
+    display: "flex",
+    justifyContent: "space-between",
+    paddingRight: "50px",
     [theme.breakpoints.down(phone)]: {
       width: '200px',
     },
@@ -477,6 +477,12 @@ const FundManagerDashboard = ({ classes, location, history }) => {
     }
   };
 
+  const goToEditDeal = () => {
+    if(orgSlug && dealData?._id){
+      history.push(`/admin/${orgSlug}/deals/${dealData._id}/edit`)
+    }
+  }
+
   const handleDealsTabChange = (newValue) => {
     setDealTab(newValue);
   };
@@ -529,12 +535,9 @@ const FundManagerDashboard = ({ classes, location, history }) => {
                 dashboard.allocations.com{orgSlug && dealData?.slug ? `/deals/${orgSlug}/${dealData.slug}` : ''}
               </Typography>
               <div className={classes.pageIcons}>
-                <div className={classes.pageIcon} onClick={goToDeal}>
-                  <ChevronRightIcon />
-                </div>
-                <div className={classes.pageIcon} onClick={handleLinkCopy}>
-                  <FileCopyOutlinedIcon />
-                </div>
+                <div className={classes.pageIcon} onClick={goToEditDeal}><EditIcon/></div>
+                <div className={classes.pageIcon} onClick={goToDeal}><ChevronRightIcon/></div>
+                <div className={classes.pageIcon} onClick={handleLinkCopy}><FileCopyOutlinedIcon/></div>
               </div>
             </FlatBox>
           </div>
