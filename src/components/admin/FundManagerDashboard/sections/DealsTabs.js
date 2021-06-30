@@ -108,9 +108,9 @@ const DealsTabs = ({ classes, history, orgSlug, data, width, tabIndex, setTabInd
     if (data?.organization?.deals?.length) {
       const { deals } = data.organization;
       console.log('DEALS', deals);
-      const spvs = deals.filter((d) => d.investmentType === 'spv');
-      const funds = deals.filter((d) => d.investmentType === 'fund');
-      setDeals([...funds, ...spvs]);
+      // const spvs = deals.filter((d) => d.investmentType === 'spv');
+      // const funds = deals.filter((d) => d.investmentType === 'fund');
+      setDeals(deals.reverse());
     }
   }, [orgSlug]);
 
