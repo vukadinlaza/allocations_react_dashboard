@@ -260,6 +260,7 @@ const styles = (theme) => ({
     display: 'flex',
     alignItems: 'center',
     padding: '8px 10px',
+    cursor: 'pointer',
     '&:not(:first-child)': {
       borderTop: '1px solid #8493A640',
     },
@@ -268,6 +269,12 @@ const styles = (theme) => ({
     },
     '&>p': {
       fontSize: '14px',
+    },
+    '&>p': {
+      fontSize: '14px',
+    },
+    '&:hover': {
+      backgroundColor: '#edf1fb',
     },
   },
   simpleBoxDataRow: {
@@ -349,12 +356,12 @@ const styles = (theme) => ({
 });
 
 export const ORG_OVERVIEW = gql`
-  query GetOrg($slug: String!, $status: String) {
+  query GetOrg($slug: String!) {
     organization(slug: $slug) {
       _id
       name
       slug
-      deals(status: $status) {
+      deals {
         _id
         company_name
         company_description
@@ -363,6 +370,7 @@ export const ORG_OVERVIEW = gql`
         slug
         date_closed
         investmentType
+        status
         organization {
           _id
           name
@@ -405,7 +413,7 @@ const FundManagerDashboard = ({ classes, location, history }) => {
   const [atDealData, setAtDealData] = useState({});
   const [openTooltip, setOpenTooltip] = useState('');
   const [getOrgDeals, { data: orgDeals }] = useLazyQuery(ORG_OVERVIEW, {
-    variables: { slug: orgSlug, status: 'active' },
+    variables: { slug: orgSlug },
     fetchPolicy: 'network-only',
   });
   const { data: atDeal } = useFetch(OPS_ACCOUNTING, dealName && DEALS_TABLE, dealName && `({Deal Name}="${dealName}")`);
@@ -480,7 +488,6 @@ const FundManagerDashboard = ({ classes, location, history }) => {
   };
 
   const handleTooltip = (id) => {
-    console.log({ id });
     setOpenTooltip(id);
   };
 
@@ -536,7 +543,7 @@ const FundManagerDashboard = ({ classes, location, history }) => {
         return <p>No Data</p>;
     }
   };
-  console.log({ atDeal });
+
   if (!orgDeals) return <Loader />;
   return (
     <div className={classes.dashboardContainer}>
@@ -555,46 +562,54 @@ const FundManagerDashboard = ({ classes, location, history }) => {
           </Button>
         </a>
       </div>
-      <DealsTabs
-        dealSlug={dealSlug}
-        orgSlug={orgSlug}
-        data={orgDeals}
-        width={width}
-        tabIndex={dealTab}
-        setTabIndex={handleDealsTabChange}
-      />
-      <Tabs
-        value={tabIndex}
-        indicatorColor="primary"
-        textColor="primary"
-        onChange={handleTabChange}
-        classes={{
-          root: classes.tabs,
-          indicator: classes.tabsIndicator,
-          flexContainer: classes.tabsContainer,
-        }}
-      >
-        {dashboardTabs.map((tab, index) => (
-          <Tab
-            label={tab}
-            className={classes.tab}
-            key={`tab-${index}`}
-            classes={{
-              root: classes.tab,
-              selected: classes.selectedTab,
-              wrapper: classes.tabWrapper,
-            }}
-            disableRipple
-          />
-        ))}
-        {/* }<Tab label="Disabled" disabled /> */}
-      </Tabs>
-      {!dealData || !atFundData || status === 'fetching' ? (
-        <div className={classes.loaderContainer}>
-          <Loader />
+      {orgDeals && !orgDeals.organization?.deals?.length ? (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '600px' }}>
+          This fund has no deals
         </div>
       ) : (
-        getTabContent()
+        <div>
+          <DealsTabs
+            dealSlug={dealSlug}
+            orgSlug={orgSlug}
+            data={orgDeals}
+            width={width}
+            tabIndex={dealTab}
+            setTabIndex={handleDealsTabChange}
+          />
+          <Tabs
+            value={tabIndex}
+            indicatorColor="primary"
+            textColor="primary"
+            onChange={handleTabChange}
+            classes={{
+              root: classes.tabs,
+              indicator: classes.tabsIndicator,
+              flexContainer: classes.tabsContainer,
+            }}
+          >
+            {dashboardTabs.map((tab, index) => (
+              <Tab
+                label={tab}
+                className={classes.tab}
+                key={`tab-${index}`}
+                classes={{
+                  root: classes.tab,
+                  selected: classes.selectedTab,
+                  wrapper: classes.tabWrapper,
+                }}
+                disableRipple
+              />
+            ))}
+            {/* }<Tab label="Disabled" disabled /> */}
+          </Tabs>
+          {!dealData || !atFundData || status === 'fetching' ? (
+            <div className={classes.loaderContainer}>
+              <Loader />
+            </div>
+          ) : (
+            getTabContent()
+          )}
+        </div>
       )}
     </div>
   );

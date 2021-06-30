@@ -1,16 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { gql } from 'apollo-boost';
-import { useLazyQuery } from '@apollo/react-hooks';
 import { withRouter, useRouteMatch } from "react-router-dom";
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Menu, MenuItem, ListItemText, Button } from '@material-ui/core';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import NearMeIcon from '@material-ui/icons/NearMe';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { phone } from '../../../../utils/helpers'
 import Loader from '../../../utils/Loader'
 
 
 
 const styles = theme => ({
+  dealTag: {
+    borderRadius: "20px",
+    color: "white",
+    fontSize: "10px",
+    padding: "0px 10px",
+    marginLeft: "5px",
+    fontWeight: 'bold',
+    height: "auto !important",
+    display: "flex",
+    alignItems: "center",
+    "& *": {
+      fontSize: "10px"
+    }
+  },
   item: {
     "&:hover": {
       backgroundColor: "#8493A61A",
@@ -53,6 +68,7 @@ const styles = theme => ({
     whiteSpace: "nowrap",
     fontSize: "16px",
     borderBottom: "2px solid #E6E9EF",
+    maxWidth: "none",
     "&:focus": {
       outline: "none"
     }
@@ -88,8 +104,7 @@ const styles = theme => ({
 const DealsTabs = ({ classes, history, orgSlug, data, width, tabIndex, setTabIndex }) => {
   const [deals, setDeals] = useState([]);
 
-  const handleTabChange = (e, newIndex, fromClick = false) => {
-    console.log({newIndex});
+  const handleTabChange = (e, newIndex) => {
     setTabIndex(newIndex);
   }
 
@@ -110,26 +125,37 @@ const DealsTabs = ({ classes, history, orgSlug, data, width, tabIndex, setTabInd
         indicatorColor="primary"
         textColor="primary"
         variant="scrollable"
-        onChange={(e,v) => handleTabChange(e, v, true)}
+        onChange={(e,v) => handleTabChange(e, v)}
         classes={{
           root: classes.tabs,
           indicator: classes.tabsIndicator,
-          // flexContainer: classes.tabsContainer
         }}
-        variant={width > phone? "fullWidth" : "scrollable"}
+        variant="scrollable"
       >
-        {deals.map((deal, index) =>
-          <Tab
-            label={deal.company_name}
-            key={`tab-${index}`}
-            classes={{
-              root: classes.tab,
-              selected: classes.selectedTab,
-              // wrapper: classes.tabWrapper
-            }}
-            disableRipple
-            />
-        )}
+        {deals.map((deal, index) => {
+          const isFund = deal.investmentType === 'fund';
+          const closed = deal.status === 'closed';
+          return(
+            <Tab
+              label={
+                <div style={{display: "flex", alignItems: "center"}}>
+                  {deal.company_name}
+                  <span style={{backgroundColor: isFund? "#2A2B54" : "#0461FF"}} className={classes.dealTag}>
+                    {isFund? <AccountBalanceIcon style={{marginRight: "2px"}}/> : <NearMeIcon style={{marginRight: "2px"}}/>}
+                    {isFund? "FUND" : "SPV" }
+                    <FiberManualRecordIcon style={{color: closed? "#d0d0d0" : "#39C522", marginLeft: "2px"}}/>
+                  </span>
+                </div>
+              }
+              key={`tab-${index}`}
+              classes={{
+                root: classes.tab,
+                selected: classes.selectedTab,
+              }}
+              disableRipple
+              />
+          )
+        })}
       </Tabs>
       <div className={classes.tabsPlaceholder}/>
     </div>

@@ -894,7 +894,7 @@ const GET_INVESTOR = gql`
 `;
 
 export default function Sidebar(props) {
-  const { userProfile, logout } = useAuth(GET_INVESTOR);
+  const { userProfile, logout, isAuthenticated } = useAuth(GET_INVESTOR);
   const history = useHistory();
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
   const [investTab, setInvestTab] = useState(false);
@@ -923,14 +923,18 @@ export default function Sidebar(props) {
     }
   }, [userProfile.showInvestAndMrkPlc, userProfile.showCredit, location.pathname, userProfile.showBuild]);
 
+  const isUserAuthenticated = isAuthenticated && userProfile
+
   useEffect(() => {
     const userIsOrgAdmin = userProfile?.organizations_admin?.length;
     const defaultAccount = userIsOrgAdmin? userProfile.organizations_admin[0].name : userProfile.name;
     const defaultUrl = userIsOrgAdmin? `/admin/${userProfile.organizations_admin[0].slug}` : '/'
     setCurrentHomeUrl(defaultUrl)
     setCurrentAccount(defaultAccount);
-    history.push(defaultUrl)
-  }, [userProfile])
+    if(isAuthenticated){
+      history.push(defaultUrl)
+    }
+  }, [isUserAuthenticated])
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -1051,10 +1055,7 @@ export default function Sidebar(props) {
 
   const container = window !== undefined ? () => window().document.body : undefined;
   const onboarding = location.pathname === '/get-started';
-  // const isFundMatch = fundMatch?.path === "/admin/:organization"
-  // // || homeMatch?.path === "/";
-  // console.log({fundMatch, isFundMatch});
-  console.log({currentAccount});
+
   return (
     <>
       <div className={classes.root}>
