@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FormControl, TextField, Button } from '@material-ui/core';
 import './styles.scss';
 
 function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
   const [feeType, setFeeType] = useState('percentage');
+  const [setupCostType, setSetupCostType] = useState('percentage');
+
 
   const {
+    _id,
     dealParams: {
       managementFees,
       managementFeesDollar,
@@ -13,10 +16,32 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
       estimatedTerm,
       totalCarry,
       estimatedSetupCosts,
+      estimatedSetupCostsDollar
     },
     differentPortfolioTerms,
     deal_lead,
   } = formData;
+
+  useEffect(() => {
+    getFeeType();
+    getSetupCostType();
+  }, [_id]);
+
+  const getFeeType = () => {
+    if (managementFees?.length > 0) {
+      setFeeType('percentage');
+    } else if (managementFeesDollar?.length > 0) {
+      setFeeType('fixed');
+    }
+  };
+
+  const getSetupCostType = () => {
+    if (estimatedSetupCosts?.length > 0) {
+      setFeeType('percentage');
+    } else if (estimatedSetupCostsDollar?.length > 0) {
+      setFeeType('fixed');
+    }
+  };
 
   const handleFormChange = ({ target }) => {
     const dealParamFields = [
@@ -51,6 +76,8 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
     if (managementFeesDollar?.length > 0 && feeType === 'fixed') {
       return managementFeesDollar;
     }
+
+    return ''
   };
 
   const changeFeeType = (type) => {
@@ -113,7 +140,7 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
                     },
                   }));
                 }}
-                className={`percentage ${feeType === 'percentage' && 'selected'}`}
+                className={`percentage ${feeType === 'percentage' ? 'selected' : ''}`}
                 name="managementFeeType"
                 variant="outlined"
               >
@@ -131,7 +158,7 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
                     },
                   }));
                 }}
-                className={`fixed ${feeType === 'fixed' && 'selected'}`}
+                className={`fixed ${feeType === 'fixed' ? 'selected' : ''}`}
                 name="managementFeeType"
                 variant="outlined"
               >
@@ -163,16 +190,15 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
           </label>
         </FormControl>
 
-        {/* TODO: estimatedSetupCosts || estimatedSetupCostsDollar */}
         <FormControl className="field">
           <label className="field-label">
-            Estimated setup cost
-            <TextField
+            Estimated setup cost ($)
+              <TextField
+              onChange={handleFormChange}
+              value={estimatedSetupCosts}
               className="text-input"
               variant="outlined"
-              value={estimatedSetupCosts || ''}
               name="estimatedSetupCosts"
-              onChange={handleFormChange}
             />
           </label>
         </FormControl>

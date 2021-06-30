@@ -1,4 +1,4 @@
-import { FormControl, TextField, Button } from '@material-ui/core';
+import { FormControl, TextField, Button, Menu, MenuItem, IconButton } from '@material-ui/core';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './styles.scss';
 import { toast } from 'react-toastify';
@@ -7,7 +7,12 @@ import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import { useSimpleReducer } from '../../../utils/hooks';
 import CopyIcon from '../../../assets/copy-icon.svg';
+import CloseIcon from '@material-ui/icons/Close';
 import 'react-image-crop/lib/ReactCrop.scss';
+import DescriptionIcon from '@material-ui/icons/Description';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import DocumentIcon from '../../../assets/document-icon.svg';
+import DocumentMenuIcon from '../../../assets/document-menu-icon.svg';
 
 const ADD_DOC = gql`
   mutation AddDealDoc($deal_id: String!, $title: String!, $doc: Upload!) {
@@ -28,7 +33,62 @@ const ADD_LOGO = gql`
 function DealSettings({ formData, setFormData, refetch }) {
   const [addDoc, { data, error }] = useMutation(ADD_DOC);
   const [doc, setDoc] = useState(null);
+  const [docMenuOpen, toggleDocMenuOpen] = useState(false);
   const [wireInstructions, setWireInstructions] = useState(null);
+  const [documentMenuAnchorEl, setDocumentMenuAnchorEl] = useState(null);
+  const {
+    documents
+  } = formData;
+
+  console.log(documents)
+
+  const editDocumentName = (doc) => {
+
+  }
+
+  const deleteDocument = (doc) => {
+
+  }
+
+  const handleDocumentMenuClick = (event) => {
+    setDocumentMenuAnchorEl(event.currentTarget);
+    toggleDocMenuOpen(open => !open)
+  };
+
+  const handleClose = () => {
+    setDocumentMenuAnchorEl(null);
+  };
+
+  const dealDocumentItems = documents.map((doc, i) => {
+    return (
+      <li className="document-item" key={i}>
+        <a className="document-link" href={doc.link} target="_blank">
+          <img src={DocumentIcon} />
+          <p className="document-title">{doc.path}</p>
+        </a>
+        <Button className="document-menu-button" aria-controls="simple-menu" aria-haspopup="true" onClick={handleDocumentMenuClick}>
+          <img src={DocumentMenuIcon} />
+        </Button>
+
+        <Menu
+          className="document-menu"
+          id="simple-menu"
+          anchorEl={documentMenuAnchorEl}
+          keepMounted
+          open={Boolean(documentMenuAnchorEl)}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={() => editDocumentName(doc)}>
+            Edit Document Name
+          </MenuItem>
+          <MenuItem onClick={() => deleteDocument(doc)}>
+            Delete Document
+          </MenuItem>
+        </Menu>
+      </li >
+    )
+  })
+
 
   const submitDoc = () => {
     if (doc?.doc && doc?.title) {
@@ -238,6 +298,15 @@ function DealSettings({ formData, setFormData, refetch }) {
             />
           </label>
         </FormControl>
+
+        <div className="deal-documents">
+          <label className="field-label">
+            Deal Documents
+            <ul className="document-list">
+              {dealDocumentItems}
+            </ul>
+          </label>
+        </div>
 
         <AddDealLogo />
 
