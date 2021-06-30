@@ -76,7 +76,20 @@ const styles = theme => ({
     display: "flex",
     alignItems: 'center',
     color: "white",
-    textTransform: "none"
+    textTransform: "none",
+    cursor: "pointer",
+    "&:hover": {
+      backgroundColor: "#56db40"
+    },
+    "&:focus": {
+      outline: "none"
+    }
+  },
+  createButtonLink: {
+    zIndex: 1,
+    "&:hover": {
+      textDecoration: "none"
+    }
   },
   dashboardContainer: {
     display: "flex",
@@ -538,17 +551,19 @@ const FundManagerDashboard = ({ classes, location, history }) => {
         return <p>No Data</p>
     }
   }
-
+  console.log({atDeal});
   if(!orgDeals) return <Loader/>
   return (
     <div className={classes.dashboardContainer}>
       {openTooltip? <div className={classes.modalBackground} onClick={e => handleTooltip('')}/> : ''}
       <div className={classes.mainTitleContainer}>
         <Typography className={classes.mainTitle}>Funds</Typography>
-        <Button className={classes.createButton}>
-          <AddCircleIcon style={{marginRight: "5px", fontSize: "20px"}}/>
-          Create New
-        </Button>
+        <a href="//build.allocations.com" target="_blank" rel="noopener noreferrer" className={classes.createButtonLink}>
+          <Button className={classes.createButton}>
+            <AddCircleIcon style={{marginRight: "5px", fontSize: "20px"}}/>
+            Create New
+          </Button>
+        </a>
       </div>
       <DealsTabs
         dealSlug={dealSlug}

@@ -14,7 +14,11 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  ListItemText
+  ListItemText,
+  InputLabel,
+  FormControl,
+  Select,
+  MenuItem
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
@@ -22,6 +26,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import SettingsIcon from '@material-ui/icons/Settings';
 import BuildIcon from '@material-ui/icons/Build';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MonetizationOnRoundedIcon from '@material-ui/icons/MonetizationOnRounded';
 import AccountBalanceRoundedIcon from '@material-ui/icons/AccountBalanceRounded';
 import CreditCardRoundedIcon from '@material-ui/icons/CreditCardRounded';
@@ -787,6 +792,15 @@ const useStyles = makeStyles((theme) => ({
     minWidth: "40px",
     color: '#8593a6',
   },
+  input: {
+    border: "none !important",
+    "&:before, &:after": {
+      border: "none"
+    }
+  },
+  inputFocused: {
+    border: "none"
+  },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
@@ -829,6 +843,17 @@ const useStyles = makeStyles((theme) => ({
       padding: "20px"
     },
   },
+  formControl: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignSelf: "center",
+    width: "78%",
+    marginTop: "20px",
+    "&:hover *:before, ": {
+      border: "none !important"
+    },
+  },
   sectionDesktop: {
     display: 'none',
     [theme.breakpoints.up('md')]: {
@@ -841,6 +866,12 @@ const useStyles = makeStyles((theme) => ({
       display: 'none',
     },
   },
+  select: {
+    width: "90%",
+    textAlign: "center",
+    fontWeight: "bold",
+    // fontSize: "20px"
+  }
 }));
 
 const GET_INVESTOR = gql`
@@ -863,11 +894,16 @@ const GET_INVESTOR = gql`
 `;
 
 export default function Sidebar(props) {
-  const { userProfile } = useAuth(GET_INVESTOR);
+  const { userProfile, logout } = useAuth(GET_INVESTOR);
+  const history = useHistory();
+  const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
   const [investTab, setInvestTab] = useState(false);
   const [creditTab, setCreditTab] = useState(false);
   const [buildTab, setBuildTab] = useState(false);
-  const fundMatch = useRouteMatch('/admin/:organization')
+  const [currentAccount, setCurrentAccount] = useState('');
+  const [currentHomeUrl, setCurrentHomeUrl] = useState('');
+  const fundMatch = useRouteMatch('/admin/:organization');
+  const homeMatch = useRouteMatch('/');
   const location = useLocation();
   const { window } = props;
   const classes = useStyles();
@@ -887,6 +923,14 @@ export default function Sidebar(props) {
     }
   }, [userProfile.showInvestAndMrkPlc, userProfile.showCredit, location.pathname, userProfile.showBuild]);
 
+  useEffect(() => {
+    const userIsOrgAdmin = userProfile?.organizations_admin?.length;
+    const defaultAccount = userIsOrgAdmin? userProfile.organizations_admin[0].name : userProfile.name;
+    const defaultUrl = userIsOrgAdmin? `/admin/${userProfile.organizations_admin[0].slug}` : '/'
+    setCurrentAccount(defaultAccount);
+    history.push(defaultUrl)
+  }, [userProfile])
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -895,9 +939,14 @@ export default function Sidebar(props) {
     setMobileOpen(false);
   };
 
+  const handleAccountChange = (account) => {
+    console.log({account});
+    setCurrentAccount(account)
+  }
+
   const menus = [
     {
-      to: '/',
+      to: currentHomeUrl,
       title: 'Home',
       icon: <HomeIcon />,
     },
@@ -929,6 +978,7 @@ export default function Sidebar(props) {
       icon: <CreditCardRoundedIcon />,
     });
   }
+
 
   const drawer = (
     <div>
@@ -983,12 +1033,23 @@ export default function Sidebar(props) {
           </List>
         </>
       )}
+      <div
+        onClick={mobileOpen ? handleDrawerClose : null}
+        className={`sidebar-nav-item`}
+      >
+        <ListItem button onClick={logoutWithRedirect}>
+          <ListItemIcon className={classes.icon}><ExitToAppIcon/></ListItemIcon>
+          <ListItemText primary="Logout" />
+        </ListItem>
+      </div>
     </div>
   );
 
   const container = window !== undefined ? () => window().document.body : undefined;
   const onboarding = location.pathname === '/get-started';
-  const isFundMatch = fundMatch?.path === "/admin/:organization";
+  // const isFundMatch = fundMatch?.path === "/admin/:organization"
+  // // || homeMatch?.path === "/";
+  // console.log({fundMatch, isFundMatch});
 
   return (
     <>
@@ -996,7 +1057,7 @@ export default function Sidebar(props) {
         {!onboarding && <CssBaseline />}
         {!onboarding ? (
           <>
-            {isFundMatch && width > phone?
+            {width > phone?
               ''
               :
               <AppBar className={classes.appBar}>
@@ -1017,7 +1078,7 @@ export default function Sidebar(props) {
                 </Toolbar>
               </AppBar>
             }
-            <div className={classes.contentContainer} style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start", height: isFundMatch? "100vh" : "calc(100vh - 70px)"}}>
+            <div className={classes.contentContainer} style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start", height: "100vh"}}>
               <nav className={classes.drawer} aria-label="mailbox folders">
                 <Hidden mdUp implementation="css">
                   <Drawer
@@ -1039,16 +1100,50 @@ export default function Sidebar(props) {
                 <Hidden smDown implementation="css">
                   <Drawer
                     classes={{
-                      paper: isFundMatch? classes.newDrawerPaper : classes.drawerPaper,
+                      paper: classes.newDrawerPaper
                     }}
                     variant="permanent"
                     open
                     >
+                    <FormControl className={classes.formControl}>
+                      <Select
+                        labelId="accounts-select"
+                        value={currentAccount}
+                        onChange={handleAccountChange}
+                        className={classes.input}
+                        classes={{
+                          root: classes.select,
+                        }}
+                        InputProps={{
+                          classes: {
+                            focused: classes.inputFocused,
+                            underline: classes.inputFocused
+                          }
+                        }}
+                        >
+                        <MenuItem
+                          onClick={() => history.push(`/`)}
+                          value={userProfile}
+                        >
+                          {userProfile?.name}
+                        </MenuItem>
+                        {userProfile?.organizations_admin?.sort((a, b) => a.name.localeCompare(b.name))
+                          .map(org =>
+                            <MenuItem
+                              onClick={() => history.push(`/admin/${org.slug}`)}
+                              value={org}
+                              key={org.name}
+                            >
+                              {org.name}
+                            </MenuItem>
+                            )}
+                      </Select>
+                    </FormControl>
                     {drawer}
                   </Drawer>
                 </Hidden>
               </nav>
-              <main className={classes.content} style={{ background: 'rgba(0,0,0,0.01)', height: isFundMatch? "100vh" : "calc(100vh - 70px)" }}>
+              <main className={classes.content} style={{ background: 'rgba(0,0,0,0.01)', height: "100vh" }}>
                 {props.children}
               </main>
             </div>
