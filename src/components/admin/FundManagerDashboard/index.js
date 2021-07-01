@@ -186,6 +186,16 @@ const styles = (theme) => ({
     zIndex: '1099',
     backgroundColor: 'rgba(26, 26, 26, 0.30)',
   },
+  noDataPlaceholder: {
+    display: 'flex',
+    flexDirection: "column",
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '600px',
+    fontSize: "26px",
+    fontWeight: 600,
+    color: "#c3c3c3"
+  },
   pageIcons: {
     width: "150px",
     display: "flex",
@@ -566,8 +576,9 @@ const FundManagerDashboard = ({ classes, location, history }) => {
         </a>
       </div>
       {orgDeals && !orgDeals.organization?.deals?.length ? (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '600px' }}>
-          This fund has no deals
+        <div className={classes.noDataPlaceholder}>
+          <div>This fund has no deals.</div>
+          <div>Click on the 'Create New' button to create a deal.</div>
         </div>
       ) : (
         <div>
