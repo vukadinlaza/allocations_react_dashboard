@@ -2,21 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import { get, toLower } from 'lodash';
 import { gql } from 'apollo-boost';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import {
-  Toolbar,
-  AppBar,
-  CssBaseline,
-  Divider,
-  Drawer,
-  Hidden,
-  IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText
-} from '@material-ui/core';
+import AppBar from '@material-ui/core/AppBar';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
+import Hidden from '@material-ui/core/Hidden';
+import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
+import Toolbar from '@material-ui/core/Toolbar';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import StorefrontIcon from '@material-ui/icons/Storefront';
@@ -27,11 +25,7 @@ import AccountBalanceRoundedIcon from '@material-ui/icons/AccountBalanceRounded'
 import CreditCardRoundedIcon from '@material-ui/icons/CreditCardRounded';
 import { useAuth } from '../../auth/useAuth';
 import NavBar from '../NavBar';
-import NewNavBar from '../NewNavBar';
-import { phone } from '../../utils/helpers'
-import Loader from '../utils/Loader'
 import './style.scss';
-
 
 const whitelistEmails = [
   {
@@ -755,7 +749,6 @@ const drawerWidth = 250;
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    flexDirection: "column"
   },
   brand: {
     flexGrow: 1,
@@ -772,10 +765,6 @@ const useStyles = makeStyles((theme) => ({
     background: '#fff',
     color: '#868c97',
     boxShadow: 'none !important',
-    position: "relative",
-    height: "70px",
-    border: "none",
-    borderBottom: "1px solid #d8dce6"
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -784,7 +773,12 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   icon: {
-    minWidth: "40px",
+    boxShadow: '0px 3px 6px #00000029',
+    width: 64,
+    height: 64,
+    borderRadius: '50%',
+    padding: 20,
+    marginRight: 16,
     color: '#8593a6',
   },
   // necessary for content to be below app bar
@@ -792,33 +786,13 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: drawerWidth,
     paddingTop: 8,
-    border: "none",
     borderRight: '1px solid #dfe2e5',
     borderLeft: 0,
-    position: "relative",
-    height: "calc(100vh - 70px)"
-  },
-  contentContainer: {
-    display:"flex",
-    justifyContent:"space-between",
-    alignItems:"flex-start",
-    height:"calc(100vh - 70px)",
-    overflow:"hidden"
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(4),
-    maxWidth: 'calc(100% - 250px)',
-    width: "calc(100% - 250px)",
-    overflowY: "scroll",
-    height: "calc(100vh - 70px)",
-    paddingBottom: "0",
-    position: "relative",
-    [theme.breakpoints.down(phone)]: {
-      width: "100vw",
-      maxWidth: "none",
-      padding: "20px"
-    },
+    maxWidth: '100%',
   },
   sectionDesktop: {
     display: 'none',
@@ -858,8 +832,6 @@ export default function Sidebar(props) {
   const [investTab, setInvestTab] = useState(false);
   const [creditTab, setCreditTab] = useState(false);
   const [buildTab, setBuildTab] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const pathMatch = useRouteMatch('/admin/:organization');
   const location = useLocation();
   const { window } = props;
   const classes = useStyles();
@@ -923,6 +895,7 @@ export default function Sidebar(props) {
 
   const drawer = (
     <div>
+      <div className={classes.toolbar} />
       <List>
         {menus.map(({ to, title, icon }) => (
           <div
@@ -959,10 +932,6 @@ export default function Sidebar(props) {
                 </ListItemIcon>
                 <ListItemText primary="Funds" />
               </ListItem>
-            </div>
-            <div
-              className={`sidebar-nav-item ${location.pathname === '/admin/settings' ? 'sidebar-nav-item-active' : ''}`}
-              >
               <ListItem component={Link} to="/admin/settings" button>
                 <ListItemIcon className={classes.icon}>
                   <SettingsIcon />
@@ -979,20 +948,13 @@ export default function Sidebar(props) {
 
   const container = window !== undefined ? () => window().document.body : undefined;
   const onboarding = location.pathname === '/get-started';
-
-  let atFMDashboard = false;
-  if(pathMatch){
-    let organization = pathMatch.params.organization;
-    atFMDashboard = (pathMatch.path === '/admin/:organization' || pathMatch.path === '/admin/:organization/:deal') && (organization !== 'funds');
-  }
-
   return (
     <>
       <div className={classes.root}>
         {!onboarding && <CssBaseline />}
         {!onboarding ? (
           <>
-            <AppBar className={classes.appBar}>
+            <AppBar position="fixed" className={classes.appBar}>
               <Toolbar>
                 <IconButton
                   color="inherit"
@@ -1006,52 +968,43 @@ export default function Sidebar(props) {
                 <div className={classes.brand}>
                   <Brand organizations_admin={userProfile.organizations_admin || []} admin={userProfile.admin} />
                 </div>
-                {atFMDashboard?
-                  <NewNavBar setLoading={setLoading}/>
-                  :
-                  <NavBar />
-                }
+                <NavBar />
               </Toolbar>
             </AppBar>
-            <div className={classes.contentContainer} style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start"}}>
-              <nav className={classes.drawer} aria-label="mailbox folders">
-                <Hidden mdUp implementation="css">
-                  <Drawer
-                    container={container}
-                    variant="temporary"
-                    anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                    open={mobileOpen}
-                    onClose={handleDrawerToggle}
-                    classes={{
-                      paper: classes.drawerPaper,
-                    }}
-                    ModalProps={{
-                      keepMounted: true,
-                    }}
-                    >
-                    {drawer}
-                  </Drawer>
-                </Hidden>
-                <Hidden smDown implementation="css">
-                  <Drawer
-                    classes={{
-                      paper: classes.drawerPaper,
-                    }}
-                    variant="permanent"
-                    open
-                    >
-                    {drawer}
-                  </Drawer>
-                </Hidden>
-              </nav>
-              <main className={classes.content} style={{ background: 'rgba(0,0,0,0.01)' }}>
-                {loading?
-                  <Loader/>
-                  :
-                  props.children
-                }
-              </main>
-            </div>
+            <nav className={classes.drawer} aria-label="mailbox folders">
+              <Hidden mdUp implementation="css">
+                <Drawer
+                  container={container}
+                  variant="temporary"
+                  anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                  open={mobileOpen}
+                  onClose={handleDrawerToggle}
+                  classes={{
+                    paper: classes.drawerPaper,
+                  }}
+                  ModalProps={{
+                    keepMounted: true,
+                  }}
+                >
+                  {drawer}
+                </Drawer>
+              </Hidden>
+              <Hidden smDown implementation="css">
+                <Drawer
+                  classes={{
+                    paper: classes.drawerPaper,
+                  }}
+                  variant="permanent"
+                  open
+                >
+                  {drawer}
+                </Drawer>
+              </Hidden>
+            </nav>
+            <main className={classes.content} style={{ background: 'rgba(0,0,0,0.01)' }}>
+              <div className={classes.toolbar} />
+              {props.children}
+            </main>
           </>
         ) : (
           <main style={{}}>{props.children}</main>

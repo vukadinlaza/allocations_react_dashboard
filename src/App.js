@@ -4,7 +4,6 @@ import Cohere from 'cohere-js';
 import AdminRoute from './auth/admin-route';
 import PrivateRoute from './components/PrivateRoute';
 import Faq from './components/Faq';
-import Loader from './components/utils/Loader'
 import DealOneClick from './components/DealOneClick';
 import Deals from './components/Deals';
 import Credit from './components/Credit';
@@ -44,7 +43,7 @@ import User from './components/Settings/User';
 import Investment from './components/Settings/Investment';
 
 // admin
-import FundManagerDashboard from './components/admin/FundManagerDashboard';
+import AdminHome from './components/admin/AdminHome';
 import Compliance from './components/admin/Compliance';
 import MasterFiling from './components/admin/MasterFiling';
 
@@ -134,8 +133,7 @@ const App = () => {
 
           {/** Whitelabel Routes * */}
           <PrivateRoute path="/admin/funds" component={Funds} exact />
-          <PrivateRoute path="/admin/:organization" component={Loader} exact />
-          <PrivateRoute path="/admin/:organization/:deal" component={FundManagerDashboard} exact />
+          <PrivateRoute path="/admin/:organization" component={AdminHome} exact />
           <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
 
           <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
