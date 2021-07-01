@@ -118,10 +118,6 @@ function DealNextSteps() {
         <script async src={process.env.REACT_APP_VERIFY_INVESTOR_URL} />
       </Helmet>
       <section className="DealNextSteps">
-        <Button className="back-button" onClick={() => history.push(path, { isInvestPage: true })}>
-          <ArrowBackIcon />
-          Back to Invest Page
-        </Button>
 
         <h1 className="header">Next Steps</h1>
         <h3 className="sub-header">Please complete the following steps to finish your investment.</h3>
