@@ -149,17 +149,18 @@ const styles = (theme) => ({
     },
   },
   loaderContainer: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-    top: 0,
-    left: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    paddingTop: '250px',
-    zIndex: '10',
+    top: "0",
+    left: "0",
+    width: "100%",
+    height: "700px",
+    display: "flex",
+    zIndex: 10,
+    position: "absolute",
+    alignItems: "flex-start",
+    paddingTop: "180px",
+    justifyContent: "center",
+    backgroundColor: "rgba(255, 255, 255)"
+    // backgroundColor: 'rgba(255, 255, 255, 0.5)',
   },
   logType: {
     width: 'fit-content',
@@ -445,6 +446,8 @@ const FundManagerDashboard = ({ classes, location, history }) => {
   const [dealTab, setDealTab] = useState(0);
   const [dealData, setDealData] = useState({});
   const [dealName, setDealName] = useState('');
+  const [dashboardTabs, setDashboardTabs] = useState([])
+  const [loading, setLoading] = useState(false);
   const [atDealData, setAtDealData] = useState({});
   const [openTooltip, setOpenTooltip] = useState('');
   const [getInvestments, { data: dealInvestments }] = useLazyQuery(GET_INVESTMENTS);
@@ -458,7 +461,6 @@ const FundManagerDashboard = ({ classes, location, history }) => {
     atDealData?.name && INVESTMENTS_TABLE,
     atDealData?.name && `(FIND("${atDealData.name}", {Deals}))`,
   );
-  const dashboardTabs = dealData?.investmentType === 'fund' ? fundTabs : spvTabs;
 
   // setInterval(() => {
   //   console.log('FIRES');
@@ -467,9 +469,20 @@ const FundManagerDashboard = ({ classes, location, history }) => {
 
   useEffect(() => {
     if(dealData && Object.keys(dealData).length){
+      const newTabs = dealData.investmentType === 'fund' ? fundTabs : spvTabs;
+      const newTabIndex = newTabs.indexOf(tabName);
+      const newIndex = newTabIndex < 0? 0 : newTabIndex;
+      const newTabName = newTabs[newIndex];
+      setTabIndex(newIndex);
+      setDashboardTabs(newTabs);
+      setTabName(newTabName);
       getInvestments({ variables: { deal_slug: dealData.slug, fund_slug: orgSlug } });
     }
   }, [dealData]);
+
+  useEffect(() => {
+    if(atFundData) setLoading(false);
+  }, [atFundData])
 
   useEffect(() => {
     getOrgDeals();
@@ -491,11 +504,6 @@ const FundManagerDashboard = ({ classes, location, history }) => {
       setAtDealData({ name: 'Deal Name Not found in AirTable', id: '' });
     }
   }, [atDeal]);
-
-  useEffect(() => {
-    const newTabIndex = dashboardTabs.indexOf(tabName);
-    setTabIndex(newTabIndex);
-  }, [dashboardTabs]);
 
   const handleDealData = (index) => {
     if (orgDeals) {
@@ -526,6 +534,7 @@ const FundManagerDashboard = ({ classes, location, history }) => {
   }
 
   const handleDealsTabChange = (newValue) => {
+    setLoading(true)
     setDealTab(newValue);
   };
 
@@ -629,6 +638,7 @@ const FundManagerDashboard = ({ classes, location, history }) => {
             tabIndex={dealTab}
             setTabIndex={handleDealsTabChange}
           />
+        <div style={{position: "relative"}}>
           <Tabs
             value={tabIndex}
             indicatorColor="primary"
@@ -639,7 +649,7 @@ const FundManagerDashboard = ({ classes, location, history }) => {
               indicator: classes.tabsIndicator,
               flexContainer: classes.tabsContainer,
             }}
-          >
+            >
             {dashboardTabs.map((tab, index) => (
               <Tab
                 label={tab}
@@ -651,17 +661,18 @@ const FundManagerDashboard = ({ classes, location, history }) => {
                   wrapper: classes.tabWrapper,
                 }}
                 disableRipple
-              />
+                />
             ))}
             {/* }<Tab label="Disabled" disabled /> */}
           </Tabs>
-          {!dealData || !atFundData || !dealInvestments || status === 'fetching' ? (
+          {!dealData || !atFundData || !dealInvestments || status === 'fetching' || loading? (
             <div className={classes.loaderContainer}>
               <Loader />
             </div>
           ) : (
             getTabContent()
           )}
+        </div>
         </div>
       )}
     </div>
