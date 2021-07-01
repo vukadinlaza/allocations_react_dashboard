@@ -1,11 +1,11 @@
 import { FormControl, TextField, Button } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React, { useState } from 'react';
-import Loader from '../../../utils/Loader';
 import './styles.scss';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { useLocation } from 'react-router';
+import Loader from '../../../utils/Loader';
 
 const validate = (formData) => {
   const required = [

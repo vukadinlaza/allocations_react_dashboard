@@ -84,6 +84,7 @@
     "react-image-crop": "^8.6.9",
     "react-in-viewport": "^1.0.0-alpha.15",
     "react-pdf": "^5.2.0",
+    "react-places-autocomplete": "^7.3.0",
     "react-router-dom": "^5.0.0",
     "react-scripts": "^3.4.1",
     "react-scroll": "^1.8.1",
