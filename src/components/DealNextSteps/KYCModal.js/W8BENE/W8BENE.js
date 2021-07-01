@@ -1,6 +1,15 @@
-import { FormControl, TextField, Button, Checkbox, FormGroup, FormControlLabel, Select, MenuItem } from '@material-ui/core'
+import {
+  FormControl,
+  TextField,
+  Button,
+  Checkbox,
+  FormGroup,
+  FormControlLabel,
+  Select,
+  MenuItem,
+} from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import countries from 'country-region-data';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Loader from '../../../utils/Loader';
@@ -332,7 +341,6 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
   }
 
 
-
   return (
     <section className="W8BENE">
 
@@ -342,8 +350,6 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
       </div>
 
       <form className="form">
-
-        {/* Name input */}
         <FormControl className="form-field name">
           <label className="form-label">
             Name of organization that is the beneficial owner
@@ -357,16 +363,10 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
           </label>
         </FormControl>
 
-
-        {/* Country input */}
-        <FormControl
-          className="form-field country-input"
-          required
-          variant="outlined"
-        >
+        <FormControl className="form-field country-input" required variant="outlined">
           <label className="form-label">
             Country of incorporation or organization
-          <Autocomplete
+            <Autocomplete
               className="country-select"
               value={formData['organization_country']}
               onChange={(event, newInputValue) => handleCountryChange('organization_country')(event, newInputValue)}
@@ -1373,14 +1373,14 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
         }
 
         {
-          formData['40c'] && formData['5_passive_nffe'] (
+          formData['40c'] && formData['5_passive_nffe'](
             <FormGroup className="form-group">
 
               <label className="form-group-label">
                 Substantial U.S. Owners of Passive NFFE
                 </label>
 
-              { passiveNFFEOwners}
+              {passiveNFFEOwners}
 
               <Button
                 onClick={handleOwnerAdd}
@@ -1412,11 +1412,10 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
           </FormControl>
 
           <div className="residence-container">
-
             <FormControl className="city">
               <label className="form-label">
                 City or town, state or province.
-                <TextField
+                  <TextField
                   variant="outlined"
                   className="address-input"
                   name="residence_city_or_town"
@@ -1428,15 +1427,10 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
               </label>
             </FormControl>
 
-
-            <FormControl
-              className="country"
-              required
-              variant="outlined"
-            >
+            <FormControl className="country" required variant="outlined">
               <label className="form-label">
                 Country
-                  <Autocomplete
+                <Autocomplete
                   className="country-select"
                   value={formData['residence_country']}
                   onChange={(event, newInputValue) => handleCountryChange('residence_country')(event, newInputValue)}
@@ -1454,7 +1448,6 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                 />
               </label>
             </FormControl>
-
           </div>
 
 
@@ -1603,23 +1596,15 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
           </label>
         </FormControl>
 
-        {/* {called && loading ? <Loader /> : */}
-        <Button onClick={handleSubmit} className="form-button accept">
-          I accept
-        </Button>
-        {/* } */}
-        <Button className="form-button decline">
-          I decline
-        </Button>
 
+        <Button className="form-button accept" onClick={handleSubmit}>I accept</Button>
+        <Button className="form-button decline">I decline</Button>
       </form>
-
-      <Button onClick={() => toggleOpen(open => !open)} className="close-button">
+      <Button onClick={() => toggleOpen((open) => !open)} className="close-button">
         <CloseIcon />
       </Button>
-
-    </section >
-  )
+    </section>
+  );
 }
 
-export default W8BENE
+export default W8BENE;

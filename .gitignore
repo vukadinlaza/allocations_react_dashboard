@@ -153,3 +153,8 @@ sketch
 # End of https://www.gitignore.io/api/node,react,macos
 
 .idea/
+
+# Cypress
+cypress/screenshots/
+cypress/videos/
+cypress/results/

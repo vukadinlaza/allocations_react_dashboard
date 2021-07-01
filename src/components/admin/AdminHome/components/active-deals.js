@@ -185,7 +185,7 @@ export const Deal = ({ deal, index, superadmin, slug, isDemo }) => {
             </TableRow>
           )}
           <TableRow style={{ borderTop: '0', maxWidth: '300px' }}>
-            <TableCell colspan="5">
+            <TableCell colSpan="5">
               <InvestmentFlow dealId={deal._id} isDemo={isDemo} superadmin={superadmin} />
             </TableCell>
           </TableRow>

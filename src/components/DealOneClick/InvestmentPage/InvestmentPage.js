@@ -8,17 +8,14 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import { toast } from 'react-toastify';
 import TermsAndConditionsPanel from './TermsAndConditionsPanel';
 import DealDocumentsPanel from './DealDocumentsPanel';
-import InvestingAsPanel from './InvestingAsPanel';
 import InvestmentAmountPanel from './InvestmentAmount';
 import PersonalInformation from './PersonalInformation';
-import PaymentInformation from './PaymentInformation';
 import './styles.scss';
 import Loader from '../../utils/Loader';
-import YourDocumentsPanel from './YourDocumentsPanel';
 import SPVDocumentModal from './SpvDocumentModal';
 import { getClientIp } from '../../../utils/ip';
 import { nWithCommas } from '../../../utils/numbers';
-import InvestmentHistory from './InvestmentHistory/InvestmentHistory';
+import { useAuth } from '../../../auth/useAuth';
 
 const GET_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
@@ -37,6 +34,18 @@ const GET_DEAL = gql`
       memo
       docSpringTemplateId
       dealCoverImageKey
+      investments {
+        investor {
+          _id
+        }
+        submissionData {
+          country
+          investor_type
+          legalName
+          accredited_investor_status
+          fullName
+        }
+      }
       documents {
         path
         link
@@ -80,6 +89,27 @@ const GET_DEAL = gql`
   }
 `;
 
+const GET_PERSONAL_INFO = gql`
+  query InvestorPersonalInfo {
+    investor {
+      _id
+      investorPersonalInfo {
+        investor {
+          _id
+        }
+        submissionData {
+          country
+          state
+          investor_type
+          legalName
+          accredited_investor_status
+          fullName
+        }
+      }
+    }
+  }
+`;
+
 const CONFIRM_INVESTMENT = gql`
   mutation ConfirmInvestment($payload: Object) {
     confirmInvestment(payload: $payload) {
@@ -87,10 +117,27 @@ const CONFIRM_INVESTMENT = gql`
     }
   }
 `;
+const GET_PREVIEW = gql`
+  mutation getInvestmentPreview($payload: Object) {
+    getInvestmentPreview(payload: $payload) {
+      previewLink
+    }
+  }
+`;
+const ADD_USER_AS_VIEWED = gql`
+  mutation addUserAsViewed($user_id: String!, $deal_id: String!) {
+    addUserAsViewed(user_id: $user_id, deal_id: $deal_id) {
+      _id
+    }
+  }
+`;
 
 // if individual remove signfull name
-const validate = (investor) => {
-  const required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
+const validate = (investor, org) => {
+  let required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
+  if (org === 'irishangels') {
+    required = required.filter(d => d !== 'accredited_investor_status')
+  }
   if (investor.country && investor.country === 'United States') {
     required.push('state');
   }
@@ -100,9 +147,11 @@ const validate = (investor) => {
   return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
 };
 
-function InvestmentPage({}) {
+function InvestmentPage({ }) {
   const history = useHistory();
   const { organization: org, deal_slug } = useParams();
+  const [addUserAsViewed, { called }] = useMutation(ADD_USER_AS_VIEWED);
+  const { userProfile } = useAuth();
   const organization = org || 'allocations';
 
   const { data, refetch } = useQuery(GET_DEAL, {
@@ -112,10 +161,23 @@ function InvestmentPage({}) {
     },
   });
 
+  const { data: personalInfo } = useQuery(GET_PERSONAL_INFO);
+
+  useEffect(() => {
+    if (data?.deal?._id && userProfile?._id && !called) {
+      addUserAsViewed({
+        variables: {
+          user_id: userProfile._id,
+          deal_id: data?.deal?._id,
+        },
+      });
+    }
+  });
+
   const [checkedTAT, setCheckedTAT] = useState(false);
   const [showSpvModal, setShowSpvModal] = useState(false);
   const [amount, setAmount] = useState('');
-
+  const [populated, setPopulated] = useState(false);
   const [investorFormData, setInvestor] = useState({
     country: '',
     country_search: '',
@@ -124,7 +186,15 @@ function InvestmentPage({}) {
   });
   const [errors, setErrors] = useState([]);
 
-  const [submitConfirmation, {}] = useMutation(CONFIRM_INVESTMENT, {
+  const populateInvestorData = () => {
+    const personalData = personalInfo?.investor?.investorPersonalInfo?.submissionData;
+    if (!personalData) return;
+    const updatedInvestorData = { ...investorFormData, ...personalData };
+    setInvestor(updatedInvestorData);
+    setPopulated(true);
+  };
+
+  const [submitConfirmation, { }] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       refetch();
       toast.success('Investment created successfully.');
@@ -132,9 +202,11 @@ function InvestmentPage({}) {
       history.push(path, { investorFormData });
     },
   });
+  const [getInvestmentPreview, { data: previewData, loading: loadingPreview }] = useMutation(GET_PREVIEW);
 
   const confirmInvestment = () => {
-    const validation = validate(investorFormData);
+    const validation = validate(investorFormData, organization);
+    console.log('validation', validation)
     setErrors(validation);
 
     if (validation.length > 0) {
@@ -148,8 +220,17 @@ function InvestmentPage({}) {
     if (parseInt(amount) < 1000) {
       return toast.warning('Please enter an investment amount greater than $1000.');
     }
+    const payload = {
+      ...investorFormData,
+      investmentAmount: nWithCommas(amount),
+      dealId: deal._id,
+      docSpringTemplateId: deal.docSpringTemplateId,
+    };
+
+    getInvestmentPreview({ variables: { payload } });
     setShowSpvModal(true);
   };
+
   const submitInvestment = async () => {
     const ip = await getClientIp();
     const payload = {
@@ -159,8 +240,6 @@ function InvestmentPage({}) {
       dealId: deal._id,
       docSpringTemplateId: deal.docSpringTemplateId,
     };
-
-    console.log('PAYLOAD', payload);
 
     submitConfirmation({ variables: { payload } });
     setShowSpvModal(false);
@@ -173,6 +252,8 @@ function InvestmentPage({}) {
     company_name,
     dealParams: { minimumInvestment },
   } = deal;
+
+  if (!populated) populateInvestorData(deal);
 
   return (
     <section className="InvestmentPage">
@@ -193,12 +274,12 @@ function InvestmentPage({}) {
       <div className="flex-container">
         <InvestmentAmountPanel setAmount={setAmount} amount={amount} minimumInvestment={minimumInvestment} />
         <div className="side-panel">
-          <InvestingAsPanel />
+          {/* <InvestingAsPanel /> */}
           {/* <InvestmentHistory deal={deal} setInvestor={setInvestor} investor={investorFormData} setAmount={setAmount} /> */}
           <DealDocumentsPanel deal={deal} />
           {/* <YourDocumentsPanel investment={investment} /> */}
         </div>
-        <PersonalInformation errors={errors} investor={investorFormData} setInvestor={setInvestor} />
+        <PersonalInformation org={org} errors={errors} investor={investorFormData} setInvestor={setInvestor} />
         <TermsAndConditionsPanel
           confirmInvestment={confirmInvestment}
           deal={deal}
@@ -207,7 +288,14 @@ function InvestmentPage({}) {
         />
       </div>
 
-      <SPVDocumentModal open={showSpvModal} setOpen={setShowSpvModal} deal={deal} submitInvestment={submitInvestment} />
+      <SPVDocumentModal
+        open={showSpvModal}
+        setOpen={setShowSpvModal}
+        deal={deal}
+        submitInvestment={submitInvestment}
+        previewData={previewData}
+        loadingPreview={loadingPreview}
+      />
     </section>
   );
 }

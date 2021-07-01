@@ -8,11 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Editor } from '@tinymce/tinymce-react';
 
 import { gql } from 'apollo-boost';
-import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 
 import {
-  Table,
-  TableBody,
   TableCell,
   TableRow,
   Paper,
@@ -42,7 +40,7 @@ import { ORG_OVERVIEW } from '../admin/AdminHome';
 import InviteInvestors from './InviteInvestors';
 import UserSearch from '../forms/UserSearch';
 import * as API from '../../api';
-import { nWithCommas, formatDate } from '../../utils/numbers';
+import { nWithCommas } from '../../utils/numbers';
 import Loader from '../utils/Loader';
 
 /** *
@@ -258,7 +256,6 @@ const dealParamsValidInputs = [
   'dealLogo',
 ];
 
-
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
@@ -287,13 +284,10 @@ export default function DealEdit() {
     dealParams: {},
   });
   const [hasChanges, setHasChanges] = useState(false);
-  const { data, refetch, error, loading } = useQuery(GET_DEAL, { variables: { id, slug: organization } });
+  const { data, refetch, loading } = useQuery(GET_DEAL, { variables: { id, slug: organization } });
   const [updateDeal] = useMutation(UPDATE_DEAL);
 
   const [currentEditTab, setEditTab] = useState(0);
-  const handleEditTabChange = (event, newValue) => {
-    setEditTab(newValue);
-  };
 
   useEffect(() => {
     if (data) {
@@ -310,7 +304,6 @@ export default function DealEdit() {
   }, [data, deal]);
 
   if (errorMessage) return <div className="Error">{errorMessage}</div>;
-
 
   return (
     <div className="DealEdit">
@@ -1125,7 +1118,7 @@ const ADD_DOC = gql`
 
 function DataRoom({ deal, refetch }) {
   const [doc, setDoc] = useSimpleReducer({ title: '' });
-  const [addDoc, { data, error }] = useMutation(ADD_DOC);
+  const [addDoc, { data }] = useMutation(ADD_DOC);
 
   useEffect(() => {
     if (data) {
@@ -1209,7 +1202,7 @@ const RM_DOC = gql`
 `;
 
 function Doc({ doc, deal, refetch }) {
-  const [rmDoc, { data, error }] = useMutation(RM_DOC);
+  const [rmDoc, { data }] = useMutation(RM_DOC);
 
   useEffect(() => {
     if (data) refetch();
@@ -1223,7 +1216,7 @@ function Doc({ doc, deal, refetch }) {
 
   return (
     <span>
-      <a href={`https://${doc.link}`} target="_blank">
+      <a href={`https://${doc.link}`} target="_blank" rel="noreferrer">
         <FontAwesomeIcon icon="link" /> &nbsp;{doc.path} &nbsp;&nbsp;
       </a>
       <FontAwesomeIcon icon="times" onClick={submit} />
@@ -1413,7 +1406,7 @@ const DELETE_DEAL = gql`
 function DeleteDeal({ deal }) {
   const { organization } = useParams();
   const history = useHistory();
-  const [deleteDeal, { data, error }] = useMutation(DELETE_DEAL, {
+  const [deleteDeal] = useMutation(DELETE_DEAL, {
     variables: { _id: deal._id },
     refetchQueries: [{ query: ORG_OVERVIEW, variables: { slug: organization } }],
     onCompleted: () => history.push(`/admin/${organization}`),
@@ -1526,7 +1519,7 @@ const ADD_LOGO = gql`
 
 function AddDealLogo({ deal, refetch }) {
   const [logo, setLogo] = useSimpleReducer({ title: 'dealCoverImage' });
-  const [addLogo, { data, error }] = useMutation(ADD_LOGO);
+  const [addLogo, { data }] = useMutation(ADD_LOGO);
   useEffect(() => {
     if (data) {
       refetch();
@@ -1582,7 +1575,7 @@ function AddDealLogo({ deal, refetch }) {
 
       <Grid item xs={12} sm={6}>
         <img
-          alt="No Image Available"
+          alt="No Img Available"
           src={`https://allocations-public.s3.us-east-2.amazonaws.com/${deal.dealCoverImageKey}`}
           style={{ width: '300px', height: '200px' }}
         />

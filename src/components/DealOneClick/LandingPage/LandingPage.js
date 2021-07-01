@@ -76,13 +76,13 @@ const GET_DEAL = gql`
 const exemptDealSlugs = [
   'allocations-60-m-round-spv',
   'allocations-spv-100m',
-  'space-x',
   'mondrian-hotel-spv',
   'cronos-capital-i',
   'allocations-200-m',
   'navier',
   'simplebet',
   '305-ventures',
+  'type-one-fund-I',
 ];
 
 function DealLandingPage() {
@@ -100,7 +100,7 @@ function DealLandingPage() {
       const { publicDeal: deal } = data;
       const idTimestamp = deal._id.toString().substring(0, 8);
       const dealTimestamp = moment.unix(new Date(parseInt(idTimestamp, 16) * 1000));
-      const rolloverTimestamp = moment.unix(new Date('2021-05-10'));
+      const rolloverTimestamp = moment.unix(new Date('2021-05-05 17:00'));
       if (
         moment(dealTimestamp).isBefore(rolloverTimestamp) &&
         !exemptDealSlugs.includes(deal_slug) &&
@@ -117,8 +117,8 @@ function DealLandingPage() {
   const { publicDeal: deal } = data;
   const idTimestamp = deal._id.toString().substring(0, 8);
   const dealTimestamp = moment.unix(new Date(parseInt(idTimestamp, 16) * 1000));
-  const rolloverTimestamp = moment.unix(new Date('2021-05-10'));
-  if (data && moment(dealTimestamp).isBefore(rolloverTimestamp) && !exemptDealSlugs.includes(deal_slug)) {
+  const rolloverTimestamp = moment.unix(new Date('2021-05-05 17:00'));
+  if (data && deal?.docSpringTemplateId === null) {
     return <Deal />;
   }
   return (

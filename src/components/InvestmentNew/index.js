@@ -10,7 +10,6 @@ import {
   Paper,
   Button,
   Checkbox,
-  Typography,
   FormControlLabel,
 } from '@material-ui/core';
 import { Row, Col } from 'reactstrap';

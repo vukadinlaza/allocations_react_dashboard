@@ -166,12 +166,8 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
                   variant="contained"
                   color="secondary"
                   onClick={() => {
-                    setShowForm(false);
-                    const token = process.env.REACT_APP_VERIFY_INVESTOR_HOST_TOKEN;
-                    const identifier = investor?._id; // optional
-                    const portal_name = process.env.NODE_ENV === 'development' ? 'Test_Allocations' : 'Allocations'; // optional
-                    const deal_name = company_name || ''; // optional
-                    window.verifyInvestor(token, identifier, portal_name, deal_name);
+                    const win = window.open('https://bridge.parallelmarkets.com/allocations', '_blank');
+                    win.focus();
                   }}
                 >
                   Click To Begin Verification
@@ -276,8 +272,6 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
                   />
                 ) : (
                   <TextField
-                    required
-                    error={errors.includes('ein')}
                     style={{ width: '100%' }}
                     value={get(investor, 'ein') || ''}
                     onChange={handleChange('ein')}

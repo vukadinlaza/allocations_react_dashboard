@@ -1,41 +1,56 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Grid, Paper, Typography, Button } from '@material-ui/core';
-import CancelPresentationIcon from '@material-ui/icons/CancelPresentation';
-import { makeStyles } from '@material-ui/core/styles';
+import { Modal } from '@material-ui/core';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import W9Indivdual from './W9Individual/W9Individual';
 import W9Entity from './W9Entity/W9Entity';
 import W8BEN from './W8BEN/W8BEN';
 import W8BENE from './W8BENE/W8BENE';
-import Loader from '../../utils/Loader';
 import './styles.scss';
 
 const UPDATE_USER = gql`
   mutation submitTaxDocument($payload: Object) {
     submitTaxDocument(payload: $payload) {
       _id
+      documents
     }
   }
 `;
 
-const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, investor, refetch }) => {
+const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, refetch, deal, setShowTaxAsCompleted }) => {
   const [submitTaxDocument, { called, loading }] = useMutation(UPDATE_USER, {
     onCompleted: (data) => {
-      console.log('data from submitTaxDoc', data)
+      const { submitTaxDocument } = data;
       refetch();
+      if (
+        submitTaxDocument?.documents.find((doc) => doc.documentName.includes('W-9') || doc.documentName.includes('W-8'))
+      ) {
+        toast.success('Success! Tax form completed.');
+      } else {
+        toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com');
+      }
       setOpen(false);
-      toast.success('Sucess! Tax form completed.');
+      setShowTaxAsCompleted(true);
+      setTimeout(() => {
+        refetch()
+      }, 3000)
+    },
+    onError: () => {
+      toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com');
     },
   });
-  // console.log('kyc templateName', kycTemplateName)
-  // https://api.docspring.com/api/v1/templates/<TEMPLATE_ID>/submissions
 
   const createDoc = (formData) => {
     // TODO: handle form data submit and create DocSpring docs w/ Lance
-    console.log('form submitted: ', kycTemplateId);
-    submitTaxDocument({ variables: { payload: { ...formData, kycTemplateId, kycTemplateName } } });
+    submitTaxDocument({
+      variables: { payload: { ...formData, kycTemplateId, kycTemplateName, isDemo: deal.isDemo === true } },
+    });
+
+    fetch('https://hooks.zapier.com/hooks/catch/7904699/byt3rnq/', {
+      method: 'post',
+      body: JSON.stringify({ ...formData, kycTemplateId, kycTemplateName }),
+    });
   };
 
   const getForm = (templateName) => {
@@ -59,9 +74,7 @@ const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, investor, ref
       aria-labelledby="modal"
       aria-describedby="modal"
     >
-      <div className="form-container">
-        {getForm(kycTemplateName)}
-      </div>
+      <div className="form-container">{getForm(kycTemplateName)}</div>
     </Modal>
   );
 };

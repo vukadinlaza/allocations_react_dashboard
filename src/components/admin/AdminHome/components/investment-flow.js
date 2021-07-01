@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import _ from 'lodash';
+import _, { sample } from 'lodash';
 import { gql } from 'apollo-boost';
 import {
   Grid,
@@ -9,20 +9,18 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-  ListItemSecondaryAction,
   Paper,
   Modal,
+  Button,
+  Container,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import Box from '@material-ui/core/Box';
-import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
-
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { toast } from 'react-toastify';
 import InvestmentEdit from '../../../InvestmentEdit';
-import { getDisplayName } from '../../../../utils/displayName';
 import { nWithCommas } from '../../../../utils/numbers';
 import Loader from '../../../utils/Loader';
 
@@ -70,6 +68,10 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid #70707040',
     borderRadius: '12px',
   },
+  avatarContainer: {
+    minWidth: 0,
+    marginRight: '5%',
+  },
   avatar: {
     margin: '0.25rem',
     height: 26,
@@ -83,10 +85,16 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#F7F9FA',
     borderRadius: '12px',
     marginBottom: 6,
+    display: 'inline-flex',
+    padding: '0.25em 0.75em',
+    cursor: 'pointer',
+    transition: '0.2s',
+    '&:hover': {
+      backgroundColor: '#edf1f4',
+    },
   },
   modal: {
     display: 'flex',
-    // alignItems: 'center',
     justifyContent: 'center',
   },
   modalPaper: {
@@ -107,6 +115,26 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'left',
     minWidth: '15%',
   },
+  investorName: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    marginRight: '5%',
+    '&>span': {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+    },
+  },
+  investmentAmount: {
+    minWidth: '20px',
+    whiteSpace: 'nowrap',
+    display: 'inline-table',
+    '&>span': {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+    },
+  },
 }));
 
 const boardData = [
@@ -120,6 +148,15 @@ export const DEAL_INVESTMENTS = gql`
   query deal($_id: String!) {
     deal(_id: $_id) {
       _id
+      docSpringTemplateId
+      viewedUsers {
+        _id
+        email
+        documents
+        first_name
+        last_name
+        name
+      }
       investments {
         _id
         status
@@ -132,6 +169,11 @@ export const DEAL_INVESTMENTS = gql`
           last_name
           name
         }
+        submissionData {
+          investor_type
+          legalName
+          fullName
+        }
       }
     }
   }
@@ -139,7 +181,9 @@ export const DEAL_INVESTMENTS = gql`
 
 export default ({ dealId, isDemo, superadmin }) => {
   const classes = useStyles();
-  const [editInvestmentModal, setEditInvestmentModal] = useState({});
+  const [editInvestmentModal, setEditInvestmentModal] = useState(false);
+  const [dataToEdit, setDataToEdit] = useState({});
+  const [deleteViewedUserModal, setDeleteViewedUserModal] = useState({});
   const [investmentUpdated, setInvestmentUpdated] = useState();
   const { data, loading, refetch } = useQuery(DEAL_INVESTMENTS, {
     variables: { _id: dealId },
@@ -187,106 +231,210 @@ export default ({ dealId, isDemo, superadmin }) => {
   }
 
   if (loading) return <Loader />;
+
+  const viewedInvestments = data?.deal?.viewedUsers
+    .map((user) => {
+      return {
+        investor: user,
+        amount: 0,
+      };
+    })
+    .filter((viewedUser) => {
+      const userInOtherCatagory = data?.deal?.investments.find(
+        (inv) => inv.status !== 'invited' && inv?.investor?._id === viewedUser?.investor?._id,
+      );
+      return !userInOtherCatagory;
+    });
+
   return (
     <>
       <Grid container spacing={2} justify="space-between">
-        {categories.map((value) => (
-          <Grid key={value.title} item xs={12} sm={3}>
-            <Box height="100%" className={classes.board}>
-              <Grid container direction="row" justify="space-between">
-                <Typography
-                  variant="h6"
-                  display="inline"
-                  style={{ padding: '8px', textTransform: 'uppercase', fontSize: '16px', maxWidth: '50%' }}
-                >
-                  {value.title}
-                </Typography>
-                <Typography
-                  variant="h6"
-                  display="inline"
-                  style={{
-                    padding: '8px',
-                    textTransform: 'uppercase',
-                    fontSize: '16px',
-                    maxWidth: '50%',
-                    color: '#39BE53',
-                  }}
-                >
-                  <FontAwesomeIcon icon="dollar-sign" size="sm" style={{ marginRight: '.15rem' }} />
-                  {nWithCommas(value.totalAmount)}
-                </Typography>
-              </Grid>
-              <List dense className={classes.list}>
-                {value?.categoryInvestments?.map((inv) => (
-                  <InvestmentSquare
-                    investment={inv}
-                    isDemo={isDemo}
-                    setEditInvestmentModal={setEditInvestmentModal}
-                    superadmin={superadmin}
-                  />
-                ))}
-              </List>
-            </Box>
-          </Grid>
-        ))}
+        {categories
+          .map((d) => {
+            if (d.key === 'invited' && data?.deal?.viewedUsers.length > 0) {
+              const cInvs = _.uniqBy([...d.categoryInvestments, ...viewedInvestments], 'investor._id');
+              return {
+                ...d,
+                categoryInvestments: cInvs,
+              };
+            }
+            return d;
+          })
+          .map((value) => (
+            <Grid key={value.title} item xs={12} sm={3}>
+              <Box height="100%" className={classes.board}>
+                <Grid container direction="row" justify="space-between">
+                  <Typography
+                    variant="h6"
+                    display="inline"
+                    style={{ padding: '8px', textTransform: 'uppercase', fontSize: '16px', maxWidth: '50%' }}
+                  >
+                    {value.title}
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    display="inline"
+                    style={{
+                      padding: '8px',
+                      textTransform: 'uppercase',
+                      fontSize: '16px',
+                      maxWidth: '50%',
+                      color: '#39BE53',
+                    }}
+                  >
+                    <FontAwesomeIcon icon="dollar-sign" size="sm" style={{ marginRight: '.15rem' }} />
+                    {nWithCommas(value.totalAmount)}
+                  </Typography>
+                </Grid>
+                <List dense className={classes.list}>
+                  {value?.categoryInvestments?.map((inv) => (
+                    <InvestmentSquare
+                      key={inv._id || inv.investor._id}
+                      investment={inv}
+                      isDemo={isDemo}
+                      setEditInvestmentModal={setEditInvestmentModal}
+                      setDataToEdit={setDataToEdit}
+                      superadmin={superadmin}
+                      setDeleteViewedUserModal={setDeleteViewedUserModal}
+                    />
+                  ))}
+                </List>
+              </Box>
+            </Grid>
+          ))}
       </Grid>
       <EditInvestmentModal
         editInvestmentModal={editInvestmentModal}
         setEditInvestmentModal={setEditInvestmentModal}
-        refetchInvestments={refetch}
-        investmentUpdated={investmentUpdated}
-        setInvestmentUpdated={setInvestmentUpdated}
+        dataToEdit={dataToEdit}
+      />
+      <DeleteViewedUser
+        deleteViewedUserModal={deleteViewedUserModal}
+        setDeleteViewedUserModal={setDeleteViewedUserModal}
+        dealId={dealId}
       />
     </>
   );
 };
-const InvestmentSquare = ({ investment, isDemo, setEditInvestmentModal, superadmin }) => {
+const InvestmentSquare = ({
+  investment,
+  setEditInvestmentModal,
+  superadmin,
+  setDataToEdit,
+  setDeleteViewedUserModal,
+  isDemo,
+}) => {
   const classes = useStyles();
   const n = _.get(investment, 'investor.name', '');
+
+  let name = investment?.submissionData?.legalName ? investment?.submissionData?.legalName : n;
+  if (isDemo) {
+    name = _.sample(demoNames);
+  }
   return (
     <div
       onClick={() => {
-        if (superadmin) {
-          setEditInvestmentModal(investment);
+        if (superadmin && investment._id) {
+          setDataToEdit(investment);
+          setEditInvestmentModal(true);
+        }
+        if (superadmin && !investment._id) {
+          setDeleteViewedUserModal(investment);
         }
       }}
     >
       <ListItem disableGutters className={classes.listItem}>
-        <ListItemAvatar>
+        <ListItemAvatar className={classes.avatarContainer}>
           <Avatar alt={n} className={classes.avatar}>
-            {n.charAt(0).toUpperCase()}
+            {name.charAt(0).toUpperCase()}
           </Avatar>
         </ListItemAvatar>
-        <ListItemText style={{ overflow: 'hidden', textOverflow: 'ellipsis' }} primary={n} />
-        <ListItemSecondaryAction>
+        <ListItemText className={classes.investorName} primary={name} />
+        <ListItemText className={classes.investmentAmount}>
           <FontAwesomeIcon icon="dollar-sign" size="sm" style={{ marginRight: '.15rem' }} />
           {nWithCommas(investment.amount || '0')}
-        </ListItemSecondaryAction>
+        </ListItemText>
       </ListItem>
     </div>
   );
 };
 
-const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal }) => {
+const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal, dataToEdit }) => {
   const classes = useStyles();
 
   return (
     <>
-      <Modal open={editInvestmentModal._id} onClose={() => {}} className={classes.modal}>
-        <Grid container xs={12} sm={12} md={4} lg={5}>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Paper className={classes.modalPaper}>
-              <Grid
-                onClick={() => setEditInvestmentModal(false)}
-                style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer' }}
-              >
-                <CloseIcon />
-              </Grid>
-              <Grid container justify="space-between" />
-              <InvestmentEdit investmentId={editInvestmentModal._id} />
-            </Paper>
+      <Modal open={editInvestmentModal} className={classes.modal}>
+        <Container maxWidth="sm">
+          <Grid container style={{ minHeight: '100vh' }}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Paper className={classes.modalPaper}>
+                <Grid
+                  onClick={() => setEditInvestmentModal(false)}
+                  style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer' }}
+                >
+                  <CloseIcon />
+                </Grid>
+                <Grid container justify="space-between" />
+                <InvestmentEdit investmentId={dataToEdit._id} setEditInvestmentModal={setEditInvestmentModal} />
+              </Paper>
+            </Grid>
           </Grid>
-        </Grid>
+        </Container>
+      </Modal>
+    </>
+  );
+};
+
+const DELETE_VIEWED_USER = gql`
+  mutation deleteUserAsViewed($user_id: String!, $deal_id: String!) {
+    deleteUserAsViewed(user_id: $user_id, deal_id: $deal_id) {
+      _id
+    }
+  }
+`;
+
+const DeleteViewedUser = ({ deleteViewedUserModal, setDeleteViewedUserModal, dealId }) => {
+  const classes = useStyles();
+  const [deleteViewedUser, {}] = useMutation(DELETE_VIEWED_USER, {
+    onCompleted: () => {
+      setDeleteViewedUserModal(false);
+      toast.success('Investment Removed');
+    },
+  });
+  return (
+    <>
+      <Modal open={Boolean(deleteViewedUserModal.investor)} className={classes.modal}>
+        <Container maxWidth="sm">
+          <Grid container style={{ minHeight: '100vh' }}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Paper className={classes.modalPaper}>
+                <Grid container justify="flex-end">
+                  <Box onClick={() => setDeleteViewedUserModal(false)} style={{ cursor: 'pointer' }}>
+                    <CloseIcon />
+                  </Box>
+                </Grid>
+                <Grid container style={{ padding: '2rem', flexDirection: 'column', alignItems: 'center' }}>
+                  <Typography variant="h6">Remove Investment</Typography>
+                  <Button
+                    variant="contained"
+                    style={{ backgroundColor: 'red', maxWidth: '30%', marginTop: '1rem' }}
+                    onClick={() => {
+                      deleteViewedUser({
+                        variables: {
+                          deal_id: dealId,
+                          user_id: deleteViewedUserModal.investor._id,
+                        },
+                      });
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </Grid>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Container>
       </Modal>
     </>
   );

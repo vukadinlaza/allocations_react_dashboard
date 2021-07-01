@@ -1,14 +1,14 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './styles.scss'
+import './styles.scss';
 
 function WireInstructions({ deal }) {
   const link =
-    deal.documents && deal.documents.find((d) => d.path === 'wire-instructions')
+    deal.documents && deal.documents !== null && (deal.documents || []).find((d) => d.path === 'wire-instructions')
       ? `https://${deal.documents.find((d) => d.path === 'wire-instructions').link}`
       : null;
 
-  if(!link) {
+  if (!link) {
     return (
       <div className="wire" style={{ padding: '20px' }}>
         Contact For Wire Details
@@ -17,8 +17,8 @@ function WireInstructions({ deal }) {
   }
 
   const onDocumentLoadSuccess = () => {
-    console.log('loaded doc')
-  }
+    console.log('loaded doc');
+  };
 
   return (
     <section className="WireInstructions">
@@ -32,13 +32,13 @@ function WireInstructions({ deal }) {
           <FontAwesomeIcon icon={['far', 'file-pdf']} />
           <a href={link} target="_blank" rel="noopener noreferrer">
             {' '}
-              Open in new tab
-            </a>
+            Open in new tab
+          </a>
         </div>
       </div>
       <p className="wire-warning">Please ensure to wire from the same entity you have signed from.</p>
     </section>
-  )
+  );
 }
 
 export default WireInstructions;

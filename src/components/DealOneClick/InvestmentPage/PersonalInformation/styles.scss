@@ -38,6 +38,35 @@
     width: 90%;
   }
 
+  .address-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 90%;
+    left: 20px;
+    padding: 5px;
+    align-items: flex-start;
+
+    .address-input-label {
+      width: 100%;
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+
+      .address-input {
+        width: 100%;
+      }
+    }
+
+    .same-mailing-checkbox {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      width: 40%;
+      height: max-content;
+    }
+  }
+
   .accredited-investor-status {
     margin-top: 15px;
     max-width: 90%;

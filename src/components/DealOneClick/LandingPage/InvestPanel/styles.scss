@@ -43,6 +43,10 @@
     outline: none;
     bottom: 5%;
   }
+
+  button:hover {
+    background-color: #42d828;
+  }
 }
 
 @media screen and (max-width: 960px) {

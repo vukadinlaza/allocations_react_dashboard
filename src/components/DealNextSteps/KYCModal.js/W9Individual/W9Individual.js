@@ -24,10 +24,11 @@ const validate = (formData) => {
 
 function W9Individual({ toggleOpen, createDoc, called, loading }) {
   const [errors, setErrors] = useState([]);
-  const { state } = useLocation()
+  const { state } = useLocation();
 
   const [formData, setFormData] = useState({
-    name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank: state?.investorFormData?.legalName || '',
+    name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank:
+      state?.investorFormData?.legalName || '',
     address_number_street_and_apt_or_suite_no_see_instructions: '',
     f1_11: '',
     f1_12: '',
@@ -67,7 +68,7 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
     setFormData((prevData) => ({ ...prevData, [target.name]: target.value }));
   };
 
-  console.log('formData', formData)
+  console.log('formData', formData);
 
   return (
     <section className="W9Individual">
@@ -213,11 +214,13 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
             />
           </label>
         </FormControl>
-        {called && loading ? <Loader /> :
+        {called && loading ? (
+          <Loader />
+        ) : (
           <Button onClick={handleSubmit} className="form-button accept">
             I accept
           </Button>
-        }
+        )}
         <Button onClick={() => toggleOpen((open) => !open)} className="form-button decline">
           I decline
         </Button>

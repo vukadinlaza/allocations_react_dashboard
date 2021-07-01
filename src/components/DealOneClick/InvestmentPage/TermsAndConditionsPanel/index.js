@@ -1,19 +1,22 @@
+import moment from 'moment';
 import { Box, Checkbox, Typography, Button } from '@material-ui/core';
 import React from 'react';
 import './styles.scss';
 
-function TermsAndConditionsPanel({ deal, checkedTAT, setCheckedTAT, confirmInvestment }) {
-  const doc = (deal.documents || []).find((d) => {
+function TermsAndConditionsPanel({ deal: { documents, signDeadline, status}, checkedTAT, setCheckedTAT, confirmInvestment }) {
+  const doc = (documents || []).find((d) => {
     return d.path.includes('Agreement');
   });
 
   const anchor = doc ? (
-    <a href={`https://${doc.link}`} target="_blank">
-      SPV Documents (Operating Agreement, Private Placement Memorandum and Subscription Agreement)
+    <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">
+      Private Fund Documents (Operating Agreement, Private Placement Memorandum and Subscription Agreement)
     </a>
   ) : (
-    'SPV Documents (Operating Agreement, Private Placement Memorandum and Subscription Agreement'
+    'Private Fund Documents (Operating Agreement, Private Placement Memorandum and Subscription Agreement'
   );
+
+  const isClosed = status === 'closed';
 
   return (
     <section className="TermsAndConditions">
@@ -47,13 +50,26 @@ function TermsAndConditionsPanel({ deal, checkedTAT, setCheckedTAT, confirmInves
           </Typography>
         </Box>
         <label>
-          <Checkbox className="terms-checkbox" onChange={(e) => setCheckedTAT(e.target.checked)} />I have read and
-          accept the terms of the investment.
+          <Checkbox
+            className="terms-checkbox"
+            onChange={(e) => setCheckedTAT(e.target.checked)}
+            classes={{
+              checked: 'terms-checkbox-checked',
+            }}
+          />
+          I have read and accept the terms of the investment.
         </label>
       </div>
-      <Button className="confirm-investment-button" disabled={!checkedTAT || !doc} onClick={confirmInvestment}>
-        Confirm investment
-      </Button>
+      {isClosed ? (
+        <Typography style={{ color: 'red', fontSize: '1em' }}>
+          You can no longer invest in this deal. This deal's deadline was:{' '}
+          {moment(signDeadline).format('dddd, MMMM D YYYY, h:mm a [EST]')}.
+        </Typography>
+      ) : (
+        <Button className="confirm-investment-button" disabled={!checkedTAT} onClick={confirmInvestment}>
+          Confirm investment
+        </Button>
+      )}
     </section>
   );
 }

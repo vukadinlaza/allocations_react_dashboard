@@ -4,7 +4,7 @@ import CloseIcon from '@material-ui/icons/Close';
 
 import './index.scss';
 
-function AllPagesPDFViewer({ document, handleClose }) {
+function AllPagesPDFViewer({ document, handleClose, usePreview }) {
   const { link } = document;
 
   if (!link) {
@@ -14,13 +14,15 @@ function AllPagesPDFViewer({ document, handleClose }) {
       </div>
     );
   }
+
+  const url = usePreview ? link : `https://${link}`;
   return (
     <section className="root-container-spv-viewer">
       <div style={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
         <div />
         <div>
           <FontAwesomeIcon icon={['far', 'file-pdf']} />
-          <a href={`https://${link}`} target="_blank" rel="noopener noreferrer">
+          <a href={url} target="_blank" rel="noopener noreferrer">
             {' '}
             Open Agreement in new tab
           </a>
@@ -28,7 +30,7 @@ function AllPagesPDFViewer({ document, handleClose }) {
         <CloseIcon className="closed-icon" onClick={handleClose} />
       </div>
       <div className="embed-responsive embed-responsive-1by1">
-        <iframe className="embed-responsive-item iframe-spv-agreement" title="SPV Document" src={`https://${link}`} />
+        <iframe className="embed-responsive-item iframe-spv-agreement" title="SPV Document" src={url} />
       </div>
     </section>
   );

@@ -109,7 +109,7 @@ export default function AdminHome({}) {
   if (orgSlug === 'demo-fund') {
     slug = 'browder-capital';
   }
-  console.log('X', x);
+
   const fundInvestments = x.filter((inv) => {
     return toLower(inv.Organization).includes(slug.replace('-', ' '));
   });
@@ -128,7 +128,7 @@ export default function AdminHome({}) {
   const header = (
     <Grid container justify="space-between">
       <Grid item sm={12} md={6}>
-        <Typography variant="h4" className={classes.orgName} style={{ color: fundData ? '#fff' : '#000' }}>
+        <Typography variant="h4" className={classes.orgName} style={{ color: fundData.length === 0 ? '#000' : '#fff' }}>
           {orgData.name}
         </Typography>
       </Grid>
@@ -184,7 +184,7 @@ export default function AdminHome({}) {
               Investments
             </ButtonBase>
           </Grid>
-          <Grid item xs={12} sm={4} md={2}>
+          {/* <Grid item xs={12} sm={4} md={2}>
             <ButtonBase
               className={tab === 'setting' ? classes.activeTab : classes.tab}
               style={{ borderRight: '1px solid #e1e9ec' }}
@@ -192,7 +192,7 @@ export default function AdminHome({}) {
             >
               Settings
             </ButtonBase>
-          </Grid>
+          </Grid> */}
         </Grid>
       </div>
 

@@ -123,10 +123,32 @@ export default ({}) => {
         <Typography variant="h3" style={{ color: 'white' }}>
           Demo
         </Typography>
-        {/* <Typography variant="h6" style={{ color: 'black', marginTop: '100px' }}>
-          Demo
-        </Typography> */}
         <Grid container spacing={12} justify="space-between" style={{ marginTop: '40px', marginBottom: '1rem' }}>
+          <Grid item>
+            <Paper className={classes.paper}>
+              <img
+                src="https://allocations-public.s3.us-east-2.amazonaws.com/analysis-icon.svg"
+                alt="oops"
+                style={{ width: '50px', height: '50px' }}
+              />
+              <Typography variant="h6">One Click Invest</Typography>
+              <Divider variant="middle" />
+
+              <Typography variant="subtitle2" style={{ fontSize: '.75rem' }}>
+                A streamlined process to investing in deals.
+              </Typography>
+              <Button
+                color="secondary"
+                variant="contained"
+                style={{ marginTop: '1rem', minWidth: '100%' }}
+                onClick={() => {
+                  history.push({ pathname: `/deals/305-ventures` });
+                }}
+              >
+                View
+              </Button>
+            </Paper>
+          </Grid>
           <Grid item>
             <Paper className={classes.paper}>
               <img
@@ -218,214 +240,6 @@ export default ({}) => {
             </Paper>
           </Grid>
         </Grid>
-
-        {/* <Typography variant="h6" style={{ color: 'black', marginTop: '20px' }}>
-          Data Room
-        </Typography>
-        <Grid container spacing={12} justify="space-between" style={{ marginTop: '40px', marginBottom: '1rem' }}>
-          <Grid item>
-            <Paper className={classes.paper}>
-              <img
-                src="https://allocations-public.s3.us-east-2.amazonaws.com/presentation.svg"
-                alt="oops"
-                style={{ width: '50px', height: '50px' }}
-              />
-              <Typography variant="h6">Deck</Typography>
-              <Divider variant="middle" />
-
-              <Typography variant="subtitle2" style={{ fontSize: '.75rem' }}>
-                Allocations deck with team, market size, traction, product & strategy.
-              </Typography>
-              <a
-                className={classes.a}
-                href="https://docsend.com/view/yz8r8j35m296ikyi/d/iqd92jcn6cinyvy5"
-                target="blank"
-              >
-                <Button
-                  color="secondary"
-                  variant="contained"
-                  style={{ marginTop: '1rem', minWidth: '100%' }}
-                  onClick={() =>
-                    postZap({
-                      variables: { body: { name: userProfile.first_name, action: 'Viewed Deck' } },
-                    })
-                  }
-                >
-                  View
-                </Button>
-              </a>
-            </Paper>
-          </Grid>
-          <Grid item>
-            <Paper className={classes.paper}>
-              <img
-                src="https://allocations-public.s3.us-east-2.amazonaws.com/document-icon.svg"
-                alt="oops"
-                style={{ width: '50px', height: '50px' }}
-              />
-              <Typography variant="h6">Data Room</Typography>
-              <Divider variant="middle" />
-
-              <Typography variant="subtitle2" style={{ fontSize: '.75rem' }}>
-                Allocations data room with financials, company formation, memo, deck
-              </Typography>
-              <a className={classes.a} href="https://docsend.com/view/s/yz8r8j35m296ikyi" target="blank">
-                <Button
-                  color="secondary"
-                  variant="contained"
-                  style={{ marginTop: '1rem', minWidth: '100%' }}
-                  onClick={() =>
-                    postZap({
-                      variables: { body: { name: userProfile.first_name, action: 'Viewed Data Room' } },
-                    })
-                  }
-                >
-                  View
-                </Button>
-              </a>
-            </Paper>
-          </Grid>
-          <Grid item style={{ width: '250px' }} />
-        </Grid>
-        <Typography variant="h6" style={{ color: 'black', marginTop: '20px' }}>
-          Next Steps
-        </Typography>
-        <Grid container spacing={12} justify="space-between" style={{ marginTop: '40px', marginBottom: '1rem' }}>
-          <Grid item>
-            <Paper className={classes.paper}>
-              <>
-                <img
-                  src="https://allocations-public.s3.us-east-2.amazonaws.com/invest1.3.svg"
-                  alt="oops"
-                  style={{ width: '50px', height: '50px' }}
-                />
-                <Typography variant="h6">Seed Round</Typography>
-                <Divider variant="middle" />
-
-                <Typography variant="subtitle2" style={{ fontSize: '.75rem' }}>
-                  The Allocations Board approved a $1m seed round at $25m post money valuation cap on Friday 23rd
-                  October 2020
-                </Typography>
-                <Typography variant="subtitle2" style={{ fontSize: '.75rem', textAlign: 'start' }}>
-                  <p
-                    style={{
-                      fontWeight: 'bold',
-                      color: 'black',
-                      marginBottom: '0',
-                      marginTop: '.5rem',
-                      textAlign: 'start',
-                    }}
-                  >
-                    Deadlines
-                  </p>
-                  Signing: 3pm Wed 18th Nov 2020
-                  <br />
-                  Wiring: 3pm Thur 19th Nov 2020
-                </Typography>
-                <Button
-                  color="secondary"
-                  variant="contained"
-                  style={{ marginTop: '1rem', minWidth: '100%' }}
-                  onClick={() => setSeedOptions(true)}
-                >
-                  View
-                </Button>
-              </>
-            </Paper>
-          </Grid>
-          <Grid item>
-            <Paper className={classes.paper}>
-              <img
-                src="https://allocations-public.s3.us-east-2.amazonaws.com/invest2.3-icon.svg"
-                alt="oops"
-                style={{ width: '50px', height: '50px' }}
-              />
-              <Typography variant="h6">Series A Round</Typography>
-              <Divider variant="middle" />
-
-              <Typography variant="subtitle2" style={{ fontSize: '.75rem' }}>
-                Apply to our Series A round waitlist
-              </Typography>
-              <Button
-                color="secondary"
-                variant="contained"
-                style={{ marginTop: '1rem', minWidth: '100%' }}
-                onClick={() => {
-                  postZap({
-                    variables: { body: { name: userProfile.first_name, action: 'Joined Waitlist for Series A' } },
-                    onCompleted: toast.success("Success! You've been added to the waitlist"),
-                  });
-                }}
-              >
-                Join Waitlist
-              </Button>
-            </Paper>
-          </Grid>
-          <Grid item style={{ width: '250px' }} />
-        </Grid>
-        <Modal className={classes.modal} open={seedOptions} onClose={() => setSeedOptions(false)}>
-          <Grid container justify="center">
-            <Grid item>
-              <Paper className={classes.modalPaper}>
-                <Grid container justify="flex-end">
-                  <Grid item>
-                    <CloseIcon onClick={() => setSeedOptions(false)} />
-                  </Grid>
-                </Grid>
-                <Typography variant="h6">How much would you like to invest?</Typography>
-                <Button
-                  color="secondary"
-                  variant="contained"
-                  onClick={() => {
-                    postZap({
-                      variables: { body: { name: userProfile.first_name, action: 'Clicked Angel (50k) Button' } },
-                    });
-                    history.push('/deals/allocations/allocations-seed');
-                  }}
-                  style={{ marginTop: '1.25rem', minWidth: '100%', fontSize: '1.25rem' }}
-                >
-                  Angel: $50k
-                </Button>
-                <a
-                  href="https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=15d04ee1-1dbf-4480-b098-2923a24085be&env=na3&acct=5ff4424d-446e-45ab-a456-3382543498de&v=2"
-                  target="blank"
-                >
-                  <Button
-                    color="secondary"
-                    variant="contained"
-                    style={{ marginTop: '1.25rem', minWidth: '100%', fontSize: '1.25rem' }}
-                    onClick={() => {
-                      postZap({
-                        variables: { body: { name: userProfile.first_name, action: 'Clicked Fund (100k) Button' } },
-                      });
-                    }}
-                  >
-                    Fund: $100k
-                  </Button>
-                </a>
-                <a
-                  href="https://na3.docusign.net/Member/PowerFormSigning.aspx?PowerFormId=76c91ab7-c2ef-49c6-8196-5ef132a5f7fd&env=na3&acct=5ff4424d-446e-45ab-a456-3382543498de&v=2"
-                  target="blank"
-                >
-                  <Button
-                    color="secondary"
-                    variant="contained"
-                    style={{ marginTop: '1.25rem', minWidth: '100%', fontSize: '1.25rem' }}
-                    onClick={() => {
-                      postZap({
-                        variables: {
-                          body: { name: userProfile.first_name, action: 'Clicked Strategic (200k) Button' },
-                        },
-                      });
-                    }}
-                  >
-                    Strategic: $200k
-                  </Button>
-                </a>
-              </Paper>
-            </Grid>
-          </Grid>
-        </Modal> */}
       </div>
     </>
   );
