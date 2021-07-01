@@ -31,35 +31,35 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
     organization_name: '',
     organization_country: '',
     disregarded_entity_name: '',
-    ['4_corporation']: false,
-    ['4_disregarded_entity']: false,
-    ['4_partnership']: false,
-    ['4_simple_trust']: false,
-    ['4_grantor_trust']: false,
-    ['4_complex_trust']: false,
-    ['4_estate']: false,
-    ['4_government']: false,
-    ['4_central_bank_of_issue']: false,
-    ['4_tax_exempt_organization']: false,
-    ['4_international_organization']: false,
-    ['4_tax_exempt_organization']: false,
-    ['4_treaty_claim_no']: false,
-    ['4_treaty_claim_yes']: false,
-    ['5_international_organization']: false,
-    ['5_exempt_retirement_plan']: false,
-    ['5_entity_wholly_owned']: false,
-    ['5_nonfinancial_group_entity']: false,
-    ['5_nonfinancial_start_up']: false,
-    ['5_nonfinancial_entity']: false,
-    ['5_501c']: false,
-    ['5_nonprofit_organization']: false,
-    ['5_publicly_traded_nffe']: false,
-    ['5_excepted_territory_nffe']: false,
-    ['5_active_nffe']: false,
-    ['5_passive_nffe']: false,
-    ['5_direct_reporting_nffe']: false,
-    ['5_sponsored_direct_reporting_nffe']: false,
-    ['5_not_financial_account']: false,
+    '4_corporation': false,
+    '4_disregarded_entity': false,
+    '4_partnership': false,
+    '4_simple_trust': false,
+    '4_grantor_trust': false,
+    '4_complex_trust': false,
+    '4_estate': false,
+    '4_government': false,
+    '4_central_bank_of_issue': false,
+    '4_tax_exempt_organization': false,
+    '4_international_organization': false,
+    '4_tax_exempt_organization': false,
+    '4_treaty_claim_no': false,
+    '4_treaty_claim_yes': false,
+    '5_international_organization': false,
+    '5_exempt_retirement_plan': false,
+    '5_entity_wholly_owned': false,
+    '5_nonfinancial_group_entity': false,
+    '5_nonfinancial_start_up': false,
+    '5_nonfinancial_entity': false,
+    '5_501c': false,
+    '5_nonprofit_organization': false,
+    '5_publicly_traded_nffe': false,
+    '5_excepted_territory_nffe': false,
+    '5_active_nffe': false,
+    '5_passive_nffe': false,
+    '5_direct_reporting_nffe': false,
+    '5_sponsored_direct_reporting_nffe': false,
+    '5_not_financial_account': false,
     residence_address: '',
     residence_city_or_town: '',
     residence_country: '',
@@ -68,57 +68,57 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
     mailing_country: '',
     us_tin: '',
     foreign_tin: '',
-    ['14a']: false,
-    ['14a_resident_of']: '',
-    ['14b']: false,
-    ['14b_government']: false,
-    ['14b_tax_exempt_pension']: false,
-    ['14b_other_tax_exempt']: false,
-    ['14b_publicly']: false,
-    ['14b_subsidiary']: false,
-    ['14b_base_erosion']: false,
-    ['14b_derivative_benefits']: false,
-    ['14b_active_trade']: false,
-    ['14b_favorable']: false,
-    ['14b_other']: false,
-    ['14b_other_input']: '',
-    ['14c']: false,
-    ['15_article_paragraph']: '',
-    ['15_rate']: '',
-    ['15_income_type']: '',
-    ['15_conditions']: '',
+    '14a': false,
+    '14a_resident_of': '',
+    '14b': false,
+    '14b_government': false,
+    '14b_tax_exempt_pension': false,
+    '14b_other_tax_exempt': false,
+    '14b_publicly': false,
+    '14b_subsidiary': false,
+    '14b_base_erosion': false,
+    '14b_derivative_benefits': false,
+    '14b_active_trade': false,
+    '14b_favorable': false,
+    '14b_other': false,
+    '14b_other_input': '',
+    '14c': false,
+    '15_article_paragraph': '',
+    '15_rate': '',
+    '15_income_type': '',
+    '15_conditions': '',
     27: false,
-    ['28a']: false,
-    ['28b']: false,
-    ['29a']: false,
-    ['29b']: false,
-    ['29c']: false,
-    ['29d']: false,
-    ['29e']: false,
-    ['29f']: false,
+    '28a': false,
+    '28b': false,
+    '29a': false,
+    '29b': false,
+    '29c': false,
+    '29d': false,
+    '29e': false,
+    '29f': false,
     30: false,
     31: false,
     32: false,
     33: false,
-    ['33_date']: '',
+    '33_date': '',
     34: false,
-    ['34_liquidation']: '',
+    '34_liquidation': '',
     35: false,
-    ['35_date']: '',
+    '35_date': '',
     36: false,
-    ['37a']: false,
-    ['37a_market']: '',
-    ['37b']: false,
-    ['37b_entity']: '',
-    ['37b_market']: '',
+    '37a': false,
+    '37a_market': '',
+    '37b': false,
+    '37b_entity': '',
+    '37b_market': '',
     38: false,
     39: false,
-    ['40a']: false,
-    ['40b']: false,
-    ['40c']: false,
+    '40a': false,
+    '40b': false,
+    '40c': false,
     42: '',
     43: false,
-    ['39']: false,
+    '39': false,
     passive_nffe_owners: [
       { name: '', address: '', tin: '' }
     ],
@@ -126,7 +126,6 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
     date_mm_dd_yyyy: moment().format('YYYY-MM-DD'),
     signature: ''
   });
-
 
   const validate = (formData) => {
     const required = [
@@ -163,14 +162,12 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
     // need to handle submit for W8-BEN-E??
 
     const validation = validate(formData)
-    console.log('Validation fields: ', validation)
     setErrors(validation)
 
     if (validation.length > 0) {
       return toast.warning('Incomplete Form');
     }
 
-    console.log('chap3', chapter3Status)
 
     createDoc(formData);
   };
@@ -279,8 +276,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
 
     if (prop === 'mailing_country') {
       if (newValue) {
-        let countryValue = newValue === 'U.S.' || newValue === 'USA' ? 'United States' : newValue;
-        return setFormData(prevData => ({ ...prevData, mailing_country: countryValue }))
+        return setFormData(prevData => ({ ...prevData, mailing_country: newValue }))
       }
     }
 
@@ -301,7 +297,6 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
     setFormData(prev => ({ ...prev, [target.name]: !prev[target.name] }))
   }
 
-
   const handleDropdownChange = (field, value) => {
 
     const fieldMap = {
@@ -316,7 +311,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
       'chapter3Status': setChapter3Status
     }
 
-    const prev = fieldMap[value]?.length > 0 ? fieldMap[value] : null;
+    const prev = fieldMap[field] ? fieldMap[field] : null;
 
     if (prev) {
       setFormData(prevData => ({
@@ -336,8 +331,6 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
 
   }
 
-  console.log('chap 3', chapter3Status)
-  console.log('form state', formData)
 
 
   return (
@@ -382,7 +375,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                 handleCountryChange('organization_country_search')(event, newInputValue);
               }}
               id="country-select"
-              options={['USA', ...countryNames, , 'U.S.',]}
+              options={countryNames}
               getOptionLabel={(option) => option}
               renderInput={(params) => <TextField {...params}
                 placeholder="Select a country"
@@ -646,29 +639,29 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
               onChange={({ target }) => handleDropdownChange('chapter4Status', target.value)}
               variant="outlined"
               className="chapter-3-select">
-              <MenuItem value="active_nffe">Active NFFE</MenuItem>
-              <MenuItem value="passive_nffe">Passive NFFE</MenuItem>
-              <MenuItem value="501(c)">501(c) organization</MenuItem>
-              <MenuItem value="international_organization">International organization</MenuItem>
-              <MenuItem value="exempt_retirement_plans">Exempt retirement plans</MenuItem>
-              <MenuItem value="entity_wholly_owned">Entity wholly owned by exempt beneficial owners</MenuItem>
-              <MenuItem value="excepted_nonfinancial_group_entity">Excepted nonfinancial group entity</MenuItem>
-              <MenuItem value="excepted_nonfinancial_start_up">Excepted nonfinancial start-up company</MenuItem>
-              <MenuItem value="excepted_nonfinancial_entity_liquidation">Excepted nonfinancial entity in liquidation or bankruptcy</MenuItem>
-              <MenuItem value="nonprofit_organization">Nonprofit organization</MenuItem>
-              <MenuItem value="publicly_traded_nffe">Publicly traded NFFE or NFFE affiliate of a publicly traded corporation</MenuItem>
-              <MenuItem value="excepted_territory_nffe">Excepted territory NFFE</MenuItem>
-              <MenuItem value="direct_reporting_nffe">Direct reporting NFFE</MenuItem>
-              <MenuItem value="sponsored_direct_reporting_nffe">Sponsored direct reporting NFFE</MenuItem>
-              <MenuItem value="non_financial_account">Account that is not a financial account</MenuItem>
-              <MenuItem value="other">Other</MenuItem>
+              <MenuItem value="4_active_nffe">Active NFFE</MenuItem>
+              <MenuItem value="4_passive_nffe">Passive NFFE</MenuItem>
+              <MenuItem value="4_501(c)">501(c) organization</MenuItem>
+              <MenuItem value="4_international_organization">International organization</MenuItem>
+              <MenuItem value="4_exempt_retirement_plans">Exempt retirement plans</MenuItem>
+              <MenuItem value="4_entity_wholly_owned">Entity wholly owned by exempt beneficial owners</MenuItem>
+              <MenuItem value="4_excepted_nonfinancial_group_entity">Excepted nonfinancial group entity</MenuItem>
+              <MenuItem value="4_excepted_nonfinancial_start_up">Excepted nonfinancial start-up company</MenuItem>
+              <MenuItem value="4_excepted_nonfinancial_entity_liquidation">Excepted nonfinancial entity in liquidation or bankruptcy</MenuItem>
+              <MenuItem value="4_nonprofit_organization">Nonprofit organization</MenuItem>
+              <MenuItem value="4_publicly_traded_nffe">Publicly traded NFFE or NFFE affiliate of a publicly traded corporation</MenuItem>
+              <MenuItem value="4_excepted_territory_nffe">Excepted territory NFFE</MenuItem>
+              <MenuItem value="4_direct_reporting_nffe">Direct reporting NFFE</MenuItem>
+              <MenuItem value="4_sponsored_direct_reporting_nffe">Sponsored direct reporting NFFE</MenuItem>
+              <MenuItem value="4_non_financial_account">Account that is not a financial account</MenuItem>
+              <MenuItem value="4_other">Other</MenuItem>
             </Select>
           </label>
         </FormControl>
 
 
         {
-          formData['chapter4Status'] === 'excepted_nonfinancial_entity_liquidation' && (
+          formData['5_nonfinancial_entity'] && (
 
             <FormGroup className="form-group">
 
@@ -676,9 +669,9 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                 <label className="form-label">
                   <b>33&nbsp;</b>
                   <Checkbox
-                    checked={formData['p3_c3']}
+                    checked={formData['33']}
                     onChange={handleCheckBox}
-                    name="p3_c3" />
+                    name="33" />
                   I certify that the entity identified in Part I:
                 </label>
 
@@ -718,9 +711,9 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                 <label className="form-label">
                   <b>33&nbsp;</b>
                   <Checkbox
-                    checked={formData['p3_c3']}
+                    checked={formData['33']}
                     onChange={handleCheckBox}
-                    name="p3_c3" />
+                    name="33" />
                   I certify that the entity identified in Part I:
                 </label>
 
@@ -1166,16 +1159,16 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
 
 
         {
-          formData['chapter4Status'] === 'nonprofit_organization' && (
+          formData['4_nonprofit_organization'] && (
             <>
               <FormControlLabel
                 className="checkbox"
                 label="I certify that the entity identified in Part I is a nonprofit organization that meets the following requirements."
                 control={
                   <Checkbox
-                    checked={formData['c4_nonprofit_organization']}
+                    checked={formData['4_nonprofit_organization']}
                     onChange={handleCheckBox}
-                    name="c4_nonprofit_organization" />
+                    name="4_nonprofit_organization" />
                 }
               />
 
@@ -1207,7 +1200,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
         }
 
         {
-          formData['chapter4Status'] === 'publicly_traded_nffe' && (
+          formData['4_publicly_traded_nffe'] && (
 
             <FormGroup className="form-group">
 
@@ -1273,7 +1266,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
         }
 
         {
-          formData['chapter4Status'] === 'excepted_territory_nffe' && (
+          formData['5_excepted_territory_nffe'] && (
 
             <FormGroup className="form-group">
 
@@ -1325,7 +1318,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
         }
 
         {
-          formData['chapter4Status'] === 'passive_nffe' && (
+          formData['4_passive_nffe'] && (
             <FormGroup className="form-group">
 
               <hr />
@@ -1380,7 +1373,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
         }
 
         {
-          formData['40c'] && formData['chapter4Status'] === 'passive_nffe' && (
+          formData['40c'] && formData['5_passive_nffe'] (
             <FormGroup className="form-group">
 
               <label className="form-group-label">
@@ -1452,7 +1445,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                     handleCountryChange('residence_country_search')(event, newInputValue);
                   }}
                   id="country-select"
-                  options={[...countryNames, 'USA', 'U.S.',]}
+                  options={countryNames}
                   getOptionLabel={(option) => option}
                   renderInput={(params) => <TextField {...params}
                     placeholder="Select a country"
@@ -1512,13 +1505,13 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                       <Autocomplete
                         className="country-select"
                         value={formData['mailing_country']}
-                        onChange={(event, newInputValue) => handleCountryChange('country')(event, newInputValue)}
+                        onChange={(event, newInputValue) => handleCountryChange('mailing_country')(event, newInputValue)}
                         inputValue={mailingCountrySearch}
                         onInputChange={(event, newInputValue) => {
                           handleCountryChange('mailing_country_search')(event, newInputValue);
                         }}
                         id="country-select"
-                        options={[...countryNames, 'USA', 'U.S.',]}
+                        options={countryNames}
                         getOptionLabel={(option) => option}
                         renderInput={(params) => <TextField {...params}
                           placeholder="Select a country"

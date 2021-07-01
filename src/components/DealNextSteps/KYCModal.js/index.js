@@ -23,6 +23,7 @@ const UPDATE_USER = gql`
 const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, investor, refetch }) => {
   const [submitTaxDocument, { called, loading }] = useMutation(UPDATE_USER, {
     onCompleted: (data) => {
+      console.log('data from submitTaxDoc', data)
       refetch();
       setOpen(false);
       toast.success('Sucess! Tax form completed.');
