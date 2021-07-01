@@ -133,7 +133,8 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
     ],
     print_name: '',
     date_mm_dd_yyyy: moment().format('YYYY-MM-DD'),
-    signature: ''
+    signature: '',
+    signing_capacity: true
   });
 
   const validate = (formData) => {
@@ -183,6 +184,9 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
 
 
   const handleChange = ({ target }) => {
+    if(target.name === 'print_name') {
+      return setFormData(prev => ({ ...prev, signature: target.value, [target.name]: target.value }))
+    }
     return setFormData(prev => ({ ...prev, [target.name]: target.value }))
   }
 
@@ -313,19 +317,19 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
       'chapter4Status': chapter4Status,
       'chapter3Status': chapter3Status
     }
-
+    
     const fieldUpdateMap = {
       '14_b_select': setSection14Select,
       'chapter4Status': setChapter4Status,
       'chapter3Status': setChapter3Status
     }
 
-    const prev = fieldMap[field] ? fieldMap[field] : null;
+    const prev = fieldMap[field] !== '' ? fieldMap[field] : null;
 
     if (prev) {
       setFormData(prevData => ({
         ...prevData,
-        [prev]: !prevData[prev],
+        [value]: !prevData[value],
         [value]: true
       }))
 
@@ -638,23 +642,23 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
               value={chapter4Status}
               onChange={({ target }) => handleDropdownChange('chapter4Status', target.value)}
               variant="outlined"
-              className="chapter-3-select">
-              <MenuItem value="4_active_nffe">Active NFFE</MenuItem>
-              <MenuItem value="4_passive_nffe">Passive NFFE</MenuItem>
-              <MenuItem value="4_501(c)">501(c) organization</MenuItem>
-              <MenuItem value="4_international_organization">International organization</MenuItem>
-              <MenuItem value="4_exempt_retirement_plans">Exempt retirement plans</MenuItem>
-              <MenuItem value="4_entity_wholly_owned">Entity wholly owned by exempt beneficial owners</MenuItem>
-              <MenuItem value="4_excepted_nonfinancial_group_entity">Excepted nonfinancial group entity</MenuItem>
-              <MenuItem value="4_excepted_nonfinancial_start_up">Excepted nonfinancial start-up company</MenuItem>
-              <MenuItem value="4_excepted_nonfinancial_entity_liquidation">Excepted nonfinancial entity in liquidation or bankruptcy</MenuItem>
-              <MenuItem value="4_nonprofit_organization">Nonprofit organization</MenuItem>
-              <MenuItem value="4_publicly_traded_nffe">Publicly traded NFFE or NFFE affiliate of a publicly traded corporation</MenuItem>
-              <MenuItem value="4_excepted_territory_nffe">Excepted territory NFFE</MenuItem>
-              <MenuItem value="4_direct_reporting_nffe">Direct reporting NFFE</MenuItem>
-              <MenuItem value="4_sponsored_direct_reporting_nffe">Sponsored direct reporting NFFE</MenuItem>
-              <MenuItem value="4_non_financial_account">Account that is not a financial account</MenuItem>
-              <MenuItem value="4_other">Other</MenuItem>
+              className="chapter-4-select">
+              <MenuItem value="5_active_nffe">Active NFFE</MenuItem>
+              <MenuItem value="5_passive_nffe">Passive NFFE</MenuItem>
+              <MenuItem value="5_501(c)">501(c) organization</MenuItem>
+              <MenuItem value="5_international_organization">International organization</MenuItem>
+              <MenuItem value="5_exempt_retirement_plans">Exempt retirement plans</MenuItem>
+              <MenuItem value="5_entity_wholly_owned">Entity wholly owned by exempt beneficial owners</MenuItem>
+              <MenuItem value="5_excepted_nonfinancial_group_entity">Excepted nonfinancial group entity</MenuItem>
+              <MenuItem value="5_excepted_nonfinancial_start_up">Excepted nonfinancial start-up company</MenuItem>
+              <MenuItem value="5_excepted_nonfinancial_entity_liquidation">Excepted nonfinancial entity in liquidation or bankruptcy</MenuItem>
+              <MenuItem value="5_nonprofit_organization">Nonprofit organization</MenuItem>
+              <MenuItem value="5_publicly_traded_nffe">Publicly traded NFFE or NFFE affiliate of a publicly traded corporation</MenuItem>
+              <MenuItem value="5_excepted_territory_nffe">Excepted territory NFFE</MenuItem>
+              <MenuItem value="5_direct_reporting_nffe">Direct reporting NFFE</MenuItem>
+              <MenuItem value="5_sponsored_direct_reporting_nffe">Sponsored direct reporting NFFE</MenuItem>
+              <MenuItem value="5_non_financial_account">Account that is not a financial account</MenuItem>
+              <MenuItem value="5_other">Other</MenuItem>
             </Select>
           </label>
         </FormControl>
@@ -1318,7 +1322,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
         }
 
         {
-          formData['4_passive_nffe'] && (
+          formData['5_passive_nffe'] && (
             <FormGroup className="form-group">
 
               <hr />
@@ -1373,7 +1377,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
         }
 
         {
-          formData['40c'] && formData['5_passive_nffe'](
+          formData['40c'] && formData['5_passive_nffe'] && (
             <FormGroup className="form-group">
 
               <label className="form-group-label">
