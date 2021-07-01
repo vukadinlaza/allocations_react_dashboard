@@ -37,7 +37,7 @@ export function formatDoughnutSeries(series) {
 }
 
 
-const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => {
+const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealInvestments }) => {
 
   const setMonthsToShow = (data) => {
     let monthsArray = [];
@@ -97,7 +97,8 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => 
   let seriesTotal = series.length? series.map(s => s.total).reduce((acc, n) => acc + n) : 0
   let steppedChartData = getSteppedChartData()
   let dealMultiple = _.toNumber(dealData?.dealParams?.dealMultiple || 1)
-
+  const investments = dealInvestments?.deal?.investments?.length && dealInvestments.deal.investments;
+  const totalRaised = investments?.map(i => i.amount).reduce((acc, n) => acc + n) || 0;
 
   return (
     <div className={classes.section}>
@@ -110,7 +111,21 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => 
         : ''
       */}
       <SimpleBox
-        size="third"
+        size="fourth"
+        title="Total Raised"
+        openTooltip={openTooltip}
+        handleTooltip={handleTooltip}
+        id="portfolioValue"
+        tooltipContent={<Typography color="inherit" >This is the estimated value of the portfolio</Typography>}
+        >
+        <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
+          <Typography style={{fontSize: "26px"}}>
+            ${nWithCommas(totalRaised)}
+          </Typography>
+        </div>
+      </SimpleBox>
+      <SimpleBox
+        size="fourth"
         title="Portfolio Value"
         openTooltip={openTooltip}
         handleTooltip={handleTooltip}
@@ -125,7 +140,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => 
         </div>
       </SimpleBox>
       <SimpleBox
-        size="third"
+        size="fourth"
         title="Total Invested"
         openTooltip={openTooltip}
         handleTooltip={handleTooltip}
@@ -142,7 +157,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => 
         </div>
       </SimpleBox>
       <SimpleBox
-        size="third"
+        size="fourth"
         title="Multiple"
         openTooltip={openTooltip}
         handleTooltip={handleTooltip}

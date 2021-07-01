@@ -365,6 +365,31 @@ const styles = (theme) => ({
   },
 });
 
+
+
+const GET_INVESTMENTS = gql`
+  query GetDeal($fund_slug: String!, $deal_slug: String!) {
+    deal(fund_slug: $fund_slug, deal_slug: $deal_slug) {
+      _id
+      investments {
+        _id
+        amount
+        status
+        submissionData {
+          legalName
+        }
+        investor {
+          _id
+          first_name
+          last_name
+          name
+          accredidation_status
+        }
+      }
+    }
+  }
+`;
+
 export const ORG_OVERVIEW = gql`
   query GetOrg($slug: String!) {
     organization(slug: $slug) {
@@ -422,6 +447,7 @@ const FundManagerDashboard = ({ classes, location, history }) => {
   const [dealName, setDealName] = useState('');
   const [atDealData, setAtDealData] = useState({});
   const [openTooltip, setOpenTooltip] = useState('');
+  const [getInvestments, { data: dealInvestments }] = useLazyQuery(GET_INVESTMENTS);
   const [getOrgDeals, { data: orgDeals }] = useLazyQuery(ORG_OVERVIEW, {
     variables: { slug: orgSlug },
     fetchPolicy: 'network-only',
@@ -438,6 +464,12 @@ const FundManagerDashboard = ({ classes, location, history }) => {
   //   console.log('FIRES');
   //   refetch();
   // }, 2000);
+
+  useEffect(() => {
+    if(dealData && Object.keys(dealData).length){
+      getInvestments({ variables: { deal_slug: dealData.slug, fund_slug: orgSlug } });
+    }
+  }, [dealData]);
 
   useEffect(() => {
     getOrgDeals();
@@ -531,12 +563,19 @@ const FundManagerDashboard = ({ classes, location, history }) => {
             dealData={dealData}
             openTooltip={openTooltip}
             handleTooltip={handleTooltip}
+            dealInvestments={dealInvestments}
           />
         );
       case 'Investments':
         return <Investments classes={classes} width={width} data={fundData} />;
       case 'Investor Onboarding Status':
-        return <InvestorStatus classes={classes} width={width} dealSlug={dealData.slug} />;
+        return (
+          <InvestorStatus
+            classes={classes}
+            width={width}
+            data={dealInvestments}
+            />
+        )
       case 'Deal Page':
         return (
           <div className={classes.section}>
@@ -616,7 +655,7 @@ const FundManagerDashboard = ({ classes, location, history }) => {
             ))}
             {/* }<Tab label="Disabled" disabled /> */}
           </Tabs>
-          {!dealData || !atFundData || status === 'fetching' ? (
+          {!dealData || !atFundData || !dealInvestments || status === 'fetching' ? (
             <div className={classes.loaderContainer}>
               <Loader />
             </div>

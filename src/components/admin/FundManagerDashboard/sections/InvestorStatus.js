@@ -12,30 +12,6 @@ import Loader from '../../../utils/Loader'
 import { phone } from '../../../../utils/helpers'
 
 
-const GET_INVESTMENTS = gql`
-  query GetDeal($fund_slug: String!, $deal_slug: String!) {
-    deal(fund_slug: $fund_slug, deal_slug: $deal_slug) {
-      _id
-      investments {
-        _id
-        amount
-        status
-        submissionData {
-          legalName
-        }
-        investor {
-          _id
-          first_name
-          last_name
-          name
-          accredidation_status
-        }
-      }
-    }
-  }
-`;
-
-
 const demoNames = [
   'Pablo Picasso',
   'Vincent van Gogh',
@@ -104,15 +80,7 @@ const InvestorBox = ({classes, investor, index, width}) => {
 }
 
 
-const InvestorStatus = ({ classes, width, dealSlug }) => {
-
-  const { organization: orgSlug } = useParams();
-  const location = useLocation();
-  const [getInvestments, { data }] = useLazyQuery(GET_INVESTMENTS);
-
-  useEffect(() => {
-    getInvestments({ variables: { deal_slug: dealSlug, fund_slug: orgSlug } });
-  }, []);
+const InvestorStatus = ({ classes, width, data }) => {
 
   if(!data?.deal?.investments){
     return (
@@ -155,7 +123,7 @@ const InvestorStatus = ({ classes, width, dealSlug }) => {
   viewedTotal += demoViewedArray.map(i => i.amount).reduce((acc, n) => acc + n)
   signedTotal += demoSignedArray.map(i => i.amount).reduce((acc, n) => acc + n)
   wiredTotal += demoWiredArray.map(i => i.amount).reduce((acc, n) => acc + n)
-  const isDemo = window?.origin?.includes('vercel') || window?.origin?.includes('localhost')
+  const isDemo = window?.origin?.includes('vercel') || window?.origin?.includes('localhost');
 
   return (
     <div className={classes.section}>

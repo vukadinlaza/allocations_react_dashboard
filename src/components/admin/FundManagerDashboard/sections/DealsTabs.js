@@ -6,6 +6,7 @@ import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import NearMeIcon from '@material-ui/icons/NearMe';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRocket } from '@fortawesome/free-solid-svg-icons'
 import { phone, nestedSort } from '../../../../utils/helpers';
 import Loader from '../../../utils/Loader';
 
@@ -137,9 +138,9 @@ const DealsTabs = ({ classes, history, orgSlug, data, width, tabIndex, setTabInd
                   {deal.company_name}
                   <span style={{ backgroundColor: isFund ? '#2A2B54' : '#0461FF' }} className={classes.dealTag}>
                     {isFund ? (
-                      <AccountBalanceIcon style={{ marginRight: '2px' }} />
+                      <AccountBalanceIcon style={{ marginRight: '4px' }} />
                     ) : (
-                      <NearMeIcon style={{ marginRight: '2px' }} />
+                      <FontAwesomeIcon style={{ marginRight: '4px' }} icon={faRocket}/>
                     )}
                     {isFund ? 'FUND' : 'SPV'}
                     <FiberManualRecordIcon style={{ color: closed ? '#d0d0d0' : '#39C522', marginLeft: '2px' }} />
