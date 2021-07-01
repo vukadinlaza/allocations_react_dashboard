@@ -116,7 +116,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
         openTooltip={openTooltip}
         handleTooltip={handleTooltip}
         id="portfolioValue"
-        tooltipContent={<Typography color="inherit" >This is the estimated value of the portfolio</Typography>}
+        tooltipContent={<Typography color="inherit" >This is the total capital raised and wired into the fund</Typography>}
         >
         <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
           <Typography style={{fontSize: "26px"}}>
