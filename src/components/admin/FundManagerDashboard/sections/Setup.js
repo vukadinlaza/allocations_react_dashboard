@@ -12,63 +12,63 @@ import { nWithCommas } from '../../../../utils/numbers';
 import { SimpleBox, ModalTooltip } from '../widgets';
 
 const buildSteps = [
-  { value: 'Initial Build', tooltip: 'Completed http://build.allocations.com/' },
+  { value: 'Initial Build Complete', tooltip: 'Completed http://build.allocations.com/' },
   { value: 'Services Agreement Signed', tooltip: 'Signed the Services Agreement' },
-  { value: 'ID', tooltip: 'This is a KYC requirement internally reviewed by the Allocations compliance team' },
+  { value: 'ID Uploaded', tooltip: 'This is a KYC requirement internally reviewed by the Allocations compliance team' },
   {
-    value: 'Investment Docs',
+    value: 'Investment Docs Uploaded',
     tooltip:
       'Uploaded investment documents for Portfolio Company. This is internally reviewed by the Allocations compliance team to determine whether Allocations can power the deal.',
   },
   {
-    value: 'Portfolio Company Deck',
+    value: 'Portfolio Company Deck Uploaded',
     tooltip:
       'Uploaded Deck for Portfolio Company. This is internally reviewed by the Allocations compliance team to determine whether Allocations can power the deal.',
   },
 ];
 const preOnboardingSteps = [
-  { value: 'SS4 Signature', tooltip: 'The process to request an EIN for the entity using the SSN of the fund manager' },
-  { value: 'Entity Formation', tooltip: 'The process of establishing the entity in Delaware' },
+  { value: 'SS4 Document Signed', tooltip: 'The process to request an EIN for the entity using the SSN of the fund manager' },
+  { value: 'Entity Formation Complete', tooltip: 'The process of establishing the entity in Delaware' },
   {
-    value: 'Bank Account',
+    value: 'Bank Account Opened',
     tooltip: 'The process of setting up a bank account. The ETA is dependent on KYC / AML checks made by the bank',
   },
   {
-    value: 'Private Fund Docs Review & Signing',
+    value: 'Private Fund Docs Signing Complete',
     tooltip: 'The process of reviewing the documents for the private fund and pre-signature from the fund manager.',
   },
 ];
 const onboardingSteps = [
   {
-    value: 'Investor Onboarding List Provided',
+    value: 'Investor Onboarding List Uploaded',
     tooltip:
       'This is the list of investors and proposed investment amounts provided by the fund manager in Google Sheets',
   },
   {
-    value: 'Carry & Management Fee Review',
+    value: 'Carry & Management Fee Review Complete',
     tooltip: 'This is the process for the fund manager to review carry & management fees',
   },
   { value: 'Onboarding Email Sent', tooltip: 'This is the investor onboarding email sent to the investors' },
   { value: 'Investor Follow Up Sent', tooltip: 'This is the follow up investor onboarding email sent to investors' },
-  { value: '506b/c Review', tooltip: 'This is the process for the fund manager to review 506b/506c investor status' },
-  { value: 'KYC Review', tooltip: 'This is the process for Allocations to perform a soft KYC check on investors' },
+  { value: '506b/c Review Complete', tooltip: 'This is the process for the fund manager to review 506b/506c investor status' },
+  { value: 'KYC Review Complete', tooltip: 'This is the process for Allocations to perform a soft KYC check on investors' },
 ];
 const closingSteps = [
-  { value: 'Portfolio Company Wire Instructions', tooltip: 'Uploaded Portfolio Company Wire Instructions' },
+  { value: 'Portfolio Company Wire Info Uploaded', tooltip: 'Uploaded Portfolio Company Wire Instructions' },
   {
-    value: 'Investor Ledger Reconciliation',
+    value: 'Investor Ledger Reconciliation Complete',
     tooltip: 'The process of reconciling wires from investors. E.g. double checking wire fees',
   },
-  { value: 'Blue Sky Fees Review', tooltip: 'The process of reviewing blue sky fees' },
-  { value: 'Signing Portfolio Company Documents', tooltip: 'The process for signing portfolio company documents' },
+  { value: 'Blue Sky Fees Review Complete', tooltip: 'The process of reviewing blue sky fees' },
+  { value: 'Signed Portfolio Company Documents', tooltip: 'The process for signing portfolio company documents' },
   {
-    value: 'Wire Approval Review',
+    value: 'Wire Approval Review Complete',
     tooltip: 'The process to approval the wire to the portfolio company. 12pm EST cutoff time.',
   },
   { value: 'Invoice Receipt Sent', tooltip: 'The process of sending invoice receipt to the fund manager' },
-  { value: 'Reg D Filing', tooltip: 'The process of filing a Reg D for the offering' },
+  { value: 'Reg D Filing Complete', tooltip: 'The process of filing a Reg D for the offering' },
   {
-    value: 'Management Fee Distribution',
+    value: 'Management Fee Distribution Complete',
     tooltip: 'The process of distributing the management fee to the Fund Manager',
   },
 ];

@@ -37,94 +37,40 @@ const GET_INVESTMENTS = gql`
 
 
 const demoNames = [
-"Jazlynn Wilkerson",
-"Virginia Rich",
-"Monique Hendrix",
-"Xzavier Bird",
-"Kendal Barnes",
-"Yadira Chan",
-"Gregory Villarreal",
-"Lauryn Donovan",
-"Sophia Sexton",
-"Simon Navarro",
-"Kale Sutton",
-"Angelo Campbell",
-"Marilyn Bullock",
-"Helen Shah",
-"Theodore Harmon",
-"Jonathon Williamson",
-"Josh Kent",
-"Jacey Frey",
-"Colt Hartman",
-"Kenna Gentry",
-"Adrian Edwards",
-"Yosef Lloyd",
-"Madyson Ortiz",
-"Slade Jordan",
-"Kamron Whitaker",
-"Franco Nash",
-"Ariella Gamble",
-"Deon Bates",
-"Jesse Case",
-"Jaylon Castaneda",
-"Sidney Arellano",
-"Kellen Singleton",
-"Ana Haney",
-"Kadence Flowers",
-"Liana Medina",
-"Shawn Perez",
-"Alayna Dalton",
-"Trinity Mcguire",
-"Armani Nolan",
-"Bailey Sanders",
-"Raul Peterson",
-"Maria Luna",
-"Elliot Norton",
-"Jaden Jacobs",
-"Darien Parrish",
-"Ralph Vang",
-"Patience Cameron",
-"Case Jacobson",
-"Tyshawn Jarvis",
-"Anne Walters",
-"Paityn Powers",
-"Amira Rasmussen",
-"Victor Booker",
-"Emelia Collier",
-"Pablo Carter",
-"Ann Velazquez",
-"Marin Malone",
-"Savanah Fowler",
-"Cherish Downs",
-"Sylvia Huff",
-"Julien Dominguez",
-"Laila Petersen",
-"Genevieve Hall",
-"Braedon Coffey",
-"Amiyah Bonilla",
-"Amanda Allen",
-"Alivia Estes",
-"Ciara Francis",
-"Dane Richard",
-"Jaylen Ferguson",
-"Kamari Norris",
-"Conrad Cabrera",
-"Zechariah Oconnell",
-"Killian Graves",
-"Curtis Steele",
-"Adelyn Huang",
-"Kailee Cannon",
-"Ronald Clements",
-"Darren Price",
-"Garrett Mcneil",
-"Kingston House",
-"Ansley Burke",
-"Carissa Chaney",
-"Darnell Figueroa",
-"Emmalee Cummings",
-]
+  'Pablo Picasso',
+  'Vincent van Gogh',
+  'Leonardo da Vinci',
+  'Claude Monet',
+  'Salvador Dali',
+  'Henri Matisse',
+  'Rembrandt',
+  'Andy Warhol',
+  "Georgia O'Keeffe",
+  'Michelangelo',
+  'Peter Paul Rubens',
+  'Edgar Degas',
+  'Caravaggio',
+  'Pierre-Auguste Renoir',
+  'Raphael',
+  'Paul Cezanne',
+  'Marc Chagall',
+  'Titian',
+  'Joan Miro',
+  'Jackson Pollock',
+  'Gustav Klimt',
+  'Albrecht Durer',
+  'Edward Hopper',
+  'Wassily Kandinsky',
+  'Jan Vermeer',
+  'Paul Klee',
+  'Edvard Munch',
+  'Goya',
+  'Janet Fish',
+  'Edouard Manet',
+];
 
-const demoAmounts = [5000, 8000, 10000, 12000, 15000, 17000, 130000, 180000, 20000, 50000]
+
+const demoAmounts = [5000, 8000, 10000, 12000, 15000, 17000, 13000, 18000, 20000, 50000]
 
 const demoBool = [true, false]
 
@@ -221,12 +167,15 @@ const InvestorStatus = ({ classes, width, dealSlug }) => {
         size="third"
         buttonText={true? '' : <div><MailIcon style={{color: "white", marginRight: "0.5em"}}/>Send Reminder</div>}
         >
-        {viewedInvestors.map((investor, index) =>
-          <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`} width={width}/>
-        )}
-        {isDemo && demoViewedArray.map((investor, index) =>
-          <InvestorBox investor={investor} classes={classes} index={index} key={`demo-investor-${index}`} width={width}/>
-        )}
+        {isDemo?
+          demoViewedArray.map((investor, index) =>
+            <InvestorBox investor={investor} classes={classes} index={index} key={`demo-investor-${index}`} width={width}/>
+          )
+            :
+          viewedInvestors.map((investor, index) =>
+            <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`} width={width}/>
+          )
+        }
       </ScrollableBox>
       <ScrollableBox
         title="SIGNED"
@@ -236,12 +185,15 @@ const InvestorStatus = ({ classes, width, dealSlug }) => {
         size="third"
         buttonText={true? '' : <div><MailIcon style={{color: "white", marginRight: "0.5em"}}/>Send Reminder</div>}
         >
-        {signedInvestors.filter(investor => investor.status === 'signed').map((investor, index) =>
-          <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`} width={width}/>
-        )}
-        {isDemo && demoSignedArray.map((investor, index) =>
-          <InvestorBox investor={investor} classes={classes} index={index} key={`demo-investor-${index}`} width={width}/>
-        )}
+        {isDemo?
+          demoSignedArray.map((investor, index) =>
+            <InvestorBox investor={investor} classes={classes} index={index} key={`demo-investor-${index}`} width={width}/>
+          )
+            :
+          signedInvestors.filter(investor => investor.status === 'signed').map((investor, index) =>
+            <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`} width={width}/>
+          )
+        }
       </ScrollableBox>
       <ScrollableBox
         title="WIRED"
@@ -250,12 +202,15 @@ const InvestorStatus = ({ classes, width, dealSlug }) => {
         fontSize="small"
         size="third"
         >
-        {wiredInvestors.filter(investor => investor.status === 'wired').map((investor, index) =>
-          <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`} width={width}/>
-        )}
-        {isDemo && demoWiredArray.map((investor, index) =>
-          <InvestorBox investor={investor} classes={classes} index={index} key={`demo-investor-${index}`} width={width}/>
-        )}
+        {isDemo?
+          demoWiredArray.map((investor, index) =>
+              <InvestorBox investor={investor} classes={classes} index={index} key={`demo-investor-${index}`} width={width}/>
+          )
+            :
+          wiredInvestors.filter(investor => investor.status === 'wired').map((investor, index) =>
+            <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`} width={width}/>
+          )
+        }
       </ScrollableBox>
     </div>
   );
