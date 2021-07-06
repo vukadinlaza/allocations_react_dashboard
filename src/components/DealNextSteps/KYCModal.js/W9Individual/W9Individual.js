@@ -1,11 +1,14 @@
 import { FormControl, TextField, Button } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import React, { useState } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import './styles.scss';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { useLocation } from 'react-router';
 import Loader from '../../../utils/Loader';
+import PlacesAutocomplete, {
+  geocodeByPlaceId
+} from "react-places-autocomplete";
 
 const validate = (formData) => {
   const required = [
@@ -25,6 +28,16 @@ const validate = (formData) => {
 function W9Individual({ toggleOpen, createDoc, called, loading }) {
   const [errors, setErrors] = useState([]);
   const { state } = useLocation();
+  const [address, setAddress] = useState('');
+  const [placeId, setPlaceId] = useState('');
+
+  const [addressComponents, setAddressComponents] = useState('')
+  const [streetNumber, setStreetNumber] = useState('');
+  const [route, setRoute] = useState('');
+  const [postalTown, setPostalTown] = useState('');
+  const [stateOrProvince, setStateOrProvince] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+  const [country, setCountry] = useState('');
 
   const [formData, setFormData] = useState({
     name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank:
@@ -39,6 +52,94 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
     city: '',
     zip: '',
   });
+
+  const handleSelect = (address, placeId) => {
+    setAddress(address);
+    setPlaceId(placeId);
+  };
+
+  useEffect(() => {
+    geocodeByPlaceId(placeId)
+    .then(results => setAddressComponents(results[0].address_components))
+    .catch(error => console.error(error));
+  }, [placeId])
+
+  useEffect(() => {
+    // finds and sets street number
+    const streetNumberInfo = (e) => {
+      try {
+        setStreetNumber(addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === "street_number")[0].long_name);
+      } catch {
+        console.log("ERROR==> missing street number", e);
+        setStreetNumber('');
+      }
+    }
+    streetNumberInfo();
+
+    // finds and sets route or street address
+    const routeInfo = (e) => {
+      try {
+        setRoute(addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === "route")[0].long_name);
+      } catch {
+        console.log("ERROR==> missing route", e);
+        setRoute('');
+      }
+    }
+    routeInfo();
+
+    // set city info
+    const cityInfo = (e) => {
+      try {
+        setFormData({ 
+          ...formData,
+          city: addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === "locality")[0].long_name });
+      } catch {
+        console.log("ERROR==> missing city", e);
+        setFormData({
+          ...formData,
+          city: ''
+        });
+      }
+    }
+    cityInfo();
+
+  // sets the State info
+    const stateInfo = (e) => {
+      try {
+        setFormData({
+          ...formData,
+           state: addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === "administrative_area_level_1")[0].long_name }); 
+      } catch {
+        console.log("ERROR==> missing State or rovince", e);
+        setStateOrProvince('');
+      }
+    }
+    stateInfo();
+
+    // sets zip code or postal code
+    // const zipCodeInfo = (e) => {
+    //   try {
+    //     setFormData({
+    //       ...formData,
+    //       zip: addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === "postal_code")[0].long_name });
+    //   } catch {
+    //     console.log("ERROR==> missing postal code", e);
+    //     setFormData({ ...formData, zip: '' });
+    //   }
+    // }
+    // zipCodeInfo();
+
+    console.log('AddrressComps:::', addressComponents);
+console.log('streetNumber:::', streetNumber);
+console.log('route:::', route);
+// console.log('City work:::', city);
+console.log('state work:::', stateOrProvince);
+console.log('postalCode work:::', postalCode);
+console.log('country work:::', country);
+    
+}, [streetNumber, route, postalTown, stateOrProvince, postalCode, country, addressComponents]);
+
+
 
   const handleSubmit = () => {
     const { city, state, zip } = formData;
@@ -68,7 +169,7 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
     setFormData((prevData) => ({ ...prevData, [target.name]: target.value }));
   };
 
-  console.log('formData', formData);
+  console.log('formData===>', formData);
 
   return (
     <section className="W9Individual">
@@ -97,18 +198,46 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
           </label>
         </FormControl>
 
-        <FormControl className="form-field address">
-          <label>
-            Street address
-            <TextField
-              value={formData.address_number_street_and_apt_or_suite_no_see_instructions}
-              onChange={handleChange}
-              name="address_number_street_and_apt_or_suite_no_see_instructions"
-              variant="outlined"
-              error={errors.includes('address_number_street_and_apt_or_suite_no_see_instructions')}
-            />
-          </label>
-        </FormControl>
+        <PlacesAutocomplete
+        value={address}
+        onChange={setAddress}
+        onSelect={handleSelect}
+        >
+        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+          <Fragment>
+
+               <FormControl className="form-field address">
+                 <label>
+                  Street address
+                  <TextField 
+                    value={formData.address_number_street_and_apt_or_suite_no_see_instructions}
+                    onChange={handleChange}
+                    name="address_number_street_and_apt_or_suite_no_see_instructions"
+                    variant="outlined"
+                    error={errors.includes('address_number_street_and_apt_or_suite_no_see_instructions')} 
+                    {...getInputProps()}/>           
+                 </label>
+               </FormControl>
+
+            <div>
+              {loading ? <div>...loading</div> : null}
+              {suggestions.map((suggestion) => {
+                console.log(suggestion);
+                const style = suggestion.active
+                  ? { backgroundColor: "#054a66", cursor: "pointer" }
+                  : { backgroundColor: "#ffffff", cursor: "pointer" };
+
+                return (
+                  <div key={suggestion.placeId} {...getSuggestionItemProps(suggestion, { style })}>
+                    {suggestion.description}
+                  </div>
+                
+                );
+              })}
+            </div>
+          </Fragment>
+        )}
+      </PlacesAutocomplete>
 
         <div className="region container">
           <FormControl className="form-field city">
