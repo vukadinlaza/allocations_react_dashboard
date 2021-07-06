@@ -21,7 +21,6 @@ const AutoFill = () => {
 
   const handleSelect = (address, placeId) => {
     setAddress(address);
-    console.log('Address you fuck', address);
     setPlaceId(placeId);
   };
 
