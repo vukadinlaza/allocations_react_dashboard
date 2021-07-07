@@ -1,14 +1,12 @@
 import { FormControl, TextField, Button } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles.scss';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { useLocation } from 'react-router';
+import PlacesAutocomplete, { geocodeByPlaceId } from 'react-places-autocomplete';
 import Loader from '../../../utils/Loader';
-import PlacesAutocomplete, {
-  geocodeByPlaceId
-} from "react-places-autocomplete";
 
 const validate = (formData) => {
   const required = [
@@ -28,16 +26,11 @@ const validate = (formData) => {
 function W9Individual({ toggleOpen, createDoc, called, loading }) {
   const [errors, setErrors] = useState([]);
   const { state } = useLocation();
+
+  // state for auto-complete
   const [address, setAddress] = useState('');
   const [placeId, setPlaceId] = useState('');
-
-  const [addressComponents, setAddressComponents] = useState('')
-  const [streetNumber, setStreetNumber] = useState('');
-  const [route, setRoute] = useState('');
-  const [postalTown, setPostalTown] = useState('');
-  const [stateOrProvince, setStateOrProvince] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [country, setCountry] = useState('');
+  const [addressComponents, setAddressComponents] = useState('');
 
   const [formData, setFormData] = useState({
     name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank:
@@ -60,86 +53,37 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
 
   useEffect(() => {
     geocodeByPlaceId(placeId)
-    .then(results => setAddressComponents(results[0].address_components))
-    .catch(error => console.error(error));
-  }, [placeId])
+      .then((results) => setAddressComponents(results[0].address_components))
+      .catch((error) => console.error(error));
+  }, [placeId]);
 
   useEffect(() => {
-    // finds and sets street number
-    const streetNumberInfo = (e) => {
-      try {
-        setStreetNumber(addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === "street_number")[0].long_name);
-      } catch {
-        console.log("ERROR==> missing street number", e);
-        setStreetNumber('');
-      }
-    }
-    streetNumberInfo();
 
-    // finds and sets route or street address
-    const routeInfo = (e) => {
+    // set auto-complete address info (all or nothing)
+    const addressInfo = (e) => {
       try {
-        setRoute(addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === "route")[0].long_name);
-      } catch {
-        console.log("ERROR==> missing route", e);
-        setRoute('');
-      }
-    }
-    routeInfo();
-
-    // set city info
-    const cityInfo = (e) => {
-      try {
-        setFormData({ 
-          ...formData,
-          city: addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === "locality")[0].long_name });
-      } catch {
-        console.log("ERROR==> missing city", e);
+        const streetNumber = (addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === 'street_number')[0].long_name);
+        const route= (addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === 'route')[0].long_name);
         setFormData({
           ...formData,
-          city: ''
+          address_number_street_and_apt_or_suite_no_see_instructions: `${streetNumber} ${route}`,
+          city: addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === 'locality')[0].long_name,
+          state: addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === 'administrative_area_level_1')[0].long_name,
+          zip: addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === "postal_code")[0].long_name
+        });
+      } catch {
+        console.log('ERROR==> missing city', e);
+        setFormData({
+          ...formData,
+          address_number_street_and_apt_or_suite_no_see_instructions: '',
+          city: '',
+          state: '',
+          zip: '',
         });
       }
-    }
-    cityInfo();
-
-  // sets the State info
-    const stateInfo = (e) => {
-      try {
-        setFormData({
-          ...formData,
-           state: addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === "administrative_area_level_1")[0].long_name }); 
-      } catch {
-        console.log("ERROR==> missing State or rovince", e);
-        setStateOrProvince('');
-      }
-    }
-    stateInfo();
-
-    // sets zip code or postal code
-    // const zipCodeInfo = (e) => {
-    //   try {
-    //     setFormData({
-    //       ...formData,
-    //       zip: addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === "postal_code")[0].long_name });
-    //   } catch {
-    //     console.log("ERROR==> missing postal code", e);
-    //     setFormData({ ...formData, zip: '' });
-    //   }
-    // }
-    // zipCodeInfo();
-
-    console.log('AddrressComps:::', addressComponents);
-console.log('streetNumber:::', streetNumber);
-console.log('route:::', route);
-// console.log('City work:::', city);
-console.log('state work:::', stateOrProvince);
-console.log('postalCode work:::', postalCode);
-console.log('country work:::', country);
-    
-}, [streetNumber, route, postalTown, stateOrProvince, postalCode, country, addressComponents]);
-
-
+    };
+    addressInfo();
+  }, [addressComponents]);
 
   const handleSubmit = () => {
     const { city, state, zip } = formData;
@@ -182,166 +126,147 @@ console.log('country work:::', country);
       </div>
       <form className="form">
         <FormControl variant="outlined" className="form-field name">
-          <label>
-            Legal name
-            <TextField
-              value={
-                formData.name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank
-              }
-              onChange={handleChange}
-              name="name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank"
-              variant="outlined"
-              error={errors.includes(
-                'name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank',
-              )}
-            />
-          </label>
+          Legal name
+          <TextField
+            value={
+              // eslint-disable-next-line max-len
+              formData.name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank
+            }
+            onChange={handleChange}
+            name="name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank"
+            variant="outlined"
+            error={errors.includes(
+              'name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank',
+            )}
+          />
         </FormControl>
 
-        <PlacesAutocomplete
-        value={address}
-        onChange={setAddress}
-        onSelect={handleSelect}
-        >
-        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <Fragment>
+        <PlacesAutocomplete value={address} onChange={setAddress} onSelect={handleSelect}>
+          {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+            <>
+              <FormControl className="form-field address">
+                Street address
+                <TextField
+                  value={formData.address_number_street_and_apt_or_suite_no_see_instructions}
+                  onChange={handleChange}
+                  name="address_number_street_and_apt_or_suite_no_see_instructions"
+                  variant="outlined"
+                  error={errors.includes('address_number_street_and_apt_or_suite_no_see_instructions')}
+                  {...getInputProps()}
+                />
+              </FormControl>
 
-               <FormControl className="form-field address">
-                 <label>
-                  Street address
-                  <TextField 
-                    value={formData.address_number_street_and_apt_or_suite_no_see_instructions}
-                    onChange={handleChange}
-                    name="address_number_street_and_apt_or_suite_no_see_instructions"
-                    variant="outlined"
-                    error={errors.includes('address_number_street_and_apt_or_suite_no_see_instructions')} 
-                    {...getInputProps()}/>           
-                 </label>
-               </FormControl>
+              <div>
+                {loading ? <div>...loading</div> : null}
+                {suggestions.map((suggestion) => {
+                  console.log(suggestion);
+                  const style = suggestion.active
+                    ? { backgroundColor: '#054a66', cursor: 'pointer' }
+                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
 
-            <div>
-              {loading ? <div>...loading</div> : null}
-              {suggestions.map((suggestion) => {
-                console.log(suggestion);
-                const style = suggestion.active
-                  ? { backgroundColor: "#054a66", cursor: "pointer" }
-                  : { backgroundColor: "#ffffff", cursor: "pointer" };
-
-                return (
-                  <div key={suggestion.placeId} {...getSuggestionItemProps(suggestion, { style })}>
-                    {suggestion.description}
-                  </div>
-                
-                );
-              })}
-            </div>
-          </Fragment>
-        )}
-      </PlacesAutocomplete>
+                  return (
+                    <div key={suggestion.placeId} {...getSuggestionItemProps(suggestion, { style })}>
+                      {suggestion.description}
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
+        </PlacesAutocomplete>
 
         <div className="region container">
           <FormControl className="form-field city">
-            <label>
-              City
-              <TextField
-                value={formData.city}
-                name="city"
-                onChange={handleChange}
-                variant="outlined"
-                error={errors.includes('city')}
-              />
-            </label>
+            City
+            <TextField
+              value={formData.city}
+              name="city"
+              onChange={handleChange}
+              variant="outlined"
+              error={errors.includes('city')}
+            />
           </FormControl>
 
           <FormControl required className="form-field state">
-            <label>
-              State
-              <TextField
-                value={formData.state}
-                name="state"
-                onChange={handleChange}
-                variant="outlined"
-                error={errors.includes('state')}
-              />
-            </label>
+            State
+            <TextField
+              value={formData.state}
+              name="state"
+              onChange={handleChange}
+              variant="outlined"
+              error={errors.includes('state')}
+            />
           </FormControl>
 
           <FormControl className="form-field zip">
-            <label>
-              Zip Code
-              <TextField
-                value={formData.zip}
-                name="zip"
-                onChange={handleChange}
-                variant="outlined"
-                error={errors.includes('zip')}
-              />
-            </label>
+            Zip Code
+            <TextField
+              value={formData.zip}
+              name="zip"
+              onChange={handleChange}
+              variant="outlined"
+              error={errors.includes('zip')}
+            />
           </FormControl>
         </div>
 
         <div className="social container">
           <FormControl className="form-field ssn">
-            <label>
-              SSN
-              <div className="ssn container">
-                <TextField
-                  name="f1_11"
-                  value={formData.f1_11}
-                  onChange={handleChange}
-                  variant="outlined"
-                  className="ssn-one"
-                  inputProps={{ maxLength: '3' }}
-                  error={errors.includes('f1_11')}
-                />
-                <TextField
-                  name="f1_12"
-                  value={formData.f1_12}
-                  onChange={handleChange}
-                  variant="outlined"
-                  className="ssn-two"
-                  inputProps={{ maxLength: '2' }}
-                  error={errors.includes('f1_12')}
-                />
-                <TextField
-                  name="f1_13"
-                  value={formData.f1_13}
-                  onChange={handleChange}
-                  variant="outlined"
-                  className="ssn-three"
-                  inputProps={{ maxLength: '4' }}
-                  error={errors.includes('f1_13')}
-                />
-              </div>
-            </label>
+            SSN
+            <div className="ssn container">
+              <TextField
+                name="f1_11"
+                value={formData.f1_11}
+                onChange={handleChange}
+                variant="outlined"
+                className="ssn-one"
+                inputProps={{ maxLength: '3' }}
+                error={errors.includes('f1_11')}
+              />
+              <TextField
+                name="f1_12"
+                value={formData.f1_12}
+                onChange={handleChange}
+                variant="outlined"
+                className="ssn-two"
+                inputProps={{ maxLength: '2' }}
+                error={errors.includes('f1_12')}
+              />
+              <TextField
+                name="f1_13"
+                value={formData.f1_13}
+                onChange={handleChange}
+                variant="outlined"
+                className="ssn-three"
+                inputProps={{ maxLength: '4' }}
+                error={errors.includes('f1_13')}
+              />
+            </div>
           </FormControl>
 
           <FormControl className="form-field date-signed">
-            <label>
-              Date signed
-              <TextField
-                value={formData.date_signed}
-                name="date_signed"
-                onChange={handleChange}
-                type="date"
-                error={errors.includes('date_signed')}
-                variant="outlined"
-              />
-            </label>
+            Date signed
+            <TextField
+              value={formData.date_signed}
+              name="date_signed"
+              onChange={handleChange}
+              type="date"
+              error={errors.includes('date_signed')}
+              variant="outlined"
+            />
           </FormControl>
         </div>
 
         <FormControl className="form-field signature">
-          <label>
-            E-Signature
-            <TextField
-              value={
-                formData.name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank
-              }
-              variant="outlined"
-              className="signature"
-            />
-          </label>
+          E-Signature
+          <TextField
+            value={
+              // eslint-disable-next-line max-len
+              formData.name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank
+            }
+            variant="outlined"
+            className="signature"
+          />
         </FormControl>
         {called && loading ? (
           <Loader />
