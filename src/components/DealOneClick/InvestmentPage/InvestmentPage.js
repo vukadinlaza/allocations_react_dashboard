@@ -136,7 +136,7 @@ const ADD_USER_AS_VIEWED = gql`
 const validate = (investor, org) => {
   let required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
   if (org === 'irishangels') {
-    required = required.filter(d => d !== 'accredited_investor_status')
+    required = required.filter((d) => d !== 'accredited_investor_status');
   }
   if (investor.country && investor.country === 'United States') {
     required.push('state');
@@ -192,36 +192,47 @@ function InvestmentPage() {
     const editPersonalData = location?.state?.submission;
     let updatedInvestorData = { ...investorFormData };
     if (!personalData && !editPersonalData) return;
-    if(editPersonalData){
+    if (editPersonalData) {
       const editAmount = location.state.amount;
       updatedInvestorData = { ...investorFormData, ...editPersonalData };
-      setAmount(editAmount)
-    }else if (personalData){
+      setAmount(editAmount);
+    } else if (personalData) {
       updatedInvestorData = { ...investorFormData, ...personalData };
     }
     setInvestor(updatedInvestorData);
     setPopulated(true);
   };
 
-  const [submitConfirmation, { }] = useMutation(CONFIRM_INVESTMENT, {
+  const [submitConfirmation] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       refetch();
-      const message = location?.state?.submission? 'Investment updated successfully.' : 'Investment created successfully.'
+      const message = location?.state?.submission
+        ? 'Investment updated successfully.'
+        : 'Investment created successfully.';
       toast.success(message);
-      const path = organization ? `/next-steps/${organization}/${deal_slug}` : `/next-steps/${deal_slug}`;
+      const path = organization
+        ? `/next-steps/${organization}/${deal_slug}`
+        : `/next-steps/${deal_slug}`;
       history.push(path, { investorFormData });
     },
   });
-  const [getInvestmentPreview, { data: previewData, loading: loadingPreview }] = useMutation(GET_PREVIEW);
+  const [getInvestmentPreview, { data: previewData, loading: loadingPreview }] = useMutation(
+    GET_PREVIEW,
+  );
+
+  if (!data) return <Loader />;
+
+  const { deal } = data;
 
   const confirmInvestment = () => {
     const validation = validate(investorFormData, organization);
-    console.log('validation', validation)
     setErrors(validation);
 
     if (validation.length > 0) return toast.warning('Incomplete Form');
     if (!amount) return toast.warning('Please enter a valid investment amount.');
-    if (parseInt(amount) < 1000) return toast.warning('Please enter an investment amount greater than $1000.');
+    // eslint-disable-next-line radix
+    if (parseInt(amount) < 1000)
+      return toast.warning('Please enter an investment amount greater than $1000.');
 
     const payload = {
       ...investorFormData,
@@ -236,7 +247,7 @@ function InvestmentPage() {
 
   const submitInvestment = async () => {
     const ip = await getClientIp();
-    const isEdit = location?.state?.submission
+    const isEdit = location?.state?.submission;
     const payload = {
       ...investorFormData,
       investmentAmount: nWithCommas(amount),
@@ -245,15 +256,12 @@ function InvestmentPage() {
       docSpringTemplateId: deal.docSpringTemplateId,
     };
 
-    if(isEdit) payload.investmentId = location.state.investmentId
+    if (isEdit) payload.investmentId = location.state.investmentId;
 
-    submitConfirmation({ variables: { payload } });
+    await submitConfirmation({ variables: { payload } });
     setShowSpvModal(false);
   };
 
-  if (!data) return <Loader />;
-
-  const { deal } = data;
   const {
     company_name,
     dealParams: { minimumInvestment },
@@ -264,11 +272,17 @@ function InvestmentPage() {
   return (
     <section className="InvestmentPage">
       <div className="nav-btn-container">
-        <Button className="back-button" onClick={() => history.push(`/deals/${organization}/${deal_slug}`)}>
+        <Button
+          className="back-button"
+          onClick={() => history.push(`/deals/${organization}/${deal_slug}`)}
+        >
           <ArrowBackIcon />
           Back to Deal Page
         </Button>
-        <Button className="next-button" onClick={() => history.push(`/next-steps/${organization}/${deal_slug}`)}>
+        <Button
+          className="next-button"
+          onClick={() => history.push(`/next-steps/${organization}/${deal_slug}`)}
+        >
           Next Steps
           <ArrowForwardIcon />
         </Button>
@@ -278,14 +292,20 @@ function InvestmentPage() {
       </div>
 
       <div className="flex-container">
-        <InvestmentAmountPanel setAmount={setAmount} amount={amount} minimumInvestment={minimumInvestment} />
+        <InvestmentAmountPanel
+          setAmount={setAmount}
+          amount={amount}
+          minimumInvestment={minimumInvestment}
+        />
         <div className="side-panel">
-          {/* <InvestingAsPanel /> */}
-          {/* <InvestmentHistory deal={deal} setInvestor={setInvestor} investor={investorFormData} setAmount={setAmount} /> */}
           <DealDocumentsPanel deal={deal} />
-          {/* <YourDocumentsPanel investment={investment} /> */}
         </div>
-        <PersonalInformation org={org} errors={errors} investor={investorFormData} setInvestor={setInvestor} />
+        <PersonalInformation
+          org={org}
+          errors={errors}
+          investor={investorFormData}
+          setInvestor={setInvestor}
+        />
         <TermsAndConditionsPanel
           confirmInvestment={confirmInvestment}
           deal={deal}
