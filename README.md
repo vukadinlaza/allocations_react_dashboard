@@ -1,5 +1,19 @@
 # Allocations
 
+## Pre-Commit hooks
+
+You should first install `pre-commit` via `brew` if you haven't already:
+
+```bash
+brew install pre-commit
+```
+
+Then from the project root of our app run:
+
+```bash
+pre-commit install
+```
+
 ## Project setup
 
 - You will need an .env file, Lance will provide this.

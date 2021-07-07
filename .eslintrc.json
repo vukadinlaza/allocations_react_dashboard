@@ -1,127 +1,103 @@
 {
-	"plugins": [
-		"jsx-a11y",
-		"react",
-		"react-hooks",
-		"import"
-	],
-	"extends": [
-		"eslint:recommended",
-		"plugin:react/recommended",
-		"plugin:jsx-a11y/recommended",
-		"plugin:import/warnings",
-		"airbnb",
-		"prettier/react",
-		"plugin:prettier/recommended",
-		"prettier"
-	],
-	"env": {
-		"browser": true,
-		"commonjs": true,
-		"es6": true,
-		"jest": true,
-		"node": true
-	},
-	"parserOptions": {
-		"ecmaVersion": 11
-	},
-	"rules": {
-		"react-hooks/rules-of-hooks": "error",
-		"react-hooks/exhaustive-deps": "warn",
-		"no-shadow": [
-			"off"
-		],
-		"camelcase": [
-			0,
-			{
-				"properties": "always"
-			}
-		],
-		"jsx-a11y/href-no-hash": [
-			"off"
-		],
-		"jsx-a11y/no-static-element-interactions": [
-			"off"
-		],
-		"jsx-a11y/click-events-have-key-events": [
-			"off"
-		],
-		"react/jsx-filename-extension": [
-			"warn",
-			{
-				"extensions": [
-					".js",
-					".jsx"
-				]
-			}
-		],
-		"prefer-destructuring": [
-			"warn",
-			{
-				"object": true,
-				"array": false
-			}
-		],
-		"consistent-return": "off",
-		"no-param-reassign": [
-			2,
-			{
-				"props": false
-			}
-		],
-		"no-underscore-dangle": "off",
-		"react/prop-types": 0,
-		"react/destructuring-assignment": 0,
-		"react/no-unescaped-entities": [
-			"off"
-		],
-		"no-return-assign": [
-			2,
-			"except-parens"
-		],
-		"no-nested-ternary": "off",
-		"react/no-array-index-key": "warn",
-		"import/no-named-as-default": "warn",
-		"import/prefer-default-export": "warn",
-		"import/no-extraneous-dependencies": "warn",
-		"no-unused-vars": "error",
-		"import/no-unresolved": [
-			0,
-			{
-				"caseSensitive": false
-			}
-		],
-		"max-len": [
-			"warn",
-			{
-				"code": 120,
-				"tabWidth": 2,
-				"comments": 100,
-				"ignoreComments": false,
-				"ignoreTrailingComments": true,
-				"ignoreUrls": true,
-				"ignoreStrings": true,
-				"ignoreTemplateLiterals": true,
-				"ignoreRegExpLiterals": true
-			}
-		],
-		"no-unused-expressions": [
-			"error",
-			{
-				"allowTernary": true
-			}
-		],
-		"dot-notation": [
-			"error",
-			{
-				"allowPattern": "^[a-z]+(_[a-z]+)+$"
-			}
-		]
-	},
-	"settings": {
-		"import/extensions": [
-			".js",
-			".jsx"
-		]
-	}
+  "plugins": ["jsx-a11y", "react", "react-hooks", "import"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:import/warnings",
+    "airbnb",
+    "prettier/react",
+    "plugin:prettier/recommended",
+    "prettier"
+  ],
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
+    "jest": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 11
+  },
+  "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "no-shadow": ["off"],
+    "camelcase": [
+      0,
+      {
+        "properties": "always"
+      }
+    ],
+    "jsx-a11y/href-no-hash": ["off"],
+    "jsx-a11y/no-static-element-interactions": ["off"],
+    "jsx-a11y/click-events-have-key-events": ["off"],
+    "react/jsx-filename-extension": [
+      "warn",
+      {
+        "extensions": [".js", ".jsx"]
+      }
+    ],
+    "prefer-destructuring": [
+      "warn",
+      {
+        "object": true,
+        "array": false
+      }
+    ],
+    "consistent-return": "off",
+    "no-param-reassign": [
+      2,
+      {
+        "props": false
+      }
+    ],
+    "no-underscore-dangle": "off",
+    "react/prop-types": 0,
+    "react/destructuring-assignment": 0,
+    "react/no-unescaped-entities": ["off"],
+    "no-return-assign": [2, "except-parens"],
+    "no-nested-ternary": "off",
+    "react/no-array-index-key": "warn",
+    "import/no-named-as-default": "warn",
+    "import/prefer-default-export": "warn",
+    "import/no-extraneous-dependencies": "warn",
+    "no-unused-vars": "error",
+    "import/no-unresolved": [
+      0,
+      {
+        "caseSensitive": false
+      }
+    ],
+    "max-len": [
+      "warn",
+      {
+        "code": 100,
+        "tabWidth": 2,
+        "comments": 100,
+        "ignoreComments": false,
+        "ignoreTrailingComments": true,
+        "ignoreUrls": true,
+        "ignoreStrings": true,
+        "ignoreTemplateLiterals": true,
+        "ignoreRegExpLiterals": true
+      }
+    ],
+    "no-unused-expressions": [
+      "error",
+      {
+        "allowTernary": true
+      }
+    ],
+    "dot-notation": [
+      "error",
+      {
+        "allowPattern": "^[a-z]+(_[a-z]+)+$"
+      }
+    ]
+  },
+  "settings": {
+    "import/extensions": [".js", ".jsx"]
+  }
 }
