@@ -1,51 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import { gql } from 'apollo-boost';
-import _ from 'lodash'
+import _ from 'lodash';
 import { useQuery } from '@apollo/react-hooks';
 import { withStyles } from '@material-ui/core/styles';
-import {
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  Button,
-  InputAdornment
-} from '@material-ui/core';
+import { TextField, FormControl, InputLabel, Select, Button, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import AllocationsTable from './AllocationsTable';
 import Loader from './Loader';
 
-
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
-    width: "100%"
+    width: '100%',
   },
   loaderContainer: {
-    position:"absolute",
-    width: "100%",
-    height: "100%",
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
     top: 0,
     left: 0,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   searchContainer: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-    marginBottom: "25px",
-    background: "white",
-    padding: "15px 20px",
-    border: "solid 1px #dadada",
-    boxShadow: "0px 3px 5px -5px",
-    borderRadius: "3px"
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: '25px',
+    background: 'white',
+    padding: '15px 20px',
+    border: 'solid 1px #dadada',
+    boxShadow: '0px 3px 5px -5px',
+    borderRadius: '3px',
   },
 });
-
-
 
 /* PROPS Needed (example)
 tableVariables = {
@@ -70,11 +60,14 @@ queryVariables={object} //optional
 tablePagination={number} // optional
 */
 
-
-
-
-const ServerTable = ({ classes, tableVariables, getCellContent, handleRowDetailPage, queryVariables, tablePagination = 25 }) => {
-
+const ServerTable = ({
+  classes,
+  tableVariables,
+  getCellContent,
+  handleRowDetailPage,
+  queryVariables,
+  tablePagination = 25,
+}) => {
   const [selectWidth, setSelectWidth] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [pagination, setPagination] = useState(tablePagination);
@@ -89,17 +82,19 @@ const ServerTable = ({ classes, tableVariables, getCellContent, handleRowDetailP
   const [filterLocalFieldKey, setFilterLocalFieldKey] = useState('');
   const { headers, gqlQuery, dataVariable, defaultSortField } = tableVariables;
 
-  const getCurrentSort = () => (!sortField? defaultSortField : sortField)
+  const getCurrentSort = () => (!sortField ? defaultSortField : sortField);
 
-
-  const { data, loading } = useQuery(gql`${gqlQuery}`,
+  const { data, loading } = useQuery(
+    gql`
+      ${gqlQuery}
+    `,
     {
-      fetchPolicy: "network-only",
+      fetchPolicy: 'network-only',
       variables: {
         pagination: {
           pagination,
           currentPage,
-          filterField: searchFilter.field ,
+          filterField: searchFilter.field,
           filterValue: searchFilter.searchFilter,
           filterNestedKey,
           filterNestedCollection,
@@ -108,95 +103,97 @@ const ServerTable = ({ classes, tableVariables, getCellContent, handleRowDetailP
           sortOrder,
           sortNestedKey,
           sortNestedCollection,
-          sortLocalFieldKey
+          sortLocalFieldKey,
         },
-        ...queryVariables
-      }
-    }
+        ...queryVariables,
+      },
+    },
   );
 
   useEffect(() => {
-    if(headers){
+    if (headers) {
       headers.forEach((header, i) => {
         const headerLength = header.label.length + 4;
-        if(headerLength > selectWidth){
-          setSelectWidth(headerLength)
+        if (headerLength > selectWidth) {
+          setSelectWidth(headerLength);
         }
       });
     }
-  }, [headers])
+  }, [headers]);
 
   useEffect(() => {
-    //clear state (mostly for tabs parent components)
-    setCurrentPage(0)
-    setPagination(tablePagination)
-    setSearchFilter({})
-    setSortField('')
-    setSortOrder(1)
-    setSortNestedKey('')
-    setSortNestedCollection('')
-    setSortLocalFieldKey('')
-    setFilterNestedKey('')
-    setFilterNestedCollection('')
-    setFilterLocalFieldKey('')
-    //clear search bar
+    // clear state (mostly for tabs parent components)
+    setCurrentPage(0);
+    setPagination(tablePagination);
+    setSearchFilter({});
+    setSortField('');
+    setSortOrder(1);
+    setSortNestedKey('');
+    setSortNestedCollection('');
+    setSortLocalFieldKey('');
+    setFilterNestedKey('');
+    setFilterNestedCollection('');
+    setFilterLocalFieldKey('');
+    // clear search bar
     const searchBarElement = document.getElementById('search-field');
-    if(searchBarElement) searchBarElement.value = ''
-  }, [tableVariables])
+    if (searchBarElement) searchBarElement.value = '';
+  }, [tableVariables]);
 
   const onChangePage = (newPage) => {
     setCurrentPage(newPage);
-  }
+  };
 
   const onChangeRowsPerPage = (event) => {
-    setPagination(parseInt(event.target.value, 10))
-  }
+    setPagination(parseInt(event.target.value, 10));
+  };
 
   const handleSearch = () => {
     // we retrieve this values like this so the refetch triggers when we click the search button
-    let searchFilter = document.getElementById('search-field').value
-    let field = document.getElementById('field-filter').value
+    const searchFilter = document.getElementById('search-field').value;
+    const field = document.getElementById('field-filter').value;
     setCurrentPage(0);
-    setSearchFilter({searchFilter, field});
+    setSearchFilter({ searchFilter, field });
 
-    const fieldHeader = headers.find(header => header.value === field);
-    //allowing search for nested keys
-    if(fieldHeader.nestedKey && fieldHeader.nestedCollection && fieldHeader.localFieldKey){
-      setFilterNestedKey(fieldHeader.nestedKey)
-      setFilterNestedCollection(fieldHeader.nestedCollection)
-      setFilterLocalFieldKey(fieldHeader.localFieldKey)
-    }else{
+    const fieldHeader = headers.find((header) => header.value === field);
+    // allowing search for nested keys
+    if (fieldHeader.nestedKey && fieldHeader.nestedCollection && fieldHeader.localFieldKey) {
+      setFilterNestedKey(fieldHeader.nestedKey);
+      setFilterNestedCollection(fieldHeader.nestedCollection);
+      setFilterLocalFieldKey(fieldHeader.localFieldKey);
+    } else {
       // if you change the field from a nested one to a normal one (we dont want to keep the previous state)
-      setFilterNestedKey('')
-      setFilterNestedCollection('')
-      setFilterLocalFieldKey('')
+      setFilterNestedKey('');
+      setFilterNestedCollection('');
+      setFilterLocalFieldKey('');
     }
-  }
+  };
 
   const onChangeSort = (sortField, isAsc, sortNestedKey, sortNestedCollection, sortLocalFieldKey) => {
-
-    let order = isAsc? 1 : -1
-    if(sortNestedKey && sortNestedCollection && sortLocalFieldKey){
-      setSortNestedKey(sortNestedKey)
-      setSortNestedCollection(sortNestedCollection)
-      setSortLocalFieldKey(sortLocalFieldKey)
-    }else{
-      setSortNestedKey('')
-      setSortNestedCollection('')
-      setSortLocalFieldKey('')
+    const order = isAsc ? 1 : -1;
+    if (sortNestedKey && sortNestedCollection && sortLocalFieldKey) {
+      setSortNestedKey(sortNestedKey);
+      setSortNestedCollection(sortNestedCollection);
+      setSortLocalFieldKey(sortLocalFieldKey);
+    } else {
+      setSortNestedKey('');
+      setSortNestedCollection('');
+      setSortLocalFieldKey('');
     }
     setSortField(sortField);
-    setSortOrder(order)
-  }
+    setSortOrder(order);
+  };
 
-  if (!data) return <div className={classes.loaderContainer} style={{padding: "30px", height: "300px"}}>
-                      <Loader/>
-                    </div>;
+  if (!data)
+    return (
+      <div className={classes.loaderContainer} style={{ padding: '30px', height: '300px' }}>
+        <Loader />
+      </div>
+    );
 
   return (
     <div className={classes.root}>
       <div className={classes.searchContainer}>
-        <FormControl variant="outlined" style={{width: `${selectWidth}em`}} size="small">
+        <FormControl variant="outlined" style={{ width: `${selectWidth}em` }} size="small">
           <InputLabel htmlFor="field-filter">Field</InputLabel>
           <Select
             native
@@ -204,10 +201,14 @@ const ServerTable = ({ classes, tableVariables, getCellContent, handleRowDetailP
             inputProps={{
               id: 'field-filter',
             }}
-            >
-            {headers.filter(header => header.isFilter).map((header, index) =>
-              <option value={header.value} key={`header-${index}`}>{header.label}</option>
-            )}
+          >
+            {headers
+              .filter((header) => header.isFilter)
+              .map((header, index) => (
+                <option value={header.value} key={`header-${index}`}>
+                  {header.label}
+                </option>
+              ))}
           </Select>
         </FormControl>
         <TextField
@@ -215,55 +216,52 @@ const ServerTable = ({ classes, tableVariables, getCellContent, handleRowDetailP
           id="search-field"
           fullWidth
           InputProps={{
-            startAdornment: <InputAdornment position="start">
-            <SearchIcon style={{color: "rgba(0, 0, 0, 0.54)"}}/>
-          </InputAdornment>,
-        }}
-        style={{margin: "0 1em"}}
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon style={{ color: 'rgba(0, 0, 0, 0.54)' }} />
+              </InputAdornment>
+            ),
+          }}
+          style={{ margin: '0 1em' }}
         />
-      <Button
-        onClick={handleSearch}
-        variant="contained"
-        color="primary"
-        style={{padding: "6px 35px"}}
-        >
-        Search
-      </Button>
-    </div>
-    {loading?
-      <div style={{position: "relative"}}>
-        <div className={classes.loaderContainer}>
-          <Loader/>
+        <Button onClick={handleSearch} variant="contained" color="primary" style={{ padding: '6px 35px' }}>
+          Search
+        </Button>
+      </div>
+      {loading ? (
+        <div style={{ position: 'relative' }}>
+          <div className={classes.loaderContainer}>
+            <Loader />
+          </div>
+          <AllocationsTable
+            data={Array(pagination).fill('')}
+            headers={['']}
+            serverPagination
+            rowsQuantity={pagination}
+            currentPage={currentPage}
+          />
         </div>
+      ) : (
         <AllocationsTable
-          data={Array(pagination).fill('')}
-          headers={['']}
-          serverPagination={true}
+          data={_.get(data, dataVariable)}
+          headers={headers}
+          serverPagination
           rowsQuantity={pagination}
           currentPage={currentPage}
-          />
-      </div>
-      :
-      <AllocationsTable
-        data={_.get(data, dataVariable)}
-        headers={headers}
-        serverPagination={true}
-        rowsQuantity={pagination}
-        currentPage={currentPage}
-        includeCheckbox={true}
-        rowSelector="_id"
-        rowDetailPage={true}
-        handleRowDetailPage={handleRowDetailPage}
-        getCellContent={getCellContent}
-        onChangePage={onChangePage}
-        onChangeRowsPerPage={onChangeRowsPerPage}
-        getSortProps={onChangeSort}
-        sortField={getCurrentSort()}
-        sortOrder={sortOrder === 1? "asc" : "desc"}
+          includeCheckbox
+          rowSelector="_id"
+          rowDetailPage
+          handleRowDetailPage={handleRowDetailPage}
+          getCellContent={getCellContent}
+          onChangePage={onChangePage}
+          onChangeRowsPerPage={onChangeRowsPerPage}
+          getSortProps={onChangeSort}
+          sortField={getCurrentSort()}
+          sortOrder={sortOrder === 1 ? 'asc' : 'desc'}
         />
-    }
-  </div>
+      )}
+    </div>
   );
-}
+};
 
 export default withStyles(styles)(ServerTable);
