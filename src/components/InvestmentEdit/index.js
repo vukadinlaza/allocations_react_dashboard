@@ -5,7 +5,16 @@ import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { gql } from 'apollo-boost';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { Button, TextField, Divider, Grid, FormControl, Select, MenuItem, InputLabel } from '@material-ui/core';
+import {
+  Button,
+  TextField,
+  Divider,
+  Grid,
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Loader from '../utils/Loader';
 import { destroy } from '../../api/investments';
@@ -67,21 +76,31 @@ const UPDATE_INVESTMENT = gql`
     }
   }
 `;
-export default function InvestmentEdit({ investmentId = false, isK1 = false, setEditInvestmentModal }) {
+export default function InvestmentEdit({
+  investmentId = false,
+  isK1 = false,
+  setEditInvestmentModal,
+  refetch = false,
+}) {
   const params = useParams();
   const [investment, setInvestment] = useState(null);
   const [hasChanges, setHasChanges] = useState(false);
   const id = investmentId || params.id;
   const classes = useStyles();
-  const { data, refetch } = useQuery(GET_INVESTMENT, { variables: { _id: id } });
+  const { data, refetch: getInvestment } = useQuery(GET_INVESTMENT, { variables: { _id: id } });
   const [createInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT);
-  const [deleteInvestment, { }] = useMutation(destroy, {
+  const [deleteInvestment] = useMutation(destroy, {
     onCompleted: () => {
+      if (refetch) {
+        refetch();
+      }
       toast.success('Sucess! Investment Deleted.');
       setEditInvestmentModal(false);
     },
-    onError: (e) => {
-      toast.error('Looks like we encountered an error.');
+    onError: () => {
+      toast.error(
+        'Something went wrong deleting the investment. Try again or contact support@allocations.com',
+      );
     },
   });
 
@@ -116,7 +135,13 @@ export default function InvestmentEdit({ investmentId = false, isK1 = false, set
         <Grid container spacing={3} direction="row" justify="flex-end">
           <Grid item xs={12} sm={12} md={6}>
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
-              <TextField style={{ width: '100%' }} value={name || ''} disabled label="Investor" variant="outlined" />
+              <TextField
+                style={{ width: '100%' }}
+                value={name || ''}
+                disabled
+                label="Investor"
+                variant="outlined"
+              />
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={12} md={6}>
@@ -125,7 +150,10 @@ export default function InvestmentEdit({ investmentId = false, isK1 = false, set
                 style={{ width: '100%' }}
                 type="number"
                 value={get(investment, 'amount', '') || 0}
-                onChange={(e) => updateInvestmentProp({ prop: 'amount', newVal: parseInt(e.target.value) })}
+                onChange={(e) =>
+                  // eslint-disable-next-line radix
+                  updateInvestmentProp({ prop: 'amount', newVal: parseInt(e.target.value) })
+                }
                 label="Amount"
                 variant="outlined"
               />
@@ -135,7 +163,11 @@ export default function InvestmentEdit({ investmentId = false, isK1 = false, set
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
               <TextField
                 style={{ width: '100%' }}
-                value={`${get(investment, 'deal.company_name', '')} ${get(investment, 'deal.company_description', '')}`}
+                value={`${get(investment, 'deal.company_name', '')} ${get(
+                  investment,
+                  'deal.company_description',
+                  '',
+                )}`}
                 label="Deal"
                 variant="outlined"
               />
@@ -194,29 +226,34 @@ export default function InvestmentEdit({ investmentId = false, isK1 = false, set
         <Divider className={classes.divider} />
         <Grid item xs={12} sm={12} md={6}>
           <div className="form-sub-title">Documents</div>
-          <Docs investment={investment} setInvestment={setInvestment} refetch={refetch} isK1={isK1} />
+          <Docs investment={investment} getInvestment={getInvestment} isK1={isK1} />
         </Grid>
       </form>
     </div>
   );
 }
 
-function Docs({ investment, setInvestment, refetch, isK1 }) {
+function Docs({ investment, getInvestment, isK1 }) {
   const [uploadedDoc, setUploadedDoc] = useState(null);
-  const [addInvestmentDoc, { loading }] = useMutation(ADD_INVESTMENT_DOC);
+  const [addInvestmentDoc, { loading }] = useMutation(ADD_INVESTMENT_DOC, {
+    onCompleted: () => {
+      getInvestment();
+      toast.success('Sucess!, Document Added');
+    },
+    onError: () => {
+      toast.error(
+        'Something went wrong adding the document. Try again or contact support@allocations.com',
+      );
+    },
+  });
   const id = get(investment, '_id', '');
   useEffect(() => {
     if (uploadedDoc) {
       addInvestmentDoc({
         variables: { doc: uploadedDoc, investment_id: id, isK1 },
-        onCompleted: () => {
-          console.log('Doc is uploaed');
-          refetch();
-          toast.success('Sucess!');
-        },
       });
     }
-  }, [addInvestmentDoc, id, isK1, refetch, uploadedDoc]);
+  }, [addInvestmentDoc, id, isK1, getInvestment, uploadedDoc]);
   const docs = get(investment, 'documents', []);
 
   if (loading || !investment) return <Loader />;
@@ -225,9 +262,10 @@ function Docs({ investment, setInvestment, refetch, isK1 }) {
     <div className="docs">
       <div className="doc-wrapper">
         <div className="add-doc">
-          <label>
+          <label htmlFor="fileUpload">
             <FontAwesomeIcon icon="plus" />
             <input
+              id="fileUpload"
               type="file"
               style={{ display: 'none' }}
               onChange={({ target }) => {
@@ -239,22 +277,27 @@ function Docs({ investment, setInvestment, refetch, isK1 }) {
         <div className="filename">&nbsp;</div>
       </div>
       {docs.map((doc) => (
-        <Doc key={doc.path} doc={doc} investment={investment} refetch={refetch} />
+        <Doc key={doc.path} doc={doc} investment={investment} getInvestment={getInvestment} />
       ))}
     </div>
   );
 }
 
-function Doc({ doc, investment, refetch }) {
-  const file = doc.path.slice(0, 12) === 'investments/' ? doc.path.split('/')[2] : doc.path.split('/')[1];
+function Doc({ doc, investment, getInvestment }) {
+  const file =
+    doc.path.slice(0, 12) === 'investments/' ? doc.path.split('/')[2] : doc.path.split('/')[1];
+  const fileName = doc.fileName ? doc.fileName : file;
+
   const [rmInvestmentDoc] = useMutation(RM_INVESTMENT_DOC, {
     variables: { file, investment_id: investment._id },
     onCompleted: () => {
-      refetch();
-      toast.success('File has been deleted');
+      getInvestment();
+      toast.success('Success! Document Deleted');
     },
     onError: () => {
-      toast.error('Looks like we encountered an error.');
+      toast.error(
+        'Something went wrong deleting the document. Try again or contact support@allocations.com',
+      );
     },
   });
   const rmDoc = () => {
@@ -270,7 +313,7 @@ function Doc({ doc, investment, refetch }) {
       <div className="filename">
         <span>
           <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">
-            {file}
+            {fileName}
           </a>
         </span>
       </div>
