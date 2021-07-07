@@ -1154,13 +1154,15 @@ export default () => {
 const TR = ({ investment, setShowDocs, showDocs, demo, setShowCaptialAccounts, capitalAccounts }) => {
   const history = useHistory();
   const capFields = (capitalAccounts || []).map((r) => r.fields);
-
+  const orgSlug = investment?.deal?.organization?.slug;
+  const dealSlug = investment?.deal?.slug;
+  const nextStepUrl = ['signed', 'wired', 'complete'].includes(investment?.status)? `/next-steps/${orgSlug}/${dealSlug}` : `/deals/${orgSlug}/${dealSlug}`
   const capitalAccountInfo = capFields.find((r) => {
     return _.get(r, 'Deal Name (webapp)[0]') === investment.deal.company_name;
   });
-
   const addedDate = moment(investment?.deal?.dealParams?.wireDeadline).format('Do MMM YYYY');
   const showDocsFn = () => setShowDocs(showDocs ? false : investment);
+  
   return (
     <TableRow key={investment._id} className="investment-row">
       <TableCell align="left" onClick={showDocsFn}>
@@ -1194,7 +1196,7 @@ const TR = ({ investment, setShowDocs, showDocs, demo, setShowCaptialAccounts, c
           variant="contained"
           size="small"
           color="primary"
-          onClick={() => history.push(_.get(investment, 'deal.appLink', ''))}
+          onClick={() => history.push(nextStepUrl)}
         >
           View
         </Button>
