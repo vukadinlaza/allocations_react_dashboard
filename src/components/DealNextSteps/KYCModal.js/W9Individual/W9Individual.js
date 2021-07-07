@@ -58,7 +58,6 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
   }, [placeId]);
 
   useEffect(() => {
-
     // set auto-complete address info (all or nothing)
     const addressInfo = (e) => {
       try {
