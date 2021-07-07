@@ -111,6 +111,7 @@ const GET_INVESTOR = gql`
         documents {
           path
           link
+          fileName
         }
         deal {
           _id
@@ -170,13 +171,13 @@ const CREATE_ORDER = gql`
     }
   }
 `;
-const POST_ZAP = gql`
-  mutation PostZap($body: Object) {
-    postZap(data: $body) {
-      _id
-    }
-  }
-`;
+// const POST_ZAP = gql`
+//   mutation PostZap($body: Object) {
+//     postZap(data: $body) {
+//       _id
+//     }
+//   }
+// `;
 const BASE = 'appLhEikZfHgNQtrL';
 const TABLE = 'Ledger';
 export default () => {
@@ -186,12 +187,11 @@ export default () => {
   const [showResignModal, setShowResignModal] = useState(false);
   const [sortByProp, setSortByProp] = useState({ prop: 'deal.company_name', direction: 'asc' });
   const [editInvestmentModal, setEditInvestmentModal] = useState({});
-  const [investmentUpdated, setInvestmentUpdated] = useState();
   const { userProfile, refetch } = useAuth(GET_INVESTOR);
   const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile?.email || '');
   const [demo, setDemo] = useState(false);
   const [showCapitalAccounts, setShowCaptialAccounts] = useState(false);
-  const [postZap, {}] = useMutation(POST_ZAP);
+  // const [postZap, {}] = useMutation(POST_ZAP);
   const investmentsRef = React.useRef(null);
 
   const [confirmation, setConfirmation] = useState(false);
@@ -295,7 +295,7 @@ export default () => {
       setTradeData({ amount: 0 });
       setTradeData({ percent: 0.0 });
     }
-    if (isNaN(parseInt(value))) return null;
+    if (Number.isNaN(parseInt(value))) return null;
 
     switch (name) {
       case 'amount':
@@ -335,7 +335,10 @@ export default () => {
                   Portfolio Value
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  $ {investmentsValue === 0 ? `${nWithCommas(investmentsValue)}.00` : nWithCommas(investmentsValue)}
+                  $
+                  {investmentsValue === 0
+                    ? `${nWithCommas(investmentsValue)}.00`
+                    : nWithCommas(investmentsValue)}
                 </h2>
                 <p
                   style={{
@@ -371,7 +374,10 @@ export default () => {
                   Total Invested
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  $ {investmentTotal === 0 ? `${nWithCommas(investmentTotal)}.00` : nWithCommas(investmentTotal)}
+                  ${' '}
+                  {investmentTotal === 0
+                    ? `${nWithCommas(investmentTotal)}.00`
+                    : nWithCommas(investmentTotal)}
                 </h2>
                 <p
                   style={{
@@ -407,7 +413,7 @@ export default () => {
                   Multiple
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  {!isNaN(multipleSum) ? multipleSum : '0.00'}x
+                  {!Number.isNaN(multipleSum) ? multipleSum : '0.00'}x
                 </h2>
                 <p
                   style={{
@@ -449,7 +455,10 @@ export default () => {
                     chartType="PieChart"
                     width="100%"
                     height="300px"
-                    data={[['Investment', 'Amount'], ...investments.map((inv) => [inv.deal.company_name, inv.amount])]}
+                    data={[
+                      ['Investment', 'Amount'],
+                      ...investments.map((inv) => [inv.deal.company_name, inv.amount]),
+                    ]}
                     options={chartOptionsA}
                   />
                 ) : null}
@@ -492,11 +501,15 @@ export default () => {
                       <div>Name</div>
                       {sortByProp.direction !== 'asc' ? (
                         <ArrowDropUpIcon
-                          onClick={() => setSortByProp({ prop: 'deal.company_name', direction: 'asc' })}
+                          onClick={() =>
+                            setSortByProp({ prop: 'deal.company_name', direction: 'asc' })
+                          }
                         />
                       ) : (
                         <ArrowDropDownIcon
-                          onClick={() => setSortByProp({ prop: 'deal.company_name', direction: 'desc' })}
+                          onClick={() =>
+                            setSortByProp({ prop: 'deal.company_name', direction: 'desc' })
+                          }
                         />
                       )}
                     </div>
@@ -512,11 +525,21 @@ export default () => {
                         <div>Investment Date</div>
                         {sortByProp.direction !== 'asc' ? (
                           <ArrowDropUpIcon
-                            onClick={() => setSortByProp({ prop: 'deal.dealParams.wireDeadline', direction: 'asc' })}
+                            onClick={() =>
+                              setSortByProp({
+                                prop: 'deal.dealParams.wireDeadline',
+                                direction: 'asc',
+                              })
+                            }
                           />
                         ) : (
                           <ArrowDropDownIcon
-                            onClick={() => setSortByProp({ prop: 'deal.dealParams.wireDeadline', direction: 'desc' })}
+                            onClick={() =>
+                              setSortByProp({
+                                prop: 'deal.dealParams.wireDeadline',
+                                direction: 'desc',
+                              })
+                            }
                           />
                         )}
                       </div>
@@ -682,8 +705,8 @@ export default () => {
                           style={{ textAlign: 'center', marginBottom: '2rem' }}
                           variant="paragraph"
                         >
-                          An Allocations team member will reach out to you shortly about your order request. Please give
-                          up to 30 days for a response. Thank you.
+                          An Allocations team member will reach out to you shortly about your order
+                          request. Please give up to 30 days for a response. Thank you.
                         </Typography>
                       </Grid>
                     </Grid>
@@ -712,7 +735,11 @@ export default () => {
                       <Loader />
                     </Grid>
                     <Grid item xs={12} sm={12} md={12} lg={12}>
-                      <Typography className={classes.grey} style={{ textAlign: 'center' }} variant="h5">
+                      <Typography
+                        className={classes.grey}
+                        style={{ textAlign: 'center' }}
+                        variant="h5"
+                      >
                         Creating your trade request
                       </Typography>
                     </Grid>
@@ -1060,9 +1087,14 @@ export default () => {
               <Typography variant="h6" className={classes.grey}>
                 $ {tradeData?.amount} for {tradeData?.deal?.company_name}
               </Typography>
-              <Typography variant="subtitle2" className={classes.grey} style={{ marginTop: '1rem' }}>
-                After you confirm your order an Allocations team member will reachout with more information. Orders are
-                open for 30 days before expiring and you can contact us to cancel your open order at anytime.
+              <Typography
+                variant="subtitle2"
+                className={classes.grey}
+                style={{ marginTop: '1rem' }}
+              >
+                After you confirm your order an Allocations team member will reachout with more
+                information. Orders are open for 30 days before expiring and you can contact us to
+                cancel your open order at anytime.
               </Typography>
               {/* FOOTER */}
               <Grid>
@@ -1138,8 +1170,7 @@ export default () => {
       <EditInvestmentModal
         editInvestmentModal={editInvestmentModal}
         setEditInvestmentModal={setEditInvestmentModal}
-        investmentUpdated={investmentUpdated}
-        setInvestmentUpdated={setInvestmentUpdated}
+        refetch={refetch}
       />
       <ResignModal
         setShowDocs={setShowDocs}
@@ -1151,18 +1182,27 @@ export default () => {
   );
 };
 
-const TR = ({ investment, setShowDocs, showDocs, demo, setShowCaptialAccounts, capitalAccounts }) => {
+const TR = ({
+  investment,
+  setShowDocs,
+  showDocs,
+  demo,
+  setShowCaptialAccounts,
+  capitalAccounts,
+}) => {
   const history = useHistory();
   const capFields = (capitalAccounts || []).map((r) => r.fields);
   const orgSlug = investment?.deal?.organization?.slug;
   const dealSlug = investment?.deal?.slug;
-  const nextStepUrl = ['signed', 'wired', 'complete'].includes(investment?.status)? `/next-steps/${orgSlug}/${dealSlug}` : `/deals/${orgSlug}/${dealSlug}`
+  const nextStepUrl = ['signed', 'wired', 'complete'].includes(investment?.status)
+    ? `/next-steps/${orgSlug}/${dealSlug}`
+    : `/deals/${orgSlug}/${dealSlug}`;
   const capitalAccountInfo = capFields.find((r) => {
     return _.get(r, 'Deal Name (webapp)[0]') === investment.deal.company_name;
   });
   const addedDate = moment(investment?.deal?.dealParams?.wireDeadline).format('Do MMM YYYY');
   const showDocsFn = () => setShowDocs(showDocs ? false : investment);
-  
+
   return (
     <TableRow key={investment._id} className="investment-row">
       <TableCell align="left" onClick={showDocsFn}>
@@ -1203,7 +1243,13 @@ const TR = ({ investment, setShowDocs, showDocs, demo, setShowCaptialAccounts, c
       </TableCell>
       <Hidden only="xs">
         <TableCell align="center">
-          <Button variant="contained" size="small" color="primary" onClick={showDocsFn} disabled={!!demo}>
+          <Button
+            variant="contained"
+            size="small"
+            color="primary"
+            onClick={showDocsFn}
+            disabled={!!demo}
+          >
             View
           </Button>
         </TableCell>
@@ -1240,7 +1286,9 @@ function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin, setS
             Documents may take up to 7 days to appear here after signing.
           </Typography>
           <Grid container spacing={1}>
-            {demo ? [] : docs.map((doc) => <Document key={doc?.path} doc={doc} investment={investment} />)}
+            {demo
+              ? []
+              : docs.map((doc) => <Document key={doc?.path} doc={doc} investment={investment} />)}
             {investment?.submissionData?.submissionId && !isClosed && (
               <Grid
                 item
@@ -1296,7 +1344,7 @@ function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin, setS
   );
 }
 
-const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal }) => {
+const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal, refetch }) => {
   const classes = useStyles();
   return (
     <>
@@ -1311,7 +1359,12 @@ const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal }) =>
                   </Box>
                 </Grid>
                 <Grid container justify="space-between" />
-                <InvestmentEdit investmentId={editInvestmentModal._id} isK1 />
+                <InvestmentEdit
+                  investmentId={editInvestmentModal._id}
+                  isK1
+                  setEditInvestmentModal={setEditInvestmentModal}
+                  refetch={refetch}
+                />
               </Paper>
             </Grid>
           </Grid>

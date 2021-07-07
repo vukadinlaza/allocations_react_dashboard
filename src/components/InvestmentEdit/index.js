@@ -18,6 +18,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import Loader from '../utils/Loader';
 import { destroy } from '../../api/investments';
+
 /** *
  *
  * investment edit and add docs for an investment
@@ -42,6 +43,7 @@ const GET_INVESTMENT = gql`
       documents {
         link
         path
+        fileName
       }
       deal {
         _id
