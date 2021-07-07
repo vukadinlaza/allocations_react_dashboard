@@ -66,7 +66,7 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
             'searchreplace visualblocks code fullscreen',
             'insertdatetime media table paste code help wordcount',
           ],
-          toolbar: 'undo redo | formatselect | bold italic backcolor image | ' +
+          toolbar: 'undo redo | formatselect | bold italic backcolor image media | ' +
                     'alignleft aligncenter alignright alignjustify | ' +
                     'bullist numlist outdent indent | removeformat | help',
           file_picker_types: 'image',
