@@ -59,7 +59,7 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
 
   useEffect(() => {
     // set auto-complete address info (all or nothing)
-    const addressInfo = (e) => {
+    const addressInfo = () => {
       try {
         const streetNumber = (addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === 'street_number')[0].long_name);
         const route= (addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === 'route')[0].long_name);
@@ -71,7 +71,6 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
           zip: addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === "postal_code")[0].long_name
         });
       } catch {
-        console.log('ERROR==> missing city', e);
         setFormData({
           ...formData,
           address_number_street_and_apt_or_suite_no_see_instructions: '',
