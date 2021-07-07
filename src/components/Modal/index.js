@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Modal, Grid, Paper } from '@material-ui/core';
 import CancelPresentationIcon from '@material-ui/icons/CancelPresentation';
 import { makeStyles } from '@material-ui/core/styles';

@@ -2,7 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { get } from 'lodash';
 import CloseIcon from '@material-ui/icons/Close';
-import { Paper, Grid, Modal, TextField, FormControl, InputLabel, Select, MenuItem, Button } from '@material-ui/core';
+import {
+  Paper,
+  Grid,
+  Modal,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+  Container,
+} from '@material-ui/core';
 import CurrencyTextField from '@unicef/material-ui-currency-textfield';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import countries from 'country-region-data';
@@ -22,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   modalPaper: {
-    marginTop: '8vh',
+    marginTop: '12vh',
     borderRadius: '1rem',
     padding: theme.spacing(2),
     maxHeight: '70%',
@@ -98,7 +109,7 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
   });
   const [amount, setAmount] = useState('');
 
-  const [submitConfirmation, { }] = useMutation(CONFIRM_INVESTMENT, {
+  const [submitConfirmation, {}] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       setTimeout(() => {
         refetch();
@@ -126,7 +137,7 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
         ...data?.investment?.submissionData,
         country_search: data?.investment?.submissionData.country,
         state_search: data?.investment?.submissionData.state,
-        title: data?.investment?.submissionData.title || ''
+        title: data?.investment?.submissionData.title || '',
       });
       setAmount(data?.investment?.amount);
     }
@@ -181,13 +192,13 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
   return (
     <>
       <Modal
-        open={showResignModal}
-        onClose={() => { }}
+        open={Boolean(showResignModal)}
+        onClose={() => {}}
         className={classes.modal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <Grid container xs={12} sm={12} md={4} lg={5}>
+        <Container maxWidth="sm">
           <Paper className={classes.modalPaper}>
             <>
               <Grid
@@ -310,7 +321,7 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
               </Grid>
             </>
           </Paper>
-        </Grid>
+        </Container>
       </Modal>
     </>
   );

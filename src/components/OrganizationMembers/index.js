@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import _ from 'lodash';
-import { useMutation, useQuery, useLazyQuery } from '@apollo/react-hooks';
+import { useMutation, useLazyQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Paper, Table, TableBody, TableCell, TextField, TableRow, Button, InputAdornment } from '@material-ui/core';
+import { Paper, Table, TableBody, TableCell, TextField, TableRow, Button } from '@material-ui/core';
 import { Col, Row } from 'reactstrap';
-import { nWithCommas, formatDate } from '../../utils/numbers';
 import * as API from '../../api';
 import Loader from '../utils/Loader';
 import './style.scss';
@@ -16,33 +14,6 @@ import './style.scss';
  * shows the admin members of a fund, superadmins can add/rm members from any fund
  *
  * */
-
-const GET_MEMBERS = gql`
-  query GetMembers($slug: String!) {
-    organizationMembers(slug: $slug) {
-      _id
-      name
-      email
-      investor_type
-      first_name
-      last_name
-    }
-    organization(slug: $slug) {
-      _id
-      name
-      adminInvites {
-        to
-        status
-        sent_at
-      }
-      complianceTasks {
-        _id
-        completed
-        task
-      }
-    }
-  }
-`;
 
 const SEND_ADMIN_INVITE = gql`
   mutation SendAdminInvite($slug: String!, $user_id: String!) {
@@ -68,7 +39,7 @@ const ADD_MEMBERSHIP = gql`
   }
 `;
 
-export default function OrganizationMembers({ data, error, refetch }) {
+export default function OrganizationMembers({ data, refetch }) {
   const { organization } = useParams();
   const [revokeMembership] = useMutation(REVOKE_MEMBERSHIP, {
     variables: { slug: organization },

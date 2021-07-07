@@ -233,7 +233,6 @@ export default function Marketplace() {
             close_date,
             coinvestors,
             deal_lead,
-            deal_name,
             deal_tagline,
             est_personal_investment,
             highlight_1,
@@ -347,7 +346,7 @@ export default function Marketplace() {
                     lg={1}
                     style={{ justifyContent: 'center', alignContent: 'around', padding: '0px' }}
                   >
-                    <a href={to} target="_blank" rel="noreferrer">
+                    <a href={to} target="_blank" rel="noopener noreferrer">
                       <Button
                         variant="contained"
                         color="secondary"
@@ -471,7 +470,7 @@ export default function Marketplace() {
                     lg={1}
                     style={{ justifyContent: 'center', alignContent: 'around', padding: '0.5rem' }}
                   >
-                    <a href={to} target="_blank" rel="noreferrer">
+                    <a href={to} target="_blank" rel="noopener noreferrer">
                       <Button variant="contained" color="primary" size="small" onClick="">
                         PLEDGE
                       </Button>

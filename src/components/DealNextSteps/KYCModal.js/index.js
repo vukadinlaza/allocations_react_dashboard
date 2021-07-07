@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Modal } from '@material-ui/core';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
@@ -33,8 +33,8 @@ const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, refetch, deal
       setOpen(false);
       setShowTaxAsCompleted(true);
       setTimeout(() => {
-        refetch()
-      }, 3000)
+        refetch();
+      }, 3000);
     },
     onError: () => {
       toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com');

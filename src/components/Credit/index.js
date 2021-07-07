@@ -76,13 +76,6 @@ const GET_INVESTOR = gql`
     }
   }
 `;
-const POST_ZAP = gql`
-  mutation PostZap($body: Object) {
-    postZap(data: $body) {
-      _id
-    }
-  }
-`;
 const UPDATE_USER = gql`
   mutation UpdateUser($investor: UserInput!) {
     updateUser(input: $investor) {
@@ -90,11 +83,11 @@ const UPDATE_USER = gql`
     }
   }
 `;
-export default ({}) => {
+export default () => {
   const classes = useStyles();
   const { userProfile, loading } = useAuth(GET_INVESTOR);
   const [updateInvestor] = useMutation(UPDATE_USER);
-  const [postZap, {}] = useMutation(POST_ZAP);
+
 
   useEffect(() => {
     if (!loading && userProfile._id) {

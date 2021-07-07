@@ -17,8 +17,6 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 
 import countries from 'country-region-data';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MailingAddress from './kyc/mailing-address-form';
 import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';

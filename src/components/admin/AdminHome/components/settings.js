@@ -3,7 +3,7 @@ import { Paper, Grid, Typography, Button, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
-import { toLower, get, pick } from 'lodash';
+import { get, pick } from 'lodash';
 import { gql } from 'apollo-boost';
 import POSModal from './pos-modal';
 
@@ -80,8 +80,7 @@ function Settings({ investor, orgData, refetch }) {
     e.persist();
     return setOrganization((prev) => ({ ...prev, [prop]: e.target.value }));
   };
-  const docs = investor.documents ? investor.documents : [];
-  const hasDoc = docs.find((d) => toLower(d.documentName).includes(toLower('Provision')));
+
   return (
     <>
       <Paper className={classes.paper} style={{ marginBottom: 16 }}>

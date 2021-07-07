@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { gql } from 'apollo-boost';
-import { useLazyQuery, useQuery, useMutation } from '@apollo/react-hooks';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { Typography, Paper, Grid, Button, Table, TableBody, TableHead, TableCell, TableRow } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { capitalize } from 'lodash';
-import { toast } from 'react-toastify';
 import SettingsIcon from '@material-ui/icons/Settings';
 import InvestorEditForm from '../forms/InvestorEdit';
 import { useAuth } from '../../auth/useAuth';
@@ -116,7 +114,7 @@ export default function Profile() {
     variables: { accountId: userProfile?.account?._id },
   });
 
-  const [removeUser, { data: removeRes, called }] = useMutation(REMOVE_ACCT_USER);
+  const [removeUser, { data: removeRes }] = useMutation(REMOVE_ACCT_USER);
   const classes = useStyles();
 
   useEffect(() => {
@@ -287,10 +285,7 @@ const AccountEntities = ({
     }
     return investor.signer_full_name;
   };
-  const handleDelete = () => {
-    refetchAccountUsers();
-    toast.success('Success! Entity removed');
-  };
+
   if (!accountEntities?.getEntities) return null;
   return (
     <Paper className="account-paper">
@@ -314,7 +309,7 @@ const AccountEntities = ({
         </TableHead>
         <TableBody>
           {accountEntities?.getEntities.map((row) => (
-            <TableRow key={row.name}>
+            <TableRow key={row?._id}>
               <TableCell component="th" scope="row">
                 {capitalize(row.investor_type)}
               </TableCell>
@@ -323,8 +318,8 @@ const AccountEntities = ({
               <TableCell align="center">{row.country}</TableCell>
               <TableCell align="center">
                 <SettingsIcon
-                  color={row.isPrimaryEntity ? 'grey' : 'primary'}
-                  style={{ cursor: 'pointer' }}
+                  color={row?.isPrimaryEntity ? 'disabled' : 'primary'}
+                  style={{ cursor: row?.isPrimaryEntity ? 'not-allowed' : 'pointer' }}
                   onClick={() => {
                     if (row.isPrimaryEntity) {
                       return;

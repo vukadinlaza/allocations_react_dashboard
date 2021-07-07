@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { get } from 'lodash';
-import { useHistory } from 'react-router-dom';
 import {
   TextField,
   Table,
@@ -45,9 +44,8 @@ function validate({ investment, user, deal }) {
 }
 
 export default function InvestmentNew() {
-  const history = useHistory();
   const [investment, setInvestment] = useState({ amount: '' });
-  const [createInvestment, { data }] = useMutation(CREATE_INVESTMENT);
+  const [createInvestment] = useMutation(CREATE_INVESTMENT);
   const [errors, setErrors] = useState([]);
   const [newUser, setNewUser] = useState(false);
   const [user, setUser] = useState(null);

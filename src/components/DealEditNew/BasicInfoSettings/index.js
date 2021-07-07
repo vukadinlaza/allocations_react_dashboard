@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import './styles.scss';
 import { FormControl, TextField, Button } from '@material-ui/core';
@@ -50,7 +50,6 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
 
   const minimumInvesmentPlaceholder = dealParams.minimumInvestment !== null && dealParams.minimumInvestment ? nWithCommas(dealParams.minimumInvestment) : '1,000';
 
-
   return (
     <section className="BasicInfoSettings">
       <h2 className="key-highlights">Key highlights</h2>
@@ -67,10 +66,9 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
             'searchreplace visualblocks code fullscreen',
             'insertdatetime media table paste code help wordcount',
           ],
-          toolbar:
-            'undo redo | formatselect | bold italic backcolor image | \
-                    alignleft aligncenter alignright alignjustify | \
-                    bullist numlist outdent indent | removeformat | help',
+          toolbar: 'undo redo | formatselect | bold italic backcolor image | ' +
+                    'alignleft aligncenter alignright alignjustify | ' +
+                    'bullist numlist outdent indent | removeformat | help',
           file_picker_types: 'image',
           file_picker_callback: function(cb, value, meta) {
             const input = document.createElement('input');

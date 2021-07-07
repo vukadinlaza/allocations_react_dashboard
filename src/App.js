@@ -1,14 +1,12 @@
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
 import AdminRoute from './auth/admin-route';
 import PrivateRoute from './components/PrivateRoute';
 import Faq from './components/Faq';
-import DealOneClick from './components/DealOneClick';
 import Deals from './components/Deals';
 import Credit from './components/Credit';
 import DealNew from './components/DealNew';
-import DealEdit from './components/DealEdit';
 import DealEditNew from './components/DealEditNew';
 import InvestorEdit from './components/InvestorEdit';
 import InvestorNew from './components/InvestorNew';
