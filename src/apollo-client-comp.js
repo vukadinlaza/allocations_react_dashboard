@@ -7,19 +7,15 @@ import { onError } from 'apollo-link-error';
 import { RetryLink } from 'apollo-link-retry';
 import { createUploadLink } from 'apollo-upload-client';
 import { withClientState } from 'apollo-link-state';
-
 import { useAuth0 } from '@auth0/auth0-react';
 import React, { useState, useEffect } from 'react';
 import { setContext } from 'apollo-link-context';
 import { WebSocketLink } from 'apollo-link-ws';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 // import { WebSocketLink } from '@apollo/client/link/ws';
-
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000/graphql';
-
 // IF you want to enable/disable dev tools in different enviroments
 const devTools = localStorage.getItem('apolloDevTools') || false;
-
 const uploadLink = createUploadLink({
   uri: API_URL,
   headers: { 'keep-alive': 'true' },
@@ -33,33 +29,46 @@ cache.readQuery = (...args) => {
     return undefined;
   }
 };
-
 const AuthorizedApolloProvider = ({ children }) => {
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
-  
+  const [wsLink, setWSLink] = useState(null);
   /**
    * Adding fix to improve logRocket recording
    * https://docs.logrocket.com/docs/troubleshooting-sessions#apollo-client
+   * 
    */
-  const token = getAccessTokenSilently();
-  useEffect(() => {
 
-  }, [token])
-  // const getToken = async () => {
-  //   const token = await getAccessTokenSilently();
-  //   return token;
-  // }
+  useEffect(() => {
+    getAccessTokenSilently().then(token => {
+      const subscriptionOptions = {
+        reconnect: true,
+        connectionParams: {
+          authToken: token,
+        },
+      };
+      const subscriptionClient = new SubscriptionClient('ws://localhost:4000/graphql', subscriptionOptions);
+      const newWSLink = new WebSocketLink(subscriptionClient);
+      console.log({token, newWSLink})
+      setWSLink(newWSLink)
+    });
+  }, [])
+
+
+  const getToken = async () => {
+    const token = await getAccessTokenSilently();
+    return token;
+  };
   // if(!token || typeof token !== "string") return <div>Loading...</div>;
   const request = async (operation) => {
     if (!window.location.pathname.includes('/public/')) {
-      // const token = await getToken();
+      const token = await getToken();
       operation.setContext({
         headers: {
           authorization: token ? `Bearer ${token}` : '',
         },
       });
     } else if (window.location.pathname.includes('/public/') && isAuthenticated) {
-      // const token = await getToken();
+      const token = await getToken();
       operation.setContext({
         headers: {
           authorization: token ? `Bearer ${token}` : '',
@@ -82,7 +91,6 @@ const AuthorizedApolloProvider = ({ children }) => {
             });
           })
           .catch(observer.error.bind(observer));
-
         return () => {
           if (handle) handle.unsubscribe();
         };
@@ -115,32 +123,27 @@ const AuthorizedApolloProvider = ({ children }) => {
     cache,
   });
 
-  const wsLink = (async () => {
-    // const token = await getToken();
-    const subscriptionOptions = {
-      reconnect: true,
-      connectionParams: {
-        authToken: token? token : '',
-      },
-    };
-    console.log(JSON.stringify(subscriptionOptions.connectionParams.authToken))
-    const subscriptionClient = await new SubscriptionClient('ws://localhost:4000/graphql', subscriptionOptions);
-    const newWSLink = await new WebSocketLink(subscriptionClient);
-    return newWSLink;
-  })();
+  // const getWSLink = async () => {
+  //   const subscriptionOptions = {
+  //     reconnect: true,
+  //   };
+  //   const subscriptionClient = new SubscriptionClient('ws://localhost:4000/graphql', subscriptionOptions);
+  //   console.log({subscriptionClient})
+  //   const newWSLink = new WebSocketLink(subscriptionClient);
+  //   console.log({newWSLink})
+  //   return newWSLink;
+  // };
 
-  const linksArray = [onErrorLink, requestLink, withClientLink, uploadLink];
-
-  console.log({linksArray})
-
-
-  console.log({token})
-  linksArray[3] = wsLink;
-  const client = new ApolloClient({
-    link: ApolloLink.from(linksArray),
-    cache,
-  });
-  return <ApolloProvider client={client}>{children}</ApolloProvider>;
+  if(wsLink){
+    const linksArray = [onErrorLink, requestLink, withClientLink, wsLink, uploadLink];
+    // console.log({ linksArray });
+    const client = new ApolloClient({
+      link: ApolloLink.from(linksArray),
+      cache,
+    });
+    return <ApolloProvider client={client}>{children}</ApolloProvider>;
+  }else{
+    return <div>Loading...</div>
+  }
 };
-
 export default AuthorizedApolloProvider;
