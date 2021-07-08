@@ -156,21 +156,19 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
                 />
               </FormControl>
 
-              <div>
-                {loading ? <div>...loading</div> : null}
+              <FormControl className="form-field">
+                {loading ? <TextField>...loading</TextField> : null}
                 {suggestions.map((suggestion) => {
-                  console.log(suggestion);
+                  console.log('suggestion==>', suggestion);
                   const style = suggestion.active
-                    ? { backgroundColor: '#054a66', cursor: 'pointer' }
-                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                    ? { backgroundColor: '#4169E1', cursor: 'pointer', width: '50%', margin: '0 auto', borderRadius: '5px' }
+                    : { backgroundColor: '#FBFCFF', cursor: 'pointer', width: '50%', margin: '0 auto' };
 
                   return (
-                    <div key={suggestion.placeId} {...getSuggestionItemProps(suggestion, { style })}>
-                      {suggestion.description}
-                    </div>
+                    <TextField value={suggestion.description} key={suggestion.placeId} {...getSuggestionItemProps(suggestion, {style})} variant="outlined"/>
                   );
                 })}
-              </div>
+              </FormControl>
             </>
           )}
         </PlacesAutocomplete>
