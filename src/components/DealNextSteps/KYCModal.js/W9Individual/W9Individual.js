@@ -70,6 +70,7 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
           state: addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === 'administrative_area_level_1')[0].long_name,
           zip: addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === "postal_code")[0].long_name
         });
+        setAddress(`${streetNumber} ${route}`);
       } catch {
         setFormData({
           ...formData,
@@ -78,6 +79,7 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
           state: '',
           zip: '',
         });
+        setAddress('');
       }
     };
     addressInfo();
