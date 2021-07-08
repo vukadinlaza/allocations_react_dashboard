@@ -8,7 +8,7 @@ function DealDocumentsPanel({ deal }) {
 
   const documentItems = (documents || []).map((doc, i) => {
     return (
-      <a key={i} href={`https://${doc.link}`} target="_blank" rel="noreferrer">
+      <a key={i} href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">
         <Button>
           <InsertDriveFileIcon />
           {doc.path}

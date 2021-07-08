@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 import ReactCrop from 'react-image-crop';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
-import { useSimpleReducer } from '../../../utils/hooks';
 import CopyIcon from '../../../assets/copy-icon.svg';
 import 'react-image-crop/lib/ReactCrop.scss';
 
@@ -26,7 +25,7 @@ const ADD_LOGO = gql`
 `;
 
 function DealSettings({ formData, setFormData, refetch }) {
-  const [addDoc, { data, error }] = useMutation(ADD_DOC);
+  const [addDoc] = useMutation(ADD_DOC);
   const [doc, setDoc] = useState(null);
   const [wireInstructions, setWireInstructions] = useState(null);
 
@@ -75,7 +74,7 @@ function DealSettings({ formData, setFormData, refetch }) {
   };
 
   function AddDealLogo() {
-    const [addLogo, { data, error }] = useMutation(ADD_LOGO);
+    const [addLogo] = useMutation(ADD_LOGO);
 
     const [upImg, setUpImg] = useState(null);
     const imgRef = useRef(null);
@@ -319,7 +318,7 @@ function DealSettings({ formData, setFormData, refetch }) {
               InputProps={{
                 endAdornment: (
                   <Button onClick={handleLinkCopy} className="copy-button">
-                    <img src={CopyIcon} />
+                    <img src={CopyIcon} alt='Copy Icon' />
                   </Button>
                 ),
               }}

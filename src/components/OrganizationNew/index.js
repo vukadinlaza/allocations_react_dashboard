@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect  } from 'react';
 import { gql } from 'apollo-boost';
 import { useHistory } from 'react-router-dom';
-import { Col, Row } from 'reactstrap';
-import Cropper from 'react-easy-crop';
 import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/react-hooks';
 import { Button, TextField, Paper, Grid } from '@material-ui/core';
@@ -33,7 +31,7 @@ function valid(org) {
 export default function OrganizationNew() {
   const history = useHistory();
   const [organization, setOrg] = useSimpleReducer({ name: '', slug: '' });
-  const [createOrg, { data, error, loading }] = useMutation(CREATE_ORG);
+  const [createOrg, { data }] = useMutation(CREATE_ORG);
 
   useEffect(() => {
     if (data) history.push(`/admin/${organization.slug}`);
@@ -84,60 +82,6 @@ export default function OrganizationNew() {
       </div>
     </Paper>
   );
-}
-
-function LogoUploadAlt({ organization, setOrg }) {
-  const [zoom, setZoom] = useState(0);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-
-  const onCropComplete = (_croppedArea, _croppedAreaPixels) => {
-    setCroppedAreaPixels(_croppedAreaPixels);
-  };
-
-  if (organization.logoSrc) {
-    return (
-      <Col md={{ size: 8, offset: 1 }}>
-        <span className="file-label">Logo &nbsp;&nbsp;</span>
-        <div style={{ height: '360px', width: '100%', border: '1px dotted red', position: 'relative' }}>
-          <Cropper
-            image={organization.logoSrc}
-            crop={crop}
-            aspect={3}
-            onCropChange={setCrop}
-            onCropComplete={onCropComplete}
-            onZoomChange={setZoom}
-          />
-        </div>
-      </Col>
-    );
-  }
-
-  return (
-    <Col md={{ size: 4, offset: 1 }}>
-      <span className="file-label">Logo (3:1 width to height) &nbsp;&nbsp;</span>
-      <Button variant="contained" component="label">
-        Upload&nbsp;&nbsp;
-        <input
-          type="file"
-          style={{ display: 'none' }}
-          onChange={async ({ target }) => {
-            if (target.validity.valid) {
-              setOrg({ logo: target.files[0], logoSrc: await readFile(target.files[0]) });
-            }
-          }}
-        />
-      </Button>
-    </Col>
-  );
-}
-
-function readFile(file) {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => resolve(reader.result), false);
-    reader.readAsDataURL(file);
-  });
 }
 
 function LogoUpload({ organization, setOrg }) {

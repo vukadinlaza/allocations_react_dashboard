@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
-import { useParams, Link, Redirect } from 'react-router-dom';
+import React from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import { gql } from 'apollo-boost';
-import { useLazyQuery } from '@apollo/react-hooks';
 import { Row, Col } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 

@@ -3,7 +3,7 @@ import { Box, Checkbox, Typography, Button } from '@material-ui/core';
 import React from 'react';
 import './styles.scss';
 
-function TermsAndConditionsPanel({ deal: { documents, signDeadline, status}, checkedTAT, setCheckedTAT, confirmInvestment }) {
+function TermsAndConditionsPanel({ deal: { documents, signDeadline, status}, checkedTAT, setCheckedTAT, confirmInvestment, isEdit }) {
   const doc = (documents || []).find((d) => {
     return d.path.includes('Agreement');
   });
@@ -67,7 +67,7 @@ function TermsAndConditionsPanel({ deal: { documents, signDeadline, status}, che
         </Typography>
       ) : (
         <Button className="confirm-investment-button" disabled={!checkedTAT} onClick={confirmInvestment}>
-          Confirm investment
+          {isEdit? "Update Investment" : "Confirm Investment"}
         </Button>
       )}
     </section>

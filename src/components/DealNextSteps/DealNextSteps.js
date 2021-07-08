@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import './styles.scss';
 import Confetti from 'react-confetti';
 import { useQuery, useLazyQuery } from '@apollo/react-hooks';
@@ -30,6 +31,25 @@ const GET_INVESTOR = gql`
       email
       documents
       accredidation_status
+      investments {
+        _id
+        deal {
+          _id
+          slug
+        }
+        amount
+        submissionData {
+          country
+          state
+          investor_type
+          legalName
+          accredited_investor_status
+          fullName
+          title
+          investmentId
+          submissionId
+        }
+      }
     }
   }
 `;
@@ -93,6 +113,19 @@ function DealNextSteps() {
   }, []);
   if (loading || !data || !dealData) return null;
 
+
+  const handleInvestmentEdit = () => {
+    const userInvestments = data?.investor?.investments;
+    const currentInvestment = userInvestments.find(inv => inv.deal.slug === deal_slug);
+    const { amount } = currentInvestment;
+    const submission = currentInvestment.submissionData
+
+    history.push({
+      pathname: `/invest/${organization}/${deal_slug}`,
+      state: { submission, amount, investmentId: currentInvestment._id }
+    })
+  }
+
   const investorFormData = history?.location?.state?.investorFormData || {};
 
   const templateInfo =
@@ -118,13 +151,29 @@ function DealNextSteps() {
         <script async src={process.env.REACT_APP_VERIFY_INVESTOR_URL} />
       </Helmet>
       <section className="DealNextSteps">
-        <Button className="back-button" onClick={() => history.push(path, { isInvestPage: true })}>
-          <ArrowBackIcon />
-          Back to Invest Page
-        </Button>
 
-        <h1 className="header">Next Steps</h1>
-        <h3 className="sub-header">Please complete the following steps to finish your investment.</h3>
+        <div className="title-container">
+          <div className="header-container">
+            <h1 className="header">Next Steps</h1>
+            <h3 className="sub-header">Please complete the following steps to finish your investment.</h3>
+          </div>
+          <a href={path} className="new-investment-button">
+            <p className="action-header"><AddCircleIcon style={{color: "#3AC522", marginRight: "6px"}}/> Add New Investment</p>
+          </a>
+        </div>
+
+        <div className="action-items">
+          <div className="action-item">
+            <img className="action-icon" src={signInvestmentYes} alt="sign-investment-yes" />
+            <div className="action-instructions">
+              <p className="action-header">Edit Investment</p>
+              <p className="action-sub-header">Basic Information including amount and personal information</p>
+            </div>
+            <Button className="completed-step-button" onClick={handleInvestmentEdit}>
+              Edit Investment
+            </Button>
+          </div>
+        </div>
 
         <div className="action-items">
           <div className="action-item">
@@ -151,7 +200,7 @@ function DealNextSteps() {
               {hasKyc ? 'Completed' : 'Submit Tax Info'}
             </Button>
           </div>
-          {dealData?.deal?.dealParams?.dealType === '506c' && (
+          {(dealData?.deal?.dealParams?.dealType === '506c' || true) && (
             <div className="action-item">
               <img
                 className="action-icon"
@@ -160,17 +209,23 @@ function DealNextSteps() {
               />
               <div className="action-instructions">
                 <p className="action-header">Accredited Investor Status</p>
-                <p className="action-sub-header">Complete your Accredited Investor application here</p>
+                <p className="action-sub-header">
+                  {data?.investor.accredidation_status === true ? '' : "Complete your Accredited Investor application here"}
+                </p>
               </div>
-              <Button
-                className={data?.investor.accredidation_status === true ? 'completed-step-button' : 'next-step-button'}
-                onClick={() => {
-                  const win = window.open('https://bridge.parallelmarkets.com/allocations', '_blank');
-                  win.focus();
-                }}
-              >
-                {data?.investor.accredidation_status === true ? 'Completed' : 'Submit your application'}
-              </Button>
+              {data?.investor.accredidation_status === true ?
+                ''
+                :
+                <Button
+                  className={data?.investor.accredidation_status === true ? 'completed-step-button' : 'next-step-button'}
+                  onClick={() => {
+                    const win = window.open('https://bridge.parallelmarkets.com/allocations', '_blank');
+                    win.focus();
+                  }}
+                  >
+                  {data?.investor.accredidation_status === true ? 'Completed' : 'Submit your application'}
+                </Button>
+              }
             </div>
           )}
 
@@ -181,7 +236,7 @@ function DealNextSteps() {
               <p className="action-sub-header">Required to complete your investment</p>
             </div>
             <Button
-              disabled={dealData.deal.isDemo ? false : !hasKyc}
+              disabled={dealData?.deal?.isDemo ? false : !hasKyc}
               onClick={() => setWireInstructionsOpen(true)}
               className="next-step-button"
             >
