@@ -9,7 +9,7 @@ import { createUploadLink } from 'apollo-upload-client';
 import { withClientState } from 'apollo-link-state';
 
 import { useAuth0 } from '@auth0/auth0-react';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { setContext } from 'apollo-link-context';
 import { WebSocketLink } from 'apollo-link-ws';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
@@ -41,22 +41,25 @@ const AuthorizedApolloProvider = ({ children }) => {
    * Adding fix to improve logRocket recording
    * https://docs.logrocket.com/docs/troubleshooting-sessions#apollo-client
    */
+  const token = getAccessTokenSilently();
+  useEffect(() => {
 
-  const getToken = async () => {
-    const token = await getAccessTokenSilently();
-    return token;
-  }
-  
+  }, [token])
+  // const getToken = async () => {
+  //   const token = await getAccessTokenSilently();
+  //   return token;
+  // }
+  // if(!token || typeof token !== "string") return <div>Loading...</div>;
   const request = async (operation) => {
     if (!window.location.pathname.includes('/public/')) {
-      const token = await getToken();
+      // const token = await getToken();
       operation.setContext({
         headers: {
           authorization: token ? `Bearer ${token}` : '',
         },
       });
     } else if (window.location.pathname.includes('/public/') && isAuthenticated) {
-      const token = getToken();
+      // const token = await getToken();
       operation.setContext({
         headers: {
           authorization: token ? `Bearer ${token}` : '',
@@ -86,82 +89,57 @@ const AuthorizedApolloProvider = ({ children }) => {
       }),
   );
 
-
-  const subscriptionClient = new SubscriptionClient('ws://localhost:4000/graphql', {
-    reconnect: true,
-    connectionParams: {
-      authToken: (async () => await getToken())(),
-    },
+  const onErrorLink = onError(({ graphQLErrors, networkError }) => {
+    if (graphQLErrors) {
+      console.log('Graphqlerrors');
+      console.log(graphQLErrors);
+    }
+    if (networkError) {
+      console.log('Network error');
+      console.log(networkError);
+    }
   });
 
-  const wsLink = new WebSocketLink(subscriptionClient)
-
-  const client = new ApolloClient({
-    link: ApolloLink.from([
-      onError(({ graphQLErrors, networkError }) => {
-        if (graphQLErrors) {
-          console.log('Graphqlerrors');
-          console.log(graphQLErrors);
-        }
-        if (networkError) {
-          console.log('Network error');
-          console.log(networkError);
-        }
-      }),
-      requestLink,
-      withClientState({
-        defaults: {
-          isConnected: true,
+  const withClientLink = withClientState({
+    defaults: {
+      isConnected: true,
+    },
+    resolvers: {
+      Mutation: {
+        updateNetworkStatus: (_, { isConnected }, { cache }) => {
+          cache.writeData({ data: { isConnected } });
+          return null;
         },
-        resolvers: {
-          Mutation: {
-            updateNetworkStatus: (_, { isConnected }, { cache }) => {
-              cache.writeData({ data: { isConnected } });
-              return null;
-            },
-          },
-        },
-        cache,
-      }),
-      uploadLink,
-      wsLink,
-    ]),
+      },
+    },
     cache,
   });
 
-  // const client = new ApolloClient({
-  //   link: split(
-  //     onError(({ graphQLErrors, networkError }) => {
-  //       if (graphQLErrors) {
-  //         console.log('Graphqlerrors');
-  //         console.log(graphQLErrors);
-  //       }
-  //       if (networkError) {
-  //         console.log('Network error');
-  //         console.log(networkError);
-  //       }
-  //     }),
-  //     requestLink,
-  //     withClientState({
-  //       defaults: {
-  //         isConnected: true,
-  //       },
-  //       resolvers: {
-  //         Mutation: {
-  //           updateNetworkStatus: (_, { isConnected }, { cache }) => {
-  //             cache.writeData({ data: { isConnected } });
-  //             return null;
-  //           },
-  //         },
-  //       },
-  //       cache,
-  //     }),
-  //     wsLink,
-  //     uploadLink,
-  //   ),
-  //   cache,
-  // });
+  const wsLink = (async () => {
+    // const token = await getToken();
+    const subscriptionOptions = {
+      reconnect: true,
+      connectionParams: {
+        authToken: token? token : '',
+      },
+    };
+    console.log(JSON.stringify(subscriptionOptions.connectionParams.authToken))
+    const subscriptionClient = await new SubscriptionClient('ws://localhost:4000/graphql', subscriptionOptions);
+    const newWSLink = await new WebSocketLink(subscriptionClient);
+    return newWSLink;
+  })();
 
+  const linksArray = [onErrorLink, requestLink, withClientLink, uploadLink];
+
+  console.log({linksArray})
+
+
+  console.log({token})
+  linksArray[3] = wsLink;
+  const client = new ApolloClient({
+    link: ApolloLink.from(linksArray),
+    cache,
+  });
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
 
