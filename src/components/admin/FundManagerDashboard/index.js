@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import _, { toLower } from 'lodash';
 import { gql } from 'apollo-boost';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery, useSubscription } from '@apollo/react-hooks';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography, Button } from '@material-ui/core';
@@ -430,6 +430,12 @@ export const ORG_OVERVIEW = gql`
   }
 `;
 
+export const ONBOARDING = gql`
+  subscription dealOnboarding($data: String){
+    dealOnboarding(data: $data)
+  }
+`
+
 const fundTabs = ['Setup', 'Highlights', 'Investments', 'Investor Onboarding Status', 'Deal Page'];
 
 const spvTabs = ['Setup', 'Investor Onboarding Status', 'Deal Page'];
@@ -455,13 +461,14 @@ const FundManagerDashboard = ({ classes, location, history }) => {
     variables: { slug: orgSlug },
     fetchPolicy: 'network-only',
   });
+  const { data: subsData, error, loading: subsLoading } = useSubscription(ONBOARDING, { variables: { data: "hello" } })
   const { data: atDeal } = useFetch(OPS_ACCOUNTING, dealName && DEALS_TABLE, dealName && `({Deal Name}="${dealName}")`);
   const { data: atFundData, status } = useFetch(
     OPS_ACCOUNTING,
     atDealData?.name && INVESTMENTS_TABLE,
     atDealData?.name && `(FIND("${atDealData.name}", {Deals}))`,
   );
-
+  console.log(subsData, error, subsLoading)
   // setInterval(() => {
   //   console.log('FIRES');
   //   refetch();

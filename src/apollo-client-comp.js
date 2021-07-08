@@ -1,5 +1,5 @@
 import { ApolloClient } from 'apollo-client';
-import { ApolloLink, Observable } from 'apollo-link';
+import { ApolloLink, Observable, split } from 'apollo-link';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -11,6 +11,9 @@ import { withClientState } from 'apollo-link-state';
 import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 import { setContext } from 'apollo-link-context';
+import { WebSocketLink } from 'apollo-link-ws';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
+// import { WebSocketLink } from '@apollo/client/link/ws';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000/graphql';
 
@@ -33,22 +36,27 @@ cache.readQuery = (...args) => {
 
 const AuthorizedApolloProvider = ({ children }) => {
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
-
+  
   /**
    * Adding fix to improve logRocket recording
    * https://docs.logrocket.com/docs/troubleshooting-sessions#apollo-client
    */
 
+  const getToken = async () => {
+    const token = await getAccessTokenSilently();
+    return token;
+  }
+  
   const request = async (operation) => {
     if (!window.location.pathname.includes('/public/')) {
-      const token = await getAccessTokenSilently();
+      const token = await getToken();
       operation.setContext({
         headers: {
           authorization: token ? `Bearer ${token}` : '',
         },
       });
     } else if (window.location.pathname.includes('/public/') && isAuthenticated) {
-      const token = await getAccessTokenSilently();
+      const token = getToken();
       operation.setContext({
         headers: {
           authorization: token ? `Bearer ${token}` : '',
@@ -78,6 +86,16 @@ const AuthorizedApolloProvider = ({ children }) => {
       }),
   );
 
+
+  const subscriptionClient = new SubscriptionClient('ws://localhost:4000/graphql', {
+    reconnect: true,
+    connectionParams: {
+      authToken: (async () => await getToken())(),
+    },
+  });
+
+  const wsLink = new WebSocketLink(subscriptionClient)
+
   const client = new ApolloClient({
     link: ApolloLink.from([
       onError(({ graphQLErrors, networkError }) => {
@@ -106,9 +124,43 @@ const AuthorizedApolloProvider = ({ children }) => {
         cache,
       }),
       uploadLink,
+      wsLink,
     ]),
     cache,
   });
+
+  // const client = new ApolloClient({
+  //   link: split(
+  //     onError(({ graphQLErrors, networkError }) => {
+  //       if (graphQLErrors) {
+  //         console.log('Graphqlerrors');
+  //         console.log(graphQLErrors);
+  //       }
+  //       if (networkError) {
+  //         console.log('Network error');
+  //         console.log(networkError);
+  //       }
+  //     }),
+  //     requestLink,
+  //     withClientState({
+  //       defaults: {
+  //         isConnected: true,
+  //       },
+  //       resolvers: {
+  //         Mutation: {
+  //           updateNetworkStatus: (_, { isConnected }, { cache }) => {
+  //             cache.writeData({ data: { isConnected } });
+  //             return null;
+  //           },
+  //         },
+  //       },
+  //       cache,
+  //     }),
+  //     wsLink,
+  //     uploadLink,
+  //   ),
+  //   cache,
+  // });
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 };
