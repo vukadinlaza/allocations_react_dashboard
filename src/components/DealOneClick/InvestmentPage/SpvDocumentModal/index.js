@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -15,6 +15,7 @@ export default function SPVDocumentModal({
   submitInvestment,
   previewData,
   loadingPreview,
+  loadingConfirmation,
 }) {
   const handleClose = () => {
     setOpen(false);
@@ -24,12 +25,8 @@ export default function SPVDocumentModal({
     return doc.path.includes('Agreement');
   });
 
-  const [loading, setLoading] = useState(false);
-
   const handleSubmit = async () => {
-    setLoading(true);
     await submitInvestment();
-    setLoading(false);
   };
 
   const previewLink = previewData?.getInvestmentPreview?.previewLink;
@@ -71,7 +68,7 @@ export default function SPVDocumentModal({
                 usePreview={!!previewLink}
                 handleClose={handleClose}
               />
-              {loading ? (
+              {loadingConfirmation ? (
                 <Loader />
               ) : (
                 <div className="buttonContainer">

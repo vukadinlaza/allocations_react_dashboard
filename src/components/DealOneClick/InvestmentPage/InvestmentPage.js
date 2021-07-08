@@ -203,17 +203,24 @@ function InvestmentPage() {
     setPopulated(true);
   };
 
-  const [submitConfirmation] = useMutation(CONFIRM_INVESTMENT, {
+  const [submitConfirmation, { loading: loadingConfirmation }] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       refetch();
       const message = location?.state?.submission
         ? 'Investment updated successfully.'
         : 'Investment created successfully.';
       toast.success(message);
+      setShowSpvModal(false);
       const path = organization
         ? `/next-steps/${organization}/${deal_slug}`
         : `/next-steps/${deal_slug}`;
       history.push(path, { investorFormData });
+    },
+    onError: () => {
+      toast.error(
+        'Something went wrong creating the investment. Try again or contact support@allocations.com',
+      );
+      setShowSpvModal(false);
     },
   });
   const [getInvestmentPreview, { data: previewData, loading: loadingPreview }] = useMutation(
@@ -259,7 +266,6 @@ function InvestmentPage() {
     if (isEdit) payload.investmentId = location.state.investmentId;
 
     await submitConfirmation({ variables: { payload } });
-    setShowSpvModal(false);
   };
 
   const {
@@ -322,6 +328,7 @@ function InvestmentPage() {
         submitInvestment={submitInvestment}
         previewData={previewData}
         loadingPreview={loadingPreview}
+        loadingConfirmation={loadingConfirmation}
       />
     </section>
   );
