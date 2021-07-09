@@ -247,13 +247,14 @@ const styles = (theme) => ({
   },
   section: {
     width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
+    // display: 'flex',
+    // justifyContent: 'space-between',
+    // flexWrap: 'wrap',
     padding: '40px',
-    [theme.breakpoints.down(phone)]: {
-      padding: '4vw',
-    },
+    margin: "0px",
+    // [theme.breakpoints.down(phone)]: {
+    //   padding: '4vw',
+    // },
   },
   sectionTitle: {
     fontSize: '32px',

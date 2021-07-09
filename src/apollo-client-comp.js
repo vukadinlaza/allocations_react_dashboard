@@ -12,8 +12,12 @@ import React, { useState, useEffect } from 'react';
 import { setContext } from 'apollo-link-context';
 import { WebSocketLink } from 'apollo-link-ws';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
-// import { WebSocketLink } from '@apollo/client/link/ws';
+import Loader from './components/utils/Loader'
+
+
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000/graphql';
+
+
 // IF you want to enable/disable dev tools in different enviroments
 const devTools = localStorage.getItem('apolloDevTools') || false;
 const uploadLink = createUploadLink({
@@ -29,6 +33,9 @@ cache.readQuery = (...args) => {
     return undefined;
   }
 };
+
+
+
 const AuthorizedApolloProvider = ({ children }) => {
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
   const [wsLink, setWSLink] = useState(null);
@@ -123,27 +130,19 @@ const AuthorizedApolloProvider = ({ children }) => {
     cache,
   });
 
-  // const getWSLink = async () => {
-  //   const subscriptionOptions = {
-  //     reconnect: true,
-  //   };
-  //   const subscriptionClient = new SubscriptionClient('ws://localhost:4000/graphql', subscriptionOptions);
-  //   console.log({subscriptionClient})
-  //   const newWSLink = new WebSocketLink(subscriptionClient);
-  //   console.log({newWSLink})
-  //   return newWSLink;
-  // };
-
   if(wsLink){
     const linksArray = [onErrorLink, requestLink, withClientLink, wsLink, uploadLink];
-    // console.log({ linksArray });
     const client = new ApolloClient({
       link: ApolloLink.from(linksArray),
       cache,
     });
     return <ApolloProvider client={client}>{children}</ApolloProvider>;
   }else{
-    return <div>Loading...</div>
+    return (
+      <div style={{display: "flex", justifyContent: "center", width: "100vw", height:"100vh", paddingTop: "30vh"}}>
+        <Loader/>
+      </div>
+    )
   }
 };
 export default AuthorizedApolloProvider;

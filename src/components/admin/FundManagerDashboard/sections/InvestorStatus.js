@@ -4,7 +4,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import { gql } from 'apollo-boost';
 import { useLazyQuery } from '@apollo/react-hooks';
 import MailIcon from '@material-ui/icons/Mail';
-import { Avatar, Typography } from '@material-ui/core';
+import { Avatar, Typography, Grid } from '@material-ui/core';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import { ScrollableBox } from '../widgets';
 import { nWithCommas } from '../../../../utils/numbers'
@@ -126,61 +126,68 @@ const InvestorStatus = ({ classes, width, data }) => {
   const isDemo = window?.origin?.includes('vercel') || window?.origin?.includes('localhost');
 
   return (
-    <div className={classes.section}>
-      <ScrollableBox
-        title="VIEWED"
-        titleData={<p className={classes.titleDataText}>${nWithCommas(viewedTotal)}</p>}
-        autoHeight={true}
-        fontSize="small"
-        size="third"
-        buttonText={true? '' : <div><MailIcon style={{color: "white", marginRight: "0.5em"}}/>Send Reminder</div>}
-        >
-        {isDemo?
-          demoViewedArray.map((investor, index) =>
-            <InvestorBox investor={investor} classes={classes} index={index} key={`demo-investor-${index}`} width={width}/>
-          )
-            :
-          viewedInvestors.map((investor, index) =>
-            <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`} width={width}/>
-          )
-        }
-      </ScrollableBox>
-      <ScrollableBox
-        title="SIGNED"
-        titleData={<p className={classes.titleDataText}>${nWithCommas(signedTotal)}</p>}
-        autoHeight={true}
-        fontSize="small"
-        size="third"
-        buttonText={true? '' : <div><MailIcon style={{color: "white", marginRight: "0.5em"}}/>Send Reminder</div>}
-        >
-        {isDemo?
-          demoSignedArray.map((investor, index) =>
-            <InvestorBox investor={investor} classes={classes} index={index} key={`demo-investor-${index}`} width={width}/>
-          )
-            :
-          signedInvestors.filter(investor => investor.status === 'signed').map((investor, index) =>
-            <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`} width={width}/>
-          )
-        }
-      </ScrollableBox>
-      <ScrollableBox
-        title="WIRED"
-        titleData={<p className={classes.titleDataText}>${nWithCommas(wiredTotal)}</p>}
-        autoHeight={true}
-        fontSize="small"
-        size="third"
-        >
-        {isDemo?
-          demoWiredArray.map((investor, index) =>
+    <Grid container spacing={3} className={classes.section}>
+      <Grid item xs={12} lg={4}>
+        <ScrollableBox
+          title="VIEWED"
+          titleData={<p className={classes.titleDataText}>${nWithCommas(viewedTotal)}</p>}
+          autoHeight={true}
+          fontSize="small"
+          size="third"
+          buttonText={true? '' : <div><MailIcon style={{color: "white", marginRight: "0.5em"}}/>Send Reminder</div>}
+          >
+          {isDemo?
+            demoViewedArray.map((investor, index) =>
               <InvestorBox investor={investor} classes={classes} index={index} key={`demo-investor-${index}`} width={width}/>
-          )
-            :
-          wiredInvestors.filter(investor => investor.status === 'wired').map((investor, index) =>
-            <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`} width={width}/>
-          )
-        }
-      </ScrollableBox>
-    </div>
+            )
+              :
+            viewedInvestors.map((investor, index) =>
+              <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`} width={width}/>
+            )
+          }
+        </ScrollableBox>
+      </Grid>
+      <Grid item xs={12} lg={4}>
+        <ScrollableBox
+          title="SIGNED"
+          titleData={<p className={classes.titleDataText}>${nWithCommas(signedTotal)}</p>}
+          autoHeight={true}
+          fontSize="small"
+          size="third"
+          buttonText={true? '' : <div><MailIcon style={{color: "white", marginRight: "0.5em"}}/>Send Reminder</div>}
+          >
+          {isDemo?
+            demoSignedArray.map((investor, index) =>
+              <InvestorBox investor={investor} classes={classes} index={index} key={`demo-investor-${index}`} width={width}/>
+            )
+              :
+            signedInvestors.filter(investor => investor.status === 'signed').map((investor, index) =>
+              <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`} width={width}/>
+            )
+          }
+        </ScrollableBox>
+
+      </Grid>
+      <Grid item xs={12} lg={4}>
+        <ScrollableBox
+          title="WIRED"
+          titleData={<p className={classes.titleDataText}>${nWithCommas(wiredTotal)}</p>}
+          autoHeight={true}
+          fontSize="small"
+          size="third"
+          >
+          {isDemo?
+            demoWiredArray.map((investor, index) =>
+                <InvestorBox investor={investor} classes={classes} index={index} key={`demo-investor-${index}`} width={width}/>
+            )
+              :
+            wiredInvestors.filter(investor => investor.status === 'wired').map((investor, index) =>
+              <InvestorBox investor={investor} classes={classes} index={index} key={`investor-${index}`} width={width}/>
+            )
+          }
+        </ScrollableBox>
+      </Grid>
+    </Grid>
   );
 }
 
