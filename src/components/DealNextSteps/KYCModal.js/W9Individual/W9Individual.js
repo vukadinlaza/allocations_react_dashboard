@@ -113,6 +113,7 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
     setFormData((prevData) => ({ ...prevData, [target.name]: target.value }));
   };
 
+  console.log('address===>', address);
   console.log('formData===>', formData);
 
   return (
