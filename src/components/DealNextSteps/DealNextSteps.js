@@ -210,7 +210,7 @@ function DealNextSteps() {
               <div className="action-instructions">
                 <p className="action-header">Accredited Investor Status</p>
                 <p className="action-sub-header">
-                  {data?.investor.accredidation_status === true ? '' : "Complete your Accredited Investor application here"}
+                  {data?.investor.accredidation_status === true ? '' : "Complete your accredited investor questionnaire here (<5 mins to complete)"}
                 </p>
               </div>
               {data?.investor.accredidation_status === true ?
@@ -223,7 +223,7 @@ function DealNextSteps() {
                     win.focus();
                   }}
                   >
-                  {data?.investor.accredidation_status === true ? 'Completed' : 'Submit your application'}
+                  {data?.investor.accredidation_status === true ? 'Completed' : 'Submit'}
                 </Button>
               }
             </div>
