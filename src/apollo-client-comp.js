@@ -52,7 +52,8 @@ const AuthorizedApolloProvider = ({ children }) => {
           authToken: token,
         },
       };
-      const subscriptionClient = new SubscriptionClient('ws://localhost:4000/graphql', subscriptionOptions);
+      // const subscriptionClient = new SubscriptionClient('ws://localhost:4000/graphql', subscriptionOptions);
+      const subscriptionClient = new SubscriptionClient(`${API_URL.replace('http', 'ws')}`, subscriptionOptions);
       const newWSLink = new WebSocketLink(subscriptionClient);
       setWSLink(newWSLink)
     });

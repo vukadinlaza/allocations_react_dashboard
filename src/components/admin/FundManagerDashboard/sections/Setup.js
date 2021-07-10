@@ -88,7 +88,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
       console.log(`Task "${step.processStreetTask}" not matching`)
       return false;
     }
-
+    
     switch (stepValue) {
       case 'Entity Formation Complete':
         const hvpField = currentTask.formFields?.find(field => field.fieldLabel.toLowerCase() === 'high volume partnership');
@@ -100,7 +100,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
           taskChecked = true;
         }
         break;
-      default:
+        default:
         taskChecked = currentTask.taskStatus === 'Completed'
         break;
     }
@@ -127,23 +127,36 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
 
   useEffect(() => {
     if(subscriptionData?.dealOnboarding){
-      const { dealOnboarding: subscriptionTask} = subscriptionData;
-      let stepSection = '';
-      let stepIndex = -1;
-
-      for(let section in setupSteps){
-        stepIndex = setupSteps[section].findIndex(step => step.processStreetTask.includes(subscriptionTask.taskName.toLowerCase()));
-        if(stepIndex >= 0){
-          stepSection = section;
-          break;
+      const { dealOnboarding } = subscriptionData;
+      
+      if(dealOnboarding.taskName){
+        let stepSection = '';
+        let stepIndex = -1;
+        
+        if(dealTasks && dealTasks.length){
+          const dealTasksCopy = dealTasks.map(t => t);
+          const subsTaskIndex = dealTasksCopy.findIndex(task => task.taskId === dealOnboarding.taskId);
+          dealTasksCopy[subsTaskIndex] = dealOnboarding;
+          setDealTasks(dealTasksCopy)
         }
-      }
-      if(stepIndex >= 0){
-        const setupStepsCopy = Object.assign({}, setupSteps);
-        const stepToUpdate = setupStepsCopy[stepSection][stepIndex];
-        const checked = getStepStatus(stepToUpdate);
-        stepToUpdate.checked = checked;
-        setSetupSteps(setupStepsCopy);
+
+        for(let section in setupSteps){
+          stepIndex = setupSteps[section].findIndex(step => step.processStreetTask.includes(dealOnboarding.taskName.toLowerCase()));
+          if(stepIndex >= 0){
+            stepSection = section;
+            break;
+          }
+        }
+        if(stepIndex >= 0){
+          const setupStepsCopy = Object.assign({}, setupSteps);
+          const stepToUpdate = setupStepsCopy[stepSection][stepIndex];
+          const checked = getStepStatus(stepToUpdate);
+          stepToUpdate.checked = checked;
+          setSetupSteps(setupStepsCopy);
+        }
+      }else if(dealOnboarding.dealName){
+        const tasks = dealOnboarding?.dealTasks;
+        if(tasks) setDealTasks(tasks)
       }
     }
   }, [subscriptionData])
