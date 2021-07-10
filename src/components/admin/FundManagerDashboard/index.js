@@ -426,6 +426,12 @@ export const ORG_OVERVIEW = gql`
           managementFeeType
           fundManagementFeeType
         }
+        dealOnboarding {
+          dealTasks {
+            taskName
+            taskStatus
+          }
+        }
       }
     }
   }
@@ -469,11 +475,6 @@ const FundManagerDashboard = ({ classes, location, history }) => {
     atDealData?.name && INVESTMENTS_TABLE,
     atDealData?.name && `(FIND("${atDealData.name}", {Deals}))`,
   );
-  console.log(subsData, error, subsLoading)
-  // setInterval(() => {
-  //   console.log('FIRES');
-  //   refetch();
-  // }, 2000);
 
   useEffect(() => {
     if(dealData && Object.keys(dealData).length){
@@ -566,8 +567,8 @@ const FundManagerDashboard = ({ classes, location, history }) => {
             classes={classes}
             data={dealData}
             openTooltip={openTooltip}
-            atDeal={atDeal}
             handleTooltip={handleTooltip}
+            subscriptionData={subsData}
           />
         );
       case 'Highlights':

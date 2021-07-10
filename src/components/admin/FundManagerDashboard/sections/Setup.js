@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { Typography, LinearProgress, Grid } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -8,73 +8,11 @@ import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import { get, every } from 'lodash';
 import Loader from '../../../utils/Loader';
 import { nWithCommas } from '../../../../utils/numbers';
-
 import { SimpleBox, ModalTooltip } from '../widgets';
+import { dealSteps } from './dealSteps'
 
-const buildSteps = [
-  { value: 'Initial Build Complete', tooltip: 'Completed http://build.allocations.com/' },
-  { value: 'Services Agreement Signed', tooltip: 'Signed the Services Agreement' },
-  { value: 'ID Uploaded', tooltip: 'This is a KYC requirement internally reviewed by the Allocations compliance team' },
-  {
-    value: 'Investment Docs Uploaded',
-    tooltip:
-      'Uploaded investment documents for Portfolio Company. This is internally reviewed by the Allocations compliance team to determine whether Allocations can power the deal.',
-  },
-  {
-    value: 'Portfolio Company Deck Uploaded',
-    tooltip:
-      'Uploaded Deck for Portfolio Company. This is internally reviewed by the Allocations compliance team to determine whether Allocations can power the deal.',
-  },
-];
-const preOnboardingSteps = [
-  { value: 'SS4 Document Signed', tooltip: 'The process to request an EIN for the entity using the SSN of the fund manager' },
-  { value: 'Entity Formation Complete', tooltip: 'The process of establishing the entity in Delaware' },
-  {
-    value: 'Bank Account Opened',
-    tooltip: 'The process of setting up a bank account. The ETA is dependent on KYC / AML checks made by the bank',
-  },
-  {
-    value: 'Private Fund Docs Signing Complete',
-    tooltip: 'The process of reviewing the documents for the private fund and pre-signature from the fund manager.',
-  },
-];
-const onboardingSteps = [
-  {
-    value: 'Investor Onboarding List Uploaded',
-    tooltip:
-      'This is the list of investors and proposed investment amounts provided by the fund manager in Google Sheets',
-  },
-  {
-    value: 'Carry & Management Fee Review Complete',
-    tooltip: 'This is the process for the fund manager to review carry & management fees',
-  },
-  { value: 'Onboarding Email Sent', tooltip: 'This is the investor onboarding email sent to the investors' },
-  { value: 'Investor Follow Up Sent', tooltip: 'This is the follow up investor onboarding email sent to investors' },
-  { value: '506b/c Review Complete', tooltip: 'This is the process for the fund manager to review 506b/506c investor status' },
-  { value: 'KYC Review Complete', tooltip: 'This is the process for Allocations to perform a soft KYC check on investors' },
-];
-const closingSteps = [
-  { value: 'Portfolio Company Wire Info Uploaded', tooltip: 'Uploaded Portfolio Company Wire Instructions' },
-  {
-    value: 'Investor Ledger Reconciliation Complete',
-    tooltip: 'The process of reconciling wires from investors. E.g. double checking wire fees',
-  },
-  { value: 'Blue Sky Fees Review Complete', tooltip: 'The process of reviewing blue sky fees' },
-  { value: 'Signed Portfolio Company Documents', tooltip: 'The process for signing portfolio company documents' },
-  {
-    value: 'Wire Approval Review Complete',
-    tooltip: 'The process to approval the wire to the portfolio company. 12pm EST cutoff time.',
-  },
-  { value: 'Invoice Receipt Sent', tooltip: 'The process of sending invoice receipt to the fund manager' },
-  { value: 'Reg D Filing Complete', tooltip: 'The process of filing a Reg D for the offering' },
-  {
-    value: 'Management Fee Distribution Complete',
-    tooltip: 'The process of distributing the management fee to the Fund Manager',
-  },
-];
 
-const Setup = ({ classes, data, openTooltip, handleTooltip, atDeal }) => {
-  if (!data) return <Loader />;
+const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) => {
 
   const { target, raised, dealParams, investmentType } = data;
   const {
@@ -90,6 +28,17 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, atDeal }) => {
     managementFeeType,
     fundManagementFeeType,
   } = dealParams;
+  
+  const [dealTasks, setDealTasks] = useState([]);
+  const [setupSteps, setSetupSteps] = useState(dealSteps)
+  const { buildSteps, preOnboardingSteps, onboardingSteps, closingSteps } = setupSteps;
+
+  useEffect(() => {
+    const tasks = data?.dealOnboarding?.dealTasks;
+    if(tasks) setDealTasks(tasks)
+  }, [data])
+
+
   const getManagementFee = () => {
     const managementFee = investmentType === 'fund' ? fundManagementFees : managementFees;
     const managementFeeDollar = investmentType === 'fund' ? fundManagementFeesDollar : managementFeesDollar;
@@ -128,32 +77,78 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, atDeal }) => {
   };
 
   const setupData = getSetupData();
-  const fieldsData = get(atDeal, '[0].fields', {});
 
-  const populatedBuildSteps = buildSteps.map((data) => {
-    return {
-      ...data,
-      checked: fieldsData[`${data.value}`] === true,
-    };
-  });
-  const populatedPreOnboardingSteps = preOnboardingSteps.map((data) => {
-    return {
-      ...data,
-      checked: fieldsData[`${data.value}`] === true,
-    };
-  });
-  const populatedOnboardingSteps = onboardingSteps.map((data) => {
-    return {
-      ...data,
-      checked: fieldsData[`${data.value}`] === true,
-    };
-  });
-  const populatedClosingSteps = closingSteps.map((data) => {
-    return {
-      ...data,
-      checked: fieldsData[`${data.value}`] === true,
-    };
-  });
+  const getStepStatus = (step) => {
+    const stepValue = step.value;
+    let taskChecked = false;
+    if(!dealTasks || !dealTasks.length) return false;
+    
+    const currentTask = dealTasks.find(task => step.processStreetTask.includes(task.taskName.toLowerCase()));
+    if(!currentTask){
+      console.log(`Task "${step.processStreetTask}" not matching with}`, dealTasks)
+      return false;
+    }
+
+    switch (stepValue) {
+      case 'Entity Formation Complete':
+        const hvpField = currentTask.formFields?.find(field => field.fieldLabel.toLowerCase() === 'high volume partnership');
+        if(!hvpField){
+          taskChecked = false;
+        }else if(hvpField.fieldValue === 'Yes'){
+          taskChecked = currentTask.taskStatus === 'Completed'
+        }else if(hvpField.fieldValue === 'No'){
+          taskChecked = true;
+        }
+        break;
+      default:
+        taskChecked = currentTask.taskStatus === 'Completed'
+        break;
+    }
+    return taskChecked;
+  }
+
+  const stepsVerification = (steps) => {
+    return steps.map((step) => {
+      const checked = getStepStatus(step)
+      return { ...step, checked };
+    });
+  }
+
+  useEffect(() => {
+    if(setupSteps){
+      let newSetupSteps = {};
+      Object.keys(setupSteps).forEach(group => {
+        const verifiedData = stepsVerification(setupSteps[group]);
+        newSetupSteps[group] = verifiedData;
+      });
+      setSetupSteps(newSetupSteps)
+    }
+  }, [])
+
+  useEffect(() => {
+    if(subscriptionData?.dealOnboarding){
+      const { dealOnboarding: subscriptionTask} = subscriptionData;
+      let stepSection = '';
+      let stepIndex = -1;
+
+      for(let section in setupSteps){
+        stepIndex = setupSteps[section].findIndex(step => step.processStreetTask.includes(subscriptionTask.taskName.toLowerCase()));
+        if(stepIndex >= 0){
+          stepSection = section;
+          break;
+        }
+      }
+      if(stepIndex >= 0){
+        const setupStepsCopy = Object.assign({}, setupSteps);
+        const stepToUpdate = setupStepsCopy[stepSection][stepIndex];
+        const checked = getStepStatus(stepToUpdate);
+        stepToUpdate.checked = checked;
+        setSetupSteps(setupStepsCopy);
+      }
+    }
+  }, [subscriptionData])
+
+  if(!buildSteps || !preOnboardingSteps || !onboardingSteps || !closingSteps) return <Loader/>
 
   return (
     <Grid container spacing={1} className={classes.section}>
@@ -163,7 +158,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, atDeal }) => {
             title="Build"
             titleData={
               <CheckCircleIcon
-                style={{ color: '#39C522', opacity: every(populatedBuildSteps, { checked: true }) ? '100%' : '25%' }}
+                style={{ color: '#39C522', opacity: every(buildSteps, { checked: true }) ? '100%' : '25%' }}
               />
             }
             autoHeight
@@ -176,23 +171,26 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, atDeal }) => {
               <Typography color="inherit">The process of submitting a build request for an SPV / Fund</Typography>
             }
           >
-            {populatedBuildSteps.map((step, idx) => (
-              <ModalTooltip
-                title={step.value}
-                handleTooltip={handleTooltip}
-                tooltipContent={<Typography color="inherit">{step.tooltip}</Typography>}
-                openTooltip={openTooltip}
-                id={step.value.split(' ').join()}
-                key={`step-${idx}`}
-              >
-                <div className={classes.setupStep} onClick={(e) => handleTooltip(step.value.split(' ').join())}>
-                  <CheckCircleIcon
-                    style={{ color: '#0461FF', opacity: step.checked ? '100%' : '25%', marginRight: '0.5em' }}
-                  />
-                  <Typography>{step.value}</Typography>
-                </div>
-              </ModalTooltip>
-            ))}
+            {buildSteps.map((step, idx) => {
+              return(
+                <ModalTooltip
+                  title={step.value}
+                  handleTooltip={handleTooltip}
+                  tooltipContent={<Typography color="inherit">{step.tooltip}</Typography>}
+                  openTooltip={openTooltip}
+                  id={step.value.split(' ').join()}
+                  key={`step-${idx}`}
+                >
+                  <div className={classes.setupStep} onClick={(e) => handleTooltip(step.value.split(' ').join())}>
+                    <CheckCircleIcon
+                      style={{ color: '#0461FF', opacity: step.checked ? '100%' : '25%', marginRight: '0.5em' }}
+                      id={`check-${step.value.split(' ').join()}`}
+                    />
+                    <Typography>{step.value}</Typography>
+                  </div>
+                </ModalTooltip>
+              )
+            })}
           </SimpleBox>
         </Grid>
         <Grid item xs={6} lg={3} style={{height: "auto"}}>
@@ -202,7 +200,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, atDeal }) => {
               <CheckCircleIcon
                 style={{
                   color: '#39C522',
-                  opacity: every(populatedPreOnboardingSteps, { checked: true }) ? '100%' : '25%',
+                  opacity: every(preOnboardingSteps, { checked: true }) ? '100%' : '25%',
                 }}
               />
             }
@@ -214,7 +212,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, atDeal }) => {
             id="preOnboarding"
             tooltipContent={<Typography color="inherit">The setup process for an SPV / Fund</Typography>}
           >
-            {populatedPreOnboardingSteps.map((step, idx) => (
+            {preOnboardingSteps.map((step, idx) => (
               <ModalTooltip
                 title={step.value}
                 handleTooltip={handleTooltip}
@@ -226,6 +224,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, atDeal }) => {
                 <div className={classes.setupStep} onClick={(e) => handleTooltip(step.value.split(' ').join())}>
                   <CheckCircleIcon
                     style={{ color: '#0461FF', opacity: step.checked ? '100%' : '25%', marginRight: '0.5em' }}
+                    id={`check-${step.value.split(' ').join()}`}
                   />
                   <Typography>{step.value}</Typography>
                 </div>
@@ -238,7 +237,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, atDeal }) => {
             title="Onboarding Investors"
             titleData={
               <CheckCircleIcon
-                style={{ color: '#39C522', opacity: every(populatedOnboardingSteps, { checked: true }) ? '100%' : '25%' }}
+                style={{ color: '#39C522', opacity: every(onboardingSteps, { checked: true }) ? '100%' : '25%' }}
               />
             }
             autoHeight
@@ -251,7 +250,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, atDeal }) => {
               <Typography color="inherit">The process of onboarding investors and finalizing terms</Typography>
             }
           >
-            {populatedOnboardingSteps.map((step, idx) => (
+            {onboardingSteps.map((step, idx) => (
               <ModalTooltip
                 title={step.value}
                 handleTooltip={handleTooltip}
@@ -263,6 +262,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, atDeal }) => {
                 <div className={classes.setupStep} onClick={(e) => handleTooltip(step.value.split(' ').join())}>
                   <CheckCircleIcon
                     style={{ color: '#0461FF', opacity: step.checked ? '100%' : '25%', marginRight: '0.5em' }}
+                    id={`check-${step.value.split(' ').join()}`}
                   />
                   <Typography>{step.value}</Typography>
                 </div>
@@ -275,7 +275,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, atDeal }) => {
             title="Closing & Post-close"
             titleData={
               <CheckCircleIcon
-                style={{ color: '#39C522', opacity: every(populatedClosingSteps, { checked: true }) ? '100%' : '25%' }}
+                style={{ color: '#39C522', opacity: every(closingSteps, { checked: true }) ? '100%' : '25%' }}
               />
             }
             autoHeight
@@ -288,7 +288,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, atDeal }) => {
               <Typography color="inherit">The process of closing and post-closing the SPV / Fund</Typography>
             }
           >
-            {populatedClosingSteps.map((step, idx) => (
+            {closingSteps.map((step, idx) => (
               <ModalTooltip
                 title={step.value}
                 handleTooltip={handleTooltip}
@@ -300,6 +300,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, atDeal }) => {
                 <div className={classes.setupStep} onClick={(e) => handleTooltip(step.value.split(' ').join())}>
                   <CheckCircleIcon
                     style={{ color: '#0461FF', opacity: step.checked ? '100%' : '25%', marginRight: '0.5em' }}
+                    id={`check-${step.value.split(' ').join()}`}
                   />
                   <Typography>{step.value}</Typography>
                 </div>
