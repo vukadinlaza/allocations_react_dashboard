@@ -44,7 +44,6 @@ const AuthorizedApolloProvider = ({ children }) => {
    * https://docs.logrocket.com/docs/troubleshooting-sessions#apollo-client
    * 
    */
-
   useEffect(() => {
     getAccessTokenSilently().then(token => {
       const subscriptionOptions = {
@@ -55,7 +54,6 @@ const AuthorizedApolloProvider = ({ children }) => {
       };
       const subscriptionClient = new SubscriptionClient('ws://localhost:4000/graphql', subscriptionOptions);
       const newWSLink = new WebSocketLink(subscriptionClient);
-      console.log({token, newWSLink})
       setWSLink(newWSLink)
     });
   }, [])
@@ -129,9 +127,14 @@ const AuthorizedApolloProvider = ({ children }) => {
     },
     cache,
   });
-
   if(wsLink){
-    const linksArray = [onErrorLink, requestLink, withClientLink, wsLink, uploadLink];
+    const client = new ApolloClient({
+      link: wsLink,
+      cache,
+    });
+    return <ApolloProvider client={client}>{children}</ApolloProvider>;
+  }else if(requestLink || withClientLink || uploadLink || onErrorLink){
+    const linksArray = [onErrorLink, requestLink, withClientLink, uploadLink];
     const client = new ApolloClient({
       link: ApolloLink.from(linksArray),
       cache,

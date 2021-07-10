@@ -85,7 +85,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
     
     const currentTask = dealTasks.find(task => step.processStreetTask.includes(task.taskName.toLowerCase()));
     if(!currentTask){
-      console.log(`Task "${step.processStreetTask}" not matching with}`, dealTasks)
+      console.log(`Task "${step.processStreetTask}" not matching`)
       return false;
     }
 
@@ -123,7 +123,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
       });
       setSetupSteps(newSetupSteps)
     }
-  }, [])
+  }, [dealTasks])
 
   useEffect(() => {
     if(subscriptionData?.dealOnboarding){
