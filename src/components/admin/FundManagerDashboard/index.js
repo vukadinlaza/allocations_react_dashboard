@@ -51,14 +51,6 @@ const styles = (theme) => ({
     borderRadius: 5,
     backgroundColor: '#39C522',
   },
-  boxEditButton: {
-    backgroundColor: '#0461FF',
-    borderRadius: '100%',
-    padding: '8px',
-    '& *': {
-      color: 'white',
-    },
-  },
   chartContainer: {
     width: '70%',
     width: '60%',
@@ -138,7 +130,6 @@ const styles = (theme) => ({
   },
   investorName: {
     fontSize: '14px',
-    // width: "calc(100% - 108px)",
     maxWidth: 'calc(100% - 108px)',
     overflow: 'hidden',
     whiteSpace: 'pre',
@@ -160,7 +151,6 @@ const styles = (theme) => ({
     paddingTop: "180px",
     justifyContent: "center",
     backgroundColor: "rgba(255, 255, 255)"
-    // backgroundColor: 'rgba(255, 255, 255, 0.5)',
   },
   logType: {
     width: 'fit-content',
@@ -232,6 +222,7 @@ const styles = (theme) => ({
     height: 10,
     borderRadius: 5,
     width: '90%',
+    marginRight: "1em"
   },
   searchContainer: {
     display: 'flex',
@@ -247,19 +238,8 @@ const styles = (theme) => ({
   },
   section: {
     width: '100%',
-    // display: 'flex',
-    // justifyContent: 'space-between',
-    // flexWrap: 'wrap',
     padding: '40px',
     margin: "0px",
-    // [theme.breakpoints.down(phone)]: {
-    //   padding: '4vw',
-    // },
-  },
-  sectionTitle: {
-    fontSize: '32px',
-    fontWeight: 'bold',
-    marginBottom: '35px',
   },
   selectedTab: {
     fontWeight: 'bold !important',
@@ -296,12 +276,6 @@ const styles = (theme) => ({
     alignItems: 'center',
     width: '100%',
   },
-  subSection: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-  },
   tab: {
     textTransform: 'none',
     minWidth: 0,
@@ -336,9 +310,6 @@ const styles = (theme) => ({
     },
   },
   tabs: {
-    // position: "absolute",
-    // top: "0",
-    // left: "0",
     width: '100%',
     border: 'none',
     height: '50px',
@@ -430,6 +401,7 @@ export const ORG_OVERVIEW = gql`
           dealTasks {
             taskName
             taskStatus
+            formFields
           }
         }
       }
@@ -444,14 +416,14 @@ export const ONBOARDING = gql`
 `
 
 const fundTabs = ['Setup', 'Highlights', 'Investments', 'Investor Onboarding Status', 'Deal Page'];
-
 const spvTabs = ['Setup', 'Investor Onboarding Status', 'Deal Page'];
-
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
 
-const FundManagerDashboard = ({ classes, location, history }) => {
+
+const FundManagerDashboard = ({ classes, history }) => {
+
   const { width } = useViewport();
   const { organization: orgSlug, deal: dealSlug } = useParams();
   const [tabIndex, setTabIndex] = useState(0);
@@ -464,12 +436,13 @@ const FundManagerDashboard = ({ classes, location, history }) => {
   const [atDealData, setAtDealData] = useState({});
   const [openTooltip, setOpenTooltip] = useState('');
   const [getInvestments, { data: dealInvestments }] = useLazyQuery(GET_INVESTMENTS);
-  const [getOrgDeals, { data: orgDeals }] = useLazyQuery(ORG_OVERVIEW, {
-    variables: { slug: orgSlug },
-    fetchPolicy: 'network-only',
-  });
-  const { data: subsData, error, loading: subsLoading } = useSubscription(ONBOARDING, { variables: { data: "hello" } })
-  const { data: atDeal } = useFetch(OPS_ACCOUNTING, dealName && DEALS_TABLE, dealName && `({Deal Name}="${dealName}")`);
+  const [getOrgDeals, { data: orgDeals }] = useLazyQuery(ORG_OVERVIEW);
+  const { data: subsData } = useSubscription(ONBOARDING, { variables: { data: "hello" } })
+  const { data: atDeal } = useFetch(
+    OPS_ACCOUNTING, 
+    dealName && DEALS_TABLE, 
+    dealName && `({Deal Name}="${dealName}")`
+    );
   const { data: atFundData, status } = useFetch(
     OPS_ACCOUNTING,
     atDealData?.name && INVESTMENTS_TABLE,
@@ -494,7 +467,10 @@ const FundManagerDashboard = ({ classes, location, history }) => {
   }, [atFundData])
 
   useEffect(() => {
-    getOrgDeals();
+    getOrgDeals({
+      variables: { slug: orgSlug },
+      fetchPolicy: 'network-only',
+    });
   }, [orgSlug]);
 
   useEffect(() => {
@@ -571,6 +547,7 @@ const FundManagerDashboard = ({ classes, location, history }) => {
             subscriptionData={subsData}
           />
         );
+
       case 'Highlights':
         return (
           <Highlights
@@ -584,16 +561,13 @@ const FundManagerDashboard = ({ classes, location, history }) => {
             dealInvestments={dealInvestments}
           />
         );
+
       case 'Investments':
         return <Investments classes={classes} width={width} data={fundData} />;
+
       case 'Investor Onboarding Status':
-        return (
-          <InvestorStatus
-            classes={classes}
-            width={width}
-            data={dealInvestments}
-            />
-        )
+        return <InvestorStatus classes={classes} width={width} data={dealInvestments} />
+
       case 'Deal Page':
         return (
           <div className={classes.section}>
@@ -609,15 +583,16 @@ const FundManagerDashboard = ({ classes, location, history }) => {
             </FlatBox>
           </div>
         );
+
       default:
         return <p>No Data</p>;
     }
   };
-
+  console.log({orgDeals})
   if (!orgDeals) return <Loader />;
   return (
     <div className={classes.dashboardContainer}>
-      {openTooltip ? <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} /> : ''}
+      {openTooltip && <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} />}
       <div className={classes.mainTitleContainer}>
         <Typography className={classes.mainTitle}>Funds</Typography>
         <a
@@ -672,7 +647,6 @@ const FundManagerDashboard = ({ classes, location, history }) => {
                 disableRipple
                 />
             ))}
-            {/* }<Tab label="Disabled" disabled /> */}
           </Tabs>
           {!dealData || !atFundData || !dealInvestments || status === 'fetching' || loading? (
             <div className={classes.loaderContainer}>
