@@ -9,7 +9,6 @@ import Loader from '../../../utils/Loader';
 import './styles.scss';
 
 export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment, previewData, loadingPreview }) {
-  console.log(deal.documents);
 
   const handleClose = () => {
     setOpen(false);
