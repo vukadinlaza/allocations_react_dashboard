@@ -136,7 +136,7 @@ const ADD_USER_AS_VIEWED = gql`
 const validate = (investor, org) => {
   let required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
   if (org === 'irishangels') {
-    required = required.filter(d => d !== 'accredited_investor_status')
+    required = required.filter((d) => d !== 'accredited_investor_status');
   }
   if (investor.country && investor.country === 'United States') {
     required.push('state');
@@ -186,27 +186,35 @@ function InvestmentPage() {
     state_search: '',
   });
   const [errors, setErrors] = useState([]);
+  useEffect(() => {
+    const pAmount = history?.location?.state?.amount;
+    if (pAmount) {
+      setAmount(pAmount);
+    }
+  }, [history]);
 
   const populateInvestorData = () => {
     const personalData = personalInfo?.investor?.investorPersonalInfo?.submissionData;
     const editPersonalData = location?.state?.submission;
     let updatedInvestorData = { ...investorFormData };
     if (!personalData && !editPersonalData) return;
-    if(editPersonalData){
+    if (editPersonalData) {
       const editAmount = location.state.amount;
       updatedInvestorData = { ...investorFormData, ...editPersonalData };
-      setAmount(editAmount)
-    }else if (personalData){
+      setAmount(editAmount);
+    } else if (personalData) {
       updatedInvestorData = { ...investorFormData, ...personalData };
     }
     setInvestor(updatedInvestorData);
     setPopulated(true);
   };
 
-  const [submitConfirmation, { }] = useMutation(CONFIRM_INVESTMENT, {
+  const [submitConfirmation, {}] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       refetch();
-      const message = location?.state?.submission? 'Investment updated successfully.' : 'Investment created successfully.'
+      const message = location?.state?.submission
+        ? 'Investment updated successfully.'
+        : 'Investment created successfully.';
       toast.success(message);
       const path = organization ? `/next-steps/${organization}/${deal_slug}` : `/next-steps/${deal_slug}`;
       history.push(path, { investorFormData });
@@ -216,7 +224,7 @@ function InvestmentPage() {
 
   const confirmInvestment = () => {
     const validation = validate(investorFormData, organization);
-    console.log('validation', validation)
+    console.log('validation', validation);
     setErrors(validation);
 
     if (validation.length > 0) return toast.warning('Incomplete Form');
@@ -236,7 +244,7 @@ function InvestmentPage() {
 
   const submitInvestment = async () => {
     const ip = await getClientIp();
-    const isEdit = location?.state?.submission
+    const isEdit = location?.state?.submission;
     const payload = {
       ...investorFormData,
       investmentAmount: nWithCommas(amount),
@@ -245,7 +253,7 @@ function InvestmentPage() {
       docSpringTemplateId: deal.docSpringTemplateId,
     };
 
-    if(isEdit) payload.investmentId = location.state.investmentId
+    if (isEdit) payload.investmentId = location.state.investmentId;
 
     submitConfirmation({ variables: { payload } });
     setShowSpvModal(false);
