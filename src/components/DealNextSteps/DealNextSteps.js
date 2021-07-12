@@ -73,7 +73,7 @@ const GET_DEAL = gql`
 
 function DealNextSteps() {
   const [confetti, showConfetti] = useState(false);
-  const { data, loading, refetch } = useQuery(GET_INVESTOR);
+  const { data, loading, refetch } = useQuery(GET_INVESTOR, {fetchPolicy: 'network-only'});
   const [getDeal, { data: dealData, called: calledDeal }] = useLazyQuery(GET_DEAL);
   const [showTaxAsCompleted, setShowTaxAsCompleted] = useState(false);
   const [open, setOpen] = useState(false);
