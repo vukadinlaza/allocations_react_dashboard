@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useMutation, useLazyQuery, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { Button } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, useLocation } from 'react-router-dom';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import { toast } from 'react-toastify';
-import { toString } from 'lodash';
 import TermsAndConditionsPanel from './TermsAndConditionsPanel';
 import DealDocumentsPanel from './DealDocumentsPanel';
 import InvestmentAmountPanel from './InvestmentAmount';
@@ -148,8 +147,9 @@ const validate = (investor, org) => {
   return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
 };
 
-function InvestmentPage({}) {
+function InvestmentPage() {
   const history = useHistory();
+  const location = useLocation();
   const { organization: org, deal_slug } = useParams();
   const [addUserAsViewed, { called }] = useMutation(ADD_USER_AS_VIEWED);
   const { userProfile } = useAuth();
@@ -186,11 +186,8 @@ function InvestmentPage({}) {
     state_search: '',
   });
   const [errors, setErrors] = useState([]);
-
   useEffect(() => {
-    console.log(history, 'HISTORY');
     const pAmount = history?.location?.state?.amount;
-    console.log(pAmount);
     if (pAmount) {
       setAmount(pAmount);
     }
@@ -198,8 +195,16 @@ function InvestmentPage({}) {
 
   const populateInvestorData = () => {
     const personalData = personalInfo?.investor?.investorPersonalInfo?.submissionData;
-    if (!personalData) return;
-    const updatedInvestorData = { ...investorFormData, ...personalData };
+    const editPersonalData = location?.state?.submission;
+    let updatedInvestorData = { ...investorFormData };
+    if (!personalData && !editPersonalData) return;
+    if (editPersonalData) {
+      const editAmount = location.state.amount;
+      updatedInvestorData = { ...investorFormData, ...editPersonalData };
+      setAmount(editAmount);
+    } else if (personalData) {
+      updatedInvestorData = { ...investorFormData, ...personalData };
+    }
     setInvestor(updatedInvestorData);
     setPopulated(true);
   };
@@ -207,7 +212,10 @@ function InvestmentPage({}) {
   const [submitConfirmation, {}] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       refetch();
-      toast.success('Investment created successfully.');
+      const message = location?.state?.submission
+        ? 'Investment updated successfully.'
+        : 'Investment created successfully.';
+      toast.success(message);
       const path = organization ? `/next-steps/${organization}/${deal_slug}` : `/next-steps/${deal_slug}`;
       history.push(path, { investorFormData });
     },
@@ -219,17 +227,10 @@ function InvestmentPage({}) {
     console.log('validation', validation);
     setErrors(validation);
 
-    if (validation.length > 0) {
-      return toast.warning('Incomplete Form');
-    }
+    if (validation.length > 0) return toast.warning('Incomplete Form');
+    if (!amount) return toast.warning('Please enter a valid investment amount.');
+    if (parseInt(amount) < 1000) return toast.warning('Please enter an investment amount greater than $1000.');
 
-    if (!amount) {
-      return toast.warning('Please enter a valid investment amount.');
-    }
-
-    if (parseInt(amount) < 1000) {
-      return toast.warning('Please enter an investment amount greater than $1000.');
-    }
     const payload = {
       ...investorFormData,
       investmentAmount: nWithCommas(amount),
@@ -243,6 +244,7 @@ function InvestmentPage({}) {
 
   const submitInvestment = async () => {
     const ip = await getClientIp();
+    const isEdit = location?.state?.submission;
     const payload = {
       ...investorFormData,
       investmentAmount: nWithCommas(amount),
@@ -250,6 +252,8 @@ function InvestmentPage({}) {
       dealId: deal._id,
       docSpringTemplateId: deal.docSpringTemplateId,
     };
+
+    if (isEdit) payload.investmentId = location.state.investmentId;
 
     submitConfirmation({ variables: { payload } });
     setShowSpvModal(false);
@@ -295,6 +299,7 @@ function InvestmentPage({}) {
           deal={deal}
           checkedTAT={checkedTAT}
           setCheckedTAT={setCheckedTAT}
+          isEdit={location?.state?.submission}
         />
       </div>
 
