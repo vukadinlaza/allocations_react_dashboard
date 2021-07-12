@@ -35,6 +35,7 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
   const [addressComponents, setAddressComponents] = useState('');
 
   const [formData, setFormData] = useState({
+    // eslint-disable-next-line max-len
     name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank:
       state?.investorFormData?.legalName || '',
     address_number_street_and_apt_or_suite_no_see_instructions: '',
@@ -115,9 +116,6 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
     setFormData((prevData) => ({ ...prevData, [target.name]: target.value }));
   };
 
-  console.log('address===>', address);
-  console.log('formData===>', formData);
-
   return (
     <section className="W9Individual">
       <div className="form-header">
@@ -164,14 +162,15 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
                         {...params}
                         name="address_number_street_and_apt_or_suite_no_see_instructions"
                         variant="outlined"
-                        error={errors.includes('address_number_street_and_apt_or_suite_no_see_instructions')}
+                        error={errors.includes(
+                          'address_number_street_and_apt_or_suite_no_see_instructions',
+                        )}
                         {...getInputProps()}
                       />
                     </>
                   );
                 }}
                 renderOption={(suggestion) => {
-                  console.log('suggestion==>', suggestion);
                   const style = suggestion.active
                     ? {
                         backgroundColor: '#4169E1',
@@ -187,7 +186,7 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
                   return (
                     <Grid container spacing={0} alignItems="center">
                       <Grid item>
-                        <LocationOnIcon />
+                        <LocationOnIcon style={{ color: '#4169E1' }} />
                       </Grid>
                       <Grid item xs>
                         <TextField
@@ -197,7 +196,7 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
                         />
                       </Grid>
                     </Grid>
-                  ); //display value
+                  );
                 }}
               />
             </>
