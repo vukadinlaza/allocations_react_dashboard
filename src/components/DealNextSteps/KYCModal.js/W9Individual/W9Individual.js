@@ -1,6 +1,7 @@
-import { FormControl, TextField, Button } from '@material-ui/core';
+import { FormControl, TextField, Button, Grid } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import CloseIcon from '@material-ui/icons/Close';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 import React, { useState, useEffect } from 'react';
 import './styles.scss';
 import moment from 'moment';
@@ -149,6 +150,9 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
               <Autocomplete
                 className="form-field address"
                 options={suggestions}
+                filterOptions={(x) => x}
+                disableClearable
+                onChange={handleChange}
                 inputValue={address}
                 onInputChange={(address) => address}
                 getOptionLabel={(suggestion) => suggestion.description} // filter value
@@ -158,7 +162,6 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
                       Street address
                       <TextField
                         {...params}
-                        onChange={handleChange}
                         name="address_number_street_and_apt_or_suite_no_see_instructions"
                         variant="outlined"
                         error={errors.includes('address_number_street_and_apt_or_suite_no_see_instructions')}
@@ -174,66 +177,29 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
                         backgroundColor: '#4169E1',
                         cursor: 'pointer',
                         width: '99%',
-                        margin: '0 auto',
                         borderRadius: '5px',
                       }
                     : {
                         backgroundColor: '#FBFCFF',
                         cursor: 'pointer',
                         width: '99%',
-                        margin: '0 auto',
                       };
                   return (
-                    <TextField
-                      value={suggestion.description}
-                      {...getSuggestionItemProps(suggestion, { style })}
-                      variant="outlined"
-                    />
+                    <Grid container spacing={0} alignItems="center">
+                      <Grid item>
+                        <LocationOnIcon />
+                      </Grid>
+                      <Grid item xs>
+                        <TextField
+                          variant="outlined"
+                          value={suggestion.description}
+                          {...getSuggestionItemProps(suggestion, { style })}
+                        />
+                      </Grid>
+                    </Grid>
                   ); //display value
                 }}
               />
-
-              {/* form without material ui-autocomplete */}
-              <FormControl className="form-field address">
-                Street address
-                <TextField
-                  value={formData.address_number_street_and_apt_or_suite_no_see_instructions}
-                  onChange={handleChange}
-                  name="address_number_street_and_apt_or_suite_no_see_instructions"
-                  variant="outlined"
-                  error={errors.includes('address_number_street_and_apt_or_suite_no_see_instructions')}
-                  {...getInputProps()}
-                />
-              </FormControl> 
-
-              <FormControl className="form-field">
-                {suggestions.map((suggestion) => {
-                  console.log('suggestion==>', suggestion);
-                  const style = suggestion.active
-                    ? {
-                        backgroundColor: '#4169E1',
-                        cursor: 'pointer',
-                        width: '50%',
-                        margin: '0 auto',
-                        borderRadius: '5px',
-                      }
-                    : {
-                        backgroundColor: '#FBFCFF',
-                        cursor: 'pointer',
-                        width: '50%',
-                        margin: '0 auto',
-                      };
-
-                  return (
-                    <TextField
-                      value={suggestion.description}
-                      key={suggestion.placeId}
-                      {...getSuggestionItemProps(suggestion, { style })}
-                      variant="outlined"
-                    />
-                  );
-                })}
-              </FormControl> 
             </>
           )}
         </PlacesAutocomplete>
