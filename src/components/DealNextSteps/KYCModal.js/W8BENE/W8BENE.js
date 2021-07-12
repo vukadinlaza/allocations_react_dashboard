@@ -40,6 +40,21 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
     organization_name: '',
     organization_country: '',
     disregarded_entity_name: '',
+    residence_address: '',
+    residence_city_or_town: '',
+    residence_country: '',
+    mailing_address: '',
+    mailing_city_or_town: '',
+    mailing_country: '',
+    us_tin: '',
+    foreign_tin: '',
+    print_name: '',
+    date_mm_dd_yyyy: moment().format('YYYY-MM-DD'),
+    signature: '',
+    signing_capacity: true,
+    passive_nffe_owners: [
+      { id: 1, name: '', address: '', tin: '' }
+    ],
     '4_corporation': false,
     '4_disregarded_entity': false,
     '4_partnership': false,
@@ -69,14 +84,6 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
     '5_direct_reporting_nffe': false,
     '5_sponsored_direct_reporting_nffe': false,
     '5_not_financial_account': false,
-    residence_address: '',
-    residence_city_or_town: '',
-    residence_country: '',
-    mailing_address: '',
-    mailing_city_or_town: '',
-    mailing_country: '',
-    us_tin: '',
-    foreign_tin: '',
     '14a': false,
     '14a_resident_of': '',
     '14b': false,
@@ -126,36 +133,33 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
     '40b': false,
     '40c': false,
     42: '',
-    43: false,
-    passive_nffe_owners: [{ name: '', address: '', tin: '' }],
-    print_name: '',
-    date_mm_dd_yyyy: moment().format('YYYY-MM-DD'),
-    signature: '',
-    signing_capacity: true,
+    43: false
   });
 
   const validate = (formData) => {
     const required = [
-      // 'organization_name',
-      // 'organization_country',
-      // 'disregarded_entity_name',
-      // 'chapter3Status',
-      // TODO: conditionally validate chapter 3 options
-      // 'chapter4Status',
-      // TODO: conditionally validate chapter 4 options
-      // 'residence_address',
-      // 'residence_country',
-      // 'residence_city_or_town',
-      // 'us_tin',
-      // 'foreign_tin',
-      // 'date_mm_dd_yyyy',
-      // 'print_name'
-      // 'permanent_residence_address_street_apt_or_suite_no_or_rural_route_do_not_use_a_p_o_box_or_in_care_of_address',
-      // 'city_or_town_state_or_province_include_postal_code_where_appropriate',
-      // 'print_name_of_signer',
-      // 'date_of_birth_mm_dd_yyyy_see_instructions',
-      // 'signature'
+      'organization_name',
+      'organization_country',
+      'residence_address',
+      'residence_country',
+      'residence_city_or_town',
+      'date_mm_dd_yyyy',
+      'print_name',
+      'residence_address',
+      'residence_city_or_town',
+      'residence_country',
+      'print_name',
+      'signature',
+      'foreign_tin'
     ];
+
+    if(chapter3Status === '') {
+      required.push('chapter3Status');
+    }
+    
+    if(chapter4Status === '') {
+      required.push('chapter4Status');
+    }
 
     if (differentMailingAddress) {
       required.push('mailing_address', 'mailing_city_or_town', 'mailing_country');
@@ -165,7 +169,6 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
   };
 
   const handleSubmit = () => {
-    // need to handle submit for W8-BEN-E??
 
     const validation = validate(formData);
     setErrors(validation);
@@ -173,6 +176,9 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
     if (validation.length > 0) {
       return toast.warning('Incomplete Form');
     }
+
+    // clean up ID's from data for docspring template
+    formData.passive_nffe_owners.forEach(owner => { delete owner.id })
 
     createDoc(formData);
   };
@@ -185,33 +191,47 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
   };
 
   const handleOwnerAdd = () => {
-    const { length } = formData.passive_nffe_owners;
+    const { passive_nffe_owners } = formData;
+    const length = passive_nffe_owners?.length;
+    if(length === 9) return;
 
-    if (length < 8) {
-      setFormData((prevState) => ({
-        ...prevState,
-        passive_nffe_owners: [...prevState.passive_nffe_owners, { name: '', address: '', tin: '' }],
-      }));
-    }
-  };
+    const lastRow = passive_nffe_owners[length - 1];
+    const updatedOwners = [...passive_nffe_owners];
+    updatedOwners.push({ id: lastRow.id + 1, name: '', address: '', tin: '' });
 
-  const handleOwnerDelete = (index) => {
     setFormData((prevState) => ({
       ...prevState,
-      passive_nffe_owners: [...prevState.passive_nffe_owners, { name: '', address: '', tin: '' }],
+      passive_nffe_owners: updatedOwners
+    }));
+
+  };
+
+  const handleOwnerDelete = (id) => {
+    
+    const { passive_nffe_owners } = formData;
+    
+    const length = passive_nffe_owners?.length;
+    if(length === 1) return;
+
+    const updatedArray = passive_nffe_owners.filter(owner => owner.id !== id)
+
+    setFormData((prevState) => ({
+      ...prevState,
+      passive_nffe_owners: updatedArray,
     }));
   };
 
-  const handleOwnerChange = ({ target }, index) => {
+  const handleOwnerChange = ({ target }, id) => {
+
+    const { passive_nffe_owners } = formData;
+
+    const newData = [...passive_nffe_owners];
+    const index = newData.findIndex(obj => obj.id === id);
+    newData[index][target.name] = target.value;
+
     setFormData((prevState) => ({
       ...prevState,
-      passive_nffe_owners: {
-        ...prevState.passive_nffe_owners,
-        [index + 1]: {
-          ...prevState.passive_nffe_owners[index + 1],
-          [target.name]: target.value,
-        },
-      },
+      passive_nffe_owners: newData,
     }));
   };
 
@@ -222,7 +242,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
           className="owner-input"
           variant="outlined"
           name="name"
-          onChange={(e) => handleOwnerChange(e, i)}
+          onChange={(e) => handleOwnerChange(e, owner.id)}
           value={owner.name}
           placeholder="Name"
         />
@@ -230,7 +250,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
         <TextField
           name="address"
           className="owner-input"
-          onChange={(e) => handleOwnerChange(e, i)}
+          onChange={(e) => handleOwnerChange(e, owner.id)}
           variant="outlined"
           value={owner.address}
           placeholder="Address"
@@ -240,12 +260,12 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
           name="tin"
           value={owner.tin}
           className="owner-input"
-          onChange={(e) => handleOwnerChange(e, i)}
+          onChange={(e) => handleOwnerChange(e, owner.id)}
           variant="outlined"
           placeholder="TIN"
         />
 
-        <Button variant="outlined" className="delete-owner" onClick={() => handleOwnerDelete(i + 1)}>
+        <Button variant="outlined" className="delete-owner" onClick={() => handleOwnerDelete(owner.id)}>
           <HighlightOffIcon />
         </Button>
       </FormControl>
@@ -373,10 +393,9 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
 
         <FormControl className="form-field address">
           <label className="form-label">
-            Name of disregarded entity receiving the payment
+            Name of disregarded entity receiving the payment (if applicable)
             <TextField
               name="disregarded_entity_name"
-              error={errors.includes('disregarded_entity_name')}
               onChange={handleChange}
               variant="outlined"
               value={formData['disregarded_entity_name']}
