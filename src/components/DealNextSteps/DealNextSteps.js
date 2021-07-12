@@ -38,6 +38,7 @@ const GET_INVESTOR = gql`
           slug
         }
         amount
+        value
         submissionData {
           country
           state

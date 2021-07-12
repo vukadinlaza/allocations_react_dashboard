@@ -179,6 +179,7 @@ function InvestmentPage() {
   const [showSpvModal, setShowSpvModal] = useState(false);
   const [amount, setAmount] = useState('');
   const [populated, setPopulated] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [investorFormData, setInvestor] = useState({
     country: '',
     country_search: '',
@@ -212,6 +213,7 @@ function InvestmentPage() {
   const [submitConfirmation, {}] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       refetch();
+      setLoading(false);
       const message = location?.state?.submission
         ? 'Investment updated successfully.'
         : 'Investment created successfully.';
@@ -257,9 +259,10 @@ function InvestmentPage() {
 
     submitConfirmation({ variables: { payload } });
     setShowSpvModal(false);
+    setLoading(true)
   };
 
-  if (!data) return <Loader />;
+  if (!data || loading) return <Loader />;
 
   const { deal } = data;
   const {
