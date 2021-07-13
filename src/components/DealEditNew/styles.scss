@@ -1,10 +1,26 @@
 .DealEditNew {
-
-
+  position: relative;
 
   h1, h2 {
     font-size: 1.6rem;
     margin: 10px 0;
+  }
+
+
+  .view-deal-page-button {
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    background: #215EF5;
+    color: white;
+    text-transform: none;
+    transition: all .2s ease-in;
+    
+    &:hover {
+      transition: all .2s ease-out;
+      background: #1253f8;
+    }
+
   }
 
   .section-header {

@@ -14,6 +14,7 @@ import FundTerms from './FundTermSettings';
 import './styles.scss';
 import { ORG_OVERVIEW } from '../admin/AdminHome';
 
+
 const validInputs = [
   '_id',
   'company_name',
@@ -235,6 +236,7 @@ function DealEditNew() {
   const [activeTab, setActiveTab] = useState('basic');
   const [formData, setFormData] = useState({
     dealParams: {},
+    documents: []
   });
 
   const { data, refetch } = useQuery(GET_DEAL, { variables: { id, slug: organization } });
@@ -337,8 +339,12 @@ function DealEditNew() {
 
   if (errorMessage) return <div className="Error">{errorMessage}</div>;
 
+  const dealPageUrl = formData.slug ? `/deals/${organization}/${formData.slug}` : ''
+
   return (
     <section className="DealEditNew">
+
+      <Button onClick={() => history.push(dealPageUrl)} className="view-deal-page-button">View Deal Page</Button>
       <div className="section-header">
         <h1>Edit Deal</h1>
         <div className="tabs-container">
@@ -377,12 +383,12 @@ function DealEditNew() {
       <div className={`save-changes ${activeTab === 'deal' && 'lastPage'}`}>
         {activeTab !== 'deal' && (
           <Button onClick={handleContinueClick} className="continue">
-            Continue
+            Next
           </Button>
         )}
 
         <Button onClick={handleFormSubmit} className="save-and-exit">
-          Save and Exit
+          Save
         </Button>
 
         {activeTab === 'deal' && (
