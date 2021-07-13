@@ -437,7 +437,7 @@ const FundManagerDashboard = ({ classes, history }) => {
   const [openTooltip, setOpenTooltip] = useState('');
   const [getInvestments, { data: dealInvestments }] = useLazyQuery(GET_INVESTMENTS);
   const [getOrgDeals, { data: orgDeals }] = useLazyQuery(ORG_OVERVIEW);
-  const { data: subsData } = useSubscription(ONBOARDING, { variables: { data: "hello" } })
+  const { data: subsData } = useSubscription(ONBOARDING)
   const { data: atDeal } = useFetch(
     OPS_ACCOUNTING, 
     dealName && DEALS_TABLE, 
