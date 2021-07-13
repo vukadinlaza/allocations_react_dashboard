@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import './styles.scss';
 import { toast } from 'react-toastify';
-import { snakeCase } from 'lodash';
 import { useLocation } from 'react-router';
 import Loader from '../../../utils/Loader';
 

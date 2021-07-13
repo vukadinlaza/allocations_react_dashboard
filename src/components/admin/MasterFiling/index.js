@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import _ from 'lodash';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
 import { useParams } from 'react-router-dom';
-import { Row, Col, Card } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 import { Paper, LinearProgress } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
@@ -34,7 +34,7 @@ const MASTER_FILING = gql`
 
 export default function MasterFiling() {
   const { organization } = useParams();
-  const { data, error } = useQuery(MASTER_FILING, { variables: { slug: organization } });
+  const { data } = useQuery(MASTER_FILING, { variables: { slug: organization } });
 
   if (!data)
     return (
@@ -75,8 +75,6 @@ export default function MasterFiling() {
 
   const grouped = _.groupBy(masterFiling, 'subCategory');
 
-  const progress = Math.round((masterFiling.filter((x) => x.status === 1).length / masterFiling.length) * 100);
-
   return (
     <div className="MasterFiling">
       <Row>
@@ -104,7 +102,7 @@ function SubCategory({ subCat, steps }) {
       <h4 onClick={() => setOpen((x) => !x)} className={classNames({ selected: open })}>
         <span>{subCat}</span>
         <span className="progress-wrapper">
-          {progress == 100 && <FontAwesomeIcon icon="check-circle" />}
+          {progress === 100 && <FontAwesomeIcon icon="check-circle" />}
           {progress < 100 && (
             <LinearProgress
               style={{ height: '18px' }}

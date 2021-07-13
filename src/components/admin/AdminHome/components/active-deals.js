@@ -22,7 +22,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Loader from '../../../utils/Loader';
 import { nWithCommas } from '../../../../utils/numbers';
 import InvestmentFlow from './investment-flow';
-import Document from '../../../utils/Document';
 
 /** *
  *
@@ -44,7 +43,7 @@ export const ActiveDeals = ({ orgData, isDemo, superadmin }) => {
     <Grid container>
       <Grid item xs={12}>
         <Paper>
-          <Grid container xs={12} justify="space-between" style={{ padding: '16px' }}>
+          <Grid container justify="space-between" style={{ padding: '16px' }}>
             <Typography variant="h6" gutterBottom>
               Active Deals: {(active || []).length}
             </Typography>
@@ -170,7 +169,7 @@ export const Deal = ({ deal, index, superadmin, slug, isDemo }) => {
                               borderRadius: '1rem',
                             }}
                           >
-                            <img src="https://allocations-public.s3.us-east-2.amazonaws.com/file-icon.svg" />
+                            <img src="https://allocations-public.s3.us-east-2.amazonaws.com/file-icon.svg" alt='File Icon' />
                             <Typography
                               variant="body2"
                               style={{

@@ -3,18 +3,13 @@ import _ from 'lodash';
 import { useParams, Link, useHistory } from 'react-router-dom';
 import { gql } from 'apollo-boost';
 import { useLazyQuery } from '@apollo/react-hooks';
-import { Row, Col } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as d3 from 'd3';
-
 import { Grid, Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import * as Chart from '../../utils/chart';
 import Loader from '../utils/Loader';
 import { nWithCommas, formatDate } from '../../utils/numbers';
 import { useAuth } from '../../auth/useAuth';
-import { getDisplayName } from '../../utils/displayName';
 
 /** *
  *
@@ -57,45 +52,6 @@ const GET_INVESTMENTS = gql`
     }
   }
 `;
-
-function renderChart(investments) {
-  const margins = { top: 0, bottom: 0, left: 0, right: 0 };
-  const { g, chartWidth, chartHeight } = Chart.initResponsive('#investments-timeseries-chart', margins);
-
-  const { data } = investments.reduce(
-    (acc, i) => {
-      const cumsum = acc.cumsum + i.amount;
-      return {
-        cumsum,
-        data: acc.data.concat([{ ...i, amount: cumsum }]),
-      };
-    },
-    { data: [], cumsum: 0 },
-  );
-
-  const x = d3
-    .scaleTime()
-    .rangeRound([0, chartWidth])
-    .domain(d3.extent(data, (d) => new Date(d.dealParams.wireDeadline)));
-
-  const y = d3
-    .scaleLinear()
-    .range([chartHeight, 0])
-    .domain(d3.extent(data, (d) => new Date(d.dealParams.wireDeadline)));
-
-  const line = d3
-    .line()
-    .x((d) => x(new Date(d.dealParams.wireDeadline)))
-    .y((d) => y(d.amount))
-    .curve(d3.curveMonotoneX);
-
-  g.append('path')
-    .datum(data)
-    .attr('stroke', '#00D394')
-    .attr('stroke-width', 1)
-    .attr('fill', '#00D394')
-    .attr('d', line);
-}
 
 const useStyles = makeStyles((theme) => ({
   green: {
@@ -169,7 +125,7 @@ export default function Investments() {
           <TableBody>
             {investments.map((investment) =>
               investment.showDocs ? (
-                <DocsRow docs={showDocs.documents} />
+                <DocsRow key={showDocs._id} docs={showDocs.documents} />
               ) : (
                 <TableRow key={investment._id} className="investment-row">
                   <TableCell>{_.get(investment, 'investor.email')}</TableCell>
@@ -221,7 +177,7 @@ function DocsRow({ docs }) {
     <TableRow>
       <TableCell colSpan={7}>
         {docs.map((doc) => (
-          <div className="doc-wrapper">
+          <div key={doc?.link} className="doc-wrapper">
             <div className="doc">
               <FontAwesomeIcon icon={['far', 'file-pdf']} />
             </div>

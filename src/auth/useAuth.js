@@ -5,7 +5,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 
-const { NODE_ENV } = process.env;
+// const { NODE_ENV } = process.env;
 
 const GET_INVESTOR = gql`
   {

@@ -5,12 +5,11 @@ import { gql } from 'apollo-boost';
 import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/react-hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CloudDone, HourglassEmpty, CheckCircle } from '@material-ui/icons';
+import { CloudDone } from '@material-ui/icons';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 import {
   Button,
-  List,
   TextField,
   Paper,
   Grid,
@@ -23,18 +22,9 @@ import {
   MenuItem,
 } from '@material-ui/core';
 import './style.scss';
-
 import countries from 'country-region-data';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import { useAuth } from '../../../auth/useAuth';
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(2),
-    marginBottom: theme.spacing(4),
-  },
-}));
 
 /** *
  *
@@ -227,51 +217,9 @@ export default function InvestorEditForm({
           <Button variant="contained" style={{ marginTop: 16 }} onClick={submit} color="primary">
             {actionText}
           </Button>
-
-          {/* <div className={classes.paper}>
-
-          <Typography variant="h6" gutterBottom>
-            KYC
-          </Typography>
-          <Typography variant="subtitle2">
-            Optional information:
-          </Typography>
-
-          <KYC investor={investor} setInvestor={setInvestor} />
-
-          <Button variant="contained"
-            style={{ marginTop: 16 }}
-            onClick={submit}
-            color="primary">
-            {actionText}
-          </Button>
-
-        </div> */}
         </form>
       </Paper>
     </>
-  );
-}
-
-function KYC({ investor, setInvestor }) {
-  const status =
-    investor.passport && investor.accredidation_doc ? (
-      investor.is_kyced ? (
-        <Button variant="contained" size="small" style={{ backgroundColor: '#21ce99' }} startIcon={<CheckCircle />}>
-          Approved
-        </Button>
-      ) : (
-        <Button variant="contained" size="small" color="secondary" startIcon={<HourglassEmpty />}>
-          Pending
-        </Button>
-      )
-    ) : null;
-
-  return (
-    <List>
-      <AccredidationUploader investor={investor} setInvestor={setInvestor} />
-      <PassportUploader investor={investor} setInvestor={setInvestor} />
-    </List>
   );
 }
 
@@ -305,43 +253,6 @@ export function PassportUploader({ investor, setInvestor }) {
               style={{ display: 'none' }}
               onChange={({ target }) => {
                 if (target.validity.valid) setInvestor((prev) => ({ ...prev, passport: target.files[0] }));
-              }}
-            />
-          </Button>
-        </ListItemSecondaryAction>
-      </ListItem>
-    </Paper>
-  );
-}
-
-function AccredidationUploader({ investor, setInvestor }) {
-  if (investor.accredidation_doc) {
-    return (
-      <Paper style={{ marginBottom: 16 }}>
-        <ListItem>
-          <ListItemText primary="Accredited Investor Certificate" secondary="via verifyinvestor.com" />
-          <ListItemSecondaryAction>
-            <Button variant="contained" color="secondary" size="small" startIcon={<CloudDone />}>
-              Uploaded
-            </Button>
-          </ListItemSecondaryAction>
-        </ListItem>
-      </Paper>
-    );
-  }
-
-  return (
-    <Paper style={{ marginBottom: 16 }}>
-      <ListItem>
-        <ListItemText primary="Accredited Investor Certificate" secondary="via verifyinvestor.com" />
-        <ListItemSecondaryAction>
-          <Button startIcon={<CloudUploadIcon />} variant="contained" color="secondary" component="label">
-            Upload
-            <input
-              type="file"
-              style={{ display: 'none' }}
-              onChange={({ target }) => {
-                if (target.validity.valid) setInvestor((prev) => ({ ...prev, accredidation_doc: target.files[0] }));
               }}
             />
           </Button>

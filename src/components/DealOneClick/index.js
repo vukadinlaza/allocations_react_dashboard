@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, useLocation, useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import { gql } from 'apollo-boost';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import moment from 'moment';

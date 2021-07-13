@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useParams, useHistory } from 'react-router-dom';
 import { gql } from 'apollo-boost';
 import _ from 'lodash';
@@ -239,7 +239,7 @@ function DealEditNew() {
     documents: []
   });
 
-  const { data, refetch, error, loading } = useQuery(GET_DEAL, { variables: { id, slug: organization } });
+  const { data, refetch } = useQuery(GET_DEAL, { variables: { id, slug: organization } });
 
   const [updateDeal] = useMutation(UPDATE_DEAL, {
     onCompleted: () => toast.success('Deal updated successfully.'),
