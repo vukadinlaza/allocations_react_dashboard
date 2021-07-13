@@ -155,6 +155,7 @@
         font-size: 1.2rem;
         width: 100%;
         font-weight: 600;
+        pointer-events: none;
 
         .upload-container {
           display: flex;
@@ -166,6 +167,7 @@
             width: max-content;
   
             .attach-button {
+              pointer-events: initial;
               margin-top: .5rem;
               width: 12rem;
               height: 3rem;
