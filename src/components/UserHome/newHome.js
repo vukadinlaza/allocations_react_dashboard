@@ -538,6 +538,9 @@ export default () => {
                   <TableCell className={classes.tableHeader} align="center">
                     Deal Page
                   </TableCell>
+                  <TableCell className={classes.tableHeader} align="center">
+                    Next Steps
+                  </TableCell>
                   <Hidden only="xs">
                     <TableCell className={classes.tableHeader} align="center">
                       Documents
@@ -1156,13 +1159,15 @@ const TR = ({ investment, setShowDocs, showDocs, demo, setShowCaptialAccounts, c
   const capFields = (capitalAccounts || []).map((r) => r.fields);
   const orgSlug = investment?.deal?.organization?.slug;
   const dealSlug = investment?.deal?.slug;
-  const nextStepUrl = ['signed', 'wired', 'complete'].includes(investment?.status)? `/next-steps/${orgSlug}/${dealSlug}` : `/deals/${orgSlug}/${dealSlug}`
+  const nextStepUrl = ['signed', 'wired', 'complete'].includes(investment?.status)
+    ? `/next-steps/${orgSlug}/${dealSlug}`
+    : `/deals/${orgSlug}/${dealSlug}`;
   const capitalAccountInfo = capFields.find((r) => {
     return _.get(r, 'Deal Name (webapp)[0]') === investment.deal.company_name;
   });
   const addedDate = moment(investment?.deal?.dealParams?.wireDeadline).format('Do MMM YYYY');
   const showDocsFn = () => setShowDocs(showDocs ? false : investment);
-  
+
   return (
     <TableRow key={investment._id} className="investment-row">
       <TableCell align="left" onClick={showDocsFn}>
@@ -1196,8 +1201,13 @@ const TR = ({ investment, setShowDocs, showDocs, demo, setShowCaptialAccounts, c
           variant="contained"
           size="small"
           color="primary"
-          onClick={() => history.push(nextStepUrl)}
+          onClick={() => history.push(_.get(investment, 'deal.appLink', ''))}
         >
+          View
+        </Button>
+      </TableCell>
+      <TableCell onClick={showDocsFn} align="center">
+        <Button variant="contained" size="small" color="primary" onClick={() => history.push(nextStepUrl)}>
           View
         </Button>
       </TableCell>
