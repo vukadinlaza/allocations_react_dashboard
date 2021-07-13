@@ -197,7 +197,6 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
       <Grid item xs={12} lg={4}>
         <ScrollableBox
           title="VIEWED"
-          // titleData={<p className={classes.titleDataText}>${nWithCommas(viewedTotal)}</p>}
           autoHeight
           fontSize="small"
           size="third"
