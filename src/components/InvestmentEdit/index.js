@@ -89,7 +89,9 @@ export default function InvestmentEdit({
   const [hasChanges, setHasChanges] = useState(false);
   const id = investmentId || params.id;
   const classes = useStyles();
-  const { data, refetch: getInvestment } = useQuery(GET_INVESTMENT, { variables: { _id: id } });
+  const { data, refetch: getInvestment, loading } = useQuery(GET_INVESTMENT, {
+    variables: { _id: id },
+  });
   const [createInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT);
   const [deleteInvestment] = useMutation(destroy, {
     onCompleted: () => {
@@ -111,8 +113,8 @@ export default function InvestmentEdit({
   }, [investment]);
 
   useEffect(() => {
-    if (data && !investment) setInvestment(data.investment);
-  }, [data, investment]);
+    if (data && !loading) setInvestment(data.investment);
+  }, [data, loading]);
 
   const updateInvestmentProp = ({ prop, newVal }) => {
     setInvestment((prev) => ({ ...prev, [prop]: newVal }));
