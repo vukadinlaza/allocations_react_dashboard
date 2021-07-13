@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { gql } from 'apollo-boost';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery, useSubscription } from '@apollo/react-hooks';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography, Button } from '@material-ui/core';
@@ -48,14 +48,6 @@ const styles = (theme) => ({
   bar: {
     borderRadius: 5,
     backgroundColor: '#39C522',
-  },
-  boxEditButton: {
-    backgroundColor: '#0461FF',
-    borderRadius: '100%',
-    padding: '8px',
-    '& *': {
-      color: 'white',
-    },
   },
   chartContainer: {
     width: '70%',
@@ -137,7 +129,6 @@ const styles = (theme) => ({
   },
   investorName: {
     fontSize: '14px',
-    // width: "calc(100% - 108px)",
     maxWidth: 'calc(100% - 108px)',
     overflow: 'hidden',
     whiteSpace: 'pre',
@@ -230,6 +221,7 @@ const styles = (theme) => ({
     height: 10,
     borderRadius: 5,
     width: '90%',
+    marginRight: '1em',
   },
   searchContainer: {
     display: 'flex',
@@ -245,18 +237,8 @@ const styles = (theme) => ({
   },
   section: {
     width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
     padding: '40px',
-    [theme.breakpoints.down(phone)]: {
-      padding: '4vw',
-    },
-  },
-  sectionTitle: {
-    fontSize: '32px',
-    fontWeight: 'bold',
-    marginBottom: '35px',
+    margin: '0px',
   },
   selectedTab: {
     fontWeight: 'bold !important',
@@ -289,12 +271,6 @@ const styles = (theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-  },
-  subSection: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
   },
   tab: {
     textTransform: 'none',
@@ -415,6 +391,13 @@ export const ORG_OVERVIEW = gql`
           managementFeeType
           fundManagementFeeType
         }
+        dealOnboarding {
+          dealTasks {
+            taskName
+            taskStatus
+            formFields
+          }
+        }
       }
     }
     investor {
@@ -425,10 +408,14 @@ export const ORG_OVERVIEW = gql`
   }
 `;
 
+export const ONBOARDING = gql`
+  subscription dealOnboarding($data: String) {
+    dealOnboarding(data: $data)
+  }
+`;
+
 const fundTabs = ['Setup', 'Highlights', 'Investments', 'Investor Onboarding Status', 'Deal Page'];
-
 const spvTabs = ['Setup', 'Investor Onboarding Status', 'Deal Page'];
-
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
@@ -441,15 +428,13 @@ const FundManagerDashboard = ({ classes, history }) => {
   const [dealTab, setDealTab] = useState(0);
   const [dealData, setDealData] = useState({});
   const [dealName, setDealName] = useState('');
-  const [dashboardTabs, setDashboardTabs] = useState([])
+  const [dashboardTabs, setDashboardTabs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [atDealData, setAtDealData] = useState({});
   const [openTooltip, setOpenTooltip] = useState('');
   const [getInvestments, { data: dealInvestments, refetch }] = useLazyQuery(GET_INVESTMENTS);
-  const [getOrgDeals, { data: orgDeals }] = useLazyQuery(ORG_OVERVIEW, {
-    variables: { slug: orgSlug },
-    fetchPolicy: 'network-only',
-  });
+  const [getOrgDeals, { data: orgDeals }] = useLazyQuery(ORG_OVERVIEW);
+  const { data: subsData } = useSubscription(ONBOARDING, { variables: { data: 'hello' } });
   const { data: atDeal } = useFetch(OPS_ACCOUNTING, dealName && DEALS_TABLE, dealName && `({Deal Name}="${dealName}")`);
   const { data: atFundData, status } = useFetch(
     OPS_ACCOUNTING,
@@ -471,7 +456,7 @@ const FundManagerDashboard = ({ classes, history }) => {
     if (dealData && Object.keys(dealData).length) {
       const newTabs = dealData.investmentType === 'fund' ? fundTabs : spvTabs;
       const newTabIndex = newTabs.indexOf(tabName);
-      const newIndex = newTabIndex < 0? 0 : newTabIndex;
+      const newIndex = newTabIndex < 0 ? 0 : newTabIndex;
       const newTabName = newTabs[newIndex];
       setTabIndex(newIndex);
       setDashboardTabs(newTabs);
@@ -485,7 +470,10 @@ const FundManagerDashboard = ({ classes, history }) => {
   }, [atFundData]);
 
   useEffect(() => {
-    getOrgDeals();
+    getOrgDeals({
+      variables: { slug: orgSlug },
+      fetchPolicy: 'network-only',
+    });
   }, [orgSlug]);
 
   useEffect(() => {
@@ -520,12 +508,12 @@ const FundManagerDashboard = ({ classes, history }) => {
 
   const goToEditDeal = () => {
     if (orgSlug && dealData?._id) {
-      history.push(`/admin/${orgSlug}/deals/${dealData._id}/edit`)
+      history.push(`/admin/${orgSlug}/deals/${dealData._id}/edit`);
     }
   };
 
   const handleDealsTabChange = (newValue) => {
-    setLoading(true)
+    setLoading(true);
     setDealTab(newValue);
   };
 
@@ -549,10 +537,11 @@ const FundManagerDashboard = ({ classes, history }) => {
             classes={classes}
             data={dealData}
             openTooltip={openTooltip}
-            atDeal={atDeal}
             handleTooltip={handleTooltip}
+            subscriptionData={subsData}
           />
         );
+
       case 'Highlights':
         return (
           <Highlights
@@ -566,8 +555,10 @@ const FundManagerDashboard = ({ classes, history }) => {
             dealInvestments={dealInvestments}
           />
         );
+
       case 'Investments':
         return <Investments classes={classes} width={width} data={fundData} />;
+
       case 'Investor Onboarding Status':
         return (
           <InvestorStatus
@@ -586,13 +577,20 @@ const FundManagerDashboard = ({ classes, history }) => {
                 dashboard.allocations.com{orgSlug && dealData?.slug ? `/deals/${orgSlug}/${dealData.slug}` : ''}
               </Typography>
               <div className={classes.pageIcons}>
-                <div className={classes.pageIcon} onClick={goToEditDeal}><EditIcon/></div>
-                <div className={classes.pageIcon} onClick={goToDeal}><ChevronRightIcon/></div>
-                <div className={classes.pageIcon} onClick={handleLinkCopy}><FileCopyOutlinedIcon/></div>
+                <div className={classes.pageIcon} onClick={goToEditDeal}>
+                  <EditIcon />
+                </div>
+                <div className={classes.pageIcon} onClick={goToDeal}>
+                  <ChevronRightIcon />
+                </div>
+                <div className={classes.pageIcon} onClick={handleLinkCopy}>
+                  <FileCopyOutlinedIcon />
+                </div>
               </div>
             </FlatBox>
           </div>
         );
+
       default:
         return <p>No Data</p>;
     }
@@ -601,7 +599,7 @@ const FundManagerDashboard = ({ classes, history }) => {
   if (!orgDeals) return <Loader />;
   return (
     <div className={classes.dashboardContainer}>
-      {openTooltip ? <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} /> : ''}
+      {openTooltip && <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} />}
       <div className={classes.mainTitleContainer}>
         <Typography className={classes.mainTitle}>Funds</Typography>
         <a

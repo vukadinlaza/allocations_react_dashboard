@@ -3,7 +3,7 @@ import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
 import _, { toLower } from 'lodash';
 import moment from 'moment'
-import { Typography } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
 import {
   DefaultChartTable,
   DoughnutChart,
@@ -11,11 +11,9 @@ import {
 } from '../../../utils/charts';
 import { SimpleBox, ChartBox } from '../widgets'
 import { nWithCommas } from '../../../../utils/numbers';
-import { useFetch } from '../../../../utils/hooks';
 import { nestedSort } from '../../../../utils/helpers';
 import Loader from '../../../utils/Loader';
 import 'chartjs-plugin-datalabels';
-
 
 
 export function getColor(i) {
@@ -24,7 +22,6 @@ export function getColor(i) {
   let color = colors[modulo]
   return color
 }
-
 
 export function formatDoughnutSeries(series) {
   return series.map((s, i) => {
@@ -101,77 +98,77 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
   const totalRaised = investments?.map(i => i.amount).reduce((acc, n) => acc + n) || 0;
 
   return (
-    <div className={classes.section}>
-      {/*status === "fetching"?
-        <div style={{position: "absolute", width: "100%", height: "100%"}}>
-          <div className={classes.loaderContainer}>
-            <Loader/>
+    <Grid container spacing={3} className={classes.section}>
+      <Grid item xs={6} lg={3}>
+        <SimpleBox
+          size="fourth"
+          title="Total Raised"
+          openTooltip={openTooltip}
+          handleTooltip={handleTooltip}
+          id="totalRaised"
+          tooltipContent={<Typography color="inherit" >This is the total capital raised and wired into the fund</Typography>}
+          >
+          <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
+            <Typography style={{fontSize: "26px"}}>
+              ${nWithCommas(totalRaised)}
+            </Typography>
           </div>
-        </div>
-        : ''
-      */}
-      <SimpleBox
-        size="fourth"
-        title="Total Raised"
-        openTooltip={openTooltip}
-        handleTooltip={handleTooltip}
-        id="totalRaised"
-        tooltipContent={<Typography color="inherit" >This is the total capital raised and wired into the fund</Typography>}
-        >
-        <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
-          <Typography style={{fontSize: "26px"}}>
-            ${nWithCommas(totalRaised)}
-          </Typography>
-        </div>
-      </SimpleBox>
-      <SimpleBox
-        size="fourth"
-        title="Portfolio Value"
-        openTooltip={openTooltip}
-        handleTooltip={handleTooltip}
-        id="portfolioValue"
-        tooltipContent={<Typography color="inherit" >This is the estimated value of the portfolio</Typography>}
-        >
-        <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
-          <Typography style={{fontSize: "26px"}}>
-            ${nWithCommas((_.sumBy(data, 'Invested') * (dealMultiple === 0 ? 1 : dealMultiple)).toFixed(0))}
-          </Typography>
-          <Typography className={classes.footerData}>0% Realized | 100% Unrealized</Typography>
-        </div>
-      </SimpleBox>
-      <SimpleBox
-        size="fourth"
-        title="Total Invested"
-        openTooltip={openTooltip}
-        handleTooltip={handleTooltip}
-        id="totalInvested"
-        tooltipContent={<Typography color="inherit" >This is the total amount invested on the platform</Typography>}
-        >
-        <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
-          <Typography style={{fontSize: "26px"}}>
-            ${nWithCommas(_.sumBy(data, 'Invested').toFixed(0))}
-          </Typography>
-          <Typography className={classes.footerData}>
-            {(data || []).length} Total Investments
-          </Typography>
-        </div>
-      </SimpleBox>
-      <SimpleBox
-        size="fourth"
-        title="Multiple"
-        openTooltip={openTooltip}
-        handleTooltip={handleTooltip}
-        id="multiple"
-        tooltipContent={<Typography color="inherit" >This is the estimated multiple IRR based on estimate data inputted by the fund manager. Subject to change and not to be relied upon.</Typography>}
-        >
-        <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
-          <Typography style={{fontSize: "26px"}}>
-            {dealMultiple.toFixed(2) || 1}x
-          </Typography>
-          <Typography className={classes.footerData}>Last Updated: June 1st, 2021</Typography>
-        </div>
-      </SimpleBox>
-      <div className={classes.subSection}>
+        </SimpleBox>
+      </Grid>
+      <Grid item xs={6} lg={3}>
+        <SimpleBox
+          size="fourth"
+          title="Portfolio Value"
+          openTooltip={openTooltip}
+          handleTooltip={handleTooltip}
+          id="portfolioValue"
+          tooltipContent={<Typography color="inherit" >This is the estimated value of the portfolio</Typography>}
+          >
+          <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
+            <Typography style={{fontSize: "26px"}}>
+              ${nWithCommas((_.sumBy(data, 'Invested') * (dealMultiple === 0 ? 1 : dealMultiple)).toFixed(0))}
+            </Typography>
+            <Typography className={classes.footerData}>0% Realized | 100% Unrealized</Typography>
+          </div>
+        </SimpleBox>
+      </Grid>
+      <Grid item xs={6} lg={3}>
+        <SimpleBox
+          size="fourth"
+          title="Total Invested"
+          openTooltip={openTooltip}
+          handleTooltip={handleTooltip}
+          id="totalInvested"
+          tooltipContent={<Typography color="inherit" >This is the total amount invested on the platform</Typography>}
+          >
+          <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
+            <Typography style={{fontSize: "26px"}}>
+              ${nWithCommas(_.sumBy(data, 'Invested').toFixed(0))}
+            </Typography>
+            <Typography className={classes.footerData}>
+              {(data || []).length} Total Investments
+            </Typography>
+          </div>
+        </SimpleBox>
+      </Grid>
+      <Grid item xs={6} lg={3}>
+        <SimpleBox
+          size="fourth"
+          title="Multiple"
+          openTooltip={openTooltip}
+          handleTooltip={handleTooltip}
+          id="multiple"
+          tooltipContent={<Typography color="inherit" >This is the estimated multiple IRR based on estimate data inputted by the fund manager. Subject to change and not to be relied upon.</Typography>}
+          >
+          <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
+            <Typography style={{fontSize: "26px"}}>
+              {dealMultiple.toFixed(2) || 1}x
+            </Typography>
+            <Typography className={classes.footerData}>Last Updated: June 1st, 2021</Typography>
+          </div>
+        </SimpleBox>
+      </Grid>
+      <Grid item xs={12} md={6}>
         <ChartBox title="Portfolio Overview" info="Explanation">
           <div className={classes.chartContainer}>
             <DoughnutChart
@@ -189,13 +186,16 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
               />
           </div>
         </ChartBox>
+      </Grid>
+      <Grid item xs={12} md={6}>
         <ChartBox title="Value" info="Explanation">
           <LineChart
             dataset={steppedChartData}
             />
         </ChartBox>
-      </div>
-    </div>
+      </Grid>
+
+    </Grid>
   );
 }
 

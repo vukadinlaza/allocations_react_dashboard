@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Typography, Tooltip, Button } from '@material-ui/core';
+import { Typography, Tooltip, Button, Grid } from '@material-ui/core';
 import HelpIcon from '@material-ui/icons/Help';
 import CloseIcon from '@material-ui/icons/Close';
 import { phone, tablet } from '../../../utils/helpers'
@@ -13,7 +13,7 @@ const styles = theme => ({
 		boxShadow: "0px 3px 6px #00000029",
 		border: "1px solid #8493A640",
 		borderRadius: "10px",
-		marginBottom: "20px",
+		// marginBottom: "20px",
 		[theme.breakpoints.down(phone)]: {
 			width: "100vw",
 			minWidth: "0 !important",
@@ -25,9 +25,9 @@ const styles = theme => ({
 	},
 	boxTitle: {
 		fontSize: "20px",
-		whiteSpace: "nowrap",
-		overflow: "hidden",
-		textOverflow: "ellipsis",
+		// whiteSpace: "nowrap",
+		// overflow: "hidden",
+		// textOverflow: "ellipsis",
 	},
 	boxTitleContainer: {
 		width: "100%",
@@ -44,8 +44,8 @@ const styles = theme => ({
 		alignItems: "center",
 	},
 	chartBox: {
-		minWidth: '430px',
-		maxWidth: '49%',
+		// minWidth: '430px',
+		// maxWidth: '49%',
 		height: "450px",
 		[theme.breakpoints.down(tablet)]: {
 			height: "auto"
@@ -74,7 +74,8 @@ const styles = theme => ({
 		height: "calc(100% - 110px)"
 	},
 	dynamicHeight: {
-		height: "auto"
+		// height: "auto"
+		height: "100%"
 	},
 	fixedBoxContent: {
 		height: "calc(100% - 71px)",
@@ -206,7 +207,7 @@ export const SimpleBox = withStyles(styles)(({ classes,
 }) => {
 
   return(
-		<div className={`${classes.box} ${autoHeight? classes.dynamicHeight : ''}`} style={getDimensions(size)}>
+		<div className={`${classes.box} ${autoHeight? classes.dynamicHeight : ''}`}>
 			<div className={classes.boxTitleContainer} style={{justifyContent: "space-between"}}>
 				<div className={classes.boxTitleText}>
 					<Typography className={classes.boxTitle} style={fontSize === "small"? {fontSize: "14px"} : {}}>{title}</Typography>
@@ -301,7 +302,7 @@ export const ScrollableBox = withStyles(styles)(({
 	children
 }) => {
   return(
-		<div className={`${classes.box} ${classes.scrollableBox}`} style={getDimensions(size)}>
+		<div className={`${classes.box} ${classes.scrollableBox}`}>
 			<div className={classes.boxTitleContainer} style={{justifyContent: "space-between"}}>
 				<div className={classes.boxTitleText}>
 					<Typography className={classes.boxTitle} style={fontSize === "small"? {fontSize: "14px"} : {}}>{title}</Typography>

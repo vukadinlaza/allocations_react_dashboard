@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
 import MailIcon from '@material-ui/icons/Mail';
-import { Avatar, Typography } from '@material-ui/core';
+import { Avatar, Typography, Grid } from '@material-ui/core';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import { ScrollableBox } from '../widgets';
 import { nWithCommas } from '../../../../utils/numbers';
@@ -193,88 +193,41 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
   wiredTotal += demoWiredArray.map((i) => i.amount).reduce((acc, n) => acc + n);
   const isDemo = window?.origin?.includes('vercel') || window.origin.includes('localhost');
   return (
-    <div className={classes.section}>
-      <ScrollableBox
-        title="VIEWED"
-        autoHeight
-        fontSize="small"
-        size="third"
-        buttonText={
-          true ? (
-            ''
-          ) : (
-            <div>
-              <MailIcon style={{ color: 'white', marginRight: '0.5em' }} />
-              Send Reminder
-            </div>
-          )
-        }
-      >
-        {isDemo
-          ? demoViewedArray.map((investor, index) => (
-              <InvestorBox
-                investor={investor}
-                classes={classes}
-                index={index}
-                key={`demo-investor-${index}`}
-                width={width}
-                superAdmin={superAdmin}
-                setShowModal={setShowModal}
-                setInvestmentId={setInvestmentId}
-                setDealId={setDealId}
-                setInvestorId={setInvestorId}
-              />
-            ))
-          : viewedInvestors.map((investor, index) => (
-              <InvestorBox
-                investor={investor}
-                classes={classes}
-                index={index}
-                key={`${investor.name}-${investor.amount}`}
-                width={width}
-                superAdmin={superAdmin}
-                setShowModal={setShowModal}
-                setInvestmentId={setInvestmentId}
-                setDealId={setDealId}
-                setInvestorId={setInvestorId}
-              />
-            ))}
-      </ScrollableBox>
-      <ScrollableBox
-        title="SIGNED"
-        titleData={<p className={classes.titleDataText}>${nWithCommas(signedTotal)}</p>}
-        autoHeight
-        fontSize="small"
-        size="third"
-        buttonText={
-          true ? (
-            ''
-          ) : (
-            <div>
-              <MailIcon style={{ color: 'white', marginRight: '0.5em' }} />
-              Send Reminder
-            </div>
-          )
-        }
-      >
-        {isDemo
-          ? demoSignedArray.map((investor, index) => (
-              <InvestorBox
-                investor={investor}
-                classes={classes}
-                index={index}
-                key={`demo-investor-${index}`}
-                width={width}
-                superAdmin={superAdmin}
-                setShowModal={setShowModal}
-                setInvestmentId={setInvestmentId}
-                setDealId={setDealId}
-                setInvestorId={setInvestorId}
-              />
-            ))
-          : signedInvestors
-              .filter((investor) => investor.status === 'signed')
-              .map((investor, index) => (
+    <Grid container spacing={3} className={classes.section}>
+      <Grid item xs={12} lg={4}>
+        <ScrollableBox
+          title="VIEWED"
+          // titleData={<p className={classes.titleDataText}>${nWithCommas(viewedTotal)}</p>}
+          autoHeight
+          fontSize="small"
+          size="third"
+          buttonText={
+            true ? (
+              ''
+            ) : (
+              <div>
+                <MailIcon style={{ color: 'white', marginRight: '0.5em' }} />
+                Send Reminder
+              </div>
+            )
+          }
+        >
+          {isDemo
+            ? demoViewedArray.map((investor, index) => (
+                <InvestorBox
+                  investor={investor}
+                  classes={classes}
+                  index={index}
+                  key={`demo-investor-${index}`}
+                  width={width}
+                  superAdmin={superAdmin}
+                  setShowModal={setShowModal}
+                  setInvestmentId={setInvestmentId}
+                  setDealId={setDealId}
+                  setInvestorId={setInvestorId}
+                />
+              ))
+            : viewedInvestors.map((investor, index) => (
                 <InvestorBox
                   investor={investor}
                   classes={classes}
@@ -288,37 +241,33 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
                   setInvestorId={setInvestorId}
                 />
               ))}
-      </ScrollableBox>
-      <ScrollableBox
-        title="WIRED"
-        titleData={<p className={classes.titleDataText}>${nWithCommas(wiredTotal)}</p>}
-        autoHeight
-        fontSize="small"
-        size="third"
-      >
-        {isDemo
-          ? demoWiredArray.map((investor, index) => (
-              <InvestorBox
-                investor={investor}
-                classes={classes}
-                index={index}
-                key={`demo-investor-${index}`}
-                width={width}
-                superAdmin={superAdmin}
-                setShowModal={setShowModal}
-                setInvestmentId={setInvestmentId}
-                setDealId={setDealId}
-                setInvestorId={setInvestorId}
-              />
-            ))
-          : wiredInvestors
-              .filter((investor) => investor.status === 'wired')
-              .map((investor, index) => (
+        </ScrollableBox>
+      </Grid>
+      <Grid item xs={12} lg={4}>
+        <ScrollableBox
+          title="SIGNED"
+          titleData={<p className={classes.titleDataText}>${nWithCommas(signedTotal)}</p>}
+          autoHeight
+          fontSize="small"
+          size="third"
+          buttonText={
+            true ? (
+              ''
+            ) : (
+              <div>
+                <MailIcon style={{ color: 'white', marginRight: '0.5em' }} />
+                Send Reminder
+              </div>
+            )
+          }
+        >
+          {isDemo
+            ? demoSignedArray.map((investor, index) => (
                 <InvestorBox
                   investor={investor}
                   classes={classes}
                   index={index}
-                  key={`investor-${index}`}
+                  key={`demo-investor-${index}`}
                   width={width}
                   superAdmin={superAdmin}
                   setShowModal={setShowModal}
@@ -326,8 +275,66 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
                   setDealId={setDealId}
                   setInvestorId={setInvestorId}
                 />
-              ))}
-      </ScrollableBox>
+              ))
+            : signedInvestors
+                .filter((investor) => investor.status === 'signed')
+                .map((investor, index) => (
+                  <InvestorBox
+                    investor={investor}
+                    classes={classes}
+                    index={index}
+                    key={`investor-${index}`}
+                    width={width}
+                    superAdmin={superAdmin}
+                    setShowModal={setShowModal}
+                    setInvestmentId={setInvestmentId}
+                    setDealId={setDealId}
+                    setInvestorId={setInvestorId}
+                  />
+                ))}
+        </ScrollableBox>
+      </Grid>
+      <Grid item xs={12} lg={4}>
+        <ScrollableBox
+          title="WIRED"
+          titleData={<p className={classes.titleDataText}>${nWithCommas(wiredTotal)}</p>}
+          autoHeight
+          fontSize="small"
+          size="third"
+        >
+          {isDemo
+            ? demoWiredArray.map((investor, index) => (
+                <InvestorBox
+                  investor={investor}
+                  classes={classes}
+                  index={index}
+                  key={`demo-investor-${index}`}
+                  width={width}
+                  superAdmin={superAdmin}
+                  setShowModal={setShowModal}
+                  setInvestmentId={setInvestmentId}
+                  setDealId={setDealId}
+                  setInvestorId={setInvestorId}
+                />
+              ))
+            : wiredInvestors
+                .filter((investor) => investor.status === 'wired')
+                .map((investor, index) => (
+                  <InvestorBox
+                    investor={investor}
+                    classes={classes}
+                    index={index}
+                    key={`investor-${index}`}
+                    width={width}
+                    superAdmin={superAdmin}
+                    setShowModal={setShowModal}
+                    setInvestmentId={setInvestmentId}
+                    setDealId={setDealId}
+                    setInvestorId={setInvestorId}
+                  />
+                ))}
+        </ScrollableBox>
+      </Grid>
 
       <AppModal isOpen={showModal} onClose={onClose}>
         {investmentId ? (
@@ -336,7 +343,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
           <DeleteViewedUser dealId={dealId} investorId={investorId} handleUpdate={handleUpdate} />
         )}
       </AppModal>
-    </div>
+    </Grid>
   );
 };
 
