@@ -22,6 +22,14 @@ const ADD_DOC = gql`
   }
 `;
 
+const RM_DOC = gql`
+  mutation RmDoc($deal_id: String!, $title: String!) {
+    rmDealDoc(deal_id: $deal_id, title: $title) {
+      _id
+    }
+  }
+`;
+
 const ADD_LOGO = gql`
   mutation AddDealLogo($deal_id: String!, $title: String!, $logo: Upload!) {
     addDealLogo(deal_id: $deal_id, title: $title, logo: $logo) {
@@ -30,24 +38,49 @@ const ADD_LOGO = gql`
   }
 `;
 
-function DealSettings({ formData, setFormData, refetch }) {
-  const [addDoc, { data, error }] = useMutation(ADD_DOC);
+const RM_LOGO = gql`
+  mutation rmDealLogo($deal_id: String!) {
+    rmDealLogo(deal_id: $deal_id) {
+      _id
+    }
+  }
+`;
+
+
+function DealSettings({ formData, setFormData, refetch, loading }) {
+  const [addDoc] = useMutation(ADD_DOC);
+  const [rmDoc] = useMutation(RM_DOC, {
+    onCompleted: () => {
+      toast.success('Deal settings have been updated.')
+      refetch()
+    }
+  });
+  const [rmDealLogo] = useMutation(RM_LOGO, {
+    onCompleted: () => {
+      toast.success('Deal cover image has been deleted.')
+      refetch()
+    }
+  });
+
+
   const [doc, setDoc] = useState(null);
   const [docMenuOpen, toggleDocMenuOpen] = useState(false);
   const [wireInstructions, setWireInstructions] = useState(null);
   const [documentMenuAnchorEl, setDocumentMenuAnchorEl] = useState(null);
+
   const {
-    documents
+    _id,
+    documents,
+    last_valuation,
+    docSpringTemplateId,
+    slug,
+    dealCoverImageKey
   } = formData;
 
-  console.log(documents)
-
-  const editDocumentName = (doc) => {
-
-  }
-
-  const deleteDocument = (doc) => {
-
+  const deleteDealDocument = (doc) => {
+    if (window.confirm(`Delete ${doc.path} document?`)) {
+      rmDoc({ variables: { deal_id: _id, title: doc.path } });
+    }
   }
 
   const handleDocumentMenuClick = (event) => {
@@ -62,7 +95,7 @@ function DealSettings({ formData, setFormData, refetch }) {
   const dealDocumentItems = documents.map((doc, i) => {
     return (
       <li className="document-item" key={i}>
-        <a className="document-link" href={doc.link} target="_blank">
+        <a className="document-link" href={`https://${doc.link}`} target="_blank" rel="noreferrer">
           <img src={DocumentIcon} />
           <p className="document-title">{doc.path}</p>
         </a>
@@ -78,10 +111,8 @@ function DealSettings({ formData, setFormData, refetch }) {
           open={Boolean(documentMenuAnchorEl)}
           onClose={handleClose}
         >
-          <MenuItem onClick={() => editDocumentName(doc)}>
-            Edit Document Name
-          </MenuItem>
-          <MenuItem onClick={() => deleteDocument(doc)}>
+
+          <MenuItem onClick={() => deleteDealDocument(doc)}>
             Delete Document
           </MenuItem>
         </Menu>
@@ -101,8 +132,6 @@ function DealSettings({ formData, setFormData, refetch }) {
       addDoc({ variables: { deal_id: formData._id, ...wireInstructions } });
     }
   };
-
-  const { last_valuation, _id, docSpringTemplateId } = formData;
 
   const handleLinkCopy = () => {
     navigator.clipboard.writeText(window.origin + (formData.appLink || ''));
@@ -136,7 +165,7 @@ function DealSettings({ formData, setFormData, refetch }) {
 
   function AddDealLogo() {
     const [addLogo, { data, error }] = useMutation(ADD_LOGO);
-
+    const [imgSrc, setImgSrc] = useState(`https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`);
     const [upImg, setUpImg] = useState(null);
     const imgRef = useRef(null);
     const previewCanvasRef = useRef(null);
@@ -144,6 +173,10 @@ function DealSettings({ formData, setFormData, refetch }) {
     const [completedCrop, setCompletedCrop] = useState(null);
     const [croppedImage, setCroppedImage] = useState(null);
     const [cropperOpen, setCropperOpen] = useState(false);
+
+    useEffect(() => {
+      setImgSrc(`https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`)
+    }, [dealCoverImageKey, slug])
 
     const submitCrop = (canvas, crop) => {
       if (!crop || !canvas) {
@@ -164,6 +197,12 @@ function DealSettings({ formData, setFormData, refetch }) {
         addLogo({ variables: { deal_id: formData._id, ...croppedImage, title: croppedImage.title } });
       }
     };
+
+    const removeLogo = () => {
+      if (dealCoverImageKey && window.confirm('Delete deal cover image?')) {
+        rmDealLogo({ variables: { deal_id: _id } });
+      }
+    }
 
     const onSelectFile = (e) => {
       if (e.target.files && e.target.files.length > 0) {
@@ -212,7 +251,7 @@ function DealSettings({ formData, setFormData, refetch }) {
     }, [completedCrop]);
 
     return (
-      <div style={{ width: '100%' }}>
+      <div className="banner-upload" style={{ width: '100%' }}>
         <FormControl className="upload">
           <label className="field-label">
             Upload cover photo
@@ -222,7 +261,12 @@ function DealSettings({ formData, setFormData, refetch }) {
                   Attach
                   <input type="file" hidden accept="image/*" onChange={onSelectFile} />
                 </Button>
-                <p>{croppedImage?.title || 'No image selected'}</p>
+                <p>
+                  {
+                    dealCoverImageKey ?
+                      'dealCoverImage.png' : croppedImage?.title || 'No image selected'
+                  }
+                </p>
               </div>
             </div>
           </label>
@@ -231,6 +275,24 @@ function DealSettings({ formData, setFormData, refetch }) {
             Upload to deal
           </Button>
         </FormControl>
+
+        {
+          dealCoverImageKey && (
+            <div className="image-preview-container">
+              <img
+                className="image-preview"
+                alt={slug}
+                src={imgSrc}
+              />
+              <Button
+                onClick={removeLogo}
+                className="delete-image">
+                Delete Image
+              </Button>
+            </div>
+          )
+        }
+
 
         {cropperOpen && (
           <div className="image-crop-container">
