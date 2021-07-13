@@ -233,7 +233,7 @@ function DealEditNew() {
   const { id, organization } = useParams();
   const history = useHistory();
   const [errorMessage, setErrorMessage] = useState(null);
-  const [activeTab, setActiveTab] = useState('deal');
+  const [activeTab, setActiveTab] = useState('basic');
   const [formData, setFormData] = useState({
     dealParams: {},
     documents: []
