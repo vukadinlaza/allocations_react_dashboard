@@ -383,12 +383,12 @@ function DealEditNew() {
       <div className={`save-changes ${activeTab === 'deal' && 'lastPage'}`}>
         {activeTab !== 'deal' && (
           <Button onClick={handleContinueClick} className="continue">
-            Continue
+            Next
           </Button>
         )}
 
         <Button onClick={handleFormSubmit} className="save-and-exit">
-          Save and Exit
+          Save
         </Button>
 
         {activeTab === 'deal' && (
