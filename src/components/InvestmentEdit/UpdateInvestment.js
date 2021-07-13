@@ -252,6 +252,7 @@ function Docs({ investment, getInvestment, isK1 }) {
 
   useEffect(() => {
     if (uploadedDoc) {
+      console.log({uploadedDoc})
       addInvestmentDoc({
         variables: { doc: uploadedDoc, investment_id: id, isK1 },
       });

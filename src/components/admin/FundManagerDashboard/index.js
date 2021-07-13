@@ -424,7 +424,7 @@ const FundManagerDashboard = ({ classes, history }) => {
   const { width } = useViewport();
   const { organization: orgSlug, deal: dealSlug } = useParams();
   const [tabIndex, setTabIndex] = useState(0);
-  const [tabName, setTabName] = useState(spvTabs[1]);
+  const [tabName, setTabName] = useState(spvTabs[0]);
   const [dealTab, setDealTab] = useState(0);
   const [dealData, setDealData] = useState({});
   const [dealName, setDealName] = useState('');

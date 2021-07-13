@@ -60,14 +60,15 @@ const InvestorBox = ({
   setInvestorId,
 }) => {
   const onClick = () => {
-    if (superAdmin && investor.investmentId) {
-      setInvestmentId(investor.investmentId);
-      setShowModal(true);
-    }
-    if (superAdmin && !investor.investmentId) {
-      setDealId(investor.dealId);
-      setInvestorId(investor.id);
-      setShowModal(true);
+    if(superAdmin){
+      if (investor.investmentId) {
+        setInvestmentId(investor.investmentId);
+        setShowModal(true);
+      }else{
+        setDealId(investor.dealId);
+        setInvestorId(investor.id);
+        setShowModal(true);
+      }
     }
   };
   return width > phone ? (
@@ -191,7 +192,10 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
 
   signedTotal += demoSignedArray.map((i) => i.amount).reduce((acc, n) => acc + n);
   wiredTotal += demoWiredArray.map((i) => i.amount).reduce((acc, n) => acc + n);
-  const isDemo = window?.origin?.includes('vercel') || window.origin.includes('localhost');
+  const isDemo = false;
+  // const isDemo = window?.origin?.includes('vercel') || window.origin.includes('localhost');
+
+
   return (
     <Grid container spacing={3} className={classes.section}>
       <Grid item xs={12} lg={4}>
@@ -211,8 +215,8 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
             )
           }
         >
-          {isDemo
-            ? demoViewedArray.map((investor, index) => (
+          {isDemo? 
+            demoViewedArray.map((investor, index) => (
                 <InvestorBox
                   investor={investor}
                   classes={classes}
@@ -260,8 +264,8 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
             )
           }
         >
-          {isDemo
-            ? demoSignedArray.map((investor, index) => (
+          {isDemo? 
+            demoSignedArray.map((investor, index) => (
                 <InvestorBox
                   investor={investor}
                   classes={classes}
@@ -301,8 +305,8 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
           fontSize="small"
           size="third"
         >
-          {isDemo
-            ? demoWiredArray.map((investor, index) => (
+          {isDemo? 
+            demoWiredArray.map((investor, index) => (
                 <InvestorBox
                   investor={investor}
                   classes={classes}
