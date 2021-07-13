@@ -115,6 +115,32 @@
       }
     }
 
+
+    .banner-upload{
+      width: 100%;
+      
+      .upload {
+        width: 100%;
+      }
+      
+      .image-preview-container {
+        width: 50%;
+        position: relative;
+
+        .image-preview {
+          width: 100%;
+        }
+
+        .delete-image {
+          background-color: #0561FF;
+          color: white;
+          position: absolute;
+          top: 10px;
+          right: 10px;
+        }
+      }
+    }
+
     .upload {
       width: 100%;
       margin: .5rem 0;
@@ -128,6 +154,7 @@
         flex-direction: column;
         font-size: 1.2rem;
         width: 100%;
+        font-weight: 600;
 
         .upload-container {
           display: flex;
@@ -149,6 +176,7 @@
   
             p {
               margin: 0 1rem;
+              font-weight: normal;
             }
   
           }
@@ -222,6 +250,94 @@
             .copy-button {
               width: max-content;
               padding: 7.5px;
+            }
+          }
+        }
+      }
+
+      .deal-documents {
+        width: 100%;
+        
+        .field-label {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          font-size: 1.2rem;
+          font-weight: 600;
+          
+          .document-list {
+            height: max-content;
+            list-style: none;
+            padding: 0;
+            width: 100%;
+            border-radius: 5px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            align-items: center;
+            margin: 0;
+            padding-top: 1rem;
+  
+            .document-item {
+              height: 8rem;
+              width: 100%;
+              min-width: max-content;
+              border-radius: 20px;
+              background: #FFFFFF 0% 0% no-repeat padding-box;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              margin-right: 0;
+              margin-bottom: 1rem;
+              position: relative;
+              box-shadow: 0px 3px 6px #0000001D;
+  
+  
+              .document-menu-button {
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                height: 1.5rem;
+                background-color: rgb(229, 229, 229);
+                width: 1.5rem;
+                min-width: 0;
+                border-radius: 100%;
+                outline: #0561ff2f;
+              }
+  
+              .document-menu {
+                border: 2px solid lime !important;
+  
+                .menu-container, .MuiMenu-paper {
+                  display: flex;
+                  height: 2rem;
+                  margin: .5rem 0;
+                  border: 2px solid !important;
+                  color: red;
+                }
+              }
+              
+              .document-link {
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-evenly;
+                align-items: center;
+                height: 100%;
+                width: 100%;
+  
+                svg {
+                  transform: scale(2);
+                }
+  
+                .document-title {
+                  width: 100%;
+                  padding: 0;
+                  text-align: center;
+                  margin: 0 1rem;
+                  font-size: 1rem;
+                }
+              }
             }
           }
         }
