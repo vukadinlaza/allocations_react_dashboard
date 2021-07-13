@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { withStyles } from '@material-ui/core/styles';
 import _, { toLower } from 'lodash';
 import moment from 'moment'
-import { Typography } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
 import { useAuth } from '../../auth/useAuth';
 import {
   DefaultChartTable,
@@ -249,25 +249,30 @@ const UserHome = ({ classes, dealData }) => {
   return (
     <div className={classes.section}>
       <Typography className={classes.mainTitle}>Overview</Typography>
-      <div className={classes.section}>
-        <SimpleBox size="third" title="Portfolio Value" info="This is the estimated value of the portfolio">
-          <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
-            <Typography style={{fontSize: "26px"}}>
-              ${nWithCommas((_.sumBy(data, 'amount') * (avgMultiple === 0 ? 1 : avgMultiple)).toFixed(0))}
-            </Typography>
-            <Typography className={classes.footerData}>0% Realized | 100% Unrealized</Typography>
-          </div>
-        </SimpleBox>
-        <SimpleBox size="third" title="Total amount" info="This is the total amount invested on the platform">
-          <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
-            <Typography style={{fontSize: "26px"}}>
-              ${nWithCommas(_.sumBy(data, 'amount').toFixed(0))}
-            </Typography>
-            <Typography className={classes.footerData}>
-              {(data || []).length} Total Investments
-            </Typography>
-          </div>
-        </SimpleBox>
+      <Grid container xs={12} spacing={3} className={classes.section}>
+        <Grid item lg={4}>
+          <SimpleBox size="third" title="Portfolio Value" info="This is the estimated value of the portfolio">
+            <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
+              <Typography style={{fontSize: "26px"}}>
+                ${nWithCommas((_.sumBy(data, 'amount') * (avgMultiple === 0 ? 1 : avgMultiple)).toFixed(0))}
+              </Typography>
+              <Typography className={classes.footerData}>0% Realized | 100% Unrealized</Typography>
+            </div>
+          </SimpleBox>
+        </Grid>
+        <Grid item lg={4}>
+          <SimpleBox size="third" title="Total amount" info="This is the total amount invested on the platform">
+            <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
+              <Typography style={{fontSize: "26px"}}>
+                ${nWithCommas(_.sumBy(data, 'amount').toFixed(0))}
+              </Typography>
+              <Typography className={classes.footerData}>
+                {(data || []).length} Total Investments
+              </Typography>
+            </div>
+          </SimpleBox>
+        </Grid>
+        <Grid item lg={4}>
         <SimpleBox size="third" title="Multiple" info="Explanation">
           <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
             <Typography style={{fontSize: "26px"}}>
@@ -276,36 +281,41 @@ const UserHome = ({ classes, dealData }) => {
             <Typography className={classes.footerData}>Last Updated: June 1st, 2021</Typography>
           </div>
         </SimpleBox>
-      </div>
-      <div className={classes.subSection}>
-        <ChartBox title="Portfolio Overview" info="Explanation">
-          <div className={classes.chartContainer}>
-            <DoughnutChart
-              series={formatDoughnutSeries(series)}
+        </Grid>
+        <Grid item lg={6}>
+          <ChartBox title="Portfolio Overview" info="Explanation">
+            <div className={classes.chartContainer}>
+              <DoughnutChart
+                series={formatDoughnutSeries(series)}
+                />
+            </div>
+            <div className={classes.tableContainer}>
+              <DefaultChartTable
+                series={formatDoughnutSeries(series)}
+                title="Investments"
+                secondColumnHeader="USD"
+                sumLabel="Total"
+                seriesTotal={seriesTotal}
+                seriesLabelKey="label"
+                />
+            </div>
+          </ChartBox>
+        </Grid>
+        <Grid item lg={6}>
+          <ChartBox title="Value" info="Explanation">
+            <LineChart
+              dataset={steppedChartData}
               />
-          </div>
-          <div className={classes.tableContainer}>
-            <DefaultChartTable
-              series={formatDoughnutSeries(series)}
-              title="Investments"
-              secondColumnHeader="USD"
-              sumLabel="Total"
-              seriesTotal={seriesTotal}
-              seriesLabelKey="label"
-              />
-          </div>
-        </ChartBox>
-        <ChartBox title="Value" info="Explanation">
-          <LineChart
-            dataset={steppedChartData}
+          </ChartBox>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography className={classes.mainTitle}>Investments</Typography>
+          <InvestorTable
+            userProfile={userProfile}
+            refetch={refetch}
             />
-        </ChartBox>
-        <Typography className={classes.mainTitle}>Investments</Typography>
-        <InvestorTable
-          userProfile={userProfile}
-          refetch={refetch}
-          />
-      </div>
+        </Grid>
+      </Grid>
     </div>
   );
 }
