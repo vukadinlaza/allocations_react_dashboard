@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useMutation, useLazyQuery, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { Button } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, useLocation } from 'react-router-dom';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import { toast } from 'react-toastify';
@@ -136,7 +136,7 @@ const ADD_USER_AS_VIEWED = gql`
 const validate = (investor, org) => {
   let required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
   if (org === 'irishangels') {
-    required = required.filter(d => d !== 'accredited_investor_status')
+    required = required.filter((d) => d !== 'accredited_investor_status');
   }
   if (investor.country && investor.country === 'United States') {
     required.push('state');
@@ -147,8 +147,9 @@ const validate = (investor, org) => {
   return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
 };
 
-function InvestmentPage({ }) {
+function InvestmentPage() {
   const history = useHistory();
+  const location = useLocation();
   const { organization: org, deal_slug } = useParams();
   const [addUserAsViewed, { called }] = useMutation(ADD_USER_AS_VIEWED);
   const { userProfile } = useAuth();
@@ -178,6 +179,7 @@ function InvestmentPage({ }) {
   const [showSpvModal, setShowSpvModal] = useState(false);
   const [amount, setAmount] = useState('');
   const [populated, setPopulated] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [investorFormData, setInvestor] = useState({
     country: '',
     country_search: '',
@@ -185,19 +187,37 @@ function InvestmentPage({ }) {
     state_search: '',
   });
   const [errors, setErrors] = useState([]);
+  useEffect(() => {
+    const pAmount = history?.location?.state?.amount;
+    if (pAmount) {
+      setAmount(pAmount);
+    }
+  }, [history]);
 
   const populateInvestorData = () => {
     const personalData = personalInfo?.investor?.investorPersonalInfo?.submissionData;
-    if (!personalData) return;
-    const updatedInvestorData = { ...investorFormData, ...personalData };
+    const editPersonalData = location?.state?.submission;
+    let updatedInvestorData = { ...investorFormData };
+    if (!personalData && !editPersonalData) return;
+    if (editPersonalData) {
+      const editAmount = location.state.amount;
+      updatedInvestorData = { ...investorFormData, ...editPersonalData };
+      setAmount(editAmount);
+    } else if (personalData) {
+      updatedInvestorData = { ...investorFormData, ...personalData };
+    }
     setInvestor(updatedInvestorData);
     setPopulated(true);
   };
 
-  const [submitConfirmation, { }] = useMutation(CONFIRM_INVESTMENT, {
+  const [submitConfirmation, {}] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       refetch();
-      toast.success('Investment created successfully.');
+      setLoading(false);
+      const message = location?.state?.submission
+        ? 'Investment updated successfully.'
+        : 'Investment created successfully.';
+      toast.success(message);
       const path = organization ? `/next-steps/${organization}/${deal_slug}` : `/next-steps/${deal_slug}`;
       history.push(path, { investorFormData });
     },
@@ -206,20 +226,13 @@ function InvestmentPage({ }) {
 
   const confirmInvestment = () => {
     const validation = validate(investorFormData, organization);
-    console.log('validation', validation)
+    console.log('validation', validation);
     setErrors(validation);
 
-    if (validation.length > 0) {
-      return toast.warning('Incomplete Form');
-    }
+    if (validation.length > 0) return toast.warning('Incomplete Form');
+    if (!amount) return toast.warning('Please enter a valid investment amount.');
+    if (parseInt(amount) < 1000) return toast.warning('Please enter an investment amount greater than $1000.');
 
-    if (!amount) {
-      return toast.warning('Please enter a valid investment amount.');
-    }
-
-    if (parseInt(amount) < 1000) {
-      return toast.warning('Please enter an investment amount greater than $1000.');
-    }
     const payload = {
       ...investorFormData,
       investmentAmount: nWithCommas(amount),
@@ -233,6 +246,7 @@ function InvestmentPage({ }) {
 
   const submitInvestment = async () => {
     const ip = await getClientIp();
+    const isEdit = location?.state?.submission;
     const payload = {
       ...investorFormData,
       investmentAmount: nWithCommas(amount),
@@ -241,11 +255,14 @@ function InvestmentPage({ }) {
       docSpringTemplateId: deal.docSpringTemplateId,
     };
 
+    if (isEdit) payload.investmentId = location.state.investmentId;
+
     submitConfirmation({ variables: { payload } });
     setShowSpvModal(false);
+    setLoading(true)
   };
 
-  if (!data) return <Loader />;
+  if (!data || loading) return <Loader />;
 
   const { deal } = data;
   const {
@@ -285,6 +302,7 @@ function InvestmentPage({ }) {
           deal={deal}
           checkedTAT={checkedTAT}
           setCheckedTAT={setCheckedTAT}
+          isEdit={location?.state?.submission}
         />
       </div>
 

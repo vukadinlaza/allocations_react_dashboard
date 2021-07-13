@@ -13,7 +13,7 @@ function DealDocumentsPanel({ deal }) {
     const renamedFile = doc.path.includes('SPV Agreement') ? 'SPV Agreement' : null;
     
     return (
-      <a key={i} href={`https://${doc.link}`} target="_blank" rel="noreferrer">
+      <a key={i} href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">
         <Button>
           <InsertDriveFileIcon />
           {renamedFile || doc.path}

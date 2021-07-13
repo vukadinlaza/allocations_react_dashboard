@@ -1,16 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { get } from 'lodash';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  Button,
-  List,
   TextField,
-  Paper,
-  Divider,
   Grid,
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction,
   FormControl,
   InputLabel,
   Select,

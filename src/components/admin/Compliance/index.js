@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import _ from 'lodash';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
-import { useParams, Link } from 'react-router-dom';
-import { Paper, Table, TableBody, TableCell, TableRow, TableHead, Button, LinearProgress } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
+import { Paper, Table, TableBody, TableCell, TableRow } from '@material-ui/core';
 import { Col, Row } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useAuth } from '../../../auth/useAuth';
 import Loader from '../../utils/Loader';
 import './style.scss';
 
@@ -34,7 +32,7 @@ const ORG_COMPLIANCE = gql`
 
 export default function Compliance() {
   const { organization } = useParams();
-  const { data, error, refetch } = useQuery(ORG_COMPLIANCE, { variables: { slug: organization } });
+  const { data } = useQuery(ORG_COMPLIANCE, { variables: { slug: organization } });
 
   if (!data || !data.organization) return <Loader />;
 

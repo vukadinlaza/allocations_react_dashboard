@@ -1,0 +1,22 @@
+repos:
+  - repo: local
+    hooks:
+      - id: prettier
+        name: Run prettier formatter
+        description: Runs the prettier formatter on JS/CSS/HTML/JSON/YAML files so their formatting is consistent.
+        stages: [commit]
+        language: script
+        entry: scripts/prettier --write --list-different
+        types: [file]
+        files: \.([jt]sx?|css|json|md|yaml|yml|html)$
+        require_serial: true
+
+      - id: eslint
+        name: Run eslint JavaScript Linter
+        description: Runs the eslint linter on JS source files, ensuring machine detectactable code bugs are not committed.
+        stages: [commit]
+        language: script
+        entry: scripts/eslint --fix
+        types: [file]
+        files: \.[jt]sx?$
+        require_serial: true

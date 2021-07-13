@@ -19,7 +19,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import SettingsIcon from '@material-ui/icons/Settings';
-import BuildIcon from '@material-ui/icons/Build';
+
 import MonetizationOnRoundedIcon from '@material-ui/icons/MonetizationOnRounded';
 import AccountBalanceRoundedIcon from '@material-ui/icons/AccountBalanceRounded';
 import CreditCardRoundedIcon from '@material-ui/icons/CreditCardRounded';

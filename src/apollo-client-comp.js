@@ -1,21 +1,14 @@
 import { ApolloClient } from 'apollo-client';
 import { ApolloLink, Observable } from 'apollo-link';
 import { ApolloProvider } from '@apollo/react-hooks';
-import { BatchHttpLink } from 'apollo-link-batch-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
-import { RetryLink } from 'apollo-link-retry';
 import { createUploadLink } from 'apollo-upload-client';
 import { withClientState } from 'apollo-link-state';
-
 import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
-import { setContext } from 'apollo-link-context';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000/graphql';
-
-// IF you want to enable/disable dev tools in different enviroments
-const devTools = localStorage.getItem('apolloDevTools') || false;
 
 const uploadLink = createUploadLink({
   uri: API_URL,

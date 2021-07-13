@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Paper, Grid, Typography, Button, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { toast } from 'react-toastify';
-import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
 import { get, pick } from 'lodash';
 import { gql } from 'apollo-boost';
@@ -59,7 +58,6 @@ const UPDATE_ORG = gql`
 `;
 function EditOrg({ orgData, refetch }) {
   const classes = useStyles();
-  const history = useHistory();
   const [organization, setOrganization] = useState(null);
   const [updateOrganization, { data }] = useMutation(UPDATE_ORG);
 

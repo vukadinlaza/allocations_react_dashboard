@@ -39,8 +39,12 @@
       label {
         display: flex;
         flex-direction: column;
-      }
-  
+      }  
+    }
+
+    .terms-list {
+      display: flex;
+      color: red;
     }
 
     .container {
@@ -72,6 +76,7 @@
     .date-signed {
       width: 50%;
     }
+
 
 
     .ein {

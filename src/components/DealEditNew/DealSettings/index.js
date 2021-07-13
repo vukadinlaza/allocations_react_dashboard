@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 import ReactCrop from 'react-image-crop';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
-import { useSimpleReducer } from '../../../utils/hooks';
 import CopyIcon from '../../../assets/copy-icon.svg';
 import CloseIcon from '@material-ui/icons/Close';
 import 'react-image-crop/lib/ReactCrop.scss';
@@ -450,7 +449,7 @@ function DealSettings({ formData, setFormData, refetch, loading }) {
               InputProps={{
                 endAdornment: (
                   <Button onClick={handleLinkCopy} className="copy-button">
-                    <img src={CopyIcon} />
+                    <img src={CopyIcon} alt='Copy Icon' />
                   </Button>
                 ),
               }}

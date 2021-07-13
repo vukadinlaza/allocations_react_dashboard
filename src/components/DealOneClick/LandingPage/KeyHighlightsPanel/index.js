@@ -7,7 +7,6 @@ function KeyHighlights({ deal }) {
   const {
     company_name,
     memo,
-    dealParams: { keyHighlights, risks },
   } = deal;
 
   return (

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import _, { toNumber } from 'lodash';
 import { gql } from 'apollo-boost';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { useParams, useHistory, Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import base64 from 'base-64';
 import {
@@ -17,21 +17,14 @@ import {
   TableCell,
   TableRow,
   Typography,
-  TableHead,
-  Modal,
 } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
-
 import ReactHtmlParser from 'react-html-parser';
-import Chart from 'chart.js';
-import classNames from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import DocusignKYCEmbeddedForm from '../forms/kycTab';
 import { nWithCommas } from '../../utils/numbers';
 import Loader from '../utils/Loader';
-import EditInvestor from '../forms/editInvestor';
 import InvestorEditForm from '../forms/InvestorEdit';
-import { useSimpleReducer } from '../../utils/hooks';
 
 /** *
  *
@@ -231,35 +224,7 @@ function DataRoom({ deal }) {
   );
 }
 
-function CompleteInvestment({ investment }) {
-  return <InvestmentOverview investment={investment} />;
-}
-
-function InvestmentOverview({ investment }) {
-  if (investment.status === 'invited') {
-    return (
-      <Paper className="tile investment-invited">
-        <div>
-          You have been invited to participate in this deal!
-          <br />
-          Please review the signing docs and wire details below.
-        </div>
-      </Paper>
-    );
-  }
-
-  return (
-    <Paper className="investment tile" style={{ marginBottom: '10px' }}>
-      <div className="small-header">My Investment</div>
-      <span className="investment-amount">{investment.amount ? `$${nWithCommas(investment.amount)}` : ''}</span>
-      <span className={`investment-status investment-${investment.status}`}>
-        {(investment.status || '').toUpperCase()}
-      </span>
-    </Paper>
-  );
-}
-
-function Wire({ investment, deal }) {
+function Wire({ deal }) {
   const link =
     deal.documents && deal.documents.find((d) => d.path === 'wire-instructions')
       ? `https://${deal.documents.find((d) => d.path === 'wire-instructions').link}`
@@ -328,7 +293,7 @@ const PLEDGE = gql`
 function Pledging({ investment, deal, refetch, investor }) {
   const [amount, setAmount] = useState('');
   const classes = useStyles();
-  const [updateInvestment, { data, error }] = useMutation(PLEDGE, {
+  const [updateInvestment] = useMutation(PLEDGE, {
     onCompleted: refetch,
   });
 
@@ -479,7 +444,6 @@ function PledgesViz({ deal }) {
   useEffect(() => {
     if (!pledges || pledges.length === 0) return;
 
-    const ctx = document.getElementById('pledges-viz').getContext('2d');
     let formatted = [];
     deal.pledges.reduce((acc, p) => {
       formatted.push({ timestamp: Number(p.timestamp), amount: acc + p.amount });
@@ -489,36 +453,6 @@ function PledgesViz({ deal }) {
     // pop a 0 on 1 day before first pledge
     formatted.unshift({ timestamp: formatted[0].timestamp - 60000 * 60 * 24, amount: 0 });
     formatted = _.orderBy(formatted, '');
-
-    const chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: formatted.map((p) => new Date(p.timestamp).toLocaleString({}, { dateStyle: 'short' })),
-        datasets: [
-          {
-            backgroundColor: '#e6f9f3',
-            borderColor: '#21ce99',
-            data: formatted.map((p) => {
-              return { x: new Date(p.timestamp), y: p.amount };
-            }),
-          },
-        ],
-      },
-      options: {
-        legend: {
-          display: false,
-        },
-        scales: {
-          yAxes: [
-            {
-              ticks: {
-                callback: (label, index, labels) => `$${nWithCommas(label)}`,
-              },
-            },
-          ],
-        },
-      },
-    });
   }, [deal, pledges]);
 
   if (!pledges || pledges.length === 0) {
@@ -536,9 +470,7 @@ function PledgesViz({ deal }) {
   );
 }
 
-function HelloSignOnboarding({ investment, deal, investor, status }) {
-  const location = useLocation();
-
+function HelloSignOnboarding({ deal, investor, status }) {
   if (!investor) return <Loader />;
 
   return (
@@ -560,18 +492,6 @@ function filename(path) {
   }
 }
 
-const INITIAL_STATE = {
-  _id: '',
-  investor_type: '',
-  country: '',
-  first_name: '',
-  last_name: '',
-  entity_name: '',
-  signer_full_name: '',
-  email: '',
-  accredited_investor_status: '',
-};
-
 function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetch, investment }) {
   const [loading, setLoading] = useState(true);
   const [investorData, setInvestor] = useState(null);
@@ -580,7 +500,7 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
   const classes = useStyles();
   const { search, pathname } = useLocation();
   const isTvc = deal.organization === 'theventurecollective';
-  let decodedParams = {}
+  const decodedParams = {};
   if (isTvc) {
     base64.decode(search.substring(1));
   }
@@ -615,7 +535,11 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
   if (!deal.onboarding_link) {
     return (
       <div style={{ display: status === 'pledged' ? 'block' : 'none' }}>
-        Hang tight! ⌛<br />
+        Hang tight!
+        <span role="img" aria-label="hour glass">
+          ⌛
+        </span>
+        <br />
         Onboarding link coming soon
       </div>
     );
@@ -632,10 +556,10 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
     params.MomentusPCS = shares;
   }
   if (units) {
-    params.Units = units
+    params.Units = units;
   }
   if (purchasePrice) {
-    params.PurchasePrice = purchasePrice
+    params.PurchasePrice = purchasePrice;
   }
 
   const urlParameters = Object.entries(params)
@@ -771,65 +695,3 @@ function KYCDocusign({ deal, investor, status, hasKyc }) {
     </Paper>
   );
 }
-
-const KYCCheck = ({ kycData, setKYCData }) => {
-  const classes = useStyles();
-
-  return (
-    <>
-      <Grid container justify="center" className="kyc-check">
-        <Paper className={`paper-container ${classes.paper}`}>
-          {!kycData.entityType && !kycData.hasOwnProperty('usCitizen') && (
-            <>
-              <Typography variant="subtitle1">Are you a U.S. citizen?</Typography>
-              <Button
-                variant="contained"
-                size="medium"
-                color="primary"
-                className={classes.button}
-                onClick={() => setKYCData({ ...kycData, usCitizen: true })}
-              >
-                Yes
-              </Button>
-              <Button
-                variant="contained"
-                size="medium"
-                color="primary"
-                className={classes.button}
-                onClick={() => setKYCData({ ...kycData, usCitizen: false })}
-              >
-                No
-              </Button>{' '}
-            </>
-          )}
-
-          {kycData.hasOwnProperty('usCitizen') && (
-            <>
-              <Typography variant="subtitle1">Are you an Entity or Individual investor?</Typography>
-              <Button
-                variant="contained"
-                size="medium"
-                color="primary"
-                className={classes.button}
-                onClick={() => setKYCData({ ...kycData, entityType: 'entity' })}
-              >
-                Entity
-              </Button>
-              <Button
-                variant="contained"
-                size="medium"
-                color="primary"
-                className={classes.button}
-                onClick={() => setKYCData({ ...kycData, entityType: 'individual' })}
-              >
-                Individual
-              </Button>
-            </>
-          )}
-
-          {/* <Button variant="contained" color="secondary" size="small" className='reset-button'> Reset </Button> */}
-        </Paper>
-      </Grid>
-    </>
-  );
-};

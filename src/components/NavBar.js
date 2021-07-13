@@ -6,14 +6,12 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Hidden from '@material-ui/core/Hidden';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import { useHistory } from 'react-router-dom';
 
 import { NavItem, UncontrolledDropdown } from 'reactstrap';
 import { makeStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Loader from './utils/Loader';
 
@@ -149,9 +147,7 @@ export function Auth0Profile({ user, logoutWithRedirect }) {
           <Avatar src={userProfile.picture} alt="Profile" /> <KeyboardArrowDownIcon />
         </Hidden>
         <Hidden smUp>
-          <IconButton>
-            <MoreIcon />
-          </IconButton>
+          <MoreIcon />
         </Hidden>
       </ButtonBase>
 
