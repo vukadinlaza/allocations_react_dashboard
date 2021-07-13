@@ -125,7 +125,14 @@ export const Deal = ({ deal, index, superadmin, slug, isDemo }) => {
             <Button
               color="primary"
               style={{ textTransform: 'lowercase' }}
-              onClick={() => history.push(`/admin/${organization || deal.organization.slug}/deals/${deal._id}/edit`)}
+              onClick={() => {
+                window.scrollTo({
+                  top: 0,
+                  left: 100,
+                  behavior: 'smooth',
+                });
+                history.push(`/admin/${organization || deal.organization.slug}/deals/${deal._id}/edit`)
+              }}
             >
               Edit
             </Button>
