@@ -1,8 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import _ from 'lodash';
-import { useParams, useLocation } from 'react-router-dom';
-import { gql } from 'apollo-boost';
-import { useLazyQuery } from '@apollo/react-hooks';
 import MailIcon from '@material-ui/icons/Mail';
 import { Avatar, Typography, Grid } from '@material-ui/core';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
@@ -89,7 +86,6 @@ const InvestorStatus = ({ classes, width, data }) => {
       </div>
     )
   }
-
 
   const { investments } = data.deal;
   const investors = investments.map(inv => {

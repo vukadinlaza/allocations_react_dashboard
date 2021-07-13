@@ -11,11 +11,9 @@ import {
 } from '../../../utils/charts';
 import { SimpleBox, ChartBox } from '../widgets'
 import { nWithCommas } from '../../../../utils/numbers';
-import { useFetch } from '../../../../utils/hooks';
 import { nestedSort } from '../../../../utils/helpers';
 import Loader from '../../../utils/Loader';
 import 'chartjs-plugin-datalabels';
-
 
 
 export function getColor(i) {
@@ -24,7 +22,6 @@ export function getColor(i) {
   let color = colors[modulo]
   return color
 }
-
 
 export function formatDoughnutSeries(series) {
   return series.map((s, i) => {

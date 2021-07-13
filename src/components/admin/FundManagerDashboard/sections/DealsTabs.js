@@ -98,7 +98,8 @@ const styles = (theme) => ({
   },
 });
 
-const DealsTabs = ({ classes, history, orgSlug, data, width, tabIndex, setTabIndex }) => {
+const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
+  
   const [deals, setDeals] = useState([]);
 
   const handleTabChange = (e, newIndex) => {

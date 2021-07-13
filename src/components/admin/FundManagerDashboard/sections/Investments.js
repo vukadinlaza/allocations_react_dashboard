@@ -1,16 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
-import {
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  Button,
-  InputAdornment
-} from '@material-ui/core';
+import { TextField, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { nWithCommas } from '../../../../utils/numbers';
-import { nestedSort } from '../../../../utils/helpers';
 import AllocationsTable from '../../../utils/AllocationsTable'
 import Loader from '../../../utils/Loader'
 
@@ -25,7 +17,6 @@ const headers = [
 const Investments = ({ classes, data }) => {
 
   const [searchTerm, setSearchTerm] = useState('');
-
 
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
@@ -45,7 +36,6 @@ const Investments = ({ classes, data }) => {
   }
 
   let investmentsData = data.map(investment => {return {...investment, Date: new Date(investment["Date"])}})
-
   if(!investmentsData) return <Loader/>
 
   if(searchTerm) investmentsData = investmentsData.filter(investment => investment['Investment'].toUpperCase().includes(searchTerm.toUpperCase()))
