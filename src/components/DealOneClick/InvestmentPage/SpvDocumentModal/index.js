@@ -63,29 +63,15 @@ export default function SPVDocumentModal({
             </Grid>
           ) : (
             <>
-              <AllPagesPDFViewer
-                document={document}
-                usePreview={!!previewLink}
-                handleClose={handleClose}
-              />
+              <AllPagesPDFViewer document={document} usePreview={!!previewLink} handleClose={handleClose} />
               {loadingConfirmation ? (
                 <Loader />
               ) : (
                 <div className="buttonContainer">
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    className="button"
-                    onClick={handleSubmit}
-                  >
+                  <Button variant="contained" color="secondary" className="button" onClick={handleSubmit}>
                     I Agree
                   </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    className="button declineBtn"
-                    onClick={handleClose}
-                  >
+                  <Button variant="contained" color="secondary" className="button declineBtn" onClick={handleClose}>
                     I Decline
                   </Button>
                 </div>

@@ -227,7 +227,7 @@ function FundTerms({ formData, setFormData }) {
 
         <FormControl className="field">
           <label className="field-label">
-            Estimated setup cost
+            Estimated setup cost ($)
             <div className="management-fee">
               <TextField
                 onChange={handleSetupCostChange}

@@ -2,12 +2,16 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 import './styles.scss';
 import moment from 'moment';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { toNumber } from 'lodash';
 import { useAuth } from '../../../../auth/useAuth';
 
 function InvestPanel({ deal, deal_slug, organization }) {
   const { userProfile, isAuthenticated } = useAuth();
+  const { search } = useLocation();
+  const p = new URLSearchParams(search);
+  const amount = p.get('amount');
   const history = useHistory();
 
   const handleWaitlistSubmit = async () => {
@@ -64,7 +68,9 @@ function InvestPanel({ deal, deal_slug, organization }) {
           if (isClosed && isAuthenticated) {
             return handleWaitlistSubmit();
           }
-          history.push(`/invest${organization ? `/${organization}` : ''}/${deal_slug}`);
+          history.push(`/invest${organization ? `/${organization}` : ''}/${deal_slug}`, {
+            amount: amount || false,
+          });
         }}
       >
         {isClosed ? 'Join Waitlist' : 'Invest'}

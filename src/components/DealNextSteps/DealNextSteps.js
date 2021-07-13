@@ -38,6 +38,7 @@ const GET_INVESTOR = gql`
           slug
         }
         amount
+        value
         submissionData {
           country
           state
@@ -73,7 +74,7 @@ const GET_DEAL = gql`
 
 function DealNextSteps() {
   const [confetti, showConfetti] = useState(false);
-  const { data, loading, refetch } = useQuery(GET_INVESTOR);
+  const { data, loading, refetch } = useQuery(GET_INVESTOR, {fetchPolicy: 'network-only'});
   const [getDeal, { data: dealData, called: calledDeal }] = useLazyQuery(GET_DEAL);
   const [showTaxAsCompleted, setShowTaxAsCompleted] = useState(false);
   const [open, setOpen] = useState(false);
@@ -210,7 +211,7 @@ function DealNextSteps() {
               <div className="action-instructions">
                 <p className="action-header">Accredited Investor Status</p>
                 <p className="action-sub-header">
-                  {data?.investor.accredidation_status === true ? '' : "Complete your Accredited Investor application here"}
+                  {data?.investor.accredidation_status === true ? '' : "Complete your accredited investor questionnaire here (<5 mins to complete)"}
                 </p>
               </div>
               {data?.investor.accredidation_status === true ?
@@ -223,7 +224,7 @@ function DealNextSteps() {
                     win.focus();
                   }}
                   >
-                  {data?.investor.accredidation_status === true ? 'Completed' : 'Submit your application'}
+                  {data?.investor.accredidation_status === true ? 'Completed' : 'Submit'}
                 </Button>
               }
             </div>

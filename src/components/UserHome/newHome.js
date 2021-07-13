@@ -335,10 +335,7 @@ export default () => {
                   Portfolio Value
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  $
-                  {investmentsValue === 0
-                    ? `${nWithCommas(investmentsValue)}.00`
-                    : nWithCommas(investmentsValue)}
+                  ${investmentsValue === 0 ? `${nWithCommas(investmentsValue)}.00` : nWithCommas(investmentsValue)}
                 </h2>
                 <p
                   style={{
@@ -374,10 +371,7 @@ export default () => {
                   Total Invested
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  ${' '}
-                  {investmentTotal === 0
-                    ? `${nWithCommas(investmentTotal)}.00`
-                    : nWithCommas(investmentTotal)}
+                  $ {investmentTotal === 0 ? `${nWithCommas(investmentTotal)}.00` : nWithCommas(investmentTotal)}
                 </h2>
                 <p
                   style={{
@@ -455,10 +449,7 @@ export default () => {
                     chartType="PieChart"
                     width="100%"
                     height="300px"
-                    data={[
-                      ['Investment', 'Amount'],
-                      ...investments.map((inv) => [inv.deal.company_name, inv.amount]),
-                    ]}
+                    data={[['Investment', 'Amount'], ...investments.map((inv) => [inv.deal.company_name, inv.amount])]}
                     options={chartOptionsA}
                   />
                 ) : null}
@@ -501,15 +492,11 @@ export default () => {
                       <div>Name</div>
                       {sortByProp.direction !== 'asc' ? (
                         <ArrowDropUpIcon
-                          onClick={() =>
-                            setSortByProp({ prop: 'deal.company_name', direction: 'asc' })
-                          }
+                          onClick={() => setSortByProp({ prop: 'deal.company_name', direction: 'asc' })}
                         />
                       ) : (
                         <ArrowDropDownIcon
-                          onClick={() =>
-                            setSortByProp({ prop: 'deal.company_name', direction: 'desc' })
-                          }
+                          onClick={() => setSortByProp({ prop: 'deal.company_name', direction: 'desc' })}
                         />
                       )}
                     </div>
@@ -560,6 +547,9 @@ export default () => {
                   </Hidden>
                   <TableCell className={classes.tableHeader} align="center">
                     Deal Page
+                  </TableCell>
+                  <TableCell className={classes.tableHeader} align="center">
+                    Next Steps
                   </TableCell>
                   <Hidden only="xs">
                     <TableCell className={classes.tableHeader} align="center">
@@ -705,8 +695,8 @@ export default () => {
                           style={{ textAlign: 'center', marginBottom: '2rem' }}
                           variant="paragraph"
                         >
-                          An Allocations team member will reach out to you shortly about your order
-                          request. Please give up to 30 days for a response. Thank you.
+                          An Allocations team member will reach out to you shortly about your order request. Please give
+                          up to 30 days for a response. Thank you.
                         </Typography>
                       </Grid>
                     </Grid>
@@ -735,11 +725,7 @@ export default () => {
                       <Loader />
                     </Grid>
                     <Grid item xs={12} sm={12} md={12} lg={12}>
-                      <Typography
-                        className={classes.grey}
-                        style={{ textAlign: 'center' }}
-                        variant="h5"
-                      >
+                      <Typography className={classes.grey} style={{ textAlign: 'center' }} variant="h5">
                         Creating your trade request
                       </Typography>
                     </Grid>
@@ -1087,14 +1073,9 @@ export default () => {
               <Typography variant="h6" className={classes.grey}>
                 $ {tradeData?.amount} for {tradeData?.deal?.company_name}
               </Typography>
-              <Typography
-                variant="subtitle2"
-                className={classes.grey}
-                style={{ marginTop: '1rem' }}
-              >
-                After you confirm your order an Allocations team member will reachout with more
-                information. Orders are open for 30 days before expiring and you can contact us to
-                cancel your open order at anytime.
+              <Typography variant="subtitle2" className={classes.grey} style={{ marginTop: '1rem' }}>
+                After you confirm your order an Allocations team member will reachout with more information. Orders are
+                open for 30 days before expiring and you can contact us to cancel your open order at anytime.
               </Typography>
               {/* FOOTER */}
               <Grid>
@@ -1182,14 +1163,7 @@ export default () => {
   );
 };
 
-const TR = ({
-  investment,
-  setShowDocs,
-  showDocs,
-  demo,
-  setShowCaptialAccounts,
-  capitalAccounts,
-}) => {
+const TR = ({ investment, setShowDocs, showDocs, demo, setShowCaptialAccounts, capitalAccounts }) => {
   const history = useHistory();
   const capFields = (capitalAccounts || []).map((r) => r.fields);
   const orgSlug = investment?.deal?.organization?.slug;
@@ -1236,20 +1210,19 @@ const TR = ({
           variant="contained"
           size="small"
           color="primary"
-          onClick={() => history.push(nextStepUrl)}
+          onClick={() => history.push(_.get(investment, 'deal.appLink', ''))}
         >
+          View
+        </Button>
+      </TableCell>
+      <TableCell onClick={showDocsFn} align="center">
+        <Button variant="contained" size="small" color="primary" onClick={() => history.push(nextStepUrl)}>
           View
         </Button>
       </TableCell>
       <Hidden only="xs">
         <TableCell align="center">
-          <Button
-            variant="contained"
-            size="small"
-            color="primary"
-            onClick={showDocsFn}
-            disabled={!!demo}
-          >
+          <Button variant="contained" size="small" color="primary" onClick={showDocsFn} disabled={!!demo}>
             View
           </Button>
         </TableCell>
@@ -1286,9 +1259,7 @@ function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin, setS
             Documents may take up to 7 days to appear here after signing.
           </Typography>
           <Grid container spacing={1}>
-            {demo
-              ? []
-              : docs.map((doc) => <Document key={doc?.path} doc={doc} investment={investment} />)}
+            {demo ? [] : docs.map((doc) => <Document key={doc?.path} doc={doc} investment={investment} />)}
             {investment?.submissionData?.submissionId && !isClosed && (
               <Grid
                 item
