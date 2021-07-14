@@ -591,7 +591,6 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
               <MenuItem value="5_direct_reporting_nffe">Direct reporting NFFE</MenuItem>
               <MenuItem value="5_sponsored_direct_reporting_nffe">Sponsored direct reporting NFFE</MenuItem>
               <MenuItem value="5_non_financial_account">Account that is not a financial account</MenuItem>
-              <MenuItem value="5_other">Other</MenuItem>
             </Select>
           </label>
         </FormControl>
