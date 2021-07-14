@@ -319,20 +319,25 @@ export default () => {
     return orderBy(investments, (inv) => get(inv, sortByProp.prop), [sortByProp.direction]);
   };
 
-  const timeOfDay =
-    moment().hour() >= 4 && moment().hour() < 12
-      ? 'Good morning'
-      : moment().hour() >= 12 && moment().hour() < 19
-      ? 'Good afternoon'
-      : 'Good evening';
+  const welcomeMessage = (userProfile) => {
+    const timeOfDay =
+      moment().hour() >= 4 && moment().hour() < 12
+        ? 'Good morning'
+        : moment().hour() >= 12 && moment().hour() < 19
+        ? 'Good afternoon'
+        : 'Good evening';
+
+    if (!userProfile.first_name) {
+      return `${timeOfDay}, Investor!`;
+    }
+    return `${timeOfDay}, ${userProfile.first_name}!`;
+  };
 
   return (
     <div className="blue-container">
       <Grid container justify="space-between" style={{ marginTop: '-2em', marginBottom: '1rem' }}>
         <Grid item xs={12} className="welcome-user">
-          <h3 className="welcome-user-text">
-            {timeOfDay}, {userProfile.first_name}!
-          </h3>
+          <h3 className="welcome-user-text">{welcomeMessage(userProfile)}</h3>
         </Grid>
         <Grid item xs={12} sm={12} md={4} style={{ border: '1em solid transparent' }}>
           <Paper style={{ minHeight: '100px' }}>
