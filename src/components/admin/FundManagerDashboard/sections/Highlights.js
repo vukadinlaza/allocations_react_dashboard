@@ -102,11 +102,11 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
       <Grid item xs={6} lg={3}>
         <SimpleBox
           size="fourth"
-          title="Total Raised"
+          title="Total Capital Received"
           openTooltip={openTooltip}
           handleTooltip={handleTooltip}
           id="totalRaised"
-          tooltipContent={<Typography color="inherit" >This is the total capital raised and wired into the fund</Typography>}
+          tooltipContent={<Typography color="inherit" >This is the total capital received into the private fund’s bank account (including loans)</Typography>}
           >
           <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
             <Typography style={{fontSize: "26px"}}>
@@ -118,28 +118,11 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
       <Grid item xs={6} lg={3}>
         <SimpleBox
           size="fourth"
-          title="Portfolio Value"
-          openTooltip={openTooltip}
-          handleTooltip={handleTooltip}
-          id="portfolioValue"
-          tooltipContent={<Typography color="inherit" >This is the estimated value of the portfolio</Typography>}
-          >
-          <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
-            <Typography style={{fontSize: "26px"}}>
-              ${nWithCommas((_.sumBy(data, 'Invested') * (dealMultiple === 0 ? 1 : dealMultiple)).toFixed(0))}
-            </Typography>
-            <Typography className={classes.footerData}>0% Realized | 100% Unrealized</Typography>
-          </div>
-        </SimpleBox>
-      </Grid>
-      <Grid item xs={6} lg={3}>
-        <SimpleBox
-          size="fourth"
           title="Total Invested"
           openTooltip={openTooltip}
           handleTooltip={handleTooltip}
           id="totalInvested"
-          tooltipContent={<Typography color="inherit" >This is the total amount invested on the platform</Typography>}
+          tooltipContent={<Typography color="inherit" >Total capital deployed from the fund</Typography>}
           >
           <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
             <Typography style={{fontSize: "26px"}}>
@@ -154,17 +137,34 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
       <Grid item xs={6} lg={3}>
         <SimpleBox
           size="fourth"
-          title="Multiple"
+          title="Multiple (Estimated)"
           openTooltip={openTooltip}
           handleTooltip={handleTooltip}
           id="multiple"
-          tooltipContent={<Typography color="inherit" >This is the estimated multiple IRR based on estimate data inputted by the fund manager. Subject to change and not to be relied upon.</Typography>}
+          tooltipContent={<Typography color="inherit" >This is the estimated multiple IRR on the Total Invested based on data provided by the fund manager. Subject to change and not to be relied upon.</Typography>}
           >
           <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
             <Typography style={{fontSize: "26px"}}>
               {dealMultiple.toFixed(2) || 1}x
             </Typography>
             <Typography className={classes.footerData}>Last Updated: June 1st, 2021</Typography>
+          </div>
+        </SimpleBox>
+      </Grid>
+      <Grid item xs={6} lg={3}>
+        <SimpleBox
+          size="fourth"
+          title="Total Portfolio Value (Estimated)"
+          openTooltip={openTooltip}
+          handleTooltip={handleTooltip}
+          id="portfolioValue"
+          tooltipContent={<Typography color="inherit" >This is the estimated value of the portfolio (Total Invested x Multiple)</Typography>}
+          >
+          <div className={classes.simpleBoxDataRow} style={{flexDirection: "column", alignItems: "flex-start"}}>
+            <Typography style={{fontSize: "26px"}}>
+              ${nWithCommas((_.sumBy(data, 'Invested') * (dealMultiple === 0 ? 1 : dealMultiple)).toFixed(0))}
+            </Typography>
+            {/*<Typography className={classes.footerData}>0% Realized | 100% Unrealized</Typography>*/}
           </div>
         </SimpleBox>
       </Grid>
@@ -188,7 +188,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
         </ChartBox>
       </Grid>
       <Grid item xs={12} md={6}>
-        <ChartBox title="Value" info="Explanation">
+        <ChartBox title="Total Invested" info="Explanation">
           <LineChart
             dataset={steppedChartData}
             />

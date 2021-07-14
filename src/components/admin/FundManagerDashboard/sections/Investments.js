@@ -10,7 +10,7 @@ import Loader from '../../../utils/Loader'
 const headers = [
   { value: 'Investment', label: 'NAME', align: 'left', alignHeader: true },
   { value: 'Date', label: 'DATE', type: 'date', align: 'left', alignHeader: true },
-  { value: 'Invested', label: 'INVESTMENT', type: 'amount', align: 'right', alignHeader: true },
+  { value: 'Invested', label: 'INVESTMENT AMOUNT', type: 'amount', align: 'right', alignHeader: true },
 ]
 
 

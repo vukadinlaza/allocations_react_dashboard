@@ -128,13 +128,14 @@ const AuthorizedApolloProvider = ({ children }) => {
     },
     cache,
   });
-  // if(wsLink){
-  //   const client = new ApolloClient({
-  //     link: wsLink,
-  //     cache,
-  //   });
-  //   return <ApolloProvider client={client}>{children}</ApolloProvider>;
-  // }else 
+  
+  if(wsLink){
+    const client = new ApolloClient({
+      link: wsLink,
+      cache,
+    });
+    return <ApolloProvider client={client}>{children}</ApolloProvider>;
+  }else 
   if(requestLink || withClientLink || uploadLink || onErrorLink){
     const linksArray = [onErrorLink, requestLink, withClientLink, uploadLink];
     const client = new ApolloClient({
