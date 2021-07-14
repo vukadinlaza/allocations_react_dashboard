@@ -318,9 +318,22 @@ export default () => {
   const sortedInvestments = (investments) => {
     return orderBy(investments, (inv) => get(inv, sortByProp.prop), [sortByProp.direction]);
   };
+
+  const timeOfDay =
+    moment().hour() >= 4 && moment().hour() < 12
+      ? 'Good morning'
+      : moment().hour() >= 12 && moment().hour() < 19
+      ? 'Good afternoon'
+      : 'Good evening';
+
   return (
     <div className="blue-container">
-      <Grid container justify="space-between" style={{ marginTop: '40px', marginBottom: '1rem' }}>
+      <Grid container justify="space-between" style={{ marginTop: '-2em', marginBottom: '1rem' }}>
+        <Grid item xs={12} className="welcome-user">
+          <h3 className="welcome-user-text">
+            {timeOfDay}, {userProfile.first_name}!
+          </h3>
+        </Grid>
         <Grid item xs={12} sm={12} md={4} style={{ border: '1em solid transparent' }}>
           <Paper style={{ minHeight: '100px' }}>
             <Grid container style={{ padding: '0.1rem', justifyContent: 'space-between' }}>
@@ -335,7 +348,10 @@ export default () => {
                   Portfolio Value
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  $ {investmentsValue === 0 ? `${nWithCommas(investmentsValue)}.00` : nWithCommas(investmentsValue)}
+                  ${' '}
+                  {investmentsValue === 0
+                    ? `${nWithCommas(investmentsValue)}.00`
+                    : nWithCommas(investmentsValue)}
                 </h2>
                 <p
                   style={{
@@ -371,7 +387,10 @@ export default () => {
                   Total Invested
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  $ {investmentTotal === 0 ? `${nWithCommas(investmentTotal)}.00` : nWithCommas(investmentTotal)}
+                  ${' '}
+                  {investmentTotal === 0
+                    ? `${nWithCommas(investmentTotal)}.00`
+                    : nWithCommas(investmentTotal)}
                 </h2>
                 <p
                   style={{
@@ -449,7 +468,10 @@ export default () => {
                     chartType="PieChart"
                     width="100%"
                     height="300px"
-                    data={[['Investment', 'Amount'], ...investments.map((inv) => [inv.deal.company_name, inv.amount])]}
+                    data={[
+                      ['Investment', 'Amount'],
+                      ...investments.map((inv) => [inv.deal.company_name, inv.amount]),
+                    ]}
                     options={chartOptionsA}
                   />
                 ) : null}
@@ -492,11 +514,15 @@ export default () => {
                       <div>Name</div>
                       {sortByProp.direction !== 'asc' ? (
                         <ArrowDropUpIcon
-                          onClick={() => setSortByProp({ prop: 'deal.company_name', direction: 'asc' })}
+                          onClick={() =>
+                            setSortByProp({ prop: 'deal.company_name', direction: 'asc' })
+                          }
                         />
                       ) : (
                         <ArrowDropDownIcon
-                          onClick={() => setSortByProp({ prop: 'deal.company_name', direction: 'desc' })}
+                          onClick={() =>
+                            setSortByProp({ prop: 'deal.company_name', direction: 'desc' })
+                          }
                         />
                       )}
                     </div>
@@ -512,11 +538,21 @@ export default () => {
                         <div>Investment Date</div>
                         {sortByProp.direction !== 'asc' ? (
                           <ArrowDropUpIcon
-                            onClick={() => setSortByProp({ prop: 'deal.dealParams.wireDeadline', direction: 'asc' })}
+                            onClick={() =>
+                              setSortByProp({
+                                prop: 'deal.dealParams.wireDeadline',
+                                direction: 'asc',
+                              })
+                            }
                           />
                         ) : (
                           <ArrowDropDownIcon
-                            onClick={() => setSortByProp({ prop: 'deal.dealParams.wireDeadline', direction: 'desc' })}
+                            onClick={() =>
+                              setSortByProp({
+                                prop: 'deal.dealParams.wireDeadline',
+                                direction: 'desc',
+                              })
+                            }
                           />
                         )}
                       </div>
@@ -685,8 +721,8 @@ export default () => {
                           style={{ textAlign: 'center', marginBottom: '2rem' }}
                           variant="paragraph"
                         >
-                          An Allocations team member will reach out to you shortly about your order request. Please give
-                          up to 30 days for a response. Thank you.
+                          An Allocations team member will reach out to you shortly about your order
+                          request. Please give up to 30 days for a response. Thank you.
                         </Typography>
                       </Grid>
                     </Grid>
@@ -715,7 +751,11 @@ export default () => {
                       <Loader />
                     </Grid>
                     <Grid item xs={12} sm={12} md={12} lg={12}>
-                      <Typography className={classes.grey} style={{ textAlign: 'center' }} variant="h5">
+                      <Typography
+                        className={classes.grey}
+                        style={{ textAlign: 'center' }}
+                        variant="h5"
+                      >
                         Creating your trade request
                       </Typography>
                     </Grid>
@@ -1063,9 +1103,14 @@ export default () => {
               <Typography variant="h6" className={classes.grey}>
                 $ {tradeData?.amount} for {tradeData?.deal?.company_name}
               </Typography>
-              <Typography variant="subtitle2" className={classes.grey} style={{ marginTop: '1rem' }}>
-                After you confirm your order an Allocations team member will reachout with more information. Orders are
-                open for 30 days before expiring and you can contact us to cancel your open order at anytime.
+              <Typography
+                variant="subtitle2"
+                className={classes.grey}
+                style={{ marginTop: '1rem' }}
+              >
+                After you confirm your order an Allocations team member will reachout with more
+                information. Orders are open for 30 days before expiring and you can contact us to
+                cancel your open order at anytime.
               </Typography>
               {/* FOOTER */}
               <Grid>
