@@ -118,6 +118,9 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
         setShowDocs(false);
       }, 1000);
     },
+    onError: () => {
+      toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com')
+    }
   });
   const [errors, setErrors] = useState([]);
   useEffect(() => {

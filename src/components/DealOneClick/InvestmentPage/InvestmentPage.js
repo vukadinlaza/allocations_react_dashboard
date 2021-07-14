@@ -221,6 +221,9 @@ function InvestmentPage() {
       const path = organization ? `/next-steps/${organization}/${deal_slug}` : `/next-steps/${deal_slug}`;
       history.push(path, { investorFormData });
     },
+    onError: () => {
+      toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com')
+    }
   });
   const [getInvestmentPreview, { data: previewData, loading: loadingPreview }] = useMutation(GET_PREVIEW);
 
