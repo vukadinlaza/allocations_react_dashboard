@@ -3,10 +3,7 @@ import { FormControl, TextField, Button } from '@material-ui/core';
 import './styles.scss';
 
 function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
-  const [feeType, setFeeType] = useState('percentage');
-  const [setupCostType, setSetupCostType] = useState('percentage');
-
-
+  const [feeType, setFeeType] = useState(null);
   const {
     _id,
     dealParams: {
@@ -24,7 +21,6 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
 
   useEffect(() => {
     getFeeType();
-    getSetupCostType();
   }, [_id]);
 
   const getFeeType = () => {
@@ -35,13 +31,6 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
     }
   };
 
-  const getSetupCostType = () => {
-    if (estimatedSetupCosts?.length > 0) {
-      setFeeType('percentage');
-    } else if (estimatedSetupCostsDollar?.length > 0) {
-      setFeeType('fixed');
-    }
-  };
 
   const handleFormChange = ({ target }) => {
     const dealParamFields = [
@@ -69,15 +58,14 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
   };
 
   const getManagementFee = () => {
-    if (managementFees?.length > 0 && feeType === 'percentage') {
+    if (managementFees?.length > 0) {
       return managementFees;
     }
-
-    if (managementFeesDollar?.length > 0 && feeType === 'fixed') {
+    if (managementFeesDollar?.length > 0) {
       return managementFeesDollar;
     }
 
-    return ''
+    return '';
   };
 
   const changeFeeType = (type) => {
@@ -100,7 +88,7 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
           managementFees: '',
         },
       }));
-    } else {
+    } else if (feeType === 'percentage') {
       setFormData((prevData) => ({
         ...prevData,
         dealParams: {
