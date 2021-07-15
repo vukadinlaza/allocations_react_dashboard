@@ -74,7 +74,7 @@ const GET_DEAL = gql`
 
 function DealNextSteps() {
   const [confetti, showConfetti] = useState(false);
-  const { data, loading, refetch } = useQuery(GET_INVESTOR, {fetchPolicy: 'network-only'});
+  const { data, loading, refetch } = useQuery(GET_INVESTOR, { fetchPolicy: 'network-only' });
   const [getDeal, { data: dealData, called: calledDeal }] = useLazyQuery(GET_DEAL);
   const [showTaxAsCompleted, setShowTaxAsCompleted] = useState(false);
   const [open, setOpen] = useState(false);
@@ -135,8 +135,8 @@ function DealNextSteps() {
         ? { templateName: 'W-9', templateId: 'tpl_dM4QcQbyLckdPXgtyx' }
         : { templateName: 'W-9-E', templateId: 'tpl_HSJjJ9c9jb2N4GXFkt' }
       : investorFormData?.investor_type === 'individual'
-      ? { templateName: 'W-8-BEN', templateId: 'tpl_qDaxDLgRkFpHJD2cFX' }
-      : { templateName: 'W-8-BEN-E', templateId: 'tpl_mXPLm5EXAyHJKhQekf' };
+        ? { templateName: 'W-8-BEN', templateId: 'tpl_qDaxDLgRkFpHJD2cFX' }
+        : { templateName: 'W-8-BEN-E', templateId: 'tpl_mXPLm5EXAyHJKhQekf' };
 
   const userDocs = data?.investor?.documents || [];
   const hasKyc =
@@ -159,7 +159,7 @@ function DealNextSteps() {
             <h3 className="sub-header">Please complete the following steps to finish your investment.</h3>
           </div>
           <a href={path} className="new-investment-button">
-            <p className="action-header"><AddCircleIcon style={{color: "#3AC522", marginRight: "6px"}}/> Add New Investment</p>
+            <p className="action-header"><AddCircleIcon style={{ color: "#3AC522", marginRight: "6px" }} /> Add New Investment</p>
           </a>
         </div>
 
@@ -201,7 +201,8 @@ function DealNextSteps() {
               {hasKyc ? 'Completed' : 'Submit Tax Info'}
             </Button>
           </div>
-          {(dealData?.deal?.dealParams?.dealType === '506c' || true) && (
+          {/* //here */}
+          {(dealData?.deal?.dealParams?.dealType === '506c') && (
             <div className="action-item">
               <img
                 className="action-icon"
@@ -223,7 +224,7 @@ function DealNextSteps() {
                     const win = window.open('https://bridge.parallelmarkets.com/allocations', '_blank');
                     win.focus();
                   }}
-                  >
+                >
                   {data?.investor.accredidation_status === true ? 'Completed' : 'Submit'}
                 </Button>
               }

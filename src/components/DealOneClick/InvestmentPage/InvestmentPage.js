@@ -219,15 +219,21 @@ function InvestmentPage() {
         : 'Investment created successfully.';
       toast.success(message);
       setShowSpvModal(false);
-      const path = organization ? `/next-steps/${organization}/${deal_slug}` : `/next-steps/${deal_slug}`;
+      const path = organization
+        ? `/next-steps/${organization}/${deal_slug}`
+        : `/next-steps/${deal_slug}`;
       history.push(path, { investorFormData });
     },
     onError: () => {
-      toast.error('Something went wrong creating the investment. Try again or contact support@allocations.com');
+      toast.error(
+        'Something went wrong creating the investment. Try again or contact support@allocations.com',
+      );
       setShowSpvModal(false);
     },
   });
-  const [getInvestmentPreview, { data: previewData, loading: loadingPreview }] = useMutation(GET_PREVIEW);
+  const [getInvestmentPreview, { data: previewData, loading: loadingPreview }] = useMutation(
+    GET_PREVIEW,
+  );
 
   if (!data) return <Loader />;
 
@@ -240,7 +246,8 @@ function InvestmentPage() {
     if (validation.length > 0) return toast.warning('Incomplete Form');
     if (!amount) return toast.warning('Please enter a valid investment amount.');
     // eslint-disable-next-line radix
-    if (parseInt(amount) < 1000) return toast.warning('Please enter an investment amount greater than $1000.');
+    if (parseInt(amount) < 1000)
+      return toast.warning('Please enter an investment amount greater than $1000.');
 
     const payload = {
       ...investorFormData,
@@ -283,11 +290,17 @@ function InvestmentPage() {
   return (
     <section className="InvestmentPage">
       <div className="nav-btn-container">
-        <Button className="back-button" onClick={() => history.push(`/deals/${organization}/${deal_slug}`)}>
+        <Button
+          className="back-button"
+          onClick={() => history.push(`/deals/${organization}/${deal_slug}`)}
+        >
           <ArrowBackIcon />
           Back to Deal Page
         </Button>
-        <Button className="next-button" onClick={() => history.push(`/next-steps/${organization}/${deal_slug}`)}>
+        <Button
+          className="next-button"
+          onClick={() => history.push(`/next-steps/${organization}/${deal_slug}`)}
+        >
           Next Steps
           <ArrowForwardIcon />
         </Button>
@@ -297,11 +310,20 @@ function InvestmentPage() {
       </div>
 
       <div className="flex-container">
-        <InvestmentAmountPanel setAmount={setAmount} amount={amount} minimumInvestment={minimumInvestment} />
+        <InvestmentAmountPanel
+          setAmount={setAmount}
+          amount={amount}
+          minimumInvestment={minimumInvestment}
+        />
         <div className="side-panel">
           <DealDocumentsPanel deal={deal} />
         </div>
-        <PersonalInformation org={org} errors={errors} investor={investorFormData} setInvestor={setInvestor} />
+        <PersonalInformation
+          org={org}
+          errors={errors}
+          investor={investorFormData}
+          setInvestor={setInvestor}
+        />
         <TermsAndConditionsPanel
           confirmInvestment={confirmInvestment}
           deal={deal}
