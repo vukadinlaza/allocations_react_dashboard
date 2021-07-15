@@ -210,7 +210,7 @@ function InvestmentPage() {
     setPopulated(true);
   };
 
-  const [submitConfirmation, {}] = useMutation(CONFIRM_INVESTMENT, {
+  const [submitConfirmation, { loading: loadingConfirmation }] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       refetch();
       setLoading(false);
@@ -218,23 +218,36 @@ function InvestmentPage() {
         ? 'Investment updated successfully.'
         : 'Investment created successfully.';
       toast.success(message);
-      const path = organization ? `/next-steps/${organization}/${deal_slug}` : `/next-steps/${deal_slug}`;
+      setShowSpvModal(false);
+      const path = organization
+        ? `/next-steps/${organization}/${deal_slug}`
+        : `/next-steps/${deal_slug}`;
       history.push(path, { investorFormData });
     },
     onError: () => {
-      toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com')
-    }
+      toast.error(
+        'Something went wrong creating the investment. Try again or contact support@allocations.com',
+      );
+      setShowSpvModal(false);
+    },
   });
-  const [getInvestmentPreview, { data: previewData, loading: loadingPreview }] = useMutation(GET_PREVIEW);
+  const [getInvestmentPreview, { data: previewData, loading: loadingPreview }] = useMutation(
+    GET_PREVIEW,
+  );
+
+  if (!data) return <Loader />;
+
+  const { deal } = data;
 
   const confirmInvestment = () => {
     const validation = validate(investorFormData, organization);
-    console.log('validation', validation);
     setErrors(validation);
 
     if (validation.length > 0) return toast.warning('Incomplete Form');
     if (!amount) return toast.warning('Please enter a valid investment amount.');
-    if (parseInt(amount) < 1000) return toast.warning('Please enter an investment amount greater than $1000.');
+    // eslint-disable-next-line radix
+    if (parseInt(amount) < 1000)
+      return toast.warning('Please enter an investment amount greater than $1000.');
 
     const payload = {
       ...investorFormData,
@@ -260,14 +273,13 @@ function InvestmentPage() {
 
     if (isEdit) payload.investmentId = location.state.investmentId;
 
-    submitConfirmation({ variables: { payload } });
+    await submitConfirmation({ variables: { payload } });
     setShowSpvModal(false);
-    setLoading(true)
+    setLoading(true);
   };
 
   if (!data || loading) return <Loader />;
 
-  const { deal } = data;
   const {
     company_name,
     dealParams: { minimumInvestment },
@@ -278,11 +290,17 @@ function InvestmentPage() {
   return (
     <section className="InvestmentPage">
       <div className="nav-btn-container">
-        <Button className="back-button" onClick={() => history.push(`/deals/${organization}/${deal_slug}`)}>
+        <Button
+          className="back-button"
+          onClick={() => history.push(`/deals/${organization}/${deal_slug}`)}
+        >
           <ArrowBackIcon />
           Back to Deal Page
         </Button>
-        <Button className="next-button" onClick={() => history.push(`/next-steps/${organization}/${deal_slug}`)}>
+        <Button
+          className="next-button"
+          onClick={() => history.push(`/next-steps/${organization}/${deal_slug}`)}
+        >
           Next Steps
           <ArrowForwardIcon />
         </Button>
@@ -292,14 +310,20 @@ function InvestmentPage() {
       </div>
 
       <div className="flex-container">
-        <InvestmentAmountPanel setAmount={setAmount} amount={amount} minimumInvestment={minimumInvestment} />
+        <InvestmentAmountPanel
+          setAmount={setAmount}
+          amount={amount}
+          minimumInvestment={minimumInvestment}
+        />
         <div className="side-panel">
-          {/* <InvestingAsPanel /> */}
-          {/* <InvestmentHistory deal={deal} setInvestor={setInvestor} investor={investorFormData} setAmount={setAmount} /> */}
           <DealDocumentsPanel deal={deal} />
-          {/* <YourDocumentsPanel investment={investment} /> */}
         </div>
-        <PersonalInformation org={org} errors={errors} investor={investorFormData} setInvestor={setInvestor} />
+        <PersonalInformation
+          org={org}
+          errors={errors}
+          investor={investorFormData}
+          setInvestor={setInvestor}
+        />
         <TermsAndConditionsPanel
           confirmInvestment={confirmInvestment}
           deal={deal}
@@ -316,6 +340,7 @@ function InvestmentPage() {
         submitInvestment={submitInvestment}
         previewData={previewData}
         loadingPreview={loadingPreview}
+        loadingConfirmation={loadingConfirmation}
       />
     </section>
   );

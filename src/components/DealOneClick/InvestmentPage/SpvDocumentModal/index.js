@@ -8,8 +8,15 @@ import AllPagesPDFViewer from '../../../PDFViewer';
 import Loader from '../../../utils/Loader';
 import './styles.scss';
 
-export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment, previewData, loadingPreview }) {
-
+export default function SPVDocumentModal({
+  setOpen,
+  open,
+  deal,
+  submitInvestment,
+  previewData,
+  loadingPreview,
+  loadingConfirmation,
+}) {
   const handleClose = () => {
     setOpen(false);
   };
@@ -17,6 +24,10 @@ export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment
   const spvDoc = (deal.documents || []).find((doc) => {
     return doc.path.includes('Agreement');
   });
+
+  const handleSubmit = async () => {
+    await submitInvestment();
+  };
 
   const previewLink = previewData?.getInvestmentPreview?.previewLink;
   const document = previewLink ? { link: previewLink } : spvDoc;
@@ -37,7 +48,14 @@ export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment
       <Fade in={open}>
         <div className="paper">
           {loadingPreview ? (
-            <Grid style={{ display: 'flex', justifyContent: 'center', marginTop: '10%', flexDirection: 'column' }}>
+            <Grid
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                marginTop: '10%',
+                flexDirection: 'column',
+              }}
+            >
               <Typography variant="h4" style={{ marginBottom: '10%' }}>
                 We are generating your documents.
               </Typography>
@@ -46,14 +64,18 @@ export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment
           ) : (
             <>
               <AllPagesPDFViewer document={document} usePreview={!!previewLink} handleClose={handleClose} />
-              <div className="buttonContainer">
-                <Button variant="contained" color="secondary" className="button" onClick={submitInvestment}>
-                  I Agree
-                </Button>
-                <Button variant="contained" color="secondary" className="button declineBtn" onClick={handleClose}>
-                  I Decline
-                </Button>
-              </div>
+              {loadingConfirmation ? (
+                <Loader />
+              ) : (
+                <div className="buttonContainer">
+                  <Button variant="contained" color="secondary" className="button" onClick={handleSubmit}>
+                    I Agree
+                  </Button>
+                  <Button variant="contained" color="secondary" className="button declineBtn" onClick={handleClose}>
+                    I Decline
+                  </Button>
+                </div>
+              )}
             </>
           )}
         </div>

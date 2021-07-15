@@ -111,6 +111,7 @@ const GET_INVESTOR = gql`
         documents {
           path
           link
+          fileName
         }
         deal {
           _id
@@ -170,13 +171,13 @@ const CREATE_ORDER = gql`
     }
   }
 `;
-const POST_ZAP = gql`
-  mutation PostZap($body: Object) {
-    postZap(data: $body) {
-      _id
-    }
-  }
-`;
+// const POST_ZAP = gql`
+//   mutation PostZap($body: Object) {
+//     postZap(data: $body) {
+//       _id
+//     }
+//   }
+// `;
 const BASE = 'appLhEikZfHgNQtrL';
 const TABLE = 'Ledger';
 export default () => {
@@ -186,12 +187,11 @@ export default () => {
   const [showResignModal, setShowResignModal] = useState(false);
   const [sortByProp, setSortByProp] = useState({ prop: 'deal.company_name', direction: 'asc' });
   const [editInvestmentModal, setEditInvestmentModal] = useState({});
-  const [investmentUpdated, setInvestmentUpdated] = useState();
   const { userProfile, refetch } = useAuth(GET_INVESTOR);
   const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile?.email || '');
   const [demo, setDemo] = useState(false);
   const [showCapitalAccounts, setShowCaptialAccounts] = useState(false);
-  const [postZap, {}] = useMutation(POST_ZAP);
+  // const [postZap, {}] = useMutation(POST_ZAP);
   const investmentsRef = React.useRef(null);
 
   const [confirmation, setConfirmation] = useState(false);
@@ -295,7 +295,7 @@ export default () => {
       setTradeData({ amount: 0 });
       setTradeData({ percent: 0.0 });
     }
-    if (isNaN(parseInt(value))) return null;
+    if (Number.isNaN(parseInt(value))) return null;
 
     switch (name) {
       case 'amount':
@@ -335,7 +335,7 @@ export default () => {
                   Portfolio Value
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  $ {investmentsValue === 0 ? `${nWithCommas(investmentsValue)}.00` : nWithCommas(investmentsValue)}
+                  ${investmentsValue === 0 ? `${nWithCommas(investmentsValue)}.00` : nWithCommas(investmentsValue)}
                 </h2>
                 <p
                   style={{
@@ -407,7 +407,7 @@ export default () => {
                   Multiple
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  {!isNaN(multipleSum) ? multipleSum : '0.00'}x
+                  {!Number.isNaN(multipleSum) ? multipleSum : '0.00'}x
                 </h2>
                 <p
                   style={{
@@ -512,11 +512,21 @@ export default () => {
                         <div>Investment Date</div>
                         {sortByProp.direction !== 'asc' ? (
                           <ArrowDropUpIcon
-                            onClick={() => setSortByProp({ prop: 'deal.dealParams.wireDeadline', direction: 'asc' })}
+                            onClick={() =>
+                              setSortByProp({
+                                prop: 'deal.dealParams.wireDeadline',
+                                direction: 'asc',
+                              })
+                            }
                           />
                         ) : (
                           <ArrowDropDownIcon
-                            onClick={() => setSortByProp({ prop: 'deal.dealParams.wireDeadline', direction: 'desc' })}
+                            onClick={() =>
+                              setSortByProp({
+                                prop: 'deal.dealParams.wireDeadline',
+                                direction: 'desc',
+                              })
+                            }
                           />
                         )}
                       </div>
@@ -1141,8 +1151,7 @@ export default () => {
       <EditInvestmentModal
         editInvestmentModal={editInvestmentModal}
         setEditInvestmentModal={setEditInvestmentModal}
-        investmentUpdated={investmentUpdated}
-        setInvestmentUpdated={setInvestmentUpdated}
+        refetch={refetch}
       />
       <ResignModal
         setShowDocs={setShowDocs}
@@ -1306,7 +1315,7 @@ function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin, setS
   );
 }
 
-const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal }) => {
+const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal, refetch }) => {
   const classes = useStyles();
   return (
     <>
@@ -1321,7 +1330,12 @@ const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal }) =>
                   </Box>
                 </Grid>
                 <Grid container justify="space-between" />
-                <InvestmentEdit investmentId={editInvestmentModal._id} isK1 />
+                <InvestmentEdit
+                  investmentId={editInvestmentModal._id}
+                  isK1
+                  setEditInvestmentModal={setEditInvestmentModal}
+                  refetch={refetch}
+                />
               </Paper>
             </Grid>
           </Grid>
