@@ -414,8 +414,8 @@ export const ONBOARDING = gql`
   }
 `;
 
-const fundTabs = ['Setup', 'Highlights', 'Investments', 'Investor Onboarding Status', 'Deal Page'];
-const spvTabs = ['Setup', 'Investor Onboarding Status', 'Deal Page'];
+const fundTabs = ['Highlights', 'Investments', 'Investor Onboarding Status', 'Deal Page'];
+const spvTabs = ['Investor Onboarding Status', 'Deal Page'];
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
@@ -424,7 +424,7 @@ const FundManagerDashboard = ({ classes, history }) => {
   const { width } = useViewport();
   const { organization: orgSlug, deal: dealSlug } = useParams();
   const [tabIndex, setTabIndex] = useState(0);
-  const [tabName, setTabName] = useState(spvTabs[0]);
+  const [tabName, setTabName] = useState(fundTabs[0]);
   const [dealTab, setDealTab] = useState(0);
   const [dealData, setDealData] = useState({});
   const [dealName, setDealName] = useState('');
