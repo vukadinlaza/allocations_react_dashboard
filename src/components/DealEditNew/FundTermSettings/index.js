@@ -20,8 +20,7 @@ function FundTerms({ formData, setFormData }) {
     },
   } = formData;
 
-  console.log('fund', formData);
-
+  
   const getFeeType = () => {
     if (fundManagementFees?.length > 0) {
       setFeeType('percentage');
