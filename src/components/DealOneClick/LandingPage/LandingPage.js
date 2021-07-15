@@ -10,8 +10,6 @@ import DealHeader from './DealHeader';
 import CoinvestorsPanel from './CoinvestorsPanel';
 import './styles.scss';
 import KeyHighlights from './KeyHighlightsPanel';
-import NotFound from '../../NotFound/index';
-
 import Loader from '../../utils/Loader';
 
 const GET_DEAL = gql`
@@ -112,7 +110,6 @@ function DealLandingPage() {
     }
   });
 
-  console.log('ERROR', error);
   if (error) return <Redirect to="/404" />;
 
   if (!data) return <Loader />;
