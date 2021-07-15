@@ -43,7 +43,7 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
     f1_12: '',
     f1_13: '',
     date_signed: moment().format('YYYY-MM-DD'),
-    signature: '',
+    signature: state?.investorFormData?.legalName || '',
     state: '',
     city: '',
     zip: '',
@@ -109,7 +109,15 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
   };
 
   const handleChange = ({ target }) => {
-    if(!target.name) return;
+    if (!target.name) return;
+
+    if (target.name.includes('name_as_shown')) {
+      return setFormData((prevData) => ({
+        ...prevData,
+        signature: target.value,
+        [target.name]: target.value
+      }));
+    }
 
     if (target.name.includes('f1')) {
       const onlyNumbers = target.value.replace(/\D+/g, '');
@@ -118,7 +126,7 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
     setFormData((prevData) => ({ ...prevData, [target.name]: target.value }));
 
   };
-  
+
   console.log('formdata', formData);
 
   return (

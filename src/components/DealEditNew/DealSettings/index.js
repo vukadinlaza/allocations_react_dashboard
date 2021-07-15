@@ -91,7 +91,7 @@ function DealSettings({ formData, setFormData, refetch, loading }) {
     setDocumentMenuAnchorEl(null);
   };
 
-  const dealDocumentItems = documents.map((doc, i) => {
+  const dealDocumentItems = documents?.map((doc, i) => {
     return (
       <li className="document-item" key={i}>
         <a className="document-link" href={`https://${doc.link}`} target="_blank" rel="noreferrer">
@@ -360,14 +360,18 @@ function DealSettings({ formData, setFormData, refetch, loading }) {
           </label>
         </FormControl>
 
-        <div className="deal-documents">
-          <label className="field-label">
-            Deal Documents
+        {
+          documents && (
+            <div className="deal-documents">
+              <label className="field-label">
+                Deal Documents
             <ul className="document-list">
-              {dealDocumentItems}
-            </ul>
-          </label>
-        </div>
+                  {dealDocumentItems}
+                </ul>
+              </label>
+            </div>
+          )
+        }
 
         <AddDealLogo />
 
