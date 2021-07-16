@@ -25,7 +25,7 @@ export function useToggle(init) {
 export const useFetch = (base, tableName, filter) => {
   const [status, setStatus] = useState('idle');
   const [data, setData] = useState([]);
-  // console.log({filter})
+
   useEffect(() => {
     if (!base || !tableName) return;
 

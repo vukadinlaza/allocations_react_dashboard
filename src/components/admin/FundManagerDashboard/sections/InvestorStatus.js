@@ -190,9 +190,12 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
       };
     });
 
-  signedTotal += demoSignedArray.map((i) => i.amount).reduce((acc, n) => acc + n);
-  wiredTotal += demoWiredArray.map((i) => i.amount).reduce((acc, n) => acc + n);
+
   const isDemo = false;
+  if(isDemo){
+    signedTotal += demoSignedArray.map((i) => i.amount).reduce((acc, n) => acc + n);
+    wiredTotal += demoWiredArray.map((i) => i.amount).reduce((acc, n) => acc + n);
+  }
   // const isDemo = window?.origin?.includes('vercel') || window.origin.includes('localhost');
 
 

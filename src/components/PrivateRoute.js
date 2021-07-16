@@ -17,7 +17,7 @@ const PrivateRoute = ({ component, ...args }) => {
   const query = queryString.parse(paramsToUse);
 
   const tvc = query.login === 'tvc' ? connection : '';
-  console.log('IS TVC from private route', tvc);
+
   return (
     <Route
       component={withAuthenticationRequired(component, {

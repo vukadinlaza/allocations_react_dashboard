@@ -414,7 +414,7 @@ export const ONBOARDING = gql`
   }
 `;
 
-const fundTabs = ['Setup', 'Highlights', 'Investments', 'Investor Onboarding Status', 'Deal Page'];
+const fundTabs = ['Highlights', 'Investments', 'Investor Onboarding Status', 'Deal Page'];
 const spvTabs = ['Investor Onboarding Status', 'Deal Page'];
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
@@ -432,8 +432,9 @@ const FundManagerDashboard = ({ classes, history }) => {
   const [loading, setLoading] = useState(false);
   const [atDealData, setAtDealData] = useState({});
   const [openTooltip, setOpenTooltip] = useState('');
+  const [orgDeals, setOrgDeals] = useState(null);
   const [getInvestments, { data: dealInvestments, refetch }] = useLazyQuery(GET_INVESTMENTS);
-  const [getOrgDeals, { data: orgDeals }] = useLazyQuery(ORG_OVERVIEW);
+  const [getOrgDeals, { data: orgDealsData }] = useLazyQuery(ORG_OVERVIEW);
   const { data: subsData } = useSubscription(ONBOARDING);
   const { data: atDeal } = useFetch(OPS_ACCOUNTING, dealName && DEALS_TABLE, dealName && `({Deal Name}="${dealName}")`);
   const { data: atFundData, status } = useFetch(
@@ -442,17 +443,17 @@ const FundManagerDashboard = ({ classes, history }) => {
     atDealData?.name && `(FIND("${atDealData.name}", {Deals}))`,
     );
     
-
+    
   const handleDealData = (index) => {
     if (orgDeals) {
       const currentDeal = orgDeals.organization?.deals?.length && orgDeals.organization.deals[index];
       const dealName = currentDeal.company_name;
-      console.log(dealName)
+
       setDealData(currentDeal);
       setDealName(dealName);
     }  
   };
-
+  
   useEffect(() => {
     if (dealData && Object.keys(dealData).length) {
       const newTabs = dealData.investmentType === 'fund' ? fundTabs : spvTabs;
@@ -478,11 +479,15 @@ const FundManagerDashboard = ({ classes, history }) => {
   }, [orgSlug]);
   
   useEffect(() => {
-    console.log(JSON.stringify(orgDeals))
-    if(orgDeals){
-      orgDeals.organization.deals = orgDeals.organization.deals.reverse()
-      handleDealData(0);
+    if(orgDealsData){
+      let orgDealsDataCopy = JSON.parse(JSON.stringify(orgDealsData));
+      orgDealsDataCopy.organization.deals = orgDealsDataCopy.organization.deals.reverse();
+      setOrgDeals(orgDealsDataCopy)
     }
+  }, [orgDealsData]);
+  
+  useEffect(() => {
+    handleDealData(0);
   }, [orgDeals]);
 
   useEffect(() => {
@@ -494,7 +499,7 @@ const FundManagerDashboard = ({ classes, history }) => {
       const data = atDeal[0].fields;
       setAtDealData({ name: data['Deal Name'], id: atDeal[0].id });
     } else if (atDeal) {
-      setAtDealData({ name: 'Deal Name Not found in AirTable', id: '' });
+      setAtDealData({ name: `Deal Name ${dealName} Not found in AirTable`, id: '' });
     }
   }, [atDeal]);
 
@@ -518,7 +523,6 @@ const FundManagerDashboard = ({ classes, history }) => {
   };
 
   const handleDealsTabChange = (newValue) => {
-    console.log('HERE')
     setLoading(true);
     setDealTab(newValue);
   };
@@ -601,7 +605,7 @@ const FundManagerDashboard = ({ classes, history }) => {
         return <p>No Data</p>;
     }
   };
-  // console.log(!dealData, !atFundData, !dealInvestments, status === 'fetching', loading)
+
   if (!orgDeals) return <Loader />;
   return (
     <div className={classes.dashboardContainer}>

@@ -129,10 +129,10 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
     
     const currentTask = dealTasks.find(task => step.processStreetTask.includes(task.taskName.toLowerCase()));
     if(!currentTask){
-      console.log(`Task "${step.processStreetTask}" not matching`)
+      // console.log(`Task "${step.processStreetTask}" not matching`)
       return false;
     }
-    if(stepValue === 'Entity Formation Complete') console.log({step, currentTask})
+
     switch (stepValue) {
       case 'Entity Formation Complete':
         const hvpTask = dealTasks.find(task => task.taskName.toLowerCase() === 'enter deal details');
@@ -153,7 +153,6 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
         }else{
           taskChecked = false;
         }
-        console.log({tasksNeeded})
       default:
         taskChecked = currentTask.taskStatus === 'Completed'
         break;
