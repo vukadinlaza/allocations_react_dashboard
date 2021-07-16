@@ -85,7 +85,7 @@ export const dealSteps = {
     { 
       value: 'Portfolio Company Wire Info Uploaded', 
       tooltip: 'Uploaded Portfolio Company Wire Instructions',
-      processStreetTask: ['']                                                                   //Cant find task
+      processStreetTask: ['wire out to portfolio company']                                                                   //Cant find task
     },
     {
       value: 'Investor Ledger Reconciliation Complete',
