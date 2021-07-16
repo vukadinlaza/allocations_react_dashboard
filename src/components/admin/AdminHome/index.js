@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { gql } from 'apollo-boost';
-
-import { Paper, Grid, ButtonBase, Typography, FormControl, Button, TextField } from '@material-ui/core';
-import _, { toLower, groupBy } from 'lodash';
+import { Paper, Grid, ButtonBase, Typography, Button } from '@material-ui/core';
+import { toLower } from 'lodash';
 import { useQuery } from '@apollo/react-hooks';
 import { useParams, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -94,7 +93,7 @@ export const ORG_OVERVIEW = gql`
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 
-export default function AdminHome({}) {
+export default function AdminHome() {
   const { data: atFundData } = useFetch(OPS_ACCOUNTING, INVESTMENTS_TABLE);
   const { organization: orgSlug } = useParams();
   const [tab, setTab] = useState('active-deals');
@@ -134,9 +133,7 @@ export default function AdminHome({}) {
       </Grid>
       <Grid item sm={12} md={6}>
         <Typography variant="body2" style={{ textAlign: 'right' }}>
-          <Grid item xs={12}>
-            {data.investor.admin && <SuperAdmin org={orgData} />}
-          </Grid>
+          {data.investor.admin && <SuperAdmin org={orgData} />}
         </Typography>
       </Grid>
     </Grid>
@@ -184,15 +181,6 @@ export default function AdminHome({}) {
               Investments
             </ButtonBase>
           </Grid>
-          {/* <Grid item xs={12} sm={4} md={2}>
-            <ButtonBase
-              className={tab === 'setting' ? classes.activeTab : classes.tab}
-              style={{ borderRight: '1px solid #e1e9ec' }}
-              onClick={() => setTab('setting')}
-            >
-              Settings
-            </ButtonBase>
-          </Grid> */}
         </Grid>
       </div>
 

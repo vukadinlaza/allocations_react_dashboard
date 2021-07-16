@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { isEqual } from 'lodash';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Paper, TextField, Button } from '@material-ui/core';
-import { Row, Col } from 'reactstrap';
 
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
@@ -12,8 +11,6 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
-import { ORG_OVERVIEW } from '../admin/AdminHome';
-import FormError from '../forms/Error';
 import { useSimpleReducer } from '../../utils/hooks';
 
 const CREATE_ORG_AND_DEAL = gql`
@@ -55,7 +52,7 @@ export default function FreeSPVOnboarding() {
   const [hasChanges, setHasChanges] = useState(false);
   const classes = useStyles();
 
-  const [createOrgAndDeal, { error }] = useMutation(CREATE_ORG_AND_DEAL, {
+  const [createOrgAndDeal] = useMutation(CREATE_ORG_AND_DEAL, {
     onCompleted: ({ createOrgAndDeal: deal }) =>
       history.push(`/admin/${deal.organization.slug}/deals/${deal._id}/edit`),
   });

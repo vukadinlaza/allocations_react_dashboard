@@ -1,5 +1,4 @@
 .SPVTermSettings {
-  animation: fade .25s ease-in forwards;
   width: 90%;
 
   h2 {
@@ -129,15 +128,5 @@
         }
       }
     }
-  }
-  
-}
-
-@keyframes fade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 100%;
-  }
+  } 
 }

@@ -18,15 +18,17 @@ import {
   FormControl,
   Input,
   InputAdornment,
+  Box,
+  Container,
 } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import CancelIcon from '@material-ui/icons/Cancel';
 import EditIcon from '@material-ui/icons/Edit';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CloseIcon from '@material-ui/icons/Close';
-import _, { toLower, orderBy, get } from 'lodash';
+import _, { orderBy, get } from 'lodash';
 import moment from 'moment';
 import Chart from 'react-google-charts';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -69,6 +71,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '12vh',
     borderRadius: '1rem',
     padding: theme.spacing(2),
+    maxHeight: '70%',
+    overflow: 'scroll',
   },
   input: {
     border: '1px solid #707070',
@@ -212,10 +216,12 @@ export default () => {
     }
   }, [setTradeData, tradeData.showLoading]);
 
+  const userProfileInvestments = userProfile?.investments;
+
   useEffect(() => {
     const demo = location.search === '?demo=true';
-    if (demo && userProfile?.investments) {
-      investmentsRef.current = userProfile?.investments.map((inv) => {
+    if (demo && userProfileInvestments) {
+      investmentsRef.current = userProfileInvestments.map((inv) => {
         inv.deal.company_name = _.sample([
           'Airbnb',
           'Coinbase',
@@ -234,7 +240,7 @@ export default () => {
       });
       setDemo(true);
     }
-  }, [demo, location.search, userProfile, userProfile?.investments]);
+  }, [demo, location.search, userProfile, userProfileInvestments]);
   const chartOptionsA = {
     title: '',
     pieHole: 0.5,
@@ -314,7 +320,7 @@ export default () => {
   };
   return (
     <div className="blue-container">
-      <Grid container spacing={12} justify="space-between" style={{ marginTop: '40px', marginBottom: '1rem' }}>
+      <Grid container justify="space-between" style={{ marginTop: '40px', marginBottom: '1rem' }}>
         <Grid item xs={12} sm={12} md={4} style={{ border: '1em solid transparent' }}>
           <Paper style={{ minHeight: '100px' }}>
             <Grid container style={{ padding: '0.1rem', justifyContent: 'space-between' }}>
@@ -532,6 +538,9 @@ export default () => {
                   <TableCell className={classes.tableHeader} align="center">
                     Deal Page
                   </TableCell>
+                  <TableCell className={classes.tableHeader} align="center">
+                    Next Steps
+                  </TableCell>
                   <Hidden only="xs">
                     <TableCell className={classes.tableHeader} align="center">
                       Documents
@@ -547,8 +556,9 @@ export default () => {
               <TableBody>
                 {sortedInvestments(investments).map((investment) =>
                   showDocs?._id === investment?._id ? (
-                    <>
+                    <React.Fragment key={investment._id}>
                       <TR
+                        key={investment._id}
                         demo={demo}
                         investment={investment}
                         setShowDocs={setShowDocs}
@@ -567,9 +577,10 @@ export default () => {
                         setEditInvestmentModal={setEditInvestmentModal}
                         isAdmin={userProfile.admin || location.pathname.includes('investor')}
                       />
-                    </>
+                    </React.Fragment>
                   ) : (
                     <TR
+                      key={investment._id}
                       demo={demo}
                       investment={investment}
                       setShowDocs={setShowDocs}
@@ -588,7 +599,7 @@ export default () => {
       </>
 
       <Modal
-        open={tradeData?.open}
+        open={Boolean(tradeData?.open)}
         onClose={() =>
           setTradeData({
             price: '',
@@ -602,7 +613,7 @@ export default () => {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <Grid container xs={12} sm={12} md={4} lg={4}>
+        <Container maxWidth="sm">
           {tradeData.showLoading ? (
             <Grid item xs={12} sm={12} md={12} lg={12}>
               <Paper className={classes.modalPaper}>
@@ -637,7 +648,7 @@ export default () => {
                             textAlign: 'end',
                           }}
                         >
-                          <CancelIcon color="black" fontSize="medium" />
+                          <CancelIcon />
                         </Typography>
                       </Grid>
                       <Grid>
@@ -713,9 +724,9 @@ export default () => {
               </Paper>
             </Grid>
           ) : (
-            <Grid container xs={12} sm={12} md={12} lg={12}>
+            <Container maxWidth="sm">
               <form noValidate autoComplete="off" style={{ width: '100%' }}>
-                <Grid xs={12} sm={12} md={12} lg={12}>
+                <Box>
                   <Paper className={classes.modalPaper}>
                     {/* HEADER */}
                     <Grid container justify="space-between">
@@ -743,7 +754,7 @@ export default () => {
                           className={classes.grey}
                           style={{ fontWeight: 'bold', fontSize: '1.5rem' }}
                         >
-                          <CancelIcon color="black" fontSize="medium" />
+                          <CancelIcon />
                         </Typography>
                       </Grid>
                     </Grid>
@@ -752,7 +763,7 @@ export default () => {
                       You'll {_.startCase(_.toLower(tradeData?.type))}
                     </Typography>
 
-                    <Grid container xs={12} sm={12} md={12} lg={12} className={classes.input}>
+                    <Grid container className={classes.input}>
                       <Grid
                         item
                         xs={6}
@@ -777,8 +788,8 @@ export default () => {
                               disableUnderline
                               startAdornment={<InputAdornment position="start">%</InputAdornment>}
                               onChange={handleInputChange}
-                              name="percent"
-                              value={tradeData.percent}
+                              name="amount"
+                              value={tradeData.amount}
                             />
                           </FormControl>
                         )}
@@ -833,14 +844,7 @@ export default () => {
                         {tradeData?.deal?.company_name || ''}
                       </Grid>
                     </Grid>
-                    <Grid
-                      container
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}
-                    >
+                    <Grid container style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}>
                       <Grid
                         item
                         xs={6}
@@ -902,7 +906,7 @@ export default () => {
                       You'll {tradeData.type === 'buy' ? 'Pay' : 'Receive'}
                     </Typography>
 
-                    <Grid container xs={12} sm={12} md={12} lg={12} className={classes.input}>
+                    <Grid container className={classes.input}>
                       <Grid item xs={6} sm={6} md={6} lg={6}>
                         <FormControl className={classes.margin} xs={6} sm={6} md={6} lg={6}>
                           <Input
@@ -935,14 +939,7 @@ export default () => {
                         USD ($)
                       </Grid>
                     </Grid>
-                    <Grid
-                      container
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}
-                    >
+                    <Grid container style={{ paddingLeft: '.5rem', paddingRight: '.5rem' }}>
                       <Grid
                         item
                         xs={6}
@@ -980,7 +977,7 @@ export default () => {
                       </Grid>
                     </Grid>
 
-                    <Grid justify="center">
+                    <Box>
                       <Button
                         variant="contained"
                         onClick={() => setConfirmation(true)}
@@ -995,13 +992,13 @@ export default () => {
                       >
                         Create Order
                       </Button>
-                    </Grid>
+                    </Box>
                   </Paper>
-                </Grid>
+                </Box>
               </form>
-            </Grid>
+            </Container>
           )}
-        </Grid>
+        </Container>
       </Modal>
       <Modal
         open={confirmation}
@@ -1010,7 +1007,7 @@ export default () => {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <Grid container xs={12} sm={12} md={4} lg={4}>
+        <Container maxWidth="sm">
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Paper className={classes.modalPaper}>
               {/* HEADER */}
@@ -1031,12 +1028,12 @@ export default () => {
                     className={classes.grey}
                     style={{ fontWeight: 'bold', fontSize: '1.5rem' }}
                   >
-                    <CancelIcon color="black" fontSize="medium" />
+                    <CancelIcon />
                   </Typography>
                 </Grid>
               </Grid>
 
-              <Typography variant="paragraph" className={classes.grey}>
+              <Typography variant="body2" className={classes.grey}>
                 You'll {_.startCase(_.toLower(tradeData?.type))}
               </Typography>
 
@@ -1060,7 +1057,7 @@ export default () => {
                   style={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}
                 />
               </Grid>
-              <Typography variant="paragraph" className={classes.grey}>
+              <Typography variant="body2" className={classes.grey}>
                 You'll {tradeData.type === 'buy' ? 'Pay' : 'Receive'}
               </Typography>
               <Typography variant="h6" className={classes.grey}>
@@ -1104,7 +1101,7 @@ export default () => {
                 </Grid>
               </Grid>
 
-              <Grid justify="center">
+              <Box>
                 <Button
                   variant="contained"
                   onClick={() => {
@@ -1130,10 +1127,10 @@ export default () => {
                 >
                   Confirm Order
                 </Button>
-              </Grid>
+              </Box>
             </Paper>
           </Grid>
-        </Grid>
+        </Container>
       </Modal>
 
       <CapitalAccountModal
@@ -1157,25 +1154,20 @@ export default () => {
   );
 };
 
-const TR = ({
-  investment,
-  setShowDocs,
-  showDocs,
-  setTradeData,
-  demo,
-  setShowCaptialAccounts,
-  capitalAccounts,
-  userProfile,
-}) => {
+const TR = ({ investment, setShowDocs, showDocs, demo, setShowCaptialAccounts, capitalAccounts }) => {
   const history = useHistory();
   const capFields = (capitalAccounts || []).map((r) => r.fields);
-
+  const orgSlug = investment?.deal?.organization?.slug;
+  const dealSlug = investment?.deal?.slug;
+  const nextStepUrl = ['signed', 'wired', 'complete'].includes(investment?.status)
+    ? `/next-steps/${orgSlug}/${dealSlug}`
+    : `/deals/${orgSlug}/${dealSlug}`;
   const capitalAccountInfo = capFields.find((r) => {
     return _.get(r, 'Deal Name (webapp)[0]') === investment.deal.company_name;
   });
-
   const addedDate = moment(investment?.deal?.dealParams?.wireDeadline).format('Do MMM YYYY');
   const showDocsFn = () => setShowDocs(showDocs ? false : investment);
+
   return (
     <TableRow key={investment._id} className="investment-row">
       <TableCell align="left" onClick={showDocsFn}>
@@ -1214,6 +1206,11 @@ const TR = ({
           View
         </Button>
       </TableCell>
+      <TableCell onClick={showDocsFn} align="center">
+        <Button variant="contained" size="small" color="primary" onClick={() => history.push(nextStepUrl)}>
+          View
+        </Button>
+      </TableCell>
       <Hidden only="xs">
         <TableCell align="center">
           <Button variant="contained" size="small" color="primary" onClick={showDocsFn} disabled={!!demo}>
@@ -1243,7 +1240,7 @@ function InvestmentStatus({ investment }) {
 }
 
 function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin, setShowResignModal }) {
-  const isClosed = moment(investment?.deal?.dealParams?.signDeadline).isBefore(new Date());
+  const isClosed = investment?.deal?.status === 'closed';
 
   return (
     <>
@@ -1252,8 +1249,8 @@ function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin, setS
           <Typography variant="subtitle2" style={{ marginBottom: '1rem' }}>
             Documents may take up to 7 days to appear here after signing.
           </Typography>
-          <Grid container xs={12} md={12} sm={12} lg={12} spacing={1}>
-            {demo ? [] : docs.map((doc) => <Document doc={doc} investment={investment} />)}
+          <Grid container spacing={1}>
+            {demo ? [] : docs.map((doc) => <Document key={doc?.path} doc={doc} investment={investment} />)}
             {investment?.submissionData?.submissionId && !isClosed && (
               <Grid
                 item
@@ -1311,24 +1308,24 @@ function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin, setS
 
 const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal }) => {
   const classes = useStyles();
-
   return (
     <>
-      <Modal open={editInvestmentModal._id} onClose={() => {}} className={classes.modal}>
-        <Grid container xs={12} sm={12} md={4} lg={5}>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Paper className={classes.modalPaper}>
-              <Grid
-                onClick={() => setEditInvestmentModal(false)}
-                style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer' }}
-              >
-                <CloseIcon />
-              </Grid>
-              <Grid container justify="space-between" />
-              <InvestmentEdit investmentId={editInvestmentModal._id} isK1 />
-            </Paper>
+      <Modal open={Boolean(editInvestmentModal?._id)} onClose={() => {}} className={classes.modal}>
+        <Container maxWidth="sm">
+          <Grid container style={{ minHeight: '100vh' }}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Paper className={classes.modalPaper}>
+                <Grid style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Box onClick={() => setEditInvestmentModal(false)} style={{ cursor: 'pointer' }}>
+                    <CloseIcon />
+                  </Box>
+                </Grid>
+                <Grid container justify="space-between" />
+                <InvestmentEdit investmentId={editInvestmentModal._id} isK1 />
+              </Paper>
+            </Grid>
           </Grid>
-        </Grid>
+        </Container>
       </Modal>
     </>
   );

@@ -3,13 +3,11 @@ import _ from 'lodash';
 import { Link, useParams } from 'react-router-dom';
 import { gql } from 'apollo-boost';
 import { useLazyQuery } from '@apollo/react-hooks';
-import { Row, Col } from 'reactstrap';
 import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, Grid } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { useAuth } from '../../auth/useAuth';
 import { nWithCommas } from '../../utils/numbers';
 import Loader from '../utils/Loader';
-import { getDisplayName } from '../../utils/displayName';
 
 import './style.scss';
 
@@ -43,7 +41,7 @@ export default function Investors() {
   const { organization } = useParams();
   const { userProfile } = useAuth();
   const [getInvestors, { data, error }] = useLazyQuery(GET_INVESTORS, { variables: { slug: organization } });
-  console.log('HELLO', data);
+
   useEffect(() => {
     if (userProfile && userProfile.email) getInvestors();
   }, [getInvestors, userProfile]);
@@ -61,7 +59,6 @@ export default function Investors() {
     organization: { orgInvestors },
   } = data;
 
-  console.log(orgInvestors.filter((i) => i.first_name === 'Brian'));
   return (
     <div className="Investors">
       {/* {organization === "allocations" && <Col sm={{ size: 12 }}>
@@ -74,7 +71,7 @@ export default function Investors() {
       <Grid container>
         <Grid item xs={12}>
           <Paper className="table-wrapper">
-            <Grid container xs={12} justify="space-between" style={{ padding: '16px' }}>
+            <Grid container justify="space-between" style={{ padding: '16px' }}>
               <Typography variant="h6" gutterBottom>
                 Investors
               </Typography>

@@ -402,11 +402,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
             </Typography>
             <Grid>
               <Paper
-                style={{
-                  border: 'solid 1px #2576FF',
-                }}
-                style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '1.5rem' }}
-              >
+                style={{ border: 'solid 1px #2576FF', marginBottom: '.25rem', marginTop: '.25rem', padding: '1.5rem' }} >
                 <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
                   <Slider
                     defaultValue={0}
@@ -434,12 +430,7 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
               <CheckCircleIcon style={{ color: data['Choose your carry'] ? '#26C604' : '#00000029' }} />
             </Typography>
             <Grid>
-              <Paper
-                style={{
-                  border: 'solid 1px #2576FF',
-                }}
-                style={{ marginBottom: '.25rem', marginTop: '.25rem', padding: '1.5rem' }}
-              >
+              <Paper style={{ border: 'solid 1px #2576FF', marginBottom: '.25rem', marginTop: '.25rem', padding: '1.5rem' }} >
                 <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
                   <Slider
                     defaultValue={0}

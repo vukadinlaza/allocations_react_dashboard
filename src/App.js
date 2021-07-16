@@ -1,15 +1,12 @@
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
 import AdminRoute from './auth/admin-route';
 import PrivateRoute from './components/PrivateRoute';
 import Faq from './components/Faq';
-import Loader from './components/utils/Loader'
-import DealOneClick from './components/DealOneClick';
 import Deals from './components/Deals';
 import Credit from './components/Credit';
 import DealNew from './components/DealNew';
-import DealEdit from './components/DealEdit';
 import DealEditNew from './components/DealEditNew';
 import InvestorEdit from './components/InvestorEdit';
 import InvestorNew from './components/InvestorNew';
@@ -44,7 +41,7 @@ import User from './components/Settings/User';
 import Investment from './components/Settings/Investment';
 
 // admin
-import FundManagerDashboard from './components/admin/FundManagerDashboard';
+import AdminHome from './components/admin/AdminHome';
 import Compliance from './components/admin/Compliance';
 import MasterFiling from './components/admin/MasterFiling';
 

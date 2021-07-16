@@ -1,15 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { get, isEqual, pick, omit } from 'lodash';
-import { useParams, Redirect } from 'react-router-dom';
-import { Row, Col } from 'reactstrap';
-import { toast } from 'react-toastify';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { gql } from 'apollo-boost';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import React from 'react';
 import { Paper, Typography, Grid } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 
-const Document = ({ doc, investment, refetch, RM_DOC }) => {
+const Document = ({ doc }) => {
   const file = doc?.path.slice(0, 12) === 'investments/' ? doc.path.split('/')[2] : doc.path.split('/')[1];
   const timeStamp = file.split('-')[0];
   const docNameToUse = new Date(Number(timeStamp)).getTime() > 0 ? file.substring(14) : file;
@@ -28,7 +20,7 @@ const Document = ({ doc, investment, refetch, RM_DOC }) => {
             borderRadius: '1rem',
           }}
         >
-          <img src="https://allocations-public.s3.us-east-2.amazonaws.com/file-icon.svg" />
+          <img src="https://allocations-public.s3.us-east-2.amazonaws.com/file-icon.svg" alt="document icon" />
           <Typography
             variant="subtitle2"
             style={{ wordBreak: 'break-all', fontSize: '.7rem', paddingLeft: '.75rem', paddingRight: '.75rem' }}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { gql } from 'apollo-boost';
 import { get } from 'lodash';
 import { toast } from 'react-toastify';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
 import { TextField, Button, FormControl, Grid, Paper } from '@material-ui/core';
 
@@ -76,7 +76,6 @@ export default function InvestorNew({ push, setNewUser }) {
             <Grid item xs={12} sm={12} md={6}>
               <TextField
                 required
-                s
                 style={{ width: '100%' }}
                 value={get(investor, 'last_name') || ''}
                 onChange={handleChange('last_name')}

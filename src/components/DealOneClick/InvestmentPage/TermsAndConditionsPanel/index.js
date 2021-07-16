@@ -3,20 +3,20 @@ import { Box, Checkbox, Typography, Button } from '@material-ui/core';
 import React from 'react';
 import './styles.scss';
 
-function TermsAndConditionsPanel({ deal: { documents, signDeadline }, checkedTAT, setCheckedTAT, confirmInvestment }) {
+function TermsAndConditionsPanel({ deal: { documents, signDeadline, status}, checkedTAT, setCheckedTAT, confirmInvestment, isEdit }) {
   const doc = (documents || []).find((d) => {
     return d.path.includes('Agreement');
   });
 
   const anchor = doc ? (
     <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">
-      SPV Documents (Operating Agreement, Private Placement Memorandum and Subscription Agreement)
+      Private Fund Documents (Operating Agreement, Private Placement Memorandum and Subscription Agreement)
     </a>
   ) : (
-    'SPV Documents (Operating Agreement, Private Placement Memorandum and Subscription Agreement'
+    'Private Fund Documents (Operating Agreement, Private Placement Memorandum and Subscription Agreement'
   );
 
-  const isClosed = moment(signDeadline).add(2, 'days').isBefore(new Date());
+  const isClosed = status === 'closed';
 
   return (
     <section className="TermsAndConditions">
@@ -67,7 +67,7 @@ function TermsAndConditionsPanel({ deal: { documents, signDeadline }, checkedTAT
         </Typography>
       ) : (
         <Button className="confirm-investment-button" disabled={!checkedTAT} onClick={confirmInvestment}>
-          Confirm investment
+          {isEdit? "Update Investment" : "Confirm Investment"}
         </Button>
       )}
     </section>

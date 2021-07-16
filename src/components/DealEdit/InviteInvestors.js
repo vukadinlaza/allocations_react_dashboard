@@ -1,27 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
 import { gql } from 'apollo-boost';
-import { Col, Row } from 'reactstrap';
 import { useParams } from 'react-router-dom';
-import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Table,
   TableBody,
   TableCell,
   TableRow,
-  Paper,
   Button,
-  FormControl,
-  Select,
-  MenuItem,
-  InputLabel,
   TextField,
-  InputAdornment,
 } from '@material-ui/core';
 
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import * as API from '../../api';
 
 const INVITE_INVESTOR = gql`
@@ -51,12 +42,6 @@ export default function InviteInvestors({ deal, refetch }) {
 
   return (
     <>
-      {/* <TextField variant="outlined"
-                 style={{width: "100%", marginBottom: "16px"}}
-                 value={searchQ}
-                 onChange={e => setSearchQ(e.target.value)}
-                 label="Search Investors"/> */}
-
       <SendEmailInvites deal={deal} refetch={refetch} />
 
       {/* TODO: Null State missing */}
@@ -87,7 +72,7 @@ const SEND_INVITE = gql`
 function SendEmailInvites({ deal, refetch }) {
   const { organization } = useParams();
   const [email, setEmail] = useState('');
-  const [sendInvite, { data, error }] = useMutation(SEND_INVITE, { onCompleted: refetch });
+  const [sendInvite, { error }] = useMutation(SEND_INVITE, { onCompleted: refetch });
 
   const submit = () => {
     if (/^.+@.+\..+$/.test(email)) {
@@ -180,7 +165,7 @@ function InvitedInvestors({ deal, refetch }) {
 
 function InvitedInvestor({ investor, deal, refetch }) {
   const { organization } = useParams();
-  const [sendInvite, { data, error }] = useMutation(SEND_INVITE, {
+  const [sendInvite] = useMutation(SEND_INVITE, {
     variables: { org: organization, deal_id: deal._id, email: investor.email },
     onCompleted: refetch,
   });
