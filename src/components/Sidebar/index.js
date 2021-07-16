@@ -2,6 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import { get, toLower } from 'lodash';
 import { gql } from 'apollo-boost';
+<<<<<<< HEAD
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import {
+  Toolbar,
+  AppBar,
+  CssBaseline,
+  Divider,
+  Drawer,
+  Hidden,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  InputLabel,
+  FormControl,
+  Select,
+  MenuItem
+} from '@material-ui/core';
+=======
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
@@ -12,6 +32,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+>>>>>>> staging
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -19,12 +40,23 @@ import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import SettingsIcon from '@material-ui/icons/Settings';
+<<<<<<< HEAD
+import BuildIcon from '@material-ui/icons/Build';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+=======
 
+>>>>>>> staging
 import MonetizationOnRoundedIcon from '@material-ui/icons/MonetizationOnRounded';
 import AccountBalanceRoundedIcon from '@material-ui/icons/AccountBalanceRounded';
 import CreditCardRoundedIcon from '@material-ui/icons/CreditCardRounded';
 import { useAuth } from '../../auth/useAuth';
 import NavBar from '../NavBar';
+<<<<<<< HEAD
+import { phone } from '../../utils/helpers'
+import Loader from '../utils/Loader'
+import { useViewport } from '../../utils/hooks';
+=======
+>>>>>>> staging
 import './style.scss';
 
 const whitelistEmails = [
@@ -781,6 +813,15 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 16,
     color: '#8593a6',
   },
+  input: {
+    border: "none !important",
+    "&:before, &:after": {
+      border: "none"
+    }
+  },
+  inputFocused: {
+    border: "none"
+  },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
@@ -788,11 +829,43 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: 8,
     borderRight: '1px solid #dfe2e5',
     borderLeft: 0,
+<<<<<<< HEAD
+    position: "relative",
+    height: "calc(100vh - 70px)"
+  },
+  newDrawerPaper: {
+    width: drawerWidth,
+    paddingTop: 8,
+    border: "none",
+    borderRight: '1px solid #dfe2e5',
+    borderLeft: 0,
+    position: "relative",
+    height: "100vh"
+  },
+  contentContainer: {
+    display:"flex",
+    justifyContent:"space-between",
+    alignItems:"flex-start",
+    height:"calc(100vh - 70px)",
+    overflow:"hidden"
+=======
+>>>>>>> staging
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(4),
     maxWidth: '100%',
+  },
+  formControl: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignSelf: "center",
+    width: "78%",
+    marginTop: "20px",
+    "&:hover *:before, ": {
+      border: "none !important"
+    },
   },
   sectionDesktop: {
     display: 'none',
@@ -806,6 +879,12 @@ const useStyles = makeStyles((theme) => ({
       display: 'none',
     },
   },
+  select: {
+    width: "90%",
+    textAlign: "center",
+    fontWeight: "bold",
+    // fontSize: "20px"
+  }
 }));
 
 const GET_INVESTOR = gql`
@@ -828,15 +907,25 @@ const GET_INVESTOR = gql`
 `;
 
 export default function Sidebar(props) {
-  const { userProfile } = useAuth(GET_INVESTOR);
+  const { userProfile, logout, isAuthenticated } = useAuth(GET_INVESTOR);
+  const history = useHistory();
+  const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
   const [investTab, setInvestTab] = useState(false);
   const [creditTab, setCreditTab] = useState(false);
   const [buildTab, setBuildTab] = useState(false);
+<<<<<<< HEAD
+  const [currentAccount, setCurrentAccount] = useState('');
+  const [currentHomeUrl, setCurrentHomeUrl] = useState('');
+  const fundMatch = useRouteMatch('/admin/:organization');
+  const homeMatch = useRouteMatch('/');
+=======
+>>>>>>> staging
   const location = useLocation();
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const { width } = useViewport();
 
   useEffect(() => {
     if (userProfile.showInvestAndMrkPlc || location.pathname === '/invest') {
@@ -850,6 +939,19 @@ export default function Sidebar(props) {
     }
   }, [userProfile.showInvestAndMrkPlc, userProfile.showCredit, location.pathname, userProfile.showBuild]);
 
+  const isUserAuthenticated = isAuthenticated && userProfile
+
+  useEffect(() => {
+    const userIsOrgAdmin = userProfile?.organizations_admin?.length;
+    const defaultAccount = userIsOrgAdmin? userProfile.organizations_admin[0].name : userProfile.name;
+    const defaultUrl = userIsOrgAdmin? `/admin/${userProfile.organizations_admin[0].slug}` : '/'
+    setCurrentHomeUrl(defaultUrl)
+    setCurrentAccount(defaultAccount);
+    if(isAuthenticated && location?.pathname === '/'){
+      history.push(defaultUrl)
+    }
+  }, [isUserAuthenticated])
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -858,9 +960,17 @@ export default function Sidebar(props) {
     setMobileOpen(false);
   };
 
+  const handleAccountChange = (e) => {
+    const org = userProfile?.organizations_admin?.find(org => org.name === e.target.value);
+    const account = org? org.name : userProfile?.name;
+    const currentHomePath = org? `/admin/${org.slug}` : '/'
+    setCurrentHomeUrl(currentHomePath)
+    setCurrentAccount(account)
+  }
+
   const menus = [
     {
-      to: '/',
+      to: currentHomeUrl,
       title: 'Home',
       icon: <HomeIcon />,
     },
@@ -892,6 +1002,7 @@ export default function Sidebar(props) {
       icon: <CreditCardRoundedIcon />,
     });
   }
+
 
   const drawer = (
     <div>
@@ -943,17 +1054,123 @@ export default function Sidebar(props) {
           </List>
         </>
       )}
+      <div
+        onClick={mobileOpen ? handleDrawerClose : null}
+        className={`sidebar-nav-item`}
+      >
+        <ListItem button onClick={logoutWithRedirect}>
+          <ListItemIcon className={classes.icon}><ExitToAppIcon/></ListItemIcon>
+          <ListItemText primary="Logout" />
+        </ListItem>
+      </div>
     </div>
   );
 
   const container = window !== undefined ? () => window().document.body : undefined;
   const onboarding = location.pathname === '/get-started';
+<<<<<<< HEAD
+
+=======
+>>>>>>> staging
   return (
     <>
       <div className={classes.root}>
         {!onboarding && <CssBaseline />}
         {!onboarding ? (
           <>
+<<<<<<< HEAD
+            {width > phone?
+              ''
+              :
+              <AppBar className={classes.appBar}>
+                <Toolbar>
+                  <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    edge="start"
+                    onClick={handleDrawerToggle}
+                    className={classes.menuButton}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <div className={classes.brand}>
+                    <Brand organizations_admin={userProfile.organizations_admin || []} admin={userProfile.admin} />
+                  </div>
+                  <NavBar />
+                </Toolbar>
+              </AppBar>
+            }
+            <div className={classes.contentContainer} style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start", height: "100vh"}}>
+              <nav className={classes.drawer} aria-label="mailbox folders">
+                <Hidden mdUp implementation="css">
+                  <Drawer
+                    container={container}
+                    variant="temporary"
+                    anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
+                    classes={{
+                      paper: classes.drawerPaper,
+                    }}
+                    ModalProps={{
+                      keepMounted: true,
+                    }}
+                    >
+                    {drawer}
+                  </Drawer>
+                </Hidden>
+                <Hidden smDown implementation="css">
+                  <Drawer
+                    classes={{
+                      paper: classes.newDrawerPaper
+                    }}
+                    variant="permanent"
+                    open
+                    >
+                    <FormControl className={classes.formControl}>
+                      <Select
+                        labelId="accounts-select"
+                        value={currentAccount || ''}
+                        onChange={handleAccountChange}
+                        className={classes.input}
+                        classes={{
+                          root: classes.select,
+                        }}
+                        InputProps={{
+                          classes: {
+                            focused: classes.inputFocused,
+                            underline: classes.inputFocused
+                          }
+                        }}
+                        >
+                        <MenuItem
+                          onClick={() => history.push(`/`)}
+                          value={userProfile?.name}
+                          style={{borderBottom: "1px solid rgb(204, 204, 204)", fontWeight: "500"}}
+                        >
+                          {userProfile?.name}
+                        </MenuItem>
+                        {userProfile?.organizations_admin?.sort((a, b) => a.name.localeCompare(b.name))
+                          .map(org =>
+                            <MenuItem
+                              onClick={() => history.push(`/admin/${org.slug}`)}
+                              value={org.name}
+                              key={org.name}
+                            >
+                              {org.name}
+                            </MenuItem>
+                            )}
+                      </Select>
+                    </FormControl>
+                    {drawer}
+                  </Drawer>
+                </Hidden>
+              </nav>
+              <main className={classes.content} style={{ background: 'rgba(0,0,0,0.01)', height: "100vh" }}>
+                {props.children}
+              </main>
+            </div>
+=======
             <AppBar position="fixed" className={classes.appBar}>
               <Toolbar>
                 <IconButton
@@ -1005,6 +1222,7 @@ export default function Sidebar(props) {
               <div className={classes.toolbar} />
               {props.children}
             </main>
+>>>>>>> staging
           </>
         ) : (
           <main style={{}}>{props.children}</main>
