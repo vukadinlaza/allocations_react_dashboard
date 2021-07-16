@@ -105,7 +105,7 @@ export const dealSteps = {
     {
       value: 'Wire Approval Review Complete',
       tooltip: 'The process to approval the wire to the portfolio company. 12pm EST cutoff time.',
-      processStreetTask: ['']                                                                       //2 tasks needed?
+      processStreetTask: ['confirm wire instructions', 'confirm fees with fund manager']                                                                      
     },
     { 
       value: 'Invoice Receipt Sent', 

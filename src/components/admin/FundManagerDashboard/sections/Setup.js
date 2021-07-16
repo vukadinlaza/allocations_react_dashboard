@@ -145,6 +145,15 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
           taskChecked = true;
         }
         break;
+      case 'Wire Approval Review Complete':
+        const tasksNeeded = dealTasks.filter(task => step.processStreetTask.includes(task.taskName.toLowerCase()));
+        const bothTasksApproved = tasksNeeded.every(task => task.taskStatus === 'Completed');
+        if(bothTasksApproved){
+          taskChecked = true;
+        }else{
+          taskChecked = false;
+        }
+        console.log({tasksNeeded})
       default:
         taskChecked = currentTask.taskStatus === 'Completed'
         break;

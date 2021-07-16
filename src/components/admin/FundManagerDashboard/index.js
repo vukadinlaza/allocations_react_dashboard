@@ -414,7 +414,7 @@ export const ONBOARDING = gql`
   }
 `;
 
-const fundTabs = ['Highlights', 'Investments', 'Investor Onboarding Status', 'Deal Page'];
+const fundTabs = ['Setup', 'Highlights', 'Investments', 'Investor Onboarding Status', 'Deal Page'];
 const spvTabs = ['Investor Onboarding Status', 'Deal Page'];
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
@@ -440,16 +440,17 @@ const FundManagerDashboard = ({ classes, history }) => {
     OPS_ACCOUNTING,
     atDealData?.name && INVESTMENTS_TABLE,
     atDealData?.name && `(FIND("${atDealData.name}", {Deals}))`,
-  );
+    );
+    
 
   const handleDealData = (index) => {
     if (orgDeals) {
       const currentDeal = orgDeals.organization?.deals?.length && orgDeals.organization.deals[index];
       const dealName = currentDeal.company_name;
-
+      console.log(dealName)
       setDealData(currentDeal);
       setDealName(dealName);
-    }
+    }  
   };
 
   useEffect(() => {
@@ -475,9 +476,13 @@ const FundManagerDashboard = ({ classes, history }) => {
       fetchPolicy: 'network-only',
     });
   }, [orgSlug]);
-
+  
   useEffect(() => {
-    handleDealData(0);
+    console.log(JSON.stringify(orgDeals))
+    if(orgDeals){
+      orgDeals.organization.deals = orgDeals.organization.deals.reverse()
+      handleDealData(0);
+    }
   }, [orgDeals]);
 
   useEffect(() => {
@@ -513,6 +518,7 @@ const FundManagerDashboard = ({ classes, history }) => {
   };
 
   const handleDealsTabChange = (newValue) => {
+    console.log('HERE')
     setLoading(true);
     setDealTab(newValue);
   };
@@ -595,7 +601,7 @@ const FundManagerDashboard = ({ classes, history }) => {
         return <p>No Data</p>;
     }
   };
-
+  // console.log(!dealData, !atFundData, !dealInvestments, status === 'fetching', loading)
   if (!orgDeals) return <Loader />;
   return (
     <div className={classes.dashboardContainer}>

@@ -100,18 +100,20 @@ const styles = (theme) => ({
 
 const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
   
-  const [deals, setDeals] = useState([]);
+  // const [deals, setDeals] = useState([]);
+  const { deals } = data.organization;
 
   const handleTabChange = (e, newIndex) => {
     setTabIndex(newIndex);
   };
 
-  useEffect(() => {
-    if (data?.organization?.deals?.length) {
-      const { deals } = data.organization;
-      setDeals(deals.reverse());
-    }
-  }, [orgSlug]);
+  // useEffect(() => {
+  //   if (data?.organization?.deals?.length) {
+  //     const { deals } = data.organization;
+  //     setDeals(deals);
+  //     // setDeals(deals.reverse());
+  //   }
+  // }, [orgSlug]);
 
   if (!data) return <Loader />;
 

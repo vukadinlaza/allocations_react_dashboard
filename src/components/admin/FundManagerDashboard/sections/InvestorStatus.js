@@ -82,7 +82,7 @@ const InvestorBox = ({
           </Typography>
         </div>
       </div>
-      {investor.amount && (
+      {(investor.amount && investor.status !== 'invited') && (
         <Typography style={{ width: '80px', textAlign: 'right' }}>${nWithCommas(investor.amount)}</Typography>
       )}
     </div>
@@ -96,7 +96,7 @@ const InvestorBox = ({
             <VerifiedUserIcon /> 506c
           </Typography>
         </div>
-        {investor.amount && <Typography style={{ textAlign: 'right' }}>${nWithCommas(investor.amount)}</Typography>}
+        {(investor.amount && investor.status !== 'invited') && <Typography style={{ textAlign: 'right' }}>${nWithCommas(investor.amount)}</Typography>}
       </div>
     </div>
   );
@@ -192,8 +192,8 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
 
   signedTotal += demoSignedArray.map((i) => i.amount).reduce((acc, n) => acc + n);
   wiredTotal += demoWiredArray.map((i) => i.amount).reduce((acc, n) => acc + n);
-  // const isDemo = false;
-  const isDemo = window?.origin?.includes('vercel') || window.origin.includes('localhost');
+  const isDemo = false;
+  // const isDemo = window?.origin?.includes('vercel') || window.origin.includes('localhost');
 
 
   return (
