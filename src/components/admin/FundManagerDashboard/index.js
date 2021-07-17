@@ -606,7 +606,7 @@ const FundManagerDashboard = ({ classes, history }) => {
         return <p>No Data</p>;
     }
   };
-  // console.log(!dealData, !atFundData, !dealInvestments, status === 'fetching', loading)
+
   if (!orgDeals) return <Loader />;
   return (
     <div className={classes.dashboardContainer}>
