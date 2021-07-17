@@ -436,13 +436,14 @@ const FundManagerDashboard = ({ classes, history }) => {
   const [getInvestments, { data: dealInvestments, refetch }] = useLazyQuery(GET_INVESTMENTS);
   const [getOrgDeals, { data: orgDealsData }] = useLazyQuery(ORG_OVERVIEW);
   const { data: subsData } = useSubscription(ONBOARDING);
-  const { data: atDeal } = useFetch(OPS_ACCOUNTING, dealName && DEALS_TABLE, dealName && `({Deal Name}="${dealName}")`);
+  const checkedDealName = encodeURIComponent(dealName);
+  const checkedAtDealDataName = encodeURIComponent(atDealData?.name)
+  const { data: atDeal } = useFetch(OPS_ACCOUNTING, dealName && DEALS_TABLE, dealName && `({Deal Name}="${checkedDealName}")`);
   const { data: atFundData, status } = useFetch(
     OPS_ACCOUNTING,
     atDealData?.name && INVESTMENTS_TABLE,
-    atDealData?.name && `(FIND("${atDealData.name}", {Deals}))`,
-    );
-    
+    atDealData?.name && `(FIND("${checkedAtDealDataName}", {Deals}))`,
+  );
     
   const handleDealData = (index) => {
     if (orgDeals) {
