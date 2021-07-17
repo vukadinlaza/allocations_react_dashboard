@@ -4,13 +4,12 @@ import BN from 'bignumber.js';
 import { gql } from 'apollo-boost';
 import { useParams, useHistory, Link, useLocation } from 'react-router-dom';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
-import { Paper, Typography, List, ListItem, ListItemText, Grid, Button } from '@material-ui/core';
+import { Paper, List, ListItem, ListItemText, Grid, Button } from '@material-ui/core';
 import queryString from 'query-string';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import moment from 'moment';
 import base64 from 'base-64';
 import { useAuth } from '../../auth/useAuth';
-import { nWithCommas } from '../../utils/numbers';
 import InvestmentFlow from './DealFlow';
 import Pledge from './pledge';
 import Loader from '../utils/Loader';
@@ -116,7 +115,6 @@ export default function Deal() {
   const { search } = useLocation();
   const { userProfile, isAuthenticated, loading } = useAuth();
   const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL);
-  console.log('deal', data);
   const [allowEdit, setAllowEdit] = useState(true);
   const [createInvestment, { called: didCreateInvestment }] = useMutation(CREATE_INVESTMENT, {
     onCompleted: () => {
@@ -224,7 +222,7 @@ export default function Deal() {
 }
 
 export function DealParams({ deal, deal_slug }) {
-  const { dealParams, date_closed, deal_lead } = deal;
+  const { dealParams } = deal;
   const history = useHistory();
   const { userProfile } = useAuth();
 

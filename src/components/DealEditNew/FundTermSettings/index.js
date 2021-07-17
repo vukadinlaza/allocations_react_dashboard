@@ -3,10 +3,11 @@ import { FormControl, TextField, Button } from '@material-ui/core';
 import './styles.scss';
 
 function FundTerms({ formData, setFormData }) {
-  const [feeType, setFeeType] = useState('percentage');
-  const [setupCostType, setSetupCostType] = useState('percentage');
+  const [feeType, setFeeType] = useState(null);
+  const [setupCostType, setSetupCostType] = useState(null);
 
   const {
+    _id,
     dealParams: {
       fundManagementFees,
       fundManagementFeesDollar,
@@ -19,6 +20,7 @@ function FundTerms({ formData, setFormData }) {
     },
   } = formData;
 
+  
   const getFeeType = () => {
     if (fundManagementFees?.length > 0) {
       setFeeType('percentage');
@@ -29,16 +31,16 @@ function FundTerms({ formData, setFormData }) {
 
   const getSetupCostType = () => {
     if (fundEstimatedSetupCosts?.length > 0) {
-      setFeeType('percentage');
+      setSetupCostType('percentage');
     } else if (fundEstimatedSetupCostsDollar?.length > 0) {
-      setFeeType('fixed');
+      setSetupCostType('fixed');
     }
   };
 
   useEffect(() => {
     getFeeType();
     getSetupCostType();
-  }, [fundManagementFees, fundManagementFeesDollar]);
+  }, [_id]);
 
   const handleFormChange = ({ target }) => {
     setFormData((prevData) => ({
@@ -51,23 +53,28 @@ function FundTerms({ formData, setFormData }) {
   };
 
   const getManagementFee = () => {
-    if (fundManagementFees?.length > 0 && feeType === 'percentage') {
+    if (fundManagementFees?.length > 0) {
       return fundManagementFees;
     }
 
-    if (fundManagementFeesDollar?.length > 0 && feeType === 'fixed') {
+    if (fundManagementFeesDollar?.length > 0) {
       return fundManagementFeesDollar;
     }
+
+    return ''
   };
 
   const getSetupCosts = () => {
-    if (fundEstimatedSetupCosts?.length > 0 && setupCostType === 'percentage') {
+    if (fundEstimatedSetupCosts?.length > 0) {
       return fundEstimatedSetupCosts;
     }
 
-    if (fundEstimatedSetupCostsDollar?.length > 0 && setupCostType === 'fixed') {
+    if (fundEstimatedSetupCostsDollar?.length > 0) {
       return fundEstimatedSetupCostsDollar;
     }
+
+    return ''
+
   };
 
   const handleFeeChange = ({ target }) => {
@@ -80,7 +87,7 @@ function FundTerms({ formData, setFormData }) {
           fundManagementFees: '',
         },
       }));
-    } else {
+    } else if (feeType === 'percentage') {
       setFormData((prevData) => ({
         ...prevData,
         dealParams: {
@@ -227,7 +234,7 @@ function FundTerms({ formData, setFormData }) {
 
         <FormControl className="field">
           <label className="field-label">
-            Estimated setup cost
+            Estimated setup cost ($)
             <div className="management-fee">
               <TextField
                 onChange={handleSetupCostChange}

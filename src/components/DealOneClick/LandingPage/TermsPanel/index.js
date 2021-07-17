@@ -13,6 +13,8 @@ const TermsPanel = ({ deal }) => {
       fundGeneralPartner,
       fundTotalCarry,
       fundManagementFees,
+      managementFeeType,
+      managementFeesDollar
     },
   } = deal;
 
@@ -39,6 +41,12 @@ const TermsPanel = ({ deal }) => {
           <li>
             <p>Total carry:</p>
             <h3>{carry}%</h3>
+          </li>
+        )}
+        {managementFeesDollar && (
+          <li>
+            <p>Total management fee:</p>
+            <h3>${managementFeesDollar}{managementFeeType? ` (${managementFeeType})` : ''}</h3>
           </li>
         )}
         {fees && (

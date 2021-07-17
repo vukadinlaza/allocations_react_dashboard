@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Paper, Grid, Typography, Button, Modal } from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { Paper, Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import { useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { useHistory } from 'react-router-dom';
-import CloseIcon from '@material-ui/icons/Close';
-import { toast } from 'react-toastify';
 import { useAuth } from '../../auth/useAuth';
 
 const useStyles = makeStyles((theme) => ({
@@ -92,13 +90,12 @@ const UPDATE_USER = gql`
     }
   }
 `;
-export default ({}) => {
+export default () => {
   const classes = useStyles();
   const history = useHistory();
   const { userProfile, loading } = useAuth(GET_INVESTOR);
   const [updateInvestor] = useMutation(UPDATE_USER);
   const [postZap, {}] = useMutation(POST_ZAP);
-  const [seedOptions, setSeedOptions] = useState(false);
 
   useEffect(() => {
     if (!loading && userProfile._id) {

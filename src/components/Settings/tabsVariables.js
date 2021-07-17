@@ -1,6 +1,3 @@
-import React from 'react';
-import { gql } from 'apollo-boost';
-
 export const getTabVariables = (tab) => {
   let gqlQuery = '';
   let headers = [];

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
 import { withRouter } from "react-router-dom";
@@ -80,9 +80,6 @@ const styles = theme => ({
     padding: "15px",
     marginBottom: "25px"
   },
-  investmentInformation: {
-    marginBottom: "40px"
-  }
 });
 
 const fields = {
@@ -155,7 +152,7 @@ const Investment = ({
           <Typography className={classes.button} onClick={handleDelete}>Delete</Typography>
         </div>
       </Paper>
-      <Paper square className={classes.investmentInformation}>
+      <Paper square className={classes.userInformation}>
         <GridSection
           title="Investor Information"
           fields={fields.investor}

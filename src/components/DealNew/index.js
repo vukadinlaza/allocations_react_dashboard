@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { isEqual } from 'lodash';
 import { useParams, useHistory } from 'react-router-dom';
 import { TextField, Button } from '@material-ui/core';
-import { Row, Col } from 'reactstrap';
 
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';

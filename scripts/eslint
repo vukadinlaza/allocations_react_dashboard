@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+
+node "./node_modules/.bin/eslint" -c "./.eslintrc.json" "$@"

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useParams, useHistory } from 'react-router-dom';
 import { gql } from 'apollo-boost';
 import _ from 'lodash';
@@ -13,6 +13,7 @@ import PortfolioCompanySettings from './PortfolioCompanySettings';
 import FundTerms from './FundTermSettings';
 import './styles.scss';
 import { ORG_OVERVIEW } from '../admin/AdminHome';
+
 
 const validInputs = [
   '_id',
@@ -235,9 +236,10 @@ function DealEditNew() {
   const [activeTab, setActiveTab] = useState('basic');
   const [formData, setFormData] = useState({
     dealParams: {},
+    documents: []
   });
 
-  const { data, refetch, error, loading } = useQuery(GET_DEAL, { variables: { id, slug: organization } });
+  const { data, refetch } = useQuery(GET_DEAL, { variables: { id, slug: organization } });
 
   const [updateDeal] = useMutation(UPDATE_DEAL, {
     onCompleted: () => toast.success('Deal updated successfully.'),
@@ -337,8 +339,12 @@ function DealEditNew() {
 
   if (errorMessage) return <div className="Error">{errorMessage}</div>;
 
+  const dealPageUrl = formData.slug ? `/deals/${organization}/${formData.slug}` : ''
+
   return (
     <section className="DealEditNew">
+
+      <Button onClick={() => history.push(dealPageUrl)} className="view-deal-page-button">View Deal Page</Button>
       <div className="section-header">
         <h1>Edit Deal</h1>
         <div className="tabs-container">
@@ -377,12 +383,12 @@ function DealEditNew() {
       <div className={`save-changes ${activeTab === 'deal' && 'lastPage'}`}>
         {activeTab !== 'deal' && (
           <Button onClick={handleContinueClick} className="continue">
-            Continue
+            Next
           </Button>
         )}
 
         <Button onClick={handleFormSubmit} className="save-and-exit">
-          Save and Exit
+          Save
         </Button>
 
         {activeTab === 'deal' && (

@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { gql } from 'apollo-boost';
 import { Row, Col } from 'reactstrap';
 import moment from 'moment';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
 import { useQuery, useMutation } from '@apollo/react-hooks';
@@ -11,7 +11,6 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import {
   Paper,
-  LinearProgress,
   Table,
   TableBody,
   TableCell,
@@ -90,11 +89,6 @@ const SUPERADMIN = gql`
         }
       }
     }
-  }
-`;
-const DELETE_ORG = gql`
-  mutation DeleteOrg($_id: String!) {
-    deleteOrganization(_id: $_id)
   }
 `;
 
@@ -190,42 +184,6 @@ export default function SuperAdminOverview() {
           {activeData === 'investors' && <InvestorsTabel investors={investors} setOpen={setOpen} />}
         </Grid>
       </div>
-
-      {/* <Row>
-        <Col md={{ size: 6 }}>
-          <Paper style={{ padding: '20px' }}>
-            <div>
-              Funds &nbsp;
-              <span className="square-number">{organizations.length}</span>
-            </div>
-            <Paper style={{ maxHeight: '500px', overflow: 'scroll' }}>
-              <Table>
-                <TableBody>
-                  {organizations.map((org) => (
-                    <Org key={org._id} org={org} refetch={refetch} />
-                  ))}
-                </TableBody>
-              </Table>
-            </Paper>
-          </Paper>
-        </Col>
-        <Col sm={{ size: 6 }}>
-          <Paper style={{ padding: '20px' }}>
-            <div className="deals-title">
-              Deals &nbsp;<span className="square-number">{deals.length}</span>
-            </div>
-            <Paper style={{ maxHeight: '500px', overflow: 'scroll' }}>
-              <Table size="small">
-                <TableBody>
-                  {deals.map((deal) => (
-                    <LegacyDeal key={deal._id} deal={deal} />
-                  ))}
-                </TableBody>
-              </Table>
-            </Paper>
-          </Paper>
-        </Col>
-      </Row> */}
       <FormModal open={open} setOpen={setOpen} form={form} />
     </div>
   );
@@ -233,7 +191,7 @@ export default function SuperAdminOverview() {
 
 function Org({ org, refetch, setOpen }) {
   const history = useHistory();
-  const [updateOrganization, { data }] = useMutation(APPROVE_ORG, {
+  const [updateOrganization] = useMutation(APPROVE_ORG, {
     onCompleted: refetch,
   });
   const approve = () => {
@@ -278,32 +236,6 @@ function Org({ org, refetch, setOpen }) {
           {' '}
           View
         </Button>
-      </TableCell>
-    </TableRow>
-  );
-}
-
-function LegacyDeal({ deal }) {
-  const val = (Number(deal.amount_raised) / (Number(deal.target) || Infinity)) * 100;
-
-  const organization = _.get(deal, 'organization.name', 'allocations');
-  return (
-    <TableRow className="deal-info">
-      <TableCell className="company-name">
-        {deal.company_name} <br />
-        <small>({organization})</small>
-      </TableCell>
-      <TableCell>
-        <i>closes: {deal.date_closed ? formatDate(deal.date_closed) : 'unknown'}</i>
-      </TableCell>
-      <TableCell>
-        <LinearProgress className="progress-bar" variant="determinate" color="secondary" value={val} />
-        <div className="text-center">
-          ${nWithCommas(deal.amount_raised)} of ${nWithCommas(deal.target)}
-        </div>
-      </TableCell>
-      <TableCell>
-        <Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link>
       </TableCell>
     </TableRow>
   );

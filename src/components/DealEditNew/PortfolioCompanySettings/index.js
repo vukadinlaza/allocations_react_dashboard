@@ -88,6 +88,8 @@ function PortfolioCompanySettings({ formData, setFormData }) {
     if (portfolioEstimatedSetupCostsDollar?.length > 0 && setupCostType === 'fixed') {
       return portfolioEstimatedSetupCostsDollar;
     }
+
+    return ''
   };
 
   const handleSetupCostChange = ({ target }) => {
