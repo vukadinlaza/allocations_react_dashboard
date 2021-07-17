@@ -41,7 +41,7 @@ import User from './components/Settings/User';
 import Investment from './components/Settings/Investment';
 
 // admin
-import AdminHome from './components/admin/AdminHome';
+import FundManagerDashboard from './components/admin/FundManagerDashboard';
 import Compliance from './components/admin/Compliance';
 import MasterFiling from './components/admin/MasterFiling';
 
