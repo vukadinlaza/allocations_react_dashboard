@@ -434,7 +434,6 @@ const FundManagerDashboard = ({ classes, history }) => {
   const [atDealData, setAtDealData] = useState({});
   const [openTooltip, setOpenTooltip] = useState('');
 
-  console.log('XXXXXXXXXXX', atDealData);
   const [orgDeals, setOrgDeals] = useState(null);
   const [getInvestments, { data: dealInvestments, refetch }] = useLazyQuery(GET_INVESTMENTS);
   const [getOrgDeals, { data: orgDealsData }] = useLazyQuery(ORG_OVERVIEW);
@@ -457,8 +456,6 @@ const FundManagerDashboard = ({ classes, history }) => {
     if (orgDeals) {
       const currentDeal = orgDeals.organization?.deals?.length && orgDeals.organization.deals[index];
       const dealName = currentDeal.company_name;
-
-      console.log('FIRES');
 
       setDealData(currentDeal);
       setDealName(dealName);
@@ -508,8 +505,9 @@ const FundManagerDashboard = ({ classes, history }) => {
   useEffect(() => {
     const id = get(atDeal, '[0].id');
     const n = get(atDeal, '[0].fields[Deal Name]', {});
-
-    console.log('ID', id, 'NAME', n);
+    if (atDeal?.length === 0) {
+      setAtDealData({ name: `Deal Name ${dealName} Not found in AirTable`, id: '' });
+    }
     if (id && n) {
       setAtDealData({ name: n, id });
     } else if (!id && !n) {
@@ -621,8 +619,6 @@ const FundManagerDashboard = ({ classes, history }) => {
   };
 
   if (!orgDeals) return <Loader />;
-
-  console.log(!dealData, !atFundData, !dealInvestments, status === 'fetching', loading);
 
   return (
     <div className={classes.dashboardContainer}>
