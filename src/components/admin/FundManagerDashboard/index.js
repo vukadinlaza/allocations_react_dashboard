@@ -9,6 +9,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import EditIcon from '@material-ui/icons/Edit';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { get } from 'lodash';
 import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
@@ -432,19 +433,25 @@ const FundManagerDashboard = ({ classes, history }) => {
   const [loading, setLoading] = useState(false);
   const [atDealData, setAtDealData] = useState({});
   const [openTooltip, setOpenTooltip] = useState('');
+
   const [orgDeals, setOrgDeals] = useState(null);
   const [getInvestments, { data: dealInvestments, refetch }] = useLazyQuery(GET_INVESTMENTS);
   const [getOrgDeals, { data: orgDealsData }] = useLazyQuery(ORG_OVERVIEW);
   const { data: subsData } = useSubscription(ONBOARDING);
   const checkedDealName = encodeURIComponent(dealName);
-  const checkedAtDealDataName = encodeURIComponent(atDealData?.name)
-  const { data: atDeal } = useFetch(OPS_ACCOUNTING, dealName && DEALS_TABLE, dealName && `({Deal Name}="${checkedDealName}")`);
+  const checkedAtDealDataName = encodeURIComponent(atDealData?.name);
+  const { data: atDeal } = useFetch(
+    OPS_ACCOUNTING,
+    dealName && DEALS_TABLE,
+    dealName && `({Deal Name}="${checkedDealName}")`,
+  );
+
   const { data: atFundData, status } = useFetch(
     OPS_ACCOUNTING,
     atDealData?.name && INVESTMENTS_TABLE,
     atDealData?.name && `(FIND("${checkedAtDealDataName}", {Deals}))`,
   );
-    
+
   const handleDealData = (index) => {
     if (orgDeals) {
       const currentDeal = orgDeals.organization?.deals?.length && orgDeals.organization.deals[index];
@@ -452,9 +459,9 @@ const FundManagerDashboard = ({ classes, history }) => {
 
       setDealData(currentDeal);
       setDealName(dealName);
-    }  
+    }
   };
-  
+
   useEffect(() => {
     if (dealData && Object.keys(dealData).length) {
       const newTabs = dealData.investmentType === 'fund' ? fundTabs : spvTabs;
@@ -478,15 +485,15 @@ const FundManagerDashboard = ({ classes, history }) => {
       fetchPolicy: 'network-only',
     });
   }, [orgSlug]);
-  
+
   useEffect(() => {
-    if(orgDealsData){
-      let orgDealsDataCopy = JSON.parse(JSON.stringify(orgDealsData));
+    if (orgDealsData) {
+      const orgDealsDataCopy = JSON.parse(JSON.stringify(orgDealsData));
       orgDealsDataCopy.organization.deals = orgDealsDataCopy.organization.deals.reverse();
-      setOrgDeals(orgDealsDataCopy)
+      setOrgDeals(orgDealsDataCopy);
     }
   }, [orgDealsData]);
-  
+
   useEffect(() => {
     handleDealData(0);
   }, [orgDeals]);
@@ -496,13 +503,17 @@ const FundManagerDashboard = ({ classes, history }) => {
   }, [dealTab]);
 
   useEffect(() => {
-    if (atDeal && atDeal.length) {
-      const data = atDeal[0].fields;
-      setAtDealData({ name: data['Deal Name'], id: atDeal[0].id });
-    } else if (atDeal) {
+    const id = get(atDeal, '[0].id');
+    const n = get(atDeal, '[0].fields[Deal Name]', {});
+    if (atDeal?.length === 0) {
       setAtDealData({ name: `Deal Name ${dealName} Not found in AirTable`, id: '' });
     }
-  }, [atDeal]);
+    if (id && n) {
+      setAtDealData({ name: n, id });
+    } else if (!id && !n) {
+      setAtDealData({ name: `Deal Name ${dealName} Not found in AirTable`, id: '' });
+    }
+  }, [atDeal, dealName]);
 
   const handleLinkCopy = () => {
     if (orgSlug && dealData?.slug) {
@@ -608,6 +619,7 @@ const FundManagerDashboard = ({ classes, history }) => {
   };
 
   if (!orgDeals) return <Loader />;
+
   return (
     <div className={classes.dashboardContainer}>
       {openTooltip && <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} />}
