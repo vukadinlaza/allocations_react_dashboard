@@ -553,8 +553,13 @@ const FundManagerDashboard = ({ classes, history }) => {
   };
 
   const getTabContent = () => {
-    const fundData = atFundData.map((d) => d.fields);
-
+    let fundData = atFundData.map((d) => d.fields);
+    console.log('FUND DATA', dealName, fundData);
+    if (orgSlug === 'browder-capital') {
+      fundData = fundData.filter((i) => {
+        return i['Fund Name'] === dealName;
+      });
+    }
     switch (tabName) {
       case 'Setup':
         return (
