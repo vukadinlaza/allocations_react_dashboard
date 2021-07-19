@@ -240,6 +240,9 @@ const styles = (theme) => ({
     width: '100%',
     padding: '40px',
     margin: '0px',
+    [theme.breakpoints.down(phone)]: {
+      padding: '10px'
+    },
   },
   selectedTab: {
     fontWeight: 'bold !important',
@@ -313,6 +316,9 @@ const styles = (theme) => ({
     padding: '0 28px',
     '& *': {
       height: '100%',
+    },
+    [theme.breakpoints.down(phone)]: {
+      padding: "0 12px"
     },
   },
   tabsContainer: {
