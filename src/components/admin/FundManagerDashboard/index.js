@@ -437,25 +437,29 @@ const FundManagerDashboard = ({ classes, history }) => {
   const [getOrgDeals, { data: orgDealsData }] = useLazyQuery(ORG_OVERVIEW);
   const { data: subsData } = useSubscription(ONBOARDING);
   const checkedDealName = encodeURIComponent(dealName);
-  const checkedAtDealDataName = encodeURIComponent(atDealData?.name)
-  const { data: atDeal } = useFetch(OPS_ACCOUNTING, dealName && DEALS_TABLE, dealName && `({Deal Name}="${checkedDealName}")`);
+  const checkedAtDealDataName = encodeURIComponent(atDealData?.name);
+  const { data: atDeal } = useFetch(
+    OPS_ACCOUNTING,
+    dealName && DEALS_TABLE,
+    dealName && `({Deal Name}="${checkedDealName}")`,
+  );
   const { data: atFundData, status } = useFetch(
     OPS_ACCOUNTING,
     atDealData?.name && INVESTMENTS_TABLE,
     atDealData?.name && `(FIND("${checkedAtDealDataName}", {Deals}))`,
   );
-    
-    
+
   const handleDealData = (index) => {
     if (orgDeals) {
-      const currentDeal = orgDeals.organization?.deals?.length && orgDeals.organization.deals[index];
+      const currentDeal =
+        orgDeals.organization?.deals?.length && orgDeals.organization.deals[index];
       const dealName = currentDeal.company_name;
 
       setDealData(currentDeal);
       setDealName(dealName);
-    }  
+    }
   };
-  
+
   useEffect(() => {
     if (dealData && Object.keys(dealData).length) {
       const newTabs = dealData.investmentType === 'fund' ? fundTabs : spvTabs;
@@ -479,15 +483,22 @@ const FundManagerDashboard = ({ classes, history }) => {
       fetchPolicy: 'network-only',
     });
   }, [orgSlug]);
-  
+
   useEffect(() => {
-    if(orgDealsData){
-      let orgDealsDataCopy = JSON.parse(JSON.stringify(orgDealsData));
-      orgDealsDataCopy.organization.deals = orgDealsDataCopy.organization.deals.reverse();
-      setOrgDeals(orgDealsDataCopy)
+    if (orgDealsData) {
+      const orgDealsDataCopy = JSON.parse(JSON.stringify(orgDealsData));
+      const funds = orgDealsDataCopy.organization.deals
+        .filter((d) => d.investmentType === 'fund')
+        .sort((a, b) => (b.status > a.status ? 1 : -1));
+      const spvs = orgDealsDataCopy.organization.deals
+        .filter((d) => d.investmentType === 'spv' || d.investmentType === null)
+        .sort((a, b) => (b.status > a.status ? 1 : -1));
+      const merged = [...funds, ...spvs];
+      orgDealsDataCopy.organization.deals = merged;
+      setOrgDeals(orgDealsDataCopy);
     }
   }, [orgDealsData]);
-  
+
   useEffect(() => {
     handleDealData(0);
   }, [orgDeals]);
@@ -525,7 +536,7 @@ const FundManagerDashboard = ({ classes, history }) => {
   };
 
   const handleDealsTabChange = (newValue) => {
-    if(newValue !== dealTab){
+    if (newValue !== dealTab) {
       setLoading(true);
       setDealTab(newValue);
     }
@@ -588,7 +599,8 @@ const FundManagerDashboard = ({ classes, history }) => {
           <div className={classes.section}>
             <FlatBox title="SHARE">
               <Typography>
-                dashboard.allocations.com{orgSlug && dealData?.slug ? `/deals/${orgSlug}/${dealData.slug}` : ''}
+                dashboard.allocations.com
+                {orgSlug && dealData?.slug ? `/deals/${orgSlug}/${dealData.slug}` : ''}
               </Typography>
               <div className={classes.pageIcons}>
                 <div className={classes.pageIcon} onClick={goToEditDeal}>
@@ -613,7 +625,9 @@ const FundManagerDashboard = ({ classes, history }) => {
   if (!orgDeals) return <Loader />;
   return (
     <div className={classes.dashboardContainer}>
-      {openTooltip && <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} />}
+      {openTooltip && (
+        <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} />
+      )}
       <div className={classes.mainTitleContainer}>
         <Typography className={classes.mainTitle}>Funds</Typography>
         <a
