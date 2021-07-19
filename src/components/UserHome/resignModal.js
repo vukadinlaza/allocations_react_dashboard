@@ -20,7 +20,7 @@ import countries from 'country-region-data';
 import { UsaStates } from 'usa-states';
 import './style.scss';
 import { useLazyQuery, useMutation } from '@apollo/client';
-import gql from 'graphql-tag';
+import { gql } from 'apollo-boost';
 import { toast } from 'react-toastify';
 import { AccreditedInvestorStatus } from '../forms/InvestorEdit';
 import { getClientIp } from '../../utils/ip';
