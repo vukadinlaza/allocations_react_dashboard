@@ -153,6 +153,9 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
   const { investors: viewedInvestors } = getColumnData('invited');
   let { investors: signedInvestors, total: signedTotal } = getColumnData('signed');
   let { investors: wiredInvestors, total: wiredTotal } = getColumnData('wired');
+  let { investors: completedInvestors, total: completedTotal } = getColumnData('complete')
+  wiredInvestors = [...wiredInvestors, ...completedInvestors]
+  wiredTotal += completedTotal
 
   const demoViewedArray = Array(15)
     .fill('')
@@ -283,7 +286,6 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
                 />
               ))
             : signedInvestors
-                .filter((investor) => investor.status === 'signed')
                 .map((investor, index) => (
                   <InvestorBox
                     investor={investor}
@@ -324,7 +326,6 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
                 />
               ))
             : wiredInvestors
-                .filter((investor) => investor.status === 'wired')
                 .map((investor, index) => (
                   <InvestorBox
                     investor={investor}
