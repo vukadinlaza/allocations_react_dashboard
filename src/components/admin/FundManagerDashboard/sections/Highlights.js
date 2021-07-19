@@ -111,7 +111,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
           tooltipContent={
             <Typography color="inherit">
               This is the total capital received into the private fund’s bank account (including
-              loans)
+              loans and drawdowns)
             </Typography>
           }
         >
