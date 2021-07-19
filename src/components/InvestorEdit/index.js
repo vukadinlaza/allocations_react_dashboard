@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { gql } from 'apollo-boost';
 import { Row, Col } from 'reactstrap';
 import { useHistory } from 'react-router-dom';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Paper, Button } from '@material-ui/core';
 import { useAuth } from '../../auth/useAuth';

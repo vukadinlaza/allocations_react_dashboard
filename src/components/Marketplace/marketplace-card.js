@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { gql } from 'apollo-boost';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import { Hidden, Paper, ListItem, List, Grid, Button, Typography } from '@material-ui/core';
 import { useSimpleReducer } from '../../utils/hooks';
 import { useAuth } from '../../auth/useAuth';

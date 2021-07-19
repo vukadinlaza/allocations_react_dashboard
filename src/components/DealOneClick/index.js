@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { gql } from 'apollo-boost';
-import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import moment from 'moment';
 import { useAuth } from '../../auth/useAuth';
 import LandingPage from './LandingPage/LandingPage';

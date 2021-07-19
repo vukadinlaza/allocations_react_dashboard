@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Grid, TextField, InputAdornment, Button } from '@material-ui/core';
 import { gql } from 'apollo-boost';
 import { toast } from 'react-toastify';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { makeStyles } from '@material-ui/core/styles';
 

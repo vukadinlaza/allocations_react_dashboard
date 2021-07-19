@@ -3,7 +3,7 @@ import _ from 'lodash';
 import BN from 'bignumber.js';
 import { gql } from 'apollo-boost';
 import { useParams, useHistory, Link, useLocation } from 'react-router-dom';
-import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import { Paper, List, ListItem, ListItemText, Grid, Button } from '@material-ui/core';
 import queryString from 'query-string';
 import useMediaQuery from '@material-ui/core/useMediaQuery';

@@ -4,7 +4,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { TextField, Button } from '@material-ui/core';
 
 import { gql } from 'apollo-boost';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 
 import './style.scss';
 import { makeStyles } from '@material-ui/core/styles';

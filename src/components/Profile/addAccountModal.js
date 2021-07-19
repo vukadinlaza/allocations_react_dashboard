@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { gql } from 'apollo-boost';
 import CloseIcon from '@material-ui/icons/Close';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import { Paper, Grid, Typography, Modal, TextField, Button, Container } from '@material-ui/core';
 import { toast } from 'react-toastify';
 import './style.scss';

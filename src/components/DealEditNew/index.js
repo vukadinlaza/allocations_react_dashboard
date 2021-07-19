@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/client';
 import { useParams, useHistory } from 'react-router-dom';
 import { gql } from 'apollo-boost';
 import _ from 'lodash';

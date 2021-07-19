@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Paper, Grid, Typography, Button, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import { gql } from 'apollo-boost';
 import { toast } from 'react-toastify';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';

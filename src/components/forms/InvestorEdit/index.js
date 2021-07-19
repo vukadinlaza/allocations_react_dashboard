@@ -3,7 +3,7 @@ import Loader from '../../utils/Loader';
 import { get, pick } from 'lodash';
 import { gql } from 'apollo-boost';
 import { toast } from 'react-toastify';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CloudDone } from '@material-ui/icons';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';

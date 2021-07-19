@@ -4,7 +4,7 @@ import './styles.scss';
 import { toast } from 'react-toastify';
 import ReactCrop from 'react-image-crop';
 import { gql } from 'apollo-boost';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import CopyIcon from '../../../assets/copy-icon.svg';
 import CloseIcon from '@material-ui/icons/Close';
 import 'react-image-crop/lib/ReactCrop.scss';

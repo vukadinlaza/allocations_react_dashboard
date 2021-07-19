@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { get } from 'lodash';
 import { gql } from 'apollo-boost';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Col, Row } from 'reactstrap';

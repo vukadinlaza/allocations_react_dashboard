@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { gql } from 'apollo-boost';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/client';
 import { get } from 'lodash';
 import { Helmet } from 'react-helmet';
 import {

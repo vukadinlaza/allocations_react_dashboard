@@ -3,7 +3,7 @@ import { gql } from 'apollo-boost';
 import { get } from 'lodash';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import { TextField, Button, FormControl, Grid, Paper } from '@material-ui/core';
 
 /** *

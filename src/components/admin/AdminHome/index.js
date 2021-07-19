@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { gql } from 'apollo-boost';
 import { Paper, Grid, ButtonBase, Typography, Button } from '@material-ui/core';
 import { toLower } from 'lodash';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { useParams, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { useFetch } from '../../../utils/hooks';

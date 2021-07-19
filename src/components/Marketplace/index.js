@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { toast } from 'react-toastify';
 import randomColor from 'randomcolor'; // import the script
 import { withStyles } from '@material-ui/core/styles';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 
 import {

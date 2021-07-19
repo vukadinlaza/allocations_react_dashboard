@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { gql } from 'apollo-boost';
 import { useParams } from 'react-router-dom';
 import { Col, Row, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';

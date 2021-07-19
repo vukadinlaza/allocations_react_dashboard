@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import HelloSign from 'hellosign-embedded';
 import { useParams, useHistory } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 import { gql } from 'apollo-boost';
 
 import { Row, Col } from 'reactstrap';

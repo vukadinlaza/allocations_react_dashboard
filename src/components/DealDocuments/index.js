@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { gql } from 'apollo-boost';
 import { map } from 'lodash';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 import { Button, Typography, Grid, FormControl, InputLabel, Select, MenuItem, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 

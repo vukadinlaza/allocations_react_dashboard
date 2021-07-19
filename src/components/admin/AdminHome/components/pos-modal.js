@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { get } from 'lodash';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/client';
 import { gql } from 'apollo-boost';
 import { Modal, Grid, TextField, Typography, Paper, Button } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

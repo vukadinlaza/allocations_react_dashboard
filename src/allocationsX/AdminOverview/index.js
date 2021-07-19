@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { Row, Col } from 'reactstrap';
 import { useParams } from 'react-router-dom';
 import { gql } from 'apollo-boost';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/client';
 import {
   Table,
   TableBody,
