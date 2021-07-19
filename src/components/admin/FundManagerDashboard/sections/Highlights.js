@@ -95,7 +95,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
   let steppedChartData = getSteppedChartData()
   let dealMultiple = _.toNumber(dealData?.dealParams?.dealMultiple || 1)
   const investments = dealInvestments?.deal?.investments?.length && dealInvestments.deal.investments;
-  console.log({investments})
+
   const totalRaised = investments?.filter(i => ['signed', 'wired', 'complete'].includes(i.status))
                                   .map(i => i.amount)
                                   .reduce((acc, n) => acc + n) || 0;

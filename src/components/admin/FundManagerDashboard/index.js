@@ -444,7 +444,7 @@ const FundManagerDashboard = ({ classes, history }) => {
     dealName && DEALS_TABLE,
     dealName && `({Deal Name}="${checkedDealName}")`,
   );
-  console.log('XXXXXXX', atDeal);
+
   const { data: atFundData, status } = useFetch(
     OPS_ACCOUNTING,
     atDealData?.name && INVESTMENTS_TABLE,
@@ -497,22 +497,10 @@ const FundManagerDashboard = ({ classes, history }) => {
         .sort((a, b) => (b.status > a.status ? 1 : -1));
       const closedSpvs = spvs
         .filter((d) => d.status === 'closed')
-        .sort((a, b) => {
-          const ats = a._id.toString().substring(0, 8);
-          const ad = moment.unix(new Date(parseInt(ats, 16) * 1000));
-          const bts = b._id.toString().substring(0, 8);
-          const bd = moment.unix(new Date(parseInt(bts, 16) * 1000));
-          return bd - ad;
-        });
+        .sort((a, b) => (getDealDate(b) - getDealDate(a)));
       const openSpvs = spvs
         .filter((d) => d.status !== 'closed')
-        .sort((a, b) => {
-          const ats = a._id.toString().substring(0, 8);
-          const ad = moment.unix(new Date(parseInt(ats, 16) * 1000));
-          const bts = b._id.toString().substring(0, 8);
-          const bd = moment.unix(new Date(parseInt(bts, 16) * 1000));
-          return bd - ad;
-        });
+        .sort((a, b) => (getDealDate(b) - getDealDate(a)));
 
       const merged = [...funds, ...[...openSpvs, ...closedSpvs]];
       orgDealsDataCopy.organization.deals = merged;
@@ -536,6 +524,12 @@ const FundManagerDashboard = ({ classes, history }) => {
       setAtDealData({ name: `Deal Name ${dealName} Not found in AirTable`, id: '' });
     }
   }, [atDeal]);
+
+  const getDealDate = (deal) => {
+    const dealTS = deal._id.toString().substring(0, 8);
+    const dealDate = moment.unix(new Date(parseInt(dealTS, 16) * 1000));
+    return dealDate;
+  }
 
   const handleLinkCopy = () => {
     if (orgSlug && dealData?.slug) {
@@ -575,7 +569,6 @@ const FundManagerDashboard = ({ classes, history }) => {
 
   const getTabContent = () => {
     let fundData = atFundData.map((d) => d.fields);
-    console.log('FUND DATA', dealName, fundData);
     if (orgSlug === 'browder-capital') {
       fundData = fundData.filter((i) => {
         return i['Fund Name'] === dealName;
