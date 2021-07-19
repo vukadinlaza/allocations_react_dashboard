@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { gql } from 'apollo-boost';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { useParams, useHistory, useLocation } from 'react-router-dom';
 import moment from 'moment';
 import TermsPanel from './TermsPanel';
@@ -13,7 +13,7 @@ import KeyHighlights from './KeyHighlightsPanel';
 
 import Loader from '../../utils/Loader';
 
-const GET_DEAL = gql`
+export const GET_DEAL = gql`
   query PublicDeal($deal_slug: String!, $fund_slug: String!) {
     publicDeal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
       _id
@@ -89,7 +89,7 @@ function DealLandingPage() {
   const { deal_slug, organization } = useParams();
   const history = useHistory();
   const { pathname } = useLocation();
-  const { data, error } = useQuery(GET_DEAL, {
+  const { data } = useQuery(GET_DEAL, {
     variables: {
       deal_slug,
       fund_slug: organization || 'allocations',
@@ -111,11 +111,9 @@ function DealLandingPage() {
     }
   });
 
-  console.log('ERROR', error);
-
   if (!data) return <Loader />;
   const { publicDeal: deal } = data;
-  
+
   if (data && deal?.docSpringTemplateId === null) {
     return <Deal />;
   }

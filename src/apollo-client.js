@@ -1,4 +1,4 @@
-import { ApolloClient } from 'apollo-client';
+import { ApolloClient } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
 import { ApolloLink, Observable } from 'apollo-link';
 import { InMemoryCache } from 'apollo-cache-inmemory';
