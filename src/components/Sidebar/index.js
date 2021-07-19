@@ -930,9 +930,15 @@ export default function Sidebar(props) {
     const defaultAccount = userIsOrgAdmin? userProfile.organizations_admin[0].name : userProfile.name;
     const defaultUrl = userIsOrgAdmin? `/admin/${userProfile.organizations_admin[0].slug}` : '/'
     setCurrentHomeUrl(defaultUrl)
-    setCurrentAccount(defaultAccount);
-    if(isAuthenticated && location?.pathname === '/'){
-      history.push(defaultUrl)
+    if(isAuthenticated){
+      if(location?.pathname === '/'){
+        setCurrentAccount(defaultAccount);
+        history.push(defaultUrl)
+      }else{
+        const organizationSlug = fundMatch?.params?.organization;
+        const currentOrg = userProfile?.organizations_admin?.find(org => org.slug === organizationSlug);
+        handleAccountChange(currentOrg?.name? currentOrg.name : '')
+      }
     }
   }, [isUserAuthenticated])
 
@@ -945,7 +951,8 @@ export default function Sidebar(props) {
   };
 
   const handleAccountChange = (e) => {
-    const org = userProfile?.organizations_admin?.find(org => org.name === e.target.value);
+    const newValue = e.target? e.target.value : e;
+    const org = userProfile?.organizations_admin?.find(org => org.name === newValue);
     const account = org? org.name : userProfile?.name;
     const currentHomePath = org? `/admin/${org.slug}` : '/'
     setCurrentHomeUrl(currentHomePath)
