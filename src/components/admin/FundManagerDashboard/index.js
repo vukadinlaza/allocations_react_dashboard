@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { gql } from 'apollo-boost';
+import moment from 'moment';
 import { useLazyQuery, useSubscription } from '@apollo/react-hooks';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
@@ -443,6 +444,7 @@ const FundManagerDashboard = ({ classes, history }) => {
     dealName && DEALS_TABLE,
     dealName && `({Deal Name}="${checkedDealName}")`,
   );
+  console.log('XXXXXXX', atDeal);
   const { data: atFundData, status } = useFetch(
     OPS_ACCOUNTING,
     atDealData?.name && INVESTMENTS_TABLE,
@@ -493,7 +495,26 @@ const FundManagerDashboard = ({ classes, history }) => {
       const spvs = orgDealsDataCopy.organization.deals
         .filter((d) => d.investmentType === 'spv' || d.investmentType === null)
         .sort((a, b) => (b.status > a.status ? 1 : -1));
-      const merged = [...funds, ...spvs];
+      const closedSpvs = spvs
+        .filter((d) => d.status === 'closed')
+        .sort((a, b) => {
+          const ats = a._id.toString().substring(0, 8);
+          const ad = moment.unix(new Date(parseInt(ats, 16) * 1000));
+          const bts = b._id.toString().substring(0, 8);
+          const bd = moment.unix(new Date(parseInt(bts, 16) * 1000));
+          return bd - ad;
+        });
+      const openSpvs = spvs
+        .filter((d) => d.status !== 'closed')
+        .sort((a, b) => {
+          const ats = a._id.toString().substring(0, 8);
+          const ad = moment.unix(new Date(parseInt(ats, 16) * 1000));
+          const bts = b._id.toString().substring(0, 8);
+          const bd = moment.unix(new Date(parseInt(bts, 16) * 1000));
+          return bd - ad;
+        });
+
+      const merged = [...funds, ...[...openSpvs, ...closedSpvs]];
       orgDealsDataCopy.organization.deals = merged;
       setOrgDeals(orgDealsDataCopy);
     }
