@@ -52,6 +52,9 @@ const styles = (theme) => ({
     borderRadius: 5,
     backgroundColor: '#39C522',
   },
+  buttonContainer: {
+    display: 'flex',
+  },
   chartContainer: {
     width: '70%',
     width: '60%',
@@ -94,6 +97,22 @@ const styles = (theme) => ({
     zIndex: 1,
     '&:hover': {
       textDecoration: 'none',
+    },
+    [theme.breakpoints.down(phone)]: {
+      marginBottom: "1em",
+      "& *": {
+        marginLeft: "0 !important",
+      }
+    },
+  },
+  createButtonsContainer: {
+    display: 'flex', 
+    justifyContent: 'space-between', 
+    width: "520px",
+    [theme.breakpoints.down(phone)]: {
+      flexDirection: "column",
+      marginBottom: "2em",
+      width: "100%"
     },
   },
   dashboardContainer: {
@@ -182,6 +201,10 @@ const styles = (theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     margin: '0 40px',
+    [theme.breakpoints.down(phone)]: {
+      flexDirection: "column",
+      alignItems: "flex-start"
+    },
   },
   modalBackground: {
     position: 'fixed',
@@ -358,9 +381,6 @@ const styles = (theme) => ({
     fontSize: '14px',
     color: '#39C522',
     fontWeight: 'bold',
-  },
-  buttonContainer: {
-    display: 'flex',
   },
 });
 
@@ -686,9 +706,9 @@ const FundManagerDashboard = ({ classes, history }) => {
       {openTooltip && (
         <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} />
       )}
-      <div className={classes.mainTitleContainer}>
+      <div className={classes.mainTitleContainer} id="main-title-container">
         <Typography className={classes.mainTitle}>{userProfile?.first_name ? `Hello ${userProfile?.first_name}, here are your Funds.` : orgDealsData?.organization?.name}</Typography>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div className={classes.createButtonsContainer}>
           <a
             href="//build.allocations.com"
             target="_blank"
