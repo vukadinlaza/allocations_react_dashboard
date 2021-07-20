@@ -151,6 +151,7 @@ const GET_INVESTOR = gql`
           dealParams {
             dealMultiple
             wireDeadline
+            signDeadline
           }
           organization {
             _id
