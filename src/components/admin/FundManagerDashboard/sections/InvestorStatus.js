@@ -48,6 +48,52 @@ const demoAmounts = [5000, 8000, 10000, 12000, 15000, 17000, 13000, 18000, 20000
 
 const demoBool = [true, false];
 
+const InvestorBoxViewed = ({
+  classes,
+  investor,
+  index,
+  width,
+  superAdmin,
+  setShowModal,
+  setInvestmentId,
+  setDealId,
+  setInvestorId,
+}) => {
+  const onClick = () => {
+    if (superAdmin) {
+      if (investor.investmentId) {
+        setInvestmentId(investor.investmentId);
+        setShowModal(true);
+      } else {
+        setDealId(investor.dealId);
+        setInvestorId(investor.id);
+        setShowModal(true);
+      }
+    }
+  };
+  return width > phone ? (
+    <div className={classes.investorBox} onClick={onClick} key={`investor-${index}`}>
+      <div className={classes.investorBoxName} style={{ display: 'flex' }}>
+        <Avatar className={classes.avatar}>{investor?.email.charAt(0).toUpperCase()}</Avatar>
+        <Typography className={classes.investorName}>
+          {investor?.name || investor?.email}
+        </Typography>
+        <div />
+      </div>
+    </div>
+  ) : (
+    <div className={classes.investorBox} onClick={onClick} key={`investor-${index}`}>
+      <Avatar className={classes.avatar}>{investor?.email.charAt(0).toUpperCase()}</Avatar>
+      <div className={classes.investorBoxAmount}>
+        <Typography className={classes.investorName}>
+          {investor?.name || investor?.email}
+        </Typography>
+        <div />
+      </div>
+    </div>
+  );
+};
+
 const InvestorBox = ({
   classes,
   investor,
@@ -85,10 +131,12 @@ const InvestorBox = ({
           </Typography>
         </div>
       </div>
-      {investor.amount && investor.status !== 'invited' && (
+      {investor.amount && investor.status !== 'invited' ? (
         <Typography style={{ width: '80px', textAlign: 'right' }}>
           ${nWithCommas(investor.amount)}
         </Typography>
+      ) : (
+        ''
       )}
     </div>
   ) : (
@@ -104,10 +152,12 @@ const InvestorBox = ({
             <VerifiedUserIcon /> 506c
           </Typography>
         </div>
-        {investor.amount && investor.status !== 'invited' && (
+        {investor.amount && investor.status !== 'invited' ? (
           <Typography style={{ textAlign: 'left', width: '100%' }}>
             ${nWithCommas(investor.amount)}
           </Typography>
+        ) : (
+          ''
         )}
       </div>
     </div>
@@ -137,6 +187,8 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
   }
 
   const { investments } = data.deal;
+  console.log('DATA', data.deal);
+  const viewedUsers = data?.deal?.viewedUsers || [];
 
   const investors = investments
     .filter((inv) => inv?.investor?._id)
@@ -262,6 +314,23 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
                   setInvestorId={setInvestorId}
                 />
               ))}
+
+          {viewedUsers.map((investor, index) => {
+            return (
+              <InvestorBoxViewed
+                investor={investor}
+                classes={classes}
+                index={index}
+                key={`investor-${index}`}
+                width={width}
+                superAdmin={superAdmin}
+                setShowModal={setShowModal}
+                setInvestmentId={setInvestmentId}
+                setDealId={setDealId}
+                setInvestorId={setInvestorId}
+              />
+            );
+          })}
         </ScrollableBox>
       </Grid>
       <Grid item xs={12} lg={4}>

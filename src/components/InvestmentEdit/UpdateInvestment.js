@@ -98,9 +98,13 @@ export default function UpdateInvestment({
     refetch: getInvestment,
     loading,
   } = useQuery(GET_INVESTMENT, { variables: { _id: id } });
+
   const [updateInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT, {
     onCompleted: () => {
       toast.success('Sucess! Investment Updated.');
+      if (handleUpdate) {
+        handleUpdate();
+      }
     },
     onError: () => {
       toast.error(
