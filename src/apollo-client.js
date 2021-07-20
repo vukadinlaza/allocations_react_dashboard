@@ -4,6 +4,7 @@ import { ApolloLink, Observable } from 'apollo-link';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
 import { withClientState } from 'apollo-link-state';
+import { WebSocketLink } from 'apollo-link-ws';
 
 /** *
  *
@@ -60,6 +61,14 @@ const requestLink = new ApolloLink(
     }),
 );
 
+
+const wsLink = new WebSocketLink({
+  url: 'ws://localhost:4000/graphql',
+  options: {
+    reconnect: true
+  }
+})
+
 export const client = new ApolloClient({
   link: ApolloLink.from([
     onError(({ graphQLErrors, networkError }) => {
@@ -90,4 +99,5 @@ export const client = new ApolloClient({
     uploadLink,
   ]),
   cache,
+  wsLink
 });

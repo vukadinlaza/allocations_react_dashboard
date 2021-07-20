@@ -41,7 +41,7 @@ import User from './components/Settings/User';
 import Investment from './components/Settings/Investment';
 
 // admin
-import AdminHome from './components/admin/AdminHome';
+import FundManagerDashboard from './components/admin/FundManagerDashboard';
 import Compliance from './components/admin/Compliance';
 import MasterFiling from './components/admin/MasterFiling';
 
@@ -131,7 +131,7 @@ const App = () => {
 
           {/** Whitelabel Routes * */}
           <PrivateRoute path="/admin/funds" component={Funds} exact />
-          <PrivateRoute path="/admin/:organization" component={AdminHome} exact />
+          <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
           <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
 
           <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
