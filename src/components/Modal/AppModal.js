@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 const AppModal = ({ isOpen, onClose, children, modalHeader }) => {
   const classes = useStyles();
   return (
-    <Modal open={isOpen} onClose={onClose} className={classes.modal} disableBackdropClick>
+    <Modal open={isOpen} onClose={onClose} className={classes.modal}>
       <Container maxWidth="sm">
         <Grid container style={{ minHeight: '100vh' }}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
