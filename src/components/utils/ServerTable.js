@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { gql } from 'apollo-boost';
 import _ from 'lodash';
-import { useQuery } from '@apollo/client';
+import { useQuery, gql } from '@apollo/client';
 import { withStyles } from '@material-ui/core/styles';
 import { TextField, FormControl, InputLabel, Select, Button, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
