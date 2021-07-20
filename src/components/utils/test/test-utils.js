@@ -3,7 +3,7 @@ import { MockedProvider } from '@apollo/client/testing';
 import TestRenderer from 'react-test-renderer';
 import { InMemoryCache } from '@apollo/client';
 
-export default function MockAllocationsProvider({ children, mocks }) {
+export default function MockAllocationsProvider({ children, mocks = [] }) {
   const cache = new InMemoryCache();
   cache.originalReadQuery = cache.readQuery;
   cache.readQuery = (...args) => {

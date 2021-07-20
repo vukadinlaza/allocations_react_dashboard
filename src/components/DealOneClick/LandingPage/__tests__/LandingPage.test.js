@@ -4,12 +4,10 @@ import MockAllocationsProvider from '../../../utils/test/test-utils';
 import LandingPage, { GET_DEAL } from '../LandingPage';
 import DealHeader from '../DealHeader';
 
-const mockHistoryPush = jest.fn();
-
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useHistory: () => ({
-    push: mockHistoryPush,
+    push: jest.fn(),
   }),
   useParams: () => ({
     organization: '305-ventures',
@@ -48,8 +46,8 @@ describe('LandingPage', () => {
     );
 
     const containerTree = container.toTree();
-
     const testInstance = container.root;
+
     expect(containerTree.props.path).toMatch('/deals/305-ventures/305-ventures');
     expect(testInstance.findByType(LandingPage)).toBeTruthy();
   });
@@ -60,7 +58,7 @@ describe('LandingPage', () => {
         company_name: '305 Ventures',
         company_description: 'Test Descriptions',
         slug: '305',
-        dealCoverImageKey: 'image',
+        dealCoverImageKey: 'test-image-allocations',
       };
 
       const container = TestRenderer.create(
