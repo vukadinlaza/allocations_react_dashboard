@@ -87,7 +87,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
       return { label: s.Investment, total: s.Invested };
     })
     .sort((a, b) => nestedSort(a, b, 'total', 'desc'));
-  const seriesTotal = series.length ? series.map((s) => s.total).reduce((acc, n) => acc + n) : 0;
+  const seriesTotal = series.length ? series.map((s) => s.total).reduce((acc, n) => acc + n, 0) : 0;
   const steppedChartData = getSteppedChartData();
   const dealMultiple = _.toNumber(dealData?.dealParams?.dealMultiple || 1);
   const investments =
@@ -97,7 +97,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
     investments
       ?.filter((i) => ['wired', 'complete'].includes(i.status))
       .map((i) => i.amount)
-      .reduce((acc, n) => acc + n) || 0;
+      .reduce((acc, n) => acc + n, 0) || 0;
 
   return (
     <Grid container spacing={3} className={classes.section}>

@@ -60,11 +60,11 @@ const InvestorBox = ({
   setInvestorId,
 }) => {
   const onClick = () => {
-    if(superAdmin){
+    if (superAdmin) {
       if (investor.investmentId) {
         setInvestmentId(investor.investmentId);
         setShowModal(true);
-      }else{
+      } else {
         setDealId(investor.dealId);
         setInvestorId(investor.id);
         setShowModal(true);
@@ -76,14 +76,19 @@ const InvestorBox = ({
       <div className={classes.investorBoxName} style={{ display: 'flex' }}>
         <Avatar className={classes.avatar}>{investor.name.charAt(0).toUpperCase()}</Avatar>
         <Typography className={classes.investorName}>{investor.name}</Typography>
-        <div className={classes.accredited} style={investor.accredidation_status ? {} : { background: '#bbc5ba' }}>
+        <div
+          className={classes.accredited}
+          style={investor.accredidation_status ? {} : { background: '#bbc5ba' }}
+        >
           <Typography style={{ color: 'white', fontSize: '12px' }}>
             <VerifiedUserIcon /> 506c
           </Typography>
         </div>
       </div>
-      {(investor.amount && investor.status !== 'invited') && (
-        <Typography style={{ width: '80px', textAlign: 'right' }}>${nWithCommas(investor.amount)}</Typography>
+      {investor.amount && investor.status !== 'invited' && (
+        <Typography style={{ width: '80px', textAlign: 'right' }}>
+          ${nWithCommas(investor.amount)}
+        </Typography>
       )}
     </div>
   ) : (
@@ -91,12 +96,17 @@ const InvestorBox = ({
       <Avatar className={classes.avatar}>{investor.name.charAt(0).toUpperCase()}</Avatar>
       <div className={classes.investorBoxAmount}>
         <Typography className={classes.investorName}>{investor.name}</Typography>
-        <div className={classes.accredited} style={investor.accredidation_status ? {} : { background: '#bbc5ba' }}>
+        <div
+          className={classes.accredited}
+          style={investor.accredidation_status ? {} : { background: '#bbc5ba' }}
+        >
           <Typography style={{ color: 'white', fontSize: '12px' }}>
             <VerifiedUserIcon /> 506c
           </Typography>
         </div>
-        {(investor.amount && investor.status !== 'invited') && <Typography style={{ textAlign: 'right' }}>${nWithCommas(investor.amount)}</Typography>}
+        {investor.amount && investor.status !== 'invited' && (
+          <Typography style={{ textAlign: 'right' }}>${nWithCommas(investor.amount)}</Typography>
+        )}
       </div>
     </div>
   );
@@ -126,20 +136,22 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
 
   const { investments } = data.deal;
 
-  const investors = investments.map((inv) => {
-    const firstName = _.get(inv, 'investor.first_name', '');
-    const n = _.get(inv, 'investor.name', '');
-    const name = inv?.submissionData?.legalName ? inv?.submissionData?.legalName : n || firstName;
-    return {
-      name,
-      amount: inv.amount,
-      status: inv.status,
-      accredidation_status: inv.investor.accredidation_status,
-      id: inv.investor._id,
-      investmentId: inv._id,
-      dealId: data.deal._id,
-    };
-  });
+  const investors = investments
+    .filter((inv) => inv?.investor?._id)
+    .map((inv) => {
+      const firstName = _.get(inv, 'investor.first_name', '');
+      const n = _.get(inv, 'investor.name', '');
+      const name = inv?.submissionData?.legalName ? inv?.submissionData?.legalName : n || firstName;
+      return {
+        name,
+        amount: inv.amount,
+        status: inv.status,
+        accredidation_status: inv.investor.accredidation_status,
+        id: inv.investor._id,
+        investmentId: inv._id,
+        dealId: data.deal._id,
+      };
+    });
 
   const getColumnData = (status) => {
     const columnInvestors = investors.filter((inv) => inv.status === status);
@@ -153,9 +165,9 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
   const { investors: viewedInvestors } = getColumnData('invited');
   let { investors: signedInvestors, total: signedTotal } = getColumnData('signed');
   let { investors: wiredInvestors, total: wiredTotal } = getColumnData('wired');
-  let { investors: completedInvestors, total: completedTotal } = getColumnData('complete')
-  wiredInvestors = [...wiredInvestors, ...completedInvestors]
-  wiredTotal += completedTotal
+  const { investors: completedInvestors, total: completedTotal } = getColumnData('complete');
+  wiredInvestors = [...wiredInvestors, ...completedInvestors];
+  wiredTotal += completedTotal;
 
   const demoViewedArray = Array(15)
     .fill('')
@@ -193,14 +205,12 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
       };
     });
 
-
   const isDemo = false;
-  if(isDemo){
+  if (isDemo) {
     signedTotal += demoSignedArray.map((i) => i.amount).reduce((acc, n) => acc + n);
     wiredTotal += demoWiredArray.map((i) => i.amount).reduce((acc, n) => acc + n);
   }
   // const isDemo = window?.origin?.includes('vercel') || window.origin.includes('localhost');
-
 
   return (
     <Grid container spacing={3} className={classes.section}>
@@ -221,8 +231,8 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
             )
           }
         >
-          {isDemo? 
-            demoViewedArray.map((investor, index) => (
+          {isDemo
+            ? demoViewedArray.map((investor, index) => (
                 <InvestorBox
                   investor={investor}
                   classes={classes}
@@ -270,8 +280,8 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
             )
           }
         >
-          {isDemo? 
-            demoSignedArray.map((investor, index) => (
+          {isDemo
+            ? demoSignedArray.map((investor, index) => (
                 <InvestorBox
                   investor={investor}
                   classes={classes}
@@ -285,21 +295,20 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
                   setInvestorId={setInvestorId}
                 />
               ))
-            : signedInvestors
-                .map((investor, index) => (
-                  <InvestorBox
-                    investor={investor}
-                    classes={classes}
-                    index={index}
-                    key={`investor-${index}`}
-                    width={width}
-                    superAdmin={superAdmin}
-                    setShowModal={setShowModal}
-                    setInvestmentId={setInvestmentId}
-                    setDealId={setDealId}
-                    setInvestorId={setInvestorId}
-                  />
-                ))}
+            : signedInvestors.map((investor, index) => (
+                <InvestorBox
+                  investor={investor}
+                  classes={classes}
+                  index={index}
+                  key={`investor-${index}`}
+                  width={width}
+                  superAdmin={superAdmin}
+                  setShowModal={setShowModal}
+                  setInvestmentId={setInvestmentId}
+                  setDealId={setDealId}
+                  setInvestorId={setInvestorId}
+                />
+              ))}
         </ScrollableBox>
       </Grid>
       <Grid item xs={12} lg={4}>
@@ -310,8 +319,8 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
           fontSize="small"
           size="third"
         >
-          {isDemo? 
-            demoWiredArray.map((investor, index) => (
+          {isDemo
+            ? demoWiredArray.map((investor, index) => (
                 <InvestorBox
                   investor={investor}
                   classes={classes}
@@ -325,21 +334,20 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
                   setInvestorId={setInvestorId}
                 />
               ))
-            : wiredInvestors
-                .map((investor, index) => (
-                  <InvestorBox
-                    investor={investor}
-                    classes={classes}
-                    index={index}
-                    key={`investor-${index}`}
-                    width={width}
-                    superAdmin={superAdmin}
-                    setShowModal={setShowModal}
-                    setInvestmentId={setInvestmentId}
-                    setDealId={setDealId}
-                    setInvestorId={setInvestorId}
-                  />
-                ))}
+            : wiredInvestors.map((investor, index) => (
+                <InvestorBox
+                  investor={investor}
+                  classes={classes}
+                  index={index}
+                  key={`investor-${index}`}
+                  width={width}
+                  superAdmin={superAdmin}
+                  setShowModal={setShowModal}
+                  setInvestmentId={setInvestmentId}
+                  setDealId={setDealId}
+                  setInvestorId={setInvestorId}
+                />
+              ))}
         </ScrollableBox>
       </Grid>
 
