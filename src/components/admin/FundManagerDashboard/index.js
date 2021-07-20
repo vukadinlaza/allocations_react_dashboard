@@ -707,17 +707,19 @@ const FundManagerDashboard = ({ classes, history }) => {
               </Button>
             </span>
           )}
-          <span className={classes.createButtonLink}>
-            <Button
-              className={classes.createButton}
-              color="secondary"
-              style={{ marginLeft: '1rem', backgroundColor: 'blue' }}
-              onClick={() => history.push(`/admin/${orgSlug}/manager`)}
-            >
-              <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
-              Add Org Admin
-            </Button>
-          </span>
+          {userProfile?.admin && (
+            <span className={classes.createButtonLink}>
+              <Button
+                className={classes.createButton}
+                color="secondary"
+                style={{ marginLeft: '1rem', backgroundColor: 'blue' }}
+                onClick={() => history.push(`/admin/${orgSlug}/manager`)}
+              >
+                <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
+                Add Org Admin
+              </Button>
+            </span>
+          )}
         </div>
       </div>
       {orgDeals && !orgDeals.organization?.deals?.length ? (
