@@ -186,6 +186,11 @@ const styles = (theme) => ({
     fontSize: '26px',
     fontWeight: 600,
     color: '#c3c3c3',
+    [theme.breakpoints.down(phone)]: {
+      width: '80vw',
+      margin: "auto",
+      height: "350px"
+    },
   },
   pageIcons: {
     width: '150px',
@@ -240,6 +245,9 @@ const styles = (theme) => ({
     width: '100%',
     padding: '40px',
     margin: '0px',
+    [theme.breakpoints.down(phone)]: {
+      padding: '10px'
+    },
   },
   selectedTab: {
     fontWeight: 'bold !important',
@@ -313,6 +321,9 @@ const styles = (theme) => ({
     padding: '0 28px',
     '& *': {
       height: '100%',
+    },
+    [theme.breakpoints.down(phone)]: {
+      padding: "0 12px"
     },
   },
   tabsContainer: {

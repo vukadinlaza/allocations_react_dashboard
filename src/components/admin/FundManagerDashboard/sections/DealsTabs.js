@@ -53,6 +53,9 @@ const styles = (theme) => ({
     fontWeight: 'bold',
     marginBottom: '15px',
     padding: '0 40px',
+    [theme.breakpoints.down(phone)]: {
+      padding: "0 22px"
+    },
   },
   selectedTab: {
     // color: "#2A2B54 !important",

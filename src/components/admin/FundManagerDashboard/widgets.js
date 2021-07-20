@@ -15,7 +15,7 @@ const styles = theme => ({
 		borderRadius: "10px",
 		// marginBottom: "20px",
 		[theme.breakpoints.down(phone)]: {
-			width: "100vw",
+			// width: "100vw",
 			minWidth: "0 !important",
 			maxWidth: "none !important"
 		},

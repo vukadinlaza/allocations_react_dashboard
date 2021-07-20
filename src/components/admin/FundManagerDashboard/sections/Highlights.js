@@ -101,7 +101,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
 
   return (
     <Grid container spacing={3} className={classes.section}>
-      <Grid item xs={6} lg={3}>
+      <Grid item xs={12} lg={3}>
         <SimpleBox
           size="fourth"
           title="Total Capital Received"
@@ -111,7 +111,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
           tooltipContent={
             <Typography color="inherit">
               This is the total capital received into the private fund’s bank account (including
-              loans)
+              loans and drawdowns)
             </Typography>
           }
         >
@@ -123,7 +123,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
           </div>
         </SimpleBox>
       </Grid>
-      <Grid item xs={6} lg={3}>
+      <Grid item xs={12} lg={3}>
         <SimpleBox
           size="fourth"
           title="Total Invested"
@@ -147,7 +147,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
           </div>
         </SimpleBox>
       </Grid>
-      <Grid item xs={6} lg={3}>
+      <Grid item xs={12} lg={3}>
         <SimpleBox
           size="fourth"
           title="Multiple (Estimated)"
@@ -170,7 +170,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
           </div>
         </SimpleBox>
       </Grid>
-      <Grid item xs={6} lg={3}>
+      <Grid item xs={12} lg={3}>
         <SimpleBox
           size="fourth"
           title="Total Portfolio Value (Estimated)"

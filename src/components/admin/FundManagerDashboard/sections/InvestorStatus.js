@@ -105,7 +105,9 @@ const InvestorBox = ({
           </Typography>
         </div>
         {investor.amount && investor.status !== 'invited' && (
-          <Typography style={{ textAlign: 'right' }}>${nWithCommas(investor.amount)}</Typography>
+          <Typography style={{ textAlign: 'left', width: '100%' }}>
+            ${nWithCommas(investor.amount)}
+          </Typography>
         )}
       </div>
     </div>
