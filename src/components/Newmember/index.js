@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useParams, useHistory, gql } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
+import { useParams, useHistory } from 'react-router-dom';
+import { useMutation, gql } from '@apollo/client';
 
 const CONFIRM_INVITE = gql`
   mutation ConfirmInvitation($accountId: String) {
