@@ -76,6 +76,19 @@ const styles = (theme) => ({
       outline: 'none',
     },
   },
+  createButtonblue: {
+    display: 'flex',
+    alignItems: 'center',
+    color: 'white',
+    textTransform: 'none',
+    cursor: 'pointer',
+    '&:hover': {
+      backgroundColor: '#56db40',
+    },
+    '&:focus': {
+      outline: 'none',
+    },
+  },
   createButtonLink: {
     zIndex: 1,
     '&:hover': {
@@ -354,6 +367,11 @@ const GET_INVESTMENTS = gql`
   query GetDeal($fund_slug: String!, $deal_slug: String!) {
     deal(fund_slug: $fund_slug, deal_slug: $deal_slug) {
       _id
+      viewedUsers {
+        first_name
+        last_name
+        email
+      }
       investments {
         _id
         amount
@@ -689,6 +707,17 @@ const FundManagerDashboard = ({ classes, history }) => {
               </Button>
             </span>
           )}
+          <span className={classes.createButtonLink}>
+            <Button
+              className={classes.createButton}
+              color="secondary"
+              style={{ marginLeft: '1rem', backgroundColor: 'blue' }}
+              onClick={() => history.push(`/admin/${orgSlug}/manager`)}
+            >
+              <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
+              Add Org Admin
+            </Button>
+          </span>
         </div>
       </div>
       {orgDeals && !orgDeals.organization?.deals?.length ? (
