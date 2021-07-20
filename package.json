@@ -1,5 +1,5 @@
 {
-  "name": "auth0-react-01-login",
+  "name": "allocations-dashboard",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -82,7 +82,7 @@
     "react-places-autocomplete": "^7.3.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.0.0",
-    "react-scripts": "^3.4.1",
+    "react-scripts": "3.4.4",
     "react-scroll": "^1.8.1",
     "react-slaask": "^1.1.0",
     "react-test-renderer": "^17.0.2",
