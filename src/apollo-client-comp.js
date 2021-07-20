@@ -1,7 +1,12 @@
 import React from 'react';
-import { ApolloClient, ApolloProvider, ApolloLink, Observable, HttpLink } from '@apollo/client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { withClientState } from 'apollo-link-state';
+import {
+  ApolloClient,
+  ApolloProvider,
+  ApolloLink,
+  Observable,
+  HttpLink,
+  InMemoryCache,
+} from '@apollo/client';
 import { onError } from 'apollo-link-error';
 import { useAuth0 } from '@auth0/auth0-react';
 
@@ -81,20 +86,9 @@ const AuthorizedApolloProvider = ({ children }) => {
         }
       }),
       requestLink,
-      withClientState({
-        defaults: {
-          isConnected: true,
-        },
-        resolvers: {
-          Mutation: {
-            updateNetworkStatus: (_, { isConnected }, { cache }) => {
-              cache.writeData({ data: { isConnected } });
-              return null;
-            },
-          },
-        },
-        cache,
-      }),
+      // apollo-link-state deprecated in V3
+      // https://github.com/apollographql/apollo-client/pull/4155
+      // https://github.com/apollographql/apollo-client/pull/4338
       uploadLink,
     ]),
     cache,
