@@ -1,9 +1,6 @@
-import { ApolloClient } from '@apollo/client';
-import { createUploadLink } from 'apollo-upload-client';
+import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 import { ApolloLink, Observable } from 'apollo-link';
-import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
-import { withClientState } from 'apollo-link-state';
 import { WebSocketLink } from 'apollo-link-ws';
 
 /** *
@@ -16,7 +13,7 @@ import { WebSocketLink } from 'apollo-link-ws';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000/graphql';
 
-const uploadLink = createUploadLink({
+const uploadLink = new HttpLink({
   uri: API_URL,
   headers: { 'keep-alive': 'true' },
 });
@@ -61,13 +58,12 @@ const requestLink = new ApolloLink(
     }),
 );
 
-
 const wsLink = new WebSocketLink({
   url: 'ws://localhost:4000/graphql',
   options: {
-    reconnect: true
-  }
-})
+    reconnect: true,
+  },
+});
 
 export const client = new ApolloClient({
   link: ApolloLink.from([
@@ -82,22 +78,11 @@ export const client = new ApolloClient({
       }
     }),
     requestLink,
-    withClientState({
-      defaults: {
-        isConnected: true,
-      },
-      resolvers: {
-        Mutation: {
-          updateNetworkStatus: (_, { isConnected }, { cache }) => {
-            cache.writeData({ data: { isConnected } });
-            return null;
-          },
-        },
-      },
-      cache,
-    }),
+    // apollo-link-state deprecated in V3
+    // https://github.com/apollographql/apollo-client/pull/4155
+    // https://github.com/apollographql/apollo-client/pull/4338
     uploadLink,
   ]),
   cache,
-  wsLink
+  wsLink,
 });

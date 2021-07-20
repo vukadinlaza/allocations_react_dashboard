@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { gql } from 'apollo-boost';
 import moment from 'moment';
-import { useLazyQuery, useSubscription } from '@apollo/react-hooks';
+import { useLazyQuery, useSubscription, gql } from '@apollo/client';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography, Button } from '@material-ui/core';

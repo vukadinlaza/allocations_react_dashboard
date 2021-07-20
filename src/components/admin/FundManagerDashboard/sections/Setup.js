@@ -4,15 +4,22 @@ import moment from 'moment';
 import { Typography, LinearProgress, Grid } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
-import { dealSteps } from './dealSteps'
+import { dealSteps } from './dealSteps';
 import { SimpleBox, ModalTooltip } from '../widgets';
 import Loader from '../../../utils/Loader';
 import { nWithCommas } from '../../../../utils/numbers';
 
-
-const StepsContainer = ({ title, steps, id, openTooltip, handleTooltip, tooltipContent, classes }) => {
+const StepsContainer = ({
+  title,
+  steps,
+  id,
+  openTooltip,
+  handleTooltip,
+  tooltipContent,
+  classes,
+}) => {
   return (
-    <Grid item xs={6} lg={3} style={{height: "auto"}}>
+    <Grid item xs={6} lg={3} style={{ height: 'auto' }}>
       <SimpleBox
         title={title}
         titleData={
@@ -26,12 +33,10 @@ const StepsContainer = ({ title, steps, id, openTooltip, handleTooltip, tooltipC
         openTooltip={openTooltip}
         handleTooltip={handleTooltip}
         id={id}
-        tooltipContent={
-          <Typography color="inherit">{tooltipContent}</Typography>
-        }
+        tooltipContent={<Typography color="inherit">{tooltipContent}</Typography>}
       >
         {steps.map((step, idx) => {
-          return(
+          return (
             <ModalTooltip
               title={step.value}
               handleTooltip={handleTooltip}
@@ -40,24 +45,29 @@ const StepsContainer = ({ title, steps, id, openTooltip, handleTooltip, tooltipC
               id={step.value.split(' ').join()}
               key={`step-${idx}`}
             >
-              <div className={classes.setupStep} onClick={(e) => handleTooltip(step.value.split(' ').join())}>
+              <div
+                className={classes.setupStep}
+                onClick={(e) => handleTooltip(step.value.split(' ').join())}
+              >
                 <CheckCircleIcon
-                  style={{ color: '#0461FF', opacity: step.checked ? '100%' : '25%', marginRight: '0.5em' }}
+                  style={{
+                    color: '#0461FF',
+                    opacity: step.checked ? '100%' : '25%',
+                    marginRight: '0.5em',
+                  }}
                   id={`check-${step.value.split(' ').join()}`}
                 />
                 <Typography>{step.value}</Typography>
               </div>
             </ModalTooltip>
-          )
+          );
         })}
       </SimpleBox>
     </Grid>
-  )
-}
-
+  );
+};
 
 const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) => {
-
   const { target, raised, dealParams, investmentType } = data;
   const {
     signDeadline,
@@ -72,23 +82,24 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
     managementFeeType,
     fundManagementFeeType,
   } = dealParams;
-  
+
   const [dealTasks, setDealTasks] = useState([]);
-  const [setupSteps, setSetupSteps] = useState(dealSteps)
+  const [setupSteps, setSetupSteps] = useState(dealSteps);
   const { buildSteps, preOnboardingSteps, onboardingSteps, closingSteps } = setupSteps;
 
   useEffect(() => {
     const tasks = data?.dealOnboarding?.dealTasks;
-    if(tasks) setDealTasks(tasks)
-  }, [data])
-
+    if (tasks) setDealTasks(tasks);
+  }, [data]);
 
   const getManagementFee = () => {
     const managementFee = investmentType === 'fund' ? fundManagementFees : managementFees;
-    const managementFeeDollar = investmentType === 'fund' ? fundManagementFeesDollar : managementFeesDollar;
-    if(managementFee || managementFee === "0") {
+    const managementFeeDollar =
+      investmentType === 'fund' ? fundManagementFeesDollar : managementFeesDollar;
+    if (managementFee || managementFee === '0') {
       return `${managementFee}%`;
-    }else if(managementFeeDollar?.length > 0) {
+    }
+    if (managementFeeDollar?.length > 0) {
       return `$${managementFeeDollar}`;
     }
   };
@@ -116,7 +127,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
       dealType,
       wireDeadline: moment(wireDeadline).format('MMMM Do, YYYY'),
       signDeadline: moment(signDeadline).format('MMMM Do, YYYY'),
-      feeType: investmentType === 'fund' ? fundManagementFeeType : managementFeeType
+      feeType: investmentType === 'fund' ? fundManagementFeeType : managementFeeType,
     };
   };
 
@@ -125,135 +136,148 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
   const getStepStatus = (step) => {
     const stepValue = step.value;
     let taskChecked = false;
-    if(!dealTasks || !dealTasks.length) return false;
-    
-    const currentTask = dealTasks.find(task => step.processStreetTask.includes(task.taskName.toLowerCase()));
-    if(!currentTask){
+    if (!dealTasks || !dealTasks.length) return false;
+
+    const currentTask = dealTasks.find((task) =>
+      step.processStreetTask.includes(task.taskName.toLowerCase()),
+    );
+    if (!currentTask) {
       // console.log(`Task "${step.processStreetTask}" not matching`)
       return false;
     }
 
     switch (stepValue) {
       case 'Entity Formation Complete':
-        const hvpTask = dealTasks.find(task => task.taskName.toLowerCase() === 'enter deal details');
-        const hvpField = hvpTask.formFields?.find(field => field.fieldLabel.toLowerCase() === 'high volume partnership');
-        if(!hvpField){
+        const hvpTask = dealTasks.find(
+          (task) => task.taskName.toLowerCase() === 'enter deal details',
+        );
+        const hvpField = hvpTask.formFields?.find(
+          (field) => field.fieldLabel.toLowerCase() === 'high volume partnership',
+        );
+        if (!hvpField) {
           taskChecked = false;
-        }else if(hvpField.fieldValue === 'Yes'){
-          taskChecked = currentTask.taskStatus === 'Completed'
-        }else if(hvpField.fieldValue === 'No'){
+        } else if (hvpField.fieldValue === 'Yes') {
+          taskChecked = currentTask.taskStatus === 'Completed';
+        } else if (hvpField.fieldValue === 'No') {
           taskChecked = true;
         }
         break;
       case 'Wire Approval Review Complete':
-        const tasksNeeded = dealTasks.filter(task => step.processStreetTask.includes(task.taskName.toLowerCase()));
-        const bothTasksApproved = tasksNeeded.every(task => task.taskStatus === 'Completed');
-        if(bothTasksApproved){
+        const tasksNeeded = dealTasks.filter((task) =>
+          step.processStreetTask.includes(task.taskName.toLowerCase()),
+        );
+        const bothTasksApproved = tasksNeeded.every((task) => task.taskStatus === 'Completed');
+        if (bothTasksApproved) {
           taskChecked = true;
-        }else{
+        } else {
           taskChecked = false;
         }
       default:
-        taskChecked = currentTask.taskStatus === 'Completed'
+        taskChecked = currentTask.taskStatus === 'Completed';
         break;
     }
     return taskChecked;
-  }
+  };
 
   const stepsVerification = (steps) => {
     return steps.map((step) => {
-      const checked = getStepStatus(step)
+      const checked = getStepStatus(step);
       return { ...step, checked };
     });
-  }
+  };
 
   useEffect(() => {
-    if(setupSteps){
+    if (setupSteps) {
       let newSetupSteps = {};
-      Object.keys(setupSteps).forEach(group => {
+      Object.keys(setupSteps).forEach((group) => {
         const verifiedData = stepsVerification(setupSteps[group]);
         newSetupSteps[group] = verifiedData;
       });
-      setSetupSteps(newSetupSteps)
+      setSetupSteps(newSetupSteps);
     }
-  }, [dealTasks])
+  }, [dealTasks]);
 
   useEffect(() => {
-    if(subscriptionData?.dealOnboarding){
+    if (subscriptionData?.dealOnboarding) {
       const { dealOnboarding } = subscriptionData;
       //if dealOnboarding subscrription type is a new task checked or unchecked
-      if(dealOnboarding.taskName){
+      if (dealOnboarding.taskName) {
         let stepSection = '';
         let stepIndex = -1;
-        
+
         //set new tasks based on new subscription information
-        if(dealTasks && dealTasks.length){
-          const dealTasksCopy = dealTasks.map(t => t);
-          const subsTaskIndex = dealTasksCopy.findIndex(task => task.taskId === dealOnboarding.taskId);
+        if (dealTasks && dealTasks.length) {
+          const dealTasksCopy = dealTasks.map((t) => t);
+          const subsTaskIndex = dealTasksCopy.findIndex(
+            (task) => task.taskId === dealOnboarding.taskId,
+          );
           dealTasksCopy[subsTaskIndex] = dealOnboarding;
-          setDealTasks(dealTasksCopy)
+          setDealTasks(dealTasksCopy);
         }
         //get step index and section of step inside current setupSteps
-        for(let section in setupSteps){
-          stepIndex = setupSteps[section].findIndex(step => step.processStreetTask.includes(dealOnboarding.taskName.toLowerCase()));
-          if(stepIndex >= 0){
+        for (let section in setupSteps) {
+          stepIndex = setupSteps[section].findIndex((step) =>
+            step.processStreetTask.includes(dealOnboarding.taskName.toLowerCase()),
+          );
+          if (stepIndex >= 0) {
             stepSection = section;
             break;
           }
         }
         // set new setupSteps with updated task data
-        if(stepIndex >= 0){
+        if (stepIndex >= 0) {
           const setupStepsCopy = Object.assign({}, setupSteps);
           const stepToUpdate = setupStepsCopy[stepSection][stepIndex];
           const checked = getStepStatus(stepToUpdate);
           stepToUpdate.checked = checked;
           setSetupSteps(setupStepsCopy);
         }
-      }else if(dealOnboarding.dealName){         //if type of dealOnboarding subscription is a new run workflow
+      } else if (dealOnboarding.dealName) {
+        //if type of dealOnboarding subscription is a new run workflow
         const tasks = dealOnboarding?.dealTasks;
-        if(tasks) setDealTasks(tasks)
+        if (tasks) setDealTasks(tasks);
       }
     }
-  }, [subscriptionData])
+  }, [subscriptionData]);
 
-  if(!buildSteps || !preOnboardingSteps || !onboardingSteps || !closingSteps) return <Loader/>
+  if (!buildSteps || !preOnboardingSteps || !onboardingSteps || !closingSteps) return <Loader />;
 
   return (
     <Grid container spacing={1} className={classes.section}>
-      <Grid container spacing={3} item xs={12} style={{marginBottom: "0px"}}>
+      <Grid container spacing={3} item xs={12} style={{ marginBottom: '0px' }}>
         <StepsContainer
           title="Build"
-          steps={buildSteps} 
-          id="build" 
-          openTooltip={openTooltip} 
-          handleTooltip={handleTooltip} 
+          steps={buildSteps}
+          id="build"
+          openTooltip={openTooltip}
+          handleTooltip={handleTooltip}
           tooltipContent="The process of submitting a build request for an SPV / Fund"
           classes={classes}
         />
         <StepsContainer
           title="Pre-onboarding"
-          steps={preOnboardingSteps} 
-          id="preOnboarding" 
-          openTooltip={openTooltip} 
-          handleTooltip={handleTooltip} 
+          steps={preOnboardingSteps}
+          id="preOnboarding"
+          openTooltip={openTooltip}
+          handleTooltip={handleTooltip}
           tooltipContent="The setup process for an SPV / Fund"
           classes={classes}
         />
         <StepsContainer
           title="Onboarding Investors"
-          steps={onboardingSteps} 
-          id="onboarding" 
-          openTooltip={openTooltip} 
-          handleTooltip={handleTooltip} 
+          steps={onboardingSteps}
+          id="onboarding"
+          openTooltip={openTooltip}
+          handleTooltip={handleTooltip}
           tooltipContent="The process of onboarding investors and finalizing terms"
           classes={classes}
         />
         <StepsContainer
           title="Closing & Post-close"
-          steps={closingSteps} 
-          id="closing" 
-          openTooltip={openTooltip} 
-          handleTooltip={handleTooltip} 
+          steps={closingSteps}
+          id="closing"
+          openTooltip={openTooltip}
+          handleTooltip={handleTooltip}
           tooltipContent="The process of closing and post-closing the SPV / Fund"
           classes={classes}
         />
@@ -268,8 +292,8 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
             id="target"
             tooltipContent={
               <Typography color="inherit">
-                This is how much you plan to raise. This is important specifically for Funds as the target raise is material
-                to the offering and its performance to investors.
+                This is how much you plan to raise. This is important specifically for Funds as the
+                target raise is material to the offering and its performance to investors.
               </Typography>
             }
           >
@@ -297,12 +321,18 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
             handleTooltip={handleTooltip}
             openTooltip={openTooltip}
             id="nextClose"
-            tooltipContent={<Typography color="inherit">This is the expected next close date for the offering</Typography>}
+            tooltipContent={
+              <Typography color="inherit">
+                This is the expected next close date for the offering
+              </Typography>
+            }
           >
             <div className={classes.simpleBoxDataRow}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <CalendarTodayIcon style={{ marginRight: '0.5em' }} />
-                <Typography style={{ fontSize: '20px' }}>{setupData.wireDeadline || 'No date available'}</Typography>
+                <Typography style={{ fontSize: '20px' }}>
+                  {setupData.wireDeadline || 'No date available'}
+                </Typography>
               </div>
             </div>
           </SimpleBox>
@@ -314,12 +344,18 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
             handleTooltip={handleTooltip}
             openTooltip={openTooltip}
             id="finalClose"
-            tooltipContent={<Typography color="inherit">This is the expected final close date for the offering</Typography>}
+            tooltipContent={
+              <Typography color="inherit">
+                This is the expected final close date for the offering
+              </Typography>
+            }
           >
             <div className={classes.simpleBoxDataRow}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <CalendarTodayIcon style={{ marginRight: '0.5em' }} />
-                <Typography style={{ fontSize: '20px' }}>{setupData.signDeadline || 'No date available'}</Typography>
+                <Typography style={{ fontSize: '20px' }}>
+                  {setupData.signDeadline || 'No date available'}
+                </Typography>
               </div>
             </div>
           </SimpleBox>
@@ -331,13 +367,27 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
             handleTooltip={handleTooltip}
             openTooltip={openTooltip}
             id="managementFee"
-            tooltipContent={<Typography color="inherit">This is the management fee chosen by the Fund Manager</Typography>}
+            tooltipContent={
+              <Typography color="inherit">
+                This is the management fee chosen by the Fund Manager
+              </Typography>
+            }
           >
             <div className={classes.simpleBoxDataRow}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Typography style={{ fontSize: '26px' }}>
                   {setupData.managementFee ? setupData.managementFee : 'No Management Fee'}{' '}
-                  {setupData.managementFee ? <span style={{ fontSize: '14px' }}>{setupData.feeType? (setupData.feeType === 'Annual'? 'per annum' : setupData.feeType) : ''}</span> : ''}
+                  {setupData.managementFee ? (
+                    <span style={{ fontSize: '14px' }}>
+                      {setupData.feeType
+                        ? setupData.feeType === 'Annual'
+                          ? 'per annum'
+                          : setupData.feeType
+                        : ''}
+                    </span>
+                  ) : (
+                    ''
+                  )}
                 </Typography>
               </div>
             </div>
@@ -350,11 +400,17 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
             handleTooltip={handleTooltip}
             openTooltip={openTooltip}
             id="carry"
-            tooltipContent={<Typography color="inherit">This is the carry fee chosen by the Fund Manager</Typography>}
+            tooltipContent={
+              <Typography color="inherit">
+                This is the carry fee chosen by the Fund Manager
+              </Typography>
+            }
           >
             <div className={classes.simpleBoxDataRow}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Typography style={{ fontSize: '20px' }}>{setupData.carry ? `${setupData.carry}%` : 'No carry'}</Typography>
+                <Typography style={{ fontSize: '20px' }}>
+                  {setupData.carry ? `${setupData.carry}%` : 'No carry'}
+                </Typography>
               </div>
             </div>
           </SimpleBox>
@@ -366,11 +422,17 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
             handleTooltip={handleTooltip}
             openTooltip={openTooltip}
             id="raiseType"
-            tooltipContent={<Typography color="inherit">This is the offering type chosen by the Fund Manager</Typography>}
+            tooltipContent={
+              <Typography color="inherit">
+                This is the offering type chosen by the Fund Manager
+              </Typography>
+            }
           >
             <div className={classes.simpleBoxDataRow}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Typography style={{ fontSize: '20px' }}>{setupData.dealType || 'No raise type'}</Typography>
+                <Typography style={{ fontSize: '20px' }}>
+                  {setupData.dealType || 'No raise type'}
+                </Typography>
               </div>
             </div>
           </SimpleBox>

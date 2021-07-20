@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { get, isEqual, pick } from 'lodash';
 import { useParams, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { gql } from 'apollo-boost';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { gql, useQuery, useMutation } from '@apollo/client';
 import {
   Button,
   TextField,
@@ -83,20 +82,30 @@ const UPDATE_INVESTMENT = gql`
     }
   }
 `;
-export default function UpdateInvestment({ investmentId = false, isK1 = false, handleUpdate = false }) {
+export default function UpdateInvestment({
+  investmentId = false,
+  isK1 = false,
+  handleUpdate = false,
+}) {
   const classes = useStyles();
   const params = useParams();
   const [investment, setInvestment] = useState(null);
   const [hasChanges, setHasChanges] = useState(false);
   const id = investmentId || params.id;
 
-  const { data, refetch: getInvestment, loading } = useQuery(GET_INVESTMENT, { variables: { _id: id } });
+  const {
+    data,
+    refetch: getInvestment,
+    loading,
+  } = useQuery(GET_INVESTMENT, { variables: { _id: id } });
   const [updateInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT, {
     onCompleted: () => {
       toast.success('Sucess! Investment Updated.');
     },
     onError: () => {
-      toast.error('Something went wrong updating the investment. Try again or contact support@allocations.com');
+      toast.error(
+        'Something went wrong updating the investment. Try again or contact support@allocations.com',
+      );
     },
   });
   const [deleteInvestment] = useMutation(destroy, {
@@ -107,7 +116,9 @@ export default function UpdateInvestment({ investmentId = false, isK1 = false, h
       toast.success('Sucess! Investment Deleted.');
     },
     onError: () => {
-      toast.error('Something went wrong deleting the investment. Try again or contact support@allocations.com');
+      toast.error(
+        'Something went wrong deleting the investment. Try again or contact support@allocations.com',
+      );
     },
   });
 
@@ -140,7 +151,13 @@ export default function UpdateInvestment({ investmentId = false, isK1 = false, h
         <Grid container spacing={3} direction="row" justify="flex-end">
           <Grid item xs={12} sm={12} md={6}>
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
-              <TextField style={{ width: '100%' }} value={name || ''} disabled label="Investor" variant="outlined" />
+              <TextField
+                style={{ width: '100%' }}
+                value={name || ''}
+                disabled
+                label="Investor"
+                variant="outlined"
+              />
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={12} md={6}>
@@ -162,7 +179,11 @@ export default function UpdateInvestment({ investmentId = false, isK1 = false, h
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
               <TextField
                 style={{ width: '100%' }}
-                value={`${get(investment, 'deal.company_name', '')} ${get(investment, 'deal.company_description', '')}`}
+                value={`${get(investment, 'deal.company_name', '')} ${get(
+                  investment,
+                  'deal.company_description',
+                  '',
+                )}`}
                 label="Deal"
                 variant="outlined"
               />
@@ -244,7 +265,9 @@ function Docs({ investment, getInvestment, isK1 }) {
       toast.success('Sucess!, Document Added');
     },
     onError: () => {
-      toast.error('Something went wrong adding the document. Try again or contact support@allocations.com');
+      toast.error(
+        'Something went wrong adding the document. Try again or contact support@allocations.com',
+      );
     },
   });
 
@@ -252,7 +275,7 @@ function Docs({ investment, getInvestment, isK1 }) {
 
   useEffect(() => {
     if (uploadedDoc) {
-      console.log({uploadedDoc})
+      console.log({ uploadedDoc });
       addInvestmentDoc({
         variables: { doc: uploadedDoc, investment_id: id, isK1 },
       });
@@ -266,7 +289,13 @@ function Docs({ investment, getInvestment, isK1 }) {
     <Grid container wrap="nowrap" direction={matches ? 'row' : 'column'}>
       <Grid container>
         {docs.map((doc) => (
-          <Doc key={doc.path} doc={doc} investment={investment} getInvestment={getInvestment} matches={matches} />
+          <Doc
+            key={doc.path}
+            doc={doc}
+            investment={investment}
+            getInvestment={getInvestment}
+            matches={matches}
+          />
         ))}
       </Grid>
 
@@ -312,7 +341,8 @@ function Docs({ investment, getInvestment, isK1 }) {
 }
 
 function Doc({ doc, investment, getInvestment, matches }) {
-  const file = doc.path.slice(0, 12) === 'investments/' ? doc.path.split('/')[2] : doc.path.split('/')[1];
+  const file =
+    doc.path.slice(0, 12) === 'investments/' ? doc.path.split('/')[2] : doc.path.split('/')[1];
 
   const [rmInvestmentDoc] = useMutation(RM_INVESTMENT_DOC, {
     variables: { file, investment_id: investment._id },
@@ -321,7 +351,9 @@ function Doc({ doc, investment, getInvestment, matches }) {
       toast.success('Success! Document Deleted');
     },
     onError: () => {
-      toast.error('Something went wrong deleting the document. Try again or contact support@allocations.com');
+      toast.error(
+        'Something went wrong deleting the document. Try again or contact support@allocations.com',
+      );
     },
   });
 
