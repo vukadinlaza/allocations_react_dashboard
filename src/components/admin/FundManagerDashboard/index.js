@@ -186,6 +186,11 @@ const styles = (theme) => ({
     fontSize: '26px',
     fontWeight: 600,
     color: '#c3c3c3',
+    [theme.breakpoints.down(phone)]: {
+      width: '80vw',
+      margin: "auto",
+      height: "350px"
+    },
   },
   pageIcons: {
     width: '150px',
