@@ -14,6 +14,7 @@ import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
 import Investments from './sections/Investments';
+import Investors from './sections/Investors';
 import { FlatBox } from './widgets';
 import { phone, tablet } from '../../../utils/helpers';
 import { useViewport, useFetch } from '../../../utils/hooks';
@@ -50,6 +51,9 @@ const styles = (theme) => ({
   bar: {
     borderRadius: 5,
     backgroundColor: '#39C522',
+  },
+  buttonContainer: {
+    display: 'flex',
   },
   chartContainer: {
     width: '70%',
@@ -93,6 +97,22 @@ const styles = (theme) => ({
     zIndex: 1,
     '&:hover': {
       textDecoration: 'none',
+    },
+    [theme.breakpoints.down(phone)]: {
+      marginBottom: "1em",
+      "& *": {
+        marginLeft: "0 !important",
+      }
+    },
+  },
+  createButtonsContainer: {
+    display: 'flex', 
+    justifyContent: 'space-between', 
+    width: "520px",
+    [theme.breakpoints.down(phone)]: {
+      flexDirection: "column",
+      marginBottom: "2em",
+      width: "100%"
     },
   },
   dashboardContainer: {
@@ -181,6 +201,10 @@ const styles = (theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     margin: '0 40px',
+    [theme.breakpoints.down(phone)]: {
+      flexDirection: "column",
+      alignItems: "flex-start"
+    },
   },
   modalBackground: {
     position: 'fixed',
@@ -358,9 +382,6 @@ const styles = (theme) => ({
     color: '#39C522',
     fontWeight: 'bold',
   },
-  buttonContainer: {
-    display: 'flex',
-  },
 });
 
 const GET_INVESTMENTS = gql`
@@ -384,6 +405,7 @@ const GET_INVESTMENTS = gql`
           first_name
           last_name
           name
+          email
           accredidation_status
         }
       }
@@ -448,8 +470,8 @@ export const ONBOARDING = gql`
   }
 `;
 
-const fundTabs = ['Highlights', 'Investments', 'Investor Onboarding Status', 'Deal Page'];
-const spvTabs = ['Investor Onboarding Status', 'Deal Page'];
+const fundTabs = ['Highlights', 'Investments', 'Investors', 'Investor Onboarding Status', 'Deal Page'];
+const spvTabs = ['Investors', 'Investor Onboarding Status', 'Deal Page'];
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
@@ -637,6 +659,9 @@ const FundManagerDashboard = ({ classes, history }) => {
       case 'Investments':
         return <Investments classes={classes} width={width} data={fundData} />;
 
+      case 'Investors':
+        return <Investors classes={classes} width={width} data={dealInvestments} />;
+
       case 'Investor Onboarding Status':
         return (
           <InvestorStatus
@@ -681,9 +706,9 @@ const FundManagerDashboard = ({ classes, history }) => {
       {openTooltip && (
         <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} />
       )}
-      <div className={classes.mainTitleContainer}>
+      <div className={classes.mainTitleContainer} id="main-title-container">
         <Typography className={classes.mainTitle}>{userProfile?.first_name ? `Hello ${userProfile?.first_name}, here are your Funds.` : orgDealsData?.organization?.name}</Typography>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div className={classes.createButtonsContainer}>
           <a
             href="//build.allocations.com"
             target="_blank"
