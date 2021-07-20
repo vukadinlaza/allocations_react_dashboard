@@ -784,6 +784,9 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
+    "&:focus": {
+      outline: "none"
+    },
     [theme.breakpoints.up('sm')]: {
       display: 'none',
     },
@@ -810,7 +813,8 @@ const useStyles = makeStyles((theme) => ({
     borderRight: '1px solid #dfe2e5',
     borderLeft: 0,
     position: "relative",
-    height: "calc(100vh - 70px)"
+    height: "100vh"
+    // height: "calc(100vh - 70px)"
   },
   newDrawerPaper: {
     width: drawerWidth,
@@ -1082,11 +1086,11 @@ export default function Sidebar(props) {
                     className={classes.menuButton}
                   >
                     <MenuIcon />
+                    
                   </IconButton>
                   <div className={classes.brand}>
                     <Brand organizations_admin={userProfile.organizations_admin || []} admin={userProfile.admin} />
                   </div>
-                  <NavBar />
                 </Toolbar>
               </AppBar>
             }
@@ -1106,6 +1110,47 @@ export default function Sidebar(props) {
                       keepMounted: true,
                     }}
                     >
+                    <FormControl className={classes.formControl}>
+                      <Select
+                        labelId="accounts-select"
+                        value={currentAccount || ''}
+                        onChange={handleAccountChange}
+                        className={classes.input}
+                        classes={{
+                          root: classes.select,
+                        }}
+                        InputProps={{
+                          classes: {
+                            focused: classes.inputFocused,
+                            underline: classes.inputFocused
+                          }
+                        }}
+                        >
+                        <MenuItem
+                          onClick={() => {
+                            handleDrawerToggle()
+                            history.push(`/`)
+                          }}
+                          value={userProfile?.name}
+                          style={{borderBottom: "1px solid rgb(204, 204, 204)", fontWeight: "500"}}
+                        >
+                          {userProfile?.name}
+                        </MenuItem>
+                        {userProfile?.organizations_admin?.sort((a, b) => a.name.localeCompare(b.name))
+                          .map(org =>
+                            <MenuItem
+                              onClick={() => {
+                                handleDrawerToggle()
+                                history.push(`/admin/${org.slug}`)
+                              }}
+                              value={org.name}
+                              key={org.name}
+                            >
+                              {org.name}
+                            </MenuItem>
+                            )}
+                      </Select>
+                    </FormControl>
                     {drawer}
                   </Drawer>
                 </Hidden>

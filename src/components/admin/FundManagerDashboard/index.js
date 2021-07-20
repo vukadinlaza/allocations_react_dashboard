@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { gql } from 'apollo-boost';
+import moment from 'moment';
 import { useLazyQuery, useSubscription } from '@apollo/react-hooks';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Tabs, Tab, Typography, Button } from '@material-ui/core';
+import { Tabs, Tab, Typography, Button, Grid } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import EditIcon from '@material-ui/icons/Edit';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
@@ -17,6 +18,7 @@ import Investors from './sections/Investors';
 import { FlatBox } from './widgets';
 import { phone, tablet } from '../../../utils/helpers';
 import { useViewport, useFetch } from '../../../utils/hooks';
+import { useAuth } from '../../../auth/useAuth';
 
 import Loader from '../../utils/Loader';
 import DealsTabs from './sections/DealsTabs';
@@ -63,6 +65,19 @@ const styles = (theme) => ({
   },
   createButton: {
     backgroundColor: '#39C522',
+    display: 'flex',
+    alignItems: 'center',
+    color: 'white',
+    textTransform: 'none',
+    cursor: 'pointer',
+    '&:hover': {
+      backgroundColor: '#56db40',
+    },
+    '&:focus': {
+      outline: 'none',
+    },
+  },
+  createButtonblue: {
     display: 'flex',
     alignItems: 'center',
     color: 'white',
@@ -186,6 +201,11 @@ const styles = (theme) => ({
     fontSize: '26px',
     fontWeight: 600,
     color: '#c3c3c3',
+    [theme.breakpoints.down(phone)]: {
+      width: '80vw',
+      margin: 'auto',
+      height: '350px',
+    },
   },
   pageIcons: {
     width: '150px',
@@ -240,6 +260,9 @@ const styles = (theme) => ({
     width: '100%',
     padding: '40px',
     margin: '0px',
+    [theme.breakpoints.down(phone)]: {
+      padding: '10px',
+    },
   },
   selectedTab: {
     fontWeight: 'bold !important',
@@ -314,6 +337,9 @@ const styles = (theme) => ({
     '& *': {
       height: '100%',
     },
+    [theme.breakpoints.down(phone)]: {
+      padding: '0 12px',
+    },
   },
   tabsContainer: {
     [theme.breakpoints.down(phone)]: {
@@ -333,12 +359,20 @@ const styles = (theme) => ({
     color: '#39C522',
     fontWeight: 'bold',
   },
+  buttonContainer: {
+    display: 'flex',
+  },
 });
 
 const GET_INVESTMENTS = gql`
   query GetDeal($fund_slug: String!, $deal_slug: String!) {
     deal(fund_slug: $fund_slug, deal_slug: $deal_slug) {
       _id
+      viewedUsers {
+        first_name
+        last_name
+        email
+      }
       investments {
         _id
         amount
@@ -425,6 +459,7 @@ const DEALS_TABLE = 'Deals';
 const FundManagerDashboard = ({ classes, history }) => {
   const { width } = useViewport();
   const { organization: orgSlug, deal: dealSlug } = useParams();
+  const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
   const [dealTab, setDealTab] = useState(0);
@@ -439,25 +474,30 @@ const FundManagerDashboard = ({ classes, history }) => {
   const [getOrgDeals, { data: orgDealsData }] = useLazyQuery(ORG_OVERVIEW);
   const { data: subsData } = useSubscription(ONBOARDING);
   const checkedDealName = encodeURIComponent(dealName);
-  const checkedAtDealDataName = encodeURIComponent(atDealData?.name)
-  const { data: atDeal } = useFetch(OPS_ACCOUNTING, dealName && DEALS_TABLE, dealName && `({Deal Name}="${checkedDealName}")`);
+  const checkedAtDealDataName = encodeURIComponent(atDealData?.name);
+  const { data: atDeal } = useFetch(
+    OPS_ACCOUNTING,
+    dealName && DEALS_TABLE,
+    dealName && `({Deal Name}="${checkedDealName}")`,
+  );
+
   const { data: atFundData, status } = useFetch(
     OPS_ACCOUNTING,
     atDealData?.name && INVESTMENTS_TABLE,
     atDealData?.name && `(FIND("${checkedAtDealDataName}", {Deals}))`,
   );
-    
-    
+
   const handleDealData = (index) => {
     if (orgDeals) {
-      const currentDeal = orgDeals.organization?.deals?.length && orgDeals.organization.deals[index];
+      const currentDeal =
+        orgDeals.organization?.deals?.length && orgDeals.organization.deals[index];
       const dealName = currentDeal.company_name;
 
       setDealData(currentDeal);
       setDealName(dealName);
-    }  
+    }
   };
-  
+
   useEffect(() => {
     if (dealData && Object.keys(dealData).length) {
       const newTabs = dealData.investmentType === 'fund' ? fundTabs : spvTabs;
@@ -481,15 +521,29 @@ const FundManagerDashboard = ({ classes, history }) => {
       fetchPolicy: 'network-only',
     });
   }, [orgSlug]);
-  
+
   useEffect(() => {
-    if(orgDealsData){
-      let orgDealsDataCopy = JSON.parse(JSON.stringify(orgDealsData));
-      orgDealsDataCopy.organization.deals = orgDealsDataCopy.organization.deals.reverse();
-      setOrgDeals(orgDealsDataCopy)
+    if (orgDealsData) {
+      const orgDealsDataCopy = JSON.parse(JSON.stringify(orgDealsData));
+      const funds = orgDealsDataCopy.organization.deals
+        .filter((d) => d.investmentType === 'fund')
+        .sort((a, b) => (b.status > a.status ? 1 : -1));
+      const spvs = orgDealsDataCopy.organization.deals
+        .filter((d) => d.investmentType === 'spv' || d.investmentType === null)
+        .sort((a, b) => (b.status > a.status ? 1 : -1));
+      const closedSpvs = spvs
+        .filter((d) => d.status === 'closed')
+        .sort((a, b) => getDealDate(b) - getDealDate(a));
+      const openSpvs = spvs
+        .filter((d) => d.status !== 'closed')
+        .sort((a, b) => getDealDate(b) - getDealDate(a));
+
+      const merged = [...funds, ...[...openSpvs, ...closedSpvs]];
+      orgDealsDataCopy.organization.deals = merged;
+      setOrgDeals(orgDealsDataCopy);
     }
   }, [orgDealsData]);
-  
+
   useEffect(() => {
     handleDealData(0);
   }, [orgDeals]);
@@ -506,6 +560,12 @@ const FundManagerDashboard = ({ classes, history }) => {
       setAtDealData({ name: `Deal Name ${dealName} Not found in AirTable`, id: '' });
     }
   }, [atDeal]);
+
+  const getDealDate = (deal) => {
+    const dealTS = deal._id.toString().substring(0, 8);
+    const dealDate = moment.unix(new Date(parseInt(dealTS, 16) * 1000));
+    return dealDate;
+  };
 
   const handleLinkCopy = () => {
     if (orgSlug && dealData?.slug) {
@@ -527,7 +587,7 @@ const FundManagerDashboard = ({ classes, history }) => {
   };
 
   const handleDealsTabChange = (newValue) => {
-    if(newValue !== dealTab){
+    if (newValue !== dealTab) {
       setLoading(true);
       setDealTab(newValue);
     }
@@ -544,8 +604,12 @@ const FundManagerDashboard = ({ classes, history }) => {
   };
 
   const getTabContent = () => {
-    const fundData = atFundData.map((d) => d.fields);
-
+    let fundData = atFundData.map((d) => d.fields);
+    if (orgSlug === 'browder-capital') {
+      fundData = fundData.filter((i) => {
+        return i['Fund Name'] === dealName;
+      });
+    }
     switch (tabName) {
       case 'Setup':
         return (
@@ -593,7 +657,8 @@ const FundManagerDashboard = ({ classes, history }) => {
           <div className={classes.section}>
             <FlatBox title="SHARE">
               <Typography>
-                dashboard.allocations.com{orgSlug && dealData?.slug ? `/deals/${orgSlug}/${dealData.slug}` : ''}
+                dashboard.allocations.com
+                {orgSlug && dealData?.slug ? `/deals/${orgSlug}/${dealData.slug}` : ''}
               </Typography>
               <div className={classes.pageIcons}>
                 <div className={classes.pageIcon} onClick={goToEditDeal}>
@@ -618,20 +683,49 @@ const FundManagerDashboard = ({ classes, history }) => {
   if (!orgDeals) return <Loader />;
   return (
     <div className={classes.dashboardContainer}>
-      {openTooltip && <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} />}
+      {openTooltip && (
+        <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} />
+      )}
       <div className={classes.mainTitleContainer}>
         <Typography className={classes.mainTitle}>Funds</Typography>
-        <a
-          href="//build.allocations.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={classes.createButtonLink}
-        >
-          <Button className={classes.createButton}>
-            <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
-            Create New
-          </Button>
-        </a>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <a
+            href="//build.allocations.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={classes.createButtonLink}
+          >
+            <Button className={classes.createButton}>
+              <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
+              Create New {userProfile?.admin && 'Build'}
+            </Button>
+          </a>
+          {userProfile?.admin && (
+            <span className={classes.createButtonLink}>
+              <Button
+                className={classes.createButton}
+                style={{ marginLeft: '1rem' }}
+                onClick={() => history.push(`/admin/${orgSlug}/deal/new`)}
+              >
+                <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
+                Create New Deal Page
+              </Button>
+            </span>
+          )}
+          {userProfile?.admin && (
+            <span className={classes.createButtonLink}>
+              <Button
+                className={classes.createButton}
+                color="secondary"
+                style={{ marginLeft: '1rem', backgroundColor: 'blue' }}
+                onClick={() => history.push(`/admin/${orgSlug}/manager`)}
+              >
+                <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
+                Add Org Admin
+              </Button>
+            </span>
+          )}
+        </div>
       </div>
       {orgDeals && !orgDeals.organization?.deals?.length ? (
         <div className={classes.noDataPlaceholder}>

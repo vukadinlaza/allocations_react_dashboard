@@ -31,7 +31,6 @@ const ActivityLog = ({ classes }) => {
           expense: '255, 4, 4',
           investment: '4, 97, 255'
         }
-        console.log(typeColors[row[headerValue]]);
         return (
           <div className={classes.logType} style={{background: `rgba(${typeColors[row[headerValue]]}, 0.2)`, color: `rgba(${typeColors[row[headerValue]]}, 1)`, fontWeight: "bold"}}>
             {`${row[headerValue].charAt(0).toUpperCase()}${row[headerValue].slice(1)}`}
