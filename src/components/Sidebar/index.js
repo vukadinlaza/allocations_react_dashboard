@@ -1137,7 +1137,7 @@ export default function Sidebar(props) {
                         classes={{
                           root: classes.select,
                         }}
-                        InputProps={{
+                        inputProps={{
                           classes: {
                             focused: classes.inputFocused,
                             underline: classes.inputFocused,
@@ -1157,20 +1157,21 @@ export default function Sidebar(props) {
                         >
                           {userProfile?.name}
                         </MenuItem>
-                        {userProfile?.organizations_admin
-                          ?.sort((a, b) => a.name.localeCompare(b.name))
-                          .map((org) => (
-                            <MenuItem
-                              onClick={() => {
-                                handleDrawerToggle();
-                                history.push(`/admin/${org.slug}`);
-                              }}
-                              value={org.name}
-                              key={org.name}
-                            >
-                              {org.name}
-                            </MenuItem>
-                          ))}
+                        {userProfile?.organizations_admin?.length &&
+                          [...userProfile.organizations_admin]
+                            .sort((a, b) => a.name.localeCompare(b.name))
+                            .map((org) => (
+                              <MenuItem
+                                onClick={() => {
+                                  handleDrawerToggle();
+                                  history.push(`/admin/${org.slug}`);
+                                }}
+                                value={org.name}
+                                key={org.name}
+                              >
+                                {org.name}
+                              </MenuItem>
+                            ))}
                       </Select>
                     </FormControl>
                     {drawer}
@@ -1193,7 +1194,7 @@ export default function Sidebar(props) {
                         classes={{
                           root: classes.select,
                         }}
-                        InputProps={{
+                        inputProps={{
                           classes: {
                             focused: classes.inputFocused,
                             underline: classes.inputFocused,
@@ -1210,17 +1211,18 @@ export default function Sidebar(props) {
                         >
                           {userProfile?.name}
                         </MenuItem>
-                        {userProfile?.organizations_admin
-                          ?.sort((a, b) => a.name.localeCompare(b.name))
-                          .map((org) => (
-                            <MenuItem
-                              onClick={() => history.push(`/admin/${org.slug}`)}
-                              value={org.name}
-                              key={org.name}
-                            >
-                              {org.name}
-                            </MenuItem>
-                          ))}
+                        {userProfile?.organizations_admin?.length &&
+                          [...userProfile.organizations_admin]
+                            .sort((a, b) => a.name.localeCompare(b.name))
+                            .map((org) => (
+                              <MenuItem
+                                onClick={() => history.push(`/admin/${org.slug}`)}
+                                value={org.name}
+                                key={org.name}
+                              >
+                                {org.name}
+                              </MenuItem>
+                            ))}
                       </Select>
                     </FormControl>
                     {drawer}
