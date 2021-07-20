@@ -676,7 +676,6 @@ const FundManagerDashboard = ({ classes, history }) => {
   };
 
   if (!orgDeals) return <Loader />;
-  console.log('0000000000', orgDealsData)
   return (
     <div className={classes.dashboardContainer}>
       {openTooltip && (
