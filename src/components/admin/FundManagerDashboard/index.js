@@ -5,7 +5,7 @@ import moment from 'moment';
 import { useLazyQuery, useSubscription } from '@apollo/react-hooks';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Tabs, Tab, Typography, Button } from '@material-ui/core';
+import { Tabs, Tab, Typography, Button, Grid } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import EditIcon from '@material-ui/icons/Edit';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
@@ -17,6 +17,7 @@ import Investments from './sections/Investments';
 import { FlatBox } from './widgets';
 import { phone, tablet } from '../../../utils/helpers';
 import { useViewport, useFetch } from '../../../utils/hooks';
+import { useAuth } from '../../../auth/useAuth';
 
 import Loader from '../../utils/Loader';
 import DealsTabs from './sections/DealsTabs';
@@ -63,6 +64,19 @@ const styles = (theme) => ({
   },
   createButton: {
     backgroundColor: '#39C522',
+    display: 'flex',
+    alignItems: 'center',
+    color: 'white',
+    textTransform: 'none',
+    cursor: 'pointer',
+    '&:hover': {
+      backgroundColor: '#56db40',
+    },
+    '&:focus': {
+      outline: 'none',
+    },
+  },
+  createButtonblue: {
     display: 'flex',
     alignItems: 'center',
     color: 'white',
@@ -188,8 +202,8 @@ const styles = (theme) => ({
     color: '#c3c3c3',
     [theme.breakpoints.down(phone)]: {
       width: '80vw',
-      margin: "auto",
-      height: "350px"
+      margin: 'auto',
+      height: '350px',
     },
   },
   pageIcons: {
@@ -246,7 +260,7 @@ const styles = (theme) => ({
     padding: '40px',
     margin: '0px',
     [theme.breakpoints.down(phone)]: {
-      padding: '10px'
+      padding: '10px',
     },
   },
   selectedTab: {
@@ -323,7 +337,7 @@ const styles = (theme) => ({
       height: '100%',
     },
     [theme.breakpoints.down(phone)]: {
-      padding: "0 12px"
+      padding: '0 12px',
     },
   },
   tabsContainer: {
@@ -344,12 +358,20 @@ const styles = (theme) => ({
     color: '#39C522',
     fontWeight: 'bold',
   },
+  buttonContainer: {
+    display: 'flex',
+  },
 });
 
 const GET_INVESTMENTS = gql`
   query GetDeal($fund_slug: String!, $deal_slug: String!) {
     deal(fund_slug: $fund_slug, deal_slug: $deal_slug) {
       _id
+      viewedUsers {
+        first_name
+        last_name
+        email
+      }
       investments {
         _id
         amount
@@ -435,6 +457,7 @@ const DEALS_TABLE = 'Deals';
 const FundManagerDashboard = ({ classes, history }) => {
   const { width } = useViewport();
   const { organization: orgSlug, deal: dealSlug } = useParams();
+  const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
   const [dealTab, setDealTab] = useState(0);
@@ -508,10 +531,10 @@ const FundManagerDashboard = ({ classes, history }) => {
         .sort((a, b) => (b.status > a.status ? 1 : -1));
       const closedSpvs = spvs
         .filter((d) => d.status === 'closed')
-        .sort((a, b) => (getDealDate(b) - getDealDate(a)));
+        .sort((a, b) => getDealDate(b) - getDealDate(a));
       const openSpvs = spvs
         .filter((d) => d.status !== 'closed')
-        .sort((a, b) => (getDealDate(b) - getDealDate(a)));
+        .sort((a, b) => getDealDate(b) - getDealDate(a));
 
       const merged = [...funds, ...[...openSpvs, ...closedSpvs]];
       orgDealsDataCopy.organization.deals = merged;
@@ -540,7 +563,7 @@ const FundManagerDashboard = ({ classes, history }) => {
     const dealTS = deal._id.toString().substring(0, 8);
     const dealDate = moment.unix(new Date(parseInt(dealTS, 16) * 1000));
     return dealDate;
-  }
+  };
 
   const handleLinkCopy = () => {
     if (orgSlug && dealData?.slug) {
@@ -660,17 +683,42 @@ const FundManagerDashboard = ({ classes, history }) => {
       )}
       <div className={classes.mainTitleContainer}>
         <Typography className={classes.mainTitle}>Funds</Typography>
-        <a
-          href="//build.allocations.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={classes.createButtonLink}
-        >
-          <Button className={classes.createButton}>
-            <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
-            Create New
-          </Button>
-        </a>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <a
+            href="//build.allocations.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={classes.createButtonLink}
+          >
+            <Button className={classes.createButton}>
+              <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
+              Create New {userProfile?.admin && 'Build'}
+            </Button>
+          </a>
+          {userProfile?.admin && (
+            <span className={classes.createButtonLink}>
+              <Button
+                className={classes.createButton}
+                style={{ marginLeft: '1rem' }}
+                onClick={() => history.push(`/admin/${orgSlug}/deal/new`)}
+              >
+                <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
+                Create New Deal Page
+              </Button>
+            </span>
+          )}
+          <span className={classes.createButtonLink}>
+            <Button
+              className={classes.createButton}
+              color="secondary"
+              style={{ marginLeft: '1rem', backgroundColor: 'blue' }}
+              onClick={() => history.push(`/admin/${orgSlug}/manager`)}
+            >
+              <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
+              Add Org Admin
+            </Button>
+          </span>
+        </div>
       </div>
       {orgDeals && !orgDeals.organization?.deals?.length ? (
         <div className={classes.noDataPlaceholder}>
