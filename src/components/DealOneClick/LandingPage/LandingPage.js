@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { gql } from 'apollo-boost';
-import { useQuery } from '@apollo/client';
+import { useQuery, gql } from '@apollo/client';
 import { useParams, useHistory, useLocation } from 'react-router-dom';
 import moment from 'moment';
 import TermsPanel from './TermsPanel';
@@ -95,6 +94,7 @@ function DealLandingPage() {
       fund_slug: organization || 'allocations',
     },
   });
+
   useEffect(() => {
     if (data?.publicDeal) {
       const { publicDeal: deal } = data;
@@ -112,11 +112,12 @@ function DealLandingPage() {
   });
 
   if (!data) return <Loader />;
-  const { publicDeal: deal } = data;
 
+  const { publicDeal: deal } = data;
   if (data && deal?.docSpringTemplateId === null) {
     return <Deal />;
   }
+
   return (
     <section className="LandingPage">
       <div className="flex-container">
