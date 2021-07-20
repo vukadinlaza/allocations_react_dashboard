@@ -681,7 +681,7 @@ const FundManagerDashboard = ({ classes, history }) => {
             ? `Hello ${userProfile?.first_name}, here are your Funds.`
             : orgDealsData?.organization?.name}
         </Typography>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '.5rem' }}>
           <a
             href="//build.allocations.com"
             target="_blank"
