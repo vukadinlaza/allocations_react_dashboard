@@ -131,10 +131,12 @@ const InvestorBox = ({
           </Typography>
         </div>
       </div>
-      {investor.amount && investor.status !== 'invited' && (
+      {investor.amount && investor.status !== 'invited' ? (
         <Typography style={{ width: '80px', textAlign: 'right' }}>
           ${nWithCommas(investor.amount)}
         </Typography>
+      ) : (
+        ''
       )}
     </div>
   ) : (
@@ -150,10 +152,12 @@ const InvestorBox = ({
             <VerifiedUserIcon /> 506c
           </Typography>
         </div>
-        {investor.amount && investor.status !== 'invited' && (
+        {investor.amount && investor.status !== 'invited' ? (
           <Typography style={{ textAlign: 'left', width: '100%' }}>
             ${nWithCommas(investor.amount)}
           </Typography>
+        ) : (
+          ''
         )}
       </div>
     </div>
