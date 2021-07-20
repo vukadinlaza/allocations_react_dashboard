@@ -676,13 +676,14 @@ const FundManagerDashboard = ({ classes, history }) => {
   };
 
   if (!orgDeals) return <Loader />;
+  console.log('0000000000', orgDealsData)
   return (
     <div className={classes.dashboardContainer}>
       {openTooltip && (
         <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} />
       )}
       <div className={classes.mainTitleContainer}>
-        <Typography className={classes.mainTitle}>Funds</Typography>
+        <Typography className={classes.mainTitle}>{userProfile?.first_name ? `Hello ${userProfile?.first_name}, here are your Funds.` : orgDealsData?.organization?.name}</Typography>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <a
             href="//build.allocations.com"
