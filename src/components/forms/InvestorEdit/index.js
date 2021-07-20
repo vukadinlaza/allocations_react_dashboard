@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Loader from '../../utils/Loader';
 import { get, pick } from 'lodash';
-import { gql } from 'apollo-boost';
 import { toast } from 'react-toastify';
-import { useMutation } from '@apollo/client';
+import { useMutation, gql } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CloudDone } from '@material-ui/icons';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-
 import {
   Button,
   TextField,
@@ -24,6 +21,7 @@ import {
 import './style.scss';
 import countries from 'country-region-data';
 import Typography from '@material-ui/core/Typography';
+import Loader from '../../utils/Loader';
 import { useAuth } from '../../../auth/useAuth';
 
 /** *
@@ -71,8 +69,12 @@ export default function InvestorEditForm({
   noValidate = false,
 }) {
   const [errors, setErrors] = useState([]);
+  const { logout, userProfile } = useAuth();
+
+  const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
+
   const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_USER, {
-    onCompleted: (data) => {
+    onCompleted: () => {
       if (userProfile.email !== investor.email) {
         logoutWithRedirect();
       } else {
@@ -81,13 +83,14 @@ export default function InvestorEditForm({
     },
   });
 
-  const { logout, userProfile } = useAuth();
-  const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
-
   const handleChange = (prop) => (e) => {
     e.persist();
     if (prop === 'investor_type') {
-      return setInvestor((prev) => ({ ...prev, [prop]: e.target.value, accredited_investor_status: '' }));
+      return setInvestor((prev) => ({
+        ...prev,
+        [prop]: e.target.value,
+        accredited_investor_status: '',
+      }));
     }
     return setInvestor((prev) => ({ ...prev, [prop]: e.target.value }));
   };
@@ -158,12 +161,21 @@ export default function InvestorEditForm({
 
             {investor.investor_type === 'entity' && (
               <Grid item xs={12} sm={12} md={6}>
-                <AccreditedInvestorStatus investor={investor} handleChange={handleChange} errors={errors} />
+                <AccreditedInvestorStatus
+                  investor={investor}
+                  handleChange={handleChange}
+                  errors={errors}
+                />
               </Grid>
             )}
 
             <Grid item xs={12} sm={12} md={6}>
-              <FormControl required error={errors.includes('country')} variant="outlined" style={{ width: '100%' }}>
+              <FormControl
+                required
+                error={errors.includes('country')}
+                variant="outlined"
+                style={{ width: '100%' }}
+              >
                 <InputLabel>Country of Residence or Place of Business</InputLabel>
                 <Select
                   value={investor.country || ''}
@@ -246,13 +258,19 @@ export function PassportUploader({ investor, setInvestor }) {
       <ListItem>
         <ListItemText primary="ID for KYC" secondary="passport / drivers license" />
         <ListItemSecondaryAction>
-          <Button startIcon={<CloudUploadIcon />} variant="contained" color="secondary" component="label">
+          <Button
+            startIcon={<CloudUploadIcon />}
+            variant="contained"
+            color="secondary"
+            component="label"
+          >
             Upload
             <input
               type="file"
               style={{ display: 'none' }}
               onChange={({ target }) => {
-                if (target.validity.valid) setInvestor((prev) => ({ ...prev, passport: target.files[0] }));
+                if (target.validity.valid)
+                  setInvestor((prev) => ({ ...prev, passport: target.files[0] }));
               }}
             />
           </Button>

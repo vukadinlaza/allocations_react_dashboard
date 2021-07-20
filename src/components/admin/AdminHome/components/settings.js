@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Paper, Grid, Typography, Button, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
+import { useMutation, gql } from '@apollo/client';
 import { get, pick } from 'lodash';
-import { gql } from 'apollo-boost';
 import POSModal from './pos-modal';
 
 const useStyles = makeStyles((theme) => ({
@@ -128,7 +127,11 @@ function Settings({ investor, orgData, refetch }) {
             </form>
           </Grid>
           <Grid item sm={12} md={6}>
-            <Typography variant="h6" style={{ marginBottom: '16px' }} onClick={() => setModal(true)}>
+            <Typography
+              variant="h6"
+              style={{ marginBottom: '16px' }}
+              onClick={() => setModal(true)}
+            >
               Provision Of Service
             </Typography>
             <POSModal modal={modal} setModal={setModal} organization={organization} />

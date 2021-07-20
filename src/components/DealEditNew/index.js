@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation, gql } from '@apollo/client';
 import { useParams, useHistory } from 'react-router-dom';
-import { gql } from 'apollo-boost';
 import _ from 'lodash';
 import { Button } from '@material-ui/core';
 import { toast } from 'react-toastify';
@@ -13,7 +12,6 @@ import PortfolioCompanySettings from './PortfolioCompanySettings';
 import FundTerms from './FundTermSettings';
 import './styles.scss';
 import { ORG_OVERVIEW } from '../admin/AdminHome';
-
 
 const validInputs = [
   '_id',
@@ -236,7 +234,7 @@ function DealEditNew() {
   const [activeTab, setActiveTab] = useState('basic');
   const [formData, setFormData] = useState({
     dealParams: {},
-    documents: []
+    documents: [],
   });
 
   const { data, refetch } = useQuery(GET_DEAL, { variables: { id, slug: organization } });
@@ -339,12 +337,13 @@ function DealEditNew() {
 
   if (errorMessage) return <div className="Error">{errorMessage}</div>;
 
-  const dealPageUrl = formData.slug ? `/deals/${organization}/${formData.slug}` : ''
+  const dealPageUrl = formData.slug ? `/deals/${organization}/${formData.slug}` : '';
 
   return (
     <section className="DealEditNew">
-
-      <Button onClick={() => history.push(dealPageUrl)} className="view-deal-page-button">View Deal Page</Button>
+      <Button onClick={() => history.push(dealPageUrl)} className="view-deal-page-button">
+        View Deal Page
+      </Button>
       <div className="section-header">
         <h1>Edit Deal</h1>
         <div className="tabs-container">
@@ -352,7 +351,10 @@ function DealEditNew() {
             Basic Info
           </button>
 
-          <button onClick={() => handleTabClick('deadline')} className={getTabClassName('deadline')}>
+          <button
+            onClick={() => handleTabClick('deadline')}
+            className={getTabClassName('deadline')}
+          >
             Deadlines
           </button>
 
@@ -367,7 +369,10 @@ function DealEditNew() {
           )}
 
           {formData.differentPortfolioTerms && formData.investmentType === 'spv' && (
-            <button onClick={() => handleTabClick('portfolio')} className={getTabClassName('portfolio')}>
+            <button
+              onClick={() => handleTabClick('portfolio')}
+              className={getTabClassName('portfolio')}
+            >
               Portfolio Company Terms
             </button>
           )}

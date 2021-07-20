@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useMutation, useLazyQuery } from '@apollo/client';
-import { gql } from 'apollo-boost';
+import { useMutation, useLazyQuery, gql } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Paper, Table, TableBody, TableCell, TextField, TableRow, Button } from '@material-ui/core';

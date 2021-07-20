@@ -1,13 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { get } from 'lodash';
-import { gql } from 'apollo-boost';
-import { useMutation } from '@apollo/client';
+import React from 'react';
+import { useMutation, gql } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import { Col, Row } from 'reactstrap';
-import { Button, TextField, FormControl, InputLabel, Paper, Tooltip } from '@material-ui/core';
+import { Button, Paper, Tooltip } from '@material-ui/core';
 import { useSimpleReducer } from '../../utils/hooks';
-import Loader from '../utils/Loader';
 
 const UPDATE_USER = gql`
   mutation UpdateUser($investor: UserInput!) {
@@ -31,7 +26,7 @@ const UPDATE_USER = gql`
 
 export default function KYC({ investor, setStatus }) {
   const [investorUpdates, update] = useSimpleReducer({});
-  const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_USER, {
+  const [updateInvestor] = useMutation(UPDATE_USER, {
     onCompleted: () => setStatus('pledged'),
   });
 

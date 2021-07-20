@@ -1,9 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
-import { gql } from 'apollo-boost';
 import { Row, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import { useQuery, gql } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Paper, Table, TableBody, TableCell, TableRow, TableHead, Button } from '@material-ui/core';
 import { nWithCommas, formatDate } from '../../utils/numbers';

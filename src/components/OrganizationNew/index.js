@@ -1,8 +1,7 @@
-import React, { useEffect  } from 'react';
-import { gql } from 'apollo-boost';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useMutation } from '@apollo/client';
+import { useMutation, gql } from '@apollo/client';
 import { Button, TextField, Paper, Grid } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Typography from '@material-ui/core/Typography';
@@ -75,7 +74,12 @@ export default function OrganizationNew() {
           <LogoUpload organization={organization} setOrg={setOrg} />
         </Grid>
         <Grid style={{ padding: '16px' }}>
-          <Button variant="contained" color="primary" disabled={!valid(organization)} onClick={submit}>
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={!valid(organization)}
+            onClick={submit}
+          >
             CREATE
           </Button>
         </Grid>

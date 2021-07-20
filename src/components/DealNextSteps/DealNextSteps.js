@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@material-ui/core';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import './styles.scss';
 import Confetti from 'react-confetti';
-import { useQuery, useLazyQuery } from '@apollo/client';
-import { gql } from 'apollo-boost';
+import { useQuery, useLazyQuery, gql } from '@apollo/client';
 import { useHistory, useParams } from 'react-router';
 import { Helmet } from 'react-helmet';
 import signInvestmentYes from '../../assets/sign-investment-yes.svg';

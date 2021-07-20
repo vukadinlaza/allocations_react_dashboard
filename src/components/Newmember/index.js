@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
-import { gql } from 'apollo-boost';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, gql } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 
 const CONFIRM_INVITE = gql`
@@ -12,7 +11,6 @@ const CONFIRM_INVITE = gql`
 export default () => {
   const { accountId } = useParams();
   const history = useHistory();
-  console.log('ACCOUNTID', accountId);
 
   const [confirmInvitation, { called }] = useMutation(CONFIRM_INVITE);
   useEffect(() => {

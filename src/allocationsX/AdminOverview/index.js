@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import _ from 'lodash';
 import { Row, Col } from 'reactstrap';
 import { useParams } from 'react-router-dom';
-import { gql } from 'apollo-boost';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation, gql } from '@apollo/client';
 import {
   Table,
   TableBody,

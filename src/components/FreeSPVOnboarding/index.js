@@ -2,10 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { isEqual } from 'lodash';
 import { useHistory } from 'react-router-dom';
 import { Paper, TextField, Button } from '@material-ui/core';
-
-import { gql } from 'apollo-boost';
-import { useMutation } from '@apollo/client';
-
+import { useMutation, gql } from '@apollo/client';
 import './style.scss';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';

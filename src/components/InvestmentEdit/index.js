@@ -3,9 +3,17 @@ import { get, isEqual, pick } from 'lodash';
 import { useParams, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { gql } from 'apollo-boost';
-import { useQuery, useMutation } from '@apollo/client';
-import { Button, TextField, Divider, Grid, FormControl, Select, MenuItem, InputLabel } from '@material-ui/core';
+import { useQuery, useMutation, gql } from '@apollo/client';
+import {
+  Button,
+  TextField,
+  Divider,
+  Grid,
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Loader from '../utils/Loader';
 import { destroy } from '../../api/investments';
@@ -67,7 +75,11 @@ const UPDATE_INVESTMENT = gql`
     }
   }
 `;
-export default function InvestmentEdit({ investmentId = false, isK1 = false, setEditInvestmentModal }) {
+export default function InvestmentEdit({
+  investmentId = false,
+  isK1 = false,
+  setEditInvestmentModal,
+}) {
   const params = useParams();
   const [investment, setInvestment] = useState(null);
   const [hasChanges, setHasChanges] = useState(false);
@@ -75,7 +87,7 @@ export default function InvestmentEdit({ investmentId = false, isK1 = false, set
   const classes = useStyles();
   const { data, refetch } = useQuery(GET_INVESTMENT, { variables: { _id: id } });
   const [createInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT);
-  const [deleteInvestment, { }] = useMutation(destroy, {
+  const [deleteInvestment, {}] = useMutation(destroy, {
     onCompleted: () => {
       toast.success('Sucess! Investment Deleted.');
       setEditInvestmentModal(false);
@@ -116,7 +128,13 @@ export default function InvestmentEdit({ investmentId = false, isK1 = false, set
         <Grid container spacing={3} direction="row" justify="flex-end">
           <Grid item xs={12} sm={12} md={6}>
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
-              <TextField style={{ width: '100%' }} value={name || ''} disabled label="Investor" variant="outlined" />
+              <TextField
+                style={{ width: '100%' }}
+                value={name || ''}
+                disabled
+                label="Investor"
+                variant="outlined"
+              />
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={12} md={6}>
@@ -125,7 +143,9 @@ export default function InvestmentEdit({ investmentId = false, isK1 = false, set
                 style={{ width: '100%' }}
                 type="number"
                 value={get(investment, 'amount', '') || 0}
-                onChange={(e) => updateInvestmentProp({ prop: 'amount', newVal: parseInt(e.target.value) })}
+                onChange={(e) =>
+                  updateInvestmentProp({ prop: 'amount', newVal: parseInt(e.target.value) })
+                }
                 label="Amount"
                 variant="outlined"
               />
@@ -135,7 +155,11 @@ export default function InvestmentEdit({ investmentId = false, isK1 = false, set
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
               <TextField
                 style={{ width: '100%' }}
-                value={`${get(investment, 'deal.company_name', '')} ${get(investment, 'deal.company_description', '')}`}
+                value={`${get(investment, 'deal.company_name', '')} ${get(
+                  investment,
+                  'deal.company_description',
+                  '',
+                )}`}
                 label="Deal"
                 variant="outlined"
               />
@@ -194,7 +218,12 @@ export default function InvestmentEdit({ investmentId = false, isK1 = false, set
         <Divider className={classes.divider} />
         <Grid item xs={12} sm={12} md={6}>
           <div className="form-sub-title">Documents</div>
-          <Docs investment={investment} setInvestment={setInvestment} refetch={refetch} isK1={isK1} />
+          <Docs
+            investment={investment}
+            setInvestment={setInvestment}
+            refetch={refetch}
+            isK1={isK1}
+          />
         </Grid>
       </form>
     </div>
@@ -246,7 +275,8 @@ function Docs({ investment, setInvestment, refetch, isK1 }) {
 }
 
 function Doc({ doc, investment, refetch }) {
-  const file = doc.path.slice(0, 12) === 'investments/' ? doc.path.split('/')[2] : doc.path.split('/')[1];
+  const file =
+    doc.path.slice(0, 12) === 'investments/' ? doc.path.split('/')[2] : doc.path.split('/')[1];
   const [rmInvestmentDoc] = useMutation(RM_INVESTMENT_DOC, {
     variables: { file, investment_id: investment._id },
     onCompleted: () => {
