@@ -13,6 +13,7 @@ import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
 import Investments from './sections/Investments';
+import Investors from './sections/Investors';
 import { FlatBox } from './widgets';
 import { phone, tablet } from '../../../utils/helpers';
 import { useViewport, useFetch } from '../../../utils/hooks';
@@ -350,6 +351,7 @@ const GET_INVESTMENTS = gql`
           first_name
           last_name
           name
+          email
           accredidation_status
         }
       }
@@ -414,8 +416,8 @@ export const ONBOARDING = gql`
   }
 `;
 
-const fundTabs = ['Highlights', 'Investments', 'Investor Onboarding Status', 'Deal Page'];
-const spvTabs = ['Investor Onboarding Status', 'Deal Page'];
+const fundTabs = ['Highlights', 'Investments', 'Investors', 'Investor Onboarding Status', 'Deal Page'];
+const spvTabs = ['Investors', 'Investor Onboarding Status', 'Deal Page'];
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
@@ -572,6 +574,9 @@ const FundManagerDashboard = ({ classes, history }) => {
 
       case 'Investments':
         return <Investments classes={classes} width={width} data={fundData} />;
+
+      case 'Investors':
+        return <Investors classes={classes} width={width} data={dealInvestments} />;
 
       case 'Investor Onboarding Status':
         return (

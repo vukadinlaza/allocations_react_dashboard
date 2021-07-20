@@ -1,0 +1,76 @@
+import React, { useState } from 'react';
+import moment from 'moment';
+import { TextField, InputAdornment } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
+import { nWithCommas } from '../../../../utils/numbers';
+import AllocationsTable from '../../../utils/AllocationsTable'
+import Loader from '../../../utils/Loader'
+
+
+const headers = [
+  { value: 'name', label: 'Name', type: 'name', align: 'left', alignHeader: true },
+  { value: 'email', label: 'Email', align: 'left', alignHeader: true },
+  { value: '_id', label: 'Dashboard Link', type: 'link', align: 'right', alignHeader: true },
+]
+
+
+const Investors = ({ classes, data }) => {
+  const { investments } = data.deal;
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const getCellContent = (type, row, headerValue) => {
+    switch (type) {
+      case 'name':
+        return (row.first_name? `${row['first_name']} ${row['last_name']}` : '')
+      case 'link':
+        return <a href={`/investor/${row._id}/home`}>Link</a>
+      default:
+        return <div></div>
+    }
+  }
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value)
+  }
+
+  let investorsData = investments.map(inv => inv.investor)
+  if(!investorsData) return <Loader/>
+
+  if(searchTerm) {
+    investorsData = investorsData.filter(investor =>
+      (investor.first_name? `${investor['first_name']} ${investor['last_name']} ${investor['email']}` : '')
+      .toUpperCase()
+      .includes(searchTerm.toUpperCase())
+    )
+  }
+
+  return (
+    <div className={classes.section}>
+      <div className={classes.searchContainer}>
+        <TextField
+          label="Search"
+          placeholder="Seach by company name"
+          id="search-field"
+          fullWidth
+          onChange={handleSearch}
+          value={searchTerm || ''}
+          InputProps={{
+            startAdornment: <InputAdornment position="start">
+            <SearchIcon style={{color: "rgba(0, 0, 0, 0.54)"}}/>
+          </InputAdornment>,
+        }}
+        style={{margin: "0 1em"}}
+        />
+    </div>
+    <AllocationsTable
+      data={investorsData}
+      headers={headers}
+      getCellContent={getCellContent}
+      sortField="email"
+      sortOrder="desc"
+      />
+    </div>
+  );
+}
+
+export default Investors;
