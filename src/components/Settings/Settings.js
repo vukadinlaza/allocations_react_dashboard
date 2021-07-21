@@ -134,18 +134,23 @@ const Settings = ({ classes, history }) => {
       setFilterNestedCollection('')
       setFilterLocalFieldKey('')
     }
-  }
-
-  const onChangeSort = (sortField, isAsc, sortNestedKey, sortNestedCollection, sortLocalFieldKey) => {
-    let order = isAsc? 1 : -1
-    if(sortNestedKey && sortNestedCollection && sortLocalFieldKey){
-      setSortNestedKey(sortNestedKey)
-      setSortNestedCollection(sortNestedCollection)
-      setSortLocalFieldKey(sortLocalFieldKey)
-    }else{
-      setSortNestedKey('')
-      setSortNestedCollection('')
-      setSortLocalFieldKey('')
+  };
+  const onChangeSort = (
+    sortField,
+    isAsc,
+    sortNestedKey,
+    sortNestedCollection,
+    sortLocalFieldKey,
+  ) => {
+    let order = isAsc ? 1 : -1;
+    if (sortNestedKey && sortNestedCollection && sortLocalFieldKey) {
+      setSortNestedKey(sortNestedKey);
+      setSortNestedCollection(sortNestedCollection);
+      setSortLocalFieldKey(sortLocalFieldKey);
+    } else {
+      setSortNestedKey('');
+      setSortNestedCollection('');
+      setSortLocalFieldKey('');
     }
     setSortField(sortField);
     setSortOrder(order)

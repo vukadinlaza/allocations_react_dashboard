@@ -309,6 +309,13 @@ const styles = (theme) => ({
     alignItems: 'center',
     width: '100%',
   },
+  sortField: {
+    margin: '1rem 0 -1rem 52px',
+    [theme.breakpoints.down(phone)]: {
+      marginLeft: '22px',
+      marginBottom: '5px',
+    },
+  },
   tab: {
     textTransform: 'none',
     minWidth: 0,
