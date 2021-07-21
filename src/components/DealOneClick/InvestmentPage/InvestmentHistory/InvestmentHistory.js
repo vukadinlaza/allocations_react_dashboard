@@ -1,10 +1,13 @@
-import React from 'react';
-import { useQuery, gql } from '@apollo/client';
+import React, { useEffect } from 'react';
+import { gql } from 'apollo-boost';
+import { useQuery } from '@apollo/react-hooks';
+import { useParams } from 'react-router-dom';
 import { Button, Typography } from '@material-ui/core';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import EditIcon from '@material-ui/icons/Edit';
 import moment from 'moment';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-import { pick } from 'lodash';
+import { pick, get } from 'lodash';
 import { nWithCommas } from '../../../../utils/numbers';
 import './styles.scss';
 

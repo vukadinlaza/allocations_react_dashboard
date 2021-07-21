@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { gql } from 'apollo-boost';
 import CloseIcon from '@material-ui/icons/Close';
-import { useMutation, gql } from '@apollo/client';
+import { useMutation } from '@apollo/react-hooks';
 import { Paper, Grid, Typography, Modal, TextField, Button, Container } from '@material-ui/core';
 import { toast } from 'react-toastify';
 import './style.scss';
@@ -73,17 +74,12 @@ export default ({ showAddAccountModal, setAddAccountModal }) => {
                   <Typography variant="h6">Add New User</Typography>
                   <CloseIcon />
                 </Grid>
-                <Typography
-                  variant="subtitle2"
-                  style={{ marginTop: '.5rem', marginBottom: '1rem' }}
-                >
-                  To add a user to your account, enter their email and click the send invite button.
-                  Tell them to check their email!
+                <Typography variant="subtitle2" style={{ marginTop: '.5rem', marginBottom: '1rem' }}>
+                  To add a user to your account, enter their email and click the send invite button. Tell them to check
+                  their email!
                 </Typography>
                 <form className={classes.root} noValidate autoComplete="off">
-                  <Grid
-                    style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem' }}
-                  >
+                  <Grid style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem' }}>
                     <TextField
                       id="standard-basic"
                       label="Email"

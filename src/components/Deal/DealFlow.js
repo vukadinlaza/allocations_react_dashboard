@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import _, { toNumber } from 'lodash';
-import { useMutation, useQuery, gql } from '@apollo/client';
+import { gql } from 'apollo-boost';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import base64 from 'base-64';

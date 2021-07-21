@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useLazyQuery, gql } from '@apollo/client';
+import { gql } from 'apollo-boost';
+import { useLazyQuery } from '@apollo/react-hooks';
 import { get } from 'lodash';
 import { Helmet } from 'react-helmet';
 import {
@@ -62,19 +63,10 @@ const GET_DOCUSIGN_FORM = gql`
   }
 `;
 
-const required = [
-  'country',
-  'investor_type',
-  'signer_full_name',
-  'dob',
-  'street_address',
-  'city',
-  'state',
-  'zip',
-];
+const required = ['country', 'investor_type', 'signer_full_name', 'dob', 'street_address', 'city', 'state', 'zip'];
 const optional = ['mail_country', 'mail_city', 'mail_zip', 'mail_state', 'mail_street_address'];
 
-export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKyc, dealType }) {
+export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKyc, company_name, dealType }) {
   const { userProfile } = useAuth(GET_INVESTOR);
   const [investor, setInvestor] = useState({});
   const [showForm, setShowForm] = useState(false);
@@ -84,11 +76,7 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
   const handleChange = (prop) => (e) => {
     e.persist();
     if (prop === 'investor_type') {
-      return setInvestor((prev) => ({
-        ...prev,
-        [prop]: e.target.value,
-        accredited_investor_status: '',
-      }));
+      return setInvestor((prev) => ({ ...prev, [prop]: e.target.value, accredited_investor_status: '' }));
     }
     return setInvestor((prev) => ({ ...prev, [prop]: e.target.value }));
   };
@@ -146,11 +134,7 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
       <Grid container spacing={1}>
         <Grid item xs={12} sm={12} md={dealType === '506c' ? 6 : 12}>
           <Paper className={classes.paper}>
-            <Typography
-              variant="h6"
-              gutterBottom
-              style={{ display: 'flex', justifyContent: 'space-between' }}
-            >
+            <Typography variant="h6" gutterBottom style={{ display: 'flex', justifyContent: 'space-between' }}>
               KYC Information
             </Typography>
             {!hasKyc ? (
@@ -158,44 +142,29 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
                 <Typography variant="subtitle2" style={{}} onClick={() => setShowForm(!showForm)}>
                   Fill out a form and sign a tax document (W8/W9).
                 </Typography>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={() => setShowForm(!showForm)}
-                >
+                <Button variant="contained" color="secondary" onClick={() => setShowForm(!showForm)}>
                   {!showForm ? 'Click To Begin KYC Form' : 'Hide Form'}
                 </Button>
               </>
             ) : (
-              <Typography variant="subtitle1">
-                We already have a W8/W9 document on file for you.
-              </Typography>
+              <Typography variant="subtitle1">We already have a W8/W9 document on file for you.</Typography>
             )}
           </Paper>
         </Grid>
         {dealType === '506c' && (
           <Grid item xs={12} sm={12} md={6}>
             <Paper className={classes.paper}>
-              <Typography
-                variant="h6"
-                gutterBottom
-                style={{ display: 'flex', justifyContent: 'space-between' }}
-              >
+              <Typography variant="h6" gutterBottom style={{ display: 'flex', justifyContent: 'space-between' }}>
                 Accredited Investor Certification
               </Typography>
               <div style={{}}>
-                <Typography variant="subtitle2">
-                  Verify your accredited investor status with VerifyInvestor.
-                </Typography>
+                <Typography variant="subtitle2">Verify your accredited investor status with VerifyInvestor.</Typography>
                 <Button
                   id="invest"
                   variant="contained"
                   color="secondary"
                   onClick={() => {
-                    const win = window.open(
-                      'https://bridge.parallelmarkets.com/allocations',
-                      '_blank',
-                    );
+                    const win = window.open('https://bridge.parallelmarkets.com/allocations', '_blank');
                     win.focus();
                   }}
                 >
@@ -241,12 +210,7 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
               </Grid>
 
               <Grid item xs={12} sm={12} md={6}>
-                <FormControl
-                  required
-                  error={errors.includes('country')}
-                  variant="outlined"
-                  style={{ width: '100%' }}
-                >
+                <FormControl required error={errors.includes('country')} variant="outlined" style={{ width: '100%' }}>
                   <InputLabel>Country of Residence or Place of Business</InputLabel>
                   <Select
                     value={investor.country || ''}
@@ -417,12 +381,7 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
                 />
               </>
             )}
-            <Button
-              variant="contained"
-              onClick={submit}
-              style={{ marginTop: '1rem' }}
-              color="primary"
-            >
+            <Button variant="contained" onClick={submit} style={{ marginTop: '1rem' }} color="primary">
               Next
             </Button>
           </>

@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useSimpleReducer } from '../../utils/hooks';
 import _, { get, isEqual } from 'lodash';
 import { useParams, useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 // wysiwyg editor
 import { Editor } from '@tinymce/tinymce-react';
-import { useQuery, useMutation, gql } from '@apollo/client';
+
+import { gql } from 'apollo-boost';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+
 import {
   TableCell,
   TableRow,
@@ -30,7 +35,6 @@ import './style.scss';
 import { makeStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import CloseIcon from '@material-ui/icons/Close';
-import { useSimpleReducer } from '../../utils/hooks';
 import { useAuth } from '../../auth/useAuth';
 import { ORG_OVERVIEW } from '../admin/AdminHome';
 import InviteInvestors from './InviteInvestors';
@@ -311,11 +315,7 @@ export default function DealEdit() {
             </Typography>
           </Grid>
           <Grid item xs={2} style={{ textAlign: 'right' }}>
-            <Button
-              onClick={() => history.push(deal.appLink || '#')}
-              variant="contained"
-              color="primary"
-            >
+            <Button onClick={() => history.push(deal.appLink || '#')} variant="contained" color="primary">
               view
             </Button>
           </Grid>
@@ -377,9 +377,7 @@ export default function DealEdit() {
                 <TextField
                   style={{ width: '100%' }}
                   value={deal.dealParams.wireDeadline || ''}
-                  onChange={(e) =>
-                    setDeal({ dealParams: { ...deal.dealParams, wireDeadline: e.target.value } })
-                  }
+                  onChange={(e) => setDeal({ dealParams: { ...deal.dealParams, wireDeadline: e.target.value } })}
                   label="Closing Date"
                   type="datetime-local"
                   variant="outlined"
@@ -441,9 +439,7 @@ export default function DealEdit() {
                 <TextField
                   style={{ width: '100%' }}
                   value={deal.dealParams.totalRoundSize || ''}
-                  onChange={(e) =>
-                    setDeal({ dealParams: { ...deal.dealParams, totalRoundSize: e.target.value } })
-                  }
+                  onChange={(e) => setDeal({ dealParams: { ...deal.dealParams, totalRoundSize: e.target.value } })}
                   label="Total Round Size"
                   inputProps={{
                     startAdornment: <InputAdornment position="start">$</InputAdornment>,
@@ -455,9 +451,7 @@ export default function DealEdit() {
                 <TextField
                   style={{ width: '100%' }}
                   value={deal.dealParams.allocation || ''}
-                  onChange={(e) =>
-                    setDeal({ dealParams: { ...deal.dealParams, allocation: e.target.value } })
-                  }
+                  onChange={(e) => setDeal({ dealParams: { ...deal.dealParams, allocation: e.target.value } })}
                   label="Allocation"
                   inputProps={{
                     startAdornment: <InputAdornment position="start">$</InputAdornment>,
@@ -507,9 +501,7 @@ export default function DealEdit() {
                 <TextField
                   style={{ width: '100%' }}
                   value={deal.dealParams.dealMultiple || ''}
-                  onChange={(e) =>
-                    setDeal({ dealParams: { ...deal.dealParams, dealMultiple: e.target.value } })
-                  }
+                  onChange={(e) => setDeal({ dealParams: { ...deal.dealParams, dealMultiple: e.target.value } })}
                   label="Deal Multiple"
                   inputProps={{
                     startAdornment: <InputAdornment position="start" />,
@@ -522,9 +514,7 @@ export default function DealEdit() {
                 <TextField
                   style={{ width: '100%' }}
                   value={deal.dealParams.dealType || ''}
-                  onChange={(e) =>
-                    setDeal({ dealParams: { ...deal.dealParams, dealType: e.target.value } })
-                  }
+                  onChange={(e) => setDeal({ dealParams: { ...deal.dealParams, dealType: e.target.value } })}
                   label="Deal Type (506c)"
                   inputProps={{
                     startAdornment: <InputAdornment position="start" />,
@@ -543,9 +533,7 @@ export default function DealEdit() {
                 <TextField
                   style={{ width: '100%' }}
                   value={deal.dealParams.signDeadline || ''}
-                  onChange={(e) =>
-                    setDeal({ dealParams: { ...deal.dealParams, signDeadline: e.target.value } })
-                  }
+                  onChange={(e) => setDeal({ dealParams: { ...deal.dealParams, signDeadline: e.target.value } })}
                   label="Signing Deadline"
                   type="datetime-local"
                   variant="outlined"
@@ -555,9 +543,7 @@ export default function DealEdit() {
                 <TextField
                   style={{ width: '100%' }}
                   value={deal.dealParams.wireDeadline || ''}
-                  onChange={(e) =>
-                    setDeal({ dealParams: { ...deal.dealParams, wireDeadline: e.target.value } })
-                  }
+                  onChange={(e) => setDeal({ dealParams: { ...deal.dealParams, wireDeadline: e.target.value } })}
                   label="Wiring Deadline"
                   type="datetime-local"
                   variant="outlined"
@@ -589,9 +575,7 @@ export default function DealEdit() {
                 <TextField
                   style={{ width: '100%' }}
                   value={deal.dealParams.managementFees || ''}
-                  onChange={(e) =>
-                    setDeal({ dealParams: { ...deal.dealParams, managementFees: e.target.value } })
-                  }
+                  onChange={(e) => setDeal({ dealParams: { ...deal.dealParams, managementFees: e.target.value } })}
                   label="Management Fee (%)"
                   inputProps={{
                     startAdornment: <InputAdornment position="start">%</InputAdornment>,
@@ -680,9 +664,7 @@ export default function DealEdit() {
                 <TextField
                   style={{ width: '100%' }}
                   value={deal.dealParams.totalCarry || ''}
-                  onChange={(e) =>
-                    setDeal({ dealParams: { ...deal.dealParams, totalCarry: e.target.value } })
-                  }
+                  onChange={(e) => setDeal({ dealParams: { ...deal.dealParams, totalCarry: e.target.value } })}
                   label="Total Carry (%)"
                   inputProps={{
                     startAdornment: <InputAdornment position="start">%</InputAdornment>,
@@ -703,9 +685,7 @@ export default function DealEdit() {
                 <TextField
                   style={{ width: '100%' }}
                   value={deal.dealParams.estimatedTerm || ''}
-                  onChange={(e) =>
-                    setDeal({ dealParams: { ...deal.dealParams, estimatedTerm: e.target.value } })
-                  }
+                  onChange={(e) => setDeal({ dealParams: { ...deal.dealParams, estimatedTerm: e.target.value } })}
                   label="Estimated Term"
                   inputProps={{
                     startAdornment: <InputAdornment position="start" />,
@@ -864,9 +844,7 @@ export default function DealEdit() {
             <TextField
               style={{ width: '100%' }}
               value={deal.dealParams.fundTotalCarry || ''}
-              onChange={(e) =>
-                setDeal({ dealParams: { ...deal.dealParams, fundTotalCarry: e.target.value } })
-              }
+              onChange={(e) => setDeal({ dealParams: { ...deal.dealParams, fundTotalCarry: e.target.value } })}
               label="Total Carry (%)"
               inputProps={{
                 startAdornment: <InputAdornment position="start">%</InputAdornment>,
@@ -1069,9 +1047,7 @@ export default function DealEdit() {
                       <InputAdornment position="end">
                         <FontAwesomeIcon
                           icon="copy"
-                          onClick={() =>
-                            navigator.clipboard.writeText(window.origin + (deal.publicLink || ''))
-                          }
+                          onClick={() => navigator.clipboard.writeText(window.origin + (deal.publicLink || ''))}
                         />
                       </InputAdornment>
                     ),
@@ -1089,9 +1065,7 @@ export default function DealEdit() {
                       <InputAdornment position="end">
                         <FontAwesomeIcon
                           icon="copy"
-                          onClick={() =>
-                            navigator.clipboard.writeText(window.origin + (deal.appLink || ''))
-                          }
+                          onClick={() => navigator.clipboard.writeText(window.origin + (deal.appLink || ''))}
                         />
                       </InputAdornment>
                     ),
@@ -1201,13 +1175,7 @@ function DataRoom({ deal, refetch }) {
       </Grid>
 
       <Grid item xs={12} sm={4}>
-        <Button
-          variant="contained"
-          onClick={submit}
-          style={{ height: 39 }}
-          fullWidth
-          color="primary"
-        >
+        <Button variant="contained" onClick={submit} style={{ height: 39 }} fullWidth color="primary">
           Upload to Data Room
         </Button>
       </Grid>
@@ -1422,12 +1390,7 @@ function AddInvestment({ deal, show, refetch }) {
           </Select>
         </FormControl>
       </div>
-      <Button
-        variant="contained"
-        onClick={submit}
-        style={{ backgroundColor: '#f7bf47' }}
-        color="primary"
-      >
+      <Button variant="contained" onClick={submit} style={{ backgroundColor: '#f7bf47' }} color="primary">
         ADD INVESTMENT
       </Button>
     </>
@@ -1467,10 +1430,7 @@ const AddCoInvestor = ({ deal, setDeal }) => {
   const addCoInvestor = () => {
     setDeal({
       ...deal,
-      dealParams: {
-        ...deal.dealParams,
-        coinvestors: [...(deal?.dealParams?.coinvestors || []), coinvestor],
-      },
+      dealParams: { ...deal.dealParams, coinvestors: [...(deal?.dealParams?.coinvestors || []), coinvestor] },
     });
     setCoinvestor('');
   };

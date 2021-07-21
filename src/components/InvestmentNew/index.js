@@ -14,7 +14,8 @@ import {
 import { Row, Col } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
-import { useLazyQuery, useMutation, gql } from '@apollo/client';
+import { gql } from 'apollo-boost';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import * as API from '../../api';
 
 import InvestorNew from '../InvestorNew';

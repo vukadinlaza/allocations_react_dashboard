@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
+import { gql } from 'apollo-boost';
 import { useParams } from 'react-router-dom';
-import { useLazyQuery, useMutation, gql } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Table, TableBody, TableCell, TableRow, Button, TextField } from '@material-ui/core';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Button,
+  TextField,
+} from '@material-ui/core';
 
 import * as API from '../../api';
 
@@ -40,13 +48,7 @@ export default function InviteInvestors({ deal, refetch }) {
       <Table>
         <TableBody>
           {(searchQ !== '' ? _.get(searchRes, 'data.searchUsers', []) : []).map((investor) => (
-            <AddInvestor
-              key={investor._id}
-              investor={investor}
-              deal={deal}
-              setSearchQ={setSearchQ}
-              refetch={refetch}
-            />
+            <AddInvestor key={investor._id} investor={investor} deal={deal} setSearchQ={setSearchQ} refetch={refetch} />
           ))}
         </TableBody>
       </Table>
@@ -174,13 +176,7 @@ function InvitedInvestor({ investor, deal, refetch }) {
       <Button size="small" className="sent-invite" endIcon={<FontAwesomeIcon icon="paper-plane" />}>
         Sent {invites.length}
       </Button>
-      <Button
-        size="small"
-        className="send-again"
-        color="primary"
-        variant="contained"
-        onClick={sendInvite}
-      >
+      <Button size="small" className="send-again" color="primary" variant="contained" onClick={sendInvite}>
         Resend
       </Button>
     </>
@@ -239,11 +235,7 @@ function AddInvestor({ investor, deal, setSearchQ, refetch }) {
   }
 
   return (
-    <TableRow
-      sm={{ size: 4, offset: 1 }}
-      onClick={() => addInvestor()}
-      className="invited-investor"
-    >
+    <TableRow sm={{ size: 4, offset: 1 }} onClick={() => addInvestor()} className="invited-investor">
       <TableCell>{investor.name}</TableCell>
       <TableCell>{investor.email}</TableCell>
       <TableCell>
