@@ -4,6 +4,7 @@ import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography, Button, Grid } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { useQuery } from 'react-apollo';
 import { phone, tablet } from '../../utils/helpers';
 import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
@@ -119,11 +120,19 @@ const styles = (theme) => ({
   },
 });
 
+const FUND_ADMIN_DASHBOARD_STATS = gql`
+  query FundAdminHighlights {
+    fundAdminHighlights
+  }
+`;
+
 const dashboardTabs = ['Highlights', 'Funds', 'SPVs'];
 
 const FundAdminDashboard = ({ classes, history }) => {
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
+  const { data } = useQuery(FUND_ADMIN_DASHBOARD_STATS);
+  console.log('DATA', data);
 
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue);
