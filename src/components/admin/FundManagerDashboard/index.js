@@ -79,18 +79,8 @@ const styles = (theme) => ({
     '&:focus': {
       outline: 'none',
     },
-  },
-  createButtonblue: {
-    display: 'flex',
-    alignItems: 'center',
-    color: 'white',
-    textTransform: 'none',
-    cursor: 'pointer',
-    '&:hover': {
-      backgroundColor: '#56db40',
-    },
-    '&:focus': {
-      outline: 'none',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '.5rem',
     },
   },
   createButtonLink: {
@@ -202,8 +192,8 @@ const styles = (theme) => ({
     alignItems: 'center',
     margin: '0 40px',
     [theme.breakpoints.down(phone)]: {
-      flexDirection: "column",
-      alignItems: "flex-start"
+      flexDirection: 'column',
+      fontSize: '.5rem',
     },
   },
   modalBackground: {
@@ -706,9 +696,13 @@ const FundManagerDashboard = ({ classes, history }) => {
       {openTooltip && (
         <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} />
       )}
-      <div className={classes.mainTitleContainer} id="main-title-container">
-        <Typography className={classes.mainTitle}>{userProfile?.first_name ? `Hello ${userProfile?.first_name}, here are your Funds.` : orgDealsData?.organization?.name}</Typography>
-        <div className={classes.createButtonsContainer}>
+      <div className={classes.mainTitleContainer}>
+        <Typography className={classes.mainTitle}>
+          {userProfile?.first_name
+            ? `Hello ${userProfile?.first_name}, here are your Funds.`
+            : orgDealsData?.organization?.name}
+        </Typography>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '.5rem' }}>
           <a
             href="//build.allocations.com"
             target="_blank"
