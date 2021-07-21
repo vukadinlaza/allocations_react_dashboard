@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { gql } from 'apollo-boost';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import { Typography, Paper, Grid, Button, Table, TableBody, TableHead, TableCell, TableRow } from '@material-ui/core';
+import { useQuery, useMutation, gql } from '@apollo/client';
+import {
+  Typography,
+  Paper,
+  Grid,
+  Button,
+  Table,
+  TableBody,
+  TableHead,
+  TableCell,
+  TableRow,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { capitalize } from 'lodash';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -110,9 +119,12 @@ export default function Profile() {
   const [createEntity, { data: createEntityRes }] = useMutation(CREATE_ENTITY);
   const [deleteEntity, { data: deleteEntityRes }] = useMutation(REMOVE_ACCT_ENTITY);
   const [updateEntity, { data: updateEntityRes }] = useMutation(UPDATE_ENTITY);
-  const { data: accountEntities, refetch: refetchAccountEntities } = useQuery(GET_ACCOUNT_ENTITIES, {
-    variables: { accountId: userProfile?.account?._id },
-  });
+  const { data: accountEntities, refetch: refetchAccountEntities } = useQuery(
+    GET_ACCOUNT_ENTITIES,
+    {
+      variables: { accountId: userProfile?.account?._id },
+    },
+  );
 
   const [removeUser, { data: removeRes }] = useMutation(REMOVE_ACCT_USER);
   const classes = useStyles();
@@ -140,7 +152,8 @@ export default function Profile() {
     }
   }, [createEntityRes, refetchAccountEntities, deleteEntityRes, updateEntityRes]);
 
-  const icon = formStatus === 'loading' ? 'circle-notch' : formStatus === 'complete' ? 'check' : null;
+  const icon =
+    formStatus === 'loading' ? 'circle-notch' : formStatus === 'complete' ? 'check' : null;
   if (!userProfile.email || !userProfile?.account)
     return (
       <div>
@@ -177,7 +190,10 @@ export default function Profile() {
         refetchAccountUsers={refetchAccountUsers}
         accountEntities={accountEntities}
       />
-      <AddAccountModal showAddAccountModal={showAddAccountModal} setAddAccountModal={setAddAccountModal} />
+      <AddAccountModal
+        showAddAccountModal={showAddAccountModal}
+        setAddAccountModal={setAddAccountModal}
+      />
       <AddEntityModal
         showEntityModal={showEntityModal}
         setShowEntityModal={setShowEntityModal}

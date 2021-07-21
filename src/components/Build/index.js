@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { gql } from 'apollo-boost';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, gql } from '@apollo/client';
 import { Link, Element } from 'react-scroll';
 import handleViewport from 'react-in-viewport';
 import { useHistory } from 'react-router-dom';

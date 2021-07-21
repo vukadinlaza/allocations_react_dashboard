@@ -1,7 +1,6 @@
 import React from 'react';
 import { Typography, Grid, Button } from '@material-ui/core';
-import { gql } from 'apollo-boost';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, gql } from '@apollo/client';
 import { toast } from 'react-toastify';
 
 const DELETE_VIEWED_USER = gql`
