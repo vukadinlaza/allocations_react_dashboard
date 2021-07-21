@@ -145,7 +145,7 @@ const App = () => {
 
           {/** catchall * */}
           <PrivateRoute exact path="/" component={UserHome} />
-          <Route path="*" component={NotFound} />
+          <Route path={['*', '/404']} component={NotFound} />
         </Switch>
       </Sidebar>
     </AuthorizedApolloProvider>
