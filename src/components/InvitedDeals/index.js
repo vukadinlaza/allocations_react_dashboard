@@ -1,10 +1,19 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { gql } from 'apollo-boost';
+import { gql } from '@apollo/client';
 import { Row, Col } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, Hidden } from '@material-ui/core';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHead,
+  Paper,
+  Button,
+  Hidden,
+} from '@material-ui/core';
 import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
 
@@ -104,7 +113,9 @@ export default function InvitedDeals() {
 }
 
 function DealRow({ deal }) {
-  const link = deal.organization ? `/deals/${deal.organization.slug}/${deal.slug}` : `/deals/${deal.slug}`;
+  const link = deal.organization
+    ? `/deals/${deal.organization.slug}/${deal.slug}`
+    : `/deals/${deal.slug}`;
 
   return (
     <TableRow>

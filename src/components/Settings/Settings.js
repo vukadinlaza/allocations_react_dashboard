@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { gql } from 'apollo-boost';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, gql } from '@apollo/client';
 import { withRouter } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import {
@@ -118,13 +117,13 @@ const Settings = ({ classes, history }) => {
 
   const handleSearch = () => {
     // we retrieve this values like this so the refetch triggers when we click the search button
-    const searchFilter = document.getElementById('search-field').value;
-    const field = document.getElementById('field-filter').value;
+    let searchFilter = document.getElementById('search-field').value;
+    let field = document.getElementById('field-filter').value;
     setCurrentPage(0);
     setSearchFilter({ searchFilter, field });
 
     const fieldHeader = headers.find((header) => header.value === field);
-    // allowing search for nested keys
+    //allowing search for nested keys
     if (fieldHeader.nestedKey && fieldHeader.nestedCollection && fieldHeader.localFieldKey) {
       setFilterNestedKey(fieldHeader.nestedKey);
       setFilterNestedCollection(fieldHeader.nestedCollection);
@@ -143,7 +142,7 @@ const Settings = ({ classes, history }) => {
     sortNestedCollection,
     sortLocalFieldKey,
   ) => {
-    const order = isAsc ? 1 : -1;
+    let order = isAsc ? 1 : -1;
     if (sortNestedKey && sortNestedCollection && sortLocalFieldKey) {
       setSortNestedKey(sortNestedKey);
       setSortNestedCollection(sortNestedCollection);
@@ -189,7 +188,7 @@ const Settings = ({ classes, history }) => {
       case 'link':
         return <a href={`/investor/${row._id}/home`}>Link</a>;
       default:
-        return <div />;
+        return <div></div>;
     }
   };
 
@@ -202,6 +201,7 @@ const Settings = ({ classes, history }) => {
         history.push(`/admin/invesments/${row._id}`);
         break;
       default:
+        return;
     }
   };
 
@@ -272,7 +272,7 @@ const Settings = ({ classes, history }) => {
           <AllocationsTable
             data={Array(pagination).fill('')}
             headers={['']}
-            serverPagination
+            serverPagination={true}
             rowsQuantity={pagination}
             currentPage={currentPage}
           />
@@ -281,12 +281,12 @@ const Settings = ({ classes, history }) => {
         <AllocationsTable
           data={data[dataVariable]}
           headers={headers}
-          serverPagination
+          serverPagination={true}
           rowsQuantity={pagination}
           currentPage={currentPage}
-          includeCheckbox
+          includeCheckbox={true}
           rowSelector="_id"
-          rowDetailPage
+          rowDetailPage={true}
           handleRowDetailPage={handleRowDetailPage}
           getCellContent={getCellContent}
           onChangePage={onChangePage}

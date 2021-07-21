@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Paper, Grid, Typography, Button, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { toast } from 'react-toastify';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, gql } from '@apollo/client';
 import { get, pick } from 'lodash';
-import { gql } from 'apollo-boost';
 
 const useStyles = makeStyles((theme) => ({
   paper: {

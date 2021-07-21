@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable radix */
 import React, { useState, useEffect } from 'react';
-import { gql } from 'apollo-boost';
+import { useMutation, gql } from '@apollo/client';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import {
   Paper,
@@ -21,19 +21,17 @@ import {
 } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
-import { useMutation, useQuery } from '@apollo/react-hooks';
 import CancelIcon from '@material-ui/icons/Cancel';
 import EditIcon from '@material-ui/icons/Edit';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CloseIcon from '@material-ui/icons/Close';
-import _, { toLower, orderBy, get } from 'lodash';
+import _, { orderBy, get } from 'lodash';
 import moment from 'moment';
 import Chart from 'react-google-charts';
 import { useHistory, useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Loader from '../utils/Loader';
 import { nWithCommas } from '../../utils/numbers';
-import { useAuth } from '../../auth/useAuth';
 import Document from '../utils/Document';
 import InvestmentEdit from '../InvestmentEdit';
 import { useSimpleReducer, useFetchWithEmail } from '../../utils/hooks';
@@ -77,14 +75,14 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: '0.5rem',
   },
   investmentRow: {
-    backgroundColor: "#FBFCFF",
-    "&:hover": {
-      backgroundColor: "rgb(241, 244, 251)"
-    }
-  }
+    backgroundColor: '#FBFCFF',
+    '&:hover': {
+      backgroundColor: 'rgb(241, 244, 251)',
+    },
+  },
 }));
 
-const GET_INVESTOR = gql`
+export const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
     investor(email: $email, _id: $_id) {
       _id
@@ -317,101 +315,93 @@ const InvestorTable = ({ userProfile, refetch }) => {
     return orderBy(investments, (inv) => get(inv, sortByProp.prop), [sortByProp.direction]);
   };
   return (
-    <div style={{width: "100%", marginBottom: "40px"}}>
-        <Grid item sm={12} md={12}>
-          <Paper style={{ overflowX: 'scroll' }}>
-            <Table>
-              <TableHead>
-                <TableRow style={{ borderBottom: 'solid black 1px' }}>
-                  <TableCell className={classes.tableHeader} align="left">
+    <div style={{ width: '100%', marginBottom: '40px' }}>
+      <Grid item sm={12} md={12}>
+        <Paper style={{ overflowX: 'scroll' }}>
+          <Table>
+            <TableHead>
+              <TableRow style={{ borderBottom: 'solid black 1px' }}>
+                <TableCell className={classes.tableHeader} align="left">
+                  <div className="sort-btns">
+                    <div>Name</div>
+                    {sortByProp.direction !== 'asc' ? (
+                      <ArrowDropUpIcon
+                        onClick={() =>
+                          setSortByProp({ prop: 'deal.company_name', direction: 'asc' })
+                        }
+                      />
+                    ) : (
+                      <ArrowDropDownIcon
+                        onClick={() =>
+                          setSortByProp({ prop: 'deal.company_name', direction: 'desc' })
+                        }
+                      />
+                    )}
+                  </div>
+                </TableCell>
+                <Hidden only="xs">
+                  <TableCell className={classes.tableHeader} align="center">
+                    Status
+                  </TableCell>
+                </Hidden>
+                <Hidden only="xs">
+                  <TableCell className={classes.tableHeader} align="center">
                     <div className="sort-btns">
-                      <div>Name</div>
+                      <div>Investment Date</div>
                       {sortByProp.direction !== 'asc' ? (
                         <ArrowDropUpIcon
-                          onClick={() => setSortByProp({ prop: 'deal.company_name', direction: 'asc' })}
+                          onClick={() =>
+                            setSortByProp({
+                              prop: 'deal.dealParams.wireDeadline',
+                              direction: 'asc',
+                            })
+                          }
                         />
                       ) : (
                         <ArrowDropDownIcon
-                          onClick={() => setSortByProp({ prop: 'deal.company_name', direction: 'desc' })}
+                          onClick={() =>
+                            setSortByProp({
+                              prop: 'deal.dealParams.wireDeadline',
+                              direction: 'desc',
+                            })
+                          }
                         />
                       )}
                     </div>
                   </TableCell>
-                  <Hidden only="xs">
-                    <TableCell className={classes.tableHeader} align="center">
-                      Status
-                    </TableCell>
-                  </Hidden>
-                  <Hidden only="xs">
-                    <TableCell className={classes.tableHeader} align="center">
-                      <div className="sort-btns">
-                        <div>Investment Date</div>
-                        {sortByProp.direction !== 'asc' ? (
-                          <ArrowDropUpIcon
-                            onClick={() => setSortByProp({ prop: 'deal.dealParams.wireDeadline', direction: 'asc' })}
-                          />
-                        ) : (
-                          <ArrowDropDownIcon
-                            onClick={() => setSortByProp({ prop: 'deal.dealParams.wireDeadline', direction: 'desc' })}
-                          />
-                        )}
-                      </div>
-                    </TableCell>
-                  </Hidden>
+                </Hidden>
+                <TableCell className={classes.tableHeader} align="center">
+                  Investment Amount
+                </TableCell>
+                <Hidden only="xs">
                   <TableCell className={classes.tableHeader} align="center">
-                    Investment Amount
+                    Investment Value
                   </TableCell>
-                  <Hidden only="xs">
-                    <TableCell className={classes.tableHeader} align="center">
-                      Investment Value
-                    </TableCell>
-                  </Hidden>
-                  <Hidden only="xs">
-                    <TableCell className={classes.tableHeader} align="center">
-                      Multiple
-                    </TableCell>
-                  </Hidden>
+                </Hidden>
+                <Hidden only="xs">
                   <TableCell className={classes.tableHeader} align="center">
-                    Deal Page
+                    Multiple
                   </TableCell>
-                  <Hidden only="xs">
-                    <TableCell className={classes.tableHeader} align="center">
-                      Documents
-                    </TableCell>
-                  </Hidden>
-                  <Hidden only="xs">
-                    <TableCell className={classes.tableHeader} align="center">
-                      Capital Accounts
-                    </TableCell>
-                  </Hidden>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {sortedInvestments(investments).map((investment) =>
-                  showDocs?._id === investment?._id ? (
-                    <>
-                      <TR
-                        demo={demo}
-                        investment={investment}
-                        setShowDocs={setShowDocs}
-                        showDocs={showDocs}
-                        setTradeData={setTradeData}
-                        setShowCaptialAccounts={setShowCaptialAccounts}
-                        capitalAccounts={capitalAccounts}
-                        userProfile={userProfile}
-                        classes={classes}
-                      />
-                      <DocsRow
-                        key={`${showDocs._id}-docs`}
-                        docs={showDocs.documents}
-                        investment={investment}
-                        setShowResignModal={setShowResignModal}
-                        demo={demo}
-                        setEditInvestmentModal={setEditInvestmentModal}
-                        isAdmin={userProfile.admin || location.pathname.includes('investor')}
-                      />
-                    </>
-                  ) : (
+                </Hidden>
+                <TableCell className={classes.tableHeader} align="center">
+                  Deal Page
+                </TableCell>
+                <Hidden only="xs">
+                  <TableCell className={classes.tableHeader} align="center">
+                    Documents
+                  </TableCell>
+                </Hidden>
+                <Hidden only="xs">
+                  <TableCell className={classes.tableHeader} align="center">
+                    Capital Accounts
+                  </TableCell>
+                </Hidden>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {sortedInvestments(investments).map((investment) =>
+                showDocs?._id === investment?._id ? (
+                  <>
                     <TR
                       demo={demo}
                       investment={investment}
@@ -423,12 +413,34 @@ const InvestorTable = ({ userProfile, refetch }) => {
                       userProfile={userProfile}
                       classes={classes}
                     />
-                  ),
-                )}
-              </TableBody>
-            </Table>
-          </Paper>
-        </Grid>
+                    <DocsRow
+                      key={`${showDocs._id}-docs`}
+                      docs={showDocs.documents}
+                      investment={investment}
+                      setShowResignModal={setShowResignModal}
+                      demo={demo}
+                      setEditInvestmentModal={setEditInvestmentModal}
+                      isAdmin={userProfile.admin || location.pathname.includes('investor')}
+                    />
+                  </>
+                ) : (
+                  <TR
+                    demo={demo}
+                    investment={investment}
+                    setShowDocs={setShowDocs}
+                    showDocs={showDocs}
+                    setTradeData={setTradeData}
+                    setShowCaptialAccounts={setShowCaptialAccounts}
+                    capitalAccounts={capitalAccounts}
+                    userProfile={userProfile}
+                    classes={classes}
+                  />
+                ),
+              )}
+            </TableBody>
+          </Table>
+        </Paper>
+      </Grid>
 
       <Modal
         open={tradeData?.open}
@@ -517,8 +529,8 @@ const InvestorTable = ({ userProfile, refetch }) => {
                           style={{ textAlign: 'center', marginBottom: '2rem' }}
                           variant="paragraph"
                         >
-                          An Allocations team member will reach out to you shortly about your order request. Please give
-                          up to 30 days for a response. Thank you.
+                          An Allocations team member will reach out to you shortly about your order
+                          request. Please give up to 30 days for a response. Thank you.
                         </Typography>
                       </Grid>
                     </Grid>
@@ -547,7 +559,11 @@ const InvestorTable = ({ userProfile, refetch }) => {
                       <Loader />
                     </Grid>
                     <Grid item xs={12} sm={12} md={12} lg={12}>
-                      <Typography className={classes.grey} style={{ textAlign: 'center' }} variant="h5">
+                      <Typography
+                        className={classes.grey}
+                        style={{ textAlign: 'center' }}
+                        variant="h5"
+                      >
                         Creating your trade request
                       </Typography>
                     </Grid>
@@ -909,9 +925,14 @@ const InvestorTable = ({ userProfile, refetch }) => {
               <Typography variant="h6" className={classes.grey}>
                 $ {tradeData?.amount} for {tradeData?.deal?.company_name}
               </Typography>
-              <Typography variant="subtitle2" className={classes.grey} style={{ marginTop: '1rem' }}>
-                After you confirm your order an Allocations team member will reachout with more information. Orders are
-                open for 30 days before expiring and you can contact us to cancel your open order at anytime.
+              <Typography
+                variant="subtitle2"
+                className={classes.grey}
+                style={{ marginTop: '1rem' }}
+              >
+                After you confirm your order an Allocations team member will reachout with more
+                information. Orders are open for 30 days before expiring and you can contact us to
+                cancel your open order at anytime.
               </Typography>
               {/* FOOTER */}
               <Grid>
@@ -1060,7 +1081,13 @@ const TR = ({
       </TableCell>
       <Hidden only="xs">
         <TableCell align="center">
-          <Button variant="contained" size="small" color="primary" onClick={showDocsFn} disabled={!!demo}>
+          <Button
+            variant="contained"
+            size="small"
+            color="primary"
+            onClick={showDocsFn}
+            disabled={!!demo}
+          >
             View
           </Button>
         </TableCell>

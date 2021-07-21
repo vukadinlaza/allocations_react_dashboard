@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { get } from 'lodash';
-import { useLazyQuery } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
+import { useLazyQuery, gql } from '@apollo/client';
 import { Modal, Grid, TextField, Typography, Paper, Button } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { makeStyles } from '@material-ui/core/styles';
@@ -64,11 +63,17 @@ const POSModal = ({ modal, setModal, organization }) => {
     e.persist();
     return setFormData((prev) => ({ ...prev, [prop]: e.target.value }));
   };
-  const submit = () => getLink({ variables: { data: { ...formData, documentType: 'Provision Of Services' } } });
+  const submit = () =>
+    getLink({ variables: { data: { ...formData, documentType: 'Provision Of Services' } } });
   const { redirectUrl, formName } = link;
 
   return (
-    <Modal open={modal} onClose={() => setModal(false)} aria-labelledby="pos-modal" aria-describedby="pos-modal">
+    <Modal
+      open={modal}
+      onClose={() => setModal(false)}
+      aria-labelledby="pos-modal"
+      aria-describedby="pos-modal"
+    >
       <Grid container xs={12} justify="center" alignItems="center">
         <Paper className={classes.paper}>
           <FontAwesomeIcon icon="times" pull="right" border onClick={() => setModal(false)} />
@@ -84,7 +89,8 @@ const POSModal = ({ modal, setModal, organization }) => {
               ) : (
                 <>
                   <Typography variant="subtitle2" align="center" className={classes.subtext}>
-                    This information will be used to fill out Allocation's Provision Of Services Agreement.
+                    This information will be used to fill out Allocation's Provision Of Services
+                    Agreement.
                   </Typography>
                   <Grid container spacing={2}>
                     {inputs.map((item) => {
@@ -121,7 +127,11 @@ const POSModal = ({ modal, setModal, organization }) => {
                 <a href={redirectUrl} target="_blank" rel="noopener noreferrer center" />
               </div>
               <div className="embed-responsive embed-responsive-1by1">
-                <iframe className="embed-responsive-item" title="Wire Instructions" src={redirectUrl} />
+                <iframe
+                  className="embed-responsive-item"
+                  title="Wire Instructions"
+                  src={redirectUrl}
+                />
               </div>
             </>
           )}

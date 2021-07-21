@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import { get, toLower } from 'lodash';
-import { gql } from 'apollo-boost';
+import { gql } from '@apollo/client';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import {
   Toolbar,
@@ -15,28 +15,23 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  InputLabel,
   FormControl,
   Select,
-  MenuItem
+  MenuItem,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import SettingsIcon from '@material-ui/icons/Settings';
-import BuildIcon from '@material-ui/icons/Build';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MonetizationOnRoundedIcon from '@material-ui/icons/MonetizationOnRounded';
 import AccountBalanceRoundedIcon from '@material-ui/icons/AccountBalanceRounded';
 import CreditCardRoundedIcon from '@material-ui/icons/CreditCardRounded';
 import { useAuth } from '../../auth/useAuth';
-import NavBar from '../NavBar';
-import { phone } from '../../utils/helpers'
-import Loader from '../utils/Loader'
+import { phone } from '../../utils/helpers';
 import { useViewport } from '../../utils/hooks';
 import './style.scss';
-
 
 const whitelistEmails = [
   {
@@ -760,7 +755,7 @@ const drawerWidth = 250;
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    flexDirection: "column"
+    flexDirection: 'column',
   },
   brand: {
     flexGrow: 1,
@@ -777,85 +772,85 @@ const useStyles = makeStyles((theme) => ({
     background: '#fff',
     color: '#868c97',
     boxShadow: 'none !important',
-    position: "relative",
-    height: "70px",
-    border: "none",
-    borderBottom: "1px solid #d8dce6"
+    position: 'relative',
+    height: '70px',
+    border: 'none',
+    borderBottom: '1px solid #d8dce6',
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    "&:focus": {
-      outline: "none"
+    '&:focus': {
+      outline: 'none',
     },
     [theme.breakpoints.up('sm')]: {
       display: 'none',
     },
   },
   icon: {
-    minWidth: "40px",
+    minWidth: '40px',
     color: '#8593a6',
   },
   input: {
-    border: "none !important",
-    "&:before, &:after": {
-      border: "none"
-    }
+    border: 'none !important',
+    '&:before, &:after': {
+      border: 'none',
+    },
   },
   inputFocused: {
-    border: "none"
+    border: 'none',
   },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
     paddingTop: 8,
-    border: "none",
+    border: 'none',
     borderRight: '1px solid #dfe2e5',
     borderLeft: 0,
-    position: "relative",
-    height: "100vh"
+    position: 'relative',
+    height: '100vh',
     // height: "calc(100vh - 70px)"
   },
   newDrawerPaper: {
     width: drawerWidth,
     paddingTop: 8,
-    border: "none",
+    border: 'none',
     borderRight: '1px solid #dfe2e5',
     borderLeft: 0,
-    position: "relative",
-    height: "100vh"
+    position: 'relative',
+    height: '100vh',
   },
   contentContainer: {
-    display:"flex",
-    justifyContent:"space-between",
-    alignItems:"flex-start",
-    height:"calc(100vh - 70px)",
-    overflow:"hidden"
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    height: 'calc(100vh - 70px)',
+    overflow: 'hidden',
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(4),
     maxWidth: 'calc(100% - 250px)',
-    width: "calc(100% - 250px)",
-    overflowY: "scroll",
-    height: "calc(100vh - 70px)",
-    paddingBottom: "0",
-    position: "relative",
+    width: 'calc(100% - 250px)',
+    overflowY: 'scroll',
+    height: 'calc(100vh - 70px)',
+    paddingBottom: '0',
+    position: 'relative',
     [theme.breakpoints.down(phone)]: {
-      width: "100vw",
-      maxWidth: "none",
-      padding: "20px"
+      width: '100vw',
+      maxWidth: 'none',
+      padding: '20px',
     },
   },
   formControl: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignSelf: "center",
-    width: "78%",
-    marginTop: "20px",
-    "&:hover *:before, ": {
-      border: "none !important"
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: '78%',
+    marginTop: '20px',
+    '&:hover *:before, ': {
+      border: 'none !important',
     },
   },
   sectionDesktop: {
@@ -871,11 +866,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   select: {
-    width: "90%",
-    textAlign: "center",
-    fontWeight: "bold",
+    width: '90%',
+    textAlign: 'center',
+    fontWeight: 'bold',
     // fontSize: "20px"
-  }
+  },
 }));
 
 const GET_INVESTOR = gql`
@@ -925,26 +920,35 @@ export default function Sidebar(props) {
     if (userProfile.showBuild || location.pathname === '/get-started') {
       setBuildTab(true);
     }
-  }, [userProfile.showInvestAndMrkPlc, userProfile.showCredit, location.pathname, userProfile.showBuild]);
+  }, [
+    userProfile.showInvestAndMrkPlc,
+    userProfile.showCredit,
+    location.pathname,
+    userProfile.showBuild,
+  ]);
 
-  const isUserAuthenticated = isAuthenticated && userProfile
+  const isUserAuthenticated = isAuthenticated && userProfile;
 
   useEffect(() => {
     const userIsOrgAdmin = userProfile?.organizations_admin?.length;
-    const defaultAccount = userIsOrgAdmin? userProfile.organizations_admin[0].name : userProfile.name;
-    const defaultUrl = userIsOrgAdmin? `/admin/${userProfile.organizations_admin[0].slug}` : '/'
-    setCurrentHomeUrl(defaultUrl)
-    if(isAuthenticated){
-      if(location?.pathname === '/'){
+    const defaultAccount = userIsOrgAdmin
+      ? userProfile.organizations_admin[0].name
+      : userProfile.name;
+    const defaultUrl = userIsOrgAdmin ? `/admin/${userProfile.organizations_admin[0].slug}` : '/';
+    setCurrentHomeUrl(defaultUrl);
+    if (isAuthenticated) {
+      if (location?.pathname === '/') {
         setCurrentAccount(defaultAccount);
-        history.push(defaultUrl)
-      }else{
+        history.push(defaultUrl);
+      } else {
         const organizationSlug = fundMatch?.params?.organization;
-        const currentOrg = userProfile?.organizations_admin?.find(org => org.slug === organizationSlug);
-        handleAccountChange(currentOrg?.name? currentOrg.name : '')
+        const currentOrg = userProfile?.organizations_admin?.find(
+          (org) => org.slug === organizationSlug,
+        );
+        handleAccountChange(currentOrg?.name ? currentOrg.name : '');
       }
     }
-  }, [isUserAuthenticated])
+  }, [isUserAuthenticated]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -955,13 +959,13 @@ export default function Sidebar(props) {
   };
 
   const handleAccountChange = (e) => {
-    const newValue = e.target? e.target.value : e;
-    const org = userProfile?.organizations_admin?.find(org => org.name === newValue);
-    const account = org? org.name : userProfile?.name;
-    const currentHomePath = org? `/admin/${org.slug}` : '/'
-    setCurrentHomeUrl(currentHomePath)
-    setCurrentAccount(account)
-  }
+    const newValue = e.target ? e.target.value : e;
+    const org = userProfile?.organizations_admin?.find((org) => org.name === newValue);
+    const account = org ? org.name : userProfile?.name;
+    const currentHomePath = org ? `/admin/${org.slug}` : '/';
+    setCurrentHomeUrl(currentHomePath);
+    setCurrentAccount(account);
+  };
 
   const menus = [
     {
@@ -998,7 +1002,6 @@ export default function Sidebar(props) {
     });
   }
 
-
   const drawer = (
     <div>
       <List>
@@ -1006,7 +1009,9 @@ export default function Sidebar(props) {
           <div
             key={`menu-${title}`}
             onClick={mobileOpen ? handleDrawerClose : null}
-            className={`sidebar-nav-item ${location.pathname === to ? 'sidebar-nav-item-active' : ''}`}
+            className={`sidebar-nav-item ${
+              location.pathname === to ? 'sidebar-nav-item-active' : ''
+            }`}
           >
             {title !== 'Get Started' ? (
               <ListItem component={Link} to={to} button>
@@ -1029,7 +1034,9 @@ export default function Sidebar(props) {
           <Divider />
           <List>
             <div
-              className={`sidebar-nav-item ${location.pathname === '/admin/funds' ? 'sidebar-nav-item-active' : ''}`}
+              className={`sidebar-nav-item ${
+                location.pathname === '/admin/funds' ? 'sidebar-nav-item-active' : ''
+              }`}
             >
               <ListItem component={Link} to="/admin/funds" button>
                 <ListItemIcon className={classes.icon}>
@@ -1039,8 +1046,10 @@ export default function Sidebar(props) {
               </ListItem>
             </div>
             <div
-              className={`sidebar-nav-item ${location.pathname === '/admin/settings' ? 'sidebar-nav-item-active' : ''}`}
-              >
+              className={`sidebar-nav-item ${
+                location.pathname === '/admin/settings' ? 'sidebar-nav-item-active' : ''
+              }`}
+            >
               <ListItem component={Link} to="/admin/settings" button>
                 <ListItemIcon className={classes.icon}>
                   <SettingsIcon />
@@ -1052,12 +1061,11 @@ export default function Sidebar(props) {
           </List>
         </>
       )}
-      <div
-        onClick={mobileOpen ? handleDrawerClose : null}
-        className={`sidebar-nav-item`}
-      >
+      <div onClick={mobileOpen ? handleDrawerClose : null} className={`sidebar-nav-item`}>
         <ListItem button onClick={logoutWithRedirect}>
-          <ListItemIcon className={classes.icon}><ExitToAppIcon/></ListItemIcon>
+          <ListItemIcon className={classes.icon}>
+            <ExitToAppIcon />
+          </ListItemIcon>
           <ListItemText primary="Logout" />
         </ListItem>
       </div>
@@ -1073,9 +1081,9 @@ export default function Sidebar(props) {
         {!onboarding && <CssBaseline />}
         {!onboarding ? (
           <>
-            {width > phone?
+            {width > phone ? (
               ''
-              :
+            ) : (
               <AppBar className={classes.appBar}>
                 <Toolbar>
                   <IconButton
@@ -1086,15 +1094,25 @@ export default function Sidebar(props) {
                     className={classes.menuButton}
                   >
                     <MenuIcon />
-                    
                   </IconButton>
                   <div className={classes.brand}>
-                    <Brand organizations_admin={userProfile.organizations_admin || []} admin={userProfile.admin} />
+                    <Brand
+                      organizations_admin={userProfile.organizations_admin || []}
+                      admin={userProfile.admin}
+                    />
                   </div>
                 </Toolbar>
               </AppBar>
-            }
-            <div className={classes.contentContainer} style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start", height: "100vh"}}>
+            )}
+            <div
+              className={classes.contentContainer}
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                height: '100vh',
+              }}
+            >
               <nav className={classes.drawer} aria-label="mailbox folders">
                 <Hidden mdUp implementation="css">
                   <Drawer
@@ -1109,7 +1127,7 @@ export default function Sidebar(props) {
                     ModalProps={{
                       keepMounted: true,
                     }}
-                    >
+                  >
                     <FormControl className={classes.formControl}>
                       <Select
                         labelId="accounts-select"
@@ -1119,36 +1137,41 @@ export default function Sidebar(props) {
                         classes={{
                           root: classes.select,
                         }}
-                        InputProps={{
+                        inputProps={{
                           classes: {
                             focused: classes.inputFocused,
-                            underline: classes.inputFocused
-                          }
+                            underline: classes.inputFocused,
+                          },
                         }}
-                        >
+                      >
                         <MenuItem
                           onClick={() => {
-                            handleDrawerToggle()
-                            history.push(`/`)
+                            handleDrawerToggle();
+                            history.push(`/`);
                           }}
                           value={userProfile?.name}
-                          style={{borderBottom: "1px solid rgb(204, 204, 204)", fontWeight: "500"}}
+                          style={{
+                            borderBottom: '1px solid rgb(204, 204, 204)',
+                            fontWeight: '500',
+                          }}
                         >
                           {userProfile?.name}
                         </MenuItem>
-                        {userProfile?.organizations_admin?.sort((a, b) => a.name.localeCompare(b.name))
-                          .map(org =>
-                            <MenuItem
-                              onClick={() => {
-                                handleDrawerToggle()
-                                history.push(`/admin/${org.slug}`)
-                              }}
-                              value={org.name}
-                              key={org.name}
-                            >
-                              {org.name}
-                            </MenuItem>
-                            )}
+                        {userProfile?.organizations_admin?.length &&
+                          [...userProfile.organizations_admin]
+                            .sort((a, b) => a.name.localeCompare(b.name))
+                            .map((org) => (
+                              <MenuItem
+                                onClick={() => {
+                                  handleDrawerToggle();
+                                  history.push(`/admin/${org.slug}`);
+                                }}
+                                value={org.name}
+                                key={org.name}
+                              >
+                                {org.name}
+                              </MenuItem>
+                            ))}
                       </Select>
                     </FormControl>
                     {drawer}
@@ -1157,11 +1180,11 @@ export default function Sidebar(props) {
                 <Hidden smDown implementation="css">
                   <Drawer
                     classes={{
-                      paper: classes.newDrawerPaper
+                      paper: classes.newDrawerPaper,
                     }}
                     variant="permanent"
                     open
-                    >
+                  >
                     <FormControl className={classes.formControl}>
                       <Select
                         labelId="accounts-select"
@@ -1171,37 +1194,45 @@ export default function Sidebar(props) {
                         classes={{
                           root: classes.select,
                         }}
-                        InputProps={{
+                        inputProps={{
                           classes: {
                             focused: classes.inputFocused,
-                            underline: classes.inputFocused
-                          }
+                            underline: classes.inputFocused,
+                          },
                         }}
-                        >
+                      >
                         <MenuItem
                           onClick={() => history.push(`/`)}
                           value={userProfile?.name}
-                          style={{borderBottom: "1px solid rgb(204, 204, 204)", fontWeight: "500"}}
+                          style={{
+                            borderBottom: '1px solid rgb(204, 204, 204)',
+                            fontWeight: '500',
+                          }}
                         >
                           {userProfile?.name}
                         </MenuItem>
-                        {userProfile?.organizations_admin?.sort((a, b) => a.name.localeCompare(b.name))
-                          .map(org =>
-                            <MenuItem
-                              onClick={() => history.push(`/admin/${org.slug}`)}
-                              value={org.name}
-                              key={org.name}
-                            >
-                              {org.name}
-                            </MenuItem>
-                            )}
+                        {userProfile?.organizations_admin?.length &&
+                          [...userProfile.organizations_admin]
+                            .sort((a, b) => a.name.localeCompare(b.name))
+                            .map((org) => (
+                              <MenuItem
+                                onClick={() => history.push(`/admin/${org.slug}`)}
+                                value={org.name}
+                                key={org.name}
+                              >
+                                {org.name}
+                              </MenuItem>
+                            ))}
                       </Select>
                     </FormControl>
                     {drawer}
                   </Drawer>
                 </Hidden>
               </nav>
-              <main className={classes.content} style={{ background: 'rgba(0,0,0,0.01)', height: "100vh" }}>
+              <main
+                className={classes.content}
+                style={{ background: 'rgba(0,0,0,0.01)', height: '100vh' }}
+              >
                 {props.children}
               </main>
             </div>
@@ -1227,8 +1258,12 @@ function Brand({ organizations_admin, admin }) {
     isAdmin = true;
   }
 
-  const adminMatches = match && match.params.organization && !whitelist.includes(match.params.organization);
-  const dealMatches = dealMatch && dealMatch.params.organization && !whitelist.includes(dealMatch.params.organization);
+  const adminMatches =
+    match && match.params.organization && !whitelist.includes(match.params.organization);
+  const dealMatches =
+    dealMatch &&
+    dealMatch.params.organization &&
+    !whitelist.includes(dealMatch.params.organization);
   if (adminMatches || dealMatches) {
     const slug = adminMatches ? match.params.organization : dealMatch.params.organization;
     const orgName = get(

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { gql } from 'apollo-boost';
 import { Paper, Grid, ButtonBase, Typography, Button } from '@material-ui/core';
 import { toLower } from 'lodash';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, gql } from '@apollo/client';
 import { useParams, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { useFetch } from '../../../utils/hooks';
@@ -127,7 +126,11 @@ export default function AdminHome() {
   const header = (
     <Grid container justify="space-between">
       <Grid item sm={12} md={6}>
-        <Typography variant="h4" className={classes.orgName} style={{ color: fundData.length === 0 ? '#000' : '#fff' }}>
+        <Typography
+          variant="h4"
+          className={classes.orgName}
+          style={{ color: fundData.length === 0 ? '#000' : '#fff' }}
+        >
           {orgData.name}
         </Typography>
       </Grid>
@@ -185,11 +188,15 @@ export default function AdminHome() {
       </div>
 
       <>
-        {tab === 'active-deals' && <ActiveDeals orgData={orgData} isDemo={isDemo} superadmin={data?.investor?.admin} />}
+        {tab === 'active-deals' && (
+          <ActiveDeals orgData={orgData} isDemo={isDemo} superadmin={data?.investor?.admin} />
+        )}
         {tab === 'closed-deals' && <ClosedDeals orgData={orgData} />}
         {tab === 'all-investors' && <Investors />}
         {tab === 'investments' && <Investments />}
-        {tab === 'setting' && <Settings orgData={orgData} investor={data.investor} refetch={refetch} />}
+        {tab === 'setting' && (
+          <Settings orgData={orgData} investor={data.investor} refetch={refetch} />
+        )}
       </>
     </>
   );
