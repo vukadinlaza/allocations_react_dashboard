@@ -1,5 +1,7 @@
-import React from 'react';
-import _ from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { gql } from 'apollo-boost';
+import { useQuery } from '@apollo/react-hooks';
+import _, { toLower } from 'lodash';
 import moment from 'moment';
 import { Typography, Grid } from '@material-ui/core';
 import { DefaultChartTable, DoughnutChart, LineChart } from '../../../utils/charts';

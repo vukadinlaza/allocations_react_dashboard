@@ -1,11 +1,15 @@
-import { FormControl, TextField, Button, Menu, MenuItem } from '@material-ui/core';
+import { FormControl, TextField, Button, Menu, MenuItem, IconButton } from '@material-ui/core';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './styles.scss';
 import { toast } from 'react-toastify';
 import ReactCrop from 'react-image-crop';
-import { useMutation, gql } from '@apollo/client';
-import 'react-image-crop/lib/ReactCrop.scss';
+import { gql } from 'apollo-boost';
+import { useMutation } from '@apollo/react-hooks';
 import CopyIcon from '../../../assets/copy-icon.svg';
+import CloseIcon from '@material-ui/icons/Close';
+import 'react-image-crop/lib/ReactCrop.scss';
+import DescriptionIcon from '@material-ui/icons/Description';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import DocumentIcon from '../../../assets/document-icon.svg';
 import DocumentMenuIcon from '../../../assets/document-menu-icon.svg';
 
@@ -41,37 +45,46 @@ const RM_LOGO = gql`
   }
 `;
 
-function DealSettings({ formData, setFormData, refetch }) {
+
+function DealSettings({ formData, setFormData, refetch, loading }) {
   const [addDoc] = useMutation(ADD_DOC);
   const [rmDoc] = useMutation(RM_DOC, {
     onCompleted: () => {
-      toast.success('Deal settings have been updated.');
-      refetch();
-    },
+      toast.success('Deal settings have been updated.')
+      refetch()
+    }
   });
   const [rmDealLogo] = useMutation(RM_LOGO, {
     onCompleted: () => {
-      toast.success('Deal cover image has been deleted.');
-      refetch();
-    },
+      toast.success('Deal cover image has been deleted.')
+      refetch()
+    }
   });
+
 
   const [doc, setDoc] = useState(null);
   const [docMenuOpen, toggleDocMenuOpen] = useState(false);
   const [wireInstructions, setWireInstructions] = useState(null);
   const [documentMenuAnchorEl, setDocumentMenuAnchorEl] = useState(null);
 
-  const { _id, documents, last_valuation, docSpringTemplateId, slug, dealCoverImageKey } = formData;
+  const {
+    _id,
+    documents,
+    last_valuation,
+    docSpringTemplateId,
+    slug,
+    dealCoverImageKey
+  } = formData;
 
   const deleteDealDocument = (doc) => {
     if (window.confirm(`Delete ${doc.path} document?`)) {
       rmDoc({ variables: { deal_id: _id, title: doc.path } });
     }
-  };
+  }
 
   const handleDocumentMenuClick = (event) => {
     setDocumentMenuAnchorEl(event.currentTarget);
-    toggleDocMenuOpen((open) => !open);
+    toggleDocMenuOpen(open => !open)
   };
 
   const handleClose = () => {
@@ -85,12 +98,7 @@ function DealSettings({ formData, setFormData, refetch }) {
           <img src={DocumentIcon} />
           <p className="document-title">{doc.path}</p>
         </a>
-        <Button
-          className="document-menu-button"
-          aria-controls="simple-menu"
-          aria-haspopup="true"
-          onClick={handleDocumentMenuClick}
-        >
+        <Button className="document-menu-button" aria-controls="simple-menu" aria-haspopup="true" onClick={handleDocumentMenuClick}>
           <img src={DocumentMenuIcon} />
         </Button>
 
@@ -102,11 +110,15 @@ function DealSettings({ formData, setFormData, refetch }) {
           open={Boolean(documentMenuAnchorEl)}
           onClose={handleClose}
         >
-          <MenuItem onClick={() => deleteDealDocument(doc)}>Delete Document</MenuItem>
+
+          <MenuItem onClick={() => deleteDealDocument(doc)}>
+            Delete Document
+          </MenuItem>
         </Menu>
-      </li>
-    );
-  });
+      </li >
+    )
+  })
+
 
   const submitDoc = () => {
     if (doc?.doc && doc?.title) {
@@ -152,9 +164,7 @@ function DealSettings({ formData, setFormData, refetch }) {
 
   function AddDealLogo() {
     const [addLogo, { data, error }] = useMutation(ADD_LOGO);
-    const [imgSrc, setImgSrc] = useState(
-      `https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`,
-    );
+    const [imgSrc, setImgSrc] = useState(`https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`);
     const [upImg, setUpImg] = useState(null);
     const imgRef = useRef(null);
     const previewCanvasRef = useRef(null);
@@ -164,8 +174,8 @@ function DealSettings({ formData, setFormData, refetch }) {
     const [cropperOpen, setCropperOpen] = useState(false);
 
     useEffect(() => {
-      setImgSrc(`https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`);
-    }, [dealCoverImageKey, slug]);
+      setImgSrc(`https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`)
+    }, [dealCoverImageKey, slug])
 
     const submitCrop = (canvas, crop) => {
       if (!crop || !canvas) {
@@ -183,9 +193,7 @@ function DealSettings({ formData, setFormData, refetch }) {
 
     const submitLogo = () => {
       if (croppedImage.logo && croppedImage.title) {
-        addLogo({
-          variables: { deal_id: formData._id, ...croppedImage, title: croppedImage.title },
-        });
+        addLogo({ variables: { deal_id: formData._id, ...croppedImage, title: croppedImage.title } });
       }
     };
 
@@ -193,7 +201,7 @@ function DealSettings({ formData, setFormData, refetch }) {
       if (dealCoverImageKey && window.confirm('Delete deal cover image?')) {
         rmDealLogo({ variables: { deal_id: _id } });
       }
-    };
+    }
 
     const onSelectFile = (e) => {
       if (e.target.files && e.target.files.length > 0) {
@@ -253,9 +261,10 @@ function DealSettings({ formData, setFormData, refetch }) {
                   <input type="file" hidden accept="image/*" onChange={onSelectFile} />
                 </Button>
                 <p>
-                  {dealCoverImageKey
-                    ? 'dealCoverImage.png'
-                    : croppedImage?.title || 'No image selected'}
+                  {
+                    dealCoverImageKey ?
+                      'dealCoverImage.png' : croppedImage?.title || 'No image selected'
+                  }
                 </p>
               </div>
             </div>
@@ -266,14 +275,23 @@ function DealSettings({ formData, setFormData, refetch }) {
           </Button>
         </FormControl>
 
-        {dealCoverImageKey && (
-          <div className="image-preview-container">
-            <img className="image-preview" alt={slug} src={imgSrc} />
-            <Button onClick={removeLogo} className="delete-image">
-              Delete Image
-            </Button>
-          </div>
-        )}
+        {
+          dealCoverImageKey && (
+            <div className="image-preview-container">
+              <img
+                className="image-preview"
+                alt={slug}
+                src={imgSrc}
+              />
+              <Button
+                onClick={removeLogo}
+                className="delete-image">
+                Delete Image
+              </Button>
+            </div>
+          )
+        }
+
 
         {cropperOpen && (
           <div className="image-crop-container">
@@ -342,14 +360,18 @@ function DealSettings({ formData, setFormData, refetch }) {
           </label>
         </FormControl>
 
-        {documents && (
-          <div className="deal-documents">
-            <label className="field-label">
-              Deal Documents
-              <ul className="document-list">{dealDocumentItems}</ul>
-            </label>
-          </div>
-        )}
+        {
+          documents && (
+            <div className="deal-documents">
+              <label className="field-label">
+                Deal Documents
+            <ul className="document-list">
+                  {dealDocumentItems}
+                </ul>
+              </label>
+            </div>
+          )
+        }
 
         <AddDealLogo />
 
@@ -379,11 +401,7 @@ function DealSettings({ formData, setFormData, refetch }) {
             </div>
           </label>
 
-          <Button
-            disabled={wireInstructions === null}
-            onClick={submitWireInstructions}
-            className="upload-button"
-          >
+          <Button disabled={wireInstructions === null} onClick={submitWireInstructions} className="upload-button">
             Upload to deal
           </Button>
         </FormControl>
@@ -435,7 +453,7 @@ function DealSettings({ formData, setFormData, refetch }) {
               InputProps={{
                 endAdornment: (
                   <Button onClick={handleLinkCopy} className="copy-button">
-                    <img src={CopyIcon} alt="Copy Icon" />
+                    <img src={CopyIcon} alt='Copy Icon' />
                   </Button>
                 ),
               }}

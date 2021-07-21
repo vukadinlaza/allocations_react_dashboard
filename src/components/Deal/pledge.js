@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Grid, TextField, InputAdornment, Button } from '@material-ui/core';
+import { gql } from 'apollo-boost';
 import { toast } from 'react-toastify';
-import { useMutation, gql } from '@apollo/client';
+import { useMutation } from '@apollo/react-hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -62,13 +63,7 @@ export default ({ investment, refetch, allowEdit }) => {
         }}
         variant="outlined"
       />
-      <Button
-        variant="contained"
-        className={classes.button}
-        size="medium"
-        onClick={submit}
-        disabled={!allowEdit}
-      >
+      <Button variant="contained" className={classes.button} size="medium" onClick={submit} disabled={!allowEdit}>
         Invest
       </Button>
     </Grid>

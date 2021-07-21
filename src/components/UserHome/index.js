@@ -1,5 +1,5 @@
 import React from 'react';
-import { gql } from '@apollo/client';
+import { gql } from 'apollo-boost';
 import { Redirect } from 'react-router-dom';
 import { useAuth } from '../../auth/useAuth';
 import NewHome from './newHome';

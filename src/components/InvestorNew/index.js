@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { gql } from 'apollo-boost';
 import { get } from 'lodash';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
-import { useMutation, gql } from '@apollo/client';
+import { useMutation } from '@apollo/react-hooks';
 import { TextField, Button, FormControl, Grid, Paper } from '@material-ui/core';
 
 /** *

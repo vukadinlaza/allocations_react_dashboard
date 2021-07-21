@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useMutation, useQuery, gql } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
 import { Button } from '@material-ui/core';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';

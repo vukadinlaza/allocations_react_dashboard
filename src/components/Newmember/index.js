@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
+import { gql } from 'apollo-boost';
 import { useParams, useHistory } from 'react-router-dom';
-import { useMutation, gql } from '@apollo/client';
+import { useMutation } from '@apollo/react-hooks';
 
 const CONFIRM_INVITE = gql`
   mutation ConfirmInvitation($accountId: String) {
@@ -11,6 +12,7 @@ const CONFIRM_INVITE = gql`
 export default () => {
   const { accountId } = useParams();
   const history = useHistory();
+  console.log('ACCOUNTID', accountId);
 
   const [confirmInvitation, { called }] = useMutation(CONFIRM_INVITE);
   useEffect(() => {

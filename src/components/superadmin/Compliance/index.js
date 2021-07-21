@@ -1,21 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
-import { useMutation, gql } from '@apollo/client';
-import { useParams } from 'react-router-dom';
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
+import { useParams, Link } from 'react-router-dom';
 import {
   Paper,
   Table,
   TableBody,
   TableCell,
   TableRow,
+  TableHead,
   TextField,
   Button,
+  LinearProgress,
   Select,
   MenuItem,
   FormControl,
   InputLabel,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormLabel,
 } from '@material-ui/core';
 import { Col, Row } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useAuth } from '../../../auth/useAuth';
 import { useSimpleReducer } from '../../../utils/hooks';
 import Loader from '../../utils/Loader';
 import './style.scss';
@@ -85,11 +94,7 @@ export default function Compliance({ data, error, refetch }) {
 }
 
 function CreateTask({ refetch, templates }) {
-  const [task, setTask] = useSimpleReducer({
-    task: '',
-    is_signature: 'false',
-    signature_template: '',
-  });
+  const [task, setTask] = useSimpleReducer({ task: '', is_signature: 'false', signature_template: '' });
   const { organization: slug } = useParams();
   const [createTask] = useMutation(CREATE_TASK, {
     variables: { slug },
@@ -106,10 +111,7 @@ function CreateTask({ refetch, templates }) {
       />
       <FormControl size="small" style={{ width: '30%' }}>
         <InputLabel>Signature?</InputLabel>
-        <Select
-          value={task.is_signature}
-          onChange={(e) => setTask({ is_signature: e.target.value })}
-        >
+        <Select value={task.is_signature} onChange={(e) => setTask({ is_signature: e.target.value })}>
           <MenuItem value="true">Yes</MenuItem>
           <MenuItem value="false">No</MenuItem>
         </Select>
@@ -135,11 +137,7 @@ function CreateTask({ refetch, templates }) {
         onClick={() =>
           createTask({
             variables: {
-              complianceTask: {
-                ...task,
-                is_signature: task.is_signature === 'true',
-                status: 'not_started',
-              },
+              complianceTask: { ...task, is_signature: task.is_signature === 'true', status: 'not_started' },
             },
           })
         }
@@ -150,6 +148,7 @@ function CreateTask({ refetch, templates }) {
   );
 }
 
+const prettyStatus = (status) => status.split('_').join(' ');
 const statuses = ['not_started', 'waiting', 'in_progress', 'done'];
 
 function Task({ task, refetch }) {
@@ -177,9 +176,7 @@ function Task({ task, refetch }) {
           <Select
             value={status}
             onChange={(e) => {
-              updateTask({
-                variables: { complianceTask: { status: e.target.value, _id: task._id } },
-              });
+              updateTask({ variables: { complianceTask: { status: e.target.value, _id: task._id } } });
               setStatus(e.target.value);
             }}
           >

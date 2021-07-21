@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import HelloSign from 'hellosign-embedded';
 import { useParams, useHistory } from 'react-router-dom';
-import { useMutation, gql } from '@apollo/client';
-import { Paper, Table, TableBody, TableCell, TableRow, Button } from '@material-ui/core';
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
+
+import { Row, Col } from 'reactstrap';
+import { Paper, Table, TableBody, TableCell, TableRow, TableHead, Button, LinearProgress } from '@material-ui/core';
 
 const helloSign = new HelloSign({ clientId: 'eda2d58dfbeed4f5eaf8d94a545f7dc5' });
 const testMode = process.env.NODE_ENV !== 'production';
@@ -36,9 +39,7 @@ export default function NextSteps({ org, refetch }) {
 
   useEffect(() => {
     // only show signatures for now
-    setRequests(
-      (org.complianceTasks || []).filter((task) => task.is_signature && task.status !== 'done'),
-    );
+    setRequests((org.complianceTasks || []).filter((task) => task.is_signature && task.status !== 'done'));
   }, [org]);
 
   if (requests.length === 0) return null;

@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from 'apollo-boost';
 
 export const search = gql`
   query SearchDeals($q: String!) {

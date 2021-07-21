@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
+import { gql } from 'apollo-boost';
 import { Row, Col } from 'reactstrap';
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
 import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
-import { useQuery, useMutation, gql } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import {

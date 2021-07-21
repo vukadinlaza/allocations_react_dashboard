@@ -4,11 +4,12 @@ import { Paper, Grid, Typography } from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { gql } from 'apollo-boost';
 import StepConnector from '@material-ui/core/StepConnector';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import { useMutation, gql } from '@apollo/client';
+import { useMutation } from '@apollo/react-hooks';
 import QuestionsTwo from './newBuild';
 import './style.scss';
 
@@ -63,11 +64,7 @@ function QontoStepIcon(props) {
         [classes.active]: active,
       })}
     >
-      {completed ? (
-        <CheckCircleIcon className={classes.completed} />
-      ) : (
-        <CheckCircleIcon className={classes.inactive} />
-      )}
+      {completed ? <CheckCircleIcon className={classes.completed} /> : <CheckCircleIcon className={classes.inactive} />}
     </div>
   );
 }
@@ -95,9 +92,7 @@ export default ({ deal, user, data, setData, setActiveStep, activeStep, atQuesti
       if (!data.airtableId) {
         const response = await fetch(`https://api.airtable.com/v0/${BASE}/${TABEL_NAME}`, {
           method: 'post', // make sure it is a "POST request"
-          body: JSON.stringify({
-            fields: { userId: user?._id, activeStep, email: user.email, ...data },
-          }),
+          body: JSON.stringify({ fields: { userId: user?._id, activeStep, email: user.email, ...data } }),
           headers: {
             Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`, // API key
             'Content-Type': 'application/json', // we will recive a json object
@@ -147,13 +142,7 @@ export default ({ deal, user, data, setData, setActiveStep, activeStep, atQuesti
   if (!deal) return null;
   return (
     <>
-      <Grid
-        xs={12}
-        sm={12}
-        md={12}
-        lg={12}
-        style={{ display: 'flex', marginTop: '3rem', marginRight: '5%' }}
-      >
+      <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', marginTop: '3rem', marginRight: '5%' }}>
         <Grid
           xs={0}
           sm={3}
@@ -214,10 +203,7 @@ export default ({ deal, user, data, setData, setActiveStep, activeStep, atQuesti
                 maxHeight: '100%',
               }}
             >
-              <Typography
-                variant="title1"
-                style={{ marginTop: '1rem', marginBottom: '1.5rem', fontSize: '2rem' }}
-              >
+              <Typography variant="title1" style={{ marginTop: '1rem', marginBottom: '1.5rem', fontSize: '2rem' }}>
                 {activeStep === 2 ? 'Tell us about your SPV/Fund' : steps[activeStep - 1]}
               </Typography>
               <QuestionsTwo
