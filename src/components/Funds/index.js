@@ -7,6 +7,9 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { phone, tablet } from '../../utils/helpers';
 import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
+import Highlights from './sections/Highlights';
+import Funds from './sections/Funds';
+import SPVs from './sections/SPVs';
 
 const styles = (theme) => ({
 	createButton: {
@@ -107,7 +110,7 @@ const styles = (theme) => ({
 
 const dashboardTabs = ['Highlights', 'Funds', 'SPVs']
 
-const FundManagerDashboard = ({ classes, history }) => {
+const FundAdminDashboard = ({ classes, history }) => {
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -119,17 +122,17 @@ const FundManagerDashboard = ({ classes, history }) => {
     switch (tabIndex) {
       case 0:
         return (
-					<div>Hightlights</div>
+					<Highlights/>
         );
 
       case 1:
         return (
-					<div>Funds</div>
+					<Funds/>
         );
 
       case 2:
         return (
-					<div>SPVs</div>
+					<SPVs/>
         );
 
       default:
@@ -192,4 +195,4 @@ const FundManagerDashboard = ({ classes, history }) => {
   );
 };
 
-export default withStyles(styles)(withRouter(FundManagerDashboard));
+export default withStyles(styles)(withRouter(FundAdminDashboard));
