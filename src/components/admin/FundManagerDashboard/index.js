@@ -91,7 +91,7 @@ const styles = (theme) => ({
     [theme.breakpoints.down(phone)]: {
       marginBottom: "1em",
       "& *": {
-        marginLeft: "0 !important",
+        // marginLeft: "0 !important",
       }
     },
   },
