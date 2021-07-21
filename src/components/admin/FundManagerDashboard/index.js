@@ -463,11 +463,11 @@ export const ONBOARDING = gql`
 const fundTabs = [
   'Highlights',
   'Investments',
-  'Investors',
   'Investor Onboarding Status',
+  'Investors',
   'Deal Page',
 ];
-const spvTabs = ['Investors', 'Investor Onboarding Status', 'Deal Page'];
+const spvTabs = ['Investor Onboarding Status', 'Investors', 'Deal Page'];
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
