@@ -88,20 +88,20 @@ const styles = (theme) => ({
       textDecoration: 'none',
     },
     [theme.breakpoints.down(phone)]: {
-      marginBottom: "1em",
-      "& *": {
-        marginLeft: "0 !important",
-      }
+      marginBottom: '1em',
+      '& *': {
+        // marginLeft: "0 !important",
+      },
     },
   },
   createButtonsContainer: {
-    display: 'flex', 
-    justifyContent: 'space-between', 
-    width: "520px",
+    display: 'flex',
+    justifyContent: 'space-between',
+    width: '520px',
     [theme.breakpoints.down(phone)]: {
-      flexDirection: "column",
-      marginBottom: "2em",
-      width: "100%"
+      flexDirection: 'column',
+      marginBottom: '2em',
+      width: '100%',
     },
   },
   dashboardContainer: {
@@ -459,8 +459,14 @@ export const ONBOARDING = gql`
   }
 `;
 
-const fundTabs = ['Highlights', 'Investments', 'Investors', 'Investor Onboarding Status', 'Deal Page'];
-const spvTabs = ['Investors', 'Investor Onboarding Status', 'Deal Page'];
+const fundTabs = [
+  'Highlights',
+  'Investments',
+  'Investor Onboarding Status',
+  'Investors',
+  'Deal Page',
+];
+const spvTabs = ['Investor Onboarding Status', 'Investors', 'Deal Page'];
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
@@ -649,7 +655,15 @@ const FundManagerDashboard = ({ classes, history }) => {
         return <Investments classes={classes} width={width} data={fundData} />;
 
       case 'Investors':
-        return <Investors classes={classes} width={width} data={dealInvestments} />;
+        return (
+          <Investors
+            classes={classes}
+            width={width}
+            data={dealInvestments}
+            orgSlug={orgSlug}
+            userProfile={userProfile}
+          />
+        );
 
       case 'Investor Onboarding Status':
         return (
