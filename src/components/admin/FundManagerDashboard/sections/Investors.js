@@ -38,7 +38,7 @@ const Investors = ({ classes, data }) => {
 
   if(searchTerm) {
     investorsData = investorsData.filter(investor =>
-      (investor.first_name? `${investor['first_name']} ${investor['last_name']} ${investor['email']}` : '')
+      (investor.first_name? `${investor['first_name']} ${investor['last_name']} ${investor['email']}` : `${investor['email']}`)
       .toUpperCase()
       .includes(searchTerm.toUpperCase())
     )
