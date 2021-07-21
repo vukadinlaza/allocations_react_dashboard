@@ -95,6 +95,9 @@ const styles = (theme) => ({
     top: '0px',
     left: '0px',
     margin: '0 40px',
+    [theme.breakpoints.down(phone)]: {
+      borderBottom: "none"
+    },
   },
   tabWrapper: {
     padding: '0 10px',
@@ -117,9 +120,11 @@ const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
   //     // setDeals(deals.reverse());
   //   }
   // }, [orgSlug]);
-
+  
   if (!data) return <Loader />;
 
+  const titleContainer = document.getElementById('main-title-container');
+  
   return (
     <div className={classes.root}>
       <Tabs
@@ -163,7 +168,7 @@ const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
           );
         })}
       </Tabs>
-      <div className={classes.tabsPlaceholder} />
+      <div className={classes.tabsPlaceholder} style={{height: titleContainer? `${titleContainer.offsetHeight + 48}px` : '130px'}}/>
     </div>
   );
 };
