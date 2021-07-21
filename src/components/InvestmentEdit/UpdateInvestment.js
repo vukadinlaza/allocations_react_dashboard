@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { get, isEqual, pick } from 'lodash';
 import { useParams, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { gql } from 'apollo-boost';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import {
   Button,
   TextField,
@@ -93,12 +94,9 @@ export default function UpdateInvestment({
   const [hasChanges, setHasChanges] = useState(false);
   const id = investmentId || params.id;
 
-  const {
-    data,
-    refetch: getInvestment,
-    loading,
-  } = useQuery(GET_INVESTMENT, { variables: { _id: id } });
-
+  const { data, refetch: getInvestment, loading } = useQuery(GET_INVESTMENT, {
+    variables: { _id: id },
+  });
   const [updateInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT, {
     onCompleted: () => {
       toast.success('Sucess! Investment Updated.');

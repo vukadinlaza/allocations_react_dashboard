@@ -1,5 +1,6 @@
 import React, { useEffect, useState, createContext, useContext } from 'react';
-import { useLazyQuery, gql } from '@apollo/client';
+import { gql } from 'apollo-boost';
+import { useLazyQuery } from '@apollo/react-hooks';
 import { useAuth0 } from '../react-auth0-spa';
 
 /** *

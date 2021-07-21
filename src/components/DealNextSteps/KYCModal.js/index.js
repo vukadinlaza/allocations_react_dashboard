@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal } from '@material-ui/core';
-import { useMutation, gql } from '@apollo/client';
+import { gql } from 'apollo-boost';
+import { useMutation } from '@apollo/react-hooks';
 import { toast } from 'react-toastify';
 import W9Indivdual from './W9Individual/W9Individual';
 import W9Entity from './W9Entity/W9Entity';

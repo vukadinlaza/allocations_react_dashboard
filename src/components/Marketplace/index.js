@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
+import { gql } from 'apollo-boost';
 import _ from 'lodash';
 import { toast } from 'react-toastify';
 import randomColor from 'randomcolor'; // import the script
 import { withStyles } from '@material-ui/core/styles';
-import { useMutation, gql } from '@apollo/client';
+import { useMutation } from '@apollo/react-hooks';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 
 import {
@@ -73,24 +74,20 @@ export default function Marketplace() {
     .filter((d) => {
       return d[`Deal Name`];
     })
-    .sort(
-      (a, b) =>
-        _.toNumber(b.pledged?.replaceAll(/[, $]/g, '')) -
-        _.toNumber(a.pledged?.replaceAll(/[, $]/g, '')),
-    );
+    .sort((a, b) => _.toNumber(b.pledged?.replaceAll(/[, $]/g, '')) - _.toNumber(a.pledged?.replaceAll(/[, $]/g, '')));
 
   return (
     <div className="blue-container">
       <Grid>
         <h4 style={{ color: '#fff ' }}>Top Deals by Pledges</h4>
         <h6 style={{ color: 'rgba(255, 255, 255, 0.75)', fontSize: '0.65rem' }}>
-          Allocations is not affiliated with, sponsors, or endorses any of the companies listed on
-          this site. Content on this page is provided for informational purposes only, may not
-          reflect the most current data, and should not be relied upon. You should do your own due
-          diligence when making any investment in a company listed on this site. The order in which
-          companies are displayed on this site does not imply any endorsement or recommendation, but
-          simply a categorization based upon the characteristics of the offering (e.g. amount
-          pledged).
+          {' '}
+          Allocations is not affiliated with, sponsors, or endorses any of the companies listed on this site. Content on
+          this page is provided for informational purposes only, may not reflect the most current data, and should not
+          be relied upon. You should do your own due diligence when making any investment in a company listed on this
+          site. The order in which companies are displayed on this site does not imply any endorsement or
+          recommendation, but simply a categorization based upon the characteristics of the offering (e.g. amount
+          pledged).{' '}
         </h6>
       </Grid>
       <Grid
@@ -138,13 +135,7 @@ export default function Marketplace() {
 
         {/* ITEM - Pleadged Title */}
         <Hidden only="xs">
-          <Grid
-            xs={12}
-            sm={12}
-            md={1}
-            lg={1}
-            style={{ justifyContent: 'center', alignContent: 'center' }}
-          >
+          <Grid xs={12} sm={12} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
             <Typography
               style={{
                 fontSize: '0.75rem',
@@ -158,13 +149,7 @@ export default function Marketplace() {
 
         {/* ITEM - Deal Lead */}
         <Hidden only="xs">
-          <Grid
-            xs={12}
-            sm={12}
-            md={1}
-            lg={1}
-            style={{ justifyContent: 'center', alignContent: 'center' }}
-          >
+          <Grid xs={12} sm={12} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
             <Typography
               style={{
                 fontSize: '0.75rem',
@@ -178,13 +163,7 @@ export default function Marketplace() {
 
         {/* ITEM - Personal Investment Amount */}
         <Hidden only="xs">
-          <Grid
-            xs={12}
-            sm={1}
-            md={1}
-            lg={1}
-            style={{ justifyContent: 'center', alignContent: 'center' }}
-          >
+          <Grid xs={12} sm={1} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
             <Typography
               style={{
                 fontSize: '0.75rem',
@@ -198,13 +177,7 @@ export default function Marketplace() {
 
         {/* ITEM - Co-Investors */}
         <Hidden only="xs">
-          <Grid
-            xs={12}
-            sm={12}
-            md={2}
-            lg={2}
-            style={{ justifyContent: 'center', alignContent: 'center' }}
-          >
+          <Grid xs={12} sm={12} md={2} lg={2} style={{ justifyContent: 'center', alignContent: 'center' }}>
             <Typography
               style={{
                 fontSize: '0.75rem',
@@ -218,13 +191,7 @@ export default function Marketplace() {
 
         {/* ITEM - Closing Date */}
         <Hidden only="xs">
-          <Grid
-            xs={12}
-            sm={12}
-            md={1}
-            lg={1}
-            style={{ justifyContent: 'center', alignContent: 'center' }}
-          >
+          <Grid xs={12} sm={12} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
             <Typography
               style={{
                 fontSize: '0.75rem',
@@ -238,13 +205,7 @@ export default function Marketplace() {
 
         {/* ITEM - BLANK */}
         <Hidden only="xs">
-          <Grid
-            xs={12}
-            sm={1}
-            md={1}
-            lg={1}
-            style={{ justifyContent: 'center', alignContent: 'center' }}
-          >
+          <Grid xs={12} sm={1} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
             <Typography
               style={{
                 fontSize: '0.75rem',
@@ -256,13 +217,7 @@ export default function Marketplace() {
 
         {/* ITEM - BLANK */}
         <Hidden only="xs">
-          <Grid
-            xs={12}
-            sm={12}
-            md={1}
-            lg={1}
-            style={{ justifyContent: 'center', alignContent: 'center' }}
-          >
+          <Grid xs={12} sm={12} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
             <Typography
               style={{
                 fontSize: '0.75rem',
@@ -359,11 +314,7 @@ export default function Marketplace() {
                     sm={3}
                     md={2}
                     lg={2}
-                    style={{
-                      justifyContent: 'center',
-                      alignContent: 'center',
-                      paddingRight: '15px',
-                    }}
+                    style={{ justifyContent: 'center', alignContent: 'center', paddingRight: '15px' }}
                   >
                     <Typography
                       style={{
@@ -411,13 +362,7 @@ export default function Marketplace() {
 
                 {/* ITEM 4 */}
                 <Hidden only="xs">
-                  <Grid
-                    xs={12}
-                    sm={1}
-                    md={1}
-                    lg={1}
-                    style={{ justifyContent: 'center', alignContent: 'center' }}
-                  >
+                  <Grid xs={12} sm={1} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
                     <Typography
                       style={{
                         fontSize: '0.8rem',
@@ -442,13 +387,7 @@ export default function Marketplace() {
 
                 {/* ITEM 3 Personal Investment Amount */}
                 <Hidden only="xs">
-                  <Grid
-                    xs={12}
-                    sm={1}
-                    md={1}
-                    lg={1}
-                    style={{ justifyContent: 'center', alignContent: 'center' }}
-                  >
+                  <Grid xs={12} sm={1} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
                     <Typography
                       style={{
                         fontSize: '0.8rem',
@@ -463,13 +402,7 @@ export default function Marketplace() {
 
                 {/* ITEM 6 */}
                 <Hidden only="xs">
-                  <Grid
-                    xs={12}
-                    sm={12}
-                    md={2}
-                    lg={2}
-                    style={{ justifyContent: 'center', alignContent: 'center' }}
-                  >
+                  <Grid xs={12} sm={12} md={2} lg={2} style={{ justifyContent: 'center', alignContent: 'center' }}>
                     <Typography
                       style={{
                         fontSize: '0.8rem',
@@ -484,13 +417,7 @@ export default function Marketplace() {
 
                 {/* ITEM 6 */}
                 <Hidden only="xs">
-                  <Grid
-                    xs={12}
-                    sm={12}
-                    md={1}
-                    lg={1}
-                    style={{ justifyContent: 'center', alignContent: 'center' }}
-                  >
+                  <Grid xs={12} sm={12} md={1} lg={1} style={{ justifyContent: 'center', alignContent: 'center' }}>
                     <Typography
                       style={{
                         fontSize: '0.8rem',

@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { Paper, Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
-import { useMutation, gql } from '@apollo/client';
+import { useMutation } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
 import { useHistory } from 'react-router-dom';
 import { useAuth } from '../../auth/useAuth';
 

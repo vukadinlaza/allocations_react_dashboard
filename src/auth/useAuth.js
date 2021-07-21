@@ -2,7 +2,9 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useLazyQuery, gql } from '@apollo/client';
+import { useLazyQuery } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
+
 // const { NODE_ENV } = process.env;
 
 const GET_INVESTOR = gql`

@@ -1,17 +1,9 @@
 import React, { useEffect } from 'react';
 import _ from 'lodash';
 import { Link, useParams } from 'react-router-dom';
-import { useLazyQuery, gql } from '@apollo/client';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  TableHead,
-  Paper,
-  Button,
-  Grid,
-} from '@material-ui/core';
+import { gql } from 'apollo-boost';
+import { useLazyQuery } from '@apollo/react-hooks';
+import { Table, TableBody, TableCell, TableRow, TableHead, Paper, Button, Grid } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { useAuth } from '../../auth/useAuth';
 import { nWithCommas } from '../../utils/numbers';
@@ -48,9 +40,7 @@ const GET_INVESTORS = gql`
 export default function Investors() {
   const { organization } = useParams();
   const { userProfile } = useAuth();
-  const [getInvestors, { data, error }] = useLazyQuery(GET_INVESTORS, {
-    variables: { slug: organization },
-  });
+  const [getInvestors, { data, error }] = useLazyQuery(GET_INVESTORS, { variables: { slug: organization } });
 
   useEffect(() => {
     if (userProfile && userProfile.email) getInvestors();
@@ -105,44 +95,36 @@ export default function Investors() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {_.orderBy(
-                  orgInvestors,
-                  ({ investments }) => _.sumBy(investments, 'amount'),
-                  'desc',
-                ).map((investor) => (
-                  <TableRow key={investor._id}>
-                    <TableCell>{investor.name || investor.email}</TableCell>
-                    <TableCell>{investor.email}</TableCell>
-                    <TableCell>
-                      {
-                        investor.investments.filter(
-                          (inv) => inv.organization === data?.organization?._id,
-                        ).length
-                      }
-                    </TableCell>
-                    <TableCell>
-                      $
-                      {nWithCommas(
-                        _.sumBy(
-                          investor.investments.filter(
-                            (inv) => inv.organization === data?.organization?._id,
+                {_.orderBy(orgInvestors, ({ investments }) => _.sumBy(investments, 'amount'), 'desc').map(
+                  (investor) => (
+                    <TableRow key={investor._id}>
+                      <TableCell>{investor.name || investor.email}</TableCell>
+                      <TableCell>{investor.email}</TableCell>
+                      <TableCell>
+                        {investor.investments.filter((inv) => inv.organization === data?.organization?._id).length}
+                      </TableCell>
+                      <TableCell>
+                        $
+                        {nWithCommas(
+                          _.sumBy(
+                            investor.investments.filter((inv) => inv.organization === data?.organization?._id),
+                            'amount',
                           ),
-                          'amount',
-                        ),
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {(organization === 'allocations' ||
-                        organization === 'vitalize' ||
-                        organization === 'irishangels') && (
-                        <Link to={`/investor/${investor._id}/home`} target="_blank">
-                          View dashboard as {investor.first_name || investor.entity_name}
-                        </Link>
-                      )}
-                    </TableCell>
-                    <TableCell />
-                  </TableRow>
-                ))}
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {(organization === 'allocations' ||
+                          organization === 'vitalize' ||
+                          organization === 'irishangels') && (
+                          <Link to={`/investor/${investor._id}/home`} target="_blank">
+                            View dashboard as {investor.first_name || investor.entity_name}
+                          </Link>
+                        )}
+                      </TableCell>
+                      <TableCell />
+                    </TableRow>
+                  ),
+                )}
               </TableBody>
             </Table>
           </Paper>

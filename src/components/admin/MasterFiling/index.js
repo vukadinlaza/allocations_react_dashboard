@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
-import { useQuery, gql } from '@apollo/client';
+import { gql } from 'apollo-boost';
+import { useQuery } from '@apollo/react-hooks';
 import { useParams } from 'react-router-dom';
 import { Row, Col } from 'reactstrap';
 import { Paper, LinearProgress } from '@material-ui/core';
@@ -64,9 +65,7 @@ export default function MasterFiling() {
                 <span>Master Filing Progress</span>
               </div>
               <hr />
-              <p className="not-setup">
-                Not yet setup, please ask to team to begin tracking your master filing steps!
-              </p>
+              <p className="not-setup">Not yet setup, please ask to team to begin tracking your master filing steps!</p>
             </Paper>
           </Col>
         </Row>
@@ -129,8 +128,7 @@ function SubCategory({ subCat, steps }) {
 function Step({ step }) {
   return (
     <Paper className="step">
-      {step.step}{' '}
-      <FontAwesomeIcon icon={step.status === 1 ? ['fas', 'check-square'] : ['far', 'square']} />
+      {step.step} <FontAwesomeIcon icon={step.status === 1 ? ['fas', 'check-square'] : ['far', 'square']} />
     </Paper>
   );
 }
