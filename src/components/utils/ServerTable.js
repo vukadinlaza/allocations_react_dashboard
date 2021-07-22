@@ -51,6 +51,17 @@ tableVariables = {
     { value: 'status', label: 'Status', isFilter: true },
     { value: 'amount', label: 'Amount', type: 'amount', align: 'right', isFilter: true },
   ],
+  /// possible header fields: [
+          value,
+          label, 
+          isFilter, 
+          type,
+          nestedKey,
+          nestedCollection,
+          localFieldKey,
+          sortOrder,
+          sortNestedCollection,
+          sortLocalFieldKey]
   dataVariable = 'investmentsList', response from server data[dataVariable]
   defaultSortField = "status"
 }
@@ -81,7 +92,7 @@ const ServerTable = ({
   const [filterNestedCollection, setFilterNestedCollection] = useState('');
   const [filterLocalFieldKey, setFilterLocalFieldKey] = useState('');
   const { headers, gqlQuery, dataVariable, defaultSortField } = tableVariables;
-
+  console.log({sortNestedKey})
   const getCurrentSort = () => (!sortField ? defaultSortField : sortField);
 
   const { data, loading } = useQuery(
@@ -170,10 +181,12 @@ const ServerTable = ({
 
   const onChangeSort = (sortField, isAsc, sortNestedKey, sortNestedCollection, sortLocalFieldKey) => {
     const order = isAsc ? 1 : -1;
-    if (sortNestedKey && sortNestedCollection && sortLocalFieldKey) {
+    if (sortNestedKey) {
       setSortNestedKey(sortNestedKey);
-      setSortNestedCollection(sortNestedCollection);
-      setSortLocalFieldKey(sortLocalFieldKey);
+      if(sortNestedCollection && sortLocalFieldKey){
+        setSortNestedCollection(sortNestedCollection);
+        setSortLocalFieldKey(sortLocalFieldKey);
+      }
     } else {
       setSortNestedKey('');
       setSortNestedCollection('');
@@ -189,7 +202,7 @@ const ServerTable = ({
         <Loader />
       </div>
     );
-console.log({data})
+
   return (
     <div className={classes.root}>
       <div className={classes.searchContainer}>
