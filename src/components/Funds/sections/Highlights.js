@@ -13,7 +13,7 @@ const Highlights = ({ classes, history, data }) => {
   const { funds, SPVs, investments } = data.fundAdminHighlights;
   const totalFunds = funds + SPVs;
   return (
-    <Grid container spacing={3} className={classes.section}>
+    <Grid container spacing={3}>
       <Grid item xs={12} lg={3}>
         <SimpleBox size="fourth" title="Total Private Funds">
           <Typography style={{ fontSize: '26px' }}>{nWithCommas(totalFunds)}</Typography>

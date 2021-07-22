@@ -71,6 +71,18 @@ const styles = (theme) => ({
       fontSize: '.5rem',
     },
   },
+  searchContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: '25px',
+    background: 'white',
+    padding: '15px 20px',
+    border: 'solid 1px #dadada',
+    boxShadow: '0px 3px 5px -5px',
+    borderRadius: '3px',
+  },
   section: {
     width: '100%',
     padding: '40px',
@@ -140,13 +152,13 @@ const FundAdminDashboard = ({ classes, history }) => {
   const getTabContent = () => {
     switch (tabIndex) {
       case 0:
-        return <Highlights data={data} />;
+        return <Highlights classes={classes} data={data} />;
 
       case 1:
-        return <Funds />;
+        return <Funds classes={classes} />;
 
       case 2:
-        return <SPVs />;
+        return <SPVs classes={classes} />;
 
       default:
         return <p>No Data</p>;
