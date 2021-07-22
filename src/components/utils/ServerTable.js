@@ -189,7 +189,7 @@ const ServerTable = ({
         <Loader />
       </div>
     );
-
+console.log({data})
   return (
     <div className={classes.root}>
       <div className={classes.searchContainer}>
