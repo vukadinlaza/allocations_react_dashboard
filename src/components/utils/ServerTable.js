@@ -3,7 +3,14 @@ import { gql } from 'apollo-boost';
 import _ from 'lodash';
 import { useQuery } from '@apollo/react-hooks';
 import { withStyles } from '@material-ui/core/styles';
-import { TextField, FormControl, InputLabel, Select, Button, InputAdornment } from '@material-ui/core';
+import {
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  Button,
+  InputAdornment,
+} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import AllocationsTable from './AllocationsTable';
 import Loader from './Loader';
@@ -61,7 +68,8 @@ tableVariables = {
           localFieldKey,
           sortOrder,
           sortNestedCollection,
-          sortLocalFieldKey]
+          sortLocalFieldKey,
+          sortField]
   dataVariable = 'investmentsList', response from server data[dataVariable]
   defaultSortField = "status"
 }
@@ -92,7 +100,7 @@ const ServerTable = ({
   const [filterNestedCollection, setFilterNestedCollection] = useState('');
   const [filterLocalFieldKey, setFilterLocalFieldKey] = useState('');
   const { headers, gqlQuery, dataVariable, defaultSortField } = tableVariables;
-  console.log({sortNestedKey})
+  console.log({ sortNestedKey });
   const getCurrentSort = () => (!sortField ? defaultSortField : sortField);
 
   const { data, loading } = useQuery(
@@ -179,11 +187,17 @@ const ServerTable = ({
     }
   };
 
-  const onChangeSort = (sortField, isAsc, sortNestedKey, sortNestedCollection, sortLocalFieldKey) => {
+  const onChangeSort = (
+    sortField,
+    isAsc,
+    sortNestedKey,
+    sortNestedCollection,
+    sortLocalFieldKey,
+  ) => {
     const order = isAsc ? 1 : -1;
     if (sortNestedKey) {
       setSortNestedKey(sortNestedKey);
-      if(sortNestedCollection && sortLocalFieldKey){
+      if (sortNestedCollection && sortLocalFieldKey) {
         setSortNestedCollection(sortNestedCollection);
         setSortLocalFieldKey(sortLocalFieldKey);
       }
@@ -237,7 +251,12 @@ const ServerTable = ({
           }}
           style={{ margin: '0 1em' }}
         />
-        <Button onClick={handleSearch} variant="contained" color="primary" style={{ padding: '6px 35px' }}>
+        <Button
+          onClick={handleSearch}
+          variant="contained"
+          color="primary"
+          style={{ padding: '6px 35px' }}
+        >
           Search
         </Button>
       </div>
