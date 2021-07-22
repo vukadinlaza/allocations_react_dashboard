@@ -57,6 +57,7 @@ tableVariables = {
     { value: 'deal', label: 'Deal', isFilter: true, type: 'deal', nestedKey: 'company_name', nestedCollection: 'deals', localFieldKey: 'deal_id' },
     { value: 'status', label: 'Status', isFilter: true },
     { value: 'amount', label: 'Amount', type: 'amount', align: 'right', isFilter: true },
+    { value: 'editButton', label: 'Edit Button', type: 'edit button', keyNotInData: true}
   ],
   /// possible header fields: [
           value,
@@ -77,6 +78,8 @@ getCellContent={function} // get specific cell content to format it - optional
 handleRowDetailPage={function} // route app on row click - optional
 queryVariables={object} //optional
 tablePagination={number} // optional
+rowDetailPage={boolean} // optional
+resetTableData={string} // optional - used for clearing sorting and filtering from one table to another
 */
 
 const ServerTable = ({
@@ -86,6 +89,8 @@ const ServerTable = ({
   handleRowDetailPage,
   queryVariables,
   tablePagination = 25,
+  rowDetailPage = false,
+  resetTableData,
 }) => {
   const [selectWidth, setSelectWidth] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
@@ -100,7 +105,7 @@ const ServerTable = ({
   const [filterNestedCollection, setFilterNestedCollection] = useState('');
   const [filterLocalFieldKey, setFilterLocalFieldKey] = useState('');
   const { headers, gqlQuery, dataVariable, defaultSortField } = tableVariables;
-  console.log({ sortNestedKey });
+
   const getCurrentSort = () => (!sortField ? defaultSortField : sortField);
 
   const { data, loading } = useQuery(
@@ -156,7 +161,7 @@ const ServerTable = ({
     // clear search bar
     const searchBarElement = document.getElementById('search-field');
     if (searchBarElement) searchBarElement.value = '';
-  }, [tableVariables]);
+  }, [tableVariables, resetTableData]);
 
   const onChangePage = (newPage) => {
     setCurrentPage(newPage);
@@ -282,7 +287,7 @@ const ServerTable = ({
           currentPage={currentPage}
           includeCheckbox
           rowSelector="_id"
-          rowDetailPage
+          rowDetailPage={rowDetailPage}
           handleRowDetailPage={handleRowDetailPage}
           getCellContent={getCellContent}
           onChangePage={onChangePage}

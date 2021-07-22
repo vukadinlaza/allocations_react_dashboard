@@ -9,8 +9,7 @@ import { phone, tablet } from '../../utils/helpers';
 import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
 import Highlights from './sections/Highlights';
-import Funds from './sections/Funds';
-import SPVs from './sections/SPVs';
+import Deals from './sections/Deals';
 
 const styles = (theme) => ({
   contentContainer: {
@@ -152,13 +151,13 @@ const FundAdminDashboard = ({ classes, history }) => {
   const getTabContent = () => {
     switch (tabIndex) {
       case 0:
-        return <Highlights classes={classes} data={data} />;
+        return <Highlights data={data} />;
 
       case 1:
-        return <Funds classes={classes} />;
+        return <Deals filter={{ filter: 'fund' }} type="Fund" />;
 
       case 2:
-        return <SPVs classes={classes} />;
+        return <Deals filter={{ filter: { $ne: 'fund' } }} type="SPV" />;
 
       default:
         return <p>No Data</p>;

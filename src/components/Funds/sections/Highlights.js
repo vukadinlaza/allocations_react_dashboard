@@ -8,7 +8,7 @@ import { nWithCommas } from '../../../utils/numbers';
 
 const styles = (theme) => ({});
 
-const Highlights = ({ classes, history, data }) => {
+const Highlights = ({ data }) => {
   if (!data?.fundAdminHighlights) return <Loader />;
   const { funds, SPVs, investments } = data.fundAdminHighlights;
   const totalFunds = funds + SPVs;
