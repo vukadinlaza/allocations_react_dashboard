@@ -16,7 +16,8 @@ const DeleteViewedUser = ({ dealId, investorId, handleUpdate = false }) => {
   const [deleteViewedUser] = useMutation(DELETE_VIEWED_USER, {
     onCompleted: () => {
       if (handleUpdate) {
-        handleUpdate();
+        handleUpdate.refetch();
+        handleUpdate.closeModal();
       }
       toast.success('Investment Removed');
     },
