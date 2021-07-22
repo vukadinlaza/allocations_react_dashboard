@@ -10,6 +10,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import EditIcon from '@material-ui/icons/Edit';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import Tooltip from '@material-ui/core/Tooltip';
 import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
@@ -694,13 +695,19 @@ const FundManagerDashboard = ({ classes, history }) => {
               </Typography>
               <div className={classes.pageIcons}>
                 <div className={classes.pageIcon} onClick={goToEditDeal}>
-                  <EditIcon />
+                  <Tooltip title="Edit">
+                    <EditIcon />
+                  </Tooltip>
                 </div>
                 <div className={classes.pageIcon} onClick={goToDeal}>
-                  <ChevronRightIcon />
+                  <Tooltip title="Go">
+                    <ChevronRightIcon />
+                  </Tooltip>
                 </div>
                 <div className={classes.pageIcon} onClick={handleLinkCopy}>
-                  <FileCopyOutlinedIcon />
+                  <Tooltip title="Copy">
+                    <FileCopyOutlinedIcon />
+                  </Tooltip>
                 </div>
               </div>
             </FlatBox>

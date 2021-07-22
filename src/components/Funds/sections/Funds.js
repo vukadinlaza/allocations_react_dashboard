@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
+<<<<<<< HEAD
 import { Typography } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
@@ -67,6 +68,7 @@ const tableVariables = {
 }
 
 const Funds = ({ classes, history }) => {
+<<<<<<< HEAD
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
       case 'managers':

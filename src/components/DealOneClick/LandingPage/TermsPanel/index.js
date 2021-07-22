@@ -14,13 +14,16 @@ const TermsPanel = ({ deal }) => {
       fundTotalCarry,
       fundManagementFees,
       managementFeeType,
-      managementFeesDollar
+      managementFeesDollar,
+      fundManagementFeeType,
     },
   } = deal;
 
   const dealLead = fundGeneralPartner || deal_lead || '';
   const carry = fundTotalCarry || totalCarry || '';
   const fees = fundManagementFees || managementFees || '';
+  const feeFrequency = fundManagementFeeType || managementFeeType || '';
+
   return (
     <section className="TermsPanel">
       <p className="section-label">Terms</p>
@@ -46,13 +49,19 @@ const TermsPanel = ({ deal }) => {
         {managementFeesDollar && (
           <li>
             <p>Total management fee:</p>
-            <h3>${managementFeesDollar}{managementFeeType? ` (${managementFeeType})` : ''}</h3>
+            <h3>${managementFeesDollar}</h3>
           </li>
         )}
         {fees && (
           <li>
             <p>Total management fee:</p>
             <h3>{fees}%</h3>
+          </li>
+        )}
+        {feeFrequency && (
+          <li>
+            <p>Fee Frequency:</p>
+            <h3>{feeFrequency}</h3>
           </li>
         )}
         {minimumInvestment && (
