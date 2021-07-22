@@ -87,7 +87,11 @@ export default function InvestorEditForm({
   const handleChange = (prop) => (e) => {
     e.persist();
     if (prop === 'investor_type') {
-      return setInvestor((prev) => ({ ...prev, [prop]: e.target.value, accredited_investor_status: '' }));
+      return setInvestor((prev) => ({
+        ...prev,
+        [prop]: e.target.value,
+        accredited_investor_status: '',
+      }));
     }
     return setInvestor((prev) => ({ ...prev, [prop]: e.target.value }));
   };
@@ -158,12 +162,21 @@ export default function InvestorEditForm({
 
             {investor.investor_type === 'entity' && (
               <Grid item xs={12} sm={12} md={6}>
-                <AccreditedInvestorStatus investor={investor} handleChange={handleChange} errors={errors} />
+                <AccreditedInvestorStatus
+                  investor={investor}
+                  handleChange={handleChange}
+                  errors={errors}
+                />
               </Grid>
             )}
 
             <Grid item xs={12} sm={12} md={6}>
-              <FormControl required error={errors.includes('country')} variant="outlined" style={{ width: '100%' }}>
+              <FormControl
+                required
+                error={errors.includes('country')}
+                variant="outlined"
+                style={{ width: '100%' }}
+              >
                 <InputLabel>Country of Residence or Place of Business</InputLabel>
                 <Select
                   value={investor.country || ''}
@@ -246,13 +259,19 @@ export function PassportUploader({ investor, setInvestor }) {
       <ListItem>
         <ListItemText primary="ID for KYC" secondary="passport / drivers license" />
         <ListItemSecondaryAction>
-          <Button startIcon={<CloudUploadIcon />} variant="contained" color="secondary" component="label">
+          <Button
+            startIcon={<CloudUploadIcon />}
+            variant="contained"
+            color="secondary"
+            component="label"
+          >
             Upload
             <input
               type="file"
               style={{ display: 'none' }}
               onChange={({ target }) => {
-                if (target.validity.valid) setInvestor((prev) => ({ ...prev, passport: target.files[0] }));
+                if (target.validity.valid)
+                  setInvestor((prev) => ({ ...prev, passport: target.files[0] }));
               }}
             />
           </Button>
@@ -314,7 +333,6 @@ const statusOptions = {
     'My professional certification qualifies me as an accredited investor',
     'I am a director or executive officer of the Fund’s General Partner',
     'I am a “knowledgeable employee" of the private fund or its managers',
-    'I am a foreigner within the meaning of Section 1446(e) of the Code',
   ],
   entity: [
     'Each equity owner of my entity is an accredited investor',

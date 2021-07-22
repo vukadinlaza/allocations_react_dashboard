@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
-import { useParams, useHistory, useLocation } from 'react-router-dom';
+import { useParams, useHistory, useLocation, Redirect } from 'react-router-dom';
 import moment from 'moment';
 import TermsPanel from './TermsPanel';
 import InvestPanel from './InvestPanel';
@@ -10,7 +10,6 @@ import DealHeader from './DealHeader';
 import CoinvestorsPanel from './CoinvestorsPanel';
 import './styles.scss';
 import KeyHighlights from './KeyHighlightsPanel';
-
 import Loader from '../../utils/Loader';
 
 const GET_DEAL = gql`
@@ -111,11 +110,11 @@ function DealLandingPage() {
     }
   });
 
-  console.log('ERROR', error);
+  if (error) return <Redirect to="/404" />;
 
   if (!data) return <Loader />;
   const { publicDeal: deal } = data;
-  
+
   if (data && deal?.docSpringTemplateId === null) {
     return <Deal />;
   }
