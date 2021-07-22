@@ -90,7 +90,6 @@ const ServerTable = ({
   queryVariables,
   tablePagination = 25,
   rowDetailPage = false,
-  resetTableData,
 }) => {
   const [selectWidth, setSelectWidth] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
@@ -104,7 +103,7 @@ const ServerTable = ({
   const [filterNestedKey, setFilterNestedKey] = useState('');
   const [filterNestedCollection, setFilterNestedCollection] = useState('');
   const [filterLocalFieldKey, setFilterLocalFieldKey] = useState('');
-  const { headers, gqlQuery, dataVariable, defaultSortField } = tableVariables;
+  const { headers, gqlQuery, dataVariable, defaultSortField, tableName } = tableVariables;
 
   const getCurrentSort = () => (!sortField ? defaultSortField : sortField);
 
@@ -161,7 +160,7 @@ const ServerTable = ({
     // clear search bar
     const searchBarElement = document.getElementById('search-field');
     if (searchBarElement) searchBarElement.value = '';
-  }, [tableVariables, resetTableData]);
+  }, [headers, gqlQuery, dataVariable, defaultSortField, tableName]);
 
   const onChangePage = (newPage) => {
     setCurrentPage(newPage);

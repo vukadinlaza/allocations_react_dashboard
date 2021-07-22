@@ -154,10 +154,10 @@ const FundAdminDashboard = ({ classes, history }) => {
         return <Highlights data={data} />;
 
       case 1:
-        return <Deals filter={{ filter: 'fund' }} type="Fund" />;
+        return <Deals filter={{ filter: 'fund' }} tableName="Fund" />;
 
       case 2:
-        return <Deals filter={{ filter: { $ne: 'fund' } }} type="SPV" />;
+        return <Deals filter={{ filter: { $ne: 'fund' } }} tableName="SPV" />;
 
       default:
         return <p>No Data</p>;

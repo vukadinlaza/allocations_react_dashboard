@@ -75,11 +75,10 @@ const tableVariables = {
     },
   ],
   dataVariable: 'fundAdminTables',
-  defaultSortField: 'company_name',
+  defaultSortField: 'company_name'
 };
 
-const Deals = ({ classes, filter, type }) => {
-  useEffect(() => {}, [type]);
+const Deals = ({ classes, filter, tableName }) => {
 
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
@@ -121,13 +120,14 @@ const Deals = ({ classes, filter, type }) => {
     }
   };
 
+  tableVariables.tableName = tableName
+
   return (
     <div>
       <ServerTable
         tableVariables={tableVariables}
         getCellContent={getCellContent}
         queryVariables={filter}
-        resetTableData={type}
       />
     </div>
   );
