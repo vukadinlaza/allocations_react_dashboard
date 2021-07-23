@@ -132,7 +132,7 @@ const ServerTable = ({
       },
     },
   );
-
+    console.log({data})
   useEffect(() => {
     if (headers) {
       headers.forEach((header, i) => {
