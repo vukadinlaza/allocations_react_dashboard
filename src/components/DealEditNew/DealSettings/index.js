@@ -1,4 +1,4 @@
-import { FormControl, TextField, Button, Menu, MenuItem, IconButton } from '@material-ui/core';
+import { FormControl, TextField, Button, Menu, MenuItem, Tooltip, IconButton } from '@material-ui/core';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './styles.scss';
 import { toast } from 'react-toastify';
@@ -168,7 +168,7 @@ function DealSettings({ formData, setFormData, refetch, loading }) {
     const [upImg, setUpImg] = useState(null);
     const imgRef = useRef(null);
     const previewCanvasRef = useRef(null);
-    const [crop, setCrop] = useState({ unit: '%', width: 30, aspect: 16 / 9 });
+    const [crop, setCrop] = useState({ unit: '%', width: 30, aspect: 675 / 248 });
     const [completedCrop, setCompletedCrop] = useState(null);
     const [croppedImage, setCroppedImage] = useState(null);
     const [cropperOpen, setCropperOpen] = useState(false);
@@ -270,7 +270,11 @@ function DealSettings({ formData, setFormData, refetch, loading }) {
             </div>
           </label>
 
-          <Button disabled={completedCrop === null} onClick={submitLogo} className="upload-button">
+          <Button
+            disabled={completedCrop === null}
+            onClick={submitLogo}
+            className={`upload-button ${completedCrop === null ? 'disabled' : ''}`}
+          >
             Upload to deal
           </Button>
         </FormControl>
@@ -401,7 +405,11 @@ function DealSettings({ formData, setFormData, refetch, loading }) {
             </div>
           </label>
 
-          <Button disabled={wireInstructions === null} onClick={submitWireInstructions} className="upload-button">
+          <Button
+            disabled={wireInstructions === null}
+            onClick={submitWireInstructions}
+            className={`upload-button ${wireInstructions === null ? 'disabled' : ''}`}
+          >
             Upload to deal
           </Button>
         </FormControl>
@@ -431,7 +439,11 @@ function DealSettings({ formData, setFormData, refetch, loading }) {
               </div>
             </div>
           </label>
-          <Button disabled={doc === null} onClick={submitDoc} className="upload-button">
+          <Button
+            disabled={doc === null}
+            onClick={submitDoc}
+            className={`upload-button ${doc === null ? 'disabled' : ''}`}
+          >
             Upload to deal
           </Button>
         </FormControl>
