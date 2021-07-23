@@ -85,14 +85,14 @@ function Member({ org, member, sendAdminInvite, revokeMembership }) {
   const invite = org.adminInvites.find((i) => i.to === member.email);
 
   const inviteArea = invite ? (
-    <Button size="small" className="sent-invite" endIcon={<FontAwesomeIcon icon="paper-plane" />}>
+    <Button size="small" className="no-outline" endIcon={<FontAwesomeIcon icon="paper-plane" />}>
       Sent{' '}
     </Button>
   ) : (
     <Button
       color="secondary"
       size="small"
-      className="send-invite"
+      className="no-outline"
       variant="contained"
       onClick={() => sendAdminInvite({ variables: { user_id: member._id } })}
       endIcon={<FontAwesomeIcon icon="envelope" />}
@@ -113,6 +113,7 @@ function Member({ org, member, sendAdminInvite, revokeMembership }) {
         <Button
           color="secondary"
           variant="contained"
+          className="no-outline"
           onClick={() => revokeMembership({ variables: { user_id: member._id } })}
         >
           Revoke
