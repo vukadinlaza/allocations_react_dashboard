@@ -29,6 +29,10 @@ import { nWithCommas } from '../../../utils/numbers';
 import { DocumentBox } from '../../Settings/common';
 import { titleCase } from '../../../utils/helpers';
 import Loader from '../../utils/Loader';
+import { useAuth } from '../../../auth/useAuth';
+import AppModal from '../../Modal/AppModal';
+import InvestmentEdit from '../../InvestmentEdit/UpdateInvestment';
+import DeleteViewedUser from '../../InvestmentEdit/DeleteViewedUser';
 
 const styles = (theme) => ({
 	back: {
@@ -153,8 +157,20 @@ const getStatusColors = (status) => {
 }
 
 
-const InvestmentRow = ({ row, classes }) => {
+const InvestmentRow = ({ row, classes, setShowModal, setInvestmentId, superAdmin, setDealId, setInvestorId }) => {
   const [open, setOpen] = React.useState(false);
+
+	const onClick = () => {
+    if (superAdmin) {
+			setShowModal(true);
+      if (row._id) {
+        setInvestmentId(row._id);
+      } else {
+        setDealId(row.deal_id);
+        setInvestorId(row.user_id);
+      }
+    }
+  };
 
   return (
     <React.Fragment>
@@ -188,9 +204,9 @@ const InvestmentRow = ({ row, classes }) => {
 						</div>
 				</TableCell>
 				<TableCell component="th" scope="row" className={classes.cellText} align="center">
-					<a href={`/admin/users/${row._id}`} className={classes.buttonLink}>
+					<span onClick={onClick} className={classes.buttonLink}>
             <EditIcon className={classes.button} />
-          </a>
+          </span>
 				</TableCell>
 				<TableCell component="th" scope="row" className={classes.cellText}>
 					<span className={classes.buttonLink} onClick={() => setOpen(!open)}>
@@ -227,13 +243,27 @@ const InvestmentRow = ({ row, classes }) => {
 
 const InvestorInvestments = ({ classes, history }) => {
 	const { userId } = useParams();
-  const { data } = useQuery(GET_USER, { variables: { _id: userId } });
+	const { userProfile } = useAuth();
+	const [showModal, setShowModal] = useState(false);
+	const [dealId, setDealId] = useState(null);
+	const [investorId, setInvestorId] = useState(null);
+	const [investmentId, setInvestmentId] = useState(null);
+  const { data, refetch } = useQuery(GET_USER, { variables: { _id: userId } });
 
 	const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value)
   }
+
+	const onClose = () => {
+    setShowModal(false);
+  };
+
+	const handleUpdate = () => {
+    refetch();
+    setShowModal(false);
+  };
 
 	const userInvestments = data?.investor?.investments;
 	if(!userInvestments) return <Loader/>
@@ -282,7 +312,16 @@ const InvestorInvestments = ({ classes, history }) => {
 						</TableHead>
 						<TableBody>
 							{dataCopy?.investor?.investments?.map((row) => (
-								<InvestmentRow key={row.name} row={row} classes={classes}/>
+								<InvestmentRow 
+									key={row.name} 
+									row={row} 
+									classes={classes}
+									setShowModal={setShowModal}
+									setInvestmentId={setInvestmentId}
+									superAdmin={userProfile?.admin}
+									setDealId={setDealId}
+									setInvestorId={setInvestorId}
+								/>
 							))}
 						</TableBody>
 					</Table>
@@ -290,6 +329,13 @@ const InvestorInvestments = ({ classes, history }) => {
 				:
 				<Loader/>
 			}
+			<AppModal isOpen={showModal} onClose={onClose}>
+				{investmentId ? (
+					<InvestmentEdit investmentId={investmentId} handleUpdate={handleUpdate} />
+				) : (
+					<DeleteViewedUser dealId={dealId} investorId={investorId} handleUpdate={handleUpdate} />
+				)}
+			</AppModal>
 		</div>
   );
 };
