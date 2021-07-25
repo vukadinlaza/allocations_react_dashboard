@@ -311,7 +311,7 @@ const InvestorInvestments = ({ classes, history }) => {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{dataCopy?.investor?.investments?.map((row) => (
+							{dataCopy?.investor?.investments?.map((row, index) => (
 								<InvestmentRow 
 									key={row.name} 
 									row={row} 
@@ -321,6 +321,7 @@ const InvestorInvestments = ({ classes, history }) => {
 									superAdmin={userProfile?.admin}
 									setDealId={setDealId}
 									setInvestorId={setInvestorId}
+									key={`row-${index}`}
 								/>
 							))}
 						</TableBody>

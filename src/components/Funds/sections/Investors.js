@@ -31,14 +31,17 @@ const investorVariables = {
   gqlQuery: `
     query AllUsers($pagination: PaginationInput!) {
       allUsers(pagination: $pagination) {
-        _id
-        first_name
-        last_name
-        email
-        entity_name
-        investments{
+        count
+        users {
           _id
-          amount
+          first_name
+          last_name
+          email
+          entity_name
+          investments{
+            _id
+            amount
+          }
         }
       }
     }`,
@@ -52,7 +55,7 @@ const investorVariables = {
     { value: 'viewProfile', label: 'VIEW PROFILE', keyNotInData: true, type: 'viewProfile', align: 'center', alignHeader: true },
     { value: 'viewDashboard', label: 'VIEW DASHBOARD', keyNotInData: true, type: 'viewDashboard', align: 'center', alignHeader: true },
   ],
-  dataVariable: 'allUsers',
+  dataVariable: 'allUsers.users',
   defaultSortField: 'first_name'
 };
 

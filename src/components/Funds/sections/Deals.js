@@ -31,22 +31,25 @@ const tableVariables = {
   gqlQuery: `
     query FundAdminTables($filter: Object, $pagination: PaginationInput!) {
       fundAdminTables(filter: $filter, pagination: $pagination) {
-        _id
-        company_name
-        deal_lead
-        AUM
-        status
-        slug
-        dealParams{
-          signDeadline
-          wireDeadline
-        }
-        dealOnboarding {
+        count
+        deals {
           _id
-        }
-        organization {
-          _id
+          company_name
+          deal_lead
+          AUM
+          status
           slug
+          dealParams{
+            signDeadline
+            wireDeadline
+          }
+          dealOnboarding {
+            _id
+          }
+          organization {
+            _id
+            slug
+          }
         }
       }
     }`,
@@ -74,7 +77,7 @@ const tableVariables = {
       align: 'center',
     },
   ],
-  dataVariable: 'fundAdminTables',
+  dataVariable: 'fundAdminTables.deals',
   defaultSortField: 'company_name'
 };
 
