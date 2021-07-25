@@ -103,12 +103,13 @@ const AllocationsTable = ({
   titleComponent,
   getSortProps,
   sortField,
+  sortOrder
 }) => {
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(rowsQuantity);
   const [orderBy, setOrderBy] = React.useState(sortField || headers[0].value);
-  const [order, setOrder] = React.useState('asc');
+  const [order, setOrder] = React.useState(sortOrder);
 
   useEffect(() => {
     setPage(currentPage);

@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import moment from 'moment';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import ServerTable from '../../utils/ServerTable';
 import { nWithCommas } from '../../../utils/numbers';
-import { titleCase } from '../../../utils/helpers';
 
 const styles = (theme) => ({
   button: {
@@ -24,10 +20,14 @@ const styles = (theme) => ({
     margin: '-6px 0',
     width: '32px',
     height: '32px',
+    cursor: 'pointer',
+		"&:hover": {
+			backgroundColor: '#3f85f9'
+		}
   },
 });
 
-const tableVariables = {
+const investorVariables = {
   gqlQuery: `
     query AllUsers($pagination: PaginationInput!) {
       allUsers(pagination: $pagination) {
@@ -38,55 +38,57 @@ const tableVariables = {
         entity_name
         investments{
           _id
+          amount
         }
       }
     }`,
   headers: [
-    { value: 'first_name', label: 'First Name', isFilter: true, isSortable: true },
-    { value: 'last_name', label: 'Last Name', isFilter: true, isSortable: true },
-    { value: 'email', label: 'Email', isFilter: true, isSortable: true },
-    { value: 'investmentAmount', label: 'Investments', type: 'investmentAmount', keyNotInData: true },
-    { value: 'investments', label: 'Investments', type: 'count', align: 'center', alignHeader: true },
-    { value: 'dashboard', label: 'Dashboard', keyNotInData: true, type: 'link', align: 'center', alignHeader: true },
+    { value: 'first_name', label: 'FIRST NAME', isFilter: true, isSortable: true },
+    { value: 'last_name', label: 'LAST NAME', isFilter: true, isSortable: true },
+    { value: 'email', label: 'EMAIL', isFilter: true, isSortable: true },
+    { value: 'investmentAmount', label: 'INVESTMENT AMOUNT', type: 'investmentAmount', keyNotInData: true },
+    { value: 'investments', label: 'TOTAL INVESTMENTS', type: 'count', align: 'center', alignHeader: true },
+    { value: 'viewInvestments', label: 'VIEW INVESTMENTS', keyNotInData: true, type: 'viewInvestments', align: 'center', alignHeader: true },
+    { value: 'viewProfile', label: 'VIEW PROFILE', keyNotInData: true, type: 'viewProfile', align: 'center', alignHeader: true },
+    { value: 'viewDashboard', label: 'VIEW DASHBOARD', keyNotInData: true, type: 'viewDashboard', align: 'center', alignHeader: true },
   ],
   dataVariable: 'allUsers',
   defaultSortField: 'first_name'
 };
 
-const Investors = ({ classes, filter, tableName }) => {
+
+const Investors = ({ classes, history }) => {
+
+  const handleShowInvestments = (userId) => {
+    history.push(`/admin/users/${userId}/investments`)
+  }
 
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
       case 'investmentAmount':
-        return nWithCommas(row['investments'].map(i => i.amount).reduce((acc, n) => acc + n ));
-      case 'amount':
-        return `$${nWithCommas(row[headerValue])}`;
-      case 'wireDeadline':
-        return row[headerValue]?.wireDeadline
-          ? moment(row[headerValue].wireDeadline).format('MM/DD/YYYY')
-          : '';
-      case 'onboarding':
-        return row[headerValue] ? 'Complete' : 'Pending';
-      case 'status':
-        return titleCase(row[headerValue]);
-      case 'edit':
+        return row['investments']?.length? 
+                  `$${nWithCommas(row['investments']
+                  .map(i => i.amount)
+                  .reduce((acc, n) => acc + n ))}`
+                  : 0
+                  
+      case 'count':
+        return row[headerValue].length;
+
+      case 'viewInvestments':
+        return  <span className={classes.buttonLink} onClick={() => handleShowInvestments(row._id)}>
+                  <PlayArrowIcon className={classes.button} />
+                </span>
+        
+      case 'viewProfile':
         return (
-          <a
-            href={`/admin/${row.organization.slug}/deals/${row._id}/edit`}
-            className={classes.buttonLink}
-          >
-            <EditIcon className={classes.button} />
-          </a>
-        );
-      case 'dealPage':
-        return (
-          <a href={`/deals/${row.organization.slug}/${row.slug}`} className={classes.buttonLink}>
+          <a href={`/admin/users/${row._id}`} className={classes.buttonLink}>
             <PlayArrowIcon className={classes.button} />
           </a>
         );
-      case 'dashboard':
+      case 'viewDashboard':
         return (
-          <a href={`/admin/${row.organization.slug}`} className={classes.buttonLink}>
+          <a href={`/investor/${row._id}/home`} className={classes.buttonLink}>
             <PlayArrowIcon className={classes.button} />
           </a>
         );
@@ -95,14 +97,15 @@ const Investors = ({ classes, filter, tableName }) => {
     }
   };
 
+
   return (
     <div>
       <ServerTable
-        tableVariables={tableVariables}
+        tableVariables={investorVariables}
         getCellContent={getCellContent}
       />
     </div>
-  );
+  )
 };
 
 export default withStyles(styles)(withRouter(Investors));

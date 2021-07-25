@@ -132,7 +132,8 @@ const ServerTable = ({
       },
     },
   );
-    console.log({data})
+    console.log(getCurrentSort(), sortOrder)
+    console.log(data)
   useEffect(() => {
     if (headers) {
       headers.forEach((header, i) => {
