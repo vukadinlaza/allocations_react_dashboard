@@ -83,7 +83,7 @@ const UPDATE_INVESTMENT = gql`
     }
   }
 `;
-export default function UpdateInvestment({
+export default function InvestmentEdit({
   investmentId = false,
   isK1 = false,
   handleUpdate = false,
@@ -101,7 +101,7 @@ export default function UpdateInvestment({
     onCompleted: () => {
       toast.success('Sucess! Investment Updated.');
       if (handleUpdate) {
-        handleUpdate();
+        handleUpdate.refetch();
       }
     },
     onError: () => {
@@ -113,7 +113,8 @@ export default function UpdateInvestment({
   const [deleteInvestment] = useMutation(destroy, {
     onCompleted: () => {
       if (handleUpdate) {
-        handleUpdate();
+        handleUpdate.refetch();
+        handleUpdate.closeModal();
       }
       toast.success('Sucess! Investment Deleted.');
     },
@@ -277,7 +278,6 @@ function Docs({ investment, getInvestment, isK1 }) {
 
   useEffect(() => {
     if (uploadedDoc) {
-      console.log({ uploadedDoc });
       addInvestmentDoc({
         variables: { doc: uploadedDoc, investment_id: id, isK1 },
       });

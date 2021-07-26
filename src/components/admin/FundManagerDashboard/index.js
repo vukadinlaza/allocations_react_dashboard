@@ -387,6 +387,7 @@ const GET_INVESTMENTS = gql`
     deal(fund_slug: $fund_slug, deal_slug: $deal_slug) {
       _id
       viewedUsers {
+        _id
         first_name
         last_name
         email

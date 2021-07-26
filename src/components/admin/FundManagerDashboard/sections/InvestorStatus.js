@@ -59,6 +59,7 @@ const InvestorBoxViewed = ({
   setInvestmentId,
   setDealId,
   setInvestorId,
+  dealId,
 }) => {
   const onClick = () => {
     if (superAdmin) {
@@ -66,12 +67,13 @@ const InvestorBoxViewed = ({
         setInvestmentId(investor.investmentId);
         setShowModal(true);
       } else {
-        setDealId(investor.dealId);
-        setInvestorId(investor.id);
+        setDealId(dealId);
+        setInvestorId(investor._id);
         setShowModal(true);
       }
     }
   };
+
   return width > phone ? (
     <div className={classes.investorBox} onClick={onClick} key={`investor-${index}`}>
       <div className={classes.investorBoxName} style={{ display: 'flex' }}>
@@ -103,18 +105,11 @@ const InvestorBox = ({
   superAdmin,
   setShowModal,
   setInvestmentId,
-  setDealId,
-  setInvestorId,
-  sortField,
 }) => {
   const onClick = () => {
     if (superAdmin) {
       if (investor.investmentId) {
         setInvestmentId(investor.investmentId);
-        setShowModal(true);
-      } else {
-        setDealId(investor.dealId);
-        setInvestorId(investor.id);
         setShowModal(true);
       }
     }
@@ -177,12 +172,15 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
   const [sortField, setSortField] = useState('name');
 
   const onClose = () => {
+    setInvestmentId(null);
+    setDealId(null);
+    setInvestorId(null);
     setShowModal(false);
   };
 
-  const handleUpdate = () => {
-    refetch();
-    setShowModal(false);
+  const handleUpdate = {
+    refetch: () => refetch(),
+    closeModal: () => setShowModal(false),
   };
 
   if (!data?.deal?.investments) {
@@ -339,8 +337,6 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
                     superAdmin={superAdmin}
                     setShowModal={setShowModal}
                     setInvestmentId={setInvestmentId}
-                    setDealId={setDealId}
-                    setInvestorId={setInvestorId}
                   />
                 ))
               : viewedInvestors.map((investor, index) => (
@@ -353,8 +349,6 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
                     superAdmin={superAdmin}
                     setShowModal={setShowModal}
                     setInvestmentId={setInvestmentId}
-                    setDealId={setDealId}
-                    setInvestorId={setInvestorId}
                   />
                 ))}
 
@@ -371,6 +365,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
                   setInvestmentId={setInvestmentId}
                   setDealId={setDealId}
                   setInvestorId={setInvestorId}
+                  dealId={data?.deal?._id}
                 />
               );
             })}
