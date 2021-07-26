@@ -32,6 +32,7 @@ const tableVariables = {
     query FundAdminTables($filter: Object, $pagination: PaginationInput!) {
       fundAdminTables(filter: $filter, pagination: $pagination) {
         count
+        isLastPage
         deals {
           _id
           company_name

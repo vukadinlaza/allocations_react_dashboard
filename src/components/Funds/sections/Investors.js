@@ -32,6 +32,7 @@ const investorVariables = {
     query AllUsers($pagination: PaginationInput!) {
       allUsers(pagination: $pagination) {
         count
+        isLastPage
         users {
           _id
           first_name
