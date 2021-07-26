@@ -90,6 +90,8 @@ const AllocationsTable = ({
   rowDetailPage,
   pagination,
   serverPagination,
+  isLastPage,
+  count,
   rowsQuantity = 25,
   currentPage = 0,
   onChangePage,
@@ -103,7 +105,7 @@ const AllocationsTable = ({
   titleComponent,
   getSortProps,
   sortField,
-  sortOrder
+  sortOrder,
 }) => {
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
@@ -249,7 +251,7 @@ const AllocationsTable = ({
                     align={header.alignHeader ? header.align : 'center'}
                   >
                     <TableSortLabel
-                      active={header.isSortable? orderBy === header.value : false}
+                      active={header.isSortable ? orderBy === header.value : false}
                       direction={orderBy === header.value ? order : 'asc'}
                       onClick={(e) =>
                         handleRequestSort(
@@ -325,7 +327,10 @@ const AllocationsTable = ({
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={serverPagination ? -1 : data ? data.length : 0}
+            count={count || 0}
+            labelDisplayedRows={({ from, to, count }) => {
+              return `${from} - ${to} of ${count}`;
+            }}
             rowsPerPage={rowsPerPage}
             page={page}
             onChangePage={handleChangePage}

@@ -133,7 +133,7 @@ const ServerTable = ({
       },
     },
   );
-console.log({data})
+
   useEffect(() => {
     if (headers) {
       headers.forEach((header, i) => {
@@ -222,6 +222,8 @@ console.log({data})
       </div>
     );
 
+  // const { isLastPage, count } = data.fundAdminTables;
+
   return (
     <div className={classes.root}>
       <div className={classes.searchContainer}>
@@ -285,6 +287,8 @@ console.log({data})
           serverPagination
           rowsQuantity={pagination}
           currentPage={currentPage}
+          isLastPage={data.fundAdminTables.isLastPage}
+          count={data.fundAdminTables.count}
           includeCheckbox
           rowSelector="_id"
           rowDetailPage={rowDetailPage}
