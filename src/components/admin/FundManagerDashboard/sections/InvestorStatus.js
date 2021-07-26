@@ -73,7 +73,7 @@ const InvestorBoxViewed = ({
       }
     }
   };
-
+  console.log('hello');
   return width > phone ? (
     <div className={classes.investorBox} onClick={onClick} key={`investor-${index}`}>
       <div className={classes.investorBoxName} style={{ display: 'flex' }}>
