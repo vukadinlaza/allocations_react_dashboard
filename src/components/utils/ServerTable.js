@@ -72,7 +72,8 @@ tableVariables = {
           sortNestedCollection,
           sortLocalFieldKey,
           sortField]
-  dataVariable = 'investmentsList', response from server data[dataVariable]
+  resolverName: 'investmentList', response from server data[dataVariable]
+  dataVariable = 'investments', actual data sent to table
   defaultSortField = "status"
 }
 getCellContent={function} // get specific cell content to format it - optional
@@ -104,7 +105,7 @@ const ServerTable = ({
   const [filterNestedKey, setFilterNestedKey] = useState('');
   const [filterNestedCollection, setFilterNestedCollection] = useState('');
   const [filterLocalFieldKey, setFilterLocalFieldKey] = useState('');
-  const { headers, gqlQuery, dataVariable, defaultSortField, tableName } = tableVariables;
+  const { headers, gqlQuery, dataVariable, resolverName, defaultSortField, tableName } = tableVariables;
 
   const getCurrentSort = () => (!sortField ? defaultSortField : sortField);
 
@@ -161,7 +162,7 @@ const ServerTable = ({
     // clear search bar
     const searchBarElement = document.getElementById('search-field');
     if (searchBarElement) searchBarElement.value = '';
-  }, [headers, gqlQuery, dataVariable, defaultSortField, tableName]);
+  }, [headers, gqlQuery, dataVariable, resolverName, defaultSortField, tableName]);
 
   const onChangePage = (newPage) => {
     setCurrentPage(newPage);
@@ -282,13 +283,12 @@ const ServerTable = ({
         </div>
       ) : (
         <AllocationsTable
-          data={_.get(data, dataVariable)}
+          data={_.get(data, `${resolverName}.${dataVariable}`)}
           headers={headers}
           serverPagination
           rowsQuantity={pagination}
           currentPage={currentPage}
-          isLastPage={data.fundAdminTables.isLastPage}
-          count={data.fundAdminTables.count}
+          count={data[resolverName].count}
           includeCheckbox
           rowSelector="_id"
           rowDetailPage={rowDetailPage}

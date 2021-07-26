@@ -32,7 +32,6 @@ const investorVariables = {
     query AllUsers($pagination: PaginationInput!) {
       allUsers(pagination: $pagination) {
         count
-        isLastPage
         users {
           _id
           first_name
@@ -56,7 +55,8 @@ const investorVariables = {
     { value: 'viewProfile', label: 'VIEW PROFILE', keyNotInData: true, type: 'viewProfile', align: 'center', alignHeader: true },
     { value: 'viewDashboard', label: 'VIEW DASHBOARD', keyNotInData: true, type: 'viewDashboard', align: 'center', alignHeader: true },
   ],
-  dataVariable: 'allUsers.users',
+  resolverName: 'allUsers',
+  dataVariable: 'users',
   defaultSortField: 'first_name'
 };
 

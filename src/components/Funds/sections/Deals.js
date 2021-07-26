@@ -32,7 +32,6 @@ const tableVariables = {
     query FundAdminTables($filter: Object, $pagination: PaginationInput!) {
       fundAdminTables(filter: $filter, pagination: $pagination) {
         count
-        isLastPage
         deals {
           _id
           company_name
@@ -78,7 +77,8 @@ const tableVariables = {
       align: 'center',
     },
   ],
-  dataVariable: 'fundAdminTables.deals',
+  resolverName: 'fundAdminTables',
+  dataVariable: 'deals',
   defaultSortField: 'company_name'
 };
 

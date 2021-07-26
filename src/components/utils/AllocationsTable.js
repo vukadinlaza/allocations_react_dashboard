@@ -90,7 +90,6 @@ const AllocationsTable = ({
   rowDetailPage,
   pagination,
   serverPagination,
-  isLastPage,
   count,
   rowsQuantity = 25,
   currentPage = 0,
