@@ -86,6 +86,19 @@ export default function InvestorEditForm({
 
   const handleChange = (prop) => (e) => {
     e.persist();
+
+    if (prop === 'first_name' || prop === 'last_name' || prop === 'signer_full_name') {
+
+      const capitalizeName = (str) =>
+        str.toLowerCase().replace(/\w{0,}/g, (match) =>
+          match.replace(/\w/, (m) => m.toUpperCase()));
+
+      return setInvestor((prev) => ({
+        ...prev,
+        [prop]: capitalizeName(e.target.value)
+      }));
+    }
+
     if (prop === 'investor_type') {
       return setInvestor((prev) => ({
         ...prev,
@@ -324,7 +337,6 @@ function InvestorName({ investor, errors, handleChange }) {
     </>
   );
 }
-
 const statusOptions = {
   individual: [
     'I have individual/joint net worth in excess of $1m',
