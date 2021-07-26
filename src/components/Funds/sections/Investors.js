@@ -80,19 +80,34 @@ const Investors = ({ classes, history }) => {
         return row[headerValue].length;
 
       case 'viewInvestments':
-        return  <span className={classes.buttonLink} onClick={() => handleShowInvestments(row._id)}>
+        return  <a 
+                  href={`/admin/users/${row._id}/investments`} 
+                  className={classes.buttonLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >
                   <PlayArrowIcon className={classes.button} />
-                </span>
+                </a>
         
       case 'viewProfile':
         return (
-          <a href={`/admin/users/${row._id}`} className={classes.buttonLink}>
+          <a 
+            href={`/admin/users/${row._id}`} 
+            className={classes.buttonLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            >
             <PlayArrowIcon className={classes.button} />
           </a>
         );
       case 'viewDashboard':
         return (
-          <a href={`/investor/${row._id}/home`} className={classes.buttonLink}>
+          <a 
+            href={`/investor/${row._id}/home`} 
+            className={classes.buttonLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            >
             <PlayArrowIcon className={classes.button} />
           </a>
         );

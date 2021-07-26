@@ -103,19 +103,31 @@ const Deals = ({ classes, filter, tableName }) => {
           <a
             href={`/admin/${row.organization.slug}/deals/${row._id}/edit`}
             className={classes.buttonLink}
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <EditIcon className={classes.button} />
           </a>
         );
       case 'dealPage':
         return (
-          <a href={`/deals/${row.organization.slug}/${row.slug}`} className={classes.buttonLink}>
+          <a 
+            href={`/deals/${row.organization.slug}/${row.slug}`} 
+            className={classes.buttonLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            >
             <PlayArrowIcon className={classes.button} />
           </a>
         );
       case 'dashboard':
         return (
-          <a href={`/admin/${row.organization.slug}`} className={classes.buttonLink}>
+          <a 
+            href={`/admin/${row.organization.slug}`} 
+            className={classes.buttonLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            >
             <PlayArrowIcon className={classes.button} />
           </a>
         );
