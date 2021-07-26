@@ -10,6 +10,7 @@ import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
 import Highlights from './sections/Highlights';
 import Deals from './sections/Deals';
+import Investors from './sections/Investors';
 
 const styles = (theme) => ({
   contentContainer: {
@@ -137,7 +138,7 @@ const FUND_ADMIN_DASHBOARD_STATS = gql`
   }
 `;
 
-const dashboardTabs = ['Highlights', 'Funds', 'SPVs'];
+const dashboardTabs = ['Highlights', 'Funds', 'SPVs', 'Investors'];
 
 const FundAdminDashboard = ({ classes, history }) => {
   const { userProfile } = useAuth();
@@ -158,6 +159,9 @@ const FundAdminDashboard = ({ classes, history }) => {
 
       case 2:
         return <Deals filter={{ filter: { $ne: 'fund' } }} tableName="SPV" />;
+
+      case 3:
+        return <Investors />;
 
       default:
         return <p>No Data</p>;

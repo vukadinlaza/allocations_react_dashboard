@@ -31,50 +31,53 @@ const tableVariables = {
   gqlQuery: `
     query FundAdminTables($filter: Object, $pagination: PaginationInput!) {
       fundAdminTables(filter: $filter, pagination: $pagination) {
-        _id
-        company_name
-        deal_lead
-        AUM
-        status
-        slug
-        dealParams{
-          signDeadline
-          wireDeadline
-        }
-        dealOnboarding {
+        count
+        deals {
           _id
-        }
-        organization {
-          _id
+          company_name
+          deal_lead
+          AUM
+          status
           slug
+          dealParams{
+            signDeadline
+            wireDeadline
+          }
+          dealOnboarding {
+            _id
+          }
+          organization {
+            _id
+            slug
+          }
         }
       }
     }`,
   headers: [
-    { value: 'company_name', label: 'Name', isFilter: true },
-    { value: 'deal_lead', label: 'Fund Manager', isFilter: true },
+    { value: 'company_name', label: 'NAME', isFilter: true },
+    { value: 'deal_lead', label: 'FUND MANAGER', isFilter: true },
     { value: 'AUM', label: 'AUM', type: 'amount' },
-    { value: 'dealParams', label: 'Close Date', type: 'wireDeadline' },
+    { value: 'dealParams', label: 'CLOSE DATE', type: 'wireDeadline', nestedKey: 'wireDeadline', sortField: 'dealParams' },
     // {drawdown}
-    { value: 'dealOnboarding', label: 'Process Street Status', type: 'onboarding' },
-    { value: 'status', label: 'Deal Status', type: 'status', isFilter: true },
-    { value: 'edit', label: 'Edit Deal', type: 'edit', keyNotInData: true, align: 'center' },
+    { value: 'dealOnboarding', label: 'PROCESS STREET STATUS', type: 'onboarding' },
+    { value: 'status', label: 'DEAL STATUS', type: 'status', isFilter: true },
+    { value: 'edit', label: 'EDIT DEAL', type: 'edit', keyNotInData: true, align: 'center' },
     {
       value: 'dealPage',
-      label: 'Deal Page',
+      label: 'DEAL PAGE',
       type: 'dealPage',
       keyNotInData: true,
       align: 'center',
     },
     {
       value: 'dashboard',
-      label: 'View Dashboard',
+      label: 'VIEW DASHBOARD',
       type: 'dashboard',
       keyNotInData: true,
       align: 'center',
     },
   ],
-  dataVariable: 'fundAdminTables',
+  dataVariable: 'fundAdminTables.deals',
   defaultSortField: 'company_name'
 };
 

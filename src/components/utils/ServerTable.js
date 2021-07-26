@@ -14,6 +14,7 @@ import {
 import SearchIcon from '@material-ui/icons/Search';
 import AllocationsTable from './AllocationsTable';
 import Loader from './Loader';
+import { titleCase } from '../../utils/helpers';
 
 const styles = (theme) => ({
   root: {
@@ -237,7 +238,7 @@ const ServerTable = ({
               .filter((header) => header.isFilter)
               .map((header, index) => (
                 <option value={header.value} key={`header-${index}`}>
-                  {header.label}
+                  {titleCase(header.label)}
                 </option>
               ))}
           </Select>

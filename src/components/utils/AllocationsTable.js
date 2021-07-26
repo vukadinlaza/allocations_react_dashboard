@@ -73,6 +73,7 @@ const styles = (theme) => ({
 				keyNotInData: Boolean // only if content of a cell is not included in data, i.e  button
 				align: 'right' optional
 				alignHeader: Boolean optional
+        isSortable: Boolean optional
 
 				nestedKey: nested key optional (needs nestedCollection & localFieldKey)
 				nestedCollection: String (collection for lookup) (needs nestedKey localFieldKey)
@@ -102,12 +103,13 @@ const AllocationsTable = ({
   titleComponent,
   getSortProps,
   sortField,
+  sortOrder
 }) => {
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(rowsQuantity);
   const [orderBy, setOrderBy] = React.useState(sortField || headers[0].value);
-  const [order, setOrder] = React.useState('asc');
+  const [order, setOrder] = React.useState(sortOrder);
 
   useEffect(() => {
     setPage(currentPage);
@@ -247,7 +249,7 @@ const AllocationsTable = ({
                     align={header.alignHeader ? header.align : 'center'}
                   >
                     <TableSortLabel
-                      active={orderBy === header.value}
+                      active={header.isSortable? orderBy === header.value : false}
                       direction={orderBy === header.value ? order : 'asc'}
                       onClick={(e) =>
                         handleRequestSort(
