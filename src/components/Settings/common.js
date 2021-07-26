@@ -32,8 +32,8 @@ const styles = theme => ({
   },
   documentBox: {
     width: "100%",
-    padding: "20px",
-    marginBottom: '20px',
+    padding: "10px 20px",
+    marginBottom: '10px',
     textAlign: "left",
     textTransform: "none",
     minWidth: "400px",

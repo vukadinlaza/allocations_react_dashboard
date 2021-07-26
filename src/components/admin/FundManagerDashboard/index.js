@@ -192,6 +192,7 @@ const styles = (theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     margin: '0 40px',
+    padding: '25px 0',
     [theme.breakpoints.down(phone)]: {
       flexDirection: 'column',
       fontSize: '.5rem',
@@ -725,7 +726,7 @@ const FundManagerDashboard = ({ classes, history }) => {
       {openTooltip && (
         <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} />
       )}
-      <div className={classes.mainTitleContainer}>
+      <div className={classes.mainTitleContainer} id="main-title-container">
         <Typography className={classes.mainTitle}>
           {userProfile?.first_name
             ? `Hello ${userProfile?.first_name}, here are your Funds.`

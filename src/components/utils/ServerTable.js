@@ -3,10 +3,18 @@ import { gql } from 'apollo-boost';
 import _ from 'lodash';
 import { useQuery } from '@apollo/react-hooks';
 import { withStyles } from '@material-ui/core/styles';
-import { TextField, FormControl, InputLabel, Select, Button, InputAdornment } from '@material-ui/core';
+import {
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  Button,
+  InputAdornment,
+} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import AllocationsTable from './AllocationsTable';
 import Loader from './Loader';
+import { titleCase } from '../../utils/helpers';
 
 const styles = (theme) => ({
   root: {
@@ -50,14 +58,30 @@ tableVariables = {
     { value: 'deal', label: 'Deal', isFilter: true, type: 'deal', nestedKey: 'company_name', nestedCollection: 'deals', localFieldKey: 'deal_id' },
     { value: 'status', label: 'Status', isFilter: true },
     { value: 'amount', label: 'Amount', type: 'amount', align: 'right', isFilter: true },
+    { value: 'editButton', label: 'Edit Button', type: 'edit button', keyNotInData: true}
   ],
-  dataVariable = 'investmentsList', response from server data[dataVariable]
+  /// possible header fields: [
+          value,
+          label, 
+          isFilter, 
+          type,
+          nestedKey,
+          nestedCollection,
+          localFieldKey,
+          sortOrder,
+          sortNestedCollection,
+          sortLocalFieldKey,
+          sortField]
+  resolverName: 'investmentList', response from server data[dataVariable]
+  dataVariable = 'investments', actual data sent to table
   defaultSortField = "status"
 }
 getCellContent={function} // get specific cell content to format it - optional
 handleRowDetailPage={function} // route app on row click - optional
 queryVariables={object} //optional
 tablePagination={number} // optional
+rowDetailPage={boolean} // optional
+resetTableData={string} // optional - used for clearing sorting and filtering from one table to another
 */
 
 const ServerTable = ({
@@ -67,6 +91,7 @@ const ServerTable = ({
   handleRowDetailPage,
   queryVariables,
   tablePagination = 25,
+  rowDetailPage = false,
 }) => {
   const [selectWidth, setSelectWidth] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
@@ -80,7 +105,7 @@ const ServerTable = ({
   const [filterNestedKey, setFilterNestedKey] = useState('');
   const [filterNestedCollection, setFilterNestedCollection] = useState('');
   const [filterLocalFieldKey, setFilterLocalFieldKey] = useState('');
-  const { headers, gqlQuery, dataVariable, defaultSortField } = tableVariables;
+  const { headers, gqlQuery, dataVariable, resolverName, defaultSortField, tableName } = tableVariables;
 
   const getCurrentSort = () => (!sortField ? defaultSortField : sortField);
 
@@ -137,7 +162,7 @@ const ServerTable = ({
     // clear search bar
     const searchBarElement = document.getElementById('search-field');
     if (searchBarElement) searchBarElement.value = '';
-  }, [tableVariables]);
+  }, [headers, gqlQuery, dataVariable, resolverName, defaultSortField, tableName]);
 
   const onChangePage = (newPage) => {
     setCurrentPage(newPage);
@@ -168,12 +193,20 @@ const ServerTable = ({
     }
   };
 
-  const onChangeSort = (sortField, isAsc, sortNestedKey, sortNestedCollection, sortLocalFieldKey) => {
+  const onChangeSort = (
+    sortField,
+    isAsc,
+    sortNestedKey,
+    sortNestedCollection,
+    sortLocalFieldKey,
+  ) => {
     const order = isAsc ? 1 : -1;
-    if (sortNestedKey && sortNestedCollection && sortLocalFieldKey) {
+    if (sortNestedKey) {
       setSortNestedKey(sortNestedKey);
-      setSortNestedCollection(sortNestedCollection);
-      setSortLocalFieldKey(sortLocalFieldKey);
+      if (sortNestedCollection && sortLocalFieldKey) {
+        setSortNestedCollection(sortNestedCollection);
+        setSortLocalFieldKey(sortLocalFieldKey);
+      }
     } else {
       setSortNestedKey('');
       setSortNestedCollection('');
@@ -189,6 +222,8 @@ const ServerTable = ({
         <Loader />
       </div>
     );
+
+  // const { isLastPage, count } = data.fundAdminTables;
 
   return (
     <div className={classes.root}>
@@ -206,7 +241,7 @@ const ServerTable = ({
               .filter((header) => header.isFilter)
               .map((header, index) => (
                 <option value={header.value} key={`header-${index}`}>
-                  {header.label}
+                  {titleCase(header.label)}
                 </option>
               ))}
           </Select>
@@ -224,7 +259,12 @@ const ServerTable = ({
           }}
           style={{ margin: '0 1em' }}
         />
-        <Button onClick={handleSearch} variant="contained" color="primary" style={{ padding: '6px 35px' }}>
+        <Button
+          onClick={handleSearch}
+          variant="contained"
+          color="primary"
+          style={{ padding: '6px 35px' }}
+        >
           Search
         </Button>
       </div>
@@ -243,14 +283,15 @@ const ServerTable = ({
         </div>
       ) : (
         <AllocationsTable
-          data={_.get(data, dataVariable)}
+          data={_.get(data, `${resolverName}.${dataVariable}`)}
           headers={headers}
           serverPagination
           rowsQuantity={pagination}
           currentPage={currentPage}
+          count={data[resolverName].count}
           includeCheckbox
           rowSelector="_id"
-          rowDetailPage
+          rowDetailPage={rowDetailPage}
           handleRowDetailPage={handleRowDetailPage}
           getCellContent={getCellContent}
           onChangePage={onChangePage}
