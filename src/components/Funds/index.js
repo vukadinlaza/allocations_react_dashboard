@@ -172,20 +172,6 @@ const FundAdminDashboard = ({ classes, history }) => {
     <div className={classes.dashboardContainer}>
       <div className={classes.mainTitleContainer}>
         <Typography className={classes.mainTitle}>Fund Admin Dashboard</Typography>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          {userProfile?.admin && (
-            <span className={classes.createButtonLink}>
-              <Button
-                className={classes.createButton}
-                style={{ marginLeft: '1rem' }}
-                onClick={() => console.log('Create new Fund')}
-              >
-                <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
-                Create New
-              </Button>
-            </span>
-          )}
-        </div>
       </div>
       <div>
         <div style={{ position: 'relative' }}>
