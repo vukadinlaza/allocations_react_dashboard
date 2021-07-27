@@ -1217,7 +1217,7 @@ const TR = ({
   const orgSlug = investment?.deal?.organization?.slug;
   const dealSlug = investment?.deal?.slug;
   const nextStepUrl = ['signed', 'wired', 'complete'].includes(investment?.status)
-    ? `/next-steps/${orgSlug}/${dealSlug}`
+    ? `/next-steps/${orgSlug}/${dealSlug}?investmentId=${investment?._id}`
     : `/deals/${orgSlug}/${dealSlug}`;
   const capitalAccountInfo = capFields.find((r) => {
     return _.get(r, 'Deal Name (webapp)[0]') === investment.deal.company_name;
