@@ -49,8 +49,8 @@ const investorVariables = {
     { value: 'first_name', label: 'FIRST NAME', isFilter: true, isSortable: true },
     { value: 'last_name', label: 'LAST NAME', isFilter: true, isSortable: true },
     { value: 'email', label: 'EMAIL', isFilter: true, isSortable: true },
-    { value: 'investmentAmount', label: 'INVESTMENT AMOUNT', type: 'investmentAmount', keyNotInData: true },
-    { value: 'investments', label: 'TOTAL INVESTMENTS', type: 'count', align: 'center', alignHeader: true },
+    { value: 'investmentAmount', label: 'INVESTMENT AMOUNT', type: 'investmentAmount', keyNotInData: true, isSortable: true },
+    { value: 'investments', label: 'TOTAL INVESTMENTS', type: 'count', align: 'center', alignHeader: true, isSortable: true },
     { value: 'viewInvestments', label: 'VIEW INVESTMENTS', keyNotInData: true, type: 'viewInvestments', align: 'center', alignHeader: true },
     { value: 'viewProfile', label: 'VIEW PROFILE', keyNotInData: true, type: 'viewProfile', align: 'center', alignHeader: true },
     { value: 'viewDashboard', label: 'VIEW DASHBOARD', keyNotInData: true, type: 'viewDashboard', align: 'center', alignHeader: true },
@@ -73,7 +73,7 @@ const Investors = ({ classes, history }) => {
         return row['investments']?.length? 
                   `$${nWithCommas(row['investments']
                   .map(i => i.amount)
-                  .reduce((acc, n) => acc + n ))}`
+                  .reduce((acc, n) => Number(acc) + Number(n) ))}`
                   : 0
                   
       case 'count':
@@ -94,8 +94,8 @@ const Investors = ({ classes, history }) => {
           <a 
             href={`/admin/users/${row._id}`} 
             className={classes.buttonLink}
-            target="_blank"
-            rel="noopener noreferrer"
+              target="_blank"
+              rel="noopener noreferrer"
             >
             <PlayArrowIcon className={classes.button} />
           </a>
