@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import queryString from 'query-string';
 import { Button } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import './styles.scss';
 import Confetti from 'react-confetti';
 import { useQuery, useLazyQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import signInvestmentYes from '../../assets/sign-investment-yes.svg';
 import wireFundsNo from '../../assets/wire-funds-no.svg';
@@ -71,6 +72,19 @@ const GET_DEAL = gql`
   }
 `;
 
+const GET_INVESTMENT = gql`
+  query GetInvestment($_id: String!) {
+    investment(_id: $_id) {
+      _id
+      amount
+      submissionData {
+        investor_type
+        country
+      }
+    }
+  }
+`;
+
 function DealNextSteps() {
   const [confetti, showConfetti] = useState(false);
   const { data, loading, refetch } = useQuery(GET_INVESTOR, { fetchPolicy: 'network-only' });
@@ -80,8 +94,13 @@ function DealNextSteps() {
   const { deal_slug, organization } = useParams();
   const [wireInstructionsOpen, setWireInstructionsOpen] = useState(false);
   const { isAuthenticated, loading: authLoading } = useAuth();
-
+  const { search } = useLocation();
+  const params = queryString.parse(search);
   const history = useHistory();
+
+  const { data: investmentData } = useQuery(GET_INVESTMENT, {
+    variables: { _id: params?.investmentId },
+  });
 
   useEffect(() => {
     if (!authLoading && !calledDeal && isAuthenticated && deal_slug) {
@@ -125,7 +144,8 @@ function DealNextSteps() {
     });
   };
 
-  const investorFormData = history?.location?.state?.investorFormData || {};
+  const investorFormData =
+    history?.location?.state?.investorFormData || investmentData?.investment?.submissionData || {};
 
   const templateInfo =
     investorFormData?.country === 'United States'
