@@ -1204,7 +1204,14 @@ export default () => {
   );
 };
 
-const TR = ({ investment, setShowDocs, showDocs, demo, setShowCaptialAccounts, capitalAccounts }) => {
+const TR = ({
+  investment,
+  setShowDocs,
+  showDocs,
+  demo,
+  setShowCaptialAccounts,
+  capitalAccounts,
+}) => {
   const history = useHistory();
   const capFields = (capitalAccounts || []).map((r) => r.fields);
   const orgSlug = investment?.deal?.organization?.slug;
@@ -1257,13 +1264,24 @@ const TR = ({ investment, setShowDocs, showDocs, demo, setShowCaptialAccounts, c
         </Button>
       </TableCell>
       <TableCell onClick={showDocsFn} align="center">
-        <Button variant="contained" size="small" color="primary" onClick={() => history.push(nextStepUrl)}>
+        <Button
+          variant="contained"
+          size="small"
+          color="primary"
+          onClick={() => history.push(nextStepUrl)}
+        >
           View
         </Button>
       </TableCell>
       <Hidden only="xs">
         <TableCell align="center">
-          <Button variant="contained" size="small" color="primary" onClick={showDocsFn} disabled={!!demo}>
+          <Button
+            variant="contained"
+            size="small"
+            color="primary"
+            onClick={showDocsFn}
+            disabled={!!demo}
+          >
             View
           </Button>
         </TableCell>
@@ -1300,7 +1318,9 @@ function DocsRow({ docs, investment, demo, setEditInvestmentModal, isAdmin, setS
             Documents may take up to 7 days to appear here after signing.
           </Typography>
           <Grid container spacing={1}>
-            {demo ? [] : docs.map((doc) => <Document key={doc?.path} doc={doc} investment={investment} />)}
+            {demo
+              ? []
+              : docs.map((doc) => <Document key={doc?.path} doc={doc} investment={investment} />)}
             {investment?.submissionData?.submissionId && !isClosed && (
               <Grid
                 item
