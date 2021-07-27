@@ -40,10 +40,10 @@ function InvestPanel({ deal, deal_slug, organization }) {
 
   return (
     <section className="InvestPanel">
-      <p className="section-label">One click invest</p>
+      <p className="section-label">One Click Invest</p>
       <ul>
         <li>
-          <p>Signing deadline:</p>
+          <p>Signing Deadline:</p>
           <h2>
             {signDeadline
               ? getDeadline(signDeadline)
@@ -53,7 +53,7 @@ function InvestPanel({ deal, deal_slug, organization }) {
           </h2>
         </li>
         <li>
-          <p>Wire deadline:</p>
+          <p>Wire Deadline:</p>
           <h2>
             {wireDeadline
               ? getDeadline(wireDeadline)

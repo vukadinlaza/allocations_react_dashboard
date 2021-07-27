@@ -4,10 +4,7 @@ import './styles.scss';
 import ReactHtmlParser from 'react-html-parser';
 
 function KeyHighlights({ deal }) {
-  const {
-    company_name,
-    memo,
-  } = deal;
+  const { company_name, memo } = deal;
 
   return (
     <section className="KeyHighlights">
@@ -17,7 +14,7 @@ function KeyHighlights({ deal }) {
           ReactHtmlParser(memo)
         ) : (
           <span className="no-data">
-            No key highlights for <b>{company_name}.</b>
+            No Key Highlights for <b>{company_name}.</b>
           </span>
         )}
       </Box>

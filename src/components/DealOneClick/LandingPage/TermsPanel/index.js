@@ -42,19 +42,19 @@ const TermsPanel = ({ deal }) => {
         )}
         {carry && (
           <li>
-            <p>Total carry:</p>
+            <p>Total Carry:</p>
             <h3>{carry}%</h3>
           </li>
         )}
         {managementFeesDollar && (
           <li>
-            <p>Total management fee:</p>
+            <p>Total Management Fee:</p>
             <h3>${managementFeesDollar}</h3>
           </li>
         )}
         {fees && (
           <li>
-            <p>Total management fee:</p>
+            <p>Total Management Fee:</p>
             <h3>{fees}%</h3>
           </li>
         )}
