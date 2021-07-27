@@ -82,6 +82,7 @@ queryVariables={object} //optional
 tablePagination={number} // optional
 rowDetailPage={boolean} // optional
 resetTableData={string} // optional - used for clearing sorting and filtering from one table to another
+defaultSortOrder
 */
 
 const ServerTable = ({
@@ -92,13 +93,14 @@ const ServerTable = ({
   queryVariables,
   tablePagination = 25,
   rowDetailPage = false,
+  defaultSortOrder
 }) => {
   const [selectWidth, setSelectWidth] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [pagination, setPagination] = useState(tablePagination);
   const [searchFilter, setSearchFilter] = useState({});
   const [sortField, setSortField] = useState('');
-  const [sortOrder, setSortOrder] = useState();
+  const [sortOrder, setSortOrder] = useState(defaultSortOrder || 1);
   const [sortNestedKey, setSortNestedKey] = useState('');
   const [sortNestedCollection, setSortNestedCollection] = useState('');
   const [sortLocalFieldKey, setSortLocalFieldKey] = useState('');
@@ -152,7 +154,7 @@ const ServerTable = ({
     setPagination(tablePagination);
     setSearchFilter({});
     setSortField('');
-    setSortOrder(1);
+    setSortOrder(defaultSortOrder || 1);
     setSortNestedKey('');
     setSortNestedCollection('');
     setSortLocalFieldKey('');

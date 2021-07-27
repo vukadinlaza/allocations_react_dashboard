@@ -54,13 +54,13 @@ const tableVariables = {
       }
     }`,
   headers: [
-    { value: 'company_name', label: 'NAME', isFilter: true },
-    { value: 'deal_lead', label: 'FUND MANAGER', isFilter: true },
-    { value: 'AUM', label: 'AUM', type: 'amount' },
-    { value: 'dealParams', label: 'CLOSE DATE', type: 'wireDeadline', nestedKey: 'wireDeadline', sortField: 'dealParams' },
+    { value: 'company_name', label: 'NAME', isFilter: true, isSortable: true },
+    { value: 'deal_lead', label: 'FUND MANAGER', isFilter: true, isSortable: true },
+    { value: 'AUM', label: 'AUM', type: 'amount', isSortable: true },
+    { value: 'dealParams', label: 'CLOSE DATE', type: 'wireDeadline', nestedKey: 'wireDeadline', sortField: 'dealParams', isSortable: true },
     // {drawdown}
-    { value: 'dealOnboarding', label: 'PROCESS STREET STATUS', type: 'onboarding' },
-    { value: 'status', label: 'DEAL STATUS', type: 'status', isFilter: true },
+    { value: 'dealOnboarding', label: 'PROCESS STREET STATUS', type: 'onboarding', isSortable: true },
+    { value: 'status', label: 'DEAL STATUS', type: 'status', isFilter: true, isSortable: true },
     { value: 'edit', label: 'EDIT DEAL', type: 'edit', keyNotInData: true, align: 'center' },
     {
       value: 'dealPage',
@@ -79,7 +79,7 @@ const tableVariables = {
   ],
   resolverName: 'fundAdminTables',
   dataVariable: 'deals',
-  defaultSortField: 'company_name'
+  defaultSortField: 'AUM'
 };
 
 const Deals = ({ classes, filter, tableName }) => {
@@ -144,6 +144,7 @@ const Deals = ({ classes, filter, tableName }) => {
         tableVariables={tableVariables}
         getCellContent={getCellContent}
         queryVariables={filter}
+        defaultSortOrder={-1}
       />
     </div>
   );
