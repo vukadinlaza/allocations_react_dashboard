@@ -6,7 +6,7 @@ import './styles.scss';
 import Confetti from 'react-confetti';
 import { useQuery, useLazyQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
-import { useHistory, useParams, useLocation } from 'react-router-dom';
+import { useHistory, useParams, useLocation, Redirect } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import signInvestmentYes from '../../assets/sign-investment-yes.svg';
 import wireFundsNo from '../../assets/wire-funds-no.svg';
@@ -130,7 +130,9 @@ function DealNextSteps() {
       showConfetti(false);
     }, 5000);
   }, []);
+
   if (loading || !data || !dealData) return null;
+  if (!investmentData) return <Redirect to={path} />;
 
   const handleInvestmentEdit = () => {
     const userInvestments = data?.investor?.investments;
