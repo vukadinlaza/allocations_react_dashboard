@@ -126,12 +126,17 @@ function DealNextSteps() {
       behavior: 'smooth',
     });
 
-    setTimeout(() => {
+    const confettiOn = setTimeout(() => {
       showConfetti(true);
     }, 1000);
-    setTimeout(() => {
+    const confettiOff = setTimeout(() => {
       showConfetti(false);
     }, 5000);
+
+    return () => {
+      clearTimeout(confettiOn);
+      clearTimeout(confettiOff);
+    };
   }, []);
 
   if (loading || !data || !dealData) return null;
