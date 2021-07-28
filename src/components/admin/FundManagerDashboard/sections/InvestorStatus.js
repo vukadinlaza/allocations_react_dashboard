@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
 import MailIcon from '@material-ui/icons/Mail';
-import { Avatar, Typography, Grid, FormControl, InputLabel } from '@material-ui/core';
+import { Avatar, Typography, Grid, FormControl, InputLabel, Tooltip } from '@material-ui/core';
 import Select from '@material-ui/core/Select';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import { ScrollableBox } from '../widgets';
@@ -60,6 +60,7 @@ const InvestorBoxViewed = ({
   setDealId,
   setInvestorId,
   dealId,
+  dealType,
 }) => {
   const onClick = () => {
     if (superAdmin) {
@@ -105,6 +106,7 @@ const InvestorBox = ({
   superAdmin,
   setShowModal,
   setInvestmentId,
+  dealType,
 }) => {
   const onClick = () => {
     if (superAdmin) {
@@ -115,21 +117,31 @@ const InvestorBox = ({
     }
   };
 
-  // these are the boxes - VIEWED/SIGNED/WIRED
-
   return width > phone ? (
     <div className={classes.investorBox} onClick={onClick} key={`investor-${index}`}>
       <div className={classes.investorBoxName} style={{ display: 'flex' }}>
         <Avatar className={classes.avatar}>{investor.name.charAt(0).toUpperCase()}</Avatar>
         <Typography className={classes.investorName}>{investor.name}</Typography>
-        <div
-          className={classes.accredited}
-          style={investor.accredidation_status ? {} : { background: '#bbc5ba' }}
-        >
-          <Typography style={{ color: 'white', fontSize: '12px' }}>
-            <VerifiedUserIcon /> 506c
-          </Typography>
-        </div>
+        {dealType === '506c' ? (
+          <div
+            className={classes.accredited}
+            style={investor.accredidation_status ? {} : { background: '#bbc5ba' }}
+          >
+            <Tooltip
+              title={
+                investor.accredidation_status
+                  ? 'This investor is accredited for 506c deals'
+                  : 'This investor is not accredited for 506c deals'
+              }
+            >
+              <Typography style={{ color: 'white', fontSize: '12px' }}>
+                <VerifiedUserIcon /> 506c
+              </Typography>
+            </Tooltip>
+          </div>
+        ) : (
+          ''
+        )}
       </div>
       {investor.amount && investor.status !== 'invited' ? (
         <Typography style={{ width: '80px', textAlign: 'right' }}>
@@ -144,14 +156,15 @@ const InvestorBox = ({
       <Avatar className={classes.avatar}>{investor.name.charAt(0).toUpperCase()}</Avatar>
       <div className={classes.investorBoxAmount}>
         <Typography className={classes.investorName}>{investor.name}</Typography>
-        <div
-          className={classes.accredited}
-          style={investor.accredidation_status ? {} : { background: '#bbc5ba' }}
-        >
-          <Typography style={{ color: 'white', fontSize: '12px' }}>
-            <VerifiedUserIcon /> 506c
-          </Typography>
-        </div>
+        {investor.accredidation_status ? (
+          <div className={classes.accredited}>
+            <Typography style={{ color: 'white', fontSize: '12px' }}>
+              <VerifiedUserIcon /> 506c
+            </Typography>
+          </div>
+        ) : (
+          ''
+        )}
         {investor.amount && investor.status !== 'invited' ? (
           <Typography style={{ textAlign: 'left', width: '100%' }}>
             ${nWithCommas(investor.amount)}
@@ -164,7 +177,7 @@ const InvestorBox = ({
   );
 };
 
-const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
+const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType }) => {
   const [showModal, setShowModal] = useState(false);
   const [investmentId, setInvestmentId] = useState(null);
   const [dealId, setDealId] = useState(null);
@@ -337,6 +350,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
                     superAdmin={superAdmin}
                     setShowModal={setShowModal}
                     setInvestmentId={setInvestmentId}
+                    dealType={dealType}
                   />
                 ))
               : viewedInvestors.map((investor, index) => (
@@ -349,6 +363,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
                     superAdmin={superAdmin}
                     setShowModal={setShowModal}
                     setInvestmentId={setInvestmentId}
+                    dealType={dealType}
                   />
                 ))}
 
@@ -366,6 +381,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
                   setDealId={setDealId}
                   setInvestorId={setInvestorId}
                   dealId={data?.deal?._id}
+                  dealType={dealType}
                 />
               );
             })}
@@ -402,6 +418,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
                     setInvestmentId={setInvestmentId}
                     setDealId={setDealId}
                     setInvestorId={setInvestorId}
+                    dealType={dealType}
                   />
                 ))
               : signedInvestors.map((investor, index) => (
@@ -416,6 +433,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
                     setInvestmentId={setInvestmentId}
                     setDealId={setDealId}
                     setInvestorId={setInvestorId}
+                    dealType={dealType}
                   />
                 ))}
           </ScrollableBox>
@@ -441,6 +459,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
                     setInvestmentId={setInvestmentId}
                     setDealId={setDealId}
                     setInvestorId={setInvestorId}
+                    dealType={dealType}
                   />
                 ))
               : wiredInvestors.map((investor, index) => (
@@ -455,6 +474,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch }) => {
                     setInvestmentId={setInvestmentId}
                     setDealId={setDealId}
                     setInvestorId={setInvestorId}
+                    dealType={dealType}
                   />
                 ))}
           </ScrollableBox>
