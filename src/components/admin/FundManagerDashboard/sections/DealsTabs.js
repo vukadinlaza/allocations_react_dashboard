@@ -52,7 +52,7 @@ const styles = (theme) => ({
     color: '#2A2B54',
     fontWeight: 'bold',
     marginBottom: '15px',
-    marginTop: '-10px',
+    marginTop: '-8px',
     padding: '0 40px',
     [theme.breakpoints.down(phone)]: {
       padding: '0 22px',
@@ -90,7 +90,7 @@ const styles = (theme) => ({
   },
   tabsPlaceholder: {
     width: 'calc(100% - 80px)',
-    borderBottom: '2px solid #E6E9EF',
+    borderBottom: '1px solid #E6E9EF',
     height: '130px', // height of main title and tabs component
     position: 'absolute',
     top: '0px',
