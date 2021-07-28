@@ -215,3 +215,21 @@ th {
   color: #fff;
 }
 
+.App {
+  width: 100vw;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 15% auto;
+  grid-template-rows: 100%;
+  grid-template-areas:
+  "sidebar mainRoute";
+
+  .sidebar {
+    z-index: 999;
+  }
+
+  @media screen and (max-width: $break-sm) {
+    margin-bottom: 15px;
+  }
+}
+

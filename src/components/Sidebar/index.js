@@ -754,7 +754,7 @@ const whitelistEmails = [
   },
 ];
 
-const drawerWidth = 250;
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -766,7 +766,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawer: {
     [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
+      width: '100%',
       flexShrink: 0,
     },
     zIndex: 1099,
@@ -806,7 +806,7 @@ const useStyles = makeStyles((theme) => ({
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
-    width: drawerWidth,
+    width: '100%',
     paddingTop: 8,
     border: 'none',
     borderRight: '1px solid #dfe2e5',
@@ -816,7 +816,7 @@ const useStyles = makeStyles((theme) => ({
     // height: "calc(100vh - 70px)"
   },
   newDrawerPaper: {
-    width: drawerWidth,
+    width: '100%',
     paddingTop: 8,
     border: 'none',
     borderRight: '1px solid #dfe2e5',
@@ -1083,7 +1083,7 @@ export default function Sidebar(props) {
     <>
       <div className={classes.root}>
         {!onboarding && <CssBaseline />}
-        {!onboarding ? (
+        {!onboarding && (
           <>
             {width > phone ? (
               ''
@@ -1231,16 +1231,8 @@ export default function Sidebar(props) {
                   </Drawer>
                 </Hidden>
               </nav>
-              <main
-                className={classes.content}
-                style={{ background: 'rgba(0,0,0,0.01)', height: '100vh' }}
-              >
-                {props.children}
-              </main>
             </div>
           </>
-        ) : (
-          <main style={{}}>{props.children}</main>
         )}
       </div>
     </>
