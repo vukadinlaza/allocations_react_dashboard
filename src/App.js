@@ -36,7 +36,6 @@ import NotFound from './components/NotFound';
 // superadmin
 import SuperAdminManager from './components/superadmin/Manager';
 import SuperAdminOverview from './components/superadmin/Overview';
-import Settings from './components/Settings/Settings';
 import User from './components/Settings/User';
 import Investment from './components/Settings/Investment';
 import InvestorInvestments from './components/Funds/sections/InvestorInvestments';
@@ -126,7 +125,6 @@ const App = () => {
           {/** SuperAdmin * */}
           <AdminRoute path="/superadmin" component={SuperAdminOverview} exact />
           <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
-          <AdminRoute path="/admin/settings" component={Settings} exact />
           <AdminRoute path="/admin/users/:userId" component={User} exact />
           <AdminRoute path="/admin/users/:userId/investments" component={InvestorInvestments} exact />
           <AdminRoute path="/admin/invesments/:investmentId" component={Investment} exact />
