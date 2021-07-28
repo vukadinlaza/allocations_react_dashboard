@@ -13,28 +13,54 @@ const Highlights = ({ data }) => {
   const { funds, SPVs, investments } = data.fundAdminHighlights;
   const totalFunds = funds + SPVs;
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={12} lg={3}>
-        <SimpleBox size="fourth" title="Total Private Funds">
-          <Typography style={{ fontSize: '26px' }}>{nWithCommas(totalFunds)}</Typography>
-        </SimpleBox>
+    <>
+      <Grid container spacing={3}>
+        <Grid item xs={12} lg={3}>
+          <SimpleBox size="fourth" title="Total Private Funds">
+            <Typography style={{ fontSize: '26px' }}>{nWithCommas(totalFunds)}</Typography>
+          </SimpleBox>
+        </Grid>
+        <Grid item xs={12} lg={3}>
+          <SimpleBox size="fourth" title="Total Funds">
+            <Typography style={{ fontSize: '26px' }}>{nWithCommas(funds)}</Typography>
+          </SimpleBox>
+        </Grid>
+        <Grid item xs={12} lg={3}>
+          <SimpleBox size="fourth" title="Total SPVs">
+            <Typography style={{ fontSize: '26px' }}>{nWithCommas(SPVs)}</Typography>
+          </SimpleBox>
+        </Grid>
+        <Grid item xs={12} lg={3}>
+          <SimpleBox size="fourth" title="Total Investments">
+            <Typography style={{ fontSize: '26px' }}>{nWithCommas(investments)}</Typography>
+          </SimpleBox>
+        </Grid>
       </Grid>
-      <Grid item xs={12} lg={3}>
-        <SimpleBox size="fourth" title="Total Funds">
-          <Typography style={{ fontSize: '26px' }}>{nWithCommas(funds)}</Typography>
-        </SimpleBox>
+      <Grid container spacing={3}>
+        <Grid item xs={12} lg={3}>
+          <SimpleBox size="fourth" title="Average Investment">
+            <Typography style={{ fontSize: '26px' }}>{nWithCommas(1)}</Typography>
+          </SimpleBox>
+        </Grid>
+        <Grid item xs={12} lg={3}>
+          <SimpleBox size="fourth" title="Total Fund AUM">
+            <Typography style={{ fontSize: '26px' }}>{nWithCommas(2)}</Typography>
+          </SimpleBox>
+        </Grid>
+        <Grid item xs={12} lg={3}>
+          <SimpleBox size="fourth" title="Total SPV AUM">
+            <Typography style={{ fontSize: '26px' }}>{nWithCommas(3)}</Typography>
+          </SimpleBox>
+        </Grid>
+        <Grid item xs={12} lg={3}>
+          <SimpleBox size="fourth" title="Total Investor AUM">
+            <Typography style={{ fontSize: '26px' }}>
+              {nWithCommas(4)} Total AUM of all investors
+            </Typography>
+          </SimpleBox>
+        </Grid>
       </Grid>
-      <Grid item xs={12} lg={3}>
-        <SimpleBox size="fourth" title="Total SPVs">
-          <Typography style={{ fontSize: '26px' }}>{nWithCommas(SPVs)}</Typography>
-        </SimpleBox>
-      </Grid>
-      <Grid item xs={12} lg={3}>
-        <SimpleBox size="fourth" title="Total Investments">
-          <Typography style={{ fontSize: '26px' }}>{nWithCommas(investments)}</Typography>
-        </SimpleBox>
-      </Grid>
-    </Grid>
+    </>
   );
 };
 
