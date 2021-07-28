@@ -39,8 +39,6 @@ const Highlights = ({ data }) => {
             <Typography style={{ fontSize: '26px' }}>{nWithCommas(investments)}</Typography>
           </SimpleBox>
         </Grid>
-      </Grid>
-      <Grid container spacing={3}>
         <Grid item xs={12} lg={3}>
           <SimpleBox size="fourth" title="Average Investment">
             <Typography style={{ fontSize: '26px' }}>

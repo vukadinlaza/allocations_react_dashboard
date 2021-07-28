@@ -51,7 +51,7 @@ const investorVariables = {
     { value: 'email', label: 'EMAIL', isFilter: true, isSortable: true },
     {
       value: 'investmentAmount',
-      label: 'INVESTMENT AMOUNT',
+      label: 'TOTAL AUM',
       type: 'investmentAmount',
       keyNotInData: true,
       isSortable: true,
