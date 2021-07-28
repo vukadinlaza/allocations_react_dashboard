@@ -10,8 +10,12 @@ const styles = (theme) => ({});
 
 const Highlights = ({ data }) => {
   if (!data?.fundAdminHighlights) return <Loader />;
-  const { funds, SPVs, investments } = data.fundAdminHighlights;
+
+  const { funds, SPVs, investments, SPVsAUM, fundsAUM } = data.fundAdminHighlights;
   const totalFunds = funds + SPVs;
+  const totalInvestorsAUM = SPVsAUM + fundsAUM;
+  const averageInvestment = totalInvestorsAUM / investments;
+
   return (
     <>
       <Grid container spacing={3}>
@@ -39,24 +43,24 @@ const Highlights = ({ data }) => {
       <Grid container spacing={3}>
         <Grid item xs={12} lg={3}>
           <SimpleBox size="fourth" title="Average Investment">
-            <Typography style={{ fontSize: '26px' }}>{nWithCommas(1)}</Typography>
+            <Typography style={{ fontSize: '26px' }}>
+              ${nWithCommas(Math.round(averageInvestment))}
+            </Typography>
           </SimpleBox>
         </Grid>
         <Grid item xs={12} lg={3}>
-          <SimpleBox size="fourth" title="Total Fund AUM">
-            <Typography style={{ fontSize: '26px' }}>{nWithCommas(2)}</Typography>
+          <SimpleBox size="fourth" title="Total Funds AUM">
+            <Typography style={{ fontSize: '26px' }}>${nWithCommas(fundsAUM)}</Typography>
           </SimpleBox>
         </Grid>
         <Grid item xs={12} lg={3}>
-          <SimpleBox size="fourth" title="Total SPV AUM">
-            <Typography style={{ fontSize: '26px' }}>{nWithCommas(3)}</Typography>
+          <SimpleBox size="fourth" title="Total SPVs AUM">
+            <Typography style={{ fontSize: '26px' }}>${nWithCommas(SPVsAUM)}</Typography>
           </SimpleBox>
         </Grid>
         <Grid item xs={12} lg={3}>
           <SimpleBox size="fourth" title="Total Investor AUM">
-            <Typography style={{ fontSize: '26px' }}>
-              {nWithCommas(4)} Total AUM of all investors
-            </Typography>
+            <Typography style={{ fontSize: '26px' }}>${nWithCommas(totalInvestorsAUM)}</Typography>
           </SimpleBox>
         </Grid>
       </Grid>
