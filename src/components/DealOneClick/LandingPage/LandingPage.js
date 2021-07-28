@@ -93,7 +93,7 @@ function DealLandingPage() {
       fund_slug: organization || 'allocations',
     },
   });
-
+console.log({data})
   useEffect(() => {
     if (data?.publicDeal) {
       const { publicDeal: deal } = data;
