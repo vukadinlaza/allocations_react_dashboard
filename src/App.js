@@ -130,7 +130,6 @@ const App = () => {
             {/** SuperAdmin * */}
             <AdminRoute path="/superadmin" component={SuperAdminOverview} exact />
             <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
-            <AdminRoute path="/admin/settings" component={Settings} exact />
             <AdminRoute path="/admin/users/:userId" component={User} exact />
             <AdminRoute path="/admin/users/:userId/investments" component={InvestorInvestments} exact />
             <AdminRoute path="/admin/invesments/:investmentId" component={Investment} exact />

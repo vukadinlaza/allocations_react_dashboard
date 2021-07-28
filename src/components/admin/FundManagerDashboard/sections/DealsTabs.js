@@ -52,9 +52,9 @@ const styles = (theme) => ({
     color: '#2A2B54',
     fontWeight: 'bold',
     marginBottom: '15px',
-    marginTop: '-8px',
     padding: '0 40px',
-    [theme.breakpoints.down(phone)]: {
+    [theme.breakpoints.down('1280')]: {
+      justifyContent: 'center',
       padding: '0 22px',
     },
   },
@@ -71,7 +71,6 @@ const styles = (theme) => ({
     whiteSpace: 'nowrap',
     fontSize: '16px',
     borderBottom: '2px solid #E6E9EF',
-    maxWidth: 'none',
     '&:focus': {
       outline: 'none',
     },
@@ -87,18 +86,6 @@ const styles = (theme) => ({
   },
   tabsIndicator: {
     // display: "none",
-  },
-  tabsPlaceholder: {
-    width: 'calc(100% - 80px)',
-    borderBottom: '1px solid #E6E9EF',
-    height: '130px', // height of main title and tabs component
-    position: 'absolute',
-    top: '0px',
-    left: '0px',
-    margin: '0 40px',
-    [theme.breakpoints.down(phone)]: {
-      borderBottom: "none"
-    },
   },
   tabWrapper: {
     padding: '0 10px',
@@ -169,7 +156,6 @@ const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
           );
         })}
       </Tabs>
-      <div className={classes.tabsPlaceholder} style={{height: titleContainer? `${titleContainer.offsetHeight + 41}px` : '130px'}}/>
     </div>
   );
 };
