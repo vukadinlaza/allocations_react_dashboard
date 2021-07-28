@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import queryString from 'query-string';
 import { Button } from '@material-ui/core';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import './styles.scss';
 import Confetti from 'react-confetti';
 import { useQuery, useLazyQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import signInvestmentYes from '../../assets/sign-investment-yes.svg';
 import wireFundsNo from '../../assets/wire-funds-no.svg';
@@ -72,6 +72,19 @@ const GET_DEAL = gql`
   }
 `;
 
+const GET_INVESTMENT = gql`
+  query GetInvestment($_id: String!) {
+    investment(_id: $_id) {
+      _id
+      amount
+      submissionData {
+        investor_type
+        country
+      }
+    }
+  }
+`;
+
 function DealNextSteps() {
   const [confetti, showConfetti] = useState(false);
   const { data, loading, refetch } = useQuery(GET_INVESTOR, { fetchPolicy: 'network-only' });
@@ -81,8 +94,18 @@ function DealNextSteps() {
   const { deal_slug, organization } = useParams();
   const [wireInstructionsOpen, setWireInstructionsOpen] = useState(false);
   const { isAuthenticated, loading: authLoading } = useAuth();
-
+  const { search } = useLocation();
+  const params = queryString.parse(search);
   const history = useHistory();
+
+  const path = organization ? `/deals/${organization}/${deal_slug}` : `/deals/${deal_slug}`;
+
+  const { data: investmentData } = useQuery(GET_INVESTMENT, {
+    variables: { _id: params?.investmentId },
+    onError: () => {
+      return history.push(path);
+    },
+  });
 
   useEffect(() => {
     if (!authLoading && !calledDeal && isAuthenticated && deal_slug) {
@@ -96,8 +119,6 @@ function DealNextSteps() {
     }
   }, [isAuthenticated, authLoading, calledDeal, getDeal, deal_slug, organization]);
 
-  const path = organization ? `/deals/${organization}/${deal_slug}` : `/deals/${deal_slug}`;
-
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -105,29 +126,35 @@ function DealNextSteps() {
       behavior: 'smooth',
     });
 
-    setTimeout(() => {
+    const confettiOn = setTimeout(() => {
       showConfetti(true);
     }, 1000);
-    setTimeout(() => {
+    const confettiOff = setTimeout(() => {
       showConfetti(false);
     }, 5000);
-  }, []);
-  if (loading || !data || !dealData) return null;
 
+    return () => {
+      clearTimeout(confettiOn);
+      clearTimeout(confettiOff);
+    };
+  }, []);
+
+  if (loading || !data || !dealData) return null;
 
   const handleInvestmentEdit = () => {
     const userInvestments = data?.investor?.investments;
-    const currentInvestment = userInvestments.find(inv => inv.deal.slug === deal_slug);
+    const currentInvestment = userInvestments.find((inv) => inv.deal.slug === deal_slug);
     const { amount } = currentInvestment;
-    const submission = currentInvestment.submissionData
+    const submission = currentInvestment.submissionData;
 
     history.push({
       pathname: `/invest/${organization}/${deal_slug}`,
-      state: { submission, amount, investmentId: currentInvestment._id }
-    })
-  }
+      state: { submission, amount, investmentId: currentInvestment._id },
+    });
+  };
 
-  const investorFormData = history?.location?.state?.investorFormData || {};
+  const investorFormData =
+    history?.location?.state?.investorFormData || investmentData?.investment?.submissionData || {};
 
   const templateInfo =
     investorFormData?.country === 'United States'
@@ -135,8 +162,8 @@ function DealNextSteps() {
         ? { templateName: 'W-9', templateId: 'tpl_dM4QcQbyLckdPXgtyx' }
         : { templateName: 'W-9-E', templateId: 'tpl_HSJjJ9c9jb2N4GXFkt' }
       : investorFormData?.investor_type === 'individual'
-        ? { templateName: 'W-8-BEN', templateId: 'tpl_qDaxDLgRkFpHJD2cFX' }
-        : { templateName: 'W-8-BEN-E', templateId: 'tpl_mXPLm5EXAyHJKhQekf' };
+      ? { templateName: 'W-8-BEN', templateId: 'tpl_qDaxDLgRkFpHJD2cFX' }
+      : { templateName: 'W-8-BEN-E', templateId: 'tpl_mXPLm5EXAyHJKhQekf' };
 
   const userDocs = data?.investor?.documents || [];
   const hasKyc =
@@ -152,14 +179,17 @@ function DealNextSteps() {
         <script async src={process.env.REACT_APP_VERIFY_INVESTOR_URL} />
       </Helmet>
       <section className="DealNextSteps">
-
         <div className="title-container">
           <div className="header-container">
             <h1 className="header">Next Steps</h1>
-            <h3 className="sub-header">Please complete the following steps to finish your investment.</h3>
+            <h3 className="sub-header">
+              Please complete the following steps to finish your investment.
+            </h3>
           </div>
           <a href={path} className="new-investment-button">
-            <p className="action-header"><AddCircleIcon style={{ color: "#3AC522", marginRight: "6px" }} /> Add New Investment</p>
+            <p className="action-header">
+              <AddCircleIcon style={{ color: '#3AC522', marginRight: '6px' }} /> Add New Investment
+            </p>
           </a>
         </div>
 
@@ -168,7 +198,9 @@ function DealNextSteps() {
             <img className="action-icon" src={signInvestmentYes} alt="sign-investment-yes" />
             <div className="action-instructions">
               <p className="action-header">Edit Investment</p>
-              <p className="action-sub-header">Basic Information including amount and personal information</p>
+              <p className="action-sub-header">
+                Basic Information including amount and personal information
+              </p>
             </div>
             <Button className="completed-step-button" onClick={handleInvestmentEdit}>
               Edit Investment
@@ -188,7 +220,11 @@ function DealNextSteps() {
           </div>
 
           <div className="action-item">
-            <img className="action-icon" src={hasKyc ? submitTaxInfoYes : submitTaxInfoNo} alt="tax-info" />
+            <img
+              className="action-icon"
+              src={hasKyc ? submitTaxInfoYes : submitTaxInfoNo}
+              alt="tax-info"
+            />
             <div className="action-instructions">
               <p className="action-header">Submit Tax Information</p>
               <p className="action-sub-header">Complete your W8/W9 forms here</p>
@@ -202,32 +238,43 @@ function DealNextSteps() {
             </Button>
           </div>
           {/* //here */}
-          {(dealData?.deal?.dealParams?.dealType === '506c') && (
+          {dealData?.deal?.dealParams?.dealType === '506c' && (
             <div className="action-item">
               <img
                 className="action-icon"
-                src={data?.investor.accredidation_status === true ? submitTaxInfoYes : submitTaxInfoNo}
+                src={
+                  data?.investor.accredidation_status === true ? submitTaxInfoYes : submitTaxInfoNo
+                }
                 alt="submit-tax-img"
               />
               <div className="action-instructions">
                 <p className="action-header">Accredited Investor Status</p>
                 <p className="action-sub-header">
-                  {data?.investor.accredidation_status === true ? '' : "Complete your accredited investor questionnaire here (<5 mins to complete)"}
+                  {data?.investor.accredidation_status === true
+                    ? ''
+                    : 'Complete your accredited investor questionnaire here (<5 mins to complete)'}
                 </p>
               </div>
-              {data?.investor.accredidation_status === true ?
+              {data?.investor.accredidation_status === true ? (
                 ''
-                :
+              ) : (
                 <Button
-                  className={data?.investor.accredidation_status === true ? 'completed-step-button' : 'next-step-button'}
+                  className={
+                    data?.investor.accredidation_status === true
+                      ? 'completed-step-button'
+                      : 'next-step-button'
+                  }
                   onClick={() => {
-                    const win = window.open('https://bridge.parallelmarkets.com/allocations', '_blank');
+                    const win = window.open(
+                      'https://bridge.parallelmarkets.com/allocations',
+                      '_blank',
+                    );
                     win.focus();
                   }}
                 >
                   {data?.investor.accredidation_status === true ? 'Completed' : 'Submit'}
                 </Button>
-              }
+              )}
             </div>
           )}
 
@@ -256,7 +303,11 @@ function DealNextSteps() {
           deal={dealData.deal || {}}
           setShowTaxAsCompleted={setShowTaxAsCompleted}
         />
-        <WireInstructionsModal open={wireInstructionsOpen} setOpen={setWireInstructionsOpen} docs={docs} />
+        <WireInstructionsModal
+          open={wireInstructionsOpen}
+          setOpen={setWireInstructionsOpen}
+          docs={docs}
+        />
         <AllocationsRocket />
         <Confetti className={`confetti ${!confetti && 'hidden'}`} />
       </section>
