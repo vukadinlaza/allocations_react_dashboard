@@ -21,9 +21,9 @@ const styles = (theme) => ({
     width: '32px',
     height: '32px',
     cursor: 'pointer',
-		"&:hover": {
-			backgroundColor: '#3f85f9'
-		}
+    '&:hover': {
+      backgroundColor: '#3f85f9',
+    },
   },
 });
 
@@ -49,65 +49,99 @@ const investorVariables = {
     { value: 'first_name', label: 'FIRST NAME', isFilter: true, isSortable: true },
     { value: 'last_name', label: 'LAST NAME', isFilter: true, isSortable: true },
     { value: 'email', label: 'EMAIL', isFilter: true, isSortable: true },
-    { value: 'investmentAmount', label: 'INVESTMENT AMOUNT', type: 'investmentAmount', keyNotInData: true, isSortable: true },
-    { value: 'investments', label: 'TOTAL INVESTMENTS', type: 'count', align: 'center', alignHeader: true, isSortable: true },
-    { value: 'viewInvestments', label: 'VIEW INVESTMENTS', keyNotInData: true, type: 'viewInvestments', align: 'center', alignHeader: true },
-    { value: 'viewProfile', label: 'VIEW PROFILE', keyNotInData: true, type: 'viewProfile', align: 'center', alignHeader: true },
-    { value: 'viewDashboard', label: 'VIEW DASHBOARD', keyNotInData: true, type: 'viewDashboard', align: 'center', alignHeader: true },
+    {
+      value: 'investmentAmount',
+      label: 'TOTAL AUM',
+      type: 'investmentAmount',
+      keyNotInData: true,
+      isSortable: true,
+    },
+    {
+      value: 'investments',
+      label: 'TOTAL INVESTMENTS',
+      type: 'count',
+      align: 'center',
+      alignHeader: true,
+      isSortable: true,
+    },
+    {
+      value: 'viewInvestments',
+      label: 'VIEW INVESTMENTS',
+      keyNotInData: true,
+      type: 'viewInvestments',
+      align: 'center',
+      alignHeader: true,
+    },
+    {
+      value: 'viewProfile',
+      label: 'VIEW PROFILE',
+      keyNotInData: true,
+      type: 'viewProfile',
+      align: 'center',
+      alignHeader: true,
+    },
+    {
+      value: 'viewDashboard',
+      label: 'VIEW DASHBOARD',
+      keyNotInData: true,
+      type: 'viewDashboard',
+      align: 'center',
+      alignHeader: true,
+    },
   ],
   resolverName: 'allUsers',
   dataVariable: 'users',
-  defaultSortField: 'first_name'
+  defaultSortField: 'investmentAmount',
 };
 
-
 const Investors = ({ classes, history }) => {
-
   const handleShowInvestments = (userId) => {
-    history.push(`/admin/users/${userId}/investments`)
-  }
+    history.push(`/admin/users/${userId}/investments`);
+  };
 
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
       case 'investmentAmount':
-        return row['investments']?.length? 
-                  `$${nWithCommas(row['investments']
-                  .map(i => i.amount)
-                  .reduce((acc, n) => Number(acc) + Number(n) ))}`
-                  : 0
-                  
+        return row.investments?.length
+          ? `$${nWithCommas(
+              row.investments.map((i) => i.amount).reduce((acc, n) => Number(acc) + Number(n)),
+            )}`
+          : 0;
+
       case 'count':
         return row[headerValue].length;
 
       case 'viewInvestments':
-        return  <a 
-                  href={`/admin/users/${row._id}/investments`} 
-                  className={classes.buttonLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  >
-                  <PlayArrowIcon className={classes.button} />
-                </a>
-        
+        return (
+          <a
+            href={`/admin/users/${row._id}/investments`}
+            className={classes.buttonLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <PlayArrowIcon className={classes.button} />
+          </a>
+        );
+
       case 'viewProfile':
         return (
-          <a 
-            href={`/admin/users/${row._id}`} 
+          <a
+            href={`/admin/users/${row._id}`}
             className={classes.buttonLink}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <PlayArrowIcon className={classes.button} />
           </a>
         );
       case 'viewDashboard':
         return (
-          <a 
-            href={`/investor/${row._id}/home`} 
+          <a
+            href={`/investor/${row._id}/home`}
             className={classes.buttonLink}
             target="_blank"
             rel="noopener noreferrer"
-            >
+          >
             <PlayArrowIcon className={classes.button} />
           </a>
         );
@@ -116,15 +150,15 @@ const Investors = ({ classes, history }) => {
     }
   };
 
-
   return (
     <div>
       <ServerTable
         tableVariables={investorVariables}
         getCellContent={getCellContent}
+        defaultSortOrder={-1}
       />
     </div>
-  )
+  );
 };
 
 export default withStyles(styles)(withRouter(Investors));

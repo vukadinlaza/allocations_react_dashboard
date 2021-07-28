@@ -331,7 +331,7 @@ export default function Sidebar(props) {
                 <ListItemText primary="Funds Admin" />
               </ListItem>
             </div>
-            <div
+            {/* <div
               className={`sidebar-nav-item ${
                 location.pathname === '/admin/settings' ? 'sidebar-nav-item-active' : ''
               }`}
@@ -342,7 +342,7 @@ export default function Sidebar(props) {
                 </ListItemIcon>
                 <ListItemText primary="Investors Admin" />
               </ListItem>
-            </div>
+            </div> */}
             <AdminLinks location={location} />
           </List>
         </>

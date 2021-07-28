@@ -37,7 +37,6 @@ import NotFound from './components/NotFound';
 // superadmin
 import SuperAdminManager from './components/superadmin/Manager';
 import SuperAdminOverview from './components/superadmin/Overview';
-import Settings from './components/Settings/Settings';
 import User from './components/Settings/User';
 import Investment from './components/Settings/Investment';
 import InvestorInvestments from './components/Funds/sections/InvestorInvestments';
