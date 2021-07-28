@@ -52,9 +52,10 @@ const styles = (theme) => ({
     color: '#2A2B54',
     fontWeight: 'bold',
     marginBottom: '15px',
+    marginTop: '-10px',
     padding: '0 40px',
     [theme.breakpoints.down(phone)]: {
-      padding: "0 22px"
+      padding: '0 22px',
     },
   },
   selectedTab: {
@@ -168,7 +169,7 @@ const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
           );
         })}
       </Tabs>
-      <div className={classes.tabsPlaceholder} style={{height: titleContainer? `${titleContainer.offsetHeight + 48}px` : '130px'}}/>
+      <div className={classes.tabsPlaceholder} style={{height: titleContainer? `${titleContainer.offsetHeight + 41}px` : '130px'}}/>
     </div>
   );
 };
