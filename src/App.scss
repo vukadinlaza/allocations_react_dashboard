@@ -224,12 +224,21 @@ th {
   grid-template-areas:
   "sidebar mainRoute";
 
+  .mainRoute {
+    grid-area: mainRoute;
+  }
+
   .sidebar {
+    grid-area: sidebar;
     z-index: 999;
   }
 
-  @media screen and (max-width: $break-sm) {
-    margin-bottom: 15px;
+  @media only screen and (max-width: 960px) {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 100%;
+    grid-template-areas:
+    "mainRoute";
   }
 }
 

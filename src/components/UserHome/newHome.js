@@ -334,7 +334,7 @@ export default () => {
   };
 
   return (
-    <div className="blue-container">
+    <div className="UserHome">
       <Grid container justify="space-between" style={{ marginTop: '-2em', marginBottom: '1rem' }}>
         <Grid item xs={12} className="welcome-user">
           <h3 className="welcome-user-text">{welcomeMessage(userProfile)}</h3>

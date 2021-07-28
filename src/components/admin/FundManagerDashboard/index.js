@@ -20,6 +20,7 @@ import { FlatBox } from './widgets';
 import { phone, tablet } from '../../../utils/helpers';
 import { useViewport, useFetch } from '../../../utils/hooks';
 import { useAuth } from '../../../auth/useAuth';
+import './FundManagerDashboard.scss';
 
 import Loader from '../../utils/Loader';
 import DealsTabs from './sections/DealsTabs';
@@ -111,8 +112,6 @@ const styles = (theme) => ({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     width: '100%',
-    position: 'absolute',
-    width: '100%',
     left: '0',
     top: '0',
     background: 'white',
@@ -181,22 +180,6 @@ const styles = (theme) => ({
     width: 'fit-content',
     padding: '2px 12px',
     borderRadius: '20px',
-  },
-  mainTitle: {
-    fontSize: '28px',
-    fontWeight: '700',
-    padding: '20px 0px',
-  },
-  mainTitleContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    margin: '0 40px',
-    padding: '25px 0',
-    [theme.breakpoints.down(phone)]: {
-      flexDirection: 'column',
-      fontSize: '.5rem',
-    },
   },
   modalBackground: {
     position: 'fixed',
@@ -722,12 +705,12 @@ const FundManagerDashboard = ({ classes, history }) => {
 
   if (!orgDeals) return <Loader />;
   return (
-    <div className={classes.dashboardContainer}>
+    <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
       {openTooltip && (
         <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} />
       )}
-      <div className={classes.mainTitleContainer} id="main-title-container">
-        <Typography className={classes.mainTitle}>
+      <div className="mainTitleContainer" id="main-title-container">
+        <Typography className="mainTitle">
           {userProfile?.first_name
             ? `Hello ${userProfile?.first_name}, here are your Funds.`
             : orgDealsData?.organization?.name}
