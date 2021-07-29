@@ -32,7 +32,8 @@ const data = [
       {
         date: '02 Sep 2020',
         Source: 'Spend Money',
-        Description: 'MESH DIGITAL SERVICES INC. - MESH DIGITAL SERVICES INC. O2C1A Domestic Manual Wire',
+        Description:
+          'MESH DIGITAL SERVICES INC. - MESH DIGITAL SERVICES INC. O2C1A Domestic Manual Wire',
         Debit: '50,000.00',
         'Running Balance': '135,000.00',
         Gross: '50,000.00',
@@ -68,7 +69,8 @@ const data = [
       {
         date: '18 Sep 2020',
         Source: 'Spend Money',
-        Description: 'BRANCH TECHNOLOGIES INC. - BRANCH TECHNOLOGIES INC. U1Z1T Domestic Online Wire',
+        Description:
+          'BRANCH TECHNOLOGIES INC. - BRANCH TECHNOLOGIES INC. U1Z1T Domestic Online Wire',
         Debit: '100,000.00',
         'Running Balance': '360,000.00',
         Gross: '100,000.00',

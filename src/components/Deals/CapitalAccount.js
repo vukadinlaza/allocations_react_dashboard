@@ -28,9 +28,13 @@ export default function CapitalAccount({ deal, investments, totalRaised, useInve
               {investments.map((investment) => (
                 <TableRow key={investment._id}>
                   <TableCell>
-                    {useInvestingAs ? investment?.investor?.investingAs : investment?.investor?.name}
+                    {useInvestingAs
+                      ? investment?.investor?.investingAs
+                      : investment?.investor?.name}
                   </TableCell>
-                  <TableCell className="text-center">{percentageOfSPV(investment, totalRaised)}%</TableCell>
+                  <TableCell className="text-center">
+                    {percentageOfSPV(investment, totalRaised)}%
+                  </TableCell>
                   <TableCell className="text-center">${nWithCommas(investment.amount)}</TableCell>
                 </TableRow>
               ))}

@@ -88,8 +88,7 @@ export default function Marketplace() {
   const { userProfile } = useAuth(GET_INVESTOR);
   const deals = [
     {
-      to:
-        'https://docs.google.com/spreadsheets/d/1EJJgDbSm4pOPZ5zFkzek2atiYWAoYZTfZExakwppGxw/edit#gid=0',
+      to: 'https://docs.google.com/spreadsheets/d/1EJJgDbSm4pOPZ5zFkzek2atiYWAoYZTfZExakwppGxw/edit#gid=0',
       name: 'Sana Health',
       tagline: 'Neuromodulation technology to end chronic pain',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/sana-health.png',
@@ -102,8 +101,7 @@ export default function Marketplace() {
       round: 'Third round',
     },
     {
-      to:
-        'https://docs.google.com/spreadsheets/d/1s_f6gMA5eGV-YIBAOoRpSB2u19KiHX2Ly4KdZn1vx0Y/edit#gid=0',
+      to: 'https://docs.google.com/spreadsheets/d/1s_f6gMA5eGV-YIBAOoRpSB2u19KiHX2Ly4KdZn1vx0Y/edit#gid=0',
       name: 'Cognitive Space',
       tagline: 'Autonomous satellite systems',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/cognitive-space.png',
@@ -116,8 +114,7 @@ export default function Marketplace() {
       round: 'Seed',
     },
     {
-      to:
-        'https://docs.google.com/spreadsheets/d/1EJCO1SURyv-rbnhoo9EbkR2mFydKfPBBgI2XYIVURDM/edit#gid=0',
+      to: 'https://docs.google.com/spreadsheets/d/1EJCO1SURyv-rbnhoo9EbkR2mFydKfPBBgI2XYIVURDM/edit#gid=0',
       name: 'Luminous',
       tagline: 'Photonics chip company backed by Bill Gates',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/luminous.png',
@@ -130,8 +127,7 @@ export default function Marketplace() {
       round: 'Secondary',
     },
     {
-      to:
-        'https://docs.google.com/spreadsheets/d/1w-rDxctNyycpcQBDi43-0VQglKvAlWJfqC7ETZz1EdM/edit#gid=0',
+      to: 'https://docs.google.com/spreadsheets/d/1w-rDxctNyycpcQBDi43-0VQglKvAlWJfqC7ETZz1EdM/edit#gid=0',
       name: 'Factmata',
       tagline: 'AI company for online content risk management',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/factmata.png',
@@ -144,8 +140,7 @@ export default function Marketplace() {
       round: 'Bridge to A',
     },
     {
-      to:
-        'https://docs.google.com/spreadsheets/d/1xKMQzP3mRvNLc6HsBiSFCDbxjoRASLVdgd7I4E6c2tQ/edit#gid=0',
+      to: 'https://docs.google.com/spreadsheets/d/1xKMQzP3mRvNLc6HsBiSFCDbxjoRASLVdgd7I4E6c2tQ/edit#gid=0',
       name: 'Brex',
       tagline: 'Corporate credit cards',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/brex.png',
@@ -158,8 +153,7 @@ export default function Marketplace() {
       round: 'Secondary',
     },
     {
-      to:
-        'https://docs.google.com/spreadsheets/d/1A8kmlgjPoxtrlgdwUa6e5nY9bBisCjJBBi--Nc7JVa8/edit#gid=0',
+      to: 'https://docs.google.com/spreadsheets/d/1A8kmlgjPoxtrlgdwUa6e5nY9bBisCjJBBi--Nc7JVa8/edit#gid=0',
       name: 'SpaceX',
       tagline: "The world's most famous private space company",
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/spacex.png',
@@ -172,8 +166,7 @@ export default function Marketplace() {
       round: 'Series N',
     },
     {
-      to:
-        'https://docs.google.com/spreadsheets/d/1ulnVK-O2lY3uGgOhc11rW0WDxcigONC858MLcCEPBG0/edit',
+      to: 'https://docs.google.com/spreadsheets/d/1ulnVK-O2lY3uGgOhc11rW0WDxcigONC858MLcCEPBG0/edit',
       name: 'Axiom Space',
       tagline: 'Building a commercial space station',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/axiom-space.png',
@@ -186,8 +179,7 @@ export default function Marketplace() {
       round: 'Series B',
     },
     {
-      to:
-        'https://docs.google.com/spreadsheets/d/1ebS6A0bD8hb9RWpw94VLz_AVIQQByVTvUIEy2lAZKhs/edit#gid=0',
+      to: 'https://docs.google.com/spreadsheets/d/1ebS6A0bD8hb9RWpw94VLz_AVIQQByVTvUIEy2lAZKhs/edit#gid=0',
       name: 'On Deck',
       tagline: 'The first place the best talent looks when starting or joining a startup',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/runway_fund.png',
@@ -201,8 +193,7 @@ export default function Marketplace() {
       round: 'N/A',
     },
     {
-      to:
-        'https://docs.google.com/spreadsheets/d/1dlkEmnt7Ls9f5Pic7AgKSF4JwnZtVM3MreSgU1mm_VU/edit#gid=0',
+      to: 'https://docs.google.com/spreadsheets/d/1dlkEmnt7Ls9f5Pic7AgKSF4JwnZtVM3MreSgU1mm_VU/edit#gid=0',
       name: 'Venus Aerospace',
       tagline: 'Hypersonic travel',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/venus-aerospace.png',
@@ -215,8 +206,7 @@ export default function Marketplace() {
       round: 'Seed',
     },
     {
-      to:
-        'https://docs.google.com/spreadsheets/d/1o0joVOj-R-b5ZGZLyhIT3Ey-4bVQEOqZc0vwuVfk3IM/edit#gid=0',
+      to: 'https://docs.google.com/spreadsheets/d/1o0joVOj-R-b5ZGZLyhIT3Ey-4bVQEOqZc0vwuVfk3IM/edit#gid=0',
       name: 'ArcType',
       tagline: 'Intuitive SQL client for developers and teams',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/arctype.png',
@@ -229,8 +219,7 @@ export default function Marketplace() {
       round: 'Pre-seed',
     },
     {
-      to:
-        'https://docs.google.com/spreadsheets/u/2/d/1oI0TduSQcs2_Ya2ldbZ6rMZ2RbLE8h7StadJK-_E4c0/edit',
+      to: 'https://docs.google.com/spreadsheets/u/2/d/1oI0TduSQcs2_Ya2ldbZ6rMZ2RbLE8h7StadJK-_E4c0/edit',
       name: 'Mati',
       tagline: 'Data infrastructure for the trust economy',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/mati-id.png',
@@ -244,8 +233,7 @@ export default function Marketplace() {
       round: 'Series A',
     },
     {
-      to:
-        'https://docs.google.com/spreadsheets/d/1EJJgDbSm4pOPZ5zFkzek2atiYWAoYZTfZExakwppGxw/edit#gid=0',
+      to: 'https://docs.google.com/spreadsheets/d/1EJJgDbSm4pOPZ5zFkzek2atiYWAoYZTfZExakwppGxw/edit#gid=0',
       name: 'Agronomics',
       tagline: 'Sustainable investment in clean meat',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/agronomics.png',
@@ -260,8 +248,7 @@ export default function Marketplace() {
       round: 'N/A',
     },
     {
-      to:
-        'https://docs.google.com/spreadsheets/d/1rYovX8o5OqW2u40QlIKH3vru9t0fXAhnBPgxXjeZ_xw/edit#gid=0',
+      to: 'https://docs.google.com/spreadsheets/d/1rYovX8o5OqW2u40QlIKH3vru9t0fXAhnBPgxXjeZ_xw/edit#gid=0',
       name: 'Cheqout',
       tagline: 'A QR payments company for brick-and-mortar transactions',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/cheqout.png',

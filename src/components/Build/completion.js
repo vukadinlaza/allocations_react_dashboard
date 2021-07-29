@@ -12,7 +12,8 @@ const useStyles = makeStyles((theme) => ({
   landingContainer: {
     minWidth: '100vw',
     minHeight: '100vh',
-    background: 'transparent linear-gradient(127deg, #2576FF 0%, #4F8EFA 100%) 0% 0% no-repeat padding-box;',
+    background:
+      'transparent linear-gradient(127deg, #2576FF 0%, #4F8EFA 100%) 0% 0% no-repeat padding-box;',
   },
   centerGrid: {
     display: 'flex',
@@ -31,19 +32,25 @@ export default ({ deal, user }) => {
     return null;
   }
   const advisorName =
-    (deal['Would you like to hire Allocations as the exempt reporting advisor?'] || '').trim() === 'Yes'
+    (deal['Would you like to hire Allocations as the exempt reporting advisor?'] || '').trim() ===
+    'Yes'
       ? 'Sharding Advisers LLC'
       : '';
   const adviserQTY =
-    (deal['Would you like to hire Allocations as the exempt reporting advisor?'] || '').trim() === 'Yes' ? 1 : 0;
+    (deal['Would you like to hire Allocations as the exempt reporting advisor?'] || '').trim() ===
+    'Yes'
+      ? 1
+      : 0;
   const adviserCost =
-    (deal['Would you like to hire Allocations as the exempt reporting advisor?'] || '').trim() === 'Yes'
+    (deal['Would you like to hire Allocations as the exempt reporting advisor?'] || '').trim() ===
+    'Yes'
       ? '$2000.00'
       : '$0.00';
   const clientInfo = `${deal.Address || ''}. ${user.email || ''} ${deal['Phone number'] || ''}`;
 
   const fees = `Management Fee: ${deal['Choose your management fee']}%. Carry: ${deal['Choose your carry']}%.`;
-  const masterPartnerName = deal['Choose your speed'] === 'Express' ? 'Sharding Holdings Management LLC' : '';
+  const masterPartnerName =
+    deal['Choose your speed'] === 'Express' ? 'Sharding Holdings Management LLC' : '';
   const params = {
     'build-asset-type': deal['Choose your asset type'] || '',
     'build-offering-type': deal['Choose offering type'] || '',
@@ -62,15 +69,18 @@ export default ({ deal, user }) => {
   const urlParameters = Object.entries(params)
     .map((e) => e.map(encodeURI).join('='))
     .join('&');
-  const link = `${powerFormLink}&signer_UserName=${user.first_name || ''} ${user.last_name || ''}&signer_Email=${
-    user.email
-  }&${urlParameters}`;
+  const link = `${powerFormLink}&signer_UserName=${user.first_name || ''} ${
+    user.last_name || ''
+  }&signer_Email=${user.email}&${urlParameters}`;
   return (
     <div className={classes.landingContainer}>
       <Grid className={classes.centerGrid}>
         {/* <Confetti /> */}
 
-        <img src="https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom+(3).svg" alt='Rocket Ship'/>
+        <img
+          src="https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom+(3).svg"
+          alt="Rocket Ship"
+        />
         <Typography
           variant="title1"
           style={{ color: 'white', marginTop: '1rem', marginBottom: '.25rem', fontSize: '2rem' }}
@@ -99,7 +109,9 @@ export default ({ deal, user }) => {
         </Button>
         {deal['Choose your fund type'] === 'SPV' && (
           <>
-            <Typography style={{ color: 'white', fontSize: '2rem', marginTop: '.25rem' }}>Or</Typography>
+            <Typography style={{ color: 'white', fontSize: '2rem', marginTop: '.25rem' }}>
+              Or
+            </Typography>
             <Button
               variant="contained"
               color="primary"

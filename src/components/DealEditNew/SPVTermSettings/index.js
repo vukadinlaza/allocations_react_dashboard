@@ -13,7 +13,7 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
       estimatedTerm,
       totalCarry,
       estimatedSetupCosts,
-      estimatedSetupCostsDollar
+      estimatedSetupCostsDollar,
     },
     differentPortfolioTerms,
     deal_lead,
@@ -30,7 +30,6 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
       setFeeType('fixed');
     }
   };
-
 
   const handleFormChange = ({ target }) => {
     const dealParamFields = [
@@ -181,7 +180,7 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
         <FormControl className="field">
           <label className="field-label">
             Estimated setup cost ($)
-              <TextField
+            <TextField
               onChange={handleFormChange}
               value={estimatedSetupCosts}
               className="text-input"

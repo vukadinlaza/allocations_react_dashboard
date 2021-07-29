@@ -30,10 +30,19 @@ const useStyles = makeStyles((theme) => ({
 const FormModal = ({ open, setOpen, form }) => {
   const classes = useStyles();
   return (
-    <Modal open={open} onClose={() => setOpen(false)} aria-labelledby="modal" aria-describedby="modal">
+    <Modal
+      open={open}
+      onClose={() => setOpen(false)}
+      aria-labelledby="modal"
+      aria-describedby="modal"
+    >
       <Grid container xs={12} justify="center" alignItems="center">
         <Paper className={classes.paper}>
-          <CancelPresentationIcon color="black" onClick={() => setOpen(false)} style={{ marginLeft: '100%' }} />
+          <CancelPresentationIcon
+            color="black"
+            onClick={() => setOpen(false)}
+            style={{ marginLeft: '100%' }}
+          />
 
           {form}
         </Paper>

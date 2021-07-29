@@ -5,7 +5,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TextField, Table, TableBody, TableCell, TableRow, Paper } from '@material-ui/core';
 import * as API from '../../api';
 
-export default function UserSearch({ user, setUser, errors = [], label = 'Investor', showLabelOnSelect = false }) {
+export default function UserSearch({
+  user,
+  setUser,
+  errors = [],
+  label = 'Investor',
+  showLabelOnSelect = false,
+}) {
   const { organization: org } = useParams();
   const [q, setQ] = useState('');
   const [records, setRecords] = useState([]);

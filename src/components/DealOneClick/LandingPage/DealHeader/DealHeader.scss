@@ -33,25 +33,22 @@
     background-position: center;
     background-repeat: no-repeat;
   }
-
 }
 
-
 @media screen and (max-width: 960px) {
-
   .DealHeader {
     width: 100%;
     height: 20rem;
 
-  .image-wrapper {
-    width: 100%;
-    height: 70%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
+    .image-wrapper {
+      width: 100%;
+      height: 70%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
   }
 }

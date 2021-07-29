@@ -60,9 +60,7 @@ const GET_INVESTOR = gql`
   }
 `;
 
-
 export default function UserHome(props) {
-
   const { userProfile, error } = useAuth(GET_INVESTOR);
 
   if (error) {
@@ -80,4 +78,3 @@ export default function UserHome(props) {
 
   return <NewHome />;
 }
-

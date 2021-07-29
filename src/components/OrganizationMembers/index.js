@@ -104,7 +104,9 @@ function Member({ org, member, sendAdminInvite, revokeMembership }) {
     <TableRow>
       <TableCell>
         {member.name}{' '}
-        {member.first_name && member.investor_type === 'entity' ? `[${member.first_name} ${member.last_name}]` : ''}
+        {member.first_name && member.investor_type === 'entity'
+          ? `[${member.first_name} ${member.last_name}]`
+          : ''}
       </TableCell>
       <TableCell>{member.email}</TableCell>
       <TableCell>{inviteArea}</TableCell>

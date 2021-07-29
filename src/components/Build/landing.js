@@ -6,7 +6,8 @@ const useStyles = makeStyles((theme) => ({
   landingContainer: {
     minWidth: '100vw',
     minHeight: '100vh',
-    background: 'transparent linear-gradient(127deg, #2576FF 0%, #4F8EFA 100%) 0% 0% no-repeat padding-box;',
+    background:
+      'transparent linear-gradient(127deg, #2576FF 0%, #4F8EFA 100%) 0% 0% no-repeat padding-box;',
   },
   centerGrid: {
     display: 'flex',
@@ -23,7 +24,10 @@ export default ({ Link }) => {
   return (
     <div className={classes.landingContainer}>
       <Grid className={classes.centerGrid}>
-        <img src="https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom+(1).svg" alt='Rocket ship'/>
+        <img
+          src="https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom+(1).svg"
+          alt="Rocket ship"
+        />
         <Typography
           variant="title1"
           style={{ color: 'white', marginTop: '1rem', marginBottom: '.25rem', fontSize: '2rem' }}

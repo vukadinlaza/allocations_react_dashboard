@@ -1,4 +1,4 @@
-@import "../../../App.scss";
+@import '../../../App.scss';
 
 .AdminHome {
   margin-bottom: 50px;
@@ -49,7 +49,8 @@
     // background-color: $softblue;
   }
 
-  .deals-closed, .investments {
+  .deals-closed,
+  .investments {
     margin-top: 20px;
     padding: 10px;
     padding-bottom: 20px;
@@ -119,14 +120,19 @@
   }
 
   .blue-container {
-    background: rgb(32,93,245);
-    background: linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 400px, rgba(255,255,255,1) 400px);
+    background: rgb(32, 93, 245);
+    background: linear-gradient(
+      180deg,
+      rgba(32, 93, 245, 1) 0%,
+      rgba(0, 94, 255, 1) 400px,
+      rgba(255, 255, 255, 1) 400px
+    );
     margin-top: -30px;
     padding-top: 30px;
     padding-bottom: 60px;
     margin-left: -32px;
     padding-left: 32px;
     margin-right: -32px;
-    padding-right: 32px
-    }
+    padding-right: 32px;
+  }
 }

@@ -1,22 +1,22 @@
-@import "../../App.scss";
+@import '../../App.scss';
 
 .InvitedDeals {
-    .table-wrapper {
-        @include xs-only {
-            button {
-                font-size: 0.8em;
-            }
-            .fa-external-link-alt {
-                font-size: 0.8em;
-            }
-        }
+  .table-wrapper {
+    @include xs-only {
+      button {
+        font-size: 0.8em;
+      }
+      .fa-external-link-alt {
+        font-size: 0.8em;
+      }
     }
+  }
 
-    a {
-        text-decoration: none;
-    }
+  a {
+    text-decoration: none;
+  }
 
-    th {
-        font-weight: bold;
-    }
+  th {
+    font-weight: bold;
+  }
 }

@@ -3,7 +3,8 @@ import React from 'react';
 export default function FormError({ error }) {
   if (!error) return null;
 
-  const msg = error.message.slice(0, 15) === 'GraphQL error: ' ? error.message.slice(15) : error.message;
+  const msg =
+    error.message.slice(0, 15) === 'GraphQL error: ' ? error.message.slice(15) : error.message;
   return (
     <div
       style={{

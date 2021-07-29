@@ -58,7 +58,8 @@ export default function DealNew() {
   const [hasChanges, setHasChanges] = useState(false);
   const [createDeal, { error }] = useMutation(CREATE_DEAL, {
     refetchQueries: [{ query: ORG_OVERVIEW, variables: { slug: organization } }],
-    onCompleted: ({ createDeal }) => history.push(`/admin/${organization}/deals/${createDeal._id}/edit`),
+    onCompleted: ({ createDeal }) =>
+      history.push(`/admin/${organization}/deals/${createDeal._id}/edit`),
   });
 
   useEffect(() => {

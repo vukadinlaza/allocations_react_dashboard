@@ -233,7 +233,11 @@ function MatchRequests({ matchRequests = [] }) {
 function MatchRequest({ req }) {
   const { order, buyer, seller, deal } = req;
   return (
-    <TableRow key={req._id} className="AdminMatchRequest" style={{ padding: '10px', marginBottom: '15px' }}>
+    <TableRow
+      key={req._id}
+      className="AdminMatchRequest"
+      style={{ padding: '10px', marginBottom: '15px' }}
+    >
       <TableCell>{deal.company_name}</TableCell>
       <TableCell>{nWithCommas(order.amount)}</TableCell>
       <TableCell>${order.price}/share</TableCell>

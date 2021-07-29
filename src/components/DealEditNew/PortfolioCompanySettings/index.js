@@ -89,7 +89,7 @@ function PortfolioCompanySettings({ formData, setFormData }) {
       return portfolioEstimatedSetupCostsDollar;
     }
 
-    return ''
+    return '';
   };
 
   const handleSetupCostChange = ({ target }) => {
@@ -190,7 +190,9 @@ function PortfolioCompanySettings({ formData, setFormData }) {
               </Button>
               <Button
                 onClick={() => changeFeeType('One-Time')}
-                className={`option-button ${portfolioManagementFeeType === 'One-Time' && 'selected'}`}
+                className={`option-button ${
+                  portfolioManagementFeeType === 'One-Time' && 'selected'
+                }`}
                 variant="outlined"
               >
                 One-time

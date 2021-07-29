@@ -38,7 +38,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 8,
   },
   blueContainer: {
-    background: 'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 160px, rgba(255,255,255,1) 160px)',
+    background:
+      'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 160px, rgba(255,255,255,1) 160px)',
     marginTop: '-30px',
     paddingTop: '30px',
     paddingBottom: '60px',
@@ -119,7 +120,12 @@ export default () => {
         <Typography variant="h3" style={{ color: 'white' }}>
           Demo
         </Typography>
-        <Grid container spacing={12} justify="space-between" style={{ marginTop: '40px', marginBottom: '1rem' }}>
+        <Grid
+          container
+          spacing={12}
+          justify="space-between"
+          style={{ marginTop: '40px', marginBottom: '1rem' }}
+        >
           <Grid item>
             <Paper className={classes.paper}>
               <img
@@ -169,7 +175,9 @@ export default () => {
                   history.push({
                     pathname: `/investor/${
                       // If true use Kingsley's ID otherwise Joel for Staging ENV
-                      process.env.NODE_ENV === 'production' ? '5de560a92817ed4e5b8a7af4' : '5ef11c26b864940023a05ec5'
+                      process.env.NODE_ENV === 'production'
+                        ? '5de560a92817ed4e5b8a7af4'
+                        : '5ef11c26b864940023a05ec5'
                     }/home`,
                     search: '?demo=true',
                   });

@@ -73,7 +73,12 @@ export default function EntityEditForm({
         </Typography>
         <Grid container spacing={3} style={{ marginTop: '16px' }}>
           <Grid item xs={12} sm={12} md={6}>
-            <FormControl required error={errors.includes('investor_type')} variant="outlined" style={{ width: '100%' }}>
+            <FormControl
+              required
+              error={errors.includes('investor_type')}
+              variant="outlined"
+              style={{ width: '100%' }}
+            >
               <InputLabel>Investor Type</InputLabel>
               <Select
                 value={investor.investor_type || ''}
@@ -89,12 +94,21 @@ export default function EntityEditForm({
 
           {investor.investor_type === 'entity' && (
             <Grid item xs={12} sm={12} md={6}>
-              <AccreditedInvestorStatus investor={investor} handleChange={handleChange} errors={errors} />
+              <AccreditedInvestorStatus
+                investor={investor}
+                handleChange={handleChange}
+                errors={errors}
+              />
             </Grid>
           )}
 
           <Grid item xs={12} sm={12} md={6}>
-            <FormControl required error={errors.includes('country')} variant="outlined" style={{ width: '100%' }}>
+            <FormControl
+              required
+              error={errors.includes('country')}
+              variant="outlined"
+              style={{ width: '100%' }}
+            >
               <InputLabel>Country of Residence or Place of Business</InputLabel>
               <Select
                 value={investor.country || ''}
@@ -138,7 +152,11 @@ export default function EntityEditForm({
                 style={{ width: '100%' }}
               >
                 <InputLabel>State</InputLabel>
-                <Select value={investor.state || ''} onChange={handleChange('state')} inputProps={{ name: 'state' }}>
+                <Select
+                  value={investor.state || ''}
+                  onChange={handleChange('state')}
+                  inputProps={{ name: 'state' }}
+                >
                   <MenuItem value="" />
                   {usStates.states.map(({ name }) => (
                     <MenuItem key={name} value={name}>
@@ -214,13 +232,19 @@ export function PassportUploader({ investor, setInvestor }) {
       <ListItem>
         <ListItemText primary="ID for KYC" secondary="passport / drivers license" />
         <ListItemSecondaryAction>
-          <Button startIcon={<CloudUploadIcon />} variant="contained" color="secondary" component="label">
+          <Button
+            startIcon={<CloudUploadIcon />}
+            variant="contained"
+            color="secondary"
+            component="label"
+          >
             Upload
             <input
               type="file"
               style={{ display: 'none' }}
               onChange={({ target }) => {
-                if (target.validity.valid) setInvestor((prev) => ({ ...prev, passport: target.files[0] }));
+                if (target.validity.valid)
+                  setInvestor((prev) => ({ ...prev, passport: target.files[0] }));
               }}
             />
           </Button>

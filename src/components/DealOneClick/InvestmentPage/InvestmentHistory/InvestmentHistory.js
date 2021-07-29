@@ -92,7 +92,9 @@ function InvestmentHistory({ deal, setInvestor, investor, setAmount }) {
         </div>
         <div>
           <div className="itemHeader">Entity</div>
-          <div>{inv?.submissionData?.legalName || inv?.submissionData?.fullName || data?.investor.name}</div>
+          <div>
+            {inv?.submissionData?.legalName || inv?.submissionData?.fullName || data?.investor.name}
+          </div>
         </div>
         <div>
           <div className="itemHeader">Amount</div>

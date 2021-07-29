@@ -1,6 +1,4 @@
 .DealSettings {
-
-
   .form-fields {
     display: flex;
     flex-wrap: wrap;
@@ -9,7 +7,7 @@
 
     .field {
       width: 48.5%;
-      margin-bottom: .75rem;
+      margin-bottom: 0.75rem;
 
       .field-label {
         display: flex;
@@ -31,14 +29,14 @@
 
     .deal-documents {
       width: 100%;
-      
+
       .field-label {
         width: 100%;
         display: flex;
         flex-direction: column;
         font-size: 1.2rem;
         font-weight: 600;
-        
+
         .document-list {
           height: 10rem;
           list-style: none;
@@ -56,14 +54,13 @@
             width: 24%;
             min-width: 250px;
             border-radius: 20px;
-            background: #FFFFFF 0% 0% no-repeat padding-box;
+            background: #ffffff 0% 0% no-repeat padding-box;
             display: flex;
             justify-content: center;
             align-items: center;
             margin-right: 1rem;
             position: relative;
-            box-shadow: 0px 3px 6px #0000001D;
-
+            box-shadow: 0px 3px 6px #0000001d;
 
             .document-menu-button {
               position: absolute;
@@ -80,15 +77,16 @@
             .document-menu {
               border: 2px solid lime !important;
 
-              .menu-container, .MuiMenu-paper {
+              .menu-container,
+              .MuiMenu-paper {
                 display: flex;
                 height: 2rem;
-                margin: .5rem 0;
+                margin: 0.5rem 0;
                 border: 2px solid !important;
                 color: red;
               }
             }
-            
+
             .document-link {
               margin: 0;
               display: flex;
@@ -115,14 +113,13 @@
       }
     }
 
-
-    .banner-upload{
+    .banner-upload {
       width: 100%;
-      
+
       .upload {
         width: 100%;
       }
-      
+
       .image-preview-container {
         width: 50%;
         position: relative;
@@ -132,7 +129,7 @@
         }
 
         .delete-image {
-          background-color: #0561FF;
+          background-color: #0561ff;
           color: white;
           position: absolute;
           top: 10px;
@@ -143,12 +140,12 @@
 
     .upload {
       width: 100%;
-      margin: .5rem 0;
+      margin: 0.5rem 0;
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
-      
+
       .field-label {
         display: flex;
         flex-direction: column;
@@ -165,31 +162,30 @@
             display: flex;
             align-items: center;
             width: max-content;
-  
+
             .attach-button {
               pointer-events: initial;
-              margin-top: .5rem;
+              margin-top: 0.5rem;
               width: 12rem;
               height: 3rem;
-              background-color: #0561FF;
+              background-color: #0561ff;
               color: white;
               text-transform: none;
             }
-  
+
             p {
               margin: 0 1rem;
               font-weight: normal;
             }
-  
           }
         }
       }
 
       .upload-button {
-        margin-top: .5rem;
+        margin-top: 0.5rem;
         width: 12rem;
         height: 3rem;
-        background-color: #2A2B54;
+        background-color: #2a2b54;
         color: white;
         text-transform: none;
       }
@@ -207,7 +203,7 @@
         z-index: 10;
         width: 100%;
       }
-      
+
       .image-preview {
         min-width: 100%;
         height: 3rem;
@@ -224,7 +220,9 @@
         overflow: auto;
         margin: 0 auto;
         position: absolute;
-        left: 0; bottom: 5%; right: 0;
+        left: 0;
+        bottom: 5%;
+        right: 0;
       }
     }
   }
@@ -232,27 +230,26 @@
 
 @media screen and (max-width: 960px) {
   .DealSettings {
-
     .form-fields {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       margin-top: 1.5rem;
-  
+
       .field {
         width: 100%;
-        margin-bottom: .75rem;
-  
+        margin-bottom: 0.75rem;
+
         .field-label {
           display: flex;
           flex-direction: column;
           font-size: 1.2rem;
           font-weight: 500;
-  
+
           .text-input {
             margin: 5px 0;
             height: 3.5rem;
-  
+
             .copy-button {
               width: max-content;
               padding: 7.5px;
@@ -263,14 +260,14 @@
 
       .deal-documents {
         width: 100%;
-        
+
         .field-label {
           width: 100%;
           display: flex;
           flex-direction: column;
           font-size: 1.2rem;
           font-weight: 600;
-          
+
           .document-list {
             height: max-content;
             list-style: none;
@@ -283,22 +280,21 @@
             align-items: center;
             margin: 0;
             padding-top: 1rem;
-  
+
             .document-item {
               height: 8rem;
               width: 100%;
               min-width: max-content;
               border-radius: 20px;
-              background: #FFFFFF 0% 0% no-repeat padding-box;
+              background: #ffffff 0% 0% no-repeat padding-box;
               display: flex;
               justify-content: center;
               align-items: center;
               margin-right: 0;
               margin-bottom: 1rem;
               position: relative;
-              box-shadow: 0px 3px 6px #0000001D;
-  
-  
+              box-shadow: 0px 3px 6px #0000001d;
+
               .document-menu-button {
                 position: absolute;
                 top: 15px;
@@ -310,19 +306,20 @@
                 border-radius: 100%;
                 outline: #0561ff2f;
               }
-  
+
               .document-menu {
                 border: 2px solid lime !important;
-  
-                .menu-container, .MuiMenu-paper {
+
+                .menu-container,
+                .MuiMenu-paper {
                   display: flex;
                   height: 2rem;
-                  margin: .5rem 0;
+                  margin: 0.5rem 0;
                   border: 2px solid !important;
                   color: red;
                 }
               }
-              
+
               .document-link {
                 margin: 0;
                 display: flex;
@@ -331,11 +328,11 @@
                 align-items: center;
                 height: 100%;
                 width: 100%;
-  
+
                 svg {
                   transform: scale(2);
                 }
-  
+
                 .document-title {
                   width: 100%;
                   padding: 0;
@@ -348,54 +345,52 @@
           }
         }
       }
-  
+
       .upload {
         width: 100%;
-        margin: .5rem 0;
+        margin: 0.5rem 0;
         display: flex;
         flex-direction: column;
-        
+
         .field-label {
           display: flex;
           flex-direction: column;
           font-size: 1.2rem;
           font-weight: 500;
-  
+
           .upload-container {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
 
-  
             .button-container {
               display: flex;
               align-items: center;
               width: 100%;
-    
+
               .attach-button {
-                margin-top: .5rem;
+                margin-top: 0.5rem;
                 width: 50%;
                 height: 3rem;
-                background-color: #0561FF;
+                background-color: #0561ff;
                 color: white;
                 text-transform: none;
               }
-    
+
               p {
                 width: 50%;
                 margin: 0 1rem;
                 font-weight: 400;
               }
             }
-
           }
         }
 
         .upload-button {
-          margin-top: .5rem;
+          margin-top: 0.5rem;
           width: 100%;
           height: 3rem;
-          background-color: #2A2B54;
+          background-color: #2a2b54;
           color: white;
           text-transform: none;
         }

@@ -91,11 +91,12 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
   const investments =
     dealInvestments?.deal?.investments?.length && dealInvestments.deal.investments;
 
-  const totalRaised =
-    investments? investments.filter((i) => ['wired', 'complete'].includes(i.status))
-      .map((i) => i.amount)
-      .reduce((acc, n) => acc + n, 0) || 0
-      : 0
+  const totalRaised = investments
+    ? investments
+        .filter((i) => ['wired', 'complete'].includes(i.status))
+        .map((i) => i.amount)
+        .reduce((acc, n) => acc + n, 0) || 0
+    : 0;
 
   return (
     <Grid container spacing={3} className={classes.section}>

@@ -1059,7 +1059,8 @@ export default function Sidebar(props) {
                 </ListItemIcon>
                 <ListItemText primary="Investors Admin" />
               </ListItem>
-            </div> */}
+            </div>{' '}
+            */}
             <AdminLinks location={location} />
           </List>
         </>

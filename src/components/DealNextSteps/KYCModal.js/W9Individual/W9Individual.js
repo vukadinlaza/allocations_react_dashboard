@@ -64,14 +64,30 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
     // set auto-complete address info (all or nothing)
     const addressInfo = () => {
       try {
-        const streetNumber = (addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === 'street_number')[0].long_name);
-        const route = (addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === 'route')[0].long_name);
+        const streetNumber =
+          addressComponents === ''
+            ? ''
+            : addressComponents.filter((i) => i.types[0] === 'street_number')[0].long_name;
+        const route =
+          addressComponents === ''
+            ? ''
+            : addressComponents.filter((i) => i.types[0] === 'route')[0].long_name;
         setFormData({
           ...formData,
           address_number_street_and_apt_or_suite_no_see_instructions: `${streetNumber} ${route}`,
-          city: addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === 'locality')[0].long_name,
-          state: addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === 'administrative_area_level_1')[0].long_name,
-          zip: addressComponents === '' ? '' : addressComponents.filter((i) => i.types[0] === "postal_code")[0].long_name
+          city:
+            addressComponents === ''
+              ? ''
+              : addressComponents.filter((i) => i.types[0] === 'locality')[0].long_name,
+          state:
+            addressComponents === ''
+              ? ''
+              : addressComponents.filter((i) => i.types[0] === 'administrative_area_level_1')[0]
+                  .long_name,
+          zip:
+            addressComponents === ''
+              ? ''
+              : addressComponents.filter((i) => i.types[0] === 'postal_code')[0].long_name,
         });
         setAddress(`${streetNumber} ${route}`);
       } catch {
@@ -115,7 +131,7 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
       return setFormData((prevData) => ({
         ...prevData,
         signature: target.value,
-        [target.name]: target.value
+        [target.name]: target.value,
       }));
     }
 
@@ -124,7 +140,6 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
       return setFormData((prevData) => ({ ...prevData, [target.name]: onlyNumbers }));
     }
     setFormData((prevData) => ({ ...prevData, [target.name]: target.value }));
-
   };
 
   console.log('formdata', formData);
@@ -186,16 +201,16 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
                 renderOption={(suggestion) => {
                   const style = suggestion.active
                     ? {
-                      backgroundColor: '#4169E1',
-                      cursor: 'pointer',
-                      width: '99%',
-                      borderRadius: '5px',
-                    }
+                        backgroundColor: '#4169E1',
+                        cursor: 'pointer',
+                        width: '99%',
+                        borderRadius: '5px',
+                      }
                     : {
-                      backgroundColor: '#FBFCFF',
-                      cursor: 'pointer',
-                      width: '99%',
-                    };
+                        backgroundColor: '#FBFCFF',
+                        cursor: 'pointer',
+                        width: '99%',
+                      };
                   return (
                     <Grid container spacing={0} alignItems="center">
                       <Grid item>

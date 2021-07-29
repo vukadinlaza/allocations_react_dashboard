@@ -68,7 +68,13 @@ export default ({ setData, classes, answers, activePage }) => {
                     <InfoIcon stye={{ background: 'rgba(0,0,0,0.4)' }} />
                   </Grid>
                 </Grid>
-                <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex', padding: '0.5rem' }}>
+                <Grid
+                  xs={12}
+                  sm={12}
+                  md={12}
+                  lg={12}
+                  style={{ display: 'flex', padding: '0.5rem' }}
+                >
                   {question.Options.map((t) => (
                     <Grid xs={4} sm={4} md={4} lg={4}>
                       <Button

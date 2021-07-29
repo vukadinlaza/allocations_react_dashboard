@@ -48,7 +48,10 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
 
   const { investmentType, status, dealParams } = formData;
 
-  const minimumInvesmentPlaceholder = dealParams.minimumInvestment !== null && dealParams.minimumInvestment ? nWithCommas(dealParams.minimumInvestment) : '1,000';
+  const minimumInvesmentPlaceholder =
+    dealParams.minimumInvestment !== null && dealParams.minimumInvestment
+      ? nWithCommas(dealParams.minimumInvestment)
+      : '1,000';
 
   return (
     <section className="BasicInfoSettings">
@@ -66,20 +69,21 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
             'searchreplace visualblocks code fullscreen',
             'insertdatetime media table paste code help wordcount',
           ],
-          toolbar: 'undo redo | formatselect | bold italic backcolor image media | ' +
-                    'alignleft aligncenter alignright alignjustify | ' +
-                    'bullist numlist outdent indent | removeformat | help',
+          toolbar:
+            'undo redo | formatselect | bold italic backcolor image media | ' +
+            'alignleft aligncenter alignright alignjustify | ' +
+            'bullist numlist outdent indent | removeformat | help',
           file_picker_types: 'image',
-          file_picker_callback: function(cb, value, meta) {
+          file_picker_callback: function (cb, value, meta) {
             const input = document.createElement('input');
             input.setAttribute('type', 'file');
             input.setAttribute('accept', 'image/*');
 
-            input.onchange = function() {
+            input.onchange = function () {
               const file = this.files[0];
 
               const reader = new FileReader();
-              reader.onload = function() {
+              reader.onload = function () {
                 const id = `blobid${new Date().getTime()}`;
                 const blobCache = window.tinymce.activeEditor.editorUpload.blobCache;
                 const base64 = reader.result.split(',')[1];
@@ -191,13 +195,13 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
               decimalPlaces={0}
               digitGroupSeparator=","
               onChange={(event, value) => {
-                setFormData(prev => ({
+                setFormData((prev) => ({
                   ...prev,
                   dealParams: {
                     ...prev.dealParams,
-                    minimumInvestment: value.toString()
-                  }
-                }))
+                    minimumInvestment: value.toString(),
+                  },
+                }));
               }}
               InputProps={{
                 startAdornment: (

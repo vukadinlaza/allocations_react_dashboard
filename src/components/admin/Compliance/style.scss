@@ -1,21 +1,21 @@
 .Compliance {
-    .task-status {
-        display: inline-block;
-        padding: 4px 10px;
-        border-radius: 10px;
-        color: #fff;
-    }
+  .task-status {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 10px;
+    color: #fff;
+  }
 
-    .task-status[data-status="not_started"] {
-        background-color: gray;
-    }
-    .task-status[data-status="waiting"] {
-        background-color: gold;
-    }
-    .task-status[data-status="in_progress"] {
-        background-color: blue;
-    }
-    .task-status[data-status="done"] {
-        background-color: green;
-    }
+  .task-status[data-status='not_started'] {
+    background-color: gray;
+  }
+  .task-status[data-status='waiting'] {
+    background-color: gold;
+  }
+  .task-status[data-status='in_progress'] {
+    background-color: blue;
+  }
+  .task-status[data-status='done'] {
+    background-color: green;
+  }
 }
