@@ -44,6 +44,7 @@ const GET_INVESTMENT = gql`
     investment(_id: $_id) {
       _id
       amount
+      capitalWiredAmount
       status
       documents {
         link
@@ -61,6 +62,7 @@ const GET_INVESTMENT = gql`
         entity_name
         investor_type
         investingAs
+        accredidation_status
       }
     }
   }
@@ -97,16 +99,21 @@ export default function InvestmentEdit({
     data,
     refetch: getInvestment,
     loading,
-  } = useQuery(GET_INVESTMENT, { variables: { _id: id } });
+  } = useQuery(GET_INVESTMENT, {
+    variables: { _id: id },
+    fetchPolicy: 'network-only',
+  });
 
   const [updateInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT, {
     onCompleted: () => {
-      toast.success('Sucess! Investment Updated.');
+      toast.success('Success! Investment Updated.');
       if (handleUpdate) {
-        handleUpdate.refetch();
+        handleUpdate();
       }
+      getInvestment();
     },
-    onError: () => {
+    onError: (error) => {
+      console.log(error);
       toast.error(
         'Something went wrong updating the investment. Try again or contact support@allocations.com',
       );
@@ -118,7 +125,7 @@ export default function InvestmentEdit({
         handleUpdate.refetch();
         handleUpdate.closeModal();
       }
-      toast.success('Sucess! Investment Deleted.');
+      toast.success('Success! Investment Deleted.');
     },
     onError: () => {
       toast.error(
@@ -136,6 +143,8 @@ export default function InvestmentEdit({
   }, [data, loading]);
 
   const updateInvestmentProp = ({ prop, newVal }) => {
+    // if 'accredidation_status' ...
+    console.log('TYPE', typeof newVal, newVal);
     setInvestment((prev) => ({ ...prev, [prop]: newVal }));
   };
 
@@ -147,7 +156,7 @@ export default function InvestmentEdit({
     get(investment, 'investor.investor_type') === 'entity'
       ? get(investment, 'investor.entity_name') || ''
       : `${get(investment, 'investor.first_name')} ${get(investment, 'investor.last_name')}`;
-
+  console.log({ investment });
   return (
     <div className="InvestmentEdit form-wrapper">
       <div className="form-title">Update Investment</div>
@@ -169,21 +178,6 @@ export default function InvestmentEdit({
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
               <TextField
                 style={{ width: '100%' }}
-                type="number"
-                value={get(investment, 'amount', '') || 0}
-                onChange={(e) =>
-                  // eslint-disable-next-line radix
-                  updateInvestmentProp({ prop: 'amount', newVal: parseInt(e.target.value) })
-                }
-                label="Amount"
-                variant="outlined"
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} sm={12} md={6}>
-            <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
-              <TextField
-                style={{ width: '100%' }}
                 value={`${get(investment, 'deal.company_name', '')} ${get(
                   investment,
                   'deal.company_description',
@@ -195,6 +189,39 @@ export default function InvestmentEdit({
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={12} md={6}>
+            <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
+              <TextField
+                style={{ width: '100%' }}
+                type="number"
+                value={get(investment, 'amount', '') || 0}
+                onChange={(e) =>
+                  // eslint-disable-next-line radix
+                  updateInvestmentProp({ prop: 'amount', newVal: parseInt(e.target.value) })
+                }
+                label="Amount Committed"
+                variant="outlined"
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={12} md={6}>
+            <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
+              <TextField
+                style={{ width: '100%' }}
+                type="number"
+                value={get(investment, 'capitalWiredAmount', '') || 0}
+                onChange={(e) =>
+                  // eslint-disable-next-line radix
+                  updateInvestmentProp({
+                    prop: 'capitalWiredAmount',
+                    newVal: parseInt(e.target.value),
+                  })
+                }
+                label="Amount Received"
+                variant="outlined"
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
             <FormControl variant="outlined" style={{ width: '100%' }}>
               <InputLabel>Status</InputLabel>
               <Select
@@ -211,6 +238,28 @@ export default function InvestmentEdit({
           </Grid>
         </Grid>
 
+        <div className="form-title">Update Investment</div>
+        <Divider className={classes.divider} />
+
+        {/* <Grid item xs={12} sm={12} md={12} lg={12}>
+          <FormControl variant="outlined" style={{ width: '100%' }}>
+            <InputLabel>Accreditation Status</InputLabel>
+            <Select
+              value={investment?.investor?.accredidation_status || false}
+              onChange={(e) =>
+                updateInvestmentProp({
+                  prop: 'accredidation_status',
+                  newVal: e.target.value,
+                })
+              }
+              inputProps={{ name: 'accredidation_status' }}
+            >
+              <MenuItem value="true">The investor is accredited</MenuItem>
+              <MenuItem value="false">The investor is not accredited</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+ */}
         <Grid container spacing={3}>
           <Grid
             item
@@ -227,7 +276,9 @@ export default function InvestmentEdit({
               onClick={() =>
                 updateInvestment({
                   variables: {
-                    investment: { ...pick(investment, ['_id', 'status', 'amount']) },
+                    investment: {
+                      ...pick(investment, ['_id', 'status', 'amount', 'capitalWiredAmount']),
+                    },
                   },
                 })
               }
@@ -267,7 +318,7 @@ function Docs({ investment, getInvestment, isK1 }) {
   const [addInvestmentDoc, { loading }] = useMutation(ADD_INVESTMENT_DOC, {
     onCompleted: () => {
       getInvestment();
-      toast.success('Sucess!, Document Added');
+      toast.success('Success! Document Added');
     },
     onError: () => {
       toast.error(
