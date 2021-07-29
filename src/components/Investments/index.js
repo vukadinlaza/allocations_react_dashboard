@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
 import { useParams, Link, useHistory } from 'react-router-dom';
-import { gql } from 'apollo-boost';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery, gql } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Grid, Table, TableBody, TableCell, TableRow, TableHead, Paper, Button } from '@material-ui/core';
+import {
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHead,
+  Paper,
+  Button,
+} from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Loader from '../utils/Loader';
@@ -99,11 +107,16 @@ export default function Investments() {
         <Grid container justify="space-between">
           <Grid item>
             <Typography variant="h6" gutterBottom>
-              Total Invested: <span className={classes.green}>${nWithCommas(_.sumBy(investments, 'amount'))}</span>
+              Total Invested:{' '}
+              <span className={classes.green}>${nWithCommas(_.sumBy(investments, 'amount'))}</span>
             </Typography>
           </Grid>
           <Grid item>
-            <Button variant="contained" color="secondary" onClick={() => history.push(`/admin/investment/new`)}>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => history.push(`/admin/investment/new`)}
+            >
               Add Investment
             </Button>
           </Grid>
@@ -139,20 +152,27 @@ export default function Investments() {
                       {investment.status}
                     </span>
                   </TableCell>
-                  <TableCell align="center">{formatDate(investment.deal.dealParams.wireDeadline)}</TableCell>
+                  <TableCell align="center">
+                    {formatDate(investment.deal.dealParams.wireDeadline)}
+                  </TableCell>
                   <TableCell align="right">
                     {_.get(investment, 'documents.length', 0) > 0 ? (
                       showDocs && showDocs._id === investment._id ? (
                         <FontAwesomeIcon icon="times" onClick={() => setShowDocs(null)} />
                       ) : (
-                        <FontAwesomeIcon icon="info-circle" onClick={() => setShowDocs(investment)} />
+                        <FontAwesomeIcon
+                          icon="info-circle"
+                          onClick={() => setShowDocs(investment)}
+                        />
                       )
                     ) : (
                       ''
                     )}
                   </TableCell>
                   <TableCell align="center">
-                    <Link to={`/admin/${organization}/investments/${investment._id}/edit`}>edit</Link>
+                    <Link to={`/admin/${organization}/investments/${investment._id}/edit`}>
+                      edit
+                    </Link>
                   </TableCell>
                 </TableRow>
               ),

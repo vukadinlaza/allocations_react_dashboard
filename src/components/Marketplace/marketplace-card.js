@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { gql } from 'apollo-boost';
+import React, { useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useMutation } from '@apollo/react-hooks';
-import { Hidden, Paper, ListItem, List, Grid, Button, Typography } from '@material-ui/core';
+import { useMutation, gql } from '@apollo/client';
+import { Paper, Grid, Button, Typography } from '@material-ui/core';
 import { useSimpleReducer } from '../../utils/hooks';
 import { useAuth } from '../../auth/useAuth';
 import './style.scss';
@@ -90,7 +88,8 @@ export default function Marketplace() {
   const { userProfile } = useAuth(GET_INVESTOR);
   const deals = [
     {
-      to: 'https://docs.google.com/spreadsheets/d/1EJJgDbSm4pOPZ5zFkzek2atiYWAoYZTfZExakwppGxw/edit#gid=0',
+      to:
+        'https://docs.google.com/spreadsheets/d/1EJJgDbSm4pOPZ5zFkzek2atiYWAoYZTfZExakwppGxw/edit#gid=0',
       name: 'Sana Health',
       tagline: 'Neuromodulation technology to end chronic pain',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/sana-health.png',
@@ -103,7 +102,8 @@ export default function Marketplace() {
       round: 'Third round',
     },
     {
-      to: 'https://docs.google.com/spreadsheets/d/1s_f6gMA5eGV-YIBAOoRpSB2u19KiHX2Ly4KdZn1vx0Y/edit#gid=0',
+      to:
+        'https://docs.google.com/spreadsheets/d/1s_f6gMA5eGV-YIBAOoRpSB2u19KiHX2Ly4KdZn1vx0Y/edit#gid=0',
       name: 'Cognitive Space',
       tagline: 'Autonomous satellite systems',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/cognitive-space.png',
@@ -116,7 +116,8 @@ export default function Marketplace() {
       round: 'Seed',
     },
     {
-      to: 'https://docs.google.com/spreadsheets/d/1EJCO1SURyv-rbnhoo9EbkR2mFydKfPBBgI2XYIVURDM/edit#gid=0',
+      to:
+        'https://docs.google.com/spreadsheets/d/1EJCO1SURyv-rbnhoo9EbkR2mFydKfPBBgI2XYIVURDM/edit#gid=0',
       name: 'Luminous',
       tagline: 'Photonics chip company backed by Bill Gates',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/luminous.png',
@@ -129,7 +130,8 @@ export default function Marketplace() {
       round: 'Secondary',
     },
     {
-      to: 'https://docs.google.com/spreadsheets/d/1w-rDxctNyycpcQBDi43-0VQglKvAlWJfqC7ETZz1EdM/edit#gid=0',
+      to:
+        'https://docs.google.com/spreadsheets/d/1w-rDxctNyycpcQBDi43-0VQglKvAlWJfqC7ETZz1EdM/edit#gid=0',
       name: 'Factmata',
       tagline: 'AI company for online content risk management',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/factmata.png',
@@ -142,7 +144,8 @@ export default function Marketplace() {
       round: 'Bridge to A',
     },
     {
-      to: 'https://docs.google.com/spreadsheets/d/1xKMQzP3mRvNLc6HsBiSFCDbxjoRASLVdgd7I4E6c2tQ/edit#gid=0',
+      to:
+        'https://docs.google.com/spreadsheets/d/1xKMQzP3mRvNLc6HsBiSFCDbxjoRASLVdgd7I4E6c2tQ/edit#gid=0',
       name: 'Brex',
       tagline: 'Corporate credit cards',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/brex.png',
@@ -155,7 +158,8 @@ export default function Marketplace() {
       round: 'Secondary',
     },
     {
-      to: 'https://docs.google.com/spreadsheets/d/1A8kmlgjPoxtrlgdwUa6e5nY9bBisCjJBBi--Nc7JVa8/edit#gid=0',
+      to:
+        'https://docs.google.com/spreadsheets/d/1A8kmlgjPoxtrlgdwUa6e5nY9bBisCjJBBi--Nc7JVa8/edit#gid=0',
       name: 'SpaceX',
       tagline: "The world's most famous private space company",
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/spacex.png',
@@ -168,7 +172,8 @@ export default function Marketplace() {
       round: 'Series N',
     },
     {
-      to: 'https://docs.google.com/spreadsheets/d/1ulnVK-O2lY3uGgOhc11rW0WDxcigONC858MLcCEPBG0/edit',
+      to:
+        'https://docs.google.com/spreadsheets/d/1ulnVK-O2lY3uGgOhc11rW0WDxcigONC858MLcCEPBG0/edit',
       name: 'Axiom Space',
       tagline: 'Building a commercial space station',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/axiom-space.png',
@@ -181,20 +186,23 @@ export default function Marketplace() {
       round: 'Series B',
     },
     {
-      to: 'https://docs.google.com/spreadsheets/d/1ebS6A0bD8hb9RWpw94VLz_AVIQQByVTvUIEy2lAZKhs/edit#gid=0',
+      to:
+        'https://docs.google.com/spreadsheets/d/1ebS6A0bD8hb9RWpw94VLz_AVIQQByVTvUIEy2lAZKhs/edit#gid=0',
       name: 'On Deck',
       tagline: 'The first place the best talent looks when starting or joining a startup',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/runway_fund.png',
       highlight_1: 'This fund invests in the best early stage founders',
       highlight_2: '450 Fellows have so far started 160 companies',
-      highlight_3: 'Raising a $5M fund, which invests in 80-100 companies over the next 12-18 months',
+      highlight_3:
+        'Raising a $5M fund, which invests in 80-100 companies over the next 12-18 months',
       pledged: '35000',
       deal_lead: 'Don Ho',
       closeDate: '10/31/2020',
       round: 'N/A',
     },
     {
-      to: 'https://docs.google.com/spreadsheets/d/1dlkEmnt7Ls9f5Pic7AgKSF4JwnZtVM3MreSgU1mm_VU/edit#gid=0',
+      to:
+        'https://docs.google.com/spreadsheets/d/1dlkEmnt7Ls9f5Pic7AgKSF4JwnZtVM3MreSgU1mm_VU/edit#gid=0',
       name: 'Venus Aerospace',
       tagline: 'Hypersonic travel',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/venus-aerospace.png',
@@ -207,7 +215,8 @@ export default function Marketplace() {
       round: 'Seed',
     },
     {
-      to: 'https://docs.google.com/spreadsheets/d/1o0joVOj-R-b5ZGZLyhIT3Ey-4bVQEOqZc0vwuVfk3IM/edit#gid=0',
+      to:
+        'https://docs.google.com/spreadsheets/d/1o0joVOj-R-b5ZGZLyhIT3Ey-4bVQEOqZc0vwuVfk3IM/edit#gid=0',
       name: 'ArcType',
       tagline: 'Intuitive SQL client for developers and teams',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/arctype.png',
@@ -220,11 +229,13 @@ export default function Marketplace() {
       round: 'Pre-seed',
     },
     {
-      to: 'https://docs.google.com/spreadsheets/u/2/d/1oI0TduSQcs2_Ya2ldbZ6rMZ2RbLE8h7StadJK-_E4c0/edit',
+      to:
+        'https://docs.google.com/spreadsheets/u/2/d/1oI0TduSQcs2_Ya2ldbZ6rMZ2RbLE8h7StadJK-_E4c0/edit',
       name: 'Mati',
       tagline: 'Data infrastructure for the trust economy',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/mati-id.png',
-      highlight_1: 'Mati aims to power 1 million Trust Economy companies by building the data infrastructure',
+      highlight_1:
+        'Mati aims to power 1 million Trust Economy companies by building the data infrastructure',
       highlight_2: '5.8x YoY revenue growth, $1.85M ARR',
       highlight_3: 'Raising an $8M Series A round at a $60M valuation',
       pledged: '$100,000.00',
@@ -233,13 +244,15 @@ export default function Marketplace() {
       round: 'Series A',
     },
     {
-      to: 'https://docs.google.com/spreadsheets/d/1EJJgDbSm4pOPZ5zFkzek2atiYWAoYZTfZExakwppGxw/edit#gid=0',
+      to:
+        'https://docs.google.com/spreadsheets/d/1EJJgDbSm4pOPZ5zFkzek2atiYWAoYZTfZExakwppGxw/edit#gid=0',
       name: 'Agronomics',
       tagline: 'Sustainable investment in clean meat',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/agronomics.png',
       highlight_1:
         'Environmentally friendly alternatives to the traditional production of meat and plant-based sources of nutrition',
-      highlight_2: 'Portfolio companies include BlueNalu, New Age Meats, Shiok Meats and Legendairy',
+      highlight_2:
+        'Portfolio companies include BlueNalu, New Age Meats, Shiok Meats and Legendairy',
       highlight_3: 'Agronomics wants to decrease the unsustainable demand on natural resources',
       pledged: '$5,000.00',
       deal_lead: 'Kingsley Advani',
@@ -247,13 +260,16 @@ export default function Marketplace() {
       round: 'N/A',
     },
     {
-      to: 'https://docs.google.com/spreadsheets/d/1rYovX8o5OqW2u40QlIKH3vru9t0fXAhnBPgxXjeZ_xw/edit#gid=0',
+      to:
+        'https://docs.google.com/spreadsheets/d/1rYovX8o5OqW2u40QlIKH3vru9t0fXAhnBPgxXjeZ_xw/edit#gid=0',
       name: 'Cheqout',
       tagline: 'A QR payments company for brick-and-mortar transactions',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/cheqout.png',
-      highlight_1: 'An Alipay for the US, CheqOut blends ordering and payments, with an initial focus on restaurants',
+      highlight_1:
+        'An Alipay for the US, CheqOut blends ordering and payments, with an initial focus on restaurants',
       highlight_2: 'Crossed $1M in processed payments last month, 3 months after launch',
-      highlight_3: 'TAM is $800B in restaurant revenues, SOM is $170B in full service—CheqOut takes 1.8% of revenue',
+      highlight_3:
+        'TAM is $800B in restaurant revenues, SOM is $170B in full service—CheqOut takes 1.8% of revenue',
       pledged: '$0.00',
       deal_lead: 'Jerry Chang',
       closeDate: '10/31/2020',
@@ -279,7 +295,12 @@ export default function Marketplace() {
       <Grid>
         <h4 style={{ color: '#fff ' }}>Featured Deals</h4>
       </Grid>
-      <Grid container spacing={12} justify="space-between" style={{ marginTop: '40px', marginBottom: '1rem' }}>
+      <Grid
+        container
+        spacing={12}
+        justify="space-between"
+        style={{ marginTop: '40px', marginBottom: '1rem' }}
+      >
         {deals.map(
           ({
             to,
@@ -330,7 +351,11 @@ export default function Marketplace() {
                       sm={4}
                       md={4}
                       lg={4}
-                      style={{ justifyContent: 'center', alignContent: 'center', padding: '0.5rem' }}
+                      style={{
+                        justifyContent: 'center',
+                        alignContent: 'center',
+                        padding: '0.5rem',
+                      }}
                     >
                       <img src={logo} alt="oops" style={{ width: '100%', height: 'auto' }} />
                     </Grid>
@@ -357,7 +382,11 @@ export default function Marketplace() {
                       sm={3}
                       md={3}
                       lg={3}
-                      style={{ justifyContent: 'center', alignContent: 'around', padding: '0.5rem' }}
+                      style={{
+                        justifyContent: 'center',
+                        alignContent: 'around',
+                        padding: '0.5rem',
+                      }}
                     >
                       <Button
                         variant="contained"
@@ -390,7 +419,13 @@ export default function Marketplace() {
                   </Grid>
 
                   {/* GREY BACKGROUND */}
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ background: 'rgba(0, 0, 0, 0.01)' }}>
+                  <Grid
+                    xs={12}
+                    sm={12}
+                    md={12}
+                    lg={12}
+                    style={{ background: 'rgba(0, 0, 0, 0.01)' }}
+                  >
                     {/* Row 2 - Round, Last Round, Valuation */}
                     <Grid
                       item
@@ -509,18 +544,34 @@ export default function Marketplace() {
                         </Typography>
                       </Grid>
                       <Grid xs={12} sm={4} md={4} lg={4}>
-                        <Typography style={{ fontSize: '1rem', color: 'rgba(0,0,0,0.5)', letterSpacing: '1px' }}>
+                        <Typography
+                          style={{
+                            fontSize: '1rem',
+                            color: 'rgba(0,0,0,0.5)',
+                            letterSpacing: '1px',
+                          }}
+                        >
                           Round
                         </Typography>
-                        <Typography style={{ fontSize: '1rem', color: 'rgba(0,0,0,0.85)', fontWeight: '900' }}>
+                        <Typography
+                          style={{ fontSize: '1rem', color: 'rgba(0,0,0,0.85)', fontWeight: '900' }}
+                        >
                           {round}
                         </Typography>
                       </Grid>
                       <Grid xs={12} sm={4} md={4} lg={4}>
-                        <Typography style={{ fontSize: '1rem', color: 'rgba(0,0,0,0.5)', letterSpacing: '1px' }}>
+                        <Typography
+                          style={{
+                            fontSize: '1rem',
+                            color: 'rgba(0,0,0,0.5)',
+                            letterSpacing: '1px',
+                          }}
+                        >
                           Days Left
                         </Typography>
-                        <Typography style={{ fontSize: '1rem', color: 'rgba(0,0,0,0.85)', fontWeight: '900' }}>
+                        <Typography
+                          style={{ fontSize: '1rem', color: 'rgba(0,0,0,0.85)', fontWeight: '900' }}
+                        >
                           15 Days
                         </Typography>
                       </Grid>

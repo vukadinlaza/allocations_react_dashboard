@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import { get, toLower } from 'lodash';
-import { gql } from 'apollo-boost';
+import { gql } from '@apollo/client';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import {
   Toolbar,
@@ -15,7 +15,6 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  InputLabel,
   FormControl,
   Select,
   MenuItem,
@@ -25,7 +24,6 @@ import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import SettingsIcon from '@material-ui/icons/Settings';
-import BuildIcon from '@material-ui/icons/Build';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MonetizationOnRoundedIcon from '@material-ui/icons/MonetizationOnRounded';
 import AccountBalanceRoundedIcon from '@material-ui/icons/AccountBalanceRounded';
@@ -1049,7 +1047,7 @@ export default function Sidebar(props) {
                 <ListItemText primary="Funds Admin" />
               </ListItem>
             </div>
-            {/* <div
+            <div
               className={`sidebar-nav-item ${
                 location.pathname === '/admin/settings' ? 'sidebar-nav-item-active' : ''
               }`}
@@ -1065,7 +1063,7 @@ export default function Sidebar(props) {
           </List>
         </>
       )}
-      <div onClick={mobileOpen ? handleDrawerClose : null} className="sidebar-nav-item">
+      <div onClick={mobileOpen ? handleDrawerClose : null} className={`sidebar-nav-item`}>
         <ListItem button onClick={logoutWithRedirect}>
           <ListItemIcon className={classes.icon}>
             <ExitToAppIcon />
@@ -1141,7 +1139,7 @@ export default function Sidebar(props) {
                         classes={{
                           root: classes.select,
                         }}
-                        InputProps={{
+                        inputProps={{
                           classes: {
                             focused: classes.inputFocused,
                             underline: classes.inputFocused,
@@ -1197,7 +1195,7 @@ export default function Sidebar(props) {
                         classes={{
                           root: classes.select,
                         }}
-                        InputProps={{
+                        inputProps={{
                           classes: {
                             focused: classes.inputFocused,
                             underline: classes.inputFocused,

@@ -1,16 +1,18 @@
-import { ApolloClient } from 'apollo-client';
-import { ApolloLink, Observable } from 'apollo-link';
-import { ApolloProvider } from '@apollo/react-hooks';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { onError } from 'apollo-link-error';
-import { createUploadLink } from 'apollo-upload-client';
-import { withClientState } from 'apollo-link-state';
-import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
+import {
+  ApolloClient,
+  ApolloProvider,
+  ApolloLink,
+  Observable,
+  HttpLink,
+  InMemoryCache,
+} from '@apollo/client';
+import { onError } from 'apollo-link-error';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000/graphql';
 
-const uploadLink = createUploadLink({
+const uploadLink = new HttpLink({
   uri: API_URL,
   headers: { 'keep-alive': 'true' },
 });
@@ -84,20 +86,9 @@ const AuthorizedApolloProvider = ({ children }) => {
         }
       }),
       requestLink,
-      withClientState({
-        defaults: {
-          isConnected: true,
-        },
-        resolvers: {
-          Mutation: {
-            updateNetworkStatus: (_, { isConnected }, { cache }) => {
-              cache.writeData({ data: { isConnected } });
-              return null;
-            },
-          },
-        },
-        cache,
-      }),
+      // apollo-link-state deprecated in V3
+      // https://github.com/apollographql/apollo-client/pull/4155
+      // https://github.com/apollographql/apollo-client/pull/4338
       uploadLink,
     ]),
     cache,

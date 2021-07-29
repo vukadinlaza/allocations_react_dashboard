@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Loader from '../../utils/Loader';
 import { get, pick } from 'lodash';
-import { gql } from 'apollo-boost';
 import { toast } from 'react-toastify';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, gql } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CloudDone } from '@material-ui/icons';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-
 import {
   Button,
   TextField,
@@ -24,6 +21,7 @@ import {
 import './style.scss';
 import countries from 'country-region-data';
 import Typography from '@material-ui/core/Typography';
+import Loader from '../../utils/Loader';
 import { useAuth } from '../../../auth/useAuth';
 
 /** *
@@ -71,8 +69,12 @@ export default function InvestorEditForm({
   noValidate = false,
 }) {
   const [errors, setErrors] = useState([]);
+  const { logout, userProfile } = useAuth();
+
+  const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
+
   const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_USER, {
-    onCompleted: (data) => {
+    onCompleted: () => {
       if (userProfile.email !== investor.email) {
         logoutWithRedirect();
       } else {
@@ -80,9 +82,6 @@ export default function InvestorEditForm({
       }
     },
   });
-
-  const { logout, userProfile } = useAuth();
-  const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
 
   const handleChange = (prop) => (e) => {
     e.persist();

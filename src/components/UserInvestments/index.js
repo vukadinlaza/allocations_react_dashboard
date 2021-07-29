@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { gql } from '@apollo/client';
 import _ from 'lodash';
 import { Redirect, useHistory } from 'react-router-dom';
-import { gql } from 'apollo-boost';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Table,

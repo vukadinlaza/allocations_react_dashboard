@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { gql } from 'apollo-boost';
 import _ from 'lodash';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, gql } from '@apollo/client';
 import { withStyles } from '@material-ui/core/styles';
 import {
   TextField,
