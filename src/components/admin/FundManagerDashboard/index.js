@@ -107,6 +107,7 @@ const styles = (theme) => ({
     },
   },
   dashboardContainer: {
+    border: 'solid 3px red',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-start',

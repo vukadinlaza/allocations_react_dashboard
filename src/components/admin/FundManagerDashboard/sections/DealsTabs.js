@@ -48,6 +48,7 @@ const styles = (theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    width: '100%',
     color: '#2A2B54',
     fontWeight: 'bold',
     marginBottom: '15px',
@@ -86,6 +87,18 @@ const styles = (theme) => ({
   tabsIndicator: {
     // display: "none",
   },
+  tabsPlaceholder: {
+    width: 'calc(100% - 80px)',
+    borderBottom: '2px solid #E6E9EF',
+    height: '130px', // height of main title and tabs component
+    position: 'absolute',
+    top: '0px',
+    left: '0px',
+    margin: '0 40px',
+    [theme.breakpoints.down(phone)]: {
+      borderBottom: 'none',
+    },
+  },
   tabWrapper: {
     padding: '0 10px',
   },
@@ -109,18 +122,20 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
 
   if (!data) return <Loader />;
 
+  const titleContainer = document.getElementById('main-title-container');
+
   return (
     <div className={classes.root}>
       <Tabs
         value={tabIndex}
         indicatorColor="primary"
         textColor="primary"
-        variant="scrollable"
         onChange={(e, v) => handleTabChange(e, v)}
         classes={{
           root: classes.tabs,
           indicator: classes.tabsIndicator,
         }}
+        variant="scrollable"
       >
         {deals.map((deal, index) => {
           const isFund = deal.investmentType === 'fund';
@@ -157,6 +172,10 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
           );
         })}
       </Tabs>
+      <div
+        className={classes.tabsPlaceholder}
+        style={{ height: titleContainer ? `${titleContainer.offsetHeight + 48}px` : '130px' }}
+      />
     </div>
   );
 };
