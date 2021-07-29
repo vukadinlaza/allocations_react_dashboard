@@ -35,7 +35,9 @@ const OrgCards = ({ organization, investor }) => {
           <Paper className={classes.paper}>
             {data.map((card) => {
               const docs = investor.documents ? investor.documents : [];
-              const hasDoc = docs.find((d) => toLower(d.documentName).includes(toLower(card.title)));
+              const hasDoc = docs.find((d) =>
+                toLower(d.documentName).includes(toLower(card.title)),
+              );
               return (
                 <Grid item xs={12} sm={6} key={card.title}>
                   <Paper className={classes.paper}>
@@ -52,7 +54,9 @@ const OrgCards = ({ organization, investor }) => {
                         onClick={() => setModal(!hasDoc)}
                         style={{ cursor: 'pointer', color: 'rgba(81,168,218,1)' }}
                       >
-                        {!hasDoc ? card.callToAction : 'You have a signed provision of service agreement.'}
+                        {!hasDoc
+                          ? card.callToAction
+                          : 'You have a signed provision of service agreement.'}
                       </Typography>
                     </Grid>
                   </Paper>

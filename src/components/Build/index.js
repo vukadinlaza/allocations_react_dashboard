@@ -55,7 +55,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 8,
   },
   blueContainer: {
-    background: 'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 120px, rgba(255,255,255,1) 120px)',
+    background:
+      'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 120px, rgba(255,255,255,1) 120px)',
     marginTop: '-30px',
     paddingTop: '30px',
     paddingBottom: '60px',

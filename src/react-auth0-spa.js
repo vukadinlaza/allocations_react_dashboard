@@ -60,13 +60,14 @@ const isAuthed = () => {
 
 export const Auth0Provider = ({ children }) => {
   const history = useHistory();
-  const [{ user, isAuthenticated, loading, auth0Client, clientPromise }, setState] = useSimpleReducer({
-    user: null,
-    isAuthenticated: null,
-    loading: true,
-    auth0Client: null,
-    clientPromise: null,
-  });
+  const [{ user, isAuthenticated, loading, auth0Client, clientPromise }, setState] =
+    useSimpleReducer({
+      user: null,
+      isAuthenticated: null,
+      loading: true,
+      auth0Client: null,
+      clientPromise: null,
+    });
 
   const getTokenSilently = async (client = auth0Client) => {
     if (!isAuthed()) {

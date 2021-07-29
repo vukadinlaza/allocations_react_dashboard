@@ -48,7 +48,12 @@ function LoginOrProfile() {
   // not signed in - show login
   return (
     <NavItem>
-      <Button id="qsLoginBtn" color="primary" className="btn-margin" onClick={() => loginWithRedirect({})}>
+      <Button
+        id="qsLoginBtn"
+        color="primary"
+        className="btn-margin"
+        onClick={() => loginWithRedirect({})}
+      >
         Log in
       </Button>
     </NavItem>

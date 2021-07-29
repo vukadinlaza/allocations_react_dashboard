@@ -1,232 +1,237 @@
-@import "../../App.scss";
+@import '../../App.scss';
 
 $break-sm: 768px;
 $break-xs: 576px;
 
 .deal-status {
-    color: #fff;
-    padding: 2px 6px;
-    border-radius: 4px;
-    opacity: 0.7;
-    text-transform: uppercase;
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  opacity: 0.7;
+  text-transform: uppercase;
 }
 
-span[data-status="onboarding"] {
-    background-color: $brandblue;
+span[data-status='onboarding'] {
+  background-color: $brandblue;
 }
 
-span[data-status="closing"] {
-    background-color: tomato;
+span[data-status='closing'] {
+  background-color: tomato;
 }
 
-span[data-status="closed"] {
-    background-color: $green;
+span[data-status='closed'] {
+  background-color: $green;
 }
 
 .UserHome {
-    .row {
-        padding: 10px;
-        @media screen and (max-width: $break-sm) {
-            padding: 0px 10px;
-        }
+  .row {
+    padding: 10px;
+    @media screen and (max-width: $break-sm) {
+      padding: 0px 10px;
     }
+  }
 
-    .admin-tile {
-        a {
-            color: #fff;
-        }
-        .admin-table {
-            max-height: 200px;
-            overflow-y: scroll;
-        }
-        padding-left: 50px;
-        padding-right: 50px;
+  .admin-tile {
+    a {
+      color: #fff;
     }
-
-    .chart-container {
-        padding: 15px 5px;
-        pointer-events: none;
+    .admin-table {
+      max-height: 200px;
+      overflow-y: scroll;
     }
+    padding-left: 50px;
+    padding-right: 50px;
+  }
 
-    .tile-top {
-        min-height: 284px;
-    }
+  .chart-container {
+    padding: 15px 5px;
+    pointer-events: none;
+  }
 
-    .tile-bottom {
-        height: 250px;
-        overflow: scroll;
-        padding: 20px 15px;
-    }
+  .tile-top {
+    min-height: 284px;
+  }
 
-    .NextSteps {
-        .step {
-            padding: 10px 20px;
-            margin-bottom: 4px;
-            background-color: #fafafa;
-            &:hover {
-                background-color: $graygreen;
-                cursor: pointer;
-            }
+  .tile-bottom {
+    height: 250px;
+    overflow: scroll;
+    padding: 20px 15px;
+  }
 
-            .checkbox {
-                padding: 0px 4px;
-                font-size: 1.2em;
-            }
+  .NextSteps {
+    .step {
+      padding: 10px 20px;
+      margin-bottom: 4px;
+      background-color: #fafafa;
+      &:hover {
+        background-color: $graygreen;
+        cursor: pointer;
+      }
 
-            .coming-soon {
-                margin-left: 15px;
-                font-size: 0.9em;
-                background-color: $softgreen;
-                opacity: 0.6;
-                color: #fff;
-                display: inline-block;
-                border-radius: 5px;
-                padding: 1px 5px;
-            }
-        }
-    }
-
-    .admin-link {
-        // background-color: $brandblue;
-        padding: 10px 20px;
+      .checkbox {
+        padding: 0px 4px;
         font-size: 1.2em;
-        margin-bottom: 15px;
-        border-radius: 10px;
-        a {
-            color: #333;
-        }
+      }
+
+      .coming-soon {
+        margin-left: 15px;
+        font-size: 0.9em;
+        background-color: $softgreen;
+        opacity: 0.6;
+        color: #fff;
+        display: inline-block;
+        border-radius: 5px;
+        padding: 1px 5px;
+      }
+    }
+  }
+
+  .admin-link {
+    // background-color: $brandblue;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    a {
+      color: #333;
+    }
+  }
+
+  .welcome {
+    .welcome-text {
+      font-size: 1.7em;
+      padding: 10px 0px;
+    }
+    .welcome-desc {
+      > div {
+        margin-top: 10px;
+      }
+      a {
+        text-decoration: none;
+        color: black;
+      }
+    }
+    .button {
+      background-color: $green;
+    }
+  }
+
+  .total-investments {
+    .amount {
+      text-align: center;
+      font-size: 2.3em;
+    }
+  }
+
+  .investment-stub {
+    padding: 10px 10px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    position: relative;
+    &:hover {
+      background-color: $softblue;
+    }
+    > span {
+      display: inline-block;
+    }
+    span:nth-child(1) {
+      padding-right: 10px;
+    }
+    .investment-status {
+      position: absolute;
+      top: -10px;
+      right: 5px;
+      font-size: 0.85em;
+      opacity: 0.7;
     }
 
-    .welcome {
-        .welcome-text {
-            font-size: 1.7em;
-            padding: 10px 0px;
-        }
-        .welcome-desc {
-            >div {
-                margin-top: 10px;
-            }
-            a {
-                text-decoration: none;
-                color: black;
-            }
-        }
-        .button {
-            background-color: $green;
-        }
+    i {
+      color: #a7a7a7;
     }
+  }
 
-    .total-investments {
-        .amount {
-            text-align: center;
-            font-size: 2.3em;
-        }
+  .invited-deals {
+    .tile {
+      overflow: scroll;
     }
-
-    .investment-stub {
-        padding: 10px 10px;
-        margin-bottom: 15px;
-        cursor: pointer;
-        position: relative;
-        &:hover {
-            background-color: $softblue;
-        }
-        >span {
-            display: inline-block;
-        }
-        span:nth-child(1) {
-            padding-right: 10px;
-        }
-        .investment-status {
-            position: absolute;
-            top: -10px;
-            right: 5px;
-            font-size: 0.85em;
-            opacity: 0.7;
-        }
-
-        i {
-            color: #a7a7a7;
-        }
-    }
-
-    .invited-deals {
-        .tile {
-            overflow: scroll;
-        }
-        .deal-stub {
-            margin-bottom: 15px;
-        }
-    }
-
     .deal-stub {
-        padding: 5px 10px;
-        cursor: pointer;
-        position: relative;
-        color: #333;
-        &:hover {
-            background-color: $softblue;
-        }
-        >span {
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 10px;
-        }
-        >span:nth-child(2) {
-            font-size: 0.9em;
-            color: #a7a7a7;
-            text-align: right;
-        }
-        .deal-status {
-            position: absolute;
-            right: -5px;
-            top: -5px;
-        }
-        a:hover {
-            color: #fff;
-        }
+      margin-bottom: 15px;
     }
+  }
+
+  .deal-stub {
+    padding: 5px 10px;
+    cursor: pointer;
+    position: relative;
+    color: #333;
+    &:hover {
+      background-color: $softblue;
+    }
+    > span {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+    > span:nth-child(2) {
+      font-size: 0.9em;
+      color: #a7a7a7;
+      text-align: right;
+    }
+    .deal-status {
+      position: absolute;
+      right: -5px;
+      top: -5px;
+    }
+    a:hover {
+      color: #fff;
+    }
+  }
 }
 
 .blue-container {
-background: rgb(32,93,245);
-background: linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 400px, rgba(255,255,255,1) 400px);
-margin-top: -10px;
-padding-top: 30px;
-padding-bottom: 60px;
-margin-left: -32px;
-padding-left: 32px;
-margin-right: -32px;
-padding-right: 32px;
+  background: rgb(32, 93, 245);
+  background: linear-gradient(
+    180deg,
+    rgba(32, 93, 245, 1) 0%,
+    rgba(0, 94, 255, 1) 400px,
+    rgba(255, 255, 255, 1) 400px
+  );
+  margin-top: -10px;
+  padding-top: 30px;
+  padding-bottom: 60px;
+  margin-left: -32px;
+  padding-left: 32px;
+  margin-right: -32px;
+  padding-right: 32px;
 
-    .welcome-user {
-        padding: 1em;
-        margin-top: -.5em;
-        margin-bottom:-1em;
+  .welcome-user {
+    padding: 1em;
+    margin-top: -0.5em;
+    margin-bottom: -1em;
 
-        .welcome-user-text {
-            margin:auto;
-            color: $offwhite;
-            padding-left: .2em;
-            @media screen and (max-width: 960px) {
-                display: none;  
-            }
-        }     
+    .welcome-user-text {
+      margin: auto;
+      color: $offwhite;
+      padding-left: 0.2em;
+      @media screen and (max-width: 960px) {
+        display: none;
+      }
     }
+  }
 }
 
 .trade-input-amount {
-    width: 100%;
+  width: 100%;
 }
 
 hr.solid {
-    border-top: 2px solid #bbb;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-  }
+  border-top: 2px solid #bbb;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
 
-  .sort-btns {
-    display: flex;
-    align-content: center;
-    align-items: center;
-  }
+.sort-btns {
+  display: flex;
+  align-content: center;
+  align-items: center;
+}

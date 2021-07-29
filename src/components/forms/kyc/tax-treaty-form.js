@@ -22,7 +22,9 @@ import {
 export default function TaxTreaty({ investor, errors, handleChange, setInvestor }) {
   return (
     <>
-      <Typography variant="subtitle2">Claim of Tax Treaty Benefits (for chapter 3 purposes)</Typography>
+      <Typography variant="subtitle2">
+        Claim of Tax Treaty Benefits (for chapter 3 purposes)
+      </Typography>
       {!investor.usePermAddressAsMailing && (
         <Grid container spacing={3}>
           <Grid item xs={12} sm={12} md={6}>

@@ -17,13 +17,23 @@ const UPDATE_USER = gql`
   }
 `;
 
-const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, refetch, deal, setShowTaxAsCompleted }) => {
+const KYCModal = ({
+  open,
+  setOpen,
+  kycTemplateId,
+  kycTemplateName,
+  refetch,
+  deal,
+  setShowTaxAsCompleted,
+}) => {
   const [submitTaxDocument, { called, loading }] = useMutation(UPDATE_USER, {
     onCompleted: (data) => {
       const { submitTaxDocument } = data;
       refetch();
       if (
-        submitTaxDocument?.documents.find((doc) => doc.documentName.includes('W-9') || doc.documentName.includes('W-8'))
+        submitTaxDocument?.documents.find(
+          (doc) => doc.documentName.includes('W-9') || doc.documentName.includes('W-8'),
+        )
       ) {
         toast.success('Success! Tax form completed.');
       } else {
@@ -43,17 +53,27 @@ const KYCModal = ({ open, setOpen, kycTemplateId, kycTemplateName, refetch, deal
   const createDoc = (formData) => {
     // TODO: handle form data submit and create DocSpring docs w/ Lance
     submitTaxDocument({
-      variables: { payload: { ...formData, kycTemplateId, kycTemplateName, isDemo: deal.isDemo === true } },
+      variables: {
+        payload: { ...formData, kycTemplateId, kycTemplateName, isDemo: deal.isDemo === true },
+      },
     });
   };
 
   const getForm = (templateName) => {
     // TODO: use actual templateName to get correct form
     const formMap = {
-      'W-9': <W9Indivdual called={called} loading={loading} toggleOpen={setOpen} createDoc={createDoc} />,
-      'W-9-E': <W9Entity called={called} loading={loading} toggleOpen={setOpen} createDoc={createDoc} />,
-      'W-8-BEN': <W8BEN called={called} loading={loading} toggleOpen={setOpen} createDoc={createDoc} />,
-      'W-8-BEN-E': <W8BENE called={called} loading={loading} toggleOpen={setOpen} createDoc={createDoc} />,
+      'W-9': (
+        <W9Indivdual called={called} loading={loading} toggleOpen={setOpen} createDoc={createDoc} />
+      ),
+      'W-9-E': (
+        <W9Entity called={called} loading={loading} toggleOpen={setOpen} createDoc={createDoc} />
+      ),
+      'W-8-BEN': (
+        <W8BEN called={called} loading={loading} toggleOpen={setOpen} createDoc={createDoc} />
+      ),
+      'W-8-BEN-E': (
+        <W8BENE called={called} loading={loading} toggleOpen={setOpen} createDoc={createDoc} />
+      ),
     };
 
     // Change template name here for testing

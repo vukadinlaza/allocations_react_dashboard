@@ -87,14 +87,14 @@ export default function InvestorEditForm({
     e.persist();
 
     if (prop === 'first_name' || prop === 'last_name' || prop === 'signer_full_name') {
-
       const capitalizeName = (str) =>
-        str.toLowerCase().replace(/\w{0,}/g, (match) =>
-          match.replace(/\w/, (m) => m.toUpperCase()));
+        str
+          .toLowerCase()
+          .replace(/\w{0,}/g, (match) => match.replace(/\w/, (m) => m.toUpperCase()));
 
       return setInvestor((prev) => ({
         ...prev,
-        [prop]: capitalizeName(e.target.value)
+        [prop]: capitalizeName(e.target.value),
       }));
     }
 

@@ -92,7 +92,7 @@ const ServerTable = ({
   queryVariables,
   tablePagination = 25,
   rowDetailPage = false,
-  defaultSortOrder
+  defaultSortOrder,
 }) => {
   const [selectWidth, setSelectWidth] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
@@ -106,7 +106,8 @@ const ServerTable = ({
   const [filterNestedKey, setFilterNestedKey] = useState('');
   const [filterNestedCollection, setFilterNestedCollection] = useState('');
   const [filterLocalFieldKey, setFilterLocalFieldKey] = useState('');
-  const { headers, gqlQuery, dataVariable, resolverName, defaultSortField, tableName } = tableVariables;
+  const { headers, gqlQuery, dataVariable, resolverName, defaultSortField, tableName } =
+    tableVariables;
 
   const getCurrentSort = () => (!sortField ? defaultSortField : sortField);
 

@@ -14,7 +14,12 @@ export default function CompleteInfoPrompt({ investor }) {
       <Col lg={{ size: 8, offset: 2 }} md={{ size: 10, offset: 1 }} sm={{ size: 12, offset: 0 }}>
         <div className="tile complete-info-prompt">
           Complete Your Info!&nbsp;&nbsp;
-          <Fab onClick={() => history.push('/profile')} size="small" color="secondary" style={{ textAlign: 'center' }}>
+          <Fab
+            onClick={() => history.push('/profile')}
+            size="small"
+            color="secondary"
+            style={{ textAlign: 'center' }}
+          >
             <FontAwesomeIcon icon="arrow-right" size="xs" />
           </Fab>
         </div>

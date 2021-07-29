@@ -5,16 +5,16 @@
   border-radius: 10px;
   position: relative;
 
-  label, span {
+  label,
+  span {
     font-size: 1rem;
   }
 
   .form-header {
     border-radius: 10px 10px 0px 0px;
-    background: #FFFFFF;
+    background: #ffffff;
     width: 100%;
     padding: 20px 0;
-
 
     h2 {
       font-size: 1.75rem;
@@ -26,14 +26,14 @@
       padding-left: 1rem;
     }
 
-    border-bottom: 2px solid #E3E4E7;
+    border-bottom: 2px solid #e3e4e7;
   }
 
   .form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: #FBFCFF;
+    background: #fbfcff;
     width: 100%;
     border-radius: 0px 0px 10px 10px;
 
@@ -63,13 +63,9 @@
 
         input {
           padding: 0px !important;
-
         }
       }
-  
     }
-
-
 
     .checkbox {
       margin: 10px 0;
@@ -114,8 +110,6 @@
       }
     }
 
-
-
     .strong {
       margin-right: 10px;
     }
@@ -158,7 +152,7 @@
         justify-content: space-between;
 
         .owner-input {
-          width: 30%
+          width: 30%;
         }
       }
     }
@@ -172,12 +166,11 @@
         padding: 0px 5px !important;
       }
 
-       p {
-         padding-left: 10px;
-         margin: 5px 0;
-       }
+      p {
+        padding-left: 10px;
+        margin: 5px 0;
+      }
     }
-
 
     .container {
       padding: 0;
@@ -191,22 +184,22 @@
       .tin {
         width: 48.5%;
       }
-
     }
 
-    .residence-container, .mailing-container {
+    .residence-container,
+    .mailing-container {
       padding: 0;
       width: 100%;
       margin: 0;
       display: flex;
       justify-content: space-between;
 
-      .city { 
+      .city {
         width: 57.5%;
       }
 
       .country {
-        width: 40%
+        width: 40%;
       }
     }
 
@@ -227,12 +220,11 @@
       .state {
         width: 17.5%;
       }
-      
+
       .zip {
         width: 20%;
       }
     }
-
 
     .form-button {
       width: 95%;
@@ -243,16 +235,16 @@
     }
 
     .accept {
-      background-color: #99E090;
+      background-color: #99e090;
       color: white;
-      
+
       &:hover {
         background-color: #83e176;
       }
     }
-    
+
     .decline {
-      background-color: #FBFCFF;
+      background-color: #fbfcff;
       &:hover {
         background-color: #eaebed;
       }
@@ -260,7 +252,6 @@
   }
 
   .signature {
-    
     input {
       font-family: 'Great Vibes', cursive !important;
       color: black;
@@ -282,78 +273,73 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      background: #FBFCFF;
+      background: #fbfcff;
       width: 100%;
       border-radius: 0px 0px 10px 10px;
-  
+
       .mailingAddressCheckbox {
         width: 95%;
       }
-  
+
       .form-field {
         width: 95%;
         margin-top: 5px;
-  
+
         hr {
           width: 100%;
         }
-  
+
         .form-label {
           width: 100%;
           display: flex;
           flex-direction: column;
           line-height: 30px;
-  
         }
-  
+
         .label-input {
           padding: 0px !important;
           margin: 0px 10px;
-  
+
           input {
             padding: 0px !important;
-  
           }
         }
-    
       }
-  
-  
-  
+
       .checkbox {
         margin: 10px 0;
         width: 95%;
         flex-direction: row;
-  
+
         .form-label {
           width: 100%;
           line-height: 35px;
-  
+
           input {
             padding: 5px !important;
           }
         }
       }
-  
+
       .checkbox-list {
         width: 90%;
       }
-  
+
       .form-input {
         margin-top: 10px;
         width: 95%;
-  
+
         .form-label {
           display: flex;
           flex-direction: column;
           margin: 10px 0;
-  
+
           .label-input {
             width: 100% !important;
           }
         }
       }
-  
+
       .form-group {
         .form-label {
           .label-input {
@@ -362,72 +348,69 @@
           }
         }
       }
-  
-  
-  
+
       .strong {
         margin-right: 10px;
       }
-  
+
       .form-group {
         width: 100%;
         display: flex;
         align-items: center;
         margin: 0;
-  
+
         .form-group-label {
           width: 95%;
           font-weight: 700;
         }
-  
+
         hr {
           width: 100%;
         }
-  
+
         .add-owner {
           width: 95%;
           margin: 10px 0;
           text-transform: none;
         }
-  
+
         .delete-owner {
           width: 7.5%;
-  
+
           svg {
             transform: scale(1.2);
             fill: rgb(95, 95, 95);
           }
         }
-  
+
         .owner {
           display: flex;
           flex-direction: row;
           width: 95%;
           margin: 5px 0;
           justify-content: space-between;
-  
+
           .owner-input {
-            width: 30%
+            width: 30%;
           }
         }
       }
-  
+
       .terms {
         margin: 5px 0;
         line-height: 30px;
         width: 100%;
-  
+
         .date-input {
           padding: 0px 5px !important;
         }
-  
-         p {
-           padding-left: 10px;
-           margin: 5px 0;
-         }
+
+        p {
+          padding-left: 10px;
+          margin: 5px 0;
+        }
       }
-  
-  
+
       .container {
         padding: 0;
         max-width: 95%;
@@ -437,54 +420,53 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-  
+
         .tin {
           width: 100%;
         }
-  
       }
-  
-      .residence-container, .mailing-container {
+
+      .residence-container,
+      .mailing-container {
         padding: 0;
         width: 100%;
         margin: 0;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-  
-        .city { 
+
+        .city {
           width: 100%;
         }
-  
+
         .country {
-          width: 100%
+          width: 100%;
         }
       }
-  
+
       .chapter3Status {
         .chapter-3-select {
           width: 100%;
         }
       }
-  
+
       .region {
         padding: 0;
         width: 95%;
-  
+
         .city {
           width: 60%;
         }
-  
+
         .state {
           width: 17.5%;
         }
-        
+
         .zip {
           width: 20%;
         }
       }
-  
-  
+
       .form-button {
         width: 95%;
         height: 3rem;
@@ -492,18 +474,18 @@
         outline: none;
         margin-bottom: 10px;
       }
-  
+
       .accept {
-        background-color: #99E090;
+        background-color: #99e090;
         color: white;
-        
+
         &:hover {
           background-color: #83e176;
         }
       }
-      
+
       .decline {
-        background-color: #FBFCFF;
+        background-color: #fbfcff;
         &:hover {
           background-color: #eaebed;
         }

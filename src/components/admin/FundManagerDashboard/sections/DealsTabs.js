@@ -6,7 +6,7 @@ import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import NearMeIcon from '@material-ui/icons/NearMe';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRocket } from '@fortawesome/free-solid-svg-icons'
+import { faRocket } from '@fortawesome/free-solid-svg-icons';
 import { phone, nestedSort } from '../../../../utils/helpers';
 import Loader from '../../../utils/Loader';
 
@@ -54,7 +54,7 @@ const styles = (theme) => ({
     marginBottom: '15px',
     padding: '0 40px',
     [theme.breakpoints.down(phone)]: {
-      padding: "0 22px"
+      padding: '0 22px',
     },
   },
   selectedTab: {
@@ -96,7 +96,7 @@ const styles = (theme) => ({
     left: '0px',
     margin: '0 40px',
     [theme.breakpoints.down(phone)]: {
-      borderBottom: "none"
+      borderBottom: 'none',
     },
   },
   tabWrapper: {
@@ -105,7 +105,6 @@ const styles = (theme) => ({
 });
 
 const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
-  
   // const [deals, setDeals] = useState([]);
   const { deals } = data.organization;
 
@@ -120,11 +119,11 @@ const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
   //     // setDeals(deals.reverse());
   //   }
   // }, [orgSlug]);
-  
+
   if (!data) return <Loader />;
 
   const titleContainer = document.getElementById('main-title-container');
-  
+
   return (
     <div className={classes.root}>
       <Tabs
@@ -147,14 +146,19 @@ const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
               label={
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   {deal.company_name}
-                  <span style={{ backgroundColor: isFund ? '#2A2B54' : '#0461FF' }} className={classes.dealTag}>
+                  <span
+                    style={{ backgroundColor: isFund ? '#2A2B54' : '#0461FF' }}
+                    className={classes.dealTag}
+                  >
                     {isFund ? (
                       <AccountBalanceIcon style={{ marginRight: '4px' }} />
                     ) : (
-                      <FontAwesomeIcon style={{ marginRight: '4px' }} icon={faRocket}/>
+                      <FontAwesomeIcon style={{ marginRight: '4px' }} icon={faRocket} />
                     )}
                     {isFund ? 'FUND' : 'SPV'}
-                    <FiberManualRecordIcon style={{ color: closed ? '#d0d0d0' : '#39C522', marginLeft: '2px' }} />
+                    <FiberManualRecordIcon
+                      style={{ color: closed ? '#d0d0d0' : '#39C522', marginLeft: '2px' }}
+                    />
                   </span>
                 </div>
               }
@@ -168,7 +172,10 @@ const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
           );
         })}
       </Tabs>
-      <div className={classes.tabsPlaceholder} style={{height: titleContainer? `${titleContainer.offsetHeight + 48}px` : '130px'}}/>
+      <div
+        className={classes.tabsPlaceholder}
+        style={{ height: titleContainer ? `${titleContainer.offsetHeight + 48}px` : '130px' }}
+      />
     </div>
   );
 };

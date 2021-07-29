@@ -140,7 +140,9 @@ const TR = ({ investment, showDocs, setShowDocs }) => {
           {_.truncate(investment.deal.company_description, { length: 35 })}
         </TableCell>
       </Hidden>
-      <TableCell align="right">{investment.amount ? `$${nWithCommas(investment.amount)}` : <i>TBD</i>}</TableCell>
+      <TableCell align="right">
+        {investment.amount ? `$${nWithCommas(investment.amount)}` : <i>TBD</i>}
+      </TableCell>
       <TableCell align="center">
         <InvestmentStatus investment={investment} />
       </TableCell>
@@ -179,7 +181,9 @@ export default function UserInvestments() {
     [(i) => TABLE_ORDER[i.status].order, (i) => new Date(i.deal.dealParams.wireDeadline).getTime()],
     ['asc', 'desc'],
   );
-  const onboardingInvestments = investments.filter((i) => !['invited', 'complete'].includes(i.status));
+  const onboardingInvestments = investments.filter(
+    (i) => !['invited', 'complete'].includes(i.status),
+  );
   const invitedInvestments = investments.filter((i) => i.status === 'invited');
   const completeInvestments = investments.filter((i) => i.status === 'complete');
 
@@ -213,15 +217,21 @@ export default function UserInvestments() {
           <Grid item xs={12} sm={4} md={2}>
             <ButtonBase
               className={activeInvestments.status === 'invited' ? classes.activeTab : classes.tab}
-              onClick={() => setActiveInvestments({ status: 'invited', investments: invitedInvestments })}
+              onClick={() =>
+                setActiveInvestments({ status: 'invited', investments: invitedInvestments })
+              }
             >
               Invited
             </ButtonBase>
           </Grid>
           <Grid item xs={12} sm={4} md={2}>
             <ButtonBase
-              className={activeInvestments.status === 'onboarding' ? classes.activeTab : classes.tab}
-              onClick={() => setActiveInvestments({ status: 'onboarding', investments: onboardingInvestments })}
+              className={
+                activeInvestments.status === 'onboarding' ? classes.activeTab : classes.tab
+              }
+              onClick={() =>
+                setActiveInvestments({ status: 'onboarding', investments: onboardingInvestments })
+              }
             >
               Onboarding
             </ButtonBase>
@@ -229,7 +239,9 @@ export default function UserInvestments() {
           <Grid item xs={12} sm={4} md={2}>
             <ButtonBase
               className={activeInvestments.status === 'complete' ? classes.activeTab : classes.tab}
-              onClick={() => setActiveInvestments({ status: 'complete', investments: completeInvestments })}
+              onClick={() =>
+                setActiveInvestments({ status: 'complete', investments: completeInvestments })
+              }
             >
               Completed
             </ButtonBase>
@@ -263,7 +275,12 @@ const Tab = ({ investments, showDocs, setShowDocs, type }) => {
                 investment.showDocs ? (
                   <DocsRow key={`${showDocs._id}-docs`} docs={showDocs.documents} />
                 ) : (
-                  <TR key={investment._id} investment={investment} showDocs={showDocs} setShowDocs={setShowDocs} />
+                  <TR
+                    key={investment._id}
+                    investment={investment}
+                    showDocs={showDocs}
+                    setShowDocs={setShowDocs}
+                  />
                 ),
               )}
             </Table>
@@ -272,7 +289,11 @@ const Tab = ({ investments, showDocs, setShowDocs, type }) => {
         </Hidden>
         <Hidden only="xs">
           <Paper>
-            <Typography variant="h6" style={{ paddingLeft: '16px', paddingTop: '16px' }} gutterBottom>
+            <Typography
+              variant="h6"
+              style={{ paddingLeft: '16px', paddingTop: '16px' }}
+              gutterBottom
+            >
               {_.startCase(_.toLower(type))} Deals
             </Typography>
             <Typography variant="subtitle2" style={{ paddingLeft: '16px', paddingBottom: '16px' }}>
@@ -296,7 +317,12 @@ const Tab = ({ investments, showDocs, setShowDocs, type }) => {
                   investment.showDocs ? (
                     <DocsRow key={`${showDocs._id}-docs`} docs={showDocs.documents} />
                   ) : (
-                    <TR key={investment._id} investment={investment} showDocs={showDocs} setShowDocs={setShowDocs} />
+                    <TR
+                      key={investment._id}
+                      investment={investment}
+                      showDocs={showDocs}
+                      setShowDocs={setShowDocs}
+                    />
                   ),
                 )}
               </TableBody>

@@ -1,5 +1,4 @@
 .PortfolioCompanySettings {
-
   width: 90%;
 
   h2 {
@@ -21,7 +20,8 @@
       width: 100%;
     }
 
-    .wide-field, .field {
+    .wide-field,
+    .field {
       margin-bottom: 1rem;
 
       .field-label {
@@ -33,7 +33,7 @@
           margin: 5px 0;
           height: 3.5rem;
         }
-        
+
         .management-fee {
           margin: 5px 0;
           display: flex;
@@ -43,20 +43,21 @@
             width: 57.5%;
           }
 
-          .percentage, .fixed {
+          .percentage,
+          .fixed {
             width: 20%;
             outline: none;
-            
+
             &.selected {
-              border: 2px solid #0461FF;
+              border: 2px solid #0461ff;
             }
           }
         }
-        
+
         .button-options {
           margin: 5px 0;
           display: flex;
-          
+
           .option-button {
             margin-right: 10px;
             outline: none;
@@ -66,7 +67,7 @@
             text-transform: none;
 
             &.selected {
-              border: 2px solid #0461FF;
+              border: 2px solid #0461ff;
             }
           }
         }
@@ -77,35 +78,30 @@
 
 @media screen and (max-width: 960px) {
   .PortfolioCompanySettings {
-
     width: 100%;
 
-  
     .form-fields {
-
       .field {
         width: 100%;
       }
-  
+
       .wide-field {
         width: 100%;
       }
-  
-      .wide-field, .field {
-  
-        .field-label {
-          
-          .management-fee {
 
-            .percentage, .fixed {
+      .wide-field,
+      .field {
+        .field-label {
+          .management-fee {
+            .percentage,
+            .fixed {
               width: 20%;
             }
           }
-  
-          .button-options {
 
+          .button-options {
             justify-content: space-between;
-  
+
             .option-button {
               margin: 0px;
               width: 48.5%;
@@ -115,5 +111,4 @@
       }
     }
   }
-  
 }

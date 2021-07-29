@@ -65,8 +65,16 @@ function PaymentInformation() {
       <TabPanel className="tab-panel" value={currentTab} index={2}>
         <div className="bank-wire">
           <TextField variant="outlined" placeholder="Enter bank name" className="bank-name" />
-          <TextField variant="outlined" placeholder="Enter routing number" className="routing-number" />
-          <TextField variant="outlined" placeholder="Enter account number" className="account-number" />
+          <TextField
+            variant="outlined"
+            placeholder="Enter routing number"
+            className="routing-number"
+          />
+          <TextField
+            variant="outlined"
+            placeholder="Enter account number"
+            className="account-number"
+          />
         </div>
       </TabPanel>
     </section>

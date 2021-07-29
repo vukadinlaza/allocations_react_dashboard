@@ -47,7 +47,11 @@ export const ActiveDeals = ({ orgData, isDemo, superadmin }) => {
             <Typography variant="h6" gutterBottom>
               Active Deals: {(active || []).length}
             </Typography>
-            <Button color="primary" variant="contained" onClick={() => history.push(`/admin/${orgData.slug}/deal/new`)}>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => history.push(`/admin/${orgData.slug}/deal/new`)}
+            >
               Create Deal
             </Button>
           </Grid>
@@ -112,7 +116,12 @@ export const Deal = ({ deal, index, superadmin, slug, isDemo }) => {
         <Hidden only="xs">
           <TableCell>
             <div>{Math.round(val || 0)}%</div>
-            <LinearProgress className="deal-progress" variant="determinate" color="secondary" value={val} />
+            <LinearProgress
+              className="deal-progress"
+              variant="determinate"
+              color="secondary"
+              value={val}
+            />
             <div>
               ${nWithCommas(raised)} of ${nWithCommas(deal.target || raised)}
             </div>
@@ -130,7 +139,9 @@ export const Deal = ({ deal, index, superadmin, slug, isDemo }) => {
                   left: 100,
                   behavior: 'smooth',
                 });
-                history.push(`/admin/${organization || deal.organization.slug}/deals/${deal._id}/edit`)
+                history.push(
+                  `/admin/${organization || deal.organization.slug}/deals/${deal._id}/edit`,
+                );
               }}
             >
               Edit
@@ -169,7 +180,10 @@ export const Deal = ({ deal, index, superadmin, slug, isDemo }) => {
                               borderRadius: '1rem',
                             }}
                           >
-                            <img src="https://allocations-public.s3.us-east-2.amazonaws.com/file-icon.svg" alt='File Icon' />
+                            <img
+                              src="https://allocations-public.s3.us-east-2.amazonaws.com/file-icon.svg"
+                              alt="File Icon"
+                            />
                             <Typography
                               variant="body2"
                               style={{

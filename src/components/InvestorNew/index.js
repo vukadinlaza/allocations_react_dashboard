@@ -25,7 +25,8 @@ export default function InvestorNew({ push, setNewUser }) {
   const [createInvestor, { data }] = useMutation(CREATE_INVESTOR);
 
   useEffect(() => {
-    if (data && data.createInvestor._id && push) history.push(`/investor/${data.createInvestor._id}/edit`);
+    if (data && data.createInvestor._id && push)
+      history.push(`/investor/${data.createInvestor._id}/edit`);
     if (data && data.createInvestor._id) {
       setNewUser(false);
     }
@@ -41,7 +42,11 @@ export default function InvestorNew({ push, setNewUser }) {
   const handleChange = (prop) => (e) => {
     e.persist();
     if (prop === 'investor_type') {
-      return setInvestor((prev) => ({ ...prev, [prop]: e.target.value, accredited_investor_status: '' }));
+      return setInvestor((prev) => ({
+        ...prev,
+        [prop]: e.target.value,
+        accredited_investor_status: '',
+      }));
     }
     return setInvestor((prev) => ({ ...prev, [prop]: e.target.value }));
   };

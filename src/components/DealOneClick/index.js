@@ -139,7 +139,8 @@ function DealOneClick() {
     const dealTimestamp = moment.unix(new Date(parseInt(idTimestamp, 16) * 1000));
     const rolloverTimestamp = moment.unix(new Date('2021-04-20'));
 
-    const isOldDeal = moment(dealTimestamp).isBefore(rolloverTimestamp) && !exemptDealSlugs.includes(deal_slug);
+    const isOldDeal =
+      moment(dealTimestamp).isBefore(rolloverTimestamp) && !exemptDealSlugs.includes(deal_slug);
 
     const blocked = userProfile?.email?.includes('allocations');
     if (data && !data.investor?.invitedDeal?.investment && !blocked && !isOldDeal) {
@@ -152,7 +153,16 @@ function DealOneClick() {
         createInvestment({ variables: { investment } });
       }
     }
-  }, [called, createInvestment, data, deal_slug, didCreateInvestment, organization, search, userProfile]);
+  }, [
+    called,
+    createInvestment,
+    data,
+    deal_slug,
+    didCreateInvestment,
+    organization,
+    search,
+    userProfile,
+  ]);
 
   if (!data) return <Loader />;
 
@@ -165,7 +175,11 @@ function DealOneClick() {
   const dealTimestamp = moment.unix(new Date(parseInt(idTimestamp, 16) * 1000));
   const rolloverTimestamp = moment.unix(new Date('2021-04-20'));
 
-  if (data && moment(dealTimestamp).isBefore(rolloverTimestamp) && !exemptDealSlugs.includes(deal_slug)) {
+  if (
+    data &&
+    moment(dealTimestamp).isBefore(rolloverTimestamp) &&
+    !exemptDealSlugs.includes(deal_slug)
+  ) {
     return <Deal />;
   }
 

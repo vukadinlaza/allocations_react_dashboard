@@ -69,7 +69,8 @@ export default ({
     }
   }, [setEntityData, showEntityModal, showEntityModalID]);
 
-  const icon = formStatus === 'loading' ? 'circle-notch' : formStatus === 'complete' ? 'check' : null;
+  const icon =
+    formStatus === 'loading' ? 'circle-notch' : formStatus === 'complete' ? 'check' : null;
   const isEdit = showEntityModal?._id;
 
   const handleClose = (isEdit) => {

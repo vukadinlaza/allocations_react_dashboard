@@ -30,7 +30,11 @@ function AllPagesPDFViewer({ document, handleClose, usePreview }) {
         <CloseIcon className="closed-icon" onClick={handleClose} />
       </div>
       <div className="embed-responsive embed-responsive-1by1">
-        <iframe className="embed-responsive-item iframe-spv-agreement" title="SPV Document" src={url} />
+        <iframe
+          className="embed-responsive-item iframe-spv-agreement"
+          title="SPV Document"
+          src={url}
+        />
       </div>
     </section>
   );

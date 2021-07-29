@@ -1,4 +1,11 @@
-import { FormControl, TextField, Button, FormGroup, FormControlLabel, Checkbox } from '@material-ui/core';
+import {
+  FormControl,
+  TextField,
+  Button,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+} from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CloseIcon from '@material-ui/icons/Close';
 import React, { useState } from 'react';
@@ -32,7 +39,8 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
   const [formData, setFormData] = useState({
     name_of_individual_who_is_the_beneficial_owner: state?.investorFormData?.legalName || '',
     country_of_citizenship: '',
-    permanent_residence_address_street_apt_or_suite_no_or_rural_route_do_not_use_a_p_o_box_or_in_care_of_address: '',
+    permanent_residence_address_street_apt_or_suite_no_or_rural_route_do_not_use_a_p_o_box_or_in_care_of_address:
+      '',
     country: '',
     city_or_town_state_or_province_include_postal_code_where_appropriate: '',
     mailing_address_if_different_from_above: '',
@@ -65,13 +73,20 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
   };
 
   const handleChange = ({ target }) => {
-    if (target.name === 'ssn' || target.name === 'foreign_tax_identifying_number_see_instructions') {
+    if (
+      target.name === 'ssn' ||
+      target.name === 'foreign_tax_identifying_number_see_instructions'
+    ) {
       const onlyNumbers = target.value.replace(/\D+/g, '');
       return setFormData((prevData) => ({ ...prevData, [target.name]: onlyNumbers }));
     }
 
     if (target.name === 'print_name_of_signer') {
-      return setFormData((prevData) => ({ ...prevData, [target.name]: target.value, signature: target.value }));
+      return setFormData((prevData) => ({
+        ...prevData,
+        [target.name]: target.value,
+        signature: target.value,
+      }));
     }
     return setFormData((prevData) => ({ ...prevData, [target.name]: target.value }));
   };
@@ -139,7 +154,9 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
             <Autocomplete
               className="country-select"
               value={formData.country_of_citizenship}
-              onChange={(event, newInputValue) => handleCountryChange('country_of_citizenship')(event, newInputValue)}
+              onChange={(event, newInputValue) =>
+                handleCountryChange('country_of_citizenship')(event, newInputValue)
+              }
               inputValue={countryCitizenSearch || ''}
               onInputChange={(event, newInputValue) => {
                 handleCountryChange('country_of_citizenship_search')(event, newInputValue);
@@ -148,7 +165,11 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
               options={[...countryNames, 'USA', 'U.S.']}
               getOptionLabel={(option) => option}
               renderInput={(params) => (
-                <TextField {...params} variant="outlined" error={errors.includes('country_of_citizenship')} />
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  error={errors.includes('country_of_citizenship')}
+                />
               )}
             />
           </label>
@@ -180,9 +201,13 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
                 <TextField
                   variant="outlined"
                   onChange={handleChange}
-                  error={errors.includes('city_or_town_state_or_province_include_postal_code_where_appropriate')}
+                  error={errors.includes(
+                    'city_or_town_state_or_province_include_postal_code_where_appropriate',
+                  )}
                   name="city_or_town_state_or_province_include_postal_code_where_appropriate"
-                  value={formData.city_or_town_state_or_province_include_postal_code_where_appropriate}
+                  value={
+                    formData.city_or_town_state_or_province_include_postal_code_where_appropriate
+                  }
                 />
                 <small>
                   <i>Include postal code where appropriate.</i>
@@ -196,7 +221,9 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
                 <Autocomplete
                   className="country-select"
                   value={formData.country}
-                  onChange={(event, newInputValue) => handleCountryChange('country')(event, newInputValue)}
+                  onChange={(event, newInputValue) =>
+                    handleCountryChange('country')(event, newInputValue)
+                  }
                   inputValue={countrySearch}
                   onInputChange={(event, newInputValue) => {
                     handleCountryChange('country_search')(event, newInputValue);
@@ -220,7 +247,11 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
           <FormControlLabel
             label="Mailing address is different than permanent address."
             control={
-              <Checkbox checked={differentMailing} onChange={() => setDifferentMailing((t) => !t)} name="sameMailing" />
+              <Checkbox
+                checked={differentMailing}
+                onChange={() => setDifferentMailing((t) => !t)}
+                name="sameMailing"
+              />
             }
           />
         </FormGroup>
@@ -250,7 +281,9 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
                       'mailing_city_or_town_state_or_province_include_postal_code_where_appropriate',
                     )}
                     name="mailing_city_or_town_state_or_province_include_postal_code_where_appropriate"
-                    value={formData.mailing_city_or_town_state_or_province_include_postal_code_where_appropriate}
+                    value={
+                      formData.mailing_city_or_town_state_or_province_include_postal_code_where_appropriate
+                    }
                   />
                   <small>
                     <i>Include postal code where appropriate.</i>
@@ -264,7 +297,9 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
                   <Autocomplete
                     className="country-select"
                     value={formData.mailing_country}
-                    onChange={(event, newInputValue) => handleCountryChange('mailing_country')(event, newInputValue)}
+                    onChange={(event, newInputValue) =>
+                      handleCountryChange('mailing_country')(event, newInputValue)
+                    }
                     inputValue={mailingCountrySearch}
                     onInputChange={(event, newInputValue) => {
                       handleCountryChange('mailing_country_search')(event, newInputValue);
@@ -336,7 +371,9 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
               value={formData.capacity_in_which_acting_if_form_is_not_signed_by_beneficial_owner}
               name="capacity_in_which_acting_if_form_is_not_signed_by_beneficial_owner"
               onChange={handleChange}
-              error={errors.includes('capacity_in_which_acting_if_form_is_not_signed_by_beneficial_owner')}
+              error={errors.includes(
+                'capacity_in_which_acting_if_form_is_not_signed_by_beneficial_owner',
+              )}
               variant="outlined"
             />
           </label>

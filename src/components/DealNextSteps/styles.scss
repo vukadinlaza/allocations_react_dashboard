@@ -9,12 +9,12 @@
   position: relative;
   overflow-x: hidden;
 
-  .title-container{
+  .title-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
 
-    .header-container{
+    .header-container {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -30,49 +30,47 @@
       }
     }
     .action-header {
-      display:flex;
+      display: flex;
       align-items: center;
       font-size: 1.2rem;
       font-weight: 700;
     }
     .new-investment-button {
       text-decoration: none;
-      color:inherit;
+      color: inherit;
     }
   }
 
-
   .back-button {
     width: max-content;
-    font-size: .75rem;
+    font-size: 0.75rem;
     margin-bottom: 1rem;
     font-weight: 700;
     text-transform: none;
-    background-color: #FBFCFF;
+    background-color: #fbfcff;
     box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
     border: 1px solid rgba(128, 128, 128, 0.166);
     color: grey;
-    transition: color .25s ease-out;
+    transition: color 0.25s ease-out;
 
     &:hover {
       color: black;
-      transition: color .25s ease-in;
+      transition: color 0.25s ease-in;
     }
 
     svg {
-      transform: scale(.75);
+      transform: scale(0.75);
     }
   }
 
   .action-items {
-
     .action-item {
       border-radius: 5px;
       height: 5rem;
       margin: 5px 0px;
       display: flex;
       align-items: center;
-      background-color: #FBFCFF;
+      background-color: #fbfcff;
       box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
       border: 1px solid rgb(232, 232, 232);
       position: relative;
@@ -89,7 +87,8 @@
         justify-content: center;
         align-items: flex-start;
 
-        .action-header, .action-sub-header {
+        .action-header,
+        .action-sub-header {
           margin: 0;
         }
 
@@ -99,13 +98,13 @@
         }
 
         .action-sub-header {
-          font-size: .75rem;
+          font-size: 0.75rem;
           font-weight: 400;
         }
       }
 
       .completed-step-button {
-        background-color: #3AC522;
+        background-color: #3ac522;
         border-radius: 5px;
         font-weight: 600;
         color: white;
@@ -116,14 +115,14 @@
         padding: 10px;
         min-width: 10rem;
         right: 20px;
-        font-size: .75rem;
+        font-size: 0.75rem;
       }
 
       .next-step-button {
-        background-color: #2A2C53;
+        background-color: #2a2c53;
         border-radius: 5px;
         font-weight: 600;
-        font-size: .75rem;
+        font-size: 0.75rem;
         color: white;
         text-transform: none;
         border: none;
@@ -136,19 +135,18 @@
     }
   }
 
-
   .confetti {
     position: absolute;
     top: 0;
     pointer-events: none;
     width: 100vw;
     height: 100vh;
-    transition: all .25s ease forwards;
+    transition: all 0.25s ease forwards;
     margin-top: -20px;
   }
 
   .hidden {
-    animation: hide .5s ease-in forwards;
+    animation: hide 0.5s ease-in forwards;
   }
 }
 
@@ -181,30 +179,30 @@
 
     .back-button {
       width: max-content;
-      font-size: .75rem;
+      font-size: 0.75rem;
       margin-bottom: 1rem;
       margin-left: 2.5%;
       padding-right: 5px;
       font-weight: 700;
       text-transform: none;
-      background-color: #FBFCFF;
+      background-color: #fbfcff;
       box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
       border: 1px solid rgba(128, 128, 128, 0.166);
       color: grey;
-      transition: color .25s ease-out;
+      transition: color 0.25s ease-out;
 
       &:hover {
         color: black;
-        transition: color .25s ease-in;
+        transition: color 0.25s ease-in;
       }
 
       svg {
-        transform: scale(.75);
+        transform: scale(0.75);
       }
     }
 
     .disabled {
-      opacity: .5;
+      opacity: 0.5;
     }
 
     .action-items {
@@ -222,7 +220,7 @@
         flex-wrap: wrap;
         align-items: center;
         justify-content: center;
-        background-color: #FBFCFF;
+        background-color: #fbfcff;
         box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
         border: 1px solid rgb(232, 232, 232);
         position: relative;
@@ -241,7 +239,8 @@
           align-items: flex-start;
           margin: 10px 0;
 
-          .action-header, .action-sub-header {
+          .action-header,
+          .action-sub-header {
             margin: 0;
           }
 
@@ -251,15 +250,13 @@
           }
 
           .action-sub-header {
-            font-size: .75rem;
+            font-size: 0.75rem;
             font-weight: 400;
           }
-
-
         }
 
         .completed-step-button {
-          background-color: #3AC522;
+          background-color: #3ac522;
           border-radius: 5px;
           font-weight: 600;
           color: white;
@@ -270,16 +267,16 @@
           position: initial;
           padding: 10px;
           width: 90%;
-          font-size: .75rem;
+          font-size: 0.75rem;
         }
 
         .next-step-button {
           width: 90%;
-          background-color: #2A2C53;
+          background-color: #2a2c53;
           border-radius: 5px;
           margin: 10px 0;
           font-weight: 600;
-          font-size: .75rem;
+          font-size: 0.75rem;
           color: white;
           text-transform: none;
           border: none;
@@ -290,10 +287,7 @@
       }
     }
   }
-
-
 }
-
 
 @keyframes hide {
   0% {

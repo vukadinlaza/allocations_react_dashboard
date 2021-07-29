@@ -58,7 +58,8 @@ export default function InvestorEdit() {
     }
   }, [userProfile]);
 
-  const icon = formStatus === 'loading' ? 'circle-notch' : formStatus === 'complete' ? 'check' : 'edit';
+  const icon =
+    formStatus === 'loading' ? 'circle-notch' : formStatus === 'complete' ? 'check' : 'edit';
 
   if (!investor) return <Loader />;
 

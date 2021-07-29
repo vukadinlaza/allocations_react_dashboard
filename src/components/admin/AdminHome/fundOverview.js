@@ -48,7 +48,9 @@ export default ({ data, children, orgData, isDemo }) => {
     const monthSum = _.sumBy(
       monthData.map((inv, index) => ({
         ...inv,
-        amount: !isNumber(inv.Invested) ? monthData[index - 1].Invested * multipleSum : multipleSum * inv.Invested,
+        amount: !isNumber(inv.Invested)
+          ? monthData[index - 1].Invested * multipleSum
+          : multipleSum * inv.Invested,
       })),
       'amount',
     );
@@ -90,7 +92,10 @@ export default ({ data, children, orgData, isDemo }) => {
                   Portfolio Value
                 </p>
                 <h2 align="left" style={{ color: 'rgba(0,0,0,0.8)', paddingLeft: '10px' }}>
-                  ${nWithCommas((_.sumBy(data, 'Invested') * (multipleSum === 0 ? 1 : multipleSum)).toFixed(0))}
+                  $
+                  {nWithCommas(
+                    (_.sumBy(data, 'Invested') * (multipleSum === 0 ? 1 : multipleSum)).toFixed(0),
+                  )}
                 </h2>
 
                 <p

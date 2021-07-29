@@ -1,4 +1,4 @@
-@import "../../App.scss";
+@import '../../App.scss';
 
 .Investments {
   @include sm-and-up {
@@ -42,7 +42,7 @@
       padding: 10px;
 
       span {
-        color: #53B987;
+        color: #53b987;
       }
     }
   }
@@ -51,7 +51,8 @@
     height: 200px;
   }
 
-  .fa-info-circle, .fa-times {
+  .fa-info-circle,
+  .fa-times {
     cursor: pointer;
   }
 
@@ -73,7 +74,7 @@
     position: relative;
 
     .fa-file-pdf {
-      color: #F48FB1;
+      color: #f48fb1;
       font-size: 3em;
       position: absolute;
       right: 3px;
@@ -99,7 +100,7 @@
 }
 
 .investment-status-pledged {
-  background-color: rgba(57, 123, 219, 1);;
+  background-color: rgba(57, 123, 219, 1);
   color: #fff;
 }
 
@@ -109,7 +110,7 @@
 }
 
 .investment-status-complete {
-  background-color: rgba(87, 204, 100, 1);;
+  background-color: rgba(87, 204, 100, 1);
   color: #fff;
 }
 
@@ -128,5 +129,5 @@
 }
 
 .doc-icon {
-  margin-right: .5rem;
+  margin-right: 0.5rem;
 }

@@ -118,8 +118,8 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
       }, 1000);
     },
     onError: () => {
-      toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com')
-    }
+      toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com');
+    },
   });
   const [errors, setErrors] = useState([]);
   useEffect(() => {
@@ -150,7 +150,11 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
       e.persist();
     }
     if (prop === 'investor_type') {
-      return setInvestor((prev) => ({ ...prev, [prop]: e.target.value, accredited_investor_status: '' }));
+      return setInvestor((prev) => ({
+        ...prev,
+        [prop]: e.target.value,
+        accredited_investor_status: '',
+      }));
     }
     if (prop === 'country') {
       if (newValue) {
@@ -261,7 +265,9 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
                     <Autocomplete
                       className="country-select"
                       value={investor.country || ''}
-                      onChange={(event, newInputValue) => handleChange('country')(event, newInputValue)}
+                      onChange={(event, newInputValue) =>
+                        handleChange('country')(event, newInputValue)
+                      }
                       inputValue={investor.country_search || ''}
                       onInputChange={(event, newInputValue) => {
                         handleChange('country_search')(event, newInputValue);
@@ -270,7 +276,12 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
                       options={[...countryNames, 'USA', 'U.S.']}
                       getOptionLabel={(option) => option}
                       renderInput={(params) => (
-                        <TextField {...params} error={errors.includes('country')} label="Country" variant="outlined" />
+                        <TextField
+                          {...params}
+                          error={errors.includes('country')}
+                          label="Country"
+                          variant="outlined"
+                        />
                       )}
                     />
                   </FormControl>
@@ -284,7 +295,9 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
                       <Autocomplete
                         className="state-select"
                         value={investor.state || ''}
-                        onChange={(event, newInputValue) => handleChange('state')(event, newInputValue)}
+                        onChange={(event, newInputValue) =>
+                          handleChange('state')(event, newInputValue)
+                        }
                         inputValue={investor.state_search || ''}
                         onInputChange={(event, newInputValue) => {
                           handleChange('state_search')(event, newInputValue);
@@ -293,13 +306,22 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
                         options={stateNames}
                         getOptionLabel={(option) => option}
                         renderInput={(params) => (
-                          <TextField {...params} error={errors.includes('state')} label="State" variant="outlined" />
+                          <TextField
+                            {...params}
+                            error={errors.includes('state')}
+                            label="State"
+                            variant="outlined"
+                          />
                         )}
                       />
                     </FormControl>
                   )}
                   {/* Accreditation status */}
-                  <AccreditedInvestorStatus investor={investor} handleChange={handleChange} errors={errors} />
+                  <AccreditedInvestorStatus
+                    investor={investor}
+                    handleChange={handleChange}
+                    errors={errors}
+                  />
                   {investor.investor_type && investor.investor_type !== 'individual' && (
                     <TextField
                       className="personal-information-input"
@@ -311,8 +333,8 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
                     />
                   )}
                   <p className="information-notice">
-                    Required by United States banking laws. This information is transmitted securely and will never be
-                    used for any purpose beyond executing your investment.
+                    Required by United States banking laws. This information is transmitted securely
+                    and will never be used for any purpose beyond executing your investment.
                   </p>
                 </section>
                 <Grid item style={{ justifyContent: 'center', display: 'flex', margin: '1rem' }}>

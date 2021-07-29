@@ -1,132 +1,132 @@
-@import "../../App.scss";
+@import '../../App.scss';
 
 @mixin order-btn {
-    padding: 4px 12px;
-    border: 1px solid #ededed;
-    display: inline-block;
-    margin-right: 10px;
-    cursor: pointer;
+  padding: 4px 12px;
+  border: 1px solid #ededed;
+  display: inline-block;
+  margin-right: 10px;
+  cursor: pointer;
 }
 
 @mixin buy-btn {
-    color: #469f95;
-    border-color: #469f95;
-    background-color: #DFF1EF;
+  color: #469f95;
+  border-color: #469f95;
+  background-color: #dff1ef;
 }
 
 @mixin sell-btn {
-    color: tomato;
-    border-color: tomato;
-    background-color: #ffb6a9;
+  color: tomato;
+  border-color: tomato;
+  background-color: #ffb6a9;
 }
 
 .AllocationsX-header {
-    background-color: $softgreen;
-    color: #fff;
+  background-color: $softgreen;
+  color: #fff;
 
-    margin-left: -15px;
-    margin-right: -15px;
-    margin-top: -80px;
-    padding: 30px 30px 15px 30px;
-    margin-bottom: 15px;
+  margin-left: -15px;
+  margin-right: -15px;
+  margin-top: -80px;
+  padding: 30px 30px 15px 30px;
+  margin-bottom: 15px;
 
-    p {
-        font-size: 1.3em;
+  p {
+    font-size: 1.3em;
+  }
+
+  .info {
+    display: inline-block;
+    margin-left: -10px;
+    display: flex;
+    justify-content: space-between;
+    .header-card {
+      font-size: 0.9em;
+      padding: 10px 30px;
+      // margin-right: 15px;
+      div:nth-child(2) {
+        font-size: 1.4em;
+      }
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 1px 1px 1px 1px #333;
+      color: #333;
     }
-
-    .info {
-        display: inline-block;
-        margin-left: -10px;
-        display: flex;
-        justify-content: space-between;
-        .header-card {
-            font-size: 0.9em;
-            padding: 10px 30px;
-            // margin-right: 15px;
-            div:nth-child(2) {
-                font-size: 1.4em;
-            }
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 1px 1px 1px 1px #333;
-            color: #333;
-        }
-    }
+  }
 }
 
 .MatchRequest {
-    >span {
-        margin-right: 15px;
-    }
-    .pending {
-        background-color: #ffe34d;
-        padding: 5px 10px;
-        border-radius: 4px;
-    }
-    .direction {
-        @include order-btn;
-    }
-    .direction-sell {
-        @include sell-btn;
-    }
-    .direction-buy {
-        @include buy-btn;
-    }
+  > span {
+    margin-right: 15px;
+  }
+  .pending {
+    background-color: #ffe34d;
+    padding: 5px 10px;
+    border-radius: 4px;
+  }
+  .direction {
+    @include order-btn;
+  }
+  .direction-sell {
+    @include sell-btn;
+  }
+  .direction-buy {
+    @include buy-btn;
+  }
 }
 
 .Book {
-    .price {
-        font-size: 1.1em;
-    }
+  .price {
+    font-size: 1.1em;
+  }
 }
 
 .AllocationsX-home {
-    .Book-header {
-        // background-color: $softblue;
-        font-size: 1.3em;
-        padding: 10px 15px 10px 15px;
+  .Book-header {
+    // background-color: $softblue;
+    font-size: 1.3em;
+    padding: 10px 15px 10px 15px;
+  }
+
+  .Book-side-wrapper {
+    // margin: 10px;
+    padding-bottom: 10px;
+  }
+
+  .Book-side th {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+
+  .buy-button {
+    background-color: $green;
+    color: #fff;
+  }
+
+  .OrderForm {
+    padding: 15px 25px;
+    margin-bottom: 15px;
+
+    .choose-direction {
+      margin-bottom: 15px;
+      .direction {
+        @include order-btn;
+      }
+      .direction-buy[data-selected='true'] {
+        @include buy-btn;
+      }
+      .direction-sell[data-selected='true'] {
+        @include sell-btn;
+      }
     }
 
-    .Book-side-wrapper {
-        // margin: 10px;
-        padding-bottom: 10px;
+    .order-details {
+      margin-bottom: 10px;
+      text-align: center;
+      padding: 10px;
+      background-color: $softblue;
+      > span {
+        // font-size: 1.2em;
+      }
     }
-
-    .Book-side th {
-        padding-top: 4px;
-        padding-bottom: 4px;
-    }
-
-    .buy-button {
-        background-color: $green;
-        color: #fff;
-    }
-
-    .OrderForm {
-        padding: 15px 25px;
-        margin-bottom: 15px;
-
-        .choose-direction {
-            margin-bottom: 15px;
-            .direction {
-                @include order-btn
-            }
-            .direction-buy[data-selected="true"] {
-                @include buy-btn
-            }
-            .direction-sell[data-selected="true"] {
-                @include sell-btn
-            }
-        }
-
-        .order-details {
-            margin-bottom: 10px;
-            text-align: center;
-            padding: 10px;
-            background-color: $softblue;
-            >span {
-                // font-size: 1.2em;
-            }
-        }
-    }
+  }
 }

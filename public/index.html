@@ -1,28 +1,47 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicons/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="%PUBLIC_URL%/favicons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="%PUBLIC_URL%/favicons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="%PUBLIC_URL%/favicons/favicon-16x16.png"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta property="og:title" content="Allocations" />
+    <meta property="og:description" content="Create SPVs in seconds" />
+    <meta
+      property="og:image"
+      content="https://allocations-public.s3.us-east-2.amazonaws.com/deals/default.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';
+  "
+    />
 
-<head>
-  <meta charset="utf-8" />
-  <link rel="shortcut icon" href="%PUBLIC_URL%/favicons/favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/favicons/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicons/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicons/favicon-16x16.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <meta property="og:title" content="Allocations">
-  <meta property="og:description" content="Create SPVs in seconds">
-  <meta property="og:image" content="https://allocations-public.s3.us-east-2.amazonaws.com/deals/default.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="theme-color" content="#000000" />
-  <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';
-  " />
-
-  <!--
+    <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-  <!--
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -32,72 +51,104 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
 
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
-  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="%PUBLIC_URL%/fonts.css">
+    <link rel="stylesheet" href="%PUBLIC_URL%/fonts.css" />
 
-  <link rel="stylesheet" href="https://cdn.auth0.com/js/auth0-samples-theme/1.0/css/auth0-theme.min.css" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.auth0.com/js/auth0-samples-theme/1.0/css/auth0-theme.min.css"
+    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
-  <title>Allocations</title>
+    <title>Allocations</title>
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-155298553-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-155298553-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
 
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-
-    gtag('config', 'UA-155298553-1');
-
-    window._slaaskSettings = {
-      key: "spk-f0df6972-1b96-47f4-805c-08dd2041191f",
-    };
-  </script>
-  <!-- <script src="https://cdn.slaask.com/chat_loader.js" async="true"></script> -->
-  <!-- Hotjar Tracking Code for https://www.allocations.com -->
-  <script>
-    (function (h, o, t, j, a, r) {
-      h.hj = h.hj || function () { (h.hj.q = h.hj.q || []).push(arguments) };
-      h._hjSettings = { hjid: 1630114, hjsv: 6 };
-      a = o.getElementsByTagName('head')[0];
-      r = o.createElement('script'); r.async = 1;
-      r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
-      a.appendChild(r);
-    })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
-  </script>
-
-  <script>
-    (function () {
-      var w = window; var ic = w.Intercom; if (typeof
-        ic === "function") { ic('reattach_activator'); ic('update', w.intercomSettings); } else {
-        var d = document; var
-          i = function () { i.c(arguments); }; i.q = []; i.c = function (args) { i.q.push(args); }; w.Intercom = i; var l = function () {
-            var
-              s = d.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = 'https://widget.intercom.io/widget/' +
-                't8cjlj0f'; var
-                  x = d.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
-          }; if (w.attachEvent) { w.attachEvent('onload', l); } else { w.addEventListener('load', l, false); }
+      function gtag() {
+        dataLayer.push(arguments);
       }
-    })();
 
-  </script>
+      gtag('js', new Date());
 
-  <link rel="stylesheet" href="https://cdn.docspring.com/embed/simple_form.v2.4.0.css" />
-  <script type="text/javascript" src="https://cdn.docspring.com/embed/simple_form.v2.4.0.js"></script>
+      gtag('config', 'UA-155298553-1');
 
-</head>
+      window._slaaskSettings = {
+        key: 'spk-f0df6972-1b96-47f4-805c-08dd2041191f',
+      };
+    </script>
+    <!-- <script src="https://cdn.slaask.com/chat_loader.js" async="true"></script> -->
+    <!-- Hotjar Tracking Code for https://www.allocations.com -->
+    <script>
+      (function (h, o, t, j, a, r) {
+        h.hj =
+          h.hj ||
+          function () {
+            (h.hj.q = h.hj.q || []).push(arguments);
+          };
+        h._hjSettings = { hjid: 1630114, hjsv: 6 };
+        a = o.getElementsByTagName('head')[0];
+        r = o.createElement('script');
+        r.async = 1;
+        r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+        a.appendChild(r);
+      })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+    </script>
 
-<body class="h-100">
-  <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="root" class="h-100"></div>
-  <!--
+    <script>
+      (function () {
+        var w = window;
+        var ic = w.Intercom;
+        if (typeof ic === 'function') {
+          ic('reattach_activator');
+          ic('update', w.intercomSettings);
+        } else {
+          var d = document;
+          var i = function () {
+            i.c(arguments);
+          };
+          i.q = [];
+          i.c = function (args) {
+            i.q.push(args);
+          };
+          w.Intercom = i;
+          var l = function () {
+            var s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.async = true;
+            s.src = 'https://widget.intercom.io/widget/' + 't8cjlj0f';
+            var x = d.getElementsByTagName('script')[0];
+            x.parentNode.insertBefore(s, x);
+          };
+          if (w.attachEvent) {
+            w.attachEvent('onload', l);
+          } else {
+            w.addEventListener('load', l, false);
+          }
+        }
+      })();
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.docspring.com/embed/simple_form.v2.4.0.css" />
+    <script
+      type="text/javascript"
+      src="https://cdn.docspring.com/embed/simple_form.v2.4.0.js"
+    ></script>
+  </head>
+
+  <body class="h-100">
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root" class="h-100"></div>
+    <!--
   This HTML file is a template.
   If you open it directly in the browser, you will see an empty page.
 
@@ -107,7 +158,6 @@
   To begin the development, run `npm start` or `yarn start`.
   To create a production bundle, use `npm run build` or `yarn build`.
 -->
-<script src="https://maps.googleapis.com/maps/api/js?key=%REACT_APP_GOOGLE_MAP_API%&libraries=places"></script>
-</body>
-
+    <script src="https://maps.googleapis.com/maps/api/js?key=%REACT_APP_GOOGLE_MAP_API%&libraries=places"></script>
+  </body>
 </html>

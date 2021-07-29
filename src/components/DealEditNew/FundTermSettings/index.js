@@ -20,7 +20,6 @@ function FundTerms({ formData, setFormData }) {
     },
   } = formData;
 
-  
   const getFeeType = () => {
     if (fundManagementFees?.length > 0) {
       setFeeType('percentage');
@@ -61,7 +60,7 @@ function FundTerms({ formData, setFormData }) {
       return fundManagementFeesDollar;
     }
 
-    return ''
+    return '';
   };
 
   const getSetupCosts = () => {
@@ -73,8 +72,7 @@ function FundTerms({ formData, setFormData }) {
       return fundEstimatedSetupCostsDollar;
     }
 
-    return ''
-
+    return '';
   };
 
   const handleFeeChange = ({ target }) => {

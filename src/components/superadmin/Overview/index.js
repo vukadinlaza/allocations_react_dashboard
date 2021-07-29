@@ -133,7 +133,10 @@ export default function SuperAdminOverview() {
           <Col md={{ size: '3' }}>
             <Paper
               onClick={() => setActiveData('orgs')}
-              style={{ padding: '20px', backgroundColor: activeData === 'orgs' ? '#205DF5' : 'white' }}
+              style={{
+                padding: '20px',
+                backgroundColor: activeData === 'orgs' ? '#205DF5' : 'white',
+              }}
             >
               <h6 style={{ color: 'rgba(0,0,0,0.3)' }}>Funds</h6>
               <h2 style={{ textAlign: 'center' }}>{organizations?.length}</h2>
@@ -146,10 +149,15 @@ export default function SuperAdminOverview() {
                 setActiveDeals(groupedDeals.onboarding || []);
                 setActiveData('activeDeals');
               }}
-              style={{ padding: '20px', backgroundColor: activeData === 'activeDeals' ? '#205DF5' : 'white' }}
+              style={{
+                padding: '20px',
+                backgroundColor: activeData === 'activeDeals' ? '#205DF5' : 'white',
+              }}
             >
               <h6 style={{ color: 'rgba(0,0,0,0.3)' }}>Active Deals</h6>
-              <h2 style={{ textAlign: 'center' }}>{_.get(groupedDeals, 'onboarding', []).length}</h2>
+              <h2 style={{ textAlign: 'center' }}>
+                {_.get(groupedDeals, 'onboarding', []).length}
+              </h2>
             </Paper>
           </Col>
 
@@ -159,7 +167,10 @@ export default function SuperAdminOverview() {
                 setActiveDeals(groupedDeals.closed || []);
                 setActiveData('closedDeals');
               }}
-              style={{ padding: '20px', backgroundColor: activeData === 'closedDeals' ? '#205DF5' : 'white' }}
+              style={{
+                padding: '20px',
+                backgroundColor: activeData === 'closedDeals' ? '#205DF5' : 'white',
+              }}
             >
               <h6 style={{ color: 'rgba(0,0,0,0.3)' }}>Closed Deals</h6>
               <h2 style={{ textAlign: 'center' }}>{_.get(groupedDeals, 'closed', []).length}</h2>
@@ -169,7 +180,10 @@ export default function SuperAdminOverview() {
           <Col md={{ size: '3' }}>
             <Paper
               onClick={() => setActiveData('investors')}
-              style={{ padding: '20px', backgroundColor: activeData === 'investors' ? '#205DF5' : 'white' }}
+              style={{
+                padding: '20px',
+                backgroundColor: activeData === 'investors' ? '#205DF5' : 'white',
+              }}
             >
               <h6 style={{ color: 'rgba(0,0,0,0.3)' }}>Users</h6>
               <h2 style={{ textAlign: 'center' }}>{investors.length || 0}</h2>
@@ -179,7 +193,9 @@ export default function SuperAdminOverview() {
 
         <Grid container>
           {activeData === 'orgs' && <FundsTabel organizations={organizations} setOpen={setOpen} />}
-          {(activeData === 'activeDeals' || activeData === 'closedDeals') && <DealsTabel activeDeals={activeDeals} />}
+          {(activeData === 'activeDeals' || activeData === 'closedDeals') && (
+            <DealsTabel activeDeals={activeDeals} />
+          )}
           {activeData === 'investors' && <InvestorsTabel investors={investors} setOpen={setOpen} />}
         </Grid>
       </div>
@@ -278,7 +294,10 @@ const DealsTabel = ({ activeDeals }) => {
       <Paper>
         <Grid container spacing={2} justify="space-between">
           <Grid item xs={12} sm={12} md={6}>
-            <Typography variant="h4" style={{ marginBottom: '20px', padding: '16px', maxWidth: '50%' }}>
+            <Typography
+              variant="h4"
+              style={{ marginBottom: '20px', padding: '16px', maxWidth: '50%' }}
+            >
               Deals
             </Typography>
           </Grid>
@@ -293,7 +312,10 @@ const DealsTabel = ({ activeDeals }) => {
                 return (
                   <TableCell
                     onClick={() =>
-                      setSortParam({ value: header.prop, direction: sortParam?.direction === 'asce' ? 'desc' : 'asce' })
+                      setSortParam({
+                        value: header.prop,
+                        direction: sortParam?.direction === 'asce' ? 'desc' : 'asce',
+                      })
                     }
                   >
                     {header.display}{' '}
@@ -357,7 +379,10 @@ const FundsTabel = ({ organizations, setOpen }) => {
       <Paper>
         <Grid container spacing={2} justify="space-between">
           <Grid item xs={12} sm={6} md={6}>
-            <Typography variant="h4" style={{ marginBottom: '20px', padding: '16px', maxWidth: '50%' }}>
+            <Typography
+              variant="h4"
+              style={{ marginBottom: '20px', padding: '16px', maxWidth: '50%' }}
+            >
               Funds
             </Typography>
           </Grid>
@@ -372,7 +397,10 @@ const FundsTabel = ({ organizations, setOpen }) => {
                 return (
                   <TableCell
                     onClick={() =>
-                      setSortParam({ value: header, direction: sortParam?.direction === 'asce' ? 'desc' : 'asce' })
+                      setSortParam({
+                        value: header,
+                        direction: sortParam?.direction === 'asce' ? 'desc' : 'asce',
+                      })
                     }
                   >
                     {header}{' '}
@@ -433,7 +461,10 @@ const InvestorsTabel = ({ investors, setOpen }) => {
       <Paper>
         <Grid container spacing={2} justify="space-between">
           <Grid item xs={12} sm={12} md={6}>
-            <Typography variant="h4" style={{ marginBottom: '20px', padding: '16px', maxWidth: '50%' }}>
+            <Typography
+              variant="h4"
+              style={{ marginBottom: '20px', padding: '16px', maxWidth: '50%' }}
+            >
               Users
             </Typography>
           </Grid>
@@ -448,7 +479,10 @@ const InvestorsTabel = ({ investors, setOpen }) => {
                 return (
                   <TableCell
                     onClick={() =>
-                      setSortParam({ value: header, direction: sortParam?.direction === 'asce' ? 'desc' : 'asce' })
+                      setSortParam({
+                        value: header,
+                        direction: sortParam?.direction === 'asce' ? 'desc' : 'asce',
+                      })
                     }
                   >
                     {header}{' '}
@@ -489,7 +523,9 @@ const User = ({ investor, setOpen }) => {
       <TableCell>{addedDate}</TableCell>
       <TableCell>${nWithCommas(_.sumBy(investor.investments, 'amount'))}</TableCell>
       <TableCell style={{ textAlign: 'center' }}>
-        {investor.accredidation_status && <CheckCircleRoundedIcon color="secondary" style={{ marginRight: '.5rem' }} />}
+        {investor.accredidation_status && (
+          <CheckCircleRoundedIcon color="secondary" style={{ marginRight: '.5rem' }} />
+        )}
       </TableCell>
       <TableCell>
         <Button

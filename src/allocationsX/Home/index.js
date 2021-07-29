@@ -32,7 +32,11 @@ export default function AllocationsX() {
   if (!data) return <Loader />;
 
   const sortedDeals = _.take(
-    _.orderBy(data.exchangeDeals, ['volume', ({ date_closed }) => new Date(date_closed).getTime()], ['desc', 'desc']),
+    _.orderBy(
+      data.exchangeDeals,
+      ['volume', ({ date_closed }) => new Date(date_closed).getTime()],
+      ['desc', 'desc'],
+    ),
     10,
   );
 
@@ -88,4 +92,4 @@ export default function AllocationsX() {
       </Row>
     </div>
   );
-};
+}

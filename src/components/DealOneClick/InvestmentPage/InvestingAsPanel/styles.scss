@@ -4,10 +4,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #FBFCFF;
+  background-color: #fbfcff;
   box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
   border: 1px solid rgb(232, 232, 232);
-
 
   button {
     width: 90%;
@@ -19,9 +18,8 @@
     text-transform: none;
 
     svg {
-      fill: #D2F0CD;
+      fill: #d2f0cd;
       margin: 0px 5px;
     }
-
   }
 }

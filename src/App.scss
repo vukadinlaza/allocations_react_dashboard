@@ -3,28 +3,36 @@ $break-sm: 768px;
 $break-xs: 576px;
 
 @mixin xs-only {
-  @media (max-width: $break-xs) { @content };
+  @media (max-width: $break-xs) {
+    @content;
+  }
 }
 
 @mixin sm-only {
-  @media (max-width: $break-sm) { @content };
+  @media (max-width: $break-sm) {
+    @content;
+  }
 }
 
 @mixin md-only {
-  @media (max-width: $break-md) { @content };
+  @media (max-width: $break-md) {
+    @content;
+  }
 }
 
 @mixin sm-and-up {
-  @media (min-width: $break-sm) { @content };
+  @media (min-width: $break-sm) {
+    @content;
+  }
 }
 
-$green: #53B987;
-$offwhite: #FCFCFC;
+$green: #53b987;
+$offwhite: #fcfcfc;
 $softblue: #eaeffc;
-$brandblue: #4169E1;
+$brandblue: #4169e1;
 
-$newblue: #09A0E3;
-$newbluelight: #86D0EE;
+$newblue: #09a0e3;
+$newbluelight: #86d0ee;
 
 $brightgreen: #05eaa4;
 $softgreen: #21ce99;
@@ -38,7 +46,6 @@ $graygreen: #e6f9f3;
 .next-steps .row {
   margin-bottom: 0;
 }
-
 
 .next-steps .col-md-5 {
   margin-bottom: 3rem;
@@ -94,7 +101,7 @@ $graygreen: #e6f9f3;
 
 .public-navbar {
   .public-brand {
-    margin: 20px; 
+    margin: 20px;
     cursor: pointer;
   }
 
@@ -130,7 +137,8 @@ $graygreen: #e6f9f3;
       margin: 0px 0px 5px 0px;
     }
 
-    .sign-in-btn, .sign-up-btn {
+    .sign-in-btn,
+    .sign-up-btn {
       margin-right: 4px;
       font-size: 0.8em;
     }
@@ -214,4 +222,3 @@ th {
   font-size: 1em;
   color: #fff;
 }
-

@@ -27,7 +27,9 @@ export default function MailingAddress({ investor, errors, handleChange, setInve
         <Checkbox
           color="primary"
           inputProps={{ 'aria-label': 'secondary checkbox' }}
-          onChange={(e) => setInvestor((prev) => ({ ...prev, usePermAddressAsMailing: e.target.checked }))}
+          onChange={(e) =>
+            setInvestor((prev) => ({ ...prev, usePermAddressAsMailing: e.target.checked }))
+          }
         />
       </Typography>
       {!investor.usePermAddressAsMailing && (
@@ -36,7 +38,12 @@ export default function MailingAddress({ investor, errors, handleChange, setInve
             if (item.slug === 'mail_country') {
               return (
                 <Grid item xs={12} sm={12} md={6}>
-                  <FormControl required error={errors.includes(item.slug)} variant="outlined" style={{ width: '100%' }}>
+                  <FormControl
+                    required
+                    error={errors.includes(item.slug)}
+                    variant="outlined"
+                    style={{ width: '100%' }}
+                  >
                     <InputLabel>Country</InputLabel>
                     <Select
                       value={investor.mail_country || ''}
