@@ -111,6 +111,7 @@ const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-start',
+    position: 'relative',
     width: '100%',
     left: '0',
     top: '0',
