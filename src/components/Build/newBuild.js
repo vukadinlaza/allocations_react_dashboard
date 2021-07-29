@@ -130,7 +130,9 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
               <>Choose your fund type</>
-              <CheckCircleIcon style={{ color: data['Choose your fund type'] ? '#26C604' : '#00000029' }} />
+              <CheckCircleIcon
+                style={{ color: data['Choose your fund type'] ? '#26C604' : '#00000029' }}
+              />
             </Typography>
             <Grid container spacing={1}>
               {[
@@ -159,7 +161,8 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
                           flexDirection: 'column',
                           justifyContent: 'center',
                           alignItems: 'center',
-                          border: data['Choose your fund type'] === item.type ? '2px solid #2576FF' : '',
+                          border:
+                            data['Choose your fund type'] === item.type ? '2px solid #2576FF' : '',
                         }}
                       >
                         {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
@@ -175,7 +178,9 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
               <>Choose your asset type</>
-              <CheckCircleIcon style={{ color: data['Choose your asset type'] ? '#26C604' : '#00000029' }} />
+              <CheckCircleIcon
+                style={{ color: data['Choose your asset type'] ? '#26C604' : '#00000029' }}
+              />
             </Typography>
             <Grid container spacing={1}>
               {[
@@ -218,7 +223,8 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
                           flexDirection: 'column',
                           justifyContent: 'center',
                           alignItems: 'center',
-                          border: data['Choose your asset type'] === item.type ? '2px solid #2576FF' : '',
+                          border:
+                            data['Choose your asset type'] === item.type ? '2px solid #2576FF' : '',
                         }}
                       >
                         {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
@@ -235,7 +241,9 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
               <>Enter name of portfolio company</>
-              <CheckCircleIcon style={{ color: data['Enter name of portfolio company'] ? '#26C604' : '#00000029' }} />
+              <CheckCircleIcon
+                style={{ color: data['Enter name of portfolio company'] ? '#26C604' : '#00000029' }}
+              />
             </Typography>
             <Grid>
               <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -257,7 +265,9 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
             <Typography className={classes.questionHeader}>
               <>Choose the name of your private fund</>
               <CheckCircleIcon
-                style={{ color: data['Choose the name of your private fund'] ? '#26C604' : '#00000029' }}
+                style={{
+                  color: data['Choose the name of your private fund'] ? '#26C604' : '#00000029',
+                }}
               />
             </Typography>
             <Grid>
@@ -269,7 +279,9 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
                     variant="outlined"
                     label="Fund Name"
                     value={data['Choose the name of your private fund'] || ''}
-                    onChange={(e) => setData({ 'Choose the name of your private fund': e.target.value })}
+                    onChange={(e) =>
+                      setData({ 'Choose the name of your private fund': e.target.value })
+                    }
                   />
                 </Grid>
               </Grid>
@@ -279,7 +291,9 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
               <>Choose the name of your manager</>
-              <CheckCircleIcon style={{ color: data['Choose the name of your manager'] ? '#26C604' : '#00000029' }} />
+              <CheckCircleIcon
+                style={{ color: data['Choose the name of your manager'] ? '#26C604' : '#00000029' }}
+              />
             </Typography>
             <Grid>
               <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -304,7 +318,9 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
               <>Choose your speed</>
-              <CheckCircleIcon style={{ color: data['Choose your speed'] ? '#26C604' : '#00000029' }} />
+              <CheckCircleIcon
+                style={{ color: data['Choose your speed'] ? '#26C604' : '#00000029' }}
+              />
             </Typography>
             <Grid container spacing={1}>
               {[
@@ -339,7 +355,8 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
                           flexDirection: 'column',
                           justifyContent: 'center',
                           alignItems: 'center',
-                          border: data['Choose your speed'] === item.type ? '2px solid #2576FF' : '',
+                          border:
+                            data['Choose your speed'] === item.type ? '2px solid #2576FF' : '',
                         }}
                       >
                         {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
@@ -368,7 +385,9 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
               <>Choose your wiring date</>
-              <CheckCircleIcon style={{ color: data['Choose your wiring date'] ? '#26C604' : '#00000029' }} />
+              <CheckCircleIcon
+                style={{ color: data['Choose your wiring date'] ? '#26C604' : '#00000029' }}
+              />
             </Typography>
             <Grid>
               <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -398,11 +417,19 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
                 <span style={{ marginLeft: '1rem' }} />
                 {nWithCommas(data['Choose your management fee'] || 0)} %
               </span>
-              <CheckCircleIcon style={{ color: data['Choose your management fee'] ? '#26C604' : '#00000029' }} />
+              <CheckCircleIcon
+                style={{ color: data['Choose your management fee'] ? '#26C604' : '#00000029' }}
+              />
             </Typography>
             <Grid>
               <Paper
-                style={{ border: 'solid 1px #2576FF', marginBottom: '.25rem', marginTop: '.25rem', padding: '1.5rem' }} >
+                style={{
+                  border: 'solid 1px #2576FF',
+                  marginBottom: '.25rem',
+                  marginTop: '.25rem',
+                  padding: '1.5rem',
+                }}
+              >
                 <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
                   <Slider
                     defaultValue={0}
@@ -427,10 +454,19 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
                 <span style={{ marginLeft: '1rem' }} />
                 {nWithCommas(data['Choose your carry'] || 0)} %
               </span>
-              <CheckCircleIcon style={{ color: data['Choose your carry'] ? '#26C604' : '#00000029' }} />
+              <CheckCircleIcon
+                style={{ color: data['Choose your carry'] ? '#26C604' : '#00000029' }}
+              />
             </Typography>
             <Grid>
-              <Paper style={{ border: 'solid 1px #2576FF', marginBottom: '.25rem', marginTop: '.25rem', padding: '1.5rem' }} >
+              <Paper
+                style={{
+                  border: 'solid 1px #2576FF',
+                  marginBottom: '.25rem',
+                  marginTop: '.25rem',
+                  padding: '1.5rem',
+                }}
+              >
                 <Grid xs={12} sm={12} md={12} lg={12} style={{ display: 'flex' }}>
                   <Slider
                     defaultValue={0}
@@ -452,7 +488,11 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
             <Typography className={classes.questionHeader}>
               <>Will you charge same fees for all investors?</>
               <CheckCircleIcon
-                style={{ color: data['Will you charge same fees for all investors?'] ? '#26C604' : '#00000029' }}
+                style={{
+                  color: data['Will you charge same fees for all investors?']
+                    ? '#26C604'
+                    : '#00000029',
+                }}
               />
             </Typography>
             <Grid container spacing={1}>
@@ -509,7 +549,9 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
                 {/* <span style={{ marginLeft: '1rem' }} />${nWithCommas(data['Enter your minimum investment amount'] || 0)} */}
               </span>
               <CheckCircleIcon
-                style={{ color: data['Enter your minimum investment amount'] ? '#26C604' : '#00000029' }}
+                style={{
+                  color: data['Enter your minimum investment amount'] ? '#26C604' : '#00000029',
+                }}
               />
             </Typography>
             <Grid>
@@ -531,7 +573,9 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
                   variant="outlined"
                   label="Minimum investment"
                   value={data['Enter your minimum investment amount'] || ''}
-                  onChange={(e) => setData({ 'Enter your minimum investment amount': e.target.value })}
+                  onChange={(e) =>
+                    setData({ 'Enter your minimum investment amount': e.target.value })
+                  }
                 />
               </Grid>
               {/* </Paper> */}
@@ -568,7 +612,10 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
                         minWidth: '100%',
                       }}
                       onClick={() => {
-                        setData({ 'Would you like to hire Allocations as the exempt reporting advisor?': item.type });
+                        setData({
+                          'Would you like to hire Allocations as the exempt reporting advisor?':
+                            item.type,
+                        });
                       }}
                     >
                       <Grid
@@ -583,7 +630,9 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
                           justifyContent: 'center',
                           alignItems: 'center',
                           border:
-                            data['Would you like to hire Allocations as the exempt reporting advisor?'] === item.type
+                            data[
+                              'Would you like to hire Allocations as the exempt reporting advisor?'
+                            ] === item.type
                               ? '2px solid #2576FF'
                               : '',
                         }}
@@ -615,7 +664,9 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
                 <Typography className={classes.questionHeader}>
                   <>Intended investment adviser name</>
                   <CheckCircleIcon
-                    style={{ color: data['Intended investment adviser name'] ? '#26C604' : '#00000029' }}
+                    style={{
+                      color: data['Intended investment adviser name'] ? '#26C604' : '#00000029',
+                    }}
                   />
                 </Typography>
                 <Grid>
@@ -627,7 +678,9 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
                         variant="outlined"
                         label="Intended investment adviser name"
                         value={data['Intended investment adviser name'] || ''}
-                        onChange={(e) => setData({ 'Intended investment adviser name': e.target.value })}
+                        onChange={(e) =>
+                          setData({ 'Intended investment adviser name': e.target.value })
+                        }
                       />
                     </Grid>
                   </Grid>
@@ -638,7 +691,9 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
           <Grid justify="space-between">
             <Typography className={classes.questionHeader}>
               <>Choose offering type</>
-              <CheckCircleIcon style={{ color: data['Choose offering type'] ? '#26C604' : '#00000029' }} />
+              <CheckCircleIcon
+                style={{ color: data['Choose offering type'] ? '#26C604' : '#00000029' }}
+              />
             </Typography>
             <Grid container spacing={1} justify="space-around">
               {[
@@ -649,7 +704,8 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
                 },
                 {
                   type: '506c',
-                  warning: 'Your investors will be required to complete accredited investor verification',
+                  warning:
+                    'Your investors will be required to complete accredited investor verification',
                 },
               ].map((item) => {
                 return (
@@ -674,7 +730,8 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
                           flexDirection: 'column',
                           justifyContent: 'center',
                           alignItems: 'center',
-                          border: data['Choose offering type'] === item.type ? '2px solid #2576FF' : '',
+                          border:
+                            data['Choose offering type'] === item.type ? '2px solid #2576FF' : '',
                         }}
                       >
                         {/* <img src={item.url} alt={item.type} style={{ width: '60px' }} /> */}
@@ -704,7 +761,11 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
             <Typography className={classes.questionHeader}>
               <>Has your attorney already provided SPV docs?</>
               <CheckCircleIcon
-                style={{ color: data['Has your attorney already provided SPV docs?'] ? '#26C604' : '#00000029' }}
+                style={{
+                  color: data['Has your attorney already provided SPV docs?']
+                    ? '#26C604'
+                    : '#00000029',
+                }}
               />
             </Typography>
             <Grid container spacing={1} justify="space-around">
@@ -760,7 +821,11 @@ export default ({ setData, data, activeStep, handleNext, handleBack, postZap }) 
             <Typography className={classes.questionHeader}>
               <>Will you invite any investors from New York?</>
               <CheckCircleIcon
-                style={{ color: data['Will you invite any investors from New York?'] ? '#26C604' : '#00000029' }}
+                style={{
+                  color: data['Will you invite any investors from New York?']
+                    ? '#26C604'
+                    : '#00000029',
+                }}
               />
             </Typography>
             <Grid container spacing={1} justify="space-around">

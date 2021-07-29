@@ -22,7 +22,8 @@ export default function EditInvestor({ data, refetch }) {
     if (formStatus === 'complete') refetch();
   }, [formStatus]);
 
-  const icon = formStatus === 'loading' ? 'circle-notch' : formStatus === 'complete' ? 'check' : null;
+  const icon =
+    formStatus === 'loading' ? 'circle-notch' : formStatus === 'complete' ? 'check' : null;
 
   if (!data.email)
     return (

@@ -1,9 +1,7 @@
 import React, { useEffect, useReducer, Fragment, useState } from 'react';
 import _ from 'lodash';
 import { Link, useParams } from 'react-router-dom';
-import { gql } from 'apollo-boost';
-
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery, gql } from '@apollo/client';
 import { Row, Col } from 'reactstrap';
 import {
   Table,
@@ -148,7 +146,11 @@ export default function Deals({ showClosed }) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {_.orderBy(open, (d) => new Date(d.dealParams.wireDeadline || Date.now()), 'desc').map((deal) => (
+                {_.orderBy(
+                  open,
+                  (d) => new Date(d.dealParams.wireDeadline || Date.now()),
+                  'desc',
+                ).map((deal) => (
                   <TableRow key={deal._id}>
                     <TableCell>{deal.company_name}</TableCell>
                     <TableCell>{deal.company_description}</TableCell>
@@ -191,7 +193,11 @@ export default function Deals({ showClosed }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {_.orderBy(closed, (d) => new Date(d.dealParams.wireDeadline || Date.now()), 'desc').map((deal) => {
+              {_.orderBy(
+                closed,
+                (d) => new Date(d.dealParams.wireDeadline || Date.now()),
+                'desc',
+              ).map((deal) => {
                 let investments = _.orderBy(
                   _.reject(deal.investments, (i) => i.status === 'invited'),
                   'amount',
@@ -204,7 +210,10 @@ export default function Deals({ showClosed }) {
                 const groupedInvestments = _.groupBy(investments, 'metaData.group');
                 return (
                   <Fragment key={deal._id}>
-                    <TableRow onClick={() => toggleCapitalAccount(deal._id)} className="closed-deal-row">
+                    <TableRow
+                      onClick={() => toggleCapitalAccount(deal._id)}
+                      className="closed-deal-row"
+                    >
                       <TableCell>{deal.company_name}</TableCell>
                       <TableCell>{deal.company_description}</TableCell>
                       <TableCell>{deal.deal_lead}</TableCell>
@@ -273,7 +282,12 @@ function DealProgress({ deal }) {
   const progress = ((raised || 0) / (deal.target || Infinity)) * 100;
   return (
     <TableCell>
-      <LinearProgress style={{ height: '20px' }} variant="determinate" color="secondary" value={progress} />
+      <LinearProgress
+        style={{ height: '20px' }}
+        variant="determinate"
+        color="secondary"
+        value={progress}
+      />
       <div className="text-center">
         ${nWithCommas(raised)} of ${nWithCommas(deal.target)}
       </div>

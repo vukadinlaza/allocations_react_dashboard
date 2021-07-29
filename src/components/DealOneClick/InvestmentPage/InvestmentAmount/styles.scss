@@ -1,11 +1,10 @@
 .InvestmentAmountPanel {
   width: 70%;
   height: max-content;
-  background-color: #FBFCFF;
+  background-color: #fbfcff;
   box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
   border: 1px solid rgb(232, 232, 232);
   overflow: hidden;
-
 
   .investment-amount-container {
     width: 90%;
@@ -27,11 +26,11 @@
       text-align: left;
 
       .MuiTypography-root {
-        color: #3CB345;
+        color: #3cb345;
         font-weight: 600;
-        font-size: .8rem;
+        font-size: 0.8rem;
         margin: 0px 5px;
-        background-color: #D8FFDE;
+        background-color: #d8ffde;
         padding: 2.5px 10px;
         border-radius: 2.5px;
       }
@@ -41,7 +40,7 @@
       overflow: hidden;
       padding: 1rem 2rem;
       white-space: nowrap;
-      background-color: #28C600;
+      background-color: #28c600;
       color: white;
       text-transform: none;
       font-weight: 700;
@@ -50,13 +49,11 @@
       border-radius: 5px;
       margin: 0px 5px;
     }
-
   }
 }
 
 @media screen and (max-width: 960px) {
   .InvestmentAmountPanel {
-
     width: 100%;
 
     .investment-amount-container {

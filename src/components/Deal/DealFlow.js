@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import _, { toNumber } from 'lodash';
-import { gql } from 'apollo-boost';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery, gql } from '@apollo/client';
 import { useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import base64 from 'base-64';
@@ -126,8 +125,13 @@ export default function InvestmentFlow({ deal, investor, refetch }) {
   });
   const hasWired = investment?.status === 'wired' || investment?.status === 'complete';
   const hasSigned =
-    (investment?.status === 'signed' || investment?.status === 'wired' || investment?.status === 'complete') && spvDoc;
-  const hasKyc = docs.find((d) => d.documentName && (d.documentName.includes('W-8') || d.documentName.includes('W-9')));
+    (investment?.status === 'signed' ||
+      investment?.status === 'wired' ||
+      investment?.status === 'complete') &&
+    spvDoc;
+  const hasKyc = docs.find(
+    (d) => d.documentName && (d.documentName.includes('W-8') || d.documentName.includes('W-9')),
+  );
   return (
     <>
       <div className={classes.tabs}>
@@ -138,14 +142,18 @@ export default function InvestmentFlow({ deal, investor, refetch }) {
               style={{ borderRight: '1px solid #e1e9ec' }}
               onClick={() => setStatus('invited')}
             >
-              Data Room {investment && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
+              Data Room{' '}
+              {investment && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
             </ButtonBase>
           </Grid>
 
           <Grid item xs={12} sm={3}>
             <ButtonBase
               className={status === 'pledged' ? classes.activeTab : classes.tab}
-              style={{ borderRight: '1px solid #e1e9ec', cursor: approved ? 'cursor' : 'not-allowed' }}
+              style={{
+                borderRight: '1px solid #e1e9ec',
+                cursor: approved ? 'cursor' : 'not-allowed',
+              }}
               onClick={() => approved && setStatus('pledged')}
             >
               Sign {!approved && <FontAwesomeIcon icon="lock" />}{' '}
@@ -156,7 +164,10 @@ export default function InvestmentFlow({ deal, investor, refetch }) {
           <Grid item xs={12} sm={3}>
             <ButtonBase
               className={status === 'kyc' ? classes.activeTab : classes.tab}
-              style={{ borderRight: '1px solid #e1e9ec', cursor: approved ? 'cursor' : 'not-allowed' }}
+              style={{
+                borderRight: '1px solid #e1e9ec',
+                cursor: approved ? 'cursor' : 'not-allowed',
+              }}
               onClick={() => approved && setStatus('kyc')}
             >
               KYC {!approved && <FontAwesomeIcon icon="lock" />}{' '}
@@ -197,10 +208,21 @@ export default function InvestmentFlow({ deal, investor, refetch }) {
           />
         )}
         {status === 'kyc' && (
-          <KYCDocusign status={status} investment={investment} deal={deal} investor={investor} hasKyc={hasKyc} />
+          <KYCDocusign
+            status={status}
+            investment={investment}
+            deal={deal}
+            investor={investor}
+            hasKyc={hasKyc}
+          />
         )}
         {onboardingLinkType === 'hellosign' && (
-          <HelloSignOnboarding status={status} investment={investment} deal={deal} investor={investor} />
+          <HelloSignOnboarding
+            status={status}
+            investment={investment}
+            deal={deal}
+            investor={investor}
+          />
         )}
       </>
     </>
@@ -240,7 +262,9 @@ function Wire({ deal }) {
 
   return (
     <div className="wire" style={{ textAlign: 'center' }}>
-      <div className="banner same-user-warning">Please ensure to wire from the same entity you have signed from.</div>
+      <div className="banner same-user-warning">
+        Please ensure to wire from the same entity you have signed from.
+      </div>
       <div className="wire-link">
         <div style={{ marginBottom: '15px' }}>
           <FontAwesomeIcon icon={['far', 'file-pdf']} />
@@ -262,7 +286,11 @@ function Wire({ deal }) {
 function PledgingLegacy({ deal }) {
   return (
     <a href={deal.pledge_link} target="_blank" rel="noopener noreferrer">
-      <svg style={{ height: 18, margin: '0 8px' }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3800 4800">
+      <svg
+        style={{ height: 18, margin: '0 8px' }}
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 3800 4800"
+      >
         <g>
           <path fill="#0F9D57" d="M0 4800h3800V840L2960 0H0" />
           <path fill="#57BB8A" d="M2960 840h840L2960 0" />
@@ -311,7 +339,11 @@ function Pledging({ investment, deal, refetch, investor }) {
 
     updateInvestment({
       variables: {
-        investment: { ..._.omit(investment, '__typename'), status: 'pledged', amount: Number(amount) },
+        investment: {
+          ..._.omit(investment, '__typename'),
+          status: 'pledged',
+          amount: Number(amount),
+        },
       },
     });
   };
@@ -566,7 +598,9 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
     .map((e) => e.map(encodeURI).join('='))
     .join('&');
 
-  let link = pathname.includes('/public/') ? deal.onboarding_link : `${deal.onboarding_link}&${urlParameters}`;
+  let link = pathname.includes('/public/')
+    ? deal.onboarding_link
+    : `${deal.onboarding_link}&${urlParameters}`;
 
   if (deal.onboarding_link.includes('demo')) {
     link = `${deal.onboarding_link}&${urlParameters}`;
@@ -580,14 +614,18 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
     investor.investor_type === 'individual'
       ? ['last_name', 'first_name', 'email']
       : ['entity_name', 'email', 'signer_full_name'];
-  const isProfileComplete = reqs.every((i) => Object.keys(investor).includes(i) && investor[i] !== null);
+  const isProfileComplete = reqs.every(
+    (i) => Object.keys(investor).includes(i) && investor[i] !== null,
+  );
 
   if (hasSigned && !resign)
     return (
       <Paper className={classes.paper}>
         <Grid container>
           <Grid xs={10} sm={10} md={10} lg={10}>
-            <Typography variant="subtitle1">Thanks for signing! You can view your signed documents below.</Typography>
+            <Typography variant="subtitle1">
+              Thanks for signing! You can view your signed documents below.
+            </Typography>
           </Grid>
           <Grid xs={2} sm={2} md={2} lg={2}>
             <Button
@@ -639,7 +677,12 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
         </a>
       </div>
       <div className="embed-responsive embed-responsive-1by1">
-        <iframe className="embed-responsive-item" title="Wire Instructions" data-hj-allow-iframe="" src={link} />
+        <iframe
+          className="embed-responsive-item"
+          title="Wire Instructions"
+          data-hj-allow-iframe=""
+          src={link}
+        />
       </div>
     </div>
   );
@@ -689,7 +732,11 @@ function KYCDocusign({ deal, investor, status, hasKyc }) {
           </a>
         </div>
         <div className="embed-responsive embed-responsive-1by1">
-          <iframe className="embed-responsive-item" title="Wire Instructions" src={link.redirectUrl} />
+          <iframe
+            className="embed-responsive-item"
+            title="Wire Instructions"
+            src={link.redirectUrl}
+          />
         </div>
       </div>
     </Paper>

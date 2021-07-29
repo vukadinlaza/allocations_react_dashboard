@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
 import BN from 'bignumber.js';
-import { gql } from 'apollo-boost';
 import { useParams, useHistory, Link, useLocation } from 'react-router-dom';
-import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation, gql } from '@apollo/client';
 import { Paper, List, ListItem, ListItemText, Grid, Button } from '@material-ui/core';
 import queryString from 'query-string';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -170,7 +169,9 @@ export default function Deal() {
       if (q && q.ref === 'public' && q.invite) {
         // need to redir back to public link (haven't been invited)
         return history.push(
-          `/public/${organization || 'allocations'}/deals/${deal_slug}?invite_code=${q.invite}&no_redirect=true`,
+          `/public/${organization || 'allocations'}/deals/${deal_slug}?invite_code=${
+            q.invite
+          }&no_redirect=true`,
         );
       }
 
@@ -193,7 +194,9 @@ export default function Deal() {
             <h2 className="deal-header">{deal.company_name}</h2>
             <h4 className="deal-description">{deal.company_description}</h4>
           </Grid>
-          {investment?._id && <Pledge investment={investment} refetch={refetch} allowEdit={allowEdit} />}
+          {investment?._id && (
+            <Pledge investment={investment} refetch={refetch} allowEdit={allowEdit} />
+          )}
         </Grid>
         <InvestmentFlow
           deal={{ ...deal, deal_slug, organization }}
@@ -233,7 +236,10 @@ export function DealParams({ deal, deal_slug }) {
 
   const setupCosts =
     dealParams.totalRoundSize && dealParams.estimatedSetupCosts
-      ? new BN(dealParams.estimatedSetupCosts).dividedBy(dealParams.totalRoundSize).times(100).toFixed(0)
+      ? new BN(dealParams.estimatedSetupCosts)
+          .dividedBy(dealParams.totalRoundSize)
+          .times(100)
+          .toFixed(0)
       : null;
 
   const show =
@@ -316,10 +322,16 @@ export function DealParams({ deal, deal_slug }) {
         <>
           <List>
             <ListItem>
-              <ListItemText primary="Signing Deadline" secondary={`${_.upperFirst(formattedDate_sign)} PST`} />
+              <ListItemText
+                primary="Signing Deadline"
+                secondary={`${_.upperFirst(formattedDate_sign)} PST`}
+              />
             </ListItem>
             <ListItem>
-              <ListItemText primary="Wiring Deadline" secondary={`${_.upperFirst(formattedDate_wire)} PST`} />
+              <ListItemText
+                primary="Wiring Deadline"
+                secondary={`${_.upperFirst(formattedDate_wire)} PST`}
+              />
             </ListItem>
           </List>
         </>
@@ -410,7 +422,10 @@ export function DealParams({ deal, deal_slug }) {
             )}
             {dealParams.estimatedTerm && (
               <ListItem>
-                <ListItemText primary="Estimated Term" secondary={`${dealParams.estimatedTerm} Years`} />
+                <ListItemText
+                  primary="Estimated Term"
+                  secondary={`${dealParams.estimatedTerm} Years`}
+                />
               </ListItem>
             )}
           </List>
@@ -443,7 +458,10 @@ export function DealParams({ deal, deal_slug }) {
           <List>
             {dealParams.portfolioTotalCarry && (
               <ListItem>
-                <ListItemText primary="Total Carry" secondary={`${dealParams.portfolioTotalCarry}%`} />
+                <ListItemText
+                  primary="Total Carry"
+                  secondary={`${dealParams.portfolioTotalCarry}%`}
+                />
               </ListItem>
             )}
             {dealParams.portfolioEstimatedSetupCosts && (
@@ -467,7 +485,9 @@ export function DealParams({ deal, deal_slug }) {
                 <ListItemText
                   primary="Management Fee"
                   secondary={`${dealParams.portfolioManagementFees}% ${
-                    dealParams.portfolioManagementFeeType === null ? '' : `(${dealParams.portfolioManagementFeeType})`
+                    dealParams.portfolioManagementFeeType === null
+                      ? ''
+                      : `(${dealParams.portfolioManagementFeeType})`
                   }`}
                 />
               </ListItem>
@@ -477,7 +497,9 @@ export function DealParams({ deal, deal_slug }) {
                 <ListItemText
                   primary="Management Fee"
                   secondary={`$${dealParams.portfolioManagementFeesDollar} ${
-                    dealParams.portfolioManagementFeeType === null ? '' : `(${dealParams.portfolioManagementFeeType})`
+                    dealParams.portfolioManagementFeeType === null
+                      ? ''
+                      : `(${dealParams.portfolioManagementFeeType})`
                   }`}
                 />
               </ListItem>
@@ -524,7 +546,10 @@ export function DealParams({ deal, deal_slug }) {
             )}
             {dealParams.fundEstimatedSetupCosts && (
               <ListItem>
-                <ListItemText primary="Estimated Setup Costs" secondary={`${dealParams.fundEstimatedSetupCosts}%`} />
+                <ListItemText
+                  primary="Estimated Setup Costs"
+                  secondary={`${dealParams.fundEstimatedSetupCosts}%`}
+                />
               </ListItem>
             )}
             {dealParams.fundEstimatedSetupCostsDollar && (
@@ -553,7 +578,10 @@ export function DealParams({ deal, deal_slug }) {
             )}
             {dealParams.fundEstimatedTerm && (
               <ListItem>
-                <ListItemText primary="Estimated Term" secondary={`${dealParams.fundEstimatedTerm} years`} />
+                <ListItemText
+                  primary="Estimated Term"
+                  secondary={`${dealParams.fundEstimatedTerm} years`}
+                />
               </ListItem>
             )}
           </List>

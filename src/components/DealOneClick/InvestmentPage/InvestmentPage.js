@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useMutation, useQuery } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
+import { useMutation, useQuery, gql } from '@apollo/client';
 import { Button } from '@material-ui/core';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
@@ -218,14 +217,17 @@ function InvestmentPage() {
         ? 'Investment updated successfully.'
         : 'Investment created successfully.';
       toast.success(message);
-      const path = organization ? `/next-steps/${organization}/${deal_slug}` : `/next-steps/${deal_slug}`;
+      const path = organization
+        ? `/next-steps/${organization}/${deal_slug}`
+        : `/next-steps/${deal_slug}`;
       history.push(path, { investorFormData });
     },
     onError: () => {
-      toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com')
-    }
+      toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com');
+    },
   });
-  const [getInvestmentPreview, { data: previewData, loading: loadingPreview }] = useMutation(GET_PREVIEW);
+  const [getInvestmentPreview, { data: previewData, loading: loadingPreview }] =
+    useMutation(GET_PREVIEW);
 
   const confirmInvestment = () => {
     const validation = validate(investorFormData, organization);
@@ -234,7 +236,8 @@ function InvestmentPage() {
 
     if (validation.length > 0) return toast.warning('Incomplete Form');
     if (!amount) return toast.warning('Please enter a valid investment amount.');
-    if (parseInt(amount) < 1000) return toast.warning('Please enter an investment amount greater than $1000.');
+    if (parseInt(amount) < 1000)
+      return toast.warning('Please enter an investment amount greater than $1000.');
 
     const payload = {
       ...investorFormData,
@@ -262,7 +265,7 @@ function InvestmentPage() {
 
     submitConfirmation({ variables: { payload } });
     setShowSpvModal(false);
-    setLoading(true)
+    setLoading(true);
   };
 
   if (!data || loading) return <Loader />;
@@ -278,11 +281,17 @@ function InvestmentPage() {
   return (
     <section className="InvestmentPage">
       <div className="nav-btn-container">
-        <Button className="back-button" onClick={() => history.push(`/deals/${organization}/${deal_slug}`)}>
+        <Button
+          className="back-button"
+          onClick={() => history.push(`/deals/${organization}/${deal_slug}`)}
+        >
           <ArrowBackIcon />
           Back to Deal Page
         </Button>
-        <Button className="next-button" onClick={() => history.push(`/next-steps/${organization}/${deal_slug}`)}>
+        <Button
+          className="next-button"
+          onClick={() => history.push(`/next-steps/${organization}/${deal_slug}`)}
+        >
           Next Steps
           <ArrowForwardIcon />
         </Button>
@@ -292,14 +301,23 @@ function InvestmentPage() {
       </div>
 
       <div className="flex-container">
-        <InvestmentAmountPanel setAmount={setAmount} amount={amount} minimumInvestment={minimumInvestment} />
+        <InvestmentAmountPanel
+          setAmount={setAmount}
+          amount={amount}
+          minimumInvestment={minimumInvestment}
+        />
         <div className="side-panel">
           {/* <InvestingAsPanel /> */}
           {/* <InvestmentHistory deal={deal} setInvestor={setInvestor} investor={investorFormData} setAmount={setAmount} /> */}
           <DealDocumentsPanel deal={deal} />
           {/* <YourDocumentsPanel investment={investment} /> */}
         </div>
-        <PersonalInformation org={org} errors={errors} investor={investorFormData} setInvestor={setInvestor} />
+        <PersonalInformation
+          org={org}
+          errors={errors}
+          investor={investorFormData}
+          setInvestor={setInvestor}
+        />
         <TermsAndConditionsPanel
           confirmInvestment={confirmInvestment}
           deal={deal}

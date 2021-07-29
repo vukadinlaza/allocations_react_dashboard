@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { gql } from 'apollo-boost';
+import React, { useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useMutation } from '@apollo/react-hooks';
-import { Hidden, Paper, ListItem, List, Grid, Button, Typography } from '@material-ui/core';
+import { useMutation, gql } from '@apollo/client';
+import { Paper, Grid, Button, Typography } from '@material-ui/core';
 import { useSimpleReducer } from '../../utils/hooks';
 import { useAuth } from '../../auth/useAuth';
 import './style.scss';
@@ -187,7 +185,8 @@ export default function Marketplace() {
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/runway_fund.png',
       highlight_1: 'This fund invests in the best early stage founders',
       highlight_2: '450 Fellows have so far started 160 companies',
-      highlight_3: 'Raising a $5M fund, which invests in 80-100 companies over the next 12-18 months',
+      highlight_3:
+        'Raising a $5M fund, which invests in 80-100 companies over the next 12-18 months',
       pledged: '35000',
       deal_lead: 'Don Ho',
       closeDate: '10/31/2020',
@@ -224,7 +223,8 @@ export default function Marketplace() {
       name: 'Mati',
       tagline: 'Data infrastructure for the trust economy',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/mati-id.png',
-      highlight_1: 'Mati aims to power 1 million Trust Economy companies by building the data infrastructure',
+      highlight_1:
+        'Mati aims to power 1 million Trust Economy companies by building the data infrastructure',
       highlight_2: '5.8x YoY revenue growth, $1.85M ARR',
       highlight_3: 'Raising an $8M Series A round at a $60M valuation',
       pledged: '$100,000.00',
@@ -239,7 +239,8 @@ export default function Marketplace() {
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/agronomics.png',
       highlight_1:
         'Environmentally friendly alternatives to the traditional production of meat and plant-based sources of nutrition',
-      highlight_2: 'Portfolio companies include BlueNalu, New Age Meats, Shiok Meats and Legendairy',
+      highlight_2:
+        'Portfolio companies include BlueNalu, New Age Meats, Shiok Meats and Legendairy',
       highlight_3: 'Agronomics wants to decrease the unsustainable demand on natural resources',
       pledged: '$5,000.00',
       deal_lead: 'Kingsley Advani',
@@ -251,9 +252,11 @@ export default function Marketplace() {
       name: 'Cheqout',
       tagline: 'A QR payments company for brick-and-mortar transactions',
       logo: 'https://allocations-public.s3.us-east-2.amazonaws.com/marketplace/cheqout.png',
-      highlight_1: 'An Alipay for the US, CheqOut blends ordering and payments, with an initial focus on restaurants',
+      highlight_1:
+        'An Alipay for the US, CheqOut blends ordering and payments, with an initial focus on restaurants',
       highlight_2: 'Crossed $1M in processed payments last month, 3 months after launch',
-      highlight_3: 'TAM is $800B in restaurant revenues, SOM is $170B in full service—CheqOut takes 1.8% of revenue',
+      highlight_3:
+        'TAM is $800B in restaurant revenues, SOM is $170B in full service—CheqOut takes 1.8% of revenue',
       pledged: '$0.00',
       deal_lead: 'Jerry Chang',
       closeDate: '10/31/2020',
@@ -279,7 +282,12 @@ export default function Marketplace() {
       <Grid>
         <h4 style={{ color: '#fff ' }}>Featured Deals</h4>
       </Grid>
-      <Grid container spacing={12} justify="space-between" style={{ marginTop: '40px', marginBottom: '1rem' }}>
+      <Grid
+        container
+        spacing={12}
+        justify="space-between"
+        style={{ marginTop: '40px', marginBottom: '1rem' }}
+      >
         {deals.map(
           ({
             to,
@@ -330,7 +338,11 @@ export default function Marketplace() {
                       sm={4}
                       md={4}
                       lg={4}
-                      style={{ justifyContent: 'center', alignContent: 'center', padding: '0.5rem' }}
+                      style={{
+                        justifyContent: 'center',
+                        alignContent: 'center',
+                        padding: '0.5rem',
+                      }}
                     >
                       <img src={logo} alt="oops" style={{ width: '100%', height: 'auto' }} />
                     </Grid>
@@ -357,7 +369,11 @@ export default function Marketplace() {
                       sm={3}
                       md={3}
                       lg={3}
-                      style={{ justifyContent: 'center', alignContent: 'around', padding: '0.5rem' }}
+                      style={{
+                        justifyContent: 'center',
+                        alignContent: 'around',
+                        padding: '0.5rem',
+                      }}
                     >
                       <Button
                         variant="contained"
@@ -390,7 +406,13 @@ export default function Marketplace() {
                   </Grid>
 
                   {/* GREY BACKGROUND */}
-                  <Grid xs={12} sm={12} md={12} lg={12} style={{ background: 'rgba(0, 0, 0, 0.01)' }}>
+                  <Grid
+                    xs={12}
+                    sm={12}
+                    md={12}
+                    lg={12}
+                    style={{ background: 'rgba(0, 0, 0, 0.01)' }}
+                  >
                     {/* Row 2 - Round, Last Round, Valuation */}
                     <Grid
                       item
@@ -509,18 +531,34 @@ export default function Marketplace() {
                         </Typography>
                       </Grid>
                       <Grid xs={12} sm={4} md={4} lg={4}>
-                        <Typography style={{ fontSize: '1rem', color: 'rgba(0,0,0,0.5)', letterSpacing: '1px' }}>
+                        <Typography
+                          style={{
+                            fontSize: '1rem',
+                            color: 'rgba(0,0,0,0.5)',
+                            letterSpacing: '1px',
+                          }}
+                        >
                           Round
                         </Typography>
-                        <Typography style={{ fontSize: '1rem', color: 'rgba(0,0,0,0.85)', fontWeight: '900' }}>
+                        <Typography
+                          style={{ fontSize: '1rem', color: 'rgba(0,0,0,0.85)', fontWeight: '900' }}
+                        >
                           {round}
                         </Typography>
                       </Grid>
                       <Grid xs={12} sm={4} md={4} lg={4}>
-                        <Typography style={{ fontSize: '1rem', color: 'rgba(0,0,0,0.5)', letterSpacing: '1px' }}>
+                        <Typography
+                          style={{
+                            fontSize: '1rem',
+                            color: 'rgba(0,0,0,0.5)',
+                            letterSpacing: '1px',
+                          }}
+                        >
                           Days Left
                         </Typography>
-                        <Typography style={{ fontSize: '1rem', color: 'rgba(0,0,0,0.85)', fontWeight: '900' }}>
+                        <Typography
+                          style={{ fontSize: '1rem', color: 'rgba(0,0,0,0.85)', fontWeight: '900' }}
+                        >
                           15 Days
                         </Typography>
                       </Grid>

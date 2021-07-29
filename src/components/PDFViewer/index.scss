@@ -1,21 +1,21 @@
 .pdf-container {
-    min-width: 100%;
-    min-height: 1.3rem;
-    font-size: .9rem;
-    margin: .3rem;
-    border-radius: .25rem;
-    padding: .25rem;
-    margin-bottom: .5rem;
-    text-align: center;
+  min-width: 100%;
+  min-height: 1.3rem;
+  font-size: 0.9rem;
+  margin: 0.3rem;
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
 }
 .iframe-spv-agreement {
-    max-height: 100%;
+  max-height: 100%;
 }
 .root-container-spv-viewer {
-    width: 100%;
-    text-align: center;
-    border-bottom: solid black 3px;
-    .close-icon {
-        cursor: pointer;
-}
+  width: 100%;
+  text-align: center;
+  border-bottom: solid black 3px;
+  .close-icon {
+    cursor: pointer;
+  }
 }

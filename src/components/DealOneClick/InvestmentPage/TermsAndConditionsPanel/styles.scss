@@ -4,13 +4,12 @@
   .terms-container {
     border-radius: 5px;
     border: 1px solid rgb(232, 232, 232);
-    background-color: #FBFCFF;
+    background-color: #fbfcff;
     box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
   }
-
 
   .MuiBox-root {
     padding: 15px;
@@ -21,27 +20,23 @@
     font-size: 11.75px;
   }
 
-
-
   .terms-checkbox {
     height: 0.5em;
     width: 0.5em;
     margin: 0 10px;
   }
 
-
   .terms-checkbox-checked {
     height: 0.5em;
     width: 0.5em;
     margin: 0 10px;
-    background-color: #0375FF;
+    background-color: #0375ff;
     color: white !important;
     border-radius: 5px;
   }
 
-
   .terms-checkbox-checked:hover {
-    background-color: #0375FF !important;
+    background-color: #0375ff !important;
     color: white !important;
   }
 
@@ -50,23 +45,22 @@
     display: flex;
     align-items: center;
     width: 100%;
-    background-color: #9194AA;
+    background-color: #9194aa;
     padding: 20px;
     margin: 0;
     border-radius: 0px 0px 5px 5px;
 
-    .MuiCheckbox-root{
+    .MuiCheckbox-root {
       color: white;
     }
 
     .Mui-checked {
-      color: #0375FF;
+      color: #0375ff;
     }
   }
 
-
   .confirm-investment-button {
-    background-color: #3AC522;
+    background-color: #3ac522;
     width: 100%;
     margin: 20px 0px;
     height: 3rem;
@@ -79,13 +73,9 @@
     outline: none;
   }
 
-
   .confirm-investment-button:hover {
     background-color: #42d828;
   }
-
-
-
 }
 @media screen and (max-width: 960px) {
   .TermsAndConditions {

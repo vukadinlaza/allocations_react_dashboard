@@ -1,13 +1,10 @@
-import React, { useEffect } from 'react';
-import { gql } from 'apollo-boost';
-import { useQuery } from '@apollo/react-hooks';
-import { useParams } from 'react-router-dom';
+import React from 'react';
+import { useQuery, gql } from '@apollo/client';
 import { Button, Typography } from '@material-ui/core';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import EditIcon from '@material-ui/icons/Edit';
 import moment from 'moment';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-import { pick, get } from 'lodash';
+import { pick } from 'lodash';
 import { nWithCommas } from '../../../../utils/numbers';
 import './styles.scss';
 
@@ -95,7 +92,9 @@ function InvestmentHistory({ deal, setInvestor, investor, setAmount }) {
         </div>
         <div>
           <div className="itemHeader">Entity</div>
-          <div>{inv?.submissionData?.legalName || inv?.submissionData?.fullName || data?.investor.name}</div>
+          <div>
+            {inv?.submissionData?.legalName || inv?.submissionData?.fullName || data?.investor.name}
+          </div>
         </div>
         <div>
           <div className="itemHeader">Amount</div>

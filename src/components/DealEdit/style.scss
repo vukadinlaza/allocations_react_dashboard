@@ -1,163 +1,164 @@
-@import "../../App.scss";
+@import '../../App.scss';
 
 .DealEdit {
+  .tabs-container {
+    outline: none;
+    .tab {
+      color: white;
+      min-width: 33.33%;
+      outline: none;
+      text-transform: none;
+      font-family: 'Roboto';
+    }
+  }
 
+  input {
+    // width: 100%;
+  }
 
-    .tabs-container {
-        outline: none;
-        .tab {
-            color: white;
-            min-width: 33.33%;
-            outline: none;
-            text-transform: none;
-            font-family: 'Roboto';
-        }
+  .AddInvestment {
+    > div,
+    > button {
+      margin-bottom: 10px;
+    }
+  }
+
+  .edit-button {
+    color: blue;
+  }
+  .investment-edit {
+    padding: 15px 10px;
+
+    .investor-name {
+      text-align: center;
+      padding: 5px;
+      .fa-times {
+        margin-left: 5px;
+      }
+    }
+  }
+
+  .edit-deal-data-room {
+    border-top: 1px solid $softblue;
+    border-bottom: 1px solid $softblue;
+    background-color: $offwhite;
+    padding: 15px 0px 5px 0px;
+
+    .add-doc {
+      padding: 10px 0px;
+      border-bottom: 1px solid $softblue;
+      > label,
+      > span {
+        margin: 10px 20px 0px 0px;
+      }
+      > button {
+        margin-left: 15px;
+        margin-top: 10px;
+      }
     }
 
-    input {
-        // width: 100%;
-    }
-
-    .AddInvestment {
-        >div, >button {
-            margin-bottom: 10px;
-        }
-    }
-
-    .edit-button {
-        color: blue;
-    }
-    .investment-edit {
-        padding: 15px 10px;
-
-        .investor-name {
-            text-align: center;
-            padding: 5px;
-            .fa-times {
-                margin-left: 5px;
-            }
-        }
-    }
-
-    .edit-deal-data-room {
-        border-top: 1px solid $softblue;
-        border-bottom: 1px solid $softblue;
-        background-color: $offwhite;
-        padding: 15px 0px 5px 0px;
-
-        .add-doc {
-            padding: 10px 0px;
-            border-bottom: 1px solid $softblue;
-            >label, >span {
-                margin: 10px 20px 0px 0px;
-            }
-            >button {
-                margin-left: 15px;
-                margin-top: 10px;
-            }
-        }
-
-        .deal-data-room-docs {
-            padding: 10px;
-            >span {
-                display: inline-block;
-                background-color: $softblue;
-                padding: 10px;
-                font-size: 1.1em;
-                margin-right: 10px;
-
-                .fa-times {
-                    display: none;
-                }
-
-                &:hover .fa-times {
-                    display: inline-block;
-                    color: #8b0000;
-                }
-            }
-        }
-    }
-
-    .investments, .search-investors {
-        .form-sub-title {
-            padding: 5px;
-            margin: 10px 0px;
-        }
-    }
-    .search-investors {
-        .form-sub-title {
-            margin-bottom: 20px;
-        }
-    }
-
-    .email-invite {
-        text-align: center;
+    .deal-data-room-docs {
+      padding: 10px;
+      > span {
+        display: inline-block;
+        background-color: $softblue;
         padding: 10px;
-        cursor: pointer;
-    }
+        font-size: 1.1em;
+        margin-right: 10px;
 
-    .send-email-invites {
-        padding: 15px 20px;
-
-    }
-
-    .invited-investors {
-        font-size: 0.9em;
-        td {
-            padding: 8px;
+        .fa-times {
+          display: none;
         }
+
+        &:hover .fa-times {
+          display: inline-block;
+          color: #8b0000;
+        }
+      }
     }
+  }
+
+  .investments,
+  .search-investors {
+    .form-sub-title {
+      padding: 5px;
+      margin: 10px 0px;
+    }
+  }
+  .search-investors {
+    .form-sub-title {
+      margin-bottom: 20px;
+    }
+  }
+
+  .email-invite {
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .send-email-invites {
+    padding: 15px 20px;
+  }
+
+  .invited-investors {
+    font-size: 0.9em;
+    td {
+      padding: 8px;
+    }
+  }
 }
 
 .form-wrapper {
-    .form-title {
-        font-size: 1.5em;
-    }
+  .form-title {
+    font-size: 1.5em;
+  }
 
-    .form-sub-title {
-        font-size: 1.2em;
-        color: #a7a7a7;
-    }
+  .form-sub-title {
+    font-size: 1.2em;
+    color: #a7a7a7;
+  }
 
-    .row {
-        margin: 25px 0px;
-    }
+  .row {
+    margin: 25px 0px;
+  }
 
-    .fa-plus-circle {
-        cursor: pointer;
-    }
-    .fa-times {
-        cursor: pointer;
-    }
-    .fa-copy {
-        cursor: pointer;
-    }
+  .fa-plus-circle {
+    cursor: pointer;
+  }
+  .fa-times {
+    cursor: pointer;
+  }
+  .fa-copy {
+    cursor: pointer;
+  }
 
-    .loading-table, .invited-investors-none {
-        padding: 10px;
-        text-align: center;
-        font-size: 1.5em;
-        color: #a7a7a7;
-    }
+  .loading-table,
+  .invited-investors-none {
+    padding: 10px;
+    text-align: center;
+    font-size: 1.5em;
+    color: #a7a7a7;
+  }
 
-    .invited-investor {
-        font-size: 0.8em;
-        &:hover {
-            background-color: $softblue;
-            cursor: pointer;
-        }
+  .invited-investor {
+    font-size: 0.8em;
+    &:hover {
+      background-color: $softblue;
+      cursor: pointer;
     }
+  }
 
-    .invited-investors {
-        font-size: 0.9em;
-    }
-    .search-investors {
-        font-size: 0.9em;
-    }
+  .invited-investors {
+    font-size: 0.9em;
+  }
+  .search-investors {
+    font-size: 0.9em;
+  }
 
-    .danger-zone {
-        background-color: #ffcfc7;
-        padding: 10px;
-        border-radius: 10px;
-    }
+  .danger-zone {
+    background-color: #ffcfc7;
+    padding: 10px;
+    border-radius: 10px;
+  }
 }

@@ -2,10 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { isEqual } from 'lodash';
 import { useParams, useHistory } from 'react-router-dom';
 import { TextField, Button } from '@material-ui/core';
-
-import { gql } from 'apollo-boost';
-import { useMutation } from '@apollo/react-hooks';
-
+import { useMutation, gql } from '@apollo/client';
 import './style.scss';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -61,7 +58,8 @@ export default function DealNew() {
   const [hasChanges, setHasChanges] = useState(false);
   const [createDeal, { error }] = useMutation(CREATE_DEAL, {
     refetchQueries: [{ query: ORG_OVERVIEW, variables: { slug: organization } }],
-    onCompleted: ({ createDeal }) => history.push(`/admin/${organization}/deals/${createDeal._id}/edit`),
+    onCompleted: ({ createDeal }) =>
+      history.push(`/admin/${organization}/deals/${createDeal._id}/edit`),
   });
 
   useEffect(() => {

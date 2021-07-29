@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import { get } from 'lodash';
-import { TextField, FormControl, InputLabel, Select, MenuItem, Checkbox, Typography } from '@material-ui/core';
+import {
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Checkbox,
+  Typography,
+} from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import countries from 'country-region-data';
 import { UsaStates } from 'usa-states';
@@ -13,7 +21,6 @@ const countryNames = countries.map((c) => c.countryName);
 const stateNames = usStates.states.map((s) => s.name);
 
 function PersonalInformation({ investor, setInvestor, errors, org }) {
-
   const [mailingDifferent, toggleMailingDifferent] = useState(false);
   const [entityDesignation, setEntityDesignation] = useState('');
   const [individualDesignation, setIndividualDesignation] = useState('');
@@ -22,32 +29,48 @@ function PersonalInformation({ investor, setInvestor, errors, org }) {
       e.persist();
     }
     if (prop === 'entity_designation') {
-      setEntityDesignation(e.target.value)
+      setEntityDesignation(e.target.value);
 
       if (individualDesignation !== '') {
-        setInvestor((prev) => ({ ...prev, [individualDesignation]: false, [e.target.value]: true }));
+        setInvestor((prev) => ({
+          ...prev,
+          [individualDesignation]: false,
+          [e.target.value]: true,
+        }));
       }
 
       if (entityDesignation !== '') {
-        return setInvestor((prev) => ({ ...prev, [entityDesignation]: false, [e.target.value]: true }));
+        return setInvestor((prev) => ({
+          ...prev,
+          [entityDesignation]: false,
+          [e.target.value]: true,
+        }));
       }
       return setInvestor((prev) => ({ ...prev, [e.target.value]: true }));
     }
 
     if (prop === 'individual_designation') {
-      setIndividualDesignation(e.target.value)
+      setIndividualDesignation(e.target.value);
 
       if (entityDesignation !== '') {
         setInvestor((prev) => ({ ...prev, [entityDesignation]: false, [e.target.value]: true }));
       }
       if (individualDesignation !== '') {
-        return setInvestor((prev) => ({ ...prev, [individualDesignation]: false, [e.target.value]: true }));
+        return setInvestor((prev) => ({
+          ...prev,
+          [individualDesignation]: false,
+          [e.target.value]: true,
+        }));
       }
       return setInvestor((prev) => ({ ...prev, [e.target.value]: true }));
     }
 
     if (prop === 'investor_type') {
-      return setInvestor((prev) => ({ ...prev, [prop]: e.target.value, accredited_investor_status: '' }));
+      return setInvestor((prev) => ({
+        ...prev,
+        [prop]: e.target.value,
+        accredited_investor_status: '',
+      }));
     }
     if (prop === 'country') {
       if (newValue) {
@@ -120,7 +143,12 @@ function PersonalInformation({ investor, setInvestor, errors, org }) {
           options={[...countryNames, 'USA', 'U.S.']}
           getOptionLabel={(option) => option}
           renderInput={(params) => (
-            <TextField {...params} error={errors.includes('country')} label="Country" variant="outlined" />
+            <TextField
+              {...params}
+              error={errors.includes('country')}
+              label="Country"
+              variant="outlined"
+            />
           )}
         />
       </FormControl>
@@ -143,14 +171,20 @@ function PersonalInformation({ investor, setInvestor, errors, org }) {
             options={stateNames}
             getOptionLabel={(option) => option}
             renderInput={(params) => (
-              <TextField {...params} error={errors.includes('state')} label="State" variant="outlined" />
+              <TextField
+                {...params}
+                error={errors.includes('state')}
+                label="State"
+                variant="outlined"
+              />
             )}
           />
         </FormControl>
       )}
       {/* Accreditation status */}
-      {org !== 'irishangels' && <AccreditedInvestorStatus investor={investor} handleChange={handleChange} errors={errors} />
-      }
+      {org !== 'irishangels' && (
+        <AccreditedInvestorStatus investor={investor} handleChange={handleChange} errors={errors} />
+      )}
 
       {investor.investor_type && investor.investor_type !== 'individual' && org !== 'irishangels' && (
         <>
@@ -177,10 +211,14 @@ function PersonalInformation({ investor, setInvestor, errors, org }) {
 
       {org === 'irishangels' && (
         <>
-          <Typography variant="subtitle2" style={{ marginBottom: '-.5rem', paddingLeft: '1rem', paddingRight: '1rem' }}>
-            Please initial below to certify that you are still an Accredited Investor, per SEC criteria, as detailed in
-            Exhibit D of the IrishAngels Membership Agreement previously executed by you.
-        </Typography>
+          <Typography
+            variant="subtitle2"
+            style={{ marginBottom: '-.5rem', paddingLeft: '1rem', paddingRight: '1rem' }}
+          >
+            Please initial below to certify that you are still an Accredited Investor, per SEC
+            criteria, as detailed in Exhibit D of the IrishAngels Membership Agreement previously
+            executed by you.
+          </Typography>
           <TextField
             className="personal-information-input"
             variant="outlined"
@@ -253,8 +291,6 @@ function PersonalInformation({ investor, setInvestor, errors, org }) {
 
       {investor.investor_type && investor.investor_type === 'individual' && org === 'irishangels' && (
         <>
-
-
           <TextField
             className="personal-information-input"
             variant="outlined"
@@ -283,7 +319,6 @@ function PersonalInformation({ investor, setInvestor, errors, org }) {
               <MenuItem value="tenants_in_commons">Tenants in Common</MenuItem>
             </Select>
           </FormControl>
-
         </>
       )}
 
@@ -306,7 +341,6 @@ function PersonalInformation({ investor, setInvestor, errors, org }) {
             />
           </label>
           {mailingDifferent && (
-
             <label className="address-input-label">
               Mailing Address:
               <TextField
@@ -318,12 +352,11 @@ function PersonalInformation({ investor, setInvestor, errors, org }) {
                 onChange={handleChange('mailing_address')}
               />
             </label>
-
           )}
           <label className="same-mailing-checkbox">
             Different Mailing Address
-          <Checkbox
-              onChange={() => toggleMailingDifferent(t => (!t))}
+            <Checkbox
+              onChange={() => toggleMailingDifferent((t) => !t)}
               value="checkedA"
               inputProps={{ 'aria-label': 'Checkbox A' }}
             />
@@ -331,12 +364,11 @@ function PersonalInformation({ investor, setInvestor, errors, org }) {
         </FormControl>
       )}
 
-
       {/* <TextField className="personal-information-input" variant="outlined" placeholder="Full Address" />
       <TextField className="personal-information-input" variant="outlined" placeholder="Phone number" /> */}
       <p className="information-notice">
-        Required by United States banking laws. This information is transmitted securely and will never be used for any
-        purpose beyond executing your investment.
+        Required by United States banking laws. This information is transmitted securely and will
+        never be used for any purpose beyond executing your investment.
       </p>
     </section>
   );

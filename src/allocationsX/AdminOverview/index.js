@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import _ from 'lodash';
 import { Row, Col } from 'reactstrap';
 import { useParams } from 'react-router-dom';
-import { gql } from 'apollo-boost';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation, gql } from '@apollo/client';
 import {
   Table,
   TableBody,
@@ -234,7 +233,11 @@ function MatchRequests({ matchRequests = [] }) {
 function MatchRequest({ req }) {
   const { order, buyer, seller, deal } = req;
   return (
-    <TableRow key={req._id} className="AdminMatchRequest" style={{ padding: '10px', marginBottom: '15px' }}>
+    <TableRow
+      key={req._id}
+      className="AdminMatchRequest"
+      style={{ padding: '10px', marginBottom: '15px' }}
+    >
       <TableCell>{deal.company_name}</TableCell>
       <TableCell>{nWithCommas(order.amount)}</TableCell>
       <TableCell>${order.price}/share</TableCell>

@@ -252,15 +252,15 @@ const AllocationsTable = ({
                     <TableSortLabel
                       active={header.isSortable ? orderBy === header.value : false}
                       direction={orderBy === header.value ? order : 'asc'}
-                      onClick={(e) =>{
-                        if(header.isSortable){
+                      onClick={(e) => {
+                        if (header.isSortable) {
                           handleRequestSort(
                             e,
                             header.value,
                             header.nestedKey,
                             header.nestedCollection,
                             header.localFieldKey,
-                          )
+                          );
                         }
                       }}
                     >

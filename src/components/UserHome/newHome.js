@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable radix */
 import React, { useState, useEffect } from 'react';
-import { gql } from 'apollo-boost';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import {
   Paper,
@@ -23,7 +22,7 @@ import {
 } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, gql } from '@apollo/client';
 import CancelIcon from '@material-ui/icons/Cancel';
 import EditIcon from '@material-ui/icons/Edit';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -152,6 +151,7 @@ const GET_INVESTOR = gql`
           dealParams {
             dealMultiple
             wireDeadline
+            signDeadline
           }
           organization {
             _id

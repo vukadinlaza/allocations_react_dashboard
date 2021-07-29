@@ -14,8 +14,7 @@ import {
 import { Row, Col } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
-import { gql } from 'apollo-boost';
-import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation, gql } from '@apollo/client';
 import * as API from '../../api';
 
 import InvestorNew from '../InvestorNew';
@@ -65,7 +64,11 @@ export default function InvestmentNew() {
     if (validation.length === 0) {
       createInvestment({
         variables: {
-          investment: { amount: Math.floor(investment.amount), user_id: user._id, deal_id: deal._id },
+          investment: {
+            amount: Math.floor(investment.amount),
+            user_id: user._id,
+            deal_id: deal._id,
+          },
         },
         onCompleted: toast.success('Sucess'),
       });
@@ -112,7 +115,12 @@ export default function InvestmentNew() {
             </Row>
             <Row>
               <Col sm={{ size: 4, offset: 1 }}>
-                <UserSearch user={user} setUser={setUser} errors={errors} deal_id={get(deal, '_id', '')} />
+                <UserSearch
+                  user={user}
+                  setUser={setUser}
+                  errors={errors}
+                  deal_id={get(deal, '_id', '')}
+                />
               </Col>
               <Col sm={{ size: 4 }}>
                 <DealSearch deal={deal} setDeal={setDeal} errors={errors} />

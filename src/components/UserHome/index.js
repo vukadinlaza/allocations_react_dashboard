@@ -1,5 +1,5 @@
 import React from 'react';
-import { gql } from 'apollo-boost';
+import { gql } from '@apollo/client';
 import { Redirect } from 'react-router-dom';
 import { useAuth } from '../../auth/useAuth';
 import NewHome from './newHome';
@@ -60,9 +60,7 @@ const GET_INVESTOR = gql`
   }
 `;
 
-
 export default function UserHome(props) {
-
   const { userProfile, error } = useAuth(GET_INVESTOR);
 
   if (error) {
@@ -80,4 +78,3 @@ export default function UserHome(props) {
 
   return <NewHome />;
 }
-

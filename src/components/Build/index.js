@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { gql } from 'apollo-boost';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, gql } from '@apollo/client';
 import { Link, Element } from 'react-scroll';
 import handleViewport from 'react-in-viewport';
 import { useHistory } from 'react-router-dom';
@@ -56,7 +55,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 8,
   },
   blueContainer: {
-    background: 'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 120px, rgba(255,255,255,1) 120px)',
+    background:
+      'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 120px, rgba(255,255,255,1) 120px)',
     marginTop: '-30px',
     paddingTop: '30px',
     paddingBottom: '60px',

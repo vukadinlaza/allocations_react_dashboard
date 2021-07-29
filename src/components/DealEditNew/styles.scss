@@ -1,31 +1,30 @@
 .DealEditNew {
   position: relative;
 
-  h1, h2 {
+  h1,
+  h2 {
     font-size: 1.6rem;
     margin: 10px 0;
   }
-
 
   .view-deal-page-button {
     position: absolute;
     top: 0%;
     right: 0%;
-    background: #215EF5;
+    background: #215ef5;
     color: white;
     text-transform: none;
-    transition: all .2s ease-in;
-    
+    transition: all 0.2s ease-in;
+
     &:hover {
-      transition: all .2s ease-out;
+      transition: all 0.2s ease-out;
       background: #1253f8;
     }
-
   }
 
   .section-header {
     width: 80%;
-    
+
     .tabs-container {
       margin: 1.75rem 0;
       width: 100%;
@@ -38,7 +37,7 @@
         border: none;
         margin-right: 1.5rem;
         padding: 5px;
-        color: #0561FF;
+        color: #0561ff;
         background: transparent;
         outline: none;
         border-radius: 0%;
@@ -46,35 +45,35 @@
         text-transform: none;
         font-size: 1.25rem;
         letter-spacing: 0px;
-        transition: all .25s ease-out;
+        transition: all 0.25s ease-out;
         border-bottom: 3px solid transparent;
 
         &.active {
-          border-bottom: 3px solid #0561FF;
-          transition: all .25s ease-in;
+          border-bottom: 3px solid #0561ff;
+          transition: all 0.25s ease-in;
         }
       }
     }
   }
 
   .save-changes {
-    margin-top: .25rem;
-    margin-bottom: .75rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.75rem;
     display: flex;
     align-items: center;
 
     .continue {
       text-transform: none;
-      background-color: #2A2B54;
+      background-color: #2a2b54;
       color: white;
       width: 12rem;
       height: 3rem;
-      margin-right: .5rem;
+      margin-right: 0.5rem;
     }
-    
+
     .save-and-exit {
       text-transform: none;
-      background-color: #0561FF;
+      background-color: #0561ff;
       color: white;
       width: 12rem;
       height: 3rem;
@@ -95,15 +94,13 @@
       align-items: flex-start;
     }
   }
-
 }
 
 @media screen and (max-width: 960px) {
   .DealEditNew {
-  
     .section-header {
       width: 100%;
-      
+
       .tabs-container {
         flex-direction: column;
 
@@ -113,7 +110,7 @@
 
           &.active {
             background-color: #f1f1f1;
-            transition: all .25s ease-in;
+            transition: all 0.25s ease-in;
           }
         }
       }
@@ -126,20 +123,18 @@
         width: 100%;
         margin: 0;
       }
-      
+
       .save-and-exit {
         width: 100%;
       }
-  
+
       .delete-deal {
         width: 100%;
       }
-  
+
       &.lastPage {
         flex-direction: column;
       }
     }
-
-
   }
 }

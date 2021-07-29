@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { gql } from 'apollo-boost';
 import { map } from 'lodash';
-import { useMutation, useQuery } from '@apollo/react-hooks';
-import { Button, Typography, Grid, FormControl, InputLabel, Select, MenuItem, Paper } from '@material-ui/core';
+import { useMutation, useQuery, gql } from '@apollo/client';
+import {
+  Button,
+  Typography,
+  Grid,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Paper,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const GET_INVESTOR = gql`
@@ -113,7 +121,13 @@ function DealDocuments() {
 
             <Grid item style={{ minWidth: '75%' }}>
               {!docs.length >= 1 && (
-                <Button disabled={!deal} fullWidth variant="contained" component="label" style={{ height: 39 }}>
+                <Button
+                  disabled={!deal}
+                  fullWidth
+                  variant="contained"
+                  component="label"
+                  style={{ height: 39 }}
+                >
                   Attach
                   <input
                     type="file"
@@ -143,7 +157,10 @@ function DealDocuments() {
                       borderRadius: '1rem',
                     }}
                   >
-                    <img src="https://allocations-public.s3.us-east-2.amazonaws.com/file-icon.svg" alt="File Icon" />
+                    <img
+                      src="https://allocations-public.s3.us-east-2.amazonaws.com/file-icon.svg"
+                      alt="File Icon"
+                    />
                     <Typography
                       variant="body2"
                       style={{

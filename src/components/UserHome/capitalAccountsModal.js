@@ -66,7 +66,9 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                 <Grid container justify="space-between">
                   <div>
                     <Typography className={classes.header}> {data.spvName}</Typography>
-                    <Typography className={classes.subHeader}>Private Fund Capital Account Statement</Typography>
+                    <Typography className={classes.subHeader}>
+                      Private Fund Capital Account Statement
+                    </Typography>
                   </div>
                 </Grid>
                 <hr className="solid" />
@@ -79,7 +81,9 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                 <Grid container justify="space-between">
                   <div>
                     <Typography>Effective Date</Typography>
-                    <Typography variant="subtitle2">(Date funds received By Private Fund's bank)</Typography>
+                    <Typography variant="subtitle2">
+                      (Date funds received By Private Fund's bank)
+                    </Typography>
                   </div>
                   <Typography className={classes.rightVaue}>{data.effectiveDate}</Typography>
                 </Grid>
@@ -89,7 +93,9 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                     <Typography>Subscription Amount</Typography>
                     <Typography variant="subtitle2">(Amount wired into Private Fund)</Typography>
                   </div>
-                  <Typography className={classes.rightVaue}>${amountFormat(data.subscriptionAmount)}</Typography>
+                  <Typography className={classes.rightVaue}>
+                    ${amountFormat(data.subscriptionAmount)}
+                  </Typography>
                 </Grid>
                 <hr className="solid" />
                 <Grid container justify="space-between">
@@ -99,7 +105,9 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                       (Legal, accounting, administration and compliance fees){' '}
                     </Typography>
                   </div>
-                  <Typography className={classes.rightVaue}>${amountFormat(data.privateFundExpenses)}</Typography>
+                  <Typography className={classes.rightVaue}>
+                    ${amountFormat(data.privateFundExpenses)}
+                  </Typography>
                 </Grid>
                 <hr className="solid" />
                 <Grid container justify="space-between">
@@ -107,7 +115,9 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                     <Typography>Management Fee</Typography>
                     <Typography variant="subtitle2">(Pro rata share of management fee) </Typography>
                   </div>
-                  <Typography className={classes.rightVaue}>${nWithCommas(data.managementFee)}</Typography>
+                  <Typography className={classes.rightVaue}>
+                    ${nWithCommas(data.managementFee)}
+                  </Typography>
                 </Grid>
                 <hr className="solid" />
                 <Grid container justify="space-between">
@@ -123,27 +133,33 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                 <Grid container justify="space-between">
                   <div>
                     <Typography>Net Investment Amount</Typography>
-                    <Typography variant="subtitle2">(Subscription amount minus initial expenses)</Typography>
+                    <Typography variant="subtitle2">
+                      (Subscription amount minus initial expenses)
+                    </Typography>
                   </div>
-                  <Typography className={classes.rightVaue}>${amountFormat(data.netInvestment)}</Typography>
+                  <Typography className={classes.rightVaue}>
+                    ${amountFormat(data.netInvestment)}
+                  </Typography>
                 </Grid>
                 <hr className="solid" />
                 <Grid container justify="space-between">
                   <div style={{ maxWidth: '80%' }}>
                     <Typography>Ownership Percentage *</Typography>
                     <Typography variant="subtitle2">
-                      *As of the effective date. This percentage does not take into account any carry percentage (if
-                      applicable).
+                      *As of the effective date. This percentage does not take into account any
+                      carry percentage (if applicable).
                     </Typography>
                   </div>
-                  <Typography className={classes.rightVaue}>{(data.ownership * 100).toFixed(2)}%</Typography>
+                  <Typography className={classes.rightVaue}>
+                    {(data.ownership * 100).toFixed(2)}%
+                  </Typography>
                 </Grid>
                 <hr className="solid" />
                 <Typography> Disclaimer: </Typography>
                 <Typography variant="subtitle2">
-                  This is a provisional capital account statement reflecting initial set up and investment information.
-                  Annual tax returns and financial statements will provide more complete information including future
-                  expenses, if any.
+                  This is a provisional capital account statement reflecting initial set up and
+                  investment information. Annual tax returns and financial statements will provide
+                  more complete information including future expenses, if any.
                 </Typography>
                 <div style={{ marginBottom: '2rem' }} />
               </Paper>

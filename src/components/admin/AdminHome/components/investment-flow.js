@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
-import { gql } from 'apollo-boost';
 import {
   Grid,
   Typography,
@@ -15,7 +14,7 @@ import {
   Container,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation, gql } from '@apollo/client';
 import Box from '@material-ui/core/Box';
 import CloseIcon from '@material-ui/icons/Close';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -252,7 +251,10 @@ export default ({ dealId, isDemo, superadmin }) => {
         {categories
           .map((d) => {
             if (d.key === 'invited' && data?.deal?.viewedUsers.length > 0) {
-              const cInvs = _.uniqBy([...d.categoryInvestments, ...viewedInvestments], 'investor._id');
+              const cInvs = _.uniqBy(
+                [...d.categoryInvestments, ...viewedInvestments],
+                'investor._id',
+              );
               return {
                 ...d,
                 categoryInvestments: cInvs,
@@ -267,7 +269,12 @@ export default ({ dealId, isDemo, superadmin }) => {
                   <Typography
                     variant="h6"
                     display="inline"
-                    style={{ padding: '8px', textTransform: 'uppercase', fontSize: '16px', maxWidth: '50%' }}
+                    style={{
+                      padding: '8px',
+                      textTransform: 'uppercase',
+                      fontSize: '16px',
+                      maxWidth: '50%',
+                    }}
                   >
                     {value.title}
                   </Typography>
@@ -282,7 +289,11 @@ export default ({ dealId, isDemo, superadmin }) => {
                       color: '#39BE53',
                     }}
                   >
-                    <FontAwesomeIcon icon="dollar-sign" size="sm" style={{ marginRight: '.15rem' }} />
+                    <FontAwesomeIcon
+                      icon="dollar-sign"
+                      size="sm"
+                      style={{ marginRight: '.15rem' }}
+                    />
                     {nWithCommas(value.totalAmount)}
                   </Typography>
                 </Grid>
@@ -374,7 +385,10 @@ const EditInvestmentModal = ({ editInvestmentModal, setEditInvestmentModal, data
                   </Box>
                 </Grid>
                 <Grid container justify="space-between" />
-                <InvestmentEdit investmentId={dataToEdit._id} setEditInvestmentModal={setEditInvestmentModal} />
+                <InvestmentEdit
+                  investmentId={dataToEdit._id}
+                  setEditInvestmentModal={setEditInvestmentModal}
+                />
               </Paper>
             </Grid>
           </Grid>
@@ -408,11 +422,17 @@ const DeleteViewedUser = ({ deleteViewedUserModal, setDeleteViewedUserModal, dea
             <Grid item xs={12} sm={12} md={12} lg={12}>
               <Paper className={classes.modalPaper}>
                 <Grid container justify="flex-end">
-                  <Box onClick={() => setDeleteViewedUserModal(false)} style={{ cursor: 'pointer' }}>
+                  <Box
+                    onClick={() => setDeleteViewedUserModal(false)}
+                    style={{ cursor: 'pointer' }}
+                  >
                     <CloseIcon />
                   </Box>
                 </Grid>
-                <Grid container style={{ padding: '2rem', flexDirection: 'column', alignItems: 'center' }}>
+                <Grid
+                  container
+                  style={{ padding: '2rem', flexDirection: 'column', alignItems: 'center' }}
+                >
                   <Typography variant="h6">Remove Investment</Typography>
                   <Button
                     variant="contained"

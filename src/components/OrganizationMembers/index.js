@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useMutation, useLazyQuery } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
+import { useMutation, useLazyQuery, gql } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Paper, Table, TableBody, TableCell, TextField, TableRow, Button } from '@material-ui/core';
@@ -105,7 +104,9 @@ function Member({ org, member, sendAdminInvite, revokeMembership }) {
     <TableRow>
       <TableCell>
         {member.name}{' '}
-        {member.first_name && member.investor_type === 'entity' ? `[${member.first_name} ${member.last_name}]` : ''}
+        {member.first_name && member.investor_type === 'entity'
+          ? `[${member.first_name} ${member.last_name}]`
+          : ''}
       </TableCell>
       <TableCell>{member.email}</TableCell>
       <TableCell>{inviteArea}</TableCell>

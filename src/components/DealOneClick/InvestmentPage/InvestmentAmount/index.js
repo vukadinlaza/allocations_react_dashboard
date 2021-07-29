@@ -5,7 +5,8 @@ import CurrencyTextField from '@unicef/material-ui-currency-textfield';
 import { nWithCommas } from '../../../../utils/numbers';
 
 function InvestmentAmountPanel({ setAmount, amount, minimumInvestment }) {
-  const placeHolder = minimumInvestment !== null && minimumInvestment ? nWithCommas(minimumInvestment) : '1,000';
+  const placeHolder =
+    minimumInvestment !== null && minimumInvestment ? nWithCommas(minimumInvestment) : '1,000';
 
   return (
     <section className="InvestmentAmountPanel">
@@ -29,7 +30,9 @@ function InvestmentAmountPanel({ setAmount, amount, minimumInvestment }) {
         />
 
         <Button
-          onClick={() => setAmount(minimumInvestment !== null && minimumInvestment ? minimumInvestment : '1000')}
+          onClick={() =>
+            setAmount(minimumInvestment !== null && minimumInvestment ? minimumInvestment : '1000')
+          }
           name="min-investment"
           className="min-investment-button"
         >

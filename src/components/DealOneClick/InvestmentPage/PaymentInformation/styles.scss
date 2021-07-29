@@ -4,7 +4,6 @@
   box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
   border: 1px solid rgb(232, 232, 232);
 
-
   .tabs-container {
     background-color: white;
     width: 100%;
@@ -20,17 +19,16 @@
       color: rgb(135, 135, 135);
       width: 33.33%;
       text-transform: none;
-      background-color: #FBFCFF;
+      background-color: #fbfcff;
       border-width: 0px;
       outline: none;
     }
 
     .Mui-selected {
       font-weight: 800;
-      color: #0561FF;
+      color: #0561ff;
       background-color: white;
     }
-
   }
   .MuiPaper-root {
     border: none;
@@ -54,16 +52,14 @@
         color: white;
         text-transform: none;
         height: 3rem;
-        background-color: #0561FF;
+        background-color: #0561ff;
       }
 
       img {
         margin-top: 10px;
         width: 150px;
       }
-
     }
-
 
     .manual-payment-button {
       margin: 0px 10px;
@@ -93,11 +89,11 @@
     }
 
     .expiration {
-      width: 48.75%
+      width: 48.75%;
     }
 
     .cvv {
-      width: 48.75%
+      width: 48.75%;
     }
   }
 
@@ -118,21 +114,17 @@
     }
 
     .routing-number {
-      width: 48.75%
+      width: 48.75%;
     }
 
     .account-number {
-      width: 48.75%
+      width: 48.75%;
     }
   }
-
 }
 
-
 @media screen and (max-width: 960px) {
-
   .PaymentInformationPanel {
-
     .tabs-container {
       background-color: white;
       width: 100%;
@@ -148,22 +140,20 @@
         color: rgb(135, 135, 135);
         width: 33.33%;
         text-transform: none;
-        background-color: #FBFCFF;
+        background-color: #fbfcff;
         border-width: 0px;
         outline: none;
       }
 
       .Mui-selected {
         font-weight: 800;
-        color: #0561FF;
+        color: #0561ff;
         background-color: white;
       }
-
     }
     .MuiPaper-root {
       border: none;
     }
-
 
     .payment-buttons {
       display: flex;
@@ -188,16 +178,14 @@
           color: white;
           text-transform: none;
           height: 3rem;
-          background-color: #0561FF;
+          background-color: #0561ff;
         }
 
         img {
           margin-top: 10px;
           width: 150px;
         }
-
       }
-
 
       .manual-payment-button {
         margin-top: 20px;
@@ -251,14 +239,12 @@
       }
 
       .routing-number {
-        width: 48.75%
+        width: 48.75%;
       }
 
       .account-number {
-        width: 48.75%
+        width: 48.75%;
       }
     }
-
   }
-
 }

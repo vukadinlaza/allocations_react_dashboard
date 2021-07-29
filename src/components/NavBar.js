@@ -48,7 +48,12 @@ function LoginOrProfile() {
   // not signed in - show login
   return (
     <NavItem>
-      <Button id="qsLoginBtn" color="primary" className="btn-margin" onClick={() => loginWithRedirect({})}>
+      <Button
+        id="qsLoginBtn"
+        color="primary"
+        className="btn-margin"
+        onClick={() => loginWithRedirect({})}
+      >
         Log in
       </Button>
     </NavItem>
@@ -125,7 +130,7 @@ export function Auth0Profile({ user, logoutWithRedirect }) {
         open={Boolean(anchorElFunds)}
         onClose={handleCloseFunds}
       >
-        {organizations_admin
+        {[...organizations_admin]
           .sort((a, b) => a.name.localeCompare(b.name))
           .map((org) => {
             return (

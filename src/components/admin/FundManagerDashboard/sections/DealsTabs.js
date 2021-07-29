@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { withRouter, useRouteMatch } from 'react-router-dom';
+import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Tabs, Tab, Menu, MenuItem, ListItemText, Button } from '@material-ui/core';
+import { Tabs, Tab } from '@material-ui/core';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-import NearMeIcon from '@material-ui/icons/NearMe';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRocket } from '@fortawesome/free-solid-svg-icons'
-import { phone, nestedSort } from '../../../../utils/helpers';
+import { faRocket } from '@fortawesome/free-solid-svg-icons';
+import { phone } from '../../../../utils/helpers';
 import Loader from '../../../utils/Loader';
 
 const styles = (theme) => ({
@@ -92,8 +91,7 @@ const styles = (theme) => ({
   },
 });
 
-const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
-  
+const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
   // const [deals, setDeals] = useState([]);
   const { deals } = data.organization;
 
@@ -108,11 +106,9 @@ const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
   //     // setDeals(deals.reverse());
   //   }
   // }, [orgSlug]);
-  
+
   if (!data) return <Loader />;
 
-  const titleContainer = document.getElementById('main-title-container');
-  
   return (
     <div className={classes.root}>
       <Tabs
@@ -125,7 +121,6 @@ const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
           root: classes.tabs,
           indicator: classes.tabsIndicator,
         }}
-        variant="scrollable"
       >
         {deals.map((deal, index) => {
           const isFund = deal.investmentType === 'fund';
@@ -135,17 +130,23 @@ const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
               label={
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   {deal.company_name}
-                  <span style={{ backgroundColor: isFund ? '#2A2B54' : '#0461FF' }} className={classes.dealTag}>
+                  <span
+                    style={{ backgroundColor: isFund ? '#2A2B54' : '#0461FF' }}
+                    className={classes.dealTag}
+                  >
                     {isFund ? (
                       <AccountBalanceIcon style={{ marginRight: '4px' }} />
                     ) : (
-                      <FontAwesomeIcon style={{ marginRight: '4px' }} icon={faRocket}/>
+                      <FontAwesomeIcon style={{ marginRight: '4px' }} icon={faRocket} />
                     )}
                     {isFund ? 'FUND' : 'SPV'}
-                    <FiberManualRecordIcon style={{ color: closed ? '#d0d0d0' : '#39C522', marginLeft: '2px' }} />
+                    <FiberManualRecordIcon
+                      style={{ color: closed ? '#d0d0d0' : '#39C522', marginLeft: '2px' }}
+                    />
                   </span>
                 </div>
               }
+              // eslint-disable-next-line react/no-array-index-key
               key={`tab-${index}`}
               classes={{
                 root: classes.tab,

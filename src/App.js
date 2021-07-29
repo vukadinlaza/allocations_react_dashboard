@@ -103,27 +103,47 @@ const App = () => {
 
             {/* Private Landing Page */}
             <PrivateRoute path="/deals/:deal_slug" component={DealLandingPage} exact />
-            <PrivateRoute path="/deals/:organization/:deal_slug" component={DealLandingPage} exact />
+            <PrivateRoute
+              path="/deals/:organization/:deal_slug"
+              component={DealLandingPage}
+              exact
+            />
 
             {/* Private Invest Page */}
             <PrivateRoute path="/invest/:deal_slug" component={InvestmentPage} exact />
-            <PrivateRoute path="/invest/:organization/:deal_slug" component={InvestmentPage} exact />
+            <PrivateRoute
+              path="/invest/:organization/:deal_slug"
+              component={InvestmentPage}
+              exact
+            />
 
             {/* Private Next Steps page */}
             <PrivateRoute path="/next-steps/:deal_slug" component={DealNextSteps} exact />
-            <PrivateRoute path="/next-steps/:organization/:deal_slug" component={DealNextSteps} exact />
+            <PrivateRoute
+              path="/next-steps/:organization/:deal_slug"
+              component={DealNextSteps}
+              exact
+            />
 
             {/** AllocationsX * */}
             <PrivateRoute path="/exchange" component={AllocationsX} exact />
             <PrivateRoute path="/exchange/:deal" component={DealExchange} exact />
-            <AdminRoute path="/admin/:organization/exchange" component={AdminExchangeOverview} exact />
+            <AdminRoute
+              path="/admin/:organization/exchange"
+              component={AdminExchangeOverview}
+              exact
+            />
 
             <PrivateRoute path="/investor/:id/home" component={UserHome} />
             <AdminRoute path="/investor/:id/investments" component={UserInvestments} />
             <AdminRoute path="/investors/new" component={InvestorNew} exact />
             <AdminRoute path="/investor/:id/edit" component={InvestorEdit} />
             <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
-            <AdminRoute path="/admin/:organization/investments/:id/edit" component={InvestmentEdit} exact />
+            <AdminRoute
+              path="/admin/:organization/investments/:id/edit"
+              component={InvestmentEdit}
+              exact
+            />
             <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
             <AdminRoute path="/admin/employee-map" component={TeamMap} exact />
 
@@ -131,7 +151,11 @@ const App = () => {
             <AdminRoute path="/superadmin" component={SuperAdminOverview} exact />
             <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
             <AdminRoute path="/admin/users/:userId" component={User} exact />
-            <AdminRoute path="/admin/users/:userId/investments" component={InvestorInvestments} exact />
+            <AdminRoute
+              path="/admin/users/:userId/investments"
+              component={InvestorInvestments}
+              exact
+            />
             <AdminRoute path="/admin/invesments/:investmentId" component={Investment} exact />
 
             {/** Whitelabel Routes * */}
@@ -141,11 +165,19 @@ const App = () => {
 
             <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
             <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />
-            <PrivateRoute path="/admin/:organization/deals/:id/edit" component={DealEditNew} exact />
+            <PrivateRoute
+              path="/admin/:organization/deals/:id/edit"
+              component={DealEditNew}
+              exact
+            />
 
             <PrivateRoute path="/admin/:organization/investments" component={Investments} exact />
             <PrivateRoute path="/admin/:organization/compliance" component={Compliance} exact />
-            <PrivateRoute path="/admin/:organization/master-filing" component={MasterFiling} exact />
+            <PrivateRoute
+              path="/admin/:organization/master-filing"
+              component={MasterFiling}
+              exact
+            />
             <AdminRoute path="/admin/:organization/investors" component={Investors} exact />
 
             {/** catchall * */}

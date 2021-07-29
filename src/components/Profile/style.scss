@@ -1,29 +1,31 @@
-@import "../../App.scss";
+@import '../../App.scss';
 
 .Profile {
-    h4 {
-        .fa-check {
-            color: $green;
-        }
-        .fa-check, .fa-edit, .fa-circle-notch {
-            margin-left: 10px;
-        }
+  h4 {
+    .fa-check {
+      color: $green;
     }
+    .fa-check,
+    .fa-edit,
+    .fa-circle-notch {
+      margin-left: 10px;
+    }
+  }
 
-    .row {
-        margin-bottom: 20px;
-    }
+  .row {
+    margin-bottom: 20px;
+  }
 
-    .file-uploader {
-        .file-label {
-            display: inline-block;
-        }
+  .file-uploader {
+    .file-label {
+      display: inline-block;
     }
-    .submit-row {
-        // text-align: center;
-    }
+  }
+  .submit-row {
+    // text-align: center;
+  }
 }
 .account-paper {
-    margin-top: 1rem;
-    padding: 1rem
+  margin-top: 1rem;
+  padding: 1rem;
 }

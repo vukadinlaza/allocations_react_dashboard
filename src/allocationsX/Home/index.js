@@ -1,9 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
-import { gql } from 'apollo-boost';
 import { Row, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, gql } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Paper, Table, TableBody, TableCell, TableRow, TableHead, Button } from '@material-ui/core';
 import { nWithCommas, formatDate } from '../../utils/numbers';
@@ -33,7 +32,11 @@ export default function AllocationsX() {
   if (!data) return <Loader />;
 
   const sortedDeals = _.take(
-    _.orderBy(data.exchangeDeals, ['volume', ({ date_closed }) => new Date(date_closed).getTime()], ['desc', 'desc']),
+    _.orderBy(
+      data.exchangeDeals,
+      ['volume', ({ date_closed }) => new Date(date_closed).getTime()],
+      ['desc', 'desc'],
+    ),
     10,
   );
 
@@ -89,4 +92,4 @@ export default function AllocationsX() {
       </Row>
     </div>
   );
-};
+}

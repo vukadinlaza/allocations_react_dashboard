@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { gql } from 'apollo-boost';
 import { pick } from 'lodash';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, gql } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { Button, Typography } from '@material-ui/core';
 import { useAuth } from '../../auth/useAuth';

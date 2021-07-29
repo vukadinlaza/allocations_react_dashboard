@@ -4,7 +4,9 @@ import './styles.scss';
 
 function WireInstructions({ deal }) {
   const link =
-    deal.documents && deal.documents !== null && (deal.documents || []).find((d) => d.path === 'wire-instructions')
+    deal.documents &&
+    deal.documents !== null &&
+    (deal.documents || []).find((d) => d.path === 'wire-instructions')
       ? `https://${deal.documents.find((d) => d.path === 'wire-instructions').link}`
       : null;
 
@@ -36,7 +38,9 @@ function WireInstructions({ deal }) {
           </a>
         </div>
       </div>
-      <p className="wire-warning">Please ensure to wire from the same entity you have signed from.</p>
+      <p className="wire-warning">
+        Please ensure to wire from the same entity you have signed from.
+      </p>
     </section>
   );
 }

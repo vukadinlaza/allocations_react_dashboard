@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { gql } from 'apollo-boost';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography, Button, Grid } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, gql } from '@apollo/client';
 import { phone, tablet } from '../../utils/helpers';
 import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';

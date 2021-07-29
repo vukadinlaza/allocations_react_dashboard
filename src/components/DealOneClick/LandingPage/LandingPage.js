@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { gql } from 'apollo-boost';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, gql } from '@apollo/client';
 import { useParams, useHistory, useLocation, Redirect } from 'react-router-dom';
 import moment from 'moment';
 import TermsPanel from './TermsPanel';
@@ -12,7 +11,7 @@ import './styles.scss';
 import KeyHighlights from './KeyHighlightsPanel';
 import Loader from '../../utils/Loader';
 
-const GET_DEAL = gql`
+export const GET_DEAL = gql`
   query PublicDeal($deal_slug: String!, $fund_slug: String!) {
     publicDeal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
       _id
@@ -94,6 +93,7 @@ function DealLandingPage() {
       fund_slug: organization || 'allocations',
     },
   });
+  console.log('new data');
   useEffect(() => {
     if (data?.publicDeal) {
       const { publicDeal: deal } = data;
@@ -113,11 +113,12 @@ function DealLandingPage() {
   if (error) return <Redirect to="/404" />;
 
   if (!data) return <Loader />;
-  const { publicDeal: deal } = data;
 
+  const { publicDeal: deal } = data;
   if (data && deal?.docSpringTemplateId === null) {
     return <Deal />;
   }
+
   return (
     <section className="LandingPage">
       <div className="flex-container">

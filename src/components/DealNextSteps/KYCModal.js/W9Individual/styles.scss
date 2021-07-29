@@ -6,13 +6,12 @@
   overflow-y: auto;
   border-radius: 10px;
   position: relative;
-  
+
   .form-header {
     border-radius: 10px 10px 0px 0px;
-    background: #FFFFFF;
+    background: #ffffff;
     width: 100%;
     padding: 20px 0;
-
 
     h2 {
       font-size: 1.75rem;
@@ -24,14 +23,14 @@
       padding-left: 1rem;
     }
 
-    border-bottom: 2px solid #E3E4E7;
+    border-bottom: 2px solid #e3e4e7;
   }
 
   .form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: #FBFCFF;
+    background: #fbfcff;
     width: 100%;
     border-radius: 0px 0px 10px 10px;
 
@@ -42,7 +41,6 @@
         display: flex;
         flex-direction: column;
       }
-  
     }
 
     .container {
@@ -51,50 +49,48 @@
       display: flex;
       justify-content: space-between;
     }
-    
-    
-    
+
     .region {
       padding: 0;
       width: 95%;
-      
+
       .city {
         width: 60%;
       }
-      
+
       .state {
         width: 17.5%;
       }
-      
+
       .zip {
         width: 20%;
       }
     }
-    
+
     .date-signed {
       width: 50%;
     }
-    
-    
+
     .ssn {
       width: 47.5%;
-      
+
       .container {
         padding: 0;
         width: 100%;
         display: flex;
         justify-content: space-between;
-        
-        .ssn-one,  .ssn-three {
+
+        .ssn-one,
+        .ssn-three {
           width: 35%;
         }
-        
+
         .ssn-two {
           width: 25%;
         }
       }
     }
-    
+
     .form-button {
       width: 95%;
       height: 3rem;
@@ -102,9 +98,8 @@
       outline: none;
       margin-bottom: 10px;
     }
-    
+
     .signature {
-    
       input {
         font-family: 'Great Vibes', cursive !important;
         color: black;
@@ -113,23 +108,20 @@
       }
     }
     .accept {
-      background-color: #99E090;
+      background-color: #99e090;
       color: white;
-      
+
       &:hover {
         background-color: #83e176;
       }
     }
-    
+
     .decline {
-      background-color: #FBFCFF;
+      background-color: #fbfcff;
       &:hover {
         background-color: #eaebed;
       }
     }
-
-
-
   }
 
   .close-button {

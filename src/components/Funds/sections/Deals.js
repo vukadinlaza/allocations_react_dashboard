@@ -57,9 +57,21 @@ const tableVariables = {
     { value: 'company_name', label: 'NAME', isFilter: true, isSortable: true },
     { value: 'deal_lead', label: 'FUND MANAGER', isFilter: true, isSortable: true },
     { value: 'AUM', label: 'AUM', type: 'amount', isSortable: true },
-    { value: 'dealParams', label: 'CLOSE DATE', type: 'wireDeadline', nestedKey: 'wireDeadline', sortField: 'dealParams', isSortable: true },
+    {
+      value: 'dealParams',
+      label: 'CLOSE DATE',
+      type: 'wireDeadline',
+      nestedKey: 'wireDeadline',
+      sortField: 'dealParams',
+      isSortable: true,
+    },
     // {drawdown}
-    { value: 'dealOnboarding', label: 'PROCESS STREET STATUS', type: 'onboarding', isSortable: true },
+    {
+      value: 'dealOnboarding',
+      label: 'PROCESS STREET STATUS',
+      type: 'onboarding',
+      isSortable: true,
+    },
     { value: 'status', label: 'DEAL STATUS', type: 'status', isFilter: true, isSortable: true },
     { value: 'edit', label: 'EDIT DEAL', type: 'edit', keyNotInData: true, align: 'center' },
     {
@@ -79,11 +91,10 @@ const tableVariables = {
   ],
   resolverName: 'fundAdminTables',
   dataVariable: 'deals',
-  defaultSortField: 'AUM'
+  defaultSortField: 'AUM',
 };
 
 const Deals = ({ classes, filter, tableName }) => {
-
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
       case 'managers':
@@ -111,23 +122,23 @@ const Deals = ({ classes, filter, tableName }) => {
         );
       case 'dealPage':
         return (
-          <a 
-            href={`/deals/${row.organization.slug}/${row.slug}`} 
+          <a
+            href={`/deals/${row.organization.slug}/${row.slug}`}
             className={classes.buttonLink}
             target="_blank"
             rel="noopener noreferrer"
-            >
+          >
             <PlayArrowIcon className={classes.button} />
           </a>
         );
       case 'dashboard':
         return (
-          <a 
-            href={`/admin/${row.organization.slug}`} 
+          <a
+            href={`/admin/${row.organization.slug}`}
             className={classes.buttonLink}
             target="_blank"
             rel="noopener noreferrer"
-            >
+          >
             <PlayArrowIcon className={classes.button} />
           </a>
         );
@@ -136,7 +147,7 @@ const Deals = ({ classes, filter, tableName }) => {
     }
   };
 
-  tableVariables.tableName = tableName
+  tableVariables.tableName = tableName;
 
   return (
     <div>

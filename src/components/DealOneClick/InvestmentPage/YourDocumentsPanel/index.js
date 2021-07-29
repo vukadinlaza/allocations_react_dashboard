@@ -11,7 +11,8 @@ function YourDocumentsPanel({ investment }) {
   const { documents } = investment;
 
   const signedDocuments = (documents || []).map((doc, i) => {
-    const file = doc?.path.slice(0, 12) === 'investments/' ? doc.path.split('/')[2] : doc.path.split('/')[1];
+    const file =
+      doc?.path.slice(0, 12) === 'investments/' ? doc.path.split('/')[2] : doc.path.split('/')[1];
 
     return (
       <a key={i} href={`https://${doc.link}`} target="_blank" rel="noreferrer">
@@ -25,7 +26,11 @@ function YourDocumentsPanel({ investment }) {
   return (
     <section className="DealDocumentsPanel">
       <p className="section-label">My Signed Documents</p>
-      {signedDocuments.length > 0 ? signedDocuments : <p className="no-docs">You do not have any signed documents.</p>}
+      {signedDocuments.length > 0 ? (
+        signedDocuments
+      ) : (
+        <p className="no-docs">You do not have any signed documents.</p>
+      )}
     </section>
   );
 }

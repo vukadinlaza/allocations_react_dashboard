@@ -8,8 +8,14 @@ import AllPagesPDFViewer from '../../../PDFViewer';
 import Loader from '../../../utils/Loader';
 import './styles.scss';
 
-export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment, previewData, loadingPreview }) {
-
+export default function SPVDocumentModal({
+  setOpen,
+  open,
+  deal,
+  submitInvestment,
+  previewData,
+  loadingPreview,
+}) {
   const handleClose = () => {
     setOpen(false);
   };
@@ -37,7 +43,14 @@ export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment
       <Fade in={open}>
         <div className="paper">
           {loadingPreview ? (
-            <Grid style={{ display: 'flex', justifyContent: 'center', marginTop: '10%', flexDirection: 'column' }}>
+            <Grid
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                marginTop: '10%',
+                flexDirection: 'column',
+              }}
+            >
               <Typography variant="h4" style={{ marginBottom: '10%' }}>
                 We are generating your documents.
               </Typography>
@@ -45,12 +58,26 @@ export default function SPVDocumentModal({ setOpen, open, deal, submitInvestment
             </Grid>
           ) : (
             <>
-              <AllPagesPDFViewer document={document} usePreview={!!previewLink} handleClose={handleClose} />
+              <AllPagesPDFViewer
+                document={document}
+                usePreview={!!previewLink}
+                handleClose={handleClose}
+              />
               <div className="buttonContainer">
-                <Button variant="contained" color="secondary" className="button" onClick={submitInvestment}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  className="button"
+                  onClick={submitInvestment}
+                >
                   I Agree
                 </Button>
-                <Button variant="contained" color="secondary" className="button declineBtn" onClick={handleClose}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  className="button declineBtn"
+                  onClick={handleClose}
+                >
                   I Decline
                 </Button>
               </div>
