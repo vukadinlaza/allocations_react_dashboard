@@ -40,10 +40,8 @@ const Highlights = ({ data }) => {
           </SimpleBox>
         </Grid>
         <Grid item xs={12} lg={3}>
-          <SimpleBox size="fourth" title="Average Investment">
-            <Typography style={{ fontSize: '26px' }}>
-              ${nWithCommas(Math.round(averageInvestment))}
-            </Typography>
+          <SimpleBox size="fourth" title="Total AUM">
+            <Typography style={{ fontSize: '26px' }}>${nWithCommas(totalInvestorsAUM)}</Typography>
           </SimpleBox>
         </Grid>
         <Grid item xs={12} lg={3}>
@@ -57,8 +55,10 @@ const Highlights = ({ data }) => {
           </SimpleBox>
         </Grid>
         <Grid item xs={12} lg={3}>
-          <SimpleBox size="fourth" title="Total Investor AUM">
-            <Typography style={{ fontSize: '26px' }}>${nWithCommas(totalInvestorsAUM)}</Typography>
+          <SimpleBox size="fourth" title="Average Investment">
+            <Typography style={{ fontSize: '26px' }}>
+              ${nWithCommas(Math.round(averageInvestment))}
+            </Typography>
           </SimpleBox>
         </Grid>
       </Grid>
