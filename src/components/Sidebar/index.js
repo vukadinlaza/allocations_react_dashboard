@@ -1047,6 +1047,7 @@ export default function Sidebar(props) {
                 <ListItemText primary="Funds Admin" />
               </ListItem>
             </div>
+            {/*
             <div
               className={`sidebar-nav-item ${
                 location.pathname === '/admin/settings' ? 'sidebar-nav-item-active' : ''
@@ -1160,7 +1161,8 @@ export default function Sidebar(props) {
                           {userProfile?.name}
                         </MenuItem>
                         {userProfile?.organizations_admin
-                          ?.sort((a, b) => a.name.localeCompare(b.name))
+                          ?.length &&
+                          [...userProfile.organizations_admin].sort((a, b) => a.name.localeCompare(b.name))
                           .map((org) => (
                             <MenuItem
                               onClick={() => {
@@ -1213,7 +1215,8 @@ export default function Sidebar(props) {
                           {userProfile?.name}
                         </MenuItem>
                         {userProfile?.organizations_admin
-                          ?.sort((a, b) => a.name.localeCompare(b.name))
+                          ?.length &&
+                          [...userProfile.organizations_admin].sort((a, b) => a.name.localeCompare(b.name))
                           .map((org) => (
                             <MenuItem
                               onClick={() => history.push(`/admin/${org.slug}`)}
