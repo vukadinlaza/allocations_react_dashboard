@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import { Paper, Grid, Typography, Button, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useMutation } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
+import { useMutation, gql } from '@apollo/client';
 import { toast } from 'react-toastify';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { useAuth } from '../../auth/useAuth';
@@ -39,7 +38,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 8,
   },
   blueContainer: {
-    background: 'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 250px, rgba(255,255,255,1) 250px)',
+    background:
+      'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 250px, rgba(255,255,255,1) 250px)',
     marginTop: '-30px',
     paddingTop: '30px',
     paddingBottom: '60px',
@@ -88,7 +88,6 @@ export default () => {
   const { userProfile, loading } = useAuth(GET_INVESTOR);
   const [updateInvestor] = useMutation(UPDATE_USER);
 
-
   useEffect(() => {
     if (!loading && userProfile._id) {
       updateInvestor({
@@ -111,7 +110,13 @@ export default () => {
               <img
                 src="https://allocations-public.s3.us-east-2.amazonaws.com/Investor+Dashboard%402x.png"
                 alt="oops"
-                style={{ width: '150px', height: '150px', position: 'relative', bottom: '-5rem', left: '20%' }}
+                style={{
+                  width: '150px',
+                  height: '150px',
+                  position: 'relative',
+                  bottom: '-5rem',
+                  left: '20%',
+                }}
               />
               <Paper className={classes.paper}>
                 <Typography variant="h6" style={{ marginTop: '2rem' }}>
@@ -132,7 +137,10 @@ export default () => {
                     <CheckCircleIcon color="secondary" />
                   </Grid>
                   <Grid item>
-                    <Typography variant="subtitle2" style={{ marginTop: '.1rem', marginLeft: '.5rem' }}>
+                    <Typography
+                      variant="subtitle2"
+                      style={{ marginTop: '.1rem', marginLeft: '.5rem' }}
+                    >
                       Instant initial application{' '}
                     </Typography>
                   </Grid>
@@ -142,7 +150,10 @@ export default () => {
                     <CheckCircleIcon color="secondary" />
                   </Grid>
                   <Grid item>
-                    <Typography variant="subtitle2" style={{ marginTop: '.1rem', marginLeft: '.5rem' }}>
+                    <Typography
+                      variant="subtitle2"
+                      style={{ marginTop: '.1rem', marginLeft: '.5rem' }}
+                    >
                       Automated credit check
                     </Typography>
                   </Grid>
@@ -163,7 +174,13 @@ export default () => {
               <img
                 src="https://allocations-public.s3.us-east-2.amazonaws.com/Investor+Dashboard%402x.png"
                 alt="oops"
-                style={{ width: '150px', height: '150px', position: 'relative', bottom: '-5rem', left: '20%' }}
+                style={{
+                  width: '150px',
+                  height: '150px',
+                  position: 'relative',
+                  bottom: '-5rem',
+                  left: '20%',
+                }}
               />
               <Paper className={classes.paper}>
                 <Typography variant="h6" style={{ marginTop: '2rem' }}>
@@ -184,7 +201,10 @@ export default () => {
                     <CheckCircleIcon color="secondary" />
                   </Grid>
                   <Grid item>
-                    <Typography variant="subtitle2" style={{ marginTop: '.1rem', marginLeft: '.5rem' }}>
+                    <Typography
+                      variant="subtitle2"
+                      style={{ marginTop: '.1rem', marginLeft: '.5rem' }}
+                    >
                       Instant initial application{' '}
                     </Typography>
                   </Grid>
@@ -194,7 +214,10 @@ export default () => {
                     <CheckCircleIcon color="secondary" />
                   </Grid>
                   <Grid item>
-                    <Typography variant="subtitle2" style={{ marginTop: '.1rem', marginLeft: '.5rem' }}>
+                    <Typography
+                      variant="subtitle2"
+                      style={{ marginTop: '.1rem', marginLeft: '.5rem' }}
+                    >
                       Automated credit check
                     </Typography>
                   </Grid>
@@ -215,7 +238,13 @@ export default () => {
               <img
                 src="https://allocations-public.s3.us-east-2.amazonaws.com/SPV%402x.png"
                 alt="oops"
-                style={{ width: '150px', height: '150px', position: 'relative', bottom: '-5rem', left: '20%' }}
+                style={{
+                  width: '150px',
+                  height: '150px',
+                  position: 'relative',
+                  bottom: '-5rem',
+                  left: '20%',
+                }}
               />
               <Paper className={classes.paper}>
                 <Typography variant="h6" style={{ marginTop: '2rem' }}>
@@ -236,7 +265,10 @@ export default () => {
                     <CheckCircleIcon color="secondary" />
                   </Grid>
                   <Grid item>
-                    <Typography variant="subtitle2" style={{ marginTop: '.1rem', marginLeft: '.5rem' }}>
+                    <Typography
+                      variant="subtitle2"
+                      style={{ marginTop: '.1rem', marginLeft: '.5rem' }}
+                    >
                       Instant initial application{' '}
                     </Typography>
                   </Grid>
@@ -246,7 +278,10 @@ export default () => {
                     <CheckCircleIcon color="secondary" />
                   </Grid>
                   <Grid item>
-                    <Typography variant="subtitle2" style={{ marginTop: '.1rem', marginLeft: '.5rem' }}>
+                    <Typography
+                      variant="subtitle2"
+                      style={{ marginTop: '.1rem', marginLeft: '.5rem' }}
+                    >
                       Automated credit check
                     </Typography>
                   </Grid>
@@ -267,7 +302,13 @@ export default () => {
               <img
                 src="https://allocations-public.s3.us-east-2.amazonaws.com/SPV%402x.png"
                 alt="oops"
-                style={{ width: '150px', height: '150px', position: 'relative', bottom: '-5rem', left: '20%' }}
+                style={{
+                  width: '150px',
+                  height: '150px',
+                  position: 'relative',
+                  bottom: '-5rem',
+                  left: '20%',
+                }}
               />
               <Paper className={classes.paper}>
                 <Typography variant="h6" style={{ marginTop: '2rem' }}>
@@ -288,7 +329,10 @@ export default () => {
                     <CheckCircleIcon color="secondary" />
                   </Grid>
                   <Grid item>
-                    <Typography variant="subtitle2" style={{ marginTop: '.1rem', marginLeft: '.5rem' }}>
+                    <Typography
+                      variant="subtitle2"
+                      style={{ marginTop: '.1rem', marginLeft: '.5rem' }}
+                    >
                       Instant initial application{' '}
                     </Typography>
                   </Grid>
@@ -298,7 +342,10 @@ export default () => {
                     <CheckCircleIcon color="secondary" />
                   </Grid>
                   <Grid item>
-                    <Typography variant="subtitle2" style={{ marginTop: '.1rem', marginLeft: '.5rem' }}>
+                    <Typography
+                      variant="subtitle2"
+                      style={{ marginTop: '.1rem', marginLeft: '.5rem' }}
+                    >
                       Automated credit check
                     </Typography>
                   </Grid>

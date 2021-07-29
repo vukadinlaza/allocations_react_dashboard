@@ -125,7 +125,7 @@ export function Auth0Profile({ user, logoutWithRedirect }) {
         open={Boolean(anchorElFunds)}
         onClose={handleCloseFunds}
       >
-        {organizations_admin
+        {[...organizations_admin]
           .sort((a, b) => a.name.localeCompare(b.name))
           .map((org) => {
             return (
