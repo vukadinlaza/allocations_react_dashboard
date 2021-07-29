@@ -506,6 +506,11 @@ const FundManagerDashboard = ({ classes, history }) => {
     dealName && `({Deal Name}="${checkedDealName}")`,
   );
 
+
+
+
+
+
   const { data: atFundData, status } = useFetch(
     OPS_ACCOUNTING,
     atDealData?.name && INVESTMENTS_TABLE,
