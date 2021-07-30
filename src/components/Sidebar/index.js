@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   drawer: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: '100%',
       flexShrink: 0,
     },
@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
     '&:focus': {
       outline: 'none',
     },
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       display: 'none',
     },
   },
@@ -367,7 +367,7 @@ export default function Sidebar(props) {
         {!onboarding && <CssBaseline />}
         {!onboarding && (
           <>
-            {width > phone ? (
+            {width > 960 ? (
               ''
             ) : (
               <AppBar className={classes.appBar}>
