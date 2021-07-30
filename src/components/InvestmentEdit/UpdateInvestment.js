@@ -17,6 +17,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { NoFragmentCyclesRule } from 'graphql';
 import Loader from '../utils/Loader';
 import { destroy } from '../../api/investments';
 import DocumentIcon from '../svg/DocumentIcon';
@@ -143,9 +144,14 @@ export default function InvestmentEdit({
   }, [data, loading]);
 
   const updateInvestmentProp = ({ prop, newVal }) => {
-    // if 'accredidation_status' ...
-    console.log('TYPE', typeof newVal, newVal);
-    setInvestment((prev) => ({ ...prev, [prop]: newVal }));
+    if (prop === 'accredidation_status') {
+      setInvestment((prev) => ({
+        ...prev,
+        investor: { ...prev.investor, accredidation_status: newVal },
+      }));
+    } else {
+      setInvestment((prev) => ({ ...prev, [prop]: newVal }));
+    }
   };
 
   if (createInvestmentRes.data?.createInvestment?._id) {
@@ -160,7 +166,7 @@ export default function InvestmentEdit({
   const convertToPositiveInteger = (num) => {
     return parseInt(num < 0 ? 0 : num);
   };
-
+  console.log(investment);
   return (
     <div className="InvestmentEdit form-wrapper">
       <div className="form-title">Update Investment</div>
@@ -251,8 +257,8 @@ export default function InvestmentEdit({
         <div className="form-title">Update Investment</div>
         <Divider className={classes.divider} />
 
-        {/* need to figure out state */}
-        {/* <Grid item xs={12} sm={12} md={12} lg={12}>
+        {/* need to figure out state issue */}
+        <Grid item xs={12} sm={12} md={12} lg={12}>
           <FormControl variant="outlined" style={{ width: '100%' }}>
             <InputLabel>Accreditation Status</InputLabel>
             <Select
@@ -265,11 +271,11 @@ export default function InvestmentEdit({
               }
               inputProps={{ name: 'accredidation_status' }}
             >
-              <MenuItem value="true">The investor is accredited</MenuItem>
-              <MenuItem value="false">The investor is not accredited</MenuItem>
+              <MenuItem value>The investor is accredited</MenuItem>
+              <MenuItem value={false}>The investor is not accredited</MenuItem>
             </Select>
           </FormControl>
-        </Grid> */}
+        </Grid>
 
         <Grid container spacing={3}>
           <Grid
