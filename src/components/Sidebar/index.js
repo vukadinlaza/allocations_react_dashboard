@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#868c97',
     boxShadow: 'none !important',
     position: 'relative',
-    height: '70px',
+    height: '4rem',
     border: 'none',
     borderBottom: '1px solid #d8dce6',
   },
