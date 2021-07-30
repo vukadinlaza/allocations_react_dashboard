@@ -247,7 +247,7 @@ th {
   @media only screen and (max-width: 960px) {
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: 5% auto;
+    grid-template-rows: 8% auto;
     grid-template-areas:
       'sidebar'
       'mainRoute';

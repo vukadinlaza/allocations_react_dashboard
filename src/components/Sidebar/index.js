@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
+    height: '100%',
   },
   brand: {
     flexGrow: 1,
@@ -57,8 +58,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#868c97',
     boxShadow: 'none !important',
     position: 'relative',
-    height: '4rem',
-    border: 'none',
+    height: '100%',
     borderBottom: '1px solid #d8dce6',
   },
   menuButton: {
@@ -360,163 +360,161 @@ export default function Sidebar(props) {
   const onboarding = location.pathname === '/get-started';
 
   return (
-    <>
-      <div className={classes.root}>
-        {!onboarding && <CssBaseline />}
-        {!onboarding && (
-          <>
-            {width > 960 ? (
-              ''
-            ) : (
-              <AppBar className={classes.appBar}>
-                <Toolbar>
-                  <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    edge="start"
-                    onClick={handleDrawerToggle}
-                    className={classes.menuButton}
-                  >
-                    <MenuIcon />
-                  </IconButton>
-                  <div className={classes.brand}>
-                    <Brand
-                      organizations_admin={userProfile.organizations_admin || []}
-                      admin={userProfile.admin}
-                    />
-                  </div>
-                </Toolbar>
-              </AppBar>
-            )}
-            <div
-              className={classes.contentContainer}
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-              }}
-            >
-              <nav className={classes.drawer} aria-label="mailbox folders">
-                <Hidden mdUp implementation="css">
-                  <Drawer
-                    container={container}
-                    variant="temporary"
-                    anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                    open={mobileOpen}
-                    onClose={handleDrawerToggle}
-                    classes={{
-                      paper: classes.drawerPaper,
-                    }}
-                    ModalProps={{
-                      keepMounted: true,
-                    }}
-                  >
-                    <FormControl className={classes.formControl}>
-                      <Select
-                        labelId="accounts-select"
-                        value={currentAccount || ''}
-                        onChange={handleAccountChange}
-                        className={classes.input}
-                        classes={{
-                          root: classes.select,
+    <div className={classes.root}>
+      {!onboarding && <CssBaseline />}
+      {!onboarding && (
+        <>
+          {width > 960 ? (
+            ''
+          ) : (
+            <AppBar className={classes.appBar}>
+              <Toolbar>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="start"
+                  onClick={handleDrawerToggle}
+                  className={classes.menuButton}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <div className={classes.brand}>
+                  <Brand
+                    organizations_admin={userProfile.organizations_admin || []}
+                    admin={userProfile.admin}
+                  />
+                </div>
+              </Toolbar>
+            </AppBar>
+          )}
+          <div
+            className={classes.contentContainer}
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+            }}
+          >
+            <nav className={classes.drawer} aria-label="mailbox folders">
+              <Hidden mdUp implementation="css">
+                <Drawer
+                  container={container}
+                  variant="temporary"
+                  anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                  open={mobileOpen}
+                  onClose={handleDrawerToggle}
+                  classes={{
+                    paper: classes.drawerPaper,
+                  }}
+                  ModalProps={{
+                    keepMounted: true,
+                  }}
+                >
+                  <FormControl className={classes.formControl}>
+                    <Select
+                      labelId="accounts-select"
+                      value={currentAccount || ''}
+                      onChange={handleAccountChange}
+                      className={classes.input}
+                      classes={{
+                        root: classes.select,
+                      }}
+                      inputProps={{
+                        classes: {
+                          focused: classes.inputFocused,
+                          underline: classes.inputFocused,
+                        },
+                      }}
+                    >
+                      <MenuItem
+                        onClick={() => {
+                          handleDrawerToggle();
+                          history.push(`/`);
                         }}
-                        inputProps={{
-                          classes: {
-                            focused: classes.inputFocused,
-                            underline: classes.inputFocused,
-                          },
-                        }}
-                      >
-                        <MenuItem
-                          onClick={() => {
-                            handleDrawerToggle();
-                            history.push(`/`);
-                          }}
-                          value={userProfile?.name}
-                          style={{
-                            borderBottom: '1px solid rgb(204, 204, 204)',
-                            fontWeight: '500',
-                          }}
-                        >
-                          {userProfile?.name}
-                        </MenuItem>
-                        {userProfile?.organizations_admin?.length &&
-                          [...userProfile.organizations_admin]
-                            .sort((a, b) => a.name.localeCompare(b.name))
-                            .map((org) => (
-                              <MenuItem
-                                onClick={() => {
-                                  handleDrawerToggle();
-                                  history.push(`/admin/${org.slug}`);
-                                }}
-                                value={org.name}
-                                key={org.name}
-                              >
-                                {org.name}
-                              </MenuItem>
-                            ))}
-                      </Select>
-                    </FormControl>
-                    {drawer}
-                  </Drawer>
-                </Hidden>
-                <Hidden smDown implementation="css">
-                  <Drawer
-                    classes={{
-                      paper: classes.newDrawerPaper,
-                    }}
-                    variant="permanent"
-                    open
-                  >
-                    <FormControl className={classes.formControl}>
-                      <Select
-                        labelId="accounts-select"
-                        value={currentAccount || ''}
-                        onChange={handleAccountChange}
-                        className={classes.input}
-                        classes={{
-                          root: classes.select,
-                        }}
-                        inputProps={{
-                          classes: {
-                            focused: classes.inputFocused,
-                            underline: classes.inputFocused,
-                          },
+                        value={userProfile?.name}
+                        style={{
+                          borderBottom: '1px solid rgb(204, 204, 204)',
+                          fontWeight: '500',
                         }}
                       >
-                        <MenuItem
-                          onClick={() => history.push(`/`)}
-                          value={userProfile?.name}
-                          style={{
-                            borderBottom: '1px solid rgb(204, 204, 204)',
-                            fontWeight: '500',
-                          }}
-                        >
-                          {userProfile?.name}
-                        </MenuItem>
-                        {userProfile?.organizations_admin?.length &&
-                          [...userProfile.organizations_admin]
-                            .sort((a, b) => a.name.localeCompare(b.name))
-                            .map((org) => (
-                              <MenuItem
-                                onClick={() => history.push(`/admin/${org.slug}`)}
-                                value={org.name}
-                                key={org.name}
-                              >
-                                {org.name}
-                              </MenuItem>
-                            ))}
-                      </Select>
-                    </FormControl>
-                    {drawer}
-                  </Drawer>
-                </Hidden>
-              </nav>
-            </div>
-          </>
-        )}
-      </div>
-    </>
+                        {userProfile?.name}
+                      </MenuItem>
+                      {userProfile?.organizations_admin?.length &&
+                        [...userProfile.organizations_admin]
+                          .sort((a, b) => a.name.localeCompare(b.name))
+                          .map((org) => (
+                            <MenuItem
+                              onClick={() => {
+                                handleDrawerToggle();
+                                history.push(`/admin/${org.slug}`);
+                              }}
+                              value={org.name}
+                              key={org.name}
+                            >
+                              {org.name}
+                            </MenuItem>
+                          ))}
+                    </Select>
+                  </FormControl>
+                  {drawer}
+                </Drawer>
+              </Hidden>
+              <Hidden smDown implementation="css">
+                <Drawer
+                  classes={{
+                    paper: classes.newDrawerPaper,
+                  }}
+                  variant="permanent"
+                  open
+                >
+                  <FormControl className={classes.formControl}>
+                    <Select
+                      labelId="accounts-select"
+                      value={currentAccount || ''}
+                      onChange={handleAccountChange}
+                      className={classes.input}
+                      classes={{
+                        root: classes.select,
+                      }}
+                      inputProps={{
+                        classes: {
+                          focused: classes.inputFocused,
+                          underline: classes.inputFocused,
+                        },
+                      }}
+                    >
+                      <MenuItem
+                        onClick={() => history.push(`/`)}
+                        value={userProfile?.name}
+                        style={{
+                          borderBottom: '1px solid rgb(204, 204, 204)',
+                          fontWeight: '500',
+                        }}
+                      >
+                        {userProfile?.name}
+                      </MenuItem>
+                      {userProfile?.organizations_admin?.length &&
+                        [...userProfile.organizations_admin]
+                          .sort((a, b) => a.name.localeCompare(b.name))
+                          .map((org) => (
+                            <MenuItem
+                              onClick={() => history.push(`/admin/${org.slug}`)}
+                              value={org.name}
+                              key={org.name}
+                            >
+                              {org.name}
+                            </MenuItem>
+                          ))}
+                    </Select>
+                  </FormControl>
+                  {drawer}
+                </Drawer>
+              </Hidden>
+            </nav>
+          </div>
+        </>
+      )}
+    </div>
   );
 }
 
