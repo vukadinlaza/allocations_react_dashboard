@@ -156,7 +156,11 @@ export default function InvestmentEdit({
     get(investment, 'investor.investor_type') === 'entity'
       ? get(investment, 'investor.entity_name') || ''
       : `${get(investment, 'investor.first_name')} ${get(investment, 'investor.last_name')}`;
-  console.log({ investment });
+
+  const convertToPositiveInteger = (num) => {
+    return parseInt(num < 0 ? 0 : num);
+  };
+
   return (
     <div className="InvestmentEdit form-wrapper">
       <div className="form-title">Update Investment</div>
@@ -183,6 +187,7 @@ export default function InvestmentEdit({
                   'deal.company_description',
                   '',
                 )}`}
+                disabled
                 label="Deal"
                 variant="outlined"
               />
@@ -193,10 +198,14 @@ export default function InvestmentEdit({
               <TextField
                 style={{ width: '100%' }}
                 type="number"
+                InputProps={{ inputProps: { min: 0 } }}
                 value={get(investment, 'amount', '') || 0}
                 onChange={(e) =>
                   // eslint-disable-next-line radix
-                  updateInvestmentProp({ prop: 'amount', newVal: parseInt(e.target.value) })
+                  updateInvestmentProp({
+                    prop: 'amount',
+                    newVal: convertToPositiveInteger(e.target.value),
+                  })
                 }
                 label="Amount Committed"
                 variant="outlined"
@@ -208,12 +217,13 @@ export default function InvestmentEdit({
               <TextField
                 style={{ width: '100%' }}
                 type="number"
+                InputProps={{ inputProps: { min: 0 } }}
                 value={get(investment, 'capitalWiredAmount', '') || 0}
                 onChange={(e) =>
                   // eslint-disable-next-line radix
                   updateInvestmentProp({
                     prop: 'capitalWiredAmount',
-                    newVal: parseInt(e.target.value),
+                    newVal: convertToPositiveInteger(e.target.value),
                   })
                 }
                 label="Amount Received"
@@ -241,6 +251,7 @@ export default function InvestmentEdit({
         <div className="form-title">Update Investment</div>
         <Divider className={classes.divider} />
 
+        {/* need to figure out state */}
         {/* <Grid item xs={12} sm={12} md={12} lg={12}>
           <FormControl variant="outlined" style={{ width: '100%' }}>
             <InputLabel>Accreditation Status</InputLabel>
@@ -258,8 +269,8 @@ export default function InvestmentEdit({
               <MenuItem value="false">The investor is not accredited</MenuItem>
             </Select>
           </FormControl>
-        </Grid>
- */}
+        </Grid> */}
+
         <Grid container spacing={3}>
           <Grid
             item
