@@ -85,16 +85,27 @@ const UPDATE_INVESTMENT = gql`
     }
   }
 `;
+
+const UPDATE_USER = gql`
+  mutation UpdateUser($input: UserInput!) {
+    updateUser(input: $input) {
+      _id
+    }
+  }
+`;
+
 export default function InvestmentEdit({
   investmentId = false,
   isK1 = false,
   handleUpdate = false,
+  userIdCopy,
 }) {
   const classes = useStyles();
   const params = useParams();
   const [investment, setInvestment] = useState(null);
   const [hasChanges, setHasChanges] = useState(false);
   const id = investmentId || params.id;
+  const [user, setUser] = useState({ _id: userIdCopy, accredidation_status: false });
 
   const {
     data,
@@ -120,6 +131,23 @@ export default function InvestmentEdit({
       );
     },
   });
+
+  const [updateUser] = useMutation(UPDATE_USER, {
+    onCompleted: () => {
+      // toast.success('Success! Investor Updated.');
+      if (handleUpdate) {
+        handleUpdate();
+      }
+      getInvestment();
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error(
+        'Something went wrong updating the investment or investor. Try again or contact support@allocations.com',
+      );
+    },
+  });
+
   const [deleteInvestment] = useMutation(destroy, {
     onCompleted: () => {
       if (handleUpdate) {
@@ -149,6 +177,10 @@ export default function InvestmentEdit({
         ...prev,
         investor: { ...prev.investor, accredidation_status: newVal },
       }));
+      setUser((prev) => ({
+        ...prev,
+        accredidation_status: newVal,
+      }));
     } else {
       setInvestment((prev) => ({ ...prev, [prop]: newVal }));
     }
@@ -166,7 +198,7 @@ export default function InvestmentEdit({
   const convertToPositiveInteger = (num) => {
     return parseInt(num < 0 ? 0 : num);
   };
-  console.log(investment);
+
   return (
     <div className="InvestmentEdit form-wrapper">
       <div className="form-title">Update Investment</div>
@@ -257,7 +289,6 @@ export default function InvestmentEdit({
         <div className="form-title">Update Investment</div>
         <Divider className={classes.divider} />
 
-        {/* need to figure out state issue */}
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <FormControl variant="outlined" style={{ width: '100%' }}>
             <InputLabel>Accreditation Status</InputLabel>
@@ -290,15 +321,22 @@ export default function InvestmentEdit({
               disabled={!hasChanges}
               variant="contained"
               style={{ backgroundColor: '#2A2B54' }}
-              onClick={() =>
+              onClick={() => {
                 updateInvestment({
                   variables: {
                     investment: {
                       ...pick(investment, ['_id', 'status', 'amount', 'capitalWiredAmount']),
                     },
                   },
-                })
-              }
+                });
+                updateUser({
+                  variables: {
+                    input: {
+                      ...pick(user, ['_id', 'accredidation_status']),
+                    },
+                  },
+                });
+              }}
               color="primary"
             >
               UPDATE

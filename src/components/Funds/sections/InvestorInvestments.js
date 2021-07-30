@@ -256,6 +256,8 @@ const InvestorInvestments = ({ classes, history }) => {
   };
 
   const userInvestments = data?.investor?.investments;
+  const userIdCopy = data?.investor?._id;
+
   if (!userInvestments) return <Loader />;
   const dataCopy = JSON.parse(JSON.stringify(data));
   dataCopy.investor.investments = dataCopy.investor.investments.filter((inv) =>
@@ -321,7 +323,11 @@ const InvestorInvestments = ({ classes, history }) => {
       )}
       <AppModal isOpen={showModal} onClose={onClose}>
         {investmentId ? (
-          <InvestmentEdit investmentId={investmentId} handleUpdate={handleUpdate} />
+          <InvestmentEdit
+            investmentId={investmentId}
+            handleUpdate={handleUpdate}
+            userIdCopy={userIdCopy}
+          />
         ) : (
           <DeleteViewedUser dealId={dealId} investorId={investorId} handleUpdate={handleUpdate} />
         )}
