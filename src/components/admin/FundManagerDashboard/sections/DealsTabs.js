@@ -136,7 +136,6 @@ const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
           root: classes.tabs,
           indicator: classes.tabsIndicator,
         }}
-        variant="scrollable"
       >
         {deals.map((deal, index) => {
           const isFund = deal.investmentType === 'fund';
@@ -146,20 +145,22 @@ const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
               label={
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   {deal.company_name}
-                  <span
-                    style={{ backgroundColor: isFund ? '#2A2B54' : '#0461FF' }}
-                    className={classes.dealTag}
-                  >
-                    {isFund ? (
-                      <AccountBalanceIcon style={{ marginRight: '4px' }} />
-                    ) : (
-                      <FontAwesomeIcon style={{ marginRight: '4px' }} icon={faRocket} />
-                    )}
-                    {isFund ? 'FUND' : 'SPV'}
-                    <FiberManualRecordIcon
-                      style={{ color: closed ? '#d0d0d0' : '#39C522', marginLeft: '2px' }}
-                    />
-                  </span>
+                  {deal.company_name !== 'All' && (
+                    <span
+                      style={{ backgroundColor: isFund ? '#2A2B54' : '#0461FF' }}
+                      className={classes.dealTag}
+                    >
+                      {isFund ? (
+                        <AccountBalanceIcon style={{ marginRight: '4px' }} />
+                      ) : (
+                        <FontAwesomeIcon style={{ marginRight: '4px' }} icon={faRocket} />
+                      )}
+                      {isFund ? 'FUND' : 'SPV'}
+                      <FiberManualRecordIcon
+                        style={{ color: closed ? '#d0d0d0' : '#39C522', marginLeft: '2px' }}
+                      />
+                    </span>
+                  )}
                 </div>
               }
               key={`tab-${index}`}

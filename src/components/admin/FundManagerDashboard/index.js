@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import moment from 'moment';
-import { useLazyQuery, useSubscription, gql } from '@apollo/client';
+import { useLazyQuery, useSubscription, useQuery, gql } from '@apollo/client';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography, Button, Grid } from '@material-ui/core';
@@ -15,6 +15,7 @@ import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
 import Investments from './sections/Investments';
 import Investors from './sections/Investors';
+import Overview from './sections/Overview';
 import { FlatBox } from './widgets';
 import { phone, tablet } from '../../../utils/helpers';
 import { useViewport, useFetch } from '../../../utils/hooks';
@@ -428,6 +429,7 @@ export const ORG_OVERVIEW = gql`
         date_closed
         investmentType
         status
+        AUM
         organization {
           _id
           name
@@ -469,6 +471,12 @@ export const ONBOARDING = gql`
   }
 `;
 
+export const GET_OVERVIEW_DATA = gql`
+  query OverviewData($slug: String!) {
+    overviewData(slug: $slug)
+  }
+`;
+
 const fundTabs = [
   'Highlights',
   'Investments',
@@ -495,6 +503,7 @@ const FundManagerDashboard = ({ classes, history }) => {
   const [atDealData, setAtDealData] = useState({});
   const [openTooltip, setOpenTooltip] = useState('');
   const [orgDeals, setOrgDeals] = useState(null);
+  const { data: overview } = useQuery(GET_OVERVIEW_DATA, { variables: { slug: orgSlug } });
   const [getInvestments, { data: dealInvestments, refetch }] = useLazyQuery(GET_INVESTMENTS);
   const [getOrgDeals, { data: orgDealsData }] = useLazyQuery(ORG_OVERVIEW);
   const { data: subsData } = useSubscription(ONBOARDING);
@@ -563,18 +572,15 @@ const FundManagerDashboard = ({ classes, history }) => {
         .filter((d) => d.status !== 'closed')
         .sort((a, b) => getDealDate(b) - getDealDate(a));
 
-      const merged = [...funds, ...[...openSpvs, ...closedSpvs]];
+      const merged = [{ company_name: 'All' }, ...funds, ...[...openSpvs, ...closedSpvs]];
       orgDealsDataCopy.organization.deals = merged;
+
       setOrgDeals(orgDealsDataCopy);
     }
   }, [orgDealsData]);
 
   useEffect(() => {
-    handleDealData(0);
-  }, [orgDeals]);
-
-  useEffect(() => {
-    handleDealData(dealTab);
+    if (dealTab !== 0) handleDealData(dealTab);
   }, [dealTab]);
 
   useEffect(() => {
@@ -613,7 +619,12 @@ const FundManagerDashboard = ({ classes, history }) => {
 
   const handleDealsTabChange = (newValue) => {
     if (newValue !== dealTab) {
-      setLoading(true);
+      const currentDeal =
+        orgDeals.organization?.deals?.length && orgDeals.organization.deals[newValue];
+      const currentDealName = currentDeal.company_name;
+      const isDealLoaded = currentDealName === dealName;
+      console.log('IS THE SAME', isDealLoaded);
+      if (newValue !== 0 && !isDealLoaded) setLoading(true);
       setDealTab(newValue);
     }
   };
@@ -629,12 +640,17 @@ const FundManagerDashboard = ({ classes, history }) => {
   };
 
   const getTabContent = () => {
+    if (dealTab === 0) {
+      return <Overview classes={classes} data={overview.overviewData} />;
+    }
+
     let fundData = atFundData.map((d) => d.fields);
     if (orgSlug === 'browder-capital') {
       fundData = fundData.filter((i) => {
         return i['Fund Name'] === dealName;
       });
     }
+
     switch (tabName) {
       case 'Setup':
         return (
@@ -720,7 +736,10 @@ const FundManagerDashboard = ({ classes, history }) => {
     }
   };
 
-  if (!orgDeals) return <Loader />;
+  if (!orgDeals || !overview?.overviewData) return <Loader />;
+
+  const isOverview = dealTab === 0;
+
   return (
     <div className={classes.dashboardContainer}>
       {openTooltip && (
@@ -787,32 +806,36 @@ const FundManagerDashboard = ({ classes, history }) => {
             setTabIndex={handleDealsTabChange}
           />
           <div style={{ position: 'relative' }}>
-            <Tabs
-              value={tabIndex}
-              indicatorColor="primary"
-              textColor="primary"
-              onChange={handleTabChange}
-              classes={{
-                root: classes.tabs,
-                indicator: classes.tabsIndicator,
-                flexContainer: classes.tabsContainer,
-              }}
-            >
-              {dashboardTabs.map((tab, index) => (
-                <Tab
-                  label={tab}
-                  className={classes.tab}
-                  key={`tab-${index}`}
-                  classes={{
-                    root: classes.tab,
-                    selected: classes.selectedTab,
-                    wrapper: classes.tabWrapper,
-                  }}
-                  disableRipple
-                />
-              ))}
-            </Tabs>
-            {!dealData || !atFundData || !dealInvestments || status === 'fetching' || loading ? (
+            {!isOverview && (
+              <Tabs
+                value={tabIndex}
+                indicatorColor="primary"
+                textColor="primary"
+                onChange={handleTabChange}
+                classes={{
+                  root: classes.tabs,
+                  indicator: classes.tabsIndicator,
+                  flexContainer: classes.tabsContainer,
+                }}
+              >
+                {dashboardTabs.map((tab, index) => (
+                  <Tab
+                    label={tab}
+                    className={classes.tab}
+                    key={`tab-${index}`}
+                    classes={{
+                      root: classes.tab,
+                      selected: classes.selectedTab,
+                      wrapper: classes.tabWrapper,
+                    }}
+                    disableRipple
+                  />
+                ))}
+              </Tabs>
+            )}
+            {(!isOverview && (!dealData || !atFundData || !dealInvestments)) ||
+            status === 'fetching' ||
+            loading ? (
               <div className={classes.loaderContainer}>
                 <Loader />
               </div>

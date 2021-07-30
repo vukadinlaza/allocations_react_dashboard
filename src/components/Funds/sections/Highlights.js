@@ -13,8 +13,8 @@ const Highlights = ({ data }) => {
 
   const { funds, SPVs, investments, SPVsAUM, fundsAUM } = data.fundAdminHighlights;
   const totalFunds = funds + SPVs;
-  const totalInvestorsAUM = SPVsAUM + fundsAUM;
-  const averageInvestment = totalInvestorsAUM / investments;
+  const totalAUM = SPVsAUM + fundsAUM;
+  const averageInvestment = totalAUM / investments;
 
   return (
     <>
@@ -41,7 +41,7 @@ const Highlights = ({ data }) => {
         </Grid>
         <Grid item xs={12} lg={3}>
           <SimpleBox size="fourth" title="Total AUM">
-            <Typography style={{ fontSize: '26px' }}>${nWithCommas(totalInvestorsAUM)}</Typography>
+            <Typography style={{ fontSize: '26px' }}>${nWithCommas(totalAUM)}</Typography>
           </SimpleBox>
         </Grid>
         <Grid item xs={12} lg={3}>

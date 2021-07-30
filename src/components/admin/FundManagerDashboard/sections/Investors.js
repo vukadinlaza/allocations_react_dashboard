@@ -39,12 +39,12 @@ const Investors = ({ classes, data, orgSlug, userProfile }) => {
     setSearchTerm(e.target.value);
   };
 
-  let investorsData = investments.map((inv) => inv.investor);
+  let investorsData = investments.map((inv) => inv.investor).filter((investor) => investor);
   if (!investorsData) return <Loader />;
 
   if (searchTerm) {
     investorsData = investorsData.filter((investor) =>
-      (investor.first_name
+      (investor?.first_name
         ? `${investor['first_name']} ${investor['last_name']} ${investor.email}`
         : `${investor.email}`
       )

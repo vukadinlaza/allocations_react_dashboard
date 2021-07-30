@@ -1059,8 +1059,7 @@ export default function Sidebar(props) {
                 </ListItemIcon>
                 <ListItemText primary="Investors Admin" />
               </ListItem>
-            </div>{' '}
-            */}
+            </div> */}
             <AdminLinks location={location} />
           </List>
         </>
@@ -1078,6 +1077,8 @@ export default function Sidebar(props) {
 
   const container = window !== undefined ? () => window().document.body : undefined;
   const onboarding = location.pathname === '/get-started';
+  const adminOrganizations = userProfile?.organizations_admin;
+  const adminOrganizationsCopy = adminOrganizations ? [...adminOrganizations] : []; //Create a copy of organizations so we can mutate with sort
 
   return (
     <>
@@ -1161,21 +1162,21 @@ export default function Sidebar(props) {
                         >
                           {userProfile?.name}
                         </MenuItem>
-                        {userProfile?.organizations_admin
-                          ?.length &&
-                          [...userProfile.organizations_admin].sort((a, b) => a.name.localeCompare(b.name))
-                          .map((org) => (
-                            <MenuItem
-                              onClick={() => {
-                                handleDrawerToggle();
-                                history.push(`/admin/${org.slug}`);
-                              }}
-                              value={org.name}
-                              key={org.name}
-                            >
-                              {org.name}
-                            </MenuItem>
-                          ))}
+                        {adminOrganizationsCopy?.length &&
+                          adminOrganizationsCopy
+                            .sort((a, b) => a.name.localeCompare(b.name))
+                            .map((org) => (
+                              <MenuItem
+                                onClick={() => {
+                                  handleDrawerToggle();
+                                  history.push(`/admin/${org.slug}`);
+                                }}
+                                value={org.name}
+                                key={org.name}
+                              >
+                                {org.name}
+                              </MenuItem>
+                            ))}
                       </Select>
                     </FormControl>
                     {drawer}
@@ -1215,18 +1216,18 @@ export default function Sidebar(props) {
                         >
                           {userProfile?.name}
                         </MenuItem>
-                        {userProfile?.organizations_admin
-                          ?.length &&
-                          [...userProfile.organizations_admin].sort((a, b) => a.name.localeCompare(b.name))
-                          .map((org) => (
-                            <MenuItem
-                              onClick={() => history.push(`/admin/${org.slug}`)}
-                              value={org.name}
-                              key={org.name}
-                            >
-                              {org.name}
-                            </MenuItem>
-                          ))}
+                        {adminOrganizationsCopy?.length &&
+                          adminOrganizationsCopy
+                            .sort((a, b) => a.name.localeCompare(b.name))
+                            .map((org) => (
+                              <MenuItem
+                                onClick={() => history.push(`/admin/${org.slug}`)}
+                                value={org.name}
+                                key={org.name}
+                              >
+                                {org.name}
+                              </MenuItem>
+                            ))}
                       </Select>
                     </FormControl>
                     {drawer}
