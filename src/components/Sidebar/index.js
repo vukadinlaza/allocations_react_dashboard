@@ -93,7 +93,6 @@ const useStyles = makeStyles((theme) => ({
     borderLeft: 0,
     position: 'relative',
     height: '100vh',
-    // height: "calc(100vh - 70px)"
   },
   newDrawerPaper: {
     width: '100%',
@@ -108,7 +107,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    height: 'calc(100vh - 70px)',
     overflow: 'hidden',
   },
   content: {
@@ -396,7 +394,6 @@ export default function Sidebar(props) {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'flex-start',
-                height: '100vh',
               }}
             >
               <nav className={classes.drawer} aria-label="mailbox folders">
