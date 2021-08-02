@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import moment from 'moment';
-import { useParams, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Typography, Tooltip } from '@material-ui/core';
+import { Tooltip } from '@material-ui/core';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import EditIcon from '@material-ui/icons/Edit';
@@ -28,9 +28,12 @@ const styles = (theme) => ({
   },
   links: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-    width: '110px',
+    // width: '130px',
+    '&>*': {
+      margin: '0 10px',
+    },
   },
 });
 
