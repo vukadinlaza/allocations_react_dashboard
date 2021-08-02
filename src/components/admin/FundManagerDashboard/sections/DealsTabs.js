@@ -107,22 +107,18 @@ const styles = (theme) => ({
 const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
   // const [deals, setDeals] = useState([]);
   const { deals } = data.organization;
+  const [titleContainer, setTitleContainer] = useState(null);
 
   const handleTabChange = (e, newIndex) => {
     setTabIndex(newIndex);
   };
 
-  // useEffect(() => {
-  //   if (data?.organization?.deals?.length) {
-  //     const { deals } = data.organization;
-  //     setDeals(deals);
-  //     // setDeals(deals.reverse());
-  //   }
-  // }, [orgSlug]);
+  useEffect(() => {
+    const titleCont = document.getElementById('main-title-container');
+    setTitleContainer(titleCont);
+  }, []);
 
-  if (!data) return <Loader />;
-
-  const titleContainer = document.getElementById('main-title-container');
+  if (!data || !titleContainer) return <Loader />;
 
   return (
     <div className={classes.root}>
@@ -136,7 +132,6 @@ const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
           root: classes.tabs,
           indicator: classes.tabsIndicator,
         }}
-        variant="scrollable"
       >
         {deals.map((deal, index) => {
           const isFund = deal.investmentType === 'fund';
@@ -146,20 +141,22 @@ const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
               label={
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   {deal.company_name}
-                  <span
-                    style={{ backgroundColor: isFund ? '#2A2B54' : '#0461FF' }}
-                    className={classes.dealTag}
-                  >
-                    {isFund ? (
-                      <AccountBalanceIcon style={{ marginRight: '4px' }} />
-                    ) : (
-                      <FontAwesomeIcon style={{ marginRight: '4px' }} icon={faRocket} />
-                    )}
-                    {isFund ? 'FUND' : 'SPV'}
-                    <FiberManualRecordIcon
-                      style={{ color: closed ? '#d0d0d0' : '#39C522', marginLeft: '2px' }}
-                    />
-                  </span>
+                  {deal.company_name !== 'All' && (
+                    <span
+                      style={{ backgroundColor: isFund ? '#2A2B54' : '#0461FF' }}
+                      className={classes.dealTag}
+                    >
+                      {isFund ? (
+                        <AccountBalanceIcon style={{ marginRight: '4px' }} />
+                      ) : (
+                        <FontAwesomeIcon style={{ marginRight: '4px' }} icon={faRocket} />
+                      )}
+                      {isFund ? 'FUND' : 'SPV'}
+                      <FiberManualRecordIcon
+                        style={{ color: closed ? '#d0d0d0' : '#39C522', marginLeft: '2px' }}
+                      />
+                    </span>
+                  )}
                 </div>
               }
               key={`tab-${index}`}
@@ -174,7 +171,7 @@ const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
       </Tabs>
       <div
         className={classes.tabsPlaceholder}
-        style={{ height: titleContainer ? `${titleContainer.offsetHeight + 48}px` : '130px' }}
+        style={{ height: titleContainer ? `${titleContainer.offsetHeight + 48}px` : '180px' }}
       />
     </div>
   );
