@@ -572,7 +572,9 @@ const FundManagerDashboard = ({ classes, history }) => {
         .filter((d) => d.status !== 'closed')
         .sort((a, b) => getDealDate(b) - getDealDate(a));
 
-      const merged = [{ company_name: 'All' }, ...funds, ...[...openSpvs, ...closedSpvs]];
+      const overviewTab = { company_name: 'All' };
+      const merged = [...funds, ...[...openSpvs, ...closedSpvs]];
+      if (orgDealsDataCopy.organization?.deals.length) merged.unshift(overviewTab);
       orgDealsDataCopy.organization.deals = merged;
 
       setOrgDeals(orgDealsDataCopy);
