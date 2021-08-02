@@ -9,6 +9,7 @@ function TermsAndConditionsPanel({
   setCheckedTAT,
   confirmInvestment,
   isEdit,
+  requireSecondSigChecked,
 }) {
   const doc = (documents || []).find((d) => {
     return d.path.includes('Agreement');
@@ -24,6 +25,8 @@ function TermsAndConditionsPanel({
   );
 
   const isClosed = status === 'closed';
+  const weOrI = requireSecondSigChecked ? 'We' : 'I';
+  const ourOrMy = requireSecondSigChecked ? 'our' : 'my';
 
   return (
     <section className="TermsAndConditions">
@@ -31,45 +34,48 @@ function TermsAndConditionsPanel({
         <p className="section-label">Terms and Conditions</p>
         <Box p={3}>
           <Typography>
-            I consent to electronic delivery of all documents, notices and agreements as related to
-            my investment;
+            {weOrI} consent to electronic delivery of all documents, notices and agreements as
+            related to my investment;
           </Typography>
           <Typography>
-            I have read and agree to the issuer’s {anchor} and hereby authorize my signature to the
-            SPV Documents; and
+            {weOrI} have read and agree to the issuer’s {anchor} and hereby authorize
+            {ourOrMy} signature{requireSecondSigChecked && 's'} to the SPV Documents; and
           </Typography>
           <Typography>
-            I have read and agree to the Portfolio Company’s investment agreement, which is attached
-            to the SPV Documents and will be executed between the Portfolio Company and the SPV.
+            {weOrI} have read and agree to the Portfolio Company’s investment agreement, which is
+            attached to the SPV Documents and will be executed between the Portfolio Company and the
+            SPV.
           </Typography>
           <Typography>
             The Manager and Administrative Manager reserve the right to reject any investment.
           </Typography>
           <Typography>
-            I understand that I must do my own diligence, read the investment documents and ask any
-            questions I think are relevant to my investment decision. Portfolio Company information
-            may be incomplete and has not been verified. The Manager may not have done extensive due
-            diligence on the Portfolio Company. Investing with notable investors doesn’t guarantee
-            any level of diligence has been performed.
+            {weOrI} understand that {weOrI} must do {ourOrMy} own diligence, read the investment
+            documents and ask any questions {weOrI} think are relevant to {ourOrMy} investment
+            decision. Portfolio Company information may be incomplete and has not been verified. The
+            Manager may not have done extensive due diligence on the Portfolio Company. Investing
+            with notable investors doesn’t guarantee any level of diligence has been performed.
           </Typography>
           <Typography>
-            I understand that the Manager and other investors may have access to material
+            {weOrI} understand that the Manager and other investors may have access to material
             information regarding the company that has not been shared with me.
           </Typography>
           <Typography>
-            I understand that my subscription amount is not guaranteed and the final investment
-            amount accepted by the SPV may be less than my desired subscription amount.
+            {weOrI} understand that {ourOrMy} subscription amount is not guaranteed and the final
+            investment amount accepted by the SPV may be less than {ourOrMy} desired subscription
+            amount.
           </Typography>
         </Box>
-        <label>
+        <label htmlFor="terms-checkbox">
           <Checkbox
             className="terms-checkbox"
             onChange={(e) => setCheckedTAT(e.target.checked)}
             classes={{
               checked: 'terms-checkbox-checked',
             }}
+            id="terms-checkbox"
           />
-          I have read and accept the terms of the investment.
+          {weOrI} have read and accept the terms of the investment.
         </label>
       </div>
       {isClosed ? (

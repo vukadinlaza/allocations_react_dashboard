@@ -101,7 +101,8 @@
       {
         "allowPattern": "^[a-z]+(_[a-z]+)+$"
       }
-    ]
+    ],
+    "react/jsx-props-no-spreading": "off"
   },
   "settings": {
     "import/extensions": [".js", ".jsx"]

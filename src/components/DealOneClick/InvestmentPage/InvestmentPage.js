@@ -9,6 +9,7 @@ import TermsAndConditionsPanel from './TermsAndConditionsPanel';
 import DealDocumentsPanel from './DealDocumentsPanel';
 import InvestmentAmountPanel from './InvestmentAmount';
 import PersonalInformation from './PersonalInformation';
+import SecondSignature from './SecondSignature';
 import './styles.scss';
 import Loader from '../../utils/Loader';
 import SPVDocumentModal from './SpvDocumentModal';
@@ -132,7 +133,7 @@ const ADD_USER_AS_VIEWED = gql`
 `;
 
 // if individual remove signfull name
-const validate = (investor, org) => {
+const validate = (investor, org, requireSecondSigChecked) => {
   let required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
   if (org === 'irishangels') {
     required = required.filter((d) => d !== 'accredited_investor_status');
@@ -143,7 +144,24 @@ const validate = (investor, org) => {
   if (investor.investor_type === 'entity' && !investor.fullName) {
     required.push('fullName');
   }
-  return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
+
+  let errors = [];
+  errors = required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
+
+  if (requireSecondSigChecked.secondSigInfo) {
+    errors.push(
+      'secondLegalName',
+      'secondEmail',
+      'secondSignerSSN',
+      'secondSignerInitials',
+      'secondSigConsent',
+    );
+    errors = errors.reduce(
+      (acc, attr) => (investor.secondInvestor[attr] ? acc : [...acc, attr]),
+      [],
+    );
+  }
+  return errors;
 };
 
 function InvestmentPage() {
@@ -185,7 +203,23 @@ function InvestmentPage() {
     state: '',
     state_search: '',
   });
+  const [requireSecondSig, setRequireSecondSig] = useState(false);
+  const [requireSecondSigChecked, setRequireSecondSigChecked] = useState({
+    secondSigInfo: false,
+    secondSigConsent: false,
+  });
   const [errors, setErrors] = useState([]);
+
+  const handleSecondSig = (investorType) => {
+    if (investorType === 'individual') return setRequireSecondSig(true);
+
+    setRequireSecondSigChecked(() => ({
+      secondSigInfo: false,
+      secondSigConsent: false,
+    }));
+    setRequireSecondSig(false);
+  };
+
   useEffect(() => {
     const pAmount = history?.location?.state?.amount;
     if (pAmount) {
@@ -204,12 +238,15 @@ function InvestmentPage() {
       setAmount(editAmount);
     } else if (personalData) {
       updatedInvestorData = { ...investorFormData, ...personalData };
+      if (personalData.investor_type === 'individual') {
+        setRequireSecondSig(true);
+      }
     }
     setInvestor(updatedInvestorData);
     setPopulated(true);
   };
 
-  const [submitConfirmation, {}] = useMutation(CONFIRM_INVESTMENT, {
+  const [submitConfirmation] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
       refetch();
       setLoading(false);
@@ -226,17 +263,25 @@ function InvestmentPage() {
       toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com');
     },
   });
+
   const [getInvestmentPreview, { data: previewData, loading: loadingPreview }] =
     useMutation(GET_PREVIEW);
 
+  if (!data || loading) return <Loader />;
+
+  const { deal } = data;
+  const {
+    company_name,
+    dealParams: { minimumInvestment },
+  } = deal;
+
   const confirmInvestment = () => {
-    const validation = validate(investorFormData, organization);
-    console.log('validation', validation);
+    const validation = validate(investorFormData, organization, requireSecondSigChecked);
     setErrors(validation);
 
     if (validation.length > 0) return toast.warning('Incomplete Form');
     if (!amount) return toast.warning('Please enter a valid investment amount.');
-    if (parseInt(amount) < 1000)
+    if (parseInt(amount, 10) < 1000)
       return toast.warning('Please enter an investment amount greater than $1000.');
 
     const payload = {
@@ -267,14 +312,6 @@ function InvestmentPage() {
     setShowSpvModal(false);
     setLoading(true);
   };
-
-  if (!data || loading) return <Loader />;
-
-  const { deal } = data;
-  const {
-    company_name,
-    dealParams: { minimumInvestment },
-  } = deal;
 
   if (!populated) populateInvestorData(deal);
 
@@ -307,23 +344,30 @@ function InvestmentPage() {
           minimumInvestment={minimumInvestment}
         />
         <div className="side-panel">
-          {/* <InvestingAsPanel /> */}
-          {/* <InvestmentHistory deal={deal} setInvestor={setInvestor} investor={investorFormData} setAmount={setAmount} /> */}
           <DealDocumentsPanel deal={deal} />
-          {/* <YourDocumentsPanel investment={investment} /> */}
         </div>
         <PersonalInformation
           org={org}
           errors={errors}
           investor={investorFormData}
           setInvestor={setInvestor}
+          handleSecondSig={handleSecondSig}
         />
+        {requireSecondSig && org === 'irishangels' && (
+          <SecondSignature
+            requireSecondSigChecked={requireSecondSigChecked}
+            setRequireSecondSigChecked={setRequireSecondSigChecked}
+            setInvestor={setInvestor}
+            errors={errors}
+          />
+        )}
         <TermsAndConditionsPanel
           confirmInvestment={confirmInvestment}
           deal={deal}
           checkedTAT={checkedTAT}
           setCheckedTAT={setCheckedTAT}
           isEdit={location?.state?.submission}
+          requireSecondSigChecked={requireSecondSigChecked.secondSigInfo}
         />
       </div>
 
@@ -334,6 +378,7 @@ function InvestmentPage() {
         submitInvestment={submitInvestment}
         previewData={previewData}
         loadingPreview={loadingPreview}
+        requireSecondSigChecked={requireSecondSigChecked.secondSigInfo}
       />
     </section>
   );
