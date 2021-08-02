@@ -625,7 +625,6 @@ const FundManagerDashboard = ({ classes, history }) => {
         orgDeals.organization?.deals?.length && orgDeals.organization.deals[newValue];
       const currentDealName = currentDeal.company_name;
       const isDealLoaded = currentDealName === dealName;
-      console.log('IS THE SAME', isDealLoaded);
       if (newValue !== 0 && !isDealLoaded) setLoading(true);
       setDealTab(newValue);
     }
