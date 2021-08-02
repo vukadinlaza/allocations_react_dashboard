@@ -267,8 +267,8 @@ const InvestorInvestments = ({ classes, history }) => {
       <Typography className={classes.mainTitle}>
         {data?.investor?.name || 'Investor'} Investments
       </Typography>
-      <Typography className={classes.back} onClick={() => history.goBack()}>
-        <NavigateBeforeIcon /> Back to Investors
+      <Typography className={classes.back} onClick={() => history.push('/admin/funds')}>
+        <NavigateBeforeIcon /> Back to Admin Dashboard
       </Typography>
       <div className={classes.searchContainer}>
         <TextField

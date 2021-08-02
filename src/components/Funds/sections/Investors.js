@@ -95,10 +95,6 @@ const investorVariables = {
 };
 
 const Investors = ({ classes, history }) => {
-  const handleShowInvestments = (userId) => {
-    history.push(`/admin/users/${userId}/investments`);
-  };
-
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
       case 'investmentAmount':

@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
+import { Typography, Tooltip } from '@material-ui/core';
+import StorefrontIcon from '@material-ui/icons/Storefront';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import EditIcon from '@material-ui/icons/Edit';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import ServerTable from '../../utils/ServerTable';
 import { nWithCommas } from '../../../utils/numbers';
 import { titleCase } from '../../../utils/helpers';
@@ -24,6 +25,12 @@ const styles = (theme) => ({
     margin: '-6px 0',
     width: '32px',
     height: '32px',
+  },
+  links: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '110px',
   },
 });
 
@@ -73,21 +80,7 @@ const tableVariables = {
       isSortable: true,
     },
     { value: 'status', label: 'DEAL STATUS', type: 'status', isFilter: true, isSortable: true },
-    { value: 'edit', label: 'EDIT DEAL', type: 'edit', keyNotInData: true, align: 'center' },
-    {
-      value: 'dealPage',
-      label: 'DEAL PAGE',
-      type: 'dealPage',
-      keyNotInData: true,
-      align: 'center',
-    },
-    {
-      value: 'dashboard',
-      label: 'VIEW DASHBOARD',
-      type: 'dashboard',
-      keyNotInData: true,
-      align: 'center',
-    },
+    { value: 'links', label: 'LINKS', type: 'links', keyNotInData: true, align: 'center' },
   ],
   resolverName: 'fundAdminTables',
   dataVariable: 'deals',
@@ -109,38 +102,40 @@ const Deals = ({ classes, filter, tableName }) => {
         return row[headerValue] ? 'Complete' : 'Pending';
       case 'status':
         return titleCase(row[headerValue]);
-      case 'edit':
+      case 'links':
         return (
-          <a
-            href={`/admin/${row.organization.slug}/deals/${row._id}/edit`}
-            className={classes.buttonLink}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <EditIcon className={classes.button} />
-          </a>
-        );
-      case 'dealPage':
-        return (
-          <a
-            href={`/deals/${row.organization.slug}/${row.slug}`}
-            className={classes.buttonLink}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <PlayArrowIcon className={classes.button} />
-          </a>
-        );
-      case 'dashboard':
-        return (
-          <a
-            href={`/admin/${row.organization.slug}`}
-            className={classes.buttonLink}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <PlayArrowIcon className={classes.button} />
-          </a>
+          <div className={classes.links}>
+            <Tooltip title="Edit">
+              <a
+                href={`/admin/${row.organization.slug}/deals/${row._id}/edit`}
+                className={classes.buttonLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <EditIcon className={classes.button} />
+              </a>
+            </Tooltip>
+            <Tooltip title="Deal Page">
+              <a
+                href={`/deals/${row.organization.slug}/${row.slug}`}
+                className={classes.buttonLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <StorefrontIcon className={classes.button} />
+              </a>
+            </Tooltip>
+            <Tooltip title="Dashboard">
+              <a
+                href={`/admin/${row.organization.slug}`}
+                className={classes.buttonLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <DashboardIcon className={classes.button} />
+              </a>
+            </Tooltip>
+          </div>
         );
       default:
         return <div />;
