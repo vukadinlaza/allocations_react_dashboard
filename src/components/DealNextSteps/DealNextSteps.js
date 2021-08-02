@@ -93,7 +93,7 @@ function DealNextSteps() {
   const { deal_slug, organization } = useParams();
   const [wireInstructionsOpen, setWireInstructionsOpen] = useState(false);
   const { isAuthenticated, loading: authLoading } = useAuth();
-  const { search } = useLocation();
+  const { search, state } = useLocation();
   const params = queryString.parse(search);
   const history = useHistory();
 
@@ -102,7 +102,7 @@ function DealNextSteps() {
   const { data: investmentData } = useQuery(GET_INVESTMENT, {
     variables: { _id: params?.investmentId },
     onError: () => {
-      return history.push(path);
+      if (!state?.investorFormData) return history.push(path);
     },
   });
 
