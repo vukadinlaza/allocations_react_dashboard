@@ -257,6 +257,7 @@ const InvestorInvestments = ({ classes, history }) => {
 
   const userInvestments = data?.investor?.investments;
   const userIdCopy = data?.investor?._id;
+  console.log({ userIdCopy });
 
   if (!userInvestments) return <Loader />;
   const dataCopy = JSON.parse(JSON.stringify(data));

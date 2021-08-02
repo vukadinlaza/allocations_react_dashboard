@@ -98,7 +98,7 @@ export default function InvestmentEdit({
   investmentId = false,
   isK1 = false,
   handleUpdate = false,
-  userIdCopy,
+  userIdCopy = null,
 }) {
   const classes = useStyles();
   const params = useParams();
@@ -115,12 +115,13 @@ export default function InvestmentEdit({
     variables: { _id: id },
     fetchPolicy: 'network-only',
   });
+  console.log({ userIdCopy });
 
   const [updateInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT, {
     onCompleted: () => {
       toast.success('Success! Investment Updated.');
       if (handleUpdate) {
-        handleUpdate();
+        handleUpdate.refetch();
       }
       getInvestment();
     },
@@ -136,7 +137,7 @@ export default function InvestmentEdit({
     onCompleted: () => {
       // toast.success('Success! Investor Updated.');
       if (handleUpdate) {
-        handleUpdate();
+        handleUpdate.refetch();
       }
       getInvestment();
     },
@@ -156,7 +157,8 @@ export default function InvestmentEdit({
       }
       toast.success('Success! Investment Deleted.');
     },
-    onError: () => {
+    onError: (error) => {
+      console.log(error);
       toast.error(
         'Something went wrong deleting the investment. Try again or contact support@allocations.com',
       );
@@ -173,6 +175,7 @@ export default function InvestmentEdit({
 
   const updateInvestmentProp = ({ prop, newVal }) => {
     if (prop === 'accredidation_status') {
+      console.log('prop and newVal', prop, newVal);
       setInvestment((prev) => ({
         ...prev,
         investor: { ...prev.investor, accredidation_status: newVal },
@@ -183,6 +186,37 @@ export default function InvestmentEdit({
       }));
     } else {
       setInvestment((prev) => ({ ...prev, [prop]: newVal }));
+    }
+  };
+
+  const handleInvestmentEdit = () => {
+    console.log('Hello', user);
+    // need to get a user Id from the other component?
+    // condition will change.
+
+    if (user._id !== null) {
+      updateUser({
+        variables: {
+          input: {
+            ...pick(user, ['_id', 'accredidation_status']),
+          },
+        },
+      });
+      updateInvestment({
+        variables: {
+          investment: {
+            ...pick(investment, ['_id', 'status', 'amount', 'capitalWiredAmount']),
+          },
+        },
+      });
+    } else {
+      updateInvestment({
+        variables: {
+          investment: {
+            ...pick(investment, ['_id', 'status', 'amount', 'capitalWiredAmount']),
+          },
+        },
+      });
     }
   };
 
@@ -329,22 +363,7 @@ export default function InvestmentEdit({
               disabled={!hasChanges}
               variant="contained"
               style={{ backgroundColor: '#2A2B54' }}
-              onClick={() => {
-                updateInvestment({
-                  variables: {
-                    investment: {
-                      ...pick(investment, ['_id', 'status', 'amount', 'capitalWiredAmount']),
-                    },
-                  },
-                });
-                updateUser({
-                  variables: {
-                    input: {
-                      ...pick(user, ['_id', 'accredidation_status']),
-                    },
-                  },
-                });
-              }}
+              onClick={handleInvestmentEdit}
               color="primary"
             >
               UPDATE
