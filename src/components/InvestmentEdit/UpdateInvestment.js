@@ -14,6 +14,7 @@ import {
   InputLabel,
   Box,
   Typography,
+  Tooltip,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -485,11 +486,13 @@ function Doc({ doc, investment, getInvestment, matches }) {
         <DocumentIcon fontSize="small" />
       </Grid>
       <Grid item>
-        <Typography align="center" style={{ fontSize: '13px' }}>
-          <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">
-            {truncateFile(file)}
-          </a>
-        </Typography>
+        <Tooltip title={file}>
+          <Typography align="center" style={{ fontSize: '13px' }}>
+            <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">
+              {truncateFile(file)}
+            </a>
+          </Typography>
+        </Tooltip>
       </Grid>
       <Grid item>
         <Box onClick={rmDoc} style={{ cursor: 'pointer' }}>
