@@ -15,14 +15,15 @@ import {
   Box,
   Typography,
   Tooltip,
+  InputAdornment,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { NoFragmentCyclesRule } from 'graphql';
 import Loader from '../utils/Loader';
 import { destroy } from '../../api/investments';
-import DocumentIcon from '../svg/DocumentIcon';
 import CrossOrPlusIcon from '../svg/CrossOrPlusIcon';
+import DocumentIcon from '../../assets/document-icon.svg';
 import './style.scss';
 
 /** *
@@ -234,7 +235,10 @@ export default function InvestmentEdit({
               <TextField
                 style={{ width: '100%' }}
                 type="number"
-                InputProps={{ inputProps: { min: 0 } }}
+                InputProps={{
+                  inputProps: { min: 0 },
+                  startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                }}
                 value={get(investment, 'amount', '') || 0}
                 onChange={(e) =>
                   // eslint-disable-next-line radix
@@ -253,7 +257,10 @@ export default function InvestmentEdit({
               <TextField
                 style={{ width: '100%' }}
                 type="number"
-                InputProps={{ inputProps: { min: 0 } }}
+                InputProps={{
+                  inputProps: { min: 0 },
+                  startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                }}
                 value={get(investment, 'capitalWiredAmount', '') || 0}
                 onChange={(e) =>
                   // eslint-disable-next-line radix
@@ -268,13 +275,12 @@ export default function InvestmentEdit({
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={12}>
-            <FormControl variant="outlined" style={{ width: '100%' }}>
+            <FormControl variant="outlined" style={{ width: '100%' }} size="small">
               <InputLabel>Status</InputLabel>
               <Select
                 value={investment?.status || ''}
                 onChange={(e) => updateInvestmentProp({ prop: 'status', newVal: e.target.value })}
                 inputProps={{ name: 'status' }}
-                // className="select"
               >
                 <MenuItem value="invited">Invited</MenuItem>
                 <MenuItem value="signed">Signed</MenuItem>
@@ -288,7 +294,11 @@ export default function InvestmentEdit({
         <div className="title">Update Investor Accreditation</div>
 
         <Grid item xs={12} sm={12} md={12} lg={12}>
-          <FormControl variant="outlined" style={{ width: '100%' }}>
+          <FormControl
+            variant="outlined"
+            style={{ width: '100%', marginBottom: '15px' }}
+            size="small"
+          >
             <InputLabel>Accreditation Status</InputLabel>
             <Select
               value={investment?.investor?.accredidation_status || false}
@@ -415,7 +425,7 @@ function Docs({ investment, getInvestment, isK1 }) {
         style={{ padding: matches ? '10px' : '10px 0' }}
       >
         <Grid item>
-          <DocumentIcon />
+          <img src={DocumentIcon} style={{ height: '28px' }} />
         </Grid>
 
         <InputLabel
@@ -429,7 +439,7 @@ function Docs({ investment, getInvestment, isK1 }) {
             justifyContent: 'space-evenly',
           }}
         >
-          <Typography style={{ color: '#2A2B54', fontSize: '13px' }}>Add New Document</Typography>
+          <Typography style={{ color: '#2A2B54', fontSize: '14px' }}>Add New Document</Typography>
           <input
             id="fileUpload"
             type="file"
@@ -483,11 +493,11 @@ function Doc({ doc, investment, getInvestment, matches }) {
       style={{ padding: matches ? '10px' : '10px 0' }}
     >
       <Grid item>
-        <DocumentIcon fontSize="small" />
+        <img src={DocumentIcon} style={{ height: '28px' }} />
       </Grid>
       <Grid item>
         <Tooltip title={file}>
-          <Typography align="center" style={{ fontSize: '13px' }}>
+          <Typography align="center" style={{ fontSize: '14px' }}>
             <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">
               {truncateFile(file)}
             </a>
