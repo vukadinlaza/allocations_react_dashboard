@@ -22,6 +22,7 @@ import Loader from '../utils/Loader';
 import { destroy } from '../../api/investments';
 import DocumentIcon from '../svg/DocumentIcon';
 import CrossOrPlusIcon from '../svg/CrossOrPlusIcon';
+import './style.scss';
 
 /** *
  *
@@ -35,9 +36,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     maxWidth: 800,
     marginBottom: theme.spacing(4),
-  },
-  divider: {
-    margin: '16px -16px',
   },
 }));
 const GET_INVESTMENT = gql`
@@ -201,8 +199,7 @@ export default function InvestmentEdit({
 
   return (
     <div className="InvestmentEdit form-wrapper">
-      <div className="form-title">Update Investment</div>
-      <Divider className={classes.divider} />
+      <div className="title">Update Investment</div>
       <form className="form" noValidate autoComplete="off">
         <Grid container spacing={3} direction="row" justify="flex-end">
           <Grid item xs={12} sm={12} md={6}>
@@ -276,6 +273,7 @@ export default function InvestmentEdit({
                 value={investment?.status || ''}
                 onChange={(e) => updateInvestmentProp({ prop: 'status', newVal: e.target.value })}
                 inputProps={{ name: 'status' }}
+                // className="select"
               >
                 <MenuItem value="invited">Invited</MenuItem>
                 <MenuItem value="signed">Signed</MenuItem>
@@ -286,8 +284,7 @@ export default function InvestmentEdit({
           </Grid>
         </Grid>
 
-        <div className="form-title">Update Investment</div>
-        <Divider className={classes.divider} />
+        <div className="title">Update Investor Accreditation</div>
 
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <FormControl variant="outlined" style={{ width: '100%' }}>
@@ -354,9 +351,8 @@ export default function InvestmentEdit({
           </Grid>
         </Grid>
 
-        <Divider className={classes.divider} />
         <Grid container>
-          <div className="form-sub-title" style={{ color: '#2A2B54' }}>
+          <div className="title" style={{ color: '#2A2B54', margin: '15px 0' }}>
             Documents
           </div>
         </Grid>
@@ -391,6 +387,7 @@ function Docs({ investment, getInvestment, isK1 }) {
       });
     }
   }, [addInvestmentDoc, id, isK1, getInvestment, uploadedDoc]);
+
   const docs = get(investment, 'documents', []);
 
   if (loading || !investment) return <Loader />;
@@ -431,7 +428,7 @@ function Docs({ investment, getInvestment, isK1 }) {
             justifyContent: 'space-evenly',
           }}
         >
-          <Typography style={{ color: '#2A2B54' }}>Add New Document</Typography>
+          <Typography style={{ color: '#2A2B54', fontSize: '13px' }}>Add New Document</Typography>
           <input
             id="fileUpload"
             type="file"
@@ -453,6 +450,11 @@ function Docs({ investment, getInvestment, isK1 }) {
 function Doc({ doc, investment, getInvestment, matches }) {
   const file =
     doc.path.slice(0, 12) === 'investments/' ? doc.path.split('/')[2] : doc.path.split('/')[1];
+
+  function truncateFile(file) {
+    // eslint-disable-next-line prefer-template
+    return file.length > 25 ? file.substr(0, 24) + '...' : file;
+  }
 
   const [rmInvestmentDoc] = useMutation(RM_INVESTMENT_DOC, {
     variables: { file, investment_id: investment._id },
@@ -480,12 +482,12 @@ function Doc({ doc, investment, getInvestment, matches }) {
       style={{ padding: matches ? '10px' : '10px 0' }}
     >
       <Grid item>
-        <DocumentIcon />
+        <DocumentIcon fontSize="small" />
       </Grid>
       <Grid item>
-        <Typography align="center">
+        <Typography align="center" style={{ fontSize: '13px' }}>
           <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">
-            {file}
+            {truncateFile(file)}
           </a>
         </Typography>
       </Grid>

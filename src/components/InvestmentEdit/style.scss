@@ -1,4 +1,28 @@
 .InvestmentEdit {
+  input {
+    padding: 10px 14px;
+  }
+
+  // need to target the select/option
+  .form {
+    .select {
+      background-color: blue;
+    }
+
+    select {
+      background-color: purple;
+    }
+  }
+
+  .title {
+    font-size: 18px;
+    margin: 15px 0;
+  }
+
+  .title:first-of-type {
+    margin-top: 0px;
+  }
+
   .docs {
     padding-top: 15px;
     display: flex;
