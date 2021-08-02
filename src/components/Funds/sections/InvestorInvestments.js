@@ -140,7 +140,7 @@ const GET_USER = gql`
 `;
 
 const investmentHeaders = [
-  { label: 'DEAL', value: 'deal.company_name' },
+  { label: 'DEAL', value: 'deal.company_name', isSortable: true },
   { label: 'DATE CREATED', value: '_id', isSortable: true },
   { label: 'AMOUNT', value: 'amount', isSortable: true },
   { label: 'STATUS', value: 'status', isSortable: true },
@@ -289,7 +289,7 @@ const InvestorInvestments = ({ classes, history }) => {
   const [investorId, setInvestorId] = useState(null);
   const [investmentId, setInvestmentId] = useState(null);
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('DEAL');
+  const [orderBy, setOrderBy] = React.useState('deal.company_name');
   const { data, refetch } = useQuery(GET_USER, { variables: { _id: userId } });
 
   const handleRequestSort = (event, property) => {
