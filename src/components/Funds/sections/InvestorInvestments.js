@@ -256,8 +256,6 @@ const InvestorInvestments = ({ classes, history }) => {
   };
 
   const userInvestments = data?.investor?.investments;
-  const userIdCopy = data?.investor?._id;
-  console.log({ userIdCopy });
 
   if (!userInvestments) return <Loader />;
   const dataCopy = JSON.parse(JSON.stringify(data));
@@ -324,11 +322,7 @@ const InvestorInvestments = ({ classes, history }) => {
       )}
       <AppModal isOpen={showModal} onClose={onClose}>
         {investmentId ? (
-          <InvestmentEdit
-            investmentId={investmentId}
-            handleUpdate={handleUpdate}
-            userIdCopy={userIdCopy}
-          />
+          <InvestmentEdit investmentId={investmentId} handleUpdate={handleUpdate} />
         ) : (
           <DeleteViewedUser dealId={dealId} investorId={investorId} handleUpdate={handleUpdate} />
         )}

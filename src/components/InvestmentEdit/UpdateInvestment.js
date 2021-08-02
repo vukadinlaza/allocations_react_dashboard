@@ -98,14 +98,13 @@ export default function InvestmentEdit({
   investmentId = false,
   isK1 = false,
   handleUpdate = false,
-  userIdCopy = null,
 }) {
-  const classes = useStyles();
   const params = useParams();
   const [investment, setInvestment] = useState(null);
-  const [hasChanges, setHasChanges] = useState(false);
+  const [user, setUser] = useState();
+  const [hasInvestmentChanges, setHasInvestmentChanges] = useState(false);
+  const [hasUserChanges, setHasUserChanges] = useState(false);
   const id = investmentId || params.id;
-  const [user, setUser] = useState({ _id: userIdCopy, accredidation_status: false });
 
   const {
     data,
@@ -115,11 +114,11 @@ export default function InvestmentEdit({
     variables: { _id: id },
     fetchPolicy: 'network-only',
   });
-  console.log({ userIdCopy });
 
   const [updateInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT, {
     onCompleted: () => {
       toast.success('Success! Investment Updated.');
+
       if (handleUpdate) {
         handleUpdate.refetch();
       }
@@ -135,7 +134,7 @@ export default function InvestmentEdit({
 
   const [updateUser] = useMutation(UPDATE_USER, {
     onCompleted: () => {
-      // toast.success('Success! Investor Updated.');
+      toast.success('Success! Investor Updated.');
       if (handleUpdate) {
         handleUpdate.refetch();
       }
@@ -166,35 +165,44 @@ export default function InvestmentEdit({
   });
 
   useEffect(() => {
-    setHasChanges(!isEqual(investment, {}));
+    setHasInvestmentChanges(!isEqual(investment, data?.investment));
   }, [investment]);
 
   useEffect(() => {
-    if (data && !loading) setInvestment(data.investment);
+    if (data && !loading) {
+      setInvestment(data.investment);
+      setUser(get(data, 'investment.investor', {}));
+    }
   }, [data, loading]);
 
   const updateInvestmentProp = ({ prop, newVal }) => {
     if (prop === 'accredidation_status') {
-      console.log('prop and newVal', prop, newVal);
-      setInvestment((prev) => ({
-        ...prev,
-        investor: { ...prev.investor, accredidation_status: newVal },
-      }));
-      setUser((prev) => ({
-        ...prev,
-        accredidation_status: newVal,
-      }));
+      setUser((prev) => {
+        const data = {
+          ...prev,
+          accredidation_status: newVal,
+        };
+        setHasUserChanges(!isEqual(data, prev));
+        return data;
+      });
     } else {
       setInvestment((prev) => ({ ...prev, [prop]: newVal }));
     }
   };
 
   const handleInvestmentEdit = () => {
-    console.log('Hello', user);
-    // need to get a user Id from the other component?
-    // condition will change.
+    if (hasInvestmentChanges) {
+      updateInvestment({
+        variables: {
+          investment: {
+            ...pick(investment, ['_id', 'status', 'amount', 'capitalWiredAmount']),
+          },
+        },
+      });
+      setHasInvestmentChanges(false);
+    }
 
-    if (user._id !== null) {
+    if (hasUserChanges) {
       updateUser({
         variables: {
           input: {
@@ -202,21 +210,7 @@ export default function InvestmentEdit({
           },
         },
       });
-      updateInvestment({
-        variables: {
-          investment: {
-            ...pick(investment, ['_id', 'status', 'amount', 'capitalWiredAmount']),
-          },
-        },
-      });
-    } else {
-      updateInvestment({
-        variables: {
-          investment: {
-            ...pick(investment, ['_id', 'status', 'amount', 'capitalWiredAmount']),
-          },
-        },
-      });
+      setHasUserChanges(false);
     }
   };
 
@@ -232,6 +226,8 @@ export default function InvestmentEdit({
   const convertToPositiveInteger = (num) => {
     return parseInt(num < 0 ? 0 : num);
   };
+
+  console.log('USER', user);
 
   return (
     <div className="InvestmentEdit form-wrapper">
@@ -335,7 +331,7 @@ export default function InvestmentEdit({
           >
             <InputLabel>Accreditation Status</InputLabel>
             <Select
-              value={investment?.investor?.accredidation_status || false}
+              value={user?.accredidation_status || false}
               onChange={(e) =>
                 updateInvestmentProp({
                   prop: 'accredidation_status',
@@ -360,7 +356,7 @@ export default function InvestmentEdit({
             style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
           >
             <Button
-              disabled={!hasChanges}
+              disabled={!hasInvestmentChanges && !hasUserChanges}
               variant="contained"
               style={{ backgroundColor: '#2A2B54' }}
               onClick={handleInvestmentEdit}
