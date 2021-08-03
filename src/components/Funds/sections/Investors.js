@@ -1,43 +1,11 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Tooltip } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import ServerTable from '../../utils/ServerTable';
 import { nWithCommas } from '../../../utils/numbers';
-
-const styles = (theme) => ({
-  button: {
-    color: 'white',
-    fontSize: '16px',
-  },
-  buttonLink: {
-    borderRadius: '100%',
-    backgroundColor: '#0462FF',
-    padding: '8px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: '-6px 0',
-    width: '32px',
-    height: '32px',
-    cursor: 'pointer',
-    '&:hover': {
-      backgroundColor: '#3f85f9',
-    },
-  },
-  links: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    // width: '130px',
-    '&>*': {
-      margin: '0 10px',
-    },
-  },
-});
 
 const investorVariables = {
   gqlQuery: `
@@ -154,4 +122,4 @@ const Investors = ({ classes, history }) => {
   );
 };
 
-export default withStyles(styles)(withRouter(Investors));
+export default withRouter(Investors);

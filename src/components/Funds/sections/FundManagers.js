@@ -1,31 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { useParams, withRouter } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
 import { Tooltip } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import ServerTable from '../../utils/ServerTable';
 import { nWithCommas } from '../../../utils/numbers';
 import { titleCase } from '../../../utils/helpers';
-
-const styles = (theme) => ({
-  button: {
-    color: 'white',
-    fontSize: '16px',
-  },
-  buttonLink: {
-    borderRadius: '100%',
-    backgroundColor: '#0462FF',
-    padding: '8px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: '-6px 0',
-    width: '32px',
-    height: '32px',
-  },
-});
 
 const tableVariables = {
   gqlQuery: `
@@ -157,4 +138,4 @@ const FundManagers = ({ classes, filter, tableName }) => {
   );
 };
 
-export default withStyles(styles)(withRouter(FundManagers));
+export default withRouter(FundManagers);

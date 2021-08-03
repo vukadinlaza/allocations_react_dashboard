@@ -35,86 +35,7 @@ import { useAuth } from '../../../auth/useAuth';
 import AppModal from '../../Modal/AppModal';
 import InvestmentEdit from '../../InvestmentEdit/UpdateInvestment';
 import DeleteViewedUser from '../../InvestmentEdit/DeleteViewedUser';
-
-const styles = (theme) => ({
-  back: {
-    cursor: 'pointer',
-    marginBottom: '20px',
-    fontWeight: 'bold',
-    '&:hover': {
-      color: '#0040FE',
-    },
-  },
-  button: {
-    color: 'white',
-    fontSize: '16px',
-  },
-  buttonLink: {
-    borderRadius: '100%',
-    backgroundColor: '#0462FF',
-    padding: '8px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: '-6px 0',
-    width: '32px',
-    height: '32px',
-    cursor: 'pointer',
-    '&:hover': {
-      backgroundColor: '#3f85f9',
-    },
-  },
-  cellText: {
-    color: '#2A2B54 !important',
-  },
-  headerText: {
-    color: '#2A2B54 !important',
-    fontWeight: '400',
-  },
-  links: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    // width: '130px',
-    '&>*': {
-      margin: '0 10px',
-    },
-  },
-  mainTitle: {
-    fontSize: '28px',
-    fontWeight: '700',
-    padding: '0px',
-    paddingBottom: '20px',
-  },
-  row: {
-    '&:hover': {
-      background: '#f1f4fb',
-    },
-  },
-  searchContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: '25px',
-    background: 'white',
-    padding: '15px 20px',
-    border: 'solid 1px #dadada',
-    boxShadow: '0px 3px 5px -5px',
-    borderRadius: '3px',
-  },
-  selectedCheckbox: {
-    color: theme.palette.primary.main,
-  },
-  tableContainer: {
-    background: '#FBFCFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #00000029',
-    border: '1px solid #8493A640',
-    borderRadius: '10px',
-    marginBottom: '50px',
-  },
-  table: {},
-});
+import styles from '../styles.js';
 
 const GET_USER = gql`
   query Investor($_id: String) {
@@ -177,7 +98,6 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  console.log({ order, orderBy });
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
@@ -190,7 +110,6 @@ function stableSort(array, comparator) {
     if (order !== 0) return order;
     return a[1] - b[1];
   });
-  console.log(stabilizedThis.map((el) => el[0]));
   return stabilizedThis.map((el) => el[0]);
 }
 
@@ -327,7 +246,7 @@ const InvestorInvestments = ({ classes, history }) => {
 
   return (
     <div>
-      <Typography className={classes.mainTitle}>
+      <Typography className={classes.investmentsMainTitle}>
         {data?.investor?.name || 'Investor'} Investments
       </Typography>
       <Typography className={classes.back} onClick={() => history.push('/admin/funds')}>
