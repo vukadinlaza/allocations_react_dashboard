@@ -42,7 +42,12 @@ const RM_LOGO = gql`
 `;
 
 function DealSettings({ formData, setFormData, refetch }) {
-  const [addDoc] = useMutation(ADD_DOC);
+  const [addDoc] = useMutation(ADD_DOC, {
+    onCompleted: () => {
+      toast.success('Doc has been added.');
+      refetch();
+    },
+  });
   const [rmDoc] = useMutation(RM_DOC, {
     onCompleted: () => {
       toast.success('Deal settings have been updated.');
@@ -151,7 +156,12 @@ function DealSettings({ formData, setFormData, refetch }) {
   };
 
   function AddDealLogo() {
-    const [addLogo, { data, error }] = useMutation(ADD_LOGO);
+    const [addLogo, { data, error }] = useMutation(ADD_LOGO, {
+      onCompleted: () => {
+        toast.success('Logo has been added.');
+        refetch();
+      },
+    });
     const [imgSrc, setImgSrc] = useState(
       `https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`,
     );
