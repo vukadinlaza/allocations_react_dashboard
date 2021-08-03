@@ -4,10 +4,11 @@ import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Typography } from '@material-ui/core';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import { Document } from 'react-pdf';
 import AllocationsTable from '../utils/AllocationsTable';
 import Loader from '../utils/Loader';
 import { nWithCommas } from '../../utils/numbers';
-import { GridSection, Section } from './common';
+import { GridSection, Section, DocumentBox } from './common';
 
 const GET_USER = gql`
   query Investor($_id: String) {
@@ -30,6 +31,7 @@ const GET_USER = gql`
         }
       }
       investorLimits
+      investorTaxDocuments
       investments {
         _id
         amount
@@ -97,6 +99,13 @@ const styles = (theme) => ({
     padding: '15px',
     marginBottom: '25px',
   },
+  documentsContainer: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+  },
 });
 
 const fields = {
@@ -152,7 +161,7 @@ const User = ({
       case 'amount':
         return nWithCommas(row[headerValue]);
       default:
-        return <div></div>;
+        return <div />;
     }
   };
 
@@ -185,12 +194,19 @@ const User = ({
       <Paper square className={classes.userInformation}>
         <GridSection title="Personal Information" fields={fields.investor} item={investor} />
         <GridSection title="Related Account" fields={fields.account} item={account} />
+        <Section title="KYC Documents">
+          <div className={classes.documentsContainer}>
+            {investor?.investorTaxDocuments.map((doc, index) => (
+              <DocumentBox doc={doc} docPath={doc.name} index={index} key={`doc-${index}`} />
+            ))}
+          </div>
+        </Section>
         <Section title="Investments">
           <div className={classes.sectionContent}>
             <AllocationsTable
               data={investor.investments}
               headers={investmentsHeaders}
-              rowDetailPage={true}
+              rowDetailPage
               handleRowDetailPage={handleRowDetailPage}
               getCellContent={getCellContent}
             />
