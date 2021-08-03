@@ -18,6 +18,14 @@ const useStyles = makeStyles(() => ({
     width: '90%',
     position: 'relative',
     margin: '20px 0',
+    fontWeight: 'bold',
+  },
+  headerLabel: {
+    padding: '15px',
+    margin: 0,
+    width: '100%',
+    fontSize: '1rem',
+    paddingLeft: 0,
   },
 }));
 
@@ -89,13 +97,18 @@ const SecondSignature = ({
 
   return (
     <PanelContainer>
-      <PanelLabel label="Require Second Signature">
-        <Checkbox
-          name="secondSigInfo"
-          checked={requireSecondSigChecked.secondSigInfo}
-          onChange={handleChecked}
-        />
-      </PanelLabel>
+      <Grid container alignItems="center" wrap="nowrap" className={classes.header}>
+        <Grid item xs={12} sm={12} lg={12} style={{ display: 'flex', padding: '0 15px' }}>
+          <Checkbox
+            name="secondSigInfo"
+            checked={requireSecondSigChecked.secondSigInfo}
+            onChange={handleChecked}
+          />
+          <Typography className={classes.headerLabel} component="p">
+            Please select if there is a second signer
+          </Typography>
+        </Grid>
+      </Grid>
 
       {requireSecondSigChecked.secondSigInfo && (
         <Grid container wrap="nowrap" direction="column">
@@ -142,20 +155,19 @@ const SecondSignature = ({
                 className={classes.input}
               />
             </Box>
-            <Grid container wrap="nowrap" alignItems="center">
-              <Grid item lg={12}>
-                <Typography component="p" className={classes.footNote}>
-                  I confirm, as the second signer, that I am present and the information I have
-                  provided above is accurate.
-                </Typography>
-              </Grid>
-              <Grid item>
+            <Grid container wrap="nowrap" alignItems="center" style={{ padding: '0 10px 0 15px' }}>
+              <Grid item lg={12} style={{ display: 'flex' }}>
                 <Checkbox
+                  style={{ paddingRight: '0' }}
                   name="secondSigConsent"
                   checked={requireSecondSigChecked.secondSigConsent}
                   onChange={handleChecked}
                   required
                 />
+                <Typography component="p" className={classes.footNote}>
+                  I confirm, as the second signer, that I am present and the information I have
+                  provided above is accurate.
+                </Typography>
               </Grid>
             </Grid>
           </Grid>
