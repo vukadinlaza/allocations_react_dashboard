@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import _ from 'lodash';
 import { useQuery, gql } from '@apollo/client';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
@@ -10,6 +11,7 @@ import {
   Paper,
   Table,
   TableHead,
+  TableSortLabel,
   TableBody,
   TextField,
   TableRow,
@@ -17,13 +19,14 @@ import {
   Box,
   InputAdornment,
   Grid,
+  Tooltip,
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import EditIcon from '@material-ui/icons/Edit';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import { nWithCommas } from '../../../utils/numbers';
 import { DocumentBox } from '../../Settings/common';
 import { titleCase } from '../../../utils/helpers';
@@ -67,6 +70,15 @@ const styles = (theme) => ({
   headerText: {
     color: '#2A2B54 !important',
     fontWeight: '400',
+  },
+  links: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // width: '130px',
+    '&>*': {
+      margin: '0 10px',
+    },
   },
   mainTitle: {
     fontSize: '28px',
@@ -127,7 +139,13 @@ const GET_USER = gql`
   }
 `;
 
-const investmentHeaders = ['DEAL', 'DATE CREATED', 'AMOUNT', 'STATUS', 'EDIT', 'DOCUMENTS'];
+const investmentHeaders = [
+  { label: 'DEAL', value: 'deal.company_name', isSortable: true },
+  { label: 'DATE CREATED', value: '_id', isSortable: true },
+  { label: 'AMOUNT', value: 'amount', isSortable: true },
+  { label: 'STATUS', value: 'status', isSortable: true },
+  { label: 'LINKS', value: '', isSortable: false },
+];
 
 const getStatusColors = (status) => {
   switch (status) {
@@ -147,6 +165,34 @@ const getStatusColors = (status) => {
       return { backgroundColor: 'rgba(0,0,0,0)', color: 'red' };
   }
 };
+
+function descendingComparator(a, b, orderBy) {
+  if (_.get(b, orderBy, '') < _.get(a, orderBy, '')) {
+    return -1;
+  }
+  if (_.get(b, orderBy, '') > _.get(a, orderBy, '')) {
+    return 1;
+  }
+  return 0;
+}
+
+function getComparator(order, orderBy) {
+  console.log({ order, orderBy });
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+function stableSort(array, comparator) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  console.log(stabilizedThis.map((el) => el[0]));
+  return stabilizedThis.map((el) => el[0]);
+}
 
 const InvestmentRow = ({
   row,
@@ -199,14 +245,18 @@ const InvestmentRow = ({
           </div>
         </TableCell>
         <TableCell component="th" scope="row" className={classes.cellText} align="center">
-          <span onClick={onClick} className={classes.buttonLink}>
-            <EditIcon className={classes.button} />
-          </span>
-        </TableCell>
-        <TableCell component="th" scope="row" className={classes.cellText}>
-          <span className={classes.buttonLink} onClick={() => setOpen(!open)}>
-            <PlayArrowIcon className={classes.button} />
-          </span>
+          <div className={classes.links}>
+            <Tooltip title="Edit">
+              <span onClick={onClick} className={classes.buttonLink}>
+                <EditIcon className={classes.button} />
+              </span>
+            </Tooltip>
+            <Tooltip title="Documents">
+              <span className={classes.buttonLink} onClick={() => setOpen(!open)}>
+                <InsertDriveFileIcon className={classes.button} />
+              </span>
+            </Tooltip>
+          </div>
         </TableCell>
       </TableRow>
       <TableRow>
@@ -238,7 +288,20 @@ const InvestorInvestments = ({ classes, history }) => {
   const [dealId, setDealId] = useState(null);
   const [investorId, setInvestorId] = useState(null);
   const [investmentId, setInvestmentId] = useState(null);
+  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('deal.company_name');
   const { data, refetch } = useQuery(GET_USER, { variables: { _id: userId } });
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
+  const createSortHandler = (property, isSortable) => (event) => {
+    if (!isSortable) return;
+    handleRequestSort(event, property);
+  };
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -256,6 +319,7 @@ const InvestorInvestments = ({ classes, history }) => {
   };
 
   const userInvestments = data?.investor?.investments;
+
   if (!userInvestments) return <Loader />;
   const dataCopy = JSON.parse(JSON.stringify(data));
   dataCopy.investor.investments = dataCopy.investor.investments.filter((inv) =>
@@ -267,8 +331,8 @@ const InvestorInvestments = ({ classes, history }) => {
       <Typography className={classes.mainTitle}>
         {data?.investor?.name || 'Investor'} Investments
       </Typography>
-      <Typography className={classes.back} onClick={() => history.goBack()}>
-        <NavigateBeforeIcon /> Back to Investors
+      <Typography className={classes.back} onClick={() => history.push('/admin/funds')}>
+        <NavigateBeforeIcon /> Back to Admin Dashboard
       </Typography>
       <div className={classes.searchContainer}>
         <TextField
@@ -293,26 +357,37 @@ const InvestorInvestments = ({ classes, history }) => {
             <TableHead>
               <TableRow>
                 {investmentHeaders.map((header, index) => (
-                  <TableCell key={`header-${index}`} className={classes.headerText}>
-                    {header}
+                  <TableCell key={`header-${index}`} className={classes.headerText} align="center">
+                    <TableSortLabel
+                      active={header.isSortable && orderBy === header.value}
+                      direction={orderBy === header.value ? order : 'asc'}
+                      onClick={createSortHandler(header.value, header.isSortable)}
+                      hideSortIcon={!header.isSortable}
+                    >
+                      {header.label}
+                    </TableSortLabel>
                   </TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {dataCopy?.investor?.investments?.map((row, index) => (
-                <InvestmentRow
-                  key={row.name}
-                  row={row}
-                  classes={classes}
-                  setShowModal={setShowModal}
-                  setInvestmentId={setInvestmentId}
-                  superAdmin={userProfile?.admin}
-                  setDealId={setDealId}
-                  setInvestorId={setInvestorId}
-                  key={`row-${index}`}
-                />
-              ))}
+              {dataCopy?.investor?.investments
+                ? stableSort(dataCopy.investor.investments, getComparator(order, orderBy)).map(
+                    (row, index) => (
+                      <InvestmentRow
+                        key={row.name}
+                        row={row}
+                        classes={classes}
+                        setShowModal={setShowModal}
+                        setInvestmentId={setInvestmentId}
+                        superAdmin={userProfile?.admin}
+                        setDealId={setDealId}
+                        setInvestorId={setInvestorId}
+                        key={`row-${index}`}
+                      />
+                    ),
+                  )
+                : ''}
             </TableBody>
           </Table>
         </TableContainer>

@@ -21,6 +21,12 @@
     "ecmaVersion": 11
   },
   "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "no-shadow": ["off"],
@@ -95,7 +101,8 @@
       {
         "allowPattern": "^[a-z]+(_[a-z]+)+$"
       }
-    ]
+    ],
+    "react/jsx-props-no-spreading": "off"
   },
   "settings": {
     "import/extensions": [".js", ".jsx"]

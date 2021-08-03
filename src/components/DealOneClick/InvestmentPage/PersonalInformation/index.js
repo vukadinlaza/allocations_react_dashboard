@@ -20,7 +20,7 @@ const usStates = new UsaStates();
 const countryNames = countries.map((c) => c.countryName);
 const stateNames = usStates.states.map((s) => s.name);
 
-function PersonalInformation({ investor, setInvestor, errors, org }) {
+function PersonalInformation({ investor, setInvestor, errors, org, handleSecondSig }) {
   const [mailingDifferent, toggleMailingDifferent] = useState(false);
   const [entityDesignation, setEntityDesignation] = useState('');
   const [individualDesignation, setIndividualDesignation] = useState('');
@@ -66,6 +66,8 @@ function PersonalInformation({ investor, setInvestor, errors, org }) {
     }
 
     if (prop === 'investor_type') {
+      handleSecondSig(e.target.value);
+
       return setInvestor((prev) => ({
         ...prev,
         [prop]: e.target.value,
@@ -226,7 +228,7 @@ function PersonalInformation({ investor, setInvestor, errors, org }) {
             error={errors.includes('initials')}
             value={get(investor, 'initials') || ''}
             onChange={handleChange('initials')}
-            label="Please initial here"
+            label="Initials"
           />
         </>
       )}
@@ -292,12 +294,17 @@ function PersonalInformation({ investor, setInvestor, errors, org }) {
       {investor.investor_type && investor.investor_type === 'individual' && org === 'irishangels' && (
         <>
           <TextField
-            className="personal-information-input"
+            className="personal-information-input numbers"
             variant="outlined"
             placeholder="Social Security Number"
             error={errors.includes('ssn')}
             value={get(investor, 'ssn') || ''}
             onChange={handleChange('ssn')}
+            type="number"
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value, 10)).toString().slice(0, 9);
+            }}
+            label="Social Security Number"
           />
 
           <FormControl
@@ -329,7 +336,7 @@ function PersonalInformation({ investor, setInvestor, errors, org }) {
           variant="outlined"
           className="address-container"
         >
-          <label className="address-input-label">
+          <label className="address-input-label" htmlFor="home-address">
             Home Address:
             <TextField
               className="address-input"
@@ -338,10 +345,11 @@ function PersonalInformation({ investor, setInvestor, errors, org }) {
               error={errors.includes('home_address')}
               value={get(investor, 'home_address') || ''}
               onChange={handleChange('home_address')}
+              id="home-address"
             />
           </label>
           {mailingDifferent && (
-            <label className="address-input-label">
+            <label className="address-input-label" htmlFor="mailing-address">
               Mailing Address:
               <TextField
                 className="address-input"
@@ -350,22 +358,22 @@ function PersonalInformation({ investor, setInvestor, errors, org }) {
                 error={errors.includes('mailing_address')}
                 value={get(investor, 'mailing_address') || ''}
                 onChange={handleChange('mailing_address')}
+                id="mailing-address"
               />
             </label>
           )}
-          <label className="same-mailing-checkbox">
+          <label className="same-mailing-checkbox" htmlFor="mailing-address-checkbox">
             Different Mailing Address
             <Checkbox
               onChange={() => toggleMailingDifferent((t) => !t)}
               value="checkedA"
-              inputProps={{ 'aria-label': 'Checkbox A' }}
+              inputProps={{ 'aria-label': 'mailing-address-checkbox' }}
+              id="mailing-address-checkbox"
             />
           </label>
         </FormControl>
       )}
 
-      {/* <TextField className="personal-information-input" variant="outlined" placeholder="Full Address" />
-      <TextField className="personal-information-input" variant="outlined" placeholder="Phone number" /> */}
       <p className="information-notice">
         Required by United States banking laws. This information is transmitted securely and will
         never be used for any purpose beyond executing your investment.

@@ -195,6 +195,12 @@ const ServerTable = ({
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   const onChangeSort = (
     sortField,
     isAsc,
@@ -225,7 +231,7 @@ const ServerTable = ({
       </div>
     );
 
-  // const { isLastPage, count } = data.fundAdminTables;
+  console.log({ data });
 
   return (
     <div className={classes.root}>
@@ -252,6 +258,7 @@ const ServerTable = ({
           label="Search"
           id="search-field"
           fullWidth
+          onKeyDown={handleKeyDown}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">

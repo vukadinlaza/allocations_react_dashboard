@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, withRouter } from 'react-router-dom';
+import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Tabs, Tab, Typography, Button, Grid } from '@material-ui/core';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { Tabs, Tab, Typography } from '@material-ui/core';
 import { useQuery, gql } from '@apollo/client';
-import { phone, tablet } from '../../utils/helpers';
-import { useAuth } from '../../auth/useAuth';
+import { phone } from '../../utils/helpers';
 import Loader from '../utils/Loader';
 import Highlights from './sections/Highlights';
 import Deals from './sections/Deals';
 import Investors from './sections/Investors';
+import FundManagers from './sections/FundManagers';
 
 const styles = (theme) => ({
   contentContainer: {
@@ -137,10 +136,9 @@ const FUND_ADMIN_DASHBOARD_STATS = gql`
   }
 `;
 
-const dashboardTabs = ['Highlights', 'Funds', 'SPVs', 'Investors'];
+const dashboardTabs = ['Highlights', 'Fund Managers', 'Funds', 'SPVs', 'Investors'];
 
-const FundAdminDashboard = ({ classes, history }) => {
-  const { userProfile } = useAuth();
+const FundAdminDashboard = ({ classes }) => {
   const [tabIndex, setTabIndex] = useState(0);
   const { data } = useQuery(FUND_ADMIN_DASHBOARD_STATS);
 
@@ -154,12 +152,15 @@ const FundAdminDashboard = ({ classes, history }) => {
         return <Highlights data={data} />;
 
       case 1:
-        return <Deals filter={{ filter: 'fund' }} tableName="Fund" />;
+        return <FundManagers data={data} />;
 
       case 2:
-        return <Deals filter={{ filter: { $ne: 'fund' } }} tableName="SPV" />;
+        return <Deals filter={{ filter: 'fund' }} tableName="Fund" />;
 
       case 3:
+        return <Deals filter={{ filter: { $ne: 'fund' } }} tableName="SPV" />;
+
+      case 4:
         return <Investors />;
 
       default:

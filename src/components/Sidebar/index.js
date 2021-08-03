@@ -23,15 +23,12 @@ import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import StorefrontIcon from '@material-ui/icons/Storefront';
-import SettingsIcon from '@material-ui/icons/Settings';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MonetizationOnRoundedIcon from '@material-ui/icons/MonetizationOnRounded';
 import AccountBalanceRoundedIcon from '@material-ui/icons/AccountBalanceRounded';
 import CreditCardRoundedIcon from '@material-ui/icons/CreditCardRounded';
 import { useAuth } from '../../auth/useAuth';
-import NavBar from '../NavBar';
 import { phone } from '../../utils/helpers';
-import Loader from '../utils/Loader';
 import { useViewport } from '../../utils/hooks';
 import whitelistEmails from './whiteListEmails';
 import './style.scss';
@@ -184,7 +181,6 @@ export default function Sidebar(props) {
   const [currentAccount, setCurrentAccount] = useState('');
   const [currentHomeUrl, setCurrentHomeUrl] = useState('');
   const fundMatch = useRouteMatch('/admin/:organization');
-  const homeMatch = useRouteMatch('/');
   const location = useLocation();
   const { window } = props;
   const classes = useStyles();
@@ -339,13 +335,12 @@ export default function Sidebar(props) {
                 </ListItemIcon>
                 <ListItemText primary="Investors Admin" />
               </ListItem>
-            </div>{' '}
-            */}
+            </div> */}
             <AdminLinks location={location} />
           </List>
         </>
       )}
-      <div onClick={mobileOpen ? handleDrawerClose : null} className={`sidebar-nav-item`}>
+      <div onClick={mobileOpen ? handleDrawerClose : null} className="sidebar-nav-item">
         <ListItem button onClick={logoutWithRedirect}>
           <ListItemIcon className={classes.icon}>
             <ExitToAppIcon />
@@ -358,6 +353,8 @@ export default function Sidebar(props) {
 
   const container = window !== undefined ? () => window().document.body : undefined;
   const onboarding = location.pathname === '/get-started';
+  const adminOrganizations = userProfile?.organizations_admin;
+  const adminOrganizationsCopy = adminOrganizations ? [...adminOrganizations] : []; // Create a copy of organizations so we can mutate with sort
 
   return (
     <div className={classes.root}>
@@ -439,8 +436,8 @@ export default function Sidebar(props) {
                       >
                         {userProfile?.name}
                       </MenuItem>
-                      {userProfile?.organizations_admin?.length &&
-                        [...userProfile.organizations_admin]
+                      {adminOrganizationsCopy?.length &&
+                        adminOrganizationsCopy
                           .sort((a, b) => a.name.localeCompare(b.name))
                           .map((org) => (
                             <MenuItem
@@ -493,8 +490,8 @@ export default function Sidebar(props) {
                       >
                         {userProfile?.name}
                       </MenuItem>
-                      {userProfile?.organizations_admin?.length &&
-                        [...userProfile.organizations_admin]
+                      {adminOrganizationsCopy?.length &&
+                        adminOrganizationsCopy
                           .sort((a, b) => a.name.localeCompare(b.name))
                           .map((org) => (
                             <MenuItem
@@ -511,6 +508,12 @@ export default function Sidebar(props) {
                 </Drawer>
               </Hidden>
             </nav>
+            <main
+              className={classes.content}
+              style={{ background: 'rgba(0,0,0,0.01)', height: '100vh' }}
+            >
+              {props.children}
+            </main>
           </div>
         </>
       )}

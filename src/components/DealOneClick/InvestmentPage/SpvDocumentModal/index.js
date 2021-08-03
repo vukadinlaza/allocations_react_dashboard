@@ -15,6 +15,7 @@ export default function SPVDocumentModal({
   submitInvestment,
   previewData,
   loadingPreview,
+  requireSecondSigChecked,
 }) {
   const handleClose = () => {
     setOpen(false);
@@ -70,7 +71,7 @@ export default function SPVDocumentModal({
                   className="button"
                   onClick={submitInvestment}
                 >
-                  I Agree
+                  {requireSecondSigChecked ? 'We' : 'I'} Agree
                 </Button>
                 <Button
                   variant="contained"
@@ -78,7 +79,7 @@ export default function SPVDocumentModal({
                   className="button declineBtn"
                   onClick={handleClose}
                 >
-                  I Decline
+                  {requireSecondSigChecked ? 'We' : 'I'} Decline
                 </Button>
               </div>
             </>

@@ -1,4 +1,17 @@
 .InvestmentEdit {
+  input {
+    padding: 10px 14px;
+  }
+
+  .title {
+    font-size: 17px;
+    margin: 15px 0;
+  }
+
+  .title:first-of-type {
+    margin-top: 0px;
+  }
+
   .docs {
     padding-top: 15px;
     display: flex;
