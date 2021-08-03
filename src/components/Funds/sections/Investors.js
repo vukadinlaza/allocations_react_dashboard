@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, withRouter } from 'react-router-dom';
+import React from 'react';
+import { withRouter } from 'react-router-dom';
+import { Tooltip } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import ServerTable from '../../utils/ServerTable';
 import { nWithCommas } from '../../../utils/numbers';
 
@@ -23,6 +26,15 @@ const styles = (theme) => ({
     cursor: 'pointer',
     '&:hover': {
       backgroundColor: '#3f85f9',
+    },
+  },
+  links: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // width: '130px',
+    '&>*': {
+      margin: '0 10px',
     },
   },
 });
@@ -65,26 +77,10 @@ const investorVariables = {
       isSortable: true,
     },
     {
-      value: 'viewInvestments',
-      label: 'VIEW INVESTMENTS',
+      value: 'links',
+      label: 'LINKS',
       keyNotInData: true,
-      type: 'viewInvestments',
-      align: 'center',
-      alignHeader: true,
-    },
-    {
-      value: 'viewProfile',
-      label: 'VIEW PROFILE',
-      keyNotInData: true,
-      type: 'viewProfile',
-      align: 'center',
-      alignHeader: true,
-    },
-    {
-      value: 'viewDashboard',
-      label: 'VIEW DASHBOARD',
-      keyNotInData: true,
-      type: 'viewDashboard',
+      type: 'links',
       align: 'center',
       alignHeader: true,
     },
@@ -95,10 +91,6 @@ const investorVariables = {
 };
 
 const Investors = ({ classes, history }) => {
-  const handleShowInvestments = (userId) => {
-    history.push(`/admin/users/${userId}/investments`);
-  };
-
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
       case 'investmentAmount':
@@ -111,39 +103,40 @@ const Investors = ({ classes, history }) => {
       case 'count':
         return row[headerValue].length;
 
-      case 'viewInvestments':
+      case 'links':
         return (
-          <a
-            href={`/admin/users/${row._id}/investments`}
-            className={classes.buttonLink}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <PlayArrowIcon className={classes.button} />
-          </a>
-        );
-
-      case 'viewProfile':
-        return (
-          <a
-            href={`/admin/users/${row._id}`}
-            className={classes.buttonLink}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <PlayArrowIcon className={classes.button} />
-          </a>
-        );
-      case 'viewDashboard':
-        return (
-          <a
-            href={`/investor/${row._id}/home`}
-            className={classes.buttonLink}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <PlayArrowIcon className={classes.button} />
-          </a>
+          <div className={classes.links}>
+            <Tooltip title="Investments">
+              <a
+                href={`/admin/users/${row._id}/investments`}
+                className={classes.buttonLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <TrendingUpIcon className={classes.button} />
+              </a>
+            </Tooltip>
+            <Tooltip title="Profile">
+              <a
+                href={`/admin/users/${row._id}`}
+                className={classes.buttonLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <AccountCircleIcon className={classes.button} />
+              </a>
+            </Tooltip>
+            <Tooltip title="Dashboard">
+              <a
+                href={`/investor/${row._id}/home`}
+                className={classes.buttonLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <DashboardIcon className={classes.button} />
+              </a>
+            </Tooltip>
+          </div>
         );
       default:
         return <div />;
