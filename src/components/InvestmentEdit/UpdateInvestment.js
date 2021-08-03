@@ -14,13 +14,17 @@ import {
   InputLabel,
   Box,
   Typography,
+  Tooltip,
+  InputAdornment,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { NoFragmentCyclesRule } from 'graphql';
 import Loader from '../utils/Loader';
 import { destroy } from '../../api/investments';
-import DocumentIcon from '../svg/DocumentIcon';
 import CrossOrPlusIcon from '../svg/CrossOrPlusIcon';
+import DocumentIcon from '../../assets/document-icon.svg';
+import './style.scss';
 
 /** *
  *
@@ -35,15 +39,13 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 800,
     marginBottom: theme.spacing(4),
   },
-  divider: {
-    margin: '16px -16px',
-  },
 }));
 const GET_INVESTMENT = gql`
   query GetInvestment($_id: String!) {
     investment(_id: $_id) {
       _id
       amount
+      capitalWiredAmount
       status
       documents {
         link
@@ -61,6 +63,7 @@ const GET_INVESTMENT = gql`
         entity_name
         investor_type
         investingAs
+        accredidation_status
       }
     }
   }
@@ -82,45 +85,79 @@ const UPDATE_INVESTMENT = gql`
     }
   }
 `;
+
+const UPDATE_USER = gql`
+  mutation UpdateUser($input: UserInput!) {
+    updateUser(input: $input) {
+      _id
+    }
+  }
+`;
+
 export default function InvestmentEdit({
   investmentId = false,
   isK1 = false,
   handleUpdate = false,
 }) {
-  const classes = useStyles();
   const params = useParams();
   const [investment, setInvestment] = useState(null);
-  const [hasChanges, setHasChanges] = useState(false);
+  const [user, setUser] = useState();
+  const [hasInvestmentChanges, setHasInvestmentChanges] = useState(false);
+  const [hasUserChanges, setHasUserChanges] = useState(false);
   const id = investmentId || params.id;
 
   const {
     data,
     refetch: getInvestment,
     loading,
-  } = useQuery(GET_INVESTMENT, { variables: { _id: id } });
+  } = useQuery(GET_INVESTMENT, {
+    variables: { _id: id },
+    fetchPolicy: 'network-only',
+  });
 
   const [updateInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT, {
     onCompleted: () => {
-      toast.success('Sucess! Investment Updated.');
+      toast.success('Success! Investment Updated.');
+
       if (handleUpdate) {
         handleUpdate.refetch();
       }
+      getInvestment();
     },
-    onError: () => {
+    onError: (error) => {
+      console.log(error);
       toast.error(
         'Something went wrong updating the investment. Try again or contact support@allocations.com',
       );
     },
   });
+
+  const [updateUser] = useMutation(UPDATE_USER, {
+    onCompleted: () => {
+      toast.success('Success! Investor Updated.');
+      if (handleUpdate) {
+        handleUpdate.refetch();
+      }
+      getInvestment();
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error(
+        'Something went wrong updating the investment or investor. Try again or contact support@allocations.com',
+      );
+    },
+  });
+
   const [deleteInvestment] = useMutation(destroy, {
     onCompleted: () => {
       if (handleUpdate) {
         handleUpdate.refetch();
         handleUpdate.closeModal();
       }
-      toast.success('Sucess! Investment Deleted.');
+      toast.success('Success! Investment Deleted.');
     },
-    onError: () => {
+    onError: (error) => {
+      console.log(error);
       toast.error(
         'Something went wrong deleting the investment. Try again or contact support@allocations.com',
       );
@@ -128,15 +165,53 @@ export default function InvestmentEdit({
   });
 
   useEffect(() => {
-    setHasChanges(!isEqual(investment, {}));
+    setHasInvestmentChanges(!isEqual(investment, data?.investment));
   }, [investment]);
 
   useEffect(() => {
-    if (data && !loading) setInvestment(data.investment);
+    if (data && !loading) {
+      setInvestment(data.investment);
+      setUser(get(data, 'investment.investor', {}));
+    }
   }, [data, loading]);
 
   const updateInvestmentProp = ({ prop, newVal }) => {
-    setInvestment((prev) => ({ ...prev, [prop]: newVal }));
+    if (prop === 'accredidation_status') {
+      setUser((prev) => {
+        const data = {
+          ...prev,
+          accredidation_status: newVal,
+        };
+        setHasUserChanges(!isEqual(data, prev));
+        return data;
+      });
+    } else {
+      setInvestment((prev) => ({ ...prev, [prop]: newVal }));
+    }
+  };
+
+  const handleInvestmentEdit = () => {
+    if (hasInvestmentChanges) {
+      updateInvestment({
+        variables: {
+          investment: {
+            ...pick(investment, ['_id', 'status', 'amount', 'capitalWiredAmount']),
+          },
+        },
+      });
+      setHasInvestmentChanges(false);
+    }
+
+    if (hasUserChanges) {
+      updateUser({
+        variables: {
+          input: {
+            ...pick(user, ['_id', 'accredidation_status']),
+          },
+        },
+      });
+      setHasUserChanges(false);
+    }
   };
 
   if (createInvestmentRes.data?.createInvestment?._id) {
@@ -148,10 +223,15 @@ export default function InvestmentEdit({
       ? get(investment, 'investor.entity_name') || ''
       : `${get(investment, 'investor.first_name')} ${get(investment, 'investor.last_name')}`;
 
+  const convertToPositiveInteger = (num) => {
+    return parseInt(num < 0 ? 0 : num);
+  };
+
+  console.log('USER', user);
+
   return (
     <div className="InvestmentEdit form-wrapper">
-      <div className="form-title">Update Investment</div>
-      <Divider className={classes.divider} />
+      <div className="title">Update Investment</div>
       <form className="form" noValidate autoComplete="off">
         <Grid container spacing={3} direction="row" justify="flex-end">
           <Grid item xs={12} sm={12} md={6}>
@@ -169,13 +249,13 @@ export default function InvestmentEdit({
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
               <TextField
                 style={{ width: '100%' }}
-                type="number"
-                value={get(investment, 'amount', '') || 0}
-                onChange={(e) =>
-                  // eslint-disable-next-line radix
-                  updateInvestmentProp({ prop: 'amount', newVal: parseInt(e.target.value) })
-                }
-                label="Amount"
+                value={`${get(investment, 'deal.company_name', '')} ${get(
+                  investment,
+                  'deal.company_description',
+                  '',
+                )}`}
+                disabled
+                label="Deal"
                 variant="outlined"
               />
             </FormControl>
@@ -184,18 +264,48 @@ export default function InvestmentEdit({
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
               <TextField
                 style={{ width: '100%' }}
-                value={`${get(investment, 'deal.company_name', '')} ${get(
-                  investment,
-                  'deal.company_description',
-                  '',
-                )}`}
-                label="Deal"
+                type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                  startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                }}
+                value={get(investment, 'amount', '') || 0}
+                onChange={(e) =>
+                  // eslint-disable-next-line radix
+                  updateInvestmentProp({
+                    prop: 'amount',
+                    newVal: convertToPositiveInteger(e.target.value),
+                  })
+                }
+                label="Amount Committed"
                 variant="outlined"
               />
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={12} md={6}>
-            <FormControl variant="outlined" style={{ width: '100%' }}>
+            <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
+              <TextField
+                style={{ width: '100%' }}
+                type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                  startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                }}
+                value={get(investment, 'capitalWiredAmount', '') || 0}
+                onChange={(e) =>
+                  // eslint-disable-next-line radix
+                  updateInvestmentProp({
+                    prop: 'capitalWiredAmount',
+                    newVal: convertToPositiveInteger(e.target.value),
+                  })
+                }
+                label="Amount Received"
+                variant="outlined"
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <FormControl variant="outlined" style={{ width: '100%' }} size="small">
               <InputLabel>Status</InputLabel>
               <Select
                 value={investment?.status || ''}
@@ -211,6 +321,31 @@ export default function InvestmentEdit({
           </Grid>
         </Grid>
 
+        <div className="title">Update Investor Accreditation</div>
+
+        <Grid item xs={12} sm={12} md={12} lg={12}>
+          <FormControl
+            variant="outlined"
+            style={{ width: '100%', marginBottom: '15px' }}
+            size="small"
+          >
+            <InputLabel>Accreditation Status</InputLabel>
+            <Select
+              value={user?.accredidation_status || false}
+              onChange={(e) =>
+                updateInvestmentProp({
+                  prop: 'accredidation_status',
+                  newVal: e.target.value,
+                })
+              }
+              inputProps={{ name: 'accredidation_status' }}
+            >
+              <MenuItem value>The investor is accredited</MenuItem>
+              <MenuItem value={false}>The investor is not accredited</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+
         <Grid container spacing={3}>
           <Grid
             item
@@ -221,16 +356,10 @@ export default function InvestmentEdit({
             style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
           >
             <Button
-              disabled={!hasChanges}
+              disabled={!hasInvestmentChanges && !hasUserChanges}
               variant="contained"
               style={{ backgroundColor: '#2A2B54' }}
-              onClick={() =>
-                updateInvestment({
-                  variables: {
-                    investment: { ...pick(investment, ['_id', 'status', 'amount']) },
-                  },
-                })
-              }
+              onClick={handleInvestmentEdit}
               color="primary"
             >
               UPDATE
@@ -248,9 +377,8 @@ export default function InvestmentEdit({
           </Grid>
         </Grid>
 
-        <Divider className={classes.divider} />
         <Grid container>
-          <div className="form-sub-title" style={{ color: '#2A2B54' }}>
+          <div className="title" style={{ color: '#2A2B54', margin: '15px 0' }}>
             Documents
           </div>
         </Grid>
@@ -267,7 +395,7 @@ function Docs({ investment, getInvestment, isK1 }) {
   const [addInvestmentDoc, { loading }] = useMutation(ADD_INVESTMENT_DOC, {
     onCompleted: () => {
       getInvestment();
-      toast.success('Sucess!, Document Added');
+      toast.success('Success! Document Added');
     },
     onError: () => {
       toast.error(
@@ -285,6 +413,7 @@ function Docs({ investment, getInvestment, isK1 }) {
       });
     }
   }, [addInvestmentDoc, id, isK1, getInvestment, uploadedDoc]);
+
   const docs = get(investment, 'documents', []);
 
   if (loading || !investment) return <Loader />;
@@ -311,7 +440,7 @@ function Docs({ investment, getInvestment, isK1 }) {
         style={{ padding: matches ? '10px' : '10px 0' }}
       >
         <Grid item>
-          <DocumentIcon />
+          <img src={DocumentIcon} style={{ height: '28px' }} />
         </Grid>
 
         <InputLabel
@@ -325,7 +454,7 @@ function Docs({ investment, getInvestment, isK1 }) {
             justifyContent: 'space-evenly',
           }}
         >
-          <Typography style={{ color: '#2A2B54' }}>Add New Document</Typography>
+          <Typography style={{ color: '#2A2B54', fontSize: '14px' }}>Add New Document</Typography>
           <input
             id="fileUpload"
             type="file"
@@ -347,6 +476,11 @@ function Docs({ investment, getInvestment, isK1 }) {
 function Doc({ doc, investment, getInvestment, matches }) {
   const file =
     doc.path.slice(0, 12) === 'investments/' ? doc.path.split('/')[2] : doc.path.split('/')[1];
+
+  function truncateFile(file) {
+    // eslint-disable-next-line prefer-template
+    return file.length > 25 ? file.substr(0, 24) + '...' : file;
+  }
 
   const [rmInvestmentDoc] = useMutation(RM_INVESTMENT_DOC, {
     variables: { file, investment_id: investment._id },
@@ -374,14 +508,16 @@ function Doc({ doc, investment, getInvestment, matches }) {
       style={{ padding: matches ? '10px' : '10px 0' }}
     >
       <Grid item>
-        <DocumentIcon />
+        <img src={DocumentIcon} style={{ height: '28px' }} />
       </Grid>
       <Grid item>
-        <Typography align="center">
-          <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">
-            {file}
-          </a>
-        </Typography>
+        <Tooltip title={file}>
+          <Typography align="center" style={{ fontSize: '14px' }}>
+            <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">
+              {truncateFile(file)}
+            </a>
+          </Typography>
+        </Tooltip>
       </Grid>
       <Grid item>
         <Box onClick={rmDoc} style={{ cursor: 'pointer' }}>

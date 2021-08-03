@@ -482,7 +482,11 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType })
 
         <AppModal isOpen={showModal} onClose={onClose}>
           {investmentId ? (
-            <InvestmentEdit investmentId={investmentId} handleUpdate={handleUpdate} />
+            <InvestmentEdit
+              investmentId={investmentId}
+              investorId={investorId}
+              handleUpdate={handleUpdate}
+            />
           ) : (
             <DeleteViewedUser dealId={dealId} investorId={investorId} handleUpdate={handleUpdate} />
           )}

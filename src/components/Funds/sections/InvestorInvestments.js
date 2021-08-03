@@ -319,6 +319,7 @@ const InvestorInvestments = ({ classes, history }) => {
   };
 
   const userInvestments = data?.investor?.investments;
+
   if (!userInvestments) return <Loader />;
   const dataCopy = JSON.parse(JSON.stringify(data));
   dataCopy.investor.investments = dataCopy.investor.investments.filter((inv) =>

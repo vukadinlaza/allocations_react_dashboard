@@ -37,6 +37,7 @@ const GET_INVESTMENT = gql`
     investment(_id: $_id) {
       _id
       amount
+      capitalWiredAmount
       status
       documents {
         link
@@ -54,6 +55,7 @@ const GET_INVESTMENT = gql`
         entity_name
         investor_type
         investingAs
+        accredidation_status
       }
     }
   }
@@ -80,16 +82,16 @@ export default function InvestmentEdit({
   isK1 = false,
   setEditInvestmentModal,
 }) {
+  const classes = useStyles();
   const params = useParams();
   const [investment, setInvestment] = useState(null);
   const [hasChanges, setHasChanges] = useState(false);
   const id = investmentId || params.id;
-  const classes = useStyles();
   const { data, refetch } = useQuery(GET_INVESTMENT, { variables: { _id: id } });
   const [createInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT);
   const [deleteInvestment, {}] = useMutation(destroy, {
     onCompleted: () => {
-      toast.success('Sucess! Investment Deleted.');
+      toast.success('Success! Investment Deleted.');
       setEditInvestmentModal(false);
     },
     onError: (e) => {
@@ -239,9 +241,9 @@ function Docs({ investment, setInvestment, refetch, isK1 }) {
       addInvestmentDoc({
         variables: { doc: uploadedDoc, investment_id: id, isK1 },
         onCompleted: () => {
-          console.log('Doc is uploaed');
+          console.log('Doc is uploaded');
           refetch();
-          toast.success('Sucess!');
+          toast.success('Success!');
         },
       });
     }
