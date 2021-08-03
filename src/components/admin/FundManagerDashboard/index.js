@@ -110,6 +110,7 @@ const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-start',
+    position: 'relative',
     width: '100%',
     left: '0',
     top: '0',
@@ -790,7 +791,7 @@ const FundManagerDashboard = ({ classes, history }) => {
             tabIndex={dealTab}
             setTabIndex={handleDealsTabChange}
           />
-          <div style={{ position: 'relative', height: 'calc(100vh - 180px)' }}>
+          <div style={{ position: 'relative' }}>
             {!isOverview && (
               <Tabs
                 value={tabIndex}

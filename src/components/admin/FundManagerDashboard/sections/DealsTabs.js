@@ -84,9 +84,6 @@ const styles = (theme) => ({
       display: 'block',
     },
   },
-  tabsIndicator: {
-    // display: "none",
-  },
   tabsPlaceholder: {
     width: 'calc(100% - 80px)',
     borderBottom: '2px solid #E6E9EF',
@@ -129,8 +126,8 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
         onChange={(e, v) => handleTabChange(e, v)}
         classes={{
           root: classes.tabs,
-          indicator: classes.tabsIndicator,
         }}
+        variant="scrollable"
       >
         {deals.map((deal, index) => {
           const isFund = deal.investmentType === 'fund';
