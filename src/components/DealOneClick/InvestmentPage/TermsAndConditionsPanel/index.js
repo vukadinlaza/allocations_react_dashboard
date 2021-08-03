@@ -92,7 +92,7 @@ function TermsAndConditionsPanel({
           disabled={!checkedTAT}
           onClick={confirmInvestment}
         >
-          {isEdit ? 'Update Investment' : 'Confirm Investment'}
+          {isEdit ? 'Update Investment' : 'Confirm And Submit For Final Agreement Review'}
         </Button>
       )}
     </section>
