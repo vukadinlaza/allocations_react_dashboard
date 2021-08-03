@@ -1,41 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
+import { useMutation, gql } from '@apollo/client';
 import { withRouter } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
-import { Tooltip } from '@material-ui/core';
+import { Tooltip, Typography, Grid, TextField, InputAdornment, Button } from '@material-ui/core';
+import { toast } from 'react-toastify';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import EditIcon from '@material-ui/icons/Edit';
+import CloseIcon from '@material-ui/icons/Close';
 import ServerTable from '../../utils/ServerTable';
 import { nWithCommas } from '../../../utils/numbers';
 import { titleCase } from '../../../utils/helpers';
-
-const styles = (theme) => ({
-  button: {
-    color: 'white',
-    fontSize: '16px',
-  },
-  buttonLink: {
-    borderRadius: '100%',
-    backgroundColor: '#0462FF',
-    padding: '8px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: '-6px 0',
-    width: '32px',
-    height: '32px',
-  },
-  links: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    // width: '130px',
-    '&>*': {
-      margin: '0 10px',
-    },
-  },
-});
+import AppModal from '../../Modal/AppModal';
 
 const tableVariables = {
   gqlQuery: `
@@ -49,7 +25,9 @@ const tableVariables = {
           AUM
           status
           slug
+          investmentType
           dealParams{
+            dealMultiple
             signDeadline
             wireDeadline
           }
@@ -68,6 +46,15 @@ const tableVariables = {
     { value: 'deal_lead', label: 'FUND MANAGER', isFilter: true, isSortable: true },
     { value: 'AUM', label: 'AUM', type: 'amount', isSortable: true },
     {
+      value: 'dealMultiple',
+      label: 'MULTIPLE',
+      type: 'multiple',
+      isSortable: true,
+      nestedKey: 'dealMultiple',
+      sortField: 'dealParams',
+      keyNotInData: true,
+    },
+    {
       value: 'dealParams',
       label: 'CLOSE DATE',
       type: 'wireDeadline',
@@ -75,7 +62,6 @@ const tableVariables = {
       sortField: 'dealParams',
       isSortable: true,
     },
-    // {drawdown}
     {
       value: 'dealOnboarding',
       label: 'PROCESS STREET STATUS',
@@ -90,13 +76,66 @@ const tableVariables = {
   defaultSortField: 'AUM',
 };
 
+const UPDATE_DEAL = gql`
+  mutation UpdateDeal($org: String!, $deal: DealInput!) {
+    updateDeal(org: $org, deal: $deal) {
+      _id
+    }
+  }
+`;
+
 const Deals = ({ classes, filter, tableName }) => {
+  const [modalData, setModalData] = useState({});
+  const [multiple, setMultiple] = useState({});
+  const [refetchCount, setRefetchCount] = useState(0); // ServerTable needs a change in this to refetch
+  const [updateDeal] = useMutation(UPDATE_DEAL, {
+    onCompleted: () => {
+      toast.success('Deal updated successfully.');
+      handleClose();
+      setRefetchCount((prev) => prev + 1);
+    },
+  });
+
+  const handleModal = (row) => {
+    const rowMultiple = row?.dealParams?.dealMultiple || 1;
+    setModalData(row);
+    setMultiple(rowMultiple);
+  };
+
+  const handleClose = () => {
+    setModalData({});
+  };
+
+  const handleMultipleChange = (event) => {
+    const newMultiple = event.target.value;
+    setMultiple(newMultiple);
+  };
+
+  const handleUpdateDeal = () => {
+    updateDeal({
+      variables: {
+        deal: {
+          _id: modalData._id,
+          dealParams: { dealMultiple: multiple },
+        },
+        org: modalData.organization.slug,
+      },
+    });
+  };
+
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
       case 'managers':
         return row[headerValue];
       case 'amount':
         return `$${nWithCommas(row[headerValue])}`;
+      case 'multiple':
+        return (
+          <div>
+            {`${row.dealParams[headerValue]}x`}
+            <EditIcon className={classes.editMultiple} onClick={(e) => handleModal(row)} />
+          </div>
+        );
       case 'wireDeadline':
         return row[headerValue]?.wireDeadline
           ? moment(row[headerValue].wireDeadline).format('MM/DD/YYYY')
@@ -153,10 +192,77 @@ const Deals = ({ classes, filter, tableName }) => {
         tableVariables={tableVariables}
         getCellContent={getCellContent}
         queryVariables={filter}
+        refetchCount={refetchCount}
         defaultSortOrder={-1}
       />
+      <AppModal isOpen={Object.keys(modalData).length} onClose={handleClose}>
+        <Typography className={classes.title}>Update Multiple</Typography>
+        <Grid spacing={3} container className={classes.formContainer}>
+          <Grid item xs={12} lg={6}>
+            <TextField
+              label="Fund Name"
+              value={modalData.company_name}
+              variant="outlined"
+              size="small"
+              fullWidth
+              disabled
+            />
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <TextField
+              label="Type"
+              value={modalData.investmentType === 'fund' ? 'Fund' : 'SPV'}
+              variant="outlined"
+              size="small"
+              fullWidth
+              disabled
+            />
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <TextField
+              label="Closing Date"
+              value={moment(modalData.dealParams?.wireDeadline).format('MM/DD/YYYY')}
+              variant="outlined"
+              size="small"
+              fullWidth
+              disabled
+            />
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <TextField
+              label="Amount Raised"
+              value={`$${nWithCommas(modalData.AUM)}`}
+              variant="outlined"
+              size="small"
+              fullWidth
+              disabled
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Multiple"
+              value={multiple}
+              variant="outlined"
+              size="small"
+              fullWidth
+              onChange={handleMultipleChange}
+              InputProps={{
+                endAdornment: <InputAdornment position="end">X</InputAdornment>,
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button onClick={handleUpdateDeal} className={classes.updateButton}>
+              Update Multiple
+            </Button>
+            <Button onClick={handleClose} className={classes.cancelButton}>
+              Cancel
+            </Button>
+          </Grid>
+        </Grid>
+      </AppModal>
     </div>
   );
 };
 
-export default withStyles(styles)(withRouter(Deals));
+export default withRouter(Deals);

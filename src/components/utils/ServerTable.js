@@ -82,6 +82,7 @@ tablePagination={number} // optional
 rowDetailPage={boolean} // optional
 resetTableData={string} // optional - used for clearing sorting and filtering from one table to another
 defaultSortOrder
+refetchCount // to trigger refetch from parent
 */
 
 const ServerTable = ({
@@ -93,6 +94,7 @@ const ServerTable = ({
   tablePagination = 25,
   rowDetailPage = false,
   defaultSortOrder,
+  refetchCount,
 }) => {
   const [selectWidth, setSelectWidth] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
@@ -111,12 +113,13 @@ const ServerTable = ({
 
   const getCurrentSort = () => (!sortField ? defaultSortField : sortField);
 
-  const { data, loading } = useQuery(
+  const { data, refetch, loading } = useQuery(
     gql`
       ${gqlQuery}
     `,
     {
       fetchPolicy: 'network-only',
+      notifyOnNetworkStatusChange: true,
       variables: {
         pagination: {
           pagination,
@@ -165,6 +168,12 @@ const ServerTable = ({
     const searchBarElement = document.getElementById('search-field');
     if (searchBarElement) searchBarElement.value = '';
   }, [headers, gqlQuery, dataVariable, resolverName, defaultSortField, tableName]);
+
+  useEffect(() => {
+    if (refetchCount) {
+      refetch();
+    }
+  }, [refetchCount]);
 
   const onChangePage = (newPage) => {
     setCurrentPage(newPage);
@@ -230,8 +239,6 @@ const ServerTable = ({
         <Loader />
       </div>
     );
-
-  console.log({ data });
 
   return (
     <div className={classes.root}>

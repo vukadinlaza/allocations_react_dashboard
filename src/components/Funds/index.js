@@ -9,126 +9,7 @@ import Highlights from './sections/Highlights';
 import Deals from './sections/Deals';
 import Investors from './sections/Investors';
 import FundManagers from './sections/FundManagers';
-
-const styles = (theme) => ({
-  contentContainer: {
-    margin: '40px',
-  },
-  createButton: {
-    backgroundColor: '#39C522',
-    display: 'flex',
-    alignItems: 'center',
-    color: 'white',
-    textTransform: 'none',
-    cursor: 'pointer',
-    '&:hover': {
-      backgroundColor: '#56db40',
-    },
-    '&:focus': {
-      outline: 'none',
-    },
-    [theme.breakpoints.down(phone)]: {
-      fontSize: '.5rem',
-    },
-  },
-  createButtonLink: {
-    zIndex: 1,
-    '&:hover': {
-      textDecoration: 'none',
-    },
-    [theme.breakpoints.down(phone)]: {
-      marginBottom: '1em',
-      '& *': {
-        // marginLeft: "0 !important",
-      },
-    },
-  },
-  dashboardContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    width: '100%',
-    position: 'absolute',
-    width: '100%',
-    left: '0',
-    top: '0',
-    background: 'white',
-  },
-  mainTitle: {
-    fontSize: '28px',
-    fontWeight: '700',
-    padding: '20px 0px',
-  },
-  mainTitleContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    margin: '0 40px',
-    [theme.breakpoints.down(phone)]: {
-      flexDirection: 'column',
-      fontSize: '.5rem',
-    },
-  },
-  searchContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: '25px',
-    background: 'white',
-    padding: '15px 20px',
-    border: 'solid 1px #dadada',
-    boxShadow: '0px 3px 5px -5px',
-    borderRadius: '3px',
-  },
-  section: {
-    width: '100%',
-    padding: '40px',
-    margin: '0px',
-    [theme.breakpoints.down(phone)]: {
-      padding: '10px',
-    },
-  },
-  selectedTab: {
-    fontWeight: 'bold !important',
-    '& $tabWrapper': {
-      backgroundColor: 'rgb(32 93 245 / 16%)',
-      borderRadius: '10px',
-    },
-  },
-  tab: {
-    textTransform: 'none',
-    minWidth: 0,
-    fontWeight: '400',
-    '&:focus': {
-      outline: 'none',
-    },
-  },
-  tabs: {
-    width: '100%',
-    border: 'none',
-    height: '50px',
-    padding: '0 28px',
-    '& *': {
-      height: '100%',
-    },
-    [theme.breakpoints.down(phone)]: {
-      padding: '0 12px',
-    },
-  },
-  tabsContainer: {
-    [theme.breakpoints.down(phone)]: {
-      overflowX: 'scroll',
-      display: 'block',
-    },
-  },
-  tabsIndicator: {
-    display: 'none',
-  },
-  tabWrapper: {
-    padding: '0 20px',
-  },
-});
+import styles from './styles.js';
 
 const FUND_ADMIN_DASHBOARD_STATS = gql`
   query fundAdminHighlights {
@@ -152,16 +33,16 @@ const FundAdminDashboard = ({ classes }) => {
         return <Highlights data={data} />;
 
       case 1:
-        return <FundManagers data={data} />;
+        return <FundManagers data={data} classes={classes} />;
 
       case 2:
-        return <Deals filter={{ filter: 'fund' }} tableName="Fund" />;
+        return <Deals filter={{ filter: 'fund' }} tableName="Fund" classes={classes} />;
 
       case 3:
-        return <Deals filter={{ filter: { $ne: 'fund' } }} tableName="SPV" />;
+        return <Deals filter={{ filter: { $ne: 'fund' } }} tableName="SPV" classes={classes} />;
 
       case 4:
-        return <Investors />;
+        return <Investors classes={classes} />;
 
       default:
         return <p>No Data</p>;
