@@ -23,6 +23,7 @@ import { useAuth } from '../../../auth/useAuth';
 
 import Loader from '../../utils/Loader';
 import DealsTabs from './sections/DealsTabs';
+import DocumentsTab from './sections/DocumentsTab';
 
 const styles = (theme) => ({
   accredited: {
@@ -483,8 +484,11 @@ const fundTabs = [
   'Investments',
   'Investor Onboarding Status',
   'Investors',
+  'Documents',
   'Deal Page',
 ];
+
+// is documents an SPV tab?
 const spvTabs = ['Investor Onboarding Status', 'Investors', 'Deal Page'];
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
@@ -682,17 +686,6 @@ const FundManagerDashboard = ({ classes, history }) => {
       case 'Investments':
         return <Investments classes={classes} width={width} data={fundData} />;
 
-      case 'Investors':
-        return (
-          <Investors
-            classes={classes}
-            width={width}
-            data={dealInvestments}
-            orgSlug={orgSlug}
-            userProfile={userProfile}
-          />
-        );
-
       case 'Investor Onboarding Status':
         return (
           <InvestorStatus
@@ -704,6 +697,20 @@ const FundManagerDashboard = ({ classes, history }) => {
             refetch={refetch}
           />
         );
+      case 'Investors':
+        return (
+          <Investors
+            classes={classes}
+            width={width}
+            data={dealInvestments}
+            orgSlug={orgSlug}
+            userProfile={userProfile}
+          />
+        );
+
+      case 'Documents':
+        return <DocumentsTab />;
+
       case 'Deal Page':
         return (
           <div className={classes.section}>
