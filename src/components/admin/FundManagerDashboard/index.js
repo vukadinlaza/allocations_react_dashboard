@@ -410,6 +410,10 @@ const GET_INVESTMENTS = gql`
           email
           accredidation_status
         }
+        documents {
+          path
+          link
+        }
       }
     }
   }
@@ -488,7 +492,6 @@ const fundTabs = [
   'Deal Page',
 ];
 
-// is documents an SPV tab?
 const spvTabs = ['Investor Onboarding Status', 'Investors', 'Deal Page'];
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
@@ -585,7 +588,6 @@ const FundManagerDashboard = ({ classes, history }) => {
       setOrgDeals(orgDealsDataCopy);
     }
   }, [orgDealsData]);
-
   useEffect(() => {
     if (dealTab !== 0) handleDealData(dealTab);
   }, [dealTab]);
@@ -709,7 +711,7 @@ const FundManagerDashboard = ({ classes, history }) => {
         );
 
       case 'Documents':
-        return <DocumentsTab />;
+        return <DocumentsTab classes={classes} dealInvestments={dealInvestments} />;
 
       case 'Deal Page':
         return (
