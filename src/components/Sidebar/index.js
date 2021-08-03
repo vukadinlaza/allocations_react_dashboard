@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
-    width: '100%',
+    width: '70%',
     paddingTop: 8,
     border: 'none',
     borderRight: '1px solid #dfe2e5',
@@ -126,7 +126,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignSelf: 'center',
-    width: '78%',
+    width: '50%',
     marginTop: '20px',
     '&:hover *:before, ': {
       border: 'none !important',
@@ -148,7 +148,6 @@ const useStyles = makeStyles((theme) => ({
     width: '90%',
     textAlign: 'center',
     fontWeight: 'bold',
-    // fontSize: "20px"
   },
 }));
 
