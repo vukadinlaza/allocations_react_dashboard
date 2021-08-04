@@ -1044,7 +1044,7 @@ export default function Sidebar(props) {
                 <ListItemIcon className={classes.icon}>
                   <AccountBalanceRoundedIcon />
                 </ListItemIcon>
-                <ListItemText primary="Funds Admin" />
+                <ListItemText primary="Funds" />
               </ListItem>
             </div>
             {/*
@@ -1142,12 +1142,6 @@ export default function Sidebar(props) {
                         classes={{
                           root: classes.select,
                         }}
-                        inputProps={{
-                          classes: {
-                            focused: classes.inputFocused,
-                            underline: classes.inputFocused,
-                          },
-                        }}
                       >
                         <MenuItem
                           onClick={() => {
@@ -1198,12 +1192,6 @@ export default function Sidebar(props) {
                         className={classes.input}
                         classes={{
                           root: classes.select,
-                        }}
-                        inputProps={{
-                          classes: {
-                            focused: classes.inputFocused,
-                            underline: classes.inputFocused,
-                          },
                         }}
                       >
                         <MenuItem

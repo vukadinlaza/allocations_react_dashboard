@@ -81,7 +81,9 @@ export default function OrganizationMembers({ data, refetch }) {
 }
 
 function Member({ org, member, sendAdminInvite, revokeMembership }) {
-  const invite = org.adminInvites.find((i) => i.to === member.email);
+  console.log('1', org);
+  const invite = org.adminInvites.filter((i) => i).find((i) => i.to === member.email);
+  console.log('2');
 
   const inviteArea = invite ? (
     <Button size="small" className="no-outline" endIcon={<FontAwesomeIcon icon="paper-plane" />}>

@@ -1,91 +1,68 @@
-import React, { useState } from 'react';
-import { withRouter } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
-import { Tabs, Tab, Typography } from '@material-ui/core';
-import { useQuery, gql } from '@apollo/client';
-import { phone } from '../../utils/helpers';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { Button, Table, TableBody, TableCell, TableRow, Paper } from '@material-ui/core';
+import { useAuth } from '../../auth/useAuth';
+import './style.scss';
+
+import Typography from '@material-ui/core/Typography';
 import Loader from '../utils/Loader';
-import Highlights from './sections/Highlights';
-import Deals from './sections/Deals';
-import Investors from './sections/Investors';
-import FundManagers from './sections/FundManagers';
-import styles from './styles.js';
 
-const FUND_ADMIN_DASHBOARD_STATS = gql`
-  query fundAdminHighlights {
-    fundAdminHighlights
-  }
-`;
+/** *
+ *
+ * Table view of Funds that a user is an admin on
+ *
+ * */
 
-const dashboardTabs = ['Highlights', 'Fund Managers', 'Funds', 'SPVs', 'Investors'];
+export default function Funds() {
+  const { userProfile } = useAuth();
+  const history = useHistory();
 
-const FundAdminDashboard = ({ classes }) => {
-  const [tabIndex, setTabIndex] = useState(0);
-  const { data } = useQuery(FUND_ADMIN_DASHBOARD_STATS);
-
-  const handleTabChange = (event, newValue) => {
-    setTabIndex(newValue);
-  };
-
-  const getTabContent = () => {
-    switch (tabIndex) {
-      case 0:
-        return <Highlights data={data} />;
-
-      case 1:
-        return <FundManagers data={data} classes={classes} />;
-
-      case 2:
-        return <Deals filter={{ filter: 'fund' }} tableName="Fund" classes={classes} />;
-
-      case 3:
-        return <Deals filter={{ filter: { $ne: 'fund' } }} tableName="SPV" classes={classes} />;
-
-      case 4:
-        return <Investors classes={classes} />;
-
-      default:
-        return <p>No Data</p>;
-    }
-  };
+  if (!userProfile.email)
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
 
   return (
-    <div className={classes.dashboardContainer}>
-      <div className={classes.mainTitleContainer}>
-        <Typography className={classes.mainTitle}>Fund Admin Dashboard</Typography>
-      </div>
-      <div>
-        <div style={{ position: 'relative' }}>
-          <Tabs
-            value={tabIndex}
-            indicatorColor="primary"
-            textColor="primary"
-            onChange={handleTabChange}
-            classes={{
-              root: classes.tabs,
-              indicator: classes.tabsIndicator,
-              flexContainer: classes.tabsContainer,
-            }}
-          >
-            {dashboardTabs.map((tab, index) => (
-              <Tab
-                label={tab}
-                className={classes.tab}
-                key={`tab-${index}`}
-                classes={{
-                  root: classes.tab,
-                  selected: classes.selectedTab,
-                  wrapper: classes.tabWrapper,
-                }}
-                disableRipple
-              />
-            ))}
-          </Tabs>
-          <div className={classes.contentContainer}> {getTabContent()}</div>
-        </div>
-      </div>
-    </div>
-  );
-};
+    <>
+      {/* <div className="small-header text-left">Funds Admin &nbsp;&nbsp;</div> */}
+      {/* {userProfile.admin &&
+      <Button onClick={() => history.push("/admin/organizations/new")}
+              color="primary">
+        CREATE FUND MANAGER
+      </Button>} */}
 
-export default withStyles(styles)(withRouter(FundAdminDashboard));
+      <Paper>
+        <Typography variant="h6" style={{ paddingLeft: '16px', paddingTop: '16px' }} gutterBottom>
+          Funds Admin
+        </Typography>
+        <Typography variant="subtitle2" style={{ paddingLeft: '16px', paddingBottom: '16px' }}>
+          Below is a list of all the funds you have access to manage.
+        </Typography>
+        <Table>
+          <TableBody>
+            {(userProfile.organizations_admin || []).map((org) => (
+              <TableRow key={org._id} className="admin-link">
+                <TableCell>
+                  {/* funds-table */}
+                  {org.name} Admin
+                </TableCell>
+                <TableCell>
+                  <Button
+                    onClick={() => history.push(`/admin/${org.slug}`)}
+                    variant="contained"
+                    size="small"
+                    color="primary"
+                  >
+                    Manage
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
+    </>
+  );
+}
