@@ -40,13 +40,7 @@ const useStyles = makeStyles((theme) => ({
   blueContainer: {
     background:
       'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 160px, rgba(255,255,255,1) 160px)',
-    marginTop: '-30px',
-    paddingTop: '30px',
-    paddingBottom: '60px',
-    marginLeft: '-32px',
-    paddingLeft: '32px',
-    marginRight: '-32px',
-    paddingRight: '32px',
+    padding: '1.5rem',
   },
   a: {
     minWidth: '100%',
