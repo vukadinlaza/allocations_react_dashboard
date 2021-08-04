@@ -1,10 +1,26 @@
 @import '../../App.scss';
 
 .SidebarDrawer {
-  border: solid 3px yellow;
   width: 100%;
   .icon {
     min-width: 40px;
     color: #8593a6;
   }
+}
+
+.sidebar-nav-item a {
+  color: #707070;
+}
+
+.sidebar-nav-item:hover a {
+  text-decoration: none !important;
+}
+
+.sidebar-nav-item-active a {
+  color: #343f51 !important;
+  font-weight: bold;
+}
+
+.sidebar-nav-item-active svg {
+  color: #205df5;
 }

@@ -19,9 +19,6 @@ import SidebarDrawer from './SidebarDrawer';
 import './Sidebar.scss';
 
 const useStyles = makeStyles(() => ({
-  inputFocused: {
-    border: 'none',
-  },
   drawerPaper: {
     width: '70%',
     paddingTop: 8,
@@ -29,16 +26,14 @@ const useStyles = makeStyles(() => ({
     borderRight: '1px solid #dfe2e5',
     borderLeft: 0,
     position: 'relative',
-    height: '100vh',
+    height: '100%',
   },
   newDrawerPaper: {
     width: '100%',
-    paddingTop: 8,
-    border: 'none',
+    paddingTop: 5,
     borderRight: '1px solid #dfe2e5',
-    borderLeft: 0,
     position: 'relative',
-    height: '100vh',
+    height: '100%',
   },
   select: {
     width: '90%',
@@ -148,7 +143,7 @@ export default function Sidebar(props) {
       {!onboarding && (
         <>
           <AppBar className="appBar">
-            <Toolbar className="toolbar">
+            <Toolbar>
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
@@ -242,7 +237,7 @@ export default function Sidebar(props) {
 
               <Hidden smDown implementation="css" className="secondHidden">
                 <Drawer
-                  className="newPaperDrawer"
+                  className="newDrawerPaper"
                   classes={{
                     paper: classes.newDrawerPaper,
                   }}

@@ -74,7 +74,13 @@ const SidebarDrawer = ({
     <div className="SidebarDrawer">
       <List>
         {menus.map(({ to, title, icon }) => (
-          <div key={`menu-${title}`} onClick={mobileOpen ? handleDrawerClose : null}>
+          <div
+            key={`menu-${title}`}
+            onClick={mobileOpen ? handleDrawerClose : null}
+            className={`sidebar-nav-item ${
+              location.pathname === to ? 'sidebar-nav-item-active' : ''
+            }`}
+          >
             {title !== 'Get Started' ? (
               <ListItem component={Link} to={to} button>
                 <ListItemIcon className="icon">{icon}</ListItemIcon>
@@ -95,7 +101,11 @@ const SidebarDrawer = ({
         <>
           <Divider />
           <List>
-            <div>
+            <div
+              className={`sidebar-nav-item ${
+                location.pathname === '/admin/funds' ? 'sidebar-nav-item-active' : ''
+              }`}
+            >
               <ListItem component={Link} to="/admin/funds" button>
                 <ListItemIcon className="icon">
                   <AccountBalanceRoundedIcon />
