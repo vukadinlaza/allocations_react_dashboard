@@ -44,7 +44,7 @@
     "apollo-link-retry": "^2.2.16",
     "apollo-link-state": "^0.4.2",
     "apollo-link-ws": "^1.0.20",
-    "apollo-upload-client": "^12.1.0",
+    "apollo-upload-client": "^16.0.0",
     "axios": "^0.19.1",
     "base-64": "^1.0.0",
     "bignumber.js": "^9.0.0",
