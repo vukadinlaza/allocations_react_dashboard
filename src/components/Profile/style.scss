@@ -23,8 +23,10 @@
       display: inline-block;
     }
   }
-}
-.account-paper {
-  margin-top: 1rem;
-  padding: 1rem;
+
+  .account-paper {
+    margin-top: 1rem;
+    padding: 1rem;
+    overflow-x: auto;
+  }
 }
