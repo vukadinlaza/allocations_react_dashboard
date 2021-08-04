@@ -30,7 +30,7 @@ const Investments = ({ classes, data }) => {
       case 'amount':
         return `$${nWithCommas(row[headerValue])}`;
       default:
-        return <div></div>;
+        return <div />;
     }
   };
 
@@ -39,15 +39,15 @@ const Investments = ({ classes, data }) => {
   };
 
   let investmentsData = data.map((investment) => {
-    return { ...investment, Date: new Date(investment['Date']) };
+    return { ...investment, Date: new Date(investment.Date) };
   });
   if (!investmentsData) return <Loader />;
 
   if (searchTerm)
     investmentsData = investmentsData.filter((investment) =>
-      investment['Investment'].toUpperCase().includes(searchTerm.toUpperCase()),
+      investment.Investment.toUpperCase().includes(searchTerm.toUpperCase()),
     );
-
+  console.log(investmentsData);
   return (
     <div className={classes.section}>
       <div className={classes.searchContainer}>

@@ -467,6 +467,7 @@ export const ORG_OVERVIEW = gql`
       _id
       admin
       documents
+      created_at
     }
   }
 `;
@@ -492,7 +493,7 @@ const fundTabs = [
   'Deal Page',
 ];
 
-const spvTabs = ['Investor Onboarding Status', 'Investors', 'Deal Page'];
+const spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
@@ -711,7 +712,7 @@ const FundManagerDashboard = ({ classes, history }) => {
         );
 
       case 'Documents':
-        return <DocumentsTab classes={classes} dealInvestments={dealInvestments} />;
+        return <DocumentsTab classes={classes} data={dealInvestments} />;
 
       case 'Deal Page':
         return (
