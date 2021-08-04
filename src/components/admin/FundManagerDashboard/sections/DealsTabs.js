@@ -71,6 +71,7 @@ const styles = (theme) => ({
     whiteSpace: 'nowrap',
     fontSize: '16px',
     borderBottom: '2px solid #E6E9EF',
+    maxWidth: 'none',
     '&:focus': {
       outline: 'none',
     },
