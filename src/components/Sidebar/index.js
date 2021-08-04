@@ -1,87 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
-import { get, toLower } from 'lodash';
+import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
+import { get } from 'lodash';
 import { gql } from '@apollo/client';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import {
   Toolbar,
   AppBar,
-  CssBaseline,
-  Divider,
   Drawer,
   Hidden,
   IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   FormControl,
   Select,
   MenuItem,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import HomeIcon from '@material-ui/icons/Home';
-import PersonIcon from '@material-ui/icons/Person';
-import StorefrontIcon from '@material-ui/icons/Storefront';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import MonetizationOnRoundedIcon from '@material-ui/icons/MonetizationOnRounded';
-import AccountBalanceRoundedIcon from '@material-ui/icons/AccountBalanceRounded';
-import CreditCardRoundedIcon from '@material-ui/icons/CreditCardRounded';
 import { useAuth } from '../../auth/useAuth';
-import { phone } from '../../utils/helpers';
-import { useViewport } from '../../utils/hooks';
-import whitelistEmails from './whiteListEmails';
-import './style.scss';
+import SidebarDrawer from './SidebarDrawer';
+import './Sidebar.scss';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-  },
-  brand: {
-    flexGrow: 1,
-  },
-  drawer: {
-    [theme.breakpoints.up('md')]: {
-      width: '100%',
-      flexShrink: 0,
-    },
-    zIndex: 1099,
-  },
-  appBar: {
-    width: '100%',
-    background: '#fff',
-    color: '#868c97',
-    boxShadow: 'none !important',
-    position: 'relative',
-    height: '100%',
-    borderBottom: '1px solid #d8dce6',
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-    '&:focus': {
-      outline: 'none',
-    },
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
-  },
-  icon: {
-    minWidth: '40px',
-    color: '#8593a6',
-  },
-  input: {
-    border: 'none !important',
-    '&:before, &:after': {
-      border: 'none',
-    },
-  },
+const useStyles = makeStyles(() => ({
   inputFocused: {
     border: 'none',
   },
-  // necessary for content to be below app bar
-  toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: '70%',
     paddingTop: 8,
@@ -99,50 +39,6 @@ const useStyles = makeStyles((theme) => ({
     borderLeft: 0,
     position: 'relative',
     height: '100vh',
-  },
-  contentContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    overflow: 'hidden',
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(4),
-    maxWidth: 'calc(100% - 250px)',
-    width: 'calc(100% - 250px)',
-    overflowY: 'scroll',
-    height: 'calc(100vh - 70px)',
-    paddingBottom: '0',
-    position: 'relative',
-    [theme.breakpoints.down(phone)]: {
-      width: '100vw',
-      maxWidth: 'none',
-      padding: '20px',
-    },
-  },
-  formControl: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignSelf: 'center',
-    width: '50%',
-    marginTop: '20px',
-    '&:hover *:before, ': {
-      border: 'none !important',
-    },
-  },
-  sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
-    },
-  },
-  sectionMobile: {
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
   },
   select: {
     width: '90%',
@@ -173,7 +69,6 @@ const GET_INVESTOR = gql`
 export default function Sidebar(props) {
   const { userProfile, logout, isAuthenticated } = useAuth(GET_INVESTOR);
   const history = useHistory();
-  const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
   const [investTab, setInvestTab] = useState(false);
   const [creditTab, setCreditTab] = useState(false);
   const [buildTab, setBuildTab] = useState(false);
@@ -185,7 +80,6 @@ export default function Sidebar(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const { width } = useViewport();
 
   useEffect(() => {
     if (userProfile.showInvestAndMrkPlc || location.pathname === '/invest') {
@@ -244,161 +138,45 @@ export default function Sidebar(props) {
     setCurrentAccount(account);
   };
 
-  const menus = [
-    {
-      to: currentHomeUrl,
-      title: 'Home',
-      icon: <HomeIcon />,
-    },
-  ];
-  menus.push({
-    to: '/profile',
-    title: 'Profile',
-    icon: <PersonIcon />,
-  });
-
-  if (whitelistEmails.find((p) => toLower(p.email) === toLower(userProfile.email)) || investTab)
-    menus.push({
-      to: '/marketplace',
-      title: 'Marketplace',
-      icon: <StorefrontIcon />,
-    });
-
-  if (investTab)
-    menus.push({
-      to: '/demo',
-      title: 'Demo',
-      icon: <MonetizationOnRoundedIcon />,
-    });
-
-  if (creditTab) {
-    menus.push({
-      to: '/credit',
-      title: 'Credit',
-      icon: <CreditCardRoundedIcon />,
-    });
-  }
-
-  const drawer = (
-    <div>
-      <List>
-        {menus.map(({ to, title, icon }) => (
-          <div
-            key={`menu-${title}`}
-            onClick={mobileOpen ? handleDrawerClose : null}
-            className={`sidebar-nav-item ${
-              location.pathname === to ? 'sidebar-nav-item-active' : ''
-            }`}
-          >
-            {title !== 'Get Started' ? (
-              <ListItem component={Link} to={to} button>
-                <ListItemIcon className={classes.icon}>{icon}</ListItemIcon>
-                <ListItemText primary={title} />
-              </ListItem>
-            ) : (
-              <a href={to}>
-                <ListItem button>
-                  <ListItemIcon className={classes.icon}>{icon}</ListItemIcon>
-                  <ListItemText primary={title} />
-                </ListItem>
-              </a>
-            )}
-          </div>
-        ))}
-      </List>
-      {userProfile.admin && (
-        <>
-          <Divider />
-          <List>
-            <div
-              className={`sidebar-nav-item ${
-                location.pathname === '/admin/funds' ? 'sidebar-nav-item-active' : ''
-              }`}
-            >
-              <ListItem component={Link} to="/admin/funds" button>
-                <ListItemIcon className={classes.icon}>
-                  <AccountBalanceRoundedIcon />
-                </ListItemIcon>
-                <ListItemText primary="Funds Admin" />
-              </ListItem>
-            </div>
-            {/*
-            <div
-              className={`sidebar-nav-item ${
-                location.pathname === '/admin/settings' ? 'sidebar-nav-item-active' : ''
-              }`}
-            >
-              <ListItem component={Link} to="/admin/settings" button>
-                <ListItemIcon className={classes.icon}>
-                  <SettingsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Investors Admin" />
-              </ListItem>
-            </div> */}
-            <AdminLinks location={location} />
-          </List>
-        </>
-      )}
-      <div onClick={mobileOpen ? handleDrawerClose : null} className="sidebar-nav-item">
-        <ListItem button onClick={logoutWithRedirect}>
-          <ListItemIcon className={classes.icon}>
-            <ExitToAppIcon />
-          </ListItemIcon>
-          <ListItemText primary="Logout" />
-        </ListItem>
-      </div>
-    </div>
-  );
-
   const container = window !== undefined ? () => window().document.body : undefined;
   const onboarding = location.pathname === '/get-started';
   const adminOrganizations = userProfile?.organizations_admin;
   const adminOrganizationsCopy = adminOrganizations ? [...adminOrganizations] : []; // Create a copy of organizations so we can mutate with sort
 
   return (
-    <div className={classes.root}>
-      {!onboarding && <CssBaseline />}
+    <div className="Sidebar">
       {!onboarding && (
         <>
-          {width > 960 ? (
-            ''
-          ) : (
-            <AppBar className={classes.appBar}>
-              <Toolbar>
-                <IconButton
-                  color="inherit"
-                  aria-label="open drawer"
-                  edge="start"
-                  onClick={handleDrawerToggle}
-                  className={classes.menuButton}
-                >
-                  <MenuIcon />
-                </IconButton>
-                <div className={classes.brand}>
-                  <Brand
-                    organizations_admin={userProfile.organizations_admin || []}
-                    admin={userProfile.admin}
-                  />
-                </div>
-              </Toolbar>
-            </AppBar>
-          )}
-          <div
-            className={classes.contentContainer}
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-start',
-            }}
-          >
-            <nav className={classes.drawer} aria-label="mailbox folders">
-              <Hidden mdUp implementation="css">
+          <AppBar className="appBar">
+            <Toolbar className="toolbar">
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                className="menuButton"
+              >
+                <MenuIcon />
+              </IconButton>
+              <div className="brand">
+                <Brand
+                  organizations_admin={userProfile.organizations_admin || []}
+                  admin={userProfile.admin}
+                />
+              </div>
+            </Toolbar>
+          </AppBar>
+
+          <div className="contentContainer">
+            <nav className="drawer" aria-label="mailbox folders">
+              <Hidden mdUp implementation="css" className="firstHidden">
                 <Drawer
                   container={container}
                   variant="temporary"
                   anchor={theme.direction === 'rtl' ? 'right' : 'left'}
                   open={mobileOpen}
                   onClose={handleDrawerToggle}
+                  className="drawerPaper"
                   classes={{
                     paper: classes.drawerPaper,
                   }}
@@ -406,12 +184,12 @@ export default function Sidebar(props) {
                     keepMounted: true,
                   }}
                 >
-                  <FormControl className={classes.formControl}>
+                  <FormControl className="formControl">
                     <Select
                       labelId="accounts-select"
                       value={currentAccount || ''}
                       onChange={handleAccountChange}
-                      className={classes.input}
+                      className="input"
                       classes={{
                         root: classes.select,
                       }}
@@ -428,10 +206,7 @@ export default function Sidebar(props) {
                           history.push(`/`);
                         }}
                         value={userProfile?.name}
-                        style={{
-                          borderBottom: '1px solid rgb(204, 204, 204)',
-                          fontWeight: '500',
-                        }}
+                        className="formItem"
                       >
                         {userProfile?.name}
                       </MenuItem>
@@ -452,23 +227,34 @@ export default function Sidebar(props) {
                           ))}
                     </Select>
                   </FormControl>
-                  {drawer}
+                  <SidebarDrawer
+                    mobileOpen={mobileOpen}
+                    handleDrawerClose={handleDrawerClose}
+                    investTab={investTab}
+                    creditTab={creditTab}
+                    userProfile={userProfile}
+                    currentHomeUrl={currentHomeUrl}
+                    logout={logout}
+                    location={location}
+                  />
                 </Drawer>
               </Hidden>
-              <Hidden smDown implementation="css">
+
+              <Hidden smDown implementation="css" className="secondHidden">
                 <Drawer
+                  className="newPaperDrawer"
                   classes={{
                     paper: classes.newDrawerPaper,
                   }}
                   variant="permanent"
                   open
                 >
-                  <FormControl className={classes.formControl}>
+                  <FormControl className="formControl">
                     <Select
                       labelId="accounts-select"
                       value={currentAccount || ''}
                       onChange={handleAccountChange}
-                      className={classes.input}
+                      className="input"
                       classes={{
                         root: classes.select,
                       }}
@@ -482,10 +268,7 @@ export default function Sidebar(props) {
                       <MenuItem
                         onClick={() => history.push(`/`)}
                         value={userProfile?.name}
-                        style={{
-                          borderBottom: '1px solid rgb(204, 204, 204)',
-                          fontWeight: '500',
-                        }}
+                        className="formItem"
                       >
                         {userProfile?.name}
                       </MenuItem>
@@ -503,16 +286,21 @@ export default function Sidebar(props) {
                           ))}
                     </Select>
                   </FormControl>
-                  {drawer}
+
+                  <SidebarDrawer
+                    mobileOpen={mobileOpen}
+                    handleDrawerClose={handleDrawerClose}
+                    investTab={investTab}
+                    creditTab={creditTab}
+                    userProfile={userProfile}
+                    currentHomeUrl={currentHomeUrl}
+                    logout={logout}
+                    location={location}
+                  />
                 </Drawer>
               </Hidden>
             </nav>
-            <main
-              className={classes.content}
-              style={{ background: 'rgba(0,0,0,0.01)', height: '100vh' }}
-            >
-              {props.children}
-            </main>
+            <main className="content">{props.children}</main>
           </div>
         </>
       )}
@@ -581,7 +369,7 @@ function OrgLogo({ slug, name, isAdmin }) {
   if (!img) {
     return (
       <div className="brand" onClick={pushfn}>
-        <span style={{ height: '60px', width: '180px', textAlign: 'center', fontSize: '1.5em' }}>
+        <span className="brand-span">
           <b>{name || deSlugify(slug)}</b>
         </span>
       </div>
@@ -593,16 +381,4 @@ function OrgLogo({ slug, name, isAdmin }) {
       <img height="60px" width="180px" alt={slug} onError={() => setImg(null)} src={img} />
     </div>
   );
-}
-
-function AdminLinks() {
-  const match = useRouteMatch('/admin/:organization');
-
-  if (!match) return null;
-  const {
-    params: { organization },
-  } = match;
-  if (organization === 'funds') return null;
-
-  return <div className="admin-links" />;
 }

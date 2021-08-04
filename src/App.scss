@@ -1,5 +1,5 @@
-$break-md: 992px;
-$break-sm: 768px;
+$break-md: 960px;
+$break-sm: 600px;
 $break-xs: 576px;
 
 @mixin xs-only {
@@ -227,7 +227,7 @@ th {
   width: 100vw;
   height: 100%;
   display: grid;
-  grid-template-columns: 15% auto;
+  grid-template-columns: minmax(250px, 10%) auto;
   grid-template-rows: 100%;
   grid-template-areas: 'sidebar mainRoute';
 
@@ -240,6 +240,7 @@ th {
   }
 
   .sidebar {
+    border: solid 3px pink;
     grid-area: sidebar;
     z-index: 999;
   }
@@ -247,7 +248,7 @@ th {
   @media only screen and (max-width: 960px) {
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: 8% auto;
+    grid-template-rows: minmax(65px, 6%) auto;
     grid-template-areas:
       'sidebar'
       'mainRoute';

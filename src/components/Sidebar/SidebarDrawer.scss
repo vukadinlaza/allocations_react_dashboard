@@ -1,0 +1,10 @@
+@import '../../App.scss';
+
+.SidebarDrawer {
+  border: solid 3px yellow;
+  width: 100%;
+  .icon {
+    min-width: 40px;
+    color: #8593a6;
+  }
+}
