@@ -12,6 +12,7 @@ import AllocationsTable from '../../../utils/AllocationsTable';
 import Loader from '../../../utils/Loader';
 import { titleCase } from '../../../../utils/helpers';
 import '../style.scss';
+import moment from 'moment';
 
 const headers = [
   { value: 'name', label: 'INVESTOR NAME', isFilter: true, align: 'left', alignHeader: true },
@@ -68,8 +69,9 @@ const DocumentsTab = ({ classes, data }) => {
         return doc.path;
       }),
       status: investment.status,
-      // date is not right
-      // dateSigned: investment.investor?.documents,
+      dateSigned: moment(new Date(parseInt(investment._id.substring(0, 8), 16) * 1000)).format(
+        'MM/DD/YYYY',
+      ),
     };
   });
   // console.log('Docs', documentsData);
@@ -124,4 +126,3 @@ const DocumentsTab = ({ classes, data }) => {
 };
 
 export default DocumentsTab;
-// export default withStyles(styles)(DocumentsTab);
