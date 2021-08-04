@@ -14,7 +14,6 @@ import Indentity from './components/Identity';
 import Funds from './components/Funds';
 import Build from './components/Build';
 import Sidebar from './components/Sidebar';
-// import Sidebar from './components/Sidebar/Sidebar';
 import UserHome from './components/UserHome';
 import Demo from './components/Invest';
 import Investors from './components/Investors';
