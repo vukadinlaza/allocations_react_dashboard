@@ -1,17 +1,26 @@
-import { Badge } from '@material-ui/core';
 import React from 'react';
+import {
+  Badge,
+  FormControl,
+  InputAdornment,
+  InputLabel,
+  Select,
+  TextField,
+} from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
 import AllocationsTable from '../../../utils/AllocationsTable';
 import Loader from '../../../utils/Loader';
+import { titleCase } from '../../../../utils/helpers';
 // import _ from 'lodash';
 // import moment from 'moment';
 
 const headers = [
-  { value: 'name', label: 'INVESTOR NAME', align: 'left', alignHeader: true },
+  { value: 'name', label: 'INVESTOR NAME', isFilter: true, align: 'left', alignHeader: true },
   {
     value: 'documents',
     label: 'DOCUMENT NAME',
     type: 'document',
-    // isFilter: true,
+    isFilter: true,
     // isSortable: true,
     align: 'left',
     alignHeader: true,
@@ -20,7 +29,6 @@ const headers = [
     value: 'status',
     label: 'STATUS',
     type: 'status',
-    // isFilter: true,
     // isSortable: true,
     align: 'center',
     // alignHeader: true,
@@ -70,9 +78,49 @@ const DocumentsTab = ({ classes, data }) => {
   if (!data) return <Loader />;
 
   return (
-    <>
+    <div className={classes.section}>
+      <div className={classes.searchContainer}>
+        <FormControl
+          variant="outlined"
+          // style={{ width: `${selectWidth}em`}}
+          size="small"
+        >
+          <InputLabel htmlFor="field-filter">Field</InputLabel>
+          <Select
+            native
+            label="Field"
+            inputProps={{
+              id: 'field-filter',
+            }}
+          >
+            {headers
+              .filter((header) => header.isFilter)
+              .map((header, index) => (
+                <option value={header.value} key={`header-${index}`}>
+                  {titleCase(header.label)}
+                </option>
+              ))}
+          </Select>
+        </FormControl>
+        <TextField
+          label="Search"
+          placeholder="Search by company name"
+          id="search-field"
+          fullWidth
+          // onChange={handleSearch}
+          // value={searchTerm || ''}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon style={{ color: 'rgba(0, 0, 0, 0.54)' }} />
+              </InputAdornment>
+            ),
+          }}
+          style={{ margin: '0 1em' }}
+        />
+      </div>
       <AllocationsTable data={documentsData} headers={headers} getCellContent={getCellContent} />
-    </>
+    </div>
   );
 };
 

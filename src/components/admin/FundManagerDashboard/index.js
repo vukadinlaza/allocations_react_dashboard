@@ -712,7 +712,7 @@ const FundManagerDashboard = ({ classes, history }) => {
         );
 
       case 'Documents':
-        return <DocumentsTab classes={classes} data={dealInvestments} />;
+        return <DocumentsTab classes={classes} width={width} data={dealInvestments} />;
 
       case 'Deal Page':
         return (

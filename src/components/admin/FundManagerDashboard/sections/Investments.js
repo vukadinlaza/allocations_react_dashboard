@@ -47,7 +47,7 @@ const Investments = ({ classes, data }) => {
     investmentsData = investmentsData.filter((investment) =>
       investment.Investment.toUpperCase().includes(searchTerm.toUpperCase()),
     );
-  console.log(investmentsData);
+
   return (
     <div className={classes.section}>
       <div className={classes.searchContainer}>
