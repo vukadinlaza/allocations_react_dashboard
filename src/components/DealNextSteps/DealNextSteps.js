@@ -205,9 +205,6 @@ function DealNextSteps() {
               Edit Investment
             </Button>
           </div>
-        </div>
-
-        <div className="action-items">
           <div className="action-item">
             <img className="action-icon" src={signInvestmentYes} alt="sign-investment-yes" />
             <div className="action-instructions">
