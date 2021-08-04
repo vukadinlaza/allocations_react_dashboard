@@ -50,34 +50,24 @@ $break-lg: 1280px;
         flex-shrink: 0;
       }
 
-      .firstHidden {
-        .drawerPaper {
+      .formControl {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-self: center;
+        width: 80%;
+        margin-top: 1.25rem;
+
+        *:before {
+          border: none !important;
+        }
+
+        .input {
           width: 100%;
-          padding-top: 8;
-          border: none;
-          border-right: 1px solid #dfe2e5;
-          position: relative;
-          height: 100vh;
 
-          .formControl {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-self: center;
-            width: 100%;
-            margin-top: 1.25rem;
-            &:hover *:before {
-              border: none;
-            }
-
-            .input {
-              width: 100%;
-
-              .formItem {
-                border-bottom: 1px solid rgb(204, 204, 204);
-                font-weight: 500;
-              }
-            }
+          .formItem {
+            border-bottom: 1px solid rgb(204, 204, 204);
+            font-weight: 500;
           }
         }
       }
@@ -85,30 +75,10 @@ $break-lg: 1280px;
       .secondHidden {
         width: 100%;
         height: 100%;
+      }
 
-        .newDrawerPaper {
-          height: 100%;
-
-          .formControl {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-self: center;
-            width: 100%;
-            margin-top: 1.25rem;
-            &:hover {
-              outline: none;
-              text-decoration: none;
-            }
-
-            .input {
-              .formItem {
-                border-bottom: 1px solid rgb(204, 204, 204);
-                font-weight: 500;
-              }
-            }
-          }
-        }
+      .newDrawerPaper {
+        height: 100%;
       }
     }
 

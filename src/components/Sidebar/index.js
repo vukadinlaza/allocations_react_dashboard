@@ -20,9 +20,8 @@ import './Sidebar.scss';
 
 const useStyles = makeStyles(() => ({
   drawerPaper: {
-    width: '70%',
+    width: '65%',
     paddingTop: 8,
-    border: 'none',
     borderRight: '1px solid #dfe2e5',
     borderLeft: 0,
     position: 'relative',
@@ -171,7 +170,6 @@ export default function Sidebar(props) {
                   anchor={theme.direction === 'rtl' ? 'right' : 'left'}
                   open={mobileOpen}
                   onClose={handleDrawerToggle}
-                  className="drawerPaper"
                   classes={{
                     paper: classes.drawerPaper,
                   }}
