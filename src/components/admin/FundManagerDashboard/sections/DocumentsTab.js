@@ -11,8 +11,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import AllocationsTable from '../../../utils/AllocationsTable';
 import Loader from '../../../utils/Loader';
 import { titleCase } from '../../../../utils/helpers';
-// import _ from 'lodash';
-// import moment from 'moment';
+import '../style.scss';
 
 const headers = [
   { value: 'name', label: 'INVESTOR NAME', isFilter: true, align: 'left', alignHeader: true },
@@ -104,7 +103,7 @@ const DocumentsTab = ({ classes, data }) => {
         </FormControl>
         <TextField
           label="Search"
-          placeholder="Search by company name"
+          placeholder="Search by investor name"
           id="search-field"
           fullWidth
           // onChange={handleSearch}
@@ -125,3 +124,4 @@ const DocumentsTab = ({ classes, data }) => {
 };
 
 export default DocumentsTab;
+// export default withStyles(styles)(DocumentsTab);
