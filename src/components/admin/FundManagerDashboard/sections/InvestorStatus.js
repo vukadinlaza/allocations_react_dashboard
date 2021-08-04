@@ -76,7 +76,12 @@ const InvestorBoxViewed = ({
   };
 
   return width > phone ? (
-    <div className={classes.investorBox} onClick={onClick} key={`investor-${index}`}>
+    <div
+      className={classes.investorBox}
+      onClick={onClick}
+      key={`investor-${index}`}
+      style={superAdmin ? { cursor: 'pointer' } : {}}
+    >
       <div className={classes.investorBoxName} style={{ display: 'flex' }}>
         <Avatar className={classes.avatar}>{investor?.email.charAt(0).toUpperCase()}</Avatar>
         <Typography className={classes.investorName}>
@@ -86,7 +91,12 @@ const InvestorBoxViewed = ({
       </div>
     </div>
   ) : (
-    <div className={classes.investorBox} onClick={onClick} key={`investor-${index}`}>
+    <div
+      className={classes.investorBox}
+      onClick={onClick}
+      key={`investor-${index}`}
+      style={superAdmin ? { cursor: 'pointer' } : {}}
+    >
       <Avatar className={classes.avatar}>{investor?.email.charAt(0).toUpperCase()}</Avatar>
       <div className={classes.investorBoxAmount}>
         <Typography className={classes.investorName}>
@@ -118,7 +128,12 @@ const InvestorBox = ({
   };
 
   return width > phone ? (
-    <div className={classes.investorBox} onClick={onClick} key={`investor-${index}`}>
+    <div
+      className={classes.investorBox}
+      onClick={onClick}
+      key={`investor-${index}`}
+      style={superAdmin ? { cursor: 'pointer' } : {}}
+    >
       <div className={classes.investorBoxName} style={{ display: 'flex' }}>
         <Avatar className={classes.avatar}>{investor.name.charAt(0).toUpperCase()}</Avatar>
         <Typography className={classes.investorName}>{investor.name}</Typography>
@@ -152,7 +167,12 @@ const InvestorBox = ({
       )}
     </div>
   ) : (
-    <div className={classes.investorBox} onClick={onClick} key={`investor-${index}`}>
+    <div
+      className={classes.investorBox}
+      onClick={onClick}
+      key={`investor-${index}`}
+      style={superAdmin ? { cursor: 'pointer' } : {}}
+    >
       <Avatar className={classes.avatar}>{investor.name.charAt(0).toUpperCase()}</Avatar>
       <div className={classes.investorBoxAmount}>
         <Typography className={classes.investorName}>{investor.name}</Typography>
