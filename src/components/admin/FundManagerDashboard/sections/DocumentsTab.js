@@ -49,6 +49,7 @@ const headers = [
 const DocumentsTab = ({ classes, data }) => {
   // console.log('Deal', data);
   const [sortField, setSortField] = useState('name');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
@@ -74,21 +75,6 @@ const DocumentsTab = ({ classes, data }) => {
     }
   };
 
-  const documentsData = data?.deal?.investments?.map((investment) => {
-    return {
-      investorId: investment.investor?._id,
-      name: titleCase(investment.investor?.name),
-      documents: investment.documents?.map((doc) => {
-        return doc.path;
-      }),
-      status: investment.status,
-      dateSigned: moment(new Date(parseInt(investment._id.substring(0, 8), 16) * 1000)).format(
-        'MM/DD/YYYY',
-      ),
-    };
-  });
-  // console.log('Docs', documentsData);
-
   const sortBy = (documentsData) => {
     return documentsData.sort((a, b) => {
       if (a[sortField] < b[sortField]) {
@@ -108,7 +94,33 @@ const DocumentsTab = ({ classes, data }) => {
     setSortField(e.target.value);
   };
 
+  const handleSearch = (e) => {
+    console.log('Search Term', e.target.value);
+    setSearchTerm(e.target.value);
+  };
+
+  let documentsData = data?.deal?.investments?.map((investment) => {
+    return {
+      investorId: investment.investor?._id,
+      name: titleCase(investment.investor?.name),
+      documents: investment.documents?.map((doc) => {
+        return doc.path;
+      }),
+      status: investment.status,
+      dateSigned: moment(new Date(parseInt(investment._id.substring(0, 8), 16) * 1000)).format(
+        'MM/DD/YYYY',
+      ),
+    };
+  });
+  // console.log('Docs', documentsData);
+
   if (!data) return <Loader />;
+
+  if (searchTerm) {
+    documentsData = documentsData.filter((doc) =>
+      doc[sortField]?.toUpperCase().includes(searchTerm.toUpperCase()),
+    );
+  }
 
   return (
     <div className={classes.section}>
@@ -136,8 +148,8 @@ const DocumentsTab = ({ classes, data }) => {
           label="Search"
           id="search-field"
           fullWidth
-          // onChange={handleSearch}
-          // value={searchTerm || ''}
+          onChange={handleSearch}
+          value={searchTerm || ''}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
