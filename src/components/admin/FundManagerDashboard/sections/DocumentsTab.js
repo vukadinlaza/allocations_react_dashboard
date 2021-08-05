@@ -78,11 +78,19 @@ const DocumentsTab = ({ classes, data }) => {
   };
 
   let documentsData = [];
+
   // required me to store as variable. "No unused expressions"
   const hello = data?.deal?.investments?.forEach((investment) => {
     if (investment.documents.length >= 1) {
       investment.documents.forEach((doc) => {
-        documentsData.push({ ...investment, doc: doc.path.split('/')[2] });
+        const splitPath = doc.path.split('/')[2];
+        const containsId = splitPath.match(/\d{13}/);
+
+        if (containsId !== null) {
+          documentsData.push({ ...investment, doc: splitPath.slice(14) });
+        } else {
+          documentsData.push({ ...investment, doc: splitPath });
+        }
       });
     } else {
       documentsData.push(investment);
