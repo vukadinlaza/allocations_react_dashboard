@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import moment from 'moment';
+import _ from 'lodash';
 import {
   Badge,
   FormControl,
@@ -54,16 +55,9 @@ const DocumentsTab = ({ classes, data }) => {
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
       case 'document':
-        if (row[headerValue].length > 1) {
-          // if it's more than one document, what should be done?
-          return row[headerValue].map((doc) => {
-            return doc.split('/')[2];
-          });
-        }
-        if (row[headerValue].length === 1) {
-          return row[headerValue][0].split('/')[2];
-        }
-        return row[headerValue];
+        return _.truncate(row[headerValue], { length: 25 });
+
+      // logic is not working. invited and signed are not displaying properly
       case 'status':
         if (row[headerValue] === 'completed' || 'wired') {
           return <Badge badgeContent="Complete" color="secondary" />;
@@ -75,51 +69,49 @@ const DocumentsTab = ({ classes, data }) => {
     }
   };
 
-  const sortBy = (documentsData) => {
-    return documentsData.sort((a, b) => {
-      if (a[sortField] < b[sortField]) {
-        return -1;
-      }
-      if (a[sortField] > b[sortField]) {
-        return 1;
-      }
-      return 0;
-    });
-  };
-
-  // console.log(sortBy(documentsData));
-
   const handleSort = (e) => {
-    // console.log('value', e.target.value);
     setSortField(e.target.value);
   };
 
   const handleSearch = (e) => {
-    console.log('Search Term', e.target.value);
     setSearchTerm(e.target.value);
   };
 
-  let documentsData = data?.deal?.investments?.map((investment) => {
+  let documentsData = [];
+  // required me to store as variable. "No unused expressions"
+  const hello = data?.deal?.investments?.forEach((investment) => {
+    if (investment.documents.length >= 1) {
+      investment.documents.forEach((doc) => {
+        documentsData.push({ ...investment, doc: doc.path.split('/')[2] });
+      });
+    } else {
+      documentsData.push(investment);
+    }
+  });
+
+  documentsData = documentsData.map((investment) => {
     return {
       investorId: investment.investor?._id,
       name: titleCase(investment.investor?.name),
-      documents: investment.documents?.map((doc) => {
-        return doc.path;
-      }),
+      documents: investment.doc,
       status: investment.status,
       dateSigned: moment(new Date(parseInt(investment._id.substring(0, 8), 16) * 1000)).format(
         'MM/DD/YYYY',
       ),
     };
   });
-  // console.log('Docs', documentsData);
 
   if (!data) return <Loader />;
 
   if (searchTerm) {
-    documentsData = documentsData.filter((doc) =>
-      doc[sortField]?.toUpperCase().includes(searchTerm.toUpperCase()),
-    );
+    documentsData = documentsData.filter((doc) => {
+      if (sortField === 'name') {
+        return doc[sortField]?.toUpperCase().includes(searchTerm.toUpperCase());
+      }
+      console.log('Sort field:', doc[sortField]);
+      // need to account for casing
+      return doc[sortField]?.includes(searchTerm);
+    });
   }
 
   return (
