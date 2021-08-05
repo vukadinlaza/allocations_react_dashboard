@@ -47,7 +47,6 @@ const useStyles = makeStyles((theme) => ({
   },
   modal: {
     display: 'flex',
-    // alignItems: 'center',
     justifyContent: 'center',
   },
   modalPaper: {
@@ -55,6 +54,13 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '.5rem',
     padding: theme.spacing(4),
     margin: theme.spacing(4),
+  },
+  gridContainer: {
+    marginTop: '40px',
+    marginBottom: '1rem',
+    [theme.breakpoints.down(600)]: {
+      justifyContent: 'center',
+    },
   },
 }));
 
@@ -114,12 +120,7 @@ export default () => {
         <Typography variant="h3" style={{ color: 'white' }}>
           Demo
         </Typography>
-        <Grid
-          container
-          spacing={12}
-          justify="space-between"
-          style={{ marginTop: '40px', marginBottom: '1rem' }}
-        >
+        <Grid container spacing={12} justify="space-between" className={classes.gridContainer}>
           <Grid item>
             <Paper className={classes.paper}>
               <img
@@ -163,9 +164,6 @@ export default () => {
                 variant="contained"
                 style={{ marginTop: '1rem', minWidth: '100%' }}
                 onClick={() => {
-                  // postZap({
-                  //   variables: { body: { name: userProfile.first_name, action: 'Viewed Investor Demo' } },
-                  // });
                   history.push({
                     pathname: `/investor/${
                       // If true use Kingsley's ID otherwise Joel for Staging ENV
@@ -199,9 +197,6 @@ export default () => {
                 variant="contained"
                 style={{ marginTop: '1rem', minWidth: '100%' }}
                 onClick={() => {
-                  // postZap({
-                  //   variables: { body: { name: userProfile.first_name, action: 'Viewed Marketplace Demo' } },
-                  // });
                   history.push({ pathname: `/marketplace` });
                 }}
               >
@@ -227,9 +222,6 @@ export default () => {
                 variant="contained"
                 style={{ marginTop: '1rem', minWidth: '100%' }}
                 onClick={() => {
-                  // postZap({
-                  //   variables: { body: { name: userProfile.first_name, action: 'Viewed Fund Manager Demo' } },
-                  // });
                   history.push({ pathname: `/admin/demo-fund` });
                 }}
               >
