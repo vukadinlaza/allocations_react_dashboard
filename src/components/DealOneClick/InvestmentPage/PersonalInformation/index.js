@@ -213,10 +213,7 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
 
       {org === 'irishangels' && (
         <>
-          <Typography
-            variant="subtitle2"
-            style={{ marginBottom: '-.5rem', padding: '0 4rem 0 2rem' }}
-          >
+          <Typography variant="subtitle2" className="accreditation-notice">
             Please initial below to certify that you are still an Accredited Investor, per SEC
             criteria, as detailed in Exhibit D of the IrishAngels Membership Agreement previously
             executed by you.
