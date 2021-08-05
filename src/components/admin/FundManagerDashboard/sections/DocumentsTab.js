@@ -45,10 +45,7 @@ const headers = [
   { value: 'viewDoc', label: 'VIEW DOCUMENT', align: 'left', alignHeader: true },
 ];
 
-// on INDEX, if there is no, investor.documents, don't render this tab?
-
 const DocumentsTab = ({ classes, data }) => {
-  // console.log('Deal', data);
   const [sortField, setSortField] = useState('name');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -57,9 +54,8 @@ const DocumentsTab = ({ classes, data }) => {
       case 'document':
         return _.truncate(row[headerValue], { length: 25 });
 
-      // logic is not working. invited and signed are not displaying properly
       case 'status':
-        if (row[headerValue] === 'completed' || 'wired') {
+        if (row[headerValue] === 'wired' || row[headerValue] === 'signed') {
           return <Badge badgeContent="Complete" color="secondary" />;
         }
         return <Badge badgeContent="Incomplete" color="primary" />;
@@ -71,6 +67,7 @@ const DocumentsTab = ({ classes, data }) => {
 
   const handleSort = (e) => {
     setSortField(e.target.value);
+    setSearchTerm('');
   };
 
   const handleSearch = (e) => {
@@ -87,9 +84,9 @@ const DocumentsTab = ({ classes, data }) => {
         const containsId = splitPath.match(/\d{13}/);
 
         if (containsId !== null) {
-          documentsData.push({ ...investment, doc: splitPath.slice(14) });
+          documentsData.push({ ...investment, doc: titleCase(splitPath.slice(14)) });
         } else {
-          documentsData.push({ ...investment, doc: splitPath });
+          documentsData.push({ ...investment, doc: titleCase(splitPath) });
         }
       });
     } else {
@@ -113,12 +110,7 @@ const DocumentsTab = ({ classes, data }) => {
 
   if (searchTerm) {
     documentsData = documentsData.filter((doc) => {
-      if (sortField === 'name') {
-        return doc[sortField]?.toUpperCase().includes(searchTerm.toUpperCase());
-      }
-      console.log('Sort field:', doc[sortField]);
-      // need to account for casing
-      return doc[sortField]?.includes(searchTerm);
+      return doc[sortField]?.toUpperCase().includes(searchTerm.toUpperCase());
     });
   }
 
