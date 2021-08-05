@@ -107,7 +107,7 @@ function DealSettings({ formData, setFormData, refetch }) {
 
         <Menu
           className="document-menu"
-          id={'simple-path'}
+          id="simple-path"
           anchorEl={documentMenuAnchorEl}
           keepMounted
           open={Boolean(documentMenuAnchorEl)}
