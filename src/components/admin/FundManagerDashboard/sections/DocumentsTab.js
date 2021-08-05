@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import moment from 'moment';
 import {
   Badge,
   FormControl,
@@ -12,16 +13,22 @@ import AllocationsTable from '../../../utils/AllocationsTable';
 import Loader from '../../../utils/Loader';
 import { titleCase } from '../../../../utils/helpers';
 import '../style.scss';
-import moment from 'moment';
 
 const headers = [
-  { value: 'name', label: 'INVESTOR NAME', isFilter: true, align: 'left', alignHeader: true },
+  {
+    value: 'name',
+    label: 'INVESTOR NAME',
+    isFilter: true,
+    isSortable: true,
+    align: 'left',
+    alignHeader: true,
+  },
   {
     value: 'documents',
     label: 'DOCUMENT NAME',
     type: 'document',
     isFilter: true,
-    // isSortable: true,
+    isSortable: true,
     align: 'left',
     alignHeader: true,
   },
@@ -29,11 +36,10 @@ const headers = [
     value: 'status',
     label: 'STATUS',
     type: 'status',
-    // isSortable: true,
+    isSortable: true,
     align: 'center',
-    // alignHeader: true,
   },
-  { value: 'dateSigned', label: 'DATE SIGNED', align: 'left', alignHeader: true },
+  { value: 'dateSigned', label: 'DATE SIGNED', isSortable: true, align: 'left', alignHeader: true },
   { value: 'reminder', label: 'SEND REMINDER', align: 'left', alignHeader: true },
   { value: 'viewDoc', label: 'VIEW DOCUMENT', align: 'left', alignHeader: true },
 ];
@@ -42,16 +48,23 @@ const headers = [
 
 const DocumentsTab = ({ classes, data }) => {
   // console.log('Deal', data);
+  const [sortField, setSortField] = useState('name');
 
   const getCellContent = (type, row, headerValue) => {
-    // console.log('ROW', row, headerValue);
     switch (type) {
       case 'document':
-        // duplicate file names, but different investment ids?
+        if (row[headerValue].length > 1) {
+          // if it's more than one document, what should be done?
+          return row[headerValue].map((doc) => {
+            return doc.split('/')[2];
+          });
+        }
+        if (row[headerValue].length === 1) {
+          return row[headerValue][0].split('/')[2];
+        }
         return row[headerValue];
-      // return row[headerValue].documents[0].split('/')[2];
       case 'status':
-        if (row[headerValue] === 'completed') {
+        if (row[headerValue] === 'completed' || 'wired') {
           return <Badge badgeContent="Complete" color="secondary" />;
         }
         return <Badge badgeContent="Incomplete" color="primary" />;
@@ -64,7 +77,7 @@ const DocumentsTab = ({ classes, data }) => {
   const documentsData = data?.deal?.investments?.map((investment) => {
     return {
       investorId: investment.investor?._id,
-      name: investment.investor?.name,
+      name: titleCase(investment.investor?.name),
       documents: investment.documents?.map((doc) => {
         return doc.path;
       }),
@@ -76,6 +89,25 @@ const DocumentsTab = ({ classes, data }) => {
   });
   // console.log('Docs', documentsData);
 
+  const sortBy = (documentsData) => {
+    return documentsData.sort((a, b) => {
+      if (a[sortField] < b[sortField]) {
+        return -1;
+      }
+      if (a[sortField] > b[sortField]) {
+        return 1;
+      }
+      return 0;
+    });
+  };
+
+  // console.log(sortBy(documentsData));
+
+  const handleSort = (e) => {
+    // console.log('value', e.target.value);
+    setSortField(e.target.value);
+  };
+
   if (!data) return <Loader />;
 
   return (
@@ -85,6 +117,7 @@ const DocumentsTab = ({ classes, data }) => {
           variant="outlined"
           // style={{ width: `${selectWidth}em`}}
           size="small"
+          value={sortField}
         >
           <InputLabel htmlFor="field-filter">Field</InputLabel>
           <Select
@@ -93,19 +126,14 @@ const DocumentsTab = ({ classes, data }) => {
             inputProps={{
               id: 'field-filter',
             }}
+            onChange={handleSort}
           >
-            {headers
-              .filter((header) => header.isFilter)
-              .map((header, index) => (
-                <option value={header.value} key={`header-${index}`}>
-                  {titleCase(header.label)}
-                </option>
-              ))}
+            <option value="name">Investor Name</option>
+            <option value="documents">Document Name</option>
           </Select>
         </FormControl>
         <TextField
           label="Search"
-          placeholder="Search by investor name"
           id="search-field"
           fullWidth
           // onChange={handleSearch}
