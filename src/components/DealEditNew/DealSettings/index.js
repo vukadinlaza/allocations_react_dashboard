@@ -62,33 +62,39 @@ function DealSettings({ formData, setFormData, refetch }) {
   });
 
   const [doc, setDoc] = useState(null);
-  const [docMenuOpen, toggleDocMenuOpen] = useState(false);
   const [wireInstructions, setWireInstructions] = useState(null);
-  const [documentMenuAnchorEl, setDocumentMenuAnchorEl] = useState(null);
 
   const { _id, documents, last_valuation, docSpringTemplateId, slug, dealCoverImageKey } = formData;
 
-  const deleteDealDocument = (doc) => {
-    if (window.confirm(`Delete ${doc.path} document?`)) {
-      rmDoc({ variables: { deal_id: _id, title: doc.path } });
-    }
-  };
+  const DealDocumentItem = ({ document }) => {
+    const [documentMenuAnchorEl, setDocumentMenuAnchorEl] = useState(null);
+    const [docMenuOpen, toggleDocMenuOpen] = useState(false);
 
-  const handleDocumentMenuClick = (event) => {
-    setDocumentMenuAnchorEl(event.currentTarget);
-    toggleDocMenuOpen((open) => !open);
-  };
+    const handleDocumentMenuClick = (event) => {
+      setDocumentMenuAnchorEl(event.currentTarget);
+      toggleDocMenuOpen((open) => !open);
+    };
 
-  const handleClose = () => {
-    setDocumentMenuAnchorEl(null);
-  };
+    const handleClose = () => {
+      setDocumentMenuAnchorEl(null);
+    };
 
-  const dealDocumentItems = documents?.map((doc, i) => {
+    const deleteDealDocument = () => {
+      if (window.confirm(`Delete ${document.path} document?`)) {
+        rmDoc({ variables: { deal_id: _id, title: document.path } });
+      }
+    };
+
     return (
-      <li className="document-item" key={i}>
-        <a className="document-link" href={`https://${doc.link}`} target="_blank" rel="noreferrer">
+      <li className="document-item">
+        <a
+          className="document-link"
+          href={`https://${document.link}`}
+          target="_blank"
+          rel="noreferrer"
+        >
           <img src={DocumentIcon} />
-          <p className="document-title">{doc.path}</p>
+          <p className="document-title">{document.path}</p>
         </a>
         <Button
           className="document-menu-button"
@@ -101,16 +107,20 @@ function DealSettings({ formData, setFormData, refetch }) {
 
         <Menu
           className="document-menu"
-          id="simple-menu"
+          id="simple-path"
           anchorEl={documentMenuAnchorEl}
           keepMounted
           open={Boolean(documentMenuAnchorEl)}
           onClose={handleClose}
         >
-          <MenuItem onClick={() => deleteDealDocument(doc)}>Delete Document</MenuItem>
+          <MenuItem onClick={deleteDealDocument}>Delete Document</MenuItem>
         </Menu>
       </li>
     );
+  };
+
+  const dealDocumentItems = documents?.map((doc) => {
+    return <DealDocumentItem document={doc} />;
   });
 
   const submitDoc = () => {
