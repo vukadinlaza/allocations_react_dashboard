@@ -31,7 +31,7 @@ const InvestmentAmountPanel = ({ setAmount, amount, minimumInvestment }) => {
             onKeyDown={(e) => {
               if (e.key === 'Backspace' && amount === minimumInvestment) setAmount('');
             }}
-            onChange={(value) => setAmount(value.toString())}
+            onChange={(_, value) => setAmount(value.toString())}
           />
         </Grid>
 
