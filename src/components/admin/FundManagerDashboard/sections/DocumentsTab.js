@@ -60,6 +60,10 @@ const headers = [
   },
 ];
 
+const handleSendReminder = () => {
+  console.log('Hey, finish this function!');
+};
+
 const DocumentsTab = ({ classes, data }) => {
   const [sortField, setSortField] = useState('name');
   const [searchTerm, setSearchTerm] = useState('');
@@ -77,13 +81,24 @@ const DocumentsTab = ({ classes, data }) => {
 
       case 'reminder':
         if (!row.dateSigned) {
-          return <PlayCircleFilledIcon color="primary" fontSize="large" />;
+          return (
+            <PlayCircleFilledIcon color="primary" fontSize="large" onClick={handleSendReminder} />
+          );
         }
         return <PlayCircleFilledIcon color="disabled" fontSize="large" />;
 
       case 'viewDoc':
         if (row.dateSigned) {
-          return <PlayCircleFilledIcon color="primary" fontSize="large" />;
+          return (
+            <a
+              href={`//${row.docLink}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              key={row.docLink}
+            >
+              <PlayCircleFilledIcon color="primary" fontSize="large" />
+            </a>
+          );
         }
         return <PlayCircleFilledIcon color="disabled" fontSize="large" />;
 
@@ -111,9 +126,13 @@ const DocumentsTab = ({ classes, data }) => {
         const containsId = splitPath.match(/\d{13}/);
 
         if (containsId !== null) {
-          documentsData.push({ ...investment, doc: titleCase(splitPath.slice(14)) });
+          documentsData.push({
+            ...investment,
+            doc: titleCase(splitPath.slice(14)),
+            docLink: doc.link,
+          });
         } else {
-          documentsData.push({ ...investment, doc: titleCase(splitPath) });
+          documentsData.push({ ...investment, doc: titleCase(splitPath), docLink: doc.link });
         }
       });
     } else {
@@ -126,6 +145,7 @@ const DocumentsTab = ({ classes, data }) => {
       investorId: investment.investor?._id,
       name: titleCase(investment.investor?.name),
       documents: investment.doc,
+      docLink: investment.docLink,
       status: investment.status,
       dateSigned: moment(new Date(parseInt(investment._id.substring(0, 8), 16) * 1000)).format(
         'MM/DD/YYYY',

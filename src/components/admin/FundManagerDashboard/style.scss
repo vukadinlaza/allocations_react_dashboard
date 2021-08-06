@@ -16,3 +16,11 @@
   color: #205df5 !important;
   opacity: 0.25 !important;
 }
+
+.MuiSvgIcon-colorPrimary {
+  cursor: pointer;
+}
+
+.MuiSvgIcon-colorPrimary:hover {
+  color: #3f85f9;
+}
