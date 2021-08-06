@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useMutation, useQuery, gql } from '@apollo/client';
+import { toast } from 'react-toastify';
 import moment from 'moment';
 import _ from 'lodash';
 import {
@@ -28,6 +30,13 @@ const HtmlTooltip = withStyles((theme) => ({
     border: '1px solid #dadde9',
   },
 }))(Tooltip);
+
+// should this happen in the parent?
+const SEND_REMINDER = gql`
+  mutation SendInvestmentDocReminder($investment_id: String!) {
+    sendInvestmentDocReminder(investment_id: $investment_id)
+  }
+`;
 
 const headers = [
   {
@@ -73,13 +82,25 @@ const headers = [
   },
 ];
 
-const handleSendReminder = () => {
-  console.log('Hey, finish this function!');
-};
-
 const DocumentsTab = ({ classes, data }) => {
   const [sortField, setSortField] = useState('name');
   const [searchTerm, setSearchTerm] = useState('');
+
+  const [sendConfirmation] = useMutation(SEND_REMINDER, {
+    onCompleted: () => {
+      toast.success('Reminder sent successfully.');
+    },
+    onError: () => {
+      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
+    },
+  });
+  // console.log(data.deal?.investments);
+  const handleSendReminder = async () => {
+    const investmentId = '603a2c6f45e3980023d21410';
+
+    sendConfirmation({ variables: { investment_id: investmentId } });
+    console.log('Clicked');
+  };
 
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
@@ -91,18 +112,19 @@ const DocumentsTab = ({ classes, data }) => {
         );
 
       case 'status':
-        if (row[headerValue] === 'wired' || row[headerValue] === 'signed') {
-          return <Badge badgeContent="Complete" color="secondary" />;
+        // status' include: wired, complete, signed, invited (legacy), and pending (legacy).
+        if (!row[headerValue]) {
+          return <Badge badgeContent="Incomplete" color="primary" />;
         }
-        return <Badge badgeContent="Incomplete" color="primary" />;
+        return <Badge badgeContent="Complete" color="secondary" />;
 
       case 'reminder':
-        if (!row.dateSigned) {
-          return (
-            <PlayCircleFilledIcon color="primary" fontSize="large" onClick={handleSendReminder} />
-          );
-        }
-        return <PlayCircleFilledIcon color="disabled" fontSize="large" />;
+        // if (!row.dateSigned) {
+        return (
+          <PlayCircleFilledIcon color="primary" fontSize="large" onClick={handleSendReminder} />
+        );
+      // }
+      // return <PlayCircleFilledIcon color="disabled" fontSize="large" />;
 
       case 'viewDoc':
         if (row.dateSigned) {
