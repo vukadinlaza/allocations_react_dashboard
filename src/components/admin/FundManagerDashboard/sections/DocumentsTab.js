@@ -8,6 +8,9 @@ import {
   InputLabel,
   Select,
   TextField,
+  Typography,
+  Tooltip,
+  withStyles,
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
@@ -15,6 +18,16 @@ import AllocationsTable from '../../../utils/AllocationsTable';
 import Loader from '../../../utils/Loader';
 import { titleCase } from '../../../../utils/helpers';
 import '../style.scss';
+
+const HtmlTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 400,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
 
 const headers = [
   {
@@ -71,7 +84,11 @@ const DocumentsTab = ({ classes, data }) => {
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
       case 'document':
-        return _.truncate(row[headerValue], { length: 25 });
+        return (
+          <HtmlTooltip title={row[headerValue]}>
+            <Typography>{_.truncate(row[headerValue], { length: 25 })}</Typography>
+          </HtmlTooltip>
+        );
 
       case 'status':
         if (row[headerValue] === 'wired' || row[headerValue] === 'signed') {
