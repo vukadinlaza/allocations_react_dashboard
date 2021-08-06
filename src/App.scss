@@ -1,5 +1,5 @@
-$break-md: 992px;
-$break-sm: 768px;
+$break-md: 960px;
+$break-sm: 600px;
 $break-xs: 576px;
 
 @mixin xs-only {
@@ -221,4 +221,40 @@ th {
   border-radius: 10px;
   font-size: 1em;
   color: #fff;
+}
+
+.App {
+  width: 100vw;
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(250px, 10%) auto;
+  grid-template-rows: 100%;
+  grid-template-areas: 'sidebar mainRoute';
+
+  .mainRoute {
+    grid-area: mainRoute;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    padding: 1rem;
+  }
+
+  .sidebar {
+    grid-area: sidebar;
+    z-index: 999;
+  }
+
+  @media only screen and (max-width: 960px) {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: minmax(65px, 6%) auto;
+    grid-template-areas:
+      'sidebar'
+      'mainRoute';
+
+    .mainRoute {
+      padding: 0.5rem;
+    }
+  }
 }
