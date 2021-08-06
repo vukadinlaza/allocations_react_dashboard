@@ -10,6 +10,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import AllocationsTable from '../../../utils/AllocationsTable';
 import Loader from '../../../utils/Loader';
 import { titleCase } from '../../../../utils/helpers';
@@ -41,8 +42,22 @@ const headers = [
     align: 'center',
   },
   { value: 'dateSigned', label: 'DATE SIGNED', isSortable: true, align: 'left', alignHeader: true },
-  { value: 'reminder', label: 'SEND REMINDER', align: 'left', alignHeader: true },
-  { value: 'viewDoc', label: 'VIEW DOCUMENT', align: 'left', alignHeader: true },
+  {
+    value: 'reminder',
+    label: 'SEND REMINDER',
+    type: 'reminder',
+    align: 'left',
+    alignHeader: true,
+    keyNotInData: true,
+  },
+  {
+    value: 'viewDoc',
+    label: 'VIEW DOCUMENT',
+    type: 'viewDoc',
+    align: 'left',
+    alignHeader: true,
+    keyNotInData: true,
+  },
 ];
 
 const DocumentsTab = ({ classes, data }) => {
@@ -59,6 +74,18 @@ const DocumentsTab = ({ classes, data }) => {
           return <Badge badgeContent="Complete" color="secondary" />;
         }
         return <Badge badgeContent="Incomplete" color="primary" />;
+
+      case 'reminder':
+        if (!row.dateSigned) {
+          return <PlayCircleFilledIcon color="primary" fontSize="large" />;
+        }
+        return <PlayCircleFilledIcon color="disabled" fontSize="large" />;
+
+      case 'viewDoc':
+        if (row.dateSigned) {
+          return <PlayCircleFilledIcon color="primary" fontSize="large" />;
+        }
+        return <PlayCircleFilledIcon color="disabled" fontSize="large" />;
 
       default:
         return <div />;
