@@ -1064,7 +1064,7 @@ export default function Sidebar(props) {
           </List>
         </>
       )}
-      <div onClick={mobileOpen ? handleDrawerClose : null} className={`sidebar-nav-item`}>
+      <div onClick={mobileOpen ? handleDrawerClose : null} className="sidebar-nav-item">
         <ListItem button onClick={logoutWithRedirect}>
           <ListItemIcon className={classes.icon}>
             <ExitToAppIcon />
@@ -1078,7 +1078,7 @@ export default function Sidebar(props) {
   const container = window !== undefined ? () => window().document.body : undefined;
   const onboarding = location.pathname === '/get-started';
   const adminOrganizations = userProfile?.organizations_admin;
-  const adminOrganizationsCopy = adminOrganizations ? [...adminOrganizations] : []; //Create a copy of organizations so we can mutate with sort
+  const adminOrganizationsCopy = adminOrganizations ? [...adminOrganizations] : []; // Create a copy of organizations so we can mutate with sort
 
   return (
     <>
@@ -1222,10 +1222,7 @@ export default function Sidebar(props) {
                   </Drawer>
                 </Hidden>
               </nav>
-              <main
-                className={classes.content}
-                style={{ background: 'rgba(0,0,0,0.01)', height: '100vh' }}
-              >
+              <main className={classes.content} style={{ background: 'white', height: '100vh' }}>
                 {props.children}
               </main>
             </div>
