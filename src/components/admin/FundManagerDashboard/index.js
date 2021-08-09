@@ -399,6 +399,7 @@ const GET_INVESTMENTS = gql`
         _id
         amount
         status
+        invited_at
         submissionData {
           legalName
         }

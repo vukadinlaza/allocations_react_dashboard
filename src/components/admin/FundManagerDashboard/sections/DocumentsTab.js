@@ -13,6 +13,7 @@ import {
   Typography,
   Tooltip,
   withStyles,
+  IconButton,
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
@@ -83,8 +84,10 @@ const headers = [
 ];
 
 const DocumentsTab = ({ classes, data }) => {
+  // const [dealData, setDealData] = useState([]);
   const [sortField, setSortField] = useState('name');
   const [searchTerm, setSearchTerm] = useState('');
+  let documentsData = [];
 
   const [sendConfirmation] = useMutation(SEND_REMINDER, {
     onCompleted: () => {
@@ -94,15 +97,43 @@ const DocumentsTab = ({ classes, data }) => {
       toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
     },
   });
-  // console.log(data.deal?.investments);
-  const handleSendReminder = async () => {
+
+  const calculateReminder = (id) => {
+    // console.log({ id });
+    const { invitedAt } = documentsData.find(({ investorId }) => investorId === id);
+
+    const invitedDate = new Date(Number(invitedAt));
+    const currentUnix = Date.now();
+    const currentDate = new Date(currentUnix);
+    // console.log('Current', currentDate);
+    const differenceUnix = currentDate - invitedDate;
+    const differenceInDays = Math.trunc(differenceUnix / (1000 * 3600 * 24));
+    // does this need to be more precise -- hours?
+    // console.log('Calc Diff', differenceInDays);
+    return differenceInDays;
+  };
+
+  const handleSendReminder = (e) => {
+    e.preventDefault();
+
+    // WHAT IS THE INVESTMENT id
     const investmentId = '603a2c6f45e3980023d21410';
 
+    // might no longer be necessary to calculate the date.
+    const numOfDays = calculateReminder(e.currentTarget.value);
+    // console.log(numOfDays);
+
+    // if less than two days, tool tip to say when you can send next reminder
+    // if more than two days, sendConfirmation() to back end.
+    // toast.success
+    // button should then gray out.
+
     sendConfirmation({ variables: { investment_id: investmentId } });
-    console.log('Clicked');
   };
 
   const getCellContent = (type, row, headerValue) => {
+    const numOfDays = calculateReminder(row.investorId);
+
     switch (type) {
       case 'document':
         return (
@@ -119,12 +150,20 @@ const DocumentsTab = ({ classes, data }) => {
         return <Badge badgeContent="Complete" color="secondary" />;
 
       case 'reminder':
-        // if (!row.dateSigned) {
+        // logic here? !row.dateSigned && numOfDays > 2
+        // what about investorId of undefined? is that ever a thing?
+        if (numOfDays > 2) {
+          return (
+            <IconButton onClick={(e) => handleSendReminder(e)} value={row.investorId}>
+              <PlayCircleFilledIcon color="primary" fontSize="large" />
+            </IconButton>
+          );
+        }
         return (
-          <PlayCircleFilledIcon color="primary" fontSize="large" onClick={handleSendReminder} />
+          <HtmlTooltip title="A reminder has been sent in the past two days.">
+            <PlayCircleFilledIcon color="disabled" fontSize="large" />;
+          </HtmlTooltip>
         );
-      // }
-      // return <PlayCircleFilledIcon color="disabled" fontSize="large" />;
 
       case 'viewDoc':
         if (row.dateSigned) {
@@ -147,15 +186,13 @@ const DocumentsTab = ({ classes, data }) => {
   };
 
   const handleSort = (e) => {
-    setSortField(e.target.value);
+    setSortField(e.target);
     setSearchTerm('');
   };
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
-
-  let documentsData = [];
 
   // required me to store as variable. "No unused expressions"
   const hello = data?.deal?.investments?.forEach((investment) => {
@@ -189,9 +226,10 @@ const DocumentsTab = ({ classes, data }) => {
       dateSigned: moment(new Date(parseInt(investment._id.substring(0, 8), 16) * 1000)).format(
         'MM/DD/YYYY',
       ),
+      invitedAt: investment.invited_at,
     };
   });
-
+  // console.log(documentsData);
   if (!data) return <Loader />;
 
   if (searchTerm) {
