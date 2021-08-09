@@ -197,7 +197,7 @@ const InvestorBox = ({
   );
 };
 
-const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType }) => {
+const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, orgSlug }) => {
   const [showModal, setShowModal] = useState(false);
   const [investmentId, setInvestmentId] = useState(null);
   const [dealId, setDealId] = useState(null);
@@ -318,12 +318,14 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType })
       };
     });
 
-  const isDemo = false;
+  const isDemo =
+    window?.origin?.includes('vercel') ||
+    window.origin.includes('localhost') ||
+    orgSlug === 'demo-fund';
   if (isDemo) {
     signedTotal += demoSignedArray.map((i) => i.amount).reduce((acc, n) => acc + n);
     wiredTotal += demoWiredArray.map((i) => i.amount).reduce((acc, n) => acc + n);
   }
-  // const isDemo = window?.origin?.includes('vercel') || window.origin.includes('localhost');
 
   const handleSort = (event) => {
     setSortField(event.target.value);
