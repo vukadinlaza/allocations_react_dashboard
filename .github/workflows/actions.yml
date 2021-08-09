@@ -1,0 +1,48 @@
+# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+#
+#
+# https://raw.githubusercontent.com/actions/starter-workflows/main/ci/node.js.yml
+# https://github.com/actions/setup-node
+
+name: Run Tests Node CI
+
+on:
+  push:
+    branches:
+      - actions-test-staging #TODO: enable for master and staging only
+  pull_request:
+    branches:
+      - 'actions-test-*'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      NODE_ENV: development
+      REACT_APP_AUTH0_DOMAIN: ${{ secrets.REACT_APP_AUTH0_DOMAIN }}
+      REACT_APP_AUTH0_KEY: ${{ secrets.REACT_APP_AUTH0_KEY }}
+      REACT_APP_AUTH0_AUDIENCE: ${{ secrets.REACT_APP_AUTH0_AUDIENCE }}
+      REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+      REACT_APP_URL: ${{ secrets.REACT_APP_URL }}
+      REACT_APP_VERIFY_INVESTOR_URL: ${{ secrets.REACT_APP_VERIFY_INVESTOR_URL }}
+      REACT_APP_VERIFY_INVESTOR_HOST_TOKEN: ${{ secrets.REACT_APP_VERIFY_INVESTOR_HOST_TOKEN }}
+      REACT_APP_AIRTABLE_API_KEY: ${{ secrets.REACT_APP_AIRTABLE_API_KEY }}
+      REACT_APP_GOOGLE_MAP_API: ${{ secrets.REACT_APP_GOOGLE_MAP_API }}
+
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        # https://devcenter.heroku.com/articles/nodejs-support#specifying-a-node-js-version
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+      - run: yarn install --frozen-lockfile
+      - run: yarn test
