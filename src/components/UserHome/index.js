@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { gql } from '@apollo/client';
 import { withStyles } from '@material-ui/core/styles';
-import _ from 'lodash';
 import moment from 'moment';
 import { Typography, TextField, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { useAuth } from '../../auth/useAuth';
-import { DefaultChartTable, DoughnutChart, LineChart } from '../utils/charts';
-import { SimpleBox, ChartBox } from '../admin/FundManagerDashboard/widgets';
 import { nWithCommas } from '../../utils/numbers';
-import { nestedSort, tablet, phone } from '../../utils/helpers';
-import Loader from '../utils/Loader';
 import 'chartjs-plugin-datalabels';
 import UserInvestments from './sections/UserInvestments';
 import FundsInvestments from './sections/FundsInvestments';

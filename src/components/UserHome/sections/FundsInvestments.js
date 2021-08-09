@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import _ from 'lodash';
 import moment from 'moment';
-import { Typography, Grid, Box, Tooltip } from '@material-ui/core';
+import { Tooltip } from '@material-ui/core';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import AllocationsTable from '../../utils/AllocationsTable';
-import { DocumentBox } from '../../Settings/common';
 import { nWithCommas } from '../../../utils/numbers';
 
 const headers = [

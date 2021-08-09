@@ -154,7 +154,7 @@ const styles = (theme) => ({
     borderRadius: '3px',
   },
   section: {
-    width: '100%',
+    // width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
     flexWrap: 'wrap',

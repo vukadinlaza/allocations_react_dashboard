@@ -9,7 +9,6 @@ import { nWithCommas } from '../../../utils/numbers';
 import { DefaultChartTable, DoughnutChart, LineChart } from '../../utils/charts';
 import { SimpleBox, ChartBox } from '../../admin/FundManagerDashboard/widgets';
 import { nestedSort } from '../../../utils/helpers';
-import '../style.scss';
 
 export function getColor(i) {
   const colors = ['#A6CEE3', '#1F78B4', '#B2DF8A', '#33A02C'];

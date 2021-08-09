@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import _ from 'lodash';
-import moment from 'moment';
 import { Tooltip, TextField, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import StorefrontIcon from '@material-ui/icons/Storefront';
-import Icon from '@material-ui/core/Icon';
-import PieChartIcon from '@material-ui/icons/PieChart';
 import AllocationsTable from '../../utils/AllocationsTable';
-import { nWithCommas } from '../../../utils/numbers';
-import { titleCase } from '../../../utils/helpers';
 
 const headers = [
   {
