@@ -100,21 +100,23 @@ const DocumentsTab = ({ classes, data }) => {
 
   const calculateReminder = (id) => {
     // console.log({ id });
-    const data = documentsData.find(({ investorId }) => investorId === id);
-    // console.log('data', data);
-    const invitedAt = '1626808527';
-    const invitedDate = new Date(Number(invitedAt * 1000));
-    // const invitedDate = new Date(1626808527 * 1000);
+    const { lastNotifiedDate, reqDate } = documentsData.find(({ investorId }) => investorId === id);
 
-    console.log('what', invitedDate);
+    let lastDate = '';
+
+    if (lastNotifiedDate || reqDate) {
+      lastDate = lastNotifiedDate || reqDate;
+    }
+
+    const convertedLastDate = new Date(Number(lastDate * 1000));
 
     const currentUnix = Date.now();
     const currentDate = new Date(currentUnix);
-    // console.log('Current', currentDate);
-    const differenceUnix = currentDate - invitedDate;
+
+    const differenceUnix = currentDate - convertedLastDate;
     const differenceInDays = Math.trunc(differenceUnix / (1000 * 3600 * 24));
     // does this need to be more precise -- hours?
-    // console.log('Calc Diff', differenceInDays);
+
     return differenceInDays;
   };
 
@@ -134,7 +136,7 @@ const DocumentsTab = ({ classes, data }) => {
 
   const getCellContent = (type, row, headerValue) => {
     const numOfDays = calculateReminder(row.investorId);
-    console.log('days', numOfDays);
+    // console.log('days', numOfDays);
     switch (type) {
       case 'document':
         return (
