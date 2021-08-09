@@ -66,6 +66,7 @@ const headers = [
   },
   { value: 'dateSigned', label: 'DATE SIGNED', isSortable: true, align: 'left', alignHeader: true },
   {
+    // value is wrong?
     value: 'reminder',
     label: 'SEND REMINDER',
     type: 'reminder',
@@ -153,6 +154,9 @@ const DocumentsTab = ({ classes, data }) => {
         return <Badge badgeContent="Complete" color="secondary" />;
 
       case 'reminder':
+        // if (numOfDays === 18848 && numOfDays > 2) {
+        // if (numOfDays > 2 && !row.status) {
+
         if (numOfDays > 2) {
           return (
             <IconButton onClick={(e) => handleSendReminder(e)} value={row.investorId}>
