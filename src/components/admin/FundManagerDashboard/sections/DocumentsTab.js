@@ -100,7 +100,6 @@ const DocumentsTab = ({ classes, data }) => {
   });
 
   const calculateReminder = (id) => {
-    // console.log({ id });
     const { lastNotifiedDate, reqDate } = documentsData.find(({ investorId }) => investorId === id);
 
     let lastDate = '';
@@ -108,17 +107,17 @@ const DocumentsTab = ({ classes, data }) => {
     if (lastNotifiedDate || reqDate) {
       lastDate = lastNotifiedDate || reqDate;
     }
+    if (lastDate) {
+      const convertedLastDate = new Date(Number(lastDate * 1000));
 
-    const convertedLastDate = new Date(Number(lastDate * 1000));
+      const currentUnix = Date.now();
+      const currentDate = new Date(currentUnix);
 
-    const currentUnix = Date.now();
-    const currentDate = new Date(currentUnix);
+      const differenceUnixSeconds = currentDate - convertedLastDate;
 
-    const differenceUnix = currentDate - convertedLastDate;
-    const differenceInDays = Math.trunc(differenceUnix / (1000 * 3600 * 24));
-    // does this need to be more precise -- hours?
-
-    return differenceInDays;
+      return differenceUnixSeconds;
+    }
+    return Infinity;
   };
 
   const handleSendReminder = (e) => {
@@ -136,8 +135,8 @@ const DocumentsTab = ({ classes, data }) => {
   };
 
   const getCellContent = (type, row, headerValue) => {
-    const numOfDays = calculateReminder(row.investorId);
-    // console.log('days', numOfDays);
+    const numOfSeconds = calculateReminder(row.investorId);
+
     switch (type) {
       case 'document':
         return (
@@ -154,20 +153,17 @@ const DocumentsTab = ({ classes, data }) => {
         return <Badge badgeContent="Complete" color="secondary" />;
 
       case 'reminder':
-        // if (numOfDays === 18848 && numOfDays > 2) {
-        // if (numOfDays > 2 && !row.status) {
-
-        if (numOfDays > 2) {
+        if (numOfSeconds < 172800) {
           return (
-            <IconButton onClick={(e) => handleSendReminder(e)} value={row.investorId}>
-              <PlayCircleFilledIcon color="primary" fontSize="large" />
-            </IconButton>
+            <Tooltip title="A reminder has been sent in the past two days.">
+              <PlayCircleFilledIcon color="disabled" fontSize="large" />
+            </Tooltip>
           );
         }
         return (
-          <HtmlTooltip title="A reminder has been sent in the past two days.">
-            <PlayCircleFilledIcon color="disabled" fontSize="large" />;
-          </HtmlTooltip>
+          <IconButton onClick={(e) => handleSendReminder(e)} value={row.investorId}>
+            <PlayCircleFilledIcon color="primary" fontSize="large" />
+          </IconButton>
         );
 
       case 'viewDoc':
