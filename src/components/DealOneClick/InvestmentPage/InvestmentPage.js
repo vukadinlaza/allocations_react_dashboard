@@ -104,6 +104,7 @@ const GET_PERSONAL_INFO = gql`
           legalName
           accredited_investor_status
           fullName
+          title
         }
       }
     }

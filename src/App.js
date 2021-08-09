@@ -70,100 +70,121 @@ const App = () => {
   return (
     <AuthorizedApolloProvider>
       {/* Sidebar should handle openState, not App.js */}
-      <Sidebar>
-        <Switch>
-          <Route path="/cb/thankyou" component={ThankYou} exact />
+      <div className="App">
+        <div className="sidebar">
+          <Sidebar />
+        </div>
+        <div className="mainRoute">
+          <Switch>
+            <Route path="/cb/thankyou" component={ThankYou} exact />
 
-          <PrivateRoute path="/" exact component={UserHome} />
-          <PrivateRoute path="/demo" exact component={Demo} />
-          <PrivateRoute path="/credit" exact component={Credit} />
-          <PrivateRoute path="/profile" component={Profile} />
-          <PrivateRoute path="/get-started" component={Build} />
-          <PrivateRoute path="/marketplace" component={Marketplace} />
-          <PrivateRoute path="/investments" component={UserInvestments} />
-          <PrivateRoute path="/invited-deals" component={InvitedDeals} />
-          <PrivateRoute path="/identity" component={Indentity} />
-          <PrivateRoute path="/dealdocs" component={DealDocuments} />
-          <PrivateRoute path="/tvclogin" component={TVC} />
-          <PrivateRoute path="/newMember/:accountId" component={NewMember} />
+            <PrivateRoute path="/" exact component={UserHome} />
+            <PrivateRoute path="/demo" exact component={Demo} />
+            <PrivateRoute path="/credit" exact component={Credit} />
+            <PrivateRoute path="/profile" component={Profile} />
+            <PrivateRoute path="/get-started" component={Build} />
+            <PrivateRoute path="/marketplace" component={Marketplace} />
+            <PrivateRoute path="/investments" component={UserInvestments} />
+            <PrivateRoute path="/invited-deals" component={InvitedDeals} />
+            <PrivateRoute path="/identity" component={Indentity} />
+            <PrivateRoute path="/dealdocs" component={DealDocuments} />
+            <PrivateRoute path="/tvclogin" component={TVC} />
+            <PrivateRoute path="/newMember/:accountId" component={NewMember} />
 
-          {/** Onboarding * */}
-          <Route path="/getting-started" component={Faq} exact />
-          <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact />
+            {/** Onboarding * */}
+            <Route path="/getting-started" component={Faq} exact />
+            <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact />
 
-          {/** Deals * */}
-          {/* PUBLIC Landing Page */}
-          <Route path="/public/:organization/:deal_slug" component={DealLandingPage} exact />
-          <Route path="/public/:deal_slug" component={DealLandingPage} exact />
+            {/** Deals * */}
+            {/* PUBLIC Landing Page */}
+            <Route path="/public/:organization/:deal_slug" component={DealLandingPage} exact />
+            <Route path="/public/:deal_slug" component={DealLandingPage} exact />
 
-          {/* Private Landing Page */}
-          <PrivateRoute path="/deals/:deal_slug" component={DealLandingPage} exact />
-          <PrivateRoute path="/deals/:organization/:deal_slug" component={DealLandingPage} exact />
+            {/* Private Landing Page */}
+            <PrivateRoute path="/deals/:deal_slug" component={DealLandingPage} exact />
+            <PrivateRoute
+              path="/deals/:organization/:deal_slug"
+              component={DealLandingPage}
+              exact
+            />
 
-          {/* Private Invest Page */}
-          <PrivateRoute path="/invest/:deal_slug" component={InvestmentPage} exact />
-          <PrivateRoute path="/invest/:organization/:deal_slug" component={InvestmentPage} exact />
+            {/* Private Invest Page */}
+            <PrivateRoute path="/invest/:deal_slug" component={InvestmentPage} exact />
+            <PrivateRoute
+              path="/invest/:organization/:deal_slug"
+              component={InvestmentPage}
+              exact
+            />
 
-          {/* Private Next Steps page */}
-          <PrivateRoute path="/next-steps/:deal_slug" component={DealNextSteps} exact />
-          <PrivateRoute
-            path="/next-steps/:organization/:deal_slug"
-            component={DealNextSteps}
-            exact
-          />
+            {/* Private Next Steps page */}
+            <PrivateRoute path="/next-steps/:deal_slug" component={DealNextSteps} exact />
+            <PrivateRoute
+              path="/next-steps/:organization/:deal_slug"
+              component={DealNextSteps}
+              exact
+            />
 
-          {/** AllocationsX * */}
-          <PrivateRoute path="/exchange" component={AllocationsX} exact />
-          <PrivateRoute path="/exchange/:deal" component={DealExchange} exact />
-          <AdminRoute
-            path="/admin/:organization/exchange"
-            component={AdminExchangeOverview}
-            exact
-          />
+            {/** AllocationsX * */}
+            <PrivateRoute path="/exchange" component={AllocationsX} exact />
+            <PrivateRoute path="/exchange/:deal" component={DealExchange} exact />
+            <AdminRoute
+              path="/admin/:organization/exchange"
+              component={AdminExchangeOverview}
+              exact
+            />
 
-          <PrivateRoute path="/investor/:id/home" component={UserHome} />
-          <AdminRoute path="/investor/:id/investments" component={UserInvestments} />
-          <AdminRoute path="/investors/new" component={InvestorNew} exact />
-          <AdminRoute path="/investor/:id/edit" component={InvestorEdit} />
-          <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
-          <AdminRoute
-            path="/admin/:organization/investments/:id/edit"
-            component={InvestmentEdit}
-            exact
-          />
-          <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
-          <AdminRoute path="/admin/employee-map" component={TeamMap} exact />
+            <PrivateRoute path="/investor/:id/home" component={UserHome} />
+            <AdminRoute path="/investor/:id/investments" component={UserInvestments} />
+            <AdminRoute path="/investors/new" component={InvestorNew} exact />
+            <AdminRoute path="/investor/:id/edit" component={InvestorEdit} />
+            <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
+            <AdminRoute
+              path="/admin/:organization/investments/:id/edit"
+              component={InvestmentEdit}
+              exact
+            />
+            <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
+            <AdminRoute path="/admin/employee-map" component={TeamMap} exact />
 
-          {/** SuperAdmin * */}
-          <AdminRoute path="/superadmin" component={SuperAdminOverview} exact />
-          <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
-          <AdminRoute path="/admin/users/:userId" component={User} exact />
-          <AdminRoute
-            path="/admin/users/:userId/investments"
-            component={InvestorInvestments}
-            exact
-          />
-          <AdminRoute path="/admin/invesments/:investmentId" component={Investment} exact />
+            {/** SuperAdmin * */}
+            <AdminRoute path="/superadmin" component={SuperAdminOverview} exact />
+            <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
+            <AdminRoute path="/admin/users/:userId" component={User} exact />
+            <AdminRoute
+              path="/admin/users/:userId/investments"
+              component={InvestorInvestments}
+              exact
+            />
+            <AdminRoute path="/admin/invesments/:investmentId" component={Investment} exact />
 
-          {/** Whitelabel Routes * */}
-          <PrivateRoute path="/admin/funds" component={Funds} exact />
-          <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
-          <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
+            {/** Whitelabel Routes * */}
+            <PrivateRoute path="/admin/funds" component={Funds} exact />
+            <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
+            <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
 
-          <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
-          <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />
-          <PrivateRoute path="/admin/:organization/deals/:id/edit" component={DealEditNew} exact />
+            <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
+            <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />
+            <PrivateRoute
+              path="/admin/:organization/deals/:id/edit"
+              component={DealEditNew}
+              exact
+            />
 
-          <PrivateRoute path="/admin/:organization/investments" component={Investments} exact />
-          <PrivateRoute path="/admin/:organization/compliance" component={Compliance} exact />
-          <PrivateRoute path="/admin/:organization/master-filing" component={MasterFiling} exact />
-          <AdminRoute path="/admin/:organization/investors" component={Investors} exact />
+            <PrivateRoute path="/admin/:organization/investments" component={Investments} exact />
+            <PrivateRoute path="/admin/:organization/compliance" component={Compliance} exact />
+            <PrivateRoute
+              path="/admin/:organization/master-filing"
+              component={MasterFiling}
+              exact
+            />
+            <AdminRoute path="/admin/:organization/investors" component={Investors} exact />
 
-          {/** catchall * */}
-          <PrivateRoute exact path="/" component={UserHome} />
-          <Route path={['*', '/404']} component={NotFound} />
-        </Switch>
-      </Sidebar>
+            {/** catchall * */}
+            <PrivateRoute exact path="/" component={UserHome} />
+            <Route path={['*', '/404']} component={NotFound} />
+          </Switch>
+        </div>
+      </div>
     </AuthorizedApolloProvider>
   );
 };
