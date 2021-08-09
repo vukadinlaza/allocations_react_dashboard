@@ -58,9 +58,9 @@ const headers = [
     alignHeader: true,
   },
   {
-    value: 'status',
+    value: 'sideLetterStatus',
     label: 'STATUS',
-    type: 'status',
+    type: 'sideLetterStatus',
     isSortable: true,
     align: 'center',
   },
@@ -100,9 +100,14 @@ const DocumentsTab = ({ classes, data }) => {
 
   const calculateReminder = (id) => {
     // console.log({ id });
-    const { invitedAt } = documentsData.find(({ investorId }) => investorId === id);
+    const data = documentsData.find(({ investorId }) => investorId === id);
+    // console.log('data', data);
+    const invitedAt = '1626808527';
+    const invitedDate = new Date(Number(invitedAt * 1000));
+    // const invitedDate = new Date(1626808527 * 1000);
 
-    const invitedDate = new Date(Number(invitedAt));
+    console.log('what', invitedDate);
+
     const currentUnix = Date.now();
     const currentDate = new Date(currentUnix);
     // console.log('Current', currentDate);
@@ -119,10 +124,6 @@ const DocumentsTab = ({ classes, data }) => {
     // WHAT IS THE INVESTMENT id
     const investmentId = '603a2c6f45e3980023d21410';
 
-    // might no longer be necessary to calculate the date.
-    const numOfDays = calculateReminder(e.currentTarget.value);
-    // console.log(numOfDays);
-
     // if less than two days, tool tip to say when you can send next reminder
     // if more than two days, sendConfirmation() to back end.
     // toast.success
@@ -133,7 +134,7 @@ const DocumentsTab = ({ classes, data }) => {
 
   const getCellContent = (type, row, headerValue) => {
     const numOfDays = calculateReminder(row.investorId);
-
+    console.log('days', numOfDays);
     switch (type) {
       case 'document':
         return (
@@ -142,16 +143,14 @@ const DocumentsTab = ({ classes, data }) => {
           </HtmlTooltip>
         );
 
-      case 'status':
-        // status' include: wired, complete, signed, invited (legacy), and pending (legacy).
-        if (!row[headerValue]) {
+      case 'sideLetterStatus':
+        if (row[headerValue] === 'pending') {
+          // if (!row[headerValue]) {
           return <Badge badgeContent="Incomplete" color="primary" />;
         }
         return <Badge badgeContent="Complete" color="secondary" />;
 
       case 'reminder':
-        // logic here? !row.dateSigned && numOfDays > 2
-        // what about investorId of undefined? is that ever a thing?
         if (numOfDays > 2) {
           return (
             <IconButton onClick={(e) => handleSendReminder(e)} value={row.investorId}>
@@ -216,6 +215,23 @@ const DocumentsTab = ({ classes, data }) => {
     }
   });
 
+  documentsData.push({
+    _id: '60be50d7d2e781002309e606',
+    investor: {
+      _id: '60be50d7d2e781002309e606',
+      name: 'Test',
+    },
+    doc: 'hello',
+    docLink: 'hello2',
+    status: 'completed',
+    sideLetterData: {
+      status: 'pending',
+      requestedDate: 1618537161,
+    },
+  });
+
+  // console.log(documentsData);
+
   documentsData = documentsData.map((investment) => {
     return {
       investorId: investment.investor?._id,
@@ -226,7 +242,8 @@ const DocumentsTab = ({ classes, data }) => {
       dateSigned: moment(new Date(parseInt(investment._id.substring(0, 8), 16) * 1000)).format(
         'MM/DD/YYYY',
       ),
-      invitedAt: investment.invited_at,
+      sideLetterStatus: investment?.sideLetterData?.status,
+      reqDate: investment?.sideLetterData?.requestedDate,
     };
   });
   // console.log(documentsData);
