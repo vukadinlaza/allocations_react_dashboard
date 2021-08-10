@@ -84,8 +84,7 @@ const headers = [
   },
 ];
 
-const DocumentsTab = ({ classes, data }) => {
-  // const [dealData, setDealData] = useState([]);
+const DocumentsTab = ({ classes, data, refetch }) => {
   const [sortField, setSortField] = useState('name');
   const [searchTerm, setSearchTerm] = useState('');
   let documentsData = [];
@@ -93,6 +92,7 @@ const DocumentsTab = ({ classes, data }) => {
   const [sendConfirmation] = useMutation(SEND_REMINDER, {
     onCompleted: () => {
       toast.success('Reminder sent successfully.');
+      refetch();
     },
     onError: () => {
       toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
@@ -123,19 +123,15 @@ const DocumentsTab = ({ classes, data }) => {
   const handleSendReminder = (e) => {
     e.preventDefault();
 
-    // WHAT IS THE INVESTMENT id
-    const investmentId = '603a2c6f45e3980023d21410';
-
-    // if less than two days, tool tip to say when you can send next reminder
-    // if more than two days, sendConfirmation() to back end.
-    // toast.success
-    // button should then gray out.
-
-    sendConfirmation({ variables: { investment_id: investmentId } });
+    sendConfirmation({ variables: { investment_id: e.currentTarget.value } });
   };
 
   const getCellContent = (type, row, headerValue) => {
     const numOfSeconds = calculateReminder(row.investorId);
+    let nextReminderDate = 0;
+    if (numOfSeconds < 172800) {
+      nextReminderDate = moment().add(numOfSeconds, 'seconds').calendar();
+    }
 
     switch (type) {
       case 'document':
@@ -155,7 +151,7 @@ const DocumentsTab = ({ classes, data }) => {
       case 'reminder':
         if (numOfSeconds < 172800) {
           return (
-            <Tooltip title="A reminder has been sent in the past two days.">
+            <Tooltip title={`Next reminder may be sent ${nextReminderDate}`}>
               <PlayCircleFilledIcon color="disabled" fontSize="large" />
             </Tooltip>
           );
@@ -217,22 +213,21 @@ const DocumentsTab = ({ classes, data }) => {
     }
   });
 
-  documentsData.push({
-    _id: '60be50d7d2e781002309e606',
-    investor: {
-      _id: '60be50d7d2e781002309e606',
-      name: 'Test',
-    },
-    doc: 'hello',
-    docLink: 'hello2',
-    status: 'completed',
-    sideLetterData: {
-      status: 'pending',
-      requestedDate: 1618537161,
-    },
-  });
-
-  // console.log(documentsData);
+  // demo data
+  // documentsData.push({
+  //   _id: '60be50d7d2e781002309e606',
+  //   investor: {
+  //     _id: '60be50d7d2e781002309e606',
+  //     name: 'Test',
+  //   },
+  //   doc: 'hello',
+  //   docLink: 'hello2',
+  //   status: 'completed',
+  //   sideLetterData: {
+  //     status: 'pending',
+  //     requestedDate: 1618537161,
+  //   },
+  // });
 
   documentsData = documentsData.map((investment) => {
     return {
@@ -248,7 +243,7 @@ const DocumentsTab = ({ classes, data }) => {
       reqDate: investment?.sideLetterData?.requestedDate,
     };
   });
-  // console.log(documentsData);
+
   if (!data) return <Loader />;
 
   if (searchTerm) {

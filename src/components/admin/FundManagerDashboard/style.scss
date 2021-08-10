@@ -24,3 +24,16 @@
 .MuiSvgIcon-colorPrimary:hover {
   color: #3f85f9;
 }
+
+.MuiIconButton-root:hover {
+  background-color: transparent !important;
+}
+
+.MuiIconButton-root {
+  color: transparent !important;
+}
+
+//need to confirm target
+button:focus {
+  outline: none !important;
+}
