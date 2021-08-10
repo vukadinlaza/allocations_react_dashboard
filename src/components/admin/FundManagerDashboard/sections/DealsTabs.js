@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Tabs, Tab } from '@material-ui/core';
+import { Tabs, Tab, Popover, Button } from '@material-ui/core';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -106,6 +106,18 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
   // const [deals, setDeals] = useState([]);
   const { deals } = data.organization;
   const [titleContainer, setTitleContainer] = useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
 
   const handleTabChange = (e, newIndex) => {
     setTabIndex(newIndex);
@@ -116,8 +128,46 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
     setTitleContainer(titleCont);
   }, []);
 
+  const mappedTabs = deals.map((deal, index) => {
+    const isFund = deal.investmentType === 'fund';
+    const closed = deal.status === 'closed';
+    return (
+      <Tab
+        label={
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            {deal.company_name}
+            {deal.company_name !== 'All' && (
+              <span
+                style={{ backgroundColor: isFund ? '#2A2B54' : '#0461FF' }}
+                className={classes.dealTag}
+              >
+                {isFund ? (
+                  <AccountBalanceIcon style={{ marginRight: '4px' }} />
+                ) : (
+                  <FontAwesomeIcon style={{ marginRight: '4px' }} icon={faRocket} />
+                )}
+                {isFund ? 'FUND' : 'SPV'}
+                <FiberManualRecordIcon
+                  style={{ color: closed ? '#d0d0d0' : '#39C522', marginLeft: '2px' }}
+                />
+              </span>
+            )}
+          </div>
+        }
+        // eslint-disable-next-line react/no-array-index-key
+        key={`tab-${index}`}
+        classes={{
+          root: classes.tab,
+          selected: classes.selectedTab,
+        }}
+        disableRipple
+      />
+    );
+  });
+
   if (!data || !titleContainer) return <Loader />;
 
+  // RETURN
   return (
     <div className={classes.root}>
       <Tabs
@@ -130,42 +180,31 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
         }}
         variant="scrollable"
       >
-        {deals.map((deal, index) => {
-          const isFund = deal.investmentType === 'fund';
-          const closed = deal.status === 'closed';
-          return (
-            <Tab
-              label={
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  {deal.company_name}
-                  {deal.company_name !== 'All' && (
-                    <span
-                      style={{ backgroundColor: isFund ? '#2A2B54' : '#0461FF' }}
-                      className={classes.dealTag}
-                    >
-                      {isFund ? (
-                        <AccountBalanceIcon style={{ marginRight: '4px' }} />
-                      ) : (
-                        <FontAwesomeIcon style={{ marginRight: '4px' }} icon={faRocket} />
-                      )}
-                      {isFund ? 'FUND' : 'SPV'}
-                      <FiberManualRecordIcon
-                        style={{ color: closed ? '#d0d0d0' : '#39C522', marginLeft: '2px' }}
-                      />
-                    </span>
-                  )}
-                </div>
-              }
-              // eslint-disable-next-line react/no-array-index-key
-              key={`tab-${index}`}
-              classes={{
-                root: classes.tab,
-                selected: classes.selectedTab,
-              }}
-              disableRipple
-            />
-          );
-        })}
+        {/* BEGIN */}
+        {mappedTabs[0]}
+        {mappedTabs[1]}
+        {mappedTabs[2]}
+        {mappedTabs[3]}
+
+        <Button onClick={handleClick}>More Funds ^</Button>
+        <Popover
+          id={id}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          Testingggggggggggggg
+        </Popover>
+
+        {/* END */}
       </Tabs>
       <div
         className={classes.tabsPlaceholder}
@@ -173,6 +212,7 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
       />
     </div>
   );
+  // CLOSE RETURN
 };
 
 export default withStyles(styles)(withRouter(DealsTabs));
