@@ -397,6 +397,7 @@ const GET_INVESTMENTS = gql`
       investments {
         _id
         amount
+        capitalWiredAmount
         status
         submissionData {
           legalName
@@ -492,7 +493,10 @@ const DEALS_TABLE = 'Deals';
 
 const FundManagerDashboard = ({ classes, history }) => {
   const { width } = useViewport();
-  const { organization: orgSlug, deal: dealSlug } = useParams();
+  let { organization: orgSlug, deal: dealSlug } = useParams();
+  if (orgSlug === 'demo-fund') {
+    orgSlug = '305-ventures';
+  }
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
@@ -702,6 +706,7 @@ const FundManagerDashboard = ({ classes, history }) => {
             dealType={dealData?.dealParams?.dealType}
             superAdmin={orgDeals?.investor?.admin}
             refetch={refetch}
+            orgSlug={orgSlug}
           />
         );
       case 'Deal Page':

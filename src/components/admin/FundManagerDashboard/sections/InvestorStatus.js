@@ -4,6 +4,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import { Avatar, Typography, Grid, FormControl, InputLabel, Tooltip } from '@material-ui/core';
 import Select from '@material-ui/core/Select';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
+import { useParams } from 'react-router';
 import { ScrollableBox } from '../widgets';
 import { nWithCommas } from '../../../../utils/numbers';
 import Loader from '../../../utils/Loader';
@@ -198,6 +199,7 @@ const InvestorBox = ({
 };
 
 const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType }) => {
+  const { organization: orgSlug } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [investmentId, setInvestmentId] = useState(null);
   const [dealId, setDealId] = useState(null);
@@ -239,7 +241,10 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType })
 
       return {
         name,
-        amount: inv.amount,
+        amount:
+          inv.capitalWiredAmount !== null && inv.capitalWiredAmount
+            ? inv.capitalWiredAmount
+            : inv.amount,
         status: inv.status,
         accredidation_status: inv.investor.accredidation_status,
         id: inv.investor._id,
@@ -318,12 +323,11 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType })
       };
     });
 
-  const isDemo = false;
+  const isDemo = orgSlug === 'demo-fund';
   if (isDemo) {
     signedTotal += demoSignedArray.map((i) => i.amount).reduce((acc, n) => acc + n);
     wiredTotal += demoWiredArray.map((i) => i.amount).reduce((acc, n) => acc + n);
   }
-  // const isDemo = window?.origin?.includes('vercel') || window.origin.includes('localhost');
 
   const handleSort = (event) => {
     setSortField(event.target.value);
