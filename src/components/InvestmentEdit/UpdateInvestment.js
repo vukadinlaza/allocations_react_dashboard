@@ -7,7 +7,6 @@ import _ from 'lodash';
 import {
   Button,
   TextField,
-  Divider,
   Grid,
   FormControl,
   Select,
@@ -20,7 +19,6 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { NoFragmentCyclesRule } from 'graphql';
 import Loader from '../utils/Loader';
 import { destroy } from '../../api/investments';
 import CrossOrPlusIcon from '../svg/CrossOrPlusIcon';
@@ -227,8 +225,6 @@ export default function InvestmentEdit({
   const convertToPositiveInteger = (num) => {
     return parseInt(num < 0 ? 0 : num);
   };
-
-  console.log('USER', user);
 
   return (
     <div className="InvestmentEdit form-wrapper">
@@ -441,7 +437,7 @@ function Docs({ investment, getInvestment, isK1 }) {
         style={{ padding: matches ? '10px' : '10px 0' }}
       >
         <Grid item>
-          <img src={DocumentIcon} style={{ height: '28px' }} />
+          <img src={DocumentIcon} alt="document icon" style={{ height: '28px' }} />
         </Grid>
 
         <InputLabel
@@ -504,7 +500,7 @@ function Doc({ doc, investment, getInvestment, matches }) {
       style={{ padding: matches ? '10px' : '10px 0' }}
     >
       <Grid item>
-        <img src={DocumentIcon} style={{ height: '28px' }} />
+        <img src={DocumentIcon} alt="document icon" style={{ height: '28px' }} />
       </Grid>
       <Grid item>
         <Tooltip title={file}>

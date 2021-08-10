@@ -188,7 +188,8 @@ span[data-status='closed'] {
   }
 }
 
-.blue-container {
+.UserHome {
+  width: 100%;
   background: rgb(32, 93, 245);
   background: linear-gradient(
     180deg,
@@ -196,17 +197,9 @@ span[data-status='closed'] {
     rgba(0, 94, 255, 1) 400px,
     rgba(255, 255, 255, 1) 400px
   );
-  margin-top: -10px;
-  padding-top: 30px;
-  padding-bottom: 60px;
-  margin-left: -32px;
-  padding-left: 32px;
-  margin-right: -32px;
-  padding-right: 32px;
 
   .welcome-user {
     padding: 1em;
-    margin-top: -0.5em;
     margin-bottom: -1em;
 
     .welcome-user-text {

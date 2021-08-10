@@ -58,11 +58,8 @@
     }
 
     .same-mailing-checkbox {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      width: 40%;
-      height: max-content;
+      margin: 0;
+      font-size: 16px;
     }
   }
 
@@ -80,6 +77,14 @@
     color: rgb(117, 117, 117);
     left: 20px;
     width: 90%;
+  }
+
+  .accreditation-notice {
+    position: relative;
+    left: 20px;
+    width: 90%;
+    margin: 20px 0 -10px 0;
+    padding: 0 5px;
   }
 }
 

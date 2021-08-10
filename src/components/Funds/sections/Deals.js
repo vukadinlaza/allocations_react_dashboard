@@ -50,8 +50,6 @@ const tableVariables = {
       label: 'MULTIPLE',
       type: 'multiple',
       isSortable: true,
-      nestedKey: 'dealMultiple',
-      sortField: 'dealParams',
       keyNotInData: true,
     },
     {
@@ -112,6 +110,10 @@ const Deals = ({ classes, filter, tableName }) => {
   };
 
   const handleUpdateDeal = () => {
+    if (multiple < 0) {
+      toast.error(`Multiple can't be negative`);
+      return;
+    }
     updateDeal({
       variables: {
         deal: {
@@ -245,6 +247,7 @@ const Deals = ({ classes, filter, tableName }) => {
               variant="outlined"
               size="small"
               fullWidth
+              type="number"
               onChange={handleMultipleChange}
               InputProps={{
                 endAdornment: <InputAdornment position="end">X</InputAdornment>,

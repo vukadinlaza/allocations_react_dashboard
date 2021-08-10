@@ -1,0 +1,29 @@
+@import '../../../App.scss';
+
+.FundManagerDashboard {
+  .mainTitleContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 40px;
+    padding: 25px 0;
+
+    @media only screen and (max-width: 1280px) {
+      justify-content: center;
+    }
+
+    @media only screen and (max-width: 650px) {
+      flex-direction: column;
+    }
+
+    .mainTitle {
+      font-size: 28px;
+      font-weight: 700;
+      padding: 20px 0px;
+
+      @media screen and (max-width: 1280px) {
+        display: none;
+      }
+    }
+  }
+}

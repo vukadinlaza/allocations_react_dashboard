@@ -213,10 +213,7 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
 
       {org === 'irishangels' && (
         <>
-          <Typography
-            variant="subtitle2"
-            style={{ marginBottom: '-.5rem', paddingLeft: '1rem', paddingRight: '1rem' }}
-          >
+          <Typography variant="subtitle2" className="accreditation-notice">
             Please initial below to certify that you are still an Accredited Investor, per SEC
             criteria, as detailed in Exhibit D of the IrishAngels Membership Agreement previously
             executed by you.
@@ -363,13 +360,14 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
             </label>
           )}
           <label className="same-mailing-checkbox" htmlFor="mailing-address-checkbox">
-            Different Mailing Address
             <Checkbox
               onChange={() => toggleMailingDifferent((t) => !t)}
               value="checkedA"
               inputProps={{ 'aria-label': 'mailing-address-checkbox' }}
               id="mailing-address-checkbox"
+              style={{ paddingLeft: 0 }}
             />
+            Different Mailing Address
           </label>
         </FormControl>
       )}

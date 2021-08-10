@@ -40,20 +40,13 @@ const useStyles = makeStyles((theme) => ({
   blueContainer: {
     background:
       'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 160px, rgba(255,255,255,1) 160px)',
-    marginTop: '-30px',
-    paddingTop: '30px',
-    paddingBottom: '60px',
-    marginLeft: '-32px',
-    paddingLeft: '32px',
-    marginRight: '-32px',
-    paddingRight: '32px',
+    padding: '1.5rem',
   },
   a: {
     minWidth: '100%',
   },
   modal: {
     display: 'flex',
-    // alignItems: 'center',
     justifyContent: 'center',
   },
   modalPaper: {
@@ -61,6 +54,13 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '.5rem',
     padding: theme.spacing(4),
     margin: theme.spacing(4),
+  },
+  gridContainer: {
+    marginTop: '40px',
+    marginBottom: '1rem',
+    [theme.breakpoints.down(600)]: {
+      justifyContent: 'center',
+    },
   },
 }));
 
@@ -120,12 +120,7 @@ export default () => {
         <Typography variant="h3" style={{ color: 'white' }}>
           Demo
         </Typography>
-        <Grid
-          container
-          spacing={12}
-          justify="space-between"
-          style={{ marginTop: '40px', marginBottom: '1rem' }}
-        >
+        <Grid container spacing={12} justify="space-between" className={classes.gridContainer}>
           <Grid item>
             <Paper className={classes.paper}>
               <img
@@ -169,9 +164,6 @@ export default () => {
                 variant="contained"
                 style={{ marginTop: '1rem', minWidth: '100%' }}
                 onClick={() => {
-                  // postZap({
-                  //   variables: { body: { name: userProfile.first_name, action: 'Viewed Investor Demo' } },
-                  // });
                   history.push({
                     pathname: `/investor/${
                       // If true use Kingsley's ID otherwise Joel for Staging ENV
@@ -205,9 +197,6 @@ export default () => {
                 variant="contained"
                 style={{ marginTop: '1rem', minWidth: '100%' }}
                 onClick={() => {
-                  // postZap({
-                  //   variables: { body: { name: userProfile.first_name, action: 'Viewed Marketplace Demo' } },
-                  // });
                   history.push({ pathname: `/marketplace` });
                 }}
               >
@@ -233,9 +222,6 @@ export default () => {
                 variant="contained"
                 style={{ marginTop: '1rem', minWidth: '100%' }}
                 onClick={() => {
-                  // postZap({
-                  //   variables: { body: { name: userProfile.first_name, action: 'Viewed Fund Manager Demo' } },
-                  // });
                   history.push({ pathname: `/admin/demo-fund` });
                 }}
               >

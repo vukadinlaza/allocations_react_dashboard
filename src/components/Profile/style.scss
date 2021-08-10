@@ -1,6 +1,8 @@
 @import '../../App.scss';
 
 .Profile {
+  width: 100%;
+
   h4 {
     .fa-check {
       color: $green;
@@ -21,11 +23,10 @@
       display: inline-block;
     }
   }
-  .submit-row {
-    // text-align: center;
+
+  .account-paper {
+    margin-top: 1rem;
+    padding: 1rem;
+    overflow-x: auto;
   }
-}
-.account-paper {
-  margin-top: 1rem;
-  padding: 1rem;
 }

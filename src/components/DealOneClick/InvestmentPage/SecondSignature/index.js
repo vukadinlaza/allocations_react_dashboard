@@ -14,10 +14,10 @@ const useStyles = makeStyles(() => ({
   footNote: {
     fontSize: '12px',
     color: '#757575',
-    left: '20px',
     width: '90%',
     position: 'relative',
     margin: '20px 0',
+    fontWeight: 'bold',
   },
 }));
 
@@ -89,13 +89,19 @@ const SecondSignature = ({
 
   return (
     <PanelContainer>
-      <PanelLabel label="Require Second Signature">
+      <Grid container wrap="nowrap">
         <Checkbox
           name="secondSigInfo"
           checked={requireSecondSigChecked.secondSigInfo}
           onChange={handleChecked}
+          style={{
+            marginRight: '-15px',
+            borderBottom: '1px solid rgb(232, 232, 232)',
+            borderRadius: '5px 5px 0px 0px',
+          }}
         />
-      </PanelLabel>
+        <PanelLabel label="Please Select if There is a Second Signer" />
+      </Grid>
 
       {requireSecondSigChecked.secondSigInfo && (
         <Grid container wrap="nowrap" direction="column">
@@ -143,19 +149,20 @@ const SecondSignature = ({
               />
             </Box>
             <Grid container wrap="nowrap" alignItems="center">
-              <Grid item lg={12}>
-                <Typography component="p" className={classes.footNote}>
-                  I confirm, as the second signer, that I am present and the information I have
-                  provided above is accurate.
-                </Typography>
-              </Grid>
               <Grid item>
                 <Checkbox
                   name="secondSigConsent"
                   checked={requireSecondSigChecked.secondSigConsent}
                   onChange={handleChecked}
                   required
+                  style={{ marginLeft: '15px' }}
                 />
+              </Grid>
+              <Grid item lg={12}>
+                <Typography component="p" className={classes.footNote}>
+                  I confirm, as the second signer, that I am present and the information I have
+                  provided above is accurate.
+                </Typography>
               </Grid>
             </Grid>
           </Grid>
