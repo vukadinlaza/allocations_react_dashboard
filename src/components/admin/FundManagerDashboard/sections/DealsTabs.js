@@ -106,10 +106,10 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
   // const [deals, setDeals] = useState([]);
   const { deals } = data.organization;
   const [titleContainer, setTitleContainer] = useState(null);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleClick = (e) => {
+    setAnchorEl(e.currentTarget);
   };
 
   const handleClose = () => {
@@ -118,6 +118,7 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
 
   const handleTabChange = (e, newIndex) => {
     setTabIndex(newIndex);
+    handleClose();
   };
 
   useEffect(() => {
@@ -164,7 +165,6 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
 
   if (!data || !titleContainer) return <Loader />;
 
-  // RETURN
   return (
     <div className={classes.root}>
       <Tabs
@@ -177,10 +177,9 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
         }}
         variant="scrollable"
       >
-        {/* BEGIN */}
         {mappedTabs.slice(0, 4)}
 
-        <Button onClick={handleClick}>More Funds ^</Button>
+        <Button onClick={handleClick}>More Funds &or;</Button>
         <Menu
           id="simple-menu"
           anchorEl={anchorEl}
@@ -188,12 +187,10 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          {mappedTabs.slice(4).map((tab) => {
-            return <MenuItem onClick={handleClose}>{tab}</MenuItem>;
+          {mappedTabs.slice(4).map((tab, i) => {
+            return <MenuItem onClick={(e) => handleTabChange(e, i + 4)}>{tab}</MenuItem>;
           })}
         </Menu>
-
-        {/* END */}
       </Tabs>
       <div
         className={classes.tabsPlaceholder}
@@ -201,7 +198,6 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
       />
     </div>
   );
-  // CLOSE RETURN
 };
 
 export default withStyles(styles)(withRouter(DealsTabs));
