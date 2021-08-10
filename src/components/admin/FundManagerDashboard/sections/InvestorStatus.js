@@ -239,7 +239,10 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, o
 
       return {
         name,
-        amount: inv.amount,
+        amount:
+          inv.capitalWiredAmount !== null && inv.capitalWiredAmount
+            ? inv.capitalWiredAmount
+            : inv.amount,
         status: inv.status,
         accredidation_status: inv.investor.accredidation_status,
         id: inv.investor._id,
@@ -318,10 +321,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, o
       };
     });
 
-  const isDemo =
-    window?.origin?.includes('vercel') ||
-    window.origin.includes('localhost') ||
-    orgSlug === 'demo-fund';
+  const isDemo = orgSlug === 'demo-fund';
   if (isDemo) {
     signedTotal += demoSignedArray.map((i) => i.amount).reduce((acc, n) => acc + n);
     wiredTotal += demoWiredArray.map((i) => i.amount).reduce((acc, n) => acc + n);

@@ -397,6 +397,7 @@ const GET_INVESTMENTS = gql`
       investments {
         _id
         amount
+        capitalWiredAmount
         status
         submissionData {
           legalName
