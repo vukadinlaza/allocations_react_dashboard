@@ -4,6 +4,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import { Avatar, Typography, Grid, FormControl, InputLabel, Tooltip } from '@material-ui/core';
 import Select from '@material-ui/core/Select';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
+import { useParams } from 'react-router';
 import { ScrollableBox } from '../widgets';
 import { nWithCommas } from '../../../../utils/numbers';
 import Loader from '../../../utils/Loader';
@@ -197,7 +198,8 @@ const InvestorBox = ({
   );
 };
 
-const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, orgSlug }) => {
+const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType }) => {
+  const { organization: orgSlug } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [investmentId, setInvestmentId] = useState(null);
   const [dealId, setDealId] = useState(null);
