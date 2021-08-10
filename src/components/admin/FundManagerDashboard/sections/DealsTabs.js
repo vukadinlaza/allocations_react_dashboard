@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Tabs, Tab, Popover, Button } from '@material-ui/core';
+import { Tabs, Tab, Popover, Button, Menu, MenuItem } from '@material-ui/core';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -116,9 +116,6 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
     setAnchorEl(null);
   };
 
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
-
   const handleTabChange = (e, newIndex) => {
     setTabIndex(newIndex);
   };
@@ -181,28 +178,20 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
         variant="scrollable"
       >
         {/* BEGIN */}
-        {mappedTabs[0]}
-        {mappedTabs[1]}
-        {mappedTabs[2]}
-        {mappedTabs[3]}
+        {mappedTabs.slice(0, 4)}
 
         <Button onClick={handleClick}>More Funds ^</Button>
-        <Popover
-          id={id}
-          open={open}
+        <Menu
+          id="simple-menu"
           anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
           onClose={handleClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
         >
-          Testingggggggggggggg
-        </Popover>
+          {mappedTabs.slice(4).map((tab) => {
+            return <MenuItem onClick={handleClose}>{tab}</MenuItem>;
+          })}
+        </Menu>
 
         {/* END */}
       </Tabs>
