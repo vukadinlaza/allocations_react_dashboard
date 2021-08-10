@@ -32,7 +32,6 @@ const HtmlTooltip = withStyles((theme) => ({
   },
 }))(Tooltip);
 
-// should this happen in the parent?
 const SEND_REMINDER = gql`
   mutation SendInvestmentDocReminder($investment_id: String!) {
     sendInvestmentDocReminder(investment_id: $investment_id)
@@ -66,7 +65,6 @@ const headers = [
   },
   { value: 'dateSigned', label: 'DATE SIGNED', isSortable: true, align: 'left', alignHeader: true },
   {
-    // value is wrong?
     value: 'reminder',
     label: 'SEND REMINDER',
     type: 'reminder',
@@ -143,7 +141,6 @@ const DocumentsTab = ({ classes, data, refetch }) => {
 
       case 'sideLetterStatus':
         if (row[headerValue] === 'pending') {
-          // if (!row[headerValue]) {
           return <Badge badgeContent="Incomplete" color="primary" />;
         }
         return <Badge badgeContent="Complete" color="secondary" />;
@@ -192,7 +189,7 @@ const DocumentsTab = ({ classes, data, refetch }) => {
   };
 
   // required me to store as variable. "No unused expressions"
-  const hello = data?.deal?.investments?.forEach((investment) => {
+  const unusedVariable = data?.deal?.investments?.forEach((investment) => {
     if (investment.documents.length >= 1) {
       investment.documents.forEach((doc) => {
         const splitPath = doc.path.split('/')[2];
@@ -212,22 +209,6 @@ const DocumentsTab = ({ classes, data, refetch }) => {
       documentsData.push(investment);
     }
   });
-
-  // demo data
-  // documentsData.push({
-  //   _id: '60be50d7d2e781002309e606',
-  //   investor: {
-  //     _id: '60be50d7d2e781002309e606',
-  //     name: 'Test',
-  //   },
-  //   doc: 'hello',
-  //   docLink: 'hello2',
-  //   status: 'completed',
-  //   sideLetterData: {
-  //     status: 'pending',
-  //     requestedDate: 1618537161,
-  //   },
-  // });
 
   documentsData = documentsData.map((investment) => {
     return {
@@ -255,12 +236,7 @@ const DocumentsTab = ({ classes, data, refetch }) => {
   return (
     <div className={classes.section}>
       <div className={classes.searchContainer}>
-        <FormControl
-          variant="outlined"
-          // style={{ width: `${selectWidth}em`}}
-          size="small"
-          value={sortField}
-        >
+        <FormControl variant="outlined" size="small" value={sortField}>
           <InputLabel htmlFor="field-filter">Field</InputLabel>
           <Select
             native
