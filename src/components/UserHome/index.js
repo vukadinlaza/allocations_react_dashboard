@@ -129,7 +129,7 @@ const UserHome = ({ classes }) => {
     if (Object.keys(userProfile).length) {
       const funds = userProfile?.investments
         ?.filter((investment) => investment?.deal?.investmentType === 'fund')
-        .map((investment) => investment?.deal);
+        .map((investment) => investment.deal);
       setUserFunds(funds);
     }
   }, [userProfile]);
@@ -183,9 +183,7 @@ const UserHome = ({ classes }) => {
           .map((investment) => {
             return { ...investment.fields, createdTime: investment.createdTime };
           });
-        const AUM = dealInvestments.length
-          ? dealInvestments.map((inv) => inv.Invested).reduce((acc, n) => acc + n)
-          : 0;
+        const AUM = dealInvestments.map((inv) => inv.Invested).reduce((acc, n) => acc + n, 0);
         return { ...deal, investments: dealInvestments, AUM };
       });
       setFunds(funds);

@@ -18,26 +18,18 @@ export function getColor(i) {
 }
 
 export function formatDoughnutSeries(series) {
-  return series.map((s, i) => {
+  return series.map(({ label, total }, i) => {
     return {
+      label,
+      total,
       backgroundColor: getColor(i),
-      label: s.label,
-      total: s.total,
     };
   });
 }
 
 const Highlights = ({ classes, data, userProfile, refetch }) => {
   const setMonthsToShow = (data) => {
-    const monthsArray = [];
-
-    data.forEach((item) => {
-      const itemMonth = moment(item.Date).format('YYYYMM');
-      if (!monthsArray.includes(itemMonth)) monthsArray.push(itemMonth);
-    });
-    monthsArray.sort();
-
-    return monthsArray;
+    return [...new Set(data.map((item) => moment(item.Date).format('YYYYMM')))].sort();
   };
 
   const setLabelsAndData = (data, monthsArray) => {
