@@ -181,58 +181,64 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
         }}
         variant={matches ? 'scrollable' : 'standard'}
       >
+        {matches ? mappedTabs.slice(0, 1) : mappedTabs.slice(0, 4)}
+
         {matches ? (
           <>
-            {mappedTabs.slice(0, 1)}
-            <Button onClick={handleClick} className={classes.moreButton}>
-              <Typography>
-                {tabIndex < 1 ? (
-                  'Funds'
-                ) : (
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    {deals[tabIndex].company_name}
-                    {deals[tabIndex].company_name !== 'All' && (
-                      <span
-                        style={{
-                          backgroundColor:
-                            deals[tabIndex].investmentType === 'fund' ? '#2A2B54' : '#0461FF',
-                        }}
-                        className={classes.dealTag}
-                      >
-                        {deals[tabIndex].investmentType === 'fund' ? (
-                          <AccountBalanceIcon style={{ marginRight: '4px' }} />
-                        ) : (
-                          <FontAwesomeIcon style={{ marginRight: '4px' }} icon={faRocket} />
+            {mappedTabs.length > 1 ? (
+              <>
+                <Button onClick={handleClick} className={classes.moreButton}>
+                  <Typography>
+                    {tabIndex < 1 ? (
+                      'Funds'
+                    ) : (
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        {deals[tabIndex].company_name}
+                        {deals[tabIndex].company_name !== 'All' && (
+                          <span
+                            style={{
+                              backgroundColor:
+                                deals[tabIndex].investmentType === 'fund' ? '#2A2B54' : '#0461FF',
+                            }}
+                            className={classes.dealTag}
+                          >
+                            {deals[tabIndex].investmentType === 'fund' ? (
+                              <AccountBalanceIcon style={{ marginRight: '4px' }} />
+                            ) : (
+                              <FontAwesomeIcon style={{ marginRight: '4px' }} icon={faRocket} />
+                            )}
+                            {deals[tabIndex].investmentType === 'fund' ? 'FUND' : 'SPV'}
+                            <FiberManualRecordIcon
+                              style={{
+                                color: deals[tabIndex].status === 'closed' ? '#d0d0d0' : '#39C522',
+                                marginLeft: '2px',
+                              }}
+                            />
+                          </span>
                         )}
-                        {deals[tabIndex].investmentType === 'fund' ? 'FUND' : 'SPV'}
-                        <FiberManualRecordIcon
-                          style={{
-                            color: deals[tabIndex].status === 'closed' ? '#d0d0d0' : '#39C522',
-                            marginLeft: '2px',
-                          }}
-                        />
-                      </span>
+                      </div>
                     )}
-                  </div>
-                )}
-              </Typography>
-              <ExpandMoreIcon />
-            </Button>
-            <Menu
-              id="simple-menu"
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              {mappedTabs.slice(1).map((tab, i) => {
-                return <MenuItem onClick={(e) => handleTabChange(e, i + 1)}>{tab}</MenuItem>;
-              })}
-            </Menu>
+                  </Typography>
+                  <ExpandMoreIcon />
+                </Button>
+                <Menu
+                  id="simple-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  {mappedTabs.slice(1).map((tab, i) => {
+                    return <MenuItem onClick={(e) => handleTabChange(e, i + 1)}>{tab}</MenuItem>;
+                  })}
+                </Menu>
+              </>
+            ) : (
+              ''
+            )}
           </>
         ) : (
           <>
-            {mappedTabs.slice(0, 4)}
             {mappedTabs.length > 4 ? (
               <>
                 <Button onClick={handleClick} className={classes.moreButton}>
