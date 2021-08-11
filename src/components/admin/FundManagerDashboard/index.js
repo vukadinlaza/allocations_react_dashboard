@@ -434,13 +434,6 @@ export const ORG_OVERVIEW = gql`
           managementFeeType
           fundManagementFeeType
         }
-        dealOnboarding {
-          dealTasks {
-            taskName
-            taskStatus
-            formFields
-          }
-        }
       }
     }
     investor {
@@ -448,12 +441,6 @@ export const ORG_OVERVIEW = gql`
       admin
       documents
     }
-  }
-`;
-
-export const ONBOARDING = gql`
-  subscription dealOnboarding($data: String) {
-    dealOnboarding(data: $data)
   }
 `;
 
@@ -492,7 +479,6 @@ const FundManagerDashboard = ({ classes, history }) => {
   const { data: overview } = useQuery(GET_OVERVIEW_DATA, { variables: { slug: orgSlug } });
   const [getInvestments, { data: dealInvestments, refetch }] = useLazyQuery(GET_INVESTMENTS);
   const [getOrgDeals, { data: orgDealsData }] = useLazyQuery(ORG_OVERVIEW);
-  const { data: subsData } = useSubscription(ONBOARDING);
   const checkedDealName = encodeURIComponent(dealName);
   const checkedAtDealDataName = encodeURIComponent(atDealData?.name);
   const { data: atDeal } = useFetch(
@@ -646,7 +632,7 @@ const FundManagerDashboard = ({ classes, history }) => {
             data={dealData}
             openTooltip={openTooltip}
             handleTooltip={handleTooltip}
-            subscriptionData={subsData}
+            subscriptionData={{}}
           />
         );
 
