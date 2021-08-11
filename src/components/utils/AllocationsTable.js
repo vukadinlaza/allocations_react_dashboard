@@ -15,6 +15,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Toolbar from '@material-ui/core/Toolbar';
 import RadioButtonUncheckedOutlinedIcon from '@material-ui/icons/RadioButtonUncheckedOutlined';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import { nWithCommas } from '../../utils/numbers';
 
 const styles = (theme) => ({
   cellText: {
@@ -328,8 +329,7 @@ const AllocationsTable = ({
                                         header.value,
                                         row[rowSelector],
                                       )
-                                    : // getRowContent(header.type, row[header.value], row[rowSelector], header.cellAction, header.cellProps):
-                                      _.get(row, header.value, 'hi')}
+                                    : _.get(row, header.value, '')}
                                 </TableCell>
                               ) : (
                                 <TableCell key={`${header.value}-${i}`} />
@@ -363,7 +363,7 @@ const AllocationsTable = ({
             component="div"
             count={count || 0}
             labelDisplayedRows={({ from, to, count }) => {
-              return `${from} - ${to} of ${count}`;
+              return `${from} - ${to} of ${nWithCommas(count)}`;
             }}
             rowsPerPage={rowsPerPage}
             page={page}

@@ -33,15 +33,6 @@ const headers = [
     align: 'right',
     alignHeader: true,
   },
-  // {
-  //   label: 'DRAWDOWN TYPE',
-  //   value: 'deal.dealParams.dealMultiple',
-  //   type: 'multiple',
-  //   isSortable: true,
-  //   keyNotInData: true,
-  //   align: 'right',
-  //   alignHeader: true,
-  // },
   {
     label: 'FUND STATUS',
     value: 'status',
