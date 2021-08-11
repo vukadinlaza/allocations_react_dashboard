@@ -22,6 +22,7 @@ import { useViewport, useFetch } from '../../../utils/hooks';
 import { useAuth } from '../../../auth/useAuth';
 import './FundManagerDashboard.scss';
 
+import AllocationsLoader from '../../utils/AllocationsLoader';
 import Loader from '../../utils/Loader';
 import DealsTabs from './sections/DealsTabs';
 
@@ -708,7 +709,7 @@ const FundManagerDashboard = ({ classes, history }) => {
     }
   };
 
-  if (!orgDeals || !overview?.overviewData) return <Loader />;
+  if (!orgDeals || !overview?.overviewData) return <AllocationsLoader fullHeight />;
 
   const isOverview = dealTab === 0;
 
@@ -809,7 +810,7 @@ const FundManagerDashboard = ({ classes, history }) => {
             status === 'fetching' ||
             loading ? (
               <div className={classes.loaderContainer}>
-                <Loader />
+                <AllocationsLoader />
               </div>
             ) : (
               getTabContent()
