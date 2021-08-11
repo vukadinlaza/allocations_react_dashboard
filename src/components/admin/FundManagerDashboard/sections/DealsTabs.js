@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Tabs, Tab, Button, Menu, MenuItem, Typography } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
@@ -35,7 +36,7 @@ const styles = (theme) => ({
     },
   },
   moreButton: {
-    width: '10em',
+    width: 'fit-content',
     textTransform: 'none',
     '&:hover': {
       backgroundColor: '#8493A61A',
@@ -105,6 +106,7 @@ const styles = (theme) => ({
 
 const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
   const { deals } = data.organization;
+  const matches = useMediaQuery('(max-width:600px)');
   const [titleContainer, setTitleContainer] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -175,15 +177,14 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
         classes={{
           root: classes.tabs,
         }}
-        // variant="standard"
-        variant="scrollable"
+        variant={matches ? 'scrollable' : 'standard'}
       >
         {mappedTabs.slice(0, 4)}
 
         {mappedTabs.length > 4 ? (
           <>
             <Button onClick={handleClick} className={classes.moreButton}>
-              <Typography>More Funds</Typography>
+              <Typography>{tabIndex < 4 ? 'More Funds' : deals[tabIndex].company_name}</Typography>
               <ExpandMoreIcon />
             </Button>
             <Menu
