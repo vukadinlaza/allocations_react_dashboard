@@ -18,11 +18,11 @@ export function getColor(i) {
 }
 
 export function formatDoughnutSeries(series) {
-  return series.map((s, i) => {
+  return series.map(({ label, total }, i) => {
     return {
+      label,
+      total,
       backgroundColor: getColor(i),
-      label: s.label,
-      total: s.total,
     };
   });
 }
