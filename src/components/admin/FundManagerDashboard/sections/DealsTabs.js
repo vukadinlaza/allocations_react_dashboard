@@ -167,6 +167,8 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
 
   if (!data || !titleContainer) return <Loader />;
 
+  console.log('INDEX', tabIndex);
+
   return (
     <div className={classes.root}>
       <Tabs
@@ -179,12 +181,41 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
         }}
         variant={matches ? 'scrollable' : 'standard'}
       >
-        {mappedTabs.slice(0, 4)}
-
-        {mappedTabs.length > 4 ? (
+        {matches ? (
           <>
+            {mappedTabs.slice(0, 1)}
             <Button onClick={handleClick} className={classes.moreButton}>
-              <Typography>{tabIndex < 4 ? 'More Funds' : deals[tabIndex].company_name}</Typography>
+              <Typography>
+                {tabIndex < 1 ? (
+                  'Funds'
+                ) : (
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    {deals[tabIndex].company_name}
+                    {deals[tabIndex].company_name !== 'All' && (
+                      <span
+                        style={{
+                          backgroundColor:
+                            deals[tabIndex].investmentType === 'fund' ? '#2A2B54' : '#0461FF',
+                        }}
+                        className={classes.dealTag}
+                      >
+                        {deals[tabIndex].investmentType === 'fund' ? (
+                          <AccountBalanceIcon style={{ marginRight: '4px' }} />
+                        ) : (
+                          <FontAwesomeIcon style={{ marginRight: '4px' }} icon={faRocket} />
+                        )}
+                        {deals[tabIndex].investmentType === 'fund' ? 'FUND' : 'SPV'}
+                        <FiberManualRecordIcon
+                          style={{
+                            color: deals[tabIndex].status === 'closed' ? '#d0d0d0' : '#39C522',
+                            marginLeft: '2px',
+                          }}
+                        />
+                      </span>
+                    )}
+                  </div>
+                )}
+              </Typography>
               <ExpandMoreIcon />
             </Button>
             <Menu
@@ -194,13 +225,66 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              {mappedTabs.slice(4).map((tab, i) => {
-                return <MenuItem onClick={(e) => handleTabChange(e, i + 4)}>{tab}</MenuItem>;
+              {mappedTabs.slice(1).map((tab, i) => {
+                return <MenuItem onClick={(e) => handleTabChange(e, i + 1)}>{tab}</MenuItem>;
               })}
             </Menu>
           </>
         ) : (
-          ''
+          <>
+            {mappedTabs.slice(0, 4)}
+            {mappedTabs.length > 4 ? (
+              <>
+                <Button onClick={handleClick} className={classes.moreButton}>
+                  <Typography>
+                    {tabIndex < 4 ? (
+                      'More Funds'
+                    ) : (
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        {deals[tabIndex].company_name}
+                        {deals[tabIndex].company_name !== 'All' && (
+                          <span
+                            style={{
+                              backgroundColor:
+                                deals[tabIndex].investmentType === 'fund' ? '#2A2B54' : '#0461FF',
+                            }}
+                            className={classes.dealTag}
+                          >
+                            {deals[tabIndex].investmentType === 'fund' ? (
+                              <AccountBalanceIcon style={{ marginRight: '4px' }} />
+                            ) : (
+                              <FontAwesomeIcon style={{ marginRight: '4px' }} icon={faRocket} />
+                            )}
+                            {deals[tabIndex].investmentType === 'fund' ? 'FUND' : 'SPV'}
+                            <FiberManualRecordIcon
+                              style={{
+                                color: deals[tabIndex].status === 'closed' ? '#d0d0d0' : '#39C522',
+                                marginLeft: '2px',
+                              }}
+                            />
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </Typography>
+                  <ExpandMoreIcon />
+                </Button>
+                <Menu
+                  id="simple-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  {mappedTabs.slice(4).map((tab, i) => {
+                    return <MenuItem onClick={(e) => handleTabChange(e, i + 4)}>{tab}</MenuItem>;
+                  })}
+                </Menu>
+              </>
+            ) : (
+              ''
+            )}
+          </>
         )}
       </Tabs>
       <div
