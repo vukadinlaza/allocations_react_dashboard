@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Tabs, Tab, Popover, Button, Menu, MenuItem } from '@material-ui/core';
+import { Tabs, Tab, Button, Menu, MenuItem, Typography } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -103,7 +104,6 @@ const styles = (theme) => ({
 });
 
 const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
-  // const [deals, setDeals] = useState([]);
   const { deals } = data.organization;
   const [titleContainer, setTitleContainer] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -175,22 +175,32 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
         classes={{
           root: classes.tabs,
         }}
+        // variant="standard"
         variant="scrollable"
       >
         {mappedTabs.slice(0, 4)}
 
-        <Button onClick={handleClick}>More Funds &or;</Button>
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-        >
-          {mappedTabs.slice(4).map((tab, i) => {
-            return <MenuItem onClick={(e) => handleTabChange(e, i + 4)}>{tab}</MenuItem>;
-          })}
-        </Menu>
+        {mappedTabs.length > 4 ? (
+          <>
+            <Button onClick={handleClick} className={classes.moreButton}>
+              <Typography>More Funds</Typography>
+              <ExpandMoreIcon />
+            </Button>
+            <Menu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              {mappedTabs.slice(4).map((tab, i) => {
+                return <MenuItem onClick={(e) => handleTabChange(e, i + 4)}>{tab}</MenuItem>;
+              })}
+            </Menu>
+          </>
+        ) : (
+          ''
+        )}
       </Tabs>
       <div
         className={classes.tabsPlaceholder}
