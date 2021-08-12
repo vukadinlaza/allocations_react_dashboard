@@ -12,6 +12,7 @@ export default function SPVDocumentModal({
   setOpen,
   open,
   deal,
+  loading,
   submitInvestment,
   previewData,
   loadingPreview,
@@ -70,6 +71,7 @@ export default function SPVDocumentModal({
                   color="secondary"
                   className="button"
                   onClick={submitInvestment}
+                  // disabled={loading}
                 >
                   {requireSecondSigChecked ? 'We' : 'I'} Agree
                 </Button>
@@ -78,6 +80,7 @@ export default function SPVDocumentModal({
                   color="secondary"
                   className="button declineBtn"
                   onClick={handleClose}
+                  // disabled={loading}
                 >
                   {requireSecondSigChecked ? 'We' : 'I'} Decline
                 </Button>
