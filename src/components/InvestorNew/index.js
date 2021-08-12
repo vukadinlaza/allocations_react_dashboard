@@ -35,7 +35,7 @@ export default function InvestorNew({ push, setNewUser }) {
   const submit = () => {
     createInvestor({
       variables: { user: investor },
-      onCompleted: toast.success('Success! Investor created!'),
+      onCompleted: toast.success('Success! Investor created'),
     });
   };
 

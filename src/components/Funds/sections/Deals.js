@@ -88,7 +88,7 @@ const Deals = ({ classes, filter, tableName }) => {
   const [refetchCount, setRefetchCount] = useState(0); // ServerTable needs a change in this to refetch
   const [updateDeal] = useMutation(UPDATE_DEAL, {
     onCompleted: () => {
-      toast.success('Deal updated successfully.');
+      toast.success('Deal updated successfully');
       handleClose();
       setRefetchCount((prev) => prev + 1);
     },
@@ -111,7 +111,7 @@ const Deals = ({ classes, filter, tableName }) => {
 
   const handleUpdateDeal = () => {
     if (multiple < 0) {
-      toast.error(`Multiple can't be negative`);
+      toast.error(`Sorry! Multiple can not be a negative`);
       return;
     }
     updateDeal({

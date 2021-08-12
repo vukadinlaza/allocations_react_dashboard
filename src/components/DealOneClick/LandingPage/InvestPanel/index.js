@@ -24,7 +24,7 @@ function InvestPanel({ deal, deal_slug, organization }) {
         'User First Name': userProfile.first_name || 'N/A',
       }),
     });
-    return toast.success('Successfully added to the waitlist!');
+    return toast.success('Success! You have been added to the waitlist');
   };
 
   const {
