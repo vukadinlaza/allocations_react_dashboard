@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMutation, useQuery, gql } from '@apollo/client';
+import { useMutation, gql } from '@apollo/client';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import _ from 'lodash';
@@ -57,21 +57,28 @@ const headers = [
     alignHeader: true,
   },
   {
-    value: 'sideLetterStatus',
+    value: 'status',
     label: 'STATUS',
-    type: 'sideLetterStatus',
+    type: 'status',
     isSortable: true,
     align: 'center',
   },
+  // {
+  //   value: 'sideLetterStatus',
+  //   label: 'STATUS',
+  //   type: 'sideLetterStatus',
+  //   isSortable: true,
+  //   align: 'center',
+  // },
   { value: 'dateSigned', label: 'DATE SIGNED', isSortable: true, align: 'left', alignHeader: true },
-  {
-    value: 'reminder',
-    label: 'SEND REMINDER',
-    type: 'reminder',
-    align: 'left',
-    alignHeader: true,
-    keyNotInData: true,
-  },
+  // {
+  //   value: 'reminder',
+  //   label: 'SEND REMINDER',
+  //   type: 'reminder',
+  //   align: 'left',
+  //   alignHeader: true,
+  //   keyNotInData: true,
+  // },
   {
     value: 'viewDoc',
     label: 'VIEW DOCUMENT',
@@ -138,6 +145,12 @@ const DocumentsTab = ({ classes, data, refetch }) => {
             <Typography>{_.truncate(row[headerValue], { length: 25 })}</Typography>
           </HtmlTooltip>
         );
+
+      case 'status':
+        if (!row.dateSigned) {
+          return <Badge badgeContent="Incomplete" color="primary" />;
+        }
+        return <Badge badgeContent="Complete" color="secondary" />;
 
       case 'sideLetterStatus':
         if (row[headerValue] === 'pending') {
