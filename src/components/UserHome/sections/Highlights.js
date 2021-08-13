@@ -87,7 +87,7 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
   const avgMultiple = multiplesTotal / data.length;
 
   return (
-    <Grid container spacing={3} className={classes.section}>
+    <Grid container spacing={3} className={classes.section} style={{ paddingTop: '25px' }}>
       <Grid item xs={12} lg={4}>
         <SimpleBox
           size="third"

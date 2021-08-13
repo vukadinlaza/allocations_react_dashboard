@@ -28,15 +28,6 @@ const headers = [
     keyNotInData: true,
   },
   {
-    label: 'DATE SIGNED',
-    value: 'dateSigned',
-    type: 'date',
-    isSortable: true,
-    align: 'right',
-    alignHeader: true,
-    keyNotInData: true,
-  },
-  {
     label: 'VIEW/SIGN DOCUMENT',
     value: 'links',
     type: 'links',
@@ -102,6 +93,7 @@ const UserDocuments = ({ classes, data }) => {
             style={{
               color: getStatusColors(row.status).color,
               backgroundColor: getStatusColors(row.status).backgroundColor,
+              marginLeft: 'auto',
             }}
           >
             {row[headerValue]}

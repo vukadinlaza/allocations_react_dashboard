@@ -106,7 +106,7 @@ const FundsInvestments = ({ classes, data, showInvestments }) => {
   };
 
   return (
-    <div className={classes.tableContainer}>
+    <div className={classes.tableContainer} style={{ paddingTop: '25px' }}>
       <AllocationsTable data={data} headers={headers} getCellContent={getCellContent} />
     </div>
   );

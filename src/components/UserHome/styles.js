@@ -186,7 +186,6 @@ const styles = (theme) => ({
   tableContainer: {
     maxWidth: 'calc(100vw - 300px)',
     minWidth: '175px',
-    paddingTop: '40px',
   },
   tableHeader: {
     textTransform: 'uppercase !important',
