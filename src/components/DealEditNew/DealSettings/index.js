@@ -44,7 +44,7 @@ const RM_LOGO = gql`
 function DealSettings({ formData, setFormData, refetch }) {
   const [addDoc] = useMutation(ADD_DOC, {
     onCompleted: () => {
-      toast.success('Your document has been added');
+      toast.success('Success! Your document has been added');
       refetch();
     },
   });
