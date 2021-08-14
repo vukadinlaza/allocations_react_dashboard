@@ -104,7 +104,6 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
                 (_.sumBy(data, 'amount') * (avgMultiple === 0 ? 1 : avgMultiple)).toFixed(0),
               )}
             </Typography>
-            <Typography className={classes.footerData}>0% Realized | 100% Unrealized</Typography>
           </div>
         </SimpleBox>
       </Grid>
@@ -138,7 +137,7 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
           </div>
         </SimpleBox>
       </Grid>
-      <Grid item lg={6}>
+      <Grid item xs={12} lg={6}>
         <ChartBox title="Portfolio Overview" info="Explanation">
           <div className={classes.chartContainer}>
             <DoughnutChart series={formatDoughnutSeries(series)} />
@@ -155,7 +154,7 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
           </div>
         </ChartBox>
       </Grid>
-      <Grid item lg={6}>
+      <Grid item xs={12} lg={6}>
         <ChartBox title="Value" info="Explanation">
           <LineChart dataset={steppedChartData} />
         </ChartBox>
