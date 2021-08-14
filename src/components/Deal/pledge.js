@@ -40,7 +40,7 @@ export default ({ investment, refetch, allowEdit }) => {
       variables: {
         investment: { _id: investment._id, amount: Number(invAmount) },
       },
-      onCompleted: toast.success('Success! Investment Amount Updated!'),
+      onCompleted: toast.success('Success! Investment amount has been updated'),
     });
   };
 
