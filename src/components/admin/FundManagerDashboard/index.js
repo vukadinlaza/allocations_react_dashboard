@@ -20,7 +20,6 @@ import { FlatBox } from './widgets';
 import { phone, tablet } from '../../../utils/helpers';
 import { useViewport, useFetch } from '../../../utils/hooks';
 import { useAuth } from '../../../auth/useAuth';
-import './FundManagerDashboard.scss';
 
 import AllocationsLoader from '../../utils/AllocationsLoader';
 import Loader from '../../utils/Loader';
@@ -183,6 +182,27 @@ const styles = (theme) => ({
     padding: '2px 12px',
     borderRadius: '20px',
   },
+  mainTitle: {
+    fontSize: '28px',
+    fontWeight: '700',
+    padding: '20px 0px',
+    [theme.breakpoints.down(tablet)]: {
+      display: 'none',
+    },
+  },
+  mainTitleContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    margin: '0',
+    padding: '0 0 25px 0',
+    [theme.breakpoints.down(tablet)]: {
+      justifyContent: 'center',
+    },
+    [theme.breakpoints.down(phone)]: {
+      flexDirection: 'column',
+    },
+  },
   modalBackground: {
     position: 'fixed',
     left: '0',
@@ -259,7 +279,7 @@ const styles = (theme) => ({
   },
   section: {
     width: '100%',
-    padding: '40px',
+    padding: '40px 0',
     margin: '0px',
     [theme.breakpoints.down(phone)]: {
       padding: '10px',
@@ -718,8 +738,8 @@ const FundManagerDashboard = ({ classes, history }) => {
       {openTooltip && (
         <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} />
       )}
-      <div className="mainTitleContainer" id="main-title-container">
-        <Typography className="mainTitle">
+      <div className={classes.mainTitleContainer} id="main-title-container">
+        <Typography className={classes.mainTitle}>
           {userProfile?.first_name
             ? `Hello ${userProfile?.first_name}, here are your Funds.`
             : orgDealsData?.organization?.name}
