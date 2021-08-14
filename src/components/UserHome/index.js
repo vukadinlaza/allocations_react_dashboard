@@ -136,9 +136,6 @@ const UserHome = ({ classes }) => {
 
   const createDealsATFilter = () => {
     if (!userFunds.length) return `({Deal Name}="Invalid deal")`;
-    if (!investorTabs.includes('Fund Investments')) {
-      investorTabs.splice(2, 0, 'Fund Investments');
-    }
     const dealsFilters = userFunds
       .map((fund) => `({Deal Name}="${encodeURIComponent(fund.company_name || 'Invalid name')}")`)
       .join(', ');
@@ -194,9 +191,14 @@ const UserHome = ({ classes }) => {
     setTabIndex(newValue);
   };
 
-  const showInvestments = (fund) => {
+  const showInvestments = ({ investment }) => {
     setSearchTerm('');
-    setFundInvestments(fund);
+    if (!investment) {
+      setFundInvestments({});
+    } else {
+      const fund = funds.find((f) => f._id === investment.deal._id);
+      setFundInvestments(fund);
+    }
   };
 
   const handleSearch = (e) => {
@@ -216,17 +218,15 @@ const UserHome = ({ classes }) => {
         );
 
       case 1:
-        return <UserInvestments data={userProfile.investments} classes={classes} />;
+        return (
+          <UserInvestments
+            data={userProfile.investments}
+            classes={classes}
+            showInvestments={showInvestments}
+          />
+        );
 
       case 2:
-        if (investorTabs.includes('Fund Investments')) {
-          return (
-            <FundsInvestments data={funds} classes={classes} showInvestments={showInvestments} />
-          );
-        }
-        return <UserDocuments data={userProfile} classes={classes} />;
-
-      case 3:
         return <UserDocuments data={userProfile} classes={classes} />;
 
       default:
@@ -260,7 +260,7 @@ const UserHome = ({ classes }) => {
           <span
             className={classes.backButton}
             onClick={() => showInvestments({})}
-          >{`< Back to Funds`}</span>
+          >{`< Back to Investments`}</span>
           <div className={classes.searchContainer}>
             <TextField
               label="Search"
