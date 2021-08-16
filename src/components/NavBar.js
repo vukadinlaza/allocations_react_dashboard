@@ -13,7 +13,7 @@ import { useHistory } from 'react-router-dom';
 import { NavItem, UncontrolledDropdown } from 'reactstrap';
 import { makeStyles } from '@material-ui/core/styles';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import Loader from './utils/Loader';
+import AllocationsLoader from './utils/AllocationsLoader';
 
 import { useAuth } from '../auth/useAuth';
 
@@ -96,7 +96,7 @@ export function Auth0Profile({ user, logoutWithRedirect }) {
   if (!userProfile.email)
     return (
       <div>
-        <Loader />
+        <AllocationsLoader />
       </div>
     );
 

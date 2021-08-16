@@ -111,7 +111,7 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
     setErrors(validation);
 
     if (validation.length > 0) {
-      return toast.warning('Incomplete Form');
+      return toast.warning('Incomplete form');
     }
 
     const payload = { ...formData };

@@ -54,7 +54,6 @@ const styles = (theme) => ({
     color: '#2A2B54',
     fontWeight: 'bold',
     marginBottom: '15px',
-    padding: '0 40px',
     [theme.breakpoints.down('1280')]: {
       justifyContent: 'center',
       padding: '0 22px',

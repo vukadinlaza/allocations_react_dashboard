@@ -12,6 +12,7 @@ import * as serviceWorker from './serviceWorker';
 
 import theme from './theme';
 import './index.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 Bugsnag.start({
   apiKey: 'b6fcaf96aefe9b327e7db6e6d6178a2c',

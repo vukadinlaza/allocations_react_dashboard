@@ -110,7 +110,7 @@ const SidebarDrawer = ({
                 <ListItemIcon className="icon">
                   <AccountBalanceRoundedIcon />
                 </ListItemIcon>
-                <ListItemText primary="Funds Admin" />
+                <ListItemText primary="Funds" />
               </ListItem>
             </div>
             <AdminLinks location={location} />

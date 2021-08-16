@@ -293,7 +293,9 @@ export default function Sidebar(props) {
                 </Drawer>
               </Hidden>
             </nav>
-            <main className="content">{props.children}</main>
+            <main className="content" style={{ background: 'white', height: '100vh' }}>
+              {props.children}
+            </main>
           </div>
         </>
       )}
