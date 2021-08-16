@@ -18,9 +18,9 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
-import './style.scss';
 import countries from 'country-region-data';
 import Typography from '@material-ui/core/Typography';
+import useStyles from './styles';
 import Loader from '../../utils/Loader';
 import { useAuth } from '../../../auth/useAuth';
 
@@ -249,10 +249,11 @@ export default function InvestorEditForm({
 }
 
 export function PassportUploader({ investor, setInvestor }) {
+  const classes = useStyles();
   if (investor.passport) {
     return (
       <Paper>
-        <div className="file-uploader">
+        <div className={classes.fileUploader}>
           <ListItem>
             <ListItemText primary="ID for KYC" secondary="passport / drivers license" />
             <ListItemSecondaryAction>
@@ -358,17 +359,17 @@ const statusOptions = {
 };
 
 export function AccreditedInvestorStatus({ investor, handleChange, errors }) {
+  const classes = useStyles();
   const { investor_type } = investor;
   if (!investor_type) return null;
 
   return (
     <FormControl
       required
-      className="accredited-investor-status"
+      className={classes.accreditedInvestorStatus}
       error={errors.includes('accredited_investor_status')}
       variant="outlined"
       fullWidth
-      style={{ width: '100%' }}
     >
       <InputLabel htmlFor="outlined-age-native-simple">Accredited Investor Type</InputLabel>
       <Select

@@ -12,18 +12,27 @@ import {
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import countries from 'country-region-data';
 import { UsaStates } from 'usa-states';
-
-import './styles.scss';
 import { AccreditedInvestorStatus } from '../../../forms/InvestorEdit';
+import { PanelContainer, PanelLabel } from '../../../Panel';
+import useStyles from './styles';
 
 const usStates = new UsaStates();
 const countryNames = countries.map((c) => c.countryName);
 const stateNames = usStates.states.map((s) => s.name);
 
-function PersonalInformation({ investor, setInvestor, errors, org, handleSecondSig }) {
+function PersonalInformation({
+  investor,
+  setInvestor,
+  errors,
+  org,
+  handleSecondSig,
+  isFromModal = false,
+}) {
   const [mailingDifferent, toggleMailingDifferent] = useState(false);
   const [entityDesignation, setEntityDesignation] = useState('');
   const [individualDesignation, setIndividualDesignation] = useState('');
+  const classes = useStyles();
+
   const handleChange = (prop) => (e, newValue) => {
     if (e) {
       e.persist();
@@ -66,7 +75,7 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
     }
 
     if (prop === 'investor_type') {
-      handleSecondSig(e.target.value);
+      if (handleSecondSig) handleSecondSig(e.target.value);
 
       return setInvestor((prev) => ({
         ...prev,
@@ -98,12 +107,12 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
   countryNames.unshift('United States');
 
   return (
-    <section className="PersonalInformationPanel">
-      <p className="section-label">Personal Information</p>
+    <PanelContainer isFromModal={isFromModal}>
+      <PanelLabel label="Personal Information" isFromModal={isFromModal} />
 
       {/* Investor Type */}
       <FormControl
-        className="personal-information-input"
+        className={classes.root}
         required
         error={errors.includes('investor_type')}
         variant="outlined"
@@ -122,7 +131,7 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
 
       {/* Legal Name */}
       <TextField
-        className="personal-information-input"
+        className={classes.root}
         variant="outlined"
         required
         placeholder="Legal name of entity or individual"
@@ -132,9 +141,8 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
       />
 
       {/* Country */}
-      <FormControl className="country-input" required variant="outlined">
+      <FormControl className={classes.root} required variant="outlined">
         <Autocomplete
-          className="country-select"
           value={investor.country || ''}
           onChange={(event, newInputValue) => handleChange('country')(event, newInputValue)}
           inputValue={investor.country_search || ''}
@@ -156,13 +164,12 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
       </FormControl>
       {investor.country === 'United States' && (
         <FormControl
-          className="state-input"
+          className={classes.root}
           required
           variant="outlined"
           disabled={!investor.country || get(investor, 'country') !== 'United States'}
         >
           <Autocomplete
-            className="state-select"
             value={investor.state || ''}
             onChange={(event, newInputValue) => handleChange('state')(event, newInputValue)}
             inputValue={investor.state_search || ''}
@@ -191,7 +198,7 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
       {investor.investor_type && investor.investor_type !== 'individual' && org !== 'irishangels' && (
         <>
           <TextField
-            className="personal-information-input"
+            className={classes.root}
             variant="outlined"
             placeholder="Signer's Full Name"
             error={errors.includes('fullName')}
@@ -199,7 +206,7 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
             onChange={handleChange('fullName')}
           />
           <TextField
-            className="personal-information-input"
+            className={classes.root}
             variant="outlined"
             placeholder="Title"
             error={errors.includes('title')}
@@ -213,13 +220,13 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
 
       {org === 'irishangels' && (
         <>
-          <Typography variant="subtitle2" className="accreditation-notice">
+          <Typography variant="subtitle2" className={classes.accreditationNotice}>
             Please initial below to certify that you are still an Accredited Investor, per SEC
             criteria, as detailed in Exhibit D of the IrishAngels Membership Agreement previously
             executed by you.
           </Typography>
           <TextField
-            className="personal-information-input"
+            className={classes.root}
             variant="outlined"
             placeholder="Initials"
             error={errors.includes('initials')}
@@ -232,7 +239,7 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
       {investor.investor_type && investor.investor_type === 'entity' && org === 'irishangels' && (
         <>
           <TextField
-            className="personal-information-input"
+            className={classes.root}
             variant="outlined"
             placeholder="Enter your name"
             error={errors.includes('fullName')}
@@ -240,7 +247,7 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
             onChange={handleChange('fullName')}
           />
           <TextField
-            className="personal-information-input"
+            className={classes.root}
             variant="outlined"
             placeholder="EIN (or SSN for Revokable Trusts)"
             error={errors.includes('ein')}
@@ -250,7 +257,7 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
           />
 
           <FormControl
-            className="personal-information-input"
+            className={classes.root}
             required
             error={errors.includes('entity_designation')}
             variant="outlined"
@@ -276,7 +283,7 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
           </FormControl>
 
           <TextField
-            className="personal-information-input"
+            className={classes.root}
             variant="outlined"
             placeholder="Title"
             error={errors.includes('title')}
@@ -291,7 +298,7 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
       {investor.investor_type && investor.investor_type === 'individual' && org === 'irishangels' && (
         <>
           <TextField
-            className="personal-information-input numbers"
+            className={`${classes.root} numbers`}
             variant="outlined"
             placeholder="Social Security Number"
             error={errors.includes('ssn')}
@@ -305,7 +312,7 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
           />
 
           <FormControl
-            className="personal-information-input"
+            className={classes.root}
             required
             error={errors.includes('investor_type')}
             variant="outlined"
@@ -331,12 +338,11 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
           required
           error={errors.includes('investor_type')}
           variant="outlined"
-          className="address-container"
+          className={classes.addressContainer}
         >
-          <label className="address-input-label" htmlFor="home-address">
+          <label className={classes.label} htmlFor="home-address">
             Home Address:
             <TextField
-              className="address-input"
               variant="outlined"
               placeholder="Address, City, State, Zip Code"
               error={errors.includes('home_address')}
@@ -346,10 +352,9 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
             />
           </label>
           {mailingDifferent && (
-            <label className="address-input-label" htmlFor="mailing-address">
+            <label className={classes.label} htmlFor="mailing-address">
               Mailing Address:
               <TextField
-                className="address-input"
                 variant="outlined"
                 placeholder="Address, City, State, Zip Code"
                 error={errors.includes('mailing_address')}
@@ -359,7 +364,7 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
               />
             </label>
           )}
-          <label className="same-mailing-checkbox" htmlFor="mailing-address-checkbox">
+          <label style={{ margin: 0, fontSize: '16px' }} htmlFor="mailing-address-checkbox">
             <Checkbox
               onChange={() => toggleMailingDifferent((t) => !t)}
               value="checkedA"
@@ -372,11 +377,11 @@ function PersonalInformation({ investor, setInvestor, errors, org, handleSecondS
         </FormControl>
       )}
 
-      <p className="information-notice">
+      <p className={classes.informationNotice}>
         Required by United States banking laws. This information is transmitted securely and will
         never be used for any purpose beyond executing your investment.
       </p>
-    </section>
+    </PanelContainer>
   );
 }
 
