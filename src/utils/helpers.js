@@ -34,3 +34,8 @@ export const nestedSort = (a, b, key, order = 'asc') => {
   if (firstValue > secondValue) return 1;
   return 0;
 };
+
+export const openInNewTab = ({ url }) => {
+  const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+  if (newWindow) newWindow.opener = null;
+};

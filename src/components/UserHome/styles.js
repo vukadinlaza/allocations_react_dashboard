@@ -4,7 +4,7 @@ const styles = (theme) => ({
   backButton: {
     cursor: 'pointer',
     fontWeight: '600',
-    width: '8em',
+    width: '11em',
     '&:hover': {
       color: '#205df5',
     },
@@ -186,7 +186,10 @@ const styles = (theme) => ({
   tableContainer: {
     maxWidth: 'calc(100vw - 300px)',
     minWidth: '175px',
-    paddingTop: '40px',
+    [theme.breakpoints.down(phone)]: {
+      maxWidth: 'none',
+      width: '100%',
+    },
   },
   tableHeader: {
     textTransform: 'uppercase !important',

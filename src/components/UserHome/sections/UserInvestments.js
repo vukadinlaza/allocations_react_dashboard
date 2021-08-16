@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
 import moment from 'moment';
-import { Tooltip, TextField, InputAdornment } from '@material-ui/core';
-import StorefrontIcon from '@material-ui/icons/Storefront';
-import Icon from '@material-ui/core/Icon';
-import PieChartIcon from '@material-ui/icons/PieChart';
+import { TextField, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import AllocationsTable from '../../utils/AllocationsTable';
 import { nWithCommas } from '../../../utils/numbers';
-import { titleCase } from '../../../utils/helpers';
+import { titleCase, openInNewTab } from '../../../utils/helpers';
+import MoreMenu from '../../utils/MoreMenu';
 
 const headers = [
-  { label: 'DEAL', value: 'deal.company_name', isSortable: true, keyNotInData: true },
+  {
+    label: 'DEAL',
+    value: 'deal.company_name',
+    isSortable: true,
+    keyNotInData: true,
+    align: 'left',
+    alignHeader: true,
+  },
   {
     label: 'STATUS',
     value: 'status',
@@ -34,7 +39,7 @@ const headers = [
     value: 'amount',
     type: 'amount',
     isSortable: true,
-    align: 'right',
+    align: 'left',
     alignHeader: true,
   },
   {
@@ -43,7 +48,7 @@ const headers = [
     type: 'multiple',
     isSortable: true,
     keyNotInData: true,
-    align: 'right',
+    align: 'left',
     alignHeader: true,
   },
   {
@@ -51,7 +56,7 @@ const headers = [
     value: 'estimatedValue',
     type: 'estimated',
     isSortable: true,
-    align: 'right',
+    align: 'left',
     alignHeader: true,
     keyNotInData: true,
   },
@@ -60,10 +65,10 @@ const headers = [
     value: '_id',
     type: 'date',
     isSortable: true,
-    align: 'right',
+    align: 'left',
     alignHeader: true,
   },
-  { label: 'LINKS', value: 'links', type: 'links', isSortable: false, keyNotInData: true },
+  { label: 'ACTIONS', value: 'actions', type: 'actions', isSortable: false, keyNotInData: true },
 ];
 
 const getStatusColors = (status) => {
@@ -71,9 +76,9 @@ const getStatusColors = (status) => {
     case 'complete':
       return { backgroundColor: '#C9EEC8', color: '#58CE46' };
     case 'wired':
-      return { backgroundColor: '#FFE9BF', color: '#FFA700' };
+      return { backgroundColor: '#C9EEC8', color: '#58CE46' };
     case 'signed':
-      return { backgroundColor: '#c8a1fc', color: '#7d20f7' };
+      return { backgroundColor: '#FFE9BF', color: '#FFA700' };
     case 'pledged':
       return { backgroundColor: '#f99fc2', color: '#f92576' };
     case 'closed':
@@ -85,12 +90,36 @@ const getStatusColors = (status) => {
   }
 };
 
-const UserInvestments = ({ classes, data }) => {
+const UserInvestments = ({ classes, data, showInvestments }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const getCellContent = (type, row, headerValue) => {
     const { amount } = row;
     const multiple = Number(_.get(row, 'deal.dealParams.dealMultiple', '1'));
+    const rowOrg = row.deal?.organization;
+    const actions = [
+      {
+        label: 'Deal Page',
+        onItemClick: openInNewTab,
+        clickArgs: { url: `/deals/${rowOrg.slug}/${row.deal.slug}` },
+      },
+      {
+        label: 'Next Steps',
+        onItemClick: openInNewTab,
+        clickArgs: {
+          url: `/next-steps/${rowOrg.slug}/${row.deal.slug}?investmentId=${row._id}`,
+        },
+      },
+      { label: 'Capital Calls', onItemClick: () => console.log('Capital') },
+    ];
+    if (row.deal.investmentType === 'fund') {
+      const fundsInvestmentsAction = {
+        label: `Fund's Investments`,
+        onItemClick: showInvestments,
+        clickArgs: { investment: row },
+      };
+      actions.splice(2, 0, fundsInvestmentsAction);
+    }
 
     switch (type) {
       case 'type':
@@ -115,36 +144,8 @@ const UserInvestments = ({ classes, data }) => {
         return `$${nWithCommas(amount * multiple)}`;
       case 'date':
         return moment(new Date(parseInt(row._id.substring(0, 8), 16) * 1000)).format('MM/DD/YYYY');
-      case 'links':
-        return (
-          <div className={classes.links}>
-            <Tooltip title="Deal Page">
-              <a
-                href={`/deals/${row.deal.organization.slug}/${row.deal.slug}`}
-                className={classes.buttonLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <StorefrontIcon className={classes.button} />
-              </a>
-            </Tooltip>
-            <Tooltip title="Next Steps">
-              <a
-                href={`/next-steps/${row.deal.organization.slug}/${row.deal.slug}?investmentId=${row._id}`}
-                className={classes.buttonLink}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Icon className={classes.buttonIcon}>fact_check</Icon>
-              </a>
-            </Tooltip>
-            <Tooltip title="Capital Calls">
-              <span className={classes.buttonLink}>
-                <PieChartIcon className={classes.button} onClick={() => console.log('here')} />
-              </span>
-            </Tooltip>
-          </div>
-        );
+      case 'actions':
+        return <MoreMenu menuItems={actions} />;
       default:
         return <div />;
     }
@@ -154,8 +155,10 @@ const UserInvestments = ({ classes, data }) => {
     setSearchTerm(e.target.value);
   };
 
-  const dataCopy = data.filter((inv) =>
-    inv.deal.company_name.toUpperCase().includes(searchTerm.toUpperCase()),
+  const dataCopy = data.filter(
+    (inv) =>
+      inv.status !== 'invited' &&
+      inv.deal.company_name.toUpperCase().includes(searchTerm.toUpperCase()),
   );
 
   return (
