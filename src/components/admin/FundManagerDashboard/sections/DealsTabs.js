@@ -154,8 +154,7 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
             )}
           </div>
         }
-        // eslint-disable-next-line react/no-array-index-key
-        key={`tab-${index}`}
+        key={`${deal._id}`}
         classes={{
           root: classes.tab,
           selected: classes.selectedTab,
