@@ -110,7 +110,7 @@ const UserInvestments = ({ classes, data, showInvestments }) => {
           url: `/next-steps/${rowOrg.slug}/${row.deal.slug}?investmentId=${row._id}`,
         },
       },
-      { label: 'Capital Calls', onItemClick: () => console.log('Capital') },
+      // { label: 'Capital Calls', onItemClick: () => console.log('Capital') },
     ];
     if (row.deal.investmentType === 'fund') {
       const fundsInvestmentsAction = {
