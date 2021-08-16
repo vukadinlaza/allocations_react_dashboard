@@ -240,7 +240,7 @@ function DealEditNew() {
   const { data, refetch } = useQuery(GET_DEAL, { variables: { id, slug: organization } });
 
   const [updateDeal] = useMutation(UPDATE_DEAL, {
-    onCompleted: () => toast.success('Deal updated successfully.'),
+    onCompleted: () => toast.success('Deal updated successfully'),
   });
 
   const [deleteDeal] = useMutation(DELETE_DEAL, {

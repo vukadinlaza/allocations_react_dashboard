@@ -78,7 +78,7 @@ export default function InvestorEditForm({
       if (userProfile.email !== investor.email) {
         logoutWithRedirect();
       } else {
-        toast.success('Success');
+        toast.success('Success!');
       }
     },
   });

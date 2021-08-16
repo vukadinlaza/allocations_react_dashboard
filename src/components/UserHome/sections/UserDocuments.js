@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Tooltip, TextField, InputAdornment } from '@material-ui/core';
+import { TextField, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import StorefrontIcon from '@material-ui/icons/Storefront';
 import AllocationsTable from '../../utils/AllocationsTable';
+import MoreMenu from '../../utils/MoreMenu';
+import { openInNewTab } from '../../../utils/helpers';
 
 const headers = [
   {
@@ -28,18 +29,9 @@ const headers = [
     keyNotInData: true,
   },
   {
-    label: 'DATE SIGNED',
-    value: 'dateSigned',
-    type: 'date',
-    isSortable: true,
-    align: 'right',
-    alignHeader: true,
-    keyNotInData: true,
-  },
-  {
-    label: 'VIEW/SIGN DOCUMENT',
-    value: 'links',
-    type: 'links',
+    label: 'ACTIONS',
+    value: 'actions',
+    type: 'actions',
     isSortable: false,
     keyNotInData: true,
   },
@@ -92,6 +84,13 @@ const UserDocuments = ({ classes, data }) => {
   }, [data]);
 
   const getCellContent = (type, row, headerValue) => {
+    const actions = [
+      {
+        label: 'View Document',
+        onItemClick: openInNewTab,
+        clickArgs: { url: `${row.link.includes('http') ? row.link : `//${row.link}`}` },
+      },
+    ];
     switch (type) {
       case 'documentName':
         return row.documentName.split('.')[0].replaceAll('_', ' ');
@@ -102,6 +101,7 @@ const UserDocuments = ({ classes, data }) => {
             style={{
               color: getStatusColors(row.status).color,
               backgroundColor: getStatusColors(row.status).backgroundColor,
+              marginLeft: 'auto',
             }}
           >
             {row[headerValue]}
@@ -111,25 +111,8 @@ const UserDocuments = ({ classes, data }) => {
         // return moment(new Date(parseInt(row._id.substring(0, 8), 16) * 1000))
         // .format('MM/DD/YYYY');
         return 'Invalid Date';
-      case 'links':
-        return (
-          <div className={classes.links}>
-            {row.link ? (
-              <Tooltip title="Go to Document">
-                <a
-                  href={`${row.link.includes('http') ? row.link : `//${row.link}`}`}
-                  className={classes.buttonLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <StorefrontIcon className={classes.button} />
-                </a>
-              </Tooltip>
-            ) : (
-              ''
-            )}
-          </div>
-        );
+      case 'actions':
+        return <MoreMenu menuItems={actions} />;
       default:
         return <div />;
     }
