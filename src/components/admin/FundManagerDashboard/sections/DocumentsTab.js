@@ -208,7 +208,7 @@ const DocumentsTab = ({ classes, data, refetch }) => {
         const splitPath = doc.path.split('/')[2];
         const containsId = splitPath.match(/\d{13}/);
 
-        if (containsId !== null) {
+        if (containsId) {
           documentsData.push({
             ...investment,
             doc: titleCase(splitPath.slice(14)),
