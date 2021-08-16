@@ -114,7 +114,7 @@ function EditOrg({ orgData, refetch }) {
                 onClick={() =>
                   updateOrganization({
                     variables: { organization },
-                    onCompleted: toast.success('Success'),
+                    onCompleted: toast.success('Success!'),
                   })
                 }
                 color="primary"

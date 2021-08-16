@@ -18,7 +18,7 @@ const DeleteViewedUser = ({ dealId, investorId, handleUpdate = false }) => {
         handleUpdate.refetch();
         handleUpdate.closeModal();
       }
-      toast.success('Investment Removed');
+      toast.success('Success! Investment deleted');
     },
   });
   return (

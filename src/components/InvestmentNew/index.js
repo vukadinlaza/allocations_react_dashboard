@@ -70,7 +70,7 @@ export default function InvestmentNew() {
             deal_id: deal._id,
           },
         },
-        onCompleted: toast.success('Success'),
+        onCompleted: toast.success('Success!'),
       });
       setInvestment({ amount: '' });
     }

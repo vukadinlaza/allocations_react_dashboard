@@ -35,9 +35,9 @@ const KYCModal = ({
           (doc) => doc.documentName.includes('W-9') || doc.documentName.includes('W-8'),
         )
       ) {
-        toast.success('Success! Tax form completed.');
+        toast.success('Success! Tax form completed');
       } else {
-        toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com');
+        toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
       }
       setOpen(false);
       setShowTaxAsCompleted(true);
@@ -46,7 +46,7 @@ const KYCModal = ({
       }, 3000);
     },
     onError: () => {
-      toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com');
+      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
     },
   });
 

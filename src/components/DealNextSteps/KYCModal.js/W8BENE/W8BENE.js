@@ -176,7 +176,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
     setErrors(validation);
 
     if (validation.length > 0) {
-      return toast.warning('Incomplete Form');
+      return toast.warning('Incomplete form');
     }
 
     // clean up ID's from data for docspring template

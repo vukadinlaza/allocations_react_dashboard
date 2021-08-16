@@ -231,7 +231,7 @@ const FundManagerDashboard = ({ classes, history }) => {
   const handleLinkCopy = () => {
     if (orgSlug && dealData?.slug) {
       navigator.clipboard.writeText(window.origin + (`/deals/${orgSlug}/${dealData.slug}` || ''));
-      toast.success('Copied deal link to clipboard.');
+      toast.info('Copied deal link to clipboard');
     }
   };
 
