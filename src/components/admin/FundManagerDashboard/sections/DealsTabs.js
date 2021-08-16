@@ -128,7 +128,7 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
     setTitleContainer(titleCont);
   }, []);
 
-  const mappedTabs = deals.map((deal, index) => {
+  const mappedTabs = deals.map((deal) => {
     const isFund = deal.investmentType === 'fund';
     const closed = deal.status === 'closed';
     return (
