@@ -203,7 +203,7 @@ const DocumentsTab = ({ classes, data, refetch }) => {
 
   // required me to store as variable. "No unused expressions"
   const unusedVariable = data?.deal?.investments?.forEach((investment) => {
-    if (investment.documents.length >= 1) {
+    if (investment.documents.length) {
       investment.documents.forEach((doc) => {
         const splitPath = doc.path.split('/')[2];
         const containsId = splitPath.match(/\d{13}/);
