@@ -162,7 +162,7 @@ export default function Profile() {
     );
   const acctUsers = data?.accountUsers || [];
   return (
-    <>
+    <div className="Profile">
       <InvestorEditForm
         investor={investor}
         userProfile={userProfile}
@@ -203,7 +203,7 @@ export default function Profile() {
         updateEntity={updateEntity}
         deleteEntity={deleteEntity}
       />
-    </>
+    </div>
   );
 }
 

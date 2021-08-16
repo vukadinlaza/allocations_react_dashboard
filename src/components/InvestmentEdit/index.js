@@ -91,11 +91,11 @@ export default function InvestmentEdit({
   const [createInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT);
   const [deleteInvestment, {}] = useMutation(destroy, {
     onCompleted: () => {
-      toast.success('Success! Investment Deleted.');
+      toast.success('Success! Investment deleted');
       setEditInvestmentModal(false);
     },
     onError: (e) => {
-      toast.error('Looks like we encountered an error.');
+      toast.error('Looks like we encountered an error');
     },
   });
 
@@ -283,10 +283,10 @@ function Doc({ doc, investment, refetch }) {
     variables: { file, investment_id: investment._id },
     onCompleted: () => {
       refetch();
-      toast.success('File has been deleted');
+      toast.success('Success! File has been deleted');
     },
     onError: () => {
-      toast.error('Looks like we encountered an error.');
+      toast.error('Looks like we encountered an error');
     },
   });
   const rmDoc = () => {

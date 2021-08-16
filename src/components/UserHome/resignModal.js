@@ -112,7 +112,7 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
     onCompleted: () => {
       setTimeout(() => {
         refetch();
-        toast.success('Investment Updated.');
+        toast.success('Success! Investment updated');
         setShowResignModal(false);
         setShowDocs(false);
       }, 1000);
@@ -179,7 +179,7 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
     const validation = validate(investor);
     setErrors(validation);
     if (validation.length > 0) {
-      return toast.warning('Please complete the form before continuing.');
+      return toast.warning('Please complete the form before continuing');
     }
     const ip = await getClientIp();
     const payload = {

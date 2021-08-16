@@ -67,7 +67,7 @@ const IdentityUpload = () => {
       variables: {
         investor: pick(investor, ['_id', 'email', 'passport']),
       },
-      onCompleted: toast.success('Success'),
+      onCompleted: toast.success('Success!'),
     });
   };
 

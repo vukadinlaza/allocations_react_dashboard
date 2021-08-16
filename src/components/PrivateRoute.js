@@ -3,7 +3,7 @@ import { Route, useLocation } from 'react-router-dom';
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 import queryString from 'query-string';
 import base64 from 'base-64';
-import Loader from './utils/Loader';
+import AllocationsLoader from './utils/AllocationsLoader';
 
 const connection = process.env.NODE_ENV === 'production' ? 'theventurecollective' : 'tvc';
 const PrivateRoute = ({ component, ...args }) => {
@@ -21,7 +21,7 @@ const PrivateRoute = ({ component, ...args }) => {
   return (
     <Route
       component={withAuthenticationRequired(component, {
-        onRedirecting: () => <Loader />,
+        onRedirecting: () => <AllocationsLoader fullHeight />,
         loginOptions: {
           connection: tvc,
         },

@@ -44,19 +44,19 @@ const RM_LOGO = gql`
 function DealSettings({ formData, setFormData, refetch }) {
   const [addDoc] = useMutation(ADD_DOC, {
     onCompleted: () => {
-      toast.success('Doc has been added.');
+      toast.success('Success! Your document has been added');
       refetch();
     },
   });
   const [rmDoc] = useMutation(RM_DOC, {
     onCompleted: () => {
-      toast.success('Deal settings have been updated.');
+      toast.success('Deal settings have been updated');
       refetch();
     },
   });
   const [rmDealLogo] = useMutation(RM_LOGO, {
     onCompleted: () => {
-      toast.success('Deal cover image has been deleted.');
+      toast.success('Deal cover image has been deleted');
       refetch();
     },
   });
@@ -137,7 +137,7 @@ function DealSettings({ formData, setFormData, refetch }) {
 
   const handleLinkCopy = () => {
     navigator.clipboard.writeText(window.origin + (formData.appLink || ''));
-    toast.success('Copied deal link to clipboard.');
+    toast.success('Success! Copied deal link to clipboard');
   };
 
   const handleFormChange = ({ target }) => {
@@ -168,7 +168,7 @@ function DealSettings({ formData, setFormData, refetch }) {
   function AddDealLogo() {
     const [addLogo, { data, error }] = useMutation(ADD_LOGO, {
       onCompleted: () => {
-        toast.success('Logo has been added.');
+        toast.success('Logo has been added');
         refetch();
       },
     });

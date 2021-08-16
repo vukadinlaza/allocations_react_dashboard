@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter, useRouteMatch } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Tabs, Tab, Menu, MenuItem, ListItemText, Button } from '@material-ui/core';
+import { Tabs, Tab } from '@material-ui/core';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-import NearMeIcon from '@material-ui/icons/NearMe';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRocket } from '@fortawesome/free-solid-svg-icons';
-import { phone, nestedSort } from '../../../../utils/helpers';
+import { phone } from '../../../../utils/helpers';
 import Loader from '../../../utils/Loader';
 
 const styles = (theme) => ({
@@ -49,11 +48,12 @@ const styles = (theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    width: '100%',
     color: '#2A2B54',
     fontWeight: 'bold',
     marginBottom: '15px',
-    padding: '0 40px',
-    [theme.breakpoints.down(phone)]: {
+    [theme.breakpoints.down('1280')]: {
+      justifyContent: 'center',
       padding: '0 22px',
     },
   },
@@ -84,9 +84,6 @@ const styles = (theme) => ({
       display: 'block',
     },
   },
-  tabsIndicator: {
-    // display: "none",
-  },
   tabsPlaceholder: {
     width: 'calc(100% - 80px)',
     borderBottom: '2px solid #E6E9EF',
@@ -104,7 +101,7 @@ const styles = (theme) => ({
   },
 });
 
-const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
+const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
   // const [deals, setDeals] = useState([]);
   const { deals } = data.organization;
   const [titleContainer, setTitleContainer] = useState(null);
@@ -126,12 +123,11 @@ const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
         value={tabIndex}
         indicatorColor="primary"
         textColor="primary"
-        variant="scrollable"
         onChange={(e, v) => handleTabChange(e, v)}
         classes={{
           root: classes.tabs,
-          indicator: classes.tabsIndicator,
         }}
+        variant="scrollable"
       >
         {deals.map((deal, index) => {
           const isFund = deal.investmentType === 'fund';
@@ -159,6 +155,7 @@ const DealsTabs = ({ classes, orgSlug, data, tabIndex, setTabIndex }) => {
                   )}
                 </div>
               }
+              // eslint-disable-next-line react/no-array-index-key
               key={`tab-${index}`}
               classes={{
                 root: classes.tab,
