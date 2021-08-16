@@ -25,6 +25,18 @@ const styles = (theme) => ({
     height: '30px',
     marginRight: '1em',
   },
+  badgeComplete: {
+    borderRadius: '100px',
+    padding: '14px 18px',
+    color: '#10C600',
+    background: 'rgba(181, 241, 172, 1)',
+  },
+  badgeIncomplete: {
+    borderRadius: '100px',
+    padding: '14px',
+    color: '#ff0404',
+    background: 'rgba(255, 163, 163, 1)',
+  },
   bar: {
     borderRadius: 5,
     backgroundColor: '#39C522',
@@ -230,6 +242,15 @@ const styles = (theme) => ({
       height: '40px',
       marginTop: '15px',
     },
+  },
+  playIcon: {
+    '&:hover': {
+      color: '#3f85f9',
+    },
+  },
+  playIconDisabled: {
+    color: '#205df5',
+    opacity: '0.25',
   },
   progress: {
     backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],

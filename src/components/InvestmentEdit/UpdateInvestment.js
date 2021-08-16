@@ -3,6 +3,7 @@ import { get, isEqual, pick } from 'lodash';
 import { useParams, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { gql, useQuery, useMutation } from '@apollo/client';
+import _ from 'lodash';
 import {
   Button,
   TextField,
@@ -465,11 +466,6 @@ function Doc({ doc, investment, getInvestment, matches }) {
   const file =
     doc.path.slice(0, 12) === 'investments/' ? doc.path.split('/')[2] : doc.path.split('/')[1];
 
-  function truncateFile(file) {
-    // eslint-disable-next-line prefer-template
-    return file.length > 25 ? file.substr(0, 24) + '...' : file;
-  }
-
   const [rmInvestmentDoc] = useMutation(RM_INVESTMENT_DOC, {
     variables: { file, investment_id: investment._id },
     onCompleted: () => {
@@ -500,7 +496,7 @@ function Doc({ doc, investment, getInvestment, matches }) {
         <Tooltip title={file}>
           <Typography align="center" style={{ fontSize: '14px' }}>
             <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">
-              {truncateFile(file)}
+              {_.truncate(file, { length: 25 })}
             </a>
           </Typography>
         </Tooltip>
