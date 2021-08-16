@@ -12,7 +12,6 @@ import {
   TextField,
   Typography,
   Tooltip,
-  withStyles,
   IconButton,
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
@@ -21,16 +20,6 @@ import AllocationsTable from '../../../utils/AllocationsTable';
 import Loader from '../../../utils/Loader';
 import { titleCase } from '../../../../utils/helpers';
 import '../style.scss';
-
-const HtmlTooltip = withStyles((theme) => ({
-  tooltip: {
-    backgroundColor: '#f5f5f9',
-    color: 'rgba(0, 0, 0, 0.87)',
-    maxWidth: 400,
-    fontSize: theme.typography.pxToRem(12),
-    border: '1px solid #dadde9',
-  },
-}))(Tooltip);
 
 const SEND_REMINDER = gql`
   mutation SendInvestmentDocReminder($investment_id: String!) {
@@ -141,9 +130,9 @@ const DocumentsTab = ({ classes, data, refetch }) => {
     switch (type) {
       case 'document':
         return (
-          <HtmlTooltip title={row[headerValue]}>
+          <Tooltip title={row[headerValue]}>
             <Typography>{_.truncate(row[headerValue], { length: 25 })}</Typography>
-          </HtmlTooltip>
+          </Tooltip>
         );
 
       case 'status':

@@ -24,6 +24,7 @@ import AllocationsLoader from '../../utils/AllocationsLoader';
 import Loader from '../../utils/Loader';
 import DealsTabs from './sections/DealsTabs';
 import styles from './styles.js';
+import DocumentsTab from './sections/DocumentsTab';
 
 const GET_INVESTMENTS = gql`
   query GetDeal($fund_slug: String!, $deal_slug: String!) {
