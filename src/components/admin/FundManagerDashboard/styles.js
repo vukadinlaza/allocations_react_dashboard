@@ -248,7 +248,6 @@ const styles = (theme) => ({
       color: '#3f85f9',
     },
   },
-
   playIconDisabled: {
     color: '#205df5',
     opacity: '0.25',
