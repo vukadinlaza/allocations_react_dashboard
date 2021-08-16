@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '8vh',
     borderRadius: '1rem',
     padding: theme.spacing(2),
-    maxHeight: '70%',
+    maxHeight: 'calc(100% - 8vh)',
     overflow: 'scroll',
   },
   modalHeader: {
@@ -25,17 +25,16 @@ const AppModal = ({ isOpen, onClose, children, modalHeader }) => {
   return (
     <Modal open={isOpen} onClose={onClose} className={classes.modal}>
       <Container maxWidth="sm">
-        <Grid container style={{ minHeight: '100vh' }}>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
+        <Grid container style={{ height: '100%' }}>
+          <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
             <Paper className={classes.modalPaper}>
-              <Grid container justify={modalHeader ? 'space-between' : 'flex-end'}>
+              <Grid container justifyContent={modalHeader ? 'space-between' : 'flex-end'}>
                 {modalHeader && <Typography>{modalHeader}</Typography>}
                 <Box onClick={onClose} style={{ cursor: 'pointer' }}>
                   <CloseIcon />
                 </Box>
               </Grid>
-
-              <Grid container justify="space-between">
+              <Grid container justifyContent="center">
                 {children}
               </Grid>
             </Paper>

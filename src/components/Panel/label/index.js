@@ -9,15 +9,15 @@ const useStyles = makeStyles(() => ({
     borderRadius: '5px 5px 0px 0px',
   },
   headerLabel: {
-    padding: '15px',
+    padding: (props) => (!props.isFromModal ? '15px' : '0 0 0 15px'),
     margin: 0,
     width: '100%',
     fontSize: '1rem',
   },
 }));
 
-const PanelLabel = ({ label, children }) => {
-  const classes = useStyles();
+const PanelLabel = ({ label, children, ...rest }) => {
+  const classes = useStyles({ ...rest });
   return (
     <Grid container alignItems="center" wrap="nowrap" className={classes.header}>
       <Grid item xs={12} sm={12} lg={12}>

@@ -4,19 +4,22 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '70%',
-    backgroundColor: '#FBFCFF',
-    boxShadow: 'rgba(170, 170, 170, 0.25) 2px 2px 4px 0px',
-    border: '1px solid rgb(232, 232, 232)',
+    backgroundColor: (props) => (!props.isFromModal ? '#FBFCFF' : 'unset'),
+    boxShadow: (props) =>
+      !props.isFromModal ? 'rgba(170, 170, 170, 0.25) 2px 2px 4px 0px' : 'none',
+    border: (props) => (!props.isFromModal ? '1px solid rgb(232, 232, 232)' : 'none'),
     marginBottom: '20px',
     [theme.breakpoints.down('sm')]: {
       width: '100%',
     },
+    [theme.breakpoints.up('md')]: {
+      width: (props) => (!props.isFromModal ? '70%' : '100%'),
+    },
   },
 }));
 
-const PanelContainer = ({ children }) => {
-  const classes = useStyles();
+const PanelContainer = ({ children, ...rest }) => {
+  const classes = useStyles({ ...rest });
   return (
     <Grid
       container
