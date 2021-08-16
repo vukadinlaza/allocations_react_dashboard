@@ -19,7 +19,6 @@ import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import AllocationsTable from '../../../utils/AllocationsTable';
 import Loader from '../../../utils/Loader';
 import { titleCase } from '../../../../utils/helpers';
-import '../style.scss';
 
 const SEND_REMINDER = gql`
   mutation SendInvestmentDocReminder($investment_id: String!) {
@@ -137,27 +136,59 @@ const DocumentsTab = ({ classes, data, refetch }) => {
 
       case 'status':
         if (!row.dateSigned) {
-          return <Badge badgeContent="Incomplete" color="primary" />;
+          return (
+            <Badge
+              badgeContent="Incomplete"
+              color="primary"
+              classes={{ colorPrimary: classes.badgeIncomplete }}
+            />
+          );
         }
-        return <Badge badgeContent="Complete" color="secondary" />;
+        return (
+          <Badge
+            badgeContent="Complete"
+            color="secondary"
+            classes={{ colorSecondary: classes.badgeComplete }}
+          />
+        );
 
       case 'sideLetterStatus':
         if (row[headerValue] === 'pending') {
-          return <Badge badgeContent="Incomplete" color="primary" />;
+          return (
+            <Badge
+              badgeContent="Incomplete"
+              color="primary"
+              classes={{ colorPrimary: classes.badgeIncomplete }}
+            />
+          );
         }
-        return <Badge badgeContent="Complete" color="secondary" />;
+        return (
+          <Badge
+            badgeContent="Complete"
+            color="secondary"
+            classes={{ colorSecondary: classes.badgeComplete }}
+          />
+        );
 
       case 'reminder':
         if (numOfSeconds < 172800) {
           return (
             <Tooltip title={`Next reminder may be sent ${nextReminderDate}`}>
-              <PlayCircleFilledIcon color="disabled" fontSize="large" />
+              <PlayCircleFilledIcon
+                color="disabled"
+                fontSize="large"
+                classes={{ colorDisabled: classes.playIconDisabled }}
+              />
             </Tooltip>
           );
         }
         return (
           <IconButton onClick={(e) => handleSendReminder(e)} value={row.investorId}>
-            <PlayCircleFilledIcon color="primary" fontSize="large" />
+            <PlayCircleFilledIcon
+              color="primary"
+              fontSize="large"
+              classes={{ colorPrimary: classes.playIcon }}
+            />
           </IconButton>
         );
 
@@ -170,11 +201,21 @@ const DocumentsTab = ({ classes, data, refetch }) => {
               rel="noopener noreferrer"
               key={row.docLink}
             >
-              <PlayCircleFilledIcon color="primary" fontSize="large" />
+              <PlayCircleFilledIcon
+                color="primary"
+                fontSize="large"
+                classes={{ colorPrimary: classes.playIcon }}
+              />
             </a>
           );
         }
-        return <PlayCircleFilledIcon color="disabled" fontSize="large" />;
+        return (
+          <PlayCircleFilledIcon
+            color="disabled"
+            fontSize="large"
+            classes={{ colorDisabled: classes.playIconDisabled }}
+          />
+        );
 
       default:
         return <div />;
