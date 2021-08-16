@@ -131,7 +131,7 @@ const UserDocuments = ({ classes, data }) => {
       <div className={classes.searchContainer}>
         <TextField
           label="Search"
-          placeholder="Search by company name"
+          placeholder="Search by document name"
           id="search-field"
           fullWidth
           onChange={handleSearch}
