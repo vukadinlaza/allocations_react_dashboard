@@ -233,13 +233,6 @@ const ServerTable = ({
     setSortOrder(order);
   };
 
-  if (!data)
-    return (
-      <div className={classes.loaderContainer} style={{ padding: '30px', height: '300px' }}>
-        <Loader />
-      </div>
-    );
-
   return (
     <div className={classes.root}>
       <div className={classes.searchContainer}>
@@ -284,7 +277,7 @@ const ServerTable = ({
           Search
         </Button>
       </div>
-      {loading ? (
+      {loading || !data ? (
         <div style={{ position: 'relative' }}>
           <div className={classes.loaderContainer}>
             <Loader />

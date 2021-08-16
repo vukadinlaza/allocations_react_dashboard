@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Tabs, Tab } from '@material-ui/core';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Tabs, Tab, Button, Menu, MenuItem, Typography } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -34,7 +36,7 @@ const styles = (theme) => ({
     },
   },
   moreButton: {
-    width: '10em',
+    width: 'fit-content',
     textTransform: 'none',
     '&:hover': {
       backgroundColor: '#8493A61A',
@@ -52,7 +54,6 @@ const styles = (theme) => ({
     color: '#2A2B54',
     fontWeight: 'bold',
     marginBottom: '15px',
-    padding: '0 40px',
     [theme.breakpoints.down('1280')]: {
       justifyContent: 'center',
       padding: '0 22px',
@@ -103,18 +104,64 @@ const styles = (theme) => ({
 });
 
 const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
-  // const [deals, setDeals] = useState([]);
   const { deals } = data.organization;
+  const matches = useMediaQuery('(max-width:600px)');
   const [titleContainer, setTitleContainer] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleTabChange = (e, newIndex) => {
     setTabIndex(newIndex);
+    handleClose();
   };
 
   useEffect(() => {
     const titleCont = document.getElementById('main-title-container');
     setTitleContainer(titleCont);
   }, []);
+
+  const mappedTabs = deals.map((deal) => {
+    const isFund = deal.investmentType === 'fund';
+    const closed = deal.status === 'closed';
+    return (
+      <Tab
+        label={
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            {deal.company_name}
+            {deal.company_name !== 'All' && (
+              <span
+                style={{ backgroundColor: isFund ? '#2A2B54' : '#0461FF' }}
+                className={classes.dealTag}
+              >
+                {isFund ? (
+                  <AccountBalanceIcon style={{ marginRight: '4px' }} />
+                ) : (
+                  <FontAwesomeIcon style={{ marginRight: '4px' }} icon={faRocket} />
+                )}
+                {isFund ? 'FUND' : 'SPV'}
+                <FiberManualRecordIcon
+                  style={{ color: closed ? '#d0d0d0' : '#39C522', marginLeft: '2px' }}
+                />
+              </span>
+            )}
+          </div>
+        }
+        key={`${deal._id}`}
+        classes={{
+          root: classes.tab,
+          selected: classes.selectedTab,
+        }}
+        disableRipple
+      />
+    );
+  });
 
   if (!data || !titleContainer) return <Loader />;
 
@@ -128,44 +175,89 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
         classes={{
           root: classes.tabs,
         }}
-        variant="scrollable"
+        variant={matches ? 'scrollable' : 'standard'}
       >
-        {deals.map((deal, index) => {
-          const isFund = deal.investmentType === 'fund';
-          const closed = deal.status === 'closed';
-          return (
-            <Tab
-              label={
+        {matches ? mappedTabs.slice(0, 1) : mappedTabs.slice(0, 4)}
+
+        <Button onClick={handleClick} className={classes.moreButton}>
+          <Typography>
+            {matches ? (
+              tabIndex < 1 ? (
+                'Funds'
+              ) : (
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  {deal.company_name}
-                  {deal.company_name !== 'All' && (
+                  {deals[tabIndex].company_name}
+                  {deals[tabIndex].company_name !== 'All' && (
                     <span
-                      style={{ backgroundColor: isFund ? '#2A2B54' : '#0461FF' }}
+                      style={{
+                        backgroundColor:
+                          deals[tabIndex].investmentType === 'fund' ? '#2A2B54' : '#0461FF',
+                      }}
                       className={classes.dealTag}
                     >
-                      {isFund ? (
+                      {deals[tabIndex].investmentType === 'fund' ? (
                         <AccountBalanceIcon style={{ marginRight: '4px' }} />
                       ) : (
                         <FontAwesomeIcon style={{ marginRight: '4px' }} icon={faRocket} />
                       )}
-                      {isFund ? 'FUND' : 'SPV'}
+                      {deals[tabIndex].investmentType === 'fund' ? 'FUND' : 'SPV'}
                       <FiberManualRecordIcon
-                        style={{ color: closed ? '#d0d0d0' : '#39C522', marginLeft: '2px' }}
+                        style={{
+                          color: deals[tabIndex].status === 'closed' ? '#d0d0d0' : '#39C522',
+                          marginLeft: '2px',
+                        }}
                       />
                     </span>
                   )}
                 </div>
-              }
-              // eslint-disable-next-line react/no-array-index-key
-              key={`tab-${index}`}
-              classes={{
-                root: classes.tab,
-                selected: classes.selectedTab,
-              }}
-              disableRipple
-            />
-          );
-        })}
+              )
+            ) : tabIndex < 4 ? (
+              'More Funds'
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                {deals[tabIndex].company_name}
+                {deals[tabIndex].company_name !== 'All' && (
+                  <span
+                    style={{
+                      backgroundColor:
+                        deals[tabIndex].investmentType === 'fund' ? '#2A2B54' : '#0461FF',
+                    }}
+                    className={classes.dealTag}
+                  >
+                    {deals[tabIndex].investmentType === 'fund' ? (
+                      <AccountBalanceIcon style={{ marginRight: '4px' }} />
+                    ) : (
+                      <FontAwesomeIcon style={{ marginRight: '4px' }} icon={faRocket} />
+                    )}
+                    {deals[tabIndex].investmentType === 'fund' ? 'FUND' : 'SPV'}
+                    <FiberManualRecordIcon
+                      style={{
+                        color: deals[tabIndex].status === 'closed' ? '#d0d0d0' : '#39C522',
+                        marginLeft: '2px',
+                      }}
+                    />
+                  </span>
+                )}
+              </div>
+            )}
+          </Typography>
+          <ExpandMoreIcon />
+        </Button>
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          {matches
+            ? mappedTabs.slice(1).map((tab, i) => {
+                return <MenuItem onClick={(e) => handleTabChange(e, i + 1)}>{tab}</MenuItem>;
+              })
+            : mappedTabs.slice(4).map((tab, i) => {
+                return <MenuItem onClick={(e) => handleTabChange(e, i + 1)}>{tab}</MenuItem>;
+              })}
+        </Menu>
       </Tabs>
       <div
         className={classes.tabsPlaceholder}

@@ -107,7 +107,7 @@
     "@types/react-router-dom": "^5.1.8",
     "@types/react-test-renderer": "^17.0.1",
     "create-react-app": "^3.2.0",
-    "eslint": "^7.11.0",
+    "eslint": "^6.6.0",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-prettier": "^6.12.0",
     "eslint-plugin-import": "^2.22.1",
@@ -116,7 +116,7 @@
     "eslint-plugin-react": "^7.21.4",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^7.0.0",
-    "jest": "^27.0.6",
+    "jest": "24.9.0",
     "prettier": "^2.1.2",
     "pretty-quick": "^3.1.1"
   },
@@ -136,7 +136,7 @@
     ]
   },
   "engines": {
-    "node": "13.x",
+    "node": "^12.22.0 || ^14 || ^16",
     "npm": "6.x"
   },
   "husky": {

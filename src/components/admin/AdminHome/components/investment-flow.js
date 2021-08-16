@@ -411,7 +411,7 @@ const DeleteViewedUser = ({ deleteViewedUserModal, setDeleteViewedUserModal, dea
   const [deleteViewedUser] = useMutation(DELETE_VIEWED_USER, {
     onCompleted: () => {
       setDeleteViewedUserModal(false);
-      toast.success('Investment Removed');
+      toast.success('Success! Investment deleted');
     },
   });
   return (

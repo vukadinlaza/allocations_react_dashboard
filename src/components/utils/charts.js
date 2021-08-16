@@ -17,6 +17,9 @@ const styles = (theme) => ({
     overflowX: 'hidden',
     display: 'flex',
     flexDirection: 'column',
+    '& *': {
+      fontSize: '0.875rem',
+    },
   },
   header: {
     position: 'sticky',
@@ -96,80 +99,79 @@ export const DefaultChartTable = withStyles(styles)(
     secondColumnHeader,
     sumLabel,
     seriesTotal,
-    firstColumnToolTip, //JSX
-    secondColumnToolTip, //JSX
-    seriesLabelKey, //String
+    firstColumnToolTip, // JSX
+    secondColumnToolTip, // JSX
+    seriesLabelKey, // String
   }) => {
     if (!series) {
-      return <div></div>;
-    } else {
-      return (
-        <table className={classes.dataTable}>
-          <thead style={{ width: '100%' }}>
-            <tr>
-              <th className={classes.header}>{title}</th>
-              <th className={classes.secondColumnHeader}>{secondColumnHeader}</th>
-            </tr>
-          </thead>
-          <tbody className={classes.tableBody}>
-            <tr className={classes.seriesTotal}>
-              <td align="left" style={{ width: '65%', minWidth: '65%' }}>
-                <div className={classes.seriesLabel}>{sumLabel}</div>
-              </td>
-              <td align="right" className={classes.seriesAmount}>
-                ${nWithCommas(Math.floor(seriesTotal))}
-              </td>
-            </tr>
-            {series.map((s, i) => (
-              <tr key={`series_${i}`}>
-                {!!firstColumnToolTip ? (
-                  <Tooltip title={<React.Fragment>{firstColumnToolTip(s)}</React.Fragment>}>
-                    <td align="left" style={{ width: '65%', minWidth: '65%' }}>
-                      <div
-                        style={{
-                          backgroundColor: s.borderColor ? s.borderColor : s.backgroundColor,
-                        }}
-                        className={classes.rowColor}
-                      />
-                      <div className={classes.sLabel}>
-                        {s[seriesLabelKey] && titleCase(s[seriesLabelKey].replace(/_/g, ' '))}
-                      </div>
-                    </td>
-                  </Tooltip>
-                ) : (
+      return <div />;
+    }
+    return (
+      <table className={classes.dataTable}>
+        <thead style={{ width: '100%' }}>
+          <tr>
+            <th className={classes.header}>{title}</th>
+            <th className={classes.secondColumnHeader}>{secondColumnHeader}</th>
+          </tr>
+        </thead>
+        <tbody className={classes.tableBody}>
+          <tr className={classes.seriesTotal}>
+            <td align="left" style={{ width: '65%', minWidth: '65%' }}>
+              <div className={classes.seriesLabel}>{sumLabel}</div>
+            </td>
+            <td align="right" className={classes.seriesAmount}>
+              ${nWithCommas(Math.floor(seriesTotal))}
+            </td>
+          </tr>
+          {series.map((s, i) => (
+            <tr key={`series_${i}`}>
+              {firstColumnToolTip ? (
+                <Tooltip title={<>{firstColumnToolTip(s)}</>}>
                   <td align="left" style={{ width: '65%', minWidth: '65%' }}>
                     <div
-                      style={{ backgroundColor: s.backgroundColor }}
+                      style={{
+                        backgroundColor: s.borderColor ? s.borderColor : s.backgroundColor,
+                      }}
                       className={classes.rowColor}
                     />
                     <div className={classes.sLabel}>
                       {s[seriesLabelKey] && titleCase(s[seriesLabelKey].replace(/_/g, ' '))}
                     </div>
                   </td>
-                )}
-                {!!secondColumnToolTip ? (
-                  <Tooltip
-                    title={
-                      <React.Fragment>
-                        <p>{!!secondColumnToolTip && secondColumnToolTip(s)}</p>
-                      </React.Fragment>
-                    }
-                  >
-                    <td align="right" className={classes.sTotal}>
-                      {nWithCommas(s.total)}
-                    </td>
-                  </Tooltip>
-                ) : (
+                </Tooltip>
+              ) : (
+                <td align="left" style={{ width: '65%', minWidth: '65%' }}>
+                  <div
+                    style={{ backgroundColor: s.backgroundColor }}
+                    className={classes.rowColor}
+                  />
+                  <div className={classes.sLabel}>
+                    {s[seriesLabelKey] && titleCase(s[seriesLabelKey].replace(/_/g, ' '))}
+                  </div>
+                </td>
+              )}
+              {secondColumnToolTip ? (
+                <Tooltip
+                  title={
+                    <>
+                      <p>{!!secondColumnToolTip && secondColumnToolTip(s)}</p>
+                    </>
+                  }
+                >
                   <td align="right" className={classes.sTotal}>
-                    ${nWithCommas(s.total)}
+                    {nWithCommas(s.total)}
                   </td>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      );
-    }
+                </Tooltip>
+              ) : (
+                <td align="right" className={classes.sTotal}>
+                  ${nWithCommas(s.total)}
+                </td>
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
   },
 );
 
@@ -178,7 +180,7 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
 
   const { width } = useViewport();
 
-  let legendOptions = {
+  const legendOptions = {
     display: false,
     position: 'right',
     labels: {
@@ -190,7 +192,7 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
     },
   };
 
-  let dataLabels = {
+  const dataLabels = {
     title: {
       font: {
         weight: 'bold',
@@ -212,63 +214,62 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
   }
 
   if (!series) {
-    return <div></div>;
-  } else {
-    return (
-      <Doughnut
-        data={{
-          labels: series.map((s) => s.label),
-          datasets:
-            [
-              {
-                backgroundColor: series.map((s) => s.backgroundColor),
-                data: series.map((s) => s.total),
-              },
-            ] || [],
-        }}
-        options={{
-          responsive: true,
-          onResize: (chart, size) => {
-            if (size.height < 250) {
-              setFontSizes(chart, size);
-            }
-          },
-          plugins: {
-            datalabels: {
-              display: true,
-              color: 'white',
-              labels: dataLabels,
-              formatter: function (value, ctx, els) {
-                const chartId = ctx.chart?.id;
-                const total = ctx.dataset?._meta[chartId]?.total;
-                const percentage = Math.round((value * 100) / total);
-                if (percentage >= 5) return percentage + '%';
-                return '';
-              },
-            },
-          },
-          elements: {
-            point: {
-              radius: 2,
-            },
-          },
-          legend: legendOptions,
-          tooltips: {
-            enabled: true,
-          },
-          responsive: true,
-          maintainAspectRatio: false,
-          cutoutPercentage: 65,
-        }}
-      />
-    );
+    return <div />;
   }
+  return (
+    <Doughnut
+      data={{
+        labels: series.map((s) => s.label),
+        datasets:
+          [
+            {
+              backgroundColor: series.map((s) => s.backgroundColor),
+              data: series.map((s) => s.total),
+            },
+          ] || [],
+      }}
+      options={{
+        responsive: true,
+        onResize: (chart, size) => {
+          if (size.height < 250) {
+            setFontSizes(chart, size);
+          }
+        },
+        plugins: {
+          datalabels: {
+            display: true,
+            color: 'white',
+            labels: dataLabels,
+            formatter(value, ctx, els) {
+              const chartId = ctx.chart?.id;
+              const total = ctx.dataset?._meta[chartId]?.total;
+              const percentage = Math.round((value * 100) / total);
+              if (percentage >= 5) return `${percentage}%`;
+              return '';
+            },
+          },
+        },
+        elements: {
+          point: {
+            radius: 2,
+          },
+        },
+        legend: legendOptions,
+        tooltips: {
+          enabled: true,
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        cutoutPercentage: 65,
+      }}
+    />
+  );
 });
 
 export const LineChart = withStyles(styles)(({ dataset: { data, labels } }) => {
   const getMaxValue = () => {
     let max = 200000;
-    let dataMaxValue = data[data.length - 1];
+    const dataMaxValue = data[data.length - 1];
     if (dataMaxValue < 10000) return 10000;
     while (max < dataMaxValue) {
       max += 200000;
@@ -279,71 +280,70 @@ export const LineChart = withStyles(styles)(({ dataset: { data, labels } }) => {
   const maxValue = getMaxValue();
 
   if (!data) {
-    return <div></div>;
-  } else {
-    return (
-      <Line
-        data={{
-          labels: labels,
-          datasets: [
-            {
-              label: 'Dataset',
-              data: data,
-              borderColor: '#0461FF',
-              backgroundColor: 'rgba(4, 97, 255, 0.2)',
-              fill: true,
-              steppedLine: true,
-            },
-          ],
-        }}
-        options={{
-          interaction: {
-            intersect: false,
-            axis: 'x',
+    return <div />;
+  }
+  return (
+    <Line
+      data={{
+        labels,
+        datasets: [
+          {
+            label: 'Dataset',
+            data,
+            borderColor: '#0461FF',
+            backgroundColor: 'rgba(4, 97, 255, 0.2)',
+            fill: true,
+            steppedLine: true,
           },
-          plugins: {
-            textInside: false,
-            datalabels: {
-              display: false,
-            },
-          },
-          spanGaps: true,
-          legend: {
+        ],
+      }}
+      options={{
+        interaction: {
+          intersect: false,
+          axis: 'x',
+        },
+        plugins: {
+          textInside: false,
+          datalabels: {
             display: false,
           },
-          elements: {
-            point: {
-              radius: 0, //delete points
+        },
+        spanGaps: true,
+        legend: {
+          display: false,
+        },
+        elements: {
+          point: {
+            radius: 0, // delete points
+          },
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          xAxes: [
+            {
+              position: 'right',
+              ticks: {},
+              scaleBeginAtZero: false,
+              beginAtZero: false,
             },
-          },
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            xAxes: [
-              {
-                position: 'right',
-                ticks: {},
-                scaleBeginAtZero: false,
-                beginAtZero: false,
+          ],
+          yAxes: [
+            {
+              gridLines: {
+                borderDash: [8, 4],
               },
-            ],
-            yAxes: [
-              {
-                gridLines: {
-                  borderDash: [8, 4],
-                },
-                ticks: {
-                  stepSize: maxValue / 5,
-                  max: maxValue,
-                  callback: function (val, index) {
-                    return nWithCommas(val);
-                  },
+              ticks: {
+                stepSize: maxValue / 5,
+                max: maxValue,
+                callback(val, index) {
+                  return nWithCommas(val);
                 },
               },
-            ],
-          },
-        }}
-      />
-    );
-  }
+            },
+          ],
+        },
+      }}
+    />
+  );
 });

@@ -252,8 +252,8 @@ function InvestmentPage() {
       refetch();
       setLoading(false);
       const message = location?.state?.submission
-        ? 'Investment updated successfully.'
-        : 'Investment created successfully.';
+        ? 'Success! Investment updated'
+        : 'Success! Investment created';
       toast.success(message);
       const path = organization
         ? `/next-steps/${organization}/${deal_slug}`
@@ -261,7 +261,7 @@ function InvestmentPage() {
       history.push(path, { investorFormData });
     },
     onError: () => {
-      toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com');
+      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
     },
   });
 
@@ -280,10 +280,10 @@ function InvestmentPage() {
     const validation = validate(investorFormData, organization, requireSecondSigChecked);
     setErrors(validation);
 
-    if (validation.length > 0) return toast.warning('Incomplete Form');
-    if (!amount) return toast.warning('Please enter a valid investment amount.');
+    if (validation.length > 0) return toast.warning('Incomplete form');
+    if (!amount) return toast.warning('Please enter a valid investment amount');
     if (parseInt(amount, 10) < 1000)
-      return toast.warning('Please enter an investment amount greater than $1000.');
+      return toast.warning('Please enter an investment amount greater than $1000');
 
     const payload = {
       ...investorFormData,
@@ -297,6 +297,7 @@ function InvestmentPage() {
   };
 
   const submitInvestment = async () => {
+    setLoading(true);
     const ip = await getClientIp();
     const isEdit = location?.state?.submission;
     const payload = {
@@ -311,7 +312,6 @@ function InvestmentPage() {
 
     submitConfirmation({ variables: { payload } });
     setShowSpvModal(false);
-    setLoading(true);
   };
 
   if (!populated) populateInvestorData(deal);
@@ -354,7 +354,7 @@ function InvestmentPage() {
           setInvestor={setInvestor}
           handleSecondSig={handleSecondSig}
         />
-        {requireSecondSig && org === 'irishangels' && (
+        {requireSecondSig && (org === 'irishangels' || org === '5f903e7164eb9a0023189ca2') && (
           <SecondSignature
             requireSecondSigChecked={requireSecondSigChecked}
             setRequireSecondSigChecked={setRequireSecondSigChecked}
@@ -377,6 +377,7 @@ function InvestmentPage() {
         setOpen={setShowSpvModal}
         deal={deal}
         submitInvestment={submitInvestment}
+        loading={loading}
         previewData={previewData}
         loadingPreview={loadingPreview}
         requireSecondSigChecked={requireSecondSigChecked.secondSigInfo}

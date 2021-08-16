@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import _ from 'lodash';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
+import Collapse from '@material-ui/core/Collapse';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -13,6 +15,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Toolbar from '@material-ui/core/Toolbar';
 import RadioButtonUncheckedOutlinedIcon from '@material-ui/icons/RadioButtonUncheckedOutlined';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import { nWithCommas } from '../../utils/numbers';
 
 const styles = (theme) => ({
   cellText: {
@@ -33,8 +36,9 @@ const styles = (theme) => ({
   tableContainer: {
     background: '#FBFCFF 0% 0% no-repeat padding-box',
     boxShadow: '0px 3px 6px #00000029',
-    border: '1px solid #8493A640',
+    border: '1px solid #8493A640 !important',
     borderRadius: '10px',
+    overflowX: 'auto',
   },
   table: {},
 });
@@ -65,6 +69,12 @@ const styles = (theme) => ({
 
 		getCellContent={functionThatReturnsSpecifiedValueForCell} only needed it a type is provided in the header - optional
 		** if something particular is needed for a column cells, like a button, just add the type property in the header.
+
+    withCollapse={Boolean} //For collapsed rows
+    getCollapsedContent = {function} // returns JSX
+    rowSelector="rowSelector" - property name that identifies each row Optional 
+    currentCollapsed={currentRowToShow}//must match row[rowSelector]
+
 		const headersExample = [
       {
 				value: 'cellValue',
@@ -105,6 +115,9 @@ const AllocationsTable = ({
   getSortProps,
   sortField,
   sortOrder,
+  getCollapsedContent,
+  withCollapse,
+  currentCollapsed,
 }) => {
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
@@ -275,50 +288,70 @@ const AllocationsTable = ({
               ? dataToShow.map((row, idx) => {
                   const isItemSelected = isSelected(`${row[rowSelector]}-${idx}`);
                   return (
-                    <TableRow
-                      key={`${row.entity}-${idx}`}
-                      className={classes.row}
-                      style={rowDetailPage ? { cursor: 'pointer' } : {}}
-                      onClick={(e) => handleDetailPage(e, row)}
-                    >
-                      {includeCheckBox ? (
-                        <TableCell align="center" padding="checkbox">
-                          <Checkbox
-                            checked={isItemSelected}
-                            onClick={(event) => handleClick(event, `${row[rowSelector]}-${idx}`)}
-                            inputProps={{ 'aria-labelledby': `${row[rowSelector]}-${idx}` }}
-                            icon={<RadioButtonUncheckedOutlinedIcon fontSize="small" />}
-                            checkedIcon={
-                              <FiberManualRecordIcon
-                                fontSize="small"
-                                className={classes.selectedCheckbox}
-                              />
-                            }
-                          />
-                        </TableCell>
+                    <React.Fragment key={`row-${idx}`}>
+                      <TableRow
+                        key={`${row.entity}-${idx}`}
+                        className={classes.row}
+                        style={rowDetailPage ? { cursor: 'pointer' } : {}}
+                        onClick={(e) => handleDetailPage(e, row)}
+                      >
+                        {includeCheckBox ? (
+                          <TableCell align="center" padding="checkbox">
+                            <Checkbox
+                              checked={isItemSelected}
+                              onClick={(event) => handleClick(event, `${row[rowSelector]}-${idx}`)}
+                              inputProps={{ 'aria-labelledby': `${row[rowSelector]}-${idx}` }}
+                              icon={<RadioButtonUncheckedOutlinedIcon fontSize="small" />}
+                              checkedIcon={
+                                <FiberManualRecordIcon
+                                  fontSize="small"
+                                  className={classes.selectedCheckbox}
+                                />
+                              }
+                            />
+                          </TableCell>
+                        ) : null}
+                        {headers && headers.length
+                          ? headers.map((header, i) =>
+                              Object.keys(row).includes(header.value) || header.keyNotInData ? (
+                                <TableCell
+                                  key={`${header.value}-${i}`}
+                                  component="th"
+                                  scope="row"
+                                  className={classes.cellText}
+                                  id={`${row[rowSelector]}-${idx}`}
+                                  align={header.align}
+                                >
+                                  {header.type
+                                    ? getCellContent(
+                                        header.type,
+                                        row,
+                                        header.value,
+                                        row[rowSelector],
+                                      )
+                                    : _.get(row, header.value, '')}
+                                </TableCell>
+                              ) : (
+                                <TableCell key={`${header.value}-${i}`} />
+                              ),
+                            )
+                          : null}
+                      </TableRow>
+
+                      {withCollapse ? (
+                        <TableRow>
+                          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                            <Collapse
+                              in={currentCollapsed.includes(row[rowSelector])}
+                              timeout="auto"
+                              unmountOnExit
+                            >
+                              {getCollapsedContent(row)}
+                            </Collapse>
+                          </TableCell>
+                        </TableRow>
                       ) : null}
-                      {headers && headers.length
-                        ? headers.map((header, i) =>
-                            Object.keys(row).includes(header.value) || header.keyNotInData ? (
-                              <TableCell
-                                key={`${header.value}-${i}`}
-                                component="th"
-                                scope="row"
-                                className={classes.cellText}
-                                id={`${row[rowSelector]}-${idx}`}
-                                align={header.align}
-                              >
-                                {header.type
-                                  ? getCellContent(header.type, row, header.value, row[rowSelector])
-                                  : // getRowContent(header.type, row[header.value], row[rowSelector], header.cellAction, header.cellProps):
-                                    row[header.value]}
-                              </TableCell>
-                            ) : (
-                              <TableCell key={`${header.value}-${i}`} />
-                            ),
-                          )
-                        : null}
-                    </TableRow>
+                    </React.Fragment>
                   );
                 })
               : null}
@@ -330,7 +363,7 @@ const AllocationsTable = ({
             component="div"
             count={count || 0}
             labelDisplayedRows={({ from, to, count }) => {
-              return `${from} - ${to} of ${count}`;
+              return `${from} - ${to} of ${nWithCommas(count)}`;
             }}
             rowsPerPage={rowsPerPage}
             page={page}

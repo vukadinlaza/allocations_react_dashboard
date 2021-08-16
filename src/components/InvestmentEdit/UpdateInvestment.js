@@ -116,7 +116,7 @@ export default function InvestmentEdit({
 
   const [updateInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT, {
     onCompleted: () => {
-      toast.success('Success! Investment Updated.');
+      toast.success('Success! Investment updated');
 
       if (handleUpdate) {
         handleUpdate.refetch();
@@ -125,15 +125,13 @@ export default function InvestmentEdit({
     },
     onError: (error) => {
       console.log(error);
-      toast.error(
-        'Something went wrong updating the investment. Try again or contact support@allocations.com',
-      );
+      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
     },
   });
 
   const [updateUser] = useMutation(UPDATE_USER, {
     onCompleted: () => {
-      toast.success('Success! Investor Updated.');
+      toast.success('Success! Investor updated');
       if (handleUpdate) {
         handleUpdate.refetch();
       }
@@ -141,9 +139,7 @@ export default function InvestmentEdit({
     },
     onError: (error) => {
       console.log(error);
-      toast.error(
-        'Something went wrong updating the investment or investor. Try again or contact support@allocations.com',
-      );
+      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
     },
   });
 
@@ -153,13 +149,11 @@ export default function InvestmentEdit({
         handleUpdate.refetch();
         handleUpdate.closeModal();
       }
-      toast.success('Success! Investment Deleted.');
+      toast.success('Success! Investment deleted');
     },
     onError: (error) => {
       console.log(error);
-      toast.error(
-        'Something went wrong deleting the investment. Try again or contact support@allocations.com',
-      );
+      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
     },
   });
 
@@ -392,12 +386,10 @@ function Docs({ investment, getInvestment, isK1 }) {
   const [addInvestmentDoc, { loading }] = useMutation(ADD_INVESTMENT_DOC, {
     onCompleted: () => {
       getInvestment();
-      toast.success('Success! Document Added');
+      toast.success('Success! Document added');
     },
     onError: () => {
-      toast.error(
-        'Something went wrong adding the document. Try again or contact support@allocations.com',
-      );
+      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
     },
   });
 
@@ -478,12 +470,10 @@ function Doc({ doc, investment, getInvestment, matches }) {
     variables: { file, investment_id: investment._id },
     onCompleted: () => {
       getInvestment();
-      toast.success('Success! Document Deleted');
+      toast.success('Success! Document deleted');
     },
     onError: () => {
-      toast.error(
-        'Something went wrong deleting the document. Try again or contact support@allocations.com',
-      );
+      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
     },
   });
 
