@@ -10,6 +10,8 @@ import { titleCase, openInNewTab } from '../../../utils/helpers';
 import MoreMenu from '../../utils/MoreMenu';
 import { useFetchWithEmail } from '../../../utils/hooks';
 import CapitalAccountsModal from '../capitalAccountsModal';
+import AppModal from '../../Modal/AppModal';
+import InvestmentEdit from '../../InvestmentEdit/UpdateInvestment';
 
 const headers = [
   {
@@ -95,10 +97,18 @@ const getStatusColors = (status) => {
 const BASE = 'appLhEikZfHgNQtrL';
 const TABLE = 'Ledger';
 
-const UserInvestments = ({ classes, data, showInvestments, userProfile }) => {
+const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [investmentId, setInvestmentId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [showCapitalAccounts, setShowCapitalAccounts] = useState({});
   const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile?.email || '');
+
+  const showInvestment = ({ invId }) => {
+    setShowModal(true);
+    setInvestmentId(invId);
+  };
+
   const getCellContent = (type, row, headerValue) => {
     const { amount } = row;
     const multiple = Number(_.get(row, 'deal.dealParams.dealMultiple', '1'));
@@ -138,6 +148,14 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile }) => {
       };
       actions.splice(2, 0, fundsInvestmentsAction);
     }
+    if (userProfile.admin) {
+      const editInvestment = {
+        label: 'Edit Investment',
+        onItemClick: showInvestment,
+        clickArgs: { invId: row._id },
+      };
+      actions.unshift(editInvestment);
+    }
 
     switch (type) {
       case 'type':
@@ -171,6 +189,16 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile }) => {
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
+  };
+
+  const onClose = () => {
+    setShowModal(false);
+    setInvestmentId(null);
+  };
+
+  const handleUpdate = {
+    refetch: () => refetch(),
+    closeModal: () => setShowModal(false),
   };
 
   const dataCopy = data
@@ -214,6 +242,9 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile }) => {
         setShowCapitalAccounts={setShowCapitalAccounts}
         showCapitalAccounts={showCapitalAccounts}
       />
+      <AppModal isOpen={showModal} onClose={onClose}>
+        <InvestmentEdit investmentId={investmentId} handleUpdate={handleUpdate} />
+      </AppModal>
     </div>
   );
 };
