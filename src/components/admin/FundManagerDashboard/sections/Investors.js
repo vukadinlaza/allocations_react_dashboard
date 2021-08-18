@@ -58,7 +58,7 @@ const Investors = ({ classes, data, orgSlug, userProfile }) => {
       <div className={classes.searchContainer}>
         <TextField
           label="Search"
-          placeholder="Seach by company name"
+          placeholder="Search by investor name"
           id="search-field"
           fullWidth
           onChange={handleSearch}

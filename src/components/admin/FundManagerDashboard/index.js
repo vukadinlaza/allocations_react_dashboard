@@ -24,6 +24,7 @@ import AllocationsLoader from '../../utils/AllocationsLoader';
 import Loader from '../../utils/Loader';
 import DealsTabs from './sections/DealsTabs';
 import styles from './styles.js';
+import DocumentsTab from './sections/DocumentsTab';
 
 const GET_INVESTMENTS = gql`
   query GetDeal($fund_slug: String!, $deal_slug: String!) {
@@ -38,6 +39,7 @@ const GET_INVESTMENTS = gql`
       investments {
         _id
         amount
+        capitalWiredAmount
         status
         submissionData {
           legalName
@@ -49,6 +51,10 @@ const GET_INVESTMENTS = gql`
           name
           email
           accredidation_status
+        }
+        documents {
+          path
+          link
         }
       }
     }
@@ -96,6 +102,7 @@ export const ORG_OVERVIEW = gql`
       _id
       admin
       documents
+      created_at
     }
   }
 `;
@@ -111,16 +118,21 @@ const fundTabs = [
   'Investments',
   'Investor Onboarding Status',
   'Investors',
+  'Documents',
   'Deal Page',
 ];
-const spvTabs = ['Investor Onboarding Status', 'Investors', 'Deal Page'];
+
+const spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
 
 const FundManagerDashboard = ({ classes, history }) => {
   const { width } = useViewport();
-  const { organization: orgSlug, deal: dealSlug } = useParams();
+  let { organization: orgSlug, deal: dealSlug } = useParams();
+  if (orgSlug === 'demo-fund') {
+    orgSlug = '305-ventures';
+  }
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
@@ -208,7 +220,6 @@ const FundManagerDashboard = ({ classes, history }) => {
       setOrgDeals(orgDealsDataCopy);
     }
   }, [orgDealsData]);
-
   useEffect(() => {
     if (dealTab !== 0) handleDealData(dealTab);
   }, [dealTab]);
@@ -309,17 +320,6 @@ const FundManagerDashboard = ({ classes, history }) => {
       case 'Investments':
         return <Investments classes={classes} width={width} data={fundData} />;
 
-      case 'Investors':
-        return (
-          <Investors
-            classes={classes}
-            width={width}
-            data={dealInvestments}
-            orgSlug={orgSlug}
-            userProfile={userProfile}
-          />
-        );
-
       case 'Investor Onboarding Status':
         return (
           <InvestorStatus
@@ -331,6 +331,22 @@ const FundManagerDashboard = ({ classes, history }) => {
             refetch={refetch}
           />
         );
+      case 'Investors':
+        return (
+          <Investors
+            classes={classes}
+            width={width}
+            data={dealInvestments}
+            orgSlug={orgSlug}
+            userProfile={userProfile}
+          />
+        );
+
+      case 'Documents':
+        return (
+          <DocumentsTab classes={classes} width={width} data={dealInvestments} refetch={refetch} />
+        );
+
       case 'Deal Page':
         return (
           <div className={classes.section}>

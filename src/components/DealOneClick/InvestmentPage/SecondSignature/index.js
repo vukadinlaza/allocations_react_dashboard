@@ -26,6 +26,7 @@ const SecondSignature = ({
   setRequireSecondSigChecked,
   setInvestor,
   errors,
+  isFromModal = false,
 }) => {
   const classes = useStyles();
 
@@ -88,7 +89,7 @@ const SecondSignature = ({
   };
 
   return (
-    <PanelContainer>
+    <PanelContainer isFromModal={isFromModal}>
       <Grid container wrap="nowrap">
         <Checkbox
           name="secondSigInfo"
@@ -100,7 +101,7 @@ const SecondSignature = ({
             borderRadius: '5px 5px 0px 0px',
           }}
         />
-        <PanelLabel label="Please Select if There is a Second Signer" />
+        <PanelLabel label="Please Select if There is a Second Signer" isFromModal={isFromModal} />
       </Grid>
 
       {requireSecondSigChecked.secondSigInfo && (

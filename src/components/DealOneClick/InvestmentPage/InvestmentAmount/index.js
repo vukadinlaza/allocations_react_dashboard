@@ -5,14 +5,14 @@ import { PanelContainer, PanelLabel } from '../../../Panel';
 import useStyles, { Adornment } from './styles';
 import { nWithCommas } from '../../../../utils/numbers';
 
-const InvestmentAmountPanel = ({ setAmount, amount, minimumInvestment }) => {
+const InvestmentAmountPanel = ({ setAmount, amount, minimumInvestment, isFromModal = false }) => {
   const classes = useStyles();
   const placeHolder =
     minimumInvestment !== null && minimumInvestment ? nWithCommas(minimumInvestment) : '1,000';
   return (
-    <PanelContainer>
-      <PanelLabel label="Investment Amount" />
-      <Grid container justifyContent="space-between" className={classes.root}>
+    <PanelContainer isFromModal={isFromModal}>
+      <PanelLabel label="Investment Amount" isFromModal={isFromModal} />
+      <Grid container justifyContent="space-between" wrap="nowrap" className={classes.root}>
         <Grid item className={classes.inputContainer} xs={12} md={7} lg={7}>
           <CurrencyTextField
             InputProps={{

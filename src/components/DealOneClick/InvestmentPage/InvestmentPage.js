@@ -16,6 +16,7 @@ import SPVDocumentModal from './SpvDocumentModal';
 import { getClientIp } from '../../../utils/ip';
 import { nWithCommas } from '../../../utils/numbers';
 import { useAuth } from '../../../auth/useAuth';
+import personalInfoValidation from '../../../utils/validation';
 
 const GET_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
@@ -133,38 +134,6 @@ const ADD_USER_AS_VIEWED = gql`
   }
 `;
 
-// if individual remove signfull name
-const validate = (investor, org, requireSecondSigChecked) => {
-  let required = ['legalName', 'investor_type', 'country', 'accredited_investor_status'];
-  if (org === 'irishangels') {
-    required = required.filter((d) => d !== 'accredited_investor_status');
-  }
-  if (investor.country && investor.country === 'United States') {
-    required.push('state');
-  }
-  if (investor.investor_type === 'entity' && !investor.fullName) {
-    required.push('fullName');
-  }
-
-  let errors = [];
-  errors = required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
-
-  if (requireSecondSigChecked.secondSigInfo) {
-    errors.push(
-      'secondLegalName',
-      'secondEmail',
-      'secondSignerSSN',
-      'secondSignerInitials',
-      'secondSigConsent',
-    );
-    errors = errors.reduce(
-      (acc, attr) => (investor.secondInvestor[attr] ? acc : [...acc, attr]),
-      [],
-    );
-  }
-  return errors;
-};
-
 function InvestmentPage() {
   const history = useHistory();
   const location = useLocation();
@@ -277,7 +246,11 @@ function InvestmentPage() {
   } = deal;
 
   const confirmInvestment = () => {
-    const validation = validate(investorFormData, organization, requireSecondSigChecked);
+    const validation = personalInfoValidation(
+      investorFormData,
+      organization,
+      requireSecondSigChecked,
+    );
     setErrors(validation);
 
     if (validation.length > 0) return toast.warning('Incomplete form');
@@ -297,6 +270,7 @@ function InvestmentPage() {
   };
 
   const submitInvestment = async () => {
+    setLoading(true);
     const ip = await getClientIp();
     const isEdit = location?.state?.submission;
     const payload = {
@@ -311,7 +285,6 @@ function InvestmentPage() {
 
     submitConfirmation({ variables: { payload } });
     setShowSpvModal(false);
-    setLoading(true);
   };
 
   if (!populated) populateInvestorData(deal);
@@ -354,7 +327,7 @@ function InvestmentPage() {
           setInvestor={setInvestor}
           handleSecondSig={handleSecondSig}
         />
-        {requireSecondSig && org === 'irishangels' && (
+        {requireSecondSig && (org === 'irishangels' || org === '5f903e7164eb9a0023189ca2') && (
           <SecondSignature
             requireSecondSigChecked={requireSecondSigChecked}
             setRequireSecondSigChecked={setRequireSecondSigChecked}
@@ -377,6 +350,7 @@ function InvestmentPage() {
         setOpen={setShowSpvModal}
         deal={deal}
         submitInvestment={submitInvestment}
+        loading={loading}
         previewData={previewData}
         loadingPreview={loadingPreview}
         requireSecondSigChecked={requireSecondSigChecked.secondSigInfo}
