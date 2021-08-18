@@ -268,6 +268,7 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
                       <MenuItem
                         onClick={(e) => handleTabChange(e, i + 1)}
                         className={classes.menuItem}
+                        key={`tab-${i}`}
                       >
                         {tab}
                       </MenuItem>
@@ -278,6 +279,7 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
                       <MenuItem
                         onClick={(e) => handleTabChange(e, i + 4)}
                         className={classes.menuItem}
+                        key={`tab-${i}`}
                       >
                         {tab}
                       </MenuItem>
