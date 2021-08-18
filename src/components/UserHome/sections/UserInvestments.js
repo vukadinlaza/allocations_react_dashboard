@@ -99,7 +99,6 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showCapitalAccounts, setShowCapitalAccounts] = useState({});
   const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile?.email || '');
-  console.log(capitalAccounts, userProfile);
   const getCellContent = (type, row, headerValue) => {
     const { amount } = row;
     const multiple = Number(_.get(row, 'deal.dealParams.dealMultiple', '1'));
@@ -123,11 +122,10 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile }) => {
       },
       {
         label: 'Capital Accounts',
+        disabled: !capitalAccountInfo,
         onItemClick: () => {
           if (capitalAccountInfo) {
             setShowCapitalAccounts(capitalAccountInfo);
-          } else {
-            toast.warn('Sorry! There is no Capital Accounts information available right now.');
           }
         },
       },
