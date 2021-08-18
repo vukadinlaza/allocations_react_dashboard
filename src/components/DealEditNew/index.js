@@ -95,10 +95,6 @@ const UPDATE_DEAL = gql`
       target
       amount_raised
       docSpringTemplateId
-      invitedInvestors {
-        _id
-        name
-      }
       dealParams {
         risks
         totalRoundSize
@@ -173,18 +169,6 @@ const GET_DEAL = gql`
             _id
             name
           }
-        }
-        invitedInvestors {
-          _id
-          name
-          email
-        }
-        emailInvites {
-          status
-          sent_at
-          to
-          opened
-          opened_at
         }
         dealParams {
           totalRoundSize
