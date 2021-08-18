@@ -155,11 +155,21 @@ const UserInvestments = ({ classes, data, showInvestments }) => {
     setSearchTerm(e.target.value);
   };
 
-  const dataCopy = data.filter(
-    (inv) =>
-      inv.status !== 'invited' &&
-      inv.deal.company_name.toUpperCase().includes(searchTerm.toUpperCase()),
-  );
+  const dataCopy = data
+    .filter(
+      (inv) =>
+        inv.status !== 'invited' &&
+        inv.deal.company_name.toUpperCase().includes(searchTerm.toUpperCase()),
+    )
+    .map((inv) => {
+      const multiple = Number(_.get(inv, 'deal.dealParams.dealMultiple', '1'));
+      const type = inv.deal?.investmentType === 'fund' ? 'fund' : 'SPV';
+      return {
+        ...inv,
+        estimatedValue: inv.amount * multiple,
+        'deal.investmentType': type,
+      };
+    });
 
   return (
     <div className={classes.tableContainer}>

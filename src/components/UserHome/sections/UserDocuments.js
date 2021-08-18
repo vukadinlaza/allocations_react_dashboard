@@ -83,6 +83,10 @@ const UserDocuments = ({ classes, data }) => {
     }
   }, [data]);
 
+  const getDocName = (doc) => {
+    return doc.documentName.split('.')[0].replaceAll('_', ' ');
+  };
+
   const getCellContent = (type, row, headerValue) => {
     const actions = [
       {
@@ -93,7 +97,7 @@ const UserDocuments = ({ classes, data }) => {
     ];
     switch (type) {
       case 'documentName':
-        return row.documentName.split('.')[0].replaceAll('_', ' ');
+        return getDocName(row);
       case 'status':
         return (
           <div
@@ -122,9 +126,14 @@ const UserDocuments = ({ classes, data }) => {
     setSearchTerm(e.target.value);
   };
 
-  const userDocumentsCopy = userDocuments.filter((doc) =>
-    doc.documentName.toUpperCase().includes(searchTerm.toUpperCase()),
-  );
+  const userDocumentsCopy = userDocuments
+    .filter((doc) => doc.documentName.toUpperCase().includes(searchTerm.toUpperCase()))
+    .map((doc) => {
+      return {
+        ...doc,
+        documentName: getDocName(doc).trim(),
+      };
+    });
 
   return (
     <div className={classes.tableContainer}>
