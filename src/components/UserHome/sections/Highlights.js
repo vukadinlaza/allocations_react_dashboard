@@ -8,7 +8,7 @@ import Loader from '../../utils/Loader';
 import { nWithCommas } from '../../../utils/numbers';
 import { DefaultChartTable, DoughnutChart, LineChart } from '../../utils/charts';
 import { SimpleBox, ChartBox } from '../../admin/FundManagerDashboard/widgets';
-import { nestedSort } from '../../../utils/helpers';
+import { nestedSort, getMomentFromId } from '../../../utils/helpers';
 
 export function getColor(i) {
   const colors = ['#A6CEE3', '#1F78B4', '#B2DF8A', '#33A02C'];
@@ -29,7 +29,7 @@ export function formatDoughnutSeries(series) {
 
 const Highlights = ({ classes, data, userProfile, refetch }) => {
   const setMonthsToShow = (data) => {
-    return [...new Set(data.map((item) => moment(item.Date).format('YYYYMM')))].sort();
+    return [...new Set(data.map((item) => getMomentFromId(item._id).format('YYYYMM')))].sort();
   };
 
   const setLabelsAndData = (data, monthsArray) => {
@@ -37,10 +37,13 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
     const chartData = [];
 
     data.forEach((item) => {
-      const itemMonth = moment(item.Date).format('YYYYMM');
+      const multiple = parseFloat(item.deal?.dealParams?.dealMultiple || '1');
+      const itemMoment = getMomentFromId(item._id);
+      const itemMonth = itemMoment.format('YYYYMM');
       const monthsIndex = monthsArray.indexOf(itemMonth);
-      const itemLabel = moment(item.Date).format('MMM YYYY');
-      const itemAmount = item.amount;
+      const itemLabel = itemMoment.format('MMM YYYY');
+      const itemAmount = item.amount * multiple;
+
       if (labels.includes(itemLabel)) {
         chartData[monthsIndex] += itemAmount;
       } else {
@@ -48,6 +51,7 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
         chartData[monthsIndex] = itemAmount;
       }
     });
+
     const nextMonth = moment(monthsArray[monthsArray.length - 1])
       .add(1, 'month')
       .format('MMM YYYY');
@@ -78,13 +82,17 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
       return { label: s.deal?.company_name, total: s.amount };
     })
     .sort((a, b) => nestedSort(a, b, 'total', 'desc'));
+
   const seriesTotal = series.length ? series.map((s) => s.total).reduce((acc, n) => acc + n) : 0;
   const steppedChartData = getSteppedChartData(data);
-  const multiplesTotal = data.reduce((acc, n) => {
-    const dealMultiple = _.toNumber(n.deal?.dealData?.dealParams?.dealMultiple || 1);
-    return acc + dealMultiple;
+
+  const totalInvested = _.sumBy(data, 'amount');
+  const portfolioValue = data.reduce((acc, n) => {
+    const dealMultiple = _.toNumber(n.deal?.dealParams?.dealMultiple || 1);
+    const investmentWithReturn = dealMultiple * n.amount;
+    return acc + investmentWithReturn;
   }, 0);
-  const avgMultiple = multiplesTotal / data.length;
+  const avgMultiple = portfolioValue / totalInvested;
 
   return (
     <Grid container spacing={3} className={classes.section} style={{ paddingTop: '25px' }}>
@@ -99,10 +107,7 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
             style={{ flexDirection: 'column', alignItems: 'flex-start' }}
           >
             <Typography style={{ fontSize: '26px' }}>
-              $
-              {nWithCommas(
-                (_.sumBy(data, 'amount') * (avgMultiple === 0 ? 1 : avgMultiple)).toFixed(0),
-              )}
+              ${nWithCommas(portfolioValue.toFixed(0))}
             </Typography>
           </div>
         </SimpleBox>
@@ -118,7 +123,7 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
             style={{ flexDirection: 'column', alignItems: 'flex-start' }}
           >
             <Typography style={{ fontSize: '26px' }}>
-              ${nWithCommas(_.sumBy(data, 'amount').toFixed(0))}
+              ${nWithCommas(totalInvested.toFixed(0))}
             </Typography>
             <Typography className={classes.footerData}>
               {(data || []).length} Total Investments
@@ -133,7 +138,7 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
             style={{ flexDirection: 'column', alignItems: 'flex-start' }}
           >
             <Typography style={{ fontSize: '26px' }}>{avgMultiple.toFixed(2) || 1}x</Typography>
-            <Typography className={classes.footerData}>Last Updated: June 1st, 2021</Typography>
+            {/* <Typography className={classes.footerData}>Last Updated: June 1st, 2021</Typography> */}
           </div>
         </SimpleBox>
       </Grid>

@@ -1,3 +1,4 @@
+import moment from 'moment';
 /** *
  *
  * Helpers in general
@@ -38,4 +39,10 @@ export const nestedSort = (a, b, key, order = 'asc') => {
 export const openInNewTab = ({ url }) => {
   const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
   if (newWindow) newWindow.opener = null;
+};
+
+export const getMomentFromId = (id, inMiliseconds) => {
+  const timeStamp = id.toString().substring(0, 8);
+  const date = moment.unix(new Date(parseInt(timeStamp, 16) * (inMiliseconds ? 1000 : 1)));
+  return date;
 };
