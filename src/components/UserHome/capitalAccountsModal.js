@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { camelCase } from 'lodash';
 import CloseIcon from '@material-ui/icons/Close';
 import { Paper, Grid, Typography, Modal, Container } from '@material-ui/core';
-import './style.scss';
 import { nWithCommas, amountFormat } from '../../utils/numbers';
 
 const useStyles = makeStyles((theme) => ({
@@ -16,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '8vh',
     borderRadius: '1rem',
     padding: theme.spacing(2),
-    maxHeight: '70%',
+    maxHeight: '70vh',
     overflow: 'scroll',
   },
   header: {
@@ -32,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
+export default ({ showCapitalAccounts, setShowCapitalAccounts }) => {
   const classes = useStyles();
   const camelCaseKeys = (obj) =>
     Object.keys(obj).reduce(
@@ -42,7 +41,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
       }),
       {},
     );
-  const data = camelCaseKeys(showCapitalAccounts);
+  const data = camelCaseKeys(showCapitalAccounts || {});
 
   return (
     <>
@@ -58,7 +57,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
             <Grid item xs={12} sm={12} md={12} lg={12}>
               <Paper className={classes.modalPaper}>
                 <Grid
-                  onClick={() => setShowCaptialAccounts(false)}
+                  onClick={() => setShowCapitalAccounts(false)}
                   style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer' }}
                 >
                   <CloseIcon />
