@@ -114,7 +114,6 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
   const getCellContent = (type, row, headerValue) => {
     const { amount } = row;
     const multiple = Number(_.get(row, 'deal.dealParams.dealMultiple', '1'));
-    console.log('row', row);
     const rowOrg = row.deal?.organization;
     const capFields = (capitalAccounts || []).map((r) => r.fields);
     const capitalAccountInfo = capFields.find((r) => {
