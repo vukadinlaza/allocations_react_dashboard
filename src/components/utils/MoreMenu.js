@@ -54,6 +54,7 @@ const MoreMenu = ({ classes, menuItems, align = 'center' }) => {
       >
         {menuItems.map((item, idx) => (
           <MenuItem
+            disabled={item.disabled}
             key={`item-${idx}`}
             onClick={() => {
               item.onItemClick({ ...item.clickArgs });
