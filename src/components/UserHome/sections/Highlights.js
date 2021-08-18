@@ -75,7 +75,7 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
     return steppedChartData;
   };
 
-  if (!data || !data.length) return <Loader />;
+  if (!data) return <Loader />;
 
   const series = data
     .map((s) => {
@@ -92,7 +92,7 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
     const investmentWithReturn = dealMultiple * n.amount;
     return acc + investmentWithReturn;
   }, 0);
-  const avgMultiple = portfolioValue / totalInvested;
+  const avgMultiple = portfolioValue / totalInvested || 1;
 
   return (
     <Grid container spacing={3} className={classes.section} style={{ paddingTop: '25px' }}>
