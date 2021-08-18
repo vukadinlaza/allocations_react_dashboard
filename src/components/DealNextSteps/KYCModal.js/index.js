@@ -25,7 +25,6 @@ const KYCModal = ({
   refetch,
   deal,
   setShowTaxAsCompleted,
-  org,
 }) => {
   const [submitTaxDocument, { called, loading }] = useMutation(UPDATE_USER, {
     onCompleted: (data) => {
@@ -67,13 +66,7 @@ const KYCModal = ({
         <W9Indivdual called={called} loading={loading} toggleOpen={setOpen} createDoc={createDoc} />
       ),
       'W-9-E': (
-        <W9Entity
-          called={called}
-          loading={loading}
-          toggleOpen={setOpen}
-          createDoc={createDoc}
-          org={org}
-        />
+        <W9Entity called={called} loading={loading} toggleOpen={setOpen} createDoc={createDoc} />
       ),
       'W-8-BEN': (
         <W8BEN called={called} loading={loading} toggleOpen={setOpen} createDoc={createDoc} />

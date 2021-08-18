@@ -298,7 +298,6 @@ function DealNextSteps() {
           refetch={refetch}
           deal={dealData.deal || {}}
           setShowTaxAsCompleted={setShowTaxAsCompleted}
-          org={organization}
         />
         <WireInstructionsModal
           open={wireInstructionsOpen}

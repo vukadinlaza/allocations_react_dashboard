@@ -35,7 +35,7 @@ const validate = (formData) => {
   return required.reduce((acc, attr) => (formData[attr] ? acc : [...acc, attr]), []);
 };
 
-function W9Entity({ toggleOpen, createDoc, called, loading, org }) {
+function W9Entity({ toggleOpen, createDoc, called, loading }) {
   const [errors, setErrors] = useState([]);
   const [revocableTrust, setRevocableTrust] = useState(false);
   const { state } = useLocation();
@@ -205,37 +205,36 @@ function W9Entity({ toggleOpen, createDoc, called, loading, org }) {
             </label>
           </FormControl>
         </div>
-        {(org === 'irishangels' || org === '5f903e7164eb9a0023189ca2') && (
-          <div className="social container">
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={revocableTrust}
-                  onChange={() => {
-                    setRevocableTrust(!revocableTrust);
-                    if (!revocableTrust) {
-                      setFormData({
-                        ...formData,
-                        f1_14: '',
-                        f1_15: '',
-                      });
-                    } else {
-                      setFormData({
-                        ...formData,
-                        ssn_1: '',
-                        ssn_2: '',
-                        ssn_3: '',
-                      });
-                    }
-                  }}
-                  name="revocableTrustCheck"
-                  color="primary"
-                />
-              }
-              label="Revocable Trust?"
-            />
-          </div>
-        )}
+        <div className="social container">
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={revocableTrust}
+                onChange={() => {
+                  setRevocableTrust(!revocableTrust);
+                  if (!revocableTrust) {
+                    setFormData({
+                      ...formData,
+                      f1_14: '',
+                      f1_15: '',
+                    });
+                  } else {
+                    setFormData({
+                      ...formData,
+                      ssn_1: '',
+                      ssn_2: '',
+                      ssn_3: '',
+                    });
+                  }
+                }}
+                name="revocableTrustCheck"
+                color="primary"
+              />
+            }
+            label="Revocable Trust?"
+          />
+        </div>
+
         <div className="social container">
           {!revocableTrust ? (
             <FormControl className="form-field ein">
