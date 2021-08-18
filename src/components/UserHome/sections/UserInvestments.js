@@ -146,7 +146,6 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
     if (row.submissionData?.submissionId) {
       actions.push({
         label: 'Resign Documents',
-        // disabled: ,
         onItemClick: () => {
           setShowResignModal(row);
         },
