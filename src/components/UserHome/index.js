@@ -223,6 +223,7 @@ const UserHome = ({ classes }) => {
             data={userProfile.investments}
             classes={classes}
             showInvestments={showInvestments}
+            userProfile={userProfile}
           />
         );
 

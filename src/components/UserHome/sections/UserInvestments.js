@@ -3,10 +3,13 @@ import _ from 'lodash';
 import moment from 'moment';
 import { TextField, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import { toast } from 'react-toastify';
 import AllocationsTable from '../../utils/AllocationsTable';
 import { nWithCommas } from '../../../utils/numbers';
 import { titleCase, openInNewTab } from '../../../utils/helpers';
 import MoreMenu from '../../utils/MoreMenu';
+import { useFetchWithEmail } from '../../../utils/hooks';
+import CapitalAccountsModal from '../capitalAccountsModal';
 
 const headers = [
   {
@@ -89,14 +92,22 @@ const getStatusColors = (status) => {
       return { backgroundColor: 'rgba(0,0,0,0)', color: 'red' };
   }
 };
+const BASE = 'appLhEikZfHgNQtrL';
+const TABLE = 'Ledger';
 
-const UserInvestments = ({ classes, data, showInvestments }) => {
+const UserInvestments = ({ classes, data, showInvestments, userProfile }) => {
   const [searchTerm, setSearchTerm] = useState('');
-
+  const [showCapitalAccounts, setShowCapitalAccounts] = useState({});
+  const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile?.email || '');
+  console.log(capitalAccounts, userProfile);
   const getCellContent = (type, row, headerValue) => {
     const { amount } = row;
     const multiple = Number(_.get(row, 'deal.dealParams.dealMultiple', '1'));
     const rowOrg = row.deal?.organization;
+    const capFields = (capitalAccounts || []).map((r) => r.fields);
+    const capitalAccountInfo = capFields.find((r) => {
+      return _.get(r, 'Deal Name (webapp)[0]') === row?.deal?.company_name;
+    });
     const actions = [
       {
         label: 'Deal Page',
@@ -110,7 +121,16 @@ const UserInvestments = ({ classes, data, showInvestments }) => {
           url: `/next-steps/${rowOrg.slug}/${row.deal.slug}?investmentId=${row._id}`,
         },
       },
-      // { label: 'Capital Calls', onItemClick: () => console.log('Capital') },
+      {
+        label: 'Capital Accounts',
+        onItemClick: () => {
+          if (capitalAccountInfo) {
+            setShowCapitalAccounts(capitalAccountInfo);
+          } else {
+            toast.warn('Sorry! There is no Capital Accounts information available right now.');
+          }
+        },
+      },
     ];
     if (row.deal.investmentType === 'fund') {
       const fundsInvestmentsAction = {
@@ -192,6 +212,10 @@ const UserInvestments = ({ classes, data, showInvestments }) => {
         />
       </div>
       <AllocationsTable data={dataCopy} headers={headers} getCellContent={getCellContent} />
+      <CapitalAccountsModal
+        setShowCapitalAccounts={setShowCapitalAccounts}
+        showCapitalAccounts={showCapitalAccounts}
+      />
     </div>
   );
 };
