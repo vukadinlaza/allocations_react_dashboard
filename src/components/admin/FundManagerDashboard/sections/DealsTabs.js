@@ -96,13 +96,13 @@ const styles = (theme) => ({
     },
   },
   tabsPlaceholder: {
-    width: 'calc(100% - 80px)',
+    width: '100%',
     borderBottom: '2px solid #E6E9EF',
     height: '130px', // height of main title and tabs component
     position: 'absolute',
     top: '0px',
     left: '0px',
-    margin: '0 40px',
+    // margin: '0 40px',
     [theme.breakpoints.down(phone)]: {
       borderBottom: 'none',
     },

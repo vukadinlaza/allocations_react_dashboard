@@ -91,8 +91,11 @@ const UserDocuments = ({ classes, data }) => {
     const actions = [
       {
         label: 'View Document',
+        disabled: !row.link,
         onItemClick: openInNewTab,
-        clickArgs: { url: `${row.link.includes('http') ? row.link : `//${row.link}`}` },
+        clickArgs: {
+          url: row.link ? `${row.link.includes('http') ? row.link : `//${row.link}`}` : '',
+        },
       },
     ];
     switch (type) {

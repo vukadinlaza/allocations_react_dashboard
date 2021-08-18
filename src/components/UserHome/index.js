@@ -224,6 +224,7 @@ const UserHome = ({ classes }) => {
             classes={classes}
             showInvestments={showInvestments}
             userProfile={userProfile}
+            refetch={refetch}
           />
         );
 
