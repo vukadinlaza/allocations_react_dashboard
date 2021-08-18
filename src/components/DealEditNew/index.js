@@ -170,13 +170,6 @@ const GET_DEAL = gql`
             name
           }
         }
-        emailInvites {
-          status
-          sent_at
-          to
-          opened
-          opened_at
-        }
         dealParams {
           totalRoundSize
           dealType
