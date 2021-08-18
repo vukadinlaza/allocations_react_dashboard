@@ -13,7 +13,7 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import './styles.scss';
 import { toast } from 'react-toastify';
-import { useLocation, useParams } from 'react-router';
+import { useLocation } from 'react-router';
 import Loader from '../../../utils/Loader';
 
 const validate = (formData) => {
