@@ -49,6 +49,9 @@ const GET_INVESTOR = gql`
           path
           link
         }
+        submissionData {
+          submissionId
+        }
         deal {
           _id
           slug

@@ -12,6 +12,7 @@ import { useFetchWithEmail } from '../../../utils/hooks';
 import CapitalAccountsModal from '../capitalAccountsModal';
 import AppModal from '../../Modal/AppModal';
 import InvestmentEdit from '../../InvestmentEdit/UpdateInvestment';
+import ResignModal from '../resignModal';
 
 const headers = [
   {
@@ -99,6 +100,7 @@ const TABLE = 'Ledger';
 
 const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch }) => {
   const [showModal, setShowModal] = useState(false);
+  const [showResignModal, setShowResignModal] = useState(false);
   const [investmentId, setInvestmentId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [showCapitalAccounts, setShowCapitalAccounts] = useState({});
@@ -112,6 +114,7 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
   const getCellContent = (type, row, headerValue) => {
     const { amount } = row;
     const multiple = Number(_.get(row, 'deal.dealParams.dealMultiple', '1'));
+    console.log('row', row);
     const rowOrg = row.deal?.organization;
     const capFields = (capitalAccounts || []).map((r) => r.fields);
     const capitalAccountInfo = capFields.find((r) => {
@@ -140,6 +143,15 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
         },
       },
     ];
+    if (row.submissionData?.submissionId) {
+      actions.push({
+        label: 'Resign Documents',
+        // disabled: ,
+        onItemClick: () => {
+          setShowResignModal(row);
+        },
+      });
+    }
     if (row.deal.investmentType === 'fund') {
       const fundsInvestmentsAction = {
         label: `Fund's Investments`,
@@ -245,6 +257,11 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
       <AppModal isOpen={showModal} onClose={onClose}>
         <InvestmentEdit investmentId={investmentId} handleUpdate={handleUpdate} />
       </AppModal>
+      <ResignModal
+        showResignModal={showResignModal}
+        setShowResignModal={setShowResignModal}
+        refetch={refetch}
+      />
     </div>
   );
 };
