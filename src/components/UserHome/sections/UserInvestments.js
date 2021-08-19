@@ -79,17 +79,17 @@ const headers = [
 
 const getStatusColors = (status) => {
   switch (status) {
-    case 'complete':
+    case 'Complete':
       return { backgroundColor: '#C9EEC8', color: '#58CE46' };
-    case 'wired':
+    case 'Wired':
       return { backgroundColor: '#C9EEC8', color: '#58CE46' };
-    case 'signed':
+    case 'Signed':
       return { backgroundColor: '#FFE9BF', color: '#FFA700' };
-    case 'pledged':
+    case 'Pledged':
       return { backgroundColor: '#f99fc2', color: '#f92576' };
-    case 'closed':
+    case 'Closed':
       return { backgroundColor: '#CECECE', color: '#3D3D3D' };
-    case 'invited':
+    case 'Invited':
       return { backgroundColor: '#C0D7FF', color: '#0461FF' };
     default:
       return { backgroundColor: 'rgba(0,0,0,0)', color: 'red' };
@@ -169,7 +169,7 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
 
     switch (type) {
       case 'type':
-        return titleCase(_.get(row, headerValue, '')) || 'SPV';
+        return _.get(row, headerValue, '') === 'fund' ? 'Fund' : 'SPV';
       case 'status':
         return (
           <div
@@ -224,6 +224,7 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
         ...inv,
         estimatedValue: inv.amount * multiple,
         'deal.investmentType': type,
+        status: titleCase(inv.status),
       };
     });
 
