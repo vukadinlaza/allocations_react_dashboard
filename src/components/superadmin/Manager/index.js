@@ -25,16 +25,6 @@ const ORG_SUPERADMIN = gql`
         status
         sent_at
       }
-      complianceTasks {
-        _id
-        completed
-        task
-        status
-      }
-      documentTemplates {
-        _id
-        title
-      }
     }
   }
 `;
