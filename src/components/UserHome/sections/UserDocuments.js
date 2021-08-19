@@ -71,9 +71,9 @@ const UserDocuments = ({ classes, data }) => {
             userDocs.push({
               ...doc,
               documentName: docName, // have same key document Name for all docs
-              type: /K1|K-1/.test(doc.link.toUpperCase())
+              type: /K1|K-1/.test(doc.path.toUpperCase())
                 ? 'K-1'
-                : /AGREEMENT|SUBSCRIPTION|DOCS/.test(doc.link.toUpperCase())
+                : /AGREEMENT|SUBSCRIPTION|DOCS/.test(doc.path.toUpperCase())
                 ? 'Investment Agreement'
                 : 'N/A',
               status: 'Complete',
