@@ -115,7 +115,7 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
       <Grid item xs={12} lg={4}>
         <SimpleBox
           size="third"
-          title="Total amount"
+          title="Total Invested"
           info="This is the total amount invested on the platform"
         >
           <div
@@ -132,7 +132,7 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
         </SimpleBox>
       </Grid>
       <Grid item xs={12} lg={4}>
-        <SimpleBox size="third" title="Multiple" info="Explanation">
+        <SimpleBox size="third" title="Estimated Multiple" info="Explanation">
           <div
             className={classes.simpleBoxDataRow}
             style={{ flexDirection: 'column', alignItems: 'flex-start' }}
@@ -160,7 +160,7 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
         </ChartBox>
       </Grid>
       <Grid item xs={12} lg={6}>
-        <ChartBox title="Value" info="Explanation">
+        <ChartBox title="Total Portfolio Value Over Time" info="Explanation">
           <LineChart dataset={steppedChartData} />
         </ChartBox>
       </Grid>
