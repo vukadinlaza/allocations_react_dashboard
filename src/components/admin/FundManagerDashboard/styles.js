@@ -190,15 +190,6 @@ const styles = (theme) => ({
       flexDirection: 'column',
     },
   },
-  modalBackground: {
-    position: 'fixed',
-    left: '0',
-    top: '0',
-    height: '100vh',
-    width: '100vw',
-    zIndex: '1099',
-    backgroundColor: 'rgba(26, 26, 26, 0.30)',
-  },
   noDataPlaceholder: {
     display: 'flex',
     flexDirection: 'column',

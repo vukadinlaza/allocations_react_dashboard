@@ -28,6 +28,8 @@ export function formatDoughnutSeries(series) {
 }
 
 const Highlights = ({ classes, data, userProfile, refetch }) => {
+  const [openTooltip, setOpenTooltip] = useState('');
+
   const setMonthsToShow = (data) => {
     return [...new Set(data.map((item) => getMomentFromId(item._id).format('YYYYMM')))].sort();
   };
@@ -75,6 +77,10 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
     return steppedChartData;
   };
 
+  const handleTooltip = (id) => {
+    setOpenTooltip(id);
+  };
+
   if (!data) return <Loader />;
 
   const series = data
@@ -101,6 +107,14 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
           size="third"
           title="Portfolio Value"
           info="This is the estimated value of the portfolio"
+          handleTooltip={handleTooltip}
+          tooltipContent={
+            <Typography color="inherit">
+              This is the estimated value of the portfolio (Total Invested x Multiple)
+            </Typography>
+          }
+          openTooltip={openTooltip}
+          id="inv-portfolio-value"
         >
           <div
             className={classes.simpleBoxDataRow}
@@ -116,7 +130,12 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
         <SimpleBox
           size="third"
           title="Total Invested"
-          info="This is the total amount invested on the platform"
+          handleTooltip={handleTooltip}
+          tooltipContent={
+            <Typography color="inherit">Total capital invested by the investor</Typography>
+          }
+          openTooltip={openTooltip}
+          id="inv-total-invested"
         >
           <div
             className={classes.simpleBoxDataRow}
@@ -132,7 +151,19 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
         </SimpleBox>
       </Grid>
       <Grid item xs={12} lg={4}>
-        <SimpleBox size="third" title="Estimated Multiple" info="Explanation">
+        <SimpleBox
+          size="third"
+          title="Estimated Multiple"
+          handleTooltip={handleTooltip}
+          tooltipContent={
+            <Typography color="inherit">
+              This is the estimated multiple IRR on the Total Invested amount based on data provided
+              by the fund manager. Subject to change and not to be relied upon.
+            </Typography>
+          }
+          openTooltip={openTooltip}
+          id="inv-multiple"
+        >
           <div
             className={classes.simpleBoxDataRow}
             style={{ flexDirection: 'column', alignItems: 'flex-start' }}
