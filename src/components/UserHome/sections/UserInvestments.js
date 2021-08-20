@@ -222,6 +222,7 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
       const type = inv.deal?.investmentType === 'fund' ? 'fund' : 'SPV';
       return {
         ...inv,
+        'deal.dealParams.dealMultiple': multiple,
         estimatedValue: inv.amount * multiple,
         'deal.investmentType': type,
         status: titleCase(inv.status),
