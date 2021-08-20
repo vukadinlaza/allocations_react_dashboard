@@ -11,6 +11,17 @@ const headers = [
     value: 'documentName',
     type: 'documentName',
     isSortable: true,
+    align: 'left',
+    alignHeader: true,
+  },
+  {
+    label: 'DEAL NAME',
+    value: 'dealName',
+    type: 'dealName',
+    isSortable: true,
+    keyNotInData: true,
+    align: 'left',
+    alignHeader: true,
   },
   {
     label: 'TYPE',
@@ -24,7 +35,7 @@ const headers = [
     value: 'status',
     type: 'status',
     isSortable: true,
-    align: 'right',
+    align: 'center',
     alignHeader: true,
     keyNotInData: true,
   },
@@ -39,7 +50,7 @@ const headers = [
 
 const getStatusColors = (status) => {
   switch (status) {
-    case 'complete':
+    case 'Complete':
       return { backgroundColor: '#C9EEC8', color: '#58CE46' };
     default:
       return { backgroundColor: 'rgba(0,0,0,0)', color: 'red' };
@@ -49,33 +60,25 @@ const getStatusColors = (status) => {
 const UserDocuments = ({ classes, data }) => {
   const [userDocuments, setUserDocuments] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-
   useEffect(() => {
     if (data) {
       const userDocs = [];
-      if (data.documents) {
-        data.documents.forEach((doc) =>
-          userDocs.push({
-            ...doc,
-            link: doc.docspringPermDownloadLink,
-            type: doc.documentName.toUpperCase().includes('K-1') ? 'K-1' : 'KYC', // have link for all types of documents
-            status: 'complete',
-          }),
-        );
-      }
       if (data.investments) {
-        let investmentsDocs = [];
-        data.investments.forEach(
-          (inv) => (investmentsDocs = [...investmentsDocs, ...inv.documents]),
-        );
-        investmentsDocs.forEach((doc) => {
-          const docNameArray = doc.path.split('-');
-          const docName = docNameArray[docNameArray.length - 1];
-          userDocs.push({
-            ...doc,
-            documentName: docName, // have same key document Name for all docs
-            type: 'Investment Agreement',
-            status: 'complete',
+        data.investments.forEach((inv) => {
+          inv.documents.forEach((doc) => {
+            const docNameArray = doc.path.split('/');
+            const docName = docNameArray[docNameArray.length - 1];
+            userDocs.push({
+              ...doc,
+              documentName: docName, // have same key document Name for all docs
+              type: /K1|K-1/.test(doc.path.toUpperCase())
+                ? 'K-1'
+                : /AGREEMENT|SUBSCRIPTION|DOCS/.test(doc.path.toUpperCase())
+                ? 'Investment Agreement'
+                : 'N/A',
+              status: 'Complete',
+              dealName: inv?.deal?.company_name,
+            });
           });
         });
       }
@@ -91,13 +94,18 @@ const UserDocuments = ({ classes, data }) => {
     const actions = [
       {
         label: 'View Document',
+        disabled: !row.link,
         onItemClick: openInNewTab,
-        clickArgs: { url: `${row.link.includes('http') ? row.link : `//${row.link}`}` },
+        clickArgs: {
+          url: row.link ? `${row.link.includes('http') ? row.link : `//${row.link}`}` : '',
+        },
       },
     ];
     switch (type) {
       case 'documentName':
         return getDocName(row);
+      case 'dealName':
+        return row.dealName;
       case 'status':
         return (
           <div
@@ -127,7 +135,9 @@ const UserDocuments = ({ classes, data }) => {
   };
 
   const userDocumentsCopy = userDocuments
-    .filter((doc) => doc.documentName.toUpperCase().includes(searchTerm.toUpperCase()))
+    .filter((doc) =>
+      `${doc.documentName} ${doc.dealName}`.toUpperCase().includes(searchTerm.toUpperCase()),
+    )
     .map((doc) => {
       return {
         ...doc,
@@ -135,12 +145,14 @@ const UserDocuments = ({ classes, data }) => {
       };
     });
 
+  console.log({ userDocumentsCopy });
+
   return (
     <div className={classes.tableContainer}>
       <div className={classes.searchContainer}>
         <TextField
           label="Search"
-          placeholder="Search by document name"
+          placeholder="Search by document name or deal name"
           id="search-field"
           fullWidth
           onChange={handleSearch}

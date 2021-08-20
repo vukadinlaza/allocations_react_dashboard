@@ -49,6 +49,9 @@ const GET_INVESTOR = gql`
           path
           link
         }
+        submissionData {
+          submissionId
+        }
         deal {
           _id
           slug
@@ -224,6 +227,7 @@ const UserHome = ({ classes }) => {
             classes={classes}
             showInvestments={showInvestments}
             userProfile={userProfile}
+            refetch={refetch}
           />
         );
 

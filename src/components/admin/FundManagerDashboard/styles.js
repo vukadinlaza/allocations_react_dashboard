@@ -314,7 +314,9 @@ const styles = (theme) => ({
     width: '100%',
   },
   sortField: {
-    margin: '1rem 0 -1rem 52px',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    margin: '1rem 1rem -2rem 0',
     [theme.breakpoints.down(phone)]: {
       marginLeft: '22px',
       marginBottom: '5px',
