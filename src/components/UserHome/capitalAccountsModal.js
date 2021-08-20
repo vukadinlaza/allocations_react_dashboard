@@ -150,7 +150,7 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts }) => {
                     </Typography>
                   </div>
                   <Typography className={classes.rightVaue}>
-                    {(data.ownership * 100).toFixed(2)}%
+                    {(data.ownership * 100).toFixed(4)}%
                   </Typography>
                 </Grid>
                 <hr className="solid" />
