@@ -75,7 +75,7 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
     return steppedChartData;
   };
 
-  if (!data || !data.length) return <Loader />;
+  if (!data) return <Loader />;
 
   const series = data
     .map((s) => {
@@ -92,7 +92,7 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
     const investmentWithReturn = dealMultiple * n.amount;
     return acc + investmentWithReturn;
   }, 0);
-  const avgMultiple = portfolioValue / totalInvested;
+  const avgMultiple = portfolioValue / totalInvested || 1;
 
   return (
     <Grid container spacing={3} className={classes.section} style={{ paddingTop: '25px' }}>
@@ -115,7 +115,7 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
       <Grid item xs={12} lg={4}>
         <SimpleBox
           size="third"
-          title="Total amount"
+          title="Total Invested"
           info="This is the total amount invested on the platform"
         >
           <div
@@ -132,7 +132,7 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
         </SimpleBox>
       </Grid>
       <Grid item xs={12} lg={4}>
-        <SimpleBox size="third" title="Multiple" info="Explanation">
+        <SimpleBox size="third" title="Estimated Multiple" info="Explanation">
           <div
             className={classes.simpleBoxDataRow}
             style={{ flexDirection: 'column', alignItems: 'flex-start' }}
@@ -160,7 +160,7 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
         </ChartBox>
       </Grid>
       <Grid item xs={12} lg={6}>
-        <ChartBox title="Value" info="Explanation">
+        <ChartBox title="Total Portfolio Value Over Time" info="Explanation">
           <LineChart dataset={steppedChartData} />
         </ChartBox>
       </Grid>

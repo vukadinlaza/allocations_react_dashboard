@@ -44,7 +44,7 @@ const CONFIRM_INVESTMENT = gql`
   }
 `;
 
-const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs }) => {
+const ResignModal = ({ showResignModal, setShowResignModal, refetch = () => {} }) => {
   const [investor, setInvestor] = useState({
     country: '',
     country_search: '',
@@ -62,12 +62,9 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
   const [getInvestment, { data, called }] = useLazyQuery(GET_INVESTMENT);
   const [submitConfirmation] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: () => {
-      setTimeout(() => {
-        refetch();
-        toast.success('Success! Investment updated');
-        setShowResignModal(false);
-        setShowDocs(false);
-      }, 1000);
+      toast.success('Success! Investment updated');
+      setShowResignModal(false);
+      refetch();
     },
     onError: () => {
       toast.error('Sorry, Something went wrong. Try again or contact support@allocations.com');
@@ -118,6 +115,7 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch, setShowDocs
     };
 
     submitConfirmation({ variables: { payload } });
+    toast.warn('Loading. We are confirming your changes.');
     setShowResignModal(false);
   };
 

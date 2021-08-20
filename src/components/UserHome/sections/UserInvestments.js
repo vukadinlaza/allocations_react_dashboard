@@ -3,10 +3,16 @@ import _ from 'lodash';
 import moment from 'moment';
 import { TextField, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import { toast } from 'react-toastify';
 import AllocationsTable from '../../utils/AllocationsTable';
 import { nWithCommas } from '../../../utils/numbers';
 import { titleCase, openInNewTab } from '../../../utils/helpers';
 import MoreMenu from '../../utils/MoreMenu';
+import { useFetchWithEmail } from '../../../utils/hooks';
+import CapitalAccountsModal from '../capitalAccountsModal';
+import AppModal from '../../Modal/AppModal';
+import InvestmentEdit from '../../InvestmentEdit/UpdateInvestment';
+import ResignModal from '../resignModal';
 
 const headers = [
   {
@@ -73,30 +79,46 @@ const headers = [
 
 const getStatusColors = (status) => {
   switch (status) {
-    case 'complete':
+    case 'Complete':
       return { backgroundColor: '#C9EEC8', color: '#58CE46' };
-    case 'wired':
+    case 'Wired':
       return { backgroundColor: '#C9EEC8', color: '#58CE46' };
-    case 'signed':
+    case 'Signed':
       return { backgroundColor: '#FFE9BF', color: '#FFA700' };
-    case 'pledged':
+    case 'Pledged':
       return { backgroundColor: '#f99fc2', color: '#f92576' };
-    case 'closed':
+    case 'Closed':
       return { backgroundColor: '#CECECE', color: '#3D3D3D' };
-    case 'invited':
+    case 'Invited':
       return { backgroundColor: '#C0D7FF', color: '#0461FF' };
     default:
       return { backgroundColor: 'rgba(0,0,0,0)', color: 'red' };
   }
 };
+const BASE = 'appLhEikZfHgNQtrL';
+const TABLE = 'Ledger';
 
-const UserInvestments = ({ classes, data, showInvestments }) => {
+const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [showResignModal, setShowResignModal] = useState(false);
+  const [investmentId, setInvestmentId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showCapitalAccounts, setShowCapitalAccounts] = useState({});
+  const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile?.email || '');
+
+  const showInvestment = ({ invId }) => {
+    setShowModal(true);
+    setInvestmentId(invId);
+  };
 
   const getCellContent = (type, row, headerValue) => {
     const { amount } = row;
     const multiple = Number(_.get(row, 'deal.dealParams.dealMultiple', '1'));
     const rowOrg = row.deal?.organization;
+    const capFields = (capitalAccounts || []).map((r) => r.fields);
+    const capitalAccountInfo = capFields.find((r) => {
+      return _.get(r, 'Deal Name (webapp)[0]') === row?.deal?.company_name;
+    });
     const actions = [
       {
         label: 'Deal Page',
@@ -110,8 +132,24 @@ const UserInvestments = ({ classes, data, showInvestments }) => {
           url: `/next-steps/${rowOrg.slug}/${row.deal.slug}?investmentId=${row._id}`,
         },
       },
-      // { label: 'Capital Calls', onItemClick: () => console.log('Capital') },
+      {
+        label: 'Capital Accounts',
+        disabled: !capitalAccountInfo,
+        onItemClick: () => {
+          if (capitalAccountInfo) {
+            setShowCapitalAccounts(capitalAccountInfo);
+          }
+        },
+      },
     ];
+    if (row.submissionData?.submissionId) {
+      actions.push({
+        label: 'Resign Documents',
+        onItemClick: () => {
+          setShowResignModal(row);
+        },
+      });
+    }
     if (row.deal.investmentType === 'fund') {
       const fundsInvestmentsAction = {
         label: `Fund's Investments`,
@@ -120,10 +158,18 @@ const UserInvestments = ({ classes, data, showInvestments }) => {
       };
       actions.splice(2, 0, fundsInvestmentsAction);
     }
+    if (userProfile.admin) {
+      const editInvestment = {
+        label: 'Edit Investment',
+        onItemClick: showInvestment,
+        clickArgs: { invId: row._id },
+      };
+      actions.unshift(editInvestment);
+    }
 
     switch (type) {
       case 'type':
-        return titleCase(_.get(row, headerValue, '')) || 'SPV';
+        return _.get(row, headerValue, '') === 'fund' ? 'Fund' : 'SPV';
       case 'status':
         return (
           <div
@@ -155,6 +201,16 @@ const UserInvestments = ({ classes, data, showInvestments }) => {
     setSearchTerm(e.target.value);
   };
 
+  const onClose = () => {
+    setShowModal(false);
+    setInvestmentId(null);
+  };
+
+  const handleUpdate = {
+    refetch: () => refetch(),
+    closeModal: () => setShowModal(false),
+  };
+
   const dataCopy = data
     .filter(
       (inv) =>
@@ -166,8 +222,10 @@ const UserInvestments = ({ classes, data, showInvestments }) => {
       const type = inv.deal?.investmentType === 'fund' ? 'fund' : 'SPV';
       return {
         ...inv,
+        'deal.dealParams.dealMultiple': multiple,
         estimatedValue: inv.amount * multiple,
         'deal.investmentType': type,
+        status: titleCase(inv.status),
       };
     });
 
@@ -192,6 +250,18 @@ const UserInvestments = ({ classes, data, showInvestments }) => {
         />
       </div>
       <AllocationsTable data={dataCopy} headers={headers} getCellContent={getCellContent} />
+      <CapitalAccountsModal
+        setShowCapitalAccounts={setShowCapitalAccounts}
+        showCapitalAccounts={showCapitalAccounts}
+      />
+      <AppModal isOpen={showModal} onClose={onClose}>
+        <InvestmentEdit investmentId={investmentId} handleUpdate={handleUpdate} />
+      </AppModal>
+      <ResignModal
+        showResignModal={showResignModal}
+        setShowResignModal={setShowResignModal}
+        refetch={refetch}
+      />
     </div>
   );
 };
