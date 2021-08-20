@@ -210,10 +210,12 @@ const AllocationsTable = ({
   };
 
   const descendingComparator = (a, b, orderBy) => {
-    if (_.get(b, orderBy, '') < _.get(a, orderBy, '')) {
+    const itemA = _.get(a, orderBy, '');
+    const itemB = _.get(b, orderBy, '');
+    if (itemB < itemA) {
       return -1;
     }
-    if (_.get(b, orderBy, '') > _.get(a, orderBy, '')) {
+    if (itemB > itemA) {
       return 1;
     }
     return 0;
