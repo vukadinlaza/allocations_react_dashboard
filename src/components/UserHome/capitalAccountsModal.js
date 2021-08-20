@@ -34,15 +34,14 @@ const useStyles = makeStyles((theme) => ({
 export default ({ showCapitalAccounts, setShowCapitalAccounts }) => {
   const classes = useStyles();
   const camelCaseKeys = (obj) =>
-    Object.keys(obj).reduce(
-      (ccObj, field) => ({
-        ...ccObj,
-        [camelCase(field)]: obj[field],
-      }),
-      {},
-    );
+    Object.keys(obj).reduce((ccObj, field) => {
+      if (field.includes('Management Fee')) {
+        const percOrDollar = field.includes('%') ? '%' : '$';
+        return { ...ccObj, [camelCase(field) + percOrDollar]: obj[field] };
+      }
+      return { ...ccObj, [camelCase(field)]: obj[field] };
+    }, {});
   const data = camelCaseKeys(showCapitalAccounts || {});
-
   return (
     <>
       <Modal
@@ -115,7 +114,7 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts }) => {
                     <Typography variant="subtitle2">(Pro rata share of management fee) </Typography>
                   </div>
                   <Typography className={classes.rightVaue}>
-                    ${nWithCommas(data.managementFee)}
+                    ${nWithCommas(data.managementFee$)}
                   </Typography>
                 </Grid>
                 <hr className="solid" />
