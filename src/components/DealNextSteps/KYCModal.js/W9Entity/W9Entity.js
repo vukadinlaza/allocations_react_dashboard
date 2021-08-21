@@ -16,22 +16,22 @@ import { toast } from 'react-toastify';
 import { useLocation } from 'react-router';
 import Loader from '../../../utils/Loader';
 
-const validate = (formData) => {
-  const required = [
+const validate = (formData, revocableTrust) => {
+  let required = [
     'tax_classification',
     'city',
     'state',
     'zip',
     'date_signed',
     'signature',
-    'f1_15',
-    'f1_14',
-    'ssn_1',
-    'ssn_2',
-    'ssn_3',
     'address_number_street_and_apt_or_suite_no_see_instructions',
     'name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank',
   ];
+  if (revocableTrust) {
+    required = [...required, 'ssn_1', 'ssn_2', 'ssn_3'];
+  } else {
+    required = [...required, 'f1_15', 'f1_14'];
+  }
   return required.reduce((acc, attr) => (formData[attr] ? acc : [...acc, attr]), []);
 };
 
@@ -66,7 +66,7 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
 
   const handleSubmit = () => {
     const { city, state, zip } = formData;
-    const validation = validate(formData);
+    const validation = validate(formData, revocableTrust);
     setErrors(validation);
 
     if (validation.length > 0) {
@@ -211,6 +211,9 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
               <Checkbox
                 checked={revocableTrust}
                 onChange={() => {
+                  if (formData.tax_classification !== 'Trust/estate') {
+                    return;
+                  }
                   setRevocableTrust(!revocableTrust);
                   if (!revocableTrust) {
                     setFormData({
@@ -265,7 +268,7 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
               </label>
             </FormControl>
           ) : (
-            <FormControl className="form-field ssn">
+            <FormControl className="form-field ein">
               SSN
               <div className="ssn container">
                 <TextField
