@@ -69,6 +69,10 @@ const styles = (theme) => ({
     justifyContent: 'flex-end',
     alignItems: 'center',
     fontSize: '14px',
+    cursor: 'pointer',
+    '&:hover': {
+      color: theme.palette.primary.main,
+    },
   },
   dynamicBoxContent: {
     height: 'calc(100% - 110px)',
@@ -107,6 +111,15 @@ const styles = (theme) => ({
   },
   modal: {
     padding: '20px',
+  },
+  modalBackground: {
+    position: 'fixed',
+    left: '0',
+    top: '0',
+    height: '100vh',
+    width: '100vw',
+    zIndex: '1099',
+    backgroundColor: 'rgba(26, 26, 26, 0.30)',
   },
   modalTitle: {
     fontWeight: 'bold',
@@ -157,28 +170,34 @@ const getDimensions = (size) => {
 export const ModalTooltip = withStyles(styles)(
   ({ classes, children, title, handleTooltip, tooltipContent, openTooltip, id }) => {
     return (
-      <Tooltip
-        title={
-          <div className={classes.modal}>
-            <div className={classes.modalTitleContainer}>
-              <Typography className={classes.modalTitle}>{title}</Typography>
-              <Typography className={classes.closeModal} onClick={(e) => handleTooltip('')}>
-                Close
-                <CloseIcon style={{ fontSize: '14px' }} />
-              </Typography>
+      <>
+        {openTooltip === id && (
+          <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} />
+        )}
+        <Tooltip
+          interactive
+          title={
+            <div className={classes.modal}>
+              <div className={classes.modalTitleContainer}>
+                <Typography className={classes.modalTitle}>{title}</Typography>
+                <Typography className={classes.closeModal} onClick={(e) => handleTooltip('')}>
+                  Close
+                  <CloseIcon style={{ fontSize: '14px' }} />
+                </Typography>
+              </div>
+              {tooltipContent}
             </div>
-            {tooltipContent}
-          </div>
-        }
-        open={openTooltip === id}
-        disableHoverListener
-        classes={{
-          popper: classes.popper,
-          tooltip: classes.tooltip,
-        }}
-      >
-        {children}
-      </Tooltip>
+          }
+          open={openTooltip === id}
+          disableHoverListener
+          classes={{
+            popper: classes.popper,
+            tooltip: classes.tooltip,
+          }}
+        >
+          {children}
+        </Tooltip>
+      </>
     );
   },
 );

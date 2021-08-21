@@ -387,9 +387,6 @@ const FundManagerDashboard = ({ classes, history }) => {
 
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
-      {openTooltip && (
-        <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} />
-      )}
       <div className={classes.mainTitleContainer} id="main-title-container">
         <Typography className={classes.mainTitle}>
           {userProfile?.first_name
