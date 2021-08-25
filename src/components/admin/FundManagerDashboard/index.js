@@ -465,11 +465,11 @@ const FundManagerDashboard = ({ classes, history }) => {
                   flexContainer: classes.tabsContainer,
                 }}
               >
-                {dashboardTabs.map((tab, index) => (
+                {dashboardTabs.map((tab) => (
                   <Tab
                     label={tab}
                     className={classes.tab}
-                    key={`tab-${index}`}
+                    key={tab}
                     classes={{
                       root: classes.tab,
                       selected: classes.selectedTab,
