@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import moment from 'moment';
-import { useLazyQuery, useSubscription, useQuery, gql } from '@apollo/client';
+import { useLazyQuery, useQuery, gql } from '@apollo/client';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Tabs, Tab, Typography, Button, Grid } from '@material-ui/core';
+import { Tabs, Tab, Typography, Button } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import EditIcon from '@material-ui/icons/Edit';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
@@ -17,13 +17,11 @@ import Investments from './sections/Investments';
 import Investors from './sections/Investors';
 import Overview from './sections/Overview';
 import { FlatBox } from './widgets';
-import { phone, tablet } from '../../../utils/helpers';
 import { useViewport, useFetch } from '../../../utils/hooks';
 import { useAuth } from '../../../auth/useAuth';
 import AllocationsLoader from '../../utils/AllocationsLoader';
-import Loader from '../../utils/Loader';
 import DealsTabs from './sections/DealsTabs';
-import styles from './styles.js';
+import styles from './styles';
 import DocumentsTab from './sections/DocumentsTab';
 
 const GET_INVESTMENTS = gql`
@@ -129,10 +127,14 @@ const DEALS_TABLE = 'Deals';
 
 const FundManagerDashboard = ({ classes, history }) => {
   const { width } = useViewport();
-  let { organization: orgSlug, deal: dealSlug } = useParams();
+  const params = useParams();
+  const { deal: dealSlug } = params;
+  let { organization: orgSlug } = params;
+
   if (orgSlug === 'demo-fund') {
     orgSlug = '305-ventures';
   }
+
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
@@ -144,11 +146,13 @@ const FundManagerDashboard = ({ classes, history }) => {
   const [atDealData, setAtDealData] = useState({});
   const [openTooltip, setOpenTooltip] = useState('');
   const [orgDeals, setOrgDeals] = useState(null);
+
   const { data: overview } = useQuery(GET_OVERVIEW_DATA, { variables: { slug: orgSlug } });
   const [getInvestments, { data: dealInvestments, refetch }] = useLazyQuery(GET_INVESTMENTS);
   const [getOrgDeals, { data: orgDealsData }] = useLazyQuery(ORG_OVERVIEW);
   const checkedDealName = encodeURIComponent(dealName);
   const checkedAtDealDataName = encodeURIComponent(atDealData?.name);
+
   const { data: atDeal } = useFetch(
     OPS_ACCOUNTING,
     dealName && DEALS_TABLE,
@@ -170,6 +174,12 @@ const FundManagerDashboard = ({ classes, history }) => {
       setDealData(currentDeal);
       setDealName(dealName);
     }
+  };
+
+  const getDealDate = (deal) => {
+    const dealTS = deal._id.toString().substring(0, 8);
+    const dealDate = moment.unix(new Date(parseInt(dealTS, 16) * 1000));
+    return dealDate;
   };
 
   useEffect(() => {
@@ -220,6 +230,7 @@ const FundManagerDashboard = ({ classes, history }) => {
       setOrgDeals(orgDealsDataCopy);
     }
   }, [orgDealsData]);
+
   useEffect(() => {
     if (dealTab !== 0) handleDealData(dealTab);
   }, [dealTab]);
@@ -232,12 +243,6 @@ const FundManagerDashboard = ({ classes, history }) => {
       setAtDealData({ name: `Deal Name ${dealName} Not found in AirTable`, id: '' });
     }
   }, [atDeal]);
-
-  const getDealDate = (deal) => {
-    const dealTS = deal._id.toString().substring(0, 8);
-    const dealDate = moment.unix(new Date(parseInt(dealTS, 16) * 1000));
-    return dealDate;
-  };
 
   const handleLinkCopy = () => {
     if (orgSlug && dealData?.slug) {
