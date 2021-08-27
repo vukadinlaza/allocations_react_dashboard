@@ -23,6 +23,7 @@ import AllocationsLoader from '../../utils/AllocationsLoader';
 import DealsTabs from './sections/DealsTabs';
 import styles from './styles';
 import DocumentsTab from './sections/DocumentsTab';
+import BuildModal from '../../NewBuild/BuildModal';
 
 const GET_INVESTMENTS = gql`
   query GetDeal($fund_slug: String!, $deal_slug: String!) {
@@ -386,6 +387,7 @@ const FundManagerDashboard = ({ classes, history }) => {
     }
   };
 
+  const [openModal, setOpenModal] = useState(false);
   if (!orgDeals || !overview?.overviewData) return <AllocationsLoader fullHeight />;
 
   const isOverview = dealTab === 0;
@@ -399,17 +401,12 @@ const FundManagerDashboard = ({ classes, history }) => {
             : orgDealsData?.organization?.name}
         </Typography>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '.5rem' }}>
-          <a
-            href="//build.allocations.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={classes.createButtonLink}
-          >
-            <Button className={classes.createButton}>
+          <span className={classes.createButtonLink}>
+            <Button className={classes.createButton} onClick={() => setOpenModal(true)}>
               <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
               Create New {userProfile?.admin && 'Build'}
             </Button>
-          </a>
+          </span>
           {userProfile?.admin && (
             <span className={classes.createButtonLink}>
               <Button
@@ -437,6 +434,7 @@ const FundManagerDashboard = ({ classes, history }) => {
           )}
         </div>
       </div>
+
       {orgDeals && !orgDeals.organization?.deals?.length ? (
         <div className={classes.noDataPlaceholder}>
           <div>This fund has no deals.</div>
@@ -492,6 +490,7 @@ const FundManagerDashboard = ({ classes, history }) => {
           </div>
         </div>
       )}
+      <BuildModal isOpen={openModal} onClose={() => setOpenModal(false)} />
     </div>
   );
 };
