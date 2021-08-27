@@ -72,15 +72,8 @@ const styles = (theme) => ({
     },
   },
   createButtonLink: {
-    zIndex: 1,
-    '&:hover': {
-      textDecoration: 'none',
-    },
     [theme.breakpoints.down(phone)]: {
       marginBottom: '1em',
-      '& *': {
-        // marginLeft: "0 !important",
-      },
     },
   },
   createButtonsContainer: {
