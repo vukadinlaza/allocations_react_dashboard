@@ -107,7 +107,6 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
   const handleSubmit = () => {
     const { city, state, zip } = formData;
     const validation = validate(formData);
-    console.log(validation);
     setErrors(validation);
 
     if (validation.length > 0) {
@@ -141,8 +140,6 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
     }
     setFormData((prevData) => ({ ...prevData, [target.name]: target.value }));
   };
-
-  console.log('formdata', formData);
 
   return (
     <section className="W9Individual">
