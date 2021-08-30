@@ -59,11 +59,11 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
   const handleChange = ({ target }) => {
     if (target.name.includes('f1') || target.name.includes('ssn')) {
       const onlyNumbers = target.value.replace(/\D+/g, '');
-      console.log('this is the value ', target.value, 'this is onlyNumbers ', onlyNumbers);
       return setFormData((prevData) => ({ ...prevData, [target.name]: onlyNumbers }));
     }
-    if (!target.name.includes('Trust/estate')) {
+    if (target.name.includes('tax_classification') && target.value !== 'Trust/estate') {
       setRevocableTrust(false);
+      setFormData((prevData) => ({ ...prevData, ssn_1: '', ssn_2: '', ssn_3: '' }));
     }
     setFormData((prevData) => ({ ...prevData, [target.name]: target.value }));
   };
