@@ -51,12 +51,6 @@ const styles = (theme) => ({
       outline: 'none',
       border: 'none',
     },
-    // '&:active': {
-    //   outline: 'none',
-    //   border: 'none',
-    //   borderBottom: 'solid 2px #205df5',
-    //   borderRadius: '0',
-    // },
   },
   root: {
     display: 'flex',
