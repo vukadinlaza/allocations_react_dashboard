@@ -27,6 +27,8 @@ export function formatDoughnutSeries(series) {
 }
 
 const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealInvestments }) => {
+  const dealMultiple = _.toNumber(dealData?.dealParams?.dealMultiple || 1);
+
   const setMonthsToShow = (data) => {
     const monthsArray = [];
 
@@ -47,7 +49,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
       const itemMonth = moment(item.Date).format('YYYYMM');
       const monthsIndex = monthsArray.indexOf(itemMonth);
       const itemLabel = moment(item.Date).format('MMM YYYY');
-      const itemAmount = item.Invested;
+      const itemAmount = item.Invested * dealMultiple;
       if (labels.includes(itemLabel)) {
         chartData[monthsIndex] += itemAmount;
       } else {
@@ -87,7 +89,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
     .sort((a, b) => nestedSort(a, b, 'total', 'desc'));
   const seriesTotal = series.length ? series.map((s) => s.total).reduce((acc, n) => acc + n, 0) : 0;
   const steppedChartData = getSteppedChartData();
-  const dealMultiple = _.toNumber(dealData?.dealParams?.dealMultiple || 1);
+
   const investments =
     dealInvestments?.deal?.investments?.length && dealInvestments.deal.investments;
 
