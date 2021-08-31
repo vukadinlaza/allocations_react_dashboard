@@ -205,7 +205,7 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
         <Typography className={classes.collapseTitle}>Documents</Typography>
         <Grid container spacing={1}>
           {row.documents.map((doc, index) => (
-            <Grid item xs={6} key={`doc-${index}`}>
+            <Grid item xs={12} lg={6} key={`doc-${index}`}>
               <DocumentBox doc={doc} docPath={doc.path.split('/')[2]} index={index} />
             </Grid>
           ))}
