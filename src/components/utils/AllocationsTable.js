@@ -53,7 +53,6 @@ const styles = (theme) => ({
 });
 
 /*
-	PROPS NEEDED (example):/*
 	PROPS NEEDED (example):
 		data={tableData}
 		headers={tableHeaders}
