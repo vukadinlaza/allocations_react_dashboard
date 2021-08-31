@@ -62,7 +62,7 @@ const BuildModal = ({ onClose, isOpen }) => {
                 <Grid item style={{ width: '100%' }}>
                   <FormControl component="fieldset" style={{ width: '100%' }}>
                     <RadioGroup className={classes.radioGroup}>
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <Box style={{ display: 'flex', flexDirection: 'column' }}>
                         {['SPV', 'Fund'].map((type) => {
                           return (
                             <FormControlLabel
@@ -84,9 +84,9 @@ const BuildModal = ({ onClose, isOpen }) => {
                             />
                           );
                         })}
-                      </div>
+                      </Box>
 
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <Box style={{ display: 'flex', flexDirection: 'column' }}>
                         {['SPAC', 'Reg Cf'].map((type) => {
                           return (
                             <FormControlLabel
@@ -108,7 +108,7 @@ const BuildModal = ({ onClose, isOpen }) => {
                             />
                           );
                         })}
-                      </div>
+                      </Box>
                     </RadioGroup>
                   </FormControl>
                 </Grid>
