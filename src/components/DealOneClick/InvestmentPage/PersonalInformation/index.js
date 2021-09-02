@@ -12,7 +12,10 @@ import {
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import countries from 'country-region-data';
 import { UsaStates } from 'usa-states';
-import { AccreditedInvestorStatus } from '../../../forms/InvestorEdit';
+import {
+  AccreditedInvestorStatus,
+  ThreeCSevenAccrediedInvestorStatus,
+} from '../../../forms/InvestorEdit';
 import { PanelContainer, PanelLabel } from '../../../Panel';
 import useStyles from './styles';
 
@@ -23,6 +26,7 @@ const stateNames = usStates.states.map((s) => s.name);
 function PersonalInformation({
   investor,
   setInvestor,
+  is3c7,
   errors,
   org,
   handleSecondSig,
@@ -32,7 +36,6 @@ function PersonalInformation({
   const [entityDesignation, setEntityDesignation] = useState('');
   const [individualDesignation, setIndividualDesignation] = useState('');
   const classes = useStyles();
-
   const handleChange = (prop) => (e, newValue) => {
     if (e) {
       e.persist();
@@ -191,8 +194,22 @@ function PersonalInformation({
         </FormControl>
       )}
       {/* Accreditation status */}
-      {org !== 'irishangels' && (
-        <AccreditedInvestorStatus investor={investor} handleChange={handleChange} errors={errors} />
+      {org !== 'irishangels' ? (
+        is3c7 ? (
+          <ThreeCSevenAccrediedInvestorStatus
+            investor={investor}
+            handleChange={handleChange}
+            errors={errors}
+          />
+        ) : (
+          <AccreditedInvestorStatus
+            investor={investor}
+            handleChange={handleChange}
+            errors={errors}
+          />
+        )
+      ) : (
+        ''
       )}
 
       {investor.investor_type && investor.investor_type !== 'individual' && org !== 'irishangels' && (
