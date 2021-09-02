@@ -74,6 +74,7 @@ const dealParamsValidInputs = [
   'fundEstimatedTerm',
   'coinvestors',
   'dealLogo',
+  'is3c7',
 ];
 
 const UPDATE_DEAL = gql`
@@ -125,6 +126,7 @@ const UPDATE_DEAL = gql`
         fundManagementFeeType
         fundGeneralPartner
         fundEstimatedTerm
+        is3c7
       }
     }
   }
@@ -199,6 +201,7 @@ const GET_DEAL = gql`
           fundManagementFeeType
           fundGeneralPartner
           fundEstimatedTerm
+          is3c7
         }
       }
     }

@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { useMutation, gql } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CloudDone } from '@material-ui/icons';
+import SendIcon from '@material-ui/icons/Send';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import {
   Button,
@@ -17,6 +18,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  ListItemIcon,
 } from '@material-ui/core';
 import countries from 'country-region-data';
 import Typography from '@material-ui/core/Typography';
@@ -380,6 +382,48 @@ export function AccreditedInvestorStatus({ investor, handleChange, errors }) {
         <MenuItem value="" />
         {statusOptions[investor_type].map((opt) => (
           <MenuItem key={opt} value={opt}>
+            {opt}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
+}
+const is3c7Options = {
+  individual: ['An individual that owns $5,000,000 or more in investments'],
+  entity: [
+    'A family-owned business not formed for the specific purpose of acquiring the interest in the fund that owns $5,000,000 or more in investments',
+    'An entity not formed for the specific purpose of acquiring the interest in the fund which owns and invests at least $25,000,000 in investments (or someone who is acting on account of such a person)',
+    'trust not formed for the specific purpose of acquiring the interest in the fund which is sponsored by and managed by qualified purchasers',
+    'A qualified institutional buyer (not formed for the specific purpose of investing in each applicable fund),  provided that the undersigned is not (1) a dealer that owns and invests on a discretionary basis less than $25,000,000 in securities of issuers that are not affiliated persons of the dealer, or (2) a plan, or a trust fund that holds the assets of such a plan, the investment decisions with respect to which are made by the beneficiaries of the plan',
+    'A company all of whose outstanding securities are beneficially owned by qualified purchasers',
+  ],
+};
+
+export function ThreeCSevenAccrediedInvestorStatus({ investor, handleChange, errors }) {
+  const classes = useStyles();
+  const { investor_type } = investor;
+  if (!investor_type) return null;
+
+  return (
+    <FormControl
+      required
+      className={classes.accreditedInvestorStatus}
+      error={errors.includes('is3c7_options_status')}
+      variant="outlined"
+    >
+      <InputLabel htmlFor="outlined-age-native-simple">Qualified Purchaser Status</InputLabel>
+      <Select
+        value={investor.is3c7_options_status || ''}
+        onChange={handleChange('is3c7_options_status')}
+        inputProps={{ name: 'is3c7_options_status' }}
+      >
+        <MenuItem value="" style={{ whiteSpace: 'normal' }} />
+        {is3c7Options[investor_type].map((opt) => (
+          <MenuItem key={opt} value={opt} style={{ whiteSpace: 'normal' }}>
+            <ListItemIcon>
+              <SendIcon fontSize="small" />
+            </ListItemIcon>
             {opt}
           </MenuItem>
         ))}
