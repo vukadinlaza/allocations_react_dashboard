@@ -15,6 +15,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Toolbar from '@material-ui/core/Toolbar';
 import RadioButtonUncheckedOutlinedIcon from '@material-ui/icons/RadioButtonUncheckedOutlined';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import { Box } from '@material-ui/core';
 import { nWithCommas } from '../../utils/numbers';
 
 const styles = (theme) => ({
@@ -39,8 +40,16 @@ const styles = (theme) => ({
     border: '1px solid #8493A640 !important',
     borderRadius: '10px',
     overflowX: 'auto',
+    padding: '20px 0',
   },
   table: {},
+  totalRow: {
+    background: '#FFFFFF',
+  },
+  totalCell: {
+    color: '#2A2B54 !important',
+    fontWeight: '600 !important',
+  },
 });
 
 /*
@@ -75,6 +84,7 @@ const styles = (theme) => ({
     rowSelector="rowSelector" - property name that identifies each row Optional 
     currentCollapsed={currentRowToShow}//must match row[rowSelector]
 
+    withTotal={Boolean} //for a Total row
 		const headersExample = [
       {
 				value: 'cellValue',
@@ -84,10 +94,11 @@ const styles = (theme) => ({
 				align: 'right' optional
 				alignHeader: Boolean optional
         isSortable: Boolean optional
-
 				nestedKey: nested key optional (needs nestedCollection & localFieldKey)
 				nestedCollection: String (collection for lookup) (needs nestedKey localFieldKey)
 				localFieldKey: key in db collection (needs nestedKey and nestedCollection)
+        totalValue: String optional // can be used to fill a cell with title text (i.e. "Total" or "Average")
+        totalType: String optional (needs withTotal to be passed into AllocationsTable and needs totalColumn)
 			}
     ]
 */
@@ -110,6 +121,7 @@ const AllocationsTable = ({
   includeCheckBox,
   tableSize,
   getCellContent,
+  getTotalContent,
   withTitle,
   titleComponent,
   getSortProps,
@@ -118,6 +130,7 @@ const AllocationsTable = ({
   getCollapsedContent,
   withCollapse,
   currentCollapsed,
+  withTotal,
 }) => {
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
@@ -225,15 +238,17 @@ const AllocationsTable = ({
   const isAllSelected = () => (data ? selected.length === data.length : false);
   let dataToShow = stableSort(data, getComparator(order, orderBy));
 
+  // temp demo data
+  withTotal = true;
+
   if (pagination) {
     dataToShow = dataToShow.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   }
-
   return (
-    <div className={classes.root} style={{ width: '100%' }}>
+    <div className={classes.root} style={{ width: '100%', padding: '12px' }}>
       <TableContainer
         component={Paper}
-        style={noShadow ? { boxShadow: 'none' } : {}}
+        style={noShadow ? { boxShadow: 'none', padding: '0' } : { padding: '0' }}
         className={classes.tableContainer}
       >
         {withTitle ? <Toolbar className={classes.toolbar}>{titleComponent}</Toolbar> : ''}
@@ -342,13 +357,13 @@ const AllocationsTable = ({
 
                       {withCollapse ? (
                         <TableRow>
-                          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                          <TableCell style={{ padding: 0 }} colSpan={headers.length}>
                             <Collapse
                               in={currentCollapsed.includes(row[rowSelector])}
                               timeout="auto"
                               unmountOnExit
                             >
-                              {getCollapsedContent(row)}
+                              <Box margin={1}>{getCollapsedContent(row)}</Box>
                             </Collapse>
                           </TableCell>
                         </TableRow>
@@ -358,6 +373,29 @@ const AllocationsTable = ({
                 })
               : null}
           </TableBody>
+
+          {withTotal ? (
+            <TableRow className={classes.totalRow}>
+              {headers.map((header) => {
+                if (header.totalValue) {
+                  return (
+                    <TableCell classes={{ root: classes.totalCell }}>{header.totalValue}</TableCell>
+                  );
+                }
+                if (header.totalType) {
+                  return (
+                    <TableCell
+                      classes={{ root: classes.totalCell }}
+                      align={header.align || 'center'}
+                    >
+                      {nWithCommas(getTotalContent(header.totalType, dataToShow, header.value))}
+                    </TableCell>
+                  );
+                }
+                return <TableCell classes={{ root: classes.totalCell }} />;
+              })}
+            </TableRow>
+          ) : null}
         </Table>
         {pagination || serverPagination ? (
           <TablePagination
