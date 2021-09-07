@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { camelCase } from 'lodash';
 import CloseIcon from '@material-ui/icons/Close';
 import { Paper, Grid, Typography, Modal, Container } from '@material-ui/core';
-import './style.scss';
 import { nWithCommas, amountFormat } from '../../utils/numbers';
 
 const useStyles = makeStyles((theme) => ({
@@ -16,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '8vh',
     borderRadius: '1rem',
     padding: theme.spacing(2),
-    maxHeight: '70%',
+    maxHeight: '70vh',
     overflow: 'scroll',
   },
   header: {
@@ -32,18 +31,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
+export default ({ showCapitalAccounts, setShowCapitalAccounts }) => {
   const classes = useStyles();
   const camelCaseKeys = (obj) =>
-    Object.keys(obj).reduce(
-      (ccObj, field) => ({
-        ...ccObj,
-        [camelCase(field)]: obj[field],
-      }),
-      {},
-    );
-  const data = camelCaseKeys(showCapitalAccounts);
-
+    Object.keys(obj).reduce((ccObj, field) => {
+      if (field.includes('Management Fee')) {
+        const percOrDollar = field.includes('%') ? '%' : '$';
+        return { ...ccObj, [camelCase(field) + percOrDollar]: obj[field] };
+      }
+      return { ...ccObj, [camelCase(field)]: obj[field] };
+    }, {});
+  const data = camelCaseKeys(showCapitalAccounts || {});
   return (
     <>
       <Modal
@@ -58,7 +56,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
             <Grid item xs={12} sm={12} md={12} lg={12}>
               <Paper className={classes.modalPaper}>
                 <Grid
-                  onClick={() => setShowCaptialAccounts(false)}
+                  onClick={() => setShowCapitalAccounts(false)}
                   style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer' }}
                 >
                   <CloseIcon />
@@ -116,7 +114,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                     <Typography variant="subtitle2">(Pro rata share of management fee) </Typography>
                   </div>
                   <Typography className={classes.rightVaue}>
-                    ${nWithCommas(data.managementFee)}
+                    ${nWithCommas(data.managementFee$)}
                   </Typography>
                 </Grid>
                 <hr className="solid" />
@@ -151,7 +149,7 @@ export default ({ showCapitalAccounts, setShowCaptialAccounts }) => {
                     </Typography>
                   </div>
                   <Typography className={classes.rightVaue}>
-                    {(data.ownership * 100).toFixed(2)}%
+                    {(data.ownership * 100).toFixed(4)}%
                   </Typography>
                 </Grid>
                 <hr className="solid" />

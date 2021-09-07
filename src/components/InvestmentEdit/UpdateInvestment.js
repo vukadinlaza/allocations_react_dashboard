@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { get, isEqual, pick } from 'lodash';
+import _, { get, isEqual, pick } from 'lodash';
 import { useParams, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { gql, useQuery, useMutation } from '@apollo/client';
-import _ from 'lodash';
+
 import {
   Button,
   TextField,

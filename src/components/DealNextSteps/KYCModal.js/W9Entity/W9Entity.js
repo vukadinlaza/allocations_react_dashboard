@@ -1,4 +1,13 @@
-import { FormControl, TextField, Button, Select, MenuItem, Tooltip } from '@material-ui/core';
+import {
+  FormControl,
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  Tooltip,
+  Checkbox,
+} from '@material-ui/core';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import CloseIcon from '@material-ui/icons/Close';
 import React, { useState } from 'react';
 import moment from 'moment';
@@ -7,24 +16,28 @@ import { toast } from 'react-toastify';
 import { useLocation } from 'react-router';
 import Loader from '../../../utils/Loader';
 
-const validate = (formData) => {
-  const required = [
+const validate = (formData, revocableTrust) => {
+  let required = [
     'tax_classification',
     'city',
     'state',
     'zip',
     'date_signed',
     'signature',
-    'f1_15',
-    'f1_14',
     'address_number_street_and_apt_or_suite_no_see_instructions',
     'name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank',
   ];
+  if (revocableTrust) {
+    required = [...required, 'ssn_1', 'ssn_2', 'ssn_3'];
+  } else {
+    required = [...required, 'f1_15', 'f1_14'];
+  }
   return required.reduce((acc, attr) => (formData[attr] ? acc : [...acc, attr]), []);
 };
 
 function W9Entity({ toggleOpen, createDoc, called, loading }) {
   const [errors, setErrors] = useState([]);
+  const [revocableTrust, setRevocableTrust] = useState(false);
   const { state } = useLocation();
   const [formData, setFormData] = useState({
     name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank:
@@ -32,6 +45,9 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
     address_number_street_and_apt_or_suite_no_see_instructions: '',
     f1_14: '',
     f1_15: '',
+    ssn_1: '',
+    ssn_2: '',
+    ssn_3: '',
     tax_classification: '',
     state: '',
     city: '',
@@ -50,7 +66,7 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
 
   const handleSubmit = () => {
     const { city, state, zip } = formData;
-    const validation = validate(formData);
+    const validation = validate(formData, revocableTrust);
     setErrors(validation);
 
     if (validation.length > 0) {
@@ -189,35 +205,102 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
             </label>
           </FormControl>
         </div>
+        <div className="social container">
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={revocableTrust}
+                onChange={() => {
+                  if (formData.tax_classification !== 'Trust/estate') {
+                    return;
+                  }
+                  setRevocableTrust(!revocableTrust);
+                  if (!revocableTrust) {
+                    setFormData({
+                      ...formData,
+                      f1_14: '',
+                      f1_15: '',
+                    });
+                  } else {
+                    setFormData({
+                      ...formData,
+                      ssn_1: '',
+                      ssn_2: '',
+                      ssn_3: '',
+                    });
+                  }
+                }}
+                name="revocableTrustCheck"
+                color="primary"
+              />
+            }
+            label="Revocable Trust?"
+          />
+        </div>
 
         <div className="social container">
-          <FormControl className="form-field ein">
-            <label>
-              EIN
-              <div className="ein container">
-                <Tooltip title="First 2 digits of EIN.">
-                  <TextField
-                    variant="outlined"
-                    className="ein-one"
-                    onChange={handleChange}
-                    name="f1_14"
-                    inputProps={{ maxLength: '2' }}
-                    error={errors.includes('f1_14')}
-                  />
-                </Tooltip>
-                <Tooltip title="Last 7 digits of EIN.">
-                  <TextField
-                    variant="outlined"
-                    onChange={handleChange}
-                    name="f1_15"
-                    className="ein-two"
-                    inputProps={{ maxLength: '7' }}
-                    error={errors.includes('f1_15')}
-                  />
-                </Tooltip>
+          {!revocableTrust ? (
+            <FormControl className="form-field ein">
+              <label>
+                EIN
+                <div className="ein container">
+                  <Tooltip title="First 2 digits of EIN.">
+                    <TextField
+                      variant="outlined"
+                      className="ein-one"
+                      onChange={handleChange}
+                      name="f1_14"
+                      inputProps={{ maxLength: '2' }}
+                      error={errors.includes('f1_14')}
+                    />
+                  </Tooltip>
+                  <Tooltip title="Last 7 digits of EIN.">
+                    <TextField
+                      variant="outlined"
+                      onChange={handleChange}
+                      name="f1_15"
+                      className="ein-two"
+                      inputProps={{ maxLength: '7' }}
+                      error={errors.includes('f1_15')}
+                    />
+                  </Tooltip>
+                </div>
+              </label>
+            </FormControl>
+          ) : (
+            <FormControl className="form-field ein">
+              SSN
+              <div className="ssn container">
+                <TextField
+                  name="ssn_1"
+                  value={formData.ssn_1fgv}
+                  onChange={handleChange}
+                  variant="outlined"
+                  className="ssn-one"
+                  inputProps={{ maxLength: '3' }}
+                  error={errors.includes('ssn_1fgv')}
+                />
+                <TextField
+                  name="ssn_2"
+                  value={formData.ssn_2}
+                  onChange={handleChange}
+                  variant="outlined"
+                  className="ssn-two"
+                  inputProps={{ maxLength: '2' }}
+                  error={errors.includes('ssn_2')}
+                />
+                <TextField
+                  name="ssn_3"
+                  value={formData.ssn_3}
+                  onChange={handleChange}
+                  variant="outlined"
+                  className="ssn-three"
+                  inputProps={{ maxLength: '4' }}
+                  error={errors.includes('ssn_3')}
+                />
               </div>
-            </label>
-          </FormControl>
+            </FormControl>
+          )}
           <FormControl className="form-field date-signed">
             <label>
               Date signed
