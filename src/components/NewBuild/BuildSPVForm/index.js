@@ -55,6 +55,13 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '5px',
     opacity: 1,
   },
+  finalTextArea: {
+    minHeight: '167px',
+    height: '167px',
+    width: '1159px',
+    padding: '0',
+    border: '1px solid red',
+  },
 }));
 
 export default function InvestorEditForm() {
@@ -295,7 +302,16 @@ export default function InvestorEditForm() {
                 }}
               />
             </Typography>
-            <TextField className={classes.paper} style={{ width: '1190px' }} variant="outlined" />
+            <TextField
+              className={classes.finalTextArea}
+              variant="outlined"
+              inputProps={{
+                style: {
+                  height: '167px',
+                  padding: 0,
+                },
+              }}
+            />
           </FormControl>
         </form>
       </Paper>
