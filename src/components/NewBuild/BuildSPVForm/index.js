@@ -55,13 +55,6 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '5px',
     opacity: 1,
   },
-  finalTextArea: {
-    minHeight: '167px',
-    height: '167px',
-    width: '1159px',
-    padding: '0',
-    border: '1px solid red',
-  },
 }));
 
 export default function InvestorEditForm() {
