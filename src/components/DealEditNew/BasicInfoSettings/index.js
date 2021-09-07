@@ -184,7 +184,7 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
 
         <FormControl className="field">
           <label className="field-label">
-            Minumum investment
+            Minimum investment
             <CurrencyTextField
               className="currency-text-input"
               variant="outlined"
