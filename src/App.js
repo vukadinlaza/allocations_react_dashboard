@@ -57,6 +57,11 @@ import DealNextSteps from './components/DealNextSteps/DealNextSteps';
 import DealLandingPage from './components/DealOneClick/LandingPage/LandingPage';
 import InvestmentPage from './components/DealOneClick/InvestmentPage/InvestmentPage';
 
+// test
+import BuildSPVForm from './components/NewBuild/BuildSPVForm/index';
+import TypeItem from './components/NewBuild/FormComponents/TypeSelector/TypeItem/index';
+import TypeSelector from './components/NewBuild/FormComponents/TypeSelector/index';
+
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
 /** *
@@ -77,7 +82,9 @@ const App = () => {
         <div className="mainRoute">
           <Switch>
             <Route path="/cb/thankyou" component={ThankYou} exact />
-
+            <PrivateRoute path="/testing" exact component={BuildSPVForm} />
+            <PrivateRoute path="/testing2" exact component={TypeItem} />
+            <PrivateRoute path="/testing3" exact component={TypeSelector} />
             <PrivateRoute path="/" exact component={UserHome} />
             <PrivateRoute path="/demo" exact component={Demo} />
             <PrivateRoute path="/credit" exact component={Credit} />

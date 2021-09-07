@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '1rem 1rem 0 0 ',
     padding: theme.spacing(2),
     maxHeight: 'calc(100% - 8vh)',
-    overflow: 'scroll',
+    // overflow: 'scroll',
   },
   modalHeader: {
     fontFamily: 'Roboto !important',
