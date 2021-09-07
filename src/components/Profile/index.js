@@ -103,6 +103,23 @@ const UPDATE_ENTITY = gql`
   }
 `;
 
+const GET_ACCOUNT_ENTITIES = gql`
+  query data($accountId: String) {
+    getEntities(accountId: $accountId) {
+      _id
+      first_name
+      last_name
+      name
+      email
+      entity_name
+      investor_type
+      signer_full_name
+      country
+      isPrimaryEntity
+    }
+  }
+`;
+
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -134,6 +151,7 @@ export default function Profile() {
       setInvestor(userProfile);
     }
   }, [userProfile]);
+
   useEffect(() => {
     if (removeRes) {
       refetchAccountUsers();
@@ -146,6 +164,7 @@ export default function Profile() {
       refetchUser();
     }
   }, [formStatus, refetchAccountUsers, refetchUser]);
+
   useEffect(() => {
     if (createEntityRes || deleteEntityRes || updateEntityRes) {
       refetchAccountEntities();
@@ -268,23 +287,6 @@ const AccountUsers = ({
     </Paper>
   );
 };
-
-const GET_ACCOUNT_ENTITIES = gql`
-  query data($accountId: String) {
-    getEntities(accountId: $accountId) {
-      _id
-      first_name
-      last_name
-      name
-      email
-      entity_name
-      investor_type
-      signer_full_name
-      country
-      isPrimaryEntity
-    }
-  }
-`;
 
 const AccountEntities = ({
   classes,
