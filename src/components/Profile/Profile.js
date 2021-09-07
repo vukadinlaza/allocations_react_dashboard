@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography } from '@material-ui/core';
-import AccountUsers from './sections/AccountUsers';
-import AccountEntities from './sections/AccountEntities';
+import ProfileAccounts from './sections/ProfileAccounts';
+import ProfileEntities from './sections/ProfileEntities';
 import ProfileInfo from './sections/ProfileInfo';
 import styles from './styles';
 
@@ -22,10 +22,10 @@ const Network = ({ classes }) => {
         return <ProfileInfo classes={classes} />;
 
       case 1:
-        return <AccountUsers classes={classes} />;
+        return <ProfileAccounts classes={classes} />;
 
       case 2:
-        return <AccountEntities classes={classes} />;
+        return <ProfileEntities classes={classes} />;
 
       default:
         return <p>No Data</p>;

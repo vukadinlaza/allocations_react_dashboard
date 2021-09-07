@@ -18,7 +18,7 @@ const GET_ACCOUNT_ENTITIES = gql`
   }
 `;
 
-const AccountEntities = () => {
+const ProfileEntities = () => {
   return (
     <div>
       <h1>Entities working!</h1>
@@ -26,4 +26,4 @@ const AccountEntities = () => {
   );
 };
 
-export default AccountEntities;
+export default ProfileEntities;
