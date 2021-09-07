@@ -19,7 +19,7 @@ import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
 import AddAccountModal from './addAccountModal';
 import AddEntityModal from './addEntityModal';
-import './style.scss';
+import useStyles from './styles';
 
 /** *
  *
