@@ -75,6 +75,14 @@ const styles = (theme) => ({
       width: '100%',
     },
   },
+  collapsedRow: {
+    padding: '20px',
+  },
+  collapseTitle: {
+    fontSize: '1.2rem',
+    fontWeight: 'bold',
+    marginBottom: '0.5em',
+  },
   contentContainer: {
     width: '100%',
   },

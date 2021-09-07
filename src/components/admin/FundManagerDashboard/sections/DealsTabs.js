@@ -104,6 +104,7 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
   const isMobile = useMediaQuery('(max-width:600px)');
   const [titleContainer, setTitleContainer] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [dropdownSelected, setDropdownSelected] = useState(false);
 
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
@@ -115,6 +116,14 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
 
   const handleTabChange = (e, newIndex) => {
     setTabIndex(newIndex);
+
+    if ((isMobile && newIndex === 0) || (!isMobile && newIndex < 4)) {
+      setDropdownSelected(false);
+    }
+    if ((isMobile && newIndex > 0) || (!isMobile && newIndex >= 4)) {
+      setDropdownSelected(true);
+    }
+
     handleClose();
   };
 
@@ -177,7 +186,13 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
         {isMobile ? mappedTabs.slice(0, 1) : mappedTabs.slice(0, 4)}
         {(isMobile && mappedTabs.length > 2) || (!isMobile && mappedTabs.length > 4) ? (
           <>
-            <Button onClick={handleClick} className={classes.moreButton}>
+            <Button
+              onClick={handleClick}
+              className={classes.moreButton}
+              style={
+                dropdownSelected ? { borderBottom: 'solid 2px #205df5', borderRadius: '0' } : {}
+              }
+            >
               <Typography>
                 {isMobile ? (
                   tabIndex < 1 ? (
@@ -212,7 +227,14 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
                 ) : tabIndex < 4 ? (
                   'More Funds'
                 ) : (
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      color: '#205df5',
+                      fontWeight: 'bold',
+                    }}
+                  >
                     {deals[tabIndex].company_name}
                     {deals[tabIndex].company_name !== 'All' && (
                       <span
