@@ -59,6 +59,23 @@ const useStyles = makeStyles((theme) => ({
 
 export default function InvestorEditForm() {
   const classes = useStyles();
+  // Basic Info
+  const [assetType, setAssetType] = useState('');
+  const [portCompName, setPortCompName] = useState('');
+  const [managerName, setManagerName] = useState('');
+  const [closingDate, setClosingDate] = useState('');
+
+  // Deal Terms
+  const [managementFee, setManagementFee] = useState('');
+  const [carryFee, setCarryFee] = useState('');
+  const [feeFrequency, setFreeFrequency] = useState('');
+  const [sameForAllInv, setSameForAllInv] = useState('');
+  // Offering Terms
+  const [allocationsAsAdviser, setAllocationsAsAdviser] = useState('');
+  const [fundTemplateDocument, setFundTemplateDocument] = useState('');
+  const [offeringType, setOfferingType] = useState('');
+  // Final
+  const [finalNotes, setFinalNotes] = useState('');
   return (
     <>
       <Paper className={classes.paper}>
@@ -77,7 +94,17 @@ export default function InvestorEditForm() {
           Build your SPV / Review and sign terms / Upload docs
         </Typography>
       </Paper>
-      <BasicInfo parentClasses={classes} />
+      <BasicInfo
+        parentClasses={classes}
+        assetType={assetType}
+        setAssetType={setAssetType}
+        portCompName={portCompName}
+        setPortCompName={setPortCompName}
+        managerName={managerName}
+        setManagerName={setManagerName}
+        closingDate={closingDate}
+        setClosingDate={setClosingDate}
+      />
       <Paper className={classes.paper}>
         <form noValidate autoComplete="off" style={{ padding: '42px' }}>
           <Typography variant="h6" gutterBottom style={{ fontSize: '34px' }}>
@@ -104,7 +131,12 @@ export default function InvestorEditForm() {
                       }}
                     />
                   </Typography>
-                  <TextField style={{ width: '568px', marginBottom: '37px' }} variant="outlined" />
+                  <TextField
+                    value={managementFee}
+                    onChange={(e) => setManagementFee(e.target.value)}
+                    style={{ width: '568px', marginBottom: '37px' }}
+                    variant="outlined"
+                  />
                 </FormControl>
               </Grid>
               <Grid item xs={6}>
@@ -126,7 +158,12 @@ export default function InvestorEditForm() {
                       }}
                     />
                   </Typography>
-                  <TextField style={{ width: '568px', marginBottom: '37px' }} variant="outlined" />
+                  <TextField
+                    value={feeFrequency}
+                    onChange={(e) => setFreeFrequency(e.target.value)}
+                    style={{ width: '568px', marginBottom: '37px' }}
+                    variant="outlined"
+                  />
                 </FormControl>
               </Grid>
             </Grid>
@@ -151,7 +188,8 @@ export default function InvestorEditForm() {
                     />
                   </Typography>
                   <TextField
-                    className={classes.paper}
+                    value={carryFee}
+                    onChange={(e) => setCarryFee(e.target.value)}
                     style={{ width: '568px', marginBottom: '37px' }}
                     variant="outlined"
                   />
@@ -177,7 +215,8 @@ export default function InvestorEditForm() {
                     />
                   </Typography>
                   <TextField
-                    className={classes.paper}
+                    value={sameForAllInv}
+                    onChange={(e) => setSameForAllInv(e.target.value)}
                     style={{ width: '568px' }}
                     variant="outlined"
                   />
@@ -214,7 +253,8 @@ export default function InvestorEditForm() {
                     />
                   </Typography>
                   <TextField
-                    className={classes.paper}
+                    value={allocationsAsAdviser}
+                    onChange={(e) => setAllocationsAsAdviser(e.target.value)}
                     style={{ width: '568px', marginBottom: '37px' }}
                     variant="outlined"
                   />
@@ -240,7 +280,8 @@ export default function InvestorEditForm() {
                     />
                   </Typography>
                   <TextField
-                    className={classes.paper}
+                    value={offeringType}
+                    onChange={(e) => setOfferingType(e.target.value)}
                     style={{ width: '568px', marginBottom: '37px' }}
                     variant="outlined"
                   />
@@ -268,7 +309,8 @@ export default function InvestorEditForm() {
                     />
                   </Typography>
                   <TextField
-                    className={classes.paper}
+                    value={fundTemplateDocument}
+                    onChange={(e) => setFundTemplateDocument(e.target.value)}
                     style={{ width: '568px', marginBottom: '37px' }}
                     variant="outlined"
                   />
@@ -296,18 +338,45 @@ export default function InvestorEditForm() {
               />
             </Typography>
             <TextField
-              className={classes.finalTextArea}
               variant="outlined"
+              value={finalNotes}
+              onChange={(e) => setFinalNotes(e.target.value)}
               inputProps={{
                 style: {
                   height: '167px',
-                  padding: 0,
+                  background: '#FFFFFF 0% 0% no-repeat padding-box',
+                  boxShadow: '0px 3px 6px #0000000A',
+                  border: '1px solid #70707040',
+                  borderRadius: '5px',
+                  opacity: 1,
                 },
               }}
             />
           </FormControl>
         </form>
       </Paper>
+      <Button
+        onClick={() => {
+          console.log('basic info');
+          console.log(assetType);
+          console.log(portCompName);
+          console.log(managerName);
+          console.log(closingDate);
+          console.log('deal terms');
+          console.log(managementFee);
+          console.log(carryFee);
+          console.log(feeFrequency);
+          console.log(sameForAllInv);
+          console.log('offering terms');
+          console.log(allocationsAsAdviser);
+          console.log(fundTemplateDocument);
+          console.log(offeringType);
+          console.log('final terms');
+          console.log(finalNotes);
+        }}
+      >
+        Test
+      </Button>
     </>
   );
 }

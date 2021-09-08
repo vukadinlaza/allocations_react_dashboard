@@ -23,19 +23,90 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import TypeItem from './TypeItem/index';
+import RocketIcon from '../../../../assets/buildRocket.svg';
+import BankIcon from '../../../../assets/buildBank.svg';
+import CryptoIcon from '../../../../assets/buildCrypto.svg';
+import DistributeIcon from '../../../../assets/buildDistribute.svg';
+import HouseIcon from '../../../../assets/buildHouse.svg';
+import LevelIcon from '../../../../assets/buildLevel.svg';
+import NetworkIcon from '../../../../assets/buildNetwork.svg';
+import PieIcon from '../../../../assets/buildPie.svg';
 
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     flexGrow: 1,
-//   },
-// }));
-
-export default function TypeSelector({ parentClasses }) {
-  // const classes = useStyles();
-  function FormRow() {
+export default function TypeSelector({
+  parentClasses,
+  assetType,
+  setAssetType,
+  portCompName,
+  setPortCompName,
+  managerName,
+  setManagerName,
+  closingDate,
+  setClosingDate,
+}) {
+  // const [assetType, setAssetType] = useState('');
+  const row1Items = [
+    {
+      title: 'Startup',
+      value: 'startup',
+      description: 'Raise money to invest in a private company',
+      icon: RocketIcon,
+    },
+    {
+      title: 'Crypto',
+      value: 'crypto',
+      description: 'Raise money to invest in a crypto project (token/equity)',
+      icon: CryptoIcon,
+    },
+    {
+      title: 'Real Estate',
+      value: 'realEstate',
+      description: 'Raise money to invest in a real estate project',
+      icon: HouseIcon,
+    },
+    {
+      title: 'SPV into a Fund',
+      value: 'spvToFund',
+      description: 'Raise money to invest into a fund',
+      icon: BankIcon,
+    },
+  ];
+  const row2Items = [
+    {
+      title: 'Secondary',
+      value: 'secondary',
+      description: 'Raise money to invest in a secondary of a private company',
+      icon: DistributeIcon,
+    },
+    {
+      title: 'SPV into an SPV',
+      value: 'spvToSpv',
+      description: 'Raise money to invest in another SPV',
+      icon: NetworkIcon,
+    },
+    {
+      title: 'Management Co.',
+      value: 'managementStake',
+      description: `Sell a stake in your fund's management company's future carry`,
+      icon: PieIcon,
+    },
+    {
+      title: 'Custom',
+      value: 'custom',
+      description: 'Raise money for X',
+      icon: LevelIcon,
+    },
+  ];
+  function FormRow({ rowItems }) {
     return (
       <>
-        <Grid item style={{ paddingBottom: '16px', paddingRight: '24px' }}>
+        {rowItems.map((item) => {
+          return (
+            <Grid item style={{ paddingBottom: '16px', paddingRight: '24px' }}>
+              <TypeItem item={item} assetType={assetType} setAssetType={setAssetType} />
+            </Grid>
+          );
+        })}
+        {/* <Grid item style={{ paddingBottom: '16px', paddingRight: '24px' }}>
           <TypeItem />
         </Grid>
         <Grid item style={{ paddingBottom: '16px', paddingRight: '24px' }}>
@@ -43,10 +114,7 @@ export default function TypeSelector({ parentClasses }) {
         </Grid>
         <Grid item style={{ paddingBottom: '16px', paddingRight: '24px' }}>
           <TypeItem />
-        </Grid>
-        <Grid item style={{ paddingBottom: '16px', paddingRight: '24px' }}>
-          <TypeItem />
-        </Grid>
+        </Grid> */}
       </>
     );
   }
@@ -72,10 +140,10 @@ export default function TypeSelector({ parentClasses }) {
           />
         </Typography>
         <Grid container spacing={1}>
-          <FormRow />
+          <FormRow rowItems={row1Items} />
         </Grid>
         <Grid container spacing={1}>
-          <FormRow />
+          <FormRow rowItems={row2Items} />
         </Grid>
         <FormControl
           required
@@ -94,7 +162,12 @@ export default function TypeSelector({ parentClasses }) {
               }}
             />
           </Typography>
-          <TextField style={{ width: '1148px', paddingTop: '16px' }} variant="outlined" />
+          <TextField
+            value={portCompName}
+            onChange={(e) => setPortCompName(e.target.value)}
+            style={{ width: '1148px', paddingTop: '16px' }}
+            variant="outlined"
+          />
         </FormControl>
         <Grid container style={{ paddingTop: '32px' }}>
           <Grid item>
@@ -110,7 +183,12 @@ export default function TypeSelector({ parentClasses }) {
                   }}
                 />
               </Typography>
-              <TextField style={{ width: '568px', paddingTop: '16px' }} variant="outlined" />
+              <TextField
+                value={managerName}
+                onChange={(e) => setManagerName(e.target.value)}
+                style={{ width: '568px', paddingTop: '16px' }}
+                variant="outlined"
+              />
             </FormControl>
           </Grid>
           <Grid item>
@@ -127,6 +205,8 @@ export default function TypeSelector({ parentClasses }) {
                 />
               </Typography>
               <TextField
+                value={closingDate}
+                onChange={(e) => setClosingDate(e.target.value)}
                 style={{ width: '568px', paddingTop: '16px' }}
                 variant="outlined"
                 type="date"
