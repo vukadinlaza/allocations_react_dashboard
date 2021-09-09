@@ -10,14 +10,37 @@ import {
   TableRow,
   Fab,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { capitalize } from 'lodash';
-import SettingsIcon from '@material-ui/icons/Settings';
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import EditIcon from '@material-ui/icons/Edit';
 import AddEntityModal from '../addEntityModal';
 
+const useStyles = makeStyles((theme) => ({
+  checkCircle: {
+    color: theme.palette.primary.main,
+  },
+  tableHeaderText: {
+    color: '#2A2B54 !important',
+  },
+  row: {
+    background: theme.palette.row,
+    '&:hover': {
+      background: theme.palette.rowHover,
+    },
+  },
+  rowText: {
+    color: '#2A2B54 !important',
+  },
+  table: {
+    boxShadow: '0px 3px 6px #00000029',
+    border: '1px solid #8493A640 !important',
+    borderRadius: '10px',
+    overflowX: 'auto',
+  },
+}));
+
 const ProfileEntities = ({
-  classes,
   data,
   deleteEntity,
   refetchAccountEntities,
@@ -25,6 +48,7 @@ const ProfileEntities = ({
   updateEntity,
   accountEntities,
 }) => {
+  const classes = useStyles();
   const [showEntityModal, setShowEntityModal] = useState();
 
   const getName = (investor) => {
@@ -53,27 +77,43 @@ const ProfileEntities = ({
       </Grid>
 
       <Grid item xs={12}>
-        <Paper className="account-paper">
-          <Table className={classes.table} aria-label="simple table">
+        <Paper elevation={10} className={classes.table}>
+          <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="left">Type</TableCell>
-                <TableCell align="center">Name </TableCell>
-                <TableCell align="center">Email</TableCell>
-                <TableCell align="center">Country</TableCell>
-                <TableCell align="center">Edit</TableCell>
+                <TableCell align="left" className={classes.tableHeaderText}>
+                  TYPE
+                </TableCell>
+                <TableCell align="center" className={classes.tableHeaderText}>
+                  NAME
+                </TableCell>
+                <TableCell align="center" className={classes.tableHeaderText}>
+                  EMAIL
+                </TableCell>
+                <TableCell align="center" className={classes.tableHeaderText}>
+                  COUNTRY
+                </TableCell>
+                <TableCell align="center" className={classes.tableHeaderText}>
+                  EDIT
+                </TableCell>
               </TableRow>
             </TableHead>
 
             <TableBody>
               {accountEntities?.getEntities.map((row) => (
-                <TableRow key={row?._id}>
-                  <TableCell component="th" scope="row">
+                <TableRow key={row?._id} className={classes.row}>
+                  <TableCell component="th" scope="row" className={classes.rowText}>
                     {capitalize(row.investor_type)}
                   </TableCell>
-                  <TableCell align="center">{getName(row)}</TableCell>
-                  <TableCell align="center">{row.email}</TableCell>
-                  <TableCell align="center">{row.country}</TableCell>
+                  <TableCell align="center" className={classes.rowText}>
+                    {getName(row)}
+                  </TableCell>
+                  <TableCell align="center" className={classes.rowText}>
+                    {row.email}
+                  </TableCell>
+                  <TableCell align="center" className={classes.rowText}>
+                    {row.country}
+                  </TableCell>
                   <TableCell align="center">
                     <Fab
                       size="small"

@@ -10,18 +10,37 @@ import {
   TableRow,
   Fab,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import AddAccountModal from '../addAccountModal';
 
-const ProfileAccounts = ({
-  classes,
-  acctUsers,
-  data,
-  removeUser,
-  refetchAccountUsers,
-  userProfile,
-}) => {
+const useStyles = makeStyles((theme) => ({
+  checkCircle: {
+    color: theme.palette.primary.main,
+  },
+  tableHeaderText: {
+    color: '#2A2B54 !important',
+  },
+  row: {
+    background: theme.palette.row,
+    '&:hover': {
+      background: theme.palette.rowHover,
+    },
+  },
+  rowText: {
+    color: '#2A2B54 !important',
+  },
+  table: {
+    boxShadow: '0px 3px 6px #00000029',
+    border: '1px solid #8493A640 !important',
+    borderRadius: '10px',
+    overflowX: 'auto',
+  },
+}));
+
+const ProfileAccounts = ({ acctUsers, data, removeUser, refetchAccountUsers, userProfile }) => {
+  const classes = useStyles();
   const [showAddAccountModal, setAddAccountModal] = useState();
 
   return (
@@ -41,25 +60,37 @@ const ProfileAccounts = ({
       </Grid>
 
       <Grid item xs={12}>
-        <Paper className="account-paper">
-          <Table className={classes.table} aria-label="simple table">
+        <Paper className={classes.table}>
+          <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="left">Name</TableCell>
-                <TableCell align="center">Email </TableCell>
-                <TableCell align="center">Account</TableCell>
-                <TableCell align="center">Delete</TableCell>
+                <TableCell align="left" className={classes.tableHeaderText}>
+                  Name
+                </TableCell>
+                <TableCell align="center" className={classes.tableHeaderText}>
+                  Email{' '}
+                </TableCell>
+                <TableCell align="center" className={classes.tableHeaderText}>
+                  Account
+                </TableCell>
+                <TableCell align="center" className={classes.tableHeaderText}>
+                  Delete
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {acctUsers.map((row) => (
-                <TableRow key={row.name}>
-                  <TableCell component="th" scope="row">
+                <TableRow key={row.name} className={classes.row}>
+                  <TableCell component="th" scope="row" className={classes.rowText}>
                     {row.name}
                   </TableCell>
-                  <TableCell align="center">{row.email}</TableCell>
-                  <TableCell align="center">{row._id}</TableCell>
-                  <TableCell align="center">
+                  <TableCell align="center" className={classes.rowText}>
+                    {row.email}
+                  </TableCell>
+                  <TableCell align="center" className={classes.rowText}>
+                    {row._id}
+                  </TableCell>
+                  <TableCell align="center" className={classes.rowText}>
                     <Fab
                       size="small"
                       aria-label="Delete"
