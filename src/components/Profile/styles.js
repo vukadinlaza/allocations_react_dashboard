@@ -1,5 +1,3 @@
-import { phone } from '../../utils/helpers';
-
 const styles = (theme) => ({
   back: {
     color: '#2A2B54',
@@ -70,7 +68,10 @@ const styles = (theme) => ({
     color: '#2A2B54 !important',
   },
   contentContainer: {
-    margin: '40px',
+    padding: '2rem',
+    [theme.breakpoints.down('sm')]: {
+      padding: '.5rem',
+    },
   },
   createButton: {
     backgroundColor: '#39C522',
@@ -85,7 +86,7 @@ const styles = (theme) => ({
     '&:focus': {
       outline: 'none',
     },
-    [theme.breakpoints.down(phone)]: {
+    [theme.breakpoints.down('sm')]: {
       fontSize: '.5rem',
     },
   },
@@ -94,7 +95,7 @@ const styles = (theme) => ({
     '&:hover': {
       textDecoration: 'none',
     },
-    [theme.breakpoints.down(phone)]: {
+    [theme.breakpoints.down('sm')]: {
       marginBottom: '1em',
       '& *': {
         // marginLeft: "0 !important",
@@ -107,7 +108,6 @@ const styles = (theme) => ({
     justifyContent: 'flex-start',
     width: '100%',
     position: 'absolute',
-    width: '100%',
     left: '0',
     top: '0',
     background: 'white',
@@ -177,7 +177,7 @@ const styles = (theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     margin: '0 40px',
-    [theme.breakpoints.down(phone)]: {
+    [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
       fontSize: '.5rem',
     },
@@ -203,7 +203,7 @@ const styles = (theme) => ({
     width: '100%',
     padding: '40px',
     margin: '0px',
-    [theme.breakpoints.down(phone)]: {
+    [theme.breakpoints.down('sm')]: {
       padding: '10px',
     },
   },
@@ -255,13 +255,14 @@ const styles = (theme) => ({
     '& *': {
       height: '100%',
     },
-    [theme.breakpoints.down(phone)]: {
+    [theme.breakpoints.down('sm')]: {
       padding: '0 12px',
     },
   },
   tabsContainer: {
-    [theme.breakpoints.down(phone)]: {
-      overflowX: 'scroll',
+    [theme.breakpoints.down('sm')]: {
+      textAlign: 'center',
+      overflow: 'auto',
       display: 'block',
     },
   },

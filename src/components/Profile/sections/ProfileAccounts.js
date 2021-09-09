@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid #8493A640 !important',
     borderRadius: '10px',
     overflowX: 'auto',
+    width: '100%',
   },
 }));
 
