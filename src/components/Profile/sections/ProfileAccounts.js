@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Typography,
   Paper,
   Grid,
   Button,
@@ -9,76 +8,91 @@ import {
   TableHead,
   TableCell,
   TableRow,
+  Fab,
 } from '@material-ui/core';
+import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
+import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import AddAccountModal from '../addAccountModal';
 
 const ProfileAccounts = ({
   classes,
   acctUsers,
-  userProfile,
   data,
   removeUser,
   refetchAccountUsers,
+  userProfile,
 }) => {
   const [showAddAccountModal, setAddAccountModal] = useState();
 
   return (
-    <div>
-      <Paper className="account-paper">
-        <Grid style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography variant="h6" gutterBottom>
-            Accounts
-          </Typography>
-          <Button color="primary" variant="contained" onClick={() => setAddAccountModal(true)}>
+    <Grid container spacing={2}>
+      <Grid item xs={12} container justifyContent="flex-end">
+        <Grid item>
+          <Button
+            color="primary"
+            variant="contained"
+            startIcon={<AddCircleRoundedIcon />}
+            onClick={() => setAddAccountModal(true)}
+            style={{ width: '200px' }}
+          >
             Add new
           </Button>
         </Grid>
-        <Table className={classes.table} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="left">Name</TableCell>
-              <TableCell align="center">Email </TableCell>
-              <TableCell align="center">Account</TableCell>
-              <TableCell align="center">Delete</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {acctUsers.map((row) => (
-              <TableRow key={row.name}>
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="center">{row.email}</TableCell>
-                <TableCell align="center">{row._id}</TableCell>
-                <TableCell align="center">
-                  {' '}
-                  <Button
-                    color="primary"
-                    variant="contained"
-                    disabled={data?.rootAdmin !== userProfile._id || data.rootAdmin === row._id}
-                    onClick={() => {
-                      removeUser({
-                        onCompleted: refetchAccountUsers(),
-                        variables: { userId: row._id, accountId: data?.accountId },
-                        notifyOnNetworkStatusChange: true,
-                        fetchPolicy: 'no-cache',
-                      });
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </TableCell>
+      </Grid>
+
+      <Grid item xs={12}>
+        <Paper className="account-paper">
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="left">Name</TableCell>
+                <TableCell align="center">Email </TableCell>
+                <TableCell align="center">Account</TableCell>
+                <TableCell align="center">Delete</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
+            </TableHead>
+            <TableBody>
+              {acctUsers.map((row) => (
+                <TableRow key={row.name}>
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="center">{row.email}</TableCell>
+                  <TableCell align="center">{row._id}</TableCell>
+                  <TableCell align="center">
+                    <Fab
+                      size="small"
+                      aria-label="Delete"
+                      disabled={data?.rootAdmin !== userProfile._id || data.rootAdmin === row._id}
+                      style={
+                        data?.rootAdmin !== userProfile._id || data.rootAdmin === row._id
+                          ? { backgroundColor: 'grey', color: 'white' }
+                          : { backgroundColor: 'red', color: 'white' }
+                      }
+                      onClick={() => {
+                        removeUser({
+                          onCompleted: refetchAccountUsers(),
+                          variables: { userId: row._id, accountId: data?.accountId },
+                          notifyOnNetworkStatusChange: true,
+                          fetchPolicy: 'no-cache',
+                        });
+                      }}
+                    >
+                      <CloseRoundedIcon />
+                    </Fab>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+      </Grid>
 
       <AddAccountModal
         showAddAccountModal={showAddAccountModal}
         setAddAccountModal={setAddAccountModal}
       />
-    </div>
+    </Grid>
   );
 };
 
