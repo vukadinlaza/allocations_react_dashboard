@@ -61,6 +61,8 @@ import InvestmentPage from './components/DealOneClick/InvestmentPage/InvestmentP
 import BuildSPVForm from './components/NewBuild/BuildSPVForm/index';
 import TypeItem from './components/NewBuild/FormComponents/TypeSelector/TypeItem/index';
 import TypeSelector from './components/NewBuild/FormComponents/TypeSelector/index';
+import AgreementSigner from './components/NewBuild/FormComponents/AgreementSigner/index';
+import UploadDocs from './components/NewBuild/FormComponents/UploadDocs/index';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -85,6 +87,8 @@ const App = () => {
             <PrivateRoute path="/testing" exact component={BuildSPVForm} />
             <PrivateRoute path="/testing2" exact component={TypeItem} />
             <PrivateRoute path="/testing3" exact component={TypeSelector} />
+            <PrivateRoute path="/testing4" exact component={AgreementSigner} />
+            <PrivateRoute path="/testing5" exact component={UploadDocs} />
             <PrivateRoute path="/" exact component={UserHome} />
             <PrivateRoute path="/demo" exact component={Demo} />
             <PrivateRoute path="/credit" exact component={Credit} />
