@@ -2,27 +2,28 @@ import React, { useEffect, useState } from 'react';
 import { get, pick } from 'lodash';
 import { toast } from 'react-toastify';
 import { useMutation, gql } from '@apollo/client';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CloudDone } from '@material-ui/icons';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import {
   Button,
   TextField,
   Paper,
   Grid,
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
+  Typography,
+  Avatar,
+  Badge,
+  Fab,
 } from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import EditIcon from '@material-ui/icons/Edit';
+import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import countries from 'country-region-data';
-import Typography from '@material-ui/core/Typography';
-import useStyles from './styles';
+import { UsaStates } from 'usa-states';
 import Loader from '../../utils/Loader';
 import { useAuth } from '../../../auth/useAuth';
+import './sections.scss';
 
 const UPDATE_USER = gql`
   mutation UpdateUser($investor: UserInput!) {
@@ -44,6 +45,42 @@ const UPDATE_USER = gql`
   }
 `;
 
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    boxShadow: '0px 3px 6px #00000029',
+    border: '1px solid #8493A640 !important',
+    borderRadius: '10px',
+    overflowX: 'none',
+    width: '100%',
+    height: '100%',
+  },
+  accreditedInvestorStatus: {
+    marginTop: '15px',
+    left: '20px',
+    padding: '5px',
+    width: '90%',
+  },
+  linkedin: {
+    color: 'blue',
+  },
+  paperTitle: {
+    padding: '.5rem',
+    paddingLeft: '1rem',
+  },
+  paperMain: {
+    background: '#f1f4fb',
+    padding: '.5rem',
+    paddingBottom: '1.5rem',
+    paddingRight: '1rem',
+    borderTop: '1px solid #8493A640 !important',
+    height: '100%',
+  },
+  avatar: {
+    width: theme.spacing(13),
+    height: theme.spacing(13),
+  },
+}));
+
 const reqs = ['country', 'investor_type', 'signer_full_name', 'email'];
 
 export function validate(investor) {
@@ -54,14 +91,8 @@ export function validate(investor) {
   return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
 }
 
-const ProfileInfo = ({
-  investor,
-  setInvestor,
-  actionText,
-  icon,
-  setFormStatus,
-  noValidate = false,
-}) => {
+const ProfileInfo = ({ investor, setInvestor, actionText, setFormStatus, noValidate = false }) => {
+  const classes = useStyles();
   const [errors, setErrors] = useState([]);
   const { logout, userProfile } = useAuth();
 
@@ -135,16 +166,252 @@ const ProfileInfo = ({
 
   if (!investor || !userProfile.email) return <Loader />;
 
+  const SmallAvatar = withStyles((theme) => ({
+    root: {
+      width: 22,
+      height: 22,
+      border: `2px solid ${theme.palette.background.paper}`,
+      backgroundColor: theme.palette.primary.main,
+    },
+  }))(Avatar);
+
+  const EditAvatar = withStyles((theme) => ({
+    root: {
+      width: 15,
+      height: 15,
+    },
+  }))(EditIcon);
+
+  const usStates = new UsaStates();
+  const stateNames = usStates.states.map((s) => s.name);
+  console.log('states==>', stateNames);
+
   return (
-    <>
-      <Paper>
+    <div className="Sections">
+      {/* main grid for all sections */}
+      <Grid container spacing={2}>
+        {/* grid container for info section */}
+        <Grid item md={6}>
+          <Paper className={classes.paper}>
+            <Grid container style={{ height: '100%' }}>
+              <Grid item xs={12} className={classes.paperTitle}>
+                <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
+                  Personal Information
+                </Typography>
+              </Grid>
+
+              {/* main section for personal info */}
+              <Grid container spacing={2} className={classes.paperMain}>
+                <Grid container spacing={1}>
+                  <Grid item xs={2} style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Badge
+                      overlap="circular"
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      badgeContent={
+                        <SmallAvatar alt="Remy Sharp" src="/static/images/avatar/1.jpg">
+                          <EditAvatar />
+                        </SmallAvatar>
+                      }
+                    >
+                      <Avatar
+                        alt="avatar"
+                        src="/static/images/avatar/2.jpg"
+                        style={{ border: 'solid yellow 3px' }}
+                        className={classes.avatar}
+                      />
+                    </Badge>
+                  </Grid>
+
+                  <Grid item xs={10}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <TextField
+                          id="first-name"
+                          fullWidth
+                          /* add the value= */
+                          label="First Name"
+                          variant="outlined"
+                          style={{ background: 'white' }}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          id="last-name"
+                          /* add the value= */
+                          fullWidth
+                          label="Last Name"
+                          variant="outlined"
+                          style={{ background: 'white' }}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    id="email"
+                    /* add the value= */
+                    fullWidth
+                    label="Email"
+                    variant="outlined"
+                    style={{ background: 'white' }}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    id="country"
+                    select
+                    fullWidth
+                    style={{ background: 'white' }}
+                    label="Country of Residence"
+                    value={investor.country}
+                    onChange={handleChange}
+                    SelectProps={{
+                      native: true,
+                    }}
+                    variant="outlined"
+                  >
+                    {countries.map(({ countryName }) => (
+                      <option key={countryName} value={countryName}>
+                        {countryName}
+                      </option>
+                    ))}
+                  </TextField>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    id="usState"
+                    select
+                    fullWidth
+                    style={{ background: 'white' }}
+                    label="State"
+                    value={investor.state}
+                    onChange={handleChange}
+                    SelectProps={{
+                      native: true,
+                    }}
+                    variant="outlined"
+                  >
+                    {stateNames.map((state) => (
+                      <option key={state} value={state}>
+                        {state}
+                      </option>
+                    ))}
+                  </TextField>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    id="username"
+                    /* add the value= */
+                    label="Username"
+                    variant="outlined"
+                    fullWidth
+                    style={{ background: 'white' }}
+                  />
+                </Grid>
+
+                <Grid container spacing={1}>
+                  <Grid item xs={12}>
+                    <TextField
+                      id="toggle"
+                      /* add the value= */
+                      label="Toggle"
+                      variant="outlined"
+                      fullWidth
+                      style={{ background: 'white' }}
+                    />
+                  </Grid>
+                  {/* <Grid item xs={2}>
+                    Toggle!
+                  </Grid> */}
+                </Grid>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+
+        <Grid item md={6}>
+          {/* grid container for investor section */}
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>
+                <Grid container>
+                  <Grid item xs={12} className={classes.paperTitle}>
+                    <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
+                      Investor Information
+                    </Typography>
+                  </Grid>
+
+                  <Grid container spacing={2} className={classes.paperMain}></Grid>
+                </Grid>
+              </Paper>
+            </Grid>
+
+            {/* grid container for interests section */}
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>
+                <Grid container>
+                  <Grid item xs={12} className={classes.paperTitle}>
+                    <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
+                      Interests
+                    </Typography>
+                  </Grid>
+
+                  <Grid container spacing={2} className={classes.paperMain}></Grid>
+                </Grid>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        {/* grid container for social section */}
+        <Grid item xs={12}>
+          <Paper className={classes.paper}>
+            <Grid container>
+              <Grid item xs={12} className={classes.paperTitle}>
+                <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
+                  Social Profile Connect
+                </Typography>
+              </Grid>
+
+              <Grid container spacing={1} className={classes.paperMain}>
+                <Grid
+                  item
+                  xs={1}
+                  style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                >
+                  <LinkedInIcon className={classes.linkedin} />
+                </Grid>
+                <Grid item xs={11}>
+                  <TextField
+                    id="linkedin"
+                    /* add the value= */
+                    label="Linkedin Profile Link"
+                    variant="outlined"
+                    style={{ background: 'white', width: '100%' }}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Button variant="contained" onClick={submit} color="primary">
+            {actionText}
+          </Button>
+        </Grid>
+      </Grid>
+
+      {/* old code to reference */}
+      {/* <Paper>
         <form noValidate autoComplete="off" style={{ padding: '16px' }}>
-          <Typography variant="h6" gutterBottom>
-            Profile {icon && <FontAwesomeIcon icon={icon} spin={icon === 'circle-notch'} />}
-          </Typography>
-          <Typography variant="subtitle2" style={{ marginBottom: '16px' }}>
-            This information can be edited from your profile page.
-          </Typography>
           <Grid container spacing={3} style={{ marginTop: '16px' }}>
             <Grid item xs={12} sm={12} md={6}>
               <FormControl
@@ -237,56 +504,10 @@ const ProfileInfo = ({
             {actionText}
           </Button>
         </form>
-      </Paper>
-    </>
+      </Paper> */}
+    </div>
   );
 };
-
-export function PassportUploader({ investor, setInvestor }) {
-  const classes = useStyles();
-  if (investor.passport) {
-    return (
-      <Paper>
-        <div className={classes.fileUploader}>
-          <ListItem>
-            <ListItemText primary="ID for KYC" secondary="passport / drivers license" />
-            <ListItemSecondaryAction>
-              <Button variant="contained" color="secondary" size="small" startIcon={<CloudDone />}>
-                Uploaded
-              </Button>
-            </ListItemSecondaryAction>
-          </ListItem>
-        </div>
-      </Paper>
-    );
-  }
-
-  return (
-    <Paper>
-      <ListItem>
-        <ListItemText primary="ID for KYC" secondary="passport / drivers license" />
-        <ListItemSecondaryAction>
-          <Button
-            startIcon={<CloudUploadIcon />}
-            variant="contained"
-            color="secondary"
-            component="label"
-          >
-            Upload
-            <input
-              type="file"
-              style={{ display: 'none' }}
-              onChange={({ target }) => {
-                if (target.validity.valid)
-                  setInvestor((prev) => ({ ...prev, passport: target.files[0] }));
-              }}
-            />
-          </Button>
-        </ListItemSecondaryAction>
-      </ListItem>
-    </Paper>
-  );
-}
 
 function InvestorName({ investor, errors, handleChange }) {
   if (investor.investor_type === 'entity') {
@@ -331,6 +552,7 @@ function InvestorName({ investor, errors, handleChange }) {
     </>
   );
 }
+
 const statusOptions = {
   individual: [
     'I have individual/joint net worth in excess of $1m',

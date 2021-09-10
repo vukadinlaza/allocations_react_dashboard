@@ -4,9 +4,9 @@ import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography } from '@material-ui/core';
 import { useAuth } from '../../auth/useAuth';
-import ProfileAccounts from './sections/ProfileAccounts';
-import ProfileEntities from './sections/ProfileEntities';
-import ProfileInfo from './sections/ProfileInfo';
+import ProfileAccounts from './profileSections/ProfileAccounts';
+import ProfileEntities from './profileSections/ProfileEntities';
+import ProfileInfo from './profileSections/ProfileInfo';
 import Loader from '../utils/Loader';
 import styles from './styles';
 
