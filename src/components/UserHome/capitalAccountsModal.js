@@ -2,7 +2,9 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { camelCase } from 'lodash';
 import CloseIcon from '@material-ui/icons/Close';
-import { Paper, Grid, Typography, Modal, Container } from '@material-ui/core';
+import { Paper, Grid, Typography, Modal, Container, Button } from '@material-ui/core';
+import { useMutation } from '@apollo/client';
+import gql from 'graphql-tag';
 import { nWithCommas, amountFormat } from '../../utils/numbers';
 
 const useStyles = makeStyles((theme) => ({
@@ -31,6 +33,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const CREATE_CAP_PDF = gql`
+  mutation CreateCapPDF($data: Object) {
+    createCapPDF(data: $data)
+  }
+`;
+
 export default ({ showCapitalAccounts, setShowCapitalAccounts }) => {
   const classes = useStyles();
   const camelCaseKeys = (obj) =>
@@ -42,6 +50,10 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts }) => {
       return { ...ccObj, [camelCase(field)]: obj[field] };
     }, {});
   const data = camelCaseKeys(showCapitalAccounts || {});
+  const [createCapPDF, { data: capPDFRes, loading }] = useMutation(CREATE_CAP_PDF, {
+    variables: { data },
+  });
+
   return (
     <>
       <Modal
@@ -56,11 +68,20 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts }) => {
             <Grid item xs={12} sm={12} md={12} lg={12}>
               <Paper className={classes.modalPaper}>
                 <Grid
-                  onClick={() => setShowCapitalAccounts(false)}
-                  style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer' }}
+                  style={{ display: 'flex', justifyContent: 'space-between', cursor: 'pointer' }}
                 >
-                  <CloseIcon />
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    style={{ marginBottom: '.5rem' }}
+                    onClick={createCapPDF}
+                  >
+                    {capPDFRes ? 'View PDF' : 'Generate PDF'}
+                    {loading && 'Loading'}
+                  </Button>
+                  <CloseIcon onClick={() => setShowCapitalAccounts(false)} />
                 </Grid>
+
                 <Grid container justify="space-between">
                   <div>
                     <Typography className={classes.header}> {data.spvName}</Typography>
