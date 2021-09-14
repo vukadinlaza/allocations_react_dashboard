@@ -22,6 +22,11 @@ const GET_INVESTOR = gql`
       signer_full_name
       accredited_investor_status
       email
+      display_username
+      username
+      state
+      sectors
+      linkedinUrl
       account {
         _id
       }
@@ -107,8 +112,10 @@ const dashboardTabs = ['Personal Information', 'Accounts', 'Entities'];
 
 const Profile = ({ classes }) => {
   const [investor, setInvestor] = useState(null);
+  console.log('investor==>', investor);
   const [formStatus, setFormStatus] = useState('edit');
   const { userProfile, refetch: refetchUser } = useAuth(GET_INVESTOR);
+  console.log('user==>', userProfile);
   const { data, refetch: refetchAccountUsers } = useQuery(GET_ACCOUNT_USERS);
   const [createEntity, { data: createEntityRes }] = useMutation(CREATE_ENTITY);
   const [deleteEntity, { data: deleteEntityRes }] = useMutation(REMOVE_ACCT_ENTITY);
