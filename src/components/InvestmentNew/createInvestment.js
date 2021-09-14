@@ -57,7 +57,7 @@ export default function CreateInvestment({ deal, handleUpdate }) {
   const handleCreateInvestment = () => {
     const e = validate({ investment, deal, user });
     if (e.length > 0) {
-      toast.error('Error. Pleasure supply the required fields');
+      toast.error('Error. Please supply the required fields.');
       return setErrors(e);
     }
     console.log('fires');
