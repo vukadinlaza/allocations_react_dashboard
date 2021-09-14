@@ -50,24 +50,32 @@ export default function TypeSelector({
       value: 'startup',
       description: 'Raise money to invest in a private company',
       icon: RocketIcon,
+      height: '56px',
+      width: '54px',
     },
     {
       title: 'Crypto',
       value: 'crypto',
       description: 'Raise money to invest in a crypto project (token/equity)',
       icon: CryptoIcon,
+      height: '34px',
+      width: '34px',
     },
     {
       title: 'Real Estate',
       value: 'realEstate',
       description: 'Raise money to invest in a real estate project',
       icon: HouseIcon,
+      height: '29px',
+      width: '36px',
     },
     {
       title: 'SPV into a Fund',
       value: 'spvToFund',
       description: 'Raise money to invest into a fund',
       icon: BankIcon,
+      height: '30px',
+      width: '30px',
     },
   ];
   const row2Items = [
@@ -76,24 +84,32 @@ export default function TypeSelector({
       value: 'secondary',
       description: 'Raise money to invest in a secondary of a private company',
       icon: DistributeIcon,
+      height: '35px',
+      width: '28px',
     },
     {
       title: 'SPV into an SPV',
       value: 'spvToSpv',
       description: 'Raise money to invest in another SPV',
       icon: NetworkIcon,
+      height: '32px',
+      width: '20px',
     },
     {
       title: 'Management Co.',
       value: 'managementStake',
       description: `Sell a stake in your fund's management company's future carry`,
       icon: PieIcon,
+      height: '30px',
+      width: '30px',
     },
     {
       title: 'Custom',
       value: 'custom',
       description: 'Raise money for X',
       icon: LevelIcon,
+      height: '26px',
+      width: '26px',
     },
   ];
   function FormRow({ rowItems }) {
@@ -106,15 +122,6 @@ export default function TypeSelector({
             </Grid>
           );
         })}
-        {/* <Grid item style={{ paddingBottom: '16px', paddingRight: '24px' }}>
-          <TypeItem />
-        </Grid>
-        <Grid item style={{ paddingBottom: '16px', paddingRight: '24px' }}>
-          <TypeItem />
-        </Grid>
-        <Grid item style={{ paddingBottom: '16px', paddingRight: '24px' }}>
-          <TypeItem />
-        </Grid> */}
       </>
     );
   }

@@ -26,6 +26,8 @@ import { SimpleBox } from '../../admin/FundManagerDashboard/widgets';
 import Loader from '../../utils/Loader';
 import { useAuth } from '../../../auth/useAuth';
 import BasicInfo from '../FormComponents/TypeSelector/index';
+import ReviewTermsModal from '../FormComponents/AgreementSigner/index';
+import UploadDocsModal from '../FormComponents/UploadDocs/index';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,6 +61,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function InvestorEditForm() {
   const classes = useStyles();
+
+  // Page
+  const [page, setPage] = useState(0);
+
   // Basic Info
   const [assetType, setAssetType] = useState('');
   const [portCompName, setPortCompName] = useState('');
@@ -70,291 +76,353 @@ export default function InvestorEditForm() {
   const [carryFee, setCarryFee] = useState('');
   const [feeFrequency, setFreeFrequency] = useState('');
   const [sameForAllInv, setSameForAllInv] = useState('');
+
   // Offering Terms
   const [allocationsAsAdviser, setAllocationsAsAdviser] = useState('');
   const [fundTemplateDocument, setFundTemplateDocument] = useState('');
   const [offeringType, setOfferingType] = useState('');
+
   // Final
   const [finalNotes, setFinalNotes] = useState('');
   return (
     <>
-      <Paper className={classes.paper}>
+      <Paper className={classes.paper} style={{ display: 'flex', flexDirection: 'row' }}>
         <Typography
           variant="h6"
           gutterBottom
           style={{
             padding: '36px 0px 27px 42px',
-            // paddingLeft: '42px',
-            // paddingDown: '27px',
-            // paddingUp: '36px',
             color: '#2A2B54',
             fontSize: '22px',
+            opacity: page === 0 ? '1' : '0.5',
           }}
         >
-          Build your SPV / Review and sign terms / Upload docs
+          Build your SPV
+        </Typography>
+        <Typography
+          variant="h6"
+          gutterBottom
+          style={{
+            padding: '36px 0px 27px 8px',
+            color: '#2A2B54',
+            fontSize: '22px',
+            opacity: '1',
+          }}
+        >
+          /
+        </Typography>
+        <Typography
+          variant="h6"
+          gutterBottom
+          style={{
+            padding: '36px 0px 27px 8px',
+            color: '#2A2B54',
+            fontSize: '22px',
+            opacity: page === 1 ? '1' : '0.5',
+          }}
+        >
+          Review and sign terms
+        </Typography>
+        <Typography
+          variant="h6"
+          gutterBottom
+          style={{
+            padding: '36px 0px 27px 8px',
+            color: '#2A2B54',
+            fontSize: '22px',
+            opacity: '1',
+          }}
+        >
+          /
+        </Typography>
+        <Typography
+          variant="h6"
+          gutterBottom
+          style={{
+            padding: '36px 0px 27px 8px',
+            color: '#2A2B54',
+            fontSize: '22px',
+            opacity: page === 2 ? '1' : '0.5',
+          }}
+        >
+          Upload docs
         </Typography>
       </Paper>
-      <BasicInfo
-        parentClasses={classes}
-        assetType={assetType}
-        setAssetType={setAssetType}
-        portCompName={portCompName}
-        setPortCompName={setPortCompName}
-        managerName={managerName}
-        setManagerName={setManagerName}
-        closingDate={closingDate}
-        setClosingDate={setClosingDate}
-      />
-      <Paper className={classes.paper}>
-        <form noValidate autoComplete="off" style={{ padding: '42px' }}>
-          <Typography variant="h6" gutterBottom style={{ fontSize: '34px' }}>
-            2. Deal Terms
-          </Typography>
-          <Grid container spacing={1} style={{ marginTop: '16px' }}>
-            <Grid item>
-              <Grid item xs={6} style={{ marginRight: '54px' }}>
-                <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
-                  <Typography
-                    style={{
-                      color: '#2A2B54',
-                      font: 'normal normal bold 17px/20px Roboto',
-                      marginBottom: '20px',
-                    }}
-                  >
-                    Choose your management fee{' '}
-                    <HelpIcon
-                      style={{
-                        marginLeft: '0.2em',
-                        cursor: 'pointer',
-                        color: '#205DF5',
-                        fontSize: '15px',
-                      }}
-                    />
-                  </Typography>
-                  <TextField
-                    value={managementFee}
-                    onChange={(e) => setManagementFee(e.target.value)}
-                    style={{ width: '568px', marginBottom: '37px' }}
-                    variant="outlined"
-                  />
-                </FormControl>
+      {page === 0 && (
+        <>
+          <BasicInfo
+            parentClasses={classes}
+            assetType={assetType}
+            setAssetType={setAssetType}
+            portCompName={portCompName}
+            setPortCompName={setPortCompName}
+            managerName={managerName}
+            setManagerName={setManagerName}
+            closingDate={closingDate}
+            setClosingDate={setClosingDate}
+          />
+          <Paper className={classes.paper}>
+            <form noValidate autoComplete="off" style={{ padding: '42px' }}>
+              <Typography variant="h6" gutterBottom style={{ fontSize: '34px' }}>
+                2. Deal Terms
+              </Typography>
+              <Grid container spacing={1} style={{ marginTop: '16px' }}>
+                <Grid item>
+                  <Grid item xs={6} style={{ marginRight: '54px' }}>
+                    <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
+                      <Typography
+                        style={{
+                          color: '#2A2B54',
+                          font: 'normal normal bold 17px/20px Roboto',
+                          marginBottom: '20px',
+                        }}
+                      >
+                        Choose your management fee{' '}
+                        <HelpIcon
+                          style={{
+                            marginLeft: '0.2em',
+                            cursor: 'pointer',
+                            color: '#205DF5',
+                            fontSize: '15px',
+                          }}
+                        />
+                      </Typography>
+                      <TextField
+                        value={managementFee}
+                        onChange={(e) => setManagementFee(e.target.value)}
+                        style={{ width: '568px', marginBottom: '37px' }}
+                        variant="outlined"
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
+                      <Typography
+                        style={{
+                          color: '#2A2B54',
+                          font: 'normal normal bold 17px/20px Roboto',
+                          marginBottom: '20px',
+                        }}
+                      >
+                        Choose your fee frequency{' '}
+                        <HelpIcon
+                          style={{
+                            marginLeft: '0.2em',
+                            cursor: 'pointer',
+                            color: '#205DF5',
+                            fontSize: '15px',
+                          }}
+                        />
+                      </Typography>
+                      <TextField
+                        value={feeFrequency}
+                        onChange={(e) => setFreeFrequency(e.target.value)}
+                        style={{ width: '568px', marginBottom: '37px' }}
+                        variant="outlined"
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+                <Grid item>
+                  <Grid item xs={6} style={{ marginRight: '54px' }}>
+                    <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
+                      <Typography
+                        style={{
+                          color: '#2A2B54',
+                          font: 'normal normal bold 17px/20px Roboto',
+                          marginBottom: '20px',
+                        }}
+                      >
+                        Choose your carry fee{' '}
+                        <HelpIcon
+                          style={{
+                            marginLeft: '0.2em',
+                            cursor: 'pointer',
+                            color: '#205DF5',
+                            fontSize: '15px',
+                          }}
+                        />
+                      </Typography>
+                      <TextField
+                        value={carryFee}
+                        onChange={(e) => setCarryFee(e.target.value)}
+                        style={{ width: '568px', marginBottom: '37px' }}
+                        variant="outlined"
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <FormControl required disabled variant="outlined" style={{ width: '400px' }}>
+                      <Typography
+                        style={{
+                          color: '#2A2B54',
+                          font: 'normal normal bold 17px/20px Roboto',
+                          marginBottom: '20px',
+                        }}
+                      >
+                        Will you charge the same fee for all investors?{' '}
+                        <HelpIcon
+                          style={{
+                            marginLeft: '0.2em',
+                            cursor: 'pointer',
+                            color: '#205DF5',
+                            fontSize: '15px',
+                          }}
+                        />
+                      </Typography>
+                      <TextField
+                        value={sameForAllInv}
+                        onChange={(e) => setSameForAllInv(e.target.value)}
+                        style={{ width: '568px' }}
+                        variant="outlined"
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
               </Grid>
-              <Grid item xs={6}>
-                <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
-                  <Typography
-                    style={{
-                      color: '#2A2B54',
-                      font: 'normal normal bold 17px/20px Roboto',
-                      marginBottom: '20px',
-                    }}
-                  >
-                    Choose your fee frequency{' '}
-                    <HelpIcon
-                      style={{
-                        marginLeft: '0.2em',
-                        cursor: 'pointer',
-                        color: '#205DF5',
-                        fontSize: '15px',
-                      }}
-                    />
-                  </Typography>
-                  <TextField
-                    value={feeFrequency}
-                    onChange={(e) => setFreeFrequency(e.target.value)}
-                    style={{ width: '568px', marginBottom: '37px' }}
-                    variant="outlined"
-                  />
-                </FormControl>
+            </form>
+          </Paper>
+          <Paper className={classes.paper}>
+            <form noValidate autoComplete="off" style={{ padding: '42px' }}>
+              <Typography variant="h6" gutterBottom style={{ fontSize: '34px' }}>
+                3. Offering Terms
+              </Typography>
+              <Grid container spacing={1} style={{ marginTop: '16px' }} wrap="nowrap">
+                <Grid item>
+                  <Grid item xs={6} style={{ marginRight: '54px' }}>
+                    <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
+                      <Typography
+                        style={{
+                          color: '#2A2B54',
+                          font: 'normal normal bold 17px/20px Roboto',
+                          marginBottom: '20px',
+                        }}
+                      >
+                        Choose Allocations as the adviser?{' '}
+                        <HelpIcon
+                          style={{
+                            marginLeft: '0.2em',
+                            cursor: 'pointer',
+                            color: '#205DF5',
+                            fontSize: '15px',
+                          }}
+                        />
+                      </Typography>
+                      <TextField
+                        value={allocationsAsAdviser}
+                        onChange={(e) => setAllocationsAsAdviser(e.target.value)}
+                        style={{ width: '568px', marginBottom: '37px' }}
+                        variant="outlined"
+                      />
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
+                      <Typography
+                        style={{
+                          color: '#2A2B54',
+                          font: 'normal normal bold 17px/20px Roboto',
+                          marginBottom: '20px',
+                        }}
+                      >
+                        What is your offering type?{' '}
+                        <HelpIcon
+                          style={{
+                            marginLeft: '0.2em',
+                            cursor: 'pointer',
+                            color: '#205DF5',
+                            fontSize: '15px',
+                          }}
+                        />
+                      </Typography>
+                      <TextField
+                        value={offeringType}
+                        onChange={(e) => setOfferingType(e.target.value)}
+                        style={{ width: '568px', marginBottom: '37px' }}
+                        variant="outlined"
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+                <Grid item>
+                  <Grid item xs={6} style={{ marginRight: '54px' }}>
+                    <FormControl required disabled variant="outlined" style={{ width: '600px' }}>
+                      <Typography
+                        style={{
+                          color: '#2A2B54',
+                          font: 'normal normal bold 17px/20px Roboto',
+                          marginBottom: '20px',
+                        }}
+                      >
+                        Who's fund template documents would you like to use?{' '}
+                        <HelpIcon
+                          style={{
+                            marginLeft: '0.2em',
+                            cursor: 'pointer',
+                            color: '#205DF5',
+                            fontSize: '15px',
+                          }}
+                        />
+                      </Typography>
+                      <TextField
+                        value={fundTemplateDocument}
+                        onChange={(e) => setFundTemplateDocument(e.target.value)}
+                        style={{ width: '568px', marginBottom: '37px' }}
+                        variant="outlined"
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid item>
-              <Grid item xs={6} style={{ marginRight: '54px' }}>
-                <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
-                  <Typography
+            </form>
+          </Paper>
+          <Paper className={classes.paper}>
+            <form noValidate autoComplete="off" style={{ padding: '42px' }}>
+              <Typography variant="h6" gutterBottom style={{ fontSize: '34px' }}>
+                4. Final
+              </Typography>
+              <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
+                <Typography style={{ color: '#2A2B54', fontWeight: 'bold', marginBottom: '9px' }}>
+                  Any notes we should know about?{' '}
+                  <HelpIcon
                     style={{
-                      color: '#2A2B54',
-                      font: 'normal normal bold 17px/20px Roboto',
-                      marginBottom: '20px',
+                      marginLeft: '0.2em',
+                      cursor: 'pointer',
+                      color: '#205DF5',
+                      fontSize: '15px',
                     }}
-                  >
-                    Choose your carry fee{' '}
-                    <HelpIcon
-                      style={{
-                        marginLeft: '0.2em',
-                        cursor: 'pointer',
-                        color: '#205DF5',
-                        fontSize: '15px',
-                      }}
-                    />
-                  </Typography>
-                  <TextField
-                    value={carryFee}
-                    onChange={(e) => setCarryFee(e.target.value)}
-                    style={{ width: '568px', marginBottom: '37px' }}
-                    variant="outlined"
                   />
-                </FormControl>
-              </Grid>
-              <Grid item xs={6}>
-                <FormControl required disabled variant="outlined" style={{ width: '400px' }}>
-                  <Typography
-                    style={{
-                      color: '#2A2B54',
-                      font: 'normal normal bold 17px/20px Roboto',
-                      marginBottom: '20px',
-                    }}
-                  >
-                    Will you charge the same fee for all investors?{' '}
-                    <HelpIcon
-                      style={{
-                        marginLeft: '0.2em',
-                        cursor: 'pointer',
-                        color: '#205DF5',
-                        fontSize: '15px',
-                      }}
-                    />
-                  </Typography>
-                  <TextField
-                    value={sameForAllInv}
-                    onChange={(e) => setSameForAllInv(e.target.value)}
-                    style={{ width: '568px' }}
-                    variant="outlined"
-                  />
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Grid>
-        </form>
-      </Paper>
-      <Paper className={classes.paper}>
-        <form noValidate autoComplete="off" style={{ padding: '42px' }}>
-          <Typography variant="h6" gutterBottom style={{ fontSize: '34px' }}>
-            3. Offering Terms
-          </Typography>
-          <Grid container spacing={1} style={{ marginTop: '16px' }} wrap="nowrap">
-            <Grid item>
-              <Grid item xs={6} style={{ marginRight: '54px' }}>
-                <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
-                  <Typography
-                    style={{
-                      color: '#2A2B54',
-                      font: 'normal normal bold 17px/20px Roboto',
-                      marginBottom: '20px',
-                    }}
-                  >
-                    Choose Allocations as the adviser?{' '}
-                    <HelpIcon
-                      style={{
-                        marginLeft: '0.2em',
-                        cursor: 'pointer',
-                        color: '#205DF5',
-                        fontSize: '15px',
-                      }}
-                    />
-                  </Typography>
-                  <TextField
-                    value={allocationsAsAdviser}
-                    onChange={(e) => setAllocationsAsAdviser(e.target.value)}
-                    style={{ width: '568px', marginBottom: '37px' }}
-                    variant="outlined"
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={6}>
-                <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
-                  <Typography
-                    style={{
-                      color: '#2A2B54',
-                      font: 'normal normal bold 17px/20px Roboto',
-                      marginBottom: '20px',
-                    }}
-                  >
-                    What is your offering type?{' '}
-                    <HelpIcon
-                      style={{
-                        marginLeft: '0.2em',
-                        cursor: 'pointer',
-                        color: '#205DF5',
-                        fontSize: '15px',
-                      }}
-                    />
-                  </Typography>
-                  <TextField
-                    value={offeringType}
-                    onChange={(e) => setOfferingType(e.target.value)}
-                    style={{ width: '568px', marginBottom: '37px' }}
-                    variant="outlined"
-                  />
-                </FormControl>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <Grid item xs={6} style={{ marginRight: '54px' }}>
-                <FormControl required disabled variant="outlined" style={{ width: '600px' }}>
-                  <Typography
-                    style={{
-                      color: '#2A2B54',
-                      font: 'normal normal bold 17px/20px Roboto',
-                      marginBottom: '20px',
-                    }}
-                  >
-                    Who's fund template documents would you like to use?{' '}
-                    <HelpIcon
-                      style={{
-                        marginLeft: '0.2em',
-                        cursor: 'pointer',
-                        color: '#205DF5',
-                        fontSize: '15px',
-                      }}
-                    />
-                  </Typography>
-                  <TextField
-                    value={fundTemplateDocument}
-                    onChange={(e) => setFundTemplateDocument(e.target.value)}
-                    style={{ width: '568px', marginBottom: '37px' }}
-                    variant="outlined"
-                  />
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Grid>
-        </form>
-      </Paper>
-      <Paper className={classes.paper}>
-        <form noValidate autoComplete="off" style={{ padding: '42px' }}>
-          <Typography variant="h6" gutterBottom style={{ fontSize: '34px' }}>
-            4. Final
-          </Typography>
-          <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
-            <Typography style={{ color: '#2A2B54', fontWeight: 'bold', marginBottom: '9px' }}>
-              Any notes we should know about?{' '}
-              <HelpIcon
-                style={{
-                  marginLeft: '0.2em',
-                  cursor: 'pointer',
-                  color: '#205DF5',
-                  fontSize: '15px',
-                }}
-              />
-            </Typography>
-            <TextField
-              variant="outlined"
-              value={finalNotes}
-              onChange={(e) => setFinalNotes(e.target.value)}
-              inputProps={{
-                style: {
-                  height: '167px',
-                  background: '#FFFFFF 0% 0% no-repeat padding-box',
-                  boxShadow: '0px 3px 6px #0000000A',
-                  border: '1px solid #70707040',
-                  borderRadius: '5px',
-                  opacity: 1,
-                },
-              }}
-            />
-          </FormControl>
-        </form>
-      </Paper>
+                </Typography>
+                <TextField
+                  variant="outlined"
+                  value={finalNotes}
+                  onChange={(e) => setFinalNotes(e.target.value)}
+                  inputProps={{
+                    style: {
+                      height: '167px',
+                      background: '#FFFFFF 0% 0% no-repeat padding-box',
+                      boxShadow: '0px 3px 6px #0000000A',
+                      border: '1px solid #70707040',
+                      borderRadius: '5px',
+                      opacity: 1,
+                    },
+                  }}
+                />
+              </FormControl>
+            </form>
+          </Paper>
+        </>
+      )}
+      {page === 1 && (
+        <>
+          <ReviewTermsModal />
+        </>
+      )}
+      {page === 2 && (
+        <>
+          <UploadDocsModal />
+        </>
+      )}
       <Button
         onClick={() => {
           console.log('basic info');
@@ -373,9 +441,17 @@ export default function InvestorEditForm() {
           console.log(offeringType);
           console.log('final terms');
           console.log(finalNotes);
+          setPage(page + 1);
         }}
       >
         Test
+      </Button>
+      <Button
+        onClick={() => {
+          setPage(page - 1);
+        }}
+      >
+        Prev
       </Button>
     </>
   );

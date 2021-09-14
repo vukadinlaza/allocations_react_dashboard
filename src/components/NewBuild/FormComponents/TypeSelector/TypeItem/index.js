@@ -5,13 +5,17 @@ import { makeStyles } from '@material-ui/core/styles';
 import RocketIcon from '../../../../../assets/buildRocket.svg';
 
 const useStyles = makeStyles((theme) => ({
-  icon: { opacity: 1, paddingBottom: '15px' },
+  icon: {
+    opacity: '1',
+  },
   itemText: {
     textAlign: 'left',
     font: 'normal normal normal 20px/24px Roboto',
     letterSpacing: '0px',
     color: '#2A2B54',
     opacity: 1,
+    whiteSpace: 'no-wrap',
+    marginBottom: '5px',
   },
   subText: {
     textAlign: 'left',
@@ -46,7 +50,24 @@ export default function TypeItem({ item, assetType, setAssetType }) {
         setAssetType(item.value);
       }}
     >
-      <img src={item.icon} alt="rocket icon" className={classes.icon} />
+      <div
+        style={{
+          height: '55px',
+          width: '55px',
+          marginBottom: '15px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <img
+          src={item.icon}
+          alt={`${item.title} icon`}
+          className={classes.icon}
+          // style={{ height: item.height, width: item.width }}
+        />
+      </div>
+
       <Typography className={classes.itemText}>{item.title}</Typography>
       <Typography className={classes.subText}>{item.description}</Typography>
     </div>

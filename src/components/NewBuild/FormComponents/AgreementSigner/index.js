@@ -60,22 +60,6 @@ export default function SignDocsForm() {
   const classes = useStyles();
   return (
     <>
-      <Paper className={classes.paper}>
-        <Typography
-          variant="h6"
-          gutterBottom
-          style={{
-            padding: '36px 0px 27px 42px',
-            // paddingLeft: '42px',
-            // paddingDown: '27px',
-            // paddingUp: '36px',
-            color: '#2A2B54',
-            fontSize: '22px',
-          }}
-        >
-          Build your SPV / Review and sign terms / Upload docs
-        </Typography>
-      </Paper>
       <Paper className={classes.paper} style={{ padding: '42px', height: '544px' }}>
         <Typography variant="h6" gutterBottom style={{ fontSize: '34px' }}>
           Sign your agreements

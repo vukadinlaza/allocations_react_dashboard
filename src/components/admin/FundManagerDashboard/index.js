@@ -24,6 +24,7 @@ import DealsTabs from './sections/DealsTabs';
 import styles from './styles';
 import DocumentsTab from './sections/DocumentsTab';
 import BuildModal from '../../NewBuild/BuildModal';
+import BuildSPVForm from '../../NewBuild/BuildSPVForm';
 
 const GET_INVESTMENTS = gql`
   query GetDeal($fund_slug: String!, $deal_slug: String!) {

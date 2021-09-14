@@ -60,25 +60,9 @@ export default function UploadDocs() {
   const classes = useStyles();
   return (
     <>
-      <Paper className={classes.paper}>
-        <Typography
-          variant="h6"
-          gutterBottom
-          style={{
-            padding: '36px 0px 27px 42px',
-            // paddingLeft: '42px',
-            // paddingDown: '27px',
-            // paddingUp: '36px',
-            color: '#2A2B54',
-            fontSize: '22px',
-          }}
-        >
-          Build your SPV / Review and sign terms / Upload docs
-        </Typography>
-      </Paper>
       <Paper className={classes.paper} style={{ padding: '42px', height: '758px' }}>
         <Typography variant="h6" gutterBottom style={{ fontSize: '34px' }}>
-          Sign your agreements
+          Upload your documents{' '}
         </Typography>
         <Typography
           variant="h6"
@@ -91,8 +75,8 @@ export default function UploadDocs() {
             opacity: 1,
           }}
         >
-          Please sign the appropriate agreements to consent to us to start creating your deals on
-          your behalf
+          Please upload the appropriate documents so we have them on file for you. When uploading
+          multiple files, please compress them into one zip folder.
         </Typography>
         <Paper
           display="flex"
