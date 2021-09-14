@@ -45,6 +45,7 @@ const UPDATE_USER = gql`
       sectors
       linkedinUrl
       display_username
+      profileImageKey
       passport {
         link
         path
@@ -96,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const reqs = ['country', 'investor_type', 'signer_full_name', 'email'];
+const reqs = ['country', 'investor_type', 'signer_full_name', 'email', 'linkedinUrl'];
 
 export function validate(investor) {
   const required =
@@ -161,7 +162,14 @@ const ProfileInfo = ({ investor, setInvestor, actionText, setFormStatus, noValid
       investor.investor_type === 'entity'
         ? ['entity_name', 'accredited_investor_status', ...reqs]
         : ['first_name', 'last_name', ...reqs];
-    const payload = pick(investor, [...required, '_id']);
+    const payload = pick(investor, [
+      ...required,
+      '_id',
+      'linkedinUrl',
+      'username',
+      'display_username',
+      'state',
+    ]);
     setErrors(validation);
 
     if (validation.length === 0) {
@@ -249,14 +257,14 @@ const ProfileInfo = ({ investor, setInvestor, actionText, setFormStatus, noValid
                           horizontal: 'right',
                         }}
                         badgeContent={
-                          <SmallAvatar alt="Remy Sharp" src="/static/images/avatar/1.jpg">
+                          <SmallAvatar alt="Edit">
                             <EditAvatar />
                           </SmallAvatar>
                         }
                       >
                         <Avatar
                           alt="avatar"
-                          src="/static/images/avatar/2.jpg"
+                          src={`https://allocations-user-img.s3.us-east-2.amazonaws.com/${investor.profileImageKey}`}
                           style={{ border: 'solid yellow 3px' }}
                           className={classes.avatar}
                         />
@@ -365,14 +373,25 @@ const ProfileInfo = ({ investor, setInvestor, actionText, setFormStatus, noValid
                   />
                 </Grid>
                 <Grid container justifyContent="center">
-                  <Grid item xs={10} style={{ padding: '10px' }}>
-                    <Typography>Display username on pblic pages instead of real name:</Typography>
+                  <Grid
+                    item
+                    xs={6}
+                    style={{ padding: '10px', display: 'flex', justifyContent: 'center' }}
+                  >
+                    <Typography style={{ fontWeight: 'bold' }}>
+                      Display username on public pages:
+                    </Typography>
                   </Grid>
-                  <Grid item xs={2}>
+                  <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center' }}>
                     <FormGroup>
                       <FormControlLabel
                         control={
-                          <Switch size="medium" checked={checked} onChange={toggleChecked} />
+                          <Switch
+                            color="primary"
+                            size="medium"
+                            checked={checked}
+                            onChange={toggleChecked}
+                          />
                         }
                       />
                     </FormGroup>
@@ -456,14 +475,7 @@ const ProfileInfo = ({ investor, setInvestor, actionText, setFormStatus, noValid
                     </Typography>
                   </Grid>
 
-                  <Grid
-                    container
-                    spacing={2}
-                    className={classes.paperMain}
-                    style={{ display: 'flex', justifyContent: 'center' }}
-                  >
-                    <Sectors investor={investor} style={{ width: '100%' }} />
-                  </Grid>
+                  <Sectors investor={investor} style={{ width: '100%' }} />
                 </Grid>
               </Paper>
             </Grid>

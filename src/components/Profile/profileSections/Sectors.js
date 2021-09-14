@@ -1,7 +1,6 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Chip from '@material-ui/core/Chip';
-import Paper from '@material-ui/core/Paper';
+import React, { useState } from 'react';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { Paper, Chip, Grid, FormControl, InputBase, NativeSelect } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,28 +14,101 @@ const useStyles = makeStyles((theme) => ({
   },
   chip: {
     margin: theme.spacing(0.5),
-    backgroundColor: 'red',
+    backgroundColor: '#DBE6FE',
+    color: '#205DF5',
+    fontWeight: 'bold',
+  },
+  paperMain: {
+    background: '#f1f4fb',
+    padding: '.5rem',
+    paddingBottom: '1.5rem',
+    paddingRight: '1rem',
+    borderTop: '1px solid #8493A640 !important',
   },
 }));
 
+const BootstrapInput = withStyles((theme) => ({
+  root: {
+    'label + &': {
+      marginTop: theme.spacing(3),
+    },
+  },
+  input: {
+    borderRadius: 4,
+    position: 'relative',
+    backgroundColor: theme.palette.background.paper,
+    border: '1px solid #ced4da',
+    fontSize: 16,
+    padding: '10px 26px 10px 12px',
+    transition: theme.transitions.create(['border-color', 'box-shadow']),
+    // Use the system font instead of the default Roboto font.
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    '&:focus': {
+      borderRadius: 4,
+      borderColor: '#80bdff',
+      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+    },
+  },
+}))(InputBase);
+
 const Sectors = ({ investor }) => {
   const classes = useStyles();
-  const [sectorData, setSectorData] = React.useState(investor.sectors);
+  const [sectorData, setSectorData] = useState(investor?.sectors || []);
 
   const handleDelete = (sectorToDelete) => () => {
-    setSectorData((sectors) => sectors.filter((sector) => sector.key !== sectorToDelete.key));
+    setSectorData((sectors) => sectors.filter((sector) => sector !== sectorToDelete));
+  };
+
+  const handleSelectorAdd = (e) => {
+    e.persist();
+    setSectorData((prev) => [...prev, e.target.value]);
   };
 
   return (
-    <Paper component="ul" className={classes.root}>
-      {sectorData.map((sector) => {
-        return (
-          <li key={sector}>
-            <Chip label={sector} onDelete={handleDelete(sector)} className={classes.chip} />
-          </li>
-        );
-      })}
-    </Paper>
+    <Grid
+      container
+      spacing={2}
+      className={classes.paperMain}
+      style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+    >
+      <Grid item xs={10}>
+        <Paper component="ul" className={classes.root}>
+          {sectorData.map((sector) => {
+            return (
+              <li key={sector}>
+                <Chip label={sector} onDelete={handleDelete(sector)} className={classes.chip} />
+              </li>
+            );
+          })}
+        </Paper>
+      </Grid>
+
+      <Grid item xs={2}>
+        <FormControl className={classes.margin}>
+          <NativeSelect
+            id="demo-customized-select-native"
+            onChange={handleSelectorAdd}
+            input={<BootstrapInput />}
+          >
+            <option aria-label="None" value="" />
+            <option value="Space">Space</option>
+            <option value="Crypto">Crypto</option>
+            <option value="Real Estate">Real Estate</option>
+          </NativeSelect>
+        </FormControl>
+      </Grid>
+    </Grid>
   );
 };
 
