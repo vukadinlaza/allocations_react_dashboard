@@ -105,7 +105,6 @@ const Sectors = ({ investor }) => {
 
   const [updateSectors] = useMutation(ADD_SECTORS);
   const [deleteSectors] = useMutation(DELETE_SECTORS);
-  const [displayUsernameStatus] = useMutation(DISPLAY_USERNAME_STATUS);
 
   const handleDelete = (sectorToDelete) => () => {
     setSectorData((sectors) => sectors.filter((sector) => sector !== sectorToDelete));
@@ -114,9 +113,14 @@ const Sectors = ({ investor }) => {
 
   const handleSelectorAdd = (e) => {
     e.persist();
-    setSectorData((prev) => [...prev, e.target.value]);
-    updateSectors({ variables: { email: investor.email, sector: e.target.value } });
+    if (sectorData.length <= 5) {
+      setSectorData((prev) => [...prev, e.target.value]);
+      updateSectors({ variables: { email: investor.email, sector: e.target.value } });
+    }
+    return sectorData;
   };
+
+  const uniqueSectors = [...new Set(sectorData)];
 
   return (
     <Grid
@@ -125,9 +129,9 @@ const Sectors = ({ investor }) => {
       className={classes.paperMain}
       style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
-      <Grid item md={12} lg={9}>
+      <Grid item md={12} lg={9} style={{ width: '100%' }}>
         <Paper component="ul" className={classes.selectedSectorsPaper}>
-          {sectorData.map((sector) => {
+          {uniqueSectors.map((sector) => {
             return (
               <li key={sector}>
                 <Chip label={sector} onDelete={handleDelete(sector)} className={classes.chip} />
