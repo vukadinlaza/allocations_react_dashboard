@@ -118,14 +118,6 @@ const Sectors = ({ investor }) => {
     updateSectors({ variables: { email: investor.email, sector: e.target.value } });
   };
 
-  const handleUsernameStatus = (e) => {
-    e.persist();
-    // setSectorData((prev) => [...prev, e.target.value]);
-    displayUsernameStatus({
-      variables: { email: investor.email, display_username: e.target.value },
-    });
-  };
-
   return (
     <Grid
       container

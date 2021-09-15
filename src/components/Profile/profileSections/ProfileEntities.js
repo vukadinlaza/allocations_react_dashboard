@@ -117,8 +117,9 @@ const ProfileEntities = ({
                   <TableCell align="center">
                     <Fab
                       size="small"
-                      color={row?.isPrimaryEntity ? 'disabled' : 'primary'}
+                      color="primary"
                       style={{ cursor: row?.isPrimaryEntity ? 'not-allowed' : 'pointer' }}
+                      disabled={row.isPrimaryEntity}
                       onClick={() => {
                         if (row.isPrimaryEntity) {
                           return;

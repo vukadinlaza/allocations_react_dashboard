@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
-import { Avatar, Badge, Grid, TextField, Button, Container, Typography } from '@material-ui/core';
+import { Avatar, Badge, Grid, TextField, Button } from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { toast } from 'react-toastify';
 import EditIcon from '@material-ui/icons/Edit';
 import AppModal from '../../Modal/AppModal';
 
 const PROFILE_IMAGE = gql`
-  mutation addProfileImage($email: String!, $image: Upload!, $linkedinUrl: String) {
-    addProfileImage(email: $email, image: $image, linkedinUrl: $linkedinUrl) {
+  mutation UpdateProfileImage($email: String!, $image: Upload!) {
+    updateProfileImage(email: $email, image: $image) {
       _id
+      email
+      profileImageKey
     }
   }
 `;
@@ -25,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfilePhoto = ({ investor }) => {
+const ProfilePhoto = ({ investor, refetchUser }) => {
   const classes = useStyles();
   const [showModal, setShowModal] = useState(false);
   const [image, setImage] = useState('');
@@ -54,15 +56,17 @@ const ProfilePhoto = ({ investor }) => {
   const [uploadImage] = useMutation(PROFILE_IMAGE, {
     onCompleted: () => {
       toast.success('Success! Profile Updated');
+      refetchUser();
+      setShowModal(false);
     },
     onError: () => {
-      toast.error('Error! No Matching Email');
+      toast.error('Error! Profile Not Updated');
     },
   });
 
   const handleSubmit = async () => {
     uploadImage({
-      variables: { image },
+      variables: { email: investor.email, image },
     });
   };
 

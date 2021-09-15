@@ -181,6 +181,7 @@ const Profile = ({ classes }) => {
             setInvestor={setInvestor}
             setFormStatus={setFormStatus}
             actionText="Save Profile"
+            refetchUser={refetchUser}
           />
         );
 

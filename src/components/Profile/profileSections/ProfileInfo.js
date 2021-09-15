@@ -95,7 +95,14 @@ export function validate(investor) {
   return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
 }
 
-const ProfileInfo = ({ investor, setInvestor, actionText, setFormStatus, noValidate = false }) => {
+const ProfileInfo = ({
+  investor,
+  setInvestor,
+  actionText,
+  setFormStatus,
+  refetchUser,
+  noValidate = false,
+}) => {
   const classes = useStyles();
   const { logout, userProfile } = useAuth();
   const [errors, setErrors] = useState([]);
@@ -211,7 +218,11 @@ const ProfileInfo = ({ investor, setInvestor, actionText, setFormStatus, noValid
                       md={4}
                       style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                     >
-                      <ProfilePhoto investor={investor} style={{ width: '100%' }} />
+                      <ProfilePhoto
+                        investor={investor}
+                        refetchUser={refetchUser}
+                        style={{ width: '100%' }}
+                      />
                     </Grid>
 
                     <Grid item xs={12} sm={10} md={8}>
@@ -289,6 +300,7 @@ const ProfileInfo = ({ investor, setInvestor, actionText, setFormStatus, noValid
                     select
                     fullWidth
                     style={{ background: 'white' }}
+                    disabled={investor.country !== 'United States'}
                     label="State"
                     value={investor.state || ''}
                     onChange={handleChange('state')}
