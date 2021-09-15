@@ -12,18 +12,14 @@ import {
   Select,
   MenuItem,
   Typography,
-  Avatar,
-  Badge,
-  Switch,
-  FormGroup,
-  FormControlLabel,
 } from '@material-ui/core';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import EditIcon from '@material-ui/icons/Edit';
+import { makeStyles } from '@material-ui/core/styles';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import countries from 'country-region-data';
 import { UsaStates } from 'usa-states';
 import Sectors from './Sectors';
+import DisplayUsername from './DisplayUsername';
+import ProfilePhoto from './ProfilePhoto';
 import Loader from '../../utils/Loader';
 import { useAuth } from '../../../auth/useAuth';
 import './sections.scss';
@@ -54,7 +50,7 @@ const UPDATE_USER = gql`
   }
 `;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   paper: {
     boxShadow: '0px 3px 6px #00000029',
     border: '1px solid #8493A640 !important',
@@ -87,14 +83,6 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: '1rem',
     borderTop: '1px solid #8493A640 !important',
   },
-  avatar: {
-    width: theme.spacing(13),
-    height: theme.spacing(13),
-    [theme.breakpoints.down('sm')]: {
-      width: theme.spacing(10),
-      height: theme.spacing(10),
-    },
-  },
 }));
 
 const reqs = ['country', 'investor_type', 'signer_full_name', 'email', 'linkedinUrl'];
@@ -111,10 +99,6 @@ const ProfileInfo = ({ investor, setInvestor, actionText, setFormStatus, noValid
   const classes = useStyles();
   const { logout, userProfile } = useAuth();
   const [errors, setErrors] = useState([]);
-
-  const { display_username } = investor;
-  const currentSwitchStatus = display_username === true;
-  const [checked, setChecked] = React.useState(currentSwitchStatus);
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
 
@@ -194,37 +178,8 @@ const ProfileInfo = ({ investor, setInvestor, actionText, setFormStatus, noValid
 
   if (!investor || !userProfile.email) return <Loader />;
 
-  const SmallAvatar = withStyles((theme) => ({
-    root: {
-      width: 22,
-      height: 22,
-      [theme.breakpoints.down('sm')]: {
-        width: 15,
-        height: 15,
-      },
-      border: `2px solid ${theme.palette.background.paper}`,
-      backgroundColor: theme.palette.primary.main,
-    },
-  }))(Avatar);
-
-  const EditAvatar = withStyles((theme) => ({
-    root: {
-      width: 15,
-      height: 15,
-      [theme.breakpoints.down('sm')]: {
-        width: 10,
-        height: 10,
-      },
-    },
-  }))(EditIcon);
-
   const usStates = new UsaStates();
   const stateNames = usStates.states.map((s) => s.name);
-
-  /* toggle for username display */
-  const toggleChecked = () => {
-    setChecked((prev) => !prev);
-  };
 
   return (
     <div className="Sections">
@@ -249,29 +204,17 @@ const ProfileInfo = ({ investor, setInvestor, actionText, setFormStatus, noValid
               >
                 <Grid item xs={12}>
                   <Grid container spacing={1}>
-                    <Grid item xs={12} sm={2} style={{ display: 'flex', justifyContent: 'center' }}>
-                      <Badge
-                        overlap="circular"
-                        anchorOrigin={{
-                          vertical: 'top',
-                          horizontal: 'right',
-                        }}
-                        badgeContent={
-                          <SmallAvatar alt="Edit">
-                            <EditAvatar />
-                          </SmallAvatar>
-                        }
-                      >
-                        <Avatar
-                          alt="avatar"
-                          src={`https://allocations-user-img.s3.us-east-2.amazonaws.com/${investor.profileImageKey}`}
-                          style={{ border: 'solid yellow 3px' }}
-                          className={classes.avatar}
-                        />
-                      </Badge>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={2}
+                      md={4}
+                      style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                    >
+                      <ProfilePhoto investor={investor} style={{ width: '100%' }} />
                     </Grid>
 
-                    <Grid item xs={12} sm={10}>
+                    <Grid item xs={12} sm={10} md={8}>
                       <Grid container spacing={2}>
                         <Grid item xs={12}>
                           <TextField
@@ -372,31 +315,7 @@ const ProfileInfo = ({ investor, setInvestor, actionText, setFormStatus, noValid
                     style={{ background: 'white' }}
                   />
                 </Grid>
-                <Grid container justifyContent="center">
-                  <Grid
-                    item
-                    xs={6}
-                    style={{ padding: '10px', display: 'flex', justifyContent: 'center' }}
-                  >
-                    <Typography style={{ fontWeight: 'bold' }}>
-                      Display username on public pages:
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center' }}>
-                    <FormGroup>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            color="primary"
-                            size="medium"
-                            checked={checked}
-                            onChange={toggleChecked}
-                          />
-                        }
-                      />
-                    </FormGroup>
-                  </Grid>
-                </Grid>
+                <DisplayUsername investor={investor} />
               </Grid>
             </Grid>
           </Paper>
@@ -524,150 +443,9 @@ const ProfileInfo = ({ investor, setInvestor, actionText, setFormStatus, noValid
           </Button>
         </Grid>
       </Grid>
-
-      {/* old code to reference
-      <Paper>
-        <form noValidate autoComplete="off" style={{ padding: '16px' }}>
-          <Grid container spacing={3} style={{ marginTop: '16px' }}>
-            <Grid item xs={12}>
-              <FormControl
-                required
-                error={errors.includes('investor_type')}
-                variant="outlined"
-                style={{ width: '100%', background: 'white' }}
-              >
-                <InputLabel>Investor Type</InputLabel>
-                <Select
-                  value={investor.investor_type || ''}
-                  onChange={handleChange('investor_type')}
-                  inputProps={{ name: 'Type' }}
-                >
-                  <MenuItem value="" />
-                  <MenuItem value="individual">Individual</MenuItem>
-                  <MenuItem value="entity">Entity</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-
-            {investor.investor_type === 'entity' && (
-              <Grid item xs={12}>
-                <AccreditedInvestorStatus
-                  investor={investor}
-                  handleChange={handleChange}
-                  errors={errors}
-                />
-              </Grid>
-            )}
-
-            <Grid item xs={12} sm={12}>
-              <FormControl
-                required
-                error={errors.includes('country')}
-                variant="outlined"
-                style={{ width: '100%' }}
-              >
-                <InputLabel>Country of Residence or Place of Business</InputLabel>
-                <Select
-                  value={investor.country || ''}
-                  onChange={handleChange('country')}
-                  inputProps={{ name: 'Country' }}
-                >
-                  <MenuItem value="" />
-                  {[{ countryName: 'United States' }, ...countries].map(({ countryName }) => (
-                    <MenuItem key={countryName} value={countryName}>
-                      {countryName}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} sm={12} md={6}>
-              <FormControl
-                required
-                disabled
-                error={errors.includes('country')}
-                variant="outlined"
-                style={{ width: '100%' }}
-              >
-                <TextField
-                  error={errors.includes('email')}
-                  style={{ width: '100%' }}
-                  value={get(investor, 'email') || ''}
-                  onChange={handleChange('email')}
-                  label="Email"
-                  variant="outlined"
-                />
-              </FormControl>
-            </Grid>
-
-            <InvestorName investor={investor} errors={errors} handleChange={handleChange} />
-
-            <Grid item xs={12} sm={12} md={6}>
-              <TextField
-                required
-                error={errors.includes('signer_full_name')}
-                style={{ width: '100%' }}
-                value={get(investor, 'signer_full_name') || ''}
-                onChange={handleChange('signer_full_name')}
-                label="Full Name of Signer"
-                variant="outlined"
-              />
-            </Grid>
-          </Grid>
-
-          <Button variant="contained" style={{ marginTop: 16 }} onClick={submit} color="primary">
-            {actionText}
-          </Button>
-        </form>
-      </Paper> */}
     </div>
   );
 };
-
-function InvestorName({ investor, errors, handleChange }) {
-  if (investor.investor_type === 'entity') {
-    return (
-      <Grid item xs={12} sm={12} md={6}>
-        <TextField
-          required
-          error={errors.includes('entity_name')}
-          style={{ width: '100%' }}
-          value={get(investor, 'entity_name') || ''}
-          onChange={handleChange('entity_name')}
-          label="Subscriber Entity Name"
-          variant="outlined"
-        />
-      </Grid>
-    );
-  }
-  return (
-    <>
-      <Grid item xs={12} sm={12} md={6}>
-        <TextField
-          required
-          error={errors.includes('first_name')}
-          style={{ width: '100%' }}
-          value={get(investor, 'first_name') || ''}
-          onChange={handleChange('first_name')}
-          label="Subscriber First Name"
-          variant="outlined"
-        />
-      </Grid>
-      <Grid item xs={12} sm={12} md={6}>
-        <TextField
-          required
-          error={errors.includes('last_name')}
-          style={{ width: '100%' }}
-          value={get(investor, 'last_name') || ''}
-          onChange={handleChange('last_name')}
-          label="Subscriber Last Name"
-          variant="outlined"
-        />
-      </Grid>
-    </>
-  );
-}
 
 const statusOptions = {
   individual: [

@@ -1,16 +1,85 @@
 import React, { useState } from 'react';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import { Paper, Chip, Grid, FormControl, InputBase, NativeSelect } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Paper, Chip, Grid, FormControl, InputLabel, Select } from '@material-ui/core';
+import { useMutation, gql } from '@apollo/client';
+
+const ADD_SECTORS = gql`
+  mutation AddSectors($email: String!, $sector: String!) {
+    addSectors(email: $email, sector: $sector) {
+      _id
+      sectors
+      email
+    }
+  }
+`;
+const DELETE_SECTORS = gql`
+  mutation DeleteSectors($email: String!, $sector: String!) {
+    deleteSectors(email: $email, sector: $sector) {
+      _id
+      sectors
+      email
+    }
+  }
+`;
+
+const DISPLAY_USERNAME_STATUS = gql`
+  mutation DisplayUsernameStatus($email: String!, $display_username: Boolean) {
+    displayUsernameStatus(email: $email, display_username: $display_username) {
+      _id
+      display_username
+      email
+    }
+  }
+`;
+
+const sectors = [
+  'AI',
+  'Biotech',
+  'Clean Technology',
+  'Community',
+  'Construction',
+  'Consumer Products',
+  'Crypto',
+  'Cyber Security',
+  'Deep Tech',
+  'Ecommerce',
+  'EdTech',
+  'Energy',
+  'Entertainment',
+  'Fintech',
+  'Food',
+  'Fund',
+  'Gaming',
+  'Human Resources',
+  'Healthcare',
+  'Internet of Things',
+  'Logistics',
+  'Manufacturing',
+  'Marketing',
+  'Media',
+  'Music',
+  'Real Estate',
+  'Recruiting',
+  'Retail',
+  'SaaS',
+  'SPAC',
+  'Space',
+  'Sports',
+  'Technology',
+  'Telecom',
+  'Travel',
+];
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  selectedSectorsPaper: {
     display: 'flex',
     justifyContent: 'center',
     flexWrap: 'wrap',
     listStyle: 'none',
     padding: theme.spacing(0.5),
     margin: 0,
-    width: '90%',
+    width: '100%',
+    minHeight: '50px',
   },
   chip: {
     margin: theme.spacing(0.5),
@@ -25,54 +94,36 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: '1rem',
     borderTop: '1px solid #8493A640 !important',
   },
+  sectorChoices: {
+    height: '50px',
+  },
 }));
-
-const BootstrapInput = withStyles((theme) => ({
-  root: {
-    'label + &': {
-      marginTop: theme.spacing(3),
-    },
-  },
-  input: {
-    borderRadius: 4,
-    position: 'relative',
-    backgroundColor: theme.palette.background.paper,
-    border: '1px solid #ced4da',
-    fontSize: 16,
-    padding: '10px 26px 10px 12px',
-    transition: theme.transitions.create(['border-color', 'box-shadow']),
-    // Use the system font instead of the default Roboto font.
-    fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(','),
-    '&:focus': {
-      borderRadius: 4,
-      borderColor: '#80bdff',
-      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
-    },
-  },
-}))(InputBase);
 
 const Sectors = ({ investor }) => {
   const classes = useStyles();
   const [sectorData, setSectorData] = useState(investor?.sectors || []);
 
+  const [updateSectors] = useMutation(ADD_SECTORS);
+  const [deleteSectors] = useMutation(DELETE_SECTORS);
+  const [displayUsernameStatus] = useMutation(DISPLAY_USERNAME_STATUS);
+
   const handleDelete = (sectorToDelete) => () => {
     setSectorData((sectors) => sectors.filter((sector) => sector !== sectorToDelete));
+    deleteSectors({ variables: { email: investor.email, sector: sectorToDelete } });
   };
 
   const handleSelectorAdd = (e) => {
     e.persist();
     setSectorData((prev) => [...prev, e.target.value]);
+    updateSectors({ variables: { email: investor.email, sector: e.target.value } });
+  };
+
+  const handleUsernameStatus = (e) => {
+    e.persist();
+    // setSectorData((prev) => [...prev, e.target.value]);
+    displayUsernameStatus({
+      variables: { email: investor.email, display_username: e.target.value },
+    });
   };
 
   return (
@@ -82,8 +133,8 @@ const Sectors = ({ investor }) => {
       className={classes.paperMain}
       style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
-      <Grid item xs={10}>
-        <Paper component="ul" className={classes.root}>
+      <Grid item md={12} lg={9}>
+        <Paper component="ul" className={classes.selectedSectorsPaper}>
           {sectorData.map((sector) => {
             return (
               <li key={sector}>
@@ -94,18 +145,22 @@ const Sectors = ({ investor }) => {
         </Paper>
       </Grid>
 
-      <Grid item xs={2}>
-        <FormControl className={classes.margin}>
-          <NativeSelect
-            id="demo-customized-select-native"
+      <Grid item md={12} lg={3} style={{ display: 'flex', justifyContent: 'center' }}>
+        <FormControl variant="outlined" style={{ background: 'white', width: '100%' }}>
+          <InputLabel>Sectors</InputLabel>
+          <Select
+            native
             onChange={handleSelectorAdd}
-            input={<BootstrapInput />}
+            label="Sector"
+            className={classes.sectorChoices}
           >
             <option aria-label="None" value="" />
-            <option value="Space">Space</option>
-            <option value="Crypto">Crypto</option>
-            <option value="Real Estate">Real Estate</option>
-          </NativeSelect>
+            {sectors.map((sector) => (
+              <option key={sector} value={sector}>
+                {sector}
+              </option>
+            ))}
+          </Select>
         </FormControl>
       </Grid>
     </Grid>
