@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
 import MailIcon from '@material-ui/icons/Mail';
-import { Avatar, Typography, Grid, FormControl, InputLabel, Tooltip } from '@material-ui/core';
+import {
+  Avatar,
+  Typography,
+  Grid,
+  FormControl,
+  InputLabel,
+  Tooltip,
+  Button,
+} from '@material-ui/core';
 import Select from '@material-ui/core/Select';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import { useParams } from 'react-router';
@@ -12,6 +20,7 @@ import { phone } from '../../../../utils/helpers';
 import AppModal from '../../../Modal/AppModal';
 import InvestmentEdit from '../../../InvestmentEdit/UpdateInvestment';
 import DeleteViewedUser from '../../../InvestmentEdit/DeleteViewedUser';
+import CreateInvestment from '../../../InvestmentNew/createInvestment';
 
 const demoNames = [
   'Pablo Picasso',
@@ -198,9 +207,10 @@ const InvestorBox = ({
   );
 };
 
-const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType }) => {
+const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, deal }) => {
   const { organization: orgSlug } = useParams();
   const [showModal, setShowModal] = useState(false);
+  const [showCreateInvModal, setShowCreateInvModal] = useState(false);
   const [investmentId, setInvestmentId] = useState(null);
   const [dealId, setDealId] = useState(null);
   const [investorId, setInvestorId] = useState(null);
@@ -216,6 +226,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType })
   const handleUpdate = {
     refetch: () => refetch(),
     closeModal: () => setShowModal(false),
+    setShowCreateInvModal: () => setShowCreateInvModal(false),
   };
 
   if (!data?.deal?.investments) {
@@ -336,6 +347,14 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType })
   return (
     <>
       <div className={classes.sortField}>
+        {superAdmin ? (
+          <Button variant="contained" color="primary" onClick={() => setShowCreateInvModal(true)}>
+            {' '}
+            Create Investment
+          </Button>
+        ) : (
+          <> </>
+        )}
         <FormControl variant="outlined" size="small" value={sortField}>
           <InputLabel id="sort-label">Sort By:</InputLabel>
           <Select native onChange={handleSort} labelId="sort-label">
@@ -514,6 +533,9 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType })
           ) : (
             <DeleteViewedUser dealId={dealId} investorId={investorId} handleUpdate={handleUpdate} />
           )}
+        </AppModal>
+        <AppModal isOpen={showCreateInvModal} onClose={() => setShowCreateInvModal(false)}>
+          <CreateInvestment deal={deal} handleUpdate={handleUpdate} />
         </AppModal>
       </Grid>
     </>

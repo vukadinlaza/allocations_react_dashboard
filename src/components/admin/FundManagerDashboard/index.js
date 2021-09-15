@@ -329,6 +329,7 @@ const FundManagerDashboard = ({ classes, history }) => {
             dealType={dealData?.dealParams?.dealType}
             superAdmin={orgDeals?.investor?.admin}
             refetch={refetch}
+            deal={dealData}
           />
         );
       case 'Investors':
