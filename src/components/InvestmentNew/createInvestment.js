@@ -60,7 +60,6 @@ export default function CreateInvestment({ deal, handleUpdate }) {
       toast.error('Error. Please supply the required fields.');
       return setErrors(e);
     }
-    console.log('fires');
     createInvestment({
       variables: {
         investment: {
