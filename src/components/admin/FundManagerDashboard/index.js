@@ -67,7 +67,7 @@ export const ORG_OVERVIEW = gql`
       _id
       name
       slug
-      deals {
+      deals(limit: 500) {
         _id
         company_name
         company_description
