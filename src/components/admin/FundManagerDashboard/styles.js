@@ -307,7 +307,7 @@ const styles = (theme) => ({
   sortField: {
     display: 'flex',
     justifyContent: 'space-between',
-    margin: '1rem 1rem -2rem 0',
+    margin: '1rem 1rem -2rem 1rem',
     [theme.breakpoints.down(phone)]: {
       marginLeft: '22px',
       marginBottom: '5px',
