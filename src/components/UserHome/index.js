@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { gql } from '@apollo/client';
 import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment';
-import { Typography, TextField, InputAdornment } from '@material-ui/core';
+import { Typography, TextField, InputAdornment, Paper } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { useAuth } from '../../auth/useAuth';
 import { nWithCommas } from '../../utils/numbers';
@@ -294,14 +294,16 @@ const UserHome = ({ classes }) => {
         </div>
       ) : (
         <>
-          <Typography className={classes.mainTitle}>
-            Hello, {userProfile.first_name || 'investor'}!
-          </Typography>
-          <HighlightedTabs
-            tabs={investorTabs}
-            tabIndex={tabIndex}
-            handleTabChange={handleTabChange}
-          />
+          <Paper style={{ marginBottom: '.5rem', minWidth: '100%', padding: '0 1rem' }}>
+            <Typography className={classes.mainTitle}>
+              Hello, {userProfile.first_name || 'investor'}!
+            </Typography>
+            <HighlightedTabs
+              tabs={investorTabs}
+              tabIndex={tabIndex}
+              handleTabChange={handleTabChange}
+            />
+          </Paper>
           <div className={classes.contentContainer}>{getTabContent()}</div>
         </>
       )}

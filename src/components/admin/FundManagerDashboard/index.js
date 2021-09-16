@@ -4,7 +4,7 @@ import moment from 'moment';
 import { useLazyQuery, useQuery, gql } from '@apollo/client';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Tabs, Tab, Typography, Button } from '@material-ui/core';
+import { Tabs, Tab, Typography, Button, Paper } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import EditIcon from '@material-ui/icons/Edit';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
@@ -395,46 +395,48 @@ const FundManagerDashboard = ({ classes, history }) => {
 
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
-      <div className={classes.mainTitleContainer} id="main-title-container">
-        <Typography className={classes.mainTitle}>
-          {userProfile?.first_name
-            ? `Hello ${userProfile?.first_name}, here are your Funds.`
-            : orgDealsData?.organization?.name}
-        </Typography>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '.5rem' }}>
-          <span className={classes.createButtonLink}>
-            <Button className={classes.createButton} onClick={() => setOpenModal(true)}>
-              <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
-              Create New {userProfile?.admin && 'Build'}
-            </Button>
-          </span>
-          {userProfile?.admin && (
+      <Paper style={{ padding: '.5rem' }}>
+        <div className={classes.mainTitleContainer} id="main-title-container">
+          <Typography className={classes.mainTitle}>
+            {userProfile?.first_name
+              ? `Hello ${userProfile?.first_name}, here are your Funds.`
+              : orgDealsData?.organization?.name}
+          </Typography>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '.5rem' }}>
             <span className={classes.createButtonLink}>
-              <Button
-                className={classes.createButton}
-                style={{ marginLeft: '1rem' }}
-                onClick={() => history.push(`/admin/${orgSlug}/deal/new`)}
-              >
+              <Button className={classes.createButton} onClick={() => setOpenModal(true)}>
                 <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
-                Create New Deal Page
+                Create New {userProfile?.admin && 'Build'}
               </Button>
             </span>
-          )}
-          {userProfile?.admin && (
-            <span className={classes.createButtonLink}>
-              <Button
-                className={classes.createButton}
-                color="secondary"
-                style={{ marginLeft: '1rem', backgroundColor: 'blue' }}
-                onClick={() => history.push(`/admin/${orgSlug}/manager`)}
-              >
-                <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
-                Add Org Admin
-              </Button>
-            </span>
-          )}
+            {userProfile?.admin && (
+              <span className={classes.createButtonLink}>
+                <Button
+                  className={classes.createButton}
+                  style={{ marginLeft: '1rem' }}
+                  onClick={() => history.push(`/admin/${orgSlug}/deal/new`)}
+                >
+                  <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
+                  Create New Deal Page
+                </Button>
+              </span>
+            )}
+            {userProfile?.admin && (
+              <span className={classes.createButtonLink}>
+                <Button
+                  className={classes.createButton}
+                  color="secondary"
+                  style={{ marginLeft: '1rem', backgroundColor: 'blue' }}
+                  onClick={() => history.push(`/admin/${orgSlug}/manager`)}
+                >
+                  <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
+                  Add Org Admin
+                </Button>
+              </span>
+            )}
+          </div>
         </div>
-      </div>
+      </Paper>
 
       {orgDeals && !orgDeals.organization?.deals?.length ? (
         <div className={classes.noDataPlaceholder}>
@@ -442,54 +444,56 @@ const FundManagerDashboard = ({ classes, history }) => {
           <div>Click on the 'Create New' button to create a deal.</div>
         </div>
       ) : (
-        <div>
-          <DealsTabs
-            dealSlug={dealSlug}
-            orgSlug={orgSlug}
-            data={orgDeals}
-            width={width}
-            tabIndex={dealTab}
-            setTabIndex={handleDealsTabChange}
-          />
-          <div style={{ position: 'relative' }}>
-            {!isOverview && (
-              <Tabs
-                value={tabIndex}
-                indicatorColor="primary"
-                textColor="primary"
-                onChange={handleTabChange}
-                classes={{
-                  root: classes.tabs,
-                  indicator: classes.tabsIndicator,
-                  flexContainer: classes.tabsContainer,
-                }}
-              >
-                {dashboardTabs.map((tab) => (
-                  <Tab
-                    label={tab}
-                    className={classes.tab}
-                    key={tab}
-                    classes={{
-                      root: classes.tab,
-                      selected: classes.selectedTab,
-                      wrapper: classes.tabWrapper,
-                    }}
-                    disableRipple
-                  />
-                ))}
-              </Tabs>
-            )}
-            {(!isOverview && (!dealData || !atFundData || !dealInvestments)) ||
-            status === 'fetching' ||
-            loading ? (
-              <div className={classes.loaderContainer}>
-                <AllocationsLoader />
-              </div>
-            ) : (
-              getTabContent()
-            )}
+        <Paper style={{ margin: '1rem 0' }}>
+          <div>
+            <DealsTabs
+              dealSlug={dealSlug}
+              orgSlug={orgSlug}
+              data={orgDeals}
+              width={width}
+              tabIndex={dealTab}
+              setTabIndex={handleDealsTabChange}
+            />
+            <div style={{ position: 'relative' }}>
+              {!isOverview && (
+                <Tabs
+                  value={tabIndex}
+                  indicatorColor="primary"
+                  textColor="primary"
+                  onChange={handleTabChange}
+                  classes={{
+                    root: classes.tabs,
+                    indicator: classes.tabsIndicator,
+                    flexContainer: classes.tabsContainer,
+                  }}
+                >
+                  {dashboardTabs.map((tab) => (
+                    <Tab
+                      label={tab}
+                      className={classes.tab}
+                      key={tab}
+                      classes={{
+                        root: classes.tab,
+                        selected: classes.selectedTab,
+                        wrapper: classes.tabWrapper,
+                      }}
+                      disableRipple
+                    />
+                  ))}
+                </Tabs>
+              )}
+              {(!isOverview && (!dealData || !atFundData || !dealInvestments)) ||
+              status === 'fetching' ||
+              loading ? (
+                <div className={classes.loaderContainer}>
+                  <AllocationsLoader />
+                </div>
+              ) : (
+                getTabContent()
+              )}
+            </div>
           </div>
-        </div>
+        </Paper>
       )}
       <BuildModal isOpen={openModal} onClose={() => setOpenModal(false)} />
     </div>

@@ -175,7 +175,7 @@ const styles = (theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     margin: '0',
-    padding: '0 0 25px 0',
+    padding: '5px 5px 10px 5px',
     [theme.breakpoints.down(tablet)]: {
       justifyContent: 'center',
     },

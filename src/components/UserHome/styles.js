@@ -125,7 +125,7 @@ const styles = (theme) => ({
     fontSize: '28px',
     fontWeight: '700',
     padding: '0px',
-    margin: '10px 0 35px 0',
+    margin: '10px 0 25px 0',
     color: '#2A2B54',
   },
   modal: {

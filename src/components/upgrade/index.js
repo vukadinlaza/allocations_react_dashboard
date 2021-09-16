@@ -18,15 +18,11 @@ export default () => {
     },
   };
   const image = {
-    Crypto: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/Blockchain.svg',
-    'Real Estate':
-      'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom+(1).svg',
-    Secondaries:
-      'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-custom.svg',
-    'Traditional Funds':
-      'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/Blockchain.svg',
-    'Quarterly Funds':
-      'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-custom.svg',
+    Crypto: 'https://allocations-public.s3.us-east-2.amazonaws.com/graphic-1.png',
+    'Real Estate': 'https://allocations-public.s3.us-east-2.amazonaws.com/graphic-3.png',
+    Secondaries: 'https://allocations-public.s3.us-east-2.amazonaws.com/graphic-2.png',
+    'Traditional Funds': 'https://allocations-public.s3.us-east-2.amazonaws.com/graphic-4.png',
+    'Quarterly Funds': 'https://allocations-public.s3.us-east-2.amazonaws.com/graphic-5.png',
   }[state?.asset];
 
   const handleUpdate = () => {
