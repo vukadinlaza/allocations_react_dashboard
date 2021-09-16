@@ -107,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignDocsForm() {
+export default function SignDocsForm({ page, setPage }) {
   const classes = useStyles();
   const [iconsChecked, setIconsChecked] = useState({});
   return (
@@ -124,7 +124,7 @@ export default function SignDocsForm() {
           className={classes.item}
           onClick={() =>
             setIconsChecked((prev) => {
-              return { ...prev, two: true };
+              return { ...prev, one: true };
             })
           }
         >
@@ -134,7 +134,7 @@ export default function SignDocsForm() {
             src={CheckCircle}
             className={classes.checkCircle}
             alt="checkbox"
-            style={{ opacity: iconsChecked.two ? '1' : '' }}
+            style={{ opacity: iconsChecked.one ? '1' : '' }}
           />
         </Paper>
         <Paper
@@ -154,12 +154,24 @@ export default function SignDocsForm() {
             style={{ opacity: iconsChecked.two ? '1' : '' }}
           />
         </Paper>
-        <Button className={classes.continueButton}>Continue</Button>
+        <Button
+          onClick={() => {
+            setPage(page + 1);
+          }}
+          className={classes.continueButton}
+        >
+          Continue
+        </Button>
         <Typography
           style={{
             font: 'normal normal normal 24px/28px Roboto',
             marginTop: '11px',
             marginLeft: '135px',
+            padding: '5px',
+            cursor: 'pointer',
+          }}
+          onClick={() => {
+            setPage(page - 1);
           }}
         >
           Previous

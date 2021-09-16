@@ -431,12 +431,12 @@ export default function NewSpvForm() {
       )}
       {page === 1 && (
         <>
-          <ReviewTermsModal />
+          <ReviewTermsModal page={page} setPage={setPage} />
         </>
       )}
       {page === 2 && (
         <>
-          <UploadDocsModal />
+          <UploadDocsModal page={page} setPage={setPage} />
         </>
       )}
       <Button

@@ -424,22 +424,6 @@ export default function NewSpvForm() {
                 <Button
                   className={classes.continueButton}
                   onClick={() => {
-                    console.log('basic info');
-                    console.log(assetType);
-                    console.log(portCompName);
-                    console.log(managerName);
-                    console.log(closingDate);
-                    console.log('deal terms');
-                    console.log(managementFee);
-                    console.log(carryFee);
-                    console.log(feeFrequency);
-                    console.log(sameForAllInv);
-                    console.log('offering terms');
-                    console.log(allocationsAsAdviser);
-                    console.log(fundTemplateDocument);
-                    console.log(offeringType);
-                    console.log('final terms');
-                    console.log(finalNotes);
                     setPage(page + 1);
                   }}
                 >
@@ -452,44 +436,14 @@ export default function NewSpvForm() {
       )}
       {page === 1 && (
         <>
-          <ReviewTermsModal />
+          <ReviewTermsModal page={page} setPage={setPage} />
         </>
       )}
       {page === 2 && (
         <>
-          <UploadDocsModal />
+          <UploadDocsModal page={page} setPage={setPage} />
         </>
       )}
-      <Button
-        onClick={() => {
-          console.log('basic info');
-          console.log(assetType);
-          console.log(portCompName);
-          console.log(managerName);
-          console.log(closingDate);
-          console.log('deal terms');
-          console.log(managementFee);
-          console.log(carryFee);
-          console.log(feeFrequency);
-          console.log(sameForAllInv);
-          console.log('offering terms');
-          console.log(allocationsAsAdviser);
-          console.log(fundTemplateDocument);
-          console.log(offeringType);
-          console.log('final terms');
-          console.log(finalNotes);
-          setPage(page + 1);
-        }}
-      >
-        Test
-      </Button>
-      <Button
-        onClick={() => {
-          setPage(page - 1);
-        }}
-      >
-        Prev
-      </Button>
     </>
   );
 }

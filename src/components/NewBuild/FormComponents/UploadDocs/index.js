@@ -86,12 +86,12 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 'auto',
     marginRight: '37px',
   },
-  continueButton: {
+  finishButton: {
     font: 'normal normal bold 24px/28px Roboto',
     marginTop: '44px',
     width: '368px',
     height: '68px',
-    background: '#186EFF 0% 0% no-repeat padding-box',
+    background: '#39C522 0% 0% no-repeat padding-box',
     borderRadius: '10px',
     opacity: '0.5',
     color: '#FFFFFF',
@@ -104,8 +104,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function UploadDocs() {
+export default function UploadDocs({ page, setPage }) {
   const classes = useStyles();
+  const [iconsChecked, setIconsChecked] = useState({});
+
   return (
     <>
       <Paper className={classes.uploadContainer}>
@@ -116,32 +118,88 @@ export default function UploadDocs() {
           Please upload the appropriate documents so we have them on file for you. When uploading
           multiple files, please compress them into one zip folder.
         </Typography>
-        <Paper className={classes.item}>
+        <Paper
+          className={classes.item}
+          onClick={() =>
+            setIconsChecked((prev) => {
+              return { ...prev, one: true };
+            })
+          }
+        >
           <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Portfolio Company Term Sheet</Typography>
-          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
+          <img
+            style={{ opacity: iconsChecked.one ? '1' : '' }}
+            src={buildUpload}
+            className={classes.uploadIcon}
+            alt="upload button"
+          />
         </Paper>
-        <Paper className={classes.item}>
+        <Paper
+          className={classes.item}
+          onClick={() =>
+            setIconsChecked((prev) => {
+              return { ...prev, two: true };
+            })
+          }
+        >
+          {' '}
           <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Pitch Deck</Typography>
-          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
+          <img
+            style={{ opacity: iconsChecked.two ? '1' : '' }}
+            src={buildUpload}
+            className={classes.uploadIcon}
+            alt="upload button"
+          />
         </Paper>
-        <Paper className={classes.item}>
+        <Paper
+          className={classes.item}
+          onClick={() =>
+            setIconsChecked((prev) => {
+              return { ...prev, three: true };
+            })
+          }
+        >
+          {' '}
           <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Driver's License/Passport</Typography>
-          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
+          <img
+            style={{ opacity: iconsChecked.three ? '1' : '' }}
+            src={buildUpload}
+            className={classes.uploadIcon}
+            alt="upload button"
+          />
         </Paper>
-        <Paper className={classes.item}>
+        <Paper
+          className={classes.item}
+          onClick={() =>
+            setIconsChecked((prev) => {
+              return { ...prev, four: true };
+            })
+          }
+        >
+          {' '}
           <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Portfolio Company Logo</Typography>
-          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
+          <img
+            style={{ opacity: iconsChecked.four ? '1' : '' }}
+            src={buildUpload}
+            className={classes.uploadIcon}
+            alt="upload button"
+          />
         </Paper>
-        <Button className={classes.continueButton}>Continue</Button>
+        <Button className={classes.finishButton}>Finish</Button>
         <Typography
           style={{
             font: 'normal normal normal 24px/28px Roboto',
             marginTop: '11px',
             marginLeft: '135px',
+            padding: '5px',
+            cursor: 'pointer',
+          }}
+          onClick={() => {
+            setPage(page - 1);
           }}
         >
           Previous
