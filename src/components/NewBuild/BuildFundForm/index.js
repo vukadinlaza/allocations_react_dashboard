@@ -64,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid #70707040',
     borderRadius: '5px',
     opacity: '0.3',
+    padding: '0',
   },
 }));
 
@@ -386,6 +387,7 @@ export default function NewSpvForm() {
                   />
                 </Typography>
                 <TextField
+                  multiline="true"
                   variant="outlined"
                   value={finalNotes}
                   onChange={(e) => setFinalNotes(e.target.value)}
