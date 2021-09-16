@@ -82,10 +82,32 @@ const BuildModal = ({ onClose, isOpen }) => {
                                 style={{
                                   margin: '.5rem',
                                   fontWeight: '600',
-                                  borderBottom: '2px solid black',
                                 }}
                               >
                                 {type}
+                              </Typography>
+                              <Typography
+                                style={{
+                                  margin: '.5rem',
+                                }}
+                              >
+                                Launch your next {type}.
+                              </Typography>
+                              <Typography
+                                style={{
+                                  margin: '.5rem',
+                                }}
+                              >
+                                Instant setup, 1-click invest.
+                              </Typography>
+                              <Typography
+                                style={{
+                                  margin: '.5rem',
+                                  borderBottom: '2px solid black',
+                                }}
+                              >
+                                End-to-end platform for setting up a {type} investing any asset
+                                class.
                               </Typography>
                               <img
                                 alt="some"

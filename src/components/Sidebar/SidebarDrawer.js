@@ -12,6 +12,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MonetizationOnRoundedIcon from '@material-ui/icons/MonetizationOnRounded';
@@ -105,7 +106,7 @@ const SidebarDrawer = ({
     {
       to: '/billing',
       title: 'Billing',
-      icon: <FlightIcon fontSize="medium" />,
+      icon: <CreditCardIcon fontSize="medium" />,
     },
   ];
 
