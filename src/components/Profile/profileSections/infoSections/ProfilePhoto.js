@@ -117,8 +117,8 @@ const ProfilePhoto = ({ investor, refetchUser }) => {
       </Badge>
 
       <AppModal isOpen={showModal} onClose={onClose} modalHeader="Upload Profile Photo">
-        <Grid container justifyContent="center" alignItems="center" spacing={2}>
-          <Grid item xs={6} style={{ textAlign: 'center' }}>
+        <Grid container justifyContent="center" alignItems="center" spacing={3}>
+          <Grid item xs={6} style={{ textAlign: 'center', width: '100%' }}>
             <TextField
               variant="outlined"
               onChange={(event) => convertFileToImage(event.target.files[0] || null)}
@@ -126,7 +126,7 @@ const ProfilePhoto = ({ investor, refetchUser }) => {
             />
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid item xs={6} style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Avatar alt="avatar" src={fileToImage} className={classes.avatar} />
           </Grid>
 
