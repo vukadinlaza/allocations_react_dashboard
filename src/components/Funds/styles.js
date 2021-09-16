@@ -43,6 +43,7 @@ const styles = (theme) => ({
   },
   contentContainer: {
     margin: '40px',
+    backgroundColor: '#f7f7f7',
   },
   createButton: {
     backgroundColor: '#39C522',

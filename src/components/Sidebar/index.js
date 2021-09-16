@@ -22,17 +22,21 @@ const useStyles = makeStyles(() => ({
   drawerPaper: {
     width: '65%',
     paddingTop: 8,
-    borderRight: '1px solid #dfe2e5',
+    borderRight: 'none !important',
     borderLeft: 0,
     position: 'relative',
     height: '100%',
+    backgroundColor: '#f7f7f7',
+    background: '#f7f7f7',
   },
   newDrawerPaper: {
     width: '100%',
     paddingTop: 5,
-    borderRight: '1px solid #dfe2e5',
     position: 'relative',
     height: '100%',
+    backgroundColor: '#f7f7f7',
+    background: '#f7f7f7',
+    borderRight: 'none !important',
   },
   select: {
     width: '90%',
@@ -173,6 +177,7 @@ export default function Sidebar(props) {
                   classes={{
                     paper: classes.drawerPaper,
                   }}
+                  style={{ backgroundColor: '#f7f7f7 !important' }}
                   ModalProps={{
                     keepMounted: true,
                   }}
@@ -183,6 +188,7 @@ export default function Sidebar(props) {
                       value={currentAccount || ''}
                       onChange={handleAccountChange}
                       className="input"
+                      style={{ backgroundColor: '#f7f7f7' }}
                       classes={{
                         root: classes.select,
                       }}

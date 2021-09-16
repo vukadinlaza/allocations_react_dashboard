@@ -29,7 +29,7 @@ const GET_INVESTORS = gql`
   query GetOrg($slug: String!) {
     organization(slug: $slug) {
       _id
-      orgInvestors {
+      investors {
         _id
         first_name
         last_name
@@ -58,7 +58,7 @@ export default function Investors() {
 
   if (error) return <div>{error.message}</div>;
 
-  if (!data?.organization?.orgInvestors)
+  if (!data?.organization?.investors)
     return (
       <div>
         <Loader />
@@ -66,7 +66,7 @@ export default function Investors() {
     );
 
   const {
-    organization: { orgInvestors },
+    organization: { investors },
   } = data;
 
   return (
@@ -106,7 +106,7 @@ export default function Investors() {
               </TableHead>
               <TableBody>
                 {_.orderBy(
-                  orgInvestors,
+                  investors,
                   ({ investments }) => _.sumBy(investments, 'amount'),
                   'desc',
                 ).map((investor) => (
