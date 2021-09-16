@@ -1,6 +1,7 @@
 import React from 'react';
 import { Paper, Button, Grid } from '@material-ui/core';
 import { useHistory, useLocation } from 'react-router';
+import { toast } from 'react-toastify';
 import './styles.scss';
 
 export default () => {
@@ -27,6 +28,10 @@ export default () => {
     'Quarterly Funds':
       'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-custom.svg',
   }[state?.asset];
+
+  const handleUpdate = () => {
+    toast.success('Success! Email sent. Allocations will contact you soon.');
+  };
 
   const activeAsset = assets[state?.type];
   if (!activeAsset) return null;
@@ -65,7 +70,12 @@ export default () => {
             style={{ display: 'flex', flexDirection: 'column' }}
           >
             <div>{activeAsset.body}</div>
-            <Button variant="contained" color="primary" style={{ marginTop: '2rem' }}>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ marginTop: '2rem' }}
+              onClick={handleUpdate}
+            >
               Upgrade
             </Button>
           </Grid>
