@@ -88,8 +88,8 @@ const App = () => {
         <div className="mainRoute">
           <Switch>
             <Route path="/cb/thankyou" component={ThankYou} exact />
-            <PrivateRoute path="/testing" exact component={BuildSPVForm} />
-            <PrivateRoute path="/testing2" exact component={BuildFundForm} />
+            <PrivateRoute path="/new-build-spv" exact component={BuildSPVForm} />
+            <PrivateRoute path="/new-build-fund" exact component={BuildFundForm} />
             <PrivateRoute path="/" exact component={UserHome} />
             <PrivateRoute path="/demo" exact component={Demo} />
             <PrivateRoute path="/credit" exact component={Credit} />
