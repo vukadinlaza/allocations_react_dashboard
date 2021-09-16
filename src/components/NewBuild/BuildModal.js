@@ -72,11 +72,7 @@ const BuildModal = ({ onClose, isOpen }) => {
                         {['SPV', 'Fund'].map((type) => {
                           return (
                             <Paper
-                              style={{ textAlign: 'center', margin: '.5rem' }}
-                              onClick={() => {
-                                history.push(`/new-build-${type.toLowerCase()}`);
-                                onClose();
-                              }}
+                              style={{ textAlign: 'center', margin: '.5rem', padding: '.5rem' }}
                             >
                               <Typography
                                 style={{
@@ -89,25 +85,11 @@ const BuildModal = ({ onClose, isOpen }) => {
                               <Typography
                                 style={{
                                   margin: '.5rem',
+                                  fontSize: '.7rem',
                                 }}
                               >
-                                Launch your next {type}.
-                              </Typography>
-                              <Typography
-                                style={{
-                                  margin: '.5rem',
-                                }}
-                              >
-                                Instant setup, 1-click invest.
-                              </Typography>
-                              <Typography
-                                style={{
-                                  margin: '.5rem',
-                                  borderBottom: '2px solid black',
-                                }}
-                              >
-                                End-to-end platform for setting up a {type} investing any asset
-                                class.
+                                Launch your next {type}. Instant setup, 1-click invest. End-to-end
+                                platform for setting up a {type} investing any asset class.
                               </Typography>
                               <img
                                 alt="some"
@@ -118,6 +100,17 @@ const BuildModal = ({ onClose, isOpen }) => {
                                     : 'https://allocations-public.s3.us-east-2.amazonaws.com/graphic-5.png'
                                 }
                               />
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                style={{ margin: '1rem' }}
+                                onClick={() => {
+                                  history.push(`/new-build-${type.toLowerCase()}`);
+                                  onClose();
+                                }}
+                              >
+                                Continue
+                              </Button>
                             </Paper>
                           );
                         })}
