@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '0px 3px 6px #00000029',
     border: '1px solid #7070703B',
     borderRadius: '15px',
-    width: '1352px',
+    width: '100%',
     padding: '42px',
   },
   title: { fontSize: '34px' },
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     border: '2px solid #2A2B5480',
     borderRadius: '10px',
     opacity: 1,
-    width: '1249px',
+    width: '100%',
     height: '91px',
     marginBottom: '8px',
   },
@@ -63,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
     width: '30px',
     marginLeft: 'auto',
     marginRight: '37px',
+    color: 'blue',
   },
   finishButton: {
     font: 'normal normal bold 24px/28px Roboto',
@@ -86,6 +87,7 @@ export default function UploadDocs({ page, setPage }) {
   const classes = useStyles();
   const [iconsChecked, setIconsChecked] = useState({});
   const history = useHistory();
+  console.log('state', iconsChecked);
   return (
     <>
       <Paper className={classes.uploadContainer}>
@@ -104,14 +106,14 @@ export default function UploadDocs({ page, setPage }) {
             });
           }}
         >
-          <img
-            src={buildDoc}
-            alt="document icon"
-            className={classes.documentIcon}
-            style={{ opacity: iconsChecked.one ? '1' : '' }}
-          />
+          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Portfolio Company Term Sheet</Typography>
-          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
+          <img
+            src={buildUpload}
+            className={classes.uploadIcon}
+            style={{ opacity: iconsChecked.one ? '1' : '' }}
+            alt="upload button"
+          />
         </Paper>
         <Paper
           className={classes.item}
@@ -121,14 +123,14 @@ export default function UploadDocs({ page, setPage }) {
             });
           }}
         >
-          <img
-            src={buildDoc}
-            alt="document icon"
-            className={classes.documentIcon}
-            style={{ opacity: iconsChecked.two ? '1' : '' }}
-          />
+          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Pitch Deck</Typography>
-          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
+          <img
+            src={buildUpload}
+            className={classes.uploadIcon}
+            style={{ opacity: iconsChecked.two ? '1' : '' }}
+            alt="upload button"
+          />
         </Paper>
         <Paper
           className={classes.item}
@@ -138,14 +140,14 @@ export default function UploadDocs({ page, setPage }) {
             });
           }}
         >
-          <img
-            src={buildDoc}
-            alt="document icon"
-            className={classes.documentIcon}
-            style={{ opacity: iconsChecked.three ? '1' : '' }}
-          />
+          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Driver's License/Passport</Typography>
-          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
+          <img
+            src={buildUpload}
+            className={classes.uploadIcon}
+            style={{ opacity: iconsChecked.three ? '1' : '' }}
+            alt="upload button"
+          />
         </Paper>
         <Paper
           className={classes.item}
@@ -162,7 +164,12 @@ export default function UploadDocs({ page, setPage }) {
             style={{ opacity: iconsChecked.four ? '1' : '' }}
           />
           <Typography className={classes.itemText}>Portfolio Company Logo</Typography>
-          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
+          <img
+            src={buildUpload}
+            className={classes.uploadIcon}
+            style={{ opacity: iconsChecked.four ? '1' : '' }}
+            alt="upload button"
+          />
         </Paper>
         <Button
           className={classes.finishButton}
