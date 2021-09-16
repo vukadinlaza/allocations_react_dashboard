@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '0px 3px 6px #00000029',
     border: '1px solid #7070703B',
     borderRadius: '15px',
-    width: '1352px',
+    width: '100%',
     opacity: 1,
   },
   formHeaderContainer: {
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '0px 3px 6px #00000029',
     border: '1px solid #7070703B',
     borderRadius: '15px',
-    width: '1352px',
+    width: '100%',
     opacity: 1,
     display: 'flex',
     flexDirection: 'row',
