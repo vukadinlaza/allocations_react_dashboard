@@ -62,7 +62,7 @@ export default () => {
             xs={12}
             md={6}
             justifyContent="center"
-            alignItems="center"
+            alignItems="flex-start"
             style={{ display: 'flex', flexDirection: 'column' }}
           >
             <div>{activeAsset.body}</div>
@@ -72,7 +72,7 @@ export default () => {
               style={{ marginTop: '2rem' }}
               onClick={handleUpdate}
             >
-              Upgrade
+              Upgrade to {state?.asset}
             </Button>
           </Grid>
         </Grid>
