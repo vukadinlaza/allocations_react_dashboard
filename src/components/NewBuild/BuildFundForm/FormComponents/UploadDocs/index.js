@@ -3,6 +3,8 @@ import { Button, Paper } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 // eslint-disable-next-line import/no-useless-path-segments
+import { toast } from 'react-toastify';
+import { useHistory } from 'react-router';
 import buildDoc from '../../../../../assets/buildDoc.svg';
 // eslint-disable-next-line import/no-useless-path-segments
 import buildUpload from '../../../../../assets/buildUpload.svg';
@@ -63,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
     width: '30px',
     marginLeft: 'auto',
     marginRight: '37px',
+    color: 'blue',
   },
   finishButton: {
     font: 'normal normal bold 24px/28px Roboto',
@@ -85,7 +88,8 @@ const useStyles = makeStyles((theme) => ({
 export default function UploadDocs({ page, setPage }) {
   const classes = useStyles();
   const [iconsChecked, setIconsChecked] = useState({});
-
+  const history = useHistory();
+  console.log('state', iconsChecked);
   return (
     <>
       <Paper className={classes.uploadContainer}>
@@ -104,14 +108,14 @@ export default function UploadDocs({ page, setPage }) {
             });
           }}
         >
-          <img
-            src={buildDoc}
-            alt="document icon"
-            className={classes.documentIcon}
-            style={{ opacity: iconsChecked.one ? '1' : '' }}
-          />
+          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Portfolio Company Term Sheet</Typography>
-          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
+          <img
+            src={buildUpload}
+            className={classes.uploadIcon}
+            style={{ opacity: iconsChecked.one ? '1' : '' }}
+            alt="upload button"
+          />
         </Paper>
         <Paper
           className={classes.item}
@@ -121,14 +125,14 @@ export default function UploadDocs({ page, setPage }) {
             });
           }}
         >
-          <img
-            src={buildDoc}
-            alt="document icon"
-            className={classes.documentIcon}
-            style={{ opacity: iconsChecked.two ? '1' : '' }}
-          />
+          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Pitch Deck</Typography>
-          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
+          <img
+            src={buildUpload}
+            className={classes.uploadIcon}
+            style={{ opacity: iconsChecked.two ? '1' : '' }}
+            alt="upload button"
+          />
         </Paper>
         <Paper
           className={classes.item}
@@ -138,14 +142,14 @@ export default function UploadDocs({ page, setPage }) {
             });
           }}
         >
-          <img
-            src={buildDoc}
-            alt="document icon"
-            className={classes.documentIcon}
-            style={{ opacity: iconsChecked.three ? '1' : '' }}
-          />
+          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Driver's License/Passport</Typography>
-          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
+          <img
+            src={buildUpload}
+            className={classes.uploadIcon}
+            style={{ opacity: iconsChecked.three ? '1' : '' }}
+            alt="upload button"
+          />
         </Paper>
         <Paper
           className={classes.item}
@@ -162,9 +166,22 @@ export default function UploadDocs({ page, setPage }) {
             style={{ opacity: iconsChecked.four ? '1' : '' }}
           />
           <Typography className={classes.itemText}>Portfolio Company Logo</Typography>
-          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
+          <img
+            src={buildUpload}
+            className={classes.uploadIcon}
+            style={{ opacity: iconsChecked.four ? '1' : '' }}
+            alt="upload button"
+          />
         </Paper>
-        <Button className={classes.finishButton}>Finish</Button>
+        <Button
+          className={classes.finishButton}
+          onClick={() => {
+            toast.success('Success! Your submission was submitted.');
+            history.push('/');
+          }}
+        >
+          Finish
+        </Button>
         <Typography
           style={{
             font: 'normal normal normal 24px/28px Roboto',
