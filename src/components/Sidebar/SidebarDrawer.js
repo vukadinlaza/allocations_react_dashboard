@@ -95,12 +95,12 @@ const SidebarDrawer = ({
   ];
   const menusTwo = [
     {
-      to: currentHomeUrl,
+      to: '/dealdocs',
       title: 'Documents Library',
       icon: <HomeIcon fontSize="medium" />,
     },
     {
-      to: currentHomeUrl,
+      to: '/billing',
       title: 'Billing',
       icon: <FlightIcon fontSize="medium" />,
     },

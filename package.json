@@ -70,6 +70,7 @@
     "react": "^16.8.6",
     "react-chartjs-2": "^2.9.0",
     "react-confetti": "^6.0.0",
+    "react-credit-cards": "^0.8.3",
     "react-dom": "^16.8.6",
     "react-draft-wysiwyg": "^1.14.4",
     "react-easy-crop": "^2.1.0",

@@ -22,6 +22,10 @@ export default () => {
       'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom+(1).svg',
     Secondaries:
       'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-custom.svg',
+    'Traditional Funds':
+      'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/Blockchain.svg',
+    'Quarterly Funds':
+      'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-custom.svg',
   }[state?.asset];
 
   const activeAsset = assets[state?.type];

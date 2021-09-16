@@ -64,7 +64,7 @@ import TypeSelector from './components/NewBuild/FormComponents/TypeSelector/inde
 import AgreementSigner from './components/NewBuild/FormComponents/AgreementSigner/index';
 import UploadDocs from './components/NewBuild/FormComponents/UploadDocs/index';
 import Upgrade from './components/upgrade';
-// import PaymentForm from './components/billing';
+import PaymentForm from './components/billing';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -100,7 +100,7 @@ const App = () => {
             <PrivateRoute path="/tvclogin" component={TVC} />
             <PrivateRoute path="/newMember/:accountId" component={NewMember} />
             <PrivateRoute path="/upgrade" component={Upgrade} />
-            {/* <PrivateRoute path="/billing" component={PaymentForm} /> */}
+            <PrivateRoute path="/billing" component={PaymentForm} />
 
             {/** Onboarding * */}
             <Route path="/getting-started" component={Faq} exact />
