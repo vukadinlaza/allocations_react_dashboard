@@ -22,16 +22,6 @@ const DELETE_SECTORS = gql`
   }
 `;
 
-const DISPLAY_USERNAME_STATUS = gql`
-  mutation DisplayUsernameStatus($email: String!, $display_username: Boolean) {
-    displayUsernameStatus(email: $email, display_username: $display_username) {
-      _id
-      display_username
-      email
-    }
-  }
-`;
-
 const sectors = [
   'AI',
   'Biotech',
