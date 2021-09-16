@@ -6,6 +6,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -29,9 +30,6 @@ const useStyles = makeStyles((theme) => ({
   radioGroup: {
     margin: '25px',
     flexDirection: 'row',
-    '& div:first-child': {
-      marginRight: '35%',
-    },
   },
   radio: {
     color: '#186EFF',
@@ -40,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 const BuildModal = ({ onClose, isOpen }) => {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <Modal open={isOpen} onClose={onClose} className={classes.modal}>
@@ -62,31 +61,47 @@ const BuildModal = ({ onClose, isOpen }) => {
                 <Grid item style={{ width: '100%' }}>
                   <FormControl component="fieldset" style={{ width: '100%' }}>
                     <RadioGroup className={classes.radioGroup}>
-                      <Box style={{ display: 'flex', flexDirection: 'column' }}>
+                      <Box
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          alignItems: 'space-between',
+                        }}
+                      >
                         {['SPV', 'Fund'].map((type) => {
                           return (
-                            <FormControlLabel
-                              key={type}
-                              value={type}
-                              control={
-                                <Radio
-                                  color="primary"
-                                  style={{ fontSize: '24px' }}
-                                  classes={{
-                                    root: classes.radio,
-                                  }}
-                                />
-                              }
-                              label={type}
-                              classes={{
-                                label: classes.label,
+                            <Paper
+                              style={{ textAlign: 'center', margin: '.5rem' }}
+                              onClick={() => {
+                                history.push(`/new-build-${type.toLowerCase()}`);
+                                onClose();
                               }}
-                            />
+                            >
+                              <Typography
+                                style={{
+                                  margin: '.5rem',
+                                  fontWeight: '600',
+                                  borderBottom: '2px solid black',
+                                }}
+                              >
+                                {type}
+                              </Typography>
+                              <img
+                                alt="some"
+                                style={{ maxWidth: '100%', margin: '1rem' }}
+                                src={
+                                  type === 'SPV'
+                                    ? 'https://allocations-public.s3.us-east-2.amazonaws.com/graphic-2.png'
+                                    : 'https://allocations-public.s3.us-east-2.amazonaws.com/graphic-5.png'
+                                }
+                              />
+                            </Paper>
                           );
                         })}
                       </Box>
 
-                      <Box style={{ display: 'flex', flexDirection: 'column' }}>
+                      {/* <Box style={{ display: 'flex', flexDirection: 'column' }}>
                         {['SPAC', 'Reg Cf'].map((type) => {
                           return (
                             <FormControlLabel
@@ -108,15 +123,15 @@ const BuildModal = ({ onClose, isOpen }) => {
                             />
                           );
                         })}
-                      </Box>
+                      </Box> */}
                     </RadioGroup>
                   </FormControl>
                 </Grid>
-                <Grid container justifyContent="center">
+                {/* <Grid container justifyContent="center">
                   <Button variant="contained" color="primary" size="large" style={{ width: '90%' }}>
                     Continue
                   </Button>
-                </Grid>
+                </Grid> */}
               </Grid>
             </Paper>
           </Grid>

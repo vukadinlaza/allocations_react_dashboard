@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Divider,
   List,
@@ -26,6 +26,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
 import whitelistEmails from './whiteListEmails';
+import BuildModal from '../NewBuild/BuildModal';
 import './SidebarDrawer.scss';
 
 const SidebarDrawer = ({
@@ -65,6 +66,7 @@ const SidebarDrawer = ({
 
   const [open, setOpen] = React.useState(false);
   const [openTwo, setOpenTwo] = React.useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   const handleClick = () => {
     setOpen(!open);
@@ -109,8 +111,11 @@ const SidebarDrawer = ({
 
   return (
     <div className="SidebarDrawer">
+      <BuildModal isOpen={openModal} onClose={() => setOpenModal(false)} />
+
       <Button
         variant="contained"
+        onClick={() => setOpenModal(true)}
         style={{
           borderRadious: '.75rem',
           width: '80%',
