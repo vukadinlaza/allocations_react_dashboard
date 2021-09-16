@@ -7,8 +7,9 @@ import {
   ListItemText,
   Typography,
   makeStyles,
+  Button,
 } from '@material-ui/core';
-import AccountBalanceRoundedIcon from '@material-ui/icons/AccountBalanceRounded';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import StorefrontIcon from '@material-ui/icons/Storefront';
@@ -78,17 +79,17 @@ const SidebarDrawer = ({
       icon: <HomeIcon fontSize="medium" />,
     },
     {
-      to: currentHomeUrl,
+      to: '/admin/spvs',
       title: 'SPVs',
       icon: <FlightIcon fontSize="medium" />,
     },
     {
-      to: currentHomeUrl,
+      to: '/admin/funds',
       title: 'Funds',
       icon: <AccountBalanceIcon fontSize="medium" />,
     },
     {
-      to: currentHomeUrl,
+      to: '/admin/allocations/investors',
       title: 'Investors',
       icon: <PersonIcon fontSize="medium" />,
     },
@@ -108,6 +109,20 @@ const SidebarDrawer = ({
 
   return (
     <div className="SidebarDrawer">
+      <Button
+        variant="contained"
+        style={{
+          borderRadious: '.75rem',
+          width: '80%',
+          margin: '.5rem 1rem',
+          backgroundColor: '#186EFF',
+          color: 'white',
+        }}
+      >
+        <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
+        Add
+      </Button>
+
       <Typography className="sectionSideBarTitle">ESSENTIALS</Typography>
       <List>
         {menus.map(({ to, title, icon }) => (

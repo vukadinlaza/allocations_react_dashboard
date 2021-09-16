@@ -46,8 +46,8 @@ export default class extends React.Component {
             alignItems: 'center',
           }}
         >
-          <div id="PaymentForm">
-            <Grid container>
+          <div id="PaymentForm" style={{ width: '100%' }}>
+            <Grid container lg={12} md={12} sm={6}>
               <Grid
                 item
                 xs={6}
@@ -76,13 +76,14 @@ export default class extends React.Component {
                     alignItems: 'center',
                   }}
                 >
-                  <Grid container spacing={1}>
-                    <Grid item xs={6} spacing={1}>
+                  <Grid container>
+                    <Grid item xs={6} lg={8} spacing={1}>
                       <TextField
                         variant="outlined"
                         style={{ display: 'block', margin: '1rem 0' }}
                         type="tel"
                         name="number"
+                        value={this.state.number}
                         placeholder="Card Number"
                         onChange={this.handleInputChange}
                         onFocus={this.handleInputFocus}
@@ -92,17 +93,19 @@ export default class extends React.Component {
                         style={{ display: 'block', margin: '1rem 0' }}
                         type="tel"
                         name="name"
+                        value={this.state.name}
                         placeholder="Name"
                         onChange={this.handleInputChange}
                         onFocus={this.handleInputFocus}
                       />{' '}
                     </Grid>
-                    <Grid item xs={6} spacing={1}>
+                    <Grid item xs={6} lg={3} spacing={1}>
                       <TextField
                         variant="outlined"
                         style={{ display: 'block', margin: '1rem 0' }}
                         type="tel"
                         name="expiry"
+                        value={this.state.expiry}
                         placeholder="Expiration"
                         onChange={this.handleInputChange}
                         onFocus={this.handleInputFocus}
@@ -112,6 +115,7 @@ export default class extends React.Component {
                         style={{ display: 'block', margin: '1rem 0' }}
                         type="tel"
                         name="cvc"
+                        value={this.state.cvc}
                         placeholder="CVC"
                         onChange={this.handleInputChange}
                         onFocus={this.handleInputFocus}
@@ -122,9 +126,18 @@ export default class extends React.Component {
                   <Button
                     variant="contained"
                     color="primary"
-                    style={{ width: '85%' }}
+                    style={{ width: '100%' }}
                     size="large"
-                    onClick={() => toast.success('Success! Credit card information saved.')}
+                    onClick={() => {
+                      toast.success('Success! Credit card information saved.');
+                      this.setState({
+                        cvc: '',
+                        expiry: '',
+                        focus: '',
+                        name: '',
+                        number: '',
+                      });
+                    }}
                   >
                     Submit
                   </Button>
