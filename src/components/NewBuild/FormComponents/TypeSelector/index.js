@@ -164,7 +164,7 @@ export default function TypeSelector({
             value={portCompName}
             onChange={(e) => setPortCompName(e.target.value)}
             style={{
-              width: '1148px',
+              width: '568px',
             }}
             className={classes.inputBox}
             // inputProps={{ className: classes.input }}

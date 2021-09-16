@@ -82,7 +82,7 @@ const SidebarDrawer = ({
     {
       to: '/admin/spvs',
       title: 'SPVs',
-      icon: <FlightIcon fontSize="medium" />,
+      icon: <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />,
     },
     {
       to: '/admin/funds',
@@ -183,7 +183,7 @@ const SidebarDrawer = ({
 
       <ListItem button onClick={handleClick}>
         <ListItemIcon>
-          <FlightIcon />
+          <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
         </ListItemIcon>
         <ListItemText primary="SPVs" />
         {open ? <ExpandLess /> : <ExpandMore />}

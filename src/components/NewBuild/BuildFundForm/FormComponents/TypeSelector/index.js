@@ -125,7 +125,7 @@ export default function TypeSelector({
             </FormControl>
           </Grid>
           <Grid item>
-            <FormControl required disabled variant="outlined" style={{ paddingLeft: '14px' }}>
+            <FormControl required disabled variant="outlined" style={{}}>
               <Typography className={classes.inputName}>
                 Number of Investments <HelpIcon className={classes.helpIcon} />
               </Typography>
@@ -156,7 +156,7 @@ export default function TypeSelector({
             </FormControl>
           </Grid>
           <Grid item>
-            <FormControl required disabled variant="outlined" style={{ paddingLeft: '14px' }}>
+            <FormControl required disabled variant="outlined" style={{}}>
               <Typography className={classes.inputName}>
                 Closing Date <HelpIcon className={classes.helpIcon} />
               </Typography>
@@ -211,7 +211,7 @@ export default function TypeSelector({
             </FormControl>
           </Grid>
           <Grid item>
-            <FormControl required disabled variant="outlined" style={{ paddingLeft: '14px' }}>
+            <FormControl required disabled variant="outlined" style={{}}>
               <Typography className={classes.inputName}>
                 GP Entity Name <HelpIcon className={classes.helpIcon} />
               </Typography>
