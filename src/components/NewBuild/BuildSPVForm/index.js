@@ -297,7 +297,7 @@ export default function NewSpvForm() {
               <Typography variant="h6" gutterBottom style={{ fontSize: '34px' }}>
                 3. Offering Terms
               </Typography>
-              <Grid container spacing={1} style={{ marginTop: '16px' }} wrap="nowrap">
+              <Grid container spacing={1} style={{ marginTop: '16px' }}>
                 <Grid item>
                   <Grid item xs={6} style={{ marginRight: '54px' }}>
                     <FormControl required disabled variant="outlined" style={{ width: '100%' }}>

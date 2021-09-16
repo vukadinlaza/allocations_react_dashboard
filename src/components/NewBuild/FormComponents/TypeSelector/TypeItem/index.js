@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
   typeItem: {
     padding: '12px',
-    width: '267px',
+    width: '100%',
     height: '166px',
     minHeight: '166px',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
