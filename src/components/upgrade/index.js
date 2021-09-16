@@ -1,6 +1,7 @@
 import React from 'react';
 import { Paper, Button, Grid } from '@material-ui/core';
 import { useHistory, useLocation } from 'react-router';
+import { toast } from 'react-toastify';
 import './styles.scss';
 
 export default () => {
@@ -28,6 +29,10 @@ export default () => {
       'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-custom.svg',
   }[state?.asset];
 
+  const handleUpdate = () => {
+    toast.success('Success! Email sent. Allocations will contact you soon.');
+  };
+
   const activeAsset = assets[state?.type];
   if (!activeAsset) return null;
   return (
@@ -39,18 +44,40 @@ export default () => {
         </span>{' '}
         <span className="subtitle">(PRO)</span>
       </Paper>
-      <Paper style={{ minHeight: '70%', padding: '1rem' }}>
+      <Paper style={{ minHeight: '70%', padding: '1rem', display: 'flex', alignItems: 'center' }}>
         <Grid
           container
           style={{ minHeight: '100%', height: '100%' }}
           justifyContent="center"
           alignItems="center"
         >
-          <Grid item xs={6} justifyContent="center" alignItems="center" style={{ display: 'flex' }}>
-            <img src={image} alt="Rocket ship" />
+          <Grid
+            item
+            xs={12}
+            md={6}
+            justifyContent="center"
+            alignItems="center"
+            style={{ display: 'flex' }}
+          >
+            <img src={image} alt="Rocket ship" className="rocket" />
           </Grid>
-          <Grid item xs={6} justifyContent="center" alignItems="center" style={{ display: 'flex' }}>
+          <Grid
+            item
+            xs={12}
+            md={6}
+            justifyContent="center"
+            alignItems="center"
+            style={{ display: 'flex', flexDirection: 'column' }}
+          >
             <div>{activeAsset.body}</div>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ marginTop: '2rem' }}
+              onClick={handleUpdate}
+            >
+              Upgrade
+            </Button>
           </Grid>
         </Grid>
       </Paper>
