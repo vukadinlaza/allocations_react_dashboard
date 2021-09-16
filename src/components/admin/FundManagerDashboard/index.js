@@ -403,12 +403,6 @@ const FundManagerDashboard = ({ classes, history }) => {
               : orgDealsData?.organization?.name}
           </Typography>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '.5rem' }}>
-            <span className={classes.createButtonLink}>
-              <Button className={classes.createButton} onClick={() => setOpenModal(true)}>
-                <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
-                Create New {userProfile?.admin && 'Build'}
-              </Button>
-            </span>
             {userProfile?.admin && (
               <span className={classes.createButtonLink}>
                 <Button
