@@ -12,11 +12,9 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
-import CreditCardIcon from '@mui/icons-material/CreditCard';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MonetizationOnRoundedIcon from '@material-ui/icons/MonetizationOnRounded';
-import CreditCardRoundedIcon from '@material-ui/icons/CreditCardRounded';
 import { Link, useRouteMatch, useHistory } from 'react-router-dom';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import FlightIcon from '@material-ui/icons/Flight';
@@ -106,7 +104,7 @@ const SidebarDrawer = ({
     {
       to: '/billing',
       title: 'Billing',
-      icon: <CreditCardIcon fontSize="medium" />,
+      icon: <MonetizationOnRoundedIcon fontSize="medium" />,
     },
   ];
 

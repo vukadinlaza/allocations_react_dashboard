@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Button, Paper } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import { toast } from 'react-toastify';
+import { useHistory } from 'react-router';
 import buildDoc from '../../../../assets/buildDoc.svg';
 import buildUpload from '../../../../assets/buildUpload.svg';
 
@@ -83,7 +85,7 @@ const useStyles = makeStyles((theme) => ({
 export default function UploadDocs({ page, setPage }) {
   const classes = useStyles();
   const [iconsChecked, setIconsChecked] = useState({});
-
+  const history = useHistory();
   return (
     <>
       <Paper className={classes.uploadContainer}>
@@ -162,7 +164,15 @@ export default function UploadDocs({ page, setPage }) {
           <Typography className={classes.itemText}>Portfolio Company Logo</Typography>
           <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
         </Paper>
-        <Button className={classes.finishButton}>Finish</Button>
+        <Button
+          className={classes.finishButton}
+          onClick={() => {
+            toast.success('Success! Your submission was a success');
+            history.push('/');
+          }}
+        >
+          Finish
+        </Button>
         <Typography
           style={{
             font: 'normal normal normal 24px/28px Roboto',
