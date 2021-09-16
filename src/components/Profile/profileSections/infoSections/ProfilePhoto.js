@@ -127,7 +127,14 @@ const ProfilePhoto = ({ investor, refetchUser }) => {
           </Grid>
 
           <Grid item xs={6} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Avatar alt="avatar" src={fileToImage} className={classes.avatar} />
+            <Avatar
+              alt="avatar"
+              src={fileToImage}
+              className={classes.avatar}
+              style={{ textAlign: 'center' }}
+            >
+              Add Image
+            </Avatar>
           </Grid>
 
           <Grid item xs={12} style={{ textAlign: 'center' }}>
