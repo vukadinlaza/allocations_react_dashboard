@@ -93,12 +93,17 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 'auto',
     marginRight: '37px',
   },
-  inputs: {
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #0000000A',
-    border: '1px solid #70707040',
-    borderRadius: '5px',
-    opacity: 1,
+  continueButton: {
+    font: 'normal normal bold 24px/28px Roboto',
+    marginTop: '44px',
+    width: '368px',
+    height: '68px',
+    background: '#186EFF 0% 0% no-repeat padding-box',
+    borderRadius: '10px',
+    opacity: '0.5',
+    color: '#FFFFFF',
+    textTransform: 'none',
+    outline: 'none',
   },
 }));
 
@@ -117,76 +122,14 @@ export default function SignDocsForm() {
         <Paper className={classes.item}>
           <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Service Agreement</Typography>
-          <img
-            src={CheckCircle}
-            classes={classes.checkCircle}
-            style={{
-              opacity: '0.3',
-              transparentheight: '35px',
-              width: '38px',
-              marginLeft: 'auto',
-              marginRight: '37px',
-            }}
-            alt="checkbox"
-          />
+          <img src={CheckCircle} className={classes.checkCircle} alt="checkbox" />
         </Paper>
-        <Paper
-          // display="flex"
-          // justifyContent="flex-end"
-          // alignItems="stretch"
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            background: '#FFFFFF 0% 0% no-repeat padding-box',
-            boxShadow: '0px 3px 6px #0000000D',
-            border: '2px solid #2A2B5480',
-            borderRadius: '10px',
-            opacity: 1,
-            width: '1249px',
-            height: '91px',
-            marginTop: '8px',
-          }}
-        >
+        <Paper className={classes.item}>
           <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
-          <Typography
-            style={{
-              font: 'normal normal normal 18px/21px Roboto',
-              color: '#2A2B54',
-              letterSpacing: '0px',
-              marginLeft: '17px',
-            }}
-          >
-            Memorandum of Understanding
-          </Typography>
-          <img
-            src={CheckCircle}
-            style={{
-              opacity: '0.3',
-              transparentheight: '35px',
-              width: '38px',
-              marginLeft: 'auto',
-              marginRight: '37px',
-            }}
-            alt="checkbox"
-          />
+          <Typography className={classes.itemText}>Memorandum of Understanding</Typography>
+          <img src={CheckCircle} className={classes.checkCircle} alt="checkbox" />
         </Paper>
-        <Button
-          style={{
-            font: 'normal normal bold 24px/28px Roboto',
-            marginTop: '44px',
-            width: '368px',
-            height: '68px',
-            background: '#186EFF 0% 0% no-repeat padding-box',
-            borderRadius: '10px',
-            opacity: '0.5',
-            color: '#FFFFFF',
-            textTransform: 'none',
-            outline: 'none',
-          }}
-        >
-          Continue
-        </Button>
+        <Button className={classes.continueButton}>Continue</Button>
         <Typography
           style={{
             font: 'normal normal normal 24px/28px Roboto',

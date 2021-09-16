@@ -59,6 +59,8 @@ import InvestmentPage from './components/DealOneClick/InvestmentPage/InvestmentP
 
 // test
 import BuildSPVForm from './components/NewBuild/BuildSPVForm/index';
+import BuildFundForm from './components/NewBuild/BuildFundForm/index';
+
 import TypeItem from './components/NewBuild/FormComponents/TypeSelector/TypeItem/index';
 import TypeSelector from './components/NewBuild/FormComponents/TypeSelector/index';
 import AgreementSigner from './components/NewBuild/FormComponents/AgreementSigner/index';
@@ -85,6 +87,7 @@ const App = () => {
           <Switch>
             <Route path="/cb/thankyou" component={ThankYou} exact />
             <PrivateRoute path="/testing" exact component={BuildSPVForm} />
+            <PrivateRoute path="/testing2" exact component={BuildFundForm} />
             <PrivateRoute path="/" exact component={UserHome} />
             <PrivateRoute path="/demo" exact component={Demo} />
             <PrivateRoute path="/credit" exact component={Credit} />

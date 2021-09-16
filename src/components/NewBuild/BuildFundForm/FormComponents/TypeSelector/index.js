@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import HelpIcon from '@material-ui/icons/Help';
-import { TextField, Paper, Grid, FormControl } from '@material-ui/core';
+import { Button, TextField, Paper, Grid, FormControl } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import TypeItem from './TypeItem/index';
-import RocketIcon from '../../../../assets/buildRocket.svg';
-import BankIcon from '../../../../assets/buildBank.svg';
-import CryptoIcon from '../../../../assets/buildCrypto.svg';
-import DistributeIcon from '../../../../assets/buildDistribute.svg';
-import HouseIcon from '../../../../assets/buildHouse.svg';
-import LevelIcon from '../../../../assets/buildLevel.svg';
-import NetworkIcon from '../../../../assets/buildNetwork.svg';
-import PieIcon from '../../../../assets/buildPie.svg';
+import RocketIcon from '../../../../../assets/buildRocket.svg';
+import CryptoIcon from '../../../../../assets/buildCrypto.svg';
+import HouseIcon from '../../../../../assets/buildHouse.svg';
+import LevelIcon from '../../../../../assets/buildLevel.svg';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -78,40 +74,6 @@ export default function TypeSelector({
       width: '36px',
     },
     {
-      title: 'SPV into a Fund',
-      value: 'spvToFund',
-      description: 'Raise money to invest into a fund',
-      icon: BankIcon,
-      height: '30px',
-      width: '30px',
-    },
-  ];
-  const row2Items = [
-    {
-      title: 'Secondary',
-      value: 'secondary',
-      description: 'Raise money to invest in a secondary of a private company',
-      icon: DistributeIcon,
-      height: '35px',
-      width: '28px',
-    },
-    {
-      title: 'SPV into an SPV',
-      value: 'spvToSpv',
-      description: 'Raise money to invest in another SPV',
-      icon: NetworkIcon,
-      height: '32px',
-      width: '20px',
-    },
-    {
-      title: 'Management Co.',
-      value: 'managementStake',
-      description: `Sell a stake in your fund's management company's future carry`,
-      icon: PieIcon,
-      height: '30px',
-      width: '30px',
-    },
-    {
       title: 'Custom',
       value: 'custom',
       description: 'Raise money for X',
@@ -120,6 +82,7 @@ export default function TypeSelector({
       width: '26px',
     },
   ];
+
   function FormRow({ rowItems }) {
     return (
       <>
@@ -145,32 +108,37 @@ export default function TypeSelector({
         <Grid container spacing={1}>
           <FormRow rowItems={row1Items} />
         </Grid>
-        <Grid container spacing={1}>
-          <FormRow rowItems={row2Items} />
+        <Grid container className={classes.bottomGrid}>
+          <Grid item>
+            <FormControl required disabled variant="outlined" style={{ width: '568px' }}>
+              <Typography className={classes.inputName}>
+                Fund Name <HelpIcon className={classes.helpIcon} />
+              </Typography>
+              <TextField
+                value={managerName}
+                onChange={(e) => setManagerName(e.target.value)}
+                style={{ width: '568px' }}
+                className={classes.inputBox}
+                // InputProps={{ className: classes.input }}
+                variant="outlined"
+              />
+            </FormControl>
+          </Grid>
+          <Grid item>
+            <FormControl required disabled variant="outlined" style={{ paddingLeft: '14px' }}>
+              <Typography className={classes.inputName}>
+                Number of Investments <HelpIcon className={classes.helpIcon} />
+              </Typography>
+              <TextField
+                value={closingDate}
+                onChange={(e) => setClosingDate(e.target.value)}
+                style={{ width: '568px' }}
+                className={classes.inputBox}
+                variant="outlined"
+              />
+            </FormControl>
+          </Grid>
         </Grid>
-        <FormControl
-          required
-          disabled
-          variant="outlined"
-          style={{
-            paddingTop: '32px',
-            width: '100%',
-          }}
-        >
-          <Typography className={classes.inputName}>
-            Portfolio Company Name <HelpIcon className={classes.helpIcon} />
-          </Typography>
-          <TextField
-            value={portCompName}
-            onChange={(e) => setPortCompName(e.target.value)}
-            style={{
-              width: '1148px',
-            }}
-            className={classes.inputBox}
-            // inputProps={{ className: classes.input }}
-            variant="outlined"
-          />
-        </FormControl>
         <Grid container className={classes.bottomGrid}>
           <Grid item>
             <FormControl required disabled variant="outlined" style={{ width: '568px' }}>
@@ -197,9 +165,62 @@ export default function TypeSelector({
                 onChange={(e) => setClosingDate(e.target.value)}
                 style={{ width: '568px' }}
                 className={classes.inputBox}
-                // InputProps={{ className: classes.input }}
                 variant="outlined"
                 type="date"
+              />
+            </FormControl>
+          </Grid>
+        </Grid>
+        <Grid container className={classes.bottomGrid}>
+          <Grid container style={{ display: 'flex', flexDirection: 'row', width: '568px' }}>
+            <FormControl required disabled variant="outlined" style={{ width: '538' }}>
+              <Typography className={classes.inputName}>
+                Do you need a GP Entity? <HelpIcon className={classes.helpIcon} />
+              </Typography>
+              <Grid container>
+                <Grid>
+                  <Button
+                    style={{
+                      width: '279px',
+                      height: '58px',
+                      background: '#FFFFFF26 0% 0% no-repeat padding-box',
+                      border: '2px solid #70707080',
+                      borderRadius: '5px',
+                      opacity: '0.5',
+                      marginRight: '3px',
+                    }}
+                  >
+                    Yes
+                  </Button>
+                </Grid>
+                <Grid>
+                  <Button
+                    style={{
+                      width: '279px',
+                      height: '58px',
+                      background: '#FFFFFF26 0% 0% no-repeat padding-box',
+                      border: '2px solid #70707080',
+                      borderRadius: '5px',
+                      opacity: '0.5',
+                    }}
+                  >
+                    No
+                  </Button>
+                </Grid>
+              </Grid>
+            </FormControl>
+          </Grid>
+          <Grid item>
+            <FormControl required disabled variant="outlined" style={{ paddingLeft: '14px' }}>
+              <Typography className={classes.inputName}>
+                GP Entity Name <HelpIcon className={classes.helpIcon} />
+              </Typography>
+              <TextField
+                value={closingDate}
+                onChange={(e) => setClosingDate(e.target.value)}
+                className={classes.inputBox}
+                style={{ width: '568px' }}
+                variant="outlined"
               />
             </FormControl>
           </Grid>

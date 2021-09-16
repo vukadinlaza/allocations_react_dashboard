@@ -1,33 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { get, pick } from 'lodash';
-import { toast } from 'react-toastify';
-import { useMutation, gql } from '@apollo/client';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CloudDone } from '@material-ui/icons';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import Tooltip from '@material-ui/core/Tooltip';
 import HelpIcon from '@material-ui/icons/Help';
 
-import {
-  Button,
-  TextField,
-  Paper,
-  Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from '@material-ui/core';
-import countries from 'country-region-data';
+import { Button, TextField, Paper, Grid, FormControl } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
-import { SimpleBox } from '../../admin/FundManagerDashboard/widgets';
-import Loader from '../../utils/Loader';
-import { useAuth } from '../../../auth/useAuth';
-import BasicInfo from '../FormComponents/TypeSelector/index';
-import ReviewTermsModal from '../FormComponents/AgreementSigner/index';
-import UploadDocsModal from '../FormComponents/UploadDocs/index';
+import BasicInfo from './FormComponents/TypeSelector/index';
+import ReviewTermsModal from './FormComponents/AgreementSigner/index';
+import UploadDocsModal from './FormComponents/UploadDocs/index';
 
 const useStyles = makeStyles((theme) => ({
   root: {

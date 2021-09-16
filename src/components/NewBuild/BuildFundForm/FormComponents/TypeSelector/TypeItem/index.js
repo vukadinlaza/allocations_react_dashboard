@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, TextField, Paper, Grid } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import RocketIcon from '../../../../../assets/buildRocket.svg';
 
 const useStyles = makeStyles((theme) => ({
   icon: {

@@ -1,33 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
-import { get, pick } from 'lodash';
-import { toast } from 'react-toastify';
-import { useMutation, gql } from '@apollo/client';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CloudDone } from '@material-ui/icons';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import Tooltip from '@material-ui/core/Tooltip';
-import HelpIcon from '@material-ui/icons/Help';
-
-import {
-  Button,
-  TextField,
-  Paper,
-  Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from '@material-ui/core';
-import countries from 'country-region-data';
+import { Button, Paper } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
-import CheckCircle from '../../../../assets/check_circle_black_24dp.svg';
-import buildDoc from '../../../../assets/buildDoc.svg';
-import buildUpload from '../../../../assets/buildUpload.svg';
-
-import Loader from '../../../utils/Loader';
+import CheckCircle from '../../../../../assets/check_circle_black_24dp.svg';
+import buildDoc from '../../../../../assets/buildDoc.svg';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid #7070703B',
     borderRadius: '15px',
     width: '1352px',
+    height: '544px',
     padding: '42px',
   },
   title: { fontSize: '34px' },
@@ -80,6 +57,14 @@ const useStyles = makeStyles((theme) => ({
     opacity: '1',
   },
   documentIcon: { marginLeft: '20px' },
+  checkCircle: {
+    opacity: '0.3',
+    transparentheight: '35px',
+    width: '38px',
+    marginLeft: 'auto',
+    marginRight: '37px',
+  },
+
   uploadIcon: {
     opacity: '0.3',
     width: '30px',
@@ -97,44 +82,30 @@ const useStyles = makeStyles((theme) => ({
     color: '#FFFFFF',
     textTransform: 'none',
     outline: 'none',
-    '&:hover': {
-      backgroundColor: '#fff',
-      color: '#3c52b2',
-    },
   },
 }));
 
-export default function UploadDocs() {
+export default function SignDocsForm() {
   const classes = useStyles();
   return (
     <>
       <Paper className={classes.uploadContainer}>
-        <Typography variant="h6" gutterBottom className={classes.title}>
-          Upload your documents{' '}
+        <Typography variant="h6" gutterBottom style={{ fontSize: '34px' }}>
+          Sign your agreements
         </Typography>
         <Typography variant="h6" gutterBottom className={classes.subtitle}>
-          Please upload the appropriate documents so we have them on file for you. When uploading
-          multiple files, please compress them into one zip folder.
+          Please sign the appropriate agreements to consent to us to start creating your deals on
+          your behalf
         </Typography>
         <Paper className={classes.item}>
           <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
-          <Typography className={classes.itemText}>Portfolio Company Term Sheet</Typography>
-          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
+          <Typography className={classes.itemText}>Service Agreement</Typography>
+          <img src={CheckCircle} className={classes.checkCircle} alt="checkbox" />
         </Paper>
         <Paper className={classes.item}>
           <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
-          <Typography className={classes.itemText}>Pitch Deck</Typography>
-          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
-        </Paper>
-        <Paper className={classes.item}>
-          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
-          <Typography className={classes.itemText}>Driver's License/Passport</Typography>
-          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
-        </Paper>
-        <Paper className={classes.item}>
-          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
-          <Typography className={classes.itemText}>Portfolio Company Logo</Typography>
-          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
+          <Typography className={classes.itemText}>Memorandum of Understanding</Typography>
+          <img src={CheckCircle} className={classes.checkCircle} alt="checkbox" />
         </Paper>
         <Button className={classes.continueButton}>Continue</Button>
         <Typography

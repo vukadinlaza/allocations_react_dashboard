@@ -1,33 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
-import { get, pick } from 'lodash';
-import { toast } from 'react-toastify';
-import { useMutation, gql } from '@apollo/client';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CloudDone } from '@material-ui/icons';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import Tooltip from '@material-ui/core/Tooltip';
-import HelpIcon from '@material-ui/icons/Help';
-
-import {
-  Button,
-  TextField,
-  Paper,
-  Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from '@material-ui/core';
-import countries from 'country-region-data';
+import { Button, Paper } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
-import CheckCircle from '../../../../assets/check_circle_black_24dp.svg';
-import buildDoc from '../../../../assets/buildDoc.svg';
-import buildUpload from '../../../../assets/buildUpload.svg';
-
-import Loader from '../../../utils/Loader';
+import CheckCircle from '../../../../../assets/check_circle_black_24dp.svg';
+import buildDoc from '../../../../../assets/buildDoc.svg';
+import buildUpload from '../../../../../assets/buildUpload.svg';
 
 const useStyles = makeStyles((theme) => ({
   root: {
