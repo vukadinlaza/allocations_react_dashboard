@@ -85,6 +85,7 @@ const styles = (theme) => ({
   },
   contentContainer: {
     width: '100%',
+    backgroundColor: '#f7f7f7',
   },
   footerData: {
     fontSize: '14px',

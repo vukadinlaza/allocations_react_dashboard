@@ -1,0 +1,55 @@
+import React from 'react';
+import { Paper, Button, Grid } from '@material-ui/core';
+import { useHistory, useLocation } from 'react-router';
+import './styles.scss';
+
+export default () => {
+  const location = useLocation();
+  const state = location?.state;
+  const assets = {
+    SPV: {
+      header: `Launch your next ${state.asset} SPV`,
+      body: `End-to-end platform for setting up ${state.asset} SPVs. Instant setup, 1-click invest.`,
+    },
+    FUND: {
+      header: `Launch your next ${state.asset}`,
+      body: `End-to-end platform for setting up ${state.asset}. Instant setup, 1-click invest.`,
+    },
+  };
+  const image = {
+    Crypto: 'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/Blockchain.svg',
+    'Real Estate':
+      'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/startup-step-custom+(1).svg',
+    Secondaries:
+      'https://allocations-public.s3.us-east-2.amazonaws.com/build-icons/custom-step-custom.svg',
+  }[state?.asset];
+
+  const activeAsset = assets[state?.type];
+  if (!activeAsset) return null;
+  return (
+    <>
+      <Paper style={{ padding: '1rem', margin: '2rem 0' }}>
+        {' '}
+        <span className="title">
+          {state.asset} {state.type === 'SPV' ? 'SPVs' : ''}
+        </span>{' '}
+        <span className="subtitle">(PRO)</span>
+      </Paper>
+      <Paper style={{ minHeight: '70%', padding: '1rem' }}>
+        <Grid
+          container
+          style={{ minHeight: '100%', height: '100%' }}
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Grid item xs={6} justifyContent="center" alignItems="center" style={{ display: 'flex' }}>
+            <img src={image} alt="Rocket ship" />
+          </Grid>
+          <Grid item xs={6} justifyContent="center" alignItems="center" style={{ display: 'flex' }}>
+            <div>{activeAsset.body}</div>
+          </Grid>
+        </Grid>
+      </Paper>
+    </>
+  );
+};

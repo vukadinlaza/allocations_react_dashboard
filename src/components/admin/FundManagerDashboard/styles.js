@@ -94,7 +94,7 @@ const styles = (theme) => ({
     width: '100%',
     left: '0',
     top: '0',
-    background: 'white',
+    background: '#f7f7f7',
   },
   footerData: {
     fontSize: '14px',
