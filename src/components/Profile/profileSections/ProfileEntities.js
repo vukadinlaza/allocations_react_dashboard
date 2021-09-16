@@ -14,7 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { capitalize } from 'lodash';
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
 import EditIcon from '@material-ui/icons/Edit';
-import AddEntityModal from '../addEntityModal';
+import AddEntityModal from '../profileModals/addEntityModal';
 
 const useStyles = makeStyles((theme) => ({
   checkCircle: {

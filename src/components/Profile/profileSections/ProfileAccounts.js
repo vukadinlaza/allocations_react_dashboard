@@ -13,7 +13,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
-import AddAccountModal from '../addAccountModal';
+import AddAccountModal from '../profileModals/addAccountModal';
 
 const useStyles = makeStyles((theme) => ({
   checkCircle: {

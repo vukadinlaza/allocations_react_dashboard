@@ -17,12 +17,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import countries from 'country-region-data';
 import { UsaStates } from 'usa-states';
-import Sectors from './Sectors';
-import DisplayUsername from './DisplayUsername';
-import ProfilePhoto from './ProfilePhoto';
+import Sectors from './infoSections/Sectors';
+import DisplayUsername from './infoSections/DisplayUsername';
+import ProfilePhoto from './infoSections/ProfilePhoto';
 import Loader from '../../utils/Loader';
 import { useAuth } from '../../../auth/useAuth';
-import './sections.scss';
 
 const UPDATE_USER = gql`
   mutation UpdateUser($investor: UserInput!) {
