@@ -24,6 +24,9 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import CheckCircle from '../../../../assets/check_circle_black_24dp.svg';
+import buildDoc from '../../../../assets/buildDoc.svg';
+import buildUpload from '../../../../assets/buildUpload.svg';
+
 import Loader from '../../../utils/Loader';
 
 const useStyles = makeStyles((theme) => ({
@@ -38,14 +41,50 @@ const useStyles = makeStyles((theme) => ({
       borderColor: '#7070703B',
     },
   },
-  paper: {
+  uploadContainer: {
     marginBottom: '16px',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     boxShadow: '0px 3px 6px #00000029',
     border: '1px solid #7070703B',
     borderRadius: '15px',
     width: '1352px',
+    padding: '42px',
+  },
+  title: { fontSize: '34px' },
+  subtitle: {
+    textAlign: 'left',
+    font: 'normal normal normal 16px/19px Roboto',
+    letterSpacing: '0px',
+    color: '#186EFF',
+    opacity: '1',
+    marginBottom: '41px',
+  },
+  item: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    boxShadow: '0px 3px 6px #0000000D',
+    border: '2px solid #2A2B5480',
+    borderRadius: '10px',
     opacity: 1,
+    width: '1249px',
+    height: '91px',
+    marginBottom: '8px',
+  },
+  itemText: {
+    font: 'normal normal normal 18px/21px Roboto',
+    color: '#2A2B54',
+    letterSpacing: '0px',
+    marginLeft: '17px',
+    opacity: '1',
+  },
+  documentIcon: { marginLeft: '20px' },
+  uploadIcon: {
+    opacity: '0.3',
+    width: '30px',
+    marginLeft: 'auto',
+    marginRight: '37px',
   },
   inputs: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
@@ -60,187 +99,33 @@ export default function UploadDocs() {
   const classes = useStyles();
   return (
     <>
-      <Paper className={classes.paper} style={{ padding: '42px', height: '758px' }}>
-        <Typography variant="h6" gutterBottom style={{ fontSize: '34px' }}>
+      <Paper className={classes.uploadContainer}>
+        <Typography variant="h6" gutterBottom className={classes.title}>
           Upload your documents{' '}
         </Typography>
-        <Typography
-          variant="h6"
-          gutterBottom
-          style={{
-            textAlign: 'left',
-            font: 'normal normal normal 16px/19px Roboto',
-            letterSpacing: '0px',
-            color: '#186EFF',
-            opacity: 1,
-          }}
-        >
+        <Typography variant="h6" gutterBottom className={classes.subtitle}>
           Please upload the appropriate documents so we have them on file for you. When uploading
           multiple files, please compress them into one zip folder.
         </Typography>
-        <Paper
-          display="flex"
-          justifyContent="flex-end"
-          alignItems="stretch"
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            background: '#FFFFFF 0% 0% no-repeat padding-box',
-            boxShadow: '0px 3px 6px #0000000D',
-            border: '2px solid #2A2B5480',
-            borderRadius: '10px',
-            opacity: 1,
-            width: '1249px',
-            height: '91px',
-            marginTop: '41px',
-          }}
-        >
-          <DescriptionOutlinedIcon fontSize="large" style={{ marginLeft: '20px' }} />
-          <Typography
-            style={{
-              font: 'normal normal normal 18px/21px Roboto',
-              color: '#2A2B54',
-              letterSpacing: '0px',
-              marginLeft: '17px',
-            }}
-          >
-            Portfolio Company Term Sheet
-          </Typography>
-          <img
-            src={CheckCircle}
-            style={{
-              opacity: '0.3',
-              transparentheight: '35px',
-              width: '38px',
-              marginLeft: 'auto',
-              marginRight: '37px',
-            }}
-            alt="checkbox"
-          />
+        <Paper className={classes.item}>
+          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
+          <Typography className={classes.itemText}>Portfolio Company Term Sheet</Typography>
+          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
         </Paper>
-        <Paper
-          display="flex"
-          justifyContent="flex-end"
-          alignItems="stretch"
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            background: '#FFFFFF 0% 0% no-repeat padding-box',
-            boxShadow: '0px 3px 6px #0000000D',
-            border: '2px solid #2A2B5480',
-            borderRadius: '10px',
-            opacity: 1,
-            width: '1249px',
-            height: '91px',
-            marginTop: '8px',
-          }}
-        >
-          <DescriptionOutlinedIcon fontSize="large" style={{ marginLeft: '20px' }} />
-          <Typography
-            style={{
-              font: 'normal normal normal 18px/21px Roboto',
-              color: '#2A2B54',
-              letterSpacing: '0px',
-              marginLeft: '17px',
-            }}
-          >
-            Pitch Deck
-          </Typography>
-          <img
-            src={CheckCircle}
-            style={{
-              opacity: '0.3',
-              transparentheight: '35px',
-              width: '38px',
-              marginLeft: 'auto',
-              marginRight: '37px',
-            }}
-            alt="checkbox"
-          />
+        <Paper className={classes.item}>
+          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
+          <Typography className={classes.itemText}>Pitch Deck</Typography>
+          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
         </Paper>
-        <Paper
-          display="flex"
-          justifyContent="flex-end"
-          alignItems="stretch"
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            background: '#FFFFFF 0% 0% no-repeat padding-box',
-            boxShadow: '0px 3px 6px #0000000D',
-            border: '2px solid #2A2B5480',
-            borderRadius: '10px',
-            opacity: 1,
-            width: '1249px',
-            height: '91px',
-            marginTop: '8px',
-          }}
-        >
-          <DescriptionOutlinedIcon fontSize="large" style={{ marginLeft: '20px' }} />
-          <Typography
-            style={{
-              font: 'normal normal normal 18px/21px Roboto',
-              color: '#2A2B54',
-              letterSpacing: '0px',
-              marginLeft: '17px',
-            }}
-          >
-            Driver's License/Passport
-          </Typography>
-          <img
-            src={CheckCircle}
-            style={{
-              opacity: '0.3',
-              transparentheight: '35px',
-              width: '38px',
-              marginLeft: 'auto',
-              marginRight: '37px',
-            }}
-            alt="checkbox"
-          />
+        <Paper className={classes.item}>
+          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
+          <Typography className={classes.itemText}>Driver's License/Passport</Typography>
+          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
         </Paper>
-        <Paper
-          display="flex"
-          justifyContent="flex-end"
-          alignItems="stretch"
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            background: '#FFFFFF 0% 0% no-repeat padding-box',
-            boxShadow: '0px 3px 6px #0000000D',
-            border: '2px solid #2A2B5480',
-            borderRadius: '10px',
-            opacity: 1,
-            width: '1249px',
-            height: '91px',
-            marginTop: '8px',
-          }}
-        >
-          <DescriptionOutlinedIcon fontSize="large" style={{ marginLeft: '20px' }} />
-          <Typography
-            style={{
-              font: 'normal normal normal 18px/21px Roboto',
-              color: '#2A2B54',
-              letterSpacing: '0px',
-              marginLeft: '17px',
-            }}
-          >
-            Portfolio Company Logo
-          </Typography>
-          <img
-            src={CheckCircle}
-            style={{
-              opacity: '0.3',
-              transparentheight: '35px',
-              width: '38px',
-              marginLeft: 'auto',
-              marginRight: '37px',
-            }}
-            alt="checkbox"
-          />
+        <Paper className={classes.item}>
+          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
+          <Typography className={classes.itemText}>Portfolio Company Logo</Typography>
+          <img src={buildUpload} className={classes.uploadIcon} alt="upload button" />
         </Paper>
         <Button
           style={{

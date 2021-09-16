@@ -50,6 +50,28 @@ const useStyles = makeStyles((theme) => ({
     width: '1352px',
     opacity: 1,
   },
+  formHeaderContainer: {
+    marginBottom: '16px',
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    boxShadow: '0px 3px 6px #00000029',
+    border: '1px solid #7070703B',
+    borderRadius: '15px',
+    width: '1352px',
+    opacity: 1,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  formHeaderText: {
+    padding: '36px 0px 27px 8px',
+    color: '#2A2B54',
+    fontSize: '22px',
+  },
+  // formHeaderTextSeperators: {
+  //   padding: '36px 0px 27px 8px',
+  //   color: '#2A2B54',
+  //   fontSize: '22px',
+  //   opacity: '1',
+  // },
   inputs: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     boxShadow: '0px 3px 6px #0000000A',
@@ -63,7 +85,7 @@ export default function InvestorEditForm() {
   const classes = useStyles();
 
   // Page
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
 
   // Basic Info
   const [assetType, setAssetType] = useState('');
@@ -86,62 +108,39 @@ export default function InvestorEditForm() {
   const [finalNotes, setFinalNotes] = useState('');
   return (
     <>
-      <Paper className={classes.paper} style={{ display: 'flex', flexDirection: 'row' }}>
+      <Paper className={classes.formHeaderContainer}>
         <Typography
+          className={classes.formHeaderText}
           variant="h6"
           gutterBottom
           style={{
-            padding: '36px 0px 27px 42px',
-            color: '#2A2B54',
-            fontSize: '22px',
+            paddingLeft: '42px',
             opacity: page === 0 ? '1' : '0.5',
           }}
         >
           Build your SPV
         </Typography>
-        <Typography
-          variant="h6"
-          gutterBottom
-          style={{
-            padding: '36px 0px 27px 8px',
-            color: '#2A2B54',
-            fontSize: '22px',
-            opacity: '1',
-          }}
-        >
+        <Typography variant="h6" gutterBottom className={classes.formHeaderText}>
           /
         </Typography>
         <Typography
+          className={classes.formHeaderText}
           variant="h6"
           gutterBottom
           style={{
-            padding: '36px 0px 27px 8px',
-            color: '#2A2B54',
-            fontSize: '22px',
             opacity: page === 1 ? '1' : '0.5',
           }}
         >
           Review and sign terms
         </Typography>
-        <Typography
-          variant="h6"
-          gutterBottom
-          style={{
-            padding: '36px 0px 27px 8px',
-            color: '#2A2B54',
-            fontSize: '22px',
-            opacity: '1',
-          }}
-        >
+        <Typography variant="h6" gutterBottom className={classes.formHeaderText}>
           /
         </Typography>
         <Typography
+          className={classes.formHeaderText}
           variant="h6"
           gutterBottom
           style={{
-            padding: '36px 0px 27px 8px',
-            color: '#2A2B54',
-            fontSize: '22px',
             opacity: page === 2 ? '1' : '0.5',
           }}
         >

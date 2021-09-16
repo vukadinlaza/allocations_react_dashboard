@@ -85,10 +85,6 @@ const App = () => {
           <Switch>
             <Route path="/cb/thankyou" component={ThankYou} exact />
             <PrivateRoute path="/testing" exact component={BuildSPVForm} />
-            <PrivateRoute path="/testing2" exact component={TypeItem} />
-            <PrivateRoute path="/testing3" exact component={TypeSelector} />
-            <PrivateRoute path="/testing4" exact component={AgreementSigner} />
-            <PrivateRoute path="/testing5" exact component={UploadDocs} />
             <PrivateRoute path="/" exact component={UserHome} />
             <PrivateRoute path="/demo" exact component={Demo} />
             <PrivateRoute path="/credit" exact component={Credit} />

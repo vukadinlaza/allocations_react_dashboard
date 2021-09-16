@@ -25,6 +25,7 @@ import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import CheckCircle from '../../../../assets/check_circle_black_24dp.svg';
 import Loader from '../../../utils/Loader';
+import buildDoc from '../../../../assets/buildDoc.svg';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,14 +39,59 @@ const useStyles = makeStyles((theme) => ({
       borderColor: '#7070703B',
     },
   },
-  paper: {
+  uploadContainer: {
     marginBottom: '16px',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     boxShadow: '0px 3px 6px #00000029',
     border: '1px solid #7070703B',
     borderRadius: '15px',
     width: '1352px',
+    height: '544px',
+    padding: '42px',
+  },
+  title: { fontSize: '34px' },
+  subtitle: {
+    textAlign: 'left',
+    font: 'normal normal normal 16px/19px Roboto',
+    letterSpacing: '0px',
+    color: '#186EFF',
+    opacity: '1',
+    marginBottom: '41px',
+  },
+  item: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    boxShadow: '0px 3px 6px #0000000D',
+    border: '2px solid #2A2B5480',
+    borderRadius: '10px',
     opacity: 1,
+    width: '1249px',
+    height: '91px',
+    marginBottom: '8px',
+  },
+  itemText: {
+    font: 'normal normal normal 18px/21px Roboto',
+    color: '#2A2B54',
+    letterSpacing: '0px',
+    marginLeft: '17px',
+    opacity: '1',
+  },
+  documentIcon: { marginLeft: '20px' },
+  checkCircle: {
+    opacity: '0.3',
+    transparentheight: '35px',
+    width: '38px',
+    marginLeft: 'auto',
+    marginRight: '37px',
+  },
+
+  uploadIcon: {
+    opacity: '0.3',
+    width: '30px',
+    marginLeft: 'auto',
+    marginRight: '37px',
   },
   inputs: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
@@ -60,55 +106,20 @@ export default function SignDocsForm() {
   const classes = useStyles();
   return (
     <>
-      <Paper className={classes.paper} style={{ padding: '42px', height: '544px' }}>
+      <Paper className={classes.uploadContainer}>
         <Typography variant="h6" gutterBottom style={{ fontSize: '34px' }}>
           Sign your agreements
         </Typography>
-        <Typography
-          variant="h6"
-          gutterBottom
-          style={{
-            textAlign: 'left',
-            font: 'normal normal normal 16px/19px Roboto',
-            letterSpacing: '0px',
-            color: '#186EFF',
-            opacity: 1,
-          }}
-        >
+        <Typography variant="h6" gutterBottom className={classes.subtitle}>
           Please sign the appropriate agreements to consent to us to start creating your deals on
           your behalf
         </Typography>
-        <Paper
-          display="flex"
-          justifyContent="flex-end"
-          alignItems="stretch"
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            background: '#FFFFFF 0% 0% no-repeat padding-box',
-            boxShadow: '0px 3px 6px #0000000D',
-            border: '2px solid #2A2B5480',
-            borderRadius: '10px',
-            opacity: 1,
-            width: '1249px',
-            height: '91px',
-            marginTop: '41px',
-          }}
-        >
-          <DescriptionOutlinedIcon fontSize="large" style={{ marginLeft: '20px' }} />
-          <Typography
-            style={{
-              font: 'normal normal normal 18px/21px Roboto',
-              color: '#2A2B54',
-              letterSpacing: '0px',
-              marginLeft: '17px',
-            }}
-          >
-            Service Agreement
-          </Typography>
+        <Paper className={classes.item}>
+          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
+          <Typography className={classes.itemText}>Service Agreement</Typography>
           <img
             src={CheckCircle}
+            classes={classes.checkCircle}
             style={{
               opacity: '0.3',
               transparentheight: '35px',
@@ -120,9 +131,9 @@ export default function SignDocsForm() {
           />
         </Paper>
         <Paper
-          display="flex"
-          justifyContent="flex-end"
-          alignItems="stretch"
+          // display="flex"
+          // justifyContent="flex-end"
+          // alignItems="stretch"
           style={{
             display: 'flex',
             justifyContent: 'flex-start',
@@ -137,7 +148,7 @@ export default function SignDocsForm() {
             marginTop: '8px',
           }}
         >
-          <DescriptionOutlinedIcon fontSize="large" style={{ marginLeft: '20px' }} />
+          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography
             style={{
               font: 'normal normal normal 18px/21px Roboto',
