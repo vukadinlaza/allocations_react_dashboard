@@ -167,7 +167,7 @@ export default function UploadDocs({ page, setPage }) {
         <Button
           className={classes.finishButton}
           onClick={() => {
-            toast.success('Success! Your submission was a success');
+            toast.success('Success! Your submission was submitted.');
             history.push('/');
           }}
         >
