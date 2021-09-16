@@ -87,6 +87,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignDocsForm() {
   const classes = useStyles();
+  const [iconsChecked, setIconsChecked] = useState({});
+  console.log(iconsChecked);
   return (
     <>
       <Paper className={classes.uploadContainer}>
@@ -97,15 +99,39 @@ export default function SignDocsForm() {
           Please sign the appropriate agreements to consent to us to start creating your deals on
           your behalf
         </Typography>
-        <Paper className={classes.item}>
+        <Paper
+          className={classes.item}
+          onClick={() => {
+            setIconsChecked((prev) => {
+              return { ...prev, one: true };
+            });
+          }}
+        >
           <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Service Agreement</Typography>
-          <img src={CheckCircle} className={classes.checkCircle} alt="checkbox" />
+          <img
+            src={CheckCircle}
+            className={classes.checkCircle}
+            alt="checkbox"
+            style={{ opacity: iconsChecked.one ? '1' : '' }}
+          />
         </Paper>
-        <Paper className={classes.item}>
+        <Paper
+          className={classes.item}
+          onClick={() =>
+            setIconsChecked((prev) => {
+              return { ...prev, two: true };
+            })
+          }
+        >
           <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Memorandum of Understanding</Typography>
-          <img src={CheckCircle} className={classes.checkCircle} alt="checkbox" />
+          <img
+            src={CheckCircle}
+            className={classes.checkCircle}
+            alt="checkbox"
+            style={{ opacity: iconsChecked.two ? '1' : '' }}
+          />
         </Paper>
         <Button className={classes.continueButton}>Continue</Button>
         <Typography
