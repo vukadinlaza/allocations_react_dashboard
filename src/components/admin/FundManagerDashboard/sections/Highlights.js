@@ -141,7 +141,9 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
           openTooltip={openTooltip}
           handleTooltip={handleTooltip}
           id="totalCommitted"
-          tooltipContent={<Typography color="inherit">Tooltip needed?</Typography>}
+          tooltipContent={
+            <Typography color="inherit">This is the total capital committed</Typography>
+          }
         >
           <div
             className={classes.simpleBoxDataRow}
