@@ -100,9 +100,11 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
         .reduce((acc, n) => acc + n, 0) || 0
     : 0;
 
+  const totalCommitted = 200000;
+
   return (
     <Grid container spacing={3} className={classes.section}>
-      <Grid item xs={12} lg={3}>
+      <Grid item xs={12} lg>
         <SimpleBox
           size="fourth"
           title="Total Capital Received"
@@ -124,7 +126,24 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
           </div>
         </SimpleBox>
       </Grid>
-      <Grid item xs={12} lg={3}>
+      <Grid item xs={12} lg>
+        <SimpleBox
+          size="fourth"
+          title="Total Committed"
+          openTooltip={openTooltip}
+          handleTooltip={handleTooltip}
+          id="totalCommitted"
+          tooltipContent={<Typography color="inherit">Tooltip needed?</Typography>}
+        >
+          <div
+            className={classes.simpleBoxDataRow}
+            style={{ flexDirection: 'column', alignItems: 'flex-start' }}
+          >
+            <Typography style={{ fontSize: '26px' }}>${nWithCommas(totalCommitted)}</Typography>
+          </div>
+        </SimpleBox>
+      </Grid>
+      <Grid item xs={12} lg>
         <SimpleBox
           size="fourth"
           title="Total Invested"
@@ -148,7 +167,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
           </div>
         </SimpleBox>
       </Grid>
-      <Grid item xs={12} lg={3}>
+      <Grid item xs={12} lg>
         <SimpleBox
           size="fourth"
           title="Multiple (Estimated)"
@@ -171,10 +190,10 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
           </div>
         </SimpleBox>
       </Grid>
-      <Grid item xs={12} lg={3}>
+      <Grid item xs={12} lg>
         <SimpleBox
           size="fourth"
-          title="Total Portfolio Value (Estimated)"
+          title="Total Portfolio Value (Est.)"
           openTooltip={openTooltip}
           handleTooltip={handleTooltip}
           id="portfolioValue"
