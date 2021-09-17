@@ -96,11 +96,19 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
   const totalRaised = investments
     ? investments
         .filter((i) => ['wired', 'complete'].includes(i.status))
-        .map((i) => i.amount)
+        // .map((i) => i.amount)
+        .map((i) => {
+          if (i.capitalWiredAmount !== null) {
+            return i.capitalWiredAmount;
+          }
+          return i.amount;
+        })
         .reduce((acc, n) => acc + n, 0) || 0
     : 0;
 
-  const totalCommitted = 200000;
+  const totalCommitted = investments
+    ? investments.map((i) => i.amount).reduce((acc, n) => acc + n, 0) || 0
+    : 0;
 
   return (
     <Grid container spacing={3} className={classes.section}>
