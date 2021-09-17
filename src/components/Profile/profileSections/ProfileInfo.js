@@ -113,7 +113,7 @@ const ProfileInfo = ({
       if (userProfile.email !== investor.email) {
         logoutWithRedirect();
       } else {
-        toast.success('Success! User Updated');
+        toast.success('Success! User updated');
       }
     },
   });
@@ -465,7 +465,7 @@ const statusOptions = {
     'I’ve had $300K+ joint income in each of the two most recent years',
     'My professional certification qualifies me as an accredited investor',
     'I am a director or executive officer of the Fund’s General Partner',
-    'I am a “knowledgeable employee" of the private fund or its managers',
+    'I am a "knowledgeable employee" of the private fund or its managers',
   ],
   entity: [
     'Each equity owner of my entity is an accredited investor',

@@ -12,6 +12,7 @@ const styles = (theme) => ({
   button: {
     color: 'white',
     fontSize: '16px',
+    '&:focus': { outline: 'none', border: 'none' },
   },
   buttonUser: {
     color: '#0040FE',
@@ -27,11 +28,6 @@ const styles = (theme) => ({
       border: 'none',
     },
   },
-
-  // buttonsContainer: {
-  //   display: 'flex',
-  //   alignItems: 'center',
-  // },
 
   buttonLink: {
     borderRadius: '100%',

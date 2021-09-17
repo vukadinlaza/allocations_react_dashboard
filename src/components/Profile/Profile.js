@@ -157,12 +157,8 @@ const Profile = ({ classes }) => {
 
   const icon =
     formStatus === 'loading' ? 'circle-notch' : formStatus === 'complete' ? 'check' : null;
-  if (!userProfile.email || !userProfile?.account)
-    return (
-      <div>
-        <Loader />
-      </div>
-    );
+  if (!userProfile.email || !userProfile?.account) return <Loader />;
+
   const acctUsers = data?.accountUsers || [];
 
   const handleTabChange = (event, newValue) => {

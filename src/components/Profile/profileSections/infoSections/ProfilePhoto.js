@@ -55,12 +55,12 @@ const ProfilePhoto = ({ investor, refetchUser }) => {
 
   const [uploadImage] = useMutation(PROFILE_IMAGE, {
     onCompleted: () => {
-      toast.success('Success! Profile Updated');
+      toast.success('Success! Profile updated');
       refetchUser();
       setShowModal(false);
     },
     onError: () => {
-      toast.error('Error! Profile Not Updated');
+      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
     },
   });
 

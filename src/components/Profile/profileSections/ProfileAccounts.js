@@ -66,16 +66,16 @@ const ProfileAccounts = ({ acctUsers, data, removeUser, refetchAccountUsers, use
             <TableHead>
               <TableRow>
                 <TableCell align="left" className={classes.tableHeaderText}>
-                  Name
+                  NAME
                 </TableCell>
                 <TableCell align="center" className={classes.tableHeaderText}>
-                  Email{' '}
+                  EMAIL{' '}
                 </TableCell>
                 <TableCell align="center" className={classes.tableHeaderText}>
-                  Account
+                  ACCOUNT
                 </TableCell>
                 <TableCell align="center" className={classes.tableHeaderText}>
-                  Delete
+                  DELETE
                 </TableCell>
               </TableRow>
             </TableHead>
