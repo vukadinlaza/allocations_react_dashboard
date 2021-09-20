@@ -1,152 +1,152 @@
-import React from 'react';
-import Cards from 'react-credit-cards';
-import 'react-credit-cards/lib/styles.scss';
-import { Grid, TextField, InputAdornment, Button, Paper, Typography } from '@material-ui/core';
-import { toast } from 'react-toastify';
+import * as React from 'react';
+import { sample, random } from 'lodash';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import { Paper, Typography } from '@material-ui/core';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import moment from 'moment';
+import { FaBookmark } from 'react-icons/fa';
+import { nWithCommas } from '../../utils/numbers';
 
-export default class extends React.Component {
-  state = {
-    cvc: '',
-    expiry: '',
-    focus: '',
-    name: '',
-    number: '',
+function randomDate(start, end) {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+const deals = [
+  'Coinbase',
+  'Space X',
+  'Tundra Trust',
+  'Axiom Space',
+  'Robinhood',
+  'Grid',
+  'StarLink',
+  'Flexport',
+  'Insight',
+  'Fast',
+];
+const desciptions = [
+  'Allocations SPV Fee',
+  'Allocations Fund Fee',
+  'Blue Skys Fee',
+  'Allocations Investment Advisor Fee',
+];
+const statuses = ['Pending', 'Draft', 'Paid'];
+const statusPill = (type) => {
+  const color = type === 'Pending' ? '#4d8fd1' : type === 'Draft' ? '#f5fc2b' : '#61e653';
+  return (
+    <span
+      style={{
+        backgroundColor: color,
+        textAlign: 'center',
+        width: '8%',
+        padding: '.25rem',
+        borderRadius: '1rem',
+        opacity: '.4',
+      }}
+    >
+      {type}
+    </span>
+  );
+};
+
+function createData() {
+  return {
+    number: random(10000, 50000),
+    date: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format('MMM/YYYY/DD'),
+    dealName: sample(deals),
+    description: sample(desciptions),
+
+    amount: random(2000, 20000),
+
+    status: sample(statuses),
   };
+}
 
-  handleInputFocus = (e) => {
-    this.setState({ focus: e.target.name });
-  };
+const rows = [...Array(20)].map(() => {
+  return createData();
+});
 
-  handleInputChange = (e) => {
-    const { name, value } = e.target;
+export default function BasicTable() {
+  return (
+    <>
+      <div style={{ margin: '1rem 0' }}>
+        <Typography variant="h3" style={{ color: 'Black', padding: '1rem' }}>
+          Invoices
+        </Typography>
+        <Typography
+          variant="subtitle2"
+          style={{ color: 'Black', paddingBottom: '1rem', paddingLeft: '1rem' }}
+        >
+          A list of all your recent transactions
+        </Typography>
+      </div>
 
-    this.setState({ [name]: value });
-  };
+      <div
+        style={{
+          margin: '1rem 0',
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'space-between',
+          height: '1rem',
+          alignItems: 'center',
+          padding: '0 0.5rem',
+        }}
+      >
+        <span style={{ textAlign: 'left', width: '6%' }}>No.</span>
+        <span style={{ textAlign: 'center', width: '12%' }} align="center">
+          Date
+        </span>
+        <span style={{ textAlign: 'center', width: '12%' }} align="center">
+          Deal Name
+        </span>
+        <span style={{ textAlign: 'center', width: '12%' }} align="center">
+          Description
+        </span>
+        <span style={{ textAlign: 'center', width: '12%' }} align="center">
+          Invoice Amount
+        </span>
+        <span style={{ textAlign: 'center', width: '12%' }} align="center">
+          Status
+        </span>
+        <span style={{ textAlign: 'center', width: '12%' }} align="center">
+          View PDF
+        </span>
+      </div>
 
-  render() {
-    return (
-      <>
+      {rows.map((row) => (
         <Paper
           style={{
-            padding: '1rem',
-            margin: '2rem 0',
+            margin: '1rem 0',
+            width: '100%',
             display: 'flex',
-            justifyContent: 'center',
+            justifyContent: 'space-between',
+            height: '5rem',
             alignItems: 'center',
+            padding: '0 0.5rem',
           }}
         >
-          <Typography variant="h4">Add your credit card information</Typography>
+          <span style={{ textAlign: 'left', width: '6%', fontWeight: '900' }}>{row.number}</span>
+          <span style={{ textAlign: 'left', width: '12%' }}>{row.date}</span>
+          <span style={{ textAlign: 'left', width: '12%' }}>{row.dealName}</span>
+          <span style={{ textAlign: 'left', width: '12%' }}>{row.description}</span>
+          <span style={{ textAlign: 'left', width: '12%' }}>
+            <span style={{ fontWeight: '900' }}>${nWithCommas(row.amount)}</span>
+            <span>.00 USD</span>
+          </span>
+          {statusPill(row.status)}
+          <span style={{ textAlign: 'center', width: '12%' }}>
+            <a
+              target="_blank"
+              href="https://allocations-public.s3.us-east-2.amazonaws.com/Allocations+Demo+Invoice.pdf"
+              rel="noreferrer"
+            >
+              <FaBookmark />
+            </a>
+          </span>
         </Paper>
-
-        <Paper
-          style={{
-            padding: '1rem',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <div id="PaymentForm" style={{ width: '100%' }}>
-            <Grid container lg={12} md={12} sm={6}>
-              <Grid
-                item
-                xs={6}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <Cards
-                  cvc={this.state.cvc}
-                  expiry={this.state.expiry}
-                  focused={this.state.focus}
-                  name={this.state.name}
-                  number={this.state.number}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <form
-                  style={{
-                    margin: '2rem',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Grid container>
-                    <Grid item xs={6} lg={8} spacing={1}>
-                      <TextField
-                        variant="outlined"
-                        style={{ display: 'block', margin: '1rem 0' }}
-                        type="tel"
-                        name="number"
-                        value={this.state.number}
-                        placeholder="Card Number"
-                        onChange={this.handleInputChange}
-                        onFocus={this.handleInputFocus}
-                      />
-                      <TextField
-                        variant="outlined"
-                        style={{ display: 'block', margin: '1rem 0' }}
-                        type="tel"
-                        name="name"
-                        value={this.state.name}
-                        placeholder="Name"
-                        onChange={this.handleInputChange}
-                        onFocus={this.handleInputFocus}
-                      />{' '}
-                    </Grid>
-                    <Grid item xs={6} lg={3} spacing={1}>
-                      <TextField
-                        variant="outlined"
-                        style={{ display: 'block', margin: '1rem 0' }}
-                        type="tel"
-                        name="expiry"
-                        value={this.state.expiry}
-                        placeholder="Expiration"
-                        onChange={this.handleInputChange}
-                        onFocus={this.handleInputFocus}
-                      />
-                      <TextField
-                        variant="outlined"
-                        style={{ display: 'block', margin: '1rem 0' }}
-                        type="tel"
-                        name="cvc"
-                        value={this.state.cvc}
-                        placeholder="CVC"
-                        onChange={this.handleInputChange}
-                        onFocus={this.handleInputFocus}
-                      />
-                    </Grid>
-                  </Grid>
-
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    style={{ width: '100%' }}
-                    size="large"
-                    onClick={() => {
-                      toast.success('Success! Credit card information saved.');
-                      this.setState({
-                        cvc: '',
-                        expiry: '',
-                        focus: '',
-                        name: '',
-                        number: '',
-                      });
-                    }}
-                  >
-                    Submit
-                  </Button>
-                </form>{' '}
-              </Grid>
-            </Grid>
-          </div>
-        </Paper>
-      </>
-    );
-  }
+      ))}
+    </>
+  );
 }

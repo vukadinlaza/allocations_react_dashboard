@@ -12,20 +12,18 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
-import StorefrontIcon from '@material-ui/icons/Storefront';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MonetizationOnRoundedIcon from '@material-ui/icons/MonetizationOnRounded';
 import { Link, useRouteMatch, useHistory } from 'react-router-dom';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-import FlightIcon from '@material-ui/icons/Flight';
-import { toLower } from 'lodash';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
+import { FaRocket } from 'react-icons/fa';
 import whitelistEmails from './whiteListEmails';
 import BuildModal from '../NewBuild/BuildModal';
+
 import './SidebarDrawer.scss';
 
 const SidebarDrawer = ({
@@ -82,7 +80,7 @@ const SidebarDrawer = ({
     {
       to: '/admin/spvs',
       title: 'SPVs',
-      icon: <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />,
+      icon: <FaRocket style={{ margin: '0 .5rem 0 0' }} />,
     },
     {
       to: '/admin/funds',
@@ -97,9 +95,9 @@ const SidebarDrawer = ({
   ];
   const menusTwo = [
     {
-      to: '/dealdocs',
-      title: 'Documents Library',
-      icon: <HomeIcon fontSize="medium" />,
+      to: '/demo',
+      title: 'Experience',
+      icon: <StarBorder fontSize="medium" />,
     },
     {
       to: '/billing',
@@ -183,7 +181,7 @@ const SidebarDrawer = ({
 
       <ListItem button onClick={handleClick}>
         <ListItemIcon>
-          <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
+          <FaRocket style={{ margin: '0 .5rem 0 0' }} />
         </ListItemIcon>
         <ListItemText primary="SPVs" />
         {open ? <ExpandLess /> : <ExpandMore />}

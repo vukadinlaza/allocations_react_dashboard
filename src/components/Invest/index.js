@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
   blueContainer: {
     background:
-      'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 160px, rgba(255,255,255,1) 160px)',
+      'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 160px, #f7f7f7, 160px)',
     padding: '1.5rem',
   },
   a: {
@@ -64,60 +64,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const GET_INVESTOR = gql`
-  {
-    investor {
-      _id
-      email
-      first_name
-      last_name
-      admin
-      showInvestAndMrkPlc
-    }
-  }
-`;
-const POST_ZAP = gql`
-  mutation PostZap($body: Object) {
-    postZap(data: $body) {
-      _id
-    }
-  }
-`;
-const UPDATE_USER = gql`
-  mutation UpdateUser($investor: UserInput!) {
-    updateUser(input: $investor) {
-      _id
-    }
-  }
-`;
 export default () => {
   const classes = useStyles();
   const history = useHistory();
-  const { userProfile, loading } = useAuth(GET_INVESTOR);
-  const [updateInvestor] = useMutation(UPDATE_USER);
-  const [postZap, {}] = useMutation(POST_ZAP);
-
-  useEffect(() => {
-    if (!loading && userProfile._id) {
-      updateInvestor({
-        variables: {
-          investor: { showInvestAndMrkPlc: true, _id: userProfile._id },
-        },
-      });
-    }
-  }, [loading, updateInvestor, userProfile]);
-
-  useEffect(() => {
-    postZap({
-      variables: { body: { action: 'Viewed Invest Page' } },
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <>
       <div className={classes.blueContainer}>
-        <Typography variant="h3" style={{ color: 'white' }}>
+        <Typography variant="h3" style={{ color: 'Black' }}>
           Demo
         </Typography>
         <Grid container spacing={12} justify="space-between" className={classes.gridContainer}>
