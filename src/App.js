@@ -91,7 +91,7 @@ const App = () => {
             <PrivateRoute path="/new-build-spv" exact component={BuildSPVForm} />
             <PrivateRoute path="/new-build-fund" exact component={BuildFundForm} />
             <PrivateRoute path="/" exact component={UserHome} />
-            <PrivateRoute path="/demo" exact component={Demo} />
+            {/* <PrivateRoute path="/demo" exact component={Demo} /> */}
             <PrivateRoute path="/credit" exact component={Credit} />
             <PrivateRoute path="/profile" component={Profile} />
             <PrivateRoute path="/get-started" component={Build} />
