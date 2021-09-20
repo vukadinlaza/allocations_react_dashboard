@@ -122,14 +122,15 @@ export default function BasicTable() {
             width: '100%',
             display: 'flex',
             justifyContent: 'space-between',
-            height: '5rem',
+            height: '4.5rem',
             alignItems: 'center',
             padding: '0 0.5rem',
+            fontSize: '.9rem',
           }}
         >
           <span style={{ textAlign: 'left', width: '6%', fontWeight: '900' }}>{row.number}</span>
           <span style={{ textAlign: 'left', width: '12%' }}>{row.date}</span>
-          <span style={{ textAlign: 'left', width: '12%' }}>{row.dealName}</span>
+          <span style={{ textAlign: 'center', width: '12%' }}>{row.dealName}</span>
           <span style={{ textAlign: 'left', width: '12%' }}>{row.description}</span>
           <span style={{ textAlign: 'left', width: '12%' }}>
             <span style={{ fontWeight: '900' }}>${nWithCommas(row.amount)}</span>

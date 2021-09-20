@@ -61,8 +61,9 @@ const SidebarDrawer = ({
   }));
   const classes = useStyles();
 
-  const [open, setOpen] = React.useState(false);
-  const [openTwo, setOpenTwo] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [openTwo, setOpenTwo] = useState(false);
+  const [openThree, setOpenThree] = useState(false);
   const [openModal, setOpenModal] = useState(false);
 
   const handleClick = () => {
@@ -70,6 +71,9 @@ const SidebarDrawer = ({
   };
   const handleClickTwo = () => {
     setOpenTwo(!openTwo);
+  };
+  const handleClickThree = () => {
+    setOpenThree(!openThree);
   };
   const menus = [
     {
@@ -94,11 +98,6 @@ const SidebarDrawer = ({
     },
   ];
   const menusTwo = [
-    {
-      to: '/demo',
-      title: 'Experience',
-      icon: <StarBorder fontSize="medium" />,
-    },
     {
       to: '/billing',
       title: 'Billing',
@@ -223,6 +222,33 @@ const SidebarDrawer = ({
               >
                 <ListItem button className={classes.nested}>
                   <ListItemText size="small" primary={x} />
+                </ListItem>
+              </Link>
+            );
+          })}
+        </List>
+      </Collapse>
+      <ListItem button onClick={handleClickThree}>
+        <ListItemIcon>
+          <StarBorder fontSize="medium" />
+        </ListItemIcon>
+        <ListItemText primary="Demo" />
+        {openThree ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      <Collapse in={openThree} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          {[
+            { title: 'Invest', link: '/deals/305-ventures' },
+            { title: 'Fund Manager', link: '/admin/demo-fund' },
+          ].map((x) => {
+            return (
+              <Link
+                to={{
+                  pathname: x.link,
+                }}
+              >
+                <ListItem button className={classes.nested}>
+                  <ListItemText size="small" primary={x.title} />
                 </ListItem>
               </Link>
             );
