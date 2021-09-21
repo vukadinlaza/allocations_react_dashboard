@@ -28,9 +28,10 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
   };
 
   const handleButtonClick = (field, value) => {
-    const dealParamFields = ['dealType', 'minimumInvestment'];
+    const dealParamFields = ['dealType', 'minimumInvestment', 'is3c7'];
 
     if (dealParamFields.includes(field)) {
+      console.log('fires', field, value);
       return setFormData((prevState) => ({
         ...prevState,
         dealParams: {
@@ -47,6 +48,8 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
   };
 
   const { investmentType, status, dealParams } = formData;
+
+  console.log('XXXXX', dealParams);
 
   const minimumInvesmentPlaceholder =
     dealParams.minimumInvestment !== null && dealParams.minimumInvestment
@@ -74,7 +77,7 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
             'alignleft aligncenter alignright alignjustify | ' +
             'bullist numlist outdent indent | removeformat | help',
           file_picker_types: 'image',
-          file_picker_callback: function (cb, value, meta) {
+          file_picker_callback(cb, value, meta) {
             const input = document.createElement('input');
             input.setAttribute('type', 'file');
             input.setAttribute('accept', 'image/*');
@@ -85,7 +88,7 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
               const reader = new FileReader();
               reader.onload = function () {
                 const id = `blobid${new Date().getTime()}`;
-                const blobCache = window.tinymce.activeEditor.editorUpload.blobCache;
+                const { blobCache } = window.tinymce.activeEditor.editorUpload;
                 const base64 = reader.result.split(',')[1];
                 const blobInfo = blobCache.create(id, file, base64);
                 blobCache.add(blobInfo);
@@ -181,7 +184,7 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
 
         <FormControl className="field">
           <label className="field-label">
-            Minumum investment
+            Minimum investment
             <CurrencyTextField
               className="currency-text-input"
               variant="outlined"
@@ -231,6 +234,25 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
                 variant="outlined"
               >
                 506c
+              </Button>
+            </div>
+          </label>
+        </FormControl>
+        <FormControl className="field">
+          <label className="field-label">
+            3(c)(7)
+            <div className="button-options">
+              <Button
+                onClick={() =>
+                  handleButtonClick(
+                    'is3c7',
+                    dealParams.is3c7 === null ? true : dealParams.is3c7 === false,
+                  )
+                }
+                className={`option-button ${dealParams.is3c7 === true && 'selected'}`}
+                variant="outlined"
+              >
+                3(c)(7)
               </Button>
             </div>
           </label>
