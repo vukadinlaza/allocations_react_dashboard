@@ -84,16 +84,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const reqs = ['country', 'investor_type', 'signer_full_name', 'email', 'linkedinUrl'];
-
-export function validate(investor) {
-  const required =
-    investor.investor_type === 'entity'
-      ? ['entity_name', 'accredited_investor_status', ...reqs]
-      : ['first_name', 'last_name', ...reqs];
-  return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
-}
-
 const ProfileInfo = ({
   investor,
   setInvestor,
@@ -107,6 +97,21 @@ const ProfileInfo = ({
   const [errors, setErrors] = useState([]);
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
+
+  const reqs = [
+    'country',
+    investor.country === 'United States' ? 'state' : '',
+    'investor_type',
+    'email',
+  ];
+
+  const validate = (investor) => {
+    const required =
+      investor.investor_type === 'entity'
+        ? ['entity_name', 'accredited_investor_status', ...reqs]
+        : ['first_name', 'last_name', ...reqs];
+    return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
+  };
 
   const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_USER, {
     onCompleted: () => {
@@ -159,6 +164,7 @@ const ProfileInfo = ({
       'username',
       'display_username',
       'state',
+      'signer_full_name',
     ]);
     setErrors(validation);
 
@@ -277,6 +283,7 @@ const ProfileInfo = ({
                     id="country"
                     select
                     fullWidth
+                    error={errors.includes('country')}
                     style={{ background: 'white' }}
                     label="Country of Residence"
                     value={investor.country || ''}
@@ -286,6 +293,7 @@ const ProfileInfo = ({
                     }}
                     variant="outlined"
                   >
+                    <option aria-label="None" value="" />
                     {countries.map(({ countryName }) => (
                       <option key={countryName} value={countryName}>
                         {countryName}
@@ -299,6 +307,11 @@ const ProfileInfo = ({
                     select
                     fullWidth
                     style={{ background: 'white' }}
+                    error={
+                      investor.country === 'United States'
+                        ? errors.includes('state')
+                        : errors.includes()
+                    }
                     disabled={investor.country !== 'United States'}
                     label="State"
                     value={investor.state || ''}
@@ -308,6 +321,7 @@ const ProfileInfo = ({
                     }}
                     variant="outlined"
                   >
+                    <option aria-label="None" value="" />
                     {stateNames.map((state) => (
                       <option key={state} value={state}>
                         {state}
