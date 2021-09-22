@@ -99,17 +99,17 @@ export default function NewSpvForm() {
   const [assetType, setAssetType] = useState('startup');
   const [portCompName, setPortCompName] = useState('Space X');
   const [managerName, setManagerName] = useState('Kingsley Advani');
-  const [closingDate, setClosingDate] = useState('23 Nov 2021');
+  const [closingDate, setClosingDate] = useState('');
 
   // Deal Terms
-  const [managementFee, setManagementFee] = useState('3%');
-  const [carryFee, setCarryFee] = useState('10%');
-  const [feeFrequency, setFreeFrequency] = useState('One Time');
+  const [managementFee, setManagementFee] = useState('2%');
+  const [carryFee, setCarryFee] = useState('One Time');
+  const [feeFrequency, setFreeFrequency] = useState('20%');
   const [sameForAllInv, setSameForAllInv] = useState('Yes');
 
   // Offering Terms
   const [allocationsAsAdviser, setAllocationsAsAdviser] = useState('Yes');
-  const [fundTemplateDocument, setFundTemplateDocument] = useState('Custom');
+  const [fundTemplateDocument, setFundTemplateDocument] = useState('Allocations Documents');
   const [offeringType, setOfferingType] = useState('506b');
 
   // Final

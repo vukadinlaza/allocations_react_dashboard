@@ -78,17 +78,17 @@ export default function NewSpvForm() {
   const [assetType, setAssetType] = useState('realEstate');
   const [portCompName, setPortCompName] = useState('Tundra Real Estate Fund');
   const [managerName, setManagerName] = useState('Kingsley Advani');
-  const [closingDate, setClosingDate] = useState('14 Mar 2021');
+  const [closingDate, setClosingDate] = useState('');
 
   // Deal Terms
-  const [managementFee, setManagementFee] = useState('5%');
-  const [carryFee, setCarryFee] = useState('10%');
-  const [feeFrequency, setFreeFrequency] = useState('Annual');
+  const [managementFee, setManagementFee] = useState('2%');
+  const [carryFee, setCarryFee] = useState('Annual');
+  const [feeFrequency, setFreeFrequency] = useState('20%');
   const [sameForAllInv, setSameForAllInv] = useState('Yes');
 
   // Offering Terms
   const [allocationsAsAdviser, setAllocationsAsAdviser] = useState('Yes');
-  const [fundTemplateDocument, setFundTemplateDocument] = useState('Allocation');
+  const [fundTemplateDocument, setFundTemplateDocument] = useState('Allocation Documents');
   const [offeringType, setOfferingType] = useState('506C');
 
   // Final
