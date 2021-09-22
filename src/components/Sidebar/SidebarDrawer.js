@@ -19,7 +19,7 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
-import { FaRocket } from 'react-icons/fa';
+import { FaRocket, FaPercentage } from 'react-icons/fa';
 import { BsArrowLeftRight } from 'react-icons/bs';
 import { RiBillLine } from 'react-icons/ri';
 import BuildModal from '../NewBuild/BuildModal';
@@ -82,12 +82,12 @@ const SidebarDrawer = ({
       icon: <HomeIcon fontSize="medium" />,
     },
     {
-      to: '/admin/spvs',
+      to: '/spvs',
       title: 'SPVs',
       icon: <FaRocket style={{ margin: '0 .5rem 0 0' }} />,
     },
     {
-      to: '/admin/funds',
+      to: '/funds',
       title: 'Funds',
       icon: <AccountBalanceIcon fontSize="medium" />,
     },
@@ -107,6 +107,11 @@ const SidebarDrawer = ({
       to: '/wire-activity',
       title: 'Wire Activity',
       icon: <BsArrowLeftRight fontSize="medium" />,
+    },
+    {
+      to: '/tax-activity',
+      title: 'Tax Activity',
+      icon: <FaPercentage fontSize="medium" />,
     },
   ];
 

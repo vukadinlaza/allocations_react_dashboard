@@ -69,6 +69,7 @@ import UploadDocs from './components/NewBuild/FormComponents/UploadDocs/index';
 import Upgrade from './components/upgrade';
 import PaymentForm from './components/billing';
 import WireActivity from './components/WireActivity';
+import TaxActivity from './components/TaxActivity.js';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -174,9 +175,10 @@ const App = () => {
             <AdminRoute path="/admin/invesments/:investmentId" component={Investment} exact />
 
             {/** Whitelabel Routes * */}
-            <PrivateRoute path="/admin/:type" component={DealTable} exact />
-            <PrivateRoute path="/admin/:type" component={DealTable} exact />
+            <PrivateRoute path="/:type" component={DealTable} exact />
+            <PrivateRoute path="/:type" component={DealTable} exact />
             <PrivateRoute path="/wire-activity" component={WireActivity} exact />
+            <PrivateRoute path="/tax-activity" component={TaxActivity} exact />
             <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
             <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
 
