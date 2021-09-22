@@ -31,6 +31,7 @@ import ThankYou from './components/ThankYou/index';
 import DealDocuments from './components/DealDocuments';
 import NewMember from './components/Newmember';
 import TVC from './components/TVC';
+import DealTable from './components/DealsTable';
 import NotFound from './components/NotFound';
 
 // superadmin
@@ -172,8 +173,8 @@ const App = () => {
             <AdminRoute path="/admin/invesments/:investmentId" component={Investment} exact />
 
             {/** Whitelabel Routes * */}
-            <PrivateRoute path="/admin/funds" component={Funds} exact />
-            <PrivateRoute path="/admin/spvs" component={Funds} exact />
+            <PrivateRoute path="/admin/:type" component={DealTable} exact />
+            <PrivateRoute path="/admin/:type" component={DealTable} exact />
             <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
             <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
 
