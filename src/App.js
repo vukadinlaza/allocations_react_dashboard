@@ -69,7 +69,7 @@ import UploadDocs from './components/NewBuild/FormComponents/UploadDocs/index';
 import Upgrade from './components/upgrade';
 import PaymentForm from './components/billing';
 import WireActivity from './components/WireActivity';
-import TaxActivity from './components/TaxActivity.js';
+import TaxActivity from './components/TaxActivity';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 

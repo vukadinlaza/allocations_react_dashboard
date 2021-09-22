@@ -38,6 +38,28 @@ const data = [
     extensionDeadline: moment(new Date(2020, 0, 12).toString()).format('DD MMM YYYY'),
     status: 'Will not file',
   },
+  {
+    name: 'Countdown Capital VI',
+    portfolioCompany: 'Space X',
+    taxYear: '2020',
+    investmentDate: moment(
+      randomDate(new Date(2019, 0, 1), new Date(2020, 0, 1)).toString(),
+    ).format('DD MMM YYYY'),
+    taxDeadline: moment(new Date(2020, 0, 9).toString()).format('DD MMM YYYY'),
+    extensionDeadline: moment(new Date(2020, 0, 12).toString()).format('DD MMM YYYY'),
+    status: 'Ready',
+  },
+  {
+    name: 'Countdown Capital II',
+    portfolioCompany: 'Space X',
+    taxYear: '2021',
+    investmentDate: moment(
+      randomDate(new Date(2019, 0, 1), new Date(2020, 0, 1)).toString(),
+    ).format('DD MMM YYYY'),
+    taxDeadline: moment(new Date(2020, 0, 9).toString()).format('DD MMM YYYY'),
+    extensionDeadline: moment(new Date(2020, 0, 12).toString()).format('DD MMM YYYY'),
+    status: 'Will not file',
+  },
 ];
 
 const TaxTable = ({ classes }) => {

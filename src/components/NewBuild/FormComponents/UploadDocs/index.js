@@ -85,7 +85,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UploadDocs({ page, setPage }) {
   const classes = useStyles();
-  const [iconsChecked, setIconsChecked] = useState({});
+  const [iconsChecked, setIconsChecked] = useState({
+    one: true,
+    two: true,
+    three: true,
+    four: true,
+  });
   const history = useHistory();
   console.log('state', iconsChecked);
   return (

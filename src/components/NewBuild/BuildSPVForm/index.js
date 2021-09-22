@@ -96,24 +96,26 @@ export default function NewSpvForm() {
   const [page, setPage] = useState(0);
 
   // Basic Info
-  const [assetType, setAssetType] = useState('');
-  const [portCompName, setPortCompName] = useState('');
-  const [managerName, setManagerName] = useState('');
-  const [closingDate, setClosingDate] = useState('');
+  const [assetType, setAssetType] = useState('startup');
+  const [portCompName, setPortCompName] = useState('Space X');
+  const [managerName, setManagerName] = useState('Kingsley Advani');
+  const [closingDate, setClosingDate] = useState('23 Nov 2021');
 
   // Deal Terms
-  const [managementFee, setManagementFee] = useState('');
-  const [carryFee, setCarryFee] = useState('');
-  const [feeFrequency, setFreeFrequency] = useState('');
-  const [sameForAllInv, setSameForAllInv] = useState('');
+  const [managementFee, setManagementFee] = useState('3%');
+  const [carryFee, setCarryFee] = useState('10%');
+  const [feeFrequency, setFreeFrequency] = useState('One Time');
+  const [sameForAllInv, setSameForAllInv] = useState('Yes');
 
   // Offering Terms
-  const [allocationsAsAdviser, setAllocationsAsAdviser] = useState('');
-  const [fundTemplateDocument, setFundTemplateDocument] = useState('');
-  const [offeringType, setOfferingType] = useState('');
+  const [allocationsAsAdviser, setAllocationsAsAdviser] = useState('Yes');
+  const [fundTemplateDocument, setFundTemplateDocument] = useState('Custom');
+  const [offeringType, setOfferingType] = useState('506b');
 
   // Final
-  const [finalNotes, setFinalNotes] = useState('');
+  const [finalNotes, setFinalNotes] = useState(
+    'Looking forward to running this SPV with Allocations!',
+  );
   return (
     <>
       <Paper className={classes.formHeaderContainer}>
