@@ -8,134 +8,55 @@ import { openInNewTab } from '../../utils/helpers';
 import styles from '../UserHome/styles';
 import { nWithCommas } from '../../utils/numbers';
 
-const spvHeaders = [
+const headers = [
   {
-    label: 'NAME',
-    value: 'spvName',
-    type: 'spvName',
+    label: 'DATE',
+    value: 'date',
+    type: 'date',
     isSortable: true,
     align: 'left',
     alignHeader: true,
   },
   {
-    label: 'PORTFOLIO COMPANY',
-    value: 'portfolioCompany',
-    type: 'portfolioCompany',
+    label: 'TO/FROM',
+    value: 'toFrom',
+    type: 'toFrom',
     isSortable: true,
     align: 'center',
     alignHeader: true,
   },
   {
-    label: 'SIZE',
-    value: 'size',
+    label: 'AMOUNT',
+    value: 'amount',
+    type: 'amount',
     isSortable: true,
     align: 'center',
     alignHeader: true,
   },
   {
-    label: 'STATUS',
-    value: 'status',
-    type: 'status',
-    isSortable: true,
-    align: 'right',
-    alignHeader: false,
-  },
-  {
-    label: 'CREATE AT',
-    value: 'createdAt',
-    type: 'createdAt',
+    label: 'METHOD',
+    value: 'method',
+    type: 'method',
     isSortable: true,
     align: 'center',
   },
   {
-    label: 'WIRE DEADLINE',
-    value: 'wireDeadline',
-    type: 'wireDeadline',
+    label: 'ACCOUNT',
+    value: 'account',
+    type: 'account',
     isSortable: true,
     align: 'center',
-    alignHeader: true,
-  },
-  {
-    label: 'MANAGE',
-    value: 'manage',
-    type: 'manage',
-    align: 'center',
-    isSortable: false,
-    alignHeader: false,
-  },
-];
-const fundHeaders = [
-  {
-    label: 'NAME',
-    value: 'spvName',
-    type: 'spvName',
-    isSortable: true,
-    align: 'left',
-    alignHeader: true,
-  },
-  {
-    label: 'PORTFOLIO COMPANY',
-    value: 'portfolioCompany',
-    type: 'portfolioCompany',
-    isSortable: true,
-    align: 'center',
-    alignHeader: true,
-  },
-  {
-    label: 'SIZE',
-    value: 'size',
-    isSortable: true,
-    align: 'center',
-    alignHeader: true,
-  },
-  {
-    label: 'STATUS',
-    value: 'status',
-    type: 'status',
-    isSortable: true,
-    align: 'right',
-    alignHeader: false,
-  },
-  {
-    label: 'CREATE AT',
-    value: 'createdAt',
-    type: 'createdAt',
-    isSortable: true,
-    align: 'center',
-  },
-  {
-    label: 'FIRST CLOSE',
-    value: 'firstClose',
-    type: 'firstClose',
-    isSortable: true,
-    align: 'center',
-    alignHeader: true,
-  },
-  {
-    label: 'FINAL CLOSE',
-    value: 'finalClose',
-    type: 'finalClose',
-    isSortable: true,
-    align: 'center',
-    alignHeader: true,
-  },
-  {
-    label: 'MANAGE',
-    value: 'manage',
-    type: 'manage',
-    align: 'center',
-    isSortable: false,
     alignHeader: false,
   },
 ];
 
 const getStatusColors = (status) => {
   switch (status) {
-    case 'Complete':
+    case 'Outbound Wire':
       return { backgroundColor: '#C9EEC8', color: '#58CE46' };
     case 'Onboarding':
       return { backgroundColor: 'rgb(255, 4, 4, .20)', color: 'FF0404' };
-    case 'Closed':
+    case 'Wire':
       return { backgroundColor: 'rgb(4, 97, 255, .25)', color: '#0461FF' };
     default:
       return { backgroundColor: 'rgba(0,0,0,0)', color: 'red' };
@@ -143,45 +64,32 @@ const getStatusColors = (status) => {
 };
 
 const UserDocuments = ({ classes, data, type }) => {
-  const headers = type === 'spvs' ? spvHeaders : fundHeaders;
   const [userDocuments, setUserDocuments] = useState(data);
   const [searchTerm, setSearchTerm] = useState('');
 
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
-      case 'spvName':
-        return row.spvName;
-      case 'portfolioCompany':
-        return row.portfolioCompany;
-      case 'size':
-        return `$${nWithCommas(row.size)}.00`;
-      case 'status':
+      case 'date':
+        return row.date;
+      case 'toFrom':
+        return row.toFrom;
+      case 'amount':
+        return `$${nWithCommas(row.amount)}`;
+      case 'method':
         return (
           <div
             className={classes.statusContainer}
             style={{
-              color: getStatusColors(row.status).color,
-              backgroundColor: getStatusColors(row.status).backgroundColor,
-              marginLeft: 'auto',
+              color: getStatusColors(row.method).color,
+              backgroundColor: getStatusColors(row.method).backgroundColor,
+              width: '90%',
             }}
           >
             {row[headerValue]}
           </div>
         );
-      case 'createdAt':
-        return row.createdAt;
-      case 'wireDeadline':
-        return row.wireDeadline;
-      case 'firstClose':
-        return row.firstClose;
-      case 'finalClose':
-        return row.finalClose;
-      case 'manage':
-        return (
-          <Button variant="contained" color="primary" style={{ borderRadius: '.5rem' }}>
-            Manage
-          </Button>
-        );
+      case 'account':
+        return row.account;
       default:
         return <div />;
     }
@@ -192,7 +100,7 @@ const UserDocuments = ({ classes, data, type }) => {
   };
 
   const dataCopy = userDocuments.filter((doc) =>
-    `${doc.name} ${doc.portfolioCompany}`.toUpperCase().includes(searchTerm.toUpperCase()),
+    `${doc.toFrom} ${doc.account}`.toUpperCase().includes(searchTerm.toUpperCase()),
   );
 
   return (
@@ -200,7 +108,7 @@ const UserDocuments = ({ classes, data, type }) => {
       <div className={classes.searchContainer}>
         <TextField
           label="Search"
-          placeholder="Search by Portfolio Name or Deal Name"
+          placeholder="Search"
           id="search-field"
           fullWidth
           onChange={handleSearch}

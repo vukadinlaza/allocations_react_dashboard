@@ -156,8 +156,8 @@ const DealTable = ({ classes }) => {
   const totalAUM = data.reduce((acc, c) => acc + c.size, 0);
 
   return (
-    <Grid container spacing={1} className={classes.section}>
-      <Grid sm={12} lg={12} style={{ margin: '.75rem' }}>
+    <Grid container spacing={1} className={classes.section} style={{ paddingTop: '0px' }}>
+      <Grid sm={12} lg={12} style={{ margin: '.75rem', fontWeight: '900' }}>
         <Typography color="inherit" variant="h3">
           {typeDisplay}
         </Typography>

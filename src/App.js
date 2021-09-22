@@ -68,6 +68,7 @@ import AgreementSigner from './components/NewBuild/FormComponents/AgreementSigne
 import UploadDocs from './components/NewBuild/FormComponents/UploadDocs/index';
 import Upgrade from './components/upgrade';
 import PaymentForm from './components/billing';
+import WireActivity from './components/WireActivity';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -175,6 +176,7 @@ const App = () => {
             {/** Whitelabel Routes * */}
             <PrivateRoute path="/admin/:type" component={DealTable} exact />
             <PrivateRoute path="/admin/:type" component={DealTable} exact />
+            <PrivateRoute path="/wire-activity" component={WireActivity} exact />
             <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
             <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
 

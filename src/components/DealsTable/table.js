@@ -28,6 +28,7 @@ const spvHeaders = [
   {
     label: 'SIZE',
     value: 'size',
+    type: 'size',
     isSortable: true,
     align: 'center',
     alignHeader: true,
@@ -187,9 +188,9 @@ const UserDocuments = ({ classes, data, type }) => {
       case 'finalClose':
         return row.finalClose;
       case 'aum':
-        return row.size * row.multiple;
+        return `$${nWithCommas(row.size * row.multiple)}`;
       case 'multiple':
-        return row.multiple;
+        return `${row.multiple}x`;
       case 'manage':
         return (
           <Button variant="contained" color="primary" style={{ borderRadius: '.5rem' }}>

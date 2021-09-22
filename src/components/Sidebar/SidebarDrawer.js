@@ -21,6 +21,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
 import { FaRocket } from 'react-icons/fa';
+import { BsArrowLeftRight } from 'react-icons/bs';
 import whitelistEmails from './whiteListEmails';
 import BuildModal from '../NewBuild/BuildModal';
 
@@ -102,6 +103,11 @@ const SidebarDrawer = ({
       to: '/billing',
       title: 'Billing',
       icon: <MonetizationOnRoundedIcon fontSize="medium" />,
+    },
+    {
+      to: '/wire-activity',
+      title: 'Wire Activity',
+      icon: <BsArrowLeftRight fontSize="medium" />,
     },
   ];
 
