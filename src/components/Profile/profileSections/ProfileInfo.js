@@ -417,49 +417,52 @@ const ProfileInfo = ({
                     <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
                       Interests
                     </Typography>
+                    <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
+                      Select a min. 3 and max. 6 sectors
+                    </Typography>
                   </Grid>
 
                   <Sectors investor={investor} style={{ width: '100%' }} />
                 </Grid>
               </Paper>
             </Grid>
-          </Grid>
-        </Grid>
 
-        {/* grid container for social section */}
-        <Grid item xs={12}>
-          <Paper className={classes.paper}>
-            <Grid container>
-              <Grid item xs={12} className={classes.paperTitle}>
-                <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
-                  Social Profile Connect
-                </Typography>
-              </Grid>
+            {/* grid container for social section */}
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>
+                <Grid container>
+                  <Grid item xs={12} className={classes.paperTitle}>
+                    <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
+                      Social Profile Connect
+                    </Typography>
+                  </Grid>
 
-              <Grid container spacing={1} className={classes.paperMain}>
-                <Grid
-                  item
-                  xs={1}
-                  style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                >
-                  <LinkedInIcon className={classes.linkedin} />
+                  <Grid container spacing={1} className={classes.paperMain}>
+                    <Grid
+                      item
+                      xs={1}
+                      style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                    >
+                      <LinkedInIcon className={classes.linkedin} />
+                    </Grid>
+                    <Grid item xs={11}>
+                      <TextField
+                        id="linkedin"
+                        /* add the value= */
+                        label="Linkedin Profile Link"
+                        variant="outlined"
+                        fullWidth
+                        style={{ background: 'white' }}
+                        error={errors.includes('linkedinUrl')}
+                        value={get(investor, 'linkedinUrl') || ''}
+                        onChange={handleChange('linkedinUrl')}
+                      />
+                    </Grid>
+                  </Grid>
                 </Grid>
-                <Grid item xs={11}>
-                  <TextField
-                    id="linkedin"
-                    /* add the value= */
-                    label="Linkedin Profile Link"
-                    variant="outlined"
-                    fullWidth
-                    style={{ background: 'white' }}
-                    error={errors.includes('linkedinUrl')}
-                    value={get(investor, 'linkedinUrl') || ''}
-                    onChange={handleChange('linkedinUrl')}
-                  />
-                </Grid>
-              </Grid>
+              </Paper>
             </Grid>
-          </Paper>
+          </Grid>
         </Grid>
 
         <Grid item xs={12}>
