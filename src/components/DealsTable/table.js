@@ -41,14 +41,14 @@ const spvHeaders = [
     alignHeader: false,
   },
   {
-    label: 'CREATE AT',
+    label: 'CREATED AT DATE',
     value: 'createdAt',
     type: 'createdAt',
     isSortable: true,
     align: 'center',
   },
   {
-    label: 'WIRE DEADLINE',
+    label: 'WIRE DEADLINE DATE',
     value: 'wireDeadline',
     type: 'wireDeadline',
     isSortable: true,
@@ -74,19 +74,29 @@ const fundHeaders = [
     alignHeader: true,
   },
   {
-    label: 'PORTFOLIO COMPANY',
-    value: 'portfolioCompany',
-    type: 'portfolioCompany',
+    label: 'RAISED',
+    value: 'size',
+    type: 'size',
     isSortable: true,
     align: 'center',
     alignHeader: true,
   },
   {
-    label: 'SIZE',
-    value: 'size',
+    label: 'MULTIPLE',
+    value: 'multiple',
+    type: 'multiple',
     isSortable: true,
     align: 'center',
     alignHeader: true,
+  },
+  {
+    label: 'AUM',
+    value: 'aum',
+    type: 'aum',
+    isSortable: true,
+    align: 'center',
+    alignHeader: true,
+    keyNotInData: true,
   },
   {
     label: 'STATUS',
@@ -97,14 +107,14 @@ const fundHeaders = [
     alignHeader: false,
   },
   {
-    label: 'CREATE AT',
+    label: 'CREATED AT DATE',
     value: 'createdAt',
     type: 'createdAt',
     isSortable: true,
     align: 'center',
   },
   {
-    label: 'FIRST CLOSE',
+    label: 'FIRST CLOSE DATE',
     value: 'firstClose',
     type: 'firstClose',
     isSortable: true,
@@ -112,7 +122,7 @@ const fundHeaders = [
     alignHeader: true,
   },
   {
-    label: 'FINAL CLOSE',
+    label: 'FINAL CLOSE DATE',
     value: 'finalClose',
     type: 'finalClose',
     isSortable: true,
@@ -154,7 +164,7 @@ const UserDocuments = ({ classes, data, type }) => {
       case 'portfolioCompany':
         return row.portfolioCompany;
       case 'size':
-        return `$${nWithCommas(row.size)}.00`;
+        return `$${nWithCommas(row.size)}`;
       case 'status':
         return (
           <div
@@ -176,6 +186,10 @@ const UserDocuments = ({ classes, data, type }) => {
         return row.firstClose;
       case 'finalClose':
         return row.finalClose;
+      case 'aum':
+        return row.size * row.multiple;
+      case 'multiple':
+        return row.multiple;
       case 'manage':
         return (
           <Button variant="contained" color="primary" style={{ borderRadius: '.5rem' }}>
@@ -200,7 +214,7 @@ const UserDocuments = ({ classes, data, type }) => {
       <div className={classes.searchContainer}>
         <TextField
           label="Search"
-          placeholder="Search by Portfolio Name or Deal Name"
+          placeholder="Search by Name"
           id="search-field"
           fullWidth
           onChange={handleSearch}

@@ -22,10 +22,10 @@ const spvData = [
     size: 440000,
     status: 'Complete',
     createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
     wireDeadline: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
     manage: 'manage',
   },
@@ -35,10 +35,10 @@ const spvData = [
     size: 604060,
     status: 'Complete',
     createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
     wireDeadline: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
     manage: 'manage',
   },
@@ -48,10 +48,10 @@ const spvData = [
     size: 103500,
     status: 'Onboarding',
     createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
     wireDeadline: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
     manage: 'manage',
   },
@@ -61,10 +61,10 @@ const spvData = [
     size: Math.round(_.random(43000, 3200000)),
     status: 'Closed',
     createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
     wireDeadline: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
     manage: 'manage',
   },
@@ -76,14 +76,15 @@ const fundData = [
     size: Math.round(_.random(42000, 1200000)),
     status: 'Complete',
     createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
     firstClose: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
     finalClose: moment(randomDate(new Date(2021, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
+    multiple: _.random(1, 8),
     manage: 'manage',
   },
   {
@@ -92,14 +93,15 @@ const fundData = [
     size: Math.round(_.random(42000, 1200000)),
     status: 'Complete',
     createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
     firstClose: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
     finalClose: moment(randomDate(new Date(2021, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
+    multiple: _.random(1, 8),
     manage: 'manage',
   },
   {
@@ -108,30 +110,32 @@ const fundData = [
     size: Math.round(_.random(42000, 1200000)),
     status: 'Onboarding',
     createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
     firstClose: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
     finalClose: moment(randomDate(new Date(2021, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
+    multiple: _.random(1, 8),
     manage: 'manage',
   },
   {
-    spvName: 'Sharding Holdings IIII',
+    spvName: 'Sharding Holdings IV',
     portfolioCompany: 'Revolut',
     size: Math.round(_.random(42000, 1200000)),
     status: 'Closed',
     createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
     firstClose: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
     finalClose: moment(randomDate(new Date(2021, 0, 1), new Date()).toString()).format(
-      'MMM/YYYY/DD',
+      'DD MMM YYYY',
     ),
+    multiple: _.random(1, 8),
     manage: 'manage',
   },
 ];
@@ -195,9 +199,8 @@ const DealTable = ({ classes }) => {
             style={{ flexDirection: 'column', alignItems: 'flex-start' }}
           >
             <Typography style={{ fontSize: '26px' }}>
-              ${nWithCommas(Math.round(totalAUM * 4.3))}.00
+              ${nWithCommas(Math.round(totalAUM * 4.3))}
             </Typography>
-            <Typography className={classes.footerData}>Last Updated: June 1st, 2021</Typography>
           </div>
         </SimpleBox>
       </Grid>
@@ -239,7 +242,7 @@ const DealTable = ({ classes }) => {
             className={classes.simpleBoxDataRow}
             style={{ flexDirection: 'column', alignItems: 'flex-start' }}
           >
-            <Typography style={{ fontSize: '26px' }}>${nWithCommas(totalAUM)}.00</Typography>
+            <Typography style={{ fontSize: '26px' }}>${nWithCommas(totalAUM)}</Typography>
             {/* <Typography className={classes.footerData}>0% Realized | 100% Unrealized</Typography> */}
           </div>
         </SimpleBox>
