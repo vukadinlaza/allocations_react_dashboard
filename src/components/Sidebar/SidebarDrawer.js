@@ -82,12 +82,12 @@ const SidebarDrawer = ({
       icon: <HomeIcon fontSize="medium" />,
     },
     {
-      to: '/spvs',
+      to: '/admin/type/spvs',
       title: 'SPVs',
       icon: <FaRocket style={{ margin: '0 .5rem 0 0' }} />,
     },
     {
-      to: '/funds',
+      to: '/admin/type/funds',
       title: 'Funds',
       icon: <AccountBalanceIcon fontSize="medium" />,
     },
@@ -171,7 +171,7 @@ const SidebarDrawer = ({
       <Collapse in={openThree} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {[
-            { title: 'Invest', link: '/deals/305-ventures' },
+            { title: 'Invest', link: '/deals/demo-space-x' },
             { title: 'Fund Manager', link: '/admin/demo-fund' },
           ].map((x) => {
             return (

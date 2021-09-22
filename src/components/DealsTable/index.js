@@ -73,7 +73,7 @@ const fundData = [
   {
     spvName: 'Sharding Holdings I',
     portfolioCompany: 'Stripe',
-    size: Math.round(_.random(42000, 1200000)),
+    size: 1000000,
     status: 'Complete',
     createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
       'DD MMM YYYY',
@@ -84,13 +84,13 @@ const fundData = [
     finalClose: moment(randomDate(new Date(2021, 0, 1), new Date()).toString()).format(
       'DD MMM YYYY',
     ),
-    multiple: _.random(1, 8),
+    multiple: 5,
     manage: 'manage',
   },
   {
     spvName: 'Sharding Holdings II',
     portfolioCompany: 'Tundra Trust',
-    size: Math.round(_.random(42000, 1200000)),
+    size: 5000000,
     status: 'Complete',
     createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
       'DD MMM YYYY',
@@ -101,13 +101,13 @@ const fundData = [
     finalClose: moment(randomDate(new Date(2021, 0, 1), new Date()).toString()).format(
       'DD MMM YYYY',
     ),
-    multiple: _.random(1, 8),
+    multiple: 3,
     manage: 'manage',
   },
   {
     spvName: 'Sharding Holdings III',
     portfolioCompany: 'Axiom Space',
-    size: Math.round(_.random(42000, 1200000)),
+    size: 10000000,
     status: 'Onboarding',
     createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
       'DD MMM YYYY',
@@ -118,13 +118,13 @@ const fundData = [
     finalClose: moment(randomDate(new Date(2021, 0, 1), new Date()).toString()).format(
       'DD MMM YYYY',
     ),
-    multiple: _.random(1, 8),
+    multiple: 2,
     manage: 'manage',
   },
   {
     spvName: 'Sharding Holdings IV',
     portfolioCompany: 'Revolut',
-    size: Math.round(_.random(42000, 1200000)),
+    size: 15000000,
     status: 'Closed',
     createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
       'DD MMM YYYY',
@@ -135,7 +135,7 @@ const fundData = [
     finalClose: moment(randomDate(new Date(2021, 0, 1), new Date()).toString()).format(
       'DD MMM YYYY',
     ),
-    multiple: _.random(1, 8),
+    multiple: 1,
     manage: 'manage',
   },
 ];
@@ -154,6 +154,8 @@ const DealTable = ({ classes }) => {
 
   const totalDeals = data.length;
   const totalAUM = data.reduce((acc, c) => acc + c.size, 0);
+  const avgMultiple =
+    type === 'spvs' ? 2.5 : data.reduce((acc, c) => acc + c.multiple, 0) / data.length;
 
   return (
     <Grid container spacing={1} className={classes.section} style={{ paddingTop: '0px' }}>
@@ -199,7 +201,7 @@ const DealTable = ({ classes }) => {
             style={{ flexDirection: 'column', alignItems: 'flex-start' }}
           >
             <Typography style={{ fontSize: '26px' }}>
-              ${nWithCommas(Math.round(totalAUM * 4.3))}
+              ${nWithCommas(Math.round(totalAUM * avgMultiple))}
             </Typography>
           </div>
         </SimpleBox>
@@ -221,7 +223,7 @@ const DealTable = ({ classes }) => {
             className={classes.simpleBoxDataRow}
             style={{ flexDirection: 'column', alignItems: 'flex-start' }}
           >
-            <Typography style={{ fontSize: '26px' }}> 4.3x</Typography>
+            <Typography style={{ fontSize: '26px' }}> {avgMultiple}x</Typography>
           </div>
         </SimpleBox>
       </Grid>

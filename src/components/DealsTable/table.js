@@ -145,7 +145,7 @@ const getStatusColors = (status) => {
     case 'Complete':
       return { backgroundColor: '#C9EEC8', color: '#58CE46' };
     case 'Onboarding':
-      return { backgroundColor: 'rgb(255, 4, 4, .20)', color: 'FF0404' };
+      return { backgroundColor: 'rgb(255, 4, 4, .20)', color: '#FF0404' };
     case 'Closed':
       return { backgroundColor: 'rgb(4, 97, 255, .25)', color: '#0461FF' };
     default:
@@ -159,6 +159,10 @@ const UserDocuments = ({ classes, data, type }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const getCellContent = (type, row, headerValue) => {
+    if (headerValue === 'status') {
+      console.log('ROW', row);
+      console.log('COLOR', row.status, getStatusColors(row.status).color);
+    }
     switch (type) {
       case 'spvName':
         return row.spvName;

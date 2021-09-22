@@ -175,8 +175,8 @@ const App = () => {
             <AdminRoute path="/admin/invesments/:investmentId" component={Investment} exact />
 
             {/** Whitelabel Routes * */}
-            <PrivateRoute path="/:type" component={DealTable} exact />
-            <PrivateRoute path="/:type" component={DealTable} exact />
+            <PrivateRoute path="/admin/type/:type" component={DealTable} exact />
+            <PrivateRoute path="/admin/type/:type" component={DealTable} exact />
             <PrivateRoute path="/wire-activity" component={WireActivity} exact />
             <PrivateRoute path="/tax-activity" component={TaxActivity} exact />
             <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
