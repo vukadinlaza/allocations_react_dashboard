@@ -13,7 +13,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import MonetizationOnRoundedIcon from '@material-ui/icons/MonetizationOnRounded';
 import { Link, useRouteMatch, useHistory } from 'react-router-dom';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import Collapse from '@material-ui/core/Collapse';
@@ -22,7 +21,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
 import { FaRocket } from 'react-icons/fa';
 import { BsArrowLeftRight } from 'react-icons/bs';
-import whitelistEmails from './whiteListEmails';
+import { RiBillLine } from 'react-icons/ri';
 import BuildModal from '../NewBuild/BuildModal';
 
 import './SidebarDrawer.scss';
@@ -102,7 +101,7 @@ const SidebarDrawer = ({
     {
       to: '/billing',
       title: 'Billing',
-      icon: <MonetizationOnRoundedIcon fontSize="medium" />,
+      icon: <RiBillLine fontSize="medium" />,
     },
     {
       to: '/wire-activity',
@@ -157,6 +156,33 @@ const SidebarDrawer = ({
         ))}
       </List>
       <Typography className="sectionSideBarTitle">TOOLS</Typography>
+      <ListItem button onClick={handleClickThree}>
+        <ListItemIcon>
+          <StarBorder fontSize="medium" />
+        </ListItemIcon>
+        <ListItemText primary="Demo" />
+        {openThree ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      <Collapse in={openThree} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          {[
+            { title: 'Invest', link: '/deals/305-ventures' },
+            { title: 'Fund Manager', link: '/admin/demo-fund' },
+          ].map((x) => {
+            return (
+              <Link
+                to={{
+                  pathname: x.link,
+                }}
+              >
+                <ListItem button className={classes.nested}>
+                  <ListItemText size="small" primary={x.title} />
+                </ListItem>
+              </Link>
+            );
+          })}
+        </List>
+      </Collapse>
       <List>
         {menusTwo.map(({ to, title, icon }) => (
           <div
@@ -234,34 +260,6 @@ const SidebarDrawer = ({
           })}
         </List>
       </Collapse>
-      <ListItem button onClick={handleClickThree}>
-        <ListItemIcon>
-          <StarBorder fontSize="medium" />
-        </ListItemIcon>
-        <ListItemText primary="Demo" />
-        {openThree ? <ExpandLess /> : <ExpandMore />}
-      </ListItem>
-      <Collapse in={openThree} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          {[
-            { title: 'Invest', link: '/deals/305-ventures' },
-            { title: 'Fund Manager', link: '/admin/demo-fund' },
-          ].map((x) => {
-            return (
-              <Link
-                to={{
-                  pathname: x.link,
-                }}
-              >
-                <ListItem button className={classes.nested}>
-                  <ListItemText size="small" primary={x.title} />
-                </ListItem>
-              </Link>
-            );
-          })}
-        </List>
-      </Collapse>
-
       <div onClick={mobileOpen ? handleDrawerClose : null}>
         <ListItem button onClick={logoutWithRedirect}>
           <ListItemIcon className="icon">
