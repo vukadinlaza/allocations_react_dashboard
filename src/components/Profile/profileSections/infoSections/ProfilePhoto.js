@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     width: theme.spacing(14),
     height: theme.spacing(14),
+    textAlign: 'center',
     [theme.breakpoints.down('sm')]: {
       width: theme.spacing(10),
       height: theme.spacing(10),
