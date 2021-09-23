@@ -193,6 +193,11 @@ const ProfileInfo = ({
   const usStates = new UsaStates();
   const stateNames = usStates.states.map((s) => s.name);
 
+  /* moves United States to beginning of array for easier access */
+  const usaAtTop = countries.sort((x, y) =>
+    x === countries[235] ? -1 : y === countries[235] ? 1 : 0,
+  );
+
   return (
     <div className="Sections">
       {/* main grid for all sections */}
@@ -294,7 +299,7 @@ const ProfileInfo = ({
                     variant="outlined"
                   >
                     <option aria-label="None" value="" />
-                    {countries.map(({ countryName }) => (
+                    {usaAtTop.map(({ countryName }) => (
                       <option key={countryName} value={countryName}>
                         {countryName}
                       </option>
