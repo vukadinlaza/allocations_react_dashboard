@@ -3,6 +3,7 @@ import { useMutation, gql } from '@apollo/client';
 import { Avatar, Badge, Grid, TextField, Button } from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { toast } from 'react-toastify';
+import PersonIcon from '@material-ui/icons/Person';
 import EditIcon from '@material-ui/icons/Edit';
 import AppModal from '../../../Modal/AppModal';
 
@@ -34,6 +35,15 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       width: theme.spacing(10),
       height: theme.spacing(10),
+    },
+  },
+  noAvatar: {
+    width: theme.spacing(12),
+    height: theme.spacing(12),
+    textAlign: 'center',
+    [theme.breakpoints.down('sm')]: {
+      width: theme.spacing(8),
+      height: theme.spacing(8),
     },
   },
 }));
@@ -136,18 +146,22 @@ const ProfilePhoto = ({ investor, refetchUser }) => {
         }}
         badgeContent={
           <SmallAvatar alt="Edit" onClick={() => setShowModal(!showModal)}>
-            <EditAvatar />
+            <EditAvatar className={classes.noAvatar} />
           </SmallAvatar>
         }
       >
-        <Avatar
-          alt="avatar"
-          src={!investor.profileImageKey ? '' : imageInDatabase}
-          style={{ border: 'solid blue 3px' }}
-          className={classes.avatar}
-        >
-          Add Image
-        </Avatar>
+        {!investor.profileImageKey ? (
+          <Avatar style={{ border: 'solid blue 3px' }} className={classes.avatar}>
+            <PersonIcon className={classes.noAvatar} />
+          </Avatar>
+        ) : (
+          <Avatar
+            alt="avatar"
+            src={!investor.profileImageKey ? '' : imageInDatabase}
+            style={{ border: 'solid blue 3px' }}
+            className={classes.avatar}
+          />
+        )}
       </Badge>
 
       <AppModal isOpen={showModal} onClose={onClose} modalHeader="Upload Profile Photo">
