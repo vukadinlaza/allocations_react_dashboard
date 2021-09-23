@@ -143,7 +143,7 @@ const Sectors = ({ investor }) => {
 
       <Grid item md={12} lg={9} style={{ width: '100%' }}>
         <Paper component="ul" className={classes.selectedSectorsPaper}>
-          {investor.sectors.length < 1 ? (
+          {!investor.sectors || investor.sectors.length < 1 ? (
             <li style={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
                 Select min. 3 and max. 6 sectors
