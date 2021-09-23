@@ -194,9 +194,11 @@ const ProfileInfo = ({
   const stateNames = usStates.states.map((s) => s.name);
 
   /* moves United States to beginning of array for easier access */
-  const usaAtTop = countries.sort((x, y) =>
-    x === countries[235] ? -1 : y === countries[235] ? 1 : 0,
+  const usaAtTop = countries.sort((country) =>
+    country.countryName === 'United States' ? -1 : !country.countryName === 'United States' ? 1 : 0,
   );
+
+  console.log('usaAtTop==>', usaAtTop);
 
   return (
     <div className="Sections">

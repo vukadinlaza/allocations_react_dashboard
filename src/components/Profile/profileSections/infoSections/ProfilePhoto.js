@@ -70,7 +70,7 @@ const ProfilePhoto = ({ investor, refetchUser }) => {
       toast.success('Success! Profile updated');
       refetchUser();
       setShowModal(false);
-      setImage(imageInDatabase);
+      setImage('');
       setFileToImage('');
     },
     onError: () => {
@@ -183,13 +183,17 @@ const ProfilePhoto = ({ investor, refetchUser }) => {
             </Button>
           </Grid>
           <Grid item xs={12} style={{ textAlign: 'center' }}>
-            <Button
-              variant="contained"
-              style={{ backgroundColor: 'red', color: 'white' }}
-              onClick={handleDelete}
-            >
-              Delete
-            </Button>
+            {!investor.profileImageKey ? (
+              ''
+            ) : (
+              <Button
+                variant="contained"
+                style={{ backgroundColor: 'red', color: 'white' }}
+                onClick={handleDelete}
+              >
+                Delete
+              </Button>
+            )}
           </Grid>
         </Grid>
       </AppModal>
