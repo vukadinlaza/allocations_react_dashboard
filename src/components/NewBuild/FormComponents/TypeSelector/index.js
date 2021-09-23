@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TypeSelector({
   parentClasses,
-  assetType,
+  asset_type,
   setAssetType,
   portCompName,
   setPortCompName,
@@ -71,7 +71,7 @@ export default function TypeSelector({
     },
     {
       title: 'Real Estate',
-      value: 'realEstate',
+      value: 'real-estate',
       description: 'Raise money to invest in a real estate project',
       icon: HouseIcon,
       height: '29px',
@@ -126,7 +126,7 @@ export default function TypeSelector({
         {rowItems.map((item) => {
           return (
             <Grid className={classes.rowItem}>
-              <TypeItem item={item} assetType={assetType} setAssetType={setAssetType} />
+              <TypeItem item={item} asset_type={asset_type} setAssetType={setAssetType} />
             </Grid>
           );
         })}

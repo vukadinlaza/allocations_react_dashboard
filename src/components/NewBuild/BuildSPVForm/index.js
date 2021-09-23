@@ -89,14 +89,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const CREATE_BUILD = gql`
+  mutation createBuild($payload: Object) {
+    createBuild(payload: $payload) {
+      _id
+      phases {
+        name
+        tasks {
+          _id
+          title
+          complete
+        }
+      }
+    }
+  }
+`;
+
 export default function NewSpvForm() {
   const classes = useStyles();
+
+  const [createBuild, { data, loading }] = useMutation(CREATE_BUILD);
 
   // Page
   const [page, setPage] = useState(0);
 
   // Basic Info
-  const [assetType, setAssetType] = useState('startup');
+  const [asset_type, setAssetType] = useState('startup');
   const [portCompName, setPortCompName] = useState('Space X');
   const [managerName, setManagerName] = useState('Kingsley Advani');
   const [closingDate, setClosingDate] = useState('');
@@ -116,6 +134,27 @@ export default function NewSpvForm() {
   const [finalNotes, setFinalNotes] = useState(
     'Looking forward to running this SPV with Allocations!',
   );
+
+  const handleSubmit = () => {
+    createBuild({
+      variables: {
+        payload: {
+          asset_type,
+          portCompName,
+          managerName,
+          closingDate,
+          managementFee,
+          carryFee,
+          feeFrequency,
+          sameForAllInv,
+          allocationsAsAdviser,
+          fundTemplateDocument,
+          offeringType,
+        },
+      },
+    });
+  };
+
   return (
     <>
       <Paper className={classes.formHeaderContainer}>
@@ -161,7 +200,7 @@ export default function NewSpvForm() {
         <>
           <BasicInfo
             parentClasses={classes}
-            assetType={assetType}
+            asset_type={asset_type}
             setAssetType={setAssetType}
             portCompName={portCompName}
             setPortCompName={setPortCompName}
@@ -429,6 +468,7 @@ export default function NewSpvForm() {
                   className={classes.continueButton}
                   onClick={() => {
                     setPage(page + 1);
+                    handleSubmit();
                   }}
                 >
                   Continue
@@ -445,7 +485,7 @@ export default function NewSpvForm() {
       )}
       {page === 2 && (
         <>
-          <UploadDocsModal page={page} setPage={setPage} />
+          <UploadDocsModal page={page} setPage={setPage} deal={data?.createBuild} />
         </>
       )}
     </>
