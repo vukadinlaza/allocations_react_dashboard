@@ -106,7 +106,52 @@ export default function UploadDocs({ page, setPage, deal = {} }) {
   });
   const history = useHistory();
 
-  const documentPaperTasks = deal?.phases?.[0].tasks.map((task) => {
+  const fakeTasks = [
+    {
+      _id: '614d1c2cef3a7370bbb96846',
+      title: 'Upload Company Deck',
+      complete: true,
+      __typename: 'Task',
+    },
+    {
+      _id: '614d1c2cef3a7370bbb96847',
+      title: 'Upload Company Logo',
+      complete: true,
+      __typename: 'Task',
+    },
+    {
+      _id: '614d1c2cef3a7370bbb96848',
+      title: 'Upload ID',
+      complete: true,
+      __typename: 'Task',
+    },
+    {
+      _id: '614d1c2cef3a7370bbb96849',
+      title: 'Upload Term Sheet',
+      complete: true,
+      __typename: 'Task',
+    },
+    {
+      _id: '614d1c2cef3a7370bbb9684a',
+      title: 'Upload Memorandum of Understanding',
+      complete: true,
+      __typename: 'Task',
+    },
+    {
+      _id: '614d1c2cef3a7370bbb9684b',
+      title: 'Upload Service Agreement',
+      complete: true,
+      __typename: 'Task',
+    },
+    {
+      _id: '614d1c2cef3a7370bbb9684c',
+      title: 'Review Documents',
+      complete: true,
+      __typename: 'Task',
+    },
+  ];
+
+  const documentPaperTasks = (deal?.phases?.[0].tasks || fakeTasks).map((task) => {
     return (
       <Paper
         className={classes.item}
@@ -116,28 +161,12 @@ export default function UploadDocs({ page, setPage, deal = {} }) {
           });
         }}
       >
-        <input
-          type="file"
-          accept="application/pdf"
-          multiple
-          onChange={({ target }) => {
-            if (target.validity.valid) {
-              addDoc({
-                variables: {
-                  doc: target.files[0],
-                  task_id: task._id,
-                  deal_id: deal._id,
-                },
-              });
-            }
-          }}
-        />
         <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
         <Typography className={classes.itemText}>{task.title}</Typography>
         <img
           src={buildUpload}
           className={classes.uploadIcon}
-          style={{ opacity: iconsChecked.one ? '1' : '' }}
+          style={{ opacity: task.complete ? '1' : '' }}
           alt="upload button"
         />
       </Paper>
@@ -158,7 +187,7 @@ export default function UploadDocs({ page, setPage, deal = {} }) {
           className={classes.finishButton}
           onClick={() => {
             toast.success('Success! Your submission was submitted.');
-            history.push('/');
+            history.push('/deal-setup');
           }}
         >
           Finish

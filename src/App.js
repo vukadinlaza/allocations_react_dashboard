@@ -70,6 +70,7 @@ import Upgrade from './components/upgrade';
 import PaymentForm from './components/billing';
 import WireActivity from './components/WireActivity';
 import TaxActivity from './components/TaxActivity';
+import DealSetup from './components/DealSetup';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -101,6 +102,7 @@ const App = () => {
             <PrivateRoute path="/marketplace" component={Marketplace} />
             <PrivateRoute path="/investments" component={UserInvestments} />
             <PrivateRoute path="/invited-deals" component={InvitedDeals} />
+            <PrivateRoute path="/deal-setup" component={DealSetup} />
             <PrivateRoute path="/identity" component={Indentity} />
             <PrivateRoute path="/dealdocs" component={DealDocuments} />
             <PrivateRoute path="/tvclogin" component={TVC} />
