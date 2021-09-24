@@ -20,7 +20,8 @@ export default function SignDocsForm({ page, setPage }) {
           your behalf
         </Typography>
         <Paper
-          className={classes.item}
+          className={`${iconsChecked.one ? classes.selected : ''} ${classes.item}`}
+          p0lok
           onClick={() =>
             setIconsChecked((prev) => {
               return { ...prev, one: true };
@@ -37,7 +38,7 @@ export default function SignDocsForm({ page, setPage }) {
           />
         </Paper>
         <Paper
-          className={classes.item}
+          className={`${iconsChecked.two ? classes.selected : ''} ${classes.item}`}
           onClick={() =>
             setIconsChecked((prev) => {
               return { ...prev, two: true };

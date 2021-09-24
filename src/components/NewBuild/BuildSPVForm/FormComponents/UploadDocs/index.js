@@ -6,6 +6,8 @@ import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
 import buildDoc from '../../../../../assets/buildDoc.svg';
 import buildUpload from '../../../../../assets/buildUpload.svg';
+import CheckCircle from '../../../../../assets/check_circle_black_24dp.svg';
+
 import useStyles from '../../../BuildStyles';
 
 export default function UploadDocs({ page, setPage }) {
@@ -23,7 +25,7 @@ export default function UploadDocs({ page, setPage }) {
           multiple files, please compress them into one zip folder.
         </Typography>
         <Paper
-          className={classes.item}
+          className={`${classes.item} ${!iconsChecked.one ? '' : classes.selected}`}
           onClick={() => {
             setIconsChecked((prev) => {
               return { ...prev, one: true };
@@ -32,15 +34,24 @@ export default function UploadDocs({ page, setPage }) {
         >
           <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Portfolio Company Term Sheet</Typography>
-          <img
-            src={buildUpload}
-            className={classes.uploadIcon}
-            style={{ opacity: iconsChecked.one ? '1' : '' }}
-            alt="upload button"
-          />
+          {!iconsChecked.one ? (
+            <img
+              src={buildUpload}
+              className={classes.uploadIcon}
+              style={{ opacity: iconsChecked.one ? '1' : '' }}
+              alt="upload button"
+            />
+          ) : (
+            <img
+              src={CheckCircle}
+              className={classes.checkCircle}
+              alt="checkbox"
+              style={{ opacity: '1' }}
+            />
+          )}
         </Paper>
         <Paper
-          className={classes.item}
+          className={`${classes.item} ${!iconsChecked.two ? '' : classes.selected}`}
           onClick={() => {
             setIconsChecked((prev) => {
               return { ...prev, two: true };
@@ -49,15 +60,24 @@ export default function UploadDocs({ page, setPage }) {
         >
           <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Pitch Deck</Typography>
-          <img
-            src={buildUpload}
-            className={classes.uploadIcon}
-            style={{ opacity: iconsChecked.two ? '1' : '' }}
-            alt="upload button"
-          />
+          {!iconsChecked.two ? (
+            <img
+              src={buildUpload}
+              className={classes.uploadIcon}
+              style={{ opacity: iconsChecked.two ? '1' : '' }}
+              alt="upload button"
+            />
+          ) : (
+            <img
+              src={CheckCircle}
+              className={classes.checkCircle}
+              alt="checkbox"
+              style={{ opacity: '1' }}
+            />
+          )}
         </Paper>
         <Paper
-          className={classes.item}
+          className={`${classes.item} ${!iconsChecked.three ? '' : classes.selected}`}
           onClick={() => {
             setIconsChecked((prev) => {
               return { ...prev, three: true };
@@ -66,15 +86,24 @@ export default function UploadDocs({ page, setPage }) {
         >
           <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Driver's License/Passport</Typography>
-          <img
-            src={buildUpload}
-            className={classes.uploadIcon}
-            style={{ opacity: iconsChecked.three ? '1' : '' }}
-            alt="upload button"
-          />
+          {!iconsChecked.three ? (
+            <img
+              src={buildUpload}
+              className={classes.uploadIcon}
+              style={{ opacity: iconsChecked.three ? '1' : '' }}
+              alt="upload button"
+            />
+          ) : (
+            <img
+              src={CheckCircle}
+              className={classes.checkCircle}
+              alt="checkbox"
+              style={{ opacity: '1' }}
+            />
+          )}
         </Paper>
         <Paper
-          className={classes.item}
+          className={`${classes.item} ${!iconsChecked.four ? '' : classes.selected}`}
           onClick={() => {
             setIconsChecked((prev) => {
               return { ...prev, four: true };
@@ -83,12 +112,21 @@ export default function UploadDocs({ page, setPage }) {
         >
           <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Portfolio Company Logo</Typography>
-          <img
-            src={buildUpload}
-            className={classes.uploadIcon}
-            style={{ opacity: iconsChecked.four ? '1' : '' }}
-            alt="upload button"
-          />
+          {!iconsChecked.four ? (
+            <img
+              src={buildUpload}
+              className={classes.uploadIcon}
+              style={{ opacity: iconsChecked.four ? '1' : '' }}
+              alt="upload button"
+            />
+          ) : (
+            <img
+              src={CheckCircle}
+              className={classes.checkCircle}
+              alt="checkbox"
+              style={{ opacity: '1' }}
+            />
+          )}
         </Paper>
         <Button
           className={classes.finishButton}
