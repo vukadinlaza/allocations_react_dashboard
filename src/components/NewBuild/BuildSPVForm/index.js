@@ -11,9 +11,15 @@ import useStyles from '../BuildStyles';
 
 export default function NewSpvForm() {
   const classes = useStyles();
-
+  const [buildData, setBuildData] = useState({});
+  const handleChange = ({ target }) => {
+    return setBuildData((prev) => ({
+      ...prev,
+      [target.name]: target.value,
+    }));
+  };
   // Page
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
 
   // Basic Info
   const [assetType, setAssetType] = useState('');
@@ -154,10 +160,10 @@ export default function NewSpvForm() {
                     required
                     disabled
                     variant="outlined"
-                    className={classes.formContainer}
+                    className={classes.formContainers}
                   >
                     <Typography className={classes.formItemName}>
-                      Will you charge the same fee for all investors?
+                      Will you charge the same fee for all investors?{' '}
                       <HelpIcon className={classes.helpIcon} />
                     </Typography>
                     <Grid container className={classes.buttonContainer}>
