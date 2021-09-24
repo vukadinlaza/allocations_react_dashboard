@@ -67,6 +67,11 @@ const useStyles = makeStyles(() => ({
   linkedin: {
     color: 'blue',
   },
+  linkedinInput: {
+    '&:invalid': {
+      border: 'red solid 2px',
+    },
+  },
   paperTitle: {
     padding: '.5rem',
     paddingLeft: '1rem',
@@ -452,8 +457,11 @@ const ProfileInfo = ({
                     </Grid>
                     <Grid item xs={11}>
                       <TextField
+                        inputProps={{
+                          className: classes.linkedinInput,
+                          pattern: `^https?://((www|\w\w)\.)?linkedin.com/((in/[^/]+/?)|(pub/[^/]+/((\w|\d)+/?){3}))$`,
+                        }}
                         id="linkedin"
-                        /* add the value= */
                         label="Linkedin Profile Link"
                         variant="outlined"
                         fullWidth
