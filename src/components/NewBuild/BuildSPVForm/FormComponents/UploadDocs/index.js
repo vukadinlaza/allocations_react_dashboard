@@ -4,94 +4,18 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
-import buildDoc from '../../../../assets/buildDoc.svg';
-import buildUpload from '../../../../assets/buildUpload.svg';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    '& > *': {
-      // margin: theme.spacing(1),
-      width: '267px',
-      height: '166px',
-      borderWidth: '1px',
-      borderStyle: 'solid',
-      borderColor: '#7070703B',
-    },
-  },
-  uploadContainer: {
-    marginBottom: '16px',
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #00000029',
-    border: '1px solid #7070703B',
-    borderRadius: '15px',
-    width: '100%',
-    padding: '42px',
-  },
-  title: { fontSize: '34px' },
-  subtitle: {
-    textAlign: 'left',
-    font: 'normal normal normal 16px/19px Roboto',
-    letterSpacing: '0px',
-    color: '#186EFF',
-    opacity: '1',
-    marginBottom: '41px',
-  },
-  item: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #0000000D',
-    border: '2px solid #2A2B5480',
-    borderRadius: '10px',
-    opacity: 1,
-    width: '100%',
-    height: '91px',
-    marginBottom: '8px',
-  },
-  itemText: {
-    font: 'normal normal normal 18px/21px Roboto',
-    color: '#2A2B54',
-    letterSpacing: '0px',
-    marginLeft: '17px',
-    opacity: '1',
-  },
-  documentIcon: { marginLeft: '20px' },
-  uploadIcon: {
-    opacity: '0.3',
-    width: '30px',
-    marginLeft: 'auto',
-    marginRight: '37px',
-    color: 'blue',
-  },
-  finishButton: {
-    font: 'normal normal bold 24px/28px Roboto',
-    marginTop: '44px',
-    width: '368px',
-    height: '68px',
-    background: '#39C522 0% 0% no-repeat padding-box',
-    borderRadius: '10px',
-    opacity: '0.5',
-    color: '#FFFFFF',
-    textTransform: 'none',
-    outline: 'none',
-    '&:hover': {
-      backgroundColor: '#fff',
-      color: '#3c52b2',
-    },
-  },
-}));
+import buildDoc from '../../../../../assets/buildDoc.svg';
+import buildUpload from '../../../../../assets/buildUpload.svg';
+import useStyles from '../../../BuildStyles';
 
 export default function UploadDocs({ page, setPage }) {
   const classes = useStyles();
   const [iconsChecked, setIconsChecked] = useState({});
   const history = useHistory();
-  console.log('state', iconsChecked);
   return (
     <>
-      <Paper className={classes.uploadContainer}>
-        <Typography variant="h6" gutterBottom className={classes.title}>
+      <Paper className={classes.paper}>
+        <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
           Upload your documents{' '}
         </Typography>
         <Typography variant="h6" gutterBottom className={classes.subtitle}>
@@ -157,12 +81,7 @@ export default function UploadDocs({ page, setPage }) {
             });
           }}
         >
-          <img
-            src={buildDoc}
-            alt="document icon"
-            className={classes.documentIcon}
-            style={{ opacity: iconsChecked.four ? '1' : '' }}
-          />
+          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Portfolio Company Logo</Typography>
           <img
             src={buildUpload}
@@ -181,13 +100,7 @@ export default function UploadDocs({ page, setPage }) {
           Finish
         </Button>
         <Typography
-          style={{
-            font: 'normal normal normal 24px/28px Roboto',
-            marginTop: '11px',
-            marginLeft: '135px',
-            padding: '5px',
-            cursor: 'pointer',
-          }}
+          className={classes.previousButton}
           onClick={() => {
             setPage(page - 1);
           }}
