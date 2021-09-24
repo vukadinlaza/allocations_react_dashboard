@@ -49,7 +49,7 @@ const mainBoxes = (name) => {
     { value: 'Pre-onboarding', title: 'Status' },
     { value: 'On Time', title: 'Timeline Status' },
     { value: 'International', title: 'Type' },
-    { value: 'Wire Deadline', title: '12/3/2021' },
+    { value: '12/3/2021', title: 'Wire Deadline' },
   ];
   const x = data.map((item) => {
     return (
