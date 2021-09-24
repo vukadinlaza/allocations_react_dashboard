@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { TextField, InputAdornment, Button } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { withStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router';
 import AllocationsTable from '../utils/AllocationsTable';
 import MoreMenu from '../utils/MoreMenu';
 import { openInNewTab } from '../../utils/helpers';
@@ -155,6 +156,7 @@ const getStatusColors = (status) => {
 
 const UserDocuments = ({ classes, data, type }) => {
   const headers = type === 'spvs' ? spvHeaders : fundHeaders;
+  const history = useHistory();
   const [userDocuments, setUserDocuments] = useState(data);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -197,7 +199,12 @@ const UserDocuments = ({ classes, data, type }) => {
         return `${row.multiple}x`;
       case 'manage':
         return (
-          <Button variant="contained" color="primary" style={{ borderRadius: '.5rem' }}>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ borderRadius: '.5rem' }}
+            onClick={() => history.push(`/deal-setup?name=${row.spvName}`)}
+          >
             Manage
           </Button>
         );

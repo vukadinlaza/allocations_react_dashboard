@@ -16,6 +16,7 @@ import {
 } from '@material-ui/core';
 import { useQuery, gql } from '@apollo/client';
 import { AiOutlineCheckCircle, AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
+import { useLocation } from 'react-router';
 import AllocationsRocket from '../DealNextSteps/AllocationsRocket/AllocationsRocket';
 
 const DEAL = gql`
@@ -41,9 +42,9 @@ const DEAL = gql`
     }
   }
 `;
-const mainBoxes = () => {
+const mainBoxes = (name) => {
   const data = [
-    { value: 'Space X', title: 'Name' },
+    { value: name || 'Space X', title: 'Name' },
     { value: 'Kingsley Advani', title: 'Fund Manager' },
     { value: 'Pre-onboarding', title: 'Status' },
     { value: 'On Time', title: 'Timeline Status' },
@@ -579,21 +580,21 @@ const deal = {
     },
   ],
 };
-
 export default () => {
+  const query = new URLSearchParams(useLocation().search);
+
   const [currentPhase, setCurentPhase] = useState(false);
   const [currentTask, setCurrentTask] = useState(false);
-  // const { data } = useQuery(DEAL, { variables: { deal_id: '614c9e8a0c74281a96566bc9' } });
   // if (!data) return null;
   // const { getDealWithTasks: deal } = data;
-  console.log(deal);
+
   return (
     <>
       <Grid sm={12} lg={12} style={{ margin: '1.25rem 0 ', fontWeight: '900' }}>
         <Typography variant="h3">SPVs</Typography>
       </Grid>
       <Grid container spacing={1} style={{ margin: '2rem 0' }}>
-        {mainBoxes()}
+        {mainBoxes(query.get('name'))}
       </Grid>
       <Grid container spacing={1}>
         <Grid item sm={12} lg={4}>
