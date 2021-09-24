@@ -14,28 +14,7 @@ import LevelIcon from '../../../../../assets/buildLevel.svg';
 import NetworkIcon from '../../../../../assets/buildNetwork.svg';
 import PieIcon from '../../../../../assets/buildPie.svg';
 
-// const useStyles = makeStyles((theme) => ({
-//   title: {
-//     fontSize: '34px',
-//   },
-//   inputBox: {
-//     background: '#FFFFFF 0% 0% no-repeat padding-box',
-//     boxShadow: '0px 3px 6px #0000000A',
-//     border: '1px solid #70707040',
-//     borderRadius: '5px',
-//     opacity: '0.3',
-//   },
-//   input: { color: '#2A2B54', opacity: '1' },
-//   rowItem: {
-//     paddingBottom: '16px',
-//     paddingRight: '24px',
-//   },
-//   form: { padding: '42px' },
-//   bottomGrid: { paddingTop: '32px' },
-// }));
-
 export default function TypeSelector({
-  parentClasses,
   assetType,
   setAssetType,
   portCompName,
@@ -128,7 +107,7 @@ export default function TypeSelector({
     );
   }
   return (
-    <Paper className={parentClasses.paper}>
+    <Paper className={classes.paper}>
       <form noValidate autoComplete="off" className={classes.formContainers}>
         <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
           1. Basic Information
@@ -136,14 +115,12 @@ export default function TypeSelector({
         <Typography className={classes.formItemName}>
           Choose your asset type <HelpIcon className={classes.helpIcon} />
         </Typography>
-        <Grid container spacing={1}>
+        <Grid container className={classes.assetChoiceGrid}>
           <FormRow rowItems={row1Items} />
-        </Grid>
-        <Grid container spacing={1}>
-          <FormRow rowItems={row2Items} />
+          <FormRow rowItems={row2Items} />{' '}
         </Grid>
         <Grid container spacing={1} className={classes.inputGridContainer}>
-          <Grid item xs={6}>
+          <Grid className={classes.inputGridItem} item xs={6}>
             <FormControl required disabled variant="outlined" className={classes.formContainers}>
               <Typography className={classes.formItemName}>
                 Portfolio Company Name <HelpIcon className={classes.helpIcon} />
@@ -156,7 +133,7 @@ export default function TypeSelector({
               />
             </FormControl>
           </Grid>
-          <Grid item xs={6}>
+          <Grid className={classes.inputGridItem} item xs={6}>
             <FormControl required disabled variant="outlined" className={classes.formContainers}>
               <Typography className={classes.formItemName}>
                 Manager Name <HelpIcon className={classes.helpIcon} />
@@ -169,7 +146,7 @@ export default function TypeSelector({
               />
             </FormControl>
           </Grid>
-          <Grid item xs={6}>
+          <Grid className={classes.inputGridItem} item xs={6}>
             <FormControl required disabled variant="outlined" className={classes.formContainers}>
               <Typography className={classes.formItemName}>
                 Closing Date <HelpIcon className={classes.helpIcon} />
