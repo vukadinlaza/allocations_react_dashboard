@@ -13,6 +13,7 @@ import HouseIcon from '../../../../../assets/buildHouse.svg';
 import LevelIcon from '../../../../../assets/buildLevel.svg';
 import NetworkIcon from '../../../../../assets/buildNetwork.svg';
 import PieIcon from '../../../../../assets/buildPie.svg';
+import moment from 'moment';
 
 export default function TypeSelector({
   assetType,
@@ -23,7 +24,10 @@ export default function TypeSelector({
   setManagerName,
   closingDate,
   setClosingDate,
+  handleChange,
+  buildData,
 }) {
+  const d = new Date();
   const classes = useStyles();
   const row1Items = [
     {
@@ -99,7 +103,13 @@ export default function TypeSelector({
         {rowItems.map((item) => {
           return (
             <Grid className={classes.assetTypeRowItem}>
-              <TypeItem item={item} assetType={assetType} setAssetType={setAssetType} />
+              <TypeItem
+                item={item}
+                assetType={assetType}
+                setAssetType={setAssetType}
+                handleChange={handleChange}
+                buildData={buildData}
+              />
             </Grid>
           );
         })}
@@ -126,8 +136,9 @@ export default function TypeSelector({
                 Portfolio Company Name <HelpIcon className={classes.helpIcon} />
               </Typography>
               <TextField
-                value={portCompName}
-                onChange={(e) => setPortCompName(e.target.value)}
+                value={buildData.portfolio_company_name}
+                name="portfolio_company_name"
+                onChange={handleChange}
                 className={classes.inputBox}
                 variant="outlined"
               />
@@ -139,8 +150,9 @@ export default function TypeSelector({
                 Manager Name <HelpIcon className={classes.helpIcon} />
               </Typography>
               <TextField
-                value={managerName}
-                onChange={(e) => setManagerName(e.target.value)}
+                value={buildData.manager_name}
+                name="manager_name"
+                onChange={handleChange}
                 className={classes.inputBox}
                 variant="outlined"
               />
@@ -152,8 +164,9 @@ export default function TypeSelector({
                 Closing Date <HelpIcon className={classes.helpIcon} />
               </Typography>
               <TextField
-                value={closingDate}
-                onChange={(e) => setClosingDate(e.target.value)}
+                value={moment(buildData.closing_date).format('YYYY-MM-DD')}
+                name="closing_date"
+                onChange={handleChange}
                 className={classes.inputBox}
                 variant="outlined"
                 type="date"

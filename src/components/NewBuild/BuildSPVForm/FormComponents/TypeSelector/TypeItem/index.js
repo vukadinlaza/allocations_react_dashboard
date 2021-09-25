@@ -43,15 +43,18 @@ import useStyles from '../../../../BuildStyles';
 //     opacity: '1',
 //   },
 // }));
-export default function TypeItem({ item, assetType, setAssetType }) {
+export default function TypeItem({ item, handleChange, buildData }) {
   const classes = useStyles();
 
   return (
-    <div
-      className={`${item.value === assetType ? classes.selected : ''} ${classes.typeItem}`}
-      onClick={() => {
-        setAssetType(item.value);
-      }}
+    <button
+      type="button"
+      name="asset_type"
+      value={item.value}
+      className={`${item.value === buildData.asset_type ? classes.selected : ''} ${
+        classes.typeItem
+      }`}
+      onClick={handleChange}
     >
       <div
         style={{
@@ -68,6 +71,6 @@ export default function TypeItem({ item, assetType, setAssetType }) {
 
       <Typography className={classes.assetItemText}>{item.title}</Typography>
       <Typography className={classes.subText}>{item.description}</Typography>
-    </div>
+    </button>
   );
 }

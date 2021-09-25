@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+// import Select from '@mui/material/Select';
+// import MenuItem from '@mui/material/MenuItem';
 import HelpIcon from '@material-ui/icons/Help';
-
-import { Button, TextField, Paper, Grid, FormControl } from '@material-ui/core';
+import { Button, TextField, Paper, Grid, FormControl, Select, MenuItem } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 // import { makeStyles } from '@material-ui/core/styles';
 import BasicInfo from './FormComponents/TypeSelector/index';
@@ -11,9 +12,54 @@ import useStyles from '../BuildStyles';
 
 export default function NewSpvForm() {
   const classes = useStyles();
-  const [buildData, setBuildData] = useState({});
+  const [buildData, setBuildData] = useState({
+    // -------------------------- in the form
+    asset_type: '',
+    portfolio_company_name: 'test',
+    manager_name: 'John Smith',
+    carry_fee: {
+      type: 'percent',
+      value: '20',
+    },
+    management_fee: {
+      type: 'percent',
+      value: '10',
+    },
+    management_fee_frequency: 'one-time',
+    setup_cost: 20000,
+    offering_type: '506c',
+    allocations_investment_advisor: true,
+    custom_investment_agreement: false,
+    closing_date: Date.now(),
+    // -------------------------- not in the form
+    name: 'Test',
+    slug: 'test',
+
+    // organization_id: ObjectId("5fa4547e0cbec80023baa4b7"),
+    // legal_spv_name: "Atomizer 38",
+    // master_series: "Atomizers",
+
+    // wire_deadline: Date.now(),
+    // sign_deadline: Date.now(),
+
+    // side letters is the 'same for all invs'
+    side_letters: false,
+    // allocations_investment_advisor: true,
+
+    industry: 'Space',
+    angels_deal: true,
+    deal_multiple: false,
+    description: 'some description',
+    memo: 'some memo',
+    // ...payload,
+  });
   const handleChange = ({ target }) => {
-    return setBuildData((prev) => ({
+    if (target.name === 'closing_date') {
+      console.log(target.value);
+      target.value = new Date(target.value);
+      console.log('new ', target.value);
+    }
+    setBuildData((prev) => ({
       ...prev,
       [target.name]: target.value,
     }));
@@ -28,8 +74,8 @@ export default function NewSpvForm() {
   const [closingDate, setClosingDate] = useState('');
 
   // Deal Terms
-  const [managementFee, setManagementFee] = useState('');
-  const [carryFee, setCarryFee] = useState('');
+  const [managementFee, setManagementFee] = useState(10);
+  const [carryFee, setCarryFee] = useState(10);
   const [feeFrequency, setFreeFrequency] = useState('');
   const [sameForAllInv, setSameForAllInv] = useState('');
 
@@ -83,6 +129,8 @@ export default function NewSpvForm() {
       {page === 0 && (
         <>
           <BasicInfo
+            buildData={buildData}
+            handleChange={handleChange}
             parentClasses={classes}
             assetType={assetType}
             setAssetType={setAssetType}
@@ -99,7 +147,12 @@ export default function NewSpvForm() {
                 2. Deal Terms
               </Typography>
               <Grid container spacing={1} className={classes.inputGridContainer}>
-                <Grid className={classes.inputGridItem} item xs={6}>
+                <Grid
+                  className={classes.inputGridItem}
+                  style={{ display: 'flex', flexDirection: 'row' }}
+                  item
+                  xs={6}
+                >
                   <FormControl
                     required
                     disabled
@@ -109,12 +162,26 @@ export default function NewSpvForm() {
                     <Typography className={classes.formItemName}>
                       Choose your management fee <HelpIcon className={classes.helpIcon} />
                     </Typography>
-                    <TextField
-                      value={managementFee}
-                      onChange={(e) => setManagementFee(e.target.value)}
-                      className={classes.inputBox}
-                      variant="outlined"
-                    />
+                    <Grid className={classes.inputBox}>
+                      <Select
+                        // value={managementFee}
+                        // onChange={(e) => setManagementFee(e.target.value)}
+                        // className={classes.inputBox}
+                        style={{ width: '25%' }}
+                        variant="outlined"
+                      >
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                      </Select>
+                      <TextField
+                        value={managementFee}
+                        onChange={(e) => setManagementFee(e.target.value)}
+                        // className={classes.inputBox}
+                        style={{ width: '75%' }}
+                        variant="outlined"
+                      />
+                    </Grid>
                   </FormControl>
                 </Grid>
                 <Grid className={classes.inputGridItem} item xs={6}>
@@ -127,10 +194,28 @@ export default function NewSpvForm() {
                     <Typography className={classes.formItemName}>
                       Choose your carry fee <HelpIcon className={classes.helpIcon} />
                     </Typography>
-                    <TextField
+                    {/* <TextField
                       value={feeFrequency}
                       onChange={(e) => setFreeFrequency(e.target.value)}
                       className={classes.inputBox}
+                      variant="outlined"
+                    /> */}
+                    <Select
+                      // value={managementFee}
+                      // onChange={(e) => setManagementFee(e.target.value)}
+                      // className={classes.inputBox}
+                      style={{ width: '25%' }}
+                      variant="outlined"
+                    >
+                      <MenuItem value={10}>Ten</MenuItem>
+                      <MenuItem value={20}>Twenty</MenuItem>
+                      <MenuItem value={30}>Thirty</MenuItem>
+                    </Select>
+                    <TextField
+                      value={managementFee}
+                      onChange={(e) => setManagementFee(e.target.value)}
+                      // className={classes.inputBox}
+                      style={{ width: '75%' }}
                       variant="outlined"
                     />
                   </FormControl>
