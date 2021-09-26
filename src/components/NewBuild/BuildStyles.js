@@ -219,7 +219,7 @@ const useStyles = makeStyles((theme) => ({
     font: 'normal normal normal 18px/21px Roboto',
     color: '#2A2B54',
     letterSpacing: '0px',
-    marginLeft: '17px',
+    textAlign: 'left',
     opacity: '1',
     [theme.breakpoints.down(phone)]: {
       margin: '0',
