@@ -3,6 +3,7 @@ import HelpIcon from '@material-ui/icons/Help';
 import { TextField, Paper, Grid, FormControl } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 // import { makeStyles } from '@material-ui/core/styles';
+import moment from 'moment';
 import useStyles from '../../../BuildStyles';
 import TypeItem from './TypeItem/index';
 import RocketIcon from '../../../../../assets/buildRocket.svg';
@@ -13,7 +14,6 @@ import HouseIcon from '../../../../../assets/buildHouse.svg';
 import LevelIcon from '../../../../../assets/buildLevel.svg';
 import NetworkIcon from '../../../../../assets/buildNetwork.svg';
 import PieIcon from '../../../../../assets/buildPie.svg';
-import moment from 'moment';
 
 export default function TypeSelector({
   assetType,
@@ -27,7 +27,6 @@ export default function TypeSelector({
   handleChange,
   buildData,
 }) {
-  const d = new Date();
   const classes = useStyles();
   const row1Items = [
     {
@@ -164,7 +163,7 @@ export default function TypeSelector({
                 Closing Date <HelpIcon className={classes.helpIcon} />
               </Typography>
               <TextField
-                value={moment(buildData.closing_date).format('YYYY-MM-DD')}
+                value={buildData.closing_date}
                 name="closing_date"
                 onChange={handleChange}
                 className={classes.inputBox}

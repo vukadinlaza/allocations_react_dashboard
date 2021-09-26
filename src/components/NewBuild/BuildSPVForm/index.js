@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import moment from 'moment';
 // import Select from '@mui/material/Select';
 // import MenuItem from '@mui/material/MenuItem';
 import HelpIcon from '@material-ui/icons/Help';
@@ -30,7 +31,7 @@ export default function NewSpvForm() {
     offering_type: '506c',
     allocations_investment_advisor: true,
     custom_investment_agreement: false,
-    closing_date: Date.now(),
+    closing_date: moment(Date.now()).format('YYYY-MM-DD'),
     // -------------------------- not in the form
     name: 'Test',
     slug: 'test',
@@ -55,9 +56,7 @@ export default function NewSpvForm() {
   });
   const handleChange = ({ target }) => {
     if (target.name === 'closing_date') {
-      console.log(target.value);
-      target.value = new Date(target.value);
-      console.log('new ', target.value);
+      const closingTimeStamp = new Date();
     }
     setBuildData((prev) => ({
       ...prev,
@@ -170,9 +169,9 @@ export default function NewSpvForm() {
                         style={{ width: '25%' }}
                         variant="outlined"
                       >
-                        <MenuItem value={10}>Ten</MenuItem>
+                        {/* <MenuItem value={10}>Ten</MenuItem>
                         <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem> */}
                       </Select>
                       <TextField
                         value={managementFee}
