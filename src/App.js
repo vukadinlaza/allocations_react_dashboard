@@ -62,10 +62,6 @@ import InvestmentPage from './components/DealOneClick/InvestmentPage/InvestmentP
 import BuildSPVForm from './components/NewBuild/BuildSPVForm/index';
 import BuildFundForm from './components/NewBuild/BuildFundForm/index';
 
-import TypeItem from './components/NewBuild/FormComponents/TypeSelector/TypeItem/index';
-import TypeSelector from './components/NewBuild/FormComponents/TypeSelector/index';
-import AgreementSigner from './components/NewBuild/FormComponents/AgreementSigner/index';
-import UploadDocs from './components/NewBuild/FormComponents/UploadDocs/index';
 import Upgrade from './components/upgrade';
 import PaymentForm from './components/billing';
 import WireActivity from './components/WireActivity';

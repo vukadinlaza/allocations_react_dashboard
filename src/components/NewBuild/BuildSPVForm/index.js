@@ -1,93 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { get, pick } from 'lodash';
-import { toast } from 'react-toastify';
 import { useMutation, gql } from '@apollo/client';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CloudDone } from '@material-ui/icons';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import Tooltip from '@material-ui/core/Tooltip';
+import moment from 'moment';
+// import Select from '@mui/material/Select';
+// import MenuItem from '@mui/material/MenuItem';
 import HelpIcon from '@material-ui/icons/Help';
-
-import {
-  Button,
-  TextField,
-  Paper,
-  Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from '@material-ui/core';
-import countries from 'country-region-data';
+import { Button, TextField, Paper, Grid, FormControl, Select, MenuItem } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import { makeStyles } from '@material-ui/core/styles';
-import { SimpleBox } from '../../admin/FundManagerDashboard/widgets';
-import Loader from '../../utils/Loader';
-import { useAuth } from '../../../auth/useAuth';
-import BasicInfo from '../FormComponents/TypeSelector/index';
-import ReviewTermsModal from '../FormComponents/AgreementSigner/index';
-import UploadDocsModal from '../FormComponents/UploadDocs/index';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    '& > *': {
-      // margin: theme.spacing(1),
-      width: '267px',
-      height: '166px',
-      borderWidth: '1px',
-      borderStyle: 'solid',
-      borderColor: '#7070703B',
-    },
-  },
-  paper: {
-    marginBottom: '16px',
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #00000029',
-    border: '1px solid #7070703B',
-    borderRadius: '15px',
-    width: '100%',
-    opacity: 1,
-  },
-  formHeaderContainer: {
-    marginBottom: '16px',
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #00000029',
-    border: '1px solid #7070703B',
-    borderRadius: '15px',
-    width: '100%',
-    opacity: 1,
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  formHeaderText: {
-    padding: '36px 0px 27px 8px',
-    color: '#2A2B54',
-    fontSize: '22px',
-  },
-  continueButton: {
-    font: 'normal normal bold 24px/28px Roboto',
-    marginTop: '44px',
-    width: '368px',
-    height: '68px',
-    background: '#186EFF 0% 0% no-repeat padding-box',
-    borderRadius: '10px',
-    opacity: '0.5',
-    color: '#FFFFFF',
-    textTransform: 'none',
-    outline: 'none',
-  },
-  input: {},
-  inputBox: {
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #0000000A',
-    border: '1px solid #70707040',
-    borderRadius: '5px',
-    opacity: '0.3',
-    padding: '0',
-  },
-}));
+// import { makeStyles } from '@material-ui/core/styles';
+import BasicInfo from './FormComponents/TypeSelector/index';
+import ReviewTermsModal from './FormComponents/AgreementSigner/index';
+import UploadDocsModal from './FormComponents/UploadDocs/index';
+import useStyles from '../BuildStyles';
 
 const CREATE_BUILD = gql`
   mutation createBuild($payload: Object) {
@@ -108,63 +31,77 @@ const CREATE_BUILD = gql`
 
 export default function NewSpvForm() {
   const classes = useStyles();
-
   const [createBuild, { data, loading }] = useMutation(CREATE_BUILD);
-
   // Page
   const [page, setPage] = useState(0);
-
-  // Basic Info
-  const [asset_type, setAssetType] = useState('startup');
-  const [portCompName, setPortCompName] = useState('Space X');
-  const [managerName, setManagerName] = useState('Kingsley Advani');
-  const [closingDate, setClosingDate] = useState('');
-
-  // Deal Terms
-  const [managementFee, setManagementFee] = useState('2%');
-  const [carryFee, setCarryFee] = useState('One Time');
-  const [feeFrequency, setFreeFrequency] = useState('20%');
-  const [sameForAllInv, setSameForAllInv] = useState('Yes');
-
-  // Offering Terms
-  const [allocationsAsAdviser, setAllocationsAsAdviser] = useState('Yes');
-  const [fundTemplateDocument, setFundTemplateDocument] = useState('Allocations Documents');
-  const [offeringType, setOfferingType] = useState('506b');
-
-  // Final
-  const [finalNotes, setFinalNotes] = useState(
-    'Looking forward to running this SPV with Allocations!',
-  );
+  const [buildData, setBuildData] = useState({
+    // -------------------------- in the form
+    asset_type: 'startup',
+    portfolio_company_name: 'test',
+    manager_name: 'John Smith',
+    carry_fee: {
+      type: 'percent',
+      value: '20',
+    },
+    management_fee: {
+      type: 'percent',
+      value: '10',
+    },
+    fund_template_documents: 'Allocations',
+    management_fee_frequency: 'one-time',
+    setup_cost: 20000,
+    offering_type: '506c',
+    allocations_investment_advisor: true,
+    custom_investment_agreement: false,
+    side_letters: false,
+    closing_date: moment(Date.now()).format('YYYY-MM-DD'),
+    // -------------------------- not in the form
+    name: 'Test',
+    slug: 'test',
+  });
 
   const handleSubmit = () => {
     createBuild({
       variables: {
         payload: {
-          asset_type,
-          portCompName,
-          managerName,
-          closingDate,
-          managementFee,
-          carryFee,
-          feeFrequency,
-          sameForAllInv,
-          allocationsAsAdviser,
-          fundTemplateDocument,
-          offeringType,
+          ...buildData,
         },
       },
     });
   };
 
+  const handleChange = ({ target }) => {
+    console.log(target.name, target.value);
+    if (
+      !target?.name?.includes('offering') &&
+      !target?.name?.includes('asset') &&
+      (target?.name?.includes('_type') || target?.name?.includes('_value'))
+    ) {
+      const splitKeyName = target.name.split('_');
+      const keyName = `${splitKeyName[0]}_${splitKeyName[1]}`;
+      setBuildData((prev) => ({
+        ...prev,
+        [keyName]: {
+          ...prev[keyName],
+          [splitKeyName[2] === 'type' ? 'type' : 'value']: target.value,
+        },
+      }));
+      return;
+    }
+    setBuildData((prev) => ({
+      ...prev,
+      [target.name]: target.value,
+    }));
+  };
+
   return (
     <>
-      <Paper className={classes.formHeaderContainer}>
+      <Paper className={classes.buildTabContainer}>
         <Typography
           className={classes.formHeaderText}
           variant="h6"
           gutterBottom
           style={{
-            paddingLeft: '42px',
             opacity: page === 0 ? '1' : '0.5',
           }}
         >
@@ -199,277 +136,299 @@ export default function NewSpvForm() {
       </Paper>
       {page === 0 && (
         <>
-          <BasicInfo
-            parentClasses={classes}
-            asset_type={asset_type}
-            setAssetType={setAssetType}
-            portCompName={portCompName}
-            setPortCompName={setPortCompName}
-            managerName={managerName}
-            setManagerName={setManagerName}
-            closingDate={closingDate}
-            setClosingDate={setClosingDate}
-          />
+          <BasicInfo buildData={buildData} handleChange={handleChange} parentClasses={classes} />
           <Paper className={classes.paper}>
-            <form noValidate autoComplete="off" style={{ padding: '42px' }}>
-              <Typography variant="h6" gutterBottom style={{ fontSize: '34px' }}>
+            <form noValidate autoComplete="off">
+              <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
                 2. Deal Terms
               </Typography>
-              <Grid container spacing={1} style={{ marginTop: '16px' }}>
-                <Grid item>
-                  <Grid item xs={6} style={{ marginRight: '54px' }}>
-                    <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
-                      <Typography
-                        style={{
-                          color: '#2A2B54',
-                          font: 'normal normal bold 17px/20px Roboto',
-                          marginBottom: '20px',
-                        }}
+              <Grid container spacing={1} className={classes.inputGridContainer}>
+                <Grid className={classes.inputGridItem} item xs={6}>
+                  <FormControl required variant="outlined" className={classes.formContainers}>
+                    <Typography className={classes.formItemName}>
+                      Choose your management fee <HelpIcon className={classes.helpIcon} />
+                    </Typography>
+                    <Grid className={classes.inputBox}>
+                      <Select
+                        style={{ width: '10%' }}
+                        variant="outlined"
+                        name="carry_fee_type"
+                        value={buildData.carry_fee.type}
+                        onChange={handleChange}
                       >
-                        Choose your management fee{' '}
-                        <HelpIcon
-                          style={{
-                            marginLeft: '0.2em',
-                            cursor: 'pointer',
-                            color: '#205DF5',
-                            fontSize: '15px',
-                          }}
-                        />
-                      </Typography>
+                        <MenuItem value="percent">%</MenuItem>
+                        <MenuItem value="fixed">$</MenuItem>
+                        <MenuItem value="custom">X</MenuItem>
+                      </Select>
                       <TextField
-                        value={managementFee}
-                        onChange={(e) => setManagementFee(e.target.value)}
-                        style={{ width: '568px', marginBottom: '37px' }}
-                        className={classes.inputBox}
+                        value={buildData.carry_fee.value}
+                        name="carry_fee_value"
+                        onChange={handleChange}
+                        style={{ width: '90%' }}
                         variant="outlined"
                       />
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
-                      <Typography
-                        style={{
-                          color: '#2A2B54',
-                          font: 'normal normal bold 17px/20px Roboto',
-                          marginBottom: '20px',
-                        }}
-                      >
-                        Choose your carry fee{' '}
-                        <HelpIcon
-                          style={{
-                            marginLeft: '0.2em',
-                            cursor: 'pointer',
-                            color: '#205DF5',
-                            fontSize: '15px',
-                          }}
-                        />
-                      </Typography>
-                      <TextField
-                        value={feeFrequency}
-                        onChange={(e) => setFreeFrequency(e.target.value)}
-                        style={{ width: '568px', marginBottom: '37px' }}
-                        className={classes.inputBox}
-                        variant="outlined"
-                      />
-                    </FormControl>
-                  </Grid>
+                    </Grid>
+                  </FormControl>
                 </Grid>
-                <Grid item>
-                  <Grid item xs={6} style={{ marginRight: '54px' }}>
-                    <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
-                      <Typography
-                        style={{
-                          color: '#2A2B54',
-                          font: 'normal normal bold 17px/20px Roboto',
-                          marginBottom: '20px',
-                        }}
+                <Grid className={classes.inputGridItem} item xs={6}>
+                  <FormControl
+                    required
+                    // disabled
+                    variant="outlined"
+                    className={classes.formContainers}
+                  >
+                    <Typography className={classes.formItemName}>
+                      Choose your management fee <HelpIcon className={classes.helpIcon} />
+                    </Typography>
+                    <Grid className={classes.inputBox}>
+                      <Select
+                        style={{ width: '10%' }}
+                        variant="outlined"
+                        name="management_fee_type"
+                        value={buildData.management_fee.type}
+                        onChange={handleChange}
                       >
-                        Choose your fee frequency{' '}
-                        <HelpIcon
-                          style={{
-                            marginLeft: '0.2em',
-                            cursor: 'pointer',
-                            color: '#205DF5',
-                            fontSize: '15px',
-                          }}
-                        />
-                      </Typography>
+                        <MenuItem value="percent">%</MenuItem>
+                        <MenuItem value="fixed">$</MenuItem>
+                        <MenuItem value="custom">X</MenuItem>
+                      </Select>
                       <TextField
-                        value={carryFee}
-                        onChange={(e) => setCarryFee(e.target.value)}
-                        style={{ width: '568px', marginBottom: '37px' }}
-                        className={classes.inputBox}
+                        value={buildData.management_fee.value}
+                        name="management_fee_value"
+                        onChange={handleChange}
+                        style={{ width: '90%' }}
                         variant="outlined"
                       />
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <FormControl required disabled variant="outlined" style={{ width: '400px' }}>
-                      <Typography
-                        style={{
-                          color: '#2A2B54',
-                          font: 'normal normal bold 17px/20px Roboto',
-                          marginBottom: '20px',
-                        }}
-                      >
-                        Will you charge the same fee for all investors?{' '}
-                        <HelpIcon
-                          style={{
-                            marginLeft: '0.2em',
-                            cursor: 'pointer',
-                            color: '#205DF5',
-                            fontSize: '15px',
+                    </Grid>
+                  </FormControl>
+                </Grid>
+                <Grid className={classes.inputGridItem} item xs={6}>
+                  <FormControl required variant="outlined" className={classes.formContainers}>
+                    <Typography className={classes.formItemName}>
+                      Choose your fee frequency <HelpIcon className={classes.helpIcon} />
+                    </Typography>
+                    <Grid container className={classes.buttonContainer}>
+                      <Grid>
+                        <Button
+                          name="management_fee_frequency"
+                          value="one-time"
+                          className={
+                            buildData.management_fee_frequency === 'one-time'
+                              ? classes.selectedInputButton
+                              : classes.inputButton
+                          }
+                          onClick={(e) => {
+                            const target = {
+                              name: e.currentTarget.name,
+                              value: e.currentTarget.value,
+                            };
+                            e.target = target;
+                            handleChange(e);
                           }}
-                        />
-                      </Typography>
-                      <TextField
-                        value={sameForAllInv}
-                        onChange={(e) => setSameForAllInv(e.target.value)}
-                        style={{ width: '568px' }}
-                        className={classes.inputBox}
-                        variant="outlined"
-                      />
-                    </FormControl>
-                  </Grid>
+                        >
+                          One-Time
+                        </Button>
+                      </Grid>
+                      <Grid>
+                        <Button
+                          value="annual"
+                          name="management_fee_frequency"
+                          className={
+                            buildData.management_fee_frequency === 'annual'
+                              ? classes.selectedInputButton
+                              : classes.inputButton
+                          }
+                          onClick={(e) => {
+                            const target = {
+                              name: e.currentTarget.name,
+                              value: e.currentTarget.value,
+                            };
+                            e.target = target;
+                            handleChange(e);
+                          }}
+                        >
+                          Annual
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </FormControl>
+                </Grid>
+                <Grid className={classes.inputGridItem} item xs={6}>
+                  <FormControl required variant="outlined" className={classes.formContainers}>
+                    <Typography className={classes.formItemName}>
+                      Will you charge the same fee for all investors?{' '}
+                      <HelpIcon className={classes.helpIcon} />
+                    </Typography>
+                    <Grid container className={classes.buttonContainer}>
+                      <Grid>
+                        <Button
+                          name="side_letters"
+                          value={buildData.side_letters}
+                          className={
+                            buildData.side_letters
+                              ? classes.selectedInputButton
+                              : classes.inputButton
+                          }
+                          onClick={(e) => {
+                            const target = {
+                              name: e.currentTarget.name,
+                              value: true,
+                            };
+                            e.target = target;
+                            handleChange(e);
+                          }}
+                        >
+                          Yes
+                        </Button>
+                      </Grid>
+                      <Grid>
+                        <Button
+                          value={buildData.side_letters}
+                          name="side_letters"
+                          className={
+                            !buildData.side_letters
+                              ? classes.selectedInputButton
+                              : classes.inputButton
+                          }
+                          onClick={(e) => {
+                            const target = {
+                              name: e.currentTarget.name,
+                              value: false,
+                            };
+                            e.target = target;
+                            handleChange(e);
+                          }}
+                        >
+                          No
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </FormControl>
                 </Grid>
               </Grid>
             </form>
           </Paper>
           <Paper className={classes.paper}>
-            <form noValidate autoComplete="off" style={{ padding: '42px' }}>
-              <Typography variant="h6" gutterBottom style={{ fontSize: '34px' }}>
+            <form noValidate autoComplete="off">
+              <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
                 3. Offering Terms
               </Typography>
-              <Grid container spacing={1} style={{ marginTop: '16px' }}>
-                <Grid item>
-                  <Grid item xs={6} style={{ marginRight: '54px' }}>
-                    <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
-                      <Typography
-                        style={{
-                          color: '#2A2B54',
-                          font: 'normal normal bold 17px/20px Roboto',
-                          marginBottom: '20px',
-                        }}
-                      >
-                        Choose Allocations as the adviser?{' '}
-                        <HelpIcon
-                          style={{
-                            marginLeft: '0.2em',
-                            cursor: 'pointer',
-                            color: '#205DF5',
-                            fontSize: '15px',
+              <Grid container spacing={1} className={classes.inputGridContainer}>
+                <Grid className={classes.inputGridItem} item xs={6}>
+                  <FormControl required variant="outlined" className={classes.formContainers}>
+                    <Typography className={classes.formItemName}>
+                      Choose Allocations as the adviser? <HelpIcon className={classes.helpIcon} />
+                    </Typography>
+                    <Grid container className={classes.buttonContainer}>
+                      <Grid>
+                        <Button
+                          name="allocations_investment_advisor"
+                          value={buildData.allocations_investment_advisor}
+                          className={
+                            buildData.allocations_investment_advisor
+                              ? classes.selectedInputButton
+                              : classes.inputButton
+                          }
+                          onClick={(e) => {
+                            const target = {
+                              name: e.currentTarget.name,
+                              value: true,
+                            };
+                            e.target = target;
+                            handleChange(e);
                           }}
-                        />
-                      </Typography>
-                      <TextField
-                        value={allocationsAsAdviser}
-                        onChange={(e) => setAllocationsAsAdviser(e.target.value)}
-                        style={{ width: '568px', marginBottom: '37px' }}
-                        className={classes.inputBox}
-                        variant="outlined"
-                      />
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
-                      <Typography
-                        style={{
-                          color: '#2A2B54',
-                          font: 'normal normal bold 17px/20px Roboto',
-                          marginBottom: '20px',
-                        }}
-                      >
-                        What is your offering type?{' '}
-                        <HelpIcon
-                          style={{
-                            marginLeft: '0.2em',
-                            cursor: 'pointer',
-                            color: '#205DF5',
-                            fontSize: '15px',
+                        >
+                          Yes
+                        </Button>
+                      </Grid>
+                      <Grid>
+                        <Button
+                          value={!buildData.allocations_investment_advisor}
+                          name="allocations_investment_advisor"
+                          className={
+                            !buildData.allocations_investment_advisor
+                              ? classes.selectedInputButton
+                              : classes.inputButton
+                          }
+                          onClick={(e) => {
+                            const target = {
+                              name: e.currentTarget.name,
+                              value: false,
+                            };
+                            e.target = target;
+                            handleChange(e);
                           }}
-                        />
-                      </Typography>
-                      <TextField
-                        value={offeringType}
-                        onChange={(e) => setOfferingType(e.target.value)}
-                        style={{ width: '568px', marginBottom: '37px' }}
-                        className={classes.inputBox}
-                        variant="outlined"
-                      />
-                    </FormControl>
-                  </Grid>
+                          // onClick={(e) => console.log(e.currentTarget.name, e.currentTarget.value)}
+                        >
+                          No
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </FormControl>
                 </Grid>
-                <Grid item>
-                  <Grid item xs={6} style={{ marginRight: '54px' }}>
-                    <FormControl required disabled variant="outlined" style={{ width: '600px' }}>
-                      <Typography
-                        style={{
-                          color: '#2A2B54',
-                          font: 'normal normal bold 17px/20px Roboto',
-                          marginBottom: '20px',
-                        }}
-                      >
-                        Who's fund template documents would you like to use?{' '}
-                        <HelpIcon
-                          style={{
-                            marginLeft: '0.2em',
-                            cursor: 'pointer',
-                            color: '#205DF5',
-                            fontSize: '15px',
-                          }}
-                        />
-                      </Typography>
-                      <TextField
-                        value={fundTemplateDocument}
-                        onChange={(e) => setFundTemplateDocument(e.target.value)}
-                        style={{ width: '568px', marginBottom: '37px' }}
-                        className={classes.inputBox}
-                        variant="outlined"
-                      />
-                    </FormControl>
-                  </Grid>
+                <Grid className={classes.inputGridItem} item xs={6}>
+                  <FormControl required variant="outlined" className={classes.formContainers}>
+                    <Typography className={classes.formItemName}>
+                      What is your offering type? <HelpIcon className={classes.helpIcon} />
+                    </Typography>
+                    <Select
+                      variant="outlined"
+                      name="offering_type"
+                      value={buildData.offering_type}
+                      onChange={handleChange}
+                    >
+                      {' '}
+                      <MenuItem value="506b">506b</MenuItem>
+                      <MenuItem value="506c">506c</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid className={classes.inputGridItem} item xs={6}>
+                  <FormControl required variant="outlined" className={classes.formContainers}>
+                    <Typography className={classes.formItemName}>
+                      Who's fund template documents would you like to use?
+                      <HelpIcon className={classes.helpIcon} />
+                    </Typography>
+                    <Select
+                      variant="outlined"
+                      name="fund_template_documents"
+                      value={buildData.fund_template_documents}
+                      onChange={handleChange}
+                    >
+                      <MenuItem value="Allocations">Allocations</MenuItem>
+                      <MenuItem value="Not Allocations">Not Allocations</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Grid>
               </Grid>
             </form>
           </Paper>
           <Paper className={classes.paper}>
-            <form noValidate autoComplete="off" style={{ padding: '42px' }}>
-              <Typography variant="h6" gutterBottom style={{ fontSize: '34px' }}>
+            <form noValidate autoComplete="off">
+              <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
                 4. Final
               </Typography>
-              <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
-                <Typography style={{ color: '#2A2B54', fontWeight: 'bold', marginBottom: '9px' }}>
-                  Any notes we should know about?{' '}
-                  <HelpIcon
-                    style={{
-                      marginLeft: '0.2em',
-                      cursor: 'pointer',
-                      color: '#205DF5',
-                      fontSize: '15px',
-                    }}
-                  />
+              <FormControl required disabled variant="outlined" className={classes.formContainers}>
+                <Typography className={classes.formItemName}>
+                  Any notes we should know about? <HelpIcon className={classes.helpIcon} />
                 </Typography>
                 <TextField
-                  multiline="true"
+                  multiline
                   variant="outlined"
-                  value={finalNotes}
-                  onChange={(e) => setFinalNotes(e.target.value)}
+                  name="memo"
+                  value={buildData.memo}
+                  onChange={handleChange}
                   inputProps={{
-                    style: {
-                      height: '167px',
-                      background: '#FFFFFF 0% 0% no-repeat padding-box',
-                      boxShadow: '0px 3px 6px #0000000A',
-                      border: '1px solid #70707040',
-                      borderRadius: '5px',
-                    },
+                    className: classes.finalInput,
                   }}
-                  className={classes.inputBox}
+                  className={classes.finalInputBox}
                 />
                 <Button
                   className={classes.continueButton}
                   onClick={() => {
                     setPage(page + 1);
                     handleSubmit();
+                    console.log(buildData);
                   }}
                 >
                   Continue

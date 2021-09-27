@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import HelpIcon from '@material-ui/icons/Help';
-import { Button, TextField, Paper, Grid, FormControl } from '@material-ui/core';
+import { TextField, Paper, Grid, FormControl } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 // import { makeStyles } from '@material-ui/core/styles';
 import useStyles from '../../../BuildStyles';
@@ -42,6 +42,40 @@ export default function TypeSelector({ assetType, handleChange, buildData }) {
       width: '36px',
     },
     {
+      title: 'SPV into a Fund',
+      value: 'spvToFund',
+      description: 'Raise money to invest into a fund',
+      icon: BankIcon,
+      height: '30px',
+      width: '30px',
+    },
+  ];
+  const row2Items = [
+    {
+      title: 'Secondary',
+      value: 'secondary',
+      description: 'Raise money to invest in a secondary of a private company',
+      icon: DistributeIcon,
+      height: '35px',
+      width: '28px',
+    },
+    {
+      title: 'SPV into an SPV',
+      value: 'spvToSpv',
+      description: 'Raise money to invest in another SPV',
+      icon: NetworkIcon,
+      height: '32px',
+      width: '20px',
+    },
+    {
+      title: 'Management Co.',
+      value: 'managementStake',
+      description: `Sell a stake in your fund's management company's future carry`,
+      icon: PieIcon,
+      height: '30px',
+      width: '30px',
+    },
+    {
       title: 'Custom',
       value: 'custom',
       description: 'Raise money for X',
@@ -79,30 +113,17 @@ export default function TypeSelector({ assetType, handleChange, buildData }) {
         </Typography>
         <Grid container className={classes.assetChoiceGrid}>
           <FormRow rowItems={row1Items} />
+          <FormRow rowItems={row2Items} />{' '}
         </Grid>
         <Grid container spacing={1} className={classes.inputGridContainer}>
           <Grid className={classes.inputGridItem} item xs={6}>
             <FormControl required disabled variant="outlined" className={classes.formContainers}>
               <Typography className={classes.formItemName}>
-                Fund Name <HelpIcon className={classes.helpIcon} />
+                Portfolio Company Name <HelpIcon className={classes.helpIcon} />
               </Typography>
               <TextField
-                value={buildData.fund_name}
-                name="fund_name"
-                onChange={handleChange}
-                className={classes.inputBox}
-                variant="outlined"
-              />
-            </FormControl>
-          </Grid>
-          <Grid className={classes.inputGridItem} item xs={6}>
-            <FormControl required disabled variant="outlined" className={classes.formContainers}>
-              <Typography className={classes.formItemName}>
-                Number Of Investments <HelpIcon className={classes.helpIcon} />
-              </Typography>
-              <TextField
-                value={buildData.number_of_investments}
-                name="number_of_investments"
+                value={buildData.portfolio_company_name}
+                name="portfolio_company_name"
                 onChange={handleChange}
                 className={classes.inputBox}
                 variant="outlined"
@@ -135,69 +156,6 @@ export default function TypeSelector({ assetType, handleChange, buildData }) {
                 className={classes.inputBox}
                 variant="outlined"
                 type="date"
-              />
-            </FormControl>
-          </Grid>
-          <Grid className={classes.inputGridItem} item xs={6}>
-            <FormControl required variant="outlined" className={classes.formContainers}>
-              <Typography className={classes.formItemName}>
-                Do you need a GP Entity?
-                <HelpIcon className={classes.helpIcon} />
-              </Typography>
-              <Grid container className={classes.buttonContainer}>
-                <Grid>
-                  <Button
-                    name="gp_entity_need"
-                    value={buildData.gp_entity_need}
-                    className={
-                      buildData.gp_entity_need ? classes.selectedInputButton : classes.inputButton
-                    }
-                    onClick={(e) => {
-                      const target = {
-                        name: e.currentTarget.name,
-                        value: true,
-                      };
-                      e.target = target;
-                      handleChange(e);
-                    }}
-                  >
-                    Yes
-                  </Button>
-                </Grid>
-                <Grid>
-                  <Button
-                    value={!buildData.gp_entity_need}
-                    name="gp_entity_need"
-                    className={
-                      !buildData.gp_entity_need ? classes.selectedInputButton : classes.inputButton
-                    }
-                    onClick={(e) => {
-                      const target = {
-                        name: e.currentTarget.name,
-                        value: false,
-                      };
-                      e.target = target;
-                      handleChange(e);
-                    }}
-                    // onClick={(e) => console.log(e.currentTarget.name, e.currentTarget.value)}
-                  >
-                    No
-                  </Button>
-                </Grid>
-              </Grid>
-            </FormControl>
-          </Grid>
-          <Grid className={classes.inputGridItem} item xs={6}>
-            <FormControl required disabled variant="outlined" className={classes.formContainers}>
-              <Typography className={classes.formItemName}>
-                GP Entity Name <HelpIcon className={classes.helpIcon} />
-              </Typography>
-              <TextField
-                value={buildData.gp_entity_name}
-                name="gp_entity_name"
-                onChange={handleChange}
-                className={classes.inputBox}
-                variant="outlined"
               />
             </FormControl>
           </Grid>

@@ -10,14 +10,10 @@ import CheckCircle from '../../../../../assets/check_circle_black_24dp.svg';
 
 import useStyles from '../../../BuildStyles';
 
-export default function UploadDocs({ page, setPage }) {
+export default function UploadDocs({ page, setPage, deal }) {
+  console.log('DEAL', deal);
   const classes = useStyles();
-  const [iconsChecked, setIconsChecked] = useState({
-    one: true,
-    two: true,
-    three: true,
-    four: true,
-  });
+  const [iconsChecked, setIconsChecked] = useState({});
   const history = useHistory();
   return (
     <>
@@ -137,7 +133,7 @@ export default function UploadDocs({ page, setPage }) {
           className={classes.finishButton}
           onClick={() => {
             toast.success('Success! Your submission was submitted.');
-            history.push('/');
+            if (deal.metadata) history.push(`/deal-setup?id=${deal.metadata._id}`);
           }}
         >
           Finish

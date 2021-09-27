@@ -3,10 +3,12 @@ import { useMutation, useQuery, gql } from '@apollo/client';
 import { Button, Paper } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+// eslint-disable-next-line import/no-useless-path-segments
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
-import buildDoc from '../../../../assets/buildDoc.svg';
-import buildUpload from '../../../../assets/buildUpload.svg';
+import buildDoc from '../../../../../assets/buildDoc.svg';
+// eslint-disable-next-line import/no-useless-path-segments
+import buildUpload from '../../../../../assets/buildUpload.svg';
 
 const useStyles = makeStyles((theme) => ({
   root: {

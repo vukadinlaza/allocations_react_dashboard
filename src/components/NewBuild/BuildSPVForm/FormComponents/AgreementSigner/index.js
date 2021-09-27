@@ -8,7 +8,7 @@ import useStyles from '../../../BuildStyles';
 
 export default function SignDocsForm({ page, setPage }) {
   const classes = useStyles();
-  const [iconsChecked, setIconsChecked] = useState({ one: true, two: true });
+  const [iconsChecked, setIconsChecked] = useState({});
   return (
     <>
       <Paper className={classes.paper}>

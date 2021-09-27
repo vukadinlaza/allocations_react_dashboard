@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, TextField, Paper, Grid } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import RocketIcon from '../../../../../assets/buildRocket.svg';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -28,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   typeItem: {
     padding: '12px',
-    width: '100%',
+    width: '267px',
     height: '166px',
     minHeight: '166px',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
