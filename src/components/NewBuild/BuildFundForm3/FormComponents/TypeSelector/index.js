@@ -2,39 +2,12 @@ import React, { useEffect, useState } from 'react';
 import HelpIcon from '@material-ui/icons/Help';
 import { Button, TextField, Paper, Grid, FormControl } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import TypeItem from './TypeItem/index';
 import RocketIcon from '../../../../../assets/buildRocket.svg';
 import CryptoIcon from '../../../../../assets/buildCrypto.svg';
 import HouseIcon from '../../../../../assets/buildHouse.svg';
 import LevelIcon from '../../../../../assets/buildLevel.svg';
-
-const useStyles = makeStyles((theme) => ({
-  title: {
-    fontSize: '34px',
-  },
-  inputBox: {
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #0000000A',
-    border: '1px solid #70707040',
-    borderRadius: '5px',
-    opacity: '0.3',
-  },
-  input: { color: '#2A2B54', opacity: '1' },
-  rowItem: {
-    paddingBottom: '16px',
-    paddingRight: '24px',
-  },
-  inputName: {
-    color: '#2A2B54',
-    fontWeight: 'bold',
-    fontSize: '18px',
-    marginBottom: '16px',
-  },
-  helpIcon: { marginLeft: '0.2em', cursor: 'pointer', color: '#205DF5', fontSize: '15px' },
-  form: { padding: '42px' },
-  bottomGrid: { paddingTop: '32px' },
-}));
+import useStyles from '../../../BuildStyles';
 
 export default function TypeSelector({
   parentClasses,
@@ -88,8 +61,13 @@ export default function TypeSelector({
       <>
         {rowItems.map((item) => {
           return (
-            <Grid className={classes.rowItem}>
-              <TypeItem item={item} assetType={assetType} setAssetType={setAssetType} />
+            <Grid className={classes.assetTypeRowItem}>
+              <TypeItem
+                item={item}
+                assetType={assetType}
+                // handleChange={handleChange}
+                // buildData={buildData}
+              />
             </Grid>
           );
         })}

@@ -16,7 +16,10 @@ export default function NewSpvForm() {
   const [buildData, setBuildData] = useState({
     // -------------------------- in the form
     asset_type: '',
-    portfolio_company_name: 'test',
+    fund_name: 'test',
+    number_of_investments: 0,
+    gp_entity_need: false,
+    gp_entity_name: 'this is a test gp entity',
     manager_name: 'John Smith',
     carry_fee: {
       type: 'percent',
