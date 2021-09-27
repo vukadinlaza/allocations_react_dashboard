@@ -59,7 +59,7 @@ import InvestmentPage from './components/DealOneClick/InvestmentPage/InvestmentP
 
 // test
 import BuildSPVForm from './components/NewBuild/BuildSPVForm/index';
-import BuildFundForm from './components/NewBuild/BuildFundForm2/index';
+import BuildFundForm from './components/NewBuild/BuildFundForm/index';
 
 import Upgrade from './components/upgrade';
 import PaymentForm from './components/billing';
