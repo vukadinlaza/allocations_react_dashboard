@@ -187,7 +187,7 @@ export default function UploadDocs({ page, setPage, deal = {} }) {
           className={classes.finishButton}
           onClick={() => {
             toast.success('Success! Your submission was submitted.');
-            history.push('/deal-setup');
+            if (deal.metadata) history.push(`/deal-setup?id=${deal.metadata._id}`);
           }}
         >
           Finish

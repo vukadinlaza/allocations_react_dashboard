@@ -93,6 +93,7 @@ const CREATE_BUILD = gql`
   mutation createBuild($payload: Object) {
     createBuild(payload: $payload) {
       _id
+      metadata
       phases {
         name
         tasks {
