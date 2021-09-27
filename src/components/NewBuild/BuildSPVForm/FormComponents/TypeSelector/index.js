@@ -3,7 +3,6 @@ import HelpIcon from '@material-ui/icons/Help';
 import { TextField, Paper, Grid, FormControl } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 // import { makeStyles } from '@material-ui/core/styles';
-import moment from 'moment';
 import useStyles from '../../../BuildStyles';
 import TypeItem from './TypeItem/index';
 import RocketIcon from '../../../../../assets/buildRocket.svg';
@@ -15,18 +14,7 @@ import LevelIcon from '../../../../../assets/buildLevel.svg';
 import NetworkIcon from '../../../../../assets/buildNetwork.svg';
 import PieIcon from '../../../../../assets/buildPie.svg';
 
-export default function TypeSelector({
-  assetType,
-  setAssetType,
-  portCompName,
-  setPortCompName,
-  managerName,
-  setManagerName,
-  closingDate,
-  setClosingDate,
-  handleChange,
-  buildData,
-}) {
+export default function TypeSelector({ assetType, handleChange, buildData }) {
   const classes = useStyles();
   const row1Items = [
     {
@@ -105,7 +93,6 @@ export default function TypeSelector({
               <TypeItem
                 item={item}
                 assetType={assetType}
-                setAssetType={setAssetType}
                 handleChange={handleChange}
                 buildData={buildData}
               />

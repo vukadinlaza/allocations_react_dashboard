@@ -170,7 +170,7 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid #70707040',
     borderRadius: '5px',
     padding: '0',
-    marginBottom: '37px',
+    // marginBottom: '37px',
     maxWidth: '568px',
     width: '100%',
   },
@@ -179,6 +179,20 @@ const useStyles = makeStyles((theme) => ({
     height: '58px',
     background: '#FFFFFF26 0% 0% no-repeat padding-box',
     border: '2px solid #70707080',
+    borderRadius: '5px',
+    marginRight: '10px',
+    opacity: '0.5',
+    outline: 'none',
+    [theme.breakpoints.down(phone)]: {
+      width: '130px',
+    },
+  },
+
+  selectedInputButton: {
+    width: '180px',
+    height: '58px',
+    background: '#FFFFFF26 0% 0% no-repeat padding-box',
+    border: '2px solid red',
     borderRadius: '5px',
     marginRight: '10px',
     opacity: '0.5',
@@ -193,6 +207,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   inputGridItem: {
+    marginBottom: '37px',
     [theme.breakpoints.down(phone)]: {
       maxWidth: '100%',
     },
@@ -256,6 +271,9 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer',
     [theme.breakpoints.down(phone)]: {
       width: '311px',
+    },
+    '& *': {
+      pointerEvents: 'none',
     },
   },
   subText: {
