@@ -87,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignDocsForm({ page, setPage }) {
   const classes = useStyles();
-  const [iconsChecked, setIconsChecked] = useState({});
+  const [iconsChecked, setIconsChecked] = useState({ one: true, two: true });
   return (
     <>
       <Paper className={classes.uploadContainer}>

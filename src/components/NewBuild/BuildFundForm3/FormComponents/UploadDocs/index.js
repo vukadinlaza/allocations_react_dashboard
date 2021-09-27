@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useMutation, useQuery, gql } from '@apollo/client';
 import { Button, Paper } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -85,11 +86,94 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function UploadDocs({ page, setPage }) {
+const ADD_DOC = gql`
+  mutation AddDealDoc($doc: Upload!, $deal_id: String, $task_id: String) {
+    addDealDoc(doc: $doc, deal_id: $deal_id, task_id: $task_id) {
+      _id
+    }
+  }
+`;
+
+export default function UploadDocs({ page, setPage, deal = {} }) {
   const classes = useStyles();
-  const [iconsChecked, setIconsChecked] = useState({});
+  const [addDoc, { data, loading }] = useMutation(ADD_DOC);
+
+  console.log('DEAL', deal);
+
+  const [iconsChecked, setIconsChecked] = useState({
+    one: true,
+    two: true,
+    three: true,
+    four: true,
+  });
   const history = useHistory();
-  console.log('state', iconsChecked);
+
+  const fakeTasks = [
+    {
+      _id: '614d1c2cef3a7370bbb96846',
+      title: 'Upload Company Deck',
+      complete: true,
+      __typename: 'Task',
+    },
+    {
+      _id: '614d1c2cef3a7370bbb96847',
+      title: 'Upload Company Logo',
+      complete: true,
+      __typename: 'Task',
+    },
+    {
+      _id: '614d1c2cef3a7370bbb96848',
+      title: 'Upload ID',
+      complete: true,
+      __typename: 'Task',
+    },
+    {
+      _id: '614d1c2cef3a7370bbb96849',
+      title: 'Upload Term Sheet',
+      complete: true,
+      __typename: 'Task',
+    },
+    {
+      _id: '614d1c2cef3a7370bbb9684a',
+      title: 'Upload Memorandum of Understanding',
+      complete: true,
+      __typename: 'Task',
+    },
+    {
+      _id: '614d1c2cef3a7370bbb9684b',
+      title: 'Upload Service Agreement',
+      complete: true,
+      __typename: 'Task',
+    },
+    {
+      _id: '614d1c2cef3a7370bbb9684c',
+      title: 'Review Documents',
+      complete: true,
+      __typename: 'Task',
+    },
+  ];
+
+  const documentPaperTasks = (deal?.phases?.[0].tasks || fakeTasks).map((task) => {
+    return (
+      <Paper
+        className={classes.item}
+        onClick={() => {
+          setIconsChecked((prev) => {
+            return { ...prev, one: true };
+          });
+        }}
+      >
+        <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
+        <Typography className={classes.itemText}>{task.title}</Typography>
+        <img
+          src={buildUpload}
+          className={classes.uploadIcon}
+          style={{ opacity: task.complete ? '1' : '' }}
+          alt="upload button"
+        />
+      </Paper>
+    );
+  });
   return (
     <>
       <Paper className={classes.uploadContainer}>
@@ -100,84 +184,12 @@ export default function UploadDocs({ page, setPage }) {
           Please upload the appropriate documents so we have them on file for you. When uploading
           multiple files, please compress them into one zip folder.
         </Typography>
-        <Paper
-          className={classes.item}
-          onClick={() => {
-            setIconsChecked((prev) => {
-              return { ...prev, one: true };
-            });
-          }}
-        >
-          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
-          <Typography className={classes.itemText}>Portfolio Company Term Sheet</Typography>
-          <img
-            src={buildUpload}
-            className={classes.uploadIcon}
-            style={{ opacity: iconsChecked.one ? '1' : '' }}
-            alt="upload button"
-          />
-        </Paper>
-        <Paper
-          className={classes.item}
-          onClick={() => {
-            setIconsChecked((prev) => {
-              return { ...prev, two: true };
-            });
-          }}
-        >
-          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
-          <Typography className={classes.itemText}>Pitch Deck</Typography>
-          <img
-            src={buildUpload}
-            className={classes.uploadIcon}
-            style={{ opacity: iconsChecked.two ? '1' : '' }}
-            alt="upload button"
-          />
-        </Paper>
-        <Paper
-          className={classes.item}
-          onClick={() => {
-            setIconsChecked((prev) => {
-              return { ...prev, three: true };
-            });
-          }}
-        >
-          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
-          <Typography className={classes.itemText}>Driver's License/Passport</Typography>
-          <img
-            src={buildUpload}
-            className={classes.uploadIcon}
-            style={{ opacity: iconsChecked.three ? '1' : '' }}
-            alt="upload button"
-          />
-        </Paper>
-        <Paper
-          className={classes.item}
-          onClick={() => {
-            setIconsChecked((prev) => {
-              return { ...prev, four: true };
-            });
-          }}
-        >
-          <img
-            src={buildDoc}
-            alt="document icon"
-            className={classes.documentIcon}
-            style={{ opacity: iconsChecked.four ? '1' : '' }}
-          />
-          <Typography className={classes.itemText}>Portfolio Company Logo</Typography>
-          <img
-            src={buildUpload}
-            className={classes.uploadIcon}
-            style={{ opacity: iconsChecked.four ? '1' : '' }}
-            alt="upload button"
-          />
-        </Paper>
+        {documentPaperTasks}
         <Button
           className={classes.finishButton}
           onClick={() => {
             toast.success('Success! Your submission was submitted.');
-            history.push('/');
+            if (deal.metadata) history.push(`/deal-setup?id=${deal.metadata._id}`);
           }}
         >
           Finish

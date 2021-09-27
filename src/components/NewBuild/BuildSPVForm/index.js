@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useMutation, gql } from '@apollo/client';
 import moment from 'moment';
 // import Select from '@mui/material/Select';
 // import MenuItem from '@mui/material/MenuItem';
@@ -11,11 +12,31 @@ import ReviewTermsModal from './FormComponents/AgreementSigner/index';
 import UploadDocsModal from './FormComponents/UploadDocs/index';
 import useStyles from '../BuildStyles';
 
+const CREATE_BUILD = gql`
+  mutation createBuild($payload: Object) {
+    createBuild(payload: $payload) {
+      _id
+      metadata
+      phases {
+        name
+        tasks {
+          _id
+          title
+          complete
+        }
+      }
+    }
+  }
+`;
+
 export default function NewSpvForm() {
   const classes = useStyles();
+  const [createBuild, { data, loading }] = useMutation(CREATE_BUILD);
+  // Page
+  const [page, setPage] = useState(0);
   const [buildData, setBuildData] = useState({
     // -------------------------- in the form
-    asset_type: '',
+    asset_type: 'startup',
     portfolio_company_name: 'test',
     manager_name: 'John Smith',
     carry_fee: {
@@ -37,21 +58,18 @@ export default function NewSpvForm() {
     // -------------------------- not in the form
     name: 'Test',
     slug: 'test',
-
-    organization_id: "ObjectId('5fa4547e0cbec80023baa4b7')",
-    legal_spv_name: 'Atomizer 38',
-    master_series: 'Atomizers',
-
-    wire_deadline: Date.now(),
-    sign_deadline: Date.now(),
-
-    industry: 'Space',
-    angels_deal: true,
-    deal_multiple: false,
-    description: 'some description',
-    memo: 'some memo',
-    // ...payload,
   });
+
+  const handleSubmit = () => {
+    createBuild({
+      variables: {
+        payload: {
+          ...buildData,
+        },
+      },
+    });
+  };
+
   const handleChange = ({ target }) => {
     console.log(target.name, target.value);
     if (
@@ -75,8 +93,6 @@ export default function NewSpvForm() {
       [target.name]: target.value,
     }));
   };
-  // Page
-  const [page, setPage] = useState(0);
 
   return (
     <>
@@ -411,6 +427,7 @@ export default function NewSpvForm() {
                   className={classes.continueButton}
                   onClick={() => {
                     setPage(page + 1);
+                    handleSubmit();
                     console.log(buildData);
                   }}
                 >
@@ -428,7 +445,7 @@ export default function NewSpvForm() {
       )}
       {page === 2 && (
         <>
-          <UploadDocsModal page={page} setPage={setPage} />
+          <UploadDocsModal page={page} setPage={setPage} deal={data?.createBuild} />
         </>
       )}
     </>

@@ -101,9 +101,9 @@ function DealNextSteps() {
 
   const { data: investmentData } = useQuery(GET_INVESTMENT, {
     variables: { _id: params?.investmentId },
-    onError: () => {
-      if (!state?.investorFormData) return history.push(path);
-    },
+    // onError: () => {
+    //   if (!state?.investorFormData) return history.push(path);
+    // },
   });
 
   useEffect(() => {

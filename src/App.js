@@ -31,6 +31,7 @@ import ThankYou from './components/ThankYou/index';
 import DealDocuments from './components/DealDocuments';
 import NewMember from './components/Newmember';
 import TVC from './components/TVC';
+import DealTable from './components/DealsTable';
 import NotFound from './components/NotFound';
 
 // superadmin
@@ -63,6 +64,9 @@ import BuildFundForm from './components/NewBuild/BuildFundForm/index';
 
 import Upgrade from './components/upgrade';
 import PaymentForm from './components/billing';
+import WireActivity from './components/WireActivity';
+import TaxActivity from './components/TaxActivity';
+import DealSetup from './components/DealSetup';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -87,13 +91,14 @@ const App = () => {
             <PrivateRoute path="/new-build-spv" exact component={BuildSPVForm} />
             <PrivateRoute path="/new-build-fund" exact component={BuildFundForm} />
             <PrivateRoute path="/" exact component={UserHome} />
-            <PrivateRoute path="/demo" exact component={Demo} />
+            {/* <PrivateRoute path="/demo" exact component={Demo} /> */}
             <PrivateRoute path="/credit" exact component={Credit} />
             <PrivateRoute path="/profile" component={Profile} />
             <PrivateRoute path="/get-started" component={Build} />
             <PrivateRoute path="/marketplace" component={Marketplace} />
             <PrivateRoute path="/investments" component={UserInvestments} />
             <PrivateRoute path="/invited-deals" component={InvitedDeals} />
+            <PrivateRoute path="/deal-setup" component={DealSetup} />
             <PrivateRoute path="/identity" component={Indentity} />
             <PrivateRoute path="/dealdocs" component={DealDocuments} />
             <PrivateRoute path="/tvclogin" component={TVC} />
@@ -168,8 +173,10 @@ const App = () => {
             <AdminRoute path="/admin/invesments/:investmentId" component={Investment} exact />
 
             {/** Whitelabel Routes * */}
-            <PrivateRoute path="/admin/funds" component={Funds} exact />
-            <PrivateRoute path="/admin/spvs" component={Funds} exact />
+            <PrivateRoute path="/admin/type/:type" component={DealTable} exact />
+            <PrivateRoute path="/admin/type/:type" component={DealTable} exact />
+            <PrivateRoute path="/wire-activity" component={WireActivity} exact />
+            <PrivateRoute path="/tax-activity" component={TaxActivity} exact />
             <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
             <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
 

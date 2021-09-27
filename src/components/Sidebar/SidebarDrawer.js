@@ -12,20 +12,18 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
-import StorefrontIcon from '@material-ui/icons/Storefront';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import MonetizationOnRoundedIcon from '@material-ui/icons/MonetizationOnRounded';
 import { Link, useRouteMatch, useHistory } from 'react-router-dom';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-import FlightIcon from '@material-ui/icons/Flight';
-import { toLower } from 'lodash';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
-import whitelistEmails from './whiteListEmails';
+import { FaRocket, FaPercentage } from 'react-icons/fa';
+import { BsArrowLeftRight } from 'react-icons/bs';
+import { RiBillLine } from 'react-icons/ri';
 import BuildModal from '../NewBuild/BuildModal';
+
 import './SidebarDrawer.scss';
 
 const SidebarDrawer = ({
@@ -63,8 +61,9 @@ const SidebarDrawer = ({
   }));
   const classes = useStyles();
 
-  const [open, setOpen] = React.useState(false);
-  const [openTwo, setOpenTwo] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [openTwo, setOpenTwo] = useState(false);
+  const [openThree, setOpenThree] = useState(false);
   const [openModal, setOpenModal] = useState(false);
 
   const handleClick = () => {
@@ -73,6 +72,9 @@ const SidebarDrawer = ({
   const handleClickTwo = () => {
     setOpenTwo(!openTwo);
   };
+  const handleClickThree = () => {
+    setOpenThree(!openThree);
+  };
   const menus = [
     {
       to: currentHomeUrl,
@@ -80,12 +82,12 @@ const SidebarDrawer = ({
       icon: <HomeIcon fontSize="medium" />,
     },
     {
-      to: '/admin/spvs',
+      to: '/admin/type/spvs',
       title: 'SPVs',
-      icon: <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />,
+      icon: <FaRocket style={{ margin: '0 .5rem 0 0' }} />,
     },
     {
-      to: '/admin/funds',
+      to: '/admin/type/funds',
       title: 'Funds',
       icon: <AccountBalanceIcon fontSize="medium" />,
     },
@@ -97,14 +99,19 @@ const SidebarDrawer = ({
   ];
   const menusTwo = [
     {
-      to: '/dealdocs',
-      title: 'Documents Library',
-      icon: <HomeIcon fontSize="medium" />,
-    },
-    {
       to: '/billing',
       title: 'Billing',
-      icon: <MonetizationOnRoundedIcon fontSize="medium" />,
+      icon: <RiBillLine fontSize="medium" />,
+    },
+    {
+      to: '/wire-activity',
+      title: 'Wire Activity',
+      icon: <BsArrowLeftRight fontSize="medium" />,
+    },
+    {
+      to: '/tax-activity',
+      title: 'Tax Activity',
+      icon: <FaPercentage fontSize="medium" />,
     },
   ];
 
@@ -154,6 +161,33 @@ const SidebarDrawer = ({
         ))}
       </List>
       <Typography className="sectionSideBarTitle">TOOLS</Typography>
+      <ListItem button onClick={handleClickThree}>
+        <ListItemIcon>
+          <StarBorder fontSize="medium" />
+        </ListItemIcon>
+        <ListItemText primary="Demo" />
+        {openThree ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      <Collapse in={openThree} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          {[
+            { title: 'Invest', link: '/deals/demo-space-x' },
+            { title: 'Fund Manager', link: '/admin/demo-fund' },
+          ].map((x) => {
+            return (
+              <Link
+                to={{
+                  pathname: x.link,
+                }}
+              >
+                <ListItem button className={classes.nested}>
+                  <ListItemText size="small" primary={x.title} />
+                </ListItem>
+              </Link>
+            );
+          })}
+        </List>
+      </Collapse>
       <List>
         {menusTwo.map(({ to, title, icon }) => (
           <div
@@ -183,7 +217,7 @@ const SidebarDrawer = ({
 
       <ListItem button onClick={handleClick}>
         <ListItemIcon>
-          <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
+          <FaRocket style={{ margin: '0 .5rem 0 0' }} />
         </ListItemIcon>
         <ListItemText primary="SPVs" />
         {open ? <ExpandLess /> : <ExpandMore />}
@@ -231,7 +265,6 @@ const SidebarDrawer = ({
           })}
         </List>
       </Collapse>
-
       <div onClick={mobileOpen ? handleDrawerClose : null}>
         <ListItem button onClick={logoutWithRedirect}>
           <ListItemIcon className="icon">

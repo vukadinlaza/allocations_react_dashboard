@@ -43,12 +43,12 @@ const useStyles = makeStyles((theme) => ({
     opacity: '1',
   },
 }));
-export default function TypeItem({ item, assetType, setAssetType }) {
+export default function TypeItem({ item, asset_type, setAssetType }) {
   const classes = useStyles();
 
   return (
     <div
-      className={`${classes.typeItem} ${item.value === assetType ? classes.selected : ''}`}
+      className={`${classes.typeItem} ${item.value === asset_type ? classes.selected : ''}`}
       onClick={() => {
         setAssetType(item.value);
       }}

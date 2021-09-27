@@ -245,7 +245,7 @@ const AllocationsTable = ({
     dataToShow = dataToShow.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   }
   return (
-    <div className={classes.root} style={{ width: '100%', padding: '12px' }}>
+    <div className={classes.root} style={{ width: '100%' }}>
       <TableContainer
         component={Paper}
         style={noShadow ? { boxShadow: 'none', padding: '0' } : { padding: '0' }}
