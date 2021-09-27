@@ -361,9 +361,9 @@ export default function NewSpvForm() {
                       value={buildData.offering_type}
                       onChange={handleChange}
                     >
+                      {' '}
+                      <MenuItem value="506b">506b</MenuItem>
                       <MenuItem value="506c">506c</MenuItem>
-                      <MenuItem value="506d">506d</MenuItem>
-                      <MenuItem value="506e">506e</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
