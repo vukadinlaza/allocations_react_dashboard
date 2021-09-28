@@ -13,6 +13,7 @@ import {
   Button,
   TextField,
   FormControl,
+  CircularProgress,
 } from '@material-ui/core';
 import { useQuery, gql, useMutation, NetworkStatus } from '@apollo/client';
 import { AiOutlineCheckCircle, AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
@@ -119,7 +120,14 @@ const TextTask = ({ task, handleChange, taskData, handleUploadDeal }) => {
   return <>{taskFields}</>;
 };
 
-const DocumentUploadTask = ({ task, deal_id, addDoc, phase_name, docLoading }) => {
+const DocumentUploadTask = ({
+  task,
+  deal_id,
+  addDoc,
+  phase_name,
+  docLoading,
+  setCurrentLoadingState,
+}) => {
   const [currentTask, setCurrentTask] = useState(task);
 
   // console.log('Component Task', currentTask);
@@ -127,6 +135,7 @@ const DocumentUploadTask = ({ task, deal_id, addDoc, phase_name, docLoading }) =
     // console.log('useEffect Loading:', docLoading);
     if (docLoading) {
       setCurrentTask({ ...currentTask, complete: true });
+      setCurrentLoadingState(true);
     }
   }, [docLoading]);
 
@@ -142,7 +151,8 @@ const DocumentUploadTask = ({ task, deal_id, addDoc, phase_name, docLoading }) =
             accept="application/pdf"
             multiple
             onChange={({ target }) => {
-              if (target.validity.valid)
+              if (target.validity.valid) {
+                console.log('Add Doc');
                 addDoc({
                   variables: {
                     doc: target.files[0],
@@ -151,6 +161,7 @@ const DocumentUploadTask = ({ task, deal_id, addDoc, phase_name, docLoading }) =
                     phase: phase_name,
                   },
                 });
+              }
             }}
           />
         </Button>
@@ -182,7 +193,7 @@ const ReviewTask = ({ task, deal_id, phase_name, updateReview }) => {
   );
 };
 
-const TaskAction = ({ task, deal, refetchDeal, phase }) => {
+const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) => {
   const { _id: deal_id } = deal;
   const [updateDeal] = useMutation(UPDATE_DEAL_SERVICE, {
     onCompleted: () => {
@@ -207,7 +218,8 @@ const TaskAction = ({ task, deal, refetchDeal, phase }) => {
     onCompleted: async () => {
       await completeStatus();
       toast.success('Success! Document uploaded.');
-      refetchDeal();
+      await refetchDeal();
+      setCurrentLoadingState(false);
     },
   });
   const [taskData, setTaskData] = useState({ ...deal });
@@ -247,6 +259,7 @@ const TaskAction = ({ task, deal, refetchDeal, phase }) => {
         addDoc={addDoc}
         phase_name={phase.name}
         docLoading={docLoading}
+        setCurrentLoadingState={setCurrentLoadingState}
       />
     );
   }
@@ -279,17 +292,15 @@ export default () => {
     data,
     refetch: refetchDeal,
     loading,
-    // networkStatus,
   } = useQuery(DEAL, {
     variables: { deal_id: query.get('id') },
-    // notifyOnNetworkStatusChange: true,
   });
   // console.log('Data from Query:', data);
   const [currentPhase, setCurrentPhase] = useState(false);
   const [currentTask, setCurrentTask] = useState(false);
   const [currentLoadingState, setCurrentLoadingState] = useState(false);
-  // console.log('CURRENT TASK?', currentTask);
-  // console.log('Network status:', networkStatus);
+  console.log('Current?', currentLoadingState);
+
   useEffect(() => {
     if (currentPhase && data?.getDealWithTasks) {
       const { getDealWithTasks: deal } = data;
@@ -371,19 +382,22 @@ export default () => {
                         onClick={() =>
                           setCurrentTask(currentTask ? (t === currentTask ? false : t) : t)
                         }
-                        // here
                       >
                         <ListItemIcon>
-                          {/* {currentTask === t && networkStatus === NetworkStatus.refetch ? (
-                            'hello'
-                          ) : ( */}
-                          <AiOutlineCheckCircle
-                            style={{
-                              color: t.complete ? '#1be01e' : 'grey',
-                            }}
-                            size="1.75rem"
-                          />
-                          {/* )} */}
+                          {(currentTask === t && currentLoadingState) ||
+                          (currentTask === t && currentLoadingState && t.complete) ? (
+                            <CircularProgress size={24} />
+                          ) : (
+                            <AiOutlineCheckCircle
+                              style={{
+                                color:
+                                  (currentLoadingState && currentTask === t) || t.complete
+                                    ? '#1be01e'
+                                    : 'grey',
+                              }}
+                              size="1.75rem"
+                            />
+                          )}
                         </ListItemIcon>
                         <ListItemText size="small" primary={_.capitalize(t.title)} />
                         <ListItemIcon
@@ -416,6 +430,7 @@ export default () => {
                   deal={deal.metadata}
                   refetchDeal={refetchDeal}
                   phase={currentPhase}
+                  setCurrentLoadingState={setCurrentLoadingState}
                 />
               </CardContent>
             </Card>
