@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Paper, Chip, Grid, FormControl, InputLabel, Select } from '@material-ui/core';
+import { Paper, Chip, Grid, FormControl, InputLabel, Select, Typography } from '@material-ui/core';
 import { useMutation, gql } from '@apollo/client';
 
 const ADD_SECTORS = gql`
@@ -119,18 +119,6 @@ const Sectors = ({ investor }) => {
       className={classes.paperMain}
       style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
-      <Grid item md={12} lg={9} style={{ width: '100%' }}>
-        <Paper component="ul" className={classes.selectedSectorsPaper}>
-          {uniqueSectors.map((sector) => {
-            return (
-              <li key={sector}>
-                <Chip label={sector} onDelete={handleDelete(sector)} className={classes.chip} />
-              </li>
-            );
-          })}
-        </Paper>
-      </Grid>
-
       <Grid item md={12} lg={3} style={{ display: 'flex', justifyContent: 'center' }}>
         <FormControl variant="outlined" style={{ background: 'white', width: '100%' }}>
           <InputLabel>Sectors</InputLabel>
@@ -141,6 +129,9 @@ const Sectors = ({ investor }) => {
             className={classes.sectorChoices}
           >
             <option aria-label="None" value="" />
+            <option aria-label="None" disabled>
+              Select 3-6 sectors
+            </option>
             {sectors.map((sector) => (
               <option key={sector} value={sector}>
                 {sector}
@@ -148,6 +139,26 @@ const Sectors = ({ investor }) => {
             ))}
           </Select>
         </FormControl>
+      </Grid>
+
+      <Grid item md={12} lg={9} style={{ width: '100%' }}>
+        <Paper component="ul" className={classes.selectedSectorsPaper}>
+          {!investor.sectors || investor.sectors.length < 1 ? (
+            <li style={{ display: 'flex', alignItems: 'center' }}>
+              <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
+                Select min. 3 and max. 6 sectors
+              </Typography>
+            </li>
+          ) : (
+            uniqueSectors.map((sector) => {
+              return (
+                <li key={sector}>
+                  <Chip label={sector} onDelete={handleDelete(sector)} className={classes.chip} />
+                </li>
+              );
+            })
+          )}
+        </Paper>
       </Grid>
     </Grid>
   );

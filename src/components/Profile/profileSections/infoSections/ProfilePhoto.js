@@ -3,6 +3,7 @@ import { useMutation, gql } from '@apollo/client';
 import { Avatar, Badge, Grid, TextField, Button } from '@material-ui/core';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { toast } from 'react-toastify';
+import PersonIcon from '@material-ui/icons/Person';
 import EditIcon from '@material-ui/icons/Edit';
 import AppModal from '../../../Modal/AppModal';
 
@@ -16,13 +17,33 @@ const PROFILE_IMAGE = gql`
   }
 `;
 
+const DELETE_PROFILE_IMAGE = gql`
+  mutation DeleteProfileImage($email: String!, $profileImageKey: String!) {
+    deleteProfileImage(email: $email, profileImageKey: $profileImageKey) {
+      _id
+      profileImageKey
+      email
+    }
+  }
+`;
+
 const useStyles = makeStyles((theme) => ({
   avatar: {
     width: theme.spacing(14),
     height: theme.spacing(14),
+    textAlign: 'center',
     [theme.breakpoints.down('sm')]: {
       width: theme.spacing(10),
       height: theme.spacing(10),
+    },
+  },
+  noAvatar: {
+    width: theme.spacing(12),
+    height: theme.spacing(12),
+    textAlign: 'center',
+    [theme.breakpoints.down('sm')]: {
+      width: theme.spacing(8),
+      height: theme.spacing(8),
     },
   },
 }));
@@ -30,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
 const ProfilePhoto = ({ investor, refetchUser }) => {
   const classes = useStyles();
   const [showModal, setShowModal] = useState(false);
+  const imageInDatabase = `https://allocations-user-img.s3.us-east-2.amazonaws.com/${investor.profileImageKey}`;
   const [image, setImage] = useState('');
   const [fileToImage, setFileToImage] = useState('');
 
@@ -58,11 +80,30 @@ const ProfilePhoto = ({ investor, refetchUser }) => {
       toast.success('Success! Profile updated');
       refetchUser();
       setShowModal(false);
+      setImage('');
+      setFileToImage('');
     },
     onError: () => {
       toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
     },
   });
+
+  const [deleteProfileImage] = useMutation(DELETE_PROFILE_IMAGE, {
+    onCompleted: () => {
+      toast.success('Success! Image deleted');
+      setImage('');
+      setFileToImage('');
+      refetchUser();
+      setShowModal(false);
+    },
+    onError: () => {
+      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
+    },
+  });
+
+  const handleDelete = () => {
+    deleteProfileImage({ variables: { email: investor.email, profileImageKey: image } });
+  };
 
   const handleSubmit = async () => {
     uploadImage({
@@ -72,6 +113,7 @@ const ProfilePhoto = ({ investor, refetchUser }) => {
 
   const onClose = () => {
     setShowModal(false);
+    setFileToImage('');
   };
 
   const SmallAvatar = withStyles((theme) => ({
@@ -104,16 +146,22 @@ const ProfilePhoto = ({ investor, refetchUser }) => {
         }}
         badgeContent={
           <SmallAvatar alt="Edit" onClick={() => setShowModal(!showModal)}>
-            <EditAvatar />
+            <EditAvatar className={classes.noAvatar} />
           </SmallAvatar>
         }
       >
-        <Avatar
-          alt="avatar"
-          src={`https://allocations-user-img.s3.us-east-2.amazonaws.com/${investor.profileImageKey}`}
-          style={{ border: 'solid blue 3px' }}
-          className={classes.avatar}
-        />
+        {!investor.profileImageKey ? (
+          <Avatar style={{ border: 'solid blue 3px' }} className={classes.avatar}>
+            <PersonIcon className={classes.noAvatar} />
+          </Avatar>
+        ) : (
+          <Avatar
+            alt="avatar"
+            src={!investor.profileImageKey ? '' : imageInDatabase}
+            style={{ border: 'solid blue 3px' }}
+            className={classes.avatar}
+          />
+        )}
       </Badge>
 
       <AppModal isOpen={showModal} onClose={onClose} modalHeader="Upload Profile Photo">
@@ -129,7 +177,13 @@ const ProfilePhoto = ({ investor, refetchUser }) => {
           <Grid item xs={6} style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Avatar
               alt="avatar"
-              src={fileToImage}
+              src={
+                !fileToImage && !investor.profileImageKey
+                  ? ''
+                  : !fileToImage
+                  ? imageInDatabase
+                  : fileToImage
+              }
               className={classes.avatar}
               style={{ textAlign: 'center' }}
             >
@@ -141,6 +195,19 @@ const ProfilePhoto = ({ investor, refetchUser }) => {
             <Button variant="contained" color="primary" onClick={handleSubmit}>
               Submit
             </Button>
+          </Grid>
+          <Grid item xs={12} style={{ textAlign: 'center' }}>
+            {!investor.profileImageKey ? (
+              ''
+            ) : (
+              <Button
+                variant="contained"
+                style={{ backgroundColor: 'red', color: 'white' }}
+                onClick={handleDelete}
+              >
+                Delete
+              </Button>
+            )}
           </Grid>
         </Grid>
       </AppModal>

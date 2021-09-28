@@ -67,6 +67,11 @@ const useStyles = makeStyles(() => ({
   linkedin: {
     color: 'blue',
   },
+  linkedinInput: {
+    '&:invalid': {
+      border: 'red solid 2px',
+    },
+  },
   paperTitle: {
     padding: '.5rem',
     paddingLeft: '1rem',
@@ -84,16 +89,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const reqs = ['country', 'investor_type', 'signer_full_name', 'email', 'linkedinUrl'];
-
-export function validate(investor) {
-  const required =
-    investor.investor_type === 'entity'
-      ? ['entity_name', 'accredited_investor_status', ...reqs]
-      : ['first_name', 'last_name', ...reqs];
-  return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
-}
-
 const ProfileInfo = ({
   investor,
   setInvestor,
@@ -107,6 +102,21 @@ const ProfileInfo = ({
   const [errors, setErrors] = useState([]);
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
+
+  const reqs = [
+    'country',
+    investor.country === 'United States' ? 'state' : '',
+    'investor_type',
+    'email',
+  ];
+
+  const validate = (investor) => {
+    const required =
+      investor.investor_type === 'entity'
+        ? ['entity_name', 'accredited_investor_status', ...reqs]
+        : ['first_name', 'last_name', ...reqs];
+    return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
+  };
 
   const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_USER, {
     onCompleted: () => {
@@ -159,6 +169,7 @@ const ProfileInfo = ({
       'username',
       'display_username',
       'state',
+      'signer_full_name',
     ]);
     setErrors(validation);
 
@@ -186,6 +197,11 @@ const ProfileInfo = ({
 
   const usStates = new UsaStates();
   const stateNames = usStates.states.map((s) => s.name);
+
+  /* moves United States to beginning of array for easier access */
+  const usaAtTop = countries.sort((country) =>
+    country.countryName === 'United States' ? -1 : !country.countryName === 'United States' ? 1 : 0,
+  );
 
   return (
     <div className="Sections">
@@ -277,6 +293,7 @@ const ProfileInfo = ({
                     id="country"
                     select
                     fullWidth
+                    error={errors.includes('country')}
                     style={{ background: 'white' }}
                     label="Country of Residence"
                     value={investor.country || ''}
@@ -286,7 +303,8 @@ const ProfileInfo = ({
                     }}
                     variant="outlined"
                   >
-                    {countries.map(({ countryName }) => (
+                    <option aria-label="None" value="" />
+                    {usaAtTop.map(({ countryName }) => (
                       <option key={countryName} value={countryName}>
                         {countryName}
                       </option>
@@ -299,6 +317,11 @@ const ProfileInfo = ({
                     select
                     fullWidth
                     style={{ background: 'white' }}
+                    error={
+                      investor.country === 'United States'
+                        ? errors.includes('state')
+                        : errors.includes()
+                    }
                     disabled={investor.country !== 'United States'}
                     label="State"
                     value={investor.state || ''}
@@ -308,6 +331,7 @@ const ProfileInfo = ({
                     }}
                     variant="outlined"
                   >
+                    <option aria-label="None" value="" />
                     {stateNames.map((state) => (
                       <option key={state} value={state}>
                         {state}
@@ -403,49 +427,55 @@ const ProfileInfo = ({
                     <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
                       Interests
                     </Typography>
+                    <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
+                      Select a min. 3 and max. 6 sectors
+                    </Typography>
                   </Grid>
 
                   <Sectors investor={investor} style={{ width: '100%' }} />
                 </Grid>
               </Paper>
             </Grid>
-          </Grid>
-        </Grid>
 
-        {/* grid container for social section */}
-        <Grid item xs={12}>
-          <Paper className={classes.paper}>
-            <Grid container>
-              <Grid item xs={12} className={classes.paperTitle}>
-                <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
-                  Social Profile Connect
-                </Typography>
-              </Grid>
+            {/* grid container for social section */}
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>
+                <Grid container>
+                  <Grid item xs={12} className={classes.paperTitle}>
+                    <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
+                      Social Profile Connect
+                    </Typography>
+                  </Grid>
 
-              <Grid container spacing={1} className={classes.paperMain}>
-                <Grid
-                  item
-                  xs={1}
-                  style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                >
-                  <LinkedInIcon className={classes.linkedin} />
+                  <Grid container spacing={1} className={classes.paperMain}>
+                    <Grid
+                      item
+                      xs={1}
+                      style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                    >
+                      <LinkedInIcon className={classes.linkedin} />
+                    </Grid>
+                    <Grid item xs={11}>
+                      <TextField
+                        inputProps={{
+                          className: classes.linkedinInput,
+                          pattern: `^https?://((www|\w\w)\.)?linkedin.com/((in/[^/]+/?)|(pub/[^/]+/((\w|\d)+/?){3}))$`,
+                        }}
+                        id="linkedin"
+                        label="Linkedin Profile Link"
+                        variant="outlined"
+                        fullWidth
+                        style={{ background: 'white' }}
+                        error={errors.includes('linkedinUrl')}
+                        value={get(investor, 'linkedinUrl') || ''}
+                        onChange={handleChange('linkedinUrl')}
+                      />
+                    </Grid>
+                  </Grid>
                 </Grid>
-                <Grid item xs={11}>
-                  <TextField
-                    id="linkedin"
-                    /* add the value= */
-                    label="Linkedin Profile Link"
-                    variant="outlined"
-                    fullWidth
-                    style={{ background: 'white' }}
-                    error={errors.includes('linkedinUrl')}
-                    value={get(investor, 'linkedinUrl') || ''}
-                    onChange={handleChange('linkedinUrl')}
-                  />
-                </Grid>
-              </Grid>
+              </Paper>
             </Grid>
-          </Paper>
+          </Grid>
         </Grid>
 
         <Grid item xs={12}>
