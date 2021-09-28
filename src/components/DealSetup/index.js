@@ -14,7 +14,7 @@ import {
   TextField,
   FormControl,
 } from '@material-ui/core';
-import { useQuery, gql, useMutation } from '@apollo/client';
+import { useQuery, gql, useMutation, NetworkStatus } from '@apollo/client';
 import { AiOutlineCheckCircle, AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
 import { useLocation } from 'react-router';
 import { toast } from 'react-toastify';
@@ -97,7 +97,7 @@ const UPDATE_DEAL_SERVICE = gql`
 `;
 
 const TextTask = ({ task, handleChange, taskData, handleUploadDeal }) => {
-  console.log('TASK', task);
+  console.log('TEXT TASK', task);
 
   const taskFields = task.metadata.collect.map((field) => {
     return (
@@ -119,7 +119,17 @@ const TextTask = ({ task, handleChange, taskData, handleUploadDeal }) => {
   return <>{taskFields}</>;
 };
 
-const DocumentUploadTask = ({ task, deal_id, addDoc, phase_name }) => {
+const DocumentUploadTask = ({ task, deal_id, addDoc, phase_name, docLoading }) => {
+  const [currentTask, setCurrentTask] = useState(task);
+
+  // console.log('Component Task', currentTask);
+  useEffect(() => {
+    // console.log('useEffect Loading:', docLoading);
+    if (docLoading) {
+      setCurrentTask({ ...currentTask, complete: true });
+    }
+  }, [docLoading]);
+
   return (
     <Grid item sm={12} lg={12}>
       <FormControl required disabled variant="outlined">
@@ -150,7 +160,7 @@ const DocumentUploadTask = ({ task, deal_id, addDoc, phase_name }) => {
 };
 
 const ReviewTask = ({ task, deal_id, phase_name, updateReview }) => {
-  console.log('TASK', task);
+  console.log('Review TASK', task);
 
   return (
     <Grid item sm={12} lg={12}>
@@ -186,8 +196,16 @@ const TaskAction = ({ task, deal, refetchDeal, phase }) => {
       refetchDeal();
     },
   });
-  const [addDoc, { data, loading }] = useMutation(ADD_DOC, {
-    onCompleted: () => {
+
+  const completeStatus = () => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, 5000);
+    });
+  };
+
+  const [addDoc, { data, loading: docLoading }] = useMutation(ADD_DOC, {
+    onCompleted: async () => {
+      await completeStatus();
       toast.success('Success! Document uploaded.');
       refetchDeal();
     },
@@ -223,7 +241,13 @@ const TaskAction = ({ task, deal, refetchDeal, phase }) => {
   }
   if (JSON.stringify(task).includes('document-upload')) {
     action = (
-      <DocumentUploadTask task={task} deal_id={deal_id} addDoc={addDoc} phase_name={phase.name} />
+      <DocumentUploadTask
+        task={task}
+        deal_id={deal_id}
+        addDoc={addDoc}
+        phase_name={phase.name}
+        docLoading={docLoading}
+      />
     );
   }
   if (JSON.stringify(task).includes('review')) {
@@ -255,13 +279,17 @@ export default () => {
     data,
     refetch: refetchDeal,
     loading,
+    // networkStatus,
   } = useQuery(DEAL, {
     variables: { deal_id: query.get('id') },
+    // notifyOnNetworkStatusChange: true,
   });
-  console.log('Data from Query:', data);
+  // console.log('Data from Query:', data);
   const [currentPhase, setCurrentPhase] = useState(false);
   const [currentTask, setCurrentTask] = useState(false);
-
+  const [currentLoadingState, setCurrentLoadingState] = useState(false);
+  // console.log('CURRENT TASK?', currentTask);
+  // console.log('Network status:', networkStatus);
   useEffect(() => {
     if (currentPhase && data?.getDealWithTasks) {
       const { getDealWithTasks: deal } = data;
@@ -343,14 +371,19 @@ export default () => {
                         onClick={() =>
                           setCurrentTask(currentTask ? (t === currentTask ? false : t) : t)
                         }
+                        // here
                       >
                         <ListItemIcon>
+                          {/* {currentTask === t && networkStatus === NetworkStatus.refetch ? (
+                            'hello'
+                          ) : ( */}
                           <AiOutlineCheckCircle
                             style={{
                               color: t.complete ? '#1be01e' : 'grey',
                             }}
                             size="1.75rem"
                           />
+                          {/* )} */}
                         </ListItemIcon>
                         <ListItemText size="small" primary={_.capitalize(t.title)} />
                         <ListItemIcon
