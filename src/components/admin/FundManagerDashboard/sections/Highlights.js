@@ -111,7 +111,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
     : 0;
 
   return (
-    <Grid container spacing={3} className={classes.section}>
+    <Grid container spacing={2} className={classes.section}>
       <Grid item xs={12} lg>
         <SimpleBox
           size="fourth"
