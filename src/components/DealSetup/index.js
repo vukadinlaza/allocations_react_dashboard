@@ -44,6 +44,7 @@ const DEAL = gql`
     }
   }
 `;
+
 const mainBoxes = (name) => {
   const data = [
     { value: name || 'Space X', title: 'Name' },
@@ -53,6 +54,7 @@ const mainBoxes = (name) => {
     { value: 'International', title: 'Type' },
     { value: '12/3/2021', title: 'Wire Deadline' },
   ];
+
   const x = data.map((item) => {
     return (
       <Grid item sm={12} lg={2}>
@@ -66,6 +68,7 @@ const mainBoxes = (name) => {
   });
   return x;
 };
+
 const ADD_DOC = gql`
   mutation addDealDocService($deal_id: String!, $task_id: String!, $doc: Upload!, $phase: String) {
     addDealDocService(deal_id: $deal_id, task_id: $task_id, doc: $doc, phase: $phase) {
@@ -115,6 +118,7 @@ const TextTask = ({ task, handleChange, taskData, handleUploadDeal }) => {
   });
   return <>{taskFields}</>;
 };
+
 const DocumentUploadTask = ({ task, deal_id, addDoc, phase_name }) => {
   return (
     <Grid item sm={12} lg={12}>
@@ -144,6 +148,7 @@ const DocumentUploadTask = ({ task, deal_id, addDoc, phase_name }) => {
     </Grid>
   );
 };
+
 const ReviewTask = ({ task, deal_id, phase_name, updateReview }) => {
   console.log('TASK', task);
 
@@ -193,6 +198,7 @@ const TaskAction = ({ task, deal, refetchDeal, phase }) => {
     e.persist();
     return setTaskData((prev) => ({ ...prev, [prop]: e.target.value }));
   };
+
   const handleUploadDeal = () => {
     updateDeal({
       variables: {
@@ -252,19 +258,22 @@ export default () => {
   } = useQuery(DEAL, {
     variables: { deal_id: query.get('id') },
   });
-
-  const [currentPhase, setCurentPhase] = useState(false);
+  console.log('Data from Query:', data);
+  const [currentPhase, setCurrentPhase] = useState(false);
   const [currentTask, setCurrentTask] = useState(false);
+
   useEffect(() => {
     if (currentPhase && data?.getDealWithTasks) {
       const { getDealWithTasks: deal } = data;
-      setCurentPhase(deal?.phases?.find((p) => p.name === currentPhase.name));
+      setCurrentPhase(deal?.phases?.find((p) => p.name === currentPhase.name));
       if (currentTask && deal.phases.tasks) {
         setCurrentTask(deal?.phases?.tasks.find((t) => t.title === currentTask.title));
       }
     }
   }, [data]);
+
   if (!data) return null;
+
   const { getDealWithTasks: deal } = data;
 
   return (
@@ -286,7 +295,7 @@ export default () => {
                       button
                       className
                       onClick={() => {
-                        setCurentPhase(currentPhase ? (p === currentPhase ? false : p) : p);
+                        setCurrentPhase(currentPhase ? (p === currentPhase ? false : p) : p);
                         if (currentTask) {
                           setCurrentTask(false);
                         }
