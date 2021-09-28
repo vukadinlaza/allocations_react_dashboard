@@ -132,7 +132,12 @@ const ProfileInfo = ({
   const handleChange = (prop) => (e) => {
     e.persist();
 
-    if (prop === 'first_name' || prop === 'last_name' || prop === 'signer_full_name') {
+    if (
+      prop === 'first_name' ||
+      prop === 'last_name' ||
+      prop === 'signer_full_name' ||
+      prop === 'city'
+    ) {
       const capitalizeName = (str) =>
         str
           .toLowerCase()
