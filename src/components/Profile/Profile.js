@@ -28,6 +28,7 @@ const GET_INVESTOR = gql`
       sectors
       linkedinUrl
       profileImageKey
+      city
       account {
         _id
       }

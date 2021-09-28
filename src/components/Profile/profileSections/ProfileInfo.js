@@ -41,6 +41,7 @@ const UPDATE_USER = gql`
       linkedinUrl
       display_username
       profileImageKey
+      city
       passport {
         link
         path
@@ -170,6 +171,7 @@ const ProfileInfo = ({
       'display_username',
       'state',
       'signer_full_name',
+      'city',
     ]);
     setErrors(validation);
 
@@ -289,6 +291,24 @@ const ProfileInfo = ({
                 </Grid>
 
                 <Grid item xs={12}>
+                  <FormControl
+                    required
+                    disabled
+                    variant="outlined"
+                    style={{ background: 'white', width: '100%' }}
+                  >
+                    <TextField
+                      error={errors.includes('city')}
+                      style={{ width: '100%' }}
+                      value={get(investor, 'city') || ''}
+                      onChange={handleChange('city')}
+                      label="City"
+                      variant="outlined"
+                    />
+                  </FormControl>
+                </Grid>
+
+                <Grid item xs={6}>
                   <TextField
                     id="country"
                     select
@@ -312,7 +332,7 @@ const ProfileInfo = ({
                   </TextField>
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                   <TextField
                     select
                     fullWidth
