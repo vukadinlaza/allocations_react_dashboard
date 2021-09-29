@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { camelCase } from 'lodash';
+import { camelCase, omit, get } from 'lodash';
 import CloseIcon from '@material-ui/icons/Close';
 import { Paper, Grid, Typography, Modal, Container, Button } from '@material-ui/core';
 import { useMutation } from '@apollo/client';
@@ -35,11 +35,17 @@ const useStyles = makeStyles((theme) => ({
 
 const CREATE_CAP_PDF = gql`
   mutation CreateCapPDF($data: Object) {
-    createCapPDF(data: $data)
+    createCapPDF(data: $data) {
+      _id
+      documents {
+        link
+        path
+      }
+    }
   }
 `;
 
-export default ({ showCapitalAccounts, setShowCapitalAccounts }) => {
+export default ({ showCapitalAccounts, setShowCapitalAccounts, refetch }) => {
   const classes = useStyles();
   const camelCaseKeys = (obj) =>
     Object.keys(obj).reduce((ccObj, field) => {
@@ -50,14 +56,21 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts }) => {
       return { ...ccObj, [camelCase(field)]: obj[field] };
     }, {});
   const data = camelCaseKeys(showCapitalAccounts || {});
-  const [createCapPDF, { data: capPDFRes, loading }] = useMutation(CREATE_CAP_PDF, {
-    variables: { data },
-  });
-
+  const [createCapPDF, { data: capRes, loading }] = useMutation(CREATE_CAP_PDF);
+  useEffect(() => {
+    createCapPDF({
+      variables: {
+        data: { ...omit(data, 'documents'), investmentId: showCapitalAccounts.investmentId },
+      },
+    });
+  }, [showCapitalAccounts]);
+  const capitalPDF = get(capRes, 'createCapPDF.documents', []).find((d) =>
+    d.path.includes('Capital_Account_Statement'),
+  );
   return (
     <>
       <Modal
-        open={Boolean(showCapitalAccounts.Email)}
+        open={Boolean(showCapitalAccounts?.Email)}
         onClose={() => {}}
         className={classes.modal}
         aria-labelledby="simple-modal-title"
@@ -70,15 +83,12 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts }) => {
                 <Grid
                   style={{ display: 'flex', justifyContent: 'space-between', cursor: 'pointer' }}
                 >
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    style={{ marginBottom: '.5rem' }}
-                    onClick={createCapPDF}
-                  >
-                    {capPDFRes ? 'View PDF' : 'Generate PDF'}
-                    {loading && 'Loading'}
-                  </Button>
+                  <a href={`https://${capitalPDF?.link}`} target="_blank" rel="noreferrer">
+                    <Button variant="contained" color="primary" style={{ marginBottom: '.5rem' }}>
+                      {loading && !capitalPDF && 'Generating your PDF version'}
+                      {capitalPDF && 'View as PDF'}
+                    </Button>
+                  </a>
                   <CloseIcon onClick={() => setShowCapitalAccounts(false)} />
                 </Grid>
 
