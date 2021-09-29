@@ -487,7 +487,7 @@ const ProfileInfo = ({
                           pattern: `^https?://((www|\w\w)\.)?linkedin.com/((in/[^/]+/?)|(pub/[^/]+/((\w|\d)+/?){3}))$`,
                         }}
                         id="linkedin"
-                        label="Linkedin Profile Link"
+                        label="LinkedIn Profile Link"
                         variant="outlined"
                         fullWidth
                         style={{ background: 'white' }}
