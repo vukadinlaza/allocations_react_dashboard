@@ -20,6 +20,7 @@ import { AiOutlineCheckCircle, AiOutlineArrowLeft, AiOutlineArrowRight } from 'r
 import { useLocation } from 'react-router';
 import { toast } from 'react-toastify';
 import AllocationsRocket from '../DealNextSteps/AllocationsRocket/AllocationsRocket';
+import pmButton from '../../assets/parallel-button.svg';
 
 const DEAL = gql`
   query getDealWithTasks($deal_id: String) {
@@ -174,6 +175,37 @@ const DocumentUploadTask = ({
   );
 };
 
+const ServiceTask = ({ task, deal_id, phase_name }) => {
+  return (
+    <Grid item sm={12} lg={12}>
+      <FormControl required disabled variant="outlined">
+        <Typography>{task.title}</Typography>
+        {task.title.includes('KYC') ? (
+          <Button
+          // onClick={() =>
+          //   updateReview({ variables: { deal_id, task_id: task._id, phase: phase_name } })
+          // }
+          >
+            <img src={pmButton} alt="Parallel Markets Login Button" />
+          </Button>
+        ) : (
+          <Button
+            fullWidth
+            variant="contained"
+            component="label"
+            style={{ height: 39 }}
+            // onClick={() =>
+            //   updateReview({ variables: { deal_id, task_id: task._id, phase: phase_name } })
+            // }
+          >
+            Service Button
+          </Button>
+        )}
+      </FormControl>
+    </Grid>
+  );
+};
+
 const ReviewTask = ({ task, deal_id, phase_name, updateReview }) => {
   return (
     <Grid item sm={12} lg={12}>
@@ -253,6 +285,7 @@ const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) 
       />
     );
   }
+
   if (JSON.stringify(task).includes('document-upload')) {
     action = (
       <DocumentUploadTask
@@ -265,6 +298,11 @@ const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) 
       />
     );
   }
+
+  if (JSON.stringify(task).includes('service')) {
+    action = <ServiceTask task={task} deal_id={deal_id} phase_name={phase.name} />;
+  }
+
   if (JSON.stringify(task).includes('review')) {
     action = (
       <ReviewTask
@@ -275,6 +313,10 @@ const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) 
       />
     );
   }
+
+  // service = fund manager kyc, create investment agreement, onboarding email, pre-sign investment agreement
+  // admin-info = confirm port company sercurities... others
+  // admin-review = review docs.... others
 
   return (
     <Grid container spacing={1} direction="column" alignItems="center" justifyContent="center">
@@ -296,7 +338,7 @@ export default () => {
   const [currentPhase, setCurrentPhase] = useState(false);
   const [currentTask, setCurrentTask] = useState(false);
   const [currentLoadingState, setCurrentLoadingState] = useState(false);
-
+  console.log('Data:', data);
   useEffect(() => {
     if (currentPhase && data?.getDealWithTasks) {
       const { getDealWithTasks: deal } = data;
