@@ -17,7 +17,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import countries from 'country-region-data';
 import { UsaStates } from 'usa-states';
-import Sectors from './infoSections/Sectors';
+import SectorsAndStages from './infoSections/SectorsAndStages';
 import DisplayUsername from './infoSections/DisplayUsername';
 import ProfilePhoto from './infoSections/ProfilePhoto';
 import Loader from '../../utils/Loader';
@@ -38,6 +38,7 @@ const UPDATE_USER = gql`
       email
       username
       sectors
+      stages
       linkedinUrl
       display_username
       profileImageKey
@@ -453,11 +454,18 @@ const ProfileInfo = ({
                       Interests
                     </Typography>
                     <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
-                      Select a min. 3 and max. 6 sectors
+                      Select max. 6 sectors
                     </Typography>
                   </Grid>
 
-                  <Sectors investor={investor} style={{ width: '100%' }} />
+                  <Grid
+                    container
+                    spacing={2}
+                    className={classes.paperMain}
+                    style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                  >
+                    <SectorsAndStages investor={investor} style={{ width: '100%' }} />
+                  </Grid>
                 </Grid>
               </Paper>
             </Grid>
