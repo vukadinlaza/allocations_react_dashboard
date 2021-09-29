@@ -30,6 +30,7 @@ const GET_INVESTOR = gql`
       linkedinUrl
       profileImageKey
       city
+      profileBio
       account {
         _id
       }

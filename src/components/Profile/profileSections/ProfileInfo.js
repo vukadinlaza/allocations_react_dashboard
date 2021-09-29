@@ -43,6 +43,7 @@ const UPDATE_USER = gql`
       display_username
       profileImageKey
       city
+      profileBio
       passport {
         link
         path
@@ -178,6 +179,7 @@ const ProfileInfo = ({
       'state',
       'signer_full_name',
       'city',
+      'profileBio',
     ]);
     setErrors(validation);
 
@@ -210,6 +212,8 @@ const ProfileInfo = ({
   const usaAtTop = countries.sort((country) =>
     country.countryName === 'United States' ? -1 : !country.countryName === 'United States' ? 1 : 0,
   );
+
+  console.log('investor==>', investor);
 
   return (
     <div className="Sections">
@@ -511,6 +515,40 @@ const ProfileInfo = ({
           </Grid>
         </Grid>
 
+        {/* Profile Bio section */}
+        <Grid item xs={12}>
+          <Paper className={classes.paper}>
+            <Grid container>
+              <Grid item xs={12} className={classes.paperTitle}>
+                <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
+                  Bio
+                </Typography>
+                <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
+                  250 characters max.
+                </Typography>
+              </Grid>
+
+              <Grid container spacing={1} className={classes.paperMain}>
+                <Grid item xs={12}>
+                  <TextField
+                    maxRows={4}
+                    id="profileBio"
+                    label="Profile bio"
+                    variant="outlined"
+                    fullWidth
+                    style={{ background: 'white' }}
+                    error={errors.includes('profileBio')}
+                    value={get(investor, 'profileBio') || ''}
+                    onChange={handleChange('profileBio')}
+                    inputProps={{ maxLength: 250 }}
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+
+        {/* Submit button */}
         <Grid item xs={12}>
           <Button variant="contained" onClick={submit} color="primary">
             {actionText}
