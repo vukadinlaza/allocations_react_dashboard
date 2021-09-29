@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import _, { pick, every } from 'lodash';
+import _, { every } from 'lodash';
 import {
   List,
   ListItem,
@@ -15,7 +15,7 @@ import {
   FormControl,
   CircularProgress,
 } from '@material-ui/core';
-import { useQuery, gql, useMutation, NetworkStatus } from '@apollo/client';
+import { useQuery, gql, useMutation } from '@apollo/client';
 import { AiOutlineCheckCircle, AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
 import { useLocation } from 'react-router';
 import { toast } from 'react-toastify';
@@ -56,9 +56,9 @@ const mainBoxes = (name) => {
     { value: '12/3/2021', title: 'Wire Deadline' },
   ];
 
-  const x = data.map((item) => {
+  const mockFundInfo = data.map((item) => {
     return (
-      <Grid item sm={12} lg={2}>
+      <Grid key={item.title} item sm={12} lg={2}>
         <Card>
           <CardContent style={{ fontWeight: '600' }}> {item.title}</CardContent>
           <Divider />
@@ -67,7 +67,7 @@ const mainBoxes = (name) => {
       </Grid>
     );
   });
-  return x;
+  return mockFundInfo;
 };
 
 const ADD_DOC = gql`
@@ -98,8 +98,6 @@ const UPDATE_DEAL_SERVICE = gql`
 `;
 
 const TextTask = ({ task, handleChange, taskData, handleUploadDeal }) => {
-  console.log('TEXT TASK', task);
-
   const taskFields = task.metadata.collect.map((field) => {
     return (
       <>
@@ -129,15 +127,28 @@ const DocumentUploadTask = ({
   setCurrentLoadingState,
 }) => {
   const [currentTask, setCurrentTask] = useState(task);
+  const [doc, setDoc] = useState(null);
 
-  // console.log('Component Task', currentTask);
   useEffect(() => {
-    // console.log('useEffect Loading:', docLoading);
     if (docLoading) {
       setCurrentTask({ ...currentTask, complete: true });
       setCurrentLoadingState(true);
     }
   }, [docLoading]);
+
+  useEffect(() => {
+    if (doc) {
+      addDoc({
+        variables: {
+          doc,
+          task_id: task._id,
+          deal_id,
+          phase: phase_name,
+        },
+      });
+      setDoc(null);
+    }
+  }, [doc]);
 
   return (
     <Grid item sm={12} lg={12}>
@@ -150,17 +161,10 @@ const DocumentUploadTask = ({
             style={{ display: 'none' }}
             accept="application/pdf"
             multiple
+            value={doc ? '' : null}
             onChange={({ target }) => {
               if (target.validity.valid) {
-                console.log('Add Doc');
-                addDoc({
-                  variables: {
-                    doc: target.files[0],
-                    task_id: task._id,
-                    deal_id,
-                    phase: phase_name,
-                  },
-                });
+                setDoc(target.files[0]);
               }
             }}
           />
@@ -171,8 +175,6 @@ const DocumentUploadTask = ({
 };
 
 const ReviewTask = ({ task, deal_id, phase_name, updateReview }) => {
-  console.log('Review TASK', task);
-
   return (
     <Grid item sm={12} lg={12}>
       <FormControl required disabled variant="outlined">
@@ -214,7 +216,7 @@ const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) 
     });
   };
 
-  const [addDoc, { data, loading: docLoading }] = useMutation(ADD_DOC, {
+  const [addDoc, { loading: docLoading }] = useMutation(ADD_DOC, {
     onCompleted: async () => {
       await completeStatus();
       toast.success('Success! Document uploaded.');
@@ -275,7 +277,7 @@ const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) 
   }
 
   return (
-    <Grid container spacing={1} direction="column" alignItems="center" justify="center">
+    <Grid container spacing={1} direction="column" alignItems="center" justifyContent="center">
       <Grid item sm={12} lg={12}>
         <Typography style={{ fontWeight: '600' }}>Edit {task.title}</Typography>
       </Grid>
@@ -288,18 +290,12 @@ const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) 
 
 export default () => {
   const query = new URLSearchParams(useLocation().search);
-  const {
-    data,
-    refetch: refetchDeal,
-    loading,
-  } = useQuery(DEAL, {
+  const { data, refetch: refetchDeal } = useQuery(DEAL, {
     variables: { deal_id: query.get('id') },
   });
-  // console.log('Data from Query:', data);
   const [currentPhase, setCurrentPhase] = useState(false);
   const [currentTask, setCurrentTask] = useState(false);
   const [currentLoadingState, setCurrentLoadingState] = useState(false);
-  console.log('Current?', currentLoadingState);
 
   useEffect(() => {
     if (currentPhase && data?.getDealWithTasks) {
@@ -317,7 +313,7 @@ export default () => {
 
   return (
     <>
-      <Grid sm={12} lg={12} style={{ margin: '1.25rem 0 ', fontWeight: '900' }}>
+      <Grid style={{ margin: '1.25rem 0 ', fontWeight: '900' }}>
         <Typography variant="h3">SPVs</Typography>
       </Grid>
       <Grid container spacing={1} style={{ margin: '2rem 0' }}>
@@ -331,8 +327,8 @@ export default () => {
                 {deal.phases.map((p) => {
                   return (
                     <ListItem
+                      key={p.name}
                       button
-                      className
                       onClick={() => {
                         setCurrentPhase(currentPhase ? (p === currentPhase ? false : p) : p);
                         if (currentTask) {
@@ -374,11 +370,10 @@ export default () => {
             <Card>
               <CardContent>
                 <List component="div" disablePadding>
-                  {currentPhase?.tasks?.map((t, i) => {
+                  {currentPhase?.tasks?.map((t) => {
                     return (
                       <ListItem
                         button
-                        className
                         onClick={() =>
                           setCurrentTask(currentTask ? (t === currentTask ? false : t) : t)
                         }

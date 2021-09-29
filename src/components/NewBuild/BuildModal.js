@@ -72,6 +72,7 @@ const BuildModal = ({ onClose, isOpen }) => {
                         {['SPV', 'Fund'].map((type) => {
                           return (
                             <Paper
+                              key={type}
                               style={{ textAlign: 'center', margin: '.5rem', padding: '.5rem' }}
                             >
                               <Typography

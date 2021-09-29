@@ -173,15 +173,16 @@ const SidebarDrawer = ({
           {[
             { title: 'Invest', link: '/deals/demo-space-x' },
             { title: 'Fund Manager', link: '/admin/demo-fund' },
-          ].map((x) => {
+          ].map((demoItem) => {
             return (
               <Link
+                key={demoItem.title}
                 to={{
-                  pathname: x.link,
+                  pathname: demoItem.link,
                 }}
               >
                 <ListItem button className={classes.nested}>
-                  <ListItemText size="small" primary={x.title} />
+                  <ListItemText size="small" primary={demoItem.title} />
                 </ListItem>
               </Link>
             );
@@ -224,16 +225,17 @@ const SidebarDrawer = ({
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          {['Real Estate', 'Crypto', 'Secondaries'].map((x) => {
+          {['Real Estate', 'Crypto', 'Secondaries'].map((spvType) => {
             return (
               <Link
+                key={spvType}
                 to={{
                   pathname: '/upgrade',
-                  state: { type: 'SPV', asset: x },
+                  state: { type: 'SPV', asset: spvType },
                 }}
               >
                 <ListItem button className={classes.nested}>
-                  <ListItemText size="small" primary={x} />
+                  <ListItemText size="small" primary={spvType} />
                 </ListItem>
               </Link>
             );
@@ -249,16 +251,17 @@ const SidebarDrawer = ({
       </ListItem>
       <Collapse in={openTwo} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          {['Quarterly Funds', 'Traditional Funds'].map((x) => {
+          {['Quarterly Funds', 'Traditional Funds'].map((fundType) => {
             return (
               <Link
+                key={fundType}
                 to={{
                   pathname: '/upgrade',
-                  state: { type: 'FUND', asset: x },
+                  state: { type: 'FUND', asset: fundType },
                 }}
               >
                 <ListItem button className={classes.nested}>
-                  <ListItemText size="small" primary={x} />
+                  <ListItemText size="small" primary={fundType} />
                 </ListItem>
               </Link>
             );
