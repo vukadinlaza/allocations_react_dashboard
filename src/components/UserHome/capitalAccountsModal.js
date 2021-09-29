@@ -84,7 +84,12 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts, refetch }) => {
                   style={{ display: 'flex', justifyContent: 'space-between', cursor: 'pointer' }}
                 >
                   <a href={`https://${capitalPDF?.link}`} target="_blank" rel="noreferrer">
-                    <Button variant="contained" color="primary" style={{ marginBottom: '.5rem' }}>
+                    <Button
+                      variant="contained"
+                      disabled={loading && !capitalPDF}
+                      color="primary"
+                      style={{ marginBottom: '.5rem' }}
+                    >
                       {loading && !capitalPDF && 'Generating your PDF version'}
                       {capitalPDF && 'View as PDF'}
                     </Button>
