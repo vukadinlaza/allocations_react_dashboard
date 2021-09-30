@@ -175,19 +175,27 @@ const DocumentUploadTask = ({
   );
 };
 
-const ServiceTask = ({ task, deal_id, phase_name }) => {
+const ServiceTask = ({ task, deal_id, phase_name, taskData }) => {
+  console.log('Task Data', taskData);
   return (
     <Grid item sm={12} lg={12}>
       <FormControl required disabled variant="outlined">
         <Typography>{task.title}</Typography>
         {task.title.includes('KYC') ? (
-          <Button
-          // onClick={() =>
-          //   updateReview({ variables: { deal_id, task_id: task._id, phase: phase_name } })
-          // }
+          <a
+            href={`https://mfl80ihum2.execute-api.us-east-1.amazonaws.com/dev/kyc/get-login-url?host=${encodeURIComponent(
+              window.location.href,
+            )}&userId=${taskData?.user_id}`}
+            target="'_blank'"
           >
-            <img src={pmButton} alt="Parallel Markets Login Button" />
-          </Button>
+            <Button
+            // onClick={() =>
+            //   updateReview({ variables: { deal_id, task_id: task._id, phase: phase_name } })
+            // }
+            >
+              <img src={pmButton} alt="Parallel Markets Login Button" />
+            </Button>
+          </a>
         ) : (
           <Button
             fullWidth
@@ -300,7 +308,9 @@ const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) 
   }
 
   if (JSON.stringify(task).includes('service')) {
-    action = <ServiceTask task={task} deal_id={deal_id} phase_name={phase.name} />;
+    action = (
+      <ServiceTask task={task} deal_id={deal_id} phase_name={phase.name} taskData={taskData} />
+    );
   }
 
   if (JSON.stringify(task).includes('review')) {
@@ -338,7 +348,7 @@ export default () => {
   const [currentPhase, setCurrentPhase] = useState(false);
   const [currentTask, setCurrentTask] = useState(false);
   const [currentLoadingState, setCurrentLoadingState] = useState(false);
-  console.log('Data:', data);
+
   useEffect(() => {
     if (currentPhase && data?.getDealWithTasks) {
       const { getDealWithTasks: deal } = data;
