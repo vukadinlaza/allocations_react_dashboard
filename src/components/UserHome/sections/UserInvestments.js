@@ -104,7 +104,7 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
   const [showResignModal, setShowResignModal] = useState(false);
   const [investmentId, setInvestmentId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [showCapitalAccounts, setShowCapitalAccounts] = useState({});
+  const [showCapitalAccounts, setShowCapitalAccounts] = useState(false);
   const [currentCollapsed, setCurrentCollapsed] = useState('');
   const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile?.email || '');
 
@@ -139,7 +139,11 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
         disabled: !capitalAccountInfo,
         onItemClick: () => {
           if (capitalAccountInfo) {
-            setShowCapitalAccounts(capitalAccountInfo);
+            setShowCapitalAccounts({
+              ...capitalAccountInfo,
+              investmentId: row._id,
+              documents: row?.documents,
+            });
           }
         },
       },
@@ -281,10 +285,13 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
         headers={headers}
         getCellContent={getCellContent}
       />
-      <CapitalAccountsModal
-        setShowCapitalAccounts={setShowCapitalAccounts}
-        showCapitalAccounts={showCapitalAccounts}
-      />
+      {showCapitalAccounts && (
+        <CapitalAccountsModal
+          setShowCapitalAccounts={setShowCapitalAccounts}
+          showCapitalAccounts={showCapitalAccounts}
+          refetch={refetch}
+        />
+      )}
       <AppModal isOpen={showModal} onClose={onClose}>
         <InvestmentEdit investmentId={investmentId} handleUpdate={handleUpdate} />
       </AppModal>
