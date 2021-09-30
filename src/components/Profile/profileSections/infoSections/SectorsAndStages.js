@@ -152,88 +152,120 @@ const Sectors = ({ investor }) => {
   return (
     <>
       {/* investor sectors choices */}
-      <Grid item md={12} lg={3} style={{ display: 'flex', justifyContent: 'center' }}>
-        <FormControl variant="outlined" style={{ background: 'white', width: '100%' }}>
-          <InputLabel>Sectors</InputLabel>
-          <Select
-            native
-            onChange={handleSelectorAdd}
-            label="Sector"
-            className={classes.sectorChoices}
-          >
-            <option aria-label="None" value="" />
-            <option aria-label="None" disabled>
-              Select max. 6 sectors
-            </option>
-            {sectors.map((sector) => (
-              <option key={sector} value={sector}>
-                {sector}
-              </option>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
-
-      <Grid item md={12} lg={9} style={{ width: '100%' }}>
-        <Paper component="ul" className={classes.selectedSectorsPaper}>
-          {!investor.sectors || investor.sectors.length < 1 ? (
-            <li style={{ display: 'flex', alignItems: 'center' }}>
-              <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
+      <Grid
+        container
+        spacing={2}
+        className={classes.paperMain}
+        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+      >
+        <Grid item xs={12} style={{ paddingLeft: '1rem' }}>
+          <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
+            Sectors
+          </Typography>
+          <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
+            Select max. 6 sectors
+          </Typography>
+        </Grid>
+        <Grid item md={12} lg={3} style={{ display: 'flex', justifyContent: 'center' }}>
+          <FormControl variant="outlined" style={{ background: 'white', width: '100%' }}>
+            <InputLabel>Sectors</InputLabel>
+            <Select
+              native
+              onChange={handleSelectorAdd}
+              label="Sector"
+              className={classes.sectorChoices}
+            >
+              <option aria-label="None" value="" />
+              <option aria-label="None" disabled>
                 Select max. 6 sectors
-              </Typography>
-            </li>
-          ) : (
-            uniqueSectors.map((sector) => {
-              return (
-                <li key={sector}>
-                  <Chip label={sector} onDelete={handleDelete(sector)} className={classes.chip} />
-                </li>
-              );
-            })
-          )}
-        </Paper>
+              </option>
+              {sectors.map((sector) => (
+                <option key={sector} value={sector}>
+                  {sector}
+                </option>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+
+        <Grid item md={12} lg={9} style={{ width: '100%' }}>
+          <Paper component="ul" className={classes.selectedSectorsPaper}>
+            {!investor.sectors || investor.sectors.length < 1 ? (
+              <li style={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
+                  Select max. 6 sectors
+                </Typography>
+              </li>
+            ) : (
+              uniqueSectors.map((sector) => {
+                return (
+                  <li key={sector}>
+                    <Chip label={sector} onDelete={handleDelete(sector)} className={classes.chip} />
+                  </li>
+                );
+              })
+            )}
+          </Paper>
+        </Grid>
       </Grid>
 
       {/* investor Stages choices */}
-      <Grid item md={12} lg={3} style={{ display: 'flex', justifyContent: 'center' }}>
-        <FormControl variant="outlined" style={{ background: 'white', width: '100%' }}>
-          <InputLabel>Stages</InputLabel>
-          <Select native onChange={handleStageAdd} label="Sector" className={classes.sectorChoices}>
-            <option aria-label="None" value="" />
-            <option aria-label="None" disabled>
-              Select stages
-            </option>
-            {stages.map((stage) => (
-              <option key={stage} value={stage}>
-                {stage}
-              </option>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
-
-      <Grid item md={12} lg={9} style={{ width: '100%' }}>
-        <Paper component="ul" className={classes.selectedSectorsPaper}>
-          {!investor.stages || investor.stages.length < 1 ? (
-            <li style={{ display: 'flex', alignItems: 'center' }}>
-              <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
+      <Grid
+        container
+        spacing={2}
+        className={classes.paperMain}
+        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+      >
+        <Grid item xs={12} style={{ paddingLeft: '1rem' }}>
+          <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
+            Deal Stages
+          </Typography>
+        </Grid>
+        <Grid item md={12} lg={3} style={{ display: 'flex', justifyContent: 'center' }}>
+          <FormControl variant="outlined" style={{ background: 'white', width: '100%' }}>
+            <InputLabel>Stages</InputLabel>
+            <Select
+              native
+              onChange={handleStageAdd}
+              label="Sector"
+              className={classes.sectorChoices}
+            >
+              <option aria-label="None" value="" />
+              <option aria-label="None" disabled>
                 Select stages
-              </Typography>
-            </li>
-          ) : (
-            uniqueStages.map((stage) => {
-              return (
-                <li key={stage}>
-                  <Chip
-                    label={stage}
-                    onDelete={handleDeleteStage(stage)}
-                    className={classes.chip}
-                  />
-                </li>
-              );
-            })
-          )}
-        </Paper>
+              </option>
+              {stages.map((stage) => (
+                <option key={stage} value={stage}>
+                  {stage}
+                </option>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+
+        <Grid item md={12} lg={9} style={{ width: '100%' }}>
+          <Paper component="ul" className={classes.selectedSectorsPaper}>
+            {!investor.stages || investor.stages.length < 1 ? (
+              <li style={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
+                  Select stages
+                </Typography>
+              </li>
+            ) : (
+              uniqueStages.map((stage) => {
+                return (
+                  <li key={stage}>
+                    <Chip
+                      label={stage}
+                      onDelete={handleDeleteStage(stage)}
+                      className={classes.chip}
+                    />
+                  </li>
+                );
+              })
+            )}
+          </Paper>
+        </Grid>
       </Grid>
     </>
   );

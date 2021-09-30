@@ -43,6 +43,7 @@ const UPDATE_USER = gql`
       display_username
       profileImageKey
       city
+      profileBio
       passport {
         link
         path
@@ -88,6 +89,12 @@ const useStyles = makeStyles(() => ({
     paddingBottom: '1.5rem',
     paddingRight: '1rem',
     borderTop: '1px solid #8493A640 !important',
+  },
+  helperText: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    background: '#f1f4fb',
+    margin: '0px',
   },
 }));
 
@@ -178,6 +185,7 @@ const ProfileInfo = ({
       'state',
       'signer_full_name',
       'city',
+      'profileBio',
     ]);
     setErrors(validation);
 
@@ -376,7 +384,33 @@ const ProfileInfo = ({
                     style={{ background: 'white' }}
                   />
                 </Grid>
+
+                {/* Display username boolean */}
                 <DisplayUsername investor={investor} />
+
+                {/* profile bio section */}
+                <Grid item xs={12}>
+                  <TextField
+                    multiline
+                    maxRows={4}
+                    id="profileBio"
+                    label="Profile Bio"
+                    placeholder="Tell a bit about yourself and your goals."
+                    variant="outlined"
+                    helperText={
+                      !investor.profileBio ? '0/250' : `${investor.profileBio.length}/250`
+                    }
+                    FormHelperTextProps={{
+                      className: classes.helperText,
+                    }}
+                    fullWidth
+                    style={{ background: 'white' }}
+                    error={errors.includes('profileBio')}
+                    value={get(investor, 'profileBio') || ''}
+                    onChange={handleChange('profileBio')}
+                    inputProps={{ maxLength: 250 }}
+                  />
+                </Grid>
               </Grid>
             </Grid>
           </Paper>
@@ -453,19 +487,9 @@ const ProfileInfo = ({
                     <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
                       Interests
                     </Typography>
-                    <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
-                      Select max. 6 sectors
-                    </Typography>
                   </Grid>
 
-                  <Grid
-                    container
-                    spacing={2}
-                    className={classes.paperMain}
-                    style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                  >
-                    <SectorsAndStages investor={investor} style={{ width: '100%' }} />
-                  </Grid>
+                  <SectorsAndStages investor={investor} style={{ width: '100%' }} />
                 </Grid>
               </Paper>
             </Grid>
@@ -511,6 +535,7 @@ const ProfileInfo = ({
           </Grid>
         </Grid>
 
+        {/* Submit button */}
         <Grid item xs={12}>
           <Button variant="contained" onClick={submit} color="primary">
             {actionText}
