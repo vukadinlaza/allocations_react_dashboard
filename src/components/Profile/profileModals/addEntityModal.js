@@ -4,10 +4,10 @@ import { pick } from 'lodash';
 import CloseIcon from '@material-ui/icons/Close';
 import { Paper, Grid, Modal, Container } from '@material-ui/core';
 import { toast } from 'react-toastify';
-import EntityEditForm from './EntityEdit/index';
+import EntityEditForm from '../EntityEdit/index';
 
-import './style.scss';
-import { useSimpleReducer } from '../../utils/hooks';
+import '../style.scss';
+import { useSimpleReducer } from '../../../utils/hooks';
 
 const useStyles = makeStyles((theme) => ({
   modal: {

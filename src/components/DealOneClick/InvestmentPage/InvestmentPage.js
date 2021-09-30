@@ -85,6 +85,7 @@ const GET_DEAL = gql`
         fundManagementFeeType
         fundGeneralPartner
         fundEstimatedTerm
+        is3c7
       }
     }
   }
@@ -242,7 +243,7 @@ function InvestmentPage() {
   const { deal } = data;
   const {
     company_name,
-    dealParams: { minimumInvestment },
+    dealParams: { minimumInvestment, is3c7 },
   } = deal;
 
   const confirmInvestment = () => {
@@ -326,6 +327,7 @@ function InvestmentPage() {
           investor={investorFormData}
           setInvestor={setInvestor}
           handleSecondSig={handleSecondSig}
+          is3c7={is3c7}
         />
         {requireSecondSig && (org === 'irishangels' || org === '5f903e7164eb9a0023189ca2') && (
           <SecondSignature
