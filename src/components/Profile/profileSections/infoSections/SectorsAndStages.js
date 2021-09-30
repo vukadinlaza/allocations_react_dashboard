@@ -21,6 +21,24 @@ const DELETE_SECTORS = gql`
     }
   }
 `;
+const ADD_STAGES = gql`
+  mutation AddStages($email: String!, $stage: String!) {
+    addStages(email: $email, stage: $stage) {
+      _id
+      stages
+      email
+    }
+  }
+`;
+const DELETE_STAGES = gql`
+  mutation DeleteStages($email: String!, $stage: String!) {
+    deleteStages(email: $email, stage: $stage) {
+      _id
+      stages
+      email
+    }
+  }
+`;
 
 const sectors = [
   'AI',
@@ -60,6 +78,8 @@ const sectors = [
   'Travel',
 ];
 
+const stages = ['Pre-Seed', 'Seed', 'Series A', 'Series B', 'Series C', 'Series D+'];
+
 const useStyles = makeStyles((theme) => ({
   selectedSectorsPaper: {
     display: 'flex',
@@ -92,13 +112,21 @@ const useStyles = makeStyles((theme) => ({
 const Sectors = ({ investor }) => {
   const classes = useStyles();
   const [sectorData, setSectorData] = useState(investor?.sectors || []);
+  const [stageData, setStageData] = useState(investor?.stages || []);
 
   const [updateSectors] = useMutation(ADD_SECTORS);
   const [deleteSectors] = useMutation(DELETE_SECTORS);
+  const [updateStages] = useMutation(ADD_STAGES);
+  const [deleteStages] = useMutation(DELETE_STAGES);
 
   const handleDelete = (sectorToDelete) => () => {
     setSectorData((sectors) => sectors.filter((sector) => sector !== sectorToDelete));
     deleteSectors({ variables: { email: investor.email, sector: sectorToDelete } });
+  };
+
+  const handleDeleteStage = (stageToDelete) => () => {
+    setStageData((stages) => stages.filter((stage) => stage !== stageToDelete));
+    deleteStages({ variables: { email: investor.email, stage: stageToDelete } });
   };
 
   const handleSelectorAdd = (e) => {
@@ -109,16 +137,21 @@ const Sectors = ({ investor }) => {
     }
     return sectorData;
   };
+  const handleStageAdd = (e) => {
+    e.persist();
+    if (stageData.length <= 5) {
+      setStageData((prev) => [...prev, e.target.value]);
+      updateStages({ variables: { email: investor.email, stage: e.target.value } });
+    }
+    return stageData;
+  };
 
   const uniqueSectors = [...new Set(sectorData)];
+  const uniqueStages = [...new Set(stageData)];
 
   return (
-    <Grid
-      container
-      spacing={2}
-      className={classes.paperMain}
-      style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-    >
+    <>
+      {/* investor sectors choices */}
       <Grid item md={12} lg={3} style={{ display: 'flex', justifyContent: 'center' }}>
         <FormControl variant="outlined" style={{ background: 'white', width: '100%' }}>
           <InputLabel>Sectors</InputLabel>
@@ -130,7 +163,7 @@ const Sectors = ({ investor }) => {
           >
             <option aria-label="None" value="" />
             <option aria-label="None" disabled>
-              Select 3-6 sectors
+              Select max. 6 sectors
             </option>
             {sectors.map((sector) => (
               <option key={sector} value={sector}>
@@ -146,7 +179,7 @@ const Sectors = ({ investor }) => {
           {!investor.sectors || investor.sectors.length < 1 ? (
             <li style={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
-                Select min. 3 and max. 6 sectors
+                Select max. 6 sectors
               </Typography>
             </li>
           ) : (
@@ -160,7 +193,49 @@ const Sectors = ({ investor }) => {
           )}
         </Paper>
       </Grid>
-    </Grid>
+
+      {/* investor Stages choices */}
+      <Grid item md={12} lg={3} style={{ display: 'flex', justifyContent: 'center' }}>
+        <FormControl variant="outlined" style={{ background: 'white', width: '100%' }}>
+          <InputLabel>Stages</InputLabel>
+          <Select native onChange={handleStageAdd} label="Sector" className={classes.sectorChoices}>
+            <option aria-label="None" value="" />
+            <option aria-label="None" disabled>
+              Select stages
+            </option>
+            {stages.map((stage) => (
+              <option key={stage} value={stage}>
+                {stage}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+
+      <Grid item md={12} lg={9} style={{ width: '100%' }}>
+        <Paper component="ul" className={classes.selectedSectorsPaper}>
+          {!investor.stages || investor.stages.length < 1 ? (
+            <li style={{ display: 'flex', alignItems: 'center' }}>
+              <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
+                Select stages
+              </Typography>
+            </li>
+          ) : (
+            uniqueStages.map((stage) => {
+              return (
+                <li key={stage}>
+                  <Chip
+                    label={stage}
+                    onDelete={handleDeleteStage(stage)}
+                    className={classes.chip}
+                  />
+                </li>
+              );
+            })
+          )}
+        </Paper>
+      </Grid>
+    </>
   );
 };
 

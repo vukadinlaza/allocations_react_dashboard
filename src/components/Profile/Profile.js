@@ -26,8 +26,10 @@ const GET_INVESTOR = gql`
       username
       state
       sectors
+      stages
       linkedinUrl
       profileImageKey
+      city
       account {
         _id
       }
