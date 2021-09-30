@@ -1,14 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Paper } from '@material-ui/core';
+import { gql, useQuery } from '@apollo/client';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import CheckCircle from '../../../../../assets/check_circle_black_24dp.svg';
+import Loader from '../../../../../assets/loading.svg';
 import buildDoc from '../../../../../assets/buildDoc.svg';
 import useStyles from '../../../BuildStyles';
 
-export default function SignDocsForm({ page, setPage }) {
+const SERVICE_AGREEMENT_LINK = gql`
+  query serviceAgreementLink($deal_id: String) {
+    serviceAgreementLink: getServiceAgreementLink(deal_id: $deal_id) {
+      dataRequestId: id
+      tokenId: token_id
+      tokenSecret: token_secret
+    }
+  }
+`;
+
+const signingModal = (serviceAgreementLink) => {
+  // eslint-disable-next-line no-undef
+  DocSpring.createVisualForm({
+    ...serviceAgreementLink,
+    domainVerification: false,
+  });
+};
+
+export default function SignDocsForm({ page, setPage, deal }) {
   const classes = useStyles();
   const [iconsChecked, setIconsChecked] = useState({});
+  const { data } = useQuery(SERVICE_AGREEMENT_LINK, { variables: { deal_id: deal?._id } });
+
   return (
     <>
       <Paper className={classes.paper}>
@@ -21,36 +42,16 @@ export default function SignDocsForm({ page, setPage }) {
         </Typography>
         <Paper
           className={`${iconsChecked.one ? classes.selected : ''} ${classes.item}`}
-          onClick={() =>
-            setIconsChecked((prev) => {
-              return { ...prev, one: true };
-            })
-          }
+          style={{ cursor: data ? 'pointer' : 'progress' }}
+          onClick={() => (data ? signingModal(data.serviceAgreementLink) : null)}
         >
           <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Service Agreement</Typography>
           <img
-            src={CheckCircle}
+            src={data ? CheckCircle : Loader}
             className={classes.checkCircle}
             alt="checkbox"
             style={{ opacity: iconsChecked.one ? '1' : '' }}
-          />
-        </Paper>
-        <Paper
-          className={`${iconsChecked.two ? classes.selected : ''} ${classes.item}`}
-          onClick={() =>
-            setIconsChecked((prev) => {
-              return { ...prev, two: true };
-            })
-          }
-        >
-          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
-          <Typography className={classes.itemText}>Memorandum of Understanding</Typography>
-          <img
-            src={CheckCircle}
-            className={classes.checkCircle}
-            alt="checkbox"
-            style={{ opacity: iconsChecked.two ? '1' : '' }}
           />
         </Paper>
         <Button

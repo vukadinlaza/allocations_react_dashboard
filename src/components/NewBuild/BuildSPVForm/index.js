@@ -440,7 +440,7 @@ export default function NewSpvForm() {
       )}
       {page === 1 && (
         <>
-          <ReviewTermsModal page={page} setPage={setPage} />
+          <ReviewTermsModal page={page} setPage={setPage} deal={data?.createBuild} />
         </>
       )}
       {page === 2 && (

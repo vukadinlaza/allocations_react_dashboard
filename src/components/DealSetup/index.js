@@ -210,9 +210,9 @@ const SignTask = ({ dataRequestId, tokenId, tokenSecret }) => {
     if (dataRequestId && tokenId && tokenSecret) {
       // eslint-disable-next-line no-undef
       DocSpring.createVisualForm({
-        dataRequestId: 'drq_hgyjTsK5bt6YFk9dCs',
-        tokenId: 'jb92cfg36EFzjQphd6',
-        tokenSecret: 'bYy2DS3JabgTRgJAXknbEhmrKAJXnDer',
+        dataRequestId,
+        tokenId,
+        tokenSecret,
         domainVerification: false,
       });
     }

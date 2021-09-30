@@ -5,10 +5,33 @@ import { makeStyles } from '@material-ui/core/styles';
 import CheckCircle from '../../../../../assets/check_circle_black_24dp.svg';
 import buildDoc from '../../../../../assets/buildDoc.svg';
 import useStyles from '../../../BuildStyles';
+import { gql, useQuery } from '@apollo/client';
 
-export default function SignDocsForm({ page, setPage }) {
+const SERVICE_AGREEMENT_LINK = gql`
+  query serviceAgreementLink($deal_id: String) {
+    serviceAgreementLink: getServiceAgreementLink(deal_id: $deal_id) {
+      dataRequestId: id
+      tokenId: token_id
+      tokenSecret: token_secret
+    }
+  }
+`;
+
+const signingModal = (serviceAgreementLink) => {
+  // eslint-disable-next-line no-undef
+  DocSpring.createVisualForm({
+    dataRequestId: 'drq_hgyjTsK5bt6YFk9dCs',
+    tokenId: 'jb92cfg36EFzjQphd6',
+    tokenSecret: 'bYy2DS3JabgTRgJAXknbEhmrKAJXnDer',
+    domainVerification: false,
+  });
+};
+
+export default function SignDocsForm({ page, setPage, deal }) {
   const classes = useStyles();
   const [iconsChecked, setIconsChecked] = useState({ one: true, two: true });
+  const { data } = useQuery(SERVICE_AGREEMENT_LINK, { variables: { deal: deal._id } });
+
   return (
     <>
       <Paper className={classes.paper}>
@@ -21,11 +44,7 @@ export default function SignDocsForm({ page, setPage }) {
         </Typography>
         <Paper
           className={`${iconsChecked.one ? classes.selected : ''} ${classes.item}`}
-          onClick={() =>
-            setIconsChecked((prev) => {
-              return { ...prev, one: true };
-            })
-          }
+          onClick={() => signingModal(data)}
         >
           <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
           <Typography className={classes.itemText}>Service Agreement</Typography>
