@@ -149,8 +149,15 @@ export default function NewSpvForm() {
                       Choose your management fee <HelpIcon className={classes.helpIcon} />
                     </Typography>
                     <Grid className={classes.inputBox}>
+                      <TextField
+                        value={buildData.carry_fee.value}
+                        name="carry_fee_value"
+                        onChange={handleChange}
+                        style={{ width: '75%' }}
+                        variant="outlined"
+                      />
                       <Select
-                        style={{ width: '10%' }}
+                        style={{ width: '25%', textAlign: 'center' }}
                         variant="outlined"
                         name="carry_fee_type"
                         value={buildData.carry_fee.type}
@@ -158,15 +165,7 @@ export default function NewSpvForm() {
                       >
                         <MenuItem value="percent">%</MenuItem>
                         <MenuItem value="fixed">$</MenuItem>
-                        <MenuItem value="custom">X</MenuItem>
                       </Select>
-                      <TextField
-                        value={buildData.carry_fee.value}
-                        name="carry_fee_value"
-                        onChange={handleChange}
-                        style={{ width: '90%' }}
-                        variant="outlined"
-                      />
                     </Grid>
                   </FormControl>
                 </Grid>
@@ -181,24 +180,27 @@ export default function NewSpvForm() {
                       Choose your management fee <HelpIcon className={classes.helpIcon} />
                     </Typography>
                     <Grid className={classes.inputBox}>
+                      <TextField
+                        value={buildData.management_fee.value}
+                        name="management_fee_value"
+                        onChange={handleChange}
+                        style={{ width: '75%' }}
+                        variant="outlined"
+                      />
                       <Select
-                        style={{ width: '10%' }}
+                        style={{ width: '25%', textAlign: 'center' }}
                         variant="outlined"
                         name="management_fee_type"
                         value={buildData.management_fee.type}
                         onChange={handleChange}
                       >
-                        <MenuItem value="percent">%</MenuItem>
-                        <MenuItem value="fixed">$</MenuItem>
-                        <MenuItem value="custom">X</MenuItem>
+                        <MenuItem style={{ textAlign: 'center' }} value="percent">
+                          %
+                        </MenuItem>
+                        <MenuItem style={{ textAlign: 'center' }} value="fixed">
+                          $
+                        </MenuItem>
                       </Select>
-                      <TextField
-                        value={buildData.management_fee.value}
-                        name="management_fee_value"
-                        onChange={handleChange}
-                        style={{ width: '90%' }}
-                        variant="outlined"
-                      />
                     </Grid>
                   </FormControl>
                 </Grid>

@@ -167,10 +167,8 @@ const useStyles = makeStyles((theme) => ({
   inputBox: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     boxShadow: '0px 3px 6px #0000000A',
-    border: '1px solid #70707040',
     borderRadius: '5px',
     padding: '0',
-    // marginBottom: '37px',
     maxWidth: '568px',
     width: '100%',
   },

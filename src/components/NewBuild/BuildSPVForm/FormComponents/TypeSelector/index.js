@@ -89,7 +89,7 @@ export default function TypeSelector({ assetType, handleChange, buildData }) {
       <>
         {rowItems.map((item) => {
           return (
-            <Grid className={classes.assetTypeRowItem}>
+            <Grid key={item.value} className={classes.assetTypeRowItem}>
               <TypeItem
                 item={item}
                 assetType={assetType}
