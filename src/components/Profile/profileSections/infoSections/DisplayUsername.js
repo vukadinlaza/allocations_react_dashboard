@@ -26,12 +26,12 @@ const DisplayUsername = ({ investor }) => {
   };
 
   return (
-    <Grid container spacing={2}>
-      <Grid item style={{ padding: '20px', display: 'flex', alignItems: 'center' }}>
+    <Grid container spacing={2} alignItems="center">
+      <Grid item style={{ paddingLeft: '20px' }}>
         <Typography style={{ fontWeight: 'bold' }}>Display username on public pages:</Typography>
       </Grid>
       <Grid item>
-        <FormGroup style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <FormGroup>
           <FormControlLabel
             control={
               <Switch

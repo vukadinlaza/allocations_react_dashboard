@@ -380,7 +380,28 @@ const ProfileInfo = ({
                     style={{ background: 'white' }}
                   />
                 </Grid>
+
+                {/* Display username boolean */}
                 <DisplayUsername investor={investor} />
+
+                {/* profile bio section */}
+                <Grid item xs={12}>
+                  <TextField
+                    multiline
+                    maxRows={4}
+                    id="profileBio"
+                    label="Profile Bio"
+                    placeholder="Tell a bit about yourself and your goals."
+                    variant="outlined"
+                    helperText={`${investor.profileBio.length}/250`}
+                    fullWidth
+                    style={{ background: 'white' }}
+                    error={errors.includes('profileBio')}
+                    value={get(investor, 'profileBio') || ''}
+                    onChange={handleChange('profileBio')}
+                    inputProps={{ maxLength: 250 }}
+                  />
+                </Grid>
               </Grid>
             </Grid>
           </Paper>
@@ -457,19 +478,9 @@ const ProfileInfo = ({
                     <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
                       Interests
                     </Typography>
-                    <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
-                      Select max. 6 sectors
-                    </Typography>
                   </Grid>
 
-                  <Grid
-                    container
-                    spacing={2}
-                    className={classes.paperMain}
-                    style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                  >
-                    <SectorsAndStages investor={investor} style={{ width: '100%' }} />
-                  </Grid>
+                  <SectorsAndStages investor={investor} style={{ width: '100%' }} />
                 </Grid>
               </Paper>
             </Grid>
@@ -513,39 +524,6 @@ const ProfileInfo = ({
               </Paper>
             </Grid>
           </Grid>
-        </Grid>
-
-        {/* Profile Bio section */}
-        <Grid item xs={12}>
-          <Paper className={classes.paper}>
-            <Grid container>
-              <Grid item xs={12} className={classes.paperTitle}>
-                <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
-                  Bio
-                </Typography>
-                <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
-                  250 characters max.
-                </Typography>
-              </Grid>
-
-              <Grid container spacing={1} className={classes.paperMain}>
-                <Grid item xs={12}>
-                  <TextField
-                    maxRows={4}
-                    id="profileBio"
-                    label="Profile bio"
-                    variant="outlined"
-                    fullWidth
-                    style={{ background: 'white' }}
-                    error={errors.includes('profileBio')}
-                    value={get(investor, 'profileBio') || ''}
-                    onChange={handleChange('profileBio')}
-                    inputProps={{ maxLength: 250 }}
-                  />
-                </Grid>
-              </Grid>
-            </Grid>
-          </Paper>
         </Grid>
 
         {/* Submit button */}
