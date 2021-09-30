@@ -20,6 +20,7 @@ import { AiOutlineCheckCircle, AiOutlineArrowLeft, AiOutlineArrowRight } from 'r
 import { useLocation } from 'react-router';
 import { toast } from 'react-toastify';
 import AllocationsRocket from '../DealNextSteps/AllocationsRocket/AllocationsRocket';
+import pmButton from '../../assets/parallel-button.svg';
 
 const DEAL = gql`
   query getDealWithTasks($deal_id: String) {
@@ -185,6 +186,45 @@ const DocumentUploadTask = ({
   );
 };
 
+const ServiceTask = ({ task, deal_id, phase_name, taskData }) => {
+  console.log('Task Data', taskData);
+  return (
+    <Grid item sm={12} lg={12}>
+      <FormControl required disabled variant="outlined">
+        <Typography>{task.title}</Typography>
+        {task.title.includes('KYC') ? (
+          <a
+            href={`https://mfl80ihum2.execute-api.us-east-1.amazonaws.com/dev/kyc/get-login-url?host=${encodeURIComponent(
+              window.location.href,
+            )}&userId=${taskData?.user_id}`}
+            target="'_blank'"
+          >
+            <Button
+            // onClick={() =>
+            //   updateReview({ variables: { deal_id, task_id: task._id, phase: phase_name } })
+            // }
+            >
+              <img src={pmButton} alt="Parallel Markets Login Button" />
+            </Button>
+          </a>
+        ) : (
+          <Button
+            fullWidth
+            variant="contained"
+            component="label"
+            style={{ height: 39 }}
+            // onClick={() =>
+            //   updateReview({ variables: { deal_id, task_id: task._id, phase: phase_name } })
+            // }
+          >
+            Service Button
+          </Button>
+        )}
+      </FormControl>
+    </Grid>
+  );
+};
+
 const ReviewTask = ({ task, deal_id, phase_name, updateReview }) => {
   return (
     <Grid item sm={12} lg={12}>
@@ -282,6 +322,7 @@ const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) 
       />
     );
   }
+
   if (JSON.stringify(task).includes('document-upload')) {
     action = (
       <DocumentUploadTask
@@ -294,6 +335,13 @@ const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) 
       />
     );
   }
+
+  if (JSON.stringify(task).includes('service')) {
+    action = (
+      <ServiceTask task={task} deal_id={deal_id} phase_name={phase.name} taskData={taskData} />
+    );
+  }
+
   if (JSON.stringify(task).includes('review')) {
     action = (
       <ReviewTask
@@ -305,6 +353,9 @@ const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) 
     );
   }
 
+  // service = fund manager kyc, create investment agreement, onboarding email, pre-sign investment agreement
+  // admin-info = confirm port company sercurities... others
+  // admin-review = review docs.... others
   if (JSON.stringify(task).includes('Service Agreement')) {
     action = <SignTask {...(data?.getServiceAgreementLink ?? {})} />;
   }
