@@ -47,6 +47,16 @@ const DEAL = gql`
   }
 `;
 
+const SERVICE_AGREEMENT_LINK = gql`
+  query serviceAgreementLink($deal_id: String) {
+    getServiceAgreementLink(deal_id: $deal_id) {
+      dataRequestId: id
+      tokenId: token_id
+      tokenSecret: token_secret
+    }
+  }
+`;
+
 const mainBoxes = (name) => {
   const data = [
     { value: name || 'Space X', title: 'Name' },
@@ -235,6 +245,22 @@ const ReviewTask = ({ task, deal_id, phase_name, updateReview }) => {
   );
 };
 
+const SignTask = ({ dataRequestId, tokenId, tokenSecret }) => {
+  useEffect(() => {
+    if (dataRequestId && tokenId && tokenSecret) {
+      // eslint-disable-next-line no-undef
+      DocSpring.createVisualForm({
+        dataRequestId,
+        tokenId,
+        tokenSecret,
+        domainVerification: false,
+      });
+    }
+  }, [dataRequestId, tokenId, tokenSecret]);
+
+  return null;
+};
+
 const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) => {
   const { _id: deal_id } = deal;
   const [updateDeal] = useMutation(UPDATE_DEAL_SERVICE, {
@@ -255,6 +281,8 @@ const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) 
       setTimeout(resolve, 5000);
     });
   };
+
+  const { data } = useQuery(SERVICE_AGREEMENT_LINK, { variables: { deal_id } });
 
   const [addDoc, { loading: docLoading }] = useMutation(ADD_DOC, {
     onCompleted: async () => {
@@ -327,6 +355,9 @@ const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) 
   // service = fund manager kyc, create investment agreement, onboarding email, pre-sign investment agreement
   // admin-info = confirm port company sercurities... others
   // admin-review = review docs.... others
+  if (JSON.stringify(task).includes('Service Agreement')) {
+    action = <SignTask {...(data?.getServiceAgreementLink ?? {})} />;
+  }
 
   return (
     <Grid container spacing={1} direction="column" alignItems="center" justifyContent="center">
@@ -345,6 +376,8 @@ export default () => {
   const { data, refetch: refetchDeal } = useQuery(DEAL, {
     variables: { deal_id: query.get('id') },
   });
+  useQuery(SERVICE_AGREEMENT_LINK, { variables: { deal_id: query.get('id') } });
+
   const [currentPhase, setCurrentPhase] = useState(false);
   const [currentTask, setCurrentTask] = useState(false);
   const [currentLoadingState, setCurrentLoadingState] = useState(false);
@@ -360,6 +393,7 @@ export default () => {
   }, [data]);
 
   if (!data) return null;
+  console.log(data);
 
   const { getDealWithTasks: deal } = data;
 
