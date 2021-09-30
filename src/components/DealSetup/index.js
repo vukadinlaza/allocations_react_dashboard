@@ -46,6 +46,12 @@ const DEAL = gql`
   }
 `;
 
+const SERVICE_AGREEMENT_LINK = gql`
+  query serviceAgreementLink($deal_id: String) {
+    getServiceAgreementLink(deal_id: $deal_id)
+  }
+`;
+
 const mainBoxes = (name) => {
   const data = [
     { value: name || 'Space X', title: 'Name' },
@@ -216,6 +222,8 @@ const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) 
     });
   };
 
+  const { data } = useQuery(SERVICE_AGREEMENT_LINK, { variables: { deal_id } });
+
   const [addDoc, { loading: docLoading }] = useMutation(ADD_DOC, {
     onCompleted: async () => {
       await completeStatus();
@@ -276,6 +284,15 @@ const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) 
     );
   }
 
+  if (JSON.stringify(task).includes('Service Agreement')) {
+    console.log(data);
+    action = (
+      <a href={data?.getServiceAgreementLink} target="_blank">
+        Sign
+      </a>
+    );
+  }
+
   return (
     <Grid container spacing={1} direction="column" alignItems="center" justifyContent="center">
       <Grid item sm={12} lg={12}>
@@ -308,6 +325,7 @@ export default () => {
   }, [data]);
 
   if (!data) return null;
+  console.log(data);
 
   const { getDealWithTasks: deal } = data;
 
