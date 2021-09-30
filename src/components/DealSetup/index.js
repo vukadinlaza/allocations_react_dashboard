@@ -48,7 +48,11 @@ const DEAL = gql`
 
 const SERVICE_AGREEMENT_LINK = gql`
   query serviceAgreementLink($deal_id: String) {
-    getServiceAgreementLink(deal_id: $deal_id)
+    getServiceAgreementLink(deal_id: $deal_id) {
+      dataRequestId: id
+      tokenId: token_id
+      tokenSecret: token_secret
+    }
   }
 `;
 
@@ -201,6 +205,22 @@ const ReviewTask = ({ task, deal_id, phase_name, updateReview }) => {
   );
 };
 
+const SignTask = ({ dataRequestId, tokenId, tokenSecret }) => {
+  useEffect(() => {
+    if (dataRequestId && tokenId && tokenSecret) {
+      // eslint-disable-next-line no-undef
+      DocSpring.createVisualForm({
+        dataRequestId: 'drq_hgyjTsK5bt6YFk9dCs',
+        tokenId: 'jb92cfg36EFzjQphd6',
+        tokenSecret: 'bYy2DS3JabgTRgJAXknbEhmrKAJXnDer',
+        domainVerification: false,
+      });
+    }
+  }, [dataRequestId, tokenId, tokenSecret]);
+
+  return null;
+};
+
 const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) => {
   const { _id: deal_id } = deal;
   const [updateDeal] = useMutation(UPDATE_DEAL_SERVICE, {
@@ -285,12 +305,7 @@ const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) 
   }
 
   if (JSON.stringify(task).includes('Service Agreement')) {
-    console.log(data);
-    action = (
-      <a href={data?.getServiceAgreementLink} target="_blank">
-        Sign
-      </a>
-    );
+    action = <SignTask {...(data?.getServiceAgreementLink ?? {})} />;
   }
 
   return (
@@ -310,6 +325,8 @@ export default () => {
   const { data, refetch: refetchDeal } = useQuery(DEAL, {
     variables: { deal_id: query.get('id') },
   });
+  useQuery(SERVICE_AGREEMENT_LINK, { variables: { deal_id: query.get('id') } });
+
   const [currentPhase, setCurrentPhase] = useState(false);
   const [currentTask, setCurrentTask] = useState(false);
   const [currentLoadingState, setCurrentLoadingState] = useState(false);
