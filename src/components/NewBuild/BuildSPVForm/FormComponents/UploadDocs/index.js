@@ -53,7 +53,11 @@ const DocUploader = ({
   }, [filesUploaded]);
 
   return (
-    <Paper className={`${classes.item} ${!filesUploaded[document.slug] ? '' : classes.selected}`}>
+    <Paper
+      className={`${classes.item} ${
+        !filesUploaded[document.slug].complete ? '' : classes.selected
+      }`}
+    >
       <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
       <Typography className={classes.itemText}>{document.name}</Typography>
       {!filesUploaded[document.slug].complete ? (
