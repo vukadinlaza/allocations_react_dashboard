@@ -3,6 +3,9 @@ const personalInfoValidation = (investor, org, requireSecondSigChecked = {}) => 
   if (org === 'irishangels') {
     required = required.filter((d) => d !== 'accredited_investor_status');
   }
+  if (investor.is3c7_options_status) {
+    required = required.filter((d) => d !== 'accredited_investor_status');
+  }
   if (investor.country && investor.country === 'United States') {
     required.push('state');
   }
