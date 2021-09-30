@@ -49,7 +49,17 @@ const DEAL = gql`
 
 const SERVICE_AGREEMENT_LINK = gql`
   query serviceAgreementLink($deal_id: String) {
-    getServiceAgreementLink(deal_id: $deal_id) {
+    dataRequest: getServiceAgreementLink(deal_id: $deal_id) {
+      dataRequestId: id
+      tokenId: token_id
+      tokenSecret: token_secret
+    }
+  }
+`;
+
+const INVESTMENT_AGREEMENT_LINK = gql`
+  query investmentAgreementLink($deal_id: String) {
+    dataRequest: getInvestmentAgreementLink(deal_id: $deal_id) {
       dataRequestId: id
       tokenId: token_id
       tokenSecret: token_secret
@@ -186,7 +196,6 @@ const DocumentUploadTask = ({
 };
 
 const ServiceTask = ({ task, deal_id, phase_name, taskData }) => {
-  console.log('Task Data', taskData);
   return (
     <Grid item sm={12} lg={12}>
       <FormControl required disabled variant="outlined">
@@ -282,7 +291,12 @@ const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) 
     });
   };
 
-  const { data } = useQuery(SERVICE_AGREEMENT_LINK, { variables: { deal_id } });
+  const { data: serviceAgreementLink } = useQuery(SERVICE_AGREEMENT_LINK, {
+    variables: { deal_id },
+  });
+  const { data: investmentAgreementLink } = useQuery(INVESTMENT_AGREEMENT_LINK, {
+    variables: { deal_id },
+  });
 
   const [addDoc, { loading: docLoading }] = useMutation(ADD_DOC, {
     onCompleted: async () => {
@@ -335,12 +349,6 @@ const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) 
     );
   }
 
-  if (JSON.stringify(task).includes('service')) {
-    action = (
-      <ServiceTask task={task} deal_id={deal_id} phase_name={phase.name} taskData={taskData} />
-    );
-  }
-
   if (JSON.stringify(task).includes('review')) {
     action = (
       <ReviewTask
@@ -356,7 +364,11 @@ const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) 
   // admin-info = confirm port company sercurities... others
   // admin-review = review docs.... others
   if (JSON.stringify(task).includes('Service Agreement')) {
-    action = <SignTask {...(data?.getServiceAgreementLink ?? {})} />;
+    action = <SignTask {...(serviceAgreementLink?.dataRequest ?? {})} />;
+  }
+
+  if (JSON.stringify(task).includes('Pre-Sign Investment Agreement')) {
+    action = <SignTask {...(investmentAgreementLink?.dataRequest ?? {})} />;
   }
 
   return (
@@ -377,6 +389,7 @@ export default () => {
     variables: { deal_id: query.get('id') },
   });
   useQuery(SERVICE_AGREEMENT_LINK, { variables: { deal_id: query.get('id') } });
+  useQuery(INVESTMENT_AGREEMENT_LINK, { variables: { deal_id: query.get('id') } });
 
   const [currentPhase, setCurrentPhase] = useState(false);
   const [currentTask, setCurrentTask] = useState(false);
