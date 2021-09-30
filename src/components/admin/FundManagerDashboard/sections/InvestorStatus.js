@@ -21,6 +21,7 @@ import AppModal from '../../../Modal/AppModal';
 import InvestmentEdit from '../../../InvestmentEdit/UpdateInvestment';
 import DeleteViewedUser from '../../../InvestmentEdit/DeleteViewedUser';
 import CreateInvestment from '../../../InvestmentNew/createInvestment';
+import SendWireReminder from '../../../InvestmentNew/sendWireReminder';
 
 const demoNames = [
   'Pablo Picasso',
@@ -215,6 +216,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
   const [dealId, setDealId] = useState(null);
   const [investorId, setInvestorId] = useState(null);
   const [sortField, setSortField] = useState('name');
+  const [reminderModalOpen, setReminderModalOpen] = useState(false);
 
   const onClose = () => {
     setInvestmentId(null);
@@ -437,13 +439,15 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
             autoHeight
             fontSize="small"
             size="third"
+            className={classes.scrollBox}
+            buttonAction={() => setReminderModalOpen((open) => !open)}
             buttonText={
-              true ? (
+              !superAdmin ? (
                 ''
               ) : (
                 <div>
                   <MailIcon style={{ color: 'white', marginRight: '0.5em' }} />
-                  Send Reminder
+                  Send Wire Reminder
                 </div>
               )
             }
@@ -536,6 +540,14 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
         </AppModal>
         <AppModal isOpen={showCreateInvModal} onClose={() => setShowCreateInvModal(false)}>
           <CreateInvestment deal={deal} handleUpdate={handleUpdate} />
+        </AppModal>
+        <AppModal
+          maxWidth="md"
+          modalHeader="Send Wire Reminder"
+          isOpen={reminderModalOpen}
+          onClose={() => setReminderModalOpen(false)}
+        >
+          <SendWireReminder signedInvestors={signedInvestors} deal={deal} />
         </AppModal>
       </Grid>
     </>

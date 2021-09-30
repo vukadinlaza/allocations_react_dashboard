@@ -3,3 +3,136 @@
     cursor: pointer;
   }
 }
+
+.SendWireReminder {
+  width: 100%;
+  height: 75vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 85%;
+    margin: 0;
+    padding: 1rem 0;
+
+    .title {
+      color: #2a2b54;
+      font-size: 18px;
+      font-weight: 400;
+    }
+
+    .investors {
+      width: 49%;
+      height: 100%;
+      overflow: hidden;
+      padding: 1rem;
+      background: #fbfcff;
+      border-radius: 10px;
+
+      button {
+        color: #2a2b5480;
+        font-size: 11px;
+        font-family: 'Roboto';
+        padding: 0;
+        outline: none;
+        padding: 5px;
+        width: max-content;
+      }
+
+      .investor-list {
+        list-style: none;
+        padding: 0;
+        overflow-y: scroll;
+        height: 80%;
+        border-radius: 5px;
+
+        .investor-item {
+          display: flex;
+          height: 3rem;
+          justify-content: space-between;
+          align-items: center;
+          background-color: white;
+          margin: 5px 0;
+          border-radius: 7.5px;
+
+          .investor-amount {
+            padding: 0px 10px;
+            margin: 0px 10px;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Roboto';
+            font-weight: 400;
+          }
+
+          .investor-label {
+            height: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            font-family: 'Roboto';
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            color: #2a2b54;
+            padding: 0;
+            margin: 0;
+            text-overflow: ellipsis;
+            width: 75%;
+            overflow-x: scroll;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+        }
+      }
+    }
+
+    .message {
+      width: 49%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      padding: 1rem;
+      background: #fbfcff;
+
+      img {
+        width: 95%;
+        overflow: hidden;
+        object-fit: cover;
+      }
+    }
+  }
+
+  .send-button {
+    background: #2a2b54;
+    color: white;
+    width: 100%;
+    text-transform: none;
+    margin: 16px 0px;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .SendWireReminder {
+    .container {
+      flex-direction: column;
+      overflow-y: scroll;
+
+      .investors {
+        width: 100%;
+      }
+
+      .message {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}
