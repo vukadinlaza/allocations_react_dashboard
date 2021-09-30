@@ -323,7 +323,7 @@ function PersonalInformation({
             onChange={handleChange('ssn')}
             type="number"
             onInput={(e) => {
-              e.target.value = Math.max(1, parseInt(e.target.value, 10)).toString().slice(0, 9);
+              e.target.value = e.target.value.slice(0, 9);
             }}
             label="Social Security Number"
           />
