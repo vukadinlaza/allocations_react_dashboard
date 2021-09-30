@@ -217,8 +217,6 @@ const ProfileInfo = ({
     country.countryName === 'United States' ? -1 : !country.countryName === 'United States' ? 1 : 0,
   );
 
-  console.log('investor==>', investor);
-
   return (
     <div className="Sections">
       {/* main grid for all sections */}
