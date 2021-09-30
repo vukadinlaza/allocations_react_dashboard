@@ -93,6 +93,8 @@ const useStyles = makeStyles(() => ({
   helperText: {
     display: 'flex',
     justifyContent: 'flex-end',
+    background: '#f1f4fb',
+    margin: '0px',
   },
 }));
 
@@ -395,7 +397,9 @@ const ProfileInfo = ({
                     label="Profile Bio"
                     placeholder="Tell a bit about yourself and your goals."
                     variant="outlined"
-                    helperText={`${investor.profileBio.length}/250`}
+                    helperText={
+                      !investor.profileBio ? '0/250' : `${investor.profileBio.length}/250`
+                    }
                     FormHelperTextProps={{
                       className: classes.helperText,
                     }}
