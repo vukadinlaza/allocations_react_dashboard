@@ -17,7 +17,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import countries from 'country-region-data';
 import { UsaStates } from 'usa-states';
-import Sectors from './infoSections/Sectors';
+import SectorsAndStages from './infoSections/SectorsAndStages';
 import DisplayUsername from './infoSections/DisplayUsername';
 import ProfilePhoto from './infoSections/ProfilePhoto';
 import Loader from '../../utils/Loader';
@@ -38,9 +38,11 @@ const UPDATE_USER = gql`
       email
       username
       sectors
+      stages
       linkedinUrl
       display_username
       profileImageKey
+      city
       passport {
         link
         path
@@ -131,7 +133,12 @@ const ProfileInfo = ({
   const handleChange = (prop) => (e) => {
     e.persist();
 
-    if (prop === 'first_name' || prop === 'last_name' || prop === 'signer_full_name') {
+    if (
+      prop === 'first_name' ||
+      prop === 'last_name' ||
+      prop === 'signer_full_name' ||
+      prop === 'city'
+    ) {
       const capitalizeName = (str) =>
         str
           .toLowerCase()
@@ -170,6 +177,7 @@ const ProfileInfo = ({
       'display_username',
       'state',
       'signer_full_name',
+      'city',
     ]);
     setErrors(validation);
 
@@ -289,6 +297,24 @@ const ProfileInfo = ({
                 </Grid>
 
                 <Grid item xs={12}>
+                  <FormControl
+                    required
+                    disabled
+                    variant="outlined"
+                    style={{ background: 'white', width: '100%' }}
+                  >
+                    <TextField
+                      error={errors.includes('city')}
+                      style={{ width: '100%' }}
+                      value={get(investor, 'city') || ''}
+                      onChange={handleChange('city')}
+                      label="City"
+                      variant="outlined"
+                    />
+                  </FormControl>
+                </Grid>
+
+                <Grid item xs={6}>
                   <TextField
                     id="country"
                     select
@@ -312,7 +338,7 @@ const ProfileInfo = ({
                   </TextField>
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                   <TextField
                     select
                     fullWidth
@@ -428,11 +454,18 @@ const ProfileInfo = ({
                       Interests
                     </Typography>
                     <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
-                      Select a min. 3 and max. 6 sectors
+                      Select max. 6 sectors
                     </Typography>
                   </Grid>
 
-                  <Sectors investor={investor} style={{ width: '100%' }} />
+                  <Grid
+                    container
+                    spacing={2}
+                    className={classes.paperMain}
+                    style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                  >
+                    <SectorsAndStages investor={investor} style={{ width: '100%' }} />
+                  </Grid>
                 </Grid>
               </Paper>
             </Grid>
@@ -462,7 +495,7 @@ const ProfileInfo = ({
                           pattern: `^https?://((www|\w\w)\.)?linkedin.com/((in/[^/]+/?)|(pub/[^/]+/((\w|\d)+/?){3}))$`,
                         }}
                         id="linkedin"
-                        label="Linkedin Profile Link"
+                        label="LinkedIn Profile Link"
                         variant="outlined"
                         fullWidth
                         style={{ background: 'white' }}
