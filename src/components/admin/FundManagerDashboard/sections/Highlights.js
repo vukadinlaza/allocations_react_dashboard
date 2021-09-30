@@ -96,13 +96,23 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
   const totalRaised = investments
     ? investments
         .filter((i) => ['wired', 'complete'].includes(i.status))
-        .map((i) => i.amount)
+        // .map((i) => i.amount)
+        .map((i) => {
+          if (i.capitalWiredAmount !== null) {
+            return i.capitalWiredAmount;
+          }
+          return i.amount;
+        })
         .reduce((acc, n) => acc + n, 0) || 0
     : 0;
 
+  const totalCommitted = investments
+    ? investments.map((i) => i.amount).reduce((acc, n) => acc + n, 0) || 0
+    : 0;
+
   return (
-    <Grid container spacing={3} className={classes.section}>
-      <Grid item xs={12} lg={3}>
+    <Grid container spacing={2} className={classes.section}>
+      <Grid item xs={12} lg>
         <SimpleBox
           size="fourth"
           title="Total Capital Received"
@@ -124,7 +134,26 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
           </div>
         </SimpleBox>
       </Grid>
-      <Grid item xs={12} lg={3}>
+      <Grid item xs={12} lg>
+        <SimpleBox
+          size="fourth"
+          title="Total Committed"
+          openTooltip={openTooltip}
+          handleTooltip={handleTooltip}
+          id="totalCommitted"
+          tooltipContent={
+            <Typography color="inherit">This is the total capital committed</Typography>
+          }
+        >
+          <div
+            className={classes.simpleBoxDataRow}
+            style={{ flexDirection: 'column', alignItems: 'flex-start' }}
+          >
+            <Typography style={{ fontSize: '26px' }}>${nWithCommas(totalCommitted)}</Typography>
+          </div>
+        </SimpleBox>
+      </Grid>
+      <Grid item xs={12} lg>
         <SimpleBox
           size="fourth"
           title="Total Invested"
@@ -148,7 +177,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
           </div>
         </SimpleBox>
       </Grid>
-      <Grid item xs={12} lg={3}>
+      <Grid item xs={12} lg>
         <SimpleBox
           size="fourth"
           title="Multiple (Estimated)"
@@ -171,10 +200,10 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
           </div>
         </SimpleBox>
       </Grid>
-      <Grid item xs={12} lg={3}>
+      <Grid item xs={12} lg>
         <SimpleBox
           size="fourth"
-          title="Total Portfolio Value (Estimated)"
+          title="Total Portfolio Value (Est.)"
           openTooltip={openTooltip}
           handleTooltip={handleTooltip}
           id="portfolioValue"
