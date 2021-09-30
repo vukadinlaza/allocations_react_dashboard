@@ -17,7 +17,7 @@ const ADD_DOC = gql`
     }
   }
 `;
-const COMPLETE_REVIEW = gql`
+const UPDATE_TASK = gql`
   mutation updateDealTask($deal_id: String!, $task_id: String!, $phase: String!) {
     updateDealTask(deal_id: $deal_id, task_id: $task_id, phase: $phase) {
       _id
@@ -30,24 +30,27 @@ const DocUploader = ({
   filesUploaded,
   setFilesUploaded,
   deal,
+  // no change
   classes,
   addDoc,
   updateTask,
 }) => {
+  // const { data, refetch: refetchDeal } = useQuery(DEAL, {
+  //   variables: { deal_id: deal?._id },
+  // });
+
   useEffect(() => {
-    if (filesUploaded[document.slug].complete) {
-      console.log('doc being added ');
+    if (filesUploaded[document.title].complete) {
       addDoc({
         variables: {
-          doc: filesUploaded[document.slug]?.document,
-          // title: `s-${document.name}`,
-          task_id: document?.task_id,
+          doc: filesUploaded[document.title]?.document,
+          task_id: document?._id,
           deal_id: deal?._id,
           phase: 'build',
         },
       });
       updateTask({
-        variables: { deal_id: deal?._id, task_id: document?.task_id, phase: 'build' },
+        variables: { deal_id: deal?._id, task_id: document?._id, phase: 'build' },
       });
     }
   }, [filesUploaded]);
@@ -55,12 +58,12 @@ const DocUploader = ({
   return (
     <Paper
       className={`${classes.item} ${
-        !filesUploaded[document.slug].complete ? '' : classes.selected
+        !filesUploaded[document.title].complete ? '' : classes.selected
       }`}
     >
       <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
-      <Typography className={classes.itemText}>{document.name}</Typography>
-      {!filesUploaded[document.slug].complete ? (
+      <Typography className={classes.itemText}>{document.title}</Typography>
+      {!filesUploaded[document.title].complete ? (
         <div className={classes.uploadIcon} style={{ opacity: '1' }}>
           <label htmlFor="doc-upload" style={{ margin: '0' }}>
             <img
@@ -83,7 +86,7 @@ const DocUploader = ({
                   setFilesUploaded((prev) => {
                     return {
                       ...prev,
-                      [document.slug]: { complete: true, document: target.files[0] },
+                      [document.title]: { complete: true, document: target.files[0] },
                     };
                   });
                 }
@@ -105,38 +108,23 @@ const DocUploader = ({
 
 export default function UploadDocs({ page, setPage, deal }) {
   const classes = useStyles();
-  const documents = [
-    {
-      task_id: '61554d10457d945d44ee8f5b',
-      name: 'Portfolio Company Term Sheet',
-      slug: 'portfolio-company-term-sheet',
-    },
-    { task_id: '61554d10457d945d44ee8f58', name: 'Pitch Deck', slug: 'pitch-deck' },
-    {
-      task_id: '61554d10457d945d44ee8f5a',
-      name: "Driver's License/Passport",
-      slug: 'license-or-passport',
-    },
-    {
-      task_id: '61554d10457d945d44ee8f59',
-      name: 'Portfolio Company Logo',
-      slug: 'portfolio-company-logo',
-    },
-  ];
+  const currentPhase = deal.phases.find((phase) => phase.name === 'build');
+  const uploadTasks = currentPhase.tasks.filter((task) => task.title.includes('Upload'));
+
   const [filesUploaded, setFilesUploaded] = useState({
-    'portfolio-company-logo': {
+    'Upload Company Logo': {
       complete: false,
       document: null,
     },
-    'license-or-passport': {
+    'Upload ID': {
       complete: false,
       document: null,
     },
-    'pitch-deck': {
+    'Upload Company Deck': {
       complete: false,
       document: null,
     },
-    'portfolio-company-term-sheet': {
+    'Upload Term Sheet': {
       complete: false,
       document: null,
     },
@@ -147,7 +135,7 @@ export default function UploadDocs({ page, setPage, deal }) {
       toast.success('Success! Your document has been added');
     },
   });
-  const [updateTask] = useMutation(COMPLETE_REVIEW, {
+  const [updateTask] = useMutation(UPDATE_TASK, {
     onCompleted: () => {
       toast.success('Success! Phase reviewed.');
     },
@@ -162,10 +150,10 @@ export default function UploadDocs({ page, setPage, deal }) {
           Please upload the appropriate documents so we have them on file for you. When uploading
           multiple files, please compress them into one zip folder.
         </Typography>
-        {documents.map((document) => (
+        {uploadTasks.map((task) => (
           <DocUploader
-            key={document.name}
-            document={document}
+            key={task.title}
+            document={task}
             classes={classes}
             filesUploaded={filesUploaded}
             setFilesUploaded={setFilesUploaded}
