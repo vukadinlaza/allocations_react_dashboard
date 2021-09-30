@@ -90,6 +90,10 @@ const useStyles = makeStyles(() => ({
     paddingRight: '1rem',
     borderTop: '1px solid #8493A640 !important',
   },
+  helperText: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
 }));
 
 const ProfileInfo = ({
@@ -394,6 +398,9 @@ const ProfileInfo = ({
                     placeholder="Tell a bit about yourself and your goals."
                     variant="outlined"
                     helperText={`${investor.profileBio.length}/250`}
+                    FormHelperTextProps={{
+                      className: classes.helperText,
+                    }}
                     fullWidth
                     style={{ background: 'white' }}
                     error={errors.includes('profileBio')}
