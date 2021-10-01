@@ -1,18 +1,128 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Paper } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import { gql, useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
 import buildDoc from '../../../../../assets/buildDoc.svg';
 import buildUpload from '../../../../../assets/buildUpload.svg';
 import CheckCircle from '../../../../../assets/check_circle_black_24dp.svg';
-
 import useStyles from '../../../BuildStyles';
 
-export default function UploadDocs({ page, setPage, deal_id }) {
+const ADD_DOC = gql`
+  mutation addDealDocService($deal_id: String!, $task_id: String!, $doc: Upload!, $phase: String) {
+    addDealDocService(deal_id: $deal_id, task_id: $task_id, doc: $doc, phase: $phase) {
+      _id
+    }
+  }
+`;
+
+const DocUploader = ({
+  document,
+  filesUploaded,
+  setFilesUploaded,
+  deal,
+  // no change
+  classes,
+  addDoc,
+}) => {
+  // const { data, refetch: refetchDeal } = useQuery(DEAL, {
+  //   variables: { deal_id: deal?._id },
+  // });
+
+  useEffect(() => {
+    if (filesUploaded[document.title].complete) {
+      addDoc({
+        variables: {
+          doc: filesUploaded[document.title]?.document,
+          task_id: document?._id,
+          deal_id: deal?._id,
+          phase: 'build',
+        },
+      });
+    }
+  }, [filesUploaded]);
+
+  return (
+    <Paper
+      className={`${classes.item} ${
+        !filesUploaded[document.title].complete ? '' : classes.selected
+      }`}
+    >
+      <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
+      <Typography className={classes.itemText}>{document.title}</Typography>
+      {!filesUploaded[document.title].complete ? (
+        <div className={classes.uploadIcon} style={{ opacity: '1' }}>
+          <label htmlFor="doc-upload" style={{ margin: '0' }}>
+            <img
+              src={buildUpload}
+              className={classes.uploadIcon}
+              style={{ opacity: '1', cursor: 'pointer' }}
+              alt="checkbox"
+            />
+          </label>
+          <form>
+            <input
+              id="doc-upload"
+              className={classes.uploadIcon}
+              type="file"
+              style={{ display: 'none' }}
+              accept="application/pdf"
+              multiple
+              onChange={({ target }) => {
+                if (target.validity.valid) {
+                  setFilesUploaded((prev) => {
+                    return {
+                      ...prev,
+                      [document.title]: { complete: true, document: target.files[0] },
+                    };
+                  });
+                }
+              }}
+            />
+          </form>
+        </div>
+      ) : (
+        <img
+          src={CheckCircle}
+          className={classes.checkCircle}
+          alt="checkbox"
+          style={{ opacity: '1' }}
+        />
+      )}
+    </Paper>
+  );
+};
+
+export default function UploadDocs({ page, setPage, deal }) {
   const classes = useStyles();
-  const [iconsChecked, setIconsChecked] = useState({});
+  const currentPhase = deal.phases.find((phase) => phase.name === 'build');
+  const uploadTasks = currentPhase.tasks.filter((task) => task.type === 'fm-document-upload');
+
+  const [filesUploaded, setFilesUploaded] = useState({
+    'Upload Company Logo': {
+      complete: false,
+      document: null,
+    },
+    'Upload ID': {
+      complete: false,
+      document: null,
+    },
+    'Upload Company Deck': {
+      complete: false,
+      document: null,
+    },
+    'Upload Term Sheet': {
+      complete: false,
+      document: null,
+    },
+  });
   const history = useHistory();
+  const [addDoc] = useMutation(ADD_DOC, {
+    onCompleted: () => {
+      toast.success('Success! Your document has been added');
+    },
+  });
   return (
     <>
       <Paper className={classes.paper}>
@@ -23,115 +133,23 @@ export default function UploadDocs({ page, setPage, deal_id }) {
           Please upload the appropriate documents so we have them on file for you. When uploading
           multiple files, please compress them into one zip folder.
         </Typography>
-        <Paper
-          className={`${classes.item} ${!iconsChecked.one ? '' : classes.selected}`}
-          onClick={() => {
-            setIconsChecked((prev) => {
-              return { ...prev, one: true };
-            });
-          }}
-        >
-          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
-          <Typography className={classes.itemText}>Portfolio Company Term Sheet</Typography>
-          {!iconsChecked.one ? (
-            <img
-              src={buildUpload}
-              className={classes.uploadIcon}
-              style={{ opacity: iconsChecked.one ? '1' : '' }}
-              alt="upload button"
-            />
-          ) : (
-            <img
-              src={CheckCircle}
-              className={classes.checkCircle}
-              alt="checkbox"
-              style={{ opacity: '1' }}
-            />
-          )}
-        </Paper>
-        <Paper
-          className={`${classes.item} ${!iconsChecked.two ? '' : classes.selected}`}
-          onClick={() => {
-            setIconsChecked((prev) => {
-              return { ...prev, two: true };
-            });
-          }}
-        >
-          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
-          <Typography className={classes.itemText}>Pitch Deck</Typography>
-          {!iconsChecked.two ? (
-            <img
-              src={buildUpload}
-              className={classes.uploadIcon}
-              style={{ opacity: iconsChecked.two ? '1' : '' }}
-              alt="upload button"
-            />
-          ) : (
-            <img
-              src={CheckCircle}
-              className={classes.checkCircle}
-              alt="checkbox"
-              style={{ opacity: '1' }}
-            />
-          )}
-        </Paper>
-        <Paper
-          className={`${classes.item} ${!iconsChecked.three ? '' : classes.selected}`}
-          onClick={() => {
-            setIconsChecked((prev) => {
-              return { ...prev, three: true };
-            });
-          }}
-        >
-          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
-          <Typography className={classes.itemText}>Driver's License/Passport</Typography>
-          {!iconsChecked.three ? (
-            <img
-              src={buildUpload}
-              className={classes.uploadIcon}
-              style={{ opacity: iconsChecked.three ? '1' : '' }}
-              alt="upload button"
-            />
-          ) : (
-            <img
-              src={CheckCircle}
-              className={classes.checkCircle}
-              alt="checkbox"
-              style={{ opacity: '1' }}
-            />
-          )}
-        </Paper>
-        <Paper
-          className={`${classes.item} ${!iconsChecked.four ? '' : classes.selected}`}
-          onClick={() => {
-            setIconsChecked((prev) => {
-              return { ...prev, four: true };
-            });
-          }}
-        >
-          <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
-          <Typography className={classes.itemText}>Portfolio Company Logo</Typography>
-          {!iconsChecked.four ? (
-            <img
-              src={buildUpload}
-              className={classes.uploadIcon}
-              style={{ opacity: iconsChecked.four ? '1' : '' }}
-              alt="upload button"
-            />
-          ) : (
-            <img
-              src={CheckCircle}
-              className={classes.checkCircle}
-              alt="checkbox"
-              style={{ opacity: '1' }}
-            />
-          )}
-        </Paper>
+        {uploadTasks.map((task) => (
+          <DocUploader
+            key={task._id}
+            document={task}
+            classes={classes}
+            filesUploaded={filesUploaded}
+            setFilesUploaded={setFilesUploaded}
+            addDoc={addDoc}
+            deal={deal}
+          />
+        ))}
+
         <Button
           className={classes.finishButton}
           onClick={() => {
             toast.success('Success! Your submission was submitted.');
-            if (deal_id) history.push(`/deal-setup?id=${deal_id}`);
+            if (deal?._id) history.push(`/deal-setup?id=${deal._id}`);
           }}
         >
           Finish

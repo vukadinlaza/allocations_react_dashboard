@@ -10,7 +10,17 @@ import useStyles from '../BuildStyles';
 
 const CREATE_BUILD = gql`
   mutation createBuild {
-    deal_id: createBuild
+    deal: createBuild {
+      _id
+      phases {
+        name
+        tasks {
+          _id
+          title
+          type
+        }
+      }
+    }
   }
 `;
 
@@ -452,14 +462,14 @@ export default function NewSpvForm() {
           page={page}
           setPage={setPage}
           setBuildInfo={setBuildInfo}
-          deal_id={initialDeal?.deal_id}
+          deal_id={initialDeal?.deal?._id}
           waitingOnInitialDeal={loading}
         />
       ),
     },
     {
       title: 'Upload docs',
-      Component: <UploadDocsModal page={page} setPage={setPage} deal_id={initialDeal?.deal_id} />,
+      Component: <UploadDocsModal page={page} setPage={setPage} deal={initialDeal?.deal} />,
     },
   ];
 

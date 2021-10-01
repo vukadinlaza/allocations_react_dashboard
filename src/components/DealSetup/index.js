@@ -167,6 +167,7 @@ const DocumentUploadTask = ({
           phase: phase_name,
         },
       });
+
       setDoc(null);
     }
   }, [doc]);
@@ -287,7 +288,7 @@ const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) 
 
   const completeStatus = () => {
     return new Promise((resolve) => {
-      setTimeout(resolve, 5000);
+      setTimeout(resolve, 2000);
     });
   };
 
@@ -478,20 +479,20 @@ export default () => {
                         }
                       >
                         <ListItemIcon>
-                          {(currentTask === t && currentLoadingState) ||
+                          {/* {(currentTask === t && currentLoadingState) ||
                           (currentTask === t && currentLoadingState && t.complete) ? (
                             <CircularProgress size={24} />
-                          ) : (
-                            <AiOutlineCheckCircle
-                              style={{
-                                color:
-                                  (currentLoadingState && currentTask === t) || t.complete
-                                    ? '#1be01e'
-                                    : 'grey',
-                              }}
-                              size="1.75rem"
-                            />
-                          )}
+                          ) : ( */}
+                          <AiOutlineCheckCircle
+                            style={{
+                              color:
+                                (currentLoadingState && currentTask === t) || t.complete
+                                  ? '#1be01e'
+                                  : 'grey',
+                            }}
+                            size="1.75rem"
+                          />
+                          {/* )} */}
                         </ListItemIcon>
                         <ListItemText size="small" primary={_.capitalize(t.title)} />
                         <ListItemIcon
