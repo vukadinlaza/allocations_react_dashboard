@@ -2,21 +2,22 @@ import React, { useEffect } from 'react';
 import _ from 'lodash';
 import { Link, useParams } from 'react-router-dom';
 import { useLazyQuery, gql } from '@apollo/client';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  TableHead,
-  Paper,
-  Button,
-  Grid,
-} from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
+// import {
+//   Table,
+//   TableBody,
+//   TableCell,
+//   TableRow,
+//   TableHead,
+//   Paper,
+//   Button,
+//   Grid,
+// } from '@material-ui/core';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+// import Typography from '@material-ui/core/Typography';
 import { useAuth } from '../../auth/useAuth';
-import { nWithCommas } from '../../utils/numbers';
+// import { nWithCommas } from '../../utils/numbers';
 import Loader from '../utils/Loader';
-
+import AllocationsTable from '../utils/AllocationsTable';
 import './style.scss';
 
 /** *
@@ -69,16 +70,66 @@ export default function Investors() {
     organization: { investors },
   } = data;
 
+  const headers = [
+    {
+      value: 'name',
+      label: 'NAME',
+      type: 'name',
+      align: 'center',
+    },
+    {
+      value: 'location',
+      label: 'LOCATION',
+      type: 'locations',
+    },
+    {
+      value: 'investments',
+      label: 'INVESTMENTS',
+      type: 'investments',
+      align: 'center',
+    },
+    {
+      value: 'sectors',
+      label: 'SECTORS',
+    },
+    {
+      value: 'linkedin',
+      label: 'LINKEDIN',
+    },
+    {
+      value: 'more',
+      label: 'MORE',
+      align: 'center',
+      type: 'more',
+    },
+  ];
+  const temp = investors.slice(2617);
+
+  const getCellContent = (type, row, headerValue) => {
+    switch (type) {
+      case 'name':
+        return <div>{row[headerValue]}</div>;
+
+      case 'location':
+        return <div>Locations</div>;
+
+      case 'investments':
+        return <div>{row[headerValue].length}</div>;
+
+      case 'more':
+        return <ExpandMore />;
+
+      default:
+        return <div />;
+    }
+  };
+
+  // TODO: Use ServerTable, create query for data to include location, sectors, and :inkedIn
+
   return (
     <div className="Investors">
-      {/* {organization === "allocations" && <Col sm={{ size: 12 }}>
-          <Paper className="actions">
-            <Link to="/investors/new">
-              <Button variant="contained" color="secondary">INVITE INVESTOR</Button>
-            </Link>
-          </Paper>
-        </Col>} */}
-      <Grid container>
+      <AllocationsTable data={temp} headers={headers} getCellContent={getCellContent} />
+      {/* <Grid container>
         <Grid item xs={12}>
           <Paper className="table-wrapper">
             <Grid container justify="space-between" style={{ padding: '16px' }}>
@@ -147,7 +198,7 @@ export default function Investors() {
             </Table>
           </Paper>
         </Grid>
-      </Grid>
+      </Grid> */}
     </div>
   );
 }
