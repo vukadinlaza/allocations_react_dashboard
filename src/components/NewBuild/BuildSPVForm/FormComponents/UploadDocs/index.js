@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Paper } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
 import buildDoc from '../../../../../assets/buildDoc.svg';
