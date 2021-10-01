@@ -1,18 +1,22 @@
-import React, { useCallback, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import moment from 'moment';
 import HelpIcon from '@material-ui/icons/Help';
 import { Button, TextField, Paper, Grid, FormControl, Select, MenuItem } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import BasicInfo from './FormComponents/TypeSelector/index';
-import ReviewTermsModal from './FormComponents/AgreementSigner/index';
 import UploadDocsModal from './FormComponents/UploadDocs/index';
 import useStyles from '../BuildStyles';
-import { useHistory } from 'react-router';
 
 const CREATE_BUILD = gql`
-  mutation createBuild($payload: Object) {
-    createBuild(payload: $payload) {
+  mutation createBuild {
+    deal_id: createBuild
+  }
+`;
+
+const SET_BUILD_INFO = gql`
+  mutation setBuildInfo($deal_id: String, $payload: Object) {
+    setBuildInfo(deal_id: $deal_id, payload: $payload) {
       _id
       metadata
       phases {
@@ -65,7 +69,7 @@ const Breadcrumbs = ({ titles, page }) => {
   );
 };
 
-const BuildDetails = ({ page, setPage, createBuild }) => {
+const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDeal }) => {
   const classes = useStyles();
 
   const [buildData, setBuildData] = useState({
@@ -95,8 +99,9 @@ const BuildDetails = ({ page, setPage, createBuild }) => {
   });
 
   const handleSubmit = () => {
-    createBuild({
+    setBuildInfo({
       variables: {
+        deal_id,
         payload: {
           ...buildData,
         },
@@ -414,10 +419,10 @@ const BuildDetails = ({ page, setPage, createBuild }) => {
             />
             <Button
               className={classes.continueButton}
+              disabled={waitingOnInitialDeal}
               onClick={() => {
                 setPage(page + 1);
                 handleSubmit();
-                console.log(buildData);
               }}
             >
               Continue
@@ -430,37 +435,31 @@ const BuildDetails = ({ page, setPage, createBuild }) => {
 };
 
 export default function NewSpvForm() {
-  const [createBuild, { data, loading }] = useMutation(CREATE_BUILD);
-  console.log(loading);
+  const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
+  const [setBuildInfo] = useMutation(SET_BUILD_INFO);
   // Page
   const [page, setPage] = useState(0);
-  const history = useHistory();
 
-  const decrementPage = useCallback(() => setPage((p) => (p > 0 ? p - 1 : 0)), []);
-  const incrementPage = useCallback(
-    () =>
-      setPage((p) => {
-        if (p >= 2) {
-          history.push(`/deal-setup?id=${data?.createBuild?.metadata._id}`)(p < 2 ? p + 1 : 2);
-        } else {
-          return p + 1;
-        }
-      }),
-    [],
-  );
+  useEffect(() => {
+    createBuild();
+  }, []);
 
   const pages = [
     {
       title: 'Build your SPV',
-      Component: <BuildDetails page={page} setPage={setPage} createBuild={createBuild} />,
+      Component: (
+        <BuildDetails
+          page={page}
+          setPage={setPage}
+          setBuildInfo={setBuildInfo}
+          deal_id={initialDeal?.deal_id}
+          waitingOnInitialDeal={loading}
+        />
+      ),
     },
     {
       title: 'Upload docs',
-      Component: <UploadDocsModal page={page} setPage={setPage} deal={data?.createBuild} />,
-    },
-    {
-      title: 'Review and sign terms',
-      Component: <ReviewTermsModal page={page} setPage={setPage} deal={data?.createBuild} />,
+      Component: <UploadDocsModal page={page} setPage={setPage} deal_id={initialDeal?.deal_id} />,
     },
   ];
 
