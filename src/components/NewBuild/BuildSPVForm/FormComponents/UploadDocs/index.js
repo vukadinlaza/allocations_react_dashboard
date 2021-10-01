@@ -1,25 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Paper } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import { useQuery, gql, useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
 import buildDoc from '../../../../../assets/buildDoc.svg';
 import buildUpload from '../../../../../assets/buildUpload.svg';
 import CheckCircle from '../../../../../assets/check_circle_black_24dp.svg';
 import useStyles from '../../../BuildStyles';
-import { set } from 'lodash';
 
 const ADD_DOC = gql`
   mutation addDealDocService($deal_id: String!, $task_id: String!, $doc: Upload!, $phase: String) {
     addDealDocService(deal_id: $deal_id, task_id: $task_id, doc: $doc, phase: $phase) {
-      _id
-    }
-  }
-`;
-const UPDATE_TASK = gql`
-  mutation updateDealTask($deal_id: String!, $task_id: String!, $phase: String!) {
-    updateDealTask(deal_id: $deal_id, task_id: $task_id, phase: $phase) {
       _id
     }
   }
@@ -33,7 +25,6 @@ const DocUploader = ({
   // no change
   classes,
   addDoc,
-  updateTask,
 }) => {
   // const { data, refetch: refetchDeal } = useQuery(DEAL, {
   //   variables: { deal_id: deal?._id },
@@ -48,9 +39,6 @@ const DocUploader = ({
           deal_id: deal?._id,
           phase: 'build',
         },
-      });
-      updateTask({
-        variables: { deal_id: deal?._id, task_id: document?._id, phase: 'build' },
       });
     }
   }, [filesUploaded]);
@@ -109,7 +97,7 @@ const DocUploader = ({
 export default function UploadDocs({ page, setPage, deal }) {
   const classes = useStyles();
   const currentPhase = deal.phases.find((phase) => phase.name === 'build');
-  const uploadTasks = currentPhase.tasks.filter((task) => task.title.includes('Upload'));
+  const uploadTasks = currentPhase.tasks.filter((task) => task.type === 'fm-document-upload');
 
   const [filesUploaded, setFilesUploaded] = useState({
     'Upload Company Logo': {
@@ -135,11 +123,6 @@ export default function UploadDocs({ page, setPage, deal }) {
       toast.success('Success! Your document has been added');
     },
   });
-  const [updateTask] = useMutation(UPDATE_TASK, {
-    onCompleted: () => {
-      toast.success('Success! Phase reviewed.');
-    },
-  });
   return (
     <>
       <Paper className={classes.paper}>
@@ -152,14 +135,13 @@ export default function UploadDocs({ page, setPage, deal }) {
         </Typography>
         {uploadTasks.map((task) => (
           <DocUploader
-            key={task.title}
+            key={task._id}
             document={task}
             classes={classes}
             filesUploaded={filesUploaded}
             setFilesUploaded={setFilesUploaded}
             addDoc={addDoc}
             deal={deal}
-            updateTask={updateTask}
           />
         ))}
 
@@ -167,7 +149,7 @@ export default function UploadDocs({ page, setPage, deal }) {
           className={classes.finishButton}
           onClick={() => {
             toast.success('Success! Your submission was submitted.');
-            if (deal?.metadata) history.push(`/deal-setup?id=${deal.metadata._id}`);
+            if (deal?._id) history.push(`/deal-setup?id=${deal._id}`);
           }}
         >
           Finish
