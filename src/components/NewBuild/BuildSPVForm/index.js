@@ -390,7 +390,7 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
-                  Who's fund template documents would you like to use?
+                  Whose fund template documents would you like to use?
                   <HelpIcon className={classes.helpIcon} />
                 </Typography>
                 <Select
