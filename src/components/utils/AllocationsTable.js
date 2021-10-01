@@ -109,7 +109,7 @@ const AllocationsTable = ({
   headers,
   rowSelector,
   rowDetailPage,
-  pagination,
+  pagination = false,
   serverPagination,
   count,
   rowsQuantity = 25,
