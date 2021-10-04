@@ -1,18 +1,7 @@
 import React, { useEffect } from 'react';
 // import _ from 'lodash';
 // import { Link, useParams } from 'react-router-dom';
-// import {
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableRow,
-//   TableHead,
-//   Paper,
-//   Button,
-//   Grid,
-// } from '@material-ui/core';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-// import Typography from '@material-ui/core/Typography';
 // import { useAuth } from '../../auth/useAuth';
 // import { nWithCommas } from '../../utils/numbers';
 // import Loader from '../utils/Loader';
@@ -29,8 +18,8 @@ import './style.scss';
 
 const investorVariables = {
   gqlQuery: `
-    query AllUsers($pagination: PaginationInput!) {
-      allUsers(pagination: $pagination) {
+    query AllUsersWithSubmissionData($pagination: PaginationInput!) {
+      allUsersWithSubmissionData(pagination: $pagination) {
         count
         users {
           _id
@@ -43,21 +32,31 @@ const investorVariables = {
             _id
             amount
             organization
+            submissionData{
+              country
+              state
+              fullName
+              legalName
+            }
           }
           linkedinUrl
           city
           state
-          mail_country
+          country
+          profileImageKey
+          sectors
         }
       }
     }`,
   headers: [
     { value: 'name', label: 'NAME', type: 'name', isFilter: true, keyNotInData: true },
-    { value: 'location', label: 'LOCATION', isFilter: true, keyNotInData: true },
+    { value: 'location', label: 'LOCATION', type: 'location', isFilter: true, keyNotInData: true },
     {
       value: 'investmentsCount',
       label: 'INVESTMENTS',
       type: 'investmentsCount',
+      align: 'center',
+      alignHeader: true,
     },
     {
       value: 'sectors',
@@ -68,15 +67,11 @@ const investorVariables = {
       value: 'linkedinUrl',
       label: 'LINKEDIN',
       type: 'linkedin',
-    },
-    {
-      value: 'more',
-      label: 'MORE',
-      type: 'more',
-      keyNotInData: true,
+      align: 'center',
+      alignHeader: true,
     },
   ],
-  resolverName: 'allUsers',
+  resolverName: 'allUsersWithSubmissionData',
   dataVariable: 'users',
   defaultSortField: 'investmentsCount',
 };
@@ -101,14 +96,27 @@ export default function Investors() {
   // } = data;
 
   const getCellContent = (type, row, headerValue) => {
-    console.log('Row', row);
+    console.log('Row', row.investments?.[0]?.submissionData?.fullName);
+    // row.investments[0].submissionData.fullName
+    // row?.investments?.[0]?.submissionData?.fullName
     switch (type) {
       // eventually add profile photos?
       case 'name':
-        return row.first_name ? `${row['first_name']} ${row['last_name']}` : '';
+        // return row.investments.submissionData
+        //   ? `${row?.investments?.[0]?.submissionData?.fullName}`
+        //   : '';
+        return row.first_name
+          ? `${row['first_name']} ${row['last_name']}`
+          : row.investments?.[0]?.submissionData
+          ? `${row?.investments?.[0]?.submissionData?.fullName}`
+          : '';
 
       case 'location':
-        return row.city ? `${row.city}, ${row.state} ${row['mail_country']}` : '';
+        return row.city
+          ? `${row.city}, ${row.state}, ${row.country}`
+          : row.investments?.[0]?.submissionData
+          ? `${row.investments?.[0]?.submissionData?.city}, ${row.investments?.[0]?.submissionData?.state}, ${row.investments?.[0]?.submissionData?.country}`
+          : '';
 
       case 'investmentsCount':
         return <div>{row[headerValue]}</div>;
@@ -117,7 +125,6 @@ export default function Investors() {
         return row[headerValue] ? (
           <a href={row[headerValue]} target="_blank" rel="noopener noreferrer">
             <img src={linkedinActive} alt="LinkedIn Logo" />
-            {row[headerValue]}
           </a>
         ) : (
           <img src={linkedinInactive} alt="LinkedIn Logo" />
@@ -131,83 +138,9 @@ export default function Investors() {
     }
   };
 
-  // TODO: Use ServerTable, create query for data to include location, sectors, and :inkedIn
-  // console.log(temp);
-
   return (
     <div className="Investors">
       <ServerTable tableVariables={investorVariables} getCellContent={getCellContent} />
-
-      {/* <Grid container>
-        <Grid item xs={12}>
-          <Paper className="table-wrapper">
-            <Grid container justify="space-between" style={{ padding: '16px' }}>
-              <Typography variant="h6" gutterBottom>
-                Investors
-              </Typography>
-              {organization === 'allocations' && (
-                <Link to="/investors/new">
-                  <Button variant="contained" color="secondary">
-                    INVITE INVESTOR
-                  </Button>
-                </Link>
-              )}
-            </Grid>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Investor</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Investments</TableCell>
-                  <TableCell>Total Invested</TableCell>
-                  <TableCell />
-                  <TableCell />
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {_.orderBy(
-                  investors,
-                  ({ investments }) => _.sumBy(investments, 'amount'),
-                  'desc',
-                ).map((investor) => (
-                  <TableRow key={investor._id}>
-                    <TableCell>{investor.name || investor.email}</TableCell>
-                    <TableCell>{investor.email}</TableCell>
-                    <TableCell>
-                      {
-                        investor.investments.filter(
-                          (inv) => inv.organization === data?.organization?._id,
-                        ).length
-                      }
-                    </TableCell>
-                    <TableCell>
-                      $
-                      {nWithCommas(
-                        _.sumBy(
-                          investor.investments.filter(
-                            (inv) => inv.organization === data?.organization?._id,
-                          ),
-                          'amount',
-                        ),
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {(organization === 'allocations' ||
-                        organization === 'vitalize' ||
-                        organization === 'irishangels') && (
-                        <Link to={`/investor/${investor._id}/home`} target="_blank">
-                          View dashboard as {investor.first_name || investor.entity_name}
-                        </Link>
-                      )}
-                    </TableCell>
-                    <TableCell />
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Paper>
-        </Grid>
-      </Grid> */}
     </div>
   );
 }
