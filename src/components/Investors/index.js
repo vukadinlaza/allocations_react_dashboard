@@ -95,28 +95,63 @@ export default function Investors() {
   //   organization: { investors },
   // } = data;
 
+  const displayName = (data) => {
+    let name = null;
+    if (data.first_name) {
+      if (data.last_name) {
+        return (name = `${data.first_name} ${data.last_name}`);
+      }
+      return (name = data.first_name);
+    }
+
+    if (data.investments.length >= 1 && data.investments[0].submissionData) {
+      const legalName =
+        data.investments[0].submissionData.legalName &&
+        data.investments[0].submissionData.legalName;
+      const fullName =
+        data.investments[0].submissionData.fullName && data.investments[0].submissionData.fullName;
+
+      return (name = legalName || fullName);
+    }
+    return name || data.email;
+  };
+
+  const displayLocation = (data) => {
+    let location = null;
+    if (!data.city && !data.country) {
+      if (data.investments.length >= 1 && data.investments[0].submissionData) {
+        const { submissionData } = data.investments[0];
+        return (location =
+          submissionData.country !== 'United States'
+            ? submissionData.country
+            : `${submissionData.state}, ${submissionData.country}`);
+      }
+    }
+
+    if (data.country) {
+      if (data.state && data.city) {
+        return (location = `${data.city}, ${data.state}, ${data.country}}`);
+      }
+      if (data.city) {
+        return (location = `${data.city}, ${data.country}`);
+      }
+      return (location = data.country);
+    }
+
+    return location;
+  };
+
   const getCellContent = (type, row, headerValue) => {
-    console.log('Row', row.investments?.[0]?.submissionData?.fullName);
+    // console.log('Row', row.investments?.[0]?.submissionData?.fullName);
     // row.investments[0].submissionData.fullName
     // row?.investments?.[0]?.submissionData?.fullName
     switch (type) {
       // eventually add profile photos?
       case 'name':
-        // return row.investments.submissionData
-        //   ? `${row?.investments?.[0]?.submissionData?.fullName}`
-        //   : '';
-        return row.first_name
-          ? `${row['first_name']} ${row['last_name']}`
-          : row.investments?.[0]?.submissionData
-          ? `${row?.investments?.[0]?.submissionData?.fullName}`
-          : '';
+        return displayName(row);
 
       case 'location':
-        return row.city
-          ? `${row.city}, ${row.state}, ${row.country}`
-          : row.investments?.[0]?.submissionData
-          ? `${row.investments?.[0]?.submissionData?.city}, ${row.investments?.[0]?.submissionData?.state}, ${row.investments?.[0]?.submissionData?.country}`
-          : '';
+        return displayLocation(row);
 
       case 'investmentsCount':
         return <div>{row[headerValue]}</div>;
