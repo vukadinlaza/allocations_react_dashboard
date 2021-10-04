@@ -8,6 +8,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import ServerTable from '../utils/ServerTable';
 import linkedinActive from '../../assets/linkedin-active.svg';
 import linkedinInactive from '../../assets/linkedin-inactive.svg';
+import { Avatar } from '@material-ui/core';
 import './style.scss';
 
 /** *
@@ -49,8 +50,21 @@ const investorVariables = {
       }
     }`,
   headers: [
-    { value: 'name', label: 'NAME', type: 'name', isFilter: true, keyNotInData: true },
-    { value: 'location', label: 'LOCATION', type: 'location', isFilter: true, keyNotInData: true },
+    {
+      value: 'first_name',
+      label: 'NAME',
+      type: 'name',
+      isFilter: true,
+      isSortable: true,
+      keyNotInData: true,
+    },
+    {
+      value: 'location',
+      label: 'LOCATION',
+      type: 'location',
+      isSortable: true,
+      keyNotInData: true,
+    },
     {
       value: 'investmentsCount',
       label: 'INVESTMENTS',
@@ -96,6 +110,7 @@ export default function Investors() {
   // } = data;
 
   const displayName = (data) => {
+    console.log('data. :>> ', data);
     let name = null;
     if (data.first_name) {
       if (data.last_name) {
@@ -113,7 +128,12 @@ export default function Investors() {
 
       return (name = legalName || fullName);
     }
-    return name || data.email;
+    return (
+      <>
+        <Avatar alt={{ name }} />
+      </>
+    );
+    // return name || data.email;
   };
 
   const displayLocation = (data) => {
@@ -154,7 +174,7 @@ export default function Investors() {
         return displayLocation(row);
 
       case 'investmentsCount':
-        return <div>{row[headerValue]}</div>;
+        return <div>{row.investments && row.investments.length}</div>;
 
       case 'linkedin':
         return row[headerValue] ? (
@@ -165,6 +185,8 @@ export default function Investors() {
           <img src={linkedinInactive} alt="LinkedIn Logo" />
         );
 
+      case 'sectors':
+        return row.sectors && row.sectors.map((sector) => <p>{sector}</p>);
       case 'more':
         return <ExpandMore />;
 
