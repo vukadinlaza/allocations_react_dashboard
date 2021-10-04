@@ -17,6 +17,8 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 // import { nWithCommas } from '../../utils/numbers';
 // import Loader from '../utils/Loader';
 import ServerTable from '../utils/ServerTable';
+import linkedinActive from '../../assets/linkedin-active.svg';
+import linkedinInactive from '../../assets/linkedin-inactive.svg';
 import './style.scss';
 
 /** *
@@ -101,6 +103,7 @@ export default function Investors() {
   const getCellContent = (type, row, headerValue) => {
     console.log('Row', row);
     switch (type) {
+      // eventually add profile photos?
       case 'name':
         return row.first_name ? `${row['first_name']} ${row['last_name']}` : '';
 
@@ -111,10 +114,13 @@ export default function Investors() {
         return <div>{row[headerValue]}</div>;
 
       case 'linkedin':
-        return (
+        return row[headerValue] ? (
           <a href={row[headerValue]} target="_blank" rel="noopener noreferrer">
+            <img src={linkedinActive} alt="LinkedIn Logo" />
             {row[headerValue]}
           </a>
+        ) : (
+          <img src={linkedinInactive} alt="LinkedIn Logo" />
         );
 
       case 'more':
