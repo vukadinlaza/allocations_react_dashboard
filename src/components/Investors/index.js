@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
-import _ from 'lodash';
-import { Link, useParams } from 'react-router-dom';
-import { useLazyQuery, gql } from '@apollo/client';
+// import _ from 'lodash';
+// import { Link, useParams } from 'react-router-dom';
 // import {
 //   Table,
 //   TableBody,
@@ -14,10 +13,10 @@ import { useLazyQuery, gql } from '@apollo/client';
 // } from '@material-ui/core';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 // import Typography from '@material-ui/core/Typography';
-import { useAuth } from '../../auth/useAuth';
+// import { useAuth } from '../../auth/useAuth';
 // import { nWithCommas } from '../../utils/numbers';
-import Loader from '../utils/Loader';
-import AllocationsTable from '../utils/AllocationsTable';
+// import Loader from '../utils/Loader';
+import ServerTable from '../utils/ServerTable';
 import './style.scss';
 
 /** *
@@ -26,95 +25,97 @@ import './style.scss';
  *
  * */
 
-const GET_INVESTORS = gql`
-  query GetOrg($slug: String!) {
-    organization(slug: $slug) {
-      _id
-      investors {
-        _id
-        first_name
-        last_name
-        email
-        name
-        investments {
+const investorVariables = {
+  gqlQuery: `
+    query AllUsers($pagination: PaginationInput!) {
+      allUsers(pagination: $pagination) {
+        count
+        users {
           _id
-          amount
-          organization
+          first_name
+          last_name
+          email
+          entity_name
+          investmentsCount
+          investments{
+            _id
+            amount
+            organization
+          }
+          linkedinUrl
+          city
+          state
+          mail_country
         }
       }
-    }
-  }
-`;
-
-export default function Investors() {
-  const { organization } = useParams();
-  const { userProfile } = useAuth();
-  const [getInvestors, { data, error }] = useLazyQuery(GET_INVESTORS, {
-    variables: { slug: organization },
-  });
-
-  useEffect(() => {
-    if (userProfile && userProfile.email) getInvestors();
-  }, [getInvestors, userProfile]);
-
-  if (error) return <div>{error.message}</div>;
-
-  if (!data?.organization?.investors)
-    return (
-      <div>
-        <Loader />
-      </div>
-    );
-
-  const {
-    organization: { investors },
-  } = data;
-
-  const headers = [
+    }`,
+  headers: [
+    { value: 'name', label: 'NAME', type: 'name', isFilter: true, keyNotInData: true },
+    { value: 'location', label: 'LOCATION', isFilter: true, keyNotInData: true },
     {
-      value: 'name',
-      label: 'NAME',
-      type: 'name',
-      align: 'center',
-    },
-    {
-      value: 'location',
-      label: 'LOCATION',
-      type: 'locations',
-    },
-    {
-      value: 'investments',
+      value: 'investmentsCount',
       label: 'INVESTMENTS',
-      type: 'investments',
-      align: 'center',
+      type: 'investmentsCount',
     },
     {
       value: 'sectors',
       label: 'SECTORS',
+      type: 'sectors',
     },
     {
-      value: 'linkedin',
+      value: 'linkedinUrl',
       label: 'LINKEDIN',
+      type: 'linkedin',
     },
     {
       value: 'more',
       label: 'MORE',
-      align: 'center',
       type: 'more',
+      keyNotInData: true,
     },
-  ];
-  const temp = investors.slice(2617);
+  ],
+  resolverName: 'allUsers',
+  dataVariable: 'users',
+  defaultSortField: 'investmentsCount',
+};
+
+export default function Investors() {
+  // const { organization } = useParams();
+  // const { userProfile } = useAuth();
+  // const [getInvestors, { data, error }] = useLazyQuery(GET_INVESTORS, {
+  //   variables: { slug: organization },
+  // });
+
+  // useEffect(() => {
+  //   if (userProfile && userProfile.email) getInvestors();
+  // }, [getInvestors, userProfile]);
+
+  // if (error) return <div>{error.message}</div>;
+
+  // if (!data?.organization?.investors) return <Loader />;
+
+  // const {
+  //   organization: { investors },
+  // } = data;
 
   const getCellContent = (type, row, headerValue) => {
+    console.log('Row', row);
     switch (type) {
       case 'name':
-        return <div>{row[headerValue]}</div>;
+        return row.first_name ? `${row['first_name']} ${row['last_name']}` : '';
 
       case 'location':
-        return <div>Locations</div>;
+        return row.city ? `${row.city}, ${row.state} ${row['mail_country']}` : '';
 
-      case 'investments':
-        return <div>{row[headerValue].length}</div>;
+      case 'investmentsCount':
+        return <div>{row[headerValue]}</div>;
+
+      case 'linkedin':
+        return (
+          <a href={row[headerValue]} target="_blank" rel="noopener noreferrer">
+            {row[headerValue]}
+          </a>
+        );
 
       case 'more':
         return <ExpandMore />;
@@ -125,10 +126,12 @@ export default function Investors() {
   };
 
   // TODO: Use ServerTable, create query for data to include location, sectors, and :inkedIn
+  // console.log(temp);
 
   return (
     <div className="Investors">
-      <AllocationsTable data={temp} headers={headers} getCellContent={getCellContent} />
+      <ServerTable tableVariables={investorVariables} getCellContent={getCellContent} />
+
       {/* <Grid container>
         <Grid item xs={12}>
           <Paper className="table-wrapper">
