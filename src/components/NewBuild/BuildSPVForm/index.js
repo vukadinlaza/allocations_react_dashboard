@@ -154,11 +154,21 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
-                  Choose your management fee <HelpIcon className={classes.helpIcon} />
+                  Choose your carry fee <HelpIcon className={classes.helpIcon} />
                 </Typography>
                 <Grid className={classes.inputBox}>
+                  <TextField
+                    style={{ width: '70%', marginRight: '12px' }}
+                    value={buildData.carry_fee.value}
+                    name="carry_fee_value"
+                    onChange={handleChange}
+                    variant="outlined"
+                  />
                   <Select
-                    style={{ width: '10%' }}
+                    style={{
+                      width: '25%',
+                      textAlign: 'center',
+                    }}
                     variant="outlined"
                     name="carry_fee_type"
                     value={buildData.carry_fee.type}
@@ -168,13 +178,6 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                     <MenuItem value="fixed">$</MenuItem>
                     <MenuItem value="custom">X</MenuItem>
                   </Select>
-                  <TextField
-                    value={buildData.carry_fee.value}
-                    name="carry_fee_value"
-                    onChange={handleChange}
-                    style={{ width: '90%' }}
-                    variant="outlined"
-                  />
                 </Grid>
               </FormControl>
             </Grid>
@@ -189,8 +192,15 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                   Choose your management fee <HelpIcon className={classes.helpIcon} />
                 </Typography>
                 <Grid className={classes.inputBox}>
+                  <TextField
+                    style={{ width: '70%', marginRight: '12px' }}
+                    value={buildData.management_fee.value}
+                    name="management_fee_value"
+                    onChange={handleChange}
+                    variant="outlined"
+                  />
                   <Select
-                    style={{ width: '10%' }}
+                    style={{ width: '25%', textAlign: 'center' }}
                     variant="outlined"
                     name="management_fee_type"
                     value={buildData.management_fee.type}
@@ -200,13 +210,6 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                     <MenuItem value="fixed">$</MenuItem>
                     <MenuItem value="custom">X</MenuItem>
                   </Select>
-                  <TextField
-                    value={buildData.management_fee.value}
-                    name="management_fee_value"
-                    onChange={handleChange}
-                    style={{ width: '90%' }}
-                    variant="outlined"
-                  />
                 </Grid>
               </FormControl>
             </Grid>
@@ -222,7 +225,7 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                       value="one-time"
                       className={
                         buildData.management_fee_frequency === 'one-time'
-                          ? classes.selectedInputButton
+                          ? `${classes.selectedInputButton} ${classes.selected}`
                           : classes.inputButton
                       }
                       onClick={(e) => {
@@ -243,7 +246,7 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                       name="management_fee_frequency"
                       className={
                         buildData.management_fee_frequency === 'annual'
-                          ? classes.selectedInputButton
+                          ? `${classes.selectedInputButton} ${classes.selected}`
                           : classes.inputButton
                       }
                       onClick={(e) => {
@@ -273,7 +276,9 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                       name="side_letters"
                       value={buildData.side_letters}
                       className={
-                        buildData.side_letters ? classes.selectedInputButton : classes.inputButton
+                        buildData.side_letters
+                          ? `${classes.selectedInputButton} ${classes.selected}`
+                          : classes.inputButton
                       }
                       onClick={(e) => {
                         const target = {
@@ -284,7 +289,7 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                         handleChange(e);
                       }}
                     >
-                      Yes
+                      Yes (Standard)
                     </Button>
                   </Grid>
                   <Grid>
@@ -292,7 +297,9 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                       value={buildData.side_letters}
                       name="side_letters"
                       className={
-                        !buildData.side_letters ? classes.selectedInputButton : classes.inputButton
+                        !buildData.side_letters
+                          ? `${classes.selectedInputButton} ${classes.selected}`
+                          : classes.inputButton
                       }
                       onClick={(e) => {
                         const target = {
@@ -330,7 +337,7 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                       value={buildData.allocations_investment_advisor}
                       className={
                         buildData.allocations_investment_advisor
-                          ? classes.selectedInputButton
+                          ? `${classes.selectedInputButton} ${classes.selected}`
                           : classes.inputButton
                       }
                       onClick={(e) => {
@@ -351,7 +358,7 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                       name="allocations_investment_advisor"
                       className={
                         !buildData.allocations_investment_advisor
-                          ? classes.selectedInputButton
+                          ? `${classes.selectedInputButton} ${classes.selected}`
                           : classes.inputButton
                       }
                       onClick={(e) => {
@@ -382,7 +389,7 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                   onChange={handleChange}
                 >
                   {' '}
-                  <MenuItem value="506b">506b</MenuItem>
+                  <MenuItem value="506b">506b (no advertising)</MenuItem>
                   <MenuItem value="506c">506c</MenuItem>
                 </Select>
               </FormControl>
