@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import _, { every } from 'lodash';
+import moment from 'moment';
 import {
   List,
   ListItem,
@@ -8,25 +9,30 @@ import {
   CardContent,
   Grid,
   ListItemIcon,
-  Divider,
   Typography,
-  Button,
-  TextField,
-  FormControl,
-  CircularProgress,
+  Snackbar,
 } from '@material-ui/core';
-import { useQuery, gql, useMutation } from '@apollo/client';
-import { AiOutlineCheckCircle, AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
-import { useLocation } from 'react-router';
-import { toast } from 'react-toastify';
-import AllocationsRocket from '../DealNextSteps/AllocationsRocket/AllocationsRocket';
-import pmButton from '../../assets/parallel-button.svg';
+import MuiAlert from '@material-ui/lab/Alert';
+import { useQuery, gql } from '@apollo/client';
+import { AiOutlineCheckCircle, AiFillCheckCircle } from 'react-icons/ai';
+import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
+import { useLocation, withRouter } from 'react-router';
+import { withStyles } from '@material-ui/core/styles';
+import AllocationsLoader from '../utils/AllocationsLoader';
+import AllocationsTable from '../utils/AllocationsTable';
+import { taskTypes } from './Tasks';
+import TaskAction from './TaskAction';
+import styles from './styles';
 
 const DEAL = gql`
   query getDealWithTasks($deal_id: String) {
     getDealWithTasks(deal_id: $deal_id) {
       _id
       metadata
+      manager_name
+      name
+      wire_deadline
+      phase
       phases {
         _id
         name
@@ -47,492 +53,254 @@ const DEAL = gql`
   }
 `;
 
-const SERVICE_AGREEMENT_LINK = gql`
-  query serviceAgreementLink($deal_id: String) {
-    dataRequest: getServiceAgreementLink(deal_id: $deal_id) {
-      dataRequestId: id
-      tokenId: token_id
-      tokenSecret: token_secret
+// const mainBoxes = (name) => {
+//   const data = [
+//     { value: name || 'Space X', title: 'Name' },
+//     { value: 'Kingsley Advani', title: 'Fund Manager' },
+//     { value: 'Pre-onboarding', title: 'Status' },
+//     { value: 'On Time', title: 'Timeline Status' },
+//     { value: 'International', title: 'Type' },
+//     { value: '12/3/2021', title: 'Wire Deadline' },
+//   ];
+//   const x = data.map((item, i) => {
+//     return (
+//       <Grid item sm={12} lg={2} key={`box-${i}`}>
+//         <FlatBox title={item.title}>
+//           <Typography style={{ fontSize: '1.25rem', padding: '16px' }}>{item.value}</Typography>
+//         </FlatBox>
+//       </Grid>
+//     );
+//   });
+//   return x;
+// };
+
+const boxesHeaders = [
+  { value: 'title', label: 'Name', align: 'left', alignHeader: true },
+  { value: 'fundManager', label: 'Fund Manager', align: 'left', alignHeader: true },
+  { value: 'status', label: 'Status', align: 'left', alignHeader: true, type: 'tag' },
+  // { value: 'timeline', label: 'Timeline Status', align: 'left', alignHeader: true, type: 'tag' },
+  { value: 'type', label: 'Type', align: 'left', alignHeader: true },
+  { value: 'wireDeadline', label: 'Wire Deadline', align: 'left', alignHeader: true },
+];
+
+const ListContainer = ({ classes, type, list, onClickAction, current, itemName }) => {
+  const getItemClass = (current, item, complete) => {
+    if (current === item) {
+      if (complete) {
+        return classes.listItemActiveComplete;
+      }
+      return classes.listItemActive;
     }
-  }
-`;
-
-const INVESTMENT_AGREEMENT_LINK = gql`
-  query investmentAgreementLink($deal_id: String) {
-    dataRequest: getInvestmentAgreementLink(deal_id: $deal_id) {
-      dataRequestId: id
-      tokenId: token_id
-      tokenSecret: token_secret
+    if (complete) {
+      return classes.listItemComplete;
     }
-  }
-`;
+    return classes.listItem;
+  };
 
-const mainBoxes = (name) => {
-  const data = [
-    { value: name || 'Space X', title: 'Name' },
-    { value: 'Kingsley Advani', title: 'Fund Manager' },
-    { value: 'Pre-onboarding', title: 'Status' },
-    { value: 'On Time', title: 'Timeline Status' },
-    { value: 'International', title: 'Type' },
-    { value: '12/3/2021', title: 'Wire Deadline' },
-  ];
-
-  const mockFundInfo = data.map((item) => {
-    return (
-      <Grid key={item.title} item sm={12} lg={2}>
-        <Card>
-          <CardContent style={{ fontWeight: '600' }}> {item.title}</CardContent>
-          <Divider />
-          <Typography style={{ fontSize: '1.25rem', padding: '16px' }}> {item.value}</Typography>
+  return (
+    <>
+      <Grid item sm={12} lg={4}>
+        <Card className={classes.card}>
+          <CardContent className={classes.cardContent}>
+            <List component="div" disablePadding>
+              {list.map((item, i) => {
+                const complete =
+                  type === 'phase' ? every(item.tasks, { complete: true }) : item.complete;
+                return (
+                  <ListItem
+                    key={`phase-${i}`}
+                    button
+                    className={getItemClass(current, item, complete)}
+                    onClick={() => onClickAction(current, item, type)}
+                  >
+                    <ListItemIcon>
+                      {complete ? (
+                        <AiFillCheckCircle style={{ color: '#1be01e' }} size="1.75rem" />
+                      ) : (
+                        <AiOutlineCheckCircle style={{ color: 'grey' }} size="1.75rem" />
+                      )}
+                    </ListItemIcon>
+                    <ListItemText size="small" primary={_.capitalize(item[itemName])} />
+                    {(type === 'phase' ||
+                      ![...taskTypes.userTask, ...taskTypes.automaticTasks].includes(
+                        item.type,
+                      )) && (
+                      <ListItemIcon className={classes.itemIcon}>
+                        {current === item ? (
+                          <IoIosArrowBack size="1.2rem" />
+                        ) : (
+                          <IoIosArrowForward size="1.2rem" />
+                        )}
+                      </ListItemIcon>
+                    )}
+                  </ListItem>
+                );
+              })}
+            </List>
+          </CardContent>
         </Card>
       </Grid>
-    );
-  });
-  return mockFundInfo;
-};
-
-const ADD_DOC = gql`
-  mutation addDealDocService($deal_id: String!, $task_id: String!, $doc: Upload!, $phase: String) {
-    addDealDocService(deal_id: $deal_id, task_id: $task_id, doc: $doc, phase: $phase) {
-      _id
-    }
-  }
-`;
-const COMPLETE_REVIEW = gql`
-  mutation updateDealTask($deal_id: String!, $task_id: String!, $phase: String!) {
-    updateDealTask(deal_id: $deal_id, task_id: $task_id, phase: $phase) {
-      _id
-    }
-  }
-`;
-const UPDATE_DEAL_SERVICE = gql`
-  mutation UpdateDealService(
-    $deal_id: String!
-    $task_id: String!
-    $phase: String!
-    $payload: Object!
-  ) {
-    updateDealService(deal_id: $deal_id, task_id: $task_id, phase: $phase, payload: $payload) {
-      _id
-    }
-  }
-`;
-
-const TextTask = ({ task, handleChange, taskData, handleUploadDeal }) => {
-  const taskFields = task.metadata.collect.map((field) => {
-    return (
-      <>
-        <Grid item sm={12} lg={12}>
-          <FormControl required disabled variant="outlined">
-            <Typography>{_.startCase(_.camelCase(field.key))}</Typography>
-            <TextField
-              value={taskData[field.key] || ''}
-              onChange={handleChange(field.key)}
-              variant="outlined"
-            />
-          </FormControl>
-        </Grid>
-        <Button onClick={() => handleUploadDeal()}>Save</Button>
-      </>
-    );
-  });
-  return <>{taskFields}</>;
-};
-
-const DocumentUploadTask = ({
-  task,
-  deal_id,
-  addDoc,
-  phase_name,
-  docLoading,
-  setCurrentLoadingState,
-}) => {
-  const [currentTask, setCurrentTask] = useState(task);
-  const [doc, setDoc] = useState(null);
-
-  useEffect(() => {
-    if (docLoading) {
-      setCurrentTask({ ...currentTask, complete: true });
-      setCurrentLoadingState(true);
-    }
-  }, [docLoading]);
-
-  useEffect(() => {
-    if (doc) {
-      addDoc({
-        variables: {
-          doc,
-          task_id: task._id,
-          deal_id,
-          phase: phase_name,
-        },
-      });
-
-      setDoc(null);
-    }
-  }, [doc]);
-
-  return (
-    <Grid item sm={12} lg={12}>
-      <FormControl required disabled variant="outlined">
-        <Typography>{task.title}</Typography>
-        <Button fullWidth variant="contained" component="label" style={{ height: 39 }}>
-          Attach
-          <input
-            type="file"
-            style={{ display: 'none' }}
-            accept="application/pdf"
-            multiple
-            value={doc ? '' : null}
-            onChange={({ target }) => {
-              if (target.validity.valid) {
-                setDoc(target.files[0]);
-              }
-            }}
-          />
-        </Button>
-      </FormControl>
-    </Grid>
+    </>
   );
 };
 
-const ServiceTask = ({ task, deal_id, phase_name, taskData }) => {
-  return (
-    <Grid item sm={12} lg={12}>
-      <FormControl required disabled variant="outlined">
-        <Typography>{task.title}</Typography>
-        {task.title.includes('KYC') ? (
-          <a
-            href={`https://mfl80ihum2.execute-api.us-east-1.amazonaws.com/dev/kyc/get-login-url?host=${encodeURIComponent(
-              window.location.href,
-            )}&userId=${taskData?.user_id}`}
-            target="'_blank'"
-          >
-            <Button
-            // onClick={() =>
-            //   updateReview({ variables: { deal_id, task_id: task._id, phase: phase_name } })
-            // }
-            >
-              <img src={pmButton} alt="Parallel Markets Login Button" />
-            </Button>
-          </a>
-        ) : (
-          <Button
-            fullWidth
-            variant="contained"
-            component="label"
-            style={{ height: 39 }}
-            // onClick={() =>
-            //   updateReview({ variables: { deal_id, task_id: task._id, phase: phase_name } })
-            // }
-          >
-            Service Button
-          </Button>
-        )}
-      </FormControl>
-    </Grid>
-  );
-};
-
-const ReviewTask = ({ task, deal_id, phase_name, updateReview }) => {
-  return (
-    <Grid item sm={12} lg={12}>
-      <FormControl required disabled variant="outlined">
-        <Typography>{task.title}</Typography>
-        <Button
-          fullWidth
-          variant="contained"
-          component="label"
-          style={{ height: 39 }}
-          onClick={() =>
-            updateReview({ variables: { deal_id, task_id: task._id, phase: phase_name } })
-          }
-        >
-          Confirm Review
-        </Button>
-      </FormControl>
-    </Grid>
-  );
-};
-
-const SignTask = ({ dataRequestId, tokenId, tokenSecret }) => {
-  useEffect(() => {
-    if (dataRequestId && tokenId && tokenSecret) {
-      // eslint-disable-next-line no-undef
-      DocSpring.createVisualForm({
-        dataRequestId,
-        tokenId,
-        tokenSecret,
-        domainVerification: false,
-      });
-    }
-  }, [dataRequestId, tokenId, tokenSecret]);
-
-  return null;
-};
-
-const TaskAction = ({ task, deal, refetchDeal, phase, setCurrentLoadingState }) => {
-  const { _id: deal_id } = deal;
-  const [updateDeal] = useMutation(UPDATE_DEAL_SERVICE, {
-    onCompleted: () => {
-      refetchDeal();
-      toast.success('Success! Task updated.');
-    },
-  });
-  const [updateReview] = useMutation(COMPLETE_REVIEW, {
-    onCompleted: () => {
-      toast.success('Success! Phase reviewed.');
-      refetchDeal();
-    },
-  });
-
-  const completeStatus = () => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, 2000);
-    });
-  };
-
-  const { data: serviceAgreementLink } = useQuery(SERVICE_AGREEMENT_LINK, {
-    variables: { deal_id },
-  });
-  const { data: investmentAgreementLink } = useQuery(INVESTMENT_AGREEMENT_LINK, {
-    variables: { deal_id },
-  });
-
-  const [addDoc, { loading: docLoading }] = useMutation(ADD_DOC, {
-    onCompleted: async () => {
-      await completeStatus();
-      toast.success('Success! Document uploaded.');
-      await refetchDeal();
-      setCurrentLoadingState(false);
-    },
-  });
-  const [taskData, setTaskData] = useState({ ...deal });
-
-  const handleChange = (prop) => (e) => {
-    e.persist();
-    return setTaskData((prev) => ({ ...prev, [prop]: e.target.value }));
-  };
-
-  const handleUploadDeal = () => {
-    updateDeal({
-      variables: {
-        deal_id,
-        phase: phase.name,
-        task_id: task._id,
-        payload: taskData,
-      },
-    });
-  };
-
-  let action = null;
-  if (JSON.stringify(task).includes('text')) {
-    action = (
-      <TextTask
-        handleChange={handleChange}
-        taskData={taskData}
-        task={task}
-        handleUploadDeal={handleUploadDeal}
-      />
-    );
-  }
-
-  if (JSON.stringify(task).includes('document-upload')) {
-    action = (
-      <DocumentUploadTask
-        task={task}
-        deal_id={deal_id}
-        addDoc={addDoc}
-        phase_name={phase.name}
-        docLoading={docLoading}
-        setCurrentLoadingState={setCurrentLoadingState}
-      />
-    );
-  }
-
-  if (JSON.stringify(task).includes('review')) {
-    action = (
-      <ReviewTask
-        task={task}
-        deal_id={deal_id}
-        phase_name={phase.name}
-        updateReview={updateReview}
-      />
-    );
-  }
-
-  // service = fund manager kyc, create investment agreement, onboarding email, pre-sign investment agreement
-  // admin-info = confirm port company sercurities... others
-  // admin-review = review docs.... others
-  if (JSON.stringify(task).includes('Service Agreement')) {
-    action = <SignTask {...(serviceAgreementLink?.dataRequest ?? {})} />;
-  }
-
-  if (JSON.stringify(task).includes('Pre-Sign Investment Agreement')) {
-    action = <SignTask {...(investmentAgreementLink?.dataRequest ?? {})} />;
-  }
-
-  return (
-    <Grid container spacing={1} direction="column" alignItems="center" justifyContent="center">
-      <Grid item sm={12} lg={12}>
-        <Typography style={{ fontWeight: '600' }}>Edit {task.title}</Typography>
-      </Grid>
-      <Grid item sm={12} lg={12} style={{ minWidth: '90%' }}>
-        {action}
-      </Grid>
-    </Grid>
-  );
-};
-
-export default () => {
+const DealSetup = ({ match, classes }) => {
   const query = new URLSearchParams(useLocation().search);
+
   const { data, refetch: refetchDeal } = useQuery(DEAL, {
+    fetchPolicy: 'network-only',
     variables: { deal_id: query.get('id') },
   });
-  useQuery(SERVICE_AGREEMENT_LINK, { variables: { deal_id: query.get('id') } });
-  useQuery(INVESTMENT_AGREEMENT_LINK, { variables: { deal_id: query.get('id') } });
-
-  const [currentPhase, setCurrentPhase] = useState(false);
+  const [taskLoading, setTaskLoading] = useState(false);
+  const [gettingTaskData, setGettingTaskData] = useState(false);
+  const [snackbarData, setSnackbarData] = useState({});
+  const [currentPhase, setCurentPhase] = useState(false);
   const [currentTask, setCurrentTask] = useState(false);
-  const [currentLoadingState, setCurrentLoadingState] = useState(false);
 
   useEffect(() => {
+    console.log(data);
     if (currentPhase && data?.getDealWithTasks) {
       const { getDealWithTasks: deal } = data;
-      setCurrentPhase(deal?.phases?.find((p) => p.name === currentPhase.name));
+      setCurentPhase(deal?.phases?.find((p) => p.name === currentPhase.name));
       if (currentTask && deal.phases.tasks) {
         setCurrentTask(deal?.phases?.tasks.find((t) => t.title === currentTask.title));
       }
     }
   }, [data]);
 
-  if (!data) return null;
-  console.log(data);
+  const handleCloseSnackbar = () => {
+    setSnackbarData({});
+  };
 
+  const listItemClick = (current, item, type) => {
+    if (type === 'phase') {
+      setCurentPhase(current ? (item === current ? false : item) : item);
+      if (currentTask) {
+        setCurrentTask(false);
+      }
+    } else {
+      setCurrentTask(current ? (item === current ? false : item) : item);
+    }
+  };
+
+  const getCellContent = (type, row, headerValue) => {
+    switch (type) {
+      case 'tag':
+        return (
+          <div
+            style={{
+              backgroundColor: 'rgb(213 251 212)',
+              color: '#34AF1F',
+              fontWeight: 'bold',
+              padding: '0.3em 2em',
+              borderRadius: '2em',
+              width: 'auto',
+              textAlign: 'center',
+            }}
+          >
+            {row[headerValue]}
+          </div>
+        );
+      default:
+        return <div />;
+    }
+  };
+
+  if (!data)
+    return (
+      <div className={classes.loaderContainer}>
+        <AllocationsLoader fullHeight />
+      </div>
+    );
   const { getDealWithTasks: deal } = data;
+
+  const mainBoxes = [
+    {
+      title: deal.name,
+      fundManager: deal.manager_name,
+      status: deal.phase,
+      timeline: 'On Time',
+      type: 'International',
+      wireDeadline: moment(deal.wire_deadline).format('MM/DD/YYYY'),
+    },
+  ];
 
   return (
     <>
-      <Grid style={{ margin: '1.25rem 0 ', fontWeight: '900' }}>
-        <Typography variant="h3">SPVs</Typography>
+      <Snackbar
+        open={!!Object.keys(snackbarData).length}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleCloseSnackbar}
+          severity={snackbarData.type}
+        >
+          {snackbarData.message}
+        </MuiAlert>
+      </Snackbar>
+      {taskLoading && (
+        <div className={classes.loaderContainer}>
+          <AllocationsLoader fullHeight />
+        </div>
+      )}
+      <Grid item sm={12} lg={12} className={classes.mainTitle}>
+        <Typography>SPVs</Typography>
       </Grid>
-      <Grid container spacing={1} style={{ margin: '2rem 0' }}>
-        {mainBoxes(deal.metadata.name)}
+      <Grid container spacing={1} className={classes.mainBoxes}>
+        {/* {mainBoxes(deal.metadata.name)} */}
+        <AllocationsTable
+          data={mainBoxes}
+          headers={boxesHeaders}
+          getCellContent={getCellContent}
+          rowHeight="90px"
+          noShadow
+        />
       </Grid>
-      <Grid container spacing={1}>
-        <Grid item sm={12} lg={4}>
-          <Card>
-            <CardContent>
-              <List component="div" disablePadding>
-                {deal.phases.map((p) => {
-                  return (
-                    <ListItem
-                      key={p.name}
-                      button
-                      onClick={() => {
-                        setCurrentPhase(currentPhase ? (p === currentPhase ? false : p) : p);
-                        if (currentTask) {
-                          setCurrentTask(false);
-                        }
-                      }}
-                    >
-                      <ListItemIcon>
-                        <AiOutlineCheckCircle
-                          style={{
-                            color: every(p.tasks, { complete: true }) ? '#1be01e' : 'grey',
-                          }}
-                          size="1.75rem"
-                        />
-                      </ListItemIcon>
-                      <ListItemText size="small" primary={_.capitalize(p.name)} />
-                      <ListItemIcon
-                        style={{
-                          marginLeft: '.25rem',
-                          display: 'flex',
-                          justifyContent: 'flex-end',
-                        }}
-                      >
-                        {currentPhase === p ? (
-                          <AiOutlineArrowLeft style={{}} size="1.2rem" />
-                        ) : (
-                          <AiOutlineArrowRight style={{}} size="1.2rem" />
-                        )}
-                      </ListItemIcon>
-                    </ListItem>
-                  );
-                })}
-              </List>
-            </CardContent>
-          </Card>
-        </Grid>
+      <Grid container spacing={5}>
+        <ListContainer
+          classes={classes}
+          type="phase"
+          list={deal.phases}
+          onClickAction={listItemClick}
+          current={currentPhase}
+          itemName="name"
+        />
         {currentPhase && (
-          <Grid item sm={12} lg={4}>
-            <Card>
-              <CardContent>
-                <List component="div" disablePadding>
-                  {currentPhase?.tasks?.map((t) => {
-                    return (
-                      <ListItem
-                        button
-                        onClick={() =>
-                          setCurrentTask(currentTask ? (t === currentTask ? false : t) : t)
-                        }
-                      >
-                        <ListItemIcon>
-                          {/* {(currentTask === t && currentLoadingState) ||
-                          (currentTask === t && currentLoadingState && t.complete) ? (
-                            <CircularProgress size={24} />
-                          ) : ( */}
-                          <AiOutlineCheckCircle
-                            style={{
-                              color:
-                                (currentLoadingState && currentTask === t) || t.complete
-                                  ? '#1be01e'
-                                  : 'grey',
-                            }}
-                            size="1.75rem"
-                          />
-                          {/* )} */}
-                        </ListItemIcon>
-                        <ListItemText size="small" primary={_.capitalize(t.title)} />
-                        <ListItemIcon
-                          style={{
-                            marginLeft: '.25rem',
-                            display: 'flex',
-                            justifyContent: 'flex-end',
-                          }}
-                        >
-                          {currentTask === t ? (
-                            <AiOutlineArrowLeft style={{}} size="1.2rem" />
-                          ) : (
-                            <AiOutlineArrowRight style={{}} size="1.2rem" />
-                          )}
-                        </ListItemIcon>
-                      </ListItem>
-                    );
-                  })}
-                </List>
-              </CardContent>
-            </Card>
-          </Grid>
+          <ListContainer
+            classes={classes}
+            type="task"
+            list={currentPhase?.tasks || []}
+            onClickAction={listItemClick}
+            current={currentTask}
+            itemName="title"
+          />
         )}
-        {currentTask && (
-          <Grid item sm={12} lg={4}>
-            <Card>
-              <CardContent>
-                <TaskAction
-                  task={currentTask}
-                  deal={deal.metadata}
-                  refetchDeal={refetchDeal}
-                  phase={currentPhase}
-                  setCurrentLoadingState={setCurrentLoadingState}
-                />
-              </CardContent>
-            </Card>
-          </Grid>
-        )}
+        {currentTask &&
+          ![...taskTypes.userTask, ...taskTypes.automaticTasks].includes(currentTask.type) && (
+            <Grid item sm={12} lg={4}>
+              <Card className={classes.card}>
+                <CardContent style={{ padding: '0 16px' }}>
+                  <TaskAction
+                    task={currentTask}
+                    deal={deal.metadata}
+                    refetchDeal={refetchDeal}
+                    phase={currentPhase}
+                    setTaskLoading={setTaskLoading}
+                    classes={classes}
+                    gettingTaskData={gettingTaskData}
+                    setGettingTaskData={setGettingTaskData}
+                    setSnackbarData={setSnackbarData}
+                  />
+                </CardContent>
+              </Card>
+            </Grid>
+          )}
       </Grid>
-      <AllocationsRocket />
     </>
   );
 };
+
+export default withStyles(styles)(withRouter(DealSetup));
