@@ -1,14 +1,9 @@
-import React, { useEffect } from 'react';
-// import _ from 'lodash';
-// import { Link, useParams } from 'react-router-dom';
+import React from 'react';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-// import { useAuth } from '../../auth/useAuth';
-// import { nWithCommas } from '../../utils/numbers';
-// import Loader from '../utils/Loader';
+import { Avatar, makeStyles, Box } from '@material-ui/core';
 import ServerTable from '../utils/ServerTable';
 import linkedinActive from '../../assets/linkedin-active.svg';
 import linkedinInactive from '../../assets/linkedin-inactive.svg';
-import { Avatar } from '@material-ui/core';
 import './style.scss';
 
 /** *
@@ -90,33 +85,38 @@ const investorVariables = {
   defaultSortField: 'investmentsCount',
 };
 
+const useStyles = makeStyles(() => ({
+  imageContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    '& > div ': {
+      marginRight: '10px',
+    },
+  },
+}));
+
 export default function Investors() {
-  // const { organization } = useParams();
-  // const { userProfile } = useAuth();
-  // const [getInvestors, { data, error }] = useLazyQuery(GET_INVESTORS, {
-  //   variables: { slug: organization },
-  // });
-
-  // useEffect(() => {
-  //   if (userProfile && userProfile.email) getInvestors();
-  // }, [getInvestors, userProfile]);
-
-  // if (error) return <div>{error.message}</div>;
-
-  // if (!data?.organization?.investors) return <Loader />;
-
-  // const {
-  //   organization: { investors },
-  // } = data;
+  const classes = useStyles();
 
   const displayName = (data) => {
-    console.log('data. :>> ', data);
+    // TODO: adjust src for Avatar image,
+    // profileImageKey is null even for users with non null data
     let name = null;
     if (data.first_name) {
       if (data.last_name) {
-        return (name = `${data.first_name} ${data.last_name}`);
+        name = `${data.first_name} ${data.last_name}`;
+        return (
+          <Box className={classes.imageContainer}>
+            <Avatar alt={name || data.email} src={data.profileImageKey} /> {name}
+          </Box>
+        );
       }
-      return (name = data.first_name);
+      name = data.first_name;
+      return (
+        <Box className={classes.imageContainer}>
+          <Avatar alt={name || data.email} src={data.profileImageKey} /> {name}
+        </Box>
+      );
     }
 
     if (data.investments.length >= 1 && data.investments[0].submissionData) {
@@ -126,14 +126,13 @@ export default function Investors() {
       const fullName =
         data.investments[0].submissionData.fullName && data.investments[0].submissionData.fullName;
 
-      return (name = legalName || fullName);
+      name = legalName || fullName;
     }
     return (
-      <>
-        <Avatar alt={{ name }} />
-      </>
+      <Box className={classes.imageContainer}>
+        <Avatar alt={name || data.email} src={data.profileImageKey} /> {name || data.email}
+      </Box>
     );
-    // return name || data.email;
   };
 
   const displayLocation = (data) => {
@@ -162,11 +161,7 @@ export default function Investors() {
   };
 
   const getCellContent = (type, row, headerValue) => {
-    // console.log('Row', row.investments?.[0]?.submissionData?.fullName);
-    // row.investments[0].submissionData.fullName
-    // row?.investments?.[0]?.submissionData?.fullName
     switch (type) {
-      // eventually add profile photos?
       case 'name':
         return displayName(row);
 
