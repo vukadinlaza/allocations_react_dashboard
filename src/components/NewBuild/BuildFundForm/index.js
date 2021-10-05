@@ -16,34 +16,29 @@ export default function NewSpvForm() {
   const [buildData, setBuildData] = useState({
     // -------------------------- in the form
     asset_type: '',
-    fund_name: 'test',
+    name: '',
+    slug: '',
     number_of_investments: 0,
-    gp_entity_need: false,
-    gp_entity_name: 'this is a test gp entity',
-    manager_name: 'John Smith',
+    gp_entity_need: '',
+    gp_entity_name: '',
+    manager_name: '',
     carry_fee: {
-      type: 'percent',
-      value: '20',
+      type: '',
+      value: '',
     },
     management_fee: {
-      type: 'percent',
-      value: '10',
+      type: '',
+      value: '',
     },
-    fund_template_documents: 'Allocations',
-    management_fee_frequency: 'one-time',
+    fund_template_documents: '',
+    management_fee_frequency: '',
     setup_cost: 20000,
-    offering_type: '506c',
-    allocations_investment_advisor: true,
-    custom_investment_agreement: false,
-    side_letters: false,
+    offering_type: '',
+    allocations_investment_advisor: '',
+    custom_investment_agreement: '',
+    side_letters: '',
     closing_date: moment(Date.now()).format('YYYY-MM-DD'),
     // -------------------------- not in the form
-    name: 'Test',
-    slug: 'test',
-
-    organization_id: "ObjectId('5fa4547e0cbec80023baa4b7')",
-    legal_spv_name: 'Atomizer 38',
-    master_series: 'Atomizers',
 
     wire_deadline: Date.now(),
     sign_deadline: Date.now(),
@@ -52,7 +47,9 @@ export default function NewSpvForm() {
     angels_deal: true,
     deal_multiple: false,
     description: 'some description',
-    memo: 'some memo',
+    memo: '',
+    portfolio_company_name: '',
+
     // ...payload,
   });
   const handleChange = ({ target }) => {
@@ -133,18 +130,21 @@ export default function NewSpvForm() {
                 <Grid className={classes.inputGridItem} item xs={6}>
                   <FormControl required variant="outlined" className={classes.formContainers}>
                     <Typography className={classes.formItemName}>
-                      Choose your management fee <HelpIcon className={classes.helpIcon} />
+                      Choose your carry fee <HelpIcon className={classes.helpIcon} />
                     </Typography>
                     <Grid className={classes.inputBox}>
                       <TextField
+                        style={{ width: '70%', marginRight: '12px' }}
                         value={buildData.carry_fee.value}
                         name="carry_fee_value"
                         onChange={handleChange}
-                        style={{ width: '90%' }}
                         variant="outlined"
                       />
                       <Select
-                        style={{ width: '10%' }}
+                        style={{
+                          width: '25%',
+                          textAlign: 'center',
+                        }}
                         variant="outlined"
                         name="carry_fee_type"
                         value={buildData.carry_fee.type}
@@ -168,14 +168,14 @@ export default function NewSpvForm() {
                     </Typography>
                     <Grid className={classes.inputBox}>
                       <TextField
+                        style={{ width: '70%', marginRight: '12px' }}
                         value={buildData.management_fee.value}
                         name="management_fee_value"
                         onChange={handleChange}
-                        style={{ width: '90%' }}
                         variant="outlined"
                       />
                       <Select
-                        style={{ width: '10%' }}
+                        style={{ width: '25%', textAlign: 'center' }}
                         variant="outlined"
                         name="management_fee_type"
                         value={buildData.management_fee.type}
@@ -199,7 +199,7 @@ export default function NewSpvForm() {
                           value="one-time"
                           className={
                             buildData.management_fee_frequency === 'one-time'
-                              ? classes.selectedInputButton
+                              ? `${classes.selectedInputButton} ${classes.selected}`
                               : classes.inputButton
                           }
                           onClick={(e) => {
@@ -220,7 +220,7 @@ export default function NewSpvForm() {
                           name="management_fee_frequency"
                           className={
                             buildData.management_fee_frequency === 'annual'
-                              ? classes.selectedInputButton
+                              ? `${classes.selectedInputButton} ${classes.selected}`
                               : classes.inputButton
                           }
                           onClick={(e) => {
@@ -251,7 +251,7 @@ export default function NewSpvForm() {
                           value={buildData.side_letters}
                           className={
                             buildData.side_letters
-                              ? classes.selectedInputButton
+                              ? `${classes.selectedInputButton} ${classes.selected}`
                               : classes.inputButton
                           }
                           onClick={(e) => {
@@ -263,7 +263,7 @@ export default function NewSpvForm() {
                             handleChange(e);
                           }}
                         >
-                          Yes
+                          Yes (Standard)
                         </Button>
                       </Grid>
                       <Grid>
@@ -271,8 +271,8 @@ export default function NewSpvForm() {
                           value={buildData.side_letters}
                           name="side_letters"
                           className={
-                            !buildData.side_letters
-                              ? classes.selectedInputButton
+                            !buildData.side_letters && buildData.side_letters !== ''
+                              ? `${classes.selectedInputButton} ${classes.selected}`
                               : classes.inputButton
                           }
                           onClick={(e) => {
@@ -311,7 +311,7 @@ export default function NewSpvForm() {
                           value={buildData.allocations_investment_advisor}
                           className={
                             buildData.allocations_investment_advisor
-                              ? classes.selectedInputButton
+                              ? `${classes.selectedInputButton} ${classes.selected}`
                               : classes.inputButton
                           }
                           onClick={(e) => {
@@ -331,8 +331,9 @@ export default function NewSpvForm() {
                           value={!buildData.allocations_investment_advisor}
                           name="allocations_investment_advisor"
                           className={
-                            !buildData.allocations_investment_advisor
-                              ? classes.selectedInputButton
+                            !buildData.allocations_investment_advisor &&
+                            buildData.allocations_investment_advisor !== ''
+                              ? `${classes.selectedInputButton} ${classes.selected}`
                               : classes.inputButton
                           }
                           onClick={(e) => {

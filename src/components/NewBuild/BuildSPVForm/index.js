@@ -106,9 +106,6 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
     custom_investment_agreement: '',
     side_letters: '',
     closing_date: moment(Date.now()).format('YYYY-MM-DD'),
-    // -------------------------- not in the form
-    // name: 'Test',
-    // slug: 'test',
   });
   useEffect(() => {
     setBuildData((prev) => ({

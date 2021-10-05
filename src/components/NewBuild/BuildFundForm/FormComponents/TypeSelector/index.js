@@ -150,7 +150,9 @@ export default function TypeSelector({ assetType, handleChange, buildData }) {
                     name="gp_entity_need"
                     value={buildData.gp_entity_need}
                     className={
-                      buildData.gp_entity_need ? classes.selectedInputButton : classes.inputButton
+                      buildData.gp_entity_need
+                        ? `${classes.selectedInputButton} ${classes.selected}`
+                        : classes.inputButton
                     }
                     onClick={(e) => {
                       const target = {
@@ -169,7 +171,9 @@ export default function TypeSelector({ assetType, handleChange, buildData }) {
                     value={!buildData.gp_entity_need}
                     name="gp_entity_need"
                     className={
-                      !buildData.gp_entity_need ? classes.selectedInputButton : classes.inputButton
+                      !buildData.gp_entity_need && buildData.gp_entity_need !== ''
+                        ? `${classes.selectedInputButton} ${classes.selected}`
+                        : classes.inputButton
                     }
                     onClick={(e) => {
                       const target = {
