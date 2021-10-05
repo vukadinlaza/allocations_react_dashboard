@@ -49,6 +49,8 @@ const investorVariables = {
       value: 'first_name',
       label: 'NAME',
       type: 'name',
+      align: 'left',
+      alignHeader: true,
       isFilter: true,
       isSortable: true,
       keyNotInData: true,
@@ -57,6 +59,8 @@ const investorVariables = {
       value: 'location',
       label: 'LOCATION',
       type: 'location',
+      align: 'left',
+      alignHeader: true,
       isSortable: true,
       keyNotInData: true,
     },
@@ -107,13 +111,13 @@ export default function Investors() {
         name = `${data.first_name} ${data.last_name}`;
         return (
           <Box className={classes.imageContainer}>
-            {/* <img
-              src={`https://allocations-public.s3.us-east-2.amazonaws.com/${data.profileImageKey}`}
-              alt="profile-image"
-            /> */}
             <Avatar
               alt={name || data.email}
-              src={`https://allocations-public.s3.us-east-2.amazonaws.com/${data.profileImageKey}`}
+              src={
+                data.profileImageKey
+                  ? `https://allocations-user-img.s3.us-east-2.amazonaws.com/${data.profileImageKey}`
+                  : data.name
+              }
             />{' '}
             {name}
           </Box>
@@ -124,7 +128,11 @@ export default function Investors() {
         <Box className={classes.imageContainer}>
           <Avatar
             alt={name || data.email}
-            src={`https://allocations-public.s3.us-east-2.amazonaws.com/${data.profileImageKey}`}
+            src={
+              data.profileImageKey
+                ? `https://allocations-user-img.s3.us-east-2.amazonaws.com/${data.profileImageKey}`
+                : data.name
+            }
           />{' '}
           {name}
         </Box>
@@ -142,7 +150,15 @@ export default function Investors() {
     }
     return (
       <Box className={classes.imageContainer}>
-        <Avatar alt={name || data.email} src={data.profileImageKey} /> {name || data.email}
+        <Avatar
+          alt={name || data.email}
+          src={
+            data.profileImageKey
+              ? `https://allocations-user-img.s3.us-east-2.amazonaws.com/${data.profileImageKey}`
+              : data.name
+          }
+        />{' '}
+        {name || data.email}
       </Box>
     );
   };
