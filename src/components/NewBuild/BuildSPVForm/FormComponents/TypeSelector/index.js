@@ -119,6 +119,20 @@ export default function TypeSelector({ assetType, handleChange, buildData }) {
           <Grid className={classes.inputGridItem} item xs={6}>
             <FormControl required disabled variant="outlined" className={classes.formContainers}>
               <Typography className={classes.formItemName}>
+                Deal Name <HelpIcon className={classes.helpIcon} />
+              </Typography>
+              <TextField
+                value={buildData.name}
+                name="name"
+                onChange={handleChange}
+                className={classes.inputBox}
+                variant="outlined"
+              />
+            </FormControl>
+          </Grid>{' '}
+          <Grid className={classes.inputGridItem} item xs={6}>
+            <FormControl required disabled variant="outlined" className={classes.formContainers}>
+              <Typography className={classes.formItemName}>
                 Portfolio Company Name <HelpIcon className={classes.helpIcon} />
               </Typography>
               <TextField
