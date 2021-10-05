@@ -1,5 +1,4 @@
 import React from 'react';
-import ExpandMore from '@material-ui/icons/ExpandMore';
 import { Avatar, makeStyles, Box } from '@material-ui/core';
 import ServerTable from '../utils/ServerTable';
 import linkedinActive from '../../assets/linkedin-active.svg';
@@ -21,20 +20,10 @@ const investorVariables = {
           _id
           first_name
           last_name
-          email
+          signer_full_name
           entity_name
+          email
           investmentsCount
-          investments{
-            _id
-            amount
-            organization
-            submissionData{
-              country
-              state
-              fullName
-              legalName
-            }
-          }
           linkedinUrl
           city
           state
@@ -138,16 +127,10 @@ export default function Investors() {
         </Box>
       );
     }
-
-    if (data.investments.length >= 1 && data.investments[0].submissionData) {
-      const legalName =
-        data.investments[0].submissionData.legalName &&
-        data.investments[0].submissionData.legalName;
-      const fullName =
-        data.investments[0].submissionData.fullName && data.investments[0].submissionData.fullName;
-
-      name = legalName || fullName;
+    if (data.signer_full_name) {
+      name = data.signer_full_name;
     }
+
     return (
       <Box className={classes.imageContainer}>
         <Avatar
@@ -165,19 +148,10 @@ export default function Investors() {
 
   const displayLocation = (data) => {
     let location = null;
-    if (!data.city && !data.country) {
-      if (data.investments.length >= 1 && data.investments[0].submissionData) {
-        const { submissionData } = data.investments[0];
-        return (location =
-          submissionData.country !== 'United States'
-            ? submissionData.country
-            : `${submissionData.state}, ${submissionData.country}`);
-      }
-    }
 
     if (data.country) {
       if (data.state && data.city) {
-        return (location = `${data.city}, ${data.state}, ${data.country}}`);
+        return (location = `${data.city}, ${data.state}, ${data.country}`);
       }
       if (data.city) {
         return (location = `${data.city}, ${data.country}`);
@@ -197,7 +171,7 @@ export default function Investors() {
         return displayLocation(row);
 
       case 'investmentsCount':
-        return <div>{row.investments && row.investments.length}</div>;
+        return <div>{row[headerValue]}</div>;
 
       case 'linkedin':
         return row[headerValue] ? (
@@ -210,8 +184,6 @@ export default function Investors() {
 
       case 'sectors':
         return row.sectors && row.sectors.map((sector) => <p>{sector}</p>);
-      case 'more':
-        return <ExpandMore />;
 
       default:
         return <div />;

@@ -150,7 +150,6 @@ const ServerTable = ({
       });
     }
   }, [headers]);
-
   useEffect(() => {
     // clear state (mostly for tabs parent components)
     setCurrentPage(0);
