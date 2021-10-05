@@ -71,6 +71,8 @@ const investorVariables = {
       value: 'sectors',
       label: 'SECTORS',
       type: 'sectors',
+      align: 'center',
+      alignHeader: true,
     },
     {
       value: 'linkedinUrl',
@@ -99,22 +101,32 @@ export default function Investors() {
   const classes = useStyles();
 
   const displayName = (data) => {
-    // TODO: adjust src for Avatar image,
-    // profileImageKey is null even for users with non null data
     let name = null;
     if (data.first_name) {
       if (data.last_name) {
         name = `${data.first_name} ${data.last_name}`;
         return (
           <Box className={classes.imageContainer}>
-            <Avatar alt={name || data.email} src={data.profileImageKey} /> {name}
+            {/* <img
+              src={`https://allocations-public.s3.us-east-2.amazonaws.com/${data.profileImageKey}`}
+              alt="profile-image"
+            /> */}
+            <Avatar
+              alt={name || data.email}
+              src={`https://allocations-public.s3.us-east-2.amazonaws.com/${data.profileImageKey}`}
+            />{' '}
+            {name}
           </Box>
         );
       }
       name = data.first_name;
       return (
         <Box className={classes.imageContainer}>
-          <Avatar alt={name || data.email} src={data.profileImageKey} /> {name}
+          <Avatar
+            alt={name || data.email}
+            src={`https://allocations-public.s3.us-east-2.amazonaws.com/${data.profileImageKey}`}
+          />{' '}
+          {name}
         </Box>
       );
     }
