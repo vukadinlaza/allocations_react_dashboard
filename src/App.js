@@ -195,7 +195,7 @@ const App = () => {
               component={MasterFiling}
               exact
             />
-            <AdminRoute path="/admin/:organization/investors" component={Investors} exact />
+            <PrivateRoute path="/investors" component={Investors} exact />
 
             {/** catchall * */}
             <PrivateRoute exact path="/" component={UserHome} />

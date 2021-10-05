@@ -92,7 +92,7 @@ const SidebarDrawer = ({
       icon: <AccountBalanceIcon fontSize="medium" />,
     },
     {
-      to: '/admin/allocations/investors',
+      to: '/investors',
       title: 'Investors',
       icon: <PersonIcon fontSize="medium" />,
     },
