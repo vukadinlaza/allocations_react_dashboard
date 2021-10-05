@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import _ from 'lodash';
 import { withStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Tabs, Tab, Button, Menu, MenuItem, Typography } from '@material-ui/core';
@@ -93,18 +92,6 @@ const styles = (theme) => ({
     [theme.breakpoints.down(phone)]: {
       overflowX: 'scroll',
       display: 'block',
-    },
-  },
-  tabsPlaceholder: {
-    width: '100%',
-    borderBottom: '2px solid #E6E9EF',
-    height: '130px', // height of main title and tabs component
-    position: 'absolute',
-    top: '0px',
-    left: '0px',
-    // margin: '0 40px',
-    [theme.breakpoints.down(phone)]: {
-      borderBottom: 'none',
     },
   },
   tabWrapper: {
@@ -315,10 +302,6 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
           mappedTabs.slice(4, 5)
         )}
       </Tabs>
-      <div
-        className={classes.tabsPlaceholder}
-        style={{ height: titleContainer ? `${titleContainer.offsetHeight + 48}px` : '180px' }}
-      />
     </div>
   );
 };

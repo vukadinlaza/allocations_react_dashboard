@@ -1,22 +1,9 @@
-import React, { useEffect } from 'react';
-import _ from 'lodash';
-import { Link, useParams } from 'react-router-dom';
-import { useLazyQuery, gql } from '@apollo/client';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  TableHead,
-  Paper,
-  Button,
-  Grid,
-} from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
-import { useAuth } from '../../auth/useAuth';
-import { nWithCommas } from '../../utils/numbers';
-import Loader from '../utils/Loader';
-
+import React from 'react';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import { Avatar, makeStyles, Box } from '@material-ui/core';
+import ServerTable from '../utils/ServerTable';
+import linkedinActive from '../../assets/linkedin-active.svg';
+import linkedinInactive from '../../assets/linkedin-inactive.svg';
 import './style.scss';
 
 /** *
@@ -25,129 +12,215 @@ import './style.scss';
  *
  * */
 
-const GET_INVESTORS = gql`
-  query GetOrg($slug: String!) {
-    organization(slug: $slug) {
-      _id
-      orgInvestors {
-        _id
-        first_name
-        last_name
-        email
-        name
-        investments {
+const investorVariables = {
+  gqlQuery: `
+    query AllUsersWithSubmissionData($pagination: PaginationInput!) {
+      allUsersWithSubmissionData(pagination: $pagination) {
+        count
+        users {
           _id
-          amount
-          organization
+          first_name
+          last_name
+          email
+          entity_name
+          investmentsCount
+          investments{
+            _id
+            amount
+            organization
+            submissionData{
+              country
+              state
+              fullName
+              legalName
+            }
+          }
+          linkedinUrl
+          city
+          state
+          country
+          profileImageKey
+          sectors
         }
       }
-    }
-  }
-`;
+    }`,
+  headers: [
+    {
+      value: 'first_name',
+      label: 'NAME',
+      type: 'name',
+      align: 'left',
+      alignHeader: true,
+      isFilter: true,
+      isSortable: true,
+      keyNotInData: true,
+    },
+    {
+      value: 'location',
+      label: 'LOCATION',
+      type: 'location',
+      align: 'left',
+      alignHeader: true,
+      isSortable: true,
+      keyNotInData: true,
+    },
+    {
+      value: 'investmentsCount',
+      label: 'INVESTMENTS',
+      type: 'investmentsCount',
+      align: 'center',
+      alignHeader: true,
+    },
+    {
+      value: 'sectors',
+      label: 'SECTORS',
+      type: 'sectors',
+      align: 'center',
+      alignHeader: true,
+    },
+    {
+      value: 'linkedinUrl',
+      label: 'LINKEDIN',
+      type: 'linkedin',
+      align: 'center',
+      alignHeader: true,
+    },
+  ],
+  resolverName: 'allUsersWithSubmissionData',
+  dataVariable: 'users',
+  defaultSortField: 'investmentsCount',
+};
+
+const useStyles = makeStyles(() => ({
+  imageContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    '& > div ': {
+      marginRight: '10px',
+    },
+  },
+}));
 
 export default function Investors() {
-  const { organization } = useParams();
-  const { userProfile } = useAuth();
-  const [getInvestors, { data, error }] = useLazyQuery(GET_INVESTORS, {
-    variables: { slug: organization },
-  });
+  const classes = useStyles();
 
-  useEffect(() => {
-    if (userProfile && userProfile.email) getInvestors();
-  }, [getInvestors, userProfile]);
+  const displayName = (data) => {
+    let name = null;
+    if (data.first_name) {
+      if (data.last_name) {
+        name = `${data.first_name} ${data.last_name}`;
+        return (
+          <Box className={classes.imageContainer}>
+            <Avatar
+              alt={name || data.email}
+              src={
+                data.profileImageKey
+                  ? `https://allocations-user-img.s3.us-east-2.amazonaws.com/${data.profileImageKey}`
+                  : data.name
+              }
+            />{' '}
+            {name}
+          </Box>
+        );
+      }
+      name = data.first_name;
+      return (
+        <Box className={classes.imageContainer}>
+          <Avatar
+            alt={name || data.email}
+            src={
+              data.profileImageKey
+                ? `https://allocations-user-img.s3.us-east-2.amazonaws.com/${data.profileImageKey}`
+                : data.name
+            }
+          />{' '}
+          {name}
+        </Box>
+      );
+    }
 
-  if (error) return <div>{error.message}</div>;
+    if (data.investments.length >= 1 && data.investments[0].submissionData) {
+      const legalName =
+        data.investments[0].submissionData.legalName &&
+        data.investments[0].submissionData.legalName;
+      const fullName =
+        data.investments[0].submissionData.fullName && data.investments[0].submissionData.fullName;
 
-  if (!data?.organization?.orgInvestors)
+      name = legalName || fullName;
+    }
     return (
-      <div>
-        <Loader />
-      </div>
+      <Box className={classes.imageContainer}>
+        <Avatar
+          alt={name || data.email}
+          src={
+            data.profileImageKey
+              ? `https://allocations-user-img.s3.us-east-2.amazonaws.com/${data.profileImageKey}`
+              : data.name
+          }
+        />{' '}
+        {name || data.email}
+      </Box>
     );
+  };
 
-  const {
-    organization: { orgInvestors },
-  } = data;
+  const displayLocation = (data) => {
+    let location = null;
+    if (!data.city && !data.country) {
+      if (data.investments.length >= 1 && data.investments[0].submissionData) {
+        const { submissionData } = data.investments[0];
+        return (location =
+          submissionData.country !== 'United States'
+            ? submissionData.country
+            : `${submissionData.state}, ${submissionData.country}`);
+      }
+    }
+
+    if (data.country) {
+      if (data.state && data.city) {
+        return (location = `${data.city}, ${data.state}, ${data.country}}`);
+      }
+      if (data.city) {
+        return (location = `${data.city}, ${data.country}`);
+      }
+      return (location = data.country);
+    }
+
+    return location;
+  };
+
+  const getCellContent = (type, row, headerValue) => {
+    switch (type) {
+      case 'name':
+        return displayName(row);
+
+      case 'location':
+        return displayLocation(row);
+
+      case 'investmentsCount':
+        return <div>{row.investments && row.investments.length}</div>;
+
+      case 'linkedin':
+        return row[headerValue] ? (
+          <a href={row[headerValue]} target="_blank" rel="noopener noreferrer">
+            <img src={linkedinActive} alt="LinkedIn Logo" />
+          </a>
+        ) : (
+          <img src={linkedinInactive} alt="LinkedIn Logo" />
+        );
+
+      case 'sectors':
+        return row.sectors && row.sectors.map((sector) => <p>{sector}</p>);
+      case 'more':
+        return <ExpandMore />;
+
+      default:
+        return <div />;
+    }
+  };
 
   return (
     <div className="Investors">
-      {/* {organization === "allocations" && <Col sm={{ size: 12 }}>
-          <Paper className="actions">
-            <Link to="/investors/new">
-              <Button variant="contained" color="secondary">INVITE INVESTOR</Button>
-            </Link>
-          </Paper>
-        </Col>} */}
-      <Grid container>
-        <Grid item xs={12}>
-          <Paper className="table-wrapper">
-            <Grid container justify="space-between" style={{ padding: '16px' }}>
-              <Typography variant="h6" gutterBottom>
-                Investors
-              </Typography>
-              {organization === 'allocations' && (
-                <Link to="/investors/new">
-                  <Button variant="contained" color="secondary">
-                    INVITE INVESTOR
-                  </Button>
-                </Link>
-              )}
-            </Grid>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Investor</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Investments</TableCell>
-                  <TableCell>Total Invested</TableCell>
-                  <TableCell />
-                  <TableCell />
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {_.orderBy(
-                  orgInvestors,
-                  ({ investments }) => _.sumBy(investments, 'amount'),
-                  'desc',
-                ).map((investor) => (
-                  <TableRow key={investor._id}>
-                    <TableCell>{investor.name || investor.email}</TableCell>
-                    <TableCell>{investor.email}</TableCell>
-                    <TableCell>
-                      {
-                        investor.investments.filter(
-                          (inv) => inv.organization === data?.organization?._id,
-                        ).length
-                      }
-                    </TableCell>
-                    <TableCell>
-                      $
-                      {nWithCommas(
-                        _.sumBy(
-                          investor.investments.filter(
-                            (inv) => inv.organization === data?.organization?._id,
-                          ),
-                          'amount',
-                        ),
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {(organization === 'allocations' ||
-                        organization === 'vitalize' ||
-                        organization === 'irishangels') && (
-                        <Link to={`/investor/${investor._id}/home`} target="_blank">
-                          View dashboard as {investor.first_name || investor.entity_name}
-                        </Link>
-                      )}
-                    </TableCell>
-                    <TableCell />
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Paper>
-        </Grid>
-      </Grid>
+      <ServerTable tableVariables={investorVariables} getCellContent={getCellContent} />
     </div>
   );
 }

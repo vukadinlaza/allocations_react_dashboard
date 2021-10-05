@@ -72,15 +72,8 @@ const styles = (theme) => ({
     },
   },
   createButtonLink: {
-    zIndex: 1,
-    '&:hover': {
-      textDecoration: 'none',
-    },
     [theme.breakpoints.down(phone)]: {
       marginBottom: '1em',
-      '& *': {
-        // marginLeft: "0 !important",
-      },
     },
   },
   createButtonsContainer: {
@@ -101,7 +94,7 @@ const styles = (theme) => ({
     width: '100%',
     left: '0',
     top: '0',
-    background: 'white',
+    background: '#f7f7f7',
   },
   footerData: {
     fontSize: '14px',
@@ -182,7 +175,7 @@ const styles = (theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     margin: '0',
-    padding: '0 0 25px 0',
+    padding: '5px 5px 10px 5px',
     [theme.breakpoints.down(tablet)]: {
       justifyContent: 'center',
     },

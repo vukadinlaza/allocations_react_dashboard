@@ -1,15 +1,29 @@
-import React from 'react';
-import { Divider, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import AccountBalanceRoundedIcon from '@material-ui/icons/AccountBalanceRounded';
+import React, { useState } from 'react';
+import {
+  Divider,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+  makeStyles,
+  Button,
+} from '@material-ui/core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
-import StorefrontIcon from '@material-ui/icons/Storefront';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import MonetizationOnRoundedIcon from '@material-ui/icons/MonetizationOnRounded';
-import CreditCardRoundedIcon from '@material-ui/icons/CreditCardRounded';
-import { Link, useRouteMatch } from 'react-router-dom';
-import { toLower } from 'lodash';
-import whitelistEmails from './whiteListEmails';
+import { Link, useRouteMatch, useHistory } from 'react-router-dom';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import StarBorder from '@material-ui/icons/StarBorder';
+import { FaRocket, FaPercentage } from 'react-icons/fa';
+import { BsArrowLeftRight } from 'react-icons/bs';
+import { RiBillLine } from 'react-icons/ri';
+import BuildModal from '../NewBuild/BuildModal';
+
 import './SidebarDrawer.scss';
 
 const SidebarDrawer = ({
@@ -34,44 +48,93 @@ const SidebarDrawer = ({
 
     return <div />;
   };
+  const history = useHistory();
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      width: '100%',
+      maxWidth: 360,
+      backgroundColor: theme.palette.background.paper,
+    },
+    nested: {
+      paddingLeft: theme.spacing(8),
+    },
+  }));
+  const classes = useStyles();
 
+  const [open, setOpen] = useState(false);
+  const [openTwo, setOpenTwo] = useState(false);
+  const [openThree, setOpenThree] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
+  const handleClickTwo = () => {
+    setOpenTwo(!openTwo);
+  };
+  const handleClickThree = () => {
+    setOpenThree(!openThree);
+  };
   const menus = [
     {
       to: currentHomeUrl,
-      title: 'Home',
-      icon: <HomeIcon />,
+      title: 'Dashboard',
+      icon: <HomeIcon fontSize="medium" />,
+    },
+    {
+      to: '/admin/type/spvs',
+      title: 'SPVs',
+      icon: <FaRocket style={{ margin: '0 .5rem 0 0' }} />,
+    },
+    {
+      to: '/admin/type/funds',
+      title: 'Funds',
+      icon: <AccountBalanceIcon fontSize="medium" />,
+    },
+    {
+      to: '/admin/allocations/investors',
+      title: 'Investors',
+      icon: <PersonIcon fontSize="medium" />,
     },
   ];
-  menus.push({
-    to: '/profile',
-    title: 'Profile',
-    icon: <PersonIcon />,
-  });
-
-  if (whitelistEmails.find((p) => toLower(p.email) === toLower(userProfile.email)) || investTab)
-    menus.push({
-      to: '/marketplace',
-      title: 'Marketplace',
-      icon: <StorefrontIcon />,
-    });
-
-  if (investTab)
-    menus.push({
-      to: '/demo',
-      title: 'Demo',
-      icon: <MonetizationOnRoundedIcon />,
-    });
-
-  if (creditTab) {
-    menus.push({
-      to: '/credit',
-      title: 'Credit',
-      icon: <CreditCardRoundedIcon />,
-    });
-  }
+  const menusTwo = [
+    {
+      to: '/billing',
+      title: 'Billing',
+      icon: <RiBillLine fontSize="medium" />,
+    },
+    {
+      to: '/wire-activity',
+      title: 'Wire Activity',
+      icon: <BsArrowLeftRight fontSize="medium" />,
+    },
+    {
+      to: '/tax-activity',
+      title: 'Tax Activity',
+      icon: <FaPercentage fontSize="medium" />,
+    },
+  ];
 
   return (
     <div className="SidebarDrawer">
+      <BuildModal isOpen={openModal} onClose={() => setOpenModal(false)} />
+
+      <Button
+        variant="contained"
+        onClick={() => setOpenModal(true)}
+        style={{
+          borderRadious: '.75rem',
+          width: '80%',
+          margin: '.5rem 1rem',
+          backgroundColor: '#186EFF',
+          color: 'white',
+        }}
+      >
+        <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
+        Add
+      </Button>
+
+      <Typography className="sectionSideBarTitle">ESSENTIALS</Typography>
       <List>
         {menus.map(({ to, title, icon }) => (
           <div
@@ -84,39 +147,127 @@ const SidebarDrawer = ({
             {title !== 'Get Started' ? (
               <ListItem component={Link} to={to} button>
                 <ListItemIcon className="icon">{icon}</ListItemIcon>
-                <ListItemText primary={title} />
+                <ListItemText primary={title} className="iconLabel" />
               </ListItem>
             ) : (
               <a href={to}>
                 <ListItem button>
                   <ListItemIcon className="icon">{icon}</ListItemIcon>
-                  <ListItemText primary={title} />
+                  <ListItemText primary={title} className="iconLabel" />
                 </ListItem>
               </a>
             )}
           </div>
         ))}
       </List>
-      {userProfile.admin && (
-        <>
-          <Divider />
-          <List>
-            <div
-              className={`sidebar-nav-item ${
-                location.pathname === '/admin/funds' ? 'sidebar-nav-item-active' : ''
-              }`}
-            >
-              <ListItem component={Link} to="/admin/funds" button>
-                <ListItemIcon className="icon">
-                  <AccountBalanceRoundedIcon />
-                </ListItemIcon>
-                <ListItemText primary="Funds" />
+      <Typography className="sectionSideBarTitle">TOOLS</Typography>
+      <ListItem button onClick={handleClickThree}>
+        <ListItemIcon>
+          <StarBorder fontSize="medium" />
+        </ListItemIcon>
+        <ListItemText primary="Demo" />
+        {openThree ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      <Collapse in={openThree} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          {[
+            { title: 'Invest', link: '/deals/demo-space-x' },
+            { title: 'Fund Manager', link: '/admin/demo-fund' },
+          ].map((demoItem) => {
+            return (
+              <Link
+                key={demoItem.title}
+                to={{
+                  pathname: demoItem.link,
+                }}
+              >
+                <ListItem button className={classes.nested}>
+                  <ListItemText size="small" primary={demoItem.title} />
+                </ListItem>
+              </Link>
+            );
+          })}
+        </List>
+      </Collapse>
+      <List>
+        {menusTwo.map(({ to, title, icon }) => (
+          <div
+            key={`menu-${title}`}
+            onClick={mobileOpen ? handleDrawerClose : null}
+            className={`sidebar-nav-item ${
+              location.pathname === to ? 'sidebar-nav-item-active' : ''
+            }`}
+          >
+            {title !== 'Get Started' ? (
+              <ListItem component={Link} to={to} button>
+                <ListItemIcon className="icon">{icon}</ListItemIcon>
+                <ListItemText primary={title} className="iconLabel" />
               </ListItem>
-            </div>
-            <AdminLinks location={location} />
-          </List>
-        </>
-      )}
+            ) : (
+              <a href={to}>
+                <ListItem button>
+                  <ListItemIcon className="icon">{icon}</ListItemIcon>
+                  <ListItemText primary={title} className="iconLabel" />
+                </ListItem>
+              </a>
+            )}
+          </div>
+        ))}
+      </List>
+      <Typography className="sectionSideBarTitle">UPGRADE</Typography>
+
+      <ListItem button onClick={handleClick}>
+        <ListItemIcon>
+          <FaRocket style={{ margin: '0 .5rem 0 0' }} />
+        </ListItemIcon>
+        <ListItemText primary="SPVs" />
+        {open ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          {['Real Estate', 'Crypto', 'Secondaries'].map((spvType) => {
+            return (
+              <Link
+                key={spvType}
+                to={{
+                  pathname: '/upgrade',
+                  state: { type: 'SPV', asset: spvType },
+                }}
+              >
+                <ListItem button className={classes.nested}>
+                  <ListItemText size="small" primary={spvType} />
+                </ListItem>
+              </Link>
+            );
+          })}
+        </List>
+      </Collapse>
+      <ListItem button onClick={handleClickTwo}>
+        <ListItemIcon>
+          <AccountBalanceIcon />
+        </ListItemIcon>
+        <ListItemText primary="Funds" />
+        {openTwo ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      <Collapse in={openTwo} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          {['Quarterly Funds', 'Traditional Funds'].map((fundType) => {
+            return (
+              <Link
+                key={fundType}
+                to={{
+                  pathname: '/upgrade',
+                  state: { type: 'FUND', asset: fundType },
+                }}
+              >
+                <ListItem button className={classes.nested}>
+                  <ListItemText size="small" primary={fundType} />
+                </ListItem>
+              </Link>
+            );
+          })}
+        </List>
+      </Collapse>
       <div onClick={mobileOpen ? handleDrawerClose : null}>
         <ListItem button onClick={logoutWithRedirect}>
           <ListItemIcon className="icon">

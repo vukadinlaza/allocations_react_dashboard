@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Button, Table, TableBody, TableCell, TableRow, Paper } from '@material-ui/core';
 import { useAuth } from '../../auth/useAuth';
 import './style.scss';
@@ -16,6 +16,8 @@ import Loader from '../utils/Loader';
 export default function Funds() {
   const { userProfile } = useAuth();
   const history = useHistory();
+  const location = useLocation();
+  console.log(location);
 
   if (!userProfile.email)
     return (
@@ -35,7 +37,7 @@ export default function Funds() {
 
       <Paper>
         <Typography variant="h6" style={{ paddingLeft: '16px', paddingTop: '16px' }} gutterBottom>
-          Funds Admin
+          {location.pathname.includes('spv') ? 'SPVs' : 'Funds'} Admin
         </Typography>
         <Typography variant="subtitle2" style={{ paddingLeft: '16px', paddingBottom: '16px' }}>
           Below is a list of all the funds you have access to manage.
