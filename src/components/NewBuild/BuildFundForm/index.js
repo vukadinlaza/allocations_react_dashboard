@@ -363,9 +363,8 @@ export default function NewSpvForm() {
                       value={buildData.offering_type}
                       onChange={handleChange}
                     >
-                      <MenuItem value="506c">506c</MenuItem>
-                      <MenuItem value="506d">506d</MenuItem>
-                      <MenuItem value="506e">506e</MenuItem>
+                      <MenuItem value="506c">506b (no advertising)</MenuItem>
+                      <MenuItem value="506d">506c</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
