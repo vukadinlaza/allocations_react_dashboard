@@ -115,14 +115,14 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
   }, [buildData.name]);
   const handleSubmit = () => {
     console.log(buildData);
-    // setBuildInfo({
-    //   variables: {
-    //     deal_id,
-    //     payload: {
-    //       ...buildData,
-    //     },
-    //   },
-    // });
+    setBuildInfo({
+      variables: {
+        deal_id,
+        payload: {
+          ...buildData,
+        },
+      },
+    });
   };
 
   const handleChange = ({ target }) => {
