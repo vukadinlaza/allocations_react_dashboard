@@ -67,7 +67,7 @@ export const ORG_OVERVIEW = gql`
       _id
       name
       slug
-      deals {
+      deals(limit: 500) {
         _id
         company_name
         company_description
@@ -336,6 +336,7 @@ const FundManagerDashboard = ({ classes, history }) => {
             dealType={dealData?.dealParams?.dealType}
             superAdmin={orgDeals?.investor?.admin}
             refetch={refetch}
+            deal={dealData}
           />
         );
       case 'Investors':

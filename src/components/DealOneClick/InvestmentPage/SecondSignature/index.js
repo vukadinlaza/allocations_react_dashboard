@@ -136,7 +136,7 @@ const SecondSignature = ({
                 className={`${classes.input} numbers`}
                 type="number"
                 onInput={(e) => {
-                  e.target.value = Math.max(0, parseInt(e.target.value, 10)).toString().slice(0, 9);
+                  e.target.value = e.target.value.slice(0, 9);
                 }}
               />
               <TextField

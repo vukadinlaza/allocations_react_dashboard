@@ -20,11 +20,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AppModal = ({ isOpen, onClose, children, modalHeader }) => {
+const AppModal = ({ isOpen, onClose, children, modalHeader, maxWidth = 'sm' }) => {
   const classes = useStyles();
   return (
     <Modal open={isOpen} onClose={onClose} className={classes.modal}>
-      <Container maxWidth="sm">
+      <Container maxWidth={maxWidth}>
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
             <Paper className={classes.modalPaper}>
