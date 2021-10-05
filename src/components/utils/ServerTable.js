@@ -15,7 +15,7 @@ import AllocationsTable from './AllocationsTable';
 import Loader from './Loader';
 import { titleCase } from '../../utils/helpers';
 
-const styles = (theme) => ({
+const styles = () => ({
   root: {
     width: '100%',
   },
@@ -90,10 +90,10 @@ const ServerTable = ({
   tableVariables,
   getCellContent,
   handleRowDetailPage,
-  queryVariables,
+  queryVariables = {},
   tablePagination = 25,
   rowDetailPage = false,
-  defaultSortOrder,
+  defaultSortOrder = 1,
   refetchCount,
 }) => {
   const [selectWidth, setSelectWidth] = useState(0);
@@ -101,7 +101,7 @@ const ServerTable = ({
   const [pagination, setPagination] = useState(tablePagination);
   const [searchFilter, setSearchFilter] = useState({});
   const [sortField, setSortField] = useState('');
-  const [sortOrder, setSortOrder] = useState(defaultSortOrder || 1);
+  const [sortOrder, setSortOrder] = useState(defaultSortOrder);
   const [sortNestedKey, setSortNestedKey] = useState('');
   const [sortNestedCollection, setSortNestedCollection] = useState('');
   const [sortLocalFieldKey, setSortLocalFieldKey] = useState('');
