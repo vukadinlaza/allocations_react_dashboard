@@ -30,11 +30,12 @@ app.get('*', async (req, res) => {
   const filePath = path.resolve(__dirname, './build', 'index.html');
   const organizationSlug = urlParams.length > 1 ? urlParams[0] : 'allocations';
   const dealSlug = urlParams.length > 1 ? urlParams[1] : urlParams[0];
-  const response = await axios.post(`${process.env.REACT_APP_EXPRESS_URL}/api/deal`, {
-    dealSlug,
-    organizationSlug,
-    API_KEY: process.env.EXPRESS_API_KEY,
-  });
+  // const response = await axios.post(`${process.env.REACT_APP_EXPRESS_URL}/api/deal`, {
+  //   dealSlug,
+  //   organizationSlug,
+  //   API_KEY: process.env.EXPRESS_API_KEY,
+  // });
+  const response = {};
 
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {

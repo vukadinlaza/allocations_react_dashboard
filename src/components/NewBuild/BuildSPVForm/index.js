@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import moment from 'moment';
+import _ from 'lodash';
 import HelpIcon from '@material-ui/icons/Help';
 import { Button, TextField, Paper, Grid, FormControl, Select, MenuItem } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
@@ -84,39 +85,44 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
 
   const [buildData, setBuildData] = useState({
     // -------------------------- in the form
-    asset_type: 'startup',
-    portfolio_company_name: 'test',
-    manager_name: 'John Smith',
+    asset_type: '',
+    name: '',
+    slug: '',
+    portfolio_company_name: '',
+    manager_name: '',
     carry_fee: {
-      type: 'percent',
-      value: '20',
+      type: '',
+      value: '',
     },
     management_fee: {
-      type: 'percent',
-      value: '10',
+      type: '',
+      value: '',
     },
-    fund_template_documents: 'Allocations',
-    management_fee_frequency: 'one-time',
+    fund_template_documents: '',
+    management_fee_frequency: '',
     setup_cost: 20000,
-    offering_type: '506c',
-    allocations_investment_advisor: true,
-    custom_investment_agreement: false,
-    side_letters: false,
+    offering_type: '',
+    allocations_investment_advisor: '',
+    custom_investment_agreement: '',
+    side_letters: '',
     closing_date: moment(Date.now()).format('YYYY-MM-DD'),
-    // -------------------------- not in the form
-    name: 'Test',
-    slug: 'test',
   });
-
+  useEffect(() => {
+    setBuildData((prev) => ({
+      ...prev,
+      slug: _.kebabCase(buildData.name),
+    }));
+  }, [buildData.name]);
   const handleSubmit = () => {
-    setBuildInfo({
-      variables: {
-        deal_id,
-        payload: {
-          ...buildData,
-        },
-      },
-    });
+    console.log(buildData);
+    // setBuildInfo({
+    //   variables: {
+    //     deal_id,
+    //     payload: {
+    //       ...buildData,
+    //     },
+    //   },
+    // });
   };
 
   const handleChange = ({ target }) => {
@@ -154,11 +160,21 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
-                  Choose your management fee <HelpIcon className={classes.helpIcon} />
+                  Choose your carry fee <HelpIcon className={classes.helpIcon} />
                 </Typography>
                 <Grid className={classes.inputBox}>
+                  <TextField
+                    style={{ width: '70%', marginRight: '12px' }}
+                    value={buildData.carry_fee.value}
+                    name="carry_fee_value"
+                    onChange={handleChange}
+                    variant="outlined"
+                  />
                   <Select
-                    style={{ width: '10%' }}
+                    style={{
+                      width: '25%',
+                      textAlign: 'center',
+                    }}
                     variant="outlined"
                     name="carry_fee_type"
                     value={buildData.carry_fee.type}
@@ -166,15 +182,7 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                   >
                     <MenuItem value="percent">%</MenuItem>
                     <MenuItem value="fixed">$</MenuItem>
-                    <MenuItem value="custom">X</MenuItem>
                   </Select>
-                  <TextField
-                    value={buildData.carry_fee.value}
-                    name="carry_fee_value"
-                    onChange={handleChange}
-                    style={{ width: '90%' }}
-                    variant="outlined"
-                  />
                 </Grid>
               </FormControl>
             </Grid>
@@ -189,8 +197,15 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                   Choose your management fee <HelpIcon className={classes.helpIcon} />
                 </Typography>
                 <Grid className={classes.inputBox}>
+                  <TextField
+                    style={{ width: '70%', marginRight: '12px' }}
+                    value={buildData.management_fee.value}
+                    name="management_fee_value"
+                    onChange={handleChange}
+                    variant="outlined"
+                  />
                   <Select
-                    style={{ width: '10%' }}
+                    style={{ width: '25%', textAlign: 'center' }}
                     variant="outlined"
                     name="management_fee_type"
                     value={buildData.management_fee.type}
@@ -198,15 +213,7 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                   >
                     <MenuItem value="percent">%</MenuItem>
                     <MenuItem value="fixed">$</MenuItem>
-                    <MenuItem value="custom">X</MenuItem>
                   </Select>
-                  <TextField
-                    value={buildData.management_fee.value}
-                    name="management_fee_value"
-                    onChange={handleChange}
-                    style={{ width: '90%' }}
-                    variant="outlined"
-                  />
                 </Grid>
               </FormControl>
             </Grid>
@@ -222,7 +229,7 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                       value="one-time"
                       className={
                         buildData.management_fee_frequency === 'one-time'
-                          ? classes.selectedInputButton
+                          ? `${classes.selectedInputButton} ${classes.selected}`
                           : classes.inputButton
                       }
                       onClick={(e) => {
@@ -243,7 +250,7 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                       name="management_fee_frequency"
                       className={
                         buildData.management_fee_frequency === 'annual'
-                          ? classes.selectedInputButton
+                          ? `${classes.selectedInputButton} ${classes.selected}`
                           : classes.inputButton
                       }
                       onClick={(e) => {
@@ -273,7 +280,9 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                       name="side_letters"
                       value={buildData.side_letters}
                       className={
-                        buildData.side_letters ? classes.selectedInputButton : classes.inputButton
+                        buildData.side_letters
+                          ? `${classes.selectedInputButton} ${classes.selected}`
+                          : classes.inputButton
                       }
                       onClick={(e) => {
                         const target = {
@@ -284,7 +293,7 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                         handleChange(e);
                       }}
                     >
-                      Yes
+                      Yes (Standard)
                     </Button>
                   </Grid>
                   <Grid>
@@ -292,7 +301,9 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                       value={buildData.side_letters}
                       name="side_letters"
                       className={
-                        !buildData.side_letters ? classes.selectedInputButton : classes.inputButton
+                        !buildData.side_letters && buildData.side_letters !== ''
+                          ? `${classes.selectedInputButton} ${classes.selected}`
+                          : classes.inputButton
                       }
                       onClick={(e) => {
                         const target = {
@@ -330,7 +341,7 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                       value={buildData.allocations_investment_advisor}
                       className={
                         buildData.allocations_investment_advisor
-                          ? classes.selectedInputButton
+                          ? `${classes.selectedInputButton} ${classes.selected}`
                           : classes.inputButton
                       }
                       onClick={(e) => {
@@ -350,8 +361,9 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                       value={!buildData.allocations_investment_advisor}
                       name="allocations_investment_advisor"
                       className={
-                        !buildData.allocations_investment_advisor
-                          ? classes.selectedInputButton
+                        !buildData.allocations_investment_advisor &&
+                        buildData.allocations_investment_advisor !== ''
+                          ? `${classes.selectedInputButton} ${classes.selected}`
                           : classes.inputButton
                       }
                       onClick={(e) => {
@@ -382,7 +394,7 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                   onChange={handleChange}
                 >
                   {' '}
-                  <MenuItem value="506b">506b</MenuItem>
+                  <MenuItem value="506b">506b (no advertising)</MenuItem>
                   <MenuItem value="506c">506c</MenuItem>
                 </Select>
               </FormControl>

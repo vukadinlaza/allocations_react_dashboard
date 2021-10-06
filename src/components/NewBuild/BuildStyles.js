@@ -254,7 +254,6 @@ const useStyles = makeStyles((theme) => ({
     background: '#186EFF26 0% 0% no-repeat padding-box !important',
     boxShadow: '0px 3px 6px #0000000D !important',
     border: '2px solid #186EFF !important',
-    borderRadius: '10px !important',
     opacity: '1 !important',
   },
   typeItem: {

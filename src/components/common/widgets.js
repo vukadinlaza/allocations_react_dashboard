@@ -1,9 +1,9 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Typography, Tooltip, Button, Grid } from '@material-ui/core';
+import { Typography, Tooltip, Button } from '@material-ui/core';
 import HelpIcon from '@material-ui/icons/Help';
 import CloseIcon from '@material-ui/icons/Close';
-import { phone, tablet } from '../../../utils/helpers';
+import { phone, tablet } from '../../utils/helpers';
 
 const styles = (theme) => ({
   box: {
@@ -69,10 +69,6 @@ const styles = (theme) => ({
     justifyContent: 'flex-end',
     alignItems: 'center',
     fontSize: '14px',
-    cursor: 'pointer',
-    '&:hover': {
-      color: theme.palette.primary.main,
-    },
   },
   dynamicBoxContent: {
     height: 'calc(100% - 110px)',
@@ -105,23 +101,12 @@ const styles = (theme) => ({
   listButton: {
     backgroundColor: '#2A2B54',
     color: 'white',
-    width: '100%',
+    width: 'calc(100% - 32px)',
     textTransform: 'none',
-    bottom: '3rem',
-    height: '3rem',
-    borderRadius: '0px 0px 10px 10px',
+    margin: '0 16px',
   },
   modal: {
     padding: '20px',
-  },
-  modalBackground: {
-    position: 'fixed',
-    left: '0',
-    top: '0',
-    height: '100vh',
-    width: '100vw',
-    zIndex: '1099',
-    backgroundColor: 'rgba(26, 26, 26, 0.30)',
   },
   modalTitle: {
     fontWeight: 'bold',
@@ -153,53 +138,47 @@ const styles = (theme) => ({
   },
 });
 
-const getDimensions = (size) => {
-  switch (size) {
-    case 'full':
-      return { minWidth: '100%' };
-    case 'half':
-      return { minWidth: '430px', maxWidth: '49%' };
-    case 'third':
-      return { minWidth: '430px', maxWidth: '32%' };
-    case 'fourth':
-      return { minWidth: '265px', maxWidth: '24%' };
-    // return {minWidth: '300px', maxWidth: '24%'};
-    default:
-      return {};
-  }
-};
+// const getDimensions = (size) => {
+//   switch (size) {
+//     case 'full':
+//       return { minWidth: '100%' };
+//     case 'half':
+//       return { minWidth: '430px', maxWidth: '49%' };
+//     case 'third':
+//       return { minWidth: '430px', maxWidth: '32%' };
+//     case 'fourth':
+//       return { minWidth: '265px', maxWidth: '24%' };
+//     // return {minWidth: '300px', maxWidth: '24%'};
+//     default:
+//       return {};
+//   }
+// };
 
 export const ModalTooltip = withStyles(styles)(
   ({ classes, children, title, handleTooltip, tooltipContent, openTooltip, id }) => {
     return (
-      <>
-        {openTooltip === id && (
-          <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} />
-        )}
-        <Tooltip
-          interactive
-          title={
-            <div className={classes.modal}>
-              <div className={classes.modalTitleContainer}>
-                <Typography className={classes.modalTitle}>{title}</Typography>
-                <Typography className={classes.closeModal} onClick={(e) => handleTooltip('')}>
-                  Close
-                  <CloseIcon style={{ fontSize: '14px' }} />
-                </Typography>
-              </div>
-              {tooltipContent}
+      <Tooltip
+        title={
+          <div className={classes.modal}>
+            <div className={classes.modalTitleContainer}>
+              <Typography className={classes.modalTitle}>{title}</Typography>
+              <Typography className={classes.closeModal} onClick={() => handleTooltip('')}>
+                Close
+                <CloseIcon style={{ fontSize: '14px' }} />
+              </Typography>
             </div>
-          }
-          open={openTooltip === id}
-          disableHoverListener
-          classes={{
-            popper: classes.popper,
-            tooltip: classes.tooltip,
-          }}
-        >
-          {children}
-        </Tooltip>
-      </>
+            {tooltipContent}
+          </div>
+        }
+        open={openTooltip === id}
+        disableHoverListener
+        classes={{
+          popper: classes.popper,
+          tooltip: classes.tooltip,
+        }}
+      >
+        {children}
+      </Tooltip>
     );
   },
 );
@@ -208,7 +187,6 @@ export const SimpleBox = withStyles(styles)(
   ({
     classes,
     title,
-    size,
     autoHeight,
     titleData,
     fontSize,
@@ -239,7 +217,7 @@ export const SimpleBox = withStyles(styles)(
                 openTooltip={openTooltip}
                 id={id}
               >
-                <HelpIcon className={classes.infoIcon} onClick={(e) => handleTooltip(id)} />
+                <HelpIcon className={classes.infoIcon} onClick={() => handleTooltip(id)} />
               </ModalTooltip>
             )}
           </div>
@@ -288,11 +266,9 @@ export const ChartBox = withStyles(styles)(({ classes, title, info, children }) 
 
 export const FlatBox = withStyles(styles)(({ classes, title, info, children }) => {
   return (
-    <div className={classes.box} style={{ width: '100%', height: 'auto', minHeight: '120px' }}>
+    <div className={classes.box} style={{ width: '100%', height: '100%', minHeight: '120px' }}>
       <div className={classes.boxTitleContainer} style={{ height: '60px' }}>
-        <Typography className={classes.boxTitle} style={{ fontSize: '14px' }}>
-          {title}
-        </Typography>
+        <Typography className={classes.boxTitle}>{title}</Typography>
         {info ? (
           <Tooltip
             title={info}
@@ -315,7 +291,6 @@ export const ScrollableBox = withStyles(styles)(
   ({
     classes,
     title,
-    size,
     titleData,
     fontSize,
     buttonAction,

@@ -26,11 +26,8 @@ const InvestmentAmountPanel = ({ setAmount, amount, minimumInvestment, isFromMod
             textAlign="left"
             outputFormat="string"
             decimalCharacter="."
-            decimalPlaces={0}
+            decimalPlaces={2}
             digitGroupSeparator=","
-            onKeyDown={(e) => {
-              if (e.key === 'Backspace' && amount === minimumInvestment) setAmount('');
-            }}
             onChange={(_, value) => setAmount(value.toString())}
           />
         </Grid>

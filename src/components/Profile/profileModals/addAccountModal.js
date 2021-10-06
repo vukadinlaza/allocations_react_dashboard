@@ -4,7 +4,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { useMutation, gql } from '@apollo/client';
 import { Paper, Grid, Typography, Modal, TextField, Button, Container } from '@material-ui/core';
 import { toast } from 'react-toastify';
-import './style.scss';
+import '../style.scss';
 
 const useStyles = makeStyles((theme) => ({
   modal: {

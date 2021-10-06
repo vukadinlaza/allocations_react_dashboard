@@ -23,7 +23,7 @@ import InvestmentNew from './components/InvestmentNew';
 import InvestmentEdit from './components/InvestmentEdit';
 import UserInvestments from './components/UserInvestments';
 import FreeSPVOnboarding from './components/FreeSPVOnboarding';
-import Profile from './components/Profile';
+import Profile from './components/Profile/Profile';
 import Marketplace from './components/Marketplace';
 import OrganizationNew from './components/OrganizationNew';
 import OrganizationMembers from './components/OrganizationMembers';
