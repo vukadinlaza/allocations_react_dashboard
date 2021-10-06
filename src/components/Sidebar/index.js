@@ -96,7 +96,7 @@ export default function Sidebar(props) {
     userProfile.showBuild,
   ]);
 
-  const isUserAuthenticated = isAuthenticated && userProfile;
+  const isUserAuthenticated = isAuthenticated && !!userProfile;
 
   useEffect(() => {
     const userIsOrgAdmin = userProfile?.organizations_admin?.length;
