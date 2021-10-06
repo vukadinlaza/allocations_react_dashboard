@@ -121,7 +121,6 @@ const BuildDetails = ({
   const [buildData, setBuildData] = useState({
     // -------------------------- in the form
     asset_type: 'startup',
-    name: '',
     portfolio_company_name: '',
     manager_name:
       userProfile.first_name && userProfile.last_name

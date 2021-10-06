@@ -65,7 +65,7 @@ const GET_INVESTOR = gql`
 `;
 
 export default function Sidebar(props) {
-  const { userProfile, logout, isAuthenticated } = useAuth(GET_INVESTOR);
+  const { userProfile, logout, isAuthenticated, loading } = useAuth(GET_INVESTOR);
   const history = useHistory();
   const [investTab, setInvestTab] = useState(false);
   const [creditTab, setCreditTab] = useState(false);
@@ -96,7 +96,7 @@ export default function Sidebar(props) {
     userProfile.showBuild,
   ]);
 
-  const isUserAuthenticated = isAuthenticated && !!userProfile;
+  const isUserAuthenticated = isAuthenticated && !loading;
 
   useEffect(() => {
     const userIsOrgAdmin = userProfile?.organizations_admin?.length;

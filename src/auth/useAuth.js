@@ -77,7 +77,7 @@ export function useAuth(QUERY = GET_INVESTOR) {
     refetch,
     params,
     adminView,
-    loading: isLoading || loading,
+    loading: isLoading || loading || !called,
     isAuthenticated,
     logout,
     loginWithRedirect,
