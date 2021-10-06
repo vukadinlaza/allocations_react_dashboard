@@ -149,6 +149,7 @@ const DealSetup = ({ match, classes }) => {
 
   const { data, refetch: refetchDeal } = useQuery(DEAL, {
     fetchPolicy: 'network-only',
+    pollInterval: 1000,
     variables: { deal_id: query.get('id') },
   });
   const [taskLoading, setTaskLoading] = useState(false);
@@ -158,7 +159,6 @@ const DealSetup = ({ match, classes }) => {
   const [currentTask, setCurrentTask] = useState(false);
 
   useEffect(() => {
-    console.log(data);
     if (currentPhase && data?.getDealWithTasks) {
       const { getDealWithTasks: deal } = data;
       setCurentPhase(deal?.phases?.find((p) => p.name === currentPhase.name));
