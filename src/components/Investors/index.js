@@ -13,8 +13,8 @@ import './style.scss';
 
 const investorVariables = {
   gqlQuery: `
-    query AllUsersWithSubmissionData($pagination: PaginationInput!) {
-      allUsersWithSubmissionData(pagination: $pagination) {
+    query AllUsersWithInvestmentsCount($pagination: PaginationInput!) {
+      allUsersWithInvestmentsCount(pagination: $pagination) {
         count
         users {
           _id
@@ -75,7 +75,7 @@ const investorVariables = {
       alignHeader: true,
     },
   ],
-  resolverName: 'allUsersWithSubmissionData',
+  resolverName: 'allUsersWithInvestmentsCount',
   dataVariable: 'users',
   defaultSortField: 'investmentsCount',
 };
