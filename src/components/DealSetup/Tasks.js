@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import CancelIcon from '@material-ui/icons/Cancel';
 import Loader from '../utils/Loader';
 import { DocumentBox, UploadBox } from '../common/common';
+import pmButton from '../../assets/parallel-button.svg';
 import styles from './styles';
 
 export const taskTypes = {
@@ -208,3 +209,47 @@ export const ReviewTask = withStyles(styles)(
     );
   },
 );
+
+export const KYCServiceTask = withStyles(styles)(({ task, taskData, classes }) => {
+  return (
+    <Grid
+      container
+      direction="column"
+      alignItems="flex-start"
+      justify="center"
+      className={classes.taskContainer}
+    >
+      <Grid item sm={12} lg={12}>
+        <FormControl required disabled variant="outlined">
+          <Typography>{task.title}</Typography>
+          <a
+            href={`https://mfl80ihum2.execute-api.us-east-1.amazonaws.com/dev/kyc/get-login-url?host=${encodeURIComponent(
+              window.location.href,
+            )}&userId=${taskData?.user_id}`}
+            target="'_blank'"
+          >
+            <Button>
+              <img src={pmButton} alt="Parallel Markets Login Button" />
+            </Button>
+          </a>
+        </FormControl>
+      </Grid>
+    </Grid>
+  );
+});
+
+export const SignTask = ({ dataRequestId, tokenId, tokenSecret }) => {
+  useEffect(() => {
+    if (dataRequestId && tokenId && tokenSecret) {
+      // eslint-disable-next-line no-undef
+      DocSpring.createVisualForm({
+        dataRequestId,
+        tokenId,
+        tokenSecret,
+        domainVerification: false,
+      });
+    }
+  }, [dataRequestId, tokenId, tokenSecret]);
+
+  return null;
+};
