@@ -86,8 +86,9 @@ const ButtonSelector = ({ currentValue, name, values, onChange }) => {
 
   return (
     <ButtonGroup color="primary" aria-label="outlined primary button group">
-      {values.map(({ label, value }) => (
+      {values.map(({ label, value }, i) => (
         <Button
+          key={i}
           name={name}
           value={value}
           className={currentValue === value ? classes.selected : null}
@@ -116,7 +117,6 @@ const BuildDetails = ({
   waitingOnInitialDeal,
 }) => {
   const classes = useStyles();
-  console.log(userProfile, userProfile.first_name);
 
   const [buildData, setBuildData] = useState({
     // -------------------------- in the form
@@ -143,12 +143,7 @@ const BuildDetails = ({
     side_letters: 'false',
     closing_date: moment(Date.now()).format('YYYY-MM-DD'),
   });
-  useEffect(() => {
-    setBuildData((prev) => ({
-      ...prev,
-      slug: _.kebabCase(buildData.name),
-    }));
-  }, [buildData.name]);
+
   const handleSubmit = () => {
     setBuildInfo({
       variables: {
@@ -395,7 +390,6 @@ export default function NewSpvForm() {
     },
   ];
 
-  console.log(authLoading, userProfile);
   if (authLoading) return null;
 
   return (
