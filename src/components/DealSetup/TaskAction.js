@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { gql, useMutation, useLazyQuery } from '@apollo/client';
-import { DocumentUploadTask, TextTask, ReviewTask, taskTypes } from './Tasks';
+import { gql, useMutation, useLazyQuery, useQuery } from '@apollo/client';
+import {
+  DocumentUploadTask,
+  TextTask,
+  ReviewTask,
+  taskTypes,
+  KYCServiceTask,
+  SignTask,
+} from './Tasks';
 import styles from './styles';
 
 const ADD_DOC = gql`
@@ -41,6 +48,16 @@ const GET_DOCUMENT = gql`
       title
       link
       createdAt
+    }
+  }
+`;
+
+const SERVICE_AGREEMENT_LINK = gql`
+  query serviceAgreementLink($deal_id: String) {
+    dataRequest: getServiceAgreementLink(deal_id: $deal_id) {
+      dataRequestId: id
+      tokenId: token_id
+      tokenSecret: token_secret
     }
   }
 `;
@@ -119,6 +136,11 @@ const TaskAction = ({
       getDocument({ variables: { task_id: task._id } });
     },
   });
+
+  const { data: serviceAgreementLink } = useQuery(SERVICE_AGREEMENT_LINK, {
+    variables: { deal_id },
+  });
+
   const [taskData, setTaskData] = useState({ ...deal });
 
   const handleChange = (prop) => (e) => {
@@ -169,6 +191,7 @@ const TaskAction = ({
       />
     );
   }
+
   if (taskTypes.review.includes(task.type)) {
     action = (
       <ReviewTask
@@ -182,6 +205,14 @@ const TaskAction = ({
           .every((t) => t.complete)}
       />
     );
+  }
+
+  if (taskTypes.automaticTasks.includes(task.type) && task.title.includes('KYC')) {
+    action = <KYCServiceTask task={task} taskData={taskData} />;
+  }
+
+  if (taskTypes.userTask.includes(task.type)) {
+    action = <SignTask {...(serviceAgreementLink?.dataRequest ?? {})} />;
   }
 
   return action;
