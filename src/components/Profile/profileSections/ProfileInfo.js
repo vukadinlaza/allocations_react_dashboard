@@ -516,7 +516,7 @@ const ProfileInfo = ({
                       <TextField
                         inputProps={{
                           className: classes.linkedinInput,
-                          pattern: `^https?://((www|\w\w)\.)?linkedin.com/((in/[^/]+/?)|(pub/[^/]+/((\w|\d)+/?){3}))$`,
+                          pattern: `^https:\/\/[a-z]{2,3}\.linkedin\.com\/.*$|[a-z]{2,3}\.linkedin\.com\/.*$`,
                         }}
                         id="linkedin"
                         label="LinkedIn Profile Link"

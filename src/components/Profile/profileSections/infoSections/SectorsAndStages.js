@@ -93,8 +93,7 @@ const useStyles = makeStyles((theme) => ({
   },
   chip: {
     margin: theme.spacing(0.5),
-    backgroundColor: '#DBE6FE',
-    color: '#205DF5',
+    color: 'white',
     fontWeight: 'bold',
   },
   paperMain: {
@@ -200,7 +199,12 @@ const Sectors = ({ investor }) => {
               uniqueSectors.map((sector) => {
                 return (
                   <li key={sector}>
-                    <Chip label={sector} onDelete={handleDelete(sector)} className={classes.chip} />
+                    <Chip
+                      label={sector}
+                      color="primary"
+                      onDelete={handleDelete(sector)}
+                      className={classes.chip}
+                    />
                   </li>
                 );
               })
@@ -256,6 +260,7 @@ const Sectors = ({ investor }) => {
                 return (
                   <li key={stage}>
                     <Chip
+                      color="primary"
                       label={stage}
                       onDelete={handleDeleteStage(stage)}
                       className={classes.chip}
