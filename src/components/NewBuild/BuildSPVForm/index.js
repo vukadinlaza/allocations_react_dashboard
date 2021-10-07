@@ -143,6 +143,14 @@ const BuildDetails = ({
     closing_date: moment(Date.now()).format('YYYY-MM-DD'),
   });
 
+  useEffect(() => {
+    const localStorageBuild = localStorage.getItem('buildData');
+    if (localStorageBuild) {
+      const parsedBuildData = JSON.parse(localStorageBuild);
+      setBuildData(parsedBuildData);
+    }
+  }, []);
+
   const handleSubmit = () => {
     setBuildInfo({
       variables: {
@@ -169,12 +177,14 @@ const BuildDetails = ({
           [splitKeyName[2] === 'type' ? 'type' : 'value']: target.value,
         },
       }));
-      return;
+      // return;
+    } else {
+      setBuildData((prev) => ({
+        ...prev,
+        [target.name]: target.value,
+      }));
     }
-    setBuildData((prev) => ({
-      ...prev,
-      [target.name]: target.value,
-    }));
+    localStorage.setItem('buildData', JSON.stringify(buildData));
   };
 
   return (
@@ -362,12 +372,25 @@ export default function NewSpvForm() {
   const { userProfile, loading: authLoading } = useAuth();
   const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
   const [setBuildInfo] = useMutation(SET_BUILD_INFO);
+
   // Page
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    createBuild();
+    // if there is no build data/deal_id, we create a new build (default info pulled from the backend)
+    if (!localStorage.getItem('buildData') && !localStorage.getItem('buildDeal')) {
+      console.log('we are creating the build');
+      createBuild();
+    }
   }, []);
+  useEffect(() => {
+    // if we finished creating the build, set the deal info in local storage
+    if (initialDeal) {
+      console.log('we have finished creating the build, and therefore need to store the data');
+      localStorage.setItem('buildDeal', JSON.stringify(initialDeal.deal));
+      // localStorage.setItem('buildData', JSON.stringify())
+    }
+  }, [loading]);
 
   const pages = [
     {
@@ -385,7 +408,15 @@ export default function NewSpvForm() {
     },
     {
       title: 'Upload docs',
-      Component: <UploadDocsModal page={page} setPage={setPage} deal={initialDeal?.deal} />,
+      Component: (
+        <UploadDocsModal
+          page={page}
+          setPage={setPage}
+          deal={
+            initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
+          }
+        />
+      ),
     },
   ];
 
