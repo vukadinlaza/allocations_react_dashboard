@@ -210,7 +210,6 @@ const DealSetup = ({ match, classes }) => {
       </div>
     );
   const { getDealWithTasks: deal } = data;
-  console.log(deal);
   const mainBoxes = [
     {
       title: deal.name,
