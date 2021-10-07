@@ -249,7 +249,13 @@ const useStyles = makeStyles((theme) => ({
       font: 'normal normal normal 16px/21px Roboto',
     },
   },
-
+  selectorButton: {
+    fontSize: '.7em',
+    color: 'black',
+    height: '69px',
+    border: '1px solid lightgray !important',
+    backgroundColor: '#ffffff',
+  },
   selected: {
     background: '#186EFF26 0% 0% no-repeat padding-box !important',
     boxShadow: '0px 3px 6px #0000000D !important',

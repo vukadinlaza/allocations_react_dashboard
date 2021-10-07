@@ -85,13 +85,24 @@ const ButtonSelector = ({ currentValue, name, values, onChange }) => {
   const classes = useStyles();
 
   return (
-    <ButtonGroup color="primary" aria-label="outlined primary button group">
+    <ButtonGroup
+      color="primary"
+      aria-label="outlined primary button group"
+      style={{
+        display: 'grid',
+        width: '450px',
+        gridTemplateColumns: `repeat(${values.length}, 1fr)`,
+        gridGap: '10px',
+      }}
+    >
       {values.map(({ label, value }, i) => (
         <Button
           key={i}
           name={name}
           value={value}
-          className={currentValue === value ? classes.selected : null}
+          className={`${currentValue === value ? classes.selected : null} ${
+            classes.selectorButton
+          }`}
           onClick={(e) => {
             const target = {
               name: e.currentTarget.name,
@@ -205,24 +216,7 @@ const BuildDetails = ({
                     { label: '1%', value: '1' },
                     { label: '2%', value: '2' },
                     { label: '3%', value: '3' },
-                  ]}
-                />
-              </FormControl>
-            </Grid>
-            <Grid className={classes.inputGridItem} item xs={6}>
-              <FormControl required variant="outlined" className={classes.formContainers}>
-                <Typography className={classes.formItemName}>
-                  Choose your carry fee <HelpIcon className={classes.helpIcon} />
-                </Typography>
-                <ButtonSelector
-                  name="carry_fee_value"
-                  onChange={handleChange}
-                  currentValue={buildData.carry_fee.value}
-                  values={[
-                    { label: '0%', value: '0' },
-                    { label: '10%', value: '10' },
-                    { label: '20%', value: '20' },
-                    { label: '30%', value: '30' },
+                    { label: 'Custom', value: 'Custom' },
                   ]}
                 />
               </FormControl>
@@ -243,6 +237,26 @@ const BuildDetails = ({
                 />
               </FormControl>
             </Grid>
+            <Grid className={classes.inputGridItem} item xs={6}>
+              <FormControl required variant="outlined" className={classes.formContainers}>
+                <Typography className={classes.formItemName}>
+                  Choose your carry fee <HelpIcon className={classes.helpIcon} />
+                </Typography>
+                <ButtonSelector
+                  name="carry_fee_value"
+                  onChange={handleChange}
+                  currentValue={buildData.carry_fee.value}
+                  values={[
+                    { label: '0%', value: '0' },
+                    { label: '10%', value: '10' },
+                    { label: '20%', value: '20' },
+                    { label: '30%', value: '30' },
+                    { label: 'Custom', value: 'Custom' },
+                  ]}
+                />
+              </FormControl>
+            </Grid>
+
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
