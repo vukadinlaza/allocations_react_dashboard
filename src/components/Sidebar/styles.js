@@ -7,6 +7,9 @@ const styles = (theme) => ({
     marginBottom: '20px',
     backgroundColor: '#186EFF',
     color: 'white',
+    '&:hover': {
+      backgroundColor: '#4488fd',
+    },
   },
   appBar: {
     width: '100%',
