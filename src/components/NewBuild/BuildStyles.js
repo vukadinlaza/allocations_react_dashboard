@@ -256,10 +256,6 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid #d3d3d3 !important',
     backgroundColor: '#ffffff',
   },
-  customButton: {
-    padding: '20px !important',
-    color: 'red',
-  },
   selected: {
     background: '#186EFF26 0% 0% no-repeat padding-box !important',
     boxShadow: '0px 3px 6px #0000000D !important',
