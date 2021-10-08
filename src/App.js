@@ -170,7 +170,7 @@ const App = () => {
               component={InvestorInvestments}
               exact
             />
-            <AdminRoute path="/admin/invesments/:investmentId" component={Investment} exact />
+            <AdminRoute path="/admin/investments/:investmentId" component={Investment} exact />
 
             {/** Whitelabel Routes * */}
             <PrivateRoute path="/admin/type/:type" component={DealTable} exact />

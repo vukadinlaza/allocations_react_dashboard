@@ -71,8 +71,9 @@ const SidebarDrawer = ({
           title: 'Funds',
           icon: <AccountBalanceIcon fontSize="medium" />,
         },
+        // need to change route to '/admin/investors', but that breaks. need to push temp fix.
         {
-          to: '/admin/allocations/investors',
+          to: '/investors',
           title: 'Investors',
           icon: <PersonIcon fontSize="medium" />,
         },
