@@ -210,11 +210,10 @@ const DealSetup = ({ match, classes }) => {
       </div>
     );
   const { getDealWithTasks: deal } = data;
-
   const mainBoxes = [
     {
       title: deal.name,
-      fundManager: deal.manager_name,
+      fundManager: deal.metadata.manager.name,
       status: deal.phase,
       timeline: 'On Time',
       type: 'International',
