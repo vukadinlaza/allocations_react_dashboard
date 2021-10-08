@@ -223,7 +223,7 @@ export const KYCServiceTask = withStyles(styles)(({ task, taskData, classes }) =
         <FormControl required disabled variant="outlined">
           <Typography>{task.title}</Typography>
           <a
-            href={`https://mfl80ihum2.execute-api.us-east-1.amazonaws.com/dev/kyc/get-login-url?host=${encodeURIComponent(
+            href={`${process.env.REACT_APP_KYC_LAMBDA_URL}/get-login-url?host=${encodeURIComponent(
               window.location.href,
             )}&userId=${taskData?.user_id}`}
             target="'_blank'"
