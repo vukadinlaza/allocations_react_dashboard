@@ -11,9 +11,7 @@ import useStyles from '../../../BuildStyles';
 
 const ADD_DOC = gql`
   mutation addDealDocService($deal_id: String!, $task_id: String!, $doc: Upload!, $phase: String) {
-    addDealDocService(deal_id: $deal_id, task_id: $task_id, doc: $doc, phase: $phase) {
-      _id
-    }
+    addDealDocService(deal_id: $deal_id, task_id: $task_id, doc: $doc, phase: $phase)
   }
 `;
 
@@ -95,6 +93,7 @@ const DocUploader = ({
 };
 
 export default function UploadDocs({ page, setPage, deal }) {
+  console.log(deal);
   const classes = useStyles();
   const currentPhase = deal.phases.find((phase) => phase.name === 'build');
   const uploadTasks = currentPhase.tasks.filter((task) => task.type === 'fm-document-upload');

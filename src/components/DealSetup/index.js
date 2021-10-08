@@ -121,10 +121,7 @@ const ListContainer = ({ classes, type, list, onClickAction, current, itemName }
                       )}
                     </ListItemIcon>
                     <ListItemText size="small" primary={_.capitalize(item[itemName])} />
-                    {(type === 'phase' ||
-                      ![...taskTypes.userTask, ...taskTypes.automaticTasks].includes(
-                        item.type,
-                      )) && (
+                    {(type === 'phase' || ![...taskTypes.userTask].includes(item.type)) && (
                       <ListItemIcon className={classes.itemIcon}>
                         {current === item ? (
                           <IoIosArrowBack size="1.2rem" />
@@ -149,6 +146,7 @@ const DealSetup = ({ match, classes }) => {
 
   const { data, refetch: refetchDeal } = useQuery(DEAL, {
     fetchPolicy: 'network-only',
+    pollInterval: 1000,
     variables: { deal_id: query.get('id') },
   });
   const [taskLoading, setTaskLoading] = useState(false);
@@ -158,7 +156,6 @@ const DealSetup = ({ match, classes }) => {
   const [currentTask, setCurrentTask] = useState(false);
 
   useEffect(() => {
-    console.log(data);
     if (currentPhase && data?.getDealWithTasks) {
       const { getDealWithTasks: deal } = data;
       setCurentPhase(deal?.phases?.find((p) => p.name === currentPhase.name));
@@ -278,26 +275,25 @@ const DealSetup = ({ match, classes }) => {
             itemName="title"
           />
         )}
-        {currentTask &&
-          ![...taskTypes.userTask, ...taskTypes.automaticTasks].includes(currentTask.type) && (
-            <Grid item sm={12} lg={4}>
-              <Card className={classes.card}>
-                <CardContent style={{ padding: '0 16px' }}>
-                  <TaskAction
-                    task={currentTask}
-                    deal={deal.metadata}
-                    refetchDeal={refetchDeal}
-                    phase={currentPhase}
-                    setTaskLoading={setTaskLoading}
-                    classes={classes}
-                    gettingTaskData={gettingTaskData}
-                    setGettingTaskData={setGettingTaskData}
-                    setSnackbarData={setSnackbarData}
-                  />
-                </CardContent>
-              </Card>
-            </Grid>
-          )}
+        {currentTask && (
+          <Grid item sm={12} lg={4}>
+            <Card className={classes.card}>
+              <CardContent style={{ padding: '0 16px' }}>
+                <TaskAction
+                  task={currentTask}
+                  deal={deal.metadata}
+                  refetchDeal={refetchDeal}
+                  phase={currentPhase}
+                  setTaskLoading={setTaskLoading}
+                  classes={classes}
+                  gettingTaskData={gettingTaskData}
+                  setGettingTaskData={setGettingTaskData}
+                  setSnackbarData={setSnackbarData}
+                />
+              </CardContent>
+            </Card>
+          </Grid>
+        )}
       </Grid>
     </>
   );

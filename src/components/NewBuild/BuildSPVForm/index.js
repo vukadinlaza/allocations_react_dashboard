@@ -3,11 +3,12 @@ import { useMutation, gql } from '@apollo/client';
 import moment from 'moment';
 import _ from 'lodash';
 import HelpIcon from '@material-ui/icons/Help';
-import { Button, TextField, Paper, Grid, FormControl, Select, MenuItem } from '@material-ui/core';
+import { Button, TextField, Paper, Grid, FormControl, ButtonGroup } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import BasicInfo from './FormComponents/TypeSelector/index';
 import UploadDocsModal from './FormComponents/UploadDocs/index';
 import useStyles from '../BuildStyles';
+import { useAuth } from '../../../auth/useAuth';
 
 const CREATE_BUILD = gql`
   mutation createBuild {
@@ -80,49 +81,77 @@ const Breadcrumbs = ({ titles, page }) => {
   );
 };
 
-const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDeal }) => {
+const ButtonSelector = ({ currentValue, name, values, onChange }) => {
+  const classes = useStyles();
+
+  return (
+    <ButtonGroup color="primary" aria-label="outlined primary button group">
+      {values.map(({ label, value }, i) => (
+        <Button
+          key={i}
+          name={name}
+          value={value}
+          className={currentValue === value ? classes.selected : null}
+          onClick={(e) => {
+            const target = {
+              name: e.currentTarget.name,
+              value: e.currentTarget.value,
+            };
+            e.target = target;
+            onChange(e);
+          }}
+        >
+          {label}
+        </Button>
+      ))}
+    </ButtonGroup>
+  );
+};
+
+const BuildDetails = ({
+  userProfile,
+  page,
+  setPage,
+  setBuildInfo,
+  deal_id,
+  waitingOnInitialDeal,
+}) => {
   const classes = useStyles();
 
   const [buildData, setBuildData] = useState({
     // -------------------------- in the form
-    asset_type: '',
-    name: '',
-    slug: '',
+    asset_type: 'startup',
     portfolio_company_name: '',
-    manager_name: '',
+    manager_name:
+      userProfile.first_name && userProfile.last_name
+        ? `${userProfile.first_name} ${userProfile.last_name}`
+        : null,
     carry_fee: {
-      type: '',
-      value: '',
+      type: 'percent',
+      value: '10',
     },
     management_fee: {
-      type: '',
-      value: '',
+      type: 'percent',
+      value: '2',
     },
-    fund_template_documents: '',
-    management_fee_frequency: '',
+    custom_investment_agreement: 'false',
+    management_fee_frequency: 'one-time',
     setup_cost: 20000,
-    offering_type: '',
-    allocations_investment_advisor: '',
-    custom_investment_agreement: '',
-    side_letters: '',
+    offering_type: '506b',
+    allocations_investment_advisor: 'true',
+    side_letters: 'false',
     closing_date: moment(Date.now()).format('YYYY-MM-DD'),
   });
-  useEffect(() => {
-    setBuildData((prev) => ({
-      ...prev,
-      slug: _.kebabCase(buildData.name),
-    }));
-  }, [buildData.name]);
+
   const handleSubmit = () => {
-    console.log(buildData);
-    // setBuildInfo({
-    //   variables: {
-    //     deal_id,
-    //     payload: {
-    //       ...buildData,
-    //     },
-    //   },
-    // });
+    setBuildInfo({
+      variables: {
+        deal_id,
+        payload: {
+          ...buildData,
+        },
+      },
+    });
   };
 
   const handleChange = ({ target }) => {
@@ -158,35 +187,6 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
           </Typography>
           <Grid container spacing={1} className={classes.inputGridContainer}>
             <Grid className={classes.inputGridItem} item xs={6}>
-              <FormControl required variant="outlined" className={classes.formContainers}>
-                <Typography className={classes.formItemName}>
-                  Choose your carry fee <HelpIcon className={classes.helpIcon} />
-                </Typography>
-                <Grid className={classes.inputBox}>
-                  <TextField
-                    style={{ width: '70%', marginRight: '12px' }}
-                    value={buildData.carry_fee.value}
-                    name="carry_fee_value"
-                    onChange={handleChange}
-                    variant="outlined"
-                  />
-                  <Select
-                    style={{
-                      width: '25%',
-                      textAlign: 'center',
-                    }}
-                    variant="outlined"
-                    name="carry_fee_type"
-                    value={buildData.carry_fee.type}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value="percent">%</MenuItem>
-                    <MenuItem value="fixed">$</MenuItem>
-                  </Select>
-                </Grid>
-              </FormControl>
-            </Grid>
-            <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl
                 required
                 // disabled
@@ -196,25 +196,35 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                 <Typography className={classes.formItemName}>
                   Choose your management fee <HelpIcon className={classes.helpIcon} />
                 </Typography>
-                <Grid className={classes.inputBox}>
-                  <TextField
-                    style={{ width: '70%', marginRight: '12px' }}
-                    value={buildData.management_fee.value}
-                    name="management_fee_value"
-                    onChange={handleChange}
-                    variant="outlined"
-                  />
-                  <Select
-                    style={{ width: '25%', textAlign: 'center' }}
-                    variant="outlined"
-                    name="management_fee_type"
-                    value={buildData.management_fee.type}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value="percent">%</MenuItem>
-                    <MenuItem value="fixed">$</MenuItem>
-                  </Select>
-                </Grid>
+                <ButtonSelector
+                  name="management_fee_value"
+                  onChange={handleChange}
+                  currentValue={buildData.management_fee.value}
+                  values={[
+                    { label: '0%', value: '0' },
+                    { label: '1%', value: '1' },
+                    { label: '2%', value: '2' },
+                    { label: '3%', value: '3' },
+                  ]}
+                />
+              </FormControl>
+            </Grid>
+            <Grid className={classes.inputGridItem} item xs={6}>
+              <FormControl required variant="outlined" className={classes.formContainers}>
+                <Typography className={classes.formItemName}>
+                  Choose your carry fee <HelpIcon className={classes.helpIcon} />
+                </Typography>
+                <ButtonSelector
+                  name="carry_fee_value"
+                  onChange={handleChange}
+                  currentValue={buildData.carry_fee.value}
+                  values={[
+                    { label: '0%', value: '0' },
+                    { label: '10%', value: '10' },
+                    { label: '20%', value: '20' },
+                    { label: '30%', value: '30' },
+                  ]}
+                />
               </FormControl>
             </Grid>
             <Grid className={classes.inputGridItem} item xs={6}>
@@ -222,50 +232,15 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                 <Typography className={classes.formItemName}>
                   Choose your fee frequency <HelpIcon className={classes.helpIcon} />
                 </Typography>
-                <Grid container className={classes.buttonContainer}>
-                  <Grid>
-                    <Button
-                      name="management_fee_frequency"
-                      value="one-time"
-                      className={
-                        buildData.management_fee_frequency === 'one-time'
-                          ? `${classes.selectedInputButton} ${classes.selected}`
-                          : classes.inputButton
-                      }
-                      onClick={(e) => {
-                        const target = {
-                          name: e.currentTarget.name,
-                          value: e.currentTarget.value,
-                        };
-                        e.target = target;
-                        handleChange(e);
-                      }}
-                    >
-                      One-Time
-                    </Button>
-                  </Grid>
-                  <Grid>
-                    <Button
-                      value="annual"
-                      name="management_fee_frequency"
-                      className={
-                        buildData.management_fee_frequency === 'annual'
-                          ? `${classes.selectedInputButton} ${classes.selected}`
-                          : classes.inputButton
-                      }
-                      onClick={(e) => {
-                        const target = {
-                          name: e.currentTarget.name,
-                          value: e.currentTarget.value,
-                        };
-                        e.target = target;
-                        handleChange(e);
-                      }}
-                    >
-                      Annual
-                    </Button>
-                  </Grid>
-                </Grid>
+                <ButtonSelector
+                  name="management_fee_frequency"
+                  onChange={handleChange}
+                  currentValue={buildData.management_fee_frequency}
+                  values={[
+                    { label: 'One-Time', value: 'one-time' },
+                    { label: 'Annual', value: 'annual' },
+                  ]}
+                />
               </FormControl>
             </Grid>
             <Grid className={classes.inputGridItem} item xs={6}>
@@ -274,50 +249,15 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                   Will you charge the same fee for all investors?{' '}
                   <HelpIcon className={classes.helpIcon} />
                 </Typography>
-                <Grid container className={classes.buttonContainer}>
-                  <Grid>
-                    <Button
-                      name="side_letters"
-                      value={buildData.side_letters}
-                      className={
-                        buildData.side_letters
-                          ? `${classes.selectedInputButton} ${classes.selected}`
-                          : classes.inputButton
-                      }
-                      onClick={(e) => {
-                        const target = {
-                          name: e.currentTarget.name,
-                          value: true,
-                        };
-                        e.target = target;
-                        handleChange(e);
-                      }}
-                    >
-                      Yes (Standard)
-                    </Button>
-                  </Grid>
-                  <Grid>
-                    <Button
-                      value={buildData.side_letters}
-                      name="side_letters"
-                      className={
-                        !buildData.side_letters && buildData.side_letters !== ''
-                          ? `${classes.selectedInputButton} ${classes.selected}`
-                          : classes.inputButton
-                      }
-                      onClick={(e) => {
-                        const target = {
-                          name: e.currentTarget.name,
-                          value: false,
-                        };
-                        e.target = target;
-                        handleChange(e);
-                      }}
-                    >
-                      No
-                    </Button>
-                  </Grid>
-                </Grid>
+                <ButtonSelector
+                  name="side_letters"
+                  onChange={handleChange}
+                  currentValue={buildData.side_letters}
+                  values={[
+                    { label: 'Yes (Standard)', value: 'false' },
+                    { label: 'No', value: 'true' },
+                  ]}
+                />
               </FormControl>
             </Grid>
           </Grid>
@@ -334,52 +274,15 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                 <Typography className={classes.formItemName}>
                   Choose Allocations as the adviser? <HelpIcon className={classes.helpIcon} />
                 </Typography>
-                <Grid container className={classes.buttonContainer}>
-                  <Grid>
-                    <Button
-                      name="allocations_investment_advisor"
-                      value={buildData.allocations_investment_advisor}
-                      className={
-                        buildData.allocations_investment_advisor
-                          ? `${classes.selectedInputButton} ${classes.selected}`
-                          : classes.inputButton
-                      }
-                      onClick={(e) => {
-                        const target = {
-                          name: e.currentTarget.name,
-                          value: true,
-                        };
-                        e.target = target;
-                        handleChange(e);
-                      }}
-                    >
-                      Yes
-                    </Button>
-                  </Grid>
-                  <Grid>
-                    <Button
-                      value={!buildData.allocations_investment_advisor}
-                      name="allocations_investment_advisor"
-                      className={
-                        !buildData.allocations_investment_advisor &&
-                        buildData.allocations_investment_advisor !== ''
-                          ? `${classes.selectedInputButton} ${classes.selected}`
-                          : classes.inputButton
-                      }
-                      onClick={(e) => {
-                        const target = {
-                          name: e.currentTarget.name,
-                          value: false,
-                        };
-                        e.target = target;
-                        handleChange(e);
-                      }}
-                      // onClick={(e) => console.log(e.currentTarget.name, e.currentTarget.value)}
-                    >
-                      No
-                    </Button>
-                  </Grid>
-                </Grid>
+                <ButtonSelector
+                  name="allocations_investment_advisor"
+                  onChange={handleChange}
+                  currentValue={buildData.allocations_investment_advisor}
+                  values={[
+                    { label: 'Yes (Recommended)', value: 'true' },
+                    { label: 'No', value: 'false' },
+                  ]}
+                />
               </FormControl>
             </Grid>
             <Grid className={classes.inputGridItem} item xs={6}>
@@ -387,16 +290,15 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                 <Typography className={classes.formItemName}>
                   What is your offering type? <HelpIcon className={classes.helpIcon} />
                 </Typography>
-                <Select
-                  variant="outlined"
+                <ButtonSelector
                   name="offering_type"
-                  value={buildData.offering_type}
                   onChange={handleChange}
-                >
-                  {' '}
-                  <MenuItem value="506b">506b (no advertising)</MenuItem>
-                  <MenuItem value="506c">506c</MenuItem>
-                </Select>
+                  currentValue={buildData.offering_type}
+                  values={[
+                    { label: 'Private (506b)', value: '506b' },
+                    { label: 'Public (506c)', value: '506c' },
+                  ]}
+                />
               </FormControl>
             </Grid>
             <Grid className={classes.inputGridItem} item xs={6}>
@@ -405,15 +307,15 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
                   Whose fund template documents would you like to use?
                   <HelpIcon className={classes.helpIcon} />
                 </Typography>
-                <Select
-                  variant="outlined"
-                  name="fund_template_documents"
-                  value={buildData.fund_template_documents}
+                <ButtonSelector
+                  name="custom_investment_agreement"
                   onChange={handleChange}
-                >
-                  <MenuItem value="Allocations">Allocations</MenuItem>
-                  <MenuItem value="Not Allocations">Not Allocations</MenuItem>
-                </Select>
+                  currentValue={buildData.custom_investment_agreement}
+                  values={[
+                    { label: 'Allocations', value: 'false' },
+                    { label: 'Custom', value: 'true' },
+                  ]}
+                />
               </FormControl>
             </Grid>
           </Grid>
@@ -457,6 +359,7 @@ const BuildDetails = ({ page, setPage, setBuildInfo, deal_id, waitingOnInitialDe
 };
 
 export default function NewSpvForm() {
+  const { userProfile, loading: authLoading } = useAuth();
   const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
   const [setBuildInfo] = useMutation(SET_BUILD_INFO);
   // Page
@@ -471,6 +374,7 @@ export default function NewSpvForm() {
       title: 'Build your SPV',
       Component: (
         <BuildDetails
+          userProfile={userProfile}
           page={page}
           setPage={setPage}
           setBuildInfo={setBuildInfo}
@@ -484,6 +388,8 @@ export default function NewSpvForm() {
       Component: <UploadDocsModal page={page} setPage={setPage} deal={initialDeal?.deal} />,
     },
   ];
+
+  if (authLoading) return null;
 
   return (
     <>

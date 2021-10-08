@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
-import { get } from 'lodash';
 import { gql } from '@apollo/client';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
 import {
   Toolbar,
   AppBar,
@@ -13,37 +12,11 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import { useAuth } from '../../auth/useAuth';
 import SidebarDrawer from './SidebarDrawer';
-import './Sidebar.scss';
-
-const useStyles = makeStyles(() => ({
-  drawerPaper: {
-    width: '65%',
-    paddingTop: 8,
-    borderRight: 'none !important',
-    borderLeft: 0,
-    position: 'relative',
-    height: '100%',
-    backgroundColor: '#f7f7f7',
-    background: '#f7f7f7',
-  },
-  newDrawerPaper: {
-    width: '100%',
-    paddingTop: 5,
-    position: 'relative',
-    height: '100%',
-    backgroundColor: '#f7f7f7',
-    background: '#f7f7f7',
-    borderRight: 'none !important',
-  },
-  select: {
-    width: '90%',
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-}));
+import styles from './styles';
 
 const GET_INVESTOR = gql`
   {
@@ -64,8 +37,8 @@ const GET_INVESTOR = gql`
   }
 `;
 
-export default function Sidebar(props) {
-  const { userProfile, logout, isAuthenticated } = useAuth(GET_INVESTOR);
+function Sidebar(props) {
+  const { userProfile, logout, isAuthenticated, loading } = useAuth(GET_INVESTOR);
   const history = useHistory();
   const [investTab, setInvestTab] = useState(false);
   const [creditTab, setCreditTab] = useState(false);
@@ -74,8 +47,7 @@ export default function Sidebar(props) {
   const [currentHomeUrl, setCurrentHomeUrl] = useState('');
   const fundMatch = useRouteMatch('/admin/:organization');
   const location = useLocation();
-  const { window } = props;
-  const classes = useStyles();
+  const { window, classes } = props;
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -96,7 +68,7 @@ export default function Sidebar(props) {
     userProfile.showBuild,
   ]);
 
-  const isUserAuthenticated = isAuthenticated && userProfile;
+  const isUserAuthenticated = isAuthenticated && !loading;
 
   useEffect(() => {
     const userIsOrgAdmin = userProfile?.organizations_admin?.length;
@@ -142,21 +114,21 @@ export default function Sidebar(props) {
   const adminOrganizationsCopy = adminOrganizations ? [...adminOrganizations] : []; // Create a copy of organizations so we can mutate with sort
 
   return (
-    <div className="Sidebar">
+    <div className={classes.sidebar}>
       {!onboarding && (
         <>
-          <AppBar className="appBar">
+          <AppBar className={classes.appBar}>
             <Toolbar>
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
                 edge="start"
                 onClick={handleDrawerToggle}
-                className="menuButton"
+                className={classes.menuButton}
               >
                 <MenuIcon />
               </IconButton>
-              <div className="brand">
+              <div className={classes.brand}>
                 <Brand
                   organizations_admin={userProfile.organizations_admin || []}
                   admin={userProfile.admin}
@@ -165,9 +137,9 @@ export default function Sidebar(props) {
             </Toolbar>
           </AppBar>
 
-          <div className="contentContainer">
-            <nav className="drawer" aria-label="mailbox folders">
-              <Hidden mdUp implementation="css" className="firstHidden">
+          <div className={classes.contentContainer}>
+            <nav className={classes.drawer} aria-label="mailbox folders">
+              <Hidden mdUp implementation="js" className={classes.firstHidden}>
                 <Drawer
                   container={container}
                   variant="temporary"
@@ -182,12 +154,12 @@ export default function Sidebar(props) {
                     keepMounted: true,
                   }}
                 >
-                  <FormControl className="formControl">
+                  <FormControl className={classes.formControl}>
                     <Select
                       labelId="accounts-select"
                       value={currentAccount || ''}
                       onChange={handleAccountChange}
-                      className="input"
+                      className={classes.input}
                       style={{ backgroundColor: '#f7f7f7' }}
                       classes={{
                         root: classes.select,
@@ -205,7 +177,7 @@ export default function Sidebar(props) {
                           history.push(`/`);
                         }}
                         value={userProfile?.name}
-                        className="formItem"
+                        className={classes.formItem}
                       >
                         {userProfile?.name}
                       </MenuItem>
@@ -239,21 +211,27 @@ export default function Sidebar(props) {
                 </Drawer>
               </Hidden>
 
-              <Hidden smDown implementation="css" className="secondHidden">
+              <Hidden smDown implementation="css" className={classes.secondHidden}>
                 <Drawer
-                  className="newDrawerPaper"
+                  className={classes.newDrawerPaper}
                   classes={{
                     paper: classes.newDrawerPaper,
                   }}
                   variant="permanent"
                   open
                 >
-                  <FormControl className="formControl">
+                  <div className={classes.brand}>
+                    <Brand
+                      organizations_admin={userProfile.organizations_admin || []}
+                      admin={userProfile.admin}
+                    />
+                  </div>
+                  <FormControl className={classes.formControl}>
                     <Select
                       labelId="accounts-select"
                       value={currentAccount || ''}
                       onChange={handleAccountChange}
-                      className="input"
+                      className={classes.input}
                       classes={{
                         root: classes.select,
                       }}
@@ -267,7 +245,7 @@ export default function Sidebar(props) {
                       <MenuItem
                         onClick={() => history.push(`/`)}
                         value={userProfile?.name}
-                        className="formItem"
+                        className={classes.formItem}
                       >
                         {userProfile?.name}
                       </MenuItem>
@@ -299,7 +277,7 @@ export default function Sidebar(props) {
                 </Drawer>
               </Hidden>
             </nav>
-            <main className="content" style={{ background: 'white', height: '100vh' }}>
+            <main className={classes.content} style={{ background: 'white', height: '100vh' }}>
               {props.children}
             </main>
           </div>
@@ -309,77 +287,17 @@ export default function Sidebar(props) {
   );
 }
 
-const whitelist = ['allocations', 'organizations', 'funds', 'investments', 'invest'];
+export default withStyles(styles)(Sidebar);
 
-function Brand({ organizations_admin, admin }) {
+function Brand() {
   const history = useHistory();
-  const match = useRouteMatch('/admin/:organization');
-  const dealMatch = useRouteMatch('/deals/:organization/:id');
-  let isAdmin = organizations_admin.find((org) => {
-    return org.slug === match?.params?.organization;
-  });
-  if (admin) {
-    isAdmin = true;
-  }
-
-  const adminMatches =
-    match && match.params.organization && !whitelist.includes(match.params.organization);
-  const dealMatches =
-    dealMatch &&
-    dealMatch.params.organization &&
-    !whitelist.includes(dealMatch.params.organization);
-  if (adminMatches || dealMatches) {
-    const slug = adminMatches ? match.params.organization : dealMatch.params.organization;
-    const orgName = get(
-      (organizations_admin || []).find((org) => org.slug === slug),
-      'name',
-      false,
-    );
-    return <OrgLogo slug={slug} name={orgName} isAdmin={isAdmin} />;
-  }
-
   return (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <img
       onClick={() => history.push('/')}
       src="https://allocations-public.s3.us-east-2.amazonaws.com/allocations-logo.svg"
       alt="allocations"
-      style={{ height: '60px', width: 'auto' }}
+      style={{ height: '60px', width: 'auto', cursor: 'pointer' }}
     />
-  );
-}
-
-function deSlugify(slug) {
-  try {
-    return slug
-      .split('-')
-      .map((str) => `${str[0].toUpperCase()}${str.slice(1)}`)
-      .join(' ');
-  } catch (e) {
-    return slug;
-  }
-}
-
-function OrgLogo({ slug, name, isAdmin }) {
-  const history = useHistory();
-  const [img, setImg] = useState();
-  useEffect(() => {
-    setImg(`https://allocations-public.s3.us-east-2.amazonaws.com/organizations/${slug}.png`);
-  }, [slug]);
-  const pushfn = isAdmin ? () => history.push(`/admin/${slug}`) : () => {};
-  if (!img) {
-    return (
-      <div className="brand" onClick={pushfn}>
-        <span className="brand-span">
-          <b>{name || deSlugify(slug)}</b>
-        </span>
-      </div>
-    );
-  }
-
-  return (
-    <div className="brand" onClick={() => history.push(`/admin/${slug}`)}>
-      <img height="60px" width="180px" alt={slug} onError={() => setImg(null)} src={img} />
-    </div>
   );
 }
