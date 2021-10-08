@@ -81,18 +81,19 @@ const Breadcrumbs = ({ titles, page }) => {
     </Paper>
   );
 };
+const phoneSize = window.innerWidth < phone;
 
-const ButtonSelector = ({ currentValue, name, values, onChange }) => {
+const ButtonSelector = ({ currentValue, name, values, onChange, gridCol = '1fr 1fr' }) => {
   const classes = useStyles();
-  const phoneSize = window.innerWidth < phone;
+
   return (
     <ButtonGroup
       color="primary"
       aria-label="outlined primary button group"
       style={{
         display: 'grid',
-        gridTemplateColumns: `repeat(${values.length}, 1fr)`,
-        width: phoneSize ? '325px' : '450px',
+        gridTemplateColumns: gridCol,
+        width: phoneSize ? '325px' : '550px',
         gridGap: phoneSize ? '6px' : '10px',
       }}
     >
@@ -212,6 +213,7 @@ const BuildDetails = ({
                   name="management_fee_value"
                   onChange={handleChange}
                   currentValue={buildData.management_fee.value}
+                  gridCol={phoneSize ? 'repeat(3, 1fr)' : 'repeat(4, 1fr) 1.5fr'}
                   values={[
                     { label: '0%', value: '0' },
                     { label: '1%', value: '1' },
@@ -247,6 +249,7 @@ const BuildDetails = ({
                   name="carry_fee_value"
                   onChange={handleChange}
                   currentValue={buildData.carry_fee.value}
+                  gridCol={phoneSize ? 'repeat(3, 1fr)' : 'repeat(4, 1fr) 1.5fr'}
                   values={[
                     { label: '0%', value: '0' },
                     { label: '10%', value: '10' },
