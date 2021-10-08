@@ -250,11 +250,15 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   selectorButton: {
-    fontSize: '.7em',
+    fontSize: '.8em',
     color: 'black',
     height: '69px',
-    border: '1px solid lightgray !important',
+    border: '1px solid #d3d3d3 !important',
     backgroundColor: '#ffffff',
+  },
+  customButton: {
+    padding: '20px !important',
+    color: 'red',
   },
   selected: {
     background: '#186EFF26 0% 0% no-repeat padding-box !important',
