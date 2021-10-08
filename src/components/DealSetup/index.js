@@ -193,6 +193,7 @@ const DealSetup = ({ match, classes }) => {
               borderRadius: '2em',
               width: 'auto',
               textAlign: 'center',
+              transform: 'translateX(-39%)',
             }}
           >
             {row[headerValue]}
