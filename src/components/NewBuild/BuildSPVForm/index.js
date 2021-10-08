@@ -9,6 +9,7 @@ import BasicInfo from './FormComponents/TypeSelector/index';
 import UploadDocsModal from './FormComponents/UploadDocs/index';
 import useStyles from '../BuildStyles';
 import { useAuth } from '../../../auth/useAuth';
+import { phone } from '../../../utils/helpers';
 
 const CREATE_BUILD = gql`
   mutation createBuild {
@@ -83,16 +84,16 @@ const Breadcrumbs = ({ titles, page }) => {
 
 const ButtonSelector = ({ currentValue, name, values, onChange }) => {
   const classes = useStyles();
-
+  const phoneSize = window.innerWidth < phone;
   return (
     <ButtonGroup
       color="primary"
       aria-label="outlined primary button group"
       style={{
         display: 'grid',
-        width: '450px',
         gridTemplateColumns: `repeat(${values.length}, 1fr)`,
-        gridGap: '10px',
+        width: phoneSize ? '325px' : '450px',
+        gridGap: phoneSize ? '6px' : '10px',
       }}
     >
       {values.map(({ label, value }, i) => (
