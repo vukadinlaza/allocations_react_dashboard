@@ -379,16 +379,14 @@ export default function NewSpvForm() {
   useEffect(() => {
     // if there is no build data/deal_id, we create a new build (default info pulled from the backend)
     if (!localStorage.getItem('buildData') && !localStorage.getItem('buildDeal')) {
-      console.log('we are creating the build');
       createBuild();
     }
   }, []);
+
   useEffect(() => {
     // if we finished creating the build, set the deal info in local storage
     if (initialDeal) {
-      console.log('we have finished creating the build, and therefore need to store the data');
       localStorage.setItem('buildDeal', JSON.stringify(initialDeal.deal));
-      // localStorage.setItem('buildData', JSON.stringify())
     }
   }, [loading]);
 
