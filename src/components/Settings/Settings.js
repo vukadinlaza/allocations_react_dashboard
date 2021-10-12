@@ -198,7 +198,7 @@ const Settings = ({ classes, history }) => {
         history.push(`/admin/users/${row._id}`);
         break;
       case 1:
-        history.push(`/admin/invesments/${row._id}`);
+        history.push(`/admin/investments/${row._id}`);
         break;
       default:
     }
