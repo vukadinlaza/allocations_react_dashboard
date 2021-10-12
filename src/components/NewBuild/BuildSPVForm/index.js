@@ -141,6 +141,7 @@ const BuildDetails = ({
     allocations_investment_advisor: 'true',
     side_letters: 'false',
     closing_date: moment(Date.now()).format('YYYY-MM-DD'),
+    sectors: [],
   });
 
   const handleSubmit = () => {
@@ -171,6 +172,7 @@ const BuildDetails = ({
       }));
       return;
     }
+    console.log('this is it!!!!', target);
     setBuildData((prev) => ({
       ...prev,
       [target.name]: target.value,
