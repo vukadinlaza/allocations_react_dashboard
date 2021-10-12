@@ -50,6 +50,7 @@ export default function TypeSelector({ assetType, handleChange, buildData }) {
       width: '26px',
     },
   ];
+
   function FormRow({ rowItems }) {
     return (
       <>
@@ -193,12 +194,28 @@ export default function TypeSelector({ assetType, handleChange, buildData }) {
           </Grid>
           <Grid className={classes.inputGridItem} item xs={6}>
             <FormControl required disabled variant="outlined" className={classes.formContainers}>
-              <Typography className={classes.formItemName}>
-                GP Entity Name <HelpIcon className={classes.helpIcon} />
+              <Typography
+                className={classes.formItemName}
+                style={{ color: !buildData.gp_entity_need && '#E5E5E5' }}
+              >
+                GP Entity Name{' '}
+                <HelpIcon
+                  className={classes.helpIcon}
+                  style={{ color: !buildData.gp_entity_need && '#E5E5E5' }}
+                />
               </Typography>
               <TextField
                 value={buildData.gp_entity_name}
                 name="gp_entity_name"
+                disabled={!buildData.gp_entity_need}
+                style={
+                  !buildData.gp_entity_need
+                    ? {
+                        background: '#E5E5E5',
+                        opacity: '0.2',
+                      }
+                    : null
+                }
                 onChange={handleChange}
                 className={classes.inputBox}
                 variant="outlined"
