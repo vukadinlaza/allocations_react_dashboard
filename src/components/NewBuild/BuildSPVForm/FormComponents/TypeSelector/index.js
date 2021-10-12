@@ -13,8 +13,15 @@ import HouseIcon from '../../../../../assets/buildHouse.svg';
 import LevelIcon from '../../../../../assets/buildLevel.svg';
 import NetworkIcon from '../../../../../assets/buildNetwork.svg';
 import PieIcon from '../../../../../assets/buildPie.svg';
+import { ModalTooltip } from '../../../../admin/FundManagerDashboard/widgets';
 
-export default function TypeSelector({ assetType, handleChange, buildData }) {
+export default function TypeSelector({
+  assetType,
+  handleChange,
+  buildData,
+  handleTooltip,
+  openTooltip,
+}) {
   const classes = useStyles();
   const row1Items = [
     {
@@ -109,7 +116,21 @@ export default function TypeSelector({ assetType, handleChange, buildData }) {
           1. Basic Information
         </Typography>
         <Typography className={classes.formItemName}>
-          Choose your asset type <HelpIcon className={classes.helpIcon} />
+          Choose your asset type
+          <ModalTooltip
+            title="Asset Type"
+            handleTooltip={handleTooltip}
+            tooltipContent={
+              <Typography color="inherit">
+                Select the type of deal which reflects the intended structure and the assets which
+                the SPV will purchase
+              </Typography>
+            }
+            openTooltip={openTooltip}
+            id="asset_type"
+          >
+            <HelpIcon className={classes.helpIcon} onClick={(e) => handleTooltip('asset_type')} />
+          </ModalTooltip>
         </Typography>
         <Grid container className={classes.assetChoiceGrid}>
           <FormRow rowItems={row1Items} />
@@ -119,7 +140,24 @@ export default function TypeSelector({ assetType, handleChange, buildData }) {
           <Grid className={classes.inputGridItem} item xs={6}>
             <FormControl required disabled variant="outlined" className={classes.formContainers}>
               <Typography className={classes.formItemName}>
-                Portfolio Company Name <HelpIcon className={classes.helpIcon} />
+                Portfolio Company Name
+                <ModalTooltip
+                  title="Company Name"
+                  handleTooltip={handleTooltip}
+                  tooltipContent={
+                    <Typography color="inherit">
+                      Full name of the company in which the SPV will invest in (e.g. Allocations,
+                      Inc., a Delaware corporation)
+                    </Typography>
+                  }
+                  openTooltip={openTooltip}
+                  id="portfolio_company_name"
+                >
+                  <HelpIcon
+                    className={classes.helpIcon}
+                    onClick={(e) => handleTooltip('portfolio_company_name')}
+                  />
+                </ModalTooltip>
               </Typography>
               <TextField
                 value={buildData.portfolio_company_name}
@@ -134,7 +172,21 @@ export default function TypeSelector({ assetType, handleChange, buildData }) {
           <Grid className={classes.inputGridItem} item xs={6}>
             <FormControl required disabled variant="outlined" className={classes.formContainers}>
               <Typography className={classes.formItemName}>
-                Manager Name <HelpIcon className={classes.helpIcon} />
+                Manager Name
+                <ModalTooltip
+                  title="Manager Name"
+                  handleTooltip={handleTooltip}
+                  tooltipContent={
+                    <Typography color="inherit">Full name of the manager of your SPV</Typography>
+                  }
+                  openTooltip={openTooltip}
+                  id="manager_name"
+                >
+                  <HelpIcon
+                    className={classes.helpIcon}
+                    onClick={(e) => handleTooltip('manager_name')}
+                  />
+                </ModalTooltip>
               </Typography>
               <TextField
                 value={buildData.manager_name}
@@ -148,7 +200,23 @@ export default function TypeSelector({ assetType, handleChange, buildData }) {
           <Grid className={classes.inputGridItem} item xs={6}>
             <FormControl required disabled variant="outlined" className={classes.formContainers}>
               <Typography className={classes.formItemName}>
-                Closing Date <HelpIcon className={classes.helpIcon} />
+                Closing Date
+                <ModalTooltip
+                  title="Closing Date"
+                  handleTooltip={handleTooltip}
+                  tooltipContent={
+                    <Typography color="inherit">
+                      Date on when the SPV needs to make the money transfer
+                    </Typography>
+                  }
+                  openTooltip={openTooltip}
+                  id="closing_date"
+                >
+                  <HelpIcon
+                    className={classes.helpIcon}
+                    onClick={(e) => handleTooltip('closing_date')}
+                  />
+                </ModalTooltip>
               </Typography>
               <TextField
                 value={buildData.closing_date}
