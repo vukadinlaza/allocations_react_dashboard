@@ -93,7 +93,7 @@ const ButtonSelector = ({ currentValue, name, values, onChange, gridCol = '1fr 1
       style={{
         display: 'grid',
         gridTemplateColumns: gridCol,
-        width: phoneSize ? '325px' : '550px',
+        width: phoneSize ? '325px' : '90%',
         gridGap: phoneSize ? '6px' : '10px',
       }}
     >
