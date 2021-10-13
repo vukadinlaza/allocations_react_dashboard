@@ -10,6 +10,7 @@ import UploadDocsModal from './FormComponents/UploadDocs/index';
 import useStyles from '../BuildStyles';
 import { useAuth } from '../../../auth/useAuth';
 import { phone } from '../../../utils/helpers';
+import { ModalTooltip } from '../../admin/FundManagerDashboard/widgets';
 
 const CREATE_BUILD = gql`
   mutation createBuild {
@@ -93,7 +94,7 @@ const ButtonSelector = ({ currentValue, name, values, onChange, gridCol = '1fr 1
       style={{
         display: 'grid',
         gridTemplateColumns: gridCol,
-        width: phoneSize ? '325px' : '550px',
+        width: phoneSize ? '325px' : '90%',
         gridGap: phoneSize ? '6px' : '10px',
       }}
     >
@@ -154,7 +155,21 @@ const BuildDetails = ({
     allocations_investment_advisor: 'true',
     side_letters: 'false',
     closing_date: moment(Date.now()).format('YYYY-MM-DD'),
+    sectors: [],
   });
+
+  const [openTooltip, setOpenTooltip] = useState('');
+
+  const handleTooltip = (id) => {
+    setOpenTooltip(id);
+  };
+  useEffect(() => {
+    const localStorageBuild = localStorage.getItem('buildData');
+    if (localStorageBuild) {
+      const parsedBuildData = JSON.parse(localStorageBuild);
+      setBuildData(parsedBuildData);
+    }
+  }, []);
 
   const handleSubmit = () => {
     setBuildInfo({
@@ -182,17 +197,25 @@ const BuildDetails = ({
           [splitKeyName[2] === 'type' ? 'type' : 'value']: target.value,
         },
       }));
-      return;
+      // return;
+    } else {
+      setBuildData((prev) => ({
+        ...prev,
+        [target.name]: target.value,
+      }));
     }
-    setBuildData((prev) => ({
-      ...prev,
-      [target.name]: target.value,
-    }));
+    localStorage.setItem('buildData', JSON.stringify(buildData));
   };
 
   return (
     <>
-      <BasicInfo buildData={buildData} handleChange={handleChange} parentClasses={classes} />
+      <BasicInfo
+        buildData={buildData}
+        handleChange={handleChange}
+        parentClasses={classes}
+        handleTooltip={handleTooltip}
+        openTooltip={openTooltip}
+      />
       <Paper className={classes.paper}>
         <form noValidate autoComplete="off">
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
@@ -207,7 +230,24 @@ const BuildDetails = ({
                 className={classes.formContainers}
               >
                 <Typography className={classes.formItemName}>
-                  Choose your management fee <HelpIcon className={classes.helpIcon} />
+                  Choose your management fee
+                  <ModalTooltip
+                    title="Management Fee"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        A fee which will be charged by the Manager for covering Manager's expenses
+                        preparing the deal
+                      </Typography>
+                    }
+                    openTooltip={openTooltip}
+                    id="management_fee"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={(e) => handleTooltip('management_fee')}
+                    />
+                  </ModalTooltip>
                 </Typography>
                 <ButtonSelector
                   name="management_fee_value"
@@ -227,7 +267,23 @@ const BuildDetails = ({
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
-                  Choose your fee frequency <HelpIcon className={classes.helpIcon} />
+                  Choose your fee frequency
+                  <ModalTooltip
+                    title="Fee Frequency"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        Period for which the Management Fee will be charged (one-time or annually)
+                      </Typography>
+                    }
+                    openTooltip={openTooltip}
+                    id="fee_frequency"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={(e) => handleTooltip('fee_frequency')}
+                    />
+                  </ModalTooltip>
                 </Typography>
                 <ButtonSelector
                   name="management_fee_frequency"
@@ -243,7 +299,24 @@ const BuildDetails = ({
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
-                  Choose your carry fee <HelpIcon className={classes.helpIcon} />
+                  Choose your carry fee
+                  <ModalTooltip
+                    title="Carry Fee"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        A fee which the Manager will be entitled to in case the SPV's investment is
+                        successful/profitable; note that carry fee is charged only from the profit
+                      </Typography>
+                    }
+                    openTooltip={openTooltip}
+                    id="carry_fee"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={(e) => handleTooltip('carry_fee')}
+                    />
+                  </ModalTooltip>
                 </Typography>
                 <ButtonSelector
                   name="carry_fee_value"
@@ -265,7 +338,23 @@ const BuildDetails = ({
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
                   Will you charge the same fee for all investors?{' '}
-                  <HelpIcon className={classes.helpIcon} />
+                  <ModalTooltip
+                    title="Charge the same fee for all investors?"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        For some investors you might want to provide different fee structure, this
+                        is possible by concluding side letters
+                      </Typography>
+                    }
+                    openTooltip={openTooltip}
+                    id="same_investor_fee"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={(e) => handleTooltip('same_investor_fee')}
+                    />
+                  </ModalTooltip>
                 </Typography>
                 <ButtonSelector
                   name="side_letters"
@@ -290,7 +379,25 @@ const BuildDetails = ({
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
-                  Choose Allocations as the adviser? <HelpIcon className={classes.helpIcon} />
+                  Choose Allocations as the reporting adviser?
+                  <ModalTooltip
+                    title="Reporting Adviser"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        An investment adviser can or will be a regulatory requirement for private
+                        funds raising capital for a fee. Please consult your legal counsel on
+                        whether your deal needs an adviser{' '}
+                      </Typography>
+                    }
+                    openTooltip={openTooltip}
+                    id="reporting_advisor"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={(e) => handleTooltip('reporting_advisor')}
+                    />
+                  </ModalTooltip>
                 </Typography>
                 <ButtonSelector
                   name="allocations_investment_advisor"
@@ -306,7 +413,25 @@ const BuildDetails = ({
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
-                  What is your offering type? <HelpIcon className={classes.helpIcon} />
+                  What is your offering type?
+                  <ModalTooltip
+                    title="Offering Type"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        Depending on the offering type you might be able to ensure
+                        self-accreditation for investors or even advertise your deal publicly;
+                        please consult your legal counsel
+                      </Typography>
+                    }
+                    openTooltip={openTooltip}
+                    id="offering_type"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={(e) => handleTooltip('offering_type')}
+                    />
+                  </ModalTooltip>
                 </Typography>
                 <ButtonSelector
                   name="offering_type"
@@ -323,7 +448,23 @@ const BuildDetails = ({
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
                   Whose fund template documents would you like to use?
-                  <HelpIcon className={classes.helpIcon} />
+                  <ModalTooltip
+                    title="Fund Template Documents"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        As you might have your own SPV documents, you can use them with us as well,
+                        this would limit the period of time in which the SPV could be closed
+                      </Typography>
+                    }
+                    openTooltip={openTooltip}
+                    id="fund_template_docs"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={(e) => handleTooltip('fund_template_docs')}
+                    />
+                  </ModalTooltip>
                 </Typography>
                 <ButtonSelector
                   name="custom_investment_agreement"
@@ -346,7 +487,23 @@ const BuildDetails = ({
           </Typography>
           <FormControl required disabled variant="outlined" className={classes.formContainers}>
             <Typography className={classes.formItemName}>
-              Any notes we should know about? <HelpIcon className={classes.helpIcon} />
+              Any notes we should know about?
+              <ModalTooltip
+                title="Extra Notes"
+                handleTooltip={handleTooltip}
+                tooltipContent={
+                  <Typography color="inherit">
+                    Indicate any special provisions which you would like to capture in the deal
+                  </Typography>
+                }
+                openTooltip={openTooltip}
+                id="extra_notes"
+              >
+                <HelpIcon
+                  className={classes.helpIcon}
+                  onClick={(e) => handleTooltip('extra_notes')}
+                />
+              </ModalTooltip>
             </Typography>
             <TextField
               multiline
@@ -380,12 +537,23 @@ export default function NewSpvForm() {
   const { userProfile, loading: authLoading } = useAuth();
   const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
   const [setBuildInfo] = useMutation(SET_BUILD_INFO);
+
   // Page
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    createBuild();
+    // if there is no build data/deal_id, we create a new build (default info pulled from the backend)
+    if (!localStorage.getItem('buildData') && !localStorage.getItem('buildDeal')) {
+      createBuild();
+    }
   }, []);
+
+  useEffect(() => {
+    // if we finished creating the build, set the deal info in local storage
+    if (initialDeal) {
+      localStorage.setItem('buildDeal', JSON.stringify(initialDeal.deal));
+    }
+  }, [loading]);
 
   const pages = [
     {
@@ -403,7 +571,15 @@ export default function NewSpvForm() {
     },
     {
       title: 'Upload docs',
-      Component: <UploadDocsModal page={page} setPage={setPage} deal={initialDeal?.deal} />,
+      Component: (
+        <UploadDocsModal
+          page={page}
+          setPage={setPage}
+          deal={
+            initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
+          }
+        />
+      ),
     },
   ];
 
