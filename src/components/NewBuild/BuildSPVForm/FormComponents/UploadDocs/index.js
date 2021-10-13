@@ -28,18 +28,19 @@ const DocUploader = ({
   //   variables: { deal_id: deal?._id },
   // });
 
-  useEffect(() => {
-    if (filesUploaded[document.title].complete) {
-      addDoc({
-        variables: {
-          doc: filesUploaded[document.title]?.document,
-          task_id: document?._id,
-          deal_id: deal?._id,
-          phase: 'build',
-        },
-      });
-    }
-  }, [filesUploaded]);
+  // useEffect(() => {
+  //   if (filesUploaded[document.title].complete) {
+  //     addDoc({
+  //       variables: {
+  //         doc: filesUploaded[document.title]?.document,
+  //         task_id: document?._id,
+  //         deal_id: deal?._id,
+  //         phase: 'build',
+  //       },
+  //     });
+  //     localStorage.setItem('buildFilesUploaded', JSON.stringify(filesUploaded));
+  //   }
+  // }, [filesUploaded]);
 
   return (
     <Paper
@@ -75,6 +76,15 @@ const DocUploader = ({
                       [document.title]: { complete: true, document: target.files[0] },
                     };
                   });
+                  addDoc({
+                    variables: {
+                      doc: target.files[0],
+                      task_id: document?._id,
+                      deal_id: deal?._id,
+                      phase: 'build',
+                    },
+                  });
+                  localStorage.setItem('buildFilesUploaded', JSON.stringify(filesUploaded));
                 }
               }}
             />
@@ -93,7 +103,6 @@ const DocUploader = ({
 };
 
 export default function UploadDocs({ page, setPage, deal }) {
-  console.log(deal);
   const classes = useStyles();
   const currentPhase = deal.phases.find((phase) => phase.name === 'build');
   const uploadTasks = currentPhase.tasks.filter((task) => task.type === 'fm-document-upload');
@@ -122,6 +131,11 @@ export default function UploadDocs({ page, setPage, deal }) {
       toast.success('Success! Your document has been added');
     },
   });
+  useEffect(() => {
+    if (localStorage.getItem('buildFilesUploaded')) {
+      setFilesUploaded(JSON.parse(localStorage.getItem('buildFilesUploaded')));
+    }
+  }, []);
   return (
     <>
       <Paper className={classes.paper}>
@@ -148,6 +162,9 @@ export default function UploadDocs({ page, setPage, deal }) {
           className={classes.finishButton}
           onClick={() => {
             toast.success('Success! Your submission was submitted.');
+            localStorage.removeItem('buildData');
+            localStorage.removeItem('buildDeal');
+            localStorage.removeItem('buildFilesUploaded');
             if (deal?._id) history.push(`/deal-setup?id=${deal._id}`);
           }}
         >
