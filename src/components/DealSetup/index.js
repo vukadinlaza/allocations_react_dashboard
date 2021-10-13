@@ -121,15 +121,16 @@ const ListContainer = ({ classes, type, list, onClickAction, current, itemName }
                       )}
                     </ListItemIcon>
                     <ListItemText size="small" primary={_.capitalize(item[itemName])} />
-                    {(type === 'phase' || ![...taskTypes.userTask].includes(item.type)) && (
-                      <ListItemIcon className={classes.itemIcon}>
-                        {current === item ? (
-                          <IoIosArrowBack size="1.2rem" />
-                        ) : (
-                          <IoIosArrowForward size="1.2rem" />
-                        )}
-                      </ListItemIcon>
-                    )}
+                    {(type === 'phase' || ![...taskTypes.userTask].includes(item.type)) &&
+                      !item.type?.startsWith('admin') && (
+                        <ListItemIcon className={classes.itemIcon}>
+                          {current === item ? (
+                            <IoIosArrowBack size="1.2rem" />
+                          ) : (
+                            <IoIosArrowForward size="1.2rem" />
+                          )}
+                        </ListItemIcon>
+                      )}
                   </ListItem>
                 );
               })}
@@ -149,6 +150,7 @@ const DealSetup = ({ match, classes }) => {
     pollInterval: 1000,
     variables: { deal_id: query.get('id') },
   });
+  console.log('data', data);
   const [taskLoading, setTaskLoading] = useState(false);
   const [gettingTaskData, setGettingTaskData] = useState(false);
   const [snackbarData, setSnackbarData] = useState({});
@@ -176,6 +178,10 @@ const DealSetup = ({ match, classes }) => {
         setCurrentTask(false);
       }
     } else {
+      if (item.type.startsWith('admin')) {
+        setCurrentTask(false);
+        return;
+      }
       setCurrentTask(current ? (item === current ? false : item) : item);
     }
   };
