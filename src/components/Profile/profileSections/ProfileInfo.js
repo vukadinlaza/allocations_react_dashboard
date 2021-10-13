@@ -99,8 +99,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const ProfileInfo = ({
-  investor,
-  setInvestor,
+  investorProfile,
   actionText,
   setFormStatus,
   refetchUser,
@@ -109,12 +108,13 @@ const ProfileInfo = ({
   const classes = useStyles();
   const { logout, userProfile } = useAuth();
   const [errors, setErrors] = useState([]);
+  const [investor, setInvestor] = useState(investorProfile);
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
 
   const reqs = [
     'country',
-    investor.country === 'United States' ? 'state' : '',
+    investor?.country === 'United States' ? 'state' : '',
     'investor_type',
     'email',
   ];

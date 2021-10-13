@@ -120,9 +120,9 @@ const dashboardTabs = ['Personal Information'];
 // 'Accounts', 'Entities'
 
 const Profile = ({ classes }) => {
-  const [investor, setInvestor] = useState(null);
+  const { userProfile, refetch: refetchUser, loading } = useAuth(GET_INVESTOR);
   const [formStatus, setFormStatus] = useState('edit');
-  const { userProfile, refetch: refetchUser } = useAuth(GET_INVESTOR);
+
   // const { data, refetch: refetchAccountUsers } = useQuery(GET_ACCOUNT_USERS);
   // const [createEntity, { data: createEntityRes }] = useMutation(CREATE_ENTITY);
   // const [deleteEntity, { data: deleteEntityRes }] = useMutation(REMOVE_ACCT_ENTITY);
@@ -135,12 +135,6 @@ const Profile = ({ classes }) => {
   // );
 
   // const [removeUser, { data: removeRes }] = useMutation(REMOVE_ACCT_USER);
-
-  useEffect(() => {
-    if (userProfile) {
-      setInvestor(userProfile);
-    }
-  }, [userProfile]);
 
   // useEffect(() => {
   //   if (removeRes) {
@@ -165,7 +159,7 @@ const Profile = ({ classes }) => {
 
   const icon =
     formStatus === 'loading' ? 'circle-notch' : formStatus === 'complete' ? 'check' : null;
-  if (!userProfile.email || !userProfile?.account) return <Loader />;
+  if (loading) return <Loader />;
 
   // const acctUsers = data?.accountUsers || [];
 
@@ -179,10 +173,8 @@ const Profile = ({ classes }) => {
         return (
           <ProfileInfo
             classes={classes}
-            investor={investor}
-            userProfile={userProfile}
+            investorProfile={userProfile}
             icon={icon}
-            setInvestor={setInvestor}
             setFormStatus={setFormStatus}
             actionText="Save Profile"
             refetchUser={refetchUser}
