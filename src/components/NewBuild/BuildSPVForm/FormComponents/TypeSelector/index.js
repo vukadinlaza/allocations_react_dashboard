@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import Select from 'react-select';
+
 import HelpIcon from '@material-ui/icons/Help';
 import { TextField, Paper, Grid, FormControl } from '@material-ui/core';
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import Typography from '@material-ui/core/Typography';
-// import { makeStyles } from '@material-ui/core/styles';
 import useStyles from '../../../BuildStyles';
 import TypeItem from './TypeItem/index';
 import RocketIcon from '../../../../../assets/buildRocket.svg';
@@ -13,6 +15,7 @@ import HouseIcon from '../../../../../assets/buildHouse.svg';
 import LevelIcon from '../../../../../assets/buildLevel.svg';
 import NetworkIcon from '../../../../../assets/buildNetwork.svg';
 import PieIcon from '../../../../../assets/buildPie.svg';
+import sectors from './sectors';
 
 export default function TypeSelector({ assetType, handleChange, buildData }) {
   const classes = useStyles();
@@ -102,6 +105,50 @@ export default function TypeSelector({ assetType, handleChange, buildData }) {
       </>
     );
   }
+
+  function SectorSelector() {
+    const suggestions = sectors.map((sector) => {
+      return {
+        value: sector.title,
+        label: sector.title,
+      };
+    });
+    const customStyles = {
+      multiValue: (styles, { data }) => ({
+        ...styles,
+        backgroundColor: '#DAE8FF',
+      }),
+      multiValueLabel: (styles, { data }) => ({
+        ...styles,
+        color: '#0461FF',
+      }),
+      multiValueRemove: (styles, { data }) => ({
+        ...styles,
+        color: '#0461FF',
+      }),
+    };
+
+    return (
+      <>
+        <Select
+          options={suggestions}
+          menuPosition="fixed"
+          styles={customStyles}
+          value={buildData.sectors.map((sector) => ({ value: sector, label: sector }))}
+          onChange={(option) => {
+            const newEvent = {
+              target: {
+                name: 'sectors',
+                value: option.map((sector) => sector.value),
+              },
+            };
+            handleChange(newEvent);
+          }}
+          isMulti
+        />
+      </>
+    );
+  }
   return (
     <Paper className={classes.paper}>
       <form noValidate autoComplete="off" className={classes.formContainers}>
@@ -159,6 +206,12 @@ export default function TypeSelector({ assetType, handleChange, buildData }) {
                 type="date"
               />
             </FormControl>
+          </Grid>
+          <Grid className={classes.inputGridItem} item xs={12}>
+            <Typography className={classes.formItemName}>
+              Sector(s) <HelpIcon className={classes.helpIcon} />
+            </Typography>
+            <SectorSelector />
           </Grid>
         </Grid>
       </form>
