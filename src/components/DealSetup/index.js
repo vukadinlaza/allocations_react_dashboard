@@ -150,7 +150,7 @@ const DealSetup = ({ match, classes }) => {
     pollInterval: 1000,
     variables: { deal_id: query.get('id') },
   });
-  console.log('data', data);
+
   const [taskLoading, setTaskLoading] = useState(false);
   const [gettingTaskData, setGettingTaskData] = useState(false);
   const [snackbarData, setSnackbarData] = useState({});
