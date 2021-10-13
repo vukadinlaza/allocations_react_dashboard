@@ -185,7 +185,6 @@ const BuildDetails = ({
       }));
       return;
     }
-    console.log('this is it!!!!', target);
     setBuildData((prev) => ({
       ...prev,
       [target.name]: target.value,
