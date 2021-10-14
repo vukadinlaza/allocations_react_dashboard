@@ -21,7 +21,6 @@ import SectorsAndStages from './infoSections/SectorsAndStages';
 import DisplayUsername from './infoSections/DisplayUsername';
 import ProfilePhoto from './infoSections/ProfilePhoto';
 import Loader from '../../utils/Loader';
-import { useAuth } from '../../../auth/useAuth';
 
 const UPDATE_USER = gql`
   mutation UpdateUser($investor: UserInput!) {
