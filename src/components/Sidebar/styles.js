@@ -82,7 +82,6 @@ const styles = (theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignSelf: 'center',
-    width: '80%',
     margin: '18px 0 10px 0',
     padding: '8px 10%',
     width: '100%',
@@ -182,7 +181,7 @@ const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'column',
     maxHeight: '80%',
-    overflowY: 'scroll',
+    overflowY: 'auto',
   },
   sidebarNavItem: {
     '&:hover': {
