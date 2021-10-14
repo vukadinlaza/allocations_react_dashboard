@@ -11,7 +11,7 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { FaRocket, FaPercentage } from 'react-icons/fa';
-import { BsArrowLeftRight } from 'react-icons/bs';
+import { BsArrowLeftRight, BsPeopleFill } from 'react-icons/bs';
 import { RiBillLine } from 'react-icons/ri';
 import { AiOutlineStar } from 'react-icons/ai';
 import BuildModal from '../NewBuild/BuildModal';
@@ -62,6 +62,11 @@ const SidebarDrawer = ({
           icon: <HomeIcon fontSize="medium" />,
         },
         {
+          to: '/profile',
+          title: 'Profile',
+          icon: <PersonIcon fontSize="medium" />,
+        },
+        {
           to: '/admin/type/spvs',
           title: 'SPVs',
           icon: <FaRocket style={{ margin: '0 .5rem 0 0' }} />,
@@ -75,7 +80,7 @@ const SidebarDrawer = ({
         {
           to: '/investors',
           title: 'Investors',
-          icon: <PersonIcon fontSize="medium" />,
+          icon: <BsPeopleFill style={{ margin: '0 .5rem 0 0' }} />,
         },
       ],
     },
