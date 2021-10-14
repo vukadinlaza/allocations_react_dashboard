@@ -18,7 +18,6 @@ import PieIcon from '../../../../../assets/buildPie.svg';
 import { ModalTooltip } from '../../../../admin/FundManagerDashboard/widgets';
 import sectors from './sectors';
 
-
 export default function TypeSelector({
   assetType,
   handleChange,
