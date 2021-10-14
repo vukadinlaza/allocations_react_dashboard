@@ -51,6 +51,8 @@ function Sidebar(props) {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
+  console.log('user', userProfile);
+
   useEffect(() => {
     if (userProfile.showInvestAndMrkPlc || location.pathname === '/invest') {
       setInvestTab(true);
