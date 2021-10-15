@@ -194,12 +194,12 @@ const SidebarDrawer = ({
                 }`}
               >
                 {!subMenu ? (
-                  <a href={to}>
+                  <Link to={to}>
                     <ListItem button className={classes.menuItem}>
                       <ListItemIcon className={classes.icon}>{icon}</ListItemIcon>
                       <ListItemText primary={title} className={classes.iconLabel} />
                     </ListItem>
-                  </a>
+                  </Link>
                 ) : (
                   <>
                     <ListItem
