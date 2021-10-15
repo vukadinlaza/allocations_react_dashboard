@@ -23,7 +23,7 @@ import InvestmentNew from './components/InvestmentNew';
 import InvestmentEdit from './components/InvestmentEdit';
 import UserInvestments from './components/UserInvestments';
 import FreeSPVOnboarding from './components/FreeSPVOnboarding';
-import Profile from './components/Profile';
+import Profile from './components/Profile/Profile';
 import Marketplace from './components/Marketplace';
 import OrganizationNew from './components/OrganizationNew';
 import OrganizationMembers from './components/OrganizationMembers';
@@ -31,6 +31,7 @@ import ThankYou from './components/ThankYou/index';
 import DealDocuments from './components/DealDocuments';
 import NewMember from './components/Newmember';
 import TVC from './components/TVC';
+import DealTable from './components/DealsTable';
 import NotFound from './components/NotFound';
 
 // superadmin
@@ -57,6 +58,16 @@ import DealNextSteps from './components/DealNextSteps/DealNextSteps';
 import DealLandingPage from './components/DealOneClick/LandingPage/LandingPage';
 import InvestmentPage from './components/DealOneClick/InvestmentPage/InvestmentPage';
 
+// test
+import BuildSPVForm from './components/NewBuild/BuildSPVForm/index';
+import BuildFundForm from './components/NewBuild/BuildFundForm/index';
+
+import Upgrade from './components/upgrade';
+import PaymentForm from './components/billing';
+import WireActivity from './components/WireActivity';
+import TaxActivity from './components/TaxActivity';
+import DealSetup from './components/DealSetup';
+
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
 /** *
@@ -77,19 +88,23 @@ const App = () => {
         <div className="mainRoute">
           <Switch>
             <Route path="/cb/thankyou" component={ThankYou} exact />
-
+            <PrivateRoute path="/new-build-spv" exact component={BuildSPVForm} />
+            <PrivateRoute path="/new-build-fund" exact component={BuildFundForm} />
             <PrivateRoute path="/" exact component={UserHome} />
-            <PrivateRoute path="/demo" exact component={Demo} />
+            {/* <PrivateRoute path="/demo" exact component={Demo} /> */}
             <PrivateRoute path="/credit" exact component={Credit} />
             <PrivateRoute path="/profile" component={Profile} />
             <PrivateRoute path="/get-started" component={Build} />
             <PrivateRoute path="/marketplace" component={Marketplace} />
             <PrivateRoute path="/investments" component={UserInvestments} />
             <PrivateRoute path="/invited-deals" component={InvitedDeals} />
+            <PrivateRoute path="/deal-setup" component={DealSetup} />
             <PrivateRoute path="/identity" component={Indentity} />
             <PrivateRoute path="/dealdocs" component={DealDocuments} />
             <PrivateRoute path="/tvclogin" component={TVC} />
             <PrivateRoute path="/newMember/:accountId" component={NewMember} />
+            <PrivateRoute path="/upgrade" component={Upgrade} />
+            <PrivateRoute path="/billing" component={PaymentForm} />
 
             {/** Onboarding * */}
             <Route path="/getting-started" component={Faq} exact />
@@ -155,10 +170,13 @@ const App = () => {
               component={InvestorInvestments}
               exact
             />
-            <AdminRoute path="/admin/invesments/:investmentId" component={Investment} exact />
+            <AdminRoute path="/admin/investments/:investmentId" component={Investment} exact />
 
             {/** Whitelabel Routes * */}
-            <PrivateRoute path="/admin/funds" component={Funds} exact />
+            <PrivateRoute path="/admin/type/:type" component={DealTable} exact />
+            <PrivateRoute path="/admin/type/:type" component={DealTable} exact />
+            <PrivateRoute path="/wire-activity" component={WireActivity} exact />
+            <PrivateRoute path="/tax-activity" component={TaxActivity} exact />
             <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
             <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
 
@@ -177,7 +195,7 @@ const App = () => {
               component={MasterFiling}
               exact
             />
-            <AdminRoute path="/admin/:organization/investors" component={Investors} exact />
+            <PrivateRoute path="/investors" component={Investors} exact />
 
             {/** catchall * */}
             <PrivateRoute exact path="/" component={UserHome} />

@@ -105,9 +105,11 @@ const styles = (theme) => ({
   listButton: {
     backgroundColor: '#2A2B54',
     color: 'white',
-    width: 'calc(100% - 32px)',
+    width: '100%',
     textTransform: 'none',
-    margin: '0 16px',
+    bottom: '3rem',
+    height: '3rem',
+    borderRadius: '0px 0px 10px 10px',
   },
   modal: {
     padding: '20px',

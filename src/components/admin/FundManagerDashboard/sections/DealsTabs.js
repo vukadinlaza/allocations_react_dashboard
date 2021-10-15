@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import _ from 'lodash';
 import { withStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Tabs, Tab, Button, Menu, MenuItem, Typography } from '@material-ui/core';
@@ -95,18 +94,6 @@ const styles = (theme) => ({
       display: 'block',
     },
   },
-  tabsPlaceholder: {
-    width: '100%',
-    borderBottom: '2px solid #E6E9EF',
-    height: '130px', // height of main title and tabs component
-    position: 'absolute',
-    top: '0px',
-    left: '0px',
-    // margin: '0 40px',
-    [theme.breakpoints.down(phone)]: {
-      borderBottom: 'none',
-    },
-  },
   tabWrapper: {
     padding: '0 10px',
   },
@@ -117,6 +104,7 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
   const isMobile = useMediaQuery('(max-width:600px)');
   const [titleContainer, setTitleContainer] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [dropdownSelected, setDropdownSelected] = useState(false);
 
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
@@ -128,6 +116,14 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
 
   const handleTabChange = (e, newIndex) => {
     setTabIndex(newIndex);
+
+    if ((isMobile && newIndex === 0) || (!isMobile && newIndex < 4)) {
+      setDropdownSelected(false);
+    }
+    if ((isMobile && newIndex > 0) || (!isMobile && newIndex >= 4)) {
+      setDropdownSelected(true);
+    }
+
     handleClose();
   };
 
@@ -190,7 +186,13 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
         {isMobile ? mappedTabs.slice(0, 1) : mappedTabs.slice(0, 4)}
         {(isMobile && mappedTabs.length > 2) || (!isMobile && mappedTabs.length > 4) ? (
           <>
-            <Button onClick={handleClick} className={classes.moreButton}>
+            <Button
+              onClick={handleClick}
+              className={classes.moreButton}
+              style={
+                dropdownSelected ? { borderBottom: 'solid 2px #205df5', borderRadius: '0' } : {}
+              }
+            >
               <Typography>
                 {isMobile ? (
                   tabIndex < 1 ? (
@@ -225,7 +227,14 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
                 ) : tabIndex < 4 ? (
                   'More Funds'
                 ) : (
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      color: '#205df5',
+                      fontWeight: 'bold',
+                    }}
+                  >
                     {deals[tabIndex].company_name}
                     {deals[tabIndex].company_name !== 'All' && (
                       <span
@@ -293,10 +302,6 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
           mappedTabs.slice(4, 5)
         )}
       </Tabs>
-      <div
-        className={classes.tabsPlaceholder}
-        style={{ height: titleContainer ? `${titleContainer.offsetHeight + 48}px` : '180px' }}
-      />
     </div>
   );
 };

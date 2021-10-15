@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
   blueContainer: {
     background:
-      'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 160px, rgba(255,255,255,1) 160px)',
+      'linear-gradient(180deg, rgba(32,93,245,1) 0%, rgba(0,94,255,1) 160px, #f7f7f7, 160px)',
     padding: '1.5rem',
   },
   a: {
@@ -64,60 +64,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const GET_INVESTOR = gql`
-  {
-    investor {
-      _id
-      email
-      first_name
-      last_name
-      admin
-      showInvestAndMrkPlc
-    }
-  }
-`;
-const POST_ZAP = gql`
-  mutation PostZap($body: Object) {
-    postZap(data: $body) {
-      _id
-    }
-  }
-`;
-const UPDATE_USER = gql`
-  mutation UpdateUser($investor: UserInput!) {
-    updateUser(input: $investor) {
-      _id
-    }
-  }
-`;
 export default () => {
   const classes = useStyles();
   const history = useHistory();
-  const { userProfile, loading } = useAuth(GET_INVESTOR);
-  const [updateInvestor] = useMutation(UPDATE_USER);
-  const [postZap, {}] = useMutation(POST_ZAP);
-
-  useEffect(() => {
-    if (!loading && userProfile._id) {
-      updateInvestor({
-        variables: {
-          investor: { showInvestAndMrkPlc: true, _id: userProfile._id },
-        },
-      });
-    }
-  }, [loading, updateInvestor, userProfile]);
-
-  useEffect(() => {
-    postZap({
-      variables: { body: { action: 'Viewed Invest Page' } },
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <>
       <div className={classes.blueContainer}>
-        <Typography variant="h3" style={{ color: 'white' }}>
+        <Typography variant="h3" style={{ color: 'Black' }}>
           Demo
         </Typography>
         <Grid container spacing={12} justify="space-between" className={classes.gridContainer}>
@@ -140,39 +94,6 @@ export default () => {
                 style={{ marginTop: '1rem', minWidth: '100%' }}
                 onClick={() => {
                   history.push({ pathname: `/deals/305-ventures` });
-                }}
-              >
-                View
-              </Button>
-            </Paper>
-          </Grid>
-          <Grid item>
-            <Paper className={classes.paper}>
-              <img
-                src="https://allocations-public.s3.us-east-2.amazonaws.com/architecture-and-city.svg"
-                alt="oops"
-                style={{ width: '50px', height: '50px' }}
-              />
-              <Typography variant="h6">Investor Demo</Typography>
-              <Divider variant="middle" />
-
-              <Typography variant="subtitle2" style={{ fontSize: '.75rem' }}>
-                Manage SPVs / Funds Calculate portfolio value Buy & sell interests on exchange
-              </Typography>
-              <Button
-                color="secondary"
-                variant="contained"
-                style={{ marginTop: '1rem', minWidth: '100%' }}
-                onClick={() => {
-                  history.push({
-                    pathname: `/investor/${
-                      // If true use Kingsley's ID otherwise Joel for Staging ENV
-                      process.env.NODE_ENV === 'production'
-                        ? '5de560a92817ed4e5b8a7af4'
-                        : '5ef11c26b864940023a05ec5'
-                    }/home`,
-                    search: '?demo=true',
-                  });
                 }}
               >
                 View

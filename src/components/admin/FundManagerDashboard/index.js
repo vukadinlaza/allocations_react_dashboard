@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import moment from 'moment';
-import { useLazyQuery, useSubscription, useQuery, gql } from '@apollo/client';
+import { useLazyQuery, useQuery, gql } from '@apollo/client';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Tabs, Tab, Typography, Button, Grid } from '@material-ui/core';
+import { Tabs, Tab, Typography, Button, Paper } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import EditIcon from '@material-ui/icons/Edit';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
@@ -17,14 +17,14 @@ import Investments from './sections/Investments';
 import Investors from './sections/Investors';
 import Overview from './sections/Overview';
 import { FlatBox } from './widgets';
-import { phone, tablet } from '../../../utils/helpers';
 import { useViewport, useFetch } from '../../../utils/hooks';
 import { useAuth } from '../../../auth/useAuth';
 import AllocationsLoader from '../../utils/AllocationsLoader';
-import Loader from '../../utils/Loader';
 import DealsTabs from './sections/DealsTabs';
-import styles from './styles.js';
+import styles from './styles';
 import DocumentsTab from './sections/DocumentsTab';
+import BuildModal from '../../NewBuild/BuildModal';
+import BuildSPVForm from '../../NewBuild/BuildSPVForm';
 
 const GET_INVESTMENTS = gql`
   query GetDeal($fund_slug: String!, $deal_slug: String!) {
@@ -67,7 +67,7 @@ export const ORG_OVERVIEW = gql`
       _id
       name
       slug
-      deals {
+      deals(limit: 500) {
         _id
         company_name
         company_description
@@ -129,10 +129,14 @@ const DEALS_TABLE = 'Deals';
 
 const FundManagerDashboard = ({ classes, history }) => {
   const { width } = useViewport();
-  let { organization: orgSlug, deal: dealSlug } = useParams();
+  const params = useParams();
+  const { deal: dealSlug } = params;
+  let { organization: orgSlug } = params;
+
   if (orgSlug === 'demo-fund') {
     orgSlug = '305-ventures';
   }
+
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
@@ -144,11 +148,13 @@ const FundManagerDashboard = ({ classes, history }) => {
   const [atDealData, setAtDealData] = useState({});
   const [openTooltip, setOpenTooltip] = useState('');
   const [orgDeals, setOrgDeals] = useState(null);
+
   const { data: overview } = useQuery(GET_OVERVIEW_DATA, { variables: { slug: orgSlug } });
   const [getInvestments, { data: dealInvestments, refetch }] = useLazyQuery(GET_INVESTMENTS);
   const [getOrgDeals, { data: orgDealsData }] = useLazyQuery(ORG_OVERVIEW);
   const checkedDealName = encodeURIComponent(dealName);
   const checkedAtDealDataName = encodeURIComponent(atDealData?.name);
+
   const { data: atDeal } = useFetch(
     OPS_ACCOUNTING,
     dealName && DEALS_TABLE,
@@ -170,6 +176,12 @@ const FundManagerDashboard = ({ classes, history }) => {
       setDealData(currentDeal);
       setDealName(dealName);
     }
+  };
+
+  const getDealDate = (deal) => {
+    const dealTS = deal._id.toString().substring(0, 8);
+    const dealDate = moment.unix(new Date(parseInt(dealTS, 16) * 1000));
+    return dealDate;
   };
 
   useEffect(() => {
@@ -220,6 +232,7 @@ const FundManagerDashboard = ({ classes, history }) => {
       setOrgDeals(orgDealsDataCopy);
     }
   }, [orgDealsData]);
+
   useEffect(() => {
     if (dealTab !== 0) handleDealData(dealTab);
   }, [dealTab]);
@@ -232,12 +245,6 @@ const FundManagerDashboard = ({ classes, history }) => {
       setAtDealData({ name: `Deal Name ${dealName} Not found in AirTable`, id: '' });
     }
   }, [atDeal]);
-
-  const getDealDate = (deal) => {
-    const dealTS = deal._id.toString().substring(0, 8);
-    const dealDate = moment.unix(new Date(parseInt(dealTS, 16) * 1000));
-    return dealDate;
-  };
 
   const handleLinkCopy = () => {
     if (orgSlug && dealData?.slug) {
@@ -329,6 +336,7 @@ const FundManagerDashboard = ({ classes, history }) => {
             dealType={dealData?.dealParams?.dealType}
             superAdmin={orgDeals?.investor?.admin}
             refetch={refetch}
+            deal={dealData}
           />
         );
       case 'Investors':
@@ -381,112 +389,108 @@ const FundManagerDashboard = ({ classes, history }) => {
     }
   };
 
+  const [openModal, setOpenModal] = useState(false);
   if (!orgDeals || !overview?.overviewData) return <AllocationsLoader fullHeight />;
 
   const isOverview = dealTab === 0;
 
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
-      <div className={classes.mainTitleContainer} id="main-title-container">
-        <Typography className={classes.mainTitle}>
-          {userProfile?.first_name
-            ? `Hello ${userProfile?.first_name}, here are your Funds.`
-            : orgDealsData?.organization?.name}
-        </Typography>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '.5rem' }}>
-          <a
-            href="//build.allocations.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={classes.createButtonLink}
-          >
-            <Button className={classes.createButton}>
-              <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
-              Create New {userProfile?.admin && 'Build'}
-            </Button>
-          </a>
-          {userProfile?.admin && (
-            <span className={classes.createButtonLink}>
-              <Button
-                className={classes.createButton}
-                style={{ marginLeft: '1rem' }}
-                onClick={() => history.push(`/admin/${orgSlug}/deal/new`)}
-              >
-                <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
-                Create New Deal Page
-              </Button>
-            </span>
-          )}
-          {userProfile?.admin && (
-            <span className={classes.createButtonLink}>
-              <Button
-                className={classes.createButton}
-                color="secondary"
-                style={{ marginLeft: '1rem', backgroundColor: 'blue' }}
-                onClick={() => history.push(`/admin/${orgSlug}/manager`)}
-              >
-                <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
-                Add Org Admin
-              </Button>
-            </span>
-          )}
+      <Paper style={{ padding: '.5rem' }}>
+        <div className={classes.mainTitleContainer} id="main-title-container">
+          <Typography className={classes.mainTitle}>
+            {userProfile?.first_name
+              ? `Hello ${userProfile?.first_name}, here are your Funds.`
+              : orgDealsData?.organization?.name}
+          </Typography>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '.5rem' }}>
+            {userProfile?.admin && (
+              <span className={classes.createButtonLink}>
+                <Button
+                  className={classes.createButton}
+                  style={{ marginLeft: '1rem' }}
+                  onClick={() => history.push(`/admin/${orgSlug}/deal/new`)}
+                >
+                  <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
+                  Create New Deal Page
+                </Button>
+              </span>
+            )}
+            {userProfile?.admin && (
+              <span className={classes.createButtonLink}>
+                <Button
+                  className={classes.createButton}
+                  color="secondary"
+                  style={{ marginLeft: '1rem', backgroundColor: 'blue' }}
+                  onClick={() => history.push(`/admin/${orgSlug}/manager`)}
+                >
+                  <AddCircleIcon style={{ marginRight: '5px', fontSize: '20px' }} />
+                  Add Org Admin
+                </Button>
+              </span>
+            )}
+          </div>
         </div>
-      </div>
+      </Paper>
+
       {orgDeals && !orgDeals.organization?.deals?.length ? (
         <div className={classes.noDataPlaceholder}>
           <div>This fund has no deals.</div>
           <div>Click on the 'Create New' button to create a deal.</div>
         </div>
       ) : (
-        <div>
-          <DealsTabs
-            dealSlug={dealSlug}
-            orgSlug={orgSlug}
-            data={orgDeals}
-            width={width}
-            tabIndex={dealTab}
-            setTabIndex={handleDealsTabChange}
-          />
-          <div style={{ position: 'relative' }}>
-            {!isOverview && (
-              <Tabs
-                value={tabIndex}
-                indicatorColor="primary"
-                textColor="primary"
-                onChange={handleTabChange}
-                classes={{
-                  root: classes.tabs,
-                  indicator: classes.tabsIndicator,
-                  flexContainer: classes.tabsContainer,
-                }}
-              >
-                {dashboardTabs.map((tab, index) => (
-                  <Tab
-                    label={tab}
-                    className={classes.tab}
-                    key={`tab-${index}`}
-                    classes={{
-                      root: classes.tab,
-                      selected: classes.selectedTab,
-                      wrapper: classes.tabWrapper,
-                    }}
-                    disableRipple
-                  />
-                ))}
-              </Tabs>
-            )}
-            {(!isOverview && (!dealData || !atFundData || !dealInvestments)) ||
-            status === 'fetching' ||
-            loading ? (
-              <div className={classes.loaderContainer}>
-                <AllocationsLoader />
-              </div>
-            ) : (
-              getTabContent()
-            )}
+        <Paper style={{ margin: '1rem 0' }}>
+          <div>
+            <DealsTabs
+              dealSlug={dealSlug}
+              orgSlug={orgSlug}
+              data={orgDeals}
+              width={width}
+              tabIndex={dealTab}
+              setTabIndex={handleDealsTabChange}
+            />
+            <div style={{ position: 'relative' }}>
+              {!isOverview && (
+                <Tabs
+                  value={tabIndex}
+                  indicatorColor="primary"
+                  textColor="primary"
+                  onChange={handleTabChange}
+                  classes={{
+                    root: classes.tabs,
+                    indicator: classes.tabsIndicator,
+                    flexContainer: classes.tabsContainer,
+                  }}
+                >
+                  {dashboardTabs.map((tab) => (
+                    <Tab
+                      label={tab}
+                      className={classes.tab}
+                      key={tab}
+                      classes={{
+                        root: classes.tab,
+                        selected: classes.selectedTab,
+                        wrapper: classes.tabWrapper,
+                      }}
+                      disableRipple
+                    />
+                  ))}
+                </Tabs>
+              )}
+              {(!isOverview && (!dealData || !atFundData || !dealInvestments)) ||
+              status === 'fetching' ||
+              loading ? (
+                <div className={classes.loaderContainer}>
+                  <AllocationsLoader />
+                </div>
+              ) : (
+                getTabContent()
+              )}
+            </div>
           </div>
-        </div>
+        </Paper>
       )}
+      <BuildModal isOpen={openModal} onClose={() => setOpenModal(false)} />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
 import moment from 'moment';
-import { TextField, InputAdornment } from '@material-ui/core';
+import { TextField, InputAdornment, Box, Typography, Grid } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { toast } from 'react-toastify';
 import AllocationsTable from '../../utils/AllocationsTable';
@@ -13,6 +13,7 @@ import CapitalAccountsModal from '../capitalAccountsModal';
 import AppModal from '../../Modal/AppModal';
 import InvestmentEdit from '../../InvestmentEdit/UpdateInvestment';
 import ResignModal from '../resignModal';
+import { DocumentBox } from '../../Settings/common';
 
 const headers = [
   {
@@ -103,7 +104,8 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
   const [showResignModal, setShowResignModal] = useState(false);
   const [investmentId, setInvestmentId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [showCapitalAccounts, setShowCapitalAccounts] = useState({});
+  const [showCapitalAccounts, setShowCapitalAccounts] = useState(false);
+  const [currentCollapsed, setCurrentCollapsed] = useState('');
   const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile?.email || '');
 
   const showInvestment = ({ invId }) => {
@@ -137,7 +139,11 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
         disabled: !capitalAccountInfo,
         onItemClick: () => {
           if (capitalAccountInfo) {
-            setShowCapitalAccounts(capitalAccountInfo);
+            setShowCapitalAccounts({
+              ...capitalAccountInfo,
+              investmentId: row._id,
+              documents: row?.documents,
+            });
           }
         },
       },
@@ -197,6 +203,21 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
     }
   };
 
+  const getCollapsedContent = (row) => {
+    return (
+      <Box className={classes.collapsedRow}>
+        <Typography className={classes.collapseTitle}>Documents</Typography>
+        <Grid container spacing={1}>
+          {row.documents.map((doc, index) => (
+            <Grid item xs={12} lg={6} key={`doc-${index}`}>
+              <DocumentBox doc={doc} docPath={doc.path.split('/')[2]} index={index} />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    );
+  };
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -229,6 +250,10 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
       };
     });
 
+  const handleRowDetailPage = (row) => {
+    setCurrentCollapsed(row._id);
+  };
+
   return (
     <div className={classes.tableContainer}>
       <div className={classes.searchContainer}>
@@ -249,11 +274,24 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
           style={{ margin: '0 1em' }}
         />
       </div>
-      <AllocationsTable data={dataCopy} headers={headers} getCellContent={getCellContent} />
-      <CapitalAccountsModal
-        setShowCapitalAccounts={setShowCapitalAccounts}
-        showCapitalAccounts={showCapitalAccounts}
+      <AllocationsTable
+        withCollapse
+        rowSelector="_id"
+        currentCollapsed={currentCollapsed}
+        getCollapsedContent={getCollapsedContent}
+        handleRowDetailPage={handleRowDetailPage}
+        rowDetailPage
+        data={dataCopy}
+        headers={headers}
+        getCellContent={getCellContent}
       />
+      {showCapitalAccounts && (
+        <CapitalAccountsModal
+          setShowCapitalAccounts={setShowCapitalAccounts}
+          showCapitalAccounts={showCapitalAccounts}
+          refetch={refetch}
+        />
+      )}
       <AppModal isOpen={showModal} onClose={onClose}>
         <InvestmentEdit investmentId={investmentId} handleUpdate={handleUpdate} />
       </AppModal>

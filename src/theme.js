@@ -66,6 +66,8 @@ const theme = createTheme({
     background: {
       default: '#fff',
     },
+    row: '#FBFCFF',
+    rowHover: '#f1f4fb',
   },
 });
 
