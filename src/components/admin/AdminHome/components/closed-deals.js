@@ -1,5 +1,5 @@
 import React from 'react';
-import Deals from '../../../Deals/index';
+import Deals from '../../../AllDeals/index';
 
 export default () => {
   return <Deals showClosed />;

@@ -4,7 +4,7 @@ import Cohere from 'cohere-js';
 import AdminRoute from './auth/admin-route';
 import PrivateRoute from './components/PrivateRoute';
 import Faq from './components/Faq';
-import Deals from './components/Deals';
+import Deals from './components/AllDeals/index';
 import Credit from './components/Credit';
 import DealNew from './components/DealNew';
 import DealEditNew from './components/DealEditNew';

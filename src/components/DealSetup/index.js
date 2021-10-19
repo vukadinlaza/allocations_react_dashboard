@@ -156,7 +156,7 @@ const DealSetup = ({ match, classes }) => {
   const [snackbarData, setSnackbarData] = useState({});
   const [currentPhase, setCurentPhase] = useState(false);
   const [currentTask, setCurrentTask] = useState(false);
-
+  console.log('current', currentPhase);
   useEffect(() => {
     if (currentPhase && data?.getDealWithTasks) {
       const { getDealWithTasks: deal } = data;
