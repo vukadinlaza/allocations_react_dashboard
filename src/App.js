@@ -46,10 +46,6 @@ import FundManagerDashboard from './components/admin/FundManagerDashboard';
 import Compliance from './components/admin/Compliance';
 import MasterFiling from './components/admin/MasterFiling';
 
-// allocationsX
-import AllocationsX from './allocationsX/Home';
-import DealExchange from './allocationsX/DealExchange';
-import AdminExchangeOverview from './allocationsX/AdminOverview';
 import AuthorizedApolloProvider from './apollo-client-comp';
 import './App.scss';
 import './utils/initFontAwesome';
@@ -136,15 +132,6 @@ const App = () => {
             <PrivateRoute
               path="/next-steps/:organization/:deal_slug"
               component={DealNextSteps}
-              exact
-            />
-
-            {/** AllocationsX * */}
-            <PrivateRoute path="/exchange" component={AllocationsX} exact />
-            <PrivateRoute path="/exchange/:deal" component={DealExchange} exact />
-            <AdminRoute
-              path="/admin/:organization/exchange"
-              component={AdminExchangeOverview}
               exact
             />
 
