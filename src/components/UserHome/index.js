@@ -133,7 +133,6 @@ const UserHome = ({ classes }) => {
       const funds = userProfile?.investments
         ?.filter((investment) => investment?.deal?.investmentType === 'fund')
         .map((investment) => investment.deal);
-      Object.keys(userProfile).length;
       setUserFunds(funds);
     }
   }, [loading]);
