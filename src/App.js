@@ -57,7 +57,8 @@ import Upgrade from './components/upgrade';
 import PaymentForm from './components/billing';
 import WireActivity from './components/WireActivity';
 import TaxActivity from './components/TaxActivity';
-import DealSetup from './components/DealSetup';
+import DealSetup from './components/deals/fund-manager/Setup';
+// import DealSetup from './components/DealSetup';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
