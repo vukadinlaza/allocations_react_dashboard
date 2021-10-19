@@ -42,7 +42,6 @@ function Sidebar(props) {
   const history = useHistory();
   const [investTab, setInvestTab] = useState(false);
   const [creditTab, setCreditTab] = useState(false);
-  const [buildTab, setBuildTab] = useState(false);
   const [currentAccount, setCurrentAccount] = useState('');
   const [currentHomeUrl, setCurrentHomeUrl] = useState('');
   const fundMatch = useRouteMatch('/admin/:organization');
@@ -57,9 +56,6 @@ function Sidebar(props) {
     }
     if (userProfile.showCredit || location.pathname === '/credit') {
       setCreditTab(true);
-    }
-    if (userProfile.showBuild || location.pathname === '/get-started') {
-      setBuildTab(true);
     }
   }, [
     userProfile.showInvestAndMrkPlc,
@@ -109,180 +105,175 @@ function Sidebar(props) {
   };
 
   const container = window !== undefined ? () => window().document.body : undefined;
-  const onboarding = location.pathname === '/get-started';
   const adminOrganizations = userProfile?.organizations_admin;
   const adminOrganizationsCopy = adminOrganizations ? [...adminOrganizations] : []; // Create a copy of organizations so we can mutate with sort
 
   return (
     <div className={classes.sidebar}>
-      {!onboarding && (
-        <>
-          <AppBar className={classes.appBar}>
-            <Toolbar>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                edge="start"
-                onClick={handleDrawerToggle}
-                className={classes.menuButton}
-              >
-                <MenuIcon />
-              </IconButton>
+      <AppBar className={classes.appBar}>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            className={classes.menuButton}
+          >
+            <MenuIcon />
+          </IconButton>
+          <div className={classes.brand}>
+            <Brand
+              organizations_admin={userProfile.organizations_admin || []}
+              admin={userProfile.admin}
+            />
+          </div>
+        </Toolbar>
+      </AppBar>
+
+      <div className={classes.contentContainer}>
+        <nav className={classes.drawer} aria-label="mailbox folders">
+          <Hidden mdUp implementation="js" className={classes.firstHidden}>
+            <Drawer
+              container={container}
+              variant="temporary"
+              anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+              open={mobileOpen}
+              onClose={handleDrawerToggle}
+              classes={{
+                paper: classes.drawerPaper,
+              }}
+              style={{ backgroundColor: '#f7f7f7 !important' }}
+              ModalProps={{
+                keepMounted: true,
+              }}
+            >
+              <FormControl className={classes.formControl}>
+                <Select
+                  labelId="accounts-select"
+                  value={currentAccount || ''}
+                  onChange={handleAccountChange}
+                  className={classes.input}
+                  style={{ backgroundColor: '#f7f7f7' }}
+                  classes={{
+                    root: classes.select,
+                  }}
+                  inputProps={{
+                    classes: {
+                      focused: classes.inputFocused,
+                      underline: classes.inputFocused,
+                    },
+                  }}
+                >
+                  <MenuItem
+                    onClick={() => {
+                      handleDrawerToggle();
+                      history.push(`/`);
+                    }}
+                    value={userProfile?.name}
+                    className={classes.formItem}
+                  >
+                    {userProfile?.name}
+                  </MenuItem>
+                  {adminOrganizationsCopy?.length &&
+                    adminOrganizationsCopy
+                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .map((org) => (
+                        <MenuItem
+                          onClick={() => {
+                            handleDrawerToggle();
+                            history.push(`/admin/${org.slug}`);
+                          }}
+                          value={org.name}
+                          key={org.name}
+                        >
+                          {org.name}
+                        </MenuItem>
+                      ))}
+                </Select>
+              </FormControl>
+              <SidebarDrawer
+                mobileOpen={mobileOpen}
+                handleDrawerClose={handleDrawerClose}
+                investTab={investTab}
+                creditTab={creditTab}
+                userProfile={userProfile}
+                currentHomeUrl={currentHomeUrl}
+                logout={logout}
+                location={location}
+              />
+            </Drawer>
+          </Hidden>
+
+          <Hidden smDown implementation="css" className={classes.secondHidden}>
+            <Drawer
+              className={classes.newDrawerPaper}
+              classes={{
+                paper: classes.newDrawerPaper,
+              }}
+              variant="permanent"
+              open
+            >
               <div className={classes.brand}>
                 <Brand
                   organizations_admin={userProfile.organizations_admin || []}
                   admin={userProfile.admin}
                 />
               </div>
-            </Toolbar>
-          </AppBar>
-
-          <div className={classes.contentContainer}>
-            <nav className={classes.drawer} aria-label="mailbox folders">
-              <Hidden mdUp implementation="js" className={classes.firstHidden}>
-                <Drawer
-                  container={container}
-                  variant="temporary"
-                  anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                  open={mobileOpen}
-                  onClose={handleDrawerToggle}
+              <FormControl className={classes.formControl}>
+                <Select
+                  labelId="accounts-select"
+                  value={currentAccount || ''}
+                  onChange={handleAccountChange}
+                  className={classes.input}
                   classes={{
-                    paper: classes.drawerPaper,
+                    root: classes.select,
                   }}
-                  style={{ backgroundColor: '#f7f7f7 !important' }}
-                  ModalProps={{
-                    keepMounted: true,
+                  inputProps={{
+                    classes: {
+                      focused: classes.inputFocused,
+                      underline: classes.inputFocused,
+                    },
                   }}
                 >
-                  <FormControl className={classes.formControl}>
-                    <Select
-                      labelId="accounts-select"
-                      value={currentAccount || ''}
-                      onChange={handleAccountChange}
-                      className={classes.input}
-                      style={{ backgroundColor: '#f7f7f7' }}
-                      classes={{
-                        root: classes.select,
-                      }}
-                      inputProps={{
-                        classes: {
-                          focused: classes.inputFocused,
-                          underline: classes.inputFocused,
-                        },
-                      }}
-                    >
-                      <MenuItem
-                        onClick={() => {
-                          handleDrawerToggle();
-                          history.push(`/`);
-                        }}
-                        value={userProfile?.name}
-                        className={classes.formItem}
-                      >
-                        {userProfile?.name}
-                      </MenuItem>
-                      {adminOrganizationsCopy?.length &&
-                        adminOrganizationsCopy
-                          .sort((a, b) => a.name.localeCompare(b.name))
-                          .map((org) => (
-                            <MenuItem
-                              onClick={() => {
-                                handleDrawerToggle();
-                                history.push(`/admin/${org.slug}`);
-                              }}
-                              value={org.name}
-                              key={org.name}
-                            >
-                              {org.name}
-                            </MenuItem>
-                          ))}
-                    </Select>
-                  </FormControl>
-                  <SidebarDrawer
-                    mobileOpen={mobileOpen}
-                    handleDrawerClose={handleDrawerClose}
-                    investTab={investTab}
-                    creditTab={creditTab}
-                    userProfile={userProfile}
-                    currentHomeUrl={currentHomeUrl}
-                    logout={logout}
-                    location={location}
-                  />
-                </Drawer>
-              </Hidden>
+                  <MenuItem
+                    onClick={() => history.push(`/`)}
+                    value={userProfile?.name}
+                    className={classes.formItem}
+                  >
+                    {userProfile?.name}
+                  </MenuItem>
+                  {adminOrganizationsCopy?.length &&
+                    adminOrganizationsCopy
+                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .map((org) => (
+                        <MenuItem
+                          onClick={() => history.push(`/admin/${org.slug}`)}
+                          value={org.name}
+                          key={org.name}
+                        >
+                          {org.name}
+                        </MenuItem>
+                      ))}
+                </Select>
+              </FormControl>
 
-              <Hidden smDown implementation="css" className={classes.secondHidden}>
-                <Drawer
-                  className={classes.newDrawerPaper}
-                  classes={{
-                    paper: classes.newDrawerPaper,
-                  }}
-                  variant="permanent"
-                  open
-                >
-                  <div className={classes.brand}>
-                    <Brand
-                      organizations_admin={userProfile.organizations_admin || []}
-                      admin={userProfile.admin}
-                    />
-                  </div>
-                  <FormControl className={classes.formControl}>
-                    <Select
-                      labelId="accounts-select"
-                      value={currentAccount || ''}
-                      onChange={handleAccountChange}
-                      className={classes.input}
-                      classes={{
-                        root: classes.select,
-                      }}
-                      inputProps={{
-                        classes: {
-                          focused: classes.inputFocused,
-                          underline: classes.inputFocused,
-                        },
-                      }}
-                    >
-                      <MenuItem
-                        onClick={() => history.push(`/`)}
-                        value={userProfile?.name}
-                        className={classes.formItem}
-                      >
-                        {userProfile?.name}
-                      </MenuItem>
-                      {adminOrganizationsCopy?.length &&
-                        adminOrganizationsCopy
-                          .sort((a, b) => a.name.localeCompare(b.name))
-                          .map((org) => (
-                            <MenuItem
-                              onClick={() => history.push(`/admin/${org.slug}`)}
-                              value={org.name}
-                              key={org.name}
-                            >
-                              {org.name}
-                            </MenuItem>
-                          ))}
-                    </Select>
-                  </FormControl>
-
-                  <SidebarDrawer
-                    mobileOpen={mobileOpen}
-                    handleDrawerClose={handleDrawerClose}
-                    investTab={investTab}
-                    creditTab={creditTab}
-                    userProfile={userProfile}
-                    currentHomeUrl={currentHomeUrl}
-                    logout={logout}
-                    location={location}
-                  />
-                </Drawer>
-              </Hidden>
-            </nav>
-            <main className={classes.content} style={{ background: 'white', height: '100vh' }}>
-              {props.children}
-            </main>
-          </div>
-        </>
-      )}
+              <SidebarDrawer
+                mobileOpen={mobileOpen}
+                handleDrawerClose={handleDrawerClose}
+                investTab={investTab}
+                creditTab={creditTab}
+                userProfile={userProfile}
+                currentHomeUrl={currentHomeUrl}
+                logout={logout}
+                location={location}
+              />
+            </Drawer>
+          </Hidden>
+        </nav>
+        <main className={classes.content} style={{ background: 'white', height: '100vh' }}>
+          {props.children}
+        </main>
+      </div>
     </div>
   );
 }

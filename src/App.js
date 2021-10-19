@@ -11,7 +11,6 @@ import DealEditNew from './components/DealEditNew';
 import InvestorEdit from './components/InvestorEdit';
 import InvestorNew from './components/InvestorNew';
 import Identity from './components/Identity';
-import Build from './components/Build';
 import Sidebar from './components/Sidebar';
 import UserHome from './components/UserHome';
 import Investors from './components/Investors';
@@ -85,7 +84,6 @@ const App = () => {
             {/* <PrivateRoute path="/demo" exact component={Demo} /> */}
             <PrivateRoute path="/credit" exact component={Credit} />
             <PrivateRoute path="/profile" component={Profile} />
-            <PrivateRoute path="/get-started" component={Build} />
             <PrivateRoute path="/marketplace" component={Marketplace} />
             <PrivateRoute path="/investments" component={UserInvestments} />
             <PrivateRoute path="/invited-deals" component={InvitedDeals} />
