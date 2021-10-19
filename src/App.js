@@ -10,12 +10,10 @@ import DealNew from './components/DealNew';
 import DealEditNew from './components/DealEditNew';
 import InvestorEdit from './components/InvestorEdit';
 import InvestorNew from './components/InvestorNew';
-import Indentity from './components/Identity';
-import Funds from './components/Funds';
+import Identity from './components/Identity';
 import Build from './components/Build';
 import Sidebar from './components/Sidebar';
 import UserHome from './components/UserHome';
-import Demo from './components/Invest';
 import Investors from './components/Investors';
 import InvitedDeals from './components/InvitedDeals';
 import Investments from './components/Investments';
@@ -27,10 +25,8 @@ import Profile from './components/Profile/Profile';
 import Marketplace from './components/Marketplace';
 import OrganizationNew from './components/OrganizationNew';
 import OrganizationMembers from './components/OrganizationMembers';
-import ThankYou from './components/ThankYou/index';
 import DealDocuments from './components/DealDocuments';
 import NewMember from './components/Newmember';
-import TVC from './components/TVC';
 import DealTable from './components/DealsTable';
 import NotFound from './components/NotFound';
 
@@ -83,7 +79,6 @@ const App = () => {
         </div>
         <div className="mainRoute">
           <Switch>
-            <Route path="/cb/thankyou" component={ThankYou} exact />
             <PrivateRoute path="/new-build-spv" exact component={BuildSPVForm} />
             <PrivateRoute path="/new-build-fund" exact component={BuildFundForm} />
             <PrivateRoute path="/" exact component={UserHome} />
@@ -95,9 +90,8 @@ const App = () => {
             <PrivateRoute path="/investments" component={UserInvestments} />
             <PrivateRoute path="/invited-deals" component={InvitedDeals} />
             <PrivateRoute path="/deal-setup" component={DealSetup} />
-            <PrivateRoute path="/identity" component={Indentity} />
+            <PrivateRoute path="/identity" component={Identity} />
             <PrivateRoute path="/dealdocs" component={DealDocuments} />
-            <PrivateRoute path="/tvclogin" component={TVC} />
             <PrivateRoute path="/newMember/:accountId" component={NewMember} />
             <PrivateRoute path="/upgrade" component={Upgrade} />
             <PrivateRoute path="/billing" component={PaymentForm} />
