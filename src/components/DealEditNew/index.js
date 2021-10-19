@@ -11,7 +11,6 @@ import DealSettings from './DealSettings';
 import PortfolioCompanySettings from './PortfolioCompanySettings';
 import FundTerms from './FundTermSettings';
 import './styles.scss';
-import { ORG_OVERVIEW } from '../admin/AdminHome';
 
 const validInputs = [
   '_id',
@@ -76,6 +75,41 @@ const dealParamsValidInputs = [
   'dealLogo',
   'is3c7',
 ];
+
+const ORG_OVERVIEW = gql`
+  query GetOrg($slug: String!, $status: String) {
+    organization(slug: $slug) {
+      _id
+      name
+      slug
+      deals(status: $status) {
+        _id
+        raised
+        appLink
+        status
+        date_closed
+        dealParams {
+          wireDeadline
+          dealMultiple
+        }
+        company_name
+        company_description
+        target
+        investments {
+          amount
+          investor {
+            investingAs
+          }
+        }
+      }
+    }
+    investor {
+      _id
+      admin
+      documents
+    }
+  }
+`;
 
 const UPDATE_DEAL = gql`
   mutation UpdateDeal($org: String!, $deal: DealInput!) {

@@ -120,7 +120,7 @@ const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
 
 const UserHome = ({ classes }) => {
-  const { userProfile, refetch } = useAuth(GET_INVESTOR);
+  const { userProfile, loading, refetch } = useAuth(GET_INVESTOR);
   const [tabIndex, setTabIndex] = useState(0);
   const [userFunds, setUserFunds] = useState([]);
   const [dealsData, setDealsData] = useState({});
@@ -129,13 +129,14 @@ const UserHome = ({ classes }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    if (Object.keys(userProfile).length) {
+    if (!loading) {
       const funds = userProfile?.investments
         ?.filter((investment) => investment?.deal?.investmentType === 'fund')
         .map((investment) => investment.deal);
+      Object.keys(userProfile).length;
       setUserFunds(funds);
     }
-  }, [userProfile]);
+  }, [loading]);
 
   const createDealsATFilter = () => {
     if (!userFunds.length) return `({Deal Name}="Invalid deal")`;
