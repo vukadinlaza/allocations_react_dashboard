@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Button, Grid } from '@material-ui/core';
 import { useLazyQuery, useMutation, gql } from '@apollo/client';
 import { toast } from 'react-toastify';
-import { getClientIp } from '../../utils/ip';
-import { nWithCommas } from '../../utils/numbers';
-import personalInfoValidation from '../../utils/validation';
-import AppModal from '../Modal/AppModal';
-import PersonalInformation from '../DealOneClick/InvestmentPage/PersonalInformation';
-import InvestmentAmountPanel from '../DealOneClick/InvestmentPage/InvestmentAmount';
-import SecondSignature from '../DealOneClick/InvestmentPage/SecondSignature';
+import { getClientIp } from '../../../utils/ip';
+import { nWithCommas } from '../../../utils/numbers';
+import personalInfoValidation from '../../../utils/validation';
+import AppModal from '../../Modal/AppModal';
+import PersonalInformation from '../../DealOneClick/InvestmentPage/PersonalInformation';
+import InvestmentAmountPanel from '../../DealOneClick/InvestmentPage/InvestmentAmount';
+import SecondSignature from '../../DealOneClick/InvestmentPage/SecondSignature';
 
 const GET_INVESTMENT = gql`
   query GetInvestment($_id: String!) {
