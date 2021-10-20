@@ -6,7 +6,7 @@ import { useHistory, useParams } from 'react-router';
 import AllocationsTable from '../utils/AllocationsTable';
 import MoreMenu from '../utils/MoreMenu';
 import { openInNewTab } from '../../utils/helpers';
-import styles from '../UserHome/styles';
+import styles from '../dashboard/InvestorDashboard/styles';
 import { nWithCommas } from '../../utils/numbers';
 
 const spvHeaders = [

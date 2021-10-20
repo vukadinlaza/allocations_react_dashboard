@@ -1,4 +1,4 @@
-import { phone, tablet } from '../../utils/helpers';
+import { phone, tablet } from '../../../utils/helpers';
 
 const styles = (theme) => ({
   backButton: {

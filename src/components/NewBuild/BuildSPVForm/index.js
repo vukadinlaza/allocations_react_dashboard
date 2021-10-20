@@ -10,7 +10,7 @@ import UploadDocsModal from './FormComponents/UploadDocs/index';
 import useStyles from '../BuildStyles';
 import { useAuth } from '../../../auth/useAuth';
 import { phone } from '../../../utils/helpers';
-import { ModalTooltip } from '../../admin/FundManagerDashboard/widgets';
+import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
 import { useCurrentOrganization } from '../../../state/current-organization';
 
 const CREATE_BUILD = gql`

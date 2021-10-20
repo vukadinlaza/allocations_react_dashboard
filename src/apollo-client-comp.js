@@ -4,7 +4,6 @@ import {
   ApolloProvider,
   ApolloLink,
   Observable,
-  HttpLink,
   InMemoryCache,
 } from '@apollo/client';
 import { onError } from 'apollo-link-error';

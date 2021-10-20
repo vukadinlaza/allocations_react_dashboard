@@ -15,7 +15,7 @@ import HouseIcon from '../../../../../assets/buildHouse.svg';
 import LevelIcon from '../../../../../assets/buildLevel.svg';
 import NetworkIcon from '../../../../../assets/buildNetwork.svg';
 import PieIcon from '../../../../../assets/buildPie.svg';
-import { ModalTooltip } from '../../../../admin/FundManagerDashboard/widgets';
+import { ModalTooltip } from '../../../../dashboard/FundManagerDashboard/widgets';
 import sectors from './sectors';
 
 export default function TypeSelector({

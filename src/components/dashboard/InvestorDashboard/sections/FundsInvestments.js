@@ -4,8 +4,8 @@ import moment from 'moment';
 import { Tooltip } from '@material-ui/core';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
-import AllocationsTable from '../../utils/AllocationsTable';
-import { nWithCommas } from '../../../utils/numbers';
+import AllocationsTable from '../../../utils/AllocationsTable';
+import { nWithCommas } from '../../../../utils/numbers';
 
 const headers = [
   { label: 'FUND NAME', value: 'company_name', isSortable: true },
