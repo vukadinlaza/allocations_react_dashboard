@@ -11,6 +11,7 @@ import useStyles from '../BuildStyles';
 import { useAuth } from '../../../auth/useAuth';
 import { phone } from '../../../utils/helpers';
 import { ModalTooltip } from '../../admin/FundManagerDashboard/widgets';
+import { useCurrentOrganization } from '../../../state/current-organization';
 
 const CREATE_BUILD = gql`
   mutation createBuild {
@@ -130,10 +131,11 @@ const BuildDetails = ({
   deal_id,
   waitingOnInitialDeal,
 }) => {
+  const organization = useCurrentOrganization();
   const classes = useStyles();
 
   const [buildData, setBuildData] = useState({
-    // -------------------------- in the form
+    organization_id: organization._id,
     asset_type: 'startup',
     portfolio_company_name: '',
     manager_name:
