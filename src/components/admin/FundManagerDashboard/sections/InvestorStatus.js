@@ -18,8 +18,6 @@ import { nWithCommas } from '../../../../utils/numbers';
 import Loader from '../../../utils/Loader';
 import { phone } from '../../../../utils/helpers';
 import AppModal from '../../../Modal/AppModal';
-import InvestmentEdit from '../../../InvestmentEdit/UpdateInvestment';
-import DeleteViewedUser from '../../../InvestmentEdit/DeleteViewedUser';
 import CreateInvestment from '../../../InvestmentNew/createInvestment';
 import SendWireReminder from '../../../InvestmentNew/sendWireReminder';
 
@@ -60,36 +58,10 @@ const demoAmounts = [5000, 8000, 10000, 12000, 15000, 17000, 13000, 18000, 20000
 
 const demoBool = [true, false];
 
-const InvestorBoxViewed = ({
-  classes,
-  investor,
-  index,
-  width,
-  superAdmin,
-  setShowModal,
-  setInvestmentId,
-  setDealId,
-  setInvestorId,
-  dealId,
-  dealType,
-}) => {
-  const onClick = () => {
-    if (superAdmin) {
-      if (investor.investmentId) {
-        setInvestmentId(investor.investmentId);
-        setShowModal(true);
-      } else {
-        setDealId(dealId);
-        setInvestorId(investor._id);
-        setShowModal(true);
-      }
-    }
-  };
-
+const InvestorBoxViewed = ({ classes, investor, index, width, superAdmin }) => {
   return width > phone ? (
     <div
       className={classes.investorBox}
-      onClick={onClick}
       key={`investor-${index}`}
       style={superAdmin ? { cursor: 'pointer' } : {}}
     >
@@ -104,7 +76,6 @@ const InvestorBoxViewed = ({
   ) : (
     <div
       className={classes.investorBox}
-      onClick={onClick}
       key={`investor-${index}`}
       style={superAdmin ? { cursor: 'pointer' } : {}}
     >
@@ -119,29 +90,10 @@ const InvestorBoxViewed = ({
   );
 };
 
-const InvestorBox = ({
-  classes,
-  investor,
-  index,
-  width,
-  superAdmin,
-  setShowModal,
-  setInvestmentId,
-  dealType,
-}) => {
-  const onClick = () => {
-    if (superAdmin) {
-      if (investor.investmentId) {
-        setInvestmentId(investor.investmentId);
-        setShowModal(true);
-      }
-    }
-  };
-
+const InvestorBox = ({ classes, investor, index, width, superAdmin, dealType }) => {
   return width > phone ? (
     <div
       className={classes.investorBox}
-      onClick={onClick}
       key={`investor-${index}`}
       style={superAdmin ? { cursor: 'pointer' } : {}}
     >
@@ -180,7 +132,6 @@ const InvestorBox = ({
   ) : (
     <div
       className={classes.investorBox}
-      onClick={onClick}
       key={`investor-${index}`}
       style={superAdmin ? { cursor: 'pointer' } : {}}
     >
@@ -210,24 +161,12 @@ const InvestorBox = ({
 
 const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, deal }) => {
   const { organization: orgSlug } = useParams();
-  const [showModal, setShowModal] = useState(false);
   const [showCreateInvModal, setShowCreateInvModal] = useState(false);
-  const [investmentId, setInvestmentId] = useState(null);
-  const [dealId, setDealId] = useState(null);
-  const [investorId, setInvestorId] = useState(null);
   const [sortField, setSortField] = useState('name');
   const [reminderModalOpen, setReminderModalOpen] = useState(false);
 
-  const onClose = () => {
-    setInvestmentId(null);
-    setDealId(null);
-    setInvestorId(null);
-    setShowModal(false);
-  };
-
   const handleUpdate = {
     refetch: () => refetch(),
-    closeModal: () => setShowModal(false),
     setShowCreateInvModal: () => setShowCreateInvModal(false),
   };
 
@@ -393,8 +332,6 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
                     key={`demo-investor-${index}`}
                     width={width}
                     superAdmin={superAdmin}
-                    setShowModal={setShowModal}
-                    setInvestmentId={setInvestmentId}
                     dealType={dealType}
                   />
                 ))
@@ -406,8 +343,6 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
                     key={`investor-${index}`}
                     width={width}
                     superAdmin={superAdmin}
-                    setShowModal={setShowModal}
-                    setInvestmentId={setInvestmentId}
                     dealType={dealType}
                   />
                 ))}
@@ -421,10 +356,6 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
                   key={`investor-${index}`}
                   width={width}
                   superAdmin={superAdmin}
-                  setShowModal={setShowModal}
-                  setInvestmentId={setInvestmentId}
-                  setDealId={setDealId}
-                  setInvestorId={setInvestorId}
                   dealId={data?.deal?._id}
                   dealType={dealType}
                 />
@@ -461,10 +392,6 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
                     key={`demo-investor-${index}`}
                     width={width}
                     superAdmin={superAdmin}
-                    setShowModal={setShowModal}
-                    setInvestmentId={setInvestmentId}
-                    setDealId={setDealId}
-                    setInvestorId={setInvestorId}
                     dealType={dealType}
                   />
                 ))
@@ -476,10 +403,6 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
                     key={`investor-${index}`}
                     width={width}
                     superAdmin={superAdmin}
-                    setShowModal={setShowModal}
-                    setInvestmentId={setInvestmentId}
-                    setDealId={setDealId}
-                    setInvestorId={setInvestorId}
                     dealType={dealType}
                   />
                 ))}
@@ -502,10 +425,6 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
                     key={`demo-investor-${index}`}
                     width={width}
                     superAdmin={superAdmin}
-                    setShowModal={setShowModal}
-                    setInvestmentId={setInvestmentId}
-                    setDealId={setDealId}
-                    setInvestorId={setInvestorId}
                     dealType={dealType}
                   />
                 ))
@@ -517,27 +436,11 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
                     key={`investor-${index}`}
                     width={width}
                     superAdmin={superAdmin}
-                    setShowModal={setShowModal}
-                    setInvestmentId={setInvestmentId}
-                    setDealId={setDealId}
-                    setInvestorId={setInvestorId}
                     dealType={dealType}
                   />
                 ))}
           </ScrollableBox>
         </Grid>
-
-        <AppModal isOpen={showModal} onClose={onClose}>
-          {investmentId ? (
-            <InvestmentEdit
-              investmentId={investmentId}
-              investorId={investorId}
-              handleUpdate={handleUpdate}
-            />
-          ) : (
-            <DeleteViewedUser dealId={dealId} investorId={investorId} handleUpdate={handleUpdate} />
-          )}
-        </AppModal>
         <AppModal isOpen={showCreateInvModal} onClose={() => setShowCreateInvModal(false)}>
           <CreateInvestment deal={deal} handleUpdate={handleUpdate} />
         </AppModal>

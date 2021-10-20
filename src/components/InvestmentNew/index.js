@@ -1,23 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { get } from 'lodash';
-import {
-  TextField,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  Paper,
-  Button,
-  Checkbox,
-  FormControlLabel,
-} from '@material-ui/core';
+import { TextField, Table, TableBody, TableCell, TableRow, Paper, Button } from '@material-ui/core';
 import { Row, Col } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
 import { useLazyQuery, useMutation, gql } from '@apollo/client';
 import * as API from '../../api';
-
-import InvestorNew from '../InvestorNew';
 import './style.scss';
 
 /** *
@@ -46,13 +34,8 @@ export default function InvestmentNew() {
   const [investment, setInvestment] = useState({ amount: '' });
   const [createInvestment] = useMutation(CREATE_INVESTMENT);
   const [errors, setErrors] = useState([]);
-  const [newUser, setNewUser] = useState(false);
   const [user, setUser] = useState(null);
   const [deal, setDeal] = useState(null);
-
-  // useEffect(() => {
-  //   if (data) history.push(`/admin/investments/${data.createInvestment._id}/edit`);
-  // }, [data, history]);
 
   const updateInvestmentProp = ({ prop, newVal }) => {
     setInvestment((prev) => ({ ...prev, [prop]: newVal }));
@@ -78,20 +61,6 @@ export default function InvestmentNew() {
 
   return (
     <>
-      {newUser && <InvestorNew push={false} setNewUser={setNewUser} />}
-      {!newUser && (
-        <FormControlLabel
-          label="Create New user"
-          control={
-            <Checkbox
-              color="primary"
-              checked={newUser}
-              inputProps={{ 'aria-label': 'secondary checkbox' }}
-              onChange={(e) => setNewUser(e.target.checked)}
-            />
-          }
-        />
-      )}
       <Paper>
         <div className="InvestmentEdit form-wrapper">
           <Row>

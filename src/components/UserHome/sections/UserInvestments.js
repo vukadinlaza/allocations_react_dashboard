@@ -3,17 +3,14 @@ import _ from 'lodash';
 import moment from 'moment';
 import { TextField, InputAdornment, Box, Typography, Grid } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import { toast } from 'react-toastify';
 import AllocationsTable from '../../utils/AllocationsTable';
 import { nWithCommas } from '../../../utils/numbers';
 import { titleCase, openInNewTab } from '../../../utils/helpers';
 import MoreMenu from '../../utils/MoreMenu';
 import { useFetchWithEmail } from '../../../utils/hooks';
 import CapitalAccountsModal from '../capitalAccountsModal';
-import AppModal from '../../Modal/AppModal';
-import InvestmentEdit from '../../InvestmentEdit/UpdateInvestment';
 import ResignModal from '../resignModal';
-import { DocumentBox } from '../../Settings/common';
+import { DocumentBox } from '../../common/common';
 
 const headers = [
   {
@@ -100,18 +97,11 @@ const BASE = 'appLhEikZfHgNQtrL';
 const TABLE = 'Ledger';
 
 const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch }) => {
-  const [showModal, setShowModal] = useState(false);
   const [showResignModal, setShowResignModal] = useState(false);
-  const [investmentId, setInvestmentId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [showCapitalAccounts, setShowCapitalAccounts] = useState(false);
   const [currentCollapsed, setCurrentCollapsed] = useState('');
   const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile?.email || '');
-
-  const showInvestment = ({ invId }) => {
-    setShowModal(true);
-    setInvestmentId(invId);
-  };
 
   const getCellContent = (type, row, headerValue) => {
     const { amount } = row;
@@ -164,14 +154,6 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
       };
       actions.splice(2, 0, fundsInvestmentsAction);
     }
-    if (userProfile.admin) {
-      const editInvestment = {
-        label: 'Edit Investment',
-        onItemClick: showInvestment,
-        clickArgs: { invId: row._id },
-      };
-      actions.unshift(editInvestment);
-    }
 
     switch (type) {
       case 'type':
@@ -220,16 +202,6 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-  };
-
-  const onClose = () => {
-    setShowModal(false);
-    setInvestmentId(null);
-  };
-
-  const handleUpdate = {
-    refetch: () => refetch(),
-    closeModal: () => setShowModal(false),
   };
 
   const dataCopy = data
@@ -292,9 +264,6 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
           refetch={refetch}
         />
       )}
-      <AppModal isOpen={showModal} onClose={onClose}>
-        <InvestmentEdit investmentId={investmentId} handleUpdate={handleUpdate} />
-      </AppModal>
       <ResignModal
         showResignModal={showResignModal}
         setShowResignModal={setShowResignModal}
