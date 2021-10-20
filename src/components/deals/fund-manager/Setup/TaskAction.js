@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { gql, useMutation, useQuery } from '@apollo/client';
-import { TextTask, ReviewTask, taskTypes, KYCServiceTask, SignTask } from './Tasks';
+import { gql, useMutation } from '@apollo/client';
+import { TextTask, ReviewTask, taskTypes, KYCServiceTask } from './Tasks';
 import DocumentUploadTask from './tasks/DocumentUploadTask';
+import SignTask, { usePrefetchSigningLinks } from './tasks/SignTask';
 import styles from './styles';
 
 const taskToComponent = {
   'fm-document-upload': DocumentUploadTask,
   'fm-info': TextTask,
+  'fm-document-signature': SignTask,
   service: ServiceTask,
   default: GenericTask,
 };
@@ -32,17 +34,8 @@ const UPDATE_DEAL_SERVICE = gql`
   }
 `;
 
-const SERVICE_AGREEMENT_LINK = gql`
-  query serviceAgreementLink($deal_id: String) {
-    dataRequest: getServiceAgreementLink(deal_id: $deal_id) {
-      dataRequestId: id
-      tokenId: token_id
-      tokenSecret: token_secret
-    }
-  }
-`;
-
 const TaskAction = ({ task, deal, refetchDeal, phase, classes, setSnackbarData }) => {
+  usePrefetchSigningLinks(deal._id);
   const Component = taskToComponent[task.type];
   return (
     <Component
@@ -81,10 +74,6 @@ const TaskAction = ({ task, deal, refetchDeal, phase, classes, setSnackbarData }
         message: error.toString(),
       });
     },
-  });
-
-  const { data: serviceAgreementLink } = useQuery(SERVICE_AGREEMENT_LINK, {
-    variables: { deal_id },
   });
 
   const [taskData, setTaskData] = useState({ ...deal });
@@ -138,10 +127,6 @@ const TaskAction = ({ task, deal, refetchDeal, phase, classes, setSnackbarData }
 
   if (taskTypes.automaticTasks.includes(task.type) && task.title.includes('KYC')) {
     action = <KYCServiceTask task={task} taskData={taskData} />;
-  }
-
-  if (taskTypes.userTask.includes(task.type)) {
-    action = <SignTask {...(serviceAgreementLink?.dataRequest ?? {})} />;
   }
 
   return action;
