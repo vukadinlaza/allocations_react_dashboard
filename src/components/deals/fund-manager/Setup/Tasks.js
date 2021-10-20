@@ -75,6 +75,19 @@ export const DocumentUploadTask = withStyles(styles)(
     deleteDoc,
     classes,
   }) => {
+    const [addDoc] = useMutation(ADD_DOC, {
+      onCompleted: () => {
+        setSnackbarData({
+          type: 'success',
+          message: 'Success! Document uploaded.',
+        });
+        setTimeout(() => {
+          // RefetchDeal gets triggered before the phase can be updated. TODO: Find better solution instead of setTimeout
+          refetchDeal();
+          getDocument({ variables: { task_id: task._id } });
+        }, 3000);
+      },
+    });
     useEffect(() => {
       setGettingTaskData(true);
       getDocument({ variables: { task_id: task._id } });

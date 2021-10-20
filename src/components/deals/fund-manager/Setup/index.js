@@ -165,8 +165,6 @@ const DealSetup = ({ match, classes }) => {
     variables: { deal_id: query.get('id') },
   });
 
-  const [taskLoading, setTaskLoading] = useState(false);
-  const [gettingTaskData, setGettingTaskData] = useState(false);
   const [snackbarData, setSnackbarData] = useState({});
   const [currentPhase, setCurrentPhase] = useState(false);
   const [currentTask, setCurrentTask] = useState(false);
@@ -240,7 +238,7 @@ const DealSetup = ({ match, classes }) => {
       wireDeadline: moment(deal.wire_deadline).format('MM/DD/YYYY'),
     },
   ];
-  console.log('current task', currentTask);
+
   return (
     <>
       <Snackbar
@@ -257,11 +255,6 @@ const DealSetup = ({ match, classes }) => {
           {snackbarData.message}
         </MuiAlert>
       </Snackbar>
-      {taskLoading && (
-        <div className={classes.loaderContainer}>
-          <AllocationsLoader fullHeight />
-        </div>
-      )}
       <Grid item sm={12} lg={12} className={classes.mainTitle}>
         <Typography>SPVs</Typography>
       </Grid>
@@ -302,10 +295,7 @@ const DealSetup = ({ match, classes }) => {
                   deal={deal.metadata}
                   refetchDeal={refetchDeal}
                   phase={currentPhase}
-                  setTaskLoading={setTaskLoading}
                   classes={classes}
-                  gettingTaskData={gettingTaskData}
-                  setGettingTaskData={setGettingTaskData}
                   setSnackbarData={setSnackbarData}
                 />
               </CardContent>
