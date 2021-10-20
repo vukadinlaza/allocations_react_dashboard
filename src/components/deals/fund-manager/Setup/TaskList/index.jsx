@@ -16,7 +16,7 @@ import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
 import { withStyles } from '@material-ui/core/styles';
 import styles from '../styles';
 
-const TaskList = ({ tasks, classes, currentTask, handleTaskChange }) => {
+const TaskList = ({ tasks, classes, currentTask, handleTaskClick }) => {
   return (
     <Grid item sm={12} lg={4}>
       <Card className={classes.card}>
@@ -29,7 +29,7 @@ const TaskList = ({ tasks, classes, currentTask, handleTaskChange }) => {
                   key={`phase-${i}`}
                   button
                   className={`${classes.listItem} ${complete && classes.listItemComplete}`}
-                  onClick={() => handleTaskChange(currentTask, task)}
+                  onClick={() => handleTaskClick(currentTask, task)}
                 >
                   <ListItemIcon>
                     {complete && <AiFillCheckCircle style={{ color: '#1be01e' }} size="1.75rem" />}

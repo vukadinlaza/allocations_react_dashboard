@@ -70,9 +70,9 @@ const taskTypes = {
   automaticTasks: ['service'],
 };
 
-const ListContainer = ({ classes, type, list, onClickAction, current, itemName }) => {
-  const getItemClass = (current, item, complete) => {
-    if (current === item) {
+const PhaseList = ({ classes, phases, currentPhase, handlePhaseClick }) => {
+  const getItemClass = (currentPhase, item, complete) => {
+    if (currentPhase === item) {
       if (complete) {
         return classes.listItemActiveComplete;
       }
@@ -90,15 +90,14 @@ const ListContainer = ({ classes, type, list, onClickAction, current, itemName }
         <Card className={classes.card}>
           <CardContent className={classes.cardContent}>
             <List component="div" disablePadding>
-              {list.map((item, i) => {
-                const complete =
-                  type === 'phase' ? every(item.tasks, { complete: true }) : item.complete;
+              {phases.map((phase, i) => {
+                const complete = every(phase.tasks, { complete: true });
                 return (
                   <ListItem
                     key={`phase-${i}`}
                     button
-                    className={getItemClass(current, item, complete)}
-                    onClick={() => onClickAction(current, item, type)}
+                    className={getItemClass(currentPhase, phase, complete)}
+                    onClick={() => handlePhaseClick(currentPhase, phase)}
                   >
                     <ListItemIcon>
                       {complete ? (
@@ -107,17 +106,14 @@ const ListContainer = ({ classes, type, list, onClickAction, current, itemName }
                         <AiOutlineCheckCircle style={{ color: 'grey' }} size="1.75rem" />
                       )}
                     </ListItemIcon>
-                    <ListItemText size="small" primary={_.capitalize(item[itemName])} />
-                    {(type === 'phase' || ![...taskTypes.userTask].includes(item.type)) &&
-                      !item.type?.startsWith('admin') && (
-                        <ListItemIcon className={classes.itemIcon}>
-                          {current === item ? (
-                            <IoIosArrowBack size="1.2rem" />
-                          ) : (
-                            <IoIosArrowForward size="1.2rem" />
-                          )}
-                        </ListItemIcon>
+                    <ListItemText size="small" primary={_.capitalize(phase.name)} />
+                    <ListItemIcon className={classes.itemIcon}>
+                      {phase === currentPhase ? (
+                        <IoIosArrowBack size="1.2rem" />
+                      ) : (
+                        <IoIosArrowForward size="1.2rem" />
                       )}
+                    </ListItemIcon>
                   </ListItem>
                 );
               })}
@@ -156,12 +152,12 @@ const DealSetup = ({ match, classes }) => {
     setSnackbarData({});
   };
 
-  const listItemClick = (current, item) => {
+  const handlePhaseClick = (current, item) => {
     setCurrentPhase(current ? (item === current ? false : item) : item);
     if (currentTask) setCurrentTask(false);
   };
 
-  const handleTaskChange = (currentTask, task) => {
+  const handleTaskClick = (currentTask, task) => {
     if (task.type.startsWith('admin')) {
       setCurrentTask(false);
       return;
@@ -211,7 +207,7 @@ const DealSetup = ({ match, classes }) => {
       wireDeadline: moment(deal.wire_deadline).format('MM/DD/YYYY'),
     },
   ];
-  console.log('DEAL', deal);
+
   return (
     <>
       <Snackbar
@@ -242,20 +238,18 @@ const DealSetup = ({ match, classes }) => {
         />
       </Grid>
       <Grid container spacing={5}>
-        <ListContainer
+        <PhaseList
           classes={classes}
-          type="phase"
-          list={deal.phases}
-          onClickAction={listItemClick}
-          current={currentPhase}
-          itemName="name"
+          phases={deal?.phases}
+          handlePhaseClick={handlePhaseClick}
+          currentPhase={currentPhase}
         />
 
         {currentPhase && (
           <TaskList
             tasks={currentPhase?.tasks || []}
             currentTask={currentTask}
-            handleTaskChange={handleTaskChange}
+            handleTaskClick={handleTaskClick}
           />
         )}
 
