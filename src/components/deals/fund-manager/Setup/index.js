@@ -285,7 +285,19 @@ const DealSetup = ({ match, classes }) => {
           current={currentPhase}
           itemName="name"
         />
-        {currentPhase.name === 'build' && <Build phase={currentPhase.name} />}
+        {currentPhase.name === 'build' && (
+          <Build
+            phase={currentPhase.name}
+            task={currentTask}
+            deal={deal.metadata}
+            refetchDeal={refetchDeal}
+            setTaskLoading={setTaskLoading}
+            classes={classes}
+            gettingTaskData={gettingTaskData}
+            setGettingTaskData={setGettingTaskData}
+            setSnackbarData={setSnackbarData}
+          />
+        )}
         {currentPhase.name === 'post-build' && <PostBuild />}
         {currentPhase.name === 'entity' && <Entity />}
         {currentPhase.name === 'post-entity' && <PostEntity />}
