@@ -1,150 +1,58 @@
 import React, { useState } from 'react';
-import _ from 'lodash';
 import { withRouter, useParams } from 'react-router-dom';
-import { gql } from '@apollo/client';
-import { Typography, Grid, Paper } from '@material-ui/core';
+import { gql, useQuery } from '@apollo/client';
+import { Typography, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import moment from 'moment';
 import { SimpleBox } from '../admin/FundManagerDashboard/widgets';
 import styles from '../admin/FundManagerDashboard/styles';
-import { useAuth } from '../../auth/useAuth';
 import UserDocuments from './table';
 import { nWithCommas } from '../../utils/numbers';
+import Loader from '../utils/Loader';
 
-function randomDate(start, end) {
-  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-}
-
-const spvData = [
-  {
-    spvName: 'Space X',
-    portfolioCompany: 'Space X',
-    size: 440000,
-    status: 'Complete',
-    createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    wireDeadline: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    manage: 'manage',
-  },
-  {
-    spvName: 'Tundra Trust SPV',
-    portfolioCompany: 'Tundra Trust',
-    size: 604060,
-    status: 'Complete',
-    createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    wireDeadline: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    manage: 'manage',
-  },
-  {
-    spvName: 'Kraken SPV',
-    portfolioCompany: 'Kraken',
-    size: 103500,
-    status: 'Onboarding',
-    createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    wireDeadline: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    manage: 'manage',
-  },
-  {
-    spvName: 'Stripe SPV',
-    portfolioCompany: 'Stripe',
-    size: Math.round(_.random(43000, 3200000)),
-    status: 'Closed',
-    createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    wireDeadline: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    manage: 'manage',
-  },
-];
-const fundData = [
-  {
-    spvName: 'Sharding Holdings I',
-    portfolioCompany: 'Stripe',
-    size: 1000000,
-    status: 'Complete',
-    createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    firstClose: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    finalClose: moment(randomDate(new Date(2021, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    multiple: 5,
-    manage: 'manage',
-  },
-  {
-    spvName: 'Sharding Holdings II',
-    portfolioCompany: 'Tundra Trust',
-    size: 5000000,
-    status: 'Complete',
-    createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    firstClose: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    finalClose: moment(randomDate(new Date(2021, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    multiple: 3,
-    manage: 'manage',
-  },
-  {
-    spvName: 'Sharding Holdings III',
-    portfolioCompany: 'Axiom Space',
-    size: 10000000,
-    status: 'Onboarding',
-    createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    firstClose: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    finalClose: moment(randomDate(new Date(2021, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    multiple: 2,
-    manage: 'manage',
-  },
-  {
-    spvName: 'Sharding Holdings IV',
-    portfolioCompany: 'Revolut',
-    size: 15000000,
-    status: 'Closed',
-    createdAt: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    firstClose: moment(randomDate(new Date(2018, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    finalClose: moment(randomDate(new Date(2021, 0, 1), new Date()).toString()).format(
-      'DD MMM YYYY',
-    ),
-    multiple: 1,
-    manage: 'manage',
-  },
-];
+const GET_DEALS = gql`
+  query GetOrg($slug: String!, $offset: Int, $limit: Int, $status: String) {
+    organization(slug: $slug, offset: $offset, limit: $limit) {
+      _id
+      n_deals
+      deals(offset: $offset, limit: $limit, status: $status) {
+        _id
+        status
+        amount_raised
+        target
+        company_name
+        company_description
+        pledge_link
+        onboarding_link
+        date_closed
+        dealParams {
+          wireDeadline
+        }
+        deal_lead
+        created_at
+        investments {
+          _id
+          amount
+          status
+          metaData
+          investor {
+            _id
+            name
+            investingAs
+          }
+        }
+      }
+    }
+  }
+`;
 
 const DealTable = ({ classes }) => {
-  const { type } = useParams();
+  const { org_slug } = useParams();
 
-  const data = type === 'spvs' ? spvData : fundData;
-  const typeDisplay = type === 'spvs' ? 'SPVs' : 'Funds';
+  const { data, loading } = useQuery(GET_DEALS, {
+    variables: { slug: org_slug, offset: 0, limit: 10 },
+  });
+
+  const typeDisplay = 'SPVs';
 
   const [openTooltip, setOpenTooltip] = useState('');
 
@@ -152,10 +60,11 @@ const DealTable = ({ classes }) => {
     setOpenTooltip(id);
   };
 
-  const totalDeals = data.length;
-  const totalAUM = data.reduce((acc, c) => acc + c.size, 0);
-  const avgMultiple =
-    type === 'spvs' ? 2.5 : data.reduce((acc, c) => acc + c.multiple, 0) / data.length;
+  if (loading) return <Loader />;
+
+  const totalDeals = data.organization.deals.length;
+  const totalAUM = data.organization.deals.reduce((acc, c) => acc + c.size, 0);
+  const avgMultiple = 2.5;
 
   return (
     <Grid container spacing={1} className={classes.section} style={{ paddingTop: '0px' }}>
@@ -251,17 +160,8 @@ const DealTable = ({ classes }) => {
       </Grid>
 
       <Grid sm={12} lg={12}>
-        {/* <Paper
-          style={{
-            margin: '.5rem',
-            background: '#FBFCFF 0% 0% no-repeat padding-box',
-            boxShadow: '0px 3px 6px #00000029',
-            border: '1px solid #8493A640',
-            borderRadius: '10px',
-          }}
-        > */}
         <div className={classes.contentContainer}>
-          <UserDocuments data={data} type={type} />
+          <UserDocuments data={data.organization.deals} type="spvs" />
         </div>
         {/* </Paper> */}
       </Grid>
