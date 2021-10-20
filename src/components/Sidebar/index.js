@@ -17,6 +17,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { useAuth } from '../../auth/useAuth';
 import SidebarDrawer from './SidebarDrawer';
 import styles from './styles';
+import { useCurrentOrganizationState } from '../../state/current-organization';
 
 const GET_INVESTOR = gql`
   {
@@ -42,7 +43,7 @@ function Sidebar(props) {
   const history = useHistory();
   const [investTab, setInvestTab] = useState(false);
   const [creditTab, setCreditTab] = useState(false);
-  const [currentAccount, setCurrentAccount] = useState('');
+  const [currentOrganization, setCurrentOrganization] = useCurrentOrganizationState();
   const [currentHomeUrl, setCurrentHomeUrl] = useState('');
   const fundMatch = useRouteMatch('/admin/:organization');
   const location = useLocation();
@@ -68,14 +69,10 @@ function Sidebar(props) {
 
   useEffect(() => {
     const userIsOrgAdmin = userProfile?.organizations_admin?.length;
-    const defaultAccount = userIsOrgAdmin
-      ? userProfile.organizations_admin[0].name
-      : userProfile.name;
     const defaultUrl = userIsOrgAdmin ? `/admin/${userProfile.organizations_admin[0].slug}` : '/';
     setCurrentHomeUrl(defaultUrl);
     if (isAuthenticated) {
       if (location?.pathname === '/') {
-        setCurrentAccount(defaultAccount);
         history.push(defaultUrl);
       } else {
         const organizationSlug = fundMatch?.params?.organization;
@@ -98,10 +95,9 @@ function Sidebar(props) {
   const handleAccountChange = (e) => {
     const newValue = e.target ? e.target.value : e;
     const org = userProfile?.organizations_admin?.find((org) => org.name === newValue);
-    const account = org ? org.name : userProfile?.name;
     const currentHomePath = org ? `/admin/${org.slug}` : '/';
     setCurrentHomeUrl(currentHomePath);
-    setCurrentAccount(account);
+    setCurrentOrganization(org);
   };
 
   const container = window !== undefined ? () => window().document.body : undefined;
@@ -150,7 +146,7 @@ function Sidebar(props) {
               <FormControl className={classes.formControl}>
                 <Select
                   labelId="accounts-select"
-                  value={currentAccount || ''}
+                  value={currentOrganization?.name || userProfile?.name || ''}
                   onChange={handleAccountChange}
                   className={classes.input}
                   style={{ backgroundColor: '#f7f7f7' }}
@@ -197,6 +193,7 @@ function Sidebar(props) {
                 investTab={investTab}
                 creditTab={creditTab}
                 userProfile={userProfile}
+                currentOrganization={currentOrganization}
                 currentHomeUrl={currentHomeUrl}
                 logout={logout}
                 location={location}
@@ -222,7 +219,7 @@ function Sidebar(props) {
               <FormControl className={classes.formControl}>
                 <Select
                   labelId="accounts-select"
-                  value={currentAccount || ''}
+                  value={currentOrganization?.name || userProfile?.name || ''}
                   onChange={handleAccountChange}
                   className={classes.input}
                   classes={{
@@ -263,6 +260,7 @@ function Sidebar(props) {
                 investTab={investTab}
                 creditTab={creditTab}
                 userProfile={userProfile}
+                currentOrganization={currentOrganization}
                 currentHomeUrl={currentHomeUrl}
                 logout={logout}
                 location={location}

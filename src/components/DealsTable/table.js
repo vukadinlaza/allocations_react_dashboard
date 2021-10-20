@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { TextField, InputAdornment, Button } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { withStyles } from '@material-ui/core/styles';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import AllocationsTable from '../utils/AllocationsTable';
 import MoreMenu from '../utils/MoreMenu';
 import { openInNewTab } from '../../utils/helpers';
@@ -12,16 +12,16 @@ import { nWithCommas } from '../../utils/numbers';
 const spvHeaders = [
   {
     label: 'NAME',
-    value: 'spvName',
-    type: 'spvName',
+    value: 'name',
+    type: 'name',
     isSortable: true,
     align: 'left',
     alignHeader: true,
   },
   {
     label: 'PORTFOLIO COMPANY',
-    value: 'portfolioCompany',
-    type: 'portfolioCompany',
+    value: 'company_name',
+    type: 'company_name',
     isSortable: true,
     align: 'center',
     alignHeader: true,
@@ -44,22 +44,22 @@ const spvHeaders = [
   },
   {
     label: 'CREATED AT DATE',
-    value: 'createdAt',
-    type: 'createdAt',
+    value: 'created_at',
+    type: 'created_at',
     isSortable: true,
     align: 'center',
   },
   {
     label: 'WIRE DEADLINE DATE',
-    value: 'wireDeadline',
-    type: 'wireDeadline',
+    value: 'wire_deadline',
+    type: 'wire_deadline',
     isSortable: true,
     align: 'center',
     alignHeader: true,
   },
   {
     label: 'MANAGE',
-    value: 'manage',
+    value: 'slug',
     type: 'manage',
     align: 'center',
     isSortable: false,
@@ -133,8 +133,8 @@ const fundHeaders = [
   },
   {
     label: 'MANAGE',
-    value: 'manage',
-    type: 'manage',
+    value: '_id',
+    type: '_id',
     align: 'center',
     isSortable: false,
     alignHeader: false,
@@ -155,21 +155,18 @@ const getStatusColors = (status) => {
 };
 
 const UserDocuments = ({ classes, data, type }) => {
+  const { org_slug } = useParams();
   const headers = type === 'spvs' ? spvHeaders : fundHeaders;
   const history = useHistory();
   const [userDocuments, setUserDocuments] = useState(data);
   const [searchTerm, setSearchTerm] = useState('');
 
   const getCellContent = (type, row, headerValue) => {
-    if (headerValue === 'status') {
-      console.log('ROW', row);
-      console.log('COLOR', row.status, getStatusColors(row.status).color);
-    }
     switch (type) {
-      case 'spvName':
-        return row.spvName;
-      case 'portfolioCompany':
-        return row.portfolioCompany;
+      case 'name':
+        return row.name;
+      case 'company_name':
+        return row.company_name;
       case 'size':
         return `$${nWithCommas(row.size)}`;
       case 'status':
@@ -185,10 +182,10 @@ const UserDocuments = ({ classes, data, type }) => {
             {row[headerValue]}
           </div>
         );
-      case 'createdAt':
-        return row.createdAt;
-      case 'wireDeadline':
-        return row.wireDeadline;
+      case 'created_at':
+        return row.created_at;
+      case 'wire_deadline':
+        return row.dealParams.wireDeadline;
       case 'firstClose':
         return row.firstClose;
       case 'finalClose':
@@ -203,7 +200,7 @@ const UserDocuments = ({ classes, data, type }) => {
             variant="contained"
             color="primary"
             style={{ borderRadius: '.5rem' }}
-            onClick={() => history.push(`/deal-setup?name=${row.spvName}`)}
+            onClick={() => history.push(`/deals/${org_slug}/${row.slug}`)}
           >
             Manage
           </Button>
