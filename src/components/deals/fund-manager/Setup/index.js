@@ -28,6 +28,7 @@ import PostEntity from './phases/PostEntity';
 import PreOnboarding from './phases/PreOnboarding';
 import Onboarding from './phases/Onboarding';
 import TaskList from './TaskList';
+import TaskAction from './TaskAction';
 
 const DEAL = gql`
   query getDealWithTasks($deal_id: String) {
@@ -167,13 +168,13 @@ const DealSetup = ({ match, classes }) => {
   const [taskLoading, setTaskLoading] = useState(false);
   const [gettingTaskData, setGettingTaskData] = useState(false);
   const [snackbarData, setSnackbarData] = useState({});
-  const [currentPhase, setCurentPhase] = useState(false);
+  const [currentPhase, setCurrentPhase] = useState(false);
   const [currentTask, setCurrentTask] = useState(false);
 
   useEffect(() => {
     if (currentPhase && data?.getDealWithTasks) {
       const { getDealWithTasks: deal } = data;
-      setCurentPhase(deal?.phases?.find((p) => p.name === currentPhase.name));
+      setCurrentPhase(deal?.phases?.find((p) => p.name === currentPhase.name));
       if (currentTask && deal.phases.tasks) {
         setCurrentTask(deal?.phases?.tasks.find((t) => t.title === currentTask.title));
       }
@@ -184,19 +185,17 @@ const DealSetup = ({ match, classes }) => {
     setSnackbarData({});
   };
 
-  const listItemClick = (current, item, type) => {
-    if (type === 'phase') {
-      setCurentPhase(current ? (item === current ? false : item) : item);
-      if (currentTask) {
-        setCurrentTask(false);
-      }
-    } else {
-      if (item.type.startsWith('admin')) {
-        setCurrentTask(false);
-        return;
-      }
-      setCurrentTask(current ? (item === current ? false : item) : item);
+  const listItemClick = (current, item) => {
+    setCurrentPhase(current ? (item === current ? false : item) : item);
+    if (currentTask) setCurrentTask(false);
+  };
+
+  const handleTaskChange = (currentTask, task) => {
+    if (task.type.startsWith('admin')) {
+      setCurrentTask(false);
+      return;
     }
+    setCurrentTask(currentTask ? (task === currentTask ? false : task) : task);
   };
 
   const getCellContent = (type, row, headerValue) => {
@@ -241,7 +240,7 @@ const DealSetup = ({ match, classes }) => {
       wireDeadline: moment(deal.wire_deadline).format('MM/DD/YYYY'),
     },
   ];
-  console.log('current phase', currentPhase);
+  console.log('current task', currentTask);
   return (
     <>
       <Snackbar
@@ -288,9 +287,30 @@ const DealSetup = ({ match, classes }) => {
 
         {currentPhase && (
           <TaskList
-            tasks={currentPhase.tasks}
-            // onClickAction={}
+            tasks={currentPhase?.tasks || []}
+            currentTask={currentTask}
+            handleTaskChange={handleTaskChange}
           />
+        )}
+
+        {currentTask && (
+          <Grid item sm={12} lg={4}>
+            <Card className={classes.card}>
+              <CardContent style={{ padding: '0 16px' }}>
+                <TaskAction
+                  task={currentTask}
+                  deal={deal.metadata}
+                  refetchDeal={refetchDeal}
+                  phase={currentPhase}
+                  setTaskLoading={setTaskLoading}
+                  classes={classes}
+                  gettingTaskData={gettingTaskData}
+                  setGettingTaskData={setGettingTaskData}
+                  setSnackbarData={setSnackbarData}
+                />
+              </CardContent>
+            </Card>
+          </Grid>
         )}
 
         {/* {currentPhase.name === 'build' && <Build tasks={currentPhase.tasks} tasks={currentPhase.tasks} />}
