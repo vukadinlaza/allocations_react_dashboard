@@ -4,11 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import _ from 'lodash';
 import moment from 'moment';
-import Loader from '../../utils/Loader';
-import { nWithCommas } from '../../../utils/numbers';
-import { DefaultChartTable, DoughnutChart, LineChart } from '../../utils/charts';
-import { SimpleBox, ChartBox } from '../../admin/FundManagerDashboard/widgets';
-import { nestedSort, getMomentFromId } from '../../../utils/helpers';
+import Loader from '../../../utils/Loader';
+import { nWithCommas } from '../../../../utils/numbers';
+import { DefaultChartTable, DoughnutChart, LineChart } from '../../../utils/charts';
+import { SimpleBox, ChartBox } from '../../FundManagerDashboard/widgets';
+import { nestedSort, getMomentFromId } from '../../../../utils/helpers';
 
 export function getColor(i) {
   const colors = ['#A6CEE3', '#1F78B4', '#B2DF8A', '#33A02C'];

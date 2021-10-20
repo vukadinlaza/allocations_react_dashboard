@@ -1,6 +1,10 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
+
+import FundManagerDashboard from './components/dashboard/FundManagerDashboard';
+import InvestorDashboard from './components/dashboard/InvestorDashboard';
+
 import AdminRoute from './auth/admin-route';
 import PrivateRoute from './components/PrivateRoute';
 import Faq from './components/Faq';
@@ -8,7 +12,6 @@ import Deals from './components/AllDeals';
 import DealNew from './components/DealNew';
 import DealEditNew from './components/DealEditNew';
 import Sidebar from './components/Sidebar';
-import UserHome from './components/UserHome';
 import Investors from './components/Investors';
 import InvestmentNew from './components/InvestmentNew';
 import Profile from './components/Profile/Profile';
@@ -18,7 +21,6 @@ import DealTable from './components/DealsTable';
 import NotFound from './components/NotFound';
 
 // admin
-import FundManagerDashboard from './components/admin/FundManagerDashboard';
 
 import DealNextSteps from './components/DealNextSteps/DealNextSteps';
 import DealLandingPage from './components/DealOneClick/LandingPage/LandingPage';
@@ -54,9 +56,11 @@ const App = () => {
           </div>
           <div className="mainRoute">
             <Switch>
+              <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
+              <PrivateRoute path="/" exact component={InvestorDashboard} />
+              <PrivateRoute path="/investor/:id/home" component={InvestorDashboard} />
+
               <PrivateRoute path="/new-build-spv" exact component={BuildSPVForm} />
-              <PrivateRoute path="/new-build-fund" exact component={BuildFundForm} />
-              <PrivateRoute path="/" exact component={UserHome} />
               <PrivateRoute path="/profile" component={Profile} />
               <PrivateRoute path="/deal-setup" component={DealSetup} />
 
@@ -92,13 +96,11 @@ const App = () => {
                 exact
               />
 
-              <PrivateRoute path="/investor/:id/home" component={UserHome} />
               <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
               <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
 
               {/** Whitelabel Routes * */}
               <PrivateRoute path="/organizations/:org_slug/deals" component={DealTable} exact />
-              <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
               <AdminRoute
                 path="/admin/:organization/members"
                 component={OrganizationMembers}
@@ -115,7 +117,6 @@ const App = () => {
               <PrivateRoute path="/investors" component={Investors} exact />
 
               {/** catchall * */}
-              <PrivateRoute exact path="/" component={UserHome} />
               <Route path={['*', '/404']} component={NotFound} />
             </Switch>
           </div>
