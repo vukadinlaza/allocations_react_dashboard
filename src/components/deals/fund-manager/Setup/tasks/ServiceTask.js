@@ -43,5 +43,5 @@ const serviceTaskMap = {
 export default function ServiceTask({ deal, phase, task, classes }) {
   const Component = serviceTaskMap[task.metadata?.key] || serviceTaskMap.default;
 
-  return <Component deal={deal} phase={phase} task={task} clases={classes} />;
+  return <Component deal={deal} phase={phase} task={task} classes={classes} />;
 }

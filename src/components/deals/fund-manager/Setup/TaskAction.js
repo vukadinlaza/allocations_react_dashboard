@@ -19,6 +19,7 @@ const taskToComponent = {
 const TaskAction = ({ task, deal, refetchDeal, phase, classes, setSnackbarData }) => {
   usePrefetchSigningLinks(deal._id);
   const Component = taskToComponent[task.type] || taskToComponent.default;
+
   return (
     <Component
       deal={deal}
