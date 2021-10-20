@@ -17,6 +17,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { useAuth } from '../../auth/useAuth';
 import SidebarDrawer from './SidebarDrawer';
 import styles from './styles';
+import { useCurrentAccountState } from '../../state/current-account';
 
 const GET_INVESTOR = gql`
   {
@@ -42,7 +43,7 @@ function Sidebar(props) {
   const history = useHistory();
   const [investTab, setInvestTab] = useState(false);
   const [creditTab, setCreditTab] = useState(false);
-  const [currentAccount, setCurrentAccount] = useState('');
+  const [currentAccount, setCurrentAccount] = useCurrentAccountState();
   const [currentHomeUrl, setCurrentHomeUrl] = useState('');
   const fundMatch = useRouteMatch('/admin/:organization');
   const location = useLocation();
