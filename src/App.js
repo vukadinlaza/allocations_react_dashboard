@@ -33,7 +33,7 @@ import DealSetup from './components/DealSetup';
 import AuthorizedApolloProvider from './apollo-client-comp';
 import './App.scss';
 import './utils/initFontAwesome';
-import { CurrentAccountProvider } from './state/current-account';
+import { CurrentAccountProvider } from './state/current-organization';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -97,7 +97,7 @@ const App = () => {
               <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
 
               {/** Whitelabel Routes * */}
-              <PrivateRoute path="/admin/type/:type" component={DealTable} exact />
+              <PrivateRoute path="/organizations/:org_slug/deals" component={DealTable} exact />
               <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
               <AdminRoute
                 path="/admin/:organization/members"
