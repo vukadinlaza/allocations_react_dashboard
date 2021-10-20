@@ -1,20 +1,11 @@
 import React, { useState } from 'react';
 import _, { every } from 'lodash';
-import {
-  List,
-  ListItem,
-  ListItemText,
-  Card,
-  CardContent,
-  Grid,
-  ListItemIcon,
-  Typography,
-  Snackbar,
-} from '@material-ui/core';
+import { List, Card, CardContent, Grid } from '@material-ui/core';
 import { AiOutlineCheckCircle, AiFillCheckCircle } from 'react-icons/ai';
 import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
 import { withStyles } from '@material-ui/core/styles';
 import styles from '../../styles';
+import InitialDealInfo from './tasks/InitialDealInfo';
 
 const Build = ({ tasks, classes }) => {
   const [currentTask, setCurrentTask] = useState(false);
@@ -24,7 +15,9 @@ const Build = ({ tasks, classes }) => {
       <Card className={classes.card}>
         <CardContent className={classes.cardContent}>
           <List component="div" disablePadding>
-            {tasks.map((task, i) => {
+            {/* <InitialDealInfo /> */}
+
+            {/* {tasks.map((task, i) => {
               const complete = task.complete;
               return (
                 <ListItem
@@ -51,7 +44,7 @@ const Build = ({ tasks, classes }) => {
                   )}
                 </ListItem>
               );
-            })}
+            })} */}
           </List>
         </CardContent>
       </Card>
