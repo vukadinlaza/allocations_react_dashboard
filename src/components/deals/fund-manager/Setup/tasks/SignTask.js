@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { gql, useQuery } from '@apollo/client';
+import Loader from '../../../../utils/Loader';
 
 const SERVICE_AGREEMENT_LINK = gql`
   query serviceAgreementLink($deal_id: String) {
@@ -47,13 +48,15 @@ export default function SignTask({ deal, task }) {
     if (data) {
       // eslint-disable-next-line no-undef
       DocSpring.createVisualForm({
-        dataRequestId: data.dataRequestId,
-        tokenId: data.tokenId,
-        tokenSecret: data.tokenSecret,
+        dataRequestId: data.dataRequest.dataRequestId,
+        tokenId: data.dataRequest.tokenId,
+        tokenSecret: data.dataRequest.tokenSecret,
         domainVerification: false,
       });
     }
   }, [loading]);
+
+  if (loading) return <Loader />;
 
   return null;
 }

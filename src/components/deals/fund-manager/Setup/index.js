@@ -20,15 +20,9 @@ import { useLocation, withRouter } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import AllocationsLoader from '../../../utils/AllocationsLoader';
 import AllocationsTable from '../../../utils/AllocationsTable';
-import styles from './styles';
-import Build from './phases/Build';
-import PostBuild from './phases/PostBuild';
-import Entity from './phases/Entity';
-import PostEntity from './phases/PostEntity';
-import PreOnboarding from './phases/PreOnboarding';
-import Onboarding from './phases/Onboarding';
 import TaskList from './TaskList';
 import TaskAction from './TaskAction';
+import styles from './styles';
 
 const DEAL = gql`
   query getDealWithTasks($deal_id: String) {
@@ -58,27 +52,6 @@ const DEAL = gql`
     }
   }
 `;
-
-// const mainBoxes = (name) => {
-//   const data = [
-//     { value: name || 'Space X', title: 'Name' },
-//     { value: 'Kingsley Advani', title: 'Fund Manager' },
-//     { value: 'Pre-onboarding', title: 'Status' },
-//     { value: 'On Time', title: 'Timeline Status' },
-//     { value: 'International', title: 'Type' },
-//     { value: '12/3/2021', title: 'Wire Deadline' },
-//   ];
-//   const x = data.map((item, i) => {
-//     return (
-//       <Grid item sm={12} lg={2} key={`box-${i}`}>
-//         <FlatBox title={item.title}>
-//           <Typography style={{ fontSize: '1.25rem', padding: '16px' }}>{item.value}</Typography>
-//         </FlatBox>
-//       </Grid>
-//     );
-//   });
-//   return x;
-// };
 
 const boxesHeaders = [
   { value: 'title', label: 'Name', align: 'left', alignHeader: true },
