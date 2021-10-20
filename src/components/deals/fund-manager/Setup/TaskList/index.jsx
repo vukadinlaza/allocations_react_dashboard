@@ -14,9 +14,9 @@ import {
 import { AiOutlineCheckCircle, AiFillCheckCircle } from 'react-icons/ai';
 import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
 import { withStyles } from '@material-ui/core/styles';
-import styles from '../../styles';
+import styles from '../styles';
 
-const Build = ({ tasks, classes }) => {
+const TaskList = ({ tasks, classes }) => {
   const [currentTask, setCurrentTask] = useState(false);
 
   return (
@@ -59,4 +59,4 @@ const Build = ({ tasks, classes }) => {
   );
 };
 
-export default withStyles(styles)(Build);
+export default withStyles(styles)(TaskList);

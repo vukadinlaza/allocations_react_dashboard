@@ -27,6 +27,7 @@ import Entity from './phases/Entity';
 import PostEntity from './phases/PostEntity';
 import PreOnboarding from './phases/PreOnboarding';
 import Onboarding from './phases/Onboarding';
+import TaskList from './TaskList';
 
 const DEAL = gql`
   query getDealWithTasks($deal_id: String) {
@@ -96,7 +97,6 @@ const taskTypes = {
 };
 
 const ListContainer = ({ classes, type, list, onClickAction, current, itemName }) => {
-  console.log('list', list);
   const getItemClass = (current, item, complete) => {
     if (current === item) {
       if (complete) {
@@ -285,12 +285,20 @@ const DealSetup = ({ match, classes }) => {
           current={currentPhase}
           itemName="name"
         />
-        {currentPhase.name === 'build' && <Build phase={currentPhase.name} />}
-        {currentPhase.name === 'post-build' && <PostBuild />}
-        {currentPhase.name === 'entity' && <Entity />}
-        {currentPhase.name === 'post-entity' && <PostEntity />}
-        {currentPhase.name === 'pre-onboarding' && <PreOnboarding />}
-        {currentPhase.name === 'onboarding' && <Onboarding />}
+
+        {currentPhase && (
+          <TaskList
+            tasks={currentPhase.tasks}
+            // onClickAction={}
+          />
+        )}
+
+        {/* {currentPhase.name === 'build' && <Build tasks={currentPhase.tasks} tasks={currentPhase.tasks} />}
+        {currentPhase.name === 'post-build' && <PostBuild tasks={currentPhase.tasks} />}
+        {currentPhase.name === 'entity' && <Entity tasks={currentPhase.tasks} />}
+        {currentPhase.name === 'post-entity' && <PostEntity tasks={currentPhase.tasks} />}
+        {currentPhase.name === 'pre-onboarding' && <PreOnboarding tasks={currentPhase.tasks} />}
+        {currentPhase.name === 'onboarding' && <Onboarding tasks={currentPhase.tasks} />} */}
       </Grid>
     </>
   );
