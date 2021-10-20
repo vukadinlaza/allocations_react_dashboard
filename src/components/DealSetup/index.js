@@ -178,10 +178,10 @@ const DealSetup = ({ match, classes }) => {
         setCurrentTask(false);
       }
     } else {
-      if (item.type.startsWith('admin')) {
-        setCurrentTask(false);
-        return;
-      }
+      // if (item.type.startsWith('admin')) {
+      //   setCurrentTask(false);
+      //   return;
+      // }
       setCurrentTask(current ? (item === current ? false : item) : item);
     }
   };
