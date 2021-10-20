@@ -6,20 +6,17 @@ import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { Link, useRouteMatch } from 'react-router-dom';
-import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import { FaRocket, FaPercentage } from 'react-icons/fa';
-import { BsArrowLeftRight, BsPeopleFill } from 'react-icons/bs';
-import { RiBillLine } from 'react-icons/ri';
-import { AiOutlineStar } from 'react-icons/ai';
+import { FaRocket } from 'react-icons/fa';
 import BuildModal from '../NewBuild/BuildModal';
-import styles from './styles.js';
+import styles from './styles';
 
 const SidebarDrawer = ({
   mobileOpen,
   handleDrawerClose,
+  currentOrganization,
   currentHomeUrl,
   logout,
   location,
@@ -66,14 +63,17 @@ const SidebarDrawer = ({
           title: 'Profile',
           icon: <PersonIcon fontSize="medium" />,
         },
-        {
-          to: '/admin/type/spvs',
-          title: 'SPVs',
-          icon: <FaRocket style={{ margin: '0 .5rem 0 0' }} />,
-        },
       ],
     },
   ];
+
+  if (currentOrganization) {
+    menuSections[0].menu.push({
+      to: `/organizations/${currentOrganization.slug}/deals`,
+      title: 'SPVs',
+      icon: <FaRocket style={{ margin: '0 .5rem 0 0' }} />,
+    });
+  }
 
   return (
     <div className={classes.sidebarDrawer}>
