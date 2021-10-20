@@ -3,14 +3,14 @@ import _ from 'lodash';
 import moment from 'moment';
 import { TextField, InputAdornment, Box, Typography, Grid } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import AllocationsTable from '../../utils/AllocationsTable';
-import { nWithCommas } from '../../../utils/numbers';
-import { titleCase, openInNewTab } from '../../../utils/helpers';
-import MoreMenu from '../../utils/MoreMenu';
-import { useFetchWithEmail } from '../../../utils/hooks';
+import AllocationsTable from '../../../utils/AllocationsTable';
+import { nWithCommas } from '../../../../utils/numbers';
+import { titleCase, openInNewTab } from '../../../../utils/helpers';
+import MoreMenu from '../../../utils/MoreMenu';
+import { useFetchWithEmail } from '../../../../utils/hooks';
 import CapitalAccountsModal from '../capitalAccountsModal';
 import ResignModal from '../resignModal';
-import { DocumentBox } from '../../common/common';
+import { DocumentBox } from '../../../common/common';
 
 const headers = [
   {

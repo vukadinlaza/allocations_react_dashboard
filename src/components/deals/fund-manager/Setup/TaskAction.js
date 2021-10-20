@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import DocumentUploadTask from './tasks/DocumentUploadTask';
-import SignTask, { usePrefetchSigningLinks } from './tasks/SignTask';
+import SignTask from './tasks/SignTask';
 import TextTask from './tasks/TextTask';
 import GenericTask from './tasks/GenericTask';
 import ServiceTask from './tasks/ServiceTask';
@@ -17,7 +17,6 @@ const taskToComponent = {
 };
 
 const TaskAction = ({ task, deal, refetchDeal, phase, classes, setSnackbarData }) => {
-  usePrefetchSigningLinks(deal._id);
   const Component = taskToComponent[task.type] || taskToComponent.default;
 
   return (

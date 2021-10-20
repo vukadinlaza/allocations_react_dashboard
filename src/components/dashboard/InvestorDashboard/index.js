@@ -4,18 +4,18 @@ import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import { Typography, TextField, InputAdornment, Paper } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import { useAuth } from '../../auth/useAuth';
-import { nWithCommas } from '../../utils/numbers';
+import { useAuth } from '../../../auth/useAuth';
+import { nWithCommas } from '../../../utils/numbers';
 import 'chartjs-plugin-datalabels';
 import UserInvestments from './sections/UserInvestments';
 import FundsInvestments from './sections/FundsInvestments';
 import UserDocuments from './sections/UserDocuments';
-import HighlightedTabs from '../utils/HighlightedTabs';
+import HighlightedTabs from '../../utils/HighlightedTabs';
 import Highlights from './sections/Highlights';
 import styles from './styles';
-import AllocationsLoader from '../utils/AllocationsLoader';
-import AllocationsTable from '../utils/AllocationsTable';
-import { useFetch } from '../../utils/hooks';
+import AllocationsLoader from '../../utils/AllocationsLoader';
+import AllocationsTable from '../../utils/AllocationsTable';
+import { useFetch } from '../../../utils/hooks';
 
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {

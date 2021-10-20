@@ -4,6 +4,7 @@ import { FormControl, Grid, Typography } from '@material-ui/core';
 import CancelIcon from '@material-ui/icons/Cancel';
 import moment from 'moment';
 import { DocumentBox, UploadBox } from '../../../../common/common';
+import Loader from '../../../../utils/Loader';
 
 const GET_DOCUMENT = gql`
   query getDealDocService($task_id: String) {
@@ -95,15 +96,8 @@ const DisplayDocument = ({
   return <UploadDocument deal={deal} phase={phase} task={task} addDocument={addDocument} />;
 };
 
-export default function DocumentUploadTask({
-  deal,
-  phase,
-  task,
-  classes,
-  setSnackbarData,
-  refetchDeal,
-}) {
-  const [getDocument, { data: documentData }] = useLazyQuery(GET_DOCUMENT, {
+export default function DocumentUploadTask({ deal, phase, task, classes, setSnackbarData }) {
+  const [getDocument, { data }] = useLazyQuery(GET_DOCUMENT, {
     fetchPolicy: 'network-only',
     onError: (error) => {
       setSnackbarData({
@@ -113,9 +107,8 @@ export default function DocumentUploadTask({
     },
   });
 
-  const [addDocument, { loading: addDocLoading }] = useMutation(ADD_DOC, {
+  const [addDocument, { loading: addDocumentLoading }] = useMutation(ADD_DOC, {
     onCompleted: () => {
-      refetchDeal();
       setSnackbarData({
         type: 'success',
         message: 'Success! Task updated.',
@@ -135,7 +128,9 @@ export default function DocumentUploadTask({
 
   useEffect(() => {
     if (task.complete) getDocument({ variables: { task_id: task._id } });
-  }, [task._id, addDocLoading]);
+  }, [task._id, task.complete, addDocumentLoading]);
+
+  if (addDocumentLoading) return <Loader />;
 
   return (
     <Grid
@@ -153,7 +148,7 @@ export default function DocumentUploadTask({
         style={{ display: 'flex', justifyContent: 'flex-start', width: '100%' }}
       >
         <DisplayDocument
-          documentData={documentData}
+          documentData={data?.getDealDocService}
           deal={deal}
           phase={phase}
           task={task}
