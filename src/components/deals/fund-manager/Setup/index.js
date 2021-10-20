@@ -292,7 +292,7 @@ const DealSetup = ({ match, classes }) => {
               <CardContent style={{ padding: '0 16px' }}>
                 <TaskAction
                   task={currentTask}
-                  deal={deal.metadata}
+                  deal={deal?.metadata}
                   refetchDeal={refetchDeal}
                   phase={currentPhase}
                   classes={classes}

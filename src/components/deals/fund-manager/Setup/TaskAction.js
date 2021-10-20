@@ -5,6 +5,7 @@ import { ReviewTask, taskTypes, KYCServiceTask } from './Tasks';
 import DocumentUploadTask from './tasks/DocumentUploadTask';
 import SignTask, { usePrefetchSigningLinks } from './tasks/SignTask';
 import TextTask from './tasks/TextTask';
+import GenericTask from './tasks/GenericTask';
 import styles from './styles';
 
 const taskToComponent = {
@@ -13,7 +14,7 @@ const taskToComponent = {
   'admin-info': TextTask,
   'fm-document-signature': SignTask,
   // service: ServiceTask,
-  // default: GenericTask,
+  default: GenericTask,
 };
 
 const COMPLETE_REVIEW = gql`
@@ -38,7 +39,7 @@ const UPDATE_DEAL_SERVICE = gql`
 
 const TaskAction = ({ task, deal, refetchDeal, phase, classes, setSnackbarData }) => {
   usePrefetchSigningLinks(deal._id);
-  const Component = taskToComponent[task.type];
+  const Component = taskToComponent[task.type] || taskToComponent.default;
   return (
     <Component
       deal={deal}
