@@ -7,13 +7,14 @@ import SignTask, { usePrefetchSigningLinks } from './tasks/SignTask';
 import TextTask from './tasks/TextTask';
 import GenericTask from './tasks/GenericTask';
 import styles from './styles';
+import ServiceTask from './tasks/ServiceTask';
 
 const taskToComponent = {
   'fm-document-upload': DocumentUploadTask,
   'fm-info': TextTask,
   'admin-info': TextTask,
   'fm-document-signature': SignTask,
-  // service: ServiceTask,
+  service: ServiceTask,
   default: GenericTask,
 };
 
