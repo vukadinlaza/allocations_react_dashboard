@@ -32,7 +32,6 @@ import EditIcon from '@material-ui/icons/Edit';
 import CloseIcon from '@material-ui/icons/Close';
 import { useSimpleReducer } from '../../utils/hooks';
 import { useAuth } from '../../auth/useAuth';
-import { ORG_OVERVIEW } from '../admin/AdminHome';
 import InviteInvestors from './InviteInvestors';
 import UserSearch from '../forms/UserSearch';
 import * as API from '../../api';
@@ -187,6 +186,41 @@ const UPDATE_DEAL = gql`
         fundGeneralPartner
         fundEstimatedTerm
       }
+    }
+  }
+`;
+
+const ORG_OVERVIEW = gql`
+  query GetOrg($slug: String!, $status: String) {
+    organization(slug: $slug) {
+      _id
+      name
+      slug
+      deals(status: $status) {
+        _id
+        raised
+        appLink
+        status
+        date_closed
+        dealParams {
+          wireDeadline
+          dealMultiple
+        }
+        company_name
+        company_description
+        target
+        investments {
+          amount
+          investor {
+            investingAs
+          }
+        }
+      }
+    }
+    investor {
+      _id
+      admin
+      documents
     }
   }
 `;
