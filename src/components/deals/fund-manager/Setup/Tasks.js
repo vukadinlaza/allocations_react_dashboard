@@ -4,6 +4,7 @@ import moment from 'moment';
 import { Grid, Typography, Button, TextField, FormControl } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import CancelIcon from '@material-ui/icons/Cancel';
+import { useMutation } from '@apollo/client';
 import Loader from '../../../utils/Loader';
 import { DocumentBox, UploadBox } from '../../../common/common';
 import pmButton from '../../../../assets/parallel-button.svg';
@@ -61,119 +62,119 @@ export const TextTask = withStyles(styles)(
   },
 );
 
-export const DocumentUploadTask = withStyles(styles)(
-  ({
-    task,
-    deal_id,
-    addDoc,
-    phase,
-    setTaskLoading,
-    gettingTaskData,
-    setGettingTaskData,
-    documentData,
-    getDocument,
-    deleteDoc,
-    classes,
-  }) => {
-    const [addDoc] = useMutation(ADD_DOC, {
-      onCompleted: () => {
-        setSnackbarData({
-          type: 'success',
-          message: 'Success! Document uploaded.',
-        });
-        setTimeout(() => {
-          // RefetchDeal gets triggered before the phase can be updated. TODO: Find better solution instead of setTimeout
-          refetchDeal();
-          getDocument({ variables: { task_id: task._id } });
-        }, 3000);
-      },
-    });
-    useEffect(() => {
-      setGettingTaskData(true);
-      getDocument({ variables: { task_id: task._id } });
-    }, [task._id]);
+// export const DocumentUploadTask = withStyles(styles)(
+//   ({
+//     task,
+//     deal_id,
+//     // addDoc,
+//     phase,
+//     setTaskLoading,
+//     gettingTaskData,
+//     setGettingTaskData,
+//     documentData,
+//     getDocument,
+//     deleteDoc,
+//     classes,
+//   }) => {
+//     const [addDoc] = useMutation(ADD_DOC, {
+//       onCompleted: () => {
+//         setSnackbarData({
+//           type: 'success',
+//           message: 'Success! Document uploaded.',
+//         });
+//         setTimeout(() => {
+//           // RefetchDeal gets triggered before the phase can be updated. TODO: Find better solution instead of setTimeout
+//           refetchDeal();
+//           getDocument({ variables: { task_id: task._id } });
+//         }, 3000);
+//       },
+//     });
+//     useEffect(() => {
+//       setGettingTaskData(true);
+//       getDocument({ variables: { task_id: task._id } });
+//     }, [task._id]);
 
-    if (gettingTaskData) {
-      return (
-        <div style={{ margin: '30px 0' }}>
-          <Loader />
-        </div>
-      );
-    }
+//     if (gettingTaskData) {
+//       return (
+//         <div style={{ margin: '30px 0' }}>
+//           <Loader />
+//         </div>
+//       );
+//     }
 
-    return (
-      <Grid
-        container
-        direction="column"
-        alignItems="flex-start"
-        justify="center"
-        className={classes.taskContainer}
-      >
-        <Typography className={classes.subTaskTitle}>{` ${task.title}`}</Typography>
-        <Grid
-          item
-          sm={12}
-          lg={12}
-          style={{ display: 'flex', justifyContent: 'flex-start', width: '100%' }}
-        >
-          {_.get(documentData, 'link') ? (
-            <div style={{ position: 'relative', marginTop: '10px', width: '100%' }}>
-              <CancelIcon
-                className={classes.cancelIcon}
-                onClick={() => {
-                  setTaskLoading(true);
-                  deleteDoc({
-                    variables: {
-                      document_id: documentData._id,
-                      task_id: task._id,
-                      phase_id: phase._id,
-                    },
-                  });
-                }}
-              />
-              <DocumentBox doc={documentData} docPath={documentData.title} minWidth="0" />
-            </div>
-          ) : (
-            <FormControl
-              required
-              disabled
-              variant="outlined"
-              style={{ width: '100%', padding: '10px 0' }}
-            >
-              <UploadBox>
-                <input
-                  type="file"
-                  style={{ display: 'none' }}
-                  accept="application/pdf"
-                  multiple
-                  onChange={({ target }) => {
-                    if (target.validity.valid) {
-                      setTaskLoading(true);
-                      addDoc({
-                        variables: {
-                          doc: target.files[0],
-                          task_id: task._id,
-                          deal_id,
-                          phase: phase.name,
-                        },
-                      });
-                    }
-                  }}
-                />
-              </UploadBox>
-            </FormControl>
-          )}
-        </Grid>
-        <Grid item sm={12} lg={12}>
-          <Typography className={classes.taskLastUpdated}>
-            Last updated on
-            {` ${moment(task.updated_at).format('MM/DD/YY')}`}
-          </Typography>
-        </Grid>
-      </Grid>
-    );
-  },
-);
+//     return (
+//       <Grid
+//         container
+//         direction="column"
+//         alignItems="flex-start"
+//         justify="center"
+//         className={classes.taskContainer}
+//       >
+//         <Typography className={classes.subTaskTitle}>{` ${task.title}`}</Typography>
+//         <Grid
+//           item
+//           sm={12}
+//           lg={12}
+//           style={{ display: 'flex', justifyContent: 'flex-start', width: '100%' }}
+//         >
+//           {_.get(documentData, 'link') ? (
+//             <div style={{ position: 'relative', marginTop: '10px', width: '100%' }}>
+//               <CancelIcon
+//                 className={classes.cancelIcon}
+//                 onClick={() => {
+//                   setTaskLoading(true);
+//                   deleteDoc({
+//                     variables: {
+//                       document_id: documentData._id,
+//                       task_id: task._id,
+//                       phase_id: phase._id,
+//                     },
+//                   });
+//                 }}
+//               />
+//               <DocumentBox doc={documentData} docPath={documentData.title} minWidth="0" />
+//             </div>
+//           ) : (
+//             <FormControl
+//               required
+//               disabled
+//               variant="outlined"
+//               style={{ width: '100%', padding: '10px 0' }}
+//             >
+//               <UploadBox>
+//                 <input
+//                   type="file"
+//                   style={{ display: 'none' }}
+//                   accept="application/pdf"
+//                   multiple
+//                   onChange={({ target }) => {
+//                     if (target.validity.valid) {
+//                       setTaskLoading(true);
+//                       addDoc({
+//                         variables: {
+//                           doc: target.files[0],
+//                           task_id: task._id,
+//                           deal_id,
+//                           phase: phase.name,
+//                         },
+//                       });
+//                     }
+//                   }}
+//                 />
+//               </UploadBox>
+//             </FormControl>
+//           )}
+//         </Grid>
+//         <Grid item sm={12} lg={12}>
+//           <Typography className={classes.taskLastUpdated}>
+//             Last updated on
+//             {` ${moment(task.updated_at).format('MM/DD/YY')}`}
+//           </Typography>
+//         </Grid>
+//       </Grid>
+//     );
+//   },
+// );
 
 export const ReviewTask = withStyles(styles)(
   ({

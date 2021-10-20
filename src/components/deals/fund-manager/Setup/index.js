@@ -238,7 +238,7 @@ const DealSetup = ({ match, classes }) => {
       wireDeadline: moment(deal.wire_deadline).format('MM/DD/YYYY'),
     },
   ];
-
+  console.log('DEAL', deal);
   return (
     <>
       <Snackbar

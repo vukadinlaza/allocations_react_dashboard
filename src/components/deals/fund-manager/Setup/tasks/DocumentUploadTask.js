@@ -95,7 +95,14 @@ const DisplayDocument = ({
   return <UploadDocument deal={deal} phase={phase} task={task} addDocument={addDocument} />;
 };
 
-export default function DocumentUploadTask({ deal, phase, task, classes, setSnackbarData }) {
+export default function DocumentUploadTask({
+  deal,
+  phase,
+  task,
+  classes,
+  setSnackbarData,
+  refetchDeal,
+}) {
   const [getDocument, { data: documentData }] = useLazyQuery(GET_DOCUMENT, {
     fetchPolicy: 'network-only',
     onError: (error) => {
@@ -108,9 +115,10 @@ export default function DocumentUploadTask({ deal, phase, task, classes, setSnac
 
   const [addDocument, { loading: addDocLoading }] = useMutation(ADD_DOC, {
     onCompleted: () => {
+      refetchDeal();
       setSnackbarData({
         type: 'success',
-        message: 'Success! Document uploaded.',
+        message: 'Success! Task updated.',
       });
     },
   });
