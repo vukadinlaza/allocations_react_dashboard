@@ -1,15 +1,8 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
-import { useQuery, gql } from '@apollo/client';
+import { useQuery, gql, useMutation } from '@apollo/client';
 import AllocationsTable from '../../../utils/AllocationsTable';
 import Loader from '../../../utils/Loader';
-
-const dummyData = Array.apply(' ', Array(100)).map((_, i) => {
-  return {
-    number: '00000000',
-    available: Math.random() >= 0.5,
-  };
-});
 
 const getCellContent = (type, row) => {
   switch (type) {
@@ -36,36 +29,49 @@ const REFERENCE_NUMBERS_BY_DEAL_ID = gql`
   }
 `;
 
+const ALLOCATE = gql`
+  mutation Allocate($deal_id: String!) {
+    referenceNumbersAllocate(deal_id: $deal_id) {
+      _id
+    }
+  }
+`;
+
 const Banking = ({ classes, deal_id }) => {
-  const { data: referenceNumbers, loading } = useQuery(REFERENCE_NUMBERS_BY_DEAL_ID, {
+  const { data, loading, refetch } = useQuery(REFERENCE_NUMBERS_BY_DEAL_ID, {
     variables: { deal_id },
   });
+  const [allocateRefNums, { loading: allocateLoading }] = useMutation(ALLOCATE, {
+    variables: { deal_id },
+    onCompleted: () => {
+      refetch();
+    },
+  });
 
-  console.log('referenceNumbers', referenceNumbers);
-  if (loading)
+  if (loading || allocateLoading)
     return (
       <div>
         <Loader />
       </div>
     );
 
-  if (referenceNumbers && referenceNumbers.length === 0)
+  if (data && data.referenceNumbersByDealId && data.referenceNumbersByDealId.length === 0)
     return (
       <Button
         variant="contained"
-        onClick={() => {
-          console.log('ass', deal_id);
-        }}
+        onClick={() => allocateRefNums()}
         className={classes.createButton}
         color="secondary"
         style={{ margin: '1rem', backgroundColor: 'blue' }}
-      />
+      >
+        Allocate Reference Numbers
+      </Button>
     );
 
   return (
     <>
       <AllocationsTable
-        data={dummyData}
+        data={data.referenceNumbersByDealId}
         headers={headers}
         getCellContent={getCellContent}
         sortField="available"
