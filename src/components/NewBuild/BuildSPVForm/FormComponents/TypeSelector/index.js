@@ -181,9 +181,9 @@ export default function TypeSelector({
         ...styles,
         height: 56,
       }),
-      placeholder: (styles) => ({
+      placeholder: (styles, data) => ({
         ...styles,
-        color: 'black',
+        color: data.children !== 'Select...' ? '#000' : '#999',
       }),
     };
 
@@ -194,11 +194,46 @@ export default function TypeSelector({
         styles={customStyles}
         options={securityTypes.map((security) => ({ value: security, label: security })) || ''}
         defaultValue={buildData.portfolio_company_securities}
-        placeholder={buildData.portfolio_company_securities}
+        placeholder={buildData.portfolio_company_securities || 'Select...'}
         onChange={(option) => {
           const newEvent = {
             target: {
               name: 'portfolio_company_securities',
+              value: option.value,
+            },
+          };
+          handleChange(newEvent);
+        }}
+      />
+    );
+  }
+
+  const dealStages = ['Pre-Seed', 'Seed', 'Series A', 'Series B', 'Series C', 'Series D+'];
+
+  function DealStagesSelector() {
+    const customStyles = {
+      control: (styles) => ({
+        ...styles,
+        height: 56,
+      }),
+      placeholder: (styles, data) => ({
+        ...styles,
+        color: data.children !== 'Select...' ? '#000' : '#999',
+      }),
+    };
+
+    return (
+      <Select
+        id="deal_stage"
+        label="Deal Stage"
+        styles={customStyles}
+        options={dealStages.map((stage) => ({ value: stage, label: stage })) || ''}
+        defaultValue={buildData.deal_stage}
+        placeholder={buildData.deal_stage}
+        onChange={(option) => {
+          const newEvent = {
+            target: {
+              name: 'deal_stage',
               value: option.value,
             },
           };
@@ -285,7 +320,6 @@ export default function TypeSelector({
                     </Typography>
                   }
                   openTooltip={openTooltip}
-                  // IS THIS ACCURATE?
                   id="portfolio_company_securities"
                 >
                   <HelpIcon
@@ -429,6 +463,30 @@ export default function TypeSelector({
           </Grid>
 
           {/* FOURTH ROW */}
+          <Grid container spacing={1} className={classes.inputGridContainer}>
+            <Grid className={classes.inputGridItem} item xs={6}>
+              <FormControl required disabled variant="outlined" className={classes.formContainers}>
+                <Typography className={classes.formItemName}>
+                  Deal Stages
+                  <ModalTooltip
+                    title="Deal Stages"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={<Typography color="inherit">TBD</Typography>}
+                    openTooltip={openTooltip}
+                    id="deal_stage"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={(e) => handleTooltip('deal_stage')}
+                    />
+                  </ModalTooltip>
+                </Typography>
+
+                <DealStagesSelector />
+              </FormControl>
+            </Grid>
+          </Grid>
+
           <Grid className={classes.inputGridItem} item xs={12}>
             <Typography className={classes.formItemName}>
               Sector(s) <HelpIcon className={classes.helpIcon} />
