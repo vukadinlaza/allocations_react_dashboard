@@ -140,7 +140,8 @@ export default function TypeSelector({
       }),
       control: (styles) => ({
         ...styles,
-        height: 55,
+        height: 56,
+        cursor: 'pointer',
       }),
     };
 
@@ -181,6 +182,7 @@ export default function TypeSelector({
         ...styles,
         height: 56,
         maxWidth: 568,
+        cursor: 'pointer',
       }),
       placeholder: (styles, data) => ({
         ...styles,
@@ -216,6 +218,7 @@ export default function TypeSelector({
         ...styles,
         height: 56,
         maxWidth: 568,
+        cursor: 'pointer',
       }),
       placeholder: (styles, data) => ({
         ...styles,
