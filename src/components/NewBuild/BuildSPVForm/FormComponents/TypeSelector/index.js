@@ -252,21 +252,23 @@ export default function TypeSelector({
               </Typography>
               <Select
                 id="portfolio_company_securities"
-                value={buildData.portfolio_company_securities}
                 label="Portfolio Company Securities"
-                value={securities.map((security) => ({ value: security, label: security })) || ''}
-                onChange={(option) => {
-                  const newEvent = {
-                    target: {
-                      name: 'portfolio_company_securities',
-                      value: option.map((security) => security.value),
-                    },
-                  };
-                  handleChange(newEvent);
-                }}
+                value={securities.map((security) => ({ value: security, name: security })) || ''}
+                onChange={handleChange}
+                // onChange={(option) => {
+                //   const newEvent = {
+                //     target: {
+                //       name: 'portfolio_company_securities',
+                //       value: option.map((security) => security.value),
+                //     },
+                //   };
+                //   handleChange(newEvent);
+                // }}
               >
-                <MenuItem value="one">One</MenuItem>
-                <MenuItem value="two">Two</MenuItem>
+                <MenuItem value="one">Series A Preferred Stock</MenuItem>
+                <MenuItem value="two">Simple Agreement for Future Equity</MenuItem>
+                <MenuItem value="three">Convertible Promissory Note</MenuItem>
+                <MenuItem value="four">Other</MenuItem>
               </Select>
               {/* <TextField
                 value={buildData.portfolio_company_securities}
