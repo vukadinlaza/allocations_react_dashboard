@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import _, { every } from 'lodash';
+import React from 'react';
 import {
   List,
   ListItem,
@@ -8,8 +7,6 @@ import {
   CardContent,
   Grid,
   ListItemIcon,
-  Typography,
-  Snackbar,
 } from '@material-ui/core';
 import { AiOutlineCheckCircle, AiFillCheckCircle } from 'react-icons/ai';
 import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
@@ -36,7 +33,7 @@ const TaskList = ({ tasks, classes, currentTask, handleTaskClick }) => {
                     {!complete && <AiOutlineCheckCircle style={{ color: 'grey' }} size="1.75rem" />}
                   </ListItemIcon>
 
-                  <ListItemText size="small" primary={_.capitalize(task.title)} />
+                  <ListItemText size="small" primary={task.title.toUpperCase()} />
 
                   {!task.type?.startsWith('admin') && (
                     <ListItemIcon className={classes.itemIcon}>

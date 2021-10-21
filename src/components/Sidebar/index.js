@@ -144,48 +144,50 @@ function Sidebar(props) {
               }}
             >
               <FormControl className={classes.formControl}>
-                <Select
-                  labelId="accounts-select"
-                  value={currentOrganization?.name || userProfile?.name || ''}
-                  onChange={handleAccountChange}
-                  className={classes.input}
-                  style={{ backgroundColor: '#f7f7f7' }}
-                  classes={{
-                    root: classes.select,
-                  }}
-                  inputProps={{
-                    classes: {
-                      focused: classes.inputFocused,
-                      underline: classes.inputFocused,
-                    },
-                  }}
-                >
-                  <MenuItem
-                    onClick={() => {
-                      handleDrawerToggle();
-                      history.push(`/`);
+                {loading ? null : (
+                  <Select
+                    labelId="accounts-select"
+                    value={currentOrganization?.name || userProfile?.name || ''}
+                    onChange={handleAccountChange}
+                    className={classes.input}
+                    style={{ backgroundColor: '#f7f7f7' }}
+                    classes={{
+                      root: classes.select,
                     }}
-                    value={userProfile?.name}
-                    className={classes.formItem}
+                    inputProps={{
+                      classes: {
+                        focused: classes.inputFocused,
+                        underline: classes.inputFocused,
+                      },
+                    }}
                   >
-                    {userProfile?.name}
-                  </MenuItem>
-                  {adminOrganizationsCopy?.length &&
-                    adminOrganizationsCopy
-                      .sort((a, b) => a.name.localeCompare(b.name))
-                      .map((org) => (
-                        <MenuItem
-                          onClick={() => {
-                            handleDrawerToggle();
-                            history.push(`/admin/${org.slug}`);
-                          }}
-                          value={org.name}
-                          key={org.name}
-                        >
-                          {org.name}
-                        </MenuItem>
-                      ))}
-                </Select>
+                    <MenuItem
+                      onClick={() => {
+                        handleDrawerToggle();
+                        history.push(`/`);
+                      }}
+                      value={userProfile?.name}
+                      className={classes.formItem}
+                    >
+                      {userProfile?.name}
+                    </MenuItem>
+                    {adminOrganizationsCopy?.length &&
+                      adminOrganizationsCopy
+                        .sort((a, b) => a.name.localeCompare(b.name))
+                        .map((org) => (
+                          <MenuItem
+                            onClick={() => {
+                              handleDrawerToggle();
+                              history.push(`/admin/${org.slug}`);
+                            }}
+                            value={org.name}
+                            key={org.name}
+                          >
+                            {org.name}
+                          </MenuItem>
+                        ))}
+                  </Select>
+                )}
               </FormControl>
               <SidebarDrawer
                 mobileOpen={mobileOpen}
@@ -217,41 +219,43 @@ function Sidebar(props) {
                 />
               </div>
               <FormControl className={classes.formControl}>
-                <Select
-                  labelId="accounts-select"
-                  value={currentOrganization?.name || userProfile?.name || ''}
-                  onChange={handleAccountChange}
-                  className={classes.input}
-                  classes={{
-                    root: classes.select,
-                  }}
-                  inputProps={{
-                    classes: {
-                      focused: classes.inputFocused,
-                      underline: classes.inputFocused,
-                    },
-                  }}
-                >
-                  <MenuItem
-                    onClick={() => history.push(`/`)}
-                    value={userProfile?.name}
-                    className={classes.formItem}
+                {loading ? null : (
+                  <Select
+                    labelId="accounts-select"
+                    value={currentOrganization?.name || userProfile?.name || ''}
+                    onChange={handleAccountChange}
+                    className={classes.input}
+                    classes={{
+                      root: classes.select,
+                    }}
+                    inputProps={{
+                      classes: {
+                        focused: classes.inputFocused,
+                        underline: classes.inputFocused,
+                      },
+                    }}
                   >
-                    {userProfile?.name}
-                  </MenuItem>
-                  {adminOrganizationsCopy?.length &&
-                    adminOrganizationsCopy
-                      .sort((a, b) => a.name.localeCompare(b.name))
-                      .map((org) => (
-                        <MenuItem
-                          onClick={() => history.push(`/admin/${org.slug}`)}
-                          value={org.name}
-                          key={org.name}
-                        >
-                          {org.name}
-                        </MenuItem>
-                      ))}
-                </Select>
+                    <MenuItem
+                      onClick={() => history.push(`/`)}
+                      value={userProfile?.name}
+                      className={classes.formItem}
+                    >
+                      {userProfile?.name}
+                    </MenuItem>
+                    {adminOrganizationsCopy?.length &&
+                      adminOrganizationsCopy
+                        .sort((a, b) => a.name.localeCompare(b.name))
+                        .map((org) => (
+                          <MenuItem
+                            onClick={() => history.push(`/admin/${org.slug}`)}
+                            value={org.name}
+                            key={org.name}
+                          >
+                            {org.name}
+                          </MenuItem>
+                        ))}
+                  </Select>
+                )}
               </FormControl>
 
               <SidebarDrawer

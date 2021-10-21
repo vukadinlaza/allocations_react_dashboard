@@ -3,11 +3,11 @@ import { withRouter, useParams } from 'react-router-dom';
 import { gql, useQuery } from '@apollo/client';
 import { Typography, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { SimpleBox } from '../dashboard/FundManagerDashboard/widgets';
-import styles from '../dashboard/FundManagerDashboard/styles';
-import UserDocuments from './table';
-import { nWithCommas } from '../../utils/numbers';
-import Loader from '../utils/Loader';
+import { SimpleBox } from '../../../dashboard/FundManagerDashboard/widgets';
+import styles from '../../../dashboard/FundManagerDashboard/styles';
+import DealsTable from './DealsTable';
+import { nWithCommas } from '../../../../utils/numbers';
+import Loader from '../../../utils/Loader';
 
 const GET_DEALS = gql`
   query GetOrg($slug: String!, $offset: Int, $limit: Int, $status: String) {
@@ -16,6 +16,8 @@ const GET_DEALS = gql`
       n_deals
       deals(offset: $offset, limit: $limit, status: $status) {
         _id
+        name
+        slug
         status
         amount_raised
         target
@@ -161,7 +163,7 @@ const DealTable = ({ classes }) => {
 
       <Grid sm={12} lg={12}>
         <div className={classes.contentContainer}>
-          <UserDocuments data={data.organization.deals} type="spvs" />
+          <DealsTable deals={data.organization.deals} />
         </div>
         {/* </Paper> */}
       </Grid>

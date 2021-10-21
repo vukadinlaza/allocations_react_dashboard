@@ -17,7 +17,7 @@ import InvestmentNew from './components/InvestmentNew';
 import Profile from './components/Profile/Profile';
 import OrganizationNew from './components/OrganizationNew';
 import OrganizationMembers from './components/OrganizationMembers';
-import DealTable from './components/DealsTable';
+import DealTable from './components/deals/fund-manager/DealsTablePage';
 import NotFound from './components/NotFound';
 
 // admin
