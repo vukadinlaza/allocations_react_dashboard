@@ -13,6 +13,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
+import Banking from './sections/Banking';
 import Investments from './sections/Investments';
 import Investors from './sections/Investors';
 import Overview from './sections/Overview';
@@ -121,7 +122,7 @@ const fundTabs = [
   'Deal Page',
 ];
 
-const spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
+const spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page', 'Banking'];
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
@@ -382,7 +383,8 @@ const FundManagerDashboard = ({ classes, history }) => {
             </FlatBox>
           </div>
         );
-
+      case 'Banking':
+        return <Banking />;
       default:
         return <p>No Data</p>;
     }
