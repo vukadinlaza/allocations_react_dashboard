@@ -163,7 +163,7 @@ const BuildDetails = ({
     sectors: [],
     representative: '',
   });
-  console.log('data', buildData);
+
   const [openTooltip, setOpenTooltip] = useState('');
 
   const handleTooltip = (id) => {
