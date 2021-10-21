@@ -139,6 +139,8 @@ const BuildDetails = ({
     asset_type: 'startup',
     portfolio_company_name: '',
     portfolio_company_securities: '',
+    estimated_spv_quantity: '',
+    minimum_investment: '',
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
@@ -161,7 +163,7 @@ const BuildDetails = ({
     sectors: [],
     representative: '',
   });
-
+  console.log('data', buildData);
   const [openTooltip, setOpenTooltip] = useState('');
 
   const handleTooltip = (id) => {
@@ -375,6 +377,37 @@ const BuildDetails = ({
                     { label: 'Yes (Standard)', value: 'false' },
                     { label: 'No', value: 'true' },
                   ]}
+                />
+              </FormControl>
+            </Grid>
+            <Grid className={classes.inputGridItem} item xs={6}>
+              <FormControl required disabled variant="outlined" className={classes.formContainers}>
+                <Typography className={classes.formItemName}>
+                  What is the minimum investment?
+                  <ModalTooltip
+                    title="What is the minimum investment?"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        Please indicate what is the minimum investment for investors to invest into
+                        SPV (e.g., $10,000)
+                      </Typography>
+                    }
+                    openTooltip={openTooltip}
+                    id="minimum_investment"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={(e) => handleTooltip('minimum_investment')}
+                    />
+                  </ModalTooltip>
+                </Typography>
+                <TextField
+                  value={buildData.minimum_investment}
+                  name="minimum_investment"
+                  onChange={handleChange}
+                  className={classes.inputBox}
+                  variant="outlined"
                 />
               </FormControl>
             </Grid>
