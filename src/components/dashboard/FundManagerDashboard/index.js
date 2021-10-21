@@ -120,6 +120,7 @@ const fundTabs = [
   'Investors',
   'Documents',
   'Deal Page',
+  'Banking',
 ];
 
 const spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page', 'Banking'];
