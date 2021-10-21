@@ -141,6 +141,8 @@ const BuildDetails = ({
     portfolio_company_securities: '',
     estimated_spv_quantity: '',
     minimum_investment: '',
+    international_companies: 'false',
+    international_investors: 'false',
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
@@ -163,7 +165,7 @@ const BuildDetails = ({
     sectors: [],
     representative: '',
   });
-
+  console.log(buildData);
   const [openTooltip, setOpenTooltip] = useState('');
 
   const handleTooltip = (id) => {
@@ -527,7 +529,72 @@ const BuildDetails = ({
       <Paper className={classes.paper}>
         <form noValidate autoComplete="off">
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-            4. Final
+            4. Demographics
+          </Typography>
+          <Grid container spacing={1} className={classes.inputGridContainer}>
+            <Grid className={classes.inputGridItem} item xs={6}>
+              <FormControl required variant="outlined" className={classes.formContainers}>
+                <Typography className={classes.formItemName}>
+                  Will you be investing into any international (Non US) companies?
+                  <ModalTooltip
+                    title="International Companies?"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={<Typography color="inherit">TBD</Typography>}
+                    openTooltip={openTooltip}
+                    id="international_companies"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={(e) => handleTooltip('international_companies')}
+                    />
+                  </ModalTooltip>
+                </Typography>
+                <ButtonSelector
+                  name="international_companies"
+                  onChange={handleChange}
+                  currentValue={buildData.international_companies}
+                  values={[
+                    { label: 'Yes', value: 'true' },
+                    { label: 'No', value: 'false' },
+                  ]}
+                />
+              </FormControl>
+            </Grid>
+            <Grid className={classes.inputGridItem} item xs={6}>
+              <FormControl required variant="outlined" className={classes.formContainers}>
+                <Typography className={classes.formItemName}>
+                  Will you have any international (Non US) investors?
+                  <ModalTooltip
+                    title="International Investors?"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={<Typography color="inherit">TBD</Typography>}
+                    openTooltip={openTooltip}
+                    id="international_investors"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={(e) => handleTooltip('international_investors')}
+                    />
+                  </ModalTooltip>
+                </Typography>
+                <ButtonSelector
+                  name="international_investors"
+                  onChange={handleChange}
+                  currentValue={buildData.international_investors}
+                  values={[
+                    { label: 'Yes', value: 'true' },
+                    { label: 'No', value: 'false' },
+                  ]}
+                />
+              </FormControl>
+            </Grid>
+          </Grid>
+        </form>
+      </Paper>
+      <Paper className={classes.paper}>
+        <form noValidate autoComplete="off">
+          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
+            6. Final
           </Typography>
           <FormControl required disabled variant="outlined" className={classes.formContainers}>
             <Typography className={classes.formItemName}>
