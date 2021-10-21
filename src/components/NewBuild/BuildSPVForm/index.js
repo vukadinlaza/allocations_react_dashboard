@@ -138,6 +138,7 @@ const BuildDetails = ({
     organization_id: organization._id,
     asset_type: 'startup',
     portfolio_company_name: '',
+    portfolio_company_securities: '',
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
@@ -158,6 +159,7 @@ const BuildDetails = ({
     side_letters: 'false',
     closing_date: moment(Date.now()).format('YYYY-MM-DD'),
     sectors: [],
+    representative: '',
   });
 
   const [openTooltip, setOpenTooltip] = useState('');
@@ -192,21 +194,27 @@ const BuildDetails = ({
     ) {
       const splitKeyName = target.name.split('_');
       const keyName = `${splitKeyName[0]}_${splitKeyName[1]}`;
-      setBuildData((prev) => ({
-        ...prev,
-        [keyName]: {
-          ...prev[keyName],
-          [splitKeyName[2] === 'type' ? 'type' : 'value']: target.value,
-        },
-      }));
-      // return;
+      setBuildData((prev) => {
+        const newBuildObject = {
+          ...prev,
+          [keyName]: {
+            ...prev[keyName],
+            [splitKeyName[2] === 'type' ? 'type' : 'value']: target.value,
+          },
+        };
+        localStorage.setItem('buildData', JSON.stringify(newBuildObject));
+        return newBuildObject;
+      });
     } else {
-      setBuildData((prev) => ({
-        ...prev,
-        [target.name]: target.value,
-      }));
+      setBuildData((prev) => {
+        const newBuildObject = {
+          ...prev,
+          [target.name]: target.value,
+        };
+        localStorage.setItem('buildData', JSON.stringify(newBuildObject));
+        return newBuildObject;
+      });
     }
-    localStorage.setItem('buildData', JSON.stringify(buildData));
   };
 
   return (

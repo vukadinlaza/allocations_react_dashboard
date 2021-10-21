@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Select from 'react-select';
-
 import HelpIcon from '@material-ui/icons/Help';
-import { TextField, Paper, Grid, FormControl, MenuItem } from '@material-ui/core';
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import { TextField, Paper, Grid, FormControl } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { toast } from 'react-toastify';
 import useStyles from '../../../BuildStyles';
@@ -124,15 +122,19 @@ export default function TypeSelector({
       }))
       .filter(({ value }) => !buildData.sectors.includes(value));
     const customStyles = {
-      multiValue: (styles, { data }) => ({
+      multiValue: (styles) => ({
         ...styles,
         backgroundColor: '#DAE8FF',
       }),
-      multiValueLabel: (styles, { data }) => ({
+      multiValueLabel: (styles) => ({
         ...styles,
         color: '#0461FF',
+        height: 37,
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: '96%',
       }),
-      multiValueRemove: (styles, { data }) => ({
+      multiValueRemove: (styles) => ({
         ...styles,
         color: '#0461FF',
       }),
@@ -166,21 +168,33 @@ export default function TypeSelector({
     );
   }
 
-  const securities = ['one', 'two', 'three'];
+  const securityTypes = [
+    'Series A Preferred Stock',
+    'Simple Agreement for Future Equity',
+    'Convertible Promissory Note',
+    'Other',
+  ];
+
   function SecuritiesSelector() {
     const customStyles = {
       control: (styles) => ({
         ...styles,
         height: 56,
       }),
+      placeholder: (styles) => ({
+        ...styles,
+        color: 'black',
+      }),
     };
+
     return (
       <Select
         id="portfolio_company_securities"
         label="Portfolio Company Securities"
         styles={customStyles}
-        options={securities.map((security) => ({ value: security, label: security })) || ''}
-        // value={securities.map((security) => ({ value: security, name: security })) || ''}
+        options={securityTypes.map((security) => ({ value: security, label: security })) || ''}
+        defaultValue={buildData.portfolio_company_securities}
+        placeholder={buildData.portfolio_company_securities}
         onChange={(option) => {
           const newEvent = {
             target: {
@@ -188,7 +202,6 @@ export default function TypeSelector({
               value: option.value,
             },
           };
-          console.log(newEvent.target.value);
           handleChange(newEvent);
         }}
       />
@@ -283,14 +296,6 @@ export default function TypeSelector({
               </Typography>
 
               <SecuritiesSelector />
-              {/* <TextField
-                value={buildData.portfolio_company_securities}
-                name="portfolio_company_securities"
-                onChange={handleChange}
-                className={classes.inputBox}
-                variant="outlined"
-                placeholder="SpaceX"
-              /> */}
             </FormControl>
           </Grid>
 
