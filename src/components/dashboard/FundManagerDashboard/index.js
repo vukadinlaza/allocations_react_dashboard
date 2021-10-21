@@ -384,7 +384,7 @@ const FundManagerDashboard = ({ classes, history }) => {
           </div>
         );
       case 'Banking':
-        return <Banking />;
+        return <Banking classes={classes} deal_id={dealData._id} />;
       default:
         return <p>No Data</p>;
     }
