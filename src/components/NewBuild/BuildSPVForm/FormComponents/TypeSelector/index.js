@@ -136,6 +136,10 @@ export default function TypeSelector({
         ...styles,
         color: '#0461FF',
       }),
+      control: (styles) => ({
+        ...styles,
+        height: 55,
+      }),
     };
 
     return (
@@ -163,6 +167,33 @@ export default function TypeSelector({
   }
 
   const securities = ['one', 'two', 'three'];
+  function SecuritiesSelector() {
+    const customStyles = {
+      control: (styles) => ({
+        ...styles,
+        height: 56,
+      }),
+    };
+    return (
+      <Select
+        id="portfolio_company_securities"
+        label="Portfolio Company Securities"
+        styles={customStyles}
+        options={securities.map((security) => ({ value: security, label: security })) || ''}
+        // value={securities.map((security) => ({ value: security, name: security })) || ''}
+        onChange={(option) => {
+          const newEvent = {
+            target: {
+              name: 'portfolio_company_securities',
+              value: option.value,
+            },
+          };
+          console.log(newEvent.target.value);
+          handleChange(newEvent);
+        }}
+      />
+    );
+  }
 
   return (
     <Paper className={classes.paper}>
@@ -250,26 +281,8 @@ export default function TypeSelector({
                   />
                 </ModalTooltip>
               </Typography>
-              <Select
-                id="portfolio_company_securities"
-                label="Portfolio Company Securities"
-                value={securities.map((security) => ({ value: security, name: security })) || ''}
-                onChange={handleChange}
-                // onChange={(option) => {
-                //   const newEvent = {
-                //     target: {
-                //       name: 'portfolio_company_securities',
-                //       value: option.map((security) => security.value),
-                //     },
-                //   };
-                //   handleChange(newEvent);
-                // }}
-              >
-                <MenuItem value="one">Series A Preferred Stock</MenuItem>
-                <MenuItem value="two">Simple Agreement for Future Equity</MenuItem>
-                <MenuItem value="three">Convertible Promissory Note</MenuItem>
-                <MenuItem value="four">Other</MenuItem>
-              </Select>
+
+              <SecuritiesSelector />
               {/* <TextField
                 value={buildData.portfolio_company_securities}
                 name="portfolio_company_securities"
