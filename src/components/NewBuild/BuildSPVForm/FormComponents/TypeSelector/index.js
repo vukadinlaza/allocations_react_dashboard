@@ -180,6 +180,7 @@ export default function TypeSelector({
       control: (styles) => ({
         ...styles,
         height: 56,
+        maxWidth: 568,
       }),
       placeholder: (styles, data) => ({
         ...styles,
@@ -208,13 +209,13 @@ export default function TypeSelector({
     );
   }
 
-  const dealStages = ['Pre-Seed', 'Seed', 'Series A', 'Series B', 'Series C', 'Series D+'];
-
   function DealStagesSelector() {
+    const dealStages = ['Pre-Seed', 'Seed', 'Series A', 'Series B', 'Series C', 'Series D+'];
     const customStyles = {
       control: (styles) => ({
         ...styles,
         height: 56,
+        maxWidth: 568,
       }),
       placeholder: (styles, data) => ({
         ...styles,
@@ -471,7 +472,11 @@ export default function TypeSelector({
                   <ModalTooltip
                     title="Deal Stages"
                     handleTooltip={handleTooltip}
-                    tooltipContent={<Typography color="inherit">TBD</Typography>}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        These are the different stages of funding for your SPV/Fund
+                      </Typography>
+                    }
                     openTooltip={openTooltip}
                     id="deal_stage"
                   >
@@ -483,6 +488,38 @@ export default function TypeSelector({
                 </Typography>
 
                 <DealStagesSelector />
+              </FormControl>
+            </Grid>
+            <Grid className={classes.inputGridItem} item xs={6}>
+              <FormControl required disabled variant="outlined" className={classes.formContainers}>
+                <Typography className={classes.formItemName}>
+                  Estimated number of SPVs in the next 12 months?
+                  <ModalTooltip
+                    title="SPV amount in the next 12 months"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        Should you select 5 or more SPVs, you will be eligible for a High Volume
+                        Partnership benefits (such as, custom name of your Master Series LLC, custom
+                        name of your SPVs, and others)
+                      </Typography>
+                    }
+                    openTooltip={openTooltip}
+                    id="estimated_spv_quantity"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={(e) => handleTooltip('estimated_spv_quantity')}
+                    />
+                  </ModalTooltip>
+                </Typography>
+                <TextField
+                  value={buildData.estimated_spv_quantity}
+                  name="estimated_spv_quantity"
+                  onChange={handleChange}
+                  className={classes.inputBox}
+                  variant="outlined"
+                />
               </FormControl>
             </Grid>
           </Grid>
