@@ -1,11 +1,11 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import DocumentUploadTask from './tasks/DocumentUploadTask';
-import SignTask from './tasks/SignTask';
-import TextTask from './tasks/TextTask';
-import GenericTask from './tasks/GenericTask';
-import ServiceTask from './tasks/ServiceTask';
-import styles from './styles';
+import DocumentUploadTask from './DocumentUploadTask';
+import SignTask from './SignTask';
+import TextTask from './TextTask';
+import GenericTask from './GenericTask';
+import ServiceTask from './ServiceTask';
+import styles from '../styles';
 
 const taskToComponent = {
   'fm-document-upload': DocumentUploadTask,

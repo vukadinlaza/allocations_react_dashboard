@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { TextField, InputAdornment, Button } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { withStyles } from '@material-ui/core/styles';
+import moment from 'moment';
 import { useHistory, useParams } from 'react-router';
-import AllocationsTable from '../utils/AllocationsTable';
-import MoreMenu from '../utils/MoreMenu';
-import { openInNewTab } from '../../utils/helpers';
-import styles from '../dashboard/InvestorDashboard/styles';
-import { nWithCommas } from '../../utils/numbers';
+import AllocationsTable from '../../../utils/AllocationsTable';
+import styles from '../../../dashboard/InvestorDashboard/styles';
 
 const spvHeaders = [
   {
@@ -25,14 +23,7 @@ const spvHeaders = [
     isSortable: true,
     align: 'center',
     alignHeader: true,
-  },
-  {
-    label: 'SIZE',
-    value: 'size',
-    type: 'size',
-    isSortable: true,
-    align: 'center',
-    alignHeader: true,
+    keyNotInData: true,
   },
   {
     label: 'STATUS',
@@ -43,7 +34,7 @@ const spvHeaders = [
     alignHeader: false,
   },
   {
-    label: 'CREATED AT DATE',
+    label: 'CREATED',
     value: 'created_at',
     type: 'created_at',
     isSortable: true,
@@ -56,6 +47,7 @@ const spvHeaders = [
     isSortable: true,
     align: 'center',
     alignHeader: true,
+    keyNotInData: true,
   },
   {
     label: 'MANAGE',
@@ -66,99 +58,36 @@ const spvHeaders = [
     alignHeader: false,
   },
 ];
-const fundHeaders = [
-  {
-    label: 'NAME',
-    value: 'spvName',
-    type: 'spvName',
-    isSortable: true,
-    align: 'left',
-    alignHeader: true,
-  },
-  {
-    label: 'RAISED',
-    value: 'size',
-    type: 'size',
-    isSortable: true,
-    align: 'center',
-    alignHeader: true,
-  },
-  {
-    label: 'MULTIPLE',
-    value: 'multiple',
-    type: 'multiple',
-    isSortable: true,
-    align: 'center',
-    alignHeader: true,
-  },
-  {
-    label: 'AUM',
-    value: 'aum',
-    type: 'aum',
-    isSortable: true,
-    align: 'center',
-    alignHeader: true,
-    keyNotInData: true,
-  },
-  {
-    label: 'STATUS',
-    value: 'status',
-    type: 'status',
-    isSortable: true,
-    align: 'right',
-    alignHeader: false,
-  },
-  {
-    label: 'CREATED AT DATE',
-    value: 'createdAt',
-    type: 'createdAt',
-    isSortable: true,
-    align: 'center',
-  },
-  {
-    label: 'FIRST CLOSE DATE',
-    value: 'firstClose',
-    type: 'firstClose',
-    isSortable: true,
-    align: 'center',
-    alignHeader: true,
-  },
-  {
-    label: 'FINAL CLOSE DATE',
-    value: 'finalClose',
-    type: 'finalClose',
-    isSortable: true,
-    align: 'center',
-    alignHeader: true,
-  },
-  {
-    label: 'MANAGE',
-    value: '_id',
-    type: '_id',
-    align: 'center',
-    isSortable: false,
-    alignHeader: false,
-  },
-];
 
 const getStatusColors = (status) => {
   switch (status) {
-    case 'Complete':
+    case 'build':
+      return { backgroundColor: '#C9EEC8', color: '#58CE46' };
+    case 'post-build':
+      return { backgroundColor: '#C9EEC8', color: '#58CE46' };
+    case 'entity':
+      return { backgroundColor: '#C9EEC8', color: '#58CE46' };
+    case 'post-entity':
+      return { backgroundColor: '#C9EEC8', color: '#58CE46' };
+    case 'pre-onboarding':
       return { backgroundColor: '#C9EEC8', color: '#58CE46' };
     case 'Onboarding':
-      return { backgroundColor: 'rgb(255, 4, 4, .20)', color: '#FF0404' };
-    case 'Closed':
+    case 'onboarding':
       return { backgroundColor: 'rgb(4, 97, 255, .25)', color: '#0461FF' };
+    case 'Closed':
+    case 'closed':
+      return { backgroundColor: 'rgb(255, 4, 4, .20)', color: '#FF0404' };
+    case 'Complete':
+      return { backgroundColor: '#C9EEC8', color: '#58CE46' };
     default:
       return { backgroundColor: 'rgba(0,0,0,0)', color: 'red' };
   }
 };
 
-const UserDocuments = ({ classes, data, type }) => {
+const DealsTable = ({ classes, deals }) => {
   const { org_slug } = useParams();
-  const headers = type === 'spvs' ? spvHeaders : fundHeaders;
+  const headers = spvHeaders;
   const history = useHistory();
-  const [userDocuments, setUserDocuments] = useState(data);
   const [searchTerm, setSearchTerm] = useState('');
 
   const getCellContent = (type, row, headerValue) => {
@@ -167,8 +96,6 @@ const UserDocuments = ({ classes, data, type }) => {
         return row.name;
       case 'company_name':
         return row.company_name;
-      case 'size':
-        return `$${nWithCommas(row.size)}`;
       case 'status':
         return (
           <div
@@ -183,17 +110,11 @@ const UserDocuments = ({ classes, data, type }) => {
           </div>
         );
       case 'created_at':
-        return row.created_at;
+        return moment(row.created_at).fromNow();
       case 'wire_deadline':
-        return row.dealParams.wireDeadline;
-      case 'firstClose':
-        return row.firstClose;
-      case 'finalClose':
-        return row.finalClose;
-      case 'aum':
-        return `$${nWithCommas(row.size * row.multiple)}`;
-      case 'multiple':
-        return `${row.multiple}x`;
+        return moment(row.dealParams.wireDeadline).isBefore(moment())
+          ? 'Closed'
+          : moment(row.dealParams.wireDeadline).format('dddd, MMMM Do YYYY');
       case 'manage':
         return (
           <Button
@@ -214,7 +135,7 @@ const UserDocuments = ({ classes, data, type }) => {
     setSearchTerm(e.target.value);
   };
 
-  const dataCopy = userDocuments.filter((doc) =>
+  const dataCopy = deals.filter((doc) =>
     `${doc.name} ${doc.portfolioCompany}`.toUpperCase().includes(searchTerm.toUpperCase()),
   );
 
@@ -243,4 +164,4 @@ const UserDocuments = ({ classes, data, type }) => {
   );
 };
 
-export default withStyles(styles)(UserDocuments);
+export default withStyles(styles)(DealsTable);

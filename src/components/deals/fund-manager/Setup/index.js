@@ -20,8 +20,8 @@ import { useLocation, withRouter } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import AllocationsLoader from '../../../utils/AllocationsLoader';
 import AllocationsTable from '../../../utils/AllocationsTable';
-import TaskList from './TaskList';
-import TaskAction from './TaskAction';
+import TaskList from './tasks/TaskList';
+import TaskAction from './tasks/TaskAction';
 import styles from './styles';
 
 const DEAL = gql`
@@ -57,18 +57,9 @@ const boxesHeaders = [
   { value: 'title', label: 'Name', align: 'left', alignHeader: true },
   { value: 'fundManager', label: 'Fund Manager', align: 'left', alignHeader: true },
   { value: 'status', label: 'Status', align: 'left', alignHeader: true, type: 'tag' },
-  // { value: 'timeline', label: 'Timeline Status', align: 'left', alignHeader: true, type: 'tag' },
   { value: 'type', label: 'Type', align: 'left', alignHeader: true },
   { value: 'wireDeadline', label: 'Wire Deadline', align: 'left', alignHeader: true },
 ];
-
-const taskTypes = {
-  docUpload: ['fm-document-upload', 'admin-document-upload'],
-  userTask: ['fm-document-signature'],
-  review: ['admin-review'],
-  text: ['admin-info', 'fm-info'],
-  automaticTasks: ['service'],
-};
 
 const PhaseList = ({ classes, phases, currentPhase, handlePhaseClick }) => {
   const getItemClass = (currentPhase, item, complete) => {
@@ -90,11 +81,11 @@ const PhaseList = ({ classes, phases, currentPhase, handlePhaseClick }) => {
         <Card className={classes.card}>
           <CardContent className={classes.cardContent}>
             <List component="div" disablePadding>
-              {phases.map((phase, i) => {
+              {phases.map((phase) => {
                 const complete = every(phase.tasks, { complete: true });
                 return (
                   <ListItem
-                    key={`phase-${i}`}
+                    key={phase._id}
                     button
                     className={getItemClass(currentPhase, phase, complete)}
                     onClick={() => handlePhaseClick(currentPhase, phase)}
@@ -125,7 +116,7 @@ const PhaseList = ({ classes, phases, currentPhase, handlePhaseClick }) => {
   );
 };
 
-const DealSetup = ({ match, classes }) => {
+const DealSetup = ({ classes }) => {
   const query = new URLSearchParams(useLocation().search);
 
   const { data, refetch: refetchDeal } = useQuery(DEAL, {
@@ -269,13 +260,6 @@ const DealSetup = ({ match, classes }) => {
             </Card>
           </Grid>
         )}
-
-        {/* {currentPhase.name === 'build' && <Build tasks={currentPhase.tasks} tasks={currentPhase.tasks} />}
-        {currentPhase.name === 'post-build' && <PostBuild tasks={currentPhase.tasks} />}
-        {currentPhase.name === 'entity' && <Entity tasks={currentPhase.tasks} />}
-        {currentPhase.name === 'post-entity' && <PostEntity tasks={currentPhase.tasks} />}
-        {currentPhase.name === 'pre-onboarding' && <PreOnboarding tasks={currentPhase.tasks} />}
-        {currentPhase.name === 'onboarding' && <Onboarding tasks={currentPhase.tasks} />} */}
       </Grid>
     </>
   );
