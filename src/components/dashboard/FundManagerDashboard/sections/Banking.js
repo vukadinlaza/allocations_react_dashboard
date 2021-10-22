@@ -1,8 +1,10 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import { useQuery, gql, useMutation } from '@apollo/client';
+import HelpIcon from '@material-ui/icons/Help';
 import AllocationsTable from '../../../utils/AllocationsTable';
 import Loader from '../../../utils/Loader';
+import { ModalTooltip } from '../widgets';
 
 const getCellContent = (type, row) => {
   switch (type) {
@@ -37,7 +39,7 @@ const ALLOCATE = gql`
   }
 `;
 
-const Banking = ({ classes, deal_id }) => {
+const Banking = ({ classes, deal_id, handleTooltip, openTooltip }) => {
   const { data, loading, refetch } = useQuery(REFERENCE_NUMBERS_BY_DEAL_ID, {
     variables: { deal_id },
   });
@@ -57,15 +59,39 @@ const Banking = ({ classes, deal_id }) => {
 
   if (data && data.referenceNumbersByDealId && data.referenceNumbersByDealId.length === 0)
     return (
-      <Button
-        variant="contained"
-        onClick={() => allocateRefNums()}
-        className={classes.createButton}
-        color="secondary"
-        style={{ margin: '1rem', backgroundColor: 'blue' }}
-      >
-        Allocate Reference Numbers
-      </Button>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <Button
+          variant="contained"
+          onClick={() => allocateRefNums()}
+          className={classes.createButton}
+          color="secondary"
+          style={{ margin: '1rem', backgroundColor: 'blue' }}
+        >
+          Allocate New Direction Reference Numbers
+        </Button>
+        <ModalTooltip
+          title="Allocate New Direction Reference Numbers"
+          handleTooltip={handleTooltip}
+          openTooltip={openTooltip}
+          tooltipContent={
+            <Typography color="inherit">
+              This button will allocate 100 New Direction Banking numbers to be used for
+              investments.
+            </Typography>
+          }
+          id="reference_numbers"
+        >
+          <HelpIcon
+            style={{
+              marginLeft: '0.2em',
+              cursor: 'pointer',
+              color: '#205DF5',
+              fontSize: '22px',
+            }}
+            onClick={() => handleTooltip('reference_numbers')}
+          />
+        </ModalTooltip>
+      </div>
     );
 
   return (
