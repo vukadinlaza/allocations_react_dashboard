@@ -135,7 +135,7 @@ const App = () => {
             />
 
             <PrivateRoute path="/investor/:id/home" component={UserHome} />
-            <PrivateRoute path="/submit-tax-docs" component={SubmitTaxDocs} />
+            <PrivateRoute path="/submit-tax-documents" component={SubmitTaxDocs} />
             <AdminRoute path="/investor/:id/investments" component={UserInvestments} />
             <AdminRoute path="/investors/new" component={InvestorNew} exact />
             <AdminRoute path="/investor/:id/edit" component={InvestorEdit} />

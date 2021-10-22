@@ -1,55 +1,12 @@
 import React, { useState } from 'react';
 import KYCModal from '../DealNextSteps/KYCModal';
-import { useQuery, useLazyQuery, gql } from '@apollo/client';
-import { MenuItem, Select, Button } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import DocIcon from '../../assets/buildDoc.svg';
 import './styles.scss';
 
-const GET_INVESTOR = gql`
-  query GetInvestor($email: String, $_id: String) {
-    investor(email: $email, _id: $_id) {
-      _id
-      first_name
-      last_name
-      entity_name
-      country
-      investor_type
-      signer_full_name
-      accredited_investor_status
-      email
-      documents
-      accredidation_status
-      investments {
-        _id
-        deal {
-          _id
-          slug
-        }
-        amount
-        value
-        submissionData {
-          country
-          state
-          investor_type
-          legalName
-          accredited_investor_status
-          fullName
-          title
-          investmentId
-          submissionId
-        }
-      }
-    }
-  }
-`;
-
 function SubmitTaxDocs() {
   const [open, setOpen] = useState(false);
-  const [taxForm, setTaxForm] = useState('W-9');
-  const [showTaxAsCompleted, setShowTaxAsCompleted] = useState(false);
-  const { data, loading, refetch } = useQuery(GET_INVESTOR, { fetchPolicy: 'network-only' });
-
-  console.log('!!!!', data);
+  const [activeForm, setActiveForm] = useState('W-9');
 
   const templateMap = {
     'W-9': { id: 'tpl_dM4QcQbyLckdPXgtyx', name: 'W9 Individual' },
@@ -59,15 +16,16 @@ function SubmitTaxDocs() {
   };
 
   const handleClick = (formName) => {
-    setTaxForm(formName);
+    setActiveForm(formName);
     setOpen(true);
   };
+
   const buttonItems = Object.entries(templateMap).map(([key, value]) => {
     return (
       <Button onClick={() => handleClick(key)} className="form-select-button">
         <div className="button-content">
-          <img src={DocIcon} />
-          <p>{value.name}</p>
+          <img className="button-img" src={DocIcon} />
+          <p className="button-text">{value.name}</p>
         </div>
       </Button>
     );
@@ -91,11 +49,11 @@ function SubmitTaxDocs() {
       <KYCModal
         open={open}
         setOpen={setOpen}
-        kycTemplateId={templateMap[taxForm].id}
-        kycTemplateName={taxForm}
-        refetch={refetch}
+        kycTemplateId={templateMap[activeForm].id}
+        kycTemplateName={activeForm}
+        refetch={() => {}}
         deal={{}}
-        setShowTaxAsCompleted={setShowTaxAsCompleted}
+        setShowTaxAsCompleted={() => {}}
       />
     </section>
   );
