@@ -4,7 +4,16 @@ import moment from 'moment';
 import _ from 'lodash';
 import countries from 'country-region-data';
 import HelpIcon from '@material-ui/icons/Help';
-import { Button, TextField, Paper, Grid, FormControl, ButtonGroup } from '@material-ui/core';
+import {
+  Button,
+  TextField,
+  Paper,
+  Grid,
+  FormControl,
+  ButtonGroup,
+  MenuItem,
+  Select as Select2,
+} from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Select from 'react-select';
 import BasicInfo from './FormComponents/TypeSelector/index';
@@ -153,8 +162,10 @@ const BuildDetails = ({
         : null,
     carry_fee_type: 'percent',
     carry_fee_value: '10',
+    custom_carry_fee: '',
     management_fee_type: 'percent',
     management_fee_value: '2',
+    custom_management_fee: '',
     custom_investment_agreement: 'false',
     management_fee_frequency: 'one-time',
     setup_cost: 20000,
@@ -202,10 +213,12 @@ const BuildDetails = ({
           carry_fee: {
             type: buildData.carry_fee_type,
             value: buildData.carry_fee_value,
+            custom: buildData.custom_carry_fee,
           },
           management_fee: {
             type: buildData.management_fee_type,
             value: buildData.management_fee_value,
+            custom: buildData.custom_management_fee,
           },
           custom_investment_agreement: buildData.custom_investment_agreement,
           management_fee_frequency: buildData.management_fee_frequency,
@@ -281,6 +294,7 @@ const BuildDetails = ({
       <Select
         id="international_companies_countries"
         label="International Companies by Country"
+        menuPosition="fixed"
         styles={customStyles}
         value={
           buildData.international_companies_countries.map((country) => ({
@@ -422,6 +436,7 @@ const BuildDetails = ({
                 />
               </FormControl>
             </Grid>
+
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
@@ -454,6 +469,42 @@ const BuildDetails = ({
                 />
               </FormControl>
             </Grid>
+
+            {buildData.management_fee_value === 'Custom' && (
+              <Grid className={classes.inputGridItem} item xs={6}>
+                <FormControl
+                  required
+                  disabled
+                  variant="outlined"
+                  className={classes.formContainers}
+                >
+                  <Typography className={classes.formItemName}>
+                    Enter your custom management fee
+                    <ModalTooltip
+                      title="Custom Management Fee"
+                      handleTooltip={handleTooltip}
+                      tooltipContent={<Typography color="inherit">TBD</Typography>}
+                      openTooltip={openTooltip}
+                      id="custom_management_fee"
+                    >
+                      <HelpIcon
+                        className={classes.helpIcon}
+                        onClick={(e) => handleTooltip('custom_management_fee')}
+                      />
+                    </ModalTooltip>
+                  </Typography>
+                  <TextField
+                    value={buildData.custom_management_fee}
+                    placeholder={'Custom Management Fee'}
+                    name="custom_management_fee"
+                    onChange={handleChange}
+                    className={classes.inputBox}
+                    variant="outlined"
+                  />
+                </FormControl>
+              </Grid>
+            )}
+
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
