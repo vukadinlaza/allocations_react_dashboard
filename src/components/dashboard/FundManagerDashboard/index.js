@@ -120,10 +120,10 @@ const fundTabs = [
   'Investors',
   'Documents',
   'Deal Page',
-  'Banking',
 ];
 
-const spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page', 'Banking'];
+const spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
+
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
@@ -155,6 +155,13 @@ const FundManagerDashboard = ({ classes, history }) => {
   const [getOrgDeals, { data: orgDealsData }] = useLazyQuery(ORG_OVERVIEW);
   const checkedDealName = encodeURIComponent(dealName);
   const checkedAtDealDataName = encodeURIComponent(atDealData?.name);
+
+  if (userProfile.admin) {
+    const bankingTabName = 'Banking';
+    // Only add banking tab if user is admin
+    if (!fundTabs.includes(bankingTabName)) fundTabs.push(bankingTabName);
+    if (!spvTabs.includes(bankingTabName)) spvTabs.push(bankingTabName);
+  }
 
   const { data: atDeal } = useFetch(
     OPS_ACCOUNTING,
@@ -385,7 +392,14 @@ const FundManagerDashboard = ({ classes, history }) => {
           </div>
         );
       case 'Banking':
-        return <Banking classes={classes} deal_id={dealData._id} />;
+        return (
+          <Banking
+            classes={classes}
+            deal_id={dealData._id}
+            openTooltip={openTooltip}
+            handleTooltip={handleTooltip}
+          />
+        );
       default:
         return <p>No Data</p>;
     }
