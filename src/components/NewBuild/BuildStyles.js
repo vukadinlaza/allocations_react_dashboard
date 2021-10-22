@@ -210,6 +210,13 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: '100%',
     },
   },
+  inputGridItemColumn: {
+    marginBottom: '37px',
+    flexDirection: 'column',
+    [theme.breakpoints.down(phone)]: {
+      maxWidth: '100%',
+    },
+  },
   finalInputBox: {
     width: '100%',
     minHeight: '167px',

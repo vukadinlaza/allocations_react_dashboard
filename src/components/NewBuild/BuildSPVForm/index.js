@@ -279,6 +279,7 @@ const BuildDetails = ({
       }),
       control: (styles) => ({
         ...styles,
+        marginTop: 50,
         minHeight: 56,
         width: phoneSize ? '325px' : '90%',
         maxWidth: 568,
@@ -320,7 +321,6 @@ const BuildDetails = ({
 
   function InternationalInvestorsCountriesSelector() {
     const countryNames = countries.map((c) => c.countryName);
-
     const customStyles = {
       multiValue: (styles) => ({
         ...styles,
@@ -340,6 +340,7 @@ const BuildDetails = ({
       }),
       control: (styles) => ({
         ...styles,
+        marginTop: 50,
         minHeight: 56,
         width: phoneSize ? '325px' : '90%',
         maxWidth: 568,
@@ -355,6 +356,7 @@ const BuildDetails = ({
       <Select
         id="international_investors_countries"
         label="International Companies by Country"
+        menuPosition="fixed"
         styles={customStyles}
         value={
           buildData.international_investors_countries.map((country) => ({
@@ -762,8 +764,13 @@ const BuildDetails = ({
                   ]}
                 />
               </FormControl>
+              {buildData.international_companies_status === 'true' && (
+                <FormControl required variant="outlined" className={classes.formContainers}>
+                  <InternationalCountrySelector />
+                </FormControl>
+              )}
             </Grid>
-            <Grid className={classes.inputGridItem} item xs={6}>
+            <Grid className={classes.inputGridItem} item xs={6} spacing={2}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
                   Will you have any international (Non US) investors?
@@ -797,22 +804,12 @@ const BuildDetails = ({
                   ]}
                 />
               </FormControl>
-            </Grid>
-
-            {buildData.international_companies_status === 'true' && (
-              <Grid className={classes.inputGridItem} item xs={6}>
-                <FormControl required variant="outlined" className={classes.formContainers}>
-                  <InternationalCountrySelector />
-                </FormControl>
-              </Grid>
-            )}
-            {buildData.international_investors_status === 'true' && (
-              <Grid className={classes.inputGridItem} item xs={6}>
+              {buildData.international_investors_status === 'true' && (
                 <FormControl required variant="outlined" className={classes.formContainers}>
                   <InternationalInvestorsCountriesSelector />
                 </FormControl>
-              </Grid>
-            )}
+              )}
+            </Grid>
           </Grid>
         </form>
       </Paper>
