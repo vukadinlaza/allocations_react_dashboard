@@ -232,6 +232,22 @@ const BuildDetails = ({
     const countryNames = countries.map((c) => c.countryName);
 
     const customStyles = {
+      multiValue: (styles) => ({
+        ...styles,
+        backgroundColor: '#DAE8FF',
+      }),
+      multiValueLabel: (styles) => ({
+        ...styles,
+        color: '#0461FF',
+        height: 37,
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: '96%',
+      }),
+      multiValueRemove: (styles) => ({
+        ...styles,
+        color: '#0461FF',
+      }),
       control: (styles) => ({
         ...styles,
         height: 56,
@@ -249,6 +265,12 @@ const BuildDetails = ({
         id="international_companies_countries"
         label="International Companies by Country"
         styles={customStyles}
+        value={
+          buildData.international_companies_countries.map((country) => ({
+            value: country,
+            label: country,
+          })) || ''
+        }
         options={countryNames.map((country) => ({ value: country, label: country })) || ''}
         defaultValue={buildData.international_companies_countries}
         placeholder={buildData.international_companies_countries}
@@ -256,11 +278,12 @@ const BuildDetails = ({
           const newEvent = {
             target: {
               name: 'international_companies_countries',
-              value: [option.value],
+              value: option.map((country) => country.value),
             },
           };
           handleChange(newEvent);
         }}
+        isMulti
       />
     );
   }
