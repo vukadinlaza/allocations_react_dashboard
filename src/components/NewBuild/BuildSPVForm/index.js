@@ -2,16 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import moment from 'moment';
 import _ from 'lodash';
+import countries from 'country-region-data';
 import HelpIcon from '@material-ui/icons/Help';
 import { Button, TextField, Paper, Grid, FormControl, ButtonGroup } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import Select from 'react-select';
 import BasicInfo from './FormComponents/TypeSelector/index';
 import UploadDocsModal from './FormComponents/UploadDocs/index';
-import useStyles from '../BuildStyles';
 import { useAuth } from '../../../auth/useAuth';
 import { phone } from '../../../utils/helpers';
 import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
 import { useCurrentOrganization } from '../../../state/current-organization';
+import useStyles from '../BuildStyles';
 
 const CREATE_BUILD = gql`
   mutation createBuild {
@@ -141,20 +143,18 @@ const BuildDetails = ({
     portfolio_company_securities: '',
     estimated_spv_quantity: '',
     minimum_investment: '',
-    international_companies: 'false',
-    international_investors: 'false',
+    international_companies_status: 'false',
+    international_companies_countries: [],
+    // international_investors_status: 'false',
+    // international_investors_countries: [],
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
         : null,
-    carry_fee: {
-      type: 'percent',
-      value: '10',
-    },
-    management_fee: {
-      type: 'percent',
-      value: '2',
-    },
+    carry_fee_type: 'percent',
+    carry_fee_value: '10',
+    management_fee_type: 'percent',
+    management_fee_value: '2',
     custom_investment_agreement: 'false',
     management_fee_frequency: 'one-time',
     setup_cost: 20000,
@@ -184,42 +184,86 @@ const BuildDetails = ({
       variables: {
         deal_id,
         payload: {
-          ...buildData,
+          organization_id: buildData.organization_id,
+          asset_type: buildData.asset_type,
+          portfolio_company_name: buildData.portfolio_company_name,
+          portfolio_company_securities: buildData.portfolio_company_securities,
+          estimated_spv_quantity: buildData.estimated_spv_quantity,
+          minimum_investment: buildData.minimum_investment,
+          international_companies: {
+            status: buildData.international_investors_status,
+            countries: buildData.international_investors_countries,
+          },
+          manager_name: buildData.manager_name,
+          carry_fee: {
+            type: buildData.carry_fee_type,
+            value: buildData.carry_fee_value,
+          },
+          management_fee: {
+            type: buildData.management_fee_type,
+            value: buildData.management_fee_value,
+          },
+          custom_investment_agreement: buildData.custom_investment_agreement,
+          management_fee_frequency: buildData.management_fee_frequency,
+          setup_cost: buildData.setup_cost,
+          offering_type: buildData.offering_type,
+          allocations_investment_advisor: buildData.allocations_investment_advisor,
+          side_letters: buildData.side_letters,
+          closing_date: buildData.closing_date,
+          sectors: buildData.sectors,
+          representative: buildData.representative,
         },
       },
     });
   };
 
   const handleChange = ({ target }) => {
-    if (
-      !target?.name?.includes('offering') &&
-      !target?.name?.includes('asset') &&
-      (target?.name?.includes('_type') || target?.name?.includes('_value'))
-    ) {
-      const splitKeyName = target.name.split('_');
-      const keyName = `${splitKeyName[0]}_${splitKeyName[1]}`;
-      setBuildData((prev) => {
-        const newBuildObject = {
-          ...prev,
-          [keyName]: {
-            ...prev[keyName],
-            [splitKeyName[2] === 'type' ? 'type' : 'value']: target.value,
-          },
-        };
-        localStorage.setItem('buildData', JSON.stringify(newBuildObject));
-        return newBuildObject;
-      });
-    } else {
-      setBuildData((prev) => {
-        const newBuildObject = {
-          ...prev,
-          [target.name]: target.value,
-        };
-        localStorage.setItem('buildData', JSON.stringify(newBuildObject));
-        return newBuildObject;
-      });
-    }
+    setBuildData((prev) => {
+      const newBuildObject = {
+        ...prev,
+        [target.name]: target.value,
+      };
+      localStorage.setItem('buildData', JSON.stringify(newBuildObject));
+      return newBuildObject;
+    });
   };
+
+  function CountrySelector() {
+    const countryNames = countries.map((c) => c.countryName);
+
+    const customStyles = {
+      control: (styles) => ({
+        ...styles,
+        height: 56,
+        maxWidth: 568,
+        cursor: 'pointer',
+      }),
+      placeholder: (styles, data) => ({
+        ...styles,
+        color: data.children !== 'Select...' ? '#000' : '#999',
+      }),
+    };
+
+    return (
+      <Select
+        id="international_companies_countries"
+        label="International Companies by Country"
+        styles={customStyles}
+        options={countryNames.map((country) => ({ value: country, label: country })) || ''}
+        defaultValue={buildData.international_companies_countries}
+        placeholder={buildData.international_companies_countries}
+        onChange={(option) => {
+          const newEvent = {
+            target: {
+              name: 'international_companies_countries',
+              value: [option.value],
+            },
+          };
+          handleChange(newEvent);
+        }}
+      />
+    );
+  }
 
   return (
     <>
@@ -256,18 +300,18 @@ const BuildDetails = ({
                       </Typography>
                     }
                     openTooltip={openTooltip}
-                    id="management_fee"
+                    id="management_fee_value"
                   >
                     <HelpIcon
                       className={classes.helpIcon}
-                      onClick={(e) => handleTooltip('management_fee')}
+                      onClick={(e) => handleTooltip('management_fee_value')}
                     />
                   </ModalTooltip>
                 </Typography>
                 <ButtonSelector
                   name="management_fee_value"
                   onChange={handleChange}
-                  currentValue={buildData.management_fee.value}
+                  currentValue={buildData.management_fee_value}
                   gridCol={phoneSize ? 'repeat(3, 1fr)' : 'repeat(4, 1fr) 1.5fr'}
                   values={[
                     { label: '0%', value: '0' },
@@ -325,18 +369,18 @@ const BuildDetails = ({
                       </Typography>
                     }
                     openTooltip={openTooltip}
-                    id="carry_fee"
+                    id="carry_fee_value"
                   >
                     <HelpIcon
                       className={classes.helpIcon}
-                      onClick={(e) => handleTooltip('carry_fee')}
+                      onClick={(e) => handleTooltip('carry_fee_value')}
                     />
                   </ModalTooltip>
                 </Typography>
                 <ButtonSelector
                   name="carry_fee_value"
                   onChange={handleChange}
-                  currentValue={buildData.carry_fee.value}
+                  currentValue={buildData.carry_fee_value}
                   gridCol={phoneSize ? 'repeat(3, 1fr)' : 'repeat(4, 1fr) 1.5fr'}
                   values={[
                     { label: '0%', value: '0' },
@@ -537,37 +581,56 @@ const BuildDetails = ({
                 <Typography className={classes.formItemName}>
                   Will you be investing into any international (Non US) companies?
                   <ModalTooltip
-                    title="International Companies?"
+                    title="International Companies"
                     handleTooltip={handleTooltip}
-                    tooltipContent={<Typography color="inherit">TBD</Typography>}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        If this SPV/Fund will invest into companies located outside the United
+                        States, please select Yes to this question followed by the applicable
+                        country.
+                      </Typography>
+                    }
                     openTooltip={openTooltip}
-                    id="international_companies"
+                    id="international_companies_status"
                   >
                     <HelpIcon
                       className={classes.helpIcon}
-                      onClick={(e) => handleTooltip('international_companies')}
+                      onClick={(e) => handleTooltip('international_companies_status')}
                     />
                   </ModalTooltip>
                 </Typography>
                 <ButtonSelector
-                  name="international_companies"
+                  name="international_companies_status"
                   onChange={handleChange}
-                  currentValue={buildData.international_companies}
+                  currentValue={buildData.international_companies_status}
+                  // why are we using strings instead of booleans?
                   values={[
                     { label: 'Yes', value: 'true' },
                     { label: 'No', value: 'false' },
                   ]}
                 />
               </FormControl>
+              {buildData.international_companies_status === 'true' && (
+                <Grid className={classes.inputGridItem} item xs={6}>
+                  <FormControl required variant="outlined" className={classes.formContainers}>
+                    <CountrySelector />
+                  </FormControl>
+                </Grid>
+              )}
             </Grid>
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
                   Will you have any international (Non US) investors?
                   <ModalTooltip
-                    title="International Investors?"
+                    title="International Investors"
                     handleTooltip={handleTooltip}
-                    tooltipContent={<Typography color="inherit">TBD</Typography>}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        If this SPV/Fund will have investors located outside the United States,
+                        please select Yes to this question followed by the applicable country.
+                      </Typography>
+                    }
                     openTooltip={openTooltip}
                     id="international_investors"
                   >
