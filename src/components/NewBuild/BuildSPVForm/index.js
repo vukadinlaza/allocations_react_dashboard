@@ -145,8 +145,8 @@ const BuildDetails = ({
     minimum_investment: '',
     international_companies_status: 'false',
     international_companies_countries: [],
-    // international_investors_status: 'false',
-    // international_investors_countries: [],
+    international_investors_status: 'false',
+    international_investors_countries: [],
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
@@ -222,17 +222,29 @@ const BuildDetails = ({
   };
 
   const handleChange = ({ target }) => {
+    const isNotInternational =
+      target.name === 'international_companies_status' && (target.value === 'false' || 'unknown');
+    const isNotInternationalInvestors =
+      target.name === 'international_investors_status' && (target.value === 'false' || 'unknown');
+
     setBuildData((prev) => {
       const newBuildObject = {
         ...prev,
+        international_companies_countries: isNotInternational
+          ? []
+          : prev.international_companies_countries,
+        international_investors_countries: isNotInternationalInvestors
+          ? []
+          : prev.international_investors_countries,
         [target.name]: target.value,
       };
+
       localStorage.setItem('buildData', JSON.stringify(newBuildObject));
       return newBuildObject;
     });
   };
 
-  function CountrySelector() {
+  function InternationalCountrySelector() {
     const countryNames = countries.map((c) => c.countryName);
 
     const customStyles = {
@@ -254,7 +266,8 @@ const BuildDetails = ({
       }),
       control: (styles) => ({
         ...styles,
-        height: 56,
+        minHeight: 56,
+        width: phoneSize ? '325px' : '90%',
         maxWidth: 568,
         cursor: 'pointer',
       }),
@@ -276,12 +289,71 @@ const BuildDetails = ({
           })) || ''
         }
         options={countryNames.map((country) => ({ value: country, label: country })) || ''}
-        defaultValue={buildData.international_companies_countries}
-        placeholder={buildData.international_companies_countries}
+        placeholder={'Select...' || buildData.international_companies_countries}
         onChange={(option) => {
           const newEvent = {
             target: {
               name: 'international_companies_countries',
+              value: option.map((country) => country.value),
+            },
+          };
+          handleChange(newEvent);
+        }}
+        isMulti
+      />
+    );
+  }
+
+  function InternationalInvestorsCountriesSelector() {
+    const countryNames = countries.map((c) => c.countryName);
+
+    const customStyles = {
+      multiValue: (styles) => ({
+        ...styles,
+        backgroundColor: '#DAE8FF',
+      }),
+      multiValueLabel: (styles) => ({
+        ...styles,
+        color: '#0461FF',
+        height: 37,
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: '96%',
+      }),
+      multiValueRemove: (styles) => ({
+        ...styles,
+        color: '#0461FF',
+      }),
+      control: (styles) => ({
+        ...styles,
+        minHeight: 56,
+        width: phoneSize ? '325px' : '90%',
+        maxWidth: 568,
+        cursor: 'pointer',
+      }),
+      placeholder: (styles, data) => ({
+        ...styles,
+        color: data.children !== 'Select...' ? '#000' : '#999',
+      }),
+    };
+
+    return (
+      <Select
+        id="international_investors_countries"
+        label="International Companies by Country"
+        styles={customStyles}
+        value={
+          buildData.international_investors_countries.map((country) => ({
+            value: country,
+            label: country,
+          })) || ''
+        }
+        options={countryNames.map((country) => ({ value: country, label: country })) || ''}
+        placeholder={'Select...' || buildData.international_investors_countries}
+        onChange={(option) => {
+          const newEvent = {
+            target: {
+              name: 'international_investors_countries',
               value: option.map((country) => country.value),
             },
           };
@@ -628,22 +700,17 @@ const BuildDetails = ({
                 </Typography>
                 <ButtonSelector
                   name="international_companies_status"
+                  gridCol="1fr 1fr 1fr"
                   onChange={handleChange}
                   currentValue={buildData.international_companies_status}
                   // why are we using strings instead of booleans?
                   values={[
                     { label: 'Yes', value: 'true' },
                     { label: 'No', value: 'false' },
+                    { label: 'Unknown', value: 'unknown' },
                   ]}
                 />
               </FormControl>
-              {buildData.international_companies_status === 'true' && (
-                <Grid className={classes.inputGridItem} item xs={6}>
-                  <FormControl required variant="outlined" className={classes.formContainers}>
-                    <CountrySelector />
-                  </FormControl>
-                </Grid>
-              )}
             </Grid>
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
@@ -659,25 +726,42 @@ const BuildDetails = ({
                       </Typography>
                     }
                     openTooltip={openTooltip}
-                    id="international_investors"
+                    id="international_investors_status"
                   >
                     <HelpIcon
                       className={classes.helpIcon}
-                      onClick={(e) => handleTooltip('international_investors')}
+                      onClick={(e) => handleTooltip('international_investors_status')}
                     />
                   </ModalTooltip>
                 </Typography>
                 <ButtonSelector
-                  name="international_investors"
+                  name="international_investors_status"
+                  gridCol="1fr 1fr 1fr"
                   onChange={handleChange}
-                  currentValue={buildData.international_investors}
+                  currentValue={buildData.international_investors_status}
                   values={[
                     { label: 'Yes', value: 'true' },
                     { label: 'No', value: 'false' },
+                    { label: 'Unknown', value: 'unknown' },
                   ]}
                 />
               </FormControl>
             </Grid>
+
+            {buildData.international_companies_status === 'true' && (
+              <Grid className={classes.inputGridItem} item xs={6}>
+                <FormControl required variant="outlined" className={classes.formContainers}>
+                  <InternationalCountrySelector />
+                </FormControl>
+              </Grid>
+            )}
+            {buildData.international_investors_status === 'true' && (
+              <Grid className={classes.inputGridItem} item xs={6}>
+                <FormControl required variant="outlined" className={classes.formContainers}>
+                  <InternationalInvestorsCountriesSelector />
+                </FormControl>
+              </Grid>
+            )}
           </Grid>
         </form>
       </Paper>
