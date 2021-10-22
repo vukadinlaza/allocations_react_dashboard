@@ -140,7 +140,7 @@ export default function TypeSelector({
       }),
       control: (styles) => ({
         ...styles,
-        height: 56,
+        minHeight: 56,
         cursor: 'pointer',
       }),
     };
