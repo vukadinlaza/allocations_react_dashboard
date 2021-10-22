@@ -171,6 +171,7 @@ const BuildDetails = ({
     setup_cost: 20000,
     offering_type: '506b',
     allocations_investment_advisor: 'true',
+    advisor_name: '',
     side_letters: 'false',
     closing_date: moment(Date.now()).format('YYYY-MM-DD'),
     sectors: [],
@@ -225,6 +226,7 @@ const BuildDetails = ({
           setup_cost: buildData.setup_cost,
           offering_type: buildData.offering_type,
           allocations_investment_advisor: buildData.allocations_investment_advisor,
+          advisor_name: buildData.advisor_name,
           side_letters: buildData.side_letters,
           closing_date: buildData.closing_date,
           sectors: buildData.sectors,
@@ -259,7 +261,7 @@ const BuildDetails = ({
 
   function InternationalCountrySelector() {
     const countryNames = countries.map((c) => c.countryName);
-
+    const placeHolder = 'Please select which countries';
     const customStyles = {
       multiValue: (styles) => ({
         ...styles,
@@ -287,7 +289,7 @@ const BuildDetails = ({
       }),
       placeholder: (styles, data) => ({
         ...styles,
-        color: data.children !== 'Select...' ? '#000' : '#999',
+        color: data.children === placeHolder ? '#999' : '#000',
       }),
     };
 
@@ -304,7 +306,7 @@ const BuildDetails = ({
           })) || ''
         }
         options={countryNames.map((country) => ({ value: country, label: country })) || ''}
-        placeholder={'Select...' || buildData.international_companies_countries}
+        placeholder={placeHolder || buildData.international_companies_countries}
         onChange={(option) => {
           const newEvent = {
             target: {
@@ -321,6 +323,7 @@ const BuildDetails = ({
 
   function InternationalInvestorsCountriesSelector() {
     const countryNames = countries.map((c) => c.countryName);
+    const placeHolder = 'Please select which countries';
     const customStyles = {
       multiValue: (styles) => ({
         ...styles,
@@ -348,7 +351,7 @@ const BuildDetails = ({
       }),
       placeholder: (styles, data) => ({
         ...styles,
-        color: data.children !== 'Select...' ? '#000' : '#999',
+        color: data.children === placeHolder ? '#999' : '#000',
       }),
     };
 
@@ -365,7 +368,7 @@ const BuildDetails = ({
           })) || ''
         }
         options={countryNames.map((country) => ({ value: country, label: country })) || ''}
-        placeholder={'Select...' || buildData.international_investors_countries}
+        placeholder={placeHolder || buildData.international_investors_countries}
         onChange={(option) => {
           const newEvent = {
             target: {
@@ -437,6 +440,39 @@ const BuildDetails = ({
                   ]}
                 />
               </FormControl>
+              {buildData.management_fee_value === 'Custom' && (
+                <FormControl
+                  required
+                  disabled
+                  variant="outlined"
+                  className={classes.formContainers}
+                  style={{ marginTop: '40px' }}
+                >
+                  <Typography className={classes.formItemName}>
+                    Enter your custom management fee
+                    <ModalTooltip
+                      title="Custom Management Fee"
+                      handleTooltip={handleTooltip}
+                      tooltipContent={<Typography color="inherit">TBD</Typography>}
+                      openTooltip={openTooltip}
+                      id="custom_management_fee"
+                    >
+                      <HelpIcon
+                        className={classes.helpIcon}
+                        onClick={(e) => handleTooltip('custom_management_fee')}
+                      />
+                    </ModalTooltip>
+                  </Typography>
+                  <TextField
+                    value={buildData.custom_management_fee}
+                    placeholder={'Custom Management Fee'}
+                    name="custom_management_fee"
+                    onChange={handleChange}
+                    className={classes.inputBox}
+                    variant="outlined"
+                  />
+                </FormControl>
+              )}
             </Grid>
 
             <Grid className={classes.inputGridItem} item xs={6}>
@@ -471,41 +507,6 @@ const BuildDetails = ({
                 />
               </FormControl>
             </Grid>
-
-            {buildData.management_fee_value === 'Custom' && (
-              <Grid className={classes.inputGridItem} item xs={6}>
-                <FormControl
-                  required
-                  disabled
-                  variant="outlined"
-                  className={classes.formContainers}
-                >
-                  <Typography className={classes.formItemName}>
-                    Enter your custom management fee
-                    <ModalTooltip
-                      title="Custom Management Fee"
-                      handleTooltip={handleTooltip}
-                      tooltipContent={<Typography color="inherit">TBD</Typography>}
-                      openTooltip={openTooltip}
-                      id="custom_management_fee"
-                    >
-                      <HelpIcon
-                        className={classes.helpIcon}
-                        onClick={(e) => handleTooltip('custom_management_fee')}
-                      />
-                    </ModalTooltip>
-                  </Typography>
-                  <TextField
-                    value={buildData.custom_management_fee}
-                    placeholder={'Custom Management Fee'}
-                    name="custom_management_fee"
-                    onChange={handleChange}
-                    className={classes.inputBox}
-                    variant="outlined"
-                  />
-                </FormControl>
-              </Grid>
-            )}
 
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
@@ -543,6 +544,39 @@ const BuildDetails = ({
                   ]}
                 />
               </FormControl>
+              {buildData.carry_fee_value === 'Custom' && (
+                <FormControl
+                  required
+                  disabled
+                  variant="outlined"
+                  className={classes.formContainers}
+                  style={{ marginTop: '40px' }}
+                >
+                  <Typography className={classes.formItemName}>
+                    Enter your custom carry fee
+                    <ModalTooltip
+                      title="Custom Carry Fee"
+                      handleTooltip={handleTooltip}
+                      tooltipContent={<Typography color="inherit">TBD</Typography>}
+                      openTooltip={openTooltip}
+                      id="custom_carry_fee"
+                    >
+                      <HelpIcon
+                        className={classes.helpIcon}
+                        onClick={(e) => handleTooltip('custom_carry_fee')}
+                      />
+                    </ModalTooltip>
+                  </Typography>
+                  <TextField
+                    value={buildData.custom_carry_fee}
+                    placeholder={'Custom Carry Fee'}
+                    name="custom_carry_fee"
+                    onChange={handleChange}
+                    className={classes.inputBox}
+                    variant="outlined"
+                  />
+                </FormControl>
+              )}
             </Grid>
 
             <Grid className={classes.inputGridItem} item xs={6}>
@@ -651,6 +685,39 @@ const BuildDetails = ({
                   ]}
                 />
               </FormControl>
+              {buildData.allocations_investment_advisor === 'false' && (
+                <FormControl
+                  required
+                  disabled
+                  variant="outlined"
+                  className={classes.formContainers}
+                  style={{ marginTop: '40px' }}
+                >
+                  <Typography className={classes.formItemName}>
+                    Please enter your advisor name
+                    <ModalTooltip
+                      title="Advisor Name"
+                      handleTooltip={handleTooltip}
+                      tooltipContent={<Typography color="inherit">TBD</Typography>}
+                      openTooltip={openTooltip}
+                      id="advisor_name"
+                    >
+                      <HelpIcon
+                        className={classes.helpIcon}
+                        onClick={(e) => handleTooltip('advisor_name')}
+                      />
+                    </ModalTooltip>
+                  </Typography>
+                  <TextField
+                    value={buildData.advisor_name}
+                    placeholder={'Advisor Name'}
+                    name="advisor_name"
+                    onChange={handleChange}
+                    className={classes.inputBox}
+                    variant="outlined"
+                  />
+                </FormControl>
+              )}
             </Grid>
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
