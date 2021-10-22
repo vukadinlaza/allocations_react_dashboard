@@ -191,6 +191,10 @@ const BuildDetails = ({
           estimated_spv_quantity: buildData.estimated_spv_quantity,
           minimum_investment: buildData.minimum_investment,
           international_companies: {
+            status: buildData.international_companies_status,
+            countries: buildData.international_companies_countries,
+          },
+          international_investors: {
             status: buildData.international_investors_status,
             countries: buildData.international_investors_countries,
           },
