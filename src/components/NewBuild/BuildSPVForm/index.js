@@ -151,6 +151,7 @@ const BuildDetails = ({
     portfolio_company_name: '',
     portfolio_company_securities: '',
     estimated_spv_quantity: '',
+    master_series_name: '',
     minimum_investment: '',
     international_companies_status: 'false',
     international_companies_countries: [],
@@ -201,6 +202,7 @@ const BuildDetails = ({
           portfolio_company_name: buildData.portfolio_company_name,
           portfolio_company_securities: buildData.portfolio_company_securities,
           estimated_spv_quantity: buildData.estimated_spv_quantity,
+          master_series_name: buildData.master_series_name,
           minimum_investment: buildData.minimum_investment,
           international_companies: {
             status: buildData.international_companies_status,
