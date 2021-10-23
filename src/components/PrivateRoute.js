@@ -9,7 +9,7 @@ import { useAuth } from '../auth/useAuth';
 
 const connection = process.env.NODE_ENV === 'production' ? 'theventurecollective' : 'tvc';
 const PrivateRoute = ({ component, ...args }) => {
-  const { isAuthenticated, userProfile } = useAuth();
+  const { isAuthenticated, loading, userProfile } = useAuth();
   const { search, pathname } = useLocation();
   const isTvc = pathname.includes('theventurecollective');
   let decodedParams = {};
@@ -25,7 +25,7 @@ const PrivateRoute = ({ component, ...args }) => {
 
   const FlagComponent = withLDProvider({
     clientSideID: process.env.REACT_APP_LAUNCH_DARKLY_ID,
-    user: isAuthenticated ? launchDarklyUser : null,
+    user: isAuthenticated && !loading ? launchDarklyUser : null,
   })(component);
 
   return (
