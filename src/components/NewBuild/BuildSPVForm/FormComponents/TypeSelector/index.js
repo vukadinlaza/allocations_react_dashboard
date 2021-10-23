@@ -141,6 +141,7 @@ export default function TypeSelector({
       control: (styles) => ({
         ...styles,
         minHeight: 56,
+        maxWidth: 1208,
         cursor: 'pointer',
       }),
     };
@@ -526,7 +527,36 @@ export default function TypeSelector({
               </FormControl>
             </Grid>
           </Grid>
-
+          {buildData.estimated_spv_quantity >= 5 && (
+            <Grid className={classes.inputGridItem} item xs={12}>
+              <FormControl required disabled variant="outlined" className={classes.formContainers}>
+                <Typography className={classes.formItemName}>
+                  Master Series Name
+                  <ModalTooltip
+                    title="Master Series Name"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={<Typography color="inherit">TBD</Typography>}
+                    openTooltip={openTooltip}
+                    id="master_series_name"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={(e) => handleTooltip('master_series_name')}
+                    />
+                  </ModalTooltip>
+                </Typography>
+                <TextField
+                  value={buildData.master_series_name}
+                  // placeholder={'master series name'}
+                  style={{ maxWidth: '100% !important' }}
+                  name="master_series_name"
+                  onChange={handleChange}
+                  className={`${classes.inputBox} ${classes.wideInputBox}`}
+                  variant="outlined"
+                />
+              </FormControl>
+            </Grid>
+          )}
           <Grid className={classes.inputGridItem} item xs={12}>
             <Typography className={classes.formItemName}>
               Sector(s) <HelpIcon className={classes.helpIcon} />

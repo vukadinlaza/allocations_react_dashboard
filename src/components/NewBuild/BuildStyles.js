@@ -172,6 +172,11 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '568px',
     width: '100%',
   },
+
+  wideInputBox: {
+    maxWidth: '1206px',
+  },
+
   inputButton: {
     width: '180px',
     height: '58px',
