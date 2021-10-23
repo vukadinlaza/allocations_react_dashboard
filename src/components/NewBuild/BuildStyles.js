@@ -264,7 +264,7 @@ const useStyles = makeStyles((theme) => ({
   selectorButton: {
     fontSize: '.8em',
     color: 'black',
-    height: '69px',
+    height: '68px',
     border: '1px solid #d3d3d3 !important',
     backgroundColor: '#ffffff',
     [theme.breakpoints.down(phone)]: {
