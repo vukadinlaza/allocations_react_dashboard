@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, Typography } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Button, Typography, TextField } from '@material-ui/core';
 import { useQuery, gql, useMutation } from '@apollo/client';
 import HelpIcon from '@material-ui/icons/Help';
 import AllocationsTable from '../../../utils/AllocationsTable';
@@ -39,12 +39,45 @@ const ALLOCATE = gql`
   }
 `;
 
-const Banking = ({ classes, deal_id, handleTooltip, openTooltip }) => {
+const UPDATE_DEAL = gql`
+  mutation updateDeal($org: String!, $deal: DealInput!) {
+    updateDeal(deal: $deal, org: $org) {
+      _id
+    }
+  }
+`;
+
+const Banking = ({ classes, deal_id, handleTooltip, openTooltip, orgSlug }) => {
+  // const handleChange = () => (e, newValue) => {
+  //   console.log(e, newValue);
+  //   if (e) {
+  //     e.persist();
+  //   }
+
+  //   setNDvirtualAccountNum(newValue);
+  //   console.log(newValue);
+  // }
+
+  const [NDvirtualAccountNum, setNDvirtualAccountNum] = useState('');
+
   const { data, loading, refetch } = useQuery(REFERENCE_NUMBERS_BY_DEAL_ID, {
     variables: { deal_id },
   });
   const [allocateRefNums, { loading: allocateLoading }] = useMutation(ALLOCATE, {
     variables: { deal_id },
+    onCompleted: () => {
+      refetch();
+    },
+  });
+
+  const [updateDeal] = useMutation(UPDATE_DEAL, {
+    variables: {
+      deal: {
+        _id: deal_id,
+        nd_virtual_account_number: NDvirtualAccountNum,
+      },
+      org: orgSlug,
+    },
     onCompleted: () => {
       refetch();
     },
@@ -60,37 +93,48 @@ const Banking = ({ classes, deal_id, handleTooltip, openTooltip }) => {
   if (data && data.referenceNumbersByDealId && data.referenceNumbersByDealId.length === 0)
     return (
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <Button
-          variant="contained"
-          onClick={() => allocateRefNums()}
-          className={classes.createButton}
-          color="secondary"
-          style={{ margin: '1rem', backgroundColor: 'blue' }}
-        >
-          Allocate New Direction Reference Numbers
-        </Button>
-        <ModalTooltip
-          title="Allocate New Direction Reference Numbers"
-          handleTooltip={handleTooltip}
-          openTooltip={openTooltip}
-          tooltipContent={
-            <Typography color="inherit">
-              This button will allocate 100 New Direction Banking numbers to be used for
-              investments.
-            </Typography>
-          }
-          id="reference_numbers"
-        >
-          <HelpIcon
-            style={{
-              marginLeft: '0.2em',
-              cursor: 'pointer',
-              color: '#205DF5',
-              fontSize: '22px',
-            }}
-            onClick={() => handleTooltip('reference_numbers')}
+        <div>
+          <Button
+            variant="contained"
+            onClick={() => allocateRefNums()}
+            className={classes.createButton}
+            color="secondary"
+            style={{ margin: '1rem', backgroundColor: 'blue' }}
+          >
+            Allocate New Direction Reference Numbers
+          </Button>
+          <ModalTooltip
+            title="Allocate New Direction Reference Numbers"
+            handleTooltip={handleTooltip}
+            openTooltip={openTooltip}
+            tooltipContent={
+              <Typography color="inherit">
+                This button will allocate 100 New Direction Banking numbers to be used for
+                investments.
+              </Typography>
+            }
+            id="reference_numbers"
+          >
+            <HelpIcon
+              style={{
+                marginLeft: '0.2em',
+                cursor: 'pointer',
+                color: '#205DF5',
+                fontSize: '22px',
+              }}
+              onClick={() => handleTooltip('reference_numbers')}
+            />
+          </ModalTooltip>
+        </div>
+        <div>
+          <TextField
+            variant="outlined"
+            placeholder="New Directions virtual account number"
+            value={NDvirtualAccountNum}
+            onChange={(event) => setNDvirtualAccountNum(event.target.value)}
           />
-        </ModalTooltip>
+          <Button onClick={updateDeal}>Save</Button>
+        </div>
       </div>
     );
 
