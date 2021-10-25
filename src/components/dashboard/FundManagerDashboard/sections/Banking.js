@@ -48,16 +48,6 @@ const UPDATE_DEAL = gql`
 `;
 
 const Banking = ({ classes, deal_id, handleTooltip, openTooltip, orgSlug }) => {
-  // const handleChange = () => (e, newValue) => {
-  //   console.log(e, newValue);
-  //   if (e) {
-  //     e.persist();
-  //   }
-
-  //   setNDvirtualAccountNum(newValue);
-  //   console.log(newValue);
-  // }
-
   const [NDvirtualAccountNum, setNDvirtualAccountNum] = useState('');
 
   const { data, loading, refetch } = useQuery(REFERENCE_NUMBERS_BY_DEAL_ID, {
