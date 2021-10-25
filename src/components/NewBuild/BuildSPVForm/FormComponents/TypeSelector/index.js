@@ -543,17 +543,17 @@ export default function TypeSelector({
                       </Typography>
                     }
                     openTooltip={openTooltip}
-                    id="master_series_name"
+                    id="master_series"
                   >
                     <HelpIcon
                       className={classes.helpIcon}
-                      onClick={(e) => handleTooltip('master_series_name')}
+                      onClick={(e) => handleTooltip('master_series')}
                     />
                   </ModalTooltip>
                 </Typography>
                 <TextField
-                  value={buildData.master_series_name}
-                  name="master_series_name"
+                  value={buildData.master_series}
+                  name="master_series"
                   onChange={handleChange}
                   className={`${classes.inputBox} ${classes.wideInputBox}`}
                   variant="outlined"

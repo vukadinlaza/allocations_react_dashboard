@@ -244,10 +244,20 @@ const BuildDetails = ({
       target.name === 'international_companies_status' && (target.value === 'false' || 'unknown');
     const isNotInternationalInvestors =
       target.name === 'international_investors_status' && (target.value === 'false' || 'unknown');
+    const isNotMasterSeries = target.name === 'estimated_spv_quantity' && target.value < 5;
+    const isAllocationsTheAdvisor =
+      target.name === 'allocations_investment_advisor' && target.value;
+    const isNotCustomManagementFee =
+      target.name === 'management_fee_value' && target.value !== 'Custom';
+    const isNotCustomCarryFee = target.name === 'carry_fee_value' && target.value !== 'Custom';
 
     setBuildData((prev) => {
       const newBuildObject = {
         ...prev,
+        master_series: isNotMasterSeries ? '' : prev.master_series,
+        investment_advisor: isAllocationsTheAdvisor ? '' : prev.investment_advisor,
+        custom_management_fee: isNotCustomManagementFee ? '' : prev.custom_management_fee,
+        custom_carry_fee: isNotCustomCarryFee ? '' : prev.custom_carry_fee,
         international_companies_countries: isNotInternational
           ? []
           : prev.international_companies_countries,
