@@ -283,7 +283,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
     let columnInvestors = investors.filter((inv) => inv.status === status);
     let total = 0;
     if (columnInvestors.length) {
-      total = columnInvestors.map((inv) => inv.amount).reduce((acc, n) => acc + n);
+      total = Math.round(columnInvestors.map((inv) => inv.amount).reduce((acc, n) => acc + n));
     }
 
     if (sortField) {
