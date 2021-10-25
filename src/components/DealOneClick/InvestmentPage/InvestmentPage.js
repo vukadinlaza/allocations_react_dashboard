@@ -218,7 +218,8 @@ function InvestmentPage() {
   };
 
   const [submitConfirmation] = useMutation(CONFIRM_INVESTMENT, {
-    onCompleted: () => {
+    onCompleted: (data) => {
+      console.log(data);
       refetch();
       setLoading(false);
       const message = location?.state?.submission
@@ -226,8 +227,8 @@ function InvestmentPage() {
         : 'Success! Investment created';
       toast.success(message);
       const path = organization
-        ? `/next-steps/${organization}/${deal_slug}`
-        : `/next-steps/${deal_slug}`;
+        ? `/next-steps/${organization}/${deal_slug}?investmentId=${data.confirmInvestment._id}`
+        : `/next-steps/${deal_slug}?investmentId=${data.confirmInvestment._id}`;
       history.push(path, { investorFormData });
     },
     onError: () => {

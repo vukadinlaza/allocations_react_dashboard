@@ -5,7 +5,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './styles.scss';
 
-function WireInstructionsModal({ open, setOpen, docs, investmentWireInstructions }) {
+function WireInstructionsModal({ open, setOpen, docs, investmentWireInstructions = {} }) {
   let link =
     docs && docs.find((d) => d.path === 'wire-instructions')
       ? `https://${docs.find((d) => d.path === 'wire-instructions').link}`
