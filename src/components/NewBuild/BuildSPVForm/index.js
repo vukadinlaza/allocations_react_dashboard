@@ -150,23 +150,23 @@ const BuildDetails = ({
     asset_type: 'startup',
     portfolio_company_name: '',
     portfolio_company_securities: '',
-    estimated_spv_quantity: '', //* add to db
+    estimated_spv_quantity: '',
     master_series: '',
-    minimum_investment: '',
+    minimum_investment: '', // ??? in database? possibly change to Number
     international_companies_status: 'false', //* add to db
     international_companies_countries: [], //* add to db
-    international_investors_status: 'false', //* investor_type
-    international_investors_countries: [], //* add to db
+    international_investors_status: 'false',
+    international_investors_countries: [],
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
         : null,
     carry_fee_type: 'percent',
     carry_fee_value: '10',
-    custom_carry_fee: '', //* add to db
+    custom_carry_fee: '',
     management_fee_type: 'percent',
     management_fee_value: '2',
-    custom_management_fee: '', //* add to db
+    custom_management_fee: '',
     custom_investment_agreement: 'false',
     management_fee_frequency: 'one-time',
     setup_cost: 20000,
@@ -202,12 +202,12 @@ const BuildDetails = ({
           asset_type: buildData.asset_type,
           portfolio_company_name: buildData.portfolio_company_name,
           portfolio_company_securities: buildData.portfolio_company_securities,
-          estimated_spv_quantity: buildData.estimated_spv_quantity,
+          estimated_spv_quantity: Number(buildData.estimated_spv_quantity),
           master_series: buildData.master_series,
           minimum_investment: buildData.minimum_investment,
-          international_companies: {
+          international_company: {
             status: buildData.international_companies_status,
-            countries: buildData.international_companies_countries,
+            country: buildData.international_companies_countries,
           },
           international_investors: {
             status: buildData.international_investors_status,
