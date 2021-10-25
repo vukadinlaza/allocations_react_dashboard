@@ -535,7 +535,11 @@ export default function TypeSelector({
                   <ModalTooltip
                     title="Master Series Name"
                     handleTooltip={handleTooltip}
-                    tooltipContent={<Typography color="inherit">TBD</Typography>}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        Please indicate the name of your SPV (applicable if you are a HVP)
+                      </Typography>
+                    }
                     openTooltip={openTooltip}
                     id="master_series_name"
                   >
@@ -557,7 +561,20 @@ export default function TypeSelector({
           )}
           <Grid className={classes.inputGridItem} item xs={12}>
             <Typography className={classes.formItemName}>
-              Sector(s) <HelpIcon className={classes.helpIcon} />
+              Sector(s)
+              <ModalTooltip
+                title="Sector(s)"
+                handleTooltip={handleTooltip}
+                tooltipContent={
+                  <Typography color="inherit">
+                    Indicate the sector where the Portfolio Company is operating in
+                  </Typography>
+                }
+                openTooltip={openTooltip}
+                id="sectors"
+              >
+                <HelpIcon className={classes.helpIcon} onClick={(e) => handleTooltip('sectors')} />
+              </ModalTooltip>
             </Typography>
             <SectorSelector />
             <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '22px' }}>
