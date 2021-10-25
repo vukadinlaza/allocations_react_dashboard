@@ -204,7 +204,7 @@ const BuildDetails = ({
           portfolio_company_securities: buildData.portfolio_company_securities,
           estimated_spv_quantity: Number(buildData.estimated_spv_quantity),
           master_series: buildData.master_series,
-          minimum_investment: buildData.minimum_investment,
+          minimum_subscription_amount: buildData.minimum_investment,
           international_company: {
             status: buildData.international_company_status,
             country: buildData.international_company_country,
@@ -823,13 +823,13 @@ const BuildDetails = ({
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={`${classes.formItemName} ${classes.customFormItemName}`}>
-                  Will you be investing into any international (Non US) companies?
+                  Will this deal being investing into an international (Non US) company?
                   <ModalTooltip
                     title="International Companies"
                     handleTooltip={handleTooltip}
                     tooltipContent={
                       <Typography color="inherit">
-                        If this SPV/Fund will invest into companies located outside the United
+                        If this SPV/Fund will invest into a company located outside the United
                         States, please select Yes to this question followed by the applicable
                         country. If you are unsure at the moment, please select Unknown.
                       </Typography>
