@@ -10,8 +10,32 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { FaRocket } from 'react-icons/fa';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import BuildModal from '../NewBuild/BuildModal';
 import styles from './styles';
+
+const AddBubbleBuildButton = ({ classes }) => (
+  <Button variant="contained" className={classes.addButton} href="https://build.allocations.com">
+    <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
+    Add
+  </Button>
+);
+
+const AddInAppBuildButton = ({ classes, setOpenModal }) => {
+  return (
+    <Button variant="contained" onClick={() => setOpenModal(true)} className={classes.addButton}>
+      <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
+      Add
+    </Button>
+  );
+};
+
+const AddBuildButton = (props) => {
+  const { useInAppBuild } = useFlags();
+
+  if (useInAppBuild) return <AddInAppBuildButton {...props} />;
+  return <AddBubbleBuildButton {...props} />;
+};
 
 const SidebarDrawer = ({
   mobileOpen,
@@ -79,10 +103,7 @@ const SidebarDrawer = ({
     <div className={classes.sidebarDrawer}>
       <BuildModal isOpen={openModal} onClose={() => setOpenModal(false)} />
 
-      <Button variant="contained" onClick={() => setOpenModal(true)} className={classes.addButton}>
-        <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
-        Add
-      </Button>
+      <AddBuildButton classes={classes} setOpenModal={setOpenModal} />
 
       <List>
         {menuSections.map(({ sectionTitle, menu }) => (
