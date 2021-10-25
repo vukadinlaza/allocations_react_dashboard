@@ -304,7 +304,7 @@ function DealNextSteps() {
           setShowTaxAsCompleted={setShowTaxAsCompleted}
         />
         <WireInstructionsModal
-          investmentWireInstructions={investmentData.investment.wire_instructions}
+          investmentWireInstructions={investmentData?.investment?.wire_instructions}
           open={wireInstructionsOpen}
           setOpen={setWireInstructionsOpen}
           docs={docs}
