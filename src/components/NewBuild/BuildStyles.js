@@ -73,9 +73,10 @@ const useStyles = makeStyles((theme) => ({
   documentIcon: { marginLeft: '20px' },
   continueButton: {
     font: 'normal normal bold 24px/28px Roboto',
-    marginTop: '44px',
-    width: '368px',
-    height: '68px',
+    marginTop: '5px',
+    width: '350px',
+    height: '60px',
+    margin: 'auto',
     background: '#186EFF 0% 0% no-repeat padding-box',
     borderRadius: '10px',
     opacity: '1',
@@ -106,6 +107,9 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: '14px',
       marginLeft: '8px',
     },
+  },
+  customFormItemName: {
+    minHeight: '40px',
   },
   sectionHeaderText: {
     fontSize: '34px',
@@ -172,7 +176,9 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '568px',
     width: '100%',
   },
-
+  selectInputBox: {
+    width: '90%',
+  },
   wideInputBox: {
     maxWidth: '1206px',
   },
@@ -210,6 +216,12 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   inputGridItem: {
+    // marginBottom: '37px',
+    [theme.breakpoints.down(phone)]: {
+      maxWidth: '100%',
+    },
+  },
+  customInputGridItem: {
     marginBottom: '37px',
     [theme.breakpoints.down(phone)]: {
       maxWidth: '100%',
@@ -264,7 +276,7 @@ const useStyles = makeStyles((theme) => ({
   selectorButton: {
     fontSize: '.8em',
     color: 'black',
-    height: '68px',
+    height: '60px',
     border: '1px solid #d3d3d3 !important',
     backgroundColor: '#ffffff',
     [theme.breakpoints.down(phone)]: {
