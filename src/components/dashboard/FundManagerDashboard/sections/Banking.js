@@ -82,8 +82,11 @@ const Banking = ({ classes, deal_id, handleTooltip, openTooltip, orgSlug }) => {
 
   if (data && data.referenceNumbersByDealId && data.referenceNumbersByDealId.length === 0)
     return (
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div>
+      <div
+        style={{ display: 'flex', alignItems: 'center' }}
+        className={classes.bankingAllocateWrapper}
+      >
+        <div style={{ width: '50%', display: 'flex', alignItems: 'center' }}>
           <Button
             variant="contained"
             onClick={() => allocateRefNums()}
@@ -116,14 +119,22 @@ const Banking = ({ classes, deal_id, handleTooltip, openTooltip, orgSlug }) => {
             />
           </ModalTooltip>
         </div>
-        <div>
+        <div style={{ width: '50%', display: 'flex', alignItems: 'center' }}>
           <TextField
             variant="outlined"
             placeholder="New Directions virtual account number"
             value={NDvirtualAccountNum}
             onChange={(event) => setNDvirtualAccountNum(event.target.value)}
           />
-          <Button onClick={updateDeal}>Save</Button>
+          <Button
+            variant="contained"
+            className={classes.createButton}
+            color="secondary"
+            style={{ margin: '1rem', backgroundColor: 'blue' }}
+            onClick={updateDeal}
+          >
+            Save
+          </Button>
         </div>
       </div>
     );
