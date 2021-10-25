@@ -472,7 +472,7 @@ const BuildDetails = ({
                   </Typography>
                   <TextField
                     value={buildData.custom_management_fee}
-                    placeholder={'Custom Management Fee'}
+                    placeholder="Custom Management Fee"
                     name="custom_management_fee"
                     onChange={handleChange}
                     className={classes.inputBox}
@@ -580,7 +580,7 @@ const BuildDetails = ({
                   </Typography>
                   <TextField
                     value={buildData.custom_carry_fee}
-                    placeholder={'Custom Carry Fee'}
+                    placeholder="Custom Carry Fee"
                     name="custom_carry_fee"
                     onChange={handleChange}
                     className={classes.inputBox}
@@ -723,7 +723,7 @@ const BuildDetails = ({
                   </Typography>
                   <TextField
                     value={buildData.advisor_name}
-                    placeholder={'Advisor Name'}
+                    placeholder="Advisor Name"
                     name="advisor_name"
                     onChange={handleChange}
                     className={classes.inputBox}
@@ -819,7 +819,7 @@ const BuildDetails = ({
                       <Typography color="inherit">
                         If this SPV/Fund will invest into companies located outside the United
                         States, please select Yes to this question followed by the applicable
-                        country.
+                        country. If you are unsure at the moment, please select Unknown.
                       </Typography>
                     }
                     openTooltip={openTooltip}
@@ -836,7 +836,6 @@ const BuildDetails = ({
                   gridCol="1fr 1fr 1fr"
                   onChange={handleChange}
                   currentValue={buildData.international_companies_status}
-                  // why are we using strings instead of booleans?
                   values={[
                     { label: 'Yes', value: 'true' },
                     { label: 'No', value: 'false' },
@@ -860,7 +859,8 @@ const BuildDetails = ({
                     tooltipContent={
                       <Typography color="inherit">
                         If this SPV/Fund will have investors located outside the United States,
-                        please select Yes to this question followed by the applicable country.
+                        please select Yes to this question followed by the applicable country. If
+                        you are unsure at the moment, please select Unknown.
                       </Typography>
                     }
                     openTooltip={openTooltip}
