@@ -547,8 +547,6 @@ export default function TypeSelector({
                 </Typography>
                 <TextField
                   value={buildData.master_series_name}
-                  // placeholder={'master series name'}
-                  style={{ maxWidth: '100% !important' }}
                   name="master_series_name"
                   onChange={handleChange}
                   className={`${classes.inputBox} ${classes.wideInputBox}`}
