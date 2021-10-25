@@ -455,7 +455,12 @@ const BuildDetails = ({
                     <ModalTooltip
                       title="Custom Management Fee"
                       handleTooltip={handleTooltip}
-                      tooltipContent={<Typography color="inherit">TBD</Typography>}
+                      tooltipContent={
+                        <Typography color="inherit">
+                          Please enter your custom management fees according to your deal. i.e "20%
+                          for the first year, 10% for any years after"
+                        </Typography>
+                      }
                       openTooltip={openTooltip}
                       id="custom_management_fee"
                     >
@@ -559,7 +564,11 @@ const BuildDetails = ({
                     <ModalTooltip
                       title="Custom Carry Fee"
                       handleTooltip={handleTooltip}
-                      tooltipContent={<Typography color="inherit">TBD</Typography>}
+                      tooltipContent={
+                        <Typography color="inherit">
+                          Please enter your custom carry fees according to your deal
+                        </Typography>
+                      }
                       openTooltip={openTooltip}
                       id="custom_carry_fee"
                     >
@@ -700,7 +709,9 @@ const BuildDetails = ({
                     <ModalTooltip
                       title="Advisor Name"
                       handleTooltip={handleTooltip}
-                      tooltipContent={<Typography color="inherit">TBD</Typography>}
+                      tooltipContent={
+                        <Typography color="inherit">Please indicate your ERA/RIA name</Typography>
+                      }
                       openTooltip={openTooltip}
                       id="advisor_name"
                     >
