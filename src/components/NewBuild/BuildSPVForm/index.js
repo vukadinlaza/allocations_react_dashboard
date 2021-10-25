@@ -150,29 +150,29 @@ const BuildDetails = ({
     asset_type: 'startup',
     portfolio_company_name: '',
     portfolio_company_securities: '',
-    estimated_spv_quantity: '',
-    master_series_name: '',
+    estimated_spv_quantity: '', //* add to db
+    master_series: '',
     minimum_investment: '',
-    international_companies_status: 'false',
-    international_companies_countries: [],
-    international_investors_status: 'false',
-    international_investors_countries: [],
+    international_companies_status: 'false', //* add to db
+    international_companies_countries: [], //* add to db
+    international_investors_status: 'false', //* investor_type
+    international_investors_countries: [], //* add to db
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
         : null,
     carry_fee_type: 'percent',
     carry_fee_value: '10',
-    custom_carry_fee: '',
+    custom_carry_fee: '', //* add to db
     management_fee_type: 'percent',
     management_fee_value: '2',
-    custom_management_fee: '',
+    custom_management_fee: '', //* add to db
     custom_investment_agreement: 'false',
     management_fee_frequency: 'one-time',
     setup_cost: 20000,
     offering_type: '506b',
-    allocations_investment_advisor: 'true',
-    advisor_name: '',
+    allocations_investment_advisor: 'true', //* conditional front or back?
+    investment_advisor: '',
     side_letters: 'false',
     closing_date: moment(Date.now()).format('YYYY-MM-DD'),
     sectors: [],
@@ -180,6 +180,7 @@ const BuildDetails = ({
   });
   console.log(buildData);
   const [openTooltip, setOpenTooltip] = useState('');
+  const customInputStyles = { style: { height: '23px' } };
 
   const handleTooltip = (id) => {
     setOpenTooltip(id);
@@ -202,7 +203,7 @@ const BuildDetails = ({
           portfolio_company_name: buildData.portfolio_company_name,
           portfolio_company_securities: buildData.portfolio_company_securities,
           estimated_spv_quantity: buildData.estimated_spv_quantity,
-          master_series_name: buildData.master_series_name,
+          master_series: buildData.master_series,
           minimum_investment: buildData.minimum_investment,
           international_companies: {
             status: buildData.international_companies_status,
@@ -228,7 +229,7 @@ const BuildDetails = ({
           setup_cost: buildData.setup_cost,
           offering_type: buildData.offering_type,
           allocations_investment_advisor: buildData.allocations_investment_advisor,
-          advisor_name: buildData.advisor_name,
+          investment_advisor: buildData.investment_advisor,
           side_letters: buildData.side_letters,
           closing_date: buildData.closing_date,
           sectors: buildData.sectors,
@@ -284,7 +285,7 @@ const BuildDetails = ({
       control: (styles) => ({
         ...styles,
         marginTop: 50,
-        minHeight: 56,
+        minHeight: 60,
         width: phoneSize ? '325px' : '90%',
         maxWidth: 568,
         cursor: 'pointer',
@@ -346,7 +347,7 @@ const BuildDetails = ({
       control: (styles) => ({
         ...styles,
         marginTop: 50,
-        minHeight: 56,
+        minHeight: 60,
         width: phoneSize ? '325px' : '90%',
         maxWidth: 568,
         cursor: 'pointer',
@@ -400,8 +401,8 @@ const BuildDetails = ({
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
             2. Deal Terms
           </Typography>
-          <Grid container spacing={1} className={classes.inputGridContainer}>
-            <Grid className={classes.inputGridItem} item xs={6}>
+          <Grid container spacing={2} className={classes.inputGridContainer}>
+            <Grid className={classes.customInputGridItem} item xs={6}>
               <FormControl
                 required
                 // disabled
@@ -477,6 +478,8 @@ const BuildDetails = ({
                     onChange={handleChange}
                     className={classes.inputBox}
                     variant="outlined"
+                    inputProps={customInputStyles}
+                    classes={{ root: classes.selectInputBox }}
                   />
                 </FormControl>
               )}
@@ -515,7 +518,7 @@ const BuildDetails = ({
               </FormControl>
             </Grid>
 
-            <Grid className={classes.inputGridItem} item xs={6}>
+            <Grid className={classes.customInputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
                   Choose your carry fee
@@ -585,6 +588,8 @@ const BuildDetails = ({
                     onChange={handleChange}
                     className={classes.inputBox}
                     variant="outlined"
+                    inputProps={customInputStyles}
+                    classes={{ root: classes.selectInputBox }}
                   />
                 </FormControl>
               )}
@@ -651,6 +656,8 @@ const BuildDetails = ({
                   onChange={handleChange}
                   className={classes.inputBox}
                   variant="outlined"
+                  inputProps={customInputStyles}
+                  classes={{ root: classes.selectInputBox }}
                 />
               </FormControl>
             </Grid>
@@ -663,7 +670,7 @@ const BuildDetails = ({
             3. Offering Terms
           </Typography>
           <Grid container spacing={1} className={classes.inputGridContainer}>
-            <Grid className={classes.inputGridItem} item xs={6}>
+            <Grid className={classes.customInputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
                   Choose Allocations as the reporting adviser?
@@ -713,21 +720,23 @@ const BuildDetails = ({
                         <Typography color="inherit">Please indicate your ERA/RIA name</Typography>
                       }
                       openTooltip={openTooltip}
-                      id="advisor_name"
+                      id="investment_advisor"
                     >
                       <HelpIcon
                         className={classes.helpIcon}
-                        onClick={(e) => handleTooltip('advisor_name')}
+                        onClick={(e) => handleTooltip('investment_advisor')}
                       />
                     </ModalTooltip>
                   </Typography>
                   <TextField
-                    value={buildData.advisor_name}
+                    value={buildData.investment_advisor}
                     placeholder="Advisor Name"
-                    name="advisor_name"
+                    name="investment_advisor"
                     onChange={handleChange}
                     className={classes.inputBox}
                     variant="outlined"
+                    inputProps={customInputStyles}
+                    classes={{ root: classes.selectInputBox }}
                   />
                 </FormControl>
               )}
@@ -810,7 +819,7 @@ const BuildDetails = ({
           <Grid container spacing={1} className={classes.inputGridContainer}>
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
-                <Typography className={classes.formItemName}>
+                <Typography className={`${classes.formItemName} ${classes.customFormItemName}`}>
                   Will you be investing into any international (Non US) companies?
                   <ModalTooltip
                     title="International Companies"
@@ -851,7 +860,7 @@ const BuildDetails = ({
             </Grid>
             <Grid className={classes.inputGridItem} item xs={6} spacing={2}>
               <FormControl required variant="outlined" className={classes.formContainers}>
-                <Typography className={classes.formItemName}>
+                <Typography className={`${classes.formItemName} ${classes.customFormItemName}`}>
                   Will you have any international (Non US) investors?
                   <ModalTooltip
                     title="International Investors"
@@ -924,10 +933,10 @@ const BuildDetails = ({
               name="memo"
               value={buildData.memo}
               onChange={handleChange}
+              className={classes.finalInputBox}
               inputProps={{
                 className: classes.finalInput,
               }}
-              className={classes.finalInputBox}
             />
             <Button
               className={classes.continueButton}
