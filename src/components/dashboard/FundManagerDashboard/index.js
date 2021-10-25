@@ -394,6 +394,7 @@ const FundManagerDashboard = ({ classes, history }) => {
       case 'Banking':
         return (
           <Banking
+            orgSlug={orgSlug}
             classes={classes}
             deal_id={dealData._id}
             openTooltip={openTooltip}
