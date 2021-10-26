@@ -13,6 +13,8 @@ import useStyles from '../BuildStyles';
 
 export default function NewSpvForm() {
   const classes = useStyles();
+
+  // need to restructure this along with handleSubmit to be similar to BuildSPVForm
   const [buildData, setBuildData] = useState({
     // -------------------------- in the form
     asset_type: '',
