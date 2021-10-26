@@ -330,6 +330,36 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     opacity: '1',
   },
+  sectorTag: {
+    display: 'flex',
+    color: '#0461ff',
+    backgroundColor: '#DAE8FF',
+    fontSize: '85%',
+    margin: '3px',
+    height: '25px',
+    paddingLeft: '6px',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    borderRadius: '4px',
+    alignItems: 'center',
+  },
+  removeSectorButton: {
+    display: 'flex',
+    height: '100%',
+    marginLeft: '3px',
+    alignItems: 'center',
+    color: '#0461ff',
+    backgroundColor: '#DAE8FF',
+    border: 'none',
+    borderRadius: '0px 4px 4px 0px',
+    fontWeight: '600',
+    fontSize: '10px',
+    //* TO DO: fix on hover - need to fit height
+    '&:hover': {
+      backgroundColor: '#FFBDAD',
+      color: '#DE350B',
+    },
+  },
   // 3. Styles that are used exclusively in the 'Upload docs' tab.
   finishButton: {
     font: 'normal normal bold 24px/28px Roboto',

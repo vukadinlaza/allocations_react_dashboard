@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 
 import HelpIcon from '@material-ui/icons/Help';
-import { TextField, Paper, Grid, FormControl } from '@material-ui/core';
+import { TextField, Paper, Grid, FormControl, Button } from '@material-ui/core';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import Typography from '@material-ui/core/Typography';
 import useStyles from '../../../BuildStyles';
@@ -17,15 +17,18 @@ import NetworkIcon from '../../../../../assets/buildNetwork.svg';
 import PieIcon from '../../../../../assets/buildPie.svg';
 import { ModalTooltip } from '../../../../dashboard/FundManagerDashboard/widgets';
 import sectors from './sectors';
+import { toast } from 'react-toastify';
 
 export default function TypeSelector({
   assetType,
   handleChange,
   buildData,
+  setBuildData,
   handleTooltip,
   openTooltip,
 }) {
   const classes = useStyles();
+
   const row1Items = [
     {
       title: 'Startup',
@@ -114,12 +117,12 @@ export default function TypeSelector({
   }
 
   function SectorSelector() {
-    const suggestions = sectors.map((sector) => {
-      return {
+    const suggestions = sectors
+      .map((sector) => ({
         value: sector.title,
         label: sector.title,
-      };
-    });
+      }))
+      .filter(({ value }) => !buildData.sectors.includes(value));
     const customStyles = {
       multiValue: (styles, { data }) => ({
         ...styles,
@@ -141,15 +144,17 @@ export default function TypeSelector({
           options={suggestions}
           menuPosition="fixed"
           styles={customStyles}
-          value={buildData.sectors.map((sector) => ({ value: sector, label: sector }))}
-          onChange={(option) => {
-            const newEvent = {
-              target: {
-                name: 'sectors',
-                value: option.map((sector) => sector.value),
-              },
-            };
-            handleChange(newEvent);
+          onChange={(options) => {
+            const sector = options[0].value;
+
+            setBuildData((prev) => {
+              const isAtLimit = prev.sectors.length >= 3;
+              if (isAtLimit) toast.info('Please limit your sectors to 3 or less');
+              return {
+                ...prev,
+                sectors: isAtLimit ? prev.sectors : [...prev.sectors, sector],
+              };
+            });
           }}
           isMulti
         />
@@ -280,6 +285,25 @@ export default function TypeSelector({
               Sector(s) <HelpIcon className={classes.helpIcon} />
             </Typography>
             <SectorSelector />
+            <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '22px' }}>
+              {buildData.sectors.map((sector) => (
+                <div className={classes.sectorTag}>
+                  <span>{sector}</span>
+                  <button
+                    className={classes.removeSectorButton}
+                    type="button"
+                    onClick={() =>
+                      setBuildData((prev) => ({
+                        ...prev,
+                        sectors: buildData.sectors.filter((item) => item !== sector),
+                      }))
+                    }
+                  >
+                    &#x2715;
+                  </button>
+                </div>
+              ))}
+            </div>
           </Grid>
         </Grid>
       </form>
