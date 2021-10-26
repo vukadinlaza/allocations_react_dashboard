@@ -163,10 +163,10 @@ const BuildDetails = ({
         : null,
     carry_fee_type: 'percent',
     carry_fee_value: '10',
-    custom_carry_fee: '',
+    custom_carry_fee: 'false',
     management_fee_type: 'percent',
     management_fee_value: '2',
-    custom_management_fee: '',
+    custom_management_fee: 'false',
     custom_investment_agreement: 'false',
     management_fee_frequency: 'one-time',
     setup_cost: 20000,
@@ -177,8 +177,9 @@ const BuildDetails = ({
     closing_date: moment(Date.now()).format('YYYY-MM-DD'),
     sectors: [],
     representative: '',
+    portfolio_deal_name: '',
   });
-  console.log(buildData);
+  console.log('Build Data:', buildData);
   const [openTooltip, setOpenTooltip] = useState('');
   const customInputStyles = { style: { height: '23px' } };
 
@@ -200,6 +201,7 @@ const BuildDetails = ({
         payload: {
           organization_id: buildData.organization_id,
           asset_type: buildData.asset_type,
+          portfolio_deal_name: buildData.portfolio_deal_name,
           portfolio_company_name: buildData.portfolio_company_name,
           portfolio_company_securities: buildData.portfolio_company_securities,
           estimated_spv_quantity: Number(buildData.estimated_spv_quantity),
@@ -256,8 +258,8 @@ const BuildDetails = ({
         ...prev,
         master_series: isNotMasterSeries ? '' : prev.master_series,
         investment_advisor: isAllocationsTheAdvisor ? '' : prev.investment_advisor,
-        custom_management_fee: isNotCustomManagementFee ? '' : prev.custom_management_fee,
-        custom_carry_fee: isNotCustomCarryFee ? '' : prev.custom_carry_fee,
+        custom_management_fee: isNotCustomManagementFee ? 'false' : prev.custom_management_fee,
+        custom_carry_fee: isNotCustomCarryFee ? 'false' : prev.custom_carry_fee,
         international_company_country: isNotInternational ? '' : prev.international_company_country,
         international_investors_countries: isNotInternationalInvestors
           ? []
@@ -475,7 +477,11 @@ const BuildDetails = ({
                     </ModalTooltip>
                   </Typography>
                   <TextField
-                    value={buildData.custom_management_fee}
+                    value={
+                      buildData.custom_management_fee === 'false'
+                        ? ''
+                        : buildData.custom_management_fee
+                    }
                     placeholder="Custom Management Fee"
                     name="custom_management_fee"
                     onChange={handleChange}
@@ -585,7 +591,7 @@ const BuildDetails = ({
                     </ModalTooltip>
                   </Typography>
                   <TextField
-                    value={buildData.custom_carry_fee}
+                    value={buildData.custom_carry_fee === 'false' ? '' : buildData.custom_carry_fee}
                     placeholder="Custom Carry Fee"
                     name="custom_carry_fee"
                     onChange={handleChange}
