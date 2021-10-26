@@ -107,9 +107,35 @@ export const ORG_OVERVIEW = gql`
   }
 `;
 
-export const GET_OVERVIEW_DATA = gql`
-  query OverviewData($slug: String!) {
-    overviewData(slug: $slug)
+const AUM_DATA = gql`
+  query OrganizationAUM($slug: String!) {
+    aum: organization(slug: $slug) {
+      total: totalAUM
+    }
+  }
+`;
+
+const TOTAL_SPVS_DATA = gql`
+  query OrganizationSPVs($slug: String!) {
+    spvs: organization(slug: $slug) {
+      total: totalSPVs
+    }
+  }
+`;
+
+const TOTAL_FUNDS_DATA = gql`
+  query OrganizationFunds($slug: String!) {
+    funds: organization(slug: $slug) {
+      total: totalFunds
+    }
+  }
+`;
+
+const TOTAL_INVESTMENTS_DATA = gql`
+  query OrganizationFunds($slug: String!) {
+    investments: organization(slug: $slug) {
+      total: totalInvestments
+    }
   }
 `;
 
@@ -150,7 +176,13 @@ const FundManagerDashboard = ({ classes, history }) => {
   const [openTooltip, setOpenTooltip] = useState('');
   const [orgDeals, setOrgDeals] = useState(null);
 
-  const { data: overview } = useQuery(GET_OVERVIEW_DATA, { variables: { slug: orgSlug } });
+  const { data: aumData } = useQuery(AUM_DATA, { variables: { slug: orgSlug } });
+  const { data: totalSpvData } = useQuery(TOTAL_SPVS_DATA, { variables: { slug: orgSlug } });
+  const { data: totalFundsData } = useQuery(TOTAL_FUNDS_DATA, { variables: { slug: orgSlug } });
+  const { data: totalInvestmentsData } = useQuery(TOTAL_INVESTMENTS_DATA, {
+    variables: { slug: orgSlug },
+  });
+
   const [getInvestments, { data: dealInvestments, refetch }] = useLazyQuery(GET_INVESTMENTS);
   const [getOrgDeals, { data: orgDealsData }] = useLazyQuery(ORG_OVERVIEW);
   const checkedDealName = encodeURIComponent(dealName);
@@ -296,7 +328,15 @@ const FundManagerDashboard = ({ classes, history }) => {
 
   const getTabContent = () => {
     if (dealTab === 0) {
-      return <Overview classes={classes} data={overview.overviewData} />;
+      return (
+        <Overview
+          classes={classes}
+          aum={aumData?.aum.total}
+          spvs={totalSpvData?.spvs.total}
+          funds={totalFundsData?.funds.total}
+          investors={totalInvestmentsData?.investments.total}
+        />
+      );
     }
 
     let fundData = atFundData.map((d) => d.fields);
@@ -407,7 +447,6 @@ const FundManagerDashboard = ({ classes, history }) => {
   };
 
   const [openModal, setOpenModal] = useState(false);
-  if (!orgDeals || !overview?.overviewData) return <AllocationsLoader fullHeight />;
 
   const isOverview = dealTab === 0;
 
