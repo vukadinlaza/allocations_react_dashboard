@@ -32,6 +32,25 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 
+  docUploadBox: {
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    // boxShadow: '0px 3px 6px #00000029',
+    // border: '1px solid #7070703B',
+    marginBottom: '16px',
+    padding: '42px',
+    borderRadius: '15px',
+    width: '100%',
+    maxWidth: '1352px',
+    opacity: 1,
+    [theme.breakpoints.down(phone)]: {
+      maxWidth: '600px',
+      marginBottom: '24px',
+      padding: '16px',
+    },
+  },
+
   buildTabContainer: {
     marginBottom: '16px',
     paddingLeft: '42px',
@@ -70,7 +89,13 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: '8px',
     },
   },
-  documentIcon: { marginLeft: '20px' },
+  documentIcon: {
+    backgroundColor: '#fff',
+    padding: '10px',
+    width: '58px',
+    height: '58px',
+    borderRadius: '50%',
+  },
   continueButton: {
     font: 'normal normal bold 24px/28px Roboto',
     marginTop: '5px',
@@ -134,8 +159,6 @@ const useStyles = makeStyles((theme) => ({
   uploadIcon: {
     opacity: '0.3',
     width: '30px',
-    marginLeft: 'auto',
-    marginRight: '37px',
     color: 'blue',
     transparentheight: '35px',
     [theme.breakpoints.down(phone)]: {
@@ -329,15 +352,16 @@ const useStyles = makeStyles((theme) => ({
   },
   item: {
     display: 'flex',
-    justifyContent: 'flex-start',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #0000000D',
-    border: '2px solid #2A2B5480',
+    background: '#186EFF26 0% 0% no-repeat padding-box',
+    // boxShadow: '0px 3px 6px #0000000D',
+    border: '2px dashed #0461FF !important',
     borderRadius: '10px',
     opacity: 1,
-    width: '100%',
-    height: '91px',
+    width: '280px',
+    height: '236px',
     marginBottom: '8px',
   },
   checkCircle: {

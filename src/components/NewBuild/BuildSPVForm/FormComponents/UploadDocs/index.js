@@ -43,7 +43,7 @@ const DocUploader = ({
   // }, [filesUploaded]);
 
   return (
-    <Paper
+    <div
       className={`${classes.item} ${
         !filesUploaded[document.title].complete ? '' : classes.selected
       }`}
@@ -98,7 +98,7 @@ const DocUploader = ({
           style={{ opacity: '1' }}
         />
       )}
-    </Paper>
+    </div>
   );
 };
 
@@ -138,14 +138,14 @@ export default function UploadDocs({ page, setPage, deal }) {
   }, []);
   return (
     <>
-      <Paper className={classes.paper}>
-        <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-          Upload your documents{' '}
-        </Typography>
-        <Typography variant="h6" gutterBottom className={classes.subtitle}>
+      <main className={classes.docUploadBox}>
+        {/* <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}> */}
+        {/* Upload your documents{' '} */}
+        {/* </Typography> */}
+        {/* <Typography variant="h6" gutterBottom className={classes.subtitle}>
           Please upload the appropriate documents so we have them on file for you. When uploading
           multiple files, please compress them into one zip folder.
-        </Typography>
+        </Typography> */}
         {uploadTasks.map((task) => (
           <DocUploader
             key={task._id}
@@ -158,7 +158,7 @@ export default function UploadDocs({ page, setPage, deal }) {
           />
         ))}
 
-        <Button
+        {/* <Button
           className={classes.finishButton}
           onClick={() => {
             toast.success('Success! Your submission was submitted.');
@@ -169,16 +169,16 @@ export default function UploadDocs({ page, setPage, deal }) {
           }}
         >
           Finish
-        </Button>
-        <Typography
+        </Button> */}
+        {/* <Typography
           className={classes.previousButton}
           onClick={() => {
             setPage(page - 1);
           }}
         >
           Previous
-        </Typography>
-      </Paper>
+        </Typography> */}
+      </main>
     </>
   );
 }
