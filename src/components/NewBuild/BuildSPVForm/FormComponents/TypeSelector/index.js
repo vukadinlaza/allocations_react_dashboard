@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Select from 'react-select';
 import HelpIcon from '@material-ui/icons/Help';
 import { TextField, Paper, Grid, FormControl } from '@material-ui/core';
@@ -62,6 +62,7 @@ export default function TypeSelector({
       width: '30px',
     },
   ];
+
   const row2Items = [
     {
       title: 'Secondary',
@@ -96,6 +97,7 @@ export default function TypeSelector({
       width: '26px',
     },
   ];
+
   function FormRow({ rowItems }) {
     return (
       <>
