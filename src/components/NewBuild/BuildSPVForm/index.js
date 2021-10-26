@@ -152,11 +152,11 @@ const BuildDetails = ({
     portfolio_company_securities: '',
     estimated_spv_quantity: '',
     master_series: '',
-    minimum_investment: '', // ??? in database? possibly change to Number
-    international_companies_status: 'false', //* add to db
-    international_companies_countries: [], //* add to db
-    international_investors_status: 'false',
-    international_investors_countries: [],
+    minimum_investment: '',
+    international_company_status: 'false', //* add to db
+    international_company_country: '', //* add to db
+    international_investors_status: 'false', //* investor_type
+    international_investors_countries: [], //* add to db
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
@@ -206,8 +206,8 @@ const BuildDetails = ({
           master_series: buildData.master_series,
           minimum_investment: buildData.minimum_investment,
           international_company: {
-            status: buildData.international_companies_status,
-            country: buildData.international_companies_countries,
+            status: buildData.international_company_status,
+            country: buildData.international_company_country,
           },
           international_investors: {
             status: buildData.international_investors_status,
@@ -241,7 +241,7 @@ const BuildDetails = ({
 
   const handleChange = ({ target }) => {
     const isNotInternational =
-      target.name === 'international_companies_status' && (target.value === 'false' || 'unknown');
+      target.name === 'international_company_status' && (target.value === 'false' || 'unknown');
     const isNotInternationalInvestors =
       target.name === 'international_investors_status' && (target.value === 'false' || 'unknown');
     const isNotMasterSeries = target.name === 'estimated_spv_quantity' && target.value < 5;
@@ -258,9 +258,7 @@ const BuildDetails = ({
         investment_advisor: isAllocationsTheAdvisor ? '' : prev.investment_advisor,
         custom_management_fee: isNotCustomManagementFee ? '' : prev.custom_management_fee,
         custom_carry_fee: isNotCustomCarryFee ? '' : prev.custom_carry_fee,
-        international_companies_countries: isNotInternational
-          ? []
-          : prev.international_companies_countries,
+        international_company_country: isNotInternational ? '' : prev.international_company_country,
         international_investors_countries: isNotInternationalInvestors
           ? []
           : prev.international_investors_countries,
@@ -308,28 +306,23 @@ const BuildDetails = ({
 
     return (
       <Select
-        id="international_companies_countries"
-        label="International Companies by Country"
+        id="international_company_country"
+        label="International Company by Country"
         menuPosition="fixed"
         styles={customStyles}
-        value={
-          buildData.international_companies_countries.map((country) => ({
-            value: country,
-            label: country,
-          })) || ''
-        }
+        value={buildData.international_company_country || ''}
         options={countryNames.map((country) => ({ value: country, label: country })) || ''}
-        placeholder={placeHolder || buildData.international_companies_countries}
+        placeholder={buildData.international_company_country || placeHolder}
         onChange={(option) => {
           const newEvent = {
             target: {
-              name: 'international_companies_countries',
-              value: option.map((country) => country.value),
+              name: 'international_company_country',
+              value: option.value,
             },
           };
           handleChange(newEvent);
         }}
-        isMulti
+        // isMulti
       />
     );
   }
@@ -842,19 +835,19 @@ const BuildDetails = ({
                       </Typography>
                     }
                     openTooltip={openTooltip}
-                    id="international_companies_status"
+                    id="international_company_status"
                   >
                     <HelpIcon
                       className={classes.helpIcon}
-                      onClick={(e) => handleTooltip('international_companies_status')}
+                      onClick={(e) => handleTooltip('international_company_status')}
                     />
                   </ModalTooltip>
                 </Typography>
                 <ButtonSelector
-                  name="international_companies_status"
+                  name="international_company_status"
                   gridCol="1fr 1fr 1fr"
                   onChange={handleChange}
-                  currentValue={buildData.international_companies_status}
+                  currentValue={buildData.international_company_status}
                   values={[
                     { label: 'Yes', value: 'true' },
                     { label: 'No', value: 'false' },
@@ -862,7 +855,7 @@ const BuildDetails = ({
                   ]}
                 />
               </FormControl>
-              {buildData.international_companies_status === 'true' && (
+              {buildData.international_company_status === 'true' && (
                 <FormControl required variant="outlined" className={classes.formContainers}>
                   <InternationalCountrySelector />
                 </FormControl>
