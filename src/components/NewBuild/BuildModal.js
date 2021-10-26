@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
@@ -7,8 +7,16 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import { useHistory } from 'react-router';
+import spvIcon from '../../assets/spv-icon.svg';
+import fundIcon from '../../assets/fund-icon.svg';
 
 const useStyles = makeStyles((theme) => ({
+  icon: {
+    maxWidth: '100%',
+    margin: '1rem',
+    border: 'solid pink 1px',
+    radius: '48px',
+  },
   modal: {
     display: 'flex',
     justifyContent: 'center',
@@ -39,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
 const BuildModal = ({ onClose, isOpen }) => {
   const classes = useStyles();
   const history = useHistory();
+  const [typeSelected, setTypeSelected] = useState('');
 
   return (
     <Modal open={isOpen} onClose={onClose} className={classes.modal}>
@@ -51,7 +60,7 @@ const BuildModal = ({ onClose, isOpen }) => {
                   Add New
                 </Typography>
                 <Box onClick={onClose} style={{ cursor: 'pointer' }}>
-                  <CloseIcon htmlColor="#fff" />
+                  <CloseIcon htmlColor="#000" />
                 </Box>
               </Grid>
             </Paper>
@@ -64,90 +73,79 @@ const BuildModal = ({ onClose, isOpen }) => {
                       <Box
                         style={{
                           display: 'flex',
-                          flexDirection: 'row',
+                          flexDirection: 'column',
                           justifyContent: 'space-between',
                           alignItems: 'space-between',
                         }}
                       >
-                        {['SPV', 'Fund'].map((type) => {
-                          return (
-                            <Paper
-                              key={type}
-                              style={{ textAlign: 'center', margin: '.5rem', padding: '.5rem' }}
-                            >
-                              <Typography
-                                style={{
-                                  margin: '.5rem',
-                                  fontWeight: '600',
-                                }}
-                              >
-                                {type}
-                              </Typography>
-                              <Typography
-                                style={{
-                                  margin: '.5rem',
-                                  fontSize: '.7rem',
-                                }}
-                              >
-                                Launch your next {type}. Instant setup, 1-click invest. End-to-end
-                                platform for setting up a {type} investing any asset class.
-                              </Typography>
-                              <img
-                                alt="some"
-                                style={{ maxWidth: '100%', margin: '1rem' }}
-                                src={
-                                  type === 'SPV'
-                                    ? 'https://allocations-public.s3.us-east-2.amazonaws.com/graphic-2.png'
-                                    : 'https://allocations-public.s3.us-east-2.amazonaws.com/graphic-5.png'
-                                }
-                              />
-                              <Button
-                                variant="contained"
-                                color="primary"
-                                style={{ margin: '1rem' }}
-                                onClick={() => {
-                                  history.push(`/new-build-${type.toLowerCase()}`);
-                                  onClose();
-                                }}
-                              >
-                                Continue
-                              </Button>
-                            </Paper>
-                          );
-                        })}
-                      </Box>
+                        <Paper
+                          key="spv"
+                          style={{ textAlign: 'center', margin: '.5rem', padding: '.5rem' }}
+                        >
+                          <img alt="spv-icon" className={classes.icon} src={spvIcon} />
 
-                      {/* <Box style={{ display: 'flex', flexDirection: 'column' }}>
-                        {['SPAC', 'Reg Cf'].map((type) => {
-                          return (
-                            <FormControlLabel
-                              key={type}
-                              value={type}
-                              control={
-                                <Radio
-                                  color="primary"
-                                  style={{ fontSize: '24px' }}
-                                  classes={{
-                                    root: classes.radio,
-                                  }}
-                                />
-                              }
-                              label={type}
-                              classes={{
-                                label: classes.label,
-                              }}
-                            />
-                          );
-                        })}
-                      </Box> */}
+                          <Typography
+                            style={{
+                              margin: '.5rem',
+                              fontWeight: '600',
+                            }}
+                          >
+                            Fund
+                          </Typography>
+                          <Typography
+                            style={{
+                              margin: '.5rem',
+                              fontSize: '.7rem',
+                            }}
+                          >
+                            A Special Purpose Vehicle (SPV) is a structure used to raise money to
+                            invest in a single asset
+                          </Typography>
+                        </Paper>
+
+                        <Paper
+                          key="fund"
+                          style={{ textAlign: 'center', margin: '.5rem', padding: '.5rem' }}
+                        >
+                          <img alt="fund-icon" className={classes.icon} src={fundIcon} />
+
+                          <Typography
+                            style={{
+                              margin: '.5rem',
+                              fontWeight: '600',
+                            }}
+                          >
+                            Fund
+                          </Typography>
+                          <Typography
+                            style={{
+                              margin: '.5rem',
+                              fontSize: '.7rem',
+                            }}
+                          >
+                            A Fund is a structure used to raise money to invest in multiple assets
+                            over a period of time
+                          </Typography>
+                        </Paper>
+                      </Box>
                     </RadioGroup>
+                    <Grid container justifyContent="center">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        type="submit"
+                        style={{ width: '90%' }}
+                        onClick={() => {
+                          history.push(`/new-build-${typeSelected}`);
+                          onClose();
+                        }}
+                      >
+                        Next
+                      </Button>
+                    </Grid>
                   </FormControl>
                 </Grid>
-                {/* <Grid container justifyContent="center">
-                  <Button variant="contained" color="primary" size="large" style={{ width: '90%' }}>
-                    Continue
-                  </Button>
-                </Grid> */}
               </Grid>
             </Paper>
           </Grid>
