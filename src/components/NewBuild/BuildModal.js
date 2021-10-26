@@ -45,9 +45,9 @@ const BuildModal = ({ onClose, isOpen }) => {
       <Container maxWidth="sm">
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
-            <Paper className={classes.modalPaper} style={{ backgroundColor: '#186EFF' }}>
+            <Paper className={classes.modalPaper} style={{ backgroundColor: '#fff' }}>
               <Grid container justifyContent="space-between">
-                <Typography variant="h6" style={{ color: '#fff' }}>
+                <Typography variant="h6" style={{ color: '#000' }}>
                   Add New
                 </Typography>
                 <Box onClick={onClose} style={{ cursor: 'pointer' }}>
