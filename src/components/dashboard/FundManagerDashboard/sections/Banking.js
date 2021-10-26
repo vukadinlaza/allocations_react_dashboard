@@ -53,6 +53,7 @@ const Banking = ({ classes, deal_id, handleTooltip, openTooltip, orgSlug }) => {
   const { data, loading, refetch } = useQuery(REFERENCE_NUMBERS_BY_DEAL_ID, {
     variables: { deal_id },
   });
+  console.log(data);
   const [allocateRefNums, { loading: allocateLoading }] = useMutation(ALLOCATE, {
     variables: { deal_id },
     onCompleted: () => {
@@ -73,53 +74,73 @@ const Banking = ({ classes, deal_id, handleTooltip, openTooltip, orgSlug }) => {
     },
   });
 
-  if (loading || allocateLoading)
-    return (
-      <div>
-        <Loader />
-      </div>
-    );
-
-  if (data && data.referenceNumbersByDealId && data.referenceNumbersByDealId.length === 0)
-    return (
+  return (
+    <>
+      {(loading || allocateLoading) && (
+        <div>
+          <Loader />
+        </div>
+      )}
       <div
-        style={{ display: 'flex', alignItems: 'center' }}
+        style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}
         className={classes.bankingAllocateWrapper}
       >
-        <div style={{ width: '50%', display: 'flex', alignItems: 'center' }}>
-          <Button
-            variant="contained"
-            onClick={() => allocateRefNums()}
-            className={classes.createButton}
-            color="secondary"
-            style={{ margin: '1rem', backgroundColor: 'blue' }}
+        {data && data.referenceNumbersByDealId && data.referenceNumbersByDealId.length === 0 && (
+          <div
+            style={{
+              width: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
           >
-            Allocate New Direction Reference Numbers
-          </Button>
-          <ModalTooltip
-            title="Allocate New Direction Reference Numbers"
-            handleTooltip={handleTooltip}
-            openTooltip={openTooltip}
-            tooltipContent={
-              <Typography color="inherit">
-                This button will allocate 100 New Direction Banking numbers to be used for
-                investments.
-              </Typography>
-            }
-            id="reference_numbers"
-          >
-            <HelpIcon
-              style={{
-                marginLeft: '0.2em',
-                cursor: 'pointer',
-                color: '#205DF5',
-                fontSize: '22px',
-              }}
-              onClick={() => handleTooltip('reference_numbers')}
+            <Button
+              variant="contained"
+              onClick={() => allocateRefNums()}
+              className={classes.createButton}
+              color="secondary"
+              style={{ margin: '1rem', backgroundColor: 'blue' }}
+            >
+              Allocate New Direction Reference Numbers
+            </Button>
+            <ModalTooltip
+              title="Allocate New Direction Reference Numbers"
+              handleTooltip={handleTooltip}
+              openTooltip={openTooltip}
+              tooltipContent={
+                <Typography color="inherit">
+                  This button will allocate 100 New Direction Banking numbers to be used for
+                  investments.
+                </Typography>
+              }
+              id="reference_numbers"
+            >
+              <HelpIcon
+                style={{
+                  marginLeft: '0.2em',
+                  cursor: 'pointer',
+                  color: '#205DF5',
+                  fontSize: '22px',
+                }}
+                onClick={() => handleTooltip('reference_numbers')}
+              />
+            </ModalTooltip>
+          </div>
+        )}
+        {data && data?.referenceNumbersByDealId?.length !== 0 && (
+          <>
+            <AllocationsTable
+              data={data.referenceNumbersByDealId}
+              headers={headers}
+              getCellContent={getCellContent}
+              sortField="available"
+              sortOrder="desc"
             />
-          </ModalTooltip>
-        </div>
-        <div style={{ width: '50%', display: 'flex', alignItems: 'center' }}>
+          </>
+        )}
+        <div
+          style={{ width: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        >
           <TextField
             variant="outlined"
             placeholder="New Directions virtual account number"
@@ -137,17 +158,6 @@ const Banking = ({ classes, deal_id, handleTooltip, openTooltip, orgSlug }) => {
           </Button>
         </div>
       </div>
-    );
-
-  return (
-    <>
-      <AllocationsTable
-        data={data.referenceNumbersByDealId}
-        headers={headers}
-        getCellContent={getCellContent}
-        sortField="available"
-        sortOrder="desc"
-      />
     </>
   );
 };
