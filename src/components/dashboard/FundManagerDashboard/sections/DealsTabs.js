@@ -100,7 +100,7 @@ const styles = (theme) => ({
 });
 
 const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
-  const { deals } = data.organization;
+  const { deals = [] } = data?.organization || {};
   const isMobile = useMediaQuery('(max-width:600px)');
   const [titleContainer, setTitleContainer] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
