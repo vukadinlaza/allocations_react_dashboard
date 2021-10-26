@@ -141,6 +141,7 @@ const BuildDetails = ({
   setBuildInfo,
   deal_id,
   waitingOnInitialDeal,
+  initialDeal,
 }) => {
   const organization = useCurrentOrganization();
   const classes = useStyles();
@@ -911,6 +912,20 @@ const BuildDetails = ({
           </Grid>
         </form>
       </Paper>
+
+      <Paper className={classes.paper}>
+        <form noValidate autoComplete="off">
+          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
+            5. Upload Your Documents
+          </Typography>
+          <UploadDocsModal
+            deal={
+              initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
+            }
+          />
+        </form>
+      </Paper>
+
       <Paper className={classes.paper}>
         <form noValidate autoComplete="off">
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
@@ -997,6 +1012,9 @@ export default function NewSpvForm() {
           setBuildInfo={setBuildInfo}
           deal_id={initialDeal?.deal?._id}
           waitingOnInitialDeal={loading}
+          initialDeal={
+            initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
+          }
         />
       ),
     },
