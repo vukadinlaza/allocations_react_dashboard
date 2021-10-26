@@ -336,7 +336,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#DAE8FF',
     fontSize: '85%',
     margin: '3px',
-    padding: '3px',
+    height: '25px',
     paddingLeft: '6px',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
@@ -345,9 +345,13 @@ const useStyles = makeStyles((theme) => ({
   },
   removeSectorButton: {
     display: 'flex',
+    height: '100%',
+    marginLeft: '3px',
+    alignItems: 'center',
     color: '#0461ff',
     backgroundColor: '#DAE8FF',
     border: 'none',
+    borderRadius: '0px 4px 4px 0px',
     fontWeight: '600',
     fontSize: '10px',
     //* TO DO: fix on hover - need to fit height

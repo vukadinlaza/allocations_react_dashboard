@@ -17,6 +17,7 @@ import NetworkIcon from '../../../../../assets/buildNetwork.svg';
 import PieIcon from '../../../../../assets/buildPie.svg';
 import { ModalTooltip } from '../../../../dashboard/FundManagerDashboard/widgets';
 import sectors from './sectors';
+import { toast } from 'react-toastify';
 
 export default function TypeSelector({
   assetType,
@@ -116,12 +117,12 @@ export default function TypeSelector({
   }
 
   function SectorSelector() {
-    const suggestions = sectors.map((sector) => {
-      return {
+    const suggestions = sectors
+      .map((sector) => ({
         value: sector.title,
         label: sector.title,
-      };
-    });
+      }))
+      .filter(({ value }) => !buildData.sectors.includes(value));
     const customStyles = {
       multiValue: (styles, { data }) => ({
         ...styles,
@@ -143,20 +144,17 @@ export default function TypeSelector({
           options={suggestions}
           menuPosition="fixed"
           styles={customStyles}
-          // shouldn't be able to add same value
           onChange={(options) => {
-            console.log('OPTION', options);
-            // const newEvent = {
-            //   target: {
-            //     name: 'sectors',
-            //     value: options.map((sector) => sector.value),
-            //   },
-            // };
-            // handleChange(newEvent);
-            setBuildData((prev) => ({
-              ...prev,
-              sectors: [...options.map(({ value }) => value), ...prev.sectors],
-            }));
+            const sector = options[0].value;
+
+            setBuildData((prev) => {
+              const isAtLimit = prev.sectors.length >= 3;
+              if (isAtLimit) toast.info('Please limit your sectors to 3 or less');
+              return {
+                ...prev,
+                sectors: isAtLimit ? prev.sectors : [...prev.sectors, sector],
+              };
+            });
           }}
           isMulti
         />
