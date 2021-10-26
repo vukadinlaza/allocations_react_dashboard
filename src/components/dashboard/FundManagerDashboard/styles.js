@@ -363,6 +363,18 @@ const styles = (theme) => ({
   tabWrapper: {
     padding: '0 20px',
   },
+  bankingAllocateWrapper: {
+    width: '100%',
+    border: 'solid 1px #dadada',
+    display: 'flex',
+    padding: '15px 20px',
+    background: 'white',
+    boxShadow: '0px 3px 5px -5px',
+    alignItems: 'center',
+    borderRadius: '3px',
+    marginBottom: '25px',
+    justifyContent: 'space-between',
+  },
   titleDataText: {
     margin: '0',
     fontSize: '14px',
