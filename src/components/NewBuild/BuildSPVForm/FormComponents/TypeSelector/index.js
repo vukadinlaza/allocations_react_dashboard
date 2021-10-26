@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 
 import HelpIcon from '@material-ui/icons/Help';
-import { TextField, Paper, Grid, FormControl } from '@material-ui/core';
+import { TextField, Paper, Grid, FormControl, Button } from '@material-ui/core';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import Typography from '@material-ui/core/Typography';
 import useStyles from '../../../BuildStyles';
@@ -22,10 +22,12 @@ export default function TypeSelector({
   assetType,
   handleChange,
   buildData,
+  setBuildData,
   handleTooltip,
   openTooltip,
 }) {
   const classes = useStyles();
+
   const row1Items = [
     {
       title: 'Startup',
@@ -141,15 +143,20 @@ export default function TypeSelector({
           options={suggestions}
           menuPosition="fixed"
           styles={customStyles}
-          value={buildData.sectors.map((sector) => ({ value: sector, label: sector }))}
-          onChange={(option) => {
-            const newEvent = {
-              target: {
-                name: 'sectors',
-                value: option.map((sector) => sector.value),
-              },
-            };
-            handleChange(newEvent);
+          // shouldn't be able to add same value
+          onChange={(options) => {
+            console.log('OPTION', options);
+            // const newEvent = {
+            //   target: {
+            //     name: 'sectors',
+            //     value: options.map((sector) => sector.value),
+            //   },
+            // };
+            // handleChange(newEvent);
+            setBuildData((prev) => ({
+              ...prev,
+              sectors: [...options.map(({ value }) => value), ...prev.sectors],
+            }));
           }}
           isMulti
         />
@@ -280,6 +287,25 @@ export default function TypeSelector({
               Sector(s) <HelpIcon className={classes.helpIcon} />
             </Typography>
             <SectorSelector />
+            <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '22px' }}>
+              {buildData.sectors.map((sector) => (
+                <div className={classes.sectorTag}>
+                  <span>{sector}</span>
+                  <button
+                    className={classes.removeSectorButton}
+                    type="button"
+                    onClick={() =>
+                      setBuildData((prev) => ({
+                        ...prev,
+                        sectors: buildData.sectors.filter((item) => item !== sector),
+                      }))
+                    }
+                  >
+                    &#x2715;
+                  </button>
+                </div>
+              ))}
+            </div>
           </Grid>
         </Grid>
       </form>

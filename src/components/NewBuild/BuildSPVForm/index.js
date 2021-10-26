@@ -213,6 +213,7 @@ const BuildDetails = ({
     <>
       <BasicInfo
         buildData={buildData}
+        setBuildData={setBuildData}
         handleChange={handleChange}
         parentClasses={classes}
         handleTooltip={handleTooltip}
