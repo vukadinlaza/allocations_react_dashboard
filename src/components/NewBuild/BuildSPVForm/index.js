@@ -146,7 +146,6 @@ const BuildDetails = ({
   const classes = useStyles();
 
   const [buildData, setBuildData] = useState({
-    organization_id: organization._id,
     asset_type: 'startup',
     portfolio_company_name: '',
     portfolio_company_securities: '',
@@ -179,7 +178,7 @@ const BuildDetails = ({
     representative: '',
     portfolio_deal_name: '',
   });
-  console.log('Build Data:', buildData);
+
   const [openTooltip, setOpenTooltip] = useState('');
   const customInputStyles = { style: { height: '23px' } };
 
@@ -199,7 +198,7 @@ const BuildDetails = ({
       variables: {
         deal_id,
         payload: {
-          organization_id: buildData.organization_id,
+          organization_id: organization._id,
           asset_type: buildData.asset_type,
           portfolio_deal_name: buildData.portfolio_deal_name,
           portfolio_company_name: buildData.portfolio_company_name,
