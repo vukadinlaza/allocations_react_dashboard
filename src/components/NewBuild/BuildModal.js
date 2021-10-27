@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
     margin: '3px',
     borderRadius: '48px',
     padding: '12px',
-    // weird with padding... 42px is sweet spot for rocket
     boxShadow: '0px 5px 10px 2px rgba(225, 225, 225, .8)',
   },
   modal: {
@@ -35,16 +34,15 @@ const useStyles = makeStyles((theme) => ({
   modalPaperTitle: {
     marginTop: '8vh',
     borderRadius: '1rem 1rem 0 0 ',
-    padding: theme.spacing(2),
+    padding: '18px 29px',
     maxHeight: 'calc(100% - 8vh)',
-    // overflow: 'scroll',
+    borderBottom: 'solid #E5E5E5 1px',
   },
 
   label: {
     color: '#2A2B54',
     fontWeight: 'bold',
   },
-  // adjust mobile.
   typeBadge: {
     backgroundColor: '#ECF3FF',
     color: '#0461FF',
@@ -105,7 +103,16 @@ const BuildModal = ({ onClose, isOpen }) => {
               }}
             >
               <Grid container style={{ marginBottom: '25px' }}>
-                <FormControl component="fieldset" style={{ width: '100%' }}>
+                <FormControl
+                  component="fieldset"
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
                   <Grid container className={classes.typeGroup}>
                     <Box
                       style={{
@@ -132,8 +139,9 @@ const BuildModal = ({ onClose, isOpen }) => {
                             margin: '10px 10px 10px 5px',
                           }}
                         >
-                          <img alt="spv-icon" className={classes.icon} src={spvIcon} />
-
+                          <div className={classes.icon}>
+                            <img alt="spv-icon" src={spvIcon} />
+                          </div>
                           <Typography className={classes.typeTitle}>SPV</Typography>
                         </Grid>
                         <Grid item className={classes.typeGrid}>
@@ -178,7 +186,6 @@ const BuildModal = ({ onClose, isOpen }) => {
                         </Grid>
                       </Paper>
                     </Box>
-                    {/* </RadioGroup> */}
                   </Grid>
                   <Grid container justifyContent="center">
                     <Button
