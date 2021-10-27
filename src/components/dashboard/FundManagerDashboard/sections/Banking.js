@@ -2,25 +2,8 @@ import React, { useState } from 'react';
 import { Button, Typography, TextField } from '@material-ui/core';
 import { useQuery, gql, useMutation } from '@apollo/client';
 import HelpIcon from '@material-ui/icons/Help';
-import AllocationsTable from '../../../utils/AllocationsTable';
 import Loader from '../../../utils/Loader';
 import { ModalTooltip } from '../widgets';
-
-const getCellContent = (type, row) => {
-  switch (type) {
-    case 'number':
-      return row.number;
-    case 'available':
-      return row.available.toString();
-    default:
-      return <div />;
-  }
-};
-
-const headers = [
-  { value: 'number', label: 'REFERENCE NUMBER', align: 'left', alignHeader: true, type: 'number' },
-  { value: 'available', label: 'AVAILABLE', type: 'available', align: 'left', alignHeader: true },
-];
 
 const REFERENCE_NUMBERS_BY_DEAL_ID = gql`
   query ReferenceNumbersByDealId($deal_id: String!) {
@@ -47,13 +30,21 @@ const UPDATE_DEAL = gql`
   }
 `;
 
-const Banking = ({ classes, deal_id, handleTooltip, openTooltip, orgSlug }) => {
+const Banking = ({
+  classes,
+  deal_id,
+  deal_NDvirtualAccountNum,
+  handleTooltip,
+  openTooltip,
+  orgSlug,
+}) => {
   const [NDvirtualAccountNum, setNDvirtualAccountNum] = useState('');
+  const [hasVirtualAccountNumber, setHasVirtualAccountNumber] = useState(deal_NDvirtualAccountNum);
 
   const { data, loading, refetch } = useQuery(REFERENCE_NUMBERS_BY_DEAL_ID, {
     variables: { deal_id },
   });
-  console.log(data);
+
   const [allocateRefNums, { loading: allocateLoading }] = useMutation(ALLOCATE, {
     variables: { deal_id },
     onCompleted: () => {
@@ -71,8 +62,19 @@ const Banking = ({ classes, deal_id, handleTooltip, openTooltip, orgSlug }) => {
     },
     onCompleted: () => {
       refetch();
+      setHasVirtualAccountNumber(NDvirtualAccountNum);
     },
   });
+
+  let referenceNumberRange = null;
+  if (data && data.referenceNumbersByDealId && data.referenceNumbersByDealId.length > 0) {
+    const refNums = [...data.referenceNumbersByDealId].sort(
+      (a, b) => Number(a.number) - Number(b.number),
+    );
+    const low = refNums[0].number;
+    const high = refNums[refNums.length - 1].number;
+    referenceNumberRange = `${low}-${high}`;
+  }
 
   return (
     <>
@@ -85,7 +87,7 @@ const Banking = ({ classes, deal_id, handleTooltip, openTooltip, orgSlug }) => {
         style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}
         className={classes.bankingAllocateWrapper}
       >
-        {data && data.referenceNumbersByDealId && data.referenceNumbersByDealId.length === 0 && (
+        {!referenceNumberRange && (
           <div
             style={{
               width: '50%',
@@ -99,7 +101,7 @@ const Banking = ({ classes, deal_id, handleTooltip, openTooltip, orgSlug }) => {
               onClick={() => allocateRefNums()}
               className={classes.createButton}
               color="secondary"
-              style={{ margin: '1rem', backgroundColor: 'blue' }}
+              style={{ margin: '1rem 1rem 1rem 0px', backgroundColor: 'blue' }}
             >
               Allocate New Direction Reference Numbers
             </Button>
@@ -127,36 +129,46 @@ const Banking = ({ classes, deal_id, handleTooltip, openTooltip, orgSlug }) => {
             </ModalTooltip>
           </div>
         )}
-        {data && data?.referenceNumbersByDealId?.length !== 0 && (
+        {referenceNumberRange && (
           <>
-            <AllocationsTable
-              data={data.referenceNumbersByDealId}
-              headers={headers}
-              getCellContent={getCellContent}
-              sortField="available"
-              sortOrder="desc"
-            />
+            <div style={{ display: 'flex' }}>
+              <p style={{ marginRight: '1em' }}>ND Reference Number Range</p>
+              <p style={{ marginLeft: '1em' }}>{referenceNumberRange}</p>
+            </div>
           </>
         )}
-        <div
-          style={{ width: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        >
-          <TextField
-            variant="outlined"
-            placeholder="New Directions virtual account number"
-            value={NDvirtualAccountNum}
-            onChange={(event) => setNDvirtualAccountNum(event.target.value)}
-          />
-          <Button
-            variant="contained"
-            className={classes.createButton}
-            color="secondary"
-            style={{ margin: '1rem', backgroundColor: 'blue' }}
-            onClick={updateDeal}
+        {hasVirtualAccountNumber ? (
+          <div style={{ display: 'flex' }}>
+            <p style={{ marginRight: '1em' }}>New Directions Virtual Account #</p>
+            <p style={{ marginLeft: '1em' }}>{hasVirtualAccountNumber}</p>
+          </div>
+        ) : (
+          <div
+            style={{
+              width: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
           >
-            Save
-          </Button>
-        </div>
+            <TextField
+              variant="outlined"
+              placeholder="New Directions Virtual Account #"
+              value={NDvirtualAccountNum}
+              onChange={(event) => setNDvirtualAccountNum(event.target.value)}
+              style={{ width: '-webkit-fill-available' }}
+            />
+            <Button
+              variant="contained"
+              className={classes.createButton}
+              color="secondary"
+              style={{ marginLeft: '1rem', backgroundColor: 'blue' }}
+              onClick={updateDeal}
+            >
+              Save
+            </Button>
+          </div>
+        )}
       </div>
     </>
   );
