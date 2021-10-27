@@ -233,6 +233,7 @@ export default function TypeSelector({
     return (
       <Select
         id="deal_stage"
+        menuPosition="fixed"
         label="Deal Stage"
         styles={customStyles}
         options={dealStages.map((stage) => ({ value: stage, label: stage })) || ''}
