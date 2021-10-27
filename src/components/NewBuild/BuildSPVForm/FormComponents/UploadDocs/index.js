@@ -4,8 +4,8 @@ import Typography from '@material-ui/core/Typography';
 import { gql, useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
-import buildDoc from '../../../../../assets/buildDoc.svg';
-import buildUpload from '../../../../../assets/buildUpload.svg';
+import documentIcon from '../../../../../assets/document-icon.svg';
+import uploadIcon from '../../../../../assets/upload-icon.svg';
 import CheckCircle from '../../../../../assets/check_circle_black_24dp.svg';
 import useStyles from '../../../BuildStyles';
 
@@ -42,23 +42,32 @@ const DocUploader = ({
   //   }
   // }, [filesUploaded]);
 
+  const uploadTitleMap = {
+    'Upload Company Deck': 'Pitch Deck',
+    'Upload Term Sheet': 'Portfolio Company Term Sheet',
+    'Upload Company Logo': 'Portfolio Company Logo',
+  };
+
   return (
     <div
       className={`${classes.item} ${
         !filesUploaded[document.title].complete ? '' : classes.selected
       }`}
     >
-      <img src={buildDoc} alt="document icon" className={classes.documentIcon} />
-      <Typography className={classes.itemText}>{document.title}</Typography>
+      <div className={classes.docIconBox}>
+        <img src={documentIcon} alt="document icon" />
+      </div>
+      <Typography className={classes.itemText}>{uploadTitleMap[document.title]}</Typography>
       {!filesUploaded[document.title].complete ? (
-        <div className={classes.uploadIcon} style={{ opacity: '1' }}>
-          <label htmlFor="doc-upload" style={{ margin: '0' }}>
+        <div className={classes.uploadIcon} style={{ opacity: '1', textAlign: 'center' }}>
+          <label htmlFor="doc-upload" className={classes.uploadIconLabel}>
             <img
-              src={buildUpload}
+              src={uploadIcon}
               className={classes.uploadIcon}
               style={{ opacity: '1', cursor: 'pointer' }}
               alt="checkbox"
             />
+            &nbsp;Upload document
           </label>
           <form>
             <input
@@ -105,8 +114,10 @@ const DocUploader = ({
 export default function UploadDocs({ page, setPage, deal }) {
   const classes = useStyles();
   const currentPhase = deal.phases.find((phase) => phase.name === 'build');
-  const uploadTasks = currentPhase.tasks.filter((task) => task.type === 'fm-document-upload');
-
+  const uploadTasks = currentPhase.tasks.filter(
+    (task) => task.type === 'fm-document-upload' && task.title !== 'Upload ID',
+  );
+  console.log('uploads', uploadTasks);
   const [filesUploaded, setFilesUploaded] = useState({
     'Upload Company Logo': {
       complete: false,
@@ -146,18 +157,19 @@ export default function UploadDocs({ page, setPage, deal }) {
           Please upload the appropriate documents so we have them on file for you. When uploading
           multiple files, please compress them into one zip folder.
         </Typography> */}
-        {uploadTasks.map((task) => (
-          <DocUploader
-            key={task._id}
-            document={task}
-            classes={classes}
-            filesUploaded={filesUploaded}
-            setFilesUploaded={setFilesUploaded}
-            addDoc={addDoc}
-            deal={deal}
-          />
-        ))}
-
+        <section className={classes.uploadContainer}>
+          {uploadTasks.map((task) => (
+            <DocUploader
+              key={task._id}
+              document={task}
+              classes={classes}
+              filesUploaded={filesUploaded}
+              setFilesUploaded={setFilesUploaded}
+              addDoc={addDoc}
+              deal={deal}
+            />
+          ))}
+        </section>
         {/* <Button
           className={classes.finishButton}
           onClick={() => {
