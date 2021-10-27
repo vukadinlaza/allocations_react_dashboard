@@ -2,16 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import moment from 'moment';
 import _ from 'lodash';
+import countries from 'country-region-data';
 import HelpIcon from '@material-ui/icons/Help';
-import { Button, TextField, Paper, Grid, FormControl, ButtonGroup } from '@material-ui/core';
+import {
+  Button,
+  TextField,
+  Paper,
+  Grid,
+  FormControl,
+  ButtonGroup,
+  MenuItem,
+  Select as Select2,
+} from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import Select from 'react-select';
 import BasicInfo from './FormComponents/TypeSelector/index';
 import UploadDocsModal from './FormComponents/UploadDocs/index';
-import useStyles from '../BuildStyles';
 import { useAuth } from '../../../auth/useAuth';
 import { phone } from '../../../utils/helpers';
 import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
 import { useCurrentOrganization } from '../../../state/current-organization';
+import useStyles from '../BuildStyles';
 
 const CREATE_BUILD = gql`
   mutation createBuild {
@@ -135,32 +146,41 @@ const BuildDetails = ({
   const classes = useStyles();
 
   const [buildData, setBuildData] = useState({
-    organization_id: organization._id,
     asset_type: 'startup',
     portfolio_company_name: '',
+    portfolio_company_securities: '',
+    estimated_spv_quantity: '',
+    master_series: '',
+    minimum_investment: '',
+    international_company_status: 'false', //* add to db
+    international_company_country: '', //* add to db
+    international_investors_status: 'false', //* investor_type
+    international_investors_countries: [], //* add to db
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
         : null,
-    carry_fee: {
-      type: 'percent',
-      value: '10',
-    },
-    management_fee: {
-      type: 'percent',
-      value: '2',
-    },
+    carry_fee_type: 'percent',
+    carry_fee_value: '10',
+    custom_carry_fee: 'false',
+    management_fee_type: 'percent',
+    management_fee_value: '2',
+    custom_management_fee: 'false',
     custom_investment_agreement: 'false',
     management_fee_frequency: 'one-time',
     setup_cost: 20000,
     offering_type: '506b',
-    allocations_investment_advisor: 'true',
+    allocations_investment_advisor: 'true', //* conditional front or back?
+    investment_advisor: '',
     side_letters: 'false',
     closing_date: moment(Date.now()).format('YYYY-MM-DD'),
     sectors: [],
+    representative: '',
+    portfolio_deal_name: '',
   });
 
   const [openTooltip, setOpenTooltip] = useState('');
+  const customInputStyles = { style: { height: '23px' } };
 
   const handleTooltip = (id) => {
     setOpenTooltip(id);
@@ -178,41 +198,203 @@ const BuildDetails = ({
       variables: {
         deal_id,
         payload: {
-          ...buildData,
+          organization_id: organization._id,
+          asset_type: buildData.asset_type,
+          portfolio_deal_name: buildData.portfolio_deal_name,
+          portfolio_company_name: buildData.portfolio_company_name,
+          portfolio_company_securities: buildData.portfolio_company_securities,
+          estimated_spv_quantity: Number(buildData.estimated_spv_quantity),
+          master_series: buildData.master_series,
+          minimum_subscription_amount: buildData.minimum_investment,
+          international_company: {
+            status: buildData.international_company_status,
+            country: buildData.international_company_country,
+          },
+          international_investors: {
+            status: buildData.international_investors_status,
+            countries: buildData.international_investors_countries,
+          },
+          manager_name: buildData.manager_name,
+          carry_fee: {
+            type: buildData.carry_fee_type,
+            value: buildData.carry_fee_value,
+            custom: buildData.custom_carry_fee,
+          },
+          management_fee: {
+            type: buildData.management_fee_type,
+            value: buildData.management_fee_value,
+            custom: buildData.custom_management_fee,
+          },
+          custom_investment_agreement: buildData.custom_investment_agreement,
+          management_fee_frequency: buildData.management_fee_frequency,
+          setup_cost: buildData.setup_cost,
+          offering_type: buildData.offering_type,
+          allocations_investment_advisor: buildData.allocations_investment_advisor,
+          investment_advisor: buildData.investment_advisor,
+          side_letters: buildData.side_letters,
+          closing_date: buildData.closing_date,
+          sectors: buildData.sectors,
+          representative: buildData.representative,
         },
       },
     });
   };
 
   const handleChange = ({ target }) => {
-    if (
-      !target?.name?.includes('offering') &&
-      !target?.name?.includes('asset') &&
-      (target?.name?.includes('_type') || target?.name?.includes('_value'))
-    ) {
-      const splitKeyName = target.name.split('_');
-      const keyName = `${splitKeyName[0]}_${splitKeyName[1]}`;
-      setBuildData((prev) => ({
+    const isNotInternational =
+      target.name === 'international_company_status' && (target.value === 'false' || 'unknown');
+    const isNotInternationalInvestors =
+      target.name === 'international_investors_status' && (target.value === 'false' || 'unknown');
+    const isNotMasterSeries = target.name === 'estimated_spv_quantity' && target.value < 5;
+    const isAllocationsTheAdvisor =
+      target.name === 'allocations_investment_advisor' && target.value;
+    const isNotCustomManagementFee =
+      target.name === 'management_fee_value' && target.value !== 'Custom';
+    const isNotCustomCarryFee = target.name === 'carry_fee_value' && target.value !== 'Custom';
+
+    setBuildData((prev) => {
+      const newBuildObject = {
         ...prev,
-        [keyName]: {
-          ...prev[keyName],
-          [splitKeyName[2] === 'type' ? 'type' : 'value']: target.value,
-        },
-      }));
-      // return;
-    } else {
-      setBuildData((prev) => ({
-        ...prev,
+        master_series: isNotMasterSeries ? '' : prev.master_series,
+        investment_advisor: isAllocationsTheAdvisor ? '' : prev.investment_advisor,
+        custom_management_fee: isNotCustomManagementFee ? 'false' : prev.custom_management_fee,
+        custom_carry_fee: isNotCustomCarryFee ? 'false' : prev.custom_carry_fee,
+        international_company_country: isNotInternational ? '' : prev.international_company_country,
+        international_investors_countries: isNotInternationalInvestors
+          ? []
+          : prev.international_investors_countries,
         [target.name]: target.value,
-      }));
-    }
-    localStorage.setItem('buildData', JSON.stringify(buildData));
+      };
+
+      localStorage.setItem('buildData', JSON.stringify(newBuildObject));
+      return newBuildObject;
+    });
   };
+
+  function InternationalCountrySelector() {
+    const countryNames = countries.map((c) => c.countryName);
+    const placeHolder = 'Please select which countries';
+    const customStyles = {
+      multiValue: (styles) => ({
+        ...styles,
+        backgroundColor: '#DAE8FF',
+      }),
+      multiValueLabel: (styles) => ({
+        ...styles,
+        color: '#0461FF',
+        height: 37,
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: '96%',
+      }),
+      multiValueRemove: (styles) => ({
+        ...styles,
+        color: '#0461FF',
+      }),
+      control: (styles) => ({
+        ...styles,
+        marginTop: 50,
+        minHeight: 60,
+        width: phoneSize ? '325px' : '90%',
+        maxWidth: 568,
+        cursor: 'pointer',
+      }),
+      placeholder: (styles, data) => ({
+        ...styles,
+        color: data.children === placeHolder ? '#999' : '#000',
+      }),
+    };
+
+    return (
+      <Select
+        id="international_company_country"
+        label="International Company by Country"
+        menuPosition="fixed"
+        styles={customStyles}
+        value={buildData.international_company_country || ''}
+        options={countryNames.map((country) => ({ value: country, label: country })) || ''}
+        placeholder={buildData.international_company_country || placeHolder}
+        onChange={(option) => {
+          const newEvent = {
+            target: {
+              name: 'international_company_country',
+              value: option.value,
+            },
+          };
+          handleChange(newEvent);
+        }}
+        // isMulti
+      />
+    );
+  }
+
+  function InternationalInvestorsCountriesSelector() {
+    const countryNames = countries.map((c) => c.countryName);
+    const placeHolder = 'Please select which countries';
+    const customStyles = {
+      multiValue: (styles) => ({
+        ...styles,
+        backgroundColor: '#DAE8FF',
+      }),
+      multiValueLabel: (styles) => ({
+        ...styles,
+        color: '#0461FF',
+        height: 37,
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: '96%',
+      }),
+      multiValueRemove: (styles) => ({
+        ...styles,
+        color: '#0461FF',
+      }),
+      control: (styles) => ({
+        ...styles,
+        marginTop: 50,
+        minHeight: 60,
+        width: phoneSize ? '325px' : '90%',
+        maxWidth: 568,
+        cursor: 'pointer',
+      }),
+      placeholder: (styles, data) => ({
+        ...styles,
+        color: data.children === placeHolder ? '#999' : '#000',
+      }),
+    };
+
+    return (
+      <Select
+        id="international_investors_countries"
+        label="International Companies by Country"
+        menuPosition="fixed"
+        styles={customStyles}
+        value={
+          buildData.international_investors_countries.map((country) => ({
+            value: country,
+            label: country,
+          })) || ''
+        }
+        options={countryNames.map((country) => ({ value: country, label: country })) || ''}
+        placeholder={placeHolder || buildData.international_investors_countries}
+        onChange={(option) => {
+          const newEvent = {
+            target: {
+              name: 'international_investors_countries',
+              value: option.map((country) => country.value),
+            },
+          };
+          handleChange(newEvent);
+        }}
+        isMulti
+      />
+    );
+  }
 
   return (
     <>
       <BasicInfo
         buildData={buildData}
+        setBuildData={setBuildData}
         handleChange={handleChange}
         parentClasses={classes}
         handleTooltip={handleTooltip}
@@ -223,8 +405,8 @@ const BuildDetails = ({
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
             2. Deal Terms
           </Typography>
-          <Grid container spacing={1} className={classes.inputGridContainer}>
-            <Grid className={classes.inputGridItem} item xs={6}>
+          <Grid container spacing={2} className={classes.inputGridContainer}>
+            <Grid className={classes.customInputGridItem} item xs={6}>
               <FormControl
                 required
                 // disabled
@@ -243,18 +425,18 @@ const BuildDetails = ({
                       </Typography>
                     }
                     openTooltip={openTooltip}
-                    id="management_fee"
+                    id="management_fee_value"
                   >
                     <HelpIcon
                       className={classes.helpIcon}
-                      onClick={(e) => handleTooltip('management_fee')}
+                      onClick={(e) => handleTooltip('management_fee_value')}
                     />
                   </ModalTooltip>
                 </Typography>
                 <ButtonSelector
                   name="management_fee_value"
                   onChange={handleChange}
-                  currentValue={buildData.management_fee.value}
+                  currentValue={buildData.management_fee_value}
                   gridCol={phoneSize ? 'repeat(3, 1fr)' : 'repeat(4, 1fr) 1.5fr'}
                   values={[
                     { label: '0%', value: '0' },
@@ -265,7 +447,52 @@ const BuildDetails = ({
                   ]}
                 />
               </FormControl>
+              {buildData.management_fee_value === 'Custom' && (
+                <FormControl
+                  required
+                  disabled
+                  variant="outlined"
+                  className={classes.formContainers}
+                  style={{ marginTop: '40px' }}
+                >
+                  <Typography className={classes.formItemName}>
+                    Enter your custom management fee
+                    <ModalTooltip
+                      title="Custom Management Fee"
+                      handleTooltip={handleTooltip}
+                      tooltipContent={
+                        <Typography color="inherit">
+                          Please enter your custom management fees according to your deal. i.e "20%
+                          for the first year, 10% for any years after"
+                        </Typography>
+                      }
+                      openTooltip={openTooltip}
+                      id="custom_management_fee"
+                    >
+                      <HelpIcon
+                        className={classes.helpIcon}
+                        onClick={(e) => handleTooltip('custom_management_fee')}
+                      />
+                    </ModalTooltip>
+                  </Typography>
+                  <TextField
+                    value={
+                      buildData.custom_management_fee === 'false'
+                        ? ''
+                        : buildData.custom_management_fee
+                    }
+                    placeholder="Custom Management Fee"
+                    name="custom_management_fee"
+                    onChange={handleChange}
+                    className={classes.inputBox}
+                    variant="outlined"
+                    inputProps={customInputStyles}
+                    classes={{ root: classes.selectInputBox }}
+                  />
+                </FormControl>
+              )}
             </Grid>
+
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
@@ -298,7 +525,8 @@ const BuildDetails = ({
                 />
               </FormControl>
             </Grid>
-            <Grid className={classes.inputGridItem} item xs={6}>
+
+            <Grid className={classes.customInputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
                   Choose your carry fee
@@ -312,18 +540,18 @@ const BuildDetails = ({
                       </Typography>
                     }
                     openTooltip={openTooltip}
-                    id="carry_fee"
+                    id="carry_fee_value"
                   >
                     <HelpIcon
                       className={classes.helpIcon}
-                      onClick={(e) => handleTooltip('carry_fee')}
+                      onClick={(e) => handleTooltip('carry_fee_value')}
                     />
                   </ModalTooltip>
                 </Typography>
                 <ButtonSelector
                   name="carry_fee_value"
                   onChange={handleChange}
-                  currentValue={buildData.carry_fee.value}
+                  currentValue={buildData.carry_fee_value}
                   gridCol={phoneSize ? 'repeat(3, 1fr)' : 'repeat(4, 1fr) 1.5fr'}
                   values={[
                     { label: '0%', value: '0' },
@@ -334,6 +562,45 @@ const BuildDetails = ({
                   ]}
                 />
               </FormControl>
+              {buildData.carry_fee_value === 'Custom' && (
+                <FormControl
+                  required
+                  disabled
+                  variant="outlined"
+                  className={classes.formContainers}
+                  style={{ marginTop: '40px' }}
+                >
+                  <Typography className={classes.formItemName}>
+                    Enter your custom carry fee
+                    <ModalTooltip
+                      title="Custom Carry Fee"
+                      handleTooltip={handleTooltip}
+                      tooltipContent={
+                        <Typography color="inherit">
+                          Please enter your custom carry fees according to your deal
+                        </Typography>
+                      }
+                      openTooltip={openTooltip}
+                      id="custom_carry_fee"
+                    >
+                      <HelpIcon
+                        className={classes.helpIcon}
+                        onClick={(e) => handleTooltip('custom_carry_fee')}
+                      />
+                    </ModalTooltip>
+                  </Typography>
+                  <TextField
+                    value={buildData.custom_carry_fee === 'false' ? '' : buildData.custom_carry_fee}
+                    placeholder="Custom Carry Fee"
+                    name="custom_carry_fee"
+                    onChange={handleChange}
+                    className={classes.inputBox}
+                    variant="outlined"
+                    inputProps={customInputStyles}
+                    classes={{ root: classes.selectInputBox }}
+                  />
+                </FormControl>
+              )}
             </Grid>
 
             <Grid className={classes.inputGridItem} item xs={6}>
@@ -369,6 +636,39 @@ const BuildDetails = ({
                 />
               </FormControl>
             </Grid>
+            <Grid className={classes.inputGridItem} item xs={6}>
+              <FormControl required disabled variant="outlined" className={classes.formContainers}>
+                <Typography className={classes.formItemName}>
+                  What is the minimum investment?
+                  <ModalTooltip
+                    title="What is the minimum investment?"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        Please indicate what is the minimum investment for investors to invest into
+                        SPV (e.g., $10,000)
+                      </Typography>
+                    }
+                    openTooltip={openTooltip}
+                    id="minimum_investment"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={(e) => handleTooltip('minimum_investment')}
+                    />
+                  </ModalTooltip>
+                </Typography>
+                <TextField
+                  value={buildData.minimum_investment}
+                  name="minimum_investment"
+                  onChange={handleChange}
+                  className={classes.inputBox}
+                  variant="outlined"
+                  inputProps={customInputStyles}
+                  classes={{ root: classes.selectInputBox }}
+                />
+              </FormControl>
+            </Grid>
           </Grid>
         </form>
       </Paper>
@@ -378,7 +678,7 @@ const BuildDetails = ({
             3. Offering Terms
           </Typography>
           <Grid container spacing={1} className={classes.inputGridContainer}>
-            <Grid className={classes.inputGridItem} item xs={6}>
+            <Grid className={classes.customInputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
                   Choose Allocations as the reporting adviser?
@@ -411,6 +711,43 @@ const BuildDetails = ({
                   ]}
                 />
               </FormControl>
+              {buildData.allocations_investment_advisor === 'false' && (
+                <FormControl
+                  required
+                  disabled
+                  variant="outlined"
+                  className={classes.formContainers}
+                  style={{ marginTop: '40px' }}
+                >
+                  <Typography className={classes.formItemName}>
+                    Please enter your advisor name
+                    <ModalTooltip
+                      title="Advisor Name"
+                      handleTooltip={handleTooltip}
+                      tooltipContent={
+                        <Typography color="inherit">Please indicate your ERA/RIA name</Typography>
+                      }
+                      openTooltip={openTooltip}
+                      id="investment_advisor"
+                    >
+                      <HelpIcon
+                        className={classes.helpIcon}
+                        onClick={(e) => handleTooltip('investment_advisor')}
+                      />
+                    </ModalTooltip>
+                  </Typography>
+                  <TextField
+                    value={buildData.investment_advisor}
+                    placeholder="Advisor Name"
+                    name="investment_advisor"
+                    onChange={handleChange}
+                    className={classes.inputBox}
+                    variant="outlined"
+                    inputProps={customInputStyles}
+                    classes={{ root: classes.selectInputBox }}
+                  />
+                </FormControl>
+              )}
             </Grid>
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
@@ -485,7 +822,98 @@ const BuildDetails = ({
       <Paper className={classes.paper}>
         <form noValidate autoComplete="off">
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-            4. Final
+            4. Demographics
+          </Typography>
+          <Grid container spacing={1} className={classes.inputGridContainer}>
+            <Grid className={classes.inputGridItem} item xs={6}>
+              <FormControl required variant="outlined" className={classes.formContainers}>
+                <Typography className={`${classes.formItemName} ${classes.customFormItemName}`}>
+                  Will this deal being investing into an international (Non US) company?
+                  <ModalTooltip
+                    title="International Companies"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        If this SPV/Fund will invest into a company located outside the United
+                        States, please select Yes to this question followed by the applicable
+                        country. If you are unsure at the moment, please select Unknown.
+                      </Typography>
+                    }
+                    openTooltip={openTooltip}
+                    id="international_company_status"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={(e) => handleTooltip('international_company_status')}
+                    />
+                  </ModalTooltip>
+                </Typography>
+                <ButtonSelector
+                  name="international_company_status"
+                  gridCol="1fr 1fr 1fr"
+                  onChange={handleChange}
+                  currentValue={buildData.international_company_status}
+                  values={[
+                    { label: 'Yes', value: 'true' },
+                    { label: 'No', value: 'false' },
+                    { label: 'Unknown', value: 'unknown' },
+                  ]}
+                />
+              </FormControl>
+              {buildData.international_company_status === 'true' && (
+                <FormControl required variant="outlined" className={classes.formContainers}>
+                  <InternationalCountrySelector />
+                </FormControl>
+              )}
+            </Grid>
+            <Grid className={classes.inputGridItem} item xs={6} spacing={2}>
+              <FormControl required variant="outlined" className={classes.formContainers}>
+                <Typography className={`${classes.formItemName} ${classes.customFormItemName}`}>
+                  Will you have any international (Non US) investors?
+                  <ModalTooltip
+                    title="International Investors"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        If this SPV/Fund will have investors located outside the United States,
+                        please select Yes to this question followed by the applicable country. If
+                        you are unsure at the moment, please select Unknown.
+                      </Typography>
+                    }
+                    openTooltip={openTooltip}
+                    id="international_investors_status"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={(e) => handleTooltip('international_investors_status')}
+                    />
+                  </ModalTooltip>
+                </Typography>
+                <ButtonSelector
+                  name="international_investors_status"
+                  gridCol="1fr 1fr 1fr"
+                  onChange={handleChange}
+                  currentValue={buildData.international_investors_status}
+                  values={[
+                    { label: 'Yes', value: 'true' },
+                    { label: 'No', value: 'false' },
+                    { label: 'Unknown', value: 'unknown' },
+                  ]}
+                />
+              </FormControl>
+              {buildData.international_investors_status === 'true' && (
+                <FormControl required variant="outlined" className={classes.formContainers}>
+                  <InternationalInvestorsCountriesSelector />
+                </FormControl>
+              )}
+            </Grid>
+          </Grid>
+        </form>
+      </Paper>
+      <Paper className={classes.paper}>
+        <form noValidate autoComplete="off">
+          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
+            6. Final
           </Typography>
           <FormControl required disabled variant="outlined" className={classes.formContainers}>
             <Typography className={classes.formItemName}>
@@ -513,10 +941,10 @@ const BuildDetails = ({
               name="memo"
               value={buildData.memo}
               onChange={handleChange}
+              className={classes.finalInputBox}
               inputProps={{
                 className: classes.finalInput,
               }}
-              className={classes.finalInputBox}
             />
             <Button
               className={classes.continueButton}

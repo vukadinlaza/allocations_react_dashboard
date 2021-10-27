@@ -73,9 +73,10 @@ const useStyles = makeStyles((theme) => ({
   documentIcon: { marginLeft: '20px' },
   continueButton: {
     font: 'normal normal bold 24px/28px Roboto',
-    marginTop: '44px',
-    width: '368px',
-    height: '68px',
+    marginTop: '5px',
+    width: '350px',
+    height: '60px',
+    margin: 'auto',
     background: '#186EFF 0% 0% no-repeat padding-box',
     borderRadius: '10px',
     opacity: '1',
@@ -106,6 +107,9 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: '14px',
       marginLeft: '8px',
     },
+  },
+  customFormItemName: {
+    minHeight: '40px',
   },
   sectionHeaderText: {
     fontSize: '34px',
@@ -172,6 +176,13 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '568px',
     width: '100%',
   },
+  selectInputBox: {
+    width: '90%',
+  },
+  wideInputBox: {
+    maxWidth: '1206px',
+  },
+
   inputButton: {
     width: '180px',
     height: '58px',
@@ -205,7 +216,20 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   inputGridItem: {
+    // marginBottom: '37px',
+    [theme.breakpoints.down(phone)]: {
+      maxWidth: '100%',
+    },
+  },
+  customInputGridItem: {
     marginBottom: '37px',
+    [theme.breakpoints.down(phone)]: {
+      maxWidth: '100%',
+    },
+  },
+  inputGridItemColumn: {
+    marginBottom: '37px',
+    flexDirection: 'column',
     [theme.breakpoints.down(phone)]: {
       maxWidth: '100%',
     },
@@ -252,7 +276,7 @@ const useStyles = makeStyles((theme) => ({
   selectorButton: {
     fontSize: '.8em',
     color: 'black',
-    height: '69px',
+    height: '60px',
     border: '1px solid #d3d3d3 !important',
     backgroundColor: '#ffffff',
     [theme.breakpoints.down(phone)]: {
@@ -329,6 +353,36 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     opacity: '1',
+  },
+  sectorTag: {
+    display: 'flex',
+    color: '#0461ff',
+    backgroundColor: '#DAE8FF',
+    fontSize: '85%',
+    margin: '3px',
+    height: '25px',
+    paddingLeft: '6px',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    borderRadius: '4px',
+    alignItems: 'center',
+  },
+  removeSectorButton: {
+    display: 'flex',
+    height: '100%',
+    marginLeft: '3px',
+    alignItems: 'center',
+    color: '#0461ff',
+    backgroundColor: '#DAE8FF',
+    border: 'none',
+    borderRadius: '0px 4px 4px 0px',
+    fontWeight: '600',
+    fontSize: '10px',
+    //* TO DO: fix on hover - need to fit height
+    '&:hover': {
+      backgroundColor: '#FFBDAD',
+      color: '#DE350B',
+    },
   },
   // 3. Styles that are used exclusively in the 'Upload docs' tab.
   finishButton: {

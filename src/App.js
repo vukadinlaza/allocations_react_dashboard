@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
+import { withLDProvider } from 'launchdarkly-react-client-sdk';
 
 import FundManagerDashboard from './components/dashboard/FundManagerDashboard';
 import InvestorDashboard from './components/dashboard/InvestorDashboard';
@@ -28,7 +29,6 @@ import InvestmentPage from './components/DealOneClick/InvestmentPage/InvestmentP
 
 // test
 import BuildSPVForm from './components/NewBuild/BuildSPVForm/index';
-import BuildFundForm from './components/NewBuild/BuildFundForm/index';
 
 import DealSetup from './components/deals/fund-manager/Setup';
 // import DealSetup from './components/DealSetup';
@@ -127,4 +127,12 @@ const App = () => {
   );
 };
 
-export default App;
+const FlagApp = () => {
+  const Component = withLDProvider({
+    clientSideID: process.env.REACT_APP_LAUNCH_DARKLY_ID,
+  })(App);
+
+  return <Component />;
+};
+
+export default FlagApp;

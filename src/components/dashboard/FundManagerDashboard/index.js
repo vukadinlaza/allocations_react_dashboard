@@ -13,6 +13,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
+import Banking from './sections/Banking';
 import Investments from './sections/Investments';
 import Investors from './sections/Investors';
 import Overview from './sections/Overview';
@@ -106,9 +107,35 @@ export const ORG_OVERVIEW = gql`
   }
 `;
 
-export const GET_OVERVIEW_DATA = gql`
-  query OverviewData($slug: String!) {
-    overviewData(slug: $slug)
+const AUM_DATA = gql`
+  query OrganizationAUM($slug: String!) {
+    aum: organization(slug: $slug) {
+      total: totalAUM
+    }
+  }
+`;
+
+const TOTAL_SPVS_DATA = gql`
+  query OrganizationSPVs($slug: String!) {
+    spvs: organization(slug: $slug) {
+      total: totalSPVs
+    }
+  }
+`;
+
+const TOTAL_FUNDS_DATA = gql`
+  query OrganizationFunds($slug: String!) {
+    funds: organization(slug: $slug) {
+      total: totalFunds
+    }
+  }
+`;
+
+const TOTAL_INVESTMENTS_DATA = gql`
+  query OrganizationFunds($slug: String!) {
+    investments: organization(slug: $slug) {
+      total: totalInvestments
+    }
   }
 `;
 
@@ -122,6 +149,7 @@ const fundTabs = [
 ];
 
 const spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
+
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
@@ -148,11 +176,24 @@ const FundManagerDashboard = ({ classes, history }) => {
   const [openTooltip, setOpenTooltip] = useState('');
   const [orgDeals, setOrgDeals] = useState(null);
 
-  const { data: overview } = useQuery(GET_OVERVIEW_DATA, { variables: { slug: orgSlug } });
+  const { data: aumData } = useQuery(AUM_DATA, { variables: { slug: orgSlug } });
+  const { data: totalSpvData } = useQuery(TOTAL_SPVS_DATA, { variables: { slug: orgSlug } });
+  const { data: totalFundsData } = useQuery(TOTAL_FUNDS_DATA, { variables: { slug: orgSlug } });
+  const { data: totalInvestmentsData } = useQuery(TOTAL_INVESTMENTS_DATA, {
+    variables: { slug: orgSlug },
+  });
+
   const [getInvestments, { data: dealInvestments, refetch }] = useLazyQuery(GET_INVESTMENTS);
   const [getOrgDeals, { data: orgDealsData }] = useLazyQuery(ORG_OVERVIEW);
   const checkedDealName = encodeURIComponent(dealName);
   const checkedAtDealDataName = encodeURIComponent(atDealData?.name);
+
+  if (userProfile.admin) {
+    const bankingTabName = 'Banking';
+    // Only add banking tab if user is admin
+    if (!fundTabs.includes(bankingTabName)) fundTabs.push(bankingTabName);
+    if (!spvTabs.includes(bankingTabName)) spvTabs.push(bankingTabName);
+  }
 
   const { data: atDeal } = useFetch(
     OPS_ACCOUNTING,
@@ -287,7 +328,15 @@ const FundManagerDashboard = ({ classes, history }) => {
 
   const getTabContent = () => {
     if (dealTab === 0) {
-      return <Overview classes={classes} data={overview.overviewData} />;
+      return (
+        <Overview
+          classes={classes}
+          aum={aumData?.aum.total}
+          spvs={totalSpvData?.spvs.total}
+          funds={totalFundsData?.funds.total}
+          investors={totalInvestmentsData?.investments.total}
+        />
+      );
     }
 
     let fundData = atFundData.map((d) => d.fields);
@@ -382,14 +431,22 @@ const FundManagerDashboard = ({ classes, history }) => {
             </FlatBox>
           </div>
         );
-
+      case 'Banking':
+        return (
+          <Banking
+            orgSlug={orgSlug}
+            classes={classes}
+            deal_id={dealData._id}
+            openTooltip={openTooltip}
+            handleTooltip={handleTooltip}
+          />
+        );
       default:
         return <p>No Data</p>;
     }
   };
 
   const [openModal, setOpenModal] = useState(false);
-  if (!orgDeals || !overview?.overviewData) return <AllocationsLoader fullHeight />;
 
   const isOverview = dealTab === 0;
 
