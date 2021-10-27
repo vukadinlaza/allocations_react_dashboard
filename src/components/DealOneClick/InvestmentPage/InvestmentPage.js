@@ -217,8 +217,8 @@ function InvestmentPage() {
     setPopulated(true);
   };
 
-  const [submitConfirmation] = useMutation(CONFIRM_INVESTMENT, {
-    onCompleted: () => {
+  const [submitConfirmation, { data: investmentData }] = useMutation(CONFIRM_INVESTMENT, {
+    onCompleted: (investmentData) => {
       refetch();
       setLoading(false);
       const message = location?.state?.submission
@@ -228,7 +228,10 @@ function InvestmentPage() {
       const path = organization
         ? `/next-steps/${organization}/${deal_slug}`
         : `/next-steps/${deal_slug}`;
-      history.push(path, { investorFormData });
+      history.push(path, {
+        id: investmentData.confirmInvestment._id,
+        investorFormData,
+      });
     },
     onError: () => {
       toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');

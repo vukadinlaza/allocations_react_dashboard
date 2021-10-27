@@ -15,6 +15,7 @@ import AllocationsRocket from './AllocationsRocket/AllocationsRocket';
 import KYCModal from './KYCModal.js';
 import WireInstructionsModal from './WireInstructionsModal/WireInstructionsModal';
 import { useAuth } from '../../auth/useAuth';
+import AppModal from '../Modal/AppModal';
 
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
@@ -84,23 +85,49 @@ const GET_INVESTMENT = gql`
   }
 `;
 
+function PaymentModal({ cryptoData, setOpenCrypto }) {
+  return (
+    <AppModal>
+      <div style={{ zIndex: '100', border: '1px black' }} className="crypto-payment-portal">
+        <iframe
+          title="crypto payment"
+          style={{
+            width: '100%',
+            maxWidth: '100%',
+            height: '1550px',
+          }}
+          src={cryptoData.access_url}
+          frameBorder="0"
+        />
+        <button type="button" onClick={() => setOpenCrypto(false)}>
+          Close
+        </button>
+        <script type="text/javascript" src="https://forumpay.com/api/events/payment.js" />
+        <script type="text/javascript">
+          CryptoPaymentStats.setToken({cryptoData.stats_token})
+        </script>
+      </div>{' '}
+    </AppModal>
+  );
+}
+
 function DealNextSteps() {
   const [confetti, showConfetti] = useState(false);
   const { data, loading, refetch } = useQuery(GET_INVESTOR, { fetchPolicy: 'network-only' });
   const [getDeal, { data: dealData, called: calledDeal }] = useLazyQuery(GET_DEAL);
   const [showTaxAsCompleted, setShowTaxAsCompleted] = useState(false);
   const [open, setOpen] = useState(false);
+  const [openCrypto, setOpenCrypto] = useState(false);
+  const [cryptoData, setCryptoData] = useState({});
   const { deal_slug, organization } = useParams();
   const [wireInstructionsOpen, setWireInstructionsOpen] = useState(false);
   const { isAuthenticated, loading: authLoading } = useAuth();
   const { search, state } = useLocation();
   const params = queryString.parse(search);
   const history = useHistory();
-
   const path = organization ? `/deals/${organization}/${deal_slug}` : `/deals/${deal_slug}`;
-
   const { data: investmentData } = useQuery(GET_INVESTMENT, {
-    variables: { _id: params?.investmentId },
+    variables: { _id: params?.investmentId ? params?.investmentId : history?.location?.state?.id },
     // onError: () => {
     //   if (!state?.investorFormData) return history.push(path);
     // },
@@ -139,6 +166,51 @@ function DealNextSteps() {
   }, []);
 
   if (loading || !data || !dealData) return null;
+  const createPayment = async () => {
+    const { investment } = investmentData;
+    const cryptoBody = {
+      invoice_amount: investment.amount,
+    };
+    console.log('this is the crypto body', cryptoBody);
+    const res = await fetch('http://localhost:4000/api/test', {
+      headers: {
+        'Content-Type': 'application/json',
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      method: 'POST',
+      body: JSON.stringify(cryptoBody),
+    });
+    const data = await res.json();
+    setCryptoData(data);
+    console.log('this is what i get back from the post ', data);
+    setOpenCrypto(true);
+    // window.open(data.access_url, 'ForumPay', 'height=600, width=400');
+    // const win = window.open(
+    //   'https://sandbox.forumpay.com/pay?merchant_id=945e6d23-fecd-47bd-9f36-4e554ac7a14e&order_amount=1.00&order_currency=USD&item_name=&widget_type=0&reference_no=',
+    //   '_blank',
+    // );
+    // win.document.write(
+    //   'https://sandbox.forumpay.com/pay?merchant_id=945e6d23-fecd-47bd-9f36-4e554ac7a14e&order_amount=1.00&order_currency=USD&item_name=&widget_type=0&reference_no=',
+    // );
+    // ReactDOM.createPortal(
+    //   <div className="crypto-payment-portal">
+    //     <iframe
+    //       title="crypto payment"
+    //       style={{
+    //         width: '100%',
+    //         maxWidth: '100%',
+    //         height: '1550px',
+    //       }}
+    //       src="https://sandbox.forumpay.com/pay?merchant_id=945e6d23-fecd-47bd-9f36-4e554ac7a14e&order_amount=1.00&order_currency=USD&item_name=&widget_type=0&reference_no="
+    //       frameBorder="0"
+    //     />
+    //   </div>,
+    //   <DealNextSteps />,
+    // );
+
+    if (!data.error) return console.log(`success!`, data);
+    console.log('There was an Error', data.error);
+  };
 
   const handleInvestmentEdit = () => {
     const userInvestments = data?.investor?.investments;
@@ -280,12 +352,19 @@ function DealNextSteps() {
               <p className="action-header">Wire Funds</p>
               <p className="action-sub-header">Required to complete your investment</p>
             </div>
-            <Button
+            {/* <Button
               disabled={dealData?.deal?.isDemo ? false : !hasKyc}
               onClick={() => setWireInstructionsOpen(true)}
               className="next-step-button"
             >
               View Wire Instructions
+            </Button> */}
+            <Button
+              // disabled={dealData?.deal?.isDemo ? false : !hasKyc}
+              onClick={createPayment}
+              className="next-step-button"
+            >
+              Make Crypto Payment
             </Button>
           </div>
         </div>
@@ -306,6 +385,39 @@ function DealNextSteps() {
         />
         <AllocationsRocket />
         <Confetti className={`confetti ${!confetti && 'hidden'}`} />
+
+        <AppModal
+          maxWidth="lg"
+          modalHeader="ForumPay Crypto Transfer"
+          isOpen={openCrypto}
+          onClose={() => setOpenCrypto(false)}
+        >
+          <div className="crypto-payment-portal">
+            <iframe
+              title="crypto payment"
+              // style="width:100%;max-width:100%;height:1550px;"
+              src="https://sandbox.forumpay.com/pay?merchant_id=945e6d23-fecd-47bd-9f36-4e554ac7a14e&order_amount=1.00&order_currency=AUD&item_name=&widget_type=0&reference_no="
+              frameBorder="0"
+            />
+            {/* <iframe
+              title="crypto payment"
+              style={{
+                width: '100%',
+                maxWidth: '100%',
+                height: '400px',
+              }}
+              src={cryptoData.access_url}
+              frameBorder="0"
+            /> */}
+            {/* <button type="button" onClick={() => setOpenCrypto(false)}>
+              Close
+            </button> */}
+            <script type="text/javascript" src="https://forumpay.com/api/events/payment.js" />
+            <script type="text/javascript">
+              CryptoPaymentStats.setToken({cryptoData.stats_token})
+            </script>
+          </div>
+        </AppModal>
       </section>
     </>
   );
