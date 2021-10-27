@@ -96,6 +96,7 @@ export const ORG_OVERVIEW = gql`
           managementFeeType
           fundManagementFeeType
         }
+        nd_virtual_account_number
       }
     }
     investor {
@@ -437,6 +438,7 @@ const FundManagerDashboard = ({ classes, history }) => {
             orgSlug={orgSlug}
             classes={classes}
             deal_id={dealData._id}
+            deal_NDvirtualAccountNum={dealData.nd_virtual_account_number || null}
             openTooltip={openTooltip}
             handleTooltip={handleTooltip}
           />
