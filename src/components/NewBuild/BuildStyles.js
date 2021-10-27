@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
   docUploadBox: {
     display: 'flex',
-    justifyContent: 'space-evenly',
+    justifyContent: 'flex-start',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     // boxShadow: '0px 3px 6px #00000029',
     // border: '1px solid #7070703B',
@@ -89,12 +89,15 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: '8px',
     },
   },
-  documentIcon: {
+
+  docIconBox: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#fff',
-    padding: '10px',
+    borderRadius: '50%',
     width: '58px',
     height: '58px',
-    borderRadius: '50%',
   },
   continueButton: {
     font: 'normal normal bold 24px/28px Roboto',
@@ -157,14 +160,18 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   uploadIcon: {
-    opacity: '0.3',
-    width: '30px',
     color: 'blue',
     transparentheight: '35px',
     [theme.breakpoints.down(phone)]: {
       marginRight: '20px',
       width: '30px',
     },
+  },
+  uploadIconLabel: {
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    whiteSpace: 'nowrap',
+    cursor: 'pointer',
   },
   subtitle: {
     textAlign: 'left',
@@ -287,9 +294,10 @@ const useStyles = makeStyles((theme) => ({
   },
   itemText: {
     font: 'normal normal normal 18px/21px Roboto',
+    width: '150px',
+    textAlign: 'center',
     color: '#2A2B54',
     letterSpacing: '0px',
-    marginLeft: '17px',
     opacity: '1',
     [theme.breakpoints.down(phone)]: {
       maxWidth: '100%',
@@ -341,22 +349,17 @@ const useStyles = makeStyles((theme) => ({
   // 1. (FUND) Styles that are used exclusively in the 'Build your SPV' tab.
   // 2. Styles that are used exclusively in the 'Review and sign terms' tab.
   uploadContainer: {
-    marginBottom: '16px',
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #00000029',
-    border: '1px solid #7070703B',
-    borderRadius: '15px',
-    width: '100%',
-    height: '544px',
-    padding: '42px',
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    width: '1000px',
+    minWidth: '900px',
   },
   item: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    background: '#186EFF26 0% 0% no-repeat padding-box',
-    // boxShadow: '0px 3px 6px #0000000D',
+    background: '#ECF3FF 0% 0% no-repeat padding-box',
     border: '2px dashed #0461FF !important',
     borderRadius: '10px',
     opacity: 1,
