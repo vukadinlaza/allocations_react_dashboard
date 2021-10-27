@@ -15,6 +15,21 @@ const ADD_DOC = gql`
   }
 `;
 
+const uploadTaskMap = {
+  'Upload Term Sheet': {
+    text: 'Portfolio Company Term Sheet',
+    position: 1,
+  },
+  'Upload Company Deck': {
+    text: 'Pitch Deck',
+    position: 2,
+  },
+  'Upload Company Logo': {
+    text: 'Portfolio Company Logo',
+    position: 3,
+  },
+};
+
 const DocUploader = ({
   document,
   filesUploaded,
@@ -42,12 +57,6 @@ const DocUploader = ({
   //   }
   // }, [filesUploaded]);
 
-  const uploadTitleMap = {
-    'Upload Company Deck': 'Pitch Deck',
-    'Upload Term Sheet': 'Portfolio Company Term Sheet',
-    'Upload Company Logo': 'Portfolio Company Logo',
-  };
-
   return (
     <div
       className={`${classes.item} ${
@@ -57,7 +66,7 @@ const DocUploader = ({
       <div className={classes.docIconBox}>
         <img src={documentIcon} alt="document icon" />
       </div>
-      <Typography className={classes.itemText}>{uploadTitleMap[document.title]}</Typography>
+      <Typography className={classes.itemText}>{uploadTaskMap[document.title].text}</Typography>
       {!filesUploaded[document.title].complete ? (
         <div className={classes.uploadIcon} style={{ opacity: '1', textAlign: 'center' }}>
           <label htmlFor="doc-upload" className={classes.uploadIconLabel}>
@@ -113,20 +122,16 @@ const DocUploader = ({
 
 export default function UploadDocs({ page, setPage, deal }) {
   const classes = useStyles();
-  const currentPhase = deal.phases.find((phase) => phase.name === 'build');
-  const uploadTasks = currentPhase.tasks.filter(
-    (task) => task.type === 'fm-document-upload' && task.title !== 'Upload ID',
-  );
-  console.log('uploads', uploadTasks);
+
   const [filesUploaded, setFilesUploaded] = useState({
     'Upload Company Logo': {
       complete: false,
       document: null,
     },
-    'Upload ID': {
-      complete: false,
-      document: null,
-    },
+    // 'Upload ID': {
+    //   complete: false,
+    //   document: null,
+    // },
     'Upload Company Deck': {
       complete: false,
       document: null,
@@ -136,6 +141,19 @@ export default function UploadDocs({ page, setPage, deal }) {
       document: null,
     },
   });
+
+  const currentPhase = deal.phases.find((phase) => phase.name === 'build');
+  const uploadTasks = currentPhase.tasks
+    .filter((task) => task.type === 'fm-document-upload' && task.title !== 'Upload ID')
+    .sort((a, b) => {
+      // console.log('rank', uploadTaskMap[a.title].position, uploadTaskMap[b.title].position)
+      console.log('a', uploadTaskMap[a.title]);
+      console.log('b', uploadTaskMap[b.title]);
+      return uploadTaskMap[a.title].position - uploadTaskMap[b.title].position;
+    });
+
+  console.log(uploadTasks);
+
   const history = useHistory();
   const [addDoc] = useMutation(ADD_DOC, {
     onCompleted: () => {
