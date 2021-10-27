@@ -159,6 +159,18 @@ const useStyles = makeStyles((theme) => ({
       textAlign: 'center',
     },
   },
+  cancelIcon: {
+    position: 'relative',
+    right: '-120px',
+    top: '-10px',
+    zIndex: 1,
+    color: '#4a4a4a',
+    cursor: 'pointer',
+    transition: '0.5s',
+    '&:hover': {
+      color: '#e71a1a',
+    },
+  },
   uploadIcon: {
     color: 'blue',
     transparentheight: '35px',
@@ -314,10 +326,26 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '.7em',
     },
   },
+  uploadDocItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    background: '#ECF3FF 0% 0% no-repeat padding-box',
+    border: '2px dashed #0461FF !important',
+    borderRadius: '10px',
+    opacity: 1,
+    width: '280px',
+    height: '236px',
+    marginBottom: '8px',
+  },
   selected: {
-    background: '#186EFF26 0% 0% no-repeat padding-box !important',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    background: '#fff 0% 0% no-repeat padding-box !important',
     boxShadow: '0px 3px 6px #0000000D !important',
-    border: '2px solid #186EFF !important',
+    border: '2px solid lightgrey !important',
     opacity: '1 !important',
   },
   typeItem: {
@@ -354,7 +382,7 @@ const useStyles = makeStyles((theme) => ({
     width: '1000px',
     minWidth: '900px',
   },
-  item: {
+  uploadDocItem: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-evenly',
@@ -366,6 +394,9 @@ const useStyles = makeStyles((theme) => ({
     width: '280px',
     height: '236px',
     marginBottom: '8px',
+  },
+  deleteDocButton: {
+    cursor: 'pointer',
   },
   checkCircle: {
     opacity: '0.3',

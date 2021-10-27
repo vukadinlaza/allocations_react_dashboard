@@ -17,7 +17,7 @@ import {
 import Typography from '@material-ui/core/Typography';
 import Select from 'react-select';
 import BasicInfo from './FormComponents/TypeSelector/index';
-import UploadDocsModal from './FormComponents/UploadDocs/index';
+import UploadDocs from './FormComponents/UploadDocs/index';
 import { useAuth } from '../../../auth/useAuth';
 import { phone } from '../../../utils/helpers';
 import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
@@ -917,7 +917,7 @@ const BuildDetails = ({
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
             5. Upload Your Documents
           </Typography>
-          <UploadDocsModal
+          <UploadDocs
             deal={
               initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
             }
@@ -1020,7 +1020,7 @@ export default function NewSpvForm() {
     {
       title: 'Upload docs',
       Component: (
-        <UploadDocsModal
+        <UploadDocs
           page={page}
           setPage={setPage}
           deal={

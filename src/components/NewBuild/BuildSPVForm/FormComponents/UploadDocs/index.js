@@ -4,14 +4,22 @@ import Typography from '@material-ui/core/Typography';
 import { gql, useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
+import CancelIcon from '@material-ui/icons/Cancel';
 import documentIcon from '../../../../../assets/document-icon.svg';
 import uploadIcon from '../../../../../assets/upload-icon.svg';
-import CheckCircle from '../../../../../assets/check_circle_black_24dp.svg';
+import greenCheck from '../../../../../assets/check.svg';
+import trash from '../../../../../assets/trash.svg';
 import useStyles from '../../../BuildStyles';
 
 const ADD_DOC = gql`
   mutation addDealDocService($deal_id: String!, $task_id: String!, $doc: Upload!, $phase: String) {
     addDealDocService(deal_id: $deal_id, task_id: $task_id, doc: $doc, phase: $phase)
+  }
+`;
+
+const DELETE_DOC = gql`
+  mutation deleteDealDocument($document_id: String!, $task_id: String!, $phase_id: String!) {
+    deleteDealDocument(document_id: $document_id, task_id: $task_id, phase_id: $phase_id)
   }
 `;
 
@@ -38,45 +46,51 @@ const DocUploader = ({
   // no change
   classes,
   addDoc,
+  deleteDoc,
 }) => {
-  // const { data, refetch: refetchDeal } = useQuery(DEAL, {
-  //   variables: { deal_id: deal?._id },
-  // });
+  console.log('uploaded', filesUploaded);
 
-  // useEffect(() => {
-  //   if (filesUploaded[document.title].complete) {
-  //     addDoc({
-  //       variables: {
-  //         doc: filesUploaded[document.title]?.document,
-  //         task_id: document?._id,
-  //         deal_id: deal?._id,
-  //         phase: 'build',
-  //       },
-  //     });
-  //     localStorage.setItem('buildFilesUploaded', JSON.stringify(filesUploaded));
-  //   }
-  // }, [filesUploaded]);
-
+  const complete = filesUploaded[document.title].complete;
   return (
-    <div
-      className={`${classes.item} ${
-        !filesUploaded[document.title].complete ? '' : classes.selected
-      }`}
-    >
-      <div className={classes.docIconBox}>
+    <div className={`${classes.uploadDocItem} ${!complete ? '' : classes.selected}`}>
+      {/* {complete && (
+        <CancelIcon
+        className={classes.cancelIcon}
+        onClick={() => {
+          deleteDoc({
+            // variables: {
+            //   document_id: documentData._id,
+              task_id: document._id,
+            //   phase_id: phase._id,
+            // },
+          });
+        }}
+      />
+      )} */}
+      <div className={classes.docIconBox} style={{ backgroundColor: complete && 'lawngreen' }}>
         <img src={documentIcon} alt="document icon" />
       </div>
-      <Typography className={classes.itemText}>{uploadTaskMap[document.title].text}</Typography>
-      {!filesUploaded[document.title].complete ? (
+      <Typography className={classes.itemText}>
+        {complete
+          ? filesUploaded[document.title].document.name
+          : uploadTaskMap[document.title].text}
+        &nbsp;
+        {complete && <img src={trash} className={classes.deleteDocButton} />}
+      </Typography>
+      {
         <div className={classes.uploadIcon} style={{ opacity: '1', textAlign: 'center' }}>
-          <label htmlFor="doc-upload" className={classes.uploadIconLabel}>
+          <label
+            htmlFor="doc-upload"
+            className={classes.uploadIconLabel}
+            style={{ color: complete && 'lawngreen' }}
+          >
             <img
-              src={uploadIcon}
+              src={complete ? greenCheck : uploadIcon}
               className={classes.uploadIcon}
               style={{ opacity: '1', cursor: 'pointer' }}
               alt="checkbox"
             />
-            &nbsp;Upload document
+            &nbsp;{!complete ? 'Upload document' : 'Document uploaded'}
           </label>
           <form>
             <input
@@ -108,14 +122,16 @@ const DocUploader = ({
             />
           </form>
         </div>
-      ) : (
-        <img
-          src={CheckCircle}
-          className={classes.checkCircle}
-          alt="checkbox"
-          style={{ opacity: '1' }}
-        />
-      )}
+
+        //  (
+        //   <img
+        //     src={CheckCircle}
+        //     className={classes.checkCircle}
+        //     alt="checkbox"
+        //     style={{ opacity: '1' }}
+        //   />
+        // )
+      }
     </div>
   );
 };
@@ -145,14 +161,10 @@ export default function UploadDocs({ page, setPage, deal }) {
   const currentPhase = deal.phases.find((phase) => phase.name === 'build');
   const uploadTasks = currentPhase.tasks
     .filter((task) => task.type === 'fm-document-upload' && task.title !== 'Upload ID')
-    .sort((a, b) => {
-      // console.log('rank', uploadTaskMap[a.title].position, uploadTaskMap[b.title].position)
-      console.log('a', uploadTaskMap[a.title]);
-      console.log('b', uploadTaskMap[b.title]);
-      return uploadTaskMap[a.title].position - uploadTaskMap[b.title].position;
-    });
+    .sort((a, b) => uploadTaskMap[a.title].position - uploadTaskMap[b.title].position);
 
-  console.log(uploadTasks);
+  console.log('phase', currentPhase);
+  console.log('tasks', uploadTasks);
 
   const history = useHistory();
   const [addDoc] = useMutation(ADD_DOC, {
@@ -160,6 +172,13 @@ export default function UploadDocs({ page, setPage, deal }) {
       toast.success('Success! Your document has been added');
     },
   });
+
+  const [deleteDoc] = useMutation(DELETE_DOC, {
+    onCompleted: () => {
+      toast.success('Success! Your document has been deleted');
+    },
+  });
+
   useEffect(() => {
     if (localStorage.getItem('buildFilesUploaded')) {
       setFilesUploaded(JSON.parse(localStorage.getItem('buildFilesUploaded')));
@@ -184,6 +203,7 @@ export default function UploadDocs({ page, setPage, deal }) {
               filesUploaded={filesUploaded}
               setFilesUploaded={setFilesUploaded}
               addDoc={addDoc}
+              deleteDoc={deleteDoc}
               deal={deal}
             />
           ))}
