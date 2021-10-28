@@ -47,7 +47,7 @@ const theme = createTheme({
           '0px 2px 1px -1px rgba(0,0,0,0.1), 0px 1px 1px 0px rgba(0,0,0,0.04), 0px 1px 3px 0px rgba(0,0,0,0.02) !important',
       },
       rounded: {
-        border: '0px !important',
+        border: '0px',
         overflow: 'hidden',
         boxShadow: '0px 3px 6px #00000029 !important',
       },

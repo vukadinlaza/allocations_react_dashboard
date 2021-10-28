@@ -397,8 +397,14 @@ const useStyles = makeStyles((theme) => ({
     height: '236px',
     marginBottom: '8px',
   },
+  uploadedDocItem: {
+    background: '#f6f7f8 0% 0% no-repeat padding-box',
+  },
   deleteDocButton: {
     cursor: 'pointer',
+    backgroundColor: 'inherit',
+    border: 'none',
+    outline: 'none',
   },
   checkCircle: {
     opacity: '0.3',
