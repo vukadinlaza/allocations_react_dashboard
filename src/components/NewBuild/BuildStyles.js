@@ -326,19 +326,6 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '.7em',
     },
   },
-  uploadDocItem: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-    background: '#ECF3FF 0% 0% no-repeat padding-box',
-    border: '2px dashed #0461FF !important',
-    borderRadius: '10px',
-    opacity: 1,
-    width: '280px',
-    height: '236px',
-    marginBottom: '8px',
-  },
   selected: {
     display: 'flex',
     flexDirection: 'column',
@@ -395,8 +382,14 @@ const useStyles = makeStyles((theme) => ({
     height: '236px',
     marginBottom: '8px',
   },
+  uploadedDocItem: {
+    background: '#f6f7f8 0% 0% no-repeat padding-box',
+  },
   deleteDocButton: {
     cursor: 'pointer',
+    backgroundColor: 'inherit',
+    border: 'none',
+    outline: 'none',
   },
   checkCircle: {
     opacity: '0.3',

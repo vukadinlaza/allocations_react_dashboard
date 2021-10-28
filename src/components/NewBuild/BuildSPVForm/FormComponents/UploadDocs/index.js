@@ -4,11 +4,14 @@ import Typography from '@material-ui/core/Typography';
 import { gql, useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
-import CancelIcon from '@material-ui/icons/Cancel';
+// import CancelIcon from '@material-ui/icons/Cancel';
 import documentIcon from '../../../../../assets/document-icon.svg';
+import documentGreenIcon from '../../../../../assets/document-green-icon.svg';
+import documentGrayIcon from '../../../../../assets/document-grayed-icon.svg';
 import uploadIcon from '../../../../../assets/upload-icon.svg';
-import greenCheck from '../../../../../assets/check.svg';
-import trash from '../../../../../assets/trash.svg';
+import greenCheckIcon from '../../../../../assets/check.svg';
+import trashIcon from '../../../../../assets/trash.svg';
+import warningIcon from '../../../../../assets/warning-red.svg';
 import useStyles from '../../../BuildStyles';
 
 const ADD_DOC = gql`
@@ -50,42 +53,46 @@ const DocUploader = ({
 }) => {
   console.log('uploaded', filesUploaded);
 
-  const complete = filesUploaded[document.title].complete;
+  const { complete } = filesUploaded[document.title];
   return (
-    <div className={`${classes.uploadDocItem} ${!complete ? '' : classes.selected}`}>
-      {/* {complete && (
-        <CancelIcon
-        className={classes.cancelIcon}
-        onClick={() => {
-          deleteDoc({
-            // variables: {
-            //   document_id: documentData._id,
-              task_id: document._id,
-            //   phase_id: phase._id,
-            // },
-          });
-        }}
-      />
-      )} */}
-      <div className={classes.docIconBox} style={{ backgroundColor: complete && 'lawngreen' }}>
-        <img src={documentIcon} alt="document icon" />
+    <div className={`${classes.uploadDocItem} ${!complete ? '' : classes.uploadedDocItem}`}>
+      <div className={classes.docIconBox} style={{ backgroundColor: complete && '#CBECC7' }}>
+        {/* need to update logic for error */}
+        <img src={!complete ? documentIcon : documentGreenIcon} alt="document icon" />
       </div>
       <Typography className={classes.itemText}>
         {complete
           ? filesUploaded[document.title].document.name
           : uploadTaskMap[document.title].text}
         &nbsp;
-        {complete && <img src={trash} className={classes.deleteDocButton} />}
+        {complete && (
+          <button
+            className={classes.deleteDocButton}
+            type="button"
+            onClick={() => {
+              console.log('Clicked!');
+              // deleteDoc({
+              //   // variables: {
+              //   //   document_id: documentData._id,
+              //     task_id: document._id,
+              //   //   phase_id: phase._id,
+              //   // },
+              // });
+            }}
+          >
+            <img src={trashIcon} className={classes.deleteDocButton} alt="trash can icon" />
+          </button>
+        )}
       </Typography>
       {
         <div className={classes.uploadIcon} style={{ opacity: '1', textAlign: 'center' }}>
           <label
             htmlFor="doc-upload"
             className={classes.uploadIconLabel}
-            style={{ color: complete && 'lawngreen' }}
+            style={{ color: complete && '#39c522' }}
           >
             <img
-              src={complete ? greenCheck : uploadIcon}
+              src={complete ? greenCheckIcon : uploadIcon}
               className={classes.uploadIcon}
               style={{ opacity: '1', cursor: 'pointer' }}
               alt="checkbox"
