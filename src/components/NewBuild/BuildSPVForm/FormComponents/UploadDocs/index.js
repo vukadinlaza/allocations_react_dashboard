@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import _ from 'lodash';
 import { CircularProgress } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { gql, useMutation } from '@apollo/client';
@@ -129,7 +130,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, classes 
       </div>
       <Typography className={classes.itemText}>
         {complete
-          ? filesUploaded[document.title].document.name
+          ? _.truncate(filesUploaded[document.title]?.document?.name, { length: 25 })
           : uploadTaskMap[document.title].text}
         &nbsp;
         {complete && (
