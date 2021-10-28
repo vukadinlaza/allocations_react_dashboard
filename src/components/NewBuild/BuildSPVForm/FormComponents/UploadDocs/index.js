@@ -72,57 +72,56 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, classes 
         <CircularProgress />
       </div>
     );
-  if (addDocError || deleteDocError)
+  if (addDocError || deleteDocError) {
     return (
       <div className={`${classes.uploadErrorItem}`}>
         <div className={classes.docErrorIconBox}>
           <img src={warningIcon} alt="warning icon" />
         </div>
         <Typography className={classes.itemText}>&nbsp;Something went wrong...</Typography>
-        {
-          <div className={classes.uploadIcon} style={{ opacity: '1', textAlign: 'center' }}>
-            <label htmlFor="doc-upload" className={classes.uploadErrorLabel}>
-              <img
-                src={documentGrayIcon}
-                className={classes.uploadIcon}
-                style={{ opacity: '1', cursor: 'pointer' }}
-                alt="checkbox"
-              />
-              &nbsp;Upload document
-            </label>
-            <form>
-              <input
-                id="doc-upload"
-                className={classes.uploadIcon}
-                type="file"
-                style={{ display: 'none' }}
-                accept="application/pdf"
-                multiple
-                onChange={({ target }) => {
-                  if (target.validity.valid) {
-                    setFilesUploaded((prev) => {
-                      return {
-                        ...prev,
-                        [document.title]: { complete: true, document: target.files[0] },
-                      };
-                    });
-                    addDoc({
-                      variables: {
-                        doc: target.files[0],
-                        task_id: document?._id,
-                        deal_id: deal?._id,
-                        phase: 'build',
-                      },
-                    });
-                    localStorage.setItem('buildFilesUploaded', JSON.stringify(filesUploaded));
-                  }
-                }}
-              />
-            </form>
-          </div>
-        }
+        <div className={classes.uploadIcon} style={{ opacity: '1', textAlign: 'center' }}>
+          <label htmlFor={`${document._id}`} className={classes.uploadErrorLabel}>
+            <img
+              src={documentGrayIcon}
+              className={classes.uploadIcon}
+              style={{ opacity: '1', cursor: 'pointer' }}
+              alt="checkbox"
+            />
+            &nbsp;Upload document
+          </label>
+          <form>
+            <input
+              id={`${document._id}`}
+              className={classes.uploadIcon}
+              type="file"
+              style={{ display: 'none' }}
+              accept="application/pdf"
+              multiple
+              onChange={({ target }) => {
+                if (target.validity.valid) {
+                  setFilesUploaded((prev) => {
+                    return {
+                      ...prev,
+                      [document.title]: { complete: true, document: target.files[0] },
+                    };
+                  });
+                  addDoc({
+                    variables: {
+                      doc: target.files[0],
+                      task_id: document?._id,
+                      deal_id: deal?._id,
+                      phase: 'build',
+                    },
+                  });
+                  localStorage.setItem('buildFilesUploaded', JSON.stringify(filesUploaded));
+                }
+              }}
+            />
+          </form>
+        </div>
       </div>
     );
+  }
   return (
     <div className={`${classes.uploadDocItem} ${!complete ? '' : classes.uploadedDocItem}`}>
       <div className={classes.docIconBox} style={{ backgroundColor: complete && '#CBECC7' }}>
@@ -151,53 +150,51 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, classes 
           </button>
         )}
       </Typography>
-      {
-        <div className={classes.uploadIcon} style={{ opacity: '1', textAlign: 'center' }}>
-          <label
-            htmlFor="doc-upload"
-            className={classes.uploadIconLabel}
-            style={{ color: complete && '#39c522' }}
-          >
-            <img
-              src={complete ? greenCheckIcon : uploadIcon}
-              className={classes.uploadIcon}
-              style={{ opacity: '1', cursor: 'pointer' }}
-              alt="checkbox"
-            />
-            &nbsp;{!complete ? 'Upload document' : 'Document uploaded'}
-          </label>
-          <form>
-            <input
-              id="doc-upload"
-              className={classes.uploadIcon}
-              type="file"
-              style={{ display: 'none' }}
-              accept="application/pdf"
-              multiple
-              onChange={({ target }) => {
-                if (target.validity.valid) {
-                  addDoc({
-                    variables: {
-                      doc: target.files[0],
-                      task_id: document?._id,
-                      deal_id: deal?._id,
-                      phase: 'build',
-                    },
-                  }).then(() => {
-                    setFilesUploaded((prev) => {
-                      return {
-                        ...prev,
-                        [document.title]: { complete: true, document: target.files[0] },
-                      };
-                    });
+      <div className={classes.uploadIcon} style={{ opacity: '1', textAlign: 'center' }}>
+        <label
+          htmlFor={`${document._id}`}
+          className={classes.uploadIconLabel}
+          style={{ color: complete && '#39c522' }}
+        >
+          <img
+            src={complete ? greenCheckIcon : uploadIcon}
+            className={classes.uploadIcon}
+            style={{ opacity: '1', cursor: 'pointer' }}
+            alt={complete ? 'green check icon' : 'upload icon'}
+          />
+          &nbsp;{!complete ? 'Upload document' : 'Document uploaded'}
+        </label>
+        <form>
+          <input
+            id={`${document._id}`}
+            className={classes.uploadIcon}
+            type="file"
+            style={{ display: 'none' }}
+            accept="application/pdf"
+            multiple
+            onChange={({ target }) => {
+              if (target.validity.valid) {
+                addDoc({
+                  variables: {
+                    doc: target.files[0],
+                    task_id: document?._id,
+                    deal_id: deal?._id,
+                    phase: 'build',
+                  },
+                }).then(() => {
+                  setFilesUploaded((prev) => {
+                    return {
+                      ...prev,
+                      [document.title]: { complete: true, document: target.files[0] },
+                    };
                   });
-                  localStorage.setItem('buildFilesUploaded', JSON.stringify(filesUploaded));
-                }
-              }}
-            />
-          </form>
-        </div>
-      }
+                });
+                localStorage.setItem('buildFilesUploaded', JSON.stringify(filesUploaded));
+              }
+            }}
+          />
+        </form>
+      </div>
     </div>
   );
 };
@@ -229,7 +226,7 @@ export default function UploadDocs({ deal }) {
     .filter((task) => task.type === 'fm-document-upload' && task.title !== 'Upload ID')
     .sort((a, b) => uploadTaskMap[a.title]?.position - uploadTaskMap[b.title]?.position);
 
-  const history = useHistory();
+  // const history = useHistory();
 
   useEffect(() => {
     if (localStorage.getItem('buildFilesUploaded')) {
