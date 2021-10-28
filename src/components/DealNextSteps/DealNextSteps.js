@@ -12,8 +12,10 @@ import wireFundsNo from '../../assets/wire-funds-no.svg';
 import submitTaxInfoYes from '../../assets/submit-tax-info-yes.svg';
 import submitTaxInfoNo from '../../assets/submit-tax-info-no.svg';
 import AllocationsRocket from './AllocationsRocket/AllocationsRocket';
+import PaymentSelectModal from './PaymentSelectModal';
 import KYCModal from './KYCModal.js';
 import WireInstructionsModal from './WireInstructionsModal/WireInstructionsModal';
+import CryptoPaymentModal from './CryptoPaymentModal/index';
 import { useAuth } from '../../auth/useAuth';
 import AppModal from '../Modal/AppModal';
 
@@ -89,7 +91,7 @@ const GET_INVESTMENT = gql`
   }
 `;
 
-function PaymentModal({ cryptoData, setOpenCrypto }) {
+function PaymentSelectModal2({ cryptoData, setOpenCrypto }) {
   return (
     <AppModal>
       <div style={{ zIndex: '100', border: '1px black' }} className="crypto-payment-portal">
@@ -121,10 +123,22 @@ function DealNextSteps() {
   const [getDeal, { data: dealData, called: calledDeal }] = useLazyQuery(GET_DEAL);
   const [showTaxAsCompleted, setShowTaxAsCompleted] = useState(false);
   const [open, setOpen] = useState(false);
+
   const [openCrypto, setOpenCrypto] = useState(false);
-  const [cryptoData, setCryptoData] = useState({});
+
   const { deal_slug, organization } = useParams();
+
+  // thing
+  const [cryptoData, setCryptoData] = useState({});
+  // there needs to be a payment state that tracks whether we are making a payment or not
+  const [openPayment, setOpenPayment] = useState(false);
+
+  // this will determine whether or not they are seeing the crypto payment instructions
+  const [cryptoPaymentOpen, setCryptoPaymentOpen] = useState(false);
+
+  // there needs to be a state tracking if it's a wire instruction
   const [wireInstructionsOpen, setWireInstructionsOpen] = useState(false);
+
   const { isAuthenticated, loading: authLoading } = useAuth();
   const { search, state } = useLocation();
   const params = queryString.parse(search);
@@ -188,29 +202,6 @@ function DealNextSteps() {
     setCryptoData(data);
     console.log('this is what i get back from the post ', data);
     setOpenCrypto(true);
-    // window.open(data.access_url, 'ForumPay', 'height=600, width=400');
-    // const win = window.open(
-    //   'https://sandbox.forumpay.com/pay?merchant_id=945e6d23-fecd-47bd-9f36-4e554ac7a14e&order_amount=1.00&order_currency=USD&item_name=&widget_type=0&reference_no=',
-    //   '_blank',
-    // );
-    // win.document.write(
-    //   'https://sandbox.forumpay.com/pay?merchant_id=945e6d23-fecd-47bd-9f36-4e554ac7a14e&order_amount=1.00&order_currency=USD&item_name=&widget_type=0&reference_no=',
-    // );
-    // ReactDOM.createPortal(
-    //   <div className="crypto-payment-portal">
-    //     <iframe
-    //       title="crypto payment"
-    //       style={{
-    //         width: '100%',
-    //         maxWidth: '100%',
-    //         height: '1550px',
-    //       }}
-    //       src="https://sandbox.forumpay.com/pay?merchant_id=945e6d23-fecd-47bd-9f36-4e554ac7a14e&order_amount=1.00&order_currency=USD&item_name=&widget_type=0&reference_no="
-    //       frameBorder="0"
-    //     />
-    //   </div>,
-    //   <DealNextSteps />,
-    // );
 
     if (!data.error) return console.log(`success!`, data);
     console.log('There was an Error', data.error);
@@ -365,16 +356,17 @@ function DealNextSteps() {
             >
               View Wire Instructions
             </Button> */}
-            <Button
-              // disabled={dealData?.deal?.isDemo ? false : !hasKyc}
-              onClick={createPayment}
-              className="next-step-button"
-            >
+            <Button className="next-step-button" onClick={() => setOpenPayment(true)}>
               Make Crypto Payment
             </Button>
           </div>
         </div>
-
+        <PaymentSelectModal
+          open={openPayment}
+          setOpen={setOpenPayment}
+          setWireInstructionsOpen={setWireInstructionsOpen}
+          setCryptoPaymentOpen={setCryptoPaymentOpen}
+        />
         <KYCModal
           open={open}
           setOpen={setOpen}
@@ -390,14 +382,23 @@ function DealNextSteps() {
           setOpen={setWireInstructionsOpen}
           docs={docs}
         />
+        <CryptoPaymentModal
+          investmentWireInstructions={investmentData?.investment?.wire_instructions}
+          open={cryptoPaymentOpen}
+          setOpen={setCryptoPaymentOpen}
+          createPayment={createPayment}
+          investmentData={investmentData}
+          docs={docs}
+        />
+
         <AllocationsRocket />
         <Confetti className={`confetti ${!confetti && 'hidden'}`} />
 
         <AppModal
           maxWidth="lg"
           modalHeader="ForumPay Crypto Transfer"
-          isOpen={openCrypto}
-          onClose={() => setOpenCrypto(false)}
+          // isOpen={openCrypto}
+          // onClose={() => setOpenCrypto(false)}
         >
           <div className="crypto-payment-portal">
             <iframe
