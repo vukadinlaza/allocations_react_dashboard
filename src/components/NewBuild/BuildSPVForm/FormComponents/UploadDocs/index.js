@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Paper, CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { gql, useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
-// import CancelIcon from '@material-ui/icons/Cancel';
 import documentIcon from '../../../../../assets/document-icon.svg';
 import documentGreenIcon from '../../../../../assets/document-green-icon.svg';
 import documentGrayIcon from '../../../../../assets/document-grayed-icon.svg';
@@ -13,7 +12,6 @@ import greenCheckIcon from '../../../../../assets/check.svg';
 import trashIcon from '../../../../../assets/trash.svg';
 import warningIcon from '../../../../../assets/warning-red.svg';
 import useStyles from '../../../BuildStyles';
-import Loader from '../../../../utils/Loader';
 
 const ADD_DOC = gql`
   mutation addDealDocService($deal_id: String!, $task_id: String!, $doc: Upload!, $phase: String) {
@@ -42,33 +40,29 @@ const uploadTaskMap = {
   },
 };
 
-const DocUploader = ({
-  document,
-  filesUploaded,
-  setFilesUploaded,
-  deal,
-  // no change
-  classes,
-}) => {
-  console.log('uploaded', filesUploaded);
+const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, classes }) => {
+  const [docId, setDocId] = useState(null);
 
-  const [addDoc, { data: documentData, loading: addDocLoading, error: addDocError }] = useMutation(
-    ADD_DOC,
-    {
-      onCompleted: () => {
-        toast.success('Success! Your document has been added');
-      },
+  const [addDoc, { data, loading: addDocLoading, error: addDocError }] = useMutation(ADD_DOC, {
+    onCompleted: ({ addDealDocService: uploadResponse }) => {
+      toast.success('Success! Your document has been added');
+      setDocId(uploadResponse._id);
     },
-  );
+  });
   const [deleteDoc, { loading: deleteDocLoading, error: deleteDocError }] = useMutation(
     DELETE_DOC,
     {
       onCompleted: () => {
         toast.success('Success! Your document has been deleted');
+        setFilesUploaded((prev) => {
+          return {
+            ...prev,
+            [document.title]: { complete: false, document: null },
+          };
+        });
       },
     },
   );
-  // let deleteDocLoading = false;
 
   const { complete } = filesUploaded[document.title];
 
@@ -144,14 +138,13 @@ const DocUploader = ({
             className={classes.deleteDocButton}
             type="button"
             onClick={() => {
-              console.log('Clicked!');
-              // deleteDoc({
-              //   // variables: {
-              //   //   document_id: documentData._id,
-              //     task_id: document._id,
-              //   //   phase_id: phase._id,
-              //   // },
-              // });
+              deleteDoc({
+                variables: {
+                  document_id: docId,
+                  task_id: document._id,
+                  phase_id: 'build',
+                },
+              });
             }}
           >
             <img src={trashIcon} className={classes.deleteDocButton} alt="trash can icon" />
@@ -209,7 +202,7 @@ const DocUploader = ({
   );
 };
 
-export default function UploadDocs({ page, setPage, deal }) {
+export default function UploadDocs({ deal }) {
   const classes = useStyles();
 
   const [filesUploaded, setFilesUploaded] = useState({
@@ -235,9 +228,6 @@ export default function UploadDocs({ page, setPage, deal }) {
   const uploadTasks = currentPhase?.tasks
     .filter((task) => task.type === 'fm-document-upload' && task.title !== 'Upload ID')
     .sort((a, b) => uploadTaskMap[a.title]?.position - uploadTaskMap[b.title]?.position);
-
-  console.log('phase', currentPhase);
-  console.log('tasks', uploadTasks);
 
   const history = useHistory();
 
