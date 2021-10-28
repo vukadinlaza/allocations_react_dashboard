@@ -20,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '0px 3px 6px #00000029',
     border: '1px solid #7070703B',
     marginBottom: '16px',
-    padding: '42px',
     borderRadius: '15px',
+    padding: '42px',
     width: '100%',
     maxWidth: '1352px',
     opacity: 1,
@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: '600px',
       marginBottom: '24px',
       padding: '16px',
+      paddingBottom: '30px',
     },
   },
 
@@ -36,10 +37,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'flex-start',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
-    // boxShadow: '0px 3px 6px #00000029',
-    // border: '1px solid #7070703B',
     marginBottom: '16px',
-    padding: '42px',
+    // padding: '42px',
+    paddingTop: '20px',
     borderRadius: '15px',
     width: '100%',
     maxWidth: '1352px',
@@ -48,8 +48,8 @@ const useStyles = makeStyles((theme) => ({
       display: 'flex',
       flexDirection: 'column',
       maxWidth: '600px',
-      marginBottom: '24px',
-      padding: '16px',
+      padding: '23px',
+      paddingBottom: '0px',
     },
   },
 
@@ -396,9 +396,13 @@ const useStyles = makeStyles((theme) => ({
   // 2. Styles that are used exclusively in the 'Review and sign terms' tab.
   uploadContainer: {
     display: 'flex',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     width: '1000px',
     minWidth: '900px',
+    [theme.breakpoints.down(phone)]: {
+      flexDirection: 'column',
+      height: '800px',
+    },
   },
   uploadDocLoader: {
     display: 'flex',
