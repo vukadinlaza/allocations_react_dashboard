@@ -12,7 +12,7 @@ import wireFundsNo from '../../assets/wire-funds-no.svg';
 import submitTaxInfoYes from '../../assets/submit-tax-info-yes.svg';
 import submitTaxInfoNo from '../../assets/submit-tax-info-no.svg';
 import AllocationsRocket from './AllocationsRocket/AllocationsRocket';
-import KYCModal from './KYCModal.js';
+import KYCModal from './KYCModal/index.js';
 import WireInstructionsModal from './WireInstructionsModal/WireInstructionsModal';
 import { useAuth } from '../../auth/useAuth';
 

@@ -32,6 +32,7 @@ import DealDocuments from './components/DealDocuments';
 import NewMember from './components/Newmember';
 import TVC from './components/TVC';
 import NotFound from './components/NotFound';
+import SubmitTaxDocs from './components/SubmitTaxDocs';
 
 // superadmin
 import SuperAdminManager from './components/superadmin/Manager';
@@ -134,6 +135,7 @@ const App = () => {
             />
 
             <PrivateRoute path="/investor/:id/home" component={UserHome} />
+            <PrivateRoute path="/submit-tax-documents" component={SubmitTaxDocs} />
             <AdminRoute path="/investor/:id/investments" component={UserInvestments} />
             <AdminRoute path="/investors/new" component={InvestorNew} exact />
             <AdminRoute path="/investor/:id/edit" component={InvestorEdit} />
