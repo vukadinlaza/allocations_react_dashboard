@@ -158,10 +158,10 @@ export default function UploadDocs({ page, setPage, deal }) {
     },
   });
 
-  const currentPhase = deal.phases.find((phase) => phase.name === 'build');
-  const uploadTasks = currentPhase.tasks
+  const currentPhase = deal?.phases.find((phase) => phase.name === 'build');
+  const uploadTasks = currentPhase?.tasks
     .filter((task) => task.type === 'fm-document-upload' && task.title !== 'Upload ID')
-    .sort((a, b) => uploadTaskMap[a.title].position - uploadTaskMap[b.title].position);
+    .sort((a, b) => uploadTaskMap[a.title]?.position - uploadTaskMap[b.title]?.position);
 
   console.log('phase', currentPhase);
   console.log('tasks', uploadTasks);
@@ -195,7 +195,7 @@ export default function UploadDocs({ page, setPage, deal }) {
           multiple files, please compress them into one zip folder.
         </Typography> */}
         <section className={classes.uploadContainer}>
-          {uploadTasks.map((task) => (
+          {uploadTasks?.map((task) => (
             <DocUploader
               key={task._id}
               document={task}

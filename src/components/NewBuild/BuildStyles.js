@@ -45,6 +45,8 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '1352px',
     opacity: 1,
     [theme.breakpoints.down(phone)]: {
+      display: 'flex',
+      flexDirection: 'column',
       maxWidth: '600px',
       marginBottom: '24px',
       padding: '16px',
