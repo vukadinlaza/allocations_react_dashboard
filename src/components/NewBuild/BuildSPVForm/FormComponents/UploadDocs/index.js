@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Paper } from '@material-ui/core';
+import { Button, Paper, CircularProgress } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { gql, useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
@@ -13,6 +13,7 @@ import greenCheckIcon from '../../../../../assets/check.svg';
 import trashIcon from '../../../../../assets/trash.svg';
 import warningIcon from '../../../../../assets/warning-red.svg';
 import useStyles from '../../../BuildStyles';
+import Loader from '../../../../utils/Loader';
 
 const ADD_DOC = gql`
   mutation addDealDocService($deal_id: String!, $task_id: String!, $doc: Upload!, $phase: String) {
@@ -48,16 +49,89 @@ const DocUploader = ({
   deal,
   // no change
   classes,
-  addDoc,
-  deleteDoc,
 }) => {
   console.log('uploaded', filesUploaded);
 
+  const [addDoc, { data: documentData, loading: addDocLoading, error: addDocError }] = useMutation(
+    ADD_DOC,
+    {
+      onCompleted: () => {
+        toast.success('Success! Your document has been added');
+      },
+    },
+  );
+  const [deleteDoc, { loading: deleteDocLoading, error: deleteDocError }] = useMutation(
+    DELETE_DOC,
+    {
+      onCompleted: () => {
+        toast.success('Success! Your document has been deleted');
+      },
+    },
+  );
+  // let deleteDocLoading = false;
+
   const { complete } = filesUploaded[document.title];
+
+  if (addDocLoading || deleteDocLoading)
+    return (
+      <div className={classes.uploadDocLoader}>
+        <CircularProgress />
+      </div>
+    );
+  if (addDocError || deleteDocError)
+    return (
+      <div className={`${classes.uploadErrorItem}`}>
+        <div className={classes.docErrorIconBox}>
+          <img src={warningIcon} alt="warning icon" />
+        </div>
+        <Typography className={classes.itemText}>&nbsp;Something went wrong...</Typography>
+        {
+          <div className={classes.uploadIcon} style={{ opacity: '1', textAlign: 'center' }}>
+            <label htmlFor="doc-upload" className={classes.uploadErrorLabel}>
+              <img
+                src={documentGrayIcon}
+                className={classes.uploadIcon}
+                style={{ opacity: '1', cursor: 'pointer' }}
+                alt="checkbox"
+              />
+              &nbsp;Upload document
+            </label>
+            <form>
+              <input
+                id="doc-upload"
+                className={classes.uploadIcon}
+                type="file"
+                style={{ display: 'none' }}
+                accept="application/pdf"
+                multiple
+                onChange={({ target }) => {
+                  if (target.validity.valid) {
+                    setFilesUploaded((prev) => {
+                      return {
+                        ...prev,
+                        [document.title]: { complete: true, document: target.files[0] },
+                      };
+                    });
+                    addDoc({
+                      variables: {
+                        doc: target.files[0],
+                        task_id: document?._id,
+                        deal_id: deal?._id,
+                        phase: 'build',
+                      },
+                    });
+                    localStorage.setItem('buildFilesUploaded', JSON.stringify(filesUploaded));
+                  }
+                }}
+              />
+            </form>
+          </div>
+        }
+      </div>
+    );
   return (
     <div className={`${classes.uploadDocItem} ${!complete ? '' : classes.uploadedDocItem}`}>
       <div className={classes.docIconBox} style={{ backgroundColor: complete && '#CBECC7' }}>
-        {/* need to update logic for error */}
         <img src={!complete ? documentIcon : documentGreenIcon} alt="document icon" />
       </div>
       <Typography className={classes.itemText}>
@@ -109,12 +183,6 @@ const DocUploader = ({
               multiple
               onChange={({ target }) => {
                 if (target.validity.valid) {
-                  setFilesUploaded((prev) => {
-                    return {
-                      ...prev,
-                      [document.title]: { complete: true, document: target.files[0] },
-                    };
-                  });
                   addDoc({
                     variables: {
                       doc: target.files[0],
@@ -122,6 +190,13 @@ const DocUploader = ({
                       deal_id: deal?._id,
                       phase: 'build',
                     },
+                  }).then(() => {
+                    setFilesUploaded((prev) => {
+                      return {
+                        ...prev,
+                        [document.title]: { complete: true, document: target.files[0] },
+                      };
+                    });
                   });
                   localStorage.setItem('buildFilesUploaded', JSON.stringify(filesUploaded));
                 }
@@ -129,15 +204,6 @@ const DocUploader = ({
             />
           </form>
         </div>
-
-        //  (
-        //   <img
-        //     src={CheckCircle}
-        //     className={classes.checkCircle}
-        //     alt="checkbox"
-        //     style={{ opacity: '1' }}
-        //   />
-        // )
       }
     </div>
   );
@@ -174,17 +240,6 @@ export default function UploadDocs({ page, setPage, deal }) {
   console.log('tasks', uploadTasks);
 
   const history = useHistory();
-  const [addDoc] = useMutation(ADD_DOC, {
-    onCompleted: () => {
-      toast.success('Success! Your document has been added');
-    },
-  });
-
-  const [deleteDoc] = useMutation(DELETE_DOC, {
-    onCompleted: () => {
-      toast.success('Success! Your document has been deleted');
-    },
-  });
 
   useEffect(() => {
     if (localStorage.getItem('buildFilesUploaded')) {
@@ -194,13 +249,6 @@ export default function UploadDocs({ page, setPage, deal }) {
   return (
     <>
       <main className={classes.docUploadBox}>
-        {/* <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}> */}
-        {/* Upload your documents{' '} */}
-        {/* </Typography> */}
-        {/* <Typography variant="h6" gutterBottom className={classes.subtitle}>
-          Please upload the appropriate documents so we have them on file for you. When uploading
-          multiple files, please compress them into one zip folder.
-        </Typography> */}
         <section className={classes.uploadContainer}>
           {uploadTasks?.map((task) => (
             <DocUploader
@@ -209,8 +257,6 @@ export default function UploadDocs({ page, setPage, deal }) {
               classes={classes}
               filesUploaded={filesUploaded}
               setFilesUploaded={setFilesUploaded}
-              addDoc={addDoc}
-              deleteDoc={deleteDoc}
               deal={deal}
             />
           ))}
