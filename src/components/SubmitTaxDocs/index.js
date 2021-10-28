@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 import KYCModal from '../DealNextSteps/KYCModal';
 import { Button } from '@material-ui/core';
 import DocIcon from '../../assets/buildDoc.svg';
+import { useLocation } from 'react-router-dom';
 import './styles.scss';
 
 function SubmitTaxDocs() {
-  const [open, setOpen] = useState(false);
-  const [activeForm, setActiveForm] = useState('W-9');
+  const useQuery = () => new URLSearchParams(useLocation().search);
+  const query = useQuery();
+  const form = query.get('form');
+
+  const [open, setOpen] = useState(form ? true : false);
+  const [activeForm, setActiveForm] = useState(form?.toUpperCase() || 'W-9');
 
   const templateMap = {
     'W-9': { id: 'tpl_dM4QcQbyLckdPXgtyx', name: 'W9 Individual' },
@@ -22,7 +27,7 @@ function SubmitTaxDocs() {
 
   const buttonItems = Object.entries(templateMap).map(([key, value]) => {
     return (
-      <Button onClick={() => handleClick(key)} className="form-select-button">
+      <Button key={key} onClick={() => handleClick(key)} className="form-select-button">
         <div className="button-content">
           <img className="button-img" src={DocIcon} />
           <p className="button-text">{value.name}</p>
@@ -49,7 +54,7 @@ function SubmitTaxDocs() {
       <KYCModal
         open={open}
         setOpen={setOpen}
-        kycTemplateId={templateMap[activeForm].id}
+        kycTemplateId={form ? templateMap[activeForm].id : ''}
         kycTemplateName={activeForm}
         refetch={() => {}}
         deal={{}}
