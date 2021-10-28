@@ -97,7 +97,6 @@ function DealNextSteps() {
   const params = queryString.parse(search);
   const history = useHistory();
 
-  console.log('investor data', data);
   const path = organization ? `/deals/${organization}/${deal_slug}` : `/deals/${deal_slug}`;
 
   const { data: investmentData } = useQuery(GET_INVESTMENT, {
