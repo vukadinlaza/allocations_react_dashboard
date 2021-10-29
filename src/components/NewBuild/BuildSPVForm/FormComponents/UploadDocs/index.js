@@ -43,7 +43,6 @@ const uploadTaskMap = {
 
 const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId, classes }) => {
   const [docId, setDocId] = useState(null);
-  console.log('deal', deal);
   const [error, setError] = useState(false);
 
   const [addDoc, { data, loading: addDocLoading, error: addDocError }] = useMutation(ADD_DOC, {
@@ -145,9 +144,6 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
             className={classes.deleteDocButton}
             type="button"
             onClick={() => {
-              console.log('docId:', docId);
-              console.log('task id:', document._id);
-              console.log('phaseId:', phaseId);
               deleteDoc({
                 variables: {
                   document_id: filesUploaded[document.title]?.document?._id,
@@ -259,12 +255,9 @@ export default function UploadDocs({ deal }) {
   });
 
   const currentPhase = deal?.phases.find((phase) => phase.name === 'build');
-  console.log('deal', deal);
-  console.log('current PHASE', currentPhase);
   const uploadTasks = currentPhase?.tasks
     .filter((task) => task.type === 'fm-document-upload' && task.title !== 'Upload ID')
     .sort((a, b) => uploadTaskMap[a.title]?.position - uploadTaskMap[b.title]?.position);
-  console.log('uploadTasks', uploadTasks);
 
   // const history = useHistory();
   useEffect(() => {
