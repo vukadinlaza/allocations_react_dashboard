@@ -113,7 +113,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, classes 
                         ...prev,
                         [document.title]: {
                           complete: true,
-                          document: { name, id: data.addDealDocService._id },
+                          document: { name, _id: data.addDealDocService._id },
                         },
                       };
                       localStorage.setItem('buildFilesUploaded', JSON.stringify(newFilesUploaded));
@@ -145,7 +145,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, classes 
             onClick={() => {
               deleteDoc({
                 variables: {
-                  document_id: filesUploaded[document.title]?.document?.id,
+                  document_id: filesUploaded[document.title]?.document?._id,
                   task_id: document._id,
                   phase_id: 'build',
                 },
@@ -153,7 +153,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, classes 
                 setFilesUploaded((prev) => {
                   const newFilesUploaded = {
                     ...prev,
-                    [document.title]: { complete: false, document: { name: null, id: null } },
+                    [document.title]: { complete: false, document: { name: null, _id: null } },
                   };
                   localStorage.setItem('buildFilesUploaded', JSON.stringify(newFilesUploaded));
                   return newFilesUploaded;
@@ -203,7 +203,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, classes 
                       ...prev,
                       [document.title]: {
                         complete: true,
-                        document: { name, id: data.addDealDocService._id },
+                        document: { name, _id: data.addDealDocService._id },
                       },
                     };
                     localStorage.setItem('buildFilesUploaded', JSON.stringify(newFilesUploaded));
@@ -227,28 +227,28 @@ export default function UploadDocs({ deal }) {
       complete: false,
       document: {
         name: null,
-        id: null,
+        _id: null,
       },
     },
     // 'Upload ID': {
     //   complete: false,
     //   document: {
     // name: null,
-    // id: null
+    // _id: null
     // },
     // },
     'Upload Company Deck': {
       complete: false,
       document: {
         name: null,
-        id: null,
+        _id: null,
       },
     },
     'Upload Term Sheet': {
       complete: false,
       document: {
         name: null,
-        id: null,
+        _id: null,
       },
     },
   });
