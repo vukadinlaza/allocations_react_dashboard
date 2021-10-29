@@ -48,8 +48,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
 
   const [addDoc, { data, loading: addDocLoading, error: addDocError }] = useMutation(ADD_DOC, {
     onCompleted: ({ addDealDocService: uploadResponse }) => {
-      toast.success('Success! Your document has been added');
-      setDocId(uploadResponse._id);
+      if (uploadResponse?.success) toast.success('Success! Your document has been added');
     },
     onError: console.error,
   });
@@ -62,12 +61,6 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
           return;
         }
         toast.success('Success! Your document has been deleted');
-        setFilesUploaded((prev) => {
-          return {
-            ...prev,
-            [document.title]: { complete: false, document: null },
-          };
-        });
       },
       onError: console.error,
     },
@@ -108,12 +101,6 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
               multiple
               onChange={({ target }) => {
                 if (target.validity.valid) {
-                  setFilesUploaded((prev) => {
-                    return {
-                      ...prev,
-                      [document.title]: { complete: true, document: target.files[0] },
-                    };
-                  });
                   addDoc({
                     variables: {
                       doc: target.files[0],
@@ -121,8 +108,20 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
                       deal_id: deal?._id,
                       phase: phaseId,
                     },
+                  }).then(({ data }) => {
+                    const { name } = target.files[0];
+                    setFilesUploaded((prev) => {
+                      const newFilesUploaded = {
+                        ...prev,
+                        [document.title]: {
+                          complete: true,
+                          document: { name, _id: data.addDealDocService._id },
+                        },
+                      };
+                      localStorage.setItem('buildFilesUploaded', JSON.stringify(newFilesUploaded));
+                      return newFilesUploaded;
+                    });
                   });
-                  localStorage.setItem('buildFilesUploaded', JSON.stringify(filesUploaded));
                 }
               }}
             />
@@ -151,10 +150,19 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
               console.log('phaseId:', phaseId);
               deleteDoc({
                 variables: {
-                  document_id: docId,
+                  document_id: filesUploaded[document.title]?.document?._id,
                   task_id: document._id,
                   phase_id: phaseId,
                 },
+              }).then(() => {
+                setFilesUploaded((prev) => {
+                  const newFilesUploaded = {
+                    ...prev,
+                    [document.title]: { complete: false, document: { name: null, _id: null } },
+                  };
+                  localStorage.setItem('buildFilesUploaded', JSON.stringify(newFilesUploaded));
+                  return newFilesUploaded;
+                });
               });
             }}
           >
@@ -193,15 +201,20 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
                     deal_id: deal?._id,
                     phase: 'build',
                   },
-                }).then(() => {
+                }).then(({ data }) => {
+                  const { name } = target.files[0];
                   setFilesUploaded((prev) => {
-                    return {
+                    const newFilesUploaded = {
                       ...prev,
-                      [document.title]: { complete: true, document: target.files[0] },
+                      [document.title]: {
+                        complete: true,
+                        document: { name, _id: data.addDealDocService._id },
+                      },
                     };
+                    localStorage.setItem('buildFilesUploaded', JSON.stringify(newFilesUploaded));
+                    return newFilesUploaded;
                   });
                 });
-                localStorage.setItem('buildFilesUploaded', JSON.stringify(filesUploaded));
               }
             }}
           />
@@ -217,19 +230,31 @@ export default function UploadDocs({ deal }) {
   const [filesUploaded, setFilesUploaded] = useState({
     'Upload Company Logo': {
       complete: false,
-      document: null,
+      document: {
+        name: null,
+        _id: null,
+      },
     },
     // 'Upload ID': {
     //   complete: false,
-    //   document: null,
+    //   document: {
+    // name: null,
+    // _id: null
+    // },
     // },
     'Upload Company Deck': {
       complete: false,
-      document: null,
+      document: {
+        name: null,
+        _id: null,
+      },
     },
     'Upload Term Sheet': {
       complete: false,
-      document: null,
+      document: {
+        name: null,
+        _id: null,
+      },
     },
   });
 

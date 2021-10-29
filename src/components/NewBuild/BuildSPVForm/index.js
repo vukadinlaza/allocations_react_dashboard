@@ -918,11 +918,7 @@ const BuildDetails = ({
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
             5. Upload Your Documents
           </Typography>
-          <UploadDocs
-            deal={
-              initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
-            }
-          />
+          <UploadDocs deal={initialDeal} />
         </form>
       </Paper>
 
