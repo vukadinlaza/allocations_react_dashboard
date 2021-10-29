@@ -123,7 +123,7 @@ const ProfileInfo = ({
       investor.investor_type === 'entity'
         ? ['entity_name', 'accredited_investor_status', ...reqs]
         : ['first_name', 'last_name', ...reqs];
-    return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
+    return required.reduce((acc, attr) => (!attr || investor[attr] ? acc : [...acc, attr]), []);
   };
 
   const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_USER, {
