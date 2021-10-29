@@ -43,17 +43,24 @@ const uploadTaskMap = {
 
 const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, classes }) => {
   const [docId, setDocId] = useState(null);
+  console.log('docId', docId);
+  const [error, setError] = useState(false);
 
   const [addDoc, { data, loading: addDocLoading, error: addDocError }] = useMutation(ADD_DOC, {
     onCompleted: ({ addDealDocService: uploadResponse }) => {
       toast.success('Success! Your document has been added');
       setDocId(uploadResponse._id);
     },
+    onError: console.error,
   });
   const [deleteDoc, { loading: deleteDocLoading, error: deleteDocError }] = useMutation(
     DELETE_DOC,
     {
-      onCompleted: () => {
+      onCompleted: ({ deleteDealDocument: deleteResponse }) => {
+        if (!deleteResponse?.acknowledged) {
+          setError(true);
+          return;
+        }
         toast.success('Success! Your document has been deleted');
         setFilesUploaded((prev) => {
           return {
@@ -62,6 +69,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, classes 
           };
         });
       },
+      onError: console.error,
     },
   );
 
@@ -73,7 +81,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, classes 
         <CircularProgress />
       </div>
     );
-  if (addDocError || deleteDocError) {
+  if (error || addDocError || deleteDocError) {
     return (
       <div className={`${classes.uploadErrorItem}`}>
         <div className={classes.docErrorIconBox}>
@@ -223,12 +231,12 @@ export default function UploadDocs({ deal }) {
   });
 
   const currentPhase = deal?.phases.find((phase) => phase.name === 'build');
+  console.log('deal', deal);
   const uploadTasks = currentPhase?.tasks
     .filter((task) => task.type === 'fm-document-upload' && task.title !== 'Upload ID')
     .sort((a, b) => uploadTaskMap[a.title]?.position - uploadTaskMap[b.title]?.position);
 
   // const history = useHistory();
-
   useEffect(() => {
     if (localStorage.getItem('buildFilesUploaded')) {
       setFilesUploaded(JSON.parse(localStorage.getItem('buildFilesUploaded')));
