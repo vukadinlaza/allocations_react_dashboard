@@ -20,6 +20,7 @@ import OrganizationNew from './components/OrganizationNew';
 import OrganizationMembers from './components/OrganizationMembers';
 import DealTable from './components/deals/fund-manager/DealsTablePage';
 import NotFound from './components/NotFound';
+import SubmitTaxDocs from './components/SubmitTaxDocs';
 
 // admin
 
@@ -60,6 +61,8 @@ const App = () => {
               <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
               <PrivateRoute path="/" exact component={InvestorDashboard} />
               <PrivateRoute path="/investor/:id/home" component={InvestorDashboard} />
+
+              <PrivateRoute path="/submit-tax-documents" component={SubmitTaxDocs} />
 
               <PrivateRoute path="/new-build-spv" exact component={BuildSPVForm} />
               <PrivateRoute path="/profile" component={Profile} />
