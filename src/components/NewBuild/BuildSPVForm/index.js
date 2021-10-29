@@ -29,6 +29,7 @@ const CREATE_BUILD = gql`
     deal: createBuild {
       _id
       phases {
+        _id
         name
         tasks {
           _id
