@@ -388,6 +388,7 @@ function DealNextSteps() {
           setOpen={setCryptoPaymentOpen}
           createPayment={createPayment}
           investmentData={investmentData}
+          dealData={dealData}
           docs={docs}
         />
 

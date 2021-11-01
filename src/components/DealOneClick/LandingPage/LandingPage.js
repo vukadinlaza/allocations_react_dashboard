@@ -9,6 +9,8 @@ import DealHeader from './DealHeader';
 import CoinvestorsPanel from './CoinvestorsPanel';
 import './styles.scss';
 import KeyHighlights from './KeyHighlightsPanel';
+import CryptoDisclosure from './CryptoDiscPanel';
+
 import Loader from '../../utils/Loader';
 
 export const GET_DEAL = gql`
@@ -128,6 +130,7 @@ function DealLandingPage() {
         <CoinvestorsPanel deal={deal} />
         <KeyHighlights deal={deal} />
         <TermsPanel deal={deal} />
+        <CryptoDisclosure deal={deal} />
       </div>
     </section>
   );

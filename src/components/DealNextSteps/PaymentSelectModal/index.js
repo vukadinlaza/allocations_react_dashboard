@@ -2,11 +2,11 @@ import React from 'react';
 import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
-import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import { useHistory } from 'react-router';
+import CryptoIcon from '../../../assets/buildCrypto.svg';
+import BankIcon from '../../../assets/buildBank.svg';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -38,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
 
 const PaymentModal = ({ open, setOpen, setWireInstructionsOpen, setCryptoPaymentOpen }) => {
   const classes = useStyles();
-  const history = useHistory();
 
   return (
     <Modal open={open} onClose={() => setOpen(false)} className={classes.modal}>
@@ -84,12 +83,12 @@ const PaymentModal = ({ open, setOpen, setWireInstructionsOpen, setCryptoPayment
                       >
                         {[
                           {
-                            paymentMethod: 'Wire',
+                            paymentMethod: 'Wire Funds',
                             buttonText: 'Show Wire Instructions',
                             openFunction: () => setWireInstructionsOpen(true),
                           },
                           {
-                            paymentMethod: 'Crypto',
+                            paymentMethod: 'Send Crypto',
                             buttonText: 'Show Crypto Instructions',
                             openFunction: () => setCryptoPaymentOpen(true),
                           },
@@ -99,6 +98,17 @@ const PaymentModal = ({ open, setOpen, setWireInstructionsOpen, setCryptoPayment
                               key={paymentType.paymentMethod}
                               style={{ textAlign: 'center', margin: '.5rem', padding: '.5rem' }}
                             >
+                              <div style={{ height: '55px' }}>
+                                <img
+                                  alt={`${paymentType.paymentMethod} icon`}
+                                  style={{ maxWidth: '100%', margin: '1rem' }}
+                                  src={
+                                    paymentType.paymentMethod === 'Send Crypto'
+                                      ? CryptoIcon
+                                      : BankIcon
+                                  }
+                                />
+                              </div>
                               <Typography
                                 style={{
                                   margin: '.5rem',
@@ -107,23 +117,6 @@ const PaymentModal = ({ open, setOpen, setWireInstructionsOpen, setCryptoPayment
                               >
                                 {paymentType.paymentMethod}
                               </Typography>
-                              <Typography
-                                style={{
-                                  margin: '.5rem',
-                                  fontSize: '.7rem',
-                                }}
-                              >
-                                Pay with {paymentType.paymentMethod}
-                              </Typography>
-                              <img
-                                alt="some"
-                                style={{ maxWidth: '100%', margin: '1rem' }}
-                                src={
-                                  paymentType.paymentMethod === 'SPV'
-                                    ? 'https://allocations-public.s3.us-east-2.amazonaws.com/graphic-2.png'
-                                    : 'https://allocations-public.s3.us-east-2.amazonaws.com/graphic-5.png'
-                                }
-                              />
                               <Button
                                 variant="contained"
                                 style={{ margin: '1rem', color: '#2A2B54' }}
