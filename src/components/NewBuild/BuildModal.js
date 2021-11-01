@@ -78,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
 const BuildModal = ({ onClose, isOpen }) => {
   const classes = useStyles();
   const history = useHistory();
-  const [typeSelected, setTypeSelected] = useState('');
+  const [typeSelected, setTypeSelected] = useState(null);
 
   return (
     <Modal open={isOpen} onClose={onClose} className={classes.modal}>
@@ -193,6 +193,7 @@ const BuildModal = ({ onClose, isOpen }) => {
                       color="primary"
                       size="large"
                       type="submit"
+                      disabled={!typeSelected}
                       style={{ width: '90%', borderRadius: '8px' }}
                       onClick={() => {
                         history.push(`/new-build-${typeSelected}`);
