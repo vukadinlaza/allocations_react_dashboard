@@ -118,7 +118,7 @@ function DealSettings({ formData, setFormData, refetch }) {
       </li>
     );
   };
-
+  console.log('DOCS', documents);
   const dealDocumentItems = documents?.map((doc) => {
     return <DealDocumentItem document={doc} />;
   });

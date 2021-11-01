@@ -5,16 +5,7 @@ import _ from 'lodash';
 import countries from 'country-region-data';
 import { toast } from 'react-toastify';
 import HelpIcon from '@material-ui/icons/Help';
-import {
-  Button,
-  TextField,
-  Paper,
-  Grid,
-  FormControl,
-  ButtonGroup,
-  MenuItem,
-  Select as Select2,
-} from '@material-ui/core';
+import { Button, TextField, Paper, Grid, FormControl, ButtonGroup } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Select from 'react-select';
 import { useHistory } from 'react-router';
@@ -25,6 +16,7 @@ import { phone } from '../../../utils/helpers';
 import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
 import { useCurrentOrganization } from '../../../state/current-organization';
 import useStyles from '../BuildStyles';
+import SignDocsForm from './FormComponents/AgreementSigner';
 
 const CREATE_BUILD = gql`
   mutation createBuild {
@@ -970,18 +962,6 @@ const BuildDetails = ({
             >
               Continue
             </Button>
-            {/* <Button
-          className={classes.finishButton}
-          onClick={() => {
-            toast.success('Success! Your submission was submitted.');
-            localStorage.removeItem('buildData');
-            localStorage.removeItem('buildDeal');
-            localStorage.removeItem('buildFilesUploaded');
-            if (deal?._id) history.push(`/deal-setup?id=${deal._id}`);
-          }}
-        >
-          Finish
-        </Button> */}
           </FormControl>
         </form>
       </Paper>
@@ -1048,21 +1028,17 @@ export default function NewSpvForm() {
       ),
     },
     {
-      title: 'Finish',
-      Component: <FinishComponent history={history} deal={initialDeal?.deal} classes />,
+      title: 'Review and sign terms',
+      Component: (
+        <SignDocsForm
+          deal={
+            initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
+          }
+          page={page}
+          setPage={setPage}
+        />
+      ),
     },
-    // {
-    //   title: 'Upload docs',
-    //   Component: (
-    //     <UploadDocs
-    //       page={page}
-    //       setPage={setPage}
-    //       deal={
-    //         initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
-    //       }
-    //     />
-    //   ),
-    // },
   ];
 
   if (authLoading) return null;
