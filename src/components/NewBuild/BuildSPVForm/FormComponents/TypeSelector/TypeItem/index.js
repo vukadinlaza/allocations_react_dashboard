@@ -1,6 +1,6 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import check from '../../../../../../assets/check.svg';
+import check from '../../../../../../assets/check-mark-blue.svg';
 import useStyles from '../../../../BuildStyles';
 
 export default function TypeItem({ item, handleChange, buildData }) {

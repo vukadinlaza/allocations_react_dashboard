@@ -9,9 +9,9 @@ import TypeItem from './TypeItem/index';
 import RocketIcon from '../../../../../assets/buildRocket.svg';
 import BankIcon from '../../../../../assets/buildBank.svg';
 import CryptoIcon from '../../../../../assets/buildCrypto.svg';
-import DistributeIcon from '../../../../../assets/buildDistribute.svg';
-import HouseIcon from '../../../../../assets/buildHouse.svg';
 import LevelIcon from '../../../../../assets/buildLevel.svg';
+import HouseIcon from '../../../../../assets/buildHouse.svg';
+import CustomIcon from '../../../../../assets/buildCustom.svg';
 import NetworkIcon from '../../../../../assets/buildNetwork.svg';
 import PieIcon from '../../../../../assets/buildPie.svg';
 import { ModalTooltip } from '../../../../dashboard/FundManagerDashboard/widgets';
@@ -68,7 +68,7 @@ export default function TypeSelector({
       title: 'Secondary',
       value: 'secondary',
       description: 'Raise money to invest in a secondary of a private company',
-      icon: DistributeIcon,
+      icon: LevelIcon,
       height: '35px',
       width: '28px',
     },
@@ -92,7 +92,7 @@ export default function TypeSelector({
       title: 'Custom',
       value: 'custom',
       description: 'Raise money for X',
-      icon: LevelIcon,
+      icon: CustomIcon,
       height: '26px',
       width: '26px',
     },

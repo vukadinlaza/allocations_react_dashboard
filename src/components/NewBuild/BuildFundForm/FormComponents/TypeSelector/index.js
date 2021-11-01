@@ -8,9 +8,10 @@ import TypeItem from './TypeItem/index';
 import RocketIcon from '../../../../../assets/buildRocket.svg';
 import BankIcon from '../../../../../assets/buildBank.svg';
 import CryptoIcon from '../../../../../assets/buildCrypto.svg';
-import DistributeIcon from '../../../../../assets/buildDistribute.svg';
+// import DistributeIcon from '../../../../../assets/buildDistribute.svg';
 import HouseIcon from '../../../../../assets/buildHouse.svg';
 import LevelIcon from '../../../../../assets/buildLevel.svg';
+import CustomIcon from '../../../../../assets/buildCustom.svg';
 import NetworkIcon from '../../../../../assets/buildNetwork.svg';
 import PieIcon from '../../../../../assets/buildPie.svg';
 
