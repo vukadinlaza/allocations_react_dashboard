@@ -177,7 +177,7 @@ const BuildDetails = ({
     allocations_investment_advisor: 'true', //* conditional front or back?
     investment_advisor: '',
     side_letters: 'false',
-    closing_date: moment(Date.now()).format('YYYY-MM-DD'),
+    closing_date: moment(Date.now()).add(7, 'days').format('YYYY-MM-DD'),
     sectors: [],
     representative: '',
     portfolio_deal_name: '',
