@@ -390,7 +390,10 @@ export function AccreditedInvestorStatus({ investor, handleChange, errors }) {
   );
 }
 const is3c7Options = {
-  individual: ['An individual that owns $5,000,000 or more in investments'],
+  individual: [
+    'An individual that owns $5,000,000 or more in investments',
+    'I am a “knowledgeable employee” of the private fund (relying on the Investment Company Act rule 3(c)(7) exemption) or its manager',
+  ],
   entity: [
     'A family-owned business not formed for the specific purpose of acquiring the interest in the fund that owns $5,000,000 or more in investments',
     'An entity not formed for the specific purpose of acquiring the interest in the fund which owns and invests at least $25,000,000 in investments (or someone who is acting on account of such a person)',
