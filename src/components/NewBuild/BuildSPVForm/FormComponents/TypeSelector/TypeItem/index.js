@@ -1,5 +1,6 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
+import check from '../../../../../../assets/check.svg';
 import useStyles from '../../../../BuildStyles';
 
 export default function TypeItem({ item, handleChange, buildData }) {
@@ -15,17 +16,9 @@ export default function TypeItem({ item, handleChange, buildData }) {
       }`}
       onClick={handleChange}
     >
-      <div
-        style={{
-          height: '55px',
-          width: '55px',
-          marginBottom: '15px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
+      <div className={classes.typeItemDiv}>
         <img src={item.icon} alt={`${item.title} icon`} className={classes.icon} />
+        {buildData.asset_type === item.value && <img alt="blue check mark" src={check} />}
       </div>
 
       <Typography className={classes.assetItemText}>{item.title}</Typography>
