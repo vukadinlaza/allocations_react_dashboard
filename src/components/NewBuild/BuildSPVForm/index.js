@@ -3,6 +3,7 @@ import { useMutation, gql } from '@apollo/client';
 import moment from 'moment';
 import _ from 'lodash';
 import countries from 'country-region-data';
+import { toast } from 'react-toastify';
 import HelpIcon from '@material-ui/icons/Help';
 import {
   Button,
@@ -16,8 +17,9 @@ import {
 } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Select from 'react-select';
+import { useHistory } from 'react-router';
 import BasicInfo from './FormComponents/TypeSelector/index';
-import UploadDocsModal from './FormComponents/UploadDocs/index';
+import UploadDocs from './FormComponents/UploadDocs/index';
 import { useAuth } from '../../../auth/useAuth';
 import { phone } from '../../../utils/helpers';
 import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
@@ -29,6 +31,7 @@ const CREATE_BUILD = gql`
     deal: createBuild {
       _id
       phases {
+        _id
         name
         tasks {
           _id
@@ -141,6 +144,7 @@ const BuildDetails = ({
   setBuildInfo,
   deal_id,
   waitingOnInitialDeal,
+  initialDeal,
 }) => {
   const organization = useCurrentOrganization();
   const classes = useStyles();
@@ -910,6 +914,16 @@ const BuildDetails = ({
           </Grid>
         </form>
       </Paper>
+
+      <Paper className={classes.paper}>
+        <form noValidate autoComplete="off">
+          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
+            5. Upload Your Documents
+          </Typography>
+          <UploadDocs deal={initialDeal} />
+        </form>
+      </Paper>
+
       <Paper className={classes.paper}>
         <form noValidate autoComplete="off">
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
@@ -956,12 +970,41 @@ const BuildDetails = ({
             >
               Continue
             </Button>
+            {/* <Button
+          className={classes.finishButton}
+          onClick={() => {
+            toast.success('Success! Your submission was submitted.');
+            localStorage.removeItem('buildData');
+            localStorage.removeItem('buildDeal');
+            localStorage.removeItem('buildFilesUploaded');
+            if (deal?._id) history.push(`/deal-setup?id=${deal._id}`);
+          }}
+        >
+          Finish
+        </Button> */}
           </FormControl>
         </form>
       </Paper>
     </>
   );
 };
+
+function FinishComponent({ history, deal, classes }) {
+  return (
+    <Button
+      className={classes.finishButton}
+      onClick={() => {
+        toast.success('Success! Your submission was submitted.');
+        localStorage.removeItem('buildData');
+        localStorage.removeItem('buildDeal');
+        localStorage.removeItem('buildFilesUploaded');
+        if (deal?._id) history.push(`/deal-setup?id=${deal._id}`);
+      }}
+    >
+      Finish
+    </Button>
+  );
+}
 
 export default function NewSpvForm() {
   const { userProfile, loading: authLoading } = useAuth();
@@ -985,6 +1028,8 @@ export default function NewSpvForm() {
     }
   }, [loading]);
 
+  const history = useHistory();
+
   const pages = [
     {
       title: 'Build your SPV',
@@ -996,21 +1041,28 @@ export default function NewSpvForm() {
           setBuildInfo={setBuildInfo}
           deal_id={initialDeal?.deal?._id}
           waitingOnInitialDeal={loading}
-        />
-      ),
-    },
-    {
-      title: 'Upload docs',
-      Component: (
-        <UploadDocsModal
-          page={page}
-          setPage={setPage}
-          deal={
+          initialDeal={
             initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
           }
         />
       ),
     },
+    {
+      title: 'Finish',
+      Component: <FinishComponent history={history} deal={initialDeal?.deal} classes />,
+    },
+    // {
+    //   title: 'Upload docs',
+    //   Component: (
+    //     <UploadDocs
+    //       page={page}
+    //       setPage={setPage}
+    //       deal={
+    //         initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
+    //       }
+    //     />
+    //   ),
+    // },
   ];
 
   if (authLoading) return null;
