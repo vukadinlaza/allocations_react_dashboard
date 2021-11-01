@@ -18,7 +18,11 @@ export default function TypeItem({ item, handleChange, buildData }) {
     >
       <div className={classes.typeItemDiv}>
         <img src={item.icon} alt={`${item.title} icon`} className={classes.icon} />
-        {buildData.asset_type === item.value && <img alt="blue check mark" src={check} />}
+        {buildData.asset_type === item.value && (
+          <div className={classes.blueCheck}>
+            <img alt="blue check mark" src={check} />
+          </div>
+        )}
       </div>
 
       <Typography className={classes.assetItemText}>{item.title}</Typography>

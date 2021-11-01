@@ -52,7 +52,15 @@ const useStyles = makeStyles((theme) => ({
       paddingBottom: '0px',
     },
   },
-
+  blueCheck: {
+    width: '26px',
+    height: '26px',
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: '50%',
+    justifyContent: 'center',
+    backgroundColor: '#0461ff',
+  },
   buildTabContainer: {
     marginBottom: '16px',
     paddingLeft: '42px',
