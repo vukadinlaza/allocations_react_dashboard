@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Paper } from '@material-ui/core';
-import { gql, useLazyQuery, useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import Typography from '@material-ui/core/Typography';
 import bluePenIcon from '../../../../../assets/sign-agreement-blue-pen.svg';
 import useStyles from '../../../BuildStyles';
