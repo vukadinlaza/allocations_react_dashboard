@@ -48,7 +48,7 @@ export default function SignDocsForm({ page, setPage, deal }) {
             Sign your agreements
           </Typography>
           <Typography variant="h6" gutterBottom className={classes.subtitle}>
-            Please sign the appropriate agreements consent to us to start creating your deals on
+            Please sign the appropriate agreements to consent us to start creating your deals on
             your behalf
           </Typography>
         </div>
