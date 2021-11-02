@@ -9,14 +9,6 @@ import styles from '../../../dashboard/InvestorDashboard/styles';
 
 const spvHeaders = [
   {
-    label: 'NAME',
-    value: 'name',
-    type: 'name',
-    isSortable: true,
-    align: 'left',
-    alignHeader: true,
-  },
-  {
     label: 'PORTFOLIO COMPANY',
     value: 'company_name',
     type: 'company_name',
@@ -30,7 +22,7 @@ const spvHeaders = [
     value: 'status',
     type: 'status',
     isSortable: true,
-    align: 'right',
+    align: 'left',
     alignHeader: false,
   },
   {
@@ -103,7 +95,7 @@ const DealsTable = ({ classes, deals }) => {
             style={{
               color: getStatusColors(row.status).color,
               backgroundColor: getStatusColors(row.status).backgroundColor,
-              marginLeft: 'auto',
+              margin: 'auto',
             }}
           >
             {row[headerValue]}
@@ -141,7 +133,7 @@ const DealsTable = ({ classes, deals }) => {
 
   return (
     <div className={classes.tableContainer}>
-      <div className={classes.searchContainer}>
+      {/* <div className={classes.searchContainer}>
         <TextField
           label="Search"
           placeholder="Search by Name"
@@ -158,7 +150,7 @@ const DealsTable = ({ classes, deals }) => {
           }}
           style={{ margin: '0 1em' }}
         />
-      </div>
+      </div> */}
       <AllocationsTable data={dataCopy} headers={headers} getCellContent={getCellContent} />
     </div>
   );
