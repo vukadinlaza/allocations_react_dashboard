@@ -177,6 +177,52 @@ const BuildDetails = ({
     portfolio_deal_name: '',
   });
 
+  const formValidation = () => {
+    /* FIELDS TO CHECK
+    /// FIELDS TO CHECK ALWAYS BELOW
+  portfolio_company_name
+  portfolio_company_securities
+  estimated_spv_quantity
+  minimum_investment
+  portfolio_deal_name
+  manager_name
+  representative
+  
+  /// FIELDS TO CHECK CONDITIONALLY BELOW HERE
+  master_series
+  international_company_country ?
+  international_investors_countries ?
+  custom_management_fee
+  custom_carry_fee
+  investment_advisor
+  */
+    const unvalidatedFields = [];
+    //fields always checked below
+    if (!buildData.portfolio_company_name) unvalidatedFields.push('Portfolio Company Name');
+    if (!buildData.portfolio_company_securities)
+      unvalidatedFields.push('Portfolio Company Securities');
+    if (!buildData.portfolio_deal_name) unvalidatedFields.push('Deal Name');
+    if (!buildData.manager_name) unvalidatedFields.push('Manager Name');
+    if (!buildData.representative) unvalidatedFields.push('Representative of Manager');
+    if (!buildData.estimated_spv_quantity) unvalidatedFields.push('Estimated Number of SPVs');
+    if (!buildData.minimum_investment) unvalidatedFields.push('Minimum Investment');
+
+    //conditionally checked fields below here
+    if (!buildData.master_series && buildData.estimated_spv_quantity >= 5)
+      unvalidatedFields.push('Master Series Name');
+    if (!buildData.custom_management_fee && buildData.management_fee_value === 'Custom')
+      unvalidatedFields.push('Custom Management Fee');
+    if (!buildData.custom_carry_fee && buildData.carry_fee_value === 'Custom')
+      unvalidatedFields.push('Custom Carry Fee');
+    if (!buildData.investment_advisor && buildData.allocations_investment_advisor === 'false')
+      unvalidatedFields.push('Advisor Name');
+
+    return {
+      isValidated: !unvalidatedFields.length,
+      unvalidatedFields,
+    };
+  };
+
   const [openTooltip, setOpenTooltip] = useState('');
   const customInputStyles = { style: { height: '23px' } };
 
@@ -958,6 +1004,18 @@ const BuildDetails = ({
               className={classes.continueButton}
               disabled={waitingOnInitialDeal}
               onClick={() => {
+                const { isValidated, unvalidatedFields } = formValidation();
+                if (!isValidated) {
+                  console.log('validated? ' + isValidated, unvalidatedFields);
+                  unvalidatedFields.forEach((field) =>
+                    toast.error(
+                      <Typography>
+                        Please fill out the following fields before continuing:<div>{field}</div>
+                      </Typography>,
+                    ),
+                  );
+                  return;
+                }
                 setPage(page + 1);
                 handleSubmit();
               }}
