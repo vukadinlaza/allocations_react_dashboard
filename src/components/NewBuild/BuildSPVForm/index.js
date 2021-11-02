@@ -149,7 +149,7 @@ const BuildDetails = ({
     portfolio_company_securities: '',
     estimated_spv_quantity: '',
     master_series: '',
-    minimum_investment: '',
+    minimum_investment: '10,000',
     international_company_status: 'false',
     international_company_country: '',
     international_investors_status: 'false',
@@ -179,6 +179,9 @@ const BuildDetails = ({
 
   const formValidation = () => {
     /* FIELDS TO CHECK
+
+    //***** NEED TO VALIDATE CLOSING DATE STILL - NEED TO CHECK FOR PROPER DATE FORMAT *********
+
     /// FIELDS TO CHECK ALWAYS BELOW
   portfolio_company_name
   portfolio_company_securities
@@ -187,35 +190,56 @@ const BuildDetails = ({
   portfolio_deal_name
   manager_name
   representative
+  sectors ??? NOT CHECKED YET
   
   /// FIELDS TO CHECK CONDITIONALLY BELOW HERE
   master_series
-  international_company_country ?
-  international_investors_countries ?
+  international_company_country ?? NOT CHECKED YET
+  international_investors_countries ?? NOT CHECKED YET
   custom_management_fee
   custom_carry_fee
   investment_advisor
   */
+
+    /// *** UPLOADED DOCUMENTS NOT VALIDATED YET *** ///
+
     const unvalidatedFields = [];
     //fields always checked below
-    if (!buildData.portfolio_company_name) unvalidatedFields.push('Portfolio Company Name');
-    if (!buildData.portfolio_company_securities)
+    if (!buildData.portfolio_company_name) {
+      unvalidatedFields.push('Portfolio Company Name');
+    }
+    if (!buildData.portfolio_company_securities) {
       unvalidatedFields.push('Portfolio Company Securities');
-    if (!buildData.portfolio_deal_name) unvalidatedFields.push('Deal Name');
-    if (!buildData.manager_name) unvalidatedFields.push('Manager Name');
-    if (!buildData.representative) unvalidatedFields.push('Representative of Manager');
-    if (!buildData.estimated_spv_quantity) unvalidatedFields.push('Estimated Number of SPVs');
-    if (!buildData.minimum_investment) unvalidatedFields.push('Minimum Investment');
+    }
+    if (!buildData.portfolio_deal_name) {
+      unvalidatedFields.push('Deal Name');
+    }
+    if (!buildData.manager_name) {
+      unvalidatedFields.push('Manager Name');
+    }
+    if (!buildData.representative) {
+      unvalidatedFields.push('Representative of Manager');
+    }
+    if (!buildData.estimated_spv_quantity) {
+      unvalidatedFields.push('Estimated Number of SPVs');
+    }
+    if (!buildData.minimum_investment) {
+      unvalidatedFields.push('Minimum Investment');
+    }
 
     //conditionally checked fields below here
-    if (!buildData.master_series && buildData.estimated_spv_quantity >= 5)
+    if (!buildData.master_series && buildData.estimated_spv_quantity >= 5) {
       unvalidatedFields.push('Master Series Name');
-    if (!buildData.custom_management_fee && buildData.management_fee_value === 'Custom')
+    }
+    if (!buildData.custom_management_fee && buildData.management_fee_value === 'Custom') {
       unvalidatedFields.push('Custom Management Fee');
-    if (!buildData.custom_carry_fee && buildData.carry_fee_value === 'Custom')
+    }
+    if (!buildData.custom_carry_fee && buildData.carry_fee_value === 'Custom') {
       unvalidatedFields.push('Custom Carry Fee');
-    if (!buildData.investment_advisor && buildData.allocations_investment_advisor === 'false')
+    }
+    if (!buildData.investment_advisor && buildData.allocations_investment_advisor === 'false') {
       unvalidatedFields.push('Advisor Name');
+    }
 
     return {
       isValidated: !unvalidatedFields.length,
