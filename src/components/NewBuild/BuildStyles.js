@@ -1,5 +1,6 @@
 // import { phone } from '../../utils/helpers';
 import { makeStyles } from '@material-ui/core/styles';
+import { autoType } from 'd3-dsv';
 import { phone, tablet } from '../../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
@@ -33,6 +34,60 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 
+  signContainer: {
+    display: 'grid',
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    boxShadow: '0px 3px 6px #00000029',
+    border: '1px solid #7070703B',
+    marginBottom: '16px',
+    borderRadius: '15px',
+    padding: '42px',
+    width: '100%',
+    maxWidth: '1352px',
+    gridGap: '30px',
+    opacity: 1,
+    [theme.breakpoints.down(phone)]: {
+      maxWidth: '600px',
+      marginBottom: '24px',
+      padding: '16px',
+      paddingBottom: '30px',
+    },
+  },
+
+  agreementUnsignedBox: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: '100px',
+    paddingLeft: '30px',
+    paddingRight: '30px',
+    border: '2px dashed #0461FF !important',
+    borderRadius: '20px',
+  },
+  agreementSignedBox: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: '100px',
+    paddingLeft: '30px',
+    paddingRight: '30px',
+    border: 'none !important',
+    boxShadow: 'none !important',
+  },
+  signed: {
+    backgroundColor: 'rgb(57,197,34, 0.23)',
+    color: '#34AF1F',
+    fontWeight: '600',
+    borderRadius: '20px',
+    padding: '5px 20px',
+  },
+  notSigned: {
+    backgroundColor: '#FFBDAD',
+    color: '#DE350B',
+    fontWeight: '600',
+    borderRadius: '20px',
+    padding: '5px 20px',
+  },
   docUploadBox: {
     display: 'flex',
     justifyContent: 'flex-start',
@@ -137,6 +192,13 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
     },
   },
+
+  buttonBox: {
+    margin: 'auto',
+    marginTop: '40px',
+    alignSelf: 'center',
+    textAlign: 'center',
+  },
   helpIcon: {
     marginLeft: '0.2em',
     cursor: 'pointer',
@@ -167,7 +229,7 @@ const useStyles = makeStyles((theme) => ({
   previousButton: {
     font: 'normal normal normal 24px/28px Roboto',
     marginTop: '11px',
-    marginLeft: '135px',
+    // marginLeft: '135px',
     padding: '5px',
     cursor: 'pointer',
     [theme.breakpoints.down(phone)]: {
@@ -284,7 +346,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   inputGridItem: {
-    // marginBottom: '37px',
     [theme.breakpoints.down(phone)]: {
       maxWidth: '100%',
     },

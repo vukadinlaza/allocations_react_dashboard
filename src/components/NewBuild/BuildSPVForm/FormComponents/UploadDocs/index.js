@@ -259,7 +259,6 @@ export default function UploadDocs({ deal }) {
     .filter((task) => task.type === 'fm-document-upload' && task.title !== 'Upload ID')
     .sort((a, b) => uploadTaskMap[a.title]?.position - uploadTaskMap[b.title]?.position);
 
-  // const history = useHistory();
   useEffect(() => {
     if (localStorage.getItem('buildFilesUploaded')) {
       setFilesUploaded(JSON.parse(localStorage.getItem('buildFilesUploaded')));
@@ -281,26 +280,6 @@ export default function UploadDocs({ deal }) {
             />
           ))}
         </section>
-        {/* <Button
-          className={classes.finishButton}
-          onClick={() => {
-            toast.success('Success! Your submission was submitted.');
-            localStorage.removeItem('buildData');
-            localStorage.removeItem('buildDeal');
-            localStorage.removeItem('buildFilesUploaded');
-            if (deal?._id) history.push(`/deal-setup?id=${deal._id}`);
-          }}
-        >
-          Finish
-        </Button> */}
-        {/* <Typography
-          className={classes.previousButton}
-          onClick={() => {
-            setPage(page - 1);
-          }}
-        >
-          Previous
-        </Typography> */}
       </main>
     </>
   );

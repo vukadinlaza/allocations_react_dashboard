@@ -5,19 +5,9 @@ import _ from 'lodash';
 import countries from 'country-region-data';
 import { toast } from 'react-toastify';
 import HelpIcon from '@material-ui/icons/Help';
-import {
-  Button,
-  TextField,
-  Paper,
-  Grid,
-  FormControl,
-  ButtonGroup,
-  MenuItem,
-  Select as Select2,
-} from '@material-ui/core';
+import { Button, TextField, Paper, Grid, FormControl, ButtonGroup } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Select from 'react-select';
-import { useHistory } from 'react-router';
 import BasicInfo from './FormComponents/TypeSelector/index';
 import UploadDocs from './FormComponents/UploadDocs/index';
 import { useAuth } from '../../../auth/useAuth';
@@ -25,6 +15,7 @@ import { phone } from '../../../utils/helpers';
 import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
 import { useCurrentOrganization } from '../../../state/current-organization';
 import useStyles from '../BuildStyles';
+import AgreementSigner from './FormComponents/AgreementSigner';
 
 const CREATE_BUILD = gql`
   mutation createBuild {
@@ -90,9 +81,12 @@ const Breadcrumbs = ({ titles, page }) => {
   return (
     <Paper className={classes.buildTabContainer}>
       {titles.map((title, i) => (
-        <>
-          <Breadcrumb title={title} active={page === i} withSeparator={i < titles.length - 1} />
-        </>
+        <Breadcrumb
+          title={title}
+          key={title}
+          active={page === i}
+          withSeparator={i < titles.length - 1}
+        />
       ))}
     </Paper>
   );
@@ -970,18 +964,6 @@ const BuildDetails = ({
             >
               Continue
             </Button>
-            {/* <Button
-          className={classes.finishButton}
-          onClick={() => {
-            toast.success('Success! Your submission was submitted.');
-            localStorage.removeItem('buildData');
-            localStorage.removeItem('buildDeal');
-            localStorage.removeItem('buildFilesUploaded');
-            if (deal?._id) history.push(`/deal-setup?id=${deal._id}`);
-          }}
-        >
-          Finish
-        </Button> */}
           </FormControl>
         </form>
       </Paper>
@@ -1010,7 +992,6 @@ export default function NewSpvForm() {
   const { userProfile, loading: authLoading } = useAuth();
   const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
   const [setBuildInfo] = useMutation(SET_BUILD_INFO);
-
   // Page
   const [page, setPage] = useState(0);
 
@@ -1027,8 +1008,6 @@ export default function NewSpvForm() {
       localStorage.setItem('buildDeal', JSON.stringify(initialDeal.deal));
     }
   }, [loading]);
-
-  const history = useHistory();
 
   const pages = [
     {
@@ -1048,21 +1027,17 @@ export default function NewSpvForm() {
       ),
     },
     {
-      title: 'Finish',
-      Component: <FinishComponent history={history} deal={initialDeal?.deal} classes />,
+      title: 'Review and sign terms',
+      Component: (
+        <AgreementSigner
+          deal={
+            initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
+          }
+          page={page}
+          setPage={setPage}
+        />
+      ),
     },
-    // {
-    //   title: 'Upload docs',
-    //   Component: (
-    //     <UploadDocs
-    //       page={page}
-    //       setPage={setPage}
-    //       deal={
-    //         initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
-    //       }
-    //     />
-    //   ),
-    // },
   ];
 
   if (authLoading) return null;
