@@ -133,24 +133,6 @@ const DealsTable = ({ classes, deals }) => {
 
   return (
     <div className={classes.tableContainer}>
-      {/* <div className={classes.searchContainer}>
-        <TextField
-          label="Search"
-          placeholder="Search by Name"
-          id="search-field"
-          fullWidth
-          onChange={handleSearch}
-          value={searchTerm || ''}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon style={{ color: 'rgba(0, 0, 0, 0.54)' }} />
-              </InputAdornment>
-            ),
-          }}
-          style={{ margin: '0 1em' }}
-        />
-      </div> */}
       <AllocationsTable data={dataCopy} headers={headers} getCellContent={getCellContent} />
     </div>
   );
