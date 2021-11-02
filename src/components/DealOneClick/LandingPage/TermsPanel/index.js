@@ -23,7 +23,6 @@ const TermsPanel = ({ deal }) => {
   const carry = fundTotalCarry || totalCarry || '';
   const fees = fundManagementFees || managementFees || '';
   const feeFrequency = fundManagementFeeType || managementFeeType || '';
-
   return (
     <section className="TermsPanel">
       <p className="section-label">Terms</p>
@@ -43,7 +42,7 @@ const TermsPanel = ({ deal }) => {
         {carry && (
           <li>
             <p>Total Carry:</p>
-            <h3>{carry}%</h3>
+            <h3>{Number(carry) >= 0 ? `${carry}%` : carry}</h3>
           </li>
         )}
         {managementFeesDollar && (
