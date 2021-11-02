@@ -156,10 +156,10 @@ const BuildDetails = ({
     estimated_spv_quantity: '',
     master_series: '',
     minimum_investment: '',
-    international_company_status: 'false', //* add to db
-    international_company_country: '', //* add to db
-    international_investors_status: 'false', //* investor_type
-    international_investors_countries: [], //* add to db
+    international_company_status: 'false',
+    international_company_country: '',
+    international_investors_status: 'false',
+    international_investors_countries: [],
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
@@ -174,7 +174,7 @@ const BuildDetails = ({
     management_fee_frequency: 'one-time',
     setup_cost: 20000,
     offering_type: '506b',
-    allocations_investment_advisor: 'true', //* conditional front or back?
+    allocations_investment_advisor: 'true',
     investment_advisor: '',
     side_letters: 'false',
     closing_date: moment(Date.now()).add(7, 'days').format('YYYY-MM-DD'),
