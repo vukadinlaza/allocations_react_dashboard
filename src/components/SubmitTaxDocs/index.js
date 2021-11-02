@@ -17,10 +17,14 @@ function SubmitTaxDocs() {
   };
   const validForms = Object.keys(templateMap);
   const [open, setOpen] = useState(validForms.includes(form) ? true : false);
-  const [activeForm, setActiveForm] = useState(form || 'W-9');
+  const [activeForm, setActiveForm] = useState(validForms.includes(form) ? form : 'W-9');
+  const [templateId, setTemplateId] = useState(
+    validForms.includes(form) ? templateMap[form].id : 'tpl_dM4QcQbyLckdPXgtyx',
+  );
 
   const handleClick = (formName) => {
     setActiveForm(formName);
+    setTemplateId(templateMap[formName].id);
     setOpen(true);
   };
 
@@ -53,7 +57,7 @@ function SubmitTaxDocs() {
       <KYCModal
         open={open}
         setOpen={setOpen}
-        kycTemplateId={validForms.includes(form) ? templateMap[activeForm].id : ''}
+        kycTemplateId={templateId}
         kycTemplateName={activeForm}
         refetch={() => {}}
         deal={{}}
