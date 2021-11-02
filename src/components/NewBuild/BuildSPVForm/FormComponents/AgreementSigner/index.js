@@ -2,12 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Button, Paper } from '@material-ui/core';
 import { gql, useLazyQuery, useQuery } from '@apollo/client';
 import Typography from '@material-ui/core/Typography';
-import CheckCircle from '../../../../../assets/check_circle_black_24dp.svg';
-import Loader from '../../../../../assets/loading.svg';
 import bluePenIcon from '../../../../../assets/sign-agreement-blue-pen.svg';
-import buildDoc from '../../../../../assets/buildDoc.svg';
 import useStyles from '../../../BuildStyles';
-import { SettingsBrightnessOutlined } from '@material-ui/icons';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
 
@@ -21,7 +17,7 @@ const SERVICE_AGREEMENT_LINK = gql`
   }
 `;
 
-export default function SignDocsForm({ page, setPage, deal, deal_id }) {
+export default function SignDocsForm({ page, setPage, deal }) {
   const history = useHistory();
   const [signed, setSigned] = useState(false);
 
@@ -34,11 +30,13 @@ export default function SignDocsForm({ page, setPage, deal, deal_id }) {
     });
   };
 
-  const [getServiceAgreementLink, { data }] = useLazyQuery(SERVICE_AGREEMENT_LINK);
+  const { data, loading, error, refetch } = useQuery(SERVICE_AGREEMENT_LINK, {
+    variables: { deal_id: deal?._id },
+  });
 
   useEffect(() => {
-    if (deal) getServiceAgreementLink({ variables: { deal_id: deal?._id } });
-  }, [deal]);
+    if (!data?.serviceAgreementLink) refetch({ variables: { deal_id: deal?._id } });
+  }, [deal?._id, loading, error]);
 
   const classes = useStyles();
 
@@ -56,8 +54,8 @@ export default function SignDocsForm({ page, setPage, deal, deal_id }) {
         </div>
         <Paper
           className={signed ? classes.agreementSignedBox : classes.agreementUnsignedBox}
-          style={{ cursor: data ? 'pointer' : 'progress' }}
-          onClick={() => (data ? signingModal(data.serviceAgreementLink) : null)}
+          style={{ cursor: data && !error ? 'pointer' : 'progress' }}
+          onClick={() => (data && !error ? signingModal(data.serviceAgreementLink) : null)}
         >
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <img src={bluePenIcon} alt="document icon" />
@@ -67,14 +65,17 @@ export default function SignDocsForm({ page, setPage, deal, deal_id }) {
           </div>
 
           <Typography className={signed ? classes.signed : classes.notSigned}>
-            {signed ? 'Signed' : '• Not Signed'}
+            {signed ? '• Signed' : '• Not Signed'}
           </Typography>
         </Paper>
 
         <div className={classes.buttonBox}>
           <Button
-            disabled={!signed}
             onClick={() => {
+              if (!signed) {
+                toast.error('Please sign the Service Agreement before continuing');
+                return;
+              }
               toast.success('Success! Your submission was submitted.');
               localStorage.removeItem('buildData');
               localStorage.removeItem('buildDeal');

@@ -8,7 +8,6 @@ import HelpIcon from '@material-ui/icons/Help';
 import { Button, TextField, Paper, Grid, FormControl, ButtonGroup } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Select from 'react-select';
-import { useHistory } from 'react-router';
 import BasicInfo from './FormComponents/TypeSelector/index';
 import UploadDocs from './FormComponents/UploadDocs/index';
 import { useAuth } from '../../../auth/useAuth';
@@ -16,7 +15,7 @@ import { phone } from '../../../utils/helpers';
 import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
 import { useCurrentOrganization } from '../../../state/current-organization';
 import useStyles from '../BuildStyles';
-import SignDocsForm from './FormComponents/AgreementSigner';
+import AgreementSigner from './FormComponents/AgreementSigner';
 
 const CREATE_BUILD = gql`
   mutation createBuild {
@@ -82,9 +81,12 @@ const Breadcrumbs = ({ titles, page }) => {
   return (
     <Paper className={classes.buildTabContainer}>
       {titles.map((title, i) => (
-        <>
-          <Breadcrumb title={title} active={page === i} withSeparator={i < titles.length - 1} />
-        </>
+        <Breadcrumb
+          title={title}
+          key={title}
+          active={page === i}
+          withSeparator={i < titles.length - 1}
+        />
       ))}
     </Paper>
   );
@@ -990,7 +992,6 @@ export default function NewSpvForm() {
   const { userProfile, loading: authLoading } = useAuth();
   const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
   const [setBuildInfo] = useMutation(SET_BUILD_INFO);
-
   // Page
   const [page, setPage] = useState(0);
 
@@ -1007,8 +1008,6 @@ export default function NewSpvForm() {
       localStorage.setItem('buildDeal', JSON.stringify(initialDeal.deal));
     }
   }, [loading]);
-
-  const history = useHistory();
 
   const pages = [
     {
@@ -1030,7 +1029,7 @@ export default function NewSpvForm() {
     {
       title: 'Review and sign terms',
       Component: (
-        <SignDocsForm
+        <AgreementSigner
           deal={
             initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
           }
