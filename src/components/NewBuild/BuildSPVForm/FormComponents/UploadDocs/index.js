@@ -100,6 +100,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
               multiple
               onChange={({ target }) => {
                 if (target.validity.valid) {
+                  setError(false);
                   addDoc({
                     variables: {
                       doc: target.files[0],
