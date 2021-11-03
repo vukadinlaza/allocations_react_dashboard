@@ -27,7 +27,7 @@ $break-xs: 576px;
 }
 
 $green: #53b987;
-$offwhite: #fcfcfc;
+$offwhite: #f7f7f7;
 $softblue: #eaeffc;
 $brandblue: #4169e1;
 
@@ -238,6 +238,7 @@ th {
     height: 100%;
     overflow: auto;
     padding: 2rem 3rem;
+    background-color: #f7f7f7;
   }
 
   .sidebar {

@@ -13,15 +13,14 @@ import Loader from '../components/utils/Loader';
  * */
 
 export default function AdminRoute({ component, ...rest }) {
-  const { userProfile } = useAuth();
+  const { userProfile, loading } = useAuth();
 
-  if (!userProfile.email)
+  if (loading)
     return (
       <div>
         <Loader />
       </div>
     );
-
   if (userProfile.admin) {
     return <Route {...rest} component={component} />;
   }

@@ -57,9 +57,13 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
   });
 
   const handleChange = ({ target }) => {
-    if (target.name.includes('f1')) {
+    if (target.name.includes('f1') || target.name.includes('ssn')) {
       const onlyNumbers = target.value.replace(/\D+/g, '');
       return setFormData((prevData) => ({ ...prevData, [target.name]: onlyNumbers }));
+    }
+    if (target.name.includes('tax_classification') && target.value !== 'Trust/estate') {
+      setRevocableTrust(false);
+      setFormData((prevData) => ({ ...prevData, ssn_1: '', ssn_2: '', ssn_3: '' }));
     }
     setFormData((prevData) => ({ ...prevData, [target.name]: target.value }));
   };
@@ -205,38 +209,40 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
             </label>
           </FormControl>
         </div>
-        <div className="social container">
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={revocableTrust}
-                onChange={() => {
-                  if (formData.tax_classification !== 'Trust/estate') {
-                    return;
-                  }
-                  setRevocableTrust(!revocableTrust);
-                  if (!revocableTrust) {
-                    setFormData({
-                      ...formData,
-                      f1_14: '',
-                      f1_15: '',
-                    });
-                  } else {
-                    setFormData({
-                      ...formData,
-                      ssn_1: '',
-                      ssn_2: '',
-                      ssn_3: '',
-                    });
-                  }
-                }}
-                name="revocableTrustCheck"
-                color="primary"
-              />
-            }
-            label="Revocable Trust?"
-          />
-        </div>
+        {formData.tax_classification === 'Trust/estate' && (
+          <div className="social container">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={revocableTrust}
+                  onChange={() => {
+                    if (formData.tax_classification !== 'Trust/estate') {
+                      return;
+                    }
+                    setRevocableTrust(!revocableTrust);
+                    if (!revocableTrust) {
+                      setFormData({
+                        ...formData,
+                        f1_14: '',
+                        f1_15: '',
+                      });
+                    } else {
+                      setFormData({
+                        ...formData,
+                        ssn_1: '',
+                        ssn_2: '',
+                        ssn_3: '',
+                      });
+                    }
+                  }}
+                  name="revocableTrustCheck"
+                  color="primary"
+                />
+              }
+              label="Revocable Trust?"
+            />
+          </div>
+        )}
 
         <div className="social container">
           {!revocableTrust ? (
@@ -252,6 +258,7 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
                       name="f1_14"
                       inputProps={{ maxLength: '2' }}
                       error={errors.includes('f1_14')}
+                      value={formData.f1_14}
                     />
                   </Tooltip>
                   <Tooltip title="Last 7 digits of EIN.">
@@ -262,6 +269,7 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
                       className="ein-two"
                       inputProps={{ maxLength: '7' }}
                       error={errors.includes('f1_15')}
+                      value={formData.f1_15}
                     />
                   </Tooltip>
                 </div>
@@ -273,12 +281,12 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
               <div className="ssn container">
                 <TextField
                   name="ssn_1"
-                  value={formData.ssn_1fgv}
+                  value={formData.ssn_1}
                   onChange={handleChange}
                   variant="outlined"
                   className="ssn-one"
                   inputProps={{ maxLength: '3' }}
-                  error={errors.includes('ssn_1fgv')}
+                  error={errors.includes('ssn_1')}
                 />
                 <TextField
                   name="ssn_2"

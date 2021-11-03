@@ -21,7 +21,6 @@ import SectorsAndStages from './infoSections/SectorsAndStages';
 import DisplayUsername from './infoSections/DisplayUsername';
 import ProfilePhoto from './infoSections/ProfilePhoto';
 import Loader from '../../utils/Loader';
-import { useAuth } from '../../../auth/useAuth';
 
 const UPDATE_USER = gql`
   mutation UpdateUser($investor: UserInput!) {
@@ -99,22 +98,22 @@ const useStyles = makeStyles(() => ({
 }));
 
 const ProfileInfo = ({
-  investor,
-  setInvestor,
+  investorProfile,
   actionText,
   setFormStatus,
-  refetchUser,
   noValidate = false,
+  refetch,
+  logout,
 }) => {
   const classes = useStyles();
-  const { logout, userProfile } = useAuth();
   const [errors, setErrors] = useState([]);
+  const [investor, setInvestor] = useState(investorProfile);
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
 
   const reqs = [
     'country',
-    investor.country === 'United States' ? 'state' : '',
+    investor?.country === 'United States' ? 'state' : '',
     'investor_type',
     'email',
   ];
@@ -129,7 +128,7 @@ const ProfileInfo = ({
 
   const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_USER, {
     onCompleted: () => {
-      if (userProfile.email !== investor.email) {
+      if (investorProfile.email !== investor.email) {
         logoutWithRedirect();
       } else {
         toast.success('Success! User updated');
@@ -190,7 +189,7 @@ const ProfileInfo = ({
     setErrors(validation);
 
     if (validation.length === 0) {
-      if (get(investor, 'email') !== userProfile.email) {
+      if (get(investor, 'email') !== investorProfile.email) {
         if (window.confirm('Changing your email will log you out, continue?')) {
           updateInvestor({
             variables: { investor: payload },
@@ -209,7 +208,7 @@ const ProfileInfo = ({
     if (updateInvestorRes.loading) setFormStatus('loading');
   }, [setFormStatus, updateInvestorRes]);
 
-  if (!investor || !userProfile.email) return <Loader />;
+  if (!investor || !investorProfile.email) return <Loader />;
 
   const usStates = new UsaStates();
   const stateNames = usStates.states.map((s) => s.name);
@@ -251,7 +250,7 @@ const ProfileInfo = ({
                     >
                       <ProfilePhoto
                         investor={investor}
-                        refetchUser={refetchUser}
+                        refetch={refetch}
                         style={{ width: '100%' }}
                       />
                     </Grid>
@@ -516,7 +515,7 @@ const ProfileInfo = ({
                       <TextField
                         inputProps={{
                           className: classes.linkedinInput,
-                          pattern: `^https?://((www|\w\w)\.)?linkedin.com/((in/[^/]+/?)|(pub/[^/]+/((\w|\d)+/?){3}))$`,
+                          pattern: `^https:\/\/[a-z]{2,3}\.linkedin\.com\/.*$|[a-z]{2,3}\.linkedin\.com\/.*$`,
                         }}
                         id="linkedin"
                         label="LinkedIn Profile Link"

@@ -8,7 +8,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { ORG_OVERVIEW } from '../admin/AdminHome';
 import FormError from '../forms/Error';
 import { useSimpleReducer } from '../../utils/hooks';
 
@@ -22,6 +21,41 @@ const CREATE_DEAL = gql`
   mutation CreateDeal($org: String!, $deal: DealInput!) {
     createDeal(org: $org, deal: $deal) {
       _id
+    }
+  }
+`;
+
+const ORG_OVERVIEW = gql`
+  query GetOrg($slug: String!, $status: String) {
+    organization(slug: $slug) {
+      _id
+      name
+      slug
+      deals(status: $status) {
+        _id
+        raised
+        appLink
+        status
+        date_closed
+        dealParams {
+          wireDeadline
+          dealMultiple
+        }
+        company_name
+        company_description
+        target
+        investments {
+          amount
+          investor {
+            investingAs
+          }
+        }
+      }
+    }
+    investor {
+      _id
+      admin
+      documents
     }
   }
 `;

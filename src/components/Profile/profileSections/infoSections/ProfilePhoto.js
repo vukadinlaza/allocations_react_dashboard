@@ -48,10 +48,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfilePhoto = ({ investor, refetchUser }) => {
+const ProfilePhoto = ({ investor, refetch }) => {
   const classes = useStyles();
   const [showModal, setShowModal] = useState(false);
-  const imageInDatabase = `https://allocations-user-img.s3.us-east-2.amazonaws.com/${investor.profileImageKey}`;
+  const [imageInDatabase, setImageInDatabase] = useState(investor.profileImageKey);
   const [image, setImage] = useState('');
   const [fileToImage, setFileToImage] = useState('');
 
@@ -76,9 +76,9 @@ const ProfilePhoto = ({ investor, refetchUser }) => {
   };
 
   const [uploadImage] = useMutation(PROFILE_IMAGE, {
-    onCompleted: () => {
+    onCompleted: (data) => {
       toast.success('Success! Profile updated');
-      refetchUser();
+      setImageInDatabase(data.updateProfileImage.profileImageKey);
       setShowModal(false);
       setImage('');
       setFileToImage('');
@@ -91,9 +91,10 @@ const ProfilePhoto = ({ investor, refetchUser }) => {
   const [deleteProfileImage] = useMutation(DELETE_PROFILE_IMAGE, {
     onCompleted: () => {
       toast.success('Success! Image deleted');
+      setImageInDatabase('');
       setImage('');
       setFileToImage('');
-      refetchUser();
+      refetch();
       setShowModal(false);
     },
     onError: () => {
@@ -102,13 +103,14 @@ const ProfilePhoto = ({ investor, refetchUser }) => {
   });
 
   const handleDelete = () => {
-    deleteProfileImage({ variables: { email: investor.email, profileImageKey: image } });
+    deleteProfileImage({ variables: { email: investor.email, profileImageKey: imageInDatabase } });
   };
 
   const handleSubmit = async () => {
-    uploadImage({
+    await uploadImage({
       variables: { email: investor.email, image },
     });
+    refetch();
   };
 
   const onClose = () => {
@@ -150,14 +152,18 @@ const ProfilePhoto = ({ investor, refetchUser }) => {
           </SmallAvatar>
         }
       >
-        {!investor.profileImageKey ? (
+        {!imageInDatabase ? (
           <Avatar style={{ border: 'solid blue 3px' }} className={classes.avatar}>
             <PersonIcon className={classes.noAvatar} />
           </Avatar>
         ) : (
           <Avatar
             alt="avatar"
-            src={!investor.profileImageKey ? '' : imageInDatabase}
+            src={
+              imageInDatabase
+                ? `https://allocations-user-img.s3.us-east-2.amazonaws.com/${imageInDatabase}`
+                : ''
+            }
             style={{ border: 'solid blue 3px' }}
             className={classes.avatar}
           />
@@ -197,7 +203,7 @@ const ProfilePhoto = ({ investor, refetchUser }) => {
             </Button>
           </Grid>
           <Grid item xs={12} style={{ textAlign: 'center' }}>
-            {!investor.profileImageKey ? (
+            {!imageInDatabase ? (
               ''
             ) : (
               <Button

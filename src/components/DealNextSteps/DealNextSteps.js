@@ -80,6 +80,10 @@ const GET_INVESTMENT = gql`
         investor_type
         country
       }
+      wire_instructions {
+        link
+        path
+      }
     }
   }
 `;
@@ -101,9 +105,9 @@ function DealNextSteps() {
 
   const { data: investmentData } = useQuery(GET_INVESTMENT, {
     variables: { _id: params?.investmentId },
-    onError: () => {
-      if (!state?.investorFormData) return history.push(path);
-    },
+    // onError: () => {
+    //   if (!state?.investorFormData) return history.push(path);
+    // },
   });
 
   useEffect(() => {
@@ -281,7 +285,7 @@ function DealNextSteps() {
               <p className="action-sub-header">Required to complete your investment</p>
             </div>
             <Button
-              disabled={dealData?.deal?.isDemo ? false : !hasKyc}
+              // disabled={dealData?.deal?.isDemo ? false : !hasKyc}
               onClick={() => setWireInstructionsOpen(true)}
               className="next-step-button"
             >
@@ -300,6 +304,7 @@ function DealNextSteps() {
           setShowTaxAsCompleted={setShowTaxAsCompleted}
         />
         <WireInstructionsModal
+          investmentWireInstructions={investmentData?.investment?.wire_instructions}
           open={wireInstructionsOpen}
           setOpen={setWireInstructionsOpen}
           docs={docs}
