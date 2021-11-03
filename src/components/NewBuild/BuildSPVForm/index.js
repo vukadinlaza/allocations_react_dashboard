@@ -165,7 +165,7 @@ const BuildDetails = ({
     management_fee_value: '2',
     custom_management_fee: 'false',
     custom_investment_agreement: 'false',
-    management_fee_frequency: 'one-time',
+    management_fee_frequency: 'one time',
     setup_cost: 20000,
     offering_type: '506b',
     allocations_investment_advisor: 'true',
@@ -500,7 +500,7 @@ const BuildDetails = ({
                     handleTooltip={handleTooltip}
                     tooltipContent={
                       <Typography color="inherit">
-                        Period for which the Management Fee will be charged (one-time or annually)
+                        Period for which the Management Fee will be charged (one time or annually)
                       </Typography>
                     }
                     openTooltip={openTooltip}
@@ -517,7 +517,7 @@ const BuildDetails = ({
                   onChange={handleChange}
                   currentValue={buildData.management_fee_frequency}
                   values={[
-                    { label: 'One-Time', value: 'one-time' },
+                    { label: 'One Time', value: 'one time' },
                     { label: 'Annual', value: 'annual' },
                   ]}
                 />
