@@ -11,7 +11,7 @@ function WireInstructionsModal({ open, setOpen, docs, investmentWireInstructions
       ? `https://${docs.find((d) => d.path === 'wire-instructions').link}`
       : null;
 
-  if (investmentWireInstructions.link) {
+  if (investmentWireInstructions?.link) {
     link = `https://${investmentWireInstructions.link}`;
   }
 
