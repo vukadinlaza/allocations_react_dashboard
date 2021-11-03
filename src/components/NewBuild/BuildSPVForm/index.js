@@ -149,7 +149,7 @@ const BuildDetails = ({
     portfolio_company_securities: '',
     estimated_spv_quantity: '',
     master_series: '',
-    minimum_investment: '',
+    minimum_investment: '$10,000',
     international_company_status: 'false',
     international_company_country: '',
     international_investors_status: 'false',
@@ -159,7 +159,7 @@ const BuildDetails = ({
         ? `${userProfile.first_name} ${userProfile.last_name}`
         : null,
     carry_fee_type: 'percent',
-    carry_fee_value: '10',
+    carry_fee_value: '20',
     custom_carry_fee: 'false',
     management_fee_type: 'percent',
     management_fee_value: '2',
