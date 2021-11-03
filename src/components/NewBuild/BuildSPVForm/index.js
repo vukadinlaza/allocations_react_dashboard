@@ -175,6 +175,7 @@ const BuildDetails = ({
     sectors: [],
     representative: '',
     portfolio_deal_name: '',
+    deal_stage: '',
   });
 
   const [unfilledFields, setUnfilledFields] = useState([]);
@@ -185,14 +186,16 @@ const BuildDetails = ({
     //***** NEED TO VALIDATE CLOSING DATE STILL - NEED TO CHECK FOR PROPER DATE FORMAT *********
 
     /// FIELDS TO CHECK ALWAYS BELOW
-  portfolio_company_name
-  portfolio_company_securities
-  estimated_spv_quantity
+  // portfolio_company_name
+  // portfolio_company_securities
+  // estimated_spv_quantity
+  // portfolio_deal_name
+  // sectors ??? NOT CHECKED YET
+  // deal_stage
+  //* These are prefilled. still need validation
   minimum_investment
-  portfolio_deal_name
   manager_name
   representative
-  sectors ??? NOT CHECKED YET
   
   /// FIELDS TO CHECK CONDITIONALLY BELOW HERE
   master_series
@@ -207,7 +210,7 @@ const BuildDetails = ({
 
     const unvalidatedFields = [];
     const fieldsToFill = [];
-    //fields always checked below
+    // fields always checked below
     if (!buildData.portfolio_company_name) {
       fieldsToFill.push('portfolio_company_name');
       unvalidatedFields.push('Portfolio Company Name');
@@ -236,8 +239,16 @@ const BuildDetails = ({
       fieldsToFill.push('minimum_investment');
       unvalidatedFields.push('Minimum Investment');
     }
+    if (!buildData.sectors.length) {
+      fieldsToFill.push('sectors');
+      unvalidatedFields.push('Sectors');
+    }
+    if (!buildData.deal_stage.length) {
+      fieldsToFill.push('deal_stage');
+      unvalidatedFields.push('Deal Stage');
+    }
 
-    //conditionally checked fields below here
+    // conditionally checked fields below here
     if (!buildData.master_series && buildData.estimated_spv_quantity >= 5) {
       fieldsToFill.push('master_series');
       unvalidatedFields.push('Master Series Name');
@@ -319,6 +330,7 @@ const BuildDetails = ({
           closing_date: buildData.closing_date,
           sectors: buildData.sectors,
           representative: buildData.representative,
+          deal_stage: buildData.deal,
         },
       },
     });
@@ -1048,7 +1060,7 @@ const BuildDetails = ({
               onClick={() => {
                 const { isValidated, unvalidatedFields } = formValidation();
                 if (!isValidated) {
-                  console.log('validated? ' + isValidated, unvalidatedFields);
+                  console.log(`validated? ${isValidated}`, unvalidatedFields);
                   toast.error(
                     <div>
                       Please fill in the following fields:{' '}
