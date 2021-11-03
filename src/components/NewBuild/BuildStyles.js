@@ -212,6 +212,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#2A2B54',
     font: 'normal normal bold 17px/20px Roboto',
     marginBottom: '20px',
+    borderRadius: '8px',
     [theme.breakpoints.down(phone)]: {
       marginBottom: '14px',
       marginLeft: '8px',
@@ -301,14 +302,18 @@ const useStyles = makeStyles((theme) => ({
   inputBox: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     boxShadow: '0px 3px 6px #0000000A',
-    borderRadius: '5px',
+    borderRadius: '8px !important',
     padding: '0',
     maxWidth: '568px',
     width: '100%',
   },
   selectInputBox: {
     width: '90%',
+    '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
+      borderRadius: '8px !important',
+    },
   },
+  selectTest: {},
   wideInputBox: {
     maxWidth: '1206px',
   },
