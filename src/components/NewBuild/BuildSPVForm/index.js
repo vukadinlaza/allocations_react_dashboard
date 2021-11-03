@@ -245,7 +245,7 @@ const BuildDetails = ({
       target.name === 'international_investors_status' && (target.value === 'false' || 'unknown');
     const isNotMasterSeries = target.name === 'estimated_spv_quantity' && target.value < 5;
     const isAllocationsTheAdvisor =
-      target.name === 'allocations_investment_advisor' && target.value;
+      target.name === 'allocations_investment_adviser' && target.value;
     const isNotCustomManagementFee =
       target.name === 'management_fee_value' && target.value !== 'Custom';
     const isNotCustomCarryFee = target.name === 'carry_fee_value' && target.value !== 'Custom';
@@ -604,7 +604,7 @@ const BuildDetails = ({
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
-                  Will you charge the same fee for all investors?{' '}
+                  Will you charge the same fee for all investors?
                   <ModalTooltip
                     title="Charge the same fee for all investors?"
                     handleTooltip={handleTooltip}
@@ -679,9 +679,9 @@ const BuildDetails = ({
             <Grid className={classes.customInputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
-                  Choose Allocations as the reporting adviser?
+                  Choose Allocations as the adviser?
                   <ModalTooltip
-                    title="Reporting Adviser"
+                    title="Reporting Advisor"
                     handleTooltip={handleTooltip}
                     tooltipContent={
                       <Typography color="inherit">
@@ -702,7 +702,7 @@ const BuildDetails = ({
                 <ButtonSelector
                   name="allocations_investment_advisor"
                   onChange={handleChange}
-                  currentValue={buildData.allocations_investment_advisor}
+                  currentValue={buildData.allocations_investment_adviser}
                   values={[
                     { label: 'Yes (Recommended)', value: 'true' },
                     { label: 'No', value: 'false' },
@@ -718,9 +718,9 @@ const BuildDetails = ({
                   style={{ marginTop: '40px' }}
                 >
                   <Typography className={classes.formItemName}>
-                    Please enter your advisor name
+                    Please enter your adviser name
                     <ModalTooltip
-                      title="Advisor Name"
+                      title="Adviser Name"
                       handleTooltip={handleTooltip}
                       tooltipContent={
                         <Typography color="inherit">Please indicate your ERA/RIA name</Typography>
@@ -736,7 +736,7 @@ const BuildDetails = ({
                   </Typography>
                   <TextField
                     value={buildData.investment_advisor}
-                    placeholder="Advisor Name"
+                    placeholder="Adviser Name"
                     name="investment_advisor"
                     onChange={handleChange}
                     className={classes.inputBox}
