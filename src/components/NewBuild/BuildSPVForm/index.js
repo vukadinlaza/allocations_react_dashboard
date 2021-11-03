@@ -149,7 +149,7 @@ const BuildDetails = ({
     portfolio_company_securities: '',
     estimated_spv_quantity: '',
     master_series: '',
-    minimum_investment: '',
+    minimum_investment: '$10,000',
     international_company_status: 'false',
     international_company_country: '',
     international_investors_status: 'false',
@@ -159,13 +159,13 @@ const BuildDetails = ({
         ? `${userProfile.first_name} ${userProfile.last_name}`
         : null,
     carry_fee_type: 'percent',
-    carry_fee_value: '10',
+    carry_fee_value: '20',
     custom_carry_fee: 'false',
     management_fee_type: 'percent',
     management_fee_value: '2',
     custom_management_fee: 'false',
     custom_investment_agreement: 'false',
-    management_fee_frequency: 'one-time',
+    management_fee_frequency: 'one time',
     setup_cost: 20000,
     offering_type: '506b',
     allocations_investment_advisor: 'true',
@@ -500,7 +500,7 @@ const BuildDetails = ({
                     handleTooltip={handleTooltip}
                     tooltipContent={
                       <Typography color="inherit">
-                        Period for which the Management Fee will be charged (one-time or annually)
+                        Period for which the Management Fee will be charged (one time or annually)
                       </Typography>
                     }
                     openTooltip={openTooltip}
@@ -517,7 +517,7 @@ const BuildDetails = ({
                   onChange={handleChange}
                   currentValue={buildData.management_fee_frequency}
                   values={[
-                    { label: 'One-Time', value: 'one-time' },
+                    { label: 'One Time', value: 'one time' },
                     { label: 'Annual', value: 'annual' },
                   ]}
                 />
@@ -604,7 +604,7 @@ const BuildDetails = ({
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
-                  Will you charge the same fee for all investors?{' '}
+                  Will you charge the same fee for all investors?
                   <ModalTooltip
                     title="Charge the same fee for all investors?"
                     handleTooltip={handleTooltip}
@@ -679,9 +679,9 @@ const BuildDetails = ({
             <Grid className={classes.customInputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
-                  Choose Allocations as the reporting adviser?
+                  Choose Allocations as the adviser?
                   <ModalTooltip
-                    title="Reporting Adviser"
+                    title="Reporting Advisor"
                     handleTooltip={handleTooltip}
                     tooltipContent={
                       <Typography color="inherit">
@@ -718,9 +718,9 @@ const BuildDetails = ({
                   style={{ marginTop: '40px' }}
                 >
                   <Typography className={classes.formItemName}>
-                    Please enter your advisor name
+                    Please enter your adviser name
                     <ModalTooltip
-                      title="Advisor Name"
+                      title="Adviser Name"
                       handleTooltip={handleTooltip}
                       tooltipContent={
                         <Typography color="inherit">Please indicate your ERA/RIA name</Typography>
@@ -736,7 +736,7 @@ const BuildDetails = ({
                   </Typography>
                   <TextField
                     value={buildData.investment_advisor}
-                    placeholder="Advisor Name"
+                    placeholder="Adviser Name"
                     name="investment_advisor"
                     onChange={handleChange}
                     className={classes.inputBox}

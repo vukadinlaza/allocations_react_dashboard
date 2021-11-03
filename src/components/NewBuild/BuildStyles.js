@@ -212,6 +212,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#2A2B54',
     font: 'normal normal bold 17px/20px Roboto',
     marginBottom: '20px',
+    borderRadius: '8px',
     [theme.breakpoints.down(phone)]: {
       marginBottom: '14px',
       marginLeft: '8px',
@@ -301,14 +302,18 @@ const useStyles = makeStyles((theme) => ({
   inputBox: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     boxShadow: '0px 3px 6px #0000000A',
-    borderRadius: '5px',
+    borderRadius: '8px !important',
     padding: '0',
     maxWidth: '568px',
     width: '100%',
   },
   selectInputBox: {
     width: '90%',
+    '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
+      borderRadius: '8px !important',
+    },
   },
+  selectTest: {},
   wideInputBox: {
     maxWidth: '1206px',
   },
@@ -405,10 +410,12 @@ const useStyles = makeStyles((theme) => ({
   },
   selectorButton: {
     fontSize: '.8em',
-    color: 'black',
+    color: '#8E9394',
     height: '60px',
     border: '1px solid #d3d3d3 !important',
     backgroundColor: '#ffffff',
+    borderRadius: '8px !important',
+    textTransform: 'capitalize',
     [theme.breakpoints.down(phone)]: {
       fontSize: '.7em',
     },
@@ -417,9 +424,12 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-evenly',
+    color: '#186EFF',
     background: '#ECF3FF 0% 0% no-repeat padding-box !important',
     boxShadow: '0px 3px 6px #0000000D !important',
     border: '2px solid #186EFF !important',
+    borderRadius: '8px !important',
+    textTransform: 'capitalize',
     opacity: '1 !important',
   },
   typeItem: {
