@@ -181,30 +181,7 @@ const BuildDetails = ({
   const [unfilledFields, setUnfilledFields] = useState([]);
 
   const formValidation = () => {
-    /* FIELDS TO CHECK
-
-    //***** NEED TO VALIDATE CLOSING DATE STILL - NEED TO CHECK FOR PROPER DATE FORMAT *********
-
-    /// FIELDS TO CHECK ALWAYS BELOW
-  // portfolio_company_name
-  // portfolio_company_securities
-  // estimated_spv_quantity
-  // portfolio_deal_name
-  // sectors ??? NOT CHECKED YET
-  // deal_stage
-  //* These are prefilled. still need validation
-  minimum_investment
-  manager_name
-  representative
-  
-  /// FIELDS TO CHECK CONDITIONALLY BELOW HERE
-  master_series
-  international_company_country ?? NOT CHECKED YET
-  international_investors_countries ?? NOT CHECKED YET
-  custom_management_fee
-  custom_carry_fee
-  investment_advisor
-  */
+    //* **** NEED TO VALIDATE CLOSING DATE STILL - NEED TO CHECK FOR PROPER DATE FORMAT *********
 
     /// *** UPLOADED DOCUMENTS NOT VALIDATED YET *** ///
 
@@ -264,6 +241,20 @@ const BuildDetails = ({
     if (!buildData.investment_advisor && buildData.allocations_investment_advisor === 'false') {
       fieldsToFill.push('investment_advisor');
       unvalidatedFields.push('Advisor Name');
+    }
+    if (
+      !buildData.international_company_country &&
+      buildData.international_company_status === 'true'
+    ) {
+      fieldsToFill.push('international_company_country');
+      unvalidatedFields.push('Country of International Company');
+    }
+    if (
+      !buildData.international_investors_countries.length &&
+      buildData.international_investors_status === 'true'
+    ) {
+      fieldsToFill.push('international_investors_countries');
+      unvalidatedFields.push('Countries of International Investors');
     }
 
     setUnfilledFields(fieldsToFill);
@@ -394,6 +385,9 @@ const BuildDetails = ({
         width: phoneSize ? '325px' : '90%',
         maxWidth: 568,
         cursor: 'pointer',
+        border: unfilledFields.includes('international_company_country')
+          ? '2px solid red'
+          : '1pm solid hsl(0, 0%, 80%)',
       }),
       placeholder: (styles, data) => ({
         ...styles,
@@ -418,8 +412,10 @@ const BuildDetails = ({
             },
           };
           handleChange(newEvent);
+          setUnfilledFields((prev) =>
+            prev.filter((field) => field !== 'international_company_country'),
+          );
         }}
-        // isMulti
       />
     );
   }
@@ -451,6 +447,9 @@ const BuildDetails = ({
         width: phoneSize ? '325px' : '90%',
         maxWidth: 568,
         cursor: 'pointer',
+        border: unfilledFields.includes('international_investors_countries')
+          ? '2px solid red'
+          : '1pm solid hsl(0, 0%, 80%)',
       }),
       placeholder: (styles, data) => ({
         ...styles,
@@ -480,6 +479,9 @@ const BuildDetails = ({
             },
           };
           handleChange(newEvent);
+          setUnfilledFields((prev) =>
+            prev.filter((field) => field !== 'international_investors_countries'),
+          );
         }}
         isMulti
       />
