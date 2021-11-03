@@ -600,7 +600,7 @@ const BuildDetails = ({
                     handleTooltip={handleTooltip}
                     tooltipContent={
                       <Typography color="inherit">
-                        Period for which the Management Fee will be charged (one-time or annually)
+                        Period for which the Management Fee will be charged (one time or annually)
                       </Typography>
                     }
                     openTooltip={openTooltip}
@@ -617,7 +617,7 @@ const BuildDetails = ({
                   onChange={handleChange}
                   currentValue={buildData.management_fee_frequency}
                   values={[
-                    { label: 'One-Time', value: 'one-time' },
+                    { label: 'One Time', value: 'one time' },
                     { label: 'Annual', value: 'annual' },
                   ]}
                 />
@@ -704,7 +704,7 @@ const BuildDetails = ({
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
-                  Will you charge the same fee for all investors?{' '}
+                  Will you charge the same fee for all investors?
                   <ModalTooltip
                     title="Charge the same fee for all investors?"
                     handleTooltip={handleTooltip}
@@ -779,9 +779,9 @@ const BuildDetails = ({
             <Grid className={classes.customInputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
-                  Choose Allocations as the reporting adviser?
+                  Choose Allocations as the adviser?
                   <ModalTooltip
-                    title="Reporting Adviser"
+                    title="Reporting Advisor"
                     handleTooltip={handleTooltip}
                     tooltipContent={
                       <Typography color="inherit">
@@ -818,9 +818,9 @@ const BuildDetails = ({
                   style={{ marginTop: '40px' }}
                 >
                   <Typography className={classes.formItemName}>
-                    Please enter your advisor name
+                    Please enter your adviser name
                     <ModalTooltip
-                      title="Advisor Name"
+                      title="Adviser Name"
                       handleTooltip={handleTooltip}
                       tooltipContent={
                         <Typography color="inherit">Please indicate your ERA/RIA name</Typography>
@@ -836,7 +836,7 @@ const BuildDetails = ({
                   </Typography>
                   <TextField
                     value={buildData.investment_advisor}
-                    placeholder="Advisor Name"
+                    placeholder="Adviser Name"
                     name="investment_advisor"
                     onChange={handleChange}
                     className={classes.inputBox}

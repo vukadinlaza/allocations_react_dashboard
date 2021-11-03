@@ -296,7 +296,6 @@ export default function TypeSelector({
         </Grid>
 
         <Grid container spacing={4} className={classes.inputGridContainer}>
-          {/* FIRST ROW */}
           <Grid className={classes.inputGridItem} item xs={6}>
             <FormControl required disabled variant="outlined" className={classes.formContainers}>
               <Typography className={classes.formItemName}>
@@ -341,7 +340,7 @@ export default function TypeSelector({
           <Grid className={classes.inputGridItem} item xs={6}>
             <FormControl required disabled variant="outlined" className={classes.formContainers}>
               <Typography className={classes.formItemName}>
-                Portfolio company securities?
+                Portfolio Company Securities?
                 <ModalTooltip
                   title="Company Securities"
                   handleTooltip={handleTooltip}
@@ -365,7 +364,6 @@ export default function TypeSelector({
               <SecuritiesSelector />
             </FormControl>
           </Grid>
-          {/* SECOND ROW */}
 
           <Grid className={classes.inputGridItem} item xs={6}>
             <FormControl required disabled variant="outlined" className={classes.formContainers}>
@@ -446,13 +444,12 @@ export default function TypeSelector({
             </FormControl>
           </Grid>
 
-          {/* THIRD ROW */}
           <Grid className={classes.inputGridItem} item xs={6}>
             <FormControl required disabled variant="outlined" className={classes.formContainers}>
               <Typography className={classes.formItemName}>
-                Manager Name
+                Fund Manager Full Name
                 <ModalTooltip
-                  title="Manager Name"
+                  title="Fund Manager Full Name"
                   handleTooltip={handleTooltip}
                   tooltipContent={
                     <Typography color="inherit">Full name of the manager of your SPV</Typography>
@@ -485,9 +482,9 @@ export default function TypeSelector({
           <Grid className={classes.inputGridItem} item xs={6}>
             <FormControl required disabled variant="outlined" className={classes.formContainers}>
               <Typography className={classes.formItemName}>
-                Representative of the manager and its title?
+                Manager Full Title
                 <ModalTooltip
-                  title="Representative"
+                  title="Manager Full Title"
                   handleTooltip={handleTooltip}
                   tooltipContent={
                     <Typography color="inherit">
@@ -525,9 +522,9 @@ export default function TypeSelector({
           <Grid className={classes.inputGridItem} item xs={6}>
             <FormControl required disabled variant="outlined" className={classes.formContainers}>
               <Typography className={classes.formItemName}>
-                Deal Stages
+                Deal Stage
                 <ModalTooltip
-                  title="Deal Stages"
+                  title="Deal Stage"
                   handleTooltip={handleTooltip}
                   tooltipContent={
                     <Typography color="inherit">
