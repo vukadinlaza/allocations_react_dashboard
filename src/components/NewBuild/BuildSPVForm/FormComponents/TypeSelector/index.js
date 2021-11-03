@@ -164,10 +164,12 @@ export default function TypeSelector({
             setBuildData((prev) => {
               const isAtLimit = prev.sectors.length >= 3;
               if (isAtLimit) toast.info('Please limit your sectors to 3 or less');
-              return {
+              const newBuildObject = {
                 ...prev,
                 sectors: isAtLimit ? prev.sectors : [...prev.sectors, sector],
               };
+              localStorage.setItem('buildData', JSON.stringify(newBuildObject));
+              return newBuildObject;
             });
 
             setUnfilledFields((prev) => prev.filter((field) => field !== 'sectors'));
