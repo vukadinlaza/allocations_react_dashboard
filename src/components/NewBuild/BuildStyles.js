@@ -405,10 +405,11 @@ const useStyles = makeStyles((theme) => ({
   },
   selectorButton: {
     fontSize: '.8em',
-    color: 'black',
+    color: '#8E9394',
     height: '60px',
     border: '1px solid #d3d3d3 !important',
     backgroundColor: '#ffffff',
+    // borderRadius: '8px',
     [theme.breakpoints.down(phone)]: {
       fontSize: '.7em',
     },
@@ -417,9 +418,11 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-evenly',
+    color: '#186EFF',
     background: '#ECF3FF 0% 0% no-repeat padding-box !important',
     boxShadow: '0px 3px 6px #0000000D !important',
     border: '2px solid #186EFF !important',
+    // borderRadius: '8px',
     opacity: '1 !important',
   },
   typeItem: {
