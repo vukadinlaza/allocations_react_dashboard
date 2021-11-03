@@ -21,12 +21,13 @@ import OrganizationMembers from './components/OrganizationMembers';
 import DealTable from './components/deals/fund-manager/DealsTablePage';
 import NotFound from './components/NotFound';
 import SubmitTaxDocs from './components/SubmitTaxDocs';
-
+import Demo from './components/Demo';
 // admin
 
 import DealNextSteps from './components/DealNextSteps/DealNextSteps';
 import DealLandingPage from './components/DealOneClick/LandingPage/LandingPage';
 import InvestmentPage from './components/DealOneClick/InvestmentPage/InvestmentPage';
+import SuperAdminManager from './components/superadmin/Manager';
 
 // test
 import BuildSPVForm from './components/NewBuild/BuildSPVForm/index';
@@ -63,6 +64,7 @@ const App = () => {
               <PrivateRoute path="/investor/:id/home" component={InvestorDashboard} />
 
               <PrivateRoute path="/submit-tax-documents" component={SubmitTaxDocs} />
+              <PrivateRoute path="/demo" component={Demo} />
 
               <PrivateRoute path="/new-build-spv" exact component={BuildSPVForm} />
               <PrivateRoute path="/profile" component={Profile} />
@@ -110,6 +112,8 @@ const App = () => {
                 component={OrganizationMembers}
                 exact
               />
+
+              <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
 
               <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
               <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />

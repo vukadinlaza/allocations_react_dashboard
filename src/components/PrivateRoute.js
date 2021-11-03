@@ -25,7 +25,7 @@ const PrivateRoute = ({ component, ...args }) => {
 
   const FlagComponent = withLDProvider({
     clientSideID: process.env.REACT_APP_LAUNCH_DARKLY_ID,
-    user: isAuthenticated && !loading ? launchDarklyUser : null,
+    user: isAuthenticated && !loading ? launchDarklyUser : undefined,
   })(component);
 
   return (
