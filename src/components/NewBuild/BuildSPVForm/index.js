@@ -177,6 +177,8 @@ const BuildDetails = ({
     portfolio_deal_name: '',
   });
 
+  const [unfilledFields, setUnfilledFields] = useState([]);
+
   const formValidation = () => {
     /* FIELDS TO CHECK
 
@@ -204,42 +206,56 @@ const BuildDetails = ({
     /// *** UPLOADED DOCUMENTS NOT VALIDATED YET *** ///
 
     const unvalidatedFields = [];
+    const fieldsToFill = [];
     //fields always checked below
     if (!buildData.portfolio_company_name) {
+      fieldsToFill.push('portfolio_company_name');
       unvalidatedFields.push('Portfolio Company Name');
     }
     if (!buildData.portfolio_company_securities) {
+      fieldsToFill.push('portfolio_company_securities');
       unvalidatedFields.push('Portfolio Company Securities');
     }
     if (!buildData.portfolio_deal_name) {
+      fieldsToFill.push('portfolio_deal_name');
       unvalidatedFields.push('Deal Name');
     }
     if (!buildData.manager_name) {
+      fieldsToFill.push('manager_name');
       unvalidatedFields.push('Manager Name');
     }
     if (!buildData.representative) {
+      fieldsToFill.push('representative');
       unvalidatedFields.push('Representative of Manager');
     }
     if (!buildData.estimated_spv_quantity) {
+      fieldsToFill.push('estimated_spv_quantity');
       unvalidatedFields.push('Estimated Number of SPVs');
     }
     if (!buildData.minimum_investment) {
+      fieldsToFill.push('minimum_investment');
       unvalidatedFields.push('Minimum Investment');
     }
 
     //conditionally checked fields below here
     if (!buildData.master_series && buildData.estimated_spv_quantity >= 5) {
+      fieldsToFill.push('master_series');
       unvalidatedFields.push('Master Series Name');
     }
     if (!buildData.custom_management_fee && buildData.management_fee_value === 'Custom') {
+      fieldsToFill.push('custom_management_fee');
       unvalidatedFields.push('Custom Management Fee');
     }
     if (!buildData.custom_carry_fee && buildData.carry_fee_value === 'Custom') {
+      fieldsToFill.push('custom_carry_fee');
       unvalidatedFields.push('Custom Carry Fee');
     }
     if (!buildData.investment_advisor && buildData.allocations_investment_advisor === 'false') {
+      fieldsToFill.push('investment_advisor');
       unvalidatedFields.push('Advisor Name');
     }
+
+    setUnfilledFields(fieldsToFill);
 
     return {
       isValidated: !unvalidatedFields.length,
@@ -467,6 +483,8 @@ const BuildDetails = ({
         parentClasses={classes}
         handleTooltip={handleTooltip}
         openTooltip={openTooltip}
+        unfilledFields={unfilledFields}
+        setUnfilledFields={setUnfilledFields}
       />
       <Paper className={classes.paper}>
         <form noValidate autoComplete="off">
@@ -1031,12 +1049,14 @@ const BuildDetails = ({
                 const { isValidated, unvalidatedFields } = formValidation();
                 if (!isValidated) {
                   console.log('validated? ' + isValidated, unvalidatedFields);
-                  unvalidatedFields.forEach((field) =>
-                    toast.error(
-                      <Typography>
-                        Please fill out the following fields before continuing:<div>{field}</div>
-                      </Typography>,
-                    ),
+                  toast.error(
+                    <div>
+                      Please fill in the following fields:{' '}
+                      {unvalidatedFields.map((field) => (
+                        <div>• {field}</div>
+                      ))}
+                    </div>,
+                    { autoClose: 10000 },
                   );
                   return;
                 }

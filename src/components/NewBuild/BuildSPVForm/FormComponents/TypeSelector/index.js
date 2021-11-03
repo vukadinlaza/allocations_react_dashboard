@@ -24,6 +24,8 @@ export default function TypeSelector({
   setBuildData,
   handleTooltip,
   openTooltip,
+  unfilledFields,
+  setUnfilledFields,
 }) {
   const classes = useStyles();
   const customInputStyles = { style: { height: '23px' } };
@@ -311,7 +313,15 @@ export default function TypeSelector({
                 className={classes.inputBox}
                 variant="outlined"
                 placeholder="SpaceX"
+                onClick={() =>
+                  setUnfilledFields((prev) =>
+                    prev.filter((field) => field !== 'portfolio_company_name'),
+                  )
+                }
                 inputProps={customInputStyles}
+                classes={{
+                  root: unfilledFields.includes('portfolio_company_name') && classes.unfilledField,
+                }}
               />
             </FormControl>
           </Grid>

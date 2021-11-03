@@ -528,6 +528,9 @@ const useStyles = makeStyles((theme) => ({
       width: '30px',
     },
   },
+  unfilledField: {
+    border: '1px solid red',
+  },
   icon: {
     opacity: '1',
   },
