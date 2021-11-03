@@ -27,6 +27,7 @@ import SubmitTaxDocs from './components/SubmitTaxDocs';
 import DealNextSteps from './components/DealNextSteps/DealNextSteps';
 import DealLandingPage from './components/DealOneClick/LandingPage/LandingPage';
 import InvestmentPage from './components/DealOneClick/InvestmentPage/InvestmentPage';
+import SuperAdminManager from './components/superadmin/Manager';
 
 // test
 import BuildSPVForm from './components/NewBuild/BuildSPVForm/index';
@@ -110,6 +111,8 @@ const App = () => {
                 component={OrganizationMembers}
                 exact
               />
+
+              <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
 
               <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
               <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />
