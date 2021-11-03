@@ -245,7 +245,7 @@ const BuildDetails = ({
       target.name === 'international_investors_status' && (target.value === 'false' || 'unknown');
     const isNotMasterSeries = target.name === 'estimated_spv_quantity' && target.value < 5;
     const isAllocationsTheAdvisor =
-      target.name === 'allocations_investment_adviser' && target.value;
+      target.name === 'allocations_investment_advisor' && target.value;
     const isNotCustomManagementFee =
       target.name === 'management_fee_value' && target.value !== 'Custom';
     const isNotCustomCarryFee = target.name === 'carry_fee_value' && target.value !== 'Custom';
@@ -702,7 +702,7 @@ const BuildDetails = ({
                 <ButtonSelector
                   name="allocations_investment_advisor"
                   onChange={handleChange}
-                  currentValue={buildData.allocations_investment_adviser}
+                  currentValue={buildData.allocations_investment_advisor}
                   values={[
                     { label: 'Yes (Recommended)', value: 'true' },
                     { label: 'No', value: 'false' },
