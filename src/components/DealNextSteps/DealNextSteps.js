@@ -344,7 +344,7 @@ function DealNextSteps() {
           <div className={`action-item ${!hasKyc && 'disabled'}`}>
             <img className="action-icon" src={wireFundsNo} alt="wire-funds-no" />
             <div className="action-instructions">
-              <p className="action-header">Wire Funds</p>
+              <p className="action-header">Payment</p>
               <p className="action-sub-header">Required to complete your investment</p>
             </div>
             {/* <Button
@@ -357,7 +357,7 @@ function DealNextSteps() {
               View Wire Instructions
             </Button> */}
             <Button className="next-step-button" onClick={() => setOpenPayment(true)}>
-              Make Crypto Payment
+              Make Payment
             </Button>
           </div>
         </div>

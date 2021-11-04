@@ -43,27 +43,27 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
   const createMerchant = async () => {
     const { investment } = investmentData;
     const { deal } = dealData;
-    const cryptoBody = {
-      invoice_amount: investment.amount,
-      company_name: deal.company_name,
-    };
-    const res = await fetch('http://localhost:4000/api/test', {
-      headers: {
-        'Content-Type': 'application/json',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      method: 'POST',
-      body: JSON.stringify(cryptoBody),
-    });
-    const data = await res.json();
+    // const cryptoBody = {
+    //   invoice_amount: investment.amount,
+    //   company_name: deal.company_name,
+    // };
+    // const res = await fetch('http://localhost:4000/api/payment', {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     // 'Content-Type': 'application/x-www-form-urlencoded',
+    //   },
+    //   method: 'POST',
+    //   body: JSON.stringify(cryptoBody),
+    // });
+    // const data = await res.json();
     // setWidgetUrl(
     //   `https://sandbox.forumpay.com/pay?merchant_id=${data.merchantId}&order_amount=${investmentData.investment.amount}&order_currency=USD&item_name=&widget_type=0&reference_no=`,
     // );
     setWidgetUrl(
-      `https://sandbox.forumpay.com/pay?merchant_id=945e6d23-fecd-47bd-9f36-4e554ac7a14e&order_amount=2000&order_currency=USD&item_name=&widget_type=0&reference_no=&accept_zero_confirmations=true`,
+      `https://sandbox.forumpay.com/pay?merchant_id=945e6d23-fecd-47bd-9f36-4e554ac7a14e&order_amount=${investment.amount}&order_currency=USD&item_name=&widget_type=0&reference_no=`,
     );
-    if (!data.error) return console.log(`success!`, data);
-    console.log('There was an Error', data.error);
+    // if (!data.error) return console.log(`success!`, data);
+    // console.log('There was an Error', data.error);
   };
   return (
     <Modal open={open} onClose={handleClose} className={classes.modal}>
@@ -119,11 +119,19 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                       on top of your capital contribution amount.
                     </p>
                   </Grid>
-                  <Grid item style={{ display: 'flex', flexDirection: 'column', margin: 'auto' }}>
+                  <Grid
+                    item
+                    style={{
+                      width: '80%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      margin: 'auto',
+                    }}
+                  >
                     <Button
                       style={{
                         font: 'normal normal bold 24px/28px Roboto',
-                        width: '50vw',
+                        width: '80%',
                         height: '60px',
                         margin: 'auto',
                         marginTop: '5px',
@@ -144,7 +152,7 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                     <Button
                       style={{
                         font: 'normal normal bold 24px/28px Roboto',
-                        width: '50vw',
+                        width: '80%',
                         height: '60px',
                         margin: 'auto',
                         marginTop: '5px',
