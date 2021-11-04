@@ -13,7 +13,7 @@ import submitTaxInfoYes from '../../assets/submit-tax-info-yes.svg';
 import submitTaxInfoNo from '../../assets/submit-tax-info-no.svg';
 import AllocationsRocket from './AllocationsRocket/AllocationsRocket';
 import PaymentSelectModal from './PaymentSelectModal';
-import KYCModal from './KYCModal.js';
+import KYCModal from './KYCModal';
 import WireInstructionsModal from './WireInstructionsModal/WireInstructionsModal';
 import CryptoPaymentModal from './CryptoPaymentModal/index';
 import { useAuth } from '../../auth/useAuth';

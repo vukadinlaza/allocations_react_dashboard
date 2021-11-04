@@ -1,5 +1,6 @@
 // import { phone } from '../../utils/helpers';
 import { makeStyles } from '@material-ui/core/styles';
+import { autoType } from 'd3-dsv';
 import { phone, tablet } from '../../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
@@ -20,8 +21,8 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '0px 3px 6px #00000029',
     border: '1px solid #7070703B',
     marginBottom: '16px',
-    padding: '42px',
     borderRadius: '15px',
+    padding: '42px',
     width: '100%',
     maxWidth: '1352px',
     opacity: 1,
@@ -29,9 +30,92 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: '600px',
       marginBottom: '24px',
       padding: '16px',
+      paddingBottom: '30px',
     },
   },
 
+  signContainer: {
+    display: 'grid',
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    boxShadow: '0px 3px 6px #00000029',
+    border: '1px solid #7070703B',
+    marginBottom: '16px',
+    borderRadius: '15px',
+    padding: '42px',
+    width: '100%',
+    maxWidth: '1352px',
+    gridGap: '30px',
+    opacity: 1,
+    [theme.breakpoints.down(phone)]: {
+      maxWidth: '600px',
+      marginBottom: '24px',
+      padding: '16px',
+      paddingBottom: '30px',
+    },
+  },
+
+  agreementUnsignedBox: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: '100px',
+    paddingLeft: '30px',
+    paddingRight: '30px',
+    border: '2px dashed #0461FF !important',
+    borderRadius: '20px',
+  },
+  agreementSignedBox: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: '100px',
+    paddingLeft: '30px',
+    paddingRight: '30px',
+    border: 'none !important',
+    boxShadow: 'none !important',
+  },
+  signed: {
+    backgroundColor: 'rgb(57,197,34, 0.23)',
+    color: '#34AF1F',
+    fontWeight: '600',
+    borderRadius: '20px',
+    padding: '5px 20px',
+  },
+  notSigned: {
+    backgroundColor: '#FFBDAD',
+    color: '#DE350B',
+    fontWeight: '600',
+    borderRadius: '20px',
+    padding: '5px 20px',
+  },
+  docUploadBox: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    marginBottom: '16px',
+    // padding: '42px',
+    paddingTop: '20px',
+    borderRadius: '15px',
+    width: '100%',
+    maxWidth: '1352px',
+    opacity: 1,
+    [theme.breakpoints.down(phone)]: {
+      display: 'flex',
+      flexDirection: 'column',
+      maxWidth: '600px',
+      padding: '23px',
+      paddingBottom: '0px',
+    },
+  },
+  blueCheck: {
+    width: '26px',
+    height: '26px',
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: '50%',
+    justifyContent: 'center',
+    backgroundColor: '#0461ff',
+  },
   buildTabContainer: {
     marginBottom: '16px',
     paddingLeft: '42px',
@@ -70,7 +154,25 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: '8px',
     },
   },
-  documentIcon: { marginLeft: '20px' },
+
+  docIconBox: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: '50%',
+    width: '58px',
+    height: '58px',
+  },
+  docErrorIconBox: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F2CECC',
+    borderRadius: '50%',
+    width: '58px',
+    height: '58px',
+  },
   continueButton: {
     font: 'normal normal bold 24px/28px Roboto',
     marginTop: '5px',
@@ -90,6 +192,13 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
     },
   },
+
+  buttonBox: {
+    margin: 'auto',
+    marginTop: '40px',
+    alignSelf: 'center',
+    textAlign: 'center',
+  },
   helpIcon: {
     marginLeft: '0.2em',
     cursor: 'pointer',
@@ -103,6 +212,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#2A2B54',
     font: 'normal normal bold 17px/20px Roboto',
     marginBottom: '20px',
+    borderRadius: '8px',
     [theme.breakpoints.down(phone)]: {
       marginBottom: '14px',
       marginLeft: '8px',
@@ -120,7 +230,7 @@ const useStyles = makeStyles((theme) => ({
   previousButton: {
     font: 'normal normal normal 24px/28px Roboto',
     marginTop: '11px',
-    marginLeft: '135px',
+    // marginLeft: '135px',
     padding: '5px',
     cursor: 'pointer',
     [theme.breakpoints.down(phone)]: {
@@ -131,17 +241,38 @@ const useStyles = makeStyles((theme) => ({
       textAlign: 'center',
     },
   },
+  cancelIcon: {
+    position: 'relative',
+    right: '-120px',
+    top: '-10px',
+    zIndex: 1,
+    color: '#4a4a4a',
+    cursor: 'pointer',
+    transition: '0.5s',
+    '&:hover': {
+      color: '#e71a1a',
+    },
+  },
   uploadIcon: {
-    opacity: '0.3',
-    width: '30px',
-    marginLeft: 'auto',
-    marginRight: '37px',
     color: 'blue',
     transparentheight: '35px',
     [theme.breakpoints.down(phone)]: {
       marginRight: '20px',
       width: '30px',
     },
+  },
+  uploadIconLabel: {
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    whiteSpace: 'nowrap',
+    cursor: 'pointer',
+  },
+  uploadErrorLabel: {
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    whiteSpace: 'nowrap',
+    cursor: 'pointer',
+    color: '#8E9394',
   },
   subtitle: {
     textAlign: 'left',
@@ -171,14 +302,27 @@ const useStyles = makeStyles((theme) => ({
   inputBox: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     boxShadow: '0px 3px 6px #0000000A',
-    borderRadius: '5px',
+    borderRadius: '8px !important',
     padding: '0',
     maxWidth: '568px',
     width: '100%',
   },
+  minimumInput: {
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    boxShadow: '0px 3px 6px #0000000A',
+    // border radius is not taking
+    borderRadius: '8px !important',
+    padding: '0',
+    maxWidth: '464px',
+    width: '100%',
+  },
   selectInputBox: {
     width: '90%',
+    '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
+      borderRadius: '8px !important',
+    },
   },
+  selectTest: {},
   wideInputBox: {
     maxWidth: '1206px',
   },
@@ -216,7 +360,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   inputGridItem: {
-    // marginBottom: '37px',
     [theme.breakpoints.down(phone)]: {
       maxWidth: '100%',
     },
@@ -264,9 +407,10 @@ const useStyles = makeStyles((theme) => ({
   },
   itemText: {
     font: 'normal normal normal 18px/21px Roboto',
+    width: '150px',
+    textAlign: 'center',
     color: '#2A2B54',
     letterSpacing: '0px',
-    marginLeft: '17px',
     opacity: '1',
     [theme.breakpoints.down(phone)]: {
       maxWidth: '100%',
@@ -275,28 +419,39 @@ const useStyles = makeStyles((theme) => ({
   },
   selectorButton: {
     fontSize: '.8em',
-    color: 'black',
+    color: '#8E9394',
     height: '60px',
     border: '1px solid #d3d3d3 !important',
     backgroundColor: '#ffffff',
+    borderRadius: '8px !important',
+    textTransform: 'capitalize',
     [theme.breakpoints.down(phone)]: {
       fontSize: '.7em',
     },
   },
   selected: {
-    background: '#186EFF26 0% 0% no-repeat padding-box !important',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    color: '#186EFF',
+    background: '#ECF3FF 0% 0% no-repeat padding-box !important',
     boxShadow: '0px 3px 6px #0000000D !important',
     border: '2px solid #186EFF !important',
+    borderRadius: '8px !important',
+    textTransform: 'capitalize',
     opacity: '1 !important',
   },
   typeItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
     padding: '12px',
     width: '100%',
     height: '166px',
     minHeight: '166px',
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    background: '#EBEBEB 0% 0% no-repeat padding-box',
     boxShadow: '0px 3px 6px #0000000D',
-    border: '2px solid #2A2B5480',
+    border: '2px solid #E5E5E5',
     borderRadius: '10px',
     cursor: 'pointer',
     [theme.breakpoints.down(phone)]: {
@@ -305,6 +460,13 @@ const useStyles = makeStyles((theme) => ({
     '& *': {
       pointerEvents: 'none',
     },
+  },
+  typeItemDiv: {
+    width: 'inherit',
+    marginBottom: '15px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   subText: {
     textAlign: 'left',
@@ -318,27 +480,61 @@ const useStyles = makeStyles((theme) => ({
   // 1. (FUND) Styles that are used exclusively in the 'Build your SPV' tab.
   // 2. Styles that are used exclusively in the 'Review and sign terms' tab.
   uploadContainer: {
-    marginBottom: '16px',
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #00000029',
-    border: '1px solid #7070703B',
-    borderRadius: '15px',
-    width: '100%',
-    height: '544px',
-    padding: '42px',
-  },
-  item: {
     display: 'flex',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
+    width: '1000px',
+    minWidth: '900px',
+    [theme.breakpoints.down(phone)]: {
+      flexDirection: 'column',
+      height: '800px',
+    },
+  },
+  uploadDocLoader: {
+    display: 'flex',
+    justifyContent: 'center',
     alignItems: 'center',
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #0000000D',
-    border: '2px solid #2A2B5480',
+    background: '#ECF3FF 0% 0% no-repeat padding-box',
+    border: '2px dashed #0461FF !important',
+    borderRadius: '10px',
+    width: '280px',
+    height: '236px',
+    marginBottom: '8px',
+  },
+  uploadDocItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    background: '#ECF3FF 0% 0% no-repeat padding-box',
+    border: '2px dashed #0461FF !important',
     borderRadius: '10px',
     opacity: 1,
-    width: '100%',
-    height: '91px',
+    width: '280px',
+    height: '236px',
     marginBottom: '8px',
+  },
+  uploadErrorItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    background: '#fff 0% 0% no-repeat padding-box',
+    border: '2px solid #EBEBEB !important',
+    borderRadius: '10px',
+    opacity: 1,
+    width: '280px',
+    height: '236px',
+    marginBottom: '8px',
+  },
+  uploadedDocItem: {
+    background: '#fff 0% 0% no-repeat padding-box',
+    border: '2px solid lightgrey !important',
+  },
+  deleteDocButton: {
+    cursor: 'pointer',
+    backgroundColor: 'inherit',
+    border: 'none',
+    outline: 'none',
   },
   checkCircle: {
     opacity: '0.3',
@@ -350,6 +546,9 @@ const useStyles = makeStyles((theme) => ({
       marginRight: '20px',
       width: '30px',
     },
+  },
+  unfilledField: {
+    border: '1px solid red',
   },
   icon: {
     opacity: '1',

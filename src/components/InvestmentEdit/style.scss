@@ -1,0 +1,76 @@
+.InvestmentEdit {
+  input {
+    padding: 10px 14px;
+  }
+
+  .title {
+    font-size: 17px;
+    margin: 15px 0;
+  }
+
+  .title:first-of-type {
+    margin-top: 0px;
+  }
+
+  .docs {
+    padding-top: 15px;
+    display: flex;
+  }
+
+  .doc-wrapper {
+    display: inline-block;
+    text-align: center;
+    margin-right: 10px;
+    // width: 100px;
+  }
+
+  .doc,
+  .add-doc {
+    display: inline-block;
+    height: 90px;
+    width: 60px;
+    margin: 0px 20px;
+    border-radius: 5px;
+    vertical-align: top;
+  }
+
+  .doc {
+    border: 1px dotted gray;
+    position: relative;
+    .fa-times-circle {
+      position: absolute;
+      right: -5px;
+      top: -5px;
+      cursor: pointer;
+    }
+    .fa-file-pdf {
+      color: #f48fb1;
+      font-size: 2em;
+      position: absolute;
+      right: 16px;
+      top: 29px;
+    }
+  }
+
+  .filename {
+    text-align: center;
+    font-size: 0.8em;
+  }
+
+  .add-doc {
+    text-align: center;
+    background-color: #f48fb1;
+    opacity: 0.7;
+
+    .fa-plus {
+      display: inline-block;
+      margin-top: 35px;
+      cursor: pointer;
+    }
+    .fa-file-upload {
+      display: inline-block;
+      margin-top: 35px;
+      cursor: pointer;
+    }
+  }
+}

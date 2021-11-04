@@ -390,11 +390,14 @@ export function AccreditedInvestorStatus({ investor, handleChange, errors }) {
   );
 }
 const is3c7Options = {
-  individual: ['An individual that owns $5,000,000 or more in investments'],
+  individual: [
+    'An individual that owns $5,000,000 or more in investments',
+    'I am a “knowledgeable employee” of the private fund (relying on the Investment Company Act rule 3(c)(7) exemption) or its manager',
+  ],
   entity: [
     'A family-owned business not formed for the specific purpose of acquiring the interest in the fund that owns $5,000,000 or more in investments',
     'An entity not formed for the specific purpose of acquiring the interest in the fund which owns and invests at least $25,000,000 in investments (or someone who is acting on account of such a person)',
-    'trust not formed for the specific purpose of acquiring the interest in the fund which is sponsored by and managed by qualified purchasers',
+    'Trust not formed for the specific purpose of acquiring the interest in the fund which is sponsored by and managed by qualified purchasers',
     'A qualified institutional buyer (not formed for the specific purpose of investing in each applicable fund),  provided that the undersigned is not (1) a dealer that owns and invests on a discretionary basis less than $25,000,000 in securities of issuers that are not affiliated persons of the dealer, or (2) a plan, or a trust fund that holds the assets of such a plan, the investment decisions with respect to which are made by the beneficiaries of the plan',
     'A company all of whose outstanding securities are beneficially owned by qualified purchasers',
   ],

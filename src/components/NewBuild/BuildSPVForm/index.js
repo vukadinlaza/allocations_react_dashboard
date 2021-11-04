@@ -3,32 +3,27 @@ import { useMutation, gql } from '@apollo/client';
 import moment from 'moment';
 import _ from 'lodash';
 import countries from 'country-region-data';
+import { toast } from 'react-toastify';
 import HelpIcon from '@material-ui/icons/Help';
-import {
-  Button,
-  TextField,
-  Paper,
-  Grid,
-  FormControl,
-  ButtonGroup,
-  MenuItem,
-  Select as Select2,
-} from '@material-ui/core';
+import { Button, TextField, Paper, Grid, FormControl, ButtonGroup } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Select from 'react-select';
 import BasicInfo from './FormComponents/TypeSelector/index';
-import UploadDocsModal from './FormComponents/UploadDocs/index';
+import UploadDocs from './FormComponents/UploadDocs/index';
 import { useAuth } from '../../../auth/useAuth';
 import { phone } from '../../../utils/helpers';
 import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
 import { useCurrentOrganization } from '../../../state/current-organization';
 import useStyles from '../BuildStyles';
+import AgreementSigner from './FormComponents/AgreementSigner';
+import { convertToPositiveIntOrNull } from '../../../utils/numbers';
 
 const CREATE_BUILD = gql`
   mutation createBuild {
     deal: createBuild {
       _id
       phases {
+        _id
         name
         tasks {
           _id
@@ -87,9 +82,12 @@ const Breadcrumbs = ({ titles, page }) => {
   return (
     <Paper className={classes.buildTabContainer}>
       {titles.map((title, i) => (
-        <>
-          <Breadcrumb title={title} active={page === i} withSeparator={i < titles.length - 1} />
-        </>
+        <Breadcrumb
+          title={title}
+          key={title}
+          active={page === i}
+          withSeparator={i < titles.length - 1}
+        />
       ))}
     </Paper>
   );
@@ -141,43 +139,138 @@ const BuildDetails = ({
   setBuildInfo,
   deal_id,
   waitingOnInitialDeal,
+  initialDeal,
 }) => {
   const organization = useCurrentOrganization();
   const classes = useStyles();
 
   const [buildData, setBuildData] = useState({
+    allocations_investment_advisor: 'true',
     asset_type: 'startup',
-    portfolio_company_name: '',
-    portfolio_company_securities: '',
-    estimated_spv_quantity: '',
-    master_series: '',
-    minimum_investment: '',
-    international_company_status: 'false', //* add to db
-    international_company_country: '', //* add to db
-    international_investors_status: 'false', //* investor_type
-    international_investors_countries: [], //* add to db
+    carry_fee_type: 'percent',
+    carry_fee_value: '20',
+    closing_date: moment(Date.now()).add(7, 'days').format('YYYY-MM-DD'),
+    custom_carry_fee: 'false',
+    custom_investment_agreement: 'false',
+    custom_management_fee: 'false',
+    deal_stage: '',
+    estimated_spv_quantity: null,
+    international_company_status: 'false',
+    international_company_country: '',
+    international_investors_status: 'false',
+    international_investors_countries: [],
+    investment_advisor: '',
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
         : null,
-    carry_fee_type: 'percent',
-    carry_fee_value: '10',
-    custom_carry_fee: 'false',
+    management_fee_frequency: 'one time',
     management_fee_type: 'percent',
     management_fee_value: '2',
-    custom_management_fee: 'false',
-    custom_investment_agreement: 'false',
-    management_fee_frequency: 'one-time',
-    setup_cost: 20000,
+    master_series: '',
+    minimum_investment: 10000,
     offering_type: '506b',
-    allocations_investment_advisor: 'true', //* conditional front or back?
-    investment_advisor: '',
-    side_letters: 'false',
-    closing_date: moment(Date.now()).format('YYYY-MM-DD'),
-    sectors: [],
-    representative: '',
+    portfolio_company_name: '',
+    portfolio_company_securities: '',
     portfolio_deal_name: '',
+    representative: '',
+    setup_cost: 20000,
+    side_letters: 'false',
+    sectors: [],
   });
+
+  const [unfilledFields, setUnfilledFields] = useState([]);
+
+  const formValidation = () => {
+    //* **** NEED TO VALIDATE CLOSING DATE STILL - NEED TO CHECK FOR PROPER DATE FORMAT *********
+
+    /// *** UPLOADED DOCUMENTS NOT VALIDATED YET *** ///
+
+    const unvalidatedFields = [];
+    const fieldsToFill = [];
+    // fields always checked below
+    if (!buildData.portfolio_company_name) {
+      fieldsToFill.push('portfolio_company_name');
+      unvalidatedFields.push('Portfolio Company Name');
+    }
+    if (!buildData.portfolio_company_securities) {
+      fieldsToFill.push('portfolio_company_securities');
+      unvalidatedFields.push('Portfolio Company Securities');
+    }
+    if (!buildData.portfolio_deal_name) {
+      fieldsToFill.push('portfolio_deal_name');
+      unvalidatedFields.push('Deal Name');
+    }
+    if (!buildData.manager_name) {
+      fieldsToFill.push('manager_name');
+      unvalidatedFields.push('Manager Name');
+    }
+    if (!buildData.representative) {
+      fieldsToFill.push('representative');
+      unvalidatedFields.push('Representative of Manager');
+    }
+    if (!buildData.estimated_spv_quantity) {
+      fieldsToFill.push('estimated_spv_quantity');
+      unvalidatedFields.push('Estimated Number of SPVs');
+    }
+    if (!buildData.minimum_investment) {
+      fieldsToFill.push('minimum_investment');
+      unvalidatedFields.push('Minimum Investment');
+    }
+    if (!buildData.sectors.length) {
+      fieldsToFill.push('sectors');
+      unvalidatedFields.push('Sectors');
+    }
+    if (!buildData.deal_stage.length) {
+      fieldsToFill.push('deal_stage');
+      unvalidatedFields.push('Deal Stage');
+    }
+
+    // conditionally checked fields below here
+    if (!buildData.master_series && buildData.estimated_spv_quantity >= 5) {
+      fieldsToFill.push('master_series');
+      unvalidatedFields.push('Master Series Name');
+    }
+    if (
+      (!buildData.custom_management_fee || buildData.custom_management_fee === 'false') &&
+      buildData.management_fee_value === 'Custom'
+    ) {
+      fieldsToFill.push('custom_management_fee');
+      unvalidatedFields.push('Custom Management Fee');
+    }
+    if (
+      (!buildData.custom_carry_fee || buildData.custom_carry_fee === 'false') &&
+      buildData.carry_fee_value === 'Custom'
+    ) {
+      fieldsToFill.push('custom_carry_fee');
+      unvalidatedFields.push('Custom Carry Fee');
+    }
+    if (!buildData.investment_advisor && buildData.allocations_investment_advisor === 'false') {
+      fieldsToFill.push('investment_advisor');
+      unvalidatedFields.push('Advisor Name');
+    }
+    if (
+      !buildData.international_company_country &&
+      buildData.international_company_status === 'true'
+    ) {
+      fieldsToFill.push('international_company_country');
+      unvalidatedFields.push('Country of International Company');
+    }
+    if (
+      !buildData.international_investors_countries.length &&
+      buildData.international_investors_status === 'true'
+    ) {
+      fieldsToFill.push('international_investors_countries');
+      unvalidatedFields.push('Countries of International Investors');
+    }
+
+    setUnfilledFields(fieldsToFill);
+
+    return {
+      isValidated: !unvalidatedFields.length,
+      unvalidatedFields,
+    };
+  };
 
   const [openTooltip, setOpenTooltip] = useState('');
   const customInputStyles = { style: { height: '23px' } };
@@ -199,13 +292,17 @@ const BuildDetails = ({
         deal_id,
         payload: {
           organization_id: organization._id,
+          allocations_investment_advisor: buildData.allocations_investment_advisor,
           asset_type: buildData.asset_type,
-          portfolio_deal_name: buildData.portfolio_deal_name,
-          portfolio_company_name: buildData.portfolio_company_name,
-          portfolio_company_securities: buildData.portfolio_company_securities,
+          carry_fee: {
+            type: buildData.carry_fee_type,
+            value: buildData.carry_fee_value,
+            custom: buildData.custom_carry_fee,
+          },
+          closing_date: buildData.closing_date,
+          custom_investment_agreement: buildData.custom_investment_agreement,
+          deal_stage: buildData.deal,
           estimated_spv_quantity: Number(buildData.estimated_spv_quantity),
-          master_series: buildData.master_series,
-          minimum_subscription_amount: buildData.minimum_investment,
           international_company: {
             status: buildData.international_company_status,
             country: buildData.international_company_country,
@@ -214,27 +311,24 @@ const BuildDetails = ({
             status: buildData.international_investors_status,
             countries: buildData.international_investors_countries,
           },
-          manager_name: buildData.manager_name,
-          carry_fee: {
-            type: buildData.carry_fee_type,
-            value: buildData.carry_fee_value,
-            custom: buildData.custom_carry_fee,
-          },
+          investment_advisor: buildData.investment_advisor,
           management_fee: {
             type: buildData.management_fee_type,
             value: buildData.management_fee_value,
             custom: buildData.custom_management_fee,
           },
-          custom_investment_agreement: buildData.custom_investment_agreement,
           management_fee_frequency: buildData.management_fee_frequency,
-          setup_cost: buildData.setup_cost,
+          manager_name: buildData.manager_name,
+          master_series: buildData.master_series,
+          minimum_subscription_amount: buildData.minimum_investment,
           offering_type: buildData.offering_type,
-          allocations_investment_advisor: buildData.allocations_investment_advisor,
-          investment_advisor: buildData.investment_advisor,
-          side_letters: buildData.side_letters,
-          closing_date: buildData.closing_date,
-          sectors: buildData.sectors,
+          portfolio_company_name: buildData.portfolio_company_name,
+          portfolio_company_securities: buildData.portfolio_company_securities,
+          portfolio_deal_name: buildData.portfolio_deal_name,
           representative: buildData.representative,
+          sectors: buildData.sectors,
+          setup_cost: buildData.setup_cost,
+          side_letters: buildData.side_letters,
         },
       },
     });
@@ -255,7 +349,8 @@ const BuildDetails = ({
     setBuildData((prev) => {
       const newBuildObject = {
         ...prev,
-        master_series: isNotMasterSeries ? '' : prev.master_series,
+        // IS NULL CORRECT?
+        master_series: isNotMasterSeries ? null : prev.master_series,
         investment_advisor: isAllocationsTheAdvisor ? '' : prev.investment_advisor,
         custom_management_fee: isNotCustomManagementFee ? 'false' : prev.custom_management_fee,
         custom_carry_fee: isNotCustomCarryFee ? 'false' : prev.custom_carry_fee,
@@ -298,6 +393,9 @@ const BuildDetails = ({
         width: phoneSize ? '325px' : '90%',
         maxWidth: 568,
         cursor: 'pointer',
+        border: unfilledFields.includes('international_company_country')
+          ? '2px solid red'
+          : '1pm solid hsl(0, 0%, 80%)',
       }),
       placeholder: (styles, data) => ({
         ...styles,
@@ -322,8 +420,10 @@ const BuildDetails = ({
             },
           };
           handleChange(newEvent);
+          setUnfilledFields((prev) =>
+            prev.filter((field) => field !== 'international_company_country'),
+          );
         }}
-        // isMulti
       />
     );
   }
@@ -355,6 +455,9 @@ const BuildDetails = ({
         width: phoneSize ? '325px' : '90%',
         maxWidth: 568,
         cursor: 'pointer',
+        border: unfilledFields.includes('international_investors_countries')
+          ? '2px solid red'
+          : '1pm solid hsl(0, 0%, 80%)',
       }),
       placeholder: (styles, data) => ({
         ...styles,
@@ -384,6 +487,9 @@ const BuildDetails = ({
             },
           };
           handleChange(newEvent);
+          setUnfilledFields((prev) =>
+            prev.filter((field) => field !== 'international_investors_countries'),
+          );
         }}
         isMulti
       />
@@ -399,6 +505,8 @@ const BuildDetails = ({
         parentClasses={classes}
         handleTooltip={handleTooltip}
         openTooltip={openTooltip}
+        unfilledFields={unfilledFields}
+        setUnfilledFields={setUnfilledFields}
       />
       <Paper className={classes.paper}>
         <form noValidate autoComplete="off">
@@ -483,11 +591,20 @@ const BuildDetails = ({
                     }
                     placeholder="Custom Management Fee"
                     name="custom_management_fee"
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setUnfilledFields((prev) =>
+                        prev.filter((field) => field !== 'custom_management_fee'),
+                      );
+                    }}
                     className={classes.inputBox}
                     variant="outlined"
                     inputProps={customInputStyles}
-                    classes={{ root: classes.selectInputBox }}
+                    classes={{
+                      root: `${
+                        unfilledFields.includes('custom_management_fee') && classes.unfilledField
+                      } ${classes.selectInputBox}`,
+                    }}
                   />
                 </FormControl>
               )}
@@ -502,7 +619,7 @@ const BuildDetails = ({
                     handleTooltip={handleTooltip}
                     tooltipContent={
                       <Typography color="inherit">
-                        Period for which the Management Fee will be charged (one-time or annually)
+                        Period for which the Management Fee will be charged (one time or annually)
                       </Typography>
                     }
                     openTooltip={openTooltip}
@@ -519,7 +636,7 @@ const BuildDetails = ({
                   onChange={handleChange}
                   currentValue={buildData.management_fee_frequency}
                   values={[
-                    { label: 'One-Time', value: 'one-time' },
+                    { label: 'One Time', value: 'one time' },
                     { label: 'Annual', value: 'annual' },
                   ]}
                 />
@@ -593,11 +710,20 @@ const BuildDetails = ({
                     value={buildData.custom_carry_fee === 'false' ? '' : buildData.custom_carry_fee}
                     placeholder="Custom Carry Fee"
                     name="custom_carry_fee"
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setUnfilledFields((prev) =>
+                        prev.filter((field) => field !== 'custom_carry_fee'),
+                      );
+                    }}
                     className={classes.inputBox}
                     variant="outlined"
                     inputProps={customInputStyles}
-                    classes={{ root: classes.selectInputBox }}
+                    classes={{
+                      root: `${
+                        unfilledFields.includes('custom_carry_fee') && classes.unfilledField
+                      } ${classes.selectInputBox}`,
+                    }}
                   />
                 </FormControl>
               )}
@@ -606,7 +732,7 @@ const BuildDetails = ({
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
-                  Will you charge the same fee for all investors?{' '}
+                  Will you charge the same fee for all investors?
                   <ModalTooltip
                     title="Charge the same fee for all investors?"
                     handleTooltip={handleTooltip}
@@ -659,13 +785,32 @@ const BuildDetails = ({
                   </ModalTooltip>
                 </Typography>
                 <TextField
+                  type="number"
                   value={buildData.minimum_investment}
                   name="minimum_investment"
-                  onChange={handleChange}
-                  className={classes.inputBox}
+                  onChange={(e) => {
+                    const value = convertToPositiveIntOrNull(e.target.value);
+
+                    const newEvent = {
+                      target: {
+                        name: 'minimum_investment',
+                        value,
+                      },
+                    };
+
+                    handleChange(newEvent);
+                    setUnfilledFields((prev) =>
+                      prev.filter((field) => field !== 'minimum_investment'),
+                    );
+                  }}
+                  className={classes.minimumInput}
                   variant="outlined"
-                  inputProps={customInputStyles}
-                  classes={{ root: classes.selectInputBox }}
+                  inputProps={{ style: { height: '23px' } }}
+                  classes={{
+                    root: `${
+                      unfilledFields.includes('minimum_investment') && classes.unfilledField
+                    } ${classes.selectInputBox}`,
+                  }}
                 />
               </FormControl>
             </Grid>
@@ -681,9 +826,9 @@ const BuildDetails = ({
             <Grid className={classes.customInputGridItem} item xs={6}>
               <FormControl required variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
-                  Choose Allocations as the reporting adviser?
+                  Choose Allocations as the adviser?
                   <ModalTooltip
-                    title="Reporting Adviser"
+                    title="Reporting Advisor"
                     handleTooltip={handleTooltip}
                     tooltipContent={
                       <Typography color="inherit">
@@ -720,9 +865,9 @@ const BuildDetails = ({
                   style={{ marginTop: '40px' }}
                 >
                   <Typography className={classes.formItemName}>
-                    Please enter your advisor name
+                    Please enter your adviser name
                     <ModalTooltip
-                      title="Advisor Name"
+                      title="Adviser Name"
                       handleTooltip={handleTooltip}
                       tooltipContent={
                         <Typography color="inherit">Please indicate your ERA/RIA name</Typography>
@@ -738,7 +883,7 @@ const BuildDetails = ({
                   </Typography>
                   <TextField
                     value={buildData.investment_advisor}
-                    placeholder="Advisor Name"
+                    placeholder="Adviser Name"
                     name="investment_advisor"
                     onChange={handleChange}
                     className={classes.inputBox}
@@ -910,6 +1055,16 @@ const BuildDetails = ({
           </Grid>
         </form>
       </Paper>
+
+      <Paper className={classes.paper}>
+        <form noValidate autoComplete="off">
+          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
+            5. Upload Your Documents
+          </Typography>
+          <UploadDocs deal={initialDeal} />
+        </form>
+      </Paper>
+
       <Paper className={classes.paper}>
         <form noValidate autoComplete="off">
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
@@ -950,6 +1105,20 @@ const BuildDetails = ({
               className={classes.continueButton}
               disabled={waitingOnInitialDeal}
               onClick={() => {
+                const { isValidated, unvalidatedFields } = formValidation();
+                if (!isValidated) {
+                  console.log(`validated? ${isValidated}`, unvalidatedFields);
+                  toast.error(
+                    <div>
+                      Please fill in the following fields:{' '}
+                      {unvalidatedFields.map((field) => (
+                        <div>• {field}</div>
+                      ))}
+                    </div>,
+                    { autoClose: 10000 },
+                  );
+                  return;
+                }
                 setPage(page + 1);
                 handleSubmit();
               }}
@@ -963,11 +1132,27 @@ const BuildDetails = ({
   );
 };
 
+function FinishComponent({ history, deal, classes }) {
+  return (
+    <Button
+      className={classes.finishButton}
+      onClick={() => {
+        toast.success('Success! Your submission was submitted.');
+        localStorage.removeItem('buildData');
+        localStorage.removeItem('buildDeal');
+        localStorage.removeItem('buildFilesUploaded');
+        if (deal?._id) history.push(`/deal-setup?id=${deal._id}`);
+      }}
+    >
+      Finish
+    </Button>
+  );
+}
+
 export default function NewSpvForm() {
   const { userProfile, loading: authLoading } = useAuth();
   const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
   const [setBuildInfo] = useMutation(SET_BUILD_INFO);
-
   // Page
   const [page, setPage] = useState(0);
 
@@ -996,18 +1181,21 @@ export default function NewSpvForm() {
           setBuildInfo={setBuildInfo}
           deal_id={initialDeal?.deal?._id}
           waitingOnInitialDeal={loading}
+          initialDeal={
+            initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
+          }
         />
       ),
     },
     {
-      title: 'Upload docs',
+      title: 'Review and sign terms',
       Component: (
-        <UploadDocsModal
-          page={page}
-          setPage={setPage}
+        <AgreementSigner
           deal={
             initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
           }
+          page={page}
+          setPage={setPage}
         />
       ),
     },

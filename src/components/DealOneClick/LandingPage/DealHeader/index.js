@@ -3,7 +3,7 @@ import './DealHeader.scss';
 
 function DealHeader({ deal }) {
   const { company_name, company_description, slug, dealCoverImageKey } = deal;
-  const key = dealCoverImageKey.includes('https')
+  const key = dealCoverImageKey?.includes('https')
     ? dealCoverImageKey
     : `https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`;
   const [img, setImg] = useState(key);
