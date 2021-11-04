@@ -9,7 +9,6 @@ import fundIcon from '../../assets/fund-icon.svg';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
-    // mocks show 81px
     height: '72px',
     width: '72px',
     display: 'flex',
@@ -114,7 +113,6 @@ const BuildModal = ({ onClose, isOpen }) => {
                   component="fieldset"
                   style={{
                     width: '100%',
-                    // height: '300px',  ?
                     display: 'flex',
                     flexDirection: 'row',
                     justifyContent: 'center',
