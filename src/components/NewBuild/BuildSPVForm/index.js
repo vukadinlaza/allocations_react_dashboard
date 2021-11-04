@@ -16,6 +16,7 @@ import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
 import { useCurrentOrganization } from '../../../state/current-organization';
 import useStyles from '../BuildStyles';
 import AgreementSigner from './FormComponents/AgreementSigner';
+import { convertToPositiveIntOrNull } from '../../../utils/numbers';
 
 const CREATE_BUILD = gql`
   mutation createBuild {
@@ -489,10 +490,6 @@ const BuildDetails = ({
     );
   }
 
-  const convertToPositiveInteger = (num) => {
-    return parseInt(num < 0 ? null : num);
-  };
-
   return (
     <>
       <BasicInfo
@@ -504,7 +501,6 @@ const BuildDetails = ({
         openTooltip={openTooltip}
         unfilledFields={unfilledFields}
         setUnfilledFields={setUnfilledFields}
-        convertToPositiveInteger={convertToPositiveInteger}
       />
       <Paper className={classes.paper}>
         <form noValidate autoComplete="off">
@@ -769,7 +765,7 @@ const BuildDetails = ({
                   value={buildData.minimum_investment}
                   name="minimum_investment"
                   onChange={(e) => {
-                    const value = convertToPositiveInteger(e.target.value);
+                    const value = convertToPositiveIntOrNull(e.target.value);
 
                     const newEvent = {
                       target: {

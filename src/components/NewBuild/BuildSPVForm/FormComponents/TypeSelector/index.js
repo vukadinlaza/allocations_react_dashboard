@@ -16,6 +16,7 @@ import NetworkIcon from '../../../../../assets/buildNetwork.svg';
 import PieIcon from '../../../../../assets/buildPie.svg';
 import { ModalTooltip } from '../../../../dashboard/FundManagerDashboard/widgets';
 import sectors from './sectors';
+import { convertToPositiveIntOrNull } from '../../../../../utils/numbers';
 
 export default function TypeSelector({
   assetType,
@@ -26,7 +27,6 @@ export default function TypeSelector({
   openTooltip,
   unfilledFields,
   setUnfilledFields,
-  convertToPositiveInteger,
 }) {
   const classes = useStyles();
   const customInputStyles = { style: { height: '23px' } };
@@ -576,7 +576,7 @@ export default function TypeSelector({
                 value={buildData.estimated_spv_quantity}
                 name="estimated_spv_quantity"
                 onChange={(e) => {
-                  const value = convertToPositiveInteger(e.target.value);
+                  const value = convertToPositiveIntOrNull(e.target.value);
 
                   const newEvent = {
                     target: {
