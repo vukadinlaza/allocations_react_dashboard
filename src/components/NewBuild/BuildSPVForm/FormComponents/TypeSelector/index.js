@@ -26,13 +26,10 @@ export default function TypeSelector({
   openTooltip,
   unfilledFields,
   setUnfilledFields,
+  convertToPositiveInteger,
 }) {
   const classes = useStyles();
   const customInputStyles = { style: { height: '23px' } };
-
-  // const convertToPositiveInteger = (num) => {
-  //   return parseInt(num < 0 ? 0 : num);
-  // };
 
   const row1Items = [
     {
@@ -579,7 +576,16 @@ export default function TypeSelector({
                 value={buildData.estimated_spv_quantity}
                 name="estimated_spv_quantity"
                 onChange={(e) => {
-                  handleChange(e);
+                  const value = convertToPositiveInteger(e.target.value);
+
+                  const newEvent = {
+                    target: {
+                      name: 'estimated_spv_quantity',
+                      value,
+                    },
+                  };
+
+                  handleChange(newEvent);
                   setUnfilledFields((prev) =>
                     prev.filter((field) => field !== 'estimated_spv_quantity'),
                   );

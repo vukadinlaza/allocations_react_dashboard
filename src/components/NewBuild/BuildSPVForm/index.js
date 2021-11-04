@@ -489,13 +489,9 @@ const BuildDetails = ({
     );
   }
 
-  // const convertToPositiveInteger = (num) => {
-  //   console.log('Inside:', num);
-  //   if (isNaN(parseFloat(num))) {
-  //     return 0;
-  //   }
-  //   return parseInt(num < 0 ? 0 : num);
-  // };
+  const convertToPositiveInteger = (num) => {
+    return parseInt(num < 0 ? null : num);
+  };
 
   return (
     <>
@@ -508,6 +504,7 @@ const BuildDetails = ({
         openTooltip={openTooltip}
         unfilledFields={unfilledFields}
         setUnfilledFields={setUnfilledFields}
+        convertToPositiveInteger={convertToPositiveInteger}
       />
       <Paper className={classes.paper}>
         <form noValidate autoComplete="off">
@@ -772,8 +769,16 @@ const BuildDetails = ({
                   value={buildData.minimum_investment}
                   name="minimum_investment"
                   onChange={(e) => {
-                    // const convertedNum = convertToPositiveInteger(e.target.value);
-                    handleChange(e);
+                    const value = convertToPositiveInteger(e.target.value);
+
+                    const newEvent = {
+                      target: {
+                        name: 'minimum_investment',
+                        value,
+                      },
+                    };
+
+                    handleChange(newEvent);
                     setUnfilledFields((prev) =>
                       prev.filter((field) => field !== 'minimum_investment'),
                     );
