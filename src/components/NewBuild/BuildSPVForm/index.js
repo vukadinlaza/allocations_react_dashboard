@@ -148,7 +148,7 @@ const BuildDetails = ({
     allocations_investment_advisor: 'true',
     asset_type: 'startup',
     carry_fee_type: 'percent',
-    carry_fee_value: '10',
+    carry_fee_value: '20',
     closing_date: moment(Date.now()).add(7, 'days').format('YYYY-MM-DD'),
     custom_carry_fee: 'false',
     custom_investment_agreement: 'false',
@@ -164,7 +164,7 @@ const BuildDetails = ({
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
         : null,
-    management_fee_frequency: 'one-time',
+    management_fee_frequency: 'one time',
     management_fee_type: 'percent',
     management_fee_value: '2',
     master_series: '',
@@ -779,9 +779,9 @@ const BuildDetails = ({
                       prev.filter((field) => field !== 'minimum_investment'),
                     );
                   }}
-                  className={classes.inputBox}
+                  className={classes.minimumInput}
                   variant="outlined"
-                  InputProps={{ inputProps: { min: 0 } }}
+                  inputProps={{ style: { height: '23px' } }}
                   classes={{
                     root: unfilledFields.includes('minimum_investment') && classes.unfilledField,
                   }}

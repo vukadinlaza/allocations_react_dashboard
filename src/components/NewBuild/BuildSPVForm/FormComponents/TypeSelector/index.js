@@ -592,13 +592,7 @@ export default function TypeSelector({
                 }}
                 className={classes.inputBox}
                 variant="outlined"
-                InputProps={{ inputProps: { min: 0 }, customInputStyles }}
-                // onClick={() =>
-                //   setUnfilledFields((prev) =>
-                //     prev.filter((field) => field !== 'estimated_spv_quantity'),
-                //   )
-                // }
-                // height: '23px'
+                inputProps={customInputStyles}
                 classes={{
                   root: unfilledFields.includes('estimated_spv_quantity') && classes.unfilledField,
                 }}
