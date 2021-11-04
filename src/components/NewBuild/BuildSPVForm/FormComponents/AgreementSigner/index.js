@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Paper } from '@material-ui/core';
+import { Button, CircularProgress, Paper } from '@material-ui/core';
 import { gql, useQuery } from '@apollo/client';
 import Typography from '@material-ui/core/Typography';
 import bluePenIcon from '../../../../../assets/sign-agreement-blue-pen.svg';
@@ -54,11 +54,18 @@ export default function SignDocsForm({ page, setPage, deal }) {
         </div>
         <Paper
           className={signed ? classes.agreementSignedBox : classes.agreementUnsignedBox}
-          style={{ cursor: data && !error ? 'pointer' : 'progress' }}
+          style={{ cursor: data && !error && 'pointer' }}
           onClick={() => (data && !error ? signingModal(data.serviceAgreementLink) : null)}
         >
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <img src={bluePenIcon} alt="document icon" />
+            {!data ? (
+              <CircularProgress />
+            ) : (
+              <div className={classes.serviceAgreementIconBox}>
+                <img src={bluePenIcon} alt="document icon" />
+              </div>
+            )}
+
             <Typography className={classes.itemText} style={{ width: '200px' }}>
               Service Agreement
             </Typography>
