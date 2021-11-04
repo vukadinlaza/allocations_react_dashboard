@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
+    width: '100%',
     margin: '.5rem',
     padding: '1rem',
     borderRadius: '8px',
@@ -157,7 +158,11 @@ const BuildModal = ({ onClose, isOpen }) => {
                             color="primary"
                             size="large"
                             type="submit"
-                            style={{ width: '70%', borderRadius: '8px' }}
+                            style={{
+                              width: '70%',
+                              borderRadius: '8px',
+                              backgroundColor: '#186EFF',
+                            }}
                             onClick={() => {
                               history.push(`/new-build-spv`);
                               onClose();
@@ -197,7 +202,11 @@ const BuildModal = ({ onClose, isOpen }) => {
                             color="primary"
                             size="large"
                             type="submit"
-                            style={{ width: '70%', borderRadius: '8px' }}
+                            style={{
+                              width: '70%',
+                              borderRadius: '8px',
+                              backgroundColor: '#186EFF',
+                            }}
                             onClick={() => {
                               history.push(`/new-build-fund`);
                               onClose();
