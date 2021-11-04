@@ -3,16 +3,18 @@ import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@materia
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
-import { useHistory } from 'react-router';
+// import { useHistory } from 'react-router';
 import spvIcon from '../../assets/spv-icon.svg';
 import fundIcon from '../../assets/fund-icon.svg';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
+    height: '81px',
+    width: '81px',
     margin: '3px',
     borderRadius: '48px',
     padding: '12px',
-    boxShadow: '0px 5px 10px 2px rgba(225, 225, 225, .8)',
+    backgroundColor: '#ECF3FF',
   },
   modal: {
     display: 'flex',
@@ -20,8 +22,8 @@ const useStyles = makeStyles((theme) => ({
   },
   modalPaperBody: {
     display: 'flex',
-    flexDirection: 'row',
-    textAlign: 'center',
+    flexDirection: 'column',
+    // textAlign: 'center',
     margin: '.5rem',
     padding: '.5rem',
     borderRadius: '8px',
@@ -48,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#0461FF',
     fontSize: '14px',
     lineHeight: '16.41px',
-    borderRadius: '44px',
+    borderRadius: '4px',
     padding: '7px 12px',
     marginTop: '7px',
   },
@@ -77,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
 
 const BuildModal = ({ onClose, isOpen }) => {
   const classes = useStyles();
-  const history = useHistory();
+  // const history = useHistory();
   const [typeSelected, setTypeSelected] = useState(null);
 
   return (
@@ -85,13 +87,13 @@ const BuildModal = ({ onClose, isOpen }) => {
       <Container maxWidth="sm">
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
-            <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#fff' }}>
+            <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#186EFF' }}>
               <Grid container justifyContent="space-between">
-                <Typography variant="h6" style={{ color: '#000' }}>
+                <Typography variant="h6" style={{ color: '#fff' }}>
                   Add New
                 </Typography>
                 <Box onClick={onClose} style={{ cursor: 'pointer' }}>
-                  <CloseIcon htmlColor="#000" />
+                  <CloseIcon htmlColor="#fff" />
                 </Box>
               </Grid>
             </Paper>
@@ -107,8 +109,9 @@ const BuildModal = ({ onClose, isOpen }) => {
                   component="fieldset"
                   style={{
                     width: '100%',
+                    // height: '300px',  ?
                     display: 'flex',
-                    flexDirection: 'column',
+                    flexDirection: 'row',
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}
@@ -117,7 +120,7 @@ const BuildModal = ({ onClose, isOpen }) => {
                     <Box
                       style={{
                         display: 'flex',
-                        flexDirection: 'column',
+                        flexDirection: 'row',
                         justifyContent: 'space-between',
                         alignItems: 'space-between',
                       }}
@@ -140,17 +143,17 @@ const BuildModal = ({ onClose, isOpen }) => {
                           }}
                         >
                           <div className={classes.icon}>
-                            <img alt="spv-icon" src={spvIcon} />
+                            <img alt="spv-icon" src={spvIcon} height="81px" />
                           </div>
                           <Typography className={classes.typeTitle}>SPV</Typography>
                         </Grid>
                         <Grid item className={classes.typeGrid}>
+                          <Typography className={classes.typeBadge}>
+                            From <span style={{ fontWeight: '700' }}>$8k</span>, paid by investors
+                          </Typography>
                           <Typography className={classes.typeBody}>
                             A Special Purpose Vehicle (SPV) is a structure used to raise money to
                             invest in a single asset
-                          </Typography>
-                          <Typography className={classes.typeBadge}>
-                            From <span style={{ fontWeight: '700' }}>$8k</span>, paid by investors
                           </Typography>
                         </Grid>
                       </Paper>
@@ -187,7 +190,7 @@ const BuildModal = ({ onClose, isOpen }) => {
                       </Paper>
                     </Box>
                   </Grid>
-                  <Grid container justifyContent="center">
+                  {/* <Grid container justifyContent="center">
                     <Button
                       variant="contained"
                       color="primary"
@@ -202,7 +205,7 @@ const BuildModal = ({ onClose, isOpen }) => {
                     >
                       Next
                     </Button>
-                  </Grid>
+                  </Grid> */}
                 </FormControl>
               </Grid>
             </Paper>
