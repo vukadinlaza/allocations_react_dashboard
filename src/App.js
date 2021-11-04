@@ -40,6 +40,7 @@ import './App.scss';
 import './utils/initFontAwesome';
 import { CurrentAccountProvider } from './state/current-organization';
 import FreeSPVOnboarding from './components/FreeSPVOnboarding';
+import Identity from './components/Identity';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -125,6 +126,7 @@ const App = () => {
               />
               <PrivateRoute path="/investors" component={Investors} exact />
 
+              <PrivateRoute path="/identity" component={Identity} />
               <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact />
 
               {/** catchall * */}
