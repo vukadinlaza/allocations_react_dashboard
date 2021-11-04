@@ -16,6 +16,7 @@ import NetworkIcon from '../../../../../assets/buildNetwork.svg';
 import PieIcon from '../../../../../assets/buildPie.svg';
 import { ModalTooltip } from '../../../../dashboard/FundManagerDashboard/widgets';
 import sectors from './sectors';
+import { convertToPositiveIntOrNull } from '../../../../../utils/numbers';
 
 export default function TypeSelector({
   assetType,
@@ -24,6 +25,8 @@ export default function TypeSelector({
   setBuildData,
   handleTooltip,
   openTooltip,
+  unfilledFields,
+  setUnfilledFields,
 }) {
   const classes = useStyles();
   const customInputStyles = { style: { height: '23px' } };
@@ -146,6 +149,7 @@ export default function TypeSelector({
         minHeight: 60,
         maxWidth: 1208,
         cursor: 'pointer',
+        border: unfilledFields.includes('sectors') ? '2px solid red' : '1pm solid hsl(0, 0%, 80%)',
       }),
     };
 
@@ -161,11 +165,15 @@ export default function TypeSelector({
             setBuildData((prev) => {
               const isAtLimit = prev.sectors.length >= 3;
               if (isAtLimit) toast.info('Please limit your sectors to 3 or less');
-              return {
+              const newBuildObject = {
                 ...prev,
                 sectors: isAtLimit ? prev.sectors : [...prev.sectors, sector],
               };
+              localStorage.setItem('buildData', JSON.stringify(newBuildObject));
+              return newBuildObject;
             });
+
+            setUnfilledFields((prev) => prev.filter((field) => field !== 'sectors'));
           }}
           isMulti
         />
@@ -187,6 +195,9 @@ export default function TypeSelector({
         height: 60,
         maxWidth: 568,
         cursor: 'pointer',
+        border: unfilledFields.includes('portfolio_company_securities')
+          ? '2px solid red'
+          : '1pm solid hsl(0, 0%, 80%)',
       }),
       placeholder: (styles, data) => ({
         ...styles,
@@ -210,6 +221,9 @@ export default function TypeSelector({
             },
           };
           handleChange(newEvent);
+          setUnfilledFields((prev) =>
+            prev.filter((field) => field !== 'portfolio_company_securities'),
+          );
         }}
       />
     );
@@ -223,6 +237,9 @@ export default function TypeSelector({
         height: 60,
         maxWidth: 568,
         cursor: 'pointer',
+        border: unfilledFields.includes('deal_stage')
+          ? '2px solid red'
+          : '1pm solid hsl(0, 0%, 80%)',
       }),
       placeholder: (styles, data) => ({
         ...styles,
@@ -247,6 +264,7 @@ export default function TypeSelector({
             },
           };
           handleChange(newEvent);
+          setUnfilledFields((prev) => prev.filter((field) => field !== 'deal_stage'));
         }}
       />
     );
@@ -306,11 +324,19 @@ export default function TypeSelector({
               <TextField
                 value={buildData.portfolio_company_name}
                 name="portfolio_company_name"
-                onChange={handleChange}
+                onChange={(e) => {
+                  handleChange(e);
+                  setUnfilledFields((prev) =>
+                    prev.filter((field) => field !== 'portfolio_company_name'),
+                  );
+                }}
                 className={classes.inputBox}
                 variant="outlined"
                 placeholder="SpaceX"
                 inputProps={customInputStyles}
+                classes={{
+                  root: unfilledFields.includes('portfolio_company_name') && classes.unfilledField,
+                }}
               />
             </FormControl>
           </Grid>
@@ -371,6 +397,14 @@ export default function TypeSelector({
                 variant="outlined"
                 placeholder="e.x. crypto deal"
                 inputProps={customInputStyles}
+                onClick={() =>
+                  setUnfilledFields((prev) =>
+                    prev.filter((field) => field !== 'portfolio_deal_name'),
+                  )
+                }
+                classes={{
+                  root: unfilledFields.includes('portfolio_deal_name') && classes.unfilledField,
+                }}
               />
             </FormControl>
           </Grid>
@@ -403,6 +437,12 @@ export default function TypeSelector({
                 variant="outlined"
                 type="date"
                 inputProps={customInputStyles}
+                onClick={() =>
+                  setUnfilledFields((prev) => prev.filter((field) => field !== 'closing_date'))
+                }
+                classes={{
+                  root: unfilledFields.includes('closing_date') && classes.unfilledField,
+                }}
               />
             </FormControl>
           </Grid>
@@ -433,6 +473,12 @@ export default function TypeSelector({
                 className={classes.inputBox}
                 variant="outlined"
                 inputProps={customInputStyles}
+                onClick={() =>
+                  setUnfilledFields((prev) => prev.filter((field) => field !== 'manager_name'))
+                }
+                classes={{
+                  root: unfilledFields.includes('manager_name') && classes.unfilledField,
+                }}
               />
             </FormControl>
           </Grid>
@@ -465,6 +511,12 @@ export default function TypeSelector({
                 className={classes.inputBox}
                 variant="outlined"
                 inputProps={customInputStyles}
+                onClick={() =>
+                  setUnfilledFields((prev) => prev.filter((field) => field !== 'representative'))
+                }
+                classes={{
+                  root: unfilledFields.includes('representative') && classes.unfilledField,
+                }}
               />
             </FormControl>
           </Grid>
@@ -520,12 +572,30 @@ export default function TypeSelector({
                 </ModalTooltip>
               </Typography>
               <TextField
+                type="number"
                 value={buildData.estimated_spv_quantity}
                 name="estimated_spv_quantity"
-                onChange={handleChange}
+                onChange={(e) => {
+                  const value = convertToPositiveIntOrNull(e.target.value);
+
+                  const newEvent = {
+                    target: {
+                      name: 'estimated_spv_quantity',
+                      value,
+                    },
+                  };
+
+                  handleChange(newEvent);
+                  setUnfilledFields((prev) =>
+                    prev.filter((field) => field !== 'estimated_spv_quantity'),
+                  );
+                }}
                 className={classes.inputBox}
                 variant="outlined"
                 inputProps={customInputStyles}
+                classes={{
+                  root: unfilledFields.includes('estimated_spv_quantity') && classes.unfilledField,
+                }}
               />
             </FormControl>
           </Grid>
@@ -558,6 +628,12 @@ export default function TypeSelector({
                   className={`${classes.inputBox} ${classes.wideInputBox}`}
                   variant="outlined"
                   inputProps={customInputStyles}
+                  onClick={() =>
+                    setUnfilledFields((prev) => prev.filter((field) => field !== 'master_series'))
+                  }
+                  classes={{
+                    root: unfilledFields.includes('master_series') && classes.unfilledField,
+                  }}
                 />
               </FormControl>
             </Grid>

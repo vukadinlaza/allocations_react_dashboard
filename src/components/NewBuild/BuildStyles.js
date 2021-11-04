@@ -307,6 +307,15 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '568px',
     width: '100%',
   },
+  minimumInput: {
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    boxShadow: '0px 3px 6px #0000000A',
+    // border radius is not taking
+    borderRadius: '8px !important',
+    padding: '0',
+    maxWidth: '464px',
+    width: '100%',
+  },
   selectInputBox: {
     width: '90%',
     '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
@@ -537,6 +546,9 @@ const useStyles = makeStyles((theme) => ({
       marginRight: '20px',
       width: '30px',
     },
+  },
+  unfilledField: {
+    border: '1px solid red',
   },
   icon: {
     opacity: '1',
