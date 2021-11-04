@@ -89,7 +89,7 @@ const BuildModal = ({ onClose, isOpen }) => {
 
   return (
     <Modal open={isOpen} onClose={onClose} className={classes.modal}>
-      <Container maxWidth="sm">
+      <Container style={{ width: '650px' }}>
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
             <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#186EFF' }}>
