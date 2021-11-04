@@ -39,6 +39,7 @@ import AuthorizedApolloProvider from './apollo-client-comp';
 import './App.scss';
 import './utils/initFontAwesome';
 import { CurrentAccountProvider } from './state/current-organization';
+import FreeSPVOnboarding from './components/FreeSPVOnboarding';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -123,6 +124,8 @@ const App = () => {
                 exact
               />
               <PrivateRoute path="/investors" component={Investors} exact />
+
+              <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact />
 
               {/** catchall * */}
               <Route path={['*', '/404']} component={NotFound} />
