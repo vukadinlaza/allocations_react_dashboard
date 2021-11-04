@@ -1107,7 +1107,6 @@ const BuildDetails = ({
               onClick={() => {
                 const { isValidated, unvalidatedFields } = formValidation();
                 if (!isValidated) {
-                  console.log(`validated? ${isValidated}`, unvalidatedFields);
                   toast.error(
                     <div>
                       Please fill in the following fields:{' '}

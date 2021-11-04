@@ -42,7 +42,6 @@ const uploadTaskMap = {
 };
 
 const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId, classes }) => {
-  const [docId, setDocId] = useState(null);
   const [error, setError] = useState(false);
 
   const [addDoc, { data, loading: addDocLoading, error: addDocError }] = useMutation(ADD_DOC, {
