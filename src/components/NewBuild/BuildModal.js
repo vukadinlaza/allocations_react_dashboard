@@ -3,15 +3,18 @@ import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@materia
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
-// import { useHistory } from 'react-router';
+import { useHistory } from 'react-router';
 import spvIcon from '../../assets/spv-icon.svg';
 import fundIcon from '../../assets/fund-icon.svg';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
-    height: '81px',
-    width: '81px',
-    margin: '3px',
+    // mocks show 81px
+    height: '72px',
+    width: '72px',
+    display: 'flex',
+    justifyContent: 'center',
+    margin: '0px 0px 15px 0px',
     borderRadius: '48px',
     padding: '12px',
     backgroundColor: '#ECF3FF',
@@ -23,12 +26,13 @@ const useStyles = makeStyles((theme) => ({
   modalPaperBody: {
     display: 'flex',
     flexDirection: 'column',
-    // textAlign: 'center',
+    justifyContent: 'space-between',
     margin: '.5rem',
-    padding: '.5rem',
+    padding: '1rem',
     borderRadius: '8px',
     boxShadow: 'none !important',
     cursor: 'pointer',
+    border: 'solid #E5E5E5 1px',
     '&:hover': {
       boxShadow: '0px 5px 10px 2px rgba(225, 225, 225, .8) !important',
     },
@@ -48,22 +52,24 @@ const useStyles = makeStyles((theme) => ({
   typeBadge: {
     backgroundColor: '#ECF3FF',
     color: '#0461FF',
-    fontSize: '14px',
+    fontSize: '13px',
     lineHeight: '16.41px',
     borderRadius: '4px',
-    padding: '7px 12px',
-    marginTop: '7px',
+    padding: '5px 10px',
   },
   typeBody: {
     textAlign: 'left',
-    fontSize: '16px',
+    fontSize: '14px',
     fontWeight: '400',
+    marginTop: '16px',
   },
   typeGrid: {
+    height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'flex-start',
+    margin: '5px 0px 25px 0px',
   },
   typeGroup: {
     width: '92.5%',
@@ -71,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
   },
   typeTitle: {
-    color: '#186EFF',
+    color: '#000',
     fontSize: '18px',
     fontWeight: '500',
   },
@@ -79,8 +85,7 @@ const useStyles = makeStyles((theme) => ({
 
 const BuildModal = ({ onClose, isOpen }) => {
   const classes = useStyles();
-  // const history = useHistory();
-  const [typeSelected, setTypeSelected] = useState(null);
+  const history = useHistory();
 
   return (
     <Modal open={isOpen} onClose={onClose} className={classes.modal}>
@@ -100,7 +105,7 @@ const BuildModal = ({ onClose, isOpen }) => {
 
             <Paper
               style={{
-                backgroundColor: '#fff',
+                backgroundColor: '#FBFCFF',
                 borderRadius: '0 0 1rem 1rem',
               }}
             >
@@ -125,15 +130,7 @@ const BuildModal = ({ onClose, isOpen }) => {
                         alignItems: 'space-between',
                       }}
                     >
-                      <Paper
-                        className={classes.modalPaperBody}
-                        onClick={() => setTypeSelected('spv')}
-                        style={
-                          typeSelected === 'spv'
-                            ? { border: 'solid #0461FF 2px' }
-                            : { border: 'solid #E5E5E5 1px' }
-                        }
-                      >
+                      <Paper className={classes.modalPaperBody}>
                         <Grid
                           item
                           style={{
@@ -143,7 +140,7 @@ const BuildModal = ({ onClose, isOpen }) => {
                           }}
                         >
                           <div className={classes.icon}>
-                            <img alt="spv-icon" src={spvIcon} height="81px" />
+                            <img alt="spv-icon" src={spvIcon} />
                           </div>
                           <Typography className={classes.typeTitle}>SPV</Typography>
                         </Grid>
@@ -156,17 +153,24 @@ const BuildModal = ({ onClose, isOpen }) => {
                             invest in a single asset
                           </Typography>
                         </Grid>
+                        <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            type="submit"
+                            style={{ width: '70%', borderRadius: '8px' }}
+                            onClick={() => {
+                              history.push(`/new-build-spv`);
+                              onClose();
+                            }}
+                          >
+                            Continue
+                          </Button>
+                        </Grid>
                       </Paper>
 
-                      <Paper
-                        className={classes.modalPaperBody}
-                        onClick={() => setTypeSelected('fund')}
-                        style={
-                          typeSelected === 'fund'
-                            ? { border: 'solid #0461FF 2px' }
-                            : { border: 'solid #E5E5E5 1px' }
-                        }
-                      >
+                      <Paper className={classes.modalPaperBody}>
                         <Grid
                           item
                           style={{
@@ -175,37 +179,38 @@ const BuildModal = ({ onClose, isOpen }) => {
                             margin: '10px 10px 10px 5px',
                           }}
                         >
-                          <img alt="fund-icon" className={classes.icon} src={fundIcon} />
+                          <div className={classes.icon}>
+                            <img alt="fund-icon" src={fundIcon} />
+                          </div>
                           <Typography className={classes.typeTitle}>Fund</Typography>
                         </Grid>
                         <Grid item className={classes.typeGrid}>
+                          <Typography className={classes.typeBadge}>
+                            From <span style={{ fontWeight: '700' }}>$15k</span>, paid by investors
+                          </Typography>
                           <Typography className={classes.typeBody}>
                             A Fund is a structure used to raise money to invest in multiple assets
                             over a period of time
                           </Typography>
-                          <Typography className={classes.typeBadge}>
-                            From <span style={{ fontWeight: '700' }}>$15k</span>, paid by investors
-                          </Typography>
+                        </Grid>
+                        <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            type="submit"
+                            style={{ width: '70%', borderRadius: '8px' }}
+                            onClick={() => {
+                              history.push(`/new-build-fund`);
+                              onClose();
+                            }}
+                          >
+                            Continue
+                          </Button>
                         </Grid>
                       </Paper>
                     </Box>
                   </Grid>
-                  {/* <Grid container justifyContent="center">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="large"
-                      type="submit"
-                      disabled={!typeSelected}
-                      style={{ width: '90%', borderRadius: '8px' }}
-                      onClick={() => {
-                        history.push(`/new-build-${typeSelected}`);
-                        onClose();
-                      }}
-                    >
-                      Next
-                    </Button>
-                  </Grid> */}
                 </FormControl>
               </Grid>
             </Paper>
