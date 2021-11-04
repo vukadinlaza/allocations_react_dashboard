@@ -153,7 +153,7 @@ const BuildDetails = ({
     custom_investment_agreement: 'false',
     custom_management_fee: 'false',
     deal_stage: '',
-    estimated_spv_quantity: '',
+    estimated_spv_quantity: null,
     international_company_status: 'false',
     international_company_country: '',
     international_investors_status: 'false',
@@ -167,7 +167,7 @@ const BuildDetails = ({
     management_fee_type: 'percent',
     management_fee_value: '2',
     master_series: '',
-    minimum_investment: '10,000',
+    minimum_investment: 10000,
     offering_type: '506b',
     portfolio_company_name: '',
     portfolio_company_securities: '',
@@ -342,7 +342,8 @@ const BuildDetails = ({
     setBuildData((prev) => {
       const newBuildObject = {
         ...prev,
-        master_series: isNotMasterSeries ? '' : prev.master_series,
+        // IS NULL CORRECT?
+        master_series: isNotMasterSeries ? null : prev.master_series,
         investment_advisor: isAllocationsTheAdvisor ? '' : prev.investment_advisor,
         custom_management_fee: isNotCustomManagementFee ? 'false' : prev.custom_management_fee,
         custom_carry_fee: isNotCustomCarryFee ? 'false' : prev.custom_carry_fee,
@@ -487,6 +488,14 @@ const BuildDetails = ({
       />
     );
   }
+
+  // const convertToPositiveInteger = (num) => {
+  //   console.log('Inside:', num);
+  //   if (isNaN(parseFloat(num))) {
+  //     return 0;
+  //   }
+  //   return parseInt(num < 0 ? 0 : num);
+  // };
 
   return (
     <>
@@ -759,13 +768,22 @@ const BuildDetails = ({
                   </ModalTooltip>
                 </Typography>
                 <TextField
+                  type="number"
                   value={buildData.minimum_investment}
                   name="minimum_investment"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    // const convertedNum = convertToPositiveInteger(e.target.value);
+                    handleChange(e);
+                    setUnfilledFields((prev) =>
+                      prev.filter((field) => field !== 'minimum_investment'),
+                    );
+                  }}
                   className={classes.inputBox}
                   variant="outlined"
-                  inputProps={customInputStyles}
-                  classes={{ root: classes.selectInputBox }}
+                  InputProps={{ inputProps: { min: 0 } }}
+                  classes={{
+                    root: unfilledFields.includes('minimum_investment') && classes.unfilledField,
+                  }}
                 />
               </FormControl>
             </Grid>

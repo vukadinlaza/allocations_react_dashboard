@@ -30,6 +30,10 @@ export default function TypeSelector({
   const classes = useStyles();
   const customInputStyles = { style: { height: '23px' } };
 
+  // const convertToPositiveInteger = (num) => {
+  //   return parseInt(num < 0 ? 0 : num);
+  // };
+
   const row1Items = [
     {
       title: 'Startup',
@@ -571,17 +575,24 @@ export default function TypeSelector({
                 </ModalTooltip>
               </Typography>
               <TextField
+                type="number"
                 value={buildData.estimated_spv_quantity}
                 name="estimated_spv_quantity"
-                onChange={handleChange}
-                className={classes.inputBox}
-                variant="outlined"
-                inputProps={customInputStyles}
-                onClick={() =>
+                onChange={(e) => {
+                  handleChange(e);
                   setUnfilledFields((prev) =>
                     prev.filter((field) => field !== 'estimated_spv_quantity'),
-                  )
-                }
+                  );
+                }}
+                className={classes.inputBox}
+                variant="outlined"
+                InputProps={{ inputProps: { min: 0 }, customInputStyles }}
+                // onClick={() =>
+                //   setUnfilledFields((prev) =>
+                //     prev.filter((field) => field !== 'estimated_spv_quantity'),
+                //   )
+                // }
+                // height: '23px'
                 classes={{
                   root: unfilledFields.includes('estimated_spv_quantity') && classes.unfilledField,
                 }}
