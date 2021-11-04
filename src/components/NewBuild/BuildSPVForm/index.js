@@ -231,11 +231,17 @@ const BuildDetails = ({
       fieldsToFill.push('master_series');
       unvalidatedFields.push('Master Series Name');
     }
-    if (!buildData.custom_management_fee && buildData.management_fee_value === 'Custom') {
+    if (
+      (!buildData.custom_management_fee || buildData.custom_management_fee === 'false') &&
+      buildData.management_fee_value === 'Custom'
+    ) {
       fieldsToFill.push('custom_management_fee');
       unvalidatedFields.push('Custom Management Fee');
     }
-    if (!buildData.custom_carry_fee && buildData.carry_fee_value === 'Custom') {
+    if (
+      (!buildData.custom_carry_fee || buildData.custom_carry_fee === 'false') &&
+      buildData.carry_fee_value === 'Custom'
+    ) {
       fieldsToFill.push('custom_carry_fee');
       unvalidatedFields.push('Custom Carry Fee');
     }
@@ -585,11 +591,20 @@ const BuildDetails = ({
                     }
                     placeholder="Custom Management Fee"
                     name="custom_management_fee"
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setUnfilledFields((prev) =>
+                        prev.filter((field) => field !== 'custom_management_fee'),
+                      );
+                    }}
                     className={classes.inputBox}
                     variant="outlined"
                     inputProps={customInputStyles}
-                    classes={{ root: classes.selectInputBox }}
+                    classes={{
+                      root: `${
+                        unfilledFields.includes('custom_management_fee') && classes.unfilledField
+                      } ${classes.selectInputBox}`,
+                    }}
                   />
                 </FormControl>
               )}
@@ -695,11 +710,20 @@ const BuildDetails = ({
                     value={buildData.custom_carry_fee === 'false' ? '' : buildData.custom_carry_fee}
                     placeholder="Custom Carry Fee"
                     name="custom_carry_fee"
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setUnfilledFields((prev) =>
+                        prev.filter((field) => field !== 'custom_carry_fee'),
+                      );
+                    }}
                     className={classes.inputBox}
                     variant="outlined"
                     inputProps={customInputStyles}
-                    classes={{ root: classes.selectInputBox }}
+                    classes={{
+                      root: `${
+                        unfilledFields.includes('custom_carry_fee') && classes.unfilledField
+                      } ${classes.selectInputBox}`,
+                    }}
                   />
                 </FormControl>
               )}
@@ -783,7 +807,9 @@ const BuildDetails = ({
                   variant="outlined"
                   inputProps={{ style: { height: '23px' } }}
                   classes={{
-                    root: unfilledFields.includes('minimum_investment') && classes.unfilledField,
+                    root: `${
+                      unfilledFields.includes('minimum_investment') && classes.unfilledField
+                    } ${classes.selectInputBox}`,
                   }}
                 />
               </FormControl>
