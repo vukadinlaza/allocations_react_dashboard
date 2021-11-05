@@ -145,7 +145,7 @@ const BuildDetails = ({
   const classes = useStyles();
 
   const [buildData, setBuildData] = useState({
-    allocations_investment_advisor: 'true',
+    allocations_reporting_adviser: 'true',
     asset_type: 'startup',
     carry_fee_type: 'percent',
     carry_fee_value: '20',
@@ -159,7 +159,7 @@ const BuildDetails = ({
     international_company_country: '',
     international_investors_status: 'false',
     international_investors_countries: [],
-    investment_advisor: '',
+    custom_reporting_adviser: '',
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
@@ -245,8 +245,11 @@ const BuildDetails = ({
       fieldsToFill.push('custom_carry_fee');
       unvalidatedFields.push('Custom Carry Fee');
     }
-    if (!buildData.investment_advisor && buildData.allocations_investment_advisor === 'false') {
-      fieldsToFill.push('investment_advisor');
+    if (
+      !buildData.custom_reporting_adviser &&
+      buildData.allocations_reporting_adviser === 'false'
+    ) {
+      fieldsToFill.push('custom_reporting_adviser');
       unvalidatedFields.push('Advisor Name');
     }
     if (
@@ -292,7 +295,7 @@ const BuildDetails = ({
         deal_id,
         payload: {
           organization_id: organization._id,
-          allocations_investment_advisor: buildData.allocations_investment_advisor,
+          allocations_reporting_adviser: buildData.allocations_reporting_adviser,
           asset_type: buildData.asset_type,
           carry_fee: {
             type: buildData.carry_fee_type,
@@ -311,7 +314,7 @@ const BuildDetails = ({
             status: buildData.international_investors_status,
             countries: buildData.international_investors_countries,
           },
-          investment_advisor: buildData.investment_advisor,
+          custom_reporting_adviser: buildData.custom_reporting_adviser,
           management_fee: {
             type: buildData.management_fee_type,
             value: buildData.management_fee_value,
@@ -340,8 +343,7 @@ const BuildDetails = ({
     const isNotInternationalInvestors =
       target.name === 'international_investors_status' && (target.value === 'false' || 'unknown');
     const isNotMasterSeries = target.name === 'estimated_spv_quantity' && target.value < 5;
-    const isAllocationsTheAdvisor =
-      target.name === 'allocations_investment_advisor' && target.value;
+    const isAllocationsTheAdvisor = target.name === 'allocations_reporting_adviser' && target.value;
     const isNotCustomManagementFee =
       target.name === 'management_fee_value' && target.value !== 'Custom';
     const isNotCustomCarryFee = target.name === 'carry_fee_value' && target.value !== 'Custom';
@@ -351,7 +353,7 @@ const BuildDetails = ({
         ...prev,
         // IS NULL CORRECT?
         master_series: isNotMasterSeries ? null : prev.master_series,
-        investment_advisor: isAllocationsTheAdvisor ? '' : prev.investment_advisor,
+        custom_reporting_adviser: isAllocationsTheAdvisor ? '' : prev.custom_reporting_adviser,
         custom_management_fee: isNotCustomManagementFee ? 'false' : prev.custom_management_fee,
         custom_carry_fee: isNotCustomCarryFee ? 'false' : prev.custom_carry_fee,
         international_company_country: isNotInternational ? '' : prev.international_company_country,
@@ -847,16 +849,16 @@ const BuildDetails = ({
                   </ModalTooltip>
                 </Typography>
                 <ButtonSelector
-                  name="allocations_investment_advisor"
+                  name="allocations_reporting_adviser"
                   onChange={handleChange}
-                  currentValue={buildData.allocations_investment_advisor}
+                  currentValue={buildData.allocations_reporting_adviser}
                   values={[
                     { label: 'Yes (Recommended)', value: 'true' },
                     { label: 'No', value: 'false' },
                   ]}
                 />
               </FormControl>
-              {buildData.allocations_investment_advisor === 'false' && (
+              {buildData.allocations_reporting_adviser === 'false' && (
                 <FormControl
                   required
                   disabled
@@ -873,18 +875,18 @@ const BuildDetails = ({
                         <Typography color="inherit">Please indicate your ERA/RIA name</Typography>
                       }
                       openTooltip={openTooltip}
-                      id="investment_advisor"
+                      id="custom_reporting_adviser"
                     >
                       <HelpIcon
                         className={classes.helpIcon}
-                        onClick={(e) => handleTooltip('investment_advisor')}
+                        onClick={(e) => handleTooltip('custom_reporting_adviser')}
                       />
                     </ModalTooltip>
                   </Typography>
                   <TextField
-                    value={buildData.investment_advisor}
+                    value={buildData.custom_reporting_adviser}
                     placeholder="Adviser Name"
-                    name="investment_advisor"
+                    name="custom_reporting_adviser"
                     onChange={handleChange}
                     className={classes.inputBox}
                     variant="outlined"
