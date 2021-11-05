@@ -35,8 +35,8 @@ export default function SignDocsForm({ page, setPage, deal }) {
   });
 
   useEffect(() => {
-    if (!data?.serviceAgreementLink) refetch({ variables: { deal_id: deal?._id } });
-  }, [deal?._id, loading, error]);
+    if (!data?.serviceAgreementLink) refetch({ deal_id: deal?._id });
+  }, [deal?.manager, loading, error]);
 
   const classes = useStyles();
 

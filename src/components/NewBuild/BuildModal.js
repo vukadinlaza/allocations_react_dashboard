@@ -9,10 +9,14 @@ import fundIcon from '../../assets/fund-icon.svg';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
-    margin: '3px',
+    height: '72px',
+    width: '72px',
+    display: 'flex',
+    justifyContent: 'center',
+    margin: '0px 0px 15px 0px',
     borderRadius: '48px',
     padding: '12px',
-    boxShadow: '0px 5px 10px 2px rgba(225, 225, 225, .8)',
+    backgroundColor: '#ECF3FF',
   },
   modal: {
     display: 'flex',
@@ -20,13 +24,15 @@ const useStyles = makeStyles((theme) => ({
   },
   modalPaperBody: {
     display: 'flex',
-    flexDirection: 'row',
-    textAlign: 'center',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    width: '100%',
     margin: '.5rem',
-    padding: '.5rem',
+    padding: '1rem',
     borderRadius: '8px',
     boxShadow: 'none !important',
     cursor: 'pointer',
+    border: 'solid #E5E5E5 1px',
     '&:hover': {
       boxShadow: '0px 5px 10px 2px rgba(225, 225, 225, .8) !important',
     },
@@ -46,22 +52,24 @@ const useStyles = makeStyles((theme) => ({
   typeBadge: {
     backgroundColor: '#ECF3FF',
     color: '#0461FF',
-    fontSize: '14px',
+    fontSize: '13px',
     lineHeight: '16.41px',
-    borderRadius: '44px',
-    padding: '7px 12px',
-    marginTop: '7px',
+    borderRadius: '4px',
+    padding: '5px 10px',
   },
   typeBody: {
     textAlign: 'left',
-    fontSize: '16px',
+    fontSize: '14px',
     fontWeight: '400',
+    marginTop: '16px',
   },
   typeGrid: {
+    height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'flex-start',
+    margin: '5px 0px 25px 0px',
   },
   typeGroup: {
     width: '92.5%',
@@ -69,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
   },
   typeTitle: {
-    color: '#186EFF',
+    color: '#000',
     fontSize: '18px',
     fontWeight: '500',
   },
@@ -78,27 +86,26 @@ const useStyles = makeStyles((theme) => ({
 const BuildModal = ({ onClose, isOpen }) => {
   const classes = useStyles();
   const history = useHistory();
-  const [typeSelected, setTypeSelected] = useState(null);
 
   return (
     <Modal open={isOpen} onClose={onClose} className={classes.modal}>
-      <Container maxWidth="sm">
+      <Container style={{ width: '650px' }}>
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
-            <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#fff' }}>
+            <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#186EFF' }}>
               <Grid container justifyContent="space-between">
-                <Typography variant="h6" style={{ color: '#000' }}>
+                <Typography variant="h6" style={{ color: '#fff' }}>
                   Add New
                 </Typography>
                 <Box onClick={onClose} style={{ cursor: 'pointer' }}>
-                  <CloseIcon htmlColor="#000" />
+                  <CloseIcon htmlColor="#fff" />
                 </Box>
               </Grid>
             </Paper>
 
             <Paper
               style={{
-                backgroundColor: '#fff',
+                backgroundColor: '#FBFCFF',
                 borderRadius: '0 0 1rem 1rem',
               }}
             >
@@ -108,7 +115,7 @@ const BuildModal = ({ onClose, isOpen }) => {
                   style={{
                     width: '100%',
                     display: 'flex',
-                    flexDirection: 'column',
+                    flexDirection: 'row',
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}
@@ -117,20 +124,12 @@ const BuildModal = ({ onClose, isOpen }) => {
                     <Box
                       style={{
                         display: 'flex',
-                        flexDirection: 'column',
+                        flexDirection: 'row',
                         justifyContent: 'space-between',
                         alignItems: 'space-between',
                       }}
                     >
-                      <Paper
-                        className={classes.modalPaperBody}
-                        onClick={() => setTypeSelected('spv')}
-                        style={
-                          typeSelected === 'spv'
-                            ? { border: 'solid #0461FF 2px' }
-                            : { border: 'solid #E5E5E5 1px' }
-                        }
-                      >
+                      <Paper className={classes.modalPaperBody}>
                         <Grid
                           item
                           style={{
@@ -145,25 +144,36 @@ const BuildModal = ({ onClose, isOpen }) => {
                           <Typography className={classes.typeTitle}>SPV</Typography>
                         </Grid>
                         <Grid item className={classes.typeGrid}>
+                          <Typography className={classes.typeBadge}>
+                            From <span style={{ fontWeight: '700' }}>$8k</span>, paid by investors
+                          </Typography>
                           <Typography className={classes.typeBody}>
                             A Special Purpose Vehicle (SPV) is a structure used to raise money to
                             invest in a single asset
                           </Typography>
-                          <Typography className={classes.typeBadge}>
-                            From <span style={{ fontWeight: '700' }}>$8k</span>, paid by investors
-                          </Typography>
+                        </Grid>
+                        <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            type="submit"
+                            style={{
+                              width: '70%',
+                              borderRadius: '8px',
+                              backgroundColor: '#186EFF',
+                            }}
+                            onClick={() => {
+                              history.push(`/new-build-spv`);
+                              onClose();
+                            }}
+                          >
+                            Continue
+                          </Button>
                         </Grid>
                       </Paper>
 
-                      <Paper
-                        className={classes.modalPaperBody}
-                        onClick={() => setTypeSelected('fund')}
-                        style={
-                          typeSelected === 'fund'
-                            ? { border: 'solid #0461FF 2px' }
-                            : { border: 'solid #E5E5E5 1px' }
-                        }
-                      >
+                      <Paper className={classes.modalPaperBody}>
                         <Grid
                           item
                           style={{
@@ -172,36 +182,41 @@ const BuildModal = ({ onClose, isOpen }) => {
                             margin: '10px 10px 10px 5px',
                           }}
                         >
-                          <img alt="fund-icon" className={classes.icon} src={fundIcon} />
+                          <div className={classes.icon}>
+                            <img alt="fund-icon" src={fundIcon} />
+                          </div>
                           <Typography className={classes.typeTitle}>Fund</Typography>
                         </Grid>
                         <Grid item className={classes.typeGrid}>
+                          <Typography className={classes.typeBadge}>
+                            From <span style={{ fontWeight: '700' }}>$15k</span>, paid by investors
+                          </Typography>
                           <Typography className={classes.typeBody}>
                             A Fund is a structure used to raise money to invest in multiple assets
                             over a period of time
                           </Typography>
-                          <Typography className={classes.typeBadge}>
-                            From <span style={{ fontWeight: '700' }}>$15k</span>, paid by investors
-                          </Typography>
+                        </Grid>
+                        <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            type="submit"
+                            style={{
+                              width: '70%',
+                              borderRadius: '8px',
+                              backgroundColor: '#186EFF',
+                            }}
+                            onClick={() => {
+                              history.push(`/new-build-fund`);
+                              onClose();
+                            }}
+                          >
+                            Continue
+                          </Button>
                         </Grid>
                       </Paper>
                     </Box>
-                  </Grid>
-                  <Grid container justifyContent="center">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="large"
-                      type="submit"
-                      disabled={!typeSelected}
-                      style={{ width: '90%', borderRadius: '8px' }}
-                      onClick={() => {
-                        history.push(`/new-build-${typeSelected}`);
-                        onClose();
-                      }}
-                    >
-                      Next
-                    </Button>
                   </Grid>
                 </FormControl>
               </Grid>
