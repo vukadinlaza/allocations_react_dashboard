@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, CircularProgress, Paper } from '@material-ui/core';
-import { gql, useQuery } from '@apollo/client';
+import { gql, useLazyQuery, useQuery } from '@apollo/client';
 import Typography from '@material-ui/core/Typography';
 import bluePenIcon from '../../../../../assets/sign-agreement-blue-pen.svg';
 import useStyles from '../../../BuildStyles';
@@ -17,7 +17,7 @@ const SERVICE_AGREEMENT_LINK = gql`
   }
 `;
 
-export default function SignDocsForm({ page, setPage, deal }) {
+export default function SignDocsForm({ page, setPage, deal, updatedDeal, dealLoading }) {
   const history = useHistory();
   const [signed, setSigned] = useState(false);
 
@@ -30,15 +30,20 @@ export default function SignDocsForm({ page, setPage, deal }) {
     });
   };
 
-  const { data, loading, error, refetch } = useQuery(SERVICE_AGREEMENT_LINK, {
-    variables: { deal_id: deal?._id },
-  });
+  const [getServiceAgreementLink, { data, loading: agreementLinkLoading, error }] = useLazyQuery(
+    SERVICE_AGREEMENT_LINK,
+    {
+      variables: { deal_id: deal?._id },
+      fetchPolicy: 'network-only',
+    },
+  );
 
   useEffect(() => {
-    if (!data?.serviceAgreementLink) refetch({ deal_id: deal?._id });
-  }, [deal?.manager, loading, error]);
+    if (!dealLoading) getServiceAgreementLink();
+  }, [dealLoading, error]);
 
   const classes = useStyles();
+  const loading = agreementLinkLoading || dealLoading;
 
   return (
     <>
@@ -54,11 +59,13 @@ export default function SignDocsForm({ page, setPage, deal }) {
         </div>
         <Paper
           className={signed ? classes.agreementSignedBox : classes.agreementUnsignedBox}
-          style={{ cursor: data && !error && 'pointer' }}
-          onClick={() => (data && !error ? signingModal(data.serviceAgreementLink) : null)}
+          style={{ cursor: data && !error && !loading && 'pointer' }}
+          onClick={() =>
+            data && !error && !loading ? signingModal(data.serviceAgreementLink) : null
+          }
         >
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            {!data ? (
+            {!data || loading || error ? (
               <CircularProgress />
             ) : (
               <div className={classes.serviceAgreementIconBox}>
@@ -93,14 +100,16 @@ export default function SignDocsForm({ page, setPage, deal }) {
           >
             Complete
           </Button>
-          <Typography
-            className={classes.previousButton}
-            onClick={() => {
-              setPage(page - 1);
-            }}
-          >
-            Previous
-          </Typography>
+          {!signed && (
+            <Typography
+              className={classes.previousButton}
+              onClick={() => {
+                setPage(page - 1);
+              }}
+            >
+              Previous
+            </Typography>
+          )}
         </div>
       </Paper>
     </>
