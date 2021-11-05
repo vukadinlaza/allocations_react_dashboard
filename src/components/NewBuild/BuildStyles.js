@@ -63,6 +63,9 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: '30px',
     border: '2px dashed #0461FF !important',
     borderRadius: '20px',
+    '&:hover': {
+      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+    },
   },
   agreementSignedBox: {
     display: 'flex',
@@ -72,7 +75,9 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: '30px',
     paddingRight: '30px',
     border: 'none !important',
+    borderRadius: '20px',
     boxShadow: 'none !important',
+    backgroundColor: '#F6F7F8',
   },
   signed: {
     backgroundColor: 'rgb(57,197,34, 0.23)',
@@ -87,6 +92,15 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '600',
     borderRadius: '20px',
     padding: '5px 20px',
+  },
+  serviceAgreementIconBox: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '60px',
+    height: '60px',
+    borderRadius: '50%',
+    backgroundColor: '#ECF3FF',
   },
   docUploadBox: {
     display: 'flex',
