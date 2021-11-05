@@ -36,7 +36,7 @@ export default function NewSpvForm() {
     management_fee_frequency: '',
     setup_cost: 20000,
     offering_type: '',
-    allocations_investment_advisor: '',
+    allocations_reporting_adviser: '',
     custom_investment_agreement: '',
     side_letters: '',
     closing_date: moment(Date.now()).format('YYYY-MM-DD'),
@@ -309,10 +309,10 @@ export default function NewSpvForm() {
                     <Grid container className={classes.buttonContainer}>
                       <Grid>
                         <Button
-                          name="allocations_investment_advisor"
-                          value={buildData.allocations_investment_advisor}
+                          name="allocations_reporting_adviser"
+                          value={buildData.allocations_reporting_adviser}
                           className={
-                            buildData.allocations_investment_advisor
+                            buildData.allocations_reporting_adviser
                               ? `${classes.selectedInputButton} ${classes.selected}`
                               : classes.inputButton
                           }
@@ -330,11 +330,11 @@ export default function NewSpvForm() {
                       </Grid>
                       <Grid>
                         <Button
-                          value={!buildData.allocations_investment_advisor}
-                          name="allocations_investment_advisor"
+                          value={!buildData.allocations_reporting_adviser}
+                          name="allocations_reporting_adviser"
                           className={
-                            !buildData.allocations_investment_advisor &&
-                            buildData.allocations_investment_advisor !== ''
+                            !buildData.allocations_reporting_adviser &&
+                            buildData.allocations_reporting_adviser !== ''
                               ? `${classes.selectedInputButton} ${classes.selected}`
                               : classes.inputButton
                           }
