@@ -252,7 +252,7 @@ export default function InvestorEditForm({
 
 export function PassportUploader({ investor, setInvestor }) {
   const classes = useStyles();
-  if (investor.passport) {
+  if (investor?.passport) {
     return (
       <Paper>
         <div className={classes.fileUploader}>

@@ -66,7 +66,10 @@ const TermsPanel = ({ deal }) => {
         {minimumInvestment && (
           <li>
             <p>Minimum Investment:</p>
-            <h3>${nWithCommas(minimumInvestment)}</h3>
+            <h3>
+              {deal.dealParams?.customCurrency ? deal.dealParams.customCurrency : '$'}
+              {nWithCommas(minimumInvestment)}
+            </h3>
           </li>
         )}
       </ul>
