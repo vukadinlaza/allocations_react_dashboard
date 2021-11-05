@@ -63,6 +63,9 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: '30px',
     border: '2px dashed #0461FF !important',
     borderRadius: '20px',
+    '&:hover': {
+      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+    },
   },
   agreementSignedBox: {
     display: 'flex',

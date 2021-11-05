@@ -17,7 +17,7 @@ const SERVICE_AGREEMENT_LINK = gql`
   }
 `;
 
-export default function SignDocsForm({ page, setPage, deal, updatedDeal, dealLoading }) {
+export default function SignDocsForm({ page, setPage, deal, updatedDeal, updatedDealLoading }) {
   const history = useHistory();
   const [signed, setSigned] = useState(false);
 
@@ -26,7 +26,12 @@ export default function SignDocsForm({ page, setPage, deal, updatedDeal, dealLoa
     DocSpring.createVisualForm({
       ...serviceAgreementLink,
       domainVerification: false,
-      onSubmit: () => setSigned(true),
+      onSubmit: () => {
+        localStorage.removeItem('buildData');
+        localStorage.removeItem('buildDeal');
+        localStorage.removeItem('buildFilesUploaded');
+        setSigned(true);
+      },
     });
   };
 
@@ -39,11 +44,12 @@ export default function SignDocsForm({ page, setPage, deal, updatedDeal, dealLoa
   );
 
   useEffect(() => {
-    if (!dealLoading) getServiceAgreementLink();
-  }, [dealLoading, error]);
+    if (updatedDeal) getServiceAgreementLink();
+  }, [updatedDeal, error]);
 
   const classes = useStyles();
-  const loading = agreementLinkLoading || dealLoading;
+  const loading = agreementLinkLoading || updatedDealLoading;
+  const readyToSign = data && !error && !loading;
 
   return (
     <>
@@ -59,10 +65,8 @@ export default function SignDocsForm({ page, setPage, deal, updatedDeal, dealLoa
         </div>
         <Paper
           className={signed ? classes.agreementSignedBox : classes.agreementUnsignedBox}
-          style={{ cursor: data && !error && !loading && 'pointer' }}
-          onClick={() =>
-            data && !error && !loading ? signingModal(data.serviceAgreementLink) : null
-          }
+          style={{ cursor: readyToSign && 'pointer', pointerEvents: !readyToSign && 'none' }}
+          onClick={() => (readyToSign ? signingModal(data.serviceAgreementLink) : null)}
         >
           <div style={{ display: 'flex', alignItems: 'center' }}>
             {!data || loading || error ? (
@@ -91,10 +95,7 @@ export default function SignDocsForm({ page, setPage, deal, updatedDeal, dealLoa
                 return;
               }
               toast.success('Success! Your submission was submitted.');
-              localStorage.removeItem('buildData');
-              localStorage.removeItem('buildDeal');
-              localStorage.removeItem('buildFilesUploaded');
-              if (deal?._id) history.push(`/deal-setup?id=${deal._id}`);
+              history.push(`/deal-setup?id=${deal._id}`);
             }}
             className={classes.continueButton}
           >

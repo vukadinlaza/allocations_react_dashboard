@@ -1151,7 +1151,8 @@ function FinishComponent({ history, deal, classes }) {
 export default function NewSpvForm() {
   const { userProfile, loading: authLoading } = useAuth();
   const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
-  const [setBuildInfo, { data: updatedDeal, loading: dealLoading }] = useMutation(SET_BUILD_INFO);
+  const [setBuildInfo, { data: updatedDeal, loading: updatedDealLoading }] =
+    useMutation(SET_BUILD_INFO);
   // Page
   const [page, setPage] = useState(0);
 
@@ -1196,7 +1197,7 @@ export default function NewSpvForm() {
           page={page}
           setPage={setPage}
           updatedDeal={updatedDeal}
-          dealLoading={dealLoading}
+          updatedDealLoading={updatedDealLoading}
         />
       ),
     },
