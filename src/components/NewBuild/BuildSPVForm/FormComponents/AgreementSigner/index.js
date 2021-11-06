@@ -16,6 +16,16 @@ const SERVICE_AGREEMENT_LINK = gql`
     }
   }
 `;
+const GET_DOCUMENT = gql`
+  query getDealDocService($task_id: String) {
+    getDealDocService(task_id: $task_id) {
+      _id
+      title
+      link
+      createdAt
+    }
+  }
+`;
 
 export default function SignDocsForm({ page, setPage, deal, updatedDeal, updatedDealLoading }) {
   const history = useHistory();
@@ -43,12 +53,22 @@ export default function SignDocsForm({ page, setPage, deal, updatedDeal, updated
     },
   );
 
+  const phase = updatedDeal?.setBuildInfo?.phases.find((phase) => phase.name === 'build');
+  const task = phase?.tasks?.find((task) => task.title === 'Sign Service Agreement');
+
+  const [getSignedServiceAgreement, { data: serviceAgreementDocUrl, loading: signedDocLoading }] =
+    useLazyQuery(GET_DOCUMENT, { variables: { task_id: task?._id }, fetchPolicy: 'network-only' });
+
   useEffect(() => {
     if (updatedDeal) getServiceAgreementLink();
   }, [updatedDeal, error]);
 
+  useEffect(() => {
+    if (signed) getSignedServiceAgreement();
+  }, [signed]);
+
   const classes = useStyles();
-  const loading = agreementLinkLoading || updatedDealLoading;
+  const loading = updatedDealLoading || agreementLinkLoading || signedDocLoading;
   const readyToSign = data && !error && !loading;
 
   return (
@@ -66,7 +86,7 @@ export default function SignDocsForm({ page, setPage, deal, updatedDeal, updated
         <Paper
           className={signed ? classes.agreementSignedBox : classes.agreementUnsignedBox}
           style={{ cursor: readyToSign && 'pointer', pointerEvents: !readyToSign && 'none' }}
-          onClick={() => (readyToSign ? signingModal(data.serviceAgreementLink) : null)}
+          onClick={() => (readyToSign ? !signed && signingModal(data.serviceAgreementLink) : null)}
         >
           <div style={{ display: 'flex', alignItems: 'center' }}>
             {!data || loading || error ? (
@@ -78,7 +98,17 @@ export default function SignDocsForm({ page, setPage, deal, updatedDeal, updated
             )}
 
             <Typography className={classes.itemText} style={{ width: '200px' }}>
-              Service Agreement
+              {!updatedDeal ? (
+                'Building your deal...'
+              ) : agreementLinkLoading ? (
+                'Almost done...'
+              ) : serviceAgreementDocUrl?.getDealDocService?.link ? (
+                <a href={serviceAgreementDocUrl?.getDealDocService?.link} target="_blank">
+                  Service Agreement
+                </a>
+              ) : (
+                'Service Agreement'
+              )}
             </Typography>
           </div>
 
