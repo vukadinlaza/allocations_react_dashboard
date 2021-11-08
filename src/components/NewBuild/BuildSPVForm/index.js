@@ -153,13 +153,13 @@ const BuildDetails = ({
     custom_carry_fee: false,
     custom_investment_agreement: false,
     custom_management_fee: false,
+    custom_reporting_adviser: '',
     deal_stage: '',
     estimated_spv_quantity: null,
     international_company_status: 'false',
     international_company_country: '',
     international_investors_status: 'false',
     international_investors_countries: [],
-    custom_reporting_adviser: '',
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
