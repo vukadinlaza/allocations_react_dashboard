@@ -365,7 +365,6 @@ const BuildDetails = ({
           : prev.international_investors_countries,
         [target.name]: target.value,
       };
-      console.log('New Object:', newBuildObject);
       localStorage.setItem('buildData', JSON.stringify(newBuildObject));
       return newBuildObject;
     });
