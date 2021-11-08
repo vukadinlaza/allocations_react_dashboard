@@ -87,6 +87,7 @@ const fields = [
     displayName: 'Tax ID Type',
     prop: 'taxIDType',
     type: 'text',
+    default: 'Legal Entity',
   },
   {
     displayName: 'Tax ID Number',
@@ -103,6 +104,7 @@ const fields = [
 const Banking = ({
   classes,
   deal_id,
+  company_name,
   deal_NDvirtualAccountNum,
   handleTooltip,
   openTooltip,
@@ -115,6 +117,7 @@ const Banking = ({
   const [accountInformation, setAccountInformation] = useState({
     ...defaultData,
     contactID: deal_id,
+    contactName: company_name,
   });
 
   const { data, loading } = useQuery(REFERENCE_NUMBERS_BY_DEAL_ID, {
@@ -190,7 +193,7 @@ const Input = ({ field, accountInformation, handleChange }) => {
       </Typography>
       <TextField
         style={{ width: '100%' }}
-        type="text"
+        type={field.type}
         size="sm"
         defaultValue={field.default}
         value={get(accountInformation, field.prop, field.default || '')}
