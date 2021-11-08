@@ -145,15 +145,14 @@ const BuildDetails = ({
   const classes = useStyles();
 
   const [buildData, setBuildData] = useState({
-    allocations_reporting_adviser: true,
+    allocations_reporting_adviser: 'true',
     asset_type: 'startup',
     carry_fee_type: 'percent',
     carry_fee_value: '20',
     closing_date: moment(Date.now()).add(7, 'days').format('YYYY-MM-DD'),
-    custom_carry_fee: false,
-    custom_investment_agreement: false,
-    custom_management_fee: false,
-    custom_reporting_adviser: '',
+    custom_carry_fee: 'false',
+    custom_investment_agreement: 'false',
+    custom_management_fee: 'false',
     deal_stage: '',
     estimated_spv_quantity: null,
     high_volume_partner: null,
@@ -161,6 +160,7 @@ const BuildDetails = ({
     international_company_country: '',
     international_investors_status: 'false',
     international_investors_countries: [],
+    custom_reporting_adviser: '',
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
@@ -176,7 +176,7 @@ const BuildDetails = ({
     portfolio_deal_name: '',
     representative: '',
     setup_cost: 20000,
-    side_letters: false,
+    side_letters: 'false',
     sectors: [],
   });
 
@@ -233,20 +233,23 @@ const BuildDetails = ({
       unvalidatedFields.push('Master Series Name');
     }
     if (
-      (!buildData.custom_management_fee || buildData.custom_management_fee === false) &&
+      (!buildData.custom_management_fee || buildData.custom_management_fee === 'false') &&
       buildData.management_fee_value === 'Custom'
     ) {
       fieldsToFill.push('custom_management_fee');
       unvalidatedFields.push('Custom Management Fee');
     }
     if (
-      (!buildData.custom_carry_fee || buildData.custom_carry_fee === false) &&
+      (!buildData.custom_carry_fee || buildData.custom_carry_fee === 'false') &&
       buildData.carry_fee_value === 'Custom'
     ) {
       fieldsToFill.push('custom_carry_fee');
       unvalidatedFields.push('Custom Carry Fee');
     }
-    if (!buildData.custom_reporting_adviser && buildData.allocations_reporting_adviser === false) {
+    if (
+      !buildData.custom_reporting_adviser &&
+      buildData.allocations_reporting_adviser === 'false'
+    ) {
       fieldsToFill.push('custom_reporting_adviser');
       unvalidatedFields.push('Advisor Name');
     }
@@ -354,8 +357,8 @@ const BuildDetails = ({
         master_series: isNotMasterSeries ? null : prev.master_series,
         high_volume_partner: !isNotMasterSeries,
         custom_reporting_adviser: isAllocationsTheAdvisor ? '' : prev.custom_reporting_adviser,
-        custom_management_fee: isNotCustomManagementFee ? false : prev.custom_management_fee,
-        custom_carry_fee: isNotCustomCarryFee ? false : prev.custom_carry_fee,
+        custom_management_fee: isNotCustomManagementFee ? 'false' : prev.custom_management_fee,
+        custom_carry_fee: isNotCustomCarryFee ? 'false' : prev.custom_carry_fee,
         international_company_country: isNotInternational ? '' : prev.international_company_country,
         international_investors_countries: isNotInternationalInvestors
           ? []
@@ -586,7 +589,7 @@ const BuildDetails = ({
                   </Typography>
                   <TextField
                     value={
-                      buildData.custom_management_fee === false
+                      buildData.custom_management_fee === 'false'
                         ? ''
                         : buildData.custom_management_fee
                     }
@@ -708,7 +711,7 @@ const BuildDetails = ({
                     </ModalTooltip>
                   </Typography>
                   <TextField
-                    value={buildData.custom_carry_fee === false ? '' : buildData.custom_carry_fee}
+                    value={buildData.custom_carry_fee === 'false' ? '' : buildData.custom_carry_fee}
                     placeholder="Custom Carry Fee"
                     name="custom_carry_fee"
                     onChange={(e) => {
@@ -757,8 +760,8 @@ const BuildDetails = ({
                   onChange={handleChange}
                   currentValue={buildData.side_letters}
                   values={[
-                    { label: 'Yes (Standard)', value: false },
-                    { label: 'No', value: true },
+                    { label: 'Yes (Standard)', value: 'false' },
+                    { label: 'No', value: 'true' },
                   ]}
                 />
               </FormControl>
@@ -852,12 +855,12 @@ const BuildDetails = ({
                   onChange={handleChange}
                   currentValue={buildData.allocations_reporting_adviser}
                   values={[
-                    { label: 'Yes (Recommended)', value: true },
-                    { label: 'No', value: false },
+                    { label: 'Yes (Recommended)', value: 'true' },
+                    { label: 'No', value: 'false' },
                   ]}
                 />
               </FormControl>
-              {buildData.allocations_reporting_adviser === false && (
+              {buildData.allocations_reporting_adviser === 'false' && (
                 <FormControl
                   required
                   disabled
@@ -956,8 +959,8 @@ const BuildDetails = ({
                   onChange={handleChange}
                   currentValue={buildData.custom_investment_agreement}
                   values={[
-                    { label: 'Allocations', value: false },
-                    { label: 'Custom', value: true },
+                    { label: 'Allocations', value: 'false' },
+                    { label: 'Custom', value: 'true' },
                   ]}
                 />
               </FormControl>
