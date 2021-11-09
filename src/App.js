@@ -15,11 +15,14 @@ import DealEditNew from './components/DealEditNew';
 import Sidebar from './components/Sidebar';
 import Investors from './components/Investors';
 import InvestmentNew from './components/InvestmentNew';
+import ProfilePage from './components/Profile/ProfilePage';
 import Profile from './components/Profile/Profile';
 import OrganizationNew from './components/OrganizationNew';
 import OrganizationMembers from './components/OrganizationMembers';
 import DealTable from './components/deals/fund-manager/DealsTablePage';
 import NotFound from './components/NotFound';
+import Prospect from './components/Prospect/Prospect';
+import ProspectDealPage from './components/Prospect/ProspectDealPage/ProspectDealPage';
 import SubmitTaxDocs from './components/SubmitTaxDocs';
 import Demo from './components/Demo';
 // admin
@@ -39,6 +42,8 @@ import AuthorizedApolloProvider from './apollo-client-comp';
 import './App.scss';
 import './utils/initFontAwesome';
 import { CurrentAccountProvider } from './state/current-organization';
+import FreeSPVOnboarding from './components/FreeSPVOnboarding';
+import Identity from './components/Identity';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -67,6 +72,7 @@ const App = () => {
               <PrivateRoute path="/demo" component={Demo} />
 
               <PrivateRoute path="/new-build-spv" exact component={BuildSPVForm} />
+              <PrivateRoute path="/profile/:id" component={ProfilePage} />
               <PrivateRoute path="/profile" component={Profile} />
               <PrivateRoute path="/deal-setup" component={DealSetup} />
 
@@ -83,6 +89,14 @@ const App = () => {
               <PrivateRoute
                 path="/deals/:organization/:deal_slug"
                 component={DealLandingPage}
+                exact
+              />
+
+              {/* prospect deals */}
+              <PrivateRoute path="/prospects" component={Prospect} exact />
+              <PrivateRoute
+                path="/prospects/:organization/:deal_slug"
+                component={ProspectDealPage}
                 exact
               />
 
@@ -123,6 +137,9 @@ const App = () => {
                 exact
               />
               <PrivateRoute path="/investors" component={Investors} exact />
+
+              <PrivateRoute path="/identity" component={Identity} />
+              <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact />
 
               {/** catchall * */}
               <Route path={['*', '/404']} component={NotFound} />

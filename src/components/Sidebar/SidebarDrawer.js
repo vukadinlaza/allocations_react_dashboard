@@ -10,6 +10,7 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { FaRocket } from 'react-icons/fa';
+import { BsBinocularsFill } from 'react-icons/bs';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import BuildModal from '../NewBuild/BuildModal';
 import styles from './styles';
@@ -86,6 +87,11 @@ const SidebarDrawer = ({
           to: '/profile',
           title: 'Profile',
           icon: <PersonIcon fontSize="medium" />,
+        },
+        {
+          to: '/prospects',
+          title: 'Prospects',
+          icon: <BsBinocularsFill />,
         },
       ],
     },

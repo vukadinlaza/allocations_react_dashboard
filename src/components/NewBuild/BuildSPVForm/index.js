@@ -145,7 +145,7 @@ const BuildDetails = ({
   const classes = useStyles();
 
   const [buildData, setBuildData] = useState({
-    allocations_investment_advisor: 'true',
+    allocations_reporting_adviser: 'true',
     asset_type: 'startup',
     carry_fee_type: 'percent',
     carry_fee_value: '20',
@@ -155,11 +155,12 @@ const BuildDetails = ({
     custom_management_fee: 'false',
     deal_stage: '',
     estimated_spv_quantity: null,
+    high_volume_partner: null,
     international_company_status: 'false',
     international_company_country: '',
     international_investors_status: 'false',
     international_investors_countries: [],
-    investment_advisor: '',
+    custom_reporting_adviser: '',
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
@@ -245,8 +246,11 @@ const BuildDetails = ({
       fieldsToFill.push('custom_carry_fee');
       unvalidatedFields.push('Custom Carry Fee');
     }
-    if (!buildData.investment_advisor && buildData.allocations_investment_advisor === 'false') {
-      fieldsToFill.push('investment_advisor');
+    if (
+      !buildData.custom_reporting_adviser &&
+      buildData.allocations_reporting_adviser === 'false'
+    ) {
+      fieldsToFill.push('custom_reporting_adviser');
       unvalidatedFields.push('Advisor Name');
     }
     if (
@@ -292,7 +296,7 @@ const BuildDetails = ({
         deal_id,
         payload: {
           organization_id: organization._id,
-          allocations_investment_advisor: buildData.allocations_investment_advisor,
+          allocations_reporting_adviser: buildData.allocations_reporting_adviser,
           asset_type: buildData.asset_type,
           carry_fee: {
             type: buildData.carry_fee_type,
@@ -303,6 +307,7 @@ const BuildDetails = ({
           custom_investment_agreement: buildData.custom_investment_agreement,
           deal_stage: buildData.deal,
           estimated_spv_quantity: Number(buildData.estimated_spv_quantity),
+          high_volume_partner: buildData.high_volume_partner,
           international_company: {
             status: buildData.international_company_status,
             country: buildData.international_company_country,
@@ -311,7 +316,7 @@ const BuildDetails = ({
             status: buildData.international_investors_status,
             countries: buildData.international_investors_countries,
           },
-          investment_advisor: buildData.investment_advisor,
+          custom_reporting_adviser: buildData.custom_reporting_adviser,
           management_fee: {
             type: buildData.management_fee_type,
             value: buildData.management_fee_value,
@@ -340,8 +345,7 @@ const BuildDetails = ({
     const isNotInternationalInvestors =
       target.name === 'international_investors_status' && (target.value === 'false' || 'unknown');
     const isNotMasterSeries = target.name === 'estimated_spv_quantity' && target.value < 5;
-    const isAllocationsTheAdvisor =
-      target.name === 'allocations_investment_advisor' && target.value;
+    const isAllocationsTheAdvisor = target.name === 'allocations_reporting_adviser' && target.value;
     const isNotCustomManagementFee =
       target.name === 'management_fee_value' && target.value !== 'Custom';
     const isNotCustomCarryFee = target.name === 'carry_fee_value' && target.value !== 'Custom';
@@ -351,7 +355,8 @@ const BuildDetails = ({
         ...prev,
         // IS NULL CORRECT?
         master_series: isNotMasterSeries ? null : prev.master_series,
-        investment_advisor: isAllocationsTheAdvisor ? '' : prev.investment_advisor,
+        high_volume_partner: !isNotMasterSeries,
+        custom_reporting_adviser: isAllocationsTheAdvisor ? '' : prev.custom_reporting_adviser,
         custom_management_fee: isNotCustomManagementFee ? 'false' : prev.custom_management_fee,
         custom_carry_fee: isNotCustomCarryFee ? 'false' : prev.custom_carry_fee,
         international_company_country: isNotInternational ? '' : prev.international_company_country,
@@ -360,7 +365,6 @@ const BuildDetails = ({
           : prev.international_investors_countries,
         [target.name]: target.value,
       };
-
       localStorage.setItem('buildData', JSON.stringify(newBuildObject));
       return newBuildObject;
     });
@@ -847,16 +851,16 @@ const BuildDetails = ({
                   </ModalTooltip>
                 </Typography>
                 <ButtonSelector
-                  name="allocations_investment_advisor"
+                  name="allocations_reporting_adviser"
                   onChange={handleChange}
-                  currentValue={buildData.allocations_investment_advisor}
+                  currentValue={buildData.allocations_reporting_adviser}
                   values={[
                     { label: 'Yes (Recommended)', value: 'true' },
                     { label: 'No', value: 'false' },
                   ]}
                 />
               </FormControl>
-              {buildData.allocations_investment_advisor === 'false' && (
+              {buildData.allocations_reporting_adviser === 'false' && (
                 <FormControl
                   required
                   disabled
@@ -873,18 +877,18 @@ const BuildDetails = ({
                         <Typography color="inherit">Please indicate your ERA/RIA name</Typography>
                       }
                       openTooltip={openTooltip}
-                      id="investment_advisor"
+                      id="custom_reporting_adviser"
                     >
                       <HelpIcon
                         className={classes.helpIcon}
-                        onClick={(e) => handleTooltip('investment_advisor')}
+                        onClick={(e) => handleTooltip('custom_reporting_adviser')}
                       />
                     </ModalTooltip>
                   </Typography>
                   <TextField
-                    value={buildData.investment_advisor}
+                    value={buildData.custom_reporting_adviser}
                     placeholder="Adviser Name"
-                    name="investment_advisor"
+                    name="custom_reporting_adviser"
                     onChange={handleChange}
                     className={classes.inputBox}
                     variant="outlined"
@@ -1107,7 +1111,6 @@ const BuildDetails = ({
               onClick={() => {
                 const { isValidated, unvalidatedFields } = formValidation();
                 if (!isValidated) {
-                  console.log(`validated? ${isValidated}`, unvalidatedFields);
                   toast.error(
                     <div>
                       Please fill in the following fields:{' '}
@@ -1152,7 +1155,8 @@ function FinishComponent({ history, deal, classes }) {
 export default function NewSpvForm() {
   const { userProfile, loading: authLoading } = useAuth();
   const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
-  const [setBuildInfo] = useMutation(SET_BUILD_INFO);
+  const [setBuildInfo, { data: updatedDeal, loading: updatedDealLoading }] =
+    useMutation(SET_BUILD_INFO);
   // Page
   const [page, setPage] = useState(0);
 
@@ -1196,6 +1200,8 @@ export default function NewSpvForm() {
           }
           page={page}
           setPage={setPage}
+          updatedDeal={updatedDeal}
+          updatedDealLoading={updatedDealLoading}
         />
       ),
     },

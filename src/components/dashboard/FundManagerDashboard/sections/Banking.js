@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Typography, TextField } from '@material-ui/core';
+import { Button, Typography, TextField, Grid } from '@material-ui/core';
 import { useQuery, gql, useMutation } from '@apollo/client';
 import HelpIcon from '@material-ui/icons/Help';
+import { get } from 'lodash';
+import { toast } from 'react-toastify';
 import Loader from '../../../utils/Loader';
 import { ModalTooltip } from '../widgets';
 
@@ -14,57 +16,133 @@ const REFERENCE_NUMBERS_BY_DEAL_ID = gql`
   }
 `;
 
-const ALLOCATE = gql`
-  mutation Allocate($deal_id: String!) {
-    referenceNumbersAllocate(deal_id: $deal_id) {
-      _id
-    }
+const CREATE_ND_BANK_ACCOUNT = gql`
+  mutation createNDBankAccount($accountInfo: AccountInfo!) {
+    createNDBankAccount(accountInfo: $accountInfo)
   }
 `;
 
-const UPDATE_DEAL = gql`
-  mutation updateDeal($org: String!, $deal: DealInput!) {
-    updateDeal(deal: $deal, org: $org) {
-      _id
-    }
-  }
-`;
+const fields = [
+  {
+    displayName: 'SPV Name',
+    prop: 'contactName',
+    type: 'text',
+  },
+  {
+    displayName: 'Executor Legal Name',
+    prop: 'executorLegalName',
+    type: 'text',
+  },
+  {
+    displayName: 'Account Type',
+    prop: 'accountType',
+    type: 'text',
+    default: 'Legal Entity',
+  },
+  {
+    displayName: 'Address',
+    prop: 'address',
+    type: 'text',
+    default: '8 The Green Suite A',
+  },
+  {
+    displayName: 'City',
+    prop: 'city',
+    type: 'text',
+    default: 'Dover',
+  },
+  {
+    displayName: 'State',
+    prop: 'state',
+    type: 'text',
+    default: 'Delaware',
+  },
+  {
+    displayName: 'Country',
+    prop: 'country',
+    type: 'text',
+    default: 'United States',
+  },
+  {
+    displayName: 'Zip',
+    prop: 'zip',
+    type: 'text',
+    default: '19901',
+  },
+  {
+    displayName: 'Banking Email',
+    prop: 'email',
+    type: 'email',
+    default: 'nd-banking@allocations.com',
+  },
+  {
+    displayName: 'Phone',
+    prop: 'phone',
+    type: 'text',
+  },
+  {
+    displayName: 'Date Of Birth',
+    prop: 'dateOfBirth',
+    type: 'date',
+  },
+  {
+    displayName: 'Tax ID Type',
+    prop: 'taxIDType',
+    type: 'text',
+    default: 'EIN',
+  },
+  {
+    displayName: 'Tax ID Number',
+    prop: 'taxIDNumber',
+    type: 'text',
+  },
+  {
+    displayName: 'Master LLC Name',
+    prop: 'groupName',
+    type: 'text',
+  },
+];
 
 const Banking = ({
   classes,
   deal_id,
+  company_name,
   deal_NDvirtualAccountNum,
   handleTooltip,
   openTooltip,
   orgSlug,
 }) => {
-  const [NDvirtualAccountNum, setNDvirtualAccountNum] = useState('');
-  const [hasVirtualAccountNumber, setHasVirtualAccountNumber] = useState(deal_NDvirtualAccountNum);
+  const defaultData = fields.reduce((acc, curr) => {
+    acc[curr?.prop] = curr?.default || '';
+    return acc;
+  }, {});
+  const [accountInformation, setAccountInformation] = useState({
+    ...defaultData,
+    contactID: deal_id,
+    contactName: company_name,
+  });
+  const [showForm, setShowForm] = useState(true);
 
-  const { data, loading, refetch } = useQuery(REFERENCE_NUMBERS_BY_DEAL_ID, {
+  const { data, loading } = useQuery(REFERENCE_NUMBERS_BY_DEAL_ID, {
     variables: { deal_id },
   });
+  const [createNDBankAccount, {}] = useMutation(CREATE_ND_BANK_ACCOUNT);
+  const createBankAccount = () => {
+    setShowForm(false);
+    toast.success('Success! Your request has been submitted.');
 
-  const [allocateRefNums, { loading: allocateLoading }] = useMutation(ALLOCATE, {
-    variables: { deal_id },
-    onCompleted: () => {
-      refetch();
-    },
-  });
-
-  const [updateDeal] = useMutation(UPDATE_DEAL, {
-    variables: {
-      deal: {
-        _id: deal_id,
-        nd_virtual_account_number: NDvirtualAccountNum,
-      },
-      org: orgSlug,
-    },
-    onCompleted: () => {
-      refetch();
-      setHasVirtualAccountNumber(NDvirtualAccountNum);
-    },
-  });
+    // return createNDBankAccount({
+    //   variables: {
+    //     accountInfo: accountInformation,
+    //   },
+    // });
+  };
+  const handleChange = ({ prop, newVal }) => {
+    setAccountInformation((prev) => ({
+      ...prev,
+      [prop]: newVal,
+    }));
+  };
 
   let referenceNumberRange = null;
   if (data && data.referenceNumbersByDealId && data.referenceNumbersByDealId.length > 0) {
@@ -78,100 +156,84 @@ const Banking = ({
 
   return (
     <>
-      {(loading || allocateLoading) && (
-        <div>
-          <Loader />
-        </div>
+      {showForm === false && (
+        <Grid container spacing={4} style={{ padding: '3rem', textAlign: 'center' }}>
+          <Grid item sm={12} md={12} lg={12}>
+            <Typography variant="h5" style={{ paddingBottom: '2rem' }}>
+              Congratulations!
+            </Typography>
+            <Typography variant="h5">
+              Your account information has been submitted to New Direction Bank and is currently
+              processing.
+            </Typography>
+            <Typography variant="h6" style={{ paddingTop: '3rem' }}>
+              You will be notified within 24 hours on the status of the account.
+            </Typography>
+          </Grid>
+        </Grid>
       )}
-      <div
-        style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}
-        className={classes.bankingAllocateWrapper}
-      >
-        {!referenceNumberRange && (
-          <div
+
+      {showForm === true && (
+        <Grid container spacing={2}>
+          {fields.map((f) => (
+            <Input field={f} accountInformation={accountInformation} handleChange={handleChange} />
+          ))}
+          <Grid
+            item
+            sm={12}
+            md={12}
+            lg={12}
             style={{
-              width: '50%',
               display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              flexDirection: 'column',
+              padding: '0 3rem',
+              margin: '2rem 30%',
             }}
           >
             <Button
               variant="contained"
-              onClick={() => allocateRefNums()}
-              className={classes.createButton}
-              color="secondary"
-              style={{ margin: '1rem 1rem 1rem 0px', backgroundColor: 'blue' }}
+              color="primary"
+              onClick={createBankAccount}
+              style={{ padding: '1rem' }}
             >
-              Allocate New Direction Reference Numbers
+              Create New Directions Bank Account
             </Button>
-            <ModalTooltip
-              title="Allocate New Direction Reference Numbers"
-              handleTooltip={handleTooltip}
-              openTooltip={openTooltip}
-              tooltipContent={
-                <Typography color="inherit">
-                  This button will allocate 100 New Direction Banking numbers to be used for
-                  investments.
-                </Typography>
-              }
-              id="reference_numbers"
-            >
-              <HelpIcon
-                style={{
-                  marginLeft: '0.2em',
-                  cursor: 'pointer',
-                  color: '#205DF5',
-                  fontSize: '22px',
-                }}
-                onClick={() => handleTooltip('reference_numbers')}
-              />
-            </ModalTooltip>
-          </div>
-        )}
-        {referenceNumberRange && (
-          <>
-            <div style={{ display: 'flex' }}>
-              <p style={{ marginRight: '1em' }}>ND Reference Number Range</p>
-              <p style={{ marginLeft: '1em' }}>{referenceNumberRange}</p>
-            </div>
-          </>
-        )}
-        {hasVirtualAccountNumber ? (
-          <div style={{ display: 'flex' }}>
-            <p style={{ marginRight: '1em' }}>New Directions Virtual Account #</p>
-            <p style={{ marginLeft: '1em' }}>{hasVirtualAccountNumber}</p>
-          </div>
-        ) : (
-          <div
-            style={{
-              width: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <TextField
-              variant="outlined"
-              placeholder="New Directions Virtual Account #"
-              value={NDvirtualAccountNum}
-              onChange={(event) => setNDvirtualAccountNum(event.target.value)}
-              style={{ width: '-webkit-fill-available' }}
-            />
-            <Button
-              variant="contained"
-              className={classes.createButton}
-              color="secondary"
-              style={{ marginLeft: '1rem', backgroundColor: 'blue' }}
-              onClick={updateDeal}
-            >
-              Save
-            </Button>
-          </div>
-        )}
-      </div>
+          </Grid>
+        </Grid>
+      )}
     </>
   );
 };
 
 export default Banking;
+
+const Input = ({ field, accountInformation, handleChange }) => {
+  return (
+    <Grid
+      item
+      sm={12}
+      md={6}
+      lg={6}
+      style={{ display: 'flex', flexDirection: 'column', padding: '0 3rem' }}
+    >
+      <Typography style={{ margin: '1rem 0', fontSize: '.9rem', fontWeight: 'bolder' }}>
+        {field.displayName}
+      </Typography>
+      <TextField
+        style={{ width: '100%' }}
+        type={field.type}
+        size="sm"
+        defaultValue={field.default}
+        value={get(accountInformation, field.prop, field.default || '')}
+        onChange={(e) =>
+          // eslint-disable-next-line radix
+          handleChange({
+            prop: field.prop,
+            newVal: e.target.value,
+          })
+        }
+        variant="outlined"
+      />
+    </Grid>
+  );
+};
