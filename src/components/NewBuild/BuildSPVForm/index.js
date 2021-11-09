@@ -181,9 +181,15 @@ const BuildDetails = ({
     sectors: [],
   });
 
+  const defaultMasterSeries = 'Atomizer LLC';
+
   useEffect(() => {
     if (initialDeal?.master_series) {
-      setBuildData((prevState) => ({ ...prevState, master_series: initialDeal?.master_series }));
+      setBuildData((prevState) => ({
+        ...prevState,
+        master_series:
+          initialDeal?.master_series !== defaultMasterSeries ? initialDeal?.master_series : '',
+      }));
     }
   }, [initialDeal?.master_series]);
 
@@ -191,8 +197,6 @@ const BuildDetails = ({
 
   const formValidation = () => {
     //* **** NEED TO VALIDATE CLOSING DATE STILL - NEED TO CHECK FOR PROPER DATE FORMAT *********
-
-    /// *** UPLOADED DOCUMENTS NOT VALIDATED YET *** ///
 
     const unvalidatedFields = [];
     const fieldsToFill = [];
@@ -217,7 +221,7 @@ const BuildDetails = ({
       fieldsToFill.push('representative');
       unvalidatedFields.push('Representative of Manager');
     }
-    if (!buildData.estimated_spv_quantity) {
+    if (!buildData.estimated_spv_quantity && buildData.master_series === defaultMasterSeries) {
       fieldsToFill.push('estimated_spv_quantity');
       unvalidatedFields.push('Estimated Number of SPVs');
     }
@@ -235,7 +239,7 @@ const BuildDetails = ({
     }
 
     // conditionally checked fields below here
-    if (!buildData.master_series && buildData.estimated_spv_quantity >= 5) {
+    if (buildData.master_series === defaultMasterSeries && buildData.estimated_spv_quantity >= 5) {
       fieldsToFill.push('master_series');
       unvalidatedFields.push('Master Series Name');
     }
@@ -331,7 +335,7 @@ const BuildDetails = ({
           },
           management_fee_frequency: buildData.management_fee_frequency,
           manager_name: buildData.manager_name,
-          master_series: buildData.master_series,
+          master_series: buildData.master_series || defaultMasterSeries,
           minimum_subscription_amount: buildData.minimum_investment,
           offering_type: buildData.offering_type,
           portfolio_company_name: buildData.portfolio_company_name,
