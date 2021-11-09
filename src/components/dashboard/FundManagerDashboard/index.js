@@ -154,6 +154,8 @@ const spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal P
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
+let BASE = OPS_ACCOUNTING;
+let INV_TABLE = INVESTMENTS_TABLE;
 
 const FundManagerDashboard = ({ classes, history }) => {
   const { width } = useViewport();
@@ -163,6 +165,8 @@ const FundManagerDashboard = ({ classes, history }) => {
 
   if (orgSlug === 'demo-fund') {
     orgSlug = '305-ventures';
+    BASE = 'app53fOK2CmyuzKXK';
+    INV_TABLE = 'Table 4';
   }
 
   const { userProfile } = useAuth();
@@ -197,14 +201,14 @@ const FundManagerDashboard = ({ classes, history }) => {
   }
 
   const { data: atDeal } = useFetch(
-    OPS_ACCOUNTING,
+    BASE,
     dealName && DEALS_TABLE,
     dealName && `({Deal Name}="${checkedDealName}")`,
   );
 
   const { data: atFundData, status } = useFetch(
-    OPS_ACCOUNTING,
-    atDealData?.name && INVESTMENTS_TABLE,
+    BASE,
+    atDealData?.name && INV_TABLE,
     atDealData?.name && `(FIND("${checkedAtDealDataName}", {Deals}))`,
   );
 
@@ -235,6 +239,7 @@ const FundManagerDashboard = ({ classes, history }) => {
       setDashboardTabs(newTabs);
       setTabName(newTabName);
       getInvestments({ variables: { deal_slug: dealData.slug, fund_slug: orgSlug } });
+      console.log('DEAL INVESTMENTS', dealInvestments);
     }
   }, [dealData]);
 
