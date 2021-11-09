@@ -19,8 +19,8 @@ import AgreementSigner from './FormComponents/AgreementSigner';
 import { convertToPositiveIntOrNull } from '../../../utils/numbers';
 
 const CREATE_BUILD = gql`
-  mutation createBuild {
-    deal: createBuild {
+  mutation createBuild($payload: Object) {
+    deal: createBuild(payload: $payload) {
       _id
       phases {
         _id
@@ -140,8 +140,8 @@ const BuildDetails = ({
   deal_id,
   waitingOnInitialDeal,
   initialDeal,
+  organization,
 }) => {
-  const organization = useCurrentOrganization();
   const classes = useStyles();
 
   const [buildData, setBuildData] = useState({
@@ -1157,15 +1157,20 @@ export default function NewSpvForm() {
   const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
   const [setBuildInfo, { data: updatedDeal, loading: updatedDealLoading }] =
     useMutation(SET_BUILD_INFO);
+
+  const organization = useCurrentOrganization();
+
   // Page
   const [page, setPage] = useState(0);
 
   useEffect(() => {
     // if there is no build data/deal_id, we create a new build (default info pulled from the backend)
-    if (!localStorage.getItem('buildData') && !localStorage.getItem('buildDeal')) {
-      createBuild();
+    if (organization) {
+      if (!localStorage.getItem('buildData') && !localStorage.getItem('buildDeal')) {
+        createBuild({ variables: { payload: { organization_id: organization._id } } });
+      }
     }
-  }, []);
+  }, [organization]);
 
   useEffect(() => {
     // if we finished creating the build, set the deal info in local storage
@@ -1179,6 +1184,7 @@ export default function NewSpvForm() {
       title: 'Build your SPV',
       Component: (
         <BuildDetails
+          organization={organization}
           userProfile={userProfile}
           page={page}
           setPage={setPage}
