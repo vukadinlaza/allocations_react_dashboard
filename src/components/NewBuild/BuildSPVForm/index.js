@@ -22,6 +22,7 @@ const CREATE_BUILD = gql`
   mutation createBuild($payload: Object) {
     deal: createBuild(payload: $payload) {
       _id
+      master_series
       phases {
         _id
         name
@@ -179,6 +180,12 @@ const BuildDetails = ({
     side_letters: 'false',
     sectors: [],
   });
+
+  useEffect(() => {
+    if (initialDeal?.master_series) {
+      setBuildData((prevState) => ({ ...prevState, master_series: initialDeal?.master_series }));
+    }
+  }, [initialDeal?.master_series]);
 
   const [unfilledFields, setUnfilledFields] = useState([]);
 
@@ -1135,23 +1142,6 @@ const BuildDetails = ({
   );
 };
 
-function FinishComponent({ history, deal, classes }) {
-  return (
-    <Button
-      className={classes.finishButton}
-      onClick={() => {
-        toast.success('Success! Your submission was submitted.');
-        localStorage.removeItem('buildData');
-        localStorage.removeItem('buildDeal');
-        localStorage.removeItem('buildFilesUploaded');
-        if (deal?._id) history.push(`/deal-setup?id=${deal._id}`);
-      }}
-    >
-      Finish
-    </Button>
-  );
-}
-
 export default function NewSpvForm() {
   const { userProfile, loading: authLoading } = useAuth();
   const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
@@ -1177,7 +1167,7 @@ export default function NewSpvForm() {
     if (initialDeal) {
       localStorage.setItem('buildDeal', JSON.stringify(initialDeal.deal));
     }
-  }, [loading]);
+  }, [loading, initialDeal?.deal]);
 
   const pages = [
     {
