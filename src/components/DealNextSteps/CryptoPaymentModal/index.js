@@ -178,7 +178,7 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                   style={{
                     width: '100%',
                     maxWidth: '100%',
-                    height: '700px',
+                    height: '1000px',
                   }}
                   src={widgetUrl}
                   frameBorder="0"
