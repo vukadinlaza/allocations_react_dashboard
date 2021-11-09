@@ -21,6 +21,8 @@ import OrganizationNew from './components/OrganizationNew';
 import OrganizationMembers from './components/OrganizationMembers';
 import DealTable from './components/deals/fund-manager/DealsTablePage';
 import NotFound from './components/NotFound';
+import Prospect from './components/Prospect/Prospect';
+import ProspectDealPage from './components/Prospect/ProspectDealPage/ProspectDealPage';
 import SubmitTaxDocs from './components/SubmitTaxDocs';
 import Demo from './components/Demo';
 // admin
@@ -87,6 +89,14 @@ const App = () => {
               <PrivateRoute
                 path="/deals/:organization/:deal_slug"
                 component={DealLandingPage}
+                exact
+              />
+
+              {/* prospect deals */}
+              <PrivateRoute path="/prospects" component={Prospect} exact />
+              <PrivateRoute
+                path="/prospects/:organization/:deal_slug"
+                component={ProspectDealPage}
                 exact
               />
 
