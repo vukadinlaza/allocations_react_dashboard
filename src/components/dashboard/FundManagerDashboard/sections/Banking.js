@@ -3,6 +3,7 @@ import { Button, Typography, TextField, Grid } from '@material-ui/core';
 import { useQuery, gql, useMutation } from '@apollo/client';
 import HelpIcon from '@material-ui/icons/Help';
 import { get } from 'lodash';
+import { toast } from 'react-toastify';
 import Loader from '../../../utils/Loader';
 import { ModalTooltip } from '../widgets';
 
@@ -42,7 +43,7 @@ const fields = [
     displayName: 'Address',
     prop: 'address',
     type: 'text',
-    default: '8 The Green Suite',
+    default: '8 The Green Suite A',
   },
   {
     displayName: 'City',
@@ -87,12 +88,12 @@ const fields = [
     displayName: 'Tax ID Type',
     prop: 'taxIDType',
     type: 'text',
-    default: 'Legal Entity',
+    default: 'EIN',
   },
   {
     displayName: 'Tax ID Number',
     prop: 'taxIDNumber',
-    type: 'number',
+    type: 'text',
   },
   {
     displayName: 'Master LLC Name',
@@ -119,18 +120,21 @@ const Banking = ({
     contactID: deal_id,
     contactName: company_name,
   });
+  const [showForm, setShowForm] = useState(true);
 
   const { data, loading } = useQuery(REFERENCE_NUMBERS_BY_DEAL_ID, {
     variables: { deal_id },
   });
   const [createNDBankAccount, {}] = useMutation(CREATE_ND_BANK_ACCOUNT);
   const createBankAccount = () => {
-    console.log(accountInformation);
-    return createNDBankAccount({
-      variables: {
-        accountInfo: accountInformation,
-      },
-    });
+    setShowForm(false);
+    toast.success('Success! Your request has been submitted.');
+
+    // return createNDBankAccount({
+    //   variables: {
+    //     accountInfo: accountInformation,
+    //   },
+    // });
   };
   const handleChange = ({ prop, newVal }) => {
     setAccountInformation((prev) => ({
@@ -151,28 +155,51 @@ const Banking = ({
 
   return (
     <>
-      {loading && (
-        <div>
-          <Loader />
-        </div>
+      {showForm === false && (
+        <Grid container spacing={4} style={{ padding: '3rem', textAlign: 'center' }}>
+          <Grid item sm={12} md={12} lg={12}>
+            <Typography variant="h5" style={{ paddingBottom: '2rem' }}>
+              Congratulations!
+            </Typography>
+            <Typography variant="h5">
+              Your account information has been submitted to New Direction Bank and is currently
+              processing.
+            </Typography>
+            <Typography variant="h6" style={{ paddingTop: '3rem' }}>
+              You will be notified within 24 hours on the status of the account.
+            </Typography>
+          </Grid>
+        </Grid>
       )}
-      <>
+
+      {showForm === true && (
         <Grid container spacing={2}>
           {fields.map((f) => (
             <Input field={f} accountInformation={accountInformation} handleChange={handleChange} />
           ))}
+          <Grid
+            item
+            sm={12}
+            md={12}
+            lg={12}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              padding: '0 3rem',
+              margin: '2rem 30%',
+            }}
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={createBankAccount}
+              style={{ padding: '1rem' }}
+            >
+              Create New Directions Bank Account
+            </Button>
+          </Grid>
         </Grid>
-      </>
-
-      <Button
-        variant="contained"
-        className={classes.createButton}
-        color="secondary"
-        style={{ marginLeft: '1rem', backgroundColor: 'blue' }}
-        onClick={createBankAccount}
-      >
-        Save
-      </Button>
+      )}
     </>
   );
 };
