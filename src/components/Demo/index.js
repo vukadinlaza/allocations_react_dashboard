@@ -119,7 +119,7 @@ export default () => {
                 variant="contained"
                 style={{ marginTop: '1rem', minWidth: '100%' }}
                 onClick={() => {
-                  history.push({ pathname: `/deals/305-ventures` });
+                  history.push({ pathname: `/deals/stratminds/klarna-demo` });
                 }}
               >
                 View
