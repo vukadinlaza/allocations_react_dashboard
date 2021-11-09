@@ -147,7 +147,7 @@ const ProspectDealPage = () => {
         <Typography variant="h6" className={classes.mainTitle}>
           Allocations Angels{' '}
           <span style={{ fontSize: '14px', color: 'grey' }}>
-            /Search and follow in the directory
+            / Search and follow in the directory
           </span>
         </Typography>
       </div>
