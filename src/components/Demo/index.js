@@ -202,7 +202,7 @@ export default () => {
                 variant="contained"
                 style={{ marginTop: '1rem', minWidth: '100%' }}
                 onClick={() => {
-                  history.push({ pathname: `/admin/demo-fund` });
+                  history.push({ pathname: `/admin/browder-capital` });
                 }}
               >
                 View
