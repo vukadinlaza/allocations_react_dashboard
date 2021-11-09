@@ -15,6 +15,7 @@ import DealEditNew from './components/DealEditNew';
 import Sidebar from './components/Sidebar';
 import Investors from './components/Investors';
 import InvestmentNew from './components/InvestmentNew';
+import ProfilePage from './components/Profile/ProfilePage';
 import Profile from './components/Profile/Profile';
 import OrganizationNew from './components/OrganizationNew';
 import OrganizationMembers from './components/OrganizationMembers';
@@ -69,6 +70,7 @@ const App = () => {
               <PrivateRoute path="/demo" component={Demo} />
 
               <PrivateRoute path="/new-build-spv" exact component={BuildSPVForm} />
+              <PrivateRoute path="/profile/:id" component={ProfilePage} />
               <PrivateRoute path="/profile" component={Profile} />
               <PrivateRoute path="/deal-setup" component={DealSetup} />
 
