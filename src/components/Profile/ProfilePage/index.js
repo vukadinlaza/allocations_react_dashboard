@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { TiSocialLinkedinCircular } from 'react-icons/ti';
 import { useStyles } from './styles';
 import Loader from '../../utils/Loader';
+import { Redirect } from 'react-router-dom';
 
 const GET_PROFILE = gql`
   query GetInvestor($_id: String) {
@@ -26,18 +27,24 @@ const GET_PROFILE = gql`
 const ProfilePage = () => {
   const classes = useStyles();
   const { id } = useParams();
-  const { data, loading } = useQuery(GET_PROFILE, {
+  const { data, loading, error } = useQuery(GET_PROFILE, {
     variables: { _id: id },
   });
 
   if (loading) return <Loader />;
+
+  if (error) return <Redirect to="/NotFound" />;
 
   return (
     <Paper>
       <Grid container direction="column" justifyContent="center" alignItems="center">
         <Grid item xs={12} style={{ marginBottom: 34 }}>
           <Avatar
-            src={`https://allocations-user-img.s3.us-east-2.amazonaws.com/${data.investor.profileImageKey}`}
+            src={
+              data.investor.profileImageKey
+                ? `https://allocations-user-img.s3.us-east-2.amazonaws.com/${data.investor.profileImageKey}`
+                : ''
+            }
             className={classes.avatar}
           />
         </Grid>
@@ -62,7 +69,7 @@ const ProfilePage = () => {
             <Typography variant="h6" className={classes.profileSectionTitle}>
               Sectors
             </Typography>
-            {data.investor.sectors.map((sector, idx) => (
+            {data.investor.sectors?.map((sector, idx) => (
               <Box
                 key={idx}
                 borderRadius={5}
@@ -82,7 +89,7 @@ const ProfilePage = () => {
             <Typography variant="h6" className={classes.profileSectionTitle}>
               Deal Stages
             </Typography>
-            {data.investor.stages.map((stage, idx) => (
+            {data.investor.stages?.map((stage, idx) => (
               <Box
                 key={idx}
                 borderRadius={5}
