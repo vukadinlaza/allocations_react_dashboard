@@ -30,7 +30,7 @@ const CREATE_ND_BANK_ACCOUNT = gql`
 
 const fields = [
   {
-    displayName: 'SPV Name',
+    displayName: 'SPV Legal Name',
     prop: 'contactName',
     type: 'text',
   },
@@ -142,19 +142,15 @@ const validatedDataDefault = fields.reduce((acc, val) => {
   return acc;
 }, {});
 
-const Banking = ({ deal_id, company_name }) => {
+const Banking = ({ deal_id }) => {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(true); // Show form if account creation flow has not yet started
   const [submitDisabled, setSubmitDisabled] = useState(true);
   const [accountInformation, setAccountInformation] = useState({
     ...defaultData,
     contactID: deal_id,
-    contactName: company_name,
   }); // managing field values
-  const [validatedData, setValidatedData] = useState({
-    ...validatedDataDefault,
-    contactName: company_name,
-  }); // Managing field validation
+  const [validatedData, setValidatedData] = useState(validatedDataDefault); // Managing field validation
 
   /*
   After each text input change, make sure each field is validated
