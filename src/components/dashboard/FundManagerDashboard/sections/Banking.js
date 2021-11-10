@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Typography, TextField, Grid } from '@material-ui/core';
 import { useQuery, gql, useMutation } from '@apollo/client';
-import HelpIcon from '@material-ui/icons/Help';
 import { get } from 'lodash';
 import { toast } from 'react-toastify';
 import moment from 'moment';
+import Loader from '../../../utils/Loader';
+
+/*
+README
+To add field validation:
+  add field `validation` to a field obj in the field array, its value being a function
+  and that function should return an obj with properties `valid` and `errorMessage`
+*/
 
 const REFERENCE_NUMBERS_BY_DEAL_ID = gql`
   query ReferenceNumbersByDealId($deal_id: String!) {
@@ -110,6 +117,11 @@ const fields = [
     displayName: 'Tax ID Number',
     prop: 'taxIDNumber',
     type: 'text',
+    validator: (id) => {
+      const errorMessage = 'Number must be XX-XXXXXX Format';
+      const reg = /^(\d{2})-(\d{7})$/;
+      return { valid: RegExp(reg).test(id), errorMessage };
+    },
   },
   {
     displayName: 'Master LLC Name',
@@ -131,32 +143,53 @@ const validatedDataDefault = fields.reduce((acc, val) => {
 }, {});
 
 const Banking = ({ deal_id, company_name }) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(true); // Show form if account creation flow has not yet started
+  const [submitDisabled, setSubmitDisabled] = useState(true);
   const [accountInformation, setAccountInformation] = useState({
     ...defaultData,
     contactID: deal_id,
     contactName: company_name,
-  });
-  const [showForm, setShowForm] = useState(true);
+  }); // managing field values
   const [validatedData, setValidatedData] = useState({
     ...validatedDataDefault,
     contactName: company_name,
-  });
-  const [submitDisabled, setSubmitDisabled] = useState(true);
+  }); // Managing field validation
 
+  /*
+  After each text input change, make sure each field is validated
+  If all fields are valid, setSubmitDisabled to false
+  */
   useEffect(() => {
     const allFields = Object.values(validatedData);
     if (!allFields.includes(false)) setSubmitDisabled(false);
+    if (allFields.includes(false)) setSubmitDisabled(true);
   }, [validatedData]);
+
+  const [createNDBankAccount] = useMutation(CREATE_ND_BANK_ACCOUNT);
 
   const { data: refNumData } = useQuery(REFERENCE_NUMBERS_BY_DEAL_ID, {
     variables: { deal_id },
   });
-  const [createNDBankAccount, { data: newAccountData }] = useMutation(CREATE_ND_BANK_ACCOUNT);
+
+  /*
+  First, find if deal has ref numbers - meaning: account creation has started
+  Set loading to false after response
+  If ref numbers are found, setShowForm to false
+  */
+  useEffect(() => {
+    if (refNumData) setLoading(false);
+    if (
+      refNumData &&
+      refNumData.referenceNumbersByDealId &&
+      refNumData.referenceNumbersByDealId.length > 0
+    )
+      setShowForm(false);
+  }, [refNumData]);
 
   const createBankAccount = () => {
     setLoading(true);
-    // toast.success('Success! Your request has been submitted.');
+    toast.success('Success! Your request has been submitted.');
     const dateOfBirth = moment(accountInformation.dateOfBirth).toISOString();
     accountInformation.phone = accountInformation.phone.replace('-', '');
 
@@ -185,21 +218,12 @@ const Banking = ({ deal_id, company_name }) => {
     });
   };
 
-  // let referenceNumberRange = null;
-  // if (
-  //   refNumData &&
-  //   refNumData.referenceNumbersByDealId &&
-  //   refNumData.referenceNumbersByDealId.length > 0
-  // ) {
-  //   const refNums = [...refNumData.referenceNumbersByDealId].sort(
-  //     (a, b) => Number(a.number) - Number(b.number),
-  //   );
-  //   const low = refNums[0].number;
-  //   const high = refNums[refNums.length - 1].number;
-  //   referenceNumberRange = `${low}-${high}`;
-  //   setShowForm(false);
-  // }
-
+  if (loading)
+    return (
+      <>
+        <Loader />
+      </>
+    );
   return (
     <>
       {showForm === false && (
@@ -283,16 +307,19 @@ const Input = ({ field, accountInformation, handleChange, validator }) => {
         defaultValue={field.default}
         value={get(accountInformation, field.prop, field.default || '')}
         onChange={(e) => {
+          const { value } = e.target;
+
           let isValidState = false;
+          // If value is valid, or present without a validator isValid == true
           if (validator) {
-            const { valid, errorMessage } = validator(e.target.value);
+            const { valid, errorMessage } = validator(value);
             isValidState = valid;
             if (!valid) setErrorStateMessage(errorMessage);
             if (valid) setErrorStateMessage(null);
             setErrorState(!valid);
-          } else isValidState = true;
+          } else if (!value) isValidState = false;
+          else isValidState = true;
 
-          // eslint-disable-next-line radix
           handleChange({
             prop: field.prop,
             newVal: e.target.value,
