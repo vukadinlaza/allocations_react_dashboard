@@ -218,6 +218,7 @@ const Banking = ({ deal_id, company_name }) => {
     });
   };
 
+  // Ref number loading - to determine showForm state
   if (loading)
     return (
       <>
@@ -310,7 +311,7 @@ const Input = ({ field, accountInformation, handleChange, validator }) => {
           const { value } = e.target;
 
           let isValidState = false;
-          // If value is valid, or present without a validator isValid == true
+          // If value is validated, or !null without a validator : isValid == true
           if (validator) {
             const { valid, errorMessage } = validator(value);
             isValidState = valid;
