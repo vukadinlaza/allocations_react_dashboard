@@ -253,7 +253,7 @@ export default function TypeSelector({
         menuPosition="fixed"
         label="Deal Stage"
         styles={customStyles}
-        options={dealStages.map((stage) => ({ value: stage, label: stage })) || ''}
+        options={dealStages.map((stage) => ({ value: stage, label: stage, key: stage })) || ''}
         defaultValue={buildData.deal_stage}
         placeholder={buildData.deal_stage}
         onChange={(option) => {
