@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Typography, TextField, Grid } from '@material-ui/core';
 import { useQuery, gql, useMutation } from '@apollo/client';
 import HelpIcon from '@material-ui/icons/Help';
 import { get } from 'lodash';
 import { toast } from 'react-toastify';
-import Loader from '../../../utils/Loader';
-import { ModalTooltip } from '../widgets';
+import moment from 'moment';
 
 const REFERENCE_NUMBERS_BY_DEAL_ID = gql`
   query ReferenceNumbersByDealId($deal_id: String!) {
@@ -73,16 +72,33 @@ const fields = [
     displayName: 'Banking Email',
     prop: 'email',
     type: 'email',
+    validator: (email) => {
+      const errorMessage = 'Please enter a valid email.';
+      const emailRegex =
+        /^(([^<>()[\]\\.,;:\s@\\"]+(\.[^<>()[\]\\.,;:\s@\\"]+)*)|(\\".+\\"))@(([^<>()[\]\\.,;:\s@\\"]+\.)+[^<>()[\]\\.,;:\s@\\"]{2,})$/i;
+      return { valid: emailRegex.test(email), errorMessage };
+    },
   },
   {
     displayName: 'Phone',
     prop: 'phone',
     type: 'text',
+    validator: (phone) => {
+      const errorMessage = 'Please enter a phone number in format 1-xxx-xxx-xxxx.';
+      const reg = /^1-(\d{3})-(\d{3})-(\d{4})$/;
+      return { valid: RegExp(reg).test(phone), errorMessage };
+    },
   },
   {
     displayName: 'Date Of Birth',
     prop: 'dateOfBirth',
     type: 'date',
+    validator: (dob) => {
+      const errorMessage = 'Must be over 18 years old';
+      const isOverEighteen = moment().subtract(18, 'years').isAfter(moment(dob));
+
+      return { valid: isOverEighteen, errorMessage };
+    },
   },
   {
     displayName: 'Tax ID Type',
@@ -102,56 +118,87 @@ const fields = [
   },
 ];
 
-const Banking = ({
-  classes,
-  deal_id,
-  company_name,
-  deal_NDvirtualAccountNum,
-  handleTooltip,
-  openTooltip,
-  orgSlug,
-}) => {
-  const defaultData = fields.reduce((acc, curr) => {
-    acc[curr?.prop] = curr?.default || '';
-    return acc;
-  }, {});
+const defaultData = fields.reduce((acc, curr) => {
+  acc[curr?.prop] = curr?.default || '';
+  return acc;
+}, {});
+
+const validatedDataDefault = fields.reduce((acc, val) => {
+  let isValid = false;
+  if (val.default) isValid = true;
+  acc[val?.prop] = isValid;
+  return acc;
+}, {});
+
+const Banking = ({ deal_id, company_name }) => {
+  const [loading, setLoading] = useState(false);
   const [accountInformation, setAccountInformation] = useState({
     ...defaultData,
     contactID: deal_id,
     contactName: company_name,
   });
   const [showForm, setShowForm] = useState(true);
+  const [validatedData, setValidatedData] = useState({
+    ...validatedDataDefault,
+    contactName: company_name,
+  });
+  const [submitDisabled, setSubmitDisabled] = useState(true);
 
-  const { data, loading } = useQuery(REFERENCE_NUMBERS_BY_DEAL_ID, {
+  useEffect(() => {
+    const allFields = Object.values(validatedData);
+    if (!allFields.includes(false)) setSubmitDisabled(false);
+  }, [validatedData]);
+
+  const { data: refNumData } = useQuery(REFERENCE_NUMBERS_BY_DEAL_ID, {
     variables: { deal_id },
   });
-  const [createNDBankAccount, {}] = useMutation(CREATE_ND_BANK_ACCOUNT);
-  const createBankAccount = () => {
-    setShowForm(false);
-    toast.success('Success! Your request has been submitted.');
+  const [createNDBankAccount, { data: newAccountData }] = useMutation(CREATE_ND_BANK_ACCOUNT);
 
-    // return createNDBankAccount({
-    //   variables: {
-    //     accountInfo: accountInformation,
-    //   },
-    // });
+  const createBankAccount = () => {
+    setLoading(true);
+    // toast.success('Success! Your request has been submitted.');
+    const dateOfBirth = moment(accountInformation.dateOfBirth).toISOString();
+    accountInformation.phone = accountInformation.phone.replace('-', '');
+
+    createNDBankAccount({
+      variables: {
+        accountInfo: { ...accountInformation, dateOfBirth },
+      },
+    }).then((res) => {
+      if (res.success) {
+        setLoading(false);
+        setShowForm(false);
+      }
+    });
   };
-  const handleChange = ({ prop, newVal }) => {
+
+  const handleChange = ({ prop, newVal, isValidState }) => {
     setAccountInformation((prev) => ({
       ...prev,
       [prop]: newVal,
     }));
+    setValidatedData((prev) => {
+      return {
+        ...prev,
+        [prop]: isValidState,
+      };
+    });
   };
 
-  let referenceNumberRange = null;
-  if (data && data.referenceNumbersByDealId && data.referenceNumbersByDealId.length > 0) {
-    const refNums = [...data.referenceNumbersByDealId].sort(
-      (a, b) => Number(a.number) - Number(b.number),
-    );
-    const low = refNums[0].number;
-    const high = refNums[refNums.length - 1].number;
-    referenceNumberRange = `${low}-${high}`;
-  }
+  // let referenceNumberRange = null;
+  // if (
+  //   refNumData &&
+  //   refNumData.referenceNumbersByDealId &&
+  //   refNumData.referenceNumbersByDealId.length > 0
+  // ) {
+  //   const refNums = [...refNumData.referenceNumbersByDealId].sort(
+  //     (a, b) => Number(a.number) - Number(b.number),
+  //   );
+  //   const low = refNums[0].number;
+  //   const high = refNums[refNums.length - 1].number;
+  //   referenceNumberRange = `${low}-${high}`;
+  //   setShowForm(false);
+  // }
 
   return (
     <>
@@ -175,7 +222,12 @@ const Banking = ({
       {showForm === true && (
         <Grid container spacing={2}>
           {fields.map((f) => (
-            <Input field={f} accountInformation={accountInformation} handleChange={handleChange} />
+            <Input
+              field={f}
+              accountInformation={accountInformation}
+              handleChange={handleChange}
+              validator={f.validator}
+            />
           ))}
           <Grid
             item
@@ -192,6 +244,7 @@ const Banking = ({
             <Button
               variant="contained"
               color="primary"
+              disabled={submitDisabled}
               onClick={createBankAccount}
               style={{ padding: '1rem' }}
             >
@@ -206,7 +259,10 @@ const Banking = ({
 
 export default Banking;
 
-const Input = ({ field, accountInformation, handleChange }) => {
+const Input = ({ field, accountInformation, handleChange, validator }) => {
+  const [errorState, setErrorState] = useState(false);
+  const [errorStateMessage, setErrorStateMessage] = useState(null);
+
   return (
     <Grid
       item
@@ -218,19 +274,31 @@ const Input = ({ field, accountInformation, handleChange }) => {
       <Typography style={{ margin: '1rem 0', fontSize: '.9rem', fontWeight: 'bolder' }}>
         {field.displayName}
       </Typography>
+      {errorStateMessage && <p style={{ fontSize: '.5rem', color: 'grey' }}>{errorStateMessage}</p>}
       <TextField
         style={{ width: '100%' }}
         type={field.type}
         size="sm"
+        error={errorState}
         defaultValue={field.default}
         value={get(accountInformation, field.prop, field.default || '')}
-        onChange={(e) =>
+        onChange={(e) => {
+          let isValidState = false;
+          if (validator) {
+            const { valid, errorMessage } = validator(e.target.value);
+            isValidState = valid;
+            if (!valid) setErrorStateMessage(errorMessage);
+            if (valid) setErrorStateMessage(null);
+            setErrorState(!valid);
+          } else isValidState = true;
+
           // eslint-disable-next-line radix
           handleChange({
             prop: field.prop,
             newVal: e.target.value,
-          })
-        }
+            isValidState,
+          });
+        }}
         variant="outlined"
       />
     </Grid>
