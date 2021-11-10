@@ -274,7 +274,7 @@ const Input = ({ field, accountInformation, handleChange, validator }) => {
       <Typography style={{ margin: '1rem 0', fontSize: '.9rem', fontWeight: 'bolder' }}>
         {field.displayName}
       </Typography>
-      {errorStateMessage && <p style={{ fontSize: '.5rem', color: 'grey' }}>{errorStateMessage}</p>}
+      {errorStateMessage && <p style={{ fontSize: '.8rem', color: 'grey' }}>{errorStateMessage}</p>}
       <TextField
         style={{ width: '100%' }}
         type={field.type}
