@@ -547,7 +547,7 @@ export default function TypeSelector({
               <DealStagesSelector />
             </FormControl>
           </Grid>
-          {/* !buildDate.high_value_partner  && render */}
+
           {!buildData.high_volume_partner && (
             <Grid className={classes.inputGridItem} item xs={6}>
               <FormControl required disabled variant="outlined" className={classes.formContainers}>
