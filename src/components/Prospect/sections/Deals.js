@@ -1,6 +1,16 @@
 import React from 'react';
-import { Card, CardHeader, Avatar, IconButton, Grid } from '@material-ui/core';
-import { FiMoreVertical } from 'react-icons/fi';
+import {
+  Card,
+  CardHeader,
+  Avatar,
+  IconButton,
+  Grid,
+  MenuItem,
+  Menu,
+  ListItemIcon,
+} from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import { FiMoreVertical, FiSettings } from 'react-icons/fi';
 import { makeStyles } from '@material-ui/core/styles';
 import ProgressBar from './DealsSections/ProgressBar';
 import DealInfo from './DealsSections/DealInfo';
@@ -15,6 +25,15 @@ const useStyles = makeStyles((theme) => ({
   },
   cardTitle: {
     fontWeight: 'bold',
+  },
+  settingsButton: {
+    outline: 'none',
+    '&:active': {
+      outline: 'none',
+    },
+    '&:focus': {
+      outline: 'none',
+    },
   },
 }));
 
@@ -62,7 +81,22 @@ const allDeals = [
 ];
 
 const Deals = () => {
+  const history = useHistory();
   const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const viewDeal = () => {
+    /* bring in data to go to real deal */
+    history.push('prospects/aardvark/aardvark');
+  };
 
   return (
     <Grid container spacing={2} justifyContent="center">
@@ -78,9 +112,28 @@ const Deals = () => {
           >
             <Card className={classes.mainCard} variant="outlined">
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <IconButton aria-label="settings">
+                <IconButton
+                  aria-label="settings"
+                  onClick={handleClick}
+                  className={classes.settingsButton}
+                >
                   <FiMoreVertical />
                 </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  onClick={handleClose}
+                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                >
+                  <MenuItem onClick={viewDeal}>
+                    <ListItemIcon>
+                      <FiSettings />
+                    </ListItemIcon>
+                    View Deal
+                  </MenuItem>
+                </Menu>
               </div>
               <CardHeader
                 style={{ marginTop: '-1rem' }}
