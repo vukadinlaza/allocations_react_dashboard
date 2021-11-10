@@ -602,7 +602,7 @@ export default function TypeSelector({
               </FormControl>
             </Grid>
           )}
-          {!buildData.master_series.high_volume_partner && buildData.estimated_spv_quantity >= 5 && (
+          {!buildData.high_volume_partner && buildData.estimated_spv_quantity >= 5 && (
             <Grid className={classes.inputGridItem} item xs={12}>
               <FormControl required disabled variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
