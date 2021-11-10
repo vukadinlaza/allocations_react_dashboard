@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import moment from 'moment';
-import _ from 'lodash';
 import countries from 'country-region-data';
 import { toast } from 'react-toastify';
 import HelpIcon from '@material-ui/icons/Help';
@@ -19,9 +18,10 @@ import AgreementSigner from './FormComponents/AgreementSigner';
 import { convertToPositiveIntOrNull } from '../../../utils/numbers';
 
 const CREATE_BUILD = gql`
-  mutation createBuild {
-    deal: createBuild {
+  mutation createBuild($payload: Object) {
+    deal: createBuild(payload: $payload) {
       _id
+      master_series
       phases {
         _id
         name
@@ -140,12 +140,12 @@ const BuildDetails = ({
   deal_id,
   waitingOnInitialDeal,
   initialDeal,
+  organization,
 }) => {
-  const organization = useCurrentOrganization();
   const classes = useStyles();
 
   const [buildData, setBuildData] = useState({
-    allocations_investment_advisor: 'true',
+    allocations_reporting_adviser: 'true',
     asset_type: 'startup',
     carry_fee_type: 'percent',
     carry_fee_value: '20',
@@ -155,11 +155,12 @@ const BuildDetails = ({
     custom_management_fee: 'false',
     deal_stage: '',
     estimated_spv_quantity: null,
+    high_volume_partner: null,
     international_company_status: 'false',
     international_company_country: '',
     international_investors_status: 'false',
     international_investors_countries: [],
-    investment_advisor: '',
+    custom_reporting_adviser: '',
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
@@ -177,14 +178,25 @@ const BuildDetails = ({
     setup_cost: 20000,
     side_letters: 'false',
     sectors: [],
+    accept_crypto: 'false',
   });
+
+  const defaultMasterSeries = 'Atomizer LLC';
+
+  useEffect(() => {
+    if (initialDeal?.master_series) {
+      setBuildData((prevState) => ({
+        ...prevState,
+        master_series:
+          initialDeal?.master_series !== defaultMasterSeries ? initialDeal?.master_series : '',
+      }));
+    }
+  }, [initialDeal?.master_series]);
 
   const [unfilledFields, setUnfilledFields] = useState([]);
 
   const formValidation = () => {
     //* **** NEED TO VALIDATE CLOSING DATE STILL - NEED TO CHECK FOR PROPER DATE FORMAT *********
-
-    /// *** UPLOADED DOCUMENTS NOT VALIDATED YET *** ///
 
     const unvalidatedFields = [];
     const fieldsToFill = [];
@@ -209,7 +221,7 @@ const BuildDetails = ({
       fieldsToFill.push('representative');
       unvalidatedFields.push('Representative of Manager');
     }
-    if (!buildData.estimated_spv_quantity) {
+    if (!buildData.estimated_spv_quantity && buildData.master_series === defaultMasterSeries) {
       fieldsToFill.push('estimated_spv_quantity');
       unvalidatedFields.push('Estimated Number of SPVs');
     }
@@ -227,7 +239,7 @@ const BuildDetails = ({
     }
 
     // conditionally checked fields below here
-    if (!buildData.master_series && buildData.estimated_spv_quantity >= 5) {
+    if (buildData.master_series === defaultMasterSeries && buildData.estimated_spv_quantity >= 5) {
       fieldsToFill.push('master_series');
       unvalidatedFields.push('Master Series Name');
     }
@@ -245,8 +257,11 @@ const BuildDetails = ({
       fieldsToFill.push('custom_carry_fee');
       unvalidatedFields.push('Custom Carry Fee');
     }
-    if (!buildData.investment_advisor && buildData.allocations_investment_advisor === 'false') {
-      fieldsToFill.push('investment_advisor');
+    if (
+      !buildData.custom_reporting_adviser &&
+      buildData.allocations_reporting_adviser === 'false'
+    ) {
+      fieldsToFill.push('custom_reporting_adviser');
       unvalidatedFields.push('Advisor Name');
     }
     if (
@@ -262,6 +277,10 @@ const BuildDetails = ({
     ) {
       fieldsToFill.push('international_investors_countries');
       unvalidatedFields.push('Countries of International Investors');
+    }
+    if (!buildData.accept_crypto) {
+      fieldsToFill.push('accept_crypto');
+      unvalidatedFields.push('Accept Crypto');
     }
 
     setUnfilledFields(fieldsToFill);
@@ -292,7 +311,7 @@ const BuildDetails = ({
         deal_id,
         payload: {
           organization_id: organization._id,
-          allocations_investment_advisor: buildData.allocations_investment_advisor,
+          allocations_reporting_adviser: buildData.allocations_reporting_adviser,
           asset_type: buildData.asset_type,
           carry_fee: {
             type: buildData.carry_fee_type,
@@ -303,6 +322,7 @@ const BuildDetails = ({
           custom_investment_agreement: buildData.custom_investment_agreement,
           deal_stage: buildData.deal,
           estimated_spv_quantity: Number(buildData.estimated_spv_quantity),
+          high_volume_partner: buildData.high_volume_partner,
           international_company: {
             status: buildData.international_company_status,
             country: buildData.international_company_country,
@@ -311,7 +331,7 @@ const BuildDetails = ({
             status: buildData.international_investors_status,
             countries: buildData.international_investors_countries,
           },
-          investment_advisor: buildData.investment_advisor,
+          custom_reporting_adviser: buildData.custom_reporting_adviser,
           management_fee: {
             type: buildData.management_fee_type,
             value: buildData.management_fee_value,
@@ -319,7 +339,7 @@ const BuildDetails = ({
           },
           management_fee_frequency: buildData.management_fee_frequency,
           manager_name: buildData.manager_name,
-          master_series: buildData.master_series,
+          master_series: buildData.master_series || defaultMasterSeries,
           minimum_subscription_amount: buildData.minimum_investment,
           offering_type: buildData.offering_type,
           portfolio_company_name: buildData.portfolio_company_name,
@@ -329,6 +349,7 @@ const BuildDetails = ({
           sectors: buildData.sectors,
           setup_cost: buildData.setup_cost,
           side_letters: buildData.side_letters,
+          accept_crypto: buildData.accept_crypto,
         },
       },
     });
@@ -340,8 +361,7 @@ const BuildDetails = ({
     const isNotInternationalInvestors =
       target.name === 'international_investors_status' && (target.value === 'false' || 'unknown');
     const isNotMasterSeries = target.name === 'estimated_spv_quantity' && target.value < 5;
-    const isAllocationsTheAdvisor =
-      target.name === 'allocations_investment_advisor' && target.value;
+    const isAllocationsTheAdvisor = target.name === 'allocations_reporting_adviser' && target.value;
     const isNotCustomManagementFee =
       target.name === 'management_fee_value' && target.value !== 'Custom';
     const isNotCustomCarryFee = target.name === 'carry_fee_value' && target.value !== 'Custom';
@@ -351,7 +371,8 @@ const BuildDetails = ({
         ...prev,
         // IS NULL CORRECT?
         master_series: isNotMasterSeries ? null : prev.master_series,
-        investment_advisor: isAllocationsTheAdvisor ? '' : prev.investment_advisor,
+        high_volume_partner: !isNotMasterSeries,
+        custom_reporting_adviser: isAllocationsTheAdvisor ? '' : prev.custom_reporting_adviser,
         custom_management_fee: isNotCustomManagementFee ? 'false' : prev.custom_management_fee,
         custom_carry_fee: isNotCustomCarryFee ? 'false' : prev.custom_carry_fee,
         international_company_country: isNotInternational ? '' : prev.international_company_country,
@@ -360,7 +381,6 @@ const BuildDetails = ({
           : prev.international_investors_countries,
         [target.name]: target.value,
       };
-
       localStorage.setItem('buildData', JSON.stringify(newBuildObject));
       return newBuildObject;
     });
@@ -537,7 +557,7 @@ const BuildDetails = ({
                   >
                     <HelpIcon
                       className={classes.helpIcon}
-                      onClick={(e) => handleTooltip('management_fee_value')}
+                      onClick={() => handleTooltip('management_fee_value')}
                     />
                   </ModalTooltip>
                 </Typography>
@@ -579,7 +599,7 @@ const BuildDetails = ({
                     >
                       <HelpIcon
                         className={classes.helpIcon}
-                        onClick={(e) => handleTooltip('custom_management_fee')}
+                        onClick={() => handleTooltip('custom_management_fee')}
                       />
                     </ModalTooltip>
                   </Typography>
@@ -627,7 +647,7 @@ const BuildDetails = ({
                   >
                     <HelpIcon
                       className={classes.helpIcon}
-                      onClick={(e) => handleTooltip('fee_frequency')}
+                      onClick={() => handleTooltip('fee_frequency')}
                     />
                   </ModalTooltip>
                 </Typography>
@@ -661,7 +681,7 @@ const BuildDetails = ({
                   >
                     <HelpIcon
                       className={classes.helpIcon}
-                      onClick={(e) => handleTooltip('carry_fee_value')}
+                      onClick={() => handleTooltip('carry_fee_value')}
                     />
                   </ModalTooltip>
                 </Typography>
@@ -702,7 +722,7 @@ const BuildDetails = ({
                     >
                       <HelpIcon
                         className={classes.helpIcon}
-                        onClick={(e) => handleTooltip('custom_carry_fee')}
+                        onClick={() => handleTooltip('custom_carry_fee')}
                       />
                     </ModalTooltip>
                   </Typography>
@@ -747,7 +767,7 @@ const BuildDetails = ({
                   >
                     <HelpIcon
                       className={classes.helpIcon}
-                      onClick={(e) => handleTooltip('same_investor_fee')}
+                      onClick={() => handleTooltip('same_investor_fee')}
                     />
                   </ModalTooltip>
                 </Typography>
@@ -780,7 +800,7 @@ const BuildDetails = ({
                   >
                     <HelpIcon
                       className={classes.helpIcon}
-                      onClick={(e) => handleTooltip('minimum_investment')}
+                      onClick={() => handleTooltip('minimum_investment')}
                     />
                   </ModalTooltip>
                 </Typography>
@@ -814,6 +834,39 @@ const BuildDetails = ({
                 />
               </FormControl>
             </Grid>
+            <Grid className={classes.inputGridItem} item xs={6}>
+              <FormControl required variant="outlined" className={classes.formContainers}>
+                <Typography className={classes.formItemName}>
+                  Will you allow investments with crypto?
+                  <ModalTooltip
+                    title="Crypto Payments"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        By accepting crypto payments, you aggree to use Atomizer, LLC as the Master
+                        Series Name
+                      </Typography>
+                    }
+                    openTooltip={openTooltip}
+                    id="crypto_payments"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={() => handleTooltip('crypto_payments')}
+                    />
+                  </ModalTooltip>
+                </Typography>
+                <ButtonSelector
+                  name="accept_crypto"
+                  onChange={handleChange}
+                  currentValue={buildData.accept_crypto}
+                  values={[
+                    { label: 'Yes', value: 'true' },
+                    { label: 'No', value: 'false' },
+                  ]}
+                />
+              </FormControl>
+            </Grid>
           </Grid>
         </form>
       </Paper>
@@ -842,21 +895,21 @@ const BuildDetails = ({
                   >
                     <HelpIcon
                       className={classes.helpIcon}
-                      onClick={(e) => handleTooltip('reporting_advisor')}
+                      onClick={() => handleTooltip('reporting_advisor')}
                     />
                   </ModalTooltip>
                 </Typography>
                 <ButtonSelector
-                  name="allocations_investment_advisor"
+                  name="allocations_reporting_adviser"
                   onChange={handleChange}
-                  currentValue={buildData.allocations_investment_advisor}
+                  currentValue={buildData.allocations_reporting_adviser}
                   values={[
                     { label: 'Yes (Recommended)', value: 'true' },
                     { label: 'No', value: 'false' },
                   ]}
                 />
               </FormControl>
-              {buildData.allocations_investment_advisor === 'false' && (
+              {buildData.allocations_reporting_adviser === 'false' && (
                 <FormControl
                   required
                   disabled
@@ -873,18 +926,18 @@ const BuildDetails = ({
                         <Typography color="inherit">Please indicate your ERA/RIA name</Typography>
                       }
                       openTooltip={openTooltip}
-                      id="investment_advisor"
+                      id="custom_reporting_adviser"
                     >
                       <HelpIcon
                         className={classes.helpIcon}
-                        onClick={(e) => handleTooltip('investment_advisor')}
+                        onClick={() => handleTooltip('custom_reporting_adviser')}
                       />
                     </ModalTooltip>
                   </Typography>
                   <TextField
-                    value={buildData.investment_advisor}
+                    value={buildData.custom_reporting_adviser}
                     placeholder="Adviser Name"
-                    name="investment_advisor"
+                    name="custom_reporting_adviser"
                     onChange={handleChange}
                     className={classes.inputBox}
                     variant="outlined"
@@ -913,7 +966,7 @@ const BuildDetails = ({
                   >
                     <HelpIcon
                       className={classes.helpIcon}
-                      onClick={(e) => handleTooltip('offering_type')}
+                      onClick={() => handleTooltip('offering_type')}
                     />
                   </ModalTooltip>
                 </Typography>
@@ -946,7 +999,7 @@ const BuildDetails = ({
                   >
                     <HelpIcon
                       className={classes.helpIcon}
-                      onClick={(e) => handleTooltip('fund_template_docs')}
+                      onClick={() => handleTooltip('fund_template_docs')}
                     />
                   </ModalTooltip>
                 </Typography>
@@ -989,7 +1042,7 @@ const BuildDetails = ({
                   >
                     <HelpIcon
                       className={classes.helpIcon}
-                      onClick={(e) => handleTooltip('international_company_status')}
+                      onClick={() => handleTooltip('international_company_status')}
                     />
                   </ModalTooltip>
                 </Typography>
@@ -1030,7 +1083,7 @@ const BuildDetails = ({
                   >
                     <HelpIcon
                       className={classes.helpIcon}
-                      onClick={(e) => handleTooltip('international_investors_status')}
+                      onClick={() => handleTooltip('international_investors_status')}
                     />
                   </ModalTooltip>
                 </Typography>
@@ -1086,7 +1139,7 @@ const BuildDetails = ({
               >
                 <HelpIcon
                   className={classes.helpIcon}
-                  onClick={(e) => handleTooltip('extra_notes')}
+                  onClick={() => handleTooltip('extra_notes')}
                 />
               </ModalTooltip>
             </Typography>
@@ -1131,49 +1184,39 @@ const BuildDetails = ({
   );
 };
 
-function FinishComponent({ history, deal, classes }) {
-  return (
-    <Button
-      className={classes.finishButton}
-      onClick={() => {
-        toast.success('Success! Your submission was submitted.');
-        localStorage.removeItem('buildData');
-        localStorage.removeItem('buildDeal');
-        localStorage.removeItem('buildFilesUploaded');
-        if (deal?._id) history.push(`/deal-setup?id=${deal._id}`);
-      }}
-    >
-      Finish
-    </Button>
-  );
-}
-
 export default function NewSpvForm() {
   const { userProfile, loading: authLoading } = useAuth();
   const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
-  const [setBuildInfo] = useMutation(SET_BUILD_INFO);
+  const [setBuildInfo, { data: updatedDeal, loading: updatedDealLoading }] =
+    useMutation(SET_BUILD_INFO);
+
+  const organization = useCurrentOrganization();
+
   // Page
   const [page, setPage] = useState(0);
 
   useEffect(() => {
     // if there is no build data/deal_id, we create a new build (default info pulled from the backend)
-    if (!localStorage.getItem('buildData') && !localStorage.getItem('buildDeal')) {
-      createBuild();
+    if (organization) {
+      if (!localStorage.getItem('buildData') && !localStorage.getItem('buildDeal')) {
+        createBuild({ variables: { payload: { organization_id: organization._id } } });
+      }
     }
-  }, []);
+  }, [organization]);
 
   useEffect(() => {
     // if we finished creating the build, set the deal info in local storage
     if (initialDeal) {
       localStorage.setItem('buildDeal', JSON.stringify(initialDeal.deal));
     }
-  }, [loading]);
+  }, [loading, initialDeal?.deal]);
 
   const pages = [
     {
       title: 'Build your SPV',
       Component: (
         <BuildDetails
+          organization={organization}
           userProfile={userProfile}
           page={page}
           setPage={setPage}
@@ -1195,6 +1238,8 @@ export default function NewSpvForm() {
           }
           page={page}
           setPage={setPage}
+          updatedDeal={updatedDeal}
+          updatedDealLoading={updatedDealLoading}
         />
       ),
     },
