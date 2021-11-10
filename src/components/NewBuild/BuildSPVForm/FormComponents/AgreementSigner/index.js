@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Button, CircularProgress, Paper } from '@material-ui/core';
 import { gql, useLazyQuery, useQuery } from '@apollo/client';
 import Typography from '@material-ui/core/Typography';
-import bluePenIcon from '../../../../../assets/sign-agreement-blue-pen.svg';
-import useStyles from '../../../BuildStyles';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
+import bluePenIcon from '../../../../../assets/sign-agreement-blue-pen.svg';
+import useStyles from '../../../BuildStyles';
 
 const SERVICE_AGREEMENT_LINK = gql`
   query serviceAgreementLink($deal_id: String) {
@@ -13,6 +13,16 @@ const SERVICE_AGREEMENT_LINK = gql`
       dataRequestId: id
       tokenId: token_id
       tokenSecret: token_secret
+    }
+  }
+`;
+const GET_DOCUMENT = gql`
+  query getDealDocService($task_id: String) {
+    getDealDocService(task_id: $task_id) {
+      _id
+      title
+      link
+      createdAt
     }
   }
 `;
@@ -43,12 +53,22 @@ export default function SignDocsForm({ page, setPage, deal, updatedDeal, updated
     },
   );
 
+  const phase = updatedDeal?.setBuildInfo?.phases.find((phase) => phase.name === 'build');
+  const task = phase?.tasks?.find((task) => task.title === 'Sign Service Agreement');
+
+  const [getSignedServiceAgreement, { data: serviceAgreementDocUrl, loading: signedDocLoading }] =
+    useLazyQuery(GET_DOCUMENT, { variables: { task_id: task?._id }, fetchPolicy: 'network-only' });
+
   useEffect(() => {
     if (updatedDeal) getServiceAgreementLink();
   }, [updatedDeal, error]);
 
+  useEffect(() => {
+    if (signed) getSignedServiceAgreement();
+  }, [signed]);
+
   const classes = useStyles();
-  const loading = agreementLinkLoading || updatedDealLoading;
+  const loading = updatedDealLoading || agreementLinkLoading || signedDocLoading;
   const readyToSign = data && !error && !loading;
 
   return (
@@ -65,8 +85,11 @@ export default function SignDocsForm({ page, setPage, deal, updatedDeal, updated
         </div>
         <Paper
           className={signed ? classes.agreementSignedBox : classes.agreementUnsignedBox}
-          style={{ cursor: readyToSign && 'pointer', pointerEvents: !readyToSign && 'none' }}
-          onClick={() => (readyToSign ? signingModal(data.serviceAgreementLink) : null)}
+          style={{
+            cursor: readyToSign && !signed && 'pointer',
+            pointerEvents: !readyToSign && 'none',
+          }}
+          onClick={() => (readyToSign ? !signed && signingModal(data.serviceAgreementLink) : null)}
         >
           <div style={{ display: 'flex', alignItems: 'center' }}>
             {!data || loading || error ? (
@@ -78,7 +101,21 @@ export default function SignDocsForm({ page, setPage, deal, updatedDeal, updated
             )}
 
             <Typography className={classes.itemText} style={{ width: '200px' }}>
-              Service Agreement
+              {!updatedDeal ? (
+                'Building your deal...'
+              ) : agreementLinkLoading ? (
+                'Almost done...'
+              ) : serviceAgreementDocUrl?.getDealDocService?.link ? (
+                <a
+                  href={serviceAgreementDocUrl?.getDealDocService?.link}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Service Agreement
+                </a>
+              ) : (
+                'Service Agreement'
+              )}
             </Typography>
           </div>
 

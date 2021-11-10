@@ -10,12 +10,18 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { FaRocket } from 'react-icons/fa';
+import { BsBinocularsFill } from 'react-icons/bs';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import BuildModal from '../NewBuild/BuildModal';
 import styles from './styles';
 
 const AddBubbleBuildButton = ({ classes }) => (
-  <Button variant="contained" className={classes.addButton} href="https://build.allocations.com">
+  <Button
+    variant="contained"
+    className={classes.addButton}
+    target="_blank"
+    href="https://build.allocations.com"
+  >
     <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
     Add
   </Button>
@@ -86,6 +92,11 @@ const SidebarDrawer = ({
           to: '/profile',
           title: 'Profile',
           icon: <PersonIcon fontSize="medium" />,
+        },
+        {
+          to: '/prospects',
+          title: 'Prospects',
+          icon: <BsBinocularsFill />,
         },
       ],
     },

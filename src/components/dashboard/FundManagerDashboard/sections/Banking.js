@@ -77,6 +77,7 @@ const fields = [
   },
   {
     displayName: 'Banking Email',
+    default: 'nd-banking@allocations.com',
     prop: 'email',
     type: 'email',
     validator: (email) => {

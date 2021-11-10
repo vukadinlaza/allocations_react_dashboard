@@ -19,9 +19,10 @@ import AgreementSigner from './FormComponents/AgreementSigner';
 import { convertToPositiveIntOrNull } from '../../../utils/numbers';
 
 const CREATE_BUILD = gql`
-  mutation createBuild {
-    deal: createBuild {
+  mutation createBuild($payload: Object) {
+    deal: createBuild(payload: $payload) {
       _id
+      master_series
       phases {
         _id
         name
@@ -140,8 +141,8 @@ const BuildDetails = ({
   deal_id,
   waitingOnInitialDeal,
   initialDeal,
+  organization,
 }) => {
-  const organization = useCurrentOrganization();
   const classes = useStyles();
 
   const [buildData, setBuildData] = useState({
@@ -155,6 +156,7 @@ const BuildDetails = ({
     custom_management_fee: 'false',
     deal_stage: '',
     estimated_spv_quantity: null,
+    high_volume_partner: null,
     international_company_status: 'false',
     international_company_country: '',
     international_investors_status: 'false',
@@ -179,12 +181,22 @@ const BuildDetails = ({
     sectors: [],
   });
 
+  const defaultMasterSeries = 'Atomizer LLC';
+
+  useEffect(() => {
+    if (initialDeal?.master_series) {
+      setBuildData((prevState) => ({
+        ...prevState,
+        master_series:
+          initialDeal?.master_series !== defaultMasterSeries ? initialDeal?.master_series : '',
+      }));
+    }
+  }, [initialDeal?.master_series]);
+
   const [unfilledFields, setUnfilledFields] = useState([]);
 
   const formValidation = () => {
     //* **** NEED TO VALIDATE CLOSING DATE STILL - NEED TO CHECK FOR PROPER DATE FORMAT *********
-
-    /// *** UPLOADED DOCUMENTS NOT VALIDATED YET *** ///
 
     const unvalidatedFields = [];
     const fieldsToFill = [];
@@ -209,7 +221,7 @@ const BuildDetails = ({
       fieldsToFill.push('representative');
       unvalidatedFields.push('Representative of Manager');
     }
-    if (!buildData.estimated_spv_quantity) {
+    if (!buildData.estimated_spv_quantity && buildData.master_series === defaultMasterSeries) {
       fieldsToFill.push('estimated_spv_quantity');
       unvalidatedFields.push('Estimated Number of SPVs');
     }
@@ -227,7 +239,7 @@ const BuildDetails = ({
     }
 
     // conditionally checked fields below here
-    if (!buildData.master_series && buildData.estimated_spv_quantity >= 5) {
+    if (buildData.master_series === defaultMasterSeries && buildData.estimated_spv_quantity >= 5) {
       fieldsToFill.push('master_series');
       unvalidatedFields.push('Master Series Name');
     }
@@ -306,6 +318,7 @@ const BuildDetails = ({
           custom_investment_agreement: buildData.custom_investment_agreement,
           deal_stage: buildData.deal,
           estimated_spv_quantity: Number(buildData.estimated_spv_quantity),
+          high_volume_partner: buildData.high_volume_partner,
           international_company: {
             status: buildData.international_company_status,
             country: buildData.international_company_country,
@@ -322,7 +335,7 @@ const BuildDetails = ({
           },
           management_fee_frequency: buildData.management_fee_frequency,
           manager_name: buildData.manager_name,
-          master_series: buildData.master_series,
+          master_series: buildData.master_series || defaultMasterSeries,
           minimum_subscription_amount: buildData.minimum_investment,
           offering_type: buildData.offering_type,
           portfolio_company_name: buildData.portfolio_company_name,
@@ -353,6 +366,7 @@ const BuildDetails = ({
         ...prev,
         // IS NULL CORRECT?
         master_series: isNotMasterSeries ? null : prev.master_series,
+        high_volume_partner: !isNotMasterSeries,
         custom_reporting_adviser: isAllocationsTheAdvisor ? '' : prev.custom_reporting_adviser,
         custom_management_fee: isNotCustomManagementFee ? 'false' : prev.custom_management_fee,
         custom_carry_fee: isNotCustomCarryFee ? 'false' : prev.custom_carry_fee,
@@ -362,7 +376,6 @@ const BuildDetails = ({
           : prev.international_investors_countries,
         [target.name]: target.value,
       };
-
       localStorage.setItem('buildData', JSON.stringify(newBuildObject));
       return newBuildObject;
     });
@@ -1133,50 +1146,39 @@ const BuildDetails = ({
   );
 };
 
-function FinishComponent({ history, deal, classes }) {
-  return (
-    <Button
-      className={classes.finishButton}
-      onClick={() => {
-        toast.success('Success! Your submission was submitted.');
-        localStorage.removeItem('buildData');
-        localStorage.removeItem('buildDeal');
-        localStorage.removeItem('buildFilesUploaded');
-        if (deal?._id) history.push(`/deal-setup?id=${deal._id}`);
-      }}
-    >
-      Finish
-    </Button>
-  );
-}
-
 export default function NewSpvForm() {
   const { userProfile, loading: authLoading } = useAuth();
   const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
   const [setBuildInfo, { data: updatedDeal, loading: updatedDealLoading }] =
     useMutation(SET_BUILD_INFO);
+
+  const organization = useCurrentOrganization();
+
   // Page
   const [page, setPage] = useState(0);
 
   useEffect(() => {
     // if there is no build data/deal_id, we create a new build (default info pulled from the backend)
-    if (!localStorage.getItem('buildData') && !localStorage.getItem('buildDeal')) {
-      createBuild();
+    if (organization) {
+      if (!localStorage.getItem('buildData') && !localStorage.getItem('buildDeal')) {
+        createBuild({ variables: { payload: { organization_id: organization._id } } });
+      }
     }
-  }, []);
+  }, [organization]);
 
   useEffect(() => {
     // if we finished creating the build, set the deal info in local storage
     if (initialDeal) {
       localStorage.setItem('buildDeal', JSON.stringify(initialDeal.deal));
     }
-  }, [loading]);
+  }, [loading, initialDeal?.deal]);
 
   const pages = [
     {
       title: 'Build your SPV',
       Component: (
         <BuildDetails
+          organization={organization}
           userProfile={userProfile}
           page={page}
           setPage={setPage}
