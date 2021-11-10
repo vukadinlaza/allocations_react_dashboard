@@ -548,58 +548,61 @@ export default function TypeSelector({
             </FormControl>
           </Grid>
 
-          <Grid className={classes.inputGridItem} item xs={6}>
-            <FormControl required disabled variant="outlined" className={classes.formContainers}>
-              <Typography className={classes.formItemName}>
-                Estimated number of SPVs in the next 12 months?
-                <ModalTooltip
-                  title="SPV amount in the next 12 months"
-                  handleTooltip={handleTooltip}
-                  tooltipContent={
-                    <Typography color="inherit">
-                      Should you select 5 or more SPVs, you will be eligible for a High Volume
-                      Partnership benefits (such as, custom name of your Master Series LLC, custom
-                      name of your SPVs, and others)
-                    </Typography>
-                  }
-                  openTooltip={openTooltip}
-                  id="estimated_spv_quantity"
-                >
-                  <HelpIcon
-                    className={classes.helpIcon}
-                    onClick={(e) => handleTooltip('estimated_spv_quantity')}
-                  />
-                </ModalTooltip>
-              </Typography>
-              <TextField
-                type="number"
-                value={buildData.estimated_spv_quantity}
-                name="estimated_spv_quantity"
-                onChange={(e) => {
-                  const value = convertToPositiveIntOrNull(e.target.value);
+          {buildData.master_series === 'Atomizer LLC' && (
+            <Grid className={classes.inputGridItem} item xs={6}>
+              <FormControl required disabled variant="outlined" className={classes.formContainers}>
+                <Typography className={classes.formItemName}>
+                  Estimated number of SPVs in the next 12 months?
+                  <ModalTooltip
+                    title="SPV amount in the next 12 months"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        Should you select 5 or more SPVs, you will be eligible for a High Volume
+                        Partnership benefits (such as, custom name of your Master Series LLC, custom
+                        name of your SPVs, and others)
+                      </Typography>
+                    }
+                    openTooltip={openTooltip}
+                    id="estimated_spv_quantity"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={(e) => handleTooltip('estimated_spv_quantity')}
+                    />
+                  </ModalTooltip>
+                </Typography>
+                <TextField
+                  type="number"
+                  value={buildData.estimated_spv_quantity}
+                  name="estimated_spv_quantity"
+                  onChange={(e) => {
+                    const value = convertToPositiveIntOrNull(e.target.value);
 
-                  const newEvent = {
-                    target: {
-                      name: 'estimated_spv_quantity',
-                      value,
-                    },
-                  };
+                    const newEvent = {
+                      target: {
+                        name: 'estimated_spv_quantity',
+                        value,
+                      },
+                    };
 
-                  handleChange(newEvent);
-                  setUnfilledFields((prev) =>
-                    prev.filter((field) => field !== 'estimated_spv_quantity'),
-                  );
-                }}
-                className={classes.inputBox}
-                variant="outlined"
-                inputProps={customInputStyles}
-                classes={{
-                  root: unfilledFields.includes('estimated_spv_quantity') && classes.unfilledField,
-                }}
-              />
-            </FormControl>
-          </Grid>
-          {buildData.estimated_spv_quantity >= 5 && (
+                    handleChange(newEvent);
+                    setUnfilledFields((prev) =>
+                      prev.filter((field) => field !== 'estimated_spv_quantity'),
+                    );
+                  }}
+                  className={classes.inputBox}
+                  variant="outlined"
+                  inputProps={customInputStyles}
+                  classes={{
+                    root:
+                      unfilledFields.includes('estimated_spv_quantity') && classes.unfilledField,
+                  }}
+                />
+              </FormControl>
+            </Grid>
+          )}
+          {buildData.master_series === 'Atomizer LLC' && buildData.estimated_spv_quantity >= 5 && (
             <Grid className={classes.inputGridItem} item xs={12}>
               <FormControl required disabled variant="outlined" className={classes.formContainers}>
                 <Typography className={classes.formItemName}>
@@ -638,6 +641,7 @@ export default function TypeSelector({
               </FormControl>
             </Grid>
           )}
+
           <Grid className={classes.inputGridItem} item xs={12}>
             <Typography className={classes.formItemName}>
               Sector(s)

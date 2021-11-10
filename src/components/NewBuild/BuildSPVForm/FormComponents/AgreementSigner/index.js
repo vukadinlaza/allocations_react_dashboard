@@ -85,7 +85,10 @@ export default function SignDocsForm({ page, setPage, deal, updatedDeal, updated
         </div>
         <Paper
           className={signed ? classes.agreementSignedBox : classes.agreementUnsignedBox}
-          style={{ cursor: readyToSign && 'pointer', pointerEvents: !readyToSign && 'none' }}
+          style={{
+            cursor: readyToSign && !signed && 'pointer',
+            pointerEvents: !readyToSign && 'none',
+          }}
           onClick={() => (readyToSign ? !signed && signingModal(data.serviceAgreementLink) : null)}
         >
           <div style={{ display: 'flex', alignItems: 'center' }}>
