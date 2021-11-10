@@ -22,6 +22,7 @@ const CREATE_BUILD = gql`
   mutation createBuild($payload: Object) {
     deal: createBuild(payload: $payload) {
       _id
+      high_volume_partner
       master_series
       phases {
         _id
@@ -156,7 +157,7 @@ const BuildDetails = ({
     custom_management_fee: 'false',
     deal_stage: '',
     estimated_spv_quantity: null,
-    high_volume_partner: null,
+    high_volume_partner: false,
     international_company_status: 'false',
     international_company_country: '',
     international_investors_status: 'false',
@@ -184,14 +185,14 @@ const BuildDetails = ({
   const defaultMasterSeries = 'Atomizer LLC';
 
   useEffect(() => {
-    if (initialDeal?.master_series) {
-      setBuildData((prevState) => ({
-        ...prevState,
-        master_series:
-          initialDeal?.master_series !== defaultMasterSeries ? initialDeal?.master_series : '',
+    if (initialDeal?.high_volume_partner) {
+      setBuildData((prev) => ({
+        ...prev,
+        master_series: initialDeal?.master_series,
+        high_volume_partner: true,
       }));
     }
-  }, [initialDeal?.master_series]);
+  }, [initialDeal]);
 
   const [unfilledFields, setUnfilledFields] = useState([]);
 
