@@ -35,7 +35,7 @@ const fields = [
     type: 'text',
   },
   {
-    displayName: 'Executor Legal Name',
+    displayName: 'Account Holder Legal Name',
     prop: 'executorLegalName',
     type: 'text',
   },
@@ -87,7 +87,7 @@ const fields = [
     },
   },
   {
-    displayName: 'Phone',
+    displayName: 'Allocations Contact Phone Number',
     prop: 'phone',
     type: 'text',
     validator: (phone) => {
@@ -118,8 +118,8 @@ const fields = [
     prop: 'taxIDNumber',
     type: 'text',
     validator: (id) => {
-      const errorMessage = 'Number must be XX-XXXXXX Format';
-      const reg = /^(\d{2})-(\d{7})$/;
+      const errorMessage = 'Number must be XXXXXXXX Format';
+      const reg = /^(\d{9})$/;
       return { valid: RegExp(reg).test(id), errorMessage };
     },
   },
