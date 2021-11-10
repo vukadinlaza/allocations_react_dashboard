@@ -24,7 +24,9 @@ const REFERENCE_NUMBERS_BY_DEAL_ID = gql`
 
 const CREATE_ND_BANK_ACCOUNT = gql`
   mutation createNDBankAccount($accountInfo: AccountInfo!) {
-    createNDBankAccount(accountInfo: $accountInfo)
+    createNDBankAccount(accountInfo: $accountInfo) {
+      success
+    }
   }
 `;
 
