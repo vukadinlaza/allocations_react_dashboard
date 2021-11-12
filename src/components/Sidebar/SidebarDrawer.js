@@ -16,7 +16,12 @@ import BuildModal from '../NewBuild/BuildModal';
 import styles from './styles';
 
 const AddBubbleBuildButton = ({ classes }) => (
-  <Button variant="contained" className={classes.addButton} href="https://build.allocations.com">
+  <Button
+    variant="contained"
+    className={classes.addButton}
+    target="_blank"
+    href="https://build.allocations.com"
+  >
     <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
     Add
   </Button>

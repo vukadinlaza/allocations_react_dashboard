@@ -73,6 +73,7 @@ const fields = [
     displayName: 'Banking Email',
     prop: 'email',
     type: 'email',
+    default: 'nd-banking@allocations.com',
   },
   {
     displayName: 'Phone',
