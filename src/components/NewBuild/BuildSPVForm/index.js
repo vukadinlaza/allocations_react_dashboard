@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import moment from 'moment';
-import _ from 'lodash';
 import countries from 'country-region-data';
 import { toast } from 'react-toastify';
 import HelpIcon from '@material-ui/icons/Help';
@@ -179,6 +178,7 @@ const BuildDetails = ({
     setup_cost: 20000,
     side_letters: 'false',
     sectors: [],
+    accept_crypto: 'false',
   });
 
   const defaultMasterSeries = 'Atomizer LLC';
@@ -277,6 +277,10 @@ const BuildDetails = ({
     ) {
       fieldsToFill.push('international_investors_countries');
       unvalidatedFields.push('Countries of International Investors');
+    }
+    if (!buildData.accept_crypto) {
+      fieldsToFill.push('accept_crypto');
+      unvalidatedFields.push('Accept Crypto');
     }
 
     setUnfilledFields(fieldsToFill);
@@ -826,6 +830,39 @@ const BuildDetails = ({
                       unfilledFields.includes('minimum_investment') && classes.unfilledField
                     } ${classes.selectInputBox}`,
                   }}
+                />
+              </FormControl>
+            </Grid>
+            <Grid className={classes.inputGridItem} item xs={6}>
+              <FormControl required variant="outlined" className={classes.formContainers}>
+                <Typography className={classes.formItemName}>
+                  Will you allow investments with crypto?
+                  <ModalTooltip
+                    title="Crypto Payments"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        By accepting crypto payments, you aggree to use Atomizer, LLC as the Master
+                        Series Name
+                      </Typography>
+                    }
+                    openTooltip={openTooltip}
+                    id="crypto_payments"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={() => handleTooltip('crypto_payments')}
+                    />
+                  </ModalTooltip>
+                </Typography>
+                <ButtonSelector
+                  name="accept_crypto"
+                  onChange={handleChange}
+                  currentValue={buildData.accept_crypto}
+                  values={[
+                    { label: 'Yes', value: 'true' },
+                    { label: 'No', value: 'false' },
+                  ]}
                 />
               </FormControl>
             </Grid>
