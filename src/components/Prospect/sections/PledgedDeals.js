@@ -6,6 +6,8 @@ import DealCard from './DealsCard/DealCard';
 const pledgedDeals = [
   {
     deal_name: 'Wowzer',
+    deal_slug: 'wowzer',
+    deal_organization: 'aardvark',
     deal_image: '',
     deal_max_allocation: 795000,
     deal_raised_amount: 420000,
@@ -16,6 +18,8 @@ const pledgedDeals = [
   },
   {
     deal_name: 'Verizon',
+    deal_slug: 'verizon',
+    deal_organization: 'aardvark',
     deal_image: '',
     deal_max_allocation: 110000,
     deal_raised_amount: 33000,
@@ -26,6 +30,8 @@ const pledgedDeals = [
   },
   {
     deal_name: 'TOPper',
+    deal_slug: 'topper',
+    deal_organization: 'aardvark',
     deal_image: '',
     deal_max_allocation: 400000,
     deal_raised_amount: 750000,
@@ -36,6 +42,8 @@ const pledgedDeals = [
   },
   {
     deal_name: 'Aardvark',
+    deal_slug: 'aardvark',
+    deal_organization: 'aardvark',
     deal_image: '',
     deal_max_allocation: 950000,
     deal_raised_amount: 630000,
@@ -50,7 +58,7 @@ const PledgedDeals = ({ userProfile, deals }) => {
   return (
     <Grid container spacing={2} justifyContent="center">
       {pledgedDeals.map((deal) => {
-        return <DealCard deal={deal} />;
+        return <DealCard deal={deal} key={deal.deal_name} />;
       })}
     </Grid>
   );

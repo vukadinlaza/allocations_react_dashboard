@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -38,9 +38,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DealCard = ({ deal }) => {
+  console.log('deal==>', deal);
   const history = useHistory();
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -52,18 +53,11 @@ const DealCard = ({ deal }) => {
 
   const viewDeal = () => {
     /* bring in data to go to real deal */
-    history.push('prospects/aardvark/aardvark');
+    history.push(`prospects/${deal.deal_organization}/${deal.deal_slug}`);
   };
 
   return (
-    <Grid
-      item
-      xs={12}
-      md={6}
-      lg={3}
-      key={deal.deal_name}
-      style={{ display: 'flex', justifyContent: 'center' }}
-    >
+    <Grid item xs={12} md={6} lg={3} style={{ display: 'flex', justifyContent: 'center' }}>
       <Card className={classes.mainCard} variant="outlined">
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <IconButton
