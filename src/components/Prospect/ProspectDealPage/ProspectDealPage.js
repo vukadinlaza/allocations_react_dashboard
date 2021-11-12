@@ -144,9 +144,9 @@ const ProspectDealPage = () => {
   return (
     <div>
       <div className={classes.mainTitleContainer}>
-        <Typography variant="h6" className={classes.mainTitle}>
+        <Typography variant="subtitle1" className={classes.mainTitle}>
           Allocations Angels{' '}
-          <span style={{ fontSize: '14px', color: 'grey' }}>
+          <span style={{ fontSize: '12px', color: 'grey' }}>
             / Search and follow in the directory
           </span>
         </Typography>

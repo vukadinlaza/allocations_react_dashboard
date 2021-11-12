@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Tabs, Tab, Typography } from '@material-ui/core';
+import { Tabs, Tab, Typography, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Deals from './sections/Deals';
 import InvitedDeals from './sections/InvitedDeals';
@@ -35,6 +35,23 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
       fontSize: '.5rem',
+    },
+  },
+  paper: {
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    boxShadow: '0px 3px 6px #00000029',
+    border: '1px solid #7070703B',
+    marginBottom: '16px',
+    borderRadius: '15px',
+    padding: '42px',
+    width: '100%',
+    maxWidth: '1352px',
+    opacity: 1,
+    [theme.breakpoints.down('sm')]: {
+      maxWidth: '600px',
+      marginBottom: '24px',
+      padding: '16px',
+      paddingBottom: '30px',
     },
   },
   selectedTab: {
@@ -109,7 +126,7 @@ const Prospect = () => {
   };
 
   return (
-    <div className={classes.dashboardContainer}>
+    <div>
       <div className={classes.mainTitleContainer}>
         <Typography variant="subtitle1" className={classes.mainTitle}>
           Allocations Angels{' '}
@@ -118,7 +135,8 @@ const Prospect = () => {
           </span>
         </Typography>
       </div>
-      <div>
+
+      <Paper className={classes.paper}>
         <div style={{ position: 'relative' }}>
           <Tabs
             value={tabIndex}
@@ -148,7 +166,7 @@ const Prospect = () => {
           </Tabs>
           <div className={classes.contentContainer}>{getTabContent()}</div>
         </div>
-      </div>
+      </Paper>
     </div>
   );
 };
