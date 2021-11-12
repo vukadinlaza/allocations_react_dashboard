@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Button, CircularProgress, Paper } from '@material-ui/core';
 import { gql, useLazyQuery, useQuery } from '@apollo/client';
 import Typography from '@material-ui/core/Typography';
-import bluePenIcon from '../../../../../assets/sign-agreement-blue-pen.svg';
-import useStyles from '../../../BuildStyles';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
+import bluePenIcon from '../../../../../assets/sign-agreement-blue-pen.svg';
+import useStyles from '../../../BuildStyles';
 
 const SERVICE_AGREEMENT_LINK = gql`
   query serviceAgreementLink($deal_id: String) {
@@ -85,7 +85,10 @@ export default function SignDocsForm({ page, setPage, deal, updatedDeal, updated
         </div>
         <Paper
           className={signed ? classes.agreementSignedBox : classes.agreementUnsignedBox}
-          style={{ cursor: readyToSign && 'pointer', pointerEvents: !readyToSign && 'none' }}
+          style={{
+            cursor: readyToSign && !signed && 'pointer',
+            pointerEvents: !readyToSign && 'none',
+          }}
           onClick={() => (readyToSign ? !signed && signingModal(data.serviceAgreementLink) : null)}
         >
           <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -103,7 +106,11 @@ export default function SignDocsForm({ page, setPage, deal, updatedDeal, updated
               ) : agreementLinkLoading ? (
                 'Almost done...'
               ) : serviceAgreementDocUrl?.getDealDocService?.link ? (
-                <a href={serviceAgreementDocUrl?.getDealDocService?.link} target="_blank">
+                <a
+                  href={serviceAgreementDocUrl?.getDealDocService?.link}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Service Agreement
                 </a>
               ) : (
