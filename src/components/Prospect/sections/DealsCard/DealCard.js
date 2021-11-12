@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { gql, useQuery } from '@apollo/client';
+import React from 'react';
 import {
   Card,
   CardHeader,
@@ -13,33 +12,8 @@ import {
 import { useHistory } from 'react-router-dom';
 import { FiMoreVertical, FiSettings } from 'react-icons/fi';
 import { makeStyles } from '@material-ui/core/styles';
-import { useAuth } from '../../../auth/useAuth';
-import ProgressBar from './DealsSections/ProgressBar';
-import DealInfo from './DealsSections/DealInfo';
-
-const GET_INVESTOR = gql`
-  query GetInvestor($email: String, $_id: String) {
-    investor(email: $email, _id: $_id) {
-      _id
-      first_name
-      last_name
-      email
-    }
-  }
-`;
-
-const GET_DEALS = gql`
-  query GetDeals {
-    allDeals {
-      _id
-      company_name
-      slug
-      created_by {
-        _id
-      }
-    }
-  }
-`;
+import ProgressBar from './ProgressBar';
+import DealInfo from './DealInfo';
 
 const useStyles = makeStyles((theme) => ({
   mainCard: {
@@ -63,74 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const allDeals = [
-  {
-    deal_name: 'Passtur',
-    deal_image: '',
-    deal_max_allocation: 750000,
-    deal_raised_amount: 420000,
-    deal_total_pledges: 13,
-    deal_days_left_to_pledge: 7,
-    deal_stage: 'Seed 3',
-    deal_sectors: ['Crypto', 'Real Estate', 'Human Resources'],
-  },
-  {
-    deal_name: 'SpaceX',
-    deal_image: '',
-    deal_max_allocation: 130000,
-    deal_raised_amount: 31000,
-    deal_total_pledges: 8,
-    deal_days_left_to_pledge: 27,
-    deal_stage: 'Seed',
-    deal_sectors: ['Crypto', 'Space', 'Human Resources'],
-  },
-  {
-    deal_name: 'Biggie',
-    deal_image: '',
-    deal_max_allocation: 300000,
-    deal_raised_amount: 950000,
-    deal_total_pledges: 21,
-    deal_days_left_to_pledge: 3,
-    deal_stage: 'Pre-Seed',
-    deal_sectors: ['Crypto', 'Real Estate', 'Human Resources'],
-  },
-  {
-    deal_name: 'Aardvark',
-    deal_image: '',
-    deal_max_allocation: 950000,
-    deal_raised_amount: 630000,
-    deal_total_pledges: 19,
-    deal_days_left_to_pledge: 13,
-    deal_stage: 'Seed 1',
-    deal_sectors: ['Crypto', 'AI'],
-  },
-];
-
-const Deals = () => {
-  const { userProfile, refetch, loading, logout } = useAuth(GET_INVESTOR);
-  const { loading: dealsLoading, error, data } = useQuery(GET_DEALS);
-  const [myDeals, setMyDeals] = useState([] || '');
-  console.log('my deals==>', myDeals);
-
-  const getDeals = () => {
-    if (!dealsLoading) {
-      const getMyDeals = async () => {
-        const deals = await data;
-        const dealsHaveCreatedBy = await deals.allDeals.filter((deal) => deal.created_by);
-        const allMyDeals = await dealsHaveCreatedBy.filter(
-          (deal) => deal.created_by._id === userProfile._id,
-        );
-        setMyDeals(allMyDeals);
-      };
-      getMyDeals();
-    }
-    return '';
-  };
-
-  useEffect(() => {
-    getDeals();
-  }, [data]);
-
+const DealCard = ({ deals }) => {
   const history = useHistory();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -150,7 +57,7 @@ const Deals = () => {
 
   return (
     <Grid container spacing={2} justifyContent="center">
-      {allDeals.map((deal) => {
+      {deals.map((deal) => {
         return (
           <Grid
             item
@@ -208,4 +115,4 @@ const Deals = () => {
   );
 };
 
-export default Deals;
+export default DealCard;

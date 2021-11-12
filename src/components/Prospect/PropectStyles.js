@@ -1,93 +1,92 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    boxShadow: '0px 3px 6px #00000029',
-    border: '1px solid #8493A640 !important',
-    borderRadius: '10px',
-    overflowX: 'none',
-    width: '100%',
-    height: '100%',
-  },
-  paperOutlined: {
-    boxShadow: 'none !important',
-    border: '1px solid #8493A640 !important',
-    borderRadius: '10px !important',
-  },
-  paperTitle: {
-    padding: '.5rem',
-    paddingLeft: '1rem',
-  },
-  paperMain: {
-    padding: '.5rem',
-    paddingBottom: '1.5rem',
-    paddingRight: '1rem',
-    paddingLeft: '1rem',
-  },
-  primaryColor: {
-    color: theme.palette.primary.main,
-  },
-  errorColor: {
-    color: theme.palette.error.main,
-  },
-  errorHover: {
-    '&:hover': {
-      background: 'rgba(255, 23, 68, 0.05)',
+  contentContainer: {
+    padding: '2rem',
+    [theme.breakpoints.down('sm')]: {
+      padding: '.5rem',
     },
   },
-  attachDeck: {
-    border: '1px solid lightgrey !important',
-    '&:hover': {
-      border: '1px solid black !important',
-    },
-  },
-  dealTypeButtonSelected: {
-    width: '100%',
-    height: '100%',
-  },
-  dealTypeButton: {
-    width: '100%',
-    height: '100%',
-    background: 'white',
-    color: 'black',
-    border: 'solid 1px lightgrey',
-    '&:hover': {
-      color: 'white',
-    },
-  },
-  cancelButton: {
-    background: 'white',
-    color: 'black',
-    border: 'solid 1px lightgrey',
-    '&:hover': {
-      color: 'white',
-      background: 'red',
-    },
-  },
-  sectionList: {
-    '&:not(:last-child)': {
-      marginBottom: 20,
-    },
-  },
-  titleWrapper: {
+  dashboardContainer: {
     display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    width: '100%',
+    position: 'absolute',
+    left: '0',
+    top: '0',
+    background: 'white',
+  },
+  mainTitle: {
+    fontWeight: '500',
+    padding: '20px 0px',
+  },
+  mainTitleContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingBottom: '.5rem',
+    margin: '0 40px',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      fontSize: '.5rem',
+    },
   },
-  selectedSectorsPaper: {
-    display: 'flex',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    listStyle: 'none',
-    padding: theme.spacing(0.5),
+  paper: {
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    boxShadow: '0px 3px 6px #00000029',
+    border: '1px solid #7070703B',
+    marginBottom: '16px',
+    borderRadius: '15px',
+    padding: '42px',
     width: '100%',
-    minHeight: '50px',
-    boxShadow: 'none !important',
+    maxWidth: '1352px',
+    opacity: 1,
+    [theme.breakpoints.down('sm')]: {
+      maxWidth: '600px',
+      marginBottom: '24px',
+      padding: '16px',
+      paddingBottom: '30px',
+    },
   },
-  chip: {
-    margin: theme.spacing(0.5),
-    color: 'white',
-    fontWeight: 'bold',
+  selectedTab: {
+    fontWeight: 'bold !important',
+    '& $tabWrapper': {
+      backgroundColor: 'rgb(32 93 245 / 16%)',
+      borderRadius: '10px',
+    },
+  },
+  tab: {
+    textTransform: 'none',
+    minWidth: 0,
+    fontWeight: '400',
+    '&:focus': {
+      outline: 'none',
+    },
+  },
+  tabs: {
+    width: '100%',
+    border: 'none',
+    height: '50px',
+    padding: '0 28px',
+    '& *': {
+      height: '100%',
+    },
+    [theme.breakpoints.down('sm')]: {
+      padding: '0 12px',
+    },
+  },
+  tabsContainer: {
+    [theme.breakpoints.down('sm')]: {
+      textAlign: 'center',
+      overflow: 'auto',
+      display: 'block',
+    },
+  },
+  tabsIndicator: {
+    display: 'none',
+  },
+  tabWrapper: {
+    padding: '0 20px',
   },
 }));
 
