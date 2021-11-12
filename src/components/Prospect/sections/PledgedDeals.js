@@ -1,4 +1,5 @@
 import React from 'react';
+import { Grid } from '@material-ui/core';
 import DealCard from './DealsCard/DealCard';
 
 /* Dummy data for now */
@@ -47,9 +48,11 @@ const pledgedDeals = [
 
 const PledgedDeals = ({ userProfile, deals }) => {
   return (
-    <>
-      <DealCard deals={pledgedDeals} />
-    </>
+    <Grid container spacing={2} justifyContent="center">
+      {pledgedDeals.map((deal) => {
+        return <DealCard deal={deal} />;
+      })}
+    </Grid>
   );
 };
 

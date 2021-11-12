@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Grid } from '@material-ui/core';
 import DealCard from './DealsCard/DealCard';
 
 /* Dummy data for now */
@@ -68,9 +69,11 @@ const MyDeals = ({ userProfile, deals }) => {
   }, [deals]);
 
   return (
-    <>
-      <DealCard deals={dummyDeals} />
-    </>
+    <Grid container spacing={2} justifyContent="center">
+      {dummyDeals.map((deal) => {
+        return <DealCard deal={deal} />;
+      })}
+    </Grid>
   );
 };
 

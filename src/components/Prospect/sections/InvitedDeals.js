@@ -1,4 +1,5 @@
 import React from 'react';
+import { Grid } from '@material-ui/core';
 import DealCard from './DealsCard/DealCard';
 
 /* Dummy data, until bring in real data */
@@ -51,9 +52,11 @@ const invitedDeals = [
 
 const InvitedDeals = ({ userProfile, deals }) => {
   return (
-    <>
-      <DealCard deals={invitedDeals} />
-    </>
+    <Grid container spacing={2} justifyContent="center">
+      {invitedDeals.map((deal) => {
+        return <DealCard deal={deal} />;
+      })}
+    </Grid>
   );
 };
 

@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DealCard = ({ deals }) => {
+const DealCard = ({ deal }) => {
   const history = useHistory();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -56,61 +56,55 @@ const DealCard = ({ deals }) => {
   };
 
   return (
-    <Grid container spacing={2} justifyContent="center">
-      {deals.map((deal) => {
-        return (
-          <Grid
-            item
-            xs={12}
-            md={6}
-            lg={3}
-            key={deal.deal_name}
-            style={{ display: 'flex', justifyContent: 'center' }}
+    <Grid
+      item
+      xs={12}
+      md={6}
+      lg={3}
+      key={deal.deal_name}
+      style={{ display: 'flex', justifyContent: 'center' }}
+    >
+      <Card className={classes.mainCard} variant="outlined">
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <IconButton
+            aria-label="settings"
+            onClick={handleClick}
+            className={classes.settingsButton}
           >
-            <Card className={classes.mainCard} variant="outlined">
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <IconButton
-                  aria-label="settings"
-                  onClick={handleClick}
-                  className={classes.settingsButton}
-                >
-                  <FiMoreVertical />
-                </IconButton>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                  onClick={handleClose}
-                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                >
-                  <MenuItem onClick={viewDeal}>
-                    <ListItemIcon>
-                      <FiSettings />
-                    </ListItemIcon>
-                    View Deal
-                  </MenuItem>
-                </Menu>
-              </div>
-              <CardHeader
-                style={{ marginTop: '-1rem' }}
-                avatar={
-                  <Avatar className={classes.dealLogo} aria-label="deal logo">
-                    logo
-                  </Avatar>
-                }
-                titleTypographyProps={{ variant: 'subtitle1' }}
-                classes={{
-                  title: classes.cardTitle,
-                }}
-                title={deal.deal_name}
-              />
-              <ProgressBar deal={deal} />
-              <DealInfo deal={deal} />
-            </Card>
-          </Grid>
-        );
-      })}
+            <FiMoreVertical />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            onClick={handleClose}
+            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          >
+            <MenuItem onClick={viewDeal}>
+              <ListItemIcon>
+                <FiSettings />
+              </ListItemIcon>
+              View Deal
+            </MenuItem>
+          </Menu>
+        </div>
+        <CardHeader
+          style={{ marginTop: '-1rem' }}
+          avatar={
+            <Avatar className={classes.dealLogo} aria-label="deal logo">
+              logo
+            </Avatar>
+          }
+          titleTypographyProps={{ variant: 'subtitle1' }}
+          classes={{
+            title: classes.cardTitle,
+          }}
+          title={deal.deal_name}
+        />
+        <ProgressBar deal={deal} />
+        <DealInfo deal={deal} />
+      </Card>
     </Grid>
   );
 };
