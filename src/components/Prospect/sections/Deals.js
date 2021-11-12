@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { gql, useQuery } from '@apollo/client';
 import {
   Card,
   CardHeader,
@@ -12,8 +13,33 @@ import {
 import { useHistory } from 'react-router-dom';
 import { FiMoreVertical, FiSettings } from 'react-icons/fi';
 import { makeStyles } from '@material-ui/core/styles';
+import { useAuth } from '../../../auth/useAuth';
 import ProgressBar from './DealsSections/ProgressBar';
 import DealInfo from './DealsSections/DealInfo';
+
+const GET_INVESTOR = gql`
+  query GetInvestor($email: String, $_id: String) {
+    investor(email: $email, _id: $_id) {
+      _id
+      first_name
+      last_name
+      email
+    }
+  }
+`;
+
+const GET_DEALS = gql`
+  query GetDeals {
+    allDeals {
+      _id
+      company_name
+      slug
+      created_by {
+        _id
+      }
+    }
+  }
+`;
 
 const useStyles = makeStyles((theme) => ({
   mainCard: {
@@ -81,6 +107,30 @@ const allDeals = [
 ];
 
 const Deals = () => {
+  const { userProfile, refetch, loading, logout } = useAuth(GET_INVESTOR);
+  const { loading: dealsLoading, error, data } = useQuery(GET_DEALS);
+  const [myDeals, setMyDeals] = useState([] || '');
+  console.log('my deals==>', myDeals);
+
+  const getDeals = () => {
+    if (!dealsLoading) {
+      const getMyDeals = async () => {
+        const deals = await data;
+        const dealsHaveCreatedBy = await deals.allDeals.filter((deal) => deal.created_by);
+        const allMyDeals = await dealsHaveCreatedBy.filter(
+          (deal) => deal.created_by._id === userProfile._id,
+        );
+        setMyDeals(allMyDeals);
+      };
+      getMyDeals();
+    }
+    return '';
+  };
+
+  useEffect(() => {
+    getDeals();
+  }, [data]);
+
   const history = useHistory();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
