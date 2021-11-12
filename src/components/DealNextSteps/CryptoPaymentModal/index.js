@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@material-ui/core';
+import { useQuery, gql } from '@apollo/client';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
+
+const DEAL_WALLET_ADDRESS = gql`
+  query getCryptoWalletAddress($deal_id: String) {
+    getCryptoWalletAddress(deal_id: $deal_id)
+  }
+`;
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -32,6 +39,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
   const classes = useStyles();
+  const { deal } = dealData;
+  console.log('dealData', deal._id);
+  //   const { data } = useQuery(DEAL_WALLET_ADDRESS, {
+  //     fetchPolicy: 'network-only',
+  //     variables: { deal_id: deal._id },
+  //   });
+
   const [warning, setWarning] = useState(true);
   const [widgetUrl, setWidgetUrl] = useState(null);
 
@@ -40,31 +54,6 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
     setOpen(false);
   };
 
-  const createMerchant = async () => {
-    const { investment } = investmentData;
-    const { deal } = dealData;
-    // const cryptoBody = {
-    //   invoice_amount: investment.amount,
-    //   company_name: deal.company_name,
-    // };
-    // const res = await fetch('http://localhost:4000/api/payment', {
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     // 'Content-Type': 'application/x-www-form-urlencoded',
-    //   },
-    //   method: 'POST',
-    //   body: JSON.stringify(cryptoBody),
-    // });
-    // const data = await res.json();
-    // setWidgetUrl(
-    //   `https://sandbox.forumpay.com/pay?merchant_id=${data.merchantId}&order_amount=${investmentData.investment.amount}&order_currency=USD&item_name=&widget_type=0&reference_no=`,
-    // );
-    setWidgetUrl(
-      `https://sandbox.forumpay.com/pay?merchant_id=945e6d23-fecd-47bd-9f36-4e554ac7a14e&order_amount=${investment.amount}&order_currency=USD&item_name=&widget_type=0&reference_no=`,
-    );
-    // if (!data.error) return console.log(`success!`, data);
-    // console.log('There was an Error', data.error);
-  };
   return (
     <Modal open={open} onClose={handleClose} className={classes.modal}>
       <Container maxWidth="sm">
@@ -143,7 +132,6 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                         outline: 'none',
                       }}
                       onClick={async () => {
-                        createMerchant();
                         setWarning(false);
                       }}
                     >
@@ -172,18 +160,7 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                 </Grid>
               </Paper>
             ) : (
-              <Paper style={{ backgroundColor: '#fff', borderRadius: '0 0 1rem 1rem' }}>
-                <iframe
-                  title="forumpay crypto payment widget"
-                  style={{
-                    width: '100%',
-                    maxWidth: '100%',
-                    height: '1000px',
-                  }}
-                  src={widgetUrl}
-                  frameBorder="0"
-                />
-              </Paper>
+              <Paper style={{ backgroundColor: '#fff', borderRadius: '0 0 1rem 1rem' }}>Test</Paper>
             )}
           </Grid>
         </Grid>

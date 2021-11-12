@@ -5,8 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControl from '@material-ui/core/FormControl';
 import { useHistory } from 'react-router';
-import CryptoIcon from '../../../assets/buildCrypto.svg';
-import BankIcon from '../../../assets/buildBank.svg';
+import CryptoIcon from '../../../assets/usdc_icon.svg';
+import BankIcon from '../../../assets/bank.svg';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
