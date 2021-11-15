@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@material-ui/core';
-import { useQuery, gql } from '@apollo/client';
-import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
-
-const DEAL_WALLET_ADDRESS = gql`
-  query getCryptoWalletAddress($deal_id: String) {
-    getCryptoWalletAddress(deal_id: $deal_id)
-  }
-`;
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -37,26 +29,17 @@ const useStyles = makeStyles((theme) => ({
     color: '#2A2B54',
   },
 }));
-function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
+function AmountTotal() {
   const classes = useStyles();
-  const { deal } = dealData;
-  const { investment } = investmentData;
 
-  const { data } = useQuery(DEAL_WALLET_ADDRESS, {
-    fetchPolicy: 'network-only',
-    variables: { deal_id: '6170936bd738def58550f515' },
-  });
   const [warning, setWarning] = useState(true);
 
   const handleClose = () => {
     setWarning(true);
-    setOpen(false);
   };
 
-  console.log('this is the data ', data);
-
   return (
-    <Modal open={open} onClose={handleClose} className={classes.modal}>
+    <Modal onClose={handleClose} className={classes.modal}>
       <Container maxWidth="sm">
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
@@ -65,9 +48,6 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                 <Typography variant="h6" style={{ color: '#fff' }}>
                   Crypto Payment{' '}
                 </Typography>
-                <Box onClick={handleClose} style={{ cursor: 'pointer' }}>
-                  <CloseIcon htmlColor="#fff" />
-                </Box>
               </Grid>
             </Paper>
 
@@ -184,7 +164,7 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                   >
                     <p>
                       Please send <b>{investment.amount}</b> amount of Crypto to the following
-                      wallet address <b>{data.getCryptoWalletAddress}</b>
+                      wallet address
                     </p>
                   </Grid>
                   <Grid

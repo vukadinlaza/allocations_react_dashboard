@@ -842,8 +842,9 @@ const BuildDetails = ({
                     handleTooltip={handleTooltip}
                     tooltipContent={
                       <Typography color="inherit">
-                        By accepting crypto payments, you aggree to use Atomizer, LLC as the Master
-                        Series Name
+                        By accepting crypto payments, you agree to use Atomizer, LLC as the Master
+                        Series. This decision is final and cannot be changed after your SPV is
+                        created.
                       </Typography>
                     }
                     openTooltip={openTooltip}

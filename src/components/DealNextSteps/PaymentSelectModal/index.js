@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: 'calc(100% - 8vh)',
     // overflow: 'scroll',
   },
+  innerPaper: {
+    boxShadow: 'none !important',
+  },
   modalHeader: {
     fontFamily: 'Roboto !important',
   },
@@ -28,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
   },
   radioGroup: {
-    margin: '25px',
+    margin: '25px auto',
     flexDirection: 'row',
   },
   radio: {
@@ -36,41 +39,82 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PaymentModal = ({ open, setOpen, setWireInstructionsOpen, setCryptoPaymentOpen }) => {
+const PaymentModal = ({
+  open,
+  dealData,
+  setOpen,
+  setWireInstructionsOpen,
+  setCryptoPaymentOpen,
+}) => {
   const classes = useStyles();
+  const paymentOptions = [];
 
+  /// default
+  paymentOptions.push({
+    paymentMethod: 'Wire Funds',
+    buttonText: 'Show Wire Instructions',
+    openFunction: () => setWireInstructionsOpen(true),
+  });
+
+  // optional crypto option
+  if (dealData?.accept_crypto) {
+    paymentOptions.push({
+      paymentMethod: 'Send Crypto',
+      buttonText: 'Show Crypto Instructions',
+      openFunction: () => setCryptoPaymentOpen(true),
+    });
+  }
   return (
     <Modal open={open} onClose={() => setOpen(false)} className={classes.modal}>
       <Container maxWidth="sm">
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
-            <Paper className={classes.modalPaper} style={{ backgroundColor: '#2A2B54' }}>
-              <Grid container justifyContent="space-between">
-                <Typography variant="h6" style={{ color: '#fff' }}>
-                  Make Payment
-                </Typography>
-                <Box onClick={() => setOpen(false)} style={{ cursor: 'pointer' }}>
-                  <CloseIcon htmlColor="#fff" />
+            <Paper
+              className={`${classes.modalPaper} ${classes.innerPaper}`}
+              style={{ backgroundColor: '#F7F7F7' }}
+            >
+              <Grid
+                container
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'flex-end',
+                  background: '#F7F7F7',
+                }}
+              >
+                <Box>
+                  <CloseIcon
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setOpen(false)}
+                    htmlColor="#2A2B54"
+                  />
                 </Box>
               </Grid>
             </Paper>
 
-            <Paper style={{ backgroundColor: '#fff', borderRadius: '0 0 1rem 1rem' }}>
+            <Paper
+              className={classes.innerPaper}
+              style={{
+                boxShadow: 'none !important',
+                backgroundColor: '#F7F7F7',
+                borderRadius: '0 0 1rem 1rem',
+              }}
+            >
               <Grid container style={{ marginBottom: '25px' }}>
                 {' '}
                 <Grid
                   item
                   style={{
                     margin: 'auto',
-                    marginTop: '20px',
+                    marginTop: '10px',
                     fontWeight: 'bold',
-                    fontSize: '18px',
+                    fontSize: '28px',
                     fontFamily: 'robot',
                   }}
                 >
-                  How would you like to make your payment?
+                  How would you like to invest?
                 </Grid>
-                <Grid item style={{ width: '100%' }}>
+                <Grid item style={{ width: '100%', background: '#F7F7F7' }}>
                   <FormControl component="fieldset" style={{ width: '100%' }}>
                     <RadioGroup className={classes.radioGroup}>
                       <Box
@@ -78,30 +122,33 @@ const PaymentModal = ({ open, setOpen, setWireInstructionsOpen, setCryptoPayment
                           display: 'flex',
                           flexDirection: 'row',
                           justifyContent: 'space-between',
-                          alignItems: 'space-between',
                         }}
                       >
-                        {[
-                          {
-                            paymentMethod: 'Wire Funds',
-                            buttonText: 'Show Wire Instructions',
-                            openFunction: () => setWireInstructionsOpen(true),
-                          },
-                          {
-                            paymentMethod: 'Send Crypto',
-                            buttonText: 'Show Crypto Instructions',
-                            openFunction: () => setCryptoPaymentOpen(true),
-                          },
-                        ].map((paymentType) => {
+                        {paymentOptions.map((paymentType) => {
                           return (
                             <Paper
+                              onClick={() => {
+                                setOpen(false);
+                                paymentType.openFunction();
+                              }}
                               key={paymentType.paymentMethod}
-                              style={{ textAlign: 'center', margin: '.5rem', padding: '.5rem' }}
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignContent: 'center',
+                                justifyContent: 'center',
+                                height: '240px',
+                                width: '240px',
+                                textAlign: 'center',
+                                margin: '.5rem',
+                                padding: '.9rem',
+                                cursor: 'pointer',
+                              }}
                             >
                               <div style={{ height: '55px' }}>
                                 <img
                                   alt={`${paymentType.paymentMethod} icon`}
-                                  style={{ maxWidth: '100%', margin: '1rem' }}
+                                  style={{ width: '50px', height: 'auto' }}
                                   src={
                                     paymentType.paymentMethod === 'Send Crypto'
                                       ? CryptoIcon
@@ -117,7 +164,7 @@ const PaymentModal = ({ open, setOpen, setWireInstructionsOpen, setCryptoPayment
                               >
                                 {paymentType.paymentMethod}
                               </Typography>
-                              <Button
+                              {/* <Button
                                 variant="contained"
                                 style={{ margin: '1rem', color: '#2A2B54' }}
                                 onClick={() => {
@@ -126,7 +173,7 @@ const PaymentModal = ({ open, setOpen, setWireInstructionsOpen, setCryptoPayment
                                 }}
                               >
                                 {paymentType.buttonText}
-                              </Button>
+                              </Button> */}
                             </Paper>
                           );
                         })}
