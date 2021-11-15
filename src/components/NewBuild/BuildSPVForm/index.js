@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import moment from 'moment';
-import _ from 'lodash';
-import countries from 'country-region-data';
 import { toast } from 'react-toastify';
-import HelpIcon from '@material-ui/icons/Help';
-import { Button, TextField, Paper, Grid, FormControl, ButtonGroup } from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
 import Select from 'react-select';
+import countries from 'country-region-data';
+import HelpIcon from '@material-ui/icons/Help';
+import { Button, TextField, Paper, Grid, FormControl } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import BasicInfo from './FormComponents/TypeSelector/index';
 import UploadDocs from './FormComponents/UploadDocs/index';
+import { ButtonSelector } from '../common/selectors';
 import { useAuth } from '../../../auth/useAuth';
 import { phone } from '../../../utils/helpers';
 import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
 import { useCurrentOrganization } from '../../../state/current-organization';
-import useStyles from '../BuildStyles';
-import AgreementSigner from './FormComponents/AgreementSigner';
 import { convertToPositiveIntOrNull } from '../../../utils/numbers';
+import AgreementSigner from './FormComponents/AgreementSigner';
+import useStyles from '../BuildStyles';
 
 const CREATE_BUILD = gql`
   mutation createBuild($payload: Object) {
@@ -95,44 +95,6 @@ const Breadcrumbs = ({ titles, page }) => {
   );
 };
 const phoneSize = window.innerWidth < phone;
-
-const ButtonSelector = ({ currentValue, name, values, onChange, gridCol = '1fr 1fr' }) => {
-  const classes = useStyles();
-
-  return (
-    <ButtonGroup
-      color="primary"
-      aria-label="outlined primary button group"
-      style={{
-        display: 'grid',
-        gridTemplateColumns: gridCol,
-        width: phoneSize ? '325px' : '90%',
-        gridGap: phoneSize ? '6px' : '10px',
-      }}
-    >
-      {values.map(({ label, value }, i) => (
-        <Button
-          key={i}
-          name={name}
-          value={value}
-          className={`${currentValue === value ? classes.selected : null} ${
-            classes.selectorButton
-          }`}
-          onClick={(e) => {
-            const target = {
-              name: e.currentTarget.name,
-              value: e.currentTarget.value,
-            };
-            e.target = target;
-            onChange(e);
-          }}
-        >
-          {label}
-        </Button>
-      ))}
-    </ButtonGroup>
-  );
-};
 
 const BuildDetails = ({
   userProfile,
