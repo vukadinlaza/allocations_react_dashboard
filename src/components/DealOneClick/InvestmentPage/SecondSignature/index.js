@@ -27,6 +27,8 @@ const SecondSignature = ({
   setInvestor,
   errors,
   isFromModal = false,
+  org,
+  investorType,
 }) => {
   const classes = useStyles();
 
@@ -89,87 +91,99 @@ const SecondSignature = ({
   };
 
   return (
-    <PanelContainer isFromModal={isFromModal}>
-      <Grid container wrap="nowrap">
-        <Checkbox
-          name="secondSigInfo"
-          checked={requireSecondSigChecked.secondSigInfo}
-          onChange={handleChecked}
-          style={{
-            marginRight: '-15px',
-            borderBottom: '1px solid rgb(232, 232, 232)',
-            borderRadius: '5px 5px 0px 0px',
-          }}
-        />
-        <PanelLabel label="Please Select if There is a Second Signer" isFromModal={isFromModal} />
-      </Grid>
+    <>
+      {investorType === 'individual' ? (
+        <PanelContainer isFromModal={isFromModal}>
+          <Grid container wrap="nowrap">
+            <Checkbox
+              name="secondSigInfo"
+              checked={requireSecondSigChecked.secondSigInfo}
+              onChange={handleChecked}
+              style={{
+                marginRight: '-15px',
+                borderBottom: '1px solid rgb(232, 232, 232)',
+                borderRadius: '5px 5px 0px 0px',
+              }}
+            />
+            <PanelLabel
+              label="Please Select if There is a Second Signer"
+              isFromModal={isFromModal}
+            />
+          </Grid>
 
-      {requireSecondSigChecked.secondSigInfo && (
-        <Grid container wrap="nowrap" direction="column">
-          <Grid item>
-            <Box component="form" noValidate>
-              <TextField
-                variant="outlined"
-                label="Legal Name"
-                name="secondLegalName"
-                required={requireSecondSigChecked.secondSigInfo}
-                onChange={handleChange('secondInvestor')}
-                error={errors.includes('secondLegalName')}
-                className={classes.input}
-              />
-              <TextField
-                variant="outlined"
-                label="Email"
-                name="secondEmail"
-                required={requireSecondSigChecked.secondSigInfo}
-                onChange={handleChange('secondInvestor')}
-                error={errors.includes('secondEmail')}
-                className={classes.input}
-              />
-              <TextField
-                variant="outlined"
-                label="Social Security Number"
-                name="secondSignerSSN"
-                required={requireSecondSigChecked.secondSigInfo}
-                onChange={handleChange('secondInvestor')}
-                error={errors.includes('secondSignerSSN')}
-                className={`${classes.input} numbers`}
-                type="number"
-                onInput={(e) => {
-                  e.target.value = e.target.value.slice(0, 9);
-                }}
-              />
-              <TextField
-                variant="outlined"
-                label="Initials"
-                name="secondSignerInitials"
-                required={requireSecondSigChecked.secondSigInfo}
-                onChange={handleChange('secondInvestor')}
-                error={errors.includes('secondSignerInitials')}
-                className={classes.input}
-              />
-            </Box>
-            <Grid container wrap="nowrap" alignItems="center">
+          {requireSecondSigChecked.secondSigInfo && (
+            <Grid container wrap="nowrap" direction="column">
               <Grid item>
-                <Checkbox
-                  name="secondSigConsent"
-                  checked={requireSecondSigChecked.secondSigConsent}
-                  onChange={handleChecked}
-                  required
-                  style={{ marginLeft: '15px' }}
-                />
-              </Grid>
-              <Grid item lg={12}>
-                <Typography component="p" className={classes.footNote}>
-                  I confirm, as the second signer, that I am present and the information I have
-                  provided above is accurate.
-                </Typography>
+                <Box component="form" noValidate>
+                  <TextField
+                    variant="outlined"
+                    label="Legal Name"
+                    name="secondLegalName"
+                    required={requireSecondSigChecked.secondSigInfo}
+                    onChange={handleChange('secondInvestor')}
+                    error={errors.includes('secondLegalName')}
+                    className={classes.input}
+                  />
+                  <TextField
+                    variant="outlined"
+                    label="Email"
+                    name="secondEmail"
+                    required={requireSecondSigChecked.secondSigInfo}
+                    onChange={handleChange('secondInvestor')}
+                    error={errors.includes('secondEmail')}
+                    className={classes.input}
+                  />
+                  {org === 'irishangels' ? (
+                    <>
+                      <TextField
+                        variant="outlined"
+                        label="Social Security Number"
+                        name="secondSignerSSN"
+                        required={requireSecondSigChecked.secondSigInfo}
+                        onChange={handleChange('secondInvestor')}
+                        error={errors.includes('secondSignerSSN')}
+                        className={`${classes.input} numbers`}
+                        type="number"
+                        onInput={(e) => {
+                          e.target.value = e.target.value.slice(0, 9);
+                        }}
+                      />
+                      <TextField
+                        variant="outlined"
+                        label="Initials"
+                        name="secondSignerInitials"
+                        required={requireSecondSigChecked.secondSigInfo}
+                        onChange={handleChange('secondInvestor')}
+                        error={errors.includes('secondSignerInitials')}
+                        className={classes.input}
+                      />
+                    </>
+                  ) : null}
+                </Box>
+                <Grid container wrap="nowrap" alignItems="center">
+                  <Grid item>
+                    <Checkbox
+                      name="secondSigConsent"
+                      checked={requireSecondSigChecked.secondSigConsent}
+                      onChange={handleChecked}
+                      required
+                      style={{ marginLeft: '15px' }}
+                    />
+                  </Grid>
+
+                  <Grid item lg={12}>
+                    <Typography component="p" className={classes.footNote}>
+                      I confirm, as the second signer, that I am present and the information I have
+                      provided above is accurate.
+                    </Typography>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Grid>
-      )}
-    </PanelContainer>
+          )}
+        </PanelContainer>
+      ) : null}
+    </>
   );
 };
 

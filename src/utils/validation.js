@@ -15,15 +15,18 @@ const personalInfoValidation = (investor, org, requireSecondSigChecked = {}) => 
 
   let errors = [];
   errors = required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
-
   if (requireSecondSigChecked.secondSigInfo) {
-    errors.push(
-      'secondLegalName',
-      'secondEmail',
-      'secondSignerSSN',
-      'secondSignerInitials',
-      'secondSigConsent',
-    );
+    if (org === 'irishangels') {
+      errors.push(
+        'secondLegalName',
+        'secondEmail',
+        'secondSignerSSN',
+        'secondSignerInitials',
+        'secondSigConsent',
+      );
+    } else {
+      errors.push('secondLegalName', 'secondEmail');
+    }
     errors = errors.reduce(
       (acc, attr) => (investor.secondInvestor[attr] ? acc : [...acc, attr]),
       [],

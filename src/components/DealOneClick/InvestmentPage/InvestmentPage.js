@@ -330,14 +330,15 @@ function InvestmentPage() {
           handleSecondSig={handleSecondSig}
           is3c7={is3c7}
         />
-        {requireSecondSig && (org === 'irishangels' || org === '5f903e7164eb9a0023189ca2') && (
-          <SecondSignature
-            requireSecondSigChecked={requireSecondSigChecked}
-            setRequireSecondSigChecked={setRequireSecondSigChecked}
-            setInvestor={setInvestor}
-            errors={errors}
-          />
-        )}
+        <SecondSignature
+          requireSecondSigChecked={requireSecondSigChecked}
+          setRequireSecondSigChecked={setRequireSecondSigChecked}
+          setInvestor={setInvestor}
+          errors={errors}
+          org={org}
+          investorType={investorFormData.investor_type}
+        />
+
         <TermsAndConditionsPanel
           confirmInvestment={confirmInvestment}
           deal={deal}
