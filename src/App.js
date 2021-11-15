@@ -71,7 +71,7 @@ const App = () => {
               <PrivateRoute path="/submit-tax-documents" component={SubmitTaxDocs} />
               <PrivateRoute path="/demo" component={Demo} />
 
-              <PrivateRoute path="/new-build-spv" exact component={BuildSPVForm} />
+              <PrivateRoute path="/new-build/:type" exact component={BuildSPVForm} />
               <PrivateRoute path="/profile/:id" component={ProfilePage} />
               <PrivateRoute path="/profile" component={Profile} />
               <PrivateRoute path="/deal-setup" component={DealSetup} />
