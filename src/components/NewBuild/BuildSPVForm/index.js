@@ -22,6 +22,7 @@ const CREATE_BUILD = gql`
   mutation createBuild($payload: Object) {
     deal: createBuild(payload: $payload) {
       _id
+      high_volume_partner
       master_series
       phases {
         _id
@@ -156,7 +157,7 @@ const BuildDetails = ({
     custom_management_fee: 'false',
     deal_stage: '',
     estimated_spv_quantity: null,
-    high_volume_partner: null,
+    high_volume_partner: false,
     international_company_status: 'false',
     international_company_country: '',
     international_investors_status: 'false',
@@ -184,14 +185,14 @@ const BuildDetails = ({
   const defaultMasterSeries = 'Atomizer LLC';
 
   useEffect(() => {
-    if (initialDeal?.master_series) {
-      setBuildData((prevState) => ({
-        ...prevState,
-        master_series:
-          initialDeal?.master_series !== defaultMasterSeries ? initialDeal?.master_series : '',
+    if (initialDeal?.high_volume_partner) {
+      setBuildData((prev) => ({
+        ...prev,
+        master_series: initialDeal?.master_series,
+        high_volume_partner: true,
       }));
     }
-  }, [initialDeal?.master_series]);
+  }, [initialDeal]);
 
   const [unfilledFields, setUnfilledFields] = useState([]);
 
@@ -318,7 +319,7 @@ const BuildDetails = ({
           custom_investment_agreement: buildData.custom_investment_agreement,
           deal_stage: buildData.deal,
           estimated_spv_quantity: Number(buildData.estimated_spv_quantity),
-          high_volume_partner: buildData.high_volume_partner,
+          high_volume_partner: buildData.estimated_spv_quantity >= 5,
           international_company: {
             status: buildData.international_company_status,
             country: buildData.international_company_country,
@@ -366,7 +367,6 @@ const BuildDetails = ({
         ...prev,
         // IS NULL CORRECT?
         master_series: isNotMasterSeries ? null : prev.master_series,
-        high_volume_partner: !isNotMasterSeries,
         custom_reporting_adviser: isAllocationsTheAdvisor ? '' : prev.custom_reporting_adviser,
         custom_management_fee: isNotCustomManagementFee ? 'false' : prev.custom_management_fee,
         custom_carry_fee: isNotCustomCarryFee ? 'false' : prev.custom_carry_fee,
