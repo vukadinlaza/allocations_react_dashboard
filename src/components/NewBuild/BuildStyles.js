@@ -1,7 +1,6 @@
-// import { phone } from '../../utils/helpers';
 import { makeStyles } from '@material-ui/core/styles';
-import { autoType } from 'd3-dsv';
-import { phone, tablet } from '../../utils/helpers';
+// import { autoType } from 'd3-dsv';
+import { phone } from '../../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
   // * Styles that are used in more than one place in the build form
@@ -107,7 +106,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-start',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     marginBottom: '16px',
-    // padding: '42px',
     paddingTop: '20px',
     borderRadius: '15px',
     width: '100%',
@@ -244,7 +242,6 @@ const useStyles = makeStyles((theme) => ({
   previousButton: {
     font: 'normal normal normal 24px/28px Roboto',
     marginTop: '11px',
-    // marginLeft: '135px',
     padding: '5px',
     cursor: 'pointer',
     [theme.breakpoints.down(phone)]: {
@@ -454,6 +451,12 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '8px !important',
     textTransform: 'capitalize',
     opacity: '1 !important',
+  },
+  typeItemSelected: {
+    extend: 'selected',
+    textTransform: 'inherit',
+    border: '2px solid #186EFF !important',
+    background: '#ECF3FF 0% 0% no-repeat padding-box !important',
   },
   typeItem: {
     display: 'flex',
