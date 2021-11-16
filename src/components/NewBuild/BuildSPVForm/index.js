@@ -4,13 +4,13 @@ import moment from 'moment';
 import { toast } from 'react-toastify';
 import { Button, Paper, Grid, FormControl } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import { useParams } from 'react-router';
 import BasicInfo from './FormComponents/TypeSelector/index';
 import UploadDocs from './FormComponents/UploadDocs/index';
 import { useAuth } from '../../../auth/useAuth';
 import { useCurrentOrganization } from '../../../state/current-organization';
 import AgreementSigner from './FormComponents/AgreementSigner';
 import useStyles from '../BuildStyles';
-import { useParams } from 'react-router';
 import {
   CarryFee,
   CustomInvestmentAgreement,

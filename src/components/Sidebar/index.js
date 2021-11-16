@@ -67,6 +67,16 @@ function Sidebar(props) {
 
   const isUserAuthenticated = isAuthenticated && !loading;
 
+  const handleAccountChange = (e) => {
+    const newValue = e.target ? e.target.value : e;
+    const org = userProfile?.organizations_admin?.find((org) => org.name === newValue);
+    if (org) {
+      const currentHomePath = org ? `/admin/${org.slug}` : '/';
+      setCurrentHomeUrl(currentHomePath);
+      setCurrentOrganization(org);
+    }
+  };
+
   useEffect(() => {
     const userIsOrgAdmin = userProfile?.organizations_admin?.length;
     const defaultUrl = userIsOrgAdmin ? `/admin/${userProfile.organizations_admin[0].slug}` : '/';
@@ -90,14 +100,6 @@ function Sidebar(props) {
 
   const handleDrawerClose = () => {
     setMobileOpen(false);
-  };
-
-  const handleAccountChange = (e) => {
-    const newValue = e.target ? e.target.value : e;
-    const org = userProfile?.organizations_admin?.find((org) => org.name === newValue);
-    const currentHomePath = org ? `/admin/${org.slug}` : '/';
-    setCurrentHomeUrl(currentHomePath);
-    setCurrentOrganization(org);
   };
 
   const container = window !== undefined ? () => window().document.body : undefined;
