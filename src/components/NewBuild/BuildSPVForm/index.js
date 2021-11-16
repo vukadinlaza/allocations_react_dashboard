@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import moment from 'moment';
 import { toast } from 'react-toastify';
-import Select from 'react-select';
 import countries from 'country-region-data';
 import HelpIcon from '@material-ui/icons/Help';
 import { Button, TextField, Paper, Grid, FormControl } from '@material-ui/core';
