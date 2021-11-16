@@ -17,8 +17,10 @@ import PieIcon from '../../../../../assets/buildPie.svg';
 import { ModalTooltip } from '../../../../dashboard/FundManagerDashboard/widgets';
 import sectors from './sectors';
 import { convertToPositiveIntOrNull } from '../../../../../utils/numbers';
+import { PortfolioCompanyName } from '../../FormFields';
 
 export default function TypeSelector({
+  dealType,
   assetType,
   handleChange,
   buildData,
@@ -39,6 +41,7 @@ export default function TypeSelector({
       icon: RocketIcon,
       height: '56px',
       width: '54px',
+      dealType: ['spv', 'fund'],
     },
     {
       title: 'Crypto',
@@ -47,6 +50,7 @@ export default function TypeSelector({
       icon: CryptoIcon,
       height: '34px',
       width: '34px',
+      dealType: ['spv', 'fund'],
     },
     {
       title: 'Real Estate',
@@ -55,6 +59,7 @@ export default function TypeSelector({
       icon: HouseIcon,
       height: '29px',
       width: '36px',
+      dealType: ['spv', 'fund'],
     },
     {
       title: 'SPV into a Fund',
@@ -63,6 +68,7 @@ export default function TypeSelector({
       icon: BankIcon,
       height: '30px',
       width: '30px',
+      dealType: ['spv'],
     },
   ];
 
@@ -74,6 +80,7 @@ export default function TypeSelector({
       icon: LevelIcon,
       height: '35px',
       width: '28px',
+      dealType: ['spv'],
     },
     {
       title: 'SPV into an SPV',
@@ -82,6 +89,7 @@ export default function TypeSelector({
       icon: NetworkIcon,
       height: '32px',
       width: '20px',
+      dealType: ['spv'],
     },
     {
       title: 'Management Co.',
@@ -90,6 +98,7 @@ export default function TypeSelector({
       icon: PieIcon,
       height: '30px',
       width: '30px',
+      dealType: ['spv'],
     },
     {
       title: 'Custom',
@@ -98,24 +107,27 @@ export default function TypeSelector({
       icon: CustomIcon,
       height: '26px',
       width: '26px',
+      dealType: ['spv', 'fund'],
     },
   ];
 
   function FormRow({ rowItems }) {
     return (
       <>
-        {rowItems.map((item) => {
-          return (
-            <Grid key={item.value} className={classes.assetTypeRowItem}>
-              <TypeItem
-                item={item}
-                assetType={assetType}
-                handleChange={handleChange}
-                buildData={buildData}
-              />
-            </Grid>
-          );
-        })}
+        {rowItems
+          .filter((item) => item.dealType.includes(dealType))
+          .map((item) => {
+            return (
+              <Grid key={item.value} className={classes.assetTypeRowItem}>
+                <TypeItem
+                  item={item}
+                  assetType={assetType}
+                  handleChange={handleChange}
+                  buildData={buildData}
+                />
+              </Grid>
+            );
+          })}
       </>
     );
   }
@@ -270,6 +282,28 @@ export default function TypeSelector({
     );
   }
 
+  // const { PortfolioCompanyName } = useFormFields({
+  //   buildData,
+  //   handleChange,
+  //   handleTooltip,
+  //   setUnfilledFields,
+  //   unfilledFields,
+  //   customInputStyles,
+  //   classes,
+  //   openTooltip
+  // })
+
+  const formFieldProps = {
+    buildData,
+    handleChange,
+    handleTooltip,
+    setUnfilledFields,
+    unfilledFields,
+    customInputStyles,
+    classes,
+    openTooltip,
+  };
+
   return (
     <Paper className={classes.paper}>
       <form noValidate autoComplete="off" className={classes.formContainers}>
@@ -299,74 +333,81 @@ export default function TypeSelector({
         </Grid>
 
         <Grid container spacing={4} className={classes.inputGridContainer}>
-          <Grid className={classes.inputGridItem} item xs={6}>
-            <FormControl required disabled variant="outlined" className={classes.formContainers}>
-              <Typography className={classes.formItemName}>
-                Portfolio Company Name
-                <ModalTooltip
-                  title="Company Name"
-                  handleTooltip={handleTooltip}
-                  tooltipContent={
-                    <Typography color="inherit">
-                      Full name of the company in which the SPV will invest in (e.g. Allocations,
-                      Inc., a Delaware corporation)
-                    </Typography>
-                  }
-                  openTooltip={openTooltip}
-                  id="portfolio_company_name"
-                >
-                  <HelpIcon
-                    className={classes.helpIcon}
-                    onClick={(e) => handleTooltip('portfolio_company_name')}
-                  />
-                </ModalTooltip>
-              </Typography>
-              <TextField
-                value={buildData.portfolio_company_name}
-                name="portfolio_company_name"
-                onChange={(e) => {
-                  handleChange(e);
-                  setUnfilledFields((prev) =>
-                    prev.filter((field) => field !== 'portfolio_company_name'),
-                  );
-                }}
-                className={classes.inputBox}
-                variant="outlined"
-                placeholder="SpaceX"
-                inputProps={customInputStyles}
-                classes={{
-                  root: unfilledFields.includes('portfolio_company_name') && classes.unfilledField,
-                }}
-              />
-            </FormControl>
-          </Grid>
-          <Grid className={classes.inputGridItem} item xs={6}>
-            <FormControl required disabled variant="outlined" className={classes.formContainers}>
-              <Typography className={classes.formItemName}>
-                Portfolio Company Securities?
-                <ModalTooltip
-                  title="Company Securities"
-                  handleTooltip={handleTooltip}
-                  tooltipContent={
-                    <Typography color="inherit">
-                      Indicate what kind of security the SPV will acquire (e.g., Series A Preferred
-                      Stock, Simple Agreement for Future Equity, Convertible Promissory Note or
-                      other)
-                    </Typography>
-                  }
-                  openTooltip={openTooltip}
-                  id="portfolio_company_securities"
-                >
-                  <HelpIcon
-                    className={classes.helpIcon}
-                    onClick={(e) => handleTooltip('portfolio_company_securities')}
-                  />
-                </ModalTooltip>
-              </Typography>
+          <PortfolioCompanyName {...formFieldProps} />
 
-              <SecuritiesSelector />
-            </FormControl>
-          </Grid>
+          {dealType === 'spv' && (
+            <Grid className={classes.inputGridItem} item xs={6}>
+              <FormControl required disabled variant="outlined" className={classes.formContainers}>
+                <Typography className={classes.formItemName}>
+                  Portfolio Company Securities?
+                  <ModalTooltip
+                    title="Company Securities"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        Indicate what kind of security the SPV will acquire (e.g., Series A
+                        Preferred Stock, Simple Agreement for Future Equity, Convertible Promissory
+                        Note or other)
+                      </Typography>
+                    }
+                    openTooltip={openTooltip}
+                    id="portfolio_company_securities"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={(e) => handleTooltip('portfolio_company_securities')}
+                    />
+                  </ModalTooltip>
+                </Typography>
+
+                <SecuritiesSelector />
+              </FormControl>
+            </Grid>
+          )}
+
+          {dealType === 'fund' && (
+            <Grid className={classes.inputGridItem} item xs={6}>
+              <FormControl required disabled variant="outlined" className={classes.formContainers}>
+                <Typography className={classes.formItemName}>
+                  Number Of Investments
+                  <ModalTooltip
+                    title="Number Of Investments"
+                    handleTooltip={handleTooltip}
+                    tooltipContent={
+                      <Typography color="inherit">
+                        Indicate the amount of investments the Fund will make during the Investment
+                        Period
+                      </Typography>
+                    }
+                    openTooltip={openTooltip}
+                    id="number_of_investments"
+                  >
+                    <HelpIcon
+                      className={classes.helpIcon}
+                      onClick={(e) => handleTooltip('number_of_investments')}
+                    />
+                  </ModalTooltip>
+                </Typography>
+                <TextField
+                  value={buildData.number_of_investments}
+                  name="number_of_investments"
+                  onChange={handleChange}
+                  className={classes.inputBox}
+                  variant="outlined"
+                  placeholder="e.x. crypto deal"
+                  inputProps={customInputStyles}
+                  onClick={() =>
+                    setUnfilledFields((prev) =>
+                      prev.filter((field) => field !== 'number_of_investments'),
+                    )
+                  }
+                  classes={{
+                    root: unfilledFields.includes('number_of_investments') && classes.unfilledField,
+                  }}
+                />
+              </FormControl>
+            </Grid>
+          )}
 
           <Grid className={classes.inputGridItem} item xs={6}>
             <FormControl required disabled variant="outlined" className={classes.formContainers}>

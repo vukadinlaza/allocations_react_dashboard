@@ -137,6 +137,7 @@ const ButtonSelector = ({ currentValue, name, values, onChange, gridCol = '1fr 1
 
 const BuildDetails = ({
   userProfile,
+  dealType,
   page,
   setPage,
   setBuildInfo,
@@ -515,6 +516,7 @@ const BuildDetails = ({
   return (
     <>
       <BasicInfo
+        dealType={dealType}
         buildData={buildData}
         setBuildData={setBuildData}
         handleChange={handleChange}
@@ -1155,7 +1157,7 @@ export default function NewDealForm() {
 
   const organization = useCurrentOrganization();
 
-  const { type } = useParams();
+  const { type: dealType } = useParams();
 
   // Page
   const [page, setPage] = useState(0);
@@ -1183,10 +1185,10 @@ export default function NewDealForm() {
 
   const pages = [
     {
-      title: `Build your ${titleMap[type]}`,
+      title: `Build your ${titleMap[dealType]}`,
       Component: (
         <BuildDetails
-          type={type}
+          dealType={dealType}
           organization={organization}
           userProfile={userProfile}
           page={page}
