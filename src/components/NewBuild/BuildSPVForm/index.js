@@ -382,13 +382,9 @@ const BuildDetails = ({
           </Typography>
           <Grid container spacing={2} className={classes.inputGridContainer}>
             <ManagementFee {...formFieldProps} />
-
             <ManagementFeeFrequency {...formFieldProps} />
-
             <CarryFee {...formFieldProps} />
-
             <SideLetters {...formFieldProps} />
-
             <MinimumInvestment {...formFieldProps} />
           </Grid>
         </form>
@@ -400,9 +396,7 @@ const BuildDetails = ({
           </Typography>
           <Grid container spacing={1} className={classes.inputGridContainer}>
             <ReportingAdviser {...formFieldProps} />
-
             <OfferingType {...formFieldProps} />
-
             <CustomInvestmentAgreement {...formFieldProps} />
           </Grid>
         </form>
@@ -414,7 +408,6 @@ const BuildDetails = ({
           </Typography>
           <Grid container spacing={1} className={classes.inputGridContainer}>
             <InternationalCompanyStatus {...formFieldProps} />
-
             <InternationalInvestorsStatus {...formFieldProps} />
           </Grid>
         </form>
