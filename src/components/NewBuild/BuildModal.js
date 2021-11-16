@@ -164,7 +164,7 @@ const BuildModal = ({ onClose, isOpen }) => {
                               backgroundColor: '#186EFF',
                             }}
                             onClick={() => {
-                              history.push(`/new-build-spv`);
+                              history.push(`/new-build/spv`);
                               onClose();
                             }}
                           >
@@ -208,7 +208,7 @@ const BuildModal = ({ onClose, isOpen }) => {
                               backgroundColor: '#186EFF',
                             }}
                             onClick={() => {
-                              history.push(`/new-build-fund`);
+                              history.push(`/new-build/fund`);
                               onClose();
                             }}
                           >

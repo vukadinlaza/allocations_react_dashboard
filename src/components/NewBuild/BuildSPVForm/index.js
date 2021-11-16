@@ -20,6 +20,7 @@ import { useCurrentOrganization } from '../../../state/current-organization';
 import { convertToPositiveIntOrNull } from '../../../utils/numbers';
 import AgreementSigner from './FormComponents/AgreementSigner';
 import useStyles from '../BuildStyles';
+import { useParams } from 'react-router';
 
 const CREATE_BUILD = gql`
   mutation createBuild($payload: Object) {
@@ -993,13 +994,15 @@ const BuildDetails = ({
   );
 };
 
-export default function NewSpvForm() {
+export default function NewDealForm() {
   const { userProfile, loading: authLoading } = useAuth();
   const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
   const [setBuildInfo, { data: updatedDeal, loading: updatedDealLoading }] =
     useMutation(SET_BUILD_INFO);
 
   const organization = useCurrentOrganization();
+
+  const { type } = useParams();
 
   // Page
   const [page, setPage] = useState(0);
@@ -1020,11 +1023,17 @@ export default function NewSpvForm() {
     }
   }, [loading, initialDeal?.deal]);
 
+  const titleMap = {
+    spv: 'SPV',
+    fund: 'Fund',
+  };
+
   const pages = [
     {
-      title: 'Build your SPV',
+      title: `Build your ${titleMap[type]}`,
       Component: (
         <BuildDetails
+          type={type}
           organization={organization}
           userProfile={userProfile}
           page={page}
