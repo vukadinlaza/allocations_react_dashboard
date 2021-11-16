@@ -14,7 +14,12 @@ const PrivateRoute = ({ component, ...args }) => {
   const isTvc = pathname.includes('theventurecollective');
   let decodedParams = {};
   if (isTvc) {
-    decodedParams = base64.decode(search.substring(1));
+    const substring = search.substring(1);
+
+    decodedParams = substring;
+    if (!substring.includes('investmentId')) {
+      decodedParams = base64.decode(substring);
+    }
   }
   const paramsToUse = isTvc ? decodedParams : search;
   const query = queryString.parse(paramsToUse);
