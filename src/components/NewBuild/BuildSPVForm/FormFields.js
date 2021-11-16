@@ -1269,6 +1269,61 @@ export function CustomInvestmentAgreement({
   );
 }
 
+export function InternationalCompanyStatus({
+  buildData,
+  handleChange,
+  handleTooltip,
+  setUnfilledFields,
+  unfilledFields,
+  customInputStyles,
+  classes,
+  openTooltip,
+}) {
+  return (
+    <Grid className={classes.inputGridItem} item xs={6}>
+      <FormControl required variant="outlined" className={classes.formContainers}>
+        <Typography className={`${classes.formItemName} ${classes.customFormItemName}`}>
+          Will this deal being investing into an international (Non US) company?
+          <ModalTooltip
+            title="International Companies"
+            handleTooltip={handleTooltip}
+            tooltipContent={
+              <Typography color="inherit">
+                If this SPV/Fund will invest into a company located outside the United States,
+                please select Yes to this question followed by the applicable country. If you are
+                unsure at the moment, please select Unknown.
+              </Typography>
+            }
+            openTooltip={openTooltip}
+            id="international_company_status"
+          >
+            <HelpIcon
+              className={classes.helpIcon}
+              onClick={(e) => handleTooltip('international_company_status')}
+            />
+          </ModalTooltip>
+        </Typography>
+        <ButtonSelector
+          name="international_company_status"
+          gridCol="1fr 1fr 1fr"
+          onChange={handleChange}
+          currentValue={buildData.international_company_status}
+          values={[
+            { label: 'Yes', value: 'true' },
+            { label: 'No', value: 'false' },
+            { label: 'Unknown', value: 'unknown' },
+          ]}
+        />
+      </FormControl>
+      {buildData.international_company_status === 'true' && (
+        <FormControl required variant="outlined" className={classes.formContainers}>
+          <InternationalCountrySelector />
+        </FormControl>
+      )}
+    </Grid>
+  );
+}
+
 // export function name({
 //     buildData,
 //     handleChange,
