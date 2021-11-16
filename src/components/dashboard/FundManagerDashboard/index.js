@@ -239,7 +239,6 @@ const FundManagerDashboard = ({ classes, history }) => {
       setDashboardTabs(newTabs);
       setTabName(newTabName);
       getInvestments({ variables: { deal_slug: dealData.slug, fund_slug: orgSlug } });
-      console.log('DEAL INVESTMENTS', dealInvestments);
     }
   }, [dealData]);
 
