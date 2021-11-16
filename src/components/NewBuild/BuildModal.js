@@ -83,6 +83,147 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+export const NewBuildWarningModal = ({ isOpen, closeModal, openNewBuildModal }) => {
+  const classes = useStyles();
+
+  return (
+    <Modal open={isOpen} onClose={closeModal} className={classes.modal}>
+      <Container style={{ width: '650px' }}>
+        <Grid container style={{ height: '100%' }}>
+          <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
+            <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#186EFF' }}>
+              <Grid container justifyContent="space-between">
+                <Typography variant="h6" style={{ color: '#fff' }}>
+                  Create New Build?
+                </Typography>
+                <Box onClick={closeModal} style={{ cursor: 'pointer' }}>
+                  <CloseIcon htmlColor="#fff" />
+                </Box>
+              </Grid>
+            </Paper>
+
+            <Paper
+              style={{
+                backgroundColor: '#FBFCFF',
+                borderRadius: '0 0 1rem 1rem',
+              }}
+            >
+              <Grid container style={{ marginBottom: '25px' }}>
+                <FormControl
+                  component="fieldset"
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Grid container className={classes.typeGroup}>
+                    <Box
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'space-between',
+                      }}
+                    >
+                      <Paper className={classes.modalPaperBody}>
+                        <Grid
+                          item
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            margin: '10px 10px 10px 5px',
+                          }}
+                        >
+                          <div className={classes.icon}>
+                            <img alt="spv-icon" src={spvIcon} />
+                          </div>
+                          <Typography className={classes.typeTitle}>
+                            Continue Current Build
+                          </Typography>
+                        </Grid>
+                        <Grid item className={classes.typeGrid}>
+                          <Typography className={classes.typeBody}>
+                            We will pick you up where you left off on your current build process.
+                          </Typography>
+                        </Grid>
+                        <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            type="submit"
+                            style={{
+                              width: '70%',
+                              borderRadius: '8px',
+                              backgroundColor: '#186EFF',
+                            }}
+                            onClick={() => {
+                              closeModal();
+                              openNewBuildModal();
+                            }}
+                          >
+                            Continue
+                          </Button>
+                        </Grid>
+                      </Paper>
+
+                      <Paper className={classes.modalPaperBody}>
+                        <Grid
+                          item
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            margin: '10px 10px 10px 5px',
+                          }}
+                        >
+                          <div className={classes.icon}>
+                            <img alt="fund-icon" src={fundIcon} />
+                          </div>
+                          <Typography className={classes.typeTitle}>Create New Build</Typography>
+                        </Grid>
+                        <Grid item className={classes.typeGrid}>
+                          <Typography className={classes.typeBody}>
+                            This will erase your current build and start a build from scratch. This
+                            action cannot be undone.
+                          </Typography>
+                        </Grid>
+                        <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            type="submit"
+                            style={{
+                              width: '70%',
+                              borderRadius: '8px',
+                              backgroundColor: '#186EFF',
+                            }}
+                            onClick={() => {
+                              localStorage.removeItem('buildData');
+                              localStorage.removeItem('buildDeal');
+                              closeModal();
+                              openNewBuildModal();
+                            }}
+                          >
+                            Continue
+                          </Button>
+                        </Grid>
+                      </Paper>
+                    </Box>
+                  </Grid>
+                </FormControl>
+              </Grid>
+            </Paper>
+          </Grid>
+        </Grid>
+      </Container>
+    </Modal>
+  );
+};
+
 const BuildModal = ({ onClose, isOpen }) => {
   const classes = useStyles();
   const history = useHistory();
