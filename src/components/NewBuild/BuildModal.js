@@ -6,6 +6,7 @@ import FormControl from '@material-ui/core/FormControl';
 import { useHistory } from 'react-router';
 import spvIcon from '../../assets/spv-icon.svg';
 import fundIcon from '../../assets/fund-icon.svg';
+import { json } from 'd3-fetch';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -162,6 +163,10 @@ export const NewBuildWarningModal = ({ isOpen, closeModal, openNewBuildModal }) 
                             }}
                             onClick={() => {
                               closeModal();
+                              const build = JSON.parse(localStorage.getItem('buildDeal'));
+                              if (build?.type) {
+                                history.push(`/new-build/${build.type}`);
+                              }
                               openNewBuildModal();
                             }}
                           >
