@@ -37,6 +37,22 @@ const useStyles = makeStyles((theme) => ({
   radio: {
     color: '#2A2B54',
   },
+  clickableButton: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignContent: 'center',
+    justifyContent: 'center',
+    height: '240px',
+    width: '240px',
+    textAlign: 'center',
+    margin: '.5rem',
+    padding: '.9rem',
+    cursor: 'pointer',
+    '&:hover': {
+      boxShadow: '0px 0px 1px #00000029 !important;',
+      transform: 'translateY(2px)',
+    },
+  },
 }));
 
 const PaymentModal = ({
@@ -132,18 +148,7 @@ const PaymentModal = ({
                                 paymentType.openFunction();
                               }}
                               key={paymentType.paymentMethod}
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignContent: 'center',
-                                justifyContent: 'center',
-                                height: '240px',
-                                width: '240px',
-                                textAlign: 'center',
-                                margin: '.5rem',
-                                padding: '.9rem',
-                                cursor: 'pointer',
-                              }}
+                              className={classes.clickableButton}
                             >
                               <div style={{ height: '55px' }}>
                                 <img
