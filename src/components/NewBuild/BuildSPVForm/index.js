@@ -2,22 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import moment from 'moment';
 import { toast } from 'react-toastify';
-import countries from 'country-region-data';
-import HelpIcon from '@material-ui/icons/Help';
-import { Button, TextField, Paper, Grid, FormControl } from '@material-ui/core';
+import { Button, Paper, Grid, FormControl } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import BasicInfo from './FormComponents/TypeSelector/index';
 import UploadDocs from './FormComponents/UploadDocs/index';
-import {
-  ButtonSelector,
-  InternationalCountrySelector,
-  InternationalInvestorsCountriesSelector,
-} from '../common/selectors';
 import { useAuth } from '../../../auth/useAuth';
-import { phone } from '../../../utils/helpers';
-import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
 import { useCurrentOrganization } from '../../../state/current-organization';
-import { convertToPositiveIntOrNull } from '../../../utils/numbers';
 import AgreementSigner from './FormComponents/AgreementSigner';
 import useStyles from '../BuildStyles';
 import { useParams } from 'react-router';
@@ -111,7 +101,6 @@ const Breadcrumbs = ({ titles, page }) => {
     </Paper>
   );
 };
-const phoneSize = window.innerWidth < phone;
 
 const BuildDetails = ({
   userProfile,
@@ -359,6 +348,18 @@ const BuildDetails = ({
       localStorage.setItem('buildData', JSON.stringify(newBuildObject));
       return newBuildObject;
     });
+  };
+
+  const formFieldProps = {
+    buildData,
+    setBuildData,
+    handleChange,
+    handleTooltip,
+    setUnfilledFields,
+    unfilledFields,
+    customInputStyles,
+    classes,
+    openTooltip,
   };
 
   return (

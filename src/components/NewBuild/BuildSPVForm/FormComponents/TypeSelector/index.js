@@ -1,9 +1,7 @@
 import React from 'react';
-import Select from 'react-select';
 import HelpIcon from '@material-ui/icons/Help';
-import { TextField, Paper, Grid, FormControl } from '@material-ui/core';
+import { Paper, Grid } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import { toast } from 'react-toastify';
 import useStyles from '../../../BuildStyles';
 import TypeItem from './TypeItem/index';
 import RocketIcon from '../../../../../assets/buildRocket.svg';
@@ -15,8 +13,6 @@ import CustomIcon from '../../../../../assets/buildCustom.svg';
 import NetworkIcon from '../../../../../assets/buildNetwork.svg';
 import PieIcon from '../../../../../assets/buildPie.svg';
 import { ModalTooltip } from '../../../../dashboard/FundManagerDashboard/widgets';
-import sectors from './sectors';
-import { convertToPositiveIntOrNull } from '../../../../../utils/numbers';
 import {
   DealName,
   EstimatedSPVQuantity,

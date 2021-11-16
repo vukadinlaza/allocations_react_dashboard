@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormControl, Grid, Typography, TextField, Button, ButtonGroup } from '@material-ui/core';
+import { FormControl, Grid, Typography, TextField } from '@material-ui/core';
 import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
 import { phone } from '../../../utils/helpers';
 import HelpIcon from '@material-ui/icons/Help';
@@ -7,48 +7,10 @@ import Select from 'react-select';
 import { toast } from 'react-toastify';
 import sectors from './FormComponents/TypeSelector/sectors';
 import { convertToPositiveIntOrNull } from '../../../utils/numbers';
-import useStyles from '../BuildStyles';
 import countries from 'country-region-data';
+import { ButtonSelector } from '../common/selectors';
 
 const phoneSize = window.innerWidth < phone;
-
-const ButtonSelector = ({ currentValue, name, values, onChange, gridCol = '1fr 1fr' }) => {
-  const classes = useStyles();
-
-  return (
-    <ButtonGroup
-      color="primary"
-      aria-label="outlined primary button group"
-      style={{
-        display: 'grid',
-        gridTemplateColumns: gridCol,
-        width: phoneSize ? '325px' : '90%',
-        gridGap: phoneSize ? '6px' : '10px',
-      }}
-    >
-      {values.map(({ label, value }, i) => (
-        <Button
-          key={i}
-          name={name}
-          value={value}
-          className={`${currentValue === value ? classes.selected : null} ${
-            classes.selectorButton
-          }`}
-          onClick={(e) => {
-            const target = {
-              name: e.currentTarget.name,
-              value: e.currentTarget.value,
-            };
-            e.target = target;
-            onChange(e);
-          }}
-        >
-          {label}
-        </Button>
-      ))}
-    </ButtonGroup>
-  );
-};
 
 export function PortfolioCompanyName({
   buildData,
