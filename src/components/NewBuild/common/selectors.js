@@ -1,4 +1,5 @@
 import React from 'react';
+import Select from 'react-select';
 import { Button, ButtonGroup } from '@material-ui/core';
 import { phone } from '../../../utils/helpers';
 import useStyles from '../BuildStyles';
@@ -43,6 +44,70 @@ export const ButtonSelector = ({ currentValue, name, values, onChange, gridCol =
   );
 };
 
-export const temp = () => {
-  return true;
-};
+export function InternationalCountrySelector({
+  handleChange,
+  setUnfilledFields,
+  unfilledFields,
+  buildData,
+  countries,
+}) {
+  const countryNames = countries.map((c) => c.countryName);
+  const placeHolder = 'Please select which countries';
+  const customStyles = {
+    multiValue: (styles) => ({
+      ...styles,
+      backgroundColor: '#DAE8FF',
+    }),
+    multiValueLabel: (styles) => ({
+      ...styles,
+      color: '#0461FF',
+      height: 37,
+      display: 'flex',
+      alignItems: 'center',
+      fontSize: '96%',
+    }),
+    multiValueRemove: (styles) => ({
+      ...styles,
+      color: '#0461FF',
+    }),
+    control: (styles) => ({
+      ...styles,
+      marginTop: 50,
+      minHeight: 60,
+      width: phoneSize ? '325px' : '90%',
+      maxWidth: 568,
+      cursor: 'pointer',
+      border: unfilledFields.includes('international_company_country')
+        ? '2px solid red'
+        : '1pm solid hsl(0, 0%, 80%)',
+    }),
+    placeholder: (styles, data) => ({
+      ...styles,
+      color: data.children === placeHolder ? '#999' : '#000',
+    }),
+  };
+
+  return (
+    <Select
+      id="international_company_country"
+      label="International Company by Country"
+      menuPosition="fixed"
+      styles={customStyles}
+      value={buildData.international_company_country || ''}
+      options={countryNames.map((country) => ({ value: country, label: country })) || ''}
+      placeholder={buildData.international_company_country || placeHolder}
+      onChange={(option) => {
+        const newEvent = {
+          target: {
+            name: 'international_company_country',
+            value: option.value,
+          },
+        };
+        handleChange(newEvent);
+        setUnfilledFields((prev) =>
+          prev.filter((field) => field !== 'international_company_country'),
+        );
+      }}
+    />
+  );
+}

@@ -9,7 +9,7 @@ import { Button, TextField, Paper, Grid, FormControl } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import BasicInfo from './FormComponents/TypeSelector/index';
 import UploadDocs from './FormComponents/UploadDocs/index';
-import { ButtonSelector } from '../common/selectors';
+import { ButtonSelector, InternationalCountrySelector } from '../common/selectors';
 import { useAuth } from '../../../auth/useAuth';
 import { phone } from '../../../utils/helpers';
 import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
@@ -342,68 +342,6 @@ const BuildDetails = ({
       return newBuildObject;
     });
   };
-
-  function InternationalCountrySelector() {
-    const countryNames = countries.map((c) => c.countryName);
-    const placeHolder = 'Please select which countries';
-    const customStyles = {
-      multiValue: (styles) => ({
-        ...styles,
-        backgroundColor: '#DAE8FF',
-      }),
-      multiValueLabel: (styles) => ({
-        ...styles,
-        color: '#0461FF',
-        height: 37,
-        display: 'flex',
-        alignItems: 'center',
-        fontSize: '96%',
-      }),
-      multiValueRemove: (styles) => ({
-        ...styles,
-        color: '#0461FF',
-      }),
-      control: (styles) => ({
-        ...styles,
-        marginTop: 50,
-        minHeight: 60,
-        width: phoneSize ? '325px' : '90%',
-        maxWidth: 568,
-        cursor: 'pointer',
-        border: unfilledFields.includes('international_company_country')
-          ? '2px solid red'
-          : '1pm solid hsl(0, 0%, 80%)',
-      }),
-      placeholder: (styles, data) => ({
-        ...styles,
-        color: data.children === placeHolder ? '#999' : '#000',
-      }),
-    };
-
-    return (
-      <Select
-        id="international_company_country"
-        label="International Company by Country"
-        menuPosition="fixed"
-        styles={customStyles}
-        value={buildData.international_company_country || ''}
-        options={countryNames.map((country) => ({ value: country, label: country })) || ''}
-        placeholder={buildData.international_company_country || placeHolder}
-        onChange={(option) => {
-          const newEvent = {
-            target: {
-              name: 'international_company_country',
-              value: option.value,
-            },
-          };
-          handleChange(newEvent);
-          setUnfilledFields((prev) =>
-            prev.filter((field) => field !== 'international_company_country'),
-          );
-        }}
-      />
-    );
-  }
 
   function InternationalInvestorsCountriesSelector() {
     const countryNames = countries.map((c) => c.countryName);
@@ -984,7 +922,13 @@ const BuildDetails = ({
               </FormControl>
               {buildData.international_company_status === 'true' && (
                 <FormControl required variant="outlined" className={classes.formContainers}>
-                  <InternationalCountrySelector />
+                  <InternationalCountrySelector
+                    handleChange={handleChange}
+                    setUnfilledFields={setUnfilledFields}
+                    unfilledFields={unfilledFields}
+                    buildData={buildData}
+                    countries={countries}
+                  />
                 </FormControl>
               )}
             </Grid>
