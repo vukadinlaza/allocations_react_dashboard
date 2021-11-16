@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import sectors from './FormComponents/TypeSelector/sectors';
 import { convertToPositiveIntOrNull } from '../../../utils/numbers';
 import useStyles from '../BuildStyles';
+import countries from 'country-region-data';
 
 const phoneSize = window.innerWidth < phone;
 
@@ -1275,10 +1276,71 @@ export function InternationalCompanyStatus({
   handleTooltip,
   setUnfilledFields,
   unfilledFields,
-  customInputStyles,
   classes,
   openTooltip,
 }) {
+  function InternationalCountrySelector() {
+    const countryNames = countries.map((c) => c.countryName);
+    const placeHolder = 'Please select which countries';
+    const customStyles = {
+      multiValue: (styles) => ({
+        ...styles,
+        backgroundColor: '#DAE8FF',
+      }),
+      multiValueLabel: (styles) => ({
+        ...styles,
+        color: '#0461FF',
+        height: 37,
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: '96%',
+      }),
+      multiValueRemove: (styles) => ({
+        ...styles,
+        color: '#0461FF',
+      }),
+      control: (styles) => ({
+        ...styles,
+        marginTop: 50,
+        minHeight: 60,
+        width: phoneSize ? '325px' : '90%',
+        maxWidth: 568,
+        cursor: 'pointer',
+        border: unfilledFields.includes('international_company_country')
+          ? '2px solid red'
+          : '1pm solid hsl(0, 0%, 80%)',
+      }),
+      placeholder: (styles, data) => ({
+        ...styles,
+        color: data.children === placeHolder ? '#999' : '#000',
+      }),
+    };
+
+    return (
+      <Select
+        id="international_company_country"
+        label="International Company by Country"
+        menuPosition="fixed"
+        styles={customStyles}
+        value={buildData.international_company_country || ''}
+        options={countryNames.map((country) => ({ value: country, label: country })) || ''}
+        placeholder={buildData.international_company_country || placeHolder}
+        onChange={(option) => {
+          const newEvent = {
+            target: {
+              name: 'international_company_country',
+              value: option.value,
+            },
+          };
+          handleChange(newEvent);
+          setUnfilledFields((prev) =>
+            prev.filter((field) => field !== 'international_company_country'),
+          );
+        }}
+      />
+    );
+  }
+
   return (
     <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
@@ -1321,6 +1383,162 @@ export function InternationalCompanyStatus({
         </FormControl>
       )}
     </Grid>
+  );
+}
+
+export function InternationalInvestorsStatus({
+  buildData,
+  handleChange,
+  handleTooltip,
+  setUnfilledFields,
+  unfilledFields,
+  customInputStyles,
+  classes,
+  openTooltip,
+}) {
+  function InternationalInvestorsCountriesSelector() {
+    const countryNames = countries.map((c) => c.countryName);
+    const placeHolder = 'Please select which countries';
+    const customStyles = {
+      multiValue: (styles) => ({
+        ...styles,
+        backgroundColor: '#DAE8FF',
+      }),
+      multiValueLabel: (styles) => ({
+        ...styles,
+        color: '#0461FF',
+        height: 37,
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: '96%',
+      }),
+      multiValueRemove: (styles) => ({
+        ...styles,
+        color: '#0461FF',
+      }),
+      control: (styles) => ({
+        ...styles,
+        marginTop: 50,
+        minHeight: 60,
+        width: phoneSize ? '325px' : '90%',
+        maxWidth: 568,
+        cursor: 'pointer',
+        border: unfilledFields.includes('international_investors_countries')
+          ? '2px solid red'
+          : '1pm solid hsl(0, 0%, 80%)',
+      }),
+      placeholder: (styles, data) => ({
+        ...styles,
+        color: data.children === placeHolder ? '#999' : '#000',
+      }),
+    };
+
+    return (
+      <Select
+        id="international_investors_countries"
+        label="International Companies by Country"
+        menuPosition="fixed"
+        styles={customStyles}
+        value={
+          buildData.international_investors_countries.map((country) => ({
+            value: country,
+            label: country,
+          })) || ''
+        }
+        options={countryNames.map((country) => ({ value: country, label: country })) || ''}
+        placeholder={placeHolder || buildData.international_investors_countries}
+        onChange={(option) => {
+          const newEvent = {
+            target: {
+              name: 'international_investors_countries',
+              value: option.map((country) => country.value),
+            },
+          };
+          handleChange(newEvent);
+          setUnfilledFields((prev) =>
+            prev.filter((field) => field !== 'international_investors_countries'),
+          );
+        }}
+        isMulti
+      />
+    );
+  }
+
+  return (
+    <Grid className={classes.inputGridItem} item xs={6} spacing={2}>
+      <FormControl required variant="outlined" className={classes.formContainers}>
+        <Typography className={`${classes.formItemName} ${classes.customFormItemName}`}>
+          Will you have any international (Non US) investors?
+          <ModalTooltip
+            title="International Investors"
+            handleTooltip={handleTooltip}
+            tooltipContent={
+              <Typography color="inherit">
+                If this SPV/Fund will have investors located outside the United States, please
+                select Yes to this question followed by the applicable country. If you are unsure at
+                the moment, please select Unknown.
+              </Typography>
+            }
+            openTooltip={openTooltip}
+            id="international_investors_status"
+          >
+            <HelpIcon
+              className={classes.helpIcon}
+              onClick={(e) => handleTooltip('international_investors_status')}
+            />
+          </ModalTooltip>
+        </Typography>
+        <ButtonSelector
+          name="international_investors_status"
+          gridCol="1fr 1fr 1fr"
+          onChange={handleChange}
+          currentValue={buildData.international_investors_status}
+          values={[
+            { label: 'Yes', value: 'true' },
+            { label: 'No', value: 'false' },
+            { label: 'Unknown', value: 'unknown' },
+          ]}
+        />
+      </FormControl>
+      {buildData.international_investors_status === 'true' && (
+        <FormControl required variant="outlined" className={classes.formContainers}>
+          <InternationalInvestorsCountriesSelector />
+        </FormControl>
+      )}
+    </Grid>
+  );
+}
+export function NotesMemo({ buildData, handleChange, handleTooltip, classes, openTooltip }) {
+  return (
+    <>
+      <Typography className={classes.formItemName}>
+        Any notes we should know about?
+        <ModalTooltip
+          title="Extra Notes"
+          handleTooltip={handleTooltip}
+          tooltipContent={
+            <Typography color="inherit">
+              Indicate any special provisions which you would like to capture in the deal
+            </Typography>
+          }
+          openTooltip={openTooltip}
+          id="extra_notes"
+        >
+          <HelpIcon className={classes.helpIcon} onClick={(e) => handleTooltip('extra_notes')} />
+        </ModalTooltip>
+      </Typography>
+      <TextField
+        multiline
+        variant="outlined"
+        name="memo"
+        value={buildData.memo}
+        onChange={handleChange}
+        className={classes.finalInputBox}
+        inputProps={{
+          className: classes.finalInput,
+        }}
+      />
+    </>
   );
 }
 
