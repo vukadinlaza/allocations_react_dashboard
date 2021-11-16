@@ -26,6 +26,9 @@ import {
   PortfolioCompanySecurities,
   Sectors,
   NumberOfInvestments,
+  Representative,
+  DealStage,
+  MasterSeries,
 } from '../../FormFields';
 
 export default function TypeSelector({
@@ -141,47 +144,6 @@ export default function TypeSelector({
     );
   }
 
-  function DealStagesSelector() {
-    const dealStages = ['Pre-Seed', 'Seed', 'Series A', 'Series B', 'Series C', 'Series D+'];
-    const customStyles = {
-      control: (styles) => ({
-        ...styles,
-        height: 60,
-        maxWidth: 568,
-        cursor: 'pointer',
-        border: unfilledFields.includes('deal_stage')
-          ? '2px solid red'
-          : '1pm solid hsl(0, 0%, 80%)',
-      }),
-      placeholder: (styles, data) => ({
-        ...styles,
-        color: data.children !== 'Select...' ? '#000' : '#999',
-      }),
-    };
-
-    return (
-      <Select
-        id="deal_stage"
-        menuPosition="fixed"
-        label="Deal Stage"
-        styles={customStyles}
-        options={dealStages.map((stage) => ({ value: stage, label: stage, key: stage })) || ''}
-        defaultValue={buildData.deal_stage}
-        placeholder={buildData.deal_stage}
-        onChange={(option) => {
-          const newEvent = {
-            target: {
-              name: 'deal_stage',
-              value: option.value,
-            },
-          };
-          handleChange(newEvent);
-          setUnfilledFields((prev) => prev.filter((field) => field !== 'deal_stage'));
-        }}
-      />
-    );
-  }
-
   const formFieldProps = {
     buildData,
     setBuildData,
@@ -224,125 +186,18 @@ export default function TypeSelector({
 
         <Grid container spacing={4} className={classes.inputGridContainer}>
           <PortfolioCompanyName {...formFieldProps} />
-
           {dealType === 'spv' && <PortfolioCompanySecurities {...formFieldProps} />}
-
           {dealType === 'fund' && <NumberOfInvestments {...formFieldProps} />}
-
           {dealType === 'spv' && <DealName {...formFieldProps} />}
-
           <ClosingDate {...formFieldProps} />
-
           <ManagerName {...formFieldProps} />
-
-          <Grid className={classes.inputGridItem} item xs={6}>
-            <FormControl required disabled variant="outlined" className={classes.formContainers}>
-              <Typography className={classes.formItemName}>
-                Manager Full Title
-                <ModalTooltip
-                  title="Manager Full Title"
-                  handleTooltip={handleTooltip}
-                  tooltipContent={
-                    <Typography color="inherit">
-                      Please indicate the name of the representative of the Manager as well as the
-                      title of the said person; applicable only if the Manager is a legal entity
-                    </Typography>
-                  }
-                  openTooltip={openTooltip}
-                  id="representative"
-                >
-                  <HelpIcon
-                    className={classes.helpIcon}
-                    onClick={(e) => handleTooltip('representative')}
-                  />
-                </ModalTooltip>
-              </Typography>
-              <TextField
-                value={buildData.representative}
-                name="representative"
-                onChange={handleChange}
-                className={classes.inputBox}
-                variant="outlined"
-                inputProps={customInputStyles}
-                onClick={() =>
-                  setUnfilledFields((prev) => prev.filter((field) => field !== 'representative'))
-                }
-                classes={{
-                  root: unfilledFields.includes('representative') && classes.unfilledField,
-                }}
-              />
-            </FormControl>
-          </Grid>
-
+          <Representative {...formFieldProps} /> {/* Manager Full Title */}
           {/* FOURTH ROW */}
-          <Grid className={classes.inputGridItem} item xs={6}>
-            <FormControl required disabled variant="outlined" className={classes.formContainers}>
-              <Typography className={classes.formItemName}>
-                Deal Stage
-                <ModalTooltip
-                  title="Deal Stage"
-                  handleTooltip={handleTooltip}
-                  tooltipContent={
-                    <Typography color="inherit">
-                      These are the different stages of funding for your SPV/Fund
-                    </Typography>
-                  }
-                  openTooltip={openTooltip}
-                  id="deal_stage"
-                >
-                  <HelpIcon
-                    className={classes.helpIcon}
-                    onClick={(e) => handleTooltip('deal_stage')}
-                  />
-                </ModalTooltip>
-              </Typography>
-
-              <DealStagesSelector />
-            </FormControl>
-          </Grid>
-
+          <DealStage {...formFieldProps} />
           {!buildData.high_volume_partner && <EstimatedSPVQuantity {...formFieldProps} />}
-
           {!buildData.high_volume_partner && buildData.estimated_spv_quantity >= 5 && (
-            <Grid className={classes.inputGridItem} item xs={12}>
-              <FormControl required disabled variant="outlined" className={classes.formContainers}>
-                <Typography className={classes.formItemName}>
-                  Master Series Name
-                  <ModalTooltip
-                    title="Master Series Name"
-                    handleTooltip={handleTooltip}
-                    tooltipContent={
-                      <Typography color="inherit">
-                        Please indicate the name of your SPV (applicable if you are a HVP)
-                      </Typography>
-                    }
-                    openTooltip={openTooltip}
-                    id="master_series"
-                  >
-                    <HelpIcon
-                      className={classes.helpIcon}
-                      onClick={(e) => handleTooltip('master_series')}
-                    />
-                  </ModalTooltip>
-                </Typography>
-                <TextField
-                  value={buildData.master_series}
-                  name="master_series"
-                  onChange={handleChange}
-                  className={`${classes.inputBox} ${classes.wideInputBox}`}
-                  variant="outlined"
-                  inputProps={customInputStyles}
-                  onClick={() =>
-                    setUnfilledFields((prev) => prev.filter((field) => field !== 'master_series'))
-                  }
-                  classes={{
-                    root: unfilledFields.includes('master_series') && classes.unfilledField,
-                  }}
-                />
-              </FormControl>
-            </Grid>
+            <MasterSeries {...formFieldProps} />
           )}
-
           <Sectors {...formFieldProps} />
         </Grid>
       </form>
