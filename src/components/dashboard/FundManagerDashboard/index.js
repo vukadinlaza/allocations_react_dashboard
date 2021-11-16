@@ -443,7 +443,6 @@ const FundManagerDashboard = ({ classes, history }) => {
             orgSlug={orgSlug}
             classes={classes}
             deal_id={dealData._id}
-            company_name={dealData.company_name}
             deal_NDvirtualAccountNum={dealData.nd_virtual_account_number || null}
             openTooltip={openTooltip}
             handleTooltip={handleTooltip}
