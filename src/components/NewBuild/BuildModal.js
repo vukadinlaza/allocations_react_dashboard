@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@material-ui/core';
+import { useMutation, gql } from '@apollo/client';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
@@ -7,6 +8,13 @@ import { useHistory } from 'react-router';
 import spvIcon from '../../assets/spv-icon.svg';
 import fundIcon from '../../assets/fund-icon.svg';
 import plusSignIcon from '../../assets/plus-vector.svg';
+import warningIcon from '../../assets/warning-red.svg';
+
+const DELETE_DEAL = gql`
+  mutation DeleteDeal($_id: String!) {
+    deleteDeal(_id: $_id)
+  }
+`;
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -18,6 +26,16 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '48px',
     padding: '12px',
     backgroundColor: '#ECF3FF',
+  },
+  warningIcon: {
+    height: '72px',
+    width: '72px',
+    display: 'flex',
+    justifyContent: 'center',
+    margin: '0px 0px 15px 0px',
+    borderRadius: '48px',
+    padding: '12px',
+    backgroundColor: '#F2CECC',
   },
   modal: {
     display: 'flex',
@@ -84,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const NewBuildWarningModal = ({ isOpen, closeModal, openNewBuildModal }) => {
+const NewOrCurrentBuild = ({ isOpen, closeModal, openNewBuildModal, setPage }) => {
   const classes = useStyles();
   const history = useHistory();
   return (
@@ -207,10 +225,7 @@ export const NewBuildWarningModal = ({ isOpen, closeModal, openNewBuildModal }) 
                               backgroundColor: '#186EFF',
                             }}
                             onClick={() => {
-                              localStorage.removeItem('buildData');
-                              localStorage.removeItem('buildDeal');
-                              closeModal();
-                              openNewBuildModal();
+                              setPage(2);
                             }}
                           >
                             Continue
@@ -227,6 +242,147 @@ export const NewBuildWarningModal = ({ isOpen, closeModal, openNewBuildModal }) 
       </Container>
     </Modal>
   );
+};
+
+const NewBuildFinalWarning = ({ isOpen, closeModal, openNewBuildModal, setPage }) => {
+  const classes = useStyles();
+  const deal = JSON.parse(localStorage.getItem('buildDeal'));
+
+  const [deleteDeal] = useMutation(DELETE_DEAL, {
+    variables: { _id: deal?._id },
+  });
+
+  return (
+    <Modal open={isOpen} onClose={closeModal} className={classes.modal}>
+      <Container style={{ width: '650px' }}>
+        <Grid container style={{ height: '100%', width: '90%', margin: 'auto' }}>
+          <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
+            <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#186EFF' }}>
+              <Grid container justifyContent="space-between">
+                <Typography variant="h6" style={{ color: '#fff' }}>
+                  Warning
+                </Typography>
+                <Box onClick={closeModal} style={{ cursor: 'pointer' }}>
+                  <CloseIcon htmlColor="#fff" />
+                </Box>
+              </Grid>
+            </Paper>
+
+            <Paper
+              style={{
+                backgroundColor: '#FBFCFF',
+                borderRadius: '0 0 1rem 1rem',
+              }}
+            >
+              <Grid container style={{ marginBottom: '25px' }}>
+                <FormControl
+                  component="fieldset"
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Grid container className={classes.typeGroup}>
+                    <Box
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'space-between',
+                      }}
+                    >
+                      <Paper className={classes.modalPaperBody}>
+                        <Grid
+                          item
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            margin: '10px 10px 10px 5px',
+                          }}
+                        >
+                          <div className={classes.warningIcon}>
+                            <img alt="spv-icon" src={warningIcon} />
+                          </div>
+                          <Typography className={classes.typeTitle}>
+                            Are you sure you want to cancel this build?
+                          </Typography>
+                        </Grid>
+                        <Grid item className={classes.typeGrid}>
+                          <Typography className={classes.typeBody} style={{ textAlign: 'center' }}>
+                            Once you cancel this build, you will start from scratch and lose this
+                            information. This action can not be undone.
+                          </Typography>
+                        </Grid>
+                        <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            type="submit"
+                            style={{
+                              width: '70%',
+                              borderRadius: '8px',
+                              backgroundColor: '#186EFF',
+                            }}
+                            onClick={() => {
+                              deleteDeal();
+                              localStorage.removeItem('buildData');
+                              localStorage.removeItem('buildDeal');
+                              setPage(1);
+                              closeModal();
+                              openNewBuildModal();
+                            }}
+                          >
+                            Continue
+                          </Button>
+                        </Grid>
+                        <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            type="button"
+                            style={{
+                              width: '70%',
+                              color: '#2A2B54',
+                              borderRadius: '8px',
+                              backgroundColor: '#ffffff',
+                            }}
+                            onClick={() => {
+                              setPage(1);
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                        </Grid>
+                      </Paper>
+                    </Box>
+                  </Grid>
+                </FormControl>
+              </Grid>
+            </Paper>
+          </Grid>
+        </Grid>
+      </Container>
+    </Modal>
+  );
+};
+
+export const NewBuildWarningModal = (props) => {
+  const [page, setPage] = useState(1);
+
+  const pageMap = {
+    1: NewOrCurrentBuild,
+    2: NewBuildFinalWarning,
+  };
+
+  const Component = pageMap[page];
+
+  return <Component {...props} setPage={setPage} />;
 };
 
 const BuildModal = ({ onClose, isOpen }) => {
