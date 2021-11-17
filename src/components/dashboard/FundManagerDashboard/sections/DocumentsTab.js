@@ -248,8 +248,6 @@ const DocumentsTab = ({ classes, data, refetch }) => {
           documentsData.push({ ...investment, doc: titleCase(splitPath), docLink: doc.link });
         }
       });
-    } else {
-      documentsData.push(investment);
     }
   });
 
