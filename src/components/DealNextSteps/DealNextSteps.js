@@ -61,6 +61,7 @@ const GET_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
     deal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
       _id
+      accept_crypto
       isDemo
       dealParams {
         dealType
@@ -363,6 +364,7 @@ function DealNextSteps() {
         </div>
         <PaymentSelectModal
           open={openPayment}
+          dealData={dealData?.deal}
           setOpen={setOpenPayment}
           setWireInstructionsOpen={setWireInstructionsOpen}
           setCryptoPaymentOpen={setCryptoPaymentOpen}

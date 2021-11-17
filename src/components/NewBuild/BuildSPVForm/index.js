@@ -349,6 +349,7 @@ const BuildDetails = ({
           sectors: buildData.sectors,
           setup_cost: buildData.setup_cost,
           side_letters: buildData.side_letters,
+          accept_crypto: buildData.accept_crypto,
         },
       },
     });
@@ -381,6 +382,7 @@ const BuildDetails = ({
         [target.name]: target.value,
       };
       localStorage.setItem('buildData', JSON.stringify(newBuildObject));
+      console.log('newBuildObject :>> ', newBuildObject);
       return newBuildObject;
     });
   };
@@ -842,8 +844,9 @@ const BuildDetails = ({
                     handleTooltip={handleTooltip}
                     tooltipContent={
                       <Typography color="inherit">
-                        By accepting crypto payments, you aggree to use Atomizer, LLC as the Master
-                        Series Name
+                        By accepting crypto payments, you agree to use Atomizer, LLC as the Master
+                        Series. This decision is final and cannot be changed after your SPV is
+                        created.
                       </Typography>
                     }
                     openTooltip={openTooltip}
@@ -1186,8 +1189,14 @@ const BuildDetails = ({
 export default function NewSpvForm() {
   const { userProfile, loading: authLoading } = useAuth();
   const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
-  const [setBuildInfo, { data: updatedDeal, loading: updatedDealLoading }] =
-    useMutation(SET_BUILD_INFO);
+  const [setBuildInfo, { data: updatedDeal, loading: updatedDealLoading }] = useMutation(
+    SET_BUILD_INFO,
+    {
+      onError: (err) => {
+        console.log('err', err);
+      },
+    },
+  );
 
   const organization = useCurrentOrganization();
 
