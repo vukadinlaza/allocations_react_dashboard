@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, CircularProgress, Paper } from '@material-ui/core';
-import { gql, useLazyQuery, useQuery } from '@apollo/client';
+import { gql, useLazyQuery } from '@apollo/client';
 import Typography from '@material-ui/core/Typography';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
@@ -50,6 +50,11 @@ export default function SignDocsForm({ page, setPage, deal, updatedDeal, updated
     {
       variables: { deal_id: deal?._id },
       fetchPolicy: 'network-only',
+      onError: () => {
+        toast.error(
+          'Sorry, we encountered an error generating your service agreement link, contact support@allocations.com',
+        );
+      },
     },
   );
 
