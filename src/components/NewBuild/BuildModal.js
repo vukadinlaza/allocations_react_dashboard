@@ -184,8 +184,7 @@ const NewOrCurrentBuild = ({ isOpen, closeModal, openNewBuildModal, setPage }) =
                               const build = JSON.parse(localStorage.getItem('buildDeal'));
                               if (build?.type) {
                                 history.push(`/new-build/${build.type}`);
-                              }
-                              openNewBuildModal();
+                              } else openNewBuildModal();
                             }}
                           >
                             Continue
