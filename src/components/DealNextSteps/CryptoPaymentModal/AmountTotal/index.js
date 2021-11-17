@@ -29,181 +29,43 @@ const useStyles = makeStyles((theme) => ({
     color: '#2A2B54',
   },
 }));
-function AmountTotal() {
+function AmountTotal({ investmentAmount, transactionFee, totalDue }) {
   const classes = useStyles();
 
-  const [warning, setWarning] = useState(true);
-
-  const handleClose = () => {
-    setWarning(true);
-  };
-
   return (
-    <Modal onClose={handleClose} className={classes.modal}>
-      <Container maxWidth="sm">
-        <Grid container style={{ height: '100%' }}>
-          <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
-            <Paper className={classes.modalPaper} style={{ backgroundColor: '#2A2B54' }}>
-              <Grid container justifyContent="space-between">
-                <Typography variant="h6" style={{ color: '#fff' }}>
-                  Crypto Payment{' '}
-                </Typography>
-              </Grid>
-            </Paper>
-
-            {warning ? (
-              <Paper style={{ backgroundColor: '#fff', borderRadius: '0 0 1rem 1rem' }}>
-                <Grid container style={{ marginBottom: '25px' }}>
-                  {' '}
-                  <Grid
-                    item
-                    style={{
-                      margin: 'auto',
-                      marginTop: '20px',
-                      fontWeight: 'bold',
-                      fontSize: '24px',
-                      fontFamily: 'robot',
-                    }}
-                  >
-                    Are you ready to make your payment?{' '}
-                  </Grid>
-                  <Grid
-                    item
-                    style={{
-                      margin: 'auto',
-                      marginTop: '20px',
-                      //   margin: '20px auto auto',
-                      marginLeft: '5rem',
-                      marginRight: '5rem',
-                      // marginTop: '20px',
-                      fontSize: '18px',
-                      fontFamily: 'robot',
-                    }}
-                  >
-                    <p>This filler text will be here until we figure out what needs to be said.</p>
-                  </Grid>
-                  <Grid
-                    item
-                    style={{
-                      width: '80%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      margin: 'auto',
-                    }}
-                  >
-                    <Button
-                      style={{
-                        font: 'normal normal bold 24px/28px Roboto',
-                        width: '80%',
-                        height: '60px',
-                        margin: 'auto',
-                        marginTop: '5px',
-                        background: '#2A2B54 0% 0% no-repeat padding-box',
-                        borderRadius: '10px',
-                        opacity: '1',
-                        color: '#FFFFFF',
-                        textTransform: 'none',
-                        outline: 'none',
-                      }}
-                      onClick={async () => {
-                        setWarning(false);
-                      }}
-                    >
-                      Send Crypto
-                    </Button>
-                    <Button
-                      style={{
-                        font: 'normal normal bold 24px/28px Roboto',
-                        width: '80%',
-                        height: '60px',
-                        margin: 'auto',
-                        marginTop: '5px',
-                        background: '#FFFFFF 0% 0% no-repeat padding-box',
-                        borderColor: '186EFF !important',
-                        borderRadius: '10px',
-                        opacity: '1',
-                        color: '#2A2B54',
-                        textTransform: 'none',
-                        // outline: 'none',
-                      }}
-                      onClick={handleClose}
-                    >
-                      Cancel
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Paper>
-            ) : (
-              <Paper style={{ backgroundColor: '#fff', borderRadius: '0 0 1rem 1rem' }}>
-                <Grid container style={{ marginBottom: '25px' }}>
-                  {' '}
-                  <Grid
-                    item
-                    style={{
-                      margin: 'auto',
-                      marginTop: '20px',
-                      fontWeight: 'bold',
-                      fontSize: '24px',
-                      fontFamily: 'robot',
-                    }}
-                  >
-                    Are you ready to make your payment?{' '}
-                  </Grid>
-                  <Grid
-                    item
-                    style={{
-                      margin: 'auto',
-                      marginTop: '20px',
-                      //   margin: '20px auto auto',
-                      marginLeft: '5rem',
-                      marginRight: '5rem',
-                      // marginTop: '20px',
-                      fontSize: '18px',
-                      fontFamily: 'robot',
-                    }}
-                  >
-                    <p>
-                      Please send <b>{investment.amount}</b> amount of Crypto to the following
-                      wallet address
-                    </p>
-                  </Grid>
-                  <Grid
-                    item
-                    style={{
-                      width: '80%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      margin: 'auto',
-                    }}
-                  >
-                    <Button
-                      style={{
-                        font: 'normal normal bold 24px/28px Roboto',
-                        width: '80%',
-                        height: '60px',
-                        margin: 'auto',
-                        marginTop: '5px',
-                        background: '#FFFFFF 0% 0% no-repeat padding-box',
-                        borderColor: '186EFF !important',
-                        borderRadius: '10px',
-                        opacity: '1',
-                        color: '#2A2B54',
-                        textTransform: 'none',
-                        // outline: 'none',
-                      }}
-                      onClick={handleClose}
-                    >
-                      Cancel
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Paper>
-            )}
+    <Paper style={{ margin: 'auto', width: '430px' }}>
+      <Grid style={{ margin: 'auto' }} container spacing={1}>
+        <Grid container item spacing={3}>
+          {' '}
+          <Grid item xs={6}>
+            Investment Amount
+          </Grid>
+          <Grid item xs={6}>
+            ${investmentAmount.toLocaleString('en-us', { minimumFractionDigits: 2 })}
           </Grid>
         </Grid>
-      </Container>
-    </Modal>
+        <Grid container item spacing={3}>
+          <Grid item xs={6}>
+            Transaction Fee (1.5%)
+          </Grid>
+          <Grid item xs={6}>
+            ${transactionFee.toLocaleString('en-us', { minimumFractionDigits: 2 })}
+          </Grid>
+        </Grid>
+        <Grid container item spacing={3}>
+          <hr style={{ width: '100%', color: 'black' }} />
+        </Grid>
+        <Grid container item spacing={3}>
+          <Grid item xs={6}>
+            <b>Total Amount Due</b>
+          </Grid>
+          <Grid item xs={6}>
+            ${totalDue.toLocaleString('en-us', { minimumFractionDigits: 2 })}
+          </Grid>
+        </Grid>
+      </Grid>
+    </Paper>
   );
 }
 
-export default CryptoPaymentModal;
+export default AmountTotal;

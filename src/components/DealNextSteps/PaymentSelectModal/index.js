@@ -169,16 +169,6 @@ const PaymentModal = ({
                               >
                                 {paymentType.paymentMethod}
                               </Typography>
-                              {/* <Button
-                                variant="contained"
-                                style={{ margin: '1rem', color: '#2A2B54' }}
-                                onClick={() => {
-                                  setOpen(false);
-                                  paymentType.openFunction();
-                                }}
-                              >
-                                {paymentType.buttonText}
-                              </Button> */}
                             </Paper>
                           );
                         })}

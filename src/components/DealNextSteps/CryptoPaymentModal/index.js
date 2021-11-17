@@ -3,6 +3,9 @@ import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@materia
 import { useQuery, gql } from '@apollo/client';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
+import AmountTotal from './AmountTotal/index';
+import CopyIcon from '../../../assets/copy-icon.svg';
+import { toast } from 'react-toastify';
 
 const DEAL_WALLET_ADDRESS = gql`
   query getCryptoWalletAddress($deal_id: String) {
@@ -21,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     maxHeight: 'calc(100% - 8vh)',
     // overflow: 'scroll',
+  },
+  innerPaper: {
+    boxShadow: 'none !important',
   },
   modalHeader: {
     fontFamily: 'Roboto !important',
@@ -46,42 +52,63 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
     fetchPolicy: 'network-only',
     variables: { deal_id: '6170936bd738def58550f515' },
   });
+
+  console.log('here is the data ', data);
   const [warning, setWarning] = useState(true);
+
+  const [investmentAmount, setInvestmentAmount] = useState(investment.amount);
+  const [transactionFee, setTransactionFee] = useState(investment.amount * 0.015);
+  const [totalDue, setTotalDue] = useState(investmentAmount + transactionFee);
+
+  console.log('here are the values', investmentAmount, transactionFee, totalDue);
 
   const handleClose = () => {
     setWarning(true);
     setOpen(false);
   };
 
-  console.log('this is the data ', data);
-
   return (
     <Modal open={open} onClose={handleClose} className={classes.modal}>
       <Container maxWidth="sm">
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
-            <Paper className={classes.modalPaper} style={{ backgroundColor: '#2A2B54' }}>
-              <Grid container justifyContent="space-between">
-                <Typography variant="h6" style={{ color: '#fff' }}>
-                  Crypto Payment{' '}
-                </Typography>
-                <Box onClick={handleClose} style={{ cursor: 'pointer' }}>
-                  <CloseIcon htmlColor="#fff" />
+            <Paper
+              className={`${classes.modalPaper} ${classes.innerPaper}`}
+              style={{ backgroundColor: '#F7F7F7' }}
+            >
+              <Grid
+                container
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'flex-end',
+                  background: '#F7F7F7',
+                }}
+              >
+                <Box>
+                  <CloseIcon
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setOpen(false)}
+                    htmlColor="#2A2B54"
+                  />
                 </Box>
               </Grid>
             </Paper>
 
             {warning ? (
-              <Paper style={{ backgroundColor: '#fff', borderRadius: '0 0 1rem 1rem' }}>
+              <Paper
+                className={classes.innerPaper}
+                style={{ backgroundColor: '#f7f7f7', borderRadius: '0 0 1rem 1rem' }}
+              >
                 <Grid container style={{ marginBottom: '25px' }}>
                   {' '}
                   <Grid
                     item
                     style={{
                       margin: 'auto',
-                      marginTop: '20px',
+                      marginTop: '10px',
                       fontWeight: 'bold',
-                      fontSize: '24px',
+                      fontSize: '28px',
                       fontFamily: 'robot',
                     }}
                   >
@@ -100,7 +127,16 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                       fontFamily: 'robot',
                     }}
                   >
-                    <p>This filler text will be here until we figure out what needs to be said.</p>
+                    <p>
+                      Please note, once a transaction has been initiated, it cannot be reversed. All
+                      payment transactions processed through Circle's Services are{' '}
+                      <b>non-refundable</b>.
+                    </p>
+
+                    <p>
+                      Additionally, Allocations charges a <b>1.5% transaction fee</b> which will be
+                      drawn from your capital contribution amount.
+                    </p>
                   </Grid>
                   <Grid
                     item
@@ -121,7 +157,7 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                         background: '#2A2B54 0% 0% no-repeat padding-box',
                         borderRadius: '10px',
                         opacity: '1',
-                        color: '#FFFFFF',
+                        color: '#F7F7F7',
                         textTransform: 'none',
                         outline: 'none',
                       }}
@@ -138,7 +174,7 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                         height: '60px',
                         margin: 'auto',
                         marginTop: '5px',
-                        background: '#FFFFFF 0% 0% no-repeat padding-box',
+                        background: '#F7F7F7 0% 0% no-repeat padding-box',
                         borderColor: '186EFF !important',
                         borderRadius: '10px',
                         opacity: '1',
@@ -154,16 +190,19 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                 </Grid>
               </Paper>
             ) : (
-              <Paper style={{ backgroundColor: '#fff', borderRadius: '0 0 1rem 1rem' }}>
+              <Paper
+                className={classes.innerPaper}
+                style={{ backgroundColor: '#f7f7f7', borderRadius: '0 0 1rem 1rem' }}
+              >
                 <Grid container style={{ marginBottom: '25px' }}>
                   {' '}
                   <Grid
                     item
                     style={{
                       margin: 'auto',
-                      marginTop: '20px',
+                      marginTop: '10px',
                       fontWeight: 'bold',
-                      fontSize: '24px',
+                      fontSize: '28px',
                       fontFamily: 'robot',
                     }}
                   >
@@ -175,17 +214,61 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                       margin: 'auto',
                       marginTop: '20px',
                       //   margin: '20px auto auto',
-                      marginLeft: '5rem',
-                      marginRight: '5rem',
+                      //   marginLeft: '5rem',
+                      //   marginRight: '5rem',
                       // marginTop: '20px',
                       fontSize: '18px',
                       fontFamily: 'robot',
                     }}
                   >
-                    <p>
-                      Please send <b>{investment.amount}</b> amount of Crypto to the following
-                      wallet address <b>{data.getCryptoWalletAddress}</b>
+                    <AmountTotal
+                      investmentAmount={investmentAmount}
+                      transactionFee={transactionFee}
+                      totalDue={totalDue}
+                    />
+                    <p
+                      style={{
+                        margin: 'auto',
+                        marginTop: '30px',
+                        marginLeft: '2.5rem',
+                        marginRight: '2.5rem',
+                      }}
+                    >
+                      Please send $
+                      <b>{totalDue.toLocaleString('en-us', { minimumFractionDigits: 2 })}</b> worth
+                      of <b>USDC</b> to the following wallet address:
                     </p>
+                    <p
+                      style={{
+                        margin: 'auto',
+                        marginTop: '30px',
+                        marginLeft: '2.5rem',
+                        marginRight: '2.0rem',
+                      }}
+                    >
+                      <b>{data?.getCryptoWalletAddress}</b>{' '}
+                      <Button
+                        style={{ minWidth: '20px' }}
+                        onClick={(e) => {
+                          navigator.clipboard.writeText(data?.getCryptoWalletAddress);
+                          toast.info('Copied wallet address to clipboard');
+                        }}
+                        className="copy-button"
+                      >
+                        <img src={CopyIcon} alt="Copy Icon" />
+                      </Button>
+                    </p>
+                    <p
+                      style={{
+                        margin: 'auto',
+                        marginTop: '30px',
+                        marginLeft: '2.5rem',
+                        marginRight: '2.5rem',
+                      }}
+                    >
+                      Once your transaction has been completed, please send your transaction hash to{' '}
+                      <b>support@allocations.com</b> to verify your payment.
+                    </p>{' '}
                   </Grid>
                   <Grid
                     item
@@ -203,7 +286,7 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                         height: '60px',
                         margin: 'auto',
                         marginTop: '5px',
-                        background: '#FFFFFF 0% 0% no-repeat padding-box',
+                        background: '#F7F7F7 0% 0% no-repeat padding-box',
                         borderColor: '186EFF !important',
                         borderRadius: '10px',
                         opacity: '1',
