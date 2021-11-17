@@ -55,8 +55,8 @@ const dummyDeals = [
 ];
 
 const MyDeals = ({ userProfile, deals }) => {
-  /* mayDeals for future use of bringing in personal deals */
-  const myDeals = !deals ? [] : deals?.filter((deal) => deal?.created_by?._id === userProfile?._id);
+  /* myDeals for future use of bringing in personal deals with real data*/
+  // const myDeals = !deals ? [] : deals?.filter((deal) => deal?.created_by?._id === userProfile?._id);
 
   return (
     <Grid container spacing={2} justifyContent="center">

@@ -36,9 +36,11 @@ const dashboardTabs = ['My Deals', 'Deals Invited To', 'Deals Pledged', 'Request
 const Prospect = () => {
   const classes = useStyles();
   const [tabIndex, setTabIndex] = useState(0);
+
   const { data: investorData } = useQuery(GET_INVESTOR);
   const userProfile = !investorData ? '' : investorData?.investor;
 
+  /* for future use of bringing in real deal from database */
   const { loading, error, data } = useQuery(GET_DEALS);
   const deals = loading ? [] : data?.allDeals;
 
