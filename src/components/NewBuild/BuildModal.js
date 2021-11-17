@@ -6,7 +6,7 @@ import FormControl from '@material-ui/core/FormControl';
 import { useHistory } from 'react-router';
 import spvIcon from '../../assets/spv-icon.svg';
 import fundIcon from '../../assets/fund-icon.svg';
-import { json } from 'd3-fetch';
+import plusSignIcon from '../../assets/plus-vector.svg';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const NewBuildWarningModal = ({ isOpen, closeModal, openNewBuildModal }) => {
   const classes = useStyles();
-
+  const history = useHistory();
   return (
     <Modal open={isOpen} onClose={closeModal} className={classes.modal}>
       <Container style={{ width: '650px' }}>
@@ -185,7 +185,7 @@ export const NewBuildWarningModal = ({ isOpen, closeModal, openNewBuildModal }) 
                           }}
                         >
                           <div className={classes.icon}>
-                            <img alt="fund-icon" src={fundIcon} />
+                            <img alt="fund-icon" src={plusSignIcon} />
                           </div>
                           <Typography className={classes.typeTitle}>Create New Build</Typography>
                         </Grid>
