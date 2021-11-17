@@ -161,10 +161,10 @@ const FundManagerDashboard = ({ classes, history }) => {
   const { width } = useViewport();
   const params = useParams();
   const { deal: dealSlug } = params;
-  let { organization: orgSlug } = params;
+  const { organization: orgSlug } = params;
 
   if (orgSlug === 'demo-fund') {
-    orgSlug = '305-ventures';
+    // orgSlug = '305-ventures';
     BASE = 'app53fOK2CmyuzKXK';
     INV_TABLE = 'Sales Demo';
   }
