@@ -76,6 +76,19 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '4px',
     padding: '5px 10px',
   },
+  cancelButton: {
+    // font: 'normal normal normal 24px/28px Roboto',
+    marginTop: '11px',
+    padding: '5px',
+    cursor: 'pointer',
+    // [theme.breakpoints.down(phone)]: {
+    //   marginBottom: '14px',
+    //   marginTop: '0px',
+    //   marginLeft: '0',
+    //   width: '100%',
+    //   textAlign: 'center',
+    // },
+  },
   typeBody: {
     textAlign: 'left',
     fontSize: '14px',
@@ -252,7 +265,14 @@ const NewBuildFinalWarning = ({ isOpen, closeModal, openNewBuildModal, setPage }
   });
 
   return (
-    <Modal open={isOpen} onClose={closeModal} className={classes.modal}>
+    <Modal
+      open={isOpen}
+      className={classes.modal}
+      onClose={() => {
+        setPage(1);
+        closeModal();
+      }}
+    >
       <Container style={{ width: '650px' }}>
         <Grid container style={{ height: '100%', width: '90%', margin: 'auto' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
@@ -261,7 +281,13 @@ const NewBuildFinalWarning = ({ isOpen, closeModal, openNewBuildModal, setPage }
                 <Typography variant="h6" style={{ color: '#fff' }}>
                   Warning
                 </Typography>
-                <Box onClick={closeModal} style={{ cursor: 'pointer' }}>
+                <Box
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    setPage(1);
+                    closeModal();
+                  }}
+                >
                   <CloseIcon htmlColor="#fff" />
                 </Box>
               </Grid>
@@ -336,11 +362,11 @@ const NewBuildFinalWarning = ({ isOpen, closeModal, openNewBuildModal, setPage }
                               openNewBuildModal();
                             }}
                           >
-                            Continue
+                            CONFIRM DELETE AND START NEW
                           </Button>
                         </Grid>
                         <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
-                          <Button
+                          {/* <Button
                             variant="contained"
                             color="primary"
                             size="large"
@@ -356,7 +382,15 @@ const NewBuildFinalWarning = ({ isOpen, closeModal, openNewBuildModal, setPage }
                             }}
                           >
                             Cancel
-                          </Button>
+                          </Button> */}
+                          <Typography
+                            className={classes.cancelButton}
+                            onClick={() => {
+                              setPage(1);
+                            }}
+                          >
+                            CANCEL
+                          </Typography>
                         </Grid>
                       </Paper>
                     </Box>
