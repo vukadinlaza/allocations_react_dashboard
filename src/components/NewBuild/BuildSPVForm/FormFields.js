@@ -1,13 +1,13 @@
 import React from 'react';
 import { FormControl, Grid, Typography, TextField } from '@material-ui/core';
-import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
-import { phone } from '../../../utils/helpers';
 import HelpIcon from '@material-ui/icons/Help';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
+import countries from 'country-region-data';
+import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
+import { phone } from '../../../utils/helpers';
 import sectors from './FormComponents/TypeSelector/sectors';
 import { convertToPositiveIntOrNull } from '../../../utils/numbers';
-import countries from 'country-region-data';
 import {
   ButtonSelector,
   InternationalCountrySelector,
@@ -718,12 +718,7 @@ export function ManagementFee({
 }) {
   return (
     <Grid className={classes.customInputGridItem} item xs={6}>
-      <FormControl
-        required
-        // disabled
-        variant="outlined"
-        className={classes.formContainers}
-      >
+      <FormControl required variant="outlined" className={classes.formContainers}>
         <Typography className={classes.formItemName}>
           Choose your management fee
           <ModalTooltip
@@ -817,9 +812,6 @@ export function ManagementFeeFrequency({
   buildData,
   handleChange,
   handleTooltip,
-  setUnfilledFields,
-  unfilledFields,
-  customInputStyles,
   classes,
   openTooltip,
 }) {
@@ -956,16 +948,7 @@ export function CarryFee({
   );
 }
 
-export function SideLetters({
-  buildData,
-  handleChange,
-  handleTooltip,
-  setUnfilledFields,
-  unfilledFields,
-  customInputStyles,
-  classes,
-  openTooltip,
-}) {
+export function SideLetters({ buildData, handleChange, handleTooltip, classes, openTooltip }) {
   return (
     <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
@@ -1070,8 +1053,6 @@ export function ReportingAdviser({
   buildData,
   handleChange,
   handleTooltip,
-  setUnfilledFields,
-  unfilledFields,
   customInputStyles,
   classes,
   openTooltip,
@@ -1193,9 +1174,6 @@ export function CustomInvestmentAgreement({
   buildData,
   handleChange,
   handleTooltip,
-  setUnfilledFields,
-  unfilledFields,
-  customInputStyles,
   classes,
   openTooltip,
 }) {
@@ -1387,17 +1365,3 @@ export function NotesMemo({ buildData, handleChange, handleTooltip, classes, ope
     </>
   );
 }
-
-// export function name({
-//     buildData,
-//     handleChange,
-//     handleTooltip,
-//     setUnfilledFields,
-//     unfilledFields,
-//     customInputStyles,
-//     classes,
-//     openTooltip,
-// }) {
-//     return (
-//     )
-// }
