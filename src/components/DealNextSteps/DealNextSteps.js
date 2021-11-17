@@ -141,7 +141,7 @@ function DealNextSteps() {
   const [wireInstructionsOpen, setWireInstructionsOpen] = useState(false);
 
   const { isAuthenticated, loading: authLoading } = useAuth();
-  const { search, state } = useLocation();
+  const { search } = useLocation();
   const params = queryString.parse(search);
   const history = useHistory();
   const path = organization ? `/deals/${organization}/${deal_slug}` : `/deals/${deal_slug}`;
