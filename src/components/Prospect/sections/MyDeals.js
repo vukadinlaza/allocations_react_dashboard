@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Grid } from '@material-ui/core';
 import DealCard from './DealsCard/DealCard';
 
@@ -55,26 +55,8 @@ const dummyDeals = [
 ];
 
 const MyDeals = ({ userProfile, deals }) => {
-  const [myDeals, setMyDeals] = useState(deals);
-  console.log('heres my deals==>', myDeals);
-
-  const getDeals = () => {
-    if (!deals || deals.length < 1) {
-      return '';
-    }
-    const getMyDeals = async () => {
-      const dealsHaveCreatedBy = await deals.filter((deal) => deal.created_by);
-      const allMyDeals = await dealsHaveCreatedBy.filter(
-        (deal) => deal.created_by._id === userProfile._id,
-      );
-      setMyDeals(allMyDeals);
-    };
-    getMyDeals();
-  };
-
-  useEffect(() => {
-    getDeals();
-  }, [deals]);
+  /* mayDeals for future use of bringing in personal deals */
+  const myDeals = !deals ? [] : deals?.filter((deal) => deal?.created_by?._id === userProfile?._id);
 
   return (
     <Grid container spacing={2} justifyContent="center">

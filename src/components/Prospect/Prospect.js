@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { Tabs, Tab, Typography, Paper } from '@material-ui/core';
-import { useAuth } from '../../auth/useAuth';
 import MyDeals from './sections/MyDeals';
 import InvitedDeals from './sections/InvitedDeals';
 import PledgedDeals from './sections/PledgedDeals';
@@ -37,26 +36,11 @@ const dashboardTabs = ['My Deals', 'Deals Invited To', 'Deals Pledged', 'Request
 const Prospect = () => {
   const classes = useStyles();
   const [tabIndex, setTabIndex] = useState(0);
-  const { userProfile, refetch, loading, logout } = useAuth(GET_INVESTOR);
-  const { loading: dealsLoading, error, data } = useQuery(GET_DEALS);
-  const [deals, setDeals] = useState([] || '');
-  console.log('deals==>', deals);
+  const { data: investorData } = useQuery(GET_INVESTOR);
+  const userProfile = !investorData ? '' : investorData?.investor;
 
-  const getDeals = () => {
-    if (!dealsLoading) {
-      const getAllDeals = async () => {
-        const everyDeal = await data;
-        const allDealsInfo = await everyDeal.allDeals;
-        setDeals(allDealsInfo);
-      };
-      getAllDeals();
-    }
-    return '';
-  };
-
-  useEffect(() => {
-    getDeals();
-  }, [data]);
+  const { loading, error, data } = useQuery(GET_DEALS);
+  const deals = loading ? [] : data?.allDeals;
 
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue);
