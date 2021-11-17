@@ -66,6 +66,7 @@ export const GET_DEAL = gql`
         fundManagementFeeType
         fundGeneralPartner
         fundEstimatedTerm
+        customCurrency
       }
     }
   }
