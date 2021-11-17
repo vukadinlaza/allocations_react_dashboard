@@ -117,7 +117,7 @@ const BuildDetails = ({
   const classes = useStyles();
 
   const [buildData, setBuildData] = useState({
-    accept_crypto: false,
+    accept_crypto: 'false',
     allocations_reporting_adviser: 'true',
     asset_type: 'startup',
     carry_fee_type: 'percent',
@@ -209,7 +209,7 @@ const BuildDetails = ({
       fieldsToFill.push('deal_stage');
       unvalidatedFields.push('Deal Stage');
     }
-    if (!buildData.accept_crypto.length) {
+    if (!buildData.accept_crypto) {
       fieldsToFill.push('accept_crypto');
       unvalidatedFields.push('Accept Crypto');
     }
@@ -351,6 +351,7 @@ const BuildDetails = ({
           : prev.international_investors_countries,
         [target.name]: target.value,
       };
+
       localStorage.setItem('buildData', JSON.stringify(newBuildObject));
       return newBuildObject;
     });

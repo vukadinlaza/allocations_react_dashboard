@@ -1198,8 +1198,8 @@ export function AcceptCrypto({ buildData, handleChange, handleTooltip, classes, 
           onChange={handleChange}
           currentValue={buildData.accept_crypto}
           values={[
-            { label: 'Yes', value: true },
-            { label: 'No', value: false },
+            { label: 'Yes', value: 'true' },
+            { label: 'No', value: 'false' },
           ]}
         />
       </FormControl>
