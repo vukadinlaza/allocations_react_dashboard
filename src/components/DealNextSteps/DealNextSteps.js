@@ -185,28 +185,6 @@ function DealNextSteps() {
   }, []);
 
   if (loading || !data || !dealData) return null;
-  const createPayment = async () => {
-    const { investment } = investmentData;
-    const cryptoBody = {
-      invoice_amount: investment.amount,
-    };
-    console.log('this is the crypto body', cryptoBody);
-    const res = await fetch('http://localhost:4000/api/test', {
-      headers: {
-        'Content-Type': 'application/json',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      method: 'POST',
-      body: JSON.stringify(cryptoBody),
-    });
-    const data = await res.json();
-    setCryptoData(data);
-    console.log('this is what i get back from the post ', data);
-    setOpenCrypto(true);
-
-    if (!data.error) return console.log(`success!`, data);
-    console.log('There was an Error', data.error);
-  };
 
   const handleInvestmentEdit = () => {
     const userInvestments = data?.investor?.investments;
@@ -388,7 +366,6 @@ function DealNextSteps() {
           investmentWireInstructions={investmentData?.investment?.wire_instructions}
           open={cryptoPaymentOpen}
           setOpen={setCryptoPaymentOpen}
-          createPayment={createPayment}
           investmentData={investmentData}
           dealData={dealData}
           docs={docs}

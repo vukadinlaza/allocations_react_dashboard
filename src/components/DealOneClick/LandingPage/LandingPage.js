@@ -100,7 +100,6 @@ function DealLandingPage() {
   useEffect(() => {
     if (data?.publicDeal) {
       const { publicDeal: deal } = data;
-      console.log('hey look at this ', deal);
       const idTimestamp = deal._id.toString().substring(0, 8);
       const dealTimestamp = moment.unix(new Date(parseInt(idTimestamp, 16) * 1000));
       const rolloverTimestamp = moment.unix(new Date('2021-05-05 17:00'));

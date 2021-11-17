@@ -53,14 +53,11 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
     variables: { deal_id: '6170936bd738def58550f515' },
   });
 
-  console.log('here is the data ', data);
   const [warning, setWarning] = useState(true);
 
   const [investmentAmount, setInvestmentAmount] = useState(investment.amount);
   const [transactionFee, setTransactionFee] = useState(investment.amount * 0.015);
   const [totalDue, setTotalDue] = useState(investmentAmount + transactionFee);
-
-  console.log('here are the values', investmentAmount, transactionFee, totalDue);
 
   const handleClose = () => {
     setWarning(true);
