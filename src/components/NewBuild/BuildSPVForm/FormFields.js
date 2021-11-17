@@ -1170,6 +1170,43 @@ export function OfferingType({ buildData, handleChange, handleTooltip, classes, 
   );
 }
 
+export function AcceptCrypto({ buildData, handleChange, handleTooltip, classes, openTooltip }) {
+  return (
+    <Grid className={classes.inputGridItem} item xs={6}>
+      <FormControl required variant="outlined" className={classes.formContainers}>
+        <Typography className={classes.formItemName}>
+          Will you allow investments with crypto?
+          <ModalTooltip
+            title="Crypto"
+            handleTooltip={handleTooltip}
+            tooltipContent={
+              <Typography color="inherit">
+                Would you like to allow investments into this deal with Crypto along with currency?
+              </Typography>
+            }
+            openTooltip={openTooltip}
+            id="accept_crypto"
+          >
+            <HelpIcon
+              className={classes.helpIcon}
+              onClick={(e) => handleTooltip('accept_crypto')}
+            />
+          </ModalTooltip>
+        </Typography>
+        <ButtonSelector
+          name="accept_crypto"
+          onChange={handleChange}
+          currentValue={buildData.accept_crypto}
+          values={[
+            { label: 'Yes', value: true },
+            { label: 'No', value: false },
+          ]}
+        />
+      </FormControl>
+    </Grid>
+  );
+}
+
 export function CustomInvestmentAgreement({
   buildData,
   handleChange,
