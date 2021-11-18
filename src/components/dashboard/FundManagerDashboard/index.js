@@ -164,7 +164,6 @@ const FundManagerDashboard = ({ classes, history }) => {
   const { organization: orgSlug } = params;
 
   if (orgSlug === 'demo-fund') {
-    // orgSlug = '305-ventures';
     BASE = 'app53fOK2CmyuzKXK';
     INV_TABLE = 'Sales Demo';
   }

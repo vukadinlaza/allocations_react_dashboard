@@ -23,42 +23,42 @@ import DeleteViewedUser from '../../../InvestmentEdit/DeleteViewedUser';
 import CreateInvestment from '../../../InvestmentNew/createInvestment';
 import SendWireReminder from '../../../InvestmentNew/sendWireReminder';
 
-const demoNames = [
-  'Pablo Picasso',
-  'Vincent van Gogh',
-  'Leonardo da Vinci',
-  'Claude Monet',
-  'Salvador Dali',
-  'Henri Matisse',
-  'Rembrandt',
-  'Andy Warhol',
-  "Georgia O'Keeffe",
-  'Michelangelo',
-  'Peter Paul Rubens',
-  'Edgar Degas',
-  'Caravaggio',
-  'Pierre-Auguste Renoir',
-  'Raphael',
-  'Paul Cezanne',
-  'Marc Chagall',
-  'Titian',
-  'Joan Miro',
-  'Jackson Pollock',
-  'Gustav Klimt',
-  'Albrecht Durer',
-  'Edward Hopper',
-  'Wassily Kandinsky',
-  'Jan Vermeer',
-  'Paul Klee',
-  'Edvard Munch',
-  'Goya',
-  'Janet Fish',
-  'Edouard Manet',
-];
+// const demoNames = [
+//   'Pablo Picasso',
+//   'Vincent van Gogh',
+//   'Leonardo da Vinci',
+//   'Claude Monet',
+//   'Salvador Dali',
+//   'Henri Matisse',
+//   'Rembrandt',
+//   'Andy Warhol',
+//   "Georgia O'Keeffe",
+//   'Michelangelo',
+//   'Peter Paul Rubens',
+//   'Edgar Degas',
+//   'Caravaggio',
+//   'Pierre-Auguste Renoir',
+//   'Raphael',
+//   'Paul Cezanne',
+//   'Marc Chagall',
+//   'Titian',
+//   'Joan Miro',
+//   'Jackson Pollock',
+//   'Gustav Klimt',
+//   'Albrecht Durer',
+//   'Edward Hopper',
+//   'Wassily Kandinsky',
+//   'Jan Vermeer',
+//   'Paul Klee',
+//   'Edvard Munch',
+//   'Goya',
+//   'Janet Fish',
+//   'Edouard Manet',
+// ];
 
-const demoAmounts = [5000, 8000, 10000, 12000, 15000, 17000, 13000, 18000, 20000, 50000];
+// const demoAmounts = [5000, 8000, 10000, 12000, 15000, 17000, 13000, 18000, 20000, 50000];
 
-const demoBool = [true, false];
+// const demoBool = [true, false];
 
 const InvestorBoxViewed = ({
   classes,
@@ -300,47 +300,47 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
   wiredInvestors = [...wiredInvestors, ...completedInvestors];
   wiredTotal += completedTotal;
 
-  const demoViewedArray = Array(15)
-    .fill('')
-    .map(() => {
-      return {
-        accredidation_status: _.sample(demoBool),
-        amount: _.sample(demoAmounts),
-        name: _.sample(demoNames),
-        status: 'invited',
-        id: '60390e16b5675e00231ad607',
-        investmentId: false,
-        dealId: '5ff493654ed6240023ded5e5',
-      };
-    });
+  // const demoViewedArray = Array(15)
+  //   .fill('')
+  //   .map(() => {
+  //     return {
+  //       accredidation_status: _.sample(demoBool),
+  //       amount: _.sample(demoAmounts),
+  //       name: _.sample(demoNames),
+  //       status: 'invited',
+  //       id: '60390e16b5675e00231ad607',
+  //       investmentId: false,
+  //       dealId: '5ff493654ed6240023ded5e5',
+  //     };
+  //   });
 
-  const demoSignedArray = Array(15)
-    .fill('')
-    .map(() => {
-      return {
-        accredidation_status: _.sample(demoBool),
-        amount: _.sample(demoAmounts),
-        name: _.sample(demoNames),
-        status: 'signed',
-      };
-    });
+  // const demoSignedArray = Array(15)
+  //   .fill('')
+  //   .map(() => {
+  //     return {
+  //       accredidation_status: _.sample(demoBool),
+  //       amount: _.sample(demoAmounts),
+  //       name: _.sample(demoNames),
+  //       status: 'signed',
+  //     };
+  //   });
 
-  const demoWiredArray = Array(25)
-    .fill('')
-    .map(() => {
-      return {
-        accredidation_status: _.sample(demoBool),
-        amount: _.sample(demoAmounts),
-        name: _.sample(demoNames),
-        status: 'wired',
-      };
-    });
+  // const demoWiredArray = Array(25)
+  //   .fill('')
+  //   .map(() => {
+  //     return {
+  //       accredidation_status: _.sample(demoBool),
+  //       amount: _.sample(demoAmounts),
+  //       name: _.sample(demoNames),
+  //       status: 'wired',
+  //     };
+  //   });
 
-  const isDemo = orgSlug === 'demo-fund';
-  if (isDemo) {
-    signedTotal += demoSignedArray.map((i) => i.amount).reduce((acc, n) => acc + n);
-    wiredTotal += demoWiredArray.map((i) => i.amount).reduce((acc, n) => acc + n);
-  }
+  // const isDemo = orgSlug === 'demo-fund';
+  // if (isDemo) {
+  //   signedTotal += demoSignedArray.map((i) => i.amount).reduce((acc, n) => acc + n);
+  //   wiredTotal += demoWiredArray.map((i) => i.amount).reduce((acc, n) => acc + n);
+  // }
 
   const handleSort = (event) => {
     setSortField(event.target.value);
@@ -384,7 +384,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
               )
             }
           >
-            {isDemo
+            {/* {isDemo
               ? demoViewedArray.map((investor, index) => (
                   <InvestorBox
                     investor={investor}
@@ -398,19 +398,21 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
                     dealType={dealType}
                   />
                 ))
-              : viewedInvestors.map((investor, index) => (
-                  <InvestorBox
-                    investor={investor}
-                    classes={classes}
-                    index={index}
-                    key={`investor-${index}`}
-                    width={width}
-                    superAdmin={superAdmin}
-                    setShowModal={setShowModal}
-                    setInvestmentId={setInvestmentId}
-                    dealType={dealType}
-                  />
-                ))}
+              :  */}
+            {viewedInvestors.map((investor, index) => (
+              <InvestorBox
+                investor={investor}
+                classes={classes}
+                index={index}
+                key={`investor-${index}`}
+                width={width}
+                superAdmin={superAdmin}
+                setShowModal={setShowModal}
+                setInvestmentId={setInvestmentId}
+                dealType={dealType}
+              />
+            ))}
+            {/* } */}
 
             {viewedUsers.map((investor, index) => {
               return (
@@ -452,7 +454,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
               )
             }
           >
-            {isDemo
+            {/* {isDemo
               ? demoSignedArray.map((investor, index) => (
                   <InvestorBox
                     investor={investor}
@@ -468,21 +470,22 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
                     dealType={dealType}
                   />
                 ))
-              : signedInvestors.map((investor, index) => (
-                  <InvestorBox
-                    investor={investor}
-                    classes={classes}
-                    index={index}
-                    key={`investor-${index}`}
-                    width={width}
-                    superAdmin={superAdmin}
-                    setShowModal={setShowModal}
-                    setInvestmentId={setInvestmentId}
-                    setDealId={setDealId}
-                    setInvestorId={setInvestorId}
-                    dealType={dealType}
-                  />
-                ))}
+              :  */}
+            {signedInvestors.map((investor, index) => (
+              <InvestorBox
+                investor={investor}
+                classes={classes}
+                index={index}
+                key={`investor-${index}`}
+                width={width}
+                superAdmin={superAdmin}
+                setShowModal={setShowModal}
+                setInvestmentId={setInvestmentId}
+                setDealId={setDealId}
+                setInvestorId={setInvestorId}
+                dealType={dealType}
+              />
+            ))}
           </ScrollableBox>
         </Grid>
         <Grid item xs={12} lg={4}>
@@ -493,37 +496,21 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
             fontSize="small"
             size="third"
           >
-            {isDemo
-              ? demoWiredArray.map((investor, index) => (
-                  <InvestorBox
-                    investor={investor}
-                    classes={classes}
-                    index={index}
-                    key={`demo-investor-${index}`}
-                    width={width}
-                    superAdmin={superAdmin}
-                    setShowModal={setShowModal}
-                    setInvestmentId={setInvestmentId}
-                    setDealId={setDealId}
-                    setInvestorId={setInvestorId}
-                    dealType={dealType}
-                  />
-                ))
-              : wiredInvestors.map((investor, index) => (
-                  <InvestorBox
-                    investor={investor}
-                    classes={classes}
-                    index={index}
-                    key={`investor-${index}`}
-                    width={width}
-                    superAdmin={superAdmin}
-                    setShowModal={setShowModal}
-                    setInvestmentId={setInvestmentId}
-                    setDealId={setDealId}
-                    setInvestorId={setInvestorId}
-                    dealType={dealType}
-                  />
-                ))}
+            {wiredInvestors.map((investor, index) => (
+              <InvestorBox
+                investor={investor}
+                classes={classes}
+                index={index}
+                key={`investor-${index}`}
+                width={width}
+                superAdmin={superAdmin}
+                setShowModal={setShowModal}
+                setInvestmentId={setInvestmentId}
+                setDealId={setDealId}
+                setInvestorId={setInvestorId}
+                dealType={dealType}
+              />
+            ))}
           </ScrollableBox>
         </Grid>
 
