@@ -114,7 +114,7 @@ const PaymentModal = ({
     });
   }
   return (
-    <Modal open={true} onClose={() => setOpen(false)} className={classes.modal}>
+    <Modal open={open} onClose={() => setOpen(false)} className={classes.modal}>
       <Container maxWidth="sm">
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
