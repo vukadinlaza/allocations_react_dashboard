@@ -51,6 +51,7 @@ const SidebarDrawer = ({
   logout,
   location,
   classes,
+  userProfile,
 }) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
   const [openModal, setOpenModal] = useState(false);
@@ -79,26 +80,41 @@ const SidebarDrawer = ({
     setOpenSubMenu(openSubMenuCopy);
   };
 
+  const prospectAccess = ['wes@allocations.com', 'drew.radcliff@allocations.com'];
+
   const menuSections = [
     {
       sectionTitle: 'ESSENTIALS',
-      menu: [
-        {
-          to: currentHomeUrl,
-          title: 'Dashboard',
-          icon: <HomeIcon fontSize="medium" />,
-        },
-        {
-          to: '/profile',
-          title: 'Profile',
-          icon: <PersonIcon fontSize="medium" />,
-        },
-        {
-          to: '/prospects',
-          title: 'Prospects',
-          icon: <BsBinocularsFill />,
-        },
-      ],
+      menu: prospectAccess.includes(userProfile.email)
+        ? [
+            {
+              to: currentHomeUrl,
+              title: 'Dashboard',
+              icon: <HomeIcon fontSize="medium" />,
+            },
+            {
+              to: '/profile',
+              title: 'Profile',
+              icon: <PersonIcon fontSize="medium" />,
+            },
+            {
+              to: '/prospects',
+              title: 'Prospects',
+              icon: <BsBinocularsFill />,
+            },
+          ]
+        : [
+            {
+              to: currentHomeUrl,
+              title: 'Dashboard',
+              icon: <HomeIcon fontSize="medium" />,
+            },
+            {
+              to: '/profile',
+              title: 'Profile',
+              icon: <PersonIcon fontSize="medium" />,
+            },
+          ],
     },
   ];
 

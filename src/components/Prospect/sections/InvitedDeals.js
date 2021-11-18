@@ -54,7 +54,7 @@ const invitedDeals = [
   },
 ];
 
-const InvitedDeals = ({ userProfile, deals }) => {
+const InvitedDeals = ({ userProfile }) => {
   return (
     <Grid container spacing={2} justifyContent="center">
       {invitedDeals.map((deal) => {

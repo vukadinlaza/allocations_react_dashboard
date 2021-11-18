@@ -18,19 +18,6 @@ const GET_INVESTOR = gql`
   }
 `;
 
-const GET_DEALS = gql`
-  query GetDeals {
-    allDeals {
-      _id
-      company_name
-      slug
-      created_by {
-        _id
-      }
-    }
-  }
-`;
-
 const dashboardTabs = ['My Deals', 'Deals Invited To', 'Deals Pledged', 'Requests'];
 
 const Prospect = () => {
@@ -40,10 +27,6 @@ const Prospect = () => {
   const { data: investorData } = useQuery(GET_INVESTOR);
   const userProfile = !investorData ? '' : investorData?.investor;
 
-  /* for future use of bringing in real deal from database */
-  const { loading, error, data } = useQuery(GET_DEALS);
-  const deals = loading ? [] : data?.allDeals;
-
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue);
   };
@@ -51,16 +34,16 @@ const Prospect = () => {
   const getTabContent = () => {
     switch (tabIndex) {
       case 0:
-        return <MyDeals userProfile={userProfile} deals={deals} />;
+        return <MyDeals userProfile={userProfile} />;
 
       case 1:
-        return <InvitedDeals userProfile={userProfile} deals={deals} />;
+        return <InvitedDeals userProfile={userProfile} />;
 
       case 2:
-        return <PledgedDeals userProfile={userProfile} deals={deals} />;
+        return <PledgedDeals userProfile={userProfile} />;
 
       case 3:
-        return <Requests userProfile={userProfile} deals={deals} />;
+        return <Requests userProfile={userProfile} />;
 
       default:
         return <p>No Data</p>;
