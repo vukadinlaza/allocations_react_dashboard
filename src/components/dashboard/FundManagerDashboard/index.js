@@ -10,6 +10,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Tooltip from '@material-ui/core/Tooltip';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
@@ -168,6 +169,8 @@ const FundManagerDashboard = ({ classes, history }) => {
     INV_TABLE = 'Sales Demo';
   }
 
+  const { fundManagerBankingTab } = useFlags();
+
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
@@ -194,9 +197,11 @@ const FundManagerDashboard = ({ classes, history }) => {
 
   if (userProfile.admin) {
     const bankingTabName = 'Banking';
-    // Only add banking tab if user is admin
-    if (!fundTabs.includes(bankingTabName)) fundTabs.push(bankingTabName);
-    if (!spvTabs.includes(bankingTabName)) spvTabs.push(bankingTabName);
+    // Only add banking tab if user is admin and FF fundManagerBankingTab is true
+    if (fundManagerBankingTab) {
+      if (!fundTabs.includes(bankingTabName)) fundTabs.push(bankingTabName);
+      if (!spvTabs.includes(bankingTabName)) spvTabs.push(bankingTabName);
+    }
   }
 
   const { data: atDeal } = useFetch(

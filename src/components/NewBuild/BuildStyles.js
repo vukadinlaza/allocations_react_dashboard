@@ -63,6 +63,9 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: '30px',
     border: '2px dashed #0461FF !important',
     borderRadius: '20px',
+    '&:hover': {
+      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+    },
   },
   agreementSignedBox: {
     display: 'flex',
@@ -72,7 +75,9 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: '30px',
     paddingRight: '30px',
     border: 'none !important',
+    borderRadius: '20px',
     boxShadow: 'none !important',
+    backgroundColor: '#F6F7F8',
   },
   signed: {
     backgroundColor: 'rgb(57,197,34, 0.23)',
@@ -87,6 +92,15 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '600',
     borderRadius: '20px',
     padding: '5px 20px',
+  },
+  serviceAgreementIconBox: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '60px',
+    height: '60px',
+    borderRadius: '50%',
+    backgroundColor: '#ECF3FF',
   },
   docUploadBox: {
     display: 'flex',
@@ -212,6 +226,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#2A2B54',
     font: 'normal normal bold 17px/20px Roboto',
     marginBottom: '20px',
+    borderRadius: '8px',
     [theme.breakpoints.down(phone)]: {
       marginBottom: '14px',
       marginLeft: '8px',
@@ -301,14 +316,27 @@ const useStyles = makeStyles((theme) => ({
   inputBox: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     boxShadow: '0px 3px 6px #0000000A',
-    borderRadius: '5px',
+    borderRadius: '8px !important',
     padding: '0',
     maxWidth: '568px',
     width: '100%',
   },
+  minimumInput: {
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    boxShadow: '0px 3px 6px #0000000A',
+    // border radius is not taking
+    borderRadius: '8px !important',
+    padding: '0',
+    maxWidth: '464px',
+    width: '100%',
+  },
   selectInputBox: {
     width: '90%',
+    '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
+      borderRadius: '8px !important',
+    },
   },
+  selectTest: {},
   wideInputBox: {
     maxWidth: '1206px',
   },
@@ -405,10 +433,12 @@ const useStyles = makeStyles((theme) => ({
   },
   selectorButton: {
     fontSize: '.8em',
-    color: 'black',
+    color: '#8E9394',
     height: '60px',
     border: '1px solid #d3d3d3 !important',
     backgroundColor: '#ffffff',
+    borderRadius: '8px !important',
+    textTransform: 'capitalize',
     [theme.breakpoints.down(phone)]: {
       fontSize: '.7em',
     },
@@ -417,9 +447,12 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-evenly',
+    color: '#186EFF',
     background: '#ECF3FF 0% 0% no-repeat padding-box !important',
     boxShadow: '0px 3px 6px #0000000D !important',
     border: '2px solid #186EFF !important',
+    borderRadius: '8px !important',
+    textTransform: 'capitalize',
     opacity: '1 !important',
   },
   typeItem: {
@@ -527,6 +560,9 @@ const useStyles = makeStyles((theme) => ({
       marginRight: '20px',
       width: '30px',
     },
+  },
+  unfilledField: {
+    border: '1px solid red',
   },
   icon: {
     opacity: '1',

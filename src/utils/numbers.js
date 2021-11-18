@@ -24,3 +24,7 @@ export function formatDate(date) {
     return date;
   }
 }
+
+export function convertToPositiveIntOrNull(num) {
+  return parseInt(num < 0 ? null : num);
+}

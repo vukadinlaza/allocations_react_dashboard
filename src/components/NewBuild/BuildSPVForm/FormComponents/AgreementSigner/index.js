@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Paper } from '@material-ui/core';
-import { gql, useQuery } from '@apollo/client';
+import { Button, CircularProgress, Paper } from '@material-ui/core';
+import { gql, useLazyQuery, useQuery } from '@apollo/client';
 import Typography from '@material-ui/core/Typography';
-import bluePenIcon from '../../../../../assets/sign-agreement-blue-pen.svg';
-import useStyles from '../../../BuildStyles';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
+import bluePenIcon from '../../../../../assets/sign-agreement-blue-pen.svg';
+import useStyles from '../../../BuildStyles';
 
 const SERVICE_AGREEMENT_LINK = gql`
   query serviceAgreementLink($deal_id: String) {
@@ -16,8 +16,18 @@ const SERVICE_AGREEMENT_LINK = gql`
     }
   }
 `;
+const GET_DOCUMENT = gql`
+  query getDealDocService($task_id: String) {
+    getDealDocService(task_id: $task_id) {
+      _id
+      title
+      link
+      createdAt
+    }
+  }
+`;
 
-export default function SignDocsForm({ page, setPage, deal }) {
+export default function SignDocsForm({ page, setPage, deal, updatedDeal, updatedDealLoading }) {
   const history = useHistory();
   const [signed, setSigned] = useState(false);
 
@@ -26,19 +36,40 @@ export default function SignDocsForm({ page, setPage, deal }) {
     DocSpring.createVisualForm({
       ...serviceAgreementLink,
       domainVerification: false,
-      onSubmit: () => setSigned(true),
+      onSubmit: () => {
+        localStorage.removeItem('buildData');
+        localStorage.removeItem('buildDeal');
+        localStorage.removeItem('buildFilesUploaded');
+        setSigned(true);
+      },
     });
   };
 
-  const { data, loading, error, refetch } = useQuery(SERVICE_AGREEMENT_LINK, {
-    variables: { deal_id: deal?._id },
-  });
+  const [getServiceAgreementLink, { data, loading: agreementLinkLoading, error }] = useLazyQuery(
+    SERVICE_AGREEMENT_LINK,
+    {
+      variables: { deal_id: deal?._id },
+      fetchPolicy: 'network-only',
+    },
+  );
+
+  const phase = updatedDeal?.setBuildInfo?.phases.find((phase) => phase.name === 'build');
+  const task = phase?.tasks?.find((task) => task.title === 'Sign Service Agreement');
+
+  const [getSignedServiceAgreement, { data: serviceAgreementDocUrl, loading: signedDocLoading }] =
+    useLazyQuery(GET_DOCUMENT, { variables: { task_id: task?._id }, fetchPolicy: 'network-only' });
 
   useEffect(() => {
-    if (!data?.serviceAgreementLink) refetch({ variables: { deal_id: deal?._id } });
-  }, [deal?._id, loading, error]);
+    if (updatedDeal) getServiceAgreementLink();
+  }, [updatedDeal, error]);
+
+  useEffect(() => {
+    if (signed) getSignedServiceAgreement();
+  }, [signed]);
 
   const classes = useStyles();
+  const loading = updatedDealLoading || agreementLinkLoading || signedDocLoading;
+  const readyToSign = data && !error && !loading;
 
   return (
     <>
@@ -54,13 +85,37 @@ export default function SignDocsForm({ page, setPage, deal }) {
         </div>
         <Paper
           className={signed ? classes.agreementSignedBox : classes.agreementUnsignedBox}
-          style={{ cursor: data && !error ? 'pointer' : 'progress' }}
-          onClick={() => (data && !error ? signingModal(data.serviceAgreementLink) : null)}
+          style={{
+            cursor: readyToSign && !signed && 'pointer',
+            pointerEvents: !readyToSign && 'none',
+          }}
+          onClick={() => (readyToSign ? !signed && signingModal(data.serviceAgreementLink) : null)}
         >
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <img src={bluePenIcon} alt="document icon" />
+            {!data || loading || error ? (
+              <CircularProgress />
+            ) : (
+              <div className={classes.serviceAgreementIconBox}>
+                <img src={bluePenIcon} alt="document icon" />
+              </div>
+            )}
+
             <Typography className={classes.itemText} style={{ width: '200px' }}>
-              Service Agreement
+              {!updatedDeal ? (
+                'Building your deal...'
+              ) : agreementLinkLoading ? (
+                'Almost done...'
+              ) : serviceAgreementDocUrl?.getDealDocService?.link ? (
+                <a
+                  href={serviceAgreementDocUrl?.getDealDocService?.link}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Service Agreement
+                </a>
+              ) : (
+                'Service Agreement'
+              )}
             </Typography>
           </div>
 
@@ -77,23 +132,22 @@ export default function SignDocsForm({ page, setPage, deal }) {
                 return;
               }
               toast.success('Success! Your submission was submitted.');
-              localStorage.removeItem('buildData');
-              localStorage.removeItem('buildDeal');
-              localStorage.removeItem('buildFilesUploaded');
-              if (deal?._id) history.push(`/deal-setup?id=${deal._id}`);
+              history.push(`/deal-setup?id=${deal._id}`);
             }}
             className={classes.continueButton}
           >
             Complete
           </Button>
-          <Typography
-            className={classes.previousButton}
-            onClick={() => {
-              setPage(page - 1);
-            }}
-          >
-            Previous
-          </Typography>
+          {!signed && (
+            <Typography
+              className={classes.previousButton}
+              onClick={() => {
+                setPage(page - 1);
+              }}
+            >
+              Previous
+            </Typography>
+          )}
         </div>
       </Paper>
     </>
