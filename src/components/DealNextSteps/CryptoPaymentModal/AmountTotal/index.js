@@ -33,7 +33,7 @@ function AmountTotal({ investmentAmount, transactionFee, totalDue }) {
   const classes = useStyles();
 
   return (
-    <Paper style={{ margin: 'auto', width: '430px' }}>
+    <Paper style={{ margin: 'auto', width: '100%' }}>
       <Grid style={{ margin: 'auto' }} container spacing={1}>
         <Grid container item spacing={3}>
           {' '}

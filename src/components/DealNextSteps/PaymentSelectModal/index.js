@@ -6,6 +6,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControl from '@material-ui/core/FormControl';
 import { useHistory } from 'react-router';
 import CryptoIcon from '../../../assets/usdc_icon.svg';
+import { phone, tablet } from '../../../utils/helpers';
 import BankIcon from '../../../assets/bank.svg';
 
 const useStyles = makeStyles((theme) => ({
@@ -18,6 +19,10 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '1rem 1rem 0 0 ',
     padding: theme.spacing(2),
     maxHeight: 'calc(100% - 8vh)',
+    backgroundColor: '#F7F7F7',
+    [theme.breakpoints.down(phone)]: {
+      marginTop: '20vh',
+    },
     // overflow: 'scroll',
   },
   innerPaper: {
@@ -25,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
   },
   modalHeader: {
     fontFamily: 'Roboto !important',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '1.25em',
+    },
   },
   label: {
     color: '#2A2B54',
@@ -44,14 +52,39 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     height: '240px',
     width: '240px',
+
     textAlign: 'center',
     margin: '.5rem',
     padding: '.9rem',
     cursor: 'pointer',
+    [theme.breakpoints.down(phone)]: {
+      width: '150px',
+      height: '150px',
+      margin: '.25rem',
+    },
+
     '&:hover': {
       boxShadow: '0px 0px 1px #00000029 !important;',
       transform: 'translateY(2px)',
     },
+  },
+  clickableButtonText: {
+    margin: '.5rem',
+    fontWeight: '600',
+  },
+  clickableButtonIcon: {
+    width: '25%',
+    height: 'auto',
+    [theme.breakpoints.down(phone)]: {
+      width: '40%',
+    },
+  },
+  modalText: {
+    margin: 'auto',
+    marginTop: '10px',
+    fontWeight: 'bold',
+    fontSize: '1.5em',
+    fontFamily: 'robot',
   },
 }));
 
@@ -81,14 +114,11 @@ const PaymentModal = ({
     });
   }
   return (
-    <Modal open={open} onClose={() => setOpen(false)} className={classes.modal}>
+    <Modal open={true} onClose={() => setOpen(false)} className={classes.modal}>
       <Container maxWidth="sm">
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
-            <Paper
-              className={`${classes.modalPaper} ${classes.innerPaper}`}
-              style={{ backgroundColor: '#F7F7F7' }}
-            >
+            <Paper className={`${classes.modalPaper} ${classes.innerPaper}`}>
               <Grid
                 container
                 style={{
@@ -118,16 +148,7 @@ const PaymentModal = ({
             >
               <Grid container style={{ marginBottom: '25px' }}>
                 {' '}
-                <Grid
-                  item
-                  style={{
-                    margin: 'auto',
-                    marginTop: '10px',
-                    fontWeight: 'bold',
-                    fontSize: '28px',
-                    fontFamily: 'robot',
-                  }}
-                >
+                <Grid item className={classes.modalText}>
                   How would you like to invest?
                 </Grid>
                 <Grid item style={{ width: '100%', background: '#F7F7F7' }}>
@@ -153,7 +174,7 @@ const PaymentModal = ({
                               <div style={{ height: '55px' }}>
                                 <img
                                   alt={`${paymentType.paymentMethod} icon`}
-                                  style={{ width: '50px', height: 'auto' }}
+                                  className={classes.clickableButtonIcon}
                                   src={
                                     paymentType.paymentMethod === 'Send Crypto'
                                       ? CryptoIcon
@@ -161,12 +182,7 @@ const PaymentModal = ({
                                   }
                                 />
                               </div>
-                              <Typography
-                                style={{
-                                  margin: '.5rem',
-                                  fontWeight: '600',
-                                }}
-                              >
+                              <Typography className={classes.clickableButtonText}>
                                 {paymentType.paymentMethod}
                               </Typography>
                             </Paper>
