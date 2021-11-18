@@ -138,7 +138,7 @@ const ProspectDealPage = () => {
   };
 
   const handleBack = () => {
-    history.push('/prospects');
+    history.goBack();
   };
 
   return (
