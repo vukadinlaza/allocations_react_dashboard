@@ -373,39 +373,6 @@ function DealNextSteps() {
 
         <AllocationsRocket />
         <Confetti className={`confetti ${!confetti && 'hidden'}`} />
-
-        <AppModal
-          maxWidth="lg"
-          modalHeader="ForumPay Crypto Transfer"
-          // isOpen={openCrypto}
-          // onClose={() => setOpenCrypto(false)}
-        >
-          <div className="crypto-payment-portal">
-            <iframe
-              title="crypto payment"
-              // style="width:100%;max-width:100%;height:1550px;"
-              src="https://sandbox.forumpay.com/pay?merchant_id=945e6d23-fecd-47bd-9f36-4e554ac7a14e&order_amount=1.00&order_currency=AUD&item_name=&widget_type=0&reference_no="
-              frameBorder="0"
-            />
-            {/* <iframe
-              title="crypto payment"
-              style={{
-                width: '100%',
-                maxWidth: '100%',
-                height: '400px',
-              }}
-              src={cryptoData.access_url}
-              frameBorder="0"
-            /> */}
-            {/* <button type="button" onClick={() => setOpenCrypto(false)}>
-              Close
-            </button> */}
-            <script type="text/javascript" src="https://forumpay.com/api/events/payment.js" />
-            <script type="text/javascript">
-              CryptoPaymentStats.setToken({cryptoData.stats_token})
-            </script>
-          </div>
-        </AppModal>
       </section>
     </>
   );

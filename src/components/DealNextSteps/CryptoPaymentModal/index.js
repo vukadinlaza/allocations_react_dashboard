@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down(phone)]: {
       marginTop: '20vh',
     },
-    // overflow: 'scroll',
   },
   innerPaper: {
     boxShadow: 'none !important',
@@ -61,10 +60,8 @@ const useStyles = makeStyles((theme) => ({
   warningText: {
     margin: 'auto',
     marginTop: '20px',
-    //   margin: '20px auto auto',
     marginLeft: '2em',
     marginRight: '2rem',
-    // marginTop: '20px',
     fontSize: '18px',
     fontFamily: 'robot',
     [theme.breakpoints.down(phone)]: {
