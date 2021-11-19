@@ -326,16 +326,11 @@ function DealNextSteps() {
               <p className="action-header">Payment</p>
               <p className="action-sub-header">Required to complete your investment</p>
             </div>
-            {/* <Button
-              disabled={dealData?.deal?.isDemo ? false : !hasKyc}
             <Button
-              // disabled={dealData?.deal?.isDemo ? false : !hasKyc}
-              onClick={() => setWireInstructionsOpen(true)}
+              disabled={dealData?.deal?.isDemo ? false : !hasKyc}
               className="next-step-button"
+              onClick={() => setOpenPayment(true)}
             >
-              View Wire Instructions
-            </Button> */}
-            <Button className="next-step-button" onClick={() => setOpenPayment(true)}>
               Make Payment
             </Button>
           </div>
