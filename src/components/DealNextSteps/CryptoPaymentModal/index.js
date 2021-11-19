@@ -182,7 +182,6 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                         opacity: '1',
                         color: '#2A2B54',
                         textTransform: 'none',
-                        // outline: 'none',
                       }}
                       onClick={handleClose}
                     >
@@ -224,14 +223,7 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                         <img className={classes.copyIcon} src={CopyIcon} alt="Copy Icon" />
                       </Button>
                     </p>
-                    <p
-                    //   style={{
-                    //     margin: 'auto',
-                    //     marginTop: '30px',
-                    //     marginLeft: '2.5rem',
-                    //     marginRight: '2.5rem',
-                    //   }}
-                    >
+                    <p>
                       Once your transaction has been completed, please send your transaction hash to{' '}
                       <b>support@allocations.com</b> to verify your payment.
                     </p>{' '}
@@ -258,7 +250,6 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                         opacity: '1',
                         color: '#2A2B54',
                         textTransform: 'none',
-                        // outline: 'none',
                       }}
                       onClick={handleClose}
                     >
