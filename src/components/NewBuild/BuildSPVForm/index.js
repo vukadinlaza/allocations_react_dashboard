@@ -117,7 +117,7 @@ const BuildDetails = ({
   const classes = useStyles();
 
   const [buildData, setBuildData] = useState({
-    accept_crypto: 'false',
+    accept_crypto: false,
     allocations_reporting_adviser: 'true',
     asset_type: 'startup',
     carry_fee_type: 'percent',
@@ -254,6 +254,10 @@ const BuildDetails = ({
       fieldsToFill.push('international_investors_countries');
       unvalidatedFields.push('Countries of International Investors');
     }
+    if (!buildData.accept_crypto) {
+      fieldsToFill.push('accept_crypto');
+      unvalidatedFields.push('Accept Crypto');
+    }
 
     setUnfilledFields(fieldsToFill);
 
@@ -322,6 +326,7 @@ const BuildDetails = ({
           sectors: buildData.sectors,
           setup_cost: buildData.setup_cost,
           side_letters: buildData.side_letters,
+          accept_crypto: buildData.accept_crypto,
         },
       },
     });
@@ -470,8 +475,14 @@ const BuildDetails = ({
 export default function NewDealForm() {
   const { userProfile, loading: authLoading } = useAuth();
   const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
-  const [setBuildInfo, { data: updatedDeal, loading: updatedDealLoading }] =
-    useMutation(SET_BUILD_INFO);
+  const [setBuildInfo, { data: updatedDeal, loading: updatedDealLoading }] = useMutation(
+    SET_BUILD_INFO,
+    {
+      onError: (err) => {
+        console.log('err', err);
+      },
+    },
+  );
 
   const organization = useCurrentOrganization();
 
