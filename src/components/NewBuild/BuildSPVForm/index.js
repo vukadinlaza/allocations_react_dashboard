@@ -24,7 +24,6 @@ import {
   OfferingType,
   ReportingAdviser,
   SideLetters,
-  CryptoDeal,
 } from './FormFields';
 
 const CREATE_BUILD = gql`
@@ -118,7 +117,7 @@ const BuildDetails = ({
   const classes = useStyles();
 
   const [buildData, setBuildData] = useState({
-    accept_crypto: 'false',
+    accept_crypto: false,
     allocations_reporting_adviser: 'true',
     asset_type: 'startup',
     carry_fee_type: 'percent',
@@ -152,7 +151,6 @@ const BuildDetails = ({
     setup_cost: 20000,
     side_letters: 'false',
     sectors: [],
-    accept_crypto: false,
   });
 
   const defaultMasterSeries = 'Atomizer LLC';
