@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
+import USDCIcon from '../../../../assets/usdc_icon.svg';
 import './styles.scss';
 import moment from 'moment';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
@@ -30,6 +31,7 @@ function InvestPanel({ deal, deal_slug, organization }) {
   const {
     dealParams: { wireDeadline, signDeadline },
     status,
+    accept_crypto,
   } = deal;
 
   const getDeadline = (date) => {
@@ -61,6 +63,16 @@ function InvestPanel({ deal, deal_slug, organization }) {
               ? getDeadline(signDeadline)
               : 'No wire deadline has been set.'}
           </h2>
+        </li>
+        <li>
+          <p>Accepting:</p>
+          {accept_crypto ? (
+            <h2>
+              Wire Transfers • <img src={USDCIcon} alt="USDC icon" />
+            </h2>
+          ) : (
+            <h2>Wire Transfers</h2>
+          )}
         </li>
       </ul>
       <Button
