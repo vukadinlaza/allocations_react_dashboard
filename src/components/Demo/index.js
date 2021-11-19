@@ -145,12 +145,7 @@ export default () => {
                 style={{ marginTop: '1rem', minWidth: '100%' }}
                 onClick={() => {
                   history.push({
-                    pathname: `/investor/${
-                      // If true use Kingsley's ID otherwise Joel for Staging ENV
-                      process.env.NODE_ENV === 'production'
-                        ? '5de560a92817ed4e5b8a7af4'
-                        : '5ef11c26b864940023a05ec5'
-                    }/home`,
+                    pathname: `/investor/5de560a92817ed4e5b8a7af4/home`,
                     search: '?demo=true',
                   });
                 }}
