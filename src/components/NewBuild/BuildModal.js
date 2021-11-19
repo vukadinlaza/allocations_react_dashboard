@@ -9,6 +9,7 @@ import spvIcon from '../../assets/spv-icon.svg';
 import fundIcon from '../../assets/fund-icon.svg';
 import plusSignIcon from '../../assets/plus-vector.svg';
 import warningIcon from '../../assets/warning-red.svg';
+import { phone } from '../../utils/helpers';
 
 const DELETE_DEAL = gql`
   mutation DeleteDeal($_id: String!) {
@@ -81,13 +82,13 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '11px',
     padding: '5px',
     cursor: 'pointer',
-    // [theme.breakpoints.down(phone)]: {
-    //   marginBottom: '14px',
-    //   marginTop: '0px',
-    //   marginLeft: '0',
-    //   width: '100%',
-    //   textAlign: 'center',
-    // },
+    [theme.breakpoints.down(phone)]: {
+      marginBottom: '14px',
+      marginTop: '0px',
+      marginLeft: '0',
+      width: '100%',
+      textAlign: 'center',
+    },
   },
   typeBody: {
     textAlign: 'left',
@@ -366,23 +367,6 @@ const NewBuildFinalWarning = ({ isOpen, closeModal, openNewBuildModal, setPage }
                           </Button>
                         </Grid>
                         <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
-                          {/* <Button
-                            variant="contained"
-                            color="primary"
-                            size="large"
-                            type="button"
-                            style={{
-                              width: '70%',
-                              color: '#2A2B54',
-                              borderRadius: '8px',
-                              backgroundColor: '#ffffff',
-                            }}
-                            onClick={() => {
-                              setPage(1);
-                            }}
-                          >
-                            Cancel
-                          </Button> */}
                           <Typography
                             className={classes.cancelButton}
                             onClick={() => {
