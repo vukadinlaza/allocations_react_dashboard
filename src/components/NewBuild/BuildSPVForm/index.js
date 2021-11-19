@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import moment from 'moment';
-import countries from 'country-region-data';
 import { toast } from 'react-toastify';
 import { Button, Paper, Grid, FormControl } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
