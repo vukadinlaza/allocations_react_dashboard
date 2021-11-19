@@ -219,7 +219,6 @@ function InvestmentPage() {
 
   const [submitConfirmation] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: (data) => {
-      console.log(data);
       refetch();
       setLoading(false);
       const message = location?.state?.submission
@@ -330,14 +329,15 @@ function InvestmentPage() {
           handleSecondSig={handleSecondSig}
           is3c7={is3c7}
         />
-        <SecondSignature
-          requireSecondSigChecked={requireSecondSigChecked}
-          setRequireSecondSigChecked={setRequireSecondSigChecked}
-          setInvestor={setInvestor}
-          errors={errors}
-          org={org}
-          investorType={investorFormData.investor_type}
-        />
+        {requireSecondSig && (
+          <SecondSignature
+            requireSecondSigChecked={requireSecondSigChecked}
+            setRequireSecondSigChecked={setRequireSecondSigChecked}
+            setInvestor={setInvestor}
+            errors={errors}
+            org={org}
+          />
+        )}
 
         <TermsAndConditionsPanel
           confirmInvestment={confirmInvestment}

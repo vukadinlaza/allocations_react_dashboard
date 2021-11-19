@@ -28,7 +28,6 @@ const SecondSignature = ({
   errors,
   isFromModal = false,
   org,
-  investorType,
 }) => {
   const classes = useStyles();
 
