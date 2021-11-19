@@ -358,7 +358,6 @@ const BuildDetails = ({
       };
 
       localStorage.setItem('buildData', JSON.stringify(newBuildObject));
-      console.log('newBuildObject :>> ', newBuildObject);
       return newBuildObject;
     });
   };
