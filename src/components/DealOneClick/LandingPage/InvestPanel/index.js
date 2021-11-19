@@ -66,7 +66,6 @@ function InvestPanel({ deal, deal_slug, organization }) {
         </li>
         <li>
           <p>Accepting:</p>
-          {/* <h2>{accept_crypto ? 'Wire Transfers' : 'Wire Transfers •'}</h2> */}
           {accept_crypto ? (
             <h2>
               Wire Transfers • <img src={USDCIcon} alt="USDC icon" />

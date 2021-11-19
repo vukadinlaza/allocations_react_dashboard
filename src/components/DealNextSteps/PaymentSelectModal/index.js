@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down(phone)]: {
       marginTop: '20vh',
     },
-    // overflow: 'scroll',
   },
   innerPaper: {
     boxShadow: 'none !important',
