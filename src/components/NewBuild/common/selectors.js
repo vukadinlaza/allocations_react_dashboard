@@ -1,10 +1,8 @@
 import React from 'react';
 import Select from 'react-select';
-import { toast } from 'react-toastify';
 import countries from 'country-region-data';
 import { Button, ButtonGroup } from '@material-ui/core';
 import { phone } from '../../../utils/helpers';
-import sectors from '../BuildSPVForm/FormComponents/TypeSelector/sectors';
 import useStyles from '../BuildStyles';
 
 const phoneSize = window.innerWidth < phone;

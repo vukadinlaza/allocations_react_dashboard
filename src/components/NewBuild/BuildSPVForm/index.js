@@ -12,6 +12,7 @@ import { useCurrentOrganization } from '../../../state/current-organization';
 import AgreementSigner from './FormComponents/AgreementSigner';
 import useStyles from '../BuildStyles';
 import {
+  AcceptCrypto,
   CarryFee,
   CustomInvestmentAgreement,
   InternationalCompanyStatus,
@@ -117,6 +118,7 @@ const BuildDetails = ({
   const classes = useStyles();
 
   const [buildData, setBuildData] = useState({
+    accept_crypto: 'false',
     allocations_reporting_adviser: 'true',
     asset_type: 'startup',
     carry_fee_type: 'percent',
@@ -209,6 +211,10 @@ const BuildDetails = ({
       fieldsToFill.push('deal_stage');
       unvalidatedFields.push('Deal Stage');
     }
+    if (!buildData.accept_crypto) {
+      fieldsToFill.push('accept_crypto');
+      unvalidatedFields.push('Accept Crypto');
+    }
 
     // conditionally checked fields below here
     if (buildData.master_series === defaultMasterSeries && buildData.estimated_spv_quantity >= 5) {
@@ -283,6 +289,7 @@ const BuildDetails = ({
         deal_id,
         payload: {
           organization_id: organization._id,
+          accept_crypto: buildData.accept_crypto,
           allocations_reporting_adviser: buildData.allocations_reporting_adviser,
           asset_type: buildData.asset_type,
           carry_fee: {
@@ -341,7 +348,6 @@ const BuildDetails = ({
     setBuildData((prev) => {
       const newBuildObject = {
         ...prev,
-        // IS NULL CORRECT?
         master_series: isNotMasterSeries ? null : prev.master_series,
         custom_reporting_adviser: isAllocationsTheAdvisor ? '' : prev.custom_reporting_adviser,
         custom_management_fee: isNotCustomManagementFee ? 'false' : prev.custom_management_fee,
@@ -352,6 +358,7 @@ const BuildDetails = ({
           : prev.international_investors_countries,
         [target.name]: target.value,
       };
+
       localStorage.setItem('buildData', JSON.stringify(newBuildObject));
       console.log('newBuildObject :>> ', newBuildObject);
       return newBuildObject;
@@ -394,7 +401,7 @@ const BuildDetails = ({
             <CarryFee {...formFieldProps} />
             <SideLetters {...formFieldProps} />
             <MinimumInvestment {...formFieldProps} />
-            <CryptoDeal {...formFieldProps} />
+            <AcceptCrypto {...formFieldProps} />
           </Grid>
         </form>
       </Paper>

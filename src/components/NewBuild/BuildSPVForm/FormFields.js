@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormControl, Grid, Typography, TextField } from '@material-ui/core';
+import { FormControl, Grid, Typography, TextField, InputAdornment } from '@material-ui/core';
 import HelpIcon from '@material-ui/icons/Help';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
@@ -646,12 +646,7 @@ export function ManagementFee({
 }) {
   return (
     <Grid className={classes.customInputGridItem} item xs={6}>
-      <FormControl
-        required
-        // disabled
-        variant="outlined"
-        className={classes.formContainers}
-      >
+      <FormControl required variant="outlined" className={classes.formContainers}>
         <Typography className={classes.formItemName}>
           Choose your management fee
           <ModalTooltip
@@ -881,16 +876,7 @@ export function CarryFee({
   );
 }
 
-export function SideLetters({
-  buildData,
-  handleChange,
-  handleTooltip,
-  setUnfilledFields,
-  unfilledFields,
-  customInputStyles,
-  classes,
-  openTooltip,
-}) {
+export function SideLetters({ buildData, handleChange, handleTooltip, classes, openTooltip }) {
   return (
     <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
@@ -964,6 +950,9 @@ export function MinimumInvestment({
           type="number"
           value={buildData.minimum_investment}
           name="minimum_investment"
+          InputProps={{
+            startAdornment: <InputAdornment position="start">$</InputAdornment>,
+          }}
           onChange={(e) => {
             const value = convertToPositiveIntOrNull(e.target.value);
 
@@ -995,8 +984,6 @@ export function ReportingAdviser({
   buildData,
   handleChange,
   handleTooltip,
-  setUnfilledFields,
-  unfilledFields,
   customInputStyles,
   classes,
   openTooltip,
@@ -1114,13 +1101,52 @@ export function OfferingType({ buildData, handleChange, handleTooltip, classes, 
   );
 }
 
+export function AcceptCrypto({ buildData, handleChange, handleTooltip, classes, openTooltip }) {
+  return (
+    <Grid className={classes.inputGridItem} item xs={6}>
+      <FormControl required variant="outlined" className={classes.cryptoFormContainer}>
+        <fieldset className={classes.cryptoFieldset}>
+          <legend className={classes.cryptoLabel}>
+            Will you allow investments with crypto?
+            <ModalTooltip
+              title="Crypto"
+              handleTooltip={handleTooltip}
+              tooltipContent={
+                <Typography color="inherit">
+                  Would you like to allow investments into this deal with Crypto along with
+                  currency?
+                </Typography>
+              }
+              openTooltip={openTooltip}
+              id="accept_crypto"
+            >
+              <HelpIcon
+                className={classes.helpIcon}
+                onClick={(e) => handleTooltip('accept_crypto')}
+              />
+            </ModalTooltip>
+          </legend>
+          <div className={classes.cryptoSelector}>
+            <ButtonSelector
+              name="accept_crypto"
+              onChange={handleChange}
+              currentValue={buildData.accept_crypto}
+              values={[
+                { label: 'Yes', value: 'true' },
+                { label: 'No', value: 'false' },
+              ]}
+            />
+          </div>
+        </fieldset>
+      </FormControl>
+    </Grid>
+  );
+}
+
 export function CustomInvestmentAgreement({
   buildData,
   handleChange,
   handleTooltip,
-  setUnfilledFields,
-  unfilledFields,
-  customInputStyles,
   classes,
   openTooltip,
 }) {
@@ -1312,55 +1338,3 @@ export function NotesMemo({ buildData, handleChange, handleTooltip, classes, ope
     </>
   );
 }
-
-export function CryptoDeal({ buildData, handleChange, handleTooltip, classes, openTooltip }) {
-  return (
-    <Grid className={classes.inputGridItem} item xs={6}>
-      <FormControl required variant="outlined" className={classes.formContainers}>
-        <Typography className={classes.formItemName}>
-          Will you allow investments with crypto?
-          <ModalTooltip
-            title="Crypto Payments"
-            handleTooltip={handleTooltip}
-            tooltipContent={
-              <Typography color="inherit">
-                By accepting crypto payments, you aggree to use Atomizer, LLC as the Master Series
-                Name
-              </Typography>
-            }
-            openTooltip={openTooltip}
-            id="crypto_payments"
-          >
-            <HelpIcon
-              className={classes.helpIcon}
-              onClick={() => handleTooltip('crypto_payments')}
-            />
-          </ModalTooltip>
-        </Typography>
-        <ButtonSelector
-          name="accept_crypto"
-          onChange={handleChange}
-          currentValue={buildData.accept_crypto}
-          values={[
-            { label: 'Yes', value: true },
-            { label: 'No', value: false },
-          ]}
-        />
-      </FormControl>
-    </Grid>
-  );
-}
-
-// export function name({
-//     buildData,
-//     handleChange,
-//     handleTooltip,
-//     setUnfilledFields,
-//     unfilledFields,
-//     customInputStyles,
-//     classes,
-//     openTooltip,
-// }) {
-//     return (
-//     )
-// }
