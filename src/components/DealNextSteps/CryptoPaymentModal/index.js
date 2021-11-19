@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
   copyIcon: {
     [theme.breakpoints.down(phone)]: {
-      width: '0.8em',
+      width: '0.65em',
     },
   },
   modalPaper: {
@@ -73,10 +73,9 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
   const classes = useStyles();
   const { deal } = dealData;
   const { investment } = investmentData;
-
   const { data } = useQuery(DEAL_WALLET_ADDRESS, {
     fetchPolicy: 'network-only',
-    variables: { deal_id: '60dca93f896ca10023ecb970' },
+    variables: { deal_id: deal._id },
   });
 
   const [warning, setWarning] = useState(true);

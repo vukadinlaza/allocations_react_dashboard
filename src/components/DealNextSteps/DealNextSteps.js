@@ -92,32 +92,6 @@ const GET_INVESTMENT = gql`
   }
 `;
 
-function PaymentSelectModal2({ cryptoData, setOpenCrypto }) {
-  return (
-    <AppModal>
-      <div style={{ zIndex: '100', border: '1px black' }} className="crypto-payment-portal">
-        <iframe
-          title="crypto payment"
-          style={{
-            width: '100%',
-            maxWidth: '100%',
-            height: '1550px',
-          }}
-          src={cryptoData.access_url}
-          frameBorder="0"
-        />
-        <button type="button" onClick={() => setOpenCrypto(false)}>
-          Close
-        </button>
-        <script type="text/javascript" src="https://forumpay.com/api/events/payment.js" />
-        <script type="text/javascript">
-          CryptoPaymentStats.setToken({cryptoData.stats_token})
-        </script>
-      </div>{' '}
-    </AppModal>
-  );
-}
-
 function DealNextSteps() {
   const [confetti, showConfetti] = useState(false);
   const { data, loading, refetch } = useQuery(GET_INVESTOR, { fetchPolicy: 'network-only' });
@@ -327,7 +301,7 @@ function DealNextSteps() {
               <p className="action-sub-header">Required to complete your investment</p>
             </div>
             <Button
-              disabled={dealData?.deal?.isDemo ? false : !hasKyc}
+              // disabled={dealData?.deal?.isDemo ? false : !hasKyc}
               className="next-step-button"
               onClick={() => setOpenPayment(true)}
             >
