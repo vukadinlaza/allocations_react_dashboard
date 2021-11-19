@@ -375,6 +375,30 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: '100%',
     },
   },
+  cryptoFormContainer: {
+    width: '98%',
+    right: '1vw',
+  },
+  cryptoFieldset: {
+    border: 'solid 1px #186EFF',
+    borderTopColor: '#186EFF',
+    borderRadius: '8px',
+    boxSizing: 'border-box',
+    width: 'inherit',
+    paddingLeft: '10px',
+  },
+  cryptoLabel: {
+    fontSize: '17px',
+    fontWeight: 'bold',
+    color: '#2A2B54',
+    width: 'fit-content',
+    padding: '0px 5px',
+    marginLeft: '5px',
+  },
+  cryptoSelector: {
+    width: '110%',
+    padding: '8px 11px 17px 5px',
+  },
   customInputGridItem: {
     marginBottom: '37px',
     [theme.breakpoints.down(phone)]: {

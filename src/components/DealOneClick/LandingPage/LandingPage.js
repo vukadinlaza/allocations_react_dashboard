@@ -9,6 +9,8 @@ import DealHeader from './DealHeader';
 import CoinvestorsPanel from './CoinvestorsPanel';
 import './styles.scss';
 import KeyHighlights from './KeyHighlightsPanel';
+import CryptoDisclosure from './CryptoDiscPanel';
+
 import Loader from '../../utils/Loader';
 
 export const GET_DEAL = gql`
@@ -16,6 +18,7 @@ export const GET_DEAL = gql`
     publicDeal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
       _id
       approved
+      accept_crypto
       created_at
       company_name
       company_description
@@ -129,6 +132,7 @@ function DealLandingPage() {
         <CoinvestorsPanel deal={deal} />
         <KeyHighlights deal={deal} />
         <TermsPanel deal={deal} />
+        <CryptoDisclosure deal={deal} />
       </div>
     </section>
   );
