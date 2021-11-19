@@ -23,6 +23,7 @@ import {
   OfferingType,
   ReportingAdviser,
   SideLetters,
+  CryptoDeal,
 } from './FormFields';
 
 const CREATE_BUILD = gql`
@@ -393,6 +394,7 @@ const BuildDetails = ({
             <CarryFee {...formFieldProps} />
             <SideLetters {...formFieldProps} />
             <MinimumInvestment {...formFieldProps} />
+            <CryptoDeal {...formFieldProps} />
           </Grid>
         </form>
       </Paper>

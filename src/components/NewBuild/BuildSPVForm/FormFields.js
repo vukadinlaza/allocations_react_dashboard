@@ -1313,6 +1313,44 @@ export function NotesMemo({ buildData, handleChange, handleTooltip, classes, ope
   );
 }
 
+export function CryptoDeal({ buildData, handleChange, handleTooltip, classes, openTooltip }) {
+  return (
+    <Grid className={classes.inputGridItem} item xs={6}>
+      <FormControl required variant="outlined" className={classes.formContainers}>
+        <Typography className={classes.formItemName}>
+          Will you allow investments with crypto?
+          <ModalTooltip
+            title="Crypto Payments"
+            handleTooltip={handleTooltip}
+            tooltipContent={
+              <Typography color="inherit">
+                By accepting crypto payments, you aggree to use Atomizer, LLC as the Master Series
+                Name
+              </Typography>
+            }
+            openTooltip={openTooltip}
+            id="crypto_payments"
+          >
+            <HelpIcon
+              className={classes.helpIcon}
+              onClick={() => handleTooltip('crypto_payments')}
+            />
+          </ModalTooltip>
+        </Typography>
+        <ButtonSelector
+          name="accept_crypto"
+          onChange={handleChange}
+          currentValue={buildData.accept_crypto}
+          values={[
+            { label: 'Yes', value: 'true' },
+            { label: 'No', value: 'false' },
+          ]}
+        />
+      </FormControl>
+    </Grid>
+  );
+}
+
 // export function name({
 //     buildData,
 //     handleChange,
