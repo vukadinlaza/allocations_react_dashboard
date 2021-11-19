@@ -131,7 +131,7 @@ const PaymentModal = ({
                 <Box>
                   <CloseIcon
                     style={{ cursor: 'pointer' }}
-                    onClick={() => setOpen(false)}
+                    onClick={(e) => setOpen(false)}
                     htmlColor="#2A2B54"
                   />
                 </Box>
