@@ -11,7 +11,7 @@ export const CurrentAccountProvider = ({ children }) => {
     if (!currentOrganization) setCurrentOrganization(userProfile?.organizations_admin?.[0]);
   }, [loading]);
 
-  console.log(currentOrganization);
+  // console.log(currentOrganization);
 
   return (
     <OrganizationContext.Provider value={{ currentOrganization, setCurrentOrganization }}>

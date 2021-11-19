@@ -25,6 +25,12 @@ import {
   Representative,
   DealStage,
   MasterSeries,
+  FundName,
+  GeneralPartnerName,
+  RepresentativeGeneralPartnerAndTitle,
+  MinimumInvestmentFund,
+  NeedGPEntity,
+  GPEntityName,
 } from '../../FormFields';
 
 export default function TypeSelector({
@@ -172,7 +178,7 @@ export default function TypeSelector({
             openTooltip={openTooltip}
             id="asset_type"
           >
-            <HelpIcon className={classes.helpIcon} onClick={(e) => handleTooltip('asset_type')} />
+            <HelpIcon className={classes.helpIcon} onClick={() => handleTooltip('asset_type')} />
           </ModalTooltip>
         </Typography>
         <Grid container className={classes.assetChoiceGrid}>
@@ -181,19 +187,36 @@ export default function TypeSelector({
         </Grid>
 
         <Grid container spacing={4} className={classes.inputGridContainer}>
-          <PortfolioCompanyName {...formFieldProps} />
-          {dealType === 'spv' && <PortfolioCompanySecurities {...formFieldProps} />}
-          {dealType === 'fund' && <NumberOfInvestments {...formFieldProps} />}
-          {dealType === 'spv' && <DealName {...formFieldProps} />}
-          <ClosingDate {...formFieldProps} />
-          <ManagerName {...formFieldProps} />
-          <Representative {...formFieldProps} /> {/* Manager Full Title */}
+          {dealType === 'spv' && (
+            <>
+              <PortfolioCompanyName {...formFieldProps} />
+              <PortfolioCompanySecurities {...formFieldProps} />
+              <DealName {...formFieldProps} />
+              <ClosingDate {...formFieldProps} />
+              <ManagerName {...formFieldProps} />
+              <Representative {...formFieldProps} />
+            </>
+          )}
+          {dealType === 'fund' && (
+            <>
+              <FundName {...formFieldProps} />
+              <NumberOfInvestments {...formFieldProps} />
+              <GeneralPartnerName {...formFieldProps} />
+              <RepresentativeGeneralPartnerAndTitle {...formFieldProps} />
+              <ClosingDate {...formFieldProps} />
+              <MinimumInvestmentFund {...formFieldProps} />
+              <NeedGPEntity {...formFieldProps} />
+              {buildData.need_gp_entity === 'false' && <GPEntityName {...formFieldProps} />}
+            </>
+          )}
           {/* FOURTH ROW */}
           <DealStage {...formFieldProps} />
-          {!buildData.high_volume_partner && <EstimatedSPVQuantity {...formFieldProps} />}
-          {!buildData.high_volume_partner && buildData.estimated_spv_quantity >= 5 && (
-            <MasterSeries {...formFieldProps} />
+          {dealType === 'spv' && !buildData.high_volume_partner && (
+            <EstimatedSPVQuantity {...formFieldProps} />
           )}
+          {dealType === 'spv' &&
+            !buildData.high_volume_partner &&
+            buildData.estimated_spv_quantity >= 5 && <MasterSeries {...formFieldProps} />}
           <Sectors {...formFieldProps} />
         </Grid>
       </form>
