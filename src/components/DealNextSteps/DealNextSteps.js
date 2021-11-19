@@ -99,19 +99,9 @@ function DealNextSteps() {
   const [showTaxAsCompleted, setShowTaxAsCompleted] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const [openCrypto, setOpenCrypto] = useState(false);
-
   const { deal_slug, organization } = useParams();
-
-  // thing
-  const [cryptoData, setCryptoData] = useState({});
-  // there needs to be a payment state that tracks whether we are making a payment or not
   const [openPayment, setOpenPayment] = useState(false);
-
-  // this will determine whether or not they are seeing the crypto payment instructions
   const [cryptoPaymentOpen, setCryptoPaymentOpen] = useState(false);
-
-  // there needs to be a state tracking if it's a wire instruction
   const [wireInstructionsOpen, setWireInstructionsOpen] = useState(false);
 
   const { isAuthenticated, loading: authLoading } = useAuth();
@@ -121,9 +111,6 @@ function DealNextSteps() {
   const path = organization ? `/deals/${organization}/${deal_slug}` : `/deals/${deal_slug}`;
   const { data: investmentData } = useQuery(GET_INVESTMENT, {
     variables: { _id: params?.investmentId ? params?.investmentId : history?.location?.state?.id },
-    // onError: () => {
-    //   if (!state?.investorFormData) return history.push(path);
-    // },
   });
 
   useEffect(() => {
