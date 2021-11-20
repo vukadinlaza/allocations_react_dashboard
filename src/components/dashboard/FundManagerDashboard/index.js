@@ -152,11 +152,10 @@ const fundTabs = [
 
 const spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
 
-const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
-const INVESTMENTS_TABLE = 'Investments';
+// Base here is OPS_ACCOUNTING
+let BASE = 'app3m4OJvAWUg0hng';
+let INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
-let BASE = OPS_ACCOUNTING;
-let INV_TABLE = INVESTMENTS_TABLE;
 
 const FundManagerDashboard = ({ classes, history }) => {
   const { width } = useViewport();
@@ -165,8 +164,9 @@ const FundManagerDashboard = ({ classes, history }) => {
   const { organization: orgSlug } = params;
 
   if (orgSlug === 'demo-fund') {
+    //BASE HERE IS Demo Fund
     BASE = 'app53fOK2CmyuzKXK';
-    INV_TABLE = 'Sales Demo';
+    INVESTMENTS_TABLE = 'Sales Demo';
   }
 
   const { fundManagerBankingTab } = useFlags();
@@ -212,7 +212,7 @@ const FundManagerDashboard = ({ classes, history }) => {
 
   const { data: atFundData, status } = useFetch(
     BASE,
-    atDealData?.name && INV_TABLE,
+    atDealData?.name && INVESTMENTS_TABLE,
     atDealData?.name && `(FIND("${checkedAtDealDataName}", {Deals}))`,
   );
 
