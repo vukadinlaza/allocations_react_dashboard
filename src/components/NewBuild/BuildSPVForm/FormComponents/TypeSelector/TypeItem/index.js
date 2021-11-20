@@ -11,7 +11,7 @@ export default function TypeItem({ item, handleChange, buildData }) {
       type="button"
       name="asset_type"
       value={item.value}
-      className={`${item.value === buildData.asset_type ? classes.selected : ''} ${
+      className={`${item.value === buildData.asset_type ? classes.typeItemSelected : ''} ${
         classes.typeItem
       }`}
       onClick={handleChange}
