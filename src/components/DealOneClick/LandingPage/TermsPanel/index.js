@@ -16,6 +16,7 @@ const TermsPanel = ({ deal }) => {
       managementFeeType,
       managementFeesDollar,
       fundManagementFeeType,
+      customCurrency,
     },
   } = deal;
 
@@ -67,7 +68,7 @@ const TermsPanel = ({ deal }) => {
           <li>
             <p>Minimum Investment:</p>
             <h3>
-              {deal.dealParams?.customCurrency ? deal.dealParams.customCurrency : '$'}
+              {customCurrency || '$'}
               {nWithCommas(minimumInvestment)}
             </h3>
           </li>
