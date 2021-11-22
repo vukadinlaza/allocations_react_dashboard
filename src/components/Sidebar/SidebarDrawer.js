@@ -22,6 +22,7 @@ import { BsBinocularsFill } from 'react-icons/bs';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import BuildModal, { NewBuildWarningModal } from '../NewBuild/BuildModal';
 import styles from './styles';
+import OrganizationModal from '../NewBuild/common/OrganizationModal';
 
 const AddBubbleBuildButton = ({ classes }) => (
   <Button
@@ -74,6 +75,8 @@ const SidebarDrawer = ({
   const [openSubMenu, setOpenSubMenu] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [openWarningModal, setOpenWarningModal] = useState(false);
+  const [openOrgModal, setOpenOrgModal] = useState(false);
+  const [dealType, setDealType] = useState(null);
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
   const AdminLinks = () => {
@@ -147,11 +150,21 @@ const SidebarDrawer = ({
 
   return (
     <div className={classes.sidebarDrawer}>
-      <BuildModal isOpen={openModal} onClose={() => setOpenModal(false)} />
       <NewBuildWarningModal
-        openNewBuildModal={() => setOpenModal(true)}
         isOpen={openWarningModal}
         closeModal={() => setOpenWarningModal(false)}
+        openNewBuildModal={() => setOpenModal(true)}
+      />
+      <BuildModal
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+        setDealType={setDealType}
+        openOrgModal={() => setOpenOrgModal(true)}
+      />
+      <OrganizationModal
+        isOpen={openOrgModal}
+        closeModal={() => setOpenOrgModal(false)}
+        dealType={dealType}
       />
 
       <AddBuildButton

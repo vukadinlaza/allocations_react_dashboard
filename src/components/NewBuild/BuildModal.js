@@ -402,7 +402,7 @@ export const NewBuildWarningModal = (props) => {
   return <Component {...props} setPage={setPage} />;
 };
 
-const BuildModal = ({ onClose, isOpen }) => {
+const BuildModal = ({ onClose, isOpen, setDealType, openOrgModal }) => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -483,7 +483,8 @@ const BuildModal = ({ onClose, isOpen }) => {
                               backgroundColor: '#186EFF',
                             }}
                             onClick={() => {
-                              history.push(`/new-build/spv`);
+                              setDealType('spv');
+                              openOrgModal();
                               onClose();
                             }}
                           >
@@ -527,7 +528,8 @@ const BuildModal = ({ onClose, isOpen }) => {
                               backgroundColor: '#186EFF',
                             }}
                             onClick={() => {
-                              history.push(`/new-build/fund`);
+                              setDealType('fund');
+                              openOrgModal();
                               onClose();
                             }}
                           >
