@@ -340,6 +340,12 @@ const useStyles = makeStyles((theme) => ({
   wideInputBox: {
     maxWidth: '1206px',
   },
+  inputLabelWithTooltip: {
+    display: 'flex',
+    '& svg': {
+      marginTop: '0.2em',
+    },
+  },
 
   inputButton: {
     width: '180px',
