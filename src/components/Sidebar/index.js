@@ -46,6 +46,7 @@ function Sidebar(props) {
   const [currentOrganization, setCurrentOrganization] = useCurrentOrganizationState();
   const [currentHomeUrl, setCurrentHomeUrl] = useState('');
   const fundMatch = useRouteMatch('/admin/:organization');
+  const fundMatchDeals = useRouteMatch('/deals/:organization/:slug');
   const location = useLocation();
   const { window, classes } = props;
   const theme = useTheme();
@@ -86,8 +87,9 @@ function Sidebar(props) {
         history.push(defaultUrl);
       } else {
         const organizationSlug = fundMatch?.params?.organization;
+        const dealOrganizationSlug = fundMatchDeals?.params?.organization;
         const currentOrg = userProfile?.organizations_admin?.find(
-          (org) => org.slug === organizationSlug,
+          (org) => org.slug === organizationSlug || org.slug === dealOrganizationSlug,
         );
         handleAccountChange(currentOrg?.name ? currentOrg.name : '');
       }
