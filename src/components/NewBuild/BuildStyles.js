@@ -1,7 +1,5 @@
-// import { phone } from '../../utils/helpers';
 import { makeStyles } from '@material-ui/core/styles';
-import { autoType } from 'd3-dsv';
-import { phone, tablet } from '../../utils/helpers';
+import { phone } from '../../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
   // * Styles that are used in more than one place in the build form
