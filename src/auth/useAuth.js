@@ -36,7 +36,7 @@ export function useAuth(QUERY = GET_INVESTOR) {
   const { isLoading, user, isAuthenticated, loginWithRedirect, logout, auth0Client } = useAuth0();
 
   const [getInvestor, { data, error, called, refetch, loading }] = useLazyQuery(QUERY);
-  const userProfile = { ...(data?.investor || {}), ...(user || {}) };
+  const userProfile = { ...(user || {}), ...(data?.investor || {}) };
 
   useEffect(() => {
     if (!isLoading && isAuthenticated && !called) {

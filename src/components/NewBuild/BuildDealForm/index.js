@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { Button, Paper, Grid, FormControl } from '@material-ui/core';
 import { useParams } from 'react-router';
 import Typography from '@material-ui/core/Typography';
+import { useParams } from 'react-router';
 import BasicInfo from './FormComponents/TypeSelector/index';
 import UploadDocs from './FormComponents/UploadDocs/index';
 import { useAuth } from '../../../auth/useAuth';
@@ -12,6 +13,7 @@ import { useCurrentOrganization } from '../../../state/current-organization';
 import AgreementSigner from './FormComponents/AgreementSigner';
 import useStyles from '../BuildStyles';
 import {
+  AcceptCrypto,
   CarryFee,
   CustomInvestmentAgreement,
   InternationalCompanyStatus,
@@ -118,6 +120,7 @@ const BuildDetails = ({
   const classes = useStyles();
 
   const [buildData, setBuildData] = useState({
+    accept_crypto: 'false',
     allocations_reporting_adviser: 'true',
     asset_type: 'startup',
     carry_fee_type: 'percent',
@@ -249,6 +252,11 @@ const BuildDetails = ({
       fieldsToFill.push('deal_stage');
       unvalidatedFields.push('Deal Stage');
     }
+    if (!buildData.accept_crypto) {
+      fieldsToFill.push('accept_crypto');
+      unvalidatedFields.push('Accept Crypto');
+    }
+
     // conditionally checked fields below here
     if (
       (!buildData.custom_management_fee || buildData.custom_management_fee === 'false') &&
@@ -285,6 +293,10 @@ const BuildDetails = ({
       fieldsToFill.push('international_investors_countries');
       unvalidatedFields.push('Countries of International Investors');
     }
+    if (!buildData.accept_crypto) {
+      fieldsToFill.push('accept_crypto');
+      unvalidatedFields.push('Accept Crypto');
+    }
 
     setUnfilledFields(fieldsToFill);
 
@@ -314,6 +326,7 @@ const BuildDetails = ({
         deal_id,
         payload: {
           organization_id: organization._id,
+          accept_crypto: buildData.accept_crypto === 'true',
           allocations_reporting_adviser: buildData.allocations_reporting_adviser,
           asset_type: buildData.asset_type,
           carry_fee: {
@@ -379,7 +392,6 @@ const BuildDetails = ({
     setBuildData((prev) => {
       const newBuildObject = {
         ...prev,
-        // IS NULL CORRECT?
         master_series: isNotMasterSeries ? null : prev.master_series,
         custom_reporting_adviser: isAllocationsTheAdvisor ? '' : prev.custom_reporting_adviser,
         custom_management_fee: isNotCustomManagementFee ? 'false' : prev.custom_management_fee,
@@ -391,6 +403,7 @@ const BuildDetails = ({
         gp_entity_name: isGPEntityNeeded ? '' : prev.gp_entity_name,
         [target.name]: target.value,
       };
+
       localStorage.setItem('buildData', JSON.stringify(newBuildObject));
       return newBuildObject;
     });
@@ -433,6 +446,7 @@ const BuildDetails = ({
             <SideLetters {...formFieldProps} />
             {dealType === 'spv' && <MinimumInvestment {...formFieldProps} />}
             {dealType === 'fund' && <AcceptedInvestorTypes {...formFieldProps} />}
+            {dealType === 'spv' && <AcceptCrypto {...formFieldProps} />}
           </Grid>
         </form>
       </Paper>
@@ -509,8 +523,14 @@ const BuildDetails = ({
 export default function NewDealForm() {
   const { userProfile, loading: authLoading } = useAuth();
   const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
-  const [setBuildInfo, { data: updatedDeal, loading: updatedDealLoading }] =
-    useMutation(SET_BUILD_INFO);
+  const [setBuildInfo, { data: updatedDeal, loading: updatedDealLoading }] = useMutation(
+    SET_BUILD_INFO,
+    {
+      onError: (err) => {
+        console.log('err', err);
+      },
+    },
+  );
 
   const organization = useCurrentOrganization();
 

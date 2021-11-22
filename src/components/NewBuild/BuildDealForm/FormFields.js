@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormControl, Grid, Typography, TextField } from '@material-ui/core';
+import { FormControl, Grid, Typography, TextField, InputAdornment } from '@material-ui/core';
 import HelpIcon from '@material-ui/icons/Help';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
@@ -11,8 +11,10 @@ import sectors from './FormComponents/TypeSelector/sectors';
 import { convertToPositiveIntOrNull } from '../../../utils/numbers';
 import {
   ButtonSelector,
+  DealStagesSelector,
   InternationalCountrySelector,
   InternationalInvestorsCountriesSelector,
+  SecuritiesSelector,
 } from '../common/selectors';
 
 const phoneSize = window.innerWidth < phone;
@@ -128,52 +130,6 @@ export function PortfolioCompanySecurities({
   classes,
   openTooltip,
 }) {
-  function SecuritiesSelector() {
-    const securityTypes = [
-      'Series A Preferred Stock',
-      'Simple Agreement for Future Equity',
-      'Convertible Promissory Note',
-      'Other',
-    ];
-    const customStyles = {
-      control: (styles) => ({
-        ...styles,
-        height: 60,
-        maxWidth: 568,
-        cursor: 'pointer',
-        border: unfilledFields.includes('portfolio_company_securities')
-          ? '2px solid red'
-          : '1pm solid hsl(0, 0%, 80%)',
-      }),
-      placeholder: (styles, data) => ({
-        ...styles,
-        color: data.children !== 'Select...' ? '#000' : '#999',
-      }),
-    };
-
-    return (
-      <Select
-        id="portfolio_company_securities"
-        label="Portfolio Company Securities"
-        styles={customStyles}
-        options={securityTypes.map((security) => ({ value: security, label: security })) || ''}
-        defaultValue={buildData.portfolio_company_securities}
-        placeholder={buildData.portfolio_company_securities || 'Select...'}
-        onChange={(option) => {
-          const newEvent = {
-            target: {
-              name: 'portfolio_company_securities',
-              value: option.value,
-            },
-          };
-          handleChange(newEvent);
-          setUnfilledFields((prev) =>
-            prev.filter((field) => field !== 'portfolio_company_securities'),
-          );
-        }}
-      />
-    );
-  }
   return (
     <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
@@ -198,7 +154,12 @@ export function PortfolioCompanySecurities({
           </ModalTooltip>
         </Grid>
 
-        <SecuritiesSelector />
+        <SecuritiesSelector
+          buildData={buildData}
+          handleChange={handleChange}
+          setUnfilledFields={setUnfilledFields}
+          unfilledFields={unfilledFields}
+        />
       </FormControl>
     </Grid>
   );
@@ -837,6 +798,7 @@ export function Sectors({
         </ModalTooltip>
       </Grid>
       <SectorSelector />
+
       <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '22px' }}>
         {buildData.sectors.map((sector) => (
           <div className={classes.sectorTag}>
@@ -921,46 +883,6 @@ export function DealStage({
   classes,
   openTooltip,
 }) {
-  function DealStagesSelector() {
-    const dealStages = ['Pre-Seed', 'Seed', 'Series A', 'Series B', 'Series C', 'Series D+'];
-    const customStyles = {
-      control: (styles) => ({
-        ...styles,
-        height: 60,
-        maxWidth: 568,
-        cursor: 'pointer',
-        border: unfilledFields.includes('deal_stage')
-          ? '2px solid red'
-          : '1pm solid hsl(0, 0%, 80%)',
-      }),
-      placeholder: (styles, data) => ({
-        ...styles,
-        color: data.children !== 'Select...' ? '#000' : '#999',
-      }),
-    };
-
-    return (
-      <Select
-        id="deal_stage"
-        menuPosition="fixed"
-        label="Deal Stage"
-        styles={customStyles}
-        options={dealStages.map((stage) => ({ value: stage, label: stage, key: stage })) || ''}
-        defaultValue={buildData.deal_stage}
-        placeholder={buildData.deal_stage}
-        onChange={(option) => {
-          const newEvent = {
-            target: {
-              name: 'deal_stage',
-              value: option.value,
-            },
-          };
-          handleChange(newEvent);
-          setUnfilledFields((prev) => prev.filter((field) => field !== 'deal_stage'));
-        }}
-      />
-    );
-  }
   return (
     <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
@@ -981,7 +903,12 @@ export function DealStage({
           </ModalTooltip>
         </Grid>
 
-        <DealStagesSelector />
+        <DealStagesSelector
+          buildData={buildData}
+          handleChange={handleChange}
+          setUnfilledFields={setUnfilledFields}
+          unfilledFields={unfilledFields}
+        />
       </FormControl>
     </Grid>
   );
@@ -1048,12 +975,7 @@ export function ManagementFee({
   const params = useParams();
   return (
     <Grid className={classes.customInputGridItem} item xs={6}>
-      <FormControl
-        required
-        // disabled
-        variant="outlined"
-        className={classes.formContainers}
-      >
+      <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Choose your management fee</Typography>
           <ModalTooltip
@@ -1374,6 +1296,10 @@ export function MinimumInvestment({
           type="number"
           value={buildData.minimum_investment}
           name="minimum_investment"
+          InputProps={{
+            style: { height: '23px' },
+            startAdornment: <InputAdornment position="start">$</InputAdornment>,
+          }}
           onChange={(e) => {
             const value = convertToPositiveIntOrNull(e.target.value);
 
@@ -1389,7 +1315,6 @@ export function MinimumInvestment({
           }}
           className={classes.minimumInput}
           variant="outlined"
-          inputProps={{ style: { height: '23px' } }}
           classes={{
             root: `${unfilledFields.includes('minimum_investment') && classes.unfilledField} ${
               classes.selectInputBox
@@ -1612,6 +1537,48 @@ export function OfferingType({ buildData, handleChange, handleTooltip, classes, 
   );
 }
 
+export function AcceptCrypto({ buildData, handleChange, handleTooltip, classes, openTooltip }) {
+  return (
+    <Grid className={classes.inputGridItem} item xs={6}>
+      <FormControl required variant="outlined" className={classes.cryptoFormContainer}>
+        <fieldset className={classes.cryptoFieldset}>
+          <legend className={classes.cryptoLabel}>
+            Will you allow investments with crypto?
+            <ModalTooltip
+              title="Crypto"
+              handleTooltip={handleTooltip}
+              tooltipContent={
+                <Typography color="inherit">
+                  Would you like to allow investments into this deal with Crypto along with
+                  currency?
+                </Typography>
+              }
+              openTooltip={openTooltip}
+              id="accept_crypto"
+            >
+              <HelpIcon
+                className={classes.helpIcon}
+                onClick={() => handleTooltip('accept_crypto')}
+              />
+            </ModalTooltip>
+          </legend>
+          <div className={classes.cryptoSelector}>
+            <ButtonSelector
+              name="accept_crypto"
+              onChange={handleChange}
+              currentValue={buildData.accept_crypto}
+              values={[
+                { label: 'Yes', value: 'true' },
+                { label: 'No', value: 'false' },
+              ]}
+            />
+          </div>
+        </fieldset>
+      </FormControl>
+    </Grid>
+  );
+}
+
 export function CustomInvestmentAgreement({
   buildData,
   handleChange,
@@ -1814,17 +1781,3 @@ export function NotesMemo({ buildData, handleChange, handleTooltip, classes, ope
     </>
   );
 }
-
-// export function name({
-//     buildData,
-//     handleChange,
-//     handleTooltip,
-//     setUnfilledFields,
-//     unfilledFields,
-//     customInputStyles,
-//     classes,
-//     openTooltip,
-// }) {
-//     return (
-//     )
-// }

@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+// import { autoType } from 'd3-dsv';
 import { phone } from '../../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
@@ -105,7 +106,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-start',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     marginBottom: '16px',
-    // padding: '42px',
     paddingTop: '20px',
     borderRadius: '15px',
     width: '100%',
@@ -242,7 +242,6 @@ const useStyles = makeStyles((theme) => ({
   previousButton: {
     font: 'normal normal normal 24px/28px Roboto',
     marginTop: '11px',
-    // marginLeft: '135px',
     padding: '5px',
     cursor: 'pointer',
     [theme.breakpoints.down(phone)]: {
@@ -382,6 +381,30 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: '100%',
     },
   },
+  cryptoFormContainer: {
+    width: '98%',
+    right: '1vw',
+  },
+  cryptoFieldset: {
+    border: 'solid 1px #186EFF',
+    borderTopColor: '#186EFF',
+    borderRadius: '8px',
+    boxSizing: 'border-box',
+    width: 'inherit',
+    paddingLeft: '10px',
+  },
+  cryptoLabel: {
+    fontSize: '17px',
+    fontWeight: 'bold',
+    color: '#2A2B54',
+    width: 'fit-content',
+    padding: '0px 5px',
+    marginLeft: '5px',
+  },
+  cryptoSelector: {
+    width: '110%',
+    padding: '8px 11px 17px 5px',
+  },
   customInputGridItem: {
     marginBottom: '37px',
     [theme.breakpoints.down(phone)]: {
@@ -458,6 +481,12 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '8px !important',
     textTransform: 'capitalize',
     opacity: '1 !important',
+  },
+  typeItemSelected: {
+    extend: 'selected',
+    textTransform: 'inherit',
+    border: '2px solid #186EFF !important',
+    background: '#ECF3FF 0% 0% no-repeat padding-box !important',
   },
   typeItem: {
     display: 'flex',
