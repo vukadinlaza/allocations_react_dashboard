@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 import { Button, Paper, Grid, FormControl } from '@material-ui/core';
 import { useParams } from 'react-router';
 import Typography from '@material-ui/core/Typography';
-import { useParams } from 'react-router';
 import BasicInfo from './FormComponents/TypeSelector/index';
 import UploadDocs from './FormComponents/UploadDocs/index';
 import { useAuth } from '../../../auth/useAuth';
@@ -183,78 +182,73 @@ const BuildDetails = ({
 
     const unvalidatedFields = [];
     const fieldsToFill = [];
+
+    const unvalidatedFieldsToFill = (fieldToFill, unvalidatedField) => {
+      fieldsToFill.push(fieldToFill);
+      unvalidatedFields.push(unvalidatedField);
+    };
     // fields always checked below
     if (dealType === 'spv') {
       if (!buildData.portfolio_company_name) {
-        fieldsToFill.push('portfolio_company_name');
-        unvalidatedFields.push('Portfolio Company Name');
+        unvalidatedFieldsToFill('portfolio_company_name', 'Portfolio Company Name');
       }
       if (!buildData.portfolio_company_securities) {
-        fieldsToFill.push('portfolio_company_securities');
-        unvalidatedFields.push('Portfolio Company Securities');
+        unvalidatedFieldsToFill('portfolio_company_securities', 'Portfolio Company Securities');
       }
       if (!buildData.portfolio_deal_name) {
-        fieldsToFill.push('portfolio_deal_name');
-        unvalidatedFields.push('Deal Name');
+        unvalidatedFieldsToFill('portfolio_deal_name', 'Deal Name');
       }
       if (!buildData.manager_name) {
-        fieldsToFill.push('manager_name');
-        unvalidatedFields.push('Manager Name');
+        unvalidatedFieldsToFill('manager_name', 'Manager Name');
       }
       if (!buildData.representative) {
-        fieldsToFill.push('representative');
-        unvalidatedFields.push('Representative of Manager');
+        unvalidatedFieldsToFill('representative', 'Representative of Manager');
       }
       if (!buildData.estimated_spv_quantity && buildData.master_series === defaultMasterSeries) {
-        fieldsToFill.push('estimated_spv_quantity');
-        unvalidatedFields.push('Estimated Number of SPVs');
+        unvalidatedFieldsToFill('estimated_spv_quantity', 'Estimated Number of SPVs');
       }
       if (
         buildData.master_series === defaultMasterSeries &&
         buildData.estimated_spv_quantity >= 5
       ) {
-        fieldsToFill.push('master_series');
-        unvalidatedFields.push('Master Series Name');
+        unvalidatedFieldsToFill('master_series', 'Master Series Name');
+      }
+      if (!buildData.accept_crypto) {
+        unvalidatedFieldsToFill('accept_crypto', 'Accept Crypto');
       }
     }
     if (dealType === 'fund') {
       if (!buildData.fund_name) {
-        fieldsToFill.push('fund_name');
-        unvalidatedFields.push('Fund Name');
+        unvalidatedFieldsToFill('fund_name', 'Fund Name');
+      }
+      if (!buildData.manager_name) {
+        unvalidatedFieldsToFill('manager_name', 'General Partner Name');
       }
       if (!buildData.general_partner_representative) {
-        fieldsToFill.push('general_partner_representative');
-        unvalidatedFields.push('General Partner Representative and Title');
+        unvalidatedFieldsToFill(
+          'general_partner_representative',
+          'General Partner Representative and Title',
+        );
       }
       if (!buildData.number_of_investments) {
-        fieldsToFill.push('number_of_investments');
-        unvalidatedFields.push('Number of Investments');
+        unvalidatedFieldsToFill('number_of_investments', 'Number of Investments');
       }
       if (!buildData.type_of_investors) {
-        fieldsToFill.push('type_of_investors');
-        unvalidatedFields.push('Type of Investors');
+        unvalidatedFieldsToFill('type_of_investors', 'Type of Investors');
       }
       if (buildData.need_gp_entity === 'false' && !buildData.gp_entity_name) {
-        fieldsToFill.push('gp_entity_name');
-        unvalidatedFields.push('GP Entity Name');
+        unvalidatedFieldsToFill('gp_entity_name', 'GP Entity Name');
       }
     }
 
     if (!buildData.minimum_investment) {
-      fieldsToFill.push('minimum_investment');
-      unvalidatedFields.push('Minimum Investment');
+      unvalidatedFieldsToFill('minimum_investment', 'Minimum Investment');
     }
     if (!buildData.sectors.length) {
-      fieldsToFill.push('sectors');
-      unvalidatedFields.push('Sectors');
+      unvalidatedFieldsToFill('sectors', 'Sectors');
     }
     if (!buildData.deal_stage.length) {
-      fieldsToFill.push('deal_stage');
-      unvalidatedFields.push('Deal Stage');
-    }
-    if (!buildData.accept_crypto) {
-      fieldsToFill.push('accept_crypto');
-      unvalidatedFields.push('Accept Crypto');
+      unvalidatedFieldsToFill('deal_stage', 'Deal Stage');
     }
 
     // conditionally checked fields below here
@@ -262,40 +256,34 @@ const BuildDetails = ({
       (!buildData.custom_management_fee || buildData.custom_management_fee === 'false') &&
       buildData.management_fee_value === 'Custom'
     ) {
-      fieldsToFill.push('custom_management_fee');
-      unvalidatedFields.push('Custom Management Fee');
+      unvalidatedFieldsToFill('custom_management_fee', 'Custom Management Fee');
     }
     if (
       (!buildData.custom_carry_fee || buildData.custom_carry_fee === 'false') &&
       buildData.carry_fee_value === 'Custom'
     ) {
-      fieldsToFill.push('custom_carry_fee');
-      unvalidatedFields.push('Custom Carry Fee');
+      unvalidatedFieldsToFill('custom_carry_fee', 'Custom Carry Fee');
     }
     if (
       !buildData.custom_reporting_adviser &&
       buildData.allocations_reporting_adviser === 'false'
     ) {
-      fieldsToFill.push('custom_reporting_adviser');
-      unvalidatedFields.push('Advisor Name');
+      unvalidatedFieldsToFill('custom_reporting_adviser', 'Advisor Name');
     }
     if (
       !buildData.international_company_country &&
       buildData.international_company_status === 'true'
     ) {
-      fieldsToFill.push('international_company_country');
-      unvalidatedFields.push('Country of International Company');
+      unvalidatedFieldsToFill('international_company_country', 'Country of International Company');
     }
     if (
       !buildData.international_investors_countries.length &&
       buildData.international_investors_status === 'true'
     ) {
-      fieldsToFill.push('international_investors_countries');
-      unvalidatedFields.push('Countries of International Investors');
-    }
-    if (!buildData.accept_crypto) {
-      fieldsToFill.push('accept_crypto');
-      unvalidatedFields.push('Accept Crypto');
+      unvalidatedFieldsToFill(
+        'international_investors_countries',
+        'Countries of International Investors',
+      );
     }
 
     setUnfilledFields(fieldsToFill);
