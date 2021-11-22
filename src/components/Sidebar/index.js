@@ -87,8 +87,9 @@ function Sidebar(props) {
         history.push(defaultUrl);
       } else {
         const organizationSlug = fundMatch?.params?.organization;
+        const dealOrganizationSlug = fundMatchDeals?.params?.organization;
         const currentOrg = userProfile?.organizations_admin?.find(
-          (org) => org.slug === organizationSlug,
+          (org) => org.slug === organizationSlug || org.slug === dealOrganizationSlug,
         );
         handleAccountChange(currentOrg?.name ? currentOrg.name : '');
       }
