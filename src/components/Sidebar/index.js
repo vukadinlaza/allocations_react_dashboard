@@ -46,6 +46,7 @@ function Sidebar(props) {
   const [currentOrganization, setCurrentOrganization] = useCurrentOrganizationState();
   const [currentHomeUrl, setCurrentHomeUrl] = useState('');
   const fundMatch = useRouteMatch('/admin/:organization');
+  const fundMatchDeals = useRouteMatch('/deals/:organization/:slug');
   const location = useLocation();
   const { window, classes } = props;
   const theme = useTheme();
