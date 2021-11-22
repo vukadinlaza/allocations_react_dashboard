@@ -145,8 +145,8 @@ const validatedDataDefault = fields.reduce((acc, val) => {
   return acc;
 }, {});
 
-const Banking = ({ deal_id }) => {
-  const [loading, setLoading] = useState(true);
+const Banking = ({ deal_id, deal_NDvirtualAccountNum }) => {
+  const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(true); // Show form if account creation flow has not yet started
   const [submitDisabled, setSubmitDisabled] = useState(true);
   const [accountInformation, setAccountInformation] = useState({
@@ -165,7 +165,14 @@ const Banking = ({ deal_id }) => {
     if (allFields.includes(false)) setSubmitDisabled(true);
   }, [validatedData]);
 
-  const [createNDBankAccount] = useMutation(CREATE_ND_BANK_ACCOUNT);
+  const [createNDBankAccount] = useMutation(CREATE_ND_BANK_ACCOUNT, {
+    onCompleted: (res) => {
+      if (res.createNDBankAccount.success) {
+        setLoading(false);
+        setShowForm(false);
+      }
+    },
+  });
 
   const { data: refNumData } = useQuery(REFERENCE_NUMBERS_BY_DEAL_ID, {
     variables: { deal_id },
@@ -196,11 +203,12 @@ const Banking = ({ deal_id }) => {
       variables: {
         accountInfo: { ...accountInformation, dateOfBirth },
       },
-    }).then((res) => {
-      if (res.success) {
-        setLoading(false);
-        setShowForm(false);
-      }
+      onCompleted: (res) => {
+        if (res.success) {
+          setLoading(false);
+          setShowForm(false);
+        }
+      },
     });
   };
 
@@ -218,12 +226,27 @@ const Banking = ({ deal_id }) => {
   };
 
   // Ref number loading - to determine showForm state
+
   if (loading)
     return (
       <>
         <Loader />
       </>
     );
+
+  if (deal_NDvirtualAccountNum) {
+    return (
+      <Grid container spacing={4} style={{ padding: '3rem', textAlign: 'center' }}>
+        <Grid item sm={12} md={12} lg={12}>
+          <Typography variant="h5">New Directions Virtual Account Number</Typography>
+          <Typography variant="h6" style={{ paddingTop: '3rem' }}>
+            {deal_NDvirtualAccountNum}
+          </Typography>
+        </Grid>
+      </Grid>
+    );
+  }
+
   return (
     <>
       {showForm === false && (
