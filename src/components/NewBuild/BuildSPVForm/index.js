@@ -117,7 +117,7 @@ const BuildDetails = ({
   const classes = useStyles();
 
   const [buildData, setBuildData] = useState({
-    accept_crypto: false,
+    accept_crypto: 'false',
     allocations_reporting_adviser: 'true',
     asset_type: 'startup',
     carry_fee_type: 'percent',
@@ -287,7 +287,7 @@ const BuildDetails = ({
         deal_id,
         payload: {
           organization_id: organization._id,
-          accept_crypto: buildData.accept_crypto,
+          accept_crypto: buildData.accept_crypto === 'true',
           allocations_reporting_adviser: buildData.allocations_reporting_adviser,
           asset_type: buildData.asset_type,
           carry_fee: {
@@ -326,7 +326,6 @@ const BuildDetails = ({
           sectors: buildData.sectors,
           setup_cost: buildData.setup_cost,
           side_letters: buildData.side_letters,
-          accept_crypto: buildData.accept_crypto,
         },
       },
     });
