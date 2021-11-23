@@ -195,7 +195,7 @@ const FundManagerDashboard = ({ classes, history }) => {
   if (userProfile.admin) {
     const bankingTabName = 'Banking';
     // Only add banking tab if user is admin and FF fundManagerBankingTab is true
-    if (fundManagerBankingTab || true) {
+    if (fundManagerBankingTab) {
       if (!fundTabs.includes(bankingTabName)) fundTabs.push(bankingTabName);
       if (!spvTabs.includes(bankingTabName)) spvTabs.push(bankingTabName);
     }
