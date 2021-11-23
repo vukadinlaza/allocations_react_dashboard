@@ -1,25 +1,46 @@
 import React, { useState } from 'react';
 import moment from 'moment';
-import { TextField, InputAdornment } from '@material-ui/core';
+import { InputAdornment, InputBase } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { nWithCommas } from '../../../../utils/numbers';
 import AllocationsTable from '../../../utils/AllocationsTable';
 import Loader from '../../../utils/Loader';
+import { useFetch } from '../../../../utils/hooks';
 
-const Investors = ({ classes, data, orgSlug, userProfile }) => {
-  const { investments } = data.deal;
+const Investors = ({ classes, orgSlug, userProfile }) => {
+  const BASE = 'appLhEikZfHgNQtrL'; // Accounting - Capital accounts
+  const DEAL_TRACKER_TABLE = 'Deal Tracker';
+  const { data, status } = useFetch(BASE, DEAL_TRACKER_TABLE);
   const [searchTerm, setSearchTerm] = useState('');
   const headers = [
-    { value: 'name', label: 'Name', type: 'name', align: 'left', alignHeader: true },
-    { value: 'email', label: 'Email', align: 'left', alignHeader: true },
+    { value: 'Investor Name', label: 'Name', type: 'name' },
+    { value: 'Email', label: 'Email' },
+    {
+      value: 'Total Amount Committed (with fees)',
+      label: 'Total Committed',
+      type: 'amount',
+      align: 'right',
+    },
+    {
+      value: 'Current Amount Contributed',
+      label: 'Amount Contributed ($)',
+      type: 'amount',
+      align: 'right',
+    },
+    { value: 'Gross Contribution Received', label: 'Total Contribution (%)' },
   ];
 
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
       case 'name':
-        return row.first_name ? `${row['first_name']} ${row['last_name']}` : '';
+        console.log(row);
+        return row['Investor Name'];
       case 'link':
         return <a href={`/investor/${row._id}/home`}>Link</a>;
+      case 'amount':
+        return `$${nWithCommas(row[headerValue])}`;
+      case 'date':
+        return moment(row[headerValue]).format('MM/DD/YYYY');
       default:
         return <div />;
     }
@@ -27,10 +48,9 @@ const Investors = ({ classes, data, orgSlug, userProfile }) => {
 
   if (['irishangels'].includes(orgSlug) || userProfile.admin) {
     headers.push({
-      value: '_id',
+      value: 'Deal',
       label: 'Dashboard Link',
       type: 'link',
-      align: 'right',
       alignHeader: true,
     });
   }
@@ -39,13 +59,13 @@ const Investors = ({ classes, data, orgSlug, userProfile }) => {
     setSearchTerm(e.target.value);
   };
 
-  let investorsData = investments.map((inv) => inv.investor).filter((investor) => investor);
-  if (!investorsData) return <Loader />;
+  let investorsData = data?.map((inv) => inv.fields);
+  if (status === 'fetching') return <Loader />;
 
   if (searchTerm) {
     investorsData = investorsData.filter((investor) =>
-      (investor?.first_name
-        ? `${investor['first_name']} ${investor['last_name']} ${investor.email}`
+      (investor['Investor Name']
+        ? `${investor['Investor Name']} ${investor.email}`
         : `${investor.email}`
       )
         .toUpperCase()
@@ -56,7 +76,8 @@ const Investors = ({ classes, data, orgSlug, userProfile }) => {
   return (
     <div className={classes.section}>
       <div className={classes.searchContainer}>
-        <TextField
+        <SearchIcon style={{ color: '#7688A0' }} />
+        <InputBase
           label="Search"
           placeholder="Search by investor name"
           id="search-field"
@@ -74,6 +95,7 @@ const Investors = ({ classes, data, orgSlug, userProfile }) => {
         />
       </div>
       <AllocationsTable
+        pagination
         data={investorsData}
         headers={headers}
         getCellContent={getCellContent}
