@@ -296,6 +296,7 @@ export function NumberOfInvestments({
           </ModalTooltip>
         </Grid>
         <TextField
+          type="number"
           value={buildData.number_of_investments}
           name="number_of_investments"
           onChange={(e) => {
@@ -465,6 +466,7 @@ export function MinimumInvestmentFund({
           </ModalTooltip>
         </Grid>
         <TextField
+          type="number"
           value={buildData.minimum_investment}
           name="minimum_investment"
           onChange={(e) => {
@@ -1297,7 +1299,6 @@ export function MinimumInvestment({
           value={buildData.minimum_investment}
           name="minimum_investment"
           InputProps={{
-            style: { height: '23px' },
             startAdornment: <InputAdornment position="start">$</InputAdornment>,
           }}
           onChange={(e) => {
@@ -1662,13 +1663,11 @@ export function InternationalCompanyStatus({
         </Grid>
         <ButtonSelector
           name="international_company_status"
-          gridCol="1fr 1fr 1fr"
           onChange={handleChange}
           currentValue={buildData.international_company_status}
           values={[
             { label: 'Yes', value: 'true' },
             { label: 'No', value: 'false' },
-            { label: 'Unknown', value: 'unknown' },
           ]}
         />
       </FormControl>
@@ -1723,13 +1722,11 @@ export function InternationalInvestorsStatus({
         </Grid>
         <ButtonSelector
           name="international_investors_status"
-          gridCol="1fr 1fr 1fr"
           onChange={handleChange}
           currentValue={buildData.international_investors_status}
           values={[
             { label: 'Yes', value: 'true' },
             { label: 'No', value: 'false' },
-            { label: 'Unknown', value: 'unknown' },
           ]}
         />
       </FormControl>

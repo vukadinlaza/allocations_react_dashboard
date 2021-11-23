@@ -148,7 +148,7 @@ const BuildDetails = ({
     management_fee_value: '2',
     master_series: '',
     minimum_investment: 10000,
-    need_gp_entity: '',
+    need_gp_entity: 'true',
     number_of_investments: null,
     offering_type: '506b',
     portfolio_company_name: '',
@@ -160,7 +160,7 @@ const BuildDetails = ({
     sectors: [],
     term_of_fund: '10',
     type: dealType,
-    type_of_investors: '',
+    type_of_investors: 'Accredited Investors (3(c)(1))',
   });
 
   const defaultMasterSeries = 'Atomizer LLC';
@@ -238,6 +238,9 @@ const BuildDetails = ({
       }
       if (buildData.need_gp_entity === 'false' && !buildData.gp_entity_name) {
         unvalidatedFieldsToFill('gp_entity_name', 'GP Entity Name');
+      }
+      if (!buildData.need_gp_entity) {
+        unvalidatedFieldsToFill('need_gp_entity', 'Need GP Entity');
       }
     }
 
@@ -347,8 +350,8 @@ const BuildDetails = ({
           management_fee_frequency: buildData.management_fee_frequency,
           manager_name: buildData.manager_name,
           master_series: buildData.master_series || defaultMasterSeries,
-          minimum_subscription_amount: buildData.minimum_investment,
-          number_of_investments: buildData.number_of_investments,
+          minimum_subscription_amount: Number(buildData.minimum_investment),
+          number_of_investments: Number(buildData.number_of_investments),
           offering_type: buildData.offering_type,
           portfolio_company_name: buildData.portfolio_company_name,
           portfolio_company_securities: buildData.portfolio_company_securities,
