@@ -155,6 +155,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '18px',
     fontWeight: '500',
   },
+  dropDownMenu: {
+    height: '225px',
+    overflowY: 'scroll',
+  },
 }));
 
 const SelectOrganization = ({
@@ -166,14 +170,14 @@ const SelectOrganization = ({
   history,
   openNewBuildModal,
 }) => {
-  const { loading, userProfile } = useAuth();
+  const { loading: userLoading, userProfile } = useAuth();
   const setCurrentOrganization = useSetCurrentOrganization();
-  const [organizations, setOrganizations] = useState([]);
+  const [organizations, setOrganizations] = useState(userProfile?.organizations_admin || []);
   const [selectedOrg, setSelectedOrg] = useState(null);
 
   useEffect(() => {
     if (!organizations?.length) setOrganizations(userProfile?.organizations_admin);
-  }, [loading]);
+  }, [userLoading]);
 
   return (
     <Modal open={isOpen} className={classes.modal} onClose={closeModal}>
@@ -247,10 +251,7 @@ const SelectOrganization = ({
                             return selectValue;
                           }}
                           displayEmpty
-                          // defaultValue="Select..."
-                          // value={selectedOrg?.name}
                           className={classes.orgSelect}
-                          defaultValue="Select.."
                           MenuProps={{
                             anchorOrigin: {
                               vertical: 'bottom',
@@ -260,14 +261,12 @@ const SelectOrganization = ({
                               vertical: 'top',
                               horizontal: 'left',
                             },
-                            // classes: {
-                            //     ".MuiMenu-root": { backgroundColor: 'red !important' }
-                            // },
+                            classes: {
+                              list: classes.dropDownMenu,
+                            },
                             getContentAnchorEl: null,
                           }}
-                          onChange={(e) => {
-                            setSelectedOrg(e.target.value);
-                          }}
+                          onChange={(e) => setSelectedOrg(e.target.value)}
                         >
                           <MenuItem
                             value="Create New Organization"
@@ -276,7 +275,7 @@ const SelectOrganization = ({
                             <img src={plusSignIcon} className={classes.createNewOrgMenuItemIcon} />
                             Create New Organization
                           </MenuItem>
-                          {organizations?.slice(0, 6).map((organization) => (
+                          {organizations?.map((organization) => (
                             <MenuItem key={organizations.name} value={organization}>
                               {organization.name}
                             </MenuItem>
@@ -343,8 +342,6 @@ const CreateNewOrganization = ({
   setEstimatedSPVQuanity,
   openTooltip,
   handleTooltip,
-  dealType,
-  history,
 }) => {
   return (
     <Modal
@@ -424,7 +421,7 @@ const CreateNewOrganization = ({
                           >
                             <HelpIcon
                               className={classes.helpIcon}
-                              onClick={(e) => handleTooltip('estimated_spv_quantity')}
+                              onClick={() => handleTooltip('estimated_spv_quantity')}
                             />
                           </ModalTooltip>
                         </Typography>
@@ -481,8 +478,8 @@ const CreateNewOrganization = ({
 export default function OrganizationModal(props) {
   const classes = useStyles();
   const history = useHistory();
-  const [page, setPage] = useState('select_org');
 
+  const [page, setPage] = useState('select_org');
   const [newOrganizationName, setNewOrganizationName] = useState('');
   const [estimatedSPVQuantity, setEstimatedSPVQuanity] = useState('');
   const [openTooltip, setOpenTooltip] = useState('');
