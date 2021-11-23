@@ -164,6 +164,7 @@ const SidebarDrawer = ({
       <OrganizationModal
         isOpen={openOrgModal}
         closeModal={() => setOpenOrgModal(false)}
+        openNewBuildModal={() => setOpenModal(true)}
         dealType={dealType}
       />
 
