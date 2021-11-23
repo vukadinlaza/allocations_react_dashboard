@@ -236,7 +236,6 @@ const SelectOrganization = ({
                         <Typography className={classes.selectTitle}>Select Organization</Typography>
                         <Select
                           variant="outlined"
-                          // displayEmpty
                           renderValue={(value) => {
                             const selectValue =
                               selectedOrg?.name ||
