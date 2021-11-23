@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Typography, TextField, Grid } from '@material-ui/core';
+import { Button, Typography, TextField, Grid, Select, MenuItem } from '@material-ui/core';
 import { useQuery, gql, useMutation } from '@apollo/client';
 import { get } from 'lodash';
 import { toast } from 'react-toastify';
@@ -149,6 +149,7 @@ const Banking = ({ deal_id, deal_NDvirtualAccountNum }) => {
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(true); // Show form if account creation flow has not yet started
   const [submitDisabled, setSubmitDisabled] = useState(true);
+  const [bankProvider, setBankProvider] = useState();
   const [accountInformation, setAccountInformation] = useState({
     ...defaultData,
     contactID: deal_id,
@@ -242,6 +243,35 @@ const Banking = ({ deal_id, deal_NDvirtualAccountNum }) => {
           <Typography variant="h6" style={{ paddingTop: '3rem' }}>
             {deal_NDvirtualAccountNum}
           </Typography>
+        </Grid>
+      </Grid>
+    );
+  }
+
+  if ((!bankProvider && !deal_NDvirtualAccountNum) || !refNumData) {
+    return (
+      <Grid container spacing={4} style={{ padding: '3rem', textAlign: 'center' }}>
+        <Typography variant="h5" style={{ paddingBottom: '2rem' }}>
+          Select a Bank Provider
+        </Typography>
+        <Grid item sm={12} md={12} lg={12}>
+          <Select
+            variant="outlined"
+            style={{ minWidth: '80%' }}
+            onChange={({ target }) => setBankProvider(target.value)}
+            value={bankProvider}
+          >
+            <MenuItem value="new_directions">New Directions</MenuItem>
+            <MenuItem value="mercury_bank" disabled>
+              Mercury Bank
+            </MenuItem>
+            <MenuItem value="modern_treasury_chase" disabled>
+              Modern Treasury / Chase Bank
+            </MenuItem>
+            <MenuItem value="first_republic" disabled>
+              First Republic
+            </MenuItem>
+          </Select>
         </Grid>
       </Grid>
     );
