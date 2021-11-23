@@ -126,7 +126,7 @@ function DealLandingPage() {
     <section className="LandingPage">
       <div className="flex-container">
         <DealHeader deal={deal} />
-        <InvestPanel deal={deal} deal_slug={deal_slug} organization={organization} />
+        {/* <InvestPanel deal={deal} deal_slug={deal_slug} organization={organization} /> */}
       </div>
       <div className="flex-container">
         <CoinvestorsPanel deal={deal} />
