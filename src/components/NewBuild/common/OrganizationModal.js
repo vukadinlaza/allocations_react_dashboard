@@ -123,6 +123,8 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '10px !important',
   },
   createNewOrgMenuItem: {
+    display: 'flex',
+    alignItems: 'center',
     color: '#186EFF',
   },
   createNewOrgMenuItemIcon: {
@@ -239,13 +241,13 @@ const SelectOrganization = ({
                             const selectValue =
                               selectedOrg?.name ||
                               (value === 'Create New Organization' && (
-                                <>
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
                                   <img
                                     src={plusSignIcon}
                                     className={classes.createNewOrgMenuItemIcon}
                                   />
-                                  {value}
-                                </>
+                                  <span className={classes.createNewOrgMenuItem}>{value}</span>
+                                </div>
                               )) ||
                               'Select...';
                             return selectValue;
