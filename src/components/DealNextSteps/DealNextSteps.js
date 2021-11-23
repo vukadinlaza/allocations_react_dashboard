@@ -100,7 +100,7 @@ function DealNextSteps() {
   const [open, setOpen] = useState(false);
 
   const { deal_slug, organization } = useParams();
-  const [openPayment, setOpenPayment] = useState(false);
+  const [openPayment, setOpenPayment] = useState(true);
   const [cryptoPaymentOpen, setCryptoPaymentOpen] = useState(false);
   const [wireInstructionsOpen, setWireInstructionsOpen] = useState(false);
 

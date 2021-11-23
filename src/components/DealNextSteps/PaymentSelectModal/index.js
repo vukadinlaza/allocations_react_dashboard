@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   innerPaper: {
     boxShadow: 'none !important',
+    background: '#186EFF',
   },
   modalHeader: {
     fontFamily: 'Roboto !important',
@@ -118,20 +119,23 @@ const PaymentModal = ({
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
             <Paper className={`${classes.modalPaper} ${classes.innerPaper}`}>
-              <Grid
-                container
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-end',
-                  background: '#F7F7F7',
-                }}
-              >
-                <Box>
+              <Grid container>
+                <Box
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    background: '#186EFF',
+                    width: '100%',
+                  }}
+                >
+                  <div style={{ color: '#FFFFFF', fontSize: '20px' }}>
+                    {' '}
+                    How would you like to invest?
+                  </div>
                   <CloseIcon
-                    style={{ cursor: 'pointer' }}
+                    style={{ cursor: 'pointer', marginTop: 'auto' }}
                     onClick={(e) => setOpen(false)}
-                    htmlColor="#2A2B54"
+                    htmlColor="#FFFFFF"
                   />
                 </Box>
               </Grid>
@@ -146,10 +150,6 @@ const PaymentModal = ({
               }}
             >
               <Grid container style={{ marginBottom: '25px' }}>
-                {' '}
-                <Grid item className={classes.modalText}>
-                  How would you like to invest?
-                </Grid>
                 <Grid item style={{ width: '100%', background: '#F7F7F7' }}>
                   <FormControl component="fieldset" style={{ width: '100%' }}>
                     <RadioGroup className={classes.radioGroup}>
