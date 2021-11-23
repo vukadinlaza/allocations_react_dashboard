@@ -47,7 +47,7 @@ export function PortfolioCompanyName({
           >
             <HelpIcon
               className={classes.helpIcon}
-              onClick={(e) => handleTooltip('portfolio_company_name')}
+              onClick={() => handleTooltip('portfolio_company_name')}
             />
           </ModalTooltip>
         </Typography>
@@ -99,7 +99,7 @@ export function PortfolioCompanySecurities({
           >
             <HelpIcon
               className={classes.helpIcon}
-              onClick={(e) => handleTooltip('portfolio_company_securities')}
+              onClick={() => handleTooltip('portfolio_company_securities')}
             />
           </ModalTooltip>
         </Typography>
@@ -139,7 +139,7 @@ export function ManagerName({
             openTooltip={openTooltip}
             id="manager_name"
           >
-            <HelpIcon className={classes.helpIcon} onClick={(e) => handleTooltip('manager_name')} />
+            <HelpIcon className={classes.helpIcon} onClick={() => handleTooltip('manager_name')} />
           </ModalTooltip>
         </Typography>
         <TextField
@@ -189,7 +189,7 @@ export function DealName({
           >
             <HelpIcon
               className={classes.helpIcon}
-              onClick={(e) => handleTooltip('portfolio_deal_name')}
+              onClick={() => handleTooltip('portfolio_deal_name')}
             />
           </ModalTooltip>
         </Typography>
@@ -258,69 +258,6 @@ export function NumberOfInvestments({
           }
           classes={{
             root: unfilledFields.includes('number_of_investments') && classes.unfilledField,
-          }}
-        />
-      </FormControl>
-    </Grid>
-  );
-}
-
-export function EstimatedSPVQuantity({
-  buildData,
-  handleChange,
-  handleTooltip,
-  setUnfilledFields,
-  unfilledFields,
-  customInputStyles,
-  classes,
-  openTooltip,
-}) {
-  return (
-    <Grid className={classes.inputGridItem} item xs={6}>
-      <FormControl required disabled variant="outlined" className={classes.formContainers}>
-        <Typography className={classes.formItemName}>
-          Estimated number of SPVs in the next 12 months?
-          <ModalTooltip
-            title="SPV amount in the next 12 months"
-            handleTooltip={handleTooltip}
-            tooltipContent={
-              <Typography color="inherit">
-                Should you select 5 or more SPVs, you will be eligible for a High Volume Partnership
-                benefits (such as, custom name of your Master Series LLC, custom name of your SPVs,
-                and others)
-              </Typography>
-            }
-            openTooltip={openTooltip}
-            id="estimated_spv_quantity"
-          >
-            <HelpIcon
-              className={classes.helpIcon}
-              onClick={(e) => handleTooltip('estimated_spv_quantity')}
-            />
-          </ModalTooltip>
-        </Typography>
-        <TextField
-          type="number"
-          value={buildData.estimated_spv_quantity}
-          name="estimated_spv_quantity"
-          onChange={(e) => {
-            const value = convertToPositiveIntOrNull(e.target.value);
-
-            const newEvent = {
-              target: {
-                name: 'estimated_spv_quantity',
-                value,
-              },
-            };
-
-            handleChange(newEvent);
-            setUnfilledFields((prev) => prev.filter((field) => field !== 'estimated_spv_quantity'));
-          }}
-          className={classes.inputBox}
-          variant="outlined"
-          inputProps={customInputStyles}
-          classes={{
-            root: unfilledFields.includes('estimated_spv_quantity') && classes.unfilledField,
           }}
         />
       </FormControl>
