@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
   },
 }));
-function TransferInstructions({ investmentAmount, transactionFee, totalDue }) {
+function TransferInstructions({ walletAddress }) {
   const classes = useStyles();
 
   return (
@@ -58,8 +58,7 @@ function TransferInstructions({ investmentAmount, transactionFee, totalDue }) {
         <Grid container item spacing={1} style={{ fontSize: '14px', margin: 'auto' }}>
           <Grid item style={{ display: 'flex', justifyContent: 'space-between' }} xs={12}>
             <div style={{ marginLeft: '1rem', fontSize: '20px', fontWeight: 'bold' }}>
-              0asdlkj3ASDFoawiejf0092q3rasDF
-              {/* // /* <b>{data?.getCryptoWalletAddress}</b> */}
+              {walletAddress}{' '}
               <Button
                 style={{ minWidth: '20px' }}
                 onClick={() => {

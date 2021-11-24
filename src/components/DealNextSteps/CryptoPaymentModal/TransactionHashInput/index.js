@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#2A2B54',
   },
 }));
-function TransferInstructions({ investmentAmount, transactionFee, totalDue }) {
+function TransferInstructions() {
   const classes = useStyles();
 
   return (
