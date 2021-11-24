@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, Avatar, Button, Box, CardMedia, Grid, LinearProgress } from '@material-ui/core';
+import {
+  Paper,
+  Avatar,
+  Button,
+  Box,
+  CardMedia,
+  Grid,
+  LinearProgress,
+  Typography,
+} from '@material-ui/core';
 import { HiOutlinePencil } from 'react-icons/hi';
 import { useStyles } from './style';
+import { SimpleBox } from './SimpleBox';
 
 function DealHeader({ deal }) {
   const { company_name, dealCoverImageKey, slug } = deal;
@@ -12,14 +22,19 @@ function DealHeader({ deal }) {
     : `https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`;
 
   const [img, setImg] = useState(key);
+  const [openTooltip, setOpenTooltip] = useState('');
 
   useEffect(() => {
     setImg(key);
   }, [dealCoverImageKey, slug, key]);
 
+  const handleTooltip = (id) => {
+    setOpenTooltip(id);
+  };
+
   return (
     <Paper className={classes.dealHeader}>
-      <Box display="flex" justifyContent="space-between">
+      <Box display="flex" justifyContent="space-between" style={{ backgroundColor: '' }}>
         <Box display="flex">
           <Avatar />
           <h1>{company_name}</h1>
@@ -29,11 +44,12 @@ function DealHeader({ deal }) {
         </Button>
       </Box>
 
-      <Grid container>
-        <Grid item xs={6}>
+      <Grid container style={{ backgroundColor: '', padding: '20px' }}>
+        <Grid item xs={6} style={{ backgroundColor: '', padding: '20px' }}>
           <CardMedia
+            style={{ backgroundColor: '' }}
             component="img"
-            height="140"
+            height="100%"
             width="140"
             alt="SPV Header Image"
             src={img}
@@ -42,11 +58,15 @@ function DealHeader({ deal }) {
             }
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={6} style={{ backgroundColor: '', padding: '20px' }}>
           <h3>Investment Progress</h3>
           <container>
             <h6 style={{ color: '#0561ff' }}>$320,000</h6>
-            <LinearProgress variant="determinate" value="10" />
+            <LinearProgress
+              variant="determinate"
+              value="10"
+              className={classes.BorderLinearProgress}
+            />
             <div style={{ float: 'right', backgroundColor: '', width: '100%' }}>
               <span style={{ float: 'right' }}>
                 Maximum Allocation:<span>$600,000</span>
@@ -73,6 +93,41 @@ function DealHeader({ deal }) {
                 Minimum Investment:<span>$600,000</span>
               </span>
             </div>
+          </div>
+          <div
+            style={{
+              backgroundColor: '',
+              display: 'flex',
+              padding: '10px',
+              justifyContent: 'center',
+            }}
+          >
+            <SimpleBox
+              title="Signing Date"
+              openTooltip={openTooltip}
+              handleTooltip={handleTooltip}
+              tooltipContent={
+                <Typography color="inherit">
+                  This is the total capital received into the private fund’s bank account (including
+                  loans and drawdowns)
+                </Typography>
+              }
+            >
+              <Typography style={{ fontSize: '18px' }}>11/12/2021</Typography>
+            </SimpleBox>
+            <SimpleBox
+              title="Wiring Date"
+              openTooltip={openTooltip}
+              handleTooltip={handleTooltip}
+              tooltipContent={
+                <Typography color="inherit">
+                  This is the total capital received into the private fund’s bank account (including
+                  loans and drawdowns)
+                </Typography>
+              }
+            >
+              <Typography style={{ fontSize: '18px' }}>11/12/2021</Typography>
+            </SimpleBox>
           </div>
         </Grid>
       </Grid>

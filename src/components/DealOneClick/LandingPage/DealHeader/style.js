@@ -14,8 +14,13 @@ export const useStyles = makeStyles({
     margin: '0',
     padding: '0',
     overflow: 'hidden',
-    // objectFit: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
+  },
+
+  BorderLinearProgress: {
+    height: '12px',
+    // borderRadius: '5px',
+    backgroundColor: '#E7E7E8',
   },
 });
