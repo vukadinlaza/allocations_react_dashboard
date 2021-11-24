@@ -502,8 +502,6 @@ const AdditionalInformation = ({
   state,
   zipCode,
   country,
-  estimatedSPVQuantity,
-  newOrganizationName,
   setZipcode,
   setCountry,
   setState,
@@ -511,8 +509,6 @@ const AdditionalInformation = ({
   setAddressLineTwo,
   setAddress,
   setMasterEntityName,
-  setNewOrganizationName,
-  setEstimatedSPVQuanity,
   openTooltip,
   handleTooltip,
 }) => {
@@ -790,7 +786,7 @@ export default function OrganizationModal(props) {
         masterEntity: {
           name: masterEntityName || 'Atomizer LLC',
           address: address || '8 The Green',
-          addressLineTwo: masterEntityName ? addressLineTwo : 'Suite 7105',
+          addressLineTwo: masterEntityName ? addressLineTwo : 'Suite A',
           city: city || 'Dover',
           state: state || 'Delaware',
           zipCode: zipCode || '19901',
