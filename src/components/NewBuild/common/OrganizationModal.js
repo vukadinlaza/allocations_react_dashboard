@@ -11,6 +11,7 @@ import {
   Select,
   MenuItem,
   TextField,
+  OutlinedInput,
 } from '@material-ui/core';
 import FormControl from '@material-ui/core/FormControl';
 import CloseIcon from '@material-ui/icons/Close';
@@ -31,36 +32,60 @@ const CREATE_ORG = gql`
       _id
       name
       slug
+      masterEntity {
+        name
+        address
+        addressLineTwo
+        city
+        state
+        zipCode
+        country
+      }
     }
   }
 `;
 
 const useStyles = makeStyles((theme) => ({
-  icon: {
-    height: '72px',
-    width: '72px',
+  modal: {
+    marginTop: '10vh',
     display: 'flex',
     justifyContent: 'center',
-    margin: '0px 0px 15px 0px',
-    borderRadius: '48px',
-    padding: '12px',
-    backgroundColor: '#ECF3FF',
+  },
+  modalContainer: {
+    width: '568px',
+    height: '328',
+  },
+  formControl: {
+    width: '100%',
+    height: '275px',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalPaperTitle: {
+    height: '67px',
+    borderRadius: '8px 8px 0 0 ',
+    padding: '18px 29px',
+    // maxHeight: 'calc(100% - 8vh)',
+    borderBottom: 'solid #E5E5E5 1px',
+  },
+  modalPaperBody: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    width: '100%',
+    margin: '.5rem',
+    padding: '1rem',
+    borderRadius: '8px',
+    boxShadow: 'none !important',
+    border: 'none !important',
   },
   helpIcon: {
     marginLeft: '0.2em',
     cursor: 'pointer',
     color: '#205DF5',
     fontSize: '15px',
-  },
-  warningIcon: {
-    height: '72px',
-    width: '72px',
-    display: 'flex',
-    justifyContent: 'center',
-    margin: '0px 0px 15px 0px',
-    borderRadius: '48px',
-    padding: '12px',
-    backgroundColor: '#F2CECC',
   },
   formItemName: {
     alignSelf: 'flex-start',
@@ -75,51 +100,11 @@ const useStyles = makeStyles((theme) => ({
   inputBox: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     boxShadow: '0px 3px 6px #0000000A',
-    borderRadius: '30px !important',
     padding: '0',
-    maxWidth: '568px',
+    maxWidth: '472px',
     width: '100%',
   },
-  modal: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  modalPaperBody: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    width: '100%',
-    margin: '.5rem',
-    padding: '1rem',
-    borderRadius: '8px',
-    boxShadow: 'none !important',
-    cursor: 'pointer',
-    border: 'solid #E5E5E5 1px',
-    '&:hover': {
-      boxShadow: '0px 5px 10px 2px rgba(225, 225, 225, .8) !important',
-    },
-  },
-  modalPaperTitle: {
-    marginTop: '8vh',
-    borderRadius: '1rem 1rem 0 0 ',
-    padding: '18px 29px',
-    maxHeight: 'calc(100% - 8vh)',
-    borderBottom: 'solid #E5E5E5 1px',
-  },
-
-  label: {
-    color: '#2A2B54',
-    fontWeight: 'bold',
-  },
-  typeBadge: {
-    backgroundColor: '#ECF3FF',
-    color: '#0461FF',
-    fontSize: '13px',
-    lineHeight: '16.41px',
-    borderRadius: '4px',
-    padding: '5px 10px',
-  },
-  cancelButton: {
+  previousButton: {
     marginTop: '11px',
     padding: '5px',
     cursor: 'pointer',
@@ -132,8 +117,12 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   orgSelect: {
-    width: '100%',
-    borderRadius: '10px !important',
+    width: '472px',
+    height: '48px',
+    borderRadius: '8px !important',
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderColor: '#CBD5E1',
+    },
   },
   createNewOrgMenuItem: {
     display: 'flex',
@@ -144,22 +133,8 @@ const useStyles = makeStyles((theme) => ({
     width: '12px',
     marginRight: '8px',
   },
-  typeBody: {
-    textAlign: 'left',
-    fontSize: '14px',
-    fontWeight: '400',
-    marginTop: '16px',
-  },
-  typeGrid: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    margin: '5px 0px 25px 0px',
-  },
   typeGroup: {
-    width: '92.5%',
+    width: '100%',
     margin: '20px',
     flexDirection: 'row',
   },
@@ -167,12 +142,31 @@ const useStyles = makeStyles((theme) => ({
     alignSelf: 'flex-start',
     marginBottom: '10px',
     color: '#000',
-    fontSize: '18px',
+    fontSize: '16px',
     fontWeight: '500',
   },
   dropDownMenu: {
     height: '225px',
     overflowY: 'scroll',
+  },
+  continueButton: {
+    marginTop: '20px',
+    width: '472px',
+    height: '48px',
+    borderRadius: '8px',
+    backgroundColor: '#186EFF',
+    '&:hover': {
+      backgroundColor: '#0558E7',
+    },
+    '&:focus': {
+      backgroundColor: '#0558E7',
+    },
+    '&:disabled': {
+      backgroundColor: '#CBD5E1',
+    },
+    '&:active': {
+      backgroundColor: '#0444B4',
+    },
   },
 }));
 
@@ -183,25 +177,27 @@ const SelectOrganization = ({
   classes,
   dealType,
   history,
+  openTooltip,
+  handleTooltip,
   openNewBuildModal,
   setCurrentOrganization,
 }) => {
   const { loading: userLoading, userProfile } = useAuth();
   const [organizations, setOrganizations] = useState(userProfile?.organizations_admin || []);
   const [selectedOrg, setSelectedOrg] = useState(null);
-  console.log('ORGS', organizations);
+
   useEffect(() => {
     if (!organizations?.length) setOrganizations(userProfile?.organizations_admin);
   }, [userLoading]);
-  console.log(selectedOrg);
+
   return (
     <Modal open={isOpen} className={classes.modal} onClose={closeModal}>
-      <Container style={{ width: '650px' }}>
-        <Grid container style={{ height: '100%', width: '90%', margin: 'auto' }}>
-          <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
+      <Container className={classes.modalContainer}>
+        <Grid container style={{ height: '100%', width: '100%', margin: 'auto' }}>
+          <Grid item style={{ height: '100%', width: '100%' }}>
             <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#186EFF' }}>
               <Grid container justifyContent="space-between">
-                <Typography variant="h6" style={{ color: '#fff' }}>
+                <Typography style={{ fontSize: '24px', fontWeight: '500', color: '#fff' }}>
                   Select Organization
                 </Typography>
                 <Box style={{ cursor: 'pointer' }} onClick={closeModal}>
@@ -212,20 +208,11 @@ const SelectOrganization = ({
             <Paper
               style={{
                 backgroundColor: '#FBFCFF',
-                borderRadius: '0 0 1rem 1rem',
+                borderRadius: '0 0 8px 8px',
                 width: '100%',
               }}
             >
-              <FormControl
-                component="fieldset"
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
+              <FormControl component="fieldset" className={classes.formControl}>
                 <Grid container className={classes.typeGroup}>
                   <Box
                     style={{
@@ -237,16 +224,22 @@ const SelectOrganization = ({
                     }}
                   >
                     <Paper className={classes.modalPaperBody}>
-                      <Grid
-                        item
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                          margin: '10px 10px 10px 5px',
-                        }}
-                      >
-                        <Typography className={classes.selectTitle}>Select Organization</Typography>
+                      <Grid item>
+                        <Typography className={classes.selectTitle}>
+                          Select Organization
+                          <ModalTooltip
+                            title="Organization"
+                            handleTooltip={handleTooltip}
+                            tooltipContent={<Typography color="inherit">TBD</Typography>}
+                            openTooltip={openTooltip}
+                            id="organization_name"
+                          >
+                            <HelpIcon
+                              className={classes.helpIcon}
+                              onClick={() => handleTooltip('organization_name')}
+                            />
+                          </ModalTooltip>
+                        </Typography>
                         <Select
                           variant="outlined"
                           renderValue={(value) => {
@@ -258,7 +251,7 @@ const SelectOrganization = ({
                                     src={plusSignIcon}
                                     className={classes.createNewOrgMenuItemIcon}
                                   />
-                                  <span className={classes.createNewOrgMenuItem}>{value}</span>
+                                  <span>{value}</span>
                                 </div>
                               )) ||
                               'Select...';
@@ -296,18 +289,16 @@ const SelectOrganization = ({
                           ))}
                         </Select>
                       </Grid>
-                      <Grid item className={classes.typeGrid}></Grid>
-                      <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
+                      <Grid
+                        item
+                        style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
+                      >
                         <Button
                           variant="contained"
                           color="primary"
                           size="large"
                           type="submit"
-                          style={{
-                            width: '70%',
-                            borderRadius: '8px',
-                            backgroundColor: '#186EFF',
-                          }}
+                          className={classes.continueButton}
                           disabled={!selectedOrg}
                           onClick={() => {
                             if (selectedOrg === 'Create New Organization') {
@@ -324,7 +315,7 @@ const SelectOrganization = ({
                       </Grid>
                       <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
                         <Typography
-                          className={classes.cancelButton}
+                          className={classes.previousButton}
                           onClick={() => {
                             openNewBuildModal();
                             closeModal();
@@ -350,18 +341,15 @@ const CreateNewOrganization = ({
   closeModal,
   setPage,
   classes,
-  dealType,
-  history,
   newOrganizationName,
   setNewOrganizationName,
   estimatedSPVQuantity,
   setEstimatedSPVQuanity,
-  setCurrentOrganization,
+  clearMasterEntityForm,
+  createOrganization,
   openTooltip,
   handleTooltip,
 }) => {
-  const [createOrganization, { data, loading, error }] = useMutation(CREATE_ORG);
-
   return (
     <Modal
       open={isOpen}
@@ -371,7 +359,7 @@ const CreateNewOrganization = ({
         closeModal();
       }}
     >
-      <Container style={{ width: '650px' }}>
+      <Container className={classes.modalContainer}>
         <Grid container style={{ height: '100%', width: '90%', margin: 'auto' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
             <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#186EFF' }}>
@@ -447,7 +435,12 @@ const CreateNewOrganization = ({
                         <TextField
                           value={estimatedSPVQuantity}
                           name="estimated_spv_quantity"
-                          onChange={(e) => setEstimatedSPVQuanity(e.target.value)}
+                          onChange={(e) => {
+                            setEstimatedSPVQuanity(e.target.value);
+                            if (e.target.value < 5) {
+                              clearMasterEntityForm();
+                            }
+                          }}
                           className={classes.inputBox}
                           variant="outlined"
                         />
@@ -462,32 +455,15 @@ const CreateNewOrganization = ({
                           color="primary"
                           size="large"
                           type="submit"
-                          style={{
-                            width: '70%',
-                            borderRadius: '8px',
-                            backgroundColor: '#186EFF',
-                          }}
+                          className={classes.continueButton}
                           onClick={() => {
                             ///// IF 5 OR MORE SPVS SEND TO NEXT MODAL TO COLLECT MORE INFO ////
                             if (estimatedSPVQuantity >= 5) {
                               setPage('additional_info');
                               return;
                             }
-
                             /////// IF LESS THAN 5 ESTIMATED SPVS CREATE NEW ORG HERE RIGHT AWAY THEN PUSH TO BUILD PAGE ////
-                            createOrganization({
-                              variables: {
-                                organization: {
-                                  name: newOrganizationName,
-                                  slug: newOrganizationName.split(' ').join('-'),
-                                },
-                              },
-                            }).then(({ data }) => {
-                              console.log(data.createOrganization);
-                              setCurrentOrganization(data.createOrganization);
-                              // history.push(`/new-build/${dealType}`)
-                              closeModal();
-                            });
+                            else createOrganization();
                           }}
                         >
                           Continue
@@ -495,7 +471,7 @@ const CreateNewOrganization = ({
                       </Grid>
                       <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
                         <Typography
-                          className={classes.cancelButton}
+                          className={classes.previousButton}
                           onClick={() => setPage('select_org')}
                         >
                           Previous
@@ -518,12 +494,13 @@ const AdditionalInformation = ({
   closeModal,
   setPage,
   classes,
+  createOrganization,
   masterEntityName,
   address,
   addressLineTwo,
   city,
   state,
-  zipcode,
+  zipCode,
   country,
   estimatedSPVQuantity,
   newOrganizationName,
@@ -551,7 +528,7 @@ const AdditionalInformation = ({
         closeModal();
       }}
     >
-      <Container style={{ width: '650px' }}>
+      <Container className={classes.modalContainer}>
         <Grid container style={{ height: '100%', width: '90%', margin: 'auto' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
             <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#186EFF' }}>
@@ -559,7 +536,13 @@ const AdditionalInformation = ({
                 <Typography variant="h6" style={{ color: '#fff' }}>
                   Additional Information
                 </Typography>
-                <Box style={{ cursor: 'pointer' }} onClick={closeModal}>
+                <Box
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    setPage('select_org');
+                    closeModal();
+                  }}
+                >
                   <CloseIcon htmlColor="#fff" />
                 </Box>
               </Grid>
@@ -690,8 +673,8 @@ const AdditionalInformation = ({
                           ))}
                         </Select>
                         <TextField
-                          value={zipcode}
-                          name="zipcode"
+                          value={zipCode}
+                          name="zipCode"
                           placeholder="Zip Code"
                           onChange={(e) => setZipcode(e.target.value)}
                           className={classes.inputBox}
@@ -701,7 +684,7 @@ const AdditionalInformation = ({
                       <Grid item style={{ marginTop: '20px' }}>
                         <Select
                           variant="outlined"
-                          renderValue={() => country || 'Country'}
+                          renderValue={() => country}
                           style={{ width: '90%' }}
                           displayEmpty
                           onChange={(e) => setCountry(e.target.value)}
@@ -734,16 +717,10 @@ const AdditionalInformation = ({
                           color="primary"
                           size="large"
                           type="submit"
-                          style={{
-                            width: '70%',
-                            borderRadius: '8px',
-                            backgroundColor: '#186EFF',
-                          }}
-                          onClick={() => {
-                            ///// CREATE NEW ORG HERE THEN PUSH TO BUILD PAGE
-                          }}
+                          className={classes.continueButton}
+                          onClick={createOrganization}
                           disabled={
-                            !masterEntityName || !address || !city || !state || !zipcode || !country
+                            !masterEntityName || !address || !city || !state || !zipCode || !country
                           }
                         >
                           Continue
@@ -751,7 +728,7 @@ const AdditionalInformation = ({
                       </Grid>
                       <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
                         <Typography
-                          className={classes.cancelButton}
+                          className={classes.previousButton}
                           onClick={() => setPage('create_new_org')}
                         >
                           Previous
@@ -774,8 +751,6 @@ export default function OrganizationModal(props) {
   const history = useHistory();
   const setCurrentOrganization = useSetCurrentOrganization();
 
-  const [page, setPage] = useState('select_org');
-
   const [newOrganizationName, setNewOrganizationName] = useState('');
   const [estimatedSPVQuantity, setEstimatedSPVQuanity] = useState('');
   const [masterEntityName, setMasterEntityName] = useState('');
@@ -783,9 +758,59 @@ export default function OrganizationModal(props) {
   const [addressLineTwo, setAddressLineTwo] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
-  const [zipcode, setZipcode] = useState('');
-  const [country, setCountry] = useState('');
+  const [zipCode, setZipcode] = useState('');
+  const [country, setCountry] = useState('United States');
 
+  const clearMasterEntityForm = () => {
+    setMasterEntityName('');
+    setAddress('');
+    setAddressLineTwo('');
+    setCity('');
+    setState('');
+    setZipcode('');
+    setCountry('United States');
+  };
+
+  const clearAllFields = () => {
+    setNewOrganizationName('');
+    setEstimatedSPVQuanity('');
+    clearMasterEntityForm();
+  };
+
+  const resetFlow = () => {
+    clearAllFields();
+    setPage('select_org');
+  };
+
+  const [createOrganization, { data, loading, error }] = useMutation(CREATE_ORG, {
+    variables: {
+      organization: {
+        name: newOrganizationName,
+        slug: newOrganizationName.split(' ').join('-'),
+        masterEntity: {
+          name: masterEntityName || 'Atomizer LLC',
+          address: address || '8 The Green',
+          addressLineTwo: masterEntityName ? addressLineTwo : 'Suite 7105',
+          city: city || 'Dover',
+          state: state || 'Delaware',
+          zipCode: zipCode || '19901',
+          country: country || 'United States',
+        },
+      },
+    },
+    onCompleted: ({ createOrganization }) => {
+      if (createOrganization?.name) {
+        console.log('DATA IT WORKED', createOrganization);
+        setCurrentOrganization(createOrganization);
+        resetFlow();
+        props.closeModal();
+      }
+      // history.push(`/new-build/${dealType}`)
+    },
+    onError: (err) => console.log('GRAPHQL ERRORRRR', err),
+  });
+
+  const [page, setPage] = useState('select_org');
   const [openTooltip, setOpenTooltip] = useState('');
 
   const handleTooltip = (id) => {
@@ -806,8 +831,9 @@ export default function OrganizationModal(props) {
     addressLineTwo,
     city,
     state,
-    zipcode,
+    zipCode,
     country,
+    createOrganization,
     setZipcode,
     setCountry,
     setState,
@@ -818,6 +844,7 @@ export default function OrganizationModal(props) {
     setNewOrganizationName,
     setEstimatedSPVQuanity,
     setPage,
+    clearMasterEntityForm,
     setCurrentOrganization,
     classes,
     handleTooltip,
