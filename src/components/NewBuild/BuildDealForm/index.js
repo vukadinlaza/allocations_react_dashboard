@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { Button, Paper, Grid, FormControl } from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
 import { useParams } from 'react-router';
+import Typography from '@material-ui/core/Typography';
 import BasicInfo from './FormComponents/TypeSelector/index';
 import UploadDocs from './FormComponents/UploadDocs/index';
 import { useAuth } from '../../../auth/useAuth';
@@ -25,12 +24,14 @@ import {
   OfferingType,
   ReportingAdviser,
   SideLetters,
+  AcceptedInvestorTypes,
 } from './FormFields';
 
 const CREATE_BUILD = gql`
   mutation createBuild($payload: Object) {
     deal: createBuild(payload: $payload) {
       _id
+      type
       high_volume_partner
       master_series
       phases {
@@ -116,7 +117,7 @@ const BuildDetails = ({
   organization,
 }) => {
   const classes = useStyles();
-  const { cryptoPaymentInBuild } = useFlags();
+
   const [buildData, setBuildData] = useState({
     accept_crypto: 'false',
     allocations_reporting_adviser: 'true',
@@ -127,14 +128,17 @@ const BuildDetails = ({
     custom_carry_fee: 'false',
     custom_investment_agreement: 'false',
     custom_management_fee: 'false',
+    custom_reporting_adviser: '',
     deal_stage: '',
     estimated_spv_quantity: null,
+    fund_name: '',
+    general_partner_representative: '',
+    gp_entity_name: null,
     high_volume_partner: false,
     international_company_status: 'false',
     international_company_country: '',
     international_investors_status: 'false',
     international_investors_countries: [],
-    custom_reporting_adviser: '',
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
@@ -144,6 +148,8 @@ const BuildDetails = ({
     management_fee_value: '2',
     master_series: '',
     minimum_investment: 10000,
+    need_gp_entity: 'true',
+    number_of_investments: null,
     offering_type: '506b',
     portfolio_company_name: '',
     portfolio_company_securities: '',
@@ -152,6 +158,9 @@ const BuildDetails = ({
     setup_cost: 20000,
     side_letters: 'false',
     sectors: [],
+    term_of_fund: '10',
+    type: dealType,
+    type_of_investors: 'Accredited Investors (3(c)(1))',
   });
 
   const defaultMasterSeries = 'Atomizer LLC';
@@ -173,91 +182,111 @@ const BuildDetails = ({
 
     const unvalidatedFields = [];
     const fieldsToFill = [];
+
+    const unvalidatedFieldsToFill = (fieldToFill, unvalidatedField) => {
+      fieldsToFill.push(fieldToFill);
+      unvalidatedFields.push(unvalidatedField);
+    };
     // fields always checked below
-    if (!buildData.portfolio_company_name) {
-      fieldsToFill.push('portfolio_company_name');
-      unvalidatedFields.push('Portfolio Company Name');
+    if (dealType === 'spv') {
+      if (!buildData.portfolio_company_name) {
+        unvalidatedFieldsToFill('portfolio_company_name', 'Portfolio Company Name');
+      }
+      if (!buildData.portfolio_company_securities) {
+        unvalidatedFieldsToFill('portfolio_company_securities', 'Portfolio Company Securities');
+      }
+      if (!buildData.portfolio_deal_name) {
+        unvalidatedFieldsToFill('portfolio_deal_name', 'Deal Name');
+      }
+      if (!buildData.manager_name) {
+        unvalidatedFieldsToFill('manager_name', 'Manager Name');
+      }
+      if (!buildData.representative) {
+        unvalidatedFieldsToFill('representative', 'Representative of Manager');
+      }
+      if (!buildData.estimated_spv_quantity && buildData.master_series === defaultMasterSeries) {
+        unvalidatedFieldsToFill('estimated_spv_quantity', 'Estimated Number of SPVs');
+      }
+      if (
+        buildData.master_series === defaultMasterSeries &&
+        buildData.estimated_spv_quantity >= 5
+      ) {
+        unvalidatedFieldsToFill('master_series', 'Master Series Name');
+      }
+      if (!buildData.accept_crypto) {
+        unvalidatedFieldsToFill('accept_crypto', 'Accept Crypto');
+      }
     }
-    if (!buildData.portfolio_company_securities) {
-      fieldsToFill.push('portfolio_company_securities');
-      unvalidatedFields.push('Portfolio Company Securities');
+    if (dealType === 'fund') {
+      if (!buildData.fund_name) {
+        unvalidatedFieldsToFill('fund_name', 'Fund Name');
+      }
+      if (!buildData.manager_name) {
+        unvalidatedFieldsToFill('manager_name', 'General Partner Name');
+      }
+      if (!buildData.general_partner_representative) {
+        unvalidatedFieldsToFill(
+          'general_partner_representative',
+          'General Partner Representative and Title',
+        );
+      }
+      if (!buildData.number_of_investments) {
+        unvalidatedFieldsToFill('number_of_investments', 'Number of Investments');
+      }
+      if (!buildData.type_of_investors) {
+        unvalidatedFieldsToFill('type_of_investors', 'Type of Investors');
+      }
+      if (buildData.need_gp_entity === 'false' && !buildData.gp_entity_name) {
+        unvalidatedFieldsToFill('gp_entity_name', 'GP Entity Name');
+      }
+      if (!buildData.need_gp_entity) {
+        unvalidatedFieldsToFill('need_gp_entity', 'Need GP Entity');
+      }
     }
-    if (!buildData.portfolio_deal_name) {
-      fieldsToFill.push('portfolio_deal_name');
-      unvalidatedFields.push('Deal Name');
-    }
-    if (!buildData.manager_name) {
-      fieldsToFill.push('manager_name');
-      unvalidatedFields.push('Manager Name');
-    }
-    if (!buildData.representative) {
-      fieldsToFill.push('representative');
-      unvalidatedFields.push('Representative of Manager');
-    }
-    if (!buildData.estimated_spv_quantity && buildData.master_series === defaultMasterSeries) {
-      fieldsToFill.push('estimated_spv_quantity');
-      unvalidatedFields.push('Estimated Number of SPVs');
-    }
+
     if (!buildData.minimum_investment) {
-      fieldsToFill.push('minimum_investment');
-      unvalidatedFields.push('Minimum Investment');
+      unvalidatedFieldsToFill('minimum_investment', 'Minimum Investment');
     }
     if (!buildData.sectors.length) {
-      fieldsToFill.push('sectors');
-      unvalidatedFields.push('Sectors');
+      unvalidatedFieldsToFill('sectors', 'Sectors');
     }
     if (!buildData.deal_stage.length) {
-      fieldsToFill.push('deal_stage');
-      unvalidatedFields.push('Deal Stage');
-    }
-    if (!buildData.accept_crypto) {
-      fieldsToFill.push('accept_crypto');
-      unvalidatedFields.push('Accept Crypto');
+      unvalidatedFieldsToFill('deal_stage', 'Deal Stage');
     }
 
     // conditionally checked fields below here
-    if (buildData.master_series === defaultMasterSeries && buildData.estimated_spv_quantity >= 5) {
-      fieldsToFill.push('master_series');
-      unvalidatedFields.push('Master Series Name');
-    }
     if (
       (!buildData.custom_management_fee || buildData.custom_management_fee === 'false') &&
       buildData.management_fee_value === 'Custom'
     ) {
-      fieldsToFill.push('custom_management_fee');
-      unvalidatedFields.push('Custom Management Fee');
+      unvalidatedFieldsToFill('custom_management_fee', 'Custom Management Fee');
     }
     if (
       (!buildData.custom_carry_fee || buildData.custom_carry_fee === 'false') &&
       buildData.carry_fee_value === 'Custom'
     ) {
-      fieldsToFill.push('custom_carry_fee');
-      unvalidatedFields.push('Custom Carry Fee');
+      unvalidatedFieldsToFill('custom_carry_fee', 'Custom Carry Fee');
     }
     if (
       !buildData.custom_reporting_adviser &&
       buildData.allocations_reporting_adviser === 'false'
     ) {
-      fieldsToFill.push('custom_reporting_adviser');
-      unvalidatedFields.push('Advisor Name');
+      unvalidatedFieldsToFill('custom_reporting_adviser', 'Advisor Name');
     }
     if (
       !buildData.international_company_country &&
       buildData.international_company_status === 'true'
     ) {
-      fieldsToFill.push('international_company_country');
-      unvalidatedFields.push('Country of International Company');
+      unvalidatedFieldsToFill('international_company_country', 'Country of International Company');
     }
     if (
       !buildData.international_investors_countries.length &&
       buildData.international_investors_status === 'true'
     ) {
-      fieldsToFill.push('international_investors_countries');
-      unvalidatedFields.push('Countries of International Investors');
-    }
-    if (!buildData.accept_crypto) {
-      fieldsToFill.push('accept_crypto');
-      unvalidatedFields.push('Accept Crypto');
+      unvalidatedFieldsToFill(
+        'international_investors_countries',
+        'Countries of International Investors',
+      );
     }
 
     setUnfilledFields(fieldsToFill);
@@ -298,8 +327,12 @@ const BuildDetails = ({
           },
           closing_date: buildData.closing_date,
           custom_investment_agreement: buildData.custom_investment_agreement,
+          custom_reporting_adviser: buildData.custom_reporting_adviser,
           deal_stage: buildData.deal,
           estimated_spv_quantity: Number(buildData.estimated_spv_quantity),
+          fund_name: buildData.fund_name,
+          general_partner_representative: buildData.general_partner_representative,
+          gp_entity_name: buildData.gp_entity_name,
           high_volume_partner: buildData.estimated_spv_quantity >= 5,
           international_company: {
             status: buildData.international_company_status,
@@ -309,7 +342,6 @@ const BuildDetails = ({
             status: buildData.international_investors_status,
             countries: buildData.international_investors_countries,
           },
-          custom_reporting_adviser: buildData.custom_reporting_adviser,
           management_fee: {
             type: buildData.management_fee_type,
             value: buildData.management_fee_value,
@@ -318,7 +350,9 @@ const BuildDetails = ({
           management_fee_frequency: buildData.management_fee_frequency,
           manager_name: buildData.manager_name,
           master_series: buildData.master_series || defaultMasterSeries,
-          minimum_subscription_amount: buildData.minimum_investment,
+          minimum_subscription_amount: Number(buildData.minimum_investment),
+          need_gp_entity: buildData.need_gp_entity,
+          number_of_investments: Number(buildData.number_of_investments),
           offering_type: buildData.offering_type,
           portfolio_company_name: buildData.portfolio_company_name,
           portfolio_company_securities: buildData.portfolio_company_securities,
@@ -327,6 +361,8 @@ const BuildDetails = ({
           sectors: buildData.sectors,
           setup_cost: buildData.setup_cost,
           side_letters: buildData.side_letters,
+          type: buildData.type,
+          type_of_investors: buildData.type_of_investors,
         },
       },
     });
@@ -342,7 +378,7 @@ const BuildDetails = ({
     const isNotCustomManagementFee =
       target.name === 'management_fee_value' && target.value !== 'Custom';
     const isNotCustomCarryFee = target.name === 'carry_fee_value' && target.value !== 'Custom';
-
+    const isGPEntityNeeded = target.name === 'need_gp_entity' && target.value === 'true';
     setBuildData((prev) => {
       const newBuildObject = {
         ...prev,
@@ -354,6 +390,7 @@ const BuildDetails = ({
         international_investors_countries: isNotInternationalInvestors
           ? []
           : prev.international_investors_countries,
+        gp_entity_name: isGPEntityNeeded ? null : prev.gp_entity_name,
         [target.name]: target.value,
       };
 
@@ -397,8 +434,9 @@ const BuildDetails = ({
             <ManagementFeeFrequency {...formFieldProps} />
             <CarryFee {...formFieldProps} />
             <SideLetters {...formFieldProps} />
-            <MinimumInvestment {...formFieldProps} />
-            {cryptoPaymentInBuild && <AcceptCrypto {...formFieldProps} />}
+            {dealType === 'spv' && <MinimumInvestment {...formFieldProps} />}
+            {dealType === 'fund' && <AcceptedInvestorTypes {...formFieldProps} />}
+            {dealType === 'spv' && <AcceptCrypto {...formFieldProps} />}
           </Grid>
         </form>
       </Paper>
@@ -495,7 +533,9 @@ export default function NewDealForm() {
     // if there is no build data/deal_id, we create a new build (default info pulled from the backend)
     if (organization) {
       if (!localStorage.getItem('buildData') && !localStorage.getItem('buildDeal')) {
-        createBuild({ variables: { payload: { organization_id: organization._id } } });
+        createBuild({
+          variables: { payload: { organization_id: organization._id, type: dealType } },
+        });
       }
     }
   }, [organization]);
