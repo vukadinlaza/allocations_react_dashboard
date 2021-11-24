@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { Button, Paper, Grid, FormControl } from '@material-ui/core';
@@ -115,7 +116,7 @@ const BuildDetails = ({
   organization,
 }) => {
   const classes = useStyles();
-
+  const { cryptoPaymentInBuild } = useFlags();
   const [buildData, setBuildData] = useState({
     accept_crypto: 'false',
     allocations_reporting_adviser: 'true',
@@ -397,7 +398,7 @@ const BuildDetails = ({
             <CarryFee {...formFieldProps} />
             <SideLetters {...formFieldProps} />
             <MinimumInvestment {...formFieldProps} />
-            <AcceptCrypto {...formFieldProps} />
+            {cryptoPaymentInBuild && <AcceptCrypto {...formFieldProps} />}
           </Grid>
         </form>
       </Paper>
