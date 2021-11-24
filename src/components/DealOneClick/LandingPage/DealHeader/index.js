@@ -59,6 +59,20 @@ function DealHeader({ deal }) {
             >
               INVEST
             </Button>
+            <div style={{ float: 'right', backgroundColor: '', width: '100%' }}>
+              <span style={{ float: 'left' }}>
+                Invest With:{' '}
+                <Button color="primary" variant="contained" disabled>
+                  USD
+                </Button>
+                <Button color="primary" variant="contained" disabled>
+                  USDC
+                </Button>
+              </span>
+              <span style={{ float: 'right' }}>
+                Minimum Investment:<span>$600,000</span>
+              </span>
+            </div>
           </div>
         </Grid>
       </Grid>
