@@ -103,6 +103,10 @@ const useStyles = makeStyles((theme) => ({
     padding: '0',
     maxWidth: '472px',
     width: '100%',
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderRadius: '8px',
+      borderColor: '#CBD5E1',
+    },
   },
   previousButton: {
     marginTop: '11px',
@@ -360,14 +364,20 @@ const CreateNewOrganization = ({
       }}
     >
       <Container className={classes.modalContainer}>
-        <Grid container style={{ height: '100%', width: '90%', margin: 'auto' }}>
+        <Grid container style={{ height: '100%', width: '100%', margin: 'auto' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
             <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#186EFF' }}>
               <Grid container justifyContent="space-between">
-                <Typography variant="h6" style={{ color: '#fff' }}>
+                <Typography style={{ fontSize: '24px', fontWeight: '500', color: '#fff' }}>
                   Create New Organization
                 </Typography>
-                <Box style={{ cursor: 'pointer' }} onClick={closeModal}>
+                <Box
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    setPage('select_org');
+                    closeModal();
+                  }}
+                >
                   <CloseIcon htmlColor="#fff" />
                 </Box>
               </Grid>
@@ -383,6 +393,7 @@ const CreateNewOrganization = ({
                 component="fieldset"
                 style={{
                   width: '100%',
+                  height: '375px',
                   display: 'flex',
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -401,7 +412,21 @@ const CreateNewOrganization = ({
                   >
                     <Paper className={classes.modalPaperBody}>
                       <Grid item>
-                        <Typography className={classes.formItemName}>Organization Name</Typography>
+                        <Typography className={classes.formItemName}>
+                          Organization Name
+                          <ModalTooltip
+                            title="Organization Name"
+                            handleTooltip={handleTooltip}
+                            tooltipContent={<Typography color="inherit">TBD</Typography>}
+                            openTooltip={openTooltip}
+                            id="organization_name"
+                          >
+                            <HelpIcon
+                              className={classes.helpIcon}
+                              onClick={() => handleTooltip('organization_name')}
+                            />
+                          </ModalTooltip>
+                        </Typography>
                         <TextField
                           value={newOrganizationName}
                           name="organization_name"
@@ -447,7 +472,7 @@ const CreateNewOrganization = ({
                       </Grid>
                       <Grid
                         item
-                        style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}
+                        style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
                       >
                         <Button
                           disabled={!newOrganizationName || !estimatedSPVQuantity}
