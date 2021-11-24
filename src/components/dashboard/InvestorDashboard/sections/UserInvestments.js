@@ -109,7 +109,10 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
     const rowOrg = row.deal?.organization;
     const capFields = (capitalAccounts || []).map((r) => r.fields);
     const capitalAccountInfo = capFields.find((r) => {
-      return _.get(r, 'Deal Name (webapp)[0]') === row?.deal?.company_name;
+      return (
+        _.get(r, 'Deal Name (webapp)[0]') === row?.deal?.company_name ||
+        _.get(r, 'Deal Name (webapp2)[0]') === row?.deal?.company_name
+      );
     });
     const actions = [
       {
