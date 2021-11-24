@@ -133,7 +133,7 @@ const BuildDetails = ({
     estimated_spv_quantity: null,
     fund_name: '',
     general_partner_representative: '',
-    gp_entity_name: '',
+    gp_entity_name: null,
     high_volume_partner: false,
     international_company_status: 'false',
     international_company_country: '',
@@ -351,6 +351,7 @@ const BuildDetails = ({
           manager_name: buildData.manager_name,
           master_series: buildData.master_series || defaultMasterSeries,
           minimum_subscription_amount: Number(buildData.minimum_investment),
+          need_gp_entity: buildData.need_gp_entity,
           number_of_investments: Number(buildData.number_of_investments),
           offering_type: buildData.offering_type,
           portfolio_company_name: buildData.portfolio_company_name,
@@ -377,9 +378,7 @@ const BuildDetails = ({
     const isNotCustomManagementFee =
       target.name === 'management_fee_value' && target.value !== 'Custom';
     const isNotCustomCarryFee = target.name === 'carry_fee_value' && target.value !== 'Custom';
-    const buildData = JSON.parse(localStorage.getItem('buildData'));
-    const isGPEntityNeeded =
-      buildData && buildData.gp_entity_name && buildData.need_gp_entity === 'true';
+    const isGPEntityNeeded = target.name === 'need_gp_entity' && target.value === 'true';
     setBuildData((prev) => {
       const newBuildObject = {
         ...prev,
@@ -391,7 +390,7 @@ const BuildDetails = ({
         international_investors_countries: isNotInternationalInvestors
           ? []
           : prev.international_investors_countries,
-        gp_entity_name: isGPEntityNeeded ? '' : prev.gp_entity_name,
+        gp_entity_name: isGPEntityNeeded ? null : prev.gp_entity_name,
         [target.name]: target.value,
       };
 
