@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Typography, TextField, Grid, Select, MenuItem } from '@material-ui/core';
 import { useQuery, gql, useMutation } from '@apollo/client';
-import { get } from 'lodash';
+import { get, omit } from 'lodash';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import Loader from '../../../utils/Loader';
@@ -37,8 +37,13 @@ const fields = [
     type: 'text',
   },
   {
-    displayName: 'Account Holder Legal Name',
-    prop: 'executorLegalName',
+    displayName: 'Account Holder Legal First Name',
+    prop: 'executorLegalNameFirstName',
+    type: 'text',
+  },
+  {
+    displayName: 'Account Holder Legal Last Name',
+    prop: 'executorLegalNameLastName',
     type: 'text',
   },
   {
@@ -67,7 +72,7 @@ const fields = [
   },
   {
     displayName: 'Country',
-    prop: 'country',
+    prop: 'countryCode',
     type: 'text',
     default: 'United States',
   },
@@ -196,16 +201,18 @@ const Banking = ({ deal_id, deal_NDvirtualAccountNum }) => {
 
   const createBankAccount = () => {
     setLoading(true);
-    toast.success('Success! Your request has been submitted.');
-    const dateOfBirth = moment(accountInformation.dateOfBirth).toISOString();
+    const dateOfBirth = moment(accountInformation.dateOfBirth).format('mm/dd/yyyy');
     accountInformation.phone = accountInformation.phone.replace('-', '');
-
+    const executorLegalName = `${accountInformation.executorLegalNameFirstName} ${accountInformation.executorLegalNameLastName}`;
     createNDBankAccount({
       variables: {
-        accountInfo: { ...accountInformation, dateOfBirth },
+        accountInfo: omit({ ...accountInformation, dateOfBirth, executorLegalName }, [
+          'executorLegalNameFirstName, executorLegalNameLastName',
+        ]),
       },
       onCompleted: (res) => {
         if (res.success) {
+          toast.success('Success! Your request has been submitted.');
           setLoading(false);
           setShowForm(false);
         }
