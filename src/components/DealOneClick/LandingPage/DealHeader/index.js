@@ -44,8 +44,22 @@ function DealHeader({ deal }) {
         </Grid>
         <Grid item xs={6}>
           <h3>Investment Progress</h3>
-          <h6 style={{ color: '#0561ff' }}>$320,000</h6>
-          <LinearProgress variant="determinate" value="10" />
+          <container>
+            <h6 style={{ color: '#0561ff' }}>$320,000</h6>
+            <LinearProgress variant="determinate" value="10" />
+            <div style={{ float: 'right', backgroundColor: '', width: '100%' }}>
+              <span style={{ float: 'right' }}>
+                Maximum Allocation:<span>$600,000</span>
+              </span>
+            </div>
+          </container>
+          <div>
+            <Button
+              style={{ float: 'right', backgroundColor: '#0561ff', width: '100%', color: 'white' }}
+            >
+              INVEST
+            </Button>
+          </div>
         </Grid>
       </Grid>
     </Paper>
