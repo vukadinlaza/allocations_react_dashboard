@@ -3,16 +3,16 @@ import { withStyles } from '@material-ui/core/styles';
 import { Typography, Tooltip } from '@material-ui/core';
 import HelpIcon from '@material-ui/icons/Help';
 import CloseIcon from '@material-ui/icons/Close';
-import { phone } from '../../../../utils/helpers';
+import { phone } from '../../../../../utils/helpers';
 
 const styles = (theme) => ({
   box: {
-    width: '40%',
-    height: '140px',
+    width: '20%',
+    height: '100px',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #00000029',
-    border: '1px solid #8493A640',
-    borderRadius: '10px',
+    // boxShadow: '0px 3px 6px #00000029',
+    // border: '1px solid #8493A640',
+    // borderRadius: '10px',
     margin: '20px',
     [theme.breakpoints.down(phone)]: {
       minWidth: '0 !important',
@@ -20,19 +20,19 @@ const styles = (theme) => ({
     },
   },
   boxContent: {
-    padding: '10px',
+    padding: '5px',
   },
   boxTitle: {
     fontSize: '18px',
   },
   boxTitleContainer: {
-    width: '100%',
-    height: '71px',
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    width: '70%',
+    // height: '71px',
+    // background: '#FFFFFF 0% 0% no-repeat padding-box',
     borderRadius: '10px 10px 0px 0px',
     display: 'flex',
     alignItems: 'center',
-    padding: '10px',
+    // padding: '10px',
   },
   boxTitleText: {
     display: 'flex',
@@ -127,7 +127,7 @@ export const ModalTooltip = withStyles(styles)(
   },
 );
 
-export const SimpleBox = withStyles(styles)(
+export const InvestingDetailsSimpleBox = withStyles(styles)(
   ({
     classes,
     title,

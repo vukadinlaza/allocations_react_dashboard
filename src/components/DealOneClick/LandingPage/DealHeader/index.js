@@ -11,7 +11,8 @@ import {
 } from '@material-ui/core';
 import { HiOutlinePencil } from 'react-icons/hi';
 import { useStyles } from './style';
-import { SimpleBox } from './SimpleBox';
+import { SimpleBox } from './widgets/SimpleBox';
+import { InvestingDetailsSimpleBox } from './widgets/InvestingDetailsSimpleBox';
 
 function DealHeader({ deal }) {
   const { company_name, dealCoverImageKey, slug } = deal;
@@ -106,6 +107,7 @@ function DealHeader({ deal }) {
               title="Signing Date"
               openTooltip={openTooltip}
               handleTooltip={handleTooltip}
+              id="signing"
               tooltipContent={
                 <Typography color="inherit">
                   This is the total capital received into the private fund’s bank account (including
@@ -119,6 +121,7 @@ function DealHeader({ deal }) {
               title="Wiring Date"
               openTooltip={openTooltip}
               handleTooltip={handleTooltip}
+              id="wiring"
               tooltipContent={
                 <Typography color="inherit">
                   This is the total capital received into the private fund’s bank account (including
@@ -131,6 +134,28 @@ function DealHeader({ deal }) {
           </div>
         </Grid>
       </Grid>
+      <Box display="flex" justifyContent="space-between" style={{ backgroundColor: '' }}>
+        <h5>INVESTING DETAILS</h5>
+      </Box>
+
+      {/* CREATE ARRAY AND MAP THROUGH IT FOR THE REST OF THE SIMILAR BOXES */}
+
+      <Box display="flex" justifyContent="space-between" style={{ backgroundColor: '' }}>
+        <InvestingDetailsSimpleBox
+          title="Offering Type"
+          openTooltip={openTooltip}
+          handleTooltip={handleTooltip}
+          id="offering"
+          tooltipContent={
+            <Typography color="inherit">
+              This is the total capital received into the private fund’s bank account (including
+              loans and drawdowns)
+            </Typography>
+          }
+        >
+          <Typography style={{ fontSize: '18px' }}>506c</Typography>
+        </InvestingDetailsSimpleBox>
+      </Box>
     </Paper>
   );
 }
