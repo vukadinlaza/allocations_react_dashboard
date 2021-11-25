@@ -11,7 +11,6 @@ import {
   Select,
   MenuItem,
   TextField,
-  OutlinedInput,
 } from '@material-ui/core';
 import FormControl from '@material-ui/core/FormControl';
 import CloseIcon from '@material-ui/icons/Close';
@@ -19,6 +18,7 @@ import HelpIcon from '@material-ui/icons/Help';
 import { makeStyles } from '@material-ui/core/styles';
 import { phone } from '../../../utils/helpers';
 import plusSignIcon from '../../../assets/plus-vector.svg';
+import plusSignBlackIcon from '../../../assets/plus-vector-black.svg';
 import { useAuth } from '../../../auth/useAuth';
 import { useHistory } from 'react-router';
 import { useSetCurrentOrganization } from '../../../state/current-organization';
@@ -45,134 +45,174 @@ const CREATE_ORG = gql`
   }
 `;
 
-const useStyles = makeStyles((theme) => ({
-  modal: {
-    marginTop: '10vh',
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  modalContainer: {
-    width: '568px',
-    height: '328',
-  },
-  formControl: {
-    width: '100%',
-    height: '275px',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalPaperTitle: {
-    height: '67px',
-    borderRadius: '8px 8px 0 0 ',
-    padding: '18px 29px',
-    // maxHeight: 'calc(100% - 8vh)',
-    borderBottom: 'solid #E5E5E5 1px',
-  },
-  modalPaperBody: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    width: '100%',
-    margin: '.5rem',
-    padding: '1rem',
-    borderRadius: '8px',
-    boxShadow: 'none !important',
-    border: 'none !important',
-  },
-  helpIcon: {
-    marginLeft: '0.2em',
-    cursor: 'pointer',
-    color: '#205DF5',
-    fontSize: '15px',
-  },
-  formItemName: {
-    alignSelf: 'flex-start',
-    color: '#2A2B54',
-    font: 'normal normal bold 17px/20px Roboto',
-    marginBottom: '10px',
-    [theme.breakpoints.down(phone)]: {
-      marginBottom: '14px',
-      marginLeft: '8px',
+const useStyles = makeStyles((theme) => {
+  const modalMarginMap = {
+    select_org: '10vh',
+    create_new_org: '10vh',
+    additional_info: '5vh',
+    default: '8vh',
+  };
+  return {
+    modal: {
+      marginTop: ({ page }) => modalMarginMap[page] || modalMarginMap.default,
+      display: 'flex',
+      justifyContent: 'center',
     },
-  },
-  inputBox: {
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #0000000A',
-    padding: '0',
-    maxWidth: '472px',
-    width: '100%',
-    '& .MuiOutlinedInput-notchedOutline': {
-      borderRadius: '8px',
-      borderColor: '#CBD5E1',
+    modalContainer: {
+      width: '568px',
+      height: '328',
     },
-  },
-  previousButton: {
-    marginTop: '11px',
-    padding: '5px',
-    cursor: 'pointer',
-    [theme.breakpoints.down(phone)]: {
-      marginBottom: '14px',
-      marginTop: '0px',
-      marginLeft: '0',
+    formControl: {
       width: '100%',
-      textAlign: 'center',
+      height: '275px',
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
-  },
-  orgSelect: {
-    width: '472px',
-    height: '48px',
-    borderRadius: '8px !important',
-    '& .MuiOutlinedInput-notchedOutline': {
-      borderColor: '#CBD5E1',
+    modalPaperTitle: {
+      height: '67px',
+      borderRadius: '8px 8px 0 0 ',
+      padding: '18px 29px',
+      // maxHeight: 'calc(100% - 8vh)',
+      borderBottom: 'solid #E5E5E5 1px',
     },
-  },
-  createNewOrgMenuItem: {
-    display: 'flex',
-    alignItems: 'center',
-    color: '#186EFF',
-  },
-  createNewOrgMenuItemIcon: {
-    width: '12px',
-    marginRight: '8px',
-  },
-  typeGroup: {
-    width: '100%',
-    margin: '20px',
-    flexDirection: 'row',
-  },
-  selectTitle: {
-    alignSelf: 'flex-start',
-    marginBottom: '10px',
-    color: '#000',
-    fontSize: '16px',
-    fontWeight: '500',
-  },
-  dropDownMenu: {
-    height: '225px',
-    overflowY: 'scroll',
-  },
-  continueButton: {
-    marginTop: '20px',
-    width: '472px',
-    height: '48px',
-    borderRadius: '8px',
-    backgroundColor: '#186EFF',
-    '&:hover': {
-      backgroundColor: '#0558E7',
+    modalPaperBody: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      width: '100%',
+      margin: '.5rem',
+      padding: '1rem',
+      marginTop: '0px',
+      marginBottom: '0px',
+      paddingTop: '0px',
+      paddingBottom: '0px',
+      borderRadius: '8px',
+      boxShadow: 'none !important',
+      border: 'none !important',
     },
-    '&:focus': {
-      backgroundColor: '#0558E7',
+    helpIcon: {
+      marginLeft: '0.2em',
+      cursor: 'pointer',
+      color: '#205DF5',
+      fontSize: '15px',
     },
-    '&:disabled': {
-      backgroundColor: '#CBD5E1',
+    formItemName: {
+      alignSelf: 'flex-start',
+      color: '#2A2B54',
+      font: 'normal normal bold 14px Roboto',
+      marginBottom: '10px',
+      [theme.breakpoints.down(phone)]: {
+        marginBottom: '14px',
+        marginLeft: '8px',
+      },
     },
-    '&:active': {
-      backgroundColor: '#0444B4',
+    inputBox: {
+      background: '#FFFFFF 0% 0% no-repeat padding-box',
+      boxShadow: '0px 3px 6px #0000000A',
+      padding: '0px',
+      maxWidth: '472px',
+      width: '100%',
+      '& .MuiOutlinedInput-notchedOutline': {
+        height: '48px',
+        borderRadius: '8px',
+        borderColor: '#CBD5E1',
+        top: '-8px',
+      },
+      '& .MuiOutlinedInput-input': {
+        fontSize: '14px',
+      },
     },
-  },
-}));
+    orgSelect: {
+      width: '472px',
+      borderRadius: '8px !important',
+      '& .MuiOutlinedInput-notchedOutline': {
+        borderColor: '#CBD5E1',
+        height: '48px',
+        top: '0px',
+      },
+    },
+    createNewOrgMenuItem: {
+      display: 'flex',
+      alignItems: 'center',
+      color: '#186EFF',
+    },
+    createNewOrgMenuItemIcon: {
+      width: '12px',
+      marginRight: '8px',
+    },
+    typeGroup: {
+      width: '100%',
+      // margin: '20px',
+      flexDirection: 'row',
+    },
+    selectTitle: {
+      alignSelf: 'flex-start',
+      marginBottom: '10px',
+      color: '#000',
+      fontSize: '16px',
+      fontWeight: '500',
+    },
+    dropDownMenu: {
+      height: '225px',
+      overflowY: 'scroll',
+    },
+    countrySelect: {
+      '& .MuiOutlinedInput-notchedOutline': {
+        borderRadius: '8px',
+        borderColor: '#CBD5E1',
+        height: '48px',
+        top: '0px',
+      },
+      '& .MuiSelect-select.MuiSelect-select': {
+        fontSize: '14px',
+      },
+    },
+    stateSelect: {
+      '& .MuiOutlinedInput-notchedOutline': {
+        borderRadius: '8px',
+        borderColor: '#CBD5E1',
+        height: '48px',
+        top: '1px',
+      },
+      '& .MuiSelect-select.MuiSelect-select': {
+        fontSize: '14px',
+      },
+    },
+    continueButton: {
+      marginTop: '20px',
+      width: '472px',
+      // height: '48px',
+      borderRadius: '8px',
+      backgroundColor: '#186EFF',
+      '&:hover': {
+        backgroundColor: '#0558E7',
+      },
+      '&:focus': {
+        backgroundColor: '#0558E7',
+      },
+      '&:disabled': {
+        backgroundColor: '#CBD5E1',
+      },
+      '&:active': {
+        backgroundColor: '#0444B4',
+      },
+    },
+    previousButton: {
+      marginTop: '11px',
+      padding: '5px',
+      cursor: 'pointer',
+      [theme.breakpoints.down(phone)]: {
+        marginBottom: '14px',
+        marginTop: '0px',
+        marginLeft: '0',
+        width: '100%',
+        textAlign: 'center',
+      },
+    },
+  };
+});
 
 const SelectOrganization = ({
   isOpen,
@@ -252,7 +292,7 @@ const SelectOrganization = ({
                               (value === 'Create New Organization' && (
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                   <img
-                                    src={plusSignIcon}
+                                    src={plusSignBlackIcon}
                                     className={classes.createNewOrgMenuItemIcon}
                                   />
                                   <span>{value}</span>
@@ -295,7 +335,7 @@ const SelectOrganization = ({
                       </Grid>
                       <Grid
                         item
-                        style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
+                        style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}
                       >
                         <Button
                           variant="contained"
@@ -385,7 +425,7 @@ const CreateNewOrganization = ({
             <Paper
               style={{
                 backgroundColor: '#FBFCFF',
-                borderRadius: '0 0 1rem 1rem',
+                borderRadius: '0 0 8px 8px',
                 width: '100%',
               }}
             >
@@ -428,6 +468,7 @@ const CreateNewOrganization = ({
                           </ModalTooltip>
                         </Typography>
                         <TextField
+                          size="small"
                           value={newOrganizationName}
                           name="organization_name"
                           onChange={(e) => setNewOrganizationName(e.target.value)}
@@ -458,6 +499,7 @@ const CreateNewOrganization = ({
                           </ModalTooltip>
                         </Typography>
                         <TextField
+                          size="small"
                           value={estimatedSPVQuantity}
                           name="estimated_spv_quantity"
                           onChange={(e) => {
@@ -550,11 +592,11 @@ const AdditionalInformation = ({
       }}
     >
       <Container className={classes.modalContainer}>
-        <Grid container style={{ height: '100%', width: '90%', margin: 'auto' }}>
+        <Grid container style={{ height: '100%', width: '100%', margin: 'auto' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
             <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#186EFF' }}>
               <Grid container justifyContent="space-between">
-                <Typography variant="h6" style={{ color: '#fff' }}>
+                <Typography style={{ fontSize: '24px', fontWeight: '500', color: '#fff' }}>
                   Additional Information
                 </Typography>
                 <Box
@@ -571,7 +613,7 @@ const AdditionalInformation = ({
             <Paper
               style={{
                 backgroundColor: '#FBFCFF',
-                borderRadius: '0 0 1rem 1rem',
+                borderRadius: '0 0 8px 8px',
                 width: '100%',
               }}
             >
@@ -579,6 +621,7 @@ const AdditionalInformation = ({
                 component="fieldset"
                 style={{
                   width: '100%',
+                  height: '550px',
                   display: 'flex',
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -615,6 +658,7 @@ const AdditionalInformation = ({
                           </ModalTooltip>
                         </Typography>
                         <TextField
+                          size="small"
                           value={masterEntityName}
                           name="master_entity_name"
                           onChange={(e) => setMasterEntityName(e.target.value)}
@@ -639,6 +683,7 @@ const AdditionalInformation = ({
                           </ModalTooltip>
                         </Typography>
                         <TextField
+                          size="small"
                           value={address}
                           name="address"
                           placeholder="Address Line 1"
@@ -649,6 +694,7 @@ const AdditionalInformation = ({
                       </Grid>
                       <Grid item style={{ marginTop: '20px' }}>
                         <TextField
+                          size="small"
                           value={addressLineTwo}
                           placeholder="Address Line 2 (Optional)"
                           name="address_line_two"
@@ -659,6 +705,7 @@ const AdditionalInformation = ({
                       </Grid>
                       <Grid item style={{ marginTop: '20px' }}>
                         <TextField
+                          size="small"
                           value={city}
                           placeholder="City"
                           name="city"
@@ -667,11 +714,15 @@ const AdditionalInformation = ({
                           variant="outlined"
                         />
                       </Grid>
-                      <Grid item style={{ display: 'flex', marginTop: '20px' }}>
+                      <Grid
+                        item
+                        style={{ display: 'flex', alignItems: 'center', marginTop: '12px' }}
+                      >
                         <Select
                           variant="outlined"
+                          className={classes.stateSelect}
                           renderValue={() => state || 'State'}
-                          style={{ width: '150px', marginRight: '15px' }}
+                          style={{ width: '250px', marginRight: '15px' }}
                           displayEmpty
                           onChange={(e) => setState(e.target.value)}
                           MenuProps={{
@@ -694,6 +745,7 @@ const AdditionalInformation = ({
                           ))}
                         </Select>
                         <TextField
+                          size="small"
                           value={zipCode}
                           name="zipCode"
                           placeholder="Zip Code"
@@ -702,12 +754,13 @@ const AdditionalInformation = ({
                           variant="outlined"
                         />
                       </Grid>
-                      <Grid item style={{ marginTop: '20px' }}>
+                      <Grid item style={{ marginTop: '4px' }}>
                         <Select
+                          fullWidth
                           variant="outlined"
                           renderValue={() => country}
-                          style={{ width: '90%' }}
                           displayEmpty
+                          className={classes.countrySelect}
                           onChange={(e) => setCountry(e.target.value)}
                           MenuProps={{
                             anchorOrigin: {
@@ -731,7 +784,7 @@ const AdditionalInformation = ({
                       </Grid>
                       <Grid
                         item
-                        style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}
+                        style={{ display: 'flex', justifyContent: 'center', marginTop: '0px' }}
                       >
                         <Button
                           variant="contained"
@@ -768,7 +821,9 @@ const AdditionalInformation = ({
 };
 
 export default function OrganizationModal(props) {
-  const classes = useStyles();
+  const [page, setPage] = useState('select_org');
+
+  const classes = useStyles({ page });
   const history = useHistory();
   const setCurrentOrganization = useSetCurrentOrganization();
 
@@ -807,7 +862,7 @@ export default function OrganizationModal(props) {
     variables: {
       organization: {
         name: newOrganizationName,
-        slug: newOrganizationName.split(' ').join('-'),
+        // slug: newOrganizationName.split(' ').join('-'),
         masterEntity: {
           name: masterEntityName || 'Atomizer LLC',
           address: address || '8 The Green',
@@ -831,7 +886,6 @@ export default function OrganizationModal(props) {
     onError: (err) => console.log('GRAPHQL ERRORRRR', err),
   });
 
-  const [page, setPage] = useState('select_org');
   const [openTooltip, setOpenTooltip] = useState('');
 
   const handleTooltip = (id) => {
