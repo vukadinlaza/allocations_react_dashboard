@@ -33,7 +33,7 @@ import InvestmentPage from './components/DealOneClick/InvestmentPage/InvestmentP
 import SuperAdminManager from './components/superadmin/Manager';
 
 // test
-import BuildSPVForm from './components/NewBuild/BuildSPVForm/index';
+import BuildDealForm from './components/NewBuild/BuildDealForm/index';
 
 import DealSetup from './components/deals/fund-manager/Setup';
 // import DealSetup from './components/DealSetup';
@@ -71,7 +71,7 @@ const App = () => {
               <PrivateRoute path="/submit-tax-documents" component={SubmitTaxDocs} />
               <PrivateRoute path="/demo" component={Demo} />
 
-              <PrivateRoute path="/new-build/:type" exact component={BuildSPVForm} />
+              <PrivateRoute path="/new-build/:type" exact component={BuildDealForm} />
               <PrivateRoute path="/profile/:id" component={ProfilePage} />
               <PrivateRoute path="/profile" component={Profile} />
               <PrivateRoute path="/deal-setup" component={DealSetup} />
