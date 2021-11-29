@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
+import _ from 'lodash';
 import {
   Container,
   Modal,
@@ -25,6 +26,7 @@ import { useSetCurrentOrganization } from '../../../state/current-organization';
 import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
 import countries from 'country-region-data';
 import states from 'usa-states';
+import { toast } from 'react-toastify';
 
 const CREATE_ORG = gql`
   mutation CreateOrganization($organization: OrganizationInput!) {
@@ -49,7 +51,7 @@ const useStyles = makeStyles((theme) => {
   const modalMarginMap = {
     select_org: '10vh',
     create_new_org: '10vh',
-    additional_info: '5vh',
+    high_volume_partnerships: '5vh',
     default: '8vh',
   };
   return {
@@ -74,7 +76,6 @@ const useStyles = makeStyles((theme) => {
       height: '67px',
       borderRadius: '8px 8px 0 0 ',
       padding: '18px 29px',
-      // maxHeight: 'calc(100% - 8vh)',
       borderBottom: 'solid #E5E5E5 1px',
     },
     modalPaperBody: {
@@ -124,6 +125,12 @@ const useStyles = makeStyles((theme) => {
         fontSize: '14px',
       },
     },
+    failedValidationStyle: {
+      '& .MuiOutlinedInput-notchedOutline': {
+        borderWidth: '2px',
+        borderColor: 'red',
+      },
+    },
     orgSelect: {
       width: '472px',
       borderRadius: '8px !important',
@@ -144,7 +151,6 @@ const useStyles = makeStyles((theme) => {
     },
     typeGroup: {
       width: '100%',
-      // margin: '20px',
       flexDirection: 'row',
     },
     selectTitle: {
@@ -180,10 +186,21 @@ const useStyles = makeStyles((theme) => {
         fontSize: '14px',
       },
     },
+    failedValidationStateSelect: {
+      '& .MuiOutlinedInput-notchedOutline': {
+        borderRadius: '8px',
+        borderColor: 'red',
+        borderWidth: '2px',
+        height: '48px',
+        top: '1px',
+      },
+      '& .MuiSelect-select.MuiSelect-select': {
+        fontSize: '14px',
+      },
+    },
     continueButton: {
       marginTop: '20px',
       width: '472px',
-      // height: '48px',
       borderRadius: '8px',
       backgroundColor: '#186EFF',
       '&:hover': {
@@ -326,9 +343,10 @@ const SelectOrganization = ({
                             <img src={plusSignIcon} className={classes.createNewOrgMenuItemIcon} />
                             Create New Organization
                           </MenuItem>
+
                           {organizations?.map((organization) => (
                             <MenuItem key={organizations.name} value={organization}>
-                              {organization.name}
+                              {_.truncate(organization.name, { length: 30 })}
                             </MenuItem>
                           ))}
                         </Select>
@@ -385,6 +403,8 @@ const CreateNewOrganization = ({
   closeModal,
   setPage,
   classes,
+  dealType,
+  history,
   newOrganizationName,
   setNewOrganizationName,
   estimatedSPVQuantity,
@@ -394,6 +414,23 @@ const CreateNewOrganization = ({
   openTooltip,
   handleTooltip,
 }) => {
+  const [failedValidationFields, setFailedValidationFields] = useState([]);
+  const validateFields = () => {
+    let allValid = true;
+    if (!newOrganizationName) {
+      setFailedValidationFields((prev) => [...prev, 'organization_name']);
+      allValid = false;
+    }
+    if (!estimatedSPVQuantity) {
+      setFailedValidationFields((prev) => [...prev, 'estimated_spv_quantity']);
+      allValid = false;
+    }
+    if (!allValid) {
+      toast.error('Please fill in all fields');
+    }
+    return allValid;
+  };
+
   return (
     <Modal
       open={isOpen}
@@ -469,11 +506,21 @@ const CreateNewOrganization = ({
                         </Typography>
                         <TextField
                           size="small"
+                          variant="outlined"
                           value={newOrganizationName}
                           name="organization_name"
-                          onChange={(e) => setNewOrganizationName(e.target.value)}
+                          onChange={(e) => {
+                            setNewOrganizationName(e.target.value);
+                            setFailedValidationFields((prev) =>
+                              prev.filter((field) => field !== 'organization_name'),
+                            );
+                          }}
                           className={classes.inputBox}
-                          variant="outlined"
+                          classes={{
+                            root:
+                              failedValidationFields.includes('organization_name') &&
+                              classes.failedValidationStyle,
+                          }}
                         />
                       </Grid>
                       <Grid item style={{ marginTop: '20px' }}>
@@ -500,16 +547,24 @@ const CreateNewOrganization = ({
                         </Typography>
                         <TextField
                           size="small"
+                          variant="outlined"
                           value={estimatedSPVQuantity}
                           name="estimated_spv_quantity"
                           onChange={(e) => {
                             setEstimatedSPVQuanity(e.target.value);
+                            setFailedValidationFields((prev) =>
+                              prev.filter((field) => field !== 'estimated_spv_quantity'),
+                            );
                             if (e.target.value < 5) {
                               clearMasterEntityForm();
                             }
                           }}
                           className={classes.inputBox}
-                          variant="outlined"
+                          classes={{
+                            root:
+                              failedValidationFields.includes('estimated_spv_quantity') &&
+                              classes.failedValidationStyle,
+                          }}
                         />
                       </Grid>
                       <Grid
@@ -517,20 +572,27 @@ const CreateNewOrganization = ({
                         style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
                       >
                         <Button
-                          disabled={!newOrganizationName || !estimatedSPVQuantity}
+                          // disabled={!newOrganizationName || !estimatedSPVQuantity}
                           variant="contained"
                           color="primary"
                           size="large"
                           type="submit"
                           className={classes.continueButton}
                           onClick={() => {
+                            // validate fields, if not valid, do nothing
+                            if (!validateFields()) return;
+
                             ///// IF 5 OR MORE SPVS SEND TO NEXT MODAL TO COLLECT MORE INFO ////
                             if (estimatedSPVQuantity >= 5) {
-                              setPage('additional_info');
+                              setPage('high_volume_partnerships');
                               return;
                             }
                             /////// IF LESS THAN 5 ESTIMATED SPVS CREATE NEW ORG HERE RIGHT AWAY THEN PUSH TO BUILD PAGE ////
-                            else createOrganization();
+                            else {
+                              createOrganization();
+                              history.push(`/new-build/${dealType}`);
+                              closeModal();
+                            }
                           }}
                         >
                           Continue
@@ -556,11 +618,13 @@ const CreateNewOrganization = ({
   );
 };
 
-const AdditionalInformation = ({
+const HighVolumePartnerships = ({
   isOpen,
   closeModal,
   setPage,
   classes,
+  dealType,
+  history,
   createOrganization,
   masterEntityName,
   address,
@@ -581,6 +645,34 @@ const AdditionalInformation = ({
 }) => {
   const statesConstructor = states.UsaStates;
   const usStates = new statesConstructor();
+  const [failedValidationFields, setFailedValidationFields] = useState([]);
+  const validateFields = () => {
+    let allValid = true;
+    if (!masterEntityName) {
+      setFailedValidationFields((prev) => [...prev, 'master_entity_name']);
+      allValid = false;
+    }
+    if (!city) {
+      setFailedValidationFields((prev) => [...prev, 'address']);
+      allValid = false;
+    }
+    if (!city) {
+      setFailedValidationFields((prev) => [...prev, 'city']);
+      allValid = false;
+    }
+    if (!state) {
+      setFailedValidationFields((prev) => [...prev, 'state']);
+      allValid = false;
+    }
+    if (!zipCode) {
+      setFailedValidationFields((prev) => [...prev, 'zipCode']);
+      allValid = false;
+    }
+    if (!allValid) {
+      toast.error('Please fill in all fields');
+    }
+    return allValid;
+  };
 
   return (
     <Modal
@@ -597,7 +689,7 @@ const AdditionalInformation = ({
             <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#186EFF' }}>
               <Grid container justifyContent="space-between">
                 <Typography style={{ fontSize: '24px', fontWeight: '500', color: '#fff' }}>
-                  Additional Information
+                  High Volume Partnerships
                 </Typography>
                 <Box
                   style={{ cursor: 'pointer' }}
@@ -659,11 +751,21 @@ const AdditionalInformation = ({
                         </Typography>
                         <TextField
                           size="small"
+                          variant="outlined"
                           value={masterEntityName}
                           name="master_entity_name"
-                          onChange={(e) => setMasterEntityName(e.target.value)}
+                          onChange={(e) => {
+                            setMasterEntityName(e.target.value);
+                            setFailedValidationFields((prev) =>
+                              prev.filter((field) => field !== 'master_entity_name'),
+                            );
+                          }}
                           className={classes.inputBox}
-                          variant="outlined"
+                          classes={{
+                            root:
+                              failedValidationFields.includes('master_entity_name') &&
+                              classes.failedValidationStyle,
+                          }}
                         />
                       </Grid>
                       <Grid item style={{ marginTop: '20px' }}>
@@ -684,12 +786,22 @@ const AdditionalInformation = ({
                         </Typography>
                         <TextField
                           size="small"
+                          variant="outlined"
                           value={address}
                           name="address"
                           placeholder="Address Line 1"
-                          onChange={(e) => setAddress(e.target.value)}
+                          onChange={(e) => {
+                            setAddress(e.target.value);
+                            setFailedValidationFields((prev) =>
+                              prev.filter((field) => field !== 'address'),
+                            );
+                          }}
                           className={classes.inputBox}
-                          variant="outlined"
+                          classes={{
+                            root:
+                              failedValidationFields.includes('address') &&
+                              classes.failedValidationStyle,
+                          }}
                         />
                       </Grid>
                       <Grid item style={{ marginTop: '20px' }}>
@@ -706,12 +818,22 @@ const AdditionalInformation = ({
                       <Grid item style={{ marginTop: '20px' }}>
                         <TextField
                           size="small"
+                          variant="outlined"
                           value={city}
                           placeholder="City"
                           name="city"
-                          onChange={(e) => setCity(e.target.value)}
+                          onChange={(e) => {
+                            setCity(e.target.value);
+                            setFailedValidationFields((prev) =>
+                              prev.filter((field) => field !== 'city'),
+                            );
+                          }}
                           className={classes.inputBox}
-                          variant="outlined"
+                          classes={{
+                            root:
+                              failedValidationFields.includes('city') &&
+                              classes.failedValidationStyle,
+                          }}
                         />
                       </Grid>
                       <Grid
@@ -720,11 +842,24 @@ const AdditionalInformation = ({
                       >
                         <Select
                           variant="outlined"
-                          className={classes.stateSelect}
+                          // className={classes.stateSelect}
+                          className={
+                            failedValidationFields.includes('state')
+                              ? classes.failedValidationStateSelect
+                              : classes.stateSelect
+                          }
                           renderValue={() => state || 'State'}
                           style={{ width: '250px', marginRight: '15px' }}
                           displayEmpty
-                          onChange={(e) => setState(e.target.value)}
+                          onChange={(e) => {
+                            setState(e.target.value);
+                            setFailedValidationFields((prev) =>
+                              prev.filter((field) => field !== 'state'),
+                            );
+                          }}
+                          // classes={{
+                          //     root: failedValidationFields.includes('state') && classes.failedValidationSelectStyle
+                          // }}
                           MenuProps={{
                             anchorOrigin: {
                               vertical: 'bottom',
@@ -746,12 +881,22 @@ const AdditionalInformation = ({
                         </Select>
                         <TextField
                           size="small"
+                          variant="outlined"
                           value={zipCode}
                           name="zipCode"
                           placeholder="Zip Code"
-                          onChange={(e) => setZipcode(e.target.value)}
+                          onChange={(e) => {
+                            setZipcode(e.target.value);
+                            setFailedValidationFields((prev) =>
+                              prev.filter((field) => field !== 'zipCode'),
+                            );
+                          }}
                           className={classes.inputBox}
-                          variant="outlined"
+                          classes={{
+                            root:
+                              failedValidationFields.includes('zipCode') &&
+                              classes.failedValidationStyle,
+                          }}
                         />
                       </Grid>
                       <Grid item style={{ marginTop: '4px' }}>
@@ -792,10 +937,12 @@ const AdditionalInformation = ({
                           size="large"
                           type="submit"
                           className={classes.continueButton}
-                          onClick={createOrganization}
-                          disabled={
-                            !masterEntityName || !address || !city || !state || !zipCode || !country
-                          }
+                          onClick={() => {
+                            if (!validateFields()) return;
+                            createOrganization();
+                            history.push(`/new-build/${dealType}`);
+                            closeModal();
+                          }}
                         >
                           Continue
                         </Button>
@@ -858,11 +1005,10 @@ export default function OrganizationModal(props) {
     setPage('select_org');
   };
 
-  const [createOrganization, { data, loading, error }] = useMutation(CREATE_ORG, {
+  const [createOrganization] = useMutation(CREATE_ORG, {
     variables: {
       organization: {
         name: newOrganizationName,
-        // slug: newOrganizationName.split(' ').join('-'),
         masterEntity: {
           name: masterEntityName || 'Atomizer LLC',
           address: address || '8 The Green',
@@ -876,14 +1022,18 @@ export default function OrganizationModal(props) {
     },
     onCompleted: ({ createOrganization }) => {
       if (createOrganization?.name) {
-        console.log('DATA IT WORKED', createOrganization);
         setCurrentOrganization(createOrganization);
         resetFlow();
-        props.closeModal();
+        toast.success(
+          `Success! New organization ${createOrganization?.name} successfully created!`,
+        );
+      } else {
+        toast.error('Something Went Wrong - Organization Not Created');
       }
-      // history.push(`/new-build/${dealType}`)
     },
-    onError: (err) => console.log('GRAPHQL ERRORRRR', err),
+    onError: (err) => {
+      toast.error('Something Went Wrong - Organization Not Created');
+    },
   });
 
   const [openTooltip, setOpenTooltip] = useState('');
@@ -895,7 +1045,7 @@ export default function OrganizationModal(props) {
   const pageMap = {
     select_org: SelectOrganization,
     create_new_org: CreateNewOrganization,
-    additional_info: AdditionalInformation,
+    high_volume_partnerships: HighVolumePartnerships,
   };
 
   const propsObj = {
