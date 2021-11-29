@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { InputAdornment, InputBase } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
@@ -11,6 +11,7 @@ const Investors = ({ classes, orgSlug, userProfile }) => {
   const BASE = 'appLhEikZfHgNQtrL'; // Accounting - Capital accounts
   const DEAL_TRACKER_TABLE = 'Deal Tracker';
   const { data, status } = useFetch(BASE, DEAL_TRACKER_TABLE);
+  const [dataWithEmails, setDataWithEmails] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const headers = [
     { value: 'Investor Name', label: 'Name', type: 'name' },
@@ -30,10 +31,37 @@ const Investors = ({ classes, orgSlug, userProfile }) => {
     { value: 'Gross Contribution Received', label: 'Total Contribution (%)' },
   ];
 
+  useEffect(() => {
+    if (data) {
+      Promise.all(
+        data.map(async (record) => {
+          const response = await fetch(
+            `https://api.airtable.com/v0/${BASE}/${DEAL_TRACKER_TABLE}/${record.fields.Email[0]}`,
+            {
+              headers: {
+                Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`, // API key
+                'Content-Type': 'application/json', // we will recive a json object
+              },
+            },
+          );
+          const resData = await response.json();
+          return {
+            ...record,
+            fields: {
+              ...record.fields,
+              Email: resData.fields.Email,
+            },
+          };
+        }),
+      )
+        .then((res) => setDataWithEmails(res))
+        .catch((error) => console.error(error));
+    }
+  }, [data]);
+
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
       case 'name':
-        console.log(row);
         return row['Investor Name'];
       case 'link':
         return <a href={`/investor/${row._id}/home`}>Link</a>;
@@ -59,7 +87,7 @@ const Investors = ({ classes, orgSlug, userProfile }) => {
     setSearchTerm(e.target.value);
   };
 
-  let investorsData = data?.map((inv) => inv.fields);
+  let investorsData = dataWithEmails?.map((inv) => inv.fields);
   if (status === 'fetching') return <Loader />;
 
   if (searchTerm) {
