@@ -201,7 +201,7 @@ const Banking = ({ deal_id, deal_NDvirtualAccountNum }) => {
 
   const createBankAccount = () => {
     setLoading(true);
-    const dateOfBirth = moment(accountInformation.dateOfBirth).format('mm/dd/yyyy');
+    const dateOfBirth = moment(new Date(accountInformation.dateOfBirth)).format('MM/DD/YYYY');
     accountInformation.phone = accountInformation.phone.replace('-', '');
     const executorLegalName = `${accountInformation.executorLegalNameFirstName} ${accountInformation.executorLegalNameLastName}`;
     const payload = omit({ ...accountInformation, dateOfBirth, executorLegalName }, [
