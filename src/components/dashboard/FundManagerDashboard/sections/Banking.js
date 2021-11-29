@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Typography, TextField, Grid } from '@material-ui/core';
+import { Button, Typography, TextField, Grid, Select, MenuItem } from '@material-ui/core';
 import { useQuery, gql, useMutation } from '@apollo/client';
-import { get } from 'lodash';
+import { get, omit } from 'lodash';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import Loader from '../../../utils/Loader';
@@ -37,8 +37,13 @@ const fields = [
     type: 'text',
   },
   {
-    displayName: 'Account Holder Legal Name',
-    prop: 'executorLegalName',
+    displayName: 'Account Holder Legal First Name',
+    prop: 'executorLegalNameFirstName',
+    type: 'text',
+  },
+  {
+    displayName: 'Account Holder Legal Last Name',
+    prop: 'executorLegalNameLastName',
     type: 'text',
   },
   {
@@ -67,7 +72,7 @@ const fields = [
   },
   {
     displayName: 'Country',
-    prop: 'country',
+    prop: 'countryCode',
     type: 'text',
     default: 'United States',
   },
@@ -145,10 +150,11 @@ const validatedDataDefault = fields.reduce((acc, val) => {
   return acc;
 }, {});
 
-const Banking = ({ deal_id }) => {
-  const [loading, setLoading] = useState(true);
+const Banking = ({ deal_id, deal_NDvirtualAccountNum }) => {
+  const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(true); // Show form if account creation flow has not yet started
   const [submitDisabled, setSubmitDisabled] = useState(true);
+  const [bankProvider, setBankProvider] = useState();
   const [accountInformation, setAccountInformation] = useState({
     ...defaultData,
     contactID: deal_id,
@@ -165,7 +171,14 @@ const Banking = ({ deal_id }) => {
     if (allFields.includes(false)) setSubmitDisabled(true);
   }, [validatedData]);
 
-  const [createNDBankAccount] = useMutation(CREATE_ND_BANK_ACCOUNT);
+  const [createNDBankAccount] = useMutation(CREATE_ND_BANK_ACCOUNT, {
+    onCompleted: (res) => {
+      if (res.createNDBankAccount.success) {
+        setLoading(false);
+        setShowForm(false);
+      }
+    },
+  });
 
   const { data: refNumData } = useQuery(REFERENCE_NUMBERS_BY_DEAL_ID, {
     variables: { deal_id },
@@ -188,19 +201,24 @@ const Banking = ({ deal_id }) => {
 
   const createBankAccount = () => {
     setLoading(true);
-    toast.success('Success! Your request has been submitted.');
-    const dateOfBirth = moment(accountInformation.dateOfBirth).toISOString();
+    const dateOfBirth = moment(accountInformation.dateOfBirth).format('mm/dd/yyyy');
     accountInformation.phone = accountInformation.phone.replace('-', '');
-
+    const executorLegalName = `${accountInformation.executorLegalNameFirstName} ${accountInformation.executorLegalNameLastName}`;
+    const payload = omit({ ...accountInformation, dateOfBirth, executorLegalName }, [
+      'executorLegalNameFirstName',
+      'executorLegalNameLastName',
+    ]);
     createNDBankAccount({
       variables: {
-        accountInfo: { ...accountInformation, dateOfBirth },
+        accountInfo: payload,
       },
-    }).then((res) => {
-      if (res.success) {
-        setLoading(false);
-        setShowForm(false);
-      }
+      onCompleted: (res) => {
+        if (res.success) {
+          toast.success('Success! Your request has been submitted.');
+          setLoading(false);
+          setShowForm(false);
+        }
+      },
     });
   };
 
@@ -218,12 +236,74 @@ const Banking = ({ deal_id }) => {
   };
 
   // Ref number loading - to determine showForm state
+
   if (loading)
     return (
       <>
         <Loader />
       </>
     );
+
+  if (deal_NDvirtualAccountNum) {
+    return (
+      <Grid container spacing={4} style={{ padding: '3rem', textAlign: 'center' }}>
+        <Grid item sm={12} md={12} lg={12}>
+          <Typography variant="h5">New Directions Virtual Account Number</Typography>
+          <Typography variant="h6" style={{ paddingTop: '3rem' }}>
+            {deal_NDvirtualAccountNum}
+          </Typography>
+        </Grid>
+      </Grid>
+    );
+  }
+  if (refNumData?.referenceNumbersByDealId.length > 0) {
+    return (
+      <Grid container spacing={4} style={{ padding: '3rem', textAlign: 'center' }}>
+        <Grid item sm={12} md={12} lg={12}>
+          <Typography variant="h5" style={{ paddingBottom: '2rem' }}>
+            Congratulations!
+          </Typography>
+          <Typography variant="h5">
+            Your account information has been submitted to New Direction Bank and is currently
+            processing.
+          </Typography>
+          <Typography variant="h6" style={{ paddingTop: '3rem' }}>
+            You will be notified within 24 hours on the status of the account.
+          </Typography>
+        </Grid>
+      </Grid>
+    );
+  }
+
+  if ((!bankProvider && !deal_NDvirtualAccountNum) || !refNumData) {
+    return (
+      <Grid container spacing={4} style={{ padding: '3rem', textAlign: 'center' }}>
+        <Typography variant="h5" style={{ paddingBottom: '2rem' }}>
+          Select a Bank Provider
+        </Typography>
+        <Grid item sm={12} md={12} lg={12}>
+          <Select
+            variant="outlined"
+            style={{ minWidth: '80%' }}
+            onChange={({ target }) => setBankProvider(target.value)}
+            value={bankProvider}
+          >
+            <MenuItem value="new_directions">New Directions</MenuItem>
+            <MenuItem value="mercury_bank" disabled>
+              Mercury Bank
+            </MenuItem>
+            <MenuItem value="modern_treasury_chase" disabled>
+              Modern Treasury / Chase Bank
+            </MenuItem>
+            <MenuItem value="first_republic" disabled>
+              First Republic
+            </MenuItem>
+          </Select>
+        </Grid>
+      </Grid>
+    );
+  }
+
   return (
     <>
       {showForm === false && (
