@@ -16,7 +16,6 @@ import PieIcon from '../../../../../assets/buildPie.svg';
 import { ModalTooltip } from '../../../../dashboard/FundManagerDashboard/widgets';
 import {
   DealName,
-  EstimatedSPVQuantity,
   ManagerName,
   ClosingDate,
   PortfolioCompanyName,
@@ -25,7 +24,6 @@ import {
   NumberOfInvestments,
   Representative,
   DealStage,
-  MasterSeries,
   FundName,
   GeneralPartnerName,
   RepresentativeGeneralPartnerAndTitle,
@@ -220,12 +218,6 @@ export default function TypeSelector({
           )}
           {/* FOURTH ROW */}
           <DealStage {...formFieldProps} />
-          {dealType === 'spv' && !buildData.high_volume_partner && (
-            <EstimatedSPVQuantity {...formFieldProps} />
-          )}
-          {dealType === 'spv' &&
-            !buildData.high_volume_partner &&
-            buildData.estimated_spv_quantity >= 5 && <MasterSeries {...formFieldProps} />}
           <Sectors {...formFieldProps} />
         </Grid>
       </form>

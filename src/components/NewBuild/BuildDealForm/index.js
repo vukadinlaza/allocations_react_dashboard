@@ -130,7 +130,6 @@ const BuildDetails = ({
     custom_management_fee: 'false',
     custom_reporting_adviser: null,
     deal_stage: '',
-    estimated_spv_quantity: null,
     fund_name: '',
     general_partner_representative: '',
     gp_entity_name: null,
@@ -146,7 +145,6 @@ const BuildDetails = ({
     management_fee_frequency: 'one time',
     management_fee_type: 'percent',
     management_fee_value: '2',
-    master_series: '',
     minimum_investment: 10000,
     need_gp_entity: 'true',
     number_of_investments: null,
@@ -162,18 +160,6 @@ const BuildDetails = ({
     type: dealType,
     type_of_investors: 'Accredited Investors (3(c)(1))',
   });
-
-  const defaultMasterSeries = 'Atomizer LLC';
-
-  useEffect(() => {
-    if (initialDeal?.high_volume_partner) {
-      setBuildData((prev) => ({
-        ...prev,
-        master_series: initialDeal?.master_series,
-        high_volume_partner: true,
-      }));
-    }
-  }, [initialDeal]);
 
   const [unfilledFields, setUnfilledFields] = useState([]);
 
@@ -203,15 +189,6 @@ const BuildDetails = ({
       }
       if (!buildData.representative) {
         unvalidatedFieldsToFill('representative', 'Representative of Manager');
-      }
-      if (!buildData.estimated_spv_quantity && buildData.master_series === defaultMasterSeries) {
-        unvalidatedFieldsToFill('estimated_spv_quantity', 'Estimated Number of SPVs');
-      }
-      if (
-        buildData.master_series === defaultMasterSeries &&
-        buildData.estimated_spv_quantity >= 5
-      ) {
-        unvalidatedFieldsToFill('master_series', 'Master Series Name');
       }
       if (!buildData.accept_crypto) {
         unvalidatedFieldsToFill('accept_crypto', 'Accept Crypto');
@@ -329,11 +306,9 @@ const BuildDetails = ({
           custom_investment_agreement: buildData.custom_investment_agreement,
           custom_reporting_adviser: buildData.custom_reporting_adviser,
           deal_stage: buildData.deal,
-          estimated_spv_quantity: Number(buildData.estimated_spv_quantity),
           fund_name: buildData.fund_name,
           general_partner_representative: buildData.general_partner_representative,
           gp_entity_name: buildData.gp_entity_name,
-          high_volume_partner: buildData.estimated_spv_quantity >= 5,
           international_company: {
             status: buildData.international_company_status,
             country: buildData.international_company_country,
@@ -349,7 +324,6 @@ const BuildDetails = ({
           },
           management_fee_frequency: buildData.management_fee_frequency,
           manager_name: buildData.manager_name,
-          master_series: buildData.master_series || defaultMasterSeries,
           minimum_subscription_amount: Number(buildData.minimum_investment),
           need_gp_entity: buildData.need_gp_entity,
           number_of_investments: Number(buildData.number_of_investments),
@@ -373,7 +347,6 @@ const BuildDetails = ({
       target.name === 'international_company_status' && (target.value === 'false' || 'unknown');
     const isNotInternationalInvestors =
       target.name === 'international_investors_status' && (target.value === 'false' || 'unknown');
-    const isNotMasterSeries = target.name === 'estimated_spv_quantity' && target.value < 5;
     const isAllocationsTheAdvisor = target.name === 'allocations_reporting_adviser' && target.value;
     const isNotCustomManagementFee =
       target.name === 'management_fee_value' && target.value !== 'Custom';
@@ -382,7 +355,6 @@ const BuildDetails = ({
     setBuildData((prev) => {
       const newBuildObject = {
         ...prev,
-        master_series: isNotMasterSeries ? null : prev.master_series,
         custom_reporting_adviser: isAllocationsTheAdvisor ? '' : prev.custom_reporting_adviser,
         custom_management_fee: isNotCustomManagementFee ? 'false' : prev.custom_management_fee,
         custom_carry_fee: isNotCustomCarryFee ? 'false' : prev.custom_carry_fee,

@@ -389,7 +389,7 @@ export function RepresentativeGeneralPartnerAndTitle({
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>
-            Representative of the General Partner and it's Title
+            Representative of the General Partner and its Title
           </Typography>
           <ModalTooltip
             title="Representative of the General Partner and it's Title"
@@ -581,71 +581,6 @@ export function GPEntityName({
   );
 }
 
-export function EstimatedSPVQuantity({
-  buildData,
-  handleChange,
-  handleTooltip,
-  setUnfilledFields,
-  unfilledFields,
-  customInputStyles,
-  classes,
-  openTooltip,
-}) {
-  return (
-    <Grid className={classes.inputGridItem} item xs={6}>
-      <FormControl required disabled variant="outlined" className={classes.formContainers}>
-        <Grid className={classes.inputLabelWithTooltip} item xs={12}>
-          <Typography className={classes.formItemName}>
-            Estimated number of SPVs in the next 12 months?
-          </Typography>
-          <ModalTooltip
-            title="SPV amount in the next 12 months"
-            handleTooltip={handleTooltip}
-            tooltipContent={
-              <Typography color="inherit">
-                Should you select 5 or more SPVs, you will be eligible for a High Volume Partnership
-                benefits (such as, custom name of your Master Series LLC, custom name of your SPVs,
-                and others)
-              </Typography>
-            }
-            openTooltip={openTooltip}
-            id="estimated_spv_quantity"
-          >
-            <HelpIcon
-              className={classes.helpIcon}
-              onClick={() => handleTooltip('estimated_spv_quantity')}
-            />
-          </ModalTooltip>
-        </Grid>
-        <TextField
-          type="number"
-          value={buildData.estimated_spv_quantity}
-          name="estimated_spv_quantity"
-          onChange={(e) => {
-            const value = convertToPositiveIntOrNull(e.target.value);
-
-            const newEvent = {
-              target: {
-                name: 'estimated_spv_quantity',
-                value,
-              },
-            };
-
-            handleChange(newEvent);
-            setUnfilledFields((prev) => prev.filter((field) => field !== 'estimated_spv_quantity'));
-          }}
-          className={classes.inputBox}
-          variant="outlined"
-          inputProps={customInputStyles}
-          classes={{
-            root: unfilledFields.includes('estimated_spv_quantity') && classes.unfilledField,
-          }}
-        />
-      </FormControl>
-    </Grid>
-  );
-}
-
 export function ClosingDate({
   buildData,
   handleChange,
@@ -741,7 +676,7 @@ export function Sectors({
       control: (styles) => ({
         ...styles,
         minHeight: 60,
-        maxWidth: 1208,
+        maxWidth: 568,
         cursor: 'pointer',
         border: unfilledFields.includes('sectors') ? '2px solid red' : '1pm solid hsl(0, 0%, 80%)',
       }),
@@ -776,7 +711,7 @@ export function Sectors({
   }
 
   return (
-    <Grid className={classes.inputGridItem} item xs={12}>
+    <Grid className={classes.inputGridItem} item xs={6}>
       <Grid className={classes.inputLabelWithTooltip} item xs={12}>
         <Typography className={classes.formItemName}>Sector(s)</Typography>
         <ModalTooltip
@@ -910,54 +845,6 @@ export function DealStage({
           handleChange={handleChange}
           setUnfilledFields={setUnfilledFields}
           unfilledFields={unfilledFields}
-        />
-      </FormControl>
-    </Grid>
-  );
-}
-
-export function MasterSeries({
-  buildData,
-  handleChange,
-  handleTooltip,
-  setUnfilledFields,
-  unfilledFields,
-  customInputStyles,
-  classes,
-  openTooltip,
-}) {
-  return (
-    <Grid className={classes.inputGridItem} item xs={12}>
-      <FormControl required disabled variant="outlined" className={classes.formContainers}>
-        <Grid className={classes.inputLabelWithTooltip} item xs={12}>
-          <Typography className={classes.formItemName}>Master Series Name</Typography>
-          <ModalTooltip
-            title="Master Series Name"
-            handleTooltip={handleTooltip}
-            tooltipContent={
-              <Typography color="inherit">
-                Please indicate the name of your SPV (applicable if you are a HVP)
-              </Typography>
-            }
-            openTooltip={openTooltip}
-            id="master_series"
-          >
-            <HelpIcon className={classes.helpIcon} onClick={() => handleTooltip('master_series')} />
-          </ModalTooltip>
-        </Grid>
-        <TextField
-          value={buildData.master_series}
-          name="master_series"
-          onChange={handleChange}
-          className={`${classes.inputBox} ${classes.wideInputBox}`}
-          variant="outlined"
-          inputProps={customInputStyles}
-          onClick={() =>
-            setUnfilledFields((prev) => prev.filter((field) => field !== 'master_series'))
-          }
-          classes={{
-            root: unfilledFields.includes('master_series') && classes.unfilledField,
-          }}
         />
       </FormControl>
     </Grid>
