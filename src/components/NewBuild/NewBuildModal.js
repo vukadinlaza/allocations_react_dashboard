@@ -980,7 +980,6 @@ export default function NewBuildModal(props) {
   const classes = useStyles({ page: props.page });
   const history = useHistory();
   const setCurrentOrganization = useSetCurrentOrganization();
-
   const [newOrganizationName, setNewOrganizationName] = useState('');
   const [estimatedSPVQuantity, setEstimatedSPVQuanity] = useState('');
   const [masterEntityName, setMasterEntityName] = useState('');
@@ -1030,14 +1029,17 @@ export default function NewBuildModal(props) {
     onCompleted: ({ createOrganization }) => {
       if (createOrganization?.name) {
         setCurrentOrganization(createOrganization);
+        props.updateSideBarOrganizationValue(createOrganization?.name);
         toast.success(
           `Success! New organization ${createOrganization?.name} successfully created!`,
         );
+      } else {
+        toast.error('Something Went Wrong - Organization Not Created');
       }
       resetFlow();
     },
     onError: (err) => {
-      toast.error('Something Went Wrong - Organization Not Created');
+      console.log('ERROR', err);
     },
   });
 

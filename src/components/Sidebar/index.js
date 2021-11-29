@@ -194,6 +194,7 @@ function Sidebar(props) {
                 )}
               </FormControl>
               <SidebarDrawer
+                updateSideBarOrganizationValue={handleAccountChange}
                 mobileOpen={mobileOpen}
                 handleDrawerClose={handleDrawerClose}
                 investTab={investTab}
@@ -270,6 +271,7 @@ function Sidebar(props) {
                 userProfile={userProfile}
                 currentOrganization={currentOrganization}
                 currentHomeUrl={currentHomeUrl}
+                updateSideBarOrganizationValue={handleAccountChange}
                 logout={logout}
                 location={location}
               />
