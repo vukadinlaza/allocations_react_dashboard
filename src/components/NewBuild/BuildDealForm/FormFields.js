@@ -851,54 +851,6 @@ export function DealStage({
   );
 }
 
-export function MasterSeries({
-  buildData,
-  handleChange,
-  handleTooltip,
-  setUnfilledFields,
-  unfilledFields,
-  customInputStyles,
-  classes,
-  openTooltip,
-}) {
-  return (
-    <Grid className={classes.inputGridItem} item xs={12}>
-      <FormControl required disabled variant="outlined" className={classes.formContainers}>
-        <Grid className={classes.inputLabelWithTooltip} item xs={12}>
-          <Typography className={classes.formItemName}>Master Series Name</Typography>
-          <ModalTooltip
-            title="Master Series Name"
-            handleTooltip={handleTooltip}
-            tooltipContent={
-              <Typography color="inherit">
-                Please indicate the name of your SPV (applicable if you are a HVP)
-              </Typography>
-            }
-            openTooltip={openTooltip}
-            id="master_series"
-          >
-            <HelpIcon className={classes.helpIcon} onClick={() => handleTooltip('master_series')} />
-          </ModalTooltip>
-        </Grid>
-        <TextField
-          value={buildData.master_series}
-          name="master_series"
-          onChange={handleChange}
-          className={`${classes.inputBox} ${classes.wideInputBox}`}
-          variant="outlined"
-          inputProps={customInputStyles}
-          onClick={() =>
-            setUnfilledFields((prev) => prev.filter((field) => field !== 'master_series'))
-          }
-          classes={{
-            root: unfilledFields.includes('master_series') && classes.unfilledField,
-          }}
-        />
-      </FormControl>
-    </Grid>
-  );
-}
-
 export function ManagementFee({
   buildData,
   handleChange,
