@@ -204,11 +204,13 @@ const Banking = ({ deal_id, deal_NDvirtualAccountNum }) => {
     const dateOfBirth = moment(accountInformation.dateOfBirth).format('mm/dd/yyyy');
     accountInformation.phone = accountInformation.phone.replace('-', '');
     const executorLegalName = `${accountInformation.executorLegalNameFirstName} ${accountInformation.executorLegalNameLastName}`;
+    const payload = omit({ ...accountInformation, dateOfBirth, executorLegalName }, [
+      'executorLegalNameFirstName',
+      'executorLegalNameLastName',
+    ]);
     createNDBankAccount({
       variables: {
-        accountInfo: omit({ ...accountInformation, dateOfBirth, executorLegalName }, [
-          'executorLegalNameFirstName, executorLegalNameLastName',
-        ]),
+        accountInfo: payload,
       },
       onCompleted: (res) => {
         if (res.success) {
@@ -249,6 +251,24 @@ const Banking = ({ deal_id, deal_NDvirtualAccountNum }) => {
           <Typography variant="h5">New Directions Virtual Account Number</Typography>
           <Typography variant="h6" style={{ paddingTop: '3rem' }}>
             {deal_NDvirtualAccountNum}
+          </Typography>
+        </Grid>
+      </Grid>
+    );
+  }
+  if (refNumData?.referenceNumbersByDealId.length > 0) {
+    return (
+      <Grid container spacing={4} style={{ padding: '3rem', textAlign: 'center' }}>
+        <Grid item sm={12} md={12} lg={12}>
+          <Typography variant="h5" style={{ paddingBottom: '2rem' }}>
+            Congratulations!
+          </Typography>
+          <Typography variant="h5">
+            Your account information has been submitted to New Direction Bank and is currently
+            processing.
+          </Typography>
+          <Typography variant="h6" style={{ paddingTop: '3rem' }}>
+            You will be notified within 24 hours on the status of the account.
           </Typography>
         </Grid>
       </Grid>
