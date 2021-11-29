@@ -161,18 +161,6 @@ const BuildDetails = ({
     type_of_investors: 'Accredited Investors (3(c)(1))',
   });
 
-  const defaultMasterSeries = 'Atomizer LLC';
-
-  useEffect(() => {
-    if (initialDeal?.high_volume_partner) {
-      setBuildData((prev) => ({
-        ...prev,
-        master_series: initialDeal?.master_series,
-        high_volume_partner: true,
-      }));
-    }
-  }, [initialDeal]);
-
   const [unfilledFields, setUnfilledFields] = useState([]);
 
   const formValidation = () => {
@@ -244,10 +232,6 @@ const BuildDetails = ({
     }
 
     // conditionally checked fields below here
-    if (buildData.master_series === defaultMasterSeries) {
-      fieldsToFill.push('master_series');
-      unvalidatedFields.push('Master Series Name');
-    }
     if (
       (!buildData.custom_management_fee || buildData.custom_management_fee === 'false') &&
       buildData.management_fee_value === 'Custom'
@@ -340,7 +324,6 @@ const BuildDetails = ({
           },
           management_fee_frequency: buildData.management_fee_frequency,
           manager_name: buildData.manager_name,
-          master_series: buildData.master_series || defaultMasterSeries,
           minimum_subscription_amount: Number(buildData.minimum_investment),
           need_gp_entity: buildData.need_gp_entity,
           number_of_investments: Number(buildData.number_of_investments),
