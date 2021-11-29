@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@material-ui/core';
+import {
+  Container,
+  Modal,
+  Typography,
+  Grid,
+  Paper,
+  Box,
+  Button,
+  TextField,
+} from '@material-ui/core';
 import { toast } from 'react-toastify';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -28,6 +37,10 @@ const useStyles = makeStyles((theme) => ({
   },
   radio: {
     color: '#2A2B54',
+  },
+  notchedOutline: {
+    borderWidth: '1px',
+    borderColor: 'blue !important',
   },
 }));
 function TransferInstructions() {
@@ -58,13 +71,22 @@ function TransferInstructions() {
             <div style={{ marginLeft: '1rem' }}> Please paste your transaction hash here</div>
           </Grid>
         </Grid>
-        <Grid container item style={{ fontSize: '14px', margin: 'auto' }}>
+        <Grid container item spacing={1} style={{ fontSize: '14px', margin: 'auto' }}>
           <Grid
             item
             style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '4px' }}
             xs={12}
           >
-            <input style={{ marginLeft: '1rem', width: '90%' }} />
+            <TextField
+              variant="outlined"
+              InputProps={{
+                classes: {
+                  notchedOutline: classes.notchedOutline,
+                },
+              }}
+              style={{ marginLeft: '1rem', width: '90%', height: '60px' }}
+            />
+            {/* <input style={{ marginLeft: '1rem', width: '90%', height: '60px' }} /> */}
           </Grid>
         </Grid>
       </Grid>

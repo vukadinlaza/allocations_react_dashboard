@@ -36,7 +36,7 @@ function AmountTotal({ investmentAmount, transactionFee, totalDue }) {
       }}
     >
       <Grid style={{ margin: 'auto' }} container>
-        <Grid container item spacing={3} style={{ fontSize: '14px', margin: 'auto' }}>
+        <Grid container item spacing={1} style={{ fontSize: '14px', margin: 'auto' }}>
           {' '}
           <Grid
             item
@@ -57,7 +57,7 @@ function AmountTotal({ investmentAmount, transactionFee, totalDue }) {
             ${investmentAmount.toLocaleString('en-us', { minimumFractionDigits: 2 })}
           </Grid> */}
         </Grid>
-        <Grid container item spacing={3} style={{ fontSize: '14px', margin: 'auto' }}>
+        <Grid container item spacing={1} style={{ fontSize: '14px', margin: 'auto' }}>
           <Grid
             item
             style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '4px' }}
@@ -69,7 +69,7 @@ function AmountTotal({ investmentAmount, transactionFee, totalDue }) {
             </div>
           </Grid>
         </Grid>
-        <Grid container item spacing={3} style={{ margin: 'auto' }}>
+        <Grid container item spacing={1} style={{ margin: 'auto' }}>
           <Grid item style={{ display: 'flex', justifyContent: 'space-between' }} xs={12}>
             <b style={{ marginLeft: '1rem' }}>Total Amount Due</b>
 

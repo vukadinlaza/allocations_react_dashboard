@@ -202,7 +202,10 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                       transactionFee={transactionFee}
                       totalDue={totalDue}
                     />
-                    <TransferInstructions walletAddress={data?.getCryptoWalletAddress} />
+                    <TransferInstructions
+                      totalDue={totalDue}
+                      walletAddress={data?.getCryptoWalletAddress}
+                    />
                     <TransactionHashInput />
                     {/* <p style={{ marginTop: '2em' }}>
                       Please send $
