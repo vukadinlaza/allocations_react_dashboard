@@ -676,7 +676,7 @@ export function Sectors({
       control: (styles) => ({
         ...styles,
         minHeight: 60,
-        maxWidth: 1208,
+        maxWidth: 568,
         cursor: 'pointer',
         border: unfilledFields.includes('sectors') ? '2px solid red' : '1pm solid hsl(0, 0%, 80%)',
       }),
@@ -711,7 +711,7 @@ export function Sectors({
   }
 
   return (
-    <Grid className={classes.inputGridItem} item xs={12}>
+    <Grid className={classes.inputGridItem} item xs={6}>
       <Grid className={classes.inputLabelWithTooltip} item xs={12}>
         <Typography className={classes.formItemName}>Sector(s)</Typography>
         <ModalTooltip
