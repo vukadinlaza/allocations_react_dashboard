@@ -130,9 +130,10 @@ const BuildDetails = ({
     custom_management_fee: 'false',
     custom_reporting_adviser: '',
     deal_stage: '',
+    estimated_spv_quantity: null,
     fund_name: '',
     general_partner_representative: '',
-    gp_entity_name: '',
+    gp_entity_name: null,
     high_volume_partner: false,
     international_company_status: 'false',
     international_company_country: '',
@@ -147,7 +148,7 @@ const BuildDetails = ({
     management_fee_value: '2',
     master_series: '',
     minimum_investment: 10000,
-    need_gp_entity: '',
+    need_gp_entity: 'true',
     number_of_investments: null,
     offering_type: '506b',
     portfolio_company_name: '',
@@ -159,7 +160,7 @@ const BuildDetails = ({
     sectors: [],
     term_of_fund: '10',
     type: dealType,
-    type_of_investors: '',
+    type_of_investors: 'Accredited Investors (3(c)(1))',
   });
 
   const defaultMasterSeries = 'Atomizer LLC';
@@ -203,9 +204,6 @@ const BuildDetails = ({
       if (!buildData.representative) {
         unvalidatedFieldsToFill('representative', 'Representative of Manager');
       }
-      if (buildData.master_series === defaultMasterSeries) {
-        unvalidatedFieldsToFill('master_series', 'Master Series Name');
-      }
       if (!buildData.accept_crypto) {
         unvalidatedFieldsToFill('accept_crypto', 'Accept Crypto');
       }
@@ -232,6 +230,9 @@ const BuildDetails = ({
       if (buildData.need_gp_entity === 'false' && !buildData.gp_entity_name) {
         unvalidatedFieldsToFill('gp_entity_name', 'GP Entity Name');
       }
+      if (!buildData.need_gp_entity) {
+        unvalidatedFieldsToFill('need_gp_entity', 'Need GP Entity');
+      }
     }
 
     if (!buildData.minimum_investment) {
@@ -245,6 +246,10 @@ const BuildDetails = ({
     }
 
     // conditionally checked fields below here
+    if (buildData.master_series === defaultMasterSeries) {
+      fieldsToFill.push('master_series');
+      unvalidatedFields.push('Master Series Name');
+    }
     if (
       (!buildData.custom_management_fee || buildData.custom_management_fee === 'false') &&
       buildData.management_fee_value === 'Custom'
@@ -338,8 +343,9 @@ const BuildDetails = ({
           management_fee_frequency: buildData.management_fee_frequency,
           manager_name: buildData.manager_name,
           master_series: buildData.master_series || defaultMasterSeries,
-          minimum_subscription_amount: buildData.minimum_investment,
-          number_of_investments: buildData.number_of_investments,
+          minimum_subscription_amount: Number(buildData.minimum_investment),
+          need_gp_entity: buildData.need_gp_entity,
+          number_of_investments: Number(buildData.number_of_investments),
           offering_type: buildData.offering_type,
           portfolio_company_name: buildData.portfolio_company_name,
           portfolio_company_securities: buildData.portfolio_company_securities,
@@ -364,9 +370,7 @@ const BuildDetails = ({
     const isNotCustomManagementFee =
       target.name === 'management_fee_value' && target.value !== 'Custom';
     const isNotCustomCarryFee = target.name === 'carry_fee_value' && target.value !== 'Custom';
-    const buildData = JSON.parse(localStorage.getItem('buildData'));
-    const isGPEntityNeeded =
-      buildData && buildData.gp_entity_name && buildData.need_gp_entity === 'true';
+    const isGPEntityNeeded = target.name === 'need_gp_entity' && target.value === 'true';
     setBuildData((prev) => {
       const newBuildObject = {
         ...prev,
@@ -377,7 +381,7 @@ const BuildDetails = ({
         international_investors_countries: isNotInternationalInvestors
           ? []
           : prev.international_investors_countries,
-        gp_entity_name: isGPEntityNeeded ? '' : prev.gp_entity_name,
+        gp_entity_name: isGPEntityNeeded ? null : prev.gp_entity_name,
         [target.name]: target.value,
       };
 

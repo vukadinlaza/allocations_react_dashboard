@@ -219,9 +219,6 @@ export default function TypeSelector({
           )}
           {/* FOURTH ROW */}
           <DealStage {...formFieldProps} />
-          {dealType === 'spv' && !buildData.high_volume_partner && (
-            <MasterSeries {...formFieldProps} />
-          )}
           <Sectors {...formFieldProps} />
         </Grid>
       </form>

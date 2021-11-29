@@ -210,7 +210,7 @@ export function DealStagesSelector({ handleChange, setUnfilledFields, unfilledFi
       styles={customStyles}
       options={dealStages.map((stage) => ({ value: stage, label: stage, key: stage })) || ''}
       defaultValue={buildData.deal_stage}
-      placeholder={buildData.deal_stage}
+      placeholder={buildData.deal_stage || 'Select...'}
       onChange={(option) => {
         const newEvent = {
           target: {
