@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import KYCModal from '../DealNextSteps/KYCModal';
 import { Button } from '@material-ui/core';
-import DocIcon from '../../assets/buildDoc.svg';
 import { useLocation } from 'react-router-dom';
+import HelpIcon from '@material-ui/icons/Help';
+import { ModalTooltip } from '../dashboard/FundManagerDashboard/widgets';
+import KYCModal from '../DealNextSteps/KYCModal';
+import DocIcon from '../../assets/buildDoc.svg';
 import './styles.scss';
 
 function SubmitTaxDocs() {
@@ -21,6 +23,7 @@ function SubmitTaxDocs() {
   const [templateId, setTemplateId] = useState(
     validForms.includes(form) ? templateMap[form].id : 'tpl_dM4QcQbyLckdPXgtyx',
   );
+  const [openTooltip, setOpenTooltip] = useState('');
 
   const handleClick = (formName) => {
     setActiveForm(formName);
@@ -28,14 +31,29 @@ function SubmitTaxDocs() {
     setOpen(true);
   };
 
+  const handleTooltip = (key) => {
+    setOpenTooltip(key);
+  };
+
   const buttonItems = Object.entries(templateMap).map(([key, value]) => {
     return (
-      <Button key={key} onClick={() => handleClick(key)} className="form-select-button">
-        <div className="button-content">
-          <img className="button-img" src={DocIcon} />
-          <p className="button-text">{value.name}</p>
-        </div>
-      </Button>
+      <>
+        <ModalTooltip
+          title={value.name}
+          tooltipContent="HI"
+          id={key}
+          handleTooltip={handleTooltip}
+          openTooltip={openTooltip}
+        >
+          <HelpIcon onClick={() => handleTooltip(key)} />
+        </ModalTooltip>
+        <Button key={key} onClick={() => handleClick(key)} className="form-select-button">
+          <div className="button-content">
+            <img className="button-img" src={DocIcon} />
+            <p className="button-text">{value.name}</p>
+          </div>
+        </Button>
+      </>
     );
   });
 
