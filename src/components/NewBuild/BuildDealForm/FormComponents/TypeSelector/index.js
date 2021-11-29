@@ -50,7 +50,7 @@ export default function TypeSelector({
   const row1Items = [
     {
       title: 'Startup',
-      value: 'startup',
+      value: 'Startup',
       description: 'Raise money to invest in a private company',
       icon: RocketIcon,
       height: '56px',
@@ -59,7 +59,7 @@ export default function TypeSelector({
     },
     {
       title: 'Crypto',
-      value: 'crypto',
+      value: 'Crypto',
       description: 'Raise money to invest in a crypto project (token/equity)',
       icon: CryptoIcon,
       height: '34px',
@@ -68,7 +68,7 @@ export default function TypeSelector({
     },
     {
       title: 'Real Estate',
-      value: 'realEstate',
+      value: 'Real Estate',
       description: 'Raise money to invest in a real estate project',
       icon: HouseIcon,
       height: '29px',
@@ -77,7 +77,7 @@ export default function TypeSelector({
     },
     {
       title: 'SPV into a Fund',
-      value: 'spvToFund',
+      value: 'SPV into a Fund',
       description: 'Raise money to invest into a fund',
       icon: BankIcon,
       height: '30px',
@@ -89,7 +89,7 @@ export default function TypeSelector({
   const row2Items = [
     {
       title: 'Secondary',
-      value: 'secondary',
+      value: 'Secondary',
       description: 'Raise money to invest in a secondary of a private company',
       icon: LevelIcon,
       height: '35px',
@@ -98,7 +98,7 @@ export default function TypeSelector({
     },
     {
       title: 'SPV into an SPV',
-      value: 'spvToSpv',
+      value: 'SPV into an SPV',
       description: 'Raise money to invest in another SPV',
       icon: NetworkIcon,
       height: '32px',
@@ -107,7 +107,7 @@ export default function TypeSelector({
     },
     {
       title: 'Management Co.',
-      value: 'managementStake',
+      value: 'Management Company',
       description: `Sell a stake in your fund's management company's future carry`,
       icon: PieIcon,
       height: '30px',
@@ -116,7 +116,7 @@ export default function TypeSelector({
     },
     {
       title: 'Custom',
-      value: 'custom',
+      value: 'Custom',
       description: 'Raise money for X',
       icon: CustomIcon,
       height: '26px',

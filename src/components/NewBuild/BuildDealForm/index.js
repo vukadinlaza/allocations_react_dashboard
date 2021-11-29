@@ -129,7 +129,7 @@ const BuildDetails = ({
     custom_carry_fee: 'false',
     custom_investment_agreement: 'false',
     custom_management_fee: 'false',
-    custom_reporting_adviser: '',
+    custom_reporting_adviser: null,
     deal_stage: '',
     fund_name: '',
     general_partner_representative: '',
@@ -158,7 +158,7 @@ const BuildDetails = ({
     side_letters: 'false',
     sectors: [],
     target_raise_goal: 100000,
-    term_of_fund: '10',
+    term_of_fund: '10 years',
     type: dealType,
     type_of_investors: 'Accredited Investors (3(c)(1))',
   });
