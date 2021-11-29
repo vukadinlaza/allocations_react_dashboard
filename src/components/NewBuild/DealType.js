@@ -78,7 +78,6 @@ const useStyles = makeStyles((theme) => ({
     padding: '5px 10px',
   },
   cancelButton: {
-    // font: 'normal normal normal 24px/28px Roboto',
     marginTop: '11px',
     padding: '5px',
     cursor: 'pointer',
@@ -116,7 +115,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NewOrCurrentBuild = ({ isOpen, closeModal, openNewBuildModal, setPage }) => {
+export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
   const classes = useStyles();
   const history = useHistory();
   return (
@@ -198,7 +197,7 @@ const NewOrCurrentBuild = ({ isOpen, closeModal, openNewBuildModal, setPage }) =
                               const build = JSON.parse(localStorage.getItem('buildDeal'));
                               if (build?.type) {
                                 history.push(`/new-build/${build.type}`);
-                              } else openNewBuildModal();
+                              } else setPage('deal_type_selector');
                             }}
                           >
                             Continue
@@ -238,7 +237,7 @@ const NewOrCurrentBuild = ({ isOpen, closeModal, openNewBuildModal, setPage }) =
                               backgroundColor: '#186EFF',
                             }}
                             onClick={() => {
-                              setPage(2);
+                              setPage('final_warning');
                             }}
                           >
                             Continue
@@ -257,7 +256,7 @@ const NewOrCurrentBuild = ({ isOpen, closeModal, openNewBuildModal, setPage }) =
   );
 };
 
-const NewBuildFinalWarning = ({ isOpen, closeModal, openNewBuildModal, setPage }) => {
+export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
   const classes = useStyles();
   const deal = JSON.parse(localStorage.getItem('buildDeal'));
 
@@ -270,7 +269,6 @@ const NewBuildFinalWarning = ({ isOpen, closeModal, openNewBuildModal, setPage }
       open={isOpen}
       className={classes.modal}
       onClose={() => {
-        setPage(1);
         closeModal();
       }}
     >
@@ -285,7 +283,6 @@ const NewBuildFinalWarning = ({ isOpen, closeModal, openNewBuildModal, setPage }
                 <Box
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
-                    setPage(1);
                     closeModal();
                   }}
                 >
@@ -358,9 +355,7 @@ const NewBuildFinalWarning = ({ isOpen, closeModal, openNewBuildModal, setPage }
                               deleteDeal();
                               localStorage.removeItem('buildData');
                               localStorage.removeItem('buildDeal');
-                              setPage(1);
-                              closeModal();
-                              openNewBuildModal();
+                              setPage('deal_type_selector');
                             }}
                           >
                             CONFIRM DELETE AND START NEW
@@ -370,7 +365,7 @@ const NewBuildFinalWarning = ({ isOpen, closeModal, openNewBuildModal, setPage }
                           <Typography
                             className={classes.cancelButton}
                             onClick={() => {
-                              setPage(1);
+                              setPage('new_or_current');
                             }}
                           >
                             CANCEL
@@ -389,25 +384,11 @@ const NewBuildFinalWarning = ({ isOpen, closeModal, openNewBuildModal, setPage }
   );
 };
 
-export const NewBuildWarningModal = (props) => {
-  const [page, setPage] = useState(1);
-
-  const pageMap = {
-    1: NewOrCurrentBuild,
-    2: NewBuildFinalWarning,
-  };
-
-  const Component = pageMap[page];
-
-  return <Component {...props} setPage={setPage} />;
-};
-
-const BuildModal = ({ onClose, isOpen, setDealType, openOrgModal }) => {
+export default function DealTypeSelector({ closeModal, isOpen, setDealType, setPage }) {
   const classes = useStyles();
-  const history = useHistory();
 
   return (
-    <Modal open={isOpen} onClose={onClose} className={classes.modal}>
+    <Modal open={isOpen} onClose={closeModal} className={classes.modal}>
       <Container style={{ width: '650px' }}>
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
@@ -416,7 +397,7 @@ const BuildModal = ({ onClose, isOpen, setDealType, openOrgModal }) => {
                 <Typography variant="h6" style={{ color: '#fff' }}>
                   Add New
                 </Typography>
-                <Box onClick={onClose} style={{ cursor: 'pointer' }}>
+                <Box onClick={closeModal} style={{ cursor: 'pointer' }}>
                   <CloseIcon htmlColor="#fff" />
                 </Box>
               </Grid>
@@ -484,8 +465,7 @@ const BuildModal = ({ onClose, isOpen, setDealType, openOrgModal }) => {
                             }}
                             onClick={() => {
                               setDealType('spv');
-                              openOrgModal();
-                              onClose();
+                              setPage('select_org');
                             }}
                           >
                             Continue
@@ -529,8 +509,7 @@ const BuildModal = ({ onClose, isOpen, setDealType, openOrgModal }) => {
                             }}
                             onClick={() => {
                               setDealType('fund');
-                              openOrgModal();
-                              onClose();
+                              setPage('select_org');
                             }}
                           >
                             Continue
@@ -547,6 +526,4 @@ const BuildModal = ({ onClose, isOpen, setDealType, openOrgModal }) => {
       </Container>
     </Modal>
   );
-};
-
-export default BuildModal;
+}

@@ -17,16 +17,18 @@ import FormControl from '@material-ui/core/FormControl';
 import CloseIcon from '@material-ui/icons/Close';
 import HelpIcon from '@material-ui/icons/Help';
 import { makeStyles } from '@material-ui/core/styles';
-import { phone } from '../../../utils/helpers';
-import plusSignIcon from '../../../assets/plus-vector.svg';
-import plusSignBlackIcon from '../../../assets/plus-vector-black.svg';
-import { useAuth } from '../../../auth/useAuth';
+import { phone } from '../../utils/helpers';
+import plusSignIcon from '../../assets/plus-vector.svg';
+import plusSignBlackIcon from '../../assets/plus-vector-black.svg';
+import { useAuth } from '../../auth/useAuth';
 import { useHistory } from 'react-router';
-import { useSetCurrentOrganization } from '../../../state/current-organization';
-import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
+import { useSetCurrentOrganization } from '../../state/current-organization';
+import { ModalTooltip } from '../dashboard/FundManagerDashboard/widgets';
 import countries from 'country-region-data';
 import states from 'usa-states';
 import { toast } from 'react-toastify';
+import DealTypeSelector from './DealType';
+import { NewOrCurrentBuild, NewBuildFinalWarning } from './DealType';
 
 const CREATE_ORG = gql`
   mutation CreateOrganization($organization: OrganizationInput!) {
@@ -240,7 +242,6 @@ const SelectOrganization = ({
   history,
   openTooltip,
   handleTooltip,
-  openNewBuildModal,
   setCurrentOrganization,
 }) => {
   const { loading: userLoading, userProfile } = useAuth();
@@ -252,7 +253,14 @@ const SelectOrganization = ({
   }, [userLoading]);
 
   return (
-    <Modal open={isOpen} className={classes.modal} onClose={closeModal}>
+    <Modal
+      open={isOpen}
+      className={classes.modal}
+      onClose={() => {
+        closeModal();
+        setPage('deal_type_selector');
+      }}
+    >
       <Container className={classes.modalContainer}>
         <Grid container style={{ height: '100%', width: '100%', margin: 'auto' }}>
           <Grid item style={{ height: '100%', width: '100%' }}>
@@ -261,7 +269,13 @@ const SelectOrganization = ({
                 <Typography style={{ fontSize: '24px', fontWeight: '500', color: '#fff' }}>
                   Select Organization
                 </Typography>
-                <Box style={{ cursor: 'pointer' }} onClick={closeModal}>
+                <Box
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    closeModal();
+                    setPage('deal_type_selector');
+                  }}
+                >
                   <CloseIcon htmlColor="#fff" />
                 </Box>
               </Grid>
@@ -379,8 +393,7 @@ const SelectOrganization = ({
                         <Typography
                           className={classes.previousButton}
                           onClick={() => {
-                            openNewBuildModal();
-                            closeModal();
+                            setPage('deal_type_selector');
                           }}
                         >
                           Previous
@@ -436,7 +449,7 @@ const CreateNewOrganization = ({
       open={isOpen}
       className={classes.modal}
       onClose={() => {
-        setPage('select_org');
+        setPage('deal_type_selector');
         closeModal();
       }}
     >
@@ -451,7 +464,7 @@ const CreateNewOrganization = ({
                 <Box
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
-                    setPage('select_org');
+                    setPage('deal_type_selector');
                     closeModal();
                   }}
                 >
@@ -572,7 +585,6 @@ const CreateNewOrganization = ({
                         style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
                       >
                         <Button
-                          // disabled={!newOrganizationName || !estimatedSPVQuantity}
                           variant="contained"
                           color="primary"
                           size="large"
@@ -679,7 +691,7 @@ const HighVolumePartnerships = ({
       open={isOpen}
       className={classes.modal}
       onClose={() => {
-        setPage('select_org');
+        setPage('deal_type_selector');
         closeModal();
       }}
     >
@@ -694,7 +706,7 @@ const HighVolumePartnerships = ({
                 <Box
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
-                    setPage('select_org');
+                    setPage('deal_type_selector');
                     closeModal();
                   }}
                 >
@@ -842,7 +854,6 @@ const HighVolumePartnerships = ({
                       >
                         <Select
                           variant="outlined"
-                          // className={classes.stateSelect}
                           className={
                             failedValidationFields.includes('state')
                               ? classes.failedValidationStateSelect
@@ -857,9 +868,6 @@ const HighVolumePartnerships = ({
                               prev.filter((field) => field !== 'state'),
                             );
                           }}
-                          // classes={{
-                          //     root: failedValidationFields.includes('state') && classes.failedValidationSelectStyle
-                          // }}
                           MenuProps={{
                             anchorOrigin: {
                               vertical: 'bottom',
@@ -967,10 +975,9 @@ const HighVolumePartnerships = ({
   );
 };
 
-export default function OrganizationModal(props) {
-  const [page, setPage] = useState('select_org');
-
-  const classes = useStyles({ page });
+export default function NewBuildModal(props) {
+  const [dealType, setDealType] = useState(null);
+  const classes = useStyles({ page: props.page });
   const history = useHistory();
   const setCurrentOrganization = useSetCurrentOrganization();
 
@@ -1002,7 +1009,7 @@ export default function OrganizationModal(props) {
 
   const resetFlow = () => {
     clearAllFields();
-    setPage('select_org');
+    props.setPage('deal_type_selector');
   };
 
   const [createOrganization] = useMutation(CREATE_ORG, {
@@ -1023,13 +1030,11 @@ export default function OrganizationModal(props) {
     onCompleted: ({ createOrganization }) => {
       if (createOrganization?.name) {
         setCurrentOrganization(createOrganization);
-        resetFlow();
         toast.success(
           `Success! New organization ${createOrganization?.name} successfully created!`,
         );
-      } else {
-        toast.error('Something Went Wrong - Organization Not Created');
       }
+      resetFlow();
     },
     onError: (err) => {
       toast.error('Something Went Wrong - Organization Not Created');
@@ -1043,12 +1048,16 @@ export default function OrganizationModal(props) {
   };
 
   const pageMap = {
+    deal_type_selector: DealTypeSelector,
     select_org: SelectOrganization,
     create_new_org: CreateNewOrganization,
     high_volume_partnerships: HighVolumePartnerships,
+    new_or_current: NewOrCurrentBuild,
+    final_warning: NewBuildFinalWarning,
   };
 
   const propsObj = {
+    dealType,
     newOrganizationName,
     estimatedSPVQuantity,
     masterEntityName,
@@ -1058,6 +1067,7 @@ export default function OrganizationModal(props) {
     state,
     zipCode,
     country,
+    setDealType,
     createOrganization,
     setZipcode,
     setCountry,
@@ -1068,7 +1078,6 @@ export default function OrganizationModal(props) {
     setMasterEntityName,
     setNewOrganizationName,
     setEstimatedSPVQuanity,
-    setPage,
     clearMasterEntityForm,
     setCurrentOrganization,
     classes,
@@ -1078,7 +1087,7 @@ export default function OrganizationModal(props) {
     ...props,
   };
 
-  const Component = pageMap[page];
+  const Component = pageMap[props.page];
 
   return <Component {...propsObj} />;
 }

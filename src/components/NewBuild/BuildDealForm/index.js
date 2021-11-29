@@ -523,7 +523,7 @@ export default function NewDealForm() {
   );
 
   const organization = useCurrentOrganization();
-  console.log('organization', organization);
+
   const { type: dealType } = useParams();
 
   // Page

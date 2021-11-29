@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-  Button,
-  Modal,
-} from '@material-ui/core';
+import { List, ListItem, ListItemIcon, ListItemText, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HomeIcon from '@material-ui/icons/Home';
@@ -20,9 +12,8 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import { FaRocket } from 'react-icons/fa';
 import { BsBinocularsFill } from 'react-icons/bs';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import BuildModal, { NewBuildWarningModal } from '../NewBuild/BuildModal';
 import styles from './styles';
-import OrganizationModal from '../NewBuild/common/OrganizationModal';
+import NewBuildModal from '../NewBuild/NewBuildModal.js';
 
 const AddBubbleBuildButton = ({ classes }) => (
   <Button
@@ -36,15 +27,14 @@ const AddBubbleBuildButton = ({ classes }) => (
   </Button>
 );
 
-const AddInAppBuildButton = ({ classes, setOpenModal, openWarningModal }) => {
+const AddInAppBuildButton = ({ classes, setOpenModal, setNewBuildModalPage }) => {
   return (
     <Button
       variant="contained"
       className={classes.addButton}
       onClick={() => {
         if (localStorage.getItem('buildData') || localStorage.getItem('buildDeal')) {
-          openWarningModal();
-          return;
+          setNewBuildModalPage('new_or_current');
         }
         setOpenModal(true);
       }}
@@ -74,9 +64,7 @@ const SidebarDrawer = ({
 }) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
   const [openModal, setOpenModal] = useState(false);
-  const [openWarningModal, setOpenWarningModal] = useState(false);
-  const [openOrgModal, setOpenOrgModal] = useState(false);
-  const [dealType, setDealType] = useState(null);
+  const [newBuildModalPage, setNewBuildModalPage] = useState('deal_type_selector');
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
   const AdminLinks = () => {
@@ -150,28 +138,17 @@ const SidebarDrawer = ({
 
   return (
     <div className={classes.sidebarDrawer}>
-      <NewBuildWarningModal
-        isOpen={openWarningModal}
-        closeModal={() => setOpenWarningModal(false)}
-        openNewBuildModal={() => setOpenModal(true)}
-      />
-      <BuildModal
+      <NewBuildModal
         isOpen={openModal}
-        onClose={() => setOpenModal(false)}
-        setDealType={setDealType}
-        openOrgModal={() => setOpenOrgModal(true)}
-      />
-      <OrganizationModal
-        isOpen={openOrgModal}
-        closeModal={() => setOpenOrgModal(false)}
-        openNewBuildModal={() => setOpenModal(true)}
-        dealType={dealType}
+        closeModal={() => setOpenModal(false)}
+        page={newBuildModalPage}
+        setPage={setNewBuildModalPage}
       />
 
       <AddBuildButton
         classes={classes}
         setOpenModal={setOpenModal}
-        openWarningModal={() => setOpenWarningModal(true)}
+        setNewBuildModalPage={setNewBuildModalPage}
       />
 
       <List>
