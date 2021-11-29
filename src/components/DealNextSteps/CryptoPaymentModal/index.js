@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
   },
+  container: {
+    maxWidth: '721px',
+  },
   copyIcon: {
     [theme.breakpoints.down(phone)]: {
       width: '0.65em',
@@ -95,7 +98,7 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
 
   return (
     <Modal open={open} onClose={handleClose} className={classes.modal}>
-      <Container maxWidth="sm">
+      <Container className={classes.container}>
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
             <Paper className={`${classes.modalPaper} ${classes.innerPaper}`}>
@@ -207,28 +210,6 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                       walletAddress={data?.getCryptoWalletAddress}
                     />
                     <TransactionHashInput />
-                    {/* <p style={{ marginTop: '2em' }}>
-                      Please send $
-                      <b>{totalDue.toLocaleString('en-us', { minimumFractionDigits: 2 })}</b> worth
-                      of <b>USDC</b> to the following wallet address:
-                    </p> */}
-                    {/* <p>
-                      <b>{data?.getCryptoWalletAddress}</b>{' '}
-                      <Button
-                        style={{ minWidth: '20px' }}
-                        onClick={() => {
-                          navigator.clipboard.writeText(data?.getCryptoWalletAddress);
-                          toast.info('Copied wallet address to clipboard');
-                        }}
-                        className="copy-button"
-                      >
-                        <img className={classes.copyIcon} src={CopyIcon} alt="Copy Icon" />
-                      </Button>
-                    </p>
-                    <p>
-                      Once your transaction has been completed, please send your transaction hash to{' '}
-                      <b>support@allocations.com</b> to verify your payment.
-                    </p>{' '} */}
                   </Grid>
                   <Grid
                     item

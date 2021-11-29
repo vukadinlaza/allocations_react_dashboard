@@ -14,6 +14,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
   },
+  container: {
+    maxWidth: '721px',
+  },
   modalPaper: {
     marginTop: '8vh',
     borderRadius: '1rem 1rem 0 0 ',
@@ -115,7 +118,7 @@ const PaymentModal = ({
   }
   return (
     <Modal open={open} onClose={() => setOpen(false)} className={classes.modal}>
-      <Container maxWidth="sm">
+      <Container className={classes.container}>
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
             <Paper className={`${classes.modalPaper} ${classes.innerPaper}`}>
@@ -134,7 +137,7 @@ const PaymentModal = ({
                   </div>
                   <CloseIcon
                     style={{ cursor: 'pointer', marginTop: 'auto' }}
-                    onClick={(e) => setOpen(false)}
+                    onClick={() => setOpen(false)}
                     htmlColor="#FFFFFF"
                   />
                 </Box>

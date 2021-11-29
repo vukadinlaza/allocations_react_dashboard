@@ -9,35 +9,13 @@ import {
   Button,
   TextField,
 } from '@material-ui/core';
+
 import { toast } from 'react-toastify';
 
 import { makeStyles } from '@material-ui/core/styles';
+import { phone, tablet } from '../../../../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
-  modal: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  modalPaper: {
-    marginTop: '8vh',
-    borderRadius: '1rem 1rem 0 0 ',
-    padding: theme.spacing(2),
-    maxHeight: 'calc(100% - 8vh)',
-  },
-  modalHeader: {
-    fontFamily: 'Roboto !important',
-  },
-  label: {
-    color: '#2A2B54',
-    fontWeight: 'bold',
-  },
-  radioGroup: {
-    margin: '25px',
-    flexDirection: 'row',
-  },
-  radio: {
-    color: '#2A2B54',
-  },
   notchedOutline: {
     borderWidth: '1px',
     borderColor: 'blue !important',

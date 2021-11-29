@@ -1,75 +1,81 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@material-ui/core';
+import { Container, Modal, Typography, Grid, Paper, Box, IconButton } from '@material-ui/core';
 import { toast } from 'react-toastify';
 
 import { makeStyles } from '@material-ui/core/styles';
+import { phone, tablet } from '../../../../utils/helpers';
+
 import CopyIcon from '../../../../assets/copy-icon.svg';
 
 const useStyles = makeStyles((theme) => ({
-  modal: {
+  paperContainer: {
     display: 'flex',
-    justifyContent: 'center',
+    margin: 'auto',
+    width: '100%',
+    marginBottom: '29px',
+    height: '140px',
   },
-  modalPaper: {
-    marginTop: '8vh',
-    borderRadius: '1rem 1rem 0 0 ',
-    padding: theme.spacing(2),
-    maxHeight: 'calc(100% - 8vh)',
+  copyIcon: {
+    width: '0.9rem',
+    height: 'auto',
+    [theme.breakpoints.down(phone)]: {
+      width: '0.65em',
+    },
   },
-  modalHeader: {
-    fontFamily: 'Roboto !important',
+  wireInstructions: {
+    fontSize: '18px',
+    marginLeft: '1rem',
+    marginRight: '1rem',
+    paddingBottom: '1rem',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '14px',
+    },
   },
-  label: {
-    color: '#2A2B54',
+  walletAddress: {
     fontWeight: 'bold',
+    fontSize: '20px',
+    marginLeft: '1rem',
+    marginRight: '1rem',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '11px',
+    },
   },
 }));
 function TransferInstructions({ walletAddress, totalDue }) {
   const classes = useStyles();
 
   return (
-    <Paper
-      style={{
-        display: 'flex',
-        margin: 'auto',
-        width: '100%',
-        marginBottom: '29px',
-        height: '122px',
-      }}
-    >
-      <Grid style={{ margin: 'auto' }} container>
-        <Grid container item spacing={1} style={{ fontSize: '14px', margin: 'auto' }}>
+    <Paper className={classes.paperContainer}>
+      <Grid container style={{ margin: 'auto' }}>
+        <Grid container item spacing={1}>
           {' '}
           <Grid
             item
             style={{
               display: 'flex',
               justifyContent: 'flex-start',
-              paddingBottom: '4px',
             }}
             xs={12}
           >
-            <div style={{ marginLeft: '1rem' }}>
+            <div className={classes.wireInstructions}>
               {' '}
               Please send ${totalDue.toLocaleString('en-us', { minimumFractionDigits: 2 })} worth of{' '}
-              <b>USDC</b> to the following wallet address
+              <b>USDC</b> to the following wallet address:
             </div>
           </Grid>
         </Grid>
-        <Grid container item spacing={1} style={{ fontSize: '14px', margin: 'auto' }}>
-          <Grid item style={{ display: 'flex', justifyContent: 'space-between' }} xs={12}>
-            <div style={{ marginLeft: '1rem', fontSize: '16px', fontWeight: 'bold' }}>
+        <Grid container item spacing={1}>
+          <Grid item style={{ display: 'flex', justifyConteont: 'space-between' }} xs={12}>
+            <div className={classes.walletAddress}>
               {walletAddress}{' '}
-              <Button
-                style={{ minWidth: '20px' }}
+              <IconButton
                 onClick={() => {
                   navigator.clipboard.writeText(walletAddress);
                   toast.info('Copied wallet address to clipboard');
                 }}
-                className="copy-button"
               >
                 <img className={classes.copyIcon} src={CopyIcon} alt="Copy Icon" />
-              </Button>
+              </IconButton>
             </div>
           </Grid>
         </Grid>

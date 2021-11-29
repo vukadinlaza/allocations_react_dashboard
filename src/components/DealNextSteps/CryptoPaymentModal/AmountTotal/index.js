@@ -1,82 +1,74 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { phone, tablet } from '../../../../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
-  modal: {
+  paperContainer: {
     display: 'flex',
-    justifyContent: 'center',
+    margin: 'auto',
+    width: '100%',
+    marginBottom: '29px',
+    height: '140px',
   },
-  modalHeader: {
-    fontFamily: 'Roboto !important',
+  textItem: {
+    margin: 'auto',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '14px',
+    },
   },
-  label: {
-    color: '#2A2B54',
-    fontWeight: 'bold',
+  row: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    paddingBottom: '4px',
   },
-  radioGroup: {
-    margin: '25px',
-    flexDirection: 'row',
+  leftColumn: {
+    marginLeft: '1rem',
   },
-  radio: {
-    color: '#2A2B54',
+  rightColumn: {
+    marginRight: '1rem',
   },
 }));
 function AmountTotal({ investmentAmount, transactionFee, totalDue }) {
   const classes = useStyles();
 
   return (
-    <Paper
-      style={{
-        display: 'flex',
-        margin: 'auto',
-        width: '100%',
-        marginBottom: '29px',
-        height: '140px',
-      }}
-    >
+    <Paper className={classes.paperContainer}>
       <Grid style={{ margin: 'auto' }} container>
-        <Grid container item spacing={1} style={{ fontSize: '14px', margin: 'auto' }}>
+        <Grid container item spacing={1} className={classes.textItem}>
           {' '}
-          <Grid
-            item
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              paddingBottom: '4px',
-            }}
-            xs={12}
-          >
-            <div style={{ marginLeft: '1rem' }}>Investment Amount</div>
-            <div style={{ marginRight: '1rem' }}>
+          <Grid className={classes.row} item xs={12}>
+            <div className={classes.leftColumn}>Investment Amount</div>
+            <div className={classes.rightColumn}>
               {' '}
               ${investmentAmount.toLocaleString('en-us', { minimumFractionDigits: 2 })}
             </div>
           </Grid>
-          {/* <Grid item xs={6}>
-            ${investmentAmount.toLocaleString('en-us', { minimumFractionDigits: 2 })}
-          </Grid> */}
         </Grid>
-        <Grid container item spacing={1} style={{ fontSize: '14px', margin: 'auto' }}>
-          <Grid
-            item
-            style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '4px' }}
-            xs={12}
-          >
-            <div style={{ marginLeft: '1rem' }}>Transaction Fee (1.5%)</div>
-            <div style={{ marginRight: '1rem' }}>
+        <Grid container item spacing={1} className={classes.textItem}>
+          <Grid item className={classes.row} xs={12}>
+            <div className={classes.leftColumn}>Transaction Fee (1.5%)</div>
+            <div className={classes.rightColumn}>
               ${transactionFee.toLocaleString('en-us', { minimumFractionDigits: 2 })}
             </div>
           </Grid>
         </Grid>
-        <Grid container item spacing={1} style={{ margin: 'auto' }}>
-          <Grid item style={{ display: 'flex', justifyContent: 'space-between' }} xs={12}>
-            <b style={{ marginLeft: '1rem' }}>Total Amount Due</b>
+        <Grid
+          container
+          item
+          spacing={1}
+          className={classes.textItem}
+          style={{ fontWeight: 'bold' }}
+        >
+          <Grid item className={classes.row} xs={12}>
+            <div className={classes.leftColumn} style={{ fontWeight: 'bold' }}>
+              Total Amount Due
+            </div>
 
-            <b style={{ marginRight: '1rem' }}>
+            <div className={classes.rightColumn} style={{ fontWeight: 'bold' }}>
               {' '}
               ${totalDue.toLocaleString('en-us', { minimumFractionDigits: 2 })}
-            </b>
+            </div>
           </Grid>
         </Grid>
       </Grid>
