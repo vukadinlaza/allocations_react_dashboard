@@ -389,7 +389,7 @@ export function RepresentativeGeneralPartnerAndTitle({
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>
-            Representative of the General Partner and it's Title
+            Representative of the General Partner and its Title
           </Typography>
           <ModalTooltip
             title="Representative of the General Partner and it's Title"
