@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { InputAdornment, InputBase } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import { nWithCommas } from '../../../../utils/numbers';
-import AllocationsTable from '../../../utils/AllocationsTable';
-import Loader from '../../../utils/Loader';
-import { useFetch } from '../../../../utils/hooks';
+import { nWithCommas } from '../../../../../utils/numbers';
+import AllocationsTable from '../../../../utils/AllocationsTable';
+import Loader from '../../../../utils/Loader';
+import { useFetch } from '../../../../../utils/hooks';
+import ProgressBarWithLabel from './ProgressBarWithLabel';
 
 const Investors = ({ classes, orgSlug, userProfile }) => {
   const BASE = 'appLhEikZfHgNQtrL'; // Accounting - Capital accounts
@@ -28,7 +29,7 @@ const Investors = ({ classes, orgSlug, userProfile }) => {
       type: 'amount',
       align: 'right',
     },
-    { value: 'Gross Contribution Received', label: 'Total Contribution (%)' },
+    { value: 'Gross Contribution Received', label: 'Total Contribution (%)', type: 'progressBar' },
   ];
 
   useEffect(() => {
@@ -69,6 +70,8 @@ const Investors = ({ classes, orgSlug, userProfile }) => {
         return `$${nWithCommas(row[headerValue])}`;
       case 'date':
         return moment(row[headerValue]).format('MM/DD/YYYY');
+      case 'progressBar':
+        return <ProgressBarWithLabel value={row[headerValue] * 100} />;
       default:
         return <div />;
     }
