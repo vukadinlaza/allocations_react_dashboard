@@ -29,8 +29,6 @@ const validate = (formData, revocableTrust) => {
   ];
   if (revocableTrust) {
     required = [...required, 'ssn_1', 'ssn_2', 'ssn_3'];
-  } else {
-    required = [...required, 'f1_15', 'f1_14'];
   }
   return required.reduce((acc, attr) => (formData[attr] ? acc : [...acc, attr]), []);
 };
@@ -116,6 +114,21 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
             />
           </label>
         </FormControl>
+
+        {formData.tax_classification === 'SMLLC' && (
+          <FormControl className="form-field disregarded-entity-name">
+            <label>
+              Disregarded Entity Name
+              <TextField
+                variant="outlined"
+                onChange={handleChange}
+                value={formData['disregarded_entity_name']}
+                error={errors.includes('disregarded_entity_name')}
+                name="disregarded_entity_name"
+              />
+            </label>
+          </FormControl>
+        )}
 
         <FormControl className="form-field address">
           <label>
@@ -244,11 +257,11 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
           </div>
         )}
 
-        <div className="social container">
+        <div className="container">
           {!revocableTrust ? (
             <FormControl className="form-field ein">
               <label>
-                EIN
+                EIN (if applicable)
                 <div className="ein container">
                   <Tooltip title="First 2 digits of EIN.">
                     <TextField
@@ -276,36 +289,44 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
               </label>
             </FormControl>
           ) : (
-            <FormControl className="form-field ein">
+            <FormControl className="form-field ssn">
               SSN
               <div className="ssn container">
-                <TextField
-                  name="ssn_1"
-                  value={formData.ssn_1}
-                  onChange={handleChange}
-                  variant="outlined"
-                  className="ssn-one"
-                  inputProps={{ maxLength: '3' }}
-                  error={errors.includes('ssn_1')}
-                />
-                <TextField
-                  name="ssn_2"
-                  value={formData.ssn_2}
-                  onChange={handleChange}
-                  variant="outlined"
-                  className="ssn-two"
-                  inputProps={{ maxLength: '2' }}
-                  error={errors.includes('ssn_2')}
-                />
-                <TextField
-                  name="ssn_3"
-                  value={formData.ssn_3}
-                  onChange={handleChange}
-                  variant="outlined"
-                  className="ssn-three"
-                  inputProps={{ maxLength: '4' }}
-                  error={errors.includes('ssn_3')}
-                />
+                <Tooltip title="First 3 digits of SSN.">
+                  <TextField
+                    name="ssn_1"
+                    value={formData.ssn_1}
+                    onChange={handleChange}
+                    variant="outlined"
+                    className="ssn-one"
+                    inputProps={{ maxLength: '3' }}
+                    error={errors.includes('ssn_1')}
+                  />
+                </Tooltip>
+
+                <Tooltip title="Second 2 digits of SSN.">
+                  <TextField
+                    name="ssn_2"
+                    value={formData.ssn_2}
+                    onChange={handleChange}
+                    variant="outlined"
+                    className="ssn-two"
+                    inputProps={{ maxLength: '2' }}
+                    error={errors.includes('ssn_2')}
+                  />
+                </Tooltip>
+
+                <Tooltip title="Last 4 digits of SSN.">
+                  <TextField
+                    name="ssn_3"
+                    value={formData.ssn_3}
+                    onChange={handleChange}
+                    variant="outlined"
+                    className="ssn-three"
+                    inputProps={{ maxLength: '4' }}
+                    error={errors.includes('ssn_3')}
+                  />
+                </Tooltip>
               </div>
             </FormControl>
           )}
@@ -323,6 +344,49 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
             </label>
           </FormControl>
         </div>
+
+        {formData.tax_classification === 'SMLLC' && (
+          <FormControl className="form-field social">
+            Social Security Number
+            <div className="container">
+              <Tooltip title="First 3 digits of SSN.">
+                <TextField
+                  name="ssn_1"
+                  value={formData.ssn_1}
+                  onChange={handleChange}
+                  variant="outlined"
+                  className="ssn-one"
+                  inputProps={{ maxLength: '3' }}
+                  error={errors.includes('ssn_1')}
+                />
+              </Tooltip>
+
+              <Tooltip title="Second 2 digits of SSN.">
+                <TextField
+                  name="ssn_2"
+                  value={formData.ssn_2}
+                  onChange={handleChange}
+                  variant="outlined"
+                  className="ssn-two"
+                  inputProps={{ maxLength: '2' }}
+                  error={errors.includes('ssn_2')}
+                />
+              </Tooltip>
+
+              <Tooltip title="Last 4 digits of SSN.">
+                <TextField
+                  name="ssn_3"
+                  value={formData.ssn_3}
+                  onChange={handleChange}
+                  variant="outlined"
+                  className="ssn-three"
+                  inputProps={{ maxLength: '4' }}
+                  error={errors.includes('ssn_3')}
+                />
+              </Tooltip>
+            </div>
+          </FormControl>
+        )}
 
         <FormControl className="form-field signature">
           <label>
