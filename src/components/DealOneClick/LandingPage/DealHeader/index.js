@@ -138,8 +138,6 @@ function DealHeader({ deal }) {
         <h5>INVESTING DETAILS</h5>
       </Box>
 
-      {/* CREATE ARRAY AND MAP THROUGH IT FOR THE REST OF THE SIMILAR BOXES */}
-
       <Box display="flex" justifyContent="space-between" style={{ backgroundColor: '' }}>
         <InvestingDetailsSimpleBox
           title="Offering Type"
