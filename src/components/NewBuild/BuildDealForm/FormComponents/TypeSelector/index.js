@@ -24,7 +24,6 @@ import {
   NumberOfInvestments,
   Representative,
   DealStage,
-  MasterSeries,
   FundName,
   GeneralPartnerName,
   RepresentativeGeneralPartnerAndTitle,
