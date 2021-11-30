@@ -20,6 +20,13 @@ const useStyles = makeStyles((theme) => ({
     borderWidth: '1px',
     borderColor: 'blue !important',
   },
+  hashInstructions: {
+    fontSize: '18px',
+    marginLeft: '1rem',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '14px',
+    },
+  },
 }));
 function TransferInstructions() {
   const classes = useStyles();
@@ -46,7 +53,10 @@ function TransferInstructions() {
             }}
             xs={12}
           >
-            <div style={{ marginLeft: '1rem' }}> Please paste your transaction hash here</div>
+            <div className={classes.hashInstructions} style={{ marginLeft: '1rem' }}>
+              {' '}
+              Please paste your transaction hash here
+            </div>
           </Grid>
         </Grid>
         <Grid container item spacing={1} style={{ fontSize: '14px', margin: 'auto' }}>
