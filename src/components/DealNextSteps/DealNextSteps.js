@@ -17,7 +17,6 @@ import KYCModal from './KYCModal';
 import WireInstructionsModal from './WireInstructionsModal/WireInstructionsModal';
 import CryptoPaymentModal from './CryptoPaymentModal/index';
 import { useAuth } from '../../auth/useAuth';
-import AppModal from '../Modal/AppModal';
 
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
@@ -100,11 +99,11 @@ function DealNextSteps() {
   const [open, setOpen] = useState(false);
 
   const { deal_slug, organization } = useParams();
-  const [openPayment, setOpenPayment] = useState(false);
+  const [openPayment, setOpenPayment] = useState(true);
   const [cryptoPaymentOpen, setCryptoPaymentOpen] = useState(false);
   const [wireInstructionsOpen, setWireInstructionsOpen] = useState(false);
 
-  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { userProfile, isAuthenticated, loading: authLoading } = useAuth();
   const { search } = useLocation();
   const params = queryString.parse(search);
   const history = useHistory();
@@ -323,6 +322,7 @@ function DealNextSteps() {
           open={cryptoPaymentOpen}
           setOpen={setCryptoPaymentOpen}
           investmentData={investmentData}
+          userId={data?.investor?._id ?? userProfile._id}
           dealData={dealData}
           docs={docs}
         />

@@ -1,65 +1,74 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@material-ui/core';
+import React from 'react';
+import { Grid, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { phone } from '../../../../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
-  modal: {
+  paperContainer: {
     display: 'flex',
-    justifyContent: 'center',
+    margin: 'auto',
+    width: '100%',
+    marginBottom: '29px',
+    height: '140px',
   },
-  modalPaper: {
-    marginTop: '8vh',
-    borderRadius: '1rem 1rem 0 0 ',
-    padding: theme.spacing(2),
-    maxHeight: 'calc(100% - 8vh)',
+  textItem: {
+    margin: 'auto',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '14px',
+    },
   },
-  modalHeader: {
-    fontFamily: 'Roboto !important',
+  row: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    paddingBottom: '4px',
   },
-  label: {
-    color: '#2A2B54',
-    fontWeight: 'bold',
+  leftColumn: {
+    marginLeft: '1rem',
   },
-  radioGroup: {
-    margin: '25px',
-    flexDirection: 'row',
-  },
-  radio: {
-    color: '#2A2B54',
+  rightColumn: {
+    marginRight: '1rem',
   },
 }));
 function AmountTotal({ investmentAmount, transactionFee, totalDue }) {
   const classes = useStyles();
 
   return (
-    <Paper style={{ margin: 'auto', width: '100%' }}>
-      <Grid style={{ margin: 'auto' }} container spacing={1}>
-        <Grid container item spacing={3}>
+    <Paper className={classes.paperContainer}>
+      <Grid style={{ margin: 'auto' }} container>
+        <Grid container item spacing={1} className={classes.textItem}>
           {' '}
-          <Grid item xs={6}>
-            Investment Amount
-          </Grid>
-          <Grid item xs={6}>
-            ${investmentAmount.toLocaleString('en-us', { minimumFractionDigits: 2 })}
-          </Grid>
-        </Grid>
-        <Grid container item spacing={3}>
-          <Grid item xs={6}>
-            Transaction Fee (1.5%)
-          </Grid>
-          <Grid item xs={6}>
-            ${transactionFee.toLocaleString('en-us', { minimumFractionDigits: 2 })}
+          <Grid className={classes.row} item xs={12}>
+            <div className={classes.leftColumn}>Investment Amount</div>
+            <div className={classes.rightColumn}>
+              {' '}
+              ${investmentAmount.toLocaleString('en-us', { minimumFractionDigits: 2 })}
+            </div>
           </Grid>
         </Grid>
-        <Grid container item spacing={3}>
-          <hr style={{ width: '100%', color: 'black' }} />
-        </Grid>
-        <Grid container item spacing={3}>
-          <Grid item xs={6}>
-            <b>Total Amount Due</b>
+        <Grid container item spacing={1} className={classes.textItem}>
+          <Grid item className={classes.row} xs={12}>
+            <div className={classes.leftColumn}>Transaction Fee (1.5%)</div>
+            <div className={classes.rightColumn}>
+              ${transactionFee.toLocaleString('en-us', { minimumFractionDigits: 2 })}
+            </div>
           </Grid>
-          <Grid item xs={6}>
-            ${totalDue.toLocaleString('en-us', { minimumFractionDigits: 2 })}
+        </Grid>
+        <Grid
+          container
+          item
+          spacing={1}
+          className={classes.textItem}
+          style={{ fontWeight: 'bold' }}
+        >
+          <Grid item className={classes.row} xs={12}>
+            <div className={classes.leftColumn} style={{ fontWeight: 'bold' }}>
+              Total Amount Due
+            </div>
+
+            <div className={classes.rightColumn} style={{ fontWeight: 'bold' }}>
+              {' '}
+              ${totalDue.toLocaleString('en-us', { minimumFractionDigits: 2 })}
+            </div>
           </Grid>
         </Grid>
       </Grid>
