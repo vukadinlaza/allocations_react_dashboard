@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@material-ui/core';
-import { useQuery, gql } from '@apollo/client';
+import { useQuery, useMutation, gql } from '@apollo/client';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 import AmountTotal from './AmountTotal/index';
@@ -14,6 +14,15 @@ import { toast } from 'react-toastify';
 const DEAL_WALLET_ADDRESS = gql`
   query getCryptoWalletAddress($deal_id: String) {
     getCryptoWalletAddress(deal_id: $deal_id)
+  }
+`;
+
+const SUBMIT_TRANSACTION_HASH = gql`
+  mutation submitTransactionHash($transactionInfo: TransactionInfo!) {
+    createInvestmentTransaction(transactionInfo: $transactionInfo) {
+      _id
+      acknowledged
+    }
   }
 `;
 
@@ -79,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
 
 const demoAmount = 5000;
 
-function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
+function CryptoPaymentModal({ open, setOpen, investmentData, investorData, dealData }) {
   const classes = useStyles();
   const { deal } = dealData;
   const { investment } = investmentData;
@@ -88,11 +97,25 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
     variables: { deal_id: deal._id },
   });
 
+  const [submitTransactionHash] = useMutation(SUBMIT_TRANSACTION_HASH, {
+    onCompleted: (data) => {
+      console.log('yo yo yo', data);
+      toast.success('Success! Your hash has been added');
+    },
+  });
+
   const [warning, setWarning] = useState(false);
 
   const [investmentAmount, setInvestmentAmount] = useState(investment?.amount || demoAmount);
   const [transactionFee, setTransactionFee] = useState(investment?.amount || demoAmount * 0.015);
   const [totalDue, setTotalDue] = useState(investmentAmount + transactionFee);
+  const [transactionHash, setTransactionHash] = useState('');
+
+  const [transactionInfo, setTransactionInfo] = useState({
+    deal_id: deal._id,
+    transaction_hash: '',
+    user_id: investorData._id,
+  });
 
   const handleClose = () => {
     setWarning(true);
@@ -212,7 +235,10 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                       totalDue={totalDue}
                       walletAddress={data?.getCryptoWalletAddress}
                     />
-                    <TransactionHashInput />
+                    <TransactionHashInput
+                      transactionInfo={transactionInfo}
+                      setTransactionInfo={setTransactionInfo}
+                    />
                   </Grid>
                   <Grid
                     item
@@ -237,7 +263,16 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
                         color: '#FFFFFF',
                         textTransform: 'none',
                       }}
-                      onClick={handleClose}
+                      onClick={(e) => {
+                        console.log(transactionInfo);
+                        submitTransactionHash({
+                          variables: {
+                            transactionInfo,
+                          },
+                        });
+
+                        handleClose();
+                      }}
                     >
                       Continue
                     </Button>

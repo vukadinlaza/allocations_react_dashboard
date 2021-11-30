@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Container,
-  Modal,
-  Typography,
-  Grid,
-  Paper,
-  Box,
-  Button,
-  TextField,
-} from '@material-ui/core';
-
-import { toast } from 'react-toastify';
+import { Grid, Paper, TextField } from '@material-ui/core';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { phone, tablet } from '../../../../utils/helpers';
@@ -28,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-function TransferInstructions() {
+function TransferInstructions({ transactionInfo, setTransactionInfo }) {
   const classes = useStyles();
 
   return (
@@ -73,6 +62,13 @@ function TransferInstructions() {
                 },
               }}
               style={{ marginLeft: '1rem', width: '90%', height: '60px' }}
+              onChange={(e) => {
+                setTransactionInfo({
+                  ...transactionInfo,
+                  transaction_hash: e.target.value,
+                });
+              }}
+              value={transactionInfo?.transaction_hash}
             />
             {/* <input style={{ marginLeft: '1rem', width: '90%', height: '60px' }} /> */}
           </Grid>
