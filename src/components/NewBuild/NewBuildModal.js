@@ -1052,7 +1052,7 @@ export default function NewBuildModal(props) {
           `Success! New organization ${createOrganization?.name} successfully created!`,
         );
       } else {
-        toast.error('Something Went Wrong - Organization Not Created');
+        toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
       }
       resetFlow();
     },
