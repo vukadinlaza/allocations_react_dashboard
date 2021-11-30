@@ -65,6 +65,11 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
     signature: '',
     capacity_in_which_acting_if_form_is_not_signed_by_beneficial_owner: '',
     date_mm_dd_yyyy: moment().format('YYYY-MM-DD'),
+    country_of_residence: '',
+    article_and_paragraph_of_applicable_treaty: '',
+    withholding_rate_claimed: '',
+    type_of_income_subject_to_reduced_withholding: '',
+    additional_conditions: '',
   });
 
   const countryNames = countries.map((c) => c.countryName);
@@ -386,6 +391,34 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
             }
           />
         </div>
+
+        {isTaxTreaty ? (
+          <div className="tax-treaty-container">
+            <FormControl className="country-of-residence">
+              <label className="form-label">
+                Country of Residence
+                <TextField
+                  variant="outlined"
+                  onChange={handleChange}
+                  name="country_of_residence"
+                  error={errors.includes('country_of_residence')}
+                />
+              </label>
+            </FormControl>
+
+            <FormControl className="article-of-treaty">
+              <label className="form-label">
+                Article and Paragraph of Applicable Treaty
+                <TextField
+                  variant="outlined"
+                  onChange={handleChange}
+                  name="article_and_paragraph_of_applicable_treaty"
+                  error={errors.includes('article_and_paragraph_of_applicable_treaty')}
+                />
+              </label>
+            </FormControl>
+          </div>
+        ) : null}
 
         <FormControl className="form-field name">
           <label className="form-label">

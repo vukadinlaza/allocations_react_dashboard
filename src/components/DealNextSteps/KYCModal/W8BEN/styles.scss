@@ -118,6 +118,19 @@
           }
         }
       }
+      .tax-treaty-container {
+        display: flex;
+        flex-direction: column;
+        width: 95%;
+
+        .country-of-residence {
+          width: 45%;
+        }
+
+        .article-of-treaty {
+          width: 75%;
+        }
+      }
 
       .foreign-tax-id {
         width: 47.5%;
