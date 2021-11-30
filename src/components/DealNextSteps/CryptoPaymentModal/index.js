@@ -180,8 +180,7 @@ function CryptoPaymentModal({ open, setOpen, investmentData, investorData, dealD
                         color: '#FFFFFF',
                         textTransform: 'none',
                       }}
-                      onClick={(e) => {
-                        // setCompleted(false);
+                      onClick={() => {
                         handleClose();
                       }}
                     >
@@ -234,14 +233,13 @@ function CryptoPaymentModal({ open, setOpen, investmentData, investorData, dealD
                         color: '#FFFFFF',
                         textTransform: 'none',
                       }}
-                      onClick={(e) => {
-                        // submitTransactionHash({
-                        //   variables: {
-                        //     transactionInfo,
-                        //   },
-                        // });
+                      onClick={() => {
+                        submitTransactionHash({
+                          variables: {
+                            transactionInfo,
+                          },
+                        });
                         setCompleted(true);
-                        // handleClose();
                       }}
                     >
                       Continue
