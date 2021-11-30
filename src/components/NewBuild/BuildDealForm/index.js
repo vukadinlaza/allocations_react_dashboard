@@ -128,7 +128,7 @@ const BuildDetails = ({
     custom_carry_fee: 'false',
     custom_investment_agreement: 'false',
     custom_management_fee: 'false',
-    custom_reporting_adviser: null,
+    custom_reporting_adviser: undefined,
     deal_stage: '',
     fund_name: '',
     general_partner_representative: '',
