@@ -20,7 +20,65 @@ export const useStyles = makeStyles({
 
   BorderLinearProgress: {
     height: '12px',
-    // borderRadius: '5px',
     backgroundColor: '#E7E7E8',
+  },
+
+  usdButton: {
+    marginLeft: '10px',
+    backgroundColor: '#12824C',
+    color: '#FFFFFF',
+  },
+
+  box: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+
+  gridContainer: {
+    padding: '20px',
+  },
+
+  cardMedia: {
+    height: '100%',
+    width: '140',
+  },
+
+  investmentNumber: {
+    color: '#0561ff',
+  },
+
+  minorText: {
+    float: 'right',
+    backgroundColor: '',
+    width: '100%',
+  },
+
+  investButton: {
+    float: 'right',
+    backgroundColor: '#0561ff',
+    width: '100%',
+    color: 'white',
+  },
+
+  divInvestContainer: {
+    float: 'right',
+    backgroundColor: '',
+    width: '100%',
+    marginTop: '10px',
+  },
+
+  floatRight: {
+    float: 'right',
+  },
+
+  floatLeft: {
+    float: 'left',
+  },
+
+  modalContainer: {
+    backgroundColor: '',
+    display: 'flex',
+    padding: '10px',
+    justifyContent: 'center',
   },
 });

@@ -35,7 +35,7 @@ function DealHeader({ deal }) {
 
   return (
     <Paper className={classes.dealHeader}>
-      <Box display="flex" justifyContent="space-between" style={{ backgroundColor: '' }}>
+      <Box className={classes.box}>
         <Box display="flex">
           <Avatar />
           <h1>{company_name}</h1>
@@ -45,13 +45,11 @@ function DealHeader({ deal }) {
         </Button>
       </Box>
 
-      <Grid container style={{ backgroundColor: '', padding: '20px' }}>
-        <Grid item xs={6} style={{ backgroundColor: '', padding: '20px' }}>
+      <Grid container className={classes.gridContainer}>
+        <Grid item xs={6} className={classes.gridContainer}>
           <CardMedia
-            style={{ backgroundColor: '' }}
+            className={classes.cardMedia}
             component="img"
-            height="100%"
-            width="140"
             alt="SPV Header Image"
             src={img}
             onError={() =>
@@ -59,50 +57,39 @@ function DealHeader({ deal }) {
             }
           />
         </Grid>
-        <Grid item xs={6} style={{ backgroundColor: '', padding: '20px' }}>
+        <Grid item xs={6} className={classes.gridContainer}>
           <h3>Investment Progress</h3>
           <container>
-            <h6 style={{ color: '#0561ff' }}>$320,000</h6>
+            <h6 className={classes.investmentNumber}>$320,000</h6>
             <LinearProgress
               variant="determinate"
               value="10"
               className={classes.BorderLinearProgress}
             />
-            <div style={{ float: 'right', backgroundColor: '', width: '100%' }}>
-              <span style={{ float: 'right' }}>
+            <div className={classes.minorText}>
+              <span className={classes.floatRight}>
                 Maximum Allocation:<span>$600,000</span>
               </span>
             </div>
           </container>
           <div>
-            <Button
-              style={{ float: 'right', backgroundColor: '#0561ff', width: '100%', color: 'white' }}
-            >
-              INVEST
-            </Button>
-            <div style={{ float: 'right', backgroundColor: '', width: '100%' }}>
-              <span style={{ float: 'left' }}>
+            <Button className={classes.investButton}>INVEST</Button>
+            <div className={classes.divInvestContainer}>
+              <span className={classes.floatLeft}>
                 Invest With:{' '}
-                <Button color="primary" variant="contained" disabled>
+                <Button color="primary" variant="contained" disabled className={classes.usdButton}>
                   USD
                 </Button>
-                <Button color="primary" variant="contained" disabled>
+                <Button color="primary" variant="contained" disabled className={classes.usdButton}>
                   USDC
                 </Button>
               </span>
-              <span style={{ float: 'right' }}>
+              <span className={classes.floatRight}>
                 Minimum Investment:<span>$600,000</span>
               </span>
             </div>
           </div>
-          <div
-            style={{
-              backgroundColor: '',
-              display: 'flex',
-              padding: '10px',
-              justifyContent: 'center',
-            }}
-          >
+          <div className={classes.modalContainer}>
             <SimpleBox
               title="Signing Date"
               openTooltip={openTooltip}
@@ -134,11 +121,11 @@ function DealHeader({ deal }) {
           </div>
         </Grid>
       </Grid>
-      <Box display="flex" justifyContent="space-between" style={{ backgroundColor: '' }}>
+      <Box className={classes.box}>
         <h5>INVESTING DETAILS</h5>
       </Box>
 
-      <Box display="flex" justifyContent="space-between" style={{ backgroundColor: '' }}>
+      <Box className={classes.box}>
         <InvestingDetailsSimpleBox
           title="Offering Type"
           openTooltip={openTooltip}
@@ -147,7 +134,22 @@ function DealHeader({ deal }) {
           tooltipContent={
             <Typography color="inherit">
               This is the total capital received into the private fund’s bank account (including
-              loans and drawdowns)
+              loans and drawdowns){' '}
+            </Typography>
+          }
+        >
+          <Typography style={{ fontSize: '18px' }}>506c</Typography>
+        </InvestingDetailsSimpleBox>
+
+        <InvestingDetailsSimpleBox
+          title="Offering Type"
+          openTooltip={openTooltip}
+          handleTooltip={handleTooltip}
+          id="offering"
+          tooltipContent={
+            <Typography color="inherit">
+              This is the total capital received into the private fund’s bank account (including
+              loans and drawdowns){' '}
             </Typography>
           }
         >
