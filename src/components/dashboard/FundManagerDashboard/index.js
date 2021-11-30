@@ -25,7 +25,7 @@ import AllocationsLoader from '../../utils/AllocationsLoader';
 import DealsTabs from './sections/DealsTabs';
 import styles from './styles';
 import DocumentsTab from './sections/DocumentsTab';
-import BuildModal from '../../NewBuild/BuildModal';
+import DealTypeSelector from '../../NewBuild/DealType';
 
 const GET_INVESTMENTS = gql`
   query GetDeal($fund_slug: String!, $deal_slug: String!) {
@@ -556,7 +556,7 @@ const FundManagerDashboard = ({ classes, history }) => {
           </div>
         </Paper>
       )}
-      <BuildModal isOpen={openModal} onClose={() => setOpenModal(false)} />
+      <DealTypeSelector isOpen={openModal} onClose={() => setOpenModal(false)} />
     </div>
   );
 };
