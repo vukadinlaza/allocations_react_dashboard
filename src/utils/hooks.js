@@ -1,6 +1,4 @@
 import { useReducer, useEffect, useState } from 'react';
-import Airtable from 'airtable';
-import { isEqual } from 'lodash';
 /** *
  *
  * simple helper hooks
@@ -28,18 +26,22 @@ export const useFetch = (base, tableName, filter) => {
   useEffect(() => {
     if (!base || !tableName) return;
 
-    let url = `https://api.airtable.com/v0/${base}/${tableName}?api_key=${process.env.REACT_APP_AIRTABLE_API_KEY}`;
-    if (filter) url += `&filterByFormula=${filter}`;
+    let url = `https://api.airtable.com/v0/${base}/${tableName}`;
+    if (filter) url += `?filterByFormula=${filter}`;
 
     const fetchData = async () => {
       setStatus('fetching');
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`,
+        },
+      });
       const res = await response.json();
       setData(res.records);
       setStatus('fetched');
     };
     fetchData();
-  }, [base, tableName, filter]);
+  }, []);
 
   // Differentiate an Airtable reponse with no results, from an invalid query
   if (!base || !tableName) return { status, data: null };
