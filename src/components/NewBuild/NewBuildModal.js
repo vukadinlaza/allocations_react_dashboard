@@ -1047,7 +1047,6 @@ export default function NewBuildModal(props) {
     },
     onCompleted: ({ createOrganization }) => {
       if (createOrganization?.name) {
-        console.log('ORG', createOrganization);
         setCurrentOrganization(createOrganization);
         toast.success(
           `Success! New organization ${createOrganization?.name} successfully created!`,
