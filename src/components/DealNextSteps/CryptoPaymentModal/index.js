@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     maxHeight: 'calc(100% - 8vh)',
     [theme.breakpoints.down(phone)]: {
-      marginTop: '20vh',
+      marginTop: '15vh',
     },
   },
   innerPaper: {
