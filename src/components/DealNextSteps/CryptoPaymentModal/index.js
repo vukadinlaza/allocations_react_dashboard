@@ -76,6 +76,9 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
+
+const demoAmount = 5000;
+
 function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
   const classes = useStyles();
   const { deal } = dealData;
@@ -87,8 +90,8 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData }) {
 
   const [warning, setWarning] = useState(false);
 
-  const [investmentAmount, setInvestmentAmount] = useState(investment.amount);
-  const [transactionFee, setTransactionFee] = useState(investment.amount * 0.015);
+  const [investmentAmount, setInvestmentAmount] = useState(investment?.amount || demoAmount);
+  const [transactionFee, setTransactionFee] = useState(investment?.amount || demoAmount * 0.015);
   const [totalDue, setTotalDue] = useState(investmentAmount + transactionFee);
 
   const handleClose = () => {
