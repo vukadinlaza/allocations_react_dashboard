@@ -512,7 +512,7 @@ export function TargetRaiseGoal({
             What is the Target Raise Goal for this deal?
           </Typography>
           <ModalTooltip
-            title="What is the Target Raise Goal for this deal?"
+            title="Target Raise Goal"
             handleTooltip={handleTooltip}
             tooltipContent={
               <Typography color="inherit">
