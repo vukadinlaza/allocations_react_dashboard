@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import AmountTotal from './AmountTotal/index';
 import TransferInstructions from './TransferInstructions/index';
 import TransactionHashInput from './TransactionHashInput/index';
+import CompletedMessage from './CompletedMessage/index';
 
 import CopyIcon from '../../../assets/copy-icon.svg';
 import { phone, tablet } from '../../../utils/helpers';
@@ -98,18 +99,18 @@ function CryptoPaymentModal({ open, setOpen, investmentData, investorData, dealD
   });
 
   const [submitTransactionHash] = useMutation(SUBMIT_TRANSACTION_HASH, {
-    onCompleted: (data) => {
-      console.log('yo yo yo', data);
+    onCompleted: () => {
       toast.success('Success! Your hash has been added');
     },
   });
 
-  const [warning, setWarning] = useState(false);
+  const [completed, setCompleted] = useState(false);
 
   const [investmentAmount, setInvestmentAmount] = useState(investment?.amount || demoAmount);
-  const [transactionFee, setTransactionFee] = useState(investment?.amount || demoAmount * 0.015);
+  const [transactionFee, setTransactionFee] = useState(
+    investment?.amount * 0.015 || demoAmount * 0.015,
+  );
   const [totalDue, setTotalDue] = useState(investmentAmount + transactionFee);
-  const [transactionHash, setTransactionHash] = useState('');
 
   const [transactionInfo, setTransactionInfo] = useState({
     deal_id: deal._id,
@@ -118,8 +119,8 @@ function CryptoPaymentModal({ open, setOpen, investmentData, investorData, dealD
   });
 
   const handleClose = () => {
-    setWarning(true);
     setOpen(false);
+    setCompleted(false);
   };
 
   return (
@@ -147,27 +148,14 @@ function CryptoPaymentModal({ open, setOpen, investmentData, investorData, dealD
               </Grid>
             </Paper>
 
-            {warning ? (
+            {completed ? (
               <Paper
                 className={classes.innerPaper}
                 style={{ backgroundColor: '#f7f7f7', borderRadius: '0 0 1rem 1rem' }}
               >
                 <Grid container style={{ marginBottom: '25px' }}>
-                  {' '}
-                  <Grid item className={classes.modalText}>
-                    Are you ready to send Crypto?
-                  </Grid>
                   <Grid item className={classes.warningText}>
-                    <p>
-                      Please note, once a transaction has been initiated, it cannot be reversed. All
-                      payment transactions processed through Circle's Services are{' '}
-                      <b>non-refundable</b>.
-                    </p>
-
-                    <p>
-                      Additionally, Allocations charges a <b>1.5% transaction fee</b> which will be
-                      drawn from your capital contribution amount.
-                    </p>
+                    <CompletedMessage />
                   </Grid>
                   <Grid
                     item
@@ -185,36 +173,19 @@ function CryptoPaymentModal({ open, setOpen, investmentData, investorData, dealD
                         height: '60px',
                         margin: 'auto',
                         marginTop: '5px',
-                        background: '#2A2B54 0% 0% no-repeat padding-box',
-                        borderRadius: '10px',
-                        opacity: '1',
-                        color: '#F7F7F7',
-                        textTransform: 'none',
-                        outline: 'none',
-                      }}
-                      onClick={async () => {
-                        setWarning(false);
-                      }}
-                    >
-                      Send Crypto
-                    </Button>
-                    <Button
-                      style={{
-                        font: 'normal normal bold 24px/28px Roboto',
-                        width: '80%',
-                        height: '60px',
-                        margin: 'auto',
-                        marginTop: '5px',
-                        background: '#F7F7F7 0% 0% no-repeat padding-box',
+                        background: '#186EFF 0% 0% no-repeat padding-box',
                         borderColor: '186EFF !important',
                         borderRadius: '10px',
                         opacity: '1',
-                        color: '#2A2B54',
+                        color: '#FFFFFF',
                         textTransform: 'none',
                       }}
-                      onClick={handleClose}
+                      onClick={(e) => {
+                        // setCompleted(false);
+                        handleClose();
+                      }}
                     >
-                      Cancel
+                      Okay
                     </Button>
                   </Grid>
                 </Grid>
@@ -264,14 +235,13 @@ function CryptoPaymentModal({ open, setOpen, investmentData, investorData, dealD
                         textTransform: 'none',
                       }}
                       onClick={(e) => {
-                        console.log(transactionInfo);
-                        submitTransactionHash({
-                          variables: {
-                            transactionInfo,
-                          },
-                        });
-
-                        handleClose();
+                        // submitTransactionHash({
+                        //   variables: {
+                        //     transactionInfo,
+                        //   },
+                        // });
+                        setCompleted(true);
+                        // handleClose();
                       }}
                     >
                       Continue
