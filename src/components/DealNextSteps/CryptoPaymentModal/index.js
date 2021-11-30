@@ -103,12 +103,9 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData, userId })
   });
 
   const [completed, setCompleted] = useState(false);
-
-  const [investmentAmount, setInvestmentAmount] = useState(investment?.amount || demoAmount);
-  const [transactionFee, setTransactionFee] = useState(
-    investment?.amount * 0.015 || demoAmount * 0.015,
-  );
-  const [totalDue, setTotalDue] = useState(investmentAmount + transactionFee);
+  const investmentAmount = investment?.amount || demoAmount;
+  const transactionFee = investmentAmount * 0.015;
+  const totalDue = investmentAmount + transactionFee;
 
   const [transactionInfo, setTransactionInfo] = useState({
     deal_id: deal._id,
