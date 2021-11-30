@@ -27,8 +27,7 @@ import { ModalTooltip } from '../dashboard/FundManagerDashboard/widgets';
 import countries from 'country-region-data';
 import states from 'usa-states';
 import { toast } from 'react-toastify';
-import DealTypeSelector from './DealType';
-import { NewOrCurrentBuild, NewBuildFinalWarning } from './DealType';
+import DealTypeSelector, { NewOrCurrentBuild, NewBuildFinalWarning } from './DealType';
 
 const CREATE_ORG = gql`
   mutation CreateOrganization($organization: OrganizationInput!) {
@@ -328,6 +327,7 @@ const SelectOrganization = ({
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                   <img
                                     src={plusSignBlackIcon}
+                                    alt="black plus-sign icon"
                                     className={classes.createNewOrgMenuItemIcon}
                                   />
                                   <span>{value}</span>
@@ -358,7 +358,11 @@ const SelectOrganization = ({
                             value="Create New Organization"
                             className={classes.createNewOrgMenuItem}
                           >
-                            <img src={plusSignIcon} className={classes.createNewOrgMenuItemIcon} />
+                            <img
+                              src={plusSignIcon}
+                              alt="blue plus-sign icon"
+                              className={classes.createNewOrgMenuItemIcon}
+                            />
                             Create New Organization
                           </MenuItem>
 
@@ -605,7 +609,6 @@ const CreateNewOrganization = ({
                             ///// IF 5 OR MORE SPVS SEND TO NEXT MODAL TO COLLECT MORE INFO ////
                             if (estimatedSPVQuantity >= 5) {
                               setPage('high_volume_partnerships');
-                              return;
                             }
                             /////// IF LESS THAN 5 ESTIMATED SPVS CREATE NEW ORG HERE RIGHT AWAY THEN PUSH TO BUILD PAGE ////
                             else {
@@ -1044,6 +1047,7 @@ export default function NewBuildModal(props) {
     },
     onCompleted: ({ createOrganization }) => {
       if (createOrganization?.name) {
+        console.log('ORG', createOrganization);
         setCurrentOrganization(createOrganization);
         toast.success(
           `Success! New organization ${createOrganization?.name} successfully created!`,

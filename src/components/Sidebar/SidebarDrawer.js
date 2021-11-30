@@ -13,7 +13,7 @@ import { FaRocket } from 'react-icons/fa';
 import { BsBinocularsFill } from 'react-icons/bs';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import styles from './styles';
-import NewBuildModal from '../NewBuild/NewBuildModal.js';
+import NewBuildModal from '../NewBuild/NewBuildModal';
 
 const AddBubbleBuildButton = ({ classes }) => (
   <Button
