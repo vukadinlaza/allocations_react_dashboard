@@ -16,7 +16,7 @@ import moment from 'moment';
 import { useLocation } from 'react-router';
 import Loader from '../../../utils/Loader';
 
-const validate = (formData) => {
+const validate = (formData, isTaxTreaty) => {
   const required = [
     'name_of_individual_who_is_the_beneficial_owner',
     'country_of_citizenship',
@@ -28,12 +28,24 @@ const validate = (formData) => {
     'date_of_birth_mm_dd_yyyy_see_instructions',
     'signature',
   ];
+
+  if (isTaxTreaty) {
+    required.push(
+      'country_of_residence',
+      'article_and_paragraph_of_applicable_treaty',
+      'withholding_rate_claimed',
+      'type_of_income_subject_to_reduced_withholding',
+      'additional_conditions',
+    );
+  }
+
   return required.reduce((acc, attr) => (formData[attr] ? acc : [...acc, attr]), []);
 };
 
 function W8BEN({ toggleOpen, createDoc, called, loading }) {
   const [errors, setErrors] = useState([]);
   const [differentMailing, setDifferentMailing] = useState(false);
+  const [isTaxTreaty, setIsTaxTreaty] = useState(false);
   const { state } = useLocation();
 
   const [formData, setFormData] = useState({
@@ -61,7 +73,7 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
   const [mailingCountrySearch, setMailingCountrySearch] = useState('');
 
   const handleSubmit = () => {
-    const validation = validate(formData);
+    const validation = validate(formData, isTaxTreaty);
     console.log('Validation errors: ', validation);
     setErrors(validation);
 
@@ -124,8 +136,6 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
     }
   };
 
-  // console.log('country', country)
-  // console.log('countrySearch', countrySearch)
   console.log('W8-BEN form state: ', formData);
 
   return (
@@ -331,37 +341,50 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
           </label>
         </FormControl>
 
-        <div className="tin-container">
-          <FormControl className="tin">
-            <label className="form-label">
-              SSN or ITIN
-              <span> (If applicable)</span>
-              <div className="tin-inputs">
+        <div className="tax-id-container">
+          <div className="tin-container">
+            <FormControl className="tin">
+              <label className="form-label">
+                SSN or ITIN
+                <span> (If applicable)</span>
+                <div className="tin-inputs">
+                  <TextField
+                    variant="outlined"
+                    className="ssn-tin"
+                    onChange={handleChange}
+                    inputProps={{ maxLength: '9' }}
+                    name="ssn_or_itin"
+                    error={errors.includes('ssn_or_itin')}
+                  />
+                </div>
+              </label>
+            </FormControl>
+
+            <FormControl className="foreign-tax-id">
+              <label className="form-label">
+                Foreign tax ID number
+                <span> (recommended)</span>
                 <TextField
                   variant="outlined"
-                  className="ssn-tin"
+                  className="foreign-tax-id-input"
                   onChange={handleChange}
-                  inputProps={{ maxLength: '9' }}
-                  name="ssn_or_itin"
-                  error={errors.includes('ssn_or_itin')}
+                  name="foreign_tax_identifying_number_see_instructions"
+                  error={errors.includes('foreign_tax_identifying_number_see_instructions')}
                 />
-              </div>
-            </label>
-          </FormControl>
+              </label>
+            </FormControl>
+          </div>
 
-          <FormControl className="foreign-tax-id">
-            <label className="form-label">
-              Foreign tax ID number
-              <span> (recommended)</span>
-              <TextField
-                variant="outlined"
-                className="foreign-tax-id-input"
-                onChange={handleChange}
-                name="foreign_tax_identifying_number_see_instructions"
-                error={errors.includes('foreign_tax_identifying_number_see_instructions')}
+          <FormControlLabel
+            label="Tax Treaty"
+            control={
+              <Checkbox
+                checked={isTaxTreaty}
+                onChange={() => setIsTaxTreaty((prev) => !prev)}
+                name="taxTreaty"
               />
-            </label>
-          </FormControl>
+            }
+          />
         </div>
 
         <FormControl className="form-field name">

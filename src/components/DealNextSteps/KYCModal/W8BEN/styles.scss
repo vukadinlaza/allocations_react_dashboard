@@ -58,6 +58,11 @@
       justify-content: space-between;
     }
 
+    .tax-id-container {
+      width: 95%;
+      margin-top: 5px;
+    }
+
     .residence-container {
       padding: 0;
       width: 100%;
@@ -97,7 +102,7 @@
 
     .tin-container {
       padding: 0;
-      width: 95%;
+      width: 100%;
       display: flex;
       justify-content: space-between;
       .tin {
