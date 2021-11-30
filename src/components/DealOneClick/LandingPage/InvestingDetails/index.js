@@ -40,6 +40,9 @@ function DealHeader({ deal }) {
           <Avatar className={classes.avatar} />
           <h1>{company_name}</h1>
         </Box>
+        <Button color="primary" variant="outlined" endIcon={<HiOutlinePencil />}>
+          Edit
+        </Button>
       </Box>
 
       <Grid container className={classes.middleGridContainer}>
@@ -118,6 +121,41 @@ function DealHeader({ deal }) {
           </div>
         </Grid>
       </Grid>
+      <Box className={classes.box}>
+        <h5>INVESTING DETAILS</h5>
+      </Box>
+
+      <Box className={classes.box}>
+        <InvestingDetailsSimpleBox
+          title="Offering Type"
+          openTooltip={openTooltip}
+          handleTooltip={handleTooltip}
+          id="offering"
+          tooltipContent={
+            <Typography color="inherit">
+              This is the total capital received into the private fund’s bank account (including
+              loans and drawdowns){' '}
+            </Typography>
+          }
+        >
+          <Typography style={{ fontSize: '18px' }}>506c</Typography>
+        </InvestingDetailsSimpleBox>
+
+        <InvestingDetailsSimpleBox
+          title="Offering Type"
+          openTooltip={openTooltip}
+          handleTooltip={handleTooltip}
+          id="offering"
+          tooltipContent={
+            <Typography color="inherit">
+              This is the total capital received into the private fund’s bank account (including
+              loans and drawdowns){' '}
+            </Typography>
+          }
+        >
+          <Typography style={{ fontSize: '18px' }}>506c</Typography>
+        </InvestingDetailsSimpleBox>
+      </Box>
     </Paper>
   );
 }

@@ -19,37 +19,17 @@ export const useStyles = makeStyles({
     backgroundColor: 'pink',
     width: '90%',
     margin: '0 auto',
-    paddingBottom: '20px',
   },
 
-  // cardMedia: {
-  // backgroundSize: 'contain',
-  // backgroundPosition: 'center',
-  // backgroundRepeat: 'no-repeat',
-  // display: 'block',
-  // maxWidth: '80%',
-  // maxHeight: '90%',
-  // width: 'auto',
-  // height: 'auto',
-  // },
-
-  cardMedia: {
-    width: '720px',
-    height: '405px',
-    '@media only screen and (min-width: 768px) and (max-width: 2300px)': {
-      backgroundSize: 'contain',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-      display: 'block',
-      maxWidth: '80%',
-      maxHeight: '90%',
-      width: 'auto',
-      height: 'auto',
-    },
-    '@media (minDeviceWidth: 768px) and (maxDeviceWidth: 1023px)': {
-      width: '50%',
-      height: '50%',
-    },
+  imageWrapper: {
+    justifySelf: 'flex-end',
+    width: '50%',
+    height: '50%',
+    margin: '0',
+    padding: '0',
+    overflow: 'hidden',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
   },
 
   BorderLinearProgress: {
@@ -67,6 +47,11 @@ export const useStyles = makeStyles({
     backgroundColor: '#8FBC8F',
     width: '90%',
     margin: '0 auto',
+  },
+
+  cardMedia: {
+    height: '100%',
+    width: '140',
   },
 
   investmentNumber: {
