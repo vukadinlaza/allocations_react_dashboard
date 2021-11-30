@@ -15,22 +15,25 @@ function SubmitTaxDocs() {
     'W-9': {
       id: 'tpl_dM4QcQbyLckdPXgtyx',
       name: 'W9 Individual',
-      tooltipContent: 'This is the tooltipContent',
+      tooltipContent:
+        'Form W-9 Individual is generally used by U.S citizens or resident aliens (trusts should use W9 Entity)',
     },
     'W-9-E': {
       id: 'tpl_HSJjJ9c9jb2N4GXFkt',
       name: 'W9 Entity',
-      tooltipContent: 'This is the tooltipContent',
+      tooltipContent:
+        'Form W-9 Entity is generally used by entities created or organized in the U.S. (including partnerships, corporations, LLCs, estates, and trusts)',
     },
     'W-8-BEN': {
       id: 'tpl_qDaxDLgRkFpHJD2cFX',
       name: 'W8 BEN',
-      tooltipContent: 'This is the tooltipContent',
+      tooltipContent:
+        'Form W-9 Entity is generally used by entities created or organized in the U.S. (including partnerships, corporations, LLCs, estates, and trusts)',
     },
     'W-8-BEN-E': {
       id: 'tpl_mXPLm5EXAyHJKhQekf',
       name: 'W8 BEN-E',
-      tooltipContent: 'This is the tooltipContent',
+      tooltipContent: 'Form W-8BEN is generally used by foreign entities',
     },
   };
   const validForms = Object.keys(templateMap);
