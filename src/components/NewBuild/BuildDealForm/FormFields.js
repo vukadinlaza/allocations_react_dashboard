@@ -494,6 +494,69 @@ export function MinimumInvestmentFund({
   );
 }
 
+export function TargetRaiseGoal({
+  buildData,
+  handleChange,
+  handleTooltip,
+  setUnfilledFields,
+  unfilledFields,
+  customInputStyles,
+  classes,
+  openTooltip,
+}) {
+  return (
+    <Grid className={classes.inputGridItem} item xs={6}>
+      <FormControl required disabled variant="outlined" className={classes.formContainers}>
+        <Grid className={classes.inputLabelWithTooltip} item xs={12}>
+          <Typography className={classes.formItemName}>
+            What is the Target Raise Goal for this deal?
+          </Typography>
+          <ModalTooltip
+            title="Target Raise Goal"
+            handleTooltip={handleTooltip}
+            tooltipContent={
+              <Typography color="inherit">
+                What is the amount you would like to raise for this deal?
+              </Typography>
+            }
+            openTooltip={openTooltip}
+            id="target_raise_goal"
+          >
+            <HelpIcon
+              className={classes.helpIcon}
+              onClick={() => handleTooltip('target_raise_goal')}
+            />
+          </ModalTooltip>
+        </Grid>
+        <TextField
+          type="number"
+          value={buildData.target_raise_goal}
+          name="target_raise_goal"
+          onChange={(e) => {
+            const value = convertToPositiveIntOrNull(e.target.value);
+
+            const newEvent = {
+              target: {
+                name: 'target_raise_goal',
+                value,
+              },
+            };
+            handleChange(newEvent);
+            setUnfilledFields((prev) => prev.filter((field) => field !== 'target_raise_goal'));
+          }}
+          className={classes.inputBox}
+          variant="outlined"
+          placeholder=""
+          inputProps={customInputStyles}
+          classes={{
+            root: unfilledFields.includes('target_raise_goal') && classes.unfilledField,
+          }}
+        />
+      </FormControl>
+    </Grid>
+  );
+}
+
 export function NeedGPEntity({ buildData, handleChange, handleTooltip, classes, openTooltip }) {
   return (
     <Grid className={classes.inputGridItem} item xs={6}>

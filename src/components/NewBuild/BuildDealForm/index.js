@@ -25,6 +25,7 @@ import {
   ReportingAdviser,
   SideLetters,
   AcceptedInvestorTypes,
+  TargetRaiseGoal,
 } from './FormFields';
 
 const CREATE_BUILD = gql`
@@ -156,6 +157,7 @@ const BuildDetails = ({
     setup_cost: 20000,
     side_letters: 'false',
     sectors: [],
+    target_raise_goal: 100000,
     term_of_fund: '10 years',
     type: dealType,
     type_of_investors: 'Accredited Investors (3(c)(1))',
@@ -192,6 +194,9 @@ const BuildDetails = ({
       }
       if (!buildData.accept_crypto) {
         unvalidatedFieldsToFill('accept_crypto', 'Accept Crypto');
+      }
+      if (!buildData.target_raise_goal) {
+        unvalidatedFieldsToFill('target_raise_goal', 'Target Raise Goal');
       }
     }
     if (dealType === 'fund') {
@@ -335,6 +340,7 @@ const BuildDetails = ({
           sectors: buildData.sectors,
           setup_cost: buildData.setup_cost,
           side_letters: buildData.side_letters,
+          target_raise_goal: buildData.target_raise_goal,
           type: buildData.type,
           type_of_investors: buildData.type_of_investors,
         },
@@ -406,6 +412,7 @@ const BuildDetails = ({
             <ManagementFeeFrequency {...formFieldProps} />
             <CarryFee {...formFieldProps} />
             <SideLetters {...formFieldProps} />
+            {dealType === 'spv' && <TargetRaiseGoal {...formFieldProps} />}
             {dealType === 'spv' && <MinimumInvestment {...formFieldProps} />}
             {dealType === 'fund' && <AcceptedInvestorTypes {...formFieldProps} />}
             {dealType === 'spv' && <AcceptCrypto {...formFieldProps} />}
