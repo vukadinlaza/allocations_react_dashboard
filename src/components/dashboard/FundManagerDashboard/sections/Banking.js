@@ -150,7 +150,7 @@ const validatedDataDefault = fields.reduce((acc, val) => {
   return acc;
 }, {});
 
-const Banking = ({ deal_id, deal_NDvirtualAccountNum }) => {
+const Banking = ({ deal_id, virtual_account_number }) => {
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(true); // Show form if account creation flow has not yet started
   const [submitDisabled, setSubmitDisabled] = useState(true);
@@ -244,13 +244,13 @@ const Banking = ({ deal_id, deal_NDvirtualAccountNum }) => {
       </>
     );
 
-  if (deal_NDvirtualAccountNum) {
+  if (virtual_account_number) {
     return (
       <Grid container spacing={4} style={{ padding: '3rem', textAlign: 'center' }}>
         <Grid item sm={12} md={12} lg={12}>
           <Typography variant="h5">New Directions Virtual Account Number</Typography>
           <Typography variant="h6" style={{ paddingTop: '3rem' }}>
-            {deal_NDvirtualAccountNum}
+            {virtual_account_number}
           </Typography>
         </Grid>
       </Grid>
@@ -275,7 +275,7 @@ const Banking = ({ deal_id, deal_NDvirtualAccountNum }) => {
     );
   }
 
-  if ((!bankProvider && !deal_NDvirtualAccountNum) || !refNumData) {
+  if ((!bankProvider && !virtual_account_number) || !refNumData) {
     return (
       <Grid container spacing={4} style={{ padding: '3rem', textAlign: 'center' }}>
         <Typography variant="h5" style={{ paddingBottom: '2rem' }}>

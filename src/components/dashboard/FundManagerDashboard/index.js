@@ -97,7 +97,7 @@ export const ORG_OVERVIEW = gql`
           managementFeeType
           fundManagementFeeType
         }
-        nd_virtual_account_number
+        virtual_account_number
       }
     }
     investor {
@@ -164,7 +164,7 @@ const FundManagerDashboard = ({ classes, history }) => {
   const { organization: orgSlug } = params;
 
   if (orgSlug === 'demo-fund') {
-    //BASE HERE IS Demo Fund
+    // BASE HERE IS Demo Fund
     BASE = 'app53fOK2CmyuzKXK';
     INVESTMENTS_TABLE = 'Sales Demo';
   }
@@ -446,7 +446,7 @@ const FundManagerDashboard = ({ classes, history }) => {
             orgSlug={orgSlug}
             classes={classes}
             deal_id={dealData._id}
-            deal_NDvirtualAccountNum={dealData.nd_virtual_account_number || null}
+            virtual_account_number={dealData.virtual_account_number || null}
             openTooltip={openTooltip}
             handleTooltip={handleTooltip}
           />
