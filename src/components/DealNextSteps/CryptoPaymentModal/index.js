@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Container, Modal, Grid, Paper, Box, Button } from '@material-ui/core';
 import { useQuery, useMutation, gql } from '@apollo/client';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
+import { toast } from 'react-toastify';
 import AmountTotal from './AmountTotal/index';
 import TransferInstructions from './TransferInstructions/index';
 import TransactionHashInput from './TransactionHashInput/index';
 import CompletedMessage from './CompletedMessage/index';
-
-import CopyIcon from '../../../assets/copy-icon.svg';
-import { phone, tablet } from '../../../utils/helpers';
-import { toast } from 'react-toastify';
+import { phone } from '../../../utils/helpers';
 
 const DEAL_WALLET_ADDRESS = gql`
   query getCryptoWalletAddress($deal_id: String) {
@@ -89,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
 
 const demoAmount = 5000;
 
-function CryptoPaymentModal({ open, setOpen, investmentData, investorData, dealData }) {
+function CryptoPaymentModal({ open, setOpen, investmentData, dealData, userId }) {
   const classes = useStyles();
   const { deal } = dealData;
   const { investment } = investmentData;
@@ -115,7 +113,7 @@ function CryptoPaymentModal({ open, setOpen, investmentData, investorData, dealD
   const [transactionInfo, setTransactionInfo] = useState({
     deal_id: deal._id,
     transaction_hash: '',
-    user_id: investorData._id,
+    user_id: userId,
   });
 
   const handleClose = () => {
@@ -141,7 +139,7 @@ function CryptoPaymentModal({ open, setOpen, investmentData, investorData, dealD
                   <div style={{ color: '#FFFFFF', fontSize: '20px' }}> Finish Transaction </div>
                   <CloseIcon
                     style={{ cursor: 'pointer', marginTop: 'auto' }}
-                    onClick={(e) => setOpen(false)}
+                    onClick={() => setOpen(false)}
                     htmlColor="#FFFFFF"
                   />
                 </Box>

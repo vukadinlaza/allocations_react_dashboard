@@ -1,11 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Modal, Typography, Grid, Paper, Box, IconButton } from '@material-ui/core';
-import { toast } from 'react-toastify';
-
+import React from 'react';
+import { Grid, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { phone, tablet } from '../../../../utils/helpers';
-
-import CopyIcon from '../../../../assets/copy-icon.svg';
+import { phone } from '../../../../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
   paperContainer: {

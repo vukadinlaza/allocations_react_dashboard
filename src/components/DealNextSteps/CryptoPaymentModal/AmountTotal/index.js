@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@material-ui/core';
+import React from 'react';
+import { Grid, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { phone, tablet } from '../../../../utils/helpers';
+import { phone } from '../../../../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
   paperContainer: {

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Grid, Paper, TextField } from '@material-ui/core';
-
 import { makeStyles } from '@material-ui/core/styles';
-import { phone, tablet } from '../../../../utils/helpers';
+import { phone } from '../../../../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
   notchedOutline: {
@@ -70,7 +69,6 @@ function TransferInstructions({ transactionInfo, setTransactionInfo }) {
               }}
               value={transactionInfo?.transaction_hash}
             />
-            {/* <input style={{ marginLeft: '1rem', width: '90%', height: '60px' }} /> */}
           </Grid>
         </Grid>
       </Grid>
