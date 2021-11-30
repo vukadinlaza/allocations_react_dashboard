@@ -70,6 +70,7 @@ function Sidebar(props) {
 
   const handleAccountChange = (e) => {
     const newValue = e.target ? e.target.value : e;
+    console.log('newValue', newValue);
     const org = userProfile?.organizations_admin?.find((org) => org.name === newValue);
     if (org) {
       const currentHomePath = org ? `/admin/${org.slug}` : '/';
@@ -91,7 +92,7 @@ function Sidebar(props) {
         const currentOrg = userProfile?.organizations_admin?.find(
           (org) => org.slug === organizationSlug || org.slug === dealOrganizationSlug,
         );
-        handleAccountChange(currentOrg?.name ? currentOrg.name : '');
+        handleAccountChange(currentOrg?.name || '');
       }
     }
   }, [isUserAuthenticated]);
@@ -194,7 +195,6 @@ function Sidebar(props) {
                 )}
               </FormControl>
               <SidebarDrawer
-                updateSideBarOrganizationValue={handleAccountChange}
                 mobileOpen={mobileOpen}
                 handleDrawerClose={handleDrawerClose}
                 investTab={investTab}
@@ -271,7 +271,6 @@ function Sidebar(props) {
                 userProfile={userProfile}
                 currentOrganization={currentOrganization}
                 currentHomeUrl={currentHomeUrl}
-                updateSideBarOrganizationValue={handleAccountChange}
                 logout={logout}
                 location={location}
               />

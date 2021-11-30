@@ -61,7 +61,6 @@ const SidebarDrawer = ({
   location,
   classes,
   userProfile,
-  updateSideBarOrganizationValue,
 }) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
   const [openModal, setOpenModal] = useState(false);
@@ -144,7 +143,6 @@ const SidebarDrawer = ({
         closeModal={() => setOpenModal(false)}
         page={newBuildModalPage}
         setPage={setNewBuildModalPage}
-        updateSideBarOrganizationValue={updateSideBarOrganizationValue}
       />
 
       <AddBuildButton

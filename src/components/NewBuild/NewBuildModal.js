@@ -244,7 +244,7 @@ const SelectOrganization = ({
   handleTooltip,
   setCurrentOrganization,
 }) => {
-  const { loading: userLoading, userProfile } = useAuth();
+  const { userProfile, loading: userLoading } = useAuth();
   const [organizations, setOrganizations] = useState(userProfile?.organizations_admin || []);
   const [selectedOrg, setSelectedOrg] = useState(null);
 
@@ -305,7 +305,11 @@ const SelectOrganization = ({
                           <ModalTooltip
                             title="Organization"
                             handleTooltip={handleTooltip}
-                            tooltipContent={<Typography color="inherit">TBD</Typography>}
+                            tooltipContent={
+                              <Typography color="inherit">
+                                Select the organization this deal will belong to
+                              </Typography>
+                            }
                             openTooltip={openTooltip}
                             id="organization_name"
                           >
@@ -507,7 +511,11 @@ const CreateNewOrganization = ({
                           <ModalTooltip
                             title="Organization Name"
                             handleTooltip={handleTooltip}
-                            tooltipContent={<Typography color="inherit">TBD</Typography>}
+                            tooltipContent={
+                              <Typography color="inherit">
+                                Enter the name of the organization you would like to create
+                              </Typography>
+                            }
                             openTooltip={openTooltip}
                             id="organization_name"
                           >
@@ -750,7 +758,11 @@ const HighVolumePartnerships = ({
                             title="Master Entity Name"
                             handleTooltip={handleTooltip}
                             tooltipContent={
-                              <Typography color="inherit">Something Goes Here TBD</Typography>
+                              <Typography color="inherit">
+                                Due to the number of SPVs you plan on creating, you are considered a
+                                high volume partner. Please enter your Master Entity Name for this
+                                organization
+                              </Typography>
                             }
                             openTooltip={openTooltip}
                             id="master_entity_name"
@@ -786,7 +798,11 @@ const HighVolumePartnerships = ({
                           <ModalTooltip
                             title="Address"
                             handleTooltip={handleTooltip}
-                            tooltipContent={<Typography color="inherit">TBD</Typography>}
+                            tooltipContent={
+                              <Typography color="inherit">
+                                Please enter your mailing address
+                              </Typography>
+                            }
                             openTooltip={openTooltip}
                             id="address"
                           >
@@ -1029,7 +1045,6 @@ export default function NewBuildModal(props) {
     onCompleted: ({ createOrganization }) => {
       if (createOrganization?.name) {
         setCurrentOrganization(createOrganization);
-        props.updateSideBarOrganizationValue(createOrganization?.name);
         toast.success(
           `Success! New organization ${createOrganization?.name} successfully created!`,
         );
@@ -1039,7 +1054,7 @@ export default function NewBuildModal(props) {
       resetFlow();
     },
     onError: (err) => {
-      console.log('ERROR', err);
+      console.log('ERROR:', err);
     },
   });
 
