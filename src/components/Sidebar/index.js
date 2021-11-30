@@ -70,7 +70,7 @@ function Sidebar(props) {
 
   const handleAccountChange = (e) => {
     const newValue = e.target ? e.target.value : e;
-    console.log('newValue', newValue);
+ 
     const org = userProfile?.organizations_admin?.find((org) => org.name === newValue);
     if (org) {
       const currentHomePath = org ? `/admin/${org.slug}` : '/';
