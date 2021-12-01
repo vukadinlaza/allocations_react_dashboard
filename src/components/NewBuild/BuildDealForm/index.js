@@ -33,8 +33,6 @@ const CREATE_BUILD = gql`
     deal: createBuild(payload: $payload) {
       _id
       type
-      high_volume_partner
-      master_series
       phases {
         _id
         name
