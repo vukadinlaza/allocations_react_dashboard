@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   FormControl,
   TextField,
@@ -392,7 +393,7 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
           />
         </div>
 
-        {isTaxTreaty ? (
+        {/* {isTaxTreaty ? (
           <div className="tax-treaty-container">
             <FormControl className="country-of-residence">
               <label className="form-label">
@@ -417,6 +418,88 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
                 />
               </label>
             </FormControl>
+          </div>
+        ) : null} */}
+
+        {isTaxTreaty ? (
+          <div className="tax-treaty-container">
+            <div className="tin-container">
+              <FormControl className="tin">
+                <label className="form-label">
+                  Country of Residence
+                  <div className="tin-inputs">
+                    <TextField
+                      variant="outlined"
+                      className="ssn-tin"
+                      onChange={handleChange}
+                      name="country_of_residence"
+                      error={errors.includes('country_of_residence')}
+                    />
+                  </div>
+                </label>
+              </FormControl>
+
+              <FormControl className="foreign-tax-id">
+                <label className="form-label">
+                  Article and Paragraph of Applicable Treaty
+                  <div className="tin-inputs">
+                    <TextField
+                      variant="outlined"
+                      className="foreign-tax-id-input"
+                      onChange={handleChange}
+                      name="article_and_paragraph_of_applicable_treaty"
+                      error={errors.includes('article_and_paragraph_of_applicable_treaty')}
+                    />
+                  </div>
+                </label>
+              </FormControl>
+            </div>
+
+            <div className="tin-container">
+              <FormControl className="tin">
+                <label className="form-label">
+                  Withholding Rate Claimed
+                  <div className="tin-inputs">
+                    <TextField
+                      variant="outlined"
+                      className="ssn-tin"
+                      onChange={handleChange}
+                      name="withholding_rate_claimed"
+                      error={errors.includes('country_of_residence')}
+                    />
+                  </div>
+                </label>
+              </FormControl>
+
+              <FormControl className="foreign-tax-id">
+                <label className="form-label">
+                  Type of Income Subject to Reduced Withholding
+                  <div className="tin-inputs">
+                    <TextField
+                      variant="outlined"
+                      className="foreign-tax-id-input"
+                      onChange={handleChange}
+                      name="type_of_income_subject_to_reduced_withholding"
+                      error={errors.includes('article_and_paragraph_of_applicable_treaty')}
+                    />
+                  </div>
+                </label>
+              </FormControl>
+            </div>
+
+            <div className="">
+              <FormControl className="tax-treaty-form-field">
+                <label className="form-label">
+                  Additional Conditions
+                  <TextField
+                    variant="outlined"
+                    onChange={handleChange}
+                    name="additional_conditions"
+                    error={errors.includes('additional_conditions')}
+                  />
+                </label>
+              </FormControl>
+            </div>
           </div>
         ) : null}
 
