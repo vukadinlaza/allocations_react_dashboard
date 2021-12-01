@@ -436,8 +436,25 @@ const CreateNewOrganization = ({
   handleTooltip,
 }) => {
   const [failedValidationFields, setFailedValidationFields] = useState([]);
+
+  const checkForIllegalChars = (field) => {
+    const regex = /[{}()|/\\^~'`[\]:;"<>#%?@+*!$&=,]/g;
+    const test = regex.test(field);
+    if (test) {
+      toast.error(
+        "Please Do Not Use The Following Characters: {, }, (, ), |, /, \\, ^, ~, ', `, [, ], :, ;, <, >, #, %, ?, @, +, *, !, $, =, ,",
+        { autoClose: 15000 },
+      );
+    }
+    return test;
+  };
+
   const validateFields = () => {
     let allValid = true;
+    if (checkForIllegalChars(newOrganizationName)) {
+      setFailedValidationFields((prev) => [...prev, 'organization_name']);
+      allValid = false;
+    }
     if (!newOrganizationName) {
       setFailedValidationFields((prev) => [...prev, 'organization_name']);
       allValid = false;
