@@ -56,7 +56,7 @@ function SubmitTaxDocs() {
 
   const buttonItems = Object.entries(templateMap).map(([key, value]) => {
     return (
-      <>
+      <div className="button-container">
         <ModalTooltip
           title={value.name}
           tooltipContent={value.tooltipContent}
@@ -72,7 +72,7 @@ function SubmitTaxDocs() {
             <p className="button-text">{value.name}</p>
           </div>
         </Button>
-      </>
+      </div>
     );
   });
 
@@ -88,7 +88,7 @@ function SubmitTaxDocs() {
 
       <div className="select-form">
         <h2>Select Tax Document:</h2>
-        <div className="button-container">{buttonItems}</div>
+        <div className="options-container">{buttonItems}</div>
       </div>
 
       <KYCModal

@@ -35,32 +35,37 @@
     border-radius: 15px;
     border: 1px solid rgb(226, 226, 226);
 
-    .button-container {
-      display: flex;
-      justify-content: space-between;
-      margin: 2rem 0;
-      flex-wrap: wrap;
+    .options-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
 
-      .form-select-button {
-        border-radius: 10px;
-        height: 8rem;
-        min-width: 10rem;
-        width: 47.5%;
-        border: 2px solid #2a2b5480;
-        text-transform: none;
-        margin-bottom: 1rem;
+      .button-container {
+        display: flex;
+        margin: 2rem 0;
+        flex-wrap: wrap;
+        width: 175%;
 
-        .button-content {
-          height: 7rem;
-          width: 90%;
-          display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-          justify-content: space-evenly;
+        .form-select-button {
+          border-radius: 10px;
+          height: 8rem;
+          min-width: 10rem;
+          width: 47.5%;
+          border: 2px solid #2a2b5480;
+          text-transform: none;
+          margin-bottom: 1rem;
 
-          .button-text {
-            padding: 0;
-            margin: 0;
+          .button-content {
+            height: 7rem;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: space-evenly;
+
+            .button-text {
+              padding: 0;
+              margin: 0;
+            }
           }
         }
       }
