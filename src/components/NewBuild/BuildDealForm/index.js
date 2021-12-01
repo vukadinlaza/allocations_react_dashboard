@@ -122,7 +122,7 @@ const BuildDetails = ({
   const [buildData, setBuildData] = useState({
     accept_crypto: 'false',
     allocations_reporting_adviser: 'true',
-    asset_type: 'startup',
+    asset_type: 'Startup',
     carry_fee_type: 'percent',
     carry_fee_value: '20',
     closing_date: moment(Date.now()).add(7, 'days').format('YYYY-MM-DD'),
