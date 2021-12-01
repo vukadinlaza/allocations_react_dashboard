@@ -436,8 +436,22 @@ const CreateNewOrganization = ({
   handleTooltip,
 }) => {
   const [failedValidationFields, setFailedValidationFields] = useState([]);
+
+  const checkForIllegalChars = (text) => {
+    const regex = /[{}()|/\\^~'`[\]:;"<>#%?@+*!$&=,]/g;
+    const charTest = regex.test(text);
+    if (charTest) {
+      toast.error('Please only use alphanumeric characters, underscores, or hyphens');
+    }
+    return charTest;
+  };
+
   const validateFields = () => {
     let allValid = true;
+    if (checkForIllegalChars(newOrganizationName)) {
+      setFailedValidationFields((prev) => [...prev, 'organization_name']);
+      allValid = false;
+    }
     if (!newOrganizationName) {
       setFailedValidationFields((prev) => [...prev, 'organization_name']);
       allValid = false;
