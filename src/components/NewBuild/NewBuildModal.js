@@ -441,7 +441,7 @@ const CreateNewOrganization = ({
     const regex = /[{}()|/\\^~'`[\]:;"<>#%?@+*!$&=,]/g;
     const charTest = regex.test(text);
     if (charTest) {
-      toast.error('Please only use alphanumeric characters, hyphens, or underscores');
+      toast.error('Please only use alphanumeric characters, underscores, or hyphens');
     }
     return charTest;
   };
