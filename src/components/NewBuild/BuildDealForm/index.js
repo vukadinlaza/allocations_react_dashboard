@@ -33,8 +33,6 @@ const CREATE_BUILD = gql`
     deal: createBuild(payload: $payload) {
       _id
       type
-      high_volume_partner
-      master_series
       phases {
         _id
         name
@@ -510,14 +508,12 @@ export default function NewDealForm() {
 
   useEffect(() => {
     // if there is no build data/deal_id, we create a new build (default info pulled from the backend)
-    if (organization) {
-      if (!localStorage.getItem('buildData') && !localStorage.getItem('buildDeal')) {
-        createBuild({
-          variables: { payload: { organization_id: organization._id, type: dealType } },
-        });
-      }
+    if (!localStorage.getItem('buildData') && !localStorage.getItem('buildDeal')) {
+      createBuild({
+        variables: { payload: { type: dealType } },
+      });
     }
-  }, [organization]);
+  }, []);
 
   useEffect(() => {
     // if we finished creating the build, set the deal info in local storage
