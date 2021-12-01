@@ -437,9 +437,9 @@ const CreateNewOrganization = ({
 }) => {
   const [failedValidationFields, setFailedValidationFields] = useState([]);
 
-  const checkForIllegalChars = (field) => {
+  const checkForIllegalChars = (text) => {
     const regex = /[{}()|/\\^~'`[\]:;"<>#%?@+*!$&=,]/g;
-    const charTest = regex.test(field);
+    const charTest = regex.test(text);
     if (charTest) {
       toast.error('Please only use alphanumeric characters, hyphens, or underscores', {
         autoClose: 15000,
