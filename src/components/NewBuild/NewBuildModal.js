@@ -439,14 +439,13 @@ const CreateNewOrganization = ({
 
   const checkForIllegalChars = (field) => {
     const regex = /[{}()|/\\^~'`[\]:;"<>#%?@+*!$&=,]/g;
-    const test = regex.test(field);
-    if (test) {
-      toast.error(
-        "Please Do Not Use The Following Characters: {, }, (, ), |, /, \\, ^, ~, ', `, [, ], :, ;, <, >, #, %, ?, @, +, *, !, $, =, ,",
-        { autoClose: 15000 },
-      );
+    const charTest = regex.test(field);
+    if (charTest) {
+      toast.error('Please only use alphanumeric characters, hyphens, or underscores', {
+        autoClose: 15000,
+      });
     }
-    return test;
+    return charTest;
   };
 
   const validateFields = () => {
