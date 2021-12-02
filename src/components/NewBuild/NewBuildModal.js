@@ -21,6 +21,7 @@ import { useHistory } from 'react-router';
 import countries from 'country-region-data';
 import states from 'usa-states';
 import { toast } from 'react-toastify';
+import { LiveTv } from '@material-ui/icons';
 import { phone } from '../../utils/helpers';
 import plusSignIcon from '../../assets/plus-vector.svg';
 import plusSignBlackIcon from '../../assets/plus-vector-black.svg';
@@ -448,22 +449,23 @@ const CreateNewOrganization = ({
 
   const validateFields = () => {
     let allValid = true;
+    let allFilled = true;
     if (checkForIllegalChars(newOrganizationName)) {
       setFailedValidationFields((prev) => [...prev, 'organization_name']);
       allValid = false;
     }
     if (!newOrganizationName) {
       setFailedValidationFields((prev) => [...prev, 'organization_name']);
-      allValid = false;
+      allFilled = false;
     }
     if (!estimatedSPVQuantity) {
       setFailedValidationFields((prev) => [...prev, 'estimated_spv_quantity']);
-      allValid = false;
+      allFilled = false;
     }
-    if (!allValid) {
+    if (!allFilled) {
       toast.error('Please fill in all fields');
     }
-    return allValid;
+    return allValid && allFilled;
   };
 
   return (
