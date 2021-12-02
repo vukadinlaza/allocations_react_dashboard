@@ -156,7 +156,6 @@ const styles = (theme) => ({
 
 export const ModalTooltip = withStyles(styles)(
   ({ classes, children, title, handleTooltip, tooltipContent, openTooltip, id }) => {
-    console.log('classes', classes);
     return (
       <Tooltip
         title={
