@@ -57,7 +57,6 @@ Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
 const App = () => {
   const { dealPageRedesign } = useFlags();
-  console.log(dealPageRedesign, 'HELP');
   return (
     <AuthorizedApolloProvider>
       <CurrentAccountProvider>
