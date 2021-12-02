@@ -1760,7 +1760,7 @@ export function PitchDeckCheckBox({ buildData, setBuildData, classes }) {
         }}
       />
       <Typography style={{ fontWeight: 'bold' }}>
-        Allow Pitch Deck to be shown publically on Deal Page?
+        Allow the Pitch Deck to be shown publicly on the Deal Page?
       </Typography>
     </div>
   );
