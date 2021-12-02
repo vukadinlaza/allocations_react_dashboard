@@ -3,17 +3,18 @@ import { withStyles } from '@material-ui/core/styles';
 import { Typography, Tooltip } from '@material-ui/core';
 import HelpIcon from '@material-ui/icons/Help';
 import CloseIcon from '@material-ui/icons/Close';
-import { phone } from '../../../../../utils/helpers';
+import { phone } from '../../../../utils/helpers';
 
 const styles = (theme) => ({
   box: {
-    width: '20%',
+    width: '100%',
     height: '100px',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     // boxShadow: '0px 3px 6px #00000029',
     // border: '1px solid #8493A640',
-    // borderRadius: '10px',
-    margin: '20px',
+    borderRadius: '10px',
+    backgroundColor: '',
+    // margin: '20px',
     [theme.breakpoints.down(phone)]: {
       minWidth: '0 !important',
       maxWidth: 'none !important',
@@ -23,10 +24,10 @@ const styles = (theme) => ({
     padding: '5px',
   },
   boxTitle: {
-    fontSize: '18px',
+    fontSize: '14px',
   },
   boxTitleContainer: {
-    width: '70%',
+    width: '100%',
     // height: '71px',
     // background: '#FFFFFF 0% 0% no-repeat padding-box',
     borderRadius: '10px 10px 0px 0px',
@@ -58,7 +59,7 @@ const styles = (theme) => ({
   infoIcon: {
     marginLeft: '0.5em',
     cursor: 'pointer',
-    color: '#205DF5',
+    color: '#758398',
     fontSize: '20px',
   },
   modal: {

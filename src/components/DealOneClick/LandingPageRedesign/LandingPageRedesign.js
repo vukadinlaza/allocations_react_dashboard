@@ -2,14 +2,13 @@ import React, { useEffect } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { useParams, useHistory, useLocation, Redirect } from 'react-router-dom';
 import moment from 'moment';
-import TermsPanel from './TermsPanel';
-import InvestPanel from './InvestPanel';
+// import InvestPanel from './InvestPanel';
 import Deal from '../../Deal';
-import DealHeader from './DealHeader';
+import DealHeaderRedesign from './DealHeader';
+import InvestingDetails from './InvestingDetails';
+import DealSummary from './DealSummary';
 import CoinvestorsPanel from './CoinvestorsPanel';
-import './styles.scss';
-import KeyHighlights from './KeyHighlightsPanel';
-import CryptoDisclosure from './CryptoDiscPanel';
+// import './styles.scss';
 
 import Loader from '../../utils/Loader';
 
@@ -87,7 +86,7 @@ const exemptDealSlugs = [
   'type-one-fund-I',
 ];
 
-function DealLandingPage() {
+function DealLandingPageRedesign() {
   const { deal_slug, organization } = useParams();
   const history = useHistory();
   const { pathname } = useLocation();
@@ -125,17 +124,13 @@ function DealLandingPage() {
   return (
     <section className="LandingPage">
       <div className="flex-container">
-        <DealHeader deal={deal} />
-        <InvestPanel deal={deal} deal_slug={deal_slug} organization={organization} />
-      </div>
-      <div className="flex-container">
+        <DealHeaderRedesign deal={deal} />
+        <InvestingDetails deal={deal} />
+        <DealSummary deal={deal} />
         <CoinvestorsPanel deal={deal} />
-        <KeyHighlights deal={deal} />
-        <TermsPanel deal={deal} />
-        <CryptoDisclosure deal={deal} />
       </div>
     </section>
   );
 }
 
-export default DealLandingPage;
+export default DealLandingPageRedesign;
