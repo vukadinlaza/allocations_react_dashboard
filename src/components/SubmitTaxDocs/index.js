@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { Button } from '@material-ui/core';
+import { Button, Tooltip } from '@material-ui/core';
 import { useLocation } from 'react-router-dom';
-import HelpIcon from '@material-ui/icons/Help';
-import { ModalTooltip } from '../dashboard/FundManagerDashboard/widgets';
 import KYCModal from '../DealNextSteps/KYCModal';
 import DocIcon from '../../assets/buildDoc.svg';
 import './styles.scss';
@@ -57,21 +55,14 @@ function SubmitTaxDocs() {
   const buttonItems = Object.entries(templateMap).map(([key, value]) => {
     return (
       <div className="button-container">
-        <ModalTooltip
-          title={value.name}
-          tooltipContent={value.tooltipContent}
-          id={key}
-          handleTooltip={handleTooltip}
-          openTooltip={openTooltip}
-        >
-          <HelpIcon onClick={() => handleTooltip(key)} />
-        </ModalTooltip>
-        <Button key={key} onClick={() => handleClick(key)} className="form-select-button">
-          <div className="button-content">
-            <img className="button-img" src={DocIcon} />
-            <p className="button-text">{value.name}</p>
-          </div>
-        </Button>
+        <Tooltip title={value.tooltipContent}>
+          <Button key={key} onClick={() => handleClick(key)} className="form-select-button">
+            <div className="button-content">
+              <img className="button-img" src={DocIcon} />
+              <p className="button-text">{value.name}</p>
+            </div>
+          </Button>
+        </Tooltip>
       </div>
     );
   });
