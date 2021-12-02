@@ -89,7 +89,7 @@ const Breadcrumb = ({ title, active, withSeparator = false }) => {
 
 const Breadcrumbs = ({ titles, page }) => {
   const classes = useStyles();
-
+  console.log('Breadcrumbs page:', page);
   return (
     <Paper className={classes.buildTabContainer}>
       {titles.map((title, i) => (
@@ -547,7 +547,7 @@ export default function NewDealForm() {
       ),
     },
     {
-      title: 'Review and sign terms',
+      title: 'Sign Agreements',
       Component: (
         <AgreementSigner
           deal={
