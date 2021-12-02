@@ -17,6 +17,7 @@ import InvestorStatus from './sections/InvestorStatus';
 import Banking from './sections/Banking';
 import Investments from './sections/Investments';
 import Investors from './sections/Investors';
+import InvestorsCapitalCalls from './sections/InvestorsCapitalCalls';
 import Overview from './sections/Overview';
 import { FlatBox } from './widgets';
 import { useViewport, useFetch } from '../../../utils/hooks';
@@ -169,7 +170,7 @@ const FundManagerDashboard = ({ classes, history }) => {
     INVESTMENTS_TABLE = 'Sales Demo';
   }
 
-  const { fundManagerBankingTab } = useFlags();
+  const { fundManagerBankingTab, capitalCalls } = useFlags();
 
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
@@ -397,7 +398,15 @@ const FundManagerDashboard = ({ classes, history }) => {
           />
         );
       case 'Investors':
-        return (
+        return capitalCalls ? (
+          <InvestorsCapitalCalls
+            classes={classes}
+            width={width}
+            data={dealInvestments}
+            orgSlug={orgSlug}
+            userProfile={userProfile}
+          />
+        ) : (
           <Investors
             classes={classes}
             width={width}
