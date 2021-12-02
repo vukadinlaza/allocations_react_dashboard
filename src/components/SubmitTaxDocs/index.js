@@ -25,7 +25,7 @@ function SubmitTaxDocs() {
         'Form W-9 Entity is generally used by entities created or organized in the U.S. (including partnerships, corporations, LLCs, estates, and trusts)',
     },
     'W-8-BEN': {
-      id: 'tpl_qDaxDLgRkFpHJD2cFX',
+      id: 'tpl_JmDP5PPQkSy7LYgJHF',
       name: 'W8 BEN',
       tooltipContent:
         'Form W-9 Entity is generally used by entities created or organized in the U.S. (including partnerships, corporations, LLCs, estates, and trusts)',
