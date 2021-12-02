@@ -14,7 +14,6 @@ import useStyles from '../DealStyles';
 import { SimpleBox } from '../widgets/SimpleBox';
 
 function DealHeader({ deal }) {
-  console.log(deal, 'DATA');
   const {
     company_name,
     dealCoverImageKey,
