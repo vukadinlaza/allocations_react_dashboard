@@ -1028,7 +1028,7 @@ export default function NewBuildModal(props) {
   const [state, setState] = useState('');
   const [zipCode, setZipcode] = useState('');
   const [country, setCountry] = useState('United States');
-  // console.log('Newbuildmodal newOrgName:', newOrganizationName);
+
   const clearMasterEntityForm = () => {
     setMasterEntityName('');
     setAddress('');
@@ -1068,7 +1068,7 @@ export default function NewBuildModal(props) {
     onCompleted: ({ createOrganization }) => {
       if (createOrganization?.name) {
         setCurrentOrganization(createOrganization);
-        props.refetch();
+        props.refetchUserProfile();
         toast.success(
           `Success! New organization ${createOrganization?.name} successfully created!`,
         );

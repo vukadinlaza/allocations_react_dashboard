@@ -39,7 +39,13 @@ const GET_INVESTOR = gql`
 `;
 
 function Sidebar(props) {
-  const { userProfile, logout, isAuthenticated, loading, refetch } = useAuth(GET_INVESTOR);
+  const {
+    userProfile,
+    logout,
+    isAuthenticated,
+    loading,
+    refetch: refetchUserProfile,
+  } = useAuth(GET_INVESTOR);
   const history = useHistory();
   const [investTab, setInvestTab] = useState(false);
   const [creditTab, setCreditTab] = useState(false);
@@ -203,7 +209,7 @@ function Sidebar(props) {
                 currentHomeUrl={currentHomeUrl}
                 logout={logout}
                 location={location}
-                refetch={refetch}
+                refetchUserProfile={refetchUserProfile}
               />
             </Drawer>
           </Hidden>
@@ -273,7 +279,7 @@ function Sidebar(props) {
                 currentHomeUrl={currentHomeUrl}
                 logout={logout}
                 location={location}
-                refetch={refetch}
+                refetchUserProfile={refetchUserProfile}
               />
             </Drawer>
           </Hidden>
