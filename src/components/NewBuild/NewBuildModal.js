@@ -17,16 +17,16 @@ import FormControl from '@material-ui/core/FormControl';
 import CloseIcon from '@material-ui/icons/Close';
 import HelpIcon from '@material-ui/icons/Help';
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router';
+import countries from 'country-region-data';
+import states from 'usa-states';
+import { toast } from 'react-toastify';
 import { phone } from '../../utils/helpers';
 import plusSignIcon from '../../assets/plus-vector.svg';
 import plusSignBlackIcon from '../../assets/plus-vector-black.svg';
 import { useAuth } from '../../auth/useAuth';
-import { useHistory } from 'react-router';
 import { useSetCurrentOrganization } from '../../state/current-organization';
 import { ModalTooltip } from '../dashboard/FundManagerDashboard/widgets';
-import countries from 'country-region-data';
-import states from 'usa-states';
-import { toast } from 'react-toastify';
 import DealTypeSelector, { NewOrCurrentBuild, NewBuildFinalWarning } from './DealType';
 
 const CREATE_ORG = gql`
@@ -620,11 +620,11 @@ const CreateNewOrganization = ({
                             // validate fields, if not valid, do nothing
                             if (!validateFields()) return;
 
-                            ///// IF 5 OR MORE SPVS SEND TO NEXT MODAL TO COLLECT MORE INFO ////
+                            // IF 5 OR MORE SPVS SEND TO NEXT MODAL TO COLLECT MORE INFO //
                             if (estimatedSPVQuantity >= 5) {
                               setPage('high_volume_partnerships');
                             }
-                            /////// IF LESS THAN 5 ESTIMATED SPVS CREATE NEW ORG HERE RIGHT AWAY THEN PUSH TO BUILD PAGE ////
+                            // IF LESS THAN 5 ESTIMATED SPVS CREATE NEW ORG HERE RIGHT AWAY THEN PUSH TO BUILD PAGE //
                             else {
                               createOrganization();
                               history.push(`/new-build/${dealType}`);
@@ -1022,7 +1022,7 @@ export default function NewBuildModal(props) {
   const [state, setState] = useState('');
   const [zipCode, setZipcode] = useState('');
   const [country, setCountry] = useState('United States');
-
+  // console.log('Newbuildmodal newOrgName:', newOrganizationName);
   const clearMasterEntityForm = () => {
     setMasterEntityName('');
     setAddress('');
@@ -1062,6 +1062,7 @@ export default function NewBuildModal(props) {
     onCompleted: ({ createOrganization }) => {
       if (createOrganization?.name) {
         setCurrentOrganization(createOrganization);
+        props.refetch();
         toast.success(
           `Success! New organization ${createOrganization?.name} successfully created!`,
         );

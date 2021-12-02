@@ -39,7 +39,7 @@ const GET_INVESTOR = gql`
 `;
 
 function Sidebar(props) {
-  const { userProfile, logout, isAuthenticated, loading } = useAuth(GET_INVESTOR);
+  const { userProfile, logout, isAuthenticated, loading, refetch } = useAuth(GET_INVESTOR);
   const history = useHistory();
   const [investTab, setInvestTab] = useState(false);
   const [creditTab, setCreditTab] = useState(false);
@@ -70,7 +70,6 @@ function Sidebar(props) {
 
   const handleAccountChange = (e) => {
     const newValue = e.target ? e.target.value : e;
- 
     const org = userProfile?.organizations_admin?.find((org) => org.name === newValue);
     if (org) {
       const currentHomePath = org ? `/admin/${org.slug}` : '/';
@@ -204,6 +203,7 @@ function Sidebar(props) {
                 currentHomeUrl={currentHomeUrl}
                 logout={logout}
                 location={location}
+                refetch={refetch}
               />
             </Drawer>
           </Hidden>
@@ -273,6 +273,7 @@ function Sidebar(props) {
                 currentHomeUrl={currentHomeUrl}
                 logout={logout}
                 location={location}
+                refetch={refetch}
               />
             </Drawer>
           </Hidden>

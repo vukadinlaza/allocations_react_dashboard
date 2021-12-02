@@ -61,6 +61,7 @@ const SidebarDrawer = ({
   location,
   classes,
   userProfile,
+  refetch,
 }) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
   const [openModal, setOpenModal] = useState(false);
@@ -143,6 +144,7 @@ const SidebarDrawer = ({
         closeModal={() => setOpenModal(false)}
         page={newBuildModalPage}
         setPage={setNewBuildModalPage}
+        refetch={refetch}
       />
 
       <AddBuildButton
