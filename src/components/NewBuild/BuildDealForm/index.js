@@ -26,6 +26,7 @@ import {
   SideLetters,
   AcceptedInvestorTypes,
   TargetRaiseGoal,
+  PitchDeckCheckBox,
 } from './FormFields';
 
 const CREATE_BUILD = gql`
@@ -151,6 +152,7 @@ const BuildDetails = ({
     portfolio_company_name: '',
     portfolio_company_securities: '',
     portfolio_deal_name: '',
+    public_pitch_deck: false,
     representative: '',
     setup_cost: 20000,
     side_letters: 'false',
@@ -334,6 +336,7 @@ const BuildDetails = ({
           portfolio_company_name: buildData.portfolio_company_name,
           portfolio_company_securities: buildData.portfolio_company_securities,
           portfolio_deal_name: buildData.portfolio_deal_name,
+          public_pitch_deck: buildData.public_pitch_deck,
           representative: buildData.representative,
           sectors: buildData.sectors,
           setup_cost: buildData.setup_cost,
@@ -446,7 +449,7 @@ const BuildDetails = ({
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
             5. Upload Your Documents
           </Typography>
-          <UploadDocs deal={initialDeal} />
+          <UploadDocs deal={initialDeal} {...formFieldProps} />
         </form>
       </Paper>
 
