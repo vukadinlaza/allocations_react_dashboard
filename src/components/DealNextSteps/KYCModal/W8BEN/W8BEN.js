@@ -88,6 +88,10 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
       return toast.warning('Incomplete form');
     }
 
+    // if (Number(formData.withholding_rate_claimed) !== 0 && Number(formData.withholding_rate_claimed)) {
+    //   formData.withholding_rate_claimed = `${formData.withholding_rate_claimed}%`;
+    // }
+
     createDoc(formData);
   };
 
@@ -114,7 +118,6 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
     if (e) {
       e.persist();
     }
-    console.log('PORP', prop);
     if (prop === 'country') {
       if (newValue) {
         const countryValue = newValue === 'U.S.' || newValue === 'USA' ? 'United States' : newValue;
