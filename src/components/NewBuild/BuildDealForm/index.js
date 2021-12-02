@@ -450,7 +450,7 @@ const BuildDetails = ({
             5. Upload Your Documents
           </Typography>
           <UploadDocs deal={initialDeal} />
-          <PitchDeckCheckBox {...formFieldProps} />
+          {dealType === 'spv' && <PitchDeckCheckBox {...formFieldProps} />}
         </form>
       </Paper>
 
