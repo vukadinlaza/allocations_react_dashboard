@@ -29,6 +29,7 @@ import { useAuth } from '../../auth/useAuth';
 import { useSetCurrentOrganization } from '../../state/current-organization';
 import { ModalTooltip } from '../dashboard/FundManagerDashboard/widgets';
 import DealTypeSelector, { NewOrCurrentBuild, NewBuildFinalWarning } from './DealType';
+import { convertToPositiveIntOrNull } from '../../utils/numbers';
 
 const CREATE_ORG = gql`
   mutation CreateOrganization($organization: OrganizationInput!) {
@@ -587,16 +588,19 @@ const CreateNewOrganization = ({
                           </ModalTooltip>
                         </Typography>
                         <TextField
+                          type="number"
                           size="small"
                           variant="outlined"
                           value={estimatedSPVQuantity}
                           name="estimated_spv_quantity"
                           onChange={(e) => {
-                            setEstimatedSPVQuanity(e.target.value);
+                            const newVal = convertToPositiveIntOrNull(e.target.value);
+
+                            setEstimatedSPVQuanity(newVal);
                             setFailedValidationFields((prev) =>
                               prev.filter((field) => field !== 'estimated_spv_quantity'),
                             );
-                            if (e.target.value < 5) {
+                            if (newVal < 5) {
                               clearMasterEntityForm();
                             }
                           }}
