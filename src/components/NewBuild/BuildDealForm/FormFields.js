@@ -1738,7 +1738,7 @@ export function NotesMemo({ buildData, handleChange, handleTooltip, classes, ope
 
 export function PitchDeckCheckBox({ buildData, setBuildData, classes }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div style={{ display: 'flex', alignItems: 'center', marginTop: '30px' }}>
       <Checkbox
         color="#39C522"
         size="medium"
