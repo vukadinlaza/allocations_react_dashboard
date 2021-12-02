@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { useParams, useHistory, useLocation, Redirect } from 'react-router-dom';
 import moment from 'moment';
-// import InvestPanel from './InvestPanel';
 import Deal from '../../Deal';
 import DealHeaderRedesign from './DealHeader';
 import InvestingDetails from './InvestingDetails';
