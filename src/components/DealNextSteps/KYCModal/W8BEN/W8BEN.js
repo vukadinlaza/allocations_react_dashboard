@@ -80,7 +80,7 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
 
   const handleSubmit = () => {
     const validation = validate(formData, isTaxTreaty);
-    console.log('Validation errors: ', validation);
+
     setErrors(validation);
 
     if (validation.length > 0) {
@@ -393,49 +393,33 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
           />
         </div>
 
-        {/* {isTaxTreaty ? (
-          <div className="tax-treaty-container">
-            <FormControl className="country-of-residence">
-              <label className="form-label">
-                Country of Residence
-                <TextField
-                  variant="outlined"
-                  onChange={handleChange}
-                  name="country_of_residence"
-                  error={errors.includes('country_of_residence')}
-                />
-              </label>
-            </FormControl>
-
-            <FormControl className="article-of-treaty">
-              <label className="form-label">
-                Article and Paragraph of Applicable Treaty
-                <TextField
-                  variant="outlined"
-                  onChange={handleChange}
-                  name="article_and_paragraph_of_applicable_treaty"
-                  error={errors.includes('article_and_paragraph_of_applicable_treaty')}
-                />
-              </label>
-            </FormControl>
-          </div>
-        ) : null} */}
-
         {isTaxTreaty ? (
           <div className="tax-treaty-container">
             <div className="tin-container">
-              <FormControl className="tin">
+              <FormControl className="tin" required variant="outlined">
                 <label className="form-label">
-                  Country of Residence
-                  <div className="tin-inputs">
-                    <TextField
-                      variant="outlined"
-                      className="ssn-tin"
-                      onChange={handleChange}
-                      name="country_of_residence"
-                      error={errors.includes('country_of_residence')}
-                    />
-                  </div>
+                  Country of citizenship
+                  <Autocomplete
+                    className="country-select"
+                    value={formData.country_of_citizenship}
+                    onChange={(event, newInputValue) =>
+                      handleCountryChange('country_of_citizenship')(event, newInputValue)
+                    }
+                    inputValue={countryCitizenSearch || ''}
+                    onInputChange={(event, newInputValue) => {
+                      handleCountryChange('country_of_citizenship_search')(event, newInputValue);
+                    }}
+                    id="country-select"
+                    options={[...countryNames, 'USA', 'U.S.']}
+                    getOptionLabel={(option) => option}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="outlined"
+                        error={errors.includes('country_of_citizenship')}
+                      />
+                    )}
+                  />
                 </label>
               </FormControl>
 
