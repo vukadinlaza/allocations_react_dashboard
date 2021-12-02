@@ -76,6 +76,7 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
   const countryNames = countries.map((c) => c.countryName);
   const [countrySearch, setCountrySearch] = useState('');
   const [countryCitizenSearch, setCountryCitizenSearch] = useState('');
+  const [countryResidenceSearch, setCountryResidenceSearch] = useState('');
   const [mailingCountrySearch, setMailingCountrySearch] = useState('');
 
   const handleSubmit = () => {
@@ -113,6 +114,7 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
     if (e) {
       e.persist();
     }
+    console.log('PORP', prop);
     if (prop === 'country') {
       if (newValue) {
         const countryValue = newValue === 'U.S.' || newValue === 'USA' ? 'United States' : newValue;
@@ -125,6 +127,12 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
         return setFormData((prevData) => ({ ...prevData, country_of_citizenship: countryValue }));
       }
     }
+    if (prop === 'country_of_residence') {
+      if (newValue) {
+        const countryValue = newValue === 'U.S.' || newValue === 'USA' ? 'United States' : newValue;
+        return setFormData((prevData) => ({ ...prevData, country_of_residence: countryValue }));
+      }
+    }
     if (prop === 'mailing_country') {
       if (newValue) {
         const countryValue = newValue === 'U.S.' || newValue === 'USA' ? 'United States' : newValue;
@@ -133,6 +141,9 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
     }
     if (prop === 'country_of_citizenship_search') {
       return setCountryCitizenSearch(newValue);
+    }
+    if (prop === 'country_of_residence_search') {
+      return setCountryResidenceSearch(newValue);
     }
     if (prop === 'mailing_country_search') {
       return setMailingCountrySearch(newValue);
@@ -396,16 +407,16 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
             <div className="tin-container">
               <FormControl className="tin" required variant="outlined">
                 <label className="form-label">
-                  Country of citizenship
+                  Country of Residence
                   <Autocomplete
                     className="country-select"
-                    value={formData.country_of_citizenship}
+                    value={formData.country_of_residence}
                     onChange={(event, newInputValue) =>
-                      handleCountryChange('country_of_citizenship')(event, newInputValue)
+                      handleCountryChange('country_of_residence')(event, newInputValue)
                     }
-                    inputValue={countryCitizenSearch || ''}
+                    inputValue={countryResidenceSearch || ''}
                     onInputChange={(event, newInputValue) => {
-                      handleCountryChange('country_of_citizenship_search')(event, newInputValue);
+                      handleCountryChange('country_of_residence_search')(event, newInputValue);
                     }}
                     id="country-select"
                     options={[...countryNames, 'USA', 'U.S.']}
@@ -414,7 +425,7 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
                       <TextField
                         {...params}
                         variant="outlined"
-                        error={errors.includes('country_of_citizenship')}
+                        error={errors.includes('country_of_residence')}
                       />
                     )}
                   />
@@ -440,14 +451,14 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
             <div className="tin-container">
               <FormControl className="tin">
                 <label className="form-label">
-                  Withholding Rate Claimed
+                  Withholding Rate Claimed (%)
                   <div className="tin-inputs">
                     <TextField
                       variant="outlined"
                       className="ssn-tin"
                       onChange={handleChange}
                       name="withholding_rate_claimed"
-                      error={errors.includes('country_of_residence')}
+                      error={errors.includes('withholding_rate_claimed')}
                     />
                   </div>
                 </label>
