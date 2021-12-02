@@ -142,8 +142,6 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
     }
   };
 
-  console.log('W8-BEN form state: ', formData);
-
   return (
     <section className="W8BEN">
       <div className="form-header">
