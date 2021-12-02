@@ -9,7 +9,6 @@ import {
   LinearProgress,
   Typography,
 } from '@material-ui/core';
-// import { useStyles } from './style';
 import moment from 'moment';
 import useStyles from '../DealStyles';
 import { SimpleBox } from '../widgets/SimpleBox';
