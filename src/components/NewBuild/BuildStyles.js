@@ -596,6 +596,9 @@ const useStyles = makeStyles((theme) => ({
   },
   pitchDeckCheckbox: {
     paddingLeft: '0px',
+    height: '24px',
+    width: '24px',
+    borderRadius: '4px',
   },
   pitchDeckColorSecondary: {
     color: '#39C522',

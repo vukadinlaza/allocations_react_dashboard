@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import moment from 'moment';
 import { toast } from 'react-toastify';
-import { Button, Paper, Grid, FormControl, Checkbox } from '@material-ui/core';
+import { Button, Paper, Grid, FormControl } from '@material-ui/core';
 import { useParams } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import BasicInfo from './FormComponents/TypeSelector/index';
@@ -26,6 +26,7 @@ import {
   SideLetters,
   AcceptedInvestorTypes,
   TargetRaiseGoal,
+  PitchDeckCheckBox,
 } from './FormFields';
 
 const CREATE_BUILD = gql`
@@ -449,30 +450,7 @@ const BuildDetails = ({
             5. Upload Your Documents
           </Typography>
           <UploadDocs deal={initialDeal} />
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Checkbox
-              color="#39C522"
-              name="public_pitch_deck"
-              checked={buildData.public_pitch_deck}
-              classes={{
-                root: classes.pitchDeckCheckbox,
-                checked: classes.pitchDeckColorSecondary,
-              }}
-              onChange={() => {
-                setBuildData((prev) => {
-                  const newBuildData = {
-                    ...prev,
-                    public_pitch_deck: !prev.public_pitch_deck,
-                  };
-                  localStorage.setItem('buildData', JSON.stringify(newBuildData));
-                  return newBuildData;
-                });
-              }}
-            />
-            <Typography style={{ fontWeight: 'bold' }}>
-              Allow Pitch Deck to be shown publically on Deal Page?
-            </Typography>
-          </div>
+          <PitchDeckCheckBox {...formFieldProps} />
         </form>
       </Paper>
 
