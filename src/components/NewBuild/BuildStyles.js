@@ -525,7 +525,7 @@ const useStyles = makeStyles((theme) => ({
     opacity: 1,
   },
   // 1. (FUND) Styles that are used exclusively in the 'Build your SPV' tab.
-  // 2. Styles that are used exclusively in the 'Review and sign terms' tab.
+  // 2. Styles that are used exclusively in the 'Sign Agreements' tab.
   uploadContainer: {
     display: 'flex',
     justifyContent: 'space-between',

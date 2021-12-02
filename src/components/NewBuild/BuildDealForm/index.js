@@ -547,7 +547,7 @@ export default function NewDealForm() {
       ),
     },
     {
-      title: 'Review and sign terms',
+      title: 'Sign Agreements',
       Component: (
         <AgreementSigner
           deal={
