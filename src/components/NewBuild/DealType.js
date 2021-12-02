@@ -355,6 +355,7 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
                               deleteDeal();
                               localStorage.removeItem('buildData');
                               localStorage.removeItem('buildDeal');
+                              localStorage.removeItem('buildFilesUploaded');
                               setPage('deal_type_selector');
                             }}
                           >

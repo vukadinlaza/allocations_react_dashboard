@@ -449,8 +449,7 @@ const BuildDetails = ({
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
             5. Upload Your Documents
           </Typography>
-          <UploadDocs deal={initialDeal} />
-          {dealType === 'spv' && <PitchDeckCheckBox {...formFieldProps} />}
+          <UploadDocs deal={initialDeal} {...formFieldProps} />
         </form>
       </Paper>
 
