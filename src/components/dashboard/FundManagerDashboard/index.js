@@ -15,6 +15,7 @@ import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
 import Banking from './sections/Banking';
+import Crypto from './sections/Crypto';
 import Investments from './sections/Investments';
 import Investors from './sections/Investors';
 import Overview from './sections/Overview';
@@ -201,6 +202,15 @@ const FundManagerDashboard = ({ classes, history }) => {
     if (fundManagerBankingTab) {
       if (!fundTabs.includes(bankingTabName)) fundTabs.push(bankingTabName);
       if (!spvTabs.includes(bankingTabName)) spvTabs.push(bankingTabName);
+    }
+  }
+
+  if (userProfile.admin) {
+    const cryptoTabName = 'Crypto';
+    // Only add banking tab if user is admin and FF fundManagerBankingTab is true
+    if (fundManagerBankingTab) {
+      if (!fundTabs.includes(cryptoTabName)) fundTabs.push(cryptoTabName);
+      if (!spvTabs.includes(cryptoTabName)) spvTabs.push(cryptoTabName);
     }
   }
 
@@ -443,6 +453,17 @@ const FundManagerDashboard = ({ classes, history }) => {
       case 'Banking':
         return (
           <Banking
+            orgSlug={orgSlug}
+            classes={classes}
+            deal_id={dealData._id}
+            virtual_account_number={dealData.virtual_account_number || null}
+            openTooltip={openTooltip}
+            handleTooltip={handleTooltip}
+          />
+        );
+      case 'Crypto':
+        return (
+          <Crypto
             orgSlug={orgSlug}
             classes={classes}
             deal_id={dealData._id}
