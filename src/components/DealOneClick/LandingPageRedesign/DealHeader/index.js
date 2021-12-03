@@ -20,6 +20,7 @@ function DealHeader({ deal }) {
     slug,
     dealParams: { wireDeadline, signDeadline },
   } = deal;
+
   const classes = useStyles();
 
   const key = dealCoverImageKey?.includes('https')
@@ -38,23 +39,25 @@ function DealHeader({ deal }) {
   };
 
   const getDeadline = (date) => {
-    return moment(date).format('dddd, MMMM D, YYYY h:mm a [EST]');
+    return moment(date).format('MM/DD/YYYY');
   };
 
   return (
     <>
-      <div className={classes.dealHeaderPaper}>placeholder</div>
+      <div className={classes.placeholder}>placeholder</div>
 
-      <Paper className={classes.dealHeader}>
+      <Paper className={classes.dealHeader} style={{ background: '' }}>
         <Box className={classes.box}>
           <Box display="flex">
             <Avatar className={classes.avatar} />
-            <h3>{company_name}</h3>
+            <h3 className={classes.companyName} style={{ background: '' }}>
+              {company_name}
+            </h3>
           </Box>
         </Box>
 
-        <Grid container className={classes.middleGridContainer}>
-          <Grid item xs={6}>
+        <Grid container className={classes.middleGridContainer} style={{ background: '' }}>
+          <Grid item xs={6} style={{ background: '' }}>
             <CardMedia
               className={classes.cardMedia}
               component="img"
@@ -65,8 +68,8 @@ function DealHeader({ deal }) {
               }
             />
           </Grid>
-          <Grid item xs={6}>
-            <h4>Investment Progress</h4>
+          <Grid item xs={6} style={{ background: '' }}>
+            <h4 className={classes.investmentProgress}>Investment Progress</h4>
             <container>
               <h6 className={classes.investmentNumber}>$320,000</h6>
               <LinearProgress
@@ -76,12 +79,12 @@ function DealHeader({ deal }) {
               />
               <div className={classes.minorText}>
                 <span className={classes.floatRight}>
-                  Maximum Allocation:<span>$600,000</span>
+                  Total Raise Amount:<span>$600,000</span>
                 </span>
               </div>
             </container>
 
-            <Button className={classes.investButton}>INVEST</Button>
+            <Button className={classes.investButton}>Invest</Button>
             <Grid container style={{ background: '', marginTop: '15px' }}>
               <Grid item xs={6} style={{ background: '' }}>
                 Invest With:{' '}
@@ -109,8 +112,9 @@ function DealHeader({ deal }) {
               </Grid>
             </Grid>
 
-            <div className={classes.modalContainer}>
+            <div className={classes.modalContainer} style={{ background: '' }}>
               <SimpleBox
+                className={classes.modalParent}
                 title="Signing Deadline"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
@@ -132,6 +136,7 @@ function DealHeader({ deal }) {
                 </Typography>
               </SimpleBox>
               <SimpleBox
+                className={classes.modalParent}
                 title="Wiring Deadline"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}

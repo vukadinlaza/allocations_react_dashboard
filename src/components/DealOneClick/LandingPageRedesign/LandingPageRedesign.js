@@ -7,6 +7,7 @@ import DealHeaderRedesign from './DealHeader';
 import InvestingDetails from './InvestingDetails';
 import DealSummary from './DealSummary';
 import CoinvestorsPanel from './CoinvestorsPanel';
+import useStyles from './DealStyles';
 // import './styles.scss';
 
 import Loader from '../../utils/Loader';
@@ -95,6 +96,9 @@ function DealLandingPageRedesign() {
       fund_slug: organization || 'allocations',
     },
   });
+
+  const classes = useStyles();
+
   useEffect(() => {
     if (data?.publicDeal) {
       const { publicDeal: deal } = data;
@@ -121,8 +125,8 @@ function DealLandingPageRedesign() {
   }
 
   return (
-    <section className="LandingPage">
-      <div className="flex-container">
+    <section className={classes.LandingPage}>
+      <div className={classes.flexContainer}>
         <DealHeaderRedesign deal={deal} />
         <InvestingDetails deal={deal} />
         <DealSummary deal={deal} />

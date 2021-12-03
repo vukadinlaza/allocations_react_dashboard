@@ -54,7 +54,7 @@ function InvestingDetails({ deal }) {
                 title="Fee Frequency"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
-                id="offering"
+                id="frequency"
                 tooltipContent={
                   <Typography color="inherit">
                     This is the total capital received into the private fund’s bank account
@@ -71,7 +71,7 @@ function InvestingDetails({ deal }) {
                 title="Deal Stage"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
-                id="offering"
+                id="stage"
                 tooltipContent={
                   <Typography color="inherit">
                     This is the total capital received into the private fund’s bank account
@@ -88,7 +88,7 @@ function InvestingDetails({ deal }) {
                 title="Portfolio Company Securities"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
-                id="offering"
+                id="portfolio"
                 tooltipContent={
                   <Typography color="inherit">
                     This is the total capital received into the private fund’s bank account
@@ -106,7 +106,7 @@ function InvestingDetails({ deal }) {
                 title="Management Fee"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
-                id="offering"
+                id="management"
                 tooltipContent={
                   <Typography color="inherit">
                     This is the total capital received into the private fund’s bank account
@@ -123,7 +123,7 @@ function InvestingDetails({ deal }) {
                 title="Carry Fee"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
-                id="offering"
+                id="carry"
                 tooltipContent={
                   <Typography color="inherit">
                     This is the total capital received into the private fund’s bank account
@@ -140,7 +140,7 @@ function InvestingDetails({ deal }) {
                 title="Sector"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
-                id="offering"
+                id="sector"
                 tooltipContent={
                   <Typography color="inherit">
                     This is the total capital received into the private fund’s bank account

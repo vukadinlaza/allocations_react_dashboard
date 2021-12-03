@@ -102,7 +102,7 @@ const App = () => {
               />
               <PrivateRoute
                 path="/deals/:organization/:deal_slug"
-                component={dealPageRedesign ? DealLandingPageRedesign : DealLandingPage}
+                component={dealPageRedesign ? DealLandingPage : DealLandingPageRedesign}
                 exact
               />
 
