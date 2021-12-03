@@ -379,6 +379,7 @@ const BuildDetails = ({
   };
 
   const formFieldProps = {
+    dealType,
     buildData,
     setBuildData,
     handleChange,
