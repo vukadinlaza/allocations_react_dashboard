@@ -160,67 +160,74 @@ export default function TypeSelector({
 
   return (
     <Paper className={classes.paper}>
-      <form noValidate autoComplete="off" className={classes.formContainers}>
+      <Grid container className={classes.sectionHeader}>
+        <Grid item className={classes.sectionHeaderNumber}>
+          1
+        </Grid>
         <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-          1. Basic Information
+          Basic Information
         </Typography>
-        <Typography className={classes.formItemName}>
-          Choose your asset type
-          <ModalTooltip
-            title="Asset Type"
-            handleTooltip={handleTooltip}
-            tooltipContent={
-              params.type === 'fund' ? (
-                <Typography color="inherit">
-                  Select the type of deal which reflects the intended structure and the assets which
-                  the Fund will purchase
-                </Typography>
-              ) : (
-                <Typography color="inherit">
-                  Select the type of deal which reflects the intended structure and the assets which
-                  the SPV will purchase
-                </Typography>
-              )
-            }
-            openTooltip={openTooltip}
-            id="asset_type"
-          >
-            <HelpIcon className={classes.helpIcon} onClick={() => handleTooltip('asset_type')} />
-          </ModalTooltip>
-        </Typography>
-        <Grid container className={classes.assetChoiceGrid}>
-          <FormRow rowItems={row1Items} />
-          <FormRow rowItems={row2Items} />{' '}
-        </Grid>
+      </Grid>
+      <Grid container className={classes.outerSection}>
+        <form noValidate autoComplete="off" className={classes.formContainers}>
+          <Typography className={classes.formItemName}>
+            Choose your asset type
+            <ModalTooltip
+              title="Asset Type"
+              handleTooltip={handleTooltip}
+              tooltipContent={
+                params.type === 'fund' ? (
+                  <Typography color="inherit">
+                    Select the type of deal which reflects the intended structure and the assets
+                    which the Fund will purchase
+                  </Typography>
+                ) : (
+                  <Typography color="inherit">
+                    Select the type of deal which reflects the intended structure and the assets
+                    which the SPV will purchase
+                  </Typography>
+                )
+              }
+              openTooltip={openTooltip}
+              id="asset_type"
+            >
+              <HelpIcon className={classes.helpIcon} onClick={() => handleTooltip('asset_type')} />
+            </ModalTooltip>
+          </Typography>
+          <Grid container className={classes.assetChoiceGrid}>
+            <FormRow rowItems={row1Items} />
+            <FormRow rowItems={row2Items} />{' '}
+          </Grid>
 
-        <Grid container spacing={4} className={classes.inputGridContainer}>
-          {dealType === 'spv' && (
-            <>
-              <PortfolioCompanyName {...formFieldProps} />
-              <PortfolioCompanySecurities {...formFieldProps} />
-              <DealName {...formFieldProps} />
-              <ClosingDate {...formFieldProps} />
-              <ManagerName {...formFieldProps} />
-              <Representative {...formFieldProps} />
-            </>
-          )}
-          {dealType === 'fund' && (
-            <>
-              <FundName {...formFieldProps} />
-              <NumberOfInvestments {...formFieldProps} />
-              <GeneralPartnerName {...formFieldProps} />
-              <RepresentativeGeneralPartnerAndTitle {...formFieldProps} />
-              <ClosingDate {...formFieldProps} />
-              <MinimumInvestmentFund {...formFieldProps} />
-              <NeedGPEntity {...formFieldProps} />
-              {buildData.need_gp_entity === 'false' && <GPEntityName {...formFieldProps} />}
-            </>
-          )}
-          {/* FOURTH ROW */}
-          <DealStage {...formFieldProps} />
-          <Sectors {...formFieldProps} />
-        </Grid>
-      </form>
+          <Grid container spacing={4} className={classes.inputGridContainer}>
+            {dealType === 'spv' && (
+              <>
+                <PortfolioCompanyName {...formFieldProps} />
+                <PortfolioCompanySecurities {...formFieldProps} />
+                <DealName {...formFieldProps} />
+                <ClosingDate {...formFieldProps} />
+                <ManagerName {...formFieldProps} />
+                <Representative {...formFieldProps} />
+              </>
+            )}
+            {dealType === 'fund' && (
+              <>
+                <FundName {...formFieldProps} />
+                <NumberOfInvestments {...formFieldProps} />
+                <GeneralPartnerName {...formFieldProps} />
+                <RepresentativeGeneralPartnerAndTitle {...formFieldProps} />
+                <ClosingDate {...formFieldProps} />
+                <MinimumInvestmentFund {...formFieldProps} />
+                <NeedGPEntity {...formFieldProps} />
+                {buildData.need_gp_entity === 'false' && <GPEntityName {...formFieldProps} />}
+              </>
+            )}
+            {/* FOURTH ROW */}
+            <DealStage {...formFieldProps} />
+            <Sectors {...formFieldProps} />
+          </Grid>
+        </form>
+      </Grid>
     </Paper>
   );
 }

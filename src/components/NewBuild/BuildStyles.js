@@ -2,7 +2,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { autoType } from 'd3-dsv';
 import { phone } from '../../utils/helpers';
 
-
 const useStyles = makeStyles((theme) => ({
   // * Styles that are used in more than one place in the build form
   root: {
@@ -234,11 +233,50 @@ const useStyles = makeStyles((theme) => ({
   customFormItemName: {
     minHeight: '40px',
   },
+  outerSection: {
+    borderLeft: 'solid #ECF3FF 3px',
+    padding: '18px 60px',
+    marginLeft: '12px',
+  },
+  sectionHeader: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  activeOuterSection: {
+    borderLeft: 'solid #ECF3FF 3px',
+  },
+  sectionHeaderNumber: {
+    width: '28px',
+    height: '28px',
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: '50%',
+    justifyContent: 'center',
+    backgroundColor: '#0461ff',
+    color: '#fff',
+    fontSize: '19px',
+    margin: '0px 12px 6px 0px',
+  },
+  // only need to add active?
+  activeSectionHeaderNumber: {
+    backgroundColor: '#0461ff',
+  },
+  inactiveSectionHeaderNumber: {
+    backgroundColor: '#EBEBEB',
+  },
   sectionHeaderText: {
-    fontSize: '34px',
+    fontSize: '24px',
+    display: 'flex',
+    margin: '0px 0px 6px 0px',
     [theme.breakpoints.down(phone)]: {
       fontSize: '24px',
     },
+  },
+  activeSectionHeaderText: {
+    backgroundColor: '#2A2B54',
+  },
+  inactiveSectionHeaderText: {
+    backgroundColor: '#8E9394',
   },
   previousButton: {
     font: 'normal normal normal 24px/28px Roboto',
@@ -372,7 +410,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   inputGridContainer: {
-    marginTop: '16px',
     [theme.breakpoints.down(phone)]: {
       flexDirection: 'column',
     },

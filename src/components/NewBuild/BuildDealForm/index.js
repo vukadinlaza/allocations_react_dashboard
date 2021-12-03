@@ -26,7 +26,6 @@ import {
   SideLetters,
   AcceptedInvestorTypes,
   TargetRaiseGoal,
-  PitchDeckCheckBox,
 } from './FormFields';
 
 const CREATE_BUILD = gql`
@@ -166,8 +165,6 @@ const BuildDetails = ({
   const [unfilledFields, setUnfilledFields] = useState([]);
 
   const formValidation = () => {
-    //* **** NEED TO VALIDATE CLOSING DATE STILL - NEED TO CHECK FOR PROPER DATE FORMAT *********
-
     const unvalidatedFields = [];
     const fieldsToFill = [];
 
@@ -403,88 +400,125 @@ const BuildDetails = ({
         unfilledFields={unfilledFields}
         setUnfilledFields={setUnfilledFields}
       />
+
       <Paper className={classes.paper}>
-        <form noValidate autoComplete="off">
-          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-            2. Deal Terms
-          </Typography>
-          <Grid container spacing={2} className={classes.inputGridContainer}>
-            <ManagementFee {...formFieldProps} />
-            <ManagementFeeFrequency {...formFieldProps} />
-            <CarryFee {...formFieldProps} />
-            <SideLetters {...formFieldProps} />
-            {dealType === 'spv' && <TargetRaiseGoal {...formFieldProps} />}
-            {dealType === 'spv' && <MinimumInvestment {...formFieldProps} />}
-            {dealType === 'fund' && <AcceptedInvestorTypes {...formFieldProps} />}
-            {dealType === 'spv' && <AcceptCrypto {...formFieldProps} />}
+        <Grid container className={classes.sectionHeader}>
+          <Grid item className={classes.sectionHeaderNumber}>
+            2
           </Grid>
-        </form>
-      </Paper>
-      <Paper className={classes.paper}>
-        <form noValidate autoComplete="off">
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-            3. Offering Terms
+            Deal Terms
           </Typography>
-          <Grid container spacing={1} className={classes.inputGridContainer}>
-            <ReportingAdviser {...formFieldProps} />
-            <OfferingType {...formFieldProps} />
-            <CustomInvestmentAgreement {...formFieldProps} />
-          </Grid>
-        </form>
-      </Paper>
-      <Paper className={classes.paper}>
-        <form noValidate autoComplete="off">
-          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-            4. Demographics
-          </Typography>
-          <Grid container spacing={1} className={classes.inputGridContainer}>
-            <InternationalCompanyStatus {...formFieldProps} />
-            <InternationalInvestorsStatus {...formFieldProps} />
-          </Grid>
-        </form>
+        </Grid>
+        <Grid container className={classes.outerSection}>
+          <form noValidate autoComplete="off">
+            <Grid container spacing={2} className={classes.inputGridContainer}>
+              <ManagementFee {...formFieldProps} />
+              <ManagementFeeFrequency {...formFieldProps} />
+              <CarryFee {...formFieldProps} />
+              <SideLetters {...formFieldProps} />
+              {dealType === 'spv' && <TargetRaiseGoal {...formFieldProps} />}
+              {dealType === 'spv' && <MinimumInvestment {...formFieldProps} />}
+              {dealType === 'fund' && <AcceptedInvestorTypes {...formFieldProps} />}
+              {dealType === 'spv' && <AcceptCrypto {...formFieldProps} />}
+            </Grid>
+          </form>
+        </Grid>
       </Paper>
 
       <Paper className={classes.paper}>
-        <form noValidate autoComplete="off">
+        <Grid container className={classes.sectionHeader}>
+          <Grid item className={classes.sectionHeaderNumber}>
+            3
+          </Grid>
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-            5. Upload Your Documents
+            Offering Terms
           </Typography>
-          <UploadDocs deal={initialDeal} {...formFieldProps} />
-        </form>
+        </Grid>
+        <Grid container className={classes.outerSection}>
+          <form noValidate autoComplete="off">
+            <Grid container spacing={1} className={classes.inputGridContainer}>
+              <ReportingAdviser {...formFieldProps} />
+              <OfferingType {...formFieldProps} />
+              <CustomInvestmentAgreement {...formFieldProps} />
+            </Grid>
+          </form>
+        </Grid>
+      </Paper>
+      <Paper className={classes.paper}>
+        <Grid container className={classes.sectionHeader}>
+          <Grid item className={classes.sectionHeaderNumber}>
+            4
+          </Grid>
+          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
+            Demographics
+          </Typography>
+        </Grid>
+        <Grid container className={classes.outerSection}>
+          <form noValidate autoComplete="off">
+            <Grid container spacing={1} className={classes.inputGridContainer}>
+              <InternationalCompanyStatus {...formFieldProps} />
+              <InternationalInvestorsStatus {...formFieldProps} />
+            </Grid>
+          </form>
+        </Grid>
       </Paper>
 
       <Paper className={classes.paper}>
-        <form noValidate autoComplete="off">
+        <Grid container className={classes.sectionHeader}>
+          <Grid item className={classes.sectionHeaderNumber}>
+            5
+          </Grid>
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-            6. Final
+            Upload Your Documents
           </Typography>
-          <FormControl required disabled variant="outlined" className={classes.formContainers}>
-            <NotesMemo {...formFieldProps} />
-            <Button
-              className={classes.continueButton}
-              disabled={waitingOnInitialDeal}
-              onClick={() => {
-                const { isValidated, unvalidatedFields } = formValidation();
-                if (!isValidated) {
-                  toast.error(
-                    <div>
-                      Please fill in the following fields:{' '}
-                      {unvalidatedFields.map((field) => (
-                        <div>• {field}</div>
-                      ))}
-                    </div>,
-                    { autoClose: 10000 },
-                  );
-                  return;
-                }
-                setPage(page + 1);
-                handleSubmit();
-              }}
-            >
-              Continue
-            </Button>
-          </FormControl>
-        </form>
+        </Grid>
+        <Grid container className={classes.outerSection}>
+          <form noValidate autoComplete="off">
+            <UploadDocs deal={initialDeal} {...formFieldProps} />
+          </form>
+        </Grid>
+      </Paper>
+
+      <Paper className={classes.paper}>
+        <Grid container className={classes.sectionHeader}>
+          <Grid item className={classes.sectionHeaderNumber}>
+            6
+          </Grid>
+          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
+            Final
+          </Typography>
+        </Grid>
+        <div className={classes.outerSection}>
+          <form noValidate autoComplete="off">
+            <FormControl required disabled variant="outlined" className={classes.formContainers}>
+              <NotesMemo {...formFieldProps} />
+              <Button
+                className={classes.continueButton}
+                disabled={waitingOnInitialDeal}
+                onClick={() => {
+                  const { isValidated, unvalidatedFields } = formValidation();
+                  if (!isValidated) {
+                    toast.error(
+                      <div>
+                        Please fill in the following fields:{' '}
+                        {unvalidatedFields.map((field) => (
+                          <div>• {field}</div>
+                        ))}
+                      </div>,
+                      { autoClose: 10000 },
+                    );
+                    return;
+                  }
+                  setPage(page + 1);
+                  handleSubmit();
+                }}
+              >
+                Continue
+              </Button>
+            </FormControl>
+          </form>
+        </div>
       </Paper>
     </>
   );
