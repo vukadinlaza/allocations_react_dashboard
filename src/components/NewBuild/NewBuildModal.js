@@ -21,7 +21,6 @@ import { useHistory } from 'react-router';
 import countries from 'country-region-data';
 import states from 'usa-states';
 import { toast } from 'react-toastify';
-import { LiveTv } from '@material-ui/icons';
 import { phone } from '../../utils/helpers';
 import plusSignIcon from '../../assets/plus-vector.svg';
 import plusSignBlackIcon from '../../assets/plus-vector-black.svg';
