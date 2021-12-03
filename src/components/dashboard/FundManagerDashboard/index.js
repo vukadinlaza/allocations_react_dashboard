@@ -207,11 +207,9 @@ const FundManagerDashboard = ({ classes, history }) => {
 
   if (userProfile.admin) {
     const cryptoTabName = 'Crypto';
-    // Only add banking tab if user is admin and FF fundManagerBankingTab is true
-    if (fundManagerBankingTab) {
-      if (!fundTabs.includes(cryptoTabName)) fundTabs.push(cryptoTabName);
-      if (!spvTabs.includes(cryptoTabName)) spvTabs.push(cryptoTabName);
-    }
+    // Only add crypto tab if user is admin
+    if (!fundTabs.includes(cryptoTabName)) fundTabs.push(cryptoTabName);
+    if (!spvTabs.includes(cryptoTabName)) spvTabs.push(cryptoTabName);
   }
 
   const { data: atDeal } = useFetch(
