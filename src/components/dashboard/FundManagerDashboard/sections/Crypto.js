@@ -1,6 +1,7 @@
 import React from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { useQuery, gql } from '@apollo/client';
+import Loader from '../../../utils/Loader';
 
 const GET_WALLET_BALANCE = gql`
   query getWalletBalance($deal_id: String!) {
@@ -9,7 +10,7 @@ const GET_WALLET_BALANCE = gql`
 `;
 
 const Crypto = ({ deal_id }) => {
-  const { data } = useQuery(GET_WALLET_BALANCE, {
+  const { data, loading } = useQuery(GET_WALLET_BALANCE, {
     variables: { deal_id },
   });
 
@@ -19,9 +20,13 @@ const Crypto = ({ deal_id }) => {
         Crypto Wallet Balance
       </Typography>
       <Grid item sm={12} md={12} lg={12}>
-        <Typography variant="h5" style={{ paddingBottom: '2rem' }}>
-          {data ? data?.walletBalance?.balances[0].amount : 'No Crypto Wallet Found'}
-        </Typography>
+        {loading ? (
+          <Loader />
+        ) : (
+          <Typography variant="h5" style={{ paddingBottom: '2rem' }}>
+            {data ? `$${data?.walletBalance?.balances[0].amount}` : 'No Wallet Found'}
+          </Typography>
+        )}
       </Grid>
     </Grid>
   );
