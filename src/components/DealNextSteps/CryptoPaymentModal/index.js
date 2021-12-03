@@ -114,8 +114,8 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData, userId })
   });
 
   const handleClose = () => {
-    setOpen(false);
     setCompleted(false);
+    setOpen(false);
   };
 
   return (
@@ -136,7 +136,7 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData, userId })
                   <div style={{ color: '#FFFFFF', fontSize: '20px' }}> Finish Transaction </div>
                   <CloseIcon
                     style={{ cursor: 'pointer', marginTop: 'auto' }}
-                    onClick={() => setOpen(false)}
+                    onClick={() => handleClose()}
                     htmlColor="#FFFFFF"
                   />
                 </Box>
