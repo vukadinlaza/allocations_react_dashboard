@@ -40,6 +40,10 @@ const uploadTaskMap = {
     text: 'Portfolio Company Logo',
     position: 3,
   },
+  'Upload Fund Logo': {
+    text: 'Fund Logo',
+    position: 1,
+  },
 };
 
 const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId, classes }) => {
@@ -221,39 +225,51 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
   );
 };
 
-export default function UploadDocs({ deal, buildData, setBuildData, classes: checkBoxClasses }) {
+export default function UploadDocs({
+  dealType,
+  deal,
+  buildData,
+  setBuildData,
+  classes: checkBoxClasses,
+}) {
   const classes = useStyles();
 
-  const [filesUploaded, setFilesUploaded] = useState({
-    'Upload Company Logo': {
-      complete: false,
-      document: {
-        name: null,
-        _id: null,
+  const docUploadMap = {
+    spv: {
+      'Upload Company Logo': {
+        complete: false,
+        document: {
+          name: null,
+          _id: null,
+        },
+      },
+      'Upload Company Deck': {
+        complete: false,
+        document: {
+          name: null,
+          _id: null,
+        },
+      },
+      'Upload Term Sheet': {
+        complete: false,
+        document: {
+          name: null,
+          _id: null,
+        },
       },
     },
-    // 'Upload ID': {
-    //   complete: false,
-    //   document: {
-    // name: null,
-    // _id: null
-    // },
-    // },
-    'Upload Company Deck': {
-      complete: false,
-      document: {
-        name: null,
-        _id: null,
+    fund: {
+      'Upload Fund Logo': {
+        complete: false,
+        document: {
+          name: null,
+          _id: null,
+        },
       },
     },
-    'Upload Term Sheet': {
-      complete: false,
-      document: {
-        name: null,
-        _id: null,
-      },
-    },
-  });
+  };
+
+  const [filesUploaded, setFilesUploaded] = useState(docUploadMap[dealType]);
 
   const currentPhase = deal?.phases.find((phase) => phase.name === 'build');
   const uploadTasks = currentPhase?.tasks
