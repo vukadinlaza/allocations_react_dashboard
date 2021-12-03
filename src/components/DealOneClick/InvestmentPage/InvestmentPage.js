@@ -329,6 +329,7 @@ function InvestmentPage() {
           setInvestor={setInvestor}
           handleSecondSig={handleSecondSig}
           is3c7={is3c7}
+          docSpringTemplateId={deal?.docSpringTemplateId}
         />
         {requireSecondSig && (org === 'irishangels' || org === '5f903e7164eb9a0023189ca2') && (
           <SecondSignature
