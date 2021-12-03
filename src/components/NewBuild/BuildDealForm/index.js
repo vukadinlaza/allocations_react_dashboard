@@ -167,10 +167,13 @@ const BuildDetails = ({
   const formValidation = () => {
     const unvalidatedFields = [];
     const fieldsToFill = [];
+    // new array
 
+    // add section number to this
     const unvalidatedFieldsToFill = (fieldToFill, unvalidatedField) => {
       fieldsToFill.push(fieldToFill);
       unvalidatedFields.push(unvalidatedField);
+      // push into new array? only number. only need to know the lowest number. check if number exists before duplicating
     };
     // fields always checked below
     if (dealType === 'spv') {
