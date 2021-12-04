@@ -31,21 +31,25 @@ const uploadTaskMap = {
   'Upload Term Sheet': {
     text: 'Portfolio Company Term Sheet',
     position: 1,
+    fileType: 'application/pdf',
     fileTypeText: 'PDF',
   },
   'Upload Company Deck': {
     text: 'Pitch Deck',
     position: 2,
+    fileType: 'application/pdf',
     fileTypeText: 'PDF',
   },
   'Upload Company Logo': {
     text: 'Portfolio Company Logo',
     position: 3,
+    fileType: 'image/jpeg, image/jpg, image/png',
     fileTypeText: 'JPEG, or PNG',
   },
   'Upload Fund Logo': {
     text: 'Fund Logo',
     position: 1,
+    fileType: 'image/jpeg, image/jpg, image/png',
     fileTypeText: 'JPEG, or PNG',
   },
 };
@@ -73,19 +77,17 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
     },
   );
 
+  const { complete } = filesUploaded[document.title];
+  const acceptedFiles = uploadTaskMap[document.title]?.fileType;
+
   const validateFileType = (target) => {
-    if (!filesUploaded[document?.title]?.document?.fileType?.includes(target.files[0]?.type)) {
-      toast.error(
-        `Please upload a ${uploadTaskMap[document?.title]?.fileTypeText} file for ${
-          uploadTaskMap[document?.title]?.text
-        }`,
-      );
+    const uploadTask = uploadTaskMap[document?.title];
+    if (!acceptedFiles.includes(target.files[0]?.type)) {
+      toast.error(`Please upload a ${uploadTask?.fileTypeText} file for ${uploadTask?.text}`);
       return false;
     }
     return true;
   };
-
-  const { complete } = filesUploaded[document.title];
 
   if (addDocLoading || deleteDocLoading)
     return (
@@ -116,7 +118,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
               className={classes.uploadIcon}
               type="file"
               style={{ display: 'none' }}
-              accept={filesUploaded[document.title]?.document?.fileType}
+              accept={acceptedFiles}
               multiple
               onChange={({ target }) => {
                 if (target.validity.valid) {
@@ -208,7 +210,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
             className={classes.uploadIcon}
             type="file"
             style={{ display: 'none' }}
-            accept={filesUploaded[document.title]?.document?.fileType}
+            accept={acceptedFiles}
             multiple
             onChange={({ target }) => {
               if (target.validity.valid) {
@@ -259,7 +261,6 @@ export default function UploadDocs({
         document: {
           name: null,
           _id: null,
-          fileType: 'image/jpeg, image/jpg, image/png',
         },
       },
       'Upload Company Deck': {
@@ -267,7 +268,6 @@ export default function UploadDocs({
         document: {
           name: null,
           _id: null,
-          fileType: 'application/pdf',
         },
       },
       'Upload Term Sheet': {
@@ -275,7 +275,6 @@ export default function UploadDocs({
         document: {
           name: null,
           _id: null,
-          fileType: 'application/pdf',
         },
       },
     },
@@ -285,7 +284,6 @@ export default function UploadDocs({
         document: {
           name: null,
           _id: null,
-          fileType: 'image/jpeg, image/jpg, image/png',
         },
       },
     },
