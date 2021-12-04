@@ -31,18 +31,22 @@ const uploadTaskMap = {
   'Upload Term Sheet': {
     text: 'Portfolio Company Term Sheet',
     position: 1,
+    fileTypeText: 'PDF',
   },
   'Upload Company Deck': {
     text: 'Pitch Deck',
     position: 2,
+    fileTypeText: 'PDF',
   },
   'Upload Company Logo': {
     text: 'Portfolio Company Logo',
     position: 3,
+    fileTypeText: 'JPEG, or PNG',
   },
   'Upload Fund Logo': {
     text: 'Fund Logo',
     position: 1,
+    fileTypeText: 'JPEG, or PNG',
   },
 };
 
@@ -68,6 +72,18 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
       onError: console.error,
     },
   );
+
+  const validateFileType = (target) => {
+    if (!filesUploaded[document?.title]?.document?.fileType?.includes(target.files[0]?.type)) {
+      toast.error(
+        `Please upload a ${uploadTaskMap[document?.title]?.fileTypeText} file for ${
+          uploadTaskMap[document?.title]?.text
+        }`,
+      );
+      return false;
+    }
+    return true;
+  };
 
   const { complete } = filesUploaded[document.title];
 
@@ -100,10 +116,11 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
               className={classes.uploadIcon}
               type="file"
               style={{ display: 'none' }}
-              accept="application/pdf"
+              accept={filesUploaded[document.title]?.document?.fileType}
               multiple
               onChange={({ target }) => {
                 if (target.validity.valid) {
+                  if (!validateFileType(target)) return;
                   setError(false);
                   addDoc({
                     variables: {
@@ -191,10 +208,11 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
             className={classes.uploadIcon}
             type="file"
             style={{ display: 'none' }}
-            accept="application/pdf"
+            accept={filesUploaded[document.title]?.document?.fileType}
             multiple
             onChange={({ target }) => {
               if (target.validity.valid) {
+                if (!validateFileType(target)) return;
                 addDoc({
                   variables: {
                     doc: target.files[0],
@@ -241,6 +259,7 @@ export default function UploadDocs({
         document: {
           name: null,
           _id: null,
+          fileType: 'image/jpeg, image/jpg, image/png',
         },
       },
       'Upload Company Deck': {
@@ -248,6 +267,7 @@ export default function UploadDocs({
         document: {
           name: null,
           _id: null,
+          fileType: 'application/pdf',
         },
       },
       'Upload Term Sheet': {
@@ -255,6 +275,7 @@ export default function UploadDocs({
         document: {
           name: null,
           _id: null,
+          fileType: 'application/pdf',
         },
       },
     },
@@ -264,6 +285,7 @@ export default function UploadDocs({
         document: {
           name: null,
           _id: null,
+          fileType: 'image/jpeg, image/jpg, image/png',
         },
       },
     },
