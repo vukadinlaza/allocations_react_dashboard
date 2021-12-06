@@ -409,7 +409,7 @@ const BuildDetails = ({
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
             2. Deal Terms
           </Typography>
-          <Grid container className={classes.inputGridContainer}>
+          <Grid container className={classes.inputGridContainer} spacing={2}>
             <ManagementFee {...formFieldProps} />
             <ManagementFeeFrequency {...formFieldProps} />
             <CarryFee {...formFieldProps} />
@@ -426,7 +426,7 @@ const BuildDetails = ({
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
             3. Offering Terms
           </Typography>
-          <Grid container className={classes.inputGridContainer}>
+          <Grid container className={classes.inputGridContainer} spacing={1}>
             <ReportingAdviser {...formFieldProps} />
             <OfferingType {...formFieldProps} />
             <CustomInvestmentAgreement {...formFieldProps} />
@@ -438,7 +438,7 @@ const BuildDetails = ({
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
             4. Demographics
           </Typography>
-          <Grid container className={classes.inputGridContainer}>
+          <Grid container className={classes.inputGridContainer} spacing={1}>
             <InternationalCompanyStatus {...formFieldProps} />
             <InternationalInvestorsStatus {...formFieldProps} />
           </Grid>
