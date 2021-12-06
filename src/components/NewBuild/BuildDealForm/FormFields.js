@@ -405,30 +405,27 @@ export function RepresentativeGeneralPartnerAndTitle({
               </Typography>
             }
             openTooltip={openTooltip}
-            id="general_partner_representative"
+            id="representative"
           >
             <HelpIcon
               className={classes.helpIcon}
-              onClick={() => handleTooltip('general_partner_representative')}
+              onClick={() => handleTooltip('representative')}
             />
           </ModalTooltip>
         </Grid>
         <TextField
-          value={buildData.general_partner_representative}
-          name="general_partner_representative"
+          value={buildData.representative}
+          name="representative"
           onChange={(e) => {
             handleChange(e);
-            setUnfilledFields((prev) =>
-              prev.filter((field) => field !== 'general_partner_representative'),
-            );
+            setUnfilledFields((prev) => prev.filter((field) => field !== 'representative'));
           }}
           className={classes.inputBox}
           variant="outlined"
           placeholder=""
           inputProps={customInputStyles}
           classes={{
-            root:
-              unfilledFields.includes('general_partner_representative') && classes.unfilledField,
+            root: unfilledFields.includes('representative') && classes.unfilledField,
           }}
         />
       </FormControl>

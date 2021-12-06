@@ -130,7 +130,6 @@ const BuildDetails = ({
     custom_management_fee: 'false',
     reporting_adviser: undefined,
     deal_stage: '',
-    general_partner_representative: '',
     gp_entity_name: null,
     high_volume_partner: false,
     international_company_status: 'false',
@@ -204,11 +203,8 @@ const BuildDetails = ({
       if (!buildData.manager_name) {
         unvalidatedFieldsToFill('manager_name', 'General Partner Name');
       }
-      if (!buildData.general_partner_representative) {
-        unvalidatedFieldsToFill(
-          'general_partner_representative',
-          'General Partner Representative and Title',
-        );
+      if (!buildData.representative) {
+        unvalidatedFieldsToFill('representative', 'General Partner Representative and Title');
       }
       if (!buildData.number_of_investments) {
         unvalidatedFieldsToFill('number_of_investments', 'Number of Investments');
@@ -305,7 +301,6 @@ const BuildDetails = ({
           closing_date: buildData.closing_date,
           custom_investment_agreement: buildData.custom_investment_agreement,
           deal_stage: buildData.deal,
-          general_partner_representative: buildData.general_partner_representative,
           gp_entity_name: buildData.gp_entity_name,
           international_company: {
             status: buildData.international_company_status,
