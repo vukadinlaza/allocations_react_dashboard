@@ -234,7 +234,6 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '40px',
   },
   outerSection: {
-    borderLeft: 'solid #ECF3FF 3px',
     padding: '18px 60px',
     marginLeft: '12px',
   },
@@ -252,17 +251,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     borderRadius: '50%',
     justifyContent: 'center',
-    backgroundColor: '#0461ff',
     color: '#fff',
     fontSize: '19px',
     margin: '0px 12px 6px 0px',
-  },
-  // only need to add active?
-  activeSectionHeaderNumber: {
-    backgroundColor: '#0461ff',
-  },
-  inactiveSectionHeaderNumber: {
-    backgroundColor: '#EBEBEB',
   },
   sectionHeaderText: {
     fontSize: '24px',
@@ -271,12 +262,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down(phone)]: {
       fontSize: '24px',
     },
-  },
-  activeSectionHeaderText: {
-    backgroundColor: '#2A2B54',
-  },
-  inactiveSectionHeaderText: {
-    backgroundColor: '#8E9394',
   },
   previousButton: {
     font: 'normal normal normal 24px/28px Roboto',

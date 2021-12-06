@@ -161,14 +161,19 @@ export default function TypeSelector({
   return (
     <Paper className={classes.paper}>
       <Grid container className={classes.sectionHeader}>
-        <Grid item className={classes.sectionHeaderNumber}>
+        <Grid item className={classes.sectionHeaderNumber} style={{ backgroundColor: '#0461ff' }}>
           1
         </Grid>
-        <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          className={classes.sectionHeaderText}
+          style={{ color: '#2A2B54' }}
+        >
           Basic Information
         </Typography>
       </Grid>
-      <Grid container className={classes.outerSection}>
+      <Grid container className={classes.outerSection} style={{ borderLeft: 'solid #ECF3FF 3px' }}>
         <form noValidate autoComplete="off" className={classes.formContainers}>
           <Typography className={classes.formItemName}>
             Choose your asset type

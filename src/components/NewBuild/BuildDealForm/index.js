@@ -237,6 +237,20 @@ const BuildDetails = ({
 
   console.log('Four:', sectionFourComplete);
 
+  const sectionFiveComplete = false;
+
+  const sections = [
+    sectionOneComplete,
+    sectionTwoComplete,
+    sectionThreeComplete,
+    sectionFourComplete,
+    sectionFiveComplete,
+  ];
+
+  const activeSection = sections.indexOf(false);
+
+  console.log('Active Index:', activeSection);
+
   const [unfilledFields, setUnfilledFields] = useState([]);
 
   const formValidation = () => {
@@ -482,14 +496,27 @@ const BuildDetails = ({
 
       <Paper className={classes.paper}>
         <Grid container className={classes.sectionHeader}>
-          <Grid item className={classes.sectionHeaderNumber}>
+          <Grid
+            item
+            className={classes.sectionHeaderNumber}
+            style={{ backgroundColor: activeSection >= 1 ? '#0461ff' : '#EBEBEB' }}
+          >
             2
           </Grid>
-          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            className={classes.sectionHeaderText}
+            style={{ color: activeSection >= 1 ? '#2A2B54' : '#8E9394' }}
+          >
             Deal Terms
           </Typography>
         </Grid>
-        <Grid container className={classes.outerSection}>
+        <Grid
+          container
+          className={classes.outerSection}
+          style={{ borderLeft: activeSection >= 1 ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+        >
           <form noValidate autoComplete="off">
             <Grid container spacing={2} className={classes.inputGridContainer}>
               <ManagementFee {...formFieldProps} />
@@ -507,14 +534,27 @@ const BuildDetails = ({
 
       <Paper className={classes.paper}>
         <Grid container className={classes.sectionHeader}>
-          <Grid item className={classes.sectionHeaderNumber}>
+          <Grid
+            item
+            className={classes.sectionHeaderNumber}
+            style={{ backgroundColor: activeSection >= 2 ? '#0461ff' : '#EBEBEB' }}
+          >
             3
           </Grid>
-          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            className={classes.sectionHeaderText}
+            style={{ color: activeSection >= 2 ? '#2A2B54' : '#8E9394' }}
+          >
             Offering Terms
           </Typography>
         </Grid>
-        <Grid container className={classes.outerSection}>
+        <Grid
+          container
+          className={classes.outerSection}
+          style={{ borderLeft: activeSection >= 2 ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+        >
           <form noValidate autoComplete="off">
             <Grid container spacing={1} className={classes.inputGridContainer}>
               <ReportingAdviser {...formFieldProps} />
@@ -526,14 +566,27 @@ const BuildDetails = ({
       </Paper>
       <Paper className={classes.paper}>
         <Grid container className={classes.sectionHeader}>
-          <Grid item className={classes.sectionHeaderNumber}>
+          <Grid
+            item
+            className={classes.sectionHeaderNumber}
+            style={{ backgroundColor: activeSection >= 3 ? '#0461ff' : '#EBEBEB' }}
+          >
             4
           </Grid>
-          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            className={classes.sectionHeaderText}
+            style={{ color: activeSection >= 3 ? '#2A2B54' : '#8E9394' }}
+          >
             Demographics
           </Typography>
         </Grid>
-        <Grid container className={classes.outerSection}>
+        <Grid
+          container
+          className={classes.outerSection}
+          style={{ borderLeft: activeSection >= 3 ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+        >
           <form noValidate autoComplete="off">
             <Grid container spacing={1} className={classes.inputGridContainer}>
               <InternationalCompanyStatus {...formFieldProps} />
@@ -545,14 +598,27 @@ const BuildDetails = ({
 
       <Paper className={classes.paper}>
         <Grid container className={classes.sectionHeader}>
-          <Grid item className={classes.sectionHeaderNumber}>
+          <Grid
+            item
+            className={classes.sectionHeaderNumber}
+            style={{ backgroundColor: activeSection >= 3 ? '#0461ff' : '#EBEBEB' }}
+          >
             5
           </Grid>
-          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            className={classes.sectionHeaderText}
+            style={{ color: activeSection >= 3 ? '#2A2B54' : '#8E9394' }}
+          >
             Upload Your Documents
           </Typography>
         </Grid>
-        <Grid container className={classes.outerSection}>
+        <Grid
+          container
+          className={classes.outerSection}
+          style={{ borderLeft: activeSection >= 3 ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+        >
           <form noValidate autoComplete="off">
             <UploadDocs deal={initialDeal} {...formFieldProps} />
           </form>
@@ -561,14 +627,26 @@ const BuildDetails = ({
 
       <Paper className={classes.paper}>
         <Grid container className={classes.sectionHeader}>
-          <Grid item className={classes.sectionHeaderNumber}>
+          <Grid
+            item
+            className={classes.sectionHeaderNumber}
+            style={{ backgroundColor: activeSection >= 3 ? '#0461ff' : '#EBEBEB' }}
+          >
             6
           </Grid>
-          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            className={classes.sectionHeaderText}
+            style={{ color: activeSection >= 3 ? '#2A2B54' : '#8E9394' }}
+          >
             Final
           </Typography>
         </Grid>
-        <div className={classes.outerSection}>
+        <div
+          className={classes.outerSection}
+          style={{ borderLeft: activeSection >= 3 ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+        >
           <form noValidate autoComplete="off">
             <FormControl required disabled variant="outlined" className={classes.formContainers}>
               <NotesMemo {...formFieldProps} />
