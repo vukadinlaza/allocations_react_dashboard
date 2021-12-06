@@ -33,13 +33,12 @@ function SubmitTaxDocs() {
     'W-8-BEN': {
       id: 'tpl_JmDP5PPQkSy7LYgJHF',
       name: 'W8 BEN',
-      tooltipContent:
-        'Form W-9 Entity is generally used by entities created or organized in the U.S. (including partnerships, corporations, LLCs, estates, and trusts)',
+      tooltipContent: 'Form W-8BEN is generally used by nonresident alien individuals',
     },
     'W-8-BEN-E': {
       id: 'tpl_mXPLm5EXAyHJKhQekf',
       name: 'W8 BEN-E',
-      tooltipContent: 'Form W-8BEN is generally used by foreign entities',
+      tooltipContent: 'Form W-8BEN-E is generally used by foreign entities',
     },
   };
   const validForms = Object.keys(templateMap);
