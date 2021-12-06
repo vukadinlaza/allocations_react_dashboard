@@ -83,15 +83,51 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '11px',
     },
   },
+
+  continueButton: {
+    font: 'normal normal bold 24px/28px Roboto',
+    width: '80%',
+    height: '60px',
+    margin: 'auto',
+    marginTop: '5px',
+    background: '#186EFF 0% 0% no-repeat padding-box',
+    borderColor: '186EFF !important',
+    borderRadius: '10px',
+    opacity: '1',
+    color: '#FFFFFF',
+    textTransform: 'none',
+  },
+
+  disabledContinueButton: {
+    font: 'normal normal bold 24px/28px Roboto',
+    width: '80%',
+    height: '60px',
+    margin: 'auto',
+    marginTop: '5px',
+    background: '#186EFF 0% 0% no-repeat padding-box',
+    borderColor: '186EFF !important',
+    borderRadius: '10px',
+    opacity: '1',
+    color: '#FFFFFF',
+    textTransform: 'none',
+  },
 }));
 
 const demoAmount = 5000;
 
-function CryptoPaymentModal({ open, setOpen, investmentData, dealData, userId }) {
+function CryptoPaymentModal({
+  open,
+  setOpen,
+  investmentData,
+  dealData,
+  userId,
+  userName,
+  userEmail,
+}) {
   const classes = useStyles();
   const { deal } = dealData;
   const { investment } = investmentData;
-  const { data } = useQuery(DEAL_WALLET_ADDRESS, {
+  const { data, error } = useQuery(DEAL_WALLET_ADDRESS, {
     fetchPolicy: 'network-only',
     variables: { deal_id: deal._id },
   });
@@ -111,6 +147,9 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData, userId })
     deal_id: deal._id,
     transaction_hash: '',
     user_id: userId,
+    user_name: userName,
+    user_email: userEmail,
+    deal_name: dealData?.deal?.name ? dealData?.deal?.name : dealData?.deal?.company_name,
   });
 
   const handleClose = () => {
@@ -215,19 +254,12 @@ function CryptoPaymentModal({ open, setOpen, investmentData, dealData, userId })
                     }}
                   >
                     <Button
-                      style={{
-                        font: 'normal normal bold 24px/28px Roboto',
-                        width: '80%',
-                        height: '60px',
-                        margin: 'auto',
-                        marginTop: '5px',
-                        background: '#186EFF 0% 0% no-repeat padding-box',
-                        borderColor: '186EFF !important',
-                        borderRadius: '10px',
-                        opacity: '1',
-                        color: '#FFFFFF',
-                        textTransform: 'none',
-                      }}
+                      className={
+                        transactionInfo.transaction_hash === ''
+                          ? classes.disabledContinueButton
+                          : classes.continueButton
+                      }
+                      disabled={transactionInfo.transaction_hash === ''}
                       onClick={() => {
                         submitTransactionHash({
                           variables: {

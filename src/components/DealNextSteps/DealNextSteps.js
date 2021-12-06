@@ -60,6 +60,8 @@ const GET_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
     deal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
       _id
+      company_name
+      name
       accept_crypto
       isDemo
       dealParams {
@@ -111,7 +113,6 @@ function DealNextSteps() {
   const { data: investmentData } = useQuery(GET_INVESTMENT, {
     variables: { _id: params?.investmentId ? params?.investmentId : history?.location?.state?.id },
   });
-
   useEffect(() => {
     if (!authLoading && !calledDeal && isAuthenticated && deal_slug) {
       getDeal({
@@ -323,6 +324,8 @@ function DealNextSteps() {
           setOpen={setCryptoPaymentOpen}
           investmentData={investmentData}
           userId={data?.investor?._id ?? userProfile._id}
+          userName={data?.investor?.first_name}
+          userEmail={data?.investor?.email}
           dealData={dealData}
           docs={docs}
         />
