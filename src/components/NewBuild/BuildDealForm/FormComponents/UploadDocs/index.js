@@ -83,7 +83,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
   const validateFileType = (target) => {
     const uploadTask = uploadTaskMap[document?.title];
     if (!acceptedFiles.includes(target.files[0]?.type)) {
-      toast.error(`Please upload a ${uploadTask?.fileTypeText} file for ${uploadTask?.text}`);
+      toast.error(`Please upload a ${uploadTask?.fileTypeText} file for the ${uploadTask?.text}`);
       return false;
     }
     return true;
