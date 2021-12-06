@@ -326,7 +326,7 @@ const BuildDetails = ({
           },
           management_fee_frequency: buildData.management_fee_frequency,
           manager_name: buildData.manager_name,
-          minimum_subscription_amount: Number(buildData.minimum_investment),
+          minimum_investment: Number(buildData.minimum_investment),
           name: buildData.name,
           need_gp_entity: buildData.need_gp_entity,
           number_of_investments: Number(buildData.number_of_investments),
