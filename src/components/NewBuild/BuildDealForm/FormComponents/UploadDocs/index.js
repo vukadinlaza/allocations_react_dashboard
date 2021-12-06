@@ -50,7 +50,7 @@ const uploadTaskMap = {
     text: 'Fund Logo',
     position: 1,
     fileType: 'image/jpeg, image/jpg, image/png',
-    fileTypeText: 'JPEG, or PNG',
+    fileTypeText: 'JPEG or PNG',
   },
 };
 
