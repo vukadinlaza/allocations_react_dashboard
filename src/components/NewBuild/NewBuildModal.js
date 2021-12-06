@@ -36,6 +36,7 @@ const CREATE_ORG = gql`
       _id
       name
       slug
+      high_volume_partner
       masterEntity {
         name
         address
@@ -1049,18 +1050,21 @@ export default function NewBuildModal(props) {
     props.setPage('deal_type_selector');
   };
 
+  const isHVP = estimatedSPVQuantity >= 5;
+
   const [createOrganization] = useMutation(CREATE_ORG, {
     variables: {
       organization: {
         name: newOrganizationName,
+        high_volume_partner: isHVP,
         masterEntity: {
-          name: masterEntityName || 'Atomizer LLC',
-          address: address || '8 The Green',
-          addressLineTwo: masterEntityName ? addressLineTwo : 'Suite A',
-          city: city || 'Dover',
-          state: state || 'Delaware',
-          zipCode: zipCode || '19901',
-          country: country || 'United States',
+          name: isHVP ? masterEntityName : 'Atomizer LLC',
+          address: isHVP ? address : '8 The Green',
+          addressLineTwo: isHVP ? addressLineTwo : 'Suite A',
+          city: isHVP ? city : 'Dover',
+          state: isHVP ? state : 'Delaware',
+          zipCode: isHVP ? zipCode : '19901',
+          country: isHVP ? country : 'United States',
         },
       },
     },
