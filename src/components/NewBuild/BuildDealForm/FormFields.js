@@ -1006,8 +1006,8 @@ export function ManagementFee({
             }
             placeholder="Custom Management Fee"
             name="custom_management_fee"
-            onChange={() => {
-              handleChange();
+            onChange={(e) => {
+              handleChange(e);
               setUnfilledFields((prev) =>
                 prev.filter((field) => field !== 'custom_management_fee'),
               );
@@ -1154,8 +1154,8 @@ export function CarryFee({
             value={buildData.custom_carry_fee === 'false' ? '' : buildData.custom_carry_fee}
             placeholder="Custom Carry Fee"
             name="custom_carry_fee"
-            onChange={() => {
-              handleChange();
+            onChange={(e) => {
+              handleChange(e);
               setUnfilledFields((prev) => prev.filter((field) => field !== 'custom_carry_fee'));
             }}
             className={classes.inputBox}
