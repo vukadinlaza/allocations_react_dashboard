@@ -103,24 +103,24 @@ export function FundName({
               </Typography>
             }
             openTooltip={openTooltip}
-            id="fund_name"
+            id="name"
           >
-            <HelpIcon className={classes.helpIcon} onClick={() => handleTooltip('fund_name')} />
+            <HelpIcon className={classes.helpIcon} onClick={() => handleTooltip('name')} />
           </ModalTooltip>
         </Grid>
         <TextField
-          value={buildData.fund_name}
-          name="fund_name"
+          value={buildData.name}
+          name="name"
           onChange={(e) => {
             handleChange(e);
-            setUnfilledFields((prev) => prev.filter((field) => field !== 'fund_name'));
+            setUnfilledFields((prev) => prev.filter((field) => field !== 'name'));
           }}
           className={classes.inputBox}
           variant="outlined"
           placeholder="e.x. crypto deal"
           inputProps={customInputStyles}
           classes={{
-            root: unfilledFields.includes('fund_name') && classes.unfilledField,
+            root: unfilledFields.includes('name') && classes.unfilledField,
           }}
         />
       </FormControl>
@@ -242,27 +242,24 @@ export function DealName({
               </Typography>
             }
             openTooltip={openTooltip}
-            id="portfolio_deal_name"
+            id="name"
           >
-            <HelpIcon
-              className={classes.helpIcon}
-              onClick={() => handleTooltip('portfolio_deal_name')}
-            />
+            <HelpIcon className={classes.helpIcon} onClick={() => handleTooltip('name')} />
           </ModalTooltip>
         </Grid>
         <TextField
-          value={buildData.portfolio_deal_name}
-          name="portfolio_deal_name"
+          value={buildData.name}
+          name="name"
           onChange={(e) => {
             handleChange(e);
-            setUnfilledFields((prev) => prev.filter((field) => field !== 'portfolio_deal_name'));
+            setUnfilledFields((prev) => prev.filter((field) => field !== 'name'));
           }}
           className={classes.inputBox}
           variant="outlined"
           placeholder="e.x. crypto deal"
           inputProps={customInputStyles}
           classes={{
-            root: unfilledFields.includes('portfolio_deal_name') && classes.unfilledField,
+            root: unfilledFields.includes('name') && classes.unfilledField,
           }}
         />
       </FormControl>
