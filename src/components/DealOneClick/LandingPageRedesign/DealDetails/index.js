@@ -12,7 +12,7 @@ const data = [
   { title: 'Deal Terms', description: 'You currently do not have any content for this section' },
 ];
 
-export default function DealDetails() {
+export default function DealDetails({ deal }) {
   const classes = useStyles();
   const [tab, setTab] = useState(0);
 
