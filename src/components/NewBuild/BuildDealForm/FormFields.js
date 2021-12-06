@@ -1433,18 +1433,18 @@ export function ReportingAdviser({
                 <Typography color="inherit">Please indicate your ERA/RIA name</Typography>
               }
               openTooltip={openTooltip}
-              id="custom_reporting_adviser"
+              id="reporting_adviser"
             >
               <HelpIcon
                 className={classes.helpIcon}
-                onClick={() => handleTooltip('custom_reporting_adviser')}
+                onClick={() => handleTooltip('reporting_adviser')}
               />
             </ModalTooltip>
           </Grid>
           <TextField
-            value={buildData.custom_reporting_adviser}
+            value={buildData.reporting_adviser}
             placeholder="Adviser Name"
-            name="custom_reporting_adviser"
+            name="reporting_adviser"
             onChange={handleChange}
             className={classes.inputBox}
             variant="outlined"

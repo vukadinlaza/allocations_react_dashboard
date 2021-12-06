@@ -128,7 +128,7 @@ const BuildDetails = ({
     custom_carry_fee: 'false',
     custom_investment_agreement: 'false',
     custom_management_fee: 'false',
-    custom_reporting_adviser: undefined,
+    reporting_adviser: undefined,
     deal_stage: '',
     general_partner_representative: '',
     gp_entity_name: null,
@@ -247,11 +247,8 @@ const BuildDetails = ({
     ) {
       unvalidatedFieldsToFill('custom_carry_fee', 'Custom Carry Fee');
     }
-    if (
-      !buildData.custom_reporting_adviser &&
-      buildData.allocations_reporting_adviser === 'false'
-    ) {
-      unvalidatedFieldsToFill('custom_reporting_adviser', 'Advisor Name');
+    if (!buildData.reporting_adviser && buildData.allocations_reporting_adviser === 'false') {
+      unvalidatedFieldsToFill('reporting_adviser', 'Advisor Name');
     }
     if (
       !buildData.international_company_country &&
@@ -307,7 +304,6 @@ const BuildDetails = ({
           },
           closing_date: buildData.closing_date,
           custom_investment_agreement: buildData.custom_investment_agreement,
-          custom_reporting_adviser: buildData.custom_reporting_adviser,
           deal_stage: buildData.deal,
           general_partner_representative: buildData.general_partner_representative,
           gp_entity_name: buildData.gp_entity_name,
@@ -334,6 +330,7 @@ const BuildDetails = ({
           portfolio_company_name: buildData.portfolio_company_name,
           portfolio_company_securities: buildData.portfolio_company_securities,
           public_pitch_deck: buildData.public_pitch_deck,
+          reporting_adviser: buildData.reporting_adviser,
           representative: buildData.representative,
           sectors: buildData.sectors,
           setup_cost: buildData.setup_cost,
@@ -359,7 +356,7 @@ const BuildDetails = ({
     setBuildData((prev) => {
       const newBuildObject = {
         ...prev,
-        custom_reporting_adviser: isAllocationsTheAdvisor ? '' : prev.custom_reporting_adviser,
+        reporting_adviser: isAllocationsTheAdvisor ? '' : prev.reporting_adviser,
         custom_management_fee: isNotCustomManagementFee ? 'false' : prev.custom_management_fee,
         custom_carry_fee: isNotCustomCarryFee ? 'false' : prev.custom_carry_fee,
         international_company_country: isNotInternational ? '' : prev.international_company_country,
