@@ -252,7 +252,7 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
                   color="primary"
                 />
               }
-              label="Revocable Trust?"
+              label="My trust does not have an EIN"
             />
           </div>
         )}
