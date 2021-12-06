@@ -7,8 +7,7 @@ import DealHeaderRedesign from './DealHeader';
 import InvestingDetails from './InvestingDetails';
 import DealSummary from './DealSummary';
 import CoinvestorsPanel from './CoinvestorsPanel';
-// import './styles.scss';
-
+import DealDetails from './DealDetails';
 import Loader from '../../utils/Loader';
 
 export const GET_DEAL = gql`
@@ -127,6 +126,7 @@ function DealLandingPageRedesign() {
         <InvestingDetails deal={deal} />
         <DealSummary deal={deal} />
         <CoinvestorsPanel deal={deal} />
+        <DealDetails />
       </div>
     </section>
   );
