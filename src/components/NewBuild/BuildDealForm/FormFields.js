@@ -539,6 +539,9 @@ export function TargetRaiseGoal({
           type="number"
           value={buildData.target_raise_goal}
           name="target_raise_goal"
+          InputProps={{
+            startAdornment: <InputAdornment position="start">$</InputAdornment>,
+          }}
           onChange={(e) => {
             const value = convertToPositiveIntOrNull(e.target.value);
 
@@ -554,9 +557,10 @@ export function TargetRaiseGoal({
           className={classes.inputBox}
           variant="outlined"
           placeholder=""
-          inputProps={customInputStyles}
           classes={{
-            root: unfilledFields.includes('target_raise_goal') && classes.unfilledField,
+            root: `${unfilledFields.includes('target_raise_goal') && classes.unfilledField} ${
+              classes.selectInputBox
+            }`,
           }}
         />
       </FormControl>
@@ -1316,7 +1320,7 @@ export function AcceptedInvestorTypes({
       <Select
         id="type_of_investors"
         menuPosition="fixed"
-        label="What type of Investors are you Accepting?"
+        label="What type of Investors are you accepting?"
         styles={customStyles}
         options={investorTypes.map((type) => ({ value: type, label: type, key: type })) || ''}
         defaultValue={buildData.type_of_investors}

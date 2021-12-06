@@ -162,6 +162,81 @@ const BuildDetails = ({
     type_of_investors: 'Accredited Investors (3(c)(1))',
   });
 
+  const sectionOne = {
+    spv: [
+      'portfolio_company_name',
+      'portfolio_company_securities',
+      'portfolio_deal_name',
+      'manager_name',
+      'representative',
+      'deal_stage',
+      'sectors',
+    ],
+    fund: [
+      'fund_name',
+      'number_of_investments',
+      'manager_name',
+      'general_partner_representative',
+      'gp_entity_name',
+      'need_gp_entity',
+      'deal_stage',
+      'sectors',
+    ],
+  };
+
+  const sectionOneComplete = sectionOne[dealType].every((field) => buildData[field]);
+
+  console.log('One:', sectionOneComplete);
+
+  const sectionTwo = {
+    spv: [
+      'management_fee_value',
+      'management_fee_frequency',
+      // 'custom_management_fee',
+      'carry_fee_value',
+      // 'custom_carry_fee',
+      'side_letters',
+      'target_raise_goal',
+      'minimum_investment',
+      'accept_crypto',
+    ],
+    fund: [
+      'management_fee_value',
+      'management_fee_frequency',
+      // 'custom_management_fee',
+      'carry_fee_value',
+      // 'custom_carry_fee',
+      'side_letters',
+      'type_of_investors',
+    ],
+  };
+
+  const sectionTwoComplete = sectionTwo[dealType].every((field) => buildData[field]);
+
+  console.log('Two:', sectionTwoComplete);
+
+  const sectionThree = [
+    'allocations_reporting_adviser',
+    // custom_reporting_adviser
+    'offering_type',
+    'custom_investment_agreement',
+  ];
+
+  const sectionThreeComplete = sectionThree.every((field) => buildData[field]);
+
+  console.log('Three:', sectionThreeComplete);
+
+  const sectionFour = [
+    'international_company_status',
+    // 'international_company_country',
+    'international_investors_status',
+    // 'international_investors_countries',
+  ];
+
+  const sectionFourComplete = sectionFour.every((field) => buildData[field]);
+
+  console.log('Four:', sectionFourComplete);
+
   const [unfilledFields, setUnfilledFields] = useState([]);
 
   const formValidation = () => {

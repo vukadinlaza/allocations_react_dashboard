@@ -360,8 +360,6 @@ const useStyles = makeStyles((theme) => ({
   minimumInput: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     boxShadow: '0px 3px 6px #0000000A',
-    // border radius is not taking
-    borderRadius: '8px !important',
     padding: '0',
     maxWidth: '464px',
     width: '100%',
