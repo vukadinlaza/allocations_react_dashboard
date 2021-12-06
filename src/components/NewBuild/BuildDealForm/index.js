@@ -26,6 +26,7 @@ import {
   SideLetters,
   AcceptedInvestorTypes,
   TargetRaiseGoal,
+  PitchDeckCheckBox,
 } from './FormFields';
 
 const CREATE_BUILD = gql`
@@ -33,8 +34,6 @@ const CREATE_BUILD = gql`
     deal: createBuild(payload: $payload) {
       _id
       type
-      high_volume_partner
-      master_series
       phases {
         _id
         name
@@ -122,7 +121,7 @@ const BuildDetails = ({
   const [buildData, setBuildData] = useState({
     accept_crypto: 'false',
     allocations_reporting_adviser: 'true',
-    asset_type: 'startup',
+    asset_type: 'Startup',
     carry_fee_type: 'percent',
     carry_fee_value: '20',
     closing_date: moment(Date.now()).add(7, 'days').format('YYYY-MM-DD'),
@@ -153,6 +152,7 @@ const BuildDetails = ({
     portfolio_company_name: '',
     portfolio_company_securities: '',
     portfolio_deal_name: '',
+    public_pitch_deck: false,
     representative: '',
     setup_cost: 20000,
     side_letters: 'false',
@@ -336,6 +336,7 @@ const BuildDetails = ({
           portfolio_company_name: buildData.portfolio_company_name,
           portfolio_company_securities: buildData.portfolio_company_securities,
           portfolio_deal_name: buildData.portfolio_deal_name,
+          public_pitch_deck: buildData.public_pitch_deck,
           representative: buildData.representative,
           sectors: buildData.sectors,
           setup_cost: buildData.setup_cost,
@@ -378,6 +379,7 @@ const BuildDetails = ({
   };
 
   const formFieldProps = {
+    dealType,
     buildData,
     setBuildData,
     handleChange,
@@ -448,7 +450,7 @@ const BuildDetails = ({
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
             5. Upload Your Documents
           </Typography>
-          <UploadDocs deal={initialDeal} />
+          <UploadDocs deal={initialDeal} {...formFieldProps} />
         </form>
       </Paper>
 
@@ -510,14 +512,12 @@ export default function NewDealForm() {
 
   useEffect(() => {
     // if there is no build data/deal_id, we create a new build (default info pulled from the backend)
-    if (organization) {
-      if (!localStorage.getItem('buildData') && !localStorage.getItem('buildDeal')) {
-        createBuild({
-          variables: { payload: { organization_id: organization._id, type: dealType } },
-        });
-      }
+    if (!localStorage.getItem('buildData') && !localStorage.getItem('buildDeal')) {
+      createBuild({
+        variables: { payload: { type: dealType } },
+      });
     }
-  }, [organization]);
+  }, []);
 
   useEffect(() => {
     // if we finished creating the build, set the deal info in local storage
@@ -551,7 +551,7 @@ export default function NewDealForm() {
       ),
     },
     {
-      title: 'Review and sign terms',
+      title: 'Sign Agreements',
       Component: (
         <AgreementSigner
           deal={

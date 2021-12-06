@@ -13,6 +13,7 @@ import greenCheckIcon from '../../../../../assets/check.svg';
 import trashIcon from '../../../../../assets/trash.svg';
 import warningIcon from '../../../../../assets/warning-red.svg';
 import useStyles from '../../../BuildStyles';
+import { PitchDeckCheckBox } from '../../FormFields';
 
 const ADD_DOC = gql`
   mutation addDealDocService($deal_id: String!, $task_id: String!, $doc: Upload!, $phase: String) {
@@ -38,6 +39,10 @@ const uploadTaskMap = {
   'Upload Company Logo': {
     text: 'Portfolio Company Logo',
     position: 3,
+  },
+  'Upload Fund Logo': {
+    text: 'Fund Logo',
+    position: 1,
   },
 };
 
@@ -220,39 +225,51 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
   );
 };
 
-export default function UploadDocs({ deal }) {
+export default function UploadDocs({
+  dealType,
+  deal,
+  buildData,
+  setBuildData,
+  classes: checkBoxClasses,
+}) {
   const classes = useStyles();
 
-  const [filesUploaded, setFilesUploaded] = useState({
-    'Upload Company Logo': {
-      complete: false,
-      document: {
-        name: null,
-        _id: null,
+  const docUploadMap = {
+    spv: {
+      'Upload Company Logo': {
+        complete: false,
+        document: {
+          name: null,
+          _id: null,
+        },
+      },
+      'Upload Company Deck': {
+        complete: false,
+        document: {
+          name: null,
+          _id: null,
+        },
+      },
+      'Upload Term Sheet': {
+        complete: false,
+        document: {
+          name: null,
+          _id: null,
+        },
       },
     },
-    // 'Upload ID': {
-    //   complete: false,
-    //   document: {
-    // name: null,
-    // _id: null
-    // },
-    // },
-    'Upload Company Deck': {
-      complete: false,
-      document: {
-        name: null,
-        _id: null,
+    fund: {
+      'Upload Fund Logo': {
+        complete: false,
+        document: {
+          name: null,
+          _id: null,
+        },
       },
     },
-    'Upload Term Sheet': {
-      complete: false,
-      document: {
-        name: null,
-        _id: null,
-      },
-    },
-  });
+  };
+
+  const [filesUploaded, setFilesUploaded] = useState(docUploadMap[dealType]);
 
   const currentPhase = deal?.phases.find((phase) => phase.name === 'build');
   const uploadTasks = currentPhase?.tasks
@@ -265,9 +282,9 @@ export default function UploadDocs({ deal }) {
     }
   }, []);
   return (
-    <>
-      <main className={classes.docUploadBox}>
-        <section className={classes.uploadContainer}>
+    <main>
+      <section className={classes.docUploadBox}>
+        <div className={classes.uploadContainer}>
           {uploadTasks?.map((task) => (
             <DocUploader
               key={task._id}
@@ -279,8 +296,15 @@ export default function UploadDocs({ deal }) {
               phaseId={currentPhase._id}
             />
           ))}
-        </section>
-      </main>
-    </>
+        </div>
+      </section>
+      {deal?.type === 'spv' && filesUploaded['Upload Company Deck']?.complete && (
+        <PitchDeckCheckBox
+          buildData={buildData}
+          setBuildData={setBuildData}
+          classes={checkBoxClasses}
+        />
+      )}
+    </main>
   );
 }

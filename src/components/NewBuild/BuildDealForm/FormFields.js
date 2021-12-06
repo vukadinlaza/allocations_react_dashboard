@@ -1,5 +1,12 @@
 import React from 'react';
-import { FormControl, Grid, Typography, TextField, InputAdornment } from '@material-ui/core';
+import {
+  FormControl,
+  Grid,
+  Typography,
+  TextField,
+  InputAdornment,
+  Checkbox,
+} from '@material-ui/core';
 import HelpIcon from '@material-ui/icons/Help';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
@@ -1726,5 +1733,35 @@ export function NotesMemo({ buildData, handleChange, handleTooltip, classes, ope
         }}
       />
     </>
+  );
+}
+
+export function PitchDeckCheckBox({ buildData, setBuildData, classes }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', marginTop: '30px' }}>
+      <Checkbox
+        color="#39C522"
+        size="medium"
+        name="public_pitch_deck"
+        checked={buildData.public_pitch_deck}
+        classes={{
+          root: classes.pitchDeckCheckbox,
+          checked: classes.pitchDeckColorSecondary,
+        }}
+        onChange={() => {
+          setBuildData((prev) => {
+            const newBuildData = {
+              ...prev,
+              public_pitch_deck: !prev.public_pitch_deck,
+            };
+            localStorage.setItem('buildData', JSON.stringify(newBuildData));
+            return newBuildData;
+          });
+        }}
+      />
+      <Typography style={{ fontWeight: 'bold' }}>
+        Allow the Pitch Deck to be shown publicly on the Deal Page?
+      </Typography>
+    </div>
   );
 }

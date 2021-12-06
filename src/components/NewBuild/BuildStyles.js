@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
-// import { autoType } from 'd3-dsv';
+import { autoType } from 'd3-dsv';
 import { phone } from '../../utils/helpers';
+
 
 const useStyles = makeStyles((theme) => ({
   // * Styles that are used in more than one place in the build form
@@ -525,7 +526,7 @@ const useStyles = makeStyles((theme) => ({
     opacity: 1,
   },
   // 1. (FUND) Styles that are used exclusively in the 'Build your SPV' tab.
-  // 2. Styles that are used exclusively in the 'Review and sign terms' tab.
+  // 2. Styles that are used exclusively in the 'Sign Agreements' tab.
   uploadContainer: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -593,6 +594,15 @@ const useStyles = makeStyles((theme) => ({
       marginRight: '20px',
       width: '30px',
     },
+  },
+  pitchDeckCheckbox: {
+    paddingLeft: '0px',
+    height: '24px',
+    width: '24px',
+    borderRadius: '4px',
+  },
+  pitchDeckColorSecondary: {
+    color: '#39C522',
   },
   unfilledField: {
     border: '1px solid red',
