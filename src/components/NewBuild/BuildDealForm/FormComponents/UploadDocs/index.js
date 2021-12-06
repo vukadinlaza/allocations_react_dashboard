@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import _ from 'lodash';
 import { CircularProgress } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { gql, useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
-import { useHistory } from 'react-router';
 import documentIcon from '../../../../../assets/document-icon.svg';
 import documentGreenIcon from '../../../../../assets/document-green-icon.svg';
 import documentGrayIcon from '../../../../../assets/document-grayed-icon.svg';
@@ -49,7 +47,7 @@ const uploadTaskMap = {
 const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId, classes }) => {
   const [error, setError] = useState(false);
 
-  const [addDoc, { data, loading: addDocLoading, error: addDocError }] = useMutation(ADD_DOC, {
+  const [addDoc, { _, loading: addDocLoading, error: addDocError }] = useMutation(ADD_DOC, {
     onCompleted: ({ addDealDocService: uploadResponse }) => {
       if (uploadResponse?.success) toast.success('Success! Your document has been added');
     },
@@ -85,15 +83,17 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
         </div>
         <Typography className={classes.itemText}>&nbsp;Something went wrong...</Typography>
         <div className={classes.uploadIcon} style={{ opacity: '1', textAlign: 'center' }}>
-          <label htmlFor={`${document._id}`} className={classes.uploadErrorLabel}>
+          <div style={{ display: 'flex' }}>
             <img
               src={documentGrayIcon}
               className={classes.uploadIcon}
-              style={{ opacity: '1', cursor: 'pointer' }}
+              style={{ opacity: '1', cursor: 'pointer', marginRight: '0.25em' }}
               alt="checkbox"
             />
-            &nbsp;Upload document
-          </label>
+            <span htmlFor={`${document._id}`} className={classes.uploadErrorLabel}>
+              &nbsp;Upload document
+            </span>
+          </div>
           <form>
             <input
               id={`${document._id}`}

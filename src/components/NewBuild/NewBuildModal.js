@@ -685,8 +685,8 @@ const HighVolumePartnerships = ({
   openTooltip,
   handleTooltip,
 }) => {
-  const statesConstructor = states.UsaStates;
-  const usStates = new statesConstructor();
+  const StatesConstructor = states.UsaStates;
+  const usStates = new StatesConstructor();
   const [failedValidationFields, setFailedValidationFields] = useState([]);
   const validateFields = () => {
     let allValid = true;

@@ -1,14 +1,11 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { autoType } from 'd3-dsv';
 import { phone } from '../../utils/helpers';
-
 
 const useStyles = makeStyles((theme) => ({
   // * Styles that are used in more than one place in the build form
   root: {
     display: 'flex',
     '& > *': {
-      // margin: theme.spacing(1),
       width: '267px',
       height: '166px',
       borderWidth: '1px',
@@ -33,102 +30,6 @@ const useStyles = makeStyles((theme) => ({
       paddingBottom: '30px',
     },
   },
-
-  signContainer: {
-    display: 'grid',
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #00000029',
-    border: '1px solid #7070703B',
-    marginBottom: '16px',
-    borderRadius: '15px',
-    padding: '42px',
-    width: '100%',
-    maxWidth: '1352px',
-    gridGap: '30px',
-    opacity: 1,
-    [theme.breakpoints.down(phone)]: {
-      maxWidth: '600px',
-      marginBottom: '24px',
-      padding: '16px',
-      paddingBottom: '30px',
-    },
-  },
-
-  agreementUnsignedBox: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height: '100px',
-    paddingLeft: '30px',
-    paddingRight: '30px',
-    border: '2px dashed #0461FF !important',
-    borderRadius: '20px',
-    '&:hover': {
-      backgroundColor: 'rgba(0, 0, 0, 0.04)',
-    },
-  },
-  agreementSignedBox: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height: '100px',
-    paddingLeft: '30px',
-    paddingRight: '30px',
-    border: 'none !important',
-    borderRadius: '20px',
-    boxShadow: 'none !important',
-    backgroundColor: '#F6F7F8',
-  },
-  signed: {
-    backgroundColor: 'rgb(57,197,34, 0.23)',
-    color: '#34AF1F',
-    fontWeight: '600',
-    borderRadius: '20px',
-    padding: '5px 20px',
-  },
-  notSigned: {
-    backgroundColor: '#FFBDAD',
-    color: '#DE350B',
-    fontWeight: '600',
-    borderRadius: '20px',
-    padding: '5px 20px',
-  },
-  serviceAgreementIconBox: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '60px',
-    height: '60px',
-    borderRadius: '50%',
-    backgroundColor: '#ECF3FF',
-  },
-  docUploadBox: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    marginBottom: '16px',
-    paddingTop: '20px',
-    borderRadius: '15px',
-    width: '100%',
-    maxWidth: '1352px',
-    opacity: 1,
-    [theme.breakpoints.down(phone)]: {
-      display: 'flex',
-      flexDirection: 'column',
-      maxWidth: '600px',
-      padding: '23px',
-      paddingBottom: '0px',
-    },
-  },
-  blueCheck: {
-    width: '26px',
-    height: '26px',
-    display: 'flex',
-    alignItems: 'center',
-    borderRadius: '50%',
-    justifyContent: 'center',
-    backgroundColor: '#0461ff',
-  },
   buildTabContainer: {
     marginBottom: '16px',
     paddingLeft: '42px',
@@ -146,45 +47,6 @@ const useStyles = makeStyles((theme) => ({
       alignItems: 'center',
       paddingLeft: '0',
     },
-  },
-  formHeaderText: {
-    padding: '36px 0px 27px 8px',
-    color: '#2A2B54',
-    fontSize: '22px',
-    [theme.breakpoints.down(phone)]: {
-      fontSize: '13px',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-  },
-  buttonContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'nowrap',
-    [theme.breakpoints.down(phone)]: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom: '8px',
-    },
-  },
-
-  docIconBox: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: '50%',
-    width: '58px',
-    height: '58px',
-  },
-  docErrorIconBox: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F2CECC',
-    borderRadius: '50%',
-    width: '58px',
-    height: '58px',
   },
   continueButton: {
     font: 'normal normal bold 24px/28px Roboto',
@@ -205,13 +67,6 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
     },
   },
-
-  buttonBox: {
-    margin: 'auto',
-    marginTop: '40px',
-    alignSelf: 'center',
-    textAlign: 'center',
-  },
   helpIcon: {
     marginLeft: '0.2em',
     cursor: 'pointer',
@@ -230,9 +85,6 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: '14px',
       marginLeft: '8px',
     },
-  },
-  customFormItemName: {
-    minHeight: '40px',
   },
   sectionHeaderText: {
     fontSize: '34px',
@@ -265,52 +117,6 @@ const useStyles = makeStyles((theme) => ({
       color: '#e71a1a',
     },
   },
-  uploadIcon: {
-    color: 'blue',
-    transparentheight: '35px',
-    [theme.breakpoints.down(phone)]: {
-      marginRight: '20px',
-      width: '30px',
-    },
-  },
-  uploadIconLabel: {
-    display: 'flex',
-    justifyContent: 'space-evenly',
-    whiteSpace: 'nowrap',
-    cursor: 'pointer',
-  },
-  uploadErrorLabel: {
-    display: 'flex',
-    justifyContent: 'space-evenly',
-    whiteSpace: 'nowrap',
-    cursor: 'pointer',
-    color: '#8E9394',
-  },
-  subtitle: {
-    textAlign: 'left',
-    font: 'normal normal normal 16px/19px Roboto',
-    letterSpacing: '0px',
-    color: '#186EFF',
-    opacity: '1',
-    marginBottom: '41px',
-  },
-
-  // 1. Styles that are used exclusively in the 'Build your SPV' tab.
-  assetTypeRowItem: {
-    paddingBottom: '16px',
-    paddingRight: '24px',
-    [theme.breakpoints.down(phone)]: {
-      paddingRight: '0',
-    },
-  },
-  assetChoiceGrid: {
-    display: 'flex',
-    [theme.breakpoints.down(phone)]: {
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-  },
   inputBox: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     boxShadow: '0px 3px 6px #0000000A',
@@ -319,56 +125,10 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '568px',
     width: '100%',
   },
-  minimumInput: {
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #0000000A',
-    // border radius is not taking
-    borderRadius: '8px !important',
-    padding: '0',
-    maxWidth: '464px',
-    width: '100%',
-  },
-  selectInputBox: {
-    width: '90%',
-    '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
-      borderRadius: '8px !important',
-    },
-  },
-  selectTest: {},
-  wideInputBox: {
-    maxWidth: '1206px',
-  },
   inputLabelWithTooltip: {
     display: 'flex',
     '& svg': {
       marginTop: '0.2em',
-    },
-  },
-
-  inputButton: {
-    width: '180px',
-    height: '58px',
-    background: '#FFFFFF26 0% 0% no-repeat padding-box',
-    border: '2px solid #70707080',
-    borderRadius: '5px',
-    marginRight: '10px',
-    opacity: '0.5',
-    outline: 'none',
-    [theme.breakpoints.down(phone)]: {
-      width: '130px',
-    },
-  },
-
-  selectedInputButton: {
-    width: '180px',
-    height: '58px',
-    background: '#FFFFFF26 0% 0% no-repeat padding-box',
-    border: '2px solid red',
-    borderRadius: '5px',
-    marginRight: '10px',
-    opacity: '0.5',
-    [theme.breakpoints.down(phone)]: {
-      width: '130px',
     },
   },
   inputGridContainer: {
@@ -378,43 +138,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   inputGridItem: {
-    [theme.breakpoints.down(phone)]: {
-      maxWidth: '100%',
-    },
-  },
-  cryptoFormContainer: {
-    width: '98%',
-    right: '1vw',
-  },
-  cryptoFieldset: {
-    border: 'solid 1px #186EFF',
-    borderTopColor: '#186EFF',
-    borderRadius: '8px',
-    boxSizing: 'border-box',
-    width: 'inherit',
-    paddingLeft: '10px',
-  },
-  cryptoLabel: {
-    fontSize: '17px',
-    fontWeight: 'bold',
-    color: '#2A2B54',
-    width: 'fit-content',
-    padding: '0px 5px',
-    marginLeft: '5px',
-  },
-  cryptoSelector: {
-    width: '110%',
-    padding: '8px 11px 17px 5px',
-  },
-  customInputGridItem: {
-    marginBottom: '37px',
-    [theme.breakpoints.down(phone)]: {
-      maxWidth: '100%',
-    },
-  },
-  inputGridItemColumn: {
-    marginBottom: '37px',
-    flexDirection: 'column',
     [theme.breakpoints.down(phone)]: {
       maxWidth: '100%',
     },
@@ -525,8 +248,183 @@ const useStyles = makeStyles((theme) => ({
     width: '202px',
     opacity: 1,
   },
-  // 1. (FUND) Styles that are used exclusively in the 'Build your SPV' tab.
-  // 2. Styles that are used exclusively in the 'Sign Agreements' tab.
+  unfilledField: {
+    border: '1px solid red',
+  },
+  icon: {
+    opacity: '1',
+  },
+  sectorTag: {
+    display: 'flex',
+    color: '#0461ff',
+    backgroundColor: '#DAE8FF',
+    fontSize: '85%',
+    margin: '3px',
+    height: '25px',
+    paddingLeft: '6px',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    borderRadius: '4px',
+    alignItems: 'center',
+  },
+  removeSectorButton: {
+    display: 'flex',
+    height: '100%',
+    marginLeft: '3px',
+    alignItems: 'center',
+    color: '#0461ff',
+    backgroundColor: '#DAE8FF',
+    border: 'none',
+    borderRadius: '0px 4px 4px 0px',
+    fontWeight: '600',
+    fontSize: '10px',
+    //* TO DO: fix on hover - need to fit height
+    '&:hover': {
+      backgroundColor: '#FFBDAD',
+      color: '#DE350B',
+    },
+  },
+  // * Styles that are only used in the SPV form
+  minimumInput: {
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    boxShadow: '0px 3px 6px #0000000A',
+    // border radius is not taking
+    borderRadius: '8px !important',
+    padding: '0',
+    maxWidth: '464px',
+    width: '100%',
+  },
+  selectInputBox: {
+    width: '90%',
+    '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
+      borderRadius: '8px !important',
+    },
+  },
+  cryptoFormContainer: {
+    width: '98%',
+    right: '1vw',
+  },
+  cryptoFieldset: {
+    border: 'solid 1px #186EFF',
+    borderTopColor: '#186EFF',
+    borderRadius: '8px',
+    boxSizing: 'border-box',
+    width: 'inherit',
+    paddingLeft: '10px',
+  },
+  cryptoLabel: {
+    fontSize: '17px',
+    fontWeight: 'bold',
+    color: '#2A2B54',
+    width: 'fit-content',
+    padding: '0px 5px',
+    marginLeft: '5px',
+  },
+  cryptoSelector: {
+    width: '110%',
+    padding: '8px 11px 17px 5px',
+  },
+  customInputGridItem: {
+    marginBottom: '37px',
+    [theme.breakpoints.down(phone)]: {
+      maxWidth: '100%',
+    },
+  },
+  pitchDeckCheckbox: {
+    paddingLeft: '0px',
+    height: '24px',
+    width: '24px',
+    borderRadius: '4px',
+  },
+  pitchDeckColorSecondary: {
+    color: '#39C522',
+  },
+  // * Styles that are only used in the AgreementSigner.
+  signContainer: {
+    display: 'grid',
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    boxShadow: '0px 3px 6px #00000029',
+    border: '1px solid #7070703B',
+    marginBottom: '16px',
+    borderRadius: '15px',
+    padding: '42px',
+    width: '100%',
+    maxWidth: '1352px',
+    gridGap: '30px',
+    opacity: 1,
+    [theme.breakpoints.down(phone)]: {
+      maxWidth: '600px',
+      marginBottom: '24px',
+      padding: '16px',
+      paddingBottom: '30px',
+    },
+  },
+  agreementUnsignedBox: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: '100px',
+    paddingLeft: '30px',
+    paddingRight: '30px',
+    border: '2px dashed #0461FF !important',
+    borderRadius: '20px',
+    '&:hover': {
+      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+    },
+  },
+  agreementSignedBox: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: '100px',
+    paddingLeft: '30px',
+    paddingRight: '30px',
+    border: 'none !important',
+    borderRadius: '20px',
+    boxShadow: 'none !important',
+    backgroundColor: '#F6F7F8',
+  },
+  signed: {
+    backgroundColor: 'rgb(57,197,34, 0.23)',
+    color: '#34AF1F',
+    fontWeight: '600',
+    borderRadius: '20px',
+    padding: '5px 20px',
+  },
+  notSigned: {
+    backgroundColor: '#FFBDAD',
+    color: '#DE350B',
+    fontWeight: '600',
+    borderRadius: '20px',
+    padding: '5px 20px',
+  },
+  serviceAgreementIconBox: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '60px',
+    height: '60px',
+    borderRadius: '50%',
+    backgroundColor: '#ECF3FF',
+  },
+  buttonBox: {
+    margin: 'auto',
+    marginTop: '40px',
+    alignSelf: 'center',
+    textAlign: 'center',
+  },
+  customFormItemName: {
+    minHeight: '40px',
+  },
+  subtitle: {
+    textAlign: 'left',
+    font: 'normal normal normal 16px/19px Roboto',
+    letterSpacing: '0px',
+    color: '#186EFF',
+    opacity: '1',
+    marginBottom: '41px',
+  },
+  // * Styles that are only used in the 'Upload Docs' tab.
   uploadContainer: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -584,82 +482,108 @@ const useStyles = makeStyles((theme) => ({
     border: 'none',
     outline: 'none',
   },
-  checkCircle: {
-    opacity: '0.3',
+  docUploadBox: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    marginBottom: '16px',
+    paddingTop: '20px',
+    borderRadius: '15px',
+    width: '100%',
+    maxWidth: '1352px',
+    opacity: 1,
+    [theme.breakpoints.down(phone)]: {
+      display: 'flex',
+      flexDirection: 'column',
+      maxWidth: '600px',
+      padding: '23px',
+      paddingBottom: '0px',
+    },
+  },
+  docIconBox: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: '50%',
+    width: '58px',
+    height: '58px',
+  },
+  docErrorIconBox: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F2CECC',
+    borderRadius: '50%',
+    width: '58px',
+    height: '58px',
+  },
+
+  blueCheck: {
+    width: '26px',
+    height: '26px',
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: '50%',
+    justifyContent: 'center',
+    backgroundColor: '#0461ff',
+  },
+  formHeaderText: {
+    padding: '36px 0px 27px 8px',
+    color: '#2A2B54',
+    fontSize: '22px',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '13px',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  },
+  buttonContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'nowrap',
+    [theme.breakpoints.down(phone)]: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom: '8px',
+    },
+  },
+  uploadIcon: {
+    color: 'blue',
     transparentheight: '35px',
-    width: '38px',
-    marginLeft: 'auto',
-    marginRight: '37px',
     [theme.breakpoints.down(phone)]: {
       marginRight: '20px',
       width: '30px',
     },
   },
-  pitchDeckCheckbox: {
-    paddingLeft: '0px',
-    height: '24px',
-    width: '24px',
-    borderRadius: '4px',
-  },
-  pitchDeckColorSecondary: {
-    color: '#39C522',
-  },
-  unfilledField: {
-    border: '1px solid red',
-  },
-  icon: {
-    opacity: '1',
-  },
-  sectorTag: {
+  uploadIconLabel: {
     display: 'flex',
-    color: '#0461ff',
-    backgroundColor: '#DAE8FF',
-    fontSize: '85%',
-    margin: '3px',
-    height: '25px',
-    paddingLeft: '6px',
+    justifyContent: 'space-evenly',
     whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-    borderRadius: '4px',
-    alignItems: 'center',
+    cursor: 'pointer',
   },
-  removeSectorButton: {
+  uploadErrorLabel: {
     display: 'flex',
-    height: '100%',
-    marginLeft: '3px',
-    alignItems: 'center',
-    color: '#0461ff',
-    backgroundColor: '#DAE8FF',
-    border: 'none',
-    borderRadius: '0px 4px 4px 0px',
-    fontWeight: '600',
-    fontSize: '10px',
-    //* TO DO: fix on hover - need to fit height
-    '&:hover': {
-      backgroundColor: '#FFBDAD',
-      color: '#DE350B',
+    justifyContent: 'space-evenly',
+    whiteSpace: 'nowrap',
+    cursor: 'pointer',
+    color: '#8E9394',
+  },
+
+  // 1. Styles that are used exclusively in the 'Type Selector' tab.
+  assetTypeRowItem: {
+    paddingBottom: '16px',
+    paddingRight: '24px',
+    [theme.breakpoints.down(phone)]: {
+      paddingRight: '0',
     },
   },
-  // 3. Styles that are used exclusively in the 'Upload docs' tab.
-  finishButton: {
-    font: 'normal normal bold 24px/28px Roboto',
-    marginTop: '44px',
-    width: '368px',
-    height: '68px',
-    background: '#39C522 0% 0% no-repeat padding-box',
-    borderRadius: '10px',
-    color: '#FFFFFF',
-    textTransform: 'none',
-    outline: 'none',
+  assetChoiceGrid: {
+    display: 'flex',
     [theme.breakpoints.down(phone)]: {
-      marginBottom: '14px',
-      marginTop: '20px',
-      marginLeft: '0',
-      width: '100%',
-    },
-    '&:hover': {
-      backgroundColor: '#fff',
-      color: '#3c52b2',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   },
 }));

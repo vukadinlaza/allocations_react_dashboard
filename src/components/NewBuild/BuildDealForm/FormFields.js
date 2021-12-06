@@ -1652,7 +1652,7 @@ export function InternationalInvestorsStatus({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6} spacing={2}>
+    <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={`${classes.formItemName} ${classes.customFormItemName}`}>
@@ -1740,7 +1740,7 @@ export function PitchDeckCheckBox({ buildData, setBuildData, classes }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', marginTop: '30px' }}>
       <Checkbox
-        color="#39C522"
+        color="default"
         size="medium"
         name="public_pitch_deck"
         checked={buildData.public_pitch_deck}
