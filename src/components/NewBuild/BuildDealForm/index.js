@@ -130,7 +130,9 @@ const BuildDetails = ({
     custom_management_fee: 'false',
     reporting_adviser: undefined,
     deal_stage: '',
-    gp_entity_name: null,
+    fund_name: '',
+    general_partner_representative: '',
+    gp_entity_name: undefined,
     high_volume_partner: false,
     international_company_status: 'false',
     international_company_country: '',
@@ -139,14 +141,14 @@ const BuildDetails = ({
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
-        : null,
+        : undefined,
     management_fee_frequency: 'one time',
     management_fee_type: 'percent',
     management_fee_value: '2',
     minimum_investment: 10000,
     name: '',
     need_gp_entity: 'true',
-    number_of_investments: null,
+    number_of_investments: undefined,
     offering_type: '506b',
     portfolio_company_name: '',
     portfolio_company_securities: '',
@@ -398,7 +400,7 @@ const BuildDetails = ({
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
             2. Deal Terms
           </Typography>
-          <Grid container spacing={2} className={classes.inputGridContainer}>
+          <Grid container className={classes.inputGridContainer} spacing={2}>
             <ManagementFee {...formFieldProps} />
             <ManagementFeeFrequency {...formFieldProps} />
             <CarryFee {...formFieldProps} />
@@ -415,7 +417,7 @@ const BuildDetails = ({
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
             3. Offering Terms
           </Typography>
-          <Grid container spacing={1} className={classes.inputGridContainer}>
+          <Grid container className={classes.inputGridContainer} spacing={1}>
             <ReportingAdviser {...formFieldProps} />
             <OfferingType {...formFieldProps} />
             <CustomInvestmentAgreement {...formFieldProps} />
@@ -427,7 +429,7 @@ const BuildDetails = ({
           <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
             4. Demographics
           </Typography>
-          <Grid container spacing={1} className={classes.inputGridContainer}>
+          <Grid container className={classes.inputGridContainer} spacing={1}>
             <InternationalCompanyStatus {...formFieldProps} />
             <InternationalInvestorsStatus {...formFieldProps} />
           </Grid>
@@ -435,12 +437,10 @@ const BuildDetails = ({
       </Paper>
 
       <Paper className={classes.paper}>
-        <form noValidate autoComplete="off">
-          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-            5. Upload Your Documents
-          </Typography>
-          <UploadDocs deal={initialDeal} {...formFieldProps} />
-        </form>
+        <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
+          5. Upload Your Documents
+        </Typography>
+        <UploadDocs deal={initialDeal} {...formFieldProps} />
       </Paper>
 
       <Paper className={classes.paper}>
