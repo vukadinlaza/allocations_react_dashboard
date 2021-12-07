@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
-import { withLDProvider, useFlags } from 'launchdarkly-react-client-sdk';
+import { withLDProvider } from 'launchdarkly-react-client-sdk';
 
 import FundManagerDashboard from './components/dashboard/FundManagerDashboard';
 import InvestorDashboard from './components/dashboard/InvestorDashboard';
@@ -28,10 +28,9 @@ import Demo from './components/Demo';
 // admin
 
 import DealNextSteps from './components/DealNextSteps/DealNextSteps';
-import DealLandingPage from './components/DealOneClick/LandingPage/LandingPage';
-import DealLandingPageRedesign from './components/DealOneClick/LandingPageRedesign/LandingPageRedesign';
 import InvestmentPage from './components/DealOneClick/InvestmentPage/InvestmentPage';
 import SuperAdminManager from './components/superadmin/Manager';
+import DealOneClick from './components/DealOneClick';
 
 // test
 import BuildDealForm from './components/NewBuild/BuildDealForm/index';
@@ -56,7 +55,6 @@ Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
  * */
 
 const App = () => {
-  const { dealPageRedesign } = useFlags();
   return (
     <AuthorizedApolloProvider>
       <CurrentAccountProvider>
@@ -83,28 +81,12 @@ const App = () => {
 
               {/** Deals * */}
               {/* PUBLIC Landing Page */}
-              <Route
-                path="/public/:organization/:deal_slug"
-                component={dealPageRedesign ? DealLandingPageRedesign : DealLandingPage}
-                exact
-              />
-              <Route
-                path="/public/:deal_slug"
-                component={dealPageRedesign ? DealLandingPageRedesign : DealLandingPage}
-                exact
-              />
+              <Route path="/public/:organization/:deal_slug" component={DealOneClick} exact />
+              <Route path="/public/:deal_slug" component={DealOneClick} exact />
 
               {/* Private Landing Page */}
-              <PrivateRoute
-                path="/deals/:deal_slug"
-                component={dealPageRedesign ? DealLandingPageRedesign : DealLandingPage}
-                exact
-              />
-              <PrivateRoute
-                path="/deals/:organization/:deal_slug"
-                component={dealPageRedesign ? DealLandingPage : DealLandingPageRedesign}
-                exact
-              />
+              <PrivateRoute path="/deals/:deal_slug" component={DealOneClick} exact />
+              <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
 
               {/* prospect deals */}
               <PrivateRoute path="/prospects" component={Prospect} exact />
