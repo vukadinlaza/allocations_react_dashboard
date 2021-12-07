@@ -236,7 +236,6 @@ export default function TypeSelector({
                 {buildData.need_gp_entity === 'false' && <GPEntityName {...formFieldProps} />}
               </>
             )}
-            {/* FOURTH ROW */}
             <DealStage {...formFieldProps} />
             <Sectors {...formFieldProps} />
           </Grid>
