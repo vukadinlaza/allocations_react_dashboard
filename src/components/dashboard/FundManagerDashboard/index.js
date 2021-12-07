@@ -98,7 +98,7 @@ export const ORG_OVERVIEW = gql`
           managementFeeType
           fundManagementFeeType
         }
-        virtual_account_number
+        nd_virtual_account_number
       }
     }
     investor {

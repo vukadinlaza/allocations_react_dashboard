@@ -57,7 +57,7 @@ function DealHeader({ deal }) {
         </Box>
 
         <Grid container className={classes.middleGridContainer} style={{ background: '' }}>
-          <Grid item xs={6} style={{ background: '' }}>
+          <Grid item style={{ background: '' }}>
             <CardMedia
               className={classes.cardMedia}
               component="img"
@@ -68,7 +68,7 @@ function DealHeader({ deal }) {
               }
             />
           </Grid>
-          <Grid item xs={6} style={{ background: '' }}>
+          <Grid item style={{ background: '' }}>
             <h4 className={classes.investmentProgress}>Investment Progress</h4>
             <container>
               <h6 className={classes.investmentNumber}>$320,000</h6>
@@ -86,7 +86,7 @@ function DealHeader({ deal }) {
 
             <Button className={classes.investButton}>Invest</Button>
             <Grid container style={{ background: '', marginTop: '15px' }}>
-              <Grid item xs={6} style={{ background: '' }}>
+              <Grid item style={{ background: '' }}>
                 Invest With:{' '}
                 <div style={{ display: 'flex' }}>
                   <div className={classes.coinvestorTagBubble}>
@@ -97,7 +97,7 @@ function DealHeader({ deal }) {
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item>
                 <div
                   style={{
                     display: 'flex',
@@ -126,7 +126,7 @@ function DealHeader({ deal }) {
                   </Typography>
                 }
               >
-                <Typography style={{ fontSize: '14px' }}>
+                <Typography style={{ fontSize: '14px', fontWeight: 'bold' }}>
                   {' '}
                   {signDeadline
                     ? getDeadline(signDeadline)
@@ -148,7 +148,7 @@ function DealHeader({ deal }) {
                   </Typography>
                 }
               >
-                <Typography style={{ fontSize: '14px' }}>
+                <Typography style={{ fontSize: '14px', fontWeight: 'bold' }}>
                   {wireDeadline
                     ? getDeadline(wireDeadline)
                     : signDeadline

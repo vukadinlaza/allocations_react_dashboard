@@ -1,5 +1,4 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { CenterFocusStrong } from '@material-ui/icons';
 
 export const DesktopExtraLarge = '1920';
 export const DesktopLarge = '1440';
@@ -24,6 +23,13 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     height: 'max-content',
     width: '1000px',
+
+    [theme.breakpoints.up('xs')]: {
+      '@media (max-device-width:780px)': {
+        width: '100%',
+        backgroundColor: '',
+      },
+    },
   },
 
   flexContainer: {
@@ -79,11 +85,19 @@ const useStyles = makeStyles((theme) => ({
     padding: '30px',
     width: '100%',
     maxWidth: '944px',
-    // marginRight: '3%',
     marginLeft: '3%',
     marginTop: '16px',
     opacity: 1,
 
+    [theme.breakpoints.up('xs')]: {
+      '@media (max-device-width:780px)': {
+        width: '100%',
+        backgroundColor: '',
+        margin: '0 auto',
+        marginTop: '16px',
+        maxWidth: '100%',
+      },
+    },
     [theme.breakpoints.up('sm')]: {},
     [theme.breakpoints.up('md')]: {},
     [theme.breakpoints.up('lg')]: {},
@@ -98,6 +112,7 @@ const useStyles = makeStyles((theme) => ({
   boxContent: {
     backgroundColor: '',
     fontSize: '12px',
+    fontWeight: 'bold',
     width: '128px',
     marginLeft: '-2px',
     marginTop: '10px',
@@ -151,7 +166,7 @@ const useStyles = makeStyles((theme) => ({
   BorderLinearProgress: {
     height: '12px',
     backgroundColor: '#E7E7E8',
-    borderRadius: '2px',
+    borderRadius: '5px',
     [theme.breakpoints.up('sm')]: {},
     [theme.breakpoints.up('md')]: {},
     [theme.breakpoints.up('lg')]: {},
@@ -172,9 +187,8 @@ const useStyles = makeStyles((theme) => ({
     width: '90%',
     margin: '0 auto',
     display: 'flex',
-    // justifyContent: 'center',
     justifyContent: 'space-between',
-
+    marginBottom: '20px',
     [theme.breakpoints.up('sm')]: {},
     [theme.breakpoints.up('md')]: {},
     [theme.breakpoints.up('lg')]: {},

@@ -125,7 +125,7 @@ function DealLandingPageRedesign() {
   }
 
   return (
-    <section className={classes.LandingPage}>
+    <section className={classes.LandingPage} style={{ background: '' }}>
       <div className={classes.flexContainer}>
         <DealHeaderRedesign deal={deal} />
         <InvestingDetails deal={deal} />

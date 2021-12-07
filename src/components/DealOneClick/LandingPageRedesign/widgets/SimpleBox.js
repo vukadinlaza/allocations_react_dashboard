@@ -21,7 +21,6 @@ const styles = (theme) => ({
   boxContent: {
     padding: '10px',
     fontSize: '14px',
-    // margin: '9px 19px 0px 9px',
   },
   boxTitle: {
     fontSize: '14px',
@@ -60,7 +59,7 @@ const styles = (theme) => ({
     marginLeft: '0.5em',
     cursor: 'pointer',
     color: '#758398',
-    fontSize: '20px',
+    fontSize: '16px',
   },
   modal: {
     padding: '20px',
