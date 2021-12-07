@@ -185,15 +185,12 @@ const BuildDetails = ({
   };
 
   const sectionOneComplete = sectionOne[dealType].every((field) => buildData[field]);
-  console.log('One:', sectionOneComplete);
 
   const sectionTwo = {
     spv: [
       'management_fee_value',
       'management_fee_frequency',
-      // 'custom_management_fee',
       'carry_fee_value',
-      // 'custom_carry_fee',
       'side_letters',
       'target_raise_goal',
       'minimum_investment',
@@ -202,42 +199,71 @@ const BuildDetails = ({
     fund: [
       'management_fee_value',
       'management_fee_frequency',
-      // 'custom_management_fee',
       'carry_fee_value',
-      // 'custom_carry_fee',
       'side_letters',
       'type_of_investors',
     ],
   };
 
-  const sectionTwoComplete = sectionTwo[dealType].every((field) => buildData[field]);
+  const sectionTwoCheck = () => {
+    let status = true;
+    if (
+      buildData.management_fee_value === 'Custom' &&
+      (buildData.custom_management_fee === 'false' || buildData.custom_management_fee === '')
+    ) {
+      status = false;
+    }
+    if (
+      buildData.carry_fee_value === 'Custom' &&
+      (buildData.custom_carry_fee === 'false' || buildData.custom_carry_fee === '')
+    ) {
+      status = false;
+    }
+    return status;
+  };
 
-  console.log('Two:', sectionTwoComplete);
+  const sectionTwoComplete =
+    sectionTwo[dealType].every((field) => buildData[field]) && sectionTwoCheck();
 
   const sectionThree = [
     'allocations_reporting_adviser',
-    // custom_reporting_adviser
     'offering_type',
     'custom_investment_agreement',
   ];
 
-  const sectionThreeComplete = sectionThree.every((field) => buildData[field]);
+  const sectionThreeCheck = () => {
+    let status = true;
+    if (buildData.allocations_reporting_adviser === 'false' && !buildData.reporting_adviser) {
+      status = false;
+    }
+    return status;
+  };
 
-  console.log('Three:', sectionThreeComplete);
+  const sectionThreeComplete =
+    sectionThree.every((field) => buildData[field]) && sectionThreeCheck();
 
-  const sectionFour = [
-    'international_company_status',
-    // 'international_company_country',
-    'international_investors_status',
-    // 'international_investors_countries',
-  ];
+  const sectionFour = ['international_company_status', 'international_investors_status'];
 
-  const sectionFourComplete = sectionFour.every((field) => buildData[field]);
+  const sectionFourCheck = () => {
+    let status = true;
+    if (
+      buildData.international_company_status === 'true' &&
+      (!buildData.international_company_country || buildData.international_company_country === '')
+    ) {
+      status = false;
+    }
+    if (
+      buildData.international_investors_status === 'true' &&
+      !buildData.international_investors_countries.length
+    ) {
+      status = false;
+    }
+    return status;
+  };
 
-  console.log('Four:', sectionFourComplete);
+  const sectionFourComplete = sectionFour.every((field) => buildData[field]) && sectionFourCheck();
 
   const sectionSixComplete = !!buildData.memo;
-  console.log('Six:', sectionSixComplete);
 
   const [unfilledFields, setUnfilledFields] = useState([]);
 
