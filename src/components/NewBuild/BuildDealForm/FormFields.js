@@ -550,7 +550,6 @@ export function TargetRaiseGoal({
           }}
           className={classes.inputBox}
           variant="outlined"
-          placeholder=""
           classes={{
             root: `${unfilledFields.includes('target_raise_goal') && classes.unfilledField} ${
               classes.selectInputBox

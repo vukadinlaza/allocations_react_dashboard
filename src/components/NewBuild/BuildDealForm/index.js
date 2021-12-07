@@ -144,6 +144,7 @@ const BuildDetails = ({
     management_fee_frequency: 'one time',
     management_fee_type: 'percent',
     management_fee_value: '2',
+    memo: '',
     minimum_investment: 10000,
     name: '',
     need_gp_entity: 'true',
@@ -165,17 +166,17 @@ const BuildDetails = ({
     spv: [
       'portfolio_company_name',
       'portfolio_company_securities',
-      'portfolio_deal_name',
+      'name',
       'manager_name',
       'representative',
       'deal_stage',
       'sectors',
     ],
     fund: [
-      'fund_name',
+      'name',
       'number_of_investments',
       'manager_name',
-      'general_partner_representative',
+      'representative',
       'gp_entity_name',
       'need_gp_entity',
       'deal_stage',
@@ -184,7 +185,6 @@ const BuildDetails = ({
   };
 
   const sectionOneComplete = sectionOne[dealType].every((field) => buildData[field]);
-
   console.log('One:', sectionOneComplete);
 
   const sectionTwo = {
@@ -236,32 +236,18 @@ const BuildDetails = ({
 
   console.log('Four:', sectionFourComplete);
 
-  const sectionFiveComplete = false;
-
-  const sections = [
-    sectionOneComplete,
-    sectionTwoComplete,
-    sectionThreeComplete,
-    sectionFourComplete,
-    sectionFiveComplete,
-  ];
-
-  const activeSection = sections.indexOf(false);
-
-  console.log('Active Index:', activeSection);
+  const sectionSixComplete = !!buildData.memo;
+  console.log('Six:', sectionSixComplete);
 
   const [unfilledFields, setUnfilledFields] = useState([]);
 
   const formValidation = () => {
     const unvalidatedFields = [];
     const fieldsToFill = [];
-    // new array
 
-    // add section number to this
     const unvalidatedFieldsToFill = (fieldToFill, unvalidatedField) => {
       fieldsToFill.push(fieldToFill);
       unvalidatedFields.push(unvalidatedField);
-      // push into new array? only number. only need to know the lowest number. check if number exists before duplicating
     };
     // fields always checked below
     if (dealType === 'spv') {
@@ -408,6 +394,7 @@ const BuildDetails = ({
           },
           management_fee_frequency: buildData.management_fee_frequency,
           manager_name: buildData.manager_name,
+          memo: buildData.memo,
           minimum_investment: Number(buildData.minimum_investment),
           name: buildData.name,
           need_gp_entity: buildData.need_gp_entity,
@@ -483,6 +470,7 @@ const BuildDetails = ({
         openTooltip={openTooltip}
         unfilledFields={unfilledFields}
         setUnfilledFields={setUnfilledFields}
+        sectionOneComplete={sectionOneComplete}
       />
 
       <Paper className={classes.paper}>
@@ -490,7 +478,7 @@ const BuildDetails = ({
           <Grid
             item
             className={classes.sectionHeaderNumber}
-            style={{ backgroundColor: activeSection >= 1 ? '#0461ff' : '#EBEBEB' }}
+            style={{ backgroundColor: sectionTwoComplete ? '#0461ff' : '#EBEBEB' }}
           >
             2
           </Grid>
@@ -498,7 +486,7 @@ const BuildDetails = ({
             variant="h6"
             gutterBottom
             className={classes.sectionHeaderText}
-            style={{ color: activeSection >= 1 ? '#2A2B54' : '#8E9394' }}
+            style={{ color: sectionTwoComplete ? '#2A2B54' : '#8E9394' }}
           >
             Deal Terms
           </Typography>
@@ -506,7 +494,7 @@ const BuildDetails = ({
         <Grid
           container
           className={classes.outerSection}
-          style={{ borderLeft: activeSection >= 1 ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+          style={{ borderLeft: sectionTwoComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
         >
           <form noValidate autoComplete="off">
             <Grid container spacing={2} className={classes.inputGridContainer}>
@@ -528,7 +516,7 @@ const BuildDetails = ({
           <Grid
             item
             className={classes.sectionHeaderNumber}
-            style={{ backgroundColor: activeSection >= 2 ? '#0461ff' : '#EBEBEB' }}
+            style={{ backgroundColor: sectionThreeComplete ? '#0461ff' : '#EBEBEB' }}
           >
             3
           </Grid>
@@ -536,7 +524,7 @@ const BuildDetails = ({
             variant="h6"
             gutterBottom
             className={classes.sectionHeaderText}
-            style={{ color: activeSection >= 2 ? '#2A2B54' : '#8E9394' }}
+            style={{ color: sectionThreeComplete ? '#2A2B54' : '#8E9394' }}
           >
             Offering Terms
           </Typography>
@@ -544,7 +532,7 @@ const BuildDetails = ({
         <Grid
           container
           className={classes.outerSection}
-          style={{ borderLeft: activeSection >= 2 ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+          style={{ borderLeft: sectionThreeComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
         >
           <form noValidate autoComplete="off">
             <Grid container spacing={1} className={classes.inputGridContainer}>
@@ -560,7 +548,7 @@ const BuildDetails = ({
           <Grid
             item
             className={classes.sectionHeaderNumber}
-            style={{ backgroundColor: activeSection >= 3 ? '#0461ff' : '#EBEBEB' }}
+            style={{ backgroundColor: sectionFourComplete ? '#0461ff' : '#EBEBEB' }}
           >
             4
           </Grid>
@@ -568,7 +556,7 @@ const BuildDetails = ({
             variant="h6"
             gutterBottom
             className={classes.sectionHeaderText}
-            style={{ color: activeSection >= 3 ? '#2A2B54' : '#8E9394' }}
+            style={{ color: sectionFourComplete ? '#2A2B54' : '#8E9394' }}
           >
             Demographics
           </Typography>
@@ -576,7 +564,7 @@ const BuildDetails = ({
         <Grid
           container
           className={classes.outerSection}
-          style={{ borderLeft: activeSection >= 3 ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+          style={{ borderLeft: sectionFourComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
         >
           <form noValidate autoComplete="off">
             <Grid container spacing={1} className={classes.inputGridContainer}>
@@ -589,18 +577,14 @@ const BuildDetails = ({
 
       <Paper className={classes.paper}>
         <Grid container className={classes.sectionHeader}>
-          <Grid
-            item
-            className={classes.sectionHeaderNumber}
-            style={{ backgroundColor: activeSection >= 3 ? '#0461ff' : '#EBEBEB' }}
-          >
+          <Grid item className={classes.sectionHeaderNumber} style={{ backgroundColor: '#0461ff' }}>
             5
           </Grid>
           <Typography
             variant="h6"
             gutterBottom
             className={classes.sectionHeaderText}
-            style={{ color: activeSection >= 3 ? '#2A2B54' : '#8E9394' }}
+            style={{ color: '#2A2B54' }}
           >
             Upload Your Documents
           </Typography>
@@ -608,7 +592,7 @@ const BuildDetails = ({
         <Grid
           container
           className={classes.outerSection}
-          style={{ borderLeft: activeSection >= 3 ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+          style={{ borderLeft: 'solid 3px #ECF3FF' }}
         >
           <form noValidate autoComplete="off">
             <UploadDocs deal={initialDeal} {...formFieldProps} />
@@ -621,7 +605,7 @@ const BuildDetails = ({
           <Grid
             item
             className={classes.sectionHeaderNumber}
-            style={{ backgroundColor: activeSection >= 3 ? '#0461ff' : '#EBEBEB' }}
+            style={{ backgroundColor: sectionSixComplete ? '#0461ff' : '#EBEBEB' }}
           >
             6
           </Grid>
@@ -629,14 +613,14 @@ const BuildDetails = ({
             variant="h6"
             gutterBottom
             className={classes.sectionHeaderText}
-            style={{ color: activeSection >= 3 ? '#2A2B54' : '#8E9394' }}
+            style={{ color: sectionSixComplete ? '#2A2B54' : '#8E9394' }}
           >
             Final
           </Typography>
         </Grid>
         <div
           className={classes.outerSection}
-          style={{ borderLeft: activeSection >= 3 ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+          style={{ borderLeft: sectionSixComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
         >
           <form noValidate autoComplete="off">
             <FormControl required disabled variant="outlined" className={classes.formContainers}>

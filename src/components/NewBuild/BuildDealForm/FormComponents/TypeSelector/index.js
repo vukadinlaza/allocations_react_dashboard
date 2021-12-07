@@ -42,6 +42,7 @@ export default function TypeSelector({
   openTooltip,
   unfilledFields,
   setUnfilledFields,
+  sectionOneComplete,
 }) {
   const classes = useStyles();
   const customInputStyles = { style: { height: '23px' } };
@@ -161,19 +162,27 @@ export default function TypeSelector({
   return (
     <Paper className={classes.paper}>
       <Grid container className={classes.sectionHeader}>
-        <Grid item className={classes.sectionHeaderNumber} style={{ backgroundColor: '#0461ff' }}>
+        <Grid
+          item
+          className={classes.sectionHeaderNumber}
+          style={{ backgroundColor: sectionOneComplete ? '#0461ff' : '#EBEBEB' }}
+        >
           1
         </Grid>
         <Typography
           variant="h6"
           gutterBottom
           className={classes.sectionHeaderText}
-          style={{ color: '#2A2B54' }}
+          style={{ color: sectionOneComplete ? '#2A2B54' : '#8E9394' }}
         >
           Basic Information
         </Typography>
       </Grid>
-      <Grid container className={classes.outerSection} style={{ borderLeft: 'solid #ECF3FF 3px' }}>
+      <Grid
+        container
+        className={classes.outerSection}
+        style={{ borderLeft: sectionOneComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+      >
         <form noValidate autoComplete="off" className={classes.formContainers}>
           <Typography className={classes.formItemName}>
             Choose your asset type
