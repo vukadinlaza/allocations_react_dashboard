@@ -31,18 +31,26 @@ const uploadTaskMap = {
   'Upload Term Sheet': {
     text: 'Portfolio Company Term Sheet',
     position: 1,
+    fileType: 'application/pdf',
+    fileTypeText: 'PDF',
   },
   'Upload Company Deck': {
     text: 'Pitch Deck',
     position: 2,
+    fileType: 'application/pdf',
+    fileTypeText: 'PDF',
   },
   'Upload Company Logo': {
     text: 'Portfolio Company Logo',
     position: 3,
+    fileType: 'image/jpeg, image/jpg, image/png',
+    fileTypeText: 'JPEG or PNG',
   },
   'Upload Fund Logo': {
     text: 'Fund Logo',
     position: 1,
+    fileType: 'image/jpeg, image/jpg, image/png',
+    fileTypeText: 'JPEG or PNG',
   },
 };
 
@@ -70,6 +78,16 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
   );
 
   const { complete } = filesUploaded[document.title];
+  const acceptedFiles = uploadTaskMap[document.title]?.fileType;
+
+  const validateFileType = (target) => {
+    const uploadTask = uploadTaskMap[document?.title];
+    if (!acceptedFiles.includes(target.files[0]?.type)) {
+      toast.error(`Please upload a ${uploadTask?.fileTypeText} file for the ${uploadTask?.text}`);
+      return false;
+    }
+    return true;
+  };
 
   if (addDocLoading || deleteDocLoading)
     return (
@@ -100,10 +118,11 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
               className={classes.uploadIcon}
               type="file"
               style={{ display: 'none' }}
-              accept="application/pdf"
+              accept={acceptedFiles}
               multiple
               onChange={({ target }) => {
                 if (target.validity.valid) {
+                  if (!validateFileType(target)) return;
                   setError(false);
                   addDoc({
                     variables: {
@@ -191,10 +210,11 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
             className={classes.uploadIcon}
             type="file"
             style={{ display: 'none' }}
-            accept="application/pdf"
+            accept={acceptedFiles}
             multiple
             onChange={({ target }) => {
               if (target.validity.valid) {
+                if (!validateFileType(target)) return;
                 addDoc({
                   variables: {
                     doc: target.files[0],
