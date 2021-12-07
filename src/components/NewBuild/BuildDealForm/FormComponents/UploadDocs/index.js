@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import _ from 'lodash';
 import { CircularProgress } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { gql, useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
-import { useHistory } from 'react-router';
 import documentIcon from '../../../../../assets/document-icon.svg';
 import documentGreenIcon from '../../../../../assets/document-green-icon.svg';
 import documentGrayIcon from '../../../../../assets/document-grayed-icon.svg';
@@ -31,25 +29,33 @@ const uploadTaskMap = {
   'Upload Term Sheet': {
     text: 'Portfolio Company Term Sheet',
     position: 1,
+    fileType: 'application/pdf',
+    fileTypeText: 'PDF',
   },
   'Upload Company Deck': {
     text: 'Pitch Deck',
     position: 2,
+    fileType: 'application/pdf',
+    fileTypeText: 'PDF',
   },
   'Upload Company Logo': {
     text: 'Portfolio Company Logo',
     position: 3,
+    fileType: 'image/jpeg, image/jpg, image/png',
+    fileTypeText: 'JPEG or PNG',
   },
   'Upload Fund Logo': {
     text: 'Fund Logo',
     position: 1,
+    fileType: 'image/jpeg, image/jpg, image/png',
+    fileTypeText: 'JPEG or PNG',
   },
 };
 
 const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId, classes }) => {
   const [error, setError] = useState(false);
 
-  const [addDoc, { data, loading: addDocLoading, error: addDocError }] = useMutation(ADD_DOC, {
+  const [addDoc, { _, loading: addDocLoading, error: addDocError }] = useMutation(ADD_DOC, {
     onCompleted: ({ addDealDocService: uploadResponse }) => {
       if (uploadResponse?.success) toast.success('Success! Your document has been added');
     },
@@ -70,6 +76,16 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
   );
 
   const { complete } = filesUploaded[document.title];
+  const acceptedFiles = uploadTaskMap[document.title]?.fileType;
+
+  const validateFileType = (target) => {
+    const uploadTask = uploadTaskMap[document?.title];
+    if (!acceptedFiles.includes(target.files[0]?.type)) {
+      toast.error(`Please upload a ${uploadTask?.fileTypeText} file for the ${uploadTask?.text}`);
+      return false;
+    }
+    return true;
+  };
 
   if (addDocLoading || deleteDocLoading)
     return (
@@ -85,25 +101,28 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
         </div>
         <Typography className={classes.itemText}>&nbsp;Something went wrong...</Typography>
         <div className={classes.uploadIcon} style={{ opacity: '1', textAlign: 'center' }}>
-          <label htmlFor={`${document._id}`} className={classes.uploadErrorLabel}>
+          <div style={{ display: 'flex' }}>
             <img
               src={documentGrayIcon}
               className={classes.uploadIcon}
-              style={{ opacity: '1', cursor: 'pointer' }}
+              style={{ opacity: '1', cursor: 'pointer', marginRight: '0.25em' }}
               alt="checkbox"
             />
-            &nbsp;Upload document
-          </label>
+            <span htmlFor={`${document._id}`} className={classes.uploadErrorLabel}>
+              &nbsp;Upload document
+            </span>
+          </div>
           <form>
             <input
               id={`${document._id}`}
               className={classes.uploadIcon}
               type="file"
               style={{ display: 'none' }}
-              accept="application/pdf"
+              accept={acceptedFiles}
               multiple
               onChange={({ target }) => {
                 if (target.validity.valid) {
+                  if (!validateFileType(target)) return;
                   setError(false);
                   addDoc({
                     variables: {
@@ -191,10 +210,11 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
             className={classes.uploadIcon}
             type="file"
             style={{ display: 'none' }}
-            accept="application/pdf"
+            accept={acceptedFiles}
             multiple
             onChange={({ target }) => {
               if (target.validity.valid) {
+                if (!validateFileType(target)) return;
                 addDoc({
                   variables: {
                     doc: target.files[0],
