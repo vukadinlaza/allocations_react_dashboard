@@ -930,11 +930,19 @@ const HighVolumePartnerships = ({
                         <TextField
                           size="small"
                           variant="outlined"
+                          type="number"
                           value={zipCode}
                           name="zipCode"
                           placeholder="Zip Code"
+                          inputProps={{
+                            min: 0,
+                          }}
                           onChange={(e) => {
-                            setZipcode(e.target.value);
+                            // Max 5 digits
+                            const value = Math.max(0, parseInt(e.target.value))
+                              .toString()
+                              .slice(0, 5);
+                            setZipcode(convertToPositiveIntOrNull(value));
                             setFailedValidationFields((prev) =>
                               prev.filter((field) => field !== 'zipCode'),
                             );
