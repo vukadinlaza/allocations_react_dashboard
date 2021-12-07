@@ -128,10 +128,8 @@ const BuildDetails = ({
     custom_carry_fee: 'false',
     custom_investment_agreement: 'false',
     custom_management_fee: 'false',
-    custom_reporting_adviser: undefined,
+    reporting_adviser: undefined,
     deal_stage: '',
-    fund_name: '',
-    general_partner_representative: '',
     gp_entity_name: null,
     high_volume_partner: false,
     international_company_status: 'false',
@@ -146,19 +144,18 @@ const BuildDetails = ({
     management_fee_type: 'percent',
     management_fee_value: '2',
     minimum_investment: 10000,
+    name: '',
     need_gp_entity: 'true',
     number_of_investments: null,
     offering_type: '506b',
     portfolio_company_name: '',
     portfolio_company_securities: '',
-    portfolio_deal_name: '',
     public_pitch_deck: false,
     representative: '',
     setup_cost: 20000,
     side_letters: 'false',
     sectors: [],
     target_raise_goal: 100000,
-    term_of_fund: '10 years',
     type: dealType,
     type_of_investors: 'Accredited Investors (3(c)(1))',
   });
@@ -183,8 +180,8 @@ const BuildDetails = ({
       if (!buildData.portfolio_company_securities) {
         unvalidatedFieldsToFill('portfolio_company_securities', 'Portfolio Company Securities');
       }
-      if (!buildData.portfolio_deal_name) {
-        unvalidatedFieldsToFill('portfolio_deal_name', 'Deal Name');
+      if (!buildData.name) {
+        unvalidatedFieldsToFill('name', 'Deal Name');
       }
       if (!buildData.manager_name) {
         unvalidatedFieldsToFill('manager_name', 'Manager Name');
@@ -200,17 +197,14 @@ const BuildDetails = ({
       }
     }
     if (dealType === 'fund') {
-      if (!buildData.fund_name) {
-        unvalidatedFieldsToFill('fund_name', 'Fund Name');
+      if (!buildData.name) {
+        unvalidatedFieldsToFill('name', 'Fund Name');
       }
       if (!buildData.manager_name) {
         unvalidatedFieldsToFill('manager_name', 'General Partner Name');
       }
-      if (!buildData.general_partner_representative) {
-        unvalidatedFieldsToFill(
-          'general_partner_representative',
-          'General Partner Representative and Title',
-        );
+      if (!buildData.representative) {
+        unvalidatedFieldsToFill('representative', 'General Partner Representative and Title');
       }
       if (!buildData.number_of_investments) {
         unvalidatedFieldsToFill('number_of_investments', 'Number of Investments');
@@ -249,11 +243,8 @@ const BuildDetails = ({
     ) {
       unvalidatedFieldsToFill('custom_carry_fee', 'Custom Carry Fee');
     }
-    if (
-      !buildData.custom_reporting_adviser &&
-      buildData.allocations_reporting_adviser === 'false'
-    ) {
-      unvalidatedFieldsToFill('custom_reporting_adviser', 'Advisor Name');
+    if (!buildData.reporting_adviser && buildData.allocations_reporting_adviser === 'false') {
+      unvalidatedFieldsToFill('reporting_adviser', 'Advisor Name');
     }
     if (
       !buildData.international_company_country &&
@@ -309,10 +300,7 @@ const BuildDetails = ({
           },
           closing_date: buildData.closing_date,
           custom_investment_agreement: buildData.custom_investment_agreement,
-          custom_reporting_adviser: buildData.custom_reporting_adviser,
           deal_stage: buildData.deal,
-          fund_name: buildData.fund_name,
-          general_partner_representative: buildData.general_partner_representative,
           gp_entity_name: buildData.gp_entity_name,
           international_company: {
             status: buildData.international_company_status,
@@ -329,14 +317,15 @@ const BuildDetails = ({
           },
           management_fee_frequency: buildData.management_fee_frequency,
           manager_name: buildData.manager_name,
-          minimum_subscription_amount: Number(buildData.minimum_investment),
+          minimum_investment: Number(buildData.minimum_investment),
+          name: buildData.name,
           need_gp_entity: buildData.need_gp_entity,
           number_of_investments: Number(buildData.number_of_investments),
           offering_type: buildData.offering_type,
           portfolio_company_name: buildData.portfolio_company_name,
           portfolio_company_securities: buildData.portfolio_company_securities,
-          portfolio_deal_name: buildData.portfolio_deal_name,
           public_pitch_deck: buildData.public_pitch_deck,
+          reporting_adviser: buildData.reporting_adviser,
           representative: buildData.representative,
           sectors: buildData.sectors,
           setup_cost: buildData.setup_cost,
@@ -362,7 +351,7 @@ const BuildDetails = ({
     setBuildData((prev) => {
       const newBuildObject = {
         ...prev,
-        custom_reporting_adviser: isAllocationsTheAdvisor ? '' : prev.custom_reporting_adviser,
+        reporting_adviser: isAllocationsTheAdvisor ? '' : prev.reporting_adviser,
         custom_management_fee: isNotCustomManagementFee ? 'false' : prev.custom_management_fee,
         custom_carry_fee: isNotCustomCarryFee ? 'false' : prev.custom_carry_fee,
         international_company_country: isNotInternational ? '' : prev.international_company_country,
