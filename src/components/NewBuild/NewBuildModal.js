@@ -703,7 +703,7 @@ const HighVolumePartnerships = ({
       setFailedValidationFields((prev) => [...prev, 'city']);
       allValid = false;
     }
-    if (!state) {
+    if (!state && country === 'United States') {
       setFailedValidationFields((prev) => [...prev, 'state']);
       allValid = false;
     }
@@ -893,6 +893,7 @@ const HighVolumePartnerships = ({
                       >
                         <Select
                           variant="outlined"
+                          disabled={country !== 'United States'}
                           className={
                             failedValidationFields.includes('state')
                               ? classes.failedValidationStateSelect
