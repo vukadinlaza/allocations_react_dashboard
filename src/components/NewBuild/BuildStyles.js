@@ -219,7 +219,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-evenly',
-    color: '#186EFF',
+    color: '#186EFF !important',
     background: '#ECF3FF 0% 0% no-repeat padding-box !important',
     boxShadow: '0px 3px 6px #0000000D !important',
     border: '2px solid #186EFF !important',
