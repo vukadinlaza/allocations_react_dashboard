@@ -54,7 +54,6 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
   });
 
   const handleChange = ({ target }) => {
-    console.log(target.name + ': ' + target.value);
     if (target.name.includes('ein') || target.name.includes('ssn')) {
       const onlyNumbers = target.value.replace(/\D+/g, '');
       return setFormData((prevData) => ({ ...prevData, [target.name]: onlyNumbers }));
@@ -69,7 +68,6 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
   const handleSubmit = () => {
     const { city, state, zip } = formData;
     const validation = validate(formData, revocableTrust);
-    console.log('validation', validation);
     setErrors(validation);
 
     if (validation.length > 0) {
