@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Typography, Tooltip, Button, Grid } from '@material-ui/core';
+import { Typography, Tooltip, Button } from '@material-ui/core';
 import HelpIcon from '@material-ui/icons/Help';
 import CloseIcon from '@material-ui/icons/Close';
 import { phone, tablet } from '../../../utils/helpers';
@@ -13,9 +13,7 @@ const styles = (theme) => ({
     boxShadow: '0px 3px 6px #00000029',
     border: '1px solid #8493A640',
     borderRadius: '10px',
-    // marginBottom: "20px",
     [theme.breakpoints.down(phone)]: {
-      // width: "100vw",
       minWidth: '0 !important',
       maxWidth: 'none !important',
     },
@@ -25,9 +23,6 @@ const styles = (theme) => ({
   },
   boxTitle: {
     fontSize: '20px',
-    // whiteSpace: "nowrap",
-    // overflow: "hidden",
-    // textOverflow: "ellipsis",
   },
   boxTitleContainer: {
     width: '100%',
@@ -44,8 +39,6 @@ const styles = (theme) => ({
     alignItems: 'center',
   },
   chartBox: {
-    // minWidth: '430px',
-    // maxWidth: '49%',
     height: '450px',
     [theme.breakpoints.down(tablet)]: {
       height: 'auto',
@@ -78,7 +71,6 @@ const styles = (theme) => ({
     height: 'calc(100% - 110px)',
   },
   dynamicHeight: {
-    // height: "auto"
     height: '100%',
   },
   fixedBoxContent: {
@@ -136,14 +128,11 @@ const styles = (theme) => ({
   },
   scrollableBox: {
     height: '635px',
-    // height: "620px"
   },
   scrollableBoxContent: {
     height: 'calc(100% - 71px)',
-    // height: "calc(100% - 130px)",
     overflowY: 'scroll',
     overflowX: 'hidden',
-    // marginBottom: "10px"
   },
   tooltip: {
     fontSize: '14px',
@@ -153,28 +142,12 @@ const styles = (theme) => ({
   },
 });
 
-const getDimensions = (size) => {
-  switch (size) {
-    case 'full':
-      return { minWidth: '100%' };
-    case 'half':
-      return { minWidth: '430px', maxWidth: '49%' };
-    case 'third':
-      return { minWidth: '430px', maxWidth: '32%' };
-    case 'fourth':
-      return { minWidth: '265px', maxWidth: '24%' };
-    // return {minWidth: '300px', maxWidth: '24%'};
-    default:
-      return {};
-  }
-};
-
 export const ModalTooltip = withStyles(styles)(
   ({ classes, children, title, handleTooltip, tooltipContent, openTooltip, id }) => {
     return (
       <>
         {openTooltip === id && (
-          <div className={classes.modalBackground} onClick={(e) => handleTooltip('')} />
+          <div className={classes.modalBackground} onClick={() => handleTooltip('')} />
         )}
         <Tooltip
           interactive
@@ -182,7 +155,7 @@ export const ModalTooltip = withStyles(styles)(
             <div className={classes.modal}>
               <div className={classes.modalTitleContainer}>
                 <Typography className={classes.modalTitle}>{title}</Typography>
-                <Typography className={classes.closeModal} onClick={(e) => handleTooltip('')}>
+                <Typography className={classes.closeModal} onClick={() => handleTooltip('')}>
                   Close
                   <CloseIcon style={{ fontSize: '14px' }} />
                 </Typography>
@@ -208,7 +181,6 @@ export const SimpleBox = withStyles(styles)(
   ({
     classes,
     title,
-    size,
     autoHeight,
     titleData,
     fontSize,
@@ -239,7 +211,7 @@ export const SimpleBox = withStyles(styles)(
                 openTooltip={openTooltip}
                 id={id}
               >
-                <HelpIcon className={classes.infoIcon} onClick={(e) => handleTooltip(id)} />
+                <HelpIcon className={classes.infoIcon} onClick={() => handleTooltip(id)} />
               </ModalTooltip>
             )}
           </div>
@@ -315,7 +287,6 @@ export const ScrollableBox = withStyles(styles)(
   ({
     classes,
     title,
-    size,
     titleData,
     fontSize,
     buttonAction,

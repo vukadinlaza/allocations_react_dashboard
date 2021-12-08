@@ -207,12 +207,6 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
         )}
       </Grid>
       <form noValidate autoComplete="off">
-        {/* <Typography variant="h6" gutterBottom style={{ display: 'flex', justifyContent: 'space-between' }} onClick={() => setShowForm(showForm ? false : true)}>
-          KYC Information  <div>{showForm ? <ExpandMoreIcon /> : <ExpandLessIcon />} </div>
-        </Typography>
-        {!showForm && <Typography variant="subtitle2" style={{}} onClick={() => setShowForm(showForm ? false : true)}>
-          Click here to begin
-        </Typography>} */}
         {showForm && (
           <>
             {' '}
@@ -429,18 +423,6 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
         )}
       </form>
       <hr />
-      {/* <Paper className={classes.paper}> */}
-      {/* <div style={{ paddingTop: "1rem", paddingBottom: "1rem" }}>
-          <Typography variant="subtitle1">Verify your accredited investor status with VerifyInvestor.</Typography>
-          <Button id="invest" variant="contained" color="secondary" onClick={() => {
-            const token = process.env.REACT_APP_VERIFY_INVESTOR_HOST_TOKEN;
-            const identifier = investor?._id; // optional
-            const portal_name = "Test_Allocations"; // optional
-            const deal_name = "Test Deal"; // optional
-            window.verifyInvestor(token, identifier, portal_name, deal_name);
-          }} >Verify Accredited Investor Status</Button>
-        </div> */}
-      {/* </Paper> */}
     </>
   );
 }

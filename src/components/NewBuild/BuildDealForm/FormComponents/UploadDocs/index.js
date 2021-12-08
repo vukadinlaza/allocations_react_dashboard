@@ -59,6 +59,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
     onCompleted: ({ addDealDocService: uploadResponse }) => {
       if (uploadResponse?.success) toast.success('Success! Your document has been added');
     },
+    // eslint-disable-next-line no-console
     onError: console.error,
   });
   const [deleteDoc, { loading: deleteDocLoading, error: deleteDocError }] = useMutation(
@@ -71,6 +72,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
         }
         toast.success('Success! Your document has been deleted');
       },
+      // eslint-disable-next-line no-console
       onError: console.error,
     },
   );

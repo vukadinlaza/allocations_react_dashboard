@@ -18,10 +18,6 @@ function WireInstructions({ deal }) {
     );
   }
 
-  const onDocumentLoadSuccess = () => {
-    console.log('loaded doc');
-  };
-
   return (
     <section className="WireInstructions">
       <div className="wire-doc-iframe">

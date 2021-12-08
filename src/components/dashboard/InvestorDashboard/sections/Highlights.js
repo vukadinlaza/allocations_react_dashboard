@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable radix */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import _ from 'lodash';
 import moment from 'moment';
@@ -27,7 +27,7 @@ export function formatDoughnutSeries(series) {
   });
 }
 
-const Highlights = ({ classes, data, userProfile, refetch }) => {
+const Highlights = ({ classes, data }) => {
   const [openTooltip, setOpenTooltip] = useState('');
 
   const setMonthsToShow = (data) => {
@@ -169,7 +169,6 @@ const Highlights = ({ classes, data, userProfile, refetch }) => {
             style={{ flexDirection: 'column', alignItems: 'flex-start' }}
           >
             <Typography style={{ fontSize: '26px' }}>{avgMultiple.toFixed(2) || 1}x</Typography>
-            {/* <Typography className={classes.footerData}>Last Updated: June 1st, 2021</Typography> */}
           </div>
         </SimpleBox>
       </Grid>

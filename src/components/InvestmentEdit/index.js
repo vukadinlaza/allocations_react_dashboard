@@ -89,12 +89,12 @@ export default function InvestmentEdit({
   const id = investmentId || params.id;
   const { data, refetch } = useQuery(GET_INVESTMENT, { variables: { _id: id } });
   const [createInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT);
-  const [deleteInvestment, {}] = useMutation(destroy, {
+  const [deleteInvestment] = useMutation(destroy, {
     onCompleted: () => {
       toast.success('Success! Investment deleted');
       setEditInvestmentModal(false);
     },
-    onError: (e) => {
+    onError: () => {
       toast.error('Looks like we encountered an error');
     },
   });
@@ -146,7 +146,7 @@ export default function InvestmentEdit({
                 type="number"
                 value={get(investment, 'amount', '') || 0}
                 onChange={(e) =>
-                  updateInvestmentProp({ prop: 'amount', newVal: parseInt(e.target.value) })
+                  updateInvestmentProp({ prop: 'amount', newVal: parseInt(e.target.value, 0) })
                 }
                 label="Amount"
                 variant="outlined"
@@ -232,7 +232,7 @@ export default function InvestmentEdit({
   );
 }
 
-function Docs({ investment, setInvestment, refetch, isK1 }) {
+function Docs({ investment, refetch, isK1 }) {
   const [uploadedDoc, setUploadedDoc] = useState(null);
   const [addInvestmentDoc, { loading }] = useMutation(ADD_INVESTMENT_DOC);
   const id = get(investment, '_id', '');
@@ -256,7 +256,7 @@ function Docs({ investment, setInvestment, refetch, isK1 }) {
     <div className="docs">
       <div className="doc-wrapper">
         <div className="add-doc">
-          <label>
+          <span>
             <FontAwesomeIcon icon="plus" />
             <input
               type="file"
@@ -265,7 +265,7 @@ function Docs({ investment, setInvestment, refetch, isK1 }) {
                 if (target.validity.valid) setUploadedDoc(target.files[0]);
               }}
             />
-          </label>
+          </span>
         </div>
         <div className="filename">&nbsp;</div>
       </div>

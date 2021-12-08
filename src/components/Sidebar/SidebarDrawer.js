@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
@@ -68,17 +68,6 @@ const SidebarDrawer = ({
   const [newBuildModalPage, setNewBuildModalPage] = useState('deal_type_selector');
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
-  const AdminLinks = () => {
-    const match = useRouteMatch('/admin/:organization');
-
-    if (!match) return null;
-    const {
-      params: { organization },
-    } = match;
-    if (organization === 'funds') return null;
-
-    return <div />;
-  };
 
   const handleOpenSubMenu = (id) => {
     const openSubMenuCopy = openSubMenu.map((i) => i);

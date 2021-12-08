@@ -10,7 +10,6 @@ import { nWithCommas, amountFormat } from '../../../utils/numbers';
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: 'flex',
-    // alignItems: 'center',
     justifyContent: 'center',
   },
   modalPaper: {
@@ -26,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   subHeader: {
     fontSize: '1.2rem',
   },
-  rightVaue: {
+  rightValue: {
     marginRight: '1.75rem',
     textAlign: 'left',
     minWidth: '15%',
@@ -45,7 +44,7 @@ const CREATE_CAP_PDF = gql`
   }
 `;
 
-export default ({ showCapitalAccounts, setShowCapitalAccounts, refetch }) => {
+export default ({ showCapitalAccounts, setShowCapitalAccounts }) => {
   const classes = useStyles();
   const camelCaseKeys = (obj) =>
     Object.keys(obj).reduce((ccObj, field) => {
@@ -109,7 +108,7 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts, refetch }) => {
 
                 <Grid container justify="space-between">
                   <Typography>Name</Typography>
-                  <Typography className={classes.rightVaue}>{data.investorNameEntity}</Typography>
+                  <Typography className={classes.rightValue}>{data.investorNameEntity}</Typography>
                 </Grid>
                 <hr className="solid" />
                 <Grid container justify="space-between">
@@ -119,7 +118,7 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts, refetch }) => {
                       (Date funds received By Private Fund's bank)
                     </Typography>
                   </div>
-                  <Typography className={classes.rightVaue}>{data.effectiveDate}</Typography>
+                  <Typography className={classes.rightValue}>{data.effectiveDate}</Typography>
                 </Grid>
                 <hr className="solid" />
                 <Grid container justify="space-between">
@@ -127,7 +126,7 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts, refetch }) => {
                     <Typography>Subscription Amount</Typography>
                     <Typography variant="subtitle2">(Amount wired into Private Fund)</Typography>
                   </div>
-                  <Typography className={classes.rightVaue}>
+                  <Typography className={classes.rightValue}>
                     ${amountFormat(data.subscriptionAmount)}
                   </Typography>
                 </Grid>
@@ -139,7 +138,7 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts, refetch }) => {
                       (Legal, accounting, administration and compliance fees){' '}
                     </Typography>
                   </div>
-                  <Typography className={classes.rightVaue}>
+                  <Typography className={classes.rightValue}>
                     ${amountFormat(data.privateFundExpenses)}
                   </Typography>
                 </Grid>
@@ -149,7 +148,7 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts, refetch }) => {
                     <Typography>Management Fee</Typography>
                     <Typography variant="subtitle2">(Pro rata share of management fee) </Typography>
                   </div>
-                  <Typography className={classes.rightVaue}>
+                  <Typography className={classes.rightValue}>
                     ${nWithCommas(data.managementFee$)}
                   </Typography>
                 </Grid>
@@ -161,7 +160,7 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts, refetch }) => {
                       (Share of the profits of an investment paid to the manager)
                     </Typography>
                   </div>
-                  <Typography className={classes.rightVaue}>{data.carry * 100 || 0}%</Typography>
+                  <Typography className={classes.rightValue}>{data.carry * 100 || 0}%</Typography>
                 </Grid>
                 <hr className="solid" />
                 <Grid container justify="space-between">
@@ -171,7 +170,7 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts, refetch }) => {
                       (Subscription amount minus initial expenses)
                     </Typography>
                   </div>
-                  <Typography className={classes.rightVaue}>
+                  <Typography className={classes.rightValue}>
                     ${amountFormat(data.netInvestment)}
                   </Typography>
                 </Grid>

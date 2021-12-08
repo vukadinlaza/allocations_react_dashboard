@@ -1,9 +1,9 @@
 import { Button, Checkbox, FormControlLabel } from '@material-ui/core';
 import React, { useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
+import { toast } from 'react-toastify';
 import { nWithCommas } from '../../utils/numbers';
 import './style.scss';
-import { toast } from 'react-toastify';
 
 const SEND_WIRE_REMINDERS = gql`
   mutation SendWireReminders($investment_ids: [String], $deal_id: String!) {
@@ -28,7 +28,8 @@ function SendWireReminder({ signedInvestors, deal }) {
     setSelectedInvestors((prev) => {
       if (prev.includes(investor.investmentId)) {
         return [...prev.filter((id) => id !== investor.investmentId)];
-      } else {
+      }
+      if (!prev.includes(investor.investmentId)) {
         return [...prev, investor.investmentId];
       }
     });
@@ -96,7 +97,8 @@ function SendWireReminder({ signedInvestors, deal }) {
         <div className="message">
           <p className="title">Message</p>
           <img
-            src={'https://allocations-public.s3.us-east-2.amazonaws.com/WireReminderTemplate.png'}
+            src="https://allocations-public.s3.us-east-2.amazonaws.com/WireReminderTemplate.png"
+            alt="wire reminder template"
           />
         </div>
       </div>

@@ -12,7 +12,6 @@ import {
 } from '@material-ui/core';
 import Select from '@material-ui/core/Select';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
-import { useParams } from 'react-router';
 import { ScrollableBox } from '../widgets';
 import { nWithCommas } from '../../../../utils/numbers';
 import Loader from '../../../utils/Loader';
@@ -34,7 +33,6 @@ const InvestorBoxViewed = ({
   setDealId,
   setInvestorId,
   dealId,
-  dealType,
 }) => {
   const onClick = () => {
     if (superAdmin) {
@@ -172,7 +170,6 @@ const InvestorBox = ({
 };
 
 const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, deal }) => {
-  const { organization: orgSlug } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [showCreateInvModal, setShowCreateInvModal] = useState(false);
   const [investmentId, setInvestmentId] = useState(null);

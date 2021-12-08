@@ -8,6 +8,7 @@ import {
   MenuItem,
   Checkbox,
   Typography,
+  FormLabel,
 } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import countries from 'country-region-data';
@@ -310,7 +311,7 @@ function PersonalInformation({
         </>
       )}
 
-      {/* Custom INDIVIDIAL investor fields for Irish Angels deals */}
+      {/* Custom INDIVIDUAL investor fields for Irish Angels deals */}
 
       {investor.investor_type && investor.investor_type === 'individual' && org === 'irishangels' && (
         <>
@@ -357,7 +358,7 @@ function PersonalInformation({
           variant="outlined"
           className={classes.addressContainer}
         >
-          <label className={classes.label} htmlFor="home-address">
+          <FormLabel className={classes.label} htmlFor="home-address">
             Home Address:
             <TextField
               variant="outlined"
@@ -367,9 +368,9 @@ function PersonalInformation({
               onChange={handleChange('home_address')}
               id="home-address"
             />
-          </label>
+          </FormLabel>
           {mailingDifferent && (
-            <label className={classes.label} htmlFor="mailing-address">
+            <FormLabel className={classes.label} htmlFor="mailing-address">
               Mailing Address:
               <TextField
                 variant="outlined"
@@ -379,9 +380,9 @@ function PersonalInformation({
                 onChange={handleChange('mailing_address')}
                 id="mailing-address"
               />
-            </label>
+            </FormLabel>
           )}
-          <label style={{ margin: 0, fontSize: '16px' }} htmlFor="mailing-address-checkbox">
+          <FormLabel style={{ margin: 0, fontSize: '16px' }} htmlFor="mailing-address-checkbox">
             <Checkbox
               onChange={() => toggleMailingDifferent((t) => !t)}
               value="checkedA"
@@ -390,7 +391,7 @@ function PersonalInformation({
               style={{ paddingLeft: 0 }}
             />
             Different Mailing Address
-          </label>
+          </FormLabel>
         </FormControl>
       )}
 

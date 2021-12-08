@@ -7,22 +7,19 @@ import {
   FormControlLabel,
   Select,
   MenuItem,
+  FormLabel,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React, { useState } from 'react';
 import countries from 'country-region-data';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import './styles.scss';
-import { useLocation } from 'react-router';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { toast } from 'react-toastify';
 import moment from 'moment';
-import Loader from '../../../utils/Loader';
 
+// eslint-disable-next-line no-unused-vars
 function W8BENE({ toggleOpen, called, loading, createDoc }) {
-  const { state } = useLocation();
-
-  const [sameMailing, setSameMailing] = useState(false);
   const treatyClaimOptions = [
     '4_disregarded_entity',
     '4_partnership',
@@ -31,7 +28,6 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
   ];
   const countryNames = countries.map((c) => c.countryName);
   const [differentMailingAddress, setDifferentMailingAddress] = useState(false);
-  const [showTreatyClaim, setTreatyClaim] = useState(false);
   const [organizationCountrySearch, setOrganizationCountrySearch] = useState('');
   const [residenceCountrySearch, setResidenceCountrySearch] = useState('');
   const [mailingCountrySearch, setMailingCountrySearch] = useState('');
@@ -69,7 +65,6 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
     '4_central_bank_of_issue': false,
     '4_tax_exempt_organization': false,
     '4_international_organization': false,
-    '4_tax_exempt_organization': false,
     '4_treaty_claim_no': false,
     '4_treaty_claim_yes': false,
     '5_international_organization': false,
@@ -362,7 +357,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
 
       <form className="form">
         <FormControl className="form-field name">
-          <label className="form-label">
+          <FormLabel className="form-label">
             Name of organization that is the beneficial owner
             <TextField
               variant="outlined"
@@ -371,11 +366,11 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
               error={errors.includes('organization_name')}
               onChange={handleChange}
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="form-field country-input" required variant="outlined">
-          <label className="form-label">
+          <FormLabel className="form-label">
             Country of incorporation or organization
             <Autocomplete
               className="country-select"
@@ -399,11 +394,11 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                 />
               )}
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="form-field address">
-          <label className="form-label">
+          <FormLabel className="form-label">
             Name of disregarded entity receiving the payment (if applicable)
             <TextField
               name="disregarded_entity_name"
@@ -411,11 +406,11 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
               variant="outlined"
               value={formData['disregarded_entity_name']}
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="form-field chapter3Status">
-          <label className="form-label">
+          <FormLabel className="form-label">
             Chapter 3 Status (Entity type)
             <Select
               name="chapter3Status"
@@ -438,12 +433,12 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
               <MenuItem value="4_private_foundation">Private foundation</MenuItem>
               <MenuItem value="4_international_organization">International organization</MenuItem>
             </Select>
-          </label>
+          </FormLabel>
         </FormControl>
 
         {treatyClaimOptions.includes(chapter3Status) && (
           <FormControl className="checkbox">
-            <label className="form-label">
+            <FormLabel className="form-label">
               <Checkbox
                 checked={formData['4_treaty_claim_yes']}
                 onChange={() => {
@@ -465,7 +460,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
               />
               If you entered disregarded entity, partnership, simple trust, or grantor trust above,
               is the entity a hybrid making a treaty claim?
-            </label>
+            </FormLabel>
           </FormControl>
         )}
 
@@ -473,10 +468,12 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
           <FormGroup className="form-group">
             <hr />
 
-            <label className="form-group-label">I certify that (select all that apply):</label>
+            <FormLabel className="form-group-label">
+              I certify that (select all that apply):
+            </FormLabel>
 
             <FormControl className="checkbox">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <Checkbox checked={formData['14a']} onChange={handleCheckBox} name="14a" />
                 <b>14a.&nbsp;</b>The beneficial owner is a resident of &nbsp;
                 <TextField
@@ -487,11 +484,11 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                 />
                 &nbsp; within the meaning of the income tax treaty between the United States and
                 that country.
-              </label>
+              </FormLabel>
             </FormControl>
 
             <FormControl className="checkbox">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <Checkbox checked={formData['14b']} onChange={handleCheckBox} name="14b" />
                 <b>14b.&nbsp;</b>
                 The beneficial owner derives the item (or items) of income for which the treaty
@@ -499,7 +496,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                 provision dealing with limitation on benefits. The following are types of limitation
                 on benefits provisions that may be included in an applicable tax treaty (check only
                 one; see instructions):
-              </label>
+              </FormLabel>
             </FormControl>
 
             {formData['14b'] && (
@@ -538,52 +535,52 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
 
             {formData['14b'] && formData['14b_other'] && (
               <FormControl className="form-field">
-                <label className="form-label">
+                <FormLabel className="form-label">
                   <TextField
                     onChange={handleChange}
                     variant="outlined"
                     name="14b_other_input"
                     placeholder="Other (please specify Article and paragraph):"
                   />
-                </label>
+                </FormLabel>
               </FormControl>
             )}
 
             <FormControl className="checkbox">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <Checkbox checked={formData['14c']} onChange={handleCheckBox} name="14c" />
                 <b>14c.&nbsp;</b>The beneficial owner is claiming treaty benefits for U.S source
                 dividends received from a foreign corporation or interest from a U.S. trade or
                 business of a foreign corporation and meets qualified resident status (see
                 instructions).
-              </label>
+              </FormLabel>
             </FormControl>
 
             <FormControl className="form-input">
-              <label className="form-group-label">
+              <FormLabel className="form-group-label">
                 Special rates and conditions (if applicable, see instructions)
-              </label>
+              </FormLabel>
 
-              <label className="form-label">
+              <FormLabel className="form-label">
                 The beneficial owner is claiming the provisions of Article and paragraph
                 <TextField className="label-input" variant="outlined" />
-              </label>
+              </FormLabel>
 
-              <label className="form-label">
+              <FormLabel className="form-label">
                 of the treaty identified on line 14a above to claim a
                 <TextField className="label-input" variant="outlined" />
-              </label>
+              </FormLabel>
 
-              <label className="form-label">
+              <FormLabel className="form-label">
                 % rate of withholding on (specify type on income):
                 <TextField className="label-input" variant="outlined" />
-              </label>
+              </FormLabel>
 
-              <label className="form-label">
+              <FormLabel className="form-label">
                 Explain the additional conditions in the Article the beneficial owner meets to be
                 eligible for the rate of withholding:
                 <TextField className="label-input" variant="outlined" />
-              </label>
+              </FormLabel>
             </FormControl>
 
             <hr />
@@ -591,7 +588,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
         )}
 
         <FormControl className="form-field chapter4Status">
-          <label className="form-label">
+          <FormLabel className="form-label">
             Chapter 4 Status (FATCA status)
             <Select
               name="chapter4Status"
@@ -631,17 +628,17 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                 Account that is not a financial account
               </MenuItem>
             </Select>
-          </label>
+          </FormLabel>
         </FormControl>
 
         {formData['5_nonfinancial_entity'] && (
           <FormGroup className="form-group">
             <FormControl className="checkbox-list">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <b>33&nbsp;</b>
                 <Checkbox checked={formData['33']} onChange={handleCheckBox} name="33" />I certify
                 that the entity identified in Part I:
-              </label>
+              </FormLabel>
 
               <ul>
                 <li className="terms">
@@ -674,11 +671,11 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
         {formData.chapter4Status === 'excepted_nonfinancial_start_up' && (
           <FormGroup className="form-group">
             <FormControl className="checkbox-list">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <b>33&nbsp;</b>
                 <Checkbox checked={formData['33']} onChange={handleCheckBox} name="33" />I certify
                 that the entity identified in Part I:
-              </label>
+              </FormLabel>
 
               <ul>
                 <li className="terms">
@@ -713,11 +710,11 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
         {formData.chapter4Status === 'excepted_nonfinancial_group_entity' && (
           <FormGroup className="form-group">
             <FormControl className="checkbox-list">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <b>32&nbsp;</b>
                 <Checkbox checked={formData.p3_c3} onChange={handleCheckBox} name="p3_c3" />I
                 certify that the entity identified in Part I:
-              </label>
+              </FormLabel>
 
               <ul>
                 <li className="terms">
@@ -745,20 +742,20 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
         {formData.chapter4Status === 'sponsored_direct_reporting_nffe' && (
           <FormGroup className="form-group">
             <FormControl className="form-input">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <strong className="strong">42&nbsp;</strong>
                 Name of sponsoring entity:
                 <TextField className="label-input" />
-              </label>
+              </FormLabel>
             </FormControl>
 
             <FormControl className="checkbox-list">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <b>43&nbsp;</b>
                 <Checkbox checked={formData.p3_c3} onChange={handleCheckBox} name="p3_c3" />I
                 certify that the entity identified in Part I is a direct reporting NFFE that is
                 sponsored by the entity identified on line 42.
-              </label>
+              </FormLabel>
             </FormControl>
           </FormGroup>
         )}
@@ -766,11 +763,11 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
         {formData.chapter4Status === 'entity_wholly_owned' && (
           <FormGroup className="form-group">
             <FormControl className="checkbox-list">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <b>30&nbsp;</b>
                 <Checkbox checked={formData.p3_c3} onChange={handleCheckBox} name="p3_c3" />I
                 certify that the entity identified in Part I:
-              </label>
+              </FormLabel>
 
               <ul>
                 <li className="terms">Is an FFI solely because it is an investment entity;</li>
@@ -807,23 +804,25 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
 
         {formData.chapter4Status === 'international_organization' && (
           <FormGroup className="form-group">
-            <label className="form-group-label">Check box 28a or 28b, whichever applies.</label>
+            <FormLabel className="form-group-label">
+              Check box 28a or 28b, whichever applies.
+            </FormLabel>
 
             <FormControl className="checkbox-list">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <b>28a&nbsp;</b>
                 <Checkbox checked={formData.p3_c3} onChange={handleCheckBox} name="p3_c3" />
                 I certify that the entity identified in Part I is an international organization
                 described <br /> in section 7701(a)(18).
-              </label>
+              </FormLabel>
             </FormControl>
 
             <FormControl className="checkbox-list">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <b>28b&nbsp;</b>
                 <Checkbox checked={formData.p3_c3} onChange={handleCheckBox} name="p3_c3" />I
                 certify that the entity identified in Part I:
-              </label>
+              </FormLabel>
 
               <ul>
                 <li className="terms">Is comprised primarily of foreign governments;</li>
@@ -850,16 +849,16 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
 
         {formData.chapter4Status === 'exempt_retirement_plans' && (
           <FormGroup className="form-group">
-            <label className="form-group-label">
+            <FormLabel className="form-group-label">
               Check box 29a, b, c, d, e, or f, whichever applies.
-            </label>
+            </FormLabel>
 
             <FormControl className="checkbox-list">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <b>29a&nbsp;</b>
                 <Checkbox checked={formData.p3_c3} onChange={handleCheckBox} name="p3_c3" />I
                 certify that the entity identified in Part I:
-              </label>
+              </FormLabel>
 
               <ul>
                 <li className="terms">Is comprised primarily of foreign governments;</li>
@@ -881,11 +880,11 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
             </FormControl>
 
             <FormControl className="checkbox-list">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <b>28b&nbsp;</b>
                 <Checkbox checked={formData.p3_c3} onChange={handleCheckBox} name="p3_c3" />I
                 certify that the entity identified in Part I:
-              </label>
+              </FormLabel>
 
               <ul>
                 <li className="terms">
@@ -945,11 +944,11 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
             </FormControl>
 
             <FormControl className="checkbox-list">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <b>29c&nbsp;</b>
                 <Checkbox checked={formData.p3_c3} onChange={handleCheckBox} name="p3_c3" />I
                 certify that the entity identified in Part I:
-              </label>
+              </FormLabel>
 
               <ul>
                 <li className="terms">
@@ -988,17 +987,17 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
             </FormControl>
 
             <FormControl className="checkbox-list">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <b>29d&nbsp;</b>
                 <Checkbox checked={formData.p3_c3} onChange={handleCheckBox} name="p3_c3" />I
                 certify that the entity identified in Part I is formed pursuant to a pension plan
                 that would meet the requirements of section 401(a), other than the requirement that
                 the plan be funded by a trust created or organized in the United States.
-              </label>
+              </FormLabel>
             </FormControl>
 
             <FormControl className="checkbox-list">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <b>29e&nbsp;</b>
                 <Checkbox checked={formData.p3_c3} onChange={handleCheckBox} name="p3_c3" />I
                 certify that the entity identified in Part I is established exclusively to earn
@@ -1006,15 +1005,15 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                 an applicable Model 1 or Model 2 IGA, or accounts described in Regulations section
                 1.1471-5(b)(2)(i)(A) (referring to retirement and pension accounts), or retirement
                 and pension accounts described in an applicable Model 1 or Model 2 IGA.
-              </label>
+              </FormLabel>
             </FormControl>
 
             <FormControl className="checkbox-list">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <b>29f&nbsp;</b>
                 <Checkbox checked={formData.p3_c3} onChange={handleCheckBox} name="p3_c3" />I
                 certify that the entity identified in Part I:
-              </label>
+              </FormLabel>
 
               <ul>
                 <li className="terms">
@@ -1042,10 +1041,10 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
 
         {formData.chapter4Status === 'active_nffe' && (
           <FormGroup className="form-group">
-            <label className="form-group-label">
+            <FormLabel className="form-group-label">
               <Checkbox checked={formData.p3_c3} onChange={handleCheckBox} name="p3_c3" />I certify
               that:
-            </label>
+            </FormLabel>
 
             <ul>
               <li className="terms">
@@ -1069,10 +1068,10 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
 
         {formData.chapter4Status === '501(c)' && (
           <FormGroup className="form-group">
-            <label className="form-group-label">
+            <FormLabel className="form-group-label">
               <Checkbox checked={formData['501c']} onChange={handleCheckBox} name="501c" />I certify
               that the entity identified in Part I is a 501(c) organization that:
-            </label>
+            </FormLabel>
 
             <ul className="terms-list">
               <li className="terms">
@@ -1139,14 +1138,16 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
 
         {formData['4_publicly_traded_nffe'] && (
           <FormGroup className="form-group">
-            <label className="form-group-label">Check box 37a or 37b, whichever applies.</label>
+            <FormLabel className="form-group-label">
+              Check box 37a or 37b, whichever applies.
+            </FormLabel>
 
             <FormControl className="checkbox-list">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <b>37a&nbsp;</b>
                 <Checkbox checked={formData.p3_c3} onChange={handleCheckBox} name="p3_c3" />I
                 certify that:
-              </label>
+              </FormLabel>
 
               <ul>
                 <li>
@@ -1162,11 +1163,11 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
             </FormControl>
 
             <FormControl className="checkbox-list">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <b>37b&nbsp;</b>
                 <Checkbox checked={formData.p3_c3} onChange={handleCheckBox} name="p3_c3" />I
                 certify that:
-              </label>
+              </FormLabel>
 
               <ul>
                 <li className="terms">
@@ -1194,11 +1195,11 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
         {formData['5_excepted_territory_nffe'] && (
           <FormGroup className="form-group">
             <FormControl className="checkbox-list">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <b>38&nbsp;</b>
                 <Checkbox checked={formData.p3_c3} onChange={handleCheckBox} name="p3_c3" />I
                 certify that:
-              </label>
+              </FormLabel>
 
               <ul>
                 <li className="terms">
@@ -1238,42 +1239,46 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
             <hr />
 
             <FormControl className="checkbox">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <Checkbox checked={formData['40a']} onChange={handleCheckBox} name="40a" />
                 <b>40a.&nbsp;</b>I certify that the entity identified in Part I is a foreign entity
                 that is not a financial institution (other than an investment entity organized in a
                 possession of the United States) and is not certifying its status as a publicly
                 traded NFFE (or affiliate), excepted territory NFFE, direct reporting NFFE, or
                 sponsored direct reporting NNFE.
-              </label>
+              </FormLabel>
             </FormControl>
 
             <hr />
 
-            <label className="form-group-label">Check box 40b or 40c, whichever applies.</label>
+            <FormLabel className="form-group-label">
+              Check box 40b or 40c, whichever applies.
+            </FormLabel>
 
             <FormControl className="checkbox">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <Checkbox checked={formData['40b']} onChange={handleCheckBox} name="40b" />
                 <b>40b.&nbsp;</b>I further certify that the entity identified in Part I has no
                 substantial U.S. owner (or, if applicable, no controlling U.S. persons); or
-              </label>
+              </FormLabel>
             </FormControl>
 
             <FormControl className="checkbox">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 <Checkbox checked={formData['40c']} onChange={handleCheckBox} name="40c" />
                 <b>40c.&nbsp;</b>I further certify that the entity identified in Part I has provided
                 the name, address, and TIN of each substantial U.S. owner (or, if applicable,
                 contrilling U.S. person) of the NFFE in Part XXIX.
-              </label>
+              </FormLabel>
             </FormControl>
           </FormGroup>
         )}
 
         {formData['40c'] && formData['5_passive_nffe'] && (
           <FormGroup className="form-group">
-            <label className="form-group-label">Substantial U.S. Owners of Passive NFFE</label>
+            <FormLabel className="form-group-label">
+              Substantial U.S. Owners of Passive NFFE
+            </FormLabel>
 
             {passiveNFFEOwners}
 
@@ -1287,7 +1292,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
           <hr />
 
           <FormControl className="address">
-            <label className="form-label">
+            <FormLabel className="form-label">
               Permanent residence address
               <TextField
                 variant="outlined"
@@ -1296,12 +1301,12 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                 onChange={handleChange}
                 error={errors.includes('residence_address')}
               />
-            </label>
+            </FormLabel>
           </FormControl>
 
           <div className="residence-container">
             <FormControl className="city">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 City or town, state or province.
                 <TextField
                   variant="outlined"
@@ -1313,11 +1318,11 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                 <small>
                   <i>Include postal code where appropriate.</i>
                 </small>
-              </label>
+              </FormLabel>
             </FormControl>
 
             <FormControl className="country" required variant="outlined">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 Country
                 <Autocomplete
                   className="country-select"
@@ -1341,7 +1346,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                     />
                   )}
                 />
-              </label>
+              </FormLabel>
             </FormControl>
           </div>
 
@@ -1359,7 +1364,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
           {differentMailingAddress && (
             <>
               <FormControl className="address">
-                <label className="form-label">
+                <FormLabel className="form-label">
                   Mailing address
                   <TextField
                     variant="outlined"
@@ -1368,12 +1373,12 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                     name="mailing_address"
                     error={errors.includes('mailing_address')}
                   />
-                </label>
+                </FormLabel>
               </FormControl>
 
               <div className="mailing-container">
                 <FormControl className="city">
-                  <label className="form-label">
+                  <FormLabel className="form-label">
                     City or town, state or province.
                     <TextField
                       variant="outlined"
@@ -1385,11 +1390,11 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                     <small>
                       <i>Include postal code where appropriate.</i>
                     </small>
-                  </label>
+                  </FormLabel>
                 </FormControl>
 
                 <FormControl className="country" required variant="outlined">
-                  <label className="form-label">
+                  <FormLabel className="form-label">
                     Mailing Country
                     <Autocomplete
                       className="country-select"
@@ -1413,7 +1418,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                         />
                       )}
                     />
-                  </label>
+                  </FormLabel>
                 </FormControl>
               </div>
             </>
@@ -1424,7 +1429,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
 
         <div className="container">
           <FormControl className="form-field tin">
-            <label className="form-label">
+            <FormLabel className="form-label">
               U.S. taxpayer identification number (TIN), if required
               <TextField
                 variant="outlined"
@@ -1434,11 +1439,11 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                 value={formData['us_tin']}
                 error={errors.includes('us_tin')}
               />
-            </label>
+            </FormLabel>
           </FormControl>
 
           <FormControl className="form-field tin">
-            <label className="form-label">
+            <FormLabel className="form-label">
               Foreign taxpayer identification number (TIN)
               <TextField
                 variant="outlined"
@@ -1448,12 +1453,12 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
                 value={formData['foreign_tin']}
                 error={errors.includes('foreign_tin')}
               />
-            </label>
+            </FormLabel>
           </FormControl>
         </div>
 
         <FormControl className="form-field date-signed">
-          <label className="form-label">
+          <FormLabel className="form-label">
             Date signed
             <TextField
               value={formData['date_mm_dd_yyyy']}
@@ -1463,11 +1468,11 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
               error={errors.includes('date_mm_dd_yyyy')}
               variant="outlined"
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="form-field">
-          <label className="form-label">
+          <FormLabel className="form-label">
             Print Name
             <TextField
               variant="outlined"
@@ -1476,11 +1481,11 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
               value={formData.print_name}
               error={errors.includes('print_name')}
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="form-field signature">
-          <label className="form-label">
+          <FormLabel className="form-label">
             E-Signature
             <TextField
               variant="outlined"
@@ -1489,7 +1494,7 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
               className="signature-input"
               value={formData.print_name}
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <Button className="form-button accept" onClick={handleSubmit}>

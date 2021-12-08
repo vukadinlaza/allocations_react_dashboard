@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import _, { get, isEqual, pick } from 'lodash';
-import { useParams, Redirect } from 'react-router-dom';
+import React, { useState } from 'react';
+import { get } from 'lodash';
 import { toast } from 'react-toastify';
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 
 import {
   Button,
@@ -14,7 +13,6 @@ import {
   InputLabel,
   InputAdornment,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import './style.scss';
 import { UserSearch } from '.';
 
@@ -52,7 +50,7 @@ export default function CreateInvestment({ deal, handleUpdate }) {
   };
 
   const convertToPositiveInteger = (num) => {
-    return parseInt(num < 0 ? 0 : num);
+    return parseInt(num < 0 ? 0 : num, 0);
   };
   const handleCreateInvestment = () => {
     const e = validate({ investment, deal, user });

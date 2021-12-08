@@ -41,7 +41,7 @@ const InvestorsCapitalCall = ({ classes, orgSlug, userProfile }) => {
             {
               headers: {
                 Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`, // API key
-                'Content-Type': 'application/json', // we will recive a json object
+                'Content-Type': 'application/json', // we will receive a json object
               },
             },
           );
@@ -56,6 +56,7 @@ const InvestorsCapitalCall = ({ classes, orgSlug, userProfile }) => {
         }),
       )
         .then((res) => setDataWithEmails(res))
+        // eslint-disable-next-line no-console
         .catch((error) => console.error(error));
     }
   }, [data]);

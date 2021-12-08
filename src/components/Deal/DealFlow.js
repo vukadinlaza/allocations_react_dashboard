@@ -331,7 +331,7 @@ function Pledging({ investment, deal, refetch, investor }) {
 
   const updateAmount = (e) => {
     const val = e.target.value;
-    if (!isNaN(Number(val))) setAmount(val);
+    if (!Number.isNaN(Number(val))) setAmount(val);
   };
 
   const submit = () => {
@@ -688,6 +688,7 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
   );
 }
 
+// eslint-disable-next-line no-unused-vars
 function KYCDocusign({ deal, investor, status, hasKyc }) {
   const [loading, setLoading] = useState(true);
   const [link, setLink] = useState();

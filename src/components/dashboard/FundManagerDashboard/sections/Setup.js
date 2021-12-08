@@ -47,7 +47,7 @@ const StepsContainer = ({
             >
               <div
                 className={classes.setupStep}
-                onClick={(e) => handleTooltip(step.value.split(' ').join())}
+                onClick={() => handleTooltip(step.value.split(' ').join())}
               >
                 <CheckCircleIcon
                   style={{
@@ -109,8 +109,8 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
   };
 
   const getRaisedPercentage = () => {
-    const isRaisedANumber = raised && !isNaN(raised);
-    const isTargetANumber = target && !isNaN(target);
+    const isRaisedANumber = raised && !Number.isNaN(raised);
+    const isTargetANumber = target && !Number.isNaN(target);
     return isTargetANumber && isRaisedANumber ? Math.round((raised / target) * 100) : 0;
   };
 
@@ -146,14 +146,16 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
       return false;
     }
 
+    const hvpTask = dealTasks.find((task) => task.taskName.toLowerCase() === 'enter deal details');
+    const hvpField = hvpTask.formFields?.find(
+      (field) => field.fieldLabel.toLowerCase() === 'high volume partnership',
+    );
+    const tasksNeeded = dealTasks.filter((task) =>
+      step.processStreetTask.includes(task.taskName.toLowerCase()),
+    );
+    const bothTasksApproved = tasksNeeded.every((task) => task.taskStatus === 'Completed');
     switch (stepValue) {
       case 'Entity Formation Complete':
-        const hvpTask = dealTasks.find(
-          (task) => task.taskName.toLowerCase() === 'enter deal details',
-        );
-        const hvpField = hvpTask.formFields?.find(
-          (field) => field.fieldLabel.toLowerCase() === 'high volume partnership',
-        );
         if (!hvpField) {
           taskChecked = false;
         } else if (hvpField.fieldValue === 'Yes') {
@@ -163,15 +165,12 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
         }
         break;
       case 'Wire Approval Review Complete':
-        const tasksNeeded = dealTasks.filter((task) =>
-          step.processStreetTask.includes(task.taskName.toLowerCase()),
-        );
-        const bothTasksApproved = tasksNeeded.every((task) => task.taskStatus === 'Completed');
         if (bothTasksApproved) {
           taskChecked = true;
         } else {
           taskChecked = false;
         }
+        break;
       default:
         taskChecked = currentTask.taskStatus === 'Completed';
         break;
@@ -188,7 +187,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
 
   useEffect(() => {
     if (setupSteps) {
-      let newSetupSteps = {};
+      const newSetupSteps = {};
       Object.keys(setupSteps).forEach((group) => {
         const verifiedData = stepsVerification(setupSteps[group]);
         newSetupSteps[group] = verifiedData;
@@ -200,12 +199,12 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
   useEffect(() => {
     if (subscriptionData?.dealOnboarding) {
       const { dealOnboarding } = subscriptionData;
-      //if dealOnboarding subscrription type is a new task checked or unchecked
+      // if dealOnboarding subscription type is a new task checked or unchecked
       if (dealOnboarding.taskName) {
         let stepSection = '';
         let stepIndex = -1;
 
-        //set new tasks based on new subscription information
+        // set new tasks based on new subscription information
         if (dealTasks && dealTasks.length) {
           const dealTasksCopy = dealTasks.map((t) => t);
           const subsTaskIndex = dealTasksCopy.findIndex(
@@ -214,8 +213,8 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
           dealTasksCopy[subsTaskIndex] = dealOnboarding;
           setDealTasks(dealTasksCopy);
         }
-        //get step index and section of step inside current setupSteps
-        for (let section in setupSteps) {
+        // get step index and section of step inside current setupSteps
+        for (const section in setupSteps) {
           stepIndex = setupSteps[section].findIndex((step) =>
             step.processStreetTask.includes(dealOnboarding.taskName.toLowerCase()),
           );
@@ -226,14 +225,14 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
         }
         // set new setupSteps with updated task data
         if (stepIndex >= 0) {
-          const setupStepsCopy = Object.assign({}, setupSteps);
+          const setupStepsCopy = { ...setupSteps };
           const stepToUpdate = setupStepsCopy[stepSection][stepIndex];
           const checked = getStepStatus(stepToUpdate);
           stepToUpdate.checked = checked;
           setSetupSteps(setupStepsCopy);
         }
       } else if (dealOnboarding.dealName) {
-        //if type of dealOnboarding subscription is a new run workflow
+        // if type of dealOnboarding subscription is a new run workflow
         const tasks = dealOnboarding?.dealTasks;
         if (tasks) setDealTasks(tasks);
       }

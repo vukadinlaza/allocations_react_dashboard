@@ -54,7 +54,7 @@ const dummyDeals = [
   },
 ];
 
-const MyDeals = ({ userProfile }) => {
+const MyDeals = () => {
   /* myDeals for future use of bringing in personal deals with real data */
   // const myDeals = !deals ? [] : deals?.filter((deal) => deal?.created_by?._id === userProfile?._id);
 

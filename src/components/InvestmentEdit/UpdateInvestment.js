@@ -17,7 +17,6 @@ import {
   Tooltip,
   InputAdornment,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Loader from '../utils/Loader';
 import { destroy } from '../../api/investments';
@@ -32,13 +31,6 @@ import './style.scss';
  * and migrating to this component once New Fund Dashboard is completed.
  * */
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(2),
-    maxWidth: 800,
-    marginBottom: theme.spacing(4),
-  },
-}));
 const GET_INVESTMENT = gql`
   query GetInvestment($_id: String!) {
     investment(_id: $_id) {
@@ -124,6 +116,7 @@ export default function InvestmentEdit({
       getInvestment();
     },
     onError: (error) => {
+      // eslint-disable-next-line no-console
       console.log(error);
       toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
     },
@@ -138,6 +131,7 @@ export default function InvestmentEdit({
       getInvestment();
     },
     onError: (error) => {
+      // eslint-disable-next-line no-console
       console.log(error);
       toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
     },
@@ -152,6 +146,7 @@ export default function InvestmentEdit({
       toast.success('Success! Investment deleted');
     },
     onError: (error) => {
+      // eslint-disable-next-line no-console
       console.log(error);
       toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
     },
@@ -217,7 +212,7 @@ export default function InvestmentEdit({
       : `${get(investment, 'investor.first_name')} ${get(investment, 'investor.last_name')}`;
 
   const convertToPositiveInteger = (num) => {
-    return parseInt(num < 0 ? 0 : num);
+    return parseInt(num < 0 ? 0 : num, 0);
   };
 
   return (

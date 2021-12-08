@@ -2,9 +2,7 @@ import React from 'react';
 import { Box } from '@material-ui/core';
 import './styles.scss';
 
-function CryptoDisclosure({ deal }) {
-  const { company_name, memo } = deal;
-
+function CryptoDisclosure() {
   return (
     <section className="CryptoDisclosure">
       <p className="section-label">Legal Crypto Disclosure</p>

@@ -939,7 +939,7 @@ const HighVolumePartnerships = ({
                           }}
                           onChange={(e) => {
                             // Max 5 digits
-                            const value = Math.max(0, parseInt(e.target.value))
+                            const value = Math.max(0, parseInt(e.target.value, 0))
                               .toString()
                               .slice(0, 5);
                             setZipcode(convertToPositiveIntOrNull(value));
@@ -1090,6 +1090,7 @@ export default function NewBuildModal(props) {
       resetFlow();
     },
     onError: (err) => {
+      // eslint-disable-next-line no-console
       console.log('ERROR:', err);
     },
   });

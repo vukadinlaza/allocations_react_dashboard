@@ -501,7 +501,6 @@ export function TargetRaiseGoal({
   handleTooltip,
   setUnfilledFields,
   unfilledFields,
-  customInputStyles,
   classes,
   openTooltip,
 }) {

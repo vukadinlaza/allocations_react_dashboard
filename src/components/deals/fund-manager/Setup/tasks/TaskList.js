@@ -20,7 +20,7 @@ const TaskList = ({ tasks, classes, currentTask, handleTaskClick }) => {
         <CardContent className={classes.cardContent}>
           <List component="div" disablePadding>
             {tasks.map((task, i) => {
-              const complete = task.complete;
+              const { complete } = task;
               return (
                 <ListItem
                   key={`phase-${i}`}

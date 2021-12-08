@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Doughnut, Line } from 'react-chartjs-2';
-import { withStyles, withTheme } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -240,7 +240,7 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
             display: true,
             color: 'white',
             labels: dataLabels,
-            formatter(value, ctx, els) {
+            formatter(value, ctx) {
               const chartId = ctx.chart?.id;
               const total = ctx.dataset?._meta[chartId]?.total;
               const percentage = Math.round((value * 100) / total);
@@ -258,7 +258,6 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
         tooltips: {
           enabled: true,
         },
-        responsive: true,
         maintainAspectRatio: false,
         cutoutPercentage: 65,
       }}
@@ -336,7 +335,7 @@ export const LineChart = withStyles(styles)(({ dataset: { data, labels } }) => {
               ticks: {
                 stepSize: maxValue / 5,
                 max: maxValue,
-                callback(val, index) {
+                callback(val) {
                   return nWithCommas(val);
                 },
               },

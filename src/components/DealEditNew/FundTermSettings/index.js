@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FormControl, TextField, Button } from '@material-ui/core';
+import { FormControl, TextField, Button, FormLabel } from '@material-ui/core';
 import './styles.scss';
 
 function FundTerms({ formData, setFormData }) {
@@ -135,7 +135,7 @@ function FundTerms({ formData, setFormData }) {
 
       <div className="form-fields">
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Management fee
             <div className="management-fee">
               <TextField
@@ -179,11 +179,11 @@ function FundTerms({ formData, setFormData }) {
                 $
               </Button>
             </div>
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Fee type
             <div className="button-options">
               <Button
@@ -201,11 +201,11 @@ function FundTerms({ formData, setFormData }) {
                 One-time
               </Button>
             </div>
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Total carry (%)
             <TextField
               onChange={handleFormChange}
@@ -214,11 +214,11 @@ function FundTerms({ formData, setFormData }) {
               className="text-input"
               variant="outlined"
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             General partner
             <TextField
               onChange={handleFormChange}
@@ -227,11 +227,11 @@ function FundTerms({ formData, setFormData }) {
               className="text-input"
               variant="outlined"
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Estimated setup cost ($)
             <div className="management-fee">
               <TextField
@@ -255,11 +255,11 @@ function FundTerms({ formData, setFormData }) {
                 $
               </Button>
             </div>
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Estimated term
             <TextField
               onChange={handleFormChange}
@@ -268,7 +268,7 @@ function FundTerms({ formData, setFormData }) {
               className="text-input"
               variant="outlined"
             />
-          </label>
+          </FormLabel>
         </FormControl>
       </div>
     </section>

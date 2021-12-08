@@ -54,7 +54,7 @@ const pledgedDeals = [
   },
 ];
 
-const PledgedDeals = ({ userProfile }) => {
+const PledgedDeals = () => {
   return (
     <Grid container spacing={2} justifyContent="center">
       {pledgedDeals.map((deal) => {

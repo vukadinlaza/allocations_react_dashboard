@@ -22,6 +22,7 @@ import {
 } from '@material-ui/core';
 import FormModal from '../../Modal';
 import { nWithCommas, formatDate } from '../../../utils/numbers';
+// eslint-disable-next-line import/extensions
 import { Deal } from '../../admin/AdminHome/components/active-deals';
 import EditOrg from '../../forms/editOrg';
 import EditInvestor from '../../forms/editInvestor';
@@ -262,8 +263,6 @@ const DealsTabel = ({ activeDeals }) => {
   useEffect(() => {
     setData(activeDeals);
   }, [activeDeals]);
-
-  console.log(activeDeals, 'asdasdasd');
 
   const [sortParam, setSortParam] = useState({ direction: 'asce' });
 

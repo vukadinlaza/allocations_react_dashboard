@@ -64,7 +64,7 @@ export const dealSteps = {
     },
     {
       value: 'Final Set Up Confirmation Review Complete',
-      tooltip: 'This is the process for the fund manager to review carry & management fees', //Same tooltip?
+      tooltip: 'This is the process for the fund manager to review carry & management fees', // Same tooltip?
       processStreetTask: ['confirmation from fm ready to onboard'],
     },
     {
@@ -80,7 +80,7 @@ export const dealSteps = {
     {
       value: '506b/c Review Complete',
       tooltip: 'This is the process for the fund manager to review 506b/506c investor status',
-      processStreetTask: [''], //Which task?
+      processStreetTask: [''], // Which task?
     },
     {
       value: 'KYC Review Complete',
@@ -92,7 +92,7 @@ export const dealSteps = {
     {
       value: 'Portfolio Company Wire Info Uploaded',
       tooltip: 'Uploaded Portfolio Company Wire Instructions',
-      processStreetTask: ['wire out to portfolio company'], //Cant find task
+      processStreetTask: ['wire out to portfolio company'], // Cant find task
     },
     {
       value: 'Investor Ledger Reconciliation Complete',

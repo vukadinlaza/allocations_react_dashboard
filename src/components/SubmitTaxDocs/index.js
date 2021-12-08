@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import KYCModal from '../DealNextSteps/KYCModal';
 import { Button } from '@material-ui/core';
-import DocIcon from '../../assets/buildDoc.svg';
 import { useLocation } from 'react-router-dom';
+import KYCModal from '../DealNextSteps/KYCModal';
+import DocIcon from '../../assets/buildDoc.svg';
 import './styles.scss';
 
 function SubmitTaxDocs() {
@@ -16,7 +16,7 @@ function SubmitTaxDocs() {
     'W-8-BEN-E': { id: 'tpl_mXPLm5EXAyHJKhQekf', name: 'W8 BEN-E' },
   };
   const validForms = Object.keys(templateMap);
-  const [open, setOpen] = useState(validForms.includes(form) ? true : false);
+  const [open, setOpen] = useState(!!validForms.includes(form));
   const [activeForm, setActiveForm] = useState(validForms.includes(form) ? form : 'W-9');
   const [templateId, setTemplateId] = useState(
     validForms.includes(form) ? templateMap[form].id : 'tpl_dM4QcQbyLckdPXgtyx',
@@ -32,7 +32,7 @@ function SubmitTaxDocs() {
     return (
       <Button key={key} onClick={() => handleClick(key)} className="form-select-button">
         <div className="button-content">
-          <img className="button-img" src={DocIcon} />
+          <img className="button-img" src={DocIcon} alt="document icon" />
           <p className="button-text">{value.name}</p>
         </div>
       </Button>

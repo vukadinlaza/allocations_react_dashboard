@@ -160,10 +160,6 @@ const TaskAction = ({
   };
 
   let action = null;
-  console.log(
-    { phase },
-    phase.tasks.every((t) => t.complete),
-  );
   if (taskTypes.text.includes(task.type)) {
     action = (
       <TextTask

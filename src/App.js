@@ -36,7 +36,6 @@ import DealOneClick from './components/DealOneClick';
 import BuildDealForm from './components/NewBuild/BuildDealForm/index';
 
 import DealSetup from './components/deals/fund-manager/Setup';
-// import DealSetup from './components/DealSetup';
 
 import AuthorizedApolloProvider from './apollo-client-comp';
 import './App.scss';

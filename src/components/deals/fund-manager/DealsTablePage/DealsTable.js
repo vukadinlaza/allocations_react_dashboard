@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, InputAdornment, Button } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
+import { Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import { useHistory, useParams } from 'react-router';
@@ -80,7 +79,7 @@ const DealsTable = ({ classes, deals }) => {
   const { org_slug } = useParams();
   const headers = spvHeaders;
   const history = useHistory();
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm] = useState('');
 
   const getCellContent = (type, row, headerValue) => {
     switch (type) {
@@ -121,10 +120,6 @@ const DealsTable = ({ classes, deals }) => {
       default:
         return <div />;
     }
-  };
-
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
   };
 
   const dataCopy = deals.filter((doc) =>

@@ -27,10 +27,6 @@ export default function Faq() {
           You are investing in a USA Series LLC which is investing in the portfolio company.
         </div>
       </Paper>
-      {/** <Paper className="Faq-entry">
-        <h5>Can I adjust my pledge?</h5>
-        <div></div>
-      </Paper>* */}
       <Paper className="Faq-entry">
         <h5>What do I need to sign?</h5>
         <div>
@@ -132,10 +128,6 @@ export default function Faq() {
           of diligence has been performed
         </div>
       </Paper>
-      {/** <Paper className="Faq-entry">
-        <h5>Upon signing, does this guarantee my investment?</h5>
-        <div>...</div>
-      </Paper>* */}
       <Paper className="Faq-entry">
         <h5>How is the SPV governed?</h5>
         <div>

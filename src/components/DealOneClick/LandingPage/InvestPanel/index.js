@@ -1,11 +1,10 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
-import USDCIcon from '../../../../assets/usdc_icon.svg';
 import './styles.scss';
 import moment from 'moment';
-import { useHistory, useParams, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { toNumber } from 'lodash';
+import USDCIcon from '../../../../assets/usdc_icon.svg';
 import { useAuth } from '../../../../auth/useAuth';
 
 function InvestPanel({ deal, deal_slug, organization }) {

@@ -72,7 +72,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
     const { labels, chartData } = setLabelsAndData(data, monthsArray);
     let accAmount = 0;
 
-    const steppedData = chartData.map((item, i) => {
+    const steppedData = chartData.map((item) => {
       accAmount += item;
       return accAmount;
     });
@@ -223,7 +223,6 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
                 (_.sumBy(data, 'Invested') * (dealMultiple === 0 ? 1 : dealMultiple)).toFixed(0),
               )}
             </Typography>
-            {/* <Typography className={classes.footerData}>0% Realized | 100% Unrealized</Typography> */}
           </div>
         </SimpleBox>
       </Grid>

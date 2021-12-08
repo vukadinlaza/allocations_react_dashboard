@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FormControl, TextField, Button } from '@material-ui/core';
+import { FormControl, TextField, Button, FormLabel } from '@material-ui/core';
 import './styles.scss';
 
 function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
@@ -13,15 +13,10 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
       estimatedTerm,
       totalCarry,
       estimatedSetupCosts,
-      estimatedSetupCostsDollar,
     },
     differentPortfolioTerms,
     deal_lead,
   } = formData;
-
-  useEffect(() => {
-    getFeeType();
-  }, [_id]);
 
   const getFeeType = () => {
     if (managementFees?.length > 0) {
@@ -30,6 +25,10 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
       setFeeType('fixed');
     }
   };
+
+  useEffect(() => {
+    getFeeType();
+  }, [_id]);
 
   const handleFormChange = ({ target }) => {
     const dealParamFields = [
@@ -105,7 +104,7 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
 
       <div className="form-fields">
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Management fee
             <div className="management-fee">
               <TextField
@@ -152,11 +151,11 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
                 $
               </Button>
             </div>
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Fee type
             <div className="button-options">
               <Button
@@ -174,11 +173,11 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
                 One-time
               </Button>
             </div>
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Estimated setup cost ($)
             <TextField
               onChange={handleFormChange}
@@ -187,11 +186,11 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
               variant="outlined"
               name="estimatedSetupCosts"
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Total carry (%)
             <TextField
               value={totalCarry || ''}
@@ -200,12 +199,12 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
               className="text-input"
               variant="outlined"
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         {/* TODO: deal_lead or organizer? */}
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Organizer
             <TextField
               value={deal_lead || ''}
@@ -214,11 +213,11 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
               className="text-input"
               variant="outlined"
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Estimated term
             <TextField
               value={estimatedTerm || ''}
@@ -228,11 +227,11 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
               variant="outlined"
               placeholder="10 years"
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="wide-field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Does your portfolio company have different terms than your SPV? (SPV into an SPV)
             <div className="button-options">
               <Button
@@ -250,7 +249,7 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
                 No
               </Button>
             </div>
-          </label>
+          </FormLabel>
         </FormControl>
       </div>
     </section>

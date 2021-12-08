@@ -11,6 +11,7 @@ function percentageOfSPV(investment, total) {
   return new BN(investment.amount).dividedBy(total).times(100).toFixed(2);
 }
 
+// eslint-disable-next-line no-unused-vars
 export default function CapitalAccount({ deal, investments, totalRaised, useInvestingAs }) {
   return (
     <TableRow>

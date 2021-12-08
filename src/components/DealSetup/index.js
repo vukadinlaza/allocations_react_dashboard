@@ -142,7 +142,7 @@ const ListContainer = ({ classes, type, list, onClickAction, current, itemName }
   );
 };
 
-const DealSetup = ({ match, classes }) => {
+const DealSetup = ({ classes }) => {
   const query = new URLSearchParams(useLocation().search);
 
   const { data, refetch: refetchDeal } = useQuery(DEAL, {
@@ -178,10 +178,6 @@ const DealSetup = ({ match, classes }) => {
         setCurrentTask(false);
       }
     } else {
-      // if (item.type.startsWith('admin')) {
-      //   setCurrentTask(false);
-      //   return;
-      // }
       setCurrentTask(current ? (item === current ? false : item) : item);
     }
   };
