@@ -74,7 +74,7 @@ function DealHeader({ deal }) {
               <h6 className={classes.investmentNumber}>$320,000</h6>
               <LinearProgress
                 variant="determinate"
-                value="10"
+                value="60"
                 className={classes.BorderLinearProgress}
               />
               <div className={classes.minorText}>
@@ -115,6 +115,7 @@ function DealHeader({ deal }) {
             <div className={classes.modalContainer} style={{ background: '' }}>
               <SimpleBox
                 className={classes.modalParent}
+                style={{ background: 'pink' }}
                 title="Signing Deadline"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}

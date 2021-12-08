@@ -248,6 +248,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     marginTop: '20px',
+    backgroundColor: '',
+
     [theme.breakpoints.up('sm')]: {},
     [theme.breakpoints.up('md')]: {},
     [theme.breakpoints.up('lg')]: {},

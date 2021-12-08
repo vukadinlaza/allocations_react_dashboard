@@ -26,7 +26,7 @@ const styles = (theme) => ({
     fontSize: '14px',
   },
   boxTitleContainer: {
-    width: '188px',
+    width: '158px',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     borderRadius: '10px 10px 0px 0px',
     display: 'flex',
