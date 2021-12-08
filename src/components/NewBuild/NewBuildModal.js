@@ -686,8 +686,8 @@ const HighVolumePartnerships = ({
   openTooltip,
   handleTooltip,
 }) => {
-  const statesConstructor = states.UsaStates;
-  const usStates = new statesConstructor();
+  const StatesConstructor = states.UsaStates;
+  const usStates = new StatesConstructor();
   const [failedValidationFields, setFailedValidationFields] = useState([]);
   const validateFields = () => {
     let allValid = true;
@@ -703,7 +703,7 @@ const HighVolumePartnerships = ({
       setFailedValidationFields((prev) => [...prev, 'city']);
       allValid = false;
     }
-    if (!state) {
+    if (!state && country === 'United States') {
       setFailedValidationFields((prev) => [...prev, 'state']);
       allValid = false;
     }
@@ -893,6 +893,7 @@ const HighVolumePartnerships = ({
                       >
                         <Select
                           variant="outlined"
+                          disabled={country !== 'United States'}
                           className={
                             failedValidationFields.includes('state')
                               ? classes.failedValidationStateSelect
@@ -929,11 +930,19 @@ const HighVolumePartnerships = ({
                         <TextField
                           size="small"
                           variant="outlined"
+                          type="number"
                           value={zipCode}
                           name="zipCode"
                           placeholder="Zip Code"
+                          inputProps={{
+                            min: 0,
+                          }}
                           onChange={(e) => {
-                            setZipcode(e.target.value);
+                            // Max 5 digits
+                            const value = Math.max(0, parseInt(e.target.value))
+                              .toString()
+                              .slice(0, 5);
+                            setZipcode(convertToPositiveIntOrNull(value));
                             setFailedValidationFields((prev) =>
                               prev.filter((field) => field !== 'zipCode'),
                             );

@@ -103,24 +103,24 @@ export function FundName({
               </Typography>
             }
             openTooltip={openTooltip}
-            id="fund_name"
+            id="name"
           >
-            <HelpIcon className={classes.helpIcon} onClick={() => handleTooltip('fund_name')} />
+            <HelpIcon className={classes.helpIcon} onClick={() => handleTooltip('name')} />
           </ModalTooltip>
         </Grid>
         <TextField
-          value={buildData.fund_name}
-          name="fund_name"
+          value={buildData.name}
+          name="name"
           onChange={(e) => {
             handleChange(e);
-            setUnfilledFields((prev) => prev.filter((field) => field !== 'fund_name'));
+            setUnfilledFields((prev) => prev.filter((field) => field !== 'name'));
           }}
           className={classes.inputBox}
           variant="outlined"
           placeholder="e.x. crypto deal"
           inputProps={customInputStyles}
           classes={{
-            root: unfilledFields.includes('fund_name') && classes.unfilledField,
+            root: unfilledFields.includes('name') && classes.unfilledField,
           }}
         />
       </FormControl>
@@ -242,27 +242,24 @@ export function DealName({
               </Typography>
             }
             openTooltip={openTooltip}
-            id="portfolio_deal_name"
+            id="name"
           >
-            <HelpIcon
-              className={classes.helpIcon}
-              onClick={() => handleTooltip('portfolio_deal_name')}
-            />
+            <HelpIcon className={classes.helpIcon} onClick={() => handleTooltip('name')} />
           </ModalTooltip>
         </Grid>
         <TextField
-          value={buildData.portfolio_deal_name}
-          name="portfolio_deal_name"
+          value={buildData.name}
+          name="name"
           onChange={(e) => {
             handleChange(e);
-            setUnfilledFields((prev) => prev.filter((field) => field !== 'portfolio_deal_name'));
+            setUnfilledFields((prev) => prev.filter((field) => field !== 'name'));
           }}
           className={classes.inputBox}
           variant="outlined"
           placeholder="e.x. crypto deal"
           inputProps={customInputStyles}
           classes={{
-            root: unfilledFields.includes('portfolio_deal_name') && classes.unfilledField,
+            root: unfilledFields.includes('name') && classes.unfilledField,
           }}
         />
       </FormControl>
@@ -408,30 +405,27 @@ export function RepresentativeGeneralPartnerAndTitle({
               </Typography>
             }
             openTooltip={openTooltip}
-            id="general_partner_representative"
+            id="representative"
           >
             <HelpIcon
               className={classes.helpIcon}
-              onClick={() => handleTooltip('general_partner_representative')}
+              onClick={() => handleTooltip('representative')}
             />
           </ModalTooltip>
         </Grid>
         <TextField
-          value={buildData.general_partner_representative}
-          name="general_partner_representative"
+          value={buildData.representative}
+          name="representative"
           onChange={(e) => {
             handleChange(e);
-            setUnfilledFields((prev) =>
-              prev.filter((field) => field !== 'general_partner_representative'),
-            );
+            setUnfilledFields((prev) => prev.filter((field) => field !== 'representative'));
           }}
           className={classes.inputBox}
           variant="outlined"
           placeholder=""
           inputProps={customInputStyles}
           classes={{
-            root:
-              unfilledFields.includes('general_partner_representative') && classes.unfilledField,
+            root: unfilledFields.includes('representative') && classes.unfilledField,
           }}
         />
       </FormControl>
@@ -539,6 +533,9 @@ export function TargetRaiseGoal({
           type="number"
           value={buildData.target_raise_goal}
           name="target_raise_goal"
+          InputProps={{
+            startAdornment: <InputAdornment position="start">$</InputAdornment>,
+          }}
           onChange={(e) => {
             const value = convertToPositiveIntOrNull(e.target.value);
 
@@ -553,10 +550,10 @@ export function TargetRaiseGoal({
           }}
           className={classes.inputBox}
           variant="outlined"
-          placeholder=""
-          inputProps={customInputStyles}
           classes={{
-            root: unfilledFields.includes('target_raise_goal') && classes.unfilledField,
+            root: `${unfilledFields.includes('target_raise_goal') && classes.unfilledField} ${
+              classes.selectInputBox
+            }`,
           }}
         />
       </FormControl>
@@ -1012,8 +1009,8 @@ export function ManagementFee({
             }
             placeholder="Custom Management Fee"
             name="custom_management_fee"
-            onChange={() => {
-              handleChange();
+            onChange={(e) => {
+              handleChange(e);
               setUnfilledFields((prev) =>
                 prev.filter((field) => field !== 'custom_management_fee'),
               );
@@ -1160,8 +1157,8 @@ export function CarryFee({
             value={buildData.custom_carry_fee === 'false' ? '' : buildData.custom_carry_fee}
             placeholder="Custom Carry Fee"
             name="custom_carry_fee"
-            onChange={() => {
-              handleChange();
+            onChange={(e) => {
+              handleChange(e);
               setUnfilledFields((prev) => prev.filter((field) => field !== 'custom_carry_fee'));
             }}
             className={classes.inputBox}
@@ -1316,7 +1313,7 @@ export function AcceptedInvestorTypes({
       <Select
         id="type_of_investors"
         menuPosition="fixed"
-        label="What type of Investors are you Accepting?"
+        label="What type of Investors are you accepting?"
         styles={customStyles}
         options={investorTypes.map((type) => ({ value: type, label: type, key: type })) || ''}
         defaultValue={buildData.type_of_investors}
@@ -1436,18 +1433,18 @@ export function ReportingAdviser({
                 <Typography color="inherit">Please indicate your ERA/RIA name</Typography>
               }
               openTooltip={openTooltip}
-              id="custom_reporting_adviser"
+              id="reporting_adviser"
             >
               <HelpIcon
                 className={classes.helpIcon}
-                onClick={() => handleTooltip('custom_reporting_adviser')}
+                onClick={() => handleTooltip('reporting_adviser')}
               />
             </ModalTooltip>
           </Grid>
           <TextField
-            value={buildData.custom_reporting_adviser}
+            value={buildData.reporting_adviser}
             placeholder="Adviser Name"
-            name="custom_reporting_adviser"
+            name="reporting_adviser"
             onChange={handleChange}
             className={classes.inputBox}
             variant="outlined"
@@ -1652,7 +1649,7 @@ export function InternationalInvestorsStatus({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6} spacing={2}>
+    <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={`${classes.formItemName} ${classes.customFormItemName}`}>
@@ -1740,7 +1737,7 @@ export function PitchDeckCheckBox({ buildData, setBuildData, classes }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', marginTop: '30px' }}>
       <Checkbox
-        color="#39C522"
+        color="default"
         size="medium"
         name="public_pitch_deck"
         checked={buildData.public_pitch_deck}
