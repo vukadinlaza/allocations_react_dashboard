@@ -305,7 +305,7 @@ function DealNextSteps() {
                     onClick={() =>
                       handleMenuItemClick({
                         templateName: 'W-8-BEN',
-                        templateId: 'tpl_qDaxDLgRkFpHJD2cFX',
+                        templateId: 'tpl_JmDP5PPQkSy7LYgJHF',
                       })
                     }
                   >
