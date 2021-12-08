@@ -26,7 +26,6 @@ import {
   SideLetters,
   AcceptedInvestorTypes,
   TargetRaiseGoal,
-  PitchDeckCheckBox,
 } from './FormFields';
 
 const CREATE_BUILD = gql`
@@ -145,6 +144,7 @@ const BuildDetails = ({
     management_fee_frequency: 'one time',
     management_fee_type: 'percent',
     management_fee_value: '2',
+    memo: '',
     minimum_investment: 10000,
     name: '',
     need_gp_entity: 'true',
@@ -162,11 +162,120 @@ const BuildDetails = ({
     type_of_investors: 'Accredited Investors (3(c)(1))',
   });
 
+  const sectionOne = {
+    spv: [
+      'portfolio_company_name',
+      'portfolio_company_securities',
+      'name',
+      'manager_name',
+      'representative',
+      'deal_stage',
+      'sectors',
+    ],
+    fund: [
+      'name',
+      'number_of_investments',
+      'manager_name',
+      'representative',
+      'need_gp_entity',
+      'deal_stage',
+      'sectors',
+    ],
+  };
+
+  const sectionOneCheck = () => {
+    let status = true;
+    if (buildData.need_gp_entity === 'false' && !buildData.gp_entity_name) {
+      status = false;
+    }
+    return status;
+  };
+
+  const sectionOneComplete =
+    sectionOne[dealType].every((field) => buildData[field]) && sectionOneCheck();
+
+  const sectionTwo = {
+    spv: [
+      'management_fee_value',
+      'management_fee_frequency',
+      'carry_fee_value',
+      'side_letters',
+      'target_raise_goal',
+      'minimum_investment',
+      'accept_crypto',
+    ],
+    fund: [
+      'management_fee_value',
+      'management_fee_frequency',
+      'carry_fee_value',
+      'side_letters',
+      'type_of_investors',
+    ],
+  };
+
+  const sectionTwoCheck = () => {
+    let status = true;
+    if (
+      buildData.management_fee_value === 'Custom' &&
+      (buildData.custom_management_fee === 'false' || buildData.custom_management_fee === '')
+    ) {
+      status = false;
+    }
+    if (
+      buildData.carry_fee_value === 'Custom' &&
+      (buildData.custom_carry_fee === 'false' || buildData.custom_carry_fee === '')
+    ) {
+      status = false;
+    }
+    return status;
+  };
+
+  const sectionTwoComplete =
+    sectionTwo[dealType].every((field) => buildData[field]) && sectionTwoCheck();
+
+  const sectionThree = [
+    'allocations_reporting_adviser',
+    'offering_type',
+    'custom_investment_agreement',
+  ];
+
+  const sectionThreeCheck = () => {
+    let status = true;
+    if (buildData.allocations_reporting_adviser === 'false' && !buildData.reporting_adviser) {
+      status = false;
+    }
+    return status;
+  };
+
+  const sectionThreeComplete =
+    sectionThree.every((field) => buildData[field]) && sectionThreeCheck();
+
+  const sectionFour = ['international_company_status', 'international_investors_status'];
+
+  const sectionFourCheck = () => {
+    let status = true;
+    if (
+      buildData.international_company_status === 'true' &&
+      (!buildData.international_company_country || buildData.international_company_country === '')
+    ) {
+      status = false;
+    }
+    if (
+      buildData.international_investors_status === 'true' &&
+      !buildData.international_investors_countries.length
+    ) {
+      status = false;
+    }
+    return status;
+  };
+
+  const sectionFourComplete = sectionFour.every((field) => buildData[field]) && sectionFourCheck();
+
+  const sectionSixComplete = !!buildData.memo;
+
   const [unfilledFields, setUnfilledFields] = useState([]);
 
   const formValidation = () => {
-    //* **** NEED TO VALIDATE CLOSING DATE STILL - NEED TO CHECK FOR PROPER DATE FORMAT *********
-
     const unvalidatedFields = [];
     const fieldsToFill = [];
 
@@ -319,6 +428,7 @@ const BuildDetails = ({
           },
           management_fee_frequency: buildData.management_fee_frequency,
           manager_name: buildData.manager_name,
+          memo: buildData.memo,
           minimum_investment: Number(buildData.minimum_investment),
           name: buildData.name,
           need_gp_entity: buildData.need_gp_entity,
@@ -394,87 +504,200 @@ const BuildDetails = ({
         openTooltip={openTooltip}
         unfilledFields={unfilledFields}
         setUnfilledFields={setUnfilledFields}
+        sectionOneComplete={sectionOneComplete}
       />
+
       <Paper className={classes.paper}>
-        <form noValidate autoComplete="off">
-          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-            2. Deal Terms
-          </Typography>
-          <Grid container className={classes.inputGridContainer} spacing={2}>
-            <ManagementFee {...formFieldProps} />
-            <ManagementFeeFrequency {...formFieldProps} />
-            <CarryFee {...formFieldProps} />
-            <SideLetters {...formFieldProps} />
-            {dealType === 'spv' && <TargetRaiseGoal {...formFieldProps} />}
-            {dealType === 'spv' && <MinimumInvestment {...formFieldProps} />}
-            {dealType === 'fund' && <AcceptedInvestorTypes {...formFieldProps} />}
-            {dealType === 'spv' && <AcceptCrypto {...formFieldProps} />}
+        <Grid container className={classes.sectionHeader}>
+          <Grid
+            item
+            className={classes.sectionHeaderNumber}
+            style={{ backgroundColor: sectionTwoComplete ? '#0461ff' : '#EBEBEB' }}
+          >
+            2
           </Grid>
-        </form>
-      </Paper>
-      <Paper className={classes.paper}>
-        <form noValidate autoComplete="off">
-          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-            3. Offering Terms
+          <Typography
+            variant="h6"
+            gutterBottom
+            className={classes.sectionHeaderText}
+            style={{ color: sectionTwoComplete ? '#2A2B54' : '#8E9394' }}
+          >
+            Deal Terms
           </Typography>
-          <Grid container className={classes.inputGridContainer} spacing={1}>
-            <ReportingAdviser {...formFieldProps} />
-            <OfferingType {...formFieldProps} />
-            <CustomInvestmentAgreement {...formFieldProps} />
-          </Grid>
-        </form>
-      </Paper>
-      <Paper className={classes.paper}>
-        <form noValidate autoComplete="off">
-          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-            4. Demographics
-          </Typography>
-          <Grid container className={classes.inputGridContainer} spacing={1}>
-            <InternationalCompanyStatus {...formFieldProps} />
-            <InternationalInvestorsStatus {...formFieldProps} />
-          </Grid>
-        </form>
+        </Grid>
+        <Grid
+          container
+          className={classes.outerSection}
+          style={{ borderLeft: sectionTwoComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+        >
+          <form noValidate autoComplete="off">
+            <Grid container spacing={2} className={classes.inputGridContainer}>
+              <ManagementFee {...formFieldProps} />
+              <ManagementFeeFrequency {...formFieldProps} />
+              <CarryFee {...formFieldProps} />
+              <SideLetters {...formFieldProps} />
+              {dealType === 'spv' && <TargetRaiseGoal {...formFieldProps} />}
+              {dealType === 'spv' && <MinimumInvestment {...formFieldProps} />}
+              {dealType === 'fund' && <AcceptedInvestorTypes {...formFieldProps} />}
+              {dealType === 'spv' && <AcceptCrypto {...formFieldProps} />}
+            </Grid>
+          </form>
+        </Grid>
       </Paper>
 
       <Paper className={classes.paper}>
-        <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-          5. Upload Your Documents
-        </Typography>
-        <UploadDocs deal={initialDeal} {...formFieldProps} />
+        <Grid container className={classes.sectionHeader}>
+          <Grid
+            item
+            className={classes.sectionHeaderNumber}
+            style={{ backgroundColor: sectionThreeComplete ? '#0461ff' : '#EBEBEB' }}
+          >
+            3
+          </Grid>
+          <Typography
+            variant="h6"
+            gutterBottom
+            className={classes.sectionHeaderText}
+            style={{ color: sectionThreeComplete ? '#2A2B54' : '#8E9394' }}
+          >
+            Offering Terms
+          </Typography>
+        </Grid>
+        <Grid
+          container
+          className={classes.outerSection}
+          style={{ borderLeft: sectionThreeComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+        >
+          <form noValidate autoComplete="off">
+            <Grid container spacing={1} className={classes.inputGridContainer}>
+              <ReportingAdviser {...formFieldProps} />
+              <OfferingType {...formFieldProps} />
+              <CustomInvestmentAgreement {...formFieldProps} />
+            </Grid>
+          </form>
+        </Grid>
       </Paper>
 
       <Paper className={classes.paper}>
-        <form noValidate autoComplete="off">
-          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-            6. Final
+        <Grid container className={classes.sectionHeader}>
+          <Grid
+            item
+            className={classes.sectionHeaderNumber}
+            style={{
+              backgroundColor: sectionFourComplete ? '#0461ff' : '#EBEBEB',
+              padding: '1px 1px 0px 0px',
+            }}
+          >
+            4
+          </Grid>
+          <Typography
+            variant="h6"
+            gutterBottom
+            className={classes.sectionHeaderText}
+            style={{
+              color: sectionFourComplete ? '#2A2B54' : '#8E9394',
+            }}
+          >
+            Demographics
           </Typography>
-          <FormControl required disabled variant="outlined" className={classes.formContainers}>
-            <NotesMemo {...formFieldProps} />
-            <Button
-              className={classes.continueButton}
-              disabled={waitingOnInitialDeal}
-              onClick={() => {
-                const { isValidated, unvalidatedFields } = formValidation();
-                if (!isValidated) {
-                  toast.error(
-                    <div>
-                      Please fill in the following fields:{' '}
-                      {unvalidatedFields.map((field) => (
-                        <div>• {field}</div>
-                      ))}
-                    </div>,
-                    { autoClose: 10000 },
-                  );
-                  return;
-                }
-                setPage(page + 1);
-                handleSubmit();
-              }}
-            >
-              Continue
-            </Button>
-          </FormControl>
-        </form>
+        </Grid>
+        <Grid
+          container
+          className={classes.outerSection}
+          style={{ borderLeft: sectionFourComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+        >
+          <form noValidate autoComplete="off">
+            <Grid container spacing={1} className={classes.inputGridContainer}>
+              <InternationalCompanyStatus {...formFieldProps} />
+              <InternationalInvestorsStatus {...formFieldProps} />
+            </Grid>
+          </form>
+        </Grid>
+      </Paper>
+
+      <Paper className={classes.paper}>
+        <Grid container className={classes.sectionHeader}>
+          <Grid
+            item
+            className={classes.sectionHeaderNumber}
+            style={{ backgroundColor: '#0461ff', padding: '1px 1px 0px 0px' }}
+          >
+            5
+          </Grid>
+          <Typography
+            variant="h6"
+            gutterBottom
+            className={classes.sectionHeaderText}
+            style={{ color: '#2A2B54' }}
+          >
+            Upload Your Documents
+          </Typography>
+        </Grid>
+        <Grid
+          container
+          className={classes.outerSection}
+          style={{ borderLeft: 'solid 3px #ECF3FF' }}
+        >
+          <form noValidate autoComplete="off">
+            <UploadDocs deal={initialDeal} {...formFieldProps} />
+          </form>
+        </Grid>
+      </Paper>
+
+      <Paper className={classes.paper}>
+        <Grid container className={classes.sectionHeader}>
+          <Grid
+            item
+            className={classes.sectionHeaderNumber}
+            style={{
+              backgroundColor: sectionSixComplete ? '#0461ff' : '#EBEBEB',
+              padding: '1px 1px 0px 0px',
+            }}
+          >
+            6
+          </Grid>
+          <Typography
+            variant="h6"
+            gutterBottom
+            className={classes.sectionHeaderText}
+            style={{ color: sectionSixComplete ? '#2A2B54' : '#8E9394' }}
+          >
+            Final
+          </Typography>
+        </Grid>
+        <div
+          className={classes.outerSection}
+          style={{ borderLeft: sectionSixComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+        >
+          <form noValidate autoComplete="off">
+            <FormControl required disabled variant="outlined" className={classes.formContainers}>
+              <NotesMemo {...formFieldProps} />
+              <Button
+                className={classes.continueButton}
+                disabled={waitingOnInitialDeal}
+                onClick={() => {
+                  const { isValidated, unvalidatedFields } = formValidation();
+                  if (!isValidated) {
+                    toast.error(
+                      <div>
+                        Please fill in the following fields:{' '}
+                        {unvalidatedFields.map((field) => (
+                          <div>• {field}</div>
+                        ))}
+                      </div>,
+                      { autoClose: 10000 },
+                    );
+                    return;
+                  }
+                  setPage(page + 1);
+                  handleSubmit();
+                }}
+              >
+                Continue
+              </Button>
+            </FormControl>
+          </form>
+        </div>
       </Paper>
     </>
   );

@@ -13,6 +13,9 @@ const useStyles = makeStyles((theme) => ({
       borderColor: '#7070703B',
     },
   },
+  activeOuterSection: {
+    borderLeft: 'solid #ECF3FF 3px',
+  },
   assetItemText: {
     font: 'normal normal normal 18px/21px Roboto',
     color: '#2A2B54',
@@ -121,7 +124,6 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   inputGridContainer: {
-    marginTop: '16px',
     [theme.breakpoints.down(phone)]: {
       flexDirection: 'column',
     },
@@ -148,6 +150,10 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: '100%',
       font: 'normal normal normal 16px/21px Roboto',
     },
+  },
+  outerSection: {
+    padding: '18px 60px',
+    marginLeft: '12px',
   },
   paper: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
@@ -196,8 +202,25 @@ const useStyles = makeStyles((theme) => ({
       color: '#DE350B',
     },
   },
+  sectionHeader: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  sectionHeaderNumber: {
+    width: '28px',
+    height: '28px',
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: '50%',
+    justifyContent: 'center',
+    color: '#fff',
+    fontSize: '19px',
+    margin: '0px 12px 6px 0px',
+  },
   sectionHeaderText: {
-    fontSize: '34px',
+    fontSize: '24px',
+    display: 'flex',
+    margin: '0px 0px 6px 0px',
     [theme.breakpoints.down(phone)]: {
       fontSize: '24px',
     },
@@ -318,8 +341,6 @@ const useStyles = makeStyles((theme) => ({
   minimumInput: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     boxShadow: '0px 3px 6px #0000000A',
-    // border radius is not taking
-    borderRadius: '8px !important',
     padding: '0',
     maxWidth: '464px',
     width: '100%',
