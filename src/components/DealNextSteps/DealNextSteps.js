@@ -167,7 +167,7 @@ function DealNextSteps() {
           ? { templateName: 'W-9', templateId: 'tpl_dM4QcQbyLckdPXgtyx' }
           : { templateName: 'W-9-E', templateId: 'tpl_HSJjJ9c9jb2N4GXFkt' }
         : investorFormData?.investor_type === 'individual'
-        ? { templateName: 'W-8-BEN', templateId: 'tpl_qDaxDLgRkFpHJD2cFX' }
+        ? { templateName: 'W-8-BEN', templateId: 'tpl_JmDP5PPQkSy7LYgJHF' }
         : { templateName: 'W-8-BEN-E', templateId: 'tpl_mXPLm5EXAyHJKhQekf' };
 
     setKycTemplate(templateInfo);
