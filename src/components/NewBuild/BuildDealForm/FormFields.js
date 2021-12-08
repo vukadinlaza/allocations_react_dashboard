@@ -1646,7 +1646,7 @@ export function InternationalInvestorsStatus({
   openTooltip,
 }) {
   return (
-    <Grid container className={classes.inputGridItem} item xs={6} spacing={2}>
+    <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={`${classes.formItemName} ${classes.customFormItemName}`}>
