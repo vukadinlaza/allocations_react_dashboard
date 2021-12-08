@@ -569,12 +569,16 @@ const BuildDetails = ({
           </form>
         </Grid>
       </Paper>
+
       <Paper className={classes.paper}>
         <Grid container className={classes.sectionHeader}>
           <Grid
             item
             className={classes.sectionHeaderNumber}
-            style={{ backgroundColor: sectionFourComplete ? '#0461ff' : '#EBEBEB' }}
+            style={{
+              backgroundColor: sectionFourComplete ? '#0461ff' : '#EBEBEB',
+              padding: '1px 1px 0px 0px',
+            }}
           >
             4
           </Grid>
@@ -582,7 +586,9 @@ const BuildDetails = ({
             variant="h6"
             gutterBottom
             className={classes.sectionHeaderText}
-            style={{ color: sectionFourComplete ? '#2A2B54' : '#8E9394' }}
+            style={{
+              color: sectionFourComplete ? '#2A2B54' : '#8E9394',
+            }}
           >
             Demographics
           </Typography>
@@ -603,7 +609,11 @@ const BuildDetails = ({
 
       <Paper className={classes.paper}>
         <Grid container className={classes.sectionHeader}>
-          <Grid item className={classes.sectionHeaderNumber} style={{ backgroundColor: '#0461ff' }}>
+          <Grid
+            item
+            className={classes.sectionHeaderNumber}
+            style={{ backgroundColor: '#0461ff', padding: '1px 1px 0px 0px' }}
+          >
             5
           </Grid>
           <Typography
@@ -631,7 +641,10 @@ const BuildDetails = ({
           <Grid
             item
             className={classes.sectionHeaderNumber}
-            style={{ backgroundColor: sectionSixComplete ? '#0461ff' : '#EBEBEB' }}
+            style={{
+              backgroundColor: sectionSixComplete ? '#0461ff' : '#EBEBEB',
+              padding: '1px 1px 0px 0px',
+            }}
           >
             6
           </Grid>
