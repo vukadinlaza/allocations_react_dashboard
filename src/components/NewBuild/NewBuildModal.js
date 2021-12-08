@@ -17,17 +17,18 @@ import FormControl from '@material-ui/core/FormControl';
 import CloseIcon from '@material-ui/icons/Close';
 import HelpIcon from '@material-ui/icons/Help';
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router';
+import countries from 'country-region-data';
+import states from 'usa-states';
+import { toast } from 'react-toastify';
 import { phone } from '../../utils/helpers';
 import plusSignIcon from '../../assets/plus-vector.svg';
 import plusSignBlackIcon from '../../assets/plus-vector-black.svg';
 import { useAuth } from '../../auth/useAuth';
-import { useHistory } from 'react-router';
 import { useSetCurrentOrganization } from '../../state/current-organization';
 import { ModalTooltip } from '../dashboard/FundManagerDashboard/widgets';
-import countries from 'country-region-data';
-import states from 'usa-states';
-import { toast } from 'react-toastify';
 import DealTypeSelector, { NewOrCurrentBuild, NewBuildFinalWarning } from './DealType';
+import { convertToPositiveIntOrNull } from '../../utils/numbers';
 
 const CREATE_ORG = gql`
   mutation CreateOrganization($organization: OrganizationInput!) {
@@ -35,6 +36,7 @@ const CREATE_ORG = gql`
       _id
       name
       slug
+      high_volume_partner
       masterEntity {
         name
         address
@@ -448,22 +450,23 @@ const CreateNewOrganization = ({
 
   const validateFields = () => {
     let allValid = true;
+    let allFilled = true;
     if (checkForIllegalChars(newOrganizationName)) {
       setFailedValidationFields((prev) => [...prev, 'organization_name']);
       allValid = false;
     }
     if (!newOrganizationName) {
       setFailedValidationFields((prev) => [...prev, 'organization_name']);
-      allValid = false;
+      allFilled = false;
     }
     if (!estimatedSPVQuantity) {
       setFailedValidationFields((prev) => [...prev, 'estimated_spv_quantity']);
-      allValid = false;
+      allFilled = false;
     }
-    if (!allValid) {
+    if (!allFilled) {
       toast.error('Please fill in all fields');
     }
-    return allValid;
+    return allValid && allFilled;
   };
 
   return (
@@ -585,16 +588,19 @@ const CreateNewOrganization = ({
                           </ModalTooltip>
                         </Typography>
                         <TextField
+                          type="number"
                           size="small"
                           variant="outlined"
                           value={estimatedSPVQuantity}
                           name="estimated_spv_quantity"
                           onChange={(e) => {
-                            setEstimatedSPVQuanity(e.target.value);
+                            const newVal = convertToPositiveIntOrNull(e.target.value);
+
+                            setEstimatedSPVQuanity(newVal);
                             setFailedValidationFields((prev) =>
                               prev.filter((field) => field !== 'estimated_spv_quantity'),
                             );
-                            if (e.target.value < 5) {
+                            if (newVal < 5) {
                               clearMasterEntityForm();
                             }
                           }}
@@ -620,11 +626,11 @@ const CreateNewOrganization = ({
                             // validate fields, if not valid, do nothing
                             if (!validateFields()) return;
 
-                            ///// IF 5 OR MORE SPVS SEND TO NEXT MODAL TO COLLECT MORE INFO ////
+                            // IF 5 OR MORE SPVS SEND TO NEXT MODAL TO COLLECT MORE INFO //
                             if (estimatedSPVQuantity >= 5) {
                               setPage('high_volume_partnerships');
                             }
-                            /////// IF LESS THAN 5 ESTIMATED SPVS CREATE NEW ORG HERE RIGHT AWAY THEN PUSH TO BUILD PAGE ////
+                            // IF LESS THAN 5 ESTIMATED SPVS CREATE NEW ORG HERE RIGHT AWAY THEN PUSH TO BUILD PAGE //
                             else {
                               createOrganization();
                               history.push(`/new-build/${dealType}`);
@@ -680,8 +686,8 @@ const HighVolumePartnerships = ({
   openTooltip,
   handleTooltip,
 }) => {
-  const statesConstructor = states.UsaStates;
-  const usStates = new statesConstructor();
+  const StatesConstructor = states.UsaStates;
+  const usStates = new StatesConstructor();
   const [failedValidationFields, setFailedValidationFields] = useState([]);
   const validateFields = () => {
     let allValid = true;
@@ -697,7 +703,7 @@ const HighVolumePartnerships = ({
       setFailedValidationFields((prev) => [...prev, 'city']);
       allValid = false;
     }
-    if (!state) {
+    if (!state && country === 'United States') {
       setFailedValidationFields((prev) => [...prev, 'state']);
       allValid = false;
     }
@@ -887,6 +893,7 @@ const HighVolumePartnerships = ({
                       >
                         <Select
                           variant="outlined"
+                          disabled={country !== 'United States'}
                           className={
                             failedValidationFields.includes('state')
                               ? classes.failedValidationStateSelect
@@ -923,11 +930,19 @@ const HighVolumePartnerships = ({
                         <TextField
                           size="small"
                           variant="outlined"
+                          type="number"
                           value={zipCode}
                           name="zipCode"
                           placeholder="Zip Code"
+                          inputProps={{
+                            min: 0,
+                          }}
                           onChange={(e) => {
-                            setZipcode(e.target.value);
+                            // Max 5 digits
+                            const value = Math.max(0, parseInt(e.target.value))
+                              .toString()
+                              .slice(0, 5);
+                            setZipcode(convertToPositiveIntOrNull(value));
                             setFailedValidationFields((prev) =>
                               prev.filter((field) => field !== 'zipCode'),
                             );
@@ -1044,24 +1059,28 @@ export default function NewBuildModal(props) {
     props.setPage('deal_type_selector');
   };
 
+  const isHVP = estimatedSPVQuantity >= 5;
+
   const [createOrganization] = useMutation(CREATE_ORG, {
     variables: {
       organization: {
         name: newOrganizationName,
+        high_volume_partner: isHVP,
         masterEntity: {
-          name: masterEntityName || 'Atomizer LLC',
-          address: address || '8 The Green',
-          addressLineTwo: masterEntityName ? addressLineTwo : 'Suite A',
-          city: city || 'Dover',
-          state: state || 'Delaware',
-          zipCode: zipCode || '19901',
-          country: country || 'United States',
+          name: isHVP ? masterEntityName : 'Atomizer LLC',
+          address: isHVP ? address : '8 The Green',
+          addressLineTwo: isHVP ? addressLineTwo : 'Suite A',
+          city: isHVP ? city : 'Dover',
+          state: isHVP ? state : 'Delaware',
+          zipCode: isHVP ? zipCode : '19901',
+          country: isHVP ? country : 'United States',
         },
       },
     },
     onCompleted: ({ createOrganization }) => {
       if (createOrganization?.name) {
         setCurrentOrganization(createOrganization);
+        props.refetchUserProfile();
         toast.success(
           `Success! New organization ${createOrganization?.name} successfully created!`,
         );

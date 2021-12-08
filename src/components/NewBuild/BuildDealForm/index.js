@@ -26,7 +26,6 @@ import {
   SideLetters,
   AcceptedInvestorTypes,
   TargetRaiseGoal,
-  PitchDeckCheckBox,
 } from './FormFields';
 
 const CREATE_BUILD = gql`
@@ -128,11 +127,11 @@ const BuildDetails = ({
     custom_carry_fee: 'false',
     custom_investment_agreement: 'false',
     custom_management_fee: 'false',
-    custom_reporting_adviser: undefined,
+    reporting_adviser: undefined,
     deal_stage: '',
     fund_name: '',
     general_partner_representative: '',
-    gp_entity_name: null,
+    gp_entity_name: undefined,
     high_volume_partner: false,
     international_company_status: 'false',
     international_company_country: '',
@@ -141,33 +140,142 @@ const BuildDetails = ({
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
-        : null,
+        : undefined,
     management_fee_frequency: 'one time',
     management_fee_type: 'percent',
     management_fee_value: '2',
+    memo: '',
     minimum_investment: 10000,
+    name: '',
     need_gp_entity: 'true',
-    number_of_investments: null,
+    number_of_investments: undefined,
     offering_type: '506b',
     portfolio_company_name: '',
     portfolio_company_securities: '',
-    portfolio_deal_name: '',
     public_pitch_deck: false,
     representative: '',
     setup_cost: 20000,
     side_letters: 'false',
     sectors: [],
     target_raise_goal: 100000,
-    term_of_fund: '10 years',
     type: dealType,
     type_of_investors: 'Accredited Investors (3(c)(1))',
   });
 
+  const sectionOne = {
+    spv: [
+      'portfolio_company_name',
+      'portfolio_company_securities',
+      'name',
+      'manager_name',
+      'representative',
+      'deal_stage',
+      'sectors',
+    ],
+    fund: [
+      'name',
+      'number_of_investments',
+      'manager_name',
+      'representative',
+      'need_gp_entity',
+      'deal_stage',
+      'sectors',
+    ],
+  };
+
+  const sectionOneCheck = () => {
+    let status = true;
+    if (buildData.need_gp_entity === 'false' && !buildData.gp_entity_name) {
+      status = false;
+    }
+    return status;
+  };
+
+  const sectionOneComplete =
+    sectionOne[dealType].every((field) => buildData[field]) && sectionOneCheck();
+
+  const sectionTwo = {
+    spv: [
+      'management_fee_value',
+      'management_fee_frequency',
+      'carry_fee_value',
+      'side_letters',
+      'target_raise_goal',
+      'minimum_investment',
+      'accept_crypto',
+    ],
+    fund: [
+      'management_fee_value',
+      'management_fee_frequency',
+      'carry_fee_value',
+      'side_letters',
+      'type_of_investors',
+    ],
+  };
+
+  const sectionTwoCheck = () => {
+    let status = true;
+    if (
+      buildData.management_fee_value === 'Custom' &&
+      (buildData.custom_management_fee === 'false' || buildData.custom_management_fee === '')
+    ) {
+      status = false;
+    }
+    if (
+      buildData.carry_fee_value === 'Custom' &&
+      (buildData.custom_carry_fee === 'false' || buildData.custom_carry_fee === '')
+    ) {
+      status = false;
+    }
+    return status;
+  };
+
+  const sectionTwoComplete =
+    sectionTwo[dealType].every((field) => buildData[field]) && sectionTwoCheck();
+
+  const sectionThree = [
+    'allocations_reporting_adviser',
+    'offering_type',
+    'custom_investment_agreement',
+  ];
+
+  const sectionThreeCheck = () => {
+    let status = true;
+    if (buildData.allocations_reporting_adviser === 'false' && !buildData.reporting_adviser) {
+      status = false;
+    }
+    return status;
+  };
+
+  const sectionThreeComplete =
+    sectionThree.every((field) => buildData[field]) && sectionThreeCheck();
+
+  const sectionFour = ['international_company_status', 'international_investors_status'];
+
+  const sectionFourCheck = () => {
+    let status = true;
+    if (
+      buildData.international_company_status === 'true' &&
+      (!buildData.international_company_country || buildData.international_company_country === '')
+    ) {
+      status = false;
+    }
+    if (
+      buildData.international_investors_status === 'true' &&
+      !buildData.international_investors_countries.length
+    ) {
+      status = false;
+    }
+    return status;
+  };
+
+  const sectionFourComplete = sectionFour.every((field) => buildData[field]) && sectionFourCheck();
+
+  const sectionSixComplete = !!buildData.memo;
+
   const [unfilledFields, setUnfilledFields] = useState([]);
 
   const formValidation = () => {
-    //* **** NEED TO VALIDATE CLOSING DATE STILL - NEED TO CHECK FOR PROPER DATE FORMAT *********
-
     const unvalidatedFields = [];
     const fieldsToFill = [];
 
@@ -183,8 +291,8 @@ const BuildDetails = ({
       if (!buildData.portfolio_company_securities) {
         unvalidatedFieldsToFill('portfolio_company_securities', 'Portfolio Company Securities');
       }
-      if (!buildData.portfolio_deal_name) {
-        unvalidatedFieldsToFill('portfolio_deal_name', 'Deal Name');
+      if (!buildData.name) {
+        unvalidatedFieldsToFill('name', 'Deal Name');
       }
       if (!buildData.manager_name) {
         unvalidatedFieldsToFill('manager_name', 'Manager Name');
@@ -200,17 +308,14 @@ const BuildDetails = ({
       }
     }
     if (dealType === 'fund') {
-      if (!buildData.fund_name) {
-        unvalidatedFieldsToFill('fund_name', 'Fund Name');
+      if (!buildData.name) {
+        unvalidatedFieldsToFill('name', 'Fund Name');
       }
       if (!buildData.manager_name) {
         unvalidatedFieldsToFill('manager_name', 'General Partner Name');
       }
-      if (!buildData.general_partner_representative) {
-        unvalidatedFieldsToFill(
-          'general_partner_representative',
-          'General Partner Representative and Title',
-        );
+      if (!buildData.representative) {
+        unvalidatedFieldsToFill('representative', 'General Partner Representative and Title');
       }
       if (!buildData.number_of_investments) {
         unvalidatedFieldsToFill('number_of_investments', 'Number of Investments');
@@ -249,11 +354,8 @@ const BuildDetails = ({
     ) {
       unvalidatedFieldsToFill('custom_carry_fee', 'Custom Carry Fee');
     }
-    if (
-      !buildData.custom_reporting_adviser &&
-      buildData.allocations_reporting_adviser === 'false'
-    ) {
-      unvalidatedFieldsToFill('custom_reporting_adviser', 'Advisor Name');
+    if (!buildData.reporting_adviser && buildData.allocations_reporting_adviser === 'false') {
+      unvalidatedFieldsToFill('reporting_adviser', 'Advisor Name');
     }
     if (
       !buildData.international_company_country &&
@@ -309,10 +411,7 @@ const BuildDetails = ({
           },
           closing_date: buildData.closing_date,
           custom_investment_agreement: buildData.custom_investment_agreement,
-          custom_reporting_adviser: buildData.custom_reporting_adviser,
           deal_stage: buildData.deal,
-          fund_name: buildData.fund_name,
-          general_partner_representative: buildData.general_partner_representative,
           gp_entity_name: buildData.gp_entity_name,
           international_company: {
             status: buildData.international_company_status,
@@ -329,14 +428,16 @@ const BuildDetails = ({
           },
           management_fee_frequency: buildData.management_fee_frequency,
           manager_name: buildData.manager_name,
-          minimum_subscription_amount: Number(buildData.minimum_investment),
+          memo: buildData.memo,
+          minimum_investment: Number(buildData.minimum_investment),
+          name: buildData.name,
           need_gp_entity: buildData.need_gp_entity,
           number_of_investments: Number(buildData.number_of_investments),
           offering_type: buildData.offering_type,
           portfolio_company_name: buildData.portfolio_company_name,
           portfolio_company_securities: buildData.portfolio_company_securities,
-          portfolio_deal_name: buildData.portfolio_deal_name,
           public_pitch_deck: buildData.public_pitch_deck,
+          reporting_adviser: buildData.reporting_adviser,
           representative: buildData.representative,
           sectors: buildData.sectors,
           setup_cost: buildData.setup_cost,
@@ -362,7 +463,7 @@ const BuildDetails = ({
     setBuildData((prev) => {
       const newBuildObject = {
         ...prev,
-        custom_reporting_adviser: isAllocationsTheAdvisor ? '' : prev.custom_reporting_adviser,
+        reporting_adviser: isAllocationsTheAdvisor ? '' : prev.reporting_adviser,
         custom_management_fee: isNotCustomManagementFee ? 'false' : prev.custom_management_fee,
         custom_carry_fee: isNotCustomCarryFee ? 'false' : prev.custom_carry_fee,
         international_company_country: isNotInternational ? '' : prev.international_company_country,
@@ -379,6 +480,7 @@ const BuildDetails = ({
   };
 
   const formFieldProps = {
+    dealType,
     buildData,
     setBuildData,
     handleChange,
@@ -402,89 +504,200 @@ const BuildDetails = ({
         openTooltip={openTooltip}
         unfilledFields={unfilledFields}
         setUnfilledFields={setUnfilledFields}
+        sectionOneComplete={sectionOneComplete}
       />
+
       <Paper className={classes.paper}>
-        <form noValidate autoComplete="off">
-          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-            2. Deal Terms
-          </Typography>
-          <Grid container spacing={2} className={classes.inputGridContainer}>
-            <ManagementFee {...formFieldProps} />
-            <ManagementFeeFrequency {...formFieldProps} />
-            <CarryFee {...formFieldProps} />
-            <SideLetters {...formFieldProps} />
-            {dealType === 'spv' && <TargetRaiseGoal {...formFieldProps} />}
-            {dealType === 'spv' && <MinimumInvestment {...formFieldProps} />}
-            {dealType === 'fund' && <AcceptedInvestorTypes {...formFieldProps} />}
-            {dealType === 'spv' && <AcceptCrypto {...formFieldProps} />}
+        <Grid container className={classes.sectionHeader}>
+          <Grid
+            item
+            className={classes.sectionHeaderNumber}
+            style={{ backgroundColor: sectionTwoComplete ? '#0461ff' : '#EBEBEB' }}
+          >
+            2
           </Grid>
-        </form>
-      </Paper>
-      <Paper className={classes.paper}>
-        <form noValidate autoComplete="off">
-          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-            3. Offering Terms
+          <Typography
+            variant="h6"
+            gutterBottom
+            className={classes.sectionHeaderText}
+            style={{ color: sectionTwoComplete ? '#2A2B54' : '#8E9394' }}
+          >
+            Deal Terms
           </Typography>
-          <Grid container spacing={1} className={classes.inputGridContainer}>
-            <ReportingAdviser {...formFieldProps} />
-            <OfferingType {...formFieldProps} />
-            <CustomInvestmentAgreement {...formFieldProps} />
-          </Grid>
-        </form>
-      </Paper>
-      <Paper className={classes.paper}>
-        <form noValidate autoComplete="off">
-          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-            4. Demographics
-          </Typography>
-          <Grid container spacing={1} className={classes.inputGridContainer}>
-            <InternationalCompanyStatus {...formFieldProps} />
-            <InternationalInvestorsStatus {...formFieldProps} />
-          </Grid>
-        </form>
+        </Grid>
+        <Grid
+          container
+          className={classes.outerSection}
+          style={{ borderLeft: sectionTwoComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+        >
+          <form noValidate autoComplete="off">
+            <Grid container spacing={2} className={classes.inputGridContainer}>
+              <ManagementFee {...formFieldProps} />
+              <ManagementFeeFrequency {...formFieldProps} />
+              <CarryFee {...formFieldProps} />
+              <SideLetters {...formFieldProps} />
+              {dealType === 'spv' && <TargetRaiseGoal {...formFieldProps} />}
+              {dealType === 'spv' && <MinimumInvestment {...formFieldProps} />}
+              {dealType === 'fund' && <AcceptedInvestorTypes {...formFieldProps} />}
+              {dealType === 'spv' && <AcceptCrypto {...formFieldProps} />}
+            </Grid>
+          </form>
+        </Grid>
       </Paper>
 
       <Paper className={classes.paper}>
-        <form noValidate autoComplete="off">
-          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-            5. Upload Your Documents
+        <Grid container className={classes.sectionHeader}>
+          <Grid
+            item
+            className={classes.sectionHeaderNumber}
+            style={{ backgroundColor: sectionThreeComplete ? '#0461ff' : '#EBEBEB' }}
+          >
+            3
+          </Grid>
+          <Typography
+            variant="h6"
+            gutterBottom
+            className={classes.sectionHeaderText}
+            style={{ color: sectionThreeComplete ? '#2A2B54' : '#8E9394' }}
+          >
+            Offering Terms
           </Typography>
-          <UploadDocs deal={initialDeal} {...formFieldProps} />
-        </form>
+        </Grid>
+        <Grid
+          container
+          className={classes.outerSection}
+          style={{ borderLeft: sectionThreeComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+        >
+          <form noValidate autoComplete="off">
+            <Grid container spacing={1} className={classes.inputGridContainer}>
+              <ReportingAdviser {...formFieldProps} />
+              <OfferingType {...formFieldProps} />
+              <CustomInvestmentAgreement {...formFieldProps} />
+            </Grid>
+          </form>
+        </Grid>
       </Paper>
 
       <Paper className={classes.paper}>
-        <form noValidate autoComplete="off">
-          <Typography variant="h6" gutterBottom className={classes.sectionHeaderText}>
-            6. Final
+        <Grid container className={classes.sectionHeader}>
+          <Grid
+            item
+            className={classes.sectionHeaderNumber}
+            style={{
+              backgroundColor: sectionFourComplete ? '#0461ff' : '#EBEBEB',
+              padding: '1px 1px 0px 0px',
+            }}
+          >
+            4
+          </Grid>
+          <Typography
+            variant="h6"
+            gutterBottom
+            className={classes.sectionHeaderText}
+            style={{
+              color: sectionFourComplete ? '#2A2B54' : '#8E9394',
+            }}
+          >
+            Demographics
           </Typography>
-          <FormControl required disabled variant="outlined" className={classes.formContainers}>
-            <NotesMemo {...formFieldProps} />
-            <Button
-              className={classes.continueButton}
-              disabled={waitingOnInitialDeal}
-              onClick={() => {
-                const { isValidated, unvalidatedFields } = formValidation();
-                if (!isValidated) {
-                  toast.error(
-                    <div>
-                      Please fill in the following fields:{' '}
-                      {unvalidatedFields.map((field) => (
-                        <div>• {field}</div>
-                      ))}
-                    </div>,
-                    { autoClose: 10000 },
-                  );
-                  return;
-                }
-                setPage(page + 1);
-                handleSubmit();
-              }}
-            >
-              Continue
-            </Button>
-          </FormControl>
-        </form>
+        </Grid>
+        <Grid
+          container
+          className={classes.outerSection}
+          style={{ borderLeft: sectionFourComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+        >
+          <form noValidate autoComplete="off">
+            <Grid container spacing={1} className={classes.inputGridContainer}>
+              <InternationalCompanyStatus {...formFieldProps} />
+              <InternationalInvestorsStatus {...formFieldProps} />
+            </Grid>
+          </form>
+        </Grid>
+      </Paper>
+
+      <Paper className={classes.paper}>
+        <Grid container className={classes.sectionHeader}>
+          <Grid
+            item
+            className={classes.sectionHeaderNumber}
+            style={{ backgroundColor: '#0461ff', padding: '1px 1px 0px 0px' }}
+          >
+            5
+          </Grid>
+          <Typography
+            variant="h6"
+            gutterBottom
+            className={classes.sectionHeaderText}
+            style={{ color: '#2A2B54' }}
+          >
+            Upload Your Documents
+          </Typography>
+        </Grid>
+        <Grid
+          container
+          className={classes.outerSection}
+          style={{ borderLeft: 'solid 3px #ECF3FF' }}
+        >
+          <form noValidate autoComplete="off">
+            <UploadDocs deal={initialDeal} {...formFieldProps} />
+          </form>
+        </Grid>
+      </Paper>
+
+      <Paper className={classes.paper}>
+        <Grid container className={classes.sectionHeader}>
+          <Grid
+            item
+            className={classes.sectionHeaderNumber}
+            style={{
+              backgroundColor: sectionSixComplete ? '#0461ff' : '#EBEBEB',
+              padding: '1px 1px 0px 0px',
+            }}
+          >
+            6
+          </Grid>
+          <Typography
+            variant="h6"
+            gutterBottom
+            className={classes.sectionHeaderText}
+            style={{ color: sectionSixComplete ? '#2A2B54' : '#8E9394' }}
+          >
+            Final
+          </Typography>
+        </Grid>
+        <div
+          className={classes.outerSection}
+          style={{ borderLeft: sectionSixComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+        >
+          <form noValidate autoComplete="off">
+            <FormControl required disabled variant="outlined" className={classes.formContainers}>
+              <NotesMemo {...formFieldProps} />
+              <Button
+                className={classes.continueButton}
+                disabled={waitingOnInitialDeal}
+                onClick={() => {
+                  const { isValidated, unvalidatedFields } = formValidation();
+                  if (!isValidated) {
+                    toast.error(
+                      <div>
+                        Please fill in the following fields:{' '}
+                        {unvalidatedFields.map((field) => (
+                          <div>• {field}</div>
+                        ))}
+                      </div>,
+                      { autoClose: 10000 },
+                    );
+                    return;
+                  }
+                  setPage(page + 1);
+                  handleSubmit();
+                }}
+              >
+                Continue
+              </Button>
+            </FormControl>
+          </form>
+        </div>
       </Paper>
     </>
   );
