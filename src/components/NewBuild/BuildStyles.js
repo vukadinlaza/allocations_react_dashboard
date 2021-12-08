@@ -238,18 +238,6 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '4px',
     alignItems: 'center',
   },
-  selected: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    color: '#186EFF',
-    background: '#ECF3FF 0% 0% no-repeat padding-box !important',
-    boxShadow: '0px 3px 6px #0000000D !important',
-    border: '2px solid #186EFF !important',
-    borderRadius: '8px !important',
-    textTransform: 'capitalize',
-    opacity: '1 !important',
-  },
   selectorButton: {
     fontSize: '.8em',
     color: '#8E9394',
@@ -261,6 +249,18 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down(phone)]: {
       fontSize: '.7em',
     },
+  },
+  selected: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    color: '#186EFF !important',
+    background: '#ECF3FF 0% 0% no-repeat padding-box !important',
+    boxShadow: '0px 3px 6px #0000000D !important',
+    border: '2px solid #186EFF !important',
+    borderRadius: '8px !important',
+    textTransform: 'capitalize',
+    opacity: '1 !important',
   },
   subText: {
     textAlign: 'left',
