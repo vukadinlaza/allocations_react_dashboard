@@ -177,14 +177,22 @@ const BuildDetails = ({
       'number_of_investments',
       'manager_name',
       'representative',
-      'gp_entity_name',
       'need_gp_entity',
       'deal_stage',
       'sectors',
     ],
   };
 
-  const sectionOneComplete = sectionOne[dealType].every((field) => buildData[field]);
+  const sectionOneCheck = () => {
+    let status = true;
+    if (buildData.need_gp_entity === 'false' && !buildData.gp_entity_name) {
+      status = false;
+    }
+    return status;
+  };
+
+  const sectionOneComplete =
+    sectionOne[dealType].every((field) => buildData[field]) && sectionOneCheck();
 
   const sectionTwo = {
     spv: [
