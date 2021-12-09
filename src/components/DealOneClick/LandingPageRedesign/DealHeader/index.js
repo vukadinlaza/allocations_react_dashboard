@@ -46,18 +46,18 @@ function DealHeader({ deal }) {
     <>
       <div className={classes.placeholder}>placeholder</div>
 
-      <Paper className={classes.dealHeader} style={{ background: '' }}>
+      <Paper className={classes.dealHeader}>
         <Box className={classes.box}>
           <Box display="flex">
             <Avatar className={classes.avatar} />
-            <h3 className={classes.companyName} style={{ background: '' }}>
+            <h3 className={classes.companyName}>
               {company_name}
             </h3>
           </Box>
         </Box>
 
-        <Grid container className={classes.middleGridContainer} style={{ background: '' }}>
-          <Grid item style={{ background: '' }}>
+        <Grid container className={classes.middleGridContainer}>
+          <Grid item>
             <CardMedia
               className={classes.cardMedia}
               component="img"
@@ -68,7 +68,7 @@ function DealHeader({ deal }) {
               }
             />
           </Grid>
-          <Grid item style={{ background: '' }}>
+          <Grid item>
             <h4 className={classes.investmentProgress}>Investment Progress</h4>
             <container>
               <h6 className={classes.investmentNumber}>$320,000</h6>
@@ -85,8 +85,8 @@ function DealHeader({ deal }) {
             </container>
 
             <Button className={classes.investButton}>Invest</Button>
-            <Grid container style={{ background: '', marginTop: '15px' }}>
-              <Grid item style={{ background: '' }}>
+            <Grid container style={{ marginTop: '15px' }}>
+              <Grid item>
                 Invest With:{' '}
                 <div style={{ display: 'flex' }}>
                   <div className={classes.coinvestorTagBubble}>
@@ -102,7 +102,6 @@ function DealHeader({ deal }) {
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    background: '',
                     marginLeft: '20px',
                   }}
                 >
@@ -112,10 +111,9 @@ function DealHeader({ deal }) {
               </Grid>
             </Grid>
 
-            <div className={classes.modalContainer} style={{ background: '' }}>
+            <div className={classes.modalContainer}>
               <SimpleBox
                 className={classes.modalParent}
-                style={{ background: 'pink' }}
                 title="Signing Deadline"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
