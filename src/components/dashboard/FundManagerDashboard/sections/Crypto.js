@@ -5,7 +5,13 @@ import Loader from '../../../utils/Loader';
 
 const GET_WALLET_BALANCE = gql`
   query getWalletBalance($deal_id: String!) {
-    walletBalance(deal_id: $deal_id)
+    walletBalance(deal_id: $deal_id) {
+      acknowledged
+      balances {
+        amount
+        currency
+      }
+    }
   }
 `;
 
