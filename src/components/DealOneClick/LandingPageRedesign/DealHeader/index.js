@@ -50,9 +50,7 @@ function DealHeader({ deal }) {
         <Box className={classes.box}>
           <Box display="flex">
             <Avatar className={classes.avatar} />
-            <h3 className={classes.companyName}>
-              {company_name}
-            </h3>
+            <h3 className={classes.companyName}>{company_name}</h3>
           </Box>
         </Box>
 

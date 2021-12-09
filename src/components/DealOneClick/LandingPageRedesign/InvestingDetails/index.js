@@ -31,8 +31,8 @@ function InvestingDetails({ deal }) {
           <h5>Investing Details</h5>
         </Box>
         <Box className={classes.boxInvestingDetails}>
-          <Grid container style={{ backgroundColor: '' }}>
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+          <Grid container>
+            <Grid item xs={3}>
               <InvestingDetailsSimpleBox
                 title="Offering Type"
                 openTooltip={openTooltip}
@@ -49,7 +49,7 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+            <Grid item xs={3}>
               <InvestingDetailsSimpleBox
                 title="Fee Frequency"
                 openTooltip={openTooltip}
@@ -66,7 +66,7 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+            <Grid item xs={3}>
               <InvestingDetailsSimpleBox
                 title="Deal Stage"
                 openTooltip={openTooltip}
@@ -83,7 +83,7 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+            <Grid item xs={3}>
               <InvestingDetailsSimpleBox
                 title="Portfolio Company Securities"
                 openTooltip={openTooltip}
@@ -100,8 +100,8 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
           </Grid>
-          <Grid container style={{ backgroundColor: '' }}>
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+          <Grid container>
+            <Grid item xs={3}>
               <InvestingDetailsSimpleBox
                 title="Management Fee"
                 openTooltip={openTooltip}
@@ -118,7 +118,7 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+            <Grid item xs={3}>
               <InvestingDetailsSimpleBox
                 title="Carry Fee"
                 openTooltip={openTooltip}
@@ -135,7 +135,7 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+            <Grid item xs={3}>
               <InvestingDetailsSimpleBox
                 title="Sector"
                 openTooltip={openTooltip}

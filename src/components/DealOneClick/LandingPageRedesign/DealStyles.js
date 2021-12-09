@@ -40,19 +40,6 @@ const useStyles = makeStyles((theme) => ({
 
   placeholder: {
     marginBottom: '150px',
-    // backgroundColor: 'orange',
-    // [theme.breakpoints.up('sm')]: {
-    //   backgroundColor: 'blue',
-    // },
-    // [theme.breakpoints.up('md')]: {
-    //   backgroundColor: 'pink',
-    // },
-    // [theme.breakpoints.up('lg')]: {
-    //   backgroundColor: 'green',
-    // },
-    // [theme.breakpoints.up('xl')]: {
-    //   backgroundColor: 'red',
-    // },
   },
 
   paper: {

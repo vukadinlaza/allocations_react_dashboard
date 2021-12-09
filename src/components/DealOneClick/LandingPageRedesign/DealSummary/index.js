@@ -7,7 +7,7 @@ function DealSummary({ deal }) {
   const classes = useStyles();
 
   return (
-    <Paper className={classes.dealHeader} style={{ background: '' }}>
+    <Paper className={classes.dealHeader}>
       <Box className={classes.box}>
         <h5>Deal Summary</h5>
       </Box>
