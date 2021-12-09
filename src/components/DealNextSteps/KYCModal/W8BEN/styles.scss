@@ -50,9 +50,28 @@
       }
     }
 
+    .tax-treaty-form-field {
+      width: 100%;
+      margin-top: 5px;
+      .form-label {
+        display: flex;
+        flex-direction: column;
+
+        span {
+          opacity: 0.85;
+          font-size: 10px;
+        }
+      }
+    }
+
     .container {
       display: flex;
       justify-content: space-between;
+    }
+
+    .tax-id-container {
+      width: 95%;
+      margin-top: 5px;
     }
 
     .residence-container {
@@ -94,7 +113,7 @@
 
     .tin-container {
       padding: 0;
-      width: 95%;
+      width: 100%;
       display: flex;
       justify-content: space-between;
       .tin {
@@ -119,7 +138,20 @@
         }
       }
     }
+    .tax-treaty-container {
+      display: flex;
+      flex-direction: column;
+      width: 95%;
+      justify-content: center;
 
+      .country-of-residence {
+        width: 45%;
+      }
+
+      .article-of-treaty {
+        width: 75%;
+      }
+    }
     .form-button {
       width: 95%;
       height: 3rem;
