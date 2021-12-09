@@ -68,19 +68,17 @@ function DealHeader({ deal }) {
           </Grid>
           <Grid item>
             <h4 className={classes.investmentProgress}>Investment Progress</h4>
-            <container>
-              <h6 className={classes.investmentNumber}>$320,000</h6>
-              <LinearProgress
-                variant="determinate"
-                value={70}
-                className={classes.BorderLinearProgress}
-              />
-              <div className={classes.minorText}>
-                <span className={classes.floatRight}>
-                  Total Raise Amount:<span>$600,000</span>
-                </span>
-              </div>
-            </container>
+            <h6 className={classes.investmentNumber}>$320,000</h6>
+            <LinearProgress
+              variant="determinate"
+              value={70}
+              className={classes.BorderLinearProgress}
+            />
+            <div className={classes.minorText}>
+              <span className={classes.floatRight}>
+                Total Raise Amount:<span>$600,000</span>
+              </span>
+            </div>
 
             <Button className={classes.investButton}>Invest</Button>
             <Grid container style={{ marginTop: '15px' }}>
