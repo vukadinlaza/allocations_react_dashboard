@@ -142,7 +142,6 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
       step.processStreetTask.includes(task.taskName.toLowerCase()),
     );
     if (!currentTask) {
-      // console.log(`Task "${step.processStreetTask}" not matching`)
       return false;
     }
 
@@ -214,15 +213,14 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
           setDealTasks(dealTasksCopy);
         }
         // get step index and section of step inside current setupSteps
-        for (const section in setupSteps) {
+        Object.values(setupSteps).forEach((section) => {
           stepIndex = setupSteps[section].findIndex((step) =>
             step.processStreetTask.includes(dealOnboarding.taskName.toLowerCase()),
           );
           if (stepIndex >= 0) {
             stepSection = section;
-            break;
           }
-        }
+        });
         // set new setupSteps with updated task data
         if (stepIndex >= 0) {
           const setupStepsCopy = { ...setupSteps };
