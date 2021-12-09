@@ -3,6 +3,7 @@ import { List, ListItem, ListItemIcon, ListItemText, Typography, Button } from '
 import { withStyles } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HomeIcon from '@material-ui/icons/Home';
+import { withLDProvider, useFlags } from 'launchdarkly-react-client-sdk';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { Link } from 'react-router-dom';
@@ -11,9 +12,9 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { FaRocket } from 'react-icons/fa';
 import { BsBinocularsFill } from 'react-icons/bs';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import styles from './styles';
 import NewBuildModal from '../NewBuild/NewBuildModal';
+import { useAuth } from '../../auth/useAuth';
 
 const AddBubbleBuildButton = ({ classes }) => (
   <Button
@@ -47,9 +48,19 @@ const AddInAppBuildButton = ({ classes, setOpenModal, setNewBuildModalPage }) =>
 
 const AddBuildButton = (props) => {
   const { useInAppBuild } = useFlags();
-
   if (useInAppBuild) return <AddInAppBuildButton {...props} />;
   return <AddBubbleBuildButton {...props} />;
+};
+
+const AddBuildWithLD = (props) => {
+  const { isAuthenticated, loading, userProfile } = useAuth();
+  const launchDarklyUser = { key: userProfile?._id, email: userProfile?.email };
+
+  const FlagComponent = withLDProvider({
+    clientSideID: process.env.REACT_APP_LAUNCH_DARKLY_ID,
+    user: isAuthenticated && !loading ? launchDarklyUser : undefined,
+  })(AddBuildButton);
+  return <FlagComponent {...props} />;
 };
 
 const SidebarDrawer = ({
@@ -135,13 +146,11 @@ const SidebarDrawer = ({
         setPage={setNewBuildModalPage}
         refetchUserProfile={refetchUserProfile}
       />
-
-      <AddBuildButton
+      <AddBuildWithLD
         classes={classes}
         setOpenModal={setOpenModal}
         setNewBuildModalPage={setNewBuildModalPage}
       />
-
       <List>
         {menuSections.map(({ sectionTitle, menu }) => (
           <>
