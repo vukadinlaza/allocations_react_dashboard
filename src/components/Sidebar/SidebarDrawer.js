@@ -162,12 +162,6 @@ const SidebarDrawer = ({
         setOpenModal={setOpenModal}
         setNewBuildModalPage={setNewBuildModalPage}
       />
-      {/* <AddBuildButton
-        classes={classes}
-        setOpenModal={setOpenModal}
-        setNewBuildModalPage={setNewBuildModalPage}
-      /> */}
-
       <List>
         {menuSections.map(({ sectionTitle, menu }) => (
           <>
