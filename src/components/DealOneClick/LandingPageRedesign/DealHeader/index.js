@@ -72,7 +72,7 @@ function DealHeader({ deal }) {
               <h6 className={classes.investmentNumber}>$320,000</h6>
               <LinearProgress
                 variant="determinate"
-                value="60"
+                value={70}
                 className={classes.BorderLinearProgress}
               />
               <div className={classes.minorText}>
