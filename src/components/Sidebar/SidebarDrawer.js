@@ -47,12 +47,12 @@ const AddInAppBuildButton = ({ classes, setOpenModal, setNewBuildModalPage }) =>
 };
 
 const AddBuildButton = (props) => {
-  const { inAppBuild } = useFlags();
-  if (inAppBuild) return <AddInAppBuildButton {...props} />;
+  const { useInAppBuild } = useFlags();
+  if (useInAppBuild) return <AddInAppBuildButton {...props} />;
   return <AddBubbleBuildButton {...props} />;
 };
 
-const ButtonWithDL = (props) => {
+const AddBuildWithLD = (props) => {
   const { isAuthenticated, loading, userProfile } = useAuth();
   const launchDarklyUser = { key: userProfile?._id, email: userProfile?.email };
 
@@ -157,7 +157,7 @@ const SidebarDrawer = ({
         setPage={setNewBuildModalPage}
         refetchUserProfile={refetchUserProfile}
       />
-      <ButtonWithDL
+      <AddBuildWithLD
         classes={classes}
         setOpenModal={setOpenModal}
         setNewBuildModalPage={setNewBuildModalPage}
