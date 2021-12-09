@@ -89,14 +89,14 @@ const exemptDealSlugs = [
   'type-one-fund-I',
 ];
 
-function DealLandingPageRedesign() {
+function DealLandingPageRedesign({ orgSlug, dealSlug }) {
   const { deal_slug, organization } = useParams();
   const history = useHistory();
   const { pathname } = useLocation();
   const { data, error } = useQuery(GET_DEAL, {
     variables: {
-      deal_slug,
-      fund_slug: organization || 'allocations',
+      deal_slug: deal_slug || dealSlug,
+      fund_slug: organization || orgSlug || 'allocations',
     },
   });
   useEffect(() => {
