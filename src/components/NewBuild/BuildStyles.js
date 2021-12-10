@@ -247,6 +247,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#ffffff',
     borderRadius: '8px !important',
     textTransform: 'capitalize',
+    '& .MuiButtonGroup-groupedOutlinedHorizontal:not(:last-child) ': {
+      border: 'none !important',
+    },
+    '& .MuiButton-outlinePrimary': {
+      border: 'none !important',
+    },
     [theme.breakpoints.down(phone)]: {
       fontSize: '.7em',
     },
@@ -357,6 +363,7 @@ const useStyles = makeStyles((theme) => ({
   },
   selectInputBox: {
     width: '90%',
+    // maxWidth: '460px',
     '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
       borderRadius: '8px !important',
     },
