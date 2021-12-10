@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Paper, Tabs, Tab, Box } from '@material-ui/core';
 import Detail from './Detail';
+import PitchDeck from './DealMemo';
+import DealMemo from './PitchDeck';
 import useStyles from '../DealStyles';
 
 const data = [
@@ -35,6 +37,8 @@ export default function DealDetails({ deal }) {
               {index !== data.length - 1 && <hr />}
             </>
           ))}
+        {tab === 1 && data.map(() => <PitchDeck />)}
+        {tab === 2 && data.map(() => <DealMemo />)}
       </Box>
     </Paper>
   );

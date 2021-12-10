@@ -10,6 +10,7 @@ import CoinvestorsPanel from './CoinvestorsPanel';
 import DealDetails from './DealDetails';
 import Loader from '../../utils/Loader';
 import Disclaimer from './Disclaimer';
+import useStyles from './DealStyles';
 
 export const GET_DEAL = gql`
   query PublicDeal($deal_slug: String!, $fund_slug: String!) {
@@ -99,6 +100,9 @@ function DealLandingPageRedesign({ orgSlug, dealSlug }) {
       fund_slug: organization || orgSlug || 'allocations',
     },
   });
+
+  const classes = useStyles();
+
   useEffect(() => {
     if (data?.publicDeal) {
       const { publicDeal: deal } = data;
@@ -125,8 +129,8 @@ function DealLandingPageRedesign({ orgSlug, dealSlug }) {
   }
 
   return (
-    <section className="LandingPage">
-      <div className="flex-container">
+    <section className={classes.LandingPage}>
+      <div className={classes.flexContainer}>
         <DealHeaderRedesign deal={deal} />
         <InvestingDetails deal={deal} />
         <DealSummary deal={deal} />

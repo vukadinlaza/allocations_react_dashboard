@@ -10,11 +10,8 @@ const styles = (theme) => ({
     width: '100%',
     height: '100px',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
-    // boxShadow: '0px 3px 6px #00000029',
-    // border: '1px solid #8493A640',
     borderRadius: '10px',
     backgroundColor: '',
-    // margin: '20px',
     [theme.breakpoints.down(phone)]: {
       minWidth: '0 !important',
       maxWidth: 'none !important',
@@ -22,18 +19,16 @@ const styles = (theme) => ({
   },
   boxContent: {
     padding: '5px',
+    fontWeight: 'bolder',
   },
   boxTitle: {
     fontSize: '14px',
   },
   boxTitleContainer: {
-    width: '100%',
-    // height: '71px',
-    // background: '#FFFFFF 0% 0% no-repeat padding-box',
+    width: '220px',
     borderRadius: '10px 10px 0px 0px',
     display: 'flex',
     alignItems: 'center',
-    // padding: '10px',
   },
   boxTitleText: {
     display: 'flex',
@@ -57,10 +52,10 @@ const styles = (theme) => ({
     justifyContent: 'center',
   },
   infoIcon: {
-    marginLeft: '0.5em',
+    marginLeft: '0.2em',
     cursor: 'pointer',
     color: '#758398',
-    fontSize: '20px',
+    fontSize: '16px',
   },
   modal: {
     padding: '20px',

@@ -31,8 +31,8 @@ function InvestingDetails({ deal }) {
           <h5>Investing Details</h5>
         </Box>
         <Box className={classes.boxInvestingDetails}>
-          <Grid container style={{ backgroundColor: '' }}>
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+          <Grid container>
+            <Grid item xs={3}>
               <InvestingDetailsSimpleBox
                 title="Offering Type"
                 openTooltip={openTooltip}
@@ -49,12 +49,12 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+            <Grid item xs={3}>
               <InvestingDetailsSimpleBox
                 title="Fee Frequency"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
-                id="offering"
+                id="frequency"
                 tooltipContent={
                   <Typography color="inherit">
                     This is the total capital received into the private fund’s bank account
@@ -66,12 +66,12 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+            <Grid item xs={3}>
               <InvestingDetailsSimpleBox
                 title="Deal Stage"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
-                id="offering"
+                id="stage"
                 tooltipContent={
                   <Typography color="inherit">
                     This is the total capital received into the private fund’s bank account
@@ -83,12 +83,12 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+            <Grid item xs={3}>
               <InvestingDetailsSimpleBox
                 title="Portfolio Company Securities"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
-                id="offering"
+                id="portfolio"
                 tooltipContent={
                   <Typography color="inherit">
                     This is the total capital received into the private fund’s bank account
@@ -100,13 +100,13 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
           </Grid>
-          <Grid container style={{ backgroundColor: '' }}>
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+          <Grid container>
+            <Grid item xs={3}>
               <InvestingDetailsSimpleBox
                 title="Management Fee"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
-                id="offering"
+                id="management"
                 tooltipContent={
                   <Typography color="inherit">
                     This is the total capital received into the private fund’s bank account
@@ -118,12 +118,12 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+            <Grid item xs={3}>
               <InvestingDetailsSimpleBox
                 title="Carry Fee"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
-                id="offering"
+                id="carry"
                 tooltipContent={
                   <Typography color="inherit">
                     This is the total capital received into the private fund’s bank account
@@ -135,12 +135,12 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+            <Grid item xs={3}>
               <InvestingDetailsSimpleBox
                 title="Sector"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
-                id="offering"
+                id="sector"
                 tooltipContent={
                   <Typography color="inherit">
                     This is the total capital received into the private fund’s bank account

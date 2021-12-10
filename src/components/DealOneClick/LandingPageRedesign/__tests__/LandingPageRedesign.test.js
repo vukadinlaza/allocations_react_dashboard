@@ -1,7 +1,7 @@
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
 import MockAllocationsProvider from '../../../utils/test/test-utils';
-import LandingPage, { GET_DEAL } from '../../LandingPage/LandingPage';
+import LandingPageRedesign, { GET_DEAL } from '../LandingPageRedesign';
 import DealHeader from '../DealHeader';
 
 jest.mock('react-router-dom', () => ({
@@ -18,8 +18,8 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
-describe('LandingPage', () => {
-  it('should render LandingPage Component', async () => {
+describe('LandingPageRedesign', () => {
+  it('should render LandingPageRedesign Component', async () => {
     const mocks = [
       {
         request: {
@@ -41,7 +41,7 @@ describe('LandingPage', () => {
 
     const container = TestRenderer.create(
       <MockAllocationsProvider path="/deals/305-ventures/305-ventures" mocks={mocks}>
-        <LandingPage />
+        <LandingPageRedesign />
       </MockAllocationsProvider>,
     );
 
@@ -49,7 +49,7 @@ describe('LandingPage', () => {
     const testInstance = container.root;
 
     expect(containerTree.props.path).toMatch('/deals/305-ventures/305-ventures');
-    expect(testInstance.findByType(LandingPage)).toBeTruthy();
+    expect(testInstance.findByType(LandingPageRedesign)).toBeTruthy();
   });
 
   describe('DealHeader', () => {
@@ -71,8 +71,6 @@ describe('LandingPage', () => {
       const testInstance = container.root;
 
       expect(testInstance.findByType(DealHeader)).toBeTruthy();
-
-      expect(testInstance.findByType(DealHeader));
     });
   });
 });
