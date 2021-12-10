@@ -20,6 +20,7 @@ function DealHeader({ deal }) {
     slug,
     dealParams: { wireDeadline, signDeadline },
   } = deal;
+
   const classes = useStyles();
 
   const key = dealCoverImageKey?.includes('https')
@@ -38,23 +39,21 @@ function DealHeader({ deal }) {
   };
 
   const getDeadline = (date) => {
-    return moment(date).format('dddd, MMMM D, YYYY h:mm a [EST]');
+    return moment(date).format('MM/DD/YYYY');
   };
 
   return (
     <>
-      <div className={classes.dealHeaderPaper}>placeholder</div>
-
       <Paper className={classes.dealHeader}>
         <Box className={classes.box}>
           <Box display="flex">
             <Avatar className={classes.avatar} />
-            <h3>{company_name}</h3>
+            <h3 className={classes.companyName}>{company_name}</h3>
           </Box>
         </Box>
 
         <Grid container className={classes.middleGridContainer}>
-          <Grid item xs={6}>
+          <Grid item>
             <CardMedia
               className={classes.cardMedia}
               component="img"
@@ -65,25 +64,23 @@ function DealHeader({ deal }) {
               }
             />
           </Grid>
-          <Grid item xs={6}>
-            <h4>Investment Progress</h4>
-            <container>
-              <h6 className={classes.investmentNumber}>$320,000</h6>
-              <LinearProgress
-                variant="determinate"
-                value="10"
-                className={classes.BorderLinearProgress}
-              />
-              <div className={classes.minorText}>
-                <span className={classes.floatRight}>
-                  Maximum Allocation:<span>$600,000</span>
-                </span>
-              </div>
-            </container>
+          <Grid item>
+            <h4 className={classes.investmentProgress}>Investment Progress</h4>
+            <h6 className={classes.investmentNumber}>$320,000</h6>
+            <LinearProgress
+              variant="determinate"
+              value={70}
+              className={classes.BorderLinearProgress}
+            />
+            <div className={classes.minorText}>
+              <span className={classes.floatRight}>
+                Total Raise Amount:<span>$600,000</span>
+              </span>
+            </div>
 
-            <Button className={classes.investButton}>INVEST</Button>
-            <Grid container style={{ background: '', marginTop: '15px' }}>
-              <Grid item xs={6} style={{ background: '' }}>
+            <Button className={classes.investButton}>Invest</Button>
+            <Grid container style={{ marginTop: '15px' }}>
+              <Grid item>
                 Invest With:{' '}
                 <div style={{ display: 'flex' }}>
                   <div className={classes.coinvestorTagBubble}>
@@ -94,12 +91,11 @@ function DealHeader({ deal }) {
                   </div>
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item>
                 <div
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    background: '',
                     marginLeft: '20px',
                   }}
                 >
@@ -111,6 +107,7 @@ function DealHeader({ deal }) {
 
             <div className={classes.modalContainer}>
               <SimpleBox
+                className={classes.modalParent}
                 title="Signing Deadline"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
@@ -122,7 +119,7 @@ function DealHeader({ deal }) {
                   </Typography>
                 }
               >
-                <Typography style={{ fontSize: '14px' }}>
+                <Typography style={{ fontSize: '14px', fontWeight: 'bold' }}>
                   {' '}
                   {signDeadline
                     ? getDeadline(signDeadline)
@@ -132,6 +129,7 @@ function DealHeader({ deal }) {
                 </Typography>
               </SimpleBox>
               <SimpleBox
+                className={classes.modalParent}
                 title="Wiring Deadline"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
@@ -143,7 +141,7 @@ function DealHeader({ deal }) {
                   </Typography>
                 }
               >
-                <Typography style={{ fontSize: '14px' }}>
+                <Typography style={{ fontSize: '14px', fontWeight: 'bold' }}>
                   {wireDeadline
                     ? getDeadline(wireDeadline)
                     : signDeadline
