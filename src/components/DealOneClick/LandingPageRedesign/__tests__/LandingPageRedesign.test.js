@@ -59,7 +59,7 @@ describe('LandingPageRedesign', () => {
         company_description: 'Test Descriptions',
         slug: '305',
         dealCoverImageKey: 'test-image-allocations',
-        dealParams: { wireDeadline: '', signDeadline: '' },
+        dealParams: { wireDeadline: '2021-07-09T17:00', signDeadline: '2021-07-09T17:00' },
       };
 
       const container = TestRenderer.create(

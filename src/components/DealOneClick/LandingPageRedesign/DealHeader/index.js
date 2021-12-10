@@ -44,7 +44,6 @@ function DealHeader({ deal }) {
 
   return (
     <>
-
       <Paper className={classes.dealHeader}>
         <Box className={classes.box}>
           <Box display="flex">
