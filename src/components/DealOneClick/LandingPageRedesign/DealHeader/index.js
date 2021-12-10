@@ -43,8 +43,6 @@ function DealHeader({ deal }) {
 
   return (
     <>
-      <div className={classes.dealHeaderPaper}>placeholder</div>
-
       <Paper className={classes.dealHeader}>
         <Box className={classes.box}>
           <Box display="flex">
