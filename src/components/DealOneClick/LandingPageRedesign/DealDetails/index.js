@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Paper, Tabs, Tab, Box } from '@material-ui/core';
 import Detail from './Detail';
+import DealMemo from './DealMemo';
+// import DealMemo1 from './DealMemo1';
 import useStyles from '../DealStyles';
+import pdf from './revolve.pdf';
 
 const data = [
   { title: 'Introduction', description: 'You currently do not have any content for this section' },
@@ -12,7 +15,7 @@ const data = [
   { title: 'Deal Terms', description: 'You currently do not have any content for this section' },
 ];
 
-export default function DealDetails({ deal }) {
+export default function DealDetails() {
   const classes = useStyles();
   const [tab, setTab] = useState(0);
 
@@ -35,6 +38,8 @@ export default function DealDetails({ deal }) {
               {index !== data.length - 1 && <hr />}
             </>
           ))}
+        {/* {tab === 1 && <DealMemo1 pdf={pdf} />} */}
+        {tab === 1 && <DealMemo pdf={pdf} />}
       </Box>
     </Paper>
   );
