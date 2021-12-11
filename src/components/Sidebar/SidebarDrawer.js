@@ -48,6 +48,7 @@ const AddInAppBuildButton = ({ classes, setOpenModal, setNewBuildModalPage }) =>
 
 const AddBuildButton = (props) => {
   const { useInAppBuild } = useFlags();
+  console.log(useInAppBuild, 'IN APOP BUILD');
   if (useInAppBuild) return <AddInAppBuildButton {...props} />;
   return <AddBubbleBuildButton {...props} />;
 };

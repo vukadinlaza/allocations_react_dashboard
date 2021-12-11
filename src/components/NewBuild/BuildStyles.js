@@ -154,6 +154,9 @@ const useStyles = makeStyles((theme) => ({
   outerSection: {
     padding: '18px 60px',
     marginLeft: '12px',
+    [theme.breakpoints.down(phone)]: {
+      padding: '0px',
+    },
   },
   paper: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
@@ -292,7 +295,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   typeItemDiv: {
-    width: 'inherit',
+    width: '100%',
     marginBottom: '15px',
     display: 'flex',
     justifyContent: 'space-between',
