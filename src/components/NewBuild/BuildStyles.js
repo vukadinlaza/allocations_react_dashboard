@@ -156,6 +156,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '12px',
     [theme.breakpoints.down(phone)]: {
       padding: '0px',
+      marginLeft: '0px',
     },
   },
   paper: {
