@@ -499,25 +499,55 @@ const BuildDetails = ({
   const [newBuildModalPage, setNewBuildModalPage] = useState('select_org');
 
   const closeModal = () => setOpenModal(false);
-
+  const closeModalAndReset = (page = 'select_org') => {
+    setNewBuildModalPage(page);
+    closeModal();
+  };
   return (
     <>
       <NewBuildModal
+        dealType={dealType}
         isOpen={openModal}
         closeModal={closeModal}
         page={newBuildModalPage}
         setPage={setNewBuildModalPage}
         // refetchUserProfile={refetchUserProfile}
         next={{
-          select_org: {
-            useSelectedOrg: () => {
+          select_org: ({ selectedOrg, setCurrentOrganization }) => {
+            if (selectedOrg === 'Create New Organization') {
+              setNewBuildModalPage('create_new_org');
+              return;
+            }
+            setCurrentOrganization(selectedOrg);
+            setPage((page) => page + 1);
+            closeModal();
+          },
+          create_new_org: ({ estimatedSPVQuantity, createOrganization }) => {
+            if (estimatedSPVQuantity >= 5) {
+              setNewBuildModalPage('high_volume_partnerships');
+            }
+            // IF LESS THAN 5 ESTIMATED SPVS CREATE NEW ORG HERE RIGHT AWAY THEN PUSH TO SERVICE AGREEMENT //
+            else {
+              createOrganization();
+              closeModalAndReset();
               setPage((page) => page + 1);
-              closeModal();
-            },
+            }
+          },
+          high_volume_partnerships: ({ createOrganization }) => {
+            createOrganization();
+            closeModalAndReset();
+            setPage((page) => page + 1);
           },
         }}
         prev={{
           select_org: closeModal,
+          create_new_org: () => setNewBuildModalPage('select_org'),
+          high_volume_partnerships: () => setNewBuildModalPage('create_new_org'),
+        }}
+        onClose={{
+          select_org: () => closeModalAndReset(),
+          create_new_org: () => closeModalAndReset(),
+          high_volume_partnerships: () => closeModalAndReset(),
         }}
       />
 

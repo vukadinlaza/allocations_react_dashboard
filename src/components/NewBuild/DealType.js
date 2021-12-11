@@ -476,7 +476,6 @@ export default function DealTypeSelector({
                             onClick={() => {
                               setDealType('spv');
                               next.spv();
-                              // setPage('select_org');
                             }}
                           >
                             Continue
@@ -521,7 +520,6 @@ export default function DealTypeSelector({
                             onClick={() => {
                               setDealType('fund');
                               next.fund();
-                              // setPage('select_org');
                             }}
                           >
                             Continue
