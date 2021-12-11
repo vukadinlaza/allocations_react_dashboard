@@ -244,6 +244,11 @@ const SelectOrganization = ({
   openTooltip,
   handleTooltip,
   setCurrentOrganization,
+  next = {
+    createNewOrg: () => setPage('create_new_org'),
+    useSelectedOrg: () => history.push(`/new-build/${dealType}`),
+  },
+  prev = () => setPage('deal_type_selector'),
 }) => {
   const { userProfile, loading: userLoading } = useAuth();
   const [organizations, setOrganizations] = useState(userProfile?.organizations_admin || []);
@@ -388,24 +393,19 @@ const SelectOrganization = ({
                           disabled={!selectedOrg}
                           onClick={() => {
                             if (selectedOrg === 'Create New Organization') {
-                              setPage('create_new_org');
+                              next.createNewOrg();
                               return;
                             }
                             setCurrentOrganization(selectedOrg);
                             closeModal();
-                            history.push(`/new-build/${dealType}`);
+                            next.useSelectedOrg();
                           }}
                         >
                           Continue
                         </Button>
                       </Grid>
                       <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Typography
-                          className={classes.previousButton}
-                          onClick={() => {
-                            setPage('deal_type_selector');
-                          }}
-                        >
+                        <Typography className={classes.previousButton} onClick={prev}>
                           Previous
                         </Typography>
                       </Grid>
@@ -436,6 +436,18 @@ const CreateNewOrganization = ({
   createOrganization,
   openTooltip,
   handleTooltip,
+  next = () => {
+    if (estimatedSPVQuantity >= 5) {
+      setPage('high_volume_partnerships');
+    }
+    // IF LESS THAN 5 ESTIMATED SPVS CREATE NEW ORG HERE RIGHT AWAY THEN PUSH TO BUILD PAGE //
+    else {
+      createOrganization();
+      history.push(`/new-build/${dealType}`);
+      closeModal();
+    }
+  },
+  prev = () => setPage('select_org'),
 }) => {
   const [failedValidationFields, setFailedValidationFields] = useState([]);
 
@@ -626,26 +638,24 @@ const CreateNewOrganization = ({
                             // validate fields, if not valid, do nothing
                             if (!validateFields()) return;
 
+                            next();
                             // IF 5 OR MORE SPVS SEND TO NEXT MODAL TO COLLECT MORE INFO //
-                            if (estimatedSPVQuantity >= 5) {
-                              setPage('high_volume_partnerships');
-                            }
-                            // IF LESS THAN 5 ESTIMATED SPVS CREATE NEW ORG HERE RIGHT AWAY THEN PUSH TO BUILD PAGE //
-                            else {
-                              createOrganization();
-                              history.push(`/new-build/${dealType}`);
-                              closeModal();
-                            }
+                            // if (estimatedSPVQuantity >= 5) {
+                            //   setPage('high_volume_partnerships');
+                            // }
+                            // // IF LESS THAN 5 ESTIMATED SPVS CREATE NEW ORG HERE RIGHT AWAY THEN PUSH TO BUILD PAGE //
+                            // else {
+                            //   createOrganization();
+                            //   history.push(`/new-build/${dealType}`);
+                            //   closeModal();
+                            // }
                           }}
                         >
                           Continue
                         </Button>
                       </Grid>
                       <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Typography
-                          className={classes.previousButton}
-                          onClick={() => setPage('select_org')}
-                        >
+                        <Typography className={classes.previousButton} onClick={prev}>
                           Previous
                         </Typography>
                       </Grid>
@@ -685,6 +695,12 @@ const HighVolumePartnerships = ({
   setMasterEntityName,
   openTooltip,
   handleTooltip,
+  next = () => {
+    createOrganization();
+    history.push(`/new-build/${dealType}`);
+    closeModal();
+  },
+  prev = () => setPage('create_new_org'),
 }) => {
   const StatesConstructor = states.UsaStates;
   const usStates = new StatesConstructor();
@@ -995,19 +1011,17 @@ const HighVolumePartnerships = ({
                           className={classes.continueButton}
                           onClick={() => {
                             if (!validateFields()) return;
-                            createOrganization();
-                            history.push(`/new-build/${dealType}`);
-                            closeModal();
+                            // createOrganization();
+                            // history.push(`/new-build/${dealType}`);
+                            // closeModal();
+                            next();
                           }}
                         >
                           Continue
                         </Button>
                       </Grid>
                       <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Typography
-                          className={classes.previousButton}
-                          onClick={() => setPage('create_new_org')}
-                        >
+                        <Typography className={classes.previousButton} onClick={prev}>
                           Previous
                         </Typography>
                       </Grid>
@@ -1109,6 +1123,14 @@ export default function NewBuildModal(props) {
     final_warning: NewBuildFinalWarning,
   };
 
+  const next = {
+    ...props.next,
+  };
+
+  const prev = {
+    ...props.prev,
+  };
+
   const propsObj = {
     dealType,
     newOrganizationName,
@@ -1142,5 +1164,5 @@ export default function NewBuildModal(props) {
 
   const Component = pageMap[props.page];
 
-  return <Component {...propsObj} />;
+  return <Component {...propsObj} next={next[props.page]} prev={prev[props.page]} />;
 }

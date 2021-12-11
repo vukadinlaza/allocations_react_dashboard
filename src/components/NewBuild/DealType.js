@@ -385,7 +385,16 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
   );
 };
 
-export default function DealTypeSelector({ closeModal, isOpen, setDealType, setPage }) {
+export default function DealTypeSelector({
+  closeModal,
+  isOpen,
+  setDealType,
+  setPage,
+  next = {
+    spv: () => setPage('select_org'),
+    fund: () => setPage('select_org'),
+  },
+}) {
   const classes = useStyles();
 
   return (
@@ -466,7 +475,8 @@ export default function DealTypeSelector({ closeModal, isOpen, setDealType, setP
                             }}
                             onClick={() => {
                               setDealType('spv');
-                              setPage('select_org');
+                              next.spv();
+                              // setPage('select_org');
                             }}
                           >
                             Continue
@@ -510,7 +520,8 @@ export default function DealTypeSelector({ closeModal, isOpen, setDealType, setP
                             }}
                             onClick={() => {
                               setDealType('fund');
-                              setPage('select_org');
+                              next.fund();
+                              // setPage('select_org');
                             }}
                           >
                             Continue

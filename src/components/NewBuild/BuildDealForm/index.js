@@ -28,6 +28,7 @@ import {
   AcceptedInvestorTypes,
   TargetRaiseGoal,
 } from './FormFields';
+import NewBuildModal from '../NewBuildModal';
 
 const CREATE_BUILD = gql`
   mutation createBuild($payload: Object) {
@@ -494,8 +495,32 @@ const BuildDetails = ({
     openTooltip,
   };
 
+  const [openModal, setOpenModal] = useState(false);
+  const [newBuildModalPage, setNewBuildModalPage] = useState('select_org');
+
+  const closeModal = () => setOpenModal(false);
+
   return (
     <>
+      <NewBuildModal
+        isOpen={openModal}
+        closeModal={closeModal}
+        page={newBuildModalPage}
+        setPage={setNewBuildModalPage}
+        // refetchUserProfile={refetchUserProfile}
+        next={{
+          select_org: {
+            useSelectedOrg: () => {
+              setPage((page) => page + 1);
+              closeModal();
+            },
+          },
+        }}
+        prev={{
+          select_org: closeModal,
+        }}
+      />
+
       <BasicInfo
         dealType={dealType}
         buildData={buildData}
@@ -691,7 +716,8 @@ const BuildDetails = ({
                     );
                     return;
                   }
-                  setPage(page + 1);
+                  // setPage(page + 1);
+                  setOpenModal(true);
                   handleSubmit();
                 }}
               >
