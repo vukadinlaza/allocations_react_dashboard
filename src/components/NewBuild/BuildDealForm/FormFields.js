@@ -1630,14 +1630,16 @@ export function InternationalCompanyStatus({
         />
       </FormControl>
       {buildData.international_company_status === 'true' && (
-        <FormControl required variant="outlined" className={classes.formContainers}>
-          <InternationalCountrySelector
-            handleChange={handleChange}
-            setUnfilledFields={setUnfilledFields}
-            unfilledFields={unfilledFields}
-            buildData={buildData}
-          />
-        </FormControl>
+        <Grid className={classes.inputGridItem} item xs={12}>
+          <FormControl required variant="outlined" className={classes.formContainers}>
+            <InternationalCountrySelector
+              handleChange={handleChange}
+              setUnfilledFields={setUnfilledFields}
+              unfilledFields={unfilledFields}
+              buildData={buildData}
+            />
+          </FormControl>
+        </Grid>
       )}
     </Grid>
   );
