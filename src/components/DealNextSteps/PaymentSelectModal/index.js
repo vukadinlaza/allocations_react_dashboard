@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@material-ui/core';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -98,6 +99,7 @@ const PaymentModal = ({
   setWireInstructionsOpen,
   setCryptoPaymentOpen,
 }) => {
+  const { cryptoPaymentInBuild } = useFlags();
   const classes = useStyles();
   const paymentOptions = [];
 
@@ -109,7 +111,7 @@ const PaymentModal = ({
   });
 
   // optional crypto option
-  if (dealData?.accept_crypto) {
+  if (dealData?.accept_crypto && cryptoPaymentInBuild) {
     paymentOptions.push({
       paymentMethod: 'Send Crypto',
       buttonText: 'Show Crypto Instructions',
