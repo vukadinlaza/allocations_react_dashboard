@@ -171,7 +171,7 @@ const FundManagerDashboard = ({ classes, history }) => {
     INVESTMENTS_TABLE = 'Sales Demo';
   }
 
-  const { fundManagerBankingTab, capitalCalls } = useFlags();
+  const { fundManagerBankingTab, capitalCalls, cryptoPaymentsInBuild } = useFlags();
 
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
@@ -206,7 +206,7 @@ const FundManagerDashboard = ({ classes, history }) => {
     }
   }
 
-  if (userProfile.admin) {
+  if (userProfile.admin && cryptoPaymentsInBuild) {
     const cryptoTabName = 'Crypto';
     // Only add crypto tab if user is admin
     if (!fundTabs.includes(cryptoTabName)) fundTabs.push(cryptoTabName);
