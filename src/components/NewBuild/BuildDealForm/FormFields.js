@@ -753,7 +753,9 @@ export function Sectors({
       <>
         <Select
           options={suggestions}
-          menuPosition="fixed"
+          menuPosition="absolute"
+          menuPlacement="top"
+          captureMenuScroll
           styles={customStyles}
           onChange={(options) => {
             const sector = options[0].value;

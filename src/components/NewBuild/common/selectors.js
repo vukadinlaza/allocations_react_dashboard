@@ -205,7 +205,8 @@ export function DealStagesSelector({ handleChange, setUnfilledFields, unfilledFi
   return (
     <Select
       id="deal_stage"
-      menuPosition="fixed"
+      menuPosition="absolute"
+      menuPlacement="top"
       label="Deal Stage"
       styles={customStyles}
       options={dealStages.map((stage) => ({ value: stage, label: stage, key: stage })) || ''}
