@@ -1691,15 +1691,17 @@ export function InternationalInvestorsStatus({
         />
       </FormControl>
       {buildData.international_investors_status === 'true' && (
-        <FormControl required variant="outlined" className={classes.formContainers}>
-          <InternationalInvestorsCountriesSelector
-            buildData={buildData}
-            unfilledFields={unfilledFields}
-            setUnfilledFields={setUnfilledFields}
-            countries={countries}
-            handleChange={handleChange}
-          />
-        </FormControl>
+        <Grid className={classes.inputGridItem} item xs={12}>
+          <FormControl required variant="outlined" className={classes.formContainers}>
+            <InternationalInvestorsCountriesSelector
+              buildData={buildData}
+              unfilledFields={unfilledFields}
+              setUnfilledFields={setUnfilledFields}
+              countries={countries}
+              handleChange={handleChange}
+            />
+          </FormControl>
+        </Grid>
       )}
     </Grid>
   );
