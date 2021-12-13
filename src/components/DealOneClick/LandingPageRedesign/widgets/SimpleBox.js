@@ -12,7 +12,6 @@ const styles = (theme) => ({
     border: '1px solid #8493A640',
     borderRadius: '10px',
     backgroundColor: '',
-    margin: '20px',
 
     [theme.breakpoints.down(phone)]: {
       minWidth: '0 !important',
@@ -21,19 +20,18 @@ const styles = (theme) => ({
   },
   boxContent: {
     padding: '10px',
-    width: '228px',
     fontSize: '14px',
   },
   boxTitle: {
     fontSize: '14px',
   },
   boxTitleContainer: {
-    width: '228px',
+    width: '158px',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     borderRadius: '10px 10px 0px 0px',
     display: 'flex',
     alignItems: 'center',
-    padding: '10px',
+    padding: '9px 19px 0px 9px',
     backgroundColor: '',
   },
   boxTitleText: {
@@ -61,7 +59,7 @@ const styles = (theme) => ({
     marginLeft: '0.5em',
     cursor: 'pointer',
     color: '#758398',
-    fontSize: '20px',
+    fontSize: '16px',
   },
   modal: {
     padding: '20px',

@@ -5,11 +5,7 @@ import { useLazyQuery, useQuery, gql } from '@apollo/client';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography, Button, Paper } from '@material-ui/core';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import EditIcon from '@material-ui/icons/Edit';
-import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-import Tooltip from '@material-ui/core/Tooltip';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
@@ -20,7 +16,6 @@ import Investments from './sections/Investments';
 import Investors from './sections/Investors';
 import InvestorsCapitalCalls from './sections/InvestorsCapitalCalls';
 import Overview from './sections/Overview';
-import { FlatBox } from './widgets';
 import { useViewport, useFetch } from '../../../utils/hooks';
 import { useAuth } from '../../../auth/useAuth';
 import AllocationsLoader from '../../utils/AllocationsLoader';
@@ -28,6 +23,7 @@ import DealsTabs from './sections/DealsTabs';
 import styles from './styles';
 import DocumentsTab from './sections/DocumentsTab';
 import DealTypeSelector from '../../NewBuild/DealType';
+import DealPage from './sections/DealPage';
 
 const GET_INVESTMENTS = gql`
   query GetDeal($fund_slug: String!, $deal_slug: String!) {
@@ -431,31 +427,14 @@ const FundManagerDashboard = ({ classes, history }) => {
 
       case 'Deal Page':
         return (
-          <div className={classes.section}>
-            <FlatBox title="SHARE">
-              <Typography>
-                dashboard.allocations.com
-                {orgSlug && dealData?.slug ? `/deals/${orgSlug}/${dealData.slug}` : ''}
-              </Typography>
-              <div className={classes.pageIcons}>
-                <div className={classes.pageIcon} onClick={goToEditDeal}>
-                  <Tooltip title="Edit">
-                    <EditIcon />
-                  </Tooltip>
-                </div>
-                <div className={classes.pageIcon} onClick={goToDeal}>
-                  <Tooltip title="Go">
-                    <ChevronRightIcon />
-                  </Tooltip>
-                </div>
-                <div className={classes.pageIcon} onClick={handleLinkCopy}>
-                  <Tooltip title="Copy">
-                    <FileCopyOutlinedIcon />
-                  </Tooltip>
-                </div>
-              </div>
-            </FlatBox>
-          </div>
+          <DealPage
+            classes={classes}
+            orgSlug={orgSlug}
+            dealData={dealData}
+            goToDeal={goToDeal}
+            goToEditDeal={goToEditDeal}
+            handleLinkCopy={handleLinkCopy}
+          />
         );
       case 'Banking':
         return (

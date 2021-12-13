@@ -10,6 +10,7 @@ import CoinvestorsPanel from './CoinvestorsPanel';
 import DealDetails from './DealDetails';
 import Loader from '../../utils/Loader';
 import Disclaimer from './Disclaimer';
+import useStyles from './DealStyles';
 
 export const GET_DEAL = gql`
   query PublicDeal($deal_slug: String!, $fund_slug: String!) {
@@ -89,16 +90,19 @@ const exemptDealSlugs = [
   'type-one-fund-I',
 ];
 
-function DealLandingPageRedesign() {
+function DealLandingPageRedesign({ orgSlug, dealSlug }) {
   const { deal_slug, organization } = useParams();
   const history = useHistory();
   const { pathname } = useLocation();
   const { data, error } = useQuery(GET_DEAL, {
     variables: {
-      deal_slug,
-      fund_slug: organization || 'allocations',
+      deal_slug: deal_slug || dealSlug,
+      fund_slug: organization || orgSlug || 'allocations',
     },
   });
+
+  const classes = useStyles();
+
   useEffect(() => {
     if (data?.publicDeal) {
       const { publicDeal: deal } = data;
@@ -125,8 +129,8 @@ function DealLandingPageRedesign() {
   }
 
   return (
-    <section className="LandingPage">
-      <div className="flex-container">
+    <section className={classes.LandingPage}>
+      <div className={classes.flexContainer}>
         <DealHeaderRedesign deal={deal} />
         <InvestingDetails deal={deal} />
         <DealSummary deal={deal} />

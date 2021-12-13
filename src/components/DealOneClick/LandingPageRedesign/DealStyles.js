@@ -5,112 +5,209 @@ export const DesktopLarge = '1440';
 export const DesktopSmall = '1366';
 
 const useStyles = makeStyles((theme) => ({
+  values: {
+    xs: 0,
+    sm: 600,
+    md: 900,
+    lg: 1200,
+    xl: 1536,
+  },
+
   avatar: {
     margin: '0 auto',
     marginRight: '15px',
   },
 
-  dealHeaderPaper: {
-    width: '1589px',
-    backgroundColor: 'white',
-    marginBottom: '16px',
+  LandingPage: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: 'max-content',
+    width: '1000px',
+
+    [theme.breakpoints.up('xs')]: {
+      '@media (max-device-width:780px)': {
+        width: '100%',
+        backgroundColor: '',
+      },
+    },
+  },
+
+  flexContainer: {
+    width: '100%',
+    height: 'max-content',
+    marginBottom: '20px',
+  },
+
+  placeholder: {
+    marginBottom: '150px',
+  },
+
+  paper: {
+    [theme.breakpoints.up('sm')]: {
+      width: '900px',
+      backgroundColor: 'white',
+      marginBottom: '16px',
+    },
+    [theme.breakpoints.up('md')]: {
+      width: '1209px',
+      backgroundColor: 'white',
+      marginBottom: '16px',
+    },
+    [theme.breakpoints.up('lg')]: {
+      width: '1409px',
+      backgroundColor: 'white',
+      marginBottom: '16px',
+    },
+    [theme.breakpoints.up('xl')]: {
+      width: '1589px',
+      backgroundColor: 'white',
+      marginBottom: '16px',
+    },
   },
 
   dealHeader: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     boxShadow: '0px 3px 6px #00000029',
-    border: '1px solid #7070703B',
-    marginBottom: '16px',
     borderRadius: '5px',
-    padding: '42px',
+    padding: '30px',
     width: '100%',
-    maxWidth: '1259px',
-    marginRight: '112px',
-    marginLeft: '123px',
+    maxWidth: '944px',
+    marginLeft: '3%',
+    marginTop: '16px',
     opacity: 1,
-    [theme.breakpoints.down(DesktopLarge)]: {
-      maxWidth: '944px',
-      marginRight: '120px',
-      marginLeft: '128px',
-      marginBottom: '24px',
-      padding: '16px',
-      paddingBottom: '30px',
+
+    [theme.breakpoints.up('xs')]: {
+      '@media (max-device-width:780px)': {
+        width: '100%',
+        backgroundColor: '',
+        margin: '0 auto',
+        marginTop: '16px',
+        maxWidth: '100%',
+      },
     },
-    [theme.breakpoints.down(DesktopSmall)]: {
-      maxWidth: '1366px',
-      marginBottom: '24px',
-      padding: '16px',
-      paddingBottom: '30px',
-    },
+    [theme.breakpoints.up('sm')]: {},
+    [theme.breakpoints.up('md')]: {},
+    [theme.breakpoints.up('lg')]: {},
+    [theme.breakpoints.up('xl')]: {},
+  },
+
+  companyName: {
+    marginTop: '5px',
+    fontFamily: 'Roboto',
   },
 
   boxContent: {
     backgroundColor: '',
     fontSize: '12px',
+    fontWeight: 'bold',
     width: '128px',
     marginLeft: '-2px',
     marginTop: '10px',
+    [theme.breakpoints.up('sm')]: {},
+    [theme.breakpoints.up('md')]: {},
+    [theme.breakpoints.up('lg')]: {},
+    [theme.breakpoints.up('xl')]: {},
+  },
+
+  modalParent: {
+    [theme.breakpoints.up('sm')]: {},
+    [theme.breakpoints.up('md')]: {},
+    [theme.breakpoints.up('lg')]: {},
+    [theme.breakpoints.up('xl')]: {
+      display: 'flex',
+      position: 'absolute',
+    },
   },
 
   box: {
     display: 'flex',
-    // justifyContent: 'space-between',
+    alignItems: 'center',
     margin: '0 auto',
     width: '90%',
     paddingBottom: '30px',
+    marginTop: '20px',
+    [theme.breakpoints.up('sm')]: {},
+    [theme.breakpoints.up('md')]: {},
+    [theme.breakpoints.up('lg')]: {},
+    [theme.breakpoints.up('xl')]: {},
   },
   boxInvestingDetails: {
     width: '90%',
     backgroundColor: '',
     margin: '0 auto',
+    [theme.breakpoints.up('sm')]: {},
+    [theme.breakpoints.up('md')]: {},
+    [theme.breakpoints.up('lg')]: {},
+    [theme.breakpoints.up('xl')]: {},
   },
 
   cardMedia: {
-    width: '491px',
-    height: '321px',
-    // '@media only screen and (min-width: 768px) and (max-width: 2300px)': {
-    //   backgroundSize: 'contain',
-    //   backgroundPosition: 'center',
-    //   backgroundRepeat: 'no-repeat',
-    //   display: 'block',
-    //   maxWidth: '80%',
-    //   maxHeight: '90%',
-    //   width: 'auto',
-    //   height: 'auto',
-    // },
-    // '@media (minDeviceWidth: 768px) and (maxDeviceWidth: 1023px)': {
-    //   width: '50%',
-    //   height: '50%',
-    // },
+    width: '368px',
+    height: '241px',
+    [theme.breakpoints.up('sm')]: {},
+    [theme.breakpoints.up('md')]: {},
+    [theme.breakpoints.up('lg')]: {},
+    [theme.breakpoints.up('xl')]: {},
   },
 
   BorderLinearProgress: {
     height: '12px',
     backgroundColor: '#E7E7E8',
+    borderRadius: '5px',
+    [theme.breakpoints.up('sm')]: {},
+    [theme.breakpoints.up('md')]: {},
+    [theme.breakpoints.up('lg')]: {},
+    [theme.breakpoints.up('xl')]: {},
   },
 
   usdButton: {
     marginLeft: '10px',
     backgroundColor: '#12824C',
     color: '#FFFFFF',
+    [theme.breakpoints.up('sm')]: {},
+    [theme.breakpoints.up('md')]: {},
+    [theme.breakpoints.up('lg')]: {},
+    [theme.breakpoints.up('xl')]: {},
   },
 
   middleGridContainer: {
-    // backgroundColor: '#8FBC8F',
     width: '90%',
     margin: '0 auto',
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: '20px',
+    [theme.breakpoints.up('sm')]: {},
+    [theme.breakpoints.up('md')]: {},
+    [theme.breakpoints.up('lg')]: {},
+    [theme.breakpoints.up('xl')]: {},
+  },
+
+  investmentProgress: {
+    fontSize: '25px',
+    [theme.breakpoints.up('sm')]: {},
+    [theme.breakpoints.up('md')]: {},
+    [theme.breakpoints.up('lg')]: {},
+    [theme.breakpoints.up('xl')]: {},
   },
 
   investmentNumber: {
     color: '#0561ff',
-    fontSize: '30px',
+    fontSize: '25px',
     marginTop: '5%',
+    [theme.breakpoints.up('sm')]: {},
+    [theme.breakpoints.up('md')]: {},
+    [theme.breakpoints.up('lg')]: {},
+    [theme.breakpoints.up('xl')]: {},
   },
 
   minorText: {
     float: 'right',
     backgroundColor: '',
     width: '100%',
+    [theme.breakpoints.up('sm')]: {},
+    [theme.breakpoints.up('md')]: {},
+    [theme.breakpoints.up('lg')]: {},
+    [theme.breakpoints.up('xl')]: {},
   },
 
   investButton: {
@@ -120,6 +217,10 @@ const useStyles = makeStyles((theme) => ({
     color: '#64748A',
     borderRadius: '6px',
     marginTop: '7%',
+    [theme.breakpoints.up('sm')]: {},
+    [theme.breakpoints.up('md')]: {},
+    [theme.breakpoints.up('lg')]: {},
+    [theme.breakpoints.up('xl')]: {},
   },
 
   floatRight: {
@@ -131,10 +232,15 @@ const useStyles = makeStyles((theme) => ({
   },
 
   modalContainer: {
-    backgroundColor: '',
     display: 'flex',
-    padding: '10px',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    marginTop: '20px',
+    backgroundColor: '',
+
+    [theme.breakpoints.up('sm')]: {},
+    [theme.breakpoints.up('md')]: {},
+    [theme.breakpoints.up('lg')]: {},
+    [theme.breakpoints.up('xl')]: {},
   },
 
   coinvestorTagBubble: {
@@ -142,9 +248,14 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'flex-start',
     padding: '8px 12px',
+    margin: '4px 6px 4px 0px',
     position: 'static',
     background: '#ECF3FF',
     borderRadius: '16px',
+    [theme.breakpoints.up('sm')]: {},
+    [theme.breakpoints.up('md')]: {},
+    [theme.breakpoints.up('lg')]: {},
+    [theme.breakpoints.up('xl')]: {},
   },
 
   coinvestorTagText: {
@@ -157,6 +268,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '12px',
     color: '#0558E7',
     margin: '0 auto',
+    [theme.breakpoints.up('sm')]: {},
+    [theme.breakpoints.up('md')]: {},
+    [theme.breakpoints.up('lg')]: {},
+    [theme.breakpoints.up('xl')]: {},
   },
 }));
 
