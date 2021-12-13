@@ -108,6 +108,7 @@ const Breadcrumbs = ({ titles, page }) => {
 
 const BuildDetails = ({
   userProfile,
+  auth,
   dealType,
   page,
   setPage,
@@ -398,12 +399,12 @@ const BuildDetails = ({
     }
   }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = ({ organization }) => {
     setBuildInfo({
       variables: {
         deal_id,
         payload: {
-          organization_id: organization._id,
+          organization_id: organization?._id,
           accept_crypto: buildData.accept_crypto === 'true',
           allocations_reporting_adviser: buildData.allocations_reporting_adviser,
           asset_type: buildData.asset_type,
@@ -511,7 +512,8 @@ const BuildDetails = ({
         closeModal={closeModal}
         page={newBuildModalPage}
         setPage={setNewBuildModalPage}
-        // refetchUserProfile={refetchUserProfile}
+        setBuildFormPage={setPage}
+        // refetchUserProfile={auth.refetchUserProfile}
         next={{
           select_org: ({ selectedOrg, setCurrentOrganization }) => {
             if (selectedOrg === 'Create New Organization') {
@@ -519,6 +521,7 @@ const BuildDetails = ({
               return;
             }
             setCurrentOrganization(selectedOrg);
+            handleSubmit({ organization: selectedOrg });
             setPage((page) => page + 1);
             closeModal();
           },
@@ -528,15 +531,19 @@ const BuildDetails = ({
             }
             // IF LESS THAN 5 ESTIMATED SPVS CREATE NEW ORG HERE RIGHT AWAY THEN PUSH TO SERVICE AGREEMENT //
             else {
-              createOrganization();
-              closeModalAndReset();
-              setPage((page) => page + 1);
+              createOrganization().then(({ data }) => {
+                handleSubmit({ organization: data?.createOrganization });
+                closeModalAndReset();
+                setPage((page) => page + 1);
+              });
             }
           },
           high_volume_partnerships: ({ createOrganization }) => {
-            createOrganization();
-            closeModalAndReset();
-            setPage((page) => page + 1);
+            createOrganization().then(({ data }) => {
+              handleSubmit({ organization: data?.createOrganization });
+              closeModalAndReset();
+              setPage((page) => page + 1);
+            });
           },
         }}
         prev={{
@@ -732,7 +739,7 @@ const BuildDetails = ({
               <Button
                 className={classes.continueButton}
                 disabled={waitingOnInitialDeal}
-                onClick={() => {
+                onClick={async () => {
                   const { isValidated, unvalidatedFields } = formValidation();
                   if (!isValidated) {
                     toast.error(
@@ -746,9 +753,7 @@ const BuildDetails = ({
                     );
                     return;
                   }
-                  // setPage(page + 1);
                   setOpenModal(true);
-                  handleSubmit();
                 }}
               >
                 Continue
@@ -762,7 +767,13 @@ const BuildDetails = ({
 };
 
 export default function NewDealForm() {
-  const { userProfile, loading: authLoading } = useAuth();
+  const {
+    isAuthenticated,
+    userProfile,
+    loading: authLoading,
+    loginWithRedirect,
+    refetch: refetchUserProfile,
+  } = useAuth();
   const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
   const [setBuildInfo, { data: updatedDeal, loading: updatedDealLoading }] = useMutation(
     SET_BUILD_INFO,
@@ -809,6 +820,7 @@ export default function NewDealForm() {
           dealType={dealType}
           organization={organization}
           userProfile={userProfile}
+          auth={{ isAuthenticated, login: loginWithRedirect, refetchUserProfile }}
           page={page}
           setPage={setPage}
           setBuildInfo={setBuildInfo}

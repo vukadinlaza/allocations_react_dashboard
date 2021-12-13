@@ -370,7 +370,7 @@ const SelectOrganization = ({
                           </MenuItem>
 
                           {organizations?.map((organization) => (
-                            <MenuItem key={organizations.name} value={organization}>
+                            <MenuItem key={organization?._id} value={organization}>
                               {_.truncate(organization.name, { length: 30 })}
                             </MenuItem>
                           ))}
@@ -1056,7 +1056,7 @@ export default function NewBuildModal(props) {
           addressLineTwo: isHVP ? addressLineTwo : 'Suite A',
           city: isHVP ? city : 'Dover',
           state: isHVP ? state : 'Delaware',
-          zipCode: isHVP ? zipCode : '19901',
+          zipCode: isHVP ? zipCode.toString() : '19901',
           country: isHVP ? country : 'United States',
         },
       },
@@ -1064,7 +1064,7 @@ export default function NewBuildModal(props) {
     onCompleted: ({ createOrganization }) => {
       if (createOrganization?.name) {
         setCurrentOrganization(createOrganization);
-        props.refetchUserProfile();
+        props.refetchUserProfile && props.refetchUserProfile();
         toast.success(
           `Success! New organization ${createOrganization?.name} successfully created!`,
         );

@@ -167,7 +167,7 @@ const SidebarDrawer = ({
             },
             fund: () => {
               history.push('/new-build/fund');
-              setOpenModal(false);
+              closeModal();
             },
           },
         }}
