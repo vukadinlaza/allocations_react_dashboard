@@ -1,51 +1,9 @@
-import React, { useState } from 'react';
-import { Document, Page, pdfjs } from 'react-pdf';
+import React from 'react';
+import PDFDisplay from '../widgets/PDFDisplay';
+// import pdf from './revolve.pdf';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-
-function DealMemo(props) {
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
-
-  const onDocumentLoadSuccess = ({ numPages }) => {
-    setNumPages(numPages);
-    setPageNumber(1);
-  };
-
-  const changePage = (offset) => {
-    setPageNumber((prevPageNumber) => prevPageNumber + offset);
-  };
-
-  const previousPage = () => {
-    changePage(-1);
-  };
-
-  const nextPage = () => {
-    changePage(1);
-  };
-
-  const { pdf } = props;
-  return (
-    <>
-      <Document
-        file={pdf}
-        options={{ workerSrc: './sample.pdf' }}
-        onLoadSuccess={onDocumentLoadSuccess}
-      >
-        <Page pageNumber={pageNumber} />
-      </Document>
-      <div>
-        <p>
-          Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
-        </p>
-        <button type="button" disabled={pageNumber <= 1} onClick={previousPage}>
-          Previous
-        </button>
-        <button type="button" disabled={pageNumber >= numPages} onClick={nextPage}>
-          Next
-        </button>
-      </div>
-    </>
-  );
+function DealMemo() {
+  const pdf = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
+  return <PDFDisplay pdf={pdf} />;
 }
 export default DealMemo;
