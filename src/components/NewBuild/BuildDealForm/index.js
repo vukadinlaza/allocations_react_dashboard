@@ -4,7 +4,7 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { Button, Paper, Grid, FormControl } from '@material-ui/core';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import BasicInfo from './FormComponents/TypeSelector/index';
 import UploadDocs from './FormComponents/UploadDocs/index';
@@ -196,7 +196,7 @@ const BuildDetails = ({
   };
 
   const sectionOneComplete =
-    sectionOne[dealType].every((field) => buildData[field]) && sectionOneCheck();
+    sectionOne[dealType]?.every((field) => buildData[field]) && sectionOneCheck();
 
   const sectionTwo = {
     spv: [
@@ -235,7 +235,7 @@ const BuildDetails = ({
   };
 
   const sectionTwoComplete =
-    sectionTwo[dealType].every((field) => buildData[field]) && sectionTwoCheck();
+    sectionTwo[dealType]?.every((field) => buildData[field]) && sectionTwoCheck();
 
   const sectionThree = [
     'allocations_reporting_adviser',
@@ -496,8 +496,11 @@ const BuildDetails = ({
     openTooltip,
   };
 
-  const [openModal, setOpenModal] = useState(false);
-  const [newBuildModalPage, setNewBuildModalPage] = useState('select_org');
+  const history = useHistory();
+  const [openModal, setOpenModal] = useState(!auth.isAuthenticated);
+  const [newBuildModalPage, setNewBuildModalPage] = useState(
+    auth.isAuthenticated ? 'select_org' : 'deal_type_selector',
+  );
 
   const closeModal = () => setOpenModal(false);
   const closeModalAndReset = (page = 'select_org') => {
@@ -515,6 +518,16 @@ const BuildDetails = ({
         setBuildFormPage={setPage}
         // refetchUserProfile={auth.refetchUserProfile}
         next={{
+          deal_type_selector: {
+            spv: () => {
+              history.push('/new-build/spv');
+              closeModal();
+            },
+            fund: () => {
+              history.push('/new-build/fund');
+              closeModal();
+            },
+          },
           select_org: ({ selectedOrg, setCurrentOrganization }) => {
             if (selectedOrg === 'Create New Organization') {
               setNewBuildModalPage('create_new_org');
@@ -552,6 +565,7 @@ const BuildDetails = ({
           high_volume_partnerships: () => setNewBuildModalPage('create_new_org'),
         }}
         onClose={{
+          deal_type_selector: () => dealType && closeModalAndReset(),
           select_org: () => closeModalAndReset(),
           create_new_org: () => closeModalAndReset(),
           high_volume_partnerships: () => closeModalAndReset(),
@@ -703,7 +717,7 @@ const BuildDetails = ({
           style={{ borderLeft: 'solid 3px #ECF3FF' }}
         >
           <form noValidate autoComplete="off">
-            <UploadDocs deal={initialDeal} {...formFieldProps} />
+            {dealType && <UploadDocs deal={initialDeal} {...formFieldProps} />}
           </form>
         </Grid>
       </Paper>
@@ -754,8 +768,12 @@ const BuildDetails = ({
                     return;
                   }
                   if (!auth.isAuthenticated) {
-                    auth.login().then(() => setOpenModal(true));
+                    auth.login().then(() => {
+                      setNewBuildModalPage('select_org');
+                      setOpenModal(true);
+                    });
                   } else {
+                    setNewBuildModalPage('select_org');
                     setOpenModal(true);
                   }
                 }}
@@ -818,7 +836,7 @@ export default function NewDealForm() {
 
   const pages = [
     {
-      title: `Build your ${titleMap[dealType]}`,
+      title: `Build your ${titleMap[dealType] || 'SPV'}`,
       Component: (
         <BuildDetails
           dealType={dealType}
@@ -851,8 +869,6 @@ export default function NewDealForm() {
       ),
     },
   ];
-
-  // if (authLoading) return null;
 
   return (
     <>
