@@ -30,6 +30,7 @@ export const GET_DEAL = gql`
       memo
       docSpringTemplateId
       dealCoverImageKey
+      target_raise_goal
       dealDetails {
         title
         content

@@ -10,6 +10,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import moment from 'moment';
+import { nWithCommas } from '../../../../utils/numbers';
 import useStyles from '../DealStyles';
 import { SimpleBox } from '../widgets/SimpleBox';
 
@@ -19,6 +20,7 @@ function DealHeader({ deal }) {
     dealCoverImageKey,
     slug,
     dealParams: { wireDeadline, signDeadline },
+    target_raise_goal,
   } = deal;
 
   const classes = useStyles();
@@ -74,7 +76,7 @@ function DealHeader({ deal }) {
             />
             <div className={classes.minorText}>
               <span className={classes.floatRight}>
-                Total Raise Amount:<span>$600,000</span>
+                Total Raise Amount: ${nWithCommas(target_raise_goal)}
               </span>
             </div>
 
