@@ -93,11 +93,20 @@ export default function InvestmentEdit({
 }) {
   const params = useParams();
   const [investment, setInvestment] = useState(null);
-  console.log('initial investment==>', investment);
   const [user, setUser] = useState();
   const [hasInvestmentChanges, setHasInvestmentChanges] = useState(false);
   const [hasUserChanges, setHasUserChanges] = useState(false);
   const id = investmentId || params.id;
+
+  /* determines if its unix time from old DB or new date structure from new DB */
+  const oldDatabaseWireDate = new Date(investment?.wired_at * 1);
+  const oldDatabaseWireDateTime = moment(oldDatabaseWireDate).format('yyy-MM-DD');
+
+  const newDatabaseWireDate = new Date(investment?.wired_at).toUTCString();
+  const newDatabaseWireDateTime = moment.utc(newDatabaseWireDate).format('yyyy-MM-DD');
+
+  const determineWireDate =
+    investment?.wired_at.length === 13 ? oldDatabaseWireDateTime : newDatabaseWireDateTime;
 
   const {
     data,
@@ -172,6 +181,8 @@ export default function InvestmentEdit({
         setHasUserChanges(!isEqual(data, prev));
         return data;
       });
+    } else if (prop === 'wired_at') {
+      setInvestment((prev) => ({ ...prev, wired_at: new Date(newVal) }));
     } else {
       setInvestment((prev) => ({ ...prev, [prop]: newVal }));
     }
@@ -292,7 +303,7 @@ export default function InvestmentEdit({
           <Grid item xs={6}>
             <FormControl variant="outlined" style={{ width: '100%' }} size="small">
               <TextField
-                value={investment?.wired_at || ''}
+                value={determineWireDate || ''}
                 onChange={(e) => updateInvestmentProp({ prop: 'wired_at', newVal: e.target.value })}
                 type="date"
                 label="Wired Date"
