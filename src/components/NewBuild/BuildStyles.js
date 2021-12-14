@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: '14px',
       marginTop: '20px',
       marginLeft: '0',
-      width: '100%',
+      width: '300px',
     },
   },
   finalInput: {
@@ -380,6 +380,10 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '20px',
     boxShadow: 'none !important',
     backgroundColor: '#F6F7F8',
+    [theme.breakpoints.down(phone)]: {
+      paddingLeft: '15px',
+      paddingRight: '15px',
+    },
   },
   agreementUnsignedBox: {
     display: 'flex',
@@ -393,12 +397,18 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: 'rgba(0, 0, 0, 0.04)',
     },
+    [theme.breakpoints.down(phone)]: {
+      paddingLeft: '10px',
+    },
   },
   buttonBox: {
     margin: 'auto',
     marginTop: '40px',
     alignSelf: 'center',
     textAlign: 'center',
+    [theme.breakpoints.down(phone)]: {
+      marginTop: '0px',
+    },
   },
   customFormItemName: {
     minHeight: '40px',
@@ -418,6 +428,10 @@ const useStyles = makeStyles((theme) => ({
     height: '60px',
     borderRadius: '50%',
     backgroundColor: '#ECF3FF',
+    [theme.breakpoints.down(phone)]: {
+      width: '45px',
+      height: '45px',
+    },
   },
   signContainer: {
     display: 'grid',
@@ -452,6 +466,10 @@ const useStyles = makeStyles((theme) => ({
     color: '#186EFF',
     opacity: '1',
     marginBottom: '41px',
+    [theme.breakpoints.down(phone)]: {
+      marginTop: '20px',
+      marginBottom: '20px',
+    },
   },
   // * Styles that are only used in the 'Upload Docs' tab.
   blueCheck: {

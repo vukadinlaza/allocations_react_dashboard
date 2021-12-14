@@ -36,9 +36,6 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '48px',
     padding: '12px',
     backgroundColor: '#ECF3FF',
-    [theme.breakpoints.down(phone)]: {
-      backgroundColor: '#FFFFFF',
-    },
   },
   warningIcon: {
     height: '72px',
