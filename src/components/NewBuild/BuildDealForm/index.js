@@ -753,7 +753,11 @@ const BuildDetails = ({
                     );
                     return;
                   }
-                  setOpenModal(true);
+                  if (!auth.isAuthenticated) {
+                    auth.login().then(() => setOpenModal(true));
+                  } else {
+                    setOpenModal(true);
+                  }
                 }}
               >
                 Continue
@@ -771,7 +775,7 @@ export default function NewDealForm() {
     isAuthenticated,
     userProfile,
     loading: authLoading,
-    loginWithRedirect,
+    loginWithPopup,
     refetch: refetchUserProfile,
   } = useAuth();
   const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
@@ -820,7 +824,7 @@ export default function NewDealForm() {
           dealType={dealType}
           organization={organization}
           userProfile={userProfile}
-          auth={{ isAuthenticated, login: loginWithRedirect, refetchUserProfile }}
+          auth={{ isAuthenticated, login: loginWithPopup, refetchUserProfile }}
           page={page}
           setPage={setPage}
           setBuildInfo={setBuildInfo}
@@ -848,7 +852,7 @@ export default function NewDealForm() {
     },
   ];
 
-  if (authLoading) return null;
+  // if (authLoading) return null;
 
   return (
     <>
