@@ -1419,41 +1419,45 @@ export function ReportingAdviser({
         />
       </FormControl>
       {buildData.allocations_reporting_adviser === 'false' && (
-        <FormControl
-          required
-          disabled
-          variant="outlined"
-          className={classes.formContainers}
-          style={{ marginTop: '40px' }}
-        >
-          <Grid className={classes.inputLabelWithTooltip} item xs={12}>
-            <Typography className={classes.formItemName}>Please enter your adviser name</Typography>
-            <ModalTooltip
-              title="Adviser Name"
-              handleTooltip={handleTooltip}
-              tooltipContent={
-                <Typography color="inherit">Please indicate your ERA/RIA name</Typography>
-              }
-              openTooltip={openTooltip}
-              id="reporting_adviser"
-            >
-              <HelpIcon
-                className={classes.helpIcon}
-                onClick={() => handleTooltip('reporting_adviser')}
-              />
-            </ModalTooltip>
-          </Grid>
-          <TextField
-            value={buildData.reporting_adviser}
-            placeholder="Adviser Name"
-            name="reporting_adviser"
-            onChange={handleChange}
-            className={classes.inputBox}
+        <Grid className={classes.inputGridItem} item xs={12}>
+          <FormControl
+            required
+            disabled
             variant="outlined"
-            inputProps={customInputStyles}
-            classes={{ root: classes.selectInputBox }}
-          />
-        </FormControl>
+            className={classes.formContainers}
+            style={{ marginTop: '40px' }}
+          >
+            <Grid className={classes.inputLabelWithTooltip} item xs={12}>
+              <Typography className={classes.formItemName}>
+                Please enter your adviser name
+              </Typography>
+              <ModalTooltip
+                title="Adviser Name"
+                handleTooltip={handleTooltip}
+                tooltipContent={
+                  <Typography color="inherit">Please indicate your ERA/RIA name</Typography>
+                }
+                openTooltip={openTooltip}
+                id="reporting_adviser"
+              >
+                <HelpIcon
+                  className={classes.helpIcon}
+                  onClick={() => handleTooltip('reporting_adviser')}
+                />
+              </ModalTooltip>
+            </Grid>
+            <TextField
+              value={buildData.reporting_adviser}
+              placeholder="Adviser Name"
+              name="reporting_adviser"
+              onChange={handleChange}
+              className={classes.inputBox}
+              variant="outlined"
+              inputProps={customInputStyles}
+              classes={{ root: classes.selectInputBox }}
+            />
+          </FormControl>
+        </Grid>
       )}
     </Grid>
   );
@@ -1628,14 +1632,16 @@ export function InternationalCompanyStatus({
         />
       </FormControl>
       {buildData.international_company_status === 'true' && (
-        <FormControl required variant="outlined" className={classes.formContainers}>
-          <InternationalCountrySelector
-            handleChange={handleChange}
-            setUnfilledFields={setUnfilledFields}
-            unfilledFields={unfilledFields}
-            buildData={buildData}
-          />
-        </FormControl>
+        <Grid className={classes.inputGridItem} item xs={12}>
+          <FormControl required variant="outlined" className={classes.formContainers}>
+            <InternationalCountrySelector
+              handleChange={handleChange}
+              setUnfilledFields={setUnfilledFields}
+              unfilledFields={unfilledFields}
+              buildData={buildData}
+            />
+          </FormControl>
+        </Grid>
       )}
     </Grid>
   );
@@ -1687,15 +1693,17 @@ export function InternationalInvestorsStatus({
         />
       </FormControl>
       {buildData.international_investors_status === 'true' && (
-        <FormControl required variant="outlined" className={classes.formContainers}>
-          <InternationalInvestorsCountriesSelector
-            buildData={buildData}
-            unfilledFields={unfilledFields}
-            setUnfilledFields={setUnfilledFields}
-            countries={countries}
-            handleChange={handleChange}
-          />
-        </FormControl>
+        <Grid className={classes.inputGridItem} item xs={12}>
+          <FormControl required variant="outlined" className={classes.formContainers}>
+            <InternationalInvestorsCountriesSelector
+              buildData={buildData}
+              unfilledFields={unfilledFields}
+              setUnfilledFields={setUnfilledFields}
+              countries={countries}
+              handleChange={handleChange}
+            />
+          </FormControl>
+        </Grid>
       )}
     </Grid>
   );

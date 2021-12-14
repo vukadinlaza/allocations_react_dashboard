@@ -11,6 +11,7 @@ import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
 import Banking from './sections/Banking';
+import Crypto from './sections/Crypto';
 import Investments from './sections/Investments';
 import Investors from './sections/Investors';
 import InvestorsCapitalCalls from './sections/InvestorsCapitalCalls';
@@ -166,7 +167,7 @@ const FundManagerDashboard = ({ classes, history }) => {
     INVESTMENTS_TABLE = 'Sales Demo';
   }
 
-  const { fundManagerBankingTab, capitalCalls } = useFlags();
+  const { fundManagerBankingTab, capitalCalls, cryptoPaymentInBuild } = useFlags();
 
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
@@ -199,6 +200,13 @@ const FundManagerDashboard = ({ classes, history }) => {
       if (!fundTabs.includes(bankingTabName)) fundTabs.push(bankingTabName);
       if (!spvTabs.includes(bankingTabName)) spvTabs.push(bankingTabName);
     }
+  }
+
+  if (userProfile.admin && cryptoPaymentInBuild) {
+    const cryptoTabName = 'Crypto';
+    // Only add crypto tab if user is admin
+    if (!fundTabs.includes(cryptoTabName)) fundTabs.push(cryptoTabName);
+    if (!spvTabs.includes(cryptoTabName)) spvTabs.push(cryptoTabName);
   }
 
   const { data: atDeal } = useFetch(
@@ -431,6 +439,17 @@ const FundManagerDashboard = ({ classes, history }) => {
       case 'Banking':
         return (
           <Banking
+            orgSlug={orgSlug}
+            classes={classes}
+            deal_id={dealData._id}
+            virtual_account_number={dealData.virtual_account_number || null}
+            openTooltip={openTooltip}
+            handleTooltip={handleTooltip}
+          />
+        );
+      case 'Crypto':
+        return (
+          <Crypto
             orgSlug={orgSlug}
             classes={classes}
             deal_id={dealData._id}
