@@ -2,15 +2,12 @@ import React, { useEffect } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { useParams, useHistory, useLocation, Redirect } from 'react-router-dom';
 import moment from 'moment';
-import { Box } from '@material-ui/core';
-import { HiOutlinePencil, HiOutlineEye } from 'react-icons/hi';
 import Deal from '../../Deal';
 import DealHeaderRedesign from './DealHeader';
 import InvestingDetails from './InvestingDetails';
 import DealSummary from './DealSummary';
 import CoinvestorsPanel from './CoinvestorsPanel';
 import DealDetails from './DealDetails';
-import DealButton from './DealButton';
 import Loader from '../../utils/Loader';
 import Disclaimer from './Disclaimer';
 import useStyles from './DealStyles';
@@ -93,7 +90,7 @@ const exemptDealSlugs = [
   'type-one-fund-I',
 ];
 
-function DealLandingPageRedesign({ orgSlug, dealSlug, goToEditDeal, goToDeal }) {
+function DealLandingPageRedesign({ orgSlug, dealSlug }) {
   const { deal_slug, organization } = useParams();
   const history = useHistory();
   const { pathname } = useLocation();

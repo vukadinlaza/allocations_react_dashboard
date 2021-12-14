@@ -31,12 +31,7 @@ export default function DealPage({
           />
           <DealButton onClick={goToDeal} icon={<HiOutlineEye color="#64748B" />} text="Preview" />
         </Box>
-        <DealLandingPageRedesign
-          orgSlug={orgSlug}
-          dealSlug={dealData.slug}
-          goToEditDeal={goToEditDeal}
-          goToDeal={goToDeal}
-        />
+        <DealLandingPageRedesign orgSlug={orgSlug} dealSlug={dealData.slug} />
       </>
     );
 
