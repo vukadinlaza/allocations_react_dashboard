@@ -27,12 +27,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   buildTabContainer: {
-    marginBottom: '16px',
-    paddingLeft: '42px',
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #00000029',
-    border: '1px solid #7070703B',
-    borderRadius: '15px',
+    backgroundColor: 'inherit',
+    boxShadow: 'none !important',
     width: '100%',
     maxWidth: '1352px',
     opacity: 1,
@@ -154,6 +150,11 @@ const useStyles = makeStyles((theme) => ({
   outerSection: {
     padding: '18px 60px',
     marginLeft: '12px',
+    display: 'flex',
+    flexWrap: 'wrap',
+    [theme.breakpoints.down(phone)]: {
+      padding: '14px',
+    },
   },
   paper: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
@@ -246,6 +247,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#ffffff',
     borderRadius: '8px !important',
     textTransform: 'capitalize',
+    '& .MuiButtonGroup-groupedOutlinedHorizontal:not(:last-child) ': {
+      border: 'none !important',
+    },
+    '& .MuiButton-outlinePrimary': {
+      border: 'none !important',
+    },
     [theme.breakpoints.down(phone)]: {
       fontSize: '.7em',
     },
@@ -356,6 +363,7 @@ const useStyles = makeStyles((theme) => ({
   },
   selectInputBox: {
     width: '90%',
+    // maxWidth: '460px',
     '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
       borderRadius: '8px !important',
     },
@@ -492,6 +500,7 @@ const useStyles = makeStyles((theme) => ({
   docUploadBox: {
     display: 'flex',
     justifyContent: 'flex-start',
+    flexWrap: 'wrap',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     marginBottom: '16px',
     paddingTop: '20px',
@@ -519,12 +528,9 @@ const useStyles = makeStyles((theme) => ({
   },
   uploadContainer: {
     display: 'flex',
-    justifyContent: 'space-between',
-    width: '1000px',
-    minWidth: '900px',
+    flexWrap: 'wrap',
     [theme.breakpoints.down(phone)]: {
       flexDirection: 'column',
-      height: '800px',
     },
   },
   uploadDocLoader: {
@@ -536,7 +542,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '10px',
     width: '280px',
     height: '236px',
-    marginBottom: '8px',
+    margin: '10px',
   },
   uploadDocItem: {
     display: 'flex',
@@ -549,7 +555,7 @@ const useStyles = makeStyles((theme) => ({
     opacity: 1,
     width: '280px',
     height: '236px',
-    marginBottom: '8px',
+    margin: '10px',
   },
   uploadedDocItem: {
     background: '#fff 0% 0% no-repeat padding-box',
@@ -573,7 +579,7 @@ const useStyles = makeStyles((theme) => ({
     opacity: 1,
     width: '280px',
     height: '236px',
-    marginBottom: '8px',
+    margin: '10px',
   },
   uploadIcon: {
     color: 'blue',
