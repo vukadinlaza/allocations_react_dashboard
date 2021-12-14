@@ -18,6 +18,15 @@ const DELETE_DEAL = gql`
 `;
 
 const useStyles = makeStyles((theme) => ({
+  iconContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    margin: '10px 10px 10px 5px',
+    [theme.breakpoints.down(phone)]: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  },
   icon: {
     height: '72px',
     width: '72px',
@@ -27,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '48px',
     padding: '12px',
     backgroundColor: '#ECF3FF',
+    [theme.breakpoints.down(phone)]: {
+      backgroundColor: '#FFFFFF',
+    },
   },
   warningIcon: {
     height: '72px',
@@ -42,6 +54,15 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
   },
+  modalPaperContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'space-between',
+    [theme.breakpoints.down(phone)]: {
+      flexDirection: 'column',
+    },
+  },
   modalPaperBody: {
     display: 'flex',
     flexDirection: 'column',
@@ -55,6 +76,11 @@ const useStyles = makeStyles((theme) => ({
     border: 'solid #E5E5E5 1px',
     '&:hover': {
       boxShadow: '0px 5px 10px 2px rgba(225, 225, 225, .8) !important',
+    },
+  },
+  modalPaperContent: {
+    [theme.breakpoints.down(phone)]: {
+      display: 'flex',
     },
   },
   modalPaperTitle: {
@@ -112,6 +138,9 @@ const useStyles = makeStyles((theme) => ({
     color: '#000',
     fontSize: '18px',
     fontWeight: '500',
+    [theme.breakpoints.down(phone)]: {
+      color: '#7688A0',
+    },
   },
 }));
 
@@ -422,37 +451,25 @@ export default function DealTypeSelector({ closeModal, isOpen, setDealType, setP
                   }}
                 >
                   <Grid container className={classes.typeGroup}>
-                    <Box
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'space-between',
-                      }}
-                    >
+                    <Box className={classes.modalPaperContainer}>
                       <Paper className={classes.modalPaperBody}>
-                        <Grid
-                          item
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            margin: '10px 10px 10px 5px',
-                          }}
-                        >
-                          <div className={classes.icon}>
-                            <img alt="spv-icon" src={spvIcon} />
-                          </div>
-                          <Typography className={classes.typeTitle}>SPV</Typography>
-                        </Grid>
-                        <Grid item className={classes.typeGrid}>
-                          <Typography className={classes.typeBadge}>
-                            From <span style={{ fontWeight: '700' }}>$8k</span>, paid by investors
-                          </Typography>
-                          <Typography className={classes.typeBody}>
-                            A Special Purpose Vehicle (SPV) is a structure used to raise money to
-                            invest in a single asset
-                          </Typography>
-                        </Grid>
+                        <Box className={classes.modalPaperContent}>
+                          <Grid item className={classes.iconContainer}>
+                            <div className={classes.icon}>
+                              <img alt="spv-icon" src={spvIcon} />
+                            </div>
+                            <Typography className={classes.typeTitle}>SPV</Typography>
+                          </Grid>
+                          <Grid item className={classes.typeGrid}>
+                            <Typography className={classes.typeBadge}>
+                              From <span style={{ fontWeight: '700' }}>$8k</span>, paid by investors
+                            </Typography>
+                            <Typography className={classes.typeBody}>
+                              A Special Purpose Vehicle (SPV) is a structure used to raise money to
+                              invest in a single asset
+                            </Typography>
+                          </Grid>
+                        </Box>
                         <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
                           <Button
                             variant="contained"
@@ -475,28 +492,24 @@ export default function DealTypeSelector({ closeModal, isOpen, setDealType, setP
                       </Paper>
 
                       <Paper className={classes.modalPaperBody}>
-                        <Grid
-                          item
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            margin: '10px 10px 10px 5px',
-                          }}
-                        >
-                          <div className={classes.icon}>
-                            <img alt="fund-icon" src={fundIcon} />
-                          </div>
-                          <Typography className={classes.typeTitle}>Fund</Typography>
-                        </Grid>
-                        <Grid item className={classes.typeGrid}>
-                          <Typography className={classes.typeBadge}>
-                            From <span style={{ fontWeight: '700' }}>$15k</span>, paid by investors
-                          </Typography>
-                          <Typography className={classes.typeBody}>
-                            A Fund is a structure used to raise money to invest in multiple assets
-                            over a period of time
-                          </Typography>
-                        </Grid>
+                        <Box className={classes.modalPaperContent}>
+                          <Grid item className={classes.iconContainer}>
+                            <div className={classes.icon}>
+                              <img alt="fund-icon" src={fundIcon} />
+                            </div>
+                            <Typography className={classes.typeTitle}>Fund</Typography>
+                          </Grid>
+                          <Grid item className={classes.typeGrid}>
+                            <Typography className={classes.typeBadge}>
+                              From <span style={{ fontWeight: '700' }}>$15k</span>, paid by
+                              investors
+                            </Typography>
+                            <Typography className={classes.typeBody}>
+                              A Fund is a structure used to raise money to invest in multiple assets
+                              over a period of time
+                            </Typography>
+                          </Grid>
+                        </Box>
                         <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
                           <Button
                             variant="contained"

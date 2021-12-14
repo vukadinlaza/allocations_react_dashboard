@@ -66,6 +66,9 @@ const useStyles = makeStyles((theme) => {
     modalContainer: {
       width: '568px',
       height: '328',
+      [theme.breakpoints.down(phone)]: {
+        width: '100%',
+      },
     },
     formControl: {
       width: '100%',
@@ -141,6 +144,9 @@ const useStyles = makeStyles((theme) => {
         borderColor: '#CBD5E1',
         height: '48px',
         top: '0px',
+      },
+      [theme.breakpoints.down(phone)]: {
+        width: '100%',
       },
     },
     createNewOrgMenuItem: {
