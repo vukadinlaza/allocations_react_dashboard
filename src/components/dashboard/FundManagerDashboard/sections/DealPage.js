@@ -2,7 +2,7 @@ import React from 'react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import EditIcon from '@material-ui/icons/Edit';
-import { Tooltip, Typography, Box } from '@material-ui/core';
+import { Tooltip, Typography, Box, Container } from '@material-ui/core';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import { HiOutlinePencil, HiOutlineEye } from 'react-icons/hi';
 import { FlatBox } from '../widgets';
@@ -22,15 +22,17 @@ export default function DealPage({
   if (dealPageRedesign)
     return (
       <>
-        <Box width="1000px" display="flex" justifyContent="flex-end">
-          <DealButton
-            onClick={goToEditDeal}
-            icon={<HiOutlinePencil color="#64748B" />}
-            text="Edit"
-            style={{ marginRight: '8px' }}
-          />
-          <DealButton onClick={goToDeal} icon={<HiOutlineEye color="#64748B" />} text="Preview" />
-        </Box>
+        <Container maxWidth="md">
+          <Box display="flex" justifyContent="flex-end">
+            <DealButton
+              onClick={goToEditDeal}
+              icon={<HiOutlinePencil color="#64748B" />}
+              text="Edit"
+              style={{ marginRight: '8px' }}
+            />
+            <DealButton onClick={goToDeal} icon={<HiOutlineEye color="#64748B" />} text="Preview" />
+          </Box>
+        </Container>
         <DealLandingPageRedesign orgSlug={orgSlug} dealSlug={dealData.slug} />
       </>
     );
