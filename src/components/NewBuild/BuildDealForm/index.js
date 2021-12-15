@@ -30,24 +30,6 @@ import {
 } from './FormFields';
 import NewBuildModal from '../NewBuildModal';
 
-// const CREATE_BUILD = gql`
-//   mutation createBuild($payload: Object) {
-//     deal: createBuild(payload: $payload) {
-//       _id
-//       type
-//       phases {
-//         _id
-//         name
-//         tasks {
-//           _id
-//           title
-//           type
-//         }
-//       }
-//     }
-//   }
-// `;
-
 const CREATE_NEW_DEAL = gql`
   mutation createNewDeal($payload: Object) {
     createNewDeal(payload: $payload) {
@@ -104,18 +86,7 @@ const Breadcrumbs = ({ titles, page }) => {
   );
 };
 
-const BuildDetails = ({
-  userProfile,
-  auth,
-  dealType,
-  page,
-  setPage,
-  createNewDeal,
-  deal_id,
-  // waitingOnInitialDeal,
-  // initialDeal,
-  organization,
-}) => {
+const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDeal }) => {
   const classes = useStyles();
   const { cryptoPaymentInBuild } = useFlags();
 
@@ -516,7 +487,6 @@ const BuildDetails = ({
     setNewBuildModalPage(page);
     setOpenModal(true);
   };
-  console.log('DEALTYPE', dealType);
 
   return (
     <>
@@ -558,7 +528,7 @@ const BuildDetails = ({
               createOrganization().then(({ data }) => {
                 handleSubmit({ organization: data?.createOrganization });
                 closeModalAndReset();
-                setPage((page) => page + 1);
+                // setPage((page) => page + 1);
               });
             }
           },
@@ -566,7 +536,7 @@ const BuildDetails = ({
             createOrganization().then(({ data }) => {
               handleSubmit({ organization: data?.createOrganization });
               closeModalAndReset();
-              setPage((page) => page + 1);
+              // setPage((page) => page + 1);
             });
           },
         }}
@@ -811,15 +781,21 @@ export default function NewDealForm() {
     refetch: refetchUserProfile,
   } = useAuth();
   // const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
-  const [createNewDeal, { data: updatedDeal, loading: updatedDealLoading }] = useMutation(
+  const [createNewDeal, { data: dealIdAndDocumentData, loading: createDealLoading }] = useMutation(
     CREATE_NEW_DEAL,
     {
+      onCompleted: ({ createNewDeal }) => {
+        console.log('DATA', createNewDeal);
+        if (createNewDeal?.deal) {
+          localStorage.setItem('buildDeal', JSON.stringify({ _id: createNewDeal?.deal?._id }));
+        }
+      },
       onError: (err) => {
         console.log('err', err);
       },
     },
   );
-  console.log('isAuthenticated', isAuthenticated);
+
   const organization = useCurrentOrganization();
 
   const { type: dealType } = useParams();
@@ -880,7 +856,7 @@ export default function NewDealForm() {
       //   }
       //   page={page}
       //   setPage={setPage}
-      //   updatedDeal={updatedDeal}
+      //   deal={deal}
       //   updatedDealLoading={updatedDealLoading}
       // />
       // ),
