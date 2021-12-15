@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
   },
   activeOuterSection: {
     borderLeft: 'solid #ECF3FF 3px',
+    [theme.breakpoints.down(phone)]: {
+      borderLeft: 'none',
+    },
   },
   assetItemText: {
     font: 'normal normal normal 18px/21px Roboto',
@@ -99,7 +102,6 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '8px',
     [theme.breakpoints.down(phone)]: {
       marginBottom: '14px',
-      marginLeft: '8px',
     },
   },
   helpIcon: {
@@ -153,7 +155,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexWrap: 'wrap',
     [theme.breakpoints.down(phone)]: {
-      padding: '14px',
+      padding: '0px',
+      marginLeft: '0px',
     },
   },
   paper: {
@@ -292,7 +295,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '10px',
     cursor: 'pointer',
     [theme.breakpoints.down(phone)]: {
-      width: '311px',
+      width: '325px',
     },
     '& *': {
       pointerEvents: 'none',
@@ -398,7 +401,7 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'rgba(0, 0, 0, 0.04)',
     },
     [theme.breakpoints.down(phone)]: {
-      paddingLeft: '10px',
+      paddingLeft: '5px',
     },
   },
   buttonBox: {
@@ -419,6 +422,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '600',
     borderRadius: '20px',
     padding: '5px 20px',
+    [theme.breakpoints.down(phone)]: {
+      padding: '4px 10px',
+    },
   },
   serviceAgreementIconBox: {
     display: 'flex',

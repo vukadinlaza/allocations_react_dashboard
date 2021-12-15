@@ -10,6 +10,7 @@ import fundIcon from '../../assets/fund-icon.svg';
 import plusSignIcon from '../../assets/plus-vector.svg';
 import warningIcon from '../../assets/warning-red.svg';
 import { phone } from '../../utils/helpers';
+import { useViewport } from '../../utils/hooks';
 
 const DELETE_DEAL = gql`
   mutation DeleteDeal($_id: String!) {
@@ -74,10 +75,14 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       boxShadow: '0px 5px 10px 2px rgba(225, 225, 225, .8) !important',
     },
+    [theme.breakpoints.down(phone)]: {
+      padding: '5px',
+    },
   },
   modalPaperContent: {
     [theme.breakpoints.down(phone)]: {
       display: 'flex',
+      justifyContent: 'space-between',
     },
   },
   modalPaperTitle: {
@@ -117,6 +122,9 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '14px',
     fontWeight: '400',
     marginTop: '16px',
+    [theme.breakpoints.down(phone)]: {
+      width: '215px',
+    },
   },
   typeGrid: {
     height: '100%',
@@ -135,18 +143,16 @@ const useStyles = makeStyles((theme) => ({
     color: '#000',
     fontSize: '18px',
     fontWeight: '500',
-    [theme.breakpoints.down(phone)]: {
-      color: '#7688A0',
-    },
   },
 }));
 
 export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
   const classes = useStyles();
   const history = useHistory();
+  const { width } = useViewport();
   return (
     <Modal open={isOpen} onClose={closeModal} className={classes.modal}>
-      <Container style={{ width: '650px' }}>
+      <Container style={{ height: '100%', width: '100%', margin: 'auto' }}>
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
             <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#186EFF' }}>
@@ -181,7 +187,7 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                     <Box
                       style={{
                         display: 'flex',
-                        flexDirection: 'row',
+                        flexDirection: width >= phone ? 'row' : 'column',
                         justifyContent: 'space-between',
                         alignItems: 'space-between',
                       }}

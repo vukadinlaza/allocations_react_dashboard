@@ -13,6 +13,7 @@ import HouseIcon from '../../../../../assets/buildHouse.svg';
 import CustomIcon from '../../../../../assets/buildCustom.svg';
 import NetworkIcon from '../../../../../assets/buildNetwork.svg';
 import PieIcon from '../../../../../assets/buildPie.svg';
+import { useViewport } from '../../../../../utils/hooks';
 import { ModalTooltip } from '../../../../dashboard/FundManagerDashboard/widgets';
 import {
   DealName,
@@ -47,6 +48,7 @@ export default function TypeSelector({
   const classes = useStyles();
   const customInputStyles = { style: { height: '23px' } };
   const params = useParams();
+  const { width } = useViewport();
 
   const row1Items = [
     {
@@ -181,7 +183,14 @@ export default function TypeSelector({
       <Grid
         container
         className={classes.outerSection}
-        style={{ borderLeft: sectionOneComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+        style={{
+          borderLeft:
+            width >= 675
+              ? sectionOneComplete
+                ? 'solid 3px #ECF3FF'
+                : 'solid 3px #EBEBEB'
+              : 'none',
+        }}
       >
         <form noValidate autoComplete="off" className={classes.formContainers}>
           <Typography className={classes.formItemName}>

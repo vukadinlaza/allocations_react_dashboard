@@ -10,6 +10,7 @@ import BasicInfo from './FormComponents/TypeSelector/index';
 import UploadDocs from './FormComponents/UploadDocs/index';
 import { useAuth } from '../../../auth/useAuth';
 import { useCurrentOrganization } from '../../../state/current-organization';
+import { useViewport } from '../../../utils/hooks';
 import AgreementSigner from './FormComponents/AgreementSigner';
 import useStyles from '../BuildStyles';
 import {
@@ -118,6 +119,7 @@ const BuildDetails = ({
 }) => {
   const classes = useStyles();
   const { cryptoPaymentInBuild } = useFlags();
+  const { width } = useViewport();
 
   const [buildData, setBuildData] = useState({
     accept_crypto: 'false',
@@ -530,7 +532,14 @@ const BuildDetails = ({
         <Grid
           container
           className={classes.outerSection}
-          style={{ borderLeft: sectionTwoComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+          style={{
+            borderLeft:
+              width >= 675
+                ? sectionTwoComplete
+                  ? 'solid 3px #ECF3FF'
+                  : 'solid 3px #EBEBEB'
+                : 'none',
+          }}
         >
           <form noValidate autoComplete="off">
             <Grid container spacing={2} className={classes.inputGridContainer}>
@@ -568,7 +577,14 @@ const BuildDetails = ({
         <Grid
           container
           className={classes.outerSection}
-          style={{ borderLeft: sectionThreeComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+          style={{
+            borderLeft:
+              width >= 675
+                ? sectionThreeComplete
+                  ? 'solid 3px #ECF3FF'
+                  : 'solid 3px #EBEBEB'
+                : 'none',
+          }}
         >
           <form noValidate autoComplete="off" style={{ width: '100%' }}>
             <Grid container spacing={1} className={classes.inputGridContainer}>
@@ -606,7 +622,14 @@ const BuildDetails = ({
         <Grid
           container
           className={classes.outerSection}
-          style={{ borderLeft: sectionFourComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+          style={{
+            borderLeft:
+              width >= 675
+                ? sectionFourComplete
+                  ? 'solid 3px #ECF3FF'
+                  : 'solid 3px #EBEBEB'
+                : 'none',
+          }}
         >
           <form noValidate autoComplete="off">
             <Grid container spacing={1} className={classes.inputGridContainer}>
@@ -638,7 +661,7 @@ const BuildDetails = ({
         <Grid
           container
           className={classes.outerSection}
-          style={{ borderLeft: 'solid 3px #ECF3FF' }}
+          style={{ borderLeft: width >= 675 ? 'solid 3px #ECF3FF' : 'none' }}
         >
           <form noValidate autoComplete="off">
             <UploadDocs deal={initialDeal} {...formFieldProps} />
@@ -669,7 +692,14 @@ const BuildDetails = ({
         </Grid>
         <div
           className={classes.outerSection}
-          style={{ borderLeft: sectionSixComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+          style={{
+            borderLeft:
+              width >= 675
+                ? sectionSixComplete
+                  ? 'solid 3px #ECF3FF'
+                  : 'solid 3px #EBEBEB'
+                : 'none',
+          }}
         >
           <form noValidate autoComplete="off" style={{ width: '100%' }}>
             <FormControl required disabled variant="outlined" style={{ width: 'inherit' }}>
