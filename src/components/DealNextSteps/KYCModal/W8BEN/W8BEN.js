@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   FormControl,
   TextField,
@@ -16,7 +17,7 @@ import moment from 'moment';
 import { useLocation } from 'react-router';
 import Loader from '../../../utils/Loader';
 
-const validate = (formData) => {
+const validate = (formData, isTaxTreaty) => {
   const required = [
     'name_of_individual_who_is_the_beneficial_owner',
     'country_of_citizenship',
@@ -28,12 +29,24 @@ const validate = (formData) => {
     'date_of_birth_mm_dd_yyyy_see_instructions',
     'signature',
   ];
+
+  if (isTaxTreaty) {
+    required.push(
+      'country_of_residence',
+      'article_and_paragraph_of_applicable_treaty',
+      'withholding_rate_claimed',
+      'type_of_income_subject_to_reduced_withholding',
+      'additional_conditions',
+    );
+  }
+
   return required.reduce((acc, attr) => (formData[attr] ? acc : [...acc, attr]), []);
 };
 
 function W8BEN({ toggleOpen, createDoc, called, loading }) {
   const [errors, setErrors] = useState([]);
   const [differentMailing, setDifferentMailing] = useState(false);
+  const [isTaxTreaty, setIsTaxTreaty] = useState(false);
   const { state } = useLocation();
 
   const [formData, setFormData] = useState({
@@ -53,21 +66,31 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
     signature: '',
     capacity_in_which_acting_if_form_is_not_signed_by_beneficial_owner: '',
     date_mm_dd_yyyy: moment().format('YYYY-MM-DD'),
+    country_of_residence: '',
+    article_and_paragraph_of_applicable_treaty: '',
+    withholding_rate_claimed: '',
+    type_of_income_subject_to_reduced_withholding: '',
+    additional_conditions: '',
   });
 
   const countryNames = countries.map((c) => c.countryName);
   const [countrySearch, setCountrySearch] = useState('');
   const [countryCitizenSearch, setCountryCitizenSearch] = useState('');
+  const [countryResidenceSearch, setCountryResidenceSearch] = useState('');
   const [mailingCountrySearch, setMailingCountrySearch] = useState('');
 
   const handleSubmit = () => {
-    const validation = validate(formData);
-    console.log('Validation errors: ', validation);
+    const validation = validate(formData, isTaxTreaty);
+
     setErrors(validation);
 
     if (validation.length > 0) {
       return toast.warning('Incomplete form');
     }
+
+    // if (Number(formData.withholding_rate_claimed) !== 0 && Number(formData.withholding_rate_claimed)) {
+    //   formData.withholding_rate_claimed = `${formData.withholding_rate_claimed}%`;
+    // }
 
     createDoc(formData);
   };
@@ -107,6 +130,12 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
         return setFormData((prevData) => ({ ...prevData, country_of_citizenship: countryValue }));
       }
     }
+    if (prop === 'country_of_residence') {
+      if (newValue) {
+        const countryValue = newValue === 'U.S.' || newValue === 'USA' ? 'United States' : newValue;
+        return setFormData((prevData) => ({ ...prevData, country_of_residence: countryValue }));
+      }
+    }
     if (prop === 'mailing_country') {
       if (newValue) {
         const countryValue = newValue === 'U.S.' || newValue === 'USA' ? 'United States' : newValue;
@@ -116,6 +145,9 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
     if (prop === 'country_of_citizenship_search') {
       return setCountryCitizenSearch(newValue);
     }
+    if (prop === 'country_of_residence_search') {
+      return setCountryResidenceSearch(newValue);
+    }
     if (prop === 'mailing_country_search') {
       return setMailingCountrySearch(newValue);
     }
@@ -123,10 +155,6 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
       return setCountrySearch(newValue);
     }
   };
-
-  // console.log('country', country)
-  // console.log('countrySearch', countrySearch)
-  console.log('W8-BEN form state: ', formData);
 
   return (
     <section className="W8BEN">
@@ -331,38 +359,145 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
           </label>
         </FormControl>
 
-        <div className="tin-container">
-          <FormControl className="tin">
-            <label className="form-label">
-              SSN or ITIN
-              <span> (If applicable)</span>
-              <div className="tin-inputs">
+        <div className="tax-id-container">
+          <div className="tin-container">
+            <FormControl className="tin">
+              <label className="form-label">
+                SSN or ITIN
+                <span> (If applicable)</span>
+                <div className="tin-inputs">
+                  <TextField
+                    variant="outlined"
+                    className="ssn-tin"
+                    onChange={handleChange}
+                    inputProps={{ maxLength: '9' }}
+                    name="ssn_or_itin"
+                    error={errors.includes('ssn_or_itin')}
+                  />
+                </div>
+              </label>
+            </FormControl>
+
+            <FormControl className="foreign-tax-id">
+              <label className="form-label">
+                Foreign tax ID number
+                <span> (recommended)</span>
                 <TextField
                   variant="outlined"
-                  className="ssn-tin"
+                  className="foreign-tax-id-input"
                   onChange={handleChange}
-                  inputProps={{ maxLength: '9' }}
-                  name="ssn_or_itin"
-                  error={errors.includes('ssn_or_itin')}
+                  name="foreign_tax_identifying_number_see_instructions"
+                  error={errors.includes('foreign_tax_identifying_number_see_instructions')}
                 />
-              </div>
-            </label>
-          </FormControl>
+              </label>
+            </FormControl>
+          </div>
 
-          <FormControl className="foreign-tax-id">
-            <label className="form-label">
-              Foreign tax ID number
-              <span> (recommended)</span>
-              <TextField
-                variant="outlined"
-                className="foreign-tax-id-input"
-                onChange={handleChange}
-                name="foreign_tax_identifying_number_see_instructions"
-                error={errors.includes('foreign_tax_identifying_number_see_instructions')}
+          <FormControlLabel
+            label="Tax Treaty"
+            control={
+              <Checkbox
+                checked={isTaxTreaty}
+                onChange={() => setIsTaxTreaty((prev) => !prev)}
+                name="taxTreaty"
               />
-            </label>
-          </FormControl>
+            }
+          />
         </div>
+
+        {isTaxTreaty ? (
+          <div className="tax-treaty-container">
+            <div className="tin-container">
+              <FormControl className="tin" required variant="outlined">
+                <label className="form-label">
+                  Country of Residence
+                  <Autocomplete
+                    className="country-select"
+                    value={formData.country_of_residence}
+                    onChange={(event, newInputValue) =>
+                      handleCountryChange('country_of_residence')(event, newInputValue)
+                    }
+                    inputValue={countryResidenceSearch || ''}
+                    onInputChange={(event, newInputValue) => {
+                      handleCountryChange('country_of_residence_search')(event, newInputValue);
+                    }}
+                    id="country-select"
+                    options={[...countryNames, 'USA', 'U.S.']}
+                    getOptionLabel={(option) => option}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="outlined"
+                        error={errors.includes('country_of_residence')}
+                      />
+                    )}
+                  />
+                </label>
+              </FormControl>
+
+              <FormControl className="foreign-tax-id">
+                <label className="form-label">
+                  Article and Paragraph of Applicable Treaty
+                  <div className="tin-inputs">
+                    <TextField
+                      variant="outlined"
+                      className="foreign-tax-id-input"
+                      onChange={handleChange}
+                      name="article_and_paragraph_of_applicable_treaty"
+                      error={errors.includes('article_and_paragraph_of_applicable_treaty')}
+                    />
+                  </div>
+                </label>
+              </FormControl>
+            </div>
+
+            <div className="tin-container">
+              <FormControl className="tin">
+                <label className="form-label">
+                  Withholding Rate Claimed (%)
+                  <div className="tin-inputs">
+                    <TextField
+                      variant="outlined"
+                      className="ssn-tin"
+                      onChange={handleChange}
+                      name="withholding_rate_claimed"
+                      error={errors.includes('withholding_rate_claimed')}
+                    />
+                  </div>
+                </label>
+              </FormControl>
+
+              <FormControl className="foreign-tax-id">
+                <label className="form-label">
+                  Type of Income Subject to Reduced Withholding
+                  <div className="tin-inputs">
+                    <TextField
+                      variant="outlined"
+                      className="foreign-tax-id-input"
+                      onChange={handleChange}
+                      name="type_of_income_subject_to_reduced_withholding"
+                      error={errors.includes('article_and_paragraph_of_applicable_treaty')}
+                    />
+                  </div>
+                </label>
+              </FormControl>
+            </div>
+
+            <div className="">
+              <FormControl className="tax-treaty-form-field">
+                <label className="form-label">
+                  Additional Conditions
+                  <TextField
+                    variant="outlined"
+                    onChange={handleChange}
+                    name="additional_conditions"
+                    error={errors.includes('additional_conditions')}
+                  />
+                </label>
+              </FormControl>
+            </div>
+          </div>
+        ) : null}
 
         <FormControl className="form-field name">
           <label className="form-label">

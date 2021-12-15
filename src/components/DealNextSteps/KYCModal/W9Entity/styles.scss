@@ -2,11 +2,9 @@
   height: 100%;
   width: 100%;
   overflow-y: scroll;
-  border-radius: 10px;
   position: relative;
 
   .form-header {
-    border-radius: 10px 10px 0px 0px;
     background: #ffffff;
     width: 100%;
     padding: 20px 0;
@@ -30,7 +28,6 @@
     align-items: center;
     background: #fbfcff;
     width: 100%;
-    border-radius: 0px 0px 10px 10px;
 
     .form-field {
       width: 95%;
@@ -92,11 +89,21 @@
       }
     }
 
+    .dash {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2em;
+      opacity: 0.75;
+      text-align: center;
+    }
+
     .ssn {
       width: 47.5%;
 
       .container {
         padding: 0;
+        margin: 0;
         width: 100%;
         display: flex;
         justify-content: space-between;
@@ -108,6 +115,24 @@
 
         .ssn-two {
           width: 25%;
+        }
+      }
+    }
+
+    .social {
+      width: 95%;
+
+      .container {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+
+        .ssn-one,
+        .ssn-two,
+        .ssn-three {
+          width: 30%;
         }
       }
     }

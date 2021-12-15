@@ -331,6 +331,7 @@ function InvestmentPage() {
           setInvestor={setInvestor}
           handleSecondSig={handleSecondSig}
           is3c7={is3c7}
+          docSpringTemplateId={deal?.docSpringTemplateId}
         />
         {requireSecondSig && (
           <SecondSignature

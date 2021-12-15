@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import queryString from 'query-string';
-import { Button } from '@material-ui/core';
+import { Button, Menu, MenuItem } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import './styles.scss';
 import Confetti from 'react-confetti';
@@ -109,10 +109,31 @@ function DealNextSteps() {
   const { search } = useLocation();
   const params = queryString.parse(search);
   const history = useHistory();
+
+  const [kycTemplate, setKycTemplate] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const path = organization ? `/deals/${organization}/${deal_slug}` : `/deals/${deal_slug}`;
-  const { data: investmentData } = useQuery(GET_INVESTMENT, {
-    variables: { _id: params?.investmentId ? params?.investmentId : history?.location?.state?.id },
+
+  const [getInvestment, { data: investmentData }] = useLazyQuery(GET_INVESTMENT, {
+    variables: { _id: params?.investmentId },
+    // onError: () => {
+    //   if (!state?.investorFormData) return history.push(path);
+    // },
   });
+
+  const investorFormData =
+    history?.location?.state?.investorFormData ||
+    investmentData?.investment?.submissionData ||
+    null;
+
   useEffect(() => {
     if (!authLoading && !calledDeal && isAuthenticated && deal_slug) {
       getDeal({
@@ -122,6 +143,10 @@ function DealNextSteps() {
         },
         fetchPolicy: 'network-only',
       });
+
+      if (params?.investmentId) {
+        getInvestment();
+      }
     }
   }, [isAuthenticated, authLoading, calledDeal, getDeal, deal_slug, organization]);
 
@@ -145,6 +170,19 @@ function DealNextSteps() {
     };
   }, []);
 
+  useEffect(() => {
+    const templateInfo =
+      investorFormData?.country === 'United States'
+        ? investorFormData?.investor_type === 'individual'
+          ? { templateName: 'W-9', templateId: 'tpl_dM4QcQbyLckdPXgtyx' }
+          : { templateName: 'W-9-E', templateId: 'tpl_HSJjJ9c9jb2N4GXFkt' }
+        : investorFormData?.investor_type === 'individual'
+        ? { templateName: 'W-8-BEN', templateId: 'tpl_JmDP5PPQkSy7LYgJHF' }
+        : { templateName: 'W-8-BEN-E', templateId: 'tpl_mXPLm5EXAyHJKhQekf' };
+
+    setKycTemplate(templateInfo);
+  }, [investorFormData]);
+
   if (loading || !data || !dealData) return null;
 
   const handleInvestmentEdit = () => {
@@ -159,17 +197,11 @@ function DealNextSteps() {
     });
   };
 
-  const investorFormData =
-    history?.location?.state?.investorFormData || investmentData?.investment?.submissionData || {};
-
-  const templateInfo =
-    investorFormData?.country === 'United States'
-      ? investorFormData?.investor_type === 'individual'
-        ? { templateName: 'W-9', templateId: 'tpl_dM4QcQbyLckdPXgtyx' }
-        : { templateName: 'W-9-E', templateId: 'tpl_HSJjJ9c9jb2N4GXFkt' }
-      : investorFormData?.investor_type === 'individual'
-      ? { templateName: 'W-8-BEN', templateId: 'tpl_qDaxDLgRkFpHJD2cFX' }
-      : { templateName: 'W-8-BEN-E', templateId: 'tpl_mXPLm5EXAyHJKhQekf' };
+  const handleMenuItemClick = (template) => {
+    setKycTemplate(template);
+    setOpen(true);
+    setAnchorEl(null);
+  };
 
   const userDocs = data?.investor?.documents || [];
   const hasKyc =
@@ -232,13 +264,76 @@ function DealNextSteps() {
               <p className="action-header">Submit Tax Information</p>
               <p className="action-sub-header">Complete your W8/W9 forms here</p>
             </div>
-            <Button
-              className={hasKyc ? 'completed-step-button' : 'next-step-button'}
-              onClick={() => setOpen(true)}
-              disabled={!!hasKyc}
-            >
-              {hasKyc ? 'Completed' : 'Submit Tax Info'}
-            </Button>
+
+            {investorFormData ? (
+              <Button
+                className={hasKyc ? 'completed-step-button' : 'next-step-button'}
+                onClick={() => setOpen(true)}
+                disabled={!!hasKyc}
+              >
+                {hasKyc ? 'Completed' : 'Submit Tax Info'}
+              </Button>
+            ) : (
+              <>
+                <Button
+                  className={hasKyc ? 'completed-step-button' : 'next-step-button'}
+                  onClick={handleClick}
+                  disabled={!!hasKyc}
+                >
+                  {hasKyc ? 'Completed' : 'Select Tax Form'}
+                </Button>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={!!anchorEl}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                  }}
+                >
+                  <MenuItem
+                    onClick={() =>
+                      handleMenuItemClick({
+                        templateName: 'W-9',
+                        templateId: 'tpl_dM4QcQbyLckdPXgtyx',
+                      })
+                    }
+                  >
+                    W-9 Individual
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() =>
+                      handleMenuItemClick({
+                        templateName: 'W-9-E',
+                        templateId: 'tpl_HSJjJ9c9jb2N4GXFkt',
+                      })
+                    }
+                  >
+                    W-9 Entity
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() =>
+                      handleMenuItemClick({
+                        templateName: 'W-8-BEN',
+                        templateId: 'tpl_JmDP5PPQkSy7LYgJHF',
+                      })
+                    }
+                  >
+                    W-8-BEN
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() =>
+                      handleMenuItemClick({
+                        templateName: 'W-8-BEN-E',
+                        templateId: 'tpl_mXPLm5EXAyHJKhQekf',
+                      })
+                    }
+                  >
+                    W-8-BEN-E
+                  </MenuItem>
+                </Menu>
+              </>
+            )}
           </div>
           {/* //here */}
           {dealData?.deal?.dealParams?.dealType === '506c' && (
@@ -306,8 +401,8 @@ function DealNextSteps() {
         <KYCModal
           open={open}
           setOpen={setOpen}
-          kycTemplateId={templateInfo.templateId}
-          kycTemplateName={templateInfo.templateName}
+          kycTemplateId={kycTemplate.templateId}
+          kycTemplateName={kycTemplate.templateName}
           refetch={refetch}
           deal={dealData.deal || {}}
           setShowTaxAsCompleted={setShowTaxAsCompleted}
