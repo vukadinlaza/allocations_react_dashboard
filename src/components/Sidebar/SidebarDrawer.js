@@ -162,11 +162,11 @@ const SidebarDrawer = ({
         next={{
           deal_type_selector: {
             spv: () => {
-              history.push('/new-build/spv');
+              history.push('/public/new-build/spv');
               closeModal();
             },
             fund: () => {
-              history.push('/new-build/fund');
+              history.push('/public/new-build/fund');
               closeModal();
             },
           },

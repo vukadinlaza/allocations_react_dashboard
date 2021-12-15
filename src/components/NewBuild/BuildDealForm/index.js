@@ -30,36 +30,34 @@ import {
 } from './FormFields';
 import NewBuildModal from '../NewBuildModal';
 
-const CREATE_BUILD = gql`
-  mutation createBuild($payload: Object) {
-    deal: createBuild(payload: $payload) {
-      _id
-      type
-      phases {
-        _id
-        name
-        tasks {
-          _id
-          title
-          type
-        }
-      }
-    }
-  }
-`;
+// const CREATE_BUILD = gql`
+//   mutation createBuild($payload: Object) {
+//     deal: createBuild(payload: $payload) {
+//       _id
+//       type
+//       phases {
+//         _id
+//         name
+//         tasks {
+//           _id
+//           title
+//           type
+//         }
+//       }
+//     }
+//   }
+// `;
 
-const SET_BUILD_INFO = gql`
-  mutation setBuildInfo($deal_id: String, $payload: Object) {
-    setBuildInfo(deal_id: $deal_id, payload: $payload) {
-      _id
-      metadata
-      phases {
-        name
-        tasks {
-          _id
-          title
-          complete
-        }
+const CREATE_NEW_DEAL = gql`
+  mutation createNewDeal($payload: Object) {
+    createNewDeal(payload: $payload) {
+      deal {
+        _id
+      }
+      documents {
+        dataRequestId: id
+        tokenId: token_id
+        tokenSecret: token_secret
       }
     }
   }
@@ -112,10 +110,10 @@ const BuildDetails = ({
   dealType,
   page,
   setPage,
-  setBuildInfo,
+  createNewDeal,
   deal_id,
-  waitingOnInitialDeal,
-  initialDeal,
+  // waitingOnInitialDeal,
+  // initialDeal,
   organization,
 }) => {
   const classes = useStyles();
@@ -399,11 +397,12 @@ const BuildDetails = ({
     }
   }, []);
 
-  const handleSubmit = ({ organization }) => {
-    setBuildInfo({
+  const handleSubmit = ({ organization, isNewHVP = false }) => {
+    createNewDeal({
       variables: {
-        deal_id,
         payload: {
+          organization,
+          isNewHVP,
           organization_id: organization?._id,
           accept_crypto: buildData.accept_crypto === 'true',
           allocations_reporting_adviser: buildData.allocations_reporting_adviser,
@@ -497,16 +496,28 @@ const BuildDetails = ({
   };
 
   const history = useHistory();
+
+  const modalStartPage = () => {
+    if (localStorage.getItem('buildData') || localStorage.getItem('buildDeal')) {
+      return 'new_or_current';
+    }
+    return 'deal_type_selector';
+  };
+
   const [openModal, setOpenModal] = useState(!auth.isAuthenticated);
-  const [newBuildModalPage, setNewBuildModalPage] = useState(
-    auth.isAuthenticated ? 'select_org' : 'deal_type_selector',
-  );
+  const [newBuildModalPage, setNewBuildModalPage] = useState(modalStartPage());
 
   const closeModal = () => setOpenModal(false);
   const closeModalAndReset = (page = 'select_org') => {
     setNewBuildModalPage(page);
     closeModal();
   };
+  const openModaltoPage = (page) => {
+    setNewBuildModalPage(page);
+    setOpenModal(true);
+  };
+  console.log('DEALTYPE', dealType);
+
   return (
     <>
       <NewBuildModal
@@ -520,11 +531,11 @@ const BuildDetails = ({
         next={{
           deal_type_selector: {
             spv: () => {
-              history.push('/new-build/spv');
+              history.push('/public/new-build/spv');
               closeModal();
             },
             fund: () => {
-              history.push('/new-build/fund');
+              history.push('/public/new-build/fund');
               closeModal();
             },
           },
@@ -535,7 +546,7 @@ const BuildDetails = ({
             }
             setCurrentOrganization(selectedOrg);
             handleSubmit({ organization: selectedOrg });
-            setPage((page) => page + 1);
+            // setPage((page) => page + 1);
             closeModal();
           },
           create_new_org: ({ estimatedSPVQuantity, createOrganization }) => {
@@ -717,7 +728,7 @@ const BuildDetails = ({
           style={{ borderLeft: 'solid 3px #ECF3FF' }}
         >
           <form noValidate autoComplete="off">
-            {dealType && <UploadDocs deal={initialDeal} {...formFieldProps} />}
+            {/* {dealType && <UploadDocs deal={initialDeal} {...formFieldProps} />} */}
           </form>
         </Grid>
       </Paper>
@@ -752,7 +763,7 @@ const BuildDetails = ({
               <NotesMemo {...formFieldProps} />
               <Button
                 className={classes.continueButton}
-                disabled={waitingOnInitialDeal}
+                // disabled={waitingOnInitialDeal}
                 onClick={async () => {
                   const { isValidated, unvalidatedFields } = formValidation();
                   if (!isValidated) {
@@ -768,13 +779,15 @@ const BuildDetails = ({
                     return;
                   }
                   if (!auth.isAuthenticated) {
-                    auth.login().then(() => {
-                      setNewBuildModalPage('select_org');
-                      setOpenModal(true);
-                    });
+                    auth
+                      .login({
+                        // redirectUri: `http://localhost:3000/public/new-build/${dealType}`
+                      })
+                      .then(() => {
+                        openModaltoPage('select_org');
+                      });
                   } else {
-                    setNewBuildModalPage('select_org');
-                    setOpenModal(true);
+                    openModaltoPage('select_org');
                   }
                 }}
               >
@@ -794,18 +807,19 @@ export default function NewDealForm() {
     userProfile,
     loading: authLoading,
     loginWithPopup,
+    loginWithRedirect,
     refetch: refetchUserProfile,
   } = useAuth();
-  const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
-  const [setBuildInfo, { data: updatedDeal, loading: updatedDealLoading }] = useMutation(
-    SET_BUILD_INFO,
+  // const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
+  const [createNewDeal, { data: updatedDeal, loading: updatedDealLoading }] = useMutation(
+    CREATE_NEW_DEAL,
     {
       onError: (err) => {
         console.log('err', err);
       },
     },
   );
-
+  console.log('isAuthenticated', isAuthenticated);
   const organization = useCurrentOrganization();
 
   const { type: dealType } = useParams();
@@ -813,21 +827,23 @@ export default function NewDealForm() {
   // Page
   const [page, setPage] = useState(0);
 
-  useEffect(() => {
-    // if there is no build data/deal_id, we create a new build (default info pulled from the backend)
-    if (!localStorage.getItem('buildData') && !localStorage.getItem('buildDeal')) {
-      createBuild({
-        variables: { payload: { type: dealType } },
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   // if there is no build data/deal_id, we create a new build (default info pulled from the backend)
+  //   if (!localStorage.getItem('buildData') && !localStorage.getItem('buildDeal')) {
+  //     if (dealType && isAuthenticated) {
+  //       createBuild({
+  //         variables: { payload: { type: dealType } },
+  //       });
+  //     }
+  //   }
+  // }, [dealType]);
 
-  useEffect(() => {
-    // if we finished creating the build, set the deal info in local storage
-    if (initialDeal) {
-      localStorage.setItem('buildDeal', JSON.stringify(initialDeal.deal));
-    }
-  }, [loading, initialDeal?.deal]);
+  // useEffect(() => {
+  // if we finished creating the build, set the deal info in local storage
+  //   if (initialDeal) {
+  //     localStorage.setItem('buildDeal', JSON.stringify(initialDeal.deal));
+  //   }
+  // }, [loading, initialDeal?.deal]);
 
   const titleMap = {
     spv: 'SPV',
@@ -845,28 +861,29 @@ export default function NewDealForm() {
           auth={{ isAuthenticated, login: loginWithPopup, refetchUserProfile }}
           page={page}
           setPage={setPage}
-          setBuildInfo={setBuildInfo}
-          deal_id={initialDeal?.deal?._id}
-          waitingOnInitialDeal={loading}
-          initialDeal={
-            initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
-          }
+          createNewDeal={createNewDeal}
+          // deal_id={initialDeal?.deal?._id}
+          // waitingOnInitialDeal={loading}
+          // initialDeal={
+          //   initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
+          // }
         />
       ),
     },
     {
       title: 'Sign Agreements',
-      Component: (
-        <AgreementSigner
-          deal={
-            initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
-          }
-          page={page}
-          setPage={setPage}
-          updatedDeal={updatedDeal}
-          updatedDealLoading={updatedDealLoading}
-        />
-      ),
+      Component: null,
+      // (
+      // <AgreementSigner
+      //   deal={
+      //     initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
+      //   }
+      //   page={page}
+      //   setPage={setPage}
+      //   updatedDeal={updatedDeal}
+      //   updatedDealLoading={updatedDealLoading}
+      // />
+      // ),
     },
   ];
 
