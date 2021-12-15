@@ -27,7 +27,8 @@ function TermsAndConditionsPanel({
 
   const isClosed = status === 'closed';
   const weOrI = requireSecondSigChecked ? 'we' : 'I';
-  const ourOrMy = requireSecondSigChecked ? 'our' : 'my';
+  // space added in front of ' our' and ' my' to make the space display on the page
+  const ourOrMy = requireSecondSigChecked ? ' our' : ' my';
   const usOrMe = requireSecondSigChecked ? 'us' : 'me';
 
   return (
