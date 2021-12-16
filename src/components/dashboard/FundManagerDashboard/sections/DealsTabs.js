@@ -170,8 +170,6 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
 
   if (!data || !titleContainer) return <Loader />;
 
-  console.log(deals, 'DEALS');
-
   return (
     <div className={classes.root}>
       <Tabs
