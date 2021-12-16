@@ -11,6 +11,9 @@ import {
   ListItemIcon,
   Typography,
   Snackbar,
+  Stepper,
+  Step,
+  StepLabel,
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import { useQuery, gql } from '@apollo/client';
@@ -187,16 +190,18 @@ const PostBuild = ({ classes }) => {
     );
   const { getDealWithTasks: deal } = data;
 
-  const mainBoxes = [
-    {
-      title: deal.name,
-      fundManager: deal?.manager_name || deal?.metadata?.manager?.name,
-      status: deal.phase,
-      timeline: 'On Time',
-      type: 'International',
-      wireDeadline: moment(deal.wire_deadline).format('MM/DD/YYYY'),
-    },
-  ];
+  // const mainBoxes = [
+  //   {
+  //     title: deal.name,
+  //     fundManager: deal?.manager_name || deal?.metadata?.manager?.name,
+  //     status: deal.phase,
+  //     timeline: 'On Time',
+  //     type: 'International',
+  //     wireDeadline: moment(deal.wire_deadline).format('MM/DD/YYYY'),
+  //   },
+  // ];
+
+  const steps = ['Pre-Onboarding', 'Onboarding', 'Closing', 'Post-Closing'];
 
   return (
     <>
@@ -229,7 +234,14 @@ const PostBuild = ({ classes }) => {
       {/* Back button */}
       {/* Name of SPV and Invite button */}
       {/* Tabs */}
-      {/* Progress bar */}
+      <Stepper alternativeLabel classes={{ root: classes.stepperContainer }}>
+        {/* Need to pass props */}
+        {steps.map((step) => (
+          <Step key={step}>
+            <StepLabel>{step}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
       <Grid container sm={12} className={classes.bodyContainer}>
         <Grid item sm={10} className={classes.currentStepContainer}>
           <Typography className={classes.stepText}>Current Step</Typography>

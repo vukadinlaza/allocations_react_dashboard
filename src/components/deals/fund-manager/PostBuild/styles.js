@@ -75,7 +75,7 @@ const styles = (theme) => ({
     width: '100%',
     zIndex: 1,
   },
-  //delete?
+  // delete?
   mainBoxes: {
     margin: '6rem 0 2rem 0',
   },
@@ -110,6 +110,37 @@ const styles = (theme) => ({
     width: '100%',
     margin: '10px 0',
   },
+
+  // Stepper
+  stepperContainer: {
+    backgroundColor: 'inherit',
+    border: 'none',
+    boxShadow: 'none !important',
+
+    // this targets ALL, but need only active
+    // '& .MuiStepLabel-iconContainer.MuiStepLabel-alternativeLabel': {
+    //   border: '2px solid #B5CEF9',
+    //   borderRadius: '50px',
+    // },
+    '& .MuiStepIcon-root': {
+      color: '#E2E8F0',
+    },
+    '& .MuiStepIcon-root.MuiStepIcon-active': {
+      color: '#186EFF',
+    },
+    // '& .MuiStepIcon-text': {
+    //   fontSize: '0.90rem',
+    // },
+  },
+  // stepIcon: {
+  //   color: 'green',
+  //   '& .MuiStepIcon-root.MuiStepIcon-active': {
+  //     color: 'orange',
+  //   },
+  // },
+  // stepComplete: {
+  //   color: 'yellow',
+  // },
 
   // Styles for Body of PostBuild and common styling between CurrentStep and NextStep
   bodyContainer: {
