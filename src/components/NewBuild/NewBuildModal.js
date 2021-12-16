@@ -616,18 +616,7 @@ const CreateNewOrganization = ({
                           onClick={() => {
                             // validate fields, if not valid, do nothing
                             if (!validateFields()) return;
-
                             next({ estimatedSPVQuantity, createOrganization });
-                            // IF 5 OR MORE SPVS SEND TO NEXT MODAL TO COLLECT MORE INFO //
-                            // if (estimatedSPVQuantity >= 5) {
-                            //   setPage('high_volume_partnerships');
-                            // }
-                            // // IF LESS THAN 5 ESTIMATED SPVS CREATE NEW ORG HERE RIGHT AWAY THEN PUSH TO BUILD PAGE //
-                            // else {
-                            //   createOrganization();
-                            //   history.push(`/new-build/${dealType}`);
-                            //   closeModal();
-                            // }
                           }}
                         >
                           Continue
@@ -981,9 +970,6 @@ const HighVolumePartnerships = ({
                           className={classes.continueButton}
                           onClick={() => {
                             if (!validateFields()) return;
-                            // createOrganization();
-                            // history.push(`/new-build/${dealType}`);
-                            // closeModal();
                             next({ createOrganization });
                           }}
                         >
