@@ -27,7 +27,7 @@ const AgreementBox = ({
   signed,
   setSigned,
   classes,
-  text,
+  title,
 }) => {
   return (
     <Paper
@@ -63,7 +63,7 @@ const AgreementBox = ({
               ) : (
                 'Service Agreement'
               )} */}
-          {loading ? 'Loading...' : text}
+          {loading ? 'Loading...' : title}
         </Typography>
       </div>
 
@@ -88,7 +88,7 @@ export default function SignDocsForm({
   const [serviceAgreementSigned, setServiceAgreementSigned] = useState(false);
   const [advisoryAgreementSigned, setAdvisoryAgreementSigned] = useState(false);
 
-  const signed = serviceAgreementSigned && advisoryAgreementSigned;
+  const allSigned = serviceAgreementSigned && advisoryAgreementSigned;
 
   const signingModal = (agreementLink, setSigned) => {
     // eslint-disable-next-line no-undef
@@ -111,17 +111,12 @@ export default function SignDocsForm({
   //   useLazyQuery(GET_DOCUMENT, { variables: { task_id: task?._id }, fetchPolicy: 'network-only' });
 
   // useEffect(() => {
-  //   if (updatedDeal) getServiceAgreementLink();
-  // }, [updatedDeal, error]);
-
-  // useEffect(() => {
   //   if (signed) getSignedServiceAgreement();
   // }, [signed]);
 
   const classes = useStyles();
   // const loading = updatedDealLoading || agreementLinkLoading || signedDocLoading;
   const loading = createDealLoading;
-  const readyToSign = !!serviceAgreementLink && !error && !loading;
 
   return (
     <>
@@ -137,33 +132,33 @@ export default function SignDocsForm({
         </div>
 
         <AgreementBox
-          signingModal={signingModal}
+          title="Service Agreement"
           agreementLink={serviceAgreementLink}
+          signingModal={signingModal}
+          readyToSign={!!serviceAgreementLink && !error && !loading}
           signed={serviceAgreementSigned}
           setSigned={setServiceAgreementSigned}
-          error={error}
           loading={loading}
-          readyToSign={readyToSign}
-          text="Service Agreement"
+          error={error}
           classes={classes}
         />
 
         <AgreementBox
-          signingModal={signingModal}
+          title="Advisory Agreement"
           agreementLink={advisoryAgreementLink}
-          error={error}
+          signingModal={signingModal}
+          readyToSign={!!advisoryAgreementLink && !error && !loading}
           signed={advisoryAgreementSigned}
           setSigned={setAdvisoryAgreementSigned}
-          text="Advisory Agreement"
           loading={loading}
-          readyToSign={readyToSign}
+          error={error}
           classes={classes}
         />
 
         <div className={classes.buttonBox}>
           <Button
             onClick={() => {
-              if (!signed) {
+              if (!allSigned) {
                 toast.error('Please sign all Agreements before continuing');
                 return;
               }
@@ -174,7 +169,7 @@ export default function SignDocsForm({
           >
             Complete
           </Button>
-          {!signed && (
+          {!allSigned && (
             <Typography
               className={classes.previousButton}
               onClick={() => {

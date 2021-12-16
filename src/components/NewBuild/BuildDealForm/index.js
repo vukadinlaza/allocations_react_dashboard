@@ -732,7 +732,6 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
               <NotesMemo {...formFieldProps} />
               <Button
                 className={classes.continueButton}
-                // disabled={waitingOnInitialDeal}
                 onClick={async () => {
                   const { isValidated, unvalidatedFields } = formValidation();
                   if (!isValidated) {
@@ -748,13 +747,9 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
                     return;
                   }
                   if (!auth.isAuthenticated) {
-                    auth
-                      .login({
-                        // redirectUri: `http://localhost:3000/public/new-build/${dealType}`
-                      })
-                      .then(() => {
-                        openModaltoPage('select_org');
-                      });
+                    auth.login().then(() => {
+                      openModaltoPage('select_org');
+                    });
                   } else {
                     openModaltoPage('select_org');
                   }
@@ -774,7 +769,6 @@ export default function NewDealForm() {
   const {
     isAuthenticated,
     userProfile,
-    loading: authLoading,
     loginWithPopup,
     loginWithRedirect,
     refetch: refetchUserProfile,
@@ -789,7 +783,6 @@ export default function NewDealForm() {
       onCompleted: ({ createNewDeal }) => {
         if (createNewDeal?.deal) {
           localStorage.setItem('buildDeal', JSON.stringify({ _id: createNewDeal?.deal?._id }));
-          // setPage(page => page + 1)
         }
       },
       onError: (err) => {
@@ -801,24 +794,6 @@ export default function NewDealForm() {
   const organization = useCurrentOrganization();
 
   const { type: dealType } = useParams();
-
-  // useEffect(() => {
-  //   // if there is no build data/deal_id, we create a new build (default info pulled from the backend)
-  //   if (!localStorage.getItem('buildData') && !localStorage.getItem('buildDeal')) {
-  //     if (dealType && isAuthenticated) {
-  //       createBuild({
-  //         variables: { payload: { type: dealType } },
-  //       });
-  //     }
-  //   }
-  // }, [dealType]);
-
-  // useEffect(() => {
-  // if we finished creating the build, set the deal info in local storage
-  //   if (initialDeal) {
-  //     localStorage.setItem('buildDeal', JSON.stringify(initialDeal.deal));
-  //   }
-  // }, [loading, initialDeal?.deal]);
 
   const titleMap = {
     spv: 'SPV',
