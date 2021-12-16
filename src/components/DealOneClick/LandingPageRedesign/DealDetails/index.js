@@ -4,7 +4,6 @@ import Detail from './Detail';
 import DealMemo from './DealMemo';
 import PitchDeck from './PitchDeck';
 import useStyles from '../DealStyles';
-import PDFDisplay from '../widgets/PDFDisplay';
 
 const data = [
   { title: 'Introduction', description: 'You currently do not have any content for this section' },
@@ -14,6 +13,9 @@ const data = [
   { title: 'Market', description: 'You currently do not have any content for this section' },
   { title: 'Deal Terms', description: 'You currently do not have any content for this section' },
 ];
+
+const pdf =
+  'https://allocations-deal-applications-test.s3.us-east-2.amazonaws.com/606bddf03e016a0023d628e6/pitch-document-Zyzz_Bible.pdf';
 
 export default function DealDetails() {
   const classes = useStyles();
@@ -38,8 +40,8 @@ export default function DealDetails() {
               {index !== data.length - 1 && <hr />}
             </>
           ))}
-        {/* {tab === 1 && <PitchDeck />} */}
-        {tab === 2 && <DealMemo />}
+        {tab === 1 && <PitchDeck pdf={pdf} />}
+        {tab === 2 && <DealMemo pdf={pdf} />}
       </Box>
     </Paper>
   );

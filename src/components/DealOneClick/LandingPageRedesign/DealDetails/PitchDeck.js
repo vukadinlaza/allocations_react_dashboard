@@ -1,8 +1,7 @@
 import React from 'react';
 import PDFDisplay from '../widgets/PDFDisplay';
-import pdf from './sampleLandscape.pdf';
 
-function PitchDeck() {
+function PitchDeck({ pdf }) {
   return <PDFDisplay pdf={pdf} />;
 }
 export default PitchDeck;

@@ -8,10 +8,9 @@ import { phone } from '../../../../utils/helpers';
 const styles = (theme) => ({
   box: {
     width: '100%',
-    height: '100px',
+    height: '60px',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     borderRadius: '10px',
-    backgroundColor: '',
     [theme.breakpoints.down(phone)]: {
       minWidth: '0 !important',
       maxWidth: 'none !important',
@@ -20,9 +19,11 @@ const styles = (theme) => ({
   boxContent: {
     padding: '5px',
     fontWeight: 'bolder',
+    color: '#2A2B54',
   },
   boxTitle: {
     fontSize: '14px',
+    color: '#64748B',
   },
   boxTitleContainer: {
     width: '220px',

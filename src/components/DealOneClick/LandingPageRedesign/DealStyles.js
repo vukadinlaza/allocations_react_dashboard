@@ -94,13 +94,14 @@ const useStyles = makeStyles((theme) => ({
   companyName: {
     marginTop: '5px',
     fontFamily: 'Roboto',
+    fontSize: '24px',
   },
 
   boxContent: {
     backgroundColor: '',
     fontSize: '12px',
     fontWeight: 'bold',
-    width: '128px',
+    width: '180px',
     marginLeft: '-2px',
     marginTop: '10px',
     [theme.breakpoints.up('sm')]: {},
@@ -182,6 +183,14 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('xl')]: {},
   },
 
+  middleGridItem: {
+    width: '50%',
+    [theme.breakpoints.up('sm')]: {},
+    [theme.breakpoints.up('md')]: {},
+    [theme.breakpoints.up('lg')]: {},
+    [theme.breakpoints.up('xl')]: {},
+  },
+
   investmentProgress: {
     fontSize: '25px',
     [theme.breakpoints.up('sm')]: {},
@@ -204,6 +213,7 @@ const useStyles = makeStyles((theme) => ({
     float: 'right',
     backgroundColor: '',
     width: '100%',
+    color: '#2A2B54',
     [theme.breakpoints.up('sm')]: {},
     [theme.breakpoints.up('md')]: {},
     [theme.breakpoints.up('lg')]: {},
@@ -225,10 +235,12 @@ const useStyles = makeStyles((theme) => ({
 
   floatRight: {
     float: 'right',
+    color: '#2A2B54',
   },
 
   floatLeft: {
     float: 'left',
+    color: '#2A2B54',
   },
 
   modalContainer: {

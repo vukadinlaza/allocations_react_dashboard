@@ -64,7 +64,7 @@ function DealHeader({ deal }) {
               }
             />
           </Grid>
-          <Grid item>
+          <Grid item className={classes.middleGridItem}>
             <h4 className={classes.investmentProgress}>Investment Progress</h4>
             <h6 className={classes.investmentNumber}>$320,000</h6>
             <LinearProgress
@@ -79,7 +79,7 @@ function DealHeader({ deal }) {
             </div>
 
             <Button className={classes.investButton}>Invest</Button>
-            <Grid container style={{ marginTop: '15px' }}>
+            <Grid container style={{ marginTop: '15px', justifyContent: 'space-between' }}>
               <Grid item>
                 Invest With:{' '}
                 <div style={{ display: 'flex' }}>
