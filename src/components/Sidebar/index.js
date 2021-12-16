@@ -39,13 +39,20 @@ const GET_INVESTOR = gql`
 `;
 
 function Sidebar(props) {
-  const { userProfile, logout, isAuthenticated, loading } = useAuth(GET_INVESTOR);
+  const {
+    userProfile,
+    logout,
+    isAuthenticated,
+    loading,
+    refetch: refetchUserProfile,
+  } = useAuth(GET_INVESTOR);
   const history = useHistory();
   const [investTab, setInvestTab] = useState(false);
   const [creditTab, setCreditTab] = useState(false);
   const [currentOrganization, setCurrentOrganization] = useCurrentOrganizationState();
   const [currentHomeUrl, setCurrentHomeUrl] = useState('');
   const fundMatch = useRouteMatch('/admin/:organization');
+  const fundMatchDeals = useRouteMatch('/deals/:organization/:slug');
   const location = useLocation();
   const { window, classes } = props;
   const theme = useTheme();
@@ -67,6 +74,16 @@ function Sidebar(props) {
 
   const isUserAuthenticated = isAuthenticated && !loading;
 
+  const handleAccountChange = (e) => {
+    const newValue = e.target ? e.target.value : e;
+    const org = userProfile?.organizations_admin?.find((org) => org.name === newValue);
+    if (org) {
+      const currentHomePath = org ? `/admin/${org.slug}` : '/';
+      setCurrentHomeUrl(currentHomePath);
+      setCurrentOrganization(org);
+    }
+  };
+
   useEffect(() => {
     const userIsOrgAdmin = userProfile?.organizations_admin?.length;
     const defaultUrl = userIsOrgAdmin ? `/admin/${userProfile.organizations_admin[0].slug}` : '/';
@@ -76,10 +93,11 @@ function Sidebar(props) {
         history.push(defaultUrl);
       } else {
         const organizationSlug = fundMatch?.params?.organization;
+        const dealOrganizationSlug = fundMatchDeals?.params?.organization;
         const currentOrg = userProfile?.organizations_admin?.find(
-          (org) => org.slug === organizationSlug,
+          (org) => org.slug === organizationSlug || org.slug === dealOrganizationSlug,
         );
-        handleAccountChange(currentOrg?.name ? currentOrg.name : '');
+        handleAccountChange(currentOrg?.name || '');
       }
     }
   }, [isUserAuthenticated]);
@@ -90,14 +108,6 @@ function Sidebar(props) {
 
   const handleDrawerClose = () => {
     setMobileOpen(false);
-  };
-
-  const handleAccountChange = (e) => {
-    const newValue = e.target ? e.target.value : e;
-    const org = userProfile?.organizations_admin?.find((org) => org.name === newValue);
-    const currentHomePath = org ? `/admin/${org.slug}` : '/';
-    setCurrentHomeUrl(currentHomePath);
-    setCurrentOrganization(org);
   };
 
   const container = window !== undefined ? () => window().document.body : undefined;
@@ -199,6 +209,7 @@ function Sidebar(props) {
                 currentHomeUrl={currentHomeUrl}
                 logout={logout}
                 location={location}
+                refetchUserProfile={refetchUserProfile}
               />
             </Drawer>
           </Hidden>
@@ -268,6 +279,7 @@ function Sidebar(props) {
                 currentHomeUrl={currentHomeUrl}
                 logout={logout}
                 location={location}
+                refetchUserProfile={refetchUserProfile}
               />
             </Drawer>
           </Hidden>

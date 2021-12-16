@@ -3,27 +3,43 @@ import { List, ListItem, ListItemIcon, ListItemText, Typography, Button } from '
 import { withStyles } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HomeIcon from '@material-ui/icons/Home';
+import { withLDProvider, useFlags } from 'launchdarkly-react-client-sdk';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { FaRocket } from 'react-icons/fa';
-import { useFlags } from 'launchdarkly-react-client-sdk';
-import BuildModal from '../NewBuild/BuildModal';
+import { BsBinocularsFill } from 'react-icons/bs';
 import styles from './styles';
+import NewBuildModal from '../NewBuild/NewBuildModal';
+import { useAuth } from '../../auth/useAuth';
 
 const AddBubbleBuildButton = ({ classes }) => (
-  <Button variant="contained" className={classes.addButton} href="https://build.allocations.com">
+  <Button
+    variant="contained"
+    className={classes.addButton}
+    target="_blank"
+    href="https://build.allocations.com"
+  >
     <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
     Add
   </Button>
 );
 
-const AddInAppBuildButton = ({ classes, setOpenModal }) => {
+const AddInAppBuildButton = ({ classes, setOpenModal, setNewBuildModalPage }) => {
   return (
-    <Button variant="contained" onClick={() => setOpenModal(true)} className={classes.addButton}>
+    <Button
+      variant="contained"
+      className={classes.addButton}
+      onClick={() => {
+        if (localStorage.getItem('buildData') || localStorage.getItem('buildDeal')) {
+          setNewBuildModalPage('new_or_current');
+        }
+        setOpenModal(true);
+      }}
+    >
       <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
       Add
     </Button>
@@ -32,7 +48,6 @@ const AddInAppBuildButton = ({ classes, setOpenModal }) => {
 
 const AddBuildButton = (props) => {
   const { useInAppBuild } = useFlags();
-
   if (useInAppBuild) return <AddInAppBuildButton {...props} />;
   return <AddBubbleBuildButton {...props} />;
 };
@@ -45,22 +60,14 @@ const SidebarDrawer = ({
   logout,
   location,
   classes,
+  refetchUserProfile,
 }) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const [newBuildModalPage, setNewBuildModalPage] = useState('deal_type_selector');
+  const { prospectDealPage } = useFlags();
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
-  const AdminLinks = () => {
-    const match = useRouteMatch('/admin/:organization');
-
-    if (!match) return null;
-    const {
-      params: { organization },
-    } = match;
-    if (organization === 'funds') return null;
-
-    return <div />;
-  };
 
   const handleOpenSubMenu = (id) => {
     const openSubMenuCopy = openSubMenu.map((i) => i);
@@ -76,18 +83,36 @@ const SidebarDrawer = ({
   const menuSections = [
     {
       sectionTitle: 'ESSENTIALS',
-      menu: [
-        {
-          to: currentHomeUrl,
-          title: 'Dashboard',
-          icon: <HomeIcon fontSize="medium" />,
-        },
-        {
-          to: '/profile',
-          title: 'Profile',
-          icon: <PersonIcon fontSize="medium" />,
-        },
-      ],
+      menu: prospectDealPage
+        ? [
+            {
+              to: currentHomeUrl,
+              title: 'Dashboard',
+              icon: <HomeIcon fontSize="medium" />,
+            },
+            {
+              to: '/profile',
+              title: 'Profile',
+              icon: <PersonIcon fontSize="medium" />,
+            },
+            {
+              to: '/prospects',
+              title: 'Prospects',
+              icon: <BsBinocularsFill />,
+            },
+          ]
+        : [
+            {
+              to: currentHomeUrl,
+              title: 'Dashboard',
+              icon: <HomeIcon fontSize="medium" />,
+            },
+            {
+              to: '/profile',
+              title: 'Profile',
+              icon: <PersonIcon fontSize="medium" />,
+            },
+          ],
     },
   ];
 
@@ -101,10 +126,18 @@ const SidebarDrawer = ({
 
   return (
     <div className={classes.sidebarDrawer}>
-      <BuildModal isOpen={openModal} onClose={() => setOpenModal(false)} />
-
-      <AddBuildButton classes={classes} setOpenModal={setOpenModal} />
-
+      <NewBuildModal
+        isOpen={openModal}
+        closeModal={() => setOpenModal(false)}
+        page={newBuildModalPage}
+        setPage={setNewBuildModalPage}
+        refetchUserProfile={refetchUserProfile}
+      />
+      <AddBuildButton
+        classes={classes}
+        setOpenModal={setOpenModal}
+        setNewBuildModalPage={setNewBuildModalPage}
+      />
       <List>
         {menuSections.map(({ sectionTitle, menu }) => (
           <>
@@ -169,4 +202,15 @@ const SidebarDrawer = ({
   );
 };
 
-export default withStyles(styles)(SidebarDrawer);
+const SidebarDrawerLD = (props) => {
+  const { isAuthenticated, loading, userProfile } = useAuth();
+  const launchDarklyUser = { key: userProfile?._id, email: userProfile?.email };
+
+  const FlagComponent = withLDProvider({
+    clientSideID: process.env.REACT_APP_LAUNCH_DARKLY_ID,
+    user: isAuthenticated && !loading ? launchDarklyUser : undefined,
+  })(SidebarDrawer);
+  return <FlagComponent {...props} />;
+};
+
+export default withStyles(styles)(SidebarDrawerLD);

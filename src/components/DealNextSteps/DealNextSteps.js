@@ -12,8 +12,10 @@ import wireFundsNo from '../../assets/wire-funds-no.svg';
 import submitTaxInfoYes from '../../assets/submit-tax-info-yes.svg';
 import submitTaxInfoNo from '../../assets/submit-tax-info-no.svg';
 import AllocationsRocket from './AllocationsRocket/AllocationsRocket';
-import KYCModal from './KYCModal/index.js';
+import PaymentSelectModal from './PaymentSelectModal';
+import KYCModal from './KYCModal';
 import WireInstructionsModal from './WireInstructionsModal/WireInstructionsModal';
+import CryptoPaymentModal from './CryptoPaymentModal/index';
 import { useAuth } from '../../auth/useAuth';
 
 const GET_INVESTOR = gql`
@@ -58,6 +60,9 @@ const GET_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
     deal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
       _id
+      company_name
+      name
+      accept_crypto
       isDemo
       dealParams {
         dealType
@@ -94,12 +99,17 @@ function DealNextSteps() {
   const [getDeal, { data: dealData, called: calledDeal }] = useLazyQuery(GET_DEAL);
   const [showTaxAsCompleted, setShowTaxAsCompleted] = useState(false);
   const [open, setOpen] = useState(false);
+
   const { deal_slug, organization } = useParams();
+  const [openPayment, setOpenPayment] = useState(false);
+  const [cryptoPaymentOpen, setCryptoPaymentOpen] = useState(false);
   const [wireInstructionsOpen, setWireInstructionsOpen] = useState(false);
-  const { isAuthenticated, loading: authLoading } = useAuth();
-  const { search, state } = useLocation();
+
+  const { userProfile, isAuthenticated, loading: authLoading } = useAuth();
+  const { search } = useLocation();
   const params = queryString.parse(search);
   const history = useHistory();
+
   const [kycTemplate, setKycTemplate] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -369,19 +379,25 @@ function DealNextSteps() {
           <div className={`action-item ${!hasKyc && 'disabled'}`}>
             <img className="action-icon" src={wireFundsNo} alt="wire-funds-no" />
             <div className="action-instructions">
-              <p className="action-header">Wire Funds</p>
+              <p className="action-header">Payment</p>
               <p className="action-sub-header">Required to complete your investment</p>
             </div>
             <Button
               // disabled={dealData?.deal?.isDemo ? false : !hasKyc}
-              onClick={() => setWireInstructionsOpen(true)}
               className="next-step-button"
+              onClick={() => setOpenPayment(true)}
             >
-              View Wire Instructions
+              Make Payment
             </Button>
           </div>
         </div>
-
+        <PaymentSelectModal
+          open={openPayment}
+          dealData={dealData?.deal}
+          setOpen={setOpenPayment}
+          setWireInstructionsOpen={setWireInstructionsOpen}
+          setCryptoPaymentOpen={setCryptoPaymentOpen}
+        />
         <KYCModal
           open={open}
           setOpen={setOpen}
@@ -397,6 +413,7 @@ function DealNextSteps() {
           setOpen={setWireInstructionsOpen}
           docs={docs}
         />
+
         <AllocationsRocket />
         <Confetti className={`confetti ${!confetti && 'hidden'}`} />
       </section>

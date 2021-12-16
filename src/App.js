@@ -15,22 +15,25 @@ import DealEditNew from './components/DealEditNew';
 import Sidebar from './components/Sidebar';
 import Investors from './components/Investors';
 import InvestmentNew from './components/InvestmentNew';
+import ProfilePage from './components/Profile/ProfilePage';
 import Profile from './components/Profile/Profile';
 import OrganizationNew from './components/OrganizationNew';
 import OrganizationMembers from './components/OrganizationMembers';
 import DealTable from './components/deals/fund-manager/DealsTablePage';
 import NotFound from './components/NotFound';
+import Prospect from './components/Prospect/Prospect';
+import ProspectDealPage from './components/Prospect/ProspectDealPage/ProspectDealPage';
 import SubmitTaxDocs from './components/SubmitTaxDocs';
 import Demo from './components/Demo';
 // admin
 
 import DealNextSteps from './components/DealNextSteps/DealNextSteps';
-import DealLandingPage from './components/DealOneClick/LandingPage/LandingPage';
 import InvestmentPage from './components/DealOneClick/InvestmentPage/InvestmentPage';
 import SuperAdminManager from './components/superadmin/Manager';
+import DealOneClick from './components/DealOneClick';
 
 // test
-import BuildSPVForm from './components/NewBuild/BuildSPVForm/index';
+import BuildDealForm from './components/NewBuild/BuildDealForm/index';
 
 import DealSetup from './components/deals/fund-manager/Setup';
 // import DealSetup from './components/DealSetup';
@@ -68,7 +71,8 @@ const App = () => {
               <PrivateRoute path="/submit-tax-documents" component={SubmitTaxDocs} />
               <PrivateRoute path="/demo" component={Demo} />
 
-              <PrivateRoute path="/new-build-spv" exact component={BuildSPVForm} />
+              <PrivateRoute path="/new-build/:type" exact component={BuildDealForm} />
+              <PrivateRoute path="/profile/:id" component={ProfilePage} />
               <PrivateRoute path="/profile" component={Profile} />
               <PrivateRoute path="/deal-setup" component={DealSetup} />
 
@@ -77,14 +81,18 @@ const App = () => {
 
               {/** Deals * */}
               {/* PUBLIC Landing Page */}
-              <Route path="/public/:organization/:deal_slug" component={DealLandingPage} exact />
-              <Route path="/public/:deal_slug" component={DealLandingPage} exact />
+              <Route path="/public/:organization/:deal_slug" component={DealOneClick} exact />
+              <Route path="/public/:deal_slug" component={DealOneClick} exact />
 
               {/* Private Landing Page */}
-              <PrivateRoute path="/deals/:deal_slug" component={DealLandingPage} exact />
+              <PrivateRoute path="/deals/:deal_slug" component={DealOneClick} exact />
+              <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
+
+              {/* prospect deals */}
+              <PrivateRoute path="/prospects" component={Prospect} exact />
               <PrivateRoute
-                path="/deals/:organization/:deal_slug"
-                component={DealLandingPage}
+                path="/prospects/:organization/:deal_slug"
+                component={ProspectDealPage}
                 exact
               />
 

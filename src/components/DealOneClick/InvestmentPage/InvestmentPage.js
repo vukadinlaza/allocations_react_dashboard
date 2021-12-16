@@ -217,9 +217,8 @@ function InvestmentPage() {
     setPopulated(true);
   };
 
-  const [submitConfirmation] = useMutation(CONFIRM_INVESTMENT, {
-    onCompleted: (data) => {
-      console.log(data);
+  const [submitConfirmation, { data: investmentData }] = useMutation(CONFIRM_INVESTMENT, {
+    onCompleted: (investmentData) => {
       refetch();
       setLoading(false);
       const message = location?.state?.submission
@@ -227,9 +226,12 @@ function InvestmentPage() {
         : 'Success! Investment created';
       toast.success(message);
       const path = organization
-        ? `/next-steps/${organization}/${deal_slug}?investmentId=${data.confirmInvestment._id}`
-        : `/next-steps/${deal_slug}?investmentId=${data.confirmInvestment._id}`;
-      history.push(path, { investorFormData });
+        ? `/next-steps/${organization}/${deal_slug}`
+        : `/next-steps/${deal_slug}`;
+      history.push(path, {
+        id: investmentData.confirmInvestment._id,
+        investorFormData,
+      });
     },
     onError: () => {
       toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
@@ -331,14 +333,16 @@ function InvestmentPage() {
           is3c7={is3c7}
           docSpringTemplateId={deal?.docSpringTemplateId}
         />
-        {requireSecondSig && (org === 'irishangels' || org === '5f903e7164eb9a0023189ca2') && (
+        {requireSecondSig && (
           <SecondSignature
             requireSecondSigChecked={requireSecondSigChecked}
             setRequireSecondSigChecked={setRequireSecondSigChecked}
             setInvestor={setInvestor}
             errors={errors}
+            org={org}
           />
         )}
+
         <TermsAndConditionsPanel
           confirmInvestment={confirmInvestment}
           deal={deal}

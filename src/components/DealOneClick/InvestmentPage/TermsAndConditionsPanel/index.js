@@ -79,7 +79,7 @@ function TermsAndConditionsPanel({
             }}
             id="terms-checkbox"
           />
-          {weOrI} have read and accept the terms of the investment.
+          {titleCase(weOrI)} have read and accept the terms of the investment.
         </label>
       </div>
       {isClosed ? (

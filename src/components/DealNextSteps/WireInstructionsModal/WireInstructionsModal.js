@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './styles.scss';
 
 function WireInstructionsModal({ open, setOpen, docs, investmentWireInstructions = {} }) {
+
   const link =
     docs && docs.find((d) => d.path.includes('instructions'))
       ? `https://${docs.find((d) => d.path.includes('instructions')).link}`

@@ -5,13 +5,11 @@ const OrganizationContext = createContext();
 
 export const CurrentAccountProvider = ({ children }) => {
   const { loading, userProfile } = useAuth();
-  const [currentOrganization, setCurrentOrganization] = useState('');
+  const [currentOrganization, setCurrentOrganization] = useState(null);
 
   useEffect(() => {
     if (!currentOrganization) setCurrentOrganization(userProfile?.organizations_admin?.[0]);
   }, [loading]);
-
-  console.log(currentOrganization);
 
   return (
     <OrganizationContext.Provider value={{ currentOrganization, setCurrentOrganization }}>

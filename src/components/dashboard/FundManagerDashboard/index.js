@@ -5,26 +5,25 @@ import { useLazyQuery, useQuery, gql } from '@apollo/client';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography, Button, Paper } from '@material-ui/core';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import EditIcon from '@material-ui/icons/Edit';
-import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-import Tooltip from '@material-ui/core/Tooltip';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
 import Banking from './sections/Banking';
+import Crypto from './sections/Crypto';
 import Investments from './sections/Investments';
 import Investors from './sections/Investors';
+import InvestorsCapitalCalls from './sections/InvestorsCapitalCalls';
 import Overview from './sections/Overview';
-import { FlatBox } from './widgets';
 import { useViewport, useFetch } from '../../../utils/hooks';
 import { useAuth } from '../../../auth/useAuth';
 import AllocationsLoader from '../../utils/AllocationsLoader';
 import DealsTabs from './sections/DealsTabs';
 import styles from './styles';
 import DocumentsTab from './sections/DocumentsTab';
-import BuildModal from '../../NewBuild/BuildModal';
+import DealTypeSelector from '../../NewBuild/DealType';
+import DealPage from './sections/DealPage';
 
 const GET_INVESTMENTS = gql`
   query GetDeal($fund_slug: String!, $deal_slug: String!) {
@@ -96,7 +95,7 @@ export const ORG_OVERVIEW = gql`
           managementFeeType
           fundManagementFeeType
         }
-        nd_virtual_account_number
+        virtual_account_number
       }
     }
     investor {
@@ -151,19 +150,24 @@ const fundTabs = [
 
 const spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
 
-const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
-const INVESTMENTS_TABLE = 'Investments';
+// Base here is OPS_ACCOUNTING
+let BASE = 'app3m4OJvAWUg0hng';
+let INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
 
 const FundManagerDashboard = ({ classes, history }) => {
   const { width } = useViewport();
   const params = useParams();
   const { deal: dealSlug } = params;
-  let { organization: orgSlug } = params;
+  const { organization: orgSlug } = params;
 
   if (orgSlug === 'demo-fund') {
-    orgSlug = '305-ventures';
+    // BASE HERE IS Demo Fund
+    BASE = 'app53fOK2CmyuzKXK';
+    INVESTMENTS_TABLE = 'Sales Demo';
   }
+
+  const { fundManagerBankingTab, capitalCalls, cryptoPaymentInBuild } = useFlags();
 
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
@@ -191,19 +195,28 @@ const FundManagerDashboard = ({ classes, history }) => {
 
   if (userProfile.admin) {
     const bankingTabName = 'Banking';
-    // Only add banking tab if user is admin
-    if (!fundTabs.includes(bankingTabName)) fundTabs.push(bankingTabName);
-    if (!spvTabs.includes(bankingTabName)) spvTabs.push(bankingTabName);
+    // Only add banking tab if user is admin and FF fundManagerBankingTab is true
+    if (fundManagerBankingTab) {
+      if (!fundTabs.includes(bankingTabName)) fundTabs.push(bankingTabName);
+      if (!spvTabs.includes(bankingTabName)) spvTabs.push(bankingTabName);
+    }
+  }
+
+  if (userProfile.admin && cryptoPaymentInBuild) {
+    const cryptoTabName = 'Crypto';
+    // Only add crypto tab if user is admin
+    if (!fundTabs.includes(cryptoTabName)) fundTabs.push(cryptoTabName);
+    if (!spvTabs.includes(cryptoTabName)) spvTabs.push(cryptoTabName);
   }
 
   const { data: atDeal } = useFetch(
-    OPS_ACCOUNTING,
+    BASE,
     dealName && DEALS_TABLE,
     dealName && `({Deal Name}="${checkedDealName}")`,
   );
 
   const { data: atFundData, status } = useFetch(
-    OPS_ACCOUNTING,
+    BASE,
     atDealData?.name && INVESTMENTS_TABLE,
     atDealData?.name && `(FIND("${checkedAtDealDataName}", {Deals}))`,
   );
@@ -332,10 +345,10 @@ const FundManagerDashboard = ({ classes, history }) => {
       return (
         <Overview
           classes={classes}
-          aum={aumData?.aum.total}
-          spvs={totalSpvData?.spvs.total}
-          funds={totalFundsData?.funds.total}
-          investors={totalInvestmentsData?.investments.total}
+          aum={aumData?.aum?.total || 0}
+          spvs={totalSpvData?.spvs?.total || 0}
+          funds={totalFundsData?.funds?.total || 0}
+          investors={totalInvestmentsData?.investments?.total || 0}
         />
       );
     }
@@ -389,7 +402,15 @@ const FundManagerDashboard = ({ classes, history }) => {
           />
         );
       case 'Investors':
-        return (
+        return capitalCalls ? (
+          <InvestorsCapitalCalls
+            classes={classes}
+            width={width}
+            data={dealInvestments}
+            orgSlug={orgSlug}
+            userProfile={userProfile}
+          />
+        ) : (
           <Investors
             classes={classes}
             width={width}
@@ -406,31 +427,14 @@ const FundManagerDashboard = ({ classes, history }) => {
 
       case 'Deal Page':
         return (
-          <div className={classes.section}>
-            <FlatBox title="SHARE">
-              <Typography>
-                dashboard.allocations.com
-                {orgSlug && dealData?.slug ? `/deals/${orgSlug}/${dealData.slug}` : ''}
-              </Typography>
-              <div className={classes.pageIcons}>
-                <div className={classes.pageIcon} onClick={goToEditDeal}>
-                  <Tooltip title="Edit">
-                    <EditIcon />
-                  </Tooltip>
-                </div>
-                <div className={classes.pageIcon} onClick={goToDeal}>
-                  <Tooltip title="Go">
-                    <ChevronRightIcon />
-                  </Tooltip>
-                </div>
-                <div className={classes.pageIcon} onClick={handleLinkCopy}>
-                  <Tooltip title="Copy">
-                    <FileCopyOutlinedIcon />
-                  </Tooltip>
-                </div>
-              </div>
-            </FlatBox>
-          </div>
+          <DealPage
+            classes={classes}
+            orgSlug={orgSlug}
+            dealData={dealData}
+            goToDeal={goToDeal}
+            goToEditDeal={goToEditDeal}
+            handleLinkCopy={handleLinkCopy}
+          />
         );
       case 'Banking':
         return (
@@ -438,7 +442,18 @@ const FundManagerDashboard = ({ classes, history }) => {
             orgSlug={orgSlug}
             classes={classes}
             deal_id={dealData._id}
-            deal_NDvirtualAccountNum={dealData.nd_virtual_account_number || null}
+            virtual_account_number={dealData.virtual_account_number || null}
+            openTooltip={openTooltip}
+            handleTooltip={handleTooltip}
+          />
+        );
+      case 'Crypto':
+        return (
+          <Crypto
+            orgSlug={orgSlug}
+            classes={classes}
+            deal_id={dealData._id}
+            virtual_account_number={dealData.virtual_account_number || null}
             openTooltip={openTooltip}
             handleTooltip={handleTooltip}
           />
@@ -548,7 +563,7 @@ const FundManagerDashboard = ({ classes, history }) => {
           </div>
         </Paper>
       )}
-      <BuildModal isOpen={openModal} onClose={() => setOpenModal(false)} />
+      <DealTypeSelector isOpen={openModal} onClose={() => setOpenModal(false)} />
     </div>
   );
 };
