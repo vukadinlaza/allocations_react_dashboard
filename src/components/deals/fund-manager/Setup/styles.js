@@ -1,5 +1,7 @@
 // import { phone } from '../../utils/helpers';
 
+import { yellow } from '@material-ui/core/colors';
+
 const styles = (theme) => ({
   cancelIcon: {
     position: 'absolute',
@@ -106,6 +108,46 @@ const styles = (theme) => ({
   textField: {
     width: '100%',
     margin: '10px 0',
+  },
+
+  // Styles for Body of Deal Setup
+  bodyContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    // backgroundColor: 'yellow',
+  },
+  stepText: {
+    textTransform: 'uppercase',
+    color: '#2A2B54',
+    fontWeight: '500',
+    fontSize: '12px', // ask for font size
+  },
+
+  // Styles for Current Step
+  currentStepContainer: {
+    paddingBottom: '30px',
+  },
+  currentStepBody: {
+    height: '100px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center',
+    border: '2px solid #186EFF',
+    borderRadius: '8px',
+    backgroundColor: '#ECF3FF',
+    padding: '7.5vh 8vw',
+  },
+  currentStepTitleRow: {
+    display: 'flex',
+    fontWeight: '500',
+    paddingBottom: '10px',
+    width: '100%',
+    '& *': {
+      marginRight: '20px',
+    },
+  },
+  currentStepText: {
+    fontSize: '12px',
   },
 });
 

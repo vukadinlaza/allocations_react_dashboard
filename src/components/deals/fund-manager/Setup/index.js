@@ -23,6 +23,7 @@ import AllocationsTable from '../../../utils/AllocationsTable';
 import TaskList from './tasks/TaskList';
 import TaskAction from './tasks/TaskAction';
 import styles from './styles';
+import CurrentStep from './common/CurrentStep';
 
 const DEAL = gql`
   query getDealWithTasks($deal_id: String) {
@@ -219,7 +220,6 @@ const DealSetup = ({ classes }) => {
         <Typography>SPVs</Typography>
       </Grid>
       <Grid container spacing={1} className={classes.mainBoxes}>
-        {/* {mainBoxes(deal.metadata.name)} */}
         <AllocationsTable
           data={mainBoxes}
           headers={boxesHeaders}
@@ -228,38 +228,15 @@ const DealSetup = ({ classes }) => {
           noShadow
         />
       </Grid>
-      <Grid container spacing={5}>
-        <PhaseList
-          classes={classes}
-          phases={deal?.phases}
-          handlePhaseClick={handlePhaseClick}
-          currentPhase={currentPhase}
-        />
-
-        {currentPhase && (
-          <TaskList
-            tasks={currentPhase?.tasks || []}
-            currentTask={currentTask}
-            handleTaskClick={handleTaskClick}
-          />
-        )}
-
-        {currentTask && (
-          <Grid item sm={12} lg={4}>
-            <Card className={classes.card}>
-              <CardContent style={{ padding: '0 16px' }}>
-                <TaskAction
-                  task={currentTask}
-                  deal={deal?.metadata}
-                  refetchDeal={refetchDeal}
-                  phase={currentPhase}
-                  classes={classes}
-                  setSnackbarData={setSnackbarData}
-                />
-              </CardContent>
-            </Card>
-          </Grid>
-        )}
+      <Grid container sm={12} className={classes.bodyContainer}>
+        <Grid item sm={10} className={classes.currentStepContainer}>
+          <Typography className={classes.stepText}>Current Step</Typography>
+          <CurrentStep />
+        </Grid>
+        <Grid item sm={10}>
+          <Typography className={classes.stepText}>Up Next</Typography>
+          ...add next step component...
+        </Grid>
       </Grid>
     </>
   );
