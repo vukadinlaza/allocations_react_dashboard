@@ -422,6 +422,8 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
         },
       },
     });
+
+    setPage((page) => page + 1);
   };
 
   const handleChange = ({ target }) => {
@@ -516,7 +518,6 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
             }
             setCurrentOrganization(selectedOrg);
             handleSubmit({ organization: selectedOrg });
-            // setPage((page) => page + 1);
             closeModal();
           },
           create_new_org: ({ estimatedSPVQuantity, createOrganization }) => {
@@ -528,7 +529,6 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
               createOrganization().then(({ data }) => {
                 handleSubmit({ organization: data?.createOrganization });
                 closeModalAndReset();
-                // setPage((page) => page + 1);
               });
             }
           },
@@ -536,7 +536,6 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
             createOrganization().then(({ data }) => {
               handleSubmit({ organization: data?.createOrganization });
               closeModalAndReset();
-              // setPage((page) => page + 1);
             });
           },
         }}
@@ -780,14 +779,17 @@ export default function NewDealForm() {
     loginWithRedirect,
     refetch: refetchUserProfile,
   } = useAuth();
-  // const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
-  const [createNewDeal, { data: dealIdAndDocumentData, loading: createDealLoading }] = useMutation(
+
+  // Page
+  const [page, setPage] = useState(0);
+
+  const [createNewDeal, { data, loading: createDealLoading, error: createDealError }] = useMutation(
     CREATE_NEW_DEAL,
     {
       onCompleted: ({ createNewDeal }) => {
-        console.log('DATA', createNewDeal);
         if (createNewDeal?.deal) {
           localStorage.setItem('buildDeal', JSON.stringify({ _id: createNewDeal?.deal?._id }));
+          // setPage(page => page + 1)
         }
       },
       onError: (err) => {
@@ -799,9 +801,6 @@ export default function NewDealForm() {
   const organization = useCurrentOrganization();
 
   const { type: dealType } = useParams();
-
-  // Page
-  const [page, setPage] = useState(0);
 
   // useEffect(() => {
   //   // if there is no build data/deal_id, we create a new build (default info pulled from the backend)
@@ -838,28 +837,20 @@ export default function NewDealForm() {
           page={page}
           setPage={setPage}
           createNewDeal={createNewDeal}
-          // deal_id={initialDeal?.deal?._id}
-          // waitingOnInitialDeal={loading}
-          // initialDeal={
-          //   initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
-          // }
         />
       ),
     },
     {
       title: 'Sign Agreements',
-      Component: null,
-      // (
-      // <AgreementSigner
-      //   deal={
-      //     initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
-      //   }
-      //   page={page}
-      //   setPage={setPage}
-      //   deal={deal}
-      //   updatedDealLoading={updatedDealLoading}
-      // />
-      // ),
+      Component: (
+        <AgreementSigner
+          dealIdAndDocumentData={data?.createNewDeal}
+          createDealLoading={createDealLoading}
+          error={createDealError}
+          page={page}
+          setPage={setPage}
+        />
+      ),
     },
   ];
 
