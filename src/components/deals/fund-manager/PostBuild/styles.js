@@ -111,19 +111,34 @@ const styles = (theme) => ({
     margin: '10px 0',
   },
 
+  // Button group
+  buttonGroup: {
+    margin: 'auto',
+
+    '& .MuiButton-containedPrimary': {
+      backgroundColor: '#ECF3FF',
+      color: '#186EFF',
+    },
+    '& .MuiButton-outlined': {
+      backgroundColor: '#CBD5E1',
+      color: '#64748B',
+      border: 'none',
+      textTransform: 'capitalize',
+    },
+  },
+
   // Stepper
   stepperContainer: {
     backgroundColor: 'inherit',
     border: 'none',
     boxShadow: 'none !important',
+    paddingBottom: '35px', // best way to do this?
 
-    // this targets ALL, but need only active
-    // '& .MuiStepLabel-iconContainer.MuiStepLabel-alternativeLabel': {
-    //   border: '2px solid #B5CEF9',
-    //   borderRadius: '50px',
-    // },
     '& .MuiStepIcon-root': {
       color: '#E2E8F0',
+    },
+    '& .MuiStepLabel-alternativeLabel': {
+      fontSize: '12px',
     },
     '& .MuiStepIcon-root.MuiStepIcon-active': {
       color: '#186EFF',
@@ -131,6 +146,10 @@ const styles = (theme) => ({
     '& .MuiStepIcon-root.MuiStepIcon-completed': {
       color: '#186EFF',
     },
+    '& .MuiStepConnector-completed .MuiStepConnector-line, .MuiStepConnector-active .MuiStepConnector-line,':
+      {
+        borderColor: '#186EFF',
+      },
     // '& .MuiStepIcon-text': {
     //   fontSize: '0.90rem',
     // },

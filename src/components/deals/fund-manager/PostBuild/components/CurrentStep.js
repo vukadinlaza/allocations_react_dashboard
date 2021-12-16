@@ -5,6 +5,7 @@ import grayCheck from '../../../../../assets/gray-check.svg';
 import styles from '../styles';
 
 const CurrentStep = ({ classes }) => {
+  // could include label ('For you') or button
   return (
     <Grid container className={classes.currentStepBody}>
       <div className={classes.stepTitleRow}>

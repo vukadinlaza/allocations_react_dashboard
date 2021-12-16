@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, Button } from '@material-ui/core';
 import { useQuery, gql } from '@apollo/client';
 import { useLocation, withRouter } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
@@ -217,8 +217,62 @@ const PostBuild = ({ classes }) => {
       </Grid> */}
       {/* Back button */}
       {/* Name of SPV and Invite button */}
-      {/* Tabs */}
+      <Grid
+        container
+        sm={10}
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignContent: 'center',
+          margin: 'auto',
+          paddingBottom: '16px',
+        }}
+      >
+        <Typography style={{ fontSize: '30px', fontWeight: '800' }}>Name of SPV</Typography>
+        <Grid item style={{ display: 'flex' }}>
+          <Button
+            variant="outlined"
+            size="small"
+            style={{
+              backgroundColor: '#CBD5E1',
+              color: '#64748B',
+              border: 'none',
+              textTransform: 'capitalize',
+              height: '80%',
+              margin: 'auto',
+            }}
+          >
+            Invite
+          </Button>
+        </Grid>
+      </Grid>
+
+      {/* Tabs/Buttons - this needs to be rethought once we have more information */}
+      <Grid container sm={10} spacing={1} direction="row" className={classes.buttonGroup}>
+        <Grid item>
+          <Button variant="contained" color="primary" size="small" disableElevation>
+            Deal Progress
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button variant="outlined" size="small">
+            Investors
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button size="small" style={{ textTransform: 'capitalize', color: '#64748B' }}>
+            Documents
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button size="small" style={{ textTransform: 'capitalize', color: '#64748B' }}>
+            Deal Page
+          </Button>
+        </Grid>
+      </Grid>
+
       <ProgressBar steps={steps} activeStep={activeStep} />
+
       <Grid container sm={12} className={classes.bodyContainer}>
         <Grid item sm={10} className={classes.currentStepContainer}>
           <Typography className={classes.stepText}>Current Step</Typography>

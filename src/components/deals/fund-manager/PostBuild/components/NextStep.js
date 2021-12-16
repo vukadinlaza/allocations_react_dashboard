@@ -5,6 +5,7 @@ import grayCheck from '../../../../../assets/gray-check.svg';
 import styles from '../styles';
 
 const NextStep = ({ classes }) => {
+  // could include label ('For you') or button
   return (
     <Grid container className={classes.nextStepBody}>
       <div className={classes.stepTitleRow} style={{ padding: '0px' }}>
