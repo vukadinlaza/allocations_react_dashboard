@@ -71,8 +71,6 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '5px',
     padding: '30px',
     width: '100%',
-    maxWidth: '944px',
-    marginLeft: '3%',
     marginTop: '16px',
     opacity: 1,
 

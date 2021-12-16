@@ -345,10 +345,10 @@ const FundManagerDashboard = ({ classes, history }) => {
       return (
         <Overview
           classes={classes}
-          aum={aumData?.aum.total}
-          spvs={totalSpvData?.spvs.total}
-          funds={totalFundsData?.funds.total}
-          investors={totalInvestmentsData?.investments.total}
+          aum={aumData?.aum?.total || 0}
+          spvs={totalSpvData?.spvs?.total || 0}
+          funds={totalFundsData?.funds?.total || 0}
+          investors={totalInvestmentsData?.investments?.total || 0}
         />
       );
     }
