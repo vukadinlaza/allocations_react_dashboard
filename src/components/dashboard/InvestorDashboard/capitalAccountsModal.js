@@ -128,7 +128,7 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts, refetch }) => {
                     <Typography variant="subtitle2">(Amount wired into Private Fund)</Typography>
                   </div>
                   <Typography className={classes.rightVaue}>
-                    ${amountFormat(data.subscriptionAmount)}
+                    ${amountFormat(data.currentAmountContributed)}
                   </Typography>
                 </Grid>
                 <hr className="solid" />
@@ -150,7 +150,7 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts, refetch }) => {
                     <Typography variant="subtitle2">(Pro rata share of management fee) </Typography>
                   </div>
                   <Typography className={classes.rightVaue}>
-                    ${nWithCommas(data.managementFee$)}
+                    ${nWithCommas(data.managementFees$)}
                   </Typography>
                 </Grid>
                 <hr className="solid" />

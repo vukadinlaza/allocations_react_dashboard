@@ -109,7 +109,10 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
     const rowOrg = row.deal?.organization;
     const capFields = (capitalAccounts || []).map((r) => r.fields);
     const capitalAccountInfo = capFields.find((r) => {
-      return _.get(r, 'Deal Name (webapp)[0]') === row?.deal?.company_name;
+      return (
+        _.get(r, 'Deal Name (webapp)[0]') === row?.deal?.company_name ||
+        _.get(r, 'Deal Name (webapp2)[0]') === row?.deal?.company_name
+      );
     });
     const actions = [
       {
@@ -175,7 +178,7 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
       case 'multiple':
         return `${_.get(row, headerValue, '1.0')}x`;
       case 'estimated':
-        return `$${nWithCommas(amount * multiple)}`;
+        return `$${nWithCommas(Math.round(amount * multiple))}`;
       case 'date':
         return moment(new Date(parseInt(row._id.substring(0, 8), 16) * 1000)).format('MM/DD/YYYY');
       case 'actions':
@@ -216,7 +219,7 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
       return {
         ...inv,
         'deal.dealParams.dealMultiple': multiple,
-        estimatedValue: inv.amount * multiple,
+        estimatedValue: Math.round(inv.amount * multiple),
         'deal.investmentType': type,
         status: titleCase(inv.status),
       };

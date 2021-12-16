@@ -635,7 +635,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
           className={classes.outerSection}
           style={{ borderLeft: sectionThreeComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
         >
-          <form noValidate autoComplete="off">
+          <form noValidate autoComplete="off" style={{ width: '100%' }}>
             <Grid container spacing={1} className={classes.inputGridContainer}>
               <ReportingAdviser {...formFieldProps} />
               <OfferingType {...formFieldProps} />
@@ -736,8 +736,8 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
           className={classes.outerSection}
           style={{ borderLeft: sectionSixComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
         >
-          <form noValidate autoComplete="off">
-            <FormControl required disabled variant="outlined" className={classes.formContainers}>
+          <form noValidate autoComplete="off" style={{ width: '100%' }}>
+            <FormControl required disabled variant="outlined" style={{ width: 'inherit' }}>
               <NotesMemo {...formFieldProps} />
               <Button
                 className={classes.continueButton}

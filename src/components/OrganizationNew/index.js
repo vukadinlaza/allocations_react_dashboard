@@ -33,7 +33,7 @@ export default function OrganizationNew() {
   const [createOrg, { data }] = useMutation(CREATE_ORG);
 
   useEffect(() => {
-    if (data) history.push(`/admin/${organization.slug}`);
+    if (data) history.push(`/admin/${data.createOrganization.slug}`);
   }, [data]);
 
   const submit = () => {
