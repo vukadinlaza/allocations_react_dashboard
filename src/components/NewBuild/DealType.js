@@ -61,6 +61,14 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: 'column',
     },
   },
+  modalBox: {
+    height: '100%',
+    width: '100%',
+    margin: 'auto',
+    [theme.breakpoints.down(phone)]: {
+      margin: '0px',
+    },
+  },
   modalPaperBody: {
     display: 'flex',
     flexDirection: 'column',
@@ -109,12 +117,21 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '11px',
     padding: '5px',
     cursor: 'pointer',
+    marginBottom: '20px',
     [theme.breakpoints.down(phone)]: {
-      marginBottom: '14px',
       marginTop: '0px',
-      marginLeft: '0',
+      marginLeft: '0px',
       width: '100%',
       textAlign: 'center',
+    },
+  },
+  deleteButton: {
+    width: '70%',
+    borderRadius: '8px',
+    backgroundColor: '#186EFF',
+    [theme.breakpoints.down(phone)]: {
+      padding: '10px',
+      width: '90%',
     },
   },
   typeBody: {
@@ -127,7 +144,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   typeGrid: {
-    height: '100%',
+    height: '20%',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-start',
@@ -138,6 +155,9 @@ const useStyles = makeStyles((theme) => ({
     width: '92.5%',
     margin: '20px',
     flexDirection: 'row',
+    [theme.breakpoints.down(phone)]: {
+      margin: '0px',
+    },
   },
   typeTitle: {
     color: '#000',
@@ -152,8 +172,8 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
   const { width } = useViewport();
   return (
     <Modal open={isOpen} onClose={closeModal} className={classes.modal}>
-      <Container style={{ height: '100%', width: '100%', margin: 'auto' }}>
-        <Grid container style={{ height: '100%' }}>
+      <Container style={{ width: '650px' }}>
+        <Grid container className={classes.modalBox}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
             <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#186EFF' }}>
               <Grid container justifyContent="space-between">
@@ -251,7 +271,11 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                           </div>
                           <Typography className={classes.typeTitle}>Create New Build</Typography>
                         </Grid>
-                        <Grid item className={classes.typeGrid}>
+                        <Grid
+                          item
+                          className={classes.typeGrid}
+                          style={{ margin: '0px 15px 25px 15px' }}
+                        >
                           <Typography className={classes.typeBody}>
                             This will erase your current build and start a build from scratch. This
                             action cannot be undone.
@@ -291,6 +315,7 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
 export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
   const classes = useStyles();
   const deal = JSON.parse(localStorage.getItem('buildDeal'));
+  const { width } = useViewport();
 
   const [deleteDeal] = useMutation(DELETE_DEAL, {
     variables: { _id: deal?._id },
@@ -305,7 +330,7 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
       }}
     >
       <Container style={{ width: '650px' }}>
-        <Grid container style={{ height: '100%', width: '90%', margin: 'auto' }}>
+        <Grid container className={classes.modalBox}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
             <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#186EFF' }}>
               <Grid container justifyContent="space-between">
@@ -329,7 +354,7 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
                 borderRadius: '0 0 1rem 1rem',
               }}
             >
-              <Grid container style={{ marginBottom: '25px' }}>
+              <Grid container style={{ marginBottom: '0px' }}>
                 <FormControl
                   component="fieldset"
                   style={{
@@ -340,7 +365,10 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
                     alignItems: 'center',
                   }}
                 >
-                  <Grid container className={classes.typeGroup}>
+                  <Grid
+                    container
+                    styles={{ ...classes.typeGroup, width: width >= 650 ? '92.5%' : '100%' }}
+                  >
                     <Box
                       style={{
                         display: 'flex',
@@ -349,7 +377,12 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
                         alignItems: 'space-between',
                       }}
                     >
-                      <Paper className={classes.modalPaperBody}>
+                      <Paper
+                        styles={{
+                          ...classes.modalPaperBody,
+                          border: width >= 650 ? 'solid #E5E5E5 1px' : 'none',
+                        }}
+                      >
                         <Grid
                           item
                           style={{
@@ -362,12 +395,25 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
                           <div className={classes.warningIcon}>
                             <img alt="spv-icon" src={warningIcon} />
                           </div>
-                          <Typography className={classes.typeTitle}>
+                          <Typography className={classes.typeTitle} style={{ textAlign: 'center' }}>
                             Are you sure you want to cancel this build?
                           </Typography>
                         </Grid>
-                        <Grid item className={classes.typeGrid}>
-                          <Typography className={classes.typeBody} style={{ textAlign: 'center' }}>
+                        <Grid
+                          item
+                          className={classes.typeGrid}
+                          style={{
+                            margin: width >= 650 ? '25px' : '18px 5px',
+                          }}
+                        >
+                          <Typography
+                            className={classes.typeBody}
+                            style={{
+                              textAlign: 'center',
+                              width: width >= 650 ? classes.typeBody.width : '335px',
+                              marginTop: width >= 650 ? '16px' : '0px',
+                            }}
+                          >
                             Once you cancel this build, you will start from scratch and lose this
                             information. This action can not be undone.
                           </Typography>
@@ -378,11 +424,7 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
                             color="primary"
                             size="large"
                             type="submit"
-                            style={{
-                              width: '70%',
-                              borderRadius: '8px',
-                              backgroundColor: '#186EFF',
-                            }}
+                            className={classes.deleteButton}
                             onClick={() => {
                               deleteDeal();
                               localStorage.removeItem('buildData');
