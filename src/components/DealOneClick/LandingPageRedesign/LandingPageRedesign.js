@@ -31,6 +31,9 @@ export const GET_DEAL = gql`
       docSpringTemplateId
       dealCoverImageKey
       target_raise_goal
+      accept_crypto
+      portfolio_company_securities
+      sectors
       dealDetails {
         title
         content
@@ -74,6 +77,7 @@ export const GET_DEAL = gql`
         fundGeneralPartner
         fundEstimatedTerm
         customCurrency
+        minimumInvestment
       }
     }
   }

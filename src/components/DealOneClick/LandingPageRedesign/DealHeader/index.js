@@ -19,8 +19,9 @@ function DealHeader({ deal }) {
     company_name,
     dealCoverImageKey,
     slug,
-    dealParams: { wireDeadline, signDeadline },
     target_raise_goal,
+    accept_crypto,
+    dealParams: { wireDeadline, signDeadline, minimumInvestment },
   } = deal;
 
   const classes = useStyles();
@@ -88,9 +89,11 @@ function DealHeader({ deal }) {
                   <div className={classes.coinvestorTagBubble}>
                     <span className={classes.coinvestorTagText}>USD</span>
                   </div>
-                  <div className={classes.coinvestorTagBubble}>
-                    <span className={classes.coinvestorTagText}>USDC</span>
-                  </div>
+                  {accept_crypto && (
+                    <div className={classes.coinvestorTagBubble}>
+                      <span className={classes.coinvestorTagText}>USDC</span>
+                    </div>
+                  )}
                 </div>
               </Grid>
               <Grid item>
@@ -102,7 +105,7 @@ function DealHeader({ deal }) {
                   }}
                 >
                   <div>Minimum Investment:</div>
-                  <div>$600,000</div>
+                  <div>${nWithCommas(minimumInvestment)}</div>
                 </div>
               </Grid>
             </Grid>
