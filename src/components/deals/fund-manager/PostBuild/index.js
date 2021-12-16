@@ -1,30 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import _, { every } from 'lodash';
-import moment from 'moment';
-import {
-  List,
-  ListItem,
-  ListItemText,
-  Card,
-  CardContent,
-  Grid,
-  ListItemIcon,
-  Typography,
-  Snackbar,
-  Stepper,
-  Step,
-  StepLabel,
-} from '@material-ui/core';
-import MuiAlert from '@material-ui/lab/Alert';
+import { Grid, Typography } from '@material-ui/core';
 import { useQuery, gql } from '@apollo/client';
-import { AiOutlineCheckCircle, AiFillCheckCircle } from 'react-icons/ai';
-import { IoIosArrowForward, IoIosArrowBack } from 'react-icons/io';
 import { useLocation, withRouter } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import AllocationsLoader from '../../../utils/AllocationsLoader';
-import CurrentStep from './common/CurrentStep';
-import NextStep from './common/NextStep';
+import CurrentStep from './components/CurrentStep';
+import NextStep from './components/NextStep';
 import styles from './styles';
+import ProgressBar from './components/ProgressBar';
 
 const DEAL = gql`
   query getDealWithTasks($deal_id: String) {
@@ -234,14 +217,7 @@ const PostBuild = ({ classes }) => {
       {/* Back button */}
       {/* Name of SPV and Invite button */}
       {/* Tabs */}
-      <Stepper alternativeLabel classes={{ root: classes.stepperContainer }}>
-        {/* Need to pass props */}
-        {steps.map((step) => (
-          <Step key={step}>
-            <StepLabel>{step}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
+      <ProgressBar steps={steps} />
       <Grid container sm={12} className={classes.bodyContainer}>
         <Grid item sm={10} className={classes.currentStepContainer}>
           <Typography className={classes.stepText}>Current Step</Typography>
