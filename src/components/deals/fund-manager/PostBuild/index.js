@@ -6,8 +6,9 @@ import { withStyles } from '@material-ui/core/styles';
 import AllocationsLoader from '../../../utils/AllocationsLoader';
 import CurrentStep from './components/CurrentStep';
 import NextStep from './components/NextStep';
-import styles from './styles';
 import ProgressBar from './components/ProgressBar';
+import backArrow from '../../../../assets/back-arrow.svg';
+import styles from './styles';
 
 const DEAL = gql`
   query getDealWithTasks($deal_id: String) {
@@ -215,8 +216,18 @@ const PostBuild = ({ classes }) => {
           noShadow
         />
       </Grid> */}
-      {/* Back button */}
-      {/* Name of SPV and Invite button */}
+      <Grid container style={{ marginBottom: '15px' }}>
+        <Button
+          style={{ textTransform: 'capitalize', color: '#64748B', outline: 'none' }}
+          startIcon={<img src={backArrow} alt="back arrow" />}
+          onClick={() => {
+            console.log('Click');
+          }}
+        >
+          Back to SPVs
+        </Button>
+      </Grid>
+
       <Grid
         container
         sm={10}
@@ -240,6 +251,7 @@ const PostBuild = ({ classes }) => {
               textTransform: 'capitalize',
               height: '80%',
               margin: 'auto',
+              outline: 'none',
             }}
           >
             Invite

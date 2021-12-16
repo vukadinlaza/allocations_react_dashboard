@@ -118,12 +118,14 @@ const styles = (theme) => ({
     '& .MuiButton-containedPrimary': {
       backgroundColor: '#ECF3FF',
       color: '#186EFF',
+      outline: 'none',
     },
     '& .MuiButton-outlined': {
       backgroundColor: '#CBD5E1',
       color: '#64748B',
       border: 'none',
       textTransform: 'capitalize',
+      outline: 'none',
     },
   },
 
