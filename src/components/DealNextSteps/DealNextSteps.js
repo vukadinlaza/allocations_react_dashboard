@@ -413,17 +413,6 @@ function DealNextSteps() {
           setOpen={setWireInstructionsOpen}
           docs={docs}
         />
-        <CryptoPaymentModal
-          investmentWireInstructions={investmentData?.investment?.wire_instructions}
-          open={cryptoPaymentOpen}
-          setOpen={setCryptoPaymentOpen}
-          investmentData={investmentData}
-          userId={data?.investor?._id ?? userProfile._id}
-          userName={data?.investor?.first_name}
-          userEmail={data?.investor?.email}
-          dealData={dealData}
-          docs={docs}
-        />
 
         <AllocationsRocket />
         <Confetti className={`confetti ${!confetti && 'hidden'}`} />
