@@ -3,6 +3,7 @@ import _, { get, isEqual, pick } from 'lodash';
 import { useParams, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { gql, useQuery, useMutation } from '@apollo/client';
+import moment from 'moment';
 
 import {
   Button,
@@ -17,7 +18,6 @@ import {
   Tooltip,
   InputAdornment,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Loader from '../utils/Loader';
 import { destroy } from '../../api/investments';
@@ -31,14 +31,6 @@ import './style.scss';
  * Slight refactor of index.js in InvestmemtEdit with the goal of making this reusable
  * and migrating to this component once New Fund Dashboard is completed.
  * */
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(2),
-    maxWidth: 800,
-    marginBottom: theme.spacing(4),
-  },
-}));
 const GET_INVESTMENT = gql`
   query GetInvestment($_id: String!) {
     investment(_id: $_id) {
@@ -46,6 +38,7 @@ const GET_INVESTMENT = gql`
       amount
       capitalWiredAmount
       status
+      wired_at
       documents {
         link
         path
@@ -104,6 +97,9 @@ export default function InvestmentEdit({
   const [hasInvestmentChanges, setHasInvestmentChanges] = useState(false);
   const [hasUserChanges, setHasUserChanges] = useState(false);
   const id = investmentId || params.id;
+
+  const oldDatabaseWireDate = !investment?.wired_at ? '' : new Date(investment?.wired_at * 1);
+  const oldDatabaseWireDateTime = moment.utc(oldDatabaseWireDate).format('yyy-MM-DD');
 
   const {
     data,
@@ -178,6 +174,8 @@ export default function InvestmentEdit({
         setHasUserChanges(!isEqual(data, prev));
         return data;
       });
+    } else if (prop === 'wired_at') {
+      setInvestment((prev) => ({ ...prev, wired_at: Date.parse(newVal) }));
     } else {
       setInvestment((prev) => ({ ...prev, [prop]: newVal }));
     }
@@ -188,7 +186,7 @@ export default function InvestmentEdit({
       updateInvestment({
         variables: {
           investment: {
-            ...pick(investment, ['_id', 'status', 'amount', 'capitalWiredAmount']),
+            ...pick(investment, ['_id', 'status', 'amount', 'capitalWiredAmount', 'wired_at']),
           },
         },
       });
@@ -295,7 +293,20 @@ export default function InvestmentEdit({
               />
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
+          <Grid item xs={6}>
+            <FormControl variant="outlined" style={{ width: '100%' }} size="small">
+              <TextField
+                value={oldDatabaseWireDateTime || ''}
+                onChange={(e) => updateInvestmentProp({ prop: 'wired_at', newVal: e.target.value })}
+                disabled={investment?.status === 'wired'}
+                type="date"
+                label="Wired Date"
+                variant="outlined"
+                InputLabelProps={{ shrink: true }}
+              />
+            </FormControl>
+          </Grid>
+          <Grid item xs={6}>
             <FormControl variant="outlined" style={{ width: '100%' }} size="small">
               <InputLabel>Status</InputLabel>
               <Select
