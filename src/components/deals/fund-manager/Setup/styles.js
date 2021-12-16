@@ -110,7 +110,7 @@ const styles = (theme) => ({
     margin: '10px 0',
   },
 
-  // Styles for Body of Deal Setup
+  // Styles for Body of Deal Setup and common styling between CurrentStep and NextStep
   bodyContainer: {
     display: 'flex',
     justifyContent: 'center',
@@ -121,23 +121,9 @@ const styles = (theme) => ({
     color: '#2A2B54',
     fontWeight: '500',
     fontSize: '12px', // ask for font size
+    marginBottom: '5px',
   },
-
-  // Styles for Current Step
-  currentStepContainer: {
-    paddingBottom: '30px',
-  },
-  currentStepBody: {
-    height: '100px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignContent: 'center',
-    border: '2px solid #186EFF',
-    borderRadius: '8px',
-    backgroundColor: '#ECF3FF',
-    padding: '7.5vh 8vw',
-  },
-  currentStepTitleRow: {
+  stepTitleRow: {
     display: 'flex',
     fontWeight: '500',
     paddingBottom: '10px',
@@ -146,8 +132,34 @@ const styles = (theme) => ({
       marginRight: '20px',
     },
   },
-  currentStepText: {
-    fontSize: '12px',
+
+  // Styles for Current Step
+  currentStepContainer: {
+    paddingBottom: '30px',
+    height: 'fit-content',
+  },
+  currentStepBody: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center',
+    border: '2px solid #186EFF',
+    borderRadius: '8px',
+    backgroundColor: '#ECF3FF',
+    padding: '3.5vh 5.5vw',
+  },
+
+  // Styles for Next Step
+  nextStepContainer: {
+    height: 'fit-content',
+    width: '100%',
+  },
+  nextStepBody: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center',
+    borderRadius: '8px',
+    backgroundColor: '#FFF',
+    padding: '3.5vh 5.5vw',
   },
 });
 

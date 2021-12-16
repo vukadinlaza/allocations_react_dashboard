@@ -24,6 +24,7 @@ import TaskList from './tasks/TaskList';
 import TaskAction from './tasks/TaskAction';
 import styles from './styles';
 import CurrentStep from './common/CurrentStep';
+import NextStep from './common/NextStep';
 
 const DEAL = gql`
   query getDealWithTasks($deal_id: String) {
@@ -233,9 +234,9 @@ const DealSetup = ({ classes }) => {
           <Typography className={classes.stepText}>Current Step</Typography>
           <CurrentStep />
         </Grid>
-        <Grid item sm={10}>
+        <Grid item sm={10} className={classes.nextStepContainer}>
           <Typography className={classes.stepText}>Up Next</Typography>
-          ...add next step component...
+          <NextStep />
         </Grid>
       </Grid>
     </>
