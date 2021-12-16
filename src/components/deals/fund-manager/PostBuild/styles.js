@@ -128,6 +128,9 @@ const styles = (theme) => ({
     '& .MuiStepIcon-root.MuiStepIcon-active': {
       color: '#186EFF',
     },
+    '& .MuiStepIcon-root.MuiStepIcon-completed': {
+      color: '#186EFF',
+    },
     // '& .MuiStepIcon-text': {
     //   fontSize: '0.90rem',
     // },

@@ -3,12 +3,13 @@ import { withStyles } from '@material-ui/core/styles';
 import { Stepper, Step, StepLabel } from '@material-ui/core';
 import styles from '../styles';
 
-// I moved this because adding the next functionality is going to make things messy
+// I moved this because adding the next functionality might make things messy
 
-const ProgressBar = ({ classes, steps }) => {
+const ProgressBar = ({ classes, steps, activeStep }) => {
+  // activeStep needs to be a number. the index of the step
+
   return (
-    <Stepper alternativeLabel classes={{ root: classes.stepperContainer }}>
-      {/* Need to pass props */}
+    <Stepper alternativeLabel classes={{ root: classes.stepperContainer }} activeStep={activeStep}>
       {steps.map((step) => (
         <Step key={step}>
           <StepLabel>{step}</StepLabel>

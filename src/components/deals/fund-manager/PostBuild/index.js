@@ -185,6 +185,7 @@ const PostBuild = ({ classes }) => {
   // ];
 
   const steps = ['Pre-Onboarding', 'Onboarding', 'Closing', 'Post-Closing'];
+  const activeStep = steps.indexOf('Closing');
 
   return (
     <>
@@ -217,7 +218,7 @@ const PostBuild = ({ classes }) => {
       {/* Back button */}
       {/* Name of SPV and Invite button */}
       {/* Tabs */}
-      <ProgressBar steps={steps} />
+      <ProgressBar steps={steps} activeStep={activeStep} />
       <Grid container sm={12} className={classes.bodyContainer}>
         <Grid item sm={10} className={classes.currentStepContainer}>
           <Typography className={classes.stepText}>Current Step</Typography>
