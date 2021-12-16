@@ -75,6 +75,7 @@ const styles = (theme) => ({
     width: '100%',
     zIndex: 1,
   },
+  //delete?
   mainBoxes: {
     margin: '6rem 0 2rem 0',
   },
@@ -110,7 +111,7 @@ const styles = (theme) => ({
     margin: '10px 0',
   },
 
-  // Styles for Body of Deal Setup and common styling between CurrentStep and NextStep
+  // Styles for Body of PostBuild and common styling between CurrentStep and NextStep
   bodyContainer: {
     display: 'flex',
     justifyContent: 'center',
