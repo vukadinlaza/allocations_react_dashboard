@@ -19,16 +19,28 @@ const GET_DOCUMENT = gql`
 `;
 
 const AgreementBox = ({
-  loading,
-  error,
+  title,
+  task,
+  agreementLink,
   readyToSign,
   signingModal,
-  agreementLink,
   signed,
   setSigned,
+  createDealLoading,
+  error,
   classes,
-  title,
 }) => {
+  const [getSignedDocument, { data: signedDocUrl, loading: signedDocLoading }] = useLazyQuery(
+    GET_DOCUMENT,
+    { variables: { task_id: task?._id }, fetchPolicy: 'network-only' },
+  );
+
+  useEffect(() => {
+    if (signed && task?._id) getSignedDocument();
+  }, [signed]);
+
+  const loading = createDealLoading || signedDocLoading;
+
   return (
     <Paper
       className={signed ? classes.agreementSignedBox : classes.agreementUnsignedBox}
@@ -36,7 +48,7 @@ const AgreementBox = ({
         cursor: readyToSign && !signed && 'pointer',
         pointerEvents: !readyToSign && 'none',
       }}
-      onClick={() => readyToSign && signingModal(agreementLink, setSigned)}
+      onClick={() => (readyToSign && !signed ? signingModal(agreementLink, setSigned) : null)}
     >
       <div style={{ display: 'flex', alignItems: 'center' }}>
         {loading || error ? (
@@ -48,22 +60,13 @@ const AgreementBox = ({
         )}
 
         <Typography className={classes.itemText} style={{ width: '200px' }}>
-          {/* {!updatedDeal ? (
-                'Building your deal...'
-              ) : agreementLinkLoading ? (
-                'Almost done...'
-              ) : serviceAgreementDocUrl?.getDealDocService?.link ? (
-                <a
-                  href={serviceAgreementDocUrl?.getDealDocService?.link}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Service Agreement
-                </a>
-              ) : (
-                'Service Agreement'
-              )} */}
-          {loading ? 'Loading...' : title}
+          {signed && signedDocUrl?.getDealDocService?.link ? (
+            <a href={signedDocUrl?.getDealDocService?.link} target="_blank" rel="noreferrer">
+              {title}
+            </a>
+          ) : (
+            !loading && title
+          )}
         </Typography>
       </div>
 
@@ -74,15 +77,9 @@ const AgreementBox = ({
   );
 };
 
-export default function SignDocsForm({
-  dealIdAndDocumentData = {},
-  createDealLoading,
-  error,
-  page,
-  setPage,
-}) {
+export default function SignDocsForm({ dealData = {}, createDealLoading, error, page, setPage }) {
   const history = useHistory();
-  const { deal, documents } = dealIdAndDocumentData;
+  const { deal, documents, phases } = dealData;
   const [serviceAgreementLink, advisoryAgreementLink] = documents || [];
 
   const [serviceAgreementSigned, setServiceAgreementSigned] = useState(false);
@@ -104,20 +101,12 @@ export default function SignDocsForm({
     });
   };
 
-  // const phase = updatedDeal?.setBuildInfo?.phases.find((phase) => phase.name === 'build');
-  // const task = phase?.tasks?.find((task) => task.title === 'Sign Service Agreement');
-
-  // const [getSignedServiceAgreement, { data: serviceAgreementDocUrl, loading: signedDocLoading }] =
-  //   useLazyQuery(GET_DOCUMENT, { variables: { task_id: task?._id }, fetchPolicy: 'network-only' });
-
-  // useEffect(() => {
-  //   if (signed) getSignedServiceAgreement();
-  // }, [signed]);
+  const phase = phases?.find((phase) => phase.name === 'build');
+  const serviceAgreementTask = phase?.tasks?.find(
+    (task) => task.title === 'Sign Service Agreement',
+  );
 
   const classes = useStyles();
-  // const loading = updatedDealLoading || agreementLinkLoading || signedDocLoading;
-  const loading = createDealLoading;
-
   return (
     <>
       <Paper className={classes.signContainer}>
@@ -135,10 +124,11 @@ export default function SignDocsForm({
           title="Service Agreement"
           agreementLink={serviceAgreementLink}
           signingModal={signingModal}
-          readyToSign={!!serviceAgreementLink && !error && !loading}
+          task={serviceAgreementTask}
+          readyToSign={!!serviceAgreementLink && !error && !createDealLoading}
           signed={serviceAgreementSigned}
           setSigned={setServiceAgreementSigned}
-          loading={loading}
+          createDealLoading={createDealLoading}
           error={error}
           classes={classes}
         />
@@ -147,10 +137,10 @@ export default function SignDocsForm({
           title="Advisory Agreement"
           agreementLink={advisoryAgreementLink}
           signingModal={signingModal}
-          readyToSign={!!advisoryAgreementLink && !error && !loading}
+          readyToSign={!!advisoryAgreementLink && !error && !createDealLoading}
           signed={advisoryAgreementSigned}
           setSigned={setAdvisoryAgreementSigned}
-          loading={loading}
+          createDealLoading={createDealLoading}
           error={error}
           classes={classes}
         />

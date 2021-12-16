@@ -36,6 +36,15 @@ const CREATE_NEW_DEAL = gql`
       deal {
         _id
       }
+      phases {
+        _id
+        name
+        tasks {
+          _id
+          title
+          type
+        }
+      }
       documents {
         dataRequestId: id
         tokenId: token_id
@@ -499,7 +508,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
         page={newBuildModalPage}
         setPage={setNewBuildModalPage}
         setBuildFormPage={setPage}
-        // refetchUserProfile={auth.refetchUserProfile}
+        refetchUserProfile={auth.refetchUserProfile}
         next={{
           deal_type_selector: {
             spv: () => {
@@ -777,9 +786,8 @@ export default function NewDealForm() {
   // Page
   const [page, setPage] = useState(0);
 
-  const [createNewDeal, { data, loading: createDealLoading, error: createDealError }] = useMutation(
-    CREATE_NEW_DEAL,
-    {
+  const [createNewDeal, { data: dealData, loading: createDealLoading, error: createDealError }] =
+    useMutation(CREATE_NEW_DEAL, {
       onCompleted: ({ createNewDeal }) => {
         if (createNewDeal?.deal) {
           localStorage.setItem('buildDeal', JSON.stringify({ _id: createNewDeal?.deal?._id }));
@@ -788,8 +796,7 @@ export default function NewDealForm() {
       onError: (err) => {
         console.log('err', err);
       },
-    },
-  );
+    });
 
   const organization = useCurrentOrganization();
 
@@ -819,7 +826,7 @@ export default function NewDealForm() {
       title: 'Sign Agreements',
       Component: (
         <AgreementSigner
-          dealIdAndDocumentData={data?.createNewDeal}
+          dealData={dealData?.createNewDeal}
           createDealLoading={createDealLoading}
           error={createDealError}
           page={page}
