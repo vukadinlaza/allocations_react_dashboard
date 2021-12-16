@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Paper, Tabs, Tab, Box } from '@material-ui/core';
 import Detail from './Detail';
-import DealMemo from './DealMemo';
+import Memo from './Memo';
 import PitchDeck from './PitchDeck';
 import useStyles from '../DealStyles';
 
@@ -41,7 +41,7 @@ export default function DealDetails() {
             </>
           ))}
         {tab === 1 && <PitchDeck pdf={pdf} />}
-        {tab === 2 && <DealMemo pdf={pdf} />}
+        {tab === 2 && <Memo pdf={pdf} />}
       </Box>
     </Paper>
   );

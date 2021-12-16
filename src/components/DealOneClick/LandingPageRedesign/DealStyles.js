@@ -95,6 +95,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '5px',
     fontFamily: 'Roboto',
     fontSize: '24px',
+    color: '#2A2B54',
   },
 
   boxContent: {
@@ -122,11 +123,12 @@ const useStyles = makeStyles((theme) => ({
 
   box: {
     display: 'flex',
+    color: '#2A2B54',
     alignItems: 'center',
     margin: '0 auto',
     width: '90%',
-    paddingBottom: '30px',
-    marginTop: '20px',
+    paddingBottom: '15px',
+    marginTop: '10px',
     [theme.breakpoints.up('sm')]: {},
     [theme.breakpoints.up('md')]: {},
     [theme.breakpoints.up('lg')]: {},
@@ -193,6 +195,7 @@ const useStyles = makeStyles((theme) => ({
 
   investmentProgress: {
     fontSize: '25px',
+    color: '#2A2B54',
     [theme.breakpoints.up('sm')]: {},
     [theme.breakpoints.up('md')]: {},
     [theme.breakpoints.up('lg')]: {},
@@ -221,7 +224,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   investButton: {
-    backgroundColor: '#EBEEF0',
+    backgroundColor: '#CBD5E1',
     width: '100%',
     height: '50px',
     color: '#64748A',
@@ -236,6 +239,7 @@ const useStyles = makeStyles((theme) => ({
   floatRight: {
     float: 'right',
     color: '#2A2B54',
+    fontSize: '14px',
   },
 
   floatLeft: {

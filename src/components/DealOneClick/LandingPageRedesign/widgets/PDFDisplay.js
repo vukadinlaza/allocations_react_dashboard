@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const useStyles = makeStyles(() => ({
   container: {
-    width: '30%',
+    width: '40%',
     float: 'right',
-    marginATop: '40px',
+    marginTop: '40px',
+    display: 'flex',
+    justifyContent: 'end',
+    alignItems: 'center',
   },
   arrowLeft: {
     border: '1px solid #CBD5E1',
@@ -38,7 +40,14 @@ const useStyles = makeStyles(() => ({
   numberContainer: {
     border: '1px solid #CBD5E1',
     borderRadius: '0px',
-    padding: '13px 24px',
+    padding: '10px 24px',
+  },
+  pdfContainer: {
+    border: '1px solid #CBD5E1',
+    padding: '10px 24px',
+    marginTop: '40px',
+    marginRight: '70px',
+    marginLeft: '70px',
   },
   numbers: {
     fontFamily: 'Roboto',
@@ -76,8 +85,8 @@ function PDFDisplay({ pdf }) {
   };
 
   return (
-    <>
-      <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
+    <div>
+      <Document file={pdf} className={classes.pdfContainer} onLoadSuccess={onDocumentLoadSuccess}>
         <Page pageNumber={pageNumber} />
       </Document>
 
@@ -104,7 +113,7 @@ function PDFDisplay({ pdf }) {
           &gt;
         </button>
       </div>
-    </>
+    </div>
   );
 }
 export default PDFDisplay;

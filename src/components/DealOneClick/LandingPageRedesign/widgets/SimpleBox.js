@@ -59,7 +59,7 @@ const styles = (theme) => ({
   infoIcon: {
     marginLeft: '0.5em',
     cursor: 'pointer',
-    color: '#758398',
+    color: '#64748B',
     fontSize: '16px',
   },
   modal: {
