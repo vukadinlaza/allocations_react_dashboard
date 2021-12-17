@@ -222,7 +222,7 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                           <div className={classes.icon}>
                             <img alt="spv-icon" src={spvIcon} />
                           </div>
-                          <Grid container justifyContent="center">
+                          <Grid container justifyContent="center" style={{ marginTop: '5px' }}>
                             <Grid
                               item
                               style={{
@@ -238,7 +238,7 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                             <Grid item className={classes.typeGrid}>
                               <Typography
                                 className={classes.typeBody}
-                                style={{ textAlign: 'center', marginTop: '0px' }}
+                                style={{ textAlign: 'center', margin: '-4px' }}
                               >
                                 We will pick you up where you left off on your current build
                                 process.
@@ -487,6 +487,7 @@ export default function DealTypeSelector({
   onClose = () => closeModal(),
 }) {
   const classes = useStyles();
+  const { width } = useViewport();
 
   return (
     <Modal open={isOpen} onClose={onClose} className={classes.modal}>
@@ -521,9 +522,12 @@ export default function DealTypeSelector({
                     alignItems: 'center',
                   }}
                 >
-                  <Grid container className={classes.typeGroup}>
+                  <Grid container justifyContent="center" className={classes.typeGroup}>
                     <Box className={classes.modalPaperContainer}>
-                      <Paper className={classes.modalPaperBody}>
+                      <Paper
+                        className={classes.modalPaperBody}
+                        style={{ margin: width >= 650 ? '.5rem' : '10px 5px' }}
+                      >
                         <Box className={classes.modalPaperContent}>
                           <Grid item className={classes.iconContainer}>
                             <div className={classes.icon}>
@@ -562,7 +566,10 @@ export default function DealTypeSelector({
                         </Grid>
                       </Paper>
 
-                      <Paper className={classes.modalPaperBody}>
+                      <Paper
+                        className={classes.modalPaperBody}
+                        style={{ margin: width >= 650 ? '.5rem' : '10px 5px' }}
+                      >
                         <Box className={classes.modalPaperContent}>
                           <Grid item className={classes.iconContainer}>
                             <div className={classes.icon}>
