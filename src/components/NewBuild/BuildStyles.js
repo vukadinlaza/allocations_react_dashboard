@@ -68,9 +68,6 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'none',
     outline: 'none',
     [theme.breakpoints.down(phone)]: {
-      marginBottom: '14px',
-      marginTop: '20px',
-      marginLeft: '0',
       width: '300px',
     },
   },
@@ -102,6 +99,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '8px',
     [theme.breakpoints.down(phone)]: {
       marginBottom: '14px',
+      width: '80%',
     },
   },
   helpIcon: {
@@ -126,9 +124,17 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: 'column',
     },
   },
-  inputGridItem: {
+  basicInformationInputItem: {
     [theme.breakpoints.down(phone)]: {
       maxWidth: '100%',
+      maxHeight: '130px',
+    },
+  },
+  inputGridItem: {
+    marginBottom: '30px',
+    [theme.breakpoints.down(phone)]: {
+      maxWidth: '100%',
+      // maxHeight: '125px',
     },
   },
   inputLabelWithTooltip: {
@@ -136,6 +142,10 @@ const useStyles = makeStyles((theme) => ({
     '& svg': {
       marginTop: '0.2em',
     },
+    // [theme.breakpoints.down(phone)]: {
+    //   alignItems: 'center',
+    //   marginBottom: '14px',
+    // },
   },
   itemText: {
     font: 'normal normal normal 18px/21px Roboto',
@@ -346,6 +356,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '37px',
     [theme.breakpoints.down(phone)]: {
       maxWidth: '100%',
+      marginBottom: '0px',
     },
   },
   minimumInput: {

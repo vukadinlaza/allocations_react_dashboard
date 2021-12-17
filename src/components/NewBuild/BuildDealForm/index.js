@@ -30,11 +30,12 @@ import {
   TargetRaiseGoal,
 } from './FormFields';
 
-const CREATE_BUILD = gql`
-  mutation createBuild($payload: Object) {
-    deal: createBuild(payload: $payload) {
-      _id
-      type
+const CREATE_NEW_DEAL = gql`
+  mutation createNewDeal($payload: Object) {
+    createNewDeal(payload: $payload) {
+      deal {
+        _id
+      }
       phases {
         _id
         name
@@ -44,22 +45,10 @@ const CREATE_BUILD = gql`
           type
         }
       }
-    }
-  }
-`;
-
-const SET_BUILD_INFO = gql`
-  mutation setBuildInfo($deal_id: String, $payload: Object) {
-    setBuildInfo(deal_id: $deal_id, payload: $payload) {
-      _id
-      metadata
-      phases {
-        name
-        tasks {
-          _id
-          title
-          complete
-        }
+      documents {
+        dataRequestId: id
+        tokenId: token_id
+        tokenSecret: token_secret
       }
     }
   }
@@ -735,25 +724,6 @@ export default function NewDealForm() {
 
   const { type: dealType } = useParams();
 
-  // Page
-  const [page, setPage] = useState(0);
-
-  useEffect(() => {
-    // if there is no build data/deal_id, we create a new build (default info pulled from the backend)
-    if (!localStorage.getItem('buildData') && !localStorage.getItem('buildDeal')) {
-      createBuild({
-        variables: { payload: { type: dealType } },
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    // if we finished creating the build, set the deal info in local storage
-    if (initialDeal) {
-      localStorage.setItem('buildDeal', JSON.stringify(initialDeal.deal));
-    }
-  }, [loading, initialDeal?.deal]);
-
   const titleMap = {
     spv: 'SPV',
     fund: 'Fund',
@@ -761,20 +731,16 @@ export default function NewDealForm() {
 
   const pages = [
     {
-      title: `Build your ${titleMap[dealType]}`,
+      title: `Build your ${titleMap[dealType] || 'SPV'}`,
       Component: (
         <BuildDetails
           dealType={dealType}
           organization={organization}
           userProfile={userProfile}
+          auth={{ isAuthenticated, login: loginWithPopup, refetchUserProfile }}
           page={page}
           setPage={setPage}
-          setBuildInfo={setBuildInfo}
-          deal_id={initialDeal?.deal?._id}
-          waitingOnInitialDeal={loading}
-          initialDeal={
-            initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
-          }
+          createNewDeal={createNewDeal}
         />
       ),
     },
@@ -782,19 +748,15 @@ export default function NewDealForm() {
       title: 'Sign Agreements',
       Component: (
         <AgreementSigner
-          deal={
-            initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
-          }
+          dealData={dealData?.createNewDeal}
+          createDealLoading={createDealLoading}
+          error={createDealError}
           page={page}
           setPage={setPage}
-          updatedDeal={updatedDeal}
-          updatedDealLoading={updatedDealLoading}
         />
       ),
     },
   ];
-
-  if (authLoading) return null;
 
   return (
     <>

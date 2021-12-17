@@ -37,7 +37,7 @@ export function PortfolioCompanyName({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6} style={{ maxHeight: '125px' }}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Portfolio Company Name</Typography>
@@ -90,7 +90,7 @@ export function FundName({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Fund Name</Typography>
@@ -138,7 +138,7 @@ export function PortfolioCompanySecurities({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Portfolio Company Securities?</Typography>
@@ -183,7 +183,7 @@ export function ManagerName({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Fund Manager Full Name</Typography>
@@ -229,7 +229,7 @@ export function DealName({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Deal Name</Typography>
@@ -278,7 +278,7 @@ export function NumberOfInvestments({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Number Of Investments</Typography>
@@ -339,7 +339,7 @@ export function GeneralPartnerName({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>General Partner Name</Typography>
@@ -389,7 +389,7 @@ export function RepresentativeGeneralPartnerAndTitle({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>
@@ -444,7 +444,7 @@ export function MinimumInvestmentFund({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Minimum Investment Amount</Typography>
@@ -563,7 +563,7 @@ export function TargetRaiseGoal({
 
 export function NeedGPEntity({ buildData, handleChange, handleTooltip, classes, openTooltip }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Do you need a GP Entity?</Typography>
@@ -609,7 +609,7 @@ export function GPEntityName({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>GP Entity Name</Typography>
@@ -660,7 +660,7 @@ export function ClosingDate({
 }) {
   const params = useParams();
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Closing Date</Typography>
@@ -780,7 +780,7 @@ export function Sectors({
   }
 
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <Grid className={classes.inputLabelWithTooltip} item xs={12}>
         <Typography className={classes.formItemName}>Sector(s)</Typography>
         <ModalTooltip
@@ -839,7 +839,7 @@ export function Representative({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Manager Full Title</Typography>
@@ -890,7 +890,7 @@ export function DealStage({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Deal Stage</Typography>
@@ -932,7 +932,8 @@ export function ManagementFee({
 }) {
   const params = useParams();
   return (
-    <Grid className={classes.customInputGridItem} item xs={6}>
+    //customInputGridItem
+    <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Choose your management fee</Typography>
@@ -1084,7 +1085,8 @@ export function CarryFee({
 }) {
   const params = useParams();
   return (
-    <Grid className={classes.customInputGridItem} item xs={6}>
+    //customInputGridItem
+    <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Choose your carry fee</Typography>
@@ -1383,7 +1385,8 @@ export function ReportingAdviser({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.customInputGridItem} item xs={6}>
+    //customInputGridItem
+    <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>
