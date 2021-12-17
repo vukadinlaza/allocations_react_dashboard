@@ -24,12 +24,16 @@ const InvestorsCapitalCall = ({ classes, orgSlug, userProfile }) => {
       align: 'right',
     },
     {
-      value: 'Current Amount Contributed',
+      value: 'Net Amount Contributed',
       label: 'Amount Contributed ($)',
       type: 'amount',
       align: 'right',
     },
-    { value: 'Gross Contribution Received', label: 'Total Contribution (%)', type: 'progressBar' },
+    {
+      value: 'Aggregate Contributed (%)',
+      label: 'Total Contribution (%)',
+      type: 'progressBar',
+    },
   ];
 
   useEffect(() => {
@@ -51,6 +55,7 @@ const InvestorsCapitalCall = ({ classes, orgSlug, userProfile }) => {
             fields: {
               ...record.fields,
               Email: resData.fields.Email,
+              _id: resData.fields._id,
             },
           };
         }),
@@ -65,7 +70,7 @@ const InvestorsCapitalCall = ({ classes, orgSlug, userProfile }) => {
       case 'name':
         return row['Investor Name'];
       case 'link':
-        return <a href={`/investor/${row._id}/home`}>Link</a>;
+        return row._id ? <a href={`/investor/${row._id}/home`}>Link</a> : <div />;
       case 'amount':
         return `$${nWithCommas(row[headerValue])}`;
       case 'date':
@@ -79,7 +84,7 @@ const InvestorsCapitalCall = ({ classes, orgSlug, userProfile }) => {
 
   if (['irishangels'].includes(orgSlug) || userProfile.admin) {
     headers.push({
-      value: 'Deal',
+      value: 'Deal Name (webapp)',
       label: 'Dashboard Link',
       type: 'link',
       alignHeader: true,
