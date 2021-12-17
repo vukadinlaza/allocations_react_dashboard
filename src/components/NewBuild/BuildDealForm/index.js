@@ -775,13 +775,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
 };
 
 export default function NewDealForm() {
-  const {
-    isAuthenticated,
-    userProfile,
-    loginWithPopup,
-    loginWithRedirect,
-    refetch: refetchUserProfile,
-  } = useAuth();
+  const { isAuthenticated, userProfile, loginWithPopup, refetch: refetchUserProfile } = useAuth();
 
   // Page
   const [page, setPage] = useState(0);
