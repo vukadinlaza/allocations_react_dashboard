@@ -241,11 +241,11 @@ const PostBuild = ({ classes }) => {
             Deal Progress
           </Button>
         </Grid>
-        <Grid item>
+        {/* <Grid item>
           <Button variant="outlined" size="small">
             Investors
           </Button>
-        </Grid>
+        </Grid> */}
         <Grid item>
           <Button size="small" style={{ textTransform: 'capitalize', color: '#64748B' }}>
             Documents
