@@ -152,25 +152,17 @@ const styles = (theme) => ({
       {
         borderColor: '#186EFF',
       },
-    // '& .MuiStepIcon-text': {
-    //   fontSize: '0.90rem',
-    // },
+    '& .MuiStepIcon-text': {
+      fontSize: '1rem',
+      // not aligned when increasing fontsize
+      verticalAlign: 'middle',
+    },
   },
-  // stepIcon: {
-  //   color: 'green',
-  //   '& .MuiStepIcon-root.MuiStepIcon-active': {
-  //     color: 'orange',
-  //   },
-  // },
-  // stepComplete: {
-  //   color: 'yellow',
-  // },
 
   // Styles for Body of PostBuild and common styling between CurrentStep and NextStep
   bodyContainer: {
     display: 'flex',
     justifyContent: 'center',
-    // backgroundColor: 'yellow',
   },
   stepText: {
     textTransform: 'uppercase',
