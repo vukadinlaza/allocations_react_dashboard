@@ -222,7 +222,7 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                           <div className={classes.icon}>
                             <img alt="spv-icon" src={spvIcon} />
                           </div>
-                          <Grid container>
+                          <Grid container justifyContent="center">
                             <Grid
                               item
                               style={{
