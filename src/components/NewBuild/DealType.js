@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@material-ui/core';
 import { useMutation, gql } from '@apollo/client';
 import CloseIcon from '@material-ui/icons/Close';

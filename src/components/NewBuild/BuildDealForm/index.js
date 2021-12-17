@@ -714,16 +714,22 @@ const BuildDetails = ({
 };
 
 export default function NewDealForm() {
-  const { userProfile, loading: authLoading } = useAuth();
-  const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
-  const [setBuildInfo, { data: updatedDeal, loading: updatedDealLoading }] = useMutation(
-    SET_BUILD_INFO,
-    {
+  const { isAuthenticated, userProfile, loginWithPopup, refetch: refetchUserProfile } = useAuth();
+
+  // Page
+  const [page, setPage] = useState(0);
+
+  const [createNewDeal, { data: dealData, loading: createDealLoading, error: createDealError }] =
+    useMutation(CREATE_NEW_DEAL, {
+      onCompleted: ({ createNewDeal }) => {
+        if (createNewDeal?.deal) {
+          localStorage.setItem('buildDeal', JSON.stringify({ _id: createNewDeal?.deal?._id }));
+        }
+      },
       onError: (err) => {
         console.log('err', err);
       },
-    },
-  );
+    });
 
   const organization = useCurrentOrganization();
 

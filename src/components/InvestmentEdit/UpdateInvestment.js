@@ -258,7 +258,8 @@ export default function InvestmentEdit({
                   inputProps: { min: 0 },
                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}
-                value={get(investment, 'amount', '') || 0}
+                value={get(investment, 'amount', '') || null}
+                placeholder={0}
                 onChange={(e) =>
                   // eslint-disable-next-line radix
                   updateInvestmentProp({
@@ -280,7 +281,8 @@ export default function InvestmentEdit({
                   inputProps: { min: 0 },
                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}
-                value={get(investment, 'capitalWiredAmount', '') || 0}
+                value={get(investment, 'capitalWiredAmount', '') || null}
+                placeholder={0}
                 onChange={(e) =>
                   // eslint-disable-next-line radix
                   updateInvestmentProp({
@@ -298,7 +300,7 @@ export default function InvestmentEdit({
               <TextField
                 value={oldDatabaseWireDateTime || ''}
                 onChange={(e) => updateInvestmentProp({ prop: 'wired_at', newVal: e.target.value })}
-                disabled={investment?.status === 'wired'}
+                disabled={investment?.status !== 'signed'}
                 type="date"
                 label="Wired Date"
                 variant="outlined"
@@ -309,16 +311,26 @@ export default function InvestmentEdit({
           <Grid item xs={6}>
             <FormControl variant="outlined" style={{ width: '100%' }} size="small">
               <InputLabel>Status</InputLabel>
-              <Select
-                value={investment?.status || ''}
-                onChange={(e) => updateInvestmentProp({ prop: 'status', newVal: e.target.value })}
-                inputProps={{ name: 'status' }}
-              >
-                <MenuItem value="invited">Invited</MenuItem>
-                <MenuItem value="signed">Signed</MenuItem>
-                <MenuItem value="wired">Wired</MenuItem>
-                <MenuItem value="complete">Complete</MenuItem>
-              </Select>
+              {investment?.documents.length < 1 ? (
+                <Select
+                  value={investment?.status || ''}
+                  onChange={(e) => updateInvestmentProp({ prop: 'status', newVal: e.target.value })}
+                  inputProps={{ name: 'status' }}
+                >
+                  <MenuItem value="invited">Invited</MenuItem>
+                </Select>
+              ) : (
+                <Select
+                  value={investment?.status || ''}
+                  onChange={(e) => updateInvestmentProp({ prop: 'status', newVal: e.target.value })}
+                  inputProps={{ name: 'status' }}
+                >
+                  <MenuItem value="invited">Invited</MenuItem>
+                  <MenuItem value="signed">Signed</MenuItem>
+                  <MenuItem value="wired">Wired</MenuItem>
+                  <MenuItem value="complete">Complete</MenuItem>
+                </Select>
+              )}
             </FormControl>
           </Grid>
         </Grid>
