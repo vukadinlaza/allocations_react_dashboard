@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { useQuery, gql } from '@apollo/client';
-import { useLocation, withRouter } from 'react-router';
+import { useHistory, useLocation, withRouter } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import AllocationsLoader from '../../../utils/AllocationsLoader';
 import CurrentStep from './components/CurrentStep';
@@ -9,6 +9,7 @@ import NextStep from './components/NextStep';
 import ProgressBar from './components/ProgressBar';
 import backArrow from '../../../../assets/back-arrow.svg';
 import styles from './styles';
+import { useCurrentOrganization } from '../../../../state/current-organization';
 
 const DEAL = gql`
   query getDealWithTasks($deal_id: String) {
@@ -103,6 +104,8 @@ const DEAL = gql`
 // };
 
 const PostBuild = ({ classes }) => {
+  const history = useHistory();
+  const organization = useCurrentOrganization();
   const query = new URLSearchParams(useLocation().search);
 
   const { data } = useQuery(DEAL, {
@@ -194,9 +197,7 @@ const PostBuild = ({ classes }) => {
         <Button
           style={{ textTransform: 'capitalize', color: '#64748B', outline: 'none' }}
           startIcon={<img src={backArrow} alt="back arrow" />}
-          onClick={() => {
-            console.log('Click');
-          }}
+          onClick={() => history.push(`/organizations/${organization.slug}/deals`)}
         >
           Back to SPVs
         </Button>
