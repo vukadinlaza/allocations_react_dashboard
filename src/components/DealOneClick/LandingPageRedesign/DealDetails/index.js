@@ -25,6 +25,24 @@ export default function DealDetails() {
     setTab(value);
   };
 
+  const tabContent = (tab) => {
+    switch (tab) {
+      case 0:
+        data.map(({ title, description }, index) => (
+          <>
+            <Detail title={title} description={description} />
+            {index !== data.length - 1 && <hr />}
+          </>
+        ));
+        break;
+      case 1:
+        return <PitchDeck pdf={pdf} />;
+      case 2:
+        return <Memo pdf={pdf} />;
+      default:
+    }
+  };
+
   return (
     <Paper className={classes.dealHeader}>
       <Box className={classes.box} style={{ display: 'block' }}>
@@ -57,15 +75,7 @@ export default function DealDetails() {
             }}
           />
         </Tabs>
-        {tab === 0 &&
-          data.map(({ title, description }, index) => (
-            <>
-              <Detail title={title} description={description} />
-              {index !== data.length - 1 && <hr />}
-            </>
-          ))}
-        {tab === 1 && <PitchDeck pdf={pdf} />}
-        {tab === 2 && <Memo pdf={pdf} />}
+        {tabContent(tab)}
       </Box>
     </Paper>
   );
