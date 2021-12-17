@@ -203,7 +203,7 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                     alignItems: 'center',
                   }}
                 >
-                  <Grid container className={classes.typeGroup}>
+                  <Grid container justifyContent="center" className={classes.typeGroup}>
                     <Box
                       style={{
                         display: 'flex',
@@ -212,7 +212,13 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                         width: width >= phone ? '100%' : '80%',
                       }}
                     >
-                      <Paper className={classes.modalPaperBody} style={{ alignItems: 'center' }}>
+                      <Paper
+                        className={classes.modalPaperBody}
+                        style={{
+                          alignItems: 'center',
+                          margin: width >= phone ? '.5rem' : '10px 0px 0px',
+                        }}
+                      >
                         <Grid container justifyContent="center">
                           <div className={classes.icon}>
                             <img alt="spv-icon" src={spvIcon} />
@@ -265,7 +271,13 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                         </Grid>
                       </Paper>
 
-                      <Paper className={classes.modalPaperBody} style={{ alignItems: 'center' }}>
+                      <Paper
+                        className={classes.modalPaperBody}
+                        style={{
+                          alignItems: 'center',
+                          margin: width >= phone ? '.5rem' : '10px 0px 0px',
+                        }}
+                      >
                         <div className={classes.icon}>
                           <img alt="fund-icon" src={plusSignIcon} />
                         </div>

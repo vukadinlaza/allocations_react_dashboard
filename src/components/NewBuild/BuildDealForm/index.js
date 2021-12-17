@@ -496,6 +496,12 @@ const BuildDetails = ({
     openTooltip,
   };
 
+  const sectionComplete = (section) => {
+    return {
+      borderLeft: width >= 675 ? (section ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB') : 'none',
+    };
+  };
+
   return (
     <>
       <BasicInfo
@@ -532,14 +538,7 @@ const BuildDetails = ({
         <Grid
           container
           className={classes.outerSection}
-          style={{
-            borderLeft:
-              width >= 675
-                ? sectionTwoComplete
-                  ? 'solid 3px #ECF3FF'
-                  : 'solid 3px #EBEBEB'
-                : 'none',
-          }}
+          style={{ borderLeft: sectionComplete(sectionTwoComplete) }}
         >
           <form noValidate autoComplete="off">
             <Grid container spacing={2} className={classes.inputGridContainer}>
@@ -577,14 +576,7 @@ const BuildDetails = ({
         <Grid
           container
           className={classes.outerSection}
-          style={{
-            borderLeft:
-              width >= 675
-                ? sectionThreeComplete
-                  ? 'solid 3px #ECF3FF'
-                  : 'solid 3px #EBEBEB'
-                : 'none',
-          }}
+          style={{ borderLeft: sectionComplete(sectionThreeComplete) }}
         >
           <form noValidate autoComplete="off" style={{ width: '100%' }}>
             <Grid container spacing={1} className={classes.inputGridContainer}>
@@ -622,14 +614,7 @@ const BuildDetails = ({
         <Grid
           container
           className={classes.outerSection}
-          style={{
-            borderLeft:
-              width >= 675
-                ? sectionFourComplete
-                  ? 'solid 3px #ECF3FF'
-                  : 'solid 3px #EBEBEB'
-                : 'none',
-          }}
+          style={{ borderLeft: sectionComplete(sectionFourComplete) }}
         >
           <form noValidate autoComplete="off">
             <Grid container spacing={1} className={classes.inputGridContainer}>
@@ -661,7 +646,7 @@ const BuildDetails = ({
         <Grid
           container
           className={classes.outerSection}
-          style={{ borderLeft: width >= 675 ? 'solid 3px #ECF3FF' : 'none' }}
+          style={{ borderLeft: sectionComplete(sectionTwoComplete) }}
         >
           <form noValidate autoComplete="off">
             <UploadDocs deal={initialDeal} {...formFieldProps} />
@@ -692,14 +677,7 @@ const BuildDetails = ({
         </Grid>
         <div
           className={classes.outerSection}
-          style={{
-            borderLeft:
-              width >= 675
-                ? sectionSixComplete
-                  ? 'solid 3px #ECF3FF'
-                  : 'solid 3px #EBEBEB'
-                : 'none',
-          }}
+          style={{ borderLeft: sectionComplete(sectionSixComplete) }}
         >
           <form noValidate autoComplete="off" style={{ width: '100%' }}>
             <FormControl required disabled variant="outlined" style={{ width: 'inherit' }}>
