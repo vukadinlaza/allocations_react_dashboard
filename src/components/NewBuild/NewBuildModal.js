@@ -250,6 +250,20 @@ const SelectOrganization = ({
   openTooltip,
   handleTooltip,
   setCurrentOrganization,
+  next = ({ selectedOrg }) => {
+    if (selectedOrg === 'Create New Organization') {
+      setPage('create_new_org');
+      return;
+    }
+    setCurrentOrganization(selectedOrg);
+    history.push(`/new-build/${dealType}`);
+    closeModal();
+  },
+  prev = () => setPage('deal_type_selector'),
+  onClose = () => {
+    closeModal();
+    setPage('deal_type_selector');
+  },
 }) => {
   const { userProfile, loading: userLoading } = useAuth();
   const [organizations, setOrganizations] = useState(userProfile?.organizations_admin || []);
@@ -260,14 +274,7 @@ const SelectOrganization = ({
   }, [userLoading]);
 
   return (
-    <Modal
-      open={isOpen}
-      className={classes.modal}
-      onClose={() => {
-        closeModal();
-        setPage('deal_type_selector');
-      }}
-    >
+    <Modal open={isOpen} className={classes.modal} onClose={onClose}>
       <Container className={classes.modalContainer}>
         <Grid container style={{ height: '100%', width: '100%', margin: 'auto' }}>
           <Grid item style={{ height: '100%', width: '100%' }}>
@@ -276,13 +283,7 @@ const SelectOrganization = ({
                 <Typography style={{ fontSize: '24px', fontWeight: '500', color: '#fff' }}>
                   Select Organization
                 </Typography>
-                <Box
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => {
-                    closeModal();
-                    setPage('deal_type_selector');
-                  }}
-                >
+                <Box style={{ cursor: 'pointer' }} onClick={onClose}>
                   <CloseIcon htmlColor="#fff" />
                 </Box>
               </Grid>
@@ -375,7 +376,7 @@ const SelectOrganization = ({
                           </MenuItem>
 
                           {organizations?.map((organization) => (
-                            <MenuItem key={organizations.name} value={organization}>
+                            <MenuItem key={organization?._id} value={organization}>
                               {_.truncate(organization.name, { length: 30 })}
                             </MenuItem>
                           ))}
@@ -392,26 +393,13 @@ const SelectOrganization = ({
                           type="submit"
                           className={classes.continueButton}
                           disabled={!selectedOrg}
-                          onClick={() => {
-                            if (selectedOrg === 'Create New Organization') {
-                              setPage('create_new_org');
-                              return;
-                            }
-                            setCurrentOrganization(selectedOrg);
-                            closeModal();
-                            history.push(`/new-build/${dealType}`);
-                          }}
+                          onClick={() => next({ selectedOrg, setCurrentOrganization })}
                         >
                           Continue
                         </Button>
                       </Grid>
                       <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Typography
-                          className={classes.previousButton}
-                          onClick={() => {
-                            setPage('deal_type_selector');
-                          }}
-                        >
+                        <Typography className={classes.previousButton} onClick={prev}>
                           Previous
                         </Typography>
                       </Grid>
@@ -442,6 +430,22 @@ const CreateNewOrganization = ({
   createOrganization,
   openTooltip,
   handleTooltip,
+  next = () => {
+    if (estimatedSPVQuantity >= 5) {
+      setPage('high_volume_partnerships');
+    }
+    // IF LESS THAN 5 ESTIMATED SPVS CREATE NEW ORG HERE RIGHT AWAY THEN PUSH TO BUILD PAGE //
+    else {
+      createOrganization();
+      history.push(`/new-build/${dealType}`);
+      closeModal();
+    }
+  },
+  prev = () => setPage('select_org'),
+  onClose = () => {
+    setPage('deal_type_selector');
+    closeModal();
+  },
 }) => {
   const [failedValidationFields, setFailedValidationFields] = useState([]);
 
@@ -476,14 +480,7 @@ const CreateNewOrganization = ({
   };
 
   return (
-    <Modal
-      open={isOpen}
-      className={classes.modal}
-      onClose={() => {
-        setPage('deal_type_selector');
-        closeModal();
-      }}
-    >
+    <Modal open={isOpen} className={classes.modal} onClose={onClose}>
       <Container className={classes.modalContainer}>
         <Grid container style={{ height: '100%', width: '100%', margin: 'auto' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
@@ -492,13 +489,7 @@ const CreateNewOrganization = ({
                 <Typography style={{ fontSize: '24px', fontWeight: '500', color: '#fff' }}>
                   Create New Organization
                 </Typography>
-                <Box
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => {
-                    setPage('deal_type_selector');
-                    closeModal();
-                  }}
-                >
+                <Box style={{ cursor: 'pointer' }} onClick={onClose}>
                   <CloseIcon htmlColor="#fff" />
                 </Box>
               </Grid>
@@ -631,27 +622,14 @@ const CreateNewOrganization = ({
                           onClick={() => {
                             // validate fields, if not valid, do nothing
                             if (!validateFields()) return;
-
-                            // IF 5 OR MORE SPVS SEND TO NEXT MODAL TO COLLECT MORE INFO //
-                            if (estimatedSPVQuantity >= 5) {
-                              setPage('high_volume_partnerships');
-                            }
-                            // IF LESS THAN 5 ESTIMATED SPVS CREATE NEW ORG HERE RIGHT AWAY THEN PUSH TO BUILD PAGE //
-                            else {
-                              createOrganization();
-                              history.push(`/new-build/${dealType}`);
-                              closeModal();
-                            }
+                            next({ estimatedSPVQuantity, createOrganization });
                           }}
                         >
                           Continue
                         </Button>
                       </Grid>
                       <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Typography
-                          className={classes.previousButton}
-                          onClick={() => setPage('select_org')}
-                        >
+                        <Typography className={classes.previousButton} onClick={prev}>
                           Previous
                         </Typography>
                       </Grid>
@@ -691,6 +669,16 @@ const HighVolumePartnerships = ({
   setMasterEntityName,
   openTooltip,
   handleTooltip,
+  next = () => {
+    createOrganization();
+    history.push(`/new-build/${dealType}`);
+    closeModal();
+  },
+  prev = () => setPage('create_new_org'),
+  onClose = () => {
+    setPage('deal_type_selector');
+    closeModal();
+  },
 }) => {
   const StatesConstructor = states.UsaStates;
   const usStates = new StatesConstructor();
@@ -724,14 +712,7 @@ const HighVolumePartnerships = ({
   };
 
   return (
-    <Modal
-      open={isOpen}
-      className={classes.modal}
-      onClose={() => {
-        setPage('deal_type_selector');
-        closeModal();
-      }}
-    >
+    <Modal open={isOpen} className={classes.modal} onClose={onClose}>
       <Container className={classes.modalContainer}>
         <Grid container style={{ height: '100%', width: '100%', margin: 'auto' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
@@ -740,13 +721,7 @@ const HighVolumePartnerships = ({
                 <Typography style={{ fontSize: '24px', fontWeight: '500', color: '#fff' }}>
                   High Volume Partnerships
                 </Typography>
-                <Box
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => {
-                    setPage('deal_type_selector');
-                    closeModal();
-                  }}
-                >
+                <Box style={{ cursor: 'pointer' }} onClick={onClose}>
                   <CloseIcon htmlColor="#fff" />
                 </Box>
               </Grid>
@@ -1001,19 +976,14 @@ const HighVolumePartnerships = ({
                           className={classes.continueButton}
                           onClick={() => {
                             if (!validateFields()) return;
-                            createOrganization();
-                            history.push(`/new-build/${dealType}`);
-                            closeModal();
+                            next({ createOrganization });
                           }}
                         >
                           Continue
                         </Button>
                       </Grid>
                       <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Typography
-                          className={classes.previousButton}
-                          onClick={() => setPage('create_new_org')}
-                        >
+                        <Typography className={classes.previousButton} onClick={prev}>
                           Previous
                         </Typography>
                       </Grid>
@@ -1030,7 +1000,7 @@ const HighVolumePartnerships = ({
 };
 
 export default function NewBuildModal(props) {
-  const [dealType, setDealType] = useState(null);
+  const [dealType, setDealType] = useState(props.dealType);
   const classes = useStyles({ page: props.page });
   const history = useHistory();
   const setCurrentOrganization = useSetCurrentOrganization();
@@ -1078,7 +1048,7 @@ export default function NewBuildModal(props) {
           addressLineTwo: isHVP ? addressLineTwo : 'Suite A',
           city: isHVP ? city : 'Dover',
           state: isHVP ? state : 'Delaware',
-          zipCode: isHVP ? zipCode : '19901',
+          zipCode: isHVP ? zipCode.toString() : '19901',
           country: isHVP ? country : 'United States',
         },
       },
@@ -1086,7 +1056,7 @@ export default function NewBuildModal(props) {
     onCompleted: ({ createOrganization }) => {
       if (createOrganization?.name) {
         setCurrentOrganization(createOrganization);
-        props.refetchUserProfile();
+        props.refetchUserProfile && props.refetchUserProfile();
         toast.success(
           `Success! New organization ${createOrganization?.name} successfully created!`,
         );
@@ -1113,6 +1083,18 @@ export default function NewBuildModal(props) {
     high_volume_partnerships: HighVolumePartnerships,
     new_or_current: NewOrCurrentBuild,
     final_warning: NewBuildFinalWarning,
+  };
+
+  const next = {
+    ...props.next,
+  };
+
+  const prev = {
+    ...props.prev,
+  };
+
+  const onClose = {
+    ...props.onClose,
   };
 
   const propsObj = {
@@ -1148,5 +1130,12 @@ export default function NewBuildModal(props) {
 
   const Component = pageMap[props.page];
 
-  return <Component {...propsObj} />;
+  return (
+    <Component
+      {...propsObj}
+      next={next[props.page]}
+      prev={prev[props.page]}
+      onClose={onClose[props.page]}
+    />
+  );
 }
