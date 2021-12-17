@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import _, { get, isEqual, pick } from 'lodash';
-import { useParams, Redirect } from 'react-router-dom';
+import React, { useState } from 'react';
+import _, { get } from 'lodash';
 import { toast } from 'react-toastify';
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 
 import {
   Button,
@@ -14,7 +13,6 @@ import {
   InputLabel,
   InputAdornment,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import './style.scss';
 import { UserSearch } from '.';
 
@@ -104,7 +102,8 @@ export default function CreateInvestment({ deal, handleUpdate }) {
                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}
                 error={errors.includes('amount')}
-                value={get(investment, 'amount', '') || 0}
+                value={get(investment, 'amount', '') || null}
+                placeholder={0}
                 onChange={(e) =>
                   // eslint-disable-next-line radix
                   updateInvestmentProp({
@@ -126,7 +125,8 @@ export default function CreateInvestment({ deal, handleUpdate }) {
                   inputProps: { min: 0 },
                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}
-                value={get(investment, 'capitalWiredAmount', '') || 0}
+                placeholder={0}
+                value={get(investment, 'capitalWiredAmount', '') || null}
                 onChange={(e) =>
                   // eslint-disable-next-line radix
                   updateInvestmentProp({
@@ -149,9 +149,6 @@ export default function CreateInvestment({ deal, handleUpdate }) {
                 inputProps={{ name: 'status' }}
               >
                 <MenuItem value="invited">Invited</MenuItem>
-                <MenuItem value="signed">Signed</MenuItem>
-                <MenuItem value="wired">Wired</MenuItem>
-                <MenuItem value="complete">Complete</MenuItem>
               </Select>
             </FormControl>
           </Grid>

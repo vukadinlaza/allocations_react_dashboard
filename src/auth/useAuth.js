@@ -33,7 +33,15 @@ const GET_INVESTOR = gql`
 export function useAuth(QUERY = GET_INVESTOR) {
   const params = useParams();
   const adminView = params && params.id;
-  const { isLoading, user, isAuthenticated, loginWithRedirect, logout, auth0Client } = useAuth0();
+  const {
+    isLoading,
+    user,
+    isAuthenticated,
+    loginWithRedirect,
+    loginWithPopup,
+    logout,
+    auth0Client,
+  } = useAuth0();
 
   const [getInvestor, { data, error, called, refetch, loading }] = useLazyQuery(QUERY);
   const userProfile = { ...(user || {}), ...(data?.investor || {}) };
@@ -80,6 +88,7 @@ export function useAuth(QUERY = GET_INVESTOR) {
     isAuthenticated,
     logout,
     loginWithRedirect,
+    loginWithPopup,
     auth0Client,
   };
 }

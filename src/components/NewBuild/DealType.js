@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@material-ui/core';
 import { useMutation, gql } from '@apollo/client';
 import CloseIcon from '@material-ui/icons/Close';
@@ -385,11 +385,21 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
   );
 };
 
-export default function DealTypeSelector({ closeModal, isOpen, setDealType, setPage }) {
+export default function DealTypeSelector({
+  closeModal,
+  isOpen,
+  setDealType,
+  setPage,
+  next = {
+    spv: () => setPage('select_org'),
+    fund: () => setPage('select_org'),
+  },
+  onClose = () => closeModal(),
+}) {
   const classes = useStyles();
 
   return (
-    <Modal open={isOpen} onClose={closeModal} className={classes.modal}>
+    <Modal open={isOpen} onClose={onClose} className={classes.modal}>
       <Container style={{ width: '650px' }}>
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
@@ -398,7 +408,7 @@ export default function DealTypeSelector({ closeModal, isOpen, setDealType, setP
                 <Typography variant="h6" style={{ color: '#fff' }}>
                   Add New
                 </Typography>
-                <Box onClick={closeModal} style={{ cursor: 'pointer' }}>
+                <Box onClick={onClose} style={{ cursor: 'pointer' }}>
                   <CloseIcon htmlColor="#fff" />
                 </Box>
               </Grid>
@@ -466,7 +476,7 @@ export default function DealTypeSelector({ closeModal, isOpen, setDealType, setP
                             }}
                             onClick={() => {
                               setDealType('spv');
-                              setPage('select_org');
+                              next.spv();
                             }}
                           >
                             Continue
@@ -510,7 +520,7 @@ export default function DealTypeSelector({ closeModal, isOpen, setDealType, setP
                             }}
                             onClick={() => {
                               setDealType('fund');
-                              setPage('select_org');
+                              next.fund();
                             }}
                           >
                             Continue
