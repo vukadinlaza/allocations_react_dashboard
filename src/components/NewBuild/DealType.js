@@ -203,17 +203,12 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                     alignItems: 'center',
                   }}
                 >
-                  <Grid
-                    container
-                    className={classes.typeGroup}
-                    style={{ justifyContent: 'center' }}
-                  >
+                  <Grid container className={classes.typeGroup}>
                     <Box
                       style={{
                         display: 'flex',
                         flexDirection: width >= phone ? 'row' : 'column',
                         justifyContent: 'space-between',
-                        alignItems: 'space-between',
                         width: width >= phone ? '100%' : '80%',
                       }}
                     >
@@ -526,7 +521,7 @@ export default function DealTypeSelector({
                     <Box className={classes.modalPaperContainer}>
                       <Paper
                         className={classes.modalPaperBody}
-                        style={{ margin: width >= 650 ? '.5rem' : '10px 5px' }}
+                        style={{ margin: width >= 650 ? '.5rem' : '10px 0px' }}
                       >
                         <Box className={classes.modalPaperContent}>
                           <Grid item className={classes.iconContainer}>
@@ -568,7 +563,7 @@ export default function DealTypeSelector({
 
                       <Paper
                         className={classes.modalPaperBody}
-                        style={{ margin: width >= 650 ? '.5rem' : '10px 5px' }}
+                        style={{ margin: width >= 650 ? '.5rem' : '10px 0px' }}
                       >
                         <Box className={classes.modalPaperContent}>
                           <Grid item className={classes.iconContainer}>
