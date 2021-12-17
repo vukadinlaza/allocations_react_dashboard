@@ -1,7 +1,5 @@
 // import { phone } from '../../utils/helpers';
 
-import { yellow } from '@material-ui/core/colors';
-
 const styles = (theme) => ({
   cancelIcon: {
     position: 'absolute',

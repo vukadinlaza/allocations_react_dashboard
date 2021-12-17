@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { useQuery, gql } from '@apollo/client';
 import { useLocation, withRouter } from 'react-router';
@@ -105,7 +105,7 @@ const DEAL = gql`
 const PostBuild = ({ classes }) => {
   const query = new URLSearchParams(useLocation().search);
 
-  const { data, refetch: refetchDeal } = useQuery(DEAL, {
+  const { data } = useQuery(DEAL, {
     fetchPolicy: 'network-only',
     pollInterval: 1000,
     variables: { deal_id: query.get('id') },
@@ -172,7 +172,7 @@ const PostBuild = ({ classes }) => {
         <AllocationsLoader fullHeight />
       </div>
     );
-  const { getDealWithTasks: deal } = data;
+  // const { getDealWithTasks: deal } = data;
 
   // const mainBoxes = [
   //   {
@@ -190,32 +190,6 @@ const PostBuild = ({ classes }) => {
 
   return (
     <>
-      {/* <Snackbar
-        open={!!Object.keys(snackbarData).length}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-      >
-        <MuiAlert
-          elevation={6}
-          variant="filled"
-          onClose={handleCloseSnackbar}
-          severity={snackbarData.type}
-        >
-          {snackbarData.message}
-        </MuiAlert>
-      </Snackbar> */}
-      {/* <Grid item sm={12} lg={12} className={classes.mainTitle}>
-        <Typography>SPVs</Typography>
-      </Grid> */}
-      {/* <Grid container spacing={1} className={classes.mainBoxes}>
-        <AllocationsTable
-          data={mainBoxes}
-          headers={boxesHeaders}
-          getCellContent={getCellContent}
-          rowHeight="90px"
-          noShadow
-        />
-      </Grid> */}
       <Grid container style={{ marginBottom: '15px' }}>
         <Button
           style={{ textTransform: 'capitalize', color: '#64748B', outline: 'none' }}
