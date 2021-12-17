@@ -258,7 +258,8 @@ export default function InvestmentEdit({
                   inputProps: { min: 0 },
                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}
-                value={get(investment, 'amount', '') || 0}
+                value={get(investment, 'amount', '') || null}
+                placeholder={0}
                 onChange={(e) =>
                   // eslint-disable-next-line radix
                   updateInvestmentProp({
@@ -280,7 +281,8 @@ export default function InvestmentEdit({
                   inputProps: { min: 0 },
                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}
-                value={get(investment, 'capitalWiredAmount', '') || 0}
+                value={get(investment, 'capitalWiredAmount', '') || null}
+                placeholder={0}
                 onChange={(e) =>
                   // eslint-disable-next-line radix
                   updateInvestmentProp({
