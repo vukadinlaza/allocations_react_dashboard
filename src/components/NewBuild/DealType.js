@@ -470,22 +470,12 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
   );
 };
 
-export default function DealTypeSelector({
-  closeModal,
-  isOpen,
-  setDealType,
-  setPage,
-  next = {
-    spv: () => setPage('select_org'),
-    fund: () => setPage('select_org'),
-  },
-  onClose = () => closeModal(),
-}) {
+export default function DealTypeSelector({ closeModal, isOpen, setDealType, setPage }) {
   const classes = useStyles();
   const { width } = useViewport();
 
   return (
-    <Modal open={isOpen} onClose={onClose} className={classes.modal}>
+    <Modal open={isOpen} onClose={closeModal} className={classes.modal}>
       <Container style={{ width: '650px' }}>
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
@@ -494,7 +484,7 @@ export default function DealTypeSelector({
                 <Typography variant="h6" style={{ color: '#fff' }}>
                   Add New
                 </Typography>
-                <Box onClick={onClose} style={{ cursor: 'pointer' }}>
+                <Box onClick={closeModal} style={{ cursor: 'pointer' }}>
                   <CloseIcon htmlColor="#fff" />
                 </Box>
               </Grid>
@@ -553,7 +543,7 @@ export default function DealTypeSelector({
                             }}
                             onClick={() => {
                               setDealType('spv');
-                              next.spv();
+                              setPage('select_org');
                             }}
                           >
                             Continue
@@ -596,7 +586,7 @@ export default function DealTypeSelector({
                             }}
                             onClick={() => {
                               setDealType('fund');
-                              next.fund();
+                              setPage('select_org');
                             }}
                           >
                             Continue
