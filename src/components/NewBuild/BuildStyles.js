@@ -545,7 +545,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#2A2B54',
     fontSize: '22px',
     [theme.breakpoints.down(phone)]: {
-      fontSize: '13px',
+      fontSize: '20px',
       justifyContent: 'center',
       alignItems: 'center',
     },
