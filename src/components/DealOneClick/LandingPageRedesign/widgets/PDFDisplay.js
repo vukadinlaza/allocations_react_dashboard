@@ -43,11 +43,10 @@ const useStyles = makeStyles(() => ({
     padding: '10px 24px',
   },
   pdfContainer: {
+    height: '100%',
+    width: '100%',
     border: '1px solid #CBD5E1',
-    padding: '10px 24px',
     marginTop: '40px',
-    marginRight: '70px',
-    marginLeft: '70px',
   },
   numbers: {
     fontFamily: 'Roboto',
@@ -59,6 +58,21 @@ const useStyles = makeStyles(() => ({
     color: '#64748B',
     margin: '10px 0px',
     padding: '12px 0px',
+  },
+  page: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    width: '100%',
+    orientation: 'portrait',
+  },
+  view: {
+    width: '100%',
+    height: '100%',
+    padding: 0,
+    backgroundColor: 'white',
+  },
+  image: {
+    objectFit: 'cover',
   },
 }));
 
@@ -85,9 +99,9 @@ function PDFDisplay({ pdf }) {
   };
 
   return (
-    <div>
-      <Document file={pdf} className={classes.pdfContainer} onLoadSuccess={onDocumentLoadSuccess}>
-        <Page pageNumber={pageNumber} />
+    <div style={{ backgroundColor: '', width: '800px' }}>
+      <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
+        <Page pageNumber={pageNumber} scale={1.331} className={classes.pdfContainer} />
       </Document>
 
       <div className={classes.container}>

@@ -29,9 +29,33 @@ export default function DealDetails() {
     <Paper className={classes.dealHeader}>
       <Box className={classes.box} style={{ display: 'block' }}>
         <Tabs value={tab} onChange={handleSetTab} indicatorColor="primary">
-          <Tab label="Details" />
-          <Tab label="Pitch Deck" />
-          <Tab label="Memos" />
+          <Tab
+            label="Details"
+            style={{
+              borderBottom: '1px solid #64748B',
+              height: '1px',
+              bottom: '0',
+              marginRight: '2%',
+            }}
+          />
+          <Tab
+            label="Pitch Deck"
+            style={{
+              borderBottom: '1px solid #64748B',
+              height: '1px',
+              bottom: '0',
+              marginRight: '2%',
+            }}
+          />
+          <Tab
+            label="Memos"
+            style={{
+              borderBottom: '1px solid #64748B',
+              height: '1px',
+              bottom: '0',
+              marginRight: '2%',
+            }}
+          />
         </Tabs>
         {tab === 0 &&
           data.map(({ title, description }, index) => (
