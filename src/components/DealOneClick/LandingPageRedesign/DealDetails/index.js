@@ -28,13 +28,12 @@ export default function DealDetails() {
   const tabContent = (tab) => {
     switch (tab) {
       case 0:
-        data.map(({ title, description }, index) => (
+        return data.map(({ title, description }, index) => (
           <>
             <Detail title={title} description={description} />
             {index !== data.length - 1 && <hr />}
           </>
         ));
-        break;
       case 1:
         return <PitchDeck pdf={pdf} />;
       case 2:
