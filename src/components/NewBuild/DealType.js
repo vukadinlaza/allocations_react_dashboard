@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     width: '72px',
     display: 'flex',
     justifyContent: 'center',
-    margin: '0px 0px 15px 0px',
+    // margin: '0px 0px 15px 0px',
     borderRadius: '48px',
     padding: '12px',
     backgroundColor: '#ECF3FF',
@@ -203,35 +203,48 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                     alignItems: 'center',
                   }}
                 >
-                  <Grid container className={classes.typeGroup}>
+                  <Grid
+                    container
+                    className={classes.typeGroup}
+                    style={{ justifyContent: 'center' }}
+                  >
                     <Box
                       style={{
                         display: 'flex',
                         flexDirection: width >= phone ? 'row' : 'column',
                         justifyContent: 'space-between',
                         alignItems: 'space-between',
+                        width: width >= phone ? '100%' : '80%',
                       }}
                     >
-                      <Paper className={classes.modalPaperBody}>
-                        <Grid
-                          item
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            margin: '10px 10px 10px 5px',
-                          }}
-                        >
+                      <Paper className={classes.modalPaperBody} style={{ alignItems: 'center' }}>
+                        <Grid container justifyContent="center">
                           <div className={classes.icon}>
                             <img alt="spv-icon" src={spvIcon} />
                           </div>
-                          <Typography className={classes.typeTitle}>
-                            Continue Current Build
-                          </Typography>
-                        </Grid>
-                        <Grid item className={classes.typeGrid}>
-                          <Typography className={classes.typeBody}>
-                            We will pick you up where you left off on your current build process.
-                          </Typography>
+                          <Grid container>
+                            <Grid
+                              item
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                margin: '10px 10px 10px 5px',
+                              }}
+                            >
+                              <Typography className={classes.typeTitle}>
+                                Continue Current Build
+                              </Typography>
+                            </Grid>
+                            <Grid item className={classes.typeGrid}>
+                              <Typography
+                                className={classes.typeBody}
+                                style={{ textAlign: 'center', marginTop: '0px' }}
+                              >
+                                We will pick you up where you left off on your current build
+                                process.
+                              </Typography>
+                            </Grid>
+                          </Grid>
                         </Grid>
                         <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
                           <Button
@@ -240,7 +253,7 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                             size="large"
                             type="submit"
                             style={{
-                              width: '70%',
+                              width: '100%',
                               borderRadius: '8px',
                               backgroundColor: '#186EFF',
                             }}
@@ -257,7 +270,10 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                         </Grid>
                       </Paper>
 
-                      <Paper className={classes.modalPaperBody}>
+                      <Paper className={classes.modalPaperBody} style={{ alignItems: 'center' }}>
+                        <div className={classes.icon}>
+                          <img alt="fund-icon" src={plusSignIcon} />
+                        </div>
                         <Grid
                           item
                           style={{
@@ -266,17 +282,17 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                             margin: '10px 10px 10px 5px',
                           }}
                         >
-                          <div className={classes.icon}>
-                            <img alt="fund-icon" src={plusSignIcon} />
-                          </div>
                           <Typography className={classes.typeTitle}>Create New Build</Typography>
                         </Grid>
                         <Grid
                           item
                           className={classes.typeGrid}
-                          style={{ margin: '0px 15px 25px 15px' }}
+                          // style={{ margin: '0px 15px 25px 15px' }}
                         >
-                          <Typography className={classes.typeBody}>
+                          <Typography
+                            className={classes.typeBody}
+                            style={{ textAlign: 'center', marginTop: '0px' }}
+                          >
                             This will erase your current build and start a build from scratch. This
                             action cannot be undone.
                           </Typography>
@@ -288,7 +304,7 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                             size="large"
                             type="submit"
                             style={{
-                              width: '70%',
+                              width: '100%',
                               borderRadius: '8px',
                               backgroundColor: '#186EFF',
                             }}
