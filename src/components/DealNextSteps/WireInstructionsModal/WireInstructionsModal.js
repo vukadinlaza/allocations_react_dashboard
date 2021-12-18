@@ -6,14 +6,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './styles.scss';
 
 function WireInstructionsModal({ open, setOpen, docs, investmentWireInstructions = {} }) {
-  const link =
+  let link =
     docs && docs.find((d) => d.path.includes('instructions'))
       ? `https://${docs.find((d) => d.path.includes('instructions')).link}`
       : null;
 
-  // if (investmentWireInstructions?.link) {
-  //   link = `https://${investmentWireInstructions.link}`;
-  // }
+  if (investmentWireInstructions?.link) {
+    link = `https://${investmentWireInstructions.link}`;
+  }
 
   const handleClose = () => {
     setOpen(false);
