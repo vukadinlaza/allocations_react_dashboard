@@ -505,6 +505,7 @@ const BuildDetails = ({
         unfilledFields={unfilledFields}
         setUnfilledFields={setUnfilledFields}
         sectionOneComplete={sectionOneComplete}
+        sectionComplete={sectionComplete}
       />
 
       <Paper className={classes.paper}>
@@ -620,7 +621,7 @@ const BuildDetails = ({
           <Grid
             item
             className={classes.sectionHeaderNumber}
-            style={{ backgroundColor: '#0461ff', padding: '1px 1px 0px 0px' }}
+            style={{ backgroundColor: '#EBEBEB', padding: '1px 1px 0px 0px' }}
           >
             5
           </Grid>
@@ -628,15 +629,16 @@ const BuildDetails = ({
             variant="h6"
             gutterBottom
             className={classes.sectionHeaderText}
-            style={{ color: '#2A2B54' }}
+            style={{ color: '#8E9394' }}
           >
             Upload Your Documents
           </Typography>
         </Grid>
         <Grid
           container
+          justifyContent="center"
           className={classes.outerSection}
-          style={{ borderLeft: sectionComplete(sectionTwoComplete) }}
+          style={{ borderLeft: sectionComplete(false) }}
         >
           <form noValidate autoComplete="off">
             <UploadDocs deal={initialDeal} {...formFieldProps} />

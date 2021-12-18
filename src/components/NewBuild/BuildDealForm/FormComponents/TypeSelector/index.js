@@ -44,6 +44,7 @@ export default function TypeSelector({
   unfilledFields,
   setUnfilledFields,
   sectionOneComplete,
+  sectionComplete,
 }) {
   const classes = useStyles();
   const customInputStyles = { style: { height: '23px' } };
@@ -183,14 +184,7 @@ export default function TypeSelector({
       <Grid
         container
         className={classes.outerSection}
-        style={{
-          borderLeft:
-            width >= 675
-              ? sectionOneComplete
-                ? 'solid 3px #ECF3FF'
-                : 'solid 3px #EBEBEB'
-              : 'none',
-        }}
+        style={{ borderLeft: sectionComplete(sectionOneComplete) }}
       >
         <form noValidate autoComplete="off" className={classes.formContainers}>
           <Typography className={classes.formItemName}>
