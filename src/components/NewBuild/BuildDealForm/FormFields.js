@@ -387,31 +387,33 @@ export function RepresentativeGeneralPartnerAndTitle({
   customInputStyles,
   classes,
   openTooltip,
+  width,
 }) {
   return (
     <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
-          <Typography className={classes.formItemName}>
+          <Grid item className={classes.formItemName}>
             Representative of the General Partner and its Title
-          </Typography>
-          <ModalTooltip
-            title="Representative of the General Partner and it's Title"
-            handleTooltip={handleTooltip}
-            tooltipContent={
-              <Typography color="inherit">
-                Please indicate the name of the representative of the Manager as well as the title
-                of the said person; applicable only if the Manager is a legal entity
-              </Typography>
-            }
-            openTooltip={openTooltip}
-            id="representative"
-          >
-            <HelpIcon
-              className={classes.helpIcon}
-              onClick={() => handleTooltip('representative')}
-            />
-          </ModalTooltip>
+            <ModalTooltip
+              title="Representative of the General Partner and it's Title"
+              handleTooltip={handleTooltip}
+              tooltipContent={
+                <Typography color="inherit">
+                  Please indicate the name of the representative of the Manager as well as the title
+                  of the said person; applicable only if the Manager is a legal entity
+                </Typography>
+              }
+              openTooltip={openTooltip}
+              id="representative"
+            >
+              <HelpIcon
+                className={classes.helpIcon}
+                style={{ margin: width >= 650 ? '.2em' : '0px 5px' }}
+                onClick={() => handleTooltip('representative')}
+              />
+            </ModalTooltip>
+          </Grid>
         </Grid>
         <TextField
           value={buildData.representative}
@@ -1086,7 +1088,6 @@ export function CarryFee({
 }) {
   const params = useParams();
   return (
-    //customInputGridItem
     <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
@@ -1303,6 +1304,7 @@ export function AcceptedInvestorTypes({
   unfilledFields,
   classes,
   openTooltip,
+  width,
 }) {
   const params = useParams();
   function InvestorTypeSelector() {
@@ -1349,35 +1351,36 @@ export function AcceptedInvestorTypes({
     <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
-          <Typography className={classes.formItemName}>
+          <Grid item className={classes.formItemName}>
             What type of investors are you accepting?
-          </Typography>
-          <ModalTooltip
-            title="Deal Stage"
-            handleTooltip={handleTooltip}
-            tooltipContent={
-              params.type === 'fund' ? (
-                <Typography color="inherit">
-                  As per Investment Company Act there are some restrictions and thresholds for Fund
-                  accepting "accredited investors" or "qualified purchasers"; please consult your
-                  legal counsel for more insight on this
-                </Typography>
-              ) : (
-                <Typography color="inherit">
-                  As per Investment Company Act there are some restrictions and thresholds for SPVs
-                  accepting "accredited investors" or "qualified purchasers"; please consult your
-                  legal counsel for more insight on this
-                </Typography>
-              )
-            }
-            openTooltip={openTooltip}
-            id="type_of_investors"
-          >
-            <HelpIcon
-              className={classes.helpIcon}
-              onClick={() => handleTooltip('type_of_investors')}
-            />
-          </ModalTooltip>
+            <ModalTooltip
+              title="Deal Stage"
+              handleTooltip={handleTooltip}
+              tooltipContent={
+                params.type === 'fund' ? (
+                  <Typography color="inherit">
+                    As per Investment Company Act there are some restrictions and thresholds for
+                    Fund accepting "accredited investors" or "qualified purchasers"; please consult
+                    your legal counsel for more insight on this
+                  </Typography>
+                ) : (
+                  <Typography color="inherit">
+                    As per Investment Company Act there are some restrictions and thresholds for
+                    SPVs accepting "accredited investors" or "qualified purchasers"; please consult
+                    your legal counsel for more insight on this
+                  </Typography>
+                )
+              }
+              openTooltip={openTooltip}
+              id="type_of_investors"
+            >
+              <HelpIcon
+                className={classes.helpIcon}
+                style={{ margin: width >= 650 ? '.2em' : '0px 5px' }}
+                onClick={() => handleTooltip('type_of_investors')}
+              />
+            </ModalTooltip>
+          </Grid>
         </Grid>
 
         <InvestorTypeSelector />
@@ -1395,7 +1398,6 @@ export function ReportingAdviser({
   openTooltip,
 }) {
   return (
-    //customInputGridItem
     <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
