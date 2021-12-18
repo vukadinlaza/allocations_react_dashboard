@@ -18,7 +18,7 @@ export const ButtonSelector = ({ currentValue, name, values, onChange, gridCol =
         display: 'grid',
         gridTemplateColumns: gridCol,
         width: phoneSize ? '325px' : '90%',
-        gridGap: phoneSize ? '6px' : '10px',
+        gridGap: phoneSize ? '20px' : '10px',
       }}
     >
       {values.map(({ label, value }, i) => (

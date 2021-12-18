@@ -934,7 +934,6 @@ export function ManagementFee({
 }) {
   const params = useParams();
   return (
-    //customInputGridItem
     <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
