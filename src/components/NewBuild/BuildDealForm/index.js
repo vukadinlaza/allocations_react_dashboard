@@ -795,7 +795,7 @@ export default function NewDealForm() {
   const organization = useCurrentOrganization();
 
   const { type: dealType } = useParams();
-  console.log('dealtype', dealType);
+
   const titleMap = {
     spv: 'SPV',
     fund: 'Fund',
