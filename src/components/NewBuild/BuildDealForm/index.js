@@ -483,6 +483,7 @@ const BuildDetails = ({
     customInputStyles,
     classes,
     openTooltip,
+    width,
   };
 
   const sectionComplete = (section) => {

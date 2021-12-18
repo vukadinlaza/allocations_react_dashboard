@@ -99,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '8px',
     [theme.breakpoints.down(phone)]: {
       marginBottom: '14px',
-      width: '80%',
+      maxWidth: '95%',
     },
   },
   helpIcon: {
@@ -335,9 +335,12 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: 'border-box',
     width: 'inherit',
     paddingLeft: '10px',
+    [theme.breakpoints.down(phone)]: {
+      paddingLeft: '0px',
+    },
   },
   cryptoFormContainer: {
-    width: '98%',
+    width: '100%',
     right: '1vw',
   },
   cryptoLabel: {
@@ -347,6 +350,10 @@ const useStyles = makeStyles((theme) => ({
     width: 'fit-content',
     padding: '0px 5px',
     marginLeft: '5px',
+    [theme.breakpoints.down(phone)]: {
+      padding: '0px',
+      marginLeft: '0px',
+    },
   },
   cryptoSelector: {
     width: '110%',
