@@ -8,8 +8,7 @@ import { phone } from '../../../../utils/helpers';
 const styles = (theme) => ({
   box: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #00000029',
-    border: '1px solid #8493A640',
+    border: '1px solid #F1F5F9',
     borderRadius: '10px',
     backgroundColor: '',
 
@@ -21,18 +20,20 @@ const styles = (theme) => ({
   boxContent: {
     padding: '10px',
     fontSize: '14px',
+    color: '#2A2B54',
   },
   boxTitle: {
     fontSize: '14px',
   },
   boxTitleContainer: {
-    width: '158px',
+    width: '180px',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     borderRadius: '10px 10px 0px 0px',
     display: 'flex',
     alignItems: 'center',
     padding: '9px 19px 0px 9px',
     backgroundColor: '',
+    color: '#64748B',
   },
   boxTitleText: {
     display: 'flex',
@@ -58,7 +59,7 @@ const styles = (theme) => ({
   infoIcon: {
     marginLeft: '0.5em',
     cursor: 'pointer',
-    color: '#758398',
+    color: '#64748B',
     fontSize: '16px',
   },
   modal: {

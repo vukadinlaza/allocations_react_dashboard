@@ -426,7 +426,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
           setup_cost: buildData.setup_cost,
           side_letters: buildData.side_letters,
           target_raise_goal: buildData.target_raise_goal,
-          type: buildData.type,
+          type: dealType,
           type_of_investors: buildData.type_of_investors,
         },
       },
