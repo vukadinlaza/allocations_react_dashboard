@@ -80,7 +80,6 @@ const AgreementBox = ({
 export default function SignDocsForm({ dealData = {}, createDealLoading, error, page, setPage }) {
   const history = useHistory();
   const { deal, documents, phases } = dealData;
-
   const [documentsSignedStatus, setDocumentsSignedStatus] = useState({});
 
   useEffect(() => {
@@ -140,7 +139,7 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
 
         {documents?.map((documentData) => (
           <AgreementBox
-            title={documentData.task.title}
+            title={documentData.task.title.slice(4)}
             agreementLink={documentData}
             signingModal={signingModal}
             task={documentData.task}
