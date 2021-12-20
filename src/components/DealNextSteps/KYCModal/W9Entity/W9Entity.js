@@ -28,11 +28,9 @@ const validate = (formData, revocableTrust) => {
     'entity_name',
   ];
 
-  revocableTrust ? required.push('ssn_1', 'ssn_2', 'ssn_3') : required.push('ein_1', 'ein_2');
-
-  if (formData.tax_classification === 'SMLLC') {
-    required.push('ein_1', 'ein_2');
-  }
+  revocableTrust || formData.tax_classification === 'SMLLC'
+    ? required.push('ssn_1', 'ssn_2', 'ssn_3')
+    : required.push('ein_1', 'ein_2');
 
   return required.reduce((acc, attr) => (formData[attr] ? acc : [...acc, attr]), []);
 };
