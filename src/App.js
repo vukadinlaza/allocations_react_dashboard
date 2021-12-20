@@ -71,7 +71,6 @@ const App = () => {
               <PrivateRoute path="/submit-tax-documents" component={SubmitTaxDocs} />
               <PrivateRoute path="/demo" component={Demo} />
 
-              <PrivateRoute path="/new-build/:type" exact component={BuildDealForm} />
               <PrivateRoute path="/profile/:id" component={ProfilePage} />
               <PrivateRoute path="/profile" component={Profile} />
               <PrivateRoute path="/deal-setup" component={DealSetup} />
@@ -81,6 +80,8 @@ const App = () => {
 
               {/** Deals * */}
               {/* PUBLIC Landing Page */}
+
+              <Route path="/public/new-build/:type" exact component={BuildDealForm} />
               <Route path="/public/:organization/:deal_slug" component={DealOneClick} exact />
               <Route path="/public/:deal_slug" component={DealOneClick} exact />
 
