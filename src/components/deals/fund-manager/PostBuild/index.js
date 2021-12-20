@@ -243,7 +243,7 @@ const PostBuild = ({ classes }) => {
   //     wireDeadline: moment(deal.wire_deadline).format('MM/DD/YYYY'),
   //   },
   // ];
-
+  console.log('Data', data);
   return (
     <>
       <Grid container style={{ marginBottom: '15px' }}>
@@ -267,7 +267,9 @@ const PostBuild = ({ classes }) => {
           paddingBottom: '16px',
         }}
       >
-        <Typography style={{ fontSize: '30px', fontWeight: '800' }}>Name of SPV</Typography>
+        <Typography style={{ fontSize: '30px', fontWeight: '800' }}>
+          {data.getDealWithTasks.name || 'Your SPV'}
+        </Typography>
         <Grid item style={{ display: 'flex' }}>
           <Button
             variant="outlined"
