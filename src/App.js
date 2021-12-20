@@ -81,7 +81,7 @@ const App = () => {
               {/** Deals * */}
               {/* PUBLIC Landing Page */}
 
-              <Route path="/public/new-build/:type" exact component={BuildDealForm} />
+              <Route path="/public/new-build/:type?" exact component={BuildDealForm} />
               <Route path="/public/:organization/:deal_slug" component={DealOneClick} exact />
               <Route path="/public/:deal_slug" component={DealOneClick} exact />
 
