@@ -289,32 +289,24 @@ const PostBuild = ({ classes }) => {
       </Grid>
 
       {/* Tabs/Buttons - this needs to be rethought once we have more information */}
-      <Grid container sm={10} spacing={1} direction="row" className={classes.buttonGroup}>
-        <Grid item>
-          <Button variant="contained" color="primary" size="small" disableElevation>
-            Deal Progress
-          </Button>
-        </Grid>
-        {/* <Grid item>
-          <Button variant="outlined" size="small">
+      <Grid item sm={10} className={classes.buttonGroup}>
+        <Button variant="contained" color="primary" size="small" disableElevation>
+          Deal Progress
+        </Button>
+        {/* <Button variant="outlined" size="small">
             Investors
-          </Button>
-        </Grid> */}
-        <Grid item>
-          <Button size="small" style={{ textTransform: 'capitalize', color: '#64748B' }}>
-            Documents
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button size="small" style={{ textTransform: 'capitalize', color: '#64748B' }}>
-            Deal Page
-          </Button>
-        </Grid>
+          </Button> */}
+        <Button size="small" style={{ textTransform: 'capitalize', color: '#64748B' }}>
+          Documents
+        </Button>
+        <Button size="small" style={{ textTransform: 'capitalize', color: '#64748B' }}>
+          Deal Page
+        </Button>
       </Grid>
 
       <ProgressBar steps={steps} activeStep={activeStep} />
 
-      <Grid container sm={12} className={classes.bodyContainer}>
+      <Grid container className={classes.bodyContainer}>
         <Grid item sm={10} className={classes.currentStepContainer}>
           <Typography className={classes.stepText}>Current Step</Typography>
           <CurrentStep data={currentStep} />
