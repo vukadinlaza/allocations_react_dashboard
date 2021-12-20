@@ -194,9 +194,9 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                             }}
                             onClick={() => {
                               closeModal();
-                              const build = JSON.parse(localStorage.getItem('buildDeal'));
+                              const build = JSON.parse(localStorage.getItem('buildData'));
                               if (build?.type) {
-                                history.push(`/new-build/${build.type}`);
+                                history.push(`/public/new-build/${build.type}`);
                               } else setPage('deal_type_selector');
                             }}
                           >
@@ -352,7 +352,10 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
                               backgroundColor: '#186EFF',
                             }}
                             onClick={() => {
-                              deleteDeal();
+                              const dealData = JSON.parse(localStorage.getItem('buildDeal'));
+                              if (dealData) {
+                                deleteDeal();
+                              }
                               localStorage.removeItem('buildData');
                               localStorage.removeItem('buildDeal');
                               localStorage.removeItem('buildFilesUploaded');
