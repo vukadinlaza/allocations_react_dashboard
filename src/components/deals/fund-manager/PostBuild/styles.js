@@ -158,6 +158,20 @@ const styles = (theme) => ({
   },
 
   // Styles for Body of PostBuild and common styling between CurrentStep and NextStep
+  badgeBlue: {
+    borderRadius: '100px',
+    fontSize: '11px',
+    padding: '5px 10px',
+    color: '#186EFF',
+    backgroundColor: '#ECF3FF',
+  },
+  badgeGray: {
+    borderRadius: '100px',
+    fontSize: '11px',
+    padding: '5px 10px',
+    color: '#334155',
+    backgroundColor: '#F1F5F9',
+  },
   bodyContainer: {
     display: 'flex',
     justifyContent: 'center',
@@ -198,20 +212,6 @@ const styles = (theme) => ({
     borderRadius: '8px',
     backgroundColor: '#ECF3FF',
     padding: '3.5vh 5.5vw',
-  },
-  badgeBlue: {
-    borderRadius: '100px',
-    fontSize: '11px',
-    padding: '5px',
-    color: '#186EFF',
-    backgroundColor: '#ECF3FF',
-  },
-  badgeGray: {
-    borderRadius: '100px',
-    fontSize: '11px',
-    padding: '5px',
-    color: '#334155',
-    backgroundColor: '#F1F5F9',
   },
 
   // Styles for Next Step

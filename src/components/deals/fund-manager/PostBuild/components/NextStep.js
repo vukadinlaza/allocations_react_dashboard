@@ -24,11 +24,6 @@ const NextStep = ({ classes, data }) => {
           </div>
         )}
       </div>
-      {/* Conditional/optional rendering */}
-      {/* <Typography style={{ fontSize: '12px' }}>
-        An Allocations representative will be reaching out shortly to assist you in completing this
-        step. If you have any questions, do not hesitate to contact support@allocations.com.
-      </Typography> */}
     </Grid>
   );
 };

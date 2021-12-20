@@ -166,9 +166,9 @@ const PostBuild = ({ classes }) => {
   const [currentStep, setCurrentStep] = useState(demoData[2]);
   const [nextStep, setNextStep] = useState(demoData[3]);
 
-  // need to find the step that matches demo data.step
   const steps = ['Pre-Onboarding', 'Onboarding', 'Closing', 'Post-Closing'];
-  const activeStep = steps.indexOf('Closing');
+  // This finds the matching step and dynamically updates progress bar
+  const activeStep = steps.indexOf(steps.find((step) => currentStep.title.includes(step)));
 
   // const [snackbarData, setSnackbarData] = useState({});
   // const [currentPhase, setCurrentPhase] = useState(false);
