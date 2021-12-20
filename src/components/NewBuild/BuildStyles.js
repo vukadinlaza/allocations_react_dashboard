@@ -142,10 +142,6 @@ const useStyles = makeStyles((theme) => ({
     '& svg': {
       marginTop: '0.2em',
     },
-    // [theme.breakpoints.down(phone)]: {
-    //   alignItems: 'center',
-    //   marginBottom: '14px',
-    // },
   },
   itemText: {
     font: 'normal normal normal 18px/21px Roboto',
