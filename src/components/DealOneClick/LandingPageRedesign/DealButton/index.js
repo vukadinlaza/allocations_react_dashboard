@@ -3,19 +3,20 @@ import { Button, makeStyles } from '@material-ui/core';
 
 const useSyles = makeStyles({
   button: {
+    background: ({ secondary }) => (secondary ? '#FFFFFF' : '#186EFF'),
     textTransform: 'none',
-    color: '#64748B',
-    borderColor: '#CBD5E1',
+    color: ({ secondary }) => (secondary ? '#64748B' : '#FFFFFF'),
+    border: ({ secondary }) => (secondary ? '1px solid #CBD5E1' : ''),
     borderRadius: '8px',
     '& .MuiButton-startIcon': {
-      color: '#64748B',
+      color: ({ secondary }) => (secondary ? '#64748B' : '#FFFFFF'),
     },
     '&:hover': {
-      background: '#ECF3FF',
+      background: ({ secondary }) => (secondary ? '#ECF3FF' : '#0444B4'),
     },
     '&:focus': {
       border: '2px solid #186EFF',
-      color: '#186EFF',
+      color: ({ secondary }) => (secondary ? '#186EFF' : '#FFF'),
       '& .MuiButton-startIcon': {
         color: '#186EFF',
       },
@@ -23,11 +24,11 @@ const useSyles = makeStyles({
   },
 });
 
-export default function DealButton({ text, icon, style, ...props }) {
-  const classes = useSyles();
+export default function DealButton({ text, icon, secondary = false, style, ...props }) {
+  const { button } = useSyles({ secondary });
 
   return (
-    <Button className={classes.button} variant="outlined" style={style} startIcon={icon} {...props}>
+    <Button className={button} variant="outlined" style={style} startIcon={icon} {...props}>
       {text}
     </Button>
   );

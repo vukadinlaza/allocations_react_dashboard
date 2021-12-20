@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import EditIcon from '@material-ui/icons/Edit';
@@ -18,22 +18,35 @@ export default function DealPage({
   handleLinkCopy,
 }) {
   const { dealPageRedesign } = useFlags();
+  const [isEdit, setIsEdit] = useState(false);
 
   if (dealPageRedesign)
     return (
       <>
         <Container maxWidth="md">
           <Box display="flex" justifyContent="flex-end">
+            {!isEdit ? (
+              <DealButton
+                secondary
+                onClick={() => setIsEdit(true)}
+                icon={<CreateOutlined />}
+                text="Edit"
+                style={{ marginRight: '8px' }}
+              />
+            ) : (
+              <DealButton secondary text="Discard Changes" style={{ marginRight: '8px' }} />
+            )}
             <DealButton
-              onClick={goToEditDeal}
-              icon={<CreateOutlined />}
-              text="Edit"
+              secondary
+              onClick={goToDeal}
+              icon={<VisibilityOutlined />}
+              text="Preview"
               style={{ marginRight: '8px' }}
             />
-            <DealButton onClick={goToDeal} icon={<VisibilityOutlined />} text="Preview" />
+            {isEdit && <DealButton text="Save" />}
           </Box>
         </Container>
-        <DealLandingPageRedesign orgSlug={orgSlug} dealSlug={dealData.slug} />
+        <DealLandingPageRedesign orgSlug={orgSlug} dealSlug={dealData.slug} isEdit={isEdit} />
       </>
     );
 
