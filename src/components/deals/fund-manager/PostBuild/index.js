@@ -256,7 +256,7 @@ const PostBuild = ({ classes }) => {
       </Grid>
 
       <Grid
-        container
+        item
         sm={10}
         style={{
           display: 'flex',
