@@ -124,6 +124,20 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
           </Typography>
         </div>
 
+        {!documents && (
+          <div
+            style={{
+              display: 'flex',
+              margin: 'auto',
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
+              width: '300px',
+            }}
+          >
+            <CircularProgress /> <Typography> Loading your agreements... </Typography>
+          </div>
+        )}
+
         {documents?.map((documentData) => (
           <AgreementBox
             title={documentData.task.title}
