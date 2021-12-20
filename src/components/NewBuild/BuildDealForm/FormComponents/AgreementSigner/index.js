@@ -35,10 +35,6 @@ const AgreementBox = ({
     { variables: { task_id: task?._id }, fetchPolicy: 'network-only' },
   );
 
-  console.log('agreement link', agreementLink);
-
-  console.log('agreement links', signedDocUrl);
-
   useEffect(() => {
     if (signed && task?._id) getSignedDocument();
   }, [signed]);
@@ -98,9 +94,7 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
     }
   }, [documents]);
 
-  console.log('documents', documents);
-  console.log('documents status', documentsSignedStatus);
-  const allSigned = false;
+  const allSigned = documents ? Object.values(documentsSignedStatus).every(Boolean) : false;
 
   const signingModal = (agreementLink, setSigned) => {
     // eslint-disable-next-line no-undef
