@@ -1048,7 +1048,7 @@ export default function NewBuildModal(props) {
           addressLineTwo: isHVP ? addressLineTwo : 'Suite A',
           city: isHVP ? city : 'Dover',
           state: isHVP ? state : 'Delaware',
-          zipCode: isHVP ? zipCode : '19901',
+          zipCode: isHVP ? zipCode.toString() : '19901',
           country: isHVP ? country : 'United States',
         },
       },
