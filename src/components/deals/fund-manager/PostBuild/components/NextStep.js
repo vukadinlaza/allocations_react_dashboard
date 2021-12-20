@@ -10,7 +10,6 @@ const NextStep = ({ classes, data }) => {
   return (
     <Grid container className={classes.nextStepBody}>
       <div className={classes.stepTitleRow} style={{ padding: '0px' }}>
-        {/* padding should be conditional */}
         <img alt="gray check" src={grayCheck} />
         <Typography>{data.title}</Typography>
         {data.tag && (
