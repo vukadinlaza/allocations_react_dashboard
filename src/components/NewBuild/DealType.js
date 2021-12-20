@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@material-ui/core';
+import { useMutation, gql } from '@apollo/client';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
@@ -9,6 +10,12 @@ import fundIcon from '../../assets/fund-icon.svg';
 import plusSignIcon from '../../assets/plus-vector.svg';
 import warningIcon from '../../assets/warning-red.svg';
 import { phone } from '../../utils/helpers';
+
+const DELETE_DEAL = gql`
+  mutation DeleteDeal($_id: String!) {
+    deleteDeal(_id: $_id)
+  }
+`;
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -251,6 +258,11 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
 
 export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
   const classes = useStyles();
+  const deal = JSON.parse(localStorage.getItem('buildDeal'));
+
+  const [deleteDeal] = useMutation(DELETE_DEAL, {
+    variables: { _id: deal?._id },
+  });
 
   return (
     <Modal
@@ -340,6 +352,10 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
                               backgroundColor: '#186EFF',
                             }}
                             onClick={() => {
+                              const dealData = JSON.parse(localStorage.getItem('buildDeal'));
+                              if (dealData) {
+                                deleteDeal();
+                              }
                               localStorage.removeItem('buildData');
                               localStorage.removeItem('buildDeal');
                               localStorage.removeItem('buildFilesUploaded');
