@@ -30,6 +30,10 @@ const validate = (formData, revocableTrust) => {
 
   revocableTrust ? required.push('ssn_1', 'ssn_2', 'ssn_3') : required.push('ein_1', 'ein_2');
 
+  if (formData.tax_classification === 'SMLLC') {
+    required.push('ein_1', 'ein_2');
+  }
+
   return required.reduce((acc, attr) => (formData[attr] ? acc : [...acc, attr]), []);
 };
 
@@ -122,7 +126,7 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
                 <MenuItem value="C Corporation">C Corporation</MenuItem>
                 <MenuItem value="S Corporation">S Corporation</MenuItem>
                 <MenuItem value="Partnership">Partnership</MenuItem>
-                <MenuItem value="SMLLC">Individual/sole proprietor or single-member LLC</MenuItem>
+                <MenuItem value="SMLLC">Sole proprietor or single-member LLC</MenuItem>
                 <MenuItem value="Trust/estate">Trust/estate</MenuItem>
                 <MenuItem value="Limited Liability Company">Limited Liability Company</MenuItem>
                 <MenuItem value="N/A">N/A</MenuItem>
@@ -248,7 +252,7 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
                     color="primary"
                   />
                 }
-                label="Revocable Trust?"
+                label="My entity does not have an EIN"
               />
             </div>
           )}
