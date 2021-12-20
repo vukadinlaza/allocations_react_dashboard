@@ -933,6 +933,7 @@ export function ManagementFee({
   customInputStyles,
   classes,
   openTooltip,
+  width,
 }) {
   const params = useParams();
   return (

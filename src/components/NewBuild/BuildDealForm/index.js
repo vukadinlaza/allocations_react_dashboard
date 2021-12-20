@@ -502,6 +502,8 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
   };
 
   const sectionComplete = (section) => {
+    console.log(section, 'section');
+    console.log(width >= 675 ? (section ? 'true true' : 'true false') : 'false');
     return {
       borderLeft: width >= 675 ? (section ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB') : 'none',
     };
@@ -603,7 +605,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
         <Grid
           container
           className={classes.outerSection}
-          style={{ borderLeft: sectionComplete(sectionTwoComplete) }}
+          style={sectionComplete(sectionTwoComplete)}
         >
           <form noValidate autoComplete="off">
             <Grid container spacing={2} className={classes.inputGridContainer}>
@@ -641,7 +643,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
         <Grid
           container
           className={classes.outerSection}
-          style={{ borderLeft: sectionComplete(sectionThreeComplete) }}
+          style={sectionComplete(sectionThreeComplete)}
         >
           <form noValidate autoComplete="off" style={{ width: '100%' }}>
             <Grid container spacing={1} className={classes.inputGridContainer}>
@@ -679,7 +681,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
         <Grid
           container
           className={classes.outerSection}
-          style={{ borderLeft: sectionComplete(sectionFourComplete) }}
+          style={sectionComplete(sectionFourComplete)}
         >
           <form noValidate autoComplete="off">
             <Grid container spacing={1} className={classes.inputGridContainer}>
@@ -712,7 +714,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
           container
           justifyContent="center"
           className={classes.outerSection}
-          style={{ borderLeft: sectionComplete(false) }}
+          style={sectionComplete(false)}
         >
           <form noValidate autoComplete="off">
             {/* <UploadDocs deal={initialDeal} {...formFieldProps} /> */}
@@ -741,10 +743,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
             Final
           </Typography>
         </Grid>
-        <div
-          className={classes.outerSection}
-          style={{ borderLeft: sectionComplete(sectionSixComplete) }}
-        >
+        <div className={classes.outerSection} style={sectionComplete(sectionSixComplete)}>
           <form noValidate autoComplete="off" style={{ width: '100%' }}>
             <FormControl required disabled variant="outlined" style={{ width: 'inherit' }}>
               <NotesMemo {...formFieldProps} />

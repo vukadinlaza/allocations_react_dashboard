@@ -181,11 +181,7 @@ export default function TypeSelector({
           Basic Information
         </Typography>
       </Grid>
-      <Grid
-        container
-        className={classes.outerSection}
-        style={{ borderLeft: sectionComplete(sectionOneComplete) }}
-      >
+      <Grid container className={classes.outerSection} style={sectionComplete(sectionOneComplete)}>
         <form noValidate autoComplete="off" className={classes.formContainers}>
           <Typography className={classes.formItemName}>
             Choose your asset type

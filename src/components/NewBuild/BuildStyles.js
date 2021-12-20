@@ -384,6 +384,9 @@ const useStyles = makeStyles((theme) => ({
     '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
       borderRadius: '8px !important',
     },
+    [theme.breakpoints.down(phone)]: {
+      width: '100%',
+    },
   },
   // * Styles that are only used in the AgreementSigner.
   agreementSignedBox: {
