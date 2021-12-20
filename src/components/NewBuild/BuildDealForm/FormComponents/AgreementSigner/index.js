@@ -35,6 +35,10 @@ const AgreementBox = ({
     { variables: { task_id: task?._id }, fetchPolicy: 'network-only' },
   );
 
+  console.log('agreement link', agreementLink);
+
+  console.log('agreement links', signedDocUrl);
+
   useEffect(() => {
     if (signed && task?._id) getSignedDocument();
   }, [signed]);
@@ -80,12 +84,23 @@ const AgreementBox = ({
 export default function SignDocsForm({ dealData = {}, createDealLoading, error, page, setPage }) {
   const history = useHistory();
   const { deal, documents, phases } = dealData;
-  const [serviceAgreementLink, advisoryAgreementLink] = documents || [];
 
-  const [serviceAgreementSigned, setServiceAgreementSigned] = useState(false);
-  const [advisoryAgreementSigned, setAdvisoryAgreementSigned] = useState(false);
+  const [documentsSignedStatus, setDocumentsSignedStatus] = useState({});
 
-  const allSigned = serviceAgreementSigned && advisoryAgreementSigned;
+  useEffect(() => {
+    if (documents) {
+      setDocumentsSignedStatus(
+        documents?.reduce((acc, document) => {
+          acc[document.task.title] = false;
+          return acc;
+        }, {}),
+      );
+    }
+  }, [documents]);
+
+  console.log('documents', documents);
+  console.log('documents status', documentsSignedStatus);
+  const allSigned = false;
 
   const signingModal = (agreementLink, setSigned) => {
     // eslint-disable-next-line no-undef
@@ -96,15 +111,10 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
         localStorage.removeItem('buildData');
         localStorage.removeItem('buildDeal');
         localStorage.removeItem('buildFilesUploaded');
-        setSigned(true);
+        setSigned();
       },
     });
   };
-
-  const phase = phases?.find((phase) => phase.name === 'build');
-  const serviceAgreementTask = phase?.tasks?.find(
-    (task) => task.title === 'Sign Service Agreement',
-  );
 
   const classes = useStyles();
   return (
@@ -120,30 +130,25 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
           </Typography>
         </div>
 
-        <AgreementBox
-          title="Service Agreement"
-          agreementLink={serviceAgreementLink}
-          signingModal={signingModal}
-          task={serviceAgreementTask}
-          readyToSign={!!serviceAgreementLink && !error && !createDealLoading}
-          signed={serviceAgreementSigned}
-          setSigned={setServiceAgreementSigned}
-          createDealLoading={createDealLoading}
-          error={error}
-          classes={classes}
-        />
-
-        <AgreementBox
-          title="Advisory Agreement"
-          agreementLink={advisoryAgreementLink}
-          signingModal={signingModal}
-          readyToSign={!!advisoryAgreementLink && !error && !createDealLoading}
-          signed={advisoryAgreementSigned}
-          setSigned={setAdvisoryAgreementSigned}
-          createDealLoading={createDealLoading}
-          error={error}
-          classes={classes}
-        />
+        {documents?.map((documentData) => (
+          <AgreementBox
+            title={documentData.task.title}
+            agreementLink={documentData}
+            signingModal={signingModal}
+            task={documentData.task}
+            readyToSign={!!documentData && !error && !createDealLoading}
+            signed={documentsSignedStatus[documentData.task.title]}
+            setSigned={() =>
+              setDocumentsSignedStatus((prev) => ({
+                ...prev,
+                [documentData.task.title]: true,
+              }))
+            }
+            createDealLoading={createDealLoading}
+            error={error}
+            classes={classes}
+          />
+        ))}
 
         <div className={classes.buttonBox}>
           <Button

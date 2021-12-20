@@ -547,7 +547,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
           },
           high_volume_partnerships: ({ createOrganization }) => {
             createOrganization().then(({ data }) => {
-              handleSubmit({ organization: data?.createOrganization });
+              handleSubmit({ organization: data?.createOrganization, isNewHVP: true });
               closeModalAndReset();
             });
           },
