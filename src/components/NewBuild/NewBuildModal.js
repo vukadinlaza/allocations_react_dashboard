@@ -1000,7 +1000,7 @@ const HighVolumePartnerships = ({
 };
 
 export default function NewBuildModal(props) {
-  const [dealType, setDealType] = useState(null);
+  const [dealType, setDealType] = useState(props.dealType);
   const classes = useStyles({ page: props.page });
   const history = useHistory();
   const setCurrentOrganization = useSetCurrentOrganization();
@@ -1078,6 +1078,18 @@ export default function NewBuildModal(props) {
     setOpenTooltip(id);
   };
 
+  const next = {
+    ...props.next,
+  };
+
+  const prev = {
+    ...props.prev,
+  };
+
+  const onClose = {
+    ...props.onClose,
+  };
+
   const pageMap = {
     deal_type_selector: DealTypeSelector,
     select_org: SelectOrganization,
@@ -1120,5 +1132,12 @@ export default function NewBuildModal(props) {
 
   const Component = pageMap[props.page];
 
-  return <Component {...propsObj} />;
+  return (
+    <Component
+      {...propsObj}
+      next={next[props.page]}
+      prev={prev[props.page]}
+      onClose={onClose[props.page]}
+    />
+  );
 }

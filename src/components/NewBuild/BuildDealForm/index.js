@@ -55,70 +55,6 @@ const CREATE_NEW_DEAL = gql`
   }
 `;
 
-export default function NewDealForm() {
-  const { isAuthenticated, userProfile, loginWithPopup, refetch: refetchUserProfile } = useAuth();
-
-  // Page
-  const [page, setPage] = useState(0);
-
-  const [createNewDeal, { data: dealData, loading: createDealLoading, error: createDealError }] =
-    useMutation(CREATE_NEW_DEAL, {
-      onCompleted: ({ createNewDeal }) => {
-        if (createNewDeal?.deal) {
-          localStorage.setItem('buildDeal', JSON.stringify({ _id: createNewDeal?.deal?._id }));
-        }
-      },
-      onError: (err) => {
-        console.log('err', err);
-      },
-    });
-
-  const organization = useCurrentOrganization();
-
-  const { type: dealType } = useParams();
-
-  const titleMap = {
-    spv: 'SPV',
-    fund: 'Fund',
-  };
-
-  const pages = [
-    {
-      title: `Build your ${titleMap[dealType] || 'SPV'}`,
-      Component: (
-        <BuildDetails
-          dealType={dealType}
-          organization={organization}
-          userProfile={userProfile}
-          auth={{ isAuthenticated, login: loginWithPopup, refetchUserProfile }}
-          page={page}
-          setPage={setPage}
-          createNewDeal={createNewDeal}
-        />
-      ),
-    },
-    {
-      title: 'Sign Agreements',
-      Component: (
-        <AgreementSigner
-          dealData={dealData?.createNewDeal}
-          createDealLoading={createDealLoading}
-          error={createDealError}
-          page={page}
-          setPage={setPage}
-        />
-      ),
-    },
-  ];
-
-  return (
-    <>
-      <Breadcrumbs titles={pages.map(({ title }) => title)} page={page} />
-      {pages[page].Component}
-    </>
-  );
-}
-
 const Breadcrumb = ({ title, active, withSeparator = false }) => {
   const classes = useStyles();
 
@@ -240,7 +176,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
   };
 
   const sectionOneComplete =
-    sectionOne[dealType].every((field) => buildData[field]) && sectionOneCheck();
+    sectionOne[dealType]?.every((field) => buildData[field]) && sectionOneCheck();
 
   const sectionTwo = {
     spv: [
@@ -279,7 +215,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
   };
 
   const sectionTwoComplete =
-    sectionTwo[dealType].every((field) => buildData[field]) && sectionTwoCheck();
+    sectionTwo[dealType]?.every((field) => buildData[field]) && sectionTwoCheck();
 
   const sectionThree = [
     'allocations_reporting_adviser',
@@ -846,3 +782,67 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
     </>
   );
 };
+
+export default function NewDealForm() {
+  const { isAuthenticated, userProfile, loginWithPopup, refetch: refetchUserProfile } = useAuth();
+
+  // Page
+  const [page, setPage] = useState(0);
+
+  const [createNewDeal, { data: dealData, loading: createDealLoading, error: createDealError }] =
+    useMutation(CREATE_NEW_DEAL, {
+      onCompleted: ({ createNewDeal }) => {
+        if (createNewDeal?.deal) {
+          localStorage.setItem('buildDeal', JSON.stringify({ _id: createNewDeal?.deal?._id }));
+        }
+      },
+      onError: (err) => {
+        console.log('err', err);
+      },
+    });
+
+  const organization = useCurrentOrganization();
+
+  const { type: dealType } = useParams();
+
+  const titleMap = {
+    spv: 'SPV',
+    fund: 'Fund',
+  };
+
+  const pages = [
+    {
+      title: `Build your ${titleMap[dealType] || 'SPV'}`,
+      Component: (
+        <BuildDetails
+          dealType={dealType}
+          organization={organization}
+          userProfile={userProfile}
+          auth={{ isAuthenticated, login: loginWithPopup, refetchUserProfile }}
+          page={page}
+          setPage={setPage}
+          createNewDeal={createNewDeal}
+        />
+      ),
+    },
+    {
+      title: 'Sign Agreements',
+      Component: (
+        <AgreementSigner
+          dealData={dealData?.createNewDeal}
+          createDealLoading={createDealLoading}
+          error={createDealError}
+          page={page}
+          setPage={setPage}
+        />
+      ),
+    },
+  ];
+
+  return (
+    <>
+      <Breadcrumbs titles={pages.map(({ title }) => title)} page={page} />
+      {pages[page].Component}
+    </>
+  );
+}
