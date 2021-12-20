@@ -91,6 +91,7 @@ const useStyles = makeStyles((theme) => ({
   },
   formContainers: {
     width: '100%',
+    height: '100%',
   },
   formItemName: {
     color: '#2A2B54',

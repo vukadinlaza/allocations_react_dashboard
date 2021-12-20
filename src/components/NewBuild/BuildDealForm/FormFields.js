@@ -894,7 +894,7 @@ export function DealStage({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.basicInformationInputItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6} style={{ height: '100%' }}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Deal Stage</Typography>
