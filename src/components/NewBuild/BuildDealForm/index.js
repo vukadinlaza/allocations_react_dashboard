@@ -49,6 +49,10 @@ const CREATE_NEW_DEAL = gql`
         dataRequestId: id
         tokenId: token_id
         tokenSecret: token_secret
+        task {
+          _id
+          title
+        }
       }
     }
   }
