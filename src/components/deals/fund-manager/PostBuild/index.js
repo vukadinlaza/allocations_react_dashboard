@@ -243,7 +243,6 @@ const PostBuild = ({ classes }) => {
   //     wireDeadline: moment(deal.wire_deadline).format('MM/DD/YYYY'),
   //   },
   // ];
-  console.log('Data', data);
   return (
     <>
       <Grid container style={{ marginBottom: '15px' }}>
