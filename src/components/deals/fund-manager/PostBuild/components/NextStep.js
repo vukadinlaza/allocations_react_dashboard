@@ -1,17 +1,28 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
+import allocationsIcon from '../../../../../assets/allocations_bar_logo.svg';
 import grayCheck from '../../../../../assets/gray-check.svg';
+import profile from '../../../../../assets/profile-icon.svg';
 import styles from '../styles';
 
-const NextStep = ({ classes }) => {
-  // could include label ('For you') or button
+const NextStep = ({ classes, data }) => {
   return (
     <Grid container className={classes.nextStepBody}>
       <div className={classes.stepTitleRow} style={{ padding: '0px' }}>
         {/* padding should be conditional */}
         <img alt="gray check" src={grayCheck} />
-        <Typography>Onboarding: Confirm Deal Details</Typography>
+        <Typography>{data.title}</Typography>
+        {data.tag && (
+          <div className={data.tag.includes('You') ? classes.badgeGray : classes.badgeBlue}>
+            <img
+              alt="icon"
+              src={data.tag.includes('You') ? profile : allocationsIcon}
+              style={{ height: '12px' }}
+            />
+            <span>{data.tag}</span>
+          </div>
+        )}
       </div>
       {/* Conditional/optional rendering */}
       {/* <Typography style={{ fontSize: '12px' }}>

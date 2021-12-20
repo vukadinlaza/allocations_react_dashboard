@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { useQuery, gql } from '@apollo/client';
 import { useHistory, useLocation, withRouter } from 'react-router';
@@ -103,6 +103,55 @@ const DEAL = gql`
 //   );
 // };
 
+const defaultDesc =
+  'An Allocations representative will be reaching out shortly to assist you in completing this step. If you have any questions, do not hesitate to contact support@allocations.com.';
+// May need to reshape based on what we are actually using
+const demoData = [
+  {
+    step: 'Pre-Onboarding',
+    title: 'Pre-Onboarding',
+    description: defaultDesc,
+  },
+  {
+    step: 'Onboarding',
+    title: 'Onboarding: Confirm Deal Details',
+    description: defaultDesc,
+  },
+  {
+    step: 'Onboarding',
+    title: 'Onboarding: Invite Investors',
+    tag: 'For You',
+    description:
+      'You can now invite investors to your deal. Please have their email addresses ready.',
+    // invite link
+  },
+  {
+    step: 'Onboarding',
+    title: 'Onboarding: 506c Review',
+    tag: 'For Allocations',
+    description:
+      'Please wait for an Allocations representative to complete this step. If you have any questions, do not hesitate to contact support@allocations.com',
+  },
+  {
+    step: 'Onboarding',
+    title: 'Onboarding: Fund Manager KYC Review',
+    tag: 'For You',
+    description:
+      'Please log in to Parallel Markets and complete hte KYC Review before moving onto the next Step.',
+    // PM Login link
+  },
+  {
+    step: 'Closing',
+    title: 'Closing',
+    description: defaultDesc,
+  },
+  {
+    step: 'Post-Closing',
+    title: 'Post-Closing',
+    description: defaultDesc,
+  },
+];
+
 const PostBuild = ({ classes }) => {
   const history = useHistory();
   const organization = useCurrentOrganization();
@@ -113,6 +162,13 @@ const PostBuild = ({ classes }) => {
     pollInterval: 1000,
     variables: { deal_id: query.get('id') },
   });
+
+  const [currentStep, setCurrentStep] = useState(demoData[2]);
+  const [nextStep, setNextStep] = useState(demoData[3]);
+
+  // need to find the step that matches demo data.step
+  const steps = ['Pre-Onboarding', 'Onboarding', 'Closing', 'Post-Closing'];
+  const activeStep = steps.indexOf('Closing');
 
   // const [snackbarData, setSnackbarData] = useState({});
   // const [currentPhase, setCurrentPhase] = useState(false);
@@ -188,9 +244,6 @@ const PostBuild = ({ classes }) => {
   //   },
   // ];
 
-  const steps = ['Pre-Onboarding', 'Onboarding', 'Closing', 'Post-Closing'];
-  const activeStep = steps.indexOf('Closing');
-
   return (
     <>
       <Grid container style={{ marginBottom: '15px' }}>
@@ -263,11 +316,11 @@ const PostBuild = ({ classes }) => {
       <Grid container sm={12} className={classes.bodyContainer}>
         <Grid item sm={10} className={classes.currentStepContainer}>
           <Typography className={classes.stepText}>Current Step</Typography>
-          <CurrentStep />
+          <CurrentStep data={currentStep} />
         </Grid>
         <Grid item sm={10} className={classes.nextStepContainer}>
           <Typography className={classes.stepText}>Up Next</Typography>
-          <NextStep />
+          <NextStep data={nextStep} />
         </Grid>
       </Grid>
     </>
