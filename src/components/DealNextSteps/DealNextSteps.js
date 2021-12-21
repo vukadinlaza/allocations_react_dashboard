@@ -80,14 +80,15 @@ const GET_INVESTMENT = gql`
   query GetInvestment($_id: String!) {
     investment(_id: $_id) {
       _id
+      status
       amount
-      submissionData {
-        investor_type
-        country
-      }
       wire_instructions {
         link
         path
+      }
+      submissionData {
+        investor_type
+        country
       }
     }
   }
@@ -376,19 +377,41 @@ function DealNextSteps() {
             </div>
           )}
 
-          <div className={`action-item ${!hasKyc && 'disabled'}`}>
-            <img className="action-icon" src={wireFundsNo} alt="wire-funds-no" />
+          <div className="action-item">
+            <img
+              className="action-icon"
+              src={
+                investmentData?.investment?.status === 'wired' ||
+                investmentData?.investment?.status === 'complete'
+                  ? submitTaxInfoYes
+                  : submitTaxInfoNo
+              }
+              alt="payment-info"
+            />
             <div className="action-instructions">
               <p className="action-header">Payment</p>
-              <p className="action-sub-header">Required to complete your investment</p>
+              <p className="action-sub-header">Required to complete your investment </p>
             </div>
-            <Button
-              // disabled={dealData?.deal?.isDemo ? false : !hasKyc}
-              className="next-step-button"
-              onClick={() => setOpenPayment(true)}
-            >
-              Make Payment
-            </Button>
+            {data?.investor.accredidation_status === true ? (
+              ''
+            ) : (
+              <Button
+                className={
+                  investmentData?.investment?.status === 'wired' ||
+                  investmentData?.investment?.status === 'complete'
+                    ? 'completed-step-button'
+                    : 'next-step-button'
+                }
+                onClick={() => {
+                  setOpenPayment(true);
+                }}
+              >
+                {investmentData?.investment?.status === 'wired' ||
+                investmentData?.investment?.status === 'complete'
+                  ? 'Completed'
+                  : 'Make Payment'}
+              </Button>
+            )}
           </div>
         </div>
         <PaymentSelectModal
