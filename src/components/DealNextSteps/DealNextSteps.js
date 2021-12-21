@@ -389,7 +389,7 @@ function DealNextSteps() {
               alt="payment-info"
             />
             <div className="action-instructions">
-              <p className="action-header">Payment</p>
+              <p className="action-header">Make Wire Payment</p>
               <p className="action-sub-header">Required to complete your investment </p>
             </div>
             {data?.investor.accredidation_status === true ? (
@@ -403,24 +403,25 @@ function DealNextSteps() {
                     : 'next-step-button'
                 }
                 onClick={() => {
-                  setOpenPayment(true);
+                  setWireInstructionsOpen(true);
                 }}
               >
                 {investmentData?.investment?.status === 'wired' ||
                 investmentData?.investment?.status === 'complete'
                   ? 'Completed'
-                  : 'Make Payment'}
+                  : 'View Wire Instructions'}
               </Button>
             )}
           </div>
         </div>
-        <PaymentSelectModal
+        {/* PaymentSelectModal to be temporarily retired while Crypto is in limbo */}
+        {/* <PaymentSelectModal
           open={openPayment}
           dealData={dealData?.deal}
           setOpen={setOpenPayment}
           setWireInstructionsOpen={setWireInstructionsOpen}
           setCryptoPaymentOpen={setCryptoPaymentOpen}
-        />
+        /> */}
         <KYCModal
           open={open}
           setOpen={setOpen}
