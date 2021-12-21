@@ -50,6 +50,10 @@ const CREATE_NEW_DEAL = gql`
         dataRequestId: id
         tokenId: token_id
         tokenSecret: token_secret
+        task {
+          _id
+          title
+        }
       }
     }
   }
@@ -98,8 +102,8 @@ const Breadcrumbs = ({ titles, page }) => {
 
 const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDeal }) => {
   const classes = useStyles();
-  const { cryptoPaymentInBuild } = useFlags();
   const { width } = useViewport();
+  const { cryptoPaymentInBuild, buildModals } = useFlags();
 
   const [buildData, setBuildData] = useState({
     accept_crypto: 'false',
@@ -373,7 +377,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
   };
   useEffect(() => {
     const localStorageBuild = localStorage.getItem('buildData');
-    if (localStorageBuild) {
+    if (localStorageBuild && buildModals) {
       const parsedBuildData = JSON.parse(localStorageBuild);
       setBuildData(parsedBuildData);
     }
@@ -692,7 +696,8 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
         </Grid>
       </Paper>
 
-      <Paper className={classes.paper}>
+      {/* Upload docs moved to post build */}
+      {/* <Paper className={classes.paper}>
         <Grid container className={classes.sectionHeader}>
           <Grid
             item
@@ -717,10 +722,10 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
           style={sectionComplete(false)}
         >
           <form noValidate autoComplete="off">
-            {/* <UploadDocs deal={initialDeal} {...formFieldProps} /> */}
+            {/* {dealType && <UploadDocs deal={initialDeal} {...formFieldProps} />} 
           </form>
         </Grid>
-      </Paper>
+      </Paper> */}
 
       <Paper className={classes.paper}>
         <Grid container className={classes.sectionHeader}>

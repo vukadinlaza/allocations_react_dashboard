@@ -18,6 +18,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import HelpIcon from '@material-ui/icons/Help';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import countries from 'country-region-data';
 import states from 'usa-states';
 import { toast } from 'react-toastify';
@@ -256,7 +257,7 @@ const SelectOrganization = ({
       return;
     }
     setCurrentOrganization(selectedOrg);
-    history.push(`/new-build/${dealType}`);
+    history.push(`/public/new-build/${dealType}`);
     closeModal();
   },
   prev = () => setPage('deal_type_selector'),
@@ -1013,6 +1014,7 @@ export default function NewBuildModal(props) {
   const [state, setState] = useState('');
   const [zipCode, setZipcode] = useState('');
   const [country, setCountry] = useState('United States');
+  const { buildModals } = useFlags();
 
   const clearMasterEntityForm = () => {
     setMasterEntityName('');
@@ -1089,14 +1091,13 @@ export default function NewBuildModal(props) {
   const onClose = {
     ...props.onClose,
   };
-
   const pageMap = {
     deal_type_selector: DealTypeSelector,
     select_org: SelectOrganization,
     create_new_org: CreateNewOrganization,
     high_volume_partnerships: HighVolumePartnerships,
-    new_or_current: NewOrCurrentBuild,
-    final_warning: NewBuildFinalWarning,
+    new_or_current: buildModals ? NewOrCurrentBuild : DealTypeSelector,
+    final_warning: buildModals ? NewBuildFinalWarning : DealTypeSelector,
   };
 
   const propsObj = {
