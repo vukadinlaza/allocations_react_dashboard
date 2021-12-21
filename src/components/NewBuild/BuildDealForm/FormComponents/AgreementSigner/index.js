@@ -25,7 +25,7 @@ const AgreementBox = ({
   readyToSign,
   signingModal,
   signed,
-  setSigned,
+  isSigned,
   createDealLoading,
   error,
   classes,
@@ -48,7 +48,7 @@ const AgreementBox = ({
         cursor: readyToSign && !signed && 'pointer',
         pointerEvents: !readyToSign && 'none',
       }}
-      onClick={() => (readyToSign && !signed ? signingModal(agreementLink, setSigned) : null)}
+      onClick={() => (readyToSign && !signed ? signingModal(agreementLink, isSigned) : null)}
     >
       <div style={{ display: 'flex', alignItems: 'center' }}>
         {loading || error ? (
@@ -95,7 +95,7 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
 
   const allSigned = documents ? Object.values(documentsSignedStatus).every(Boolean) : false;
 
-  const signingModal = (agreementLink, setSigned) => {
+  const signingModal = (agreementLink, isSigned) => {
     // eslint-disable-next-line no-undef
     DocSpring.createVisualForm({
       ...agreementLink,
@@ -104,7 +104,7 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
         localStorage.removeItem('buildData');
         localStorage.removeItem('buildDeal');
         localStorage.removeItem('buildFilesUploaded');
-        setSigned();
+        isSigned();
       },
     });
   };
@@ -137,18 +137,18 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
           </div>
         )}
 
-        {documents?.map((documentData) => (
+        {documents?.map(({ task, ...documentData }) => (
           <AgreementBox
-            title={documentData.task.title.slice(4)}
+            title={task.title.slice(4)}
             agreementLink={documentData}
             signingModal={signingModal}
-            task={documentData.task}
+            task={task}
             readyToSign={!!documentData && !error && !createDealLoading}
-            signed={documentsSignedStatus[documentData.task.title]}
-            setSigned={() =>
+            signed={documentsSignedStatus[task.title]}
+            isSigned={() =>
               setDocumentsSignedStatus((prev) => ({
                 ...prev,
-                [documentData.task.title]: true,
+                [task.title]: true,
               }))
             }
             createDealLoading={createDealLoading}
