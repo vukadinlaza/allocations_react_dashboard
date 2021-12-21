@@ -24,6 +24,9 @@ const styles = (theme) => ({
   },
   boxTitle: {
     fontSize: '14px',
+    [theme.breakpoints.down(phone)]: {
+      width: '100%',
+    },
   },
   boxTitleContainer: {
     width: '180px',
@@ -32,12 +35,18 @@ const styles = (theme) => ({
     display: 'flex',
     alignItems: 'center',
     padding: '9px 19px 0px 9px',
-    backgroundColor: '',
     color: '#64748B',
+    [theme.breakpoints.down(phone)]: {
+      width: '100%',
+      padding: '6px 5px 0px 5px',
+    },
   },
   boxTitleText: {
     display: 'flex',
     alignItems: 'center',
+    [theme.breakpoints.down(phone)]: {
+      width: '100%',
+    },
   },
   closeModal: {
     right: '20px',
