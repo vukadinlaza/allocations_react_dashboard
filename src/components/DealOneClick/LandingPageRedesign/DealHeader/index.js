@@ -12,8 +12,9 @@ import {
 import moment from 'moment';
 import useStyles from '../DealStyles';
 import { SimpleBox } from '../widgets/SimpleBox';
+import BadgeWrapper from './BadgeWrapper';
 
-function DealHeader({ deal }) {
+function DealHeader({ deal, isEdit }) {
   const {
     company_name,
     dealCoverImageKey,
@@ -47,7 +48,9 @@ function DealHeader({ deal }) {
       <Paper className={classes.dealHeader}>
         <Box className={classes.box}>
           <Box display="flex">
-            <Avatar className={classes.avatar} />
+            <BadgeWrapper isEdit={isEdit}>
+              <Avatar className={classes.avatar} />
+            </BadgeWrapper>
             <h3 className={classes.companyName}>{company_name}</h3>
           </Box>
         </Box>

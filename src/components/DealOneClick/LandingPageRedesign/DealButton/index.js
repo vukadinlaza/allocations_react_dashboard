@@ -15,7 +15,7 @@ const useSyles = makeStyles({
       background: ({ secondary }) => (secondary ? '#ECF3FF' : '#0444B4'),
     },
     '&:focus': {
-      border: '2px solid #186EFF',
+      border: '1px solid #186EFF',
       color: ({ secondary }) => (secondary ? '#186EFF' : '#FFF'),
       '& .MuiButton-startIcon': {
         color: '#186EFF',

@@ -34,7 +34,12 @@ export default function DealPage({
                 style={{ marginRight: '8px' }}
               />
             ) : (
-              <DealButton secondary text="Discard Changes" style={{ marginRight: '8px' }} />
+              <DealButton
+                onClick={() => setIsEdit(false)}
+                secondary
+                text="Discard Changes"
+                style={{ marginRight: '8px' }}
+              />
             )}
             <DealButton
               secondary

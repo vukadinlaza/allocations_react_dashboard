@@ -128,7 +128,7 @@ function DealLandingPageRedesign({ orgSlug, dealSlug, isEdit }) {
 
   return (
     <Container maxWidth="md" style={{ marginBottom: '134px' }}>
-      <DealHeaderRedesign deal={deal} />
+      <DealHeaderRedesign deal={deal} isEdit={isEdit} />
       <InvestingDetails deal={deal} />
       <DealSummary deal={deal} />
       <CoinvestorsPanel deal={deal} />
