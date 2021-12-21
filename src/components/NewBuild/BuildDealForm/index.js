@@ -737,7 +737,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
               padding: '1px 1px 0px 0px',
             }}
           >
-            6
+            5
           </Grid>
           <Typography
             variant="h6"
