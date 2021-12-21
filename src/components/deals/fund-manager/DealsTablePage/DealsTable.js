@@ -102,7 +102,9 @@ const DealsTable = ({ classes, deals }) => {
           </div>
         );
       case 'created_at':
-        return moment(row.created_at).fromNow();
+        const date = new Date(parseInt(row.created_at));
+        const fdate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+        return moment(fdate).fromNow();
       case 'wire_deadline':
         return moment(row.dealParams.wireDeadline).isBefore(moment())
           ? 'Closed'
