@@ -103,7 +103,10 @@ const SecondSignature = ({
               borderRadius: '5px 5px 0px 0px',
             }}
           />
-          <PanelLabel label="Please select if there is a second signer" isFromModal={isFromModal} />
+          <PanelLabel
+            label="Please select if you have the authority to sign as a second signer or the second signer is present"
+            isFromModal={isFromModal}
+          />
         </Grid>
 
         {requireSecondSigChecked.secondSigInfo && (
