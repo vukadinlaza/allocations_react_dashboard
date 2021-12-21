@@ -4,13 +4,15 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { Button, Paper, Grid, FormControl } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router';
+import { useParams, useHistory } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import BasicInfo from './FormComponents/TypeSelector/index';
 import UploadDocs from './FormComponents/UploadDocs/index';
 import { useAuth } from '../../../auth/useAuth';
 import { useCurrentOrganization } from '../../../state/current-organization';
+import { useViewport } from '../../../utils/hooks';
 import AgreementSigner from './FormComponents/AgreementSigner';
+import NewBuildModal from '../NewBuildModal';
 import useStyles from '../BuildStyles';
 import {
   AcceptCrypto,
@@ -28,7 +30,6 @@ import {
   AcceptedInvestorTypes,
   TargetRaiseGoal,
 } from './FormFields';
-import NewBuildModal from '../NewBuildModal';
 
 const CREATE_NEW_DEAL = gql`
   mutation createNewDeal($payload: Object) {
@@ -101,6 +102,7 @@ const Breadcrumbs = ({ titles, page }) => {
 
 const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDeal }) => {
   const classes = useStyles();
+  const { width } = useViewport();
   const { cryptoPaymentInBuild, buildModals } = useFlags();
 
   const [buildData, setBuildData] = useState({
@@ -438,7 +440,6 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
 
     setPage((page) => page + 1);
   };
-
   const handleChange = ({ target }) => {
     const isNotInternational =
       target.name === 'international_company_status' && (target.value === 'false' || 'unknown');
@@ -479,6 +480,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
     customInputStyles,
     classes,
     openTooltip,
+    width,
   };
 
   const history = useHistory();
@@ -501,6 +503,14 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
   const openModaltoPage = (page) => {
     setNewBuildModalPage(page);
     setOpenModal(true);
+  };
+
+  const sectionComplete = (section) => {
+    console.log(section, 'section');
+    console.log(width >= 675 ? (section ? 'true true' : 'true false') : 'false');
+    return {
+      borderLeft: width >= 675 ? (section ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB') : 'none',
+    };
   };
 
   return (
@@ -564,7 +574,6 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
           high_volume_partnerships: () => closeModalAndReset(),
         }}
       />
-
       <BasicInfo
         dealType={dealType}
         buildData={buildData}
@@ -576,6 +585,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
         unfilledFields={unfilledFields}
         setUnfilledFields={setUnfilledFields}
         sectionOneComplete={sectionOneComplete}
+        sectionComplete={sectionComplete}
       />
 
       <Paper className={classes.paper}>
@@ -599,7 +609,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
         <Grid
           container
           className={classes.outerSection}
-          style={{ borderLeft: sectionTwoComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+          style={sectionComplete(sectionTwoComplete)}
         >
           <form noValidate autoComplete="off">
             <Grid container spacing={2} className={classes.inputGridContainer}>
@@ -637,7 +647,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
         <Grid
           container
           className={classes.outerSection}
-          style={{ borderLeft: sectionThreeComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+          style={sectionComplete(sectionThreeComplete)}
         >
           <form noValidate autoComplete="off" style={{ width: '100%' }}>
             <Grid container spacing={1} className={classes.inputGridContainer}>
@@ -675,7 +685,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
         <Grid
           container
           className={classes.outerSection}
-          style={{ borderLeft: sectionFourComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+          style={sectionComplete(sectionFourComplete)}
         >
           <form noValidate autoComplete="off">
             <Grid container spacing={1} className={classes.inputGridContainer}>
@@ -692,7 +702,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
           <Grid
             item
             className={classes.sectionHeaderNumber}
-            style={{ backgroundColor: '#0461ff', padding: '1px 1px 0px 0px' }}
+            style={{ backgroundColor: '#EBEBEB', padding: '1px 1px 0px 0px' }}
           >
             5
           </Grid>
@@ -700,15 +710,16 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
             variant="h6"
             gutterBottom
             className={classes.sectionHeaderText}
-            style={{ color: '#2A2B54' }}
+            style={{ color: '#8E9394' }}
           >
             Upload Your Documents
           </Typography>
         </Grid>
         <Grid
           container
+          justifyContent="center"
           className={classes.outerSection}
-          style={{ borderLeft: 'solid 3px #ECF3FF' }}
+          style={sectionComplete(false)}
         >
           <form noValidate autoComplete="off">
             {/* {dealType && <UploadDocs deal={initialDeal} {...formFieldProps} />} 
@@ -737,10 +748,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
             Final
           </Typography>
         </Grid>
-        <div
-          className={classes.outerSection}
-          style={{ borderLeft: sectionSixComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
-        >
+        <div className={classes.outerSection} style={sectionComplete(sectionSixComplete)}>
           <form noValidate autoComplete="off" style={{ width: '100%' }}>
             <FormControl required disabled variant="outlined" style={{ width: 'inherit' }}>
               <NotesMemo {...formFieldProps} />

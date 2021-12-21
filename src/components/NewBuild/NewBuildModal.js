@@ -67,6 +67,9 @@ const useStyles = makeStyles((theme) => {
     modalContainer: {
       width: '568px',
       height: '328',
+      [theme.breakpoints.down(phone)]: {
+        width: '100%',
+      },
     },
     formControl: {
       width: '100%',
@@ -142,6 +145,9 @@ const useStyles = makeStyles((theme) => {
         borderColor: '#CBD5E1',
         height: '48px',
         top: '0px',
+      },
+      [theme.breakpoints.down(phone)]: {
+        width: '100%',
       },
     },
     createNewOrgMenuItem: {
@@ -1074,15 +1080,6 @@ export default function NewBuildModal(props) {
     setOpenTooltip(id);
   };
 
-  const pageMap = {
-    deal_type_selector: DealTypeSelector,
-    select_org: SelectOrganization,
-    create_new_org: CreateNewOrganization,
-    high_volume_partnerships: HighVolumePartnerships,
-    new_or_current: buildModals ? NewOrCurrentBuild : DealTypeSelector,
-    final_warning: buildModals ? NewBuildFinalWarning : DealTypeSelector,
-  };
-
   const next = {
     ...props.next,
   };
@@ -1093,6 +1090,14 @@ export default function NewBuildModal(props) {
 
   const onClose = {
     ...props.onClose,
+  };
+  const pageMap = {
+    deal_type_selector: DealTypeSelector,
+    select_org: SelectOrganization,
+    create_new_org: CreateNewOrganization,
+    high_volume_partnerships: HighVolumePartnerships,
+    new_or_current: buildModals ? NewOrCurrentBuild : DealTypeSelector,
+    final_warning: buildModals ? NewBuildFinalWarning : DealTypeSelector,
   };
 
   const propsObj = {
