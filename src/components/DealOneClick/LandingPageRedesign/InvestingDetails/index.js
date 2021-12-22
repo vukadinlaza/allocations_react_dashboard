@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Paper, Box, Typography, Grid } from '@material-ui/core';
 import useStyles from '../DealStyles';
-import { phone } from '../../../../utils/helpers';
 import { InvestingDetailsSimpleBox } from '../widgets/InvestingDetailsSimpleBox';
 
 function InvestingDetails({ deal }) {
