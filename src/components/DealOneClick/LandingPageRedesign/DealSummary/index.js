@@ -9,7 +9,7 @@ function DealSummary({ deal }) {
   return (
     <Paper className={classes.dealHeader}>
       <Box className={classes.box}>
-        <h5 className={classes.investmentProgress}>Deal Summary</h5>
+        <div className={classes.investmentProgress}>Deal Summary</div>
       </Box>
 
       <Box className={classes.box}>{company_description}</Box>

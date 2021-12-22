@@ -29,7 +29,7 @@ function InvestingDetails({ deal }) {
     <>
       <Paper className={classes.dealHeader}>
         <Box className={classes.box}>
-          <h5 className={classes.investmentProgress}>Investing Details</h5>
+          <div className={classes.investmentProgress}>Investing Details</div>
         </Box>
         <Box className={classes.boxInvestingDetails}>
           <Grid container>

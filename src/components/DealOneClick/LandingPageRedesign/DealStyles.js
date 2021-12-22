@@ -84,8 +84,6 @@ const useStyles = makeStyles((theme) => ({
       padding: '5px',
     },
     [theme.breakpoints.down(tablet)]: {
-      // width: '468px',
-      // height: '341px',
       backgroundSize: 'contain',
       backgroundPosition: 'initial',
       backgroundRepeat: 'no-repeat',

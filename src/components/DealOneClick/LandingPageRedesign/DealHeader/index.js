@@ -48,7 +48,7 @@ function DealHeader({ deal }) {
         <Box className={classes.box}>
           <Box display="flex">
             <Avatar className={classes.avatar} />
-            <h3 className={classes.companyName}>{company_name}</h3>
+            <div className={classes.companyName}>{company_name}</div>
           </Box>
         </Box>
 
@@ -65,8 +65,8 @@ function DealHeader({ deal }) {
             />
           </Grid>
           <Grid item className={classes.middleGridItem}>
-            <h4 className={classes.investmentProgress}>Investment Progress</h4>
-            <h6 className={classes.investmentNumber}>$320,000</h6>
+            <div className={classes.investmentProgress}>Investment Progress</div>
+            <div className={classes.investmentNumber}>$320,000</div>
             <LinearProgress
               variant="determinate"
               value={70}

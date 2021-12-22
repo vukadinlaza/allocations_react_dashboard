@@ -8,7 +8,7 @@ export default function DealSummary({ title, content }) {
   return (
     <Paper className={classes.dealHeader}>
       <Box className={classes.box}>
-        <h5 className={classes.investmentProgress}>{title}</h5>
+        <div className={classes.investmentProgress}>{title}</div>
       </Box>
 
       <Box className={classes.box}>{content}</Box>

@@ -1,20 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Paper, Box } from '@material-ui/core';
 import useStyles from '../DealStyles';
 
-function CoinvestorsPanel({ deal }) {
-  const { coinvestors } = deal;
-
+function CoinvestorsPanel() {
   const classes = useStyles();
-
-  const coinvestorItems = (deal.coinvestors || []).map((item) => {
-    return <li>{item}</li>;
-  });
 
   return (
     <Paper className={classes.dealHeader}>
       <Box className={classes.box}>
-        <h5 className={classes.investmentProgress}>Co-Investors/Previous Investors</h5>
+        <div className={classes.investmentProgress}>Co-Investors/Previous Investors</div>
       </Box>
 
       <Box className={classes.box}>
