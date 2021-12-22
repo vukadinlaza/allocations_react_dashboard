@@ -14,7 +14,7 @@ function CoinvestorsPanel({ deal }) {
   return (
     <Paper className={classes.dealHeader}>
       <Box className={classes.box}>
-        <h5>Co-Investors/Previous Investors</h5>
+        <h5 className={classes.investmentProgress}>Co-Investors/Previous Investors</h5>
       </Box>
 
       <Box className={classes.box}>

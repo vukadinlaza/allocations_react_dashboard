@@ -12,12 +12,17 @@ const useStyles = makeStyles((theme) => ({
     opacity: 1,
     [theme.breakpoints.down(phone)]: {
       width: '100%',
-      backgroundColor: '',
       margin: '0 auto',
       marginTop: '16px',
       maxWidth: '100%',
-      padding: '3px',
-      backgroundColor: 'pink',
+      padding: '0px',
+    },
+    [theme.breakpoints.down(tablet)]: {
+      width: '90%',
+      margin: '0 auto',
+      marginTop: '16px',
+      maxWidth: '100%',
+      padding: '0px',
     },
   },
 
@@ -29,6 +34,11 @@ const useStyles = makeStyles((theme) => ({
     width: '90%',
     paddingBottom: '15px',
     marginTop: '10px',
+    [theme.breakpoints.down(phone)]: {
+      width: '98%',
+      fontSize: '14px',
+    },
+    [theme.breakpoints.down(tablet)]: {},
   },
 
   avatar: {
@@ -41,6 +51,9 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Roboto',
     fontSize: '24px',
     color: '#2A2B54',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '20px',
+    },
   },
 
   middleGridContainer: {
@@ -51,15 +64,32 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '20px',
     [theme.breakpoints.down(phone)]: {
       marginBottom: '0px',
+      width: '97%',
     },
+    [theme.breakpoints.down(tablet)]: {
+      marginBottom: '0px',
+      width: '97%',
+    },
+    [theme.breakpoints.down(tablet)]: {},
   },
 
   cardMedia: {
     width: '368px',
     height: '241px',
     [theme.breakpoints.down(phone)]: {
-      height: '210px',
-      objectFit: 'contain',
+      width: '100%',
+      backgroundSize: 'contain',
+      backgroundPosition: 'initial',
+      backgroundRepeat: 'no-repeat',
+      padding: '5px',
+    },
+    [theme.breakpoints.down(tablet)]: {
+      // width: '468px',
+      // height: '341px',
+      backgroundSize: 'contain',
+      backgroundPosition: 'initial',
+      backgroundRepeat: 'no-repeat',
+      padding: '5px',
     },
   },
 
@@ -67,7 +97,11 @@ const useStyles = makeStyles((theme) => ({
     width: '50%',
     [theme.breakpoints.down(phone)]: {
       width: '100%',
-      backgroundColor: 'green',
+      marginTop: '10px',
+    },
+    [theme.breakpoints.down(tablet)]: {
+      width: '100%',
+      marginTop: '10px',
     },
   },
 
@@ -96,7 +130,6 @@ const useStyles = makeStyles((theme) => ({
 
   minorText: {
     float: 'right',
-    backgroundColor: '',
     width: '100%',
     color: '#2A2B54',
   },
@@ -110,6 +143,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 
+  totalRaiseAmount: {
+    fontWeight: 'bold',
+    fontSize: '12px',
+  },
+
   investButton: {
     backgroundColor: '#CBD5E1',
     width: '100%',
@@ -117,6 +155,46 @@ const useStyles = makeStyles((theme) => ({
     color: '#64748A',
     borderRadius: '6px',
     marginTop: '7%',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '14px',
+      height: '40px',
+    },
+  },
+
+  gridContainer: {
+    marginTop: '15px',
+    justifyContent: 'space-between',
+    [theme.breakpoints.down(phone)]: {
+      marginTop: '10px',
+    },
+  },
+
+  investItem: {
+    color: '#64748B',
+    fontSize: '14px',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '12px',
+    },
+  },
+
+  minimumInvestItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginLeft: '20px',
+  },
+
+  minimumInvestText: {
+    color: '#64748B',
+    fontSize: '14px',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '12px',
+    },
+  },
+
+  minimumInvestNumber: {
+    fontWeight: 'bold',
+    fontSize: '12px',
+    color: '#2A2B54',
   },
 
   LandingPage: {
@@ -128,7 +206,6 @@ const useStyles = makeStyles((theme) => ({
       minWidth: '0 !important',
       maxWidth: 'none !important',
       width: '100%',
-      backgroundColor: '',
     },
   },
 
@@ -143,27 +220,21 @@ const useStyles = makeStyles((theme) => ({
   },
 
   boxContent: {
-    backgroundColor: '',
     fontSize: '12px',
     fontWeight: 'bold',
     width: '180px',
     marginLeft: '-2px',
     marginTop: '10px',
-  },
-
-  modalParent: {
-    [theme.breakpoints.up('sm')]: {},
-    [theme.breakpoints.up('md')]: {},
-    [theme.breakpoints.up('lg')]: {},
-    [theme.breakpoints.up('xl')]: {
-      display: 'flex',
-      position: 'absolute',
+    [theme.breakpoints.down(phone)]: {
+      width: '120px',
+      paddingTop: '5px',
+      marginLeft: '0px',
+      marginTop: '8px',
     },
   },
 
   boxInvestingDetails: {
     width: '90%',
-    backgroundColor: '',
     margin: '0 auto',
   },
 
@@ -182,7 +253,17 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     marginTop: '20px',
-    backgroundColor: '',
+    [theme.breakpoints.down(phone)]: {
+      marginBottom: '20px',
+    },
+  },
+
+  typography: {
+    fontSize: '14px',
+    fontWeight: 'bold',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '12px',
+    },
   },
 
   coinvestorTagBubble: {
@@ -194,6 +275,10 @@ const useStyles = makeStyles((theme) => ({
     position: 'static',
     background: '#ECF3FF',
     borderRadius: '16px',
+    [theme.breakpoints.down(phone)]: {
+      padding: '4px 6px',
+      margin: '4px 6px 4px 0px',
+    },
   },
 
   coinvestorTagText: {

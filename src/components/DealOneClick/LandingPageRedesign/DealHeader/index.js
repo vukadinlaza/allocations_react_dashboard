@@ -75,13 +75,13 @@ function DealHeader({ deal }) {
             <div className={classes.minorText}>
               <span className={classes.floatRight}>
                 Total Raise Amount:
-                <span style={{ fontWeight: 'bold', fontSize: '12px' }}>$600,000</span>
+                <span className={classes.totalRaiseAmount}>$600,000</span>
               </span>
             </div>
 
             <Button className={classes.investButton}>Invest</Button>
-            <Grid container style={{ marginTop: '15px', justifyContent: 'space-between' }}>
-              <Grid item style={{ color: '#64748B', fontSize: '14px' }}>
+            <Grid container className={classes.gridContainer}>
+              <Grid item className={classes.investItem}>
                 Invest With:{' '}
                 <div style={{ display: 'flex' }}>
                   <div className={classes.coinvestorTagBubble}>
@@ -93,24 +93,15 @@ function DealHeader({ deal }) {
                 </div>
               </Grid>
               <Grid item>
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    marginLeft: '20px',
-                  }}
-                >
-                  <div style={{ color: '#64748B', fontSize: '14px' }}>Minimum Investment:</div>
-                  <div style={{ fontWeight: 'bold', fontSize: '12px', color: '#2A2B54' }}>
-                    $5,000
-                  </div>
+                <div className={classes.minimumInvestItem}>
+                  <div className={classes.minimumInvestText}>Minimum Investment:</div>
+                  <div className={classes.minimumInvestNumber}>$5,000</div>
                 </div>
               </Grid>
             </Grid>
 
             <div className={classes.modalContainer}>
               <SimpleBox
-                className={classes.modalParent}
                 title="Signing Deadline"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
@@ -122,7 +113,7 @@ function DealHeader({ deal }) {
                   </Typography>
                 }
               >
-                <Typography style={{ fontSize: '14px', fontWeight: 'bold' }}>
+                <Typography className={classes.typography}>
                   {' '}
                   {signDeadline
                     ? getDeadline(signDeadline)
@@ -132,7 +123,6 @@ function DealHeader({ deal }) {
                 </Typography>
               </SimpleBox>
               <SimpleBox
-                className={classes.modalParent}
                 title="Wiring Deadline"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
@@ -144,7 +134,7 @@ function DealHeader({ deal }) {
                   </Typography>
                 }
               >
-                <Typography style={{ fontSize: '14px', fontWeight: 'bold' }}>
+                <Typography className={classes.typography}>
                   {wireDeadline
                     ? getDeadline(wireDeadline)
                     : signDeadline

@@ -10,30 +10,36 @@ const styles = (theme) => ({
     width: '100%',
     height: '60px',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
-    borderRadius: '10px',
     [theme.breakpoints.down(phone)]: {
       minWidth: '0 !important',
       maxWidth: 'none !important',
+      height: '100%',
     },
-  },
-  boxContent: {
-    padding: '5px',
-    fontWeight: 'bolder',
-    color: '#2A2B54',
   },
   boxTitle: {
     fontSize: '14px',
     color: '#64748B',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '14px',
+      display: 'flex',
+    },
   },
   boxTitleContainer: {
     width: '220px',
-    borderRadius: '10px 10px 0px 0px',
     display: 'flex',
     alignItems: 'center',
+    [theme.breakpoints.down(phone)]: {
+      width: '120px',
+      fontSize: '14px',
+      display: 'inline-block',
+      alignSelf: 'flex-end',
+      top: '0',
+    },
   },
+
   boxTitleText: {
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'start',
   },
   closeModal: {
     right: '20px',
@@ -57,10 +63,15 @@ const styles = (theme) => ({
     cursor: 'pointer',
     color: '#64748B',
     fontSize: '16px',
+    [theme.breakpoints.down(phone)]: {
+      marginLeft: '5px',
+    },
   },
+
   modal: {
     padding: '20px',
   },
+
   modalBackground: {
     position: 'fixed',
     left: '0',
