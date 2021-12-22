@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, makeStyles } from '@material-ui/core';
 
-const useSyles = makeStyles({
+const useStyles = makeStyles({
   button: {
     background: ({ secondary }) => (secondary ? '#FFFFFF' : '#186EFF'),
     textTransform: 'none',
@@ -25,7 +25,7 @@ const useSyles = makeStyles({
 });
 
 export default function DealButton({ text, icon, secondary = false, style, ...props }) {
-  const { button } = useSyles({ secondary });
+  const { button } = useStyles({ secondary });
 
   return (
     <Button className={button} variant="outlined" style={style} startIcon={icon} {...props}>
