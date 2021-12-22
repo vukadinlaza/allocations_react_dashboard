@@ -154,7 +154,7 @@ function InvestingDetails({ deal }) {
                 }
               >
                 <Box display="flex">
-                  <Typography className={classes.boxContent}>{sectors.join(', ')}</Typography>
+                  <Typography className={classes.boxContent}>{sectors?.join(', ')}</Typography>
                 </Box>
               </InvestingDetailsSimpleBox>
             </Grid>
