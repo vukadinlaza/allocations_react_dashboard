@@ -29,13 +29,18 @@ const AddBubbleBuildButton = ({ classes }) => (
 );
 
 const AddInAppBuildButton = ({ classes, setOpenModal, setNewBuildModalPage }) => {
+  const { buildModals } = useFlags();
   return (
     <Button
       variant="contained"
       className={classes.addButton}
       onClick={() => {
-        if (localStorage.getItem('buildData') || localStorage.getItem('buildDeal')) {
-          setNewBuildModalPage('new_or_current');
+        if (buildModals) {
+          if (localStorage.getItem('buildData') || localStorage.getItem('buildDeal')) {
+            setNewBuildModalPage('new_or_current');
+          }
+        } else {
+          localStorage.removeItem('buildData');
         }
         setOpenModal(true);
       }}
