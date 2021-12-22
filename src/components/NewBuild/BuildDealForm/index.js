@@ -375,11 +375,16 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
   const handleTooltip = (id) => {
     setOpenTooltip(id);
   };
+
   useEffect(() => {
-    const localStorageBuild = localStorage.getItem('buildData');
-    if (localStorageBuild && buildModals) {
-      const parsedBuildData = JSON.parse(localStorageBuild);
-      setBuildData(parsedBuildData);
+    if (buildModals) {
+      const localStorageBuild = localStorage.getItem('buildData');
+      if (localStorageBuild && buildModals) {
+        const parsedBuildData = JSON.parse(localStorageBuild);
+        setBuildData(parsedBuildData);
+      }
+    } else {
+      localStorage.removeItem('buildData');
     }
   }, []);
 
@@ -486,8 +491,10 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
   const history = useHistory();
 
   const modalStartPage = () => {
-    if (localStorage.getItem('buildData') || localStorage.getItem('buildDeal')) {
-      return 'new_or_current';
+    if (buildModals) {
+      if (localStorage.getItem('buildData') || localStorage.getItem('buildDeal')) {
+        return 'new_or_current';
+      }
     }
     return 'deal_type_selector';
   };
