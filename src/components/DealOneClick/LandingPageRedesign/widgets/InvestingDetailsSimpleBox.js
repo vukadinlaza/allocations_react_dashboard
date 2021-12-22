@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Typography, Tooltip } from '@material-ui/core';
 import HelpIcon from '@material-ui/icons/Help';
 import CloseIcon from '@material-ui/icons/Close';
-import { phone } from '../../../../utils/helpers';
+import { phone, tablet } from '../../../../utils/helpers';
 
 const styles = (theme) => ({
   box: {
@@ -34,6 +34,9 @@ const styles = (theme) => ({
       display: 'inline-block',
       alignSelf: 'flex-end',
       top: '0',
+    },
+    [theme.breakpoints.down(tablet)]: {
+      width: '115px',
     },
   },
 
