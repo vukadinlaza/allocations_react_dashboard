@@ -225,9 +225,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '10px',
     [theme.breakpoints.down(phone)]: {
       width: '120px',
-      paddingTop: '5px',
+      paddingTop: '0px',
       marginLeft: '0px',
-      marginTop: '8px',
+      marginTop: '4px',
     },
   },
 
