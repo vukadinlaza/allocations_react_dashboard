@@ -7,15 +7,6 @@ import { useHistory } from 'react-router';
 import bluePenIcon from '../../../../../assets/sign-agreement-blue-pen.svg';
 import useStyles from '../../../BuildStyles';
 
-const SERVICE_AGREEMENT_LINK = gql`
-  query serviceAgreementLink($deal_id: String) {
-    serviceAgreementLink: getServiceAgreementLink(deal_id: $deal_id) {
-      dataRequestId: id
-      tokenId: token_id
-      tokenSecret: token_secret
-    }
-  }
-`;
 const GET_DOCUMENT = gql`
   query getDealDocService($task_id: String) {
     getDealDocService(task_id: $task_id) {
@@ -27,55 +18,98 @@ const GET_DOCUMENT = gql`
   }
 `;
 
-export default function SignDocsForm({ page, setPage, deal, updatedDeal, updatedDealLoading }) {
-  const history = useHistory();
-  const [signed, setSigned] = useState(false);
+const AgreementBox = ({
+  title,
+  task,
+  agreementLink,
+  readyToSign,
+  signingModal,
+  signed,
+  isSigned,
+  createDealLoading,
+  error,
+  classes,
+}) => {
+  const [getSignedDocument, { data: signedDocUrl, loading: signedDocLoading }] = useLazyQuery(
+    GET_DOCUMENT,
+    { variables: { task_id: task?._id }, fetchPolicy: 'network-only' },
+  );
 
-  const signingModal = (serviceAgreementLink) => {
+  useEffect(() => {
+    if (signed && task?._id) getSignedDocument();
+  }, [signed]);
+
+  const loading = createDealLoading || signedDocLoading;
+
+  return (
+    <Paper
+      className={signed ? classes.agreementSignedBox : classes.agreementUnsignedBox}
+      style={{
+        cursor: readyToSign && !signed && 'pointer',
+        pointerEvents: !readyToSign && 'none',
+      }}
+      onClick={() => (readyToSign && !signed ? signingModal(agreementLink, isSigned) : null)}
+    >
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        {loading || error ? (
+          <CircularProgress />
+        ) : (
+          <div className={classes.serviceAgreementIconBox}>
+            <img src={bluePenIcon} alt="document icon" />
+          </div>
+        )}
+
+        <Typography className={classes.itemText} style={{ width: '200px' }}>
+          {signed && signedDocUrl?.getDealDocService?.link ? (
+            <a href={signedDocUrl?.getDealDocService?.link} target="_blank" rel="noreferrer">
+              {title}
+            </a>
+          ) : (
+            !loading && title
+          )}
+        </Typography>
+      </div>
+
+      <Typography className={signed ? classes.signed : classes.notSigned}>
+        {signed ? '• Signed' : '• Not Signed'}
+      </Typography>
+    </Paper>
+  );
+};
+
+export default function SignDocsForm({ dealData = {}, createDealLoading, error, page, setPage }) {
+  const history = useHistory();
+  const { deal, documents } = dealData;
+  const [documentsSignedStatus, setDocumentsSignedStatus] = useState({});
+
+  useEffect(() => {
+    if (documents) {
+      setDocumentsSignedStatus(
+        documents?.reduce((acc, document) => {
+          acc[document.task.title] = false;
+          return acc;
+        }, {}),
+      );
+    }
+  }, [documents]);
+
+  const allSigned = documents ? Object.values(documentsSignedStatus).every(Boolean) : false;
+
+  const signingModal = (agreementLink, isSigned) => {
     // eslint-disable-next-line no-undef
     DocSpring.createVisualForm({
-      ...serviceAgreementLink,
+      ...agreementLink,
       domainVerification: false,
       onSubmit: () => {
         localStorage.removeItem('buildData');
         localStorage.removeItem('buildDeal');
         localStorage.removeItem('buildFilesUploaded');
-        setSigned(true);
+        isSigned();
       },
     });
   };
 
-  const [getServiceAgreementLink, { data, loading: agreementLinkLoading, error }] = useLazyQuery(
-    SERVICE_AGREEMENT_LINK,
-    {
-      variables: { deal_id: deal?._id },
-      fetchPolicy: 'network-only',
-      onError: () => {
-        toast.error(
-          'Sorry, we encountered an error generating your service agreement link, contact support@allocations.com',
-        );
-      },
-    },
-  );
-
-  const phase = updatedDeal?.setBuildInfo?.phases.find((phase) => phase.name === 'build');
-  const task = phase?.tasks?.find((task) => task.title === 'Sign Service Agreement');
-
-  const [getSignedServiceAgreement, { data: serviceAgreementDocUrl, loading: signedDocLoading }] =
-    useLazyQuery(GET_DOCUMENT, { variables: { task_id: task?._id }, fetchPolicy: 'network-only' });
-
-  useEffect(() => {
-    if (updatedDeal) getServiceAgreementLink();
-  }, [updatedDeal, error]);
-
-  useEffect(() => {
-    if (signed) getSignedServiceAgreement();
-  }, [signed]);
-
   const classes = useStyles();
-  const loading = updatedDealLoading || agreementLinkLoading || signedDocLoading;
-  const readyToSign = data && !error && !loading;
-
   return (
     <>
       <Paper className={classes.signContainer}>
@@ -88,52 +122,46 @@ export default function SignDocsForm({ page, setPage, deal, updatedDeal, updated
             your behalf
           </Typography>
         </div>
-        <Paper
-          className={signed ? classes.agreementSignedBox : classes.agreementUnsignedBox}
-          style={{
-            cursor: readyToSign && !signed && 'pointer',
-            pointerEvents: !readyToSign && 'none',
-          }}
-          onClick={() => (readyToSign ? !signed && signingModal(data.serviceAgreementLink) : null)}
-        >
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            {!data || loading || error ? (
-              <CircularProgress />
-            ) : (
-              <div className={classes.serviceAgreementIconBox}>
-                <img src={bluePenIcon} alt="document icon" />
-              </div>
-            )}
 
-            <Typography className={classes.itemText} style={{ width: '200px' }}>
-              {!updatedDeal ? (
-                'Building your deal...'
-              ) : agreementLinkLoading ? (
-                'Almost done...'
-              ) : serviceAgreementDocUrl?.getDealDocService?.link ? (
-                <a
-                  href={serviceAgreementDocUrl?.getDealDocService?.link}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Service Agreement
-                </a>
-              ) : (
-                'Service Agreement'
-              )}
-            </Typography>
+        {!documents && (
+          <div
+            style={{
+              display: 'flex',
+              margin: 'auto',
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
+              width: '300px',
+            }}
+          >
+            <CircularProgress /> <Typography> Loading your agreements... </Typography>
           </div>
+        )}
 
-          <Typography className={signed ? classes.signed : classes.notSigned}>
-            {signed ? '• Signed' : '• Not Signed'}
-          </Typography>
-        </Paper>
+        {documents?.map(({ task, ...documentData }) => (
+          <AgreementBox
+            title={task.title.slice(4)}
+            agreementLink={documentData}
+            signingModal={signingModal}
+            task={task}
+            readyToSign={!!documentData && !error && !createDealLoading}
+            signed={documentsSignedStatus[task.title]}
+            isSigned={() =>
+              setDocumentsSignedStatus((prev) => ({
+                ...prev,
+                [task.title]: true,
+              }))
+            }
+            createDealLoading={createDealLoading}
+            error={error}
+            classes={classes}
+          />
+        ))}
 
         <div className={classes.buttonBox}>
           <Button
             onClick={() => {
-              if (!signed) {
-                toast.error('Please sign the Service Agreement before continuing');
+              if (!allSigned) {
+                toast.error('Please sign all Agreements before continuing');
                 return;
               }
               toast.success('Success! Your submission was submitted.');
@@ -143,7 +171,7 @@ export default function SignDocsForm({ page, setPage, deal, updatedDeal, updated
           >
             Complete
           </Button>
-          {!signed && (
+          {!allSigned && (
             <Typography
               className={classes.previousButton}
               onClick={() => {

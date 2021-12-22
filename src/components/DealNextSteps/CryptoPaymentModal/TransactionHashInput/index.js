@@ -26,7 +26,7 @@ function TransferInstructions({ transactionInfo, setTransactionInfo }) {
         margin: 'auto',
         width: '100%',
         marginBottom: '29px',
-        height: '122px',
+        height: '134px',
       }}
     >
       <Grid style={{ margin: 'auto' }} container>
@@ -55,6 +55,10 @@ function TransferInstructions({ transactionInfo, setTransactionInfo }) {
           >
             <TextField
               variant="outlined"
+              // error={transactionInfo.transaction_hash === ''}
+              // helperText={
+              //   transactionInfo.transaction_hash === '' ? 'Please Input a Transaction Hash' : ''
+              // }
               InputProps={{
                 classes: {
                   notchedOutline: classes.notchedOutline,

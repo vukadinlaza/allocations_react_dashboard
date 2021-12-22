@@ -4,13 +4,15 @@ import { useFlags } from 'launchdarkly-react-client-sdk';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { Button, Paper, Grid, FormControl } from '@material-ui/core';
-import { useParams } from 'react-router';
+import { useParams, useHistory } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import BasicInfo from './FormComponents/TypeSelector/index';
 import UploadDocs from './FormComponents/UploadDocs/index';
 import { useAuth } from '../../../auth/useAuth';
 import { useCurrentOrganization } from '../../../state/current-organization';
+import { useViewport } from '../../../utils/hooks';
 import AgreementSigner from './FormComponents/AgreementSigner';
+import NewBuildModal from '../NewBuildModal';
 import useStyles from '../BuildStyles';
 import {
   AcceptCrypto,
@@ -29,11 +31,12 @@ import {
   TargetRaiseGoal,
 } from './FormFields';
 
-const CREATE_BUILD = gql`
-  mutation createBuild($payload: Object) {
-    deal: createBuild(payload: $payload) {
-      _id
-      type
+const CREATE_NEW_DEAL = gql`
+  mutation createNewDeal($payload: Object) {
+    createNewDeal(payload: $payload) {
+      deal {
+        _id
+      }
       phases {
         _id
         name
@@ -43,21 +46,13 @@ const CREATE_BUILD = gql`
           type
         }
       }
-    }
-  }
-`;
-
-const SET_BUILD_INFO = gql`
-  mutation setBuildInfo($deal_id: String, $payload: Object) {
-    setBuildInfo(deal_id: $deal_id, payload: $payload) {
-      _id
-      metadata
-      phases {
-        name
-        tasks {
+      documents {
+        dataRequestId: id
+        tokenId: token_id
+        tokenSecret: token_secret
+        task {
           _id
           title
-          complete
         }
       }
     }
@@ -105,19 +100,10 @@ const Breadcrumbs = ({ titles, page }) => {
   );
 };
 
-const BuildDetails = ({
-  userProfile,
-  dealType,
-  page,
-  setPage,
-  setBuildInfo,
-  deal_id,
-  waitingOnInitialDeal,
-  initialDeal,
-  organization,
-}) => {
+const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDeal }) => {
   const classes = useStyles();
-  const { cryptoPaymentInBuild } = useFlags();
+  const { width } = useViewport();
+  const { cryptoPaymentInBuild, buildModals } = useFlags();
 
   const [buildData, setBuildData] = useState({
     accept_crypto: 'false',
@@ -194,7 +180,7 @@ const BuildDetails = ({
   };
 
   const sectionOneComplete =
-    sectionOne[dealType].every((field) => buildData[field]) && sectionOneCheck();
+    sectionOne[dealType]?.every((field) => buildData[field]) && sectionOneCheck();
 
   const sectionTwo = {
     spv: [
@@ -233,7 +219,7 @@ const BuildDetails = ({
   };
 
   const sectionTwoComplete =
-    sectionTwo[dealType].every((field) => buildData[field]) && sectionTwoCheck();
+    sectionTwo[dealType]?.every((field) => buildData[field]) && sectionTwoCheck();
 
   const sectionThree = [
     'allocations_reporting_adviser',
@@ -391,18 +377,19 @@ const BuildDetails = ({
   };
   useEffect(() => {
     const localStorageBuild = localStorage.getItem('buildData');
-    if (localStorageBuild) {
+    if (localStorageBuild && buildModals) {
       const parsedBuildData = JSON.parse(localStorageBuild);
       setBuildData(parsedBuildData);
     }
   }, []);
 
-  const handleSubmit = () => {
-    setBuildInfo({
+  const handleSubmit = ({ organization, isNewHVP = false }) => {
+    createNewDeal({
       variables: {
-        deal_id,
         payload: {
-          organization_id: organization._id,
+          organization,
+          isNewHVP,
+          organization_id: organization?._id,
           accept_crypto: buildData.accept_crypto === 'true',
           allocations_reporting_adviser: buildData.allocations_reporting_adviser,
           asset_type: buildData.asset_type,
@@ -445,13 +432,14 @@ const BuildDetails = ({
           setup_cost: buildData.setup_cost,
           side_letters: buildData.side_letters,
           target_raise_goal: buildData.target_raise_goal,
-          type: buildData.type,
+          type: dealType,
           type_of_investors: buildData.type_of_investors,
         },
       },
     });
-  };
 
+    setPage((page) => page + 1);
+  };
   const handleChange = ({ target }) => {
     const isNotInternational =
       target.name === 'international_company_status' && (target.value === 'false' || 'unknown');
@@ -492,10 +480,100 @@ const BuildDetails = ({
     customInputStyles,
     classes,
     openTooltip,
+    width,
+  };
+
+  const history = useHistory();
+
+  const modalStartPage = () => {
+    if (localStorage.getItem('buildData') || localStorage.getItem('buildDeal')) {
+      return 'new_or_current';
+    }
+    return 'deal_type_selector';
+  };
+
+  const [openModal, setOpenModal] = useState(!auth.isAuthenticated);
+  const [newBuildModalPage, setNewBuildModalPage] = useState(modalStartPage());
+
+  const closeModal = () => setOpenModal(false);
+  const closeModalAndReset = (page = 'select_org') => {
+    setNewBuildModalPage(page);
+    closeModal();
+  };
+  const openModaltoPage = (page) => {
+    setNewBuildModalPage(page);
+    setOpenModal(true);
+  };
+
+  const sectionComplete = (section) => {
+    console.log(section, 'section');
+    console.log(width >= 675 ? (section ? 'true true' : 'true false') : 'false');
+    return {
+      borderLeft: width >= 675 ? (section ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB') : 'none',
+    };
   };
 
   return (
     <>
+      <NewBuildModal
+        dealType={dealType}
+        isOpen={openModal}
+        closeModal={closeModal}
+        page={newBuildModalPage}
+        setPage={setNewBuildModalPage}
+        setBuildFormPage={setPage}
+        refetchUserProfile={auth.refetchUserProfile}
+        next={{
+          deal_type_selector: {
+            spv: () => {
+              history.push('/public/new-build/spv');
+              closeModal();
+            },
+            fund: () => {
+              history.push('/public/new-build/fund');
+              closeModal();
+            },
+          },
+          select_org: ({ selectedOrg, setCurrentOrganization }) => {
+            if (selectedOrg === 'Create New Organization') {
+              setNewBuildModalPage('create_new_org');
+              return;
+            }
+            setCurrentOrganization(selectedOrg);
+            handleSubmit({ organization: selectedOrg });
+            closeModal();
+          },
+          create_new_org: ({ estimatedSPVQuantity, createOrganization }) => {
+            if (estimatedSPVQuantity >= 5) {
+              setNewBuildModalPage('high_volume_partnerships');
+            }
+            // IF LESS THAN 5 ESTIMATED SPVS CREATE NEW ORG HERE RIGHT AWAY THEN PUSH TO SERVICE AGREEMENT //
+            else {
+              createOrganization().then(({ data }) => {
+                handleSubmit({ organization: data?.createOrganization });
+                closeModalAndReset();
+              });
+            }
+          },
+          high_volume_partnerships: ({ createOrganization }) => {
+            createOrganization().then(({ data }) => {
+              handleSubmit({ organization: data?.createOrganization, isNewHVP: true });
+              closeModalAndReset();
+            });
+          },
+        }}
+        prev={{
+          select_org: closeModal,
+          create_new_org: () => setNewBuildModalPage('select_org'),
+          high_volume_partnerships: () => setNewBuildModalPage('create_new_org'),
+        }}
+        onClose={{
+          deal_type_selector: () => dealType && closeModalAndReset(),
+          select_org: () => closeModalAndReset(),
+          create_new_org: () => closeModalAndReset(),
+          high_volume_partnerships: () => closeModalAndReset(),
+        }}
+      />
       <BasicInfo
         dealType={dealType}
         buildData={buildData}
@@ -507,6 +585,7 @@ const BuildDetails = ({
         unfilledFields={unfilledFields}
         setUnfilledFields={setUnfilledFields}
         sectionOneComplete={sectionOneComplete}
+        sectionComplete={sectionComplete}
       />
 
       <Paper className={classes.paper}>
@@ -530,7 +609,7 @@ const BuildDetails = ({
         <Grid
           container
           className={classes.outerSection}
-          style={{ borderLeft: sectionTwoComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+          style={sectionComplete(sectionTwoComplete)}
         >
           <form noValidate autoComplete="off">
             <Grid container spacing={2} className={classes.inputGridContainer}>
@@ -568,9 +647,9 @@ const BuildDetails = ({
         <Grid
           container
           className={classes.outerSection}
-          style={{ borderLeft: sectionThreeComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+          style={sectionComplete(sectionThreeComplete)}
         >
-          <form noValidate autoComplete="off">
+          <form noValidate autoComplete="off" style={{ width: '100%' }}>
             <Grid container spacing={1} className={classes.inputGridContainer}>
               <ReportingAdviser {...formFieldProps} />
               <OfferingType {...formFieldProps} />
@@ -606,7 +685,7 @@ const BuildDetails = ({
         <Grid
           container
           className={classes.outerSection}
-          style={{ borderLeft: sectionFourComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
+          style={sectionComplete(sectionFourComplete)}
         >
           <form noValidate autoComplete="off">
             <Grid container spacing={1} className={classes.inputGridContainer}>
@@ -617,12 +696,13 @@ const BuildDetails = ({
         </Grid>
       </Paper>
 
-      <Paper className={classes.paper}>
+      {/* Upload docs moved to post build */}
+      {/* <Paper className={classes.paper}>
         <Grid container className={classes.sectionHeader}>
           <Grid
             item
             className={classes.sectionHeaderNumber}
-            style={{ backgroundColor: '#0461ff', padding: '1px 1px 0px 0px' }}
+            style={{ backgroundColor: '#EBEBEB', padding: '1px 1px 0px 0px' }}
           >
             5
           </Grid>
@@ -630,21 +710,22 @@ const BuildDetails = ({
             variant="h6"
             gutterBottom
             className={classes.sectionHeaderText}
-            style={{ color: '#2A2B54' }}
+            style={{ color: '#8E9394' }}
           >
             Upload Your Documents
           </Typography>
         </Grid>
         <Grid
           container
+          justifyContent="center"
           className={classes.outerSection}
-          style={{ borderLeft: 'solid 3px #ECF3FF' }}
+          style={sectionComplete(false)}
         >
           <form noValidate autoComplete="off">
-            <UploadDocs deal={initialDeal} {...formFieldProps} />
+            {/* {dealType && <UploadDocs deal={initialDeal} {...formFieldProps} />} 
           </form>
         </Grid>
-      </Paper>
+      </Paper> */}
 
       <Paper className={classes.paper}>
         <Grid container className={classes.sectionHeader}>
@@ -667,17 +748,13 @@ const BuildDetails = ({
             Final
           </Typography>
         </Grid>
-        <div
-          className={classes.outerSection}
-          style={{ borderLeft: sectionSixComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
-        >
-          <form noValidate autoComplete="off">
-            <FormControl required disabled variant="outlined" className={classes.formContainers}>
+        <div className={classes.outerSection} style={sectionComplete(sectionSixComplete)}>
+          <form noValidate autoComplete="off" style={{ width: '100%' }}>
+            <FormControl required disabled variant="outlined" style={{ width: 'inherit' }}>
               <NotesMemo {...formFieldProps} />
               <Button
                 className={classes.continueButton}
-                disabled={waitingOnInitialDeal}
-                onClick={() => {
+                onClick={async () => {
                   const { isValidated, unvalidatedFields } = formValidation();
                   if (!isValidated) {
                     toast.error(
@@ -691,8 +768,13 @@ const BuildDetails = ({
                     );
                     return;
                   }
-                  setPage(page + 1);
-                  handleSubmit();
+                  if (!auth.isAuthenticated) {
+                    auth.login().then(() => {
+                      openModaltoPage('select_org');
+                    });
+                  } else {
+                    openModaltoPage('select_org');
+                  }
                 }}
               >
                 Continue
@@ -706,39 +788,26 @@ const BuildDetails = ({
 };
 
 export default function NewDealForm() {
-  const { userProfile, loading: authLoading } = useAuth();
-  const [createBuild, { data: initialDeal, loading }] = useMutation(CREATE_BUILD);
-  const [setBuildInfo, { data: updatedDeal, loading: updatedDealLoading }] = useMutation(
-    SET_BUILD_INFO,
-    {
-      onError: (err) => {
-        console.log('err', err);
-      },
-    },
-  );
-
-  const organization = useCurrentOrganization();
-
-  const { type: dealType } = useParams();
+  const { isAuthenticated, userProfile, loginWithPopup, refetch: refetchUserProfile } = useAuth();
 
   // Page
   const [page, setPage] = useState(0);
 
-  useEffect(() => {
-    // if there is no build data/deal_id, we create a new build (default info pulled from the backend)
-    if (!localStorage.getItem('buildData') && !localStorage.getItem('buildDeal')) {
-      createBuild({
-        variables: { payload: { type: dealType } },
-      });
-    }
-  }, []);
+  const [createNewDeal, { data: dealData, loading: createDealLoading, error: createDealError }] =
+    useMutation(CREATE_NEW_DEAL, {
+      onCompleted: ({ createNewDeal }) => {
+        if (createNewDeal?.deal) {
+          localStorage.setItem('buildDeal', JSON.stringify({ _id: createNewDeal?.deal?._id }));
+        }
+      },
+      onError: (err) => {
+        console.log('err', err);
+      },
+    });
 
-  useEffect(() => {
-    // if we finished creating the build, set the deal info in local storage
-    if (initialDeal) {
-      localStorage.setItem('buildDeal', JSON.stringify(initialDeal.deal));
-    }
-  }, [loading, initialDeal?.deal]);
+  const organization = useCurrentOrganization();
+
+  const { type: dealType } = useParams();
 
   const titleMap = {
     spv: 'SPV',
@@ -747,20 +816,16 @@ export default function NewDealForm() {
 
   const pages = [
     {
-      title: `Build your ${titleMap[dealType]}`,
+      title: `Build your ${titleMap[dealType] || 'SPV'}`,
       Component: (
         <BuildDetails
           dealType={dealType}
           organization={organization}
           userProfile={userProfile}
+          auth={{ isAuthenticated, login: loginWithPopup, refetchUserProfile }}
           page={page}
           setPage={setPage}
-          setBuildInfo={setBuildInfo}
-          deal_id={initialDeal?.deal?._id}
-          waitingOnInitialDeal={loading}
-          initialDeal={
-            initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
-          }
+          createNewDeal={createNewDeal}
         />
       ),
     },
@@ -768,19 +833,15 @@ export default function NewDealForm() {
       title: 'Sign Agreements',
       Component: (
         <AgreementSigner
-          deal={
-            initialDeal?.deal ? initialDeal?.deal : JSON.parse(localStorage.getItem('buildDeal'))
-          }
+          dealData={dealData?.createNewDeal}
+          createDealLoading={createDealLoading}
+          error={createDealError}
           page={page}
           setPage={setPage}
-          updatedDeal={updatedDeal}
-          updatedDealLoading={updatedDealLoading}
         />
       ),
     },
   ];
-
-  if (authLoading) return null;
 
   return (
     <>

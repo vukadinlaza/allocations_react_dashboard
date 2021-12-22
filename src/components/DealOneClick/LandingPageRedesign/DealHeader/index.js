@@ -101,7 +101,7 @@ function DealHeader({ deal }) {
               }
             />
           </Grid>
-          <Grid item>
+          <Grid item className={classes.middleGridItem}>
             <h4 className={classes.investmentProgress}>Investment Progress</h4>
             <h6 className={classes.investmentNumber}>${nWithCommas(totalInvestments)}</h6>
             <LinearProgress
@@ -111,13 +111,16 @@ function DealHeader({ deal }) {
             />
             <div className={classes.minorText}>
               <span className={classes.floatRight}>
-                Total Raise Amount: ${nWithCommas(target_raise_goal)}
+                Total Raise Amount:
+                <span style={{ fontWeight: 'bold', fontSize: '12px' }}>
+                  ${nWithCommas(target_raise_goal)}
+                </span>
               </span>
             </div>
 
             <Button className={classes.investButton}>Invest</Button>
-            <Grid container style={{ marginTop: '15px' }}>
-              <Grid item>
+            <Grid container style={{ marginTop: '15px', justifyContent: 'space-between' }}>
+              <Grid item style={{ color: '#64748B', fontSize: '14px' }}>
                 Invest With:{' '}
                 <div style={{ display: 'flex' }}>
                   <div className={classes.coinvestorTagBubble}>
@@ -138,8 +141,10 @@ function DealHeader({ deal }) {
                     marginLeft: '20px',
                   }}
                 >
-                  <div>Minimum Investment:</div>
-                  <div>${nWithCommas(minimumInvestment)}</div>
+                  <div style={{ color: '#64748B', fontSize: '14px' }}>Minimum Investment:</div>
+                  <div style={{ fontWeight: 'bold', fontSize: '12px', color: '#2A2B54' }}>
+                    ${nWithCommas(minimumInvestment)}
+                  </div>
                 </div>
               </Grid>
             </Grid>

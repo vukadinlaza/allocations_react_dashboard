@@ -6,7 +6,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import { withLDProvider, useFlags } from 'launchdarkly-react-client-sdk';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
@@ -52,17 +52,6 @@ const AddBuildButton = (props) => {
   return <AddBubbleBuildButton {...props} />;
 };
 
-const AddBuildWithLD = (props) => {
-  const { isAuthenticated, loading, userProfile } = useAuth();
-  const launchDarklyUser = { key: userProfile?._id, email: userProfile?.email };
-
-  const FlagComponent = withLDProvider({
-    clientSideID: process.env.REACT_APP_LAUNCH_DARKLY_ID,
-    user: isAuthenticated && !loading ? launchDarklyUser : undefined,
-  })(AddBuildButton);
-  return <FlagComponent {...props} />;
-};
-
 const SidebarDrawer = ({
   mobileOpen,
   handleDrawerClose,
@@ -71,25 +60,17 @@ const SidebarDrawer = ({
   logout,
   location,
   classes,
-  userProfile,
   refetchUserProfile,
 }) => {
+  const history = useHistory();
   const [openSubMenu, setOpenSubMenu] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [newBuildModalPage, setNewBuildModalPage] = useState('deal_type_selector');
+  const { prospectDealPage } = useFlags();
+
+  const closeModal = () => setOpenModal(false);
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
-  const AdminLinks = () => {
-    const match = useRouteMatch('/admin/:organization');
-
-    if (!match) return null;
-    const {
-      params: { organization },
-    } = match;
-    if (organization === 'funds') return null;
-
-    return <div />;
-  };
 
   const handleOpenSubMenu = (id) => {
     const openSubMenuCopy = openSubMenu.map((i) => i);
@@ -102,12 +83,10 @@ const SidebarDrawer = ({
     setOpenSubMenu(openSubMenuCopy);
   };
 
-  const prospectAccess = ['wes@allocations.com', 'drew.radcliff@allocations.com'];
-
   const menuSections = [
     {
       sectionTitle: 'ESSENTIALS',
-      menu: prospectAccess.includes(userProfile.email)
+      menu: prospectDealPage
         ? [
             {
               to: currentHomeUrl,
@@ -152,12 +131,24 @@ const SidebarDrawer = ({
     <div className={classes.sidebarDrawer}>
       <NewBuildModal
         isOpen={openModal}
-        closeModal={() => setOpenModal(false)}
+        closeModal={closeModal}
         page={newBuildModalPage}
         setPage={setNewBuildModalPage}
         refetchUserProfile={refetchUserProfile}
+        next={{
+          deal_type_selector: {
+            spv: () => {
+              history.push('/public/new-build/spv');
+              closeModal();
+            },
+            fund: () => {
+              history.push('/public/new-build/fund');
+              closeModal();
+            },
+          },
+        }}
       />
-      <AddBuildWithLD
+      <AddBuildButton
         classes={classes}
         setOpenModal={setOpenModal}
         setNewBuildModalPage={setNewBuildModalPage}
@@ -226,4 +217,15 @@ const SidebarDrawer = ({
   );
 };
 
-export default withStyles(styles)(SidebarDrawer);
+const SidebarDrawerLD = (props) => {
+  const { isAuthenticated, loading, userProfile } = useAuth();
+  const launchDarklyUser = { key: userProfile?._id, email: userProfile?.email };
+
+  const FlagComponent = withLDProvider({
+    clientSideID: process.env.REACT_APP_LAUNCH_DARKLY_ID,
+    user: isAuthenticated && !loading ? launchDarklyUser : undefined,
+  })(SidebarDrawer);
+  return <FlagComponent {...props} />;
+};
+
+export default withStyles(styles)(SidebarDrawerLD);

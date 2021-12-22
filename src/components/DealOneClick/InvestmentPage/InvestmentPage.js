@@ -226,8 +226,8 @@ function InvestmentPage() {
         : 'Success! Investment created';
       toast.success(message);
       const path = organization
-        ? `/next-steps/${organization}/${deal_slug}`
-        : `/next-steps/${deal_slug}`;
+        ? `/next-steps/${organization}/${deal_slug}?investmentId=${investmentData.confirmInvestment._id}`
+        : `/next-steps/${deal_slug}?investmentId=${investmentData.confirmInvestment._id}`;
       history.push(path, {
         id: investmentData.confirmInvestment._id,
         investorFormData,
@@ -331,6 +331,7 @@ function InvestmentPage() {
           setInvestor={setInvestor}
           handleSecondSig={handleSecondSig}
           is3c7={is3c7}
+          docSpringTemplateId={deal?.docSpringTemplateId}
         />
         {requireSecondSig && (
           <SecondSignature

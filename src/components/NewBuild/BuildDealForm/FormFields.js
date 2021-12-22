@@ -37,7 +37,7 @@ export function PortfolioCompanyName({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6} style={{ maxHeight: '125px' }}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Portfolio Company Name</Typography>
@@ -90,7 +90,7 @@ export function FundName({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Fund Name</Typography>
@@ -138,7 +138,7 @@ export function PortfolioCompanySecurities({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Portfolio Company Securities?</Typography>
@@ -183,7 +183,7 @@ export function ManagerName({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Fund Manager Full Name</Typography>
@@ -229,7 +229,7 @@ export function DealName({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Deal Name</Typography>
@@ -278,7 +278,7 @@ export function NumberOfInvestments({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Number Of Investments</Typography>
@@ -339,7 +339,7 @@ export function GeneralPartnerName({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>General Partner Name</Typography>
@@ -387,31 +387,33 @@ export function RepresentativeGeneralPartnerAndTitle({
   customInputStyles,
   classes,
   openTooltip,
+  width,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
-          <Typography className={classes.formItemName}>
+          <Grid item className={classes.formItemName}>
             Representative of the General Partner and its Title
-          </Typography>
-          <ModalTooltip
-            title="Representative of the General Partner and it's Title"
-            handleTooltip={handleTooltip}
-            tooltipContent={
-              <Typography color="inherit">
-                Please indicate the name of the representative of the Manager as well as the title
-                of the said person; applicable only if the Manager is a legal entity
-              </Typography>
-            }
-            openTooltip={openTooltip}
-            id="representative"
-          >
-            <HelpIcon
-              className={classes.helpIcon}
-              onClick={() => handleTooltip('representative')}
-            />
-          </ModalTooltip>
+            <ModalTooltip
+              title="Representative of the General Partner and it's Title"
+              handleTooltip={handleTooltip}
+              tooltipContent={
+                <Typography color="inherit">
+                  Please indicate the name of the representative of the Manager as well as the title
+                  of the said person; applicable only if the Manager is a legal entity
+                </Typography>
+              }
+              openTooltip={openTooltip}
+              id="representative"
+            >
+              <HelpIcon
+                className={classes.helpIcon}
+                style={{ margin: width >= 650 ? '.2em' : '0px 5px' }}
+                onClick={() => handleTooltip('representative')}
+              />
+            </ModalTooltip>
+          </Grid>
         </Grid>
         <TextField
           value={buildData.representative}
@@ -444,7 +446,7 @@ export function MinimumInvestmentFund({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Minimum Investment Amount</Typography>
@@ -504,30 +506,32 @@ export function TargetRaiseGoal({
   customInputStyles,
   classes,
   openTooltip,
+  width,
 }) {
   return (
     <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
-          <Typography className={classes.formItemName}>
+          <Grid item className={classes.formItemName}>
             What is the Target Raise Goal for this deal?
-          </Typography>
-          <ModalTooltip
-            title="Target Raise Goal"
-            handleTooltip={handleTooltip}
-            tooltipContent={
-              <Typography color="inherit">
-                What is the amount you would like to raise for this deal?
-              </Typography>
-            }
-            openTooltip={openTooltip}
-            id="target_raise_goal"
-          >
-            <HelpIcon
-              className={classes.helpIcon}
-              onClick={() => handleTooltip('target_raise_goal')}
-            />
-          </ModalTooltip>
+            <ModalTooltip
+              title="Target Raise Goal"
+              handleTooltip={handleTooltip}
+              tooltipContent={
+                <Typography color="inherit">
+                  What is the amount you would like to raise for this deal?
+                </Typography>
+              }
+              openTooltip={openTooltip}
+              id="target_raise_goal"
+            >
+              <HelpIcon
+                className={classes.helpIcon}
+                style={{ margin: width >= 650 ? '.2em' : '0px 5px' }}
+                onClick={() => handleTooltip('target_raise_goal')}
+              />
+            </ModalTooltip>
+          </Grid>
         </Grid>
         <TextField
           type="number"
@@ -563,7 +567,7 @@ export function TargetRaiseGoal({
 
 export function NeedGPEntity({ buildData, handleChange, handleTooltip, classes, openTooltip }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Do you need a GP Entity?</Typography>
@@ -609,7 +613,7 @@ export function GPEntityName({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>GP Entity Name</Typography>
@@ -660,7 +664,7 @@ export function ClosingDate({
 }) {
   const params = useParams();
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Closing Date</Typography>
@@ -753,7 +757,9 @@ export function Sectors({
       <>
         <Select
           options={suggestions}
-          menuPosition="fixed"
+          menuPosition="absolute"
+          menuPlacement="top"
+          captureMenuScroll
           styles={customStyles}
           onChange={(options) => {
             const sector = options[0].value;
@@ -778,7 +784,7 @@ export function Sectors({
   }
 
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <Grid className={classes.inputLabelWithTooltip} item xs={12}>
         <Typography className={classes.formItemName}>Sector(s)</Typography>
         <ModalTooltip
@@ -837,7 +843,7 @@ export function Representative({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Manager Full Title</Typography>
@@ -888,7 +894,7 @@ export function DealStage({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.inputGridItem} item xs={6}>
+    <Grid className={classes.basicInformationInputItem} item xs={6} style={{ height: '100%' }}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Deal Stage</Typography>
@@ -927,10 +933,11 @@ export function ManagementFee({
   customInputStyles,
   classes,
   openTooltip,
+  width,
 }) {
   const params = useParams();
   return (
-    <Grid className={classes.customInputGridItem} item xs={6}>
+    <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Choose your management fee</Typography>
@@ -1082,7 +1089,7 @@ export function CarryFee({
 }) {
   const params = useParams();
   return (
-    <Grid className={classes.customInputGridItem} item xs={6}>
+    <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>Choose your carry fee</Typography>
@@ -1176,31 +1183,40 @@ export function CarryFee({
   );
 }
 
-export function SideLetters({ buildData, handleChange, handleTooltip, classes, openTooltip }) {
+export function SideLetters({
+  buildData,
+  handleChange,
+  handleTooltip,
+  classes,
+  openTooltip,
+  width,
+}) {
   return (
     <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
-          <Typography className={classes.formItemName}>
+          <Grid item className={classes.formItemName}>
             Will you charge the same fee for all investors?
-          </Typography>
-          <ModalTooltip
-            title="Charge the same fee for all investors?"
-            handleTooltip={handleTooltip}
-            tooltipContent={
-              <Typography color="inherit">
-                For some investors you might want to provide different fee structure, this is
-                possible by concluding side letters
-              </Typography>
-            }
-            openTooltip={openTooltip}
-            id="same_investor_fee"
-          >
-            <HelpIcon
-              className={classes.helpIcon}
-              onClick={() => handleTooltip('same_investor_fee')}
-            />
-          </ModalTooltip>
+            <ModalTooltip
+              title="Charge the same fee for all investors?"
+              handleTooltip={handleTooltip}
+              tooltipContent={
+                <Typography color="inherit">
+                  For some investors you might want to provide different fee structure, this is
+                  possible by concluding side letters
+                </Typography>
+              }
+              openTooltip={openTooltip}
+              id="same_investor_fee"
+            >
+              <HelpIcon
+                className={classes.helpIcon}
+                style={{ margin: width >= 650 ? '.2em' : '0px 5px' }}
+                fontSize="medium"
+                onClick={() => handleTooltip('same_investor_fee')}
+              />
+            </ModalTooltip>
+          </Grid>
         </Grid>
         <ButtonSelector
           name="side_letters"
@@ -1289,6 +1305,7 @@ export function AcceptedInvestorTypes({
   unfilledFields,
   classes,
   openTooltip,
+  width,
 }) {
   const params = useParams();
   function InvestorTypeSelector() {
@@ -1335,35 +1352,36 @@ export function AcceptedInvestorTypes({
     <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
-          <Typography className={classes.formItemName}>
+          <Grid item className={classes.formItemName}>
             What type of investors are you accepting?
-          </Typography>
-          <ModalTooltip
-            title="Deal Stage"
-            handleTooltip={handleTooltip}
-            tooltipContent={
-              params.type === 'fund' ? (
-                <Typography color="inherit">
-                  As per Investment Company Act there are some restrictions and thresholds for Fund
-                  accepting "accredited investors" or "qualified purchasers"; please consult your
-                  legal counsel for more insight on this
-                </Typography>
-              ) : (
-                <Typography color="inherit">
-                  As per Investment Company Act there are some restrictions and thresholds for SPVs
-                  accepting "accredited investors" or "qualified purchasers"; please consult your
-                  legal counsel for more insight on this
-                </Typography>
-              )
-            }
-            openTooltip={openTooltip}
-            id="type_of_investors"
-          >
-            <HelpIcon
-              className={classes.helpIcon}
-              onClick={() => handleTooltip('type_of_investors')}
-            />
-          </ModalTooltip>
+            <ModalTooltip
+              title="Deal Stage"
+              handleTooltip={handleTooltip}
+              tooltipContent={
+                params.type === 'fund' ? (
+                  <Typography color="inherit">
+                    As per Investment Company Act there are some restrictions and thresholds for
+                    Fund accepting "accredited investors" or "qualified purchasers"; please consult
+                    your legal counsel for more insight on this
+                  </Typography>
+                ) : (
+                  <Typography color="inherit">
+                    As per Investment Company Act there are some restrictions and thresholds for
+                    SPVs accepting "accredited investors" or "qualified purchasers"; please consult
+                    your legal counsel for more insight on this
+                  </Typography>
+                )
+              }
+              openTooltip={openTooltip}
+              id="type_of_investors"
+            >
+              <HelpIcon
+                className={classes.helpIcon}
+                style={{ margin: width >= 650 ? '.2em' : '0px 5px' }}
+                onClick={() => handleTooltip('type_of_investors')}
+              />
+            </ModalTooltip>
+          </Grid>
         </Grid>
 
         <InvestorTypeSelector />
@@ -1381,7 +1399,7 @@ export function ReportingAdviser({
   openTooltip,
 }) {
   return (
-    <Grid className={classes.customInputGridItem} item xs={6}>
+    <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Typography className={classes.formItemName}>
@@ -1417,41 +1435,45 @@ export function ReportingAdviser({
         />
       </FormControl>
       {buildData.allocations_reporting_adviser === 'false' && (
-        <FormControl
-          required
-          disabled
-          variant="outlined"
-          className={classes.formContainers}
-          style={{ marginTop: '40px' }}
-        >
-          <Grid className={classes.inputLabelWithTooltip} item xs={12}>
-            <Typography className={classes.formItemName}>Please enter your adviser name</Typography>
-            <ModalTooltip
-              title="Adviser Name"
-              handleTooltip={handleTooltip}
-              tooltipContent={
-                <Typography color="inherit">Please indicate your ERA/RIA name</Typography>
-              }
-              openTooltip={openTooltip}
-              id="reporting_adviser"
-            >
-              <HelpIcon
-                className={classes.helpIcon}
-                onClick={() => handleTooltip('reporting_adviser')}
-              />
-            </ModalTooltip>
-          </Grid>
-          <TextField
-            value={buildData.reporting_adviser}
-            placeholder="Adviser Name"
-            name="reporting_adviser"
-            onChange={handleChange}
-            className={classes.inputBox}
+        <Grid className={classes.inputGridItem} item xs={12}>
+          <FormControl
+            required
+            disabled
             variant="outlined"
-            inputProps={customInputStyles}
-            classes={{ root: classes.selectInputBox }}
-          />
-        </FormControl>
+            className={classes.formContainers}
+            style={{ marginTop: '40px' }}
+          >
+            <Grid className={classes.inputLabelWithTooltip} item xs={12}>
+              <Typography className={classes.formItemName}>
+                Please enter your adviser name
+              </Typography>
+              <ModalTooltip
+                title="Adviser Name"
+                handleTooltip={handleTooltip}
+                tooltipContent={
+                  <Typography color="inherit">Please indicate your ERA/RIA name</Typography>
+                }
+                openTooltip={openTooltip}
+                id="reporting_adviser"
+              >
+                <HelpIcon
+                  className={classes.helpIcon}
+                  onClick={() => handleTooltip('reporting_adviser')}
+                />
+              </ModalTooltip>
+            </Grid>
+            <TextField
+              value={buildData.reporting_adviser}
+              placeholder="Adviser Name"
+              name="reporting_adviser"
+              onChange={handleChange}
+              className={classes.inputBox}
+              variant="outlined"
+              inputProps={customInputStyles}
+              classes={{ root: classes.selectInputBox }}
+            />
+          </FormControl>
+        </Grid>
       )}
     </Grid>
   );
@@ -1496,8 +1518,8 @@ export function AcceptCrypto({ buildData, handleChange, handleTooltip, classes, 
   return (
     <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.cryptoFormContainer}>
-        <fieldset className={classes.cryptoFieldset}>
-          <legend className={classes.cryptoLabel}>
+        <Grid container className={classes.cryptoFieldset}>
+          <Grid item className={classes.cryptoLabel}>
             Will you allow investments with crypto?
             <ModalTooltip
               title="Crypto"
@@ -1516,7 +1538,7 @@ export function AcceptCrypto({ buildData, handleChange, handleTooltip, classes, 
                 onClick={() => handleTooltip('accept_crypto')}
               />
             </ModalTooltip>
-          </legend>
+          </Grid>
           <div className={classes.cryptoSelector}>
             <ButtonSelector
               name="accept_crypto"
@@ -1528,7 +1550,7 @@ export function AcceptCrypto({ buildData, handleChange, handleTooltip, classes, 
               ]}
             />
           </div>
-        </fieldset>
+        </Grid>
       </FormControl>
     </Grid>
   );
@@ -1540,31 +1562,33 @@ export function CustomInvestmentAgreement({
   handleTooltip,
   classes,
   openTooltip,
+  width,
 }) {
   return (
     <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
-          <Typography className={classes.formItemName}>
+          <Grid item className={classes.formItemName}>
             Whose fund template documents would you like to use?
-          </Typography>
-          <ModalTooltip
-            title="Fund Template Documents"
-            handleTooltip={handleTooltip}
-            tooltipContent={
-              <Typography color="inherit">
-                As you might have your own SPV documents, you can use them with us as well, this
-                would limit the period of time in which the SPV could be closed
-              </Typography>
-            }
-            openTooltip={openTooltip}
-            id="fund_template_docs"
-          >
-            <HelpIcon
-              className={classes.helpIcon}
-              onClick={() => handleTooltip('fund_template_docs')}
-            />
-          </ModalTooltip>
+            <ModalTooltip
+              title="Fund Template Documents"
+              handleTooltip={handleTooltip}
+              tooltipContent={
+                <Typography color="inherit">
+                  As you might have your own SPV documents, you can use them with us as well, this
+                  would limit the period of time in which the SPV could be closed
+                </Typography>
+              }
+              openTooltip={openTooltip}
+              id="fund_template_docs"
+            >
+              <HelpIcon
+                className={classes.helpIcon}
+                style={{ margin: width >= 650 ? '.2em' : '0px 5px' }}
+                onClick={() => handleTooltip('fund_template_docs')}
+              />
+            </ModalTooltip>
+          </Grid>
         </Grid>
         <ButtonSelector
           name="custom_investment_agreement"
@@ -1588,32 +1612,34 @@ export function InternationalCompanyStatus({
   unfilledFields,
   classes,
   openTooltip,
+  width,
 }) {
   return (
     <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
-          <Typography className={`${classes.formItemName} ${classes.customFormItemName}`}>
+          <Grid item className={`${classes.formItemName} ${classes.customFormItemName}`}>
             Will this deal being investing into an international (Non US) company?
-          </Typography>
-          <ModalTooltip
-            title="International Companies"
-            handleTooltip={handleTooltip}
-            tooltipContent={
-              <Typography color="inherit">
-                If this SPV/Fund will invest into a company located outside the United States,
-                please select Yes to this question followed by the applicable country. If you are
-                unsure at the moment, please select Unknown.
-              </Typography>
-            }
-            openTooltip={openTooltip}
-            id="international_company_status"
-          >
-            <HelpIcon
-              className={classes.helpIcon}
-              onClick={() => handleTooltip('international_company_status')}
-            />
-          </ModalTooltip>
+            <ModalTooltip
+              title="International Companies"
+              handleTooltip={handleTooltip}
+              tooltipContent={
+                <Typography color="inherit">
+                  If this SPV/Fund will invest into a company located outside the United States,
+                  please select Yes to this question followed by the applicable country. If you are
+                  unsure at the moment, please select Unknown.
+                </Typography>
+              }
+              openTooltip={openTooltip}
+              id="international_company_status"
+            >
+              <HelpIcon
+                className={classes.helpIcon}
+                style={{ margin: width >= 650 ? '.2em' : '0px 5px' }}
+                onClick={() => handleTooltip('international_company_status')}
+              />
+            </ModalTooltip>
+          </Grid>
         </Grid>
         <ButtonSelector
           name="international_company_status"
@@ -1626,14 +1652,16 @@ export function InternationalCompanyStatus({
         />
       </FormControl>
       {buildData.international_company_status === 'true' && (
-        <FormControl required variant="outlined" className={classes.formContainers}>
-          <InternationalCountrySelector
-            handleChange={handleChange}
-            setUnfilledFields={setUnfilledFields}
-            unfilledFields={unfilledFields}
-            buildData={buildData}
-          />
-        </FormControl>
+        <Grid className={classes.inputGridItem} item xs={12}>
+          <FormControl required variant="outlined" className={classes.formContainers}>
+            <InternationalCountrySelector
+              handleChange={handleChange}
+              setUnfilledFields={setUnfilledFields}
+              unfilledFields={unfilledFields}
+              buildData={buildData}
+            />
+          </FormControl>
+        </Grid>
       )}
     </Grid>
   );
@@ -1647,32 +1675,34 @@ export function InternationalInvestorsStatus({
   unfilledFields,
   classes,
   openTooltip,
+  width,
 }) {
   return (
     <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
-          <Typography className={`${classes.formItemName} ${classes.customFormItemName}`}>
+          <Grid item className={`${classes.formItemName} ${classes.customFormItemName}`}>
             Will you have any international (Non US) investors?
-          </Typography>
-          <ModalTooltip
-            title="International Investors"
-            handleTooltip={handleTooltip}
-            tooltipContent={
-              <Typography color="inherit">
-                If this SPV/Fund will have investors located outside the United States, please
-                select Yes to this question followed by the applicable country. If you are unsure at
-                the moment, please select Unknown.
-              </Typography>
-            }
-            openTooltip={openTooltip}
-            id="international_investors_status"
-          >
-            <HelpIcon
-              className={classes.helpIcon}
-              onClick={() => handleTooltip('international_investors_status')}
-            />
-          </ModalTooltip>
+            <ModalTooltip
+              title="International Investors"
+              handleTooltip={handleTooltip}
+              tooltipContent={
+                <Typography color="inherit">
+                  If this SPV/Fund will have investors located outside the United States, please
+                  select Yes to this question followed by the applicable country. If you are unsure
+                  at the moment, please select Unknown.
+                </Typography>
+              }
+              openTooltip={openTooltip}
+              id="international_investors_status"
+            >
+              <HelpIcon
+                className={classes.helpIcon}
+                style={{ margin: width >= 650 ? '.2em' : '0px 5px' }}
+                onClick={() => handleTooltip('international_investors_status')}
+              />
+            </ModalTooltip>
+          </Grid>
         </Grid>
         <ButtonSelector
           name="international_investors_status"
@@ -1685,15 +1715,17 @@ export function InternationalInvestorsStatus({
         />
       </FormControl>
       {buildData.international_investors_status === 'true' && (
-        <FormControl required variant="outlined" className={classes.formContainers}>
-          <InternationalInvestorsCountriesSelector
-            buildData={buildData}
-            unfilledFields={unfilledFields}
-            setUnfilledFields={setUnfilledFields}
-            countries={countries}
-            handleChange={handleChange}
-          />
-        </FormControl>
+        <Grid className={classes.inputGridItem} item xs={12}>
+          <FormControl required variant="outlined" className={classes.formContainers}>
+            <InternationalInvestorsCountriesSelector
+              buildData={buildData}
+              unfilledFields={unfilledFields}
+              setUnfilledFields={setUnfilledFields}
+              countries={countries}
+              handleChange={handleChange}
+            />
+          </FormControl>
+        </Grid>
       )}
     </Grid>
   );

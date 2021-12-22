@@ -71,8 +71,6 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '5px',
     padding: '30px',
     width: '100%',
-    maxWidth: '944px',
-    marginLeft: '3%',
     marginTop: '16px',
     opacity: 1,
 
@@ -94,13 +92,15 @@ const useStyles = makeStyles((theme) => ({
   companyName: {
     marginTop: '5px',
     fontFamily: 'Roboto',
+    fontSize: '24px',
+    color: '#2A2B54',
   },
 
   boxContent: {
     backgroundColor: '',
     fontSize: '12px',
     fontWeight: 'bold',
-    width: '128px',
+    width: '180px',
     marginLeft: '-2px',
     marginTop: '10px',
     [theme.breakpoints.up('sm')]: {},
@@ -121,11 +121,12 @@ const useStyles = makeStyles((theme) => ({
 
   box: {
     display: 'flex',
+    color: '#2A2B54',
     alignItems: 'center',
     margin: '0 auto',
     width: '90%',
-    paddingBottom: '30px',
-    marginTop: '20px',
+    paddingBottom: '15px',
+    marginTop: '10px',
     [theme.breakpoints.up('sm')]: {},
     [theme.breakpoints.up('md')]: {},
     [theme.breakpoints.up('lg')]: {},
@@ -182,8 +183,17 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('xl')]: {},
   },
 
+  middleGridItem: {
+    width: '50%',
+    [theme.breakpoints.up('sm')]: {},
+    [theme.breakpoints.up('md')]: {},
+    [theme.breakpoints.up('lg')]: {},
+    [theme.breakpoints.up('xl')]: {},
+  },
+
   investmentProgress: {
     fontSize: '25px',
+    color: '#2A2B54',
     [theme.breakpoints.up('sm')]: {},
     [theme.breakpoints.up('md')]: {},
     [theme.breakpoints.up('lg')]: {},
@@ -204,6 +214,7 @@ const useStyles = makeStyles((theme) => ({
     float: 'right',
     backgroundColor: '',
     width: '100%',
+    color: '#2A2B54',
     [theme.breakpoints.up('sm')]: {},
     [theme.breakpoints.up('md')]: {},
     [theme.breakpoints.up('lg')]: {},
@@ -211,7 +222,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   investButton: {
-    backgroundColor: '#EBEEF0',
+    backgroundColor: '#CBD5E1',
     width: '100%',
     height: '50px',
     color: '#64748A',
@@ -225,10 +236,13 @@ const useStyles = makeStyles((theme) => ({
 
   floatRight: {
     float: 'right',
+    color: '#2A2B54',
+    fontSize: '14px',
   },
 
   floatLeft: {
     float: 'left',
+    color: '#2A2B54',
   },
 
   modalContainer: {

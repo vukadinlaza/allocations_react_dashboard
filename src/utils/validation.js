@@ -25,7 +25,7 @@ const personalInfoValidation = (investor, org, requireSecondSigChecked = {}) => 
         'secondSigConsent',
       );
     } else {
-      errors.push('secondLegalName', 'secondEmail');
+      errors.push('secondLegalName', 'secondEmail', 'secondSigConsent');
     }
     errors = errors.reduce(
       (acc, attr) => (investor.secondInvestor[attr] ? acc : [...acc, attr]),
