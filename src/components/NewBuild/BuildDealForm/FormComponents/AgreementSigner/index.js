@@ -79,7 +79,7 @@ const AgreementBox = ({
 
 export default function SignDocsForm({ dealData = {}, createDealLoading, error, page, setPage }) {
   const history = useHistory();
-  const { deal, documents, phases } = dealData;
+  const { deal, documents } = dealData;
   const [documentsSignedStatus, setDocumentsSignedStatus] = useState({});
 
   useEffect(() => {
