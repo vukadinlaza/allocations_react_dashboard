@@ -163,7 +163,10 @@ export default function TypeSelector({
   };
 
   return (
-    <Paper className={classes.paper}>
+    <Paper
+      className={classes.paper}
+      style={{ paddingBottom: width >= 650 ? classes.paper.paddingBottom : '82px' }}
+    >
       <Grid container className={classes.sectionHeader}>
         <Grid
           item

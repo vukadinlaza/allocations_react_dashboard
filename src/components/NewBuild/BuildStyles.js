@@ -91,7 +91,6 @@ const useStyles = makeStyles((theme) => ({
   },
   formContainers: {
     width: '100%',
-    height: '100%',
   },
   formItemName: {
     color: '#2A2B54',
@@ -157,7 +156,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   outerSection: {
-    padding: '18px 60px',
+    padding: '18px 50px',
     marginLeft: '12px',
     display: 'flex',
     flexWrap: 'wrap',
@@ -432,7 +431,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   customFormItemName: {
-    minHeight: '40px',
+    minHeight: '45px',
   },
   notSigned: {
     backgroundColor: '#FFBDAD',
