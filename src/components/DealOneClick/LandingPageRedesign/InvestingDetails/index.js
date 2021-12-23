@@ -119,7 +119,9 @@ function InvestingDetails({ deal }) {
                   </Typography>
                 }
               >
-                <Typography className={classes.boxContent}>{managementFees}%</Typography>
+                {managementFees && (
+                  <Typography className={classes.boxContent}>{managementFees}%</Typography>
+                )}
               </InvestingDetailsSimpleBox>
             </Grid>
 
@@ -136,7 +138,9 @@ function InvestingDetails({ deal }) {
                   </Typography>
                 }
               >
-                <Typography className={classes.boxContent}>{totalCarry}%</Typography>
+                {totalCarry && (
+                  <Typography className={classes.boxContent}>{totalCarry}%</Typography>
+                )}
               </InvestingDetailsSimpleBox>
             </Grid>
 
