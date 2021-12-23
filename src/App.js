@@ -4,6 +4,7 @@ import Cohere from 'cohere-js';
 import { withLDProvider } from 'launchdarkly-react-client-sdk';
 
 import DealDashboard from './components/dashboard/DealDashboard';
+import FundManagerDashboard from './components/dashboard/FundManagerDashboard';
 import InvestorDashboard from './components/dashboard/InvestorDashboard';
 
 import AdminRoute from './auth/admin-route';
@@ -64,6 +65,7 @@ const App = () => {
           </div>
           <div className="mainRoute">
             <Switch>
+              <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
               <PrivateRoute path="/admin/:organization/:deal" component={DealDashboard} exact />
               <PrivateRoute path="/" exact component={InvestorDashboard} />
               <PrivateRoute path="/investor/:id/home" component={InvestorDashboard} />
