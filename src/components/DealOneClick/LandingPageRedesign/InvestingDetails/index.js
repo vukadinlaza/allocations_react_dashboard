@@ -7,6 +7,9 @@ function InvestingDetails({ deal }) {
   const {
     dealCoverImageKey,
     slug,
+    status,
+    portfolio_company_securities,
+    sectors,
     dealParams: { dealType, managementFeeType, totalCarry, managementFees },
   } = deal;
 
@@ -79,7 +82,7 @@ function InvestingDetails({ deal }) {
                   </Typography>
                 }
               >
-                <Typography className={classes.boxContent}>Seed</Typography>
+                <Typography className={classes.boxContent}>{status}</Typography>
               </InvestingDetailsSimpleBox>
             </Grid>
 
@@ -96,7 +99,9 @@ function InvestingDetails({ deal }) {
                   </Typography>
                 }
               >
-                <Typography className={classes.boxContent}>Series A Preferred Stock</Typography>
+                <Typography className={classes.boxContent}>
+                  {portfolio_company_securities}
+                </Typography>
               </InvestingDetailsSimpleBox>
             </Grid>
           </Grid>
@@ -114,7 +119,9 @@ function InvestingDetails({ deal }) {
                   </Typography>
                 }
               >
-                <Typography className={classes.boxContent}>{managementFees}%</Typography>
+                {managementFees && (
+                  <Typography className={classes.boxContent}>{managementFees}%</Typography>
+                )}
               </InvestingDetailsSimpleBox>
             </Grid>
 
@@ -131,7 +138,9 @@ function InvestingDetails({ deal }) {
                   </Typography>
                 }
               >
-                <Typography className={classes.boxContent}>{totalCarry}%</Typography>
+                {totalCarry && (
+                  <Typography className={classes.boxContent}>{totalCarry}%</Typography>
+                )}
               </InvestingDetailsSimpleBox>
             </Grid>
 
@@ -148,7 +157,9 @@ function InvestingDetails({ deal }) {
                   </Typography>
                 }
               >
-                <Typography className={classes.boxContent}>Space</Typography>
+                <Box display="flex">
+                  <Typography className={classes.boxContent}>{sectors?.join(', ')}</Typography>
+                </Box>
               </InvestingDetailsSimpleBox>
             </Grid>
           </Grid>
