@@ -22,17 +22,20 @@ const styles = (theme) => ({
     width: '100%',
   },
   selectedTab: {
-    fontWeight: 'bold !important',
+    fontWeight: '500 !important',
+    color: '#186EFF',
     '& $tabWrapper': {
-      backgroundColor: 'rgb(32 93 245 / 16%)',
+      backgroundColor: '#ECF3FF',
       borderRadius: '10px',
     },
   },
   tab: {
     textTransform: 'none',
     minWidth: 0,
-    fontWeight: '400',
+    fontWeight: '500',
     padding: '6px 0',
+    fontSize: '16px',
+    color: '#64748B',
     '&:focus': {
       outline: 'none',
     },
@@ -59,11 +62,11 @@ const styles = (theme) => ({
     display: 'none',
   },
   tabWrapper: {
-    padding: '0 32px',
+    padding: '4px 16px',
   },
 });
 
-const HighlightedTabs = ({ classes, tabs, tabIndex, handleTabChange }) => {
+const HighlightedTabs = ({ classes, tabs, tabIndex, handleTabChange, rootStyle }) => {
   return (
     <div className={classes.root}>
       <Tabs
@@ -76,6 +79,7 @@ const HighlightedTabs = ({ classes, tabs, tabIndex, handleTabChange }) => {
           indicator: classes.tabsIndicator,
           flexContainer: classes.tabsContainer,
         }}
+        style={rootStyle || {}}
       >
         {tabs.map((tab, index) => (
           <Tab
