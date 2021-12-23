@@ -1,6 +1,5 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Grid, Paper, Typography } from '@material-ui/core';
 import styles from '../styles';
 
@@ -15,7 +14,9 @@ const dashboardBoxes = [
   },
 ];
 
-const Investors = ({ classes }) => {
+interface Props extends WithStyles<typeof styles> {}
+
+const Investors: React.FC<Props> = ({ classes }) => {
   const boxSize = 2;
   const invisibleBoxes = Array(5 - dashboardBoxes.length).fill(0);
 
@@ -42,4 +43,4 @@ const Investors = ({ classes }) => {
   );
 };
 
-export default withStyles(styles)(withRouter(Investors));
+export default withStyles(styles)(Investors);

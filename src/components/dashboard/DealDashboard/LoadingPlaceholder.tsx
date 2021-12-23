@@ -1,14 +1,15 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Grid, Paper } from '@material-ui/core';
 import styles from './styles';
 
-const LoadingPlaceholder = ({ classes }) => {
+interface Props extends WithStyles<typeof styles> {}
+
+const LoadingPlaceholder: React.FC<Props> = ({ classes }) => {
   return (
     <>
       <Grid item xs={1} />
-      {[0, 1, 2, 3, 4].map((value) => (
+      {[0, 1, 2, 3, 4].map((value: number) => (
         <Grid key={value} item lg={2}>
           <Paper elevation={0} className={`${classes.placeholderItem} ${classes.smallBox}`} />
         </Grid>
@@ -23,4 +24,4 @@ const LoadingPlaceholder = ({ classes }) => {
   );
 };
 
-export default withStyles(styles)(withRouter(LoadingPlaceholder));
+export default withStyles(styles)(LoadingPlaceholder);

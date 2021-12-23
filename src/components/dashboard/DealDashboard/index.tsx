@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery, gql } from '@apollo/client';
-import { useParams, withRouter } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
+import { useParams, withRouter, RouteComponentProps } from 'react-router-dom';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
 import { IoIosArrowBack } from 'react-icons/io';
 import HighlightedTabs from '../../utils/HighlightedTabs';
@@ -30,18 +30,20 @@ const GET_DEAL = gql`
   }
 `;
 
+interface Props extends WithStyles<typeof styles> {}
+
 const dealDashboardTabs = ['Deal Progress', 'Investors', 'Documents', 'Deal Page'];
 
-const DealDashboard = ({ classes }) => {
-  const params = useParams();
-  const { deal: dealSlug } = params;
+const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
+  const params: { deal: string; organization: string } = useParams();
+  const { deal: dealSlug }: { deal: string } = params;
   const { organization: orgSlug } = params;
   const [tabIndex, setTabIndex] = useState(0);
   const { data: dealData } = useQuery(GET_DEAL, {
     variables: { deal_slug: dealSlug, fund_slug: orgSlug },
   });
 
-  const handleTabChange = (event, index) => {
+  const handleTabChange = (event: any, index: number) => {
     setTabIndex(index);
   };
 
@@ -50,15 +52,15 @@ const DealDashboard = ({ classes }) => {
     const tabName = dealDashboardTabs[tabIndex];
     switch (tabName) {
       case 'Deal Progress':
-        return <p>Deal Progres</p>;
+        return <p>Deal Progres </p>;
       case 'Investors':
         return <Investors />;
       case 'Documents':
-        return <p>Documents</p>;
+        return <p>Documents </p>;
       case 'Deal Page':
-        return <p>Deal Page</p>;
+        return <p>Deal Page </p>;
       default:
-        return <p>No Data</p>;
+        return <p>No Data </p>;
     }
   };
 

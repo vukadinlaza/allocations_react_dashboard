@@ -1,6 +1,6 @@
 import { phone, tablet } from '../../../utils/helpers';
 
-const styles = (theme) => ({
+const styles: any = (theme: any) => ({
   backButton: {
     paddingLeft: '12.5%',
     paddingBottom: '24px',
