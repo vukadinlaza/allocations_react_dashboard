@@ -52,7 +52,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     const tabName = dealDashboardTabs[tabIndex];
     switch (tabName) {
       case 'Deal Progress':
-        return <p>Deal Progres </p>;
+        return <p>Deal Progress </p>;
       case 'Investors':
         return <Investors />;
       case 'Documents':
