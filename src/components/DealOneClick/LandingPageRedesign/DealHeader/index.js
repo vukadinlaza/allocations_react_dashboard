@@ -14,6 +14,7 @@ import moment from 'moment';
 import { nWithCommas } from '../../../../utils/numbers';
 import useStyles from '../DealStyles';
 import { SimpleBox } from '../widgets/SimpleBox';
+import BadgeWrapper from './BadgeWrapper';
 import Loader from '../../../utils/Loader';
 
 const GET_INVESTMENTS = gql`
@@ -27,7 +28,7 @@ const GET_INVESTMENTS = gql`
   }
 `;
 
-function DealHeader({ deal }) {
+function DealHeader({ deal, isEdit }) {
   const {
     _id,
     company_name,
@@ -84,7 +85,9 @@ function DealHeader({ deal }) {
       <Paper className={classes.dealHeader}>
         <Box className={classes.box}>
           <Box display="flex">
-            <Avatar className={classes.avatar} />
+            <BadgeWrapper isEdit={isEdit}>
+              <Avatar className={classes.avatar} />
+            </BadgeWrapper>
             <h3 className={classes.companyName}>{company_name}</h3>
           </Box>
         </Box>

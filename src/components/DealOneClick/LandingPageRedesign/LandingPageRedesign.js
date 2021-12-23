@@ -95,7 +95,7 @@ const exemptDealSlugs = [
   'type-one-fund-I',
 ];
 
-function DealLandingPageRedesign({ orgSlug, dealSlug }) {
+function DealLandingPageRedesign({ orgSlug, dealSlug, isEdit }) {
   const { deal_slug, organization } = useParams();
   const history = useHistory();
   const { pathname } = useLocation();
@@ -133,7 +133,7 @@ function DealLandingPageRedesign({ orgSlug, dealSlug }) {
 
   return (
     <Container maxWidth="md" style={{ marginBottom: '134px' }}>
-      <DealHeaderRedesign deal={deal} />
+      <DealHeaderRedesign deal={deal} isEdit={isEdit} />
       <InvestingDetails deal={deal} />
       <DealSummary deal={deal} />
       <CoinvestorsPanel deal={deal} />
