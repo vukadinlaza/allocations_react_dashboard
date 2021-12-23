@@ -3,7 +3,7 @@ import { useQuery, gql } from '@apollo/client';
 import { useParams, withRouter, RouteComponentProps } from 'react-router-dom';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
-import { IoIosArrowBack } from 'react-icons/io';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import LoadingPlaceholder from './LoadingPlaceholder';
 import Investors from './sections/Investors';
@@ -36,7 +36,7 @@ const dealDashboardTabs = ['Deal Progress', 'Investors', 'Documents', 'Deal Page
 
 const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   const params: { deal: string; organization: string } = useParams();
-  const { deal: dealSlug }: { deal: string } = params;
+  const { deal: dealSlug } = params;
   const { organization: orgSlug } = params;
   const [tabIndex, setTabIndex] = useState(0);
   const { data: dealData } = useQuery(GET_DEAL, {
@@ -70,7 +70,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
         <Grid container justifyContent="center" spacing={2}>
           <Grid item xs={4}>
             <p className={classes.backButton}>
-              <IoIosArrowBack size="1.2rem" style={{ marginRight: '0.5em' }} /> Back to SPVs
+              <ChevronLeftIcon /> Back to SPVs
             </p>
           </Grid>
           <Grid item xs={8} />

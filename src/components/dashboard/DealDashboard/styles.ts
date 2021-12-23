@@ -1,6 +1,7 @@
 import { phone, tablet } from '../../../utils/helpers';
+import { Theme } from '@material-ui/core';
 
-const styles: any = (theme: any) => ({
+const styles: any = (theme: Theme) => ({
   backButton: {
     paddingLeft: '12.5%',
     paddingBottom: '24px',
