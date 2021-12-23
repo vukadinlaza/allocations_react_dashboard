@@ -16,6 +16,7 @@ const GET_DEAL = gql`
   query GetDeal($fund_slug: String!, $deal_slug: String!) {
     deal(fund_slug: $fund_slug, deal_slug: $deal_slug) {
       _id
+      company_name
       investments {
         _id
         amount
@@ -81,7 +82,9 @@ const DealDashboard = ({ classes, history }) => {
         <Grid container justifyContent="center" spacing={2}>
           <Grid item xs={1} />
           <Grid item lg={10}>
-            <Typography className={classes.pageTitle}>Name of SPV</Typography>
+            <Typography className={classes.pageTitle}>
+              {dealData?.deal?.company_name || 'Deal Name'}
+            </Typography>
             <HighlightedTabs
               tabs={dealDashboardTabs}
               tabIndex={tabIndex}
