@@ -13,6 +13,7 @@ import HouseIcon from '../../../../../assets/buildHouse.svg';
 import CustomIcon from '../../../../../assets/buildCustom.svg';
 import NetworkIcon from '../../../../../assets/buildNetwork.svg';
 import PieIcon from '../../../../../assets/buildPie.svg';
+import { useViewport } from '../../../../../utils/hooks';
 import { ModalTooltip } from '../../../../dashboard/FundManagerDashboard/widgets';
 import {
   DealName,
@@ -43,10 +44,12 @@ export default function TypeSelector({
   unfilledFields,
   setUnfilledFields,
   sectionOneComplete,
+  sectionComplete,
 }) {
   const classes = useStyles();
   const customInputStyles = { style: { height: '23px' } };
   const params = useParams();
+  const { width } = useViewport();
 
   const row1Items = [
     {
@@ -178,11 +181,7 @@ export default function TypeSelector({
           Basic Information
         </Typography>
       </Grid>
-      <Grid
-        container
-        className={classes.outerSection}
-        style={{ borderLeft: sectionOneComplete ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB' }}
-      >
+      <Grid container className={classes.outerSection} style={sectionComplete(sectionOneComplete)}>
         <form noValidate autoComplete="off" className={classes.formContainers}>
           <Typography className={classes.formItemName}>
             Choose your asset type

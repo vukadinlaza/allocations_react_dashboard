@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
   },
   activeOuterSection: {
     borderLeft: 'solid #ECF3FF 3px',
+    [theme.breakpoints.down(phone)]: {
+      borderLeft: 'none',
+    },
   },
   assetItemText: {
     font: 'normal normal normal 18px/21px Roboto',
@@ -65,10 +68,7 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'none',
     outline: 'none',
     [theme.breakpoints.down(phone)]: {
-      marginBottom: '14px',
-      marginTop: '20px',
-      marginLeft: '0',
-      width: '100%',
+      width: '300px',
     },
   },
   finalInput: {
@@ -91,6 +91,7 @@ const useStyles = makeStyles((theme) => ({
   },
   formContainers: {
     width: '100%',
+    height: '100%',
   },
   formItemName: {
     color: '#2A2B54',
@@ -99,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '8px',
     [theme.breakpoints.down(phone)]: {
       marginBottom: '14px',
-      marginLeft: '8px',
+      maxWidth: '95%',
     },
   },
   helpIcon: {
@@ -124,9 +125,17 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: 'column',
     },
   },
-  inputGridItem: {
+  basicInformationInputItem: {
     [theme.breakpoints.down(phone)]: {
       maxWidth: '100%',
+      maxHeight: '130px',
+    },
+  },
+  inputGridItem: {
+    marginBottom: '30px',
+    [theme.breakpoints.down(phone)]: {
+      maxWidth: '100%',
+      // maxHeight: '125px',
     },
   },
   inputLabelWithTooltip: {
@@ -153,7 +162,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexWrap: 'wrap',
     [theme.breakpoints.down(phone)]: {
-      padding: '14px',
+      padding: '0px',
+      marginLeft: '0px',
     },
   },
   paper: {
@@ -292,14 +302,14 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '10px',
     cursor: 'pointer',
     [theme.breakpoints.down(phone)]: {
-      width: '311px',
+      width: '325px',
     },
     '& *': {
       pointerEvents: 'none',
     },
   },
   typeItemDiv: {
-    width: 'inherit',
+    width: '100%',
     marginBottom: '15px',
     display: 'flex',
     justifyContent: 'space-between',
@@ -322,9 +332,12 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: 'border-box',
     width: 'inherit',
     paddingLeft: '10px',
+    [theme.breakpoints.down(phone)]: {
+      paddingLeft: '0px',
+    },
   },
   cryptoFormContainer: {
-    width: '98%',
+    width: '100%',
     right: '1vw',
   },
   cryptoLabel: {
@@ -334,6 +347,10 @@ const useStyles = makeStyles((theme) => ({
     width: 'fit-content',
     padding: '0px 5px',
     marginLeft: '5px',
+    [theme.breakpoints.down(phone)]: {
+      padding: '0px',
+      marginLeft: '0px',
+    },
   },
   cryptoSelector: {
     width: '110%',
@@ -343,6 +360,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '37px',
     [theme.breakpoints.down(phone)]: {
       maxWidth: '100%',
+      marginBottom: '0px',
     },
   },
   minimumInput: {
@@ -367,6 +385,9 @@ const useStyles = makeStyles((theme) => ({
     '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
       borderRadius: '8px !important',
     },
+    [theme.breakpoints.down(phone)]: {
+      width: '100%',
+    },
   },
   // * Styles that are only used in the AgreementSigner.
   agreementSignedBox: {
@@ -380,6 +401,10 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '20px',
     boxShadow: 'none !important',
     backgroundColor: '#F6F7F8',
+    [theme.breakpoints.down(phone)]: {
+      paddingLeft: '15px',
+      paddingRight: '15px',
+    },
   },
   agreementUnsignedBox: {
     display: 'flex',
@@ -393,12 +418,18 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: 'rgba(0, 0, 0, 0.04)',
     },
+    [theme.breakpoints.down(phone)]: {
+      paddingLeft: '5px',
+    },
   },
   buttonBox: {
     margin: 'auto',
     marginTop: '40px',
     alignSelf: 'center',
     textAlign: 'center',
+    [theme.breakpoints.down(phone)]: {
+      marginTop: '0px',
+    },
   },
   customFormItemName: {
     minHeight: '40px',
@@ -409,6 +440,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '600',
     borderRadius: '20px',
     padding: '5px 20px',
+    [theme.breakpoints.down(phone)]: {
+      padding: '4px 10px',
+    },
   },
   serviceAgreementIconBox: {
     display: 'flex',
@@ -418,6 +452,10 @@ const useStyles = makeStyles((theme) => ({
     height: '60px',
     borderRadius: '50%',
     backgroundColor: '#ECF3FF',
+    [theme.breakpoints.down(phone)]: {
+      width: '45px',
+      height: '45px',
+    },
   },
   signContainer: {
     display: 'grid',
@@ -452,6 +490,10 @@ const useStyles = makeStyles((theme) => ({
     color: '#186EFF',
     opacity: '1',
     marginBottom: '41px',
+    [theme.breakpoints.down(phone)]: {
+      marginTop: '20px',
+      marginBottom: '20px',
+    },
   },
   // * Styles that are only used in the 'Upload Docs' tab.
   blueCheck: {
@@ -521,7 +563,7 @@ const useStyles = makeStyles((theme) => ({
     color: '#2A2B54',
     fontSize: '22px',
     [theme.breakpoints.down(phone)]: {
-      fontSize: '13px',
+      fontSize: '20px',
       justifyContent: 'center',
       alignItems: 'center',
     },

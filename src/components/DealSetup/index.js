@@ -24,6 +24,8 @@ import { taskTypes } from './Tasks';
 import TaskAction from './TaskAction';
 import styles from './styles';
 
+// IS THIS BEING USED? Or a copy of what was in PostBuild (Previously 'Setup'?
+
 const DEAL = gql`
   query getDealWithTasks($deal_id: String) {
     getDealWithTasks(deal_id: $deal_id) {

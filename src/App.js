@@ -19,7 +19,7 @@ import ProfilePage from './components/Profile/ProfilePage';
 import Profile from './components/Profile/Profile';
 import OrganizationNew from './components/OrganizationNew';
 import OrganizationMembers from './components/OrganizationMembers';
-import DealTable from './components/deals/fund-manager/DealsTablePage';
+import DealsTable from './components/deals/fund-manager/DealsTablePage';
 import NotFound from './components/NotFound';
 import Prospect from './components/Prospect/Prospect';
 import ProspectDealPage from './components/Prospect/ProspectDealPage/ProspectDealPage';
@@ -35,7 +35,7 @@ import DealOneClick from './components/DealOneClick';
 // test
 import BuildDealForm from './components/NewBuild/BuildDealForm/index';
 
-import DealSetup from './components/deals/fund-manager/Setup';
+import DealSetup from './components/deals/fund-manager/PostBuild';
 // import DealSetup from './components/DealSetup';
 
 import AuthorizedApolloProvider from './apollo-client-comp';
@@ -80,6 +80,7 @@ const App = () => {
 
               {/** Deals * */}
               {/* PUBLIC Landing Page */}
+
               <Route path="/public/new-build/:type?" exact component={BuildDealForm} />
               <Route path="/public/:organization/:deal_slug" component={DealOneClick} exact />
               <Route path="/public/:deal_slug" component={DealOneClick} exact />
@@ -116,7 +117,7 @@ const App = () => {
               <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
 
               {/** Whitelabel Routes * */}
-              <PrivateRoute path="/organizations/:org_slug/deals" component={DealTable} exact />
+              <PrivateRoute path="/organizations/:org_slug/deals" component={DealsTable} exact />
               <AdminRoute
                 path="/admin/:organization/members"
                 component={OrganizationMembers}

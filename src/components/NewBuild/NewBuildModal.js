@@ -18,6 +18,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import HelpIcon from '@material-ui/icons/Help';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import countries from 'country-region-data';
 import states from 'usa-states';
 import { toast } from 'react-toastify';
@@ -66,6 +67,9 @@ const useStyles = makeStyles((theme) => {
     modalContainer: {
       width: '568px',
       height: '328',
+      [theme.breakpoints.down(phone)]: {
+        width: '100%',
+      },
     },
     formControl: {
       width: '100%',
@@ -141,6 +145,9 @@ const useStyles = makeStyles((theme) => {
         borderColor: '#CBD5E1',
         height: '48px',
         top: '0px',
+      },
+      [theme.breakpoints.down(phone)]: {
+        width: '100%',
       },
     },
     createNewOrgMenuItem: {
@@ -250,7 +257,7 @@ const SelectOrganization = ({
       return;
     }
     setCurrentOrganization(selectedOrg);
-    history.push(`/new-build/${dealType}`);
+    history.push(`/public/new-build/${dealType}`);
     closeModal();
   },
   prev = () => setPage('deal_type_selector'),

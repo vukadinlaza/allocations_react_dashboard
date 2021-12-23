@@ -10,6 +10,7 @@ import fundIcon from '../../assets/fund-icon.svg';
 import plusSignIcon from '../../assets/plus-vector.svg';
 import warningIcon from '../../assets/warning-red.svg';
 import { phone } from '../../utils/helpers';
+import { useViewport } from '../../utils/hooks';
 
 const DELETE_DEAL = gql`
   mutation DeleteDeal($_id: String!) {
@@ -18,12 +19,21 @@ const DELETE_DEAL = gql`
 `;
 
 const useStyles = makeStyles((theme) => ({
+  iconContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    margin: '10px 10px 10px 5px',
+    [theme.breakpoints.down(phone)]: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  },
   icon: {
     height: '72px',
     width: '72px',
     display: 'flex',
     justifyContent: 'center',
-    margin: '0px 0px 15px 0px',
+    // margin: '0px 0px 15px 0px',
     borderRadius: '48px',
     padding: '12px',
     backgroundColor: '#ECF3FF',
@@ -42,6 +52,23 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
   },
+  modalPaperContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'space-between',
+    [theme.breakpoints.down(phone)]: {
+      flexDirection: 'column',
+    },
+  },
+  modalBox: {
+    height: '100%',
+    width: '100%',
+    margin: 'auto',
+    [theme.breakpoints.down(phone)]: {
+      margin: '0px',
+    },
+  },
   modalPaperBody: {
     display: 'flex',
     flexDirection: 'column',
@@ -55,6 +82,15 @@ const useStyles = makeStyles((theme) => ({
     border: 'solid #E5E5E5 1px',
     '&:hover': {
       boxShadow: '0px 5px 10px 2px rgba(225, 225, 225, .8) !important',
+    },
+    [theme.breakpoints.down(phone)]: {
+      padding: '5px',
+    },
+  },
+  modalPaperContent: {
+    [theme.breakpoints.down(phone)]: {
+      display: 'flex',
+      justifyContent: 'space-between',
     },
   },
   modalPaperTitle: {
@@ -81,12 +117,21 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '11px',
     padding: '5px',
     cursor: 'pointer',
+    marginBottom: '20px',
     [theme.breakpoints.down(phone)]: {
-      marginBottom: '14px',
       marginTop: '0px',
-      marginLeft: '0',
+      marginLeft: '0px',
       width: '100%',
       textAlign: 'center',
+    },
+  },
+  deleteButton: {
+    width: '70%',
+    borderRadius: '8px',
+    backgroundColor: '#186EFF',
+    [theme.breakpoints.down(phone)]: {
+      padding: '10px',
+      width: '90%',
     },
   },
   typeBody: {
@@ -94,9 +139,12 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '14px',
     fontWeight: '400',
     marginTop: '16px',
+    [theme.breakpoints.down(phone)]: {
+      width: '215px',
+    },
   },
   typeGrid: {
-    height: '100%',
+    height: '20%',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-start',
@@ -107,6 +155,9 @@ const useStyles = makeStyles((theme) => ({
     width: '92.5%',
     margin: '20px',
     flexDirection: 'row',
+    [theme.breakpoints.down(phone)]: {
+      margin: '0px',
+    },
   },
   typeTitle: {
     color: '#000',
@@ -118,10 +169,11 @@ const useStyles = makeStyles((theme) => ({
 export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
   const classes = useStyles();
   const history = useHistory();
+  const { width } = useViewport();
   return (
     <Modal open={isOpen} onClose={closeModal} className={classes.modal}>
       <Container style={{ width: '650px' }}>
-        <Grid container style={{ height: '100%' }}>
+        <Grid container className={classes.modalBox}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
             <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#186EFF' }}>
               <Grid container justifyContent="space-between">
@@ -151,35 +203,49 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                     alignItems: 'center',
                   }}
                 >
-                  <Grid container className={classes.typeGroup}>
+                  <Grid container justifyContent="center" className={classes.typeGroup}>
                     <Box
                       style={{
                         display: 'flex',
-                        flexDirection: 'row',
+                        flexDirection: width >= phone ? 'row' : 'column',
                         justifyContent: 'space-between',
-                        alignItems: 'space-between',
+                        width: width >= phone ? '100%' : '80%',
                       }}
                     >
-                      <Paper className={classes.modalPaperBody}>
-                        <Grid
-                          item
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            margin: '10px 10px 10px 5px',
-                          }}
-                        >
+                      <Paper
+                        className={classes.modalPaperBody}
+                        style={{
+                          alignItems: 'center',
+                          margin: width >= phone ? '.5rem' : '10px 0px 0px',
+                        }}
+                      >
+                        <Grid container justifyContent="center">
                           <div className={classes.icon}>
                             <img alt="spv-icon" src={spvIcon} />
                           </div>
-                          <Typography className={classes.typeTitle}>
-                            Continue Current Build
-                          </Typography>
-                        </Grid>
-                        <Grid item className={classes.typeGrid}>
-                          <Typography className={classes.typeBody}>
-                            We will pick you up where you left off on your current build process.
-                          </Typography>
+                          <Grid container justifyContent="center" style={{ marginTop: '5px' }}>
+                            <Grid
+                              item
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                margin: '10px 10px 10px 5px',
+                              }}
+                            >
+                              <Typography className={classes.typeTitle}>
+                                Continue Current Build
+                              </Typography>
+                            </Grid>
+                            <Grid item className={classes.typeGrid}>
+                              <Typography
+                                className={classes.typeBody}
+                                style={{ textAlign: 'center', margin: '-4px' }}
+                              >
+                                We will pick you up where you left off on your current build
+                                process.
+                              </Typography>
+                            </Grid>
+                          </Grid>
                         </Grid>
                         <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
                           <Button
@@ -188,15 +254,15 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                             size="large"
                             type="submit"
                             style={{
-                              width: '70%',
+                              width: '100%',
                               borderRadius: '8px',
                               backgroundColor: '#186EFF',
                             }}
                             onClick={() => {
                               closeModal();
-                              const build = JSON.parse(localStorage.getItem('buildDeal'));
+                              const build = JSON.parse(localStorage.getItem('buildData'));
                               if (build?.type) {
-                                history.push(`/new-build/${build.type}`);
+                                history.push(`/public/new-build/${build.type}`);
                               } else setPage('deal_type_selector');
                             }}
                           >
@@ -205,7 +271,16 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                         </Grid>
                       </Paper>
 
-                      <Paper className={classes.modalPaperBody}>
+                      <Paper
+                        className={classes.modalPaperBody}
+                        style={{
+                          alignItems: 'center',
+                          margin: width >= phone ? '.5rem' : '10px 0px 0px',
+                        }}
+                      >
+                        <div className={classes.icon}>
+                          <img alt="fund-icon" src={plusSignIcon} />
+                        </div>
                         <Grid
                           item
                           style={{
@@ -214,13 +289,17 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                             margin: '10px 10px 10px 5px',
                           }}
                         >
-                          <div className={classes.icon}>
-                            <img alt="fund-icon" src={plusSignIcon} />
-                          </div>
                           <Typography className={classes.typeTitle}>Create New Build</Typography>
                         </Grid>
-                        <Grid item className={classes.typeGrid}>
-                          <Typography className={classes.typeBody}>
+                        <Grid
+                          item
+                          className={classes.typeGrid}
+                          // style={{ margin: '0px 15px 25px 15px' }}
+                        >
+                          <Typography
+                            className={classes.typeBody}
+                            style={{ textAlign: 'center', marginTop: '0px' }}
+                          >
                             This will erase your current build and start a build from scratch. This
                             action cannot be undone.
                           </Typography>
@@ -232,7 +311,7 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                             size="large"
                             type="submit"
                             style={{
-                              width: '70%',
+                              width: '100%',
                               borderRadius: '8px',
                               backgroundColor: '#186EFF',
                             }}
@@ -259,6 +338,7 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
 export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
   const classes = useStyles();
   const deal = JSON.parse(localStorage.getItem('buildDeal'));
+  const { width } = useViewport();
 
   const [deleteDeal] = useMutation(DELETE_DEAL, {
     variables: { _id: deal?._id },
@@ -273,7 +353,7 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
       }}
     >
       <Container style={{ width: '650px' }}>
-        <Grid container style={{ height: '100%', width: '90%', margin: 'auto' }}>
+        <Grid container className={classes.modalBox}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
             <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#186EFF' }}>
               <Grid container justifyContent="space-between">
@@ -297,7 +377,7 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
                 borderRadius: '0 0 1rem 1rem',
               }}
             >
-              <Grid container style={{ marginBottom: '25px' }}>
+              <Grid container style={{ marginBottom: '0px' }}>
                 <FormControl
                   component="fieldset"
                   style={{
@@ -308,7 +388,10 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
                     alignItems: 'center',
                   }}
                 >
-                  <Grid container className={classes.typeGroup}>
+                  <Grid
+                    container
+                    styles={{ ...classes.typeGroup, width: width >= 650 ? '92.5%' : '100%' }}
+                  >
                     <Box
                       style={{
                         display: 'flex',
@@ -317,7 +400,12 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
                         alignItems: 'space-between',
                       }}
                     >
-                      <Paper className={classes.modalPaperBody}>
+                      <Paper
+                        styles={{
+                          ...classes.modalPaperBody,
+                          border: width >= 650 ? 'solid #E5E5E5 1px' : 'none',
+                        }}
+                      >
                         <Grid
                           item
                           style={{
@@ -330,12 +418,25 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
                           <div className={classes.warningIcon}>
                             <img alt="spv-icon" src={warningIcon} />
                           </div>
-                          <Typography className={classes.typeTitle}>
+                          <Typography className={classes.typeTitle} style={{ textAlign: 'center' }}>
                             Are you sure you want to cancel this build?
                           </Typography>
                         </Grid>
-                        <Grid item className={classes.typeGrid}>
-                          <Typography className={classes.typeBody} style={{ textAlign: 'center' }}>
+                        <Grid
+                          item
+                          className={classes.typeGrid}
+                          style={{
+                            margin: width >= 650 ? '25px' : '18px 5px',
+                          }}
+                        >
+                          <Typography
+                            className={classes.typeBody}
+                            style={{
+                              textAlign: 'center',
+                              width: width >= 650 ? classes.typeBody.width : '335px',
+                              marginTop: width >= 650 ? '16px' : '0px',
+                            }}
+                          >
                             Once you cancel this build, you will start from scratch and lose this
                             information. This action can not be undone.
                           </Typography>
@@ -346,13 +447,12 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
                             color="primary"
                             size="large"
                             type="submit"
-                            style={{
-                              width: '70%',
-                              borderRadius: '8px',
-                              backgroundColor: '#186EFF',
-                            }}
+                            className={classes.deleteButton}
                             onClick={() => {
-                              deleteDeal();
+                              const dealData = JSON.parse(localStorage.getItem('buildDeal'));
+                              if (dealData) {
+                                deleteDeal();
+                              }
                               localStorage.removeItem('buildData');
                               localStorage.removeItem('buildDeal');
                               localStorage.removeItem('buildFilesUploaded');
@@ -397,6 +497,7 @@ export default function DealTypeSelector({
   onClose = () => closeModal(),
 }) {
   const classes = useStyles();
+  const { width } = useViewport();
 
   return (
     <Modal open={isOpen} onClose={onClose} className={classes.modal}>
@@ -431,38 +532,29 @@ export default function DealTypeSelector({
                     alignItems: 'center',
                   }}
                 >
-                  <Grid container className={classes.typeGroup}>
-                    <Box
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'space-between',
-                      }}
-                    >
-                      <Paper className={classes.modalPaperBody}>
-                        <Grid
-                          item
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            margin: '10px 10px 10px 5px',
-                          }}
-                        >
-                          <div className={classes.icon}>
-                            <img alt="spv-icon" src={spvIcon} />
-                          </div>
-                          <Typography className={classes.typeTitle}>SPV</Typography>
-                        </Grid>
-                        <Grid item className={classes.typeGrid}>
-                          <Typography className={classes.typeBadge}>
-                            From <span style={{ fontWeight: '700' }}>$8k</span>, paid by investors
-                          </Typography>
-                          <Typography className={classes.typeBody}>
-                            A Special Purpose Vehicle (SPV) is a structure used to raise money to
-                            invest in a single asset
-                          </Typography>
-                        </Grid>
+                  <Grid container justifyContent="center" className={classes.typeGroup}>
+                    <Box className={classes.modalPaperContainer}>
+                      <Paper
+                        className={classes.modalPaperBody}
+                        style={{ margin: width >= 650 ? '.5rem' : '10px 0px' }}
+                      >
+                        <Box className={classes.modalPaperContent}>
+                          <Grid item className={classes.iconContainer}>
+                            <div className={classes.icon}>
+                              <img alt="spv-icon" src={spvIcon} />
+                            </div>
+                            <Typography className={classes.typeTitle}>SPV</Typography>
+                          </Grid>
+                          <Grid item className={classes.typeGrid}>
+                            <Typography className={classes.typeBadge}>
+                              From <span style={{ fontWeight: '700' }}>$8k</span>, paid by investors
+                            </Typography>
+                            <Typography className={classes.typeBody}>
+                              A Special Purpose Vehicle (SPV) is a structure used to raise money to
+                              invest in a single asset
+                            </Typography>
+                          </Grid>
+                        </Box>
                         <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
                           <Button
                             variant="contained"
@@ -484,29 +576,28 @@ export default function DealTypeSelector({
                         </Grid>
                       </Paper>
 
-                      <Paper className={classes.modalPaperBody}>
-                        <Grid
-                          item
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            margin: '10px 10px 10px 5px',
-                          }}
-                        >
-                          <div className={classes.icon}>
-                            <img alt="fund-icon" src={fundIcon} />
-                          </div>
-                          <Typography className={classes.typeTitle}>Fund</Typography>
-                        </Grid>
-                        <Grid item className={classes.typeGrid}>
-                          <Typography className={classes.typeBadge}>
-                            From <span style={{ fontWeight: '700' }}>$15k</span>, paid by investors
-                          </Typography>
-                          <Typography className={classes.typeBody}>
-                            A Fund is a structure used to raise money to invest in multiple assets
-                            over a period of time
-                          </Typography>
-                        </Grid>
+                      <Paper
+                        className={classes.modalPaperBody}
+                        style={{ margin: width >= 650 ? '.5rem' : '10px 0px' }}
+                      >
+                        <Box className={classes.modalPaperContent}>
+                          <Grid item className={classes.iconContainer}>
+                            <div className={classes.icon}>
+                              <img alt="fund-icon" src={fundIcon} />
+                            </div>
+                            <Typography className={classes.typeTitle}>Fund</Typography>
+                          </Grid>
+                          <Grid item className={classes.typeGrid}>
+                            <Typography className={classes.typeBadge}>
+                              From <span style={{ fontWeight: '700' }}>$15k</span>, paid by
+                              investors
+                            </Typography>
+                            <Typography className={classes.typeBody}>
+                              A Fund is a structure used to raise money to invest in multiple assets
+                              over a period of time
+                            </Typography>
+                          </Grid>
+                        </Box>
                         <Grid item style={{ display: 'flex', justifyContent: 'center' }}>
                           <Button
                             variant="contained"

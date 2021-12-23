@@ -9,18 +9,45 @@ import {
   LinearProgress,
   Typography,
 } from '@material-ui/core';
+import { useQuery, gql } from '@apollo/client';
 import moment from 'moment';
+import { nWithCommas } from '../../../../utils/numbers';
 import useStyles from '../DealStyles';
 import { SimpleBox } from '../widgets/SimpleBox';
 import BadgeWrapper from './BadgeWrapper';
+import Loader from '../../../utils/Loader';
+
+const GET_INVESTMENTS = gql`
+  query GetDeal($_id: String) {
+    deal(_id: $_id) {
+      investments {
+        _id
+        amount
+      }
+    }
+  }
+`;
 
 function DealHeader({ deal, isEdit }) {
   const {
+    _id,
     company_name,
     dealCoverImageKey,
     slug,
-    dealParams: { wireDeadline, signDeadline },
+    target_raise_goal,
+    accept_crypto,
+    dealParams: { wireDeadline, signDeadline, minimumInvestment },
   } = deal;
+  const [totalInvestments, setTotalInvestments] = useState('');
+  const { loading } = useQuery(GET_INVESTMENTS, {
+    variables: {
+      _id,
+    },
+    onCompleted: (data) => {
+      const total = data.deal.investments.reduce((prev, cur) => prev + cur.amount, 0);
+      setTotalInvestments(total);
+    },
+  });
 
   const classes = useStyles();
 
@@ -41,6 +68,16 @@ function DealHeader({ deal, isEdit }) {
 
   const getDeadline = (date) => {
     return moment(date).format('MM/DD/YYYY');
+  };
+
+  if (loading) {
+    return <Loader />;
+  }
+
+  const getTotalRaiseAmount = (total, progress) => {
+    if (progress > total) return 100;
+    if (progress === 0) return 0;
+    return progress / total;
   };
 
   return (
@@ -69,16 +106,18 @@ function DealHeader({ deal, isEdit }) {
           </Grid>
           <Grid item className={classes.middleGridItem}>
             <h4 className={classes.investmentProgress}>Investment Progress</h4>
-            <h6 className={classes.investmentNumber}>$320,000</h6>
+            <h6 className={classes.investmentNumber}>${nWithCommas(totalInvestments)}</h6>
             <LinearProgress
               variant="determinate"
-              value={70}
+              value={getTotalRaiseAmount(target_raise_goal, totalInvestments)}
               className={classes.BorderLinearProgress}
             />
             <div className={classes.minorText}>
               <span className={classes.floatRight}>
                 Total Raise Amount:
-                <span style={{ fontWeight: 'bold', fontSize: '12px' }}>$600,000</span>
+                <span style={{ fontWeight: 'bold', fontSize: '12px' }}>
+                  ${nWithCommas(target_raise_goal)}
+                </span>
               </span>
             </div>
 
@@ -90,9 +129,11 @@ function DealHeader({ deal, isEdit }) {
                   <div className={classes.coinvestorTagBubble}>
                     <span className={classes.coinvestorTagText}>USD</span>
                   </div>
-                  <div className={classes.coinvestorTagBubble}>
-                    <span className={classes.coinvestorTagText}>USDC</span>
-                  </div>
+                  {accept_crypto && (
+                    <div className={classes.coinvestorTagBubble}>
+                      <span className={classes.coinvestorTagText}>USDC</span>
+                    </div>
+                  )}
                 </div>
               </Grid>
               <Grid item>
@@ -105,7 +146,7 @@ function DealHeader({ deal, isEdit }) {
                 >
                   <div style={{ color: '#64748B', fontSize: '14px' }}>Minimum Investment:</div>
                   <div style={{ fontWeight: 'bold', fontSize: '12px', color: '#2A2B54' }}>
-                    $5,000
+                    ${nWithCommas(minimumInvestment)}
                   </div>
                 </div>
               </Grid>
