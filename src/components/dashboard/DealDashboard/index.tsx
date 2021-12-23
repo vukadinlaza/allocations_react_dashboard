@@ -35,12 +35,12 @@ interface Props extends WithStyles<typeof styles> {}
 const dealDashboardTabs = ['Deal Progress', 'Investors', 'Documents', 'Deal Page'];
 
 const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
-  const params: { deal: string; organization: string } = useParams();
-  const { deal: dealSlug } = params;
+  const params: { deal_slug: string; organization: string } = useParams();
+  const { deal_slug } = params;
   const { organization: orgSlug } = params;
   const [tabIndex, setTabIndex] = useState(0);
   const { data: dealData } = useQuery(GET_DEAL, {
-    variables: { deal_slug: dealSlug, fund_slug: orgSlug },
+    variables: { deal_slug, fund_slug: orgSlug },
   });
 
   const handleTabChange = (event: any, index: number) => {

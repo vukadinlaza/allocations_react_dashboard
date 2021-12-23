@@ -66,7 +66,11 @@ const App = () => {
           <div className="mainRoute">
             <Switch>
               <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
-              <PrivateRoute path="/admin/:organization/:deal" component={DealDashboard} exact />
+              <PrivateRoute
+                path="/admin/:organization/:deal_slug"
+                component={DealDashboard}
+                exact
+              />
               <PrivateRoute path="/" exact component={InvestorDashboard} />
               <PrivateRoute path="/investor/:id/home" component={InvestorDashboard} />
 
