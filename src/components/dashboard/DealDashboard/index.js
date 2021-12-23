@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import moment from 'moment';
-import { useLazyQuery, useQuery, gql } from '@apollo/client';
+import React, { useState } from 'react';
+import { useQuery, gql } from '@apollo/client';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Grid, Paper, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import { IoIosArrowBack } from 'react-icons/io';
-import { useViewport } from '../../../utils/hooks';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import LoadingPlaceholder from './LoadingPlaceholder';
 import Investors from './sections/Investors';
@@ -35,8 +32,7 @@ const GET_DEAL = gql`
 
 const dealDashboardTabs = ['Deal Progress', 'Investors', 'Documents', 'Deal Page'];
 
-const DealDashboard = ({ classes, history }) => {
-  const { width } = useViewport();
+const DealDashboard = ({ classes }) => {
   const params = useParams();
   const { deal: dealSlug } = params;
   const { organization: orgSlug } = params;
@@ -44,8 +40,6 @@ const DealDashboard = ({ classes, history }) => {
   const { data: dealData } = useQuery(GET_DEAL, {
     variables: { deal_slug: dealSlug, fund_slug: orgSlug },
   });
-
-  console.log({ dealSlug, orgSlug, dealData });
 
   const handleTabChange = (event, index) => {
     setTabIndex(index);
@@ -101,9 +95,3 @@ const DealDashboard = ({ classes, history }) => {
 };
 
 export default withStyles(styles)(withRouter(DealDashboard));
-
-// {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
-//     <Grid key={value} item>
-//         <Paper className={classes.paper}>{value + 1}</Paper>
-//     </Grid>
-// ))}
