@@ -8,6 +8,7 @@ import HighlightedTabs from '../../utils/HighlightedTabs';
 import LoadingPlaceholder from './LoadingPlaceholder';
 import Investors from './sections/Investors';
 import styles from './styles';
+import DealProgress from './sections/DealProgress';
 
 const GET_DEAL = gql`
   query GetDeal($fund_slug: String!, $deal_slug: String!) {
@@ -52,7 +53,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     const tabName = dealDashboardTabs[tabIndex];
     switch (tabName) {
       case 'Deal Progress':
-        return <p>Deal Progress </p>;
+        return <DealProgress />;
       case 'Investors':
         return <Investors />;
       case 'Documents':
