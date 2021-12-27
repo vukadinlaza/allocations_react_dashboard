@@ -50,6 +50,9 @@ const GET_INVESTMENT = gql`
         link
         path
       }
+      submissionData {
+        legalName
+      }
       deal {
         _id
         company_name
@@ -63,6 +66,7 @@ const GET_INVESTMENT = gql`
         investor_type
         investingAs
         accredidation_status
+        email
       }
     }
   }
@@ -211,10 +215,18 @@ export default function InvestmentEdit({
     return <Redirect to={`/deals/${createInvestmentRes.data.createInvestment._id}/edit`} />;
   }
 
-  const name =
-    get(investment, 'investor.investor_type') === 'entity'
-      ? get(investment, 'investor.entity_name') || ''
-      : `${get(investment, 'investor.first_name')} ${get(investment, 'investor.last_name')}`;
+  const name = function name() {
+    if (get(investment, 'investor.investor_type') === 'entity') {
+      return get(investment, 'investor.entity_name');
+    }
+    if (get(investment, 'investor.first_name') && get(investment, 'investor.last_name')) {
+      return `${get(investment, 'investor.first_name')} ${get(investment, 'investor.last_name')}`;
+    }
+    if (get(investment, 'submissionData.legalName')) {
+      return get(investment, 'submissionData.legalName');
+    }
+      return get(investment, 'investor.email');
+  };
 
   const convertToPositiveInteger = (num) => {
     return parseInt(num < 0 ? 0 : num);
@@ -229,7 +241,7 @@ export default function InvestmentEdit({
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
               <TextField
                 style={{ width: '100%' }}
-                value={name || ''}
+                value={name() || ''}
                 disabled
                 label="Investor"
                 variant="outlined"
