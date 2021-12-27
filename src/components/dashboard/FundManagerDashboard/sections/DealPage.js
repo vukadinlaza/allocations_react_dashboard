@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import EditIcon from '@material-ui/icons/Edit';
 import { Tooltip, Typography, Box, Container } from '@material-ui/core';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
-import { HiOutlinePencil, HiOutlineEye } from 'react-icons/hi';
+import { CreateOutlined, VisibilityOutlined } from '@material-ui/icons';
 import { FlatBox } from '../widgets';
 import DealLandingPageRedesign from '../../../DealOneClick/LandingPageRedesign/LandingPageRedesign';
 import DealButton from '../../../DealOneClick/LandingPageRedesign/DealButton';
@@ -18,22 +18,40 @@ export default function DealPage({
   handleLinkCopy,
 }) {
   const { dealPageRedesign } = useFlags();
+  const [isEdit, setIsEdit] = useState(false);
 
   if (dealPageRedesign)
     return (
       <>
         <Container maxWidth="md">
           <Box display="flex" justifyContent="flex-end">
+            {!isEdit ? (
+              <DealButton
+                secondary
+                onClick={() => setIsEdit(true)}
+                icon={<CreateOutlined />}
+                text="Edit"
+                style={{ marginRight: '8px' }}
+              />
+            ) : (
+              <DealButton
+                onClick={() => setIsEdit(false)}
+                secondary
+                text="Discard Changes"
+                style={{ marginRight: '8px' }}
+              />
+            )}
             <DealButton
-              onClick={goToEditDeal}
-              icon={<HiOutlinePencil color="#64748B" />}
-              text="Edit"
+              secondary
+              onClick={goToDeal}
+              icon={<VisibilityOutlined />}
+              text="Preview"
               style={{ marginRight: '8px' }}
             />
-            <DealButton onClick={goToDeal} icon={<HiOutlineEye color="#64748B" />} text="Preview" />
+            {isEdit && <DealButton text="Save" />}
           </Box>
         </Container>
-        <DealLandingPageRedesign orgSlug={orgSlug} dealSlug={dealData.slug} />
+        <DealLandingPageRedesign orgSlug={orgSlug} dealSlug={dealData.slug} isEdit={isEdit} />
       </>
     );
 

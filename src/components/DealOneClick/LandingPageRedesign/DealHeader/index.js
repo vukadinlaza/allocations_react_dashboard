@@ -9,17 +9,45 @@ import {
   LinearProgress,
   Typography,
 } from '@material-ui/core';
+import { useQuery, gql } from '@apollo/client';
 import moment from 'moment';
+import { nWithCommas } from '../../../../utils/numbers';
 import useStyles from '../DealStyles';
 import { SimpleBox } from '../widgets/SimpleBox';
+import BadgeWrapper from './BadgeWrapper';
+import Loader from '../../../utils/Loader';
 
-function DealHeader({ deal }) {
+const GET_INVESTMENTS = gql`
+  query GetDeal($_id: String) {
+    deal(_id: $_id) {
+      investments {
+        _id
+        amount
+      }
+    }
+  }
+`;
+
+function DealHeader({ deal, isEdit }) {
   const {
+    _id,
     company_name,
     dealCoverImageKey,
     slug,
-    dealParams: { wireDeadline, signDeadline },
+    target_raise_goal,
+    accept_crypto,
+    dealParams: { wireDeadline, signDeadline, minimumInvestment },
   } = deal;
+  const [totalInvestments, setTotalInvestments] = useState('');
+  const { loading } = useQuery(GET_INVESTMENTS, {
+    variables: {
+      _id,
+    },
+    onCompleted: (data) => {
+      const total = data.deal.investments.reduce((prev, cur) => prev + cur.amount, 0);
+      setTotalInvestments(total);
+    },
+  });
 
   const classes = useStyles();
 
@@ -42,12 +70,24 @@ function DealHeader({ deal }) {
     return moment(date).format('MM/DD/YYYY');
   };
 
+  if (loading) {
+    return <Loader />;
+  }
+
+  const getTotalRaiseAmount = (total, progress) => {
+    if (progress > total) return 100;
+    if (progress === 0) return 0;
+    return progress / total;
+  };
+
   return (
     <>
       <Paper className={classes.dealHeader}>
         <Box className={classes.box}>
           <Box display="flex">
-            <Avatar className={classes.avatar} />
+            <BadgeWrapper isEdit={isEdit}>
+              <Avatar className={classes.avatar} />
+            </BadgeWrapper>
             <span className={classes.companyName}>{company_name}</span>
           </Box>
         </Box>
@@ -66,16 +106,18 @@ function DealHeader({ deal }) {
           </Grid>
           <Grid item className={classes.middleGridItem}>
             <span className={classes.investmentProgress}>Investment Progress</span>
-            <span className={classes.investmentNumber}>$320,000</span>
+            <span className={classes.investmentNumber}>${nWithCommas(totalInvestments)}</span>
             <LinearProgress
               variant="determinate"
-              value={70}
+              value={getTotalRaiseAmount(target_raise_goal, totalInvestments)}
               className={classes.BorderLinearProgress}
             />
             <div className={classes.minorText}>
               <span className={classes.floatRight}>
                 Total Raise Amount:
-                <span className={classes.totalRaiseAmount}>$600,000</span>
+                <span style={{ fontWeight: 'bold', fontSize: '12px' }}>
+                  ${nWithCommas(target_raise_goal)}
+                </span>
               </span>
             </div>
 
@@ -87,15 +129,17 @@ function DealHeader({ deal }) {
                   <div className={classes.coinvestorTagBubble}>
                     <span className={classes.coinvestorTagText}>USD</span>
                   </div>
-                  <div className={classes.coinvestorTagBubble}>
-                    <span className={classes.coinvestorTagText}>USDC</span>
-                  </div>
+                  {accept_crypto && (
+                    <div className={classes.coinvestorTagBubble}>
+                      <span className={classes.coinvestorTagText}>USDC</span>
+                    </div>
+                  )}
                 </div>
               </Grid>
               <Grid item>
                 <div className={classes.minimumInvestItem}>
                   <span className={classes.minimumInvestText}>Minimum Investment:</span>
-                  <span className={classes.minimumInvestNumber}>$5,000</span>
+                  <span className={classes.minimumInvestNumber}> ${nWithCommas(minimumInvestment)}</span>
                 </div>
               </Grid>
             </Grid>

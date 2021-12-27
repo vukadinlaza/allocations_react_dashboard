@@ -25,7 +25,7 @@ const AgreementBox = ({
   readyToSign,
   signingModal,
   signed,
-  setSigned,
+  isSigned,
   createDealLoading,
   error,
   classes,
@@ -48,7 +48,7 @@ const AgreementBox = ({
         cursor: readyToSign && !signed && 'pointer',
         pointerEvents: !readyToSign && 'none',
       }}
-      onClick={() => (readyToSign && !signed ? signingModal(agreementLink, setSigned) : null)}
+      onClick={() => (readyToSign && !signed ? signingModal(agreementLink, isSigned) : null)}
     >
       <div style={{ display: 'flex', alignItems: 'center' }}>
         {loading || error ? (
@@ -79,15 +79,23 @@ const AgreementBox = ({
 
 export default function SignDocsForm({ dealData = {}, createDealLoading, error, page, setPage }) {
   const history = useHistory();
-  const { deal, documents, phases } = dealData;
-  const [serviceAgreementLink, advisoryAgreementLink] = documents || [];
+  const { deal, documents } = dealData;
+  const [documentsSignedStatus, setDocumentsSignedStatus] = useState({});
 
-  const [serviceAgreementSigned, setServiceAgreementSigned] = useState(false);
-  const [advisoryAgreementSigned, setAdvisoryAgreementSigned] = useState(false);
+  useEffect(() => {
+    if (documents) {
+      setDocumentsSignedStatus(
+        documents?.reduce((acc, document) => {
+          acc[document.task.title] = false;
+          return acc;
+        }, {}),
+      );
+    }
+  }, [documents]);
 
-  const allSigned = serviceAgreementSigned && advisoryAgreementSigned;
+  const allSigned = documents ? Object.values(documentsSignedStatus).every(Boolean) : false;
 
-  const signingModal = (agreementLink, setSigned) => {
+  const signingModal = (agreementLink, isSigned) => {
     // eslint-disable-next-line no-undef
     DocSpring.createVisualForm({
       ...agreementLink,
@@ -96,15 +104,10 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
         localStorage.removeItem('buildData');
         localStorage.removeItem('buildDeal');
         localStorage.removeItem('buildFilesUploaded');
-        setSigned(true);
+        isSigned();
       },
     });
   };
-
-  const phase = phases?.find((phase) => phase.name === 'build');
-  const serviceAgreementTask = phase?.tasks?.find(
-    (task) => task.title === 'Sign Service Agreement',
-  );
 
   const classes = useStyles();
   return (
@@ -120,30 +123,39 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
           </Typography>
         </div>
 
-        <AgreementBox
-          title="Service Agreement"
-          agreementLink={serviceAgreementLink}
-          signingModal={signingModal}
-          task={serviceAgreementTask}
-          readyToSign={!!serviceAgreementLink && !error && !createDealLoading}
-          signed={serviceAgreementSigned}
-          setSigned={setServiceAgreementSigned}
-          createDealLoading={createDealLoading}
-          error={error}
-          classes={classes}
-        />
+        {!documents && (
+          <div
+            style={{
+              display: 'flex',
+              margin: 'auto',
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
+              width: '300px',
+            }}
+          >
+            <CircularProgress /> <Typography> Loading your agreements... </Typography>
+          </div>
+        )}
 
-        <AgreementBox
-          title="Advisory Agreement"
-          agreementLink={advisoryAgreementLink}
-          signingModal={signingModal}
-          readyToSign={!!advisoryAgreementLink && !error && !createDealLoading}
-          signed={advisoryAgreementSigned}
-          setSigned={setAdvisoryAgreementSigned}
-          createDealLoading={createDealLoading}
-          error={error}
-          classes={classes}
-        />
+        {documents?.map(({ task, ...documentData }) => (
+          <AgreementBox
+            title={task.title.slice(4)}
+            agreementLink={documentData}
+            signingModal={signingModal}
+            task={task}
+            readyToSign={!!documentData && !error && !createDealLoading}
+            signed={documentsSignedStatus[task.title]}
+            isSigned={() =>
+              setDocumentsSignedStatus((prev) => ({
+                ...prev,
+                [task.title]: true,
+              }))
+            }
+            createDealLoading={createDealLoading}
+            error={error}
+            classes={classes}
+          />
+        ))}
 
         <div className={classes.buttonBox}>
           <Button
