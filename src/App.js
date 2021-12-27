@@ -73,8 +73,8 @@ const App = () => {
                 marginBottom: '.25rem',
               }}
             >
-              Friday, December 24th is a federal holiday in the United States in observance of
-              Christmas. Banks in the United States will be closed. Please{' '}
+              Friday, December 31st is a federal holiday in the United States in observance of New
+              Year's Day. Banks in the United States will be closed. Please{' '}
               <a
                 href="https://www.allocations.com/contact-us"
                 style={{
