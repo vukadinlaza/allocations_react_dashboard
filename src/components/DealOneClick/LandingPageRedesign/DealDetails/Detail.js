@@ -34,7 +34,7 @@ export default function Detail({ title, description }) {
     <Box my="56px">
       <Box display="flex" mb="24px">
         <span className={classes.headerIndicator} />
-        <Typography variant="h5" component="h5" className={classes.titleText}>
+        <Typography variant="span5" component="span" className={classes.titleText}>
           {title}
         </Typography>
       </Box>
