@@ -3,38 +3,49 @@ import { withStyles } from '@material-ui/core/styles';
 import { Typography, Tooltip } from '@material-ui/core';
 import HelpIcon from '@material-ui/icons/Help';
 import CloseIcon from '@material-ui/icons/Close';
-import { phone } from '../../../../utils/helpers';
+import { phone, tablet } from '../../../../utils/helpers';
 
 const styles = (theme) => ({
   box: {
     width: '100%',
     height: '60px',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
-    borderRadius: '10px',
+    marginRight: '3px',
     [theme.breakpoints.down(phone)]: {
       minWidth: '0 !important',
       maxWidth: 'none !important',
+      height: '100%',
+      marginRight: '4px',
     },
-  },
-  boxContent: {
-    padding: '5px',
-    fontWeight: 'bolder',
-    color: '#2A2B54',
   },
   boxTitle: {
     fontSize: '14px',
     color: '#64748B',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '12px',
+      display: 'flex',
+    },
   },
   boxTitleContainer: {
     width: '220px',
-    borderRadius: '10px 10px 0px 0px',
     display: 'flex',
     alignItems: 'center',
+    [theme.breakpoints.down(phone)]: {
+      width: '119px',
+      display: 'inline-block',
+      alignSelf: 'flex-end',
+      top: '0',
+    },
+    [theme.breakpoints.down(tablet)]: {
+      width: '115px',
+    },
   },
+
   boxTitleText: {
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'start',
   },
+
   closeModal: {
     right: '20px',
     display: 'flex',
@@ -57,10 +68,15 @@ const styles = (theme) => ({
     cursor: 'pointer',
     color: '#64748B',
     fontSize: '16px',
+    [theme.breakpoints.down(phone)]: {
+      marginLeft: '1px',
+    },
   },
+
   modal: {
     padding: '20px',
   },
+
   modalBackground: {
     position: 'fixed',
     left: '0',
