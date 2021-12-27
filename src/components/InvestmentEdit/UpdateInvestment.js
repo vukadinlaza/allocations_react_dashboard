@@ -225,10 +225,7 @@ export default function InvestmentEdit({
     if (get(investment, 'submissionData.legalName')) {
       return get(investment, 'submissionData.legalName');
     }
-    if (get(investment, 'investor.email')) {
       return get(investment, 'investor.email');
-    }
-    return '';
   };
 
   const convertToPositiveInteger = (num) => {
