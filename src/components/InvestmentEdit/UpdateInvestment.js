@@ -50,6 +50,9 @@ const GET_INVESTMENT = gql`
         link
         path
       }
+      submissionData {
+        legalName
+      }
       deal {
         _id
         company_name
@@ -213,8 +216,10 @@ export default function InvestmentEdit({
 
   const name =
     get(investment, 'investor.investor_type') === 'entity'
-      ? get(investment, 'investor.entity_name') || ''
-      : `${get(investment, 'investor.first_name')} ${get(investment, 'investor.last_name')}`;
+      ? get(investment, 'investor.entity_name')
+      : `${get(investment, 'investor.first_name')} ${get(investment, 'investor.last_name')}`
+      ? get(investment, 'submissionData.legalName')
+      : '';
 
   const convertToPositiveInteger = (num) => {
     return parseInt(num < 0 ? 0 : num);
