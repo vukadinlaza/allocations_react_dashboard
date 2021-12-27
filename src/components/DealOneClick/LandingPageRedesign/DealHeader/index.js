@@ -1,14 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Paper,
-  Avatar,
-  Button,
-  Box,
-  CardMedia,
-  Grid,
-  LinearProgress,
-  Typography,
-} from '@material-ui/core';
+import React, { useState } from 'react';
+import { Paper, Avatar, Button, Box, Grid, LinearProgress, Typography } from '@material-ui/core';
 import { useQuery, gql } from '@apollo/client';
 import moment from 'moment';
 import { nWithCommas } from '../../../../utils/numbers';
@@ -16,6 +7,7 @@ import useStyles from '../DealStyles';
 import { SimpleBox } from '../widgets/SimpleBox';
 import BadgeWrapper from './BadgeWrapper';
 import Loader from '../../../utils/Loader';
+import CoverPhoto from './CoverPhoto';
 
 const GET_INVESTMENTS = gql`
   query GetDeal($_id: String) {
@@ -51,16 +43,7 @@ function DealHeader({ deal, isEdit }) {
 
   const classes = useStyles();
 
-  const key = dealCoverImageKey?.includes('https')
-    ? dealCoverImageKey
-    : `https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`;
-
-  const [img, setImg] = useState(key);
   const [openTooltip, setOpenTooltip] = useState('');
-
-  useEffect(() => {
-    setImg(key);
-  }, [dealCoverImageKey, slug, key]);
 
   const handleTooltip = (id) => {
     setOpenTooltip(id);
@@ -94,14 +77,11 @@ function DealHeader({ deal, isEdit }) {
 
         <Grid container className={classes.middleGridContainer}>
           <Grid item>
-            <CardMedia
-              className={classes.cardMedia}
-              component="img"
-              alt="SPV Header Image"
-              src={img}
-              onError={() =>
-                setImg('https://allocations-public.s3.us-east-2.amazonaws.com/deals/default.png')
-              }
+            <CoverPhoto
+              dealCoverImageKey={dealCoverImageKey}
+              slug={slug}
+              isEdit={isEdit}
+              classes={classes}
             />
           </Grid>
           <Grid item className={classes.middleGridItem}>
