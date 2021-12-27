@@ -63,7 +63,7 @@ const App = () => {
             <Sidebar />
           </div>
           <div className="mainRoute">
-            <div
+            {/* <div
               style={{
                 backgroundColor: '#0144e4',
                 width: '100%',
@@ -85,7 +85,7 @@ const App = () => {
                 contact support
               </a>{' '}
               for any assistance.
-            </div>
+            </div> */}
             <Switch>
               <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
               <PrivateRoute path="/" exact component={InvestorDashboard} />
