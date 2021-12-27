@@ -7,7 +7,6 @@ import { Button, Paper, Grid, FormControl } from '@material-ui/core';
 import { useParams, useHistory } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import BasicInfo from './FormComponents/TypeSelector/index';
-import UploadDocs from './FormComponents/UploadDocs/index';
 import { useAuth } from '../../../auth/useAuth';
 import { useCurrentOrganization } from '../../../state/current-organization';
 import { useViewport } from '../../../utils/hooks';
@@ -100,7 +99,7 @@ const Breadcrumbs = ({ titles, page }) => {
   );
 };
 
-const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDeal }) => {
+const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) => {
   const classes = useStyles();
   const { width } = useViewport();
   const { cryptoPaymentInBuild, buildModals } = useFlags();
@@ -128,7 +127,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
-        : undefined,
+        : '',
     management_fee_frequency: 'one time',
     management_fee_type: 'percent',
     management_fee_value: '2',
@@ -136,7 +135,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
     minimum_investment: 10000,
     name: '',
     need_gp_entity: 'true',
-    number_of_investments: undefined,
+    number_of_investments: '',
     offering_type: '506b',
     portfolio_company_name: '',
     portfolio_company_securities: '',
@@ -498,6 +497,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
     }
     return 'deal_type_selector';
   };
+  const fullAuth = useAuth();
 
   const [openModal, setOpenModal] = useState(!auth.isAuthenticated);
   const [newBuildModalPage, setNewBuildModalPage] = useState(modalStartPage());
@@ -513,8 +513,6 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
   };
 
   const sectionComplete = (section) => {
-    console.log(section, 'section');
-    console.log(width >= 675 ? (section ? 'true true' : 'true false') : 'false');
     return {
       borderLeft: width >= 675 ? (section ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB') : 'none',
     };
@@ -776,9 +774,15 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
                     return;
                   }
                   if (!auth.isAuthenticated) {
-                    auth.login().then(() => {
-                      openModaltoPage('select_org');
-                    });
+                    try {
+                      await auth.login();
+                      const token = await fullAuth.getAccessTokenSilently();
+                      if (token) {
+                        openModaltoPage('select_org');
+                      }
+                    } catch (e) {
+                      console.error(e);
+                    }
                   } else {
                     openModaltoPage('select_org');
                   }
@@ -829,7 +833,7 @@ export default function NewDealForm() {
           dealType={dealType}
           organization={organization}
           userProfile={userProfile}
-          auth={{ isAuthenticated, login: loginWithPopup, refetchUserProfile }}
+          auth={{ isAuthenticated, login: loginWithPopup, refetchUserProfile, userProfile }}
           page={page}
           setPage={setPage}
           createNewDeal={createNewDeal}

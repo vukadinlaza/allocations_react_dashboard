@@ -18,7 +18,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import HelpIcon from '@material-ui/icons/Help';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import countries from 'country-region-data';
 import states from 'usa-states';
 import { toast } from 'react-toastify';
@@ -267,11 +266,15 @@ const SelectOrganization = ({
   },
 }) => {
   const { userProfile, loading: userLoading } = useAuth();
-  const [organizations, setOrganizations] = useState(userProfile?.organizations_admin || []);
-  const [selectedOrg, setSelectedOrg] = useState(null);
+  const [organizations, setOrganizations] = useState([]);
+  const [selectedOrg, setSelectedOrg] = useState({});
+  console.log(organizations);
+  console.log(selectedOrg);
 
   useEffect(() => {
-    if (!organizations?.length) setOrganizations(userProfile?.organizations_admin);
+    if (!organizations.length && userProfile.organizations_admin) {
+      setOrganizations(userProfile.organizations_admin);
+    }
   }, [userLoading]);
 
   return (
@@ -362,7 +365,13 @@ const SelectOrganization = ({
                             },
                             getContentAnchorEl: null,
                           }}
-                          onChange={(e) => setSelectedOrg(e.target.value)}
+                          onChange={(e) =>
+                            setSelectedOrg(
+                              organizations.filter(
+                                (organization) => organization._id === e.target.value,
+                              )[0],
+                            )
+                          }
                         >
                           <MenuItem
                             value="Create New Organization"
@@ -376,11 +385,12 @@ const SelectOrganization = ({
                             Create New Organization
                           </MenuItem>
 
-                          {organizations?.map((organization) => (
-                            <MenuItem key={organization?._id} value={organization}>
-                              {_.truncate(organization.name, { length: 30 })}
-                            </MenuItem>
-                          ))}
+                          {organizations.length > 0 &&
+                            organizations.map((organization) => (
+                              <MenuItem key={organization._id} value={organization._id}>
+                                {_.truncate(organization.name, { length: 30 })}
+                              </MenuItem>
+                            ))}
                         </Select>
                       </Grid>
                       <Grid
@@ -921,7 +931,7 @@ const HighVolumePartnerships = ({
                           }}
                           onChange={(e) => {
                             // Max 5 digits
-                            const value = Math.max(0, parseInt(e.target.value))
+                            const value = Math.max(0, parseInt(e.target.value, 0))
                               .toString()
                               .slice(0, 5);
                             setZipcode(convertToPositiveIntOrNull(value));
