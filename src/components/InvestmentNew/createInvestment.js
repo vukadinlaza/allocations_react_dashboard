@@ -149,6 +149,9 @@ export default function CreateInvestment({ deal, handleUpdate }) {
                 inputProps={{ name: 'status' }}
               >
                 <MenuItem value="invited">Invited</MenuItem>
+                <MenuItem value="signed">Signed</MenuItem>
+                <MenuItem value="wired">Wired</MenuItem>
+                <MenuItem value="complete">Complete</MenuItem>
               </Select>
             </FormControl>
           </Grid>
