@@ -75,10 +75,15 @@ export default function CreateInvestment({ deal, handleUpdate }) {
     <div className="InvestmentEdit form-wrapper">
       <div className="title">Create Investment</div>
       <form className="form" noValidate autoComplete="off">
-        <Grid container spacing={3} direction="row" justify="flex-end">
+        <Grid container spacing={3} direction="row" justifyContent="flex-end">
           <Grid item xs={12} sm={12} md={6}>
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
-              <UserSearch user={user} setUser={setUser} deal_id={get(deal, '_id', '')} />
+              <UserSearch
+                user={user}
+                setUser={setUser}
+                deal_id={get(deal, '_id', '')}
+                errors={errors}
+              />
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={12} md={6}>
@@ -102,8 +107,8 @@ export default function CreateInvestment({ deal, handleUpdate }) {
                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}
                 error={errors.includes('amount')}
-                value={get(investment, 'amount', '') || null}
-                placeholder={0}
+                value={get(investment, 'amount', '') || undefined}
+                placeholder="0"
                 onChange={(e) =>
                   // eslint-disable-next-line radix
                   updateInvestmentProp({
@@ -125,8 +130,8 @@ export default function CreateInvestment({ deal, handleUpdate }) {
                   inputProps: { min: 0 },
                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}
-                placeholder={0}
-                value={get(investment, 'capitalWiredAmount', '') || null}
+                placeholder="0"
+                value={get(investment, 'capitalWiredAmount', '') || undefined}
                 onChange={(e) =>
                   // eslint-disable-next-line radix
                   updateInvestmentProp({
