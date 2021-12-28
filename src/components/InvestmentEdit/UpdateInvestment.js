@@ -190,8 +190,10 @@ export default function InvestmentEdit({
     (updatedInvestment?.status === 'wired' || updatedInvestment?.status === 'complete') &&
     !updatedInvestment?.capitalWiredAmount
       ? errors.push('capitalWiredAmount')
-      : (updatedInvestment?.status === 'wired' || updatedInvestment?.status === 'complete') &&
-        !updatedInvestment?.wired_at
+      : errors.push();
+
+    (updatedInvestment?.status === 'wired' || updatedInvestment?.status === 'complete') &&
+    !updatedInvestment?.wired_at
       ? errors.push('wired_at')
       : errors.push();
 
@@ -544,6 +546,7 @@ function Doc({ doc, investment, getInvestment, matches }) {
   });
 
   const rmDoc = () => {
+    // eslint-disable-next-line no-alert
     if (window.confirm(`Delete ${file}?`)) rmInvestmentDoc();
   };
 
