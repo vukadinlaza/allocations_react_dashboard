@@ -13,21 +13,50 @@ import backArrow from '../../../assets/back-arrow.svg';
 import styles from './styles';
 import { useCurrentOrganization } from '../../../state/current-organization';
 
-const GET_DEAL = gql`
-  query GetDeal($fund_slug: String!, $deal_slug: String!) {
-    deal(fund_slug: $fund_slug, deal_slug: $deal_slug) {
+// const GET_DEAL = gql`
+//   query GetDeal($fund_slug: String!, $deal_slug: String!) {
+//     deal(fund_slug: $fund_slug, deal_slug: $deal_slug) {
+//       _id
+//       company_name
+//       investments {
+//         _id
+//         amount
+//         investor {
+//           _id
+//           first_name
+//           last_name
+//           name
+//           email
+//           accredidation_status
+//         }
+//       }
+//     }
+//   }
+// `;
+
+const DEAL = gql`
+  query getDealByIdWithTasks($deal_id: String) {
+    getDealByIdWithTasks(deal_id: $deal_id) {
       _id
-      company_name
-      investments {
+      metadata
+      manager_name
+      name
+      wire_deadline
+      phase
+      phases {
         _id
-        amount
-        investor {
+        name
+        deal_id
+        tasks {
           _id
-          first_name
-          last_name
-          name
-          email
-          accredidation_status
+          title
+          description
+          metadata
+          type
+          complete
+          done_by
+          created_at
+          updated_at
         }
       }
     }
@@ -42,13 +71,19 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   const history = useHistory();
   // i realize this could be confusing, but the global state might be preferable to grab.
   const currentOrg = useCurrentOrganization();
-  const params: { deal_slug: string; organization: string } = useParams();
-  const { organization: orgSlug, deal_slug } = params;
+  const params: { organization: string; deal_id: string } = useParams();
+  const { organization: orgSlug, deal_id } = params;
   const [tabIndex, setTabIndex] = useState(0);
-  const { data: dealData } = useQuery(GET_DEAL, {
-    variables: { deal_slug, fund_slug: orgSlug },
+  // const { data: dealData } = useQuery(GET_DEAL, {
+  //   variables: { deal_slug, fund_slug: orgSlug },
+  // });
+  const { data: dealData } = useQuery(DEAL, {
+    variables: { deal_id },
   });
 
+  console.log('data:', dealData);
+  console.log('Deal Id:', deal_id);
+  console.log('Org Slug:', orgSlug);
   const handleTabChange = (event: any, index: number) => {
     setTabIndex(index);
   };
@@ -87,7 +122,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
           <Grid item xs={1} />
           <Grid item xs={12} lg={10}>
             <Typography className={classes.pageTitle}>
-              {dealData?.deal?.company_name || 'Deal Name'}
+              {dealData?.getDealByIdWithTasks?.name || 'Deal Name'}
             </Typography>
             <HighlightedTabs
               tabs={dealDashboardTabs}

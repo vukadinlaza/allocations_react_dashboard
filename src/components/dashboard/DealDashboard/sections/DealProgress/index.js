@@ -143,13 +143,13 @@ const demoData = [
 ];
 
 const DealProgress = ({ classes }) => {
-  const query = new URLSearchParams(useLocation().search);
+  // const query = new URLSearchParams(useLocation().search);
 
-  const { data } = useQuery(DEAL, {
-    fetchPolicy: 'network-only',
-    pollInterval: 1000,
-    variables: { deal_id: query.get('id') },
-  });
+  // const { data } = useQuery(DEAL, {
+  //   fetchPolicy: 'network-only',
+  //   pollInterval: 1000,
+  //   variables: { deal_id: query.get('id') },
+  // });
 
   const [currentStep, setCurrentStep] = useState(demoData[2]);
   const [nextStep, setNextStep] = useState(demoData[3]);
@@ -185,7 +185,7 @@ const DealProgress = ({ classes }) => {
   // };
 
   // need some styling
-  if (!data) return <LoadingPlaceholder />;
+  // if (!data) return <LoadingPlaceholder />;
   // const { getDealWithTasks: deal } = data;
 
   return (
