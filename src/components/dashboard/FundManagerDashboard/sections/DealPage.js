@@ -30,25 +30,24 @@ export default function DealPage({
                 secondary
                 onClick={() => setIsEdit(true)}
                 icon={<CreateOutlined />}
-                text="Edit"
                 style={{ marginRight: '8px' }}
-              />
+              >
+                Edit
+              </DealButton>
             ) : (
-              <DealButton
-                onClick={() => setIsEdit(false)}
-                secondary
-                text="Discard Changes"
-                style={{ marginRight: '8px' }}
-              />
+              <DealButton onClick={() => setIsEdit(false)} secondary style={{ marginRight: '8px' }}>
+                Discard Changes
+              </DealButton>
             )}
             <DealButton
               secondary
               onClick={goToDeal}
               icon={<VisibilityOutlined />}
-              text="Preview"
               style={{ marginRight: '8px' }}
-            />
-            {isEdit && <DealButton text="Save" />}
+            >
+              Preview
+            </DealButton>
+            {isEdit && <DealButton>Save</DealButton>}
           </Box>
         </Container>
         <DealLandingPageRedesign orgSlug={orgSlug} dealSlug={dealData.slug} isEdit={isEdit} />

@@ -77,12 +77,7 @@ function DealHeader({ deal, isEdit }) {
 
         <Grid container className={classes.middleGridContainer}>
           <Grid item>
-            <CoverPhoto
-              dealCoverImageKey={dealCoverImageKey}
-              slug={slug}
-              isEdit={isEdit}
-              classes={classes}
-            />
+            <CoverPhoto deal={deal} isEdit={isEdit} classes={classes} />
           </Grid>
           <Grid item className={classes.middleGridItem}>
             <h4 className={classes.investmentProgress}>Investment Progress</h4>
