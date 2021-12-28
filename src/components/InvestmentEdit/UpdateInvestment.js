@@ -157,7 +157,7 @@ export default function InvestmentEdit({
 
   useEffect(() => {
     setHasInvestmentChanges(!isEqual(investment, data?.investment));
-  }, [investment]);
+  }, [investment, data?.investment]);
 
   useEffect(() => {
     if (data && !loading) {
@@ -247,7 +247,7 @@ export default function InvestmentEdit({
       : `${get(investment, 'investor.first_name')} ${get(investment, 'investor.last_name')}`;
 
   const convertToPositiveInteger = (num) => {
-    return parseInt(num < 0 ? 0 : num);
+    return Number(num < 0 ? 0 : num);
   };
 
   return (
@@ -295,8 +295,8 @@ export default function InvestmentEdit({
                   inputProps: { min: 0 },
                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}
-                value={get(investment, 'amount', '') || null}
-                placeholder={0}
+                value={investment?.amount || undefined}
+                placeholder="0"
                 onChange={(e) =>
                   // eslint-disable-next-line radix
                   updateInvestmentProp({
@@ -322,8 +322,8 @@ export default function InvestmentEdit({
                   inputProps: { min: 0 },
                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
                 }}
-                value={get(investment, 'capitalWiredAmount', '') || null}
-                placeholder={0}
+                value={investment?.capitalWiredAmount || undefined}
+                placeholder="0"
                 onChange={(e) =>
                   // eslint-disable-next-line radix
                   updateInvestmentProp({
@@ -423,6 +423,7 @@ export default function InvestmentEdit({
             <Button
               style={{ marginTop: '5px', color: '#FF0404' }}
               onClick={() => {
+                // eslint-disable-next-line no-alert
                 if (window.confirm('Are you sure you want to delete this investment?')) {
                   return deleteInvestment({ variables: { id: investmentId } });
                 }
