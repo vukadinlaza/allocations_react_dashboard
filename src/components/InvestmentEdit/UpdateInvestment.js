@@ -190,10 +190,8 @@ export default function InvestmentEdit({
     (updatedInvestment?.status === 'wired' || updatedInvestment?.status === 'complete') &&
     !updatedInvestment?.capitalWiredAmount
       ? errors.push('capitalWiredAmount')
-      : errors.push();
-
-    (updatedInvestment?.status === 'wired' || updatedInvestment?.status === 'complete') &&
-    !updatedInvestment?.wired_at
+      : (updatedInvestment?.status === 'wired' || updatedInvestment?.status === 'complete') &&
+        !updatedInvestment?.wired_at
       ? errors.push('wired_at')
       : errors.push();
 
