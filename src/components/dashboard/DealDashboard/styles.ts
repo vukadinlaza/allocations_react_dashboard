@@ -26,9 +26,9 @@ const styles: any = (theme: Theme) => ({
     boxShadow: 'none !important',
   },
   pageTitle: {
-    fontSize: '40px',
-    fontWeight: 'bold',
-    marginBottom: '32px',
+    fontSize: '30px',
+    fontWeight: '800',
+    marginBottom: '24px',
   },
   placeholderItem: {
     boxShadow: 'none !important',
@@ -70,7 +70,7 @@ const styles: any = (theme: Theme) => ({
     backgroundColor: 'inherit',
     border: 'none',
     boxShadow: 'none !important',
-    paddingBottom: '35px', // best way to do this?
+    padding: '0px 0px 35px 0px', // here
     width: '100%',
 
     '& .MuiStepIcon-root': {

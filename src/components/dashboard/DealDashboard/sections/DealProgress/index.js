@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import { useQuery, gql } from '@apollo/client';
-import { useHistory, useLocation, withRouter } from 'react-router';
+import { useLocation, withRouter } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
-import { useCurrentOrganization } from '../../../../../state/current-organization';
 import CurrentStep from './components/CurrentStep';
 import NextStep from './components/NextStep';
 import ProgressBar from './components/ProgressBar';
-import AllocationsLoader from '../../../../utils/AllocationsLoader';
+import LoadingPlaceholder from '../../LoadingPlaceholder';
 import styles from '../../styles.ts';
 
 const DEAL = gql`
@@ -152,8 +151,6 @@ const demoData = [
 ];
 
 const DealProgress = ({ classes }) => {
-  const history = useHistory();
-  const organization = useCurrentOrganization();
   const query = new URLSearchParams(useLocation().search);
 
   const { data } = useQuery(DEAL, {
@@ -224,12 +221,8 @@ const DealProgress = ({ classes }) => {
   //   }
   // };
 
-  if (!data)
-    return (
-      <div className={classes.loaderContainer}>
-        <AllocationsLoader fullHeight />
-      </div>
-    );
+  // need some styling
+  if (!data) return <LoadingPlaceholder />;
   // const { getDealWithTasks: deal } = data;
 
   // const mainBoxes = [
@@ -247,11 +240,11 @@ const DealProgress = ({ classes }) => {
       <ProgressBar steps={steps} activeStep={activeStep} />
 
       <Grid container className={classes.bodyContainer}>
-        <Grid item sm={10} className={classes.currentStepContainer}>
+        <Grid item xs={10} lg={10} className={classes.currentStepContainer}>
           <Typography className={classes.stepText}>Current Step</Typography>
           <CurrentStep data={currentStep} />
         </Grid>
-        <Grid item sm={10} className={classes.nextStepContainer}>
+        <Grid item xs={10} lg={10} className={classes.nextStepContainer}>
           <Typography className={classes.stepText}>Up Next</Typography>
           <NextStep data={nextStep} />
         </Grid>
