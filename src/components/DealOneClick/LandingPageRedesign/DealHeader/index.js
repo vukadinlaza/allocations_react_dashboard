@@ -20,12 +20,10 @@ const GET_INVESTMENTS = gql`
   }
 `;
 
-function DealHeader({ deal, isEdit }) {
+function DealHeader({ deal }) {
   const {
     _id,
     company_name,
-    dealCoverImageKey,
-    slug,
     target_raise_goal,
     accept_crypto,
     dealParams: { wireDeadline, signDeadline, minimumInvestment },
@@ -68,7 +66,7 @@ function DealHeader({ deal, isEdit }) {
       <Paper className={classes.dealHeader}>
         <Box className={classes.box}>
           <Box display="flex">
-            <BadgeWrapper isEdit={isEdit}>
+            <BadgeWrapper>
               <Avatar className={classes.avatar} />
             </BadgeWrapper>
             <h3 className={classes.companyName}>{company_name}</h3>
@@ -77,7 +75,7 @@ function DealHeader({ deal, isEdit }) {
 
         <Grid container className={classes.middleGridContainer}>
           <Grid item>
-            <CoverPhoto deal={deal} isEdit={isEdit} classes={classes} />
+            <CoverPhoto deal={deal} classes={classes} />
           </Grid>
           <Grid item className={classes.middleGridItem}>
             <h4 className={classes.investmentProgress}>Investment Progress</h4>

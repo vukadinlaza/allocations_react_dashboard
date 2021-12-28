@@ -2,6 +2,7 @@ import React from 'react';
 import { Badge, Box } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { CameraAltOutlined } from '@material-ui/icons';
+import { useDealPage } from '../../../dashboard/FundManagerDashboard/sections/DealPage/DealPageContext';
 
 const StyledBox = withStyles({
   root: {
@@ -15,7 +16,9 @@ const StyledBox = withStyles({
   },
 })(Box);
 
-export default function BadgeWrapper({ isEdit, children }) {
+export default function BadgeWrapper({ children }) {
+  const { isEdit } = useDealPage();
+
   if (isEdit) {
     return (
       <Badge

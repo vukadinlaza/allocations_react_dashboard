@@ -2,8 +2,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import { CameraAltOutlined } from '@material-ui/icons';
 import { CardMedia, Box } from '@material-ui/core';
 import DealButton from '../DealButton';
+import { useDealPage } from '../../../dashboard/FundManagerDashboard/sections/DealPage/DealPageContext';
 
-export default function CoverPhoto({ isEdit, classes, deal }) {
+export default function CoverPhoto({ classes, deal }) {
   const { dealCoverImageKey, slug } = deal;
   const key = dealCoverImageKey?.includes('https')
     ? dealCoverImageKey
@@ -12,6 +13,7 @@ export default function CoverPhoto({ isEdit, classes, deal }) {
   const [img, setImg] = useState(key);
   const inputFile = useRef(null);
   const [upImg, setUpImg] = useState(null);
+  const { isEdit } = useDealPage();
 
   useEffect(() => {
     setImg(key);

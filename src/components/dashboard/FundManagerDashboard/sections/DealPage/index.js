@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import EditIcon from '@material-ui/icons/Edit';
 import { Tooltip, Typography, Box, Container } from '@material-ui/core';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import { CreateOutlined, VisibilityOutlined } from '@material-ui/icons';
-import { FlatBox } from '../widgets';
-import DealLandingPageRedesign from '../../../DealOneClick/LandingPageRedesign/LandingPageRedesign';
-import DealButton from '../../../DealOneClick/LandingPageRedesign/DealButton';
+import { FlatBox } from '../../widgets';
+import DealLandingPageRedesign from '../../../../DealOneClick/LandingPageRedesign/LandingPageRedesign';
+import DealButton from '../../../../DealOneClick/LandingPageRedesign/DealButton';
+import { useDealPage, useDealPageDispatch } from './DealPageContext';
 
 export default function DealPage({
   orgSlug,
@@ -18,7 +19,8 @@ export default function DealPage({
   handleLinkCopy,
 }) {
   const { dealPageRedesign } = useFlags();
-  const [isEdit, setIsEdit] = useState(false);
+  const { isEdit } = useDealPage();
+  const dispatch = useDealPageDispatch();
 
   if (dealPageRedesign)
     return (
@@ -28,14 +30,18 @@ export default function DealPage({
             {!isEdit ? (
               <DealButton
                 secondary
-                onClick={() => setIsEdit(true)}
+                onClick={() => dispatch({ type: 'edit', value: true })}
                 icon={<CreateOutlined />}
                 style={{ marginRight: '8px' }}
               >
                 Edit
               </DealButton>
             ) : (
-              <DealButton onClick={() => setIsEdit(false)} secondary style={{ marginRight: '8px' }}>
+              <DealButton
+                onClick={() => dispatch({ type: 'edit', value: false })}
+                secondary
+                style={{ marginRight: '8px' }}
+              >
                 Discard Changes
               </DealButton>
             )}
@@ -50,7 +56,7 @@ export default function DealPage({
             {isEdit && <DealButton>Save</DealButton>}
           </Box>
         </Container>
-        <DealLandingPageRedesign orgSlug={orgSlug} dealSlug={dealData.slug} isEdit={isEdit} />
+        <DealLandingPageRedesign orgSlug={orgSlug} dealSlug={dealData.slug} />
       </>
     );
 

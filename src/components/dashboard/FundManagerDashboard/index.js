@@ -24,6 +24,7 @@ import styles from './styles';
 import DocumentsTab from './sections/DocumentsTab';
 import DealTypeSelector from '../../NewBuild/DealType';
 import DealPage from './sections/DealPage';
+import { DealPageProvider } from './sections/DealPage/DealPageContext';
 
 const GET_INVESTMENTS = gql`
   query GetDeal($fund_slug: String!, $deal_slug: String!) {
@@ -427,14 +428,16 @@ const FundManagerDashboard = ({ classes, history }) => {
 
       case 'Deal Page':
         return (
-          <DealPage
-            classes={classes}
-            orgSlug={orgSlug}
-            dealData={dealData}
-            goToDeal={goToDeal}
-            goToEditDeal={goToEditDeal}
-            handleLinkCopy={handleLinkCopy}
-          />
+          <DealPageProvider>
+            <DealPage
+              classes={classes}
+              orgSlug={orgSlug}
+              dealData={dealData}
+              goToDeal={goToDeal}
+              goToEditDeal={goToEditDeal}
+              handleLinkCopy={handleLinkCopy}
+            />
+          </DealPageProvider>
         );
       case 'Banking':
         return (
