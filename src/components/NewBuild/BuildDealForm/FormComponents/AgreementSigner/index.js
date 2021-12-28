@@ -4,8 +4,12 @@ import { gql, useLazyQuery } from '@apollo/client';
 import Typography from '@material-ui/core/Typography';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
+import DocIcon from '../../../../../assets/buildDoc.svg';
 import bluePenIcon from '../../../../../assets/sign-agreement-blue-pen.svg';
+import check from '../../../../../assets/check-mark-blue.svg';
 import useStyles from '../../../BuildStyles';
+import { useViewport } from '../../../../../utils/hooks';
+import { phone } from '../../../../../utils/helpers';
 
 const GET_DOCUMENT = gql`
   query getDealDocService($task_id: String) {
@@ -30,6 +34,7 @@ const AgreementBox = ({
   error,
   classes,
 }) => {
+  const { width } = useViewport();
   const [getSignedDocument, { data: signedDocUrl, loading: signedDocLoading }] = useLazyQuery(
     GET_DOCUMENT,
     { variables: { task_id: task?._id }, fetchPolicy: 'network-only' },
@@ -53,13 +58,17 @@ const AgreementBox = ({
       <div style={{ display: 'flex', alignItems: 'center' }}>
         {loading || error ? (
           <CircularProgress />
-        ) : (
+        ) : width > phone ? (
           <div className={classes.serviceAgreementIconBox}>
             <img src={bluePenIcon} alt="document icon" />
           </div>
+        ) : (
+          <div className={classes.serviceAgreementIconBox}>
+            <img src={DocIcon} alt="document icon" />
+          </div>
         )}
 
-        <Typography className={classes.itemText} style={{ width: '200px' }}>
+        <Typography className={classes.itemText}>
           {signed && signedDocUrl?.getDealDocService?.link ? (
             <a href={signedDocUrl?.getDealDocService?.link} target="_blank" rel="noreferrer">
               {title}
@@ -70,9 +79,15 @@ const AgreementBox = ({
         </Typography>
       </div>
 
-      <Typography className={signed ? classes.signed : classes.notSigned}>
-        {signed ? '• Signed' : '• Not Signed'}
-      </Typography>
+      {width > phone ? (
+        <Typography className={signed ? classes.signed : classes.notSigned}>
+          {signed ? '• Signed' : '• Not Signed'}
+        </Typography>
+      ) : signed ? (
+        <div className={classes.blueCheck}>
+          <img src={check} alt="check mark" />
+        </div>
+      ) : null}
     </Paper>
   );
 };

@@ -154,6 +154,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down(phone)]: {
       maxWidth: '100%',
       font: 'normal normal normal 16px/21px Roboto',
+      width: '180px',
     },
   },
   outerSection: {
@@ -419,7 +420,8 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'rgba(0, 0, 0, 0.04)',
     },
     [theme.breakpoints.down(phone)]: {
-      paddingLeft: '5px',
+      paddingLeft: '15px',
+      paddingRight: '15px',
     },
   },
   buttonBox: {
@@ -482,6 +484,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '600',
     borderRadius: '20px',
     padding: '5px 20px',
+    [theme.breakpoints.down(phone)]: {
+      padding: '4px 10px',
+    },
   },
   subtitle: {
     textAlign: 'left',
