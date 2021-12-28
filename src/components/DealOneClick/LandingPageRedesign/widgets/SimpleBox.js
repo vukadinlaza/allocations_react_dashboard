@@ -10,8 +10,6 @@ const styles = (theme) => ({
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     border: '1px solid #F1F5F9',
     borderRadius: '10px',
-    backgroundColor: '',
-
     [theme.breakpoints.down(phone)]: {
       minWidth: '0 !important',
       maxWidth: 'none !important',
@@ -24,6 +22,9 @@ const styles = (theme) => ({
   },
   boxTitle: {
     fontSize: '14px',
+    [theme.breakpoints.down(phone)]: {
+      width: '100%',
+    },
   },
   boxTitleContainer: {
     width: '180px',
@@ -32,12 +33,18 @@ const styles = (theme) => ({
     display: 'flex',
     alignItems: 'center',
     padding: '9px 19px 0px 9px',
-    backgroundColor: '',
     color: '#64748B',
+    [theme.breakpoints.down(phone)]: {
+      width: '100%',
+      padding: '6px 5px 0px 5px',
+    },
   },
   boxTitleText: {
     display: 'flex',
     alignItems: 'center',
+    [theme.breakpoints.down(phone)]: {
+      width: '100%',
+    },
   },
   closeModal: {
     right: '20px',
@@ -61,6 +68,9 @@ const styles = (theme) => ({
     cursor: 'pointer',
     color: '#64748B',
     fontSize: '16px',
+    [theme.breakpoints.down(phone)]: {
+      marginLeft: '0em',
+    },
   },
   modal: {
     padding: '20px',

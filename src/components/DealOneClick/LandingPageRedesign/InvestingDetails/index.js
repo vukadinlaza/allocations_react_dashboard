@@ -31,11 +31,11 @@ function InvestingDetails({ deal }) {
     <>
       <Paper className={classes.dealHeader}>
         <Box className={classes.box}>
-          <h5>Investing Details</h5>
+          <span className={classes.investmentProgress}>Investing Details</span>
         </Box>
         <Box className={classes.boxInvestingDetails}>
           <Grid container>
-            <Grid item xs={3}>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Offering Type"
                 openTooltip={openTooltip}
@@ -52,7 +52,7 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Fee Frequency"
                 openTooltip={openTooltip}
@@ -69,7 +69,7 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Deal Stage"
                 openTooltip={openTooltip}
@@ -86,7 +86,7 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Portfolio Company Securities"
                 openTooltip={openTooltip}
@@ -106,7 +106,7 @@ function InvestingDetails({ deal }) {
             </Grid>
           </Grid>
           <Grid container>
-            <Grid item xs={3}>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Management Fee"
                 openTooltip={openTooltip}
@@ -125,7 +125,7 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Carry Fee"
                 openTooltip={openTooltip}
@@ -144,7 +144,7 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Sector"
                 openTooltip={openTooltip}

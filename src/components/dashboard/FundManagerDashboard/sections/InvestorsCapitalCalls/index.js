@@ -8,10 +8,14 @@ import Loader from '../../../../utils/Loader';
 import { useFetch } from '../../../../../utils/hooks';
 import ProgressBarWithLabel from './ProgressBarWithLabel';
 
-const InvestorsCapitalCall = ({ classes, orgSlug, userProfile }) => {
+const InvestorsCapitalCall = ({ classes, orgSlug, userProfile, dealName }) => {
   const BASE = 'appLhEikZfHgNQtrL'; // Accounting - Capital accounts
   const DEAL_TRACKER_TABLE = 'Deal Tracker';
-  const { data, status } = useFetch(BASE, DEAL_TRACKER_TABLE);
+  const { data, status } = useFetch(
+    BASE,
+    DEAL_TRACKER_TABLE,
+    `(FIND("${dealName}", {Deal Name (webapp)}))`,
+  );
   const [dataWithEmails, setDataWithEmails] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const headers = [

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles } from '@material-ui/core/styles';
+import { phone, tablet } from '../../../../utils/helpers';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     width: '40%',
     float: 'right',
@@ -12,6 +14,15 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     justifyContent: 'end',
     alignItems: 'center',
+    [theme.breakpoints.down(phone)]: {
+      width: '100vw',
+      marginTop: '20px',
+    },
+    [theme.breakpoints.down(tablet)]: {
+      float: 'left',
+      width: '75vw',
+      marginBottom: '20px',
+    },
   },
   arrowLeft: {
     border: '1px solid #CBD5E1',
@@ -47,6 +58,20 @@ const useStyles = makeStyles(() => ({
     width: '100%',
     border: '1px solid #CBD5E1',
     marginTop: '40px',
+    [theme.breakpoints.down(phone)]: {
+      height: '10%',
+      width: '10%',
+      border: '0px solid',
+      marginTop: '40px',
+      marginRight: '2000px',
+    },
+    [theme.breakpoints.down(tablet)]: {
+      height: '10%',
+      width: '10%',
+      border: '0px solid',
+      marginTop: '40px',
+      marginRight: '2000px',
+    },
   },
   numbers: {
     fontFamily: 'Roboto',
@@ -59,27 +84,14 @@ const useStyles = makeStyles(() => ({
     margin: '10px 0px',
     padding: '12px 0px',
   },
-  page: {
-    flexDirection: 'row',
-    backgroundColor: '#fff',
-    width: '100%',
-    orientation: 'portrait',
-  },
-  view: {
-    width: '100%',
-    height: '100%',
-    padding: 0,
-    backgroundColor: 'white',
-  },
-  image: {
-    objectFit: 'cover',
-  },
 }));
 
 function PDFDisplay({ pdf }) {
   const classes = useStyles();
   const [numPages, setNumPages] = useState(1);
   const [pageNumber, setPageNumber] = useState(1);
+  const isMobile = useMediaQuery('(max-width:600px)');
+  const isTablet = useMediaQuery('(max-width:768px)');
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
@@ -101,7 +113,13 @@ function PDFDisplay({ pdf }) {
   return (
     <div style={{ backgroundColor: '', width: '800px' }}>
       <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
-        <Page pageNumber={pageNumber} scale={1.331} className={classes.pdfContainer} />
+        {isMobile ? (
+          <Page pageNumber={pageNumber} scale={0.448} className={classes.pdfContainer} />
+        ) : isTablet ? (
+          <Page pageNumber={pageNumber} scale={1} className={classes.pdfContainer} />
+        ) : (
+          <Page pageNumber={pageNumber} scale={1.331} className={classes.pdfContainer} />
+        )}
       </Document>
 
       <div className={classes.container}>

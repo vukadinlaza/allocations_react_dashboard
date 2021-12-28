@@ -137,7 +137,7 @@ export default function InvestmentNew() {
   );
 }
 
-export function UserSearch({ user, setUser, errors = [], deal_id }) {
+export function UserSearch({ user, setUser, errors, deal_id }) {
   const [q, setQ] = useState('');
   const [records, setRecords] = useState([]);
   const [search, searchRes] = useLazyQuery(API.users.search);
@@ -247,7 +247,7 @@ function DealSearch({ deal, setDeal, errors }) {
   }
 
   return (
-    <div className="assoc-search">
+    <div>
       <TextField
         required
         style={{ width: '100%' }}
