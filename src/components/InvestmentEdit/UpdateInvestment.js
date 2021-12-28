@@ -96,6 +96,7 @@ export default function InvestmentEdit({
   const [user, setUser] = useState();
   const [hasInvestmentChanges, setHasInvestmentChanges] = useState(false);
   const [hasUserChanges, setHasUserChanges] = useState(false);
+  const [errors, setErrors] = useState([]);
   const id = investmentId || params.id;
 
   const oldDatabaseWireDate = !investment?.wired_at ? '' : new Date(investment?.wired_at * 1);
@@ -113,6 +114,7 @@ export default function InvestmentEdit({
   const [updateInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT, {
     onCompleted: () => {
       toast.success('Success! Investment updated');
+      setErrors([]);
 
       if (handleUpdate) {
         handleUpdate.refetch();
@@ -181,7 +183,39 @@ export default function InvestmentEdit({
     }
   };
 
+  /* form validation */
+  const validate = (updatedInvestment) => {
+    const errors = [];
+
+    (updatedInvestment?.status === 'wired' || updatedInvestment?.status === 'complete') &&
+    !updatedInvestment?.capitalWiredAmount
+      ? errors.push('capitalWiredAmount')
+      : errors.push();
+
+    (updatedInvestment?.status === 'wired' || updatedInvestment?.status === 'complete') &&
+    !updatedInvestment?.wired_at
+      ? errors.push('wired_at')
+      : errors.push();
+
+    return errors;
+  };
+
   const handleInvestmentEdit = () => {
+    const e = validate(investment);
+
+    if (e.length > 1) {
+      toast.error('Error. Please supply the required fields.');
+      return setErrors(e);
+    }
+    if (e.includes('wired_at')) {
+      toast.error('Error. Please supply wired date.');
+      return setErrors(e);
+    }
+    if (e.includes('capitalWiredAmount')) {
+      toast.error('Error. Please supply amount received.');
+      return setErrors(e);
+    }
+
     if (hasInvestmentChanges) {
       updateInvestment({
         variables: {
@@ -222,8 +256,9 @@ export default function InvestmentEdit({
     <div className="InvestmentEdit form-wrapper">
       <div className="title">Update Investment</div>
       <form className="form" noValidate autoComplete="off">
-        <Grid container spacing={3} direction="row" justify="flex-end">
-          <Grid item xs={12} sm={12} md={6}>
+        <Grid container spacing={3}>
+          {/* investor name */}
+          <Grid item xs={12} md={6}>
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
               <TextField
                 style={{ width: '100%' }}
@@ -234,7 +269,9 @@ export default function InvestmentEdit({
               />
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={12} md={6}>
+
+          {/* investment deal name */}
+          <Grid item xs={12} md={6}>
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
               <TextField
                 style={{ width: '100%' }}
@@ -249,7 +286,9 @@ export default function InvestmentEdit({
               />
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={12} md={6}>
+
+          {/* investment committed amount */}
+          <Grid item xs={12} md={6}>
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
               <TextField
                 style={{ width: '100%' }}
@@ -272,11 +311,15 @@ export default function InvestmentEdit({
               />
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={12} md={6}>
+
+          {/* investment wired amount */}
+          <Grid item xs={12} md={6}>
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
               <TextField
                 style={{ width: '100%' }}
                 type="number"
+                error={errors.includes('capitalWiredAmount')}
+                disabled={investment?.status === 'signed' || investment?.status === 'invited'}
                 InputProps={{
                   inputProps: { min: 0 },
                   startAdornment: <InputAdornment position="start">$</InputAdornment>,
@@ -295,44 +338,45 @@ export default function InvestmentEdit({
               />
             </FormControl>
           </Grid>
-          <Grid item xs={6}>
+
+          {/* investment status */}
+          <Grid item xs={12} md={6}>
             <FormControl variant="outlined" style={{ width: '100%' }} size="small">
               <TextField
-                value={oldDatabaseWireDateTime || ''}
-                onChange={(e) => updateInvestmentProp({ prop: 'wired_at', newVal: e.target.value })}
-                disabled={investment?.status !== 'signed'}
-                type="date"
-                label="Wired Date"
+                select
+                label="Status"
                 variant="outlined"
-                InputLabelProps={{ shrink: true }}
-              />
+                size="small"
+                value={investment?.status || ''}
+                onChange={(e) => updateInvestmentProp({ prop: 'status', newVal: e.target.value })}
+              >
+                <MenuItem value="invited">Invited</MenuItem>
+                <MenuItem value="signed">Signed</MenuItem>
+                <MenuItem value="wired">Wired</MenuItem>
+                <MenuItem value="complete">Complete</MenuItem>
+              </TextField>
             </FormControl>
           </Grid>
-          <Grid item xs={6}>
-            <FormControl variant="outlined" style={{ width: '100%' }} size="small">
-              <InputLabel>Status</InputLabel>
-              {investment?.documents.length < 1 ? (
-                <Select
-                  value={investment?.status || ''}
-                  onChange={(e) => updateInvestmentProp({ prop: 'status', newVal: e.target.value })}
-                  inputProps={{ name: 'status' }}
-                >
-                  <MenuItem value="invited">Invited</MenuItem>
-                </Select>
-              ) : (
-                <Select
-                  value={investment?.status || ''}
-                  onChange={(e) => updateInvestmentProp({ prop: 'status', newVal: e.target.value })}
-                  inputProps={{ name: 'status' }}
-                >
-                  <MenuItem value="invited">Invited</MenuItem>
-                  <MenuItem value="signed">Signed</MenuItem>
-                  <MenuItem value="wired">Wired</MenuItem>
-                  <MenuItem value="complete">Complete</MenuItem>
-                </Select>
-              )}
-            </FormControl>
-          </Grid>
+
+          {/* investment wire date */}
+          {(investment?.status === 'wired' || investment?.status === 'complete') && (
+            <Grid item xs={12} md={6}>
+              <FormControl variant="outlined" style={{ width: '100%' }} size="small">
+                <TextField
+                  value={oldDatabaseWireDateTime || ''}
+                  error={errors.includes('wired_at')}
+                  onChange={(e) =>
+                    updateInvestmentProp({ prop: 'wired_at', newVal: e.target.value })
+                  }
+                  disabled={investment?.status === 'signed' || investment?.status === 'invited'}
+                  type="date"
+                  label="Wired Date"
+                  variant="outlined"
+                  InputLabelProps={{ shrink: true }}
+                />
+              </FormControl>
+            </Grid>
+          )}
         </Grid>
 
         <div className="title">Update Investor Accreditation</div>
