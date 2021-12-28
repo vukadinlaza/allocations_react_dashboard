@@ -43,8 +43,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   // i realize this could be confusing, but the global state might be preferable to grab.
   const currentOrg = useCurrentOrganization();
   const params: { deal_slug: string; organization: string } = useParams();
-  const { deal_slug } = params;
-  const { organization: orgSlug } = params;
+  const { organization: orgSlug, deal_slug } = params;
   const [tabIndex, setTabIndex] = useState(0);
   const { data: dealData } = useQuery(GET_DEAL, {
     variables: { deal_slug, fund_slug: orgSlug },

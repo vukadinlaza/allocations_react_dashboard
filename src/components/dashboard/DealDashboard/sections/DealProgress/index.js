@@ -38,14 +38,6 @@ const DEAL = gql`
   }
 `;
 
-// const boxesHeaders = [
-//   { value: 'title', label: 'Name', align: 'left', alignHeader: true },
-//   { value: 'fundManager', label: 'Fund Manager', align: 'left', alignHeader: true },
-//   { value: 'status', label: 'Status', align: 'left', alignHeader: true, type: 'tag' },
-//   { value: 'type', label: 'Type', align: 'left', alignHeader: true },
-//   { value: 'wireDeadline', label: 'Wire Deadline', align: 'left', alignHeader: true },
-// ];
-
 // const PhaseList = ({ classes, phases, currentPhase, handlePhaseClick }) => {
 //   const getItemClass = (currentPhase, item, complete) => {
 //     if (currentPhase === item) {
@@ -103,7 +95,7 @@ const DEAL = gql`
 
 const defaultDesc =
   'An Allocations representative will be reaching out shortly to assist you in completing this step. If you have any questions, do not hesitate to contact support@allocations.com.';
-// May need to reshape based on what we are actually using
+
 const demoData = [
   {
     step: 'Pre-Onboarding',
@@ -166,7 +158,6 @@ const DealProgress = ({ classes }) => {
   // This finds the matching step and dynamically updates progress bar
   const activeStep = steps.indexOf(steps.find((step) => currentStep.title.includes(step)));
 
-  // const [snackbarData, setSnackbarData] = useState({});
   // const [currentPhase, setCurrentPhase] = useState(false);
   // const [currentTask, setCurrentTask] = useState(false);
 
@@ -179,10 +170,6 @@ const DealProgress = ({ classes }) => {
   //     }
   //   }
   // }, [data]);
-
-  // const handleCloseSnackbar = () => {
-  //   setSnackbarData({});
-  // };
 
   // const handlePhaseClick = (current, item) => {
   //   setCurrentPhase(current ? (item === current ? false : item) : item);
@@ -197,44 +184,10 @@ const DealProgress = ({ classes }) => {
   //   setCurrentTask(currentTask ? (task === currentTask ? false : task) : task);
   // };
 
-  // const getCellContent = (type, row, headerValue) => {
-  //   switch (type) {
-  //     case 'tag':
-  //       return (
-  //         <div
-  //           style={{
-  //             backgroundColor: 'rgb(213 251 212)',
-  //             color: '#34AF1F',
-  //             fontWeight: 'bold',
-  //             padding: '0.3em 2em',
-  //             borderRadius: '2em',
-  //             width: 'auto',
-  //             textAlign: 'center',
-  //             transform: 'translateX(-39%)',
-  //           }}
-  //         >
-  //           {row[headerValue]}
-  //         </div>
-  //       );
-  //     default:
-  //       return <div />;
-  //   }
-  // };
-
   // need some styling
   if (!data) return <LoadingPlaceholder />;
   // const { getDealWithTasks: deal } = data;
 
-  // const mainBoxes = [
-  //   {
-  //     title: deal.name,
-  //     fundManager: deal?.manager_name || deal?.metadata?.manager?.name,
-  //     status: deal.phase,
-  //     timeline: 'On Time',
-  //     type: 'International',
-  //     wireDeadline: moment(deal.wire_deadline).format('MM/DD/YYYY'),
-  //   },
-  // ];
   return (
     <>
       <ProgressBar steps={steps} activeStep={activeStep} />
