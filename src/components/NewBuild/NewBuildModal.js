@@ -266,13 +266,11 @@ const SelectOrganization = ({
   },
 }) => {
   const { userProfile, loading: userLoading } = useAuth();
-  const [organizations, setOrganizations] = useState([]);
-  const [selectedOrg, setSelectedOrg] = useState({});
-  console.log(organizations);
-  console.log(selectedOrg);
+  const [organizations, setOrganizations] = useState(['']);
+  const [selectedOrg, setSelectedOrg] = useState('');
 
   useEffect(() => {
-    if (!organizations.length && userProfile.organizations_admin) {
+    if (userProfile.organizations_admin) {
       setOrganizations(userProfile.organizations_admin);
     }
   }, [userLoading]);
@@ -350,6 +348,7 @@ const SelectOrganization = ({
                             return selectValue;
                           }}
                           displayEmpty
+                          defaultValue=""
                           className={classes.orgSelect}
                           MenuProps={{
                             anchorOrigin: {
@@ -385,7 +384,7 @@ const SelectOrganization = ({
                             Create New Organization
                           </MenuItem>
 
-                          {organizations.length > 0 &&
+                          {organizations.length > 1 &&
                             organizations.map((organization) => (
                               <MenuItem key={organization._id} value={organization._id}>
                                 {_.truncate(organization.name, { length: 30 })}
@@ -403,7 +402,7 @@ const SelectOrganization = ({
                           size="large"
                           type="submit"
                           className={classes.continueButton}
-                          disabled={!selectedOrg}
+                          disabled={selectedOrg === ''}
                           onClick={() => next({ selectedOrg, setCurrentOrganization })}
                         >
                           Continue
@@ -916,7 +915,9 @@ const HighVolumePartnerships = ({
                           }}
                         >
                           {usStates?.states?.map(({ name }) => (
-                            <MenuItem value={name}>{name}</MenuItem>
+                            <MenuItem value={name} key={name}>
+                              {name}
+                            </MenuItem>
                           ))}
                         </Select>
                         <TextField
@@ -971,7 +972,9 @@ const HighVolumePartnerships = ({
                           }}
                         >
                           {countries?.map(({ countryName }) => (
-                            <MenuItem value={countryName}>{countryName}</MenuItem>
+                            <MenuItem value={countryName} key={countryName}>
+                              {countryName}
+                            </MenuItem>
                           ))}
                         </Select>
                       </Grid>
@@ -1146,6 +1149,7 @@ export default function NewBuildModal(props) {
   return (
     <Component
       {...propsObj}
+      key={props.page}
       next={next[props.page]}
       prev={prev[props.page]}
       onClose={onClose[props.page]}

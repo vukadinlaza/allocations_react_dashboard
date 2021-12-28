@@ -497,7 +497,6 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
     }
     return 'deal_type_selector';
   };
-  const fullAuth = useAuth();
 
   const [openModal, setOpenModal] = useState(!auth.isAuthenticated);
   const [newBuildModalPage, setNewBuildModalPage] = useState(modalStartPage());
@@ -766,7 +765,7 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
                       <div>
                         Please fill in the following fields:{' '}
                         {unvalidatedFields.map((field) => (
-                          <div>• {field}</div>
+                          <div key={field}>• {field}</div>
                         ))}
                       </div>,
                       { autoClose: 10000 },
@@ -776,7 +775,7 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
                   if (!auth.isAuthenticated) {
                     try {
                       await auth.login();
-                      const token = await fullAuth.getAccessTokenSilently();
+                      const token = await auth.getAccessTokenSilently();
                       if (token) {
                         openModaltoPage('select_org');
                       }
@@ -799,7 +798,13 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
 };
 
 export default function NewDealForm() {
-  const { isAuthenticated, userProfile, loginWithPopup, refetch: refetchUserProfile } = useAuth();
+  const {
+    isAuthenticated,
+    userProfile,
+    loginWithPopup,
+    refetch: refetchUserProfile,
+    getAccessTokenSilently,
+  } = useAuth();
 
   // Page
   const [page, setPage] = useState(0);
@@ -833,7 +838,13 @@ export default function NewDealForm() {
           dealType={dealType}
           organization={organization}
           userProfile={userProfile}
-          auth={{ isAuthenticated, login: loginWithPopup, refetchUserProfile, userProfile }}
+          auth={{
+            isAuthenticated,
+            login: loginWithPopup,
+            refetchUserProfile,
+            userProfile,
+            getAccessTokenSilently,
+          }}
           page={page}
           setPage={setPage}
           createNewDeal={createNewDeal}
