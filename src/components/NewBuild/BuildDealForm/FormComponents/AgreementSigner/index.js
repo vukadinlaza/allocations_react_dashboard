@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react';
 import { Button, CircularProgress, Paper } from '@material-ui/core';
 import { gql, useLazyQuery } from '@apollo/client';
@@ -96,7 +97,6 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
   const allSigned = documents ? Object.values(documentsSignedStatus).every(Boolean) : false;
 
   const signingModal = (agreementLink, isSigned) => {
-    // eslint-disable-next-line no-undef
     DocSpring.createVisualForm({
       ...agreementLink,
       domainVerification: false,
