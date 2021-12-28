@@ -105,6 +105,8 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
         localStorage.removeItem('buildDeal');
         localStorage.removeItem('buildFilesUploaded');
         isSigned();
+        // eslint-disable-next-line no-undef
+        DocSpring.closeModal();
       },
     });
   };
