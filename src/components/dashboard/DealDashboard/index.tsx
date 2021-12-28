@@ -81,9 +81,6 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     variables: { deal_id },
   });
 
-  console.log('data:', dealData);
-  console.log('Deal Id:', deal_id);
-  console.log('Org Slug:', orgSlug);
   const handleTabChange = (event: any, index: number) => {
     setTabIndex(index);
   };
