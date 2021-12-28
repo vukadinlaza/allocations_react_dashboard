@@ -132,6 +132,7 @@ const useStyles = makeStyles((theme) => ({
   },
   inputGridItem: {
     marginBottom: '30px',
+    height: 'fit-content',
     [theme.breakpoints.down(phone)]: {
       maxWidth: '100%',
       // maxHeight: '125px',

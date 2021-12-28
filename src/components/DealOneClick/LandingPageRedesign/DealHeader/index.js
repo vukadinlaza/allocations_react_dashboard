@@ -9,17 +9,45 @@ import {
   LinearProgress,
   Typography,
 } from '@material-ui/core';
+import { useQuery, gql } from '@apollo/client';
 import moment from 'moment';
+import { nWithCommas } from '../../../../utils/numbers';
 import useStyles from '../DealStyles';
 import { SimpleBox } from '../widgets/SimpleBox';
+import BadgeWrapper from './BadgeWrapper';
+import Loader from '../../../utils/Loader';
 
-function DealHeader({ deal }) {
+const GET_INVESTMENTS = gql`
+  query GetDeal($_id: String) {
+    deal(_id: $_id) {
+      investments {
+        _id
+        amount
+      }
+    }
+  }
+`;
+
+function DealHeader({ deal, isEdit }) {
   const {
+    _id,
     company_name,
     dealCoverImageKey,
     slug,
-    dealParams: { wireDeadline, signDeadline },
+    target_raise_goal,
+    accept_crypto,
+    dealParams: { wireDeadline, signDeadline, minimumInvestment },
   } = deal;
+  const [totalInvestments, setTotalInvestments] = useState('');
+  const { loading } = useQuery(GET_INVESTMENTS, {
+    variables: {
+      _id,
+    },
+    onCompleted: (data) => {
+      const total = data.deal.investments.reduce((prev, cur) => prev + cur.amount, 0);
+      setTotalInvestments(total);
+    },
+  });
 
   const classes = useStyles();
 
@@ -42,13 +70,25 @@ function DealHeader({ deal }) {
     return moment(date).format('MM/DD/YYYY');
   };
 
+  if (loading) {
+    return <Loader />;
+  }
+
+  const getTotalRaiseAmount = (total, progress) => {
+    if (progress > total) return 100;
+    if (progress === 0) return 0;
+    return progress / total;
+  };
+
   return (
     <>
       <Paper className={classes.dealHeader}>
         <Box className={classes.box}>
           <Box display="flex">
-            <Avatar className={classes.avatar} />
-            <h3 className={classes.companyName}>{company_name}</h3>
+            <BadgeWrapper isEdit={isEdit}>
+              <Avatar className={classes.avatar} />
+            </BadgeWrapper>
+            <span className={classes.companyName}>{company_name}</span>
           </Box>
         </Box>
 
@@ -65,52 +105,50 @@ function DealHeader({ deal }) {
             />
           </Grid>
           <Grid item className={classes.middleGridItem}>
-            <h4 className={classes.investmentProgress}>Investment Progress</h4>
-            <h6 className={classes.investmentNumber}>$320,000</h6>
+            <span className={classes.investmentProgress}>Investment Progress</span>
+            <span className={classes.investmentNumber}>${nWithCommas(totalInvestments)}</span>
             <LinearProgress
               variant="determinate"
-              value={70}
+              value={getTotalRaiseAmount(target_raise_goal, totalInvestments)}
               className={classes.BorderLinearProgress}
             />
             <div className={classes.minorText}>
               <span className={classes.floatRight}>
                 Total Raise Amount:
-                <span style={{ fontWeight: 'bold', fontSize: '12px' }}>$600,000</span>
+                <span style={{ fontWeight: 'bold', fontSize: '12px' }}>
+                  ${nWithCommas(target_raise_goal)}
+                </span>
               </span>
             </div>
 
             <Button className={classes.investButton}>Invest</Button>
-            <Grid container style={{ marginTop: '15px', justifyContent: 'space-between' }}>
-              <Grid item style={{ color: '#64748B', fontSize: '14px' }}>
+            <Grid container className={classes.gridContainer}>
+              <Grid item className={classes.investItem}>
                 Invest With:{' '}
                 <div style={{ display: 'flex' }}>
                   <div className={classes.coinvestorTagBubble}>
                     <span className={classes.coinvestorTagText}>USD</span>
                   </div>
-                  <div className={classes.coinvestorTagBubble}>
-                    <span className={classes.coinvestorTagText}>USDC</span>
-                  </div>
+                  {accept_crypto && (
+                    <div className={classes.coinvestorTagBubble}>
+                      <span className={classes.coinvestorTagText}>USDC</span>
+                    </div>
+                  )}
                 </div>
               </Grid>
               <Grid item>
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    marginLeft: '20px',
-                  }}
-                >
-                  <div style={{ color: '#64748B', fontSize: '14px' }}>Minimum Investment:</div>
-                  <div style={{ fontWeight: 'bold', fontSize: '12px', color: '#2A2B54' }}>
-                    $5,000
-                  </div>
+                <div className={classes.minimumInvestItem}>
+                  <span className={classes.minimumInvestText}>Minimum Investment:</span>
+                  <span className={classes.minimumInvestNumber}>
+                    {' '}
+                    ${nWithCommas(minimumInvestment)}
+                  </span>
                 </div>
               </Grid>
             </Grid>
 
             <div className={classes.modalContainer}>
               <SimpleBox
-                className={classes.modalParent}
                 title="Signing Deadline"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
@@ -122,7 +160,7 @@ function DealHeader({ deal }) {
                   </Typography>
                 }
               >
-                <Typography style={{ fontSize: '14px', fontWeight: 'bold' }}>
+                <Typography className={classes.typography}>
                   {' '}
                   {signDeadline
                     ? getDeadline(signDeadline)
@@ -132,7 +170,6 @@ function DealHeader({ deal }) {
                 </Typography>
               </SimpleBox>
               <SimpleBox
-                className={classes.modalParent}
                 title="Wiring Deadline"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
@@ -144,7 +181,7 @@ function DealHeader({ deal }) {
                   </Typography>
                 }
               >
-                <Typography style={{ fontSize: '14px', fontWeight: 'bold' }}>
+                <Typography className={classes.typography}>
                   {wireDeadline
                     ? getDeadline(wireDeadline)
                     : signDeadline

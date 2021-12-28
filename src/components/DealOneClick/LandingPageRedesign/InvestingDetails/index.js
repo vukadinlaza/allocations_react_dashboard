@@ -7,6 +7,9 @@ function InvestingDetails({ deal }) {
   const {
     dealCoverImageKey,
     slug,
+    status,
+    portfolio_company_securities,
+    sectors,
     dealParams: { dealType, managementFeeType, totalCarry, managementFees },
   } = deal;
 
@@ -28,11 +31,11 @@ function InvestingDetails({ deal }) {
     <>
       <Paper className={classes.dealHeader}>
         <Box className={classes.box}>
-          <h5>Investing Details</h5>
+          <span className={classes.investmentProgress}>Investing Details</span>
         </Box>
         <Box className={classes.boxInvestingDetails}>
           <Grid container>
-            <Grid item xs={3}>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Offering Type"
                 openTooltip={openTooltip}
@@ -49,7 +52,7 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Fee Frequency"
                 openTooltip={openTooltip}
@@ -66,7 +69,7 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Deal Stage"
                 openTooltip={openTooltip}
@@ -79,11 +82,11 @@ function InvestingDetails({ deal }) {
                   </Typography>
                 }
               >
-                <Typography className={classes.boxContent}>Seed</Typography>
+                <Typography className={classes.boxContent}>{status}</Typography>
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Portfolio Company Securities"
                 openTooltip={openTooltip}
@@ -96,12 +99,14 @@ function InvestingDetails({ deal }) {
                   </Typography>
                 }
               >
-                <Typography className={classes.boxContent}>Series A Preferred Stock</Typography>
+                <Typography className={classes.boxContent}>
+                  {portfolio_company_securities}
+                </Typography>
               </InvestingDetailsSimpleBox>
             </Grid>
           </Grid>
           <Grid container>
-            <Grid item xs={3}>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Management Fee"
                 openTooltip={openTooltip}
@@ -114,11 +119,13 @@ function InvestingDetails({ deal }) {
                   </Typography>
                 }
               >
-                <Typography className={classes.boxContent}>{managementFees}%</Typography>
+                {managementFees && (
+                  <Typography className={classes.boxContent}>{managementFees}%</Typography>
+                )}
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Carry Fee"
                 openTooltip={openTooltip}
@@ -131,11 +138,13 @@ function InvestingDetails({ deal }) {
                   </Typography>
                 }
               >
-                <Typography className={classes.boxContent}>{totalCarry}%</Typography>
+                {totalCarry && (
+                  <Typography className={classes.boxContent}>{totalCarry}%</Typography>
+                )}
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Sector"
                 openTooltip={openTooltip}
@@ -148,7 +157,9 @@ function InvestingDetails({ deal }) {
                   </Typography>
                 }
               >
-                <Typography className={classes.boxContent}>Space</Typography>
+                <Box display="flex">
+                  <Typography className={classes.boxContent}>{sectors?.join(', ')}</Typography>
+                </Box>
               </InvestingDetailsSimpleBox>
             </Grid>
           </Grid>

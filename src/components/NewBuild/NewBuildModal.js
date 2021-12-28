@@ -1014,7 +1014,6 @@ export default function NewBuildModal(props) {
   const [state, setState] = useState('');
   const [zipCode, setZipcode] = useState('');
   const [country, setCountry] = useState('United States');
-  const { buildModals } = useFlags();
 
   const clearMasterEntityForm = () => {
     setMasterEntityName('');
@@ -1080,6 +1079,15 @@ export default function NewBuildModal(props) {
     setOpenTooltip(id);
   };
 
+  const pageMap = {
+    deal_type_selector: DealTypeSelector,
+    select_org: SelectOrganization,
+    create_new_org: CreateNewOrganization,
+    high_volume_partnerships: HighVolumePartnerships,
+    new_or_current: NewOrCurrentBuild,
+    final_warning: NewBuildFinalWarning,
+  };
+
   const next = {
     ...props.next,
   };
@@ -1090,14 +1098,6 @@ export default function NewBuildModal(props) {
 
   const onClose = {
     ...props.onClose,
-  };
-  const pageMap = {
-    deal_type_selector: DealTypeSelector,
-    select_org: SelectOrganization,
-    create_new_org: CreateNewOrganization,
-    high_volume_partnerships: HighVolumePartnerships,
-    new_or_current: buildModals ? NewOrCurrentBuild : DealTypeSelector,
-    final_warning: buildModals ? NewBuildFinalWarning : DealTypeSelector,
   };
 
   const propsObj = {

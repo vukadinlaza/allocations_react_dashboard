@@ -1,16 +1,44 @@
 import { makeStyles } from '@material-ui/core/styles';
-
-export const DesktopExtraLarge = '1920';
-export const DesktopLarge = '1440';
-export const DesktopSmall = '1366';
+import { phone, tablet } from '../../../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
-  values: {
-    xs: 0,
-    sm: 600,
-    md: 900,
-    lg: 1200,
-    xl: 1536,
+  dealHeader: {
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    boxShadow: '0px 3px 6px #00000029',
+    borderRadius: '5px',
+    padding: '30px',
+    width: '100%',
+    marginTop: '16px',
+    opacity: 1,
+    [theme.breakpoints.down(phone)]: {
+      width: '100%',
+      margin: '0 auto',
+      marginTop: '16px',
+      maxWidth: '100%',
+      padding: '0px',
+    },
+    [theme.breakpoints.down(tablet)]: {
+      width: '90%',
+      margin: '0 auto',
+      marginTop: '16px',
+      maxWidth: '100%',
+      padding: '0px',
+    },
+  },
+
+  box: {
+    display: 'flex',
+    color: '#2A2B54',
+    alignItems: 'center',
+    margin: '0 auto',
+    width: '90%',
+    paddingBottom: '15px',
+    marginTop: '10px',
+    [theme.breakpoints.down(phone)]: {
+      width: '98%',
+      fontSize: '14px',
+    },
+    [theme.breakpoints.down(tablet)]: {},
   },
 
   avatar: {
@@ -18,17 +46,164 @@ const useStyles = makeStyles((theme) => ({
     marginRight: '15px',
   },
 
+  companyName: {
+    marginTop: '5px',
+    fontFamily: 'Roboto',
+    fontSize: '24px',
+    color: '#2A2B54',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '20px',
+    },
+  },
+
+  middleGridContainer: {
+    width: '90%',
+    margin: '0 auto',
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: '20px',
+    [theme.breakpoints.down(phone)]: {
+      marginBottom: '0px',
+      width: '97%',
+    },
+    [theme.breakpoints.down(tablet)]: {
+      marginBottom: '0px',
+      width: '97%',
+    },
+    [theme.breakpoints.down(tablet)]: {},
+  },
+
+  cardMedia: {
+    width: '368px',
+    height: '241px',
+    [theme.breakpoints.down(phone)]: {
+      width: '100%',
+      backgroundSize: 'contain',
+      backgroundPosition: 'initial',
+      backgroundRepeat: 'no-repeat',
+      padding: '5px',
+    },
+    [theme.breakpoints.down(tablet)]: {
+      backgroundSize: 'contain',
+      backgroundPosition: 'initial',
+      backgroundRepeat: 'no-repeat',
+      padding: '5px',
+    },
+  },
+
+  middleGridItem: {
+    width: '50%',
+    [theme.breakpoints.down(phone)]: {
+      width: '100%',
+      marginTop: '10px',
+    },
+    [theme.breakpoints.down(tablet)]: {
+      width: '100%',
+      marginTop: '10px',
+    },
+  },
+
+  investmentProgress: {
+    fontSize: '25px',
+    color: '#2A2B54',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '16px',
+    },
+  },
+
+  investmentNumber: {
+    color: '#0561ff',
+    fontSize: '25px',
+    marginTop: '5%',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '20px',
+    },
+  },
+
+  BorderLinearProgress: {
+    height: '12px',
+    backgroundColor: '#E7E7E8',
+    borderRadius: '5px',
+  },
+
+  minorText: {
+    float: 'right',
+    width: '100%',
+    color: '#2A2B54',
+  },
+
+  floatRight: {
+    float: 'right',
+    color: '#2A2B54',
+    fontSize: '14px',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '12px',
+    },
+  },
+
+  totalRaiseAmount: {
+    fontWeight: 'bold',
+    fontSize: '12px',
+  },
+
+  investButton: {
+    backgroundColor: '#CBD5E1',
+    width: '100%',
+    height: '50px',
+    color: '#64748A',
+    borderRadius: '6px',
+    marginTop: '7%',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '14px',
+      height: '40px',
+    },
+  },
+
+  gridContainer: {
+    marginTop: '15px',
+    justifyContent: 'space-between',
+    [theme.breakpoints.down(phone)]: {
+      marginTop: '10px',
+    },
+  },
+
+  investItem: {
+    color: '#64748B',
+    fontSize: '14px',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '12px',
+    },
+  },
+
+  minimumInvestItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginLeft: '20px',
+  },
+
+  minimumInvestText: {
+    color: '#64748B',
+    fontSize: '14px',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '12px',
+    },
+  },
+
+  minimumInvestNumber: {
+    fontWeight: 'bold',
+    fontSize: '12px',
+    color: '#2A2B54',
+  },
+
   LandingPage: {
     display: 'flex',
     flexDirection: 'column',
     height: 'max-content',
     width: '1000px',
-
-    [theme.breakpoints.up('xs')]: {
-      '@media (max-device-width:780px)': {
-        width: '100%',
-        backgroundColor: '',
-      },
+    [theme.breakpoints.down(phone)]: {
+      minWidth: '0 !important',
+      maxWidth: 'none !important',
+      width: '100%',
     },
   },
 
@@ -42,202 +217,29 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '150px',
   },
 
-  paper: {
-    [theme.breakpoints.up('sm')]: {
-      width: '900px',
-      backgroundColor: 'white',
-      marginBottom: '16px',
-    },
-    [theme.breakpoints.up('md')]: {
-      width: '1209px',
-      backgroundColor: 'white',
-      marginBottom: '16px',
-    },
-    [theme.breakpoints.up('lg')]: {
-      width: '1409px',
-      backgroundColor: 'white',
-      marginBottom: '16px',
-    },
-    [theme.breakpoints.up('xl')]: {
-      width: '1589px',
-      backgroundColor: 'white',
-      marginBottom: '16px',
-    },
-  },
-
-  dealHeader: {
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #00000029',
-    borderRadius: '5px',
-    padding: '30px',
-    width: '100%',
-    marginTop: '16px',
-    opacity: 1,
-
-    [theme.breakpoints.up('xs')]: {
-      '@media (max-device-width:780px)': {
-        width: '100%',
-        backgroundColor: '',
-        margin: '0 auto',
-        marginTop: '16px',
-        maxWidth: '100%',
-      },
-    },
-    [theme.breakpoints.up('sm')]: {},
-    [theme.breakpoints.up('md')]: {},
-    [theme.breakpoints.up('lg')]: {},
-    [theme.breakpoints.up('xl')]: {},
-  },
-
-  companyName: {
-    marginTop: '5px',
-    fontFamily: 'Roboto',
-    fontSize: '24px',
-    color: '#2A2B54',
-  },
-
   boxContent: {
-    backgroundColor: '',
     fontSize: '12px',
     fontWeight: 'bold',
     width: '180px',
     marginLeft: '-2px',
     marginTop: '10px',
-    [theme.breakpoints.up('sm')]: {},
-    [theme.breakpoints.up('md')]: {},
-    [theme.breakpoints.up('lg')]: {},
-    [theme.breakpoints.up('xl')]: {},
-  },
-
-  modalParent: {
-    [theme.breakpoints.up('sm')]: {},
-    [theme.breakpoints.up('md')]: {},
-    [theme.breakpoints.up('lg')]: {},
-    [theme.breakpoints.up('xl')]: {
-      display: 'flex',
-      position: 'absolute',
+    [theme.breakpoints.down(phone)]: {
+      width: '120px',
+      paddingTop: '0px',
+      marginLeft: '0px',
+      marginTop: '4px',
     },
   },
 
-  box: {
-    display: 'flex',
-    color: '#2A2B54',
-    alignItems: 'center',
-    margin: '0 auto',
-    width: '90%',
-    paddingBottom: '15px',
-    marginTop: '10px',
-    [theme.breakpoints.up('sm')]: {},
-    [theme.breakpoints.up('md')]: {},
-    [theme.breakpoints.up('lg')]: {},
-    [theme.breakpoints.up('xl')]: {},
-  },
   boxInvestingDetails: {
     width: '90%',
-    backgroundColor: '',
     margin: '0 auto',
-    [theme.breakpoints.up('sm')]: {},
-    [theme.breakpoints.up('md')]: {},
-    [theme.breakpoints.up('lg')]: {},
-    [theme.breakpoints.up('xl')]: {},
-  },
-
-  cardMedia: {
-    width: '368px',
-    height: '241px',
-    [theme.breakpoints.up('sm')]: {},
-    [theme.breakpoints.up('md')]: {},
-    [theme.breakpoints.up('lg')]: {},
-    [theme.breakpoints.up('xl')]: {},
-  },
-
-  BorderLinearProgress: {
-    height: '12px',
-    backgroundColor: '#E7E7E8',
-    borderRadius: '5px',
-    [theme.breakpoints.up('sm')]: {},
-    [theme.breakpoints.up('md')]: {},
-    [theme.breakpoints.up('lg')]: {},
-    [theme.breakpoints.up('xl')]: {},
   },
 
   usdButton: {
     marginLeft: '10px',
     backgroundColor: '#12824C',
     color: '#FFFFFF',
-    [theme.breakpoints.up('sm')]: {},
-    [theme.breakpoints.up('md')]: {},
-    [theme.breakpoints.up('lg')]: {},
-    [theme.breakpoints.up('xl')]: {},
-  },
-
-  middleGridContainer: {
-    width: '90%',
-    margin: '0 auto',
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginBottom: '20px',
-    [theme.breakpoints.up('sm')]: {},
-    [theme.breakpoints.up('md')]: {},
-    [theme.breakpoints.up('lg')]: {},
-    [theme.breakpoints.up('xl')]: {},
-  },
-
-  middleGridItem: {
-    width: '50%',
-    [theme.breakpoints.up('sm')]: {},
-    [theme.breakpoints.up('md')]: {},
-    [theme.breakpoints.up('lg')]: {},
-    [theme.breakpoints.up('xl')]: {},
-  },
-
-  investmentProgress: {
-    fontSize: '25px',
-    color: '#2A2B54',
-    [theme.breakpoints.up('sm')]: {},
-    [theme.breakpoints.up('md')]: {},
-    [theme.breakpoints.up('lg')]: {},
-    [theme.breakpoints.up('xl')]: {},
-  },
-
-  investmentNumber: {
-    color: '#0561ff',
-    fontSize: '25px',
-    marginTop: '5%',
-    [theme.breakpoints.up('sm')]: {},
-    [theme.breakpoints.up('md')]: {},
-    [theme.breakpoints.up('lg')]: {},
-    [theme.breakpoints.up('xl')]: {},
-  },
-
-  minorText: {
-    float: 'right',
-    backgroundColor: '',
-    width: '100%',
-    color: '#2A2B54',
-    [theme.breakpoints.up('sm')]: {},
-    [theme.breakpoints.up('md')]: {},
-    [theme.breakpoints.up('lg')]: {},
-    [theme.breakpoints.up('xl')]: {},
-  },
-
-  investButton: {
-    backgroundColor: '#CBD5E1',
-    width: '100%',
-    height: '50px',
-    color: '#64748A',
-    borderRadius: '6px',
-    marginTop: '7%',
-    [theme.breakpoints.up('sm')]: {},
-    [theme.breakpoints.up('md')]: {},
-    [theme.breakpoints.up('lg')]: {},
-    [theme.breakpoints.up('xl')]: {},
-  },
-
-  floatRight: {
-    float: 'right',
-    color: '#2A2B54',
-    fontSize: '14px',
   },
 
   floatLeft: {
@@ -249,12 +251,17 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     marginTop: '20px',
-    backgroundColor: '',
+    [theme.breakpoints.down(phone)]: {
+      marginBottom: '20px',
+    },
+  },
 
-    [theme.breakpoints.up('sm')]: {},
-    [theme.breakpoints.up('md')]: {},
-    [theme.breakpoints.up('lg')]: {},
-    [theme.breakpoints.up('xl')]: {},
+  typography: {
+    fontSize: '14px',
+    fontWeight: 'bold',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '12px',
+    },
   },
 
   coinvestorTagBubble: {
@@ -266,10 +273,10 @@ const useStyles = makeStyles((theme) => ({
     position: 'static',
     background: '#ECF3FF',
     borderRadius: '16px',
-    [theme.breakpoints.up('sm')]: {},
-    [theme.breakpoints.up('md')]: {},
-    [theme.breakpoints.up('lg')]: {},
-    [theme.breakpoints.up('xl')]: {},
+    [theme.breakpoints.down(phone)]: {
+      padding: '4px 6px',
+      margin: '4px 6px 4px 0px',
+    },
   },
 
   coinvestorTagText: {
@@ -282,10 +289,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '12px',
     color: '#0558E7',
     margin: '0 auto',
-    [theme.breakpoints.up('sm')]: {},
-    [theme.breakpoints.up('md')]: {},
-    [theme.breakpoints.up('lg')]: {},
-    [theme.breakpoints.up('xl')]: {},
   },
 }));
 
