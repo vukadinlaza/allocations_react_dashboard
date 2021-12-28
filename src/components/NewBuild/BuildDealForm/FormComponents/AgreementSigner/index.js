@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
 import bluePenIcon from '../../../../../assets/sign-agreement-blue-pen.svg';
 import useStyles from '../../../BuildStyles';
+import { useCurrentOrganization } from '../../../../../state/current-organization';
 
 const GET_DOCUMENT = gql`
   query getDealDocService($task_id: String) {
@@ -79,6 +80,7 @@ const AgreementBox = ({
 
 export default function SignDocsForm({ dealData = {}, createDealLoading, error, page, setPage }) {
   const history = useHistory();
+  const currentOrg = useCurrentOrganization();
   const { deal, documents } = dealData;
   const [documentsSignedStatus, setDocumentsSignedStatus] = useState({});
 
@@ -165,7 +167,7 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
                 return;
               }
               toast.success('Success! Your submission was submitted.');
-              history.push(`/deal-setup?id=${deal._id}`);
+              history.push(`/admin/${currentOrg.slug}/${deal._id}`);
             }}
             className={classes.continueButton}
           >
