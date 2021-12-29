@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Paper, Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
-import { useMutation, gql } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
-import { useAuth } from '../../auth/useAuth';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -64,32 +62,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const GET_INVESTOR = gql`
-  {
-    investor {
-      _id
-      email
-      first_name
-      last_name
-      admin
-      showInvestAndMrkPlc
-    }
-  }
-`;
-const POST_ZAP = gql`
-  mutation PostZap($body: Object) {
-    postZap(data: $body) {
-      _id
-    }
-  }
-`;
-const UPDATE_USER = gql`
-  mutation UpdateUser($investor: UserInput!) {
-    updateUser(input: $investor) {
-      _id
-    }
-  }
-`;
+// const GET_INVESTOR = gql`
+//   {
+//     investor {
+//       _id
+//       email
+//       first_name
+//       last_name
+//       admin
+//       showInvestAndMrkPlc
+//     }
+//   }
+// `;
+// const POST_ZAP = gql`
+//   mutation PostZap($body: Object) {
+//     postZap(data: $body) {
+//       _id
+//     }
+//   }
+// `;
+// const UPDATE_USER = gql`
+//   mutation UpdateUser($investor: UserInput!) {
+//     updateUser(input: $investor) {
+//       _id
+//     }
+//   }
+// `;
 export default () => {
   const classes = useStyles();
   const history = useHistory();

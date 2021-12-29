@@ -8,14 +8,11 @@ import { useQuery, useLazyQuery, gql } from '@apollo/client';
 import { useHistory, useParams, useLocation } from 'react-router';
 import { Helmet } from 'react-helmet';
 import signInvestmentYes from '../../assets/sign-investment-yes.svg';
-import wireFundsNo from '../../assets/wire-funds-no.svg';
 import submitTaxInfoYes from '../../assets/submit-tax-info-yes.svg';
 import submitTaxInfoNo from '../../assets/submit-tax-info-no.svg';
 import AllocationsRocket from './AllocationsRocket/AllocationsRocket';
-import PaymentSelectModal from './PaymentSelectModal';
 import KYCModal from './KYCModal';
 import WireInstructionsModal from './WireInstructionsModal/WireInstructionsModal';
-import CryptoPaymentModal from './CryptoPaymentModal/index';
 import { useAuth } from '../../auth/useAuth';
 
 const GET_INVESTOR = gql`
@@ -102,11 +99,9 @@ function DealNextSteps() {
   const [open, setOpen] = useState(false);
 
   const { deal_slug, organization } = useParams();
-  const [openPayment, setOpenPayment] = useState(false);
-  const [cryptoPaymentOpen, setCryptoPaymentOpen] = useState(false);
   const [wireInstructionsOpen, setWireInstructionsOpen] = useState(false);
 
-  const { userProfile, isAuthenticated, loading: authLoading } = useAuth();
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const { search } = useLocation();
   const params = queryString.parse(search);
   const history = useHistory();

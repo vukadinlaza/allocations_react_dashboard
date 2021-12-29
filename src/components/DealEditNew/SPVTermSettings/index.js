@@ -13,15 +13,10 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
       estimatedTerm,
       totalCarry,
       estimatedSetupCosts,
-      estimatedSetupCostsDollar,
     },
     differentPortfolioTerms,
     deal_lead,
   } = formData;
-
-  useEffect(() => {
-    getFeeType();
-  }, [_id]);
 
   const getFeeType = () => {
     if (managementFees?.length > 0) {
@@ -30,6 +25,10 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
       setFeeType('fixed');
     }
   };
+
+  useEffect(() => {
+    getFeeType();
+  }, [_id]);
 
   const handleFormChange = ({ target }) => {
     const dealParamFields = [

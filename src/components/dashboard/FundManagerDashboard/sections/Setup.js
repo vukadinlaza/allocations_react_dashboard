@@ -172,6 +172,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
         } else {
           taskChecked = false;
         }
+        break;
       default:
         taskChecked = currentTask.taskStatus === 'Completed';
         break;
@@ -188,7 +189,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
 
   useEffect(() => {
     if (setupSteps) {
-      let newSetupSteps = {};
+      const newSetupSteps = {};
       Object.keys(setupSteps).forEach((group) => {
         const verifiedData = stepsVerification(setupSteps[group]);
         newSetupSteps[group] = verifiedData;
@@ -200,12 +201,12 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
   useEffect(() => {
     if (subscriptionData?.dealOnboarding) {
       const { dealOnboarding } = subscriptionData;
-      //if dealOnboarding subscrription type is a new task checked or unchecked
+      // if dealOnboarding subscrription type is a new task checked or unchecked
       if (dealOnboarding.taskName) {
         let stepSection = '';
         let stepIndex = -1;
 
-        //set new tasks based on new subscription information
+        // set new tasks based on new subscription information
         if (dealTasks && dealTasks.length) {
           const dealTasksCopy = dealTasks.map((t) => t);
           const subsTaskIndex = dealTasksCopy.findIndex(
@@ -214,8 +215,8 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
           dealTasksCopy[subsTaskIndex] = dealOnboarding;
           setDealTasks(dealTasksCopy);
         }
-        //get step index and section of step inside current setupSteps
-        for (let section in setupSteps) {
+        // get step index and section of step inside current setupSteps
+        for (const section in setupSteps) {
           stepIndex = setupSteps[section].findIndex((step) =>
             step.processStreetTask.includes(dealOnboarding.taskName.toLowerCase()),
           );
@@ -226,14 +227,14 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
         }
         // set new setupSteps with updated task data
         if (stepIndex >= 0) {
-          const setupStepsCopy = Object.assign({}, setupSteps);
+          const setupStepsCopy = { ...setupSteps };
           const stepToUpdate = setupStepsCopy[stepSection][stepIndex];
           const checked = getStepStatus(stepToUpdate);
           stepToUpdate.checked = checked;
           setSetupSteps(setupStepsCopy);
         }
       } else if (dealOnboarding.dealName) {
-        //if type of dealOnboarding subscription is a new run workflow
+        // if type of dealOnboarding subscription is a new run workflow
         const tasks = dealOnboarding?.dealTasks;
         if (tasks) setDealTasks(tasks);
       }

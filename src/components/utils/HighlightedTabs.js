@@ -1,21 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import _ from 'lodash';
-import { useQuery, gql } from '@apollo/client';
+import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import {
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  Button,
-  InputAdornment,
-  Tabs,
-  Tab,
-} from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
-import AllocationsTable from './AllocationsTable';
-import Loader from './Loader';
-import { titleCase, phone, tablet } from '../../utils/helpers';
+import { Tabs, Tab } from '@material-ui/core';
+import { phone } from '../../utils/helpers';
 
 const styles = (theme) => ({
   root: {
