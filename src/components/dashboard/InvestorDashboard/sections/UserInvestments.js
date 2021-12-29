@@ -129,7 +129,7 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
       },
       {
         label: 'Capital Accounts',
-        disabled: !capitalAccountInfo,
+        disabled: capitalAccountInfo,
         onItemClick: () => {
           if (capitalAccountInfo) {
             setShowCapitalAccounts({

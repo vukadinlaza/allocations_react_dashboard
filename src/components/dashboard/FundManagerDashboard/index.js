@@ -409,6 +409,7 @@ const FundManagerDashboard = ({ classes, history }) => {
             data={dealInvestments}
             orgSlug={orgSlug}
             userProfile={userProfile}
+            dealName={checkedDealName}
           />
         ) : (
           <Investors
