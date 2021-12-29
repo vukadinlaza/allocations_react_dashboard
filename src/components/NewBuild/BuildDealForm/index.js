@@ -513,8 +513,6 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
   };
 
   const sectionComplete = (section) => {
-    console.log(section, 'section');
-    console.log(width >= 675 ? (section ? 'true true' : 'true false') : 'false');
     return {
       borderLeft: width >= 675 ? (section ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB') : 'none',
     };
