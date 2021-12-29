@@ -40,8 +40,14 @@ const DEAL = gql`
       _id
       metadata
       manager_name
+      manager {
+        type
+        name
+        email
+        title
+        entity_name
+      }
       name
-      wire_deadline
       phase
       phases {
         _id
@@ -50,15 +56,14 @@ const DEAL = gql`
         tasks {
           _id
           title
-          description
           metadata
           type
           complete
-          done_by
           created_at
           updated_at
         }
       }
+      type
     }
   }
 `;
@@ -94,7 +99,6 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     switch (tabName) {
       case 'Deal Progress':
         return <DealProgress {...dealProps} />;
-      // return <DealProgress data={dealData.getDealByIdWithTasks} />;
       case 'Investors':
         return <Investors />;
       case 'Documents':

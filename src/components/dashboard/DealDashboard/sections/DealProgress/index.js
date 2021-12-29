@@ -1,42 +1,11 @@
 import React, { useState } from 'react';
 import { Grid, Typography } from '@material-ui/core';
-import { useQuery, gql } from '@apollo/client';
-import { RouteComponentProps, useLocation, withRouter } from 'react-router';
+import { withRouter } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import CurrentStep from './components/CurrentStep';
 import NextStep from './components/NextStep';
 import ProgressBar from './components/ProgressBar';
-import LoadingPlaceholder from '../../LoadingPlaceholder';
 import styles from '../../styles';
-
-const DEAL = gql`
-  query getDealWithTasks($deal_id: String) {
-    getDealWithTasks(deal_id: $deal_id) {
-      _id
-      metadata
-      manager_name
-      name
-      wire_deadline
-      phase
-      phases {
-        _id
-        name
-        deal_id
-        tasks {
-          _id
-          title
-          description
-          metadata
-          type
-          complete
-          done_by
-          created_at
-          updated_at
-        }
-      }
-    }
-  }
-`;
 
 // const PhaseList = ({ classes, phases, currentPhase, handlePhaseClick }) => {
 //   const getItemClass = (currentPhase, item, complete) => {
@@ -143,17 +112,9 @@ const demoData = [
 ];
 
 const DealProgress = ({ data, classes }) => {
-  // const query = new URLSearchParams(useLocation().search);
-
-  // const { data } = useQuery(DEAL, {
-  //   fetchPolicy: 'network-only',
-  //   pollInterval: 1000,
-  //   variables: { deal_id: query.get('id') },
-  // });
-
   console.log('Data:', data);
 
-  const [currentStep, setCurrentStep] = useState(demoData[2]);
+  const [currentStep, setCurrentStep] = useState(demoData[6]);
   const [nextStep, setNextStep] = useState(demoData[3]);
 
   const steps = ['Pre-Onboarding', 'Onboarding', 'Closing', 'Post-Closing'];
