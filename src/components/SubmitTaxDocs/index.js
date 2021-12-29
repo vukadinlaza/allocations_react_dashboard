@@ -42,7 +42,7 @@ function SubmitTaxDocs() {
     },
   };
   const validForms = Object.keys(templateMap);
-  const [open, setOpen] = useState(validForms.includes(form) ? true : false);
+  const [open, setOpen] = useState(!!validForms.includes(form));
   const [activeForm, setActiveForm] = useState(validForms.includes(form) ? form : 'W-9');
   const [templateId, setTemplateId] = useState(
     validForms.includes(form) ? templateMap[form].id : 'tpl_dM4QcQbyLckdPXgtyx',
@@ -61,7 +61,7 @@ function SubmitTaxDocs() {
         <Tooltip title={value.tooltipContent} styles={{ fontSize: '16px' }} arrow>
           <Button key={key} onClick={() => handleClick(key)} className="form-select-button">
             <div className="button-content">
-              <img className="button-img" src={DocIcon} />
+              <img className="button-img" src={DocIcon} alt="document icon" />
               <p className="button-text">{value.name}</p>
             </div>
           </Button>

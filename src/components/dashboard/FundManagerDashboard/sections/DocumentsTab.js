@@ -231,7 +231,7 @@ const DocumentsTab = ({ classes, data, refetch }) => {
     setSearchTerm(e.target.value);
   };
 
-  // required me to store as variable. "No unused expressions"
+  // eslint-disable-next-line no-unused-vars
   const unusedVariable = data?.deal?.investments?.forEach((investment) => {
     if (investment.documents.length) {
       investment.documents.forEach((doc) => {

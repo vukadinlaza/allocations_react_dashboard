@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Typography, Tooltip, Button, Grid } from '@material-ui/core';
+import { Typography, Tooltip, Button } from '@material-ui/core';
 import HelpIcon from '@material-ui/icons/Help';
 import CloseIcon from '@material-ui/icons/Close';
 import { phone, tablet } from '../../../utils/helpers';
@@ -153,21 +153,21 @@ const styles = (theme) => ({
   },
 });
 
-const getDimensions = (size) => {
-  switch (size) {
-    case 'full':
-      return { minWidth: '100%' };
-    case 'half':
-      return { minWidth: '430px', maxWidth: '49%' };
-    case 'third':
-      return { minWidth: '430px', maxWidth: '32%' };
-    case 'fourth':
-      return { minWidth: '265px', maxWidth: '24%' };
-    // return {minWidth: '300px', maxWidth: '24%'};
-    default:
-      return {};
-  }
-};
+// const getDimensions = (size) => {
+//   switch (size) {
+//     case 'full':
+//       return { minWidth: '100%' };
+//     case 'half':
+//       return { minWidth: '430px', maxWidth: '49%' };
+//     case 'third':
+//       return { minWidth: '430px', maxWidth: '32%' };
+//     case 'fourth':
+//       return { minWidth: '265px', maxWidth: '24%' };
+//     // return {minWidth: '300px', maxWidth: '24%'};
+//     default:
+//       return {};
+//   }
+// };
 
 export const ModalTooltip = withStyles(styles)(
   ({ classes, children, title, handleTooltip, tooltipContent, openTooltip, id }) => {

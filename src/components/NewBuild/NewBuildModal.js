@@ -18,7 +18,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import HelpIcon from '@material-ui/icons/Help';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import countries from 'country-region-data';
 import states from 'usa-states';
 import { toast } from 'react-toastify';

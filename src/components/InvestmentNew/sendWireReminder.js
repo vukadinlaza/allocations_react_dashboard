@@ -28,9 +28,8 @@ function SendWireReminder({ signedInvestors, deal }) {
     setSelectedInvestors((prev) => {
       if (prev.includes(investor.investmentId)) {
         return [...prev.filter((id) => id !== investor.investmentId)];
-      } else {
-        return [...prev, investor.investmentId];
       }
+      return [...prev, investor.investmentId];
     });
   };
 
@@ -96,7 +95,8 @@ function SendWireReminder({ signedInvestors, deal }) {
         <div className="message">
           <p className="title">Message</p>
           <img
-            src={'https://allocations-public.s3.us-east-2.amazonaws.com/WireReminderTemplate.png'}
+            src="https://allocations-public.s3.us-east-2.amazonaws.com/WireReminderTemplate.png"
+            alt="wire reminder template"
           />
         </div>
       </div>
