@@ -405,7 +405,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
           },
           closing_date: buildData.closing_date,
           custom_investment_agreement: buildData.custom_investment_agreement,
-          deal_stage: buildData.deal,
+          deal_stage: buildData.deal_stage,
           gp_entity_name: buildData.gp_entity_name,
           international_company: {
             status: buildData.international_company_status,
