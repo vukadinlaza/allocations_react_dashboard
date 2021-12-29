@@ -69,10 +69,9 @@ const dealDashboardTabs = ['Deal Progress', 'Investors', 'Documents', 'Deal Page
 
 const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   const history = useHistory();
-  // i realize this could be confusing, but the global state might be preferable to grab.
   const currentOrg = useCurrentOrganization();
-  const params: { organization: string; deal_id: string } = useParams();
-  const { organization: orgSlug, deal_id } = params;
+  const params: { deal_id: string } = useParams();
+  const { deal_id } = params;
   const [tabIndex, setTabIndex] = useState(0);
   // const { data: dealData } = useQuery(GET_DEAL, {
   //   variables: { deal_slug, fund_slug: orgSlug },
@@ -85,12 +84,17 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     setTabIndex(index);
   };
 
+  const dealProps = {
+    data: dealData?.getDealByIdWithTasks,
+  };
+
   const getTabComponent = () => {
     if (!dealData) return <LoadingPlaceholder />;
     const tabName = dealDashboardTabs[tabIndex];
     switch (tabName) {
       case 'Deal Progress':
-        return <DealProgress />;
+        return <DealProgress {...dealProps} />;
+      // return <DealProgress data={dealData.getDealByIdWithTasks} />;
       case 'Investors':
         return <Investors />;
       case 'Documents':

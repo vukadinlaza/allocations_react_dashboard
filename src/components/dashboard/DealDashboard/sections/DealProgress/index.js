@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import { useQuery, gql } from '@apollo/client';
-import { useLocation, withRouter } from 'react-router';
+import { RouteComponentProps, useLocation, withRouter } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import CurrentStep from './components/CurrentStep';
 import NextStep from './components/NextStep';
 import ProgressBar from './components/ProgressBar';
 import LoadingPlaceholder from '../../LoadingPlaceholder';
-import styles from '../../styles.ts';
+import styles from '../../styles';
 
 const DEAL = gql`
   query getDealWithTasks($deal_id: String) {
@@ -142,7 +142,7 @@ const demoData = [
   },
 ];
 
-const DealProgress = ({ classes }) => {
+const DealProgress = ({ data, classes }) => {
   // const query = new URLSearchParams(useLocation().search);
 
   // const { data } = useQuery(DEAL, {
@@ -150,6 +150,8 @@ const DealProgress = ({ classes }) => {
   //   pollInterval: 1000,
   //   variables: { deal_id: query.get('id') },
   // });
+
+  console.log('Data:', data);
 
   const [currentStep, setCurrentStep] = useState(demoData[2]);
   const [nextStep, setNextStep] = useState(demoData[3]);
@@ -163,7 +165,7 @@ const DealProgress = ({ classes }) => {
 
   // useEffect(() => {
   //   if (currentPhase && data?.getDealWithTasks) {
-  //     const { getDealWithTasks: deal } = data;
+  //     const {getDealWithTasks: deal } = data;
   //     setCurrentPhase(deal?.phases?.find((p) => p.name === currentPhase.name));
   //     if (currentTask && deal.phases.tasks) {
   //       setCurrentTask(deal?.phases?.tasks.find((t) => t.title === currentTask.title));
@@ -186,7 +188,7 @@ const DealProgress = ({ classes }) => {
 
   // need some styling
   // if (!data) return <LoadingPlaceholder />;
-  // const { getDealWithTasks: deal } = data;
+  // const {getDealWithTasks: deal } = data;
 
   return (
     <>
