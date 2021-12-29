@@ -2,7 +2,10 @@ import React, { useEffect, useState, useRef } from 'react';
 import { CameraAltOutlined } from '@material-ui/icons';
 import { CardMedia, Box } from '@material-ui/core';
 import DealButton from '../DealButton';
-import { useDealPage } from '../../../dashboard/FundManagerDashboard/sections/DealPage/DealPageContext';
+import {
+  useDealPage,
+  useDealPageDispatch,
+} from '../../../dashboard/FundManagerDashboard/sections/DealPage/DealPageContext';
 
 export default function CoverPhoto({ classes, deal }) {
   const { dealCoverImageKey, slug } = deal;
@@ -12,8 +15,8 @@ export default function CoverPhoto({ classes, deal }) {
 
   const [img, setImg] = useState(key);
   const inputFile = useRef(null);
-  const [upImg, setUpImg] = useState(null);
   const { isEdit } = useDealPage();
+  const dispatch = useDealPageDispatch();
 
   useEffect(() => {
     setImg(key);
@@ -24,11 +27,14 @@ export default function CoverPhoto({ classes, deal }) {
   };
 
   const onSelectFile = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
     if (e.target.files && e.target.files.length > 0) {
       const reader = new FileReader();
-      reader.addEventListener('load', () => setUpImg(reader.result));
+      reader.addEventListener('load', () =>
+        dispatch({
+          type: 'coverPhoto',
+          image: reader.result,
+        }),
+      );
       reader.readAsDataURL(e.target.files[0]);
     }
   };

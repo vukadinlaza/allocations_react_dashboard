@@ -5,16 +5,22 @@ const DealPageDispatchContext = createContext(null);
 
 const dealPageReducer = (dealPageData, action) => {
   switch (action.type) {
+    case 'edit': {
+      return {
+        ...dealPageData,
+        isEdit: action.value,
+      };
+    }
     case 'avatar': {
       return {
         ...dealPageData,
         avatar: action.image,
       };
     }
-    case 'edit': {
+    case 'coverPhoto': {
       return {
         ...dealPageData,
-        isEdit: action.value,
+        coverPhoto: action.image,
       };
     }
     default: {
@@ -23,7 +29,7 @@ const dealPageReducer = (dealPageData, action) => {
   }
 };
 
-const initialDealPageData = { avatar: '', isEdit: false };
+const initialDealPageData = { isEdit: false, avatar: '', coverPhoto: '' };
 
 export const DealPageProvider = ({ children }) => {
   const [dealPageData, dispatch] = useReducer(dealPageReducer, initialDealPageData);
