@@ -7,7 +7,6 @@ import { Button, Paper, Grid, FormControl } from '@material-ui/core';
 import { useParams, useHistory } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import BasicInfo from './FormComponents/TypeSelector/index';
-import UploadDocs from './FormComponents/UploadDocs/index';
 import { useAuth } from '../../../auth/useAuth';
 import { useCurrentOrganization } from '../../../state/current-organization';
 import { useViewport } from '../../../utils/hooks';

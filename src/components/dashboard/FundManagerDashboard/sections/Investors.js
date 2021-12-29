@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import moment from 'moment';
 import { TextField, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import { nWithCommas } from '../../../../utils/numbers';
 import AllocationsTable from '../../../utils/AllocationsTable';
 import Loader from '../../../utils/Loader';
 

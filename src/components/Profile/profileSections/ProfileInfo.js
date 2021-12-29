@@ -515,6 +515,7 @@ const ProfileInfo = ({
                       <TextField
                         inputProps={{
                           className: classes.linkedinInput,
+                          // eslint-disable-next-line no-useless-escape
                           pattern: `^https:\/\/[a-z]{2,3}\.linkedin\.com\/.*$|[a-z]{2,3}\.linkedin\.com\/.*$`,
                         }}
                         id="linkedin"

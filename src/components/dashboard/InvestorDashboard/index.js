@@ -8,7 +8,6 @@ import { useAuth } from '../../../auth/useAuth';
 import { nWithCommas } from '../../../utils/numbers';
 import 'chartjs-plugin-datalabels';
 import UserInvestments from './sections/UserInvestments';
-import FundsInvestments from './sections/FundsInvestments';
 import UserDocuments from './sections/UserDocuments';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import Highlights from './sections/Highlights';

@@ -3,7 +3,7 @@ import { Box } from '@material-ui/core';
 import './styles.scss';
 
 function CryptoDisclosure({ deal }) {
-  const { company_name, memo } = deal;
+  // const { company_name, memo } = deal;
 
   return (
     <section className="CryptoDisclosure">

@@ -91,9 +91,9 @@ function DealSettings({ formData, setFormData, refetch }) {
           className="document-link"
           href={`https://${document.link}`}
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
         >
-          <img src={DocumentIcon} />
+          <img src={DocumentIcon} alt="document icon" />
           <p className="document-title">{document.path}</p>
         </a>
         <Button
@@ -102,7 +102,7 @@ function DealSettings({ formData, setFormData, refetch }) {
           aria-haspopup="true"
           onClick={handleDocumentMenuClick}
         >
-          <img src={DocumentMenuIcon} />
+          <img src={DocumentMenuIcon} alt="document icon" />
         </Button>
 
         <Menu
@@ -166,10 +166,13 @@ function DealSettings({ formData, setFormData, refetch }) {
   };
 
   function AddDealLogo() {
-    const [addLogo, { data, error }] = useMutation(ADD_LOGO, {
+    const [addLogo] = useMutation(ADD_LOGO, {
       onCompleted: () => {
         toast.success('Logo has been added');
         refetch();
+      },
+      onError: (err) => {
+        console.log('Error:', err);
       },
     });
     const [imgSrc, setImgSrc] = useState(
