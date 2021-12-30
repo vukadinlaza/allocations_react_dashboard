@@ -7,7 +7,7 @@ import useStyles from '../DealStyles';
 import { SimpleBox } from '../widgets/SimpleBox';
 import BadgeWrapper from './BadgeWrapper';
 import Loader from '../../../utils/Loader';
-import CoverPhoto from './CoverPhoto';
+import CoverImage from './CoverImage';
 
 const GET_INVESTMENTS = gql`
   query GetDeal($_id: String) {
@@ -75,7 +75,7 @@ function DealHeader({ deal }) {
 
         <Grid container className={classes.middleGridContainer}>
           <Grid item>
-            <CoverPhoto deal={deal} classes={classes} />
+            <CoverImage deal={deal} classes={classes} />
           </Grid>
           <Grid item className={classes.middleGridItem}>
             <h4 className={classes.investmentProgress}>Investment Progress</h4>

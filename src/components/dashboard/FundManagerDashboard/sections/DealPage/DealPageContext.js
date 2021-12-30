@@ -17,10 +17,10 @@ const dealPageReducer = (dealPageData, action) => {
         avatar: action.image,
       };
     }
-    case 'coverPhoto': {
+    case 'coverImage': {
       return {
         ...dealPageData,
-        coverPhoto: action.image,
+        coverImage: action.image,
       };
     }
     default: {
@@ -29,7 +29,11 @@ const dealPageReducer = (dealPageData, action) => {
   }
 };
 
-const initialDealPageData = { isEdit: false, avatar: '', coverPhoto: '' };
+const initialDealPageData = {
+  isEdit: false,
+  avatar: '',
+  coverImage: 'https://allocations-public.s3.us-east-2.amazonaws.com/deals/default.png',
+};
 
 export const DealPageProvider = ({ children }) => {
   const [dealPageData, dispatch] = useReducer(dealPageReducer, initialDealPageData);
