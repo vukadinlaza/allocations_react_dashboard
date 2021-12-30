@@ -99,7 +99,7 @@ const Breadcrumbs = ({ titles, page }) => {
   );
 };
 
-const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDeal }) => {
+const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) => {
   const classes = useStyles();
   const { width } = useViewport();
   const { cryptoPaymentInBuild, buildModals } = useFlags();
@@ -127,7 +127,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
     manager_name:
       userProfile.first_name && userProfile.last_name
         ? `${userProfile.first_name} ${userProfile.last_name}`
-        : undefined,
+        : '',
     management_fee_frequency: 'one time',
     management_fee_type: 'percent',
     management_fee_value: '2',
@@ -135,7 +135,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
     minimum_investment: 10000,
     name: '',
     need_gp_entity: 'true',
-    number_of_investments: undefined,
+    number_of_investments: '',
     offering_type: '506b',
     portfolio_company_name: '',
     portfolio_company_securities: '',
@@ -765,7 +765,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
                       <div>
                         Please fill in the following fields:{' '}
                         {unvalidatedFields.map((field) => (
-                          <div>• {field}</div>
+                          <div key={field}>• {field}</div>
                         ))}
                       </div>,
                       { autoClose: 10000 },
@@ -773,9 +773,15 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
                     return;
                   }
                   if (!auth.isAuthenticated) {
-                    auth.login().then(() => {
-                      openModaltoPage('select_org');
-                    });
+                    try {
+                      await auth.login();
+                      const token = await auth.getAccessTokenSilently();
+                      if (token) {
+                        openModaltoPage('select_org');
+                      }
+                    } catch (e) {
+                      console.error(e);
+                    }
                   } else {
                     openModaltoPage('select_org');
                   }
@@ -792,7 +798,13 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
 };
 
 export default function NewDealForm() {
-  const { isAuthenticated, userProfile, loginWithPopup, refetch: refetchUserProfile } = useAuth();
+  const {
+    isAuthenticated,
+    userProfile,
+    loginWithPopup,
+    refetch: refetchUserProfile,
+    getAccessTokenSilently,
+  } = useAuth();
 
   // Page
   const [page, setPage] = useState(0);
@@ -826,7 +838,13 @@ export default function NewDealForm() {
           dealType={dealType}
           organization={organization}
           userProfile={userProfile}
-          auth={{ isAuthenticated, login: loginWithPopup, refetchUserProfile }}
+          auth={{
+            isAuthenticated,
+            login: loginWithPopup,
+            refetchUserProfile,
+            userProfile,
+            getAccessTokenSilently,
+          }}
           page={page}
           setPage={setPage}
           createNewDeal={createNewDeal}
