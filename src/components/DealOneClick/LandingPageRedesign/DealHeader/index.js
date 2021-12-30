@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Paper, Avatar, Button, Box, Grid, LinearProgress, Typography } from '@material-ui/core';
+import { Paper, Button, Box, Grid, LinearProgress, Typography } from '@material-ui/core';
 import { useQuery, gql } from '@apollo/client';
 import moment from 'moment';
 import { nWithCommas } from '../../../../utils/numbers';
 import useStyles from '../DealStyles';
 import { SimpleBox } from '../widgets/SimpleBox';
-import BadgeWrapper from './BadgeWrapper';
+import AvatarImage from './AvatarImage';
 import Loader from '../../../utils/Loader';
 import CoverImage from './CoverImage';
 
@@ -66,9 +66,7 @@ function DealHeader({ deal }) {
       <Paper className={classes.dealHeader}>
         <Box className={classes.box}>
           <Box display="flex">
-            <BadgeWrapper>
-              <Avatar className={classes.avatar} />
-            </BadgeWrapper>
+            <AvatarImage deal={deal} classes={classes} />
             <h3 className={classes.companyName}>{company_name}</h3>
           </Box>
         </Box>

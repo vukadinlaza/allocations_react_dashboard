@@ -6,6 +6,7 @@ import { useDealPage } from '../../../dashboard/FundManagerDashboard/sections/De
 
 const StyledBox = withStyles({
   root: {
+    cursor: 'pointer',
     '&:hover': {
       background: '#ECF3FF',
     },
@@ -16,7 +17,7 @@ const StyledBox = withStyles({
   },
 })(Box);
 
-export default function BadgeWrapper({ children }) {
+export default function BadgeWrapper({ children, handleClick, ...props }) {
   const { isEdit } = useDealPage();
 
   if (isEdit) {
@@ -34,10 +35,12 @@ export default function BadgeWrapper({ children }) {
             border="1px solid #CBD5E1"
             p="4px"
             color="#64748B"
+            onClick={handleClick}
           >
             <CameraAltOutlined style={{ fontSize: 16 }} />
           </StyledBox>
         }
+        {...props}
       >
         {children}
       </Badge>

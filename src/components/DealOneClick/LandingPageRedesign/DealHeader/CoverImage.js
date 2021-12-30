@@ -11,9 +11,7 @@ import {
 export default function CoverImage({ classes, deal }) {
   const { dealCoverImageKey } = deal;
 
-  const [imgSrc, setImgSrc] = useState(
-    `https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`,
-  );
+  const [imgSrc, setImgSrc] = useState();
   const [upImg, setUpImg] = useState(null);
   const inputFile = useRef(null);
   const previewCanvasRef = useRef(null);
@@ -24,7 +22,11 @@ export default function CoverImage({ classes, deal }) {
   const [completedCrop, setCompletedCrop] = useState(null);
 
   useEffect(() => {
-    setImgSrc(`https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`);
+    setImgSrc(
+      dealCoverImageKey
+        ? `https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`
+        : 'https://allocations-public.s3.us-east-2.amazonaws.com/deals/default.png',
+    );
   }, [dealCoverImageKey, isEdit]);
 
   const onButtonClick = () => {
