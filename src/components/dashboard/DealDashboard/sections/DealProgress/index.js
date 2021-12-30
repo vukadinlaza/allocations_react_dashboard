@@ -7,44 +7,6 @@ import NextStep from './components/NextStep';
 import ProgressBar from './components/ProgressBar';
 import styles from '../../styles';
 
-const defaultDesc =
-  'An Allocations representative will be reaching out shortly to assist you in completing this step. If you have any questions, do not hesitate to contact support@allocations.com.';
-
-const demoData = [
-  {
-    task: 'Pre-Onboarding',
-    description: defaultDesc,
-  },
-  {
-    task: 'Confirm Deal Details',
-    description: defaultDesc,
-  },
-  {
-    task: 'Invite Investors',
-    tag: 'For You',
-    description:
-      'You can now invite investors to your deal. Please have their email addresses ready.',
-    button: 'BUTTON HERE',
-  },
-  {
-    task: '506c Review',
-    tag: 'For Allocations',
-    description: defaultDesc,
-  },
-  {
-    task: 'Fund Manager KYC Review',
-    tag: 'For You',
-    description: defaultDesc,
-  },
-  {
-    task: 'Closing',
-    description: defaultDesc,
-  },
-  {
-    task: 'Post-Closing',
-    description: defaultDesc,
-  },
-];
 const dataCopy = [
   {
     phase: 'build',
@@ -136,8 +98,7 @@ const dataCopy = [
 
 const DealProgress = ({ data, classes }) => {
   const [currentPhase, setCurrentPhase] = useState('Pre-Onboarding');
-  const [currentTask, setCurrentTask] = useState('');
-
+  const [currentTask, setCurrentTask] = useState({});
   const [nextTask, setNextTask] = useState({});
   const [activeStep, setActiveStep] = useState(0);
 
