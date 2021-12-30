@@ -32,7 +32,7 @@ const dealPageReducer = (dealPageData, action) => {
 const initialDealPageData = {
   isEdit: false,
   avatar: '',
-  coverImage: 'https://allocations-public.s3.us-east-2.amazonaws.com/deals/default.png',
+  coverImage: '',
 };
 
 export const DealPageProvider = ({ children }) => {
