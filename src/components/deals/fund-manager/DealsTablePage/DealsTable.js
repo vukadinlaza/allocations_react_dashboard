@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, InputAdornment, Button } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
+import { Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import { useHistory, useParams } from 'react-router';
@@ -123,9 +122,9 @@ const DealsTable = ({ classes, deals }) => {
     }
   };
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
+  // const handleSearch = (e) => {
+  //   setSearchTerm(e.target.value);
+  // };
 
   const dataCopy = deals.filter((doc) =>
     `${doc.name} ${doc.portfolioCompany}`.toUpperCase().includes(searchTerm.toUpperCase()),

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, { useEffect } from 'react';
 import _ from 'lodash';
 import moment from 'moment';
@@ -241,12 +242,12 @@ export const KYCServiceTask = withStyles(styles)(({ task, taskData, classes }) =
 export const SignTask = ({ dataRequestId, tokenId, tokenSecret }) => {
   useEffect(() => {
     if (dataRequestId && tokenId && tokenSecret) {
-      // eslint-disable-next-line no-undef
       DocSpring.createVisualForm({
         dataRequestId,
         tokenId,
         tokenSecret,
         domainVerification: false,
+        onSubmit: () => DocSpring.closeModal(),
       });
     }
   }, [dataRequestId, tokenId, tokenSecret]);

@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable radix */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import _ from 'lodash';
 import moment from 'moment';

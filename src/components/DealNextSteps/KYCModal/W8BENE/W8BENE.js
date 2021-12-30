@@ -13,16 +13,11 @@ import React, { useState } from 'react';
 import countries from 'country-region-data';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import './styles.scss';
-import { useLocation } from 'react-router';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { toast } from 'react-toastify';
 import moment from 'moment';
-import Loader from '../../../utils/Loader';
 
-function W8BENE({ toggleOpen, called, loading, createDoc }) {
-  const { state } = useLocation();
-
-  const [sameMailing, setSameMailing] = useState(false);
+function W8BENE({ toggleOpen, createDoc }) {
   const treatyClaimOptions = [
     '4_disregarded_entity',
     '4_partnership',
@@ -31,7 +26,6 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
   ];
   const countryNames = countries.map((c) => c.countryName);
   const [differentMailingAddress, setDifferentMailingAddress] = useState(false);
-  const [showTreatyClaim, setTreatyClaim] = useState(false);
   const [organizationCountrySearch, setOrganizationCountrySearch] = useState('');
   const [residenceCountrySearch, setResidenceCountrySearch] = useState('');
   const [mailingCountrySearch, setMailingCountrySearch] = useState('');
@@ -69,7 +63,6 @@ function W8BENE({ toggleOpen, called, loading, createDoc }) {
     '4_central_bank_of_issue': false,
     '4_tax_exempt_organization': false,
     '4_international_organization': false,
-    '4_tax_exempt_organization': false,
     '4_treaty_claim_no': false,
     '4_treaty_claim_yes': false,
     '5_international_organization': false,

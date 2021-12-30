@@ -83,7 +83,7 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts, refetch }) => {
                 <Grid
                   style={{ display: 'flex', justifyContent: 'space-between', cursor: 'pointer' }}
                 >
-                  <a href={`https://${capitalPDF?.link}`} target="_blank" rel="noreferrer">
+                  <a href={`https://${capitalPDF?.link}`} target="_blank" rel="noopener noreferrer">
                     <Button
                       variant="contained"
                       disabled={loading && !capitalPDF}

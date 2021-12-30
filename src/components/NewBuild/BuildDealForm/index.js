@@ -7,7 +7,6 @@ import { Button, Paper, Grid, FormControl } from '@material-ui/core';
 import { useParams, useHistory } from 'react-router';
 import Typography from '@material-ui/core/Typography';
 import BasicInfo from './FormComponents/TypeSelector/index';
-import UploadDocs from './FormComponents/UploadDocs/index';
 import { useAuth } from '../../../auth/useAuth';
 import { useCurrentOrganization } from '../../../state/current-organization';
 import { useViewport } from '../../../utils/hooks';
@@ -405,7 +404,7 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
           },
           closing_date: buildData.closing_date,
           custom_investment_agreement: buildData.custom_investment_agreement,
-          deal_stage: buildData.deal,
+          deal_stage: buildData.deal_stage,
           gp_entity_name: buildData.gp_entity_name,
           international_company: {
             status: buildData.international_company_status,
@@ -513,8 +512,6 @@ const BuildDetails = ({ userProfile, auth, dealType, page, setPage, createNewDea
   };
 
   const sectionComplete = (section) => {
-    console.log(section, 'section');
-    console.log(width >= 675 ? (section ? 'true true' : 'true false') : 'false');
     return {
       borderLeft: width >= 675 ? (section ? 'solid 3px #ECF3FF' : 'solid 3px #EBEBEB') : 'none',
     };
