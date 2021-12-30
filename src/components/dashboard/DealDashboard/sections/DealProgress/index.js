@@ -65,7 +65,9 @@ const DealProgress = ({ data, classes }) => {
   const [activeStep, setActiveStep] = useState(0);
 
   const steps = ['Pre-Onboarding', 'Onboarding', 'Closing', 'Post-Closing'];
-
+  console.log('Phase:', currentPhase);
+  console.log('Current Step:', currentStep);
+  console.log('Active Step:', activeStep);
   const stepMap = new Map([
     ['build', 'Pre-Onboarding'],
     ['post-build', 'Pre-Onboarding'],
@@ -82,13 +84,13 @@ const DealProgress = ({ data, classes }) => {
     if (phase) {
       setCurrentPhase(phase.name);
       setCurrentStep(stepMap.get(phase.name));
-      setActiveStep(steps.indexOf(currentPhase));
+      setActiveStep(steps.indexOf(currentStep));
     }
     if (task) {
       setCurrentTask(task.title);
     }
-  }, [data]);
-
+  }, [data, activeStep]);
+  // console.log('Data:', data);
   // const handleTaskClick = (currentTask, task) => {
   //   if (task.type.startsWith('admin')) {
   //     setCurrentTask(false);
