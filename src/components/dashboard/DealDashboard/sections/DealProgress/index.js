@@ -58,8 +58,10 @@ const demoData = [
 
 const DealProgress = ({ data, classes }) => {
   const [currentPhase, setCurrentPhase] = useState('Pre-Onboarding');
+  // title
   const [currentTask, setCurrentTask] = useState('');
 
+  // object of step (desc. title, etc)
   const [currentStep, setCurrentStep] = useState(demoData[6]);
   const [nextStep, setNextStep] = useState(demoData[3]);
   const [activeStep, setActiveStep] = useState(0);
