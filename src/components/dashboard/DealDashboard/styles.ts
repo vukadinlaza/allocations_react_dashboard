@@ -9,6 +9,42 @@ const styles: any = (theme: Theme) => ({
     fontWeight: 500,
     cursor: 'pointer',
   },
+  boardBox: {
+    height: '160px',
+    width: '100%',
+    background: '#FFFFFF',
+    borderRadius: '8px',
+    marginBottom: '8px',
+    padding: '16px 24px',
+  },
+  boardBoxMainText: {
+    fontSize: '12px',
+    fontWeight: 400,
+    color: '#2A2B54',
+    margin: 0,
+    marginBottom: '4px',
+    lineHeight: '16px',
+  },
+  boardBoxText: {
+    fontSize: '12px',
+    fontWeight: 400,
+    color: '#64748B',
+    margin: 0,
+    marginBottom: '4px',
+    lineHeight: '16px',
+  },
+  boardBoxTitle: {
+    fontSize: '12px',
+    fontWeight: 700,
+    color: '#64748B',
+    margin: 0,
+    marginBottom: '4px',
+    lineHeight: '16px',
+  },
+  boardContainer: {
+    overflowX: 'scroll',
+    paddingTop: '8px',
+  },
   boxTitle: {
     fontWeight: 500,
     fontSize: '16px',
@@ -23,6 +59,12 @@ const styles: any = (theme: Theme) => ({
     margin: '0',
     fontSize: '12px',
     fontWeight: 400,
+  },
+  headerLabel: {
+    fontSize: '12px',
+    fontWeight: 700,
+    color: '#2A2B54',
+    marginBottom: '16px',
   },
   input: {
     color: '#2A2B54',
@@ -46,9 +88,9 @@ const styles: any = (theme: Theme) => ({
     boxShadow: 'none !important',
   },
   pageTitle: {
-    fontSize: '30px',
-    fontWeight: '800',
-    marginBottom: '24px',
+    fontSize: '40px',
+    fontWeight: 'bold',
+    marginBottom: '32px',
   },
   placeholderItem: {
     boxShadow: 'none !important',
@@ -68,7 +110,7 @@ const styles: any = (theme: Theme) => ({
     },
   },
   searchContainer: {
-    margin: '40px 0 25px 0',
+    margin: '32px 0 24px 0',
   },
   smallBox: {
     height: '88px',

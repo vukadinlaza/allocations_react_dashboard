@@ -2,23 +2,16 @@ import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
-import Collapse from '@material-ui/core/Collapse';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import Toolbar from '@material-ui/core/Toolbar';
-import RadioButtonUncheckedOutlinedIcon from '@material-ui/icons/RadioButtonUncheckedOutlined';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import { Box } from '@material-ui/core';
 import { nWithCommas } from '../../utils/numbers';
 
 const styles = (theme) => ({
@@ -34,6 +27,7 @@ const styles = (theme) => ({
     color: '#2A2B54 !important',
     fontWeight: '400',
     border: 'none',
+    padding: '3.5px 16px',
   },
   paginationArrows: {
     background: '#FFFFFF',

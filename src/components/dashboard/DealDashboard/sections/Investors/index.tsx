@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import moment from 'moment';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import {
   Grid,
@@ -12,11 +13,16 @@ import {
 import SearchIcon from '@material-ui/icons/Search';
 import ViewAgendaOutlinedIcon from '@material-ui/icons/ViewAgendaOutlined';
 import ViewWeekOutlinedIcon from '@material-ui/icons/ViewWeekOutlined';
-import styles from '../styles';
-import NewAllocationsTable from '../../../utils/NewAllocationsTable';
-import { nWithCommas } from '../../../../utils/numbers';
+import styles from '../../styles';
+import Board from './components/Board';
+import NewAllocationsTable from '../../../../utils/NewAllocationsTable';
+import { nWithCommas } from '../../../../../utils/numbers';
+import { titleCase } from '../../../../../utils/helpers';
+import { getChipStyle, sortByStatus } from './helpers';
 
-interface Props extends WithStyles<typeof styles> {}
+interface Props extends WithStyles<typeof styles> {
+  investorsData: Investment[];
+}
 
 interface Header {
   value: string;
@@ -29,33 +35,20 @@ interface Header {
   customSort?: boolean;
 }
 
-interface Investor {
-  name: string;
-  email: string;
+export interface Investment {
+  amount: number;
+  investor: {
+    accredidation_status: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+    name: string;
+    _id: string;
+  };
   status: string;
-  investment: number;
-  investmentDate: string;
+  updated_at: string;
+  _id: string;
 }
-
-interface ChipStyle {
-  fontSize: string;
-  fontWeight: number;
-  borderRadius: string;
-  height: string;
-  background?: string;
-  color?: string;
-}
-
-const dashboardBoxes = [
-  {
-    title: 'Total Investors',
-    value: `10`,
-  },
-  {
-    title: 'Total Invested',
-    value: `$1,800,000`,
-  },
-];
 
 const investorsHeaders: Header[] = [
   {
@@ -79,7 +72,7 @@ const investorsHeaders: Header[] = [
     customSort: true,
   },
   {
-    value: 'investment',
+    value: 'amount',
     label: 'Investment',
     type: 'investment',
     keyNotInData: true,
@@ -89,81 +82,22 @@ const investorsHeaders: Header[] = [
   },
 ];
 
-const investorsData: Investor[] = [
-  {
-    name: 'Alexander Winter',
-    email: 'alexanderwinter@gmail.com',
-    status: 'Viewed',
-    investment: 0,
-    investmentDate: '',
-  },
-  {
-    name: 'Brandon Lee',
-    email: 'lee@gmail.com',
-    status: 'Invited',
-    investment: 0,
-    investmentDate: '',
-  },
-  { name: '', email: 'raribrown@gmail.com', status: 'Invited', investment: 0, investmentDate: '' },
-  {
-    name: 'Dan Green',
-    email: 'dangreen@gmail.com',
-    status: 'Signed',
-    investment: 700000,
-    investmentDate: '12/17/2021',
-  },
-  {
-    name: 'Edith Jones',
-    email: 'edithjones@gmail.com',
-    status: 'Invited',
-    investment: 0,
-    investmentDate: '',
-  },
-  {
-    name: 'Frank Helen',
-    email: 'frankhelen@gmail.com',
-    status: 'Wired',
-    investment: 900000,
-    investmentDate: '12/17/2021',
-  },
-  {
-    name: 'Ginny Cho',
-    email: 'ginnycho@gmail.com',
-    status: 'Signed',
-    investment: 80000,
-    investmentDate: '12/17/2021',
-  },
-  {
-    name: 'Harry Burke',
-    email: 'zarryburke@gmail.com',
-    status: 'Viewed',
-    investment: 0,
-    investmentDate: '',
-  },
-  {
-    name: 'Susan Dennis',
-    email: 'zusandennis@gmail.com',
-    status: 'Invited',
-    investment: 0,
-    investmentDate: '',
-  },
-  {
-    name: 'Zack Gleeson',
-    email: 'zackgleeson@gmail.com',
-    status: 'Wired',
-    investment: 250000,
-    investmentDate: '12/17/2021',
-  },
-  {
-    name: 'Zack Gleeson',
-    email: 'zackgleeson@gmail.com',
-    status: 'Wired',
-    investment: 250000,
-    investmentDate: '12/17/2021',
-  },
-];
-
-const Investors: React.FC<Props> = ({ classes }) => {
+const Investors: React.FC<Props> = ({ classes, investorsData }) => {
+  const dashboardBoxes: { title: string; value: number | string }[] = [
+    {
+      title: 'Total Investors',
+      value: new Set([...investorsData.map((investment: Investment) => investment.investor?.email)])
+        .size,
+    },
+    {
+      title: 'Total Invested',
+      value: `$${nWithCommas(
+        investorsData
+          .map((investment: Investment) => investment.amount)
+          .reduce((acc: number, n: number) => acc + n),
+      )}`,
+    },
+  ];
   const boxSize = 2;
   const containerSpacing = 2;
   const invisibleBoxes = Array(5 - dashboardBoxes.length).fill(0);
@@ -174,53 +108,30 @@ const Investors: React.FC<Props> = ({ classes }) => {
     setCurrentView(newView);
   };
 
-  const getChipStyle = (status: string) => {
-    let basicStyle: ChipStyle = {
-      fontSize: '12px',
-      fontWeight: 500,
-      borderRadius: '12px',
-      height: '24px',
-    };
-    switch (status) {
-      case 'Invited':
-        basicStyle.background = '#F1F5F9';
-        basicStyle.color = '#334155';
-        return basicStyle;
-      case 'Viewed':
-        basicStyle.background = '#2A2B54';
-        basicStyle.color = '#FFFFFF';
-        return basicStyle;
-      case 'Signed':
-        basicStyle.background = '#ECF3FF';
-        basicStyle.color = '#0558E7';
-        return basicStyle;
-      case 'Wired':
-        basicStyle.background = '#D1FAE5';
-        basicStyle.color = '#047857';
-        return basicStyle;
-      default:
-        return basicStyle;
-    }
-  };
-
-  const getCellContent = (type: string, row: any, headerValue: string) => {
+  const getCellContent = (type: string, row: Investment, headerValue: string) => {
     switch (type) {
-      case 'investor':
+      case 'investor': {
+        const { investor } = row;
+        const fullName = `${titleCase(investor.first_name)} ${titleCase(investor.last_name)}`;
         return (
           <div>
             <p
               className={`${classes.cellValue} ${classes.textTop}`}
               style={{ marginBottom: '4px' }}
             >
-              {row.name}
+              {fullName ? fullName : '---'}
             </p>
-            <p className={`${classes.cellValue} ${classes.textBottom}`}>{row.email}</p>
+            <p className={`${classes.cellValue} ${classes.textBottom}`}>{investor.email}</p>
           </div>
         );
+      }
       case 'status':
         return (
           <div>
-            <Chip label={row.status} style={getChipStyle(row.status)} />
+            <Chip
+              label={row.status !== 'complete' ? titleCase(row.status) : 'Wired'}
+              style={getChipStyle(row.status.toLowerCase())}
+            />
           </div>
         );
       case 'investment':
@@ -230,9 +141,11 @@ const Investors: React.FC<Props> = ({ classes }) => {
               className={`${classes.cellValue} ${classes.textTop}`}
               style={{ marginBottom: '4px' }}
             >
-              ${nWithCommas(row.investment)}
+              {row.amount ? `$${nWithCommas(row.amount)}` : ''}
             </p>
-            <p className={`${classes.cellValue} ${classes.textBottom}`}>{row.investmentDate}</p>
+            <p className={`${classes.cellValue} ${classes.textBottom}`}>
+              {row.updated_at ? moment(row.updated_at, 'x').format('MM/DD/YYYY') : ''}
+            </p>
           </div>
         );
       default:
@@ -240,27 +153,19 @@ const Investors: React.FC<Props> = ({ classes }) => {
     }
   };
 
-  const getSortedData = (data: Investor[], property: string, order: string) => {
-    console.log({ order });
+  const getSortedData = (data: Investment[], property: string, order: string) => {
+    const dataCopy = JSON.parse(JSON.stringify(data));
     switch (property) {
       case 'investor':
-        return data.sort((a, b) => {
-          const _a = a.name ? a.name : a.email;
-          const _b = b.name ? b.name : b.email;
+        return dataCopy.sort((a: Investment, b: Investment) => {
+          const aFullName = `${a?.investor?.first_name}${a?.investor?.last_name}`;
+          const bFullName = `${b?.investor?.first_name}${b?.investor?.last_name}`;
+          const _a = aFullName ? aFullName : a?.investor?.email;
+          const _b = bFullName ? bFullName : b?.investor?.email;
           return ('' + (order === 'desc' ? _b : _a)).localeCompare(order === 'desc' ? _a : _b);
         });
       case 'status': {
-        const statusOrder: { [key: string]: any } = {
-          Invited: 0,
-          Viewed: 1,
-          Signed: 2,
-          Wired: 3,
-        };
-        return data.sort((a, b) => {
-          return order === 'desc'
-            ? statusOrder[a.status] - statusOrder[b.status]
-            : statusOrder[b.status] - statusOrder[a.status];
-        });
+        return sortByStatus(data, 'status', order);
       }
       default:
         return data;
@@ -273,8 +178,10 @@ const Investors: React.FC<Props> = ({ classes }) => {
   };
 
   const data = searchTerm
-    ? investorsData.filter((investor) => {
-        return `${investor.name}${investor.email}`
+    ? investorsData.filter((investment: Investment) => {
+        const { investor } = investment;
+        const investorName = `${investor.first_name}${investor.last_name}`;
+        return `${investorName}${investment?.investor?.email}`
           .toLocaleLowerCase()
           .includes(searchTerm.toLocaleLowerCase())
           ? true
@@ -306,11 +213,7 @@ const Investors: React.FC<Props> = ({ classes }) => {
             placeholder="Search investor"
             className={classes.textFieldRoot}
             onChange={(e) => updateSearch(e)}
-            InputLabelProps={{
-              style: {
-                top: '-4px',
-              },
-            }}
+            InputLabelProps={{ style: { top: '-4px' } }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -320,10 +223,7 @@ const Investors: React.FC<Props> = ({ classes }) => {
               classes: { input: classes.input, root: classes.inputRoot },
             }}
             inputProps={{
-              style: {
-                padding: '14.5px 14px 14.5px 0',
-                background: 'white',
-              },
+              style: { padding: '14.5px 14px 14.5px 0', background: 'white' },
             }}
           />
         </Grid>
@@ -361,10 +261,10 @@ const Investors: React.FC<Props> = ({ classes }) => {
         </Grid>
         <Grid item xs={1} />
       </Grid>
-      <Grid container spacing={containerSpacing}>
-        <Grid item xs={1} />
-        <Grid item lg={10}>
-          {currentView === 'list' && (
+      {currentView === 'list' ? (
+        <Grid container spacing={containerSpacing}>
+          <Grid item xs={1} />
+          <Grid item lg={10}>
             <NewAllocationsTable
               headers={investorsHeaders}
               getCellContent={getCellContent}
@@ -373,10 +273,12 @@ const Investors: React.FC<Props> = ({ classes }) => {
               pagination={true}
               getSortedData={getSortedData}
             />
-          )}
+          </Grid>
+          <Grid item xs={1} />
         </Grid>
-        <Grid item xs={1} />
-      </Grid>
+      ) : (
+        <Board data={data} />
+      )}
     </>
   );
 };
