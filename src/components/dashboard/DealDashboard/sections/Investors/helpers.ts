@@ -8,7 +8,6 @@ interface ChipStyle {
 }
 
 export const sortByStatus = (data: any, field?: string, order?: string) => {
-  const dataCopy = JSON.parse(JSON.stringify(data));
   const statusOrder: { [key: string]: any } = {
     invited: 0,
     viewed: 1,
@@ -16,7 +15,7 @@ export const sortByStatus = (data: any, field?: string, order?: string) => {
     wired: 3,
     complete: 4,
   };
-  return dataCopy.sort((a: any, b: any) => {
+  return data.sort((a: any, b: any) => {
     return order === 'desc'
       ? statusOrder[field ? a[field] : a] - statusOrder[field ? b[field] : b]
       : statusOrder[field ? b[field] : b] - statusOrder[field ? a[field] : a];

@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
 import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Paper from '@material-ui/core/Paper';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+  Paper,
+  Button,
+} from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { nWithCommas } from '../../utils/numbers';
 
 const styles = (theme) => ({
+  buttonLabel: {
+    width: 'auto',
+  },
   cellText: {
     color: '#2A2B54 !important',
     padding: '15px 16px',
@@ -29,6 +35,10 @@ const styles = (theme) => ({
     border: 'none',
     padding: '3.5px 16px',
   },
+  pagination: {
+    height: '48px',
+    display: 'flex',
+  },
   paginationArrows: {
     background: '#FFFFFF',
     border: '1px solid #CBD5E1',
@@ -38,6 +48,20 @@ const styles = (theme) => ({
     display: 'inline-block',
     color: '#64748B',
     cursor: 'pointer',
+    width: '48px',
+    minWidth: '0',
+    '&:active': {
+      background: '#ECF3FF',
+      border: '1px solid #186EFF !important',
+    },
+    '&:hover': {
+      background: '#ECF3FF',
+      border: '1px solid #CBD5E1',
+      outline: 'none',
+    },
+    '&:focus': {
+      outline: 'none',
+    },
   },
   paginationContainer: {
     display: 'flex',
@@ -287,24 +311,32 @@ const AllocationsTable = ({
             <p className={classes.paginationText}>
               Showing {from} to {to} of {nWithCommas(data.length)} {listOf}
             </p>
-            <div style={{ height: '48px' }}>
-              <span
-                className={classes.paginationArrows}
+            <div className={classes.pagination}>
+              <Button
                 style={{ borderRadius: '8px 0px 0px 8px' }}
                 onClick={(e) => handleChangePage(e, page - 1)}
+                disableRipple
+                classes={{
+                  root: classes.paginationArrows,
+                  label: classes.buttonLabel,
+                }}
               >
                 <ChevronLeftIcon />
-              </span>
+              </Button>
               <span className={classes.paginationCount}>
                 {from} of {to}
               </span>
-              <span
-                className={classes.paginationArrows}
+              <Button
                 style={{ borderRadius: '0px 8px 8px 0px' }}
                 onClick={(e) => handleChangePage(e, page + 1)}
+                disableRipple
+                classes={{
+                  root: classes.paginationArrows,
+                  label: classes.buttonLabel,
+                }}
               >
                 <ChevronRightIcon />
-              </span>
+              </Button>
             </div>
           </div>
         )}

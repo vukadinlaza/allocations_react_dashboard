@@ -79,6 +79,7 @@ const investorsHeaders: Header[] = [
     align: 'left',
     alignHeader: true,
     isSortable: true,
+    customSort: true,
   },
 ];
 
@@ -165,7 +166,22 @@ const Investors: React.FC<Props> = ({ classes, investorsData }) => {
           return ('' + (order === 'desc' ? _b : _a)).localeCompare(order === 'desc' ? _a : _b);
         });
       case 'status': {
-        return sortByStatus(data, 'status', order);
+        return sortByStatus(dataCopy, 'status', order);
+      }
+      case 'amount': {
+        let invitedAndViewed = dataCopy.filter((investment: Investment) =>
+          ['invited', 'viewed'].includes(investment.status),
+        );
+        invitedAndViewed = sortByStatus(invitedAndViewed, 'status', order);
+        const otherStatus = dataCopy
+          .filter((investment: Investment) => !['invited', 'viewed'].includes(investment.status))
+          .sort((a: Investment, b: Investment) =>
+            order === 'asc' ? a.amount - b.amount : b.amount - a.amount,
+          );
+
+        return order === 'asc'
+          ? [...invitedAndViewed, ...otherStatus]
+          : [...otherStatus, ...invitedAndViewed];
       }
       default:
         return data;
@@ -270,7 +286,7 @@ const Investors: React.FC<Props> = ({ classes, investorsData }) => {
               getCellContent={getCellContent}
               data={data}
               listOf="investors"
-              pagination={true}
+              pagination={data.length >= 10 ? true : false}
               getSortedData={getSortedData}
             />
           </Grid>
