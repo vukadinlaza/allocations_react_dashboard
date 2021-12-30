@@ -1,13 +1,12 @@
 import React from 'react';
-import { Container, Modal, Typography, Grid, Paper, Box, Button } from '@material-ui/core';
+import { Container, Modal, Typography, Grid, Paper, Box } from '@material-ui/core';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControl from '@material-ui/core/FormControl';
-import { useHistory } from 'react-router';
 import CryptoIcon from '../../../assets/usdc_icon.svg';
-import { phone, tablet } from '../../../utils/helpers';
+import { phone } from '../../../utils/helpers';
 import BankIcon from '../../../assets/bank.svg';
 
 const useStyles = makeStyles((theme) => ({

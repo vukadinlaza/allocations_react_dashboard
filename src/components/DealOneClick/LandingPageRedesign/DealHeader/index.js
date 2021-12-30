@@ -67,7 +67,7 @@ function DealHeader({ deal }) {
         <Box className={classes.box}>
           <Box display="flex">
             <AvatarImage deal={deal} classes={classes} />
-            <h3 className={classes.companyName}>{company_name}</h3>
+            <span className={classes.companyName}>{company_name}</span>
           </Box>
         </Box>
 
@@ -76,8 +76,8 @@ function DealHeader({ deal }) {
             <CoverImage deal={deal} classes={classes} />
           </Grid>
           <Grid item className={classes.middleGridItem}>
-            <h4 className={classes.investmentProgress}>Investment Progress</h4>
-            <h6 className={classes.investmentNumber}>${nWithCommas(totalInvestments)}</h6>
+            <span className={classes.investmentProgress}>Investment Progress</span>
+            <span className={classes.investmentNumber}>${nWithCommas(totalInvestments)}</span>
             <LinearProgress
               variant="determinate"
               value={getTotalRaiseAmount(target_raise_goal, totalInvestments)}
@@ -93,8 +93,8 @@ function DealHeader({ deal }) {
             </div>
 
             <Button className={classes.investButton}>Invest</Button>
-            <Grid container style={{ marginTop: '15px', justifyContent: 'space-between' }}>
-              <Grid item style={{ color: '#64748B', fontSize: '14px' }}>
+            <Grid container className={classes.gridContainer}>
+              <Grid item className={classes.investItem}>
                 Invest With:{' '}
                 <div style={{ display: 'flex' }}>
                   <div className={classes.coinvestorTagBubble}>
@@ -108,24 +108,18 @@ function DealHeader({ deal }) {
                 </div>
               </Grid>
               <Grid item>
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    marginLeft: '20px',
-                  }}
-                >
-                  <div style={{ color: '#64748B', fontSize: '14px' }}>Minimum Investment:</div>
-                  <div style={{ fontWeight: 'bold', fontSize: '12px', color: '#2A2B54' }}>
+                <div className={classes.minimumInvestItem}>
+                  <span className={classes.minimumInvestText}>Minimum Investment:</span>
+                  <span className={classes.minimumInvestNumber}>
+                    {' '}
                     ${nWithCommas(minimumInvestment)}
-                  </div>
+                  </span>
                 </div>
               </Grid>
             </Grid>
 
             <div className={classes.modalContainer}>
               <SimpleBox
-                className={classes.modalParent}
                 title="Signing Deadline"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
@@ -137,7 +131,7 @@ function DealHeader({ deal }) {
                   </Typography>
                 }
               >
-                <Typography style={{ fontSize: '14px', fontWeight: 'bold' }}>
+                <Typography className={classes.typography}>
                   {' '}
                   {signDeadline
                     ? getDeadline(signDeadline)
@@ -147,7 +141,6 @@ function DealHeader({ deal }) {
                 </Typography>
               </SimpleBox>
               <SimpleBox
-                className={classes.modalParent}
                 title="Wiring Deadline"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
@@ -159,7 +152,7 @@ function DealHeader({ deal }) {
                   </Typography>
                 }
               >
-                <Typography style={{ fontSize: '14px', fontWeight: 'bold' }}>
+                <Typography className={classes.typography}>
                   {wireDeadline
                     ? getDeadline(wireDeadline)
                     : signDeadline

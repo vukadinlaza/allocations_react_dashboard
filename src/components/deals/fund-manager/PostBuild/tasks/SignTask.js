@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, { useEffect } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import Loader from '../../../../utils/Loader';
@@ -46,12 +47,12 @@ export default function SignTask({ deal, task }) {
 
   useEffect(() => {
     if (data) {
-      // eslint-disable-next-line no-undef
       DocSpring.createVisualForm({
         dataRequestId: data.dataRequest.dataRequestId,
         tokenId: data.dataRequest.tokenId,
         tokenSecret: data.dataRequest.tokenSecret,
         domainVerification: false,
+        onSubmit: () => DocSpring.closeModal(),
       });
     }
   }, [loading]);

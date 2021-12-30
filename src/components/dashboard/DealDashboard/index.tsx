@@ -1,22 +1,31 @@
 import React, { useState } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { useParams, withRouter, RouteComponentProps } from 'react-router-dom';
+import { useHistory } from 'react-router';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
-import { Grid, Typography } from '@material-ui/core';
+import { Button, Grid, Typography } from '@material-ui/core';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import LoadingPlaceholder from './LoadingPlaceholder';
 import Investors from './sections/Investors';
+import DealProgress from './sections/DealProgress';
+import backArrow from '../../../assets/back-arrow.svg';
 import styles from './styles';
+import { useCurrentOrganization } from '../../../state/current-organization';
 
-const GET_DEAL = gql`
-  query GetDeal($fund_slug: String!, $deal_slug: String!) {
-    deal(fund_slug: $fund_slug, deal_slug: $deal_slug) {
+const DEAL = gql`
+  query getDealByIdWithTasks($deal_id: String) {
+    getDealByIdWithTasks(deal_id: $deal_id) {
       _id
-      company_name
+      metadata
+      manager_name
+      name
+      wire_deadline
       investments {
         _id
         amount
+        status
+        updated_at
         investor {
           _id
           first_name
@@ -24,6 +33,23 @@ const GET_DEAL = gql`
           name
           email
           accredidation_status
+        }
+      }
+      phase
+      phases {
+        _id
+        name
+        deal_id
+        tasks {
+          _id
+          title
+          description
+          metadata
+          type
+          complete
+          done_by
+          created_at
+          updated_at
         }
       }
     }
@@ -35,12 +61,13 @@ interface Props extends WithStyles<typeof styles> {}
 const dealDashboardTabs = ['Deal Progress', 'Investors', 'Documents', 'Deal Page'];
 
 const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
-  const params: { deal_slug: string; organization: string } = useParams();
-  const { deal_slug } = params;
-  const { organization: orgSlug } = params;
+  const history = useHistory();
+  const currentOrg = useCurrentOrganization();
+  const params: { organization: string; deal_id: string } = useParams();
+  const { deal_id } = params;
   const [tabIndex, setTabIndex] = useState(0);
-  const { data: dealData } = useQuery(GET_DEAL, {
-    variables: { deal_slug, fund_slug: orgSlug },
+  const { data: dealData } = useQuery(DEAL, {
+    variables: { deal_id },
   });
 
   const handleTabChange = (event: any, index: number) => {
@@ -52,9 +79,9 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     const tabName = dealDashboardTabs[tabIndex];
     switch (tabName) {
       case 'Deal Progress':
-        return <p>Deal Progress </p>;
+        return <DealProgress />;
       case 'Investors':
-        return <Investors />;
+        return <Investors investorsData={dealData?.getDealByIdWithTasks?.investments} />;
       case 'Documents':
         return <p>Documents </p>;
       case 'Deal Page':
@@ -65,21 +92,23 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   };
 
   return (
-    <Grid container className={classes.root} spacing={2}>
+    <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Grid container justifyContent="center" spacing={2}>
+        <Grid container justifyContent="flex-start" spacing={2}>
           <Grid item xs={4}>
-            <p className={classes.backButton}>
+            <p
+              className={classes.backButton}
+              onClick={() => history.push(`/organizations/${currentOrg.slug}/deals`)}
+            >
               <ChevronLeftIcon /> Back to SPVs
             </p>
           </Grid>
-          <Grid item xs={8} />
         </Grid>
         <Grid container justifyContent="center" spacing={2}>
           <Grid item xs={1} />
-          <Grid item lg={10}>
+          <Grid item xs={12} lg={10}>
             <Typography className={classes.pageTitle}>
-              {dealData?.deal?.company_name || 'Deal Name'}
+              {dealData?.getDealByIdWithTasks?.name || 'Deal Name'}
             </Typography>
             <HighlightedTabs
               tabs={dealDashboardTabs}
