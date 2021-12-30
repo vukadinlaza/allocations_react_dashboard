@@ -13,27 +13,6 @@ import backArrow from '../../../assets/back-arrow.svg';
 import styles from './styles';
 import { useCurrentOrganization } from '../../../state/current-organization';
 
-// const GET_DEAL = gql`
-//   query GetDeal($fund_slug: String!, $deal_slug: String!) {
-//     deal(fund_slug: $fund_slug, deal_slug: $deal_slug) {
-//       _id
-//       company_name
-//       investments {
-//         _id
-//         amount
-//         investor {
-//           _id
-//           first_name
-//           last_name
-//           name
-//           email
-//           accredidation_status
-//         }
-//       }
-//     }
-//   }
-// `;
-
 const DEAL = gql`
   query getDealByIdWithTasks($deal_id: String) {
     getDealByIdWithTasks(deal_id: $deal_id) {
@@ -42,6 +21,20 @@ const DEAL = gql`
       manager_name
       name
       wire_deadline
+      investments {
+        _id
+        amount
+        status
+        updated_at
+        investor {
+          _id
+          first_name
+          last_name
+          name
+          email
+          accredidation_status
+        }
+      }
       phase
       phases {
         _id
@@ -69,14 +62,10 @@ const dealDashboardTabs = ['Deal Progress', 'Investors', 'Documents', 'Deal Page
 
 const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   const history = useHistory();
-  // i realize this could be confusing, but the global state might be preferable to grab.
   const currentOrg = useCurrentOrganization();
   const params: { organization: string; deal_id: string } = useParams();
-  const { organization: orgSlug, deal_id } = params;
+  const { deal_id } = params;
   const [tabIndex, setTabIndex] = useState(0);
-  // const { data: dealData } = useQuery(GET_DEAL, {
-  //   variables: { deal_slug, fund_slug: orgSlug },
-  // });
   const { data: dealData } = useQuery(DEAL, {
     variables: { deal_id },
   });
@@ -92,7 +81,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
       case 'Deal Progress':
         return <DealProgress />;
       case 'Investors':
-        return <Investors />;
+        return <Investors investorsData={dealData?.getDealByIdWithTasks?.investments} />;
       case 'Documents':
         return <p>Documents </p>;
       case 'Deal Page':
@@ -102,18 +91,18 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     }
   };
 
-  // I don't see the class 'root' anywhere.
   return (
-    <Grid container className={classes.root} spacing={2}>
+    <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Grid container spacing={2}>
-          <Button
-            style={{ textTransform: 'capitalize', color: '#64748B', outline: 'none' }}
-            startIcon={<img src={backArrow} alt="back arrow" />}
-            onClick={() => history.push(`/organizations/${currentOrg.slug}/deals`)}
-          >
-            Back to SPVs
-          </Button>
+        <Grid container justifyContent="flex-start" spacing={2}>
+          <Grid item xs={4}>
+            <p
+              className={classes.backButton}
+              onClick={() => history.push(`/organizations/${currentOrg.slug}/deals`)}
+            >
+              <ChevronLeftIcon /> Back to SPVs
+            </p>
+          </Grid>
         </Grid>
         <Grid container justifyContent="center" spacing={2}>
           <Grid item xs={1} />
