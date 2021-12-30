@@ -139,7 +139,10 @@ function DealHeader({ deal, isEdit }) {
               <Grid item>
                 <div className={classes.minimumInvestItem}>
                   <span className={classes.minimumInvestText}>Minimum Investment:</span>
-                  <span className={classes.minimumInvestNumber}> ${nWithCommas(minimumInvestment)}</span>
+                  <span className={classes.minimumInvestNumber}>
+                    {' '}
+                    ${nWithCommas(minimumInvestment)}
+                  </span>
                 </div>
               </Grid>
             </Grid>

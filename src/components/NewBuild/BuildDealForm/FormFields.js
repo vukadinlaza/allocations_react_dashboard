@@ -503,7 +503,6 @@ export function TargetRaiseGoal({
   handleTooltip,
   setUnfilledFields,
   unfilledFields,
-  customInputStyles,
   classes,
   openTooltip,
   width,
@@ -811,7 +810,7 @@ export function Sectors({
 
       <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '22px' }}>
         {buildData.sectors.map((sector) => (
-          <div className={classes.sectorTag}>
+          <div className={classes.sectorTag} key={sector}>
             <span>{sector}</span>
             <button
               className={classes.removeSectorButton}
@@ -933,7 +932,6 @@ export function ManagementFee({
   customInputStyles,
   classes,
   openTooltip,
-  width,
 }) {
   const params = useParams();
   return (

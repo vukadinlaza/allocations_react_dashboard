@@ -36,6 +36,7 @@ export function useAuth(QUERY = GET_INVESTOR) {
   const {
     isLoading,
     user,
+    getAccessTokenSilently,
     isAuthenticated,
     loginWithRedirect,
     loginWithPopup,
@@ -86,6 +87,7 @@ export function useAuth(QUERY = GET_INVESTOR) {
     adminView,
     loading: isLoading || loading || !called,
     isAuthenticated,
+    getAccessTokenSilently,
     logout,
     loginWithRedirect,
     loginWithPopup,
