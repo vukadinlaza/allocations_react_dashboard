@@ -9,6 +9,42 @@ const styles: any = (theme: Theme) => ({
     fontWeight: 500,
     cursor: 'pointer',
   },
+  boardBox: {
+    height: '160px',
+    width: '100%',
+    background: '#FFFFFF',
+    borderRadius: '8px',
+    marginBottom: '8px',
+    padding: '16px 24px',
+  },
+  boardBoxMainText: {
+    fontSize: '12px',
+    fontWeight: 400,
+    color: '#2A2B54',
+    margin: 0,
+    marginBottom: '4px',
+    lineHeight: '16px',
+  },
+  boardBoxText: {
+    fontSize: '12px',
+    fontWeight: 400,
+    color: '#64748B',
+    margin: 0,
+    marginBottom: '4px',
+    lineHeight: '16px',
+  },
+  boardBoxTitle: {
+    fontSize: '12px',
+    fontWeight: 700,
+    color: '#64748B',
+    margin: 0,
+    marginBottom: '4px',
+    lineHeight: '16px',
+  },
+  boardContainer: {
+    overflowX: 'scroll',
+    paddingTop: '8px',
+  },
   boxTitle: {
     fontWeight: 500,
     fontSize: '16px',
@@ -19,6 +55,32 @@ const styles: any = (theme: Theme) => ({
     fontSize: '20px',
     color: '#2A2B54',
   },
+  cellValue: {
+    margin: '0',
+    fontSize: '12px',
+    fontWeight: 400,
+  },
+  headerLabel: {
+    fontSize: '12px',
+    fontWeight: 700,
+    color: '#2A2B54',
+    marginBottom: '16px',
+  },
+  input: {
+    color: '#2A2B54',
+    '&::placeholder': {
+      // textOverflow: 'ellipsis !important',
+      color: '#94A3B8',
+      fontSize: '14px',
+      opacity: 1,
+      fontWeight: 'normal',
+    },
+  },
+  inputRoot: {
+    borderRadius: '8px',
+    background: 'white',
+    color: '#64748B',
+  },
   largeBox: {
     height: '500px',
     width: '100%',
@@ -26,9 +88,9 @@ const styles: any = (theme: Theme) => ({
     boxShadow: 'none !important',
   },
   pageTitle: {
-    fontSize: '30px',
-    fontWeight: '800',
-    marginBottom: '24px',
+    fontSize: '40px',
+    fontWeight: 'bold',
+    marginBottom: '32px',
   },
   placeholderItem: {
     boxShadow: 'none !important',
@@ -47,6 +109,9 @@ const styles: any = (theme: Theme) => ({
       animation: '$load 1s cubic-bezier(0.4, 0.0, 0.2, 1) infinite',
     },
   },
+  searchContainer: {
+    margin: '32px 0 24px 0',
+  },
   smallBox: {
     height: '88px',
     width: '100%',
@@ -58,6 +123,55 @@ const styles: any = (theme: Theme) => ({
     [theme.breakpoints.down(phone)]: {
       overflowX: 'scroll',
       display: 'block',
+    },
+  },
+  textBottom: {
+    color: '#64748B',
+  },
+  textFieldRoot: {
+    width: '100%',
+    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderColor: '#186EFF',
+    },
+  },
+  textTop: {
+    color: '#2A2B54',
+  },
+  viewButton: {
+    fontSize: '16px',
+    textTransform: 'none',
+    padding: '1px 15px',
+    fontWeight: 500,
+    border: '1px solid #64748B',
+    marginLeft: '8px',
+    height: '32px',
+    color: '#64748B',
+    boxSizing: 'border-box',
+    transition: '0s',
+    '& svg': {
+      marginRight: '8px',
+    },
+    '&:hover': {
+      backgroundColor: '#ECF3FF',
+      border: '1px solid #CBD5E1',
+      outline: 'none',
+    },
+    '&:focus': {
+      outline: 'none',
+    },
+  },
+  viewButtonContainer: {
+    //Need this to avoid movement when selecting buttons
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  viewButtonSelected: {
+    border: '2px solid #186EFF',
+    color: theme.palette.primary.main,
+    backgroundColor: '#ECF3FF',
+    transition: '0s',
+    '&:hover, &:focus': {
+      border: '2px solid #186EFF',
     },
   },
   '@keyframes load': {

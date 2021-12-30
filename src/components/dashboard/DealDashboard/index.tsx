@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { useParams, withRouter, RouteComponentProps } from 'react-router-dom';
 import { useHistory } from 'react-router';
+import { useCurrentOrganization } from '../../../state/current-organization';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Button, Grid, Typography } from '@material-ui/core';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -11,28 +12,6 @@ import Investors from './sections/Investors';
 import DealProgress from './sections/DealProgress';
 import backArrow from '../../../assets/back-arrow.svg';
 import styles from './styles';
-import { useCurrentOrganization } from '../../../state/current-organization';
-
-// const GET_DEAL = gql`
-//   query GetDeal($fund_slug: String!, $deal_slug: String!) {
-//     deal(fund_slug: $fund_slug, deal_slug: $deal_slug) {
-//       _id
-//       company_name
-//       investments {
-//         _id
-//         amount
-//         investor {
-//           _id
-//           first_name
-//           last_name
-//           name
-//           email
-//           accredidation_status
-//         }
-//       }
-//     }
-//   }
-// `;
 
 const DEAL = gql`
   query getDealByIdWithTasks($deal_id: String) {
@@ -41,6 +20,22 @@ const DEAL = gql`
       metadata
       manager_name
       name
+      wire_deadline
+      investments {
+        _id
+        amount
+        status
+        updated_at
+        investor {
+          _id
+          first_name
+          last_name
+          name
+          email
+          accredidation_status
+        }
+      }
+      phase
       phases {
         _id
         name
@@ -69,9 +64,6 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   const params: { deal_id: string } = useParams();
   const { deal_id } = params;
   const [tabIndex, setTabIndex] = useState(0);
-  // const { data: dealData } = useQuery(GET_DEAL, {
-  //   variables: { deal_slug, fund_slug: orgSlug },
-  // });
   const { data: dealData } = useQuery(DEAL, {
     fetchPolicy: 'network-only',
     pollInterval: 1000,
@@ -93,7 +85,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
       case 'Deal Progress':
         return <DealProgress {...dealProps} />;
       case 'Investors':
-        return <Investors />;
+        return <Investors investorsData={dealData?.getDealByIdWithTasks?.investments} />;
       case 'Documents':
         return <p>Documents </p>;
       case 'Deal Page':
@@ -103,18 +95,18 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     }
   };
 
-  // I don't see the class 'root' anywhere.
   return (
-    <Grid container className={classes.root} spacing={2}>
+    <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Grid container spacing={2}>
-          <Button
-            style={{ textTransform: 'capitalize', color: '#64748B', outline: 'none' }}
-            startIcon={<img src={backArrow} alt="back arrow" />}
-            onClick={() => history.push(`/organizations/${currentOrg.slug}/deals`)}
-          >
-            Back to SPVs
-          </Button>
+        <Grid container justifyContent="flex-start" spacing={2}>
+          <Grid item xs={4}>
+            <p
+              className={classes.backButton}
+              onClick={() => history.push(`/organizations/${currentOrg.slug}/deals`)}
+            >
+              <ChevronLeftIcon /> Back to SPVs
+            </p>
+          </Grid>
         </Grid>
         <Grid container justifyContent="center" spacing={2}>
           <Grid item xs={1} />
