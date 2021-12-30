@@ -18,12 +18,10 @@ const CurrentStep = ({ classes, phase, task }) => {
         <Typography>
           {phase}: {task?.title}
         </Typography>
-        {task && (
-          <div className={forFM ? classes.badgeGray : classes.badgeBlue}>
-            <img alt="icon" src={forFM ? profile : allocationsIcon} style={{ height: '12px' }} />
-            <span>{forFM ? 'For You' : 'For Allocations'}</span>
-          </div>
-        )}
+        <div className={forFM ? classes.badgeGray : classes.badgeBlue}>
+          <img alt="icon" src={forFM ? profile : allocationsIcon} style={{ height: '12px' }} />
+          <span>{forFM ? 'For You' : 'For Allocations'}</span>
+        </div>
       </div>
 
       <Typography style={{ fontSize: '12px', textAlign: 'left', width: '100%' }}>

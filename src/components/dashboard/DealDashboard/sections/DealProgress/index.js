@@ -45,7 +45,7 @@ const demoData = [
     description: defaultDesc,
   },
 ];
-const demo = [
+const dataCopy = [
   {
     phase: 'build',
     title: 'Sign Service Agreement',
@@ -138,15 +138,13 @@ const DealProgress = ({ data, classes }) => {
   const [currentPhase, setCurrentPhase] = useState('Pre-Onboarding');
   const [currentTask, setCurrentTask] = useState('');
 
-  const [currentStep, setCurrentStep] = useState(demoData[6]);
-  const [nextStep, setNextStep] = useState(demoData[3]);
+  const [nextTask, setNextTask] = useState({});
   const [activeStep, setActiveStep] = useState(0);
 
   const steps = ['Pre-Onboarding', 'Onboarding', 'Closing', 'Post-Closing'];
-  console.log('Phase:', currentPhase);
-  console.log('Task:', currentTask);
-  console.log('Current Step:', currentStep);
-  console.log('Active Step:', activeStep);
+  // console.log('Phase:', currentPhase);
+  // console.log('Task:', currentTask);
+  // console.log('Active Step:', activeStep);
 
   const stepMap = new Map([
     ['build', 'Pre-Onboarding'],
@@ -158,7 +156,6 @@ const DealProgress = ({ data, classes }) => {
   ]);
 
   useEffect(() => {
-    // console.log('DATA:', data);
     const phase = data?.phases.find((phase) => phase.tasks.find((task) => task.complete === false));
     const tasks = data?.phases.flatMap((phase) =>
       phase.tasks.map((task) => ({
@@ -168,18 +165,18 @@ const DealProgress = ({ data, classes }) => {
         complete: task.complete,
       })),
     );
-    console.log('TASKS:', tasks);
     const task = tasks.find((task) => task.complete === false);
-    console.log('THE TASK OBJECT:', task);
+    const taskIndex = tasks.indexOf(task);
+
     if (phase) {
       setCurrentPhase(stepMap.get(phase.name));
-      setCurrentStep(stepMap.get(phase.name));
-      setActiveStep(steps.indexOf(currentStep));
+      setActiveStep(steps.indexOf(currentPhase));
     }
     if (task) {
       setCurrentTask(task);
+      setNextTask(tasks[taskIndex + 1]);
     }
-  }, [data, activeStep]);
+  }, [data]);
 
   return (
     <>
@@ -192,7 +189,7 @@ const DealProgress = ({ data, classes }) => {
         </Grid>
         <Grid item xs={10} lg={10} className={classes.nextStepContainer}>
           <Typography className={classes.stepText}>Up Next</Typography>
-          <NextStep data={nextStep} />
+          <NextStep task={nextTask} />
         </Grid>
       </Grid>
     </>
