@@ -6,12 +6,14 @@ import grayCheck from '../../../../../../assets/gray-check.svg';
 import profile from '../../../../../../assets/profile-icon.svg';
 import styles from '../../../styles.ts';
 
-const CurrentStep = ({ classes, data }) => {
+const CurrentStep = ({ classes, data, phase, taskTitle }) => {
   return (
     <Grid container className={classes.currentStepBody}>
       <div className={classes.stepTitleRow}>
         <img alt="gray check" src={grayCheck} />
-        <Typography>{data.title}</Typography>
+        <Typography>
+          {phase}: {taskTitle}
+        </Typography>
         {data.tag && (
           <div className={data.tag.includes('You') ? classes.badgeGray : classes.badgeBlue}>
             <img

@@ -12,64 +12,54 @@ const defaultDesc =
 
 const demoData = [
   {
-    step: 'Pre-Onboarding',
-    title: 'Pre-Onboarding',
+    task: 'Pre-Onboarding',
     description: defaultDesc,
   },
   {
-    step: 'Onboarding',
-    title: 'Onboarding: Confirm Deal Details',
+    task: 'Confirm Deal Details',
     description: defaultDesc,
   },
   {
-    step: 'Onboarding',
-    title: 'Onboarding: Invite Investors',
+    task: 'Invite Investors',
     tag: 'For You',
     description:
       'You can now invite investors to your deal. Please have their email addresses ready.',
-    // invite link
+    button: 'BUTTON HERE',
   },
   {
-    step: 'Onboarding',
-    title: 'Onboarding: 506c Review',
+    task: '506c Review',
     tag: 'For Allocations',
-    description:
-      'Please wait for an Allocations representative to complete this step. If you have any questions, do not hesitate to contact support@allocations.com',
-  },
-  {
-    step: 'Onboarding',
-    title: 'Onboarding: Fund Manager KYC Review',
-    tag: 'For You',
-    description:
-      'Please log in to Parallel Markets and complete hte KYC Review before moving onto the next Step.',
-    // PM Login link
-  },
-  {
-    step: 'Closing',
-    title: 'Closing',
     description: defaultDesc,
   },
   {
-    step: 'Post-Closing',
-    title: 'Post-Closing',
+    task: 'Fund Manager KYC Review',
+    tag: 'For You',
+    description: defaultDesc,
+  },
+  {
+    task: 'Closing',
+    description: defaultDesc,
+  },
+  {
+    task: 'Post-Closing',
     description: defaultDesc,
   },
 ];
 
 const DealProgress = ({ data, classes }) => {
   const [currentPhase, setCurrentPhase] = useState('Pre-Onboarding');
-  // title
-  const [currentTask, setCurrentTask] = useState('');
+  const [currentTaskTitle, setCurrentTaskTitle] = useState('');
 
-  // object of step (desc. title, etc)
   const [currentStep, setCurrentStep] = useState(demoData[6]);
   const [nextStep, setNextStep] = useState(demoData[3]);
   const [activeStep, setActiveStep] = useState(0);
 
   const steps = ['Pre-Onboarding', 'Onboarding', 'Closing', 'Post-Closing'];
   console.log('Phase:', currentPhase);
+  console.log('Task Title:', currentTaskTitle);
   console.log('Current Step:', currentStep);
   console.log('Active Step:', activeStep);
+
   const stepMap = new Map([
     ['build', 'Pre-Onboarding'],
     ['post-build', 'Pre-Onboarding'],
@@ -80,26 +70,29 @@ const DealProgress = ({ data, classes }) => {
   ]);
 
   useEffect(() => {
+    // console.log('DATA:', data);
     const phase = data?.phases.find((phase) => phase.tasks.find((task) => task.complete === false));
     const task = phase.tasks.find((task) => task.complete === false);
 
     if (phase) {
-      setCurrentPhase(phase.name);
+      setCurrentPhase(stepMap.get(phase.name));
       setCurrentStep(stepMap.get(phase.name));
       setActiveStep(steps.indexOf(currentStep));
     }
     if (task) {
-      setCurrentTask(task.title);
+      setCurrentTaskTitle(task.title);
     }
   }, [data, activeStep]);
-  // console.log('Data:', data);
-  // const handleTaskClick = (currentTask, task) => {
-  //   if (task.type.startsWith('admin')) {
-  //     setCurrentTask(false);
-  //     return;
-  //   }
-  //   setCurrentTask(currentTask ? (task === currentTask ? false : task) : task);
-  // };
+
+  const tasks = data?.phases.flatMap((phase) =>
+    phase.tasks.map((task) => ({
+      phase: phase.name,
+      title: task.title,
+      type: task.type,
+      complete: task.complete,
+    })),
+  );
+  console.log('TASKS:', tasks);
 
   return (
     <>
@@ -108,7 +101,7 @@ const DealProgress = ({ data, classes }) => {
       <Grid container className={classes.bodyContainer}>
         <Grid item xs={10} lg={10} className={classes.currentStepContainer}>
           <Typography className={classes.stepText}>Current Step</Typography>
-          <CurrentStep data={currentStep} />
+          <CurrentStep data={currentStep} phase={currentPhase} taskTitle={currentTaskTitle} />
         </Grid>
         <Grid item xs={10} lg={10} className={classes.nextStepContainer}>
           <Typography className={classes.stepText}>Up Next</Typography>
