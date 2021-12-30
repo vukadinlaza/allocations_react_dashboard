@@ -5,7 +5,7 @@ import { gql, useLazyQuery } from '@apollo/client';
 import Typography from '@material-ui/core/Typography';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
-import DocIcon from '../../../../../assets/buildDoc.svg';
+import docIcon from '../../../../../assets/buildDoc.svg';
 import bluePenIcon from '../../../../../assets/sign-agreement-blue-pen.svg';
 import check from '../../../../../assets/check-mark-blue.svg';
 import useStyles from '../../../BuildStyles';
@@ -72,7 +72,7 @@ const AgreementBox = ({
           </div>
         ) : (
           <div className={classes.serviceAgreementIconBox}>
-            <img src={DocIcon} alt="document icon" />
+            <img src={docIcon} alt="document icon" />
           </div>
         )}
 

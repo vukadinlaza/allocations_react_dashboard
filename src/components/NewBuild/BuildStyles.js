@@ -462,6 +462,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down(phone)]: {
       width: '45px',
       height: '45px',
+      backgroundColor: 'white',
     },
   },
   signContainer: {
