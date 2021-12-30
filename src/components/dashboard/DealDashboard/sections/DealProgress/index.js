@@ -45,10 +45,98 @@ const demoData = [
     description: defaultDesc,
   },
 ];
+const demo = [
+  {
+    phase: 'build',
+    title: 'Sign Service Agreement',
+    type: 'fm-document-signature',
+    complete: true,
+  },
+  {
+    phase: 'post-build',
+    title: 'Create Process Street Run: 01. Client Solutions',
+    type: 'service',
+    complete: true,
+  },
+  {
+    phase: 'pre-onboarding',
+    title: 'Sign Investment Agreement',
+    type: 'fm-document-signature',
+    complete: false,
+  },
+  {
+    phase: 'pre-onboarding',
+    title: 'Upload Company Deck',
+    type: 'fm-document-upload',
+    complete: false,
+  },
+  {
+    phase: 'pre-onboarding',
+    title: 'Upload Company Logo',
+    type: 'fm-document-upload',
+    complete: false,
+  },
+  {
+    phase: 'pre-onboarding',
+    title: 'Upload Term Sheet',
+    type: 'fm-document-upload',
+    complete: false,
+  },
+  {
+    phase: 'pre-onboarding',
+    title: 'Migration Banking',
+    type: 'process-street-checklist',
+    complete: true,
+  },
+  {
+    phase: 'pre-onboarding',
+    title: 'Creating Bank Account',
+    type: 'process-street-checklist',
+    complete: true,
+  },
+  {
+    phase: 'pre-onboarding',
+    title: 'Legals / Deal Setup',
+    type: 'process-street-checklist',
+    complete: true,
+  },
+  {
+    phase: 'onboarding',
+    title: 'Confirm Deal Details',
+    type: 'process-street-tasks',
+    complete: true,
+  },
+  { phase: 'onboarding', title: 'Invite Investors', type: 'fm-document-upload', complete: false },
+  {
+    phase: 'onboarding',
+    title: 'Invite Investors Confirmed',
+    type: 'process-street-tasks',
+    complete: false,
+  },
+  {
+    phase: 'onboarding',
+    title: 'Fund Manager KYC Review',
+    type: 'process-street-tasks',
+    complete: false,
+  },
+  { phase: 'closing', title: 'Next Steps', type: 'process-street-checklist', complete: true },
+  {
+    phase: 'post-closing',
+    title: 'Compliance EDGAR Submission',
+    type: 'process-street-checklist',
+    complete: true,
+  },
+  {
+    phase: 'post-closing',
+    title: 'Compliance Reg D + Blue Sky',
+    type: 'process-street-checklist',
+    complete: true,
+  },
+];
 
 const DealProgress = ({ data, classes }) => {
   const [currentPhase, setCurrentPhase] = useState('Pre-Onboarding');
-  const [currentTaskTitle, setCurrentTaskTitle] = useState('');
+  const [currentTask, setCurrentTask] = useState('');
 
   const [currentStep, setCurrentStep] = useState(demoData[6]);
   const [nextStep, setNextStep] = useState(demoData[3]);
@@ -56,7 +144,7 @@ const DealProgress = ({ data, classes }) => {
 
   const steps = ['Pre-Onboarding', 'Onboarding', 'Closing', 'Post-Closing'];
   console.log('Phase:', currentPhase);
-  console.log('Task Title:', currentTaskTitle);
+  console.log('Task:', currentTask);
   console.log('Current Step:', currentStep);
   console.log('Active Step:', activeStep);
 
@@ -72,27 +160,26 @@ const DealProgress = ({ data, classes }) => {
   useEffect(() => {
     // console.log('DATA:', data);
     const phase = data?.phases.find((phase) => phase.tasks.find((task) => task.complete === false));
-    const task = phase.tasks.find((task) => task.complete === false);
-
+    const tasks = data?.phases.flatMap((phase) =>
+      phase.tasks.map((task) => ({
+        phase: phase.name,
+        title: task.title,
+        type: task.type,
+        complete: task.complete,
+      })),
+    );
+    console.log('TASKS:', tasks);
+    const task = tasks.find((task) => task.complete === false);
+    console.log('THE TASK OBJECT:', task);
     if (phase) {
       setCurrentPhase(stepMap.get(phase.name));
       setCurrentStep(stepMap.get(phase.name));
       setActiveStep(steps.indexOf(currentStep));
     }
     if (task) {
-      setCurrentTaskTitle(task.title);
+      setCurrentTask(task);
     }
   }, [data, activeStep]);
-
-  const tasks = data?.phases.flatMap((phase) =>
-    phase.tasks.map((task) => ({
-      phase: phase.name,
-      title: task.title,
-      type: task.type,
-      complete: task.complete,
-    })),
-  );
-  console.log('TASKS:', tasks);
 
   return (
     <>
@@ -101,7 +188,7 @@ const DealProgress = ({ data, classes }) => {
       <Grid container className={classes.bodyContainer}>
         <Grid item xs={10} lg={10} className={classes.currentStepContainer}>
           <Typography className={classes.stepText}>Current Step</Typography>
-          <CurrentStep data={currentStep} phase={currentPhase} taskTitle={currentTaskTitle} />
+          <CurrentStep phase={currentPhase} task={currentTask} />
         </Grid>
         <Grid item xs={10} lg={10} className={classes.nextStepContainer}>
           <Typography className={classes.stepText}>Up Next</Typography>

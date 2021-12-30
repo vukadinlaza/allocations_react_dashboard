@@ -6,27 +6,27 @@ import grayCheck from '../../../../../../assets/gray-check.svg';
 import profile from '../../../../../../assets/profile-icon.svg';
 import styles from '../../../styles.ts';
 
-const CurrentStep = ({ classes, data, phase, taskTitle }) => {
+const CurrentStep = ({ classes, phase, task }) => {
   return (
     <Grid container className={classes.currentStepBody}>
       <div className={classes.stepTitleRow}>
         <img alt="gray check" src={grayCheck} />
         <Typography>
-          {phase}: {taskTitle}
+          {phase}: {task.title}
         </Typography>
-        {data.tag && (
-          <div className={data.tag.includes('You') ? classes.badgeGray : classes.badgeBlue}>
+        {task && (
+          <div className={task.type.includes('process') ? classes.badgeBlue : classes.badgeGray}>
             <img
               alt="icon"
-              src={data.tag.includes('You') ? profile : allocationsIcon}
+              src={task.type.includes('process') ? allocationsIcon : profile}
               style={{ height: '12px' }}
             />
-            <span>{data.tag}</span>
+            <span>{task.type.includes('process') ? 'For Allocations' : 'For You'}</span>
           </div>
         )}
       </div>
       <Typography style={{ fontSize: '12px', textAlign: 'left', width: '100%' }}>
-        {data.description}
+        {task.description}
       </Typography>
     </Grid>
   );
