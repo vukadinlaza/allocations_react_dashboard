@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import { withRouter } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
@@ -6,61 +6,6 @@ import CurrentStep from './components/CurrentStep';
 import NextStep from './components/NextStep';
 import ProgressBar from './components/ProgressBar';
 import styles from '../../styles';
-
-// const PhaseList = ({ classes, phases, currentPhase, handlePhaseClick }) => {
-//   const getItemClass = (currentPhase, item, complete) => {
-//     if (currentPhase === item) {
-//       if (complete) {
-//         return classes.listItemActiveComplete;
-//       }
-//       return classes.listItemActive;
-//     }
-//     if (complete) {
-//       return classes.listItemComplete;
-//     }
-//     return classes.listItem;
-//   };
-
-//   return (
-//     <>
-//       <Grid item sm={12} lg={4}>
-//         <Card className={classes.card}>
-//           <CardContent className={classes.cardContent}>
-//             <List component="div" disablePadding>
-//               {phases.map((phase) => {
-//                 const complete = every(phase.tasks, { complete: true });
-//                 return (
-//                   <ListItem
-//                     key={phase._id}
-//                     button
-//                     className={getItemClass(currentPhase, phase, complete)}
-//                     onClick={() => handlePhaseClick(currentPhase, phase)}
-//                   >
-//                     <ListItemIcon>
-//                       {complete ? (
-//                         <AiFillCheckCircle style={{ color: '#1be01e' }} size="1.75rem" />
-//                       ) : (
-//                         <AiOutlineCheckCircle style={{ color: 'grey' }} size="1.75rem" />
-//                       )}
-//                     </ListItemIcon>
-//                     <ListItemText size="small" primary={_.capitalize(phase.name)} />
-//                     <ListItemIcon className={classes.itemIcon}>
-//                       {phase === currentPhase ? (
-//                         <IoIosArrowBack size="1.2rem" />
-//                       ) : (
-//                         <IoIosArrowForward size="1.2rem" />
-//                       )}
-//                     </ListItemIcon>
-//                   </ListItem>
-//                 );
-//               })}
-//             </List>
-//           </CardContent>
-//         </Card>
-//       </Grid>
-//     </>
-//   );
-// };
 
 const defaultDesc =
   'An Allocations representative will be reaching out shortly to assist you in completing this step. If you have any questions, do not hesitate to contact support@allocations.com.';
@@ -112,32 +57,37 @@ const demoData = [
 ];
 
 const DealProgress = ({ data, classes }) => {
-  console.log('Data:', data);
+  const [currentPhase, setCurrentPhase] = useState('Pre-Onboarding');
+  const [currentTask, setCurrentTask] = useState('');
 
   const [currentStep, setCurrentStep] = useState(demoData[6]);
   const [nextStep, setNextStep] = useState(demoData[3]);
+  const [activeStep, setActiveStep] = useState(0);
 
   const steps = ['Pre-Onboarding', 'Onboarding', 'Closing', 'Post-Closing'];
-  // This finds the matching step and dynamically updates progress bar
-  const activeStep = steps.indexOf(steps.find((step) => currentStep.title.includes(step)));
 
-  // const [currentPhase, setCurrentPhase] = useState(false);
-  // const [currentTask, setCurrentTask] = useState(false);
+  const stepMap = new Map([
+    ['build', 'Pre-Onboarding'],
+    ['post-build', 'Pre-Onboarding'],
+    ['pre-onboarding', 'Pre-Onboarding'],
+    ['onboarding', 'Onboarding'],
+    ['closing', 'Closing'],
+    ['post-closing', 'Post-Closing'],
+  ]);
 
-  // useEffect(() => {
-  //   if (currentPhase && data?.getDealWithTasks) {
-  //     const {getDealWithTasks: deal } = data;
-  //     setCurrentPhase(deal?.phases?.find((p) => p.name === currentPhase.name));
-  //     if (currentTask && deal.phases.tasks) {
-  //       setCurrentTask(deal?.phases?.tasks.find((t) => t.title === currentTask.title));
-  //     }
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    const phase = data?.phases.find((phase) => phase.tasks.find((task) => task.complete === false));
+    const task = phase.tasks.find((task) => task.complete === false);
 
-  // const handlePhaseClick = (current, item) => {
-  //   setCurrentPhase(current ? (item === current ? false : item) : item);
-  //   if (currentTask) setCurrentTask(false);
-  // };
+    if (phase) {
+      setCurrentPhase(phase.name);
+      setCurrentStep(stepMap.get(phase.name));
+      setActiveStep(steps.indexOf(currentPhase));
+    }
+    if (task) {
+      setCurrentTask(task.title);
+    }
+  }, [data]);
 
   // const handleTaskClick = (currentTask, task) => {
   //   if (task.type.startsWith('admin')) {
@@ -146,10 +96,6 @@ const DealProgress = ({ data, classes }) => {
   //   }
   //   setCurrentTask(currentTask ? (task === currentTask ? false : task) : task);
   // };
-
-  // need some styling
-  // if (!data) return <LoadingPlaceholder />;
-  // const {getDealWithTasks: deal } = data;
 
   return (
     <>

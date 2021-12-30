@@ -40,15 +40,7 @@ const DEAL = gql`
       _id
       metadata
       manager_name
-      manager {
-        type
-        name
-        email
-        title
-        entity_name
-      }
       name
-      phase
       phases {
         _id
         name
@@ -63,7 +55,6 @@ const DEAL = gql`
           updated_at
         }
       }
-      type
     }
   }
 `;
