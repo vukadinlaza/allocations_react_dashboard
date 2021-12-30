@@ -6,27 +6,28 @@ import grayCheck from '../../../../../../assets/gray-check.svg';
 import profile from '../../../../../../assets/profile-icon.svg';
 import styles from '../../../styles.ts';
 
+const defaultDesc =
+  'An Allocations representative will be reaching out shortly to assist you in completing this step. If you have any questions, do not hesitate to contact support@allocations.com.';
+
 const CurrentStep = ({ classes, phase, task }) => {
+  const forFM = !task?.type?.includes('process');
   return (
     <Grid container className={classes.currentStepBody}>
       <div className={classes.stepTitleRow}>
         <img alt="gray check" src={grayCheck} />
         <Typography>
-          {phase}: {task.title}
+          {phase}: {task?.title}
         </Typography>
         {task && (
-          <div className={task.type.includes('process') ? classes.badgeBlue : classes.badgeGray}>
-            <img
-              alt="icon"
-              src={task.type.includes('process') ? allocationsIcon : profile}
-              style={{ height: '12px' }}
-            />
-            <span>{task.type.includes('process') ? 'For Allocations' : 'For You'}</span>
+          <div className={forFM ? classes.badgeGray : classes.badgeBlue}>
+            <img alt="icon" src={forFM ? profile : allocationsIcon} style={{ height: '12px' }} />
+            <span>{forFM ? 'For You' : 'For Allocations'}</span>
           </div>
         )}
       </div>
+
       <Typography style={{ fontSize: '12px', textAlign: 'left', width: '100%' }}>
-        {task.description}
+        {forFM ? 'Something else happens' : defaultDesc}
       </Typography>
     </Grid>
   );
