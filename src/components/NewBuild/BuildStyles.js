@@ -401,9 +401,14 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '20px',
     boxShadow: 'none !important',
     backgroundColor: '#F6F7F8',
+    '&:hover': {
+      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+    },
     [theme.breakpoints.down(phone)]: {
       paddingLeft: '15px',
       paddingRight: '15px',
+      border: '2px solid #186EFF !important',
+      backgroundColor: 'rgba(26, 110, 255, 0.16)',
     },
   },
   agreementUnsignedBox: {
@@ -421,6 +426,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down(phone)]: {
       paddingLeft: '15px',
       paddingRight: '15px',
+      border: '2px solid #2A2B54 !important',
     },
   },
   buttonBox: {

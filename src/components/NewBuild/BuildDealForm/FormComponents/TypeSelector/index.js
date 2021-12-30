@@ -13,6 +13,7 @@ import HouseIcon from '../../../../../assets/buildHouse.svg';
 import CustomIcon from '../../../../../assets/buildCustom.svg';
 import NetworkIcon from '../../../../../assets/buildNetwork.svg';
 import PieIcon from '../../../../../assets/buildPie.svg';
+import { useViewport } from '../../../../../utils/hooks';
 import { ModalTooltip } from '../../../../dashboard/FundManagerDashboard/widgets';
 import {
   DealName,
@@ -46,6 +47,7 @@ export default function TypeSelector({
   sectionComplete,
 }) {
   const classes = useStyles();
+  const { width } = useViewport();
   const customInputStyles = { style: { height: '23px' } };
   const params = useParams();
 
