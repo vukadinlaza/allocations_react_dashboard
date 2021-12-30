@@ -96,25 +96,23 @@ const dataCopy = [
   },
 ];
 
+const steps = ['Pre-Onboarding', 'Onboarding', 'Closing', 'Post-Closing'];
+
+const stepMap = new Map([
+  ['build', 'Pre-Onboarding'],
+  ['post-build', 'Pre-Onboarding'],
+  ['pre-onboarding', 'Pre-Onboarding'],
+  ['onboarding', 'Onboarding'],
+  ['closing', 'Closing'],
+  ['post-closing', 'Post-Closing'],
+]);
+
 const DealProgress = ({ data, classes }) => {
   const [currentPhase, setCurrentPhase] = useState('Pre-Onboarding');
   const [currentTask, setCurrentTask] = useState({});
   const [nextTask, setNextTask] = useState({});
+  const [nextTaskPhase, setNextTaskPhase] = useState('Pre-Onboarding');
   const [activeStep, setActiveStep] = useState(0);
-
-  const steps = ['Pre-Onboarding', 'Onboarding', 'Closing', 'Post-Closing'];
-  // console.log('Phase:', currentPhase);
-  // console.log('Task:', currentTask);
-  // console.log('Active Step:', activeStep);
-
-  const stepMap = new Map([
-    ['build', 'Pre-Onboarding'],
-    ['post-build', 'Pre-Onboarding'],
-    ['pre-onboarding', 'Pre-Onboarding'],
-    ['onboarding', 'Onboarding'],
-    ['closing', 'Closing'],
-    ['post-closing', 'Post-Closing'],
-  ]);
 
   useEffect(() => {
     const phase = data?.phases.find((phase) => phase.tasks.find((task) => task.complete === false));
@@ -136,6 +134,7 @@ const DealProgress = ({ data, classes }) => {
     if (task) {
       setCurrentTask(task);
       setNextTask(tasks[taskIndex + 1]);
+      setNextTaskPhase(stepMap.get(nextTask.phase));
     }
   }, [data]);
 
@@ -150,7 +149,7 @@ const DealProgress = ({ data, classes }) => {
         </Grid>
         <Grid item xs={10} lg={10} className={classes.nextStepContainer}>
           <Typography className={classes.stepText}>Up Next</Typography>
-          <NextStep task={nextTask} />
+          <NextStep phase={nextTaskPhase} task={nextTask} />
         </Grid>
       </Grid>
     </>

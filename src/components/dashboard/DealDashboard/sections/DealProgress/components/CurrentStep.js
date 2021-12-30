@@ -16,7 +16,7 @@ const CurrentStep = ({ classes, phase, task }) => {
       <div className={classes.stepTitleRow}>
         <img alt="gray check" src={grayCheck} />
         <Typography>
-          {phase}: {task?.title}
+          {phase && `${phase}:`} {task?.title}
         </Typography>
         <div className={forFM ? classes.badgeGray : classes.badgeBlue}>
           <img alt="icon" src={forFM ? profile : allocationsIcon} style={{ height: '12px' }} />
