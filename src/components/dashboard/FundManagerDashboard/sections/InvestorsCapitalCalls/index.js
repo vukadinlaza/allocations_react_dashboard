@@ -19,24 +19,36 @@ const InvestorsCapitalCall = ({ classes, orgSlug, userProfile, dealName }) => {
   const [dataWithEmails, setDataWithEmails] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const headers = [
-    { value: 'Investor Name', label: 'Name', type: 'name' },
-    { value: 'Email', label: 'Email' },
+    {
+      value: 'Investor Name',
+      label: 'Name',
+      type: 'name',
+      isSortable: true,
+    },
+    {
+      value: 'Email',
+      label: 'Email',
+      isSortable: true,
+    },
     {
       value: 'Total Amount Committed (with fees)',
       label: 'Total Committed',
       type: 'amount',
       align: 'right',
+      isSortable: true,
     },
     {
       value: 'Net Amount Contributed',
       label: 'Amount Contributed ($)',
       type: 'amount',
       align: 'right',
+      isSortable: true,
     },
     {
       value: 'Aggregate Contributed (%)',
       label: 'Total Contribution (%)',
       type: 'progressBar',
+      isSortable: true,
     },
   ];
 
@@ -80,7 +92,7 @@ const InvestorsCapitalCall = ({ classes, orgSlug, userProfile, dealName }) => {
       case 'date':
         return moment(row[headerValue]).format('MM/DD/YYYY');
       case 'progressBar':
-        return <ProgressBarWithLabel value={row[headerValue] * 100} />;
+        return <ProgressBarWithLabel value={Math.round(row[headerValue] * 100)} />;
       default:
         return <div />;
     }
@@ -92,6 +104,7 @@ const InvestorsCapitalCall = ({ classes, orgSlug, userProfile, dealName }) => {
       label: 'Dashboard Link',
       type: 'link',
       alignHeader: true,
+      isSortable: true,
     });
   }
 
@@ -141,6 +154,7 @@ const InvestorsCapitalCall = ({ classes, orgSlug, userProfile, dealName }) => {
         getCellContent={getCellContent}
         sortField="email"
         sortOrder="desc"
+        count={investorsData.length}
       />
     </div>
   );
