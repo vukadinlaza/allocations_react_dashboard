@@ -13,6 +13,7 @@ import {
 import SearchIcon from '@material-ui/icons/Search';
 import ViewAgendaOutlinedIcon from '@material-ui/icons/ViewAgendaOutlined';
 import ViewWeekOutlinedIcon from '@material-ui/icons/ViewWeekOutlined';
+import { v4 as uuidv4 } from 'uuid';
 import styles from '../../styles';
 import Board from './components/Board';
 import NewAllocationsTable from '../../../../utils/NewAllocationsTable';
@@ -189,7 +190,6 @@ const Investors: React.FC<Props> = ({ classes, investorsData }) => {
   };
 
   const updateSearch = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    console.log({ event });
     setSearchTerm(event.currentTarget.value);
   };
 
@@ -210,7 +210,7 @@ const Investors: React.FC<Props> = ({ classes, investorsData }) => {
       <Grid container spacing={containerSpacing}>
         <Grid item xs={1} />
         {dashboardBoxes.map((box, index) => (
-          <Grid key={`box-${index}`} item lg={boxSize}>
+          <Grid key={uuidv4()} item lg={boxSize}>
             <Paper elevation={0} className={classes.smallBox}>
               <Typography className={classes.boxTitle}>{box.title}</Typography>
               <Typography className={classes.boxValue}>{box.value}</Typography>
@@ -218,7 +218,7 @@ const Investors: React.FC<Props> = ({ classes, investorsData }) => {
           </Grid>
         ))}
         {invisibleBoxes.length &&
-          invisibleBoxes.map((box, index) => <Grid item key={`box-${index}`} xs={boxSize} />)}
+          invisibleBoxes.map((box, index) => <Grid item key={uuidv4()} xs={boxSize} />)}
         <Grid item xs={1} />
       </Grid>
       <Grid container spacing={containerSpacing} className={classes.searchContainer}>
@@ -253,7 +253,7 @@ const Investors: React.FC<Props> = ({ classes, investorsData }) => {
               className={`${classes.viewButton} ${
                 currentView === 'list' ? classes.viewButtonSelected : ''
               }`}
-              onClick={(e) => handleViewChange('list')}
+              onClick={() => handleViewChange('list')}
             >
               <ViewAgendaOutlinedIcon style={{ height: '18px' }} />
               List

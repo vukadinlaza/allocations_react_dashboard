@@ -94,7 +94,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Grid container justifyContent="center" spacing={2}>
+        <Grid container justifyContent="flex-start" spacing={2}>
           <Grid item xs={4}>
             <p
               className={classes.backButton}
@@ -103,7 +103,6 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
               <ChevronLeftIcon /> Back to SPVs
             </p>
           </Grid>
-          <Grid item xs={8} />
         </Grid>
         <Grid container justifyContent="center" spacing={2}>
           <Grid item xs={1} />
