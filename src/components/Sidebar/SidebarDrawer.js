@@ -145,10 +145,12 @@ const SidebarDrawer = ({
             spv: () => {
               history.push('/public/new-build/spv');
               closeModal();
+              handleDrawerClose();
             },
             fund: () => {
               history.push('/public/new-build/fund');
               closeModal();
+              handleDrawerClose();
             },
           },
         }}
