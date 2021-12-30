@@ -146,15 +146,14 @@ const useStyles = makeStyles((theme) => ({
   },
   itemText: {
     font: 'normal normal normal 18px/21px Roboto',
-    width: '150px',
-    textAlign: 'center',
     color: '#2A2B54',
     letterSpacing: '0px',
     opacity: '1',
+    paddingLeft: '30px',
     [theme.breakpoints.down(phone)]: {
-      maxWidth: '100%',
       font: 'normal normal normal 16px/21px Roboto',
-      width: '180px',
+      maxWidth: '180px',
+      paddingLeft: '15px',
     },
   },
   outerSection: {
