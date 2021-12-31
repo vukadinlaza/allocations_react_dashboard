@@ -3,13 +3,12 @@ import { useQuery, gql } from '@apollo/client';
 import { useParams, withRouter, RouteComponentProps } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
-import { Button, Grid, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import LoadingPlaceholder from './LoadingPlaceholder';
 import Investors from './sections/Investors';
 import DealProgress from './sections/DealProgress';
-import backArrow from '../../../assets/back-arrow.svg';
 import styles from './styles';
 import { useCurrentOrganization } from '../../../state/current-organization';
 
@@ -81,7 +80,13 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
       case 'Deal Progress':
         return <DealProgress />;
       case 'Investors':
-        return <Investors investorsData={dealData?.getDealByIdWithTasks?.investments} />;
+        return (
+          <Investors
+            investorsData={dealData?.getDealByIdWithTasks?.investments}
+            orgSlug={currentOrg.slug}
+            dealId={deal_id}
+          />
+        );
       case 'Documents':
         return <p>Documents </p>;
       case 'Deal Page':
