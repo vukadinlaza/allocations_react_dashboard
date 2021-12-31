@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { useParams, withRouter, RouteComponentProps } from 'react-router-dom';
 import { useHistory } from 'react-router';
+import { useCurrentOrganization } from '../../../state/current-organization';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -10,7 +11,6 @@ import LoadingPlaceholder from './LoadingPlaceholder';
 import Investors from './sections/Investors';
 import DealProgress from './sections/DealProgress';
 import styles from './styles';
-import { useCurrentOrganization } from '../../../state/current-organization';
 
 const DEAL = gql`
   query getDealByIdWithTasks($deal_id: String) {
@@ -42,11 +42,9 @@ const DEAL = gql`
         tasks {
           _id
           title
-          description
           metadata
           type
           complete
-          done_by
           created_at
           updated_at
         }
@@ -62,10 +60,12 @@ const dealDashboardTabs = ['Deal Progress', 'Investors', 'Documents', 'Deal Page
 const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   const history = useHistory();
   const currentOrg = useCurrentOrganization();
-  const params: { organization: string; deal_id: string } = useParams();
+  const params: { deal_id: string } = useParams();
   const { deal_id } = params;
   const [tabIndex, setTabIndex] = useState(0);
   const { data: dealData } = useQuery(DEAL, {
+    fetchPolicy: 'network-only',
+    pollInterval: 1000,
     variables: { deal_id },
   });
 
@@ -73,12 +73,16 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     setTabIndex(index);
   };
 
+  const dealProps = {
+    data: dealData?.getDealByIdWithTasks,
+  };
+
   const getTabComponent = () => {
     if (!dealData) return <LoadingPlaceholder />;
     const tabName = dealDashboardTabs[tabIndex];
     switch (tabName) {
       case 'Deal Progress':
-        return <DealProgress />;
+        return <DealProgress {...dealProps} />;
       case 'Investors':
         return (
           <Investors
