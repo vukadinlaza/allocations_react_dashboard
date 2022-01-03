@@ -310,7 +310,7 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
       if (!buildData.type_of_investors) {
         unvalidatedFieldsToFill('type_of_investors', 'Type of Investors');
       }
-      if (buildData.need_gp_entity === 'false' && !buildData.gp_entity_name) {
+      if (!buildData.gp_entity_name) {
         unvalidatedFieldsToFill('gp_entity_name', 'GP Entity Name');
       }
       if (!buildData.need_gp_entity) {
