@@ -20,9 +20,12 @@ import NewAllocationsTable from '../../../../utils/NewAllocationsTable';
 import { nWithCommas } from '../../../../../utils/numbers';
 import { titleCase } from '../../../../../utils/helpers';
 import { getChipStyle, sortByStatus } from './helpers';
+import InviteModal from './components/InviteModal';
 
 interface Props extends WithStyles<typeof styles> {
   investorsData: Investment[];
+  dealId: string;
+  orgSlug: string;
 }
 
 interface Header {
@@ -84,7 +87,8 @@ const investorsHeaders: Header[] = [
   },
 ];
 
-const Investors: React.FC<Props> = ({ classes, investorsData }) => {
+const Investors: React.FC<Props> = ({ classes, investorsData, orgSlug, dealId }) => {
+  const investmentAmounts = investorsData.map((investment: Investment) => investment.amount);
   const dashboardBoxes: { title: string; value: number | string }[] = [
     {
       title: 'Total Investors',
@@ -93,16 +97,16 @@ const Investors: React.FC<Props> = ({ classes, investorsData }) => {
     },
     {
       title: 'Total Invested',
-      value: `$${nWithCommas(
-        investorsData
-          .map((investment: Investment) => investment.amount)
-          .reduce((acc: number, n: number) => acc + n),
-      )}`,
+      value: `$${
+        investmentAmounts?.length
+          ? nWithCommas(investmentAmounts.reduce((acc: number, n: number) => acc + n))
+          : '0'
+      }`,
     },
   ];
   const boxSize = 2;
   const containerSpacing = 2;
-  const invisibleBoxes = Array(5 - dashboardBoxes.length).fill(0);
+  const invisibleBoxes = Array(5 - dashboardBoxes.length - 1).fill(0);
   const [currentView, setCurrentView] = useState('list');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -219,6 +223,9 @@ const Investors: React.FC<Props> = ({ classes, investorsData }) => {
         ))}
         {invisibleBoxes.length &&
           invisibleBoxes.map((box, index) => <Grid item key={uuidv4()} xs={boxSize} />)}
+        <Grid item xs={boxSize} className={classes.inviteButtonContainer}>
+          <InviteModal orgSlug={orgSlug} dealId={dealId} />
+        </Grid>
         <Grid item xs={1} />
       </Grid>
       <Grid container spacing={containerSpacing} className={classes.searchContainer}>
