@@ -3,8 +3,8 @@ import { Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import { useHistory, useParams } from 'react-router';
-import AllocationsTable from '../../../utils/AllocationsTable';
-import styles from '../../../dashboard/InvestorDashboard/styles';
+import AllocationsTable from '../../../../utils/AllocationsTable';
+import styles from '../../../InvestorDashboard/styles';
 
 const spvHeaders = [
   {
