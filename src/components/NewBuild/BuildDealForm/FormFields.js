@@ -620,7 +620,11 @@ export function GPEntityName({
             title="GP Entity Name"
             handleTooltip={handleTooltip}
             tooltipContent={
-              <Typography color="inherit">Indicate your desired name of the GP entity</Typography>
+              buildData.need_gp_entity === 'true' ? (
+                <Typography color="inherit">Indicate your desired name of the GP entity</Typography>
+              ) : (
+                <Typography color="inherit">Indicate the name of the GP entity</Typography>
+              )
             }
             openTooltip={openTooltip}
             id="gp_entity_name"
