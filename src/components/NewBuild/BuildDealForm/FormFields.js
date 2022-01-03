@@ -1593,7 +1593,7 @@ export function CustomInvestmentAgreement({
           onChange={handleChange}
           currentValue={buildData.custom_investment_agreement}
           values={[
-            { label: 'Allocations', value: 'false' },
+            { label: 'Allocations (Recommended)', value: 'false' },
             { label: 'Custom', value: 'true' },
           ]}
         />
