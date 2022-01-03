@@ -163,14 +163,12 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
 
         <div className={classes.buttonBox}>
           <Button
+            disabled={!allSigned}
             onClick={() => {
-              if (!allSigned) {
-                toast.error('Please sign all Agreements before continuing');
-                return;
-              }
               toast.success('Success! Your submission was submitted.');
               history.push(`/admin/${currentOrg.slug}/${deal._id}`);
             }}
+            style={!allSigned ? { backgroundColor: '#EBEBEB' } : {}}
             className={classes.continueButton}
           >
             Complete
