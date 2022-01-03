@@ -3,7 +3,7 @@ import { Paper, Tabs, Tab, Box } from '@material-ui/core';
 import Detail from './Detail';
 import Memo from './Memo';
 import PitchDeck from './PitchDeck';
-import useStyles from '../DealStyles';
+import useStyles from '../style';
 
 const data = [
   { title: 'Introduction', description: 'You currently do not have any content for this section' },

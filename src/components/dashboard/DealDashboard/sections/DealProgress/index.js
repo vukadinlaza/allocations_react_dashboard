@@ -4,8 +4,8 @@ import { withRouter } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import CurrentStep from './components/CurrentStep';
 import NextStep from './components/NextStep';
-import ProgressBar from './components/ProgressBar';
-import styles from '../../styles';
+import ProgressBar from './components/Progressbar';
+import styles from '../../styles.ts';
 
 const dataCopy = [
   {

@@ -29,7 +29,7 @@ import Demo from './components/Demo';
 // admin
 
 import DealNextSteps from './components/DealNextSteps/DealNextSteps';
-import InvestmentPage from './components/DealOneClick/InvestmentPage/InvestmentPage';
+import InvestmentPage from './components/DealOneClick/InvestmentPage';
 import SuperAdminManager from './components/superadmin/Manager';
 import DealOneClick from './components/DealOneClick';
 

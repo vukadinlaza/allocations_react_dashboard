@@ -1,7 +1,7 @@
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
 import MockAllocationsProvider from '../../../utils/test/test-utils';
-import LandingPageRedesign, { GET_DEAL } from '../LandingPageRedesign';
+import LandingPageRedesign, { GET_DEAL } from '..';
 import DealHeader from '../DealHeader';
 
 jest.mock('react-router-dom', () => ({

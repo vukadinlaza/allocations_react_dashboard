@@ -12,7 +12,7 @@ import {
 import { useQuery, gql } from '@apollo/client';
 import moment from 'moment';
 import { nWithCommas } from '../../../../utils/numbers';
-import useStyles from '../DealStyles';
+import useStyles from '../style';
 import { SimpleBox } from '../widgets/SimpleBox';
 import BadgeWrapper from './BadgeWrapper';
 import Loader from '../../../utils/Loader';

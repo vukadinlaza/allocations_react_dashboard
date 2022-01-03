@@ -1,6 +1,6 @@
 import React from 'react';
 import { Paper, Box } from '@material-ui/core';
-import useStyles from '../DealStyles';
+import useStyles from '../style';
 
 function DealSummary({ deal }) {
   const { company_description } = deal;
