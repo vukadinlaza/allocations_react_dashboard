@@ -19,6 +19,7 @@ const DEAL = gql`
       metadata
       manager_name
       name
+      company_name
       wire_deadline
       investments {
         _id
@@ -117,7 +118,9 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
           <Grid item xs={1} />
           <Grid item xs={12} lg={10}>
             <Typography className={classes.pageTitle}>
-              {dealData?.getDealByIdWithTasks?.name || 'Deal Name'}
+              {dealData?.getDealByIdWithTasks?.name ||
+                dealData?.getDealByIdWithTasks?.company_name ||
+                'Deal Name'}
             </Typography>
             <HighlightedTabs
               tabs={dealDashboardTabs}
