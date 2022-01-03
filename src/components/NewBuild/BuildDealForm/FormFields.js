@@ -674,7 +674,7 @@ export function ClosingDate({
               params.type === 'fund' ? (
                 <Typography color="inherit">
                   Date on when the Fund needs to make the first investment. Please note that
-                  Allocations requires at least 24 notice for processing a wire
+                  Allocations requires at least a 24-hour notice for processing a wire
                 </Typography>
               ) : (
                 <Typography color="inherit">
