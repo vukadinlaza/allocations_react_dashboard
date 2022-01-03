@@ -88,6 +88,7 @@ const investorsHeaders: Header[] = [
 ];
 
 const Investors: React.FC<Props> = ({ classes, investorsData, orgSlug, dealId }) => {
+  const investmentAmounts = investorsData.map((investment: Investment) => investment.amount);
   const dashboardBoxes: { title: string; value: number | string }[] = [
     {
       title: 'Total Investors',
@@ -96,11 +97,11 @@ const Investors: React.FC<Props> = ({ classes, investorsData, orgSlug, dealId })
     },
     {
       title: 'Total Invested',
-      value: `$${nWithCommas(
-        investorsData
-          .map((investment: Investment) => investment.amount)
-          .reduce((acc: number, n: number) => acc + n),
-      )}`,
+      value: `$${
+        investmentAmounts?.length
+          ? nWithCommas(investmentAmounts.reduce((acc: number, n: number) => acc + n))
+          : '0'
+      }`,
     },
   ];
   const boxSize = 2;
