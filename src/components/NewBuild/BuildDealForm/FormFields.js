@@ -1617,7 +1617,7 @@ export function InternationalCompanyStatus({
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Grid item className={`${classes.formItemName} ${classes.customFormItemName}`}>
-            Will this deal being investing into an international (Non US) company?
+            Is the portfolio company located outside of the US?
             <ModalTooltip
               title="International Companies"
               handleTooltip={handleTooltip}
