@@ -10,7 +10,7 @@ import moment from 'moment';
 import base64 from 'base-64';
 import { useAuth } from '../../auth/useAuth';
 import InvestmentFlow from './DealFlow';
-import Pledge from './pledge';
+import Pledge from './Pledge';
 import Loader from '../utils/Loader';
 import './style.scss';
 

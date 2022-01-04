@@ -1,6 +1,6 @@
 import React from 'react';
 import { Paper, Box } from '@material-ui/core';
-import useStyles from '../DealStyles';
+import useStyles from '../style';
 
 export default function DealSummary({ title, content }) {
   const classes = useStyles();

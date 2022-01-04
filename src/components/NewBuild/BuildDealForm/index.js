@@ -115,7 +115,6 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
     custom_investment_agreement: 'false',
     custom_management_fee: 'false',
     reporting_adviser: undefined,
-    deal_stage: '',
     fund_name: '',
     general_partner_representative: '',
     gp_entity_name: undefined,
@@ -156,7 +155,6 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
       'name',
       'manager_name',
       'representative',
-      'deal_stage',
       'sectors',
     ],
     fund: [
@@ -165,7 +163,6 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
       'manager_name',
       'representative',
       'need_gp_entity',
-      'deal_stage',
       'sectors',
     ],
   };
@@ -323,9 +320,6 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
     }
     if (!buildData.sectors.length) {
       unvalidatedFieldsToFill('sectors', 'Sectors');
-    }
-    if (!buildData.deal_stage.length) {
-      unvalidatedFieldsToFill('deal_stage', 'Deal Stage');
     }
 
     // conditionally checked fields below here

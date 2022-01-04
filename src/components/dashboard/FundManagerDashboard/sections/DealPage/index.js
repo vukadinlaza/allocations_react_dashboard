@@ -5,7 +5,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import { Tooltip, Typography } from '@material-ui/core';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import { FlatBox } from '../../widgets';
-import DealLandingPageRedesign from '../../../../DealOneClick/LandingPageRedesign/LandingPageRedesign';
+import DealLandingPageRedesign from '../../../../DealOneClick/LandingPageRedesign';
 
 export default function DealPage({
   orgSlug,

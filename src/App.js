@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
 import { withLDProvider } from 'launchdarkly-react-client-sdk';
 
-import DealDashboard from './components/dashboard/DealDashboard';
+import DealDashboard from './components/dashboard/DealDashboard/index.tsx';
 import FundManagerDashboard from './components/dashboard/FundManagerDashboard';
 import InvestorDashboard from './components/dashboard/InvestorDashboard';
 
@@ -17,7 +17,7 @@ import Sidebar from './components/Sidebar';
 import Investors from './components/Investors';
 import InvestmentNew from './components/InvestmentNew';
 import ProfilePage from './components/Profile/ProfilePage';
-import Profile from './components/Profile/Profile';
+import Profile from './components/Profile';
 import OrganizationNew from './components/OrganizationNew';
 import OrganizationMembers from './components/OrganizationMembers';
 import DealsTable from './components/dashboard/FundManagerDashboard/FundManagerDealsTable/DealsTablePage';
@@ -29,7 +29,7 @@ import Demo from './components/Demo';
 // admin
 
 import DealNextSteps from './components/DealNextSteps/DealNextSteps';
-import InvestmentPage from './components/DealOneClick/InvestmentPage/InvestmentPage';
+import InvestmentPage from './components/DealOneClick/InvestmentPage';
 import SuperAdminManager from './components/superadmin/Manager';
 import DealOneClick from './components/DealOneClick';
 
