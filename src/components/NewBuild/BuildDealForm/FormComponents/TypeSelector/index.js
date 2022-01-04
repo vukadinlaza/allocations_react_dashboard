@@ -23,7 +23,6 @@ import {
   Sectors,
   NumberOfInvestments,
   Representative,
-  DealStage,
   FundName,
   GeneralPartnerName,
   RepresentativeGeneralPartnerAndTitle,
@@ -233,7 +232,6 @@ export default function TypeSelector({
                 {buildData.need_gp_entity === 'false' && <GPEntityName {...formFieldProps} />}
               </>
             )}
-            <DealStage {...formFieldProps} />
             <Sectors {...formFieldProps} />
           </Grid>
         </form>
