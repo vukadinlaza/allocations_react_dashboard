@@ -23,6 +23,7 @@ import {
   InternationalInvestorsCountriesSelector,
   SecuritiesSelector,
 } from '../common/selectors';
+import { useViewport } from '../../../utils/hooks';
 
 export function PortfolioCompanyName({
   buildData,
@@ -936,6 +937,7 @@ export function ManagementFee({
   openTooltip,
 }) {
   const params = useParams();
+  const { width } = useViewport();
   return (
     <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
