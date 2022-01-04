@@ -3,7 +3,6 @@ import { Box } from '@material-ui/core';
 import './styles.scss';
 
 function CryptoDisclosure({ deal }) {
-
   return (
     <section className="CryptoDisclosure">
       <p className="section-label">Legal Crypto Disclosure</p>

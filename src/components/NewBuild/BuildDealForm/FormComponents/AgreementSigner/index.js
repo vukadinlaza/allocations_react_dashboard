@@ -5,9 +5,13 @@ import { gql, useLazyQuery } from '@apollo/client';
 import Typography from '@material-ui/core/Typography';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router';
+import docIcon from '../../../../../assets/buildDoc.svg';
 import bluePenIcon from '../../../../../assets/sign-agreement-blue-pen.svg';
+import check from '../../../../../assets/check-mark-blue.svg';
 import useStyles from '../../../BuildStyles';
 import { useCurrentOrganization } from '../../../../../state/current-organization';
+import { useViewport } from '../../../../../utils/hooks';
+import { phone } from '../../../../../utils/helpers';
 
 const GET_DOCUMENT = gql`
   query getDealDocService($task_id: String) {
@@ -32,6 +36,7 @@ const AgreementBox = ({
   error,
   classes,
 }) => {
+  const { width } = useViewport();
   const [getSignedDocument, { data: signedDocUrl, loading: signedDocLoading }] = useLazyQuery(
     GET_DOCUMENT,
     { variables: { task_id: task?._id }, fetchPolicy: 'network-only' },
@@ -43,38 +48,46 @@ const AgreementBox = ({
 
   const loading = createDealLoading || signedDocLoading;
 
+  const handleAgreementClick = () => {
+    if (readyToSign && !signed) signingModal(agreementLink, isSigned);
+    if (signed && signedDocUrl?.getDealDocService?.link)
+      window.open(signedDocUrl?.getDealDocService?.link, '_blank');
+  };
+
   return (
     <Paper
       className={signed ? classes.agreementSignedBox : classes.agreementUnsignedBox}
       style={{
-        cursor: readyToSign && !signed && 'pointer',
+        cursor: 'pointer',
         pointerEvents: !readyToSign && 'none',
       }}
-      onClick={() => (readyToSign && !signed ? signingModal(agreementLink, isSigned) : null)}
+      onClick={handleAgreementClick}
     >
       <div style={{ display: 'flex', alignItems: 'center' }}>
         {loading || error ? (
           <CircularProgress />
-        ) : (
+        ) : width > phone ? (
           <div className={classes.serviceAgreementIconBox}>
             <img src={bluePenIcon} alt="document icon" />
           </div>
+        ) : (
+          <div className={classes.serviceAgreementIconBox}>
+            <img src={docIcon} alt="document icon" />
+          </div>
         )}
 
-        <Typography className={classes.itemText} style={{ width: '200px' }}>
-          {signed && signedDocUrl?.getDealDocService?.link ? (
-            <a href={signedDocUrl?.getDealDocService?.link} target="_blank" rel="noreferrer">
-              {title}
-            </a>
-          ) : (
-            !loading && title
-          )}
-        </Typography>
+        <Typography className={classes.itemText}>{title}</Typography>
       </div>
 
-      <Typography className={signed ? classes.signed : classes.notSigned}>
-        {signed ? '• Signed' : '• Not Signed'}
-      </Typography>
+      {width > phone ? (
+        <Typography className={signed ? classes.signed : classes.notSigned}>
+          {signed ? '• Signed' : '• Not Signed'}
+        </Typography>
+      ) : signed ? (
+        <div className={classes.blueCheck}>
+          <img src={check} alt="check mark" />
+        </div>
+      ) : null}
     </Paper>
   );
 };

@@ -24,8 +24,6 @@ import {
   SecuritiesSelector,
 } from '../common/selectors';
 
-const phoneSize = window.innerWidth < phone;
-
 export function PortfolioCompanyName({
   buildData,
   handleChange,
@@ -968,7 +966,7 @@ export function ManagementFee({
           name="management_fee_value"
           onChange={handleChange}
           currentValue={buildData.management_fee_value}
-          gridCol={phoneSize ? 'repeat(3, 1fr)' : 'repeat(4, 1fr) 1.5fr'}
+          gridCol={width <= phone ? 'repeat(3, 1fr)' : 'repeat(4, 1fr) 1.5fr'}
           values={[
             { label: '0%', value: '0' },
             { label: '1%', value: '1' },
@@ -1084,6 +1082,7 @@ export function CarryFee({
   customInputStyles,
   classes,
   openTooltip,
+  width,
 }) {
   const params = useParams();
   return (
@@ -1121,7 +1120,7 @@ export function CarryFee({
           name="carry_fee_value"
           onChange={handleChange}
           currentValue={buildData.carry_fee_value}
-          gridCol={phoneSize ? 'repeat(3, 1fr)' : 'repeat(4, 1fr) 1.5fr'}
+          gridCol={width <= phone ? 'repeat(3, 1fr)' : 'repeat(4, 1fr) 1.5fr'}
           values={[
             { label: '0%', value: '0' },
             { label: '10%', value: '10' },
