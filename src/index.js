@@ -36,7 +36,17 @@ ReactDOM.render(
     <ThemeProvider theme={theme}>
       <Router>
         <Auth0ProviderWithHistory>
-          <ToastContainer />
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable={false}
+            pauseOnHover
+          />
           <App />
         </Auth0ProviderWithHistory>
       </Router>

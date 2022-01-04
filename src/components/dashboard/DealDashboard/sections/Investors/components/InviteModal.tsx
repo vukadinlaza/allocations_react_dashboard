@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { v4 as uuidv4 } from 'uuid';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
-import { Modal, Backdrop, Fade, Button, Paper, TextField, Snackbar } from '@material-ui/core';
+import { Modal, Backdrop, Fade, Button, Paper, TextField } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import CancelIcon from '@material-ui/icons/Cancel';
@@ -10,11 +10,20 @@ import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import styles from '../../../styles';
 import { validateEmail } from '../../../../../../utils/helpers';
-
+import { toast } from 'react-toastify';
+import classNames from 'classnames';
 interface Props extends WithStyles<typeof styles> {
   orgSlug: string;
   dealId: string;
 }
+
+// interface CustomCloseButtonProps {
+//   closeToast: () => void;
+// }
+
+// const CustomCloseButton: React.ReactElement<CustomCloseButtonProps> = ({ closeToast }) => (
+//   <button onClick={closeToast}>X</button>
+// );
 
 const SEND_INVITATIONS = gql`
   mutation SendInvitations($dealId: String!, $emails: [String]) {
@@ -27,7 +36,6 @@ const InviteModal: React.FC<Props> = ({ classes, orgSlug, dealId }) => {
   const [inputValue, setInputValue] = useState('');
   const [emails, setEmails] = useState<Array<string>>([]);
   const [error, setError] = useState('');
-  const [snackbar, setSnackbar] = useState(false);
   const [emailsSent, setEmailsSent] = useState(false);
   const [sendInvitations] = useMutation(SEND_INVITATIONS, {
     onCompleted: (res) => {
@@ -35,7 +43,6 @@ const InviteModal: React.FC<Props> = ({ classes, orgSlug, dealId }) => {
         setInputValue('');
         setEmails([]);
         setError('');
-        setSnackbar(false);
         setEmailsSent(true);
       }
     },
@@ -81,11 +88,11 @@ const InviteModal: React.FC<Props> = ({ classes, orgSlug, dealId }) => {
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.origin + (`/admin/${orgSlug}/${dealId}` || ''));
-    setSnackbar(true);
-  };
-
-  const handleSnackbarClose = () => {
-    setSnackbar(false);
+    toast('Copied to Clipboard', {
+      position: 'bottom-center',
+      className: classes.snackbar,
+      bodyClassName: classes.snackbarMessage,
+    });
   };
 
   const sendEmails = () => {
@@ -203,17 +210,6 @@ const InviteModal: React.FC<Props> = ({ classes, orgSlug, dealId }) => {
           </Paper>
         </Fade>
       </Modal>
-      <Snackbar
-        open={snackbar}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-        className={classes.snackbar}
-      >
-        <div className={classes.snackbarText}>
-          <span className={classes.snackbarMessage}>Copied to clipboard</span>
-          <CloseIcon style={{ cursor: 'pointer' }} onClick={handleSnackbarClose} />
-        </div>
-      </Snackbar>
     </>
   );
 };

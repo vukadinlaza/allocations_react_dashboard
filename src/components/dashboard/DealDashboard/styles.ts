@@ -275,10 +275,18 @@ const styles: any = (theme: Theme) => ({
     background: '#FBFCFF',
     boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.11)',
     borderRadius: '8px',
+    '& .Toastify__close-button > svg': {
+      fill: 'currentColor',
+      height: '50px',
+      width: '20px',
+    },
+    '& .Toastify__close-button--default': {
+      opacity: '1.0',
+    },
   },
   snackbarMessage: {
     fontWeight: 400,
-    fontSize: '12px',
+    fontSize: '16px',
     color: '#334155',
   },
   snackbarText: {
