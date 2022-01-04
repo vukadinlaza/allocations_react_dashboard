@@ -240,7 +240,7 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
         </FormControl>
         <FormControl className="field">
           <label className="field-label">
-            3(c)(7)
+            {/* 3(c)(7) */}
             <div className="button-options">
               <Button
                 onClick={() =>
