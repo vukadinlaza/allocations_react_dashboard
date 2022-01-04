@@ -168,7 +168,7 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
               toast.success('Success! Your submission was submitted.');
               history.push(`/admin/${currentOrg.slug}/${deal._id}`);
             }}
-            style={!allSigned ? { backgroundColor: '#EBEBEB' } : {}}
+            style={{ backgroundColor: !allSigned && '#EBEBEB' }}
             className={classes.continueButton}
           >
             Complete
