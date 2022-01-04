@@ -20,7 +20,7 @@ import ProfilePage from './components/Profile/ProfilePage';
 import Profile from './components/Profile/Profile';
 import OrganizationNew from './components/OrganizationNew';
 import OrganizationMembers from './components/OrganizationMembers';
-import DealsTable from './components/deals/fund-manager/DealsTablePage';
+import DealsTable from './components/dashboard/FundManagerDashboard/FundManagerDealsTable/DealsTablePage';
 import NotFound from './components/NotFound';
 import Prospect from './components/Prospect/Prospect';
 import ProspectDealPage from './components/Prospect/ProspectDealPage/ProspectDealPage';
@@ -35,9 +35,6 @@ import DealOneClick from './components/DealOneClick';
 
 // test
 import BuildDealForm from './components/NewBuild/BuildDealForm/index';
-
-import DealSetup from './components/deals/fund-manager/PostBuild';
-// import DealSetup from './components/DealSetup';
 
 import AuthorizedApolloProvider from './apollo-client-comp';
 import './App.scss';
@@ -75,7 +72,6 @@ const App = () => {
 
               <PrivateRoute path="/profile/:id" component={ProfilePage} />
               <PrivateRoute path="/profile" component={Profile} />
-              <PrivateRoute path="/deal-setup" component={DealSetup} />
 
               {/** Onboarding * */}
               <Route path="/getting-started" component={Faq} exact />
