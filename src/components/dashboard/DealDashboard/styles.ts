@@ -269,7 +269,7 @@ const styles: any = (theme: Theme) => ({
     boxShadow: 'none !important',
     padding: '16px 24px',
   },
-  snackbar: {
+  toast: {
     width: '344px',
     height: '56px',
     background: '#FBFCFF',
@@ -284,19 +284,10 @@ const styles: any = (theme: Theme) => ({
       opacity: '1.0',
     },
   },
-  snackbarMessage: {
+  toastBody: {
     fontWeight: 400,
     fontSize: '16px',
     color: '#334155',
-  },
-  snackbarText: {
-    height: '100%',
-    width: '100%',
-    borderRadius: '8px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '20px 16px',
   },
   tabsContainer: {
     [theme.breakpoints.down(phone)]: {

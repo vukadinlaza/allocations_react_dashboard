@@ -90,8 +90,8 @@ const InviteModal: React.FC<Props> = ({ classes, orgSlug, dealId }) => {
     navigator.clipboard.writeText(window.origin + (`/admin/${orgSlug}/${dealId}` || ''));
     toast('Copied to Clipboard', {
       position: 'bottom-center',
-      className: classes.snackbar,
-      bodyClassName: classes.snackbarMessage,
+      className: classes.toast,
+      bodyClassName: classes.toastBody,
     });
   };
 
