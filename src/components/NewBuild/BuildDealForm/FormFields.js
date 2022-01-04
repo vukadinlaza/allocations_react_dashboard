@@ -618,7 +618,11 @@ export function GPEntityName({
             title="GP Entity Name"
             handleTooltip={handleTooltip}
             tooltipContent={
-              <Typography color="inherit">Indicate your desired name of the GP entity</Typography>
+              buildData.need_gp_entity === 'true' ? (
+                <Typography color="inherit">Indicate your desired name of the GP entity</Typography>
+              ) : (
+                <Typography color="inherit">Indicate the name of the GP entity</Typography>
+              )
             }
             openTooltip={openTooltip}
             id="gp_entity_name"
@@ -672,7 +676,7 @@ export function ClosingDate({
               params.type === 'fund' ? (
                 <Typography color="inherit">
                   Date on when the Fund needs to make the first investment. Please note that
-                  Allocations requires at least 24 notice for processing a wire
+                  Allocations requires at least a 24-hour notice for processing a wire
                 </Typography>
               ) : (
                 <Typography color="inherit">
@@ -1592,7 +1596,7 @@ export function CustomInvestmentAgreement({
           onChange={handleChange}
           currentValue={buildData.custom_investment_agreement}
           values={[
-            { label: 'Allocations', value: 'false' },
+            { label: 'Allocations (Recommended)', value: 'false' },
             { label: 'Custom', value: 'true' },
           ]}
         />
@@ -1616,7 +1620,7 @@ export function InternationalCompanyStatus({
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Grid item className={`${classes.formItemName} ${classes.customFormItemName}`}>
-            Will this deal being investing into an international (Non US) company?
+            Is the portfolio company located outside of the US?
             <ModalTooltip
               title="International Companies"
               handleTooltip={handleTooltip}

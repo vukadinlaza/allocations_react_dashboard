@@ -234,7 +234,7 @@ export default function TypeSelector({
                 <ClosingDate {...formFieldProps} />
                 <MinimumInvestmentFund {...formFieldProps} />
                 <NeedGPEntity {...formFieldProps} />
-                {buildData.need_gp_entity === 'false' && <GPEntityName {...formFieldProps} />}
+                <GPEntityName {...formFieldProps} />
               </>
             )}
             <Sectors {...formFieldProps} />
