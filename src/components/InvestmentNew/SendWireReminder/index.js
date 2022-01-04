@@ -1,9 +1,9 @@
 import { Button, Checkbox, FormControlLabel } from '@material-ui/core';
 import React, { useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
-import { nWithCommas } from '../../utils/numbers';
-import './style.scss';
 import { toast } from 'react-toastify';
+import { nWithCommas } from '../../../utils/numbers';
+import '../style.scss';
 
 const SEND_WIRE_REMINDERS = gql`
   mutation SendWireReminders($investment_ids: [String], $deal_id: String!) {

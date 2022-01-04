@@ -11,10 +11,9 @@ import {
   Fab,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { capitalize } from 'lodash';
+import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
-import EditIcon from '@material-ui/icons/Edit';
-import AddEntityModal from '../profileModals/addEntityModal';
+import AddAccountModal from '../../profileModals/AddAccountModal';
 
 const useStyles = makeStyles((theme) => ({
   checkCircle: {
@@ -37,28 +36,13 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid #8493A640 !important',
     borderRadius: '10px',
     overflowX: 'auto',
+    width: '100%',
   },
 }));
 
-const ProfileEntities = ({
-  data,
-  deleteEntity,
-  refetchAccountEntities,
-  createEntity,
-  updateEntity,
-  accountEntities,
-}) => {
+const ProfileAccounts = ({ acctUsers, data, removeUser, refetchAccountUsers, userProfile }) => {
   const classes = useStyles();
-  const [showEntityModal, setShowEntityModal] = useState();
-
-  const getName = (investor) => {
-    if (investor.investor_type === 'entity') {
-      return investor.entity_name;
-    }
-    return investor.signer_full_name;
-  };
-
-  if (!accountEntities?.getEntities) return null;
+  const [showAddAccountModal, setAddAccountModal] = useState();
 
   return (
     <Grid container spacing={2}>
@@ -68,7 +52,7 @@ const ProfileEntities = ({
             color="primary"
             variant="contained"
             startIcon={<AddCircleRoundedIcon />}
-            onClick={() => setShowEntityModal(true)}
+            onClick={() => setAddAccountModal(true)}
             style={{ width: '200px' }}
           >
             Add new
@@ -77,58 +61,56 @@ const ProfileEntities = ({
       </Grid>
 
       <Grid item xs={12}>
-        <Paper elevation={10} className={classes.table}>
+        <Paper className={classes.table}>
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell align="left" className={classes.tableHeaderText}>
-                  TYPE
-                </TableCell>
-                <TableCell align="center" className={classes.tableHeaderText}>
                   NAME
                 </TableCell>
                 <TableCell align="center" className={classes.tableHeaderText}>
-                  EMAIL
+                  EMAIL{' '}
                 </TableCell>
                 <TableCell align="center" className={classes.tableHeaderText}>
-                  COUNTRY
+                  ACCOUNT
                 </TableCell>
                 <TableCell align="center" className={classes.tableHeaderText}>
-                  EDIT
+                  DELETE
                 </TableCell>
               </TableRow>
             </TableHead>
-
             <TableBody>
-              {accountEntities?.getEntities.map((row) => (
-                <TableRow key={row?._id} className={classes.row}>
+              {acctUsers.map((row) => (
+                <TableRow key={row.name} className={classes.row}>
                   <TableCell component="th" scope="row" className={classes.rowText}>
-                    {capitalize(row.investor_type)}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowText}>
-                    {getName(row)}
+                    {row.name}
                   </TableCell>
                   <TableCell align="center" className={classes.rowText}>
                     {row.email}
                   </TableCell>
                   <TableCell align="center" className={classes.rowText}>
-                    {row.country}
+                    {row._id}
                   </TableCell>
-                  <TableCell align="center">
+                  <TableCell align="center" className={classes.rowText}>
                     <Fab
                       size="small"
-                      color="primary"
-                      style={{ cursor: row?.isPrimaryEntity ? 'not-allowed' : 'pointer' }}
-                      disabled={row.isPrimaryEntity}
+                      aria-label="Delete"
+                      disabled={data?.rootAdmin !== userProfile._id || data.rootAdmin === row._id}
+                      style={
+                        data?.rootAdmin !== userProfile._id || data.rootAdmin === row._id
+                          ? { backgroundColor: 'grey', color: 'white' }
+                          : { backgroundColor: 'red', color: 'white' }
+                      }
                       onClick={() => {
-                        if (row.isPrimaryEntity) {
-                          return;
-                        }
-                        setShowEntityModal(row);
+                        removeUser({
+                          onCompleted: refetchAccountUsers(),
+                          variables: { userId: row._id, accountId: data?.accountId },
+                          notifyOnNetworkStatusChange: true,
+                          fetchPolicy: 'no-cache',
+                        });
                       }}
-                      aria-label="add"
                     >
-                      <EditIcon />
+                      <CloseRoundedIcon />
                     </Fab>
                   </TableCell>
                 </TableRow>
@@ -138,17 +120,12 @@ const ProfileEntities = ({
         </Paper>
       </Grid>
 
-      <AddEntityModal
-        showEntityModal={showEntityModal}
-        setShowEntityModal={setShowEntityModal}
-        accountId={data?.accountId}
-        refetchAccountEntities={refetchAccountEntities}
-        createEntity={createEntity}
-        updateEntity={updateEntity}
-        deleteEntity={deleteEntity}
+      <AddAccountModal
+        showAddAccountModal={showAddAccountModal}
+        setAddAccountModal={setAddAccountModal}
       />
     </Grid>
   );
 };
 
-export default ProfileEntities;
+export default ProfileAccounts;

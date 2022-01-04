@@ -19,11 +19,11 @@ import {
   InputAdornment,
 } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import Loader from '../utils/Loader';
-import { destroy } from '../../api/investments';
-import CrossOrPlusIcon from '../svg/CrossOrPlusIcon';
-import DocumentIcon from '../../assets/document-icon.svg';
-import './style.scss';
+import Loader from '../../utils/Loader';
+import { destroy } from '../../../api/investments';
+import CrossOrPlusIcon from '../../svg/CrossOrPlusIcon';
+import DocumentIcon from '../../../assets/document-icon.svg';
+import '../style.scss';
 
 /** *
  *

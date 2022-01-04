@@ -8,8 +8,8 @@ import {
   taskTypes,
   KYCServiceTask,
   SignTask,
-} from './Tasks';
-import styles from './styles';
+} from '../Tasks';
+import styles from '../styles';
 
 const ADD_DOC = gql`
   mutation addDealDocService($deal_id: String!, $task_id: String!, $doc: Upload!, $phase: String) {

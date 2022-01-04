@@ -21,14 +21,14 @@ import { useHistory } from 'react-router';
 import countries from 'country-region-data';
 import states from 'usa-states';
 import { toast } from 'react-toastify';
-import { phone } from '../../utils/helpers';
-import plusSignIcon from '../../assets/plus-vector.svg';
-import plusSignBlackIcon from '../../assets/plus-vector-black.svg';
-import { useAuth } from '../../auth/useAuth';
-import { useSetCurrentOrganization } from '../../state/current-organization';
-import { ModalTooltip } from '../dashboard/FundManagerDashboard/widgets';
-import DealTypeSelector, { NewOrCurrentBuild, NewBuildFinalWarning } from './DealType';
-import { convertToPositiveIntOrNull } from '../../utils/numbers';
+import { phone } from '../../../utils/helpers';
+import plusSignIcon from '../../../assets/plus-vector.svg';
+import plusSignBlackIcon from '../../../assets/plus-vector-black.svg';
+import { useAuth } from '../../../auth/useAuth';
+import { useSetCurrentOrganization } from '../../../state/current-organization';
+import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
+import DealTypeSelector, { NewOrCurrentBuild, NewBuildFinalWarning } from '../DealType';
+import { convertToPositiveIntOrNull } from '../../../utils/numbers';
 
 const CREATE_ORG = gql`
   mutation CreateOrganization($organization: OrganizationInput!) {

@@ -13,8 +13,8 @@ import {
   InputLabel,
   InputAdornment,
 } from '@material-ui/core';
-import './style.scss';
-import { UserSearch } from '.';
+import '../style.scss';
+import { UserSearch } from '..';
 
 const CREATE_INVESTMENT = gql`
   mutation CreateInvestment($investment: InvestmentInput!) {

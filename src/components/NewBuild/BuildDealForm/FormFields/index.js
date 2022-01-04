@@ -12,17 +12,17 @@ import Select from 'react-select';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import countries from 'country-region-data';
-import { ModalTooltip } from '../../dashboard/FundManagerDashboard/widgets';
-import { phone } from '../../../utils/helpers';
-import sectors from './FormComponents/TypeSelector/sectors';
-import { convertToPositiveIntOrNull } from '../../../utils/numbers';
+import { ModalTooltip } from '../../../dashboard/FundManagerDashboard/widgets';
+import { phone } from '../../../../utils/helpers';
+import sectors from '../FormComponents/TypeSelector/sectors';
+import { convertToPositiveIntOrNull } from '../../../../utils/numbers';
 import {
   ButtonSelector,
   DealStagesSelector,
   InternationalCountrySelector,
   InternationalInvestorsCountriesSelector,
   SecuritiesSelector,
-} from '../common/selectors';
+} from '../../common/selectors';
 
 const phoneSize = window.innerWidth < phone;
 

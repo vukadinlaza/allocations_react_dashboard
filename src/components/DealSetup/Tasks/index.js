@@ -5,10 +5,10 @@ import moment from 'moment';
 import { Grid, Typography, Button, TextField, FormControl } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import CancelIcon from '@material-ui/icons/Cancel';
-import Loader from '../utils/Loader';
-import { DocumentBox, UploadBox } from '../common/common';
+import Loader from '../../utils/Loader';
+import { DocumentBox, UploadBox } from '../../common/common';
 import pmButton from '../../assets/parallel-button.svg';
-import styles from './styles';
+import styles from '../styles';
 
 export const taskTypes = {
   docUpload: ['fm-document-upload', 'admin-document-upload'],

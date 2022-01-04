@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Loader from '../utils/Loader';
-import InvestorEditForm from './InvestorEdit';
+import Loader from '../../utils/Loader';
+import InvestorEditForm from '../InvestorEdit';
 
 /** *
  *

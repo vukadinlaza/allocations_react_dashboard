@@ -11,9 +11,10 @@ import {
   Fab,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
+import { capitalize } from 'lodash';
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded';
-import AddAccountModal from '../profileModals/addAccountModal';
+import EditIcon from '@material-ui/icons/Edit';
+import AddEntityModal from '../../profileModals/AddEntityModal';
 
 const useStyles = makeStyles((theme) => ({
   checkCircle: {
@@ -36,13 +37,28 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid #8493A640 !important',
     borderRadius: '10px',
     overflowX: 'auto',
-    width: '100%',
   },
 }));
 
-const ProfileAccounts = ({ acctUsers, data, removeUser, refetchAccountUsers, userProfile }) => {
+const ProfileEntities = ({
+  data,
+  deleteEntity,
+  refetchAccountEntities,
+  createEntity,
+  updateEntity,
+  accountEntities,
+}) => {
   const classes = useStyles();
-  const [showAddAccountModal, setAddAccountModal] = useState();
+  const [showEntityModal, setShowEntityModal] = useState();
+
+  const getName = (investor) => {
+    if (investor.investor_type === 'entity') {
+      return investor.entity_name;
+    }
+    return investor.signer_full_name;
+  };
+
+  if (!accountEntities?.getEntities) return null;
 
   return (
     <Grid container spacing={2}>
@@ -52,7 +68,7 @@ const ProfileAccounts = ({ acctUsers, data, removeUser, refetchAccountUsers, use
             color="primary"
             variant="contained"
             startIcon={<AddCircleRoundedIcon />}
-            onClick={() => setAddAccountModal(true)}
+            onClick={() => setShowEntityModal(true)}
             style={{ width: '200px' }}
           >
             Add new
@@ -61,56 +77,58 @@ const ProfileAccounts = ({ acctUsers, data, removeUser, refetchAccountUsers, use
       </Grid>
 
       <Grid item xs={12}>
-        <Paper className={classes.table}>
+        <Paper elevation={10} className={classes.table}>
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell align="left" className={classes.tableHeaderText}>
+                  TYPE
+                </TableCell>
+                <TableCell align="center" className={classes.tableHeaderText}>
                   NAME
                 </TableCell>
                 <TableCell align="center" className={classes.tableHeaderText}>
-                  EMAIL{' '}
+                  EMAIL
                 </TableCell>
                 <TableCell align="center" className={classes.tableHeaderText}>
-                  ACCOUNT
+                  COUNTRY
                 </TableCell>
                 <TableCell align="center" className={classes.tableHeaderText}>
-                  DELETE
+                  EDIT
                 </TableCell>
               </TableRow>
             </TableHead>
+
             <TableBody>
-              {acctUsers.map((row) => (
-                <TableRow key={row.name} className={classes.row}>
+              {accountEntities?.getEntities.map((row) => (
+                <TableRow key={row?._id} className={classes.row}>
                   <TableCell component="th" scope="row" className={classes.rowText}>
-                    {row.name}
+                    {capitalize(row.investor_type)}
+                  </TableCell>
+                  <TableCell align="center" className={classes.rowText}>
+                    {getName(row)}
                   </TableCell>
                   <TableCell align="center" className={classes.rowText}>
                     {row.email}
                   </TableCell>
                   <TableCell align="center" className={classes.rowText}>
-                    {row._id}
+                    {row.country}
                   </TableCell>
-                  <TableCell align="center" className={classes.rowText}>
+                  <TableCell align="center">
                     <Fab
                       size="small"
-                      aria-label="Delete"
-                      disabled={data?.rootAdmin !== userProfile._id || data.rootAdmin === row._id}
-                      style={
-                        data?.rootAdmin !== userProfile._id || data.rootAdmin === row._id
-                          ? { backgroundColor: 'grey', color: 'white' }
-                          : { backgroundColor: 'red', color: 'white' }
-                      }
+                      color="primary"
+                      style={{ cursor: row?.isPrimaryEntity ? 'not-allowed' : 'pointer' }}
+                      disabled={row.isPrimaryEntity}
                       onClick={() => {
-                        removeUser({
-                          onCompleted: refetchAccountUsers(),
-                          variables: { userId: row._id, accountId: data?.accountId },
-                          notifyOnNetworkStatusChange: true,
-                          fetchPolicy: 'no-cache',
-                        });
+                        if (row.isPrimaryEntity) {
+                          return;
+                        }
+                        setShowEntityModal(row);
                       }}
+                      aria-label="add"
                     >
-                      <CloseRoundedIcon />
+                      <EditIcon />
                     </Fab>
                   </TableCell>
                 </TableRow>
@@ -120,12 +138,17 @@ const ProfileAccounts = ({ acctUsers, data, removeUser, refetchAccountUsers, use
         </Paper>
       </Grid>
 
-      <AddAccountModal
-        showAddAccountModal={showAddAccountModal}
-        setAddAccountModal={setAddAccountModal}
+      <AddEntityModal
+        showEntityModal={showEntityModal}
+        setShowEntityModal={setShowEntityModal}
+        accountId={data?.accountId}
+        refetchAccountEntities={refetchAccountEntities}
+        createEntity={createEntity}
+        updateEntity={updateEntity}
+        deleteEntity={deleteEntity}
       />
     </Grid>
   );
 };
 
-export default ProfileAccounts;
+export default ProfileEntities;

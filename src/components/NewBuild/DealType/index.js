@@ -5,12 +5,12 @@ import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import { useHistory } from 'react-router';
-import spvIcon from '../../assets/spv-icon.svg';
-import fundIcon from '../../assets/fund-icon.svg';
-import plusSignIcon from '../../assets/plus-vector.svg';
-import warningIcon from '../../assets/warning-red.svg';
-import { phone } from '../../utils/helpers';
-import { useViewport } from '../../utils/hooks';
+import spvIcon from '../../../assets/spv-icon.svg';
+import fundIcon from '../../../assets/fund-icon.svg';
+import plusSignIcon from '../../../assets/plus-vector.svg';
+import warningIcon from '../../../assets/warning-red.svg';
+import { phone } from '../../../utils/helpers';
+import { useViewport } from '../../../utils/hooks';
 
 const DELETE_DEAL = gql`
   mutation DeleteDeal($_id: String!) {

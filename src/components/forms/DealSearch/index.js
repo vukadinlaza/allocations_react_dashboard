@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useLazyQuery } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TextField, Table, TableBody, TableCell, TableRow, Paper } from '@material-ui/core';
-import * as API from '../../api';
+import * as API from '../../../api';
 
 export default function DealSearch({ deal, setDeal, errors = [], label = 'Deal' }) {
   const { organization: org } = useParams();

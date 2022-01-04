@@ -16,9 +16,9 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 
 import countries from 'country-region-data';
-import MailingAddress from './kyc/mailing-address-form';
-import { useAuth } from '../../auth/useAuth';
-import Loader from '../utils/Loader';
+import MailingAddress from '../kyc/MailingAddressForm';
+import { useAuth } from '../../../auth/useAuth';
+import Loader from '../../utils/Loader';
 
 const useStyles = makeStyles((theme) => ({
   paper: {

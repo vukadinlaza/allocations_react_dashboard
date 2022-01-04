@@ -19,8 +19,8 @@ import { phone } from '../../../../../utils/helpers';
 import AppModal from '../../../../Modal/AppModal';
 import InvestmentEdit from '../../../../InvestmentEdit/UpdateInvestment';
 import DeleteViewedUser from '../../../../InvestmentEdit/DeleteViewedUser';
-import CreateInvestment from '../../../../InvestmentNew/createInvestment';
-import SendWireReminder from '../../../../InvestmentNew/sendWireReminder';
+import CreateInvestment from '../../../../InvestmentNew/CreateInvestment';
+import SendWireReminder from '../../../../InvestmentNew/SendWireReminder';
 
 const InvestorBoxViewed = ({
   classes,

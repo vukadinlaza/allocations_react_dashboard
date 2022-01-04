@@ -20,7 +20,7 @@ import {
 import CheckIcon from '@material-ui/icons/Check';
 import ReactHtmlParser from 'react-html-parser';
 import { makeStyles } from '@material-ui/core/styles';
-import DocusignKYCEmbeddedForm from '../../forms/kycTab';
+import DocusignKYCEmbeddedForm from '../../forms/KYCTab';
 import { nWithCommas } from '../../../utils/numbers';
 import Loader from '../../utils/Loader';
 import InvestorEditForm from '../../forms/InvestorEdit';

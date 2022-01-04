@@ -5,7 +5,7 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { toast } from 'react-toastify';
 import PersonIcon from '@material-ui/icons/Person';
 import EditIcon from '@material-ui/icons/Edit';
-import AppModal from '../../../Modal/AppModal';
+import AppModal from '../../../../Modal/AppModal';
 
 const PROFILE_IMAGE = gql`
   mutation UpdateProfileImage($email: String!, $image: Upload!) {
