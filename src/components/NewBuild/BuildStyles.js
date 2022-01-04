@@ -91,7 +91,6 @@ const useStyles = makeStyles((theme) => ({
   },
   formContainers: {
     width: '100%',
-    height: '100%',
   },
   formItemName: {
     color: '#2A2B54',
@@ -147,18 +146,18 @@ const useStyles = makeStyles((theme) => ({
   },
   itemText: {
     font: 'normal normal normal 18px/21px Roboto',
-    width: '150px',
-    textAlign: 'center',
     color: '#2A2B54',
     letterSpacing: '0px',
     opacity: '1',
+    paddingLeft: '30px',
     [theme.breakpoints.down(phone)]: {
-      maxWidth: '100%',
       font: 'normal normal normal 16px/21px Roboto',
+      maxWidth: '180px',
+      paddingLeft: '15px',
     },
   },
   outerSection: {
-    padding: '18px 60px',
+    padding: '18px 50px',
     marginLeft: '12px',
     display: 'flex',
     flexWrap: 'wrap',
@@ -402,9 +401,14 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '20px',
     boxShadow: 'none !important',
     backgroundColor: '#F6F7F8',
+    '&:hover': {
+      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+    },
     [theme.breakpoints.down(phone)]: {
       paddingLeft: '15px',
       paddingRight: '15px',
+      border: '2px solid #186EFF !important',
+      backgroundColor: 'rgba(26, 110, 255, 0.16)',
     },
   },
   agreementUnsignedBox: {
@@ -420,7 +424,9 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'rgba(0, 0, 0, 0.04)',
     },
     [theme.breakpoints.down(phone)]: {
-      paddingLeft: '5px',
+      paddingLeft: '15px',
+      paddingRight: '15px',
+      border: '2px solid #2A2B54 !important',
     },
   },
   buttonBox: {
@@ -433,7 +439,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   customFormItemName: {
-    minHeight: '40px',
+    minHeight: '45px',
   },
   notSigned: {
     backgroundColor: '#FFBDAD',
@@ -456,6 +462,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down(phone)]: {
       width: '45px',
       height: '45px',
+      backgroundColor: 'white',
     },
   },
   signContainer: {
@@ -483,6 +490,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '600',
     borderRadius: '20px',
     padding: '5px 20px',
+    [theme.breakpoints.down(phone)]: {
+      padding: '4px 10px',
+    },
   },
   subtitle: {
     textAlign: 'left',

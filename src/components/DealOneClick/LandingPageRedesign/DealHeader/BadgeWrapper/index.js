@@ -2,9 +2,11 @@ import React from 'react';
 import { Badge, Box } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { CameraAltOutlined } from '@material-ui/icons';
+import { useDealPage } from '../../../dashboard/FundManagerDashboard/sections/DealPage/DealPageContext';
 
 const StyledBox = withStyles({
   root: {
+    cursor: 'pointer',
     '&:hover': {
       background: '#ECF3FF',
     },
@@ -15,7 +17,9 @@ const StyledBox = withStyles({
   },
 })(Box);
 
-export default function BadgeWrapper({ isEdit, children }) {
+export default function BadgeWrapper({ children, handleClick, ...props }) {
+  const { isEdit } = useDealPage();
+
   if (isEdit) {
     return (
       <Badge
@@ -31,10 +35,12 @@ export default function BadgeWrapper({ isEdit, children }) {
             border="1px solid #CBD5E1"
             p="4px"
             color="#64748B"
+            onClick={handleClick}
           >
             <CameraAltOutlined style={{ fontSize: 16 }} />
           </StyledBox>
         }
+        {...props}
       >
         {children}
       </Badge>

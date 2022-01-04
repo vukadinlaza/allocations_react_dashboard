@@ -24,7 +24,7 @@ import {
   SecuritiesSelector,
 } from '../../common/selectors';
 
-const phoneSize = window.innerWidth < phone;
+import { useViewport } from '../../../../utils/hooks';
 
 export function PortfolioCompanyName({
   buildData,
@@ -99,7 +99,7 @@ export function FundName({
             handleTooltip={handleTooltip}
             tooltipContent={
               <Typography color="inherit">
-                A name to identify your deal (name of your series LP)
+                A name for you to identify your deal on your Dashboard. Ex. Crypto Fund I
               </Typography>
             }
             openTooltip={openTooltip}
@@ -238,7 +238,7 @@ export function DealName({
             handleTooltip={handleTooltip}
             tooltipContent={
               <Typography color="inherit">
-                A name to identify your deal (name of your series SPV in case you are a HVP)
+                A name for you to identify your deal on your Dashboard. Ex. Crypto SPV I
               </Typography>
             }
             openTooltip={openTooltip}
@@ -620,7 +620,11 @@ export function GPEntityName({
             title="GP Entity Name"
             handleTooltip={handleTooltip}
             tooltipContent={
-              <Typography color="inherit">Indicate your desired name of the GP entity</Typography>
+              buildData.need_gp_entity === 'true' ? (
+                <Typography color="inherit">Indicate your desired name of the GP entity</Typography>
+              ) : (
+                <Typography color="inherit">Indicate the name of the GP entity</Typography>
+              )
             }
             openTooltip={openTooltip}
             id="gp_entity_name"
@@ -674,7 +678,7 @@ export function ClosingDate({
               params.type === 'fund' ? (
                 <Typography color="inherit">
                   Date on when the Fund needs to make the first investment. Please note that
-                  Allocations requires at least 24 notice for processing a wire
+                  Allocations requires at least a 24-hour notice for processing a wire
                 </Typography>
               ) : (
                 <Typography color="inherit">
@@ -934,6 +938,7 @@ export function ManagementFee({
   openTooltip,
 }) {
   const params = useParams();
+  const { width } = useViewport();
   return (
     <Grid className={classes.inputGridItem} item xs={6}>
       <FormControl required variant="outlined" className={classes.formContainers}>
@@ -968,7 +973,7 @@ export function ManagementFee({
           name="management_fee_value"
           onChange={handleChange}
           currentValue={buildData.management_fee_value}
-          gridCol={phoneSize ? 'repeat(3, 1fr)' : 'repeat(4, 1fr) 1.5fr'}
+          gridCol={width <= phone ? 'repeat(3, 1fr)' : 'repeat(4, 1fr) 1.5fr'}
           values={[
             { label: '0%', value: '0' },
             { label: '1%', value: '1' },
@@ -1084,6 +1089,7 @@ export function CarryFee({
   customInputStyles,
   classes,
   openTooltip,
+  width,
 }) {
   const params = useParams();
   return (
@@ -1121,7 +1127,7 @@ export function CarryFee({
           name="carry_fee_value"
           onChange={handleChange}
           currentValue={buildData.carry_fee_value}
-          gridCol={phoneSize ? 'repeat(3, 1fr)' : 'repeat(4, 1fr) 1.5fr'}
+          gridCol={width <= phone ? 'repeat(3, 1fr)' : 'repeat(4, 1fr) 1.5fr'}
           values={[
             { label: '0%', value: '0' },
             { label: '10%', value: '10' },
@@ -1593,7 +1599,7 @@ export function CustomInvestmentAgreement({
           onChange={handleChange}
           currentValue={buildData.custom_investment_agreement}
           values={[
-            { label: 'Allocations', value: 'false' },
+            { label: 'Allocations (Recommended)', value: 'false' },
             { label: 'Custom', value: 'true' },
           ]}
         />
@@ -1617,7 +1623,7 @@ export function InternationalCompanyStatus({
       <FormControl required variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
           <Grid item className={`${classes.formItemName} ${classes.customFormItemName}`}>
-            Will this deal being investing into an international (Non US) company?
+            Is the portfolio company located outside of the US?
             <ModalTooltip
               title="International Companies"
               handleTooltip={handleTooltip}

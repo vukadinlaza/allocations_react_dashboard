@@ -3,12 +3,12 @@ import Select from 'react-select';
 import countries from 'country-region-data';
 import { Button, ButtonGroup } from '@material-ui/core';
 import { phone } from '../../../utils/helpers';
+import { useViewport } from '../../../utils/hooks';
 import useStyles from '../BuildStyles';
-
-const phoneSize = window.innerWidth < phone;
 
 export const ButtonSelector = ({ currentValue, name, values, onChange, gridCol = '1fr 1fr' }) => {
   const classes = useStyles();
+  const { width } = useViewport();
 
   return (
     <ButtonGroup
@@ -17,8 +17,8 @@ export const ButtonSelector = ({ currentValue, name, values, onChange, gridCol =
       style={{
         display: 'grid',
         gridTemplateColumns: gridCol,
-        width: phoneSize ? '100%' : '90%',
-        gridGap: phoneSize ? '20px' : '10px',
+        width: width <= phone ? '100%' : '90%',
+        gridGap: width <= phone ? '20px' : '10px',
       }}
     >
       {values.map(({ label, value }, i) => (
@@ -51,6 +51,7 @@ export function InternationalCountrySelector({
   unfilledFields,
   buildData,
 }) {
+  const { width } = useViewport();
   const countryNames = countries.map((c) => c.countryName);
   const placeHolder = 'Please select which countries';
   const customStyles = {
@@ -74,7 +75,7 @@ export function InternationalCountrySelector({
       ...styles,
       marginTop: 50,
       minHeight: 60,
-      width: phoneSize ? '325px' : '90%',
+      width: width <= phone ? '325px' : '90%',
       maxWidth: 568,
       cursor: 'pointer',
       border: unfilledFields.includes('international_company_country')
@@ -119,6 +120,7 @@ export function InternationalInvestorsCountriesSelector({
   buildData,
   countries,
 }) {
+  const { width } = useViewport();
   const countryNames = countries.map((c) => c.countryName);
   const placeHolder = 'Please select which countries';
   const customStyles = {
@@ -142,7 +144,7 @@ export function InternationalInvestorsCountriesSelector({
       ...styles,
       marginTop: 50,
       minHeight: 60,
-      width: phoneSize ? '325px' : '90%',
+      width: width <= phone ? '325px' : '90%',
       maxWidth: 568,
       cursor: 'pointer',
       border: unfilledFields.includes('international_investors_countries')

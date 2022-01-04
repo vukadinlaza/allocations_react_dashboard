@@ -13,6 +13,7 @@ import HouseIcon from '../../../../../assets/buildHouse.svg';
 import CustomIcon from '../../../../../assets/buildCustom.svg';
 import NetworkIcon from '../../../../../assets/buildNetwork.svg';
 import PieIcon from '../../../../../assets/buildPie.svg';
+import { useViewport } from '../../../../../utils/hooks';
 import { ModalTooltip } from '../../../../dashboard/FundManagerDashboard/widgets';
 import {
   DealName,
@@ -23,7 +24,6 @@ import {
   Sectors,
   NumberOfInvestments,
   Representative,
-  DealStage,
   FundName,
   GeneralPartnerName,
   RepresentativeGeneralPartnerAndTitle,
@@ -46,6 +46,7 @@ export default function TypeSelector({
   sectionComplete,
 }) {
   const classes = useStyles();
+  const { width } = useViewport();
   const customInputStyles = { style: { height: '23px' } };
   const params = useParams();
 
@@ -161,7 +162,10 @@ export default function TypeSelector({
   };
 
   return (
-    <Paper className={classes.paper}>
+    <Paper
+      className={classes.paper}
+      style={{ paddingBottom: width >= 650 ? classes.paper.paddingBottom : '82px' }}
+    >
       <Grid container className={classes.sectionHeader}>
         <Grid
           item
@@ -230,10 +234,9 @@ export default function TypeSelector({
                 <ClosingDate {...formFieldProps} />
                 <MinimumInvestmentFund {...formFieldProps} />
                 <NeedGPEntity {...formFieldProps} />
-                {buildData.need_gp_entity === 'false' && <GPEntityName {...formFieldProps} />}
+                <GPEntityName {...formFieldProps} />
               </>
             )}
-            <DealStage {...formFieldProps} />
             <Sectors {...formFieldProps} />
           </Grid>
         </form>

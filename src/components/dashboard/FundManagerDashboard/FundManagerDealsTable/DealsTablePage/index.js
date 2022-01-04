@@ -4,8 +4,8 @@ import { gql, useQuery } from '@apollo/client';
 import { Typography, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import DealsTable from './DealsTable';
-import Loader from '../../../utils/Loader';
-import styles from '../../../dashboard/FundManagerDashboard/styles';
+import Loader from '../../../../utils/Loader';
+import styles from '../../styles';
 
 const GET_DEALS = gql`
   query GetOrg($slug: String!, $offset: Int, $limit: Int, $status: String) {

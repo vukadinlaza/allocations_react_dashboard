@@ -24,12 +24,12 @@ const useStyles = makeStyles({
   },
 });
 
-export default function DealButton({ text, icon, secondary = false, style, ...props }) {
+export default function DealButton({ icon, secondary = false, style, children, ...props }) {
   const { button } = useStyles({ secondary });
 
   return (
     <Button className={button} variant="outlined" style={style} startIcon={icon} {...props}>
-      {text}
+      {children}
     </Button>
   );
 }

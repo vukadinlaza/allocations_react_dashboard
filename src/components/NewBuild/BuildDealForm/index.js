@@ -310,7 +310,7 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
       if (!buildData.type_of_investors) {
         unvalidatedFieldsToFill('type_of_investors', 'Type of Investors');
       }
-      if (buildData.need_gp_entity === 'false' && !buildData.gp_entity_name) {
+      if (!buildData.gp_entity_name) {
         unvalidatedFieldsToFill('gp_entity_name', 'GP Entity Name');
       }
       if (!buildData.need_gp_entity) {
@@ -683,7 +683,7 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
               color: sectionFourComplete ? '#2A2B54' : '#8E9394',
             }}
           >
-            Demographics
+            Compliance
           </Typography>
         </Grid>
         <Grid
@@ -741,7 +741,7 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
               padding: '1px 1px 0px 0px',
             }}
           >
-            6
+            5
           </Grid>
           <Typography
             variant="h6"

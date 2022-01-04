@@ -3,8 +3,8 @@ import { Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import { useHistory, useParams } from 'react-router';
-import AllocationsTable from '../../../../utils/AllocationsTable';
-import styles from '../../../../dashboard/InvestorDashboard/styles';
+import AllocationsTable from '../../../../../utils/AllocationsTable';
+import styles from '../../../../InvestorDashboard/styles';
 
 const spvHeaders = [
   {
@@ -79,7 +79,7 @@ const DealsTable = ({ classes, deals }) => {
   const { org_slug } = useParams();
   const headers = spvHeaders;
   const history = useHistory();
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm] = useState('');
 
   const getCellContent = (type, row, headerValue) => {
     switch (type) {

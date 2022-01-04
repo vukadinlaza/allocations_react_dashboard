@@ -4,13 +4,12 @@ import { useParams, withRouter, RouteComponentProps } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { useCurrentOrganization } from '../../../state/current-organization';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
-import { Button, Grid, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import LoadingPlaceholder from './LoadingPlaceholder';
 import Investors from './sections/Investors';
 import DealProgress from './sections/DealProgress';
-import backArrow from '../../../assets/back-arrow.svg';
 import styles from './styles';
 
 const DEAL = gql`
@@ -20,6 +19,7 @@ const DEAL = gql`
       metadata
       manager_name
       name
+      company_name
       wire_deadline
       investments {
         _id
@@ -85,7 +85,13 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
       case 'Deal Progress':
         return <DealProgress {...dealProps} />;
       case 'Investors':
-        return <Investors investorsData={dealData?.getDealByIdWithTasks?.investments} />;
+        return (
+          <Investors
+            investorsData={dealData?.getDealByIdWithTasks?.investments}
+            orgSlug={currentOrg.slug}
+            dealId={deal_id}
+          />
+        );
       case 'Documents':
         return <p>Documents </p>;
       case 'Deal Page':
@@ -112,7 +118,9 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
           <Grid item xs={1} />
           <Grid item xs={12} lg={10}>
             <Typography className={classes.pageTitle}>
-              {dealData?.getDealByIdWithTasks?.name || 'Deal Name'}
+              {dealData?.getDealByIdWithTasks?.name ||
+                dealData?.getDealByIdWithTasks?.company_name ||
+                'Deal Name'}
             </Typography>
             <HighlightedTabs
               tabs={dealDashboardTabs}
