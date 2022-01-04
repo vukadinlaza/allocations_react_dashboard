@@ -29,7 +29,6 @@
     "@material-ui/lab": "^4.0.0-alpha.60",
     "@nivo/pie": "^0.61.1",
     "@tinymce/tinymce-react": "^3.4.0",
-    "@types/toastify-js": "^1.11.0",
     "@unicef/material-ui-currency-textfield": "^0.8.6",
     "airtable": "^0.10.1",
     "apollo-link": "^1.2.13",

@@ -15,7 +15,6 @@ import styles from './styles';
 import AllocationsLoader from '../../utils/AllocationsLoader';
 import AllocationsTable from '../../utils/AllocationsTable';
 import { useFetch } from '../../../utils/hooks';
-import AllocationsAlert from '../../utils/AllocationsAlert.tsx';
 
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
@@ -259,7 +258,6 @@ const UserHome = ({ classes }) => {
 
   return (
     <div className={classes.root}>
-      {/* <AllocationsAlert type='info' component='toast' message='INFO' show /> */}
       {fundInvestments && Object.keys(fundInvestments).length ? (
         <div className={classes.investmentsContainer}>
           <Typography className={classes.mainTitle}>{fundInvestments.company_name}</Typography>
