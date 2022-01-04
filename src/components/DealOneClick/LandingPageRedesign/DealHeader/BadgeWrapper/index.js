@@ -2,7 +2,7 @@ import React from 'react';
 import { Badge, Box } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { CameraAltOutlined } from '@material-ui/icons';
-import { useDealPage } from '../../../dashboard/FundManagerDashboard/sections/DealPage/DealPageContext';
+import { useDealPage } from '../../../../dashboard/FundManagerDashboard/sections/DealPage/DealPageContext';
 
 const StyledBox = withStyles({
   root: {
