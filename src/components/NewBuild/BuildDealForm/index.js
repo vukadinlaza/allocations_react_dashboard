@@ -683,7 +683,7 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
               color: sectionFourComplete ? '#2A2B54' : '#8E9394',
             }}
           >
-            Demographics
+            Compliance
           </Typography>
         </Grid>
         <Grid

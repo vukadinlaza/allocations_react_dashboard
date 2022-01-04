@@ -99,7 +99,7 @@ export function FundName({
             handleTooltip={handleTooltip}
             tooltipContent={
               <Typography color="inherit">
-                A name to identify your deal (name of your series LP)
+                A name for you to identify your deal on your Dashboard. Ex. Crypto Fund I
               </Typography>
             }
             openTooltip={openTooltip}
@@ -238,7 +238,7 @@ export function DealName({
             handleTooltip={handleTooltip}
             tooltipContent={
               <Typography color="inherit">
-                A name to identify your deal (name of your series SPV in case you are a HVP)
+                A name for you to identify your deal on your Dashboard. Ex. Crypto SPV I
               </Typography>
             }
             openTooltip={openTooltip}
