@@ -110,7 +110,7 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
     asset_type: 'Startup',
     carry_fee_type: 'percent',
     carry_fee_value: '20',
-    closing_date: moment(Date.now()).add(7, 'days').format('YYYY-MM-DD'),
+    closing_date: moment(Date.now()).add(14, 'days').format('YYYY-MM-DD'),
     custom_carry_fee: 'false',
     custom_investment_agreement: 'false',
     custom_management_fee: 'false',
