@@ -1000,8 +1000,8 @@ export function ManagementFee({
               handleTooltip={handleTooltip}
               tooltipContent={
                 <Typography color="inherit">
-                  Please enter your custom management fees according to your deal. i.e "20% for the
-                  first year, 10% for any years after"
+                  Please enter your custom management fees ($ or %) according to your deal. i.e 20%
+                  for the first year, 10% for any years after
                 </Typography>
               }
               openTooltip={openTooltip}
