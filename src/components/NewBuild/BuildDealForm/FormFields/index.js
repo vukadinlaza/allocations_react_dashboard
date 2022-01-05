@@ -849,14 +849,15 @@ export function Representative({
     <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
-          <Typography className={classes.formItemName}>Manager Full Title</Typography>
+          <Typography className={classes.formItemName}>Fund Manager Full Title</Typography>
           <ModalTooltip
-            title="Manager Full Title"
+            title="Fund Manager Full Title"
             handleTooltip={handleTooltip}
             tooltipContent={
               <Typography color="inherit">
-                Please indicate the name of the representative of the Manager as well as the title
-                of the said person; applicable only if the Manager is a legal entity
+                {buildData.type === 'spv'
+                  ? 'Title of the Fund Manager from previous question'
+                  : 'Please indicate the name of the representative of the Manager as well as the title of the said person; applicable only if the Manager is a legal entity'}
               </Typography>
             }
             openTooltip={openTooltip}
@@ -1579,8 +1580,8 @@ export function CustomInvestmentAgreement({
               handleTooltip={handleTooltip}
               tooltipContent={
                 <Typography color="inherit">
-                  As you might have your own Fund documents, you can use them with us as well, this
-                  would limit the period of time in which the Fund could be closed
+                  Choose Allocations to prepare your Fund Documents (Recommended) or use your own
+                  Custom (extra time and fees may accrue)
                 </Typography>
               }
               openTooltip={openTooltip}
