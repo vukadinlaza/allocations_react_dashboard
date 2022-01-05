@@ -1579,8 +1579,8 @@ export function CustomInvestmentAgreement({
               handleTooltip={handleTooltip}
               tooltipContent={
                 <Typography color="inherit">
-                  As you might have your own SPV documents, you can use them with us as well, this
-                  would limit the period of time in which the SPV could be closed
+                  As you might have your own Fund documents, you can use them with us as well, this
+                  would limit the period of time in which the Fund could be closed
                 </Typography>
               }
               openTooltip={openTooltip}

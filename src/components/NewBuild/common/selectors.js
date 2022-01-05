@@ -231,7 +231,7 @@ export function DealStagesSelector({ handleChange, setUnfilledFields, unfilledFi
 export function SecuritiesSelector({ handleChange, setUnfilledFields, unfilledFields, buildData }) {
   const securityTypes = [
     'Series A Preferred Stock',
-    'Simple Agreement for Future Equity',
+    'Simple Agreement for Future Equity (SAFE)',
     'Convertible Promissory Note',
     'Other',
   ];
