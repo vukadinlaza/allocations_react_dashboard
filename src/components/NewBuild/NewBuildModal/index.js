@@ -1081,9 +1081,8 @@ export default function NewBuildModal(props) {
       }
       resetFlow();
     },
-    onError: (err) => {
-      console.log('ERROR:', err);
-    },
+    onError: () =>
+      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com'),
   });
 
   const [openTooltip, setOpenTooltip] = useState('');
