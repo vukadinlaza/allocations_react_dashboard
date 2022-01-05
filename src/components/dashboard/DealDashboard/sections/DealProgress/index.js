@@ -115,8 +115,10 @@ const DealProgress = ({ data, classes }) => {
   const [activeStep, setActiveStep] = useState(0);
 
   useEffect(() => {
-    const phase = data?.phases.find((phase) => phase.tasks.find((task) => task.complete === false));
-    const tasks = data?.phases.flatMap((phase) =>
+    const phase = data?.phases?.find((phase) =>
+      phase.tasks.find((task) => task.complete === false),
+    );
+    const tasks = data?.phases?.flatMap((phase) =>
       phase.tasks.map((task) => ({
         phase: phase.name,
         title: task.title,
@@ -124,8 +126,8 @@ const DealProgress = ({ data, classes }) => {
         complete: task.complete,
       })),
     );
-    const task = tasks.find((task) => task.complete === false);
-    const taskIndex = tasks.indexOf(task);
+    const task = tasks?.find((task) => task.complete === false);
+    const taskIndex = tasks?.indexOf(task);
 
     if (phase) {
       setCurrentPhase(stepMap.get(phase.name));
