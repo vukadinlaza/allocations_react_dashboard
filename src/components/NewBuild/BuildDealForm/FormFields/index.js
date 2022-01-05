@@ -148,7 +148,7 @@ export function PortfolioCompanySecurities({
             tooltipContent={
               <Typography color="inherit">
                 Indicate what kind of security the SPV will acquire (e.g., Series A Preferred Stock,
-                Simple Agreement for Future Equity, Convertible Promissory Note or other)
+                Simple Agreement for Future Equity (SAFE), Convertible Promissory Note or other)
               </Typography>
             }
             openTooltip={openTooltip}
