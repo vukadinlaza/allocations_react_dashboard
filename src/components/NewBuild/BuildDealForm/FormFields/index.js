@@ -1103,14 +1103,14 @@ export function CarryFee({
             tooltipContent={
               params.type === 'fund' ? (
                 <Typography color="inherit">
-                  A fee which the General Partner will be entitled to in case the Fund's investment
-                  is successful/profitable; note that generally carry fee is charged only from the
+                  Carry Fee is a share of the profits that the General Partner is entitled to when
+                  the Fund investment is profitable. Note that Carry Fee is charged only on profits.
                   profit
                 </Typography>
               ) : (
                 <Typography color="inherit">
-                  A fee which the Manager will be entitled to in case the SPV's investment is
-                  successful/profitable; note that carry fee is charged only from the profit
+                  Carry Fee is a share of the profits that the Manager is entitled to when the SPV's
+                  investment is profitable. Note that Carry Fee is charged only on profits.
                 </Typography>
               )
             }
