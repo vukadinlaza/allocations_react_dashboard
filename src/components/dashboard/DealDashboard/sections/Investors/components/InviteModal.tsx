@@ -17,14 +17,6 @@ interface Props extends WithStyles<typeof styles> {
   dealId: string;
 }
 
-// interface CustomCloseButtonProps {
-//   closeToast: () => void;
-// }
-
-// const CustomCloseButton: React.ReactElement<CustomCloseButtonProps> = ({ closeToast }) => (
-//   <button onClick={closeToast}>X</button>
-// );
-
 const SEND_INVITATIONS = gql`
   mutation SendInvitations($dealId: String!, $emails: [String]) {
     sendInvitations(dealId: $dealId, emails: $emails)
