@@ -133,7 +133,7 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
     memo: '',
     minimum_investment: 10000,
     name: '',
-    need_gp_entity: 'true',
+    need_gp_entity: '',
     number_of_investments: '',
     offering_type: '506b',
     portfolio_company_name: '',

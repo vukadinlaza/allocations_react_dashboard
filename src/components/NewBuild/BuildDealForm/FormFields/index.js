@@ -590,7 +590,7 @@ export function NeedGPEntity({ buildData, handleChange, handleTooltip, classes, 
         <ButtonSelector
           name="need_gp_entity"
           onChange={handleChange}
-          currentValue={buildData.need_gp_entity}
+          currentValue={buildData.need_gp_entity || 'true'}
           values={[
             { label: 'Yes', value: 'true' },
             { label: 'No', value: 'false' },
@@ -1207,7 +1207,7 @@ export function SideLetters({
               tooltipContent={
                 <Typography color="inherit">
                   For some investors you might want to provide different fee structure, this is
-                  possible by concluding side letters
+                  possible by including side letters
                 </Typography>
               }
               openTooltip={openTooltip}
