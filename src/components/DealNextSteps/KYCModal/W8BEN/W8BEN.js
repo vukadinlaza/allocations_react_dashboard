@@ -31,13 +31,7 @@ const validate = (formData, isTaxTreaty) => {
   ];
 
   if (isTaxTreaty) {
-    required.push(
-      'country_of_residence',
-      'article_and_paragraph_of_applicable_treaty',
-      'withholding_rate_claimed',
-      'type_of_income_subject_to_reduced_withholding',
-      'additional_conditions',
-    );
+    required.push('country_of_residence');
   }
 
   return required.reduce((acc, attr) => (formData[attr] ? acc : [...acc, attr]), []);
