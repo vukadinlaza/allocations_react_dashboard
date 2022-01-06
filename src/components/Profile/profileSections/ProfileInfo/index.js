@@ -134,6 +134,10 @@ const ProfileInfo = ({
         toast.success('Success! User updated');
       }
     },
+    onError: () =>
+      toast.error(
+        'Sorry, something went wrong. Try again or contact support at support@allocations.com',
+      ),
   });
 
   const handleChange = (prop) => (e) => {

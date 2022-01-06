@@ -71,16 +71,11 @@ const TaskAction = ({
   gettingTaskData,
   setGettingTaskData,
   classes,
-  setSnackbarData,
 }) => {
   const { _id: deal_id } = deal;
   const [updateDeal] = useMutation(UPDATE_DEAL_SERVICE, {
     onCompleted: () => {
       refetchDeal();
-      setSnackbarData({
-        type: 'success',
-        message: 'Success! Task updated.',
-      });
     },
   });
   const [getDocument, { data: documentData }] = useLazyQuery(GET_DOCUMENT, {
@@ -89,36 +84,18 @@ const TaskAction = ({
       setGettingTaskData(false);
       setTaskLoading(false);
     },
-    onError: (error) => {
-      setSnackbarData({
-        type: 'error',
-        message: error.toString(),
-      });
-    },
   });
   const [updateReview] = useMutation(COMPLETE_REVIEW, {
     onCompleted: () => {
       setTaskLoading(false);
-      setSnackbarData({
-        type: 'success',
-        message: 'Success! Phase reviewed.',
-      });
       refetchDeal();
     },
     onError: (error) => {
       setTaskLoading(false);
-      setSnackbarData({
-        type: 'error',
-        message: error.toString(),
-      });
     },
   });
   const [addDoc] = useMutation(ADD_DOC, {
     onCompleted: () => {
-      setSnackbarData({
-        type: 'success',
-        message: 'Success! Document uploaded.',
-      });
       setTimeout(() => {
         // RefetchDeal gets triggered before the phase can be updated. TODO: Find better solution instead of setTimeout
         refetchDeal();
@@ -128,10 +105,6 @@ const TaskAction = ({
   });
   const [deleteDoc] = useMutation(DELETE_DOCUMENT, {
     onCompleted: () => {
-      setSnackbarData({
-        type: 'success',
-        message: 'Success! Document deleted.',
-      });
       refetchDeal();
       getDocument({ variables: { task_id: task._id } });
     },

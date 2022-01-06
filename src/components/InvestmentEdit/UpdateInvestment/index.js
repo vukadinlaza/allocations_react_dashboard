@@ -121,10 +121,8 @@ export default function InvestmentEdit({
       }
       getInvestment();
     },
-    onError: (error) => {
-      console.log(error);
-      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
-    },
+    onError: () =>
+      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com'),
   });
 
   const [updateUser] = useMutation(UPDATE_USER, {
@@ -135,10 +133,8 @@ export default function InvestmentEdit({
       }
       getInvestment();
     },
-    onError: (error) => {
-      console.log(error);
-      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
-    },
+    onError: () =>
+      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com'),
   });
 
   const [deleteInvestment] = useMutation(destroy, {
@@ -149,10 +145,8 @@ export default function InvestmentEdit({
       }
       toast.success('Success! Investment deleted');
     },
-    onError: (error) => {
-      console.log(error);
-      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
-    },
+    onError: () =>
+      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com'),
   });
 
   useEffect(() => {
