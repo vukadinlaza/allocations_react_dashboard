@@ -1106,7 +1106,6 @@ export function CarryFee({
                 <Typography color="inherit">
                   Carry Fee is a share of the profits that the General Partner is entitled to when
                   the Fund investment is profitable. Note that Carry Fee is charged only on profits.
-                  profit
                 </Typography>
               ) : (
                 <Typography color="inherit">
