@@ -1579,8 +1579,8 @@ export function CustomInvestmentAgreement({
               handleTooltip={handleTooltip}
               tooltipContent={
                 <Typography color="inherit">
-                  Choose Allocations to prepare your Fund Documents (Recommended) or use your own
-                  Custom (extra time and fees may accrue)
+                  Choose Allocations to prepare your Fund documents (Recommended) or use your own
+                  Custom documents (extra time and fees may accrue)
                 </Typography>
               }
               openTooltip={openTooltip}
