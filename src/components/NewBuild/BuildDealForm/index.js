@@ -187,6 +187,7 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
       'target_raise_goal',
       'minimum_investment',
       'accept_crypto',
+      'type_of_investors',
     ],
     fund: [
       'management_fee_value',
@@ -304,9 +305,6 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
       if (!buildData.number_of_investments) {
         unvalidatedFieldsToFill('number_of_investments', 'Number of Investments');
       }
-      if (!buildData.type_of_investors) {
-        unvalidatedFieldsToFill('type_of_investors', 'Type of Investors');
-      }
       if (!buildData.gp_entity_name) {
         unvalidatedFieldsToFill('gp_entity_name', 'GP Entity Name');
       }
@@ -315,6 +313,9 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
       }
     }
 
+    if (!buildData.type_of_investors) {
+      unvalidatedFieldsToFill('type_of_investors', 'Type of Investors');
+    }
     if (!buildData.minimum_investment) {
       unvalidatedFieldsToFill('minimum_investment', 'Minimum Investment');
     }
@@ -617,7 +618,7 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
               <SideLetters {...formFieldProps} />
               {dealType === 'spv' && <TargetRaiseGoal {...formFieldProps} />}
               {dealType === 'spv' && <MinimumInvestment {...formFieldProps} />}
-              {dealType === 'fund' && <AcceptedInvestorTypes {...formFieldProps} />}
+              <AcceptedInvestorTypes {...formFieldProps} />
               {dealType === 'spv' && cryptoPaymentInBuild && <AcceptCrypto {...formFieldProps} />}
             </Grid>
           </form>
