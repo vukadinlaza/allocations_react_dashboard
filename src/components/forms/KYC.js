@@ -3,6 +3,7 @@ import { useMutation, gql } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Paper, Tooltip } from '@material-ui/core';
 import { useSimpleReducer } from '../../utils/hooks';
+import { toast } from 'react-toastify';
 
 const UPDATE_USER = gql`
   mutation UpdateUser($investor: UserInput!) {
@@ -28,6 +29,10 @@ export default function KYC({ investor, setStatus }) {
   const [investorUpdates, update] = useSimpleReducer({});
   const [updateInvestor] = useMutation(UPDATE_USER, {
     onCompleted: () => setStatus('pledged'),
+    onError: () =>
+      toast.error(
+        'Sorry, something went wrong. Try again or contact support at support@allocations.com',
+      ),
   });
 
   const valid = Boolean({ ...investor, ...investorUpdates }.passport);

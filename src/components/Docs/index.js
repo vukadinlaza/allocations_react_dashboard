@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useQuery, useLazyQuery, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
+import { toast } from 'react-toastify';
 
 /** *
  *
@@ -22,7 +23,10 @@ const RM_INVESTMENT_DOC = gql`
 
 export function Docs({ investment, setInvestment }) {
   const [uploadedDoc, setUploadedDoc] = useState(null);
-  const [addInvestmentDoc, { data, loading, error }] = useMutation(ADD_INVESTMENT_DOC);
+  const [addInvestmentDoc, { data, loading, error }] = useMutation(ADD_INVESTMENT_DOC, {
+    onError: () =>
+      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com'),
+  });
 
   useEffect(() => {
     if (uploadedDoc) {
@@ -72,6 +76,9 @@ export function Doc({ doc, investment }) {
   const file = doc.path.split('/')[1];
   const [rmInvestmentDoc, { data }] = useMutation(RM_INVESTMENT_DOC, {
     variables: { file, investment_id: investment._id },
+    onError: () => {
+      toast.error('Something went wrong. Try again or contact support at support@allocations.com.');
+    },
   });
 
   useEffect(() => {

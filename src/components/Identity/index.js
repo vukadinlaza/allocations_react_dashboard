@@ -68,6 +68,10 @@ const IdentityUpload = () => {
         investor: pick(investor, ['_id', 'email', 'passport']),
       },
       onCompleted: toast.success('Success!'),
+      onError: () =>
+        toast.error(
+          'Sorry, something went wrong. Try again or contact support at support@allocations.com',
+        ),
     });
   };
 
