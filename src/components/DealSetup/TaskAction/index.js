@@ -52,9 +52,9 @@ const GET_DOCUMENT = gql`
   }
 `;
 
-const SERVICE_AGREEMENT_LINK = gql`
-  query serviceAgreementLink($deal_id: String) {
-    dataRequest: getServiceAgreementLink(deal_id: $deal_id) {
+const SERVICES_AGREEMENT_LINK = gql`
+  query servicesAgreementLink($deal_id: String) {
+    dataRequest: getServicesAgreementLink(deal_id: $deal_id) {
       dataRequestId: id
       tokenId: token_id
       tokenSecret: token_secret
@@ -110,7 +110,7 @@ const TaskAction = ({
     },
   });
 
-  const { data: serviceAgreementLink } = useQuery(SERVICE_AGREEMENT_LINK, {
+  const { data: servicesAgreementLink } = useQuery(SERVICES_AGREEMENT_LINK, {
     variables: { deal_id },
   });
 
@@ -185,7 +185,7 @@ const TaskAction = ({
   }
 
   if (taskTypes.userTask.includes(task.type)) {
-    action = <SignTask {...(serviceAgreementLink?.dataRequest ?? {})} />;
+    action = <SignTask {...(servicesAgreementLink?.dataRequest ?? {})} />;
   }
 
   return action;

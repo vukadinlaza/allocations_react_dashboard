@@ -451,7 +451,7 @@ const useStyles = makeStyles((theme) => ({
       padding: '4px 10px',
     },
   },
-  serviceAgreementIconBox: {
+  servicesAgreementIconBox: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

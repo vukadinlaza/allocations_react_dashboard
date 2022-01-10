@@ -10,7 +10,7 @@ import styles from '../../styles.ts';
 const dataCopy = [
   {
     phase: 'build',
-    title: 'Sign Service Agreement',
+    title: 'Sign Services Agreement',
     type: 'fm-document-signature',
     complete: true,
   },
