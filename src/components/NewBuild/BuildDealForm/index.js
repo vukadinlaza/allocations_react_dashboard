@@ -685,7 +685,7 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
           className={classes.outerSection}
           style={sectionComplete(sectionFourComplete)}
         >
-          <form noValidate autoComplete="off">
+          <form noValidate autoComplete="off" style={{ width: '100%' }}>
             <Grid container spacing={1} className={classes.inputGridContainer}>
               <InternationalCompanyStatus {...formFieldProps} />
               <InternationalInvestorsStatus {...formFieldProps} />
