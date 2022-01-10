@@ -67,11 +67,11 @@ const AgreementBox = ({
         {loading || error ? (
           <CircularProgress />
         ) : width > phone ? (
-          <div className={classes.serviceAgreementIconBox}>
+          <div className={classes.servicesAgreementIconBox}>
             <img src={bluePenIcon} alt="document icon" />
           </div>
         ) : (
-          <div className={classes.serviceAgreementIconBox}>
+          <div className={classes.servicesAgreementIconBox}>
             <img src={docIcon} alt="document icon" />
           </div>
         )}
