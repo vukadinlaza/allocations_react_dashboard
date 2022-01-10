@@ -365,11 +365,14 @@ const SelectOrganization = ({
                             getContentAnchorEl: null,
                           }}
                           onChange={(e) =>
-                            setSelectedOrg(
-                              organizations.filter(
+                            setSelectedOrg(() => {
+                              if (e.target.value === 'Create New Organization') {
+                                return 'Create New Organization';
+                              }
+                              return organizations.filter(
                                 (organization) => organization._id === e.target.value,
-                              )[0],
-                            )
+                              )[0];
+                            })
                           }
                         >
                           <MenuItem
