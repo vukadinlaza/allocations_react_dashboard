@@ -761,7 +761,7 @@ export function Sectors({
         <Select
           options={suggestions}
           menuPosition="absolute"
-          menuPlacement="top"
+          menuPlacement="auto"
           captureMenuScroll
           styles={customStyles}
           onChange={(options) => {
@@ -1334,6 +1334,7 @@ export function AcceptedInvestorTypes({
       <Select
         id="type_of_investors"
         menuPosition="fixed"
+        menuPlacement="auto"
         label="What type of Investors are you accepting?"
         styles={customStyles}
         options={investorTypes.map((type) => ({ value: type, label: type, key: type })) || ''}
