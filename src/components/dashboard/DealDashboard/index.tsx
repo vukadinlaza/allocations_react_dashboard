@@ -11,6 +11,7 @@ import LoadingPlaceholder from './LoadingPlaceholder';
 import Investors from './sections/Investors';
 import DealProgress from './sections/DealProgress';
 import styles from './styles';
+import CompletedTasksList from './sections/DealProgress/components/CompletedTasksList';
 
 const DEAL = gql`
   query getDealByIdWithTasks($deal_id: String) {
@@ -69,6 +70,16 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     pollInterval: 1000,
     variables: { deal_id },
   });
+
+  console.log('data', dealData);
+
+  const completedTasks = dealData?.getDealByIdWithTasks?.phases
+    .filter((phase: any) => phase.name !== 'build')
+    .flatMap((phase: any) =>
+      phase.tasks
+        .filter((task: any) => task.completed)
+        .map((task: any) => ({ ...task, phase: phase.name })),
+    );
 
   const handleTabChange = (event: any, index: number) => {
     setTabIndex(index);
@@ -131,6 +142,10 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
           </Grid>
           <Grid item xs={1} />
           {getTabComponent()}
+
+          <Grid item xs={10} lg={10} style={{ padding: '0px' }}>
+            <CompletedTasksList completedTasks={completedTasks} classes={classes} />
+          </Grid>
         </Grid>
       </Grid>
     </Grid>
