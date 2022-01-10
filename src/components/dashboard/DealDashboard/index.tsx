@@ -75,7 +75,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     .filter((phase: any) => phase.name !== 'build')
     .flatMap((phase: any) =>
       phase.tasks
-        .filter((task: any) => task.completed)
+        .filter((task: any) => task.complete)
         .map((task: any) => ({ ...task, phase: phase.name })),
     );
 
