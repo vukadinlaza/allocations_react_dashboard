@@ -71,8 +71,6 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     variables: { deal_id },
   });
 
-  console.log('data', dealData);
-
   const completedTasks = dealData?.getDealByIdWithTasks?.phases
     .filter((phase: any) => phase.name !== 'build')
     .flatMap((phase: any) =>
