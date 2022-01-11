@@ -70,6 +70,35 @@ const styles: any = (theme: Theme) => ({
     fontSize: '12px',
     fontWeight: 400,
   },
+  completedTasksListContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: '50px',
+  },
+  completedTaskListItem: {
+    display: 'flex',
+    alignItems: 'center',
+    height: '104px',
+    width: '100%',
+    marginTop: '10px',
+    marginBottom: '10px',
+    backgroundColor: '#ffffff',
+    borderRadius: '8px',
+  },
+  completedTaskCheckImageContainer: {
+    marginRight: '15px',
+  },
+  completedTaskText: {
+    marginRight: '15px',
+    fontFamily: 'roboto',
+    fontSize: '18px',
+    color: '#94A3B8',
+  },
+  completedTaskToggle: {
+    color: '#0F172A',
+    fontWeight: '500',
+    cursor: 'pointer',
+  },
   closeModal: {
     color: 'white',
     cursor: 'pointer',
