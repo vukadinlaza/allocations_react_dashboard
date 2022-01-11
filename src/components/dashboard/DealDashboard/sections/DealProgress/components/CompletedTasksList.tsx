@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Typography } from '@material-ui/core';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
-import blueCheck from '../../../../../../assets/blue-check-mark-circle.svg';
+import blueCheck from '../../../../../../assets/blue-check-mark.svg';
 import forYou from '../../../../../../assets/for-you-icon.svg';
 import forAllocations from '../../../../../../assets/for-allocations-icon.svg';
 import downArrow from '../../../../../../assets/keyboard_arrow_down.svg';
@@ -38,11 +38,7 @@ const CompletedTasksList: React.FC<completedTaskListProps> = ({ completedTasks, 
     <li key={_id} className={classes.completedTaskListItem}>
       <div style={{ display: 'flex', alignItems: 'center', marginLeft: '50px' }}>
         <div className={classes.completedTaskCheckImageContainer}>
-          <img
-            src={blueCheck}
-            alt={'Blue check mark'}
-            className={classes.completedTaskCheckImage}
-          />
+          <img src={blueCheck} alt={'Blue check mark'} />
         </div>
         <Typography className={classes.completedTaskText}>
           {capitalizePhaseName(phase)}: {title}

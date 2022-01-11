@@ -86,18 +86,7 @@ const styles: any = (theme: Theme) => ({
     borderRadius: '8px',
   },
   completedTaskCheckImageContainer: {
-    display: 'flex',
     marginRight: '15px',
-    justifyContent: 'center',
-    alignItems: 'center',
-    border: '2px solid blue',
-    borderRadius: '50%',
-    width: '20px',
-    height: '20px',
-  },
-  completedTaskCheckImage: {
-    width: '12px',
-    height: '12px',
   },
   completedTaskText: {
     marginRight: '15px',
