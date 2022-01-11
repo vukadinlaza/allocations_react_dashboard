@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import { gql, useLazyQuery } from '@apollo/client';
 import { Grid, Typography } from '@material-ui/core';
 import allocationsIcon from '../../../../../../../assets/allocations_bar_logo.svg';
 import grayCheck from '../../../../../../../assets/gray-check.svg';
@@ -7,12 +8,35 @@ import profile from '../../../../../../../assets/profile-icon.svg';
 import styles from '../../../../styles.ts';
 import { AgreementBox } from '../../../../../../NewBuild/BuildDealForm/FormComponents/AgreementSigner';
 
+const GET_INVESTMENT_AGREEMENT = gql`
+  query getDealDocService($task_id: String) {
+    getDealDocService(task_id: $task_id) {
+      _id
+      title
+      link
+      createdAt
+    }
+  }
+`;
+
 const defaultDesc =
   'An Allocations representative will be reaching out shortly to assist you in completing this step. If you have any questions, do not hesitate to contact support@allocations.com.';
 
 const CurrentStep = ({ classes, phase, task }) => {
   const forFM = !task?.type?.includes('process');
   const isAgreementSigner = task?.title?.includes('Sign');
+  const [getDocument, { loading, error, data }] = useLazyQuery(GET_INVESTMENT_AGREEMENT, {
+    variables: {
+      task_id: task?._id,
+    },
+  });
+
+  useEffect(() => {
+    if (task?._id) getDocument();
+    console.log(task?._id, 'task ID');
+    console.log(data, 'DATA');
+  }, [task]);
+
   return (
     <Grid container className={classes.currentStepBody}>
       <div className={classes.stepTitleRow}>
