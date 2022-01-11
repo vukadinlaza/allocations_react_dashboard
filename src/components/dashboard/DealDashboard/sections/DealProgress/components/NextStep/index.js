@@ -1,9 +1,9 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
-import allocationsIcon from '../../../../../../../assets/allocations_bar_logo.svg';
 import grayCheck from '../../../../../../../assets/gray-check.svg';
-import profile from '../../../../../../../assets/profile-icon.svg';
+import allocationsIcon from '../../../../../../../assets/for-allocations-icon.svg';
+import forYouIcon from '../../../../../../../assets/for-you-icon.svg';
 import styles from '../../../../styles.ts';
 
 const NextStep = ({ classes, phase, task }) => {
@@ -16,10 +16,10 @@ const NextStep = ({ classes, phase, task }) => {
         <Typography>
           {phase && `${phase}:`} {task?.title}
         </Typography>
-        <div className={forFM ? classes.badgeGray : classes.badgeBlue}>
-          <img alt="icon" src={forFM ? profile : allocationsIcon} style={{ height: '12px' }} />
-          <span>{forFM ? 'For You' : 'For Allocations'}</span>
-        </div>
+        <img
+          alt={forFM ? 'for you icon' : 'allocations icon'}
+          src={forFM ? forYouIcon : allocationsIcon}
+        />
       </div>
     </Grid>
   );

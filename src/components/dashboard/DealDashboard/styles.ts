@@ -405,20 +405,6 @@ const styles: any = (theme: Theme) => ({
   },
 
   // Styles for Body of PostBuild and common styling between CurrentStep and NextStep
-  badgeBlue: {
-    borderRadius: '100px',
-    fontSize: '11px',
-    padding: '5px 10px',
-    color: '#186EFF',
-    backgroundColor: '#ECF3FF',
-  },
-  badgeGray: {
-    borderRadius: '100px',
-    fontSize: '11px',
-    padding: '5px 10px',
-    color: '#334155',
-    backgroundColor: '#F1F5F9',
-  },
   bodyContainer: {
     display: 'flex',
     justifyContent: 'center',
