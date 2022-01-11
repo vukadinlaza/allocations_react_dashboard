@@ -144,7 +144,9 @@ const DealProgress = ({ data, classes }) => {
   const completedTasks = data.phases
     .filter((phase) => phase.name !== 'build')
     .flatMap((phase) =>
-      phase.tasks.filter((task) => task.complete).map((task) => ({ ...task, phase: phase.name })),
+      phase.tasks
+        .filter((task) => task.complete && !task.title.includes('Create Process Street Run'))
+        .map((task) => ({ ...task, phase: phase.name })),
     );
 
   return (
