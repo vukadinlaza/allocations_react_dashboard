@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Typography } from '@material-ui/core';
 import { withRouter } from 'react-router';
+import { Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import CurrentStep from './components/CurrentStep';
 import NextStep from './components/NextStep';
