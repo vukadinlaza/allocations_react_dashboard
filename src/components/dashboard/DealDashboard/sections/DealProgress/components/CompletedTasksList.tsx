@@ -52,7 +52,7 @@ const CompletedTasksList: React.FC<completedTaskListProps> = ({ completedTasks, 
   ));
 
   return (
-    <div style={{ marginTop: '50px' }}>
+    <div>
       <Typography className={classes.completedTaskToggle} onClick={toggleList}>
         Completed
         <img
