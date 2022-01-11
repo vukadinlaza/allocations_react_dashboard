@@ -162,7 +162,7 @@ const DealProgress = ({ data, classes }) => {
           <Typography className={classes.stepText}>Up Next</Typography>
           <NextStep phase={nextTaskPhase} task={nextTask} />
         </Grid>
-        <Grid item xs={12} lg={12}>
+        <Grid item xs={10} lg={12}>
           <Divider variant="middle" style={{ color: '#E2E8F0', margin: '50px 0px' }} />
         </Grid>
         <Grid item xs={10} lg={10} style={{ padding: '0px' }}>
