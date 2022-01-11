@@ -92,7 +92,7 @@ export function InternationalCountrySelector({
     <Select
       id="international_company_country"
       label="International Company by Country"
-      menuPosition="fixed"
+      menuPosition="absolute"
       styles={customStyles}
       value={buildData.international_company_country || ''}
       options={countryNames.map((country) => ({ value: country, label: country })) || ''}
@@ -161,7 +161,7 @@ export function InternationalInvestorsCountriesSelector({
     <Select
       id="international_investors_countries"
       label="International Companies by Country"
-      menuPosition="fixed"
+      menuPosition="absolute"
       styles={customStyles}
       value={
         buildData.international_investors_countries.map((country) => ({
@@ -231,7 +231,7 @@ export function DealStagesSelector({ handleChange, setUnfilledFields, unfilledFi
 export function SecuritiesSelector({ handleChange, setUnfilledFields, unfilledFields, buildData }) {
   const securityTypes = [
     'Series A Preferred Stock',
-    'Simple Agreement for Future Equity',
+    'Simple Agreement for Future Equity (SAFE)',
     'Convertible Promissory Note',
     'Other',
   ];

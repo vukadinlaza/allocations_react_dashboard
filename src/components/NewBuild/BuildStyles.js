@@ -176,6 +176,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     maxWidth: '1352px',
     opacity: 1,
+    overflow: 'visible',
     [theme.breakpoints.down(phone)]: {
       maxWidth: '600px',
       marginBottom: '24px',

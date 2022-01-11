@@ -148,7 +148,7 @@ export function PortfolioCompanySecurities({
             tooltipContent={
               <Typography color="inherit">
                 Indicate what kind of security the SPV will acquire (e.g., Series A Preferred Stock,
-                Simple Agreement for Future Equity, Convertible Promissory Note or other)
+                Simple Agreement for Future Equity (SAFE), Convertible Promissory Note or other)
               </Typography>
             }
             openTooltip={openTooltip}
@@ -590,7 +590,7 @@ export function NeedGPEntity({ buildData, handleChange, handleTooltip, classes, 
         <ButtonSelector
           name="need_gp_entity"
           onChange={handleChange}
-          currentValue={buildData.need_gp_entity}
+          currentValue={buildData.need_gp_entity || 'true'}
           values={[
             { label: 'Yes', value: 'true' },
             { label: 'No', value: 'false' },
@@ -761,7 +761,7 @@ export function Sectors({
         <Select
           options={suggestions}
           menuPosition="absolute"
-          menuPlacement="top"
+          menuPlacement="auto"
           captureMenuScroll
           styles={customStyles}
           onChange={(options) => {
@@ -849,14 +849,15 @@ export function Representative({
     <Grid className={classes.basicInformationInputItem} item xs={6}>
       <FormControl required disabled variant="outlined" className={classes.formContainers}>
         <Grid className={classes.inputLabelWithTooltip} item xs={12}>
-          <Typography className={classes.formItemName}>Manager Full Title</Typography>
+          <Typography className={classes.formItemName}>Fund Manager Full Title</Typography>
           <ModalTooltip
-            title="Manager Full Title"
+            title="Fund Manager Full Title"
             handleTooltip={handleTooltip}
             tooltipContent={
               <Typography color="inherit">
-                Please indicate the name of the representative of the Manager as well as the title
-                of the said person; applicable only if the Manager is a legal entity
+                {buildData.type === 'spv'
+                  ? 'Title of the Fund Manager from previous question'
+                  : 'Please indicate the name of the representative of the Manager as well as the title of the said person; applicable only if the Manager is a legal entity'}
               </Typography>
             }
             openTooltip={openTooltip}
@@ -1000,8 +1001,8 @@ export function ManagementFee({
               handleTooltip={handleTooltip}
               tooltipContent={
                 <Typography color="inherit">
-                  Please enter your custom management fees according to your deal. i.e "20% for the
-                  first year, 10% for any years after"
+                  Please enter your custom management fees ($ or %) according to your deal. i.e 20%
+                  for the first year, 10% for any years after
                 </Typography>
               }
               openTooltip={openTooltip}
@@ -1103,14 +1104,13 @@ export function CarryFee({
             tooltipContent={
               params.type === 'fund' ? (
                 <Typography color="inherit">
-                  A fee which the General Partner will be entitled to in case the Fund's investment
-                  is successful/profitable; note that generally carry fee is charged only from the
-                  profit
+                  Carry Fee is a share of the profits that the General Partner is entitled to when
+                  the Fund investment is profitable. Note that Carry Fee is charged only on profits.
                 </Typography>
               ) : (
                 <Typography color="inherit">
-                  A fee which the Manager will be entitled to in case the SPV's investment is
-                  successful/profitable; note that carry fee is charged only from the profit
+                  Carry Fee is a share of the profits that the Manager is entitled to when the SPV's
+                  investment is profitable. Note that Carry Fee is charged only on profits.
                 </Typography>
               )
             }
@@ -1207,7 +1207,7 @@ export function SideLetters({
               tooltipContent={
                 <Typography color="inherit">
                   For some investors you might want to provide different fee structure, this is
-                  possible by concluding side letters
+                  possible by including side letters
                 </Typography>
               }
               openTooltip={openTooltip}
@@ -1334,6 +1334,7 @@ export function AcceptedInvestorTypes({
       <Select
         id="type_of_investors"
         menuPosition="fixed"
+        menuPlacement="auto"
         label="What type of Investors are you accepting?"
         styles={customStyles}
         options={investorTypes.map((type) => ({ value: type, label: type, key: type })) || ''}
@@ -1579,8 +1580,8 @@ export function CustomInvestmentAgreement({
               handleTooltip={handleTooltip}
               tooltipContent={
                 <Typography color="inherit">
-                  As you might have your own SPV documents, you can use them with us as well, this
-                  would limit the period of time in which the SPV could be closed
+                  Choose Allocations to prepare your Fund documents (Recommended) or use your own
+                  Custom documents (extra time and fees may accrue)
                 </Typography>
               }
               openTooltip={openTooltip}

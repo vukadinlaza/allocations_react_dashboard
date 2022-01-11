@@ -110,7 +110,7 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
     asset_type: 'Startup',
     carry_fee_type: 'percent',
     carry_fee_value: '20',
-    closing_date: moment(Date.now()).add(7, 'days').format('YYYY-MM-DD'),
+    closing_date: moment(Date.now()).add(14, 'days').format('YYYY-MM-DD'),
     custom_carry_fee: 'false',
     custom_investment_agreement: 'false',
     custom_management_fee: 'false',
@@ -187,6 +187,7 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
       'target_raise_goal',
       'minimum_investment',
       'accept_crypto',
+      'type_of_investors',
     ],
     fund: [
       'management_fee_value',
@@ -304,9 +305,6 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
       if (!buildData.number_of_investments) {
         unvalidatedFieldsToFill('number_of_investments', 'Number of Investments');
       }
-      if (!buildData.type_of_investors) {
-        unvalidatedFieldsToFill('type_of_investors', 'Type of Investors');
-      }
       if (!buildData.gp_entity_name) {
         unvalidatedFieldsToFill('gp_entity_name', 'GP Entity Name');
       }
@@ -315,6 +313,9 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
       }
     }
 
+    if (!buildData.type_of_investors) {
+      unvalidatedFieldsToFill('type_of_investors', 'Type of Investors');
+    }
     if (!buildData.minimum_investment) {
       unvalidatedFieldsToFill('minimum_investment', 'Minimum Investment');
     }
@@ -418,7 +419,7 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
           memo: buildData.memo,
           minimum_investment: Number(buildData.minimum_investment),
           name: buildData.name,
-          need_gp_entity: buildData.need_gp_entity,
+          need_gp_entity: dealType === 'spv' ? '' : buildData.need_gp_entity,
           number_of_investments: Number(buildData.number_of_investments),
           offering_type: buildData.offering_type,
           portfolio_company_name: buildData.portfolio_company_name,
@@ -617,7 +618,7 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
               <SideLetters {...formFieldProps} />
               {dealType === 'spv' && <TargetRaiseGoal {...formFieldProps} />}
               {dealType === 'spv' && <MinimumInvestment {...formFieldProps} />}
-              {dealType === 'fund' && <AcceptedInvestorTypes {...formFieldProps} />}
+              <AcceptedInvestorTypes {...formFieldProps} />
               {dealType === 'spv' && cryptoPaymentInBuild && <AcceptCrypto {...formFieldProps} />}
             </Grid>
           </form>
