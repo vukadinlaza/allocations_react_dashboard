@@ -24,7 +24,7 @@ const GET_DOCUMENT = gql`
   }
 `;
 
-const AgreementBox = ({
+export const AgreementBox = ({
   title,
   task,
   agreementLink,
@@ -67,11 +67,11 @@ const AgreementBox = ({
         {loading || error ? (
           <CircularProgress />
         ) : width > phone ? (
-          <div className={classes.servicesAgreementIconBox}>
+          <div className={classes.serviceAgreementIconBox}>
             <img src={bluePenIcon} alt="document icon" />
           </div>
         ) : (
-          <div className={classes.servicesAgreementIconBox}>
+          <div className={classes.serviceAgreementIconBox}>
             <img src={docIcon} alt="document icon" />
           </div>
         )}

@@ -424,6 +424,15 @@ const styles: any = (theme: Theme) => ({
     color: '#334155',
     backgroundColor: '#F1F5F9',
   },
+  blueCheck: {
+    width: '26px',
+    height: '26px',
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: '50%',
+    justifyContent: 'center',
+    backgroundColor: '#0461ff',
+  },
   bodyContainer: {
     display: 'flex',
     justifyContent: 'center',
@@ -478,6 +487,67 @@ const styles: any = (theme: Theme) => ({
     borderRadius: '8px',
     backgroundColor: '#FFF',
     padding: '3.5vh 5.5vw',
+  },
+
+  // styles for AgreementSigner component
+  agreementSignedBox: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: '100px',
+    paddingLeft: '30px',
+    paddingRight: '30px',
+    border: 'none !important',
+    borderRadius: '20px',
+    boxShadow: 'none !important',
+    backgroundColor: '#F6F7F8',
+    '&:hover': {
+      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+    },
+    [theme.breakpoints.down(phone)]: {
+      paddingLeft: '15px',
+      paddingRight: '15px',
+      border: '2px solid #186EFF !important',
+      backgroundColor: 'rgba(26, 110, 255, 0.16)',
+    },
+  },
+  agreementUnsignedBox: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: '100px',
+    paddingLeft: '30px',
+    paddingRight: '30px',
+    border: '2px dashed #0461FF !important',
+    borderRadius: '20px',
+    '&:hover': {
+      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+    },
+    [theme.breakpoints.down(phone)]: {
+      paddingLeft: '15px',
+      paddingRight: '15px',
+      border: '2px solid #2A2B54 !important',
+    },
+  },
+  signed: {
+    backgroundColor: 'rgb(57,197,34, 0.23)',
+    color: '#34AF1F',
+    fontWeight: '600',
+    borderRadius: '20px',
+    padding: '5px 20px',
+    [theme.breakpoints.down(phone)]: {
+      padding: '4px 10px',
+    },
+  },
+  notSigned: {
+    backgroundColor: '#FFBDAD',
+    color: '#DE350B',
+    fontWeight: '600',
+    borderRadius: '20px',
+    padding: '5px 20px',
+    [theme.breakpoints.down(phone)]: {
+      padding: '4px 10px',
+    },
   },
 });
 

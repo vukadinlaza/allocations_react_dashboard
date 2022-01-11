@@ -5,12 +5,14 @@ import allocationsIcon from '../../../../../../../assets/allocations_bar_logo.sv
 import grayCheck from '../../../../../../../assets/gray-check.svg';
 import profile from '../../../../../../../assets/profile-icon.svg';
 import styles from '../../../../styles.ts';
+import { AgreementBox } from '../../../../../../NewBuild/BuildDealForm/FormComponents/AgreementSigner';
 
 const defaultDesc =
   'An Allocations representative will be reaching out shortly to assist you in completing this step. If you have any questions, do not hesitate to contact support@allocations.com.';
 
 const CurrentStep = ({ classes, phase, task }) => {
   const forFM = !task?.type?.includes('process');
+  const isAgreementSigner = task?.title?.includes('Sign');
   return (
     <Grid container className={classes.currentStepBody}>
       <div className={classes.stepTitleRow}>
@@ -23,7 +25,7 @@ const CurrentStep = ({ classes, phase, task }) => {
           <span>{forFM ? 'For You' : 'For Allocations'}</span>
         </div>
       </div>
-
+      {isAgreementSigner && <AgreementBox title={task.title} task={task} classes={classes} />}
       <Typography style={{ fontSize: '12px', textAlign: 'left', width: '100%' }}>
         {forFM ? 'Something else happens' : defaultDesc}
       </Typography>
