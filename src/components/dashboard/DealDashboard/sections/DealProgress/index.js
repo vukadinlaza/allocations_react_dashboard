@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import CurrentStep from './components/CurrentStep';
 import NextStep from './components/NextStep';
 import ProgressBar from './components/Progressbar';
+import CompletedTasksList from './components/CompletedTasksList';
 import styles from '../../styles.ts';
 
 const dataCopy = [
@@ -140,6 +141,12 @@ const DealProgress = ({ data, classes }) => {
     }
   }, [data]);
 
+  const completedTasks = data.phases
+    .filter((phase) => phase.name !== 'build')
+    .flatMap((phase) =>
+      phase.tasks.filter((task) => task.complete).map((task) => ({ ...task, phase: phase.name })),
+    );
+
   return (
     <>
       <ProgressBar steps={steps} activeStep={activeStep} />
@@ -152,6 +159,9 @@ const DealProgress = ({ data, classes }) => {
         <Grid item xs={10} lg={10} className={classes.nextStepContainer}>
           <Typography className={classes.stepText}>Up Next</Typography>
           <NextStep phase={nextTaskPhase} task={nextTask} />
+        </Grid>
+        <Grid item xs={10} lg={10} style={{ padding: '0px' }}>
+          <CompletedTasksList completedTasks={completedTasks} classes={classes} />
         </Grid>
       </Grid>
     </>
