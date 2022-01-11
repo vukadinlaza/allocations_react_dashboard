@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Divider, Grid, Typography } from '@material-ui/core';
 import { withRouter } from 'react-router';
 import { Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
@@ -161,6 +162,9 @@ const DealProgress = ({ data, classes }) => {
         <Grid item xs={10} lg={10} className={classes.nextStepContainer}>
           <Typography className={classes.stepText}>Up Next</Typography>
           <NextStep phase={nextTaskPhase} task={nextTask} />
+        </Grid>
+        <Grid item xs={10} lg={12}>
+          <Divider variant="middle" style={{ color: '#E2E8F0', margin: '50px 0px' }} />
         </Grid>
         <Grid item xs={10} lg={10} style={{ padding: '0px' }}>
           <CompletedTasksList completedTasks={completedTasks} classes={classes} />
