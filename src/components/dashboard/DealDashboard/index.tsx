@@ -62,19 +62,29 @@ const UPDATE_BUILD_DEAL = gql`
 
 interface Props extends WithStyles<typeof styles> {}
 
-const dealDashboardTabs = ['Deal Progress', 'Investors', 'Documents', 'Deal Page'];
-
 const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   const history = useHistory();
   const currentOrg = useCurrentOrganization();
   const params: { deal_id: string } = useParams();
   const { deal_id } = params;
   const [tabIndex, setTabIndex] = useState(0);
-  const { data: dealData } = useQuery(DEAL, {
+  const { data: dealData, loading } = useQuery(DEAL, {
     fetchPolicy: 'network-only',
     pollInterval: 1000,
     variables: { deal_id },
   });
+
+  let dealDashboardTabs = ['Deal Progress', 'Investors', 'Documents', 'Deal Page'];
+
+  const remainingTasks = dealData?.getDealByIdWithTasks?.phases.flatMap((phase: any) =>
+    phase.tasks
+      .filter((task: any) => task.complete === false)
+      .map((task: any) => ({ title: task.title, complete: task.complete })),
+  );
+
+  if (!remainingTasks?.length && loading === false) {
+    dealDashboardTabs = ['Investors', 'Documents', 'Deal Page'];
+  }
 
   const [updateBuildDeal, { data: updatedDealData }] = useMutation(UPDATE_BUILD_DEAL, {
     // onCompleted: () => {
@@ -107,7 +117,9 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
 
   const getTabComponent = () => {
     if (!dealData) return <LoadingPlaceholder />;
+
     const tabName = dealDashboardTabs[tabIndex];
+    console.log('TABS:', dealDashboardTabs);
     switch (tabName) {
       case 'Deal Progress':
         return <DealProgress {...dealProps} />;
