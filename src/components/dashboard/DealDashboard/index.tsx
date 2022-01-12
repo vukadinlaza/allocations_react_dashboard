@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery, gql } from '@apollo/client';
 import { useParams, withRouter, RouteComponentProps } from 'react-router-dom';
 import { useHistory } from 'react-router';
@@ -68,21 +68,27 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   const params: { deal_id: string } = useParams();
   const { deal_id } = params;
   const [tabIndex, setTabIndex] = useState(0);
+  const [dealDashboardTabs, setDealDashboardTabs] = useState([] as string[]);
+
   const { data: dealData, loading } = useQuery(DEAL, {
     fetchPolicy: 'network-only',
     pollInterval: 1000,
     variables: { deal_id },
   });
 
-  let dealDashboardTabs = ['Deal Progress', 'Investors', 'Documents', 'Deal Page'];
+  useEffect(() => {
+    if (dealData) {
+      const remainingTasks = dealData?.getDealByIdWithTasks?.phases.flatMap((phase: any) =>
+        phase.tasks.filter((task: any) => !task.complete),
+      );
 
-  const remainingTasks = dealData?.getDealByIdWithTasks?.phases.flatMap((phase: any) =>
-    phase.tasks.filter((task: any) => !task.complete),
-  );
-
-  if (!remainingTasks?.length && !loading) {
-    dealDashboardTabs = ['Investors', 'Documents', 'Deal Page'];
-  }
+      if (!remainingTasks?.length) {
+        setDealDashboardTabs(['Investors', 'Documents', 'Deal Page']);
+      } else {
+        setDealDashboardTabs(['Deal Progress', 'Investors', 'Documents', 'Deal Page']);
+      }
+    }
+  }, [dealData]);
 
   const [updateBuildDeal, { data: updatedDealData }] = useMutation(UPDATE_BUILD_DEAL, {
     // onCompleted: () => {
@@ -124,7 +130,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
         return (
           <Investors
             investorsData={dealData?.getDealByIdWithTasks?.investments}
-            orgSlug={currentOrg.slug}
+            orgSlug={currentOrg?.slug}
             dealId={deal_id}
           />
         );
