@@ -63,6 +63,29 @@ const App = () => {
             <Sidebar />
           </div>
           <div className="mainRoute">
+            <div
+              style={{
+                backgroundColor: '#0144e4',
+                width: '100%',
+                padding: '.5rem',
+                color: 'white',
+                textAlign: 'center',
+                marginBottom: '.25rem',
+              }}
+            >
+              Monday, January 17th is a federal holiday in the United States in observance of Martin
+              Luther King Jr. Day. Banks in the United States will be closed. Please{' '}
+              <a
+                href="https://www.allocations.com/contact-us"
+                style={{
+                  color: 'white',
+                  textDecoration: 'underline',
+                }}
+              >
+                contact support
+              </a>{' '}
+              for any assistance.
+            </div>
             <Switch>
               <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
               <PrivateRoute path="/" exact component={InvestorDashboard} />
