@@ -77,9 +77,9 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   });
 
   const [updateBuildDeal, { data: updatedDealData }] = useMutation(UPDATE_BUILD_DEAL, {
-    onCompleted: () => {
-      console.log('You did it!');
-    },
+    // onCompleted: () => {
+    // Do we want a toast notification
+    // },
     onError: (err) => {
       console.log('Error:', err);
     },
@@ -88,14 +88,13 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   const handleTabChange = (event: any, index: number) => {
     setTabIndex(index);
   };
-  console.log('DealData:', dealData);
+
   const handleComplete = () => {
-    console.log('Clicked!', deal_id);
     updateBuildDeal({
       variables: {
         payload: {
           deal_id,
-          // dealData?.getDealByIdWithTasks,
+          task: 'User Acknowledged Complete',
         },
       },
     });

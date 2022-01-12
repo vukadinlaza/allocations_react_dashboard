@@ -121,7 +121,7 @@ const DealProgress = ({ data, handleComplete, classes }) => {
   const [nextTask, setNextTask] = useState({});
   const [nextTaskPhase, setNextTaskPhase] = useState('Pre-Onboarding');
   const [activeStep, setActiveStep] = useState(0);
-  // console.log('DATA:', data);
+
   useEffect(() => {
     const phase = data?.phases?.find((phase) =>
       phase.tasks.find((task) => task.complete === false),
@@ -138,14 +138,11 @@ const DealProgress = ({ data, handleComplete, classes }) => {
     const taskIndex = tasks?.indexOf(task);
 
     if (phase) {
-      console.log('Phase:', phase);
       setCurrentPhase(stepMap.get(phase.name));
-      console.log('Step:', currentPhase);
       setActiveStep(steps.indexOf(currentPhase));
     }
     if (task) {
       setCurrentTask(task);
-      console.log('Current Task:', currentTask);
       setNextTask(tasks[taskIndex + 1]);
       if (nextTask) {
         setNextTaskPhase(stepMap.get(nextTask.phase));
