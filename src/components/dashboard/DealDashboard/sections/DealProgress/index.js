@@ -93,7 +93,13 @@ const dataCopy = [
     phase: 'post-closing',
     title: 'Compliance Reg D + Blue Sky',
     type: 'process-street-checklist',
-    complete: true,
+    complete: false,
+  },
+  {
+    phase: 'post-closing',
+    title: 'User Acknowledged Complete',
+    type: 'fm-review',
+    complete: false,
   },
 ];
 
@@ -114,7 +120,7 @@ const DealProgress = ({ data, classes }) => {
   const [nextTask, setNextTask] = useState({});
   const [nextTaskPhase, setNextTaskPhase] = useState('Pre-Onboarding');
   const [activeStep, setActiveStep] = useState(0);
-
+  // console.log('DATA:', data);
   useEffect(() => {
     const phase = data?.phases?.find((phase) =>
       phase.tasks.find((task) => task.complete === false),
@@ -131,11 +137,14 @@ const DealProgress = ({ data, classes }) => {
     const taskIndex = tasks?.indexOf(task);
 
     if (phase) {
+      console.log('Phase:', phase);
       setCurrentPhase(stepMap.get(phase.name));
+      console.log('Step:', currentPhase);
       setActiveStep(steps.indexOf(currentPhase));
     }
     if (task) {
       setCurrentTask(task);
+      console.log('Current Task:', currentTask);
       setNextTask(tasks[taskIndex + 1]);
       setNextTaskPhase(stepMap.get(nextTask.phase));
     }
@@ -158,10 +167,12 @@ const DealProgress = ({ data, classes }) => {
           <Typography className={classes.stepText}>Current Step</Typography>
           <CurrentStep phase={currentPhase} task={currentTask} />
         </Grid>
-        <Grid item xs={10} lg={10} className={classes.nextStepContainer}>
-          <Typography className={classes.stepText}>Up Next</Typography>
-          <NextStep phase={nextTaskPhase} task={nextTask} />
-        </Grid>
+        {nextTask !== undefined && (
+          <Grid item xs={10} lg={10} className={classes.nextStepContainer}>
+            <Typography className={classes.stepText}>Up Next</Typography>
+            <NextStep phase={nextTaskPhase} task={nextTask} />
+          </Grid>
+        )}
         <Grid item xs={10} lg={12}>
           <Divider variant="middle" style={{ color: '#E2E8F0', margin: '50px 0px' }} />
         </Grid>
