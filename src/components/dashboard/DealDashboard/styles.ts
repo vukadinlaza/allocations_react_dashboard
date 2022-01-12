@@ -486,7 +486,6 @@ const styles: any = (theme: Theme) => ({
     flexDirection: 'column',
     alignContent: 'center',
     textAlign: 'center',
-    marginBottom: '15px',
   },
   closeTabButton: {
     backgroundColor: '#186EFF',
