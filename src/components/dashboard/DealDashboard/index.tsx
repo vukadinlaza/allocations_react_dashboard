@@ -116,7 +116,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     if (!dealData) return <LoadingPlaceholder />;
 
     const tabName = dealDashboardTabs[tabIndex];
-    console.log('TABS:', dealDashboardTabs);
+
     switch (tabName) {
       case 'Deal Progress':
         return <DealProgress {...dealProps} />;
