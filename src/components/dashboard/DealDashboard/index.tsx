@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery, gql } from '@apollo/client';
+import { useMutation, useQuery, gql } from '@apollo/client';
 import { useParams, withRouter, RouteComponentProps } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { useCurrentOrganization } from '../../../state/current-organization';
@@ -54,6 +54,12 @@ const DEAL = gql`
   }
 `;
 
+const UPDATE_BUILD_DEAL = gql`
+  mutation updateBuildDeal($payload: Object) {
+    updateBuildDeal(payload: $payload)
+  }
+`;
+
 interface Props extends WithStyles<typeof styles> {}
 
 const dealDashboardTabs = ['Deal Progress', 'Investors', 'Documents', 'Deal Page'];
@@ -70,12 +76,29 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     variables: { deal_id },
   });
 
+  const [updateBuildDeal, { data: updatedDealData }] = useMutation(UPDATE_BUILD_DEAL, {
+    onCompleted: () => {
+      console.log('You did it!');
+    },
+    onError: (err) => {
+      console.log('Error:', err);
+    },
+  });
+
   const handleTabChange = (event: any, index: number) => {
     setTabIndex(index);
   };
-
+  console.log('DealData:', dealData);
   const handleComplete = () => {
-    console.log('Clicked!');
+    console.log('Clicked!', deal_id);
+    updateBuildDeal({
+      variables: {
+        payload: {
+          deal_id,
+          // dealData?.getDealByIdWithTasks,
+        },
+      },
+    });
   };
 
   const dealProps = {
