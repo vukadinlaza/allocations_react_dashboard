@@ -7,6 +7,7 @@ import NextStep from './components/NextStep';
 import ProgressBar from './components/Progressbar';
 import CompletedTasksList from './components/CompletedTasksList';
 import styles from '../../styles.ts';
+import CongratsStep from './components/CongratsStep';
 
 const dataCopy = [
   {
@@ -146,7 +147,9 @@ const DealProgress = ({ data, classes }) => {
       setCurrentTask(task);
       console.log('Current Task:', currentTask);
       setNextTask(tasks[taskIndex + 1]);
-      setNextTaskPhase(stepMap.get(nextTask.phase));
+      if (nextTask) {
+        setNextTaskPhase(stepMap.get(nextTask.phase));
+      }
     }
   }, [data]);
 
@@ -163,10 +166,14 @@ const DealProgress = ({ data, classes }) => {
       <ProgressBar steps={steps} activeStep={activeStep} />
 
       <Grid container className={classes.bodyContainer}>
-        <Grid item xs={10} lg={10} className={classes.currentStepContainer}>
-          <Typography className={classes.stepText}>Current Step</Typography>
-          <CurrentStep phase={currentPhase} task={currentTask} />
-        </Grid>
+        {currentTask?.title?.includes('User Acknowledged Complete') ? (
+          <CongratsStep />
+        ) : (
+          <Grid item xs={10} lg={10} className={classes.currentStepContainer}>
+            <Typography className={classes.stepText}>Current Step</Typography>
+            <CurrentStep phase={currentPhase} task={currentTask} />
+          </Grid>
+        )}
         {nextTask !== undefined && (
           <Grid item xs={10} lg={10} className={classes.nextStepContainer}>
             <Typography className={classes.stepText}>Up Next</Typography>
