@@ -77,12 +77,10 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   let dealDashboardTabs = ['Deal Progress', 'Investors', 'Documents', 'Deal Page'];
 
   const remainingTasks = dealData?.getDealByIdWithTasks?.phases.flatMap((phase: any) =>
-    phase.tasks
-      .filter((task: any) => task.complete === false)
-      .map((task: any) => ({ title: task.title, complete: task.complete })),
+    phase.tasks.filter((task: any) => !task.complete),
   );
 
-  if (!remainingTasks?.length && loading === false) {
+  if (!remainingTasks?.length && !loading) {
     dealDashboardTabs = ['Investors', 'Documents', 'Deal Page'];
   }
 
@@ -104,7 +102,6 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
       variables: {
         payload: {
           deal_id,
-          task: 'User Acknowledged Complete',
         },
       },
     });
