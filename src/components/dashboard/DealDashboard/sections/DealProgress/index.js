@@ -157,7 +157,7 @@ const DealProgress = ({ data, classes }) => {
       <Grid container className={classes.bodyContainer}>
         <Grid item xs={10} lg={10} className={classes.currentStepContainer}>
           <Typography className={classes.stepText}>Current Step</Typography>
-          <CurrentStep phase={currentPhase} task={currentTask} />
+          <CurrentStep phase={currentPhase} task={currentTask} deal={data} />
         </Grid>
         <Grid item xs={10} lg={10} className={classes.nextStepContainer}>
           <Typography className={classes.stepText}>Up Next</Typography>

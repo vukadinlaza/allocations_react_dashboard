@@ -9,12 +9,10 @@ import styles from '../../../../styles.ts';
 import { AgreementBox } from '../../../../../../NewBuild/BuildDealForm/FormComponents/AgreementSigner';
 
 const GET_INVESTMENT_AGREEMENT = gql`
-  query getDealDocService($task_id: String) {
-    getDealDocService(task_id: $task_id) {
-      _id
-      title
+  query GetServicesAgreementLink($deal_id: String) {
+    getServicesAgreementLink(deal_id: $deal_id) {
+      id
       link
-      createdAt
     }
   }
 `;
@@ -22,18 +20,18 @@ const GET_INVESTMENT_AGREEMENT = gql`
 const defaultDesc =
   'An Allocations representative will be reaching out shortly to assist you in completing this step. If you have any questions, do not hesitate to contact support@allocations.com.';
 
-const CurrentStep = ({ classes, phase, task }) => {
+const CurrentStep = ({ classes, phase, task, deal }) => {
   const forFM = !task?.type?.includes('process');
   const isAgreementSigner = task?.title?.includes('Sign');
   const [getDocument, { loading, error, data }] = useLazyQuery(GET_INVESTMENT_AGREEMENT, {
     variables: {
-      task_id: task?._id,
+      deal_id: deal?._id,
     },
   });
 
   useEffect(() => {
-    if (task?._id) getDocument();
-    console.log(task?._id, 'task ID');
+    if (deal?._id) getDocument();
+    console.log(deal, 'deal data');
     console.log(data, 'DATA');
   }, [task]);
 
