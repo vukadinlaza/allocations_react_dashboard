@@ -74,8 +74,13 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     setTabIndex(index);
   };
 
+  const handleComplete = () => {
+    console.log('Clicked!');
+  };
+
   const dealProps = {
     data: dealData?.getDealByIdWithTasks,
+    handleComplete: handleComplete,
   };
 
   const getTabComponent = () => {

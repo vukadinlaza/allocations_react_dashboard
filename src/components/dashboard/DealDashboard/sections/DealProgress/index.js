@@ -115,7 +115,7 @@ const stepMap = new Map([
   ['post-closing', 'Post-Closing'],
 ]);
 
-const DealProgress = ({ data, classes }) => {
+const DealProgress = ({ data, handleComplete, classes }) => {
   const [currentPhase, setCurrentPhase] = useState('Pre-Onboarding');
   const [currentTask, setCurrentTask] = useState({});
   const [nextTask, setNextTask] = useState({});
@@ -167,7 +167,7 @@ const DealProgress = ({ data, classes }) => {
 
       <Grid container className={classes.bodyContainer}>
         {currentTask?.title?.includes('User Acknowledged Complete') ? (
-          <CongratsStep />
+          <CongratsStep handleComplete={handleComplete} />
         ) : (
           <Grid item xs={10} lg={10} className={classes.currentStepContainer}>
             <Typography className={classes.stepText}>Current Step</Typography>
