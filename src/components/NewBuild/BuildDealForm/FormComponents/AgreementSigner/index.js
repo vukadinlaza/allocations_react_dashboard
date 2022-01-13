@@ -46,6 +46,11 @@ export const AgreementBox = ({
     if (signed && task?._id) getSignedDocument();
   }, [signed]);
 
+  useEffect(() => {
+    console.log({ readyToSign });
+    console.log({ agreementLink });
+  }, [readyToSign, agreementLink]);
+
   const loading = createDealLoading || signedDocLoading;
 
   const handleAgreementClick = () => {
@@ -154,25 +159,28 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
           </div>
         )}
 
-        {documents?.map(({ task, ...documentData }) => (
-          <AgreementBox
-            title={task.title.slice(4)}
-            agreementLink={documentData}
-            signingModal={signingModal}
-            task={task}
-            readyToSign={!!documentData && !error && !createDealLoading}
-            signed={documentsSignedStatus[task.title]}
-            isSigned={() =>
-              setDocumentsSignedStatus((prev) => ({
-                ...prev,
-                [task.title]: true,
-              }))
-            }
-            createDealLoading={createDealLoading}
-            error={error}
-            classes={classes}
-          />
-        ))}
+        {documents?.map(({ task, ...documentData }) => {
+          console.log(documentData, 'DOCUMENT');
+          return (
+            <AgreementBox
+              title={task.title.slice(4)}
+              agreementLink={documentData}
+              signingModal={signingModal}
+              task={task}
+              readyToSign={!!documentData && !error && !createDealLoading}
+              signed={documentsSignedStatus[task.title]}
+              isSigned={() =>
+                setDocumentsSignedStatus((prev) => ({
+                  ...prev,
+                  [task.title]: true,
+                }))
+              }
+              createDealLoading={createDealLoading}
+              error={error}
+              classes={classes}
+            />
+          );
+        })}
 
         <div className={classes.buttonBox}>
           <Button

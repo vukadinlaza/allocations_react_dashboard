@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+/* eslint-disable no-undef */
+import React, { useEffect, useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { gql, useLazyQuery } from '@apollo/client';
 import { Grid, Typography } from '@material-ui/core';
@@ -9,31 +10,62 @@ import styles from '../../../../styles.ts';
 import { AgreementBox } from '../../../../../../NewBuild/BuildDealForm/FormComponents/AgreementSigner';
 
 const GET_INVESTMENT_AGREEMENT = gql`
-  query GetServicesAgreementLink($deal_id: String) {
-    getServicesAgreementLink(deal_id: $deal_id) {
+  query GetFmSignatureLink($deal_id: String) {
+    getFmSignatureLink(deal_id: $deal_id) {
       id
+      token_id
+      token_secret
       link
     }
   }
 `;
 
+const signingModal = (agreementLink, isSigned) => {
+  DocSpring.createVisualForm({
+    ...agreementLink,
+    domainVerification: false,
+    onSubmit: () => {
+      localStorage.removeItem('buildData');
+      localStorage.removeItem('buildDeal');
+      localStorage.removeItem('buildFilesUploaded');
+      isSigned();
+      DocSpring.closeModal();
+    },
+  });
+};
+
 const defaultDesc =
   'An Allocations representative will be reaching out shortly to assist you in completing this step. If you have any questions, do not hesitate to contact support@allocations.com.';
 
 const CurrentStep = ({ classes, phase, task, deal }) => {
+  const [readyToSign, setReadyToSign] = useState(false);
+  const [documentSignedStatus, setDocumentSignedStatus] = useState(false);
+  const [investmentAgreement, setInvestmentAgreement] = useState({});
   const forFM = !task?.type?.includes('process');
-  const isAgreementSigner = task?.title?.includes('Sign');
-  const [getDocument, { loading, error, data }] = useLazyQuery(GET_INVESTMENT_AGREEMENT, {
-    variables: {
-      deal_id: deal?._id,
+  const isAgreementSigner = task?.title?.includes('Sign Investment Agreement');
+  const [getInvestmentAgreement, { loading, error, data }] = useLazyQuery(
+    GET_INVESTMENT_AGREEMENT,
+    {
+      variables: {
+        deal_id: deal?._id,
+      },
+      onCompleted: (res) => {
+        console.log(res);
+        setReadyToSign(true);
+        setInvestmentAgreement({
+          dataRequestId: res.getFmSignatureLink.id,
+          tokenSecret: res.getFmSignatureLink.token_secret,
+          tokenId: res.getFmSignatureLink.token_id,
+        });
+      },
     },
-  });
+  );
 
   useEffect(() => {
-    if (deal?._id) getDocument();
-    console.log(deal, 'deal data');
-    console.log(data, 'DATA');
-  }, [task]);
+    if (deal._id && isAgreementSigner) {
+      getInvestmentAgreement();
+    }
+  }, [deal, isAgreementSigner]);
 
   return (
     <Grid container className={classes.currentStepBody}>
@@ -47,7 +79,19 @@ const CurrentStep = ({ classes, phase, task, deal }) => {
           <span>{forFM ? 'For You' : 'For Allocations'}</span>
         </div>
       </div>
-      {isAgreementSigner && <AgreementBox title={task.title} task={task} classes={classes} />}
+      {isAgreementSigner && (
+        <AgreementBox
+          title={task.title}
+          task={task}
+          classes={classes}
+          agreementLink={investmentAgreement}
+          createDealLoading={loading}
+          readyToSign={readyToSign}
+          signingModal={signingModal}
+          signed={documentSignedStatus}
+          isSigned={() => setDocumentSignedStatus(true)}
+        />
+      )}
       <Typography style={{ fontSize: '12px', textAlign: 'left', width: '100%' }}>
         {forFM ? 'Something else happens' : defaultDesc}
       </Typography>
