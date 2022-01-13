@@ -32,6 +32,7 @@ export const AgreementBox = ({
   signingModal,
   signed,
   isSigned,
+  timeoutLoading = false,
   createDealLoading,
   error,
   classes,
@@ -51,7 +52,7 @@ export const AgreementBox = ({
     console.log({ agreementLink });
   }, [readyToSign, agreementLink]);
 
-  const loading = createDealLoading || signedDocLoading;
+  const loading = createDealLoading || signedDocLoading || timeoutLoading;
 
   const handleAgreementClick = () => {
     if (readyToSign && !signed) signingModal(agreementLink, isSigned);
@@ -102,6 +103,7 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
   const currentOrg = useCurrentOrganization();
   const { deal, documents } = dealData;
   const [documentsSignedStatus, setDocumentsSignedStatus] = useState({});
+  const [timeoutLoading, setTimeoutLoading] = useState({});
 
   useEffect(() => {
     if (documents) {

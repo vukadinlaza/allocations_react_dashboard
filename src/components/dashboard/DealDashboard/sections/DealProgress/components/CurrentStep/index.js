@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { gql, useLazyQuery } from '@apollo/client';
 import { Grid, Typography } from '@material-ui/core';
-import allocationsIcon from '../../../../../../../assets/allocations_bar_logo.svg';
+import allocationsIcon from '../../../../../../../assets/for-allocations-icon.svg';
+import forYouIcon from '../../../../../../../assets/for-you-icon.svg';
 import grayCheck from '../../../../../../../assets/gray-check.svg';
-import profile from '../../../../../../../assets/profile-icon.svg';
 import styles from '../../../../styles.ts';
 import { AgreementBox } from '../../../../../../NewBuild/BuildDealForm/FormComponents/AgreementSigner';
 
@@ -74,10 +74,10 @@ const CurrentStep = ({ classes, phase, task, deal }) => {
         <Typography>
           {phase && `${phase}:`} {task?.title}
         </Typography>
-        <div className={forFM ? classes.badgeGray : classes.badgeBlue}>
-          <img alt="icon" src={forFM ? profile : allocationsIcon} style={{ height: '12px' }} />
-          <span>{forFM ? 'For You' : 'For Allocations'}</span>
-        </div>
+        <img
+          alt={forFM ? 'for you icon' : 'allocations icon'}
+          src={forFM ? forYouIcon : allocationsIcon}
+        />
       </div>
       {isAgreementSigner && (
         <AgreementBox
