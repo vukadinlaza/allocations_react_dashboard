@@ -68,6 +68,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   const params: { deal_id: string } = useParams();
   const { deal_id } = params;
   const [tabIndex, setTabIndex] = useState(0);
+
   const [dealDashboardTabs, setDealDashboardTabs] = useState([] as string[]);
 
   const { data: dealData, loading } = useQuery(DEAL, {
