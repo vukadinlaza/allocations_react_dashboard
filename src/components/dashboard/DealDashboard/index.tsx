@@ -64,6 +64,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   const params: { deal_id: string } = useParams();
   const { deal_id } = params;
   const [tabIndex, setTabIndex] = useState(0);
+
   const { data: dealData } = useQuery(DEAL, {
     fetchPolicy: 'network-only',
     pollInterval: 1000,
