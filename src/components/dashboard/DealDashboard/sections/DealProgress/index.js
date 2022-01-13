@@ -8,6 +8,7 @@ import NextStep from './components/NextStep';
 import ProgressBar from './components/Progressbar';
 import CompletedTasksList from './components/CompletedTasksList';
 import styles from '../../styles.ts';
+import CongratsStep from './components/CongratsStep';
 
 const dataCopy = [
   {
@@ -94,7 +95,13 @@ const dataCopy = [
     phase: 'post-closing',
     title: 'Compliance Reg D + Blue Sky',
     type: 'process-street-checklist',
-    complete: true,
+    complete: false,
+  },
+  {
+    phase: 'post-closing',
+    title: 'User Acknowledged Complete',
+    type: 'fm-review',
+    complete: false,
   },
 ];
 
@@ -109,7 +116,7 @@ const stepMap = new Map([
   ['post-closing', 'Post-Closing'],
 ]);
 
-const DealProgress = ({ data, classes }) => {
+const DealProgress = ({ data, handleComplete, updateDealLoading, classes }) => {
   const [currentPhase, setCurrentPhase] = useState('Pre-Onboarding');
   const [currentTask, setCurrentTask] = useState({});
   const [nextTask, setNextTask] = useState({});
@@ -138,7 +145,9 @@ const DealProgress = ({ data, classes }) => {
     if (task) {
       setCurrentTask(task);
       setNextTask(tasks[taskIndex + 1]);
-      setNextTaskPhase(stepMap.get(nextTask.phase));
+      if (nextTask) {
+        setNextTaskPhase(stepMap.get(nextTask.phase));
+      }
     }
   }, [data]);
 
@@ -155,14 +164,20 @@ const DealProgress = ({ data, classes }) => {
       <ProgressBar steps={steps} activeStep={activeStep} />
 
       <Grid container className={classes.bodyContainer}>
-        <Grid item xs={10} lg={10} className={classes.currentStepContainer}>
-          <Typography className={classes.stepText}>Current Step</Typography>
-          <CurrentStep phase={currentPhase} task={currentTask} />
-        </Grid>
-        <Grid item xs={10} lg={10} className={classes.nextStepContainer}>
-          <Typography className={classes.stepText}>Up Next</Typography>
-          <NextStep phase={nextTaskPhase} task={nextTask} />
-        </Grid>
+        {currentTask?.title?.includes('User Acknowledged Complete') ? (
+          <CongratsStep handleComplete={handleComplete} updateDealLoading={updateDealLoading} />
+        ) : (
+          <Grid item xs={10} lg={10} className={classes.currentStepContainer}>
+            <Typography className={classes.stepText}>Current Step</Typography>
+            <CurrentStep phase={currentPhase} task={currentTask} />
+          </Grid>
+        )}
+        {nextTask !== undefined && (
+          <Grid item xs={10} lg={10} className={classes.nextStepContainer}>
+            <Typography className={classes.stepText}>Up Next</Typography>
+            <NextStep phase={nextTaskPhase} task={nextTask} />
+          </Grid>
+        )}
         <Grid item xs={10} lg={12}>
           <Divider variant="middle" style={{ color: '#E2E8F0', margin: '50px 0px' }} />
         </Grid>

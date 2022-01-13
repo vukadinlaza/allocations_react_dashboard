@@ -460,6 +460,21 @@ const styles: any = (theme: Theme) => ({
     backgroundColor: '#FFF',
     padding: '3.5vh 5.5vw',
   },
+
+  // Styles for Congrats Step
+  congratsStepBody: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignContent: 'center',
+    textAlign: 'center',
+  },
+  closeTabButton: {
+    backgroundColor: '#186EFF',
+    color: '#fff',
+    width: '119px',
+    borderRadius: '8px',
+    textTransform: 'capitalize',
+  },
 });
 
 export default styles;

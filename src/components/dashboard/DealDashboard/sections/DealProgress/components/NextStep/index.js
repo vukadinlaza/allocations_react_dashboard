@@ -13,13 +13,19 @@ const NextStep = ({ classes, phase, task }) => {
     <Grid container className={classes.nextStepBody}>
       <div className={classes.stepTitleRow} style={{ padding: '0px' }}>
         <img alt="gray check" src={grayCheck} />
-        <Typography>
-          {phase && `${phase}:`} {task?.title}
-        </Typography>
-        <img
-          alt={forFM ? 'for you icon' : 'allocations icon'}
-          src={forFM ? forYouIcon : allocationsIcon}
-        />
+        {task?.title?.includes('User Acknowledged Complete') ? (
+          <Typography>Finished!</Typography>
+        ) : (
+          <>
+            <Typography>
+              {phase && `${phase}:`} {task?.title}
+            </Typography>
+            <img
+              alt={forFM ? 'for you icon' : 'allocations icon'}
+              src={forFM ? forYouIcon : allocationsIcon}
+            />
+          </>
+        )}
       </div>
     </Grid>
   );
