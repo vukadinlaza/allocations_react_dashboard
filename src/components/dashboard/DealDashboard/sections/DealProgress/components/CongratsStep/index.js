@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Button, Grid, Typography } from '@material-ui/core';
 import styles from '../../../../styles.ts';
 
-const CongratsStep = ({ classes, handleComplete }) => {
+const CongratsStep = ({ classes, handleComplete, updateDealLoading }) => {
   return (
     <>
       <Grid container className={classes.congratsStepBody}>
@@ -16,6 +16,7 @@ const CongratsStep = ({ classes, handleComplete }) => {
             variant="contained"
             classes={{ root: classes.closeTabButton }}
             onClick={handleComplete}
+            disabled={updateDealLoading}
           >
             Close Tab
           </Button>

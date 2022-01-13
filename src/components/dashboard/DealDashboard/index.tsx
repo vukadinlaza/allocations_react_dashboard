@@ -90,7 +90,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     }
   }, [dealData]);
 
-  const [updateBuildDeal, { data: updatedDealData }] = useMutation(UPDATE_BUILD_DEAL, {
+  const [updateBuildDeal, { loading: updateDealLoading }] = useMutation(UPDATE_BUILD_DEAL, {
     // onCompleted: () => {
     // Do we want a toast notification
     // },
@@ -116,6 +116,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   const dealProps = {
     data: dealData?.getDealByIdWithTasks,
     handleComplete: handleComplete,
+    updateDealLoading: updateDealLoading,
   };
 
   const getTabComponent = () => {
