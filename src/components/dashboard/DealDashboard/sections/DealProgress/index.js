@@ -122,6 +122,8 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, classes }) => {
   const [nextTaskPhase, setNextTaskPhase] = useState('Pre-Onboarding');
   const [activeStep, setActiveStep] = useState(0);
 
+  console.log('DATA', data);
+
   useEffect(() => {
     const phase = data?.phases?.find((phase) =>
       phase.tasks.find((task) => task.complete === false),
@@ -168,7 +170,11 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, classes }) => {
         ) : (
           <Grid item xs={10} lg={10} className={classes.currentStepContainer}>
             <Typography className={classes.stepText}>Current Step</Typography>
-            <CurrentStep phase={currentPhase} task={currentTask} />
+            <CurrentStep
+              phase={data?.phases.find((phase) => phase.name === currentPhase.toLowerCase())}
+              task={currentTask}
+              dealType={data?.type}
+            />
           </Grid>
         )}
         {nextTask !== undefined && (
