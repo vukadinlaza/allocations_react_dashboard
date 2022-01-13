@@ -7,8 +7,8 @@ module.exports = {
         name: 'container',
         filename: 'remoteEntry.js',
         remotes: {
-          mfe1: 'mfe1@http://localhost:8083/remoteEntry.js',
-          treasury: 'treasury@http://localhost:3001/_next/static/chunks/remoteEntry.js',
+          //   mfe1: 'mfe1@http://localhost:8083/remoteEntry.js',
+          //   treasury: 'treasury@http://localhost:3001/_next/static/chunks/remoteEntry.js',
         },
         shared: [
           {

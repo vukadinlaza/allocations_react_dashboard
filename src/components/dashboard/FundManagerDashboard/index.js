@@ -25,10 +25,10 @@ import DocumentsTab from './sections/DocumentsTab';
 import DealTypeSelector from '../../NewBuild/DealType';
 import DealPage from './sections/DealPage';
 
-const MFE1 = React.lazy(() => import('mfe1/mfe1'));
-const NewDirectionsAccountCreationForm = React.lazy(() =>
-  import('treasury/NewDirectionsAccountCreationForm'),
-);
+// const MFE1 = React.lazy(() => import('mfe1/mfe1'));
+// const NewDirectionsAccountCreationForm = React.lazy(() =>
+//   import('treasury/NewDirectionsAccountCreationForm'),
+// );
 
 const GET_INVESTMENTS = gql`
   query GetDeal($fund_slug: String!, $deal_slug: String!) {
@@ -475,12 +475,12 @@ const FundManagerDashboard = ({ classes, history }) => {
 
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
-      <React.Suspense fallback="Loading Button">
+      {/* <React.Suspense fallback="Loading Button">
         <MFE1 />
       </React.Suspense>
       <React.Suspense fallback="Loading Button">
         <NewDirectionsAccountCreationForm />
-      </React.Suspense>
+      </React.Suspense> */}
       <Paper style={{ padding: '.5rem' }}>
         <div className={classes.mainTitleContainer} id="main-title-container">
           <Typography className={classes.mainTitle}>
