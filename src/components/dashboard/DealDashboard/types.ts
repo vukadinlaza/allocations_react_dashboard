@@ -8,12 +8,14 @@ export interface Task {
 }
 
 export interface DealPhase {
+  _id: string;
   name: string;
   deal_id: string;
   tasks: Task[];
 }
 
 export interface Deal {
+  _id: string;
   organization_id: string;
   user_id: string;
   slug: string;
