@@ -70,18 +70,13 @@ const styles: any = (theme: Theme) => ({
     fontSize: '12px',
     fontWeight: 400,
   },
-  completedTasksListContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginTop: '50px',
-  },
   completedTaskListItem: {
     display: 'flex',
     alignItems: 'center',
-    height: '104px',
+    justifyContent: 'flex-start',
+    padding: '3.5vh 5.5vw',
     width: '100%',
-    marginTop: '10px',
-    marginBottom: '10px',
+    margin: '10px 0px',
     backgroundColor: '#ffffff',
     borderRadius: '8px',
   },
@@ -410,20 +405,6 @@ const styles: any = (theme: Theme) => ({
   },
 
   // Styles for Body of PostBuild and common styling between CurrentStep and NextStep
-  badgeBlue: {
-    borderRadius: '100px',
-    fontSize: '11px',
-    padding: '5px 10px',
-    color: '#186EFF',
-    backgroundColor: '#ECF3FF',
-  },
-  badgeGray: {
-    borderRadius: '100px',
-    fontSize: '11px',
-    padding: '5px 10px',
-    color: '#334155',
-    backgroundColor: '#F1F5F9',
-  },
   bodyContainer: {
     display: 'flex',
     justifyContent: 'center',

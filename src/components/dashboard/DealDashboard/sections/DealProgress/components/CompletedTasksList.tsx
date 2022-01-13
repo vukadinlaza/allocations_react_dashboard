@@ -35,7 +35,7 @@ const CompletedTasksList = ({ completedTasks, classes }: completedTaskListProps)
 
   const list = completedTasks?.map(({ _id, phase, title, type }) => (
     <li key={_id} className={classes.completedTaskListItem}>
-      <div style={{ display: 'flex', alignItems: 'center', marginLeft: '50px' }}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
         <div className={classes.completedTaskCheckImageContainer}>
           <img src={blueCheck} alt={'Blue check mark'} />
         </div>
@@ -51,7 +51,7 @@ const CompletedTasksList = ({ completedTasks, classes }: completedTaskListProps)
   ));
 
   return (
-    <div className={classes.completedTasksListContainer}>
+    <div>
       <Typography className={classes.completedTaskToggle} onClick={toggleList}>
         Completed
         <img
