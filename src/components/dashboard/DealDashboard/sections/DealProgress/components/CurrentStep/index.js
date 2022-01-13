@@ -50,7 +50,7 @@ const CurrentStep = ({ classes, phase, task, deal }) => {
         deal_id: deal?._id,
       },
       onCompleted: (res) => {
-        console.log(res);
+        console.log(res, 'res');
         setReadyToSign(true);
         setInvestmentAgreement({
           dataRequestId: res.getFmSignatureLink.id,
