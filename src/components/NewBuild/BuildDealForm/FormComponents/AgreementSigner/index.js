@@ -32,6 +32,7 @@ const AgreementBox = ({
   signingModal,
   signed,
   isSigned,
+  timeoutLoading = false,
   createDealLoading,
   error,
   classes,
@@ -46,7 +47,7 @@ const AgreementBox = ({
     if (signed && task?._id) getSignedDocument();
   }, [signed]);
 
-  const loading = createDealLoading || signedDocLoading;
+  const loading = createDealLoading || signedDocLoading || timeoutLoading;
 
   const handleAgreementClick = () => {
     if (readyToSign && !signed) signingModal(agreementLink, isSigned);
@@ -97,6 +98,7 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
   const currentOrg = useCurrentOrganization();
   const { deal, documents } = dealData;
   const [documentsSignedStatus, setDocumentsSignedStatus] = useState({});
+  const [timeoutLoading, setTimeoutLoading] = useState({});
 
   useEffect(() => {
     if (documents) {
@@ -162,12 +164,23 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
             task={task}
             readyToSign={!!documentData && !error && !createDealLoading}
             signed={documentsSignedStatus[task.title]}
-            isSigned={() =>
+            isSigned={() => {
+              setTimeoutLoading((prev) => ({
+                ...prev,
+                [task.title]: true,
+              }));
               setDocumentsSignedStatus((prev) => ({
                 ...prev,
                 [task.title]: true,
-              }))
-            }
+              }));
+              setTimeout(() => {
+                setTimeoutLoading((prev) => ({
+                  ...prev,
+                  [task.title]: false,
+                }));
+              }, 2500);
+            }}
+            timeoutLoading={timeoutLoading[task.title]}
             createDealLoading={createDealLoading}
             error={error}
             classes={classes}
