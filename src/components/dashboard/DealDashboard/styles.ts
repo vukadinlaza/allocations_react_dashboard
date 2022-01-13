@@ -462,7 +462,7 @@ const styles: any = (theme: Theme) => ({
   },
   currentStepBody: {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'start',
     alignContent: 'center',
     border: '2px solid #186EFF',
     borderRadius: '8px',
@@ -487,9 +487,10 @@ const styles: any = (theme: Theme) => ({
   // styles for AgreementSigner component
   agreementSignedBox: {
     display: 'flex',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
-    height: '100px',
+    height: '184px',
     paddingLeft: '30px',
     paddingRight: '30px',
     border: 'none !important',
@@ -508,12 +509,13 @@ const styles: any = (theme: Theme) => ({
   },
   agreementUnsignedBox: {
     display: 'flex',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
     alignItems: 'center',
-    height: '100px',
-    paddingLeft: '30px',
-    paddingRight: '30px',
-    border: '2px dashed #0461FF !important',
+    justifyContent: 'space-evenly',
+    height: '184px',
+    width: '228px',
+    padding: '15px',
+    border: '2px dashed #CBD5E1 !important',
     borderRadius: '20px',
     '&:hover': {
       backgroundColor: 'rgba(0, 0, 0, 0.04)',
@@ -543,6 +545,17 @@ const styles: any = (theme: Theme) => ({
     [theme.breakpoints.down(phone)]: {
       padding: '4px 10px',
     },
+  },
+  itemText: {
+    font: 'Roboto',
+    fontWeight: '500',
+    fontSize: '20px',
+    lineHeight: '24px',
+  },
+  serviceAgreementIconBox: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
   // Styles for Congrats Step
   congratsStepBody: {
     display: 'flex',

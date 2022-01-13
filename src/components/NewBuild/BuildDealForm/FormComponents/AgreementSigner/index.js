@@ -69,7 +69,7 @@ export const AgreementBox = ({
       }}
       onClick={handleAgreementClick}
     >
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div className={classes.agreementContainer}>
         {loading || error ? (
           <CircularProgress />
         ) : width > phone ? (
@@ -81,9 +81,8 @@ export const AgreementBox = ({
             <img src={docIcon} alt="document icon" />
           </div>
         )}
-
-        <Typography className={classes.itemText}>{title}</Typography>
       </div>
+      <Typography className={classes.itemText}>{title}</Typography>
 
       {width > phone ? (
         <Typography className={signed ? classes.signed : classes.notSigned}>
@@ -162,7 +161,6 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
         )}
 
         {documents?.map(({ task, ...documentData }) => {
-          console.log(documentData, 'DOCUMENT');
           return (
             <AgreementBox
               title={task.title.slice(4)}
