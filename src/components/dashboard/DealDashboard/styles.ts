@@ -497,7 +497,7 @@ const styles: any = (theme: Theme) => ({
     borderRadius: '20px',
     boxShadow: 'none !important',
     backgroundColor: '#F6F7F8',
-    '&:hover': {
+    '&:hover, &:focus': {
       backgroundColor: 'rgba(0, 0, 0, 0.04)',
     },
     [theme.breakpoints.down(phone)]: {
@@ -517,8 +517,14 @@ const styles: any = (theme: Theme) => ({
     padding: '15px',
     border: '2px dashed #CBD5E1 !important',
     borderRadius: '20px',
-    '&:hover': {
+    '&:hover, focus': {
       backgroundColor: 'rgba(0, 0, 0, 0.04)',
+      '&:nth-child(2)': {
+        color: '#186EFF',
+      },
+      '&:active': {
+        border: '2px dashed #186EFF !important',
+      },
     },
     [theme.breakpoints.down(phone)]: {
       paddingLeft: '15px',
@@ -551,6 +557,7 @@ const styles: any = (theme: Theme) => ({
     fontWeight: '500',
     fontSize: '20px',
     lineHeight: '24px',
+    textAlign: 'center',
   },
   serviceAgreementIconBox: {
     display: 'flex',

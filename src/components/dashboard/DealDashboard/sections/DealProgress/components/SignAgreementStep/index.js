@@ -52,6 +52,9 @@ const SignAgreementStep = ({ classes, task, deal }) => {
     },
   );
 
+  const newTitle = task?.title?.split(' ');
+  newTitle.shift();
+
   useEffect(() => {
     if (deal._id) {
       getInvestmentAgreement();
@@ -60,7 +63,7 @@ const SignAgreementStep = ({ classes, task, deal }) => {
 
   return (
     <AgreementBox
-      title={task.title}
+      title={newTitle.join(' ')}
       task={task}
       classes={classes}
       agreementLink={investmentAgreement}
