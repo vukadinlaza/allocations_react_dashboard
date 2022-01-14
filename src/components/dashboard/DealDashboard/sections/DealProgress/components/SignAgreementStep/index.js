@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
-import { gql, useLazyQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
+import { CircularProgress } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import styles from '../../../../styles.ts';
 import { AgreementBox } from '../../../../../../NewBuild/BuildDealForm/FormComponents/AgreementSigner';
@@ -33,17 +34,9 @@ const SignAgreementStep = ({ classes, task, deal }) => {
   const [readyToSign, setReadyToSign] = useState(false);
   const [documentSignedStatus, setDocumentSignedStatus] = useState(false);
   const [investmentAgreement, setInvestmentAgreement] = useState({});
-  const [getInvestmentAgreement, { loading }] = useLazyQuery(GET_INVESTMENT_AGREEMENT, {
+  const { data, loading, error, startPolling, stopPolling } = useQuery(GET_INVESTMENT_AGREEMENT, {
     variables: {
       deal_id: deal?._id,
-    },
-    onCompleted: (res) => {
-      setReadyToSign(true);
-      setInvestmentAgreement({
-        dataRequestId: res.getFmSignatureLink.id,
-        tokenSecret: res.getFmSignatureLink.token_secret,
-        tokenId: res.getFmSignatureLink.token_id,
-      });
     },
   });
 
@@ -52,22 +45,38 @@ const SignAgreementStep = ({ classes, task, deal }) => {
 
   useEffect(() => {
     if (deal._id) {
-      getInvestmentAgreement();
+      startPolling(5000);
     }
-  }, []);
+    if (data) {
+      setInvestmentAgreement({
+        dataRequestId: data.getFmSignatureLink.id,
+        tokenId: data.getFmSignatureLink.token_id,
+        tokenSecret: data.getFmSignatureLink.token_secret,
+      });
+      setReadyToSign(true);
+      stopPolling();
+    }
+  }, [data]);
 
   return (
-    <AgreementBox
-      title={newTitle.join(' ')}
-      task={task}
-      classes={classes}
-      agreementLink={investmentAgreement}
-      createDealLoading={loading}
-      readyToSign={readyToSign}
-      signingModal={signingModal}
-      signed={documentSignedStatus}
-      isSigned={() => setDocumentSignedStatus(true)}
-    />
+    <>
+      {documentSignedStatus ? (
+        <CircularProgress />
+      ) : (
+        <AgreementBox
+          title={newTitle.join(' ')}
+          task={task}
+          classes={classes}
+          error={error}
+          agreementLink={investmentAgreement}
+          createDealLoading={loading}
+          readyToSign={readyToSign}
+          signingModal={signingModal}
+          signed={documentSignedStatus}
+          isSigned={() => setDocumentSignedStatus(true)}
+        />
+      )}
+    </>
   );
 };
 

@@ -47,11 +47,6 @@ export const AgreementBox = ({
     if (signed && task?._id) getSignedDocument();
   }, [signed]);
 
-  useEffect(() => {
-    console.log({ readyToSign });
-    console.log({ agreementLink });
-  }, [readyToSign, agreementLink]);
-
   const loading = createDealLoading || signedDocLoading || timeoutLoading;
 
   const handleAgreementClick = () => {
