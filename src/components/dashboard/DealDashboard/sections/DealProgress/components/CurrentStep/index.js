@@ -28,9 +28,11 @@ const CurrentStep = ({ classes, phase, task, deal }) => {
         />
       </div>
       {isAgreementSigner && <SignAgreementStep task={task} deal={deal} />}
-      <Typography style={{ fontSize: '12px', textAlign: 'left', width: '100%' }}>
-        {forFM ? 'Something else happens' : defaultDesc}
-      </Typography>
+      {!isAgreementSigner && (
+        <Typography style={{ fontSize: '12px', textAlign: 'left', width: '100%' }}>
+          {forFM ? 'Something else happens' : defaultDesc}
+        </Typography>
+      )}
     </Grid>
   );
 };
