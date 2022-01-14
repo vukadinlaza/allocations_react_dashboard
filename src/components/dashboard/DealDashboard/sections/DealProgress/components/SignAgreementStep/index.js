@@ -33,24 +33,19 @@ const SignAgreementStep = ({ classes, task, deal }) => {
   const [readyToSign, setReadyToSign] = useState(false);
   const [documentSignedStatus, setDocumentSignedStatus] = useState(false);
   const [investmentAgreement, setInvestmentAgreement] = useState({});
-  const [getInvestmentAgreement, { loading, error, data }] = useLazyQuery(
-    GET_INVESTMENT_AGREEMENT,
-    {
-      variables: {
-        deal_id: deal?._id,
-      },
-      onCompleted: (res) => {
-        console.log(res, 'res');
-        setReadyToSign(true);
-        setInvestmentAgreement({
-          dataRequestId: res.getFmSignatureLink.id,
-          tokenSecret: res.getFmSignatureLink.token_secret,
-          tokenId: res.getFmSignatureLink.token_id,
-        });
-      },
-      onError: (err) => console.log(err),
+  const [getInvestmentAgreement, { loading }] = useLazyQuery(GET_INVESTMENT_AGREEMENT, {
+    variables: {
+      deal_id: deal?._id,
     },
-  );
+    onCompleted: (res) => {
+      setReadyToSign(true);
+      setInvestmentAgreement({
+        dataRequestId: res.getFmSignatureLink.id,
+        tokenSecret: res.getFmSignatureLink.token_secret,
+        tokenId: res.getFmSignatureLink.token_id,
+      });
+    },
+  });
 
   const newTitle = task?.title?.split(' ');
   newTitle.shift();
@@ -59,7 +54,7 @@ const SignAgreementStep = ({ classes, task, deal }) => {
     if (deal._id) {
       getInvestmentAgreement();
     }
-  }, [deal]);
+  }, []);
 
   return (
     <AgreementBox

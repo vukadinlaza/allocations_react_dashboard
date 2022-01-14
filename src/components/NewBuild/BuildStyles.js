@@ -396,8 +396,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   agreementSignedBox: {
-    display: 'flex',
-    justifyContent: 'space-between',
+    display: 'grid',
+    gridTemplateColumns: '20px 1fr 135px',
     alignItems: 'center',
     height: '100px',
     paddingLeft: '30px',
@@ -410,6 +410,7 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'rgba(0, 0, 0, 0.04)',
     },
     [theme.breakpoints.down(phone)]: {
+      gridTemplateColumns: '30px 8fr 1fr',
       paddingLeft: '15px',
       paddingRight: '15px',
       border: '2px solid #186EFF !important',
@@ -417,8 +418,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   agreementUnsignedBox: {
-    display: 'flex',
-    justifyContent: 'space-between',
+    display: 'grid',
+    gridTemplateColumns: '20px 1fr 135px',
     alignItems: 'center',
     height: '100px',
     paddingLeft: '30px',
@@ -429,6 +430,7 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'rgba(0, 0, 0, 0.04)',
     },
     [theme.breakpoints.down(phone)]: {
+      gridTemplateColumns: '30px 1fr',
       paddingLeft: '15px',
       paddingRight: '15px',
       border: '2px solid #2A2B54 !important',
