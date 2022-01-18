@@ -83,13 +83,13 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
         phase.tasks.filter((task: any) => !task.complete),
       );
 
-      const investorsInvited = remainingTasks.filter(
+      const investorsInvited = remainingTasks.find(
         (task: any) => task.title === 'Invite Investors',
       );
 
       if (!remainingTasks?.length) {
         setDealDashboardTabs(['Investors', 'Documents', 'Deal Page']);
-      } else if (investorsInvited.length) {
+      } else if (investorsInvited) {
         setDealDashboardTabs(['Deal Progress', 'Documents', 'Deal Page']);
       } else {
         setDealDashboardTabs(['Deal Progress', 'Investors', 'Documents', 'Deal Page']);
