@@ -10,6 +10,7 @@ import HighlightedTabs from '../../utils/HighlightedTabs';
 import LoadingPlaceholder from './LoadingPlaceholder';
 import Investors from './sections/Investors';
 import DealProgress from './sections/DealProgress';
+import { Task, DealPhase } from './types';
 import styles from './styles';
 
 const DEAL = gql`
@@ -79,12 +80,12 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
 
   useEffect(() => {
     if (dealData) {
-      const remainingTasks = dealData?.getDealByIdWithTasks?.phases.flatMap((phase: any) =>
-        phase.tasks.filter((task: any) => !task.complete),
+      const remainingTasks = dealData?.getDealByIdWithTasks?.phases.flatMap((phase: DealPhase) =>
+        phase.tasks.filter((task: Task) => !task.complete),
       );
 
       const investorsInvited = remainingTasks.find(
-        (task: any) => task.title === 'Invite Investors',
+        (task: Task) => task.title === 'Invite Investors',
       );
 
       if (!remainingTasks?.length) {
