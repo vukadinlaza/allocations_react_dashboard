@@ -64,7 +64,7 @@ export const AgreementBox = ({
       }}
       onClick={handleAgreementClick}
     >
-      <div className={classes.agreementContainer}>
+      <div>
         {loading || error ? (
           <CircularProgress />
         ) : width > phone ? (
