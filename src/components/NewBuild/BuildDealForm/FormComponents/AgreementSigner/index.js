@@ -24,7 +24,7 @@ const GET_DOCUMENT = gql`
   }
 `;
 
-const AgreementBox = ({
+export const AgreementBox = ({
   title,
   task,
   agreementLink,
@@ -59,26 +59,25 @@ const AgreementBox = ({
     <Paper
       className={signed ? classes.agreementSignedBox : classes.agreementUnsignedBox}
       style={{
-        cursor: 'pointer',
+        cursor: !loading && 'pointer',
         pointerEvents: !readyToSign && 'none',
       }}
-      onClick={handleAgreementClick}
+      onClick={!loading && handleAgreementClick}
     >
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div>
         {loading || error ? (
           <CircularProgress />
         ) : width > phone ? (
-          <div className={classes.servicesAgreementIconBox}>
+          <div className={classes.serviceAgreementIconBox}>
             <img src={bluePenIcon} alt="document icon" />
           </div>
         ) : (
-          <div className={classes.servicesAgreementIconBox}>
+          <div className={classes.serviceAgreementIconBox}>
             <img src={docIcon} alt="document icon" />
           </div>
         )}
-
-        <Typography className={classes.itemText}>{title}</Typography>
       </div>
+      <Typography className={classes.itemText}>{title}</Typography>
 
       {width > phone ? (
         <Typography className={signed ? classes.signed : classes.notSigned}>
@@ -156,36 +155,38 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
           </div>
         )}
 
-        {documents?.map(({ task, ...documentData }) => (
-          <AgreementBox
-            title={task.title.slice(4)}
-            agreementLink={documentData}
-            signingModal={signingModal}
-            task={task}
-            readyToSign={!!documentData && !error && !createDealLoading}
-            signed={documentsSignedStatus[task.title]}
-            isSigned={() => {
-              setTimeoutLoading((prev) => ({
-                ...prev,
-                [task.title]: true,
-              }));
-              setDocumentsSignedStatus((prev) => ({
-                ...prev,
-                [task.title]: true,
-              }));
-              setTimeout(() => {
+        {documents?.map(({ task, ...documentData }) => {
+          return (
+            <AgreementBox
+              title={task.title.slice(4)}
+              agreementLink={documentData}
+              signingModal={signingModal}
+              task={task}
+              readyToSign={!!documentData && !error && !createDealLoading}
+              signed={documentsSignedStatus[task.title]}
+              isSigned={() => {
                 setTimeoutLoading((prev) => ({
                   ...prev,
-                  [task.title]: false,
+                  [task.title]: true,
                 }));
-              }, 2500);
-            }}
-            timeoutLoading={timeoutLoading[task.title]}
-            createDealLoading={createDealLoading}
-            error={error}
-            classes={classes}
-          />
-        ))}
+                setDocumentsSignedStatus((prev) => ({
+                  ...prev,
+                  [task.title]: true,
+                }));
+                setTimeout(() => {
+                  setTimeoutLoading((prev) => ({
+                    ...prev,
+                    [task.title]: false,
+                  }));
+                }, 2500);
+              }}
+              timeoutLoading={timeoutLoading[task.title]}
+              createDealLoading={createDealLoading}
+              error={error}
+              classes={classes}
+            />
+          );
+        })}
 
         <div className={classes.buttonBox}>
           <Button
