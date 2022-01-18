@@ -391,10 +391,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   // * Styles that are only used in the AgreementSigner.
-  agreementContainer: {
-    display: 'flex',
-    alignItems: 'center',
-  },
   agreementSignedBox: {
     display: 'grid',
     gridTemplateColumns: '20px 1fr 135px',
