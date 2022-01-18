@@ -7,8 +7,8 @@ import documentIcon from '../../../../../../../assets/document-icon.svg';
 import documentGreenIcon from '../../../../../../../assets/document-green-icon.svg';
 import documentGrayIcon from '../../../../../../../assets/document-grayed-icon.svg';
 import uploadIcon from '../../../../../../../assets/upload-icon.svg';
-import greenCheckIcon from '../../../../../../../assets/check.svg';
 import redUploadIcon from '../../../../../../../assets/red-doc-upload.svg';
+import greenCheckCircle from '../../../../../../../assets/green-circled-checkmark.svg';
 
 import trashIcon from '../../../../../../../assets/trash.svg';
 import warningIcon from '../../../../../../../assets/warning-red.svg';
@@ -79,7 +79,6 @@ const useStyles = makeStyles((theme) => ({
     height: '48px',
   },
   docIcon: {
-    // width: '14px',
     height: '20px',
   },
   itemText: {
@@ -90,11 +89,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '500',
     letterSpacing: '0px',
     opacity: '1',
-    // paddingLeft: '30px',
     [theme.breakpoints.down(phone)]: {
       font: 'normal normal normal 16px/20px Roboto',
       maxWidth: '180px',
-      // paddingLeft: '15px',
     },
   },
   docUploadBox: {
@@ -142,7 +139,7 @@ const useStyles = makeStyles((theme) => ({
   },
   uploadedDocItem: {
     background: '#fff 0% 0% no-repeat padding-box',
-    border: '2px solid lightgrey !important',
+    border: '2px solid #10B981 !important',
   },
   uploadErrorLabel: {
     display: 'flex',
@@ -166,7 +163,7 @@ const useStyles = makeStyles((theme) => ({
   },
   uploadIcon: {
     color: 'blue',
-    width: '10.5px',
+    height: '13.5px',
     transparentheight: '35px',
     [theme.breakpoints.down(phone)]: {
       marginRight: '20px',
@@ -185,6 +182,11 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer',
     color: '#B91C1C',
     fontWeight: '500',
+  },
+  greenCheckCircle: {
+    height: '13px',
+    width: '13px',
+    border: '1px solid #047857',
   },
 }));
 
@@ -373,10 +375,10 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
         <label
           htmlFor={`${document._id}`}
           className={classes.uploadIconLabel}
-          style={{ color: complete && '#39c522' }}
+          style={complete ? { backgroundColor: '#D1FAE5', color: '#047857' } : null}
         >
           <img
-            src={complete ? greenCheckIcon : redUploadIcon}
+            src={complete ? greenCheckCircle : redUploadIcon}
             className={classes.uploadIcon}
             style={{ opacity: '1', cursor: 'pointer' }}
             alt={complete ? 'green check icon' : 'upload icon'}
@@ -398,7 +400,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
                   variables: {
                     doc: target.files[0],
                     task_id: document?._id,
-                    deal_id: phase?.deal._id,
+                    deal_id: phase?.deal_id,
                     phase: phase?.name,
                   },
                 }).then(({ data }) => {
@@ -464,9 +466,8 @@ export default function UploadDocs({ dealType, phase, classes: checkBoxClasses }
 
   const [filesUploaded, setFilesUploaded] = useState(docUploadMap[dealType]);
 
-  // const currentPhase = deal?.phases.find((phase) => phase.name === 'build');
   const uploadTasks = phase?.tasks
-    .filter((task) => task.type === 'fm-document-upload' && task.title !== 'Upload ID')
+    .filter((task) => task.type === 'fm-document-upload')
     .sort((a, b) => uploadTaskMap[a.title]?.position - uploadTaskMap[b.title]?.position);
 
   useEffect(() => {

@@ -10,7 +10,7 @@ import UploadDocs from '../UploadDocs';
 const defaultDesc =
   'An Allocations representative will be reaching out shortly to assist you in completing this step. If you have any questions, do not hesitate to contact support@allocations.com.';
 
-const CurrentStep = ({ classes, phase, task, dealType }) => {
+const CurrentStep = ({ classes, phase, task, deal }) => {
   const forFM = !task?.type?.includes('process');
 
   const isUploadDocumentTask = [
@@ -25,7 +25,8 @@ const CurrentStep = ({ classes, phase, task, dealType }) => {
       <div className={classes.stepTitleRow}>
         <img alt="gray check" src={grayCheck} />
         <Typography>
-          {phase && `${phase.name}:`} {task?.title}
+          {phase &&
+            `${phase.name}: ${isUploadDocumentTask ? 'Upload Your Documents' : task?.title}`}
         </Typography>
         <div className={forFM ? classes.badgeGray : classes.badgeBlue}>
           <img alt="icon" src={forFM ? profile : allocationsIcon} style={{ height: '12px' }} />
@@ -34,7 +35,7 @@ const CurrentStep = ({ classes, phase, task, dealType }) => {
       </div>
 
       <Typography style={{ fontSize: '12px', textAlign: 'left', width: '100%' }}>
-        {isUploadDocumentTask && <UploadDocs phase={phase} dealType={dealType} />}
+        {isUploadDocumentTask && <UploadDocs phase={phase} dealType={deal?.type} />}
         {forFM ? 'Something else happens' : defaultDesc}
       </Typography>
     </Grid>

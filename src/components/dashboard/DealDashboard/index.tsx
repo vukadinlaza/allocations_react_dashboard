@@ -73,7 +73,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
 
   const { data: dealData, loading } = useQuery(DEAL, {
     fetchPolicy: 'network-only',
-    pollInterval: 1000,
+    // pollInterval: 1000,
     variables: { deal_id },
   });
 
