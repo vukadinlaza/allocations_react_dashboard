@@ -128,7 +128,6 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, classes }) => {
     );
     const tasks = data?.phases?.flatMap((phase) =>
       phase.tasks.map((task) => ({
-        _id: task._id,
         phase: phase.name,
         title: task.title,
         type: task.type,
