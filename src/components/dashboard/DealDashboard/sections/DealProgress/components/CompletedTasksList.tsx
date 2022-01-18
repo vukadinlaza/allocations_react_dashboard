@@ -7,20 +7,9 @@ import forAllocations from '../../../../../../assets/for-allocations-icon.svg';
 import downArrow from '../../../../../../assets/keyboard_arrow_down.svg';
 import upArrow from '../../../../../../assets/keyboard_arrow_up.svg';
 import styles from '../../../styles';
+import { Task } from '../../../types';
 
-interface task {
-  _id: string;
-  title: string;
-  complete: boolean;
-  phase: string;
-  type: string;
-}
-
-interface completedTaskListProps extends WithStyles<typeof styles> {
-  completedTasks: Array<task>;
-}
-
-const capitalizePhaseName = (phase: string) => {
+const capitalizePhaseName = (phase: string): string => {
   return phase
     .split('-')
     .reduce((acc, str) => {
@@ -31,12 +20,22 @@ const capitalizePhaseName = (phase: string) => {
     .join('-');
 };
 
-const CompletedTasksList: React.FC<completedTaskListProps> = ({ completedTasks, classes }) => {
+interface TaskWithPhase extends Task {
+  phase: string;
+}
+
+interface completedTaskListProps extends WithStyles<typeof styles> {
+  completedTasks: Array<TaskWithPhase>;
+}
+
+const CompletedTasksList = ({ completedTasks, classes }: completedTaskListProps) => {
   const [openList, setOpenList] = useState<Boolean>(true);
-  const toggleList = (): void => setOpenList((prev) => !prev);
+
+  const toggleList = () => setOpenList((prev) => !prev);
+
   const list = completedTasks?.map(({ _id, phase, title, type }) => (
     <li key={_id} className={classes.completedTaskListItem}>
-      <div style={{ display: 'flex', alignItems: 'center', marginLeft: '50px' }}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
         <div className={classes.completedTaskCheckImageContainer}>
           <img src={blueCheck} alt={'Blue check mark'} />
         </div>
@@ -52,7 +51,7 @@ const CompletedTasksList: React.FC<completedTaskListProps> = ({ completedTasks, 
   ));
 
   return (
-    <div className={classes.completedTasksListContainer}>
+    <div>
       <Typography className={classes.completedTaskToggle} onClick={toggleList}>
         Completed
         <img

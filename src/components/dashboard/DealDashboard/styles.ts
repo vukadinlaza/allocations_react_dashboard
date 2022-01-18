@@ -70,18 +70,13 @@ const styles: any = (theme: Theme) => ({
     fontSize: '12px',
     fontWeight: 400,
   },
-  completedTasksListContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginTop: '50px',
-  },
   completedTaskListItem: {
     display: 'flex',
     alignItems: 'center',
-    height: '104px',
+    justifyContent: 'flex-start',
+    padding: '3.5vh 5.5vw',
     width: '100%',
-    marginTop: '10px',
-    marginBottom: '10px',
+    margin: '10px 0px',
     backgroundColor: '#ffffff',
     borderRadius: '8px',
   },
@@ -410,20 +405,6 @@ const styles: any = (theme: Theme) => ({
   },
 
   // Styles for Body of PostBuild and common styling between CurrentStep and NextStep
-  badgeBlue: {
-    borderRadius: '100px',
-    fontSize: '11px',
-    padding: '5px 10px',
-    color: '#186EFF',
-    backgroundColor: '#ECF3FF',
-  },
-  badgeGray: {
-    borderRadius: '100px',
-    fontSize: '11px',
-    padding: '5px 10px',
-    color: '#334155',
-    backgroundColor: '#F1F5F9',
-  },
   bodyContainer: {
     display: 'flex',
     justifyContent: 'center',
@@ -458,7 +439,7 @@ const styles: any = (theme: Theme) => ({
   },
   currentStepBody: {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'start',
     alignContent: 'center',
     border: '2px solid #186EFF',
     borderRadius: '8px',
@@ -480,6 +461,85 @@ const styles: any = (theme: Theme) => ({
     padding: '3.5vh 5.5vw',
   },
 
+  // styles for AgreementSigner component
+  agreementSignedBox: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    height: '184px',
+    paddingLeft: '30px',
+    paddingRight: '30px',
+    border: 'none !important',
+    borderRadius: '20px',
+    boxShadow: 'none !important',
+    backgroundColor: '#F6F7F8',
+    '&:hover, &:focus': {
+      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+    },
+    [theme.breakpoints.down(phone)]: {
+      paddingLeft: '15px',
+      paddingRight: '15px',
+      border: '2px solid #186EFF !important',
+      backgroundColor: 'rgba(26, 110, 255, 0.16)',
+    },
+  },
+  agreementUnsignedBox: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    height: '184px',
+    width: '228px',
+    padding: '15px',
+    border: '2px dashed #CBD5E1 !important',
+    borderRadius: '20px',
+    '&:hover, focus': {
+      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+      '&:nth-child(2)': {
+        color: '#186EFF',
+      },
+      '&:active': {
+        border: '2px dashed #186EFF !important',
+      },
+    },
+    [theme.breakpoints.down(phone)]: {
+      paddingLeft: '15px',
+      paddingRight: '15px',
+      border: '2px solid #2A2B54 !important',
+    },
+  },
+  signed: {
+    backgroundColor: 'rgb(57,197,34, 0.23)',
+    color: '#34AF1F',
+    fontWeight: '600',
+    borderRadius: '20px',
+    padding: '5px 20px',
+    [theme.breakpoints.down(phone)]: {
+      padding: '4px 10px',
+    },
+  },
+  notSigned: {
+    backgroundColor: '#FFBDAD',
+    color: '#DE350B',
+    fontWeight: '600',
+    borderRadius: '20px',
+    padding: '5px 20px',
+    [theme.breakpoints.down(phone)]: {
+      padding: '4px 10px',
+    },
+  },
+  itemText: {
+    font: 'Roboto',
+    fontWeight: '500',
+    fontSize: '20px',
+    lineHeight: '24px',
+    textAlign: 'center',
+  },
+  serviceAgreementIconBox: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
   // Styles for Congrats Step
   congratsStepBody: {
     display: 'flex',
