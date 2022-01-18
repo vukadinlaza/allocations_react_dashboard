@@ -126,14 +126,17 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, classes }) => {
     const phase = data?.phases?.find((phase) =>
       phase.tasks.find((task) => task.complete === false),
     );
-    const tasks = data?.phases?.flatMap((phase) =>
-      phase.tasks.map((task) => ({
-        phase: phase.name,
-        title: task.title,
-        type: task.type,
-        complete: task.complete,
-      })),
-    );
+    const tasks = data?.phases
+      ?.flatMap((phase) =>
+        phase.tasks.map((task) => ({
+          phase: phase.name,
+          title: task.title,
+          type: task.type,
+          complete: task.complete,
+        })),
+      )
+      .filter((task) => !task.title.includes('Create Process Street Run'));
+
     const task = tasks?.find((task) => task.complete === false);
     const taskIndex = tasks?.indexOf(task);
 
