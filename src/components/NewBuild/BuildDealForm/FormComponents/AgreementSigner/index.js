@@ -59,10 +59,10 @@ const AgreementBox = ({
     <Paper
       className={signed ? classes.agreementSignedBox : classes.agreementUnsignedBox}
       style={{
-        cursor: 'pointer',
+        cursor: !loading && 'pointer',
         pointerEvents: !readyToSign && 'none',
       }}
-      onClick={handleAgreementClick}
+      onClick={!loading && handleAgreementClick}
     >
       <div style={{ display: 'flex', alignItems: 'center' }}>
         {loading || error ? (
