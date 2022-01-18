@@ -128,6 +128,7 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, classes }) => {
     );
     const tasks = data?.phases?.flatMap((phase) =>
       phase.tasks.map((task) => ({
+        _id: task._id,
         phase: phase.name,
         title: task.title,
         type: task.type,
@@ -168,7 +169,7 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, classes }) => {
         ) : (
           <Grid item xs={10} lg={10} className={classes.currentStepContainer}>
             <Typography className={classes.stepText}>Current Step</Typography>
-            <CurrentStep phase={currentPhase} task={currentTask} />
+            <CurrentStep phase={currentPhase} task={currentTask} deal={data} />
           </Grid>
         )}
         {nextTask !== undefined && (
