@@ -20,6 +20,7 @@
     "@auth0/auth0-spa-js": "^1.6.1",
     "@bugsnag/js": "^7.15.1",
     "@bugsnag/plugin-react": "^7.15.1",
+    "@bugsnag/browser": "^7.15.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.17",
     "@fortawesome/free-regular-svg-icons": "^5.11.2",
     "@fortawesome/free-solid-svg-icons": "^5.8.1",
