@@ -2,11 +2,12 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
+import SignAgreementStep from '../SignAgreementStep';
+import InviteModal from '../../../Investors/components/InviteModal';
 import allocationsIcon from '../../../../../../../assets/for-allocations-icon.svg';
 import forYouIcon from '../../../../../../../assets/for-you-icon.svg';
 import grayCheck from '../../../../../../../assets/gray-check.svg';
 import styles from '../../../../styles.ts';
-import SignAgreementStep from '../SignAgreementStep';
 
 const defaultDesc =
   'An Allocations representative will be reaching out shortly to assist you in completing this step. If you have any questions, do not hesitate to contact support@allocations.com.';
@@ -14,6 +15,7 @@ const defaultDesc =
 const CurrentStep = ({ classes, phase, task, deal }) => {
   const forFM = !task?.type?.includes('process');
   const isAgreementSigner = task?.title?.includes('Sign Investment Agreement');
+  const inviteInvestors = task?.title === 'Invite Investors';
 
   return (
     <Grid container className={classes.currentStepBody}>
@@ -28,10 +30,20 @@ const CurrentStep = ({ classes, phase, task, deal }) => {
         />
       </div>
       {isAgreementSigner && <SignAgreementStep task={task} deal={deal} />}
-      {!isAgreementSigner && (
+      {!isAgreementSigner && !inviteInvestors && (
         <Typography style={{ fontSize: '12px', textAlign: 'left', width: '100%' }}>
           {forFM ? 'Something else happens' : defaultDesc}
         </Typography>
+      )}
+      {inviteInvestors && (
+        <>
+          <Typography
+            style={{ fontSize: '12px', textAlign: 'left', width: '100%', paddingBottom: '8px' }}
+          >
+            You can now invite investors to your deal. Please have their email addresses ready.
+          </Typography>
+          <InviteModal />
+        </>
       )}
     </Grid>
   );
