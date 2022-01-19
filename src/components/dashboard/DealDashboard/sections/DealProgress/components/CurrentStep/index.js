@@ -12,7 +12,7 @@ import styles from '../../../../styles.ts';
 const defaultDesc =
   'An Allocations representative will be reaching out shortly to assist you in completing this step. If you have any questions, do not hesitate to contact support@allocations.com.';
 
-const CurrentStep = ({ classes, phase, task, deal }) => {
+const CurrentStep = ({ classes, phase, task, deal, orgSlug }) => {
   const forFM = !task?.type?.includes('process');
   const isAgreementSigner = task?.title?.includes('Sign Investment Agreement');
   const inviteInvestors = task?.title === 'Invite Investors';
@@ -42,7 +42,7 @@ const CurrentStep = ({ classes, phase, task, deal }) => {
           >
             You can now invite investors to your deal. Please have their email addresses ready.
           </Typography>
-          <InviteModal />
+          <InviteModal dealId={deal._id} orgSlug={orgSlug} />
         </>
       )}
     </Grid>
