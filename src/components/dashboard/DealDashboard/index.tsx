@@ -10,12 +10,14 @@ import HighlightedTabs from '../../utils/HighlightedTabs';
 import LoadingPlaceholder from './LoadingPlaceholder';
 import Investors from './sections/Investors';
 import DealProgress from './sections/DealProgress';
+import { Task, DealPhase } from './types';
 import styles from './styles';
 
 const DEAL = gql`
   query getDealByIdWithTasks($deal_id: String) {
     getDealByIdWithTasks(deal_id: $deal_id) {
       _id
+      type
       metadata
       manager_name
       name
@@ -79,12 +81,18 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
 
   useEffect(() => {
     if (dealData) {
-      const remainingTasks = dealData?.getDealByIdWithTasks?.phases.flatMap((phase: any) =>
-        phase.tasks.filter((task: any) => !task.complete),
+      const remainingTasks = dealData?.getDealByIdWithTasks?.phases.flatMap((phase: DealPhase) =>
+        phase.tasks.filter((task: Task) => !task.complete),
+      );
+
+      const investorsInvited = remainingTasks.find(
+        (task: Task) => task.title === 'Invite Investors',
       );
 
       if (!remainingTasks?.length) {
         setDealDashboardTabs(['Investors', 'Documents', 'Deal Page']);
+      } else if (investorsInvited) {
+        setDealDashboardTabs(['Deal Progress', 'Documents', 'Deal Page']);
       } else {
         setDealDashboardTabs(['Deal Progress', 'Investors', 'Documents', 'Deal Page']);
       }
@@ -118,6 +126,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     data: dealData?.getDealByIdWithTasks,
     handleComplete: handleComplete,
     updateDealLoading: updateDealLoading,
+    orgSlug: currentOrg?.slug,
   };
 
   const getTabComponent = () => {

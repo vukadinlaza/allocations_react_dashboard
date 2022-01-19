@@ -15,6 +15,7 @@ import classNames from 'classnames';
 interface Props extends WithStyles<typeof styles> {
   orgSlug: string;
   dealId: string;
+  dealProgressTask?: boolean;
 }
 
 const SEND_INVITATIONS = gql`
@@ -23,7 +24,13 @@ const SEND_INVITATIONS = gql`
   }
 `;
 
-const InviteModal: React.FC<Props> = ({ classes, orgSlug, dealId }) => {
+const UPDATE_DEAL_TASK = gql`
+  mutation UpdateInviteInvestorsTask($dealId: String!) {
+    updateInviteInvestorsTask(dealId: $dealId)
+  }
+`;
+
+const InviteModal: React.FC<Props> = ({ classes, orgSlug, dealId, dealProgressTask = false }) => {
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [emails, setEmails] = useState<Array<string>>([]);
@@ -37,6 +44,12 @@ const InviteModal: React.FC<Props> = ({ classes, orgSlug, dealId }) => {
         setError('');
         setEmailsSent(true);
       }
+    },
+  });
+
+  const [updateInviteInvestorsTask] = useMutation(UPDATE_DEAL_TASK, {
+    onError: (err) => {
+      console.log('Error:', err);
     },
   });
 
@@ -98,6 +111,13 @@ const InviteModal: React.FC<Props> = ({ classes, orgSlug, dealId }) => {
         emails,
       },
     });
+    if (dealProgressTask) {
+      updateInviteInvestorsTask({
+        variables: {
+          dealId,
+        },
+      });
+    }
   };
 
   const handleInviteMore = () => {
