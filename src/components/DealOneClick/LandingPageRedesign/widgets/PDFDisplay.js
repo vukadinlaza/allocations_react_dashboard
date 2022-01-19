@@ -16,13 +16,12 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     [theme.breakpoints.down(phone)]: {
       width: '100vw',
-      paddingRight: '80px',
-      float: 'left',
       marginTop: '20px',
     },
     [theme.breakpoints.down(tablet)]: {
       float: 'left',
       width: '75vw',
+      marginBottom: '20px',
     },
   },
   arrowLeft: {
