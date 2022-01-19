@@ -1400,6 +1400,8 @@ export function ReportingAdviser({
   handleChange,
   handleTooltip,
   customInputStyles,
+  setUnfilledFields,
+  unfilledFields,
   classes,
   openTooltip,
 }) {
@@ -1471,11 +1473,18 @@ export function ReportingAdviser({
               value={buildData.reporting_adviser}
               placeholder="Adviser Name"
               name="reporting_adviser"
-              onChange={handleChange}
+              onChange={(e) => {
+                handleChange(e);
+                setUnfilledFields((prev) => prev.filter((field) => field !== 'reporting_adviser'));
+              }}
               className={classes.inputBox}
               variant="outlined"
               inputProps={customInputStyles}
-              classes={{ root: classes.selectInputBox }}
+              classes={{
+                root: `${unfilledFields.includes('reporting_adviser') && classes.unfilledField} ${
+                  classes.selectInputBox
+                }`,
+              }}
             />
           </FormControl>
         </Grid>

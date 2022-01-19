@@ -23,9 +23,9 @@ const useStyles = makeStyles((theme) => ({
     color: '#2A2B54 !important',
   },
   row: {
-    background: theme.palette.row,
+    background: '#FBFCFF',
     '&:hover': {
-      background: theme.palette.rowHover,
+      background: '#f1f4fb',
     },
   },
   rowText: {

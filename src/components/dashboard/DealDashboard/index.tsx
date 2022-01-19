@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useQuery, gql } from '@apollo/client';
+import React, { useEffect, useState } from 'react';
+import { useMutation, useQuery, gql } from '@apollo/client';
 import { useParams, withRouter, RouteComponentProps } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { useCurrentOrganization } from '../../../state/current-organization';
@@ -54,9 +54,13 @@ const DEAL = gql`
   }
 `;
 
-interface Props extends WithStyles<typeof styles> {}
+const UPDATE_BUILD_DEAL = gql`
+  mutation updateBuildDeal($payload: Object) {
+    updateBuildDeal(payload: $payload)
+  }
+`;
 
-const dealDashboardTabs = ['Deal Progress', 'Investors', 'Documents', 'Deal Page'];
+interface Props extends WithStyles<typeof styles> {}
 
 const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   const history = useHistory();
@@ -64,23 +68,63 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   const params: { deal_id: string } = useParams();
   const { deal_id } = params;
   const [tabIndex, setTabIndex] = useState(0);
-  const { data: dealData } = useQuery(DEAL, {
+
+  const [dealDashboardTabs, setDealDashboardTabs] = useState([] as string[]);
+
+  const { data: dealData, loading } = useQuery(DEAL, {
     fetchPolicy: 'network-only',
     pollInterval: 1000,
     variables: { deal_id },
+  });
+
+  useEffect(() => {
+    if (dealData) {
+      const remainingTasks = dealData?.getDealByIdWithTasks?.phases.flatMap((phase: any) =>
+        phase.tasks.filter((task: any) => !task.complete),
+      );
+
+      if (!remainingTasks?.length) {
+        setDealDashboardTabs(['Investors', 'Documents', 'Deal Page']);
+      } else {
+        setDealDashboardTabs(['Deal Progress', 'Investors', 'Documents', 'Deal Page']);
+      }
+    }
+  }, [dealData]);
+
+  const [updateBuildDeal, { loading: updateDealLoading }] = useMutation(UPDATE_BUILD_DEAL, {
+    // onCompleted: () => {
+    // Do we want a toast notification
+    // },
+    onError: (err) => {
+      console.log('Error:', err);
+    },
   });
 
   const handleTabChange = (event: any, index: number) => {
     setTabIndex(index);
   };
 
+  const handleComplete = () => {
+    updateBuildDeal({
+      variables: {
+        payload: {
+          deal_id,
+        },
+      },
+    });
+  };
+
   const dealProps = {
     data: dealData?.getDealByIdWithTasks,
+    handleComplete: handleComplete,
+    updateDealLoading: updateDealLoading,
   };
 
   const getTabComponent = () => {
     if (!dealData) return <LoadingPlaceholder />;
+
     const tabName = dealDashboardTabs[tabIndex];
+
     switch (tabName) {
       case 'Deal Progress':
         return <DealProgress {...dealProps} />;
@@ -88,7 +132,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
         return (
           <Investors
             investorsData={dealData?.getDealByIdWithTasks?.investments}
-            orgSlug={currentOrg.slug}
+            orgSlug={currentOrg?.slug}
             dealId={deal_id}
           />
         );

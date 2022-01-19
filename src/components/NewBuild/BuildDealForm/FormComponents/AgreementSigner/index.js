@@ -24,7 +24,7 @@ const GET_DOCUMENT = gql`
   }
 `;
 
-const AgreementBox = ({
+export const AgreementBox = ({
   title,
   task,
   agreementLink,
@@ -32,6 +32,7 @@ const AgreementBox = ({
   signingModal,
   signed,
   isSigned,
+  timeoutLoading = false,
   createDealLoading,
   error,
   classes,
@@ -46,7 +47,7 @@ const AgreementBox = ({
     if (signed && task?._id) getSignedDocument();
   }, [signed]);
 
-  const loading = createDealLoading || signedDocLoading;
+  const loading = createDealLoading || signedDocLoading || timeoutLoading;
 
   const handleAgreementClick = () => {
     if (readyToSign && !signed) signingModal(agreementLink, isSigned);
@@ -58,26 +59,25 @@ const AgreementBox = ({
     <Paper
       className={signed ? classes.agreementSignedBox : classes.agreementUnsignedBox}
       style={{
-        cursor: 'pointer',
+        cursor: !loading && 'pointer',
         pointerEvents: !readyToSign && 'none',
       }}
-      onClick={handleAgreementClick}
+      onClick={!loading && handleAgreementClick}
     >
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div>
         {loading || error ? (
           <CircularProgress />
         ) : width > phone ? (
-          <div className={classes.servicesAgreementIconBox}>
+          <div className={classes.serviceAgreementIconBox}>
             <img src={bluePenIcon} alt="document icon" />
           </div>
         ) : (
-          <div className={classes.servicesAgreementIconBox}>
+          <div className={classes.serviceAgreementIconBox}>
             <img src={docIcon} alt="document icon" />
           </div>
         )}
-
-        <Typography className={classes.itemText}>{title}</Typography>
       </div>
+      <Typography className={classes.itemText}>{title}</Typography>
 
       {width > phone ? (
         <Typography className={signed ? classes.signed : classes.notSigned}>
@@ -97,6 +97,7 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
   const currentOrg = useCurrentOrganization();
   const { deal, documents } = dealData;
   const [documentsSignedStatus, setDocumentsSignedStatus] = useState({});
+  const [timeoutLoading, setTimeoutLoading] = useState({});
 
   useEffect(() => {
     if (documents) {
@@ -154,25 +155,38 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
           </div>
         )}
 
-        {documents?.map(({ task, ...documentData }) => (
-          <AgreementBox
-            title={task.title.slice(4)}
-            agreementLink={documentData}
-            signingModal={signingModal}
-            task={task}
-            readyToSign={!!documentData && !error && !createDealLoading}
-            signed={documentsSignedStatus[task.title]}
-            isSigned={() =>
-              setDocumentsSignedStatus((prev) => ({
-                ...prev,
-                [task.title]: true,
-              }))
-            }
-            createDealLoading={createDealLoading}
-            error={error}
-            classes={classes}
-          />
-        ))}
+        {documents?.map(({ task, ...documentData }) => {
+          return (
+            <AgreementBox
+              title={task.title.slice(4)}
+              agreementLink={documentData}
+              signingModal={signingModal}
+              task={task}
+              readyToSign={!!documentData && !error && !createDealLoading}
+              signed={documentsSignedStatus[task.title]}
+              isSigned={() => {
+                setTimeoutLoading((prev) => ({
+                  ...prev,
+                  [task.title]: true,
+                }));
+                setDocumentsSignedStatus((prev) => ({
+                  ...prev,
+                  [task.title]: true,
+                }));
+                setTimeout(() => {
+                  setTimeoutLoading((prev) => ({
+                    ...prev,
+                    [task.title]: false,
+                  }));
+                }, 2500);
+              }}
+              timeoutLoading={timeoutLoading[task.title]}
+              createDealLoading={createDealLoading}
+              error={error}
+              classes={classes}
+            />
+          );
+        })}
 
         <div className={classes.buttonBox}>
           <Button

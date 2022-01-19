@@ -1,16 +1,20 @@
+/* eslint-disable no-undef */
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
-import allocationsIcon from '../../../../../../../assets/allocations_bar_logo.svg';
+import allocationsIcon from '../../../../../../../assets/for-allocations-icon.svg';
+import forYouIcon from '../../../../../../../assets/for-you-icon.svg';
 import grayCheck from '../../../../../../../assets/gray-check.svg';
-import profile from '../../../../../../../assets/profile-icon.svg';
 import styles from '../../../../styles.ts';
+import SignAgreementStep from '../SignAgreementStep';
 
 const defaultDesc =
   'An Allocations representative will be reaching out shortly to assist you in completing this step. If you have any questions, do not hesitate to contact support@allocations.com.';
 
-const CurrentStep = ({ classes, phase, task }) => {
+const CurrentStep = ({ classes, phase, task, deal }) => {
   const forFM = !task?.type?.includes('process');
+  const isAgreementSigner = task?.title?.includes('Sign Investment Agreement');
+
   return (
     <Grid container className={classes.currentStepBody}>
       <div className={classes.stepTitleRow}>
@@ -18,15 +22,17 @@ const CurrentStep = ({ classes, phase, task }) => {
         <Typography>
           {phase && `${phase}:`} {task?.title}
         </Typography>
-        <div className={forFM ? classes.badgeGray : classes.badgeBlue}>
-          <img alt="icon" src={forFM ? profile : allocationsIcon} style={{ height: '12px' }} />
-          <span>{forFM ? 'For You' : 'For Allocations'}</span>
-        </div>
+        <img
+          alt={forFM ? 'for you icon' : 'allocations icon'}
+          src={forFM ? forYouIcon : allocationsIcon}
+        />
       </div>
-
-      <Typography style={{ fontSize: '12px', textAlign: 'left', width: '100%' }}>
-        {forFM ? 'Something else happens' : defaultDesc}
-      </Typography>
+      {isAgreementSigner && <SignAgreementStep task={task} deal={deal} />}
+      {!isAgreementSigner && (
+        <Typography style={{ fontSize: '12px', textAlign: 'left', width: '100%' }}>
+          {forFM ? 'Something else happens' : defaultDesc}
+        </Typography>
+      )}
     </Grid>
   );
 };
