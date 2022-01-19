@@ -284,12 +284,13 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
     return fileName;
   };
 
-  if (addDocLoading || deleteDocLoading)
+  if (addDocLoading || deleteDocLoading) {
     return (
       <div className={classes.uploadDocLoader}>
         <CircularProgress />
       </div>
     );
+  }
   if (error || addDocError || deleteDocError) {
     return (
       <div className={`${classes.uploadErrorItem}`}>
