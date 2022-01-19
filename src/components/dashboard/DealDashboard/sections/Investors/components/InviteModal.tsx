@@ -48,9 +48,6 @@ const InviteModal: React.FC<Props> = ({ classes, orgSlug, dealId, dealProgressTa
   });
 
   const [updateInviteInvestorsTask] = useMutation(UPDATE_DEAL_TASK, {
-    onCompleted: (res) => {
-      console.log('Res:', res.updateInviteInvestorsTask.message);
-    },
     onError: (err) => {
       console.log('Error:', err);
     },

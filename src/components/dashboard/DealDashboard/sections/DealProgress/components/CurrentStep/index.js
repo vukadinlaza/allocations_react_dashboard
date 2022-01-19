@@ -16,7 +16,7 @@ const CurrentStep = ({ classes, phase, task, deal, orgSlug }) => {
   const forFM = !task?.type?.includes('process');
   const isAgreementSigner = task?.title?.includes('Sign Investment Agreement');
   const inviteInvestors = task?.title === 'Invite Investors';
-  console.log(inviteInvestors);
+
   return (
     <Grid container className={classes.currentStepBody}>
       <div className={classes.stepTitleRow}>
