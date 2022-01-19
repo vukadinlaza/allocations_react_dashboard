@@ -8,28 +8,48 @@ import Loader from '../../../../utils/Loader';
 import { useFetch } from '../../../../../utils/hooks';
 import ProgressBarWithLabel from './ProgressBarWithLabel';
 
-const InvestorsCapitalCall = ({ classes, orgSlug, userProfile }) => {
+const InvestorsCapitalCall = ({ classes, orgSlug, userProfile, dealName }) => {
   const BASE = 'appLhEikZfHgNQtrL'; // Accounting - Capital accounts
   const DEAL_TRACKER_TABLE = 'Deal Tracker';
-  const { data, status } = useFetch(BASE, DEAL_TRACKER_TABLE);
+  const { data, status } = useFetch(
+    BASE,
+    DEAL_TRACKER_TABLE,
+    `(FIND("${dealName}", {Deal Name (webapp)}))`,
+  );
   const [dataWithEmails, setDataWithEmails] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const headers = [
-    { value: 'Investor Name', label: 'Name', type: 'name' },
-    { value: 'Email', label: 'Email' },
+    {
+      value: 'Investor Name',
+      label: 'Name',
+      type: 'name',
+      isSortable: true,
+    },
+    {
+      value: 'Email',
+      label: 'Email',
+      isSortable: true,
+    },
     {
       value: 'Total Amount Committed (with fees)',
       label: 'Total Committed',
       type: 'amount',
       align: 'right',
+      isSortable: true,
     },
     {
-      value: 'Current Amount Contributed',
+      value: 'Net Amount Contributed',
       label: 'Amount Contributed ($)',
       type: 'amount',
       align: 'right',
+      isSortable: true,
     },
-    { value: 'Gross Contribution Received', label: 'Total Contribution (%)', type: 'progressBar' },
+    {
+      value: 'Aggregate Contributed (%)',
+      label: 'Total Contribution (%)',
+      type: 'progressBar',
+      isSortable: true,
+    },
   ];
 
   useEffect(() => {
@@ -51,6 +71,7 @@ const InvestorsCapitalCall = ({ classes, orgSlug, userProfile }) => {
             fields: {
               ...record.fields,
               Email: resData.fields.Email,
+              _id: resData.fields._id,
             },
           };
         }),
@@ -66,13 +87,13 @@ const InvestorsCapitalCall = ({ classes, orgSlug, userProfile }) => {
       case 'name':
         return row['Investor Name'];
       case 'link':
-        return <a href={`/investor/${row._id}/home`}>Link</a>;
+        return row._id ? <a href={`/investor/${row._id}/home`}>Link</a> : <div />;
       case 'amount':
         return `$${nWithCommas(row[headerValue])}`;
       case 'date':
         return moment(row[headerValue]).format('MM/DD/YYYY');
       case 'progressBar':
-        return <ProgressBarWithLabel value={row[headerValue] * 100} />;
+        return <ProgressBarWithLabel value={Math.round(row[headerValue] * 100)} />;
       default:
         return <div />;
     }
@@ -80,10 +101,11 @@ const InvestorsCapitalCall = ({ classes, orgSlug, userProfile }) => {
 
   if (['irishangels'].includes(orgSlug) || userProfile.admin) {
     headers.push({
-      value: 'Deal',
+      value: 'Deal Name (webapp)',
       label: 'Dashboard Link',
       type: 'link',
       alignHeader: true,
+      isSortable: true,
     });
   }
 
@@ -133,6 +155,7 @@ const InvestorsCapitalCall = ({ classes, orgSlug, userProfile }) => {
         getCellContent={getCellContent}
         sortField="email"
         sortOrder="desc"
+        count={investorsData.length}
       />
     </div>
   );

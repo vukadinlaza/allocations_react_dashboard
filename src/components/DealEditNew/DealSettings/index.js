@@ -91,7 +91,7 @@ function DealSettings({ formData, setFormData, refetch }) {
           className="document-link"
           href={`https://${document.link}`}
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
         >
           <img src={DocumentIcon} alt="document icon" />
           <p className="document-title">{document.path}</p>
@@ -170,6 +170,9 @@ function DealSettings({ formData, setFormData, refetch }) {
       onCompleted: () => {
         toast.success('Logo has been added');
         refetch();
+      },
+      onError: (err) => {
+        console.log('Error:', err);
       },
     });
     const [imgSrc, setImgSrc] = useState(

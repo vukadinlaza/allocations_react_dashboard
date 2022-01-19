@@ -5,8 +5,8 @@ import moment from 'moment';
  *
  * */
 
-export const phone = '650';
-export const tablet = '1024';
+export const phone = 650;
+export const tablet = 1024;
 
 export const titleCase = (str) => {
   if (!str) return str;
@@ -45,4 +45,12 @@ export const getMomentFromId = (id, inMiliseconds) => {
   const timeStamp = id.toString().substring(0, 8);
   const date = moment.unix(new Date(parseInt(timeStamp, 16) * (inMiliseconds ? 1000 : 1)));
   return date;
+};
+
+export const validateEmail = (email) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    );
 };

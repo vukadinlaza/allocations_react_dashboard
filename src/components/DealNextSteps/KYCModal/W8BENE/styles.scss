@@ -2,7 +2,6 @@
   height: 100%;
   width: 100%;
   overflow-y: scroll;
-  border-radius: 10px;
   position: relative;
 
   label,
@@ -11,7 +10,6 @@
   }
 
   .form-header {
-    border-radius: 10px 10px 0px 0px;
     background: #ffffff;
     width: 100%;
     padding: 20px 0;
@@ -35,7 +33,6 @@
     align-items: center;
     background: #fbfcff;
     width: 100%;
-    border-radius: 0px 0px 10px 10px;
 
     .mailingAddressCheckbox {
       width: 95%;

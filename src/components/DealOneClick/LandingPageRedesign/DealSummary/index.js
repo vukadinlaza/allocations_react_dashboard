@@ -1,6 +1,6 @@
 import React from 'react';
 import { Paper, Box } from '@material-ui/core';
-import useStyles from '../DealStyles';
+import useStyles from '../style';
 
 function DealSummary({ deal }) {
   const { company_description } = deal;
@@ -9,7 +9,7 @@ function DealSummary({ deal }) {
   return (
     <Paper className={classes.dealHeader}>
       <Box className={classes.box}>
-        <h5>Deal Summary</h5>
+        <span className={classes.investmentProgress}>Deal Summary</span>
       </Box>
 
       <Box className={classes.box}>{company_description}</Box>

@@ -89,6 +89,17 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
     return true;
   };
 
+  const truncFile = (file) => {
+    let fileName = file;
+
+    if (file.length > 25) {
+      const split = file.split('.');
+      fileName = `${split[0].slice(0, 25)}...${split[1]}`;
+    }
+
+    return fileName;
+  };
+
   if (addDocLoading || deleteDocLoading)
     return (
       <div className={classes.uploadDocLoader}>
@@ -155,6 +166,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
       </div>
     );
   }
+
   return (
     <div className={`${classes.uploadDocItem} ${!complete ? '' : classes.uploadedDocItem}`}>
       <div className={classes.docIconBox} style={{ backgroundColor: complete && '#CBECC7' }}>
@@ -162,7 +174,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
       </div>
       <Typography className={classes.itemText}>
         {complete
-          ? _.truncate(filesUploaded[document.title]?.document?.name, { length: 25 })
+          ? truncFile(filesUploaded[document.title]?.document?.name)
           : uploadTaskMap[document.title].text}
         &nbsp;
         {complete && (
@@ -305,21 +317,19 @@ export default function UploadDocs({
   }, []);
   return (
     <main>
-      <section className={classes.docUploadBox}>
-        <div className={classes.uploadContainer}>
-          {uploadTasks?.map((task) => (
-            <DocUploader
-              key={task._id}
-              document={task}
-              classes={classes}
-              filesUploaded={filesUploaded}
-              setFilesUploaded={setFilesUploaded}
-              deal={deal}
-              phaseId={currentPhase._id}
-            />
-          ))}
-        </div>
-      </section>
+      <div className={classes.uploadContainer}>
+        {uploadTasks?.map((task) => (
+          <DocUploader
+            key={task._id}
+            document={task}
+            classes={classes}
+            filesUploaded={filesUploaded}
+            setFilesUploaded={setFilesUploaded}
+            deal={deal}
+            phaseId={currentPhase._id}
+          />
+        ))}
+      </div>
       {deal?.type === 'spv' && filesUploaded['Upload Company Deck']?.complete && (
         <PitchDeckCheckBox
           buildData={buildData}

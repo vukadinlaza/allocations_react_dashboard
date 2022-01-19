@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import queryString from 'query-string';
-import { Button } from '@material-ui/core';
+import { Button, Menu, MenuItem } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import './styles.scss';
 import Confetti from 'react-confetti';
@@ -8,14 +8,11 @@ import { useQuery, useLazyQuery, gql } from '@apollo/client';
 import { useHistory, useParams, useLocation } from 'react-router';
 import { Helmet } from 'react-helmet';
 import signInvestmentYes from '../../assets/sign-investment-yes.svg';
-import wireFundsNo from '../../assets/wire-funds-no.svg';
 import submitTaxInfoYes from '../../assets/submit-tax-info-yes.svg';
 import submitTaxInfoNo from '../../assets/submit-tax-info-no.svg';
 import AllocationsRocket from './AllocationsRocket/AllocationsRocket';
-import PaymentSelectModal from './PaymentSelectModal';
 import KYCModal from './KYCModal';
 import WireInstructionsModal from './WireInstructionsModal/WireInstructionsModal';
-import CryptoPaymentModal from './CryptoPaymentModal/index';
 import { useAuth } from '../../auth/useAuth';
 
 const GET_INVESTOR = gql`
@@ -60,6 +57,8 @@ const GET_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
     deal(deal_slug: $deal_slug, fund_slug: $fund_slug) {
       _id
+      company_name
+      name
       accept_crypto
       isDemo
       dealParams {
@@ -78,14 +77,15 @@ const GET_INVESTMENT = gql`
   query GetInvestment($_id: String!) {
     investment(_id: $_id) {
       _id
+      status
       amount
-      submissionData {
-        investor_type
-        country
-      }
       wire_instructions {
         link
         path
+      }
+      submissionData {
+        investor_type
+        country
       }
     }
   }
@@ -99,18 +99,36 @@ function DealNextSteps() {
   const [open, setOpen] = useState(false);
 
   const { deal_slug, organization } = useParams();
-  const [openPayment, setOpenPayment] = useState(true);
-  const [cryptoPaymentOpen, setCryptoPaymentOpen] = useState(false);
   const [wireInstructionsOpen, setWireInstructionsOpen] = useState(false);
 
-  const { userProfile, isAuthenticated, loading: authLoading } = useAuth();
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const { search } = useLocation();
   const params = queryString.parse(search);
   const history = useHistory();
+
+  const [kycTemplate, setKycTemplate] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const path = organization ? `/deals/${organization}/${deal_slug}` : `/deals/${deal_slug}`;
-  const { data: investmentData } = useQuery(GET_INVESTMENT, {
-    variables: { _id: params?.investmentId ? params?.investmentId : history?.location?.state?.id },
+
+  const [getInvestment, { data: investmentData }] = useLazyQuery(GET_INVESTMENT, {
+    variables: { _id: params?.investmentId },
+    // onError: () => {
+    //   if (!state?.investorFormData) return history.push(path);
+    // },
   });
+
+  const investorFormData =
+    history?.location?.state?.investorFormData ||
+    investmentData?.investment?.submissionData ||
+    null;
 
   useEffect(() => {
     if (!authLoading && !calledDeal && isAuthenticated && deal_slug) {
@@ -121,6 +139,10 @@ function DealNextSteps() {
         },
         fetchPolicy: 'network-only',
       });
+
+      if (params?.investmentId) {
+        getInvestment();
+      }
     }
   }, [isAuthenticated, authLoading, calledDeal, getDeal, deal_slug, organization]);
 
@@ -144,6 +166,19 @@ function DealNextSteps() {
     };
   }, []);
 
+  useEffect(() => {
+    const templateInfo =
+      investorFormData?.country === 'United States'
+        ? investorFormData?.investor_type === 'individual'
+          ? { templateName: 'W-9', templateId: 'tpl_dM4QcQbyLckdPXgtyx' }
+          : { templateName: 'W-9-E', templateId: 'tpl_HSJjJ9c9jb2N4GXFkt' }
+        : investorFormData?.investor_type === 'individual'
+        ? { templateName: 'W-8-BEN', templateId: 'tpl_JmDP5PPQkSy7LYgJHF' }
+        : { templateName: 'W-8-BEN-E', templateId: 'tpl_mXPLm5EXAyHJKhQekf' };
+
+    setKycTemplate(templateInfo);
+  }, [investorFormData]);
+
   if (loading || !data || !dealData) return null;
 
   const handleInvestmentEdit = () => {
@@ -158,17 +193,11 @@ function DealNextSteps() {
     });
   };
 
-  const investorFormData =
-    history?.location?.state?.investorFormData || investmentData?.investment?.submissionData || {};
-
-  const templateInfo =
-    investorFormData?.country === 'United States'
-      ? investorFormData?.investor_type === 'individual'
-        ? { templateName: 'W-9', templateId: 'tpl_dM4QcQbyLckdPXgtyx' }
-        : { templateName: 'W-9-E', templateId: 'tpl_HSJjJ9c9jb2N4GXFkt' }
-      : investorFormData?.investor_type === 'individual'
-      ? { templateName: 'W-8-BEN', templateId: 'tpl_qDaxDLgRkFpHJD2cFX' }
-      : { templateName: 'W-8-BEN-E', templateId: 'tpl_mXPLm5EXAyHJKhQekf' };
+  const handleMenuItemClick = (template) => {
+    setKycTemplate(template);
+    setOpen(true);
+    setAnchorEl(null);
+  };
 
   const userDocs = data?.investor?.documents || [];
   const hasKyc =
@@ -231,13 +260,76 @@ function DealNextSteps() {
               <p className="action-header">Submit Tax Information</p>
               <p className="action-sub-header">Complete your W8/W9 forms here</p>
             </div>
-            <Button
-              className={hasKyc ? 'completed-step-button' : 'next-step-button'}
-              onClick={() => setOpen(true)}
-              disabled={!!hasKyc}
-            >
-              {hasKyc ? 'Completed' : 'Submit Tax Info'}
-            </Button>
+
+            {investorFormData ? (
+              <Button
+                className={hasKyc ? 'completed-step-button' : 'next-step-button'}
+                onClick={() => setOpen(true)}
+                disabled={!!hasKyc}
+              >
+                {hasKyc ? 'Completed' : 'Submit Tax Info'}
+              </Button>
+            ) : (
+              <>
+                <Button
+                  className={hasKyc ? 'completed-step-button' : 'next-step-button'}
+                  onClick={handleClick}
+                  disabled={!!hasKyc}
+                >
+                  {hasKyc ? 'Completed' : 'Select Tax Form'}
+                </Button>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={!!anchorEl}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                  }}
+                >
+                  <MenuItem
+                    onClick={() =>
+                      handleMenuItemClick({
+                        templateName: 'W-9',
+                        templateId: 'tpl_dM4QcQbyLckdPXgtyx',
+                      })
+                    }
+                  >
+                    W-9 Individual
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() =>
+                      handleMenuItemClick({
+                        templateName: 'W-9-E',
+                        templateId: 'tpl_HSJjJ9c9jb2N4GXFkt',
+                      })
+                    }
+                  >
+                    W-9 Entity
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() =>
+                      handleMenuItemClick({
+                        templateName: 'W-8-BEN',
+                        templateId: 'tpl_JmDP5PPQkSy7LYgJHF',
+                      })
+                    }
+                  >
+                    W-8-BEN
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() =>
+                      handleMenuItemClick({
+                        templateName: 'W-8-BEN-E',
+                        templateId: 'tpl_mXPLm5EXAyHJKhQekf',
+                      })
+                    }
+                  >
+                    W-8-BEN-E
+                  </MenuItem>
+                </Menu>
+              </>
+            )}
           </div>
           {/* //here */}
           {dealData?.deal?.dealParams?.dealType === '506c' && (
@@ -280,33 +372,56 @@ function DealNextSteps() {
             </div>
           )}
 
-          <div className={`action-item ${!hasKyc && 'disabled'}`}>
-            <img className="action-icon" src={wireFundsNo} alt="wire-funds-no" />
+          <div className="action-item">
+            <img
+              className="action-icon"
+              src={
+                investmentData?.investment?.status === 'wired' ||
+                investmentData?.investment?.status === 'complete'
+                  ? submitTaxInfoYes
+                  : submitTaxInfoNo
+              }
+              alt="payment-info"
+            />
             <div className="action-instructions">
-              <p className="action-header">Payment</p>
-              <p className="action-sub-header">Required to complete your investment</p>
+              <p className="action-header">Make Wire Payment</p>
+              <p className="action-sub-header">Required to complete your investment </p>
             </div>
-            <Button
-              // disabled={dealData?.deal?.isDemo ? false : !hasKyc}
-              className="next-step-button"
-              onClick={() => setOpenPayment(true)}
-            >
-              Make Payment
-            </Button>
+            {data?.investor.accredidation_status === true ? (
+              ''
+            ) : (
+              <Button
+                className={
+                  investmentData?.investment?.status === 'wired' ||
+                  investmentData?.investment?.status === 'complete'
+                    ? 'completed-step-button'
+                    : 'next-step-button'
+                }
+                onClick={() => {
+                  setWireInstructionsOpen(true);
+                }}
+              >
+                {investmentData?.investment?.status === 'wired' ||
+                investmentData?.investment?.status === 'complete'
+                  ? 'Completed'
+                  : 'View Wire Instructions'}
+              </Button>
+            )}
           </div>
         </div>
-        <PaymentSelectModal
+        {/* PaymentSelectModal to be temporarily retired while Crypto is in limbo */}
+        {/* <PaymentSelectModal
           open={openPayment}
           dealData={dealData?.deal}
           setOpen={setOpenPayment}
           setWireInstructionsOpen={setWireInstructionsOpen}
           setCryptoPaymentOpen={setCryptoPaymentOpen}
-        />
+        /> */}
         <KYCModal
           open={open}
           setOpen={setOpen}
-          kycTemplateId={templateInfo.templateId}
-          kycTemplateName={templateInfo.templateName}
+          kycTemplateId={kycTemplate.templateId}
+          kycTemplateName={kycTemplate.templateName}
           refetch={refetch}
           deal={dealData.deal || {}}
           setShowTaxAsCompleted={setShowTaxAsCompleted}
@@ -315,15 +430,6 @@ function DealNextSteps() {
           investmentWireInstructions={investmentData?.investment?.wire_instructions}
           open={wireInstructionsOpen}
           setOpen={setWireInstructionsOpen}
-          docs={docs}
-        />
-        <CryptoPaymentModal
-          investmentWireInstructions={investmentData?.investment?.wire_instructions}
-          open={cryptoPaymentOpen}
-          setOpen={setCryptoPaymentOpen}
-          investmentData={investmentData}
-          userId={data?.investor?._id ?? userProfile._id}
-          dealData={dealData}
           docs={docs}
         />
 

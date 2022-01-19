@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMutation, gql } from '@apollo/client';
+import { get } from 'lodash';
+import { toast } from 'react-toastify';
 
 /** *
  *
@@ -72,6 +74,9 @@ export function Doc({ doc, investment }) {
   const file = doc.path.split('/')[1];
   const [rmInvestmentDoc, { data }] = useMutation(RM_INVESTMENT_DOC, {
     variables: { file, investment_id: investment._id },
+    onError: () => {
+      toast.error('Something went wrong. Try again or contact support at support@allocations.com.');
+    },
   });
 
   useEffect(() => {

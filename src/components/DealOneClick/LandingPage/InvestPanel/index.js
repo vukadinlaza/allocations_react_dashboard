@@ -1,17 +1,19 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
-import './styles.scss';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import moment from 'moment';
 import { useHistory, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import USDCIcon from '../../../../assets/usdc_icon.svg';
 import { useAuth } from '../../../../auth/useAuth';
+import USDCIcon from '../../../../assets/usdc_icon.svg';
+import './styles.scss';
 
 function InvestPanel({ deal, deal_slug, organization }) {
   const { userProfile, isAuthenticated } = useAuth();
   const { search } = useLocation();
   const p = new URLSearchParams(search);
   const amount = p.get('amount');
+  const { cryptoPaymentInBuild } = useFlags();
   const history = useHistory();
 
   const handleWaitlistSubmit = async () => {
@@ -65,7 +67,7 @@ function InvestPanel({ deal, deal_slug, organization }) {
         </li>
         <li>
           <p>Accepting:</p>
-          {accept_crypto ? (
+          {accept_crypto && cryptoPaymentInBuild ? (
             <h2>
               Wire Transfers • <img src={USDCIcon} alt="USDC icon" />
             </h2>

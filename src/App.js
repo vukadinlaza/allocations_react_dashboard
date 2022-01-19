@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
 import { withLDProvider } from 'launchdarkly-react-client-sdk';
 
+import DealDashboard from './components/dashboard/DealDashboard/index.tsx';
 import FundManagerDashboard from './components/dashboard/FundManagerDashboard';
 import InvestorDashboard from './components/dashboard/InvestorDashboard';
 
@@ -16,10 +17,10 @@ import Sidebar from './components/Sidebar';
 import Investors from './components/Investors';
 import InvestmentNew from './components/InvestmentNew';
 import ProfilePage from './components/Profile/ProfilePage';
-import Profile from './components/Profile/Profile';
+import Profile from './components/Profile';
 import OrganizationNew from './components/OrganizationNew';
 import OrganizationMembers from './components/OrganizationMembers';
-import DealTable from './components/deals/fund-manager/DealsTablePage';
+import DealsTable from './components/dashboard/FundManagerDashboard/FundManagerDealsTable/DealsTablePage';
 import NotFound from './components/NotFound';
 import Prospect from './components/Prospect/Prospect';
 import ProspectDealPage from './components/Prospect/ProspectDealPage/ProspectDealPage';
@@ -28,14 +29,12 @@ import Demo from './components/Demo';
 // admin
 
 import DealNextSteps from './components/DealNextSteps/DealNextSteps';
-import InvestmentPage from './components/DealOneClick/InvestmentPage/InvestmentPage';
+import InvestmentPage from './components/DealOneClick/InvestmentPage';
 import SuperAdminManager from './components/superadmin/Manager';
 import DealOneClick from './components/DealOneClick';
 
 // test
 import BuildDealForm from './components/NewBuild/BuildDealForm/index';
-
-import DealSetup from './components/deals/fund-manager/Setup';
 
 import AuthorizedApolloProvider from './apollo-client-comp';
 import './App.scss';
@@ -64,22 +63,24 @@ const App = () => {
           <div className="mainRoute">
             <Switch>
               <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
+              <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
+              <PrivateRoute path="/admin/:organization/:deal_id" component={DealDashboard} exact />
               <PrivateRoute path="/" exact component={InvestorDashboard} />
               <PrivateRoute path="/investor/:id/home" component={InvestorDashboard} />
 
               <PrivateRoute path="/submit-tax-documents" component={SubmitTaxDocs} />
               <PrivateRoute path="/demo" component={Demo} />
 
-              <PrivateRoute path="/new-build/:type" exact component={BuildDealForm} />
               <PrivateRoute path="/profile/:id" component={ProfilePage} />
               <PrivateRoute path="/profile" component={Profile} />
-              <PrivateRoute path="/deal-setup" component={DealSetup} />
 
               {/** Onboarding * */}
               <Route path="/getting-started" component={Faq} exact />
 
               {/** Deals * */}
               {/* PUBLIC Landing Page */}
+
+              <Route path="/public/new-build/:type?" exact component={BuildDealForm} />
               <Route path="/public/:organization/:deal_slug" component={DealOneClick} exact />
               <Route path="/public/:deal_slug" component={DealOneClick} exact />
 
@@ -115,7 +116,7 @@ const App = () => {
               <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
 
               {/** Whitelabel Routes * */}
-              <PrivateRoute path="/organizations/:org_slug/deals" component={DealTable} exact />
+              <PrivateRoute path="/organizations/:org_slug/deals" component={DealsTable} exact />
               <AdminRoute
                 path="/admin/:organization/members"
                 component={OrganizationMembers}

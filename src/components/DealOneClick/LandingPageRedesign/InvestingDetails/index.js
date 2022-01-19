@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Paper, Box, Typography, Grid } from '@material-ui/core';
-import useStyles from '../DealStyles';
+import useStyles from '../style';
 import { InvestingDetailsSimpleBox } from '../widgets/InvestingDetailsSimpleBox';
 
 function InvestingDetails({ deal }) {
   const {
     dealCoverImageKey,
     slug,
+    status,
+    portfolio_company_securities,
+    sectors,
     dealParams: { dealType, managementFeeType, totalCarry, managementFees },
   } = deal;
 
@@ -28,11 +31,11 @@ function InvestingDetails({ deal }) {
     <>
       <Paper className={classes.dealHeader}>
         <Box className={classes.box}>
-          <h5>Investing Details</h5>
+          <span className={classes.investmentProgress}>Investing Details</span>
         </Box>
         <Box className={classes.boxInvestingDetails}>
-          <Grid container style={{ backgroundColor: '' }}>
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+          <Grid container>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Offering Type"
                 openTooltip={openTooltip}
@@ -49,12 +52,12 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Fee Frequency"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
-                id="offering"
+                id="frequency"
                 tooltipContent={
                   <Typography color="inherit">
                     This is the total capital received into the private fund’s bank account
@@ -66,12 +69,12 @@ function InvestingDetails({ deal }) {
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Deal Stage"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
-                id="offering"
+                id="stage"
                 tooltipContent={
                   <Typography color="inherit">
                     This is the total capital received into the private fund’s bank account
@@ -79,16 +82,16 @@ function InvestingDetails({ deal }) {
                   </Typography>
                 }
               >
-                <Typography className={classes.boxContent}>Seed</Typography>
+                <Typography className={classes.boxContent}>{status}</Typography>
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Portfolio Company Securities"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
-                id="offering"
+                id="portfolio"
                 tooltipContent={
                   <Typography color="inherit">
                     This is the total capital received into the private fund’s bank account
@@ -96,17 +99,19 @@ function InvestingDetails({ deal }) {
                   </Typography>
                 }
               >
-                <Typography className={classes.boxContent}>Series A Preferred Stock</Typography>
+                <Typography className={classes.boxContent}>
+                  {portfolio_company_securities}
+                </Typography>
               </InvestingDetailsSimpleBox>
             </Grid>
           </Grid>
-          <Grid container style={{ backgroundColor: '' }}>
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+          <Grid container>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Management Fee"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
-                id="offering"
+                id="management"
                 tooltipContent={
                   <Typography color="inherit">
                     This is the total capital received into the private fund’s bank account
@@ -114,16 +119,18 @@ function InvestingDetails({ deal }) {
                   </Typography>
                 }
               >
-                <Typography className={classes.boxContent}>{managementFees}%</Typography>
+                {managementFees && (
+                  <Typography className={classes.boxContent}>{managementFees}%</Typography>
+                )}
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Carry Fee"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
-                id="offering"
+                id="carry"
                 tooltipContent={
                   <Typography color="inherit">
                     This is the total capital received into the private fund’s bank account
@@ -131,16 +138,18 @@ function InvestingDetails({ deal }) {
                   </Typography>
                 }
               >
-                <Typography className={classes.boxContent}>{totalCarry}%</Typography>
+                {totalCarry && (
+                  <Typography className={classes.boxContent}>{totalCarry}%</Typography>
+                )}
               </InvestingDetailsSimpleBox>
             </Grid>
 
-            <Grid item xs={3} style={{ backgroundColor: '' }}>
+            <Grid item sm={3} xs={6}>
               <InvestingDetailsSimpleBox
                 title="Sector"
                 openTooltip={openTooltip}
                 handleTooltip={handleTooltip}
-                id="offering"
+                id="sector"
                 tooltipContent={
                   <Typography color="inherit">
                     This is the total capital received into the private fund’s bank account
@@ -148,7 +157,9 @@ function InvestingDetails({ deal }) {
                   </Typography>
                 }
               >
-                <Typography className={classes.boxContent}>Space</Typography>
+                <Box display="flex">
+                  <Typography className={classes.boxContent}>{sectors?.join(', ')}</Typography>
+                </Box>
               </InvestingDetailsSimpleBox>
             </Grid>
           </Grid>

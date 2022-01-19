@@ -3,42 +3,49 @@ import { withStyles } from '@material-ui/core/styles';
 import { Typography, Tooltip } from '@material-ui/core';
 import HelpIcon from '@material-ui/icons/Help';
 import CloseIcon from '@material-ui/icons/Close';
-import { phone } from '../../../../utils/helpers';
+import { phone, tablet } from '../../../../utils/helpers';
 
 const styles = (theme) => ({
   box: {
     width: '100%',
-    height: '100px',
+    height: '60px',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
-    // boxShadow: '0px 3px 6px #00000029',
-    // border: '1px solid #8493A640',
-    borderRadius: '10px',
-    backgroundColor: '',
-    // margin: '20px',
+    marginRight: '3px',
     [theme.breakpoints.down(phone)]: {
       minWidth: '0 !important',
       maxWidth: 'none !important',
+      height: '100%',
+      marginRight: '4px',
     },
-  },
-  boxContent: {
-    padding: '5px',
   },
   boxTitle: {
     fontSize: '14px',
+    color: '#64748B',
+    [theme.breakpoints.down(phone)]: {
+      fontSize: '12px',
+      display: 'flex',
+    },
   },
   boxTitleContainer: {
-    width: '100%',
-    // height: '71px',
-    // background: '#FFFFFF 0% 0% no-repeat padding-box',
-    borderRadius: '10px 10px 0px 0px',
+    width: '220px',
     display: 'flex',
     alignItems: 'center',
-    // padding: '10px',
+    [theme.breakpoints.down(phone)]: {
+      width: '119px',
+      display: 'inline-block',
+      alignSelf: 'flex-end',
+      top: '0',
+    },
+    [theme.breakpoints.down(tablet)]: {
+      width: '115px',
+    },
   },
+
   boxTitleText: {
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'start',
   },
+
   closeModal: {
     right: '20px',
     display: 'flex',
@@ -57,14 +64,19 @@ const styles = (theme) => ({
     justifyContent: 'center',
   },
   infoIcon: {
-    marginLeft: '0.5em',
+    marginLeft: '0.2em',
     cursor: 'pointer',
-    color: '#758398',
-    fontSize: '20px',
+    color: '#64748B',
+    fontSize: '16px',
+    [theme.breakpoints.down(phone)]: {
+      marginLeft: '1px',
+    },
   },
+
   modal: {
     padding: '20px',
   },
+
   modalBackground: {
     position: 'fixed',
     left: '0',

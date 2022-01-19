@@ -18,8 +18,7 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 
-// eslint-disable-next-line no-unused-vars
-function W8BENE({ toggleOpen, called, loading, createDoc }) {
+function W8BENE({ toggleOpen, createDoc }) {
   const treatyClaimOptions = [
     '4_disregarded_entity',
     '4_partnership',

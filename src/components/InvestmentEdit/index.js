@@ -88,14 +88,18 @@ export default function InvestmentEdit({
   const [hasChanges, setHasChanges] = useState(false);
   const id = investmentId || params.id;
   const { data, refetch } = useQuery(GET_INVESTMENT, { variables: { _id: id } });
-  const [createInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT);
-  const [deleteInvestment] = useMutation(destroy, {
+  const [createInvestment, createInvestmentRes] = useMutation(UPDATE_INVESTMENT, {
+    onError: () =>
+      toast.error('Something went wrong. Try again or contact support at support@allocations.com.'),
+  });
+  // eslint-disable-next-line no-empty-pattern
+  const [deleteInvestment, {}] = useMutation(destroy, {
     onCompleted: () => {
       toast.success('Success! Investment deleted');
       setEditInvestmentModal(false);
     },
     onError: () => {
-      toast.error('Looks like we encountered an error');
+      toast.error('Something went wrong. Try again or contact support at support@allocations.com.');
     },
   });
 
@@ -234,7 +238,10 @@ export default function InvestmentEdit({
 
 function Docs({ investment, refetch, isK1 }) {
   const [uploadedDoc, setUploadedDoc] = useState(null);
-  const [addInvestmentDoc, { loading }] = useMutation(ADD_INVESTMENT_DOC);
+  const [addInvestmentDoc, { loading }] = useMutation(ADD_INVESTMENT_DOC, {
+    onError: () =>
+      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com'),
+  });
   const id = get(investment, '_id', '');
   useEffect(() => {
     if (uploadedDoc) {
@@ -286,7 +293,7 @@ function Doc({ doc, investment, refetch }) {
       toast.success('Success! File has been deleted');
     },
     onError: () => {
-      toast.error('Looks like we encountered an error');
+      toast.error('Something went wrong. Try again or contact support at support@allocations.com.');
     },
   });
   const rmDoc = () => {

@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
   },
   activeOuterSection: {
     borderLeft: 'solid #ECF3FF 3px',
+    [theme.breakpoints.down(phone)]: {
+      borderLeft: 'none',
+    },
   },
   assetItemText: {
     font: 'normal normal normal 18px/21px Roboto',
@@ -27,12 +30,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   buildTabContainer: {
-    marginBottom: '16px',
-    paddingLeft: '42px',
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    boxShadow: '0px 3px 6px #00000029',
-    border: '1px solid #7070703B',
-    borderRadius: '15px',
+    backgroundColor: 'inherit',
+    boxShadow: 'none !important',
     width: '100%',
     maxWidth: '1352px',
     opacity: 1,
@@ -69,10 +68,7 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'none',
     outline: 'none',
     [theme.breakpoints.down(phone)]: {
-      marginBottom: '14px',
-      marginTop: '20px',
-      marginLeft: '0',
-      width: '100%',
+      width: '300px',
     },
   },
   finalInput: {
@@ -103,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '8px',
     [theme.breakpoints.down(phone)]: {
       marginBottom: '14px',
-      marginLeft: '8px',
+      maxWidth: '95%',
     },
   },
   helpIcon: {
@@ -128,9 +124,18 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: 'column',
     },
   },
-  inputGridItem: {
+  basicInformationInputItem: {
     [theme.breakpoints.down(phone)]: {
       maxWidth: '100%',
+      maxHeight: '130px',
+    },
+  },
+  inputGridItem: {
+    marginBottom: '30px',
+    height: 'fit-content',
+    [theme.breakpoints.down(phone)]: {
+      maxWidth: '100%',
+      // maxHeight: '125px',
     },
   },
   inputLabelWithTooltip: {
@@ -141,19 +146,25 @@ const useStyles = makeStyles((theme) => ({
   },
   itemText: {
     font: 'normal normal normal 18px/21px Roboto',
-    width: '150px',
-    textAlign: 'center',
     color: '#2A2B54',
     letterSpacing: '0px',
     opacity: '1',
+    paddingLeft: '30px',
     [theme.breakpoints.down(phone)]: {
-      maxWidth: '100%',
       font: 'normal normal normal 16px/21px Roboto',
+      maxWidth: '180px',
+      paddingLeft: '15px',
     },
   },
   outerSection: {
-    padding: '18px 60px',
+    padding: '18px 50px',
     marginLeft: '12px',
+    display: 'flex',
+    flexWrap: 'wrap',
+    [theme.breakpoints.down(phone)]: {
+      padding: '0px',
+      marginLeft: '0px',
+    },
   },
   paper: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
@@ -165,6 +176,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     maxWidth: '1352px',
     opacity: 1,
+    overflow: 'visible',
     [theme.breakpoints.down(phone)]: {
       maxWidth: '600px',
       marginBottom: '24px',
@@ -246,6 +258,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#ffffff',
     borderRadius: '8px !important',
     textTransform: 'capitalize',
+    '& .MuiButtonGroup-groupedOutlinedHorizontal:not(:last-child) ': {
+      border: 'none !important',
+    },
+    '& .MuiButton-outlinePrimary': {
+      border: 'none !important',
+    },
     [theme.breakpoints.down(phone)]: {
       fontSize: '.7em',
     },
@@ -285,14 +303,14 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '10px',
     cursor: 'pointer',
     [theme.breakpoints.down(phone)]: {
-      width: '311px',
+      width: '325px',
     },
     '& *': {
       pointerEvents: 'none',
     },
   },
   typeItemDiv: {
-    width: 'inherit',
+    width: '100%',
     marginBottom: '15px',
     display: 'flex',
     justifyContent: 'space-between',
@@ -315,9 +333,12 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: 'border-box',
     width: 'inherit',
     paddingLeft: '10px',
+    [theme.breakpoints.down(phone)]: {
+      paddingLeft: '0px',
+    },
   },
   cryptoFormContainer: {
-    width: '98%',
+    width: '100%',
     right: '1vw',
   },
   cryptoLabel: {
@@ -327,6 +348,10 @@ const useStyles = makeStyles((theme) => ({
     width: 'fit-content',
     padding: '0px 5px',
     marginLeft: '5px',
+    [theme.breakpoints.down(phone)]: {
+      padding: '0px',
+      marginLeft: '0px',
+    },
   },
   cryptoSelector: {
     width: '110%',
@@ -336,6 +361,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '37px',
     [theme.breakpoints.down(phone)]: {
       maxWidth: '100%',
+      marginBottom: '0px',
     },
   },
   minimumInput: {
@@ -356,14 +382,18 @@ const useStyles = makeStyles((theme) => ({
   },
   selectInputBox: {
     width: '90%',
+    // maxWidth: '460px',
     '& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline': {
       borderRadius: '8px !important',
+    },
+    [theme.breakpoints.down(phone)]: {
+      width: '100%',
     },
   },
   // * Styles that are only used in the AgreementSigner.
   agreementSignedBox: {
-    display: 'flex',
-    justifyContent: 'space-between',
+    display: 'grid',
+    gridTemplateColumns: '20px 1fr 135px',
     alignItems: 'center',
     height: '100px',
     paddingLeft: '30px',
@@ -372,10 +402,20 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '20px',
     boxShadow: 'none !important',
     backgroundColor: '#F6F7F8',
+    '&:hover': {
+      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+    },
+    [theme.breakpoints.down(phone)]: {
+      gridTemplateColumns: '30px 8fr 1fr',
+      paddingLeft: '15px',
+      paddingRight: '15px',
+      border: '2px solid #186EFF !important',
+      backgroundColor: 'rgba(26, 110, 255, 0.16)',
+    },
   },
   agreementUnsignedBox: {
-    display: 'flex',
-    justifyContent: 'space-between',
+    display: 'grid',
+    gridTemplateColumns: '20px 1fr 135px',
     alignItems: 'center',
     height: '100px',
     paddingLeft: '30px',
@@ -385,15 +425,24 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: 'rgba(0, 0, 0, 0.04)',
     },
+    [theme.breakpoints.down(phone)]: {
+      gridTemplateColumns: '30px 1fr',
+      paddingLeft: '15px',
+      paddingRight: '15px',
+      border: '2px solid #2A2B54 !important',
+    },
   },
   buttonBox: {
     margin: 'auto',
     marginTop: '40px',
     alignSelf: 'center',
     textAlign: 'center',
+    [theme.breakpoints.down(phone)]: {
+      marginTop: '0px',
+    },
   },
   customFormItemName: {
-    minHeight: '40px',
+    minHeight: '45px',
   },
   notSigned: {
     backgroundColor: '#FFBDAD',
@@ -401,8 +450,11 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '600',
     borderRadius: '20px',
     padding: '5px 20px',
+    [theme.breakpoints.down(phone)]: {
+      padding: '4px 10px',
+    },
   },
-  serviceAgreementIconBox: {
+  servicesAgreementIconBox: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -410,6 +462,11 @@ const useStyles = makeStyles((theme) => ({
     height: '60px',
     borderRadius: '50%',
     backgroundColor: '#ECF3FF',
+    [theme.breakpoints.down(phone)]: {
+      width: '45px',
+      height: '45px',
+      backgroundColor: 'white',
+    },
   },
   signContainer: {
     display: 'grid',
@@ -436,6 +493,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '600',
     borderRadius: '20px',
     padding: '5px 20px',
+    [theme.breakpoints.down(phone)]: {
+      padding: '4px 10px',
+    },
   },
   subtitle: {
     textAlign: 'left',
@@ -444,6 +504,10 @@ const useStyles = makeStyles((theme) => ({
     color: '#186EFF',
     opacity: '1',
     marginBottom: '41px',
+    [theme.breakpoints.down(phone)]: {
+      marginTop: '20px',
+      marginBottom: '20px',
+    },
   },
   // * Styles that are only used in the 'Upload Docs' tab.
   blueCheck: {
@@ -492,6 +556,7 @@ const useStyles = makeStyles((theme) => ({
   docUploadBox: {
     display: 'flex',
     justifyContent: 'flex-start',
+    flexWrap: 'wrap',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     marginBottom: '16px',
     paddingTop: '20px',
@@ -512,19 +577,16 @@ const useStyles = makeStyles((theme) => ({
     color: '#2A2B54',
     fontSize: '22px',
     [theme.breakpoints.down(phone)]: {
-      fontSize: '13px',
+      fontSize: '20px',
       justifyContent: 'center',
       alignItems: 'center',
     },
   },
   uploadContainer: {
     display: 'flex',
-    justifyContent: 'space-between',
-    width: '1000px',
-    minWidth: '900px',
+    flexWrap: 'wrap',
     [theme.breakpoints.down(phone)]: {
       flexDirection: 'column',
-      height: '800px',
     },
   },
   uploadDocLoader: {
@@ -536,7 +598,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '10px',
     width: '280px',
     height: '236px',
-    marginBottom: '8px',
+    margin: '10px',
   },
   uploadDocItem: {
     display: 'flex',
@@ -549,7 +611,7 @@ const useStyles = makeStyles((theme) => ({
     opacity: 1,
     width: '280px',
     height: '236px',
-    marginBottom: '8px',
+    margin: '10px',
   },
   uploadedDocItem: {
     background: '#fff 0% 0% no-repeat padding-box',
@@ -573,7 +635,7 @@ const useStyles = makeStyles((theme) => ({
     opacity: 1,
     width: '280px',
     height: '236px',
-    marginBottom: '8px',
+    margin: '10px',
   },
   uploadIcon: {
     color: 'blue',

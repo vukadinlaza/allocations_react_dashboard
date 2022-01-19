@@ -24,8 +24,8 @@ import FormModal from '../../Modal';
 import { nWithCommas, formatDate } from '../../../utils/numbers';
 // eslint-disable-next-line import/extensions
 import { Deal } from '../../admin/AdminHome/components/active-deals';
-import EditOrg from '../../forms/editOrg';
-import EditInvestor from '../../forms/editInvestor';
+import EditOrg from '../../forms/EditOrg';
+import EditInvestor from '../../forms/EditInvestor';
 import './style.scss';
 
 const SUPERADMIN = gql`

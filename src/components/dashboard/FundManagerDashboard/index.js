@@ -5,21 +5,17 @@ import { useLazyQuery, useQuery, gql } from '@apollo/client';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Tabs, Tab, Typography, Button, Paper } from '@material-ui/core';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import EditIcon from '@material-ui/icons/Edit';
-import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-import Tooltip from '@material-ui/core/Tooltip';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
 import Banking from './sections/Banking';
+import Crypto from './sections/Crypto';
 import Investments from './sections/Investments';
 import Investors from './sections/Investors';
 import InvestorsCapitalCalls from './sections/InvestorsCapitalCalls';
 import Overview from './sections/Overview';
-import { FlatBox } from './widgets';
 import { useViewport, useFetch } from '../../../utils/hooks';
 import { useAuth } from '../../../auth/useAuth';
 import AllocationsLoader from '../../utils/AllocationsLoader';
@@ -27,6 +23,12 @@ import DealsTabs from './sections/DealsTabs';
 import styles from './styles';
 import DocumentsTab from './sections/DocumentsTab';
 import DealTypeSelector from '../../NewBuild/DealType';
+import DealPage from './sections/DealPage';
+
+// const MFE1 = React.lazy(() => import('mfe1/mfe1'));
+// const NewDirectionsAccountCreationForm = React.lazy(() =>
+//   import('treasury/NewDirectionsAccountCreationForm'),
+// );
 
 const GET_INVESTMENTS = gql`
   query GetDeal($fund_slug: String!, $deal_slug: String!) {
@@ -170,7 +172,7 @@ const FundManagerDashboard = ({ classes, history }) => {
     INVESTMENTS_TABLE = 'Sales Demo';
   }
 
-  const { fundManagerBankingTab, capitalCalls } = useFlags();
+  const { fundManagerBankingTab, capitalCalls, cryptoPaymentInBuild } = useFlags();
 
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
@@ -203,6 +205,13 @@ const FundManagerDashboard = ({ classes, history }) => {
       if (!fundTabs.includes(bankingTabName)) fundTabs.push(bankingTabName);
       if (!spvTabs.includes(bankingTabName)) spvTabs.push(bankingTabName);
     }
+  }
+
+  if (userProfile.admin && cryptoPaymentInBuild) {
+    const cryptoTabName = 'Crypto';
+    // Only add crypto tab if user is admin
+    if (!fundTabs.includes(cryptoTabName)) fundTabs.push(cryptoTabName);
+    if (!spvTabs.includes(cryptoTabName)) spvTabs.push(cryptoTabName);
   }
 
   const { data: atDeal } = useFetch(
@@ -341,10 +350,10 @@ const FundManagerDashboard = ({ classes, history }) => {
       return (
         <Overview
           classes={classes}
-          aum={aumData?.aum.total}
-          spvs={totalSpvData?.spvs.total}
-          funds={totalFundsData?.funds.total}
-          investors={totalInvestmentsData?.investments.total}
+          aum={aumData?.aum?.total || 0}
+          spvs={totalSpvData?.spvs?.total || 0}
+          funds={totalFundsData?.funds?.total || 0}
+          investors={totalInvestmentsData?.investments?.total || 0}
         />
       );
     }
@@ -405,6 +414,7 @@ const FundManagerDashboard = ({ classes, history }) => {
             data={dealInvestments}
             orgSlug={orgSlug}
             userProfile={userProfile}
+            dealName={checkedDealName}
           />
         ) : (
           <Investors
@@ -423,35 +433,29 @@ const FundManagerDashboard = ({ classes, history }) => {
 
       case 'Deal Page':
         return (
-          <div className={classes.section}>
-            <FlatBox title="SHARE">
-              <Typography>
-                dashboard.allocations.com
-                {orgSlug && dealData?.slug ? `/deals/${orgSlug}/${dealData.slug}` : ''}
-              </Typography>
-              <div className={classes.pageIcons}>
-                <div className={classes.pageIcon} onClick={goToEditDeal}>
-                  <Tooltip title="Edit">
-                    <EditIcon />
-                  </Tooltip>
-                </div>
-                <div className={classes.pageIcon} onClick={goToDeal}>
-                  <Tooltip title="Go">
-                    <ChevronRightIcon />
-                  </Tooltip>
-                </div>
-                <div className={classes.pageIcon} onClick={handleLinkCopy}>
-                  <Tooltip title="Copy">
-                    <FileCopyOutlinedIcon />
-                  </Tooltip>
-                </div>
-              </div>
-            </FlatBox>
-          </div>
+          <DealPage
+            classes={classes}
+            orgSlug={orgSlug}
+            dealData={dealData}
+            goToDeal={goToDeal}
+            goToEditDeal={goToEditDeal}
+            handleLinkCopy={handleLinkCopy}
+          />
         );
       case 'Banking':
         return (
           <Banking
+            orgSlug={orgSlug}
+            classes={classes}
+            deal_id={dealData._id}
+            virtual_account_number={dealData.virtual_account_number || null}
+            openTooltip={openTooltip}
+            handleTooltip={handleTooltip}
+          />
+        );
+      case 'Crypto':
+        return (
+          <Crypto
             orgSlug={orgSlug}
             classes={classes}
             deal_id={dealData._id}
@@ -471,6 +475,12 @@ const FundManagerDashboard = ({ classes, history }) => {
 
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
+      {/* <React.Suspense fallback="Loading Button">
+        <MFE1 />
+      </React.Suspense> */}
+      {/* <React.Suspense fallback="Loading Button">
+        <NewDirectionsAccountCreationForm />
+      </React.Suspense> */}
       <Paper style={{ padding: '.5rem' }}>
         <div className={classes.mainTitleContainer} id="main-title-container">
           <Typography className={classes.mainTitle}>

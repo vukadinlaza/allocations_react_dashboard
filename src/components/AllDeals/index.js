@@ -83,9 +83,9 @@ export default function Deals({ showClosed }) {
     '5e553fb7e165e6d78c794097', // TODO: Remove this
   );
   const useInvestingAs = organization === 'irishangels';
-  useEffect(() => {
-    if (userProfile && userProfile.email) getDeals();
-  }, [getDeals, userProfile]);
+  // useEffect(() => {
+  //   if (userProfile && userProfile.email) getDeals();
+  // }, [getDeals, userProfile]);
 
   useEffect(() => {
     getDeals({

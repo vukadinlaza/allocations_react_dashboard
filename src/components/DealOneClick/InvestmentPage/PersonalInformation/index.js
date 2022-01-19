@@ -32,6 +32,7 @@ function PersonalInformation({
   org,
   handleSecondSig,
   isFromModal = false,
+  docSpringTemplateId,
 }) {
   const [mailingDifferent, toggleMailingDifferent] = useState(false);
   const [entityDesignation, setEntityDesignation] = useState('');
@@ -194,6 +195,18 @@ function PersonalInformation({
           />
         </FormControl>
       )}
+
+      {docSpringTemplateId === 'tpl_zbmQNPrkqXnJmFMD7C' && (
+        <TextField
+          className={classes.root}
+          variant="outlined"
+          placeholder="Street Address"
+          error={errors.includes('address')}
+          value={get(investor, 'address') || ''}
+          onChange={handleChange('address')}
+        />
+      )}
+
       {/* Accreditation status */}
       {org !== 'irishangels' ? (
         is3c7 ? (
