@@ -126,6 +126,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     data: dealData?.getDealByIdWithTasks,
     handleComplete: handleComplete,
     updateDealLoading: updateDealLoading,
+    orgSlug: currentOrg?.slug,
   };
 
   const getTabComponent = () => {

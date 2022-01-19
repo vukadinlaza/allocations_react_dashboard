@@ -115,7 +115,7 @@ const stepMap = new Map([
   ['post-closing', 'Post-Closing'],
 ]);
 
-const DealProgress = ({ data, handleComplete, updateDealLoading, classes }) => {
+const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classes }) => {
   const [currentPhase, setCurrentPhase] = useState('Pre-Onboarding');
   const [currentTask, setCurrentTask] = useState({});
   const [nextTask, setNextTask] = useState({});
@@ -178,6 +178,7 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, classes }) => {
               phase={data?.phases.find((phase) => phase.name === currentPhase.toLowerCase())}
               task={currentTask}
               deal={data}
+              orgSlug={orgSlug}
             />
           </Grid>
         )}
