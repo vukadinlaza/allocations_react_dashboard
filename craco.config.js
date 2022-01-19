@@ -8,7 +8,7 @@ module.exports = {
         filename: 'remoteEntry.js',
         remotes: {
           //   mfe1: 'mfe1@http://localhost:8083/remoteEntry.js',
-          //   treasury: 'treasury@http://localhost:3001/_next/static/chunks/remoteEntry.js',
+          // treasury: 'treasury@http://localhost:3001/_next/static/chunks/remoteEntry.js',
         },
         shared: [
           {
@@ -20,6 +20,20 @@ module.exports = {
           },
           {
             'react-dom': {
+              eager: true,
+              singleton: true,
+              requiredVersion: false,
+            },
+          },
+          {
+            '@material-ui/styles': {
+              eager: true,
+              singleton: true,
+              requiredVersion: false,
+            },
+          },
+          {
+            '@material-ui/core': {
               eager: true,
               singleton: true,
               requiredVersion: false,
