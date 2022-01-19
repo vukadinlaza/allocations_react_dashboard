@@ -44,7 +44,7 @@ const CurrentStep = ({ classes, phase, task, deal, orgSlug }) => {
       </div>
 
       {isAgreementSigner && <SignAgreementStep task={task} deal={deal} />}
-      {isUploadDocumentTask && <UploadDocs phase={phase} dealType={deal?.type} />}
+      {isUploadDocumentTask && <UploadDocs phase={phase} deal={deal} />}
       {!isForFM && (
         <Typography style={{ fontSize: '12px', textAlign: 'left', width: '100%' }}>
           {defaultDesc}
