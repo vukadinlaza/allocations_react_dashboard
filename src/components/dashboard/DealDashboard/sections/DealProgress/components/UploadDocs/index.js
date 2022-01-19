@@ -526,8 +526,6 @@ export default function UploadDocs({ deal, phase }) {
 }
 
 function PitchDeckCheckBox({ deal, classes }) {
-  console.log('pitch deck', deal);
-
   const [updateDeal] = useMutation(UPDATE_DEAL, {
     onError: console.error,
   });
