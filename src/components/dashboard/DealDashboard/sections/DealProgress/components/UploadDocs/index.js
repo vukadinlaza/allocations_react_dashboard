@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { gql, useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
-import documentIcon from '../../../../../assets/document-icon.svg';
-import documentGreenIcon from '../../../../../assets/document-green-icon.svg';
-import documentGrayIcon from '../../../../../assets/document-grayed-icon.svg';
-import uploadIcon from '../../../../../assets/upload-icon.svg';
-import greenCheckIcon from '../../../../../assets/check.svg';
-import trashIcon from '../../../../../assets/trash.svg';
-import warningIcon from '../../../../../assets/warning-red.svg';
-import useStyles from '../../../BuildStyles';
-import { PitchDeckCheckBox } from '../../FormFields';
+import documentIcon from '../../../../../../../assets/document-icon.svg';
+import documentGreenIcon from '../../../../../../../assets/document-green-icon.svg';
+import documentGrayIcon from '../../../../../../../assets/document-grayed-icon.svg';
+import redUploadIcon from '../../../../../../../assets/red-doc-upload.svg';
+import greenCheckCircle from '../../../../../../../assets/green-circled-checkmark.svg';
+import trashIcon from '../../../../../../../assets/trash.svg';
+import warningIcon from '../../../../../../../assets/warning-red.svg';
+import { phone } from '../../../../../../../utils/helpers';
+// import { PitchDeckCheckBox } from '../../../../../../NewBuild/BuildDealForm/FormFields';
 
 const ADD_DOC = gql`
   mutation addDealDocService($deal_id: String!, $task_id: String!, $doc: Upload!, $phase: String) {
@@ -25,6 +25,169 @@ const DELETE_DOC = gql`
   }
 `;
 
+const useStyles = makeStyles((theme) => ({
+  uploadContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    [theme.breakpoints.down(phone)]: {
+      flexDirection: 'column',
+    },
+  },
+  blueCheck: {
+    width: '26px',
+    height: '26px',
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: '50%',
+    justifyContent: 'center',
+    backgroundColor: '#0461ff',
+  },
+  buttonContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'nowrap',
+    [theme.breakpoints.down(phone)]: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom: '8px',
+    },
+  },
+  deleteDocButton: {
+    cursor: 'pointer',
+    backgroundColor: 'inherit',
+    border: 'none',
+    outline: 'none',
+  },
+  docErrorIconBox: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F2CECC',
+    borderRadius: '50%',
+    width: '58px',
+    height: '58px',
+  },
+  docIconBox: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ECF3FF',
+    borderRadius: '50%',
+    width: '48px',
+    height: '48px',
+  },
+  docIcon: {
+    height: '20px',
+  },
+  itemText: {
+    font: 'normal normal normal 18px/20px Roboto',
+    color: '#2A2B54',
+    width: '160px',
+    textAlign: 'center',
+    fontWeight: '500',
+    letterSpacing: '0px',
+    opacity: '1',
+    [theme.breakpoints.down(phone)]: {
+      font: 'normal normal normal 16px/20px Roboto',
+      maxWidth: '180px',
+    },
+  },
+  docUploadBox: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
+    background: '#FFFFFF 0% 0% no-repeat padding-box',
+    marginBottom: '16px',
+    paddingTop: '20px',
+    borderRadius: '15px',
+    width: '100%',
+    maxWidth: '1352px',
+    opacity: 1,
+    [theme.breakpoints.down(phone)]: {
+      display: 'flex',
+      flexDirection: 'column',
+      maxWidth: '600px',
+      padding: '23px',
+      paddingBottom: '0px',
+    },
+  },
+  uploadDocLoader: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    background: '#ECF3FF 0% 0% no-repeat padding-box',
+    border: '2px dashed #0461FF !important',
+    borderRadius: '10px',
+    width: '228px',
+    height: '184px',
+    margin: '10px',
+  },
+  uploadDocItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    background: '#fff 0% 0% no-repeat padding-box',
+    border: '1px dashed #CBD5E1 !important',
+    borderRadius: '10px',
+    opacity: 1,
+    width: '228px',
+    height: '184px',
+    margin: '10px',
+  },
+  uploadedDocItem: {
+    background: '#fff 0% 0% no-repeat padding-box',
+    border: '2px solid #10B981 !important',
+  },
+  uploadErrorLabel: {
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    whiteSpace: 'nowrap',
+    cursor: 'pointer',
+    color: '#8E9394',
+  },
+  uploadErrorItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    background: '#fff 0% 0% no-repeat padding-box',
+    border: '2px solid #EBEBEB !important',
+    borderRadius: '10px',
+    opacity: 1,
+    width: '228px',
+    height: '184px',
+    margin: '10px',
+  },
+  uploadIcon: {
+    color: 'blue',
+    height: '13.5px',
+    transparentheight: '35px',
+    [theme.breakpoints.down(phone)]: {
+      marginRight: '20px',
+      width: '30px',
+    },
+  },
+  uploadIconLabel: {
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    width: '143px',
+    height: '24px',
+    borderRadius: '12px',
+    whiteSpace: 'nowrap',
+    backgroundColor: '#FEE2E2',
+    cursor: 'pointer',
+    color: '#B91C1C',
+    fontWeight: '500',
+  },
+  greenCheckCircle: {
+    height: '13px',
+    width: '13px',
+    border: '1px solid #047857',
+  },
+}));
+
 const uploadTaskMap = {
   'Upload Term Sheet': {
     text: 'Portfolio Company Term Sheet',
@@ -33,13 +196,13 @@ const uploadTaskMap = {
     fileTypeText: 'PDF',
   },
   'Upload Company Deck': {
-    text: 'Pitch Deck',
+    text: 'Pitch Deck (Optional)',
     position: 2,
     fileType: 'application/pdf',
     fileTypeText: 'PDF',
   },
   'Upload Company Logo': {
-    text: 'Portfolio Company Logo',
+    text: 'Portfolio Company Logo (Optional)',
     position: 3,
     fileType: 'image/jpeg, image/jpg, image/png',
     fileTypeText: 'JPEG or PNG',
@@ -52,7 +215,7 @@ const uploadTaskMap = {
   },
 };
 
-const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId, classes }) => {
+const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes }) => {
   const [error, setError] = useState(false);
 
   const [addDoc, { _, loading: addDocLoading, error: addDocError }] = useMutation(ADD_DOC, {
@@ -139,22 +302,27 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
                     variables: {
                       doc: target.files[0],
                       task_id: document?._id,
-                      deal_id: deal?._id,
-                      phase: phaseId,
+                      deal_id: phase?.deal_id,
+                      phase: phase._id,
                     },
                   }).then(({ data }) => {
                     const { name } = target.files[0];
-                    setFilesUploaded((prev) => {
-                      const newFilesUploaded = {
-                        ...prev,
-                        [document.title]: {
-                          complete: true,
-                          document: { name, _id: data.addDealDocService._id },
-                        },
-                      };
-                      localStorage.setItem('buildFilesUploaded', JSON.stringify(newFilesUploaded));
-                      return newFilesUploaded;
-                    });
+                    if (data.addDealDocService) {
+                      setFilesUploaded((prev) => {
+                        const newFilesUploaded = {
+                          ...prev,
+                          [document.title]: {
+                            complete: true,
+                            document: { name, _id: data.addDealDocService._id },
+                          },
+                        };
+                        localStorage.setItem(
+                          'buildFilesUploaded',
+                          JSON.stringify(newFilesUploaded),
+                        );
+                        return newFilesUploaded;
+                      });
+                    }
                   });
                 }
               }}
@@ -168,7 +336,11 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
   return (
     <div className={`${classes.uploadDocItem} ${!complete ? '' : classes.uploadedDocItem}`}>
       <div className={classes.docIconBox} style={{ backgroundColor: complete && '#CBECC7' }}>
-        <img src={!complete ? documentIcon : documentGreenIcon} alt="document icon" />
+        <img
+          src={!complete ? documentIcon : documentGreenIcon}
+          alt="document icon"
+          className={classes.docIcon}
+        />
       </div>
       <Typography className={classes.itemText}>
         {complete
@@ -184,7 +356,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
                 variables: {
                   document_id: filesUploaded[document.title]?.document?._id,
                   task_id: document._id,
-                  phase_id: phaseId,
+                  phase_id: phase?._id,
                 },
               }).then(() => {
                 setFilesUploaded((prev) => {
@@ -202,14 +374,14 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
           </button>
         )}
       </Typography>
-      <div className={classes.uploadIcon} style={{ opacity: '1', textAlign: 'center' }}>
+      <div style={{ opacity: '1', textAlign: 'center' }}>
         <label
           htmlFor={`${document._id}`}
           className={classes.uploadIconLabel}
-          style={{ color: complete && '#39c522' }}
+          style={complete ? { backgroundColor: '#D1FAE5', color: '#047857' } : null}
         >
           <img
-            src={complete ? greenCheckIcon : uploadIcon}
+            src={complete ? greenCheckCircle : redUploadIcon}
             className={classes.uploadIcon}
             style={{ opacity: '1', cursor: 'pointer' }}
             alt={complete ? 'green check icon' : 'upload icon'}
@@ -231,22 +403,24 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
                   variables: {
                     doc: target.files[0],
                     task_id: document?._id,
-                    deal_id: deal?._id,
-                    phase: 'build',
+                    deal_id: phase?.deal_id,
+                    phase: phase?.name,
                   },
                 }).then(({ data }) => {
-                  const { name } = target.files[0];
-                  setFilesUploaded((prev) => {
-                    const newFilesUploaded = {
-                      ...prev,
-                      [document.title]: {
-                        complete: true,
-                        document: { name, _id: data.addDealDocService._id },
-                      },
-                    };
-                    localStorage.setItem('buildFilesUploaded', JSON.stringify(newFilesUploaded));
-                    return newFilesUploaded;
-                  });
+                  if (data.addDealDocService) {
+                    const { name } = target.files[0];
+                    setFilesUploaded((prev) => {
+                      const newFilesUploaded = {
+                        ...prev,
+                        [document.title]: {
+                          complete: true,
+                          document: { name, _id: data.addDealDocService._id },
+                        },
+                      };
+                      localStorage.setItem('buildFilesUploaded', JSON.stringify(newFilesUploaded));
+                      return newFilesUploaded;
+                    });
+                  }
                 });
               }
             }}
@@ -257,13 +431,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId,
   );
 };
 
-export default function UploadDocs({
-  dealType,
-  deal,
-  buildData,
-  setBuildData,
-  classes: checkBoxClasses,
-}) {
+export default function UploadDocs({ dealType, phase, classes: checkBoxClasses }) {
   const classes = useStyles();
 
   const docUploadMap = {
@@ -303,9 +471,8 @@ export default function UploadDocs({
 
   const [filesUploaded, setFilesUploaded] = useState(docUploadMap[dealType]);
 
-  const currentPhase = deal?.phases.find((phase) => phase.name === 'build');
-  const uploadTasks = currentPhase?.tasks
-    .filter((task) => task.type === 'fm-document-upload' && task.title !== 'Upload ID')
+  const uploadTasks = phase?.tasks
+    .filter((task) => task.type === 'fm-document-upload')
     .sort((a, b) => uploadTaskMap[a.title]?.position - uploadTaskMap[b.title]?.position);
 
   useEffect(() => {
@@ -323,18 +490,18 @@ export default function UploadDocs({
             classes={classes}
             filesUploaded={filesUploaded}
             setFilesUploaded={setFilesUploaded}
-            deal={deal}
-            phaseId={currentPhase._id}
+            phase={phase}
+            phaseId={phase._id}
           />
         ))}
       </div>
-      {deal?.type === 'spv' && filesUploaded['Upload Company Deck']?.complete && (
+      {/* {deal?.type === 'spv' && filesUploaded['Upload Company Deck']?.complete && (
         <PitchDeckCheckBox
           buildData={buildData}
           setBuildData={setBuildData}
           classes={checkBoxClasses}
         />
-      )}
+      )} */}
     </main>
   );
 }
