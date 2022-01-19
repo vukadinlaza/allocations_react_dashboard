@@ -6,10 +6,8 @@ import { toast } from 'react-toastify';
 import documentIcon from '../../../../../../../assets/document-icon.svg';
 import documentGreenIcon from '../../../../../../../assets/document-green-icon.svg';
 import documentGrayIcon from '../../../../../../../assets/document-grayed-icon.svg';
-import uploadIcon from '../../../../../../../assets/upload-icon.svg';
 import redUploadIcon from '../../../../../../../assets/red-doc-upload.svg';
 import greenCheckCircle from '../../../../../../../assets/green-circled-checkmark.svg';
-
 import trashIcon from '../../../../../../../assets/trash.svg';
 import warningIcon from '../../../../../../../assets/warning-red.svg';
 import { phone } from '../../../../../../../utils/helpers';
@@ -309,17 +307,22 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
                     },
                   }).then(({ data }) => {
                     const { name } = target.files[0];
-                    setFilesUploaded((prev) => {
-                      const newFilesUploaded = {
-                        ...prev,
-                        [document.title]: {
-                          complete: true,
-                          document: { name, _id: data.addDealDocService._id },
-                        },
-                      };
-                      localStorage.setItem('buildFilesUploaded', JSON.stringify(newFilesUploaded));
-                      return newFilesUploaded;
-                    });
+                    if (data.addDealDocService) {
+                      setFilesUploaded((prev) => {
+                        const newFilesUploaded = {
+                          ...prev,
+                          [document.title]: {
+                            complete: true,
+                            document: { name, _id: data.addDealDocService._id },
+                          },
+                        };
+                        localStorage.setItem(
+                          'buildFilesUploaded',
+                          JSON.stringify(newFilesUploaded),
+                        );
+                        return newFilesUploaded;
+                      });
+                    }
                   });
                 }
               }}
@@ -404,18 +407,20 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
                     phase: phase?.name,
                   },
                 }).then(({ data }) => {
-                  const { name } = target.files[0];
-                  setFilesUploaded((prev) => {
-                    const newFilesUploaded = {
-                      ...prev,
-                      [document.title]: {
-                        complete: true,
-                        document: { name, _id: data.addDealDocService._id },
-                      },
-                    };
-                    localStorage.setItem('buildFilesUploaded', JSON.stringify(newFilesUploaded));
-                    return newFilesUploaded;
-                  });
+                  if (data.addDealDocService) {
+                    const { name } = target.files[0];
+                    setFilesUploaded((prev) => {
+                      const newFilesUploaded = {
+                        ...prev,
+                        [document.title]: {
+                          complete: true,
+                          document: { name, _id: data.addDealDocService._id },
+                        },
+                      };
+                      localStorage.setItem('buildFilesUploaded', JSON.stringify(newFilesUploaded));
+                      return newFilesUploaded;
+                    });
+                  }
                 });
               }
             }}

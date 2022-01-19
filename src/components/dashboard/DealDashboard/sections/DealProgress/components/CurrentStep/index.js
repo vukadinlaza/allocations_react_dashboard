@@ -8,6 +8,7 @@ import grayCheck from '../../../../../../../assets/gray-check.svg';
 import styles from '../../../../styles.ts';
 import UploadDocs from '../UploadDocs';
 import SignAgreementStep from '../SignAgreementStep';
+import { capitalizePhaseName } from '../CompletedTasksList';
 
 const defaultDesc =
   'An Allocations representative will be reaching out shortly to assist you in completing this step. If you have any questions, do not hesitate to contact support@allocations.com.';
@@ -29,7 +30,9 @@ const CurrentStep = ({ classes, phase, task, deal }) => {
         <img alt="gray check" src={grayCheck} />
         <Typography>
           {phase &&
-            `${phase.name}: ${isUploadDocumentTask ? 'Upload Your Documents' : task?.title}`}
+            `${capitalizePhaseName(phase.name)}: ${
+              isUploadDocumentTask ? 'Upload Your Documents' : task?.title
+            }`}
         </Typography>
         <img
           alt={isForFM ? 'for you icon' : 'allocations icon'}
