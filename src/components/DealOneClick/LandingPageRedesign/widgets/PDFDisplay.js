@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-// import { Document, Page, pdfjs } from 'react-pdf';
+import { Document, Page, pdfjs } from 'react-pdf';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles } from '@material-ui/core/styles';
 import { phone, tablet } from '../../../../utils/helpers';
 
-// pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -16,12 +16,13 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     [theme.breakpoints.down(phone)]: {
       width: '100vw',
+      paddingRight: '80px',
+      float: 'left',
       marginTop: '20px',
     },
     [theme.breakpoints.down(tablet)]: {
       float: 'left',
       width: '75vw',
-      marginBottom: '20px',
     },
   },
   arrowLeft: {
@@ -87,29 +88,65 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function PDFDisplay({ pdf }) {
-  // const classes = useStyles();
-  // const [numPages, setNumPages] = useState(1);
-  // const [pageNumber, setPageNumber] = useState(1);
-  // const isMobile = useMediaQuery('(max-width:600px)');
-  // const isTablet = useMediaQuery('(max-width:768px)');
+  const classes = useStyles();
+  const [numPages, setNumPages] = useState(1);
+  const [pageNumber, setPageNumber] = useState(1);
+  const isMobile = useMediaQuery('(max-width:600px)');
+  const isTablet = useMediaQuery('(max-width:768px)');
 
-  // const onDocumentLoadSuccess = ({ numPages }) => {
-  //   setNumPages(numPages);
-  //   setPageNumber(1);
-  // };
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+    setPageNumber(1);
+  };
 
-  // const changePage = (offset) => {
-  //   setPageNumber((prevPageNumber) => prevPageNumber + offset);
-  // };
+  const changePage = (offset) => {
+    setPageNumber((prevPageNumber) => prevPageNumber + offset);
+  };
 
-  // const previousPage = () => {
-  //   changePage(-1);
-  // };
+  const previousPage = () => {
+    changePage(-1);
+  };
 
-  // const nextPage = () => {
-  //   changePage(1);
-  // };
+  const nextPage = () => {
+    changePage(1);
+  };
 
-  return <div style={{ backgroundColor: '', width: '800px' }}>hello</div>;
+  return (
+    <div style={{ backgroundColor: '', width: '800px' }}>
+      <Document file={pdf} onLoadSuccess={onDocumentLoadSuccess}>
+        {isMobile ? (
+          <Page pageNumber={pageNumber} scale={0.448} className={classes.pdfContainer} />
+        ) : isTablet ? (
+          <Page pageNumber={pageNumber} scale={1} className={classes.pdfContainer} />
+        ) : (
+          <Page pageNumber={pageNumber} scale={1.331} className={classes.pdfContainer} />
+        )}
+      </Document>
+
+      <div className={classes.container}>
+        <button
+          type="button"
+          className={classes.arrowLeft}
+          disabled={pageNumber <= 1}
+          onClick={previousPage}
+        >
+          &lt;
+        </button>
+        <span className={classes.numberContainer}>
+          <span className={classes.numbers}>
+            {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
+          </span>
+        </span>
+        <button
+          type="button"
+          className={classes.arrowRight}
+          disabled={pageNumber >= numPages}
+          onClick={nextPage}
+        >
+          &gt;
+        </button>
+      </div>
+    </div>
+  );
 }
 export default PDFDisplay;
