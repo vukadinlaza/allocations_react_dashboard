@@ -5,7 +5,6 @@ import { gql, useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import documentIcon from '../../../../../../../assets/document-icon.svg';
 import documentGreenIcon from '../../../../../../../assets/document-green-icon.svg';
-import documentGrayIcon from '../../../../../../../assets/document-grayed-icon.svg';
 import redUploadIcon from '../../../../../../../assets/red-doc-upload.svg';
 import greenCheckCircle from '../../../../../../../assets/green-circled-checkmark.svg';
 import trashIcon from '../../../../../../../assets/trash.svg';
@@ -243,6 +242,9 @@ const useStyles = makeStyles((theme) => ({
     color: '#FFFFFF',
     textTransform: 'none',
     outline: 'none',
+    '&:active': {
+      backgroundColor: '#0444B4',
+    },
   },
   continueButtonDisabled: {
     font: 'normal normal bold 16px Roboto',
@@ -284,14 +286,13 @@ const uploadTaskMap = {
 };
 
 const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes }) => {
-  const [error, setError] = useState(false);
-
   const [addDoc, { _, loading: addDocLoading, error: addDocError }] = useMutation(ADD_DOC, {
     onCompleted: ({ addDealDocService: uploadResponse }) => {
       if (uploadResponse?.success) toast.success('Success! Your document has been added');
     },
     onError: console.error,
   });
+
   const [deleteDoc, { loading: deleteDocLoading, error: deleteDocError }] = useMutation(
     DELETE_DOC,
     {
@@ -306,6 +307,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
     },
   );
 
+  const [error, setError] = useState(false);
   const { complete } = filesUploaded[document.title];
   const acceptedFiles = uploadTaskMap[document.title]?.fileType;
 
@@ -320,23 +322,24 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
 
   const truncFile = (file) => {
     let fileName = file;
-
     if (file.length > 25) {
       const split = file.split('.');
       fileName = `${split[0].slice(0, 25)}...${split[1]}`;
     }
-
     return fileName;
   };
 
-  if (addDocLoading || deleteDocLoading) {
+  const isError = error || addDocError || deleteDocError;
+  const isLoading = addDocLoading || deleteDocLoading;
+
+  if (isLoading)
     return (
       <div className={classes.uploadDocLoader}>
         <CircularProgress />
       </div>
     );
-  }
-  if (error || addDocError || deleteDocError) {
+
+  if (isError)
     return (
       <div>
         <label htmlFor={`${document._id}`}>
@@ -392,7 +395,6 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
         </form>
       </div>
     );
-  }
 
   return (
     <div>
@@ -556,7 +558,6 @@ export default function UploadDocs({ deal, phase }) {
             filesUploaded={filesUploaded}
             setFilesUploaded={setFilesUploaded}
             phase={phase}
-            phaseId={phase._id}
           />
         ))}
       </div>
