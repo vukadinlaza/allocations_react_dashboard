@@ -42,9 +42,6 @@ const SignAgreementStep = ({ classes, task, deal }) => {
       ...agreementLink,
       domainVerification: false,
       onSubmit: () => {
-        localStorage.removeItem('buildData');
-        localStorage.removeItem('buildDeal');
-        localStorage.removeItem('buildFilesUploaded');
         isSigned();
         DocSpring.closeModal();
         signInvestmentAgreement({
