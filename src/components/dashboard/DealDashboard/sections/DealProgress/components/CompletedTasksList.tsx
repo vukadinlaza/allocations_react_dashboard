@@ -9,7 +9,7 @@ import upArrow from '../../../../../../assets/keyboard_arrow_up.svg';
 import styles from '../../../styles';
 import { Task } from '../../../types';
 
-const capitalizePhaseName = (phase: string): string => {
+export const capitalizePhaseName = (phase: string): string => {
   return phase
     .split('-')
     .reduce((acc, str) => {

@@ -20,12 +20,14 @@ const stepMap = new Map([
   ['post-closing', 'Post-Closing'],
 ]);
 
-const DealProgress = ({ data, handleComplete, updateDealLoading, classes }) => {
+const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classes }) => {
   const [currentPhase, setCurrentPhase] = useState('Pre-Onboarding');
   const [currentTask, setCurrentTask] = useState({});
   const [nextTask, setNextTask] = useState({});
   const [nextTaskPhase, setNextTaskPhase] = useState('Pre-Onboarding');
   const [activeStep, setActiveStep] = useState(0);
+
+  // console.log('DATA', data);
 
   useEffect(() => {
     const phase = data?.phases?.find((phase) =>
@@ -77,7 +79,12 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, classes }) => {
         ) : (
           <Grid item xs={10} lg={10} className={classes.currentStepContainer}>
             <Typography className={classes.stepText}>Current Step</Typography>
-            <CurrentStep phase={currentPhase} task={currentTask} deal={data} />
+            <CurrentStep
+              phase={data?.phases.find((phase) => phase.name === currentPhase.toLowerCase())}
+              task={currentTask}
+              deal={data}
+              orgSlug={orgSlug}
+            />
           </Grid>
         )}
         {nextTask !== undefined && (

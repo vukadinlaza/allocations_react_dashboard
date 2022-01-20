@@ -17,6 +17,7 @@ const DEAL = gql`
   query getDealByIdWithTasks($deal_id: String) {
     getDealByIdWithTasks(deal_id: $deal_id) {
       _id
+      type
       metadata
       manager_name
       name
@@ -125,6 +126,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     data: dealData?.getDealByIdWithTasks,
     handleComplete,
     updateDealLoading,
+    orgSlug: currentOrg?.slug,
   };
 
   const getTabComponent = () => {
