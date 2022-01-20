@@ -8,10 +8,10 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import CancelIcon from '@material-ui/icons/Cancel';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import { toast } from 'react-toastify';
 import styles from '../../../styles';
 import { validateEmail } from '../../../../../../utils/helpers';
-import { toast } from 'react-toastify';
-import classNames from 'classnames';
+
 interface Props extends WithStyles<typeof styles> {
   orgSlug: string;
   dealId: string;
@@ -49,7 +49,7 @@ const InviteModal: React.FC<Props> = ({ classes, orgSlug, dealId }) => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    const value = e.currentTarget.value;
+    const { value } = e.currentTarget;
     if (![',', 'Enter', ' '].includes(value.charAt(value.length - 1))) {
       setInputValue(value);
     }
@@ -144,9 +144,6 @@ const InviteModal: React.FC<Props> = ({ classes, orgSlug, dealId }) => {
                     value={inputValue || ''}
                     InputProps={{
                       classes: { input: classes.input, root: classes.inputRoot },
-                    }}
-                    inputProps={{
-                      style: { padding: '14.5px 14px', background: 'white' },
                     }}
                     onKeyPress={updateEmails}
                   />

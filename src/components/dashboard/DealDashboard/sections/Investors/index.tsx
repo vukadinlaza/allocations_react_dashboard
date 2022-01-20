@@ -22,6 +22,20 @@ import { titleCase } from '../../../../../utils/helpers';
 import { getChipStyle, sortByStatus } from './helpers';
 import InviteModal from './components/InviteModal';
 
+export interface Investment {
+  amount: number;
+  investor: {
+    accredidation_status: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+    name: string;
+    _id: string;
+  };
+  status: string;
+  updated_at: string;
+  _id: string;
+}
 interface Props extends WithStyles<typeof styles> {
   investorsData: Investment[];
   dealId: string;
@@ -37,21 +51,6 @@ interface Header {
   alignHeader?: boolean;
   isSortable?: boolean;
   customSort?: boolean;
-}
-
-export interface Investment {
-  amount: number;
-  investor: {
-    accredidation_status: string;
-    email: string;
-    first_name: string;
-    last_name: string;
-    name: string;
-    _id: string;
-  };
-  status: string;
-  updated_at: string;
-  _id: string;
 }
 
 const investorsHeaders: Header[] = [
@@ -114,7 +113,7 @@ const Investors: React.FC<Props> = ({ classes, investorsData, orgSlug, dealId })
     setCurrentView(newView);
   };
 
-  const getCellContent = (type: string, row: Investment, headerValue: string) => {
+  const getCellContent = (type: string, row: Investment) => {
     switch (type) {
       case 'investor': {
         const { investor } = row;
@@ -125,7 +124,7 @@ const Investors: React.FC<Props> = ({ classes, investorsData, orgSlug, dealId })
               className={`${classes.cellValue} ${classes.textTop}`}
               style={{ marginBottom: '4px' }}
             >
-              {fullName ? fullName : '---'}
+              {fullName || '---'}
             </p>
             <p className={`${classes.cellValue} ${classes.textBottom}`}>{investor.email}</p>
           </div>
@@ -155,7 +154,7 @@ const Investors: React.FC<Props> = ({ classes, investorsData, orgSlug, dealId })
           </div>
         );
       default:
-        return <p></p>;
+        return <p />;
     }
   };
 
@@ -166,9 +165,9 @@ const Investors: React.FC<Props> = ({ classes, investorsData, orgSlug, dealId })
         return dataCopy.sort((a: Investment, b: Investment) => {
           const aFullName = `${a?.investor?.first_name}${a?.investor?.last_name}`;
           const bFullName = `${b?.investor?.first_name}${b?.investor?.last_name}`;
-          const _a = aFullName ? aFullName : a?.investor?.email;
-          const _b = bFullName ? bFullName : b?.investor?.email;
-          return ('' + (order === 'desc' ? _b : _a)).localeCompare(order === 'desc' ? _a : _b);
+          const _a = aFullName || a?.investor?.email;
+          const _b = bFullName || b?.investor?.email;
+          return ` ${order === 'desc' ? _b : _a}`.localeCompare(order === 'desc' ? _a : _b);
         });
       case 'status': {
         return sortByStatus(dataCopy, 'status', order);
@@ -201,11 +200,9 @@ const Investors: React.FC<Props> = ({ classes, investorsData, orgSlug, dealId })
     ? investorsData.filter((investment: Investment) => {
         const { investor } = investment;
         const investorName = `${investor.first_name}${investor.last_name}`;
-        return `${investorName}${investment?.investor?.email}`
+        return !!`${investorName}${investment?.investor?.email}`
           .toLocaleLowerCase()
-          .includes(searchTerm.toLocaleLowerCase())
-          ? true
-          : false;
+          .includes(searchTerm.toLocaleLowerCase());
       })
     : investorsData;
 
@@ -213,7 +210,7 @@ const Investors: React.FC<Props> = ({ classes, investorsData, orgSlug, dealId })
     <>
       <Grid container spacing={containerSpacing}>
         <Grid item xs={1} />
-        {dashboardBoxes.map((box, index) => (
+        {dashboardBoxes.map((box) => (
           <Grid key={uuidv4()} item lg={boxSize}>
             <Paper elevation={0} className={classes.smallBox}>
               <Typography className={classes.boxTitle}>{box.title}</Typography>
@@ -222,7 +219,7 @@ const Investors: React.FC<Props> = ({ classes, investorsData, orgSlug, dealId })
           </Grid>
         ))}
         {invisibleBoxes.length &&
-          invisibleBoxes.map((box, index) => <Grid item key={uuidv4()} xs={boxSize} />)}
+          invisibleBoxes.map(() => <Grid item key={uuidv4()} xs={boxSize} />)}
         <Grid item xs={boxSize} className={classes.inviteButtonContainer}>
           <InviteModal orgSlug={orgSlug} dealId={dealId} />
         </Grid>
@@ -244,9 +241,6 @@ const Investors: React.FC<Props> = ({ classes, investorsData, orgSlug, dealId })
                 </InputAdornment>
               ),
               classes: { input: classes.input, root: classes.inputRoot },
-            }}
-            inputProps={{
-              style: { padding: '14.5px 14px 14.5px 0', background: 'white' },
             }}
           />
         </Grid>
@@ -293,7 +287,7 @@ const Investors: React.FC<Props> = ({ classes, investorsData, orgSlug, dealId })
               getCellContent={getCellContent}
               data={data}
               listOf="investors"
-              pagination={data.length >= 10 ? true : false}
+              pagination={data.length >= 10}
               getSortedData={getSortedData}
             />
           </Grid>

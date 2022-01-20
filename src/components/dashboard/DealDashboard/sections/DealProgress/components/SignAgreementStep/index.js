@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { CircularProgress } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import styles from '../../../../styles.ts';
+import styles from '../../../../styles';
 import { AgreementBox } from '../../../../../../NewBuild/BuildDealForm/FormComponents/AgreementSigner';
 
 const GET_INVESTMENT_AGREEMENT = gql`

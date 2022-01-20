@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
 import { withLDProvider } from 'launchdarkly-react-client-sdk';
 
-import DealDashboard from './components/dashboard/DealDashboard/index.tsx';
+import DealDashboard from './components/dashboard/DealDashboard/index';
 import FundManagerDashboard from './components/dashboard/FundManagerDashboard';
 import InvestorDashboard from './components/dashboard/InvestorDashboard';
 

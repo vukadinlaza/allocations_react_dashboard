@@ -9,6 +9,7 @@ import {
   KYCServiceTask,
   SignTask,
 } from '../Tasks';
+// eslint-disable-next-line import/extensions
 import styles from '../styles';
 
 const ADD_DOC = gql`
@@ -90,7 +91,7 @@ const TaskAction = ({
       setTaskLoading(false);
       refetchDeal();
     },
-    onError: (error) => {
+    onError: () => {
       setTaskLoading(false);
     },
   });

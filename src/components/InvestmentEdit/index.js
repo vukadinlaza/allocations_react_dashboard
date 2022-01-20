@@ -150,7 +150,7 @@ export default function InvestmentEdit({
                 type="number"
                 value={get(investment, 'amount', '') || 0}
                 onChange={(e) =>
-                  updateInvestmentProp({ prop: 'amount', newVal: parseInt(e.target.value, 0) })
+                  updateInvestmentProp({ prop: 'amount', newVal: parseInt(e.target.value, 10) })
                 }
                 label="Amount"
                 variant="outlined"

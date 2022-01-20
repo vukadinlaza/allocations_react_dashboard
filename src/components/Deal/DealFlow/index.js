@@ -101,134 +101,6 @@ const useStyles = makeStyles((theme) => ({
     margin: '.5rem',
   },
 }));
-
-export default function InvestmentFlow({ deal, investor, refetch }) {
-  const [status, setStatus] = useState('invited');
-  const classes = useStyles();
-  const { data } = useQuery(GET_INVESTOR, {
-    variables: { deal_id: deal._id, _id: investor._id },
-    pollInterval: 1000,
-  });
-  if (!data) return null;
-  const { investor: polledInvestor } = data;
-  const investment = _.get(polledInvestor, 'dealInvestments[0]', null);
-  const onboardingLinkType = getOnboardingLinkType(deal.onboarding_link) || 'docusign';
-  const { approved } = deal;
-  const docs = _.get(polledInvestor, 'documents') || [];
-  const spvDoc = investment?.documents.find((d) => {
-    return (
-      d?.path.includes('SPV') ||
-      d?.path.includes('LPA') ||
-      d?.path.toLowerCase().includes('fund') ||
-      d?.path.toLowerCase().includes('final')
-    );
-  });
-  const hasWired = investment?.status === 'wired' || investment?.status === 'complete';
-  const hasSigned =
-    (investment?.status === 'signed' ||
-      investment?.status === 'wired' ||
-      investment?.status === 'complete') &&
-    spvDoc;
-  const hasKyc = docs.find(
-    (d) => d.documentName && (d.documentName.includes('W-8') || d.documentName.includes('W-9')),
-  );
-  return (
-    <>
-      <div className={classes.tabs}>
-        <Grid container justify="center">
-          <Grid item xs={12} sm={3}>
-            <ButtonBase
-              className={status === 'invited' ? classes.activeTab : classes.tab}
-              style={{ borderRight: '1px solid #e1e9ec' }}
-              onClick={() => setStatus('invited')}
-            >
-              Data Room{' '}
-              {investment && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
-            </ButtonBase>
-          </Grid>
-
-          <Grid item xs={12} sm={3}>
-            <ButtonBase
-              className={status === 'pledged' ? classes.activeTab : classes.tab}
-              style={{
-                borderRight: '1px solid #e1e9ec',
-                cursor: approved ? 'cursor' : 'not-allowed',
-              }}
-              onClick={() => approved && setStatus('pledged')}
-            >
-              Sign {!approved && <FontAwesomeIcon icon="lock" />}{' '}
-              {hasSigned && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
-            </ButtonBase>
-          </Grid>
-
-          <Grid item xs={12} sm={3}>
-            <ButtonBase
-              className={status === 'kyc' ? classes.activeTab : classes.tab}
-              style={{
-                borderRight: '1px solid #e1e9ec',
-                cursor: approved ? 'cursor' : 'not-allowed',
-              }}
-              onClick={() => approved && setStatus('kyc')}
-            >
-              KYC {!approved && <FontAwesomeIcon icon="lock" />}{' '}
-              {hasKyc && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
-            </ButtonBase>
-          </Grid>
-
-          <Grid item xs={12} sm={3}>
-            <ButtonBase
-              className={status === 'onboarded' ? classes.activeTab : classes.tab}
-              style={{ cursor: approved ? 'cursor' : 'not-allowed' }}
-              onClick={() => approved && setStatus('onboarded')}
-            >
-              Wire {!approved && <FontAwesomeIcon icon="lock" />}{' '}
-              {hasWired && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
-            </ButtonBase>
-          </Grid>
-        </Grid>
-      </div>
-
-      <>
-        {status === 'invited' && <DataRoom deal={deal} />}
-        {status === 'pledging' && (
-          <Pledging investment={investment} investor={investor} deal={deal} refetch={refetch} />
-        )}
-        {status === 'onboarded' && <Wire investment={investment} deal={deal} />}
-        {/** Always render Onboarding so that the Docusign loads in... * */}
-        {onboardingLinkType === 'docusign' && status === 'pledged' && (
-          <Onboarding
-            status={status}
-            dealInvestments={polledInvestor.dealInvestments}
-            investment={investment}
-            deal={deal}
-            investor={investor}
-            data={data}
-            hasSigned={hasSigned}
-            refetch={refetch}
-          />
-        )}
-        {status === 'kyc' && (
-          <KYCDocusign
-            status={status}
-            investment={investment}
-            deal={deal}
-            investor={investor}
-            hasKyc={hasKyc}
-          />
-        )}
-        {onboardingLinkType === 'hellosign' && (
-          <HelloSignOnboarding
-            status={status}
-            investment={investment}
-            deal={deal}
-            investor={investor}
-          />
-        )}
-      </>
-    </>
-  );
-}
-
 function DataRoom({ deal }) {
   return (
     <div className="deal-data-room">
@@ -305,167 +177,6 @@ function PledgingLegacy({ deal }) {
       </svg>
       <strong style={{ color: '#4bc076' }}>Pledge Document</strong>
     </a>
-  );
-}
-
-const PLEDGE = gql`
-  mutation Pledge($investment: InvestmentInput!) {
-    updateInvestment(investment: $investment) {
-      _id
-      amount
-      status
-    }
-  }
-`;
-
-function Pledging({ investment, deal, refetch, investor }) {
-  const [amount, setAmount] = useState('');
-  const classes = useStyles();
-  const [updateInvestment] = useMutation(PLEDGE, {
-    onCompleted: refetch,
-  });
-
-  useEffect(() => {
-    setAmount(investment.amount || '');
-  }, [investment.amount]);
-
-  const updateAmount = (e) => {
-    const val = e.target.value;
-    if (!Number.isNaN(Number(val))) setAmount(val);
-  };
-
-  const submit = () => {
-    // TODO - check that its over the min investment (if min investment exists)
-
-    updateInvestment({
-      variables: {
-        investment: {
-          ..._.omit(investment, '__typename'),
-          status: 'pledged',
-          amount: Number(amount),
-        },
-      },
-    });
-  };
-
-  const unpledge = () => {
-    updateInvestment({
-      variables: {
-        investment: { ..._.omit(investment, '__typename'), status: 'invited', amount: null },
-      },
-    });
-  };
-
-  // if no investor just show doc
-  const noInvestor = !investor || _.isEmpty(investor);
-
-  // old deal is deal created before May, 1
-  const oldDeal = !deal.created_at || deal.created_at < 1588334400000;
-  if (oldDeal) {
-    return (
-      <div className="pledging">
-        <PledgingLegacy deal={deal} />
-      </div>
-    );
-  }
-
-  if (noInvestor) {
-    return (
-      <div className="pledging">
-        <div className="pledge-data">
-          <PledgesViz deal={deal} />
-          <PledgesTable deal={deal} />
-        </div>
-        <hr />
-        <PledgingLegacy deal={deal} />
-      </div>
-    );
-  }
-
-  return (
-    <>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={7}>
-          <Paper className={classes.paper}>
-            {investment.status === 'invited' && (
-              <>
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  style={{ marginBottom: 16 }}
-                  label="Pledge Amount"
-                  value={amount}
-                  onChange={updateAmount}
-                />
-                <Button size="large" fullWidth variant="contained" color="primary" onClick={submit}>
-                  Pledge
-                </Button>
-
-                <Typography
-                  variant="body2"
-                  className={classes.text}
-                  style={{ marginTop: 8, textAlign: 'center', lineHeight: '34px' }}
-                >
-                  or <br />
-                  pledge via spreadsheet <PledgingLegacy deal={deal} />
-                </Typography>
-              </>
-            )}
-            {investment.status !== 'invited' && (
-              <>
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  className="pledge-amount"
-                  label="Pledge Amount"
-                  value={amount}
-                  onChange={updateAmount}
-                />
-                <ButtonGroup style={{ marginTop: 16 }}>
-                  <Button variant="contained" color="primary" onClick={submit}>
-                    Edit
-                  </Button>
-                  <Button color="primary" onClick={unpledge}>
-                    Unpledge
-                  </Button>
-                </ButtonGroup>
-              </>
-            )}
-          </Paper>
-
-          <PledgesViz deal={deal} />
-        </Grid>
-
-        <Grid item xs={12} sm={5}>
-          <PledgesTable deal={deal} />
-        </Grid>
-      </Grid>
-    </>
-  );
-}
-
-function PledgesTable({ deal }) {
-  const classes = useStyles();
-
-  if (!deal.pledges) return null;
-
-  return (
-    <Paper className={classes.paper}>
-      <Table size="small">
-        <TableBody>
-          {deal.pledges.map((pledge) => (
-            <TableRow key={pledge.timestamp}>
-              <TableCell>{pledge.initials}</TableCell>
-              <TableCell>${nWithCommas(pledge.amount)}</TableCell>
-            </TableRow>
-          ))}
-          <TableRow className="total">
-            <TableCell>Total</TableCell>
-            <TableCell>${nWithCommas(_.sumBy(deal.pledges, 'amount'))}</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </Paper>
   );
 }
 
@@ -688,6 +399,31 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
   );
 }
 
+function PledgesTable({ deal }) {
+  const classes = useStyles();
+
+  if (!deal.pledges) return null;
+
+  return (
+    <Paper className={classes.paper}>
+      <Table size="small">
+        <TableBody>
+          {deal.pledges.map((pledge) => (
+            <TableRow key={pledge.timestamp}>
+              <TableCell>{pledge.initials}</TableCell>
+              <TableCell>${nWithCommas(pledge.amount)}</TableCell>
+            </TableRow>
+          ))}
+          <TableRow className="total">
+            <TableCell>Total</TableCell>
+            <TableCell>${nWithCommas(_.sumBy(deal.pledges, 'amount'))}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </Paper>
+  );
+}
+
 // eslint-disable-next-line no-unused-vars
 function KYCDocusign({ deal, investor, status, hasKyc }) {
   const [loading, setLoading] = useState(true);
@@ -741,5 +477,268 @@ function KYCDocusign({ deal, investor, status, hasKyc }) {
         </div>
       </div>
     </Paper>
+  );
+}
+
+function Pledging({ investment, deal, refetch, investor }) {
+  const PLEDGE = gql`
+    mutation Pledge($investment: InvestmentInput!) {
+      updateInvestment(investment: $investment) {
+        _id
+        amount
+        status
+      }
+    }
+  `;
+
+  const [amount, setAmount] = useState('');
+  const classes = useStyles();
+  const [updateInvestment] = useMutation(PLEDGE, {
+    onCompleted: refetch,
+  });
+
+  useEffect(() => {
+    setAmount(investment.amount || '');
+  }, [investment.amount]);
+
+  const updateAmount = (e) => {
+    const val = e.target.value;
+    if (!Number.isNaN(Number(val))) setAmount(val);
+  };
+
+  const submit = () => {
+    // TODO - check that its over the min investment (if min investment exists)
+
+    updateInvestment({
+      variables: {
+        investment: {
+          ..._.omit(investment, '__typename'),
+          status: 'pledged',
+          amount: Number(amount),
+        },
+      },
+    });
+  };
+
+  const unpledge = () => {
+    updateInvestment({
+      variables: {
+        investment: { ..._.omit(investment, '__typename'), status: 'invited', amount: null },
+      },
+    });
+  };
+
+  // if no investor just show doc
+  const noInvestor = !investor || _.isEmpty(investor);
+
+  // old deal is deal created before May, 1
+  const oldDeal = !deal.created_at || deal.created_at < 1588334400000;
+  if (oldDeal) {
+    return (
+      <div className="pledging">
+        <PledgingLegacy deal={deal} />
+      </div>
+    );
+  }
+
+  if (noInvestor) {
+    return (
+      <div className="pledging">
+        <div className="pledge-data">
+          <PledgesViz deal={deal} />
+          <PledgesTable deal={deal} />
+        </div>
+        <hr />
+        <PledgingLegacy deal={deal} />
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={7}>
+          <Paper className={classes.paper}>
+            {investment.status === 'invited' && (
+              <>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  style={{ marginBottom: 16 }}
+                  label="Pledge Amount"
+                  value={amount}
+                  onChange={updateAmount}
+                />
+                <Button size="large" fullWidth variant="contained" color="primary" onClick={submit}>
+                  Pledge
+                </Button>
+
+                <Typography
+                  variant="body2"
+                  className={classes.text}
+                  style={{ marginTop: 8, textAlign: 'center', lineHeight: '34px' }}
+                >
+                  or <br />
+                  pledge via spreadsheet <PledgingLegacy deal={deal} />
+                </Typography>
+              </>
+            )}
+            {investment.status !== 'invited' && (
+              <>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  className="pledge-amount"
+                  label="Pledge Amount"
+                  value={amount}
+                  onChange={updateAmount}
+                />
+                <ButtonGroup style={{ marginTop: 16 }}>
+                  <Button variant="contained" color="primary" onClick={submit}>
+                    Edit
+                  </Button>
+                  <Button color="primary" onClick={unpledge}>
+                    Unpledge
+                  </Button>
+                </ButtonGroup>
+              </>
+            )}
+          </Paper>
+
+          <PledgesViz deal={deal} />
+        </Grid>
+
+        <Grid item xs={12} sm={5}>
+          <PledgesTable deal={deal} />
+        </Grid>
+      </Grid>
+    </>
+  );
+}
+
+export default function InvestmentFlow({ deal, investor, refetch }) {
+  const [status, setStatus] = useState('invited');
+  const classes = useStyles();
+  const { data } = useQuery(GET_INVESTOR, {
+    variables: { deal_id: deal._id, _id: investor._id },
+    pollInterval: 1000,
+  });
+  if (!data) return null;
+  const { investor: polledInvestor } = data;
+  const investment = _.get(polledInvestor, 'dealInvestments[0]', null);
+  const onboardingLinkType = getOnboardingLinkType(deal.onboarding_link) || 'docusign';
+  const { approved } = deal;
+  const docs = _.get(polledInvestor, 'documents') || [];
+  const spvDoc = investment?.documents.find((d) => {
+    return (
+      d?.path.includes('SPV') ||
+      d?.path.includes('LPA') ||
+      d?.path.toLowerCase().includes('fund') ||
+      d?.path.toLowerCase().includes('final')
+    );
+  });
+  const hasWired = investment?.status === 'wired' || investment?.status === 'complete';
+  const hasSigned =
+    (investment?.status === 'signed' ||
+      investment?.status === 'wired' ||
+      investment?.status === 'complete') &&
+    spvDoc;
+  const hasKyc = docs.find(
+    (d) => d.documentName && (d.documentName.includes('W-8') || d.documentName.includes('W-9')),
+  );
+  return (
+    <>
+      <div className={classes.tabs}>
+        <Grid container justify="center">
+          <Grid item xs={12} sm={3}>
+            <ButtonBase
+              className={status === 'invited' ? classes.activeTab : classes.tab}
+              style={{ borderRight: '1px solid #e1e9ec' }}
+              onClick={() => setStatus('invited')}
+            >
+              Data Room{' '}
+              {investment && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
+            </ButtonBase>
+          </Grid>
+
+          <Grid item xs={12} sm={3}>
+            <ButtonBase
+              className={status === 'pledged' ? classes.activeTab : classes.tab}
+              style={{
+                borderRight: '1px solid #e1e9ec',
+                cursor: approved ? 'cursor' : 'not-allowed',
+              }}
+              onClick={() => approved && setStatus('pledged')}
+            >
+              Sign {!approved && <FontAwesomeIcon icon="lock" />}{' '}
+              {hasSigned && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
+            </ButtonBase>
+          </Grid>
+
+          <Grid item xs={12} sm={3}>
+            <ButtonBase
+              className={status === 'kyc' ? classes.activeTab : classes.tab}
+              style={{
+                borderRight: '1px solid #e1e9ec',
+                cursor: approved ? 'cursor' : 'not-allowed',
+              }}
+              onClick={() => approved && setStatus('kyc')}
+            >
+              KYC {!approved && <FontAwesomeIcon icon="lock" />}{' '}
+              {hasKyc && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
+            </ButtonBase>
+          </Grid>
+
+          <Grid item xs={12} sm={3}>
+            <ButtonBase
+              className={status === 'onboarded' ? classes.activeTab : classes.tab}
+              style={{ cursor: approved ? 'cursor' : 'not-allowed' }}
+              onClick={() => approved && setStatus('onboarded')}
+            >
+              Wire {!approved && <FontAwesomeIcon icon="lock" />}{' '}
+              {hasWired && <CheckIcon color="secondary" style={{ marginLeft: '0.5rem' }} />}
+            </ButtonBase>
+          </Grid>
+        </Grid>
+      </div>
+
+      <>
+        {status === 'invited' && <DataRoom deal={deal} />}
+        {status === 'pledging' && (
+          <Pledging investment={investment} investor={investor} deal={deal} refetch={refetch} />
+        )}
+        {status === 'onboarded' && <Wire investment={investment} deal={deal} />}
+        {/** Always render Onboarding so that the Docusign loads in... * */}
+        {onboardingLinkType === 'docusign' && status === 'pledged' && (
+          <Onboarding
+            status={status}
+            dealInvestments={polledInvestor.dealInvestments}
+            investment={investment}
+            deal={deal}
+            investor={investor}
+            data={data}
+            hasSigned={hasSigned}
+            refetch={refetch}
+          />
+        )}
+        {status === 'kyc' && (
+          <KYCDocusign
+            status={status}
+            investment={investment}
+            deal={deal}
+            investor={investor}
+            hasKyc={hasKyc}
+          />
+        )}
+        {onboardingLinkType === 'hellosign' && (
+          <HelloSignOnboarding
+            status={status}
+            investment={investment}
+            deal={deal}
+            investor={investor}
+          />
+        )}
+      </>
+    </>
   );
 }

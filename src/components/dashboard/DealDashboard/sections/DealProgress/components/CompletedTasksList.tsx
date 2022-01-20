@@ -29,7 +29,7 @@ interface completedTaskListProps extends WithStyles<typeof styles> {
 }
 
 const CompletedTasksList = ({ completedTasks, classes }: completedTaskListProps) => {
-  const [openList, setOpenList] = useState<Boolean>(true);
+  const [openList, setOpenList] = useState<boolean>(true);
 
   const toggleList = () => setOpenList((prev) => !prev);
 
@@ -37,15 +37,13 @@ const CompletedTasksList = ({ completedTasks, classes }: completedTaskListProps)
     <li key={_id} className={classes.completedTaskListItem}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <div className={classes.completedTaskCheckImageContainer}>
-          <img src={blueCheck} alt={'Blue check mark'} />
+          <img src={blueCheck} alt="Blue check mark" />
         </div>
         <Typography className={classes.completedTaskText}>
           {capitalizePhaseName(phase)}: {title}
         </Typography>
-        {type.includes('fm') && <img src={forYou} alt={'For You Icon'} />}
-        {type.includes('process-street') && (
-          <img src={forAllocations} alt={'For Allocations Icon'} />
-        )}
+        {type.includes('fm') && <img src={forYou} alt="For You Icon" />}
+        {type.includes('process-street') && <img src={forAllocations} alt="For Allocations Icon" />}
       </div>
     </li>
   ));
@@ -57,7 +55,7 @@ const CompletedTasksList = ({ completedTasks, classes }: completedTaskListProps)
         <img
           style={{ marginLeft: '10px' }}
           src={openList ? upArrow : downArrow}
-          alt={'up or down arrow'}
+          alt="up or down arrow"
         />
       </Typography>
       {openList && (

@@ -16,7 +16,6 @@ import {
   Grid,
   Hidden,
 } from '@material-ui/core';
-import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
 import CapitalAccount from './CapitalAccount';
 
@@ -68,9 +67,26 @@ const GET_DEALS = gql`
   }
 `;
 
+function DealProgress({ deal }) {
+  const raised = _.sumBy(deal?.investments, 'amount');
+  const progress = ((raised || 0) / (deal.target || Infinity)) * 100;
+  return (
+    <TableCell>
+      <LinearProgress
+        style={{ height: '20px' }}
+        variant="determinate"
+        color="secondary"
+        value={progress}
+      />
+      <div className="text-center">
+        ${nWithCommas(raised)} of ${nWithCommas(deal.target)}
+      </div>
+    </TableCell>
+  );
+}
+
 export default function Deals({ showClosed }) {
   const { organization } = useParams();
-  const { userProfile } = useAuth();
   const [page, setPage] = useState(0);
 
   const [getDeals, { data, error }] = useLazyQuery(GET_DEALS, {
@@ -83,9 +99,6 @@ export default function Deals({ showClosed }) {
     '5e553fb7e165e6d78c794097', // TODO: Remove this
   );
   const useInvestingAs = organization === 'irishangels';
-  // useEffect(() => {
-  //   if (userProfile && userProfile.email) getDeals();
-  // }, [getDeals, userProfile]);
 
   useEffect(() => {
     getDeals({
@@ -274,23 +287,5 @@ export default function Deals({ showClosed }) {
         </Paper>
       </>
     </div>
-  );
-}
-
-function DealProgress({ deal }) {
-  const raised = _.sumBy(deal?.investments, 'amount');
-  const progress = ((raised || 0) / (deal.target || Infinity)) * 100;
-  return (
-    <TableCell>
-      <LinearProgress
-        style={{ height: '20px' }}
-        variant="determinate"
-        color="secondary"
-        value={progress}
-      />
-      <div className="text-center">
-        ${nWithCommas(raised)} of ${nWithCommas(deal.target)}
-      </div>
-    </TableCell>
   );
 }

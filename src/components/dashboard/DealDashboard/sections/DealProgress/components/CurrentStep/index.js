@@ -5,7 +5,7 @@ import { Grid, Typography } from '@material-ui/core';
 import allocationsIcon from '../../../../../../../assets/for-allocations-icon.svg';
 import forYouIcon from '../../../../../../../assets/for-you-icon.svg';
 import grayCheck from '../../../../../../../assets/gray-check.svg';
-import styles from '../../../../styles.ts';
+import styles from '../../../../styles';
 import SignAgreementStep from '../SignAgreementStep';
 
 const defaultDesc =

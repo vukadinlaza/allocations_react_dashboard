@@ -55,6 +55,7 @@ const uploadTaskMap = {
 const DocUploader = ({ document, filesUploaded, setFilesUploaded, deal, phaseId, classes }) => {
   const [error, setError] = useState(false);
 
+  // eslint-disable-next-line no-unused-vars
   const [addDoc, { _, loading: addDocLoading, error: addDocError }] = useMutation(ADD_DOC, {
     onCompleted: ({ addDealDocService: uploadResponse }) => {
       if (uploadResponse?.success) toast.success('Success! Your document has been added');

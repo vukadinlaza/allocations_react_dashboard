@@ -86,6 +86,138 @@ const UPDATE_USER = gql`
   }
 `;
 
+function Doc({ doc, investment, getInvestment, matches }) {
+  const file =
+    doc.path.slice(0, 12) === 'investments/' ? doc.path.split('/')[2] : doc.path.split('/')[1];
+
+  const [rmInvestmentDoc] = useMutation(RM_INVESTMENT_DOC, {
+    variables: { file, investment_id: investment._id },
+    onCompleted: () => {
+      getInvestment();
+      toast.success('Success! Document deleted');
+    },
+    onError: () => {
+      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
+    },
+  });
+
+  const rmDoc = () => {
+    // eslint-disable-next-line no-alert
+    if (window.confirm(`Delete ${file}?`)) rmInvestmentDoc();
+  };
+
+  return (
+    <Grid
+      container
+      wrap="nowrap"
+      justify="space-evenly"
+      alignItems="center"
+      style={{ padding: matches ? '10px' : '10px 0' }}
+    >
+      <Grid item>
+        <img src={DocumentIcon} alt="document icon" style={{ height: '28px' }} />
+      </Grid>
+      <Grid item>
+        <Tooltip title={file}>
+          <Typography align="center" style={{ fontSize: '14px' }}>
+            <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">
+              {_.truncate(file, { length: 25 })}
+            </a>
+          </Typography>
+        </Tooltip>
+      </Grid>
+      <Grid item>
+        <Box onClick={rmDoc} style={{ cursor: 'pointer' }}>
+          <CrossOrPlusIcon type="cross" />
+        </Box>
+      </Grid>
+    </Grid>
+  );
+}
+
+function Docs({ investment, getInvestment, isK1 }) {
+  const matches = useMediaQuery('(min-width:600px)');
+  const [uploadedDoc, setUploadedDoc] = useState(null);
+
+  const [addInvestmentDoc, { loading }] = useMutation(ADD_INVESTMENT_DOC, {
+    onCompleted: () => {
+      getInvestment();
+      toast.success('Success! Document added');
+    },
+    onError: () => {
+      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
+    },
+  });
+
+  const id = get(investment, '_id', '');
+
+  useEffect(() => {
+    if (uploadedDoc) {
+      addInvestmentDoc({
+        variables: { doc: uploadedDoc, investment_id: id, isK1 },
+      });
+    }
+  }, [addInvestmentDoc, id, isK1, getInvestment, uploadedDoc]);
+
+  const docs = get(investment, 'documents', []);
+
+  if (loading || !investment) return <Loader />;
+
+  return (
+    <Grid container wrap="nowrap" direction={matches ? 'row' : 'column'}>
+      <Grid container>
+        {docs.map((doc) => (
+          <Doc
+            key={doc.path}
+            doc={doc}
+            investment={investment}
+            getInvestment={getInvestment}
+            matches={matches}
+          />
+        ))}
+      </Grid>
+
+      <Grid
+        container
+        wrap="nowrap"
+        justify="space-evenly"
+        alignItems="center"
+        style={{ padding: matches ? '10px' : '10px 0' }}
+      >
+        <Grid item>
+          <img src={DocumentIcon} alt="document icon" style={{ height: '28px' }} />
+        </Grid>
+
+        <InputLabel
+          htmlFor="fileUpload"
+          style={{
+            margin: 0,
+            cursor: 'pointer',
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-evenly',
+          }}
+        >
+          <Typography style={{ color: '#2A2B54', fontSize: '14px' }}>Add New Document</Typography>
+          <input
+            id="fileUpload"
+            type="file"
+            style={{ display: 'none' }}
+            onChange={({ target }) => {
+              if (target.validity.valid) setUploadedDoc(target.files[0]);
+            }}
+          />
+
+          <Box>
+            <CrossOrPlusIcon />
+          </Box>
+        </InputLabel>
+      </Grid>
+    </Grid>
+  );
+}
+
 export default function InvestmentEdit({
   investmentId = false,
   isK1 = false,
@@ -438,137 +570,5 @@ export default function InvestmentEdit({
         <Docs investment={investment} getInvestment={getInvestment} isK1={isK1} />
       </form>
     </div>
-  );
-}
-
-function Docs({ investment, getInvestment, isK1 }) {
-  const matches = useMediaQuery('(min-width:600px)');
-  const [uploadedDoc, setUploadedDoc] = useState(null);
-
-  const [addInvestmentDoc, { loading }] = useMutation(ADD_INVESTMENT_DOC, {
-    onCompleted: () => {
-      getInvestment();
-      toast.success('Success! Document added');
-    },
-    onError: () => {
-      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
-    },
-  });
-
-  const id = get(investment, '_id', '');
-
-  useEffect(() => {
-    if (uploadedDoc) {
-      addInvestmentDoc({
-        variables: { doc: uploadedDoc, investment_id: id, isK1 },
-      });
-    }
-  }, [addInvestmentDoc, id, isK1, getInvestment, uploadedDoc]);
-
-  const docs = get(investment, 'documents', []);
-
-  if (loading || !investment) return <Loader />;
-
-  return (
-    <Grid container wrap="nowrap" direction={matches ? 'row' : 'column'}>
-      <Grid container>
-        {docs.map((doc) => (
-          <Doc
-            key={doc.path}
-            doc={doc}
-            investment={investment}
-            getInvestment={getInvestment}
-            matches={matches}
-          />
-        ))}
-      </Grid>
-
-      <Grid
-        container
-        wrap="nowrap"
-        justify="space-evenly"
-        alignItems="center"
-        style={{ padding: matches ? '10px' : '10px 0' }}
-      >
-        <Grid item>
-          <img src={DocumentIcon} alt="document icon" style={{ height: '28px' }} />
-        </Grid>
-
-        <InputLabel
-          htmlFor="fileUpload"
-          style={{
-            margin: 0,
-            cursor: 'pointer',
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-evenly',
-          }}
-        >
-          <Typography style={{ color: '#2A2B54', fontSize: '14px' }}>Add New Document</Typography>
-          <input
-            id="fileUpload"
-            type="file"
-            style={{ display: 'none' }}
-            onChange={({ target }) => {
-              if (target.validity.valid) setUploadedDoc(target.files[0]);
-            }}
-          />
-
-          <Box>
-            <CrossOrPlusIcon />
-          </Box>
-        </InputLabel>
-      </Grid>
-    </Grid>
-  );
-}
-
-function Doc({ doc, investment, getInvestment, matches }) {
-  const file =
-    doc.path.slice(0, 12) === 'investments/' ? doc.path.split('/')[2] : doc.path.split('/')[1];
-
-  const [rmInvestmentDoc] = useMutation(RM_INVESTMENT_DOC, {
-    variables: { file, investment_id: investment._id },
-    onCompleted: () => {
-      getInvestment();
-      toast.success('Success! Document deleted');
-    },
-    onError: () => {
-      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
-    },
-  });
-
-  const rmDoc = () => {
-    // eslint-disable-next-line no-alert
-    if (window.confirm(`Delete ${file}?`)) rmInvestmentDoc();
-  };
-
-  return (
-    <Grid
-      container
-      wrap="nowrap"
-      justify="space-evenly"
-      alignItems="center"
-      style={{ padding: matches ? '10px' : '10px 0' }}
-    >
-      <Grid item>
-        <img src={DocumentIcon} alt="document icon" style={{ height: '28px' }} />
-      </Grid>
-      <Grid item>
-        <Tooltip title={file}>
-          <Typography align="center" style={{ fontSize: '14px' }}>
-            <a href={`https://${doc.link}`} target="_blank" rel="noopener noreferrer">
-              {_.truncate(file, { length: 25 })}
-            </a>
-          </Typography>
-        </Tooltip>
-      </Grid>
-      <Grid item>
-        <Box onClick={rmDoc} style={{ cursor: 'pointer' }}>
-          <CrossOrPlusIcon type="cross" />
-        </Box>
-      </Grid>
-    </Grid>
   );
 }

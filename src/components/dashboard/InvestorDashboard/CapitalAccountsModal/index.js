@@ -70,7 +70,6 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts }) => {
     <>
       <Modal
         open={Boolean(showCapitalAccounts?.Email)}
-        onClose={() => {}}
         className={classes.modal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"

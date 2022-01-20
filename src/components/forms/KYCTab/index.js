@@ -74,6 +74,50 @@ const required = [
 ];
 const optional = ['mail_country', 'mail_city', 'mail_zip', 'mail_state', 'mail_street_address'];
 
+function InvestorName({ investor, errors, handleChange }) {
+  if (investor.investor_type === 'entity') {
+    return (
+      <Grid item xs={12} sm={12} md={6}>
+        <TextField
+          required
+          error={errors.includes('entity_name')}
+          style={{ width: '100%' }}
+          value={get(investor, 'entity_name') || ''}
+          onChange={handleChange('entity_name')}
+          label="Subscriber Entity Name"
+          variant="outlined"
+        />
+      </Grid>
+    );
+  }
+  return (
+    <>
+      <Grid item xs={12} sm={12} md={6}>
+        <TextField
+          required
+          error={errors.includes('first_name')}
+          style={{ width: '100%' }}
+          value={get(investor, 'first_name') || ''}
+          onChange={handleChange('first_name')}
+          label="Subscriber First Name"
+          variant="outlined"
+        />
+      </Grid>
+      <Grid item xs={12} sm={12} md={6}>
+        <TextField
+          required
+          error={errors.includes('last_name')}
+          style={{ width: '100%' }}
+          value={get(investor, 'last_name') || ''}
+          onChange={handleChange('last_name')}
+          label="Subscriber Last Name"
+          variant="outlined"
+        />
+      </Grid>
+    </>
+  );
+}
+
 export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKyc, dealType }) {
   const { userProfile } = useAuth(GET_INVESTOR);
   const [investor, setInvestor] = useState({});
@@ -423,50 +467,6 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
         )}
       </form>
       <hr />
-    </>
-  );
-}
-
-function InvestorName({ investor, errors, handleChange }) {
-  if (investor.investor_type === 'entity') {
-    return (
-      <Grid item xs={12} sm={12} md={6}>
-        <TextField
-          required
-          error={errors.includes('entity_name')}
-          style={{ width: '100%' }}
-          value={get(investor, 'entity_name') || ''}
-          onChange={handleChange('entity_name')}
-          label="Subscriber Entity Name"
-          variant="outlined"
-        />
-      </Grid>
-    );
-  }
-  return (
-    <>
-      <Grid item xs={12} sm={12} md={6}>
-        <TextField
-          required
-          error={errors.includes('first_name')}
-          style={{ width: '100%' }}
-          value={get(investor, 'first_name') || ''}
-          onChange={handleChange('first_name')}
-          label="Subscriber First Name"
-          variant="outlined"
-        />
-      </Grid>
-      <Grid item xs={12} sm={12} md={6}>
-        <TextField
-          required
-          error={errors.includes('last_name')}
-          style={{ width: '100%' }}
-          value={get(investor, 'last_name') || ''}
-          onChange={handleChange('last_name')}
-          label="Subscriber Last Name"
-          variant="outlined"
-        />
-      </Grid>
     </>
   );
 }

@@ -81,9 +81,6 @@ function SubmitTaxDocs() {
         setOpen={setOpen}
         kycTemplateId={templateId}
         kycTemplateName={activeForm}
-        refetch={() => {}}
-        deal={{}}
-        setShowTaxAsCompleted={() => {}}
       />
     </section>
   );

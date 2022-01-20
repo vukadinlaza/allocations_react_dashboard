@@ -10,7 +10,7 @@ import {
 import { onError } from 'apollo-link-error';
 import { useAuth0 } from '@auth0/auth0-react';
 
-const { createUploadLink } = require('apollo-upload-client');
+import { createUploadLink } from 'apollo-upload-client';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000/graphql';
 

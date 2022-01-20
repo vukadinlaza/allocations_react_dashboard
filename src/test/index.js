@@ -1,11 +1,9 @@
 // Testing config and helpers
 
 import React from 'react';
-import { act, render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import Utils from 'react-dom/test-utils';
 import { MockedProvider } from '@apollo/react-testing';
-import Deal, { GET_INVESTOR_DEAL, CREATE_INVESTMENT } from '.';
 import '../utils/initFontAwesome';
 
 export const Auth0Provider = ({ children, user, isAuthenticated = true }) => {
@@ -18,8 +16,8 @@ export const Auth0Provider = ({ children, user, isAuthenticated = true }) => {
         loading: false,
         auth0Client: null,
         getTokenSilently: () => {},
-        loginWithRedirect: async (...p) => {},
-        logout: (...p) => {},
+        loginWithRedirect: async () => {},
+        logout: () => {},
       }}
     >
       {children}

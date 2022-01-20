@@ -107,123 +107,6 @@ export const CREATE_INVESTMENT = gql`
 // }
 const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
 
-export default function Deal() {
-  const mobile = useMediaQuery('(max-width:1200px)');
-  const { organization, deal_slug } = useParams();
-  const history = useHistory();
-  const { search } = useLocation();
-  const { userProfile, isAuthenticated, loading } = useAuth();
-  const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL);
-  const [allowEdit, setAllowEdit] = useState(true);
-  const [createInvestment, { called: didCreateInvestment }] = useMutation(CREATE_INVESTMENT, {
-    onCompleted: () => {
-      // alert('Mutation Succeeded!')
-      refetch();
-    },
-  });
-
-  useEffect(() => {
-    if (!loading && !called && isAuthenticated) {
-      getDeal({
-        variables: {
-          deal_slug,
-          fund_slug: organization || 'allocations',
-        },
-      });
-    }
-  }, [isAuthenticated, loading, called, getDeal, deal_slug, organization]);
-
-  useEffect(() => {
-    const blocked = userProfile?.email?.includes('allocations');
-    if (data && !data.investor?.invitedDeal?.investment && !blocked) {
-      let decodedParams = {};
-      if (base64regex.test(search.substring(1)) && search && !search.includes('amount')) {
-        decodedParams = base64.decode(search.substring(1));
-      }
-      const isTvc = organization === 'theventurecollective';
-      const paramsToUse = isTvc ? decodedParams : search;
-      const p = new URLSearchParams(paramsToUse);
-      // eslint-disable-next-line radix
-      const amount = parseInt(p.get('amount')) || 0;
-      const investment = {
-        deal_id: data.investor.invitedDeal?._id,
-        user_id: data.investor._id,
-        amount,
-      };
-      if (userProfile?.email && !didCreateInvestment) {
-        createInvestment({ variables: { investment } });
-      }
-    }
-  }, [called, createInvestment, data, didCreateInvestment, organization, search, userProfile]);
-  useEffect(() => {
-    const isEncoded = base64regex.test(search.substring(1)) && search.substring(1).length > 0;
-    if (isEncoded) {
-      setAllowEdit(false);
-    }
-  }, [organization, search]);
-
-  useEffect(() => {
-    // theres been an error
-    if (error) {
-      const q = queryString.parse(search);
-      if (q && q.ref === 'public' && q.invite) {
-        // need to redir back to public link (haven't been invited)
-        return history.push(
-          `/public/${organization || 'allocations'}/deals/${deal_slug}?invite_code=${
-            q.invite
-          }&no_redirect=true`,
-        );
-      }
-
-      if (error.message === 'GraphQL error: REDIRECT') return history.push(`/`);
-      if (userProfile.email) refetch();
-    }
-  }, [deal_slug, error, history, organization, refetch, search, userProfile]);
-  if (!data) return <Loader />;
-
-  const {
-    investor,
-    investor: { invitedDeal: deal },
-  } = data;
-  const { investment } = deal;
-  return (
-    <>
-      <div style={{ width: mobile ? '100%' : 'calc(100% - 300px)' }}>
-        <Grid container justify="space-between" alignItems="flex-end">
-          <Grid item>
-            <h2 className="deal-header">{deal.company_name}</h2>
-            <h4 className="deal-description">{deal.company_description}</h4>
-          </Grid>
-          {investment?._id && (
-            <Pledge investment={investment} refetch={refetch} allowEdit={allowEdit} />
-          )}
-        </Grid>
-        <InvestmentFlow
-          deal={{ ...deal, deal_slug, organization }}
-          investment={investment}
-          investor={investor}
-          refetch={refetch}
-        />
-      </div>
-
-      <div
-        style={{
-          position: !mobile ? 'absolute' : 'relative',
-          padding: '85px 16px',
-          top: !mobile ? 0 : -32,
-          bottom: 0,
-          right: 0,
-          width: !mobile ? 300 : '100%',
-          borderLeft: !mobile ? '1px solid #dfe2e5' : 0,
-        }}
-      >
-        <DealParams deal={deal} deal_slug={deal_slug} />
-        <InvestorData investor={investor} />
-      </div>
-    </>
-  );
-}
-
 export function DealParams({ deal, deal_slug }) {
   const { dealParams } = deal;
   const history = useHistory();
@@ -367,18 +250,6 @@ export function DealParams({ deal, deal_slug }) {
                 <ListItemText primary="Organizer" secondary={deal.deal_lead} />
               </ListItem>
             )}
-            {/* {dealParams.allocation && <ListItem>
-          <ListItemText
-            primary="Allocation"
-            secondary={'$' + dealParams.allocation}
-          />
-        </ListItem>}
-        {dealParams.minimumInvestment && <ListItem>
-          <ListItemText
-            primary="Min. Investment"
-            secondary={'$' + nWithCommas(dealParams.minimumInvestment)}
-          />
-        </ListItem>} */}
             {dealParams.totalCarry && (
               <ListItem>
                 <ListItemText primary="Total Carry" secondary={`${dealParams.totalCarry}%`} />
@@ -635,6 +506,123 @@ function InvestorData({ investor }) {
           <ListItemText primary="Signer Full Name" secondary={investor.signer_full_name} />
         </ListItem>
       </List>
+    </>
+  );
+}
+
+export default function Deal() {
+  const mobile = useMediaQuery('(max-width:1200px)');
+  const { organization, deal_slug } = useParams();
+  const history = useHistory();
+  const { search } = useLocation();
+  const { userProfile, isAuthenticated, loading } = useAuth();
+  const [getDeal, { data, error, refetch, called }] = useLazyQuery(GET_INVESTOR_DEAL);
+  const [allowEdit, setAllowEdit] = useState(true);
+  const [createInvestment, { called: didCreateInvestment }] = useMutation(CREATE_INVESTMENT, {
+    onCompleted: () => {
+      // alert('Mutation Succeeded!')
+      refetch();
+    },
+  });
+
+  useEffect(() => {
+    if (!loading && !called && isAuthenticated) {
+      getDeal({
+        variables: {
+          deal_slug,
+          fund_slug: organization || 'allocations',
+        },
+      });
+    }
+  }, [isAuthenticated, loading, called, getDeal, deal_slug, organization]);
+
+  useEffect(() => {
+    const blocked = userProfile?.email?.includes('allocations');
+    if (data && !data.investor?.invitedDeal?.investment && !blocked) {
+      let decodedParams = {};
+      if (base64regex.test(search.substring(1)) && search && !search.includes('amount')) {
+        decodedParams = base64.decode(search.substring(1));
+      }
+      const isTvc = organization === 'theventurecollective';
+      const paramsToUse = isTvc ? decodedParams : search;
+      const p = new URLSearchParams(paramsToUse);
+      // eslint-disable-next-line radix
+      const amount = parseInt(p.get('amount')) || 0;
+      const investment = {
+        deal_id: data.investor.invitedDeal?._id,
+        user_id: data.investor._id,
+        amount,
+      };
+      if (userProfile?.email && !didCreateInvestment) {
+        createInvestment({ variables: { investment } });
+      }
+    }
+  }, [called, createInvestment, data, didCreateInvestment, organization, search, userProfile]);
+  useEffect(() => {
+    const isEncoded = base64regex.test(search.substring(1)) && search.substring(1).length > 0;
+    if (isEncoded) {
+      setAllowEdit(false);
+    }
+  }, [organization, search]);
+
+  useEffect(() => {
+    // theres been an error
+    if (error) {
+      const q = queryString.parse(search);
+      if (q && q.ref === 'public' && q.invite) {
+        // need to redir back to public link (haven't been invited)
+        return history.push(
+          `/public/${organization || 'allocations'}/deals/${deal_slug}?invite_code=${
+            q.invite
+          }&no_redirect=true`,
+        );
+      }
+
+      if (error.message === 'GraphQL error: REDIRECT') return history.push(`/`);
+      if (userProfile.email) refetch();
+    }
+  }, [deal_slug, error, history, organization, refetch, search, userProfile]);
+  if (!data) return <Loader />;
+
+  const {
+    investor,
+    investor: { invitedDeal: deal },
+  } = data;
+  const { investment } = deal;
+  return (
+    <>
+      <div style={{ width: mobile ? '100%' : 'calc(100% - 300px)' }}>
+        <Grid container justify="space-between" alignItems="flex-end">
+          <Grid item>
+            <h2 className="deal-header">{deal.company_name}</h2>
+            <h4 className="deal-description">{deal.company_description}</h4>
+          </Grid>
+          {investment?._id && (
+            <Pledge investment={investment} refetch={refetch} allowEdit={allowEdit} />
+          )}
+        </Grid>
+        <InvestmentFlow
+          deal={{ ...deal, deal_slug, organization }}
+          investment={investment}
+          investor={investor}
+          refetch={refetch}
+        />
+      </div>
+
+      <div
+        style={{
+          position: !mobile ? 'absolute' : 'relative',
+          padding: '85px 16px',
+          top: !mobile ? 0 : -32,
+          bottom: 0,
+          right: 0,
+          width: !mobile ? 300 : '100%',
+          borderLeft: !mobile ? '1px solid #dfe2e5' : 0,
+        }}
+      >
+        <DealParams deal={deal} deal_slug={deal_slug} />
+        <InvestorData investor={investor} />
+      </div>
     </>
   );
 }

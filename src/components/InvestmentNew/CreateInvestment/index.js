@@ -50,7 +50,7 @@ export default function CreateInvestment({ deal, handleUpdate }) {
   };
 
   const convertToPositiveInteger = (num) => {
-    return parseInt(num < 0 ? 0 : num, 0);
+    return parseInt(num < 0 ? 0 : num, 10);
   };
   const handleCreateInvestment = () => {
     const e = validate({ investment, deal, user });

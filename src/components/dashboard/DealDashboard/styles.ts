@@ -1,5 +1,5 @@
-import { phone } from '../../../utils/helpers';
 import { Theme } from '@material-ui/core';
+import { phone } from '../../../utils/helpers';
 
 const styles: any = (theme: Theme) => ({
   avatarBackground: {
@@ -158,8 +158,6 @@ const styles: any = (theme: Theme) => ({
     margin: '0',
     marginTop: '0.5em',
     paddingLeft: '6px',
-    // position: 'absolute',
-    // bottom: '-26px'
   },
   headerLabel: {
     fontSize: '12px',
@@ -170,7 +168,6 @@ const styles: any = (theme: Theme) => ({
   input: {
     color: '#2A2B54',
     '&::placeholder': {
-      // textOverflow: 'ellipsis !important',
       color: '#94A3B8',
       fontSize: '14px',
       opacity: 1,
@@ -355,7 +352,7 @@ const styles: any = (theme: Theme) => ({
     },
   },
   viewButtonContainer: {
-    //Need this to avoid movement when selecting buttons
+    // Need this to avoid movement when selecting buttons
     display: 'flex',
     justifyContent: 'center',
   },

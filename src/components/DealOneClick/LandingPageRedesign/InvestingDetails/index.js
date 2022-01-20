@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Paper, Box, Typography, Grid } from '@material-ui/core';
 import useStyles from '../style';
 import { InvestingDetailsSimpleBox } from '../widgets/InvestingDetailsSimpleBox';
 
 function InvestingDetails({ deal }) {
   const {
-    dealCoverImageKey,
-    slug,
     status,
     portfolio_company_securities,
     sectors,
@@ -15,13 +13,7 @@ function InvestingDetails({ deal }) {
 
   const classes = useStyles();
 
-  const key = dealCoverImageKey?.includes('https')
-    ? dealCoverImageKey
-    : `https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`;
-
   const [openTooltip, setOpenTooltip] = useState('');
-
-  useEffect(() => {}, [dealCoverImageKey, slug, key]);
 
   const handleTooltip = (id) => {
     setOpenTooltip(id);

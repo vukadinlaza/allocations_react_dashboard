@@ -8,6 +8,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import Loader from '../../utils/Loader';
 import { DocumentBox, UploadBox } from '../../common/common';
 import pmButton from '../../assets/parallel-button.svg';
+// eslint-disable-next-line import/extensions
 import styles from '../styles';
 
 export const taskTypes = {
