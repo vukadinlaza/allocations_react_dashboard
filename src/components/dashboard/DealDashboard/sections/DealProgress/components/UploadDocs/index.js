@@ -177,13 +177,20 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     background: '#fff 0% 0% no-repeat padding-box',
-    border: '2px solid #EBEBEB !important',
+    border: '1px dashed #CBD5E1 !important',
     borderRadius: '10px',
     opacity: 1,
     width: '228px',
     height: '184px',
     marginRight: '20px',
     cursor: 'pointer',
+    '&:hover': {
+      backgroundColor: '#ECF3FF',
+    },
+    '&:active': {
+      borderColor: '#186EFF !important',
+      color: '#186EFF !important',
+    },
   },
   uploadIcon: {
     color: 'blue',
