@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CircularProgress, makeStyles } from '@material-ui/core';
+import { CircularProgress, makeStyles, Checkbox } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { gql, useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
@@ -11,7 +11,6 @@ import greenCheckCircle from '../../../../../../../assets/green-circled-checkmar
 import trashIcon from '../../../../../../../assets/trash.svg';
 import warningIcon from '../../../../../../../assets/warning-red.svg';
 import { phone } from '../../../../../../../utils/helpers';
-// import { PitchDeckCheckBox } from '../../../../../../NewBuild/BuildDealForm/FormFields';
 
 const ADD_DOC = gql`
   mutation addDealDocService($deal_id: String!, $task_id: String!, $doc: Upload!, $phase: String) {
@@ -22,6 +21,15 @@ const ADD_DOC = gql`
 const DELETE_DOC = gql`
   mutation deleteDealDocument($document_id: String!, $task_id: String!, $phase_id: String!) {
     deleteDealDocument(document_id: $document_id, task_id: $task_id, phase_id: $phase_id)
+  }
+`;
+
+const UPDATE_DEAL = gql`
+  mutation updateDealBuildApi($payload: Object) {
+    updateDealBuildApi(payload: $payload) {
+      _id
+      public_pitch_deck
+    }
   }
 `;
 
@@ -193,6 +201,21 @@ const useStyles = makeStyles((theme) => ({
     width: '13px',
     border: '1px solid #047857',
   },
+  checkBoxContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    marginTop: '10px',
+    marginLeft: '10px',
+  },
+  pitchDeckCheckbox: {
+    paddingLeft: '0px',
+    height: '24px',
+    width: '24px',
+    borderRadius: '4px',
+  },
+  pitchDeckColorSecondary: {
+    color: '#39C522',
+  },
 }));
 
 const uploadTaskMap = {
@@ -268,12 +291,13 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
     return fileName;
   };
 
-  if (addDocLoading || deleteDocLoading)
+  if (addDocLoading || deleteDocLoading) {
     return (
       <div className={classes.uploadDocLoader}>
         <CircularProgress />
       </div>
     );
+  }
   if (error || addDocError || deleteDocError) {
     return (
       <div className={`${classes.uploadErrorItem}`}>
@@ -438,7 +462,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
   );
 };
 
-export default function UploadDocs({ dealType, phase, classes: checkBoxClasses }) {
+export default function UploadDocs({ deal, phase }) {
   const classes = useStyles();
 
   const docUploadMap = {
@@ -476,7 +500,7 @@ export default function UploadDocs({ dealType, phase, classes: checkBoxClasses }
     },
   };
 
-  const [filesUploaded, setFilesUploaded] = useState(docUploadMap[dealType]);
+  const [filesUploaded, setFilesUploaded] = useState(docUploadMap[deal?.type]);
 
   const uploadTasks = phase?.tasks
     .filter((task) => task.type === 'fm-document-upload')
@@ -488,7 +512,7 @@ export default function UploadDocs({ dealType, phase, classes: checkBoxClasses }
     }
   }, []);
   return (
-    <main>
+    <div>
       <div className={classes.uploadContainer}>
         {uploadTasks?.map((task) => (
           <DocUploader
@@ -501,14 +525,44 @@ export default function UploadDocs({ dealType, phase, classes: checkBoxClasses }
             phaseId={phase._id}
           />
         ))}
+        {deal?.type === 'spv' && filesUploaded['Upload Company Deck']?.complete && (
+          <PitchDeckCheckBox deal={deal} classes={classes} />
+        )}
       </div>
-      {/* {deal?.type === 'spv' && filesUploaded['Upload Company Deck']?.complete && (
-        <PitchDeckCheckBox
-          buildData={buildData}
-          setBuildData={setBuildData}
-          classes={checkBoxClasses}
-        />
-      )} */}
-    </main>
+    </div>
+  );
+}
+
+function PitchDeckCheckBox({ deal, classes }) {
+  const [updateDeal] = useMutation(UPDATE_DEAL, {
+    onError: console.error,
+  });
+
+  return (
+    <div className={classes.checkBoxContainer}>
+      <Checkbox
+        color="default"
+        size="medium"
+        name="public_pitch_deck"
+        checked={deal?.metadata?.public_pitch_deck}
+        classes={{
+          root: classes.pitchDeckCheckbox,
+          checked: classes.pitchDeckColorSecondary,
+        }}
+        onChange={(e) => {
+          updateDeal({
+            variables: {
+              payload: {
+                deal_id: deal?._id,
+                public_pitch_deck: e.target.checked,
+              },
+            },
+          });
+        }}
+      />
+      <Typography style={{ fontWeight: 'bold' }}>
+        Allow the Pitch Deck to be shown publicly on the Deal Page?
+      </Typography>
+    </div>
   );
 }
