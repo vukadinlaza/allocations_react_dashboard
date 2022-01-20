@@ -134,6 +134,12 @@ const useStyles = makeStyles((theme) => ({
     width: '228px',
     height: '184px',
     margin: '10px',
+    '&:hover': {
+      backgroundColor: '#ECF3FF',
+    },
+    // "&:active": {
+    //   borderColor: '#186EFF !important'
+    // }
   },
   uploadedDocItem: {
     background: '#fff 0% 0% no-repeat padding-box',
@@ -180,6 +186,7 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer',
     color: '#B91C1C',
     fontWeight: '500',
+    fontSize: '12px',
   },
   greenCheckCircle: {
     height: '13px',
