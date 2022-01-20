@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
-import { gql, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { CircularProgress } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import styles from '../../../../styles.ts';
@@ -16,19 +16,14 @@ const GET_INVESTMENT_AGREEMENT = gql`
     }
   }
 `;
-const signingModal = (agreementLink, isSigned) => {
-  DocSpring.createVisualForm({
-    ...agreementLink,
-    domainVerification: false,
-    onSubmit: () => {
-      localStorage.removeItem('buildData');
-      localStorage.removeItem('buildDeal');
-      localStorage.removeItem('buildFilesUploaded');
-      isSigned();
-      DocSpring.closeModal();
-    },
-  });
-};
+
+const SIGN_INVESTMENT_AGREEMENT = gql`
+  mutation SignInvestmentAgreement($payload: Object) {
+    signInvestmentAgreement(payload: $payload) {
+      message
+    }
+  }
+`;
 
 const SignAgreementStep = ({ classes, task, deal }) => {
   const [readyToSign, setReadyToSign] = useState(false);
@@ -39,6 +34,26 @@ const SignAgreementStep = ({ classes, task, deal }) => {
       deal_id: deal?._id,
     },
   });
+  const [signInvestmentAgreement, { data: confirmationMessage }] =
+    useMutation(SIGN_INVESTMENT_AGREEMENT);
+
+  const signingModal = (agreementLink, isSigned) => {
+    DocSpring.createVisualForm({
+      ...agreementLink,
+      domainVerification: false,
+      onSubmit: () => {
+        isSigned();
+        DocSpring.closeModal();
+        signInvestmentAgreement({
+          variables: {
+            payload: {
+              deal_id: deal._id,
+            },
+          },
+        });
+      },
+    });
+  };
 
   const newTitle = task?.title?.split(' ');
   newTitle.shift();
