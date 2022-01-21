@@ -171,6 +171,9 @@ const useStyles = makeStyles((theme) => ({
       borderColor: '#186EFF !important',
       color: '#186EFF !important',
     },
+    [theme.breakpoints.down(phone)]: {
+      marginRight: '0px',
+    },
   },
   uploadedDocItem: {
     background: '#fff 0% 0% no-repeat padding-box',
