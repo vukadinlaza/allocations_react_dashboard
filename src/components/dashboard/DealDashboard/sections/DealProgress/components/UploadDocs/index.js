@@ -32,6 +32,12 @@ const UPDATE_DEAL = gql`
   }
 `;
 
+const SET_DOC_TASKS_COMPLETE = gql`
+  mutation setDocumentTasksComplete($payload: Object) {
+    setDocumentTasksComplete(payload: $payload)
+  }
+`;
+
 const useStyles = makeStyles((theme) => ({
   mainContainer: {
     display: 'flex',
@@ -499,6 +505,10 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, taskId, phase,
 export default function UploadDocs({ deal, phase }) {
   const classes = useStyles();
 
+  const [setDocTasksComplete] = useMutation(SET_DOC_TASKS_COMPLETE, {
+    onError: console.error,
+  });
+
   const uploadTasks = phase?.tasks
     .filter((task) => task.type === 'fm-document-upload')
     .sort((a, b) => uploadTaskMap[a.title]?.position - uploadTaskMap[b.title]?.position);
@@ -548,12 +558,18 @@ export default function UploadDocs({ deal, phase }) {
           isRequiredTasksComplete ? classes.continueButton : classes.continueButtonDisabled
         }
         onClick={() => {
-          console.log(
-            Object.values(filesUploaded).map((file) => ({
-              task_id: file.task_id,
-              document_id: file.document._id,
-            })),
-          );
+          const taskData = Object.values(filesUploaded).map((file) => ({
+            task_id: file.task_id,
+            document_id: file.document._id,
+          }));
+          setDocTasksComplete({
+            variables: {
+              payload: {
+                deal_id: deal._id,
+                taskData,
+              },
+            },
+          });
         }}
       >
         Continue
