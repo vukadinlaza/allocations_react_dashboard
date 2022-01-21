@@ -560,7 +560,7 @@ export default function UploadDocs({ deal, phase }) {
         onClick={() => {
           const taskData = Object.values(filesUploaded).map((file) => ({
             task_id: file?.task_id,
-            document_id: file?.document._id,
+            document_id: file?.document?._id,
           }));
           setDocTasksComplete({
             variables: {
