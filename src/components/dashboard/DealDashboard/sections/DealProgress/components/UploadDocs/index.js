@@ -43,12 +43,18 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-around',
-    height: '320px',
+    minHeight: '320px',
+    [theme.breakpoints.down(phone)]: {
+      flexDirection: 'column',
+      minHeight: '800px',
+    },
   },
   uploadContainer: {
     display: 'flex',
+    flexWrap: 'wrap',
     [theme.breakpoints.down(phone)]: {
       flexDirection: 'column',
+      alignSelf: 'center',
     },
   },
   blueCheck: {
@@ -113,6 +119,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down(phone)]: {
       font: 'normal normal normal 16px/20px Roboto',
       maxWidth: '180px',
+      fontWeight: '500',
     },
   },
   docUploadBox: {
@@ -202,7 +209,6 @@ const useStyles = makeStyles((theme) => ({
     height: '13.5px',
     transparentheight: '35px',
     [theme.breakpoints.down(phone)]: {
-      marginRight: '20px',
       width: '30px',
     },
   },
