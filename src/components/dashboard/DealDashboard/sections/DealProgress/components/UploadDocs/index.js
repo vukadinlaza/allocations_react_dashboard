@@ -514,9 +514,9 @@ export default function UploadDocs({ deal, phase }) {
     .sort((a, b) => uploadTaskMap[a.title]?.position - uploadTaskMap[b.title]?.position);
 
   const [filesUploaded, setFilesUploaded] = useState(
-    uploadTasks.reduce((acc, task) => {
-      acc[task.title] = {
-        task_id: task._id,
+    uploadTasks?.reduce((acc, task) => {
+      acc[task?.title] = {
+        task_id: task?._id,
         complete: false,
         document: {
           name: null,
@@ -559,13 +559,13 @@ export default function UploadDocs({ deal, phase }) {
         }
         onClick={() => {
           const taskData = Object.values(filesUploaded).map((file) => ({
-            task_id: file.task_id,
-            document_id: file.document._id,
+            task_id: file?.task_id,
+            document_id: file?.document._id,
           }));
           setDocTasksComplete({
             variables: {
               payload: {
-                deal_id: deal._id,
+                deal_id: deal?._id,
                 taskData,
               },
             },
