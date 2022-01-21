@@ -2,8 +2,8 @@ import React from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Paper, Tooltip } from '@material-ui/core';
-import { useSimpleReducer } from '../../utils/hooks';
 import { toast } from 'react-toastify';
+import { useSimpleReducer } from '../../utils/hooks';
 
 const UPDATE_USER = gql`
   mutation UpdateUser($investor: UserInput!) {

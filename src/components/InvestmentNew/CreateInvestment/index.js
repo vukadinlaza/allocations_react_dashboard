@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import _, { get } from 'lodash';
+import { get } from 'lodash';
 import { toast } from 'react-toastify';
 import { gql, useMutation } from '@apollo/client';
 
@@ -50,7 +50,7 @@ export default function CreateInvestment({ deal, handleUpdate }) {
   };
 
   const convertToPositiveInteger = (num) => {
-    return parseInt(num < 0 ? 0 : num);
+    return parseInt(num < 0 ? 0 : num, 10);
   };
   const handleCreateInvestment = () => {
     const e = validate({ investment, deal, user });

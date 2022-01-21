@@ -30,7 +30,6 @@ const styles = (theme) => ({
     width: '100%',
     border: 'none',
     height: '50px',
-    // padding: '0 28px',
     '& *': {
       height: '100%',
     },

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, createContext } from 'react';
+import React from 'react';
 
 export const Auth0Context = React.createContext();
 export const useAuth0 = () => {
@@ -8,11 +8,9 @@ export const useAuth0 = () => {
     loading: false,
     auth0Client: null,
     getTokenSilently: () => {},
-    loginWithRedirect: async (...p) => {},
-    logout: (...p) => {},
+    loginWithRedirect: async () => {},
+    logout: () => {},
   };
-
-  return useContext(Auth0Context);
 };
 
 export const Auth0Provider = ({ children, user, isAuthenticated = true }) => {
@@ -24,8 +22,8 @@ export const Auth0Provider = ({ children, user, isAuthenticated = true }) => {
         loading: false,
         auth0Client: null,
         getTokenSilently: () => {},
-        loginWithRedirect: async (...p) => {},
-        logout: (...p) => {},
+        loginWithRedirect: async () => {},
+        logout: () => {},
       }}
     >
       {children}

@@ -37,6 +37,18 @@ const GET_INVESTOR = gql`
     }
   }
 `;
+function Brand() {
+  const history = useHistory();
+  return (
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+    <img
+      onClick={() => history.push('/')}
+      src="https://allocations-public.s3.us-east-2.amazonaws.com/allocations-logo.svg"
+      alt="allocations"
+      style={{ height: '60px', width: 'auto', cursor: 'pointer' }}
+    />
+  );
+}
 
 function Sidebar(props) {
   const {
@@ -293,16 +305,3 @@ function Sidebar(props) {
 }
 
 export default withStyles(styles)(Sidebar);
-
-function Brand() {
-  const history = useHistory();
-  return (
-    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-    <img
-      onClick={() => history.push('/')}
-      src="https://allocations-public.s3.us-east-2.amazonaws.com/allocations-logo.svg"
-      alt="allocations"
-      style={{ height: '60px', width: 'auto', cursor: 'pointer' }}
-    />
-  );
-}

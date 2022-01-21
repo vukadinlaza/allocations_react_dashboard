@@ -142,7 +142,7 @@ const ServerTable = ({
 
   useEffect(() => {
     if (headers) {
-      headers.forEach((header, i) => {
+      headers.forEach((header) => {
         const headerLength = header.label.length + 4;
         if (headerLength > selectWidth) {
           setSelectWidth(headerLength);

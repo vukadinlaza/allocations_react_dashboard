@@ -1,13 +1,13 @@
 import React from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import './styles.scss';
-import { FormControl, TextField, Button } from '@material-ui/core';
+import { FormControl, TextField, Button, FormLabel } from '@material-ui/core';
 import CurrencyTextField from '@unicef/material-ui-currency-textfield';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import { nWithCommas } from '../../../utils/numbers.js';
+import { nWithCommas } from '../../../utils/numbers';
 
-function BasicInfoSettings({ formData, setFormData, loading }) {
+function BasicInfoSettings({ formData, setFormData }) {
   const handleFormChange = ({ target }) => {
     const dealParamFields = ['dealType', 'minimumInvestment'];
 
@@ -31,7 +31,6 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
     const dealParamFields = ['dealType', 'minimumInvestment', 'is3c7'];
 
     if (dealParamFields.includes(field)) {
-      console.log('fires', field, value);
       return setFormData((prevState) => ({
         ...prevState,
         dealParams: {
@@ -49,9 +48,7 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
 
   const { investmentType, status, dealParams } = formData;
 
-  console.log('XXXXX', dealParams);
-
-  const minimumInvesmentPlaceholder =
+  const minimumInvestmentPlaceholder =
     dealParams.minimumInvestment !== null && dealParams.minimumInvestment
       ? nWithCommas(dealParams.minimumInvestment)
       : '1,000';
@@ -77,12 +74,13 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
             'alignleft aligncenter alignright alignjustify | ' +
             'bullist numlist outdent indent | removeformat | help',
           file_picker_types: 'image',
-          file_picker_callback(cb, value, meta) {
+          file_picker_callback(cb) {
             const input = document.createElement('input');
             input.setAttribute('type', 'file');
             input.setAttribute('accept', 'image/*');
 
             input.onchange = function () {
+              // eslint-disable-next-line react/no-this-in-sfc
               const file = this.files[0];
 
               const reader = new FileReader();
@@ -111,7 +109,7 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
 
       <div className="form-fields">
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Company name
             <TextField
               name="company_name"
@@ -120,11 +118,11 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
               className="text-input"
               variant="outlined"
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Company description
             <TextField
               name="company_description"
@@ -133,11 +131,11 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
               className="text-input"
               variant="outlined"
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Target raise
             <TextField
               className="currency-text-input"
@@ -153,11 +151,11 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
                 ),
               }}
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Investment type
             <div className="button-options">
               <Button
@@ -179,17 +177,17 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
                 Fund
               </Button>
             </div>
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Minimum investment
             <CurrencyTextField
               className="currency-text-input"
               variant="outlined"
               value={dealParams.minimumInvestment}
-              placeholder={minimumInvesmentPlaceholder}
+              placeholder={minimumInvestmentPlaceholder}
               currencySymbol="$"
               textAlign="left"
               name="minimumInvestment"
@@ -214,11 +212,11 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
                 ),
               }}
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Deal type
             <div className="button-options">
               <Button
@@ -236,10 +234,10 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
                 506c
               </Button>
             </div>
-          </label>
+          </FormLabel>
         </FormControl>
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             3(c)(7)
             <div className="button-options">
               <Button
@@ -255,11 +253,11 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
                 3(c)(7)
               </Button>
             </div>
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Status
             <div className="button-options">
               <Button
@@ -277,7 +275,7 @@ function BasicInfoSettings({ formData, setFormData, loading }) {
                 Closed
               </Button>
             </div>
-          </label>
+          </FormLabel>
         </FormControl>
       </div>
     </section>

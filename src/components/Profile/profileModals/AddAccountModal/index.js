@@ -9,7 +9,6 @@ import '../style.scss';
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: 'flex',
-    // alignItems: 'center',
     justifyContent: 'center',
   },
   modalPaper: {

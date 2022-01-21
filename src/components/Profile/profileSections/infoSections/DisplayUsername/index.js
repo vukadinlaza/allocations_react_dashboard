@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { Grid, Typography, Switch, FormGroup, FormControlLabel } from '@material-ui/core';
-// import { makeStyles } from '@material-ui/core/styles';
 
 const DISPLAY_USERNAME_STATUS = gql`
   mutation DisplayUsernameStatus($email: String!, $display_username: Boolean) {

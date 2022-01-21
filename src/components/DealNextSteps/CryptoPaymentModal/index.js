@@ -127,7 +127,7 @@ function CryptoPaymentModal({
   const classes = useStyles();
   const { deal } = dealData;
   const { investment } = investmentData;
-  const { data, error } = useQuery(DEAL_WALLET_ADDRESS, {
+  const { data } = useQuery(DEAL_WALLET_ADDRESS, {
     fetchPolicy: 'network-only',
     variables: { deal_id: deal._id },
   });

@@ -38,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const DealCard = ({ deal }) => {
-  console.log('deal==>', deal);
   const history = useHistory();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);

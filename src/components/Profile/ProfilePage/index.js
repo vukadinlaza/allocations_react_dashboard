@@ -1,11 +1,10 @@
 import React from 'react';
 import { Paper, Grid, Avatar, Typography, Box } from '@material-ui/core';
 import { gql, useQuery } from '@apollo/client';
-import { useParams } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 import { TiSocialLinkedinCircular } from 'react-icons/ti';
 import { useStyles } from './styles';
 import Loader from '../../utils/Loader';
-import { Redirect } from 'react-router-dom';
 
 const GET_PROFILE = gql`
   query GetInvestor($_id: String) {

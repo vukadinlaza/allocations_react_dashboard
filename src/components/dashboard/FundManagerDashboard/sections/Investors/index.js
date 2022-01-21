@@ -12,7 +12,7 @@ const Investors = ({ classes, data, orgSlug, userProfile }) => {
     { value: 'email', label: 'Email', align: 'left', alignHeader: true },
   ];
 
-  const getCellContent = (type, row, headerValue) => {
+  const getCellContent = (type, row) => {
     switch (type) {
       case 'name':
         return row.first_name ? `${row['first_name']} ${row['last_name']}` : '';

@@ -74,6 +74,50 @@ const required = [
 ];
 const optional = ['mail_country', 'mail_city', 'mail_zip', 'mail_state', 'mail_street_address'];
 
+function InvestorName({ investor, errors, handleChange }) {
+  if (investor.investor_type === 'entity') {
+    return (
+      <Grid item xs={12} sm={12} md={6}>
+        <TextField
+          required
+          error={errors.includes('entity_name')}
+          style={{ width: '100%' }}
+          value={get(investor, 'entity_name') || ''}
+          onChange={handleChange('entity_name')}
+          label="Subscriber Entity Name"
+          variant="outlined"
+        />
+      </Grid>
+    );
+  }
+  return (
+    <>
+      <Grid item xs={12} sm={12} md={6}>
+        <TextField
+          required
+          error={errors.includes('first_name')}
+          style={{ width: '100%' }}
+          value={get(investor, 'first_name') || ''}
+          onChange={handleChange('first_name')}
+          label="Subscriber First Name"
+          variant="outlined"
+        />
+      </Grid>
+      <Grid item xs={12} sm={12} md={6}>
+        <TextField
+          required
+          error={errors.includes('last_name')}
+          style={{ width: '100%' }}
+          value={get(investor, 'last_name') || ''}
+          onChange={handleChange('last_name')}
+          label="Subscriber Last Name"
+          variant="outlined"
+        />
+      </Grid>
+    </>
+  );
+}
+
 export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKyc, dealType }) {
   const { userProfile } = useAuth(GET_INVESTOR);
   const [investor, setInvestor] = useState({});
@@ -207,12 +251,6 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
         )}
       </Grid>
       <form noValidate autoComplete="off">
-        {/* <Typography variant="h6" gutterBottom style={{ display: 'flex', justifyContent: 'space-between' }} onClick={() => setShowForm(showForm ? false : true)}>
-          KYC Information  <div>{showForm ? <ExpandMoreIcon /> : <ExpandLessIcon />} </div>
-        </Typography>
-        {!showForm && <Typography variant="subtitle2" style={{}} onClick={() => setShowForm(showForm ? false : true)}>
-          Click here to begin
-        </Typography>} */}
         {showForm && (
           <>
             {' '}
@@ -429,62 +467,6 @@ export default function DocusignKYCEmbeddedForm({ setLink, deal_slug, org, hasKy
         )}
       </form>
       <hr />
-      {/* <Paper className={classes.paper}> */}
-      {/* <div style={{ paddingTop: "1rem", paddingBottom: "1rem" }}>
-          <Typography variant="subtitle1">Verify your accredited investor status with VerifyInvestor.</Typography>
-          <Button id="invest" variant="contained" color="secondary" onClick={() => {
-            const token = process.env.REACT_APP_VERIFY_INVESTOR_HOST_TOKEN;
-            const identifier = investor?._id; // optional
-            const portal_name = "Test_Allocations"; // optional
-            const deal_name = "Test Deal"; // optional
-            window.verifyInvestor(token, identifier, portal_name, deal_name);
-          }} >Verify Accredited Investor Status</Button>
-        </div> */}
-      {/* </Paper> */}
-    </>
-  );
-}
-
-function InvestorName({ investor, errors, handleChange }) {
-  if (investor.investor_type === 'entity') {
-    return (
-      <Grid item xs={12} sm={12} md={6}>
-        <TextField
-          required
-          error={errors.includes('entity_name')}
-          style={{ width: '100%' }}
-          value={get(investor, 'entity_name') || ''}
-          onChange={handleChange('entity_name')}
-          label="Subscriber Entity Name"
-          variant="outlined"
-        />
-      </Grid>
-    );
-  }
-  return (
-    <>
-      <Grid item xs={12} sm={12} md={6}>
-        <TextField
-          required
-          error={errors.includes('first_name')}
-          style={{ width: '100%' }}
-          value={get(investor, 'first_name') || ''}
-          onChange={handleChange('first_name')}
-          label="Subscriber First Name"
-          variant="outlined"
-        />
-      </Grid>
-      <Grid item xs={12} sm={12} md={6}>
-        <TextField
-          required
-          error={errors.includes('last_name')}
-          style={{ width: '100%' }}
-          value={get(investor, 'last_name') || ''}
-          onChange={handleChange('last_name')}
-          label="Subscriber Last Name"
-          variant="outlined"
-        />
-      </Grid>
     </>
   );
 }

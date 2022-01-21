@@ -935,7 +935,7 @@ const HighVolumePartnerships = ({
                           }}
                           onChange={(e) => {
                             // Max 5 digits
-                            const value = Math.max(0, parseInt(e.target.value, 0))
+                            const value = Math.max(0, parseInt(e.target.value, 10))
                               .toString()
                               .slice(0, 5);
                             setZipcode(convertToPositiveIntOrNull(value));

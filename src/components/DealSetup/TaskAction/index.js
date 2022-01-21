@@ -9,6 +9,7 @@ import {
   KYCServiceTask,
   SignTask,
 } from '../Tasks';
+// eslint-disable-next-line import/extensions
 import styles from '../styles';
 
 const ADD_DOC = gql`
@@ -90,7 +91,7 @@ const TaskAction = ({
       setTaskLoading(false);
       refetchDeal();
     },
-    onError: (error) => {
+    onError: () => {
       setTaskLoading(false);
     },
   });
@@ -133,10 +134,6 @@ const TaskAction = ({
   };
 
   let action = null;
-  console.log(
-    { phase },
-    phase.tasks.every((t) => t.complete),
-  );
   if (taskTypes.text.includes(task.type)) {
     action = (
       <TextTask

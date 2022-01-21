@@ -122,10 +122,6 @@ const DealsTable = ({ classes, deals }) => {
     }
   };
 
-  // const handleSearch = (e) => {
-  //   setSearchTerm(e.target.value);
-  // };
-
   const dataCopy = deals.filter((doc) =>
     `${doc.name} ${doc.portfolioCompany}`.toUpperCase().includes(searchTerm.toUpperCase()),
   );

@@ -240,7 +240,7 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
             display: true,
             color: 'white',
             labels: dataLabels,
-            formatter(value, ctx, els) {
+            formatter(value, ctx) {
               const chartId = ctx.chart?.id;
               const total = ctx.dataset?._meta[chartId]?.total;
               const percentage = Math.round((value * 100) / total);
@@ -335,7 +335,7 @@ export const LineChart = withStyles(styles)(({ dataset: { data, labels } }) => {
               ticks: {
                 stepSize: maxValue / 5,
                 max: maxValue,
-                callback(val, index) {
+                callback(val) {
                   return nWithCommas(val);
                 },
               },

@@ -8,7 +8,8 @@
     "airbnb",
     "prettier/react",
     "plugin:prettier/recommended",
-    "prettier"
+    "prettier",
+    "plugin:@typescript-eslint/recommended"
   ],
   "env": {
     "browser": true,
@@ -18,7 +19,11 @@
     "node": true
   },
   "parserOptions": {
-    "ecmaVersion": 11
+    "ecmaVersion": 11,
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true
+    }
   },
   "rules": {
     "prettier/prettier": [
@@ -42,7 +47,18 @@
     "react/jsx-filename-extension": [
       "warn",
       {
-        "extensions": [".js", ".jsx"]
+        "extensions": [".js", ".jsx", ".tsx", ".ts"]
+      }
+    ],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "mjs": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
       }
     ],
     "prefer-destructuring": [

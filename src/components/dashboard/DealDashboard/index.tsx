@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery, gql } from '@apollo/client';
 import { useParams, withRouter, RouteComponentProps } from 'react-router-dom';
 import { useHistory } from 'react-router';
-import { useCurrentOrganization } from '../../../state/current-organization';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import { useCurrentOrganization } from '../../../state/current-organization';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import LoadingPlaceholder from './LoadingPlaceholder';
 import Investors from './sections/Investors';
@@ -62,7 +62,7 @@ const UPDATE_BUILD_DEAL = gql`
   }
 `;
 
-interface Props extends WithStyles<typeof styles> {}
+type Props = WithStyles<typeof styles>;
 
 const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   const history = useHistory();
@@ -73,7 +73,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
 
   const [dealDashboardTabs, setDealDashboardTabs] = useState([] as string[]);
 
-  const { data: dealData, loading } = useQuery(DEAL, {
+  const { data: dealData } = useQuery(DEAL, {
     fetchPolicy: 'network-only',
     pollInterval: 1000,
     variables: { deal_id },
@@ -124,8 +124,8 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
 
   const dealProps = {
     data: dealData?.getDealByIdWithTasks,
-    handleComplete: handleComplete,
-    updateDealLoading: updateDealLoading,
+    handleComplete,
+    updateDealLoading,
     orgSlug: currentOrg?.slug,
   };
 
@@ -159,12 +159,15 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
       <Grid item xs={12}>
         <Grid container justifyContent="flex-start" spacing={2}>
           <Grid item xs={4}>
-            <p
-              className={classes.backButton}
-              onClick={() => history.push(`/organizations/${currentOrg.slug}/deals`)}
-            >
-              <ChevronLeftIcon /> Back to SPVs
-            </p>
+            {
+              // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+              <p
+                className={classes.backButton}
+                onClick={() => history.push(`/organizations/${currentOrg.slug}/deals`)}
+              >
+                <ChevronLeftIcon /> Back to SPVs
+              </p>
+            }
           </Grid>
         </Grid>
         <Grid container justifyContent="center" spacing={2}>

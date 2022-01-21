@@ -3,7 +3,7 @@ import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Grid, Paper } from '@material-ui/core';
 import styles from '../styles';
 
-interface Props extends WithStyles<typeof styles> {}
+type Props = WithStyles<typeof styles>;
 
 const LoadingPlaceholder: React.FC<Props> = ({ classes }) => {
   return (

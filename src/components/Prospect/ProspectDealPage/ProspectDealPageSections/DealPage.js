@@ -17,7 +17,7 @@ const DealPage = ({ classes }) => {
                 >
                   How much are you investing into this SPV?
                 </Typography>
-                <Tooltip title="howmuch are you personally investing?" arrow>
+                <Tooltip title="how much are you personally investing?" arrow>
                   <img src={questionMark} alt="question mark" />
                 </Tooltip>
               </Grid>

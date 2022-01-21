@@ -130,7 +130,7 @@ const AllocationsTable = ({
   getCollapsedContent,
   withCollapse,
   currentCollapsed,
-  withTotal,
+  // withTotal,
 }) => {
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
@@ -206,6 +206,18 @@ const AllocationsTable = ({
     }
   };
 
+  const descendingComparator = (a, b, orderBy) => {
+    const itemA = _.get(a, orderBy, '');
+    const itemB = _.get(b, orderBy, '');
+    if (itemB < itemA) {
+      return -1;
+    }
+    if (itemB > itemA) {
+      return 1;
+    }
+    return 0;
+  };
+
   const getComparator = (order, orderBy) => {
     return order === 'desc'
       ? (a, b) => descendingComparator(a, b, orderBy)
@@ -222,24 +234,12 @@ const AllocationsTable = ({
     return stabilizedThis.map((el) => el[0]);
   };
 
-  const descendingComparator = (a, b, orderBy) => {
-    const itemA = _.get(a, orderBy, '');
-    const itemB = _.get(b, orderBy, '');
-    if (itemB < itemA) {
-      return -1;
-    }
-    if (itemB > itemA) {
-      return 1;
-    }
-    return 0;
-  };
-
   const isSelected = (name) => selected.indexOf(name) !== -1;
   const isAllSelected = () => (data ? selected.length === data.length : false);
   let dataToShow = stableSort(data, getComparator(order, orderBy));
 
   // temp demo data
-  withTotal = true;
+  const withTotal = true;
 
   if (pagination) {
     dataToShow = dataToShow.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);

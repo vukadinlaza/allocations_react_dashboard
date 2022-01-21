@@ -40,7 +40,7 @@ export default function NullPaper({ title, text, image, button, onClick }) {
       <Grid container alignItems="center">
         <Hidden only="md">
           <Grid item lg={5}>
-            <img src={image} className={classes.img} />
+            <img src={image} className={classes.img} alt="paper" />
           </Grid>
         </Hidden>
         <Grid item md={12} lg={7}>

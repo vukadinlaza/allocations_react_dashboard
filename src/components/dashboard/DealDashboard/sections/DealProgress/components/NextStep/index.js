@@ -4,7 +4,7 @@ import { Grid, Typography } from '@material-ui/core';
 import grayCheck from '../../../../../../../assets/gray-check.svg';
 import allocationsIcon from '../../../../../../../assets/for-allocations-icon.svg';
 import forYouIcon from '../../../../../../../assets/for-you-icon.svg';
-import styles from '../../../../styles.ts';
+import styles from '../../../../styles';
 
 const NextStep = ({ classes, phase, task }) => {
   const forFM = !task?.type?.includes('process');

@@ -20,24 +20,6 @@ import { useSimpleReducer } from '../../../utils/hooks';
 import Loader from '../../utils/Loader';
 import './style.scss';
 
-const ORG_COMPLIANCE = gql`
-  query OrgCompliance($slug: String!) {
-    organization(slug: $slug) {
-      _id
-      name
-      slug
-      complianceTasks {
-        _id
-        completed
-        status
-        is_signature
-        signature_template
-        task
-      }
-    }
-  }
-`;
-
 const CREATE_TASK = gql`
   mutation CreateTask($slug: String!, $complianceTask: ComplianceTaskInput!) {
     createComplianceTask(slug: $slug, complianceTask: $complianceTask) {
@@ -60,7 +42,7 @@ const DELETE_TASK = gql`
   }
 `;
 
-export default function Compliance({ data, error, refetch }) {
+export default function Compliance({ data, refetch }) {
   if (!data || !data.organization) return <Loader />;
 
   const { organization } = data;

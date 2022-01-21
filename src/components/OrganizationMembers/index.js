@@ -37,49 +37,6 @@ const ADD_MEMBERSHIP = gql`
     }
   }
 `;
-
-export default function OrganizationMembers({ data, refetch }) {
-  const { organization } = useParams();
-  const [revokeMembership] = useMutation(REVOKE_MEMBERSHIP, {
-    variables: { slug: organization },
-    onCompleted: refetch,
-  });
-
-  const [sendAdminInvite] = useMutation(SEND_ADMIN_INVITE, {
-    variables: { slug: organization },
-    onCompleted: refetch,
-  });
-
-  if (!data) return <Loader />;
-
-  return (
-    <div className="OrganizationMembers">
-      <Row>
-        <Col sm={{ size: 8, offset: 1 }}>
-          <Paper style={{ margin: '10px 0px' }}>
-            <UserSearch refetch={refetch} />
-          </Paper>
-          <Paper style={{ marginTop: '15px' }}>
-            <Table>
-              <TableBody>
-                {data.organizationMembers.map((member) => (
-                  <Member
-                    key={member._id}
-                    org={data.organization}
-                    member={member}
-                    sendAdminInvite={sendAdminInvite}
-                    revokeMembership={revokeMembership}
-                  />
-                ))}
-              </TableBody>
-            </Table>
-          </Paper>
-        </Col>
-      </Row>
-    </div>
-  );
-}
-
 function Member({ org, member, sendAdminInvite, revokeMembership }) {
   const invite = org.adminInvites.filter((i) => i).find((i) => i.to === member.email);
 
@@ -175,6 +132,48 @@ function UserSearch({ refetch }) {
           </TableBody>
         </Table>
       </Paper>
+    </div>
+  );
+}
+
+export default function OrganizationMembers({ data, refetch }) {
+  const { organization } = useParams();
+  const [revokeMembership] = useMutation(REVOKE_MEMBERSHIP, {
+    variables: { slug: organization },
+    onCompleted: refetch,
+  });
+
+  const [sendAdminInvite] = useMutation(SEND_ADMIN_INVITE, {
+    variables: { slug: organization },
+    onCompleted: refetch,
+  });
+
+  if (!data) return <Loader />;
+
+  return (
+    <div className="OrganizationMembers">
+      <Row>
+        <Col sm={{ size: 8, offset: 1 }}>
+          <Paper style={{ margin: '10px 0px' }}>
+            <UserSearch refetch={refetch} />
+          </Paper>
+          <Paper style={{ marginTop: '15px' }}>
+            <Table>
+              <TableBody>
+                {data.organizationMembers.map((member) => (
+                  <Member
+                    key={member._id}
+                    org={data.organization}
+                    member={member}
+                    sendAdminInvite={sendAdminInvite}
+                    revokeMembership={revokeMembership}
+                  />
+                ))}
+              </TableBody>
+            </Table>
+          </Paper>
+        </Col>
+      </Row>
     </div>
   );
 }

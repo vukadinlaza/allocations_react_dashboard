@@ -1,5 +1,6 @@
 import {
   FormControl,
+  FormLabel,
   TextField,
   Button,
   Select,
@@ -17,7 +18,7 @@ import { useLocation } from 'react-router';
 import Loader from '../../../utils/Loader';
 
 const validate = (formData, revocableTrust) => {
-  let required = [
+  const required = [
     'tax_classification',
     'city',
     'state',
@@ -90,14 +91,14 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
 
   return (
     <section className="W9Entity">
-      <div classname="form-container">
+      <div className="form-container">
         <div className="form-header">
           <h2>Complete W-9 Entity</h2>
           <h3>Please complete this W-9 in order to complete your tax requirements.</h3>
         </div>
         <form className="form">
           <FormControl className="form-field name">
-            <label>
+            <FormLabel>
               Legal Entity Name
               <TextField
                 variant="outlined"
@@ -106,11 +107,11 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
                 error={errors.includes('entity_name')}
                 name="entity_name"
               />
-            </label>
+            </FormLabel>
           </FormControl>
 
           <FormControl className="form-field address">
-            <label>
+            <FormLabel>
               Tax Classification
               <Select
                 onChange={handleChange}
@@ -127,13 +128,13 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
                 <MenuItem value="Limited Liability Company">Limited Liability Company</MenuItem>
                 <MenuItem value="N/A">N/A</MenuItem>
               </Select>
-            </label>
+            </FormLabel>
           </FormControl>
 
           {formData.tax_classification === 'SMLLC' && (
-            //TODO: add prefill for signnature
+            // TODO: add prefill for signature
             <FormControl className="form-field disregarded-entity-name">
-              <label>
+              <FormLabel>
                 SMLLC Owner Name
                 <TextField
                   variant="outlined"
@@ -142,13 +143,13 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
                   error={errors.includes('smllc_owner')}
                   name="smllc_owner"
                 />
-              </label>
+              </FormLabel>
             </FormControl>
           )}
 
           {formData.tax_classification === 'Limited Liability Company' && (
             <FormControl className="form-field address">
-              <label>
+              <FormLabel>
                 What is your entity taxed as?
                 <Select
                   onChange={handleChange}
@@ -161,12 +162,12 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
                   <MenuItem value="S Corporation">S Corporation</MenuItem>
                   <MenuItem value="Partnership">Partnership</MenuItem>
                 </Select>
-              </label>
+              </FormLabel>
             </FormControl>
           )}
 
           <FormControl className="form-field address">
-            <label>
+            <FormLabel>
               Street address
               <TextField
                 onChange={handleChange}
@@ -175,12 +176,12 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
                 error={errors.includes('address')}
                 name="address"
               />
-            </label>
+            </FormLabel>
           </FormControl>
 
           <div className="region container ">
             <FormControl className="form-field city">
-              <label>
+              <FormLabel>
                 City
                 <TextField
                   variant="outlined"
@@ -189,11 +190,11 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
                   error={errors.includes('city')}
                   value={formData.city}
                 />
-              </label>
+              </FormLabel>
             </FormControl>
 
             <FormControl className="form-field state">
-              <label>
+              <FormLabel>
                 State
                 <TextField
                   variant="outlined"
@@ -202,11 +203,11 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
                   error={errors.includes('state')}
                   value={formData.state}
                 />
-              </label>
+              </FormLabel>
             </FormControl>
 
             <FormControl className="form-field zip">
-              <label>
+              <FormLabel>
                 Zip Code
                 <TextField
                   variant="outlined"
@@ -215,7 +216,7 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
                   error={errors.includes('zip')}
                   value={formData.zip}
                 />
-              </label>
+              </FormLabel>
             </FormControl>
           </div>
           {formData.tax_classification === 'Trust/estate' && (
@@ -256,7 +257,7 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
           <div className="container">
             {!revocableTrust ? (
               <FormControl className="form-field ein">
-                <label>
+                <FormLabel>
                   EIN
                   <div className="ein container">
                     <Tooltip title="First 2 digits of EIN.">
@@ -282,7 +283,7 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
                       />
                     </Tooltip>
                   </div>
-                </label>
+                </FormLabel>
               </FormControl>
             ) : (
               <FormControl className="form-field ssn">
@@ -326,7 +327,7 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
               </FormControl>
             )}
             <FormControl className="form-field date-signed">
-              <label>
+              <FormLabel>
                 Date signed
                 <TextField
                   value={formData.date_signed}
@@ -336,7 +337,7 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
                   error={errors.includes('date_signed')}
                   variant="outlined"
                 />
-              </label>
+              </FormLabel>
             </FormControl>
           </div>
 
@@ -384,7 +385,7 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
           )}
 
           <FormControl className="form-field signature">
-            <label>
+            <FormLabel>
               E-Signature
               <TextField
                 value={formData.signature}
@@ -394,7 +395,7 @@ function W9Entity({ toggleOpen, createDoc, called, loading }) {
                 error={errors.includes('signature')}
                 className="signature-input"
               />
-            </label>
+            </FormLabel>
           </FormControl>
 
           {called && loading ? (

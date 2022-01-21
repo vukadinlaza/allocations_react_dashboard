@@ -62,32 +62,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const GET_INVESTOR = gql`
-//   {
-//     investor {
-//       _id
-//       email
-//       first_name
-//       last_name
-//       admin
-//       showInvestAndMrkPlc
-//     }
-//   }
-// `;
-// const POST_ZAP = gql`
-//   mutation PostZap($body: Object) {
-//     postZap(data: $body) {
-//       _id
-//     }
-//   }
-// `;
-// const UPDATE_USER = gql`
-//   mutation UpdateUser($investor: UserInput!) {
-//     updateUser(input: $investor) {
-//       _id
-//     }
-//   }
-// `;
 export default () => {
   const classes = useStyles();
   const history = useHistory();

@@ -62,198 +62,6 @@ export function validate(investor) {
   return required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);
 }
 
-export default function InvestorEditForm({
-  investor,
-  setInvestor,
-  actionText,
-  icon,
-  setFormStatus,
-  noValidate = false,
-}) {
-  const [errors, setErrors] = useState([]);
-  const { logout, userProfile } = useAuth();
-
-  const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
-
-  const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_USER, {
-    onCompleted: () => {
-      if (userProfile.email !== investor.email) {
-        logoutWithRedirect();
-      } else {
-        toast.success('Success!');
-      }
-    },
-    onError: () =>
-      toast.error(
-        'Sorry, something went wrong. Try again or contact support at support@allocations.com',
-      ),
-  });
-
-  const handleChange = (prop) => (e) => {
-    e.persist();
-
-    if (prop === 'first_name' || prop === 'last_name' || prop === 'signer_full_name') {
-      const capitalizeName = (str) =>
-        str
-          .toLowerCase()
-          .replace(/\w{0,}/g, (match) => match.replace(/\w/, (m) => m.toUpperCase()));
-
-      return setInvestor((prev) => ({
-        ...prev,
-        [prop]: capitalizeName(e.target.value),
-      }));
-    }
-
-    if (prop === 'investor_type') {
-      return setInvestor((prev) => ({
-        ...prev,
-        [prop]: e.target.value,
-        accredited_investor_status: '',
-      }));
-    }
-    return setInvestor((prev) => ({ ...prev, [prop]: e.target.value }));
-  };
-
-  const submit = () => {
-    // don't validate if noValidate flag passed
-    if (noValidate) return updateInvestor({ variables: { investor } });
-    const validation = validate(investor);
-    const required =
-      investor.investor_type === 'entity'
-        ? ['entity_name', 'accredited_investor_status', ...reqs]
-        : ['first_name', 'last_name', ...reqs];
-    const payload = pick(investor, [...required, '_id']);
-    setErrors(validation);
-
-    if (validation.length === 0) {
-      if (get(investor, 'email') !== userProfile.email) {
-        if (window.confirm('Changing your email will log you out, continue?')) {
-          updateInvestor({
-            variables: { investor: payload },
-          });
-        }
-      } else {
-        updateInvestor({
-          variables: { investor: payload },
-        });
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (updateInvestorRes.data) setFormStatus('complete');
-    if (updateInvestorRes.loading) setFormStatus('loading');
-  }, [setFormStatus, updateInvestorRes]);
-
-  if (!investor || !userProfile.email) return <Loader />;
-
-  return (
-    <>
-      <Paper>
-        <form noValidate autoComplete="off" style={{ padding: '16px' }}>
-          <Typography variant="h6" gutterBottom>
-            Profile {icon && <FontAwesomeIcon icon={icon} spin={icon === 'circle-notch'} />}
-          </Typography>
-          <Typography variant="subtitle2" style={{ marginBottom: '16px' }}>
-            This information can be edited from your profile page.
-          </Typography>
-          <Grid container spacing={3} style={{ marginTop: '16px' }}>
-            <Grid item xs={12} sm={12} md={6}>
-              <FormControl
-                required
-                error={errors.includes('investor_type')}
-                variant="outlined"
-                style={{ width: '100%' }}
-              >
-                <InputLabel>Investor Type</InputLabel>
-                <Select
-                  value={investor.investor_type || ''}
-                  onChange={handleChange('investor_type')}
-                  inputProps={{ name: 'Type' }}
-                >
-                  <MenuItem value="" />
-                  <MenuItem value="individual">Individual</MenuItem>
-                  <MenuItem value="entity">Entity</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-
-            {investor.investor_type === 'entity' && (
-              <Grid item xs={12} sm={12} md={6}>
-                <AccreditedInvestorStatus
-                  investor={investor}
-                  handleChange={handleChange}
-                  errors={errors}
-                />
-              </Grid>
-            )}
-
-            <Grid item xs={12} sm={12} md={6}>
-              <FormControl
-                required
-                error={errors.includes('country')}
-                variant="outlined"
-                style={{ width: '100%' }}
-              >
-                <InputLabel>Country of Residence or Place of Business</InputLabel>
-                <Select
-                  value={investor.country || ''}
-                  onChange={handleChange('country')}
-                  inputProps={{ name: 'Country' }}
-                >
-                  <MenuItem value="" />
-                  {[{ countryName: 'United States' }, ...countries].map(({ countryName }) => (
-                    <MenuItem key={countryName} value={countryName}>
-                      {countryName}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} sm={12} md={6}>
-              <FormControl
-                required
-                disabled
-                error={errors.includes('country')}
-                variant="outlined"
-                style={{ width: '100%' }}
-              >
-                <TextField
-                  error={errors.includes('email')}
-                  style={{ width: '100%' }}
-                  value={get(investor, 'email') || ''}
-                  onChange={handleChange('email')}
-                  label="Email"
-                  variant="outlined"
-                />
-              </FormControl>
-            </Grid>
-
-            <InvestorName investor={investor} errors={errors} handleChange={handleChange} />
-
-            <Grid item xs={12} sm={12} md={6}>
-              <TextField
-                required
-                error={errors.includes('signer_full_name')}
-                style={{ width: '100%' }}
-                value={get(investor, 'signer_full_name') || ''}
-                onChange={handleChange('signer_full_name')}
-                label="Full Name of Signer"
-                variant="outlined"
-              />
-            </Grid>
-          </Grid>
-
-          <Button variant="contained" style={{ marginTop: 16 }} onClick={submit} color="primary">
-            {actionText}
-          </Button>
-        </form>
-      </Paper>
-    </>
-  );
-}
-
 export function PassportUploader({ investor, setInvestor }) {
   const classes = useStyles();
   if (investor?.passport) {
@@ -436,5 +244,198 @@ export function ThreeCSevenAccrediedInvestorStatus({ investor, handleChange, err
         ))}
       </Select>
     </FormControl>
+  );
+}
+
+export default function InvestorEditForm({
+  investor,
+  setInvestor,
+  actionText,
+  icon,
+  setFormStatus,
+  noValidate = false,
+}) {
+  const [errors, setErrors] = useState([]);
+  const { logout, userProfile } = useAuth();
+
+  const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
+
+  const [updateInvestor, updateInvestorRes] = useMutation(UPDATE_USER, {
+    onCompleted: () => {
+      if (userProfile.email !== investor.email) {
+        logoutWithRedirect();
+      } else {
+        toast.success('Success!');
+      }
+    },
+    onError: () =>
+      toast.error(
+        'Sorry, something went wrong. Try again or contact support at support@allocations.com',
+      ),
+  });
+
+  const handleChange = (prop) => (e) => {
+    e.persist();
+
+    if (prop === 'first_name' || prop === 'last_name' || prop === 'signer_full_name') {
+      const capitalizeName = (str) =>
+        str
+          .toLowerCase()
+          .replace(/\w{0,}/g, (match) => match.replace(/\w/, (m) => m.toUpperCase()));
+
+      return setInvestor((prev) => ({
+        ...prev,
+        [prop]: capitalizeName(e.target.value),
+      }));
+    }
+
+    if (prop === 'investor_type') {
+      return setInvestor((prev) => ({
+        ...prev,
+        [prop]: e.target.value,
+        accredited_investor_status: '',
+      }));
+    }
+    return setInvestor((prev) => ({ ...prev, [prop]: e.target.value }));
+  };
+
+  const submit = () => {
+    // don't validate if noValidate flag passed
+    if (noValidate) return updateInvestor({ variables: { investor } });
+    const validation = validate(investor);
+    const required =
+      investor.investor_type === 'entity'
+        ? ['entity_name', 'accredited_investor_status', ...reqs]
+        : ['first_name', 'last_name', ...reqs];
+    const payload = pick(investor, [...required, '_id']);
+    setErrors(validation);
+
+    if (validation.length === 0) {
+      if (get(investor, 'email') !== userProfile.email) {
+        // eslint-disable-next-line no-alert
+        if (window.confirm('Changing your email will log you out, continue?')) {
+          updateInvestor({
+            variables: { investor: payload },
+          });
+        }
+      } else {
+        updateInvestor({
+          variables: { investor: payload },
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (updateInvestorRes.data) setFormStatus('complete');
+    if (updateInvestorRes.loading) setFormStatus('loading');
+  }, [setFormStatus, updateInvestorRes]);
+
+  if (!investor || !userProfile.email) return <Loader />;
+
+  return (
+    <>
+      <Paper>
+        <form noValidate autoComplete="off" style={{ padding: '16px' }}>
+          <Typography variant="h6" gutterBottom>
+            Profile {icon && <FontAwesomeIcon icon={icon} spin={icon === 'circle-notch'} />}
+          </Typography>
+          <Typography variant="subtitle2" style={{ marginBottom: '16px' }}>
+            This information can be edited from your profile page.
+          </Typography>
+          <Grid container spacing={3} style={{ marginTop: '16px' }}>
+            <Grid item xs={12} sm={12} md={6}>
+              <FormControl
+                required
+                error={errors.includes('investor_type')}
+                variant="outlined"
+                style={{ width: '100%' }}
+              >
+                <InputLabel>Investor Type</InputLabel>
+                <Select
+                  value={investor.investor_type || ''}
+                  onChange={handleChange('investor_type')}
+                  inputProps={{ name: 'Type' }}
+                >
+                  <MenuItem value="" />
+                  <MenuItem value="individual">Individual</MenuItem>
+                  <MenuItem value="entity">Entity</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+
+            {investor.investor_type === 'entity' && (
+              <Grid item xs={12} sm={12} md={6}>
+                <AccreditedInvestorStatus
+                  investor={investor}
+                  handleChange={handleChange}
+                  errors={errors}
+                />
+              </Grid>
+            )}
+
+            <Grid item xs={12} sm={12} md={6}>
+              <FormControl
+                required
+                error={errors.includes('country')}
+                variant="outlined"
+                style={{ width: '100%' }}
+              >
+                <InputLabel>Country of Residence or Place of Business</InputLabel>
+                <Select
+                  value={investor.country || ''}
+                  onChange={handleChange('country')}
+                  inputProps={{ name: 'Country' }}
+                >
+                  <MenuItem value="" />
+                  {[{ countryName: 'United States' }, ...countries].map(({ countryName }) => (
+                    <MenuItem key={countryName} value={countryName}>
+                      {countryName}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12} sm={12} md={6}>
+              <FormControl
+                required
+                disabled
+                error={errors.includes('country')}
+                variant="outlined"
+                style={{ width: '100%' }}
+              >
+                <TextField
+                  error={errors.includes('email')}
+                  style={{ width: '100%' }}
+                  value={get(investor, 'email') || ''}
+                  onChange={handleChange('email')}
+                  label="Email"
+                  variant="outlined"
+                />
+              </FormControl>
+            </Grid>
+
+            <InvestorName investor={investor} errors={errors} handleChange={handleChange} />
+
+            <Grid item xs={12} sm={12} md={6}>
+              <TextField
+                required
+                error={errors.includes('signer_full_name')}
+                style={{ width: '100%' }}
+                value={get(investor, 'signer_full_name') || ''}
+                onChange={handleChange('signer_full_name')}
+                label="Full Name of Signer"
+                variant="outlined"
+              />
+            </Grid>
+          </Grid>
+
+          <Button variant="contained" style={{ marginTop: 16 }} onClick={submit} color="primary">
+            {actionText}
+          </Button>
+        </form>
+      </Paper>
+    </>
   );
 }

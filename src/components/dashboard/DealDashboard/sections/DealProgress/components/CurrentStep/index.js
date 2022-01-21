@@ -9,7 +9,7 @@ import InviteModal from '../../../Investors/components/InviteModal';
 import allocationsIcon from '../../../../../../../assets/for-allocations-icon.svg';
 import forYouIcon from '../../../../../../../assets/for-you-icon.svg';
 import grayCheck from '../../../../../../../assets/gray-check.svg';
-import styles from '../../../../styles.ts';
+import styles from '../../../../styles';
 
 const defaultDesc =
   'An Allocations representative will be reaching out shortly to assist you in completing this step. If you have any questions, do not hesitate to contact support@allocations.com.';

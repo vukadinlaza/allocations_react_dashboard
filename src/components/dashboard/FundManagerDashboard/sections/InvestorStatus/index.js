@@ -33,7 +33,6 @@ const InvestorBoxViewed = ({
   setDealId,
   setInvestorId,
   dealId,
-  dealType,
 }) => {
   const onClick = () => {
     if (superAdmin) {

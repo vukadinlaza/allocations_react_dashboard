@@ -23,7 +23,7 @@ export const sortByStatus = (data: any, field?: string, order?: string) => {
 };
 
 export const getChipStyle = (status: string) => {
-  let basicStyle: ChipStyle = {
+  const basicStyle: ChipStyle = {
     fontSize: '12px',
     fontWeight: 500,
     borderRadius: '12px',

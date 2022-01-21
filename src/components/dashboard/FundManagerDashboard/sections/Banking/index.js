@@ -150,6 +150,55 @@ const validatedDataDefault = fields.reduce((acc, val) => {
   return acc;
 }, {});
 
+const Input = ({ field, accountInformation, handleChange, validator }) => {
+  const [errorState, setErrorState] = useState(false);
+  const [errorStateMessage, setErrorStateMessage] = useState(null);
+
+  return (
+    <Grid
+      item
+      sm={12}
+      md={6}
+      lg={6}
+      style={{ display: 'flex', flexDirection: 'column', padding: '0 3rem' }}
+    >
+      <Typography style={{ margin: '1rem 0', fontSize: '.9rem', fontWeight: 'bolder' }}>
+        {field.displayName}
+      </Typography>
+      {errorStateMessage && <p style={{ fontSize: '.8rem', color: 'grey' }}>{errorStateMessage}</p>}
+      <TextField
+        style={{ width: '100%' }}
+        type={field.type}
+        size="sm"
+        error={errorState}
+        defaultValue={field.default}
+        value={get(accountInformation, field.prop, field.default || '')}
+        onChange={(e) => {
+          const { value } = e.target;
+
+          let isValidState = false;
+          // If value is validated, or !null without a validator : isValid == true
+          if (validator) {
+            const { valid, errorMessage } = validator(value);
+            isValidState = valid;
+            if (!valid) setErrorStateMessage(errorMessage);
+            if (valid) setErrorStateMessage(null);
+            setErrorState(!valid);
+          } else if (!value) isValidState = false;
+          else isValidState = true;
+
+          handleChange({
+            prop: field.prop,
+            newVal: e.target.value,
+            isValidState,
+          });
+        }}
+        variant="outlined"
+      />
+    </Grid>
+  );
+};
+
 const Banking = ({ deal_id, virtual_account_number }) => {
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(true); // Show form if account creation flow has not yet started
@@ -362,52 +411,3 @@ const Banking = ({ deal_id, virtual_account_number }) => {
 };
 
 export default Banking;
-
-const Input = ({ field, accountInformation, handleChange, validator }) => {
-  const [errorState, setErrorState] = useState(false);
-  const [errorStateMessage, setErrorStateMessage] = useState(null);
-
-  return (
-    <Grid
-      item
-      sm={12}
-      md={6}
-      lg={6}
-      style={{ display: 'flex', flexDirection: 'column', padding: '0 3rem' }}
-    >
-      <Typography style={{ margin: '1rem 0', fontSize: '.9rem', fontWeight: 'bolder' }}>
-        {field.displayName}
-      </Typography>
-      {errorStateMessage && <p style={{ fontSize: '.8rem', color: 'grey' }}>{errorStateMessage}</p>}
-      <TextField
-        style={{ width: '100%' }}
-        type={field.type}
-        size="sm"
-        error={errorState}
-        defaultValue={field.default}
-        value={get(accountInformation, field.prop, field.default || '')}
-        onChange={(e) => {
-          const { value } = e.target;
-
-          let isValidState = false;
-          // If value is validated, or !null without a validator : isValid == true
-          if (validator) {
-            const { valid, errorMessage } = validator(value);
-            isValidState = valid;
-            if (!valid) setErrorStateMessage(errorMessage);
-            if (valid) setErrorStateMessage(null);
-            setErrorState(!valid);
-          } else if (!value) isValidState = false;
-          else isValidState = true;
-
-          handleChange({
-            prop: field.prop,
-            newVal: e.target.value,
-            isValidState,
-          });
-        }}
-        variant="outlined"
-      />
-    </Grid>
-  );
-};

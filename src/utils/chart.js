@@ -29,6 +29,6 @@ export function initResponsive(el, margins) {
   return { g, chartHeight, chartWidth, svg };
 }
 
-export function clearChart(el) {
+export function clearChart() {
   return d3.selectAll(`el > *`).remove();
 }

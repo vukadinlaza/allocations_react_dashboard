@@ -41,7 +41,6 @@ const styles = (theme) => ({
   },
   chartContainer: {
     width: '70%',
-    // width: '60%',
     padding: '5% 0',
     [theme.breakpoints.down(tablet)]: {
       padding: 0,

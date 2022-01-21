@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormControl, TextField } from '@material-ui/core';
+import { FormControl, TextField, FormLabel } from '@material-ui/core';
 import './styles.scss';
 
 function DeadlineSettings({ formData, setFormData }) {
@@ -23,7 +23,7 @@ function DeadlineSettings({ formData, setFormData }) {
 
       <div className="form-fields">
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Signing deadline
             <TextField
               onChange={handleFormChange}
@@ -33,11 +33,11 @@ function DeadlineSettings({ formData, setFormData }) {
               className="text-input"
               variant="outlined"
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Wiring deadline
             <TextField
               onChange={handleFormChange}
@@ -47,7 +47,7 @@ function DeadlineSettings({ formData, setFormData }) {
               className="text-input"
               variant="outlined"
             />
-          </label>
+          </FormLabel>
         </FormControl>
       </div>
     </section>

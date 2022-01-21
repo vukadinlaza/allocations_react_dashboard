@@ -1,4 +1,4 @@
-import { FormControl, TextField, Button, Menu, MenuItem } from '@material-ui/core';
+import { FormControl, TextField, Button, Menu, MenuItem, FormLabel } from '@material-ui/core';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './styles.scss';
 import { toast } from 'react-toastify';
@@ -68,7 +68,7 @@ function DealSettings({ formData, setFormData, refetch }) {
 
   const DealDocumentItem = ({ document }) => {
     const [documentMenuAnchorEl, setDocumentMenuAnchorEl] = useState(null);
-    const [docMenuOpen, toggleDocMenuOpen] = useState(false);
+    const [toggleDocMenuOpen] = useState(false);
 
     const handleDocumentMenuClick = (event) => {
       setDocumentMenuAnchorEl(event.currentTarget);
@@ -102,7 +102,7 @@ function DealSettings({ formData, setFormData, refetch }) {
           aria-haspopup="true"
           onClick={handleDocumentMenuClick}
         >
-          <img src={DocumentMenuIcon} alt="document icon" />
+          <img src={DocumentMenuIcon} alt="document menu icon" />
         </Button>
 
         <Menu
@@ -188,7 +188,7 @@ function DealSettings({ formData, setFormData, refetch }) {
 
     useEffect(() => {
       setImgSrc(`https://allocations-public.s3.us-east-2.amazonaws.com/${dealCoverImageKey}`);
-    }, [dealCoverImageKey, slug]);
+    }, []);
 
     const submitCrop = (canvas, crop) => {
       if (!crop || !canvas) {
@@ -267,7 +267,7 @@ function DealSettings({ formData, setFormData, refetch }) {
     return (
       <div className="banner-upload" style={{ width: '100%' }}>
         <FormControl className="upload">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Upload cover photo
             <div className="upload-container">
               <div className="button-container">
@@ -282,7 +282,7 @@ function DealSettings({ formData, setFormData, refetch }) {
                 </p>
               </div>
             </div>
-          </label>
+          </FormLabel>
 
           <Button
             disabled={completedCrop === null}
@@ -344,7 +344,7 @@ function DealSettings({ formData, setFormData, refetch }) {
 
       <div className="form-fields">
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Last valuation ($)
             <TextField
               value={last_valuation || ''}
@@ -353,11 +353,11 @@ function DealSettings({ formData, setFormData, refetch }) {
               className="text-input"
               variant="outlined"
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             DocSpring Template ID
             <TextField
               name="docSpringTemplateId"
@@ -366,22 +366,22 @@ function DealSettings({ formData, setFormData, refetch }) {
               className="text-input"
               variant="outlined"
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         {documents && (
           <div className="deal-documents">
-            <label className="field-label">
+            <FormLabel className="field-label">
               Deal Documents
               <ul className="document-list">{dealDocumentItems}</ul>
-            </label>
+            </FormLabel>
           </div>
         )}
 
         <AddDealLogo />
 
         <FormControl className="upload">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Upload wire instructions
             <div className="upload-container">
               <div className="button-container">
@@ -404,7 +404,7 @@ function DealSettings({ formData, setFormData, refetch }) {
                 <p>{wireInstructions?.title || 'No file selected'}</p>
               </div>
             </div>
-          </label>
+          </FormLabel>
 
           <Button
             disabled={wireInstructions === null}
@@ -416,7 +416,7 @@ function DealSettings({ formData, setFormData, refetch }) {
         </FormControl>
 
         <FormControl className="upload">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Upload documents
             <div className="upload-container">
               <div className="button-container">
@@ -439,7 +439,7 @@ function DealSettings({ formData, setFormData, refetch }) {
                 <p>{doc?.doc?.name || 'No file selected'}</p>
               </div>
             </div>
-          </label>
+          </FormLabel>
           <Button
             disabled={doc === null}
             onClick={submitDoc}
@@ -450,14 +450,14 @@ function DealSettings({ formData, setFormData, refetch }) {
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Deal ID
             <TextField disabled value={_id || ''} className="text-input" variant="outlined" />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Live deal link
             <TextField
               className="text-input"
@@ -471,7 +471,7 @@ function DealSettings({ formData, setFormData, refetch }) {
                 ),
               }}
             />
-          </label>
+          </FormLabel>
         </FormControl>
       </div>
     </section>

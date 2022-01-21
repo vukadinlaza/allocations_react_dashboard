@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { CircularProgress } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import styles from '../../../../styles.ts';
+import styles from '../../../../styles';
 import { AgreementBox } from '../../../../../../NewBuild/BuildDealForm/FormComponents/AgreementSigner';
 
 const GET_INVESTMENT_AGREEMENT = gql`
@@ -34,8 +34,7 @@ const SignAgreementStep = ({ classes, task, deal }) => {
       deal_id: deal?._id,
     },
   });
-  const [signInvestmentAgreement, { data: confirmationMessage }] =
-    useMutation(SIGN_INVESTMENT_AGREEMENT);
+  const [signInvestmentAgreement] = useMutation(SIGN_INVESTMENT_AGREEMENT);
 
   const signingModal = (agreementLink, isSigned) => {
     DocSpring.createVisualForm({

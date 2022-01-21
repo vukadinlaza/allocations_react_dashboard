@@ -42,101 +42,6 @@ function validate({ investment, user, deal }) {
   return errors;
 }
 
-export default function InvestmentNew() {
-  const [investment, setInvestment] = useState({ amount: '' });
-  const [createInvestment] = useMutation(CREATE_INVESTMENT);
-  const [errors, setErrors] = useState([]);
-  const [newUser, setNewUser] = useState(false);
-  const [user, setUser] = useState(null);
-  const [deal, setDeal] = useState(null);
-
-  const updateInvestmentProp = ({ prop, newVal }) => {
-    setInvestment((prev) => ({ ...prev, [prop]: newVal }));
-  };
-
-  const submit = () => {
-    const validation = validate({ investment, user, deal });
-    setErrors(validation);
-    if (validation.length === 0) {
-      createInvestment({
-        variables: {
-          investment: {
-            amount: Math.floor(investment.amount),
-            user_id: user._id,
-            deal_id: deal._id,
-          },
-        },
-        onCompleted: toast.success('Success!'),
-      });
-      setInvestment({ amount: '' });
-    }
-  };
-
-  return (
-    <>
-      {newUser && <InvestorNew push={false} setNewUser={setNewUser} />}
-      {!newUser && (
-        <FormControlLabel
-          label="Create New user"
-          control={
-            <Checkbox
-              color="primary"
-              checked={newUser}
-              inputProps={{ 'aria-label': 'secondary checkbox' }}
-              onChange={(e) => setNewUser(e.target.checked)}
-            />
-          }
-        />
-      )}
-      <Paper>
-        <div className="InvestmentEdit form-wrapper">
-          <Row>
-            <Col sm={{ size: 8, offset: 1 }}>
-              <div className="form-title">Create Investment</div>
-            </Col>
-          </Row>
-          <form className="form" noValidate autoComplete="off">
-            <Row>
-              <Col sm={{ size: 8, offset: 1 }}>
-                <TextField
-                  required
-                  error={errors.includes('amount')}
-                  style={{ width: '100%' }}
-                  value={investment.amount}
-                  onChange={(e) => updateInvestmentProp({ prop: 'amount', newVal: e.target.value })}
-                  label="Amount"
-                  variant="filled"
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col sm={{ size: 4, offset: 1 }}>
-                <UserSearch
-                  user={user}
-                  setUser={setUser}
-                  errors={errors}
-                  deal_id={get(deal, '_id', '')}
-                />
-              </Col>
-              <Col sm={{ size: 4 }}>
-                <DealSearch deal={deal} setDeal={setDeal} errors={errors} />
-              </Col>
-            </Row>
-            <Row>
-              <Col sm={{ size: 8, offset: 1 }}>
-                <Button variant="contained" onClick={submit} color="primary">
-                  CREATE
-                </Button>
-              </Col>
-            </Row>
-            <Row />
-          </form>
-        </div>
-      </Paper>
-    </>
-  );
-}
-
 export function UserSearch({ user, setUser, errors, deal_id }) {
   const [q, setQ] = useState('');
   const [records, setRecords] = useState([]);
@@ -270,5 +175,100 @@ function DealSearch({ deal, setDeal, errors }) {
         </Table>
       </Paper>
     </div>
+  );
+}
+
+export default function InvestmentNew() {
+  const [investment, setInvestment] = useState({ amount: '' });
+  const [createInvestment] = useMutation(CREATE_INVESTMENT);
+  const [errors, setErrors] = useState([]);
+  const [newUser, setNewUser] = useState(false);
+  const [user, setUser] = useState(null);
+  const [deal, setDeal] = useState(null);
+
+  const updateInvestmentProp = ({ prop, newVal }) => {
+    setInvestment((prev) => ({ ...prev, [prop]: newVal }));
+  };
+
+  const submit = () => {
+    const validation = validate({ investment, user, deal });
+    setErrors(validation);
+    if (validation.length === 0) {
+      createInvestment({
+        variables: {
+          investment: {
+            amount: Math.floor(investment.amount),
+            user_id: user._id,
+            deal_id: deal._id,
+          },
+        },
+        onCompleted: toast.success('Success!'),
+      });
+      setInvestment({ amount: '' });
+    }
+  };
+
+  return (
+    <>
+      {newUser && <InvestorNew push={false} setNewUser={setNewUser} />}
+      {!newUser && (
+        <FormControlLabel
+          label="Create New user"
+          control={
+            <Checkbox
+              color="primary"
+              checked={newUser}
+              inputProps={{ 'aria-label': 'secondary checkbox' }}
+              onChange={(e) => setNewUser(e.target.checked)}
+            />
+          }
+        />
+      )}
+      <Paper>
+        <div className="InvestmentEdit form-wrapper">
+          <Row>
+            <Col sm={{ size: 8, offset: 1 }}>
+              <div className="form-title">Create Investment</div>
+            </Col>
+          </Row>
+          <form className="form" noValidate autoComplete="off">
+            <Row>
+              <Col sm={{ size: 8, offset: 1 }}>
+                <TextField
+                  required
+                  error={errors.includes('amount')}
+                  style={{ width: '100%' }}
+                  value={investment.amount}
+                  onChange={(e) => updateInvestmentProp({ prop: 'amount', newVal: e.target.value })}
+                  label="Amount"
+                  variant="filled"
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={{ size: 4, offset: 1 }}>
+                <UserSearch
+                  user={user}
+                  setUser={setUser}
+                  errors={errors}
+                  deal_id={get(deal, '_id', '')}
+                />
+              </Col>
+              <Col sm={{ size: 4 }}>
+                <DealSearch deal={deal} setDeal={setDeal} errors={errors} />
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={{ size: 8, offset: 1 }}>
+                <Button variant="contained" onClick={submit} color="primary">
+                  CREATE
+                </Button>
+              </Col>
+            </Row>
+            <Row />
+          </form>
+        </div>
+      </Paper>
+    </>
   );
 }

@@ -1,8 +1,7 @@
-const express = require('express');
-const path = require('path');
-const fs = require('fs');
-const axios = require('axios');
-require('dotenv').config();
+/* eslint-disable no-param-reassign */
+import express from 'express';
+import path from 'path';
+import fs from 'fs';
 
 const PORT = process.env.PORT || 3000;
 
@@ -26,15 +25,7 @@ app.use(express.static(path.join(__dirname, '/build')));
 app.get('*', async (req, res) => {
   const { params } = req;
   const isDealPage = params['0'].includes('/deals/') || params['0'].includes('/public/');
-  const urlParams = params['0'].split('/').slice(2, 4);
   const filePath = path.resolve(__dirname, './build', 'index.html');
-  const organizationSlug = urlParams.length > 1 ? urlParams[0] : 'allocations';
-  const dealSlug = urlParams.length > 1 ? urlParams[1] : urlParams[0];
-  // const response = await axios.post(`${process.env.REACT_APP_EXPRESS_URL}/api/deal`, {
-  //   dealSlug,
-  //   organizationSlug,
-  //   API_KEY: process.env.EXPRESS_API_KEY,
-  // });
   const response = {};
 
   fs.readFile(filePath, 'utf8', (err, data) => {

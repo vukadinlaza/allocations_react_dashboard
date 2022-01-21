@@ -368,23 +368,36 @@ function DealEditNew() {
       <div className="section-header">
         <h1>Edit Deal</h1>
         <div className="tabs-container">
-          <button onClick={() => handleTabClick('basic')} className={getTabClassName('basic')}>
+          <button
+            onClick={() => handleTabClick('basic')}
+            className={getTabClassName('basic')}
+            type="button"
+          >
             Basic Info
           </button>
 
           <button
             onClick={() => handleTabClick('deadline')}
             className={getTabClassName('deadline')}
+            type="button"
           >
             Deadlines
           </button>
 
           {formData.investmentType === 'spv' ? (
-            <button onClick={() => handleTabClick('spv')} className={getTabClassName('spv')}>
+            <button
+              onClick={() => handleTabClick('spv')}
+              className={getTabClassName('spv')}
+              type="button"
+            >
               SPV Terms
             </button>
           ) : (
-            <button onClick={() => handleTabClick('fund')} className={getTabClassName('fund')}>
+            <button
+              onClick={() => handleTabClick('fund')}
+              className={getTabClassName('fund')}
+              type="button"
+            >
               Fund Terms
             </button>
           )}
@@ -393,12 +406,17 @@ function DealEditNew() {
             <button
               onClick={() => handleTabClick('portfolio')}
               className={getTabClassName('portfolio')}
+              type="button"
             >
               Portfolio Company Terms
             </button>
           )}
 
-          <button onClick={() => handleTabClick('deal')} className={getTabClassName('deal')}>
+          <button
+            onClick={() => handleTabClick('deal')}
+            className={getTabClassName('deal')}
+            type="button"
+          >
             Deal Settings
           </button>
         </div>
