@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-param-reassign */
-import express from 'express';
-import path from 'path';
-import fs from 'fs';
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+require('dotenv').config();
 
 const PORT = process.env.PORT || 3000;
 
