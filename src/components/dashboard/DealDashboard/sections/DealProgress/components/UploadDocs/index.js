@@ -285,7 +285,7 @@ const uploadTaskMap = {
   },
 };
 
-const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes }) => {
+const DocUploader = ({ document, filesUploaded, setFilesUploaded, taskId, phase, classes }) => {
   const [addDoc, { _, loading: addDocLoading, error: addDocError }] = useMutation(ADD_DOC, {
     onCompleted: ({ addDealDocService: uploadResponse }) => {
       if (uploadResponse?.success) toast.success('Success! Your document has been added');
@@ -499,46 +499,23 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
 export default function UploadDocs({ deal, phase }) {
   const classes = useStyles();
 
-  const docUploadMap = {
-    spv: {
-      'Upload Company Logo': {
-        complete: false,
-        document: {
-          name: null,
-          _id: null,
-        },
-      },
-      'Upload Company Deck': {
-        complete: false,
-        document: {
-          name: null,
-          _id: null,
-        },
-      },
-      'Upload Term Sheet': {
-        complete: false,
-        document: {
-          name: null,
-          _id: null,
-        },
-      },
-    },
-    fund: {
-      'Upload Fund Logo': {
-        complete: false,
-        document: {
-          name: null,
-          _id: null,
-        },
-      },
-    },
-  };
-
-  const [filesUploaded, setFilesUploaded] = useState(docUploadMap[deal?.type]);
-
   const uploadTasks = phase?.tasks
     .filter((task) => task.type === 'fm-document-upload')
     .sort((a, b) => uploadTaskMap[a.title]?.position - uploadTaskMap[b.title]?.position);
+
+  const [filesUploaded, setFilesUploaded] = useState(
+    uploadTasks.reduce((acc, task) => {
+      acc[task.title] = {
+        task_id: task._id,
+        complete: false,
+        document: {
+          name: null,
+          _id: null,
+        },
+      };
+      return acc;
+    }, {}),
+  );
 
   useEffect(() => {
     if (localStorage.getItem('buildFilesUploaded')) {
@@ -553,6 +530,7 @@ export default function UploadDocs({ deal, phase }) {
         {uploadTasks?.map((task) => (
           <DocUploader
             key={task._id}
+            taskId={task._id}
             document={task}
             classes={classes}
             filesUploaded={filesUploaded}
@@ -561,7 +539,7 @@ export default function UploadDocs({ deal, phase }) {
           />
         ))}
       </div>
-      {deal?.type === 'spv' && filesUploaded['Upload Company Deck']?.complete && (
+      {filesUploaded['Upload Company Deck']?.complete && (
         <PitchDeckCheckBox deal={deal} classes={classes} />
       )}
       <Button
@@ -569,6 +547,14 @@ export default function UploadDocs({ deal, phase }) {
         className={
           isRequiredTasksComplete ? classes.continueButton : classes.continueButtonDisabled
         }
+        onClick={() => {
+          console.log(
+            Object.values(filesUploaded).map((file) => ({
+              task_id: file.task_id,
+              document_id: file.document._id,
+            })),
+          );
+        }}
       >
         Continue
       </Button>
