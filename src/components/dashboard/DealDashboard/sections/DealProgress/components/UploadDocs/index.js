@@ -291,7 +291,7 @@ const uploadTaskMap = {
   },
 };
 
-const DocUploader = ({ document, filesUploaded, setFilesUploaded, taskId, phase, classes }) => {
+const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes }) => {
   const [addDoc, { _, loading: addDocLoading, error: addDocError }] = useMutation(ADD_DOC, {
     onCompleted: ({ addDealDocService: uploadResponse }) => {
       if (uploadResponse?.success) toast.success('Success! Your document has been added');
@@ -314,7 +314,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, taskId, phase,
   );
 
   const [error, setError] = useState(false);
-  const { complete } = filesUploaded[document.title];
+  const complete = filesUploaded[document.title]?.complete;
   const acceptedFiles = uploadTaskMap[document.title]?.fileType;
 
   const validateFileType = (target) => {
@@ -524,7 +524,7 @@ export default function UploadDocs({ deal, phase }) {
         },
       };
       return acc;
-    }, {}),
+    }, {}) || {},
   );
 
   useEffect(() => {
