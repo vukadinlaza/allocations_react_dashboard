@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 import styles from '../../../styles';
 import { validateEmail } from '../../../../../../utils/helpers';
 
-interface Props extends WithStyles<typeof styles> {
+export interface Props extends WithStyles<typeof styles> {
   orgSlug: string;
   dealId: string;
   dealProgressTask?: boolean;

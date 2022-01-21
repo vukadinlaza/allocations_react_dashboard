@@ -34,8 +34,7 @@ const SignAgreementStep = ({ classes, task, deal }) => {
       deal_id: deal?._id,
     },
   });
-  const [signInvestmentAgreement, { data: confirmationMessage }] =
-    useMutation(SIGN_INVESTMENT_AGREEMENT);
+  const [signInvestmentAgreement] = useMutation(SIGN_INVESTMENT_AGREEMENT);
 
   const signingModal = (agreementLink, isSigned) => {
     DocSpring.createVisualForm({
