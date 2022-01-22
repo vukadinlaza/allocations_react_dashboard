@@ -395,6 +395,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
                       const newFilesUploaded = {
                         ...prev,
                         [document.title]: {
+                          ...prev[document.title],
                           complete: true,
                           document: { name, _id: data.addDealDocService._id },
                         },
@@ -442,7 +443,11 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
                     setFilesUploaded((prev) => {
                       const newFilesUploaded = {
                         ...prev,
-                        [document.title]: { complete: false, document: { name: null, _id: null } },
+                        [document.title]: {
+                          ...prev[document.title],
+                          complete: false,
+                          document: { name: null, _id: null },
+                        },
                       };
                       localStorage.setItem('buildFilesUploaded', JSON.stringify(newFilesUploaded));
                       return newFilesUploaded;
@@ -494,6 +499,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
                     const newFilesUploaded = {
                       ...prev,
                       [document.title]: {
+                        ...prev[document.title],
                         complete: true,
                         document: { name, _id: data.addDealDocService._id },
                       },
