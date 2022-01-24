@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState } from 'react';
 import { CircularProgress, makeStyles, Checkbox, Button } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
@@ -109,7 +110,6 @@ const useStyles = makeStyles((theme) => ({
   },
   itemText: {
     font: 'normal normal normal 18px/20px Roboto',
-    color: '#2A2B54',
     color: 'inherit',
     width: '160px',
     textAlign: 'center',
