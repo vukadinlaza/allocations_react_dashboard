@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
 import { gql, useMutation, useQuery } from '@apollo/client';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import styles from '../../../../styles';
 import { AgreementBox } from '../../../../../../NewBuild/BuildDealForm/FormComponents/AgreementSigner';
@@ -77,18 +77,26 @@ const SignAgreementStep = ({ classes, task, deal }) => {
       {documentSignedStatus ? (
         <CircularProgress />
       ) : (
-        <AgreementBox
-          title={newTitle.join(' ')}
-          task={task}
-          classes={classes}
-          error={error}
-          agreementLink={investmentAgreement}
-          createDealLoading={loading}
-          readyToSign={readyToSign}
-          signingModal={signingModal}
-          signed={documentSignedStatus}
-          isSigned={() => setDocumentSignedStatus(true)}
-        />
+        <>
+          <Typography style={{ fontSize: '14px', marginBottom: '20px' }}>
+            Please wait while we generate your Investment Agreement. This may take 1-2 minutes so
+            please do not refresh or close this browser window. If you should encounter any problems
+            or have any questions, do not hesitate to contact{' '}
+            <strong>support@allocations.com</strong>.
+          </Typography>
+          <AgreementBox
+            title={newTitle.join(' ')}
+            task={task}
+            classes={classes}
+            error={error}
+            agreementLink={investmentAgreement}
+            createDealLoading={loading}
+            readyToSign={readyToSign}
+            signingModal={signingModal}
+            signed={documentSignedStatus}
+            isSigned={() => setDocumentSignedStatus(true)}
+          />
+        </>
       )}
     </>
   );
