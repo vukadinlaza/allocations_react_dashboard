@@ -825,9 +825,6 @@ export default function NewDealForm() {
     });
 
   const [wakeUpBuildApi] = useMutation(WAKE_UP_BUILD_API, {
-    onCompleted: (data) => {
-      console.log('data', data);
-    },
     onError: console.error,
   });
 
