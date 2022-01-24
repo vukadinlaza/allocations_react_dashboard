@@ -12,7 +12,7 @@ import LoadingPlaceholder from './LoadingPlaceholder';
 import Investors from './sections/Investors';
 import DealProgress from './sections/DealProgress';
 import { Task, DealPhase } from './types';
-import DealPage from '../FundManagerDashboard/sections/DealPage';
+import DealPage from './sections/DealPage';
 import styles from './styles';
 
 const DEAL = gql`
@@ -178,7 +178,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
         return (
           <DealPage
             orgSlug={orgSlug}
-            dealData={dealData}
+            dealData={dealData.getDealByIdWithTasks}
             classes={classes}
             goToDeal={goToDeal}
             goToEditDeal={goToEditDeal}

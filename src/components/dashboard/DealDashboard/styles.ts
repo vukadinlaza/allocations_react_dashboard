@@ -98,6 +98,14 @@ const styles: any = (theme: Theme) => ({
     color: 'white',
     cursor: 'pointer',
   },
+  containedButton: {
+    background: '#186EFF',
+    color: '#FFFFFF',
+    borderRadius: '8px',
+    width: '98px',
+    height: '32px',
+    padding: '0px 10px',
+  },
   copyLink: {
     width: '100%',
     height: '48px',
@@ -215,6 +223,10 @@ const styles: any = (theme: Theme) => ({
     borderRadius: '8px',
     boxShadow: 'none !important',
   },
+  linkText: {
+    width: '50%',
+    marginLeft: '15px',
+  },
   modal: {
     width: '520px',
     maxHeight: '672px',
@@ -254,6 +266,19 @@ const styles: any = (theme: Theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  outlinedButton: {
+    border: '1px solid #CBD5E1',
+    borderRadius: '8px',
+    color: '#64748B',
+    width: '98px',
+    height: '32px',
+    padding: '0px 10px',
+  },
+  pageIcons: {
+    display: 'flex',
+    width: '40%',
+    justifyContent: 'space-evenly',
+  },
   pageTitle: {
     fontSize: '40px',
     fontWeight: 'bold',
@@ -282,6 +307,16 @@ const styles: any = (theme: Theme) => ({
   },
   searchContainer: {
     margin: '32px 0 24px 0',
+  },
+  section: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '8px',
+    background: '#FFFFFF',
+    height: '68px',
+    borderRadius: '8px',
   },
   smallBox: {
     height: '88px',
