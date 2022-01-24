@@ -361,7 +361,6 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
     },
   );
 
-  const [error, setError] = useState(false);
   const complete = filesUploaded[document.title]?.complete;
   const acceptedFiles = uploadTaskMap[document.title]?.fileType;
 
@@ -559,9 +558,10 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
 export default function UploadDocs({ deal, phase }) {
   const classes = useStyles();
 
-  const [setDocTasksComplete] = useMutation(SET_DOC_TASKS_COMPLETE, {
-    onError: console.error,
-  });
+  const [setDocTasksComplete, { data: docTasksCompleteData, loading: tasksCompleteLoading }] =
+    useMutation(SET_DOC_TASKS_COMPLETE, {
+      onError: console.error,
+    });
 
   const uploadTasks = phase?.tasks
     .filter((task) => task.type === 'fm-document-upload')
@@ -588,6 +588,12 @@ export default function UploadDocs({ deal, phase }) {
   }, []);
 
   const isRequiredTasksComplete = filesUploaded['Upload Term Sheet']?.complete;
+
+  // Needs to keep loading spinner until task data is refreshed with updated data from getDealWithTasks in  index.tsx of DealDashboard
+  if (tasksCompleteLoading || docTasksCompleteData?.setDocumentTasksComplete?.message) {
+    return <CircularProgress />;
+  }
+
   return (
     <div className={classes.mainContainer}>
       <div className={classes.uploadContainer}>
