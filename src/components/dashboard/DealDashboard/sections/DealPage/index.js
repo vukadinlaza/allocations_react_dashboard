@@ -11,7 +11,6 @@ export default function DealPage({
   goToEditDeal,
   handleLinkCopy,
 }) {
-  console.log(dealData);
   const { dealPageRedesign } = useFlags();
 
   if (dealPageRedesign)
@@ -23,6 +22,7 @@ export default function DealPage({
         dealPageRedesign={dealPageRedesign}
       />
     );
+
   return (
     <Grid item xs={10} className={classes.section}>
       <Typography className={classes.linkText}>
