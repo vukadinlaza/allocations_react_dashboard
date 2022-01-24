@@ -11,22 +11,6 @@ function InvestingAsPanel() {
         <CheckCircleIcon />
         Myself/Individual
       </Button>
-      {/* <Button>
-        <CheckCircleIcon />
-        Joint with spouse
-      </Button>
-      <Button>
-        <CheckCircleIcon />
-        LLC
-      </Button>
-      <Button>
-        <CheckCircleIcon />
-        Partnership
-      </Button>
-      <Button>
-        <CheckCircleIcon />
-        Trust
-      </Button> */}
     </section>
   );
 }

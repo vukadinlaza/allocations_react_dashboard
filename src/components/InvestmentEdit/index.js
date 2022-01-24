@@ -92,12 +92,13 @@ export default function InvestmentEdit({
     onError: () =>
       toast.error('Something went wrong. Try again or contact support at support@allocations.com.'),
   });
+  // eslint-disable-next-line no-empty-pattern
   const [deleteInvestment, {}] = useMutation(destroy, {
     onCompleted: () => {
       toast.success('Success! Investment deleted');
       setEditInvestmentModal(false);
     },
-    onError: (e) => {
+    onError: () => {
       toast.error('Something went wrong. Try again or contact support at support@allocations.com.');
     },
   });
@@ -149,7 +150,7 @@ export default function InvestmentEdit({
                 type="number"
                 value={get(investment, 'amount', '') || 0}
                 onChange={(e) =>
-                  updateInvestmentProp({ prop: 'amount', newVal: parseInt(e.target.value) })
+                  updateInvestmentProp({ prop: 'amount', newVal: parseInt(e.target.value, 10) })
                 }
                 label="Amount"
                 variant="outlined"
@@ -235,7 +236,7 @@ export default function InvestmentEdit({
   );
 }
 
-function Docs({ investment, setInvestment, refetch, isK1 }) {
+function Docs({ investment, refetch, isK1 }) {
   const [uploadedDoc, setUploadedDoc] = useState(null);
   const [addInvestmentDoc, { loading }] = useMutation(ADD_INVESTMENT_DOC, {
     onError: () =>
@@ -262,7 +263,7 @@ function Docs({ investment, setInvestment, refetch, isK1 }) {
     <div className="docs">
       <div className="doc-wrapper">
         <div className="add-doc">
-          <label>
+          <span>
             <FontAwesomeIcon icon="plus" />
             <input
               type="file"
@@ -271,7 +272,7 @@ function Docs({ investment, setInvestment, refetch, isK1 }) {
                 if (target.validity.valid) setUploadedDoc(target.files[0]);
               }}
             />
-          </label>
+          </span>
         </div>
         <div className="filename">&nbsp;</div>
       </div>

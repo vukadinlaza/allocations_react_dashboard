@@ -1,25 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { get } from 'lodash';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  Button,
-  List,
-  TextField,
-  Paper,
-  Divider,
-  Grid,
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Typography,
-  Checkbox,
-} from '@material-ui/core';
+import { TextField, Grid, Typography } from '@material-ui/core';
 
-export default function TaxTreaty({ investor, errors, handleChange, setInvestor }) {
+export default function TaxTreaty({ investor, errors, handleChange }) {
   return (
     <>
       <Typography variant="subtitle2">

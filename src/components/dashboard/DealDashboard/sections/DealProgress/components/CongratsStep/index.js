@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Button, Grid, Typography } from '@material-ui/core';
-import styles from '../../../../styles.ts';
+import styles from '../../../../styles';
 
 const CongratsStep = ({ classes, handleComplete, updateDealLoading }) => {
   return (

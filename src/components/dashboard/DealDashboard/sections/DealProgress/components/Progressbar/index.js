@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Stepper, Step, StepLabel } from '@material-ui/core';
-import styles from '../../../../styles.ts';
+import styles from '../../../../styles';
 
 const ProgressBar = ({ classes, steps, activeStep }) => {
   // activeStep needs to be a number. the index of the step

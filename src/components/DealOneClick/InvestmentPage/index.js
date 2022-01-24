@@ -217,7 +217,7 @@ function InvestmentPage() {
     setPopulated(true);
   };
 
-  const [submitConfirmation, { data: investmentData }] = useMutation(CONFIRM_INVESTMENT, {
+  const [submitConfirmation] = useMutation(CONFIRM_INVESTMENT, {
     onCompleted: (investmentData) => {
       refetch();
       setLoading(false);

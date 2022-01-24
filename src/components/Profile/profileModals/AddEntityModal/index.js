@@ -12,7 +12,6 @@ import { useSimpleReducer } from '../../../../utils/hooks';
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: 'flex',
-    // alignItems: 'center',
     justifyContent: 'center',
   },
   modalPaper: {
@@ -60,7 +59,8 @@ export default ({
   const [entityData, setEntityData] = useSimpleReducer({ accountId });
   const [formStatus, setFormStatus] = useState('edit');
 
-  // created variable so it can be statically checked by useEffect. useEffect dependency doesnt like complex expressions.
+  // created variable so it can be statically checked by useEffect.
+  // useEffect dependency doesn't like complex expressions.
   const showEntityModalID = showEntityModal?._id;
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export default ({
     formStatus === 'loading' ? 'circle-notch' : formStatus === 'complete' ? 'check' : null;
   const isEdit = showEntityModal?._id;
 
-  const handleClose = (isEdit) => {
+  const handleClose = () => {
     refetchAccountEntities();
     toast.success(`Success!`);
     setShowEntityModal(false);

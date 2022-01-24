@@ -1,17 +1,9 @@
 import React, { useState } from 'react';
 import { Button, Tooltip } from '@material-ui/core';
 import { useLocation } from 'react-router-dom';
-// import MuiThemeProvider from 'material-ui/lib/styles/MuiThemeProvider';
-// import getMuiTheme from 'material-ui/lib/styles/getMuiTheme';
 import KYCModal from '../DealNextSteps/KYCModal';
 import DocIcon from '../../assets/buildDoc.svg';
 import './styles.scss';
-
-// const muiTheme = getMuiTheme({
-//   tooltip: {
-//     fontSize: '16px'
-//   }
-// })
 
 function SubmitTaxDocs() {
   const useQuery = () => new URLSearchParams(useLocation().search);
@@ -57,7 +49,6 @@ function SubmitTaxDocs() {
   const buttonItems = Object.entries(templateMap).map(([key, value]) => {
     return (
       <div className="button-container">
-        {/* <MuiThemeProvider muiTheme={muiTheme}> */}
         <Tooltip title={value.tooltipContent} styles={{ fontSize: '16px' }} arrow>
           <Button key={key} onClick={() => handleClick(key)} className="form-select-button">
             <div className="button-content">
@@ -66,7 +57,6 @@ function SubmitTaxDocs() {
             </div>
           </Button>
         </Tooltip>
-        {/* </MuiThemeProvider> */}
       </div>
     );
   });
@@ -91,9 +81,6 @@ function SubmitTaxDocs() {
         setOpen={setOpen}
         kycTemplateId={templateId}
         kycTemplateName={activeForm}
-        refetch={() => {}}
-        deal={{}}
-        setShowTaxAsCompleted={() => {}}
       />
     </section>
   );

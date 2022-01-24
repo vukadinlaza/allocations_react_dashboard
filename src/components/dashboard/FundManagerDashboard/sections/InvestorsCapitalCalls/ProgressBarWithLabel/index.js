@@ -18,7 +18,7 @@ export default function ProgressBarWithLabel({ value }) {
   return (
     <Box>
       <Typography variant="body2" color="primary">
-        {value + '%'}
+        {`${value}%`}
       </Typography>
       <BorderLinearProgress variant="determinate" value={value} />
     </Box>

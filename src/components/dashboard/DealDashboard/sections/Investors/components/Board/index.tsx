@@ -19,7 +19,7 @@ interface Column {
 
 const Board: React.FC<Props> = ({ classes, data }) => {
   const containerSpacing = 2;
-  let columns: Column = {};
+  const columns: Column = {};
   data.forEach((investment: Investment) => {
     const status: string = investment.status !== 'complete' ? investment.status : 'wired';
     columns[status] ? columns[status].push(investment) : (columns[status] = [investment]);
@@ -29,12 +29,12 @@ const Board: React.FC<Props> = ({ classes, data }) => {
     <>
       <Grid container spacing={containerSpacing} wrap="nowrap" className={classes.boardContainer}>
         <Grid item xs={1} style={{ minWidth: '8.333333%' }} />
-        {sortByStatus(Object.keys(columns), '', 'desc').map((column: string, index: number) => (
+        {sortByStatus(Object.keys(columns), '', 'desc').map((column: string) => (
           <Grid item lg={3} style={{ minWidth: '25%' }} key={uuidv4()}>
             <Typography className={classes.headerLabel}>
               {column.toUpperCase()} ({columns[column].length})
             </Typography>
-            {columns[column].map((investment: Investment, index: number) => {
+            {columns[column].map((investment: Investment) => {
               const { investor } = investment;
               const fullName = `${titleCase(investor.first_name)} ${titleCase(investor.last_name)}`;
               return (

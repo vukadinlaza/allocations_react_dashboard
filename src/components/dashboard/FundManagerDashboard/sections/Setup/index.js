@@ -47,7 +47,7 @@ const StepsContainer = ({
             >
               <div
                 className={classes.setupStep}
-                onClick={(e) => handleTooltip(step.value.split(' ').join())}
+                onClick={() => handleTooltip(step.value.split(' ').join())}
               >
                 <CheckCircleIcon
                   style={{
@@ -109,8 +109,8 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
   };
 
   const getRaisedPercentage = () => {
-    const isRaisedANumber = raised && !isNaN(raised);
-    const isTargetANumber = target && !isNaN(target);
+    const isRaisedANumber = raised && !Number.isNaN(raised);
+    const isTargetANumber = target && !Number.isNaN(target);
     return isTargetANumber && isRaisedANumber ? Math.round((raised / target) * 100) : 0;
   };
 
@@ -142,18 +142,19 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
       step.processStreetTask.includes(task.taskName.toLowerCase()),
     );
     if (!currentTask) {
-      // console.log(`Task "${step.processStreetTask}" not matching`)
       return false;
     }
 
+    const hvpTask = dealTasks.find((task) => task.taskName.toLowerCase() === 'enter deal details');
+    const hvpField = hvpTask.formFields?.find(
+      (field) => field.fieldLabel.toLowerCase() === 'high volume partnership',
+    );
+    const tasksNeeded = dealTasks.filter((task) =>
+      step.processStreetTask.includes(task.taskName.toLowerCase()),
+    );
+    const bothTasksApproved = tasksNeeded.every((task) => task.taskStatus === 'Completed');
     switch (stepValue) {
       case 'Entity Formation Complete':
-        const hvpTask = dealTasks.find(
-          (task) => task.taskName.toLowerCase() === 'enter deal details',
-        );
-        const hvpField = hvpTask.formFields?.find(
-          (field) => field.fieldLabel.toLowerCase() === 'high volume partnership',
-        );
         if (!hvpField) {
           taskChecked = false;
         } else if (hvpField.fieldValue === 'Yes') {
@@ -163,10 +164,6 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
         }
         break;
       case 'Wire Approval Review Complete':
-        const tasksNeeded = dealTasks.filter((task) =>
-          step.processStreetTask.includes(task.taskName.toLowerCase()),
-        );
-        const bothTasksApproved = tasksNeeded.every((task) => task.taskStatus === 'Completed');
         if (bothTasksApproved) {
           taskChecked = true;
         } else {
@@ -201,7 +198,7 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
   useEffect(() => {
     if (subscriptionData?.dealOnboarding) {
       const { dealOnboarding } = subscriptionData;
-      // if dealOnboarding subscrription type is a new task checked or unchecked
+      // if dealOnboarding subscription type is a new task checked or unchecked
       if (dealOnboarding.taskName) {
         let stepSection = '';
         let stepIndex = -1;
@@ -216,15 +213,14 @@ const Setup = ({ classes, data, openTooltip, handleTooltip, subscriptionData }) 
           setDealTasks(dealTasksCopy);
         }
         // get step index and section of step inside current setupSteps
-        for (const section in setupSteps) {
+        Object.values(setupSteps).forEach((section) => {
           stepIndex = setupSteps[section].findIndex((step) =>
             step.processStreetTask.includes(dealOnboarding.taskName.toLowerCase()),
           );
           if (stepIndex >= 0) {
             stepSection = section;
-            break;
           }
-        }
+        });
         // set new setupSteps with updated task data
         if (stepIndex >= 0) {
           const setupStepsCopy = { ...setupSteps };

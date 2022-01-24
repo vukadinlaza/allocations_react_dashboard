@@ -6,6 +6,7 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
+  FormLabel,
 } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CloseIcon from '@material-ui/icons/Close';
@@ -164,7 +165,7 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
       </div>
       <form className="form">
         <FormControl className="form-field name">
-          <label className="form-label">
+          <FormLabel className="form-label">
             Name of individual who is the beneficial owner
             <TextField
               variant="outlined"
@@ -173,11 +174,11 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
               name="name_of_individual_who_is_the_beneficial_owner"
               value={formData.name_of_individual_who_is_the_beneficial_owner}
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="form-field country-input" required variant="outlined">
-          <label className="form-label">
+          <FormLabel className="form-label">
             Country of citizenship
             <Autocomplete
               className="country-select"
@@ -200,12 +201,12 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
                 />
               )}
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormGroup className="form-field residence">
           <FormControl className="address">
-            <label className="form-label">
+            <FormLabel className="form-label">
               Permanent residence address (street, apt. or suite no., or rural route)
               <span>Please do not use a P.O. box.</span>
               <TextField
@@ -219,12 +220,12 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
                   formData.permanent_residence_address_street_apt_or_suite_no_or_rural_route_do_not_use_a_p_o_box_or_in_care_of_address
                 }
               />
-            </label>
+            </FormLabel>
           </FormControl>
 
           <div className="residence-container">
             <FormControl className="city">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 City or town, state or province.
                 <TextField
                   variant="outlined"
@@ -240,11 +241,11 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
                 <small>
                   <i>Include postal code where appropriate.</i>
                 </small>
-              </label>
+              </FormLabel>
             </FormControl>
 
             <FormControl className="country" required variant="outlined">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 Country
                 <Autocomplete
                   className="country-select"
@@ -268,7 +269,7 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
                     />
                   )}
                 />
-              </label>
+              </FormLabel>
             </FormControl>
           </div>
 
@@ -286,7 +287,7 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
         {differentMailing && (
           <FormGroup className="form-field mailing">
             <FormControl className="mailingAddress">
-              <label className="form-label">
+              <FormLabel className="form-label">
                 Mailing address (if different from above)
                 <TextField
                   variant="outlined"
@@ -295,12 +296,12 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
                   name="mailing_address_if_different_from_above"
                   value={formData.mailing_address_if_different_from_above}
                 />
-              </label>
+              </FormLabel>
             </FormControl>
 
             <div className="residence-container">
               <FormControl className="city">
-                <label className="form-label">
+                <FormLabel className="form-label">
                   City or town, state or province.
                   <TextField
                     variant="outlined"
@@ -316,11 +317,11 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
                   <small>
                     <i>Include postal code where appropriate.</i>
                   </small>
-                </label>
+                </FormLabel>
               </FormControl>
 
               <FormControl className="country" required variant="outlined">
-                <label className="form-label">
+                <FormLabel className="form-label">
                   Country
                   <Autocomplete
                     className="country-select"
@@ -339,14 +340,14 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
                       <TextField {...params} placeholder="Select a country" variant="outlined" />
                     )}
                   />
-                </label>
+                </FormLabel>
               </FormControl>
             </div>
           </FormGroup>
         )}
 
         <FormControl className="form-field date-signed">
-          <label className="form-label">
+          <FormLabel className="form-label">
             Date of birth
             <TextField
               value={formData.date_of_birth_mm_dd_yyyy_see_instructions}
@@ -356,7 +357,7 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
               error={errors.includes('date_of_birth_mm_dd_yyyy_see_instructions')}
               variant="outlined"
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <div className="tax-id-container">
@@ -500,7 +501,7 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
         ) : null}
 
         <FormControl className="form-field name">
-          <label className="form-label">
+          <FormLabel className="form-label">
             Capacity in which acting (if form is not signed by beneficial owner)
             <TextField
               value={formData.capacity_in_which_acting_if_form_is_not_signed_by_beneficial_owner}
@@ -511,11 +512,11 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
               )}
               variant="outlined"
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="form-field name">
-          <label className="form-label">
+          <FormLabel className="form-label">
             Print name of signer
             <TextField
               value={formData.print_name_of_signer}
@@ -524,11 +525,11 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
               error={errors.includes('print_name_of_signer')}
               variant="outlined"
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="form-field date-signed">
-          <label className="form-label">
+          <FormLabel className="form-label">
             Date signed
             <TextField
               value={formData.date_mm_dd_yyyy}
@@ -538,11 +539,11 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
               error={errors.includes('date_mm_dd_yyyy')}
               variant="outlined"
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="form-field signature">
-          <label className="form-label">
+          <FormLabel className="form-label">
             E-Signature
             <TextField
               value={formData.signature}
@@ -551,7 +552,7 @@ function W8BEN({ toggleOpen, createDoc, called, loading }) {
               error={errors.includes('signature')}
               variant="outlined"
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         {called && loading ? (

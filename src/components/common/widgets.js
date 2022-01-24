@@ -13,9 +13,7 @@ const styles = (theme) => ({
     boxShadow: '0px 3px 6px #00000029',
     border: '1px solid #8493A640',
     borderRadius: '10px',
-    // marginBottom: "20px",
     [theme.breakpoints.down(phone)]: {
-      // width: "100vw",
       minWidth: '0 !important',
       maxWidth: 'none !important',
     },
@@ -25,9 +23,6 @@ const styles = (theme) => ({
   },
   boxTitle: {
     fontSize: '20px',
-    // whiteSpace: "nowrap",
-    // overflow: "hidden",
-    // textOverflow: "ellipsis",
   },
   boxTitleContainer: {
     width: '100%',
@@ -44,8 +39,6 @@ const styles = (theme) => ({
     alignItems: 'center',
   },
   chartBox: {
-    // minWidth: '430px',
-    // maxWidth: '49%',
     height: '450px',
     [theme.breakpoints.down(tablet)]: {
       height: 'auto',
@@ -74,7 +67,6 @@ const styles = (theme) => ({
     height: 'calc(100% - 110px)',
   },
   dynamicHeight: {
-    // height: "auto"
     height: '100%',
   },
   fixedBoxContent: {
@@ -121,14 +113,11 @@ const styles = (theme) => ({
   },
   scrollableBox: {
     height: '635px',
-    // height: "620px"
   },
   scrollableBoxContent: {
     height: 'calc(100% - 71px)',
-    // height: "calc(100% - 130px)",
     overflowY: 'scroll',
     overflowX: 'hidden',
-    // marginBottom: "10px"
   },
   tooltip: {
     fontSize: '14px',
@@ -137,22 +126,6 @@ const styles = (theme) => ({
     color: 'black',
   },
 });
-
-// const getDimensions = (size) => {
-//   switch (size) {
-//     case 'full':
-//       return { minWidth: '100%' };
-//     case 'half':
-//       return { minWidth: '430px', maxWidth: '49%' };
-//     case 'third':
-//       return { minWidth: '430px', maxWidth: '32%' };
-//     case 'fourth':
-//       return { minWidth: '265px', maxWidth: '24%' };
-//     // return {minWidth: '300px', maxWidth: '24%'};
-//     default:
-//       return {};
-//   }
-// };
 
 export const ModalTooltip = withStyles(styles)(
   ({ classes, children, title, handleTooltip, tooltipContent, openTooltip, id }) => {

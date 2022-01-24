@@ -26,5 +26,5 @@ export function formatDate(date) {
 }
 
 export function convertToPositiveIntOrNull(num) {
-  return parseInt(num < 0 ? null : num, 0);
+  return parseInt(num < 0 ? null : num, 10);
 }

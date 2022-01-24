@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AppBar, Tabs, Tab, Box, Typography, TextField, Button } from '@material-ui/core';
+import { AppBar, Tabs, Tab, Box, TextField, Button } from '@material-ui/core';
 import './styles.scss';
 
 import plaidLogo from '../../../../assets/plaid.svg';
@@ -50,7 +50,7 @@ function PaymentInformation() {
         <div className="payment-buttons">
           <div className="plaid-container">
             <Button className="plaid-button">Connect bank account</Button>
-            <img src={plaidLogo} />
+            <img src={plaidLogo} alt="plaid logo" />
           </div>
           <Button className="manual-payment-button">Add manually</Button>
         </div>

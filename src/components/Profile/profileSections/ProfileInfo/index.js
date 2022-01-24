@@ -97,6 +97,56 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const statusOptions = {
+  individual: [
+    'I have individual/joint net worth in excess of $1m',
+    'I have had $200K+ income in each of the two most recent years',
+    'I’ve had $300K+ joint income in each of the two most recent years',
+    'My professional certification qualifies me as an accredited investor',
+    'I am a director or executive officer of the Fund’s General Partner',
+    'I am a "knowledgeable employee" of the private fund or its managers',
+  ],
+  entity: [
+    'Each equity owner of my entity is an accredited investor',
+    'My entity has total assets in excess of $5m',
+    'I am a “family office” with $5m+ in assets under management',
+    'I am an Investment Advisor',
+    'I am an Exempt Investment Adviser',
+    'I am a private business development company',
+    'I am an investment company or a business development company',
+    'I am a Small Business Investment Company',
+  ],
+};
+
+export function AccreditedInvestorStatus({ investor, handleChange, errors }) {
+  const { investor_type } = investor;
+  if (!investor_type) return null;
+
+  return (
+    <FormControl
+      style={{ background: 'white' }}
+      required
+      error={errors.includes('accredited_investor_status')}
+      variant="outlined"
+      fullWidth
+    >
+      <InputLabel htmlFor="outlined-age-native-simple">Accredited Investor Type</InputLabel>
+      <Select
+        value={investor.accredited_investor_status || ''}
+        onChange={handleChange('accredited_investor_status')}
+        inputProps={{ name: 'Accredited Investor Status' }}
+      >
+        <MenuItem value="" />
+        {statusOptions[investor_type].map((opt) => (
+          <MenuItem key={opt} value={opt}>
+            {opt}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
+}
+
 const ProfileInfo = ({
   investorProfile,
   actionText,
@@ -549,55 +599,5 @@ const ProfileInfo = ({
     </div>
   );
 };
-
-const statusOptions = {
-  individual: [
-    'I have individual/joint net worth in excess of $1m',
-    'I have had $200K+ income in each of the two most recent years',
-    'I’ve had $300K+ joint income in each of the two most recent years',
-    'My professional certification qualifies me as an accredited investor',
-    'I am a director or executive officer of the Fund’s General Partner',
-    'I am a "knowledgeable employee" of the private fund or its managers',
-  ],
-  entity: [
-    'Each equity owner of my entity is an accredited investor',
-    'My entity has total assets in excess of $5m',
-    'I am a “family office” with $5m+ in assets under management',
-    'I am an Investment Advisor',
-    'I am an Exempt Investment Adviser',
-    'I am a private business development company',
-    'I am an investment company or a business development company',
-    'I am a Small Business Investment Company',
-  ],
-};
-
-export function AccreditedInvestorStatus({ investor, handleChange, errors }) {
-  const { investor_type } = investor;
-  if (!investor_type) return null;
-
-  return (
-    <FormControl
-      style={{ background: 'white' }}
-      required
-      error={errors.includes('accredited_investor_status')}
-      variant="outlined"
-      fullWidth
-    >
-      <InputLabel htmlFor="outlined-age-native-simple">Accredited Investor Type</InputLabel>
-      <Select
-        value={investor.accredited_investor_status || ''}
-        onChange={handleChange('accredited_investor_status')}
-        inputProps={{ name: 'Accredited Investor Status' }}
-      >
-        <MenuItem value="" />
-        {statusOptions[investor_type].map((opt) => (
-          <MenuItem key={opt} value={opt}>
-            {opt}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  );
-}
 
 export default ProfileInfo;

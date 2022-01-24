@@ -44,7 +44,7 @@ const CONFIRM_INVESTMENT = gql`
   }
 `;
 
-const ResignModal = ({ showResignModal, setShowResignModal, refetch = () => {} }) => {
+const ResignModal = ({ showResignModal, setShowResignModal, refetch }) => {
   const [investor, setInvestor] = useState({
     country: '',
     country_search: '',

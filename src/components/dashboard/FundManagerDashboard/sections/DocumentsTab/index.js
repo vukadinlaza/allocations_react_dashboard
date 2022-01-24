@@ -51,22 +51,7 @@ const headers = [
     isSortable: true,
     align: 'center',
   },
-  // {
-  //   value: 'sideLetterStatus',
-  //   label: 'STATUS',
-  //   type: 'sideLetterStatus',
-  //   isSortable: true,
-  //   align: 'center',
-  // },
   { value: 'dateSigned', label: 'DATE SIGNED', isSortable: true, align: 'left', alignHeader: true },
-  // {
-  //   value: 'reminder',
-  //   label: 'SEND REMINDER',
-  //   type: 'reminder',
-  //   align: 'left',
-  //   alignHeader: true,
-  //   keyNotInData: true,
-  // },
   {
     value: 'viewDoc',
     label: 'VIEW DOCUMENT',
@@ -231,6 +216,7 @@ const DocumentsTab = ({ classes, data, refetch }) => {
     setSearchTerm(e.target.value);
   };
 
+  // required me to store as variable. "No unused expressions"
   // eslint-disable-next-line no-unused-vars
   const unusedVariable = data?.deal?.investments?.forEach((investment) => {
     if (investment.documents.length) {

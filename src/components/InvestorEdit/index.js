@@ -47,6 +47,33 @@ const DELETE_INVESTOR = gql`
   }
 `;
 
+function DeleteInvestor({ investor }) {
+  const history = useHistory();
+  const [delInvestor, { data }] = useMutation(DELETE_INVESTOR);
+
+  useEffect(() => {
+    if (data && data.deleteInvestor) history.push('/investors');
+  }, [data]);
+
+  const submit = () => {
+    // eslint-disable-next-line no-alert
+    if (window.confirm(`Delete ${investor.first_name} ${investor.last_name}?`)) {
+      delInvestor({ variables: { id: investor._id } });
+    }
+  };
+
+  return (
+    <Col sm={{ size: 6, offset: 1 }}>
+      <Paper className="DeleteInvestor">
+        <div>DANGER ZONE</div>
+        <Button variant="contained" onClick={submit}>
+          DELETE INVESTOR
+        </Button>
+      </Paper>
+    </Col>
+  );
+}
+
 export default function InvestorEdit() {
   const [formStatus, setFormStatus] = useState('edit');
   const { userProfile, refetch } = useAuth(GET_INVESTOR);
@@ -84,31 +111,5 @@ export default function InvestorEdit() {
         <DeleteInvestor investor={investor} />
       </Row>
     </div>
-  );
-}
-
-function DeleteInvestor({ investor }) {
-  const history = useHistory();
-  const [delInvestor, { data }] = useMutation(DELETE_INVESTOR);
-
-  useEffect(() => {
-    if (data && data.deleteInvestor) history.push('/investors');
-  }, [data]);
-
-  const submit = () => {
-    if (window.confirm(`Delete ${investor.first_name} ${investor.last_name}?`)) {
-      delInvestor({ variables: { id: investor._id } });
-    }
-  };
-
-  return (
-    <Col sm={{ size: 6, offset: 1 }}>
-      <Paper className="DeleteInvestor">
-        <div>DANGER ZONE</div>
-        <Button variant="contained" onClick={submit}>
-          DELETE INVESTOR
-        </Button>
-      </Paper>
-    </Col>
   );
 }

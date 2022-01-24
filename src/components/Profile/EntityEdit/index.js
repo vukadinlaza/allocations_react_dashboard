@@ -43,7 +43,6 @@ export default function EntityEditForm({
   setInvestor,
   actionText,
   icon,
-  setFormStatus,
   submitfn,
   deleteEntity,
   isEdit,
@@ -145,12 +144,7 @@ export default function EntityEditForm({
           </Grid>
           {investor.country === 'United States' && (
             <Grid item xs={6} sm={6} md={6}>
-              <FormControl
-                required
-                //   error={errors.includes('country')}
-                variant="outlined"
-                style={{ width: '100%' }}
-              >
+              <FormControl required variant="outlined" style={{ width: '100%' }}>
                 <InputLabel>State</InputLabel>
                 <Select
                   value={investor.state || ''}

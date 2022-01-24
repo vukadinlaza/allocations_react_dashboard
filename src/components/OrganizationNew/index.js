@@ -27,6 +27,33 @@ function valid(org) {
   return org.name && org.slug;
 }
 
+function LogoUpload({ organization, setOrg }) {
+  if (organization.logo) {
+    return (
+      <Grid style={{ padding: '16px' }}>
+        <span className="file-label">Logo &nbsp;&nbsp;</span>
+        <FontAwesomeIcon icon="check" />
+      </Grid>
+    );
+  }
+
+  return (
+    <Grid style={{ padding: '16px' }}>
+      <span className="file-label">Logo (3:1 width to height) &nbsp;&nbsp;</span>
+      <Button variant="contained" component="label">
+        Upload&nbsp;&nbsp;
+        <input
+          type="file"
+          style={{ display: 'none' }}
+          onChange={({ target }) => {
+            if (target.validity.valid) setOrg({ logo: target.files[0] });
+          }}
+        />
+      </Button>
+    </Grid>
+  );
+}
+
 export default function OrganizationNew() {
   const history = useHistory();
   const [organization, setOrg] = useSimpleReducer({ name: '', slug: '' });
@@ -85,32 +112,5 @@ export default function OrganizationNew() {
         </Grid>
       </div>
     </Paper>
-  );
-}
-
-function LogoUpload({ organization, setOrg }) {
-  if (organization.logo) {
-    return (
-      <Grid style={{ padding: '16px' }}>
-        <span className="file-label">Logo &nbsp;&nbsp;</span>
-        <FontAwesomeIcon icon="check" />
-      </Grid>
-    );
-  }
-
-  return (
-    <Grid style={{ padding: '16px' }}>
-      <span className="file-label">Logo (3:1 width to height) &nbsp;&nbsp;</span>
-      <Button variant="contained" component="label">
-        Upload&nbsp;&nbsp;
-        <input
-          type="file"
-          style={{ display: 'none' }}
-          onChange={({ target }) => {
-            if (target.validity.valid) setOrg({ logo: target.files[0] });
-          }}
-        />
-      </Button>
-    </Grid>
   );
 }

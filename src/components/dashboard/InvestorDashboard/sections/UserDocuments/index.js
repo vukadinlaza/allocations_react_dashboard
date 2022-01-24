@@ -145,8 +145,6 @@ const UserDocuments = ({ classes, data }) => {
       };
     });
 
-  console.log({ userDocumentsCopy });
-
   return (
     <div className={classes.tableContainer}>
       <div className={classes.searchContainer}>

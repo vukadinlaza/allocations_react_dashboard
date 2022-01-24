@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FormControl, TextField, Button } from '@material-ui/core';
+import { FormControl, TextField, Button, FormLabel } from '@material-ui/core';
 import './styles.scss';
 
 function PortfolioCompanySettings({ formData, setFormData }) {
@@ -17,11 +17,6 @@ function PortfolioCompanySettings({ formData, setFormData }) {
     },
   } = formData;
 
-  useEffect(() => {
-    getFeeType();
-    getSetupCostType();
-  }, [portfolioManagementFees, portfolioManagementFeesDollar]);
-
   const getFeeType = () => {
     if (portfolioManagementFees?.length > 0) {
       setFeeType('percentage');
@@ -37,6 +32,11 @@ function PortfolioCompanySettings({ formData, setFormData }) {
       setFeeType('fixed');
     }
   };
+
+  useEffect(() => {
+    getFeeType();
+    getSetupCostType();
+  }, [portfolioManagementFees, portfolioManagementFeesDollar]);
 
   const handleFormChange = ({ target }) => {
     setFormData((prevData) => ({
@@ -130,7 +130,7 @@ function PortfolioCompanySettings({ formData, setFormData }) {
 
       <div className="form-fields">
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Portfolio management fee
             <div className="management-fee">
               <TextField
@@ -174,11 +174,11 @@ function PortfolioCompanySettings({ formData, setFormData }) {
                 $
               </Button>
             </div>
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Fee type
             <div className="button-options">
               <Button
@@ -198,11 +198,11 @@ function PortfolioCompanySettings({ formData, setFormData }) {
                 One-time
               </Button>
             </div>
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Portfolio carry fee (%)
             <TextField
               onChange={handleFormChange}
@@ -211,11 +211,11 @@ function PortfolioCompanySettings({ formData, setFormData }) {
               className="text-input"
               variant="outlined"
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="field">
-          <label className="field-label">
+          <FormLabel className="field-label">
             Estimated setup cost
             <div className="management-fee">
               <TextField
@@ -239,7 +239,7 @@ function PortfolioCompanySettings({ formData, setFormData }) {
                 $
               </Button>
             </div>
-          </label>
+          </FormLabel>
         </FormControl>
       </div>
     </section>

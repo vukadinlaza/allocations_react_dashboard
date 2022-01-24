@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useMutation } from '@apollo/client';
+import { useMutation, gql } from '@apollo/client';
+import { get } from 'lodash';
 import { toast } from 'react-toastify';
 
 /** *
@@ -23,10 +24,7 @@ const RM_INVESTMENT_DOC = gql`
 
 export function Docs({ investment, setInvestment }) {
   const [uploadedDoc, setUploadedDoc] = useState(null);
-  const [addInvestmentDoc, { data, loading, error }] = useMutation(ADD_INVESTMENT_DOC, {
-    onError: () =>
-      toast.error('Sorry, something went wrong. Try again or contact support@allocations.com'),
-  });
+  const [addInvestmentDoc, { data }] = useMutation(ADD_INVESTMENT_DOC);
 
   useEffect(() => {
     if (uploadedDoc) {
@@ -51,7 +49,7 @@ export function Docs({ investment, setInvestment }) {
     <div className="docs">
       <div className="doc-wrapper">
         <div className="add-doc">
-          <label>
+          <span>
             <FontAwesomeIcon icon="plus" />
             <input
               type="file"
@@ -60,7 +58,7 @@ export function Docs({ investment, setInvestment }) {
                 if (target.validity.valid) setUploadedDoc(target.files[0]);
               }}
             />
-          </label>
+          </span>
         </div>
         <div className="filename">&nbsp;</div>
       </div>

@@ -300,11 +300,49 @@ const uploadTaskMap = {
   },
 };
 
+function PitchDeckCheckBox({ deal, classes }) {
+  const [updateDeal] = useMutation(UPDATE_DEAL, {
+    onError: console.error,
+  });
+
+  return (
+    <div className={classes.checkBoxContainer}>
+      <Checkbox
+        color="default"
+        size="medium"
+        name="public_pitch_deck"
+        checked={deal?.metadata?.public_pitch_deck}
+        classes={{
+          root: classes.pitchDeckCheckbox,
+          checked: classes.pitchDeckColorSecondary,
+        }}
+        onChange={(e) => {
+          updateDeal({
+            variables: {
+              payload: {
+                deal_id: deal?._id,
+                public_pitch_deck: e.target.checked,
+              },
+            },
+          });
+        }}
+      />
+      <Typography style={{ fontWeight: 'bold' }}>
+        Allow the Pitch Deck to be shown publicly on the Deal Page?
+      </Typography>
+    </div>
+  );
+}
+
 const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes }) => {
+  const [error, setError] = useState(false);
+
+  // eslint-disable-next-line no-unused-vars
   const [addDoc, { _, loading: addDocLoading, error: addDocError }] = useMutation(ADD_DOC, {
     onCompleted: ({ addDealDocService: uploadResponse }) => {
       if (uploadResponse?.success) toast.success('Success! Your document has been added');
     },
+    // eslint-disable-next-line no-console
     onError: console.error,
   });
 
@@ -318,6 +356,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
         }
         toast.success('Success! Your document has been deleted');
       },
+      // eslint-disable-next-line no-console
       onError: console.error,
     },
   );
@@ -589,40 +628,6 @@ export default function UploadDocs({ deal, phase }) {
       >
         Continue
       </Button>
-    </div>
-  );
-}
-
-function PitchDeckCheckBox({ deal, classes }) {
-  const [updateDeal] = useMutation(UPDATE_DEAL, {
-    onError: console.error,
-  });
-
-  return (
-    <div className={classes.checkBoxContainer}>
-      <Checkbox
-        color="default"
-        size="medium"
-        name="public_pitch_deck"
-        checked={deal?.metadata?.public_pitch_deck}
-        classes={{
-          root: classes.pitchDeckCheckbox,
-          checked: classes.pitchDeckColorSecondary,
-        }}
-        onChange={(e) => {
-          updateDeal({
-            variables: {
-              payload: {
-                deal_id: deal?._id,
-                public_pitch_deck: e.target.checked,
-              },
-            },
-          });
-        }}
-      />
-      <Typography style={{ fontWeight: 'bold' }}>
-        Allow the Pitch Deck to be shown publicly on the Deal Page?
-      </Typography>
     </div>
   );
 }

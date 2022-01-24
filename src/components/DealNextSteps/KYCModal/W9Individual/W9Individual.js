@@ -1,4 +1,4 @@
-import { FormControl, TextField, Button } from '@material-ui/core';
+import { FormControl, TextField, Button, FormLabel } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React, { useState } from 'react';
 import moment from 'moment';
@@ -78,7 +78,7 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
       </div>
       <form className="form">
         <FormControl variant="outlined" className="form-field name">
-          <label>
+          <FormLabel>
             Legal name
             <TextField
               value={
@@ -91,11 +91,11 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
                 'name_as_shown_on_your_income_tax_return_name_is_required_on_this_line_do_not_leave_this_line_blank',
               )}
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <FormControl className="form-field address">
-          <label>
+          <FormLabel>
             Street address
             <TextField
               value={formData.address_number_street_and_apt_or_suite_no_see_instructions}
@@ -104,12 +104,12 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
               variant="outlined"
               error={errors.includes('address_number_street_and_apt_or_suite_no_see_instructions')}
             />
-          </label>
+          </FormLabel>
         </FormControl>
 
         <div className="region container">
           <FormControl className="form-field city">
-            <label>
+            <FormLabel>
               City
               <TextField
                 value={formData.city}
@@ -118,11 +118,11 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
                 variant="outlined"
                 error={errors.includes('city')}
               />
-            </label>
+            </FormLabel>
           </FormControl>
 
           <FormControl required className="form-field state">
-            <label>
+            <FormLabel>
               State
               <TextField
                 value={formData.state}
@@ -131,11 +131,11 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
                 variant="outlined"
                 error={errors.includes('state')}
               />
-            </label>
+            </FormLabel>
           </FormControl>
 
           <FormControl className="form-field zip">
-            <label>
+            <FormLabel>
               Zip Code
               <TextField
                 value={formData.zip}
@@ -144,13 +144,13 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
                 variant="outlined"
                 error={errors.includes('zip')}
               />
-            </label>
+            </FormLabel>
           </FormControl>
         </div>
 
         <div className="social container">
           <FormControl className="form-field ssn">
-            <label>
+            <FormLabel>
               SSN
               <div className="ssn container">
                 <TextField
@@ -181,11 +181,11 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
                   error={errors.includes('f1_13')}
                 />
               </div>
-            </label>
+            </FormLabel>
           </FormControl>
 
           <FormControl className="form-field date-signed">
-            <label>
+            <FormLabel>
               Date signed
               <TextField
                 value={formData.date_signed}
@@ -195,12 +195,12 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
                 error={errors.includes('date_signed')}
                 variant="outlined"
               />
-            </label>
+            </FormLabel>
           </FormControl>
         </div>
 
         <FormControl className="form-field signature">
-          <label>
+          <FormLabel>
             E-Signature
             <TextField
               value={
@@ -209,7 +209,7 @@ function W9Individual({ toggleOpen, createDoc, called, loading }) {
               variant="outlined"
               className="signature"
             />
-          </label>
+          </FormLabel>
         </FormControl>
         {called && loading ? (
           <Loader />
