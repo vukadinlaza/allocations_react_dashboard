@@ -58,6 +58,14 @@ const CREATE_NEW_DEAL = gql`
   }
 `;
 
+const WAKE_UP_BUILD_API = gql`
+  mutation wakeUpBuildApi($payload: Object) {
+    wakeUpBuildApi(payload: $payload) {
+      message
+    }
+  }
+`;
+
 const Breadcrumb = ({ title, active, withSeparator = false }) => {
   const classes = useStyles();
 
@@ -815,6 +823,17 @@ export default function NewDealForm() {
         console.log('err', err);
       },
     });
+
+  const [wakeUpBuildApi] = useMutation(WAKE_UP_BUILD_API, {
+    onCompleted: (data) => {
+      console.log('data', data);
+    },
+    onError: console.error,
+  });
+
+  useEffect(() => {
+    wakeUpBuildApi();
+  }, []);
 
   const organization = useCurrentOrganization();
 
