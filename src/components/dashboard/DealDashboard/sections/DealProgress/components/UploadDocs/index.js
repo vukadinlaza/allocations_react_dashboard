@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { CircularProgress, makeStyles, Checkbox } from '@material-ui/core';
+import { CircularProgress, makeStyles, Checkbox, Button } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { gql, useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import documentIcon from '../../../../../../../assets/document-icon.svg';
 import documentGreenIcon from '../../../../../../../assets/document-green-icon.svg';
-import documentGrayIcon from '../../../../../../../assets/document-grayed-icon.svg';
 import redUploadIcon from '../../../../../../../assets/red-doc-upload.svg';
 import greenCheckCircle from '../../../../../../../assets/green-circled-checkmark.svg';
 import trashIcon from '../../../../../../../assets/trash.svg';
@@ -33,12 +32,29 @@ const UPDATE_DEAL = gql`
   }
 `;
 
+const SET_DOC_TASKS_COMPLETE = gql`
+  mutation setDocumentTasksComplete($payload: Object) {
+    setDocumentTasksComplete(payload: $payload)
+  }
+`;
+
 const useStyles = makeStyles((theme) => ({
+  mainContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    minHeight: '320px',
+    [theme.breakpoints.down(phone)]: {
+      flexDirection: 'column',
+      minHeight: '800px',
+    },
+  },
   uploadContainer: {
     display: 'flex',
     flexWrap: 'wrap',
     [theme.breakpoints.down(phone)]: {
       flexDirection: 'column',
+      alignSelf: 'center',
     },
   },
   blueCheck: {
@@ -72,8 +88,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     backgroundColor: '#F2CECC',
     borderRadius: '50%',
-    width: '58px',
-    height: '58px',
+    width: '48px',
+    height: '48px',
   },
   docIconBox: {
     display: 'flex',
@@ -84,12 +100,17 @@ const useStyles = makeStyles((theme) => ({
     width: '48px',
     height: '48px',
   },
+  warningIcon: {
+    height: '20px',
+    width: '20px',
+  },
   docIcon: {
     height: '20px',
   },
   itemText: {
     font: 'normal normal normal 18px/20px Roboto',
     color: '#2A2B54',
+    color: 'inherit',
     width: '160px',
     textAlign: 'center',
     fontWeight: '500',
@@ -98,6 +119,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down(phone)]: {
       font: 'normal normal normal 16px/20px Roboto',
       maxWidth: '180px',
+      fontWeight: '500',
     },
   },
   docUploadBox: {
@@ -105,7 +127,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
     background: '#FFFFFF 0% 0% no-repeat padding-box',
-    marginBottom: '16px',
     paddingTop: '20px',
     borderRadius: '15px',
     width: '100%',
@@ -128,7 +149,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '10px',
     width: '228px',
     height: '184px',
-    margin: '10px',
+    marginRight: '20px',
   },
   uploadDocItem: {
     display: 'flex',
@@ -141,7 +162,18 @@ const useStyles = makeStyles((theme) => ({
     opacity: 1,
     width: '228px',
     height: '184px',
-    margin: '10px',
+    marginRight: '20px',
+    cursor: 'pointer',
+    '&:hover': {
+      backgroundColor: '#ECF3FF',
+    },
+    '&:active': {
+      borderColor: '#186EFF !important',
+      color: '#186EFF !important',
+    },
+    [theme.breakpoints.down(phone)]: {
+      marginRight: '0px',
+    },
   },
   uploadedDocItem: {
     background: '#fff 0% 0% no-repeat padding-box',
@@ -160,23 +192,30 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     background: '#fff 0% 0% no-repeat padding-box',
-    border: '2px solid #EBEBEB !important',
+    border: '1px dashed #CBD5E1 !important',
     borderRadius: '10px',
     opacity: 1,
     width: '228px',
     height: '184px',
-    margin: '10px',
+    marginRight: '20px',
+    cursor: 'pointer',
+    '&:hover': {
+      backgroundColor: '#ECF3FF',
+    },
+    '&:active': {
+      borderColor: '#186EFF !important',
+      color: '#186EFF !important',
+    },
   },
   uploadIcon: {
     color: 'blue',
     height: '13.5px',
     transparentheight: '35px',
     [theme.breakpoints.down(phone)]: {
-      marginRight: '20px',
       width: '30px',
     },
   },
-  uploadIconLabel: {
+  uploadIconBox: {
     display: 'flex',
     justifyContent: 'space-evenly',
     alignItems: 'center',
@@ -185,9 +224,9 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '12px',
     whiteSpace: 'nowrap',
     backgroundColor: '#FEE2E2',
-    cursor: 'pointer',
     color: '#B91C1C',
     fontWeight: '500',
+    fontSize: '12px',
   },
   greenCheckCircle: {
     height: '13px',
@@ -197,8 +236,7 @@ const useStyles = makeStyles((theme) => ({
   checkBoxContainer: {
     display: 'flex',
     alignItems: 'center',
-    marginTop: '10px',
-    marginLeft: '10px',
+    marginLeft: '2px',
   },
   pitchDeckCheckbox: {
     paddingLeft: '0px',
@@ -208,6 +246,30 @@ const useStyles = makeStyles((theme) => ({
   },
   pitchDeckColorSecondary: {
     color: '#39C522',
+  },
+  continueButton: {
+    font: 'normal normal bold 16px Roboto',
+    width: '113px',
+    height: '48px',
+    background: '#186EFF 0% 0% no-repeat padding-box',
+    borderRadius: '10px',
+    opacity: '1',
+    color: '#FFFFFF',
+    textTransform: 'none',
+    outline: 'none',
+    '&:active': {
+      backgroundColor: '#0444B4',
+    },
+  },
+  continueButtonDisabled: {
+    font: 'normal normal bold 16px Roboto',
+    width: '113px',
+    height: '48px',
+    background: '#CBD5E1 0% 0% no-repeat padding-box',
+    borderRadius: '10px',
+    opacity: '1',
+    textTransform: 'none',
+    outline: 'none',
   },
 }));
 
@@ -283,6 +345,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
     // eslint-disable-next-line no-console
     onError: console.error,
   });
+
   const [deleteDoc, { loading: deleteDocLoading, error: deleteDocError }] = useMutation(
     DELETE_DOC,
     {
@@ -298,7 +361,7 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
     },
   );
 
-  const { complete } = filesUploaded[document.title];
+  const complete = filesUploaded[document.title]?.complete;
   const acceptedFiles = uploadTaskMap[document.title]?.fileType;
 
   const validateFileType = (target) => {
@@ -312,142 +375,37 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
 
   const truncFile = (file) => {
     let fileName = file;
-
     if (file.length > 25) {
       const split = file.split('.');
       fileName = `${split[0].slice(0, 25)}...${split[1]}`;
     }
-
     return fileName;
   };
 
-  if (addDocLoading || deleteDocLoading) {
+  const isError = error || addDocError || deleteDocError;
+  const isLoading = addDocLoading || deleteDocLoading;
+
+  if (isLoading)
     return (
       <div className={classes.uploadDocLoader}>
         <CircularProgress />
       </div>
     );
-  }
-  if (error || addDocError || deleteDocError) {
-    return (
-      <div className={`${classes.uploadErrorItem}`}>
-        <div className={classes.docErrorIconBox}>
-          <img src={warningIcon} alt="warning icon" />
-        </div>
-        <Typography className={classes.itemText}>&nbsp;Something went wrong...</Typography>
-        <div className={classes.uploadIcon} style={{ opacity: '1', textAlign: 'center' }}>
-          <div style={{ display: 'flex' }}>
-            <img
-              src={documentGrayIcon}
-              className={classes.uploadIcon}
-              style={{ opacity: '1', cursor: 'pointer', marginRight: '0.25em' }}
-              alt="checkbox"
-            />
-            <span htmlFor={`${document._id}`} className={classes.uploadErrorLabel}>
-              &nbsp;Upload document
-            </span>
-          </div>
-          <form>
-            <input
-              id={`${document._id}`}
-              className={classes.uploadIcon}
-              type="file"
-              style={{ display: 'none' }}
-              accept={acceptedFiles}
-              multiple
-              onChange={({ target }) => {
-                if (target.validity.valid) {
-                  if (!validateFileType(target)) return;
-                  setError(false);
-                  addDoc({
-                    variables: {
-                      doc: target.files[0],
-                      task_id: document?._id,
-                      deal_id: phase?.deal_id,
-                      phase: phase._id,
-                    },
-                  }).then(({ data }) => {
-                    const { name } = target.files[0];
-                    if (data.addDealDocService) {
-                      setFilesUploaded((prev) => {
-                        const newFilesUploaded = {
-                          ...prev,
-                          [document.title]: {
-                            complete: true,
-                            document: { name, _id: data.addDealDocService._id },
-                          },
-                        };
-                        localStorage.setItem(
-                          'buildFilesUploaded',
-                          JSON.stringify(newFilesUploaded),
-                        );
-                        return newFilesUploaded;
-                      });
-                    }
-                  });
-                }
-              }}
-            />
-          </form>
-        </div>
-      </div>
-    );
-  }
 
-  return (
-    <div className={`${classes.uploadDocItem} ${!complete ? '' : classes.uploadedDocItem}`}>
-      <div className={classes.docIconBox} style={{ backgroundColor: complete && '#CBECC7' }}>
-        <img
-          src={!complete ? documentIcon : documentGreenIcon}
-          alt="document icon"
-          className={classes.docIcon}
-        />
-      </div>
-      <Typography className={classes.itemText}>
-        {complete
-          ? truncFile(filesUploaded[document.title]?.document?.name)
-          : uploadTaskMap[document.title].text}
-        &nbsp;
-        {complete && (
-          <button
-            className={classes.deleteDocButton}
-            type="button"
-            onClick={() => {
-              deleteDoc({
-                variables: {
-                  document_id: filesUploaded[document.title]?.document?._id,
-                  task_id: document._id,
-                  phase_id: phase?._id,
-                },
-              }).then(() => {
-                setFilesUploaded((prev) => {
-                  const newFilesUploaded = {
-                    ...prev,
-                    [document.title]: { complete: false, document: { name: null, _id: null } },
-                  };
-                  localStorage.setItem('buildFilesUploaded', JSON.stringify(newFilesUploaded));
-                  return newFilesUploaded;
-                });
-              });
-            }}
-          >
-            <img src={trashIcon} className={classes.deleteDocButton} alt="trash can icon" />
-          </button>
-        )}
-      </Typography>
-      <div style={{ opacity: '1', textAlign: 'center' }}>
-        <label
-          htmlFor={`${document._id}`}
-          className={classes.uploadIconLabel}
-          style={complete ? { backgroundColor: '#D1FAE5', color: '#047857' } : null}
-        >
-          <img
-            src={complete ? greenCheckCircle : redUploadIcon}
-            className={classes.uploadIcon}
-            style={{ opacity: '1', cursor: 'pointer' }}
-            alt={complete ? 'green check icon' : 'upload icon'}
-          />
-          &nbsp;{!complete ? 'Upload document' : 'Document uploaded'}
+  if (isError)
+    return (
+      <div>
+        <label htmlFor={`${document._id}`}>
+          <div className={`${classes.uploadErrorItem}`}>
+            <div className={classes.docErrorIconBox}>
+              <img src={warningIcon} className={classes.warningIcon} alt="warning icon" />
+            </div>
+            <Typography className={classes.itemText}>&nbsp;Something went wrong...</Typography>
+            <div className={classes.uploadIconBox}>
+              <img src={redUploadIcon} className={classes.uploadIcon} alt="upload icon" />
+              Upload document
+            </div>
+          </div>
         </label>
         <form>
           <input
@@ -460,20 +418,22 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
             onChange={({ target }) => {
               if (target.validity.valid) {
                 if (!validateFileType(target)) return;
+                setError(false);
                 addDoc({
                   variables: {
                     doc: target.files[0],
                     task_id: document?._id,
                     deal_id: phase?.deal_id,
-                    phase: phase?.name,
+                    phase: phase._id,
                   },
                 }).then(({ data }) => {
+                  const { name } = target.files[0];
                   if (data.addDealDocService) {
-                    const { name } = target.files[0];
                     setFilesUploaded((prev) => {
                       const newFilesUploaded = {
                         ...prev,
                         [document.title]: {
+                          ...prev[document.title],
                           complete: true,
                           document: { name, _id: data.addDealDocService._id },
                         },
@@ -488,6 +448,109 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
           />
         </form>
       </div>
+    );
+
+  return (
+    <div>
+      <label htmlFor={`${document._id}`}>
+        <div className={`${classes.uploadDocItem} ${!complete ? '' : classes.uploadedDocItem}`}>
+          <div className={classes.docIconBox} style={{ backgroundColor: complete && '#CBECC7' }}>
+            <img
+              src={!complete ? documentIcon : documentGreenIcon}
+              alt="document icon"
+              className={classes.docIcon}
+            />
+          </div>
+
+          <Typography className={classes.itemText}>
+            {complete
+              ? truncFile(filesUploaded[document.title]?.document?.name)
+              : uploadTaskMap[document.title].text}
+            {complete && (
+              <button
+                className={classes.deleteDocButton}
+                type="button"
+                onClick={() => {
+                  deleteDoc({
+                    variables: {
+                      document_id: filesUploaded[document.title]?.document?._id,
+                      task_id: document._id,
+                      phase_id: phase?._id,
+                    },
+                  }).then(() => {
+                    setFilesUploaded((prev) => {
+                      const newFilesUploaded = {
+                        ...prev,
+                        [document.title]: {
+                          ...prev[document.title],
+                          complete: false,
+                          document: { name: null, _id: null },
+                        },
+                      };
+                      localStorage.setItem('buildFilesUploaded', JSON.stringify(newFilesUploaded));
+                      return newFilesUploaded;
+                    });
+                  });
+                }}
+              >
+                <img src={trashIcon} className={classes.deleteDocButton} alt="trash can icon" />
+              </button>
+            )}
+          </Typography>
+
+          <div
+            className={classes.uploadIconBox}
+            style={complete ? { backgroundColor: '#D1FAE5', color: '#047857' } : null}
+          >
+            <img
+              src={complete ? greenCheckCircle : redUploadIcon}
+              className={classes.uploadIcon}
+              alt={complete ? 'green check icon' : 'upload icon'}
+            />
+            {!complete ? 'Upload document' : 'Document uploaded'}
+          </div>
+        </div>
+      </label>
+      <form>
+        <input
+          id={`${document._id}`}
+          className={classes.uploadIcon}
+          type="file"
+          style={{ display: 'none' }}
+          disabled={complete}
+          accept={acceptedFiles}
+          multiple
+          onChange={({ target }) => {
+            if (target.validity.valid) {
+              if (!validateFileType(target)) return;
+              addDoc({
+                variables: {
+                  doc: target.files[0],
+                  task_id: document?._id,
+                  deal_id: phase?.deal_id,
+                  phase: phase?.name,
+                },
+              }).then(({ data }) => {
+                if (data.addDealDocService) {
+                  const { name } = target.files[0];
+                  setFilesUploaded((prev) => {
+                    const newFilesUploaded = {
+                      ...prev,
+                      [document.title]: {
+                        ...prev[document.title],
+                        complete: true,
+                        document: { name, _id: data.addDealDocService._id },
+                      },
+                    };
+                    localStorage.setItem('buildFilesUploaded', JSON.stringify(newFilesUploaded));
+                    return newFilesUploaded;
+                  });
+                }
+              });
+            }
+          }}
+        />
+      </form>
     </div>
   );
 };
@@ -495,70 +558,82 @@ const DocUploader = ({ document, filesUploaded, setFilesUploaded, phase, classes
 export default function UploadDocs({ deal, phase }) {
   const classes = useStyles();
 
-  const docUploadMap = {
-    spv: {
-      'Upload Company Logo': {
-        complete: false,
-        document: {
-          name: null,
-          _id: null,
-        },
-      },
-      'Upload Company Deck': {
-        complete: false,
-        document: {
-          name: null,
-          _id: null,
-        },
-      },
-      'Upload Term Sheet': {
-        complete: false,
-        document: {
-          name: null,
-          _id: null,
-        },
-      },
-    },
-    fund: {
-      'Upload Fund Logo': {
-        complete: false,
-        document: {
-          name: null,
-          _id: null,
-        },
-      },
-    },
-  };
-
-  const [filesUploaded, setFilesUploaded] = useState(docUploadMap[deal?.type]);
+  const [setDocTasksComplete, { data: docTasksCompleteData, loading: tasksCompleteLoading }] =
+    useMutation(SET_DOC_TASKS_COMPLETE, {
+      onError: console.error,
+    });
 
   const uploadTasks = phase?.tasks
     .filter((task) => task.type === 'fm-document-upload')
     .sort((a, b) => uploadTaskMap[a.title]?.position - uploadTaskMap[b.title]?.position);
+
+  const [filesUploaded, setFilesUploaded] = useState(
+    uploadTasks?.reduce((acc, task) => {
+      acc[task?.title] = {
+        task_id: task?._id,
+        complete: false,
+        document: {
+          name: null,
+          _id: null,
+        },
+      };
+      return acc;
+    }, {}) || {},
+  );
 
   useEffect(() => {
     if (localStorage.getItem('buildFilesUploaded')) {
       setFilesUploaded(JSON.parse(localStorage.getItem('buildFilesUploaded')));
     }
   }, []);
+
+  const isRequiredTasksComplete = filesUploaded['Upload Term Sheet']?.complete;
+
+  // Needs to keep loading spinner until task data is refreshed with updated data from getDealWithTasks in  index.tsx of DealDashboard
+  if (tasksCompleteLoading || docTasksCompleteData?.setDocumentTasksComplete?.message) {
+    return <CircularProgress />;
+  }
+
   return (
-    <div>
+    <div className={classes.mainContainer}>
       <div className={classes.uploadContainer}>
         {uploadTasks?.map((task) => (
           <DocUploader
             key={task._id}
+            taskId={task._id}
             document={task}
             classes={classes}
             filesUploaded={filesUploaded}
             setFilesUploaded={setFilesUploaded}
             phase={phase}
-            phaseId={phase._id}
           />
         ))}
-        {deal?.type === 'spv' && filesUploaded['Upload Company Deck']?.complete && (
-          <PitchDeckCheckBox deal={deal} classes={classes} />
-        )}
       </div>
+      {filesUploaded['Upload Company Deck']?.complete && (
+        <PitchDeckCheckBox deal={deal} classes={classes} />
+      )}
+      <Button
+        disabled={!isRequiredTasksComplete}
+        className={
+          isRequiredTasksComplete ? classes.continueButton : classes.continueButtonDisabled
+        }
+        onClick={() => {
+          const taskData = Object.values(filesUploaded).map((file) => ({
+            task_id: file?.task_id,
+            document_id: file?.document?._id,
+          }));
+          setDocTasksComplete({
+            variables: {
+              payload: {
+                deal_id: deal?._id,
+                taskData,
+              },
+            },
+          });
+        }}
+      >
+        Continue
+      </Button>
     </div>
   );
 }
