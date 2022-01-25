@@ -21,8 +21,7 @@ const RoutingModal = ({ classes, open, handleClose }) => {
       <Fade in={open}>
         <Paper className={classes.routingModal}>
           <Grid className={classes.modalListItem}>
-            <Eye />
-            {/* <img src={Eye} alt="Eye Icon" className={classes.modalSVG} /> */}
+            <img src={Eye} alt="Eye Icon" className={classes.modalSVG} />
             <Typography> View Page </Typography>
           </Grid>
           <Grid className={classes.modalListItem}>

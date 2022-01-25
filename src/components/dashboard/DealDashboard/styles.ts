@@ -252,6 +252,7 @@ const styles: any = (theme: Theme) => ({
   },
   modalListItem: {
     display: 'flex',
+    alignItems: 'center',
     '&:hover': {
       background: '#ECF3FF',
       color: '#186EFF',
@@ -266,6 +267,8 @@ const styles: any = (theme: Theme) => ({
   },
   modalSVG: {
     color: '#2A2B54 !important',
+    width: '15px',
+    margin: '10px',
     '&:hover': {
       color: '#186EFF !important',
     },
@@ -322,6 +325,8 @@ const styles: any = (theme: Theme) => ({
     },
   },
   routingModal: {
+    display: 'grid',
+    gridTemplateRows: 'repeat(3, 1fr)',
     width: '90%',
     height: '120px',
     filter: 'drop-shadow(0px 20px 56px rgba(0, 0, 0, 0.29))',
