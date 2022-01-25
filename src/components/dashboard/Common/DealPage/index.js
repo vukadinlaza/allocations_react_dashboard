@@ -5,9 +5,9 @@ import { Typography, Button, Grid, Modal, Backdrop, Fade, Paper } from '@materia
 import DealLandingPageRedesign from '../../../DealOneClick/LandingPageRedesign';
 import { useViewport } from '../../../../utils/hooks';
 import { phone } from '../../../../utils/helpers';
-import { ReactComponent as Eye } from '../../../../../assets/eye.svg';
-import { ReactComponent as CopyLink } from '../../../../../assets/copy-icon.svg';
-import { ReactComponent as Pencil } from '../../../../../assets/pencil.svg';
+import { ReactComponent as Eye } from '../../../../assets/eye.svg';
+import { ReactComponent as CopyLink } from '../../../../assets/copy-icon.svg';
+import { ReactComponent as Pencil } from '../../../../assets/pencil.svg';
 
 const RoutingModal = ({ classes, open, handleClose, goToDeal, handleLinkCopy, goToEditDeal }) => {
   return (
