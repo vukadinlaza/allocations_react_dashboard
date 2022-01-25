@@ -102,9 +102,8 @@ const styles: any = (theme: Theme) => ({
     background: '#186EFF',
     color: '#FFFFFF',
     borderRadius: '8px',
-    width: '98px',
-    height: '32px',
-    padding: '0px 10px',
+    padding: '6px 16px',
+    fontSize: '12px',
   },
   copyLink: {
     width: '100%',
@@ -225,7 +224,12 @@ const styles: any = (theme: Theme) => ({
   },
   linkText: {
     width: '50%',
+    fontSize: '14px',
     marginLeft: '15px',
+    [theme.breakpoints.down(phone)]: {
+      overflowWrap: 'anywhere',
+      width: '70%',
+    },
   },
   modal: {
     width: '520px',
@@ -246,12 +250,25 @@ const styles: any = (theme: Theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
   },
+  modalListItem: {
+    display: 'flex',
+    '&:hover': {
+      background: '#ECF3FF',
+      color: '#186EFF',
+    },
+  },
   modalSubtitle: {
     fontSize: '20px',
     fontWeight: 500,
     color: '#2A2B54',
     lineHeight: '24px',
     margin: '16px 0 40px 0',
+  },
+  modalSVG: {
+    color: '#2A2B54 !important',
+    '&:hover': {
+      color: '#186EFF !important',
+    },
   },
   modalTitle: {
     fontSize: '24px',
@@ -270,13 +287,12 @@ const styles: any = (theme: Theme) => ({
     border: '1px solid #CBD5E1',
     borderRadius: '8px',
     color: '#64748B',
-    width: '98px',
-    height: '32px',
-    padding: '0px 10px',
+    padding: '6px 16px',
+    fontSize: '12px',
   },
   pageIcons: {
     display: 'flex',
-    width: '40%',
+    width: '50%',
     justifyContent: 'space-evenly',
   },
   pageTitle: {
@@ -305,6 +321,12 @@ const styles: any = (theme: Theme) => ({
       animation: '$load 1s cubic-bezier(0.4, 0.0, 0.2, 1) infinite',
     },
   },
+  routingModal: {
+    width: '90%',
+    height: '120px',
+    filter: 'drop-shadow(0px 20px 56px rgba(0, 0, 0, 0.29))',
+    borderRadius: '8px',
+  },
   searchContainer: {
     margin: '32px 0 24px 0',
   },
@@ -313,10 +335,12 @@ const styles: any = (theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '8px',
     background: '#FFFFFF',
     height: '68px',
     borderRadius: '8px',
+    [theme.breakpoints.down(phone)]: {
+      height: '90px',
+    },
   },
   smallBox: {
     height: '88px',

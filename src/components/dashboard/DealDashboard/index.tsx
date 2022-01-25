@@ -208,7 +208,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
         </Grid>
         <Grid container justifyContent="center" spacing={2}>
           <Grid item xs={1} />
-          <Grid item xs={12} lg={10}>
+          <Grid item xs={10} lg={10}>
             <Typography className={classes.pageTitle}>
               {dealData?.getDealByIdWithTasks?.name ||
                 dealData?.getDealByIdWithTasks?.company_name ||
