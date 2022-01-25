@@ -23,7 +23,7 @@ import DealsTabs from './sections/DealsTabs';
 import styles from './styles';
 import DocumentsTab from './sections/DocumentsTab';
 import DealTypeSelector from '../../NewBuild/DealType';
-import DealPage from './sections/DealPage';
+import DealPage from '../DealDashboard/sections/DealPage';
 
 // const MFE1 = React.lazy(() => import('mfe1/mfe1'));
 // const NewDirectionsAccountCreationForm = React.lazy(() =>
@@ -314,13 +314,13 @@ const FundManagerDashboard = ({ classes, history }) => {
 
   const goToDeal = () => {
     if (orgSlug && dealData?.slug) {
-      history.push(`/deals/${orgSlug}/${dealData.slug}`);
+      window.open(`/deals/${orgSlug}/${dealData.slug}`);
     }
   };
 
   const goToEditDeal = () => {
     if (orgSlug && dealData?._id) {
-      history.push(`/admin/${orgSlug}/deals/${dealData._id}/edit`);
+      window.open(`/admin/${orgSlug}/deals/${dealData._id}/edit`);
     }
   };
 

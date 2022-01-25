@@ -127,13 +127,13 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
 
   const goToDeal = () => {
     if (orgSlug && dealData.getDealByIdWithTasks.metadata?.slug) {
-      history.push(`/deals/${orgSlug}/${dealData.getDealByIdWithTasks.metadata.slug}`);
+      window.open(`/deals/${orgSlug}/${dealData.getDealByIdWithTasks.metadata.slug}`);
     }
   };
 
   const goToEditDeal = () => {
     if (orgSlug && dealData.getDealByIdWithTasks._id) {
-      history.push(`/admin/${orgSlug}/deals/${dealData.getDealByIdWithTasks._id}/edit`);
+      window.open(`/admin/${orgSlug}/deals/${dealData.getDealByIdWithTasks._id}/edit`);
     }
   };
 

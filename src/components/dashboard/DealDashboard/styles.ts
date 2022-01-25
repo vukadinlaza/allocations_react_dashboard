@@ -336,7 +336,7 @@ const styles: any = (theme: Theme) => ({
   searchContainer: {
     margin: '32px 0 24px 0',
   },
-  section: {
+  dealSection: {
     width: '100%',
     display: 'flex',
     alignItems: 'center',

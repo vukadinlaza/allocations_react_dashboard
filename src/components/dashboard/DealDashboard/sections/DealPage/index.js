@@ -38,6 +38,7 @@ const RoutingModal = ({ classes, open, handleClose, goToDeal, handleLinkCopy, go
   );
 };
 
+// In the future, can remove this component
 export default function DealPage({
   orgSlug,
   dealData,
@@ -49,12 +50,13 @@ export default function DealPage({
   const { dealPageRedesign } = useFlags();
   const { width } = useViewport();
   const [openModal, setOpenModal] = useState(false);
+  const dealSlug = dealData?.metadata?.slug || dealData?.slug;
 
   if (dealPageRedesign)
     return (
       <DealLandingPageRedesign
         orgSlug={orgSlug}
-        dealSlug={dealData.slug}
+        dealSlug={dealSlug}
         goToDeal={goToDeal}
         dealPageRedesign={dealPageRedesign}
       />
@@ -76,10 +78,10 @@ export default function DealPage({
         handleLinkCopy={handleLinkCopy}
         goToEditDeal={goToEditDeal}
       />
-      <Grid item xs={10} className={classes.section}>
+      <Grid item xs={10} className={classes.dealSection}>
         <Typography className={classes.linkText}>
           {window.origin}
-          {orgSlug && dealData.metadata.slug ? `/deals/${orgSlug}/${dealData.metadata.slug}` : ''}
+          {orgSlug && dealSlug ? `/deals/${orgSlug}/${dealSlug}` : ''}
         </Typography>
         {width > phone ? (
           <div className={classes.pageIcons}>
@@ -94,7 +96,7 @@ export default function DealPage({
             </Button>
           </div>
         ) : (
-          <MoreVertRounded onClick={() => setOpenModal(true)} />
+          <MoreVertRounded style={{ cursor: 'pointer' }} onClick={() => setOpenModal(true)} />
         )}
       </Grid>
     </>

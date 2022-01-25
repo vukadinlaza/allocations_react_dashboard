@@ -7,6 +7,7 @@ import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import { FlatBox } from '../../widgets';
 import DealLandingPageRedesign from '../../../../DealOneClick/LandingPageRedesign';
 
+// defunct component, can be deleted
 export default function DealPage({
   orgSlug,
   dealData,
