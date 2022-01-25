@@ -45,15 +45,11 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classe
         .filter((task) => !task.title.includes('Create Process Street Run')),
     );
 
-    console.log(tasks, 'TASKS');
-
     const task = tasks?.find((task) => task.complete === false);
     const taskIndex = tasks?.indexOf(task);
 
     if (phase) {
-      console.log(phase, 'PHASE');
       setCurrentPhase(stepMap.get(phase.name));
-      console.log(currentPhase, 'CURRENT PHASE');
       setActiveStep(steps.indexOf(currentPhase));
     }
     if (task) {
@@ -63,7 +59,7 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classe
         setNextTaskPhase(stepMap.get(nextTask.phase));
       }
     }
-  }, [data]);
+  }, [data, currentPhase]);
 
   const completedTasks = data.phases
     .filter((phase) => phase.name !== 'build')
