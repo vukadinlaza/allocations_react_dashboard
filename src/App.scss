@@ -247,11 +247,6 @@ th {
 
   @media only screen and (max-width: 960px) {
     display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: minmax(65px, 6%) auto;
-    grid-template-areas:
-      'sidebar'
-      'mainRoute';
 
     .mainRoute {
       padding: 0.5rem;

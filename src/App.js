@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
 import { withLDProvider } from 'launchdarkly-react-client-sdk';
@@ -55,9 +55,31 @@ Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 const App = () => {
   const { isAuthenticated } = useAuth();
 
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const widthStyle = windowWidth > 960 ? 'greaterThan960Px' : 'lessThan960Px';
+
   const authenticatedStyle = {
-    gridTemplateColumns: 'minmax(250px, 10%) auto',
-    gridTemplateAreas: `'sidebar mainRoute'`,
+    greaterThan960Px: {
+      gridTemplateColumns: 'minmax(250px, 10%) auto',
+      gridTemplateAreas: `'sidebar mainRoute'`,
+    },
+    lessThan960Px: {
+      gridTemplateColumns: '100%',
+      gridTemplateRows: 'minmax(65px, 6%) auto',
+      gridTemplateAreas: `
+        'sidebar'
+        'mainRoute'
+        `,
+    },
   };
 
   const unAuthenticatedStyle = {
@@ -67,7 +89,10 @@ const App = () => {
 
   return (
     <CurrentAccountProvider>
-      <div className="App" style={isAuthenticated ? authenticatedStyle : unAuthenticatedStyle}>
+      <div
+        className="App"
+        style={isAuthenticated ? authenticatedStyle[widthStyle] : unAuthenticatedStyle}
+      >
         <div className="sidebar" style={{ display: !isAuthenticated && 'none' }}>
           <Sidebar />
         </div>
