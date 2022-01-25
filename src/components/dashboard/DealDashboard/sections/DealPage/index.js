@@ -84,16 +84,13 @@ export default function DealPage({
         {width > phone ? (
           <div className={classes.pageIcons}>
             <Button className={classes.outlinedButton} variant="outlined" onClick={goToEditDeal}>
-              {' '}
               Edit Deal
             </Button>
             <Button className={classes.outlinedButton} variant="outlined" onClick={handleLinkCopy}>
-              {' '}
-              Copy Link{' '}
+              Copy Link
             </Button>
             <Button className={classes.containedButton} variant="contained" onClick={goToDeal}>
-              {' '}
-              View Deal{' '}
+              View Deal
             </Button>
           </div>
         ) : (
