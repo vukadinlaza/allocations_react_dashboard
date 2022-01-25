@@ -38,7 +38,6 @@ const RoutingModal = ({ classes, open, handleClose, goToDeal, handleLinkCopy, go
   );
 };
 
-// In the future, can remove this component
 export default function DealPage({
   orgSlug,
   dealData,
