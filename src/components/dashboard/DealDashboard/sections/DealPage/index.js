@@ -5,9 +5,9 @@ import { Typography, Button, Grid, Modal, Backdrop, Fade, Paper } from '@materia
 import DealLandingPageRedesign from '../../../../DealOneClick/LandingPageRedesign';
 import { useViewport } from '../../../../../utils/hooks';
 import { phone } from '../../../../../utils/helpers';
-import Eye from '../../../../../assets/eye.svg';
-import CopyLink from '../../../../../assets/copy-icon.svg';
-import Pencil from '../../../../../assets/pencil.svg';
+import { ReactComponent as Eye } from '../../../../../assets/eye.svg';
+import { ReactComponent as CopyLink } from '../../../../../assets/copy-icon.svg';
+import { ReactComponent as Pencil } from '../../../../../assets/pencil.svg';
 
 const RoutingModal = ({ classes, open, handleClose, goToDeal, handleLinkCopy, goToEditDeal }) => {
   return (
@@ -21,15 +21,15 @@ const RoutingModal = ({ classes, open, handleClose, goToDeal, handleLinkCopy, go
       <Fade in={open}>
         <Paper className={classes.routingModal}>
           <Grid className={classes.modalListItem} onClick={goToDeal}>
-            <img src={Eye} alt="Eye Icon" className={classes.modalSVG} />
+            <Eye alt="eye icon" className={classes.modalSVG} />
             <Typography> View Page </Typography>
           </Grid>
           <Grid className={classes.modalListItem} onClick={handleLinkCopy}>
-            <img src={CopyLink} alt="document menu icon" className={classes.modalSVG} />
+            <CopyLink alt="document menu icon" className={classes.modalSVG} />
             <Typography> Copy Link </Typography>
           </Grid>
           <Grid className={classes.modalListItem} onClick={goToEditDeal}>
-            <img src={Pencil} alt="pencil logo" className={classes.modalSVG} />
+            <Pencil alt="pencil logo" className={classes.modalSVG} />
             <Typography> Edit Deal </Typography>
           </Grid>
         </Paper>
@@ -78,7 +78,7 @@ export default function DealPage({
       />
       <Grid item xs={10} className={classes.section}>
         <Typography className={classes.linkText}>
-          dashboard.allocations.com
+          {window.origin}
           {orgSlug && dealData.metadata.slug ? `/deals/${orgSlug}/${dealData.metadata.slug}` : ''}
         </Typography>
         {width > phone ? (

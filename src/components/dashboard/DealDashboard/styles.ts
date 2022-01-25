@@ -252,10 +252,14 @@ const styles: any = (theme: Theme) => ({
   },
   modalListItem: {
     display: 'flex',
+    fill: 'black',
     alignItems: 'center',
-    '&:hover': {
+    '&:hover, &:focus, &active': {
       background: '#ECF3FF',
       color: '#186EFF',
+      '& svg': {
+        fill: '#186EFF',
+      },
     },
   },
   modalSubtitle: {
@@ -266,12 +270,9 @@ const styles: any = (theme: Theme) => ({
     margin: '16px 0 40px 0',
   },
   modalSVG: {
-    color: '#2A2B54 !important',
+    fill: '#2A2B54',
     width: '15px',
     margin: '10px',
-    '&:hover': {
-      color: '#186EFF !important',
-    },
   },
   modalTitle: {
     fontSize: '24px',

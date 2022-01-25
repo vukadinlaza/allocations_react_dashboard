@@ -126,8 +126,6 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   };
 
   const goToDeal = () => {
-    console.log(orgSlug, 'ORG SUG');
-    console.log(dealData.getDealByIdWithTasks.metadata.slug, 'DEAL SLUG');
     if (orgSlug && dealData.getDealByIdWithTasks.metadata?.slug) {
       history.push(`/deals/${orgSlug}/${dealData.getDealByIdWithTasks.metadata.slug}`);
     }
@@ -140,7 +138,6 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   };
 
   const handleLinkCopy = () => {
-    console.log(dealData.getDealByIdWithTasks);
     if (orgSlug && dealData.getDealByIdWithTasks.metadata?.slug) {
       navigator.clipboard.writeText(
         window.origin + (`/deals/${orgSlug}/${dealData.getDealByIdWithTasks.metadata.slug}` || ''),
