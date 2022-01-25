@@ -12,6 +12,7 @@ import App from './App';
 import theme from './theme';
 import './index.css';
 import 'react-toastify/dist/ReactToastify.css';
+import AuthorizedApolloProvider from './apollo-client-comp';
 
 Bugsnag.start({
   apiKey: 'b6fcaf96aefe9b327e7db6e6d6178a2c',
@@ -36,18 +37,20 @@ ReactDOM.render(
     <ThemeProvider theme={theme}>
       <Router>
         <Auth0ProviderWithHistory>
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable={false}
-            pauseOnHover
-          />
-          <App />
+          <AuthorizedApolloProvider>
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable={false}
+              pauseOnHover
+            />
+            <App />
+          </AuthorizedApolloProvider>
         </Auth0ProviderWithHistory>
       </Router>
     </ThemeProvider>
