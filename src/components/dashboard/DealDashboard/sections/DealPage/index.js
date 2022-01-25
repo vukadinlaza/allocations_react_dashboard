@@ -9,7 +9,7 @@ import Eye from '../../../../../assets/eye.svg';
 import CopyLink from '../../../../../assets/copy-icon.svg';
 import Pencil from '../../../../../assets/pencil.svg';
 
-const RoutingModal = ({ classes, open, handleClose }) => {
+const RoutingModal = ({ classes, open, handleClose, goToDeal, handleLinkCopy, goToEditDeal }) => {
   return (
     <Modal
       className={classes.modalContainer}
@@ -20,15 +20,15 @@ const RoutingModal = ({ classes, open, handleClose }) => {
     >
       <Fade in={open}>
         <Paper className={classes.routingModal}>
-          <Grid className={classes.modalListItem}>
+          <Grid className={classes.modalListItem} onClick={goToDeal}>
             <img src={Eye} alt="Eye Icon" className={classes.modalSVG} />
             <Typography> View Page </Typography>
           </Grid>
-          <Grid className={classes.modalListItem}>
+          <Grid className={classes.modalListItem} onClick={handleLinkCopy}>
             <img src={CopyLink} alt="document menu icon" className={classes.modalSVG} />
             <Typography> Copy Link </Typography>
           </Grid>
-          <Grid className={classes.modalListItem}>
+          <Grid className={classes.modalListItem} onClick={goToEditDeal}>
             <img src={Pencil} alt="pencil logo" className={classes.modalSVG} />
             <Typography> Edit Deal </Typography>
           </Grid>
@@ -66,7 +66,16 @@ export default function DealPage({
 
   return (
     <>
-      <RoutingModal item xs={12} open={openModal} handleClose={handleClose} classes={classes} />
+      <RoutingModal
+        item
+        xs={12}
+        open={openModal}
+        handleClose={handleClose}
+        classes={classes}
+        goToDeal={goToDeal}
+        handleLinkCopy={handleLinkCopy}
+        goToEditDeal={goToEditDeal}
+      />
       <Grid item xs={10} className={classes.section}>
         <Typography className={classes.linkText}>
           dashboard.allocations.com
