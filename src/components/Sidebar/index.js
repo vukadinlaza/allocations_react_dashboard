@@ -126,6 +126,7 @@ function Sidebar(props) {
   const adminOrganizations = userProfile?.organizations_admin;
   const adminOrganizationsCopy = adminOrganizations ? [...adminOrganizations] : []; // Create a copy of organizations so we can mutate with sort
 
+  if (!isAuthenticated) return <div className={classes.unAuthenticatedSideBar} />;
   return (
     <div className={classes.sidebar}>
       <AppBar className={classes.appBar}>

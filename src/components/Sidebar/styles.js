@@ -173,6 +173,11 @@ const styles = (theme) => ({
     backgroundColor: '#f7f7f7',
     border: 'none !important',
   },
+  unAuthenticatedSideBar: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#f7f7f7',
+  },
   sidebarDrawer: {
     width: '100%',
     marginTop: '1rem',
