@@ -27,11 +27,11 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classe
   const [nextTaskPhase, setNextTaskPhase] = useState('Pre-Onboarding');
   const [activeStep, setActiveStep] = useState(0);
 
-  // console.log('DATA', data);
-
   useEffect(() => {
     const phase = data?.phases?.find((phase) =>
-      phase.tasks.find((task) => task.complete === false),
+      phase.tasks.find(
+        (task) => task.complete === false && !task.title.includes('Create Process Street Run'),
+      ),
     );
     const tasks = data?.phases?.flatMap((phase) =>
       phase.tasks
@@ -45,11 +45,15 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classe
         .filter((task) => !task.title.includes('Create Process Street Run')),
     );
 
+    console.log(tasks, 'TASKS');
+
     const task = tasks?.find((task) => task.complete === false);
     const taskIndex = tasks?.indexOf(task);
 
     if (phase) {
+      console.log(phase, 'PHASE');
       setCurrentPhase(stepMap.get(phase.name));
+      console.log(currentPhase, 'CURRENT PHASE');
       setActiveStep(steps.indexOf(currentPhase));
     }
     if (task) {
