@@ -178,7 +178,7 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
                     ...prev,
                     [task.title]: false,
                   }));
-                }, 2500);
+                }, 5000);
               }}
               timeoutLoading={timeoutLoading[task.title]}
               createDealLoading={createDealLoading}
