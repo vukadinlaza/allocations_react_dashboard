@@ -12,7 +12,7 @@ import LoadingPlaceholder from './LoadingPlaceholder';
 import Investors from './sections/Investors';
 import DealProgress from './sections/DealProgress';
 import { Task, DealPhase } from './types';
-import DealPage from './sections/DealPage';
+import DealPage from '../Common/DealPage';
 import styles from './styles';
 
 const DEAL = gql`

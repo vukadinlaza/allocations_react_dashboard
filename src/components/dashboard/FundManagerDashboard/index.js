@@ -23,7 +23,7 @@ import DealsTabs from './sections/DealsTabs';
 import styles from './styles';
 import DocumentsTab from './sections/DocumentsTab';
 import DealTypeSelector from '../../NewBuild/DealType';
-import DealPage from '../DealDashboard/sections/DealPage';
+import DealPage from '../Common/DealPage';
 
 // const MFE1 = React.lazy(() => import('mfe1/mfe1'));
 // const NewDirectionsAccountCreationForm = React.lazy(() =>
