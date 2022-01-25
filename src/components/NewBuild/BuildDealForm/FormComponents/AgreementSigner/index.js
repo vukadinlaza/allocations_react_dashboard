@@ -200,7 +200,7 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
           >
             Complete
           </Button>
-          {!allSigned && (
+          {/* {!allSigned && (
             <Typography
               className={classes.previousButton}
               onClick={() => {
@@ -209,7 +209,7 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
             >
               Previous
             </Typography>
-          )}
+          )} */}
         </div>
       </Paper>
     </>
