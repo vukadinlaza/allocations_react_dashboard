@@ -172,7 +172,7 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
     if (buildData.need_gp_entity === 'false' && !buildData.gp_entity_name) {
       status = false;
     }
-    return status;
+    return status && buildData.sectors.length > 0;
   };
 
   const sectionOneComplete =
