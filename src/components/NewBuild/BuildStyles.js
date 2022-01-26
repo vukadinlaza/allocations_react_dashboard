@@ -120,6 +120,15 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#0461FF',
     borderRadius: '50%',
   },
+  blueCheckSignAgreement: {
+    width: '26px',
+    height: '26px',
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: '50%',
+    justifyContent: 'center',
+    backgroundColor: '#0461ff',
+  },
   inputBox: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     boxShadow: '0px 3px 6px #0000000A',
