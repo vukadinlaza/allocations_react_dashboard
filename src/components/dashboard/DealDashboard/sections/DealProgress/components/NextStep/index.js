@@ -15,6 +15,8 @@ const NextStep = ({ classes, phase, task }) => {
     'Upload Fund Logo',
   ].includes(task?.title);
 
+  console.log(phase, 'PHASE');
+
   return (
     <Grid container className={classes.nextStepBody}>
       <div className={classes.stepTitleRow} style={{ padding: '0px' }}>

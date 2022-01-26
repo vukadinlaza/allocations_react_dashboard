@@ -65,7 +65,7 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classe
     if (task) {
       setCurrentTask(task);
       setNextTask(tasks[taskIndex + 1]);
-      if (nextTask) {
+      if (nextTask.phase) {
         setNextTaskPhase(stepMap.get(nextTask.phase));
       }
     }
