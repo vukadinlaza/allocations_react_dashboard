@@ -68,7 +68,8 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'none',
     outline: 'none',
     [theme.breakpoints.down(phone)]: {
-      width: '300px',
+      width: '85vw',
+      font: 'normal normal bold 20px/24px Roboto',
     },
   },
   finalInput: {
@@ -190,11 +191,11 @@ const useStyles = makeStyles((theme) => ({
     padding: '5px',
     cursor: 'pointer',
     [theme.breakpoints.down(phone)]: {
-      marginBottom: '14px',
-      marginTop: '0px',
-      marginLeft: '0',
+      margin: '11px 0px 14px 0px',
+      padding: '20px ​0px 0px 0px',
       width: '100%',
       textAlign: 'center',
+      font: 'normal normal normal 20px/24px Roboto',
     },
   },
   removeSectorButton: {
@@ -410,7 +411,8 @@ const useStyles = makeStyles((theme) => ({
       paddingLeft: '15px',
       paddingRight: '15px',
       border: '2px solid #186EFF !important',
-      backgroundColor: 'rgba(26, 110, 255, 0.16)',
+      backgroundColor: 'rgba(24, 110, 255, 0.15)',
+      borderRadius: '5px',
     },
   },
   agreementUnsignedBox: {
@@ -422,6 +424,7 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: '30px',
     border: '2px dashed #0461FF !important',
     borderRadius: '20px',
+    boxShadow: 'none !important',
     '&:hover': {
       backgroundColor: 'rgba(0, 0, 0, 0.04)',
     },
@@ -429,7 +432,8 @@ const useStyles = makeStyles((theme) => ({
       gridTemplateColumns: '30px 1fr',
       paddingLeft: '15px',
       paddingRight: '15px',
-      border: '2px solid #2A2B54 !important',
+      border: '2px solid rgba(42, 43, 84, 0.5) !important',
+      borderRadius: '5px',
     },
   },
   buttonBox: {
@@ -443,16 +447,6 @@ const useStyles = makeStyles((theme) => ({
   },
   customFormItemName: {
     minHeight: '45px',
-  },
-  notSigned: {
-    backgroundColor: '#FFBDAD',
-    color: '#DE350B',
-    fontWeight: '600',
-    borderRadius: '20px',
-    padding: '5px 20px',
-    [theme.breakpoints.down(phone)]: {
-      padding: '4px 10px',
-    },
   },
   servicesAgreementIconBox: {
     display: 'flex',
@@ -478,6 +472,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '42px',
     width: '100%',
     maxWidth: '1352px',
+    height: 'fit-content',
     gridGap: '30px',
     opacity: 1,
     [theme.breakpoints.down(phone)]: {
@@ -485,16 +480,7 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: '24px',
       padding: '16px',
       paddingBottom: '30px',
-    },
-  },
-  signed: {
-    backgroundColor: 'rgb(57,197,34, 0.23)',
-    color: '#34AF1F',
-    fontWeight: '600',
-    borderRadius: '20px',
-    padding: '5px 20px',
-    [theme.breakpoints.down(phone)]: {
-      padding: '4px 10px',
+      gridGap: '15px',
     },
   },
   subtitle: {
