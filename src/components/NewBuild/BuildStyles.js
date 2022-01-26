@@ -444,16 +444,6 @@ const useStyles = makeStyles((theme) => ({
   customFormItemName: {
     minHeight: '45px',
   },
-  notSigned: {
-    backgroundColor: '#FFBDAD',
-    color: '#DE350B',
-    fontWeight: '600',
-    borderRadius: '20px',
-    padding: '5px 20px',
-    [theme.breakpoints.down(phone)]: {
-      padding: '4px 10px',
-    },
-  },
   servicesAgreementIconBox: {
     display: 'flex',
     justifyContent: 'center',
@@ -485,16 +475,6 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: '24px',
       padding: '16px',
       paddingBottom: '30px',
-    },
-  },
-  signed: {
-    backgroundColor: 'rgb(57,197,34, 0.23)',
-    color: '#34AF1F',
-    fontWeight: '600',
-    borderRadius: '20px',
-    padding: '5px 20px',
-    [theme.breakpoints.down(phone)]: {
-      padding: '4px 10px',
     },
   },
   subtitle: {
