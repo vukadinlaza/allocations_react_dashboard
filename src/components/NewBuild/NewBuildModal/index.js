@@ -275,6 +275,18 @@ const SelectOrganization = ({
     }
   }, [userLoading]);
 
+  const alphabetizeOrgs = (a, b) => {
+    const nameA = a.name.toUpperCase();
+    const nameB = b.name.toUpperCase();
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    return 0;
+  };
+
   return (
     <Modal open={isOpen} className={classes.modal} onClose={onClose}>
       <Container className={classes.modalContainer}>
@@ -388,7 +400,7 @@ const SelectOrganization = ({
                           </MenuItem>
 
                           {organizations.length > 1 &&
-                            organizations.map((organization) => (
+                            [...organizations].sort(alphabetizeOrgs).map((organization) => (
                               <MenuItem key={organization._id} value={organization._id}>
                                 {_.truncate(organization.name, { length: 30 })}
                               </MenuItem>
