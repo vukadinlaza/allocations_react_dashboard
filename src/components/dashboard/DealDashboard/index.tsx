@@ -88,7 +88,6 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
       const investorsInvited = remainingTasks.find(
         (task: Task) => task.title === 'Invite Investors',
       );
-
       if (!remainingTasks?.length) {
         setDealDashboardTabs(['Investors', 'Documents', 'Deal Page']);
       } else if (investorsInvited) {
@@ -99,16 +98,9 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     }
   }, [dealData]);
 
-  const [updateBuildDeal, { loading: updateDealLoading }] = useMutation(UPDATE_BUILD_DEAL, {
-    // onCompleted: () => {
-    // Do we want a toast notification
-    // },
-    onError: (err) => {
-      console.log('Error:', err);
-    },
-  });
+  const [updateBuildDeal, { loading: updateDealLoading }] = useMutation(UPDATE_BUILD_DEAL);
 
-  const handleTabChange = (event: any, index: number) => {
+  const handleTabChange = (event: React.ChangeEvent, index: number) => {
     setTabIndex(index);
   };
 
