@@ -111,6 +111,14 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     opacity: '1',
   },
+  blueCheck: {
+    position: 'relative',
+    bottom: '12px',
+    height: '26px',
+    width: '26px',
+    backgroundColor: '#0461FF',
+    borderRadius: '50%',
+  },
   inputBox: {
     background: '#FFFFFF 0% 0% no-repeat padding-box',
     boxShadow: '0px 3px 6px #0000000A',
