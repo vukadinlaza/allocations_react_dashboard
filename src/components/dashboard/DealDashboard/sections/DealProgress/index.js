@@ -41,6 +41,7 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classe
         (task) => task.complete === false && !task.title.includes('Create Process Street Run'),
       ),
     );
+
     const tasks = data?.phases
       ?.filter((phase) => phase.name !== 'build' || phase.name === 'post-build')
       .flatMap((phase) =>
