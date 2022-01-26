@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
 import { withLDProvider } from 'launchdarkly-react-client-sdk';
