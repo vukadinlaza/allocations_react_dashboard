@@ -1311,7 +1311,7 @@ export function AcceptedInvestorTypes({
   openTooltip,
   width,
 }) {
-  const { width } = useViewport();
+  const { width: screenWidth } = useViewport();
   const params = useParams();
   function InvestorTypeSelector() {
     const investorTypes = ['Accredited Investors (3(c)(1))', 'Qualified Purchasers (3(c)(7))'];
@@ -1319,7 +1319,7 @@ export function AcceptedInvestorTypes({
       control: (styles) => ({
         ...styles,
         height: 60,
-        width: width < 650 ? '100%' : '90.5%',
+        width: screenWidth < 650 ? '100%' : '90.5%',
         cursor: 'pointer',
         border: unfilledFields.includes('type_of_investors')
           ? '2px solid red'
