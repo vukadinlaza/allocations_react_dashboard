@@ -90,11 +90,11 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
       );
 
       if (!remainingTasks?.length) {
-        setDealDashboardTabs(['Investors', 'Documents', 'Deal Page']);
+        setDealDashboardTabs(['Investors', 'Deal Page']);
       } else if (investorsInvited) {
-        setDealDashboardTabs(['Deal Progress', 'Documents', 'Deal Page']);
+        setDealDashboardTabs(['Deal Progress', 'Deal Page']);
       } else {
-        setDealDashboardTabs(['Deal Progress', 'Investors', 'Documents', 'Deal Page']);
+        setDealDashboardTabs(['Deal Progress', 'Investors', 'Deal Page']);
       }
     }
   }, [dealData]);
