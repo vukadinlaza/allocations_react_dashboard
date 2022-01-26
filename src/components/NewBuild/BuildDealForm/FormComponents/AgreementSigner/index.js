@@ -87,7 +87,7 @@ export const AgreementBox = ({
           alt={signed ? 'signed badge' : 'not signed badge'}
         />
       ) : signed ? (
-        <div className={classes.blueCheck}>
+        <div className={classes.blueCheckSignAgreement}>
           <img src={check} alt="check mark" />
         </div>
       ) : null}
