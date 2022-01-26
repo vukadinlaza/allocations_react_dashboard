@@ -116,7 +116,7 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
     DocSpring.createVisualForm({
       ...agreementLink,
       domainVerification: false,
-      onSubmit: () => {
+      onSave: () => {
         localStorage.removeItem('buildData');
         localStorage.removeItem('buildDeal');
         localStorage.removeItem('buildFilesUploaded');
