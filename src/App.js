@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
 import { withLDProvider } from 'launchdarkly-react-client-sdk';
@@ -42,6 +42,7 @@ import { CurrentAccountProvider } from './state/current-organization';
 import FreeSPVOnboarding from './components/FreeSPVOnboarding';
 import Identity from './components/Identity';
 import { useAuth } from './auth/useAuth';
+import { useViewport } from './utils/hooks';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -54,18 +55,9 @@ Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
 const App = () => {
   const { isAuthenticated } = useAuth();
+  const { width } = useViewport();
 
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  const widthStyle = windowWidth > 960 ? 'greaterThan960Px' : 'lessThan960Px';
+  const widthStyle = width > 960 ? 'greaterThan960Px' : 'lessThan960Px';
 
   const authenticatedStyle = {
     greaterThan960Px: {

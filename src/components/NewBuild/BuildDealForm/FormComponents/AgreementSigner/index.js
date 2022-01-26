@@ -8,6 +8,8 @@ import { useHistory } from 'react-router';
 import docIcon from '../../../../../assets/buildDoc.svg';
 import bluePenIcon from '../../../../../assets/sign-agreement-blue-pen.svg';
 import check from '../../../../../assets/check-mark-blue.svg';
+import notSignedBadge from '../../../../../assets/not-signed-badge.svg';
+import signedBadge from '../../../../../assets/signed-badge.svg';
 import useStyles from '../../../BuildStyles';
 import { useCurrentOrganization } from '../../../../../state/current-organization';
 import { useViewport } from '../../../../../utils/hooks';
@@ -80,9 +82,10 @@ export const AgreementBox = ({
       <Typography className={classes.itemText}>{title}</Typography>
 
       {width > phone ? (
-        <Typography className={signed ? classes.signed : classes.notSigned}>
-          {signed ? '• Signed' : '• Not Signed'}
-        </Typography>
+        <img
+          src={signed ? signedBadge : notSignedBadge}
+          alt={signed ? 'signed badge' : 'not signed badge'}
+        />
       ) : signed ? (
         <div className={classes.blueCheck}>
           <img src={check} alt="check mark" />
@@ -123,6 +126,7 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
         isSigned();
         // eslint-disable-next-line no-undef
         DocSpring.closeModal();
+        return true;
       },
     });
   };
