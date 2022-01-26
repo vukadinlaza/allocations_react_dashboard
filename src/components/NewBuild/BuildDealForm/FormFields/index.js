@@ -1318,7 +1318,8 @@ export function AcceptedInvestorTypes({
       control: (styles) => ({
         ...styles,
         height: 60,
-        maxWidth: 568,
+        width: window.innerWidth < 650 ? '100%' : '90.5%',
+        // maxWidth: 464,
         cursor: 'pointer',
         border: unfilledFields.includes('type_of_investors')
           ? '2px solid red'
@@ -1388,7 +1389,6 @@ export function AcceptedInvestorTypes({
             </ModalTooltip>
           </Grid>
         </Grid>
-
         <InvestorTypeSelector />
       </FormControl>
     </Grid>
