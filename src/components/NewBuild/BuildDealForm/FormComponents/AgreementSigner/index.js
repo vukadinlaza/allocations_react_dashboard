@@ -95,7 +95,7 @@ export const AgreementBox = ({
   );
 };
 
-export default function SignDocsForm({ dealData = {}, createDealLoading, error, page, setPage }) {
+export default function SignDocsForm({ dealData = {}, createDealLoading, error }) {
   const history = useHistory();
   const currentOrg = useCurrentOrganization();
   const { deal, documents } = dealData;
