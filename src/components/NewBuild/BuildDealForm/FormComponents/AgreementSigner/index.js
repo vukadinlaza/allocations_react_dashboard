@@ -116,13 +116,14 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
     DocSpring.createVisualForm({
       ...agreementLink,
       domainVerification: false,
-      onSave: () => {
+      onSubmit: () => {
         localStorage.removeItem('buildData');
         localStorage.removeItem('buildDeal');
         localStorage.removeItem('buildFilesUploaded');
         isSigned();
         // eslint-disable-next-line no-undef
         DocSpring.closeModal();
+        return true;
       },
     });
   };
