@@ -53,7 +53,7 @@ export function InternationalCountrySelector({
 }) {
   const { width } = useViewport();
   const countryNames = countries.map((c) => c.countryName);
-  const placeHolder = 'Please select which countries';
+  const placeHolder = 'Please select which country';
   const customStyles = {
     multiValue: (styles) => ({
       ...styles,

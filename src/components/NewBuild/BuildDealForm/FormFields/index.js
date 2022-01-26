@@ -1319,7 +1319,6 @@ export function AcceptedInvestorTypes({
         ...styles,
         height: 60,
         width: window.innerWidth < 650 ? '100%' : '90.5%',
-        // maxWidth: 464,
         cursor: 'pointer',
         border: unfilledFields.includes('type_of_investors')
           ? '2px solid red'
