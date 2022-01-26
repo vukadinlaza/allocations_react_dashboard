@@ -75,7 +75,10 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classe
     phase.tasks
       .filter((task) => task.complete && !hiddenTasks.includes(task.title))
       .map((task) => {
-        if (task.title.includes('Upload')) task.title = 'Upload Your Documents';
+        if (task.title.includes('Upload')) {
+          task.title = 'Upload Your Documents';
+          task.realTitle = 'Upload Company Deck';
+        }
         return { ...task, phase: phase.name };
       }),
   );
