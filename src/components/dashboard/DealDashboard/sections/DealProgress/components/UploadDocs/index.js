@@ -239,6 +239,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '2px',
   },
   pitchDeckCheckbox: {
+    display: 'flex',
+    alignItems: 'inherit',
+    justifyContent: 'inherit',
     paddingLeft: '0px',
     height: '24px',
     width: '24px',
