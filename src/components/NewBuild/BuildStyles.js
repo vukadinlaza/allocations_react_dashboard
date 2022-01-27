@@ -389,15 +389,6 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '464px',
     width: '100%',
   },
-  pitchDeckCheckbox: {
-    paddingLeft: '0px',
-    height: '24px',
-    width: '24px',
-    borderRadius: '4px',
-  },
-  pitchDeckColorSecondary: {
-    color: '#39C522',
-  },
   selectInputBox: {
     width: '90%',
     // maxWidth: '460px',
