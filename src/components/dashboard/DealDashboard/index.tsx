@@ -5,12 +5,14 @@ import { useHistory } from 'react-router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
+import { toast } from 'react-toastify';
 import { useCurrentOrganization } from '../../../state/current-organization';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import LoadingPlaceholder from './LoadingPlaceholder';
 import Investors from './sections/Investors';
 import DealProgress from './sections/DealProgress';
 import { Task, DealPhase } from './types';
+import DealPage from '../Common/DealPage';
 import styles from './styles';
 
 const DEAL = gql`
@@ -67,6 +69,7 @@ type Props = WithStyles<typeof styles>;
 const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   const history = useHistory();
   const currentOrg = useCurrentOrganization();
+  const orgSlug = currentOrg?.slug;
   const params: { deal_id: string } = useParams();
   const { deal_id } = params;
   const [tabIndex, setTabIndex] = useState(0);
@@ -122,6 +125,27 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     });
   };
 
+  const goToDeal = () => {
+    if (orgSlug && dealData.getDealByIdWithTasks.metadata?.slug) {
+      window.open(`/deals/${orgSlug}/${dealData.getDealByIdWithTasks.metadata.slug}`);
+    }
+  };
+
+  const goToEditDeal = () => {
+    if (orgSlug && dealData.getDealByIdWithTasks._id) {
+      window.open(`/admin/${orgSlug}/deals/${dealData.getDealByIdWithTasks._id}/edit`);
+    }
+  };
+
+  const handleLinkCopy = () => {
+    if (orgSlug && dealData.getDealByIdWithTasks.metadata?.slug) {
+      navigator.clipboard.writeText(
+        window.origin + (`/deals/${orgSlug}/${dealData.getDealByIdWithTasks.metadata.slug}` || ''),
+      );
+      toast.info('Copied deal link to clipboard');
+    }
+  };
+
   const dealProps = {
     data: dealData?.getDealByIdWithTasks,
     handleComplete,
@@ -141,14 +165,23 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
         return (
           <Investors
             investorsData={dealData?.getDealByIdWithTasks?.investments}
-            orgSlug={currentOrg?.slug}
+            orgSlug={orgSlug}
             dealId={deal_id}
           />
         );
       case 'Documents':
         return <p>Documents </p>;
       case 'Deal Page':
-        return <p>Deal Page </p>;
+        return (
+          <DealPage
+            orgSlug={orgSlug}
+            dealData={dealData.getDealByIdWithTasks}
+            classes={classes}
+            goToDeal={goToDeal}
+            goToEditDeal={goToEditDeal}
+            handleLinkCopy={handleLinkCopy}
+          />
+        );
       default:
         return <p>No Data </p>;
     }
@@ -172,7 +205,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
         </Grid>
         <Grid container justifyContent="center" spacing={2}>
           <Grid item xs={1} />
-          <Grid item xs={12} lg={10}>
+          <Grid item xs={10} lg={10}>
             <Typography className={classes.pageTitle}>
               {dealData?.getDealByIdWithTasks?.name ||
                 dealData?.getDealByIdWithTasks?.company_name ||
