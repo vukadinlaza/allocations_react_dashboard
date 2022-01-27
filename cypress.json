@@ -1,1 +1,15 @@
-{}
+{
+  "projectId": "fbxv36",
+  "baseUrl": "http://localhost:3000",
+  "chromeWebSecurity": false,
+  "env": {
+    "username": "aaron.dennis@allocations.com",
+    "password": "allocations32!",
+    "audience": "https://allocations1-dev.auth0.com/api/v2/",
+    "scope": "openid profile email",
+    "client_id": "IoZHYhxPVWJlhRuCX8rGwuLjUSGG6BT8",
+    "client_secret": "mYVxuMhN4UUbWzhHWqDGTceLwQYfCuaRtZTlOqYXkNP8Q4hnUKfhJIVxZgUhl6XI",
+    "auth0Domain": "https://allocations1-dev.auth0.com/oauth/token",
+    "localStorageKey": "@@auth0spajs@@::IoZHYhxPVWJlhRuCX8rGwuLjUSGG6BT8::https://allocations1-dev.auth0.com/api/v2/::openid profile email"
+  }
+}
