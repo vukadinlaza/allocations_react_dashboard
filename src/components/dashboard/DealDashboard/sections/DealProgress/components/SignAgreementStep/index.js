@@ -50,6 +50,7 @@ const SignAgreementStep = ({ classes, task, deal }) => {
             },
           },
         });
+        return true;
       },
     });
   };
