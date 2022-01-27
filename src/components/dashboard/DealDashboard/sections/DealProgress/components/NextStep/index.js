@@ -8,6 +8,12 @@ import styles from '../../../../styles';
 
 const NextStep = ({ classes, phase, task }) => {
   const forFM = !task?.type?.includes('process');
+  const isUploadDocumentTask = [
+    'Upload Company Deck',
+    'Upload Company Logo',
+    'Upload Term Sheet',
+    'Upload Fund Logo',
+  ].includes(task?.title);
 
   return (
     <Grid container className={classes.nextStepBody}>
@@ -18,7 +24,7 @@ const NextStep = ({ classes, phase, task }) => {
         ) : (
           <>
             <Typography>
-              {phase && `${phase}:`} {task?.title}
+              {phase && `${phase}:`} {isUploadDocumentTask ? 'Upload Your Documents' : task?.title}
             </Typography>
             <img
               alt={forFM ? 'for you icon' : 'allocations icon'}

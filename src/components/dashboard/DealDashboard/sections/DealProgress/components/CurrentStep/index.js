@@ -3,7 +3,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
 import SignAgreementStep from '../SignAgreementStep';
-import { capitalizePhaseName } from '../CompletedTasksList';
+import capitalizePhaseName from '../../../../../../utils/capitalizePhaseName';
 import UploadDocs from '../UploadDocs';
 import InviteModal from '../../../Investors/components/InviteModal';
 import allocationsIcon from '../../../../../../../assets/for-allocations-icon.svg';
