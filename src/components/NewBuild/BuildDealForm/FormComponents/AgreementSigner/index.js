@@ -64,7 +64,7 @@ export const AgreementBox = ({
         cursor: !loading && 'pointer',
         pointerEvents: !readyToSign && 'none',
       }}
-      onClick={!loading ? handleAgreementClick : undefined}
+      onClick={!loading ? handleAgreementClick : null}
     >
       <div>
         {loading || error ? (

@@ -43,7 +43,7 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classe
     );
 
     const tasks = data?.phases
-      ?.filter((phase) => phase.name !== 'build' || phase.name === 'post-build')
+      ?.filter((phase) => phase.name !== 'build')
       .flatMap((phase) =>
         phase.tasks
           .map((task) => ({
