@@ -54,6 +54,13 @@ const styles = (theme) => ({
       height: '250px',
     },
   },
+  containedButton: {
+    background: '#186EFF',
+    color: '#FFFFFF',
+    borderRadius: '8px',
+    padding: '6px 16px',
+    fontSize: '12px',
+  },
   createButton: {
     backgroundColor: '#39C522',
     display: 'flex',
@@ -95,6 +102,19 @@ const styles = (theme) => ({
     left: '0',
     top: '0',
     background: '#f7f7f7',
+  },
+  dealSection: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    background: '#f7f7f7',
+    height: '68px',
+    borderRadius: '8px',
+    margin: '30px',
+    [theme.breakpoints.down(phone)]: {
+      height: '90px',
+    },
   },
   footerData: {
     fontSize: '14px',
@@ -144,6 +164,15 @@ const styles = (theme) => ({
       marginBottom: '0.5em',
     },
   },
+  linkText: {
+    width: '50%',
+    fontSize: '14px',
+    marginLeft: '15px',
+    [theme.breakpoints.down(phone)]: {
+      overflowWrap: 'anywhere',
+      width: '70%',
+    },
+  },
   loaderContainer: {
     top: '0',
     left: '0',
@@ -183,6 +212,28 @@ const styles = (theme) => ({
       flexDirection: 'column',
     },
   },
+  modalContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalListItem: {
+    display: 'flex',
+    fill: 'black',
+    alignItems: 'center',
+    '&:hover, &:focus, &active': {
+      background: '#ECF3FF',
+      color: '#186EFF',
+      '& svg': {
+        fill: '#186EFF',
+      },
+    },
+  },
+  modalSVG: {
+    fill: '#2A2B54',
+    width: '15px',
+    margin: '10px',
+  },
   noDataPlaceholder: {
     display: 'flex',
     flexDirection: 'column',
@@ -199,14 +250,17 @@ const styles = (theme) => ({
       height: '350px',
     },
   },
+  outlinedButton: {
+    border: '1px solid #CBD5E1',
+    borderRadius: '8px',
+    color: '#64748B',
+    padding: '6px 16px',
+    fontSize: '12px',
+  },
   pageIcons: {
-    width: '150px',
     display: 'flex',
-    justifyContent: 'space-between',
-    paddingRight: '50px',
-    [theme.breakpoints.down(phone)]: {
-      width: '200px',
-    },
+    width: '50%',
+    justifyContent: 'space-evenly',
   },
   pageIcon: {
     backgroundColor: '#0461FF',
@@ -244,6 +298,14 @@ const styles = (theme) => ({
     borderRadius: 5,
     width: '90%',
     marginRight: '1em',
+  },
+  routingModal: {
+    display: 'grid',
+    gridTemplateRows: 'repeat(3, 1fr)',
+    width: '90%',
+    height: '120px',
+    filter: 'drop-shadow(0px 20px 56px rgba(0, 0, 0, 0.29))',
+    borderRadius: '8px',
   },
   searchContainer: {
     display: 'flex',

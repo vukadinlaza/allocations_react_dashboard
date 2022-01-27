@@ -20,6 +20,14 @@ const stepMap = new Map([
   ['post-closing', 'Post-Closing'],
 ]);
 
+const hiddenTasks = [
+  'Create Process Street Run: 01. Client Solutions',
+  'Process Investment Agreement',
+  'Upload Company Deck',
+  'Upload Company Logo',
+  'Upload Fund Logo',
+];
+
 const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classes }) => {
   const [currentPhase, setCurrentPhase] = useState('Pre-Onboarding');
   const [currentTask, setCurrentTask] = useState({});
@@ -33,17 +41,20 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classe
         (task) => task.complete === false && !task.title.includes('Create Process Street Run'),
       ),
     );
-    const tasks = data?.phases?.flatMap((phase) =>
-      phase.tasks
-        .map((task) => ({
-          _id: task._id,
-          phase: phase.name,
-          title: task.title,
-          type: task.type,
-          complete: task.complete,
-        }))
-        .filter((task) => !task.title.includes('Create Process Street Run')),
-    );
+
+    const tasks = data?.phases
+      ?.filter((phase) => phase.name !== 'build')
+      .flatMap((phase) =>
+        phase.tasks
+          .map((task) => ({
+            _id: task._id,
+            phase: phase.name,
+            title: task.title,
+            type: task.type,
+            complete: task.complete,
+          }))
+          .filter((task) => !hiddenTasks.includes(task.title)),
+      );
 
     const task = tasks?.find((task) => task.complete === false);
     const taskIndex = tasks?.indexOf(task);
@@ -55,19 +66,23 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classe
     if (task) {
       setCurrentTask(task);
       setNextTask(tasks[taskIndex + 1]);
-      if (nextTask) {
+      if (nextTask?.phase) {
         setNextTaskPhase(stepMap.get(nextTask.phase));
       }
     }
   }, [data, currentPhase]);
 
-  const completedTasks = data.phases
-    .filter((phase) => phase.name !== 'build')
-    .flatMap((phase) =>
-      phase.tasks
-        .filter((task) => task.complete && !task.title.includes('Create Process Street Run'))
-        .map((task) => ({ ...task, phase: phase.name })),
-    );
+  const completedTasks = data.phases.flatMap((phase) =>
+    phase.tasks
+      .filter((task) => task.complete && !hiddenTasks.includes(task.title))
+      .map((task) => {
+        if (task.title.includes('Upload')) {
+          task.title = 'Upload Your Documents';
+          task.realTitle = 'Upload Company Deck';
+        }
+        return { ...task, phase: phase.name };
+      }),
+  );
 
   return (
     <>

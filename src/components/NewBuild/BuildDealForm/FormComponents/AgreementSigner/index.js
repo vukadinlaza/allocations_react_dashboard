@@ -64,7 +64,7 @@ export const AgreementBox = ({
         cursor: !loading && 'pointer',
         pointerEvents: !readyToSign && 'none',
       }}
-      onClick={!loading && handleAgreementClick}
+      onClick={!loading ? handleAgreementClick : null}
     >
       <div>
         {loading || error ? (
@@ -188,6 +188,7 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error }
               createDealLoading={createDealLoading}
               error={error}
               classes={classes}
+              key={task._id}
             />
           );
         })}
