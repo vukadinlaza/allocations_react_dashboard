@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { useCurrentOrganization } from '../../../state/current-organization';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import LoadingPlaceholder from './LoadingPlaceholder';
-import Investors from './sections/Investors';
+// import Investors from './sections/Investors';
 import DealProgress from './sections/DealProgress';
 import { Task, DealPhase } from './types';
 import DealPage from '../Common/DealPage';
@@ -66,6 +66,8 @@ const UPDATE_BUILD_DEAL = gql`
 
 type Props = WithStyles<typeof styles>;
 
+const Investors = React.lazy(() => import('invest/Investors'));
+
 const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
   const history = useHistory();
   const currentOrg = useCurrentOrganization();
@@ -84,11 +86,11 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
 
   useEffect(() => {
     if (dealData) {
-      const remainingTasks = dealData?.getDealByIdWithTasks?.phases.flatMap((phase: DealPhase) =>
+      const remainingTasks = dealData?.getDealByIdWithTasks?.phases?.flatMap((phase: DealPhase) =>
         phase.tasks.filter((task: Task) => !task.complete),
       );
 
-      const investorsInvited = remainingTasks.find(
+      const investorsInvited = remainingTasks?.find(
         (task: Task) => task.title === 'Invite Investors',
       );
       if (!remainingTasks?.length) {
@@ -155,11 +157,14 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
         return <DealProgress {...dealProps} />;
       case 'Investors':
         return (
-          <Investors
-            investorsData={dealData?.getDealByIdWithTasks?.investments}
-            orgSlug={orgSlug}
-            dealId={deal_id}
-          />
+          // <Investors
+          //   investorsData={dealData?.getDealByIdWithTasks?.investments}
+          //   orgSlug={orgSlug}
+          //   dealId={deal_id}
+          // />
+          <React.Suspense fallback="Loading...">
+            <Investors />
+          </React.Suspense>
         );
       case 'Documents':
         return <p>Documents </p>;
