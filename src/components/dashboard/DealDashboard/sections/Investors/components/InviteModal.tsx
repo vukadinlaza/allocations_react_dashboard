@@ -129,9 +129,9 @@ const InviteModal: React.FC<Props> = ({ classes, orgSlug, dealId, dealProgressTa
     }
   };
 
-  const handleInviteMore = () => {
-    setEmailsSent(false);
-  };
+  // const handleInviteMore = () => {
+  //   setEmailsSent(false);
+  // };
 
   if (loading || emailsSent) return <CircularProgress />;
 
