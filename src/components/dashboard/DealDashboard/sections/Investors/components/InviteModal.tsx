@@ -134,6 +134,8 @@ const InviteModal: React.FC<Props> = ({ classes, orgSlug, dealId, dealProgressTa
   //   setEmailsSent(false);
   // };
 
+  // Once emails have been sent and we are on the Invite Investors task,
+  // we render a spinner so that the modal is unavailable
   if (dealProgressTask && (loading || emailsSent)) return <CircularProgress />;
 
   return (
