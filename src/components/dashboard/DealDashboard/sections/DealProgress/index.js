@@ -26,7 +26,6 @@ const hiddenTasks = [
   'Process Investment Agreement',
   'Upload Company Deck',
   'Upload Company Logo',
-  'Upload Fund Logo',
 ];
 
 const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classes }) => {
