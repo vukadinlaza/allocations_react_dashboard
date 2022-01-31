@@ -248,7 +248,7 @@ export const SignTask = ({ dataRequestId, tokenId, tokenSecret }) => {
         tokenId,
         tokenSecret,
         domainVerification: false,
-        onSubmit: () => {
+        onSave: () => {
           DocSpring.closeModal();
           return true;
         },
