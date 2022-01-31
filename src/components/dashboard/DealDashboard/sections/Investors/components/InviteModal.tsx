@@ -15,7 +15,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import CancelIcon from '@material-ui/icons/Cancel';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
-// import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import { toast } from 'react-toastify';
 import styles from '../../../styles';
 import { validateEmail } from '../../../../../../utils/helpers';
@@ -139,83 +138,82 @@ const InviteModal: React.FC<Props> = ({ classes, orgSlug, dealId, dealProgressTa
 
   return (
     <>
-      <>
-        <Button className={classes.inviteButton} disableRipple onClick={handleOpen}>
-          Invite
-        </Button>
-        <Modal
-          className={classes.modalContainer}
-          open={open}
-          onClose={handleClose}
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-            classes: {
-              root: classes.backdrop,
-            },
-          }}
-        >
-          <Fade in={open}>
-            <Paper className={classes.modal} style={{ minHeight: emailsSent ? '344px' : '432px' }}>
-              <div className={classes.modalTitleContainer}>
-                <span className={classes.modalTitle}>Invite</span>
-                <CloseIcon className={classes.closeModal} onClick={handleClose} />
-              </div>
+      <Button className={classes.inviteButton} disableRipple onClick={handleOpen}>
+        Invite
+      </Button>
+      <Modal
+        className={classes.modalContainer}
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+          classes: {
+            root: classes.backdrop,
+          },
+        }}
+      >
+        <Fade in={open}>
+          <Paper className={classes.modal} style={{ minHeight: emailsSent ? '344px' : '432px' }}>
+            <div className={classes.modalTitleContainer}>
+              <span className={classes.modalTitle}>Invite</span>
+              <CloseIcon className={classes.closeModal} onClick={handleClose} />
+            </div>
 
-              <div className={classes.modalContentContainer}>
-                <span className={classes.avatarBackground}>
-                  <PersonAddIcon className={classes.personAdd} />
-                </span>
-                <p className={classes.modalSubtitle}>Invite Investors</p>
-                <div className={classes.emailsInput}>
-                  <TextField
-                    variant="outlined"
-                    placeholder="Enter investor emails here..."
-                    className={classes.textFieldRoot}
-                    InputLabelProps={{ style: { top: '-4px' } }}
-                    onChange={handleChange}
-                    value={inputValue || ''}
-                    InputProps={{
-                      classes: { input: classes.input, root: classes.inputRoot },
-                    }}
-                    onKeyPress={updateEmails}
-                  />
-                  {error && <p className={classes.error}>{error}</p>}
-                </div>
-                {emails.length ? (
-                  <div className={classes.emailsContainer}>
-                    {emails.map((email) => (
-                      <span className={classes.emailTag} key={uuidv4()}>
-                        <span className={classes.emailTagText}>{email}</span>
-                        <CancelIcon
-                          className={classes.emailTagCancel}
-                          onClick={() => removeEmail(email)}
-                        />
-                      </span>
-                    ))}
-                  </div>
-                ) : (
-                  ''
-                )}
-                <Button
-                  disabled={!emails.length || disabled}
-                  className={!emails.length ? classes.inviteButtonDisabled : classes.inviteButton}
-                  style={{ width: '100%', marginTop: '40px' }}
-                  onClick={() => {
-                    setOpen(false);
-                    sendEmails();
-                    setDisabled(true);
+            <div className={classes.modalContentContainer}>
+              <span className={classes.avatarBackground}>
+                <PersonAddIcon className={classes.personAdd} />
+              </span>
+              <p className={classes.modalSubtitle}>Invite Investors</p>
+              <div className={classes.emailsInput}>
+                <TextField
+                  variant="outlined"
+                  placeholder="Enter investor emails here..."
+                  className={classes.textFieldRoot}
+                  InputLabelProps={{ style: { top: '-4px' } }}
+                  onChange={handleChange}
+                  value={inputValue || ''}
+                  InputProps={{
+                    classes: { input: classes.input, root: classes.inputRoot },
                   }}
-                >
-                  Invite
-                </Button>
-                <Button className={classes.copyLink} disableRipple onClick={handleCopyLink}>
-                  <FileCopyOutlinedIcon style={{ marginRight: '8px' }} /> Copy Link
-                </Button>
+                  onKeyPress={updateEmails}
+                />
+                {error && <p className={classes.error}>{error}</p>}
               </div>
+              {emails.length ? (
+                <div className={classes.emailsContainer}>
+                  {emails.map((email) => (
+                    <span className={classes.emailTag} key={uuidv4()}>
+                      <span className={classes.emailTagText}>{email}</span>
+                      <CancelIcon
+                        className={classes.emailTagCancel}
+                        onClick={() => removeEmail(email)}
+                      />
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                ''
+              )}
+              <Button
+                disabled={!emails.length || disabled}
+                className={!emails.length ? classes.inviteButtonDisabled : classes.inviteButton}
+                style={{ width: '100%', marginTop: '40px' }}
+                onClick={() => {
+                  setOpen(false);
+                  sendEmails();
+                  setDisabled(true);
+                }}
+              >
+                Invite
+              </Button>
+              <Button className={classes.copyLink} disableRipple onClick={handleCopyLink}>
+                <FileCopyOutlinedIcon style={{ marginRight: '8px' }} /> Copy Link
+              </Button>
+            </div>
 
-              {/* // : (
+            {/* // : (
             //   <div className={classes.modalContentContainer}>
             //     <span className={classes.avatarBackground}>
             //       <MailOutlineIcon className={classes.personAdd} />
@@ -235,10 +233,9 @@ const InviteModal: React.FC<Props> = ({ classes, orgSlug, dealId, dealProgressTa
             //     </Button>
             //   </div>
             // )} */}
-            </Paper>
-          </Fade>
-        </Modal>
-      </>
+          </Paper>
+        </Fade>
+      </Modal>
     </>
   );
 };
