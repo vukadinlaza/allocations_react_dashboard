@@ -22,10 +22,10 @@ const stepMap = new Map([
 
 const hiddenTasks = [
   'Create Process Street Run: 01. Client Solutions',
+  'Create Process Street Run: 01. Client Solutions (Fund)',
   'Process Investment Agreement',
   'Upload Company Deck',
   'Upload Company Logo',
-  'Upload Fund Logo',
 ];
 
 const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classes }) => {

@@ -40,7 +40,7 @@ const SignAgreementStep = ({ classes, task, deal }) => {
     DocSpring.createVisualForm({
       ...agreementLink,
       domainVerification: false,
-      onSubmit: () => {
+      onSave: () => {
         isSigned();
         signInvestmentAgreement({
           variables: {
