@@ -42,7 +42,6 @@ const SignAgreementStep = ({ classes, task, deal }) => {
       domainVerification: false,
       onSave: () => {
         isSigned();
-        DocSpring.closeModal();
         signInvestmentAgreement({
           variables: {
             payload: {
@@ -50,6 +49,7 @@ const SignAgreementStep = ({ classes, task, deal }) => {
             },
           },
         });
+        DocSpring.closeModal();
         return true;
       },
     });

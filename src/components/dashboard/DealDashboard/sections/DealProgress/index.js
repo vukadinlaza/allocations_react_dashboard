@@ -63,6 +63,7 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classe
       setCurrentPhase(stepMap.get(phase.name));
       setActiveStep(steps.indexOf(currentPhase));
     }
+
     if (task) {
       setCurrentTask(task);
       setNextTask(tasks[taskIndex + 1]);
@@ -70,7 +71,7 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classe
         setNextTaskPhase(stepMap.get(nextTask.phase));
       }
     }
-  }, [data, currentPhase]);
+  }, [data, currentPhase, nextTask.phase]);
 
   const completedTasks = data.phases.flatMap((phase) =>
     phase.tasks
