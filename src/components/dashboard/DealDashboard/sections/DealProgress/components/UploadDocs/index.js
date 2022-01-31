@@ -297,7 +297,7 @@ const uploadTaskMap = {
     fileTypeText: 'JPEG or PNG',
   },
   'Upload Fund Logo': {
-    text: 'Fund Logo',
+    text: 'Fund Logo (Optional)',
     position: 1,
     fileType: 'image/jpeg, image/jpg, image/png',
     fileTypeText: 'JPEG or PNG',
@@ -591,7 +591,8 @@ export default function UploadDocs({ deal, phase }) {
     }
   }, []);
 
-  const isRequiredTasksComplete = filesUploaded['Upload Term Sheet']?.complete;
+  const isRequiredTasksComplete =
+    deal.type === 'spv' ? filesUploaded['Upload Term Sheet']?.complete : true;
 
   // Needs to keep loading spinner until task data is refreshed with updated data from getDealWithTasks in  index.tsx of DealDashboard
   if (tasksCompleteLoading || docTasksCompleteData?.setDocumentTasksComplete?.message) {
