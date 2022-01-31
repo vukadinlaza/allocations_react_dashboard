@@ -163,7 +163,7 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
           //   dealId={deal_id}
           // />
           <React.Suspense fallback="Loading...">
-            <Investors />
+            <Investors deal_id="6061cc94b71aff0023471b8b" />
           </React.Suspense>
         );
       case 'Documents':

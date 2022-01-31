@@ -9,7 +9,7 @@ module.exports = {
         remotes: {
           //   mfe1: 'mfe1@http://localhost:8083/remoteEntry.js',
           // treasury: 'treasury@http://localhost:3001/_next/static/chunks/remoteEntry.js',
-          invest: `invest@http://localhost:3000/_next/static/chunks/remoteEntry.js`,
+          invest: `invest@http://localhost:3001/_next/static/chunks/remoteEntry.js`,
         },
         shared: [
           {
