@@ -172,7 +172,7 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
     if (buildData.need_gp_entity === 'false' && !buildData.gp_entity_name) {
       status = false;
     }
-    return status;
+    return status && buildData.sectors.length > 0;
   };
 
   const sectionOneComplete =
@@ -425,7 +425,7 @@ const BuildDetails = ({ userProfile, auth, dealType, setPage, createNewDeal }) =
           portfolio_company_name: buildData.portfolio_company_name,
           portfolio_company_securities: buildData.portfolio_company_securities,
           public_pitch_deck: buildData.public_pitch_deck,
-          reporting_adviser: buildData.reporting_adviser,
+          reporting_adviser: buildData.reporting_adviser ? buildData.reporting_adviser : undefined,
           representative: buildData.representative,
           sectors: buildData.sectors,
           setup_cost: buildData.setup_cost,

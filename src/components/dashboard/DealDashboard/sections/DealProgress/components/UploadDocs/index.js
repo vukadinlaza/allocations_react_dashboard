@@ -116,6 +116,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '500',
     letterSpacing: '0px',
     opacity: '1',
+    overflowWrap: 'break-word',
     [theme.breakpoints.down(phone)]: {
       font: 'normal normal normal 16px/20px Roboto',
       maxWidth: '180px',
@@ -239,6 +240,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '2px',
   },
   pitchDeckCheckbox: {
+    display: 'flex',
+    alignItems: 'inherit',
+    justifyContent: 'inherit',
     paddingLeft: '0px',
     height: '24px',
     width: '24px',

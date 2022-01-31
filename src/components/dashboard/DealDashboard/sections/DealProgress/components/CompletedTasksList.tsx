@@ -8,17 +8,7 @@ import downArrow from '../../../../../../assets/keyboard_arrow_down.svg';
 import upArrow from '../../../../../../assets/keyboard_arrow_up.svg';
 import styles from '../../../styles';
 import { Task } from '../../../types';
-
-export const capitalizePhaseName = (phase: string): string => {
-  return phase
-    .split('-')
-    .reduce((acc, str) => {
-      const capitalizedStr = str[0].toUpperCase() + str.slice(1);
-      acc.push(capitalizedStr);
-      return acc;
-    }, [] as string[])
-    .join('-');
-};
+import capitalizePhaseName from '../../../../../utils/capitalizePhaseName';
 
 interface TaskWithPhase extends Task {
   phase: string;

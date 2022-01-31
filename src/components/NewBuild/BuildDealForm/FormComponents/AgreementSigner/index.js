@@ -8,6 +8,8 @@ import { useHistory } from 'react-router';
 import docIcon from '../../../../../assets/buildDoc.svg';
 import bluePenIcon from '../../../../../assets/sign-agreement-blue-pen.svg';
 import check from '../../../../../assets/check-mark-blue.svg';
+import notSignedBadge from '../../../../../assets/not-signed-badge.svg';
+import signedBadge from '../../../../../assets/signed-badge.svg';
 import useStyles from '../../../BuildStyles';
 import { useCurrentOrganization } from '../../../../../state/current-organization';
 import { useViewport } from '../../../../../utils/hooks';
@@ -62,7 +64,7 @@ export const AgreementBox = ({
         cursor: !loading && 'pointer',
         pointerEvents: !readyToSign && 'none',
       }}
-      onClick={!loading && handleAgreementClick}
+      onClick={!loading ? handleAgreementClick : null}
     >
       <div>
         {loading || error ? (
@@ -80,11 +82,12 @@ export const AgreementBox = ({
       <Typography className={classes.itemText}>{title}</Typography>
 
       {width > phone ? (
-        <Typography className={signed ? classes.signed : classes.notSigned}>
-          {signed ? '• Signed' : '• Not Signed'}
-        </Typography>
+        <img
+          src={signed ? signedBadge : notSignedBadge}
+          alt={signed ? 'signed badge' : 'not signed badge'}
+        />
       ) : signed ? (
-        <div className={classes.blueCheck}>
+        <div className={classes.blueCheckSignAgreement}>
           <img src={check} alt="check mark" />
         </div>
       ) : null}
@@ -92,7 +95,7 @@ export const AgreementBox = ({
   );
 };
 
-export default function SignDocsForm({ dealData = {}, createDealLoading, error, page, setPage }) {
+export default function SignDocsForm({ dealData = {}, createDealLoading, error }) {
   const history = useHistory();
   const currentOrg = useCurrentOrganization();
   const { deal, documents } = dealData;
@@ -123,6 +126,7 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
         isSigned();
         // eslint-disable-next-line no-undef
         DocSpring.closeModal();
+        return true;
       },
     });
   };
@@ -178,12 +182,13 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
                     ...prev,
                     [task.title]: false,
                   }));
-                }, 2500);
+                }, 5000);
               }}
               timeoutLoading={timeoutLoading[task.title]}
               createDealLoading={createDealLoading}
               error={error}
               classes={classes}
+              key={task._id}
             />
           );
         })}
@@ -200,7 +205,7 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
           >
             Complete
           </Button>
-          {!allSigned && (
+          {/* {!allSigned && (
             <Typography
               className={classes.previousButton}
               onClick={() => {
@@ -209,7 +214,7 @@ export default function SignDocsForm({ dealData = {}, createDealLoading, error, 
             >
               Previous
             </Typography>
-          )}
+          )} */}
         </div>
       </Paper>
     </>

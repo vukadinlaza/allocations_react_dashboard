@@ -98,6 +98,13 @@ const styles: any = (theme: Theme) => ({
     color: 'white',
     cursor: 'pointer',
   },
+  containedButton: {
+    background: '#186EFF',
+    color: '#FFFFFF',
+    borderRadius: '8px',
+    padding: '6px 16px',
+    fontSize: '12px',
+  },
   copyLink: {
     width: '100%',
     height: '48px',
@@ -215,6 +222,15 @@ const styles: any = (theme: Theme) => ({
     borderRadius: '8px',
     boxShadow: 'none !important',
   },
+  linkText: {
+    width: '50%',
+    fontSize: '14px',
+    marginLeft: '15px',
+    [theme.breakpoints.down(phone)]: {
+      overflowWrap: 'anywhere',
+      width: '70%',
+    },
+  },
   modal: {
     width: '520px',
     maxHeight: '672px',
@@ -234,12 +250,29 @@ const styles: any = (theme: Theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
   },
+  modalListItem: {
+    display: 'flex',
+    fill: 'black',
+    alignItems: 'center',
+    '&:hover, &:focus, &active': {
+      background: '#ECF3FF',
+      color: '#186EFF',
+      '& svg': {
+        fill: '#186EFF',
+      },
+    },
+  },
   modalSubtitle: {
     fontSize: '20px',
     fontWeight: 500,
     color: '#2A2B54',
     lineHeight: '24px',
     margin: '16px 0 40px 0',
+  },
+  modalSVG: {
+    fill: '#2A2B54',
+    width: '15px',
+    margin: '10px',
   },
   modalTitle: {
     fontSize: '24px',
@@ -253,6 +286,18 @@ const styles: any = (theme: Theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  outlinedButton: {
+    border: '1px solid #CBD5E1',
+    borderRadius: '8px',
+    color: '#64748B',
+    padding: '6px 16px',
+    fontSize: '12px',
+  },
+  pageIcons: {
+    display: 'flex',
+    width: '50%',
+    justifyContent: 'space-evenly',
   },
   pageTitle: {
     fontSize: '40px',
@@ -280,8 +325,28 @@ const styles: any = (theme: Theme) => ({
       animation: '$load 1s cubic-bezier(0.4, 0.0, 0.2, 1) infinite',
     },
   },
+  routingModal: {
+    display: 'grid',
+    gridTemplateRows: 'repeat(3, 1fr)',
+    width: '90%',
+    height: '120px',
+    filter: 'drop-shadow(0px 20px 56px rgba(0, 0, 0, 0.29))',
+    borderRadius: '8px',
+  },
   searchContainer: {
     margin: '32px 0 24px 0',
+  },
+  dealSection: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    background: '#FFFFFF',
+    height: '68px',
+    borderRadius: '8px',
+    [theme.breakpoints.down(phone)]: {
+      height: '90px',
+    },
   },
   smallBox: {
     height: '88px',
