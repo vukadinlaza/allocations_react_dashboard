@@ -407,7 +407,7 @@ const FundManagerDashboard = ({ classes, history }) => {
           />
         );
       case 'Investors':
-        return capitalCallsDealSpecific.includes(dealData._id) ? (
+        return (capitalCallsDealSpecific || []).includes(dealData?._id) ? (
           <InvestorsCapitalCalls
             classes={classes}
             width={width}
