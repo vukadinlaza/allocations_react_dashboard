@@ -211,7 +211,7 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
     .filter(
       (inv) =>
         inv.status !== 'invited' &&
-        inv.deal.company_name.toUpperCase().includes(searchTerm.toUpperCase()),
+        inv.deal.company_name?.toUpperCase().includes(searchTerm?.toUpperCase()),
     )
     .map((inv) => {
       const multiple = Number(_.get(inv, 'deal.dealParams.dealMultiple', '1'));
