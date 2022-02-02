@@ -269,11 +269,11 @@ function Sidebar(props) {
                     {adminOrganizationsCopy?.length &&
                       adminOrganizationsCopy
                         .sort((a, b) => a.name.localeCompare(b.name))
-                        .map((org) => (
+                        .map((org, i) => (
                           <MenuItem
                             onClick={() => history.push(`/admin/${org.slug}`)}
                             value={org.name}
-                            key={org.name}
+                            key={`${org.name}${i}`}
                           >
                             {org.name}
                           </MenuItem>

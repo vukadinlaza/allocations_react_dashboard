@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -24,11 +25,10 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 import './auth0';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import '@testing-library/cypress/add-commands';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import 'cypress-file-upload';
+import 'cypress-wait-until';
 
 Cypress.Commands.add('getByTestId', (testId) => {
-  return cy.get(`[data-testid="${testId}"]`);
+  return cy.get(`[data-cy="${testId}"]`);
 });
