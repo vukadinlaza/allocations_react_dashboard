@@ -44,21 +44,31 @@ const InviteModal: React.FC<Props> = ({ classes, orgSlug, dealId, dealProgressTa
   const [error, setError] = useState('');
   const [emailsSent, setEmailsSent] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  const [sendInvitations, { loading }] = useMutation(SEND_INVITATIONS, {
-    onCompleted: (res) => {
-      if (res.sendInvitations.emailsSent) {
-        setInputValue('');
-        setEmails([]);
-        setError('');
-        setEmailsSent(true);
-      }
-      toast.success('Emails successfully sent!');
-    },
-  });
 
   const [updateInviteInvestorsTask] = useMutation(UPDATE_DEAL_TASK, {
     onError: (err) => {
       console.log('Error:', err);
+    },
+  });
+
+  const [sendInvitations, { loading }] = useMutation(SEND_INVITATIONS, {
+    onCompleted: (res) => {
+      if (res.sendInvitations.emailsSent) {
+        if (dealProgressTask) {
+          updateInviteInvestorsTask({
+            variables: {
+              dealId,
+            },
+          });
+        }
+        setInputValue('');
+        setEmails([]);
+        setError('');
+        setEmailsSent(true);
+        toast.success('Emails successfully sent!');
+      } else {
+        toast.error('Sorry, something went wrong. Try again or contact support@allocations.com');
+      }
     },
   });
 
@@ -121,13 +131,6 @@ const InviteModal: React.FC<Props> = ({ classes, orgSlug, dealId, dealProgressTa
         emails,
       },
     });
-    if (dealProgressTask) {
-      updateInviteInvestorsTask({
-        variables: {
-          dealId,
-        },
-      });
-    }
   };
 
   // const handleInviteMore = () => {
