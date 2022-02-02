@@ -172,7 +172,7 @@ const FundManagerDashboard = ({ classes, history }) => {
     INVESTMENTS_TABLE = 'Sales Demo';
   }
 
-  const { fundManagerBankingTab, capitalCalls, cryptoPaymentInBuild } = useFlags();
+  const { fundManagerBankingTab, capitalCallsDealSpecific, cryptoPaymentInBuild } = useFlags();
 
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
@@ -407,7 +407,7 @@ const FundManagerDashboard = ({ classes, history }) => {
           />
         );
       case 'Investors':
-        return capitalCalls ? (
+        return (capitalCallsDealSpecific || []).includes(dealData?._id) ? (
           <InvestorsCapitalCalls
             classes={classes}
             width={width}

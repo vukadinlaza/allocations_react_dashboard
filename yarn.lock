@@ -1098,12 +1098,30 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bugsnag/browser@^7.15.0", "@bugsnag/browser@^7.15.1":
+"@bugsnag/browser@^7.15.0":
+  version "7.15.0"
+  resolved "https://registry.yarnpkg.com/@bugsnag/browser/-/browser-7.15.0.tgz#38eb5585708785cea3903609ac170ee5aee821ca"
+  integrity sha512-xXoLqAbjL+WypAEcrlkB+uVL2P/xiBmbNTulIW5TvqzjtBdKGAjgDO45iRqLCPkVV/z1xke9GUHIJoObv4pfgg==
+  dependencies:
+    "@bugsnag/core" "^7.15.0"
+
+"@bugsnag/browser@^7.15.1":
   version "7.15.1"
   resolved "https://registry.yarnpkg.com/@bugsnag/browser/-/browser-7.15.1.tgz#3192671c125f290dc385ce0f1a85e23e69b84ef2"
   integrity sha512-9JyoadlU4Tj5wnu2NnSfvYX2n31FC7jBdsMF0JdWrrOMFH0htmjUL9JMDv3zXFtOfeez2GMDivwc/dJPXTUEkA==
   dependencies:
     "@bugsnag/core" "^7.15.1"
+
+"@bugsnag/core@^7.15.0":
+  version "7.15.0"
+  resolved "https://registry.yarnpkg.com/@bugsnag/core/-/core-7.15.0.tgz#e16d69caa7fbddb23d2b90bb39f611295a00231c"
+  integrity sha512-aoMlcIhzj4hZV2D2URbyJByfazk/LJKChGFDGP2YiwP0oj5Nx8ICFoaEIK+po95uQ04tBq6K6CKjcgesESsjEA==
+  dependencies:
+    "@bugsnag/cuid" "^3.0.0"
+    "@bugsnag/safe-json-stringify" "^6.0.0"
+    error-stack-parser "^2.0.3"
+    iserror "0.0.2"
+    stack-generator "^2.0.3"
 
 "@bugsnag/core@^7.15.1":
   version "7.15.1"

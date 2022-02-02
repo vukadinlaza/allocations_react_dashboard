@@ -22,10 +22,10 @@ const stepMap = new Map([
 
 const hiddenTasks = [
   'Create Process Street Run: 01. Client Solutions',
+  'Create Process Street Run: 01. Client Solutions (Fund)',
   'Process Investment Agreement',
   'Upload Company Deck',
   'Upload Company Logo',
-  'Upload Fund Logo',
 ];
 
 const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classes }) => {
@@ -63,6 +63,7 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classe
       setCurrentPhase(stepMap.get(phase.name));
       setActiveStep(steps.indexOf(currentPhase));
     }
+
     if (task) {
       setCurrentTask(task);
       setNextTask(tasks[taskIndex + 1]);
@@ -70,7 +71,7 @@ const DealProgress = ({ data, handleComplete, updateDealLoading, orgSlug, classe
         setNextTaskPhase(stepMap.get(nextTask.phase));
       }
     }
-  }, [data, currentPhase]);
+  }, [data, currentPhase, nextTask.phase]);
 
   const completedTasks = data.phases.flatMap((phase) =>
     phase.tasks

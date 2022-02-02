@@ -19,6 +19,7 @@ export const GET_DEAL = gql`
       _id
       approved
       accept_crypto
+      accept_ach
       created_at
       company_name
       company_description
