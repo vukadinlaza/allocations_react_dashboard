@@ -5,7 +5,7 @@ import { Grid, Typography } from '@material-ui/core';
 import SignAgreementStep from '../SignAgreementStep';
 import capitalizePhaseName from '../../../../../../utils/capitalizePhaseName';
 import UploadDocs from '../UploadDocs';
-import InviteModal from '../../../Investors/components/InviteModal';
+import InviteModal from './InviteModal';
 import allocationsIcon from '../../../../../../../assets/for-allocations-icon.svg';
 import forYouIcon from '../../../../../../../assets/for-you-icon.svg';
 import grayCheck from '../../../../../../../assets/gray-check.svg';

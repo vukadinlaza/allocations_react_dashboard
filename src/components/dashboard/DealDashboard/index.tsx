@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 import { useCurrentOrganization } from '../../../state/current-organization';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import LoadingPlaceholder from './LoadingPlaceholder';
-// import Investors from './sections/Investors';
 import DealProgress from './sections/DealProgress';
 import { Task, DealPhase } from './types';
 import DealPage from '../Common/DealPage';
@@ -157,13 +156,8 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
         return <DealProgress {...dealProps} />;
       case 'Investors':
         return (
-          // <Investors
-          //   investorsData={dealData?.getDealByIdWithTasks?.investments}
-          //   orgSlug={orgSlug}
-          //   dealId={deal_id}
-          // />
           <React.Suspense fallback="Loading...">
-            <Investors deal_id="6061cc94b71aff0023471b8b" />
+            <Investors deal_id={deal_id} />
           </React.Suspense>
         );
       case 'Documents':
