@@ -114,8 +114,6 @@ const UserInvestments = ({ classes, data, showInvestments, userProfile, refetch 
         _.get(r, 'Deal Name (webapp2)[0]') === row?.deal?.company_name
       );
     });
-    console.log('CAP FIELDS', capFields);
-    console.log('ALL', capitalAccountInfo);
     const actions = [
       {
         label: 'Deal Page',
