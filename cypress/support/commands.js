@@ -26,6 +26,8 @@
 import './auth0';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import '@testing-library/cypress/add-commands';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'cypress-file-upload';
 
 Cypress.Commands.add('getByTestId', (testId) => {
   return cy.get(`[data-testid="${testId}"]`);
