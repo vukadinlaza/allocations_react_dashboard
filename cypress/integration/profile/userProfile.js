@@ -7,6 +7,8 @@ describe('User Profile', () => {
   beforeEach(() => {
     cy.loginAuth0(username, password);
     cy.visit('/');
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(6000);
   });
   it('switches to profile', () => {
     cy.findByText(/profile/i).click({ force: true });
@@ -19,8 +21,7 @@ describe('User Profile', () => {
       '#root > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(2) > div > div > div:nth-child(1) > div > div > div:nth-child(2) > div:nth-child(1) > div > div:nth-child(2) > div > div:nth-child(1) > div > div > input',
     )
       .clear()
-      .type('Aaron')
-      .should('eq', 'Aaron');
+      .type('Aaron');
     cy.findByRole('textbox', { name: /last name/i })
       .clear()
       .type('Dennis');
@@ -56,7 +57,7 @@ describe('User Profile', () => {
     cy.findByRole('button', { name: /save profile/i }).click();
   });
   it('uploads a picture', () => {
-    cy.findByText(/profile/i).click({ force: true, timeout: 5000 });
+    cy.findByText(/profile/i).click({ force: true, timeout: 9000 });
     cy.fixture('cypress.png').then(() => {
       cy.get(
         '#root > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(2) > div > div > div:nth-child(1) > div > div > div:nth-child(2) > div:nth-child(1) > div > div:nth-child(1) > span > span > div > svg',
