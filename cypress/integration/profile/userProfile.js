@@ -14,15 +14,13 @@ describe('User Profile', () => {
     cy.findByRole('heading', { name: /personal information/i }).contains('Personal Information');
   });
   it('fills out and saves profile form', () => {
-    cy.findByText(/profile/i).click({ force: true });
-    cy.waitUntil(() =>
-      cy
-        .get(
-          '#root > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(2) > div > div > div:nth-child(1) > div > div > div:nth-child(2) > div:nth-child(1) > div > div:nth-child(2) > div > div:nth-child(1) > div > div > input',
-        )
-        .clear()
-        .type('Aaron'),
-    );
+    cy.findByText(/profile/i).click({ force: true, timeout: 5000 });
+    cy.get(
+      '#root > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(2) > div > div > div:nth-child(1) > div > div > div:nth-child(2) > div:nth-child(1) > div > div:nth-child(2) > div > div:nth-child(1) > div > div > input',
+    )
+      .clear()
+      .type('Aaron')
+      .should('eq', 'Aaron');
     cy.findByRole('textbox', { name: /last name/i })
       .clear()
       .type('Dennis');
