@@ -7,6 +7,8 @@ describe('Sidebar Menu', () => {
   beforeEach(() => {
     cy.loginAuth0(username, password);
     cy.visit('/');
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(6000);
   });
   it('switches to profile', () => {
     cy.findByText(/profile/i).click();
