@@ -9,6 +9,16 @@ describe('User Profile', () => {
     cy.visit('/');
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(6000);
+    cy.updateFeatureFlags({
+      'deal-page-redesign': true,
+      'build-modals': false,
+      'prospect-deal-page': false,
+      'capital-calls': false,
+      'test-flag-for-demo': false,
+      'crypto-payment-in-build': false,
+      'fund-manager-banking-tab': false,
+      'use-in-app-build': true,
+    });
   });
   it('switches to profile', () => {
     cy.findByText(/profile/i).click({ force: true });
