@@ -1,3 +1,4 @@
+require('dotenv').config();
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 
 module.exports = {
@@ -7,39 +8,30 @@ module.exports = {
         name: 'container',
         filename: 'remoteEntry.js',
         remotes: {
-          //   mfe1: 'mfe1@http://localhost:8083/remoteEntry.js',
-          // treasury: 'treasury@http://localhost:3001/_next/static/chunks/remoteEntry.js',
+          build: `build@${process.env.BUILD_FRONTEND_URL}/_next/static/chunks/remoteEntry.js`,
         },
-        shared: [
-          {
-            react: {
-              eager: true,
-              singleton: true,
-              requiredVersion: false,
-            },
+        shared: {
+          react: {
+            eager: true,
+            singleton: true,
+            requiredVersion: false,
           },
-          {
-            'react-dom': {
-              eager: true,
-              singleton: true,
-              requiredVersion: false,
-            },
+          'react-dom': {
+            eager: true,
+            singleton: true,
+            requiredVersion: false,
           },
-          {
-            '@material-ui/styles': {
-              eager: true,
-              singleton: true,
-              requiredVersion: false,
-            },
+          '@material-ui/styles': {
+            eager: true,
+            singleton: true,
+            requiredVersion: false,
           },
-          {
-            '@material-ui/core': {
-              eager: true,
-              singleton: true,
-              requiredVersion: false,
-            },
+          '@material-ui/core': {
+            eager: true,
+            singleton: true,
+            requiredVersion: false,
           },
-        ],
+        },
       }),
     ],
     configure: (webpackConfig) => {
