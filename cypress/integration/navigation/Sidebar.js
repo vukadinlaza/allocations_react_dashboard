@@ -44,6 +44,19 @@ describe('Sidebar Menu', () => {
     cy.url().should('eq', 'http://localhost:3000/admin/Rainmakers');
     cy.findByRole('tab', { name: /all/i }).contains('All');
   });
+  it('resizes the window', () => {
+    let resizeEventFired = false;
+    cy.window().then((win) => {
+      win.addEventListener('resize', () => {
+        resizeEventFired = true;
+      });
+    });
+
+    cy.viewport(414, 896);
+    cy.wrap().should(() => {
+      expect(resizeEventFired).to.eq(true);
+    });
+  });
   it('logs out', () => {
     cy.findByText(/logout/i).click();
     cy.url().should('include', 'https://staging.login.allocations.com/');
