@@ -44,7 +44,7 @@ describe('Sidebar Menu', () => {
     cy.url().should('eq', 'http://localhost:3000/admin/Rainmakers');
     cy.findByRole('tab', { name: /all/i }).contains('All');
   });
-  it('resizes the window', () => {
+  it('resizes the window and opens hamburger menu', () => {
     let resizeEventFired = false;
     cy.window().then((win) => {
       win.addEventListener('resize', () => {
@@ -56,6 +56,9 @@ describe('Sidebar Menu', () => {
     cy.wrap().should(() => {
       expect(resizeEventFired).to.eq(true);
     });
+    cy.findByRole('button', { name: /open drawer/i }).click();
+    cy.findByRole('button', { name: /profile/i }).click();
+    cy.url().should('eq', 'http://localhost:3000/profile');
   });
   it('logs out', () => {
     cy.findByText(/logout/i).click();
