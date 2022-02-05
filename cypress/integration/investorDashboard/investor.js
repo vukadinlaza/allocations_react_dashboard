@@ -74,6 +74,34 @@ describe('Investor Dashboard', () => {
       '#root > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(1)',
     ).contains('Search');
   });
+  it('searches and sorts investments', () => {
+    cy.findByRole('button', { name: /repair biotechnologies/i }).click();
+    cy.findByRole('option', { name: /Aaron Dennis/i }).click();
+    cy.url().should('eq', 'http://localhost:3000/');
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(5000);
+    cy.findByRole('tab', { name: /investments/i }).click();
+    cy.get('table > tbody')
+      .find('tr')
+      .then((row) => {
+        return row.length;
+      })
+      .should('eq', 4);
+    cy.get(
+      '#root > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(1)',
+    )
+      .clear()
+      .type('Space X');
+    cy.get('table > tbody')
+      .find('tr')
+      .then((row) => {
+        return row.length;
+      })
+      .should('eq', 2);
+    cy.get(
+      '#root > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(1)',
+    ).clear();
+  });
   it('logs out', () => {
     cy.findByText(/logout/i).click();
     cy.url().should('include', 'https://staging.login.allocations.com/');
