@@ -8,6 +8,7 @@ module.exports = {
         name: 'container',
         filename: 'remoteEntry.js',
         remotes: {
+          invest: `invest@https://invest-frontend-staging.herokuapp.com/_next/static/chunks/remoteEntry.js`,
           build: `build@${process.env.BUILD_FRONTEND_URL}/_next/static/chunks/remoteEntry.js`,
         },
         shared: {

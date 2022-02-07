@@ -16,8 +16,8 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import CancelIcon from '@material-ui/icons/Cancel';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import { toast } from 'react-toastify';
-import styles from '../../../styles';
-import { validateEmail } from '../../../../../../utils/helpers';
+import styles from '../../../../styles';
+import { validateEmail } from '../../../../../../../utils/helpers';
 
 export interface Props extends WithStyles<typeof styles> {
   orgSlug: string;
