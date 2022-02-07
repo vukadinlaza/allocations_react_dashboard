@@ -35,6 +35,7 @@ import DealOneClick from './components/DealOneClick';
 
 // test
 import Build from './components/Build';
+import PostBuild from './components/PostBuild';
 
 import './App.scss';
 import './utils/initFontAwesome';
@@ -110,6 +111,7 @@ const App = () => {
             {/* PUBLIC Landing Page */}
 
             <Route path="/public/new-build/:type?" exact component={Build} />
+            <Route path="/public/new-build/deal" component={PostBuild} />
             <Route path="/public/:organization/:deal_slug" component={DealOneClick} exact />
             <Route path="/public/:deal_slug" component={DealOneClick} exact />
 
