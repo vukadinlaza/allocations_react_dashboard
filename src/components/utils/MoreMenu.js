@@ -37,7 +37,7 @@ const MoreMenu = ({ classes, menuItems, align = 'center' }) => {
   };
 
   return (
-    <div className={classes.root} style={{ justifyContent: align }}>
+    <div className={classes.root} style={{ justifyContent: align }} data="actions-menu">
       <MoreVertIcon
         aria-controls="simple-menu"
         aria-haspopup="true"

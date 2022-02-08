@@ -293,6 +293,7 @@ const AllocationsTable = ({
                           );
                         }
                       }}
+                      data="table-sort"
                     >
                       {header.label}
                     </TableSortLabel>
