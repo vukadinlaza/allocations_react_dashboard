@@ -8,11 +8,11 @@ const RemotePostBuild = React.lazy(() => import('build/PostBuild'));
 export default function PostBuild() {
   const { userProfile } = useAuth();
   const { search } = useLocation();
-  const p = new URLSearchParams(search);
+  const params = new URLSearchParams(search);
 
   return (
     <Suspense fallback={<Loader />}>
-      <RemotePostBuild user={userProfile} deal_id={p.get('id')} />
+      <RemotePostBuild user={userProfile} deal_id={params.get('id')} />
     </Suspense>
   );
 }
