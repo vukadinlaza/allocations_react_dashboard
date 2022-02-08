@@ -7,7 +7,6 @@
     "dev": "craco start --verbose",
     "start:watch": "nodemon server.js",
     "build": "craco build",
-    "heroku-postbuild": "npm install && npm run build",
     "test": "craco test",
     "eject": "react-scripts eject",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
