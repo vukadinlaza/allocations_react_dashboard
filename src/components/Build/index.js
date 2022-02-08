@@ -9,8 +9,6 @@ export default function Build() {
   const { userProfile } = useAuth();
   const history = useHistory();
 
-  console.log(userProfile, 'USER');
-
   return (
     <Suspense fallback={<Loader />}>
       <RemoteBuild
