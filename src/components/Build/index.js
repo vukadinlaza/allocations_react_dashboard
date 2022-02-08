@@ -13,7 +13,7 @@ export default function Build() {
     <Suspense fallback={<Loader />}>
       <RemoteBuild
         user={userProfile}
-        onCreate={(deal) => history.push(`/public/new-build/deal?id=${deal._id}`)}
+        onCreate={(deal) => history.push(`/new-build/deal?id=${deal._id}`)}
       />
     </Suspense>
   );
