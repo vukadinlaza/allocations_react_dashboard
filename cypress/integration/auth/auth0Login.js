@@ -9,10 +9,10 @@ describe('Login', () => {
     cy.visit('/');
     cy.url().should('eq', 'http://localhost:3000/admin/repair-biotechnologies');
   });
-  it('logs out', () => {
-    cy.loginAuth0(username, password);
-    cy.visit('/');
-    cy.findByText(/logout/i).click();
-    cy.url().should('include', 'https://staging.login.allocations.com/');
-  });
+  // it('logs out', () => {
+  //   cy.loginAuth0(username, password);
+  //   cy.visit('/');
+  //   cy.findByText(/logout/i).click();
+  //   cy.url().should('include', 'https://staging.login.allocations.com/');
+  // });
 });

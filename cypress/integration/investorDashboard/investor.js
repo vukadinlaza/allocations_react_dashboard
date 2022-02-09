@@ -74,79 +74,79 @@ describe('Investor Dashboard', () => {
       '#root > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(1)',
     ).contains('Search');
   });
-  // it('searches and sorts investments', () => {
-  //   cy.findByRole('button', { name: /repair biotechnologies/i }).click();
-  //   cy.findByRole('option', { name: /Aaron Dennis/i }).click();
-  //   cy.url().should('eq', 'http://localhost:3000/');
-  //   // eslint-disable-next-line cypress/no-unnecessary-waiting
-  //   cy.wait(5000);
-  //   cy.findByRole('tab', { name: /investments/i }).click();
-  //   cy.get('table > tbody')
-  //     .find('tr')
-  //     .then((row) => {
-  //       return row.length;
-  //     })
-  //     .should('eq', 4);
-  //   cy.get(
-  //     '#root > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(1)',
-  //   )
-  //     .clear()
-  //     .type('Space X');
-  //   cy.get('table > tbody')
-  //     .find('tr')
-  //     .then((row) => {
-  //       return row.length;
-  //     })
-  //     .should('eq', 2);
-  //   cy.get(
-  //     '#root > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(1)',
-  //   ).clear();
-  //   cy.get('table > tbody').find('tr').first().contains('Space X');
-  //   cy.get('[data="table-sort"]').first().click({ force: true }).click();
-  //   cy.get('table > tbody').find('tr').first().should('not.contain', 'Space X');
-  //   cy.get('table > tbody').find('tr').first().contains('The Ticket Fairy SPV');
-  // });
-  // it('opens the actions menu', () => {
-  //   cy.findByRole('button', { name: /repair biotechnologies/i }).click();
-  //   cy.findByRole('option', { name: /Aaron Dennis/i }).click();
-  //   cy.url().should('eq', 'http://localhost:3000/');
-  //   // eslint-disable-next-line cypress/no-unnecessary-waiting
-  //   cy.wait(5000);
-  //   cy.findByRole('tab', { name: /investments/i }).click();
-  //   cy.get('[data="actions-menu"]').first().click();
-  //   cy.get(
-  //     '#root > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(2) > div > table > tbody > tr:nth-child(2) > td > div > div > div',
-  //   ).contains('Documents');
-  //   cy.findByRole('menu')
-  //     .find('li')
-  //     .then((item) => {
-  //       return item.length;
-  //     })
-  //     .should('eq', 3);
-  // });
-  // it('visits the Deal Page in the action menu', () => {
-  //   cy.findByRole('button', { name: /repair biotechnologies/i }).click();
-  //   cy.findByRole('option', { name: /Aaron Dennis/i }).click();
-  //   cy.url().should('eq', 'http://localhost:3000/');
-  //   // eslint-disable-next-line cypress/no-unnecessary-waiting
-  //   cy.wait(5000);
-  //   cy.findByRole('tab', { name: /investments/i }).click();
-  //   cy.get('[data="actions-menu"]').first().click();
-  //   cy.window().then((win) => {
-  //     cy.spy(win, 'open').as('deal-page');
-  //   });
-  //   cy.findByRole('menuitem', { name: /deal page/i }).click();
-  //   cy.get('@deal-page').should(
-  //     'be.calledWith',
-  //     '/deals/allocations/demo-space-x',
-  //     '_blank',
-  //     'noopener,noreferrer',
-  //   );
-  //   cy.visit('http://localhost:3000/deals/allocations/demo-space-x');
-  //   // eslint-disable-next-line cypress/no-unnecessary-waiting
-  //   cy.wait(5000);
-  //   cy.findByRole('heading', { name: /space x/i }).contains('Space X');
-  // });
+  it('searches and sorts investments', () => {
+    cy.findByRole('button', { name: /repair biotechnologies/i }).click();
+    cy.findByRole('option', { name: /Aaron Dennis/i }).click();
+    cy.url().should('eq', 'http://localhost:3000/');
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(5000);
+    cy.findByRole('tab', { name: /investments/i }).click();
+    cy.get('table > tbody')
+      .find('tr')
+      .then((row) => {
+        return row.length;
+      })
+      .should('eq', 4);
+    cy.get(
+      '#root > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(1)',
+    )
+      .clear()
+      .type('Space X');
+    cy.get('table > tbody')
+      .find('tr')
+      .then((row) => {
+        return row.length;
+      })
+      .should('eq', 2);
+    cy.get(
+      '#root > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(1)',
+    ).clear();
+    cy.get('table > tbody').find('tr').first().contains('Space X');
+    cy.get('[data="table-sort"]').first().click({ force: true }).click();
+    cy.get('table > tbody').find('tr').first().should('not.contain', 'Space X');
+    cy.get('table > tbody').find('tr').first().contains('The Ticket Fairy SPV');
+  });
+  it('opens the actions menu', () => {
+    cy.findByRole('button', { name: /repair biotechnologies/i }).click();
+    cy.findByRole('option', { name: /Aaron Dennis/i }).click();
+    cy.url().should('eq', 'http://localhost:3000/');
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(5000);
+    cy.findByRole('tab', { name: /investments/i }).click();
+    cy.get('[data="actions-menu"]').first().click();
+    cy.get(
+      '#root > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(2) > div > table > tbody > tr:nth-child(2) > td > div > div > div',
+    ).contains('Documents');
+    cy.findByRole('menu')
+      .find('li')
+      .then((item) => {
+        return item.length;
+      })
+      .should('eq', 3);
+  });
+  it('visits the Deal Page in the action menu', () => {
+    cy.findByRole('button', { name: /repair biotechnologies/i }).click();
+    cy.findByRole('option', { name: /Aaron Dennis/i }).click();
+    cy.url().should('eq', 'http://localhost:3000/');
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(5000);
+    cy.findByRole('tab', { name: /investments/i }).click();
+    cy.get('[data="actions-menu"]').first().click();
+    cy.window().then((win) => {
+      cy.spy(win, 'open').as('deal-page');
+    });
+    cy.findByRole('menuitem', { name: /deal page/i }).click();
+    cy.get('@deal-page').should(
+      'be.calledWith',
+      '/deals/allocations/demo-space-x',
+      '_blank',
+      'noopener,noreferrer',
+    );
+    cy.visit('http://localhost:3000/deals/allocations/demo-space-x');
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(5000);
+    cy.findByRole('heading', { name: /space x/i }).contains('Space X');
+  });
   it('visits the Next Steps in the action menu', () => {
     cy.findByRole('button', { name: /repair biotechnologies/i }).click();
     cy.findByRole('option', { name: /Aaron Dennis/i }).click();
@@ -231,7 +231,7 @@ describe('Investor Dashboard', () => {
       '_blank',
     );
   });
-  it('searches and sorts documents', () => {
+  it('searches, sorts and views documents', () => {
     cy.findByRole('button', { name: /repair biotechnologies/i }).click();
     cy.findByRole('option', { name: /Aaron Dennis/i }).click();
     cy.url().should('eq', 'http://localhost:3000/');
@@ -276,8 +276,8 @@ describe('Investor Dashboard', () => {
       .should('have.been.called')
       .and('be.calledWith', Cypress.sinon.match.string, '_blank', 'noopener,noreferrer');
   });
-  it('logs out', () => {
-    cy.findByText(/logout/i).click();
-    cy.url().should('include', 'https://staging.login.allocations.com/');
-  });
+  // it('logs out', () => {
+  //   cy.findByText(/logout/i).click();
+  //   cy.url().should('include', 'https://staging.login.allocations.com/');
+  // });
 });
