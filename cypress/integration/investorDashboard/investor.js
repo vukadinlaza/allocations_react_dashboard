@@ -214,6 +214,7 @@ describe('Investor Dashboard', () => {
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(5000);
     cy.findByRole('button', { name: /view wire instructions/i }).click();
+    cy.get('.wire-doc-iframe').invoke('attr', 'style', 'opacity: 1');
     cy.get('.embed-responsive-item').invoke('attr', 'style', 'opacity: 1').should('be.visible');
     cy.findByRole('button').click();
     // eslint-disable-next-line cypress/no-unnecessary-waiting
@@ -237,10 +238,43 @@ describe('Investor Dashboard', () => {
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(5000);
     cy.findByRole('tab', { name: /documents/i }).click();
+    cy.get('table > tbody')
+      .find('tr')
+      .then((row) => {
+        return row.length;
+      })
+      .should('eq', 3);
     cy.findByRole('textbox', { name: /search/i })
       .clear()
       .type('Space X');
     cy.findByRole('textbox', { name: /search/i }).should('have.value', 'Space X');
+    cy.get('table > tbody')
+      .find('tr')
+      .then((row) => {
+        return row.length;
+      })
+      .should('eq', 2);
+    cy.findByRole('textbox', { name: /search/i }).clear();
+    cy.get('table > tbody').find('tr').first().contains('1626712391797-Demo Investment Agreement');
+    cy.get('[data="table-sort"]').first().click({ force: true }).click();
+    cy.get('table > tbody')
+      .find('tr')
+      .first()
+      .should('not.contain', '1626712391797-Demo Investment Agreement');
+    cy.get('table > tbody')
+      .find('tr')
+      .first()
+      .contains('1641262052720-Lance test template MDampAM');
+    cy.get('[data="actions-menu"]').first().click();
+    cy.window().then((win) => {
+      cy.spy(win, 'open').as('view-documents');
+    });
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(5000);
+    cy.findByRole('menuitem', { name: /view document/i }).click();
+    cy.get('@view-documents')
+      .should('have.been.called')
+      .and('be.calledWith', Cypress.sinon.match.string, '_blank', 'noopener,noreferrer');
   });
   it('logs out', () => {
     cy.findByText(/logout/i).click();
