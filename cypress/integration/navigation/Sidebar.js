@@ -57,6 +57,8 @@ describe('Sidebar Menu', () => {
     cy.wrap().should(() => {
       expect(resizeEventFired).to.eq(true);
     });
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(4000);
     cy.findByRole('button', { name: /open drawer/i }).click();
     cy.findByRole('button', { name: /profile/i }).click();
     cy.url().should('eq', 'http://localhost:3000/profile');

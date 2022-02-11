@@ -197,6 +197,16 @@ describe('Investor Dashboard', () => {
       .then(() => {
         expect(headers).to.include.members(pageHeaders);
       });
+    cy.get(
+      '#root > div:nth-child(2) > div:nth-child(2) > section > div:nth-child(2) > div:nth-child(2)',
+    )
+      .find('button')
+      .should('be.visible');
+    cy.get(
+      '#root > div:nth-child(2) > div:nth-child(2) > section > div:nth-child(2) > div:nth-child(3)',
+    )
+      .find('button')
+      .should('be.visible');
     cy.findByRole('button', { name: /edit investment/i }).click();
     cy.url().should('eq', 'http://localhost:3000/invest/allocations/demo-space-x');
     cy.visit(
