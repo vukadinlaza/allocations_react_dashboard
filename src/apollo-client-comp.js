@@ -39,6 +39,7 @@ const AuthorizedApolloProvider = ({ children }) => {
   const request = async (operation) => {
     if (!window.location.pathname.includes('/public/')) {
       const token = await getAccessTokenSilently();
+      localStorage.setItem('allocationsToken', token);
       operation.setContext({
         headers: {
           authorization: token ? `Bearer ${token}` : '',
@@ -46,6 +47,7 @@ const AuthorizedApolloProvider = ({ children }) => {
       });
     } else if (window.location.pathname.includes('/public/') && isAuthenticated) {
       const token = await getAccessTokenSilently();
+      if (token) localStorage.setItem('allocationsToken', token);
       operation.setContext({
         headers: {
           authorization: token ? `Bearer ${token}` : '',

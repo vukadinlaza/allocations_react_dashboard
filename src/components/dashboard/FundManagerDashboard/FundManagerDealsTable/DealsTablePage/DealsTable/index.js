@@ -100,8 +100,12 @@ const DealsTable = ({ classes, deals }) => {
             {row[headerValue]}
           </div>
         );
-      case 'created_at':
-        return moment(row.created_at).fromNow();
+      case 'created_at': {
+        // eslint-disable-next-line no-case-declarations
+        if (!row.created_at) return '';
+        const date = new Date(parseInt(row.created_at, 10));
+        return moment(date.toISOString()).fromNow();
+      }
       case 'wire_deadline':
         return moment(row.dealParams.wireDeadline).isBefore(moment())
           ? 'Closed'

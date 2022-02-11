@@ -34,14 +34,14 @@ const InvestorsCapitalCall = ({ classes, orgSlug, userProfile, dealName }) => {
       value: 'Total Amount Committed (with fees)',
       label: 'Total Committed',
       type: 'amount',
-      align: 'right',
+      align: 'center',
       isSortable: true,
     },
     {
       value: 'Net Amount Contributed',
       label: 'Amount Contributed ($)',
       type: 'amount',
-      align: 'right',
+      align: 'center',
       isSortable: true,
     },
     {

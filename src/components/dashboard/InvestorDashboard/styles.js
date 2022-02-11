@@ -142,9 +142,9 @@ const styles = (theme) => ({
   },
   root: {
     width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
+    // display: 'flex',
+    // justifyContent: 'space-between',
+    // flexWrap: 'wrap',
     [theme.breakpoints.down(phone)]: {
       padding: '4vw',
     },
