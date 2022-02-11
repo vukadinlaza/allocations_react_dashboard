@@ -135,7 +135,7 @@ function DealLandingPageRedesign({ orgSlug, dealSlug, goToDeal, dealPageRedesign
 
   return (
     <DealPageProvider>
-      {dealPageRedesign && false && <DealPageButtons goToDeal={goToDeal} />}
+      {dealPageRedesign && <DealPageButtons goToDeal={goToDeal} />}
       <Container maxWidth="md" style={{ marginBottom: '134px' }}>
         <DealHeaderRedesign deal={deal} />
         <InvestingDetails deal={deal} />

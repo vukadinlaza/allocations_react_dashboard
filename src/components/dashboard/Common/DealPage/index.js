@@ -51,7 +51,7 @@ export default function DealPage({
   const [openModal, setOpenModal] = useState(false);
   const dealSlug = dealData?.metadata?.slug || dealData?.slug;
 
-  if (dealPageRedesign && false)
+  if (dealPageRedesign)
     return (
       <DealLandingPageRedesign
         orgSlug={orgSlug}

@@ -5,5 +5,5 @@ import DealLandingPageRedesign from './LandingPageRedesign';
 
 export default function DealOneClick() {
   const { dealPageRedesign } = useFlags();
-  return dealPageRedesign && false ? <DealLandingPageRedesign /> : <DealLandingPage />;
+  return dealPageRedesign ? <DealLandingPageRedesign /> : <DealLandingPage />;
 }
