@@ -84,11 +84,11 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
 
   useEffect(() => {
     if (dealData) {
-      const remainingTasks = dealData?.getDealByIdWithTasks?.phases?.flatMap((phase: DealPhase) =>
+      const remainingTasks = dealData?.getDealByIdWithTasks?.phases.flatMap((phase: DealPhase) =>
         phase.tasks.filter((task: Task) => !task.complete),
       );
 
-      const investorsInvited = remainingTasks?.find(
+      const investorsInvited = remainingTasks.find(
         (task: Task) => task.title === 'Invite Investors',
       );
       if (!remainingTasks?.length) {
