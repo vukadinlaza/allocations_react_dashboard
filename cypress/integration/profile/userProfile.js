@@ -7,6 +7,18 @@ describe('User Profile', () => {
   beforeEach(() => {
     cy.loginAuth0(username, password);
     cy.visit('/');
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(6000);
+    cy.updateFeatureFlags({
+      'deal-page-redesign': true,
+      'build-modals': false,
+      'prospect-deal-page': false,
+      'capital-calls': false,
+      'test-flag-for-demo': false,
+      'crypto-payment-in-build': false,
+      'fund-manager-banking-tab': false,
+      'use-in-app-build': true,
+    });
   });
   it('switches to profile', () => {
     cy.findByText(/profile/i).click({ force: true });
@@ -14,15 +26,12 @@ describe('User Profile', () => {
     cy.findByRole('heading', { name: /personal information/i }).contains('Personal Information');
   });
   it('fills out and saves profile form', () => {
-    cy.findByText(/profile/i).click({ force: true });
-    cy.waitUntil(() =>
-      cy
-        .get(
-          '#root > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(2) > div > div > div:nth-child(1) > div > div > div:nth-child(2) > div:nth-child(1) > div > div:nth-child(2) > div > div:nth-child(1) > div > div > input',
-        )
-        .clear()
-        .type('Aaron'),
-    );
+    cy.findByText(/profile/i).click({ force: true, timeout: 5000 });
+    cy.get(
+      '#root > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(2) > div > div > div:nth-child(1) > div > div > div:nth-child(2) > div:nth-child(1) > div > div:nth-child(2) > div > div:nth-child(1) > div > div > input',
+    )
+      .clear()
+      .type('Aaron');
     cy.findByRole('textbox', { name: /last name/i })
       .clear()
       .type('Dennis');
@@ -58,7 +67,7 @@ describe('User Profile', () => {
     cy.findByRole('button', { name: /save profile/i }).click();
   });
   it('uploads a picture', () => {
-    cy.findByText(/profile/i).click({ force: true, timeout: 5000 });
+    cy.findByText(/profile/i).click({ force: true, timeout: 9000 });
     cy.fixture('cypress.png').then(() => {
       cy.get(
         '#root > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(2) > div > div:nth-child(2) > div > div > div:nth-child(1) > div > div > div:nth-child(2) > div:nth-child(1) > div > div:nth-child(1) > span > span > div > svg',
