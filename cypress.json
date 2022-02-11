@@ -1,0 +1,8 @@
+{
+  "projectId": "fbxv36",
+  "baseUrl": "http://localhost:3000",
+  "chromeWebSecurity": false,
+  "viewportWidth": 1440,
+  "viewportHeight": 1080,
+  "experimentalSessionSupport": true
+}

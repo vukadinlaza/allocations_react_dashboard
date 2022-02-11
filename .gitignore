@@ -158,3 +158,4 @@ sketch
 cypress/screenshots/
 cypress/videos/
 cypress/results/
+cypress.env.json

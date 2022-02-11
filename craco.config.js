@@ -1,4 +1,5 @@
 require('dotenv').config();
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 
 module.exports = {
