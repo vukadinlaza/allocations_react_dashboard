@@ -31,6 +31,9 @@ const GET_INVESTMENT = gql`
         organization {
           name
         }
+        dealParams {
+          is3c7
+        }
       }
     }
   }
@@ -137,6 +140,7 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch }) => {
           org={organization}
           errors={errors}
           investor={investor}
+          is3c7={data?.investment?.deal?.dealParams?.is3c7}
           setInvestor={setInvestor}
           handleSecondSig={handleSecondSig}
           isFromModal

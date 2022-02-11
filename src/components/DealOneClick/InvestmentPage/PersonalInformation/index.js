@@ -196,7 +196,9 @@ function PersonalInformation({
         </FormControl>
       )}
 
-      {docSpringTemplateId === 'tpl_zbmQNPrkqXnJmFMD7C' && (
+      {['tpl_y3GEaLkZMDqhHT6SqE', 'tpl_zbmQNPrkqXnJmFMD7C', 'tpl_sCjzLb53RKfSd7ZErJ'].includes(
+        docSpringTemplateId,
+      ) && (
         <TextField
           className={classes.root}
           variant="outlined"

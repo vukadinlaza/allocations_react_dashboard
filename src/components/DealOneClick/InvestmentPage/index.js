@@ -9,7 +9,6 @@ import TermsAndConditionsPanel from './TermsAndConditionsPanel';
 import DealDocumentsPanel from './DealDocumentsPanel';
 import InvestmentAmountPanel from './InvestmentAmount';
 import PersonalInformation from './PersonalInformation';
-import SecondSignature from './SecondSignature';
 import './styles.scss';
 import Loader from '../../utils/Loader';
 import SPVDocumentModal from './SpvDocumentModal';
@@ -174,6 +173,7 @@ function InvestmentPage() {
     state: '',
     state_search: '',
   });
+  // eslint-disable-next-line no-unused-vars
   const [requireSecondSig, setRequireSecondSig] = useState(false);
   const [requireSecondSigChecked, setRequireSecondSigChecked] = useState({
     secondSigInfo: false,
@@ -333,7 +333,7 @@ function InvestmentPage() {
           is3c7={is3c7}
           docSpringTemplateId={deal?.docSpringTemplateId}
         />
-        {requireSecondSig && (
+        {/* {requireSecondSig && (
           <SecondSignature
             requireSecondSigChecked={requireSecondSigChecked}
             setRequireSecondSigChecked={setRequireSecondSigChecked}
@@ -341,7 +341,7 @@ function InvestmentPage() {
             errors={errors}
             org={org}
           />
-        )}
+        )} */}
 
         <TermsAndConditionsPanel
           confirmInvestment={confirmInvestment}

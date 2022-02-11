@@ -92,7 +92,7 @@ function UserSearch({ refetch }) {
   });
 
   useEffect(() => {
-    search({ variables: { q } });
+    search({ variables: { q, org: 'allocations' } });
   }, [q]);
 
   useEffect(() => {

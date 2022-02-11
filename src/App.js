@@ -34,7 +34,8 @@ import SuperAdminManager from './components/superadmin/Manager';
 import DealOneClick from './components/DealOneClick';
 
 // test
-import BuildDealForm from './components/NewBuild/BuildDealForm/index';
+import Build from './components/Build';
+import PostBuild from './components/PostBuild';
 
 import './App.scss';
 import './utils/initFontAwesome';
@@ -92,6 +93,7 @@ const App = () => {
           <Switch>
             <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
             <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
+            <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
             <PrivateRoute path="/admin/:organization/:deal_id" component={DealDashboard} exact />
             <PrivateRoute path="/" exact component={InvestorDashboard} />
             <PrivateRoute path="/investor/:id/home" component={InvestorDashboard} />
@@ -108,7 +110,8 @@ const App = () => {
             {/** Deals * */}
             {/* PUBLIC Landing Page */}
 
-            <Route path="/public/new-build/:type?" exact component={BuildDealForm} />
+            <PrivateRoute path="/new-build/deal" exact component={PostBuild} />
+            <Route path="/public/new-build/:type?" exact component={Build} />
             <Route path="/public/:organization/:deal_slug" component={DealOneClick} exact />
             <Route path="/public/:deal_slug" component={DealOneClick} exact />
 
@@ -146,8 +149,6 @@ const App = () => {
             {/** Whitelabel Routes * */}
             <PrivateRoute path="/organizations/:org_slug/deals" component={DealsTable} exact />
             <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
-
-            <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
 
             <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
             <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />

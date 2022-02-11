@@ -33,6 +33,7 @@ function InvestPanel({ deal, deal_slug, organization }) {
     dealParams: { wireDeadline, signDeadline },
     status,
     accept_crypto,
+    accept_ach,
   } = deal;
 
   const getDeadline = (date) => {
@@ -71,6 +72,8 @@ function InvestPanel({ deal, deal_slug, organization }) {
             <h2>
               Wire Transfers • <img src={USDCIcon} alt="USDC icon" />
             </h2>
+          ) : accept_ach ? (
+            <h2>Wire Transfers or ACH Transfers</h2>
           ) : (
             <h2>Wire Transfers</h2>
           )}

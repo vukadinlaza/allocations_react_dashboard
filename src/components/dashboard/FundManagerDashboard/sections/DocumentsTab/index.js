@@ -51,7 +51,14 @@ const headers = [
     isSortable: true,
     align: 'center',
   },
-  { value: 'dateSigned', label: 'DATE SIGNED', isSortable: true, align: 'left', alignHeader: true },
+  {
+    value: 'dateSigned',
+    label: 'DATE SIGNED',
+    isSortable: true,
+    type: 'date',
+    align: 'left',
+    alignHeader: true,
+  },
   {
     value: 'viewDoc',
     label: 'VIEW DOCUMENT',
@@ -176,7 +183,8 @@ const DocumentsTab = ({ classes, data, refetch }) => {
             />
           </IconButton>
         );
-
+      case 'date':
+        return moment(row[headerValue]).format('MM/DD/YYYY');
       case 'viewDoc':
         if (row.dateSigned) {
           return (
@@ -244,9 +252,7 @@ const DocumentsTab = ({ classes, data, refetch }) => {
       documents: investment.doc,
       docLink: investment.docLink,
       status: investment.status,
-      dateSigned: moment(new Date(parseInt(investment._id.substring(0, 8), 16) * 1000)).format(
-        'MM/DD/YYYY',
-      ),
+      dateSigned: moment(new Date(parseInt(investment._id.substring(0, 8), 16) * 1000)),
       sideLetterStatus: investment?.sideLetterData?.status,
       reqDate: investment?.sideLetterData?.requestedDate,
     };
