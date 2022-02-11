@@ -81,8 +81,10 @@ function SubmitTaxDocs() {
         setOpen={setOpen}
         kycTemplateId={templateId}
         kycTemplateName={activeForm}
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         refetch={() => {}}
         deal={{}}
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         setShowTaxAsCompleted={() => {}}
       />
     </section>
