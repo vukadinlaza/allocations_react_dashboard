@@ -15,7 +15,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-    "types": ["cypress", "@testing-library/cypress"]
+    "types": ["cypress", "@testing-library/cypress"],
+    "paths": {
+      "*": ["./src/@types/*"]
+    }
   },
   "include": ["src"]
 }

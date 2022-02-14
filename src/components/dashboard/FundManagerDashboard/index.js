@@ -71,6 +71,7 @@ export const ORG_OVERVIEW = gql`
       _id
       name
       slug
+      high_volume_partner
       deals(limit: 500) {
         _id
         company_name
@@ -445,12 +446,10 @@ const FundManagerDashboard = ({ classes, history }) => {
       case 'Banking':
         return (
           <Banking
-            orgSlug={orgSlug}
-            classes={classes}
+            organizationData={orgDealsData}
+            dealData={dealData}
             deal_id={dealData._id}
             virtual_account_number={dealData.virtual_account_number || null}
-            openTooltip={openTooltip}
-            handleTooltip={handleTooltip}
           />
         );
       case 'Crypto':
