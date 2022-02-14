@@ -28,21 +28,18 @@ const AddBubbleBuildButton = ({ classes }) => (
   </Button>
 );
 
-const AddInAppBuildButton = ({ classes, setOpenModal, setNewBuildModalPage }) => {
+const AddInAppBuildButton = ({ classes }) => {
   const { buildModals } = useFlags();
+  const history = useHistory();
+
   return (
     <Button
       variant="contained"
       className={classes.addButton}
       onClick={() => {
         if (buildModals) {
-          if (localStorage.getItem('buildData') || localStorage.getItem('buildDeal')) {
-            setNewBuildModalPage('new_or_current');
-          }
-        } else {
-          localStorage.removeItem('buildData');
+          history.push('/public/new-build/spv');
         }
-        setOpenModal(true);
       }}
     >
       <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
