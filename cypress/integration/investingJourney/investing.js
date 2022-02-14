@@ -75,7 +75,7 @@ describe('Investing Journey', () => {
     cy.findByRole('heading', { name: /2%/i }).contains(/\d?%/);
     cy.findByRole('heading', { name: /one-time/i }).contains('One-Time' || 'Annual');
     cy.findByRole('heading', { name: /\$5,000/i }).contains(/^\$\d{1,3}(,\d{3})*(\.\d+)?$/);
-    cy.findByRole('button', { name: /invest/i }).click();
+    cy.findByRole('button', { name: /invest/i }).click({ force: true });
     cy.url().should('eq', 'http://localhost:3000/invest/allocations/demo-space-x');
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(5000);
@@ -139,41 +139,15 @@ describe('Investing Journey', () => {
     cy.findByRole('option', {
       name: /My professional certification qualifies me as an accredited investor/,
     }).click();
-    cy.get(
-      '#root > div:nth-child(2) > div:nth-child(2) > section > div:nth-child(3) > section:nth-child(4)',
-    )
-      .find('input')
-      .click();
-    cy.get(
-      '#root > div:nth-child(2) > div:nth-child(2) > section > div:nth-child(3) > section:nth-child(4) > div:nth-child(2) > div > form > div:nth-child(1)',
-    )
-      .find('input')
-      .click()
-      .clear()
-      .type('Second Signer')
-      .should('have.value', 'Second Signer');
-    cy.get(
-      '#root > div:nth-child(2) > div:nth-child(2) > section > div:nth-child(3) > section:nth-child(4) > div:nth-child(2) > div > form > div:nth-child(2)',
-    )
-      .find('input')
-      .click()
-      .clear()
-      .type('second@email.com')
-      .should('have.value', 'second@email.com');
-    cy.get(
-      '#root > div:nth-child(2) > div:nth-child(2) > section > div:nth-child(3) > section:nth-child(4) > div:nth-child(2) > div > div',
-    )
-      .find('input')
-      .click();
     cy.findByRole('checkbox', {
-      name: /we have read and accept the terms of the investment\./i,
+      name: /I have read and accept the terms of the investment\./i,
     }).click();
     cy.findByRole('button', { name: /confirm and submit for final agreement review/i }).click();
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(4000);
     cy.findByTitle(/spv document/i).should('be.visible');
-    cy.findByRole('button', { name: /we agree/i }).should('be.visible');
-    cy.findByRole('button', { name: /we decline/i }).click();
+    cy.findByRole('button', { name: /I agree/i }).should('be.visible');
+    cy.findByRole('button', { name: /I decline/i }).click();
   });
   // it('logs out', () => {
   //   cy.findByText(/logout/i).click();
