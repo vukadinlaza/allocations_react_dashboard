@@ -7,6 +7,7 @@ import { ThemeProvider as AllocationsThemeProvider } from '@allocations/design-s
 import Bugsnag from '@bugsnag/js';
 import BugsnagPluginReact from '@bugsnag/plugin-react';
 import { ToastContainer } from 'react-toastify';
+import { datadogRum } from '@datadog/browser-rum';
 import Auth0ProviderWithHistory from './auth/Auth0providerWithHistory';
 import App from './App';
 
@@ -14,6 +15,20 @@ import theme from './theme';
 import './index.css';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthorizedApolloProvider from './apollo-client-comp';
+
+datadogRum.init({
+  applicationId: process.env.DD_APP_ID,
+  clientToken: process.env.DD_CLIENT_TOKEN,
+  site: 'datadoghq.com',
+  service: process.env.DD_SERVICE,
+  // Specify a version number to identify the deployed version of your application in Datadog
+  // version: '1.0.0',
+  sampleRate: 100,
+  trackInteractions: true,
+  defaultPrivacyLevel: 'mask-user-input',
+});
+
+datadogRum.startSessionReplayRecording();
 
 Bugsnag.start({
   apiKey: 'b6fcaf96aefe9b327e7db6e6d6178a2c',
