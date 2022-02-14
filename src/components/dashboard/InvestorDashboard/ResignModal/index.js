@@ -8,7 +8,6 @@ import personalInfoValidation from '../../../../utils/validation';
 import AppModal from '../../../Modal/AppModal';
 import PersonalInformation from '../../../DealOneClick/InvestmentPage/PersonalInformation';
 import InvestmentAmountPanel from '../../../DealOneClick/InvestmentPage/InvestmentAmount';
-import SecondSignature from '../../../DealOneClick/InvestmentPage/SecondSignature';
 
 const GET_INVESTMENT = gql`
   query GetInvestment($_id: String!) {
@@ -145,15 +144,6 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch }) => {
           handleSecondSig={handleSecondSig}
           isFromModal
         />
-        {requireSecondSig && organization === 'irishangels' && (
-          <SecondSignature
-            requireSecondSigChecked={requireSecondSigChecked}
-            setRequireSecondSigChecked={setRequireSecondSigChecked}
-            setInvestor={setInvestor}
-            errors={errors}
-            isFromModal
-          />
-        )}
 
         <Button variant="contained" color="secondary" onClick={submitInvestment}>
           Update

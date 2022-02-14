@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { hotjar } from 'react-hotjar';
 import { ThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider as AllocationsThemeProvider } from '@allocations/design-system';
 import Bugsnag from '@bugsnag/js';
 import BugsnagPluginReact from '@bugsnag/plugin-react';
 import { ToastContainer } from 'react-toastify';
@@ -28,6 +29,7 @@ datadogRum.init({
 });
 
 datadogRum.startSessionReplayRecording();
+
 Bugsnag.start({
   apiKey: 'b6fcaf96aefe9b327e7db6e6d6178a2c',
   plugins: [new BugsnagPluginReact()],
@@ -48,26 +50,28 @@ const ErrorBoundary = Bugsnag.getPlugin('react').createErrorBoundary(React);
 
 ReactDOM.render(
   <ErrorBoundary>
-    <ThemeProvider theme={theme}>
-      <Router>
-        <Auth0ProviderWithHistory>
-          <AuthorizedApolloProvider>
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable={false}
-              pauseOnHover
-            />
-            <App />
-          </AuthorizedApolloProvider>
-        </Auth0ProviderWithHistory>
-      </Router>
-    </ThemeProvider>
+    <AllocationsThemeProvider>
+      <ThemeProvider theme={theme}>
+        <Router>
+          <Auth0ProviderWithHistory>
+            <AuthorizedApolloProvider>
+              <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable={false}
+                pauseOnHover
+              />
+              <App />
+            </AuthorizedApolloProvider>
+          </Auth0ProviderWithHistory>
+        </Router>
+      </ThemeProvider>
+    </AllocationsThemeProvider>
   </ErrorBoundary>,
   document.getElementById('root'),
 );

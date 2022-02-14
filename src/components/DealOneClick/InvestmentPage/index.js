@@ -333,15 +333,6 @@ function InvestmentPage() {
           is3c7={is3c7}
           docSpringTemplateId={deal?.docSpringTemplateId}
         />
-        {/* {requireSecondSig && (
-          <SecondSignature
-            requireSecondSigChecked={requireSecondSigChecked}
-            setRequireSecondSigChecked={setRequireSecondSigChecked}
-            setInvestor={setInvestor}
-            errors={errors}
-            org={org}
-          />
-        )} */}
 
         <TermsAndConditionsPanel
           confirmInvestment={confirmInvestment}

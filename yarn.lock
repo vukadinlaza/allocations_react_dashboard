@@ -2,6 +2,14 @@
 # yarn lockfile v1
 
 
+"@allocations/design-system@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@allocations/design-system/-/design-system-0.1.6.tgz#4cfafbe477a9e7abfbf89822d2ca8c8449a3a6c1"
+  integrity sha512-+i1BH+snQ8wNWMtHlkGe4BIPsOISU3k/L6GqkK7hnZVR0zeEZDRc/cfxg3DHS8Ect0+sIZ8PNIm0WlHSCv9Q3w==
+  dependencies:
+    clsx "^1.1.1"
+    react-infinite-scroll-component "^6.1.0"
+
 "@apideck/better-ajv-errors@^0.3.1":
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/@apideck/better-ajv-errors/-/better-ajv-errors-0.3.2.tgz#cd6d3814eda8aee38ee2e3fa6457be43af4f8361"
@@ -1237,6 +1245,7 @@
   dependencies:
     debug "^3.1.0"
     lodash.once "^4.1.1"
+
 "@datadog/browser-core@4.2.0":
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-4.2.0.tgz#0e63afea132bcd759c2525f319315f6ec7fad2ca"
@@ -11523,6 +11532,13 @@ react-in-viewport@^1.0.0-alpha.15:
   dependencies:
     hoist-non-react-statics "^3.0.0"
 
+react-infinite-scroll-component@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/react-infinite-scroll-component/-/react-infinite-scroll-component-6.1.0.tgz#7e511e7aa0f728ac3e51f64a38a6079ac522407f"
+  integrity sha512-SQu5nCqy8DxQWpnUVLx7V7b7LcA37aM7tvoWjTLZp1dk6EJibM5/4EJKzOnl07/BsM1Y40sKLuqjCwwH/xV0TQ==
+  dependencies:
+    throttle-debounce "^2.1.0"
+
 "react-is@^16.12.0 || ^17.0.0", "react-is@^16.8.0 || ^17.0.0", react-is@^17.0.1, react-is@^17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
@@ -13313,6 +13329,11 @@ throat@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/throat/-/throat-6.0.1.tgz#d514fedad95740c12c2d7fc70ea863eb51ade375"
   integrity sha512-8hmiGIJMDlwjg7dlJ4yKGLK8EsYqKgPWbG3b4wjJddKNwc7N7Dpn08Df4szr/sZdMVeOstrdYSsqzX6BYbcB+w==
+
+throttle-debounce@^2.1.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/throttle-debounce/-/throttle-debounce-2.3.0.tgz#fd31865e66502071e411817e241465b3e9c372e2"
+  integrity sha512-H7oLPV0P7+jgvrk+6mwwwBDmxTaxnu9HMXmloNLXwnNO0ZxZ31Orah2n8lU1eMPvsaowP2CX+USCgyovXfdOFQ==
 
 throttleit@^1.0.0:
   version "1.0.0"
