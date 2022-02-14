@@ -94,6 +94,7 @@ const App = () => {
             <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
             <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
             <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
+            <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
             <PrivateRoute path="/admin/:organization/:deal_id" component={DealDashboard} exact />
             <PrivateRoute path="/" exact component={InvestorDashboard} />
             <PrivateRoute path="/investor/:id/home" component={InvestorDashboard} />
@@ -143,7 +144,6 @@ const App = () => {
               exact
             />
 
-            <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
             <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
 
             {/** Whitelabel Routes * */}
