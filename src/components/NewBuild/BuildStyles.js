@@ -345,9 +345,6 @@ const useStyles = makeStyles((theme) => ({
   },
   // * Styles that are only used in the SPV form
   cryptoFieldset: {
-    border: 'solid 1px #186EFF',
-    borderTopColor: '#186EFF',
-    borderRadius: '8px',
     boxSizing: 'border-box',
     width: 'inherit',
     paddingLeft: '10px',

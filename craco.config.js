@@ -12,6 +12,7 @@ module.exports = {
           invest: `invest@https://invest-frontend-staging.herokuapp.com/_next/static/chunks/remoteEntry.js`,
           build: `build@${process.env.BUILD_FRONTEND_URL}/_next/static/chunks/remoteEntry.js`,
           treasury: `treasury@${process.env.TREASURY_FRONTEND_URL}/_next/static/chunks/remoteEntry.js`,
+          blockchain: `blockchain@${process.env.CRYPTO_FRONTEND_URL}/_next/static/chunks/remoteEntry.js`,
         },
         shared: {
           react: {

@@ -91,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PaymentModal = ({
+const PaymentSelectModal = ({
   open,
   dealData,
   setOpen,
@@ -204,4 +204,4 @@ const PaymentModal = ({
   );
 };
 
-export default PaymentModal;
+export default PaymentSelectModal;

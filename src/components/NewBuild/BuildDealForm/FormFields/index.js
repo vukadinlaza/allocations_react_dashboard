@@ -1520,43 +1520,50 @@ export function OfferingType({ buildData, handleChange, handleTooltip, classes, 
   );
 }
 
-export function AcceptCrypto({ buildData, handleChange, handleTooltip, classes, openTooltip }) {
+export function AcceptCrypto({
+  buildData,
+  handleChange,
+  handleTooltip,
+  classes,
+  openTooltip,
+  width,
+}) {
   return (
     <Grid className={classes.inputGridItem} item xs={6}>
-      <FormControl required variant="outlined" className={classes.cryptoFormContainer}>
-        <Grid container className={classes.cryptoFieldset}>
-          <Grid item className={classes.cryptoLabel}>
+      <FormControl required variant="outlined" className={classes.formContainers}>
+        <Grid className={classes.inputLabelWithTooltip} item xs={12}>
+          <Typography className={classes.formItemName}>
             Will you allow investments with crypto?
-            <ModalTooltip
-              title="Crypto"
-              handleTooltip={handleTooltip}
-              tooltipContent={
-                <Typography color="inherit">
-                  Would you like to allow investments into this deal with Crypto along with
-                  currency?
-                </Typography>
-              }
-              openTooltip={openTooltip}
-              id="accept_crypto"
-            >
-              <HelpIcon
-                className={classes.helpIcon}
-                onClick={() => handleTooltip('accept_crypto')}
-              />
-            </ModalTooltip>
-          </Grid>
-          <div className={classes.cryptoSelector}>
-            <ButtonSelector
-              name="accept_crypto"
-              onChange={handleChange}
-              currentValue={buildData.accept_crypto}
-              values={[
-                { label: 'Yes', value: 'true' },
-                { label: 'No', value: 'false' },
-              ]}
+          </Typography>
+          <ModalTooltip
+            title="Crypto"
+            handleTooltip={handleTooltip}
+            tooltipContent={
+              <Typography color="inherit">
+                Would you like to allow investors the additional option to fund their investments
+                with cryptocurrency?
+              </Typography>
+            }
+            openTooltip={openTooltip}
+            id="accept_crypto"
+          >
+            <HelpIcon
+              className={classes.helpIcon}
+              style={{ margin: width >= 650 ? '.2em' : '0px 5px' }}
+              fontSize="medium"
+              onClick={() => handleTooltip('accept_crypto')}
             />
-          </div>
+          </ModalTooltip>
         </Grid>
+        <ButtonSelector
+          name="accept_crypto"
+          onChange={handleChange}
+          currentValue={buildData.accept_crypto}
+          values={[
+            { label: 'Yes', value: 'true' },
+            { label: 'No', value: 'false' },
+          ]}
+        />
       </FormControl>
     </Grid>
   );
@@ -1736,6 +1743,69 @@ export function InternationalInvestorsStatus({
     </Grid>
   );
 }
+
+export function CryptoPaymentStatus({
+  buildData,
+  handleChange,
+  handleTooltip,
+  setUnfilledFields,
+  unfilledFields,
+  classes,
+  openTooltip,
+  width,
+}) {
+  return (
+    <Grid className={classes.inputGridItem} item xs={6}>
+      <FormControl required variant="outlined" className={classes.formContainers}>
+        <Grid className={classes.inputLabelWithTooltip} item xs={12}>
+          <Grid item className={`${classes.formItemName} ${classes.customFormItemName}`}>
+            Would you like to enable investments with cryptocurrency?
+            <ModalTooltip
+              title="Crypto Payments"
+              handleTooltip={handleTooltip}
+              tooltipContent={
+                <Typography color="inherit">
+                  Selecting yes allows investors to fund their investment with USDC. Invesors will
+                  be charged a 1.5% fee for this service.
+                </Typography>
+              }
+              openTooltip={openTooltip}
+              id="crypto_payments_status"
+            >
+              <HelpIcon
+                className={classes.helpIcon}
+                style={{ margin: width >= 650 ? '.2em' : '0px 5px' }}
+                onClick={() => handleTooltip('crypto_payments_status')}
+              />
+            </ModalTooltip>
+          </Grid>
+        </Grid>
+        <ButtonSelector
+          name="accept_crypto"
+          onChange={handleChange}
+          currentValue={buildData.accept_crypto}
+          values={[
+            { label: 'Yes', value: 'true' },
+            { label: 'No', value: 'false' },
+          ]}
+        />
+      </FormControl>
+      {buildData.accept_crypto === 'true' && (
+        <Grid className={classes.inputGridItem} item xs={12}>
+          <FormControl required variant="outlined" className={classes.formContainers}>
+            <InternationalCountrySelector
+              handleChange={handleChange}
+              setUnfilledFields={setUnfilledFields}
+              unfilledFields={unfilledFields}
+              buildData={buildData}
+            />
+          </FormControl>
+        </Grid>
+      )}
+    </Grid>
+  );
+}
+
 export function NotesMemo({ buildData, handleChange, handleTooltip, classes, openTooltip }) {
   return (
     <>
