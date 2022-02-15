@@ -73,9 +73,6 @@ ReactDOM.render(
                   padding: '20px 50px',
                   color: 'white',
                   textAlign: 'center',
-                  margin: '-2rem -3rem',
-                  marginBottom: '50px',
-                  height: '92px',
                 }}
               >
                 Monday, February 21st is a federal holiday in the United States in observance of
