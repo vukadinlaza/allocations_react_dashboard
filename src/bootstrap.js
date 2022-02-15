@@ -66,6 +66,31 @@ ReactDOM.render(
                 draggable={false}
                 pauseOnHover
               />
+              <div
+                style={{
+                  backgroundColor: 'rgb(1, 68, 228)',
+                  width: 'calc(100% + 6rem)',
+                  padding: '20px 50px',
+                  color: 'white',
+                  textAlign: 'center',
+                  margin: '-2rem -3rem',
+                  marginBottom: '50px',
+                  height: '92px',
+                }}
+              >
+                Monday, February 21st is a federal holiday in the United States in observance of
+                President’s Day. Banks in the United States will be closed. Please{' '}
+                <a
+                  href="https://www.allocations.com/contact-us"
+                  style={{
+                    color: 'white',
+                    textDecoration: 'underline',
+                  }}
+                >
+                  contact support
+                </a>{' '}
+                for any assistance.
+              </div>
               <App />
             </AuthorizedApolloProvider>
           </Auth0ProviderWithHistory>
