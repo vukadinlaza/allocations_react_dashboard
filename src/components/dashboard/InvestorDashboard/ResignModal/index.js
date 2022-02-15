@@ -55,11 +55,6 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch }) => {
   });
   const [amount, setAmount] = useState('');
   const [errors, setErrors] = useState([]);
-  const [requireSecondSig, setRequireSecondSig] = useState(false);
-  const [requireSecondSigChecked, setRequireSecondSigChecked] = useState({
-    secondSigInfo: false,
-    secondSigConsent: false,
-  });
 
   const [getInvestment, { data, called }] = useLazyQuery(GET_INVESTMENT);
   const [submitConfirmation] = useMutation(CONFIRM_INVESTMENT, {
@@ -93,8 +88,6 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch }) => {
         title: data?.investment?.submissionData.title || '',
       }));
       setAmount(data?.investment?.amount);
-      if (data?.investment?.submissionData?.investor_type === 'individual')
-        setRequireSecondSig(true);
     }
   }, [called, data]);
 
@@ -121,16 +114,6 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch }) => {
     setShowResignModal(false);
   };
 
-  const handleSecondSig = (investorType) => {
-    if (investorType === 'individual') return setRequireSecondSig(true);
-
-    setRequireSecondSigChecked(() => ({
-      secondSigInfo: false,
-      secondSigConsent: false,
-    }));
-    setRequireSecondSig(false);
-  };
-
   return (
     <AppModal isOpen={Boolean(showResignModal)} onClose={() => setShowResignModal(false)}>
       <Grid container direction="column" alignItems="center">
@@ -141,7 +124,6 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch }) => {
           investor={investor}
           is3c7={data?.investment?.deal?.dealParams?.is3c7}
           setInvestor={setInvestor}
-          handleSecondSig={handleSecondSig}
           isFromModal
         />
 
