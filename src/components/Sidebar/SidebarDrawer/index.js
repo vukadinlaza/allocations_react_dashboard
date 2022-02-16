@@ -121,14 +121,6 @@ const SidebarDrawer = ({
     },
   ];
 
-  if (currentOrganization) {
-    menuSections[0].menu.push({
-      to: `/organizations/${currentOrganization.slug}/deals`,
-      title: 'SPVs',
-      icon: <FaRocket style={{ margin: '0 .5rem 0 0' }} />,
-    });
-  }
-
   return (
     <div className={classes.sidebarDrawer}>
       <NewBuildModal
