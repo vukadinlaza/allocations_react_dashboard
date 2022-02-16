@@ -26,7 +26,7 @@ export function formatDoughnutSeries(series) {
   });
 }
 
-const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealInvestments }) => {
+const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => {
   const dealMultiple = _.toNumber(dealData?.dealParams?.dealMultiple || 1);
 
   const setMonthsToShow = (data) => {
@@ -90,8 +90,7 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
   const seriesTotal = series.length ? series.map((s) => s.total).reduce((acc, n) => acc + n, 0) : 0;
   const steppedChartData = getSteppedChartData();
 
-  const investments =
-    dealInvestments?.deal?.investments?.length && dealInvestments.deal.investments;
+  const investments = dealData?.deal?.investments?.length && dealData.deal.investments;
 
   const totalRaised = investments
     ? investments
