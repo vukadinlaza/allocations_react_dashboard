@@ -10,7 +10,7 @@ interface Props {
 }
 
 const BankingTab = ({ organizationData, dealData, deal_id, virtual_account_number }: Props) => {
-  const highVolumePartner = organizationData?.organization?.high_volume_partner;
+  const highVolumePartner = organizationData?.deal?.organization?.high_volume_partner;
 
   return (
     <>
