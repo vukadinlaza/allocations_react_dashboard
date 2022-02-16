@@ -126,6 +126,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
       const { deals } = data.organization;
       return deals
         .map((deal: Deal) => {
+          // eslint-disable-next-line prefer-const
           let { dealParams: { dealMultiple = {} } = {}, AUM } = deal;
           dealMultiple = Number(dealMultiple);
           if (dealMultiple && dealMultiple > 1) {
