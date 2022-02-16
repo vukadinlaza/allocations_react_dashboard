@@ -13,7 +13,7 @@ import { PanelContainer, PanelLabel } from '../../../Panel';
 import useStyles from './styles';
 
 function TechStarsCIFUSQuestion({ setInvestor, errors, org, isFromModal = false }) {
-  if (org !== 'allocations') return null;
+  if (org !== 'techstars') return null;
 
   const classes = useStyles();
   const handleChange = (event) => {
