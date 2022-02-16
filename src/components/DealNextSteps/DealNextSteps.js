@@ -394,26 +394,23 @@ function DealNextSteps() {
               <p className="action-header">Fund Investment</p>
               <p className="action-sub-header">Required to complete your investment </p>
             </div>
-            {data?.investor.accredidation_status === true ? (
-              ''
-            ) : (
-              <Button
-                className={
-                  investmentData?.investment?.status === 'wired' ||
-                  investmentData?.investment?.status === 'complete'
-                    ? 'completed-step-button'
-                    : 'next-step-button'
-                }
-                onClick={() => {
-                  setOpenPayment(true);
-                }}
-              >
-                {investmentData?.investment?.status === 'wired' ||
+
+            <Button
+              className={
+                investmentData?.investment?.status === 'wired' ||
                 investmentData?.investment?.status === 'complete'
-                  ? 'Completed'
-                  : 'Select Funding Method'}
-              </Button>
-            )}
+                  ? 'completed-step-button'
+                  : 'next-step-button'
+              }
+              onClick={() => {
+                setOpenPayment(true);
+              }}
+            >
+              {investmentData?.investment?.status === 'wired' ||
+              investmentData?.investment?.status === 'complete'
+                ? 'Completed'
+                : 'Select Funding Method'}
+            </Button>
           </div>
         </div>
         {/* PaymentSelectModal to be temporarily retired while Crypto is in limbo */}
