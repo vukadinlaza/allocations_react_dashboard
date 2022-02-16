@@ -185,7 +185,7 @@ describe('Investor Dashboard', () => {
       'Sign for Investment',
       'Submit Tax Information',
       'Accredited Investor Status',
-      'Make Wire Payment',
+      'Fund Investment',
     ];
     cy.get(
       '#root > div:nth-child(2) > div:nth-child(2) > section > div:nth-child(2) > .action-item > .action-instructions',
@@ -222,8 +222,9 @@ describe('Investor Dashboard', () => {
       'http://localhost:3000/next-steps/allocations/demo-space-x?investmentId=61fd7417aaca22067d0daf45',
     );
     // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(5000);
-    cy.findByRole('button', { name: /view wire instructions/i }).click();
+    cy.wait(9000);
+    cy.findByRole('button', { name: /select funding method/i }).click();
+    cy.findByText(/wire funds/i).click();
     cy.get('.wire-doc-iframe').invoke('attr', 'style', 'opacity: 1');
     cy.get('.embed-responsive-item').invoke('attr', 'style', 'opacity: 1').should('be.visible');
     cy.findByRole('button').click();
