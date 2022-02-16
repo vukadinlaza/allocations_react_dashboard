@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
-import { get } from 'lodash';
+import React from 'react';
 import {
   FormControl,
-  FormLabel,
   FormControlLabel,
   Radio,
   RadioGroup,
@@ -13,9 +11,8 @@ import { PanelContainer, PanelLabel } from '../../../Panel';
 import useStyles from './styles';
 
 function TechStarsCIFUSQuestion({ setInvestor, errors, org, isFromModal = false }) {
-  if (org !== 'techstars') return null;
-
   const classes = useStyles();
+  if (org !== 'techstars') return null;
   const handleChange = (event) => {
     setInvestor((prev) => ({
       ...prev,
