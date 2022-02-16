@@ -12,6 +12,9 @@ const personalInfoValidation = (investor, org, requireSecondSigChecked = {}) => 
   if (investor.investor_type === 'entity' && !investor.fullName) {
     required.push('fullName');
   }
+  if (org === 'techstars') {
+    required.push('cifusStatus');
+  }
 
   let errors = [];
   errors = required.reduce((acc, attr) => (investor[attr] ? acc : [...acc, attr]), []);

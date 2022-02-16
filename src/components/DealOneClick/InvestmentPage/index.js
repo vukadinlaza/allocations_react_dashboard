@@ -16,6 +16,7 @@ import { getClientIp } from '../../../utils/ip';
 import { nWithCommas } from '../../../utils/numbers';
 import { useAuth } from '../../../auth/useAuth';
 import personalInfoValidation from '../../../utils/validation';
+import TechStarsCIFUSQuestion from './TechStarsCIFUSQuestion';
 
 const GET_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
@@ -333,6 +334,7 @@ function InvestmentPage() {
           is3c7={is3c7}
           docSpringTemplateId={deal?.docSpringTemplateId}
         />
+        <TechStarsCIFUSQuestion setInvestor={setInvestor} errors={errors} org={org} />
 
         <TermsAndConditionsPanel
           confirmInvestment={confirmInvestment}
