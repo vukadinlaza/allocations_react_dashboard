@@ -209,10 +209,10 @@ const FundManagerDashboard = ({ classes, history }) => {
   }
 
   if (userProfile.admin && cryptoPaymentInBuild) {
-    const cryptoTabName = 'Crypto';
+    // const cryptoTabName = 'Crypto';
     // Only add crypto tab if user is admin
-    if (!fundTabs.includes(cryptoTabName)) fundTabs.push(cryptoTabName);
-    if (!spvTabs.includes(cryptoTabName)) spvTabs.push(cryptoTabName);
+    // if (!fundTabs.includes(cryptoTabName)) fundTabs.push(cryptoTabName);
+    // if (!spvTabs.includes(cryptoTabName)) spvTabs.push(cryptoTabName);
   }
 
   const { data: atDeal } = useFetch(
