@@ -77,6 +77,7 @@ const Investors = ({ classes, data, orgSlug, userProfile }) => {
         getCellContent={getCellContent}
         sortField="email"
         sortOrder="desc"
+        noShadow
       />
     </div>
   );

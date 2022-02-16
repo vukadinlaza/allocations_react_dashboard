@@ -74,6 +74,7 @@ const Investments = ({ classes, data }) => {
         getCellContent={getCellContent}
         sortField="Date"
         sortOrder="desc"
+        noShadow
       />
     </div>
   );

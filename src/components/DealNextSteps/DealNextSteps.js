@@ -13,8 +13,13 @@ import submitTaxInfoNo from '../../assets/submit-tax-info-no.svg';
 import AllocationsRocket from './AllocationsRocket/AllocationsRocket';
 import KYCModal from './KYCModal';
 import WireInstructionsModal from './WireInstructionsModal/WireInstructionsModal';
+import PaymentSelectModal from './PaymentSelectModal/index';
 import { useAuth } from '../../auth/useAuth';
 
+const CryptoPaymentModalRemote = React.lazy(() =>
+  // eslint-disable-next-line import/extensions
+  import('blockchain/CryptoPaymentModalRemote'),
+);
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
     investor(email: $email, _id: $_id) {
@@ -99,6 +104,8 @@ function DealNextSteps() {
   const [open, setOpen] = useState(false);
 
   const { deal_slug, organization } = useParams();
+  const [openPayment, setOpenPayment] = useState(false);
+  const [cryptoPaymentOpen, setCryptoPaymentOpen] = useState(false);
   const [wireInstructionsOpen, setWireInstructionsOpen] = useState(false);
 
   const { isAuthenticated, loading: authLoading } = useAuth();
@@ -384,7 +391,7 @@ function DealNextSteps() {
               alt="payment-info"
             />
             <div className="action-instructions">
-              <p className="action-header">Make Wire Payment</p>
+              <p className="action-header">Fund Investment</p>
               <p className="action-sub-header">Required to complete your investment </p>
             </div>
             {data?.investor.accredidation_status === true ? (
@@ -398,25 +405,25 @@ function DealNextSteps() {
                     : 'next-step-button'
                 }
                 onClick={() => {
-                  setWireInstructionsOpen(true);
+                  setOpenPayment(true);
                 }}
               >
                 {investmentData?.investment?.status === 'wired' ||
                 investmentData?.investment?.status === 'complete'
                   ? 'Completed'
-                  : 'View Wire Instructions'}
+                  : 'Select Funding Method'}
               </Button>
             )}
           </div>
         </div>
         {/* PaymentSelectModal to be temporarily retired while Crypto is in limbo */}
-        {/* <PaymentSelectModal
+        <PaymentSelectModal
           open={openPayment}
           dealData={dealData?.deal}
           setOpen={setOpenPayment}
           setWireInstructionsOpen={setWireInstructionsOpen}
           setCryptoPaymentOpen={setCryptoPaymentOpen}
-        /> */}
+        />
         <KYCModal
           open={open}
           setOpen={setOpen}
@@ -432,7 +439,18 @@ function DealNextSteps() {
           setOpen={setWireInstructionsOpen}
           docs={docs}
         />
-
+        <React.Suspense fallback={<div>Loading</div>}>
+          <CryptoPaymentModalRemote
+            open={cryptoPaymentOpen}
+            setOpen={setCryptoPaymentOpen}
+            deal_name={dealData?.deal?.name ?? dealData?.deal?.company_name}
+            deal_id={dealData?.deal?._id}
+            investor_name={`${data?.investor.first_name} ${data?.investor.last_name}`}
+            investment_amount={investmentData.investment.amount}
+            investment_id={investmentData.investment._id}
+            user_id={data._id}
+          />
+        </React.Suspense>
         <AllocationsRocket />
         <Confetti className={`confetti ${!confetti && 'hidden'}`} />
       </section>

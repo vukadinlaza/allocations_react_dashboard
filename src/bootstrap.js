@@ -50,8 +50,8 @@ const ErrorBoundary = Bugsnag.getPlugin('react').createErrorBoundary(React);
 
 ReactDOM.render(
   <ErrorBoundary>
-    <AllocationsThemeProvider>
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <AllocationsThemeProvider>
         <Router>
           <Auth0ProviderWithHistory>
             <AuthorizedApolloProvider>
@@ -92,8 +92,8 @@ ReactDOM.render(
             </AuthorizedApolloProvider>
           </Auth0ProviderWithHistory>
         </Router>
-      </ThemeProvider>
-    </AllocationsThemeProvider>
+      </AllocationsThemeProvider>
+    </ThemeProvider>
   </ErrorBoundary>,
   document.getElementById('root'),
 );

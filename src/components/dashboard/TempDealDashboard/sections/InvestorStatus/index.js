@@ -169,7 +169,7 @@ const InvestorBox = ({
   );
 };
 
-const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, deal }) => {
+const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType }) => {
   const [showModal, setShowModal] = useState(false);
   const [showCreateInvModal, setShowCreateInvModal] = useState(false);
   const [investmentId, setInvestmentId] = useState(null);
@@ -399,7 +399,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
           </ScrollableBox>
         </Grid>
 
-        <AppModal isOpen={showModal} onClose={onClose}>
+        <AppModal isOpen={showModal} onClose={onClose} maxWidth="md">
           {investmentId ? (
             <InvestmentEdit
               investmentId={investmentId}
@@ -410,8 +410,12 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
             <DeleteViewedUser dealId={dealId} investorId={investorId} handleUpdate={handleUpdate} />
           )}
         </AppModal>
-        <AppModal isOpen={showCreateInvModal} onClose={() => setShowCreateInvModal(false)}>
-          <CreateInvestment deal={deal} handleUpdate={handleUpdate} />
+        <AppModal
+          isOpen={showCreateInvModal}
+          onClose={() => setShowCreateInvModal(false)}
+          maxWidth="md"
+        >
+          <CreateInvestment deal={data.deal} handleUpdate={handleUpdate} />
         </AppModal>
         <AppModal
           maxWidth="md"
@@ -419,7 +423,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType, d
           isOpen={reminderModalOpen}
           onClose={() => setReminderModalOpen(false)}
         >
-          <SendWireReminder signedInvestors={signedInvestors} deal={deal} />
+          <SendWireReminder signedInvestors={signedInvestors} deal={data} />
         </AppModal>
       </Grid>
     </>

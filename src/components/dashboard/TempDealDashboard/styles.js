@@ -101,20 +101,26 @@ const styles = (theme) => ({
     width: '100%',
     left: '0',
     top: '0',
-    background: '#f7f7f7',
+    background: '#f8fafc',
+    [theme.breakpoints.down(phone)]: {
+      maxWidth: '100vw',
+    },
   },
   dealSection: {
     width: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    background: '#f7f7f7',
+    background: 'white',
     height: '68px',
     borderRadius: '8px',
     margin: '30px',
     [theme.breakpoints.down(phone)]: {
       height: '90px',
     },
+  },
+  dealsTitle: {
+    marginBottom: '28px',
   },
   footerData: {
     fontSize: '14px',
@@ -177,14 +183,13 @@ const styles = (theme) => ({
     top: '0',
     left: '0',
     width: '100%',
-    height: '700px',
+    height: '100vh',
     display: 'flex',
     zIndex: 10,
     position: 'absolute',
     alignItems: 'flex-start',
     paddingTop: '180px',
     justifyContent: 'center',
-    backgroundColor: 'rgba(255, 255, 255)',
   },
   logType: {
     width: 'fit-content',
@@ -315,13 +320,13 @@ const styles = (theme) => ({
     marginBottom: '25px',
     background: 'white',
     padding: '15px 20px',
-    border: 'solid 1px #dadada',
-    boxShadow: '0px 3px 5px -5px',
-    borderRadius: '3px',
+    border: 'none',
+    boxShadow: 'none',
+    borderRadius: '8px',
   },
   section: {
     width: '100%',
-    padding: '40px 0',
+    padding: '24px 0',
     margin: '0px',
     [theme.breakpoints.down(phone)]: {
       padding: '10px',
@@ -362,7 +367,7 @@ const styles = (theme) => ({
   sortField: {
     display: 'flex',
     justifyContent: 'space-between',
-    margin: '1rem 1rem -2rem 1rem',
+    margin: '1rem 1rem 0 1rem',
     [theme.breakpoints.down(phone)]: {
       marginLeft: '22px',
       marginBottom: '5px',
@@ -424,6 +429,10 @@ const styles = (theme) => ({
   },
   tabWrapper: {
     padding: '0 20px',
+  },
+  titleContainer: {
+    padding: '0 8px',
+    marginBottom: '44px',
   },
   bankingAllocateWrapper: {
     width: '100%',
