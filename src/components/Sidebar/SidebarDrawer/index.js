@@ -10,7 +10,6 @@ import { Link, useHistory } from 'react-router-dom';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import { FaRocket } from 'react-icons/fa';
 import { BsBinocularsFill } from 'react-icons/bs';
 import styles from '../styles';
 import NewBuildModal from '../../NewBuild/NewBuildModal';
@@ -57,7 +56,6 @@ const AddBuildButton = (props) => {
 const SidebarDrawer = ({
   mobileOpen,
   handleDrawerClose,
-  currentOrganization,
   currentHomeUrl,
   logout,
   location,
