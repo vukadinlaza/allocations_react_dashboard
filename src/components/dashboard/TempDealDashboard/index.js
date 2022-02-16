@@ -110,7 +110,7 @@ let BASE = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
 
-const FundManagerDashboard = ({ classes }) => {
+const TempDealDashboard = ({ classes }) => {
   const { width } = useViewport();
   const params = useParams();
   const { deal_id } = params;
@@ -366,4 +366,4 @@ const FundManagerDashboard = ({ classes }) => {
   );
 };
 
-export default withStyles(styles)(withRouter(FundManagerDashboard));
+export default withStyles(styles)(withRouter(TempDealDashboard));
