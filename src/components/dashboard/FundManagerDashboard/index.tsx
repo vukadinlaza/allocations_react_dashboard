@@ -19,20 +19,6 @@ import { titleCase } from '../../../utils/helpers';
 import { useAuth } from '../../../auth/useAuth';
 import AllocationsLoader from '../../utils/AllocationsLoader';
 
-// export const ORG_DEALS = gql`
-//   query OrgLastDeals($slug: String!, $lastNDeals: Int!) {
-//     orgLastDeals(slug: $slug, lastNDeals: $lastNDeals) {
-//       _id
-//       slug
-//       deals(limit: 100) {
-//         _id
-//         company_name
-//         investmentType
-//         status
-//       }
-//     }
-//   }
-// `;
 export const ORG_DEALS = gql`
   query GetOrg($slug: String!) {
     organization(slug: $slug) {
@@ -134,7 +120,6 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
       slug: orgSlug,
     },
   });
-  console.log({ data });
 
   const orgAUM = () => {
     if (data?.organization?.deals) {
