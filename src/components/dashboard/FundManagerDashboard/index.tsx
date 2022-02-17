@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { withRouter, RouteComponentProps, useParams } from 'react-router-dom';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
@@ -109,6 +109,9 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
   const params = useParams();
   const orgSlug = (params as GeneralObject)?.organization;
   const [searchTerm, setSearchTerm] = useState('');
+  const [orgAUM, setOrgAUM] = useState(null);
+  const [orgMultiple, setOrgMultiple] = useState<string | null>(null);
+  const [figuresCalculated, setFiguresCalculated] = useState(false);
   const { data: aumData } = useQuery(AUM_DATA, { variables: { slug: orgSlug } });
   const { data: totalSpvData } = useQuery(TOTAL_SPVS_DATA, { variables: { slug: orgSlug } });
   const { data: totalFundsData } = useQuery(TOTAL_FUNDS_DATA, { variables: { slug: orgSlug } });
@@ -121,44 +124,57 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
     },
   });
 
-  const orgAUM = () => {
-    if (data?.organization?.deals) {
+  useEffect(() => {
+    if (data?.organization?.deals && aumData) {
       const { deals } = data.organization;
-      return deals
+      const organizationAUM = deals
         .map((deal: Deal) => {
           // eslint-disable-next-line prefer-const
           let { dealParams: { dealMultiple = {} } = {}, AUM } = deal;
           dealMultiple = Number(dealMultiple);
-          if (dealMultiple && dealMultiple > 1) {
-            return (dealMultiple as number) * AUM;
-          }
-          return AUM || 0;
+          return dealMultiple && dealMultiple > 1 ? (dealMultiple as number) * AUM : AUM ?? 0.0;
         })
         .reduce((acc: number, n: number) => {
           return acc + n;
         }, 0);
-    }
-  };
+      setOrgAUM(organizationAUM);
 
-  const getFormattedAmount = (amount: number) => {
+      const organizationMultiple =
+        aumData?.aum?.total === 0
+          ? '1.0'
+          : (organizationAUM / aumData?.aum?.total).toFixed(1) ?? '1.0';
+
+      setOrgMultiple(organizationMultiple);
+    }
+  }, [data, aumData]);
+
+  useEffect(() => {
+    // Make sure we dont render before everything was calculated so we dont show transitions in figures
+    if (orgMultiple !== null && orgAUM !== null) {
+      setFiguresCalculated(true);
+    }
+  }, [orgMultiple]);
+
+  const getFormattedAmount = (amount: number | null) => {
+    if (!amount) return '0.0';
     if (amount > 1000000) {
-      return `${Math.round(amount / 1000000)}m`;
+      return `${(amount / 1000000).toFixed(1)}m`;
     }
     if (amount > 1000) {
-      return `${Math.round(amount / 1000)}k`;
+      return `${(amount / 1000).toFixed(1)}k`;
     }
     return amount;
   };
 
   const dashboardBoxes: { title: string; value: number | string }[] = [
-    { title: 'Total AUM', value: `$${getFormattedAmount(orgAUM()) || 0}` },
+    { title: 'Total AUM', value: `$${getFormattedAmount(orgAUM) || 0}` },
     {
       title: 'Total Raised',
       value: `$${getFormattedAmount(aumData?.aum?.total) || 0}`,
     },
     {
       title: 'Estimated Multiple',
-      value: `${(orgAUM() / (aumData?.aum?.total || 1)).toFixed(1) || 1}x`,
+      value: `${orgMultiple}x`,
     },
     {
       title: 'Total Private Funds',
@@ -225,7 +241,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
     setSearchTerm(event.currentTarget.value);
   };
 
-  if (!data) return <AllocationsLoader fullHeight />;
+  if (!data || !figuresCalculated) return <AllocationsLoader fullHeight />;
 
   const spvs = getListData('spv');
   const funds = getListData('fund');
@@ -305,7 +321,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
             />
             <TextField
               variant="outlined"
-              placeholder="Search investor"
+              placeholder="Search"
               className={classes.textFieldRoot}
               onChange={(e) => updateSearch(e)}
               InputLabelProps={{ style: { top: '-4px' } }}
