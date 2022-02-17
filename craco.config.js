@@ -1,6 +1,7 @@
 require('dotenv').config();
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+const ExternalTemplateRemotesPlugin = require('external-remotes-plugin');
 
 module.exports = {
   webpack: {
@@ -10,7 +11,7 @@ module.exports = {
         filename: 'remoteEntry.js',
         remotes: {
           invest: `invest@https://invest-frontend-staging.herokuapp.com/_next/static/chunks/remoteEntry.js`,
-          build: `build@${process.env.BUILD_FRONTEND_URL}/_next/static/chunks/remoteEntry.js`,
+          build: `build@[window.buildURL]/_next/static/chunks/remoteEntry.js`,
           treasury: `treasury@${process.env.TREASURY_FRONTEND_URL}/_next/static/chunks/remoteEntry.js`,
           blockchain: `blockchain@${process.env.CRYPTO_FRONTEND_URL}/_next/static/chunks/remoteEntry.js`,
         },
@@ -37,6 +38,7 @@ module.exports = {
           },
         },
       }),
+      new ExternalTemplateRemotesPlugin(),
     ],
     configure: (webpackConfig) => {
       // webpackConfig.output.enabledLibraryTypes = ['var'];
