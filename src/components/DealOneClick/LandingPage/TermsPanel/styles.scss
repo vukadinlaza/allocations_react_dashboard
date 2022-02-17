@@ -1,52 +1,62 @@
-.TermsPanel {
-  width: 37.5%;
-  height: max-content;
+.terms-and-documents {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  background-color: #fbfcff;
-  box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
-  border: 1px solid rgb(232, 232, 232);
+  width: 37.5%;
 
-  ul {
-    list-style: none;
-    padding: 10px 0;
+  .TermsPanel {
     width: 100%;
+    height: max-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #fbfcff;
+    box-shadow: rgba(170, 170, 170, 0.25) 2px 2px 4px 0px;
+    border: 1px solid rgb(232, 232, 232);
 
-    li {
+    ul {
+      list-style: none;
+      padding: 10px 0;
       width: 100%;
-      padding-left: 15px;
-      margin: 20px 0;
 
-      p {
-        font-size: 0.8em;
-        margin: 5px 0;
-      }
+      li {
+        width: 100%;
+        padding-left: 15px;
+        margin: 20px 0;
 
-      h2 {
-        margin: 0;
-        padding: 0;
-        font-size: 1.25rem;
-      }
+        p {
+          font-size: 0.8em;
+          margin: 5px 0;
+        }
 
-      h3 {
-        font-size: 18px;
+        h2 {
+          margin: 0;
+          padding: 0;
+          font-size: 1.25rem;
+        }
+
+        h3 {
+          font-size: 18px;
+        }
       }
     }
-  }
 
-  button {
-    background-color: #3ac522;
-    color: white;
-    width: 95%;
-    height: 3rem;
-    outline: none;
+    button {
+      background-color: #3ac522;
+      color: white;
+      width: 95%;
+      height: 3rem;
+      outline: none;
+    }
   }
 }
 
 @media screen and (max-width: 960px) {
-  .TermsPanel {
+  .terms-and-documents {
     width: 100%;
+
+    .TermsPanel {
+      width: 100%;
+    }
   }
 }
