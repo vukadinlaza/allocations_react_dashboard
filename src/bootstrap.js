@@ -69,7 +69,7 @@ ReactDOM.render(
               <div
                 style={{
                   backgroundColor: 'rgb(1, 68, 228)',
-                  width: 'calc(100% + 6rem)',
+                  width: '100%',
                   padding: '20px 50px',
                   color: 'white',
                   textAlign: 'center',
