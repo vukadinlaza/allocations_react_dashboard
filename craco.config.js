@@ -11,10 +11,10 @@ module.exports = {
         name: 'container',
         filename: 'remoteEntry.js',
         remotes: {
-          invest: `invest@https://invest-frontend-staging.herokuapp.com/_next/static/chunks/remoteEntry.js`,
+          invest: `invest@[window.investModuleFerederationURL]`,
           build: 'build@[window.buildModuleFederationURL]',
           treasury: `treasury@[window.treasuryModuleFederationURL]`,
-          blockchain: `blockchain@${process.env.CRYPTO_FRONTEND_URL}/_next/static/chunks/remoteEntry.js`,
+          blockchain: `blockchain@[window.cryptoModuleFederationURL]`,
         },
         shared: {
           react: {

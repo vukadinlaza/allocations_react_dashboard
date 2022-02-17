@@ -5,4 +5,8 @@ window.buildModuleFederationURL = `${process.env.REACT_APP_BUILD_FRONTEND_URL}/$
 
 window.treasuryModuleFederationURL = `${process.env.REACT_APP_TREASURY_FRONTEND_URL}/${moduleFederationURLSuffix}`;
 
+window.cryptoModuleFederationURL = `${process.env.REACT_APP_CRYPTO_FRONTEND_URL}/${moduleFederationURLSuffix}`;
+
+window.investModuleFerederationURL = `${process.env.REACT_APP_INVEST_FRONTEND_URL}/${moduleFederationURLSuffix}`;
+
 import('./bootstrap');
