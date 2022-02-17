@@ -41,6 +41,7 @@ const GET_DEAL = gql`
       organization {
         _id
         name
+        high_volume_partner
       }
       dealParams {
         signDeadline
@@ -308,12 +309,11 @@ const TempDealDashboard = ({ classes }) => {
       case 'Banking':
         return (
           <Banking
-            orgSlug={orgSlug}
-            classes={classes}
+            organizationData={dealData}
+            dealData={dealData}
             deal_id={dealData.deal._id}
             virtual_account_number={dealData.deal.virtual_account_number || null}
-            openTooltip={openTooltip}
-            handleTooltip={handleTooltip}
+            classes={classes}
           />
         );
       case 'Crypto':

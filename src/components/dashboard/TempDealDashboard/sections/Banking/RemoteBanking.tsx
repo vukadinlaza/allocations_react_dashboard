@@ -12,12 +12,12 @@ export default function RemoteBanking({
   dealData: { [key: string]: any };
 }) {
   const { userProfile } = useAuth();
-  const { _id: org_id } = organizationData.organization;
+  const { _id: org_id } = organizationData.deal.organization;
 
   const bankProps = {
     org_id,
-    deal_id: dealData._id,
-    deal_name: dealData.company_name,
+    deal_id: dealData.deal._id,
+    deal_name: dealData.deal.company_name,
   };
 
   return (
