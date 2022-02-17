@@ -28,7 +28,6 @@ const AddBubbleBuildButton = ({ classes }) => (
 );
 
 const AddInAppBuildButton = ({ classes }) => {
-  const { buildModals } = useFlags();
   const history = useHistory();
 
   return (
@@ -36,9 +35,7 @@ const AddInAppBuildButton = ({ classes }) => {
       variant="contained"
       className={classes.addButton}
       onClick={() => {
-        if (buildModals) {
-          history.push('/public/new-build/spv');
-        }
+        history.push('/public/new-build');
       }}
     >
       <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { withRouter, RouteComponentProps, useParams } from 'react-router-dom';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
@@ -109,8 +109,8 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
   const params = useParams();
   const orgSlug = (params as GeneralObject)?.organization;
   const [searchTerm, setSearchTerm] = useState('');
-  const [orgAUM, setOrgAUM] = useState(0.0);
-  const [orgMultiple, setOrgMultiple] = useState('0.0');
+  const [orgAUM, setOrgAUM] = useState(null);
+  const [orgMultiple, setOrgMultiple] = useState<string | null>(null);
   const [figuresCalculated, setFiguresCalculated] = useState(false);
   const { data: aumData } = useQuery(AUM_DATA, { variables: { slug: orgSlug } });
   const { data: totalSpvData } = useQuery(TOTAL_SPVS_DATA, { variables: { slug: orgSlug } });
@@ -124,43 +124,39 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
     },
   });
 
-  const prevStateRef = useRef({ orgAUM, orgMultiple });
-
   useEffect(() => {
     if (data?.organization?.deals && aumData) {
-      prevStateRef.current = { orgAUM, orgMultiple };
       const { deals } = data.organization;
       const organizationAUM = deals
         .map((deal: Deal) => {
           // eslint-disable-next-line prefer-const
           let { dealParams: { dealMultiple = {} } = {}, AUM } = deal;
           dealMultiple = Number(dealMultiple);
-          if (dealMultiple && dealMultiple > 1) {
-            return (dealMultiple as number) * AUM;
-          }
-          return AUM || 0;
+          return dealMultiple && dealMultiple > 1 ? (dealMultiple as number) * AUM : AUM ?? 0.0;
         })
         .reduce((acc: number, n: number) => {
           return acc + n;
         }, 0);
       setOrgAUM(organizationAUM);
 
-      const organizationMultiple = (organizationAUM / aumData?.aum?.total).toFixed(1) || '1.0';
+      const organizationMultiple =
+        aumData?.aum?.total === 0
+          ? '1.0'
+          : (organizationAUM / aumData?.aum?.total).toFixed(1) ?? '1.0';
+
       setOrgMultiple(organizationMultiple);
     }
   }, [data, aumData]);
 
   useEffect(() => {
     // Make sure we dont render before everything was calculated so we dont show transitions in figures
-    if (
-      prevStateRef.current.orgMultiple !== orgMultiple &&
-      prevStateRef.current.orgAUM !== orgAUM
-    ) {
+    if (orgMultiple !== null && orgAUM !== null) {
       setFiguresCalculated(true);
     }
   }, [orgMultiple]);
 
-  const getFormattedAmount = (amount: number) => {
+  const getFormattedAmount = (amount: number | null) => {
+    if (!amount) return '0.0';
     if (amount > 1000000) {
       return `${(amount / 1000000).toFixed(1)}m`;
     }

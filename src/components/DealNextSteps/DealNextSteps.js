@@ -96,10 +96,19 @@ const GET_INVESTMENT = gql`
   }
 `;
 
+const GET_CRYPTO_OPTIONS = gql`
+  query GetCryptoOptions($deal_id: String!) {
+    cryptoOptions(deal_id: $deal_id) {
+      crypto_payments
+    }
+  }
+`;
+
 function DealNextSteps() {
   const [confetti, showConfetti] = useState(false);
   const { data, loading, refetch } = useQuery(GET_INVESTOR, { fetchPolicy: 'network-only' });
   const [getDeal, { data: dealData, called: calledDeal }] = useLazyQuery(GET_DEAL);
+
   const [showTaxAsCompleted, setShowTaxAsCompleted] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -137,6 +146,9 @@ function DealNextSteps() {
     investmentData?.investment?.submissionData ||
     null;
 
+  const [getCryptoOptions, { data: cryptoOptionsData, called: calledCrypto }] =
+    useLazyQuery(GET_CRYPTO_OPTIONS);
+
   useEffect(() => {
     if (!authLoading && !calledDeal && isAuthenticated && deal_slug) {
       getDeal({
@@ -152,6 +164,17 @@ function DealNextSteps() {
       }
     }
   }, [isAuthenticated, authLoading, calledDeal, getDeal, deal_slug, organization]);
+
+  useEffect(() => {
+    if (dealData && !calledCrypto) {
+      getCryptoOptions({
+        variables: {
+          deal_id: dealData?.deal._id,
+        },
+        fetchPolicy: 'network-only',
+      });
+    }
+  }, [dealData, calledCrypto, getCryptoOptions]);
 
   useEffect(() => {
     window.scrollTo({
@@ -186,7 +209,7 @@ function DealNextSteps() {
     setKycTemplate(templateInfo);
   }, [investorFormData]);
 
-  if (loading || !data || !dealData) return null;
+  if (loading || !cryptoOptionsData || !data || !dealData) return null;
 
   const handleInvestmentEdit = () => {
     const userInvestments = data?.investor?.investments;
@@ -416,7 +439,7 @@ function DealNextSteps() {
         {/* PaymentSelectModal to be temporarily retired while Crypto is in limbo */}
         <PaymentSelectModal
           open={openPayment}
-          dealData={dealData?.deal}
+          cryptoOptions={cryptoOptionsData?.cryptoOptions}
           setOpen={setOpenPayment}
           setWireInstructionsOpen={setWireInstructionsOpen}
           setCryptoPaymentOpen={setCryptoPaymentOpen}
@@ -436,18 +459,22 @@ function DealNextSteps() {
           setOpen={setWireInstructionsOpen}
           docs={docs}
         />
-        <React.Suspense fallback={<div>Loading</div>}>
-          <CryptoPaymentModalRemote
-            open={cryptoPaymentOpen}
-            setOpen={setCryptoPaymentOpen}
-            deal_name={dealData?.deal?.name ?? dealData?.deal?.company_name}
-            deal_id={dealData?.deal?._id}
-            investor_name={`${data?.investor.first_name} ${data?.investor.last_name}`}
-            investment_amount={investmentData.investment.amount}
-            investment_id={investmentData.investment._id}
-            user_id={data._id}
-          />
-        </React.Suspense>
+
+        {investmentData ? (
+          <React.Suspense fallback={<div>Loading</div>}>
+            <CryptoPaymentModalRemote
+              open={cryptoPaymentOpen}
+              setOpen={setCryptoPaymentOpen}
+              deal_name={dealData?.deal?.name ?? dealData?.deal?.company_name}
+              deal_id={dealData?.deal?._id}
+              investor_name={`${data?.investor.first_name} ${data?.investor.last_name}`}
+              investment_amount={investmentData.investment.amount}
+              investment_id={investmentData.investment._id}
+              user_id={data._id}
+            />
+          </React.Suspense>
+        ) : null}
+
         <AllocationsRocket />
         <Confetti className={`confetti ${!confetti && 'hidden'}`} />
       </section>
