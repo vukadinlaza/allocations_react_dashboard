@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { withRouter, RouteComponentProps, useParams } from 'react-router-dom';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
@@ -109,6 +109,9 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
   const params = useParams();
   const orgSlug = (params as GeneralObject)?.organization;
   const [searchTerm, setSearchTerm] = useState('');
+  const [orgAUM, setOrgAUM] = useState(0.0);
+  const [orgMultiple, setOrgMultiple] = useState('0.0');
+  const [figuresCalculated, setFiguresCalculated] = useState(false);
   const { data: aumData } = useQuery(AUM_DATA, { variables: { slug: orgSlug } });
   const { data: totalSpvData } = useQuery(TOTAL_SPVS_DATA, { variables: { slug: orgSlug } });
   const { data: totalFundsData } = useQuery(TOTAL_FUNDS_DATA, { variables: { slug: orgSlug } });
@@ -121,10 +124,13 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
     },
   });
 
-  const orgAUM = () => {
-    if (data?.organization?.deals) {
+  const prevStateRef = useRef({ orgAUM, orgMultiple });
+
+  useEffect(() => {
+    if (data?.organization?.deals && aumData) {
+      prevStateRef.current = { orgAUM, orgMultiple };
       const { deals } = data.organization;
-      return deals
+      const organizationAUM = deals
         .map((deal: Deal) => {
           // eslint-disable-next-line prefer-const
           let { dealParams: { dealMultiple = {} } = {}, AUM } = deal;
@@ -137,28 +143,42 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
         .reduce((acc: number, n: number) => {
           return acc + n;
         }, 0);
+      setOrgAUM(organizationAUM);
+
+      const organizationMultiple = (organizationAUM / aumData?.aum?.total).toFixed(1) || '1.0';
+      setOrgMultiple(organizationMultiple);
     }
-  };
+  }, [data, aumData]);
+
+  useEffect(() => {
+    // Make sure we dont render before everything was calculated so we dont show transitions in figures
+    if (
+      prevStateRef.current.orgMultiple !== orgMultiple &&
+      prevStateRef.current.orgAUM !== orgAUM
+    ) {
+      setFiguresCalculated(true);
+    }
+  }, [orgMultiple]);
 
   const getFormattedAmount = (amount: number) => {
     if (amount > 1000000) {
-      return `${Math.round(amount / 1000000)}m`;
+      return `${(amount / 1000000).toFixed(1)}m`;
     }
     if (amount > 1000) {
-      return `${Math.round(amount / 1000)}k`;
+      return `${(amount / 1000).toFixed(1)}k`;
     }
     return amount;
   };
 
   const dashboardBoxes: { title: string; value: number | string }[] = [
-    { title: 'Total AUM', value: `$${getFormattedAmount(orgAUM()) || 0}` },
+    { title: 'Total AUM', value: `$${getFormattedAmount(orgAUM) || 0}` },
     {
       title: 'Total Raised',
       value: `$${getFormattedAmount(aumData?.aum?.total) || 0}`,
     },
     {
       title: 'Estimated Multiple',
-      value: `${(orgAUM() / (aumData?.aum?.total || 1)).toFixed(1) || 1}x`,
+      value: `${orgMultiple}x`,
     },
     {
       title: 'Total Private Funds',
@@ -225,7 +245,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
     setSearchTerm(event.currentTarget.value);
   };
 
-  if (!data) return <AllocationsLoader fullHeight />;
+  if (!data || !figuresCalculated) return <AllocationsLoader fullHeight />;
 
   const spvs = getListData('spv');
   const funds = getListData('fund');
@@ -305,7 +325,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
             />
             <TextField
               variant="outlined"
-              placeholder="Search investor"
+              placeholder="Search"
               className={classes.textFieldRoot}
               onChange={(e) => updateSearch(e)}
               InputLabelProps={{ style: { top: '-4px' } }}
