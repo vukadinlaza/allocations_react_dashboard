@@ -58,10 +58,10 @@ const SidebarDrawer = ({
   classes,
 }) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
+  const [setOpenModal] = useState(false);
   const { prospectDealPage } = useFlags();
 
-  const closeModal = () => setOpenModal(false);
+  // const closeModal = () => setOpenModal(false);
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
 
