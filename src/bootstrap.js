@@ -55,6 +55,17 @@ ReactDOM.render(
         <Router>
           <Auth0ProviderWithHistory>
             <AuthorizedApolloProvider>
+              <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable={false}
+                pauseOnHover
+              />
               <App />
             </AuthorizedApolloProvider>
           </Auth0ProviderWithHistory>
