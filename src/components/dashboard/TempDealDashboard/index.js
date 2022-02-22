@@ -18,7 +18,7 @@ import { useAuth } from '../../../auth/useAuth';
 import AllocationsLoader from '../../utils/AllocationsLoader';
 import styles from './styles';
 import DocumentsTab from './sections/DocumentsTab';
-import DealTypeSelector from '../../NewBuild/DealType';
+import DealTypeSelector from './DealType';
 import DealPage from '../Common/DealPage';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import { phone } from '../../../utils/helpers';
