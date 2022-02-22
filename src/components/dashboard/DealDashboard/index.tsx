@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 import { useCurrentOrganization } from '../../../state/current-organization';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import LoadingPlaceholder from './LoadingPlaceholder';
-import DealProgress from './sections/DealProgress';
 import { Task, DealPhase } from './types';
 import DealPage from '../Common/DealPage';
 import styles from './styles';
@@ -95,9 +94,9 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
       if (!remainingTasks?.length) {
         setDealDashboardTabs(['Investors', 'Deal Page']);
       } else if (investorsInvited) {
-        setDealDashboardTabs(['Deal Progress', 'Deal Page']);
+        setDealDashboardTabs(['Deal Page']);
       } else {
-        setDealDashboardTabs(['Deal Progress', 'Investors', 'Deal Page']);
+        setDealDashboardTabs(['Investors', 'Deal Page']);
       }
     }
   }, [dealData]);
@@ -152,8 +151,6 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     const tabName = dealDashboardTabs[tabIndex];
 
     switch (tabName) {
-      case 'Deal Progress':
-        return <DealProgress {...dealProps} />;
       case 'Investors':
         return (
           <React.Suspense fallback="Loading...">
