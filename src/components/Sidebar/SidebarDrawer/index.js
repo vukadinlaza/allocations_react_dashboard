@@ -12,6 +12,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { BsBinocularsFill } from 'react-icons/bs';
 import styles from '../styles';
+import { useAuth } from '../../../auth/useAuth';
 
 const AddBubbleBuildButton = ({ classes }) => (
   <Button
@@ -55,9 +56,7 @@ const SidebarDrawer = ({
   logout,
   location,
   classes,
-  refetchUserProfile,
 }) => {
-  const history = useHistory();
   const [openSubMenu, setOpenSubMenu] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const { prospectDealPage } = useFlags();

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery, gql } from '@apollo/client';
+import { useQuery, gql } from '@apollo/client';
 import { useParams, withRouter, RouteComponentProps } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -56,12 +56,6 @@ const DEAL = gql`
   }
 `;
 
-const UPDATE_BUILD_DEAL = gql`
-  mutation updateBuildDeal($payload: Object) {
-    updateBuildDeal(payload: $payload)
-  }
-`;
-
 type Props = WithStyles<typeof styles>;
 
 const Investors = React.lazy(() => import('invest/Investors'));
@@ -101,20 +95,8 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     }
   }, [dealData]);
 
-  const [updateBuildDeal, { loading: updateDealLoading }] = useMutation(UPDATE_BUILD_DEAL);
-
   const handleTabChange = (event: React.ChangeEvent, index: number) => {
     setTabIndex(index);
-  };
-
-  const handleComplete = () => {
-    updateBuildDeal({
-      variables: {
-        payload: {
-          deal_id,
-        },
-      },
-    });
   };
 
   const goToDeal = () => {
@@ -136,13 +118,6 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
       );
       toast.info('Copied deal link to clipboard');
     }
-  };
-
-  const dealProps = {
-    data: dealData?.getDealByIdWithTasks,
-    handleComplete,
-    updateDealLoading,
-    orgSlug: currentOrg?.slug,
   };
 
   const getTabComponent = () => {
