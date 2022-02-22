@@ -12,8 +12,6 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { BsBinocularsFill } from 'react-icons/bs';
 import styles from '../styles';
-import NewBuildModal from '../../NewBuild/NewBuildModal';
-import { useAuth } from '../../../auth/useAuth';
 
 const AddBubbleBuildButton = ({ classes }) => (
   <Button
@@ -62,7 +60,6 @@ const SidebarDrawer = ({
   const history = useHistory();
   const [openSubMenu, setOpenSubMenu] = useState([]);
   const [openModal, setOpenModal] = useState(false);
-  const [newBuildModalPage, setNewBuildModalPage] = useState('deal_type_selector');
   const { prospectDealPage } = useFlags();
 
   const closeModal = () => setOpenModal(false);
@@ -118,32 +115,7 @@ const SidebarDrawer = ({
 
   return (
     <div className={classes.sidebarDrawer}>
-      <NewBuildModal
-        isOpen={openModal}
-        closeModal={closeModal}
-        page={newBuildModalPage}
-        setPage={setNewBuildModalPage}
-        refetchUserProfile={refetchUserProfile}
-        next={{
-          deal_type_selector: {
-            spv: () => {
-              history.push('/public/new-build/spv');
-              closeModal();
-              handleDrawerClose();
-            },
-            fund: () => {
-              history.push('/public/new-build/fund');
-              closeModal();
-              handleDrawerClose();
-            },
-          },
-        }}
-      />
-      <AddBuildButton
-        classes={classes}
-        setOpenModal={setOpenModal}
-        setNewBuildModalPage={setNewBuildModalPage}
-      />
+      <AddBuildButton classes={classes} setOpenModal={setOpenModal} />
       <List>
         {menuSections.map(({ sectionTitle, menu }) => (
           <>
