@@ -1,4 +1,5 @@
 import moment from 'moment';
+import _ from 'lodash';
 /** *
  *
  * Helpers in general
@@ -53,4 +54,38 @@ export const validateEmail = (email) => {
     .match(
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     );
+};
+
+export const sortByString = (a, b, field = '', order = 'asc') => {
+  const aString = typeof a === 'string' ? a : a[field];
+  const bString = typeof b === 'string' ? b : b[field];
+  const firstValue = order === 'asc' ? aString : bString;
+  const secondValue = order === 'asc' ? bString : aString;
+  return firstValue.localeCompare(secondValue);
+};
+
+export const sortByNumber = (a, b, field = '', order = 'asc') => {
+  const aNumber = typeof a === 'number' ? a : a[field];
+  const bNumber = typeof b === 'number' ? b : b[field];
+  const firstValue = order === 'asc' ? aNumber : bNumber;
+  const secondValue = order === 'asc' ? bNumber : aNumber;
+  return firstValue - secondValue;
+};
+
+export const sortByDate = (a, b, field = '', order = 'asc') => {
+  const aDate = a instanceof Date ? a : a[field];
+  const bDate = b instanceof Date ? b : b[field];
+  const firstValue = order === 'asc' ? aDate : bDate;
+  const secondValue = order === 'asc' ? bDate : aDate;
+  return firstValue - secondValue;
+};
+
+export const sortByStatus = (statusOrder, data, field, order) => {
+  return data.sort((a, b) => {
+    return order === 'desc'
+      ? statusOrder[field ? _.get(a, `${field}`) : a] -
+          statusOrder[field ? _.get(b, `${field}`) : b]
+      : statusOrder[field ? _.get(b, `${field}`) : b] -
+          statusOrder[field ? _.get(a, `${field}`) : a];
+  });
 };

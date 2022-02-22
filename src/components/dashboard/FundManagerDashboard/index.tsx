@@ -15,7 +15,7 @@ import { Box, BigBox } from '../Common/components';
 import { Header, Deal, GeneralObject } from '../Common/types';
 import { nWithCommas } from '../../../utils/numbers';
 import styles from './styles';
-import { titleCase } from '../../../utils/helpers';
+import { sortByNumber, titleCase, sortByStatus } from '../../../utils/helpers';
 import { useAuth } from '../../../auth/useAuth';
 import AllocationsLoader from '../../utils/AllocationsLoader';
 
@@ -87,12 +87,14 @@ const headers: Header[] = [
     isButton: false,
     label: 'Status',
     withSort: true,
+    customSort: true,
   },
   {
     id: 'amountRaised',
     isButton: false,
     label: 'Total Raised',
     withSort: true,
+    customSort: true,
   },
   {
     id: 'manage',
@@ -237,6 +239,27 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
       });
   };
 
+  const handleSort = (data: any, orderBy: any, direction: any): any => {
+    const statusOrder = {
+      'Pre-Onboarding': 1,
+      Onboarding: 2,
+      Closed: 3,
+    };
+    const numberAmount = (amount: string) => {
+      return Number(amount?.split('$')?.pop()?.replace(/[.,]/g, ''));
+    };
+    switch (orderBy) {
+      case 'amountRaised':
+        return data.sort((a: any, b: any) =>
+          sortByNumber(numberAmount(a.amountRaised), numberAmount(b.amountRaised), '', direction),
+        );
+      case 'status':
+        return sortByStatus(statusOrder, data, 'status.props.text', direction);
+      default:
+        return data;
+    }
+  };
+
   const updateSearch = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setSearchTerm(event.currentTarget.value);
   };
@@ -245,7 +268,6 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
 
   const spvs = getListData('spv');
   const funds = getListData('fund');
-
   return (
     <Grid container spacing={2} className={classes.mainContainer}>
       <Grid item xs={12}>
@@ -352,7 +374,8 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
                   <AllocationsList
                     data={spvs}
                     headers={headers}
-                    sortBy=""
+                    customSort={handleSort}
+                    sortBy="amountRaised"
                     sortDirection="desc"
                     itemsPerPage={5}
                   />
