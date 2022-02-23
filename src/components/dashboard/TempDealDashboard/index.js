@@ -334,6 +334,8 @@ const TempDealDashboard = ({ classes }) => {
 
   const [openModal, setOpenModal] = useState(false);
 
+  const typographyVariant = width > phone ? 'heading2' : 'heading4';
+
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
       <div style={{ margin: '1rem 0' }}>
@@ -343,7 +345,7 @@ const TempDealDashboard = ({ classes }) => {
               component="div"
               content={dealName}
               fontWeight={700}
-              variant={width > phone ? 'heading2' : 'heading4'}
+              variant={typographyVariant}
             />
           </div>
           <HighlightedTabs

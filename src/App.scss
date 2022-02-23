@@ -223,30 +223,38 @@ th {
   color: #fff;
 }
 
+.mainRoute {
+  grid-area: mainRoute;
+  display: grid;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 2rem 3rem;
+  background-color: #f8fafc;
+}
+
+.sidebar {
+  grid-area: sidebar;
+  z-index: 999;
+}
+
 .App {
   display: grid;
   grid-template-rows: 100%;
-  width: 100vw;
+  width: 100%;
   height: 100%;
-
-  .mainRoute {
-    grid-area: mainRoute;
-    display: grid;
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    padding: 2rem 3rem;
-    background-color: #f8fafc;
-  }
-
-  .sidebar {
-    grid-area: sidebar;
-    z-index: 999;
-  }
+  grid-template-columns: minmax(250px, 10%) auto;
+  grid-template-areas: 'sidebar mainRoute';
 
   @media only screen and (max-width: 960px) {
     display: grid;
+
+    grid-template-columns: 100%;
+    grid-template-rows: minmax(65px, 6%) auto;
+    grid-template-areas:
+      'sidebar'
+      'mainRoute';
 
     .mainRoute {
       padding: 0.5rem;
