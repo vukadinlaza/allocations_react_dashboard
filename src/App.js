@@ -43,7 +43,6 @@ import { CurrentAccountProvider } from './state/current-organization';
 import FreeSPVOnboarding from './components/FreeSPVOnboarding';
 import Identity from './components/Identity';
 import { useAuth } from './auth/useAuth';
-import { useViewport } from './utils/hooks';
 import TempDealDashboard from './components/dashboard/TempDealDashboard';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
@@ -57,25 +56,6 @@ Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
 const App = () => {
   const { isAuthenticated } = useAuth();
-  const { width } = useViewport();
-
-  const widthStyle = width > 960 ? 'greaterThan960Px' : 'lessThan960Px';
-
-  const authenticatedStyle = {
-    greaterThan960Px: {
-      gridTemplateColumns: 'minmax(250px, 10%) auto',
-      gridTemplateAreas: `'sidebar mainRoute'`,
-    },
-    lessThan960Px: {
-      gridTemplateColumns: '100%',
-      gridTemplateRows: 'minmax(65px, 6%) auto',
-      gridTemplateAreas: `
-        'sidebar'
-        'mainRoute'
-        `,
-    },
-  };
-
   const unAuthenticatedStyle = {
     gridTemplateColumns: 'auto',
     gridTemplateAreas: `'mainRoute'`,
@@ -83,10 +63,7 @@ const App = () => {
 
   return (
     <CurrentAccountProvider>
-      <div
-        className="App"
-        style={isAuthenticated ? authenticatedStyle[widthStyle] : unAuthenticatedStyle}
-      >
+      <div className="App" style={!isAuthenticated ? { unAuthenticatedStyle } : {}}>
         <div className="sidebar" style={{ display: !isAuthenticated && 'none' }}>
           <Sidebar />
         </div>
