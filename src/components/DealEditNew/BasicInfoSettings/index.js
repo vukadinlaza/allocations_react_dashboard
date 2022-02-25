@@ -154,7 +154,7 @@ function BasicInfoSettings({ formData, setFormData }) {
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
+        <FormControl className="field field-buttons">
           <FormLabel className="field-label">
             Investment type
             <div className="button-options">
@@ -215,7 +215,7 @@ function BasicInfoSettings({ formData, setFormData }) {
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
+        <FormControl className="field field-buttons">
           <FormLabel className="field-label">
             Deal type
             <div className="button-options">
@@ -255,7 +255,7 @@ function BasicInfoSettings({ formData, setFormData }) {
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
+        <FormControl className="field field-buttons">
           <FormLabel className="field-label">
             Status
             <div className="button-options">
