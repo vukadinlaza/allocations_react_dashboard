@@ -394,7 +394,8 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
                   <AllocationsList
                     data={funds}
                     headers={headers}
-                    sortBy=""
+                    customSort={handleSort}
+                    sortBy="amountRaised"
                     sortDirection="desc"
                     itemsPerPage={5}
                   />
