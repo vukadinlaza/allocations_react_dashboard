@@ -61,6 +61,23 @@
       }
     }
 
+    .field:nth-child(4) {
+      background-color: pink;
+      width: 48.5%;
+
+      .field-label {
+        width: fit-content;
+
+        .button-options {
+          margin: 5px 0 0 0;
+
+          .option-button + .option-button {
+            margin-right: 0;
+          }
+        }
+      }
+    }
+
     .field:nth-child(7) {
       width: fit-content;
 
