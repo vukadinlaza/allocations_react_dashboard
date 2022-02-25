@@ -3,7 +3,6 @@ import { useMutation, useQuery, gql } from '@apollo/client';
 import { Button } from '@material-ui/core';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import { toast } from 'react-toastify';
 import TermsAndConditionsPanel from './TermsAndConditionsPanel';
 import DealDocumentsPanel from './DealDocumentsPanel';
@@ -303,13 +302,6 @@ function InvestmentPage() {
         >
           <ArrowBackIcon />
           Back to Deal Page
-        </Button>
-        <Button
-          className="next-button"
-          onClick={() => history.push(`/next-steps/${organization}/${deal_slug}`)}
-        >
-          Next Steps
-          <ArrowForwardIcon />
         </Button>
       </div>
       <div>
