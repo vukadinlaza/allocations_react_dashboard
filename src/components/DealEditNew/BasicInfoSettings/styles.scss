@@ -62,20 +62,45 @@
     }
 
     .field-buttons {
-      background-color: pink;
-      width: 48.5%;
+      margin-bottom: calc(0.75rem + 5px);
 
       .field-label {
         width: fit-content;
 
         .button-options {
-          margin: 5px 0 0 0;
+          margin: 0;
 
           .option-button + .option-button {
             margin-right: 0;
           }
         }
       }
+    }
+
+    .field-buttons:nth-child(4)::before,
+    .field-buttons:nth-child(6)::before,
+    .field-buttons:nth-child(8)::before {
+      font-size: 1.2rem;
+      font-weight: 500;
+      line-height: 1;
+      color: rgba(0, 0, 0, 0.54);
+      margin-bottom: 5px;
+    }
+
+    .field-buttons:nth-child(4)::before {
+      content: 'Investment type';
+    }
+
+    .field-buttons:nth-child(6)::before {
+      content: 'Deal type';
+    }
+
+    .field-buttons:nth-child(8)::before {
+      content: 'Status';
+    }
+
+    .field-buttons:nth-child(8) {
+      margin-bottom: calc(0.75rem + 5px);
     }
 
     .field:nth-child(7) {
@@ -118,8 +143,6 @@
       }
 
       .field-buttons {
-        width: 100%;
-
         .field-label {
           width: 100%;
         }
