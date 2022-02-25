@@ -116,6 +116,14 @@
           }
         }
       }
+
+      .field:nth-child(4) {
+        width: 100%;
+
+        .field-label {
+          width: 100%;
+        }
+      }
     }
   }
 }
