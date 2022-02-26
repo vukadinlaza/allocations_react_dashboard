@@ -102,19 +102,6 @@
     .field-buttons:nth-child(8) {
       margin-bottom: calc(0.75rem + 5px);
     }
-
-    .field:nth-child(7) {
-      width: fit-content;
-
-      .field-label {
-        .button-options {
-          margin: 0;
-          .option-button {
-            margin-right: 0;
-          }
-        }
-      }
-    }
   }
 }
 

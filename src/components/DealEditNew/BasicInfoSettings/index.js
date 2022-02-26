@@ -234,7 +234,7 @@ function BasicInfoSettings({ formData, setFormData }) {
             </div>
           </FormLabel>
         </FormControl>
-        <FormControl className="field">
+        <FormControl className="field field-buttons">
           <FormLabel className="field-label">
             <div className="button-options">
               <Button
