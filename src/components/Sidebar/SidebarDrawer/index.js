@@ -14,7 +14,7 @@ import { BsBinocularsFill } from 'react-icons/bs';
 import styles from '../styles';
 import NewBuildModal from '../../NewBuild/NewBuildModal';
 import { useAuth } from '../../../auth/useAuth';
-
+import BallotIcon from '@material-ui/icons/Ballot';
 const AddBubbleBuildButton = ({ classes }) => (
   <Button
     variant="contained"
@@ -66,8 +66,7 @@ const SidebarDrawer = ({
   const [openSubMenu, setOpenSubMenu] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [newBuildModalPage, setNewBuildModalPage] = useState('deal_type_selector');
-  const { prospectDealPage } = useFlags();
-
+  const { prospectDealPage, taxDashboard } = useFlags();
   const closeModal = () => setOpenModal(false);
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
@@ -199,6 +198,20 @@ const SidebarDrawer = ({
           </>
         ))}
       </List>
+      {taxDashboard && (
+        <a href="https://tax2021.allocations.com/" target="_blank" rel="noopener noreferrer">
+          {' '}
+          <div onClick={mobileOpen ? handleDrawerClose : null} className={classes.sidebarNavItem}>
+            <ListItem button className={classes.menuItem}>
+              <ListItemIcon className={classes.icon}>
+                <BallotIcon fontSize="medium" />
+              </ListItemIcon>
+              <ListItemText primary="Tax Dashboard" />
+            </ListItem>
+          </div>
+        </a>
+      )}
+
       <div onClick={mobileOpen ? handleDrawerClose : null} className={classes.sidebarNavItem}>
         <ListItem button onClick={logoutWithRedirect} className={classes.menuItem}>
           <ListItemIcon className={classes.icon}>
