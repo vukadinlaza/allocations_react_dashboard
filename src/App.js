@@ -14,6 +14,7 @@ import Deals from './components/AllDeals';
 import DealNew from './components/DealNew';
 import DealEditNew from './components/DealEditNew';
 import Sidebar from './components/Sidebar';
+import TaxDashboard from './components/TaxDashboard';
 import Investors from './components/Investors';
 import InvestmentNew from './components/InvestmentNew';
 import ProfilePage from './components/Profile/ProfilePage';
@@ -118,6 +119,7 @@ const App = () => {
             <PrivateRoute path="/" exact component={InvestorDashboard} />
             <PrivateRoute path="/investor/:id/home" component={InvestorDashboard} />
             <PrivateRoute path="/submit-tax-documents" component={SubmitTaxDocs} />
+            <PrivateRoute path="/tax-activity" component={TaxDashboard} />
             <PrivateRoute path="/demo" component={Demo} />
             <PrivateRoute path="/profile/:id" component={ProfilePage} />
             <PrivateRoute path="/profile" component={Profile} />
