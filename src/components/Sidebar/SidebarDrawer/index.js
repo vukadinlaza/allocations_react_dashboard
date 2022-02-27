@@ -10,11 +10,12 @@ import { Link, useHistory } from 'react-router-dom';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import BallotIcon from '@material-ui/icons/Ballot';
 import { BsBinocularsFill } from 'react-icons/bs';
 import styles from '../styles';
 import NewBuildModal from '../../NewBuild/NewBuildModal';
 import { useAuth } from '../../../auth/useAuth';
-import BallotIcon from '@material-ui/icons/Ballot';
+
 const AddBubbleBuildButton = ({ classes }) => (
   <Button
     variant="contained"
