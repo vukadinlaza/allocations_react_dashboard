@@ -54,100 +54,99 @@ Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
  *
  * */
 
-const App = () => {
+const SideBar = ({ isAuthenticated }) => {
+  return (
+    <div className="sidebar" style={{ display: !isAuthenticated && 'none' }}>
+      <Sidebar />
+    </div>
+  );
+};
+
+const MainApp = ({ isAuthenticated }) => {
+  return (
+    <div className="mainRoute" style={{ justifyContent: !isAuthenticated && 'center' }}>
+      <Switch>
+        {/* Allocations Admin Routes */}
+        <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
+        <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
+        <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
+        <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
+
+        {/* Organization Admin */}
+        <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
+        <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
+        <PrivateRoute path="/admin/:organization/:deal_id" component={DealDashboard} exact />
+        <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />
+        <PrivateRoute path="/admin/:organization/deals/:id/edit" component={DealEditNew} exact />
+        <PrivateRoute
+          path="/admin/:organization/deals/:deal_id"
+          component={TempDealDashboard}
+          exact
+        />
+
+        {/* Investor */}
+        <PrivateRoute path="/" exact component={InvestorDashboard} />
+        <PrivateRoute path="/investor/:id/home" component={InvestorDashboard} />
+        <PrivateRoute path="/submit-tax-documents" component={SubmitTaxDocs} />
+        <PrivateRoute path="/demo" component={Demo} />
+        <PrivateRoute path="/profile/:id" component={ProfilePage} />
+        <PrivateRoute path="/profile" component={Profile} />
+
+        {/** Onboarding * */}
+        <Route path="/getting-started" component={Faq} exact />
+
+        {/** Deals * */}
+        {/* Public */}
+
+        <Route path="/public/new-build" exact component={Build} />
+        <Route path="/public/:organization/:deal_slug" component={DealOneClick} exact />
+        <Route path="/public/:deal_slug" component={DealOneClick} exact />
+
+        {/* Private  */}
+        <PrivateRoute path="/new-build/deal" exact component={PostBuild} />
+        <PrivateRoute path="/deals/:deal_slug" component={DealOneClick} exact />
+        <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
+
+        {/* Prospect deals */}
+        <PrivateRoute path="/prospects" component={Prospect} exact />
+        <PrivateRoute
+          path="/prospects/:organization/:deal_slug"
+          component={ProspectDealPage}
+          exact
+        />
+
+        {/* Invest */}
+        <PrivateRoute path="/invest/:deal_slug" component={InvestmentPage} exact />
+        <PrivateRoute path="/invest/:organization/:deal_slug" component={InvestmentPage} exact />
+
+        {/* Next Steps page */}
+        <PrivateRoute path="/next-steps/:deal_slug" component={DealNextSteps} exact />
+        <PrivateRoute path="/next-steps/:organization/:deal_slug" component={DealNextSteps} exact />
+
+        {/** Whitelabel Routes * */}
+        <PrivateRoute path="/organizations/:org_slug/deals" component={DealsTable} exact />
+        <PrivateRoute path="/investors" component={Investors} exact />
+        <PrivateRoute path="/identity" component={Identity} />
+        <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact />
+
+        {/** catchall * */}
+        <Route path={['*', '/404']} component={NotFound} />
+      </Switch>
+    </div>
+  );
+};
+
+const LayOut = () => {
   const { isAuthenticated } = useAuth();
   const unAuthenticatedStyle = {
     gridTemplateColumns: 'auto',
     gridTemplateAreas: `'mainRoute'`,
   };
-
   return (
     <CurrentAccountProvider>
       <div className="App" style={!isAuthenticated ? { unAuthenticatedStyle } : {}}>
-        <div className="sidebar" style={{ display: !isAuthenticated && 'none' }}>
-          <Sidebar />
-        </div>
-        <div className="mainRoute" style={{ justifyContent: !isAuthenticated && 'center' }}>
-          <Switch>
-            {/* Allocations Admin Routes */}
-            <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
-            <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
-            <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
-            <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
-
-            {/* Organization Admin */}
-            <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
-            <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
-            <PrivateRoute path="/admin/:organization/:deal_id" component={DealDashboard} exact />
-            <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />
-            <PrivateRoute
-              path="/admin/:organization/deals/:id/edit"
-              component={DealEditNew}
-              exact
-            />
-            <PrivateRoute
-              path="/admin/:organization/deals/:deal_id"
-              component={TempDealDashboard}
-              exact
-            />
-
-            {/* Investor */}
-            <PrivateRoute path="/" exact component={InvestorDashboard} />
-            <PrivateRoute path="/investor/:id/home" component={InvestorDashboard} />
-            <PrivateRoute path="/submit-tax-documents" component={SubmitTaxDocs} />
-            <PrivateRoute path="/demo" component={Demo} />
-            <PrivateRoute path="/profile/:id" component={ProfilePage} />
-            <PrivateRoute path="/profile" component={Profile} />
-
-            {/** Onboarding * */}
-            <Route path="/getting-started" component={Faq} exact />
-
-            {/** Deals * */}
-            {/* Public */}
-
-            <Route path="/public/new-build" exact component={Build} />
-            <Route path="/public/:organization/:deal_slug" component={DealOneClick} exact />
-            <Route path="/public/:deal_slug" component={DealOneClick} exact />
-
-            {/* Private  */}
-            <PrivateRoute path="/new-build/deal" exact component={PostBuild} />
-            <PrivateRoute path="/deals/:deal_slug" component={DealOneClick} exact />
-            <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
-
-            {/* Prospect deals */}
-            <PrivateRoute path="/prospects" component={Prospect} exact />
-            <PrivateRoute
-              path="/prospects/:organization/:deal_slug"
-              component={ProspectDealPage}
-              exact
-            />
-
-            {/* Invest */}
-            <PrivateRoute path="/invest/:deal_slug" component={InvestmentPage} exact />
-            <PrivateRoute
-              path="/invest/:organization/:deal_slug"
-              component={InvestmentPage}
-              exact
-            />
-
-            {/* Next Steps page */}
-            <PrivateRoute path="/next-steps/:deal_slug" component={DealNextSteps} exact />
-            <PrivateRoute
-              path="/next-steps/:organization/:deal_slug"
-              component={DealNextSteps}
-              exact
-            />
-
-            {/** Whitelabel Routes * */}
-            <PrivateRoute path="/organizations/:org_slug/deals" component={DealsTable} exact />
-            <PrivateRoute path="/investors" component={Investors} exact />
-            <PrivateRoute path="/identity" component={Identity} />
-            <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact />
-
-            {/** catchall * */}
-            <Route path={['*', '/404']} component={NotFound} />
-          </Switch>
-        </div>
+        <SideBar isAuthenticated={isAuthenticated} />
+        <MainApp isAuthenticated={isAuthenticated} />
       </div>
     </CurrentAccountProvider>
   );
@@ -156,7 +155,7 @@ const App = () => {
 const FlagApp = () => {
   const Component = withLDProvider({
     clientSideID: process.env.REACT_APP_LAUNCH_DARKLY_ID,
-  })(App);
+  })(LayOut);
 
   return <Component />;
 };

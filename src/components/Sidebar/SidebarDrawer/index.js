@@ -3,7 +3,7 @@ import { List, ListItem, ListItemIcon, ListItemText, Typography, Button } from '
 import { withStyles } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HomeIcon from '@material-ui/icons/Home';
-import { withLDProvider, useFlags } from 'launchdarkly-react-client-sdk';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { Link, useHistory } from 'react-router-dom';
@@ -12,7 +12,6 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { BsBinocularsFill } from 'react-icons/bs';
 import styles from '../styles';
-import { useAuth } from '../../../auth/useAuth';
 
 const AddBubbleBuildButton = ({ classes }) => (
   <Button
@@ -60,7 +59,6 @@ const SidebarDrawer = ({
   const [openSubMenu, setOpenSubMenu] = useState([]);
   const [setOpenModal] = useState(false);
   const { prospectDealPage } = useFlags();
-
   // const closeModal = () => setOpenModal(false);
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
@@ -179,15 +177,15 @@ const SidebarDrawer = ({
   );
 };
 
-const SidebarDrawerLD = (props) => {
-  const { isAuthenticated, loading, userProfile } = useAuth();
-  const launchDarklyUser = { key: userProfile?._id, email: userProfile?.email };
+// const SidebarDrawerLD = (props) => {
+//   const { isAuthenticated, loading, userProfile } = useAuth();
+//   const launchDarklyUser = { key: userProfile?._id, email: userProfile?.email };
 
-  const FlagComponent = withLDProvider({
-    clientSideID: process.env.REACT_APP_LAUNCH_DARKLY_ID,
-    user: isAuthenticated && !loading ? launchDarklyUser : undefined,
-  })(SidebarDrawer);
-  return <FlagComponent {...props} />;
-};
+//   const FlagComponent = withLDProvider({
+//     clientSideID: process.env.REACT_APP_LAUNCH_DARKLY_ID,
+//     user: isAuthenticated && !loading ? launchDarklyUser : undefined,
+//   })(SidebarDrawer);
+//   return <FlagComponent {...props} />;
+// };
 
-export default withStyles(styles)(SidebarDrawerLD);
+export default withStyles(styles)(SidebarDrawer);
