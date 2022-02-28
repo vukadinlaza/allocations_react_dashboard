@@ -49,15 +49,14 @@ export function useAuth(QUERY = GET_INVESTOR) {
   const [getInvestor, { data, error, called, refetch, loading }] = useLazyQuery(QUERY);
   const userProfile = { ...(user || {}), ...(data?.investor || {}) };
   const launchDarklyUser = { key: userProfile?._id, email: userProfile?.email };
-
+  if (userProfile) {
+    ldclient?.identify(launchDarklyUser, userProfile._id);
+  }
   useEffect(() => {
     if (!isLoading && isAuthenticated && !called) {
       adminView ? getInvestor({ variables: { _id: params.id } }) : getInvestor();
     }
-    if (userProfile) {
-      ldclient?.identify(launchDarklyUser, userProfile._id);
-    }
-  }, [userProfile, isAuthenticated, isLoading, called, adminView, getInvestor, params.id]);
+  }, [isAuthenticated, isLoading, called, adminView, getInvestor, params.id]);
 
   useEffect(() => {
     if (data) {
