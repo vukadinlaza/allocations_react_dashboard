@@ -3,7 +3,7 @@ import { useHistory } from 'react-router';
 import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
 
-const RemoteDealPage = React.lazy(() => import('DealPage'));
+const RemoteDealPage = React.lazy(() => import('build/DealPage'));
 
 export default function DealPage() {
   const { userProfile } = useAuth();
