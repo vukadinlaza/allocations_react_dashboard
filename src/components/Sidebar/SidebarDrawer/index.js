@@ -177,15 +177,4 @@ const SidebarDrawer = ({
   );
 };
 
-// const SidebarDrawerLD = (props) => {
-//   const { isAuthenticated, loading, userProfile } = useAuth();
-//   const launchDarklyUser = { key: userProfile?._id, email: userProfile?.email };
-
-//   const FlagComponent = withLDProvider({
-//     clientSideID: process.env.REACT_APP_LAUNCH_DARKLY_ID,
-//     user: isAuthenticated && !loading ? launchDarklyUser : undefined,
-//   })(SidebarDrawer);
-//   return <FlagComponent {...props} />;
-// };
-
 export default withStyles(styles)(SidebarDrawer);
