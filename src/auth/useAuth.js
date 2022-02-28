@@ -55,9 +55,7 @@ export function useAuth(QUERY = GET_INVESTOR) {
       adminView ? getInvestor({ variables: { _id: params.id } }) : getInvestor();
     }
     if (userProfile) {
-      ldclient?.identify(launchDarklyUser, userProfile._id, () => {
-        console.log('new flags available');
-      });
+      ldclient?.identify(launchDarklyUser, userProfile._id);
     }
   }, [userProfile, isAuthenticated, isLoading, called, adminView, getInvestor, params.id]);
 
