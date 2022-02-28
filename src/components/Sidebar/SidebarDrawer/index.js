@@ -200,7 +200,7 @@ const SidebarDrawer = ({
         ))}
       </List>
       {taxDashboard && (
-        <Link to={'/tax-activity'}>
+        <Link to="/tax-activity">
           <div onClick={mobileOpen ? handleDrawerClose : null} className={classes.sidebarNavItem}>
             <ListItem button className={classes.menuItem}>
               <ListItemIcon className={classes.icon}>
