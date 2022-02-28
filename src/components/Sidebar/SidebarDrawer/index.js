@@ -58,7 +58,7 @@ const SidebarDrawer = ({
 }) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
   const [setOpenModal] = useState(false);
-  const { prospectDealPage, useInAppBuild } = useFlags();
+  const { prospectDealPage } = useFlags();
   // const closeModal = () => setOpenModal(false);
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
@@ -112,7 +112,6 @@ const SidebarDrawer = ({
 
   return (
     <div className={classes.sidebarDrawer}>
-      {useInAppBuild && 'aasdkfjasd;fkajdf'}
       <AddBuildButton classes={classes} setOpenModal={setOpenModal} />
       <List>
         {menuSections.map(({ sectionTitle, menu }) => (
