@@ -200,17 +200,16 @@ const SidebarDrawer = ({
         ))}
       </List>
       {taxDashboard && (
-        <a href="https://tax2021.allocations.com/" target="_blank" rel="noopener noreferrer">
-          {' '}
+        <Link to={'/tax-activity'}>
           <div onClick={mobileOpen ? handleDrawerClose : null} className={classes.sidebarNavItem}>
             <ListItem button className={classes.menuItem}>
               <ListItemIcon className={classes.icon}>
                 <BallotIcon fontSize="medium" />
               </ListItemIcon>
-              <ListItemText primary="Tax Dashboard" />
+              <ListItemText primary="Tax Activity" />
             </ListItem>
           </div>
-        </a>
+        </Link>
       )}
 
       <div onClick={mobileOpen ? handleDrawerClose : null} className={classes.sidebarNavItem}>
