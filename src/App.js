@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
-import { withLDProvider } from 'launchdarkly-react-client-sdk';
+import { withLDProvider, useLDClient } from 'launchdarkly-react-client-sdk';
 
 import DealDashboard from './components/dashboard/DealDashboard/index';
 import FundManagerDashboard from './components/dashboard/FundManagerDashboard';
@@ -137,7 +137,12 @@ const MainApp = ({ isAuthenticated }) => {
 };
 
 const LayOut = () => {
-  const { isAuthenticated } = useAuth();
+  const ldclient = useLDClient();
+  const { isAuthenticated, userProfile } = useAuth();
+  const launchDarklyUser = { key: userProfile?._id, email: userProfile?.email };
+  if (launchDarklyUser.key && launchDarklyUser.email) {
+    ldclient?.identify(launchDarklyUser, userProfile._id);
+  }
   const unAuthenticatedStyle = {
     gridTemplateColumns: 'auto',
     gridTemplateAreas: `'mainRoute'`,

@@ -2,7 +2,6 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useLDClient } from 'launchdarkly-react-client-sdk';
 import { useLazyQuery, gql } from '@apollo/client';
 
 const GET_INVESTOR = gql`
@@ -33,7 +32,6 @@ const GET_INVESTOR = gql`
 
 export function useAuth(QUERY = GET_INVESTOR) {
   const params = useParams();
-  const ldclient = useLDClient();
   const adminView = params && params.id;
   const {
     isLoading,
@@ -48,10 +46,10 @@ export function useAuth(QUERY = GET_INVESTOR) {
 
   const [getInvestor, { data, error, called, refetch, loading }] = useLazyQuery(QUERY);
   const userProfile = { ...(user || {}), ...(data?.investor || {}) };
-  const launchDarklyUser = { key: userProfile?._id, email: userProfile?.email };
-  if (launchDarklyUser.key && launchDarklyUser.email) {
-    ldclient?.identify(launchDarklyUser, userProfile._id);
-  }
+  // const launchDarklyUser = { key: userProfile?._id, email: userProfile?.email };
+  // if (launchDarklyUser.key && launchDarklyUser.email) {
+  //   ldclient?.identify(launchDarklyUser, userProfile._id);
+  // }
   useEffect(() => {
     if (!isLoading && isAuthenticated && !called) {
       adminView ? getInvestor({ variables: { _id: params.id } }) : getInvestor();
