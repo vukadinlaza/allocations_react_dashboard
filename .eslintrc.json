@@ -9,7 +9,8 @@
     "prettier/react",
     "plugin:prettier/recommended",
     "prettier",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:cypress/recommended"
   ],
   "env": {
     "browser": true,

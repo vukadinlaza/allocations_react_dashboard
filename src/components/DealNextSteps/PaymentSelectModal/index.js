@@ -91,9 +91,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PaymentModal = ({
+const PaymentSelectModal = ({
   open,
-  dealData,
+  cryptoOptions,
   setOpen,
   setWireInstructionsOpen,
   setCryptoPaymentOpen,
@@ -110,7 +110,7 @@ const PaymentModal = ({
   });
 
   // optional crypto option
-  if (dealData?.accept_crypto && cryptoPaymentInBuild) {
+  if (cryptoOptions?.crypto_payments && cryptoPaymentInBuild) {
     paymentOptions.push({
       paymentMethod: 'Send Crypto',
       buttonText: 'Show Crypto Instructions',
@@ -204,4 +204,4 @@ const PaymentModal = ({
   );
 };
 
-export default PaymentModal;
+export default PaymentSelectModal;

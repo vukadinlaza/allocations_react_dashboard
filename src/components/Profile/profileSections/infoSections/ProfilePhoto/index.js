@@ -177,6 +177,7 @@ const ProfilePhoto = ({ investor, refetch }) => {
               variant="outlined"
               onChange={(event) => convertFileToImage(event.target.files[0] || null)}
               type="file"
+              inputProps={{ data: 'upload-avatar' }}
             />
           </Grid>
 

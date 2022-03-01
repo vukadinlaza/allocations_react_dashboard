@@ -3,7 +3,6 @@ import { useMutation, useQuery, gql } from '@apollo/client';
 import { Button } from '@material-ui/core';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import { toast } from 'react-toastify';
 import TermsAndConditionsPanel from './TermsAndConditionsPanel';
 import DealDocumentsPanel from './DealDocumentsPanel';
@@ -16,6 +15,7 @@ import { getClientIp } from '../../../utils/ip';
 import { nWithCommas } from '../../../utils/numbers';
 import { useAuth } from '../../../auth/useAuth';
 import personalInfoValidation from '../../../utils/validation';
+import TechStarsCIFUSQuestion from './TechStarsCIFUSQuestion';
 
 const GET_DEAL = gql`
   query Deal($deal_slug: String!, $fund_slug: String!) {
@@ -303,13 +303,6 @@ function InvestmentPage() {
           <ArrowBackIcon />
           Back to Deal Page
         </Button>
-        <Button
-          className="next-button"
-          onClick={() => history.push(`/next-steps/${organization}/${deal_slug}`)}
-        >
-          Next Steps
-          <ArrowForwardIcon />
-        </Button>
       </div>
       <div>
         <h1 className="investment-header">Invest in {company_name}</h1>
@@ -333,15 +326,7 @@ function InvestmentPage() {
           is3c7={is3c7}
           docSpringTemplateId={deal?.docSpringTemplateId}
         />
-        {/* {requireSecondSig && (
-          <SecondSignature
-            requireSecondSigChecked={requireSecondSigChecked}
-            setRequireSecondSigChecked={setRequireSecondSigChecked}
-            setInvestor={setInvestor}
-            errors={errors}
-            org={org}
-          />
-        )} */}
+        <TechStarsCIFUSQuestion setInvestor={setInvestor} errors={errors} org={org} />
 
         <TermsAndConditionsPanel
           confirmInvestment={confirmInvestment}

@@ -8,7 +8,6 @@ import personalInfoValidation from '../../../../utils/validation';
 import AppModal from '../../../Modal/AppModal';
 import PersonalInformation from '../../../DealOneClick/InvestmentPage/PersonalInformation';
 import InvestmentAmountPanel from '../../../DealOneClick/InvestmentPage/InvestmentAmount';
-import SecondSignature from '../../../DealOneClick/InvestmentPage/SecondSignature';
 
 const GET_INVESTMENT = gql`
   query GetInvestment($_id: String!) {
@@ -56,11 +55,6 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch }) => {
   });
   const [amount, setAmount] = useState('');
   const [errors, setErrors] = useState([]);
-  const [requireSecondSig, setRequireSecondSig] = useState(false);
-  const [requireSecondSigChecked, setRequireSecondSigChecked] = useState({
-    secondSigInfo: false,
-    secondSigConsent: false,
-  });
 
   const [getInvestment, { data, called }] = useLazyQuery(GET_INVESTMENT);
   const [submitConfirmation] = useMutation(CONFIRM_INVESTMENT, {
@@ -94,8 +88,6 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch }) => {
         title: data?.investment?.submissionData.title || '',
       }));
       setAmount(data?.investment?.amount);
-      if (data?.investment?.submissionData?.investor_type === 'individual')
-        setRequireSecondSig(true);
     }
   }, [called, data]);
 
@@ -122,16 +114,6 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch }) => {
     setShowResignModal(false);
   };
 
-  const handleSecondSig = (investorType) => {
-    if (investorType === 'individual') return setRequireSecondSig(true);
-
-    setRequireSecondSigChecked(() => ({
-      secondSigInfo: false,
-      secondSigConsent: false,
-    }));
-    setRequireSecondSig(false);
-  };
-
   return (
     <AppModal isOpen={Boolean(showResignModal)} onClose={() => setShowResignModal(false)}>
       <Grid container direction="column" alignItems="center">
@@ -142,18 +124,8 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch }) => {
           investor={investor}
           is3c7={data?.investment?.deal?.dealParams?.is3c7}
           setInvestor={setInvestor}
-          handleSecondSig={handleSecondSig}
           isFromModal
         />
-        {requireSecondSig && organization === 'irishangels' && (
-          <SecondSignature
-            requireSecondSigChecked={requireSecondSigChecked}
-            setRequireSecondSigChecked={setRequireSecondSigChecked}
-            setInvestor={setInvestor}
-            errors={errors}
-            isFromModal
-          />
-        )}
 
         <Button variant="contained" color="secondary" onClick={submitInvestment}>
           Update

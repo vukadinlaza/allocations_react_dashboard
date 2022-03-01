@@ -14,6 +14,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@allocations/design-system": "^0.1.7",
     "@apollo/client": "^3.3.21",
     "@auth0/auth0-react": "^1.1.0",
     "@auth0/auth0-spa-js": "^1.6.1",
@@ -48,6 +49,7 @@
     "d3": "^5.14.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "external-remotes-plugin": "^1.0.0",
     "graphql": "16.2.0",
     "graphql-tag": "^2.10.1",
     "hellosign-embedded": "^2.7.1",
@@ -88,6 +90,7 @@
     "webpack-server": "^0.1.2"
   },
   "devDependencies": {
+    "@testing-library/cypress": "^8.0.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^10.4.9",
     "@types/jest": "^27.0.3",
@@ -100,9 +103,13 @@
     "@typescript-eslint/eslint-plugin": "^5.10.0",
     "@typescript-eslint/parser": "^5.10.0",
     "create-react-app": "^3.2.0",
+    "cypress": "9.4.1",
+    "cypress-file-upload": "^5.0.8",
+    "cypress-wait-until": "^1.7.2",
     "eslint": "^8.7.0",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-prettier": "^6.12.0",
+    "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-prettier": "^3.1.4",

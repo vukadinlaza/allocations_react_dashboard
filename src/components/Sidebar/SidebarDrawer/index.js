@@ -10,10 +10,8 @@ import { Link, useHistory } from 'react-router-dom';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import { FaRocket } from 'react-icons/fa';
 import { BsBinocularsFill } from 'react-icons/bs';
 import styles from '../styles';
-import NewBuildModal from '../../NewBuild/NewBuildModal';
 import { useAuth } from '../../../auth/useAuth';
 
 const AddBubbleBuildButton = ({ classes }) => (
@@ -28,21 +26,15 @@ const AddBubbleBuildButton = ({ classes }) => (
   </Button>
 );
 
-const AddInAppBuildButton = ({ classes, setOpenModal, setNewBuildModalPage }) => {
-  const { buildModals } = useFlags();
+const AddInAppBuildButton = ({ classes }) => {
+  const history = useHistory();
+
   return (
     <Button
       variant="contained"
       className={classes.addButton}
       onClick={() => {
-        if (buildModals) {
-          if (localStorage.getItem('buildData') || localStorage.getItem('buildDeal')) {
-            setNewBuildModalPage('new_or_current');
-          }
-        } else {
-          localStorage.removeItem('buildData');
-        }
-        setOpenModal(true);
+        history.push('/public/new-build');
       }}
     >
       <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
@@ -60,20 +52,16 @@ const AddBuildButton = (props) => {
 const SidebarDrawer = ({
   mobileOpen,
   handleDrawerClose,
-  currentOrganization,
   currentHomeUrl,
   logout,
   location,
   classes,
-  refetchUserProfile,
 }) => {
-  const history = useHistory();
   const [openSubMenu, setOpenSubMenu] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
-  const [newBuildModalPage, setNewBuildModalPage] = useState('deal_type_selector');
+  const [setOpenModal] = useState(false);
   const { prospectDealPage } = useFlags();
 
-  const closeModal = () => setOpenModal(false);
+  // const closeModal = () => setOpenModal(false);
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
 
@@ -124,42 +112,9 @@ const SidebarDrawer = ({
     },
   ];
 
-  if (currentOrganization) {
-    menuSections[0].menu.push({
-      to: `/organizations/${currentOrganization.slug}/deals`,
-      title: 'SPVs',
-      icon: <FaRocket style={{ margin: '0 .5rem 0 0' }} />,
-    });
-  }
-
   return (
     <div className={classes.sidebarDrawer}>
-      <NewBuildModal
-        isOpen={openModal}
-        closeModal={closeModal}
-        page={newBuildModalPage}
-        setPage={setNewBuildModalPage}
-        refetchUserProfile={refetchUserProfile}
-        next={{
-          deal_type_selector: {
-            spv: () => {
-              history.push('/public/new-build/spv');
-              closeModal();
-              handleDrawerClose();
-            },
-            fund: () => {
-              history.push('/public/new-build/fund');
-              closeModal();
-              handleDrawerClose();
-            },
-          },
-        }}
-      />
-      <AddBuildButton
-        classes={classes}
-        setOpenModal={setOpenModal}
-        setNewBuildModalPage={setNewBuildModalPage}
-      />
+      <AddBuildButton classes={classes} setOpenModal={setOpenModal} />
       <List>
         {menuSections.map(({ sectionTitle, menu }) => (
           <>

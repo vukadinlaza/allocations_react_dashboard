@@ -30,7 +30,6 @@ function PersonalInformation({
   is3c7,
   errors,
   org,
-  handleSecondSig,
   isFromModal = false,
   docSpringTemplateId,
 }) {
@@ -80,8 +79,6 @@ function PersonalInformation({
     }
 
     if (prop === 'investor_type') {
-      if (handleSecondSig) handleSecondSig(e.target.value);
-
       return setInvestor((prev) => ({
         ...prev,
         [prop]: e.target.value,

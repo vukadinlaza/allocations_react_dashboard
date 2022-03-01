@@ -43,7 +43,7 @@ import { CurrentAccountProvider } from './state/current-organization';
 import FreeSPVOnboarding from './components/FreeSPVOnboarding';
 import Identity from './components/Identity';
 import { useAuth } from './auth/useAuth';
-import { useViewport } from './utils/hooks';
+import TempDealDashboard from './components/dashboard/TempDealDashboard';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -56,25 +56,6 @@ Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
 const App = () => {
   const { isAuthenticated } = useAuth();
-  const { width } = useViewport();
-
-  const widthStyle = width > 960 ? 'greaterThan960Px' : 'lessThan960Px';
-
-  const authenticatedStyle = {
-    greaterThan960Px: {
-      gridTemplateColumns: 'minmax(250px, 10%) auto',
-      gridTemplateAreas: `'sidebar mainRoute'`,
-    },
-    lessThan960Px: {
-      gridTemplateColumns: '100%',
-      gridTemplateRows: 'minmax(65px, 6%) auto',
-      gridTemplateAreas: `
-        'sidebar'
-        'mainRoute'
-        `,
-    },
-  };
-
   const unAuthenticatedStyle = {
     gridTemplateColumns: 'auto',
     gridTemplateAreas: `'mainRoute'`,
@@ -82,25 +63,39 @@ const App = () => {
 
   return (
     <CurrentAccountProvider>
-      <div
-        className="App"
-        style={isAuthenticated ? authenticatedStyle[widthStyle] : unAuthenticatedStyle}
-      >
+      <div className="App" style={!isAuthenticated ? { unAuthenticatedStyle } : {}}>
         <div className="sidebar" style={{ display: !isAuthenticated && 'none' }}>
           <Sidebar />
         </div>
         <div className="mainRoute" style={{ justifyContent: !isAuthenticated && 'center' }}>
           <Switch>
+            {/* Allocations Admin Routes */}
+            <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
+            <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
+            <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
+            <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
+
+            {/* Organization Admin */}
             <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
             <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
-            <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
             <PrivateRoute path="/admin/:organization/:deal_id" component={DealDashboard} exact />
+            <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />
+            <PrivateRoute
+              path="/admin/:organization/deals/:id/edit"
+              component={DealEditNew}
+              exact
+            />
+            <PrivateRoute
+              path="/admin/:organization/deals/:deal_id"
+              component={TempDealDashboard}
+              exact
+            />
+
+            {/* Investor */}
             <PrivateRoute path="/" exact component={InvestorDashboard} />
             <PrivateRoute path="/investor/:id/home" component={InvestorDashboard} />
-
             <PrivateRoute path="/submit-tax-documents" component={SubmitTaxDocs} />
             <PrivateRoute path="/demo" component={Demo} />
-
             <PrivateRoute path="/profile/:id" component={ProfilePage} />
             <PrivateRoute path="/profile" component={Profile} />
 
@@ -108,18 +103,18 @@ const App = () => {
             <Route path="/getting-started" component={Faq} exact />
 
             {/** Deals * */}
-            {/* PUBLIC Landing Page */}
+            {/* Public */}
 
-            <PrivateRoute path="/new-build/deal" exact component={PostBuild} />
-            <Route path="/public/new-build/:type?" exact component={Build} />
+            <Route path="/public/new-build" exact component={Build} />
             <Route path="/public/:organization/:deal_slug" component={DealOneClick} exact />
             <Route path="/public/:deal_slug" component={DealOneClick} exact />
 
-            {/* Private Landing Page */}
+            {/* Private  */}
+            <PrivateRoute path="/new-build/deal" exact component={PostBuild} />
             <PrivateRoute path="/deals/:deal_slug" component={DealOneClick} exact />
             <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
 
-            {/* prospect deals */}
+            {/* Prospect deals */}
             <PrivateRoute path="/prospects" component={Prospect} exact />
             <PrivateRoute
               path="/prospects/:organization/:deal_slug"
@@ -127,7 +122,7 @@ const App = () => {
               exact
             />
 
-            {/* Private Invest Page */}
+            {/* Invest */}
             <PrivateRoute path="/invest/:deal_slug" component={InvestmentPage} exact />
             <PrivateRoute
               path="/invest/:organization/:deal_slug"
@@ -135,7 +130,7 @@ const App = () => {
               exact
             />
 
-            {/* Private Next Steps page */}
+            {/* Next Steps page */}
             <PrivateRoute path="/next-steps/:deal_slug" component={DealNextSteps} exact />
             <PrivateRoute
               path="/next-steps/:organization/:deal_slug"
@@ -143,22 +138,9 @@ const App = () => {
               exact
             />
 
-            <AdminRoute path="/admin/investment/new" component={InvestmentNew} exact />
-            <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
-
             {/** Whitelabel Routes * */}
             <PrivateRoute path="/organizations/:org_slug/deals" component={DealsTable} exact />
-            <AdminRoute path="/admin/:organization/members" component={OrganizationMembers} exact />
-
-            <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
-            <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />
-            <PrivateRoute
-              path="/admin/:organization/deals/:id/edit"
-              component={DealEditNew}
-              exact
-            />
             <PrivateRoute path="/investors" component={Investors} exact />
-
             <PrivateRoute path="/identity" component={Identity} />
             <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact />
 
