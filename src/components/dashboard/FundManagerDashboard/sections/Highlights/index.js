@@ -196,7 +196,6 @@ const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip, dealI
             style={{ flexDirection: 'column', alignItems: 'flex-start' }}
           >
             <Typography style={{ fontSize: '26px' }}>{dealMultiple.toFixed(2) || 1}x</Typography>
-            <Typography className={classes.footerData}>Last Updated: June 1st, 2021</Typography>
           </div>
         </SimpleBox>
       </Grid>
