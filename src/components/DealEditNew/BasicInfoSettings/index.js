@@ -154,9 +154,8 @@ function BasicInfoSettings({ formData, setFormData }) {
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
+        <FormControl className="field field-buttons">
           <FormLabel className="field-label">
-            Investment type
             <div className="button-options">
               <Button
                 onClick={() => handleButtonClick('investmentType', 'spv')}
@@ -215,9 +214,8 @@ function BasicInfoSettings({ formData, setFormData }) {
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
+        <FormControl className="field field-buttons">
           <FormLabel className="field-label">
-            Deal type
             <div className="button-options">
               <Button
                 onClick={() => handleButtonClick('dealType', '506b')}
@@ -236,7 +234,8 @@ function BasicInfoSettings({ formData, setFormData }) {
             </div>
           </FormLabel>
         </FormControl>
-        <FormControl className="field">
+
+        <FormControl className="field field-buttons">
           <FormLabel className="field-label">
             <div className="button-options">
               <Button
@@ -255,9 +254,8 @@ function BasicInfoSettings({ formData, setFormData }) {
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
+        <FormControl className="field field-buttons">
           <FormLabel className="field-label">
-            Status
             <div className="button-options">
               <Button
                 onClick={() => handleButtonClick('status', 'onboarding')}
