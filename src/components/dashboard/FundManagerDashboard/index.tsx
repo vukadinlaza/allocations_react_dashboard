@@ -340,7 +340,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
           <Grid item xs={10}>
             <AllocationsTypography
               component="div"
-              content="Deals"
+              content="Deals Under Construction"
               fontWeight={700}
               variant="heading3"
             />
