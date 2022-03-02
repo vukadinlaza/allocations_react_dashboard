@@ -136,7 +136,6 @@ const styles = (theme) => ({
     width: '100%',
     maxWidth: '100%',
     overflowX: 'hidden',
-    cursor: 'pointer',
     '&:hover': {
       backgroundColor: '#edf1f4',
     },

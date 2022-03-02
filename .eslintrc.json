@@ -119,7 +119,8 @@
         "allowPattern": "^[a-z]+(_[a-z]+)+$"
       }
     ],
-    "react/jsx-props-no-spreading": "off"
+    "react/jsx-props-no-spreading": "off",
+    "@typescript-eslint/ban-ts-comment": "off"
   },
   "settings": {
     "import/resolver": {
