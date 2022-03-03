@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node secrets.js",
     "start": "node server.js",
     "dev": "craco start --verbose",
     "start:watch": "nodemon server.js",
@@ -38,6 +39,7 @@
     "apollo-link-error": "^1.1.12",
     "apollo-link-ws": "^1.0.20",
     "apollo-upload-client": "^16.0.0",
+    "aws-sdk": "^2.1086.0",
     "axios": "^0.19.1",
     "base-64": "^1.0.0",
     "bignumber.js": "^9.0.0",
