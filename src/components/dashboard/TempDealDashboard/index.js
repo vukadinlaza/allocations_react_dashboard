@@ -124,7 +124,6 @@ const TempDealDashboard = ({ classes }) => {
   }
 
   const { fundManagerBankingTab, capitalCallsDealSpecific, cryptoPaymentInBuild } = useFlags();
-
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
