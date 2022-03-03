@@ -226,7 +226,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
               text={`${titleCase(deal.status)}`}
             />
           ),
-          amountRaised: `$${nWithCommas(dealRaised)}`,
+          amountRaised: `$${nWithCommas(Math.round(dealRaised))}`,
           manage: (
             <AllocationsButton
               onClick={() => history.push(`/admin/${orgSlug}/deals/${deal._id}`)}
