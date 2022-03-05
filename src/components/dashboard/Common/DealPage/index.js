@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { MoreVertRounded } from '@material-ui/icons';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { Typography, Button, Grid, Modal, Backdrop, Fade, Paper } from '@material-ui/core';
-import DealLandingPageRedesign from '../../../DealOneClick/LandingPageRedesign';
+// import DealLandingPageRedesign from '../../../DealOneClick/LandingPageRedesign';
 import { useViewport } from '../../../../utils/hooks';
 import { phone } from '../../../../utils/helpers';
 import { ReactComponent as Eye } from '../../../../assets/eye.svg';
 import { ReactComponent as CopyLink } from '../../../../assets/copy-icon.svg';
 import { ReactComponent as Pencil } from '../../../../assets/pencil.svg';
+import RemoteDealPage from '../../../RemoteDealPage';
 
 const RoutingModal = ({ classes, open, handleClose, goToDeal, handleLinkCopy, goToEditDeal }) => {
   return (
@@ -53,12 +54,13 @@ export default function DealPage({
 
   if (dealPageRedesign)
     return (
-      <DealLandingPageRedesign
-        orgSlug={orgSlug}
-        dealSlug={dealSlug}
-        goToDeal={goToDeal}
-        dealPageRedesign={dealPageRedesign}
-      />
+      <RemoteDealPage />
+      // <DealLandingPageRedesign
+      //   orgSlug={orgSlug}
+      //   dealSlug={dealSlug}
+      //   goToDeal={goToDeal}
+      //   dealPageRedesign={dealPageRedesign}
+      // />
     );
 
   const handleClose = () => {
