@@ -15,7 +15,7 @@ const data = [
 ];
 
 const pdf =
-  'https://allocations-deal-applications-test.s3.us-east-2.amazonaws.com/606bddf03e016a0023d628e6/pitch-document-Zyzz_Bible.pdf';
+  'https://allocations-deal-applications-test.s3.us-east-2.amazonaws.com/606bddf03e016a0023d628e6/airbnb-original-deck-2008.pdf';
 
 export default function DealDetails() {
   const classes = useStyles();
