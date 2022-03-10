@@ -25,24 +25,16 @@ describe('Sidebar Menu', () => {
     cy.url().should('eq', 'http://localhost:3000/profile');
     cy.findByRole('heading', { name: /personal information/i }).contains('Personal Information');
   });
-  it('switches to SPVs', () => {
-    cy.findByRole('button', { name: /spvs/i }).click({ force: true });
-    cy.url().should('include', '/deals');
-    cy.findByRole('button', { name: /portfolio company/i, timeout: 60000 }).contains(
-      'PORTFOLIO COMPANY',
-    );
-  });
   it('switches to profile and back to dashboard', () => {
     cy.findByText(/profile/i).click({ force: true });
     cy.findByRole('button', { name: /dashboard/i }).click({ force: true });
-    cy.url().should('eq', 'http://localhost:3000/admin/repair-biotechnologies');
+    cy.url().should('eq', 'http://localhost:3000/admin/perpetual-vp');
     cy.findByRole('button', { name: /create new deal page/i }).contains('Create New Deal Page');
   });
   it('selects the dropdown and selects another organization', () => {
-    cy.findByRole('button', { name: /repair biotechnologies/i }).click();
+    cy.findByRole('button', { name: /perpetual value partners/i }).click();
     cy.findByRole('option', { name: /rainmakers/i }).click();
     cy.url().should('eq', 'http://localhost:3000/admin/Rainmakers');
-    cy.findByRole('tab', { name: /all/i }).contains('All');
   });
   it('resizes the window and opens hamburger menu', () => {
     let resizeEventFired = false;
