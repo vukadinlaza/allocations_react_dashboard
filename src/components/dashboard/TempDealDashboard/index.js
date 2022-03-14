@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { toast } from 'react-toastify';
 import { gql, useQuery } from '@apollo/client';
 import { useParams, withRouter } from 'react-router-dom';
@@ -23,7 +23,7 @@ import DealPage from '../Common/DealPage';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import { phone } from '../../../utils/helpers';
 
-// const MFE1 = React.lazy(() => import('mfe1/mfe1'));
+const RemoteInvestors = React.lazy(() => import('invest/Investors'));
 
 const GET_DEAL = gql`
   query GetDeal($_id: String!) {
@@ -275,13 +275,9 @@ const TempDealDashboard = ({ classes }) => {
         );
       case 'Investors':
         return (capitalCallsDealSpecific || []).includes(dealData?.deal._id) ? (
-          <InvestorsCapitalCalls
-            classes={classes}
-            data={dealData}
-            orgSlug={orgSlug}
-            userProfile={userProfile}
-            dealName={checkedDealName}
-          />
+          <Suspense fallback={<AllocationsLoader />}>
+            <RemoteInvestors deal_id={dealData?.deal?._id} />
+          </Suspense>
         ) : (
           <Investors
             classes={classes}
