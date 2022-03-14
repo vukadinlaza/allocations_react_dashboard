@@ -18,6 +18,7 @@ import { useAuth } from '../../auth/useAuth';
 import SidebarDrawer from './SidebarDrawer';
 import styles from './styles';
 import { useCurrentOrganizationState } from '../../state/current-organization';
+import OrgDropDown from '../OrgDropDown';
 
 const GET_INVESTOR = gql`
   {
@@ -167,6 +168,8 @@ function Sidebar(props) {
               }}
             >
               <FormControl className={classes.formControl}>
+                {/* <OrgDropDown />
+                HELLO!!!!! */}
                 {loading ? null : (
                   <Select
                     labelId="accounts-select"
@@ -242,6 +245,7 @@ function Sidebar(props) {
                   admin={userProfile.admin}
                 />
               </div>
+              <OrgDropDown loading={loading} />
               <FormControl className={classes.formControl}>
                 {loading ? null : (
                   <Select
