@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@allocations/design-system": "^0.1.7",
+    "@allocations/nextjs-common": "^1.2.5",
     "@apollo/client": "^3.3.21",
     "@auth0/auth0-react": "^1.1.0",
     "@auth0/auth0-spa-js": "^1.6.1",
