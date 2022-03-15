@@ -12,7 +12,6 @@ import Banking from './sections/Banking';
 import Crypto from './sections/Crypto';
 import Investments from './sections/Investments';
 import Investors from './sections/Investors';
-import InvestorsCapitalCalls from './sections/InvestorsCapitalCalls';
 import { useFetch, useViewport } from '../../../utils/hooks';
 import { useAuth } from '../../../auth/useAuth';
 import AllocationsLoader from '../../utils/AllocationsLoader';
