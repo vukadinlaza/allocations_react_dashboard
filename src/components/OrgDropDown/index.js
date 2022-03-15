@@ -1,6 +1,5 @@
 import React, { Suspense } from 'react';
-import { useHistory, useRouteMatch } from 'react-router';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useRouteMatch } from 'react-router';
 import { useAuth } from '../../auth/useAuth';
 import { useCurrentOrganizationState } from '../../state/current-organization';
 import Loader from '../utils/Loader';
@@ -11,7 +10,8 @@ export default function OrgDropDown({ loading }) {
   const { userProfile } = useAuth();
   // TO DO: confirm organizations_admin data is same as list of orgs...
   const fundMatch = useRouteMatch('/admin/:organization');
-  const fundMatchDeals = useRouteMatch('/deals/:organization/:slug');
+  const dealRouteMatch = useRouteMatch('/deals/:organization/:slug');
+  const routeMatch = useRouteMatch('/admin/:organization/*');
   const location = useLocation();
   const history = useHistory();
   const [currentOrganization, setCurrentOrganization] = useCurrentOrganizationState();
@@ -23,7 +23,8 @@ export default function OrgDropDown({ loading }) {
         currentOrganization={currentOrganization}
         loading={loading} // bad practice?
         fundMatch={fundMatch}
-        fundMatchDeals={fundMatchDeals}
+        dealRouteMatch={dealRouteMatch}
+        routeMatch={routeMatch}
         locationPath={location.pathname}
         reroute={(path) => history.push(`${path}`)}
         setCurrentOrganization={(newOrg) => setCurrentOrganization(newOrg)}
