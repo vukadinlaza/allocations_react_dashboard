@@ -11,7 +11,7 @@ export default function OrgDropDown({ loading }) {
   // TO DO: confirm organizations_admin data is same as list of orgs...
   const fundMatch = useRouteMatch('/admin/:organization');
   const dealRouteMatch = useRouteMatch('/deals/:organization/:slug');
-  const routeMatch = useRouteMatch('/admin/:organization/*');
+  const wildcardMatch = useRouteMatch('/*/:organization/*');
   const location = useLocation();
   const history = useHistory();
   const [currentOrganization, setCurrentOrganization] = useCurrentOrganizationState();
@@ -21,10 +21,10 @@ export default function OrgDropDown({ loading }) {
       <RemoteOrgDropDown
         user={userProfile}
         currentOrganization={currentOrganization}
-        loading={loading} // bad practice?
+        loading={loading}
         fundMatch={fundMatch}
         dealRouteMatch={dealRouteMatch}
-        routeMatch={routeMatch}
+        wildcardMatch={wildcardMatch}
         locationPath={location.pathname}
         reroute={(path) => history.push(`${path}`)}
         setCurrentOrganization={(newOrg) => setCurrentOrganization(newOrg)}
