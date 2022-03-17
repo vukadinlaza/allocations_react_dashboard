@@ -1,6 +1,10 @@
 import { phone } from '../../../utils/helpers';
 
 const styles = (theme) => ({
+  back: {
+    marginBottom: '40px',
+    marginLeft: '-40px',
+  },
   box: {
     marginBottom: '20px',
   },
@@ -61,6 +65,11 @@ const styles = (theme) => ({
     marginBottom: '100px',
     [theme.breakpoints.down(phone)]: {
       maxWidth: '100vw',
+    },
+  },
+  menuContainer: {
+    '&>span': {
+      cursor: 'pointer',
     },
   },
   mobileBoxes: {

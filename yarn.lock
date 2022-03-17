@@ -15,13 +15,12 @@
     mongodb-memory-server "^8.1.0"
     mongoose "^6.0.6"
 
-"@allocations/design-system@^0.1.7":
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/@allocations/design-system/-/design-system-0.1.7.tgz#ced618827180edcccf9adf946186476621ea6034"
-  integrity sha512-+AXYGaWR+xaJFfarN7/MhuYBIZkpWlbvfLhq5F6AEiW4NVbjcZcgsESorxTmIbNinoeoRqB0AI/4kamZDEDlcA==
+"@allocations/design-system@^0.1.9":
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/@allocations/design-system/-/design-system-0.1.9.tgz#b98d74f7deed2a38e75b9e19e631b1083532778c"
+  integrity sha512-yRx4gk13IVMBG3Jqwi3hSUkB0OMLD4+UMz/0YZPtOn5pfOMwJ4alhw3mp0s4r9XHaJReJrwxtAfyFyPXoJGrrQ==
   dependencies:
     clsx "^1.1.1"
-    react-infinite-scroll-component "^6.1.0"
     tslib "^2.3.1"
 
 "@allocations/nextjs-common@^1.2.5":
@@ -12240,13 +12239,6 @@ react-in-viewport@^1.0.0-alpha.15:
   dependencies:
     hoist-non-react-statics "^3.0.0"
 
-react-infinite-scroll-component@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/react-infinite-scroll-component/-/react-infinite-scroll-component-6.1.0.tgz#7e511e7aa0f728ac3e51f64a38a6079ac522407f"
-  integrity sha512-SQu5nCqy8DxQWpnUVLx7V7b7LcA37aM7tvoWjTLZp1dk6EJibM5/4EJKzOnl07/BsM1Y40sKLuqjCwwH/xV0TQ==
-  dependencies:
-    throttle-debounce "^2.1.0"
-
 "react-is@^16.12.0 || ^17.0.0", "react-is@^16.8.0 || ^17.0.0", react-is@^17.0.1, react-is@^17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
@@ -14102,11 +14094,6 @@ throat@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/throat/-/throat-6.0.1.tgz#d514fedad95740c12c2d7fc70ea863eb51ade375"
   integrity sha512-8hmiGIJMDlwjg7dlJ4yKGLK8EsYqKgPWbG3b4wjJddKNwc7N7Dpn08Df4szr/sZdMVeOstrdYSsqzX6BYbcB+w==
-
-throttle-debounce@^2.1.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/throttle-debounce/-/throttle-debounce-2.3.0.tgz#fd31865e66502071e411817e241465b3e9c372e2"
-  integrity sha512-H7oLPV0P7+jgvrk+6mwwwBDmxTaxnu9HMXmloNLXwnNO0ZxZ31Orah2n8lU1eMPvsaowP2CX+USCgyovXfdOFQ==
 
 throttleit@^1.0.0:
   version "1.0.0"

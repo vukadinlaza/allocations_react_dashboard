@@ -74,7 +74,7 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts }) => {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <Container maxWidth="sm">
+        <Container maxWidth="md">
           <Grid container>
             <Grid item xs={12} sm={12} md={12} lg={12}>
               <Paper className={classes.modalPaper}>
