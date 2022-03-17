@@ -45,6 +45,7 @@ import Identity from './components/Identity';
 import { useAuth } from './auth/useAuth';
 import TempDealDashboard from './components/dashboard/TempDealDashboard';
 import RemoteFundManagerDashboard from './components/RemoteFundManagerDashboard';
+import RemoteTaxDashboard from './components/TaxDashboard';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -94,6 +95,7 @@ const MainApp = ({ isAuthenticated }) => {
         <PrivateRoute path="/" exact component={InvestorDashboard} />
         <PrivateRoute path="/investor/:id/home" component={InvestorDashboard} />
         <PrivateRoute path="/submit-tax-documents" component={SubmitTaxDocs} />
+        <PrivateRoute path="/tax-activity" component={RemoteTaxDashboard} />
         <PrivateRoute path="/demo" component={Demo} />
         <PrivateRoute path="/profile/:id" component={ProfilePage} />
         <PrivateRoute path="/profile" component={Profile} />
