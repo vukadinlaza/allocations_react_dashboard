@@ -20,7 +20,6 @@ import { useAuth } from '../../../auth/useAuth';
 import AllocationsLoader from '../../utils/AllocationsLoader';
 
 // @ts-ignore
-const SPVList = React.lazy(() => import('build/DealList'));
 
 export const ORG_DEALS = gql`
   query GetOrg($slug: String!) {
@@ -338,22 +337,6 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
         <Grid container spacing={2} className={classes.searchContainer}>
           <Grid item xs={1} />
           <Grid item xs={10}>
-            <AllocationsTypography
-              component="div"
-              content="Deals Under Construction"
-              fontWeight={700}
-              variant="heading3"
-            />
-            <Suspense fallback={<CircularProgress />}>
-              <SPVList
-                orgId={data?.organization?._id}
-                onManage={(deal: any) =>
-                  deal.legacy_deal
-                    ? history.push(`/admin/${orgSlug}/deals/${deal._id}`)
-                    : history.push(`/new-build/deal?id=${deal._id}`)
-                }
-              />
-            </Suspense>
             <TextField
               variant="outlined"
               placeholder="Search"
