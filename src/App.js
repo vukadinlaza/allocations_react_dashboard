@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Cohere from 'cohere-js';
-import { withLDProvider, useLDClient } from 'launchdarkly-react-client-sdk';
+import { withLDProvider, useLDClient, useFlags } from 'launchdarkly-react-client-sdk';
 
 import DealDashboard from './components/dashboard/DealDashboard/index';
 import FundManagerDashboard from './components/dashboard/FundManagerDashboard';
@@ -44,6 +44,7 @@ import FreeSPVOnboarding from './components/FreeSPVOnboarding';
 import Identity from './components/Identity';
 import { useAuth } from './auth/useAuth';
 import TempDealDashboard from './components/dashboard/TempDealDashboard';
+import RemoteFundManagerDashboard from './components/RemoteFundManagerDashboard';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -63,6 +64,7 @@ const SideBar = ({ isAuthenticated }) => {
 };
 
 const MainApp = ({ isAuthenticated }) => {
+  const { remoteFundManagerDashboard } = useFlags();
   return (
     <div className="mainRoute" style={{ justifyContent: !isAuthenticated && 'center' }}>
       <Switch>
@@ -73,7 +75,11 @@ const MainApp = ({ isAuthenticated }) => {
         <AdminRoute path="/admin/organizations/new" component={OrganizationNew} exact />
 
         {/* Organization Admin */}
-        <PrivateRoute path="/admin/:organization" component={FundManagerDashboard} exact />
+        <PrivateRoute
+          path="/admin/:organization"
+          component={remoteFundManagerDashboard ? RemoteFundManagerDashboard : FundManagerDashboard}
+          exact
+        />
         <PrivateRoute path="/admin/:organization/deals" component={Deals} exact />
         <PrivateRoute path="/admin/:organization/:deal_id" component={DealDashboard} exact />
         <PrivateRoute path="/admin/:organization/deal/new" component={DealNew} exact />
