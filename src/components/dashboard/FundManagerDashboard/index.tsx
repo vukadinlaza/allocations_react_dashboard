@@ -1,8 +1,8 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { withRouter, RouteComponentProps, useParams } from 'react-router-dom';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
-import { CircularProgress, Grid, InputAdornment, TextField } from '@material-ui/core';
+import { Grid, InputAdornment, TextField } from '@material-ui/core';
 import {
   Typography as AllocationsTypography,
   Chip as AllocationsChip,
