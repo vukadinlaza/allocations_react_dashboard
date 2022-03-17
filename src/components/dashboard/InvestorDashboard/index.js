@@ -86,6 +86,10 @@ const UserHome = ({ classes }) => {
       })) || [],
     [userProfile],
   );
+  const userHasFunds = useMemo(
+    () => !!userInvestments.find((i) => i.type === 'fund'),
+    [userInvestments],
+  );
   const userFunds = useMemo(() => {
     if (!loading) {
       const dealsIds = [];
@@ -171,8 +175,8 @@ const UserHome = ({ classes }) => {
   if (
     !Object.keys(userProfile).length ||
     loading ||
-    atFundDataStatus !== 'fetched' ||
-    atDealStatus !== 'fetched'
+    (userHasFunds && atFundDataStatus !== 'fetched') ||
+    (userHasFunds && atDealStatus !== 'fetched')
   ) {
     return <AllocationsLoader fullHeight />;
   }
