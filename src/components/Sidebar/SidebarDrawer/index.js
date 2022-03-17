@@ -10,6 +10,7 @@ import { Link, useHistory } from 'react-router-dom';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import BallotIcon from '@material-ui/icons/Ballot';
 import { BsBinocularsFill } from 'react-icons/bs';
 import styles from '../styles';
 
@@ -57,9 +58,7 @@ const SidebarDrawer = ({
   classes,
 }) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
-  const [setOpenModal] = useState(false);
-  const { prospectDealPage } = useFlags();
-  // const closeModal = () => setOpenModal(false);
+  const { prospectDealPage, taxDashboard } = useFlags();
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
 
@@ -112,7 +111,7 @@ const SidebarDrawer = ({
 
   return (
     <div className={classes.sidebarDrawer}>
-      <AddBuildButton classes={classes} setOpenModal={setOpenModal} />
+      <AddBuildButton classes={classes} />
       <List>
         {menuSections.map(({ sectionTitle, menu }) => (
           <>
@@ -165,6 +164,19 @@ const SidebarDrawer = ({
           </>
         ))}
       </List>
+      {taxDashboard && (
+        <Link to="/tax-activity">
+          <div onClick={mobileOpen ? handleDrawerClose : null} className={classes.sidebarNavItem}>
+            <ListItem button className={classes.menuItem}>
+              <ListItemIcon className={classes.icon}>
+                <BallotIcon fontSize="medium" />
+              </ListItemIcon>
+              <ListItemText primary="Tax Activity" />
+            </ListItem>
+          </div>
+        </Link>
+      )}
+
       <div onClick={mobileOpen ? handleDrawerClose : null} className={classes.sidebarNavItem}>
         <ListItem button onClick={logoutWithRedirect} className={classes.menuItem}>
           <ListItemIcon className={classes.icon}>
