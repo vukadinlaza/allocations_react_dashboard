@@ -240,6 +240,18 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
         legend: legendOptions,
         tooltips: {
           enabled: true,
+          callbacks: {
+            title(tooltipItem, data) {
+              return `$${nWithCommas(Math.round(data.datasets[0].data[tooltipItem[0].index]))}`;
+            },
+            label(tooltipItem, data) {
+              return data.labels[tooltipItem.index];
+            },
+          },
+          backgroundColor: '#FFF',
+          titleFontSize: 16,
+          titleFontColor: '#2A2B54',
+          bodyFontColor: '#94A3B8',
         },
         maintainAspectRatio: false,
         cutoutPercentage: 55,
@@ -249,7 +261,7 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
 });
 
 export const LineChart = withStyles(styles)(({ dataset: { data, labels } }) => {
-  Chart.pluginService.register({
+  const lineChartPlugin = {
     afterDraw(chart, easing) {
       if (chart.tooltip._active && chart.tooltip._active.length) {
         const activePoint = chart.controller.tooltip._active[0];
@@ -268,7 +280,7 @@ export const LineChart = withStyles(styles)(({ dataset: { data, labels } }) => {
         ctx.restore();
       }
     },
-  });
+  };
 
   const lineData = (canvas) => {
     const ctx = canvas.getContext('2d');
@@ -309,6 +321,7 @@ export const LineChart = withStyles(styles)(({ dataset: { data, labels } }) => {
   return (
     <Line
       data={lineData}
+      plugins={[lineChartPlugin]}
       options={{
         interaction: {
           intersect: false,

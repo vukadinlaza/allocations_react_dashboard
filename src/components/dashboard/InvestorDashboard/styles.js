@@ -3,10 +3,13 @@ import { phone } from '../../../utils/helpers';
 const styles = (theme) => ({
   back: {
     marginBottom: '40px',
-    marginLeft: '-40px',
+    display: 'flex',
   },
   box: {
     marginBottom: '20px',
+  },
+  breadcrumbSeparator: {
+    margin: '0 8px',
   },
   buttonsContainer: {
     display: 'flex',
@@ -85,6 +88,12 @@ const styles = (theme) => ({
     display: 'flex',
     justifyContent: 'flex-end',
     marginTop: '24px',
+  },
+  previousPage: {
+    cursor: 'pointer',
+  },
+  searchContainer: {
+    margin: '20px 0',
   },
   tableContainer: {
     maxWidth: 'calc(100vw - 300px)',

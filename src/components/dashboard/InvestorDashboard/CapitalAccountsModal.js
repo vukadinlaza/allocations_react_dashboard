@@ -5,7 +5,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { Paper, Grid, Typography, Modal, Container, Button } from '@material-ui/core';
 import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
-import { nWithCommas, amountFormat } from '../../../../utils/numbers';
+import { amountFormat, nWithCommas } from '@allocations/nextjs-common';
 
 const useStyles = makeStyles((theme) => ({
   modal: {

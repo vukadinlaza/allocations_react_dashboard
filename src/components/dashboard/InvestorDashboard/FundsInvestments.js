@@ -1,20 +1,16 @@
-/* eslint-disable no-unused-vars */
-
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import { Button, Chip, colors, Icon, List, Menu, Typography } from '@allocations/design-system';
+import { Input, List, Typography } from '@allocations/design-system';
 import {
   nWithCommas,
-  getMomentFromId,
   sortByNumber,
-  customStringSort,
   titleCase,
   sortByDate,
   sortByString,
 } from '@allocations/nextjs-common';
 import 'chartjs-plugin-datalabels';
 import { Grid } from '@material-ui/core';
-import FundsInvestments from './sections/FundsInvestments1';
+import { useHistory } from 'react-router';
 
 const dealInvestmentsHeaders = [
   {
@@ -37,7 +33,13 @@ const dealInvestmentsHeaders = [
   },
 ];
 
-const InvestmentsList = ({ classes, fundInvestments, showInvestments, dealName }) => {
+const FundsInvestments = ({ classes, fundInvestments, showInvestments, dealName }) => {
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    document.querySelector('.mainRoute').scrollTo(0, 0);
+  }, []);
+
   const getFormattedData = () =>
     fundInvestments.length
       ? fundInvestments.map((investment) => {
@@ -70,29 +72,62 @@ const InvestmentsList = ({ classes, fundInvestments, showInvestments, dealName }
         return data;
     }
   };
+
+  const handleSearch = (e) => {
+    const searchTerm = e.target.value;
+    setSearch(searchTerm);
+  };
+
+  const filteredData = getFormattedData().filter((investment) =>
+    investment.Investment?.toLowerCase().includes(search?.toLowerCase()),
+  );
+
   return (
     <Grid container spacing={2} className={classes.listsContainer}>
       <Grid item xs={1} />
       <Grid item xs={10} className={classes.list}>
         <div className={classes.back}>
-          <Button
-            text="Back to Dashboard"
-            variant="ghost"
-            onClick={() => showInvestments(false)}
-            startIcon={<Icon iconName="chevron_left" />}
-          />
-        </div>
-
-        <div className={classes.listTitleContainer}>
+          <span className={classes.previousPage}>
+            <Typography
+              component="div"
+              content="Dashboard"
+              fontColor="#94A3B8"
+              fontWeight={500}
+              variant="button"
+              onClick={() => showInvestments(false)}
+            />
+          </span>
+          <div className={classes.breadcrumbSeparator}>
+            <Typography
+              component="div"
+              content="/"
+              fontColor="#94A3B8"
+              fontWeight={500}
+              variant="button"
+            />
+          </div>
           <Typography
             component="div"
             content={`${dealName} Investments`}
-            fontWeight={700}
-            variant="heading3"
+            fontColor="#2A2B54"
+            fontWeight={500}
+            variant="button"
+          />
+        </div>
+        <div className={classes.searchContainer}>
+          <Input
+            helperText=""
+            iconName="search"
+            iconPosition="left"
+            label=""
+            name="search"
+            placeholder="Search Investments"
+            type="text"
+            onChange={handleSearch}
           />
         </div>
         <List
-          data={getFormattedData()}
+          data={filteredData}
           headers={dealInvestmentsHeaders}
           sortBy="Investment"
           sortDirection="asc"
@@ -104,4 +139,4 @@ const InvestmentsList = ({ classes, fundInvestments, showInvestments, dealName }
   );
 };
 
-export default InvestmentsList;
+export default FundsInvestments;

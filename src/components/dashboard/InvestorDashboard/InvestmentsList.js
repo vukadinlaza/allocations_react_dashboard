@@ -1,8 +1,6 @@
-/* eslint-disable no-unused-vars */
-
 import React, { useState } from 'react';
 import _ from 'lodash';
-import { Button, Chip, Icon, List, Menu, Typography } from '@allocations/design-system';
+import { Button, Chip, Icon, Input, List, Menu, Typography } from '@allocations/design-system';
 import {
   nWithCommas,
   getMomentFromId,
@@ -87,13 +85,16 @@ const InvestmentsList = ({
   showResignInvestment,
   userProfile,
   setShowCapitalAccounts,
+  setShowDocuments,
 }) => {
   const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile?.email || '');
-
+  const [search, setSearch] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuOpen, setMenuOpen] = useState(null);
   const [selectedItem, setSelectedItem] = useState('');
   const history = useHistory();
+
+  const itemsPerPage = 5;
 
   const handleMenuOpen = (e, index) => {
     setAnchorEl(e.currentTarget);
@@ -278,21 +279,48 @@ const InvestmentsList = ({
     }
   };
 
+  const handleSearch = (e) => {
+    const searchTerm = e.target.value;
+    setSearch(searchTerm);
+  };
+
+  const filteredData = getFormattedData().filter((investment) =>
+    investment.dealName?.toLowerCase().includes(search?.toLowerCase()),
+  );
+
   return (
     <Grid container spacing={2} className={classes.listsContainer}>
       <Grid item xs={1} />
       <Grid item xs={10} className={classes.list}>
         <div className={classes.listTitleContainer}>
           <Typography component="div" content="Investments" fontWeight={700} variant="heading3" />
+          <Button
+            text="View Documents"
+            variant="primary"
+            onClick={() => setShowDocuments(true)}
+            startIcon={<Icon iconName="description" iconColor="#FFFFFF" />}
+          />
+        </div>
+        <div className={classes.searchContainer}>
+          <Input
+            helperText=""
+            iconName="search"
+            iconPosition="left"
+            label=""
+            name="search"
+            placeholder="Search Investments"
+            type="text"
+            onChange={handleSearch}
+          />
         </div>
         <List
-          data={getFormattedData()}
+          data={filteredData}
           headers={headers}
           customSort={handleSort}
           sortBy="amount"
           sortDirection="desc"
-          withPagination
-          itemsPerPage={5}
+          withPagination={!(filteredData.length < itemsPerPage)}
+          itemsPerPage={itemsPerPage}
         />
       </Grid>
       <Grid item xs={false} md={1} />

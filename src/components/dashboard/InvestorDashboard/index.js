@@ -1,10 +1,8 @@
-/* eslint-disable no-unused-vars */
-
 import React, { useEffect, useMemo, useState } from 'react';
 import { gql } from '@apollo/client';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
-import { List, Typography } from '@allocations/design-system';
+import { Typography } from '@allocations/design-system';
 import { getMomentFromId } from '@allocations/nextjs-common';
 import { useAuth } from '../../../auth/useAuth';
 import 'chartjs-plugin-datalabels';
@@ -17,29 +15,13 @@ import InvestorHighlights from './InvestorHighlights';
 import FundsInvestments from './FundsInvestments';
 import ResignModal from './ResignModal';
 import CapitalAccountsModal from './CapitalAccountsModal';
+import UserDocuments from './UserDocuments';
 
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
     investor(email: $email, _id: $_id) {
       _id
-      name
-      first_name
-      last_name
-      entity_name
-      country
-      signer_full_name
-      accredited_investor_status
-      investor_type
       email
-      organizations
-      admin
-      documents
-      organizations_admin {
-        _id
-        slug
-        name
-        logo
-      }
       investments {
         _id
         value
@@ -57,31 +39,15 @@ const GET_INVESTOR = gql`
           _id
           slug
           company_name
-          company_description
-          date_closed
-          status
           investmentType
-          deal_lead
+          status
           dealParams {
             dealMultiple
-            wireDeadline
           }
           organization {
             _id
             slug
           }
-        }
-      }
-      invitedDeals {
-        _id
-        slug
-        company_name
-        company_description
-        date_closed
-        status
-        organization {
-          _id
-          slug
         }
       }
     }
@@ -96,10 +62,10 @@ const UserHome = ({ classes }) => {
   const { userProfile, loading, refetch } = useAuth(GET_INVESTOR);
   const [resignInvestment, showResignInvestment] = useState(false);
   const [showCapitalAccounts, setShowCapitalAccounts] = useState(false);
-  const [userFunds, setUserFunds] = useState([]);
   const [dealsData, setDealsData] = useState({});
   const [funds, setFunds] = useState([]);
   const [fundInvestments, setFundInvestments] = useState({});
+  const [showDocuments, setShowDocuments] = useState(false);
   const userInvestments = useMemo(
     () =>
       userProfile.investments?.map((investment) => ({
@@ -120,8 +86,7 @@ const UserHome = ({ classes }) => {
       })) || [],
     [userProfile],
   );
-
-  useEffect(() => {
+  const userFunds = useMemo(() => {
     if (!loading) {
       const dealsIds = [];
       const funds = userProfile?.investments
@@ -138,7 +103,7 @@ const UserHome = ({ classes }) => {
         .map((investment) => {
           return investment.deal;
         });
-      setUserFunds(funds);
+      return funds;
     }
   }, [loading]);
 
@@ -160,13 +125,13 @@ const UserHome = ({ classes }) => {
     return `OR(${fundsFilters})`;
   };
 
-  const { data: atDeal } = useFetch(
+  const { data: atDeal, status: atDealStatus } = useFetch(
     OPS_ACCOUNTING,
     userFunds?.length && DEALS_TABLE,
     userFunds?.length && createDealsATFilter(),
   );
 
-  const { data: atFundData } = useFetch(
+  const { data: atFundData, status: atFundDataStatus } = useFetch(
     OPS_ACCOUNTING,
     Object.keys(dealsData)?.length && INVESTMENTS_TABLE,
     Object.keys(dealsData)?.length && createInvestmentsATFilter(),
@@ -188,8 +153,7 @@ const UserHome = ({ classes }) => {
           .map((investment) => {
             return { ...investment.fields, createdTime: investment.createdTime };
           });
-        const AUM = dealInvestments.map((inv) => inv.Invested).reduce((acc, n) => acc + n, 0);
-        return { ...deal, investments: dealInvestments, AUM };
+        return { ...deal, investments: dealInvestments };
       });
       setFunds(funds);
     }
@@ -199,60 +163,83 @@ const UserHome = ({ classes }) => {
     if (!dealId) {
       setFundInvestments({});
     } else {
-      console.log({ funds, dealId });
       const fund = funds.find((f) => f._id === dealId);
       setFundInvestments(fund);
     }
   };
 
-  if (!Object.keys(userProfile).length || loading) return <AllocationsLoader fullHeight />;
-  console.log({ fundInvestments });
-  return (
-    <Grid container spacing={2} className={classes.mainContainer}>
-      {fundInvestments && Object.keys(fundInvestments).length ? (
+  if (
+    !Object.keys(userProfile).length ||
+    loading ||
+    atFundDataStatus !== 'fetched' ||
+    atDealStatus !== 'fetched'
+  ) {
+    return <AllocationsLoader fullHeight />;
+  }
+
+  const getPageContent = () => {
+    if (userInvestments.length && showDocuments) {
+      return (
+        <UserDocuments
+          classes={classes}
+          userInvestments={userInvestments}
+          setShowDocuments={setShowDocuments}
+        />
+      );
+    }
+    if (fundInvestments && Object.keys(fundInvestments).length) {
+      return (
         <FundsInvestments
           classes={classes}
           fundInvestments={fundInvestments.investments}
           showInvestments={showInvestments}
           dealName={fundInvestments.company_name}
         />
-      ) : (
-        <Grid item xs={12}>
-          <Grid container spacing={2}>
-            <Grid item xs={1} />
-            <Grid
-              item
-              xs={10}
-              container
-              spacing={2}
-              className={classes.titleContainer}
-              alignItems="center"
-            >
-              <Grid item xs={12} lg={8}>
-                <Typography
-                  component="div"
-                  content="Investor Dashboard"
-                  fontWeight={700}
-                  variant="heading2"
-                />
-              </Grid>
-              <Grid item xs={12} lg={4} className={classes.buttonsContainer} />
+      );
+    }
+    return (
+      <Grid item xs={12}>
+        <Grid container spacing={2}>
+          <Grid item xs={1} />
+          <Grid
+            item
+            xs={10}
+            container
+            spacing={2}
+            className={classes.titleContainer}
+            alignItems="center"
+          >
+            <Grid item xs={12} lg={8}>
+              <Typography
+                component="div"
+                content="Investor Dashboard"
+                fontWeight={700}
+                variant="heading2"
+              />
             </Grid>
-            <Grid item xs={1} />
+            <Grid item xs={12} lg={4} className={classes.buttonsContainer} />
           </Grid>
-          <InvestorHighlights classes={classes} userInvestments={userInvestments} />
-          <InvestorCharts classes={classes} userInvestments={userInvestments} />
-          <InvestmentsList
-            classes={classes}
-            userInvestments={userInvestments}
-            showInvestments={showInvestments}
-            fundInvestments={fundInvestments}
-            showResignInvestment={showResignInvestment}
-            userProfile={userProfile}
-            setShowCapitalAccounts={setShowCapitalAccounts}
-          />
+          <Grid item xs={1} />
         </Grid>
-      )}
+        <InvestorHighlights classes={classes} userInvestments={userInvestments} />
+        <InvestorCharts classes={classes} userInvestments={userInvestments} />
+        <InvestmentsList
+          classes={classes}
+          userInvestments={userInvestments}
+          showInvestments={showInvestments}
+          fundInvestments={fundInvestments}
+          showResignInvestment={showResignInvestment}
+          userProfile={userProfile}
+          setShowCapitalAccounts={setShowCapitalAccounts}
+          setShowDocuments={setShowDocuments}
+        />
+      </Grid>
+    );
+  };
+
+  return (
+    <Grid container spacing={2} className={classes.mainContainer}>
+      {getPageContent()}
       {showCapitalAccounts && (
         <CapitalAccountsModal
           setShowCapitalAccounts={setShowCapitalAccounts}
