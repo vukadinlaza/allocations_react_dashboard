@@ -14,6 +14,7 @@ import Deals from './components/AllDeals';
 import DealNew from './components/DealNew';
 import DealEditNew from './components/DealEditNew';
 import Sidebar from './components/Sidebar';
+import TaxDashboard from './components/TaxDashboard';
 import Investors from './components/Investors';
 import InvestmentNew from './components/InvestmentNew';
 import ProfilePage from './components/Profile/ProfilePage';
