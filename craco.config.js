@@ -11,7 +11,7 @@ module.exports = {
         name: 'container',
         filename: 'remoteEntry.js',
         remotes: {
-          invest: `invest@[window.investModuleFerederationURL]`,
+          invest: `invest@[window.investModuleFederationURL]`,
           build: 'build@[window.buildModuleFederationURL]',
           treasury: `treasury@[window.treasuryModuleFederationURL]`,
           blockchain: `blockchain@[window.cryptoModuleFederationURL]`,

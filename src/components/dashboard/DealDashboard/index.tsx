@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery, gql } from '@apollo/client';
+import { useQuery, gql } from '@apollo/client';
 import { useParams, withRouter, RouteComponentProps } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 import { useCurrentOrganization } from '../../../state/current-organization';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import LoadingPlaceholder from './LoadingPlaceholder';
-import DealProgress from './sections/DealProgress';
 import { Task, DealPhase } from './types';
 import DealPage from '../Common/DealPage';
 import styles from './styles';
@@ -57,12 +56,6 @@ const DEAL = gql`
   }
 `;
 
-const UPDATE_BUILD_DEAL = gql`
-  mutation updateBuildDeal($payload: Object) {
-    updateBuildDeal(payload: $payload)
-  }
-`;
-
 type Props = WithStyles<typeof styles>;
 
 const Investors = React.lazy(() => import('invest/Investors'));
@@ -95,27 +88,15 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
       if (!remainingTasks?.length) {
         setDealDashboardTabs(['Investors', 'Deal Page']);
       } else if (investorsInvited) {
-        setDealDashboardTabs(['Deal Progress', 'Deal Page']);
+        setDealDashboardTabs(['Deal Page']);
       } else {
-        setDealDashboardTabs(['Deal Progress', 'Investors', 'Deal Page']);
+        setDealDashboardTabs(['Investors', 'Deal Page']);
       }
     }
   }, [dealData]);
 
-  const [updateBuildDeal, { loading: updateDealLoading }] = useMutation(UPDATE_BUILD_DEAL);
-
   const handleTabChange = (event: React.ChangeEvent, index: number) => {
     setTabIndex(index);
-  };
-
-  const handleComplete = () => {
-    updateBuildDeal({
-      variables: {
-        payload: {
-          deal_id,
-        },
-      },
-    });
   };
 
   const goToDeal = () => {
@@ -139,21 +120,12 @@ const DealDashboard: React.FC<Props & RouteComponentProps> = ({ classes }) => {
     }
   };
 
-  const dealProps = {
-    data: dealData?.getDealByIdWithTasks,
-    handleComplete,
-    updateDealLoading,
-    orgSlug: currentOrg?.slug,
-  };
-
   const getTabComponent = () => {
     if (!dealData) return <LoadingPlaceholder />;
 
     const tabName = dealDashboardTabs[tabIndex];
 
     switch (tabName) {
-      case 'Deal Progress':
-        return <DealProgress {...dealProps} />;
       case 'Investors':
         return (
           <React.Suspense fallback="Loading...">

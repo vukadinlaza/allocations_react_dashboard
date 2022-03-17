@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { withRouter, RouteComponentProps, useParams } from 'react-router-dom';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
-import { Grid, InputAdornment, TextField } from '@material-ui/core';
+import { CircularProgress, Grid, InputAdornment, TextField } from '@material-ui/core';
 import {
   Typography as AllocationsTypography,
   Chip as AllocationsChip,
@@ -18,6 +18,9 @@ import styles from './styles';
 import { sortByNumber, titleCase, sortByStatus } from '../../../utils/helpers';
 import { useAuth } from '../../../auth/useAuth';
 import AllocationsLoader from '../../utils/AllocationsLoader';
+
+// @ts-ignore
+const SPVList = React.lazy(() => import('build/DealList'));
 
 export const ORG_DEALS = gql`
   query GetOrg($slug: String!) {
@@ -337,10 +340,20 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
           <Grid item xs={10}>
             <AllocationsTypography
               component="div"
-              content="Deals"
+              content="Deals Under Construction"
               fontWeight={700}
               variant="heading3"
             />
+            <Suspense fallback={<CircularProgress />}>
+              <SPVList
+                orgId={data?.organization?._id}
+                onManage={(deal: any) =>
+                  deal.legacy_deal
+                    ? history.push(`/admin/${orgSlug}/deals/${deal._id}`)
+                    : history.push(`/new-build/deal?id=${deal._id}`)
+                }
+              />
+            </Suspense>
             <TextField
               variant="outlined"
               placeholder="Search"
@@ -362,7 +375,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
         <Grid container spacing={2} zeroMinWidth className={classes.listsContainer}>
           <Grid item xs={1} />
           <Grid item xs={10}>
-            <Grid container justifyContent="space-between">
+            <Grid container justifyContent="space-between" spacing={2}>
               <Grid item xs={12} xl={6} className={classes.list}>
                 <AllocationsTypography
                   component="div"

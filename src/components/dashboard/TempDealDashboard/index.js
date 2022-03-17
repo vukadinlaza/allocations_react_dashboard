@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { toast } from 'react-toastify';
 import { gql, useQuery } from '@apollo/client';
 import { useParams, withRouter } from 'react-router-dom';
@@ -12,18 +12,17 @@ import Banking from './sections/Banking';
 import Crypto from './sections/Crypto';
 import Investments from './sections/Investments';
 import Investors from './sections/Investors';
-import InvestorsCapitalCalls from './sections/InvestorsCapitalCalls';
 import { useFetch, useViewport } from '../../../utils/hooks';
 import { useAuth } from '../../../auth/useAuth';
 import AllocationsLoader from '../../utils/AllocationsLoader';
 import styles from './styles';
 import DocumentsTab from './sections/DocumentsTab';
-import DealTypeSelector from '../../NewBuild/DealType';
+import DealTypeSelector from './DealType';
 import DealPage from '../Common/DealPage';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import { phone } from '../../../utils/helpers';
 
-// const MFE1 = React.lazy(() => import('mfe1/mfe1'));
+const RemoteInvestors = React.lazy(() => import('invest/Investors'));
 
 const GET_DEAL = gql`
   query GetDeal($_id: String!) {
@@ -124,7 +123,6 @@ const TempDealDashboard = ({ classes }) => {
   }
 
   const { fundManagerBankingTab, capitalCallsDealSpecific, cryptoPaymentInBuild } = useFlags();
-
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
@@ -276,13 +274,9 @@ const TempDealDashboard = ({ classes }) => {
         );
       case 'Investors':
         return (capitalCallsDealSpecific || []).includes(dealData?.deal._id) ? (
-          <InvestorsCapitalCalls
-            classes={classes}
-            data={dealData}
-            orgSlug={orgSlug}
-            userProfile={userProfile}
-            dealName={checkedDealName}
-          />
+          <Suspense fallback={<AllocationsLoader />}>
+            <RemoteInvestors deal_id={dealData?.deal?._id} />
+          </Suspense>
         ) : (
           <Investors
             classes={classes}
@@ -334,6 +328,8 @@ const TempDealDashboard = ({ classes }) => {
 
   const [openModal, setOpenModal] = useState(false);
 
+  const typographyVariant = width > phone ? 'heading2' : 'heading4';
+
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
       <div style={{ margin: '1rem 0' }}>
@@ -343,7 +339,7 @@ const TempDealDashboard = ({ classes }) => {
               component="div"
               content={dealName}
               fontWeight={700}
-              variant={width > phone ? 'heading2' : 'heading4'}
+              variant={typographyVariant}
             />
           </div>
           <HighlightedTabs
