@@ -12,7 +12,7 @@ import {
 import 'chartjs-plugin-datalabels';
 import { Grid } from '@material-ui/core';
 import { useHistory } from 'react-router';
-import { useFetchWithEmail } from '../../../utils/hooks';
+import { useFetchWithEmail } from '../../../../utils/hooks';
 
 const headers = [
   {

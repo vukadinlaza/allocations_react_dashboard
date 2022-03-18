@@ -9,13 +9,13 @@ import 'chartjs-plugin-datalabels';
 import styles from './styles';
 import AllocationsLoader from '../../utils/AllocationsLoader';
 import { useFetch } from '../../../utils/hooks';
-import InvestmentsList from './InvestmentsList';
-import InvestorCharts from './InvestorCharts';
-import InvestorHighlights from './InvestorHighlights';
-import FundsInvestments from './FundsInvestments';
-import ResignModal from './ResignModal';
-import CapitalAccountsModal from './CapitalAccountsModal';
-import UserDocuments from './UserDocuments';
+import InvestmentsList from './components/InvestmentsList';
+import InvestorCharts from './components/InvestorCharts';
+import InvestorHighlights from './components/InvestorHighlights';
+import FundsInvestments from './components/FundsInvestments';
+import ResignModal from './components/ResignModal';
+import CapitalAccountsModal from './components/CapitalAccountsModal';
+import UserDocuments from './components/UserDocuments';
 
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {

@@ -4,7 +4,7 @@ import React, { useMemo } from 'react';
 import { Grid } from '@material-ui/core';
 import { v4 as uuidv4 } from 'uuid';
 import 'chartjs-plugin-datalabels';
-import { Box } from '../Common/components';
+import { Box } from '../../Common/components';
 
 const InvestorHighlights = ({ classes, userInvestments }) => {
   const abbreviateAmount = (amount) => {

@@ -6,7 +6,7 @@ import { Paper, Grid } from '@material-ui/core';
 import { Typography } from '@allocations/design-system';
 import { getMomentFromId, sortByNumber } from '@allocations/nextjs-common';
 import 'chartjs-plugin-datalabels';
-import { DoughnutChart, LineChart, DefaultChartTable } from '../../utils/charts';
+import { DoughnutChart, LineChart, DefaultChartTable } from '../../../utils/charts';
 
 export function getColor(i) {
   const colors = ['#68EE76', '#186EFF', '#7BCAEB'];
