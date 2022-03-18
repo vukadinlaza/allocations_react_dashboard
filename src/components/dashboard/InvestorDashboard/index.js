@@ -15,7 +15,6 @@ import InvestorHighlights from './components/InvestorHighlights';
 import FundsInvestments from './components/FundsInvestments';
 import ResignModal from './components/ResignModal';
 import CapitalAccountsModal from './components/CapitalAccountsModal';
-import UserDocuments from './components/UserDocuments';
 
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
@@ -65,7 +64,6 @@ const UserHome = ({ classes }) => {
   const [dealsData, setDealsData] = useState({});
   const [funds, setFunds] = useState([]);
   const [fundInvestments, setFundInvestments] = useState({});
-  const [showDocuments, setShowDocuments] = useState(false);
   const userInvestments = useMemo(
     () =>
       userProfile.investments?.map((investment) => ({
@@ -182,15 +180,6 @@ const UserHome = ({ classes }) => {
   }
 
   const getPageContent = () => {
-    if (userInvestments.length && showDocuments) {
-      return (
-        <UserDocuments
-          classes={classes}
-          userInvestments={userInvestments}
-          setShowDocuments={setShowDocuments}
-        />
-      );
-    }
     if (fundInvestments && Object.keys(fundInvestments).length) {
       return (
         <FundsInvestments
@@ -235,7 +224,6 @@ const UserHome = ({ classes }) => {
           showResignInvestment={showResignInvestment}
           userProfile={userProfile}
           setShowCapitalAccounts={setShowCapitalAccounts}
-          setShowDocuments={setShowDocuments}
         />
       </Grid>
     );

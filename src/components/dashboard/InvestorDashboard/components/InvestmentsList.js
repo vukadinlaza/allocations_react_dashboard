@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
-import { Button, Chip, Icon, Input, List, Menu, Typography } from '@allocations/design-system';
+import { Chip, Icon, Input, List, Menu, Typography } from '@allocations/design-system';
 import {
   nWithCommas,
   getMomentFromId,
@@ -8,6 +8,8 @@ import {
   customStringSort,
   titleCase,
   sortByDate,
+  openInNewTab,
+  sortByString,
 } from '@allocations/nextjs-common';
 import 'chartjs-plugin-datalabels';
 import { Grid } from '@material-ui/core';
@@ -19,11 +21,7 @@ const headers = [
     id: 'portfolioCompany',
     label: 'Portolio Company',
     withSort: true,
-  },
-  {
-    id: 'company_name',
-    label: 'Deal Name',
-    withSort: true,
+    customSort: true,
   },
   {
     id: 'amount',
@@ -85,16 +83,54 @@ const InvestmentsList = ({
   showResignInvestment,
   userProfile,
   setShowCapitalAccounts,
-  setShowDocuments,
 }) => {
   const { data: capitalAccounts } = useFetchWithEmail(BASE, TABLE, userProfile?.email || '');
   const [search, setSearch] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuOpen, setMenuOpen] = useState(null);
   const [selectedItem, setSelectedItem] = useState('');
+  const [userDocuments, setUserDocuments] = useState([]);
   const history = useHistory();
 
   const itemsPerPage = 5;
+
+  useEffect(() => {
+    const userDocs = [];
+    if (userInvestments) {
+      userInvestments.forEach((inv) => {
+        inv.metadata.documents.forEach((doc) => {
+          const docNameArray = doc.path.split('/');
+          const docName = docNameArray[docNameArray.length - 1];
+          userDocs.push({
+            ...doc,
+            documentName: docName, // have same key document Name for all docs
+            type: /K1|K-1/.test(doc.path.toUpperCase())
+              ? 'K-1'
+              : /AGREEMENT|SUBSCRIPTION|DOCS/.test(doc.path.toUpperCase())
+              ? 'Investment Agreement'
+              : 'N/A',
+            status: 'Complete',
+            dealName: inv.dealName,
+          });
+        });
+      });
+      setUserDocuments(userDocs);
+    }
+  }, [userInvestments]);
+
+  const downloadDealDocs = (dealName) => {
+    userDocuments
+      .filter((d) => {
+        return d.dealName === dealName;
+      })
+      .forEach((document) => {
+        openInNewTab(
+          document.link
+            ? `${document.link.includes('http') ? document.link : `//${document.link}`}`
+            : '',
+        );
+      });
+  };
 
   const handleMenuOpen = (e, index) => {
     setAnchorEl(e.currentTarget);
@@ -120,6 +156,9 @@ const InvestmentsList = ({
         break;
       case 'nextSteps':
         history.push(`/next-steps/${orgSlug}/${dealSlug}`);
+        break;
+      case 'downloadDocs':
+        downloadDealDocs(investment.dealName);
         break;
       case 'fundsInvestments':
         showInvestments(dealId);
@@ -150,6 +189,13 @@ const InvestmentsList = ({
         label: 'Next Steps',
         startIcon: {
           iconName: 'dns',
+        },
+      },
+      {
+        id: 'downloadDocs',
+        label: 'Download Documents',
+        startIcon: {
+          iconName: 'description',
         },
       },
     ];
@@ -203,8 +249,14 @@ const InvestmentsList = ({
       ? userInvestments.map((investment, index) => {
           const { dealName, amount, dealMultiple, type, dealStatus, _id } = investment;
           return {
-            portfolioCompany: titleCase(dealName || ''),
-            dealName: titleCase(dealName || ''),
+            portfolioCompany: (
+              <Typography
+                component="div"
+                content={titleCase(dealName || '')}
+                fontWeight={700}
+                variant="caption"
+              />
+            ),
             amount: `$${nWithCommas(amount)}`,
             dealMultiple: `${Number(dealMultiple).toFixed(2)}x`,
             value: `$${nWithCommas(Math.round(amount * Number(dealMultiple)))}`,
@@ -217,7 +269,7 @@ const InvestmentsList = ({
                 text={`${titleCase(dealStatus || '')}`}
               />
             ),
-            investmentDate: getMomentFromId(_id).format('MM/DD/YYYY'),
+            investmentDate: getMomentFromId(_id).format('MMM DD, YYYY'),
             actions: (
               <span className={classes.menuContainer}>
                 <Icon onClick={(e) => handleMenuOpen(e, index)} iconName="more_vert" id={index} />
@@ -270,6 +322,10 @@ const InvestmentsList = ({
             direction,
           );
         });
+      case 'portfolioCompany':
+        return data.sort((a, b) => {
+          return sortByString(a[orderBy].props.content, b[orderBy].props.content, '', direction);
+        });
       case 'investmentDate':
         return data.sort((a, b) =>
           sortByDate(new Date(a.investmentDate), new Date(b.investmentDate), '', direction),
@@ -285,7 +341,7 @@ const InvestmentsList = ({
   };
 
   const filteredData = getFormattedData().filter((investment) =>
-    investment.dealName?.toLowerCase().includes(search?.toLowerCase()),
+    investment.portfolioCompany.props.content?.toLowerCase().includes(search?.toLowerCase()),
   );
 
   return (
@@ -294,12 +350,6 @@ const InvestmentsList = ({
       <Grid item xs={10} className={classes.list}>
         <div className={classes.listTitleContainer}>
           <Typography component="div" content="Investments" fontWeight={700} variant="heading3" />
-          <Button
-            text="View Documents"
-            variant="primary"
-            onClick={() => setShowDocuments(true)}
-            startIcon={<Icon iconName="description" iconColor="#FFFFFF" />}
-          />
         </div>
         <div className={classes.searchContainer}>
           <Input
