@@ -183,6 +183,15 @@ const TempDealDashboard = ({ classes }) => {
   }, [dealData]);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('tab')) {
+      const tabIndex = dashboardTabs.findIndex((tab) => tab === params.get('tab'));
+      setTabName(dashboardTabs[tabIndex === -1 ? 0 : tabIndex]);
+      setTabIndex(tabIndex === -1 ? 0 : tabIndex);
+    }
+  }, [dashboardTabs]);
+
+  useEffect(() => {
     if (atFundData) setLoading(false);
   }, [atFundData]);
 
