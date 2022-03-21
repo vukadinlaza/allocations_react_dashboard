@@ -341,7 +341,7 @@ const InvestmentsList = ({
   };
 
   const filteredData = getFormattedData().filter((investment) =>
-    investment.portfolioCompany.props.content?.toLowerCase().includes(search?.toLowerCase()),
+    investment.portfolioCompany?.props?.content?.toLowerCase().includes(search?.toLowerCase()),
   );
 
   return (
