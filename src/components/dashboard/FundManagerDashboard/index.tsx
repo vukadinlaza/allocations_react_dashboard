@@ -292,13 +292,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
                 variant="heading2"
               />
             </Grid>
-            <Grid
-              item
-              xs={12}
-              lg={4}
-              justifyContent="space-between"
-              className={classes.buttonsContainer}
-            >
+            <Grid item xs={12} lg={4} className={classes.buttonsContainer}>
               {userProfile?.admin && (
                 <AllocationsButton
                   onClick={() => history.push(`/admin/${orgSlug}/deal/new`)}
@@ -356,7 +350,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
           </Grid>
           <Grid item xs={1} />
         </Grid>
-        <Grid container spacing={2} zeroMinWidth className={classes.listsContainer}>
+        <Grid container spacing={2} className={classes.listsContainer}>
           <Grid item xs={1} />
           <Grid item xs={10}>
             <Grid container justifyContent="space-between" spacing={2}>
