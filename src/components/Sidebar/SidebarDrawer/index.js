@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { List, ListItem, ListItemIcon, ListItemText, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { v4 as uuidv4 } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HomeIcon from '@material-ui/icons/Home';
 import { useFlags } from 'launchdarkly-react-client-sdk';
@@ -114,7 +115,7 @@ const SidebarDrawer = ({
       <AddBuildButton classes={classes} />
       <List>
         {menuSections.map(({ sectionTitle, menu }) => (
-          <>
+          <React.Fragment key={uuidv4()}>
             <Typography className={classes.sectionSideBarTitle}>{sectionTitle}</Typography>
             {menu.map(({ to, title, icon, subMenu }, menuId) => (
               <div
@@ -161,7 +162,7 @@ const SidebarDrawer = ({
                 )}
               </div>
             ))}
-          </>
+          </React.Fragment>
         ))}
       </List>
       {taxDashboard && (
