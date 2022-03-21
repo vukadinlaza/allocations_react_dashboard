@@ -18,6 +18,7 @@ export interface Investment {
   _id: string;
   amount: number;
   status: string;
+  capitalWiredAmount: number;
 }
 
 export interface Deal {
