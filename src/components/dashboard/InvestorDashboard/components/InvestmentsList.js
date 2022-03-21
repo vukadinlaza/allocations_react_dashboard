@@ -13,7 +13,6 @@ import {
 } from '@allocations/nextjs-common';
 import 'chartjs-plugin-datalabels';
 import { Grid } from '@material-ui/core';
-import { useHistory } from 'react-router';
 import { useFetchWithEmail } from '../../../../utils/hooks';
 
 const headers = [
@@ -90,7 +89,6 @@ const InvestmentsList = ({
   const [menuOpen, setMenuOpen] = useState(null);
   const [selectedItem, setSelectedItem] = useState('');
   const [userDocuments, setUserDocuments] = useState([]);
-  const history = useHistory();
 
   const itemsPerPage = 5;
 
