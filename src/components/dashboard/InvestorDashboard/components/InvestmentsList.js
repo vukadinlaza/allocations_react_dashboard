@@ -152,10 +152,10 @@ const InvestmentsList = ({
     const { orgSlug, dealSlug, dealId } = metadata;
     switch (id) {
       case 'dealPage':
-        history.push(`/deals/${orgSlug}/${dealSlug}`);
+        openInNewTab(`/deals/${orgSlug}/${dealSlug}`);
         break;
       case 'nextSteps':
-        history.push(`/next-steps/${orgSlug}/${dealSlug}`);
+        openInNewTab(`/next-steps/${orgSlug}/${dealSlug}`);
         break;
       case 'downloadDocs':
         downloadDealDocs(investment.dealName);
