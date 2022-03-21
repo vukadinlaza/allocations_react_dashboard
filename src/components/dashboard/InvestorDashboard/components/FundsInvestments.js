@@ -10,7 +10,6 @@ import {
 } from '@allocations/nextjs-common';
 import 'chartjs-plugin-datalabels';
 import { Grid } from '@material-ui/core';
-import { useHistory } from 'react-router';
 
 const dealInvestmentsHeaders = [
   {

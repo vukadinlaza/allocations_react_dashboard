@@ -262,7 +262,7 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
 
 export const LineChart = withStyles(styles)(({ dataset: { data, labels } }) => {
   const lineChartPlugin = {
-    afterDraw(chart, easing) {
+    afterDraw(chart) {
       if (chart.tooltip._active && chart.tooltip._active.length) {
         const activePoint = chart.controller.tooltip._active[0];
         const { ctx } = chart;
