@@ -1,43 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { gql } from '@apollo/client';
 import { withStyles } from '@material-ui/core/styles';
-import moment from 'moment';
-import { Typography, TextField, InputAdornment, Paper } from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
+import { Grid } from '@material-ui/core';
+import { Typography } from '@allocations/design-system';
+import { getMomentFromId } from '@allocations/nextjs-common';
 import { useAuth } from '../../../auth/useAuth';
-import { nWithCommas } from '../../../utils/numbers';
 import 'chartjs-plugin-datalabels';
-import UserInvestments from './sections/UserInvestments';
-import UserDocuments from './sections/UserDocuments';
-import HighlightedTabs from '../../utils/HighlightedTabs';
-import Highlights from './sections/Highlights';
 import styles from './styles';
 import AllocationsLoader from '../../utils/AllocationsLoader';
-import AllocationsTable from '../../utils/AllocationsTable';
 import { useFetch } from '../../../utils/hooks';
+import InvestmentsList from './components/InvestmentsList';
+import InvestorCharts from './components/InvestorCharts';
+import InvestorHighlights from './components/InvestorHighlights';
+import FundsInvestments from './components/FundsInvestments';
+import ResignModal from './components/ResignModal';
+import CapitalAccountsModal from './components/CapitalAccountsModal';
 
 const GET_INVESTOR = gql`
   query GetInvestor($email: String, $_id: String) {
     investor(email: $email, _id: $_id) {
       _id
-      name
-      first_name
-      last_name
-      entity_name
-      country
-      signer_full_name
-      accredited_investor_status
-      investor_type
       email
-      organizations
-      admin
-      documents
-      organizations_admin {
-        _id
-        slug
-        name
-        logo
-      }
       investments {
         _id
         value
@@ -55,14 +38,10 @@ const GET_INVESTOR = gql`
           _id
           slug
           company_name
-          company_description
-          date_closed
-          status
           investmentType
-          deal_lead
+          status
           dealParams {
             dealMultiple
-            wireDeadline
           }
           organization {
             _id
@@ -70,49 +49,9 @@ const GET_INVESTOR = gql`
           }
         }
       }
-      invitedDeals {
-        _id
-        slug
-        company_name
-        company_description
-        date_closed
-        status
-        organization {
-          _id
-          slug
-        }
-      }
     }
   }
 `;
-
-const investmentsHeaders = [
-  {
-    label: 'NAME OF INVESTMENT',
-    value: 'Investment',
-    isSortable: true,
-    align: 'left',
-    alignHeader: true,
-  },
-  {
-    label: 'DATE',
-    value: 'createdTime',
-    type: 'date',
-    isSortable: true,
-    align: 'right',
-    alignHeader: true,
-  },
-  {
-    label: 'AMOUNT',
-    value: 'Invested',
-    type: 'amount',
-    isSortable: true,
-    align: 'right',
-    alignHeader: true,
-  },
-];
-
-const investorTabs = ['Highlights', 'Investments', 'Documents'];
 
 const OPS_ACCOUNTING = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
@@ -120,19 +59,53 @@ const DEALS_TABLE = 'Deals';
 
 const UserHome = ({ classes }) => {
   const { userProfile, loading, refetch } = useAuth(GET_INVESTOR);
-  const [tabIndex, setTabIndex] = useState(0);
-  const [userFunds, setUserFunds] = useState([]);
+  const [resignInvestment, showResignInvestment] = useState(false);
+  const [showCapitalAccounts, setShowCapitalAccounts] = useState(false);
   const [dealsData, setDealsData] = useState({});
   const [funds, setFunds] = useState([]);
   const [fundInvestments, setFundInvestments] = useState({});
-  const [searchTerm, setSearchTerm] = useState('');
-
-  useEffect(() => {
+  const userInvestments = useMemo(
+    () =>
+      userProfile.investments?.map((investment) => ({
+        _id: investment._id,
+        amount: investment.amount,
+        type: investment.deal?.investmentType,
+        dealName: investment.deal?.company_name,
+        dealMultiple: investment.deal?.dealParams?.dealMultiple || 1,
+        dealStatus: investment.deal?.status,
+        investmentDate: getMomentFromId(investment._id).format('MM/DD/YYYY'),
+        metadata: {
+          dealSlug: investment.deal?.slug,
+          orgSlug: investment.deal?.organization?.slug,
+          dealId: investment.deal?._id,
+          submissionId: investment.submissionData?.submissionId,
+          documents: investment.documents,
+        },
+      })) || [],
+    [userProfile],
+  );
+  const userHasFunds = useMemo(
+    () => !!userInvestments.find((i) => i.type === 'fund'),
+    [userInvestments],
+  );
+  const userFunds = useMemo(() => {
     if (!loading) {
+      const dealsIds = [];
       const funds = userProfile?.investments
-        ?.filter((investment) => investment?.deal?.investmentType === 'fund')
-        .map((investment) => investment.deal);
-      setUserFunds(funds);
+        ?.filter((investment) => {
+          if (
+            dealsIds.includes(investment?.deal?._id) ||
+            investment?.deal?.investmentType !== 'fund' ||
+            !investment?.deal?._id
+          )
+            return false;
+          dealsIds.push(investment.deal._id);
+          return true;
+        })
+        .map((investment) => {
+          return investment.deal;
+        });
+      return funds;
     }
   }, [loading]);
 
@@ -154,13 +127,13 @@ const UserHome = ({ classes }) => {
     return `OR(${fundsFilters})`;
   };
 
-  const { data: atDeal } = useFetch(
+  const { data: atDeal, status: atDealStatus } = useFetch(
     OPS_ACCOUNTING,
     userFunds?.length && DEALS_TABLE,
     userFunds?.length && createDealsATFilter(),
   );
 
-  const { data: atFundData } = useFetch(
+  const { data: atFundData, status: atFundDataStatus } = useFetch(
     OPS_ACCOUNTING,
     Object.keys(dealsData)?.length && INVESTMENTS_TABLE,
     Object.keys(dealsData)?.length && createInvestmentsATFilter(),
@@ -182,131 +155,96 @@ const UserHome = ({ classes }) => {
           .map((investment) => {
             return { ...investment.fields, createdTime: investment.createdTime };
           });
-        const AUM = dealInvestments.map((inv) => inv.Invested).reduce((acc, n) => acc + n, 0);
-        return { ...deal, investments: dealInvestments, AUM };
+        return { ...deal, investments: dealInvestments };
       });
       setFunds(funds);
     }
   }, [atFundData]);
 
-  const handleTabChange = (event, newValue) => {
-    setTabIndex(newValue);
-  };
-
-  const showInvestments = ({ investment }) => {
-    setSearchTerm('');
-    if (!investment) {
+  const showInvestments = (dealId) => {
+    if (!dealId) {
       setFundInvestments({});
     } else {
-      const fund = funds.find((f) => f._id === investment.deal._id);
+      const fund = funds.find((f) => f._id === dealId);
       setFundInvestments(fund);
     }
   };
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
+  if (
+    !Object.keys(userProfile).length ||
+    loading ||
+    (userHasFunds && atFundDataStatus !== 'fetched') ||
+    (userHasFunds && atDealStatus !== 'fetched')
+  ) {
+    return <AllocationsLoader fullHeight />;
+  }
 
-  const getTabContent = () => {
-    switch (tabIndex) {
-      case 0:
-        return (
-          <Highlights
-            data={userProfile.investments}
-            classes={classes}
-            userProfile={userProfile}
-            refetch={refetch}
-          />
-        );
-
-      case 1:
-        return (
-          <UserInvestments
-            data={userProfile.investments}
-            classes={classes}
-            showInvestments={showInvestments}
-            userProfile={userProfile}
-            refetch={refetch}
-          />
-        );
-
-      case 2:
-        return <UserDocuments data={userProfile} classes={classes} />;
-
-      default:
-        return <p>No Data</p>;
+  const getPageContent = () => {
+    if (fundInvestments && Object.keys(fundInvestments).length) {
+      return (
+        <FundsInvestments
+          classes={classes}
+          fundInvestments={fundInvestments.investments}
+          showInvestments={showInvestments}
+          dealName={fundInvestments.company_name}
+        />
+      );
     }
+    return (
+      <Grid item xs={12}>
+        <Grid container spacing={2}>
+          <Grid item xs={1} />
+          <Grid
+            item
+            xs={10}
+            container
+            spacing={2}
+            className={classes.titleContainer}
+            alignItems="center"
+          >
+            <Grid item xs={12} lg={8}>
+              <Typography
+                component="div"
+                content="Investor Dashboard"
+                fontWeight={700}
+                variant="heading2"
+              />
+            </Grid>
+            <Grid item xs={12} lg={4} className={classes.buttonsContainer} />
+          </Grid>
+          <Grid item xs={1} />
+        </Grid>
+        <InvestorHighlights classes={classes} userInvestments={userInvestments} />
+        <InvestorCharts classes={classes} userInvestments={userInvestments} />
+        <InvestmentsList
+          classes={classes}
+          userInvestments={userInvestments}
+          showInvestments={showInvestments}
+          fundInvestments={fundInvestments}
+          showResignInvestment={showResignInvestment}
+          userProfile={userProfile}
+          setShowCapitalAccounts={setShowCapitalAccounts}
+        />
+      </Grid>
+    );
   };
-
-  const getCellContent = (type, row, headerValue) => {
-    switch (type) {
-      case 'date':
-        return moment(row[headerValue]).format('MM/DD/YYYY');
-      case 'amount':
-        return `$${nWithCommas(row[headerValue])}`;
-      default:
-        return <div />;
-    }
-  };
-
-  if (!Object.keys(userProfile).length) return <AllocationsLoader fullHeight />;
-
-  const fundInvestmentsCopy =
-    fundInvestments?.investments?.filter((inv) =>
-      inv.Investment.toLowerCase().includes(searchTerm.toLowerCase()),
-    ) || [];
 
   return (
-    <div className={classes.root}>
-      {fundInvestments && Object.keys(fundInvestments).length ? (
-        <div className={classes.investmentsContainer}>
-          <Typography className={classes.mainTitle}>{fundInvestments.company_name}</Typography>
-          <span
-            className={classes.backButton}
-            onClick={() => showInvestments({})}
-          >{`< Back to Investments`}</span>
-          <div className={classes.searchContainer}>
-            <TextField
-              label="Search"
-              placeholder="Search by company name"
-              id="search-field"
-              fullWidth
-              onChange={handleSearch}
-              value={searchTerm || ''}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon style={{ color: 'rgba(0, 0, 0, 0.54)' }} />
-                  </InputAdornment>
-                ),
-              }}
-              style={{ margin: '0 1em' }}
-            />
-          </div>
-          <AllocationsTable
-            data={fundInvestmentsCopy}
-            headers={investmentsHeaders}
-            getCellContent={getCellContent}
-            sortField="Date"
-            sortOrder="desc"
-          />
-        </div>
-      ) : (
-        <>
-          <Paper style={{ marginBottom: '.5rem', minWidth: '100%', padding: '0 1rem' }}>
-            <Typography className={classes.mainTitle}>
-              Hello, {userProfile.first_name || 'investor'}!
-            </Typography>
-            <HighlightedTabs
-              tabs={investorTabs}
-              tabIndex={tabIndex}
-              handleTabChange={handleTabChange}
-            />
-          </Paper>
-          <div className={classes.contentContainer}>{getTabContent()}</div>
-        </>
+    <Grid container spacing={2} className={classes.mainContainer}>
+      {getPageContent()}
+      {showCapitalAccounts && (
+        <CapitalAccountsModal
+          setShowCapitalAccounts={setShowCapitalAccounts}
+          showCapitalAccounts={showCapitalAccounts}
+          refetch={refetch}
+        />
       )}
-    </div>
+      <ResignModal
+        showResignModal={resignInvestment}
+        setShowResignModal={showResignInvestment}
+        refetch={refetch}
+      />
+    </Grid>
   );
 };
 

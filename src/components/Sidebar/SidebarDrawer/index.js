@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { List, ListItem, ListItemIcon, ListItemText, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { v4 as uuidv4 } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import HomeIcon from '@material-ui/icons/Home';
 import { useFlags } from 'launchdarkly-react-client-sdk';
@@ -10,6 +11,7 @@ import { Link, useHistory } from 'react-router-dom';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import BallotIcon from '@material-ui/icons/Ballot';
 import { BsBinocularsFill } from 'react-icons/bs';
 import styles from '../styles';
 
@@ -50,9 +52,7 @@ const AddBuildButton = (props) => {
 
 const SidebarDrawer = ({ mobileOpen, handleDrawerClose, logout, location, classes }) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
-  const [setOpenModal] = useState(false);
-  const { prospectDealPage } = useFlags();
-  // const closeModal = () => setOpenModal(false);
+  const { prospectDealPage, taxDashboard } = useFlags();
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
 
@@ -105,10 +105,10 @@ const SidebarDrawer = ({ mobileOpen, handleDrawerClose, logout, location, classe
 
   return (
     <div className={classes.sidebarDrawer}>
-      <AddBuildButton classes={classes} setOpenModal={setOpenModal} />
+      <AddBuildButton classes={classes} />
       <List>
         {menuSections.map(({ sectionTitle, menu }) => (
-          <>
+          <React.Fragment key={uuidv4()}>
             <Typography className={classes.sectionSideBarTitle}>{sectionTitle}</Typography>
             {menu.map(({ to, title, icon, subMenu }, menuId) => (
               <div
@@ -155,9 +155,22 @@ const SidebarDrawer = ({ mobileOpen, handleDrawerClose, logout, location, classe
                 )}
               </div>
             ))}
-          </>
+          </React.Fragment>
         ))}
       </List>
+      {taxDashboard && (
+        <Link to="/tax-activity">
+          <div onClick={mobileOpen ? handleDrawerClose : null} className={classes.sidebarNavItem}>
+            <ListItem button className={classes.menuItem}>
+              <ListItemIcon className={classes.icon}>
+                <BallotIcon fontSize="medium" />
+              </ListItemIcon>
+              <ListItemText primary="Tax Activity" />
+            </ListItem>
+          </div>
+        </Link>
+      )}
+
       <div onClick={mobileOpen ? handleDrawerClose : null} className={classes.sidebarNavItem}>
         <ListItem button onClick={logoutWithRedirect} className={classes.menuItem}>
           <ListItemIcon className={classes.icon}>

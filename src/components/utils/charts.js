@@ -3,9 +3,8 @@ import { Doughnut, Line } from 'react-chartjs-2';
 import { withStyles } from '@material-ui/core/styles';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import Tooltip from '@material-ui/core/Tooltip';
-import { nWithCommas } from '../../utils/numbers';
-import { titleCase, phone } from '../../utils/helpers';
+import { nWithCommas, titleCase } from '@allocations/nextjs-common';
+import { phone } from '../../utils/helpers';
 import { useViewport } from '../../utils/hooks';
 
 const styles = (theme) => ({
@@ -29,8 +28,8 @@ const styles = (theme) => ({
   },
   rowColor: {
     borderRadius: '100%',
-    width: '10px',
-    height: '10px',
+    width: '15px',
+    height: '15px',
     marginRight: '10px',
     alignSelf: 'center',
   },
@@ -70,6 +69,7 @@ const styles = (theme) => ({
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+    fontSize: '16px',
   },
   sTotal: {
     paddingRight: '15px',
@@ -77,12 +77,15 @@ const styles = (theme) => ({
     justifyContent: 'flex-end',
   },
   tableBody: {
-    maxHeight: '190px',
+    maxHeight: '100%',
     maxWidth: '100%',
     overflowY: 'scroll',
     flexDirection: 'column',
+    alignItems: 'center',
+    height: '100%',
+    paddingTop: '30px',
     '& tr': {
-      borderBottom: `solid 1px rgba(0, 0, 0, 0.1)`,
+      // borderBottom: `solid 1px rgba(0, 0, 0, 0.1)`,
       minHeight: '40px',
     },
     '&::-webkit-scrollbar': {
@@ -95,12 +98,6 @@ export const DefaultChartTable = withStyles(styles)(
   ({
     classes,
     series,
-    title,
-    secondColumnHeader,
-    sumLabel,
-    seriesTotal,
-    firstColumnToolTip, // JSX
-    secondColumnToolTip, // JSX
     seriesLabelKey, // String
   }) => {
     if (!series) {
@@ -108,65 +105,25 @@ export const DefaultChartTable = withStyles(styles)(
     }
     return (
       <table className={classes.dataTable}>
-        <thead style={{ width: '100%' }}>
-          <tr>
-            <th className={classes.header}>{title}</th>
-            <th className={classes.secondColumnHeader}>{secondColumnHeader}</th>
-          </tr>
-        </thead>
         <tbody className={classes.tableBody}>
-          <tr className={classes.seriesTotal}>
-            <td align="left" style={{ width: '65%', minWidth: '65%' }}>
-              <div className={classes.seriesLabel}>{sumLabel}</div>
-            </td>
-            <td align="right" className={classes.seriesAmount}>
-              ${nWithCommas(Math.floor(seriesTotal))}
-            </td>
-          </tr>
           {series.map((s, i) => (
             <tr key={`series_${i}`}>
-              {firstColumnToolTip ? (
-                <Tooltip title={<>{firstColumnToolTip(s)}</>}>
-                  <td align="left" style={{ width: '65%', minWidth: '65%' }}>
-                    <div
-                      style={{
-                        backgroundColor: s.borderColor ? s.borderColor : s.backgroundColor,
-                      }}
-                      className={classes.rowColor}
-                    />
-                    <div className={classes.sLabel}>
-                      {s[seriesLabelKey] && titleCase(s[seriesLabelKey].replace(/_/g, ' '))}
-                    </div>
-                  </td>
-                </Tooltip>
-              ) : (
-                <td align="left" style={{ width: '65%', minWidth: '65%' }}>
-                  <div
-                    style={{ backgroundColor: s.backgroundColor }}
-                    className={classes.rowColor}
-                  />
-                  <div className={classes.sLabel}>
-                    {s[seriesLabelKey] && titleCase(s[seriesLabelKey].replace(/_/g, ' '))}
-                  </div>
-                </td>
-              )}
-              {secondColumnToolTip ? (
-                <Tooltip
-                  title={
-                    <>
-                      <p>{!!secondColumnToolTip && secondColumnToolTip(s)}</p>
-                    </>
-                  }
-                >
-                  <td align="right" className={classes.sTotal}>
-                    {nWithCommas(s.total)}
-                  </td>
-                </Tooltip>
-              ) : (
-                <td align="right" className={classes.sTotal}>
-                  ${nWithCommas(s.total)}
-                </td>
-              )}
+              <td
+                align="left"
+                style={{
+                  width: '100%',
+                  minWidth: '65%',
+                  display: 'flex',
+                  justifyContent: 'flex-start',
+                  flexDirection: 'row',
+                  marginBottom: '10px',
+                }}
+              >
+                <div style={{ backgroundColor: s.backgroundColor }} className={classes.rowColor} />
+                <div className={classes.sLabel}>
+                  {s[seriesLabelKey] && titleCase(s[seriesLabelKey].replace(/_/g, ' '))}
+                </div>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -176,6 +133,38 @@ export const DefaultChartTable = withStyles(styles)(
 );
 
 export const DoughnutChart = withStyles(styles)(({ series }) => {
+  const addAlpha = (color, opacity) => {
+    const _opacity = Math.round(Math.min(Math.max(opacity || 1, 0), 1) * 255);
+    return color + _opacity.toString(16).toUpperCase();
+  };
+
+  const getGradient = (context, canvas, color) => {
+    const { height, width } = context.chart;
+    const centerX = Math.floor(width / 2);
+    const centerY = height / 2;
+    const { ctx } = context.chart;
+    const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, centerY * 1.6);
+    gradient.addColorStop(0, color);
+    gradient.addColorStop(0.4, color);
+    gradient.addColorStop(0.5, addAlpha(color, 0.8));
+    gradient.addColorStop(0.7, color);
+    gradient.addColorStop(1, color);
+    return gradient;
+  };
+  const doughnutData = (canvas) => {
+    return {
+      labels: series.map((s) => s.label),
+      datasets:
+        [
+          {
+            backgroundColor: (context) =>
+              series.map((s) => getGradient(context, canvas, s.backgroundColor)),
+            data: series.map((s) => s.total),
+          },
+        ] || [],
+    };
+  };
+
   Chart.plugins.register(ChartDataLabels);
 
   const { width } = useViewport();
@@ -218,16 +207,7 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
   }
   return (
     <Doughnut
-      data={{
-        labels: series.map((s) => s.label),
-        datasets:
-          [
-            {
-              backgroundColor: series.map((s) => s.backgroundColor),
-              data: series.map((s) => s.total),
-            },
-          ] || [],
-      }}
+      data={doughnutData}
       options={{
         responsive: true,
         onResize: (chart, size) => {
@@ -237,7 +217,7 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
         },
         plugins: {
           datalabels: {
-            display: true,
+            display: false,
             color: 'white',
             labels: dataLabels,
             formatter(value, ctx) {
@@ -253,19 +233,76 @@ export const DoughnutChart = withStyles(styles)(({ series }) => {
           point: {
             radius: 2,
           },
+          arc: {
+            borderWidth: 0,
+          },
         },
         legend: legendOptions,
         tooltips: {
           enabled: true,
+          callbacks: {
+            title(tooltipItem, data) {
+              return `$${nWithCommas(Math.round(data.datasets[0].data[tooltipItem[0].index]))}`;
+            },
+            label(tooltipItem, data) {
+              return data.labels[tooltipItem.index];
+            },
+          },
+          backgroundColor: '#FFF',
+          titleFontSize: 16,
+          titleFontColor: '#2A2B54',
+          bodyFontColor: '#94A3B8',
         },
         maintainAspectRatio: false,
-        cutoutPercentage: 65,
+        cutoutPercentage: 55,
       }}
     />
   );
 });
 
 export const LineChart = withStyles(styles)(({ dataset: { data, labels } }) => {
+  const lineChartPlugin = {
+    afterDraw(chart) {
+      if (chart.tooltip._active && chart.tooltip._active.length) {
+        const activePoint = chart.controller.tooltip._active[0];
+        const { ctx } = chart;
+        const { x, y } = activePoint.tooltipPosition();
+        // const topY = chart.scales['y-axis-0'].top;
+        const bottomY = chart.scales['y-axis-0'].bottom;
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, bottomY);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#0461FF';
+        ctx.setLineDash([3]);
+        ctx.stroke();
+        ctx.restore();
+      }
+    },
+  };
+
+  const lineData = (canvas) => {
+    const ctx = canvas.getContext('2d');
+    const gradient = ctx.createLinearGradient(0, 0, 400, 400);
+    gradient.addColorStop(0, 'rgba(4, 97, 255, 1)');
+    gradient.addColorStop(0.5, 'rgba(4, 97, 255, 0.1)');
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0');
+    return {
+      labels,
+      datasets: [
+        {
+          label: 'Dataset',
+          data,
+          borderColor: '#0461FF',
+          backgroundColor: gradient,
+          fill: true,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: '#0461FF',
+        },
+      ],
+    };
+  };
   const getMaxValue = () => {
     let max = 200000;
     const dataMaxValue = data[data.length - 1];
@@ -273,7 +310,7 @@ export const LineChart = withStyles(styles)(({ dataset: { data, labels } }) => {
     while (max < dataMaxValue) {
       max += 200000;
     }
-    return max;
+    return max + 0.25 * max;
   };
 
   const maxValue = getMaxValue();
@@ -283,19 +320,8 @@ export const LineChart = withStyles(styles)(({ dataset: { data, labels } }) => {
   }
   return (
     <Line
-      data={{
-        labels,
-        datasets: [
-          {
-            label: 'Dataset',
-            data,
-            borderColor: '#0461FF',
-            backgroundColor: 'rgba(4, 97, 255, 0.2)',
-            fill: true,
-            steppedLine: true,
-          },
-        ],
-      }}
+      data={lineData}
+      plugins={[lineChartPlugin]}
       options={{
         interaction: {
           intersect: false,
@@ -317,6 +343,35 @@ export const LineChart = withStyles(styles)(({ dataset: { data, labels } }) => {
           },
         },
         responsive: true,
+        tooltips: {
+          callbacks: {
+            title(tooltipItem, data) {
+              return `$${nWithCommas(Math.round(data.datasets[0].data[tooltipItem[0].index]))}`;
+            },
+            label(tooltipItem, data) {
+              return data.labels[tooltipItem.index];
+            },
+          },
+          backgroundColor: '#FFF',
+          titleFontSize: 16,
+          titleFontColor: '#2A2B54',
+          bodyFontColor: '#94A3B8',
+          bodyFontSize: 14,
+          displayColors: false,
+          mode: 'index',
+          intersect: false,
+          yAlign: 'bottom',
+          xAlign: 'center',
+          caretPadding: 20,
+          xPadding: 2,
+          yPadding: 2,
+          // borderColor: '#e3e7f1',
+          borderWidth: 1,
+        },
+        hover: {
+          mode: 'index',
+          intersect: false,
+        },
         maintainAspectRatio: false,
         scales: {
           xAxes: [
@@ -325,14 +380,24 @@ export const LineChart = withStyles(styles)(({ dataset: { data, labels } }) => {
               ticks: {},
               scaleBeginAtZero: false,
               beginAtZero: false,
+              gridLines: {
+                borderDash: [8, 4],
+                color: 'rgba(0, 0, 0, 0)',
+                drawBorder: false,
+                display: false,
+              },
             },
           ],
           yAxes: [
             {
               gridLines: {
                 borderDash: [8, 4],
+                color: 'rgba(0, 0, 0, 0)',
+                drawBorder: false,
+                display: false,
               },
               ticks: {
+                display: false,
                 stepSize: maxValue / 5,
                 max: maxValue,
                 callback(val) {

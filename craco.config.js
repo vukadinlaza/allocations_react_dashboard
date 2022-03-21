@@ -15,6 +15,7 @@ module.exports = {
           build: 'build@[window.buildModuleFederationURL]',
           treasury: `treasury@[window.treasuryModuleFederationURL]`,
           blockchain: `blockchain@[window.cryptoModuleFederationURL]`,
+          taxdashboard: `taxdashboard@[window.taxdashboardModuleFerederationURL]`,
         },
         shared: {
           react: {
@@ -43,7 +44,7 @@ module.exports = {
     ],
     configure: (webpackConfig) => {
       // webpackConfig.output.enabledLibraryTypes = ['var'];
-      webpackConfig.resolve.fallback = { buffer: false };
+      webpackConfig.resolve.fallback = { buffer: false, util: false };
       return webpackConfig;
     },
   },
