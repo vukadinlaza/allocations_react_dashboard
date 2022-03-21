@@ -310,7 +310,8 @@ export const LineChart = withStyles(styles)(({ dataset: { data, labels } }) => {
     while (max < dataMaxValue) {
       max += 200000;
     }
-    return max + 0.25 * max;
+    if (max > 200000) return max * 1.4;
+    return max * 1.25;
   };
 
   const maxValue = getMaxValue();
