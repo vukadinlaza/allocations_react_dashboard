@@ -38,6 +38,7 @@ export const ORG_DEALS = gql`
           _id
           amount
           status
+          capitalWiredAmount
         }
         AUM
       }
@@ -211,7 +212,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
       .reverse()
       .map((deal: Deal) => {
         let dealRaised: number | number[] = deal.investments?.map((i) =>
-          ['complete', 'wired'].includes(i.status) ? i.amount : 0,
+          ['complete', 'wired'].includes(i.status) ? i.capitalWiredAmount || i.amount : 0,
         );
         dealRaised = dealRaised.length
           ? dealRaised.reduce((acc, n) => {
