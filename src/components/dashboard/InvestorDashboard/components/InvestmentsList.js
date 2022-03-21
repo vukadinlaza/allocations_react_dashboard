@@ -254,7 +254,7 @@ const InvestmentsList = ({
                 component="div"
                 content={titleCase(dealName || '')}
                 fontWeight={700}
-                variant="caption"
+                variant="button"
               />
             ),
             amount: `$${nWithCommas(amount)}`,
