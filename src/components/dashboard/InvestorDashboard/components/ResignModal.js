@@ -115,7 +115,11 @@ const ResignModal = ({ showResignModal, setShowResignModal, refetch }) => {
   };
 
   return (
-    <AppModal isOpen={Boolean(showResignModal)} onClose={() => setShowResignModal(false)}>
+    <AppModal
+      isOpen={Boolean(showResignModal)}
+      onClose={() => setShowResignModal(false)}
+      maxWidth="md"
+    >
       <Grid container direction="column" alignItems="center">
         <InvestmentAmountPanel amount={amount} setAmount={setAmount} isFromModal />
         <PersonalInformation
