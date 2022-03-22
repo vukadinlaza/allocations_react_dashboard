@@ -8,7 +8,6 @@ const RemoteOrgDropDown = React.lazy(() => import('build/OrgDropDown'));
 
 export default function OrgDropDown({ loading }) {
   const { userProfile } = useAuth();
-  // TO DO: confirm organizations_admin data is same as list of orgs...
   const fundMatch = useRouteMatch('/admin/:organization');
   const dealRouteMatch = useRouteMatch('/deals/:organization/:slug');
   const wildcardMatch = useRouteMatch('/*/:organization/*');
