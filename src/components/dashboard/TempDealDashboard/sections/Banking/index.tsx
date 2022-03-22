@@ -1,6 +1,7 @@
 import React from 'react';
 import RemoteBanking from './RemoteBanking';
 import Banking from './Banking';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 
 interface Props {
   organizationData: { [key: string]: any };
@@ -10,11 +11,11 @@ interface Props {
 }
 
 const BankingTab = ({ organizationData, dealData, deal_id, virtual_account_number }: Props) => {
-  const highVolumePartner = organizationData?.deal?.organization?.high_volume_partner;
+  const { treasuryBankingTab } = useFlags();
 
   return (
     <>
-      {highVolumePartner ? (
+      {treasuryBankingTab ? (
         <RemoteBanking organizationData={organizationData} dealData={dealData} />
       ) : (
         <Banking deal_id={deal_id} virtual_account_number={virtual_account_number} />
