@@ -1,7 +1,7 @@
 import React from 'react';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import RemoteBanking from './RemoteBanking';
 import Banking from './Banking';
-import { useFlags } from 'launchdarkly-react-client-sdk';
 
 interface Props {
   organizationData: { [key: string]: any };
