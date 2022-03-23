@@ -50,14 +50,7 @@ const AddBuildButton = (props) => {
   return <AddBubbleBuildButton {...props} />;
 };
 
-const SidebarDrawer = ({
-  mobileOpen,
-  handleDrawerClose,
-  currentHomeUrl,
-  logout,
-  location,
-  classes,
-}) => {
+const SidebarDrawer = ({ mobileOpen, handleDrawerClose, logout, location, classes }) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
   const { prospectDealPage, taxDashboard } = useFlags();
 
@@ -80,7 +73,7 @@ const SidebarDrawer = ({
       menu: prospectDealPage
         ? [
             {
-              to: currentHomeUrl,
+              to: '/',
               title: 'Dashboard',
               icon: <HomeIcon fontSize="medium" />,
             },
@@ -97,7 +90,7 @@ const SidebarDrawer = ({
           ]
         : [
             {
-              to: currentHomeUrl,
+              to: '/',
               title: 'Dashboard',
               icon: <HomeIcon fontSize="medium" />,
             },

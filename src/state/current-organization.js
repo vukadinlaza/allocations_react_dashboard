@@ -1,15 +1,9 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useAuth } from '../auth/useAuth';
+import React, { createContext, useContext, useState } from 'react';
 
 const OrganizationContext = createContext();
 
 export const CurrentAccountProvider = ({ children }) => {
-  const { loading, userProfile } = useAuth();
   const [currentOrganization, setCurrentOrganization] = useState(null);
-
-  useEffect(() => {
-    if (!currentOrganization) setCurrentOrganization(userProfile?.organizations_admin?.[0]);
-  }, [loading]);
 
   return (
     <OrganizationContext.Provider value={{ currentOrganization, setCurrentOrganization }}>
