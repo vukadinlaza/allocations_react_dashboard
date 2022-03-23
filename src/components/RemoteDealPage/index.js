@@ -8,13 +8,12 @@ export default function RemoteDealPage() {
   const history = useHistory();
   const { pathname } = useLocation();
   const { organization, deal_id, deal_slug } = useParams();
-  console.log(deal_slug, 'DEAL SLUG');
   return (
     <Suspense fallback={<Loader />}>
       <DealPage
         orgSlug={organization}
         dealId={deal_id}
-        deal_slug={deal_slug ?? ''}
+        dealSlug={deal_slug}
         pathname={pathname}
         pushToDealPage={() => history.push(`/admin/${organization}/${deal_id}`)}
         goToInvestPage={(dealSlug) => history.push(`/invest/${organization}/${dealSlug}`)}
