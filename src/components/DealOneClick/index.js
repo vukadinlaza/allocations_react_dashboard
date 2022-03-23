@@ -1,9 +1,9 @@
 import React from 'react';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import DealLandingPage from './LandingPage';
-import DealLandingPageRedesign from './LandingPageRedesign';
+import RemoteDealPage from '../RemoteDealPage';
 
 export default function DealOneClick() {
   const { dealPageRedesign } = useFlags();
-  return dealPageRedesign ? <DealLandingPageRedesign /> : <DealLandingPage />;
+  return dealPageRedesign ? <RemoteDealPage /> : <DealLandingPage />;
 }
