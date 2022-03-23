@@ -91,7 +91,7 @@ export default () => {
                 variant="contained"
                 style={{ marginTop: '1rem', minWidth: '100%' }}
                 onClick={() => {
-                  history.push({ pathname: `/deals/klarna-demo` });
+                  history.push({ pathname: `/deals/allocations/klarna-demo` });
                 }}
               >
                 View

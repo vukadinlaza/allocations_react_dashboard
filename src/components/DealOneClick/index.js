@@ -5,5 +5,6 @@ import RemoteDealPage from '../RemoteDealPage';
 
 export default function DealOneClick() {
   const { dealPageRedesign } = useFlags();
+  console.log(dealPageRedesign);
   return dealPageRedesign ? <RemoteDealPage /> : <DealLandingPage />;
 }
