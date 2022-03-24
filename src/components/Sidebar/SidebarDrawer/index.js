@@ -15,7 +15,6 @@ import BallotIcon from '@material-ui/icons/Ballot';
 import { BsBinocularsFill } from 'react-icons/bs';
 import styles from '../styles';
 import { useCurrentOrganizationState } from '../../../state/current-organization';
-import { useAuth } from '../../../auth/useAuth';
 
 const AddBubbleBuildButton = ({ classes }) => (
   <Button
@@ -52,7 +51,14 @@ const AddBuildButton = (props) => {
   return <AddBubbleBuildButton {...props} />;
 };
 
-const SidebarDrawer = ({ mobileOpen, handleDrawerClose, userProfile, logout, location }) => {
+const SidebarDrawer = ({
+  mobileOpen,
+  handleDrawerClose,
+  userProfile,
+  logout,
+  location,
+  classes,
+}) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
   const { prospectDealPage, taxDashboard } = useFlags();
   const [currentOrganization] = useCurrentOrganizationState();
