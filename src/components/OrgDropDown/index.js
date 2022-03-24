@@ -14,9 +14,7 @@ export default function OrgDropDown({ loading }) {
   const location = useLocation();
   const history = useHistory();
   const [currentOrganization, setCurrentOrganization] = useCurrentOrganizationState();
-  useEffect(() => {
-    console.log(currentOrganization, 'CURRENT ORG REACT');
-  }, [currentOrganization]);
+
   return (
     <Suspense fallback={<Loader />}>
       <RemoteOrgDropDown
