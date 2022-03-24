@@ -133,12 +133,9 @@ function Sidebar(props) {
               <SidebarDrawer
                 mobileOpen={mobileOpen}
                 handleDrawerClose={handleDrawerClose}
-                investTab={investTab}
-                creditTab={creditTab}
                 userProfile={userProfile}
                 logout={logout}
                 location={location}
-                refetchUserProfile={refetchUserProfile}
               />
             </Drawer>
           </Hidden>
@@ -163,12 +160,9 @@ function Sidebar(props) {
               <SidebarDrawer
                 mobileOpen={mobileOpen}
                 handleDrawerClose={handleDrawerClose}
-                investTab={investTab}
-                creditTab={creditTab}
                 userProfile={userProfile}
                 logout={logout}
                 location={location}
-                refetchUserProfile={refetchUserProfile}
               />
             </Drawer>
           </Hidden>

@@ -52,12 +52,11 @@ const AddBuildButton = (props) => {
   return <AddBubbleBuildButton {...props} />;
 };
 
-const SidebarDrawer = ({ mobileOpen, handleDrawerClose, logout, location, classes }) => {
+const SidebarDrawer = ({ mobileOpen, handleDrawerClose, userProfile, logout, location }) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
   const { prospectDealPage, taxDashboard } = useFlags();
   const [currentOrganization] = useCurrentOrganizationState();
   const [currentHomeUrl, setCurrentHomeUrl] = useState('');
-  const { userProfile } = useAuth();
 
   useEffect(() => {
     const isRealOrg = currentOrganization?.name !== userProfile?.name;
