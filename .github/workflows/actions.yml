@@ -17,36 +17,6 @@ on:
       - '**' # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#patterns-to-match-branches-and-tags
 
 jobs:
-  cypress-run:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    env:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      CYPRESS_USERNAME: ${{ secrets.CYPRESS_USERNAME }}
-      CYPRESS_PASSWORD: ${{ secrets.CYPRESS_PASSWORD }}
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x] #https://vercel.com/docs/runtimes
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        # https://devcenter.heroku.com/articles/nodejs-support#specifying-a-node-js-version
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
-      - run: yarn install --frozen-lockfile
-      - name: Cypress run
-        uses: cypress-io/github-action@v2
-        with:
-          build: yarn build
-          start: yarn start
-
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
