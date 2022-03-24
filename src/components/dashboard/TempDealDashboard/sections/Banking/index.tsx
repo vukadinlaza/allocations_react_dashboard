@@ -16,7 +16,11 @@ const BankingTab = ({ organizationData, dealData, deal_id, virtual_account_numbe
   return (
     <>
       {treasuryBankingTab ? (
-        <RemoteBanking organizationData={organizationData} dealData={dealData} />
+        <RemoteBanking
+          organizationData={organizationData}
+          dealData={dealData}
+          virtual_account_number={virtual_account_number}
+        />
       ) : (
         <Banking deal_id={deal_id} virtual_account_number={virtual_account_number} />
       )}
