@@ -15,7 +15,7 @@ const BankingTab = ({ dealData, deal_id, virtual_account_number }: Props) => {
   return (
     <>
       {treasuryBankingTab ? (
-        <RemoteBanking dealData={dealData} />
+        <RemoteBanking dealData={dealData} virtual_account_number={virtual_account_number} />
       ) : (
         <Banking deal_id={deal_id} virtual_account_number={virtual_account_number} />
       )}

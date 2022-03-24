@@ -46,6 +46,7 @@ import { useAuth } from './auth/useAuth';
 import TempDealDashboard from './components/dashboard/TempDealDashboard';
 import RemoteFundManagerDashboard from './components/RemoteFundManagerDashboard';
 import RemoteTaxDashboard from './components/TaxDashboard';
+import SidebarOld from './components/SidebarOld';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -57,9 +58,10 @@ Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
  * */
 
 const SideBar = ({ isAuthenticated }) => {
+  const { federatedSidebar } = useFlags();
   return (
     <div className="sidebar" style={{ display: !isAuthenticated && 'none' }}>
-      <Sidebar />
+      {federatedSidebar ? <Sidebar /> : <SidebarOld />}
     </div>
   );
 };

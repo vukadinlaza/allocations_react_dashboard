@@ -16,6 +16,10 @@ interface BankingProps {
   org_id: string;
 }
 
-const Banking: React.FC<{ user: AllocationsUser; bankProps: BankingProps }> = () => JSX.Element;
+const Banking: React.FC<{
+  user: AllocationsUser;
+  bankProps: BankingProps;
+  virtual_account_number?: string | null;
+}> = () => JSX.Element;
 
 export default Banking;

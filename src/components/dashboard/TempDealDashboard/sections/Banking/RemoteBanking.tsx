@@ -4,7 +4,13 @@ import Loader from '../../../../utils/Loader';
 
 const Banking = React.lazy(() => import('treasury/Banking'));
 
-export default function RemoteBanking({ dealData }: { dealData: { [key: string]: any } }) {
+export default function RemoteBanking({
+  dealData,
+  virtual_account_number,
+}: {
+  dealData: { [key: string]: any };
+  virtual_account_number?: string | null;
+}) {
   const { userProfile } = useAuth();
 
   const bankProps = {
@@ -15,7 +21,15 @@ export default function RemoteBanking({ dealData }: { dealData: { [key: string]:
 
   return (
     <React.Suspense fallback={<Loader />}>
-      <Banking user={userProfile} bankProps={bankProps} />
+      <Banking
+        user={userProfile}
+        bankProps={bankProps}
+        virtual_account_number={virtual_account_number}
+      />
     </React.Suspense>
   );
 }
+
+RemoteBanking.defaultProps = {
+  virtual_account_number: null,
+};
