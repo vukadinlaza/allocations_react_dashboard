@@ -127,7 +127,7 @@ const TempDealDashboard = ({ classes }) => {
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
-  const [deal, setDeal] = useState(null);
+  const [serviceDeal, setServiceDeal] = useState(null);
   const [dealName, setDealName] = useState('');
   const [dashboardTabs, setDashboardTabs] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -182,7 +182,7 @@ const TempDealDashboard = ({ classes }) => {
             'Deal Page',
           ];
         }
-        setDeal(deal);
+        setServiceDeal(deal);
       } catch (e) {
         console.log('ERROR:', e);
       }
@@ -335,9 +335,8 @@ const TempDealDashboard = ({ classes }) => {
       case 'Banking':
         return (
           <Banking
-            organizationData={dealData}
-            dealData={dealData}
-            deal_id={dealData.deal._id}
+            dealData={serviceDeal}
+            deal_id={serviceDeal._id}
             virtual_account_number={dealData.deal.virtual_account_number || null}
             classes={classes}
           />
