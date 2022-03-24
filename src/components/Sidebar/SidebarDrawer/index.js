@@ -58,8 +58,7 @@ const SidebarDrawer = ({ mobileOpen, handleDrawerClose, logout, location, classe
   const [currentHomeUrl, setCurrentHomeUrl] = useState('');
 
   useEffect(() => {
-    const isRealOrg = currentOrganization && !currentOrganization.name.includes('@');
-    const currentHomePath = isRealOrg ? `/admin/${currentOrganization.slug}` : '/';
+    const currentHomePath = currentOrganization ? `/admin/${currentOrganization.slug}` : '/';
     setCurrentHomeUrl(currentHomePath);
   }, [currentOrganization]);
 
