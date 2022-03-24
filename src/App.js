@@ -107,12 +107,9 @@ const MainApp = ({ isAuthenticated }) => {
         {/* Public */}
 
         <Route path="/public/new-build" exact component={Build} />
-        <Route path="/public/:organization/:deal_slug" component={DealOneClick} exact />
-        <Route path="/public/:deal_slug" component={DealOneClick} exact />
 
         {/* Private  */}
         <PrivateRoute path="/new-build/deal" exact component={PostBuild} />
-        <PrivateRoute path="/deals/:deal_slug" component={DealOneClick} exact />
         <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
 
         {/* Prospect deals */}
