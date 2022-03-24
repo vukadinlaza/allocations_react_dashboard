@@ -104,13 +104,7 @@ const fundTabs = [
   'Deal Page',
 ];
 
-const spvTabs = [
-  'Deal Progress',
-  'Investor Onboarding Status',
-  'Investors',
-  'Documents',
-  'Deal Page',
-];
+let spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
 
 // Base here is OPS_ACCOUNTING
 let BASE = 'app3m4OJvAWUg0hng';
@@ -133,6 +127,7 @@ const TempDealDashboard = ({ classes }) => {
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
+  const [deal, setDeal] = useState(null);
   const [dealName, setDealName] = useState('');
   const [dashboardTabs, setDashboardTabs] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -172,6 +167,27 @@ const TempDealDashboard = ({ classes }) => {
     INVESTMENTS_TABLE,
     `(FIND("${checkedAtDealDataName}", {Deals}))`,
   );
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${process.env.REACT_APP_BUILD_FRONTEND_URL}/api/deals/${deal_id}`);
+        const deal = await res.json();
+        if (deal?.phases?.length) {
+          spvTabs = [
+            'Deal Progress',
+            'Investor Onboarding Status',
+            'Investors',
+            'Documents',
+            'Deal Page',
+          ];
+        }
+        setDeal(deal);
+      } catch (e) {
+        console.log('ERROR:', e);
+      }
+    })();
+  }, [deal_id]);
 
   useEffect(() => {
     setDealName(dealData?.deal?.company_name);
