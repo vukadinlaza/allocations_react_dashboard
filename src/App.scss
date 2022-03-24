@@ -247,7 +247,7 @@ th {
   grid-template-columns: minmax(250px, 10%) auto;
   grid-template-areas: 'sidebar mainRoute';
 
-  @media only screen and (max-width: 960px) {
+  @media only screen and (max-width: 900px) {
     display: grid;
 
     grid-template-columns: 100%;

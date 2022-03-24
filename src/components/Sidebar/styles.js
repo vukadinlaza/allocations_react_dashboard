@@ -13,13 +13,16 @@ const styles = (theme) => ({
   },
   appBar: {
     width: '100%',
-    background: '#f7f7f7',
+    background: 'white',
     color: '#868c97',
     boxShadow: 'none !important',
     position: 'relative',
     height: '100%',
-    [theme.breakpoints.up(tablet)]: {
+    [theme.breakpoints.up('lg')]: {
       display: 'none',
+    },
+    '&>*': {
+      justifyContent: 'space-between',
     },
   },
   brand: {
@@ -55,14 +58,14 @@ const styles = (theme) => ({
     alignItems: 'flex-start',
     overflow: 'hidden',
     height: '100%',
-    backgroundColor: '#f7f7f7',
+    backgroundColor: 'white',
   },
   drawer: {
     width: '100%',
     height: '100%',
     backgroundColor: 'white',
     borderRight: 'solid 1px #e4e3e3',
-    [theme.breakpoints.up(tablet)]: {
+    [theme.breakpoints.up('md')]: {
       width: '100%',
       flexShrink: 0,
     },
@@ -74,8 +77,8 @@ const styles = (theme) => ({
     borderLeft: 0,
     position: 'relative',
     height: '100%',
-    backgroundColor: '#f7f7f7',
-    background: '#f7f7f7',
+    backgroundColor: 'white',
+    background: 'white',
   },
   formControl: {
     display: 'flex',
@@ -170,7 +173,7 @@ const styles = (theme) => ({
     flexDirection: 'column',
     height: '100%',
     width: '100%',
-    backgroundColor: '#f7f7f7',
+    backgroundColor: 'white',
     border: 'none !important',
   },
   sidebarDrawer: {
