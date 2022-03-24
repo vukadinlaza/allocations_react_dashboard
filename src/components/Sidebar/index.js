@@ -103,12 +103,13 @@ function Sidebar(props) {
               admin={userProfile.admin}
             />
           </div>
+          <div style={{ width: '64px', height: '48px' }} />
         </Toolbar>
       </AppBar>
 
       <div className={classes.contentContainer}>
         <nav className={classes.drawer} aria-label="mailbox folders">
-          <Hidden mdUp implementation="js" className={classes.firstHidden}>
+          <Hidden lgUp implementation="js" className={classes.firstHidden}>
             <Drawer
               container={container}
               variant="temporary"
@@ -123,6 +124,12 @@ function Sidebar(props) {
                 keepMounted: true,
               }}
             >
+              <div className={classes.brand}>
+                <Brand
+                  organizations_admin={userProfile.organizations_admin || []}
+                  admin={userProfile.admin}
+                />
+              </div>
               <OrgDropDown loading={loading} />
 
               <SidebarDrawer
@@ -139,7 +146,7 @@ function Sidebar(props) {
             </Drawer>
           </Hidden>
 
-          <Hidden smDown implementation="css" className={classes.secondHidden}>
+          <Hidden mdDown implementation="css" className={classes.secondHidden}>
             <Drawer
               className={classes.newDrawerPaper}
               classes={{
