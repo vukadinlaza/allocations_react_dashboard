@@ -15,6 +15,7 @@ import BallotIcon from '@material-ui/icons/Ballot';
 import { BsBinocularsFill } from 'react-icons/bs';
 import styles from '../styles';
 import { useCurrentOrganizationState } from '../../../state/current-organization';
+import { useAuth } from '../../../auth/useAuth';
 
 const AddBubbleBuildButton = ({ classes }) => (
   <Button
@@ -56,11 +57,13 @@ const SidebarDrawer = ({ mobileOpen, handleDrawerClose, logout, location, classe
   const { prospectDealPage, taxDashboard } = useFlags();
   const [currentOrganization] = useCurrentOrganizationState();
   const [currentHomeUrl, setCurrentHomeUrl] = useState('');
+  const { userProfile } = useAuth();
 
   useEffect(() => {
-    const currentHomePath = currentOrganization ? `/admin/${currentOrganization.slug}` : '/';
+    const isRealOrg = currentOrganization?.name !== userProfile?.name;
+    const currentHomePath = isRealOrg ? `/admin/${currentOrganization?.slug}` : '/';
     setCurrentHomeUrl(currentHomePath);
-  }, [currentOrganization]);
+  }, [currentOrganization, userProfile]);
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
 
