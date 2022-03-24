@@ -7,7 +7,7 @@ describe('Login', () => {
   it('logs in', () => {
     cy.loginAuth0(username, password);
     cy.visit('/');
-    cy.url().should('eq', 'http://localhost:3000/admin/repair-biotechnologies');
+    cy.url().should('eq', 'http://localhost:3000/admin/perpetual-vp');
   });
   // it('logs out', () => {
   //   cy.loginAuth0(username, password);
