@@ -21,6 +21,7 @@ import DealTypeSelector from './DealType';
 import DealPage from '../Common/DealPage';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import { phone } from '../../../utils/helpers';
+import PostBuild from '../../PostBuild';
 
 const RemoteInvestors = React.lazy(() => import('invest/Investors'));
 
@@ -103,7 +104,13 @@ const fundTabs = [
   'Deal Page',
 ];
 
-const spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
+const spvTabs = [
+  'Deal Progress',
+  'Investor Onboarding Status',
+  'Investors',
+  'Documents',
+  'Deal Page',
+];
 
 // Base here is OPS_ACCOUNTING
 let BASE = 'app3m4OJvAWUg0hng';
@@ -162,8 +169,8 @@ const TempDealDashboard = ({ classes }) => {
 
   const { data: atFundData, status } = useFetch(
     BASE,
-    atDealData?.name && INVESTMENTS_TABLE,
-    atDealData?.name && `(FIND("${checkedAtDealDataName}", {Deals}))`,
+    INVESTMENTS_TABLE,
+    `(FIND("${checkedAtDealDataName}", {Deals}))`,
   );
 
   useEffect(() => {
@@ -330,6 +337,8 @@ const TempDealDashboard = ({ classes }) => {
             handleTooltip={handleTooltip}
           />
         );
+      case 'Deal Progress':
+        return <PostBuild deal_id={deal_id} />;
       default:
         return <p>No Data</p>;
     }
@@ -357,7 +366,7 @@ const TempDealDashboard = ({ classes }) => {
             handleTabChange={handleTabChange}
             rootStyle={{ padding: '0 8px' }}
           />
-          {!dealData || !dealData || !atFundData || status === 'fetching' || loading ? (
+          {!dealData || !atFundData || status === 'fetching' || loading ? (
             <div className={classes.loaderContainer}>
               <AllocationsLoader />
             </div>
