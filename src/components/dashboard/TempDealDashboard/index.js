@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { toast } from 'react-toastify';
 import { gql, useQuery } from '@apollo/client';
 import { useParams, withRouter } from 'react-router-dom';
@@ -12,7 +12,6 @@ import Banking from './sections/Banking';
 import Crypto from './sections/Crypto';
 import Investments from './sections/Investments';
 import Investors from './sections/Investors';
-import InvestorsCapitalCalls from './sections/InvestorsCapitalCalls';
 import { useFetch, useViewport } from '../../../utils/hooks';
 import { useAuth } from '../../../auth/useAuth';
 import AllocationsLoader from '../../utils/AllocationsLoader';
@@ -23,7 +22,7 @@ import DealPage from '../Common/DealPage';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import { phone } from '../../../utils/helpers';
 
-// const MFE1 = React.lazy(() => import('mfe1/mfe1'));
+const RemoteInvestors = React.lazy(() => import('invest/Investors'));
 
 const GET_DEAL = gql`
   query GetDeal($_id: String!) {
@@ -184,6 +183,15 @@ const TempDealDashboard = ({ classes }) => {
   }, [dealData]);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('tab')) {
+      const tabIndex = dashboardTabs.findIndex((tab) => tab === params.get('tab'));
+      setTabName(dashboardTabs[tabIndex === -1 ? 0 : tabIndex]);
+      setTabIndex(tabIndex === -1 ? 0 : tabIndex);
+    }
+  }, [dashboardTabs]);
+
+  useEffect(() => {
     if (atFundData) setLoading(false);
   }, [atFundData]);
 
@@ -275,13 +283,9 @@ const TempDealDashboard = ({ classes }) => {
         );
       case 'Investors':
         return (capitalCallsDealSpecific || []).includes(dealData?.deal._id) ? (
-          <InvestorsCapitalCalls
-            classes={classes}
-            data={dealData}
-            orgSlug={orgSlug}
-            userProfile={userProfile}
-            dealName={checkedDealName}
-          />
+          <Suspense fallback={<AllocationsLoader />}>
+            <RemoteInvestors deal_id={dealData?.deal?._id} />
+          </Suspense>
         ) : (
           <Investors
             classes={classes}

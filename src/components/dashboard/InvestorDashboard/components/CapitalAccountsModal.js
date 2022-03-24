@@ -5,7 +5,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { Paper, Grid, Typography, Modal, Container, Button } from '@material-ui/core';
 import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
-import { nWithCommas, amountFormat } from '../../../../utils/numbers';
+import { amountFormat, nWithCommas } from '@allocations/nextjs-common';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -74,7 +74,7 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts }) => {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <Container maxWidth="sm">
+        <Container maxWidth="md">
           <Grid container>
             <Grid item xs={12} sm={12} md={12} lg={12}>
               <Paper className={classes.modalPaper}>
