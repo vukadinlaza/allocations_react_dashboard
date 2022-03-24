@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { useHistory, useLocation, useRouteMatch } from 'react-router';
 import { useAuth } from '../../auth/useAuth';
 import { useCurrentOrganizationState } from '../../state/current-organization';
@@ -14,7 +14,9 @@ export default function OrgDropDown({ loading }) {
   const location = useLocation();
   const history = useHistory();
   const [currentOrganization, setCurrentOrganization] = useCurrentOrganizationState();
-
+  useEffect(() => {
+    console.log(currentOrganization, 'CURRENT ORG REACT');
+  }, [currentOrganization]);
   return (
     <Suspense fallback={<Loader />}>
       <RemoteOrgDropDown

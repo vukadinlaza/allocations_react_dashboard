@@ -8,7 +8,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { useAuth } from '../../auth/useAuth';
 import SidebarDrawer from './SidebarDrawer';
 import styles from './styles';
-import { useCurrentOrganizationState } from '../../state/current-organization';
 import OrgDropDown from '../OrgDropDown';
 
 const GET_INVESTOR = gql`
@@ -52,7 +51,6 @@ function Sidebar(props) {
   } = useAuth(GET_INVESTOR);
   const [investTab, setInvestTab] = useState(false);
   const [creditTab, setCreditTab] = useState(false);
-  const [currentOrganization] = useCurrentOrganizationState();
 
   const location = useLocation();
   const { window, classes } = props;
@@ -138,7 +136,6 @@ function Sidebar(props) {
                 investTab={investTab}
                 creditTab={creditTab}
                 userProfile={userProfile}
-                currentOrganization={currentOrganization}
                 logout={logout}
                 location={location}
                 refetchUserProfile={refetchUserProfile}
@@ -169,7 +166,6 @@ function Sidebar(props) {
                 investTab={investTab}
                 creditTab={creditTab}
                 userProfile={userProfile}
-                currentOrganization={currentOrganization}
                 logout={logout}
                 location={location}
                 refetchUserProfile={refetchUserProfile}
