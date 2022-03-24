@@ -19,6 +19,11 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      CYPRESS_USERNAME: ${{ secrets.CYPRESS_USERNAME }}
+      CYPRESS_PASSWORD: ${{ secrets.CYPRESS_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -29,10 +34,6 @@ jobs:
         with:
           build: yarn build
           start: yarn start
-    env:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      CYPRESS_USERNAME: ${{ secrets.CYPRESS_USERNAME }}
-      CYPRESS_PASSWORD: ${{ secrets.CYPRESS_PASSWORD }}
 
   test:
     runs-on: ubuntu-latest
