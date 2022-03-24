@@ -243,7 +243,18 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType })
     let columnInvestors = investors.filter((inv) => inv.status === status);
     let total = 0;
     if (columnInvestors.length) {
-      total = Math.round(columnInvestors.map((inv) => inv.amount).reduce((acc, n) => acc + n));
+      // For deals that support capitalWiredAmount, we should look for capitalWiredAmount on wired investments, for old deals we just rely on the wired status and use amount
+      total = Math.round(
+        columnInvestors
+          .map((inv) =>
+            ['wired', 'completed'].includes(status)
+              ? inv.capitalWiredAmount || inv.amount
+              : inv.amount,
+          )
+          .reduce((acc, n) => {
+            return acc + n;
+          }),
+      );
     }
 
     if (sortField) {

@@ -16,6 +16,18 @@ const Investors = ({ classes, data, orgSlug, userProfile }) => {
     switch (type) {
       case 'name':
         return row.first_name ? `${row['first_name']} ${row['last_name']}` : '';
+      case 'taxLink':
+        return row._id ? (
+          <a
+            href={`https://tax2021.allocations.com/home/${row.email}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Tax Activity
+          </a>
+        ) : (
+          <div />
+        );
       case 'link':
         return <a href={`/investor/${row._id}/home`}>Link</a>;
       default:
@@ -24,6 +36,14 @@ const Investors = ({ classes, data, orgSlug, userProfile }) => {
   };
 
   if (['irishangels'].includes(orgSlug) || userProfile.admin) {
+    headers.push({
+      value: 'Tax Activity',
+      label: 'Tax Activity',
+      type: 'taxLink',
+      alignHeader: true,
+      keyNotInData: true,
+    });
+
     headers.push({
       value: '_id',
       label: 'Dashboard Link',

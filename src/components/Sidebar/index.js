@@ -1,23 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { gql } from '@apollo/client';
 import { useTheme } from '@material-ui/core/styles';
-import {
-  Toolbar,
-  AppBar,
-  Drawer,
-  Hidden,
-  IconButton,
-  FormControl,
-  Select,
-  MenuItem,
-} from '@material-ui/core';
+import { Toolbar, AppBar, Drawer, Hidden, IconButton } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import { useAuth } from '../../auth/useAuth';
 import SidebarDrawer from './SidebarDrawer';
 import styles from './styles';
-import { useCurrentOrganizationState } from '../../state/current-organization';
+import OrgDropDown from '../OrgDropDown';
 
 const GET_INVESTOR = gql`
   {
@@ -51,20 +42,10 @@ function Brand() {
 }
 
 function Sidebar(props) {
-  const {
-    userProfile,
-    logout,
-    isAuthenticated,
-    loading,
-    refetch: refetchUserProfile,
-  } = useAuth(GET_INVESTOR);
-  const history = useHistory();
-  const [investTab, setInvestTab] = useState(false);
-  const [creditTab, setCreditTab] = useState(false);
-  const [currentOrganization, setCurrentOrganization] = useCurrentOrganizationState();
-  const [currentHomeUrl, setCurrentHomeUrl] = useState('');
-  const fundMatch = useRouteMatch('/admin/:organization');
-  const fundMatchDeals = useRouteMatch('/deals/:organization/:slug');
+  const { userProfile, logout, isAuthenticated, loading } = useAuth(GET_INVESTOR);
+  const [setInvestTab] = useState(false);
+  const [setCreditTab] = useState(false);
+
   const location = useLocation();
   const { window, classes } = props;
   const theme = useTheme();
@@ -84,36 +65,6 @@ function Sidebar(props) {
     userProfile.showBuild,
   ]);
 
-  const isUserAuthenticated = isAuthenticated && !loading;
-
-  const handleAccountChange = (e) => {
-    const newValue = e.target ? e.target.value : e;
-    const org = userProfile?.organizations_admin?.find((org) => org.name === newValue);
-    if (org) {
-      const currentHomePath = org ? `/admin/${org.slug}` : '/';
-      setCurrentHomeUrl(currentHomePath);
-      setCurrentOrganization(org);
-    }
-  };
-
-  useEffect(() => {
-    const userIsOrgAdmin = userProfile?.organizations_admin?.length;
-    const defaultUrl = userIsOrgAdmin ? `/admin/${userProfile.organizations_admin[0].slug}` : '/';
-    setCurrentHomeUrl(defaultUrl);
-    if (isAuthenticated) {
-      if (location?.pathname === '/') {
-        history.push(defaultUrl);
-      } else {
-        const organizationSlug = fundMatch?.params?.organization;
-        const dealOrganizationSlug = fundMatchDeals?.params?.organization;
-        const currentOrg = userProfile?.organizations_admin?.find(
-          (org) => org.slug === organizationSlug || org.slug === dealOrganizationSlug,
-        );
-        handleAccountChange(currentOrg?.name || '');
-      }
-    }
-  }, [isUserAuthenticated]);
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -123,8 +74,6 @@ function Sidebar(props) {
   };
 
   const container = window !== undefined ? () => window().document.body : undefined;
-  const adminOrganizations = userProfile?.organizations_admin;
-  const adminOrganizationsCopy = adminOrganizations ? [...adminOrganizations] : []; // Create a copy of organizations so we can mutate with sort
 
   if (!isAuthenticated) return null;
   return (
@@ -146,12 +95,13 @@ function Sidebar(props) {
               admin={userProfile.admin}
             />
           </div>
+          <div style={{ width: '64px', height: '48px' }} />
         </Toolbar>
       </AppBar>
 
       <div className={classes.contentContainer}>
         <nav className={classes.drawer} aria-label="mailbox folders">
-          <Hidden mdUp implementation="js" className={classes.firstHidden}>
+          <Hidden lgUp implementation="js" className={classes.firstHidden}>
             <Drawer
               container={container}
               variant="temporary"
@@ -166,68 +116,25 @@ function Sidebar(props) {
                 keepMounted: true,
               }}
             >
-              <FormControl className={classes.formControl}>
-                {loading ? null : (
-                  <Select
-                    labelId="accounts-select"
-                    value={currentOrganization?.name || userProfile?.name || ''}
-                    onChange={handleAccountChange}
-                    className={classes.input}
-                    style={{ backgroundColor: '#f7f7f7' }}
-                    classes={{
-                      root: classes.select,
-                    }}
-                    inputProps={{
-                      classes: {
-                        focused: classes.inputFocused,
-                        underline: classes.inputFocused,
-                      },
-                    }}
-                  >
-                    <MenuItem
-                      onClick={() => {
-                        handleDrawerToggle();
-                        history.push(`/`);
-                      }}
-                      value={userProfile?.name}
-                      className={classes.formItem}
-                    >
-                      {userProfile?.name}
-                    </MenuItem>
-                    {adminOrganizationsCopy?.length &&
-                      adminOrganizationsCopy
-                        .sort((a, b) => a.name.localeCompare(b.name))
-                        .map((org) => (
-                          <MenuItem
-                            onClick={() => {
-                              handleDrawerToggle();
-                              history.push(`/admin/${org.slug}`);
-                            }}
-                            value={org.name}
-                            key={org.name}
-                          >
-                            {org.name}
-                          </MenuItem>
-                        ))}
-                  </Select>
-                )}
-              </FormControl>
+              <div className={classes.brand}>
+                <Brand
+                  organizations_admin={userProfile.organizations_admin || []}
+                  admin={userProfile.admin}
+                />
+              </div>
+              <OrgDropDown loading={loading} />
+
               <SidebarDrawer
                 mobileOpen={mobileOpen}
                 handleDrawerClose={handleDrawerClose}
-                investTab={investTab}
-                creditTab={creditTab}
                 userProfile={userProfile}
-                currentOrganization={currentOrganization}
-                currentHomeUrl={currentHomeUrl}
                 logout={logout}
                 location={location}
-                refetchUserProfile={refetchUserProfile}
               />
             </Drawer>
           </Hidden>
 
-          <Hidden smDown implementation="css" className={classes.secondHidden}>
+          <Hidden mdDown implementation="css" className={classes.secondHidden}>
             <Drawer
               className={classes.newDrawerPaper}
               classes={{
@@ -242,57 +149,14 @@ function Sidebar(props) {
                   admin={userProfile.admin}
                 />
               </div>
-              <FormControl className={classes.formControl}>
-                {loading ? null : (
-                  <Select
-                    labelId="accounts-select"
-                    value={currentOrganization?.name || userProfile?.name || ''}
-                    onChange={handleAccountChange}
-                    className={classes.input}
-                    classes={{
-                      root: classes.select,
-                    }}
-                    inputProps={{
-                      classes: {
-                        focused: classes.inputFocused,
-                        underline: classes.inputFocused,
-                      },
-                    }}
-                  >
-                    <MenuItem
-                      onClick={() => history.push(`/`)}
-                      value={userProfile?.name}
-                      className={classes.formItem}
-                    >
-                      {userProfile?.name}
-                    </MenuItem>
-                    {adminOrganizationsCopy?.length &&
-                      adminOrganizationsCopy
-                        .sort((a, b) => a.name.localeCompare(b.name))
-                        .map((org, i) => (
-                          <MenuItem
-                            onClick={() => history.push(`/admin/${org.slug}`)}
-                            value={org.name}
-                            key={`${org.name}${i}`}
-                          >
-                            {org.name}
-                          </MenuItem>
-                        ))}
-                  </Select>
-                )}
-              </FormControl>
+              <OrgDropDown loading={loading} />
 
               <SidebarDrawer
                 mobileOpen={mobileOpen}
                 handleDrawerClose={handleDrawerClose}
-                investTab={investTab}
-                creditTab={creditTab}
                 userProfile={userProfile}
-                currentOrganization={currentOrganization}
-                currentHomeUrl={currentHomeUrl}
                 logout={logout}
                 location={location}
-                refetchUserProfile={refetchUserProfile}
               />
             </Drawer>
           </Hidden>
