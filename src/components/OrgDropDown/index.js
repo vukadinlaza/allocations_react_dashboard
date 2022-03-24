@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense } from 'react';
 import { useHistory, useLocation, useRouteMatch } from 'react-router';
 import { useAuth } from '../../auth/useAuth';
 import { useCurrentOrganizationState } from '../../state/current-organization';

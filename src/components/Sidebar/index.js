@@ -42,15 +42,9 @@ function Brand() {
 }
 
 function Sidebar(props) {
-  const {
-    userProfile,
-    logout,
-    isAuthenticated,
-    loading,
-    refetch: refetchUserProfile,
-  } = useAuth(GET_INVESTOR);
-  const [investTab, setInvestTab] = useState(false);
-  const [creditTab, setCreditTab] = useState(false);
+  const { userProfile, logout, isAuthenticated, loading } = useAuth(GET_INVESTOR);
+  const [setInvestTab] = useState(false);
+  const [setCreditTab] = useState(false);
 
   const location = useLocation();
   const { window, classes } = props;
