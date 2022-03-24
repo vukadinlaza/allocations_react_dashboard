@@ -29,10 +29,10 @@ jobs:
         with:
           build: yarn build
           start: yarn start
-    env:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      CYPRESS_USERNAME: ${{ secrets.CYPRESS_USERNAME }}
-      CYPRESS_PASSWORD: ${{ secrets.CYPRESS_PASSWORD }}
+    # env:
+    #   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    #   CYPRESS_USERNAME: ${{ secrets.CYPRESS_USERNAME }}
+    #   CYPRESS_PASSWORD: ${{ secrets.CYPRESS_PASSWORD }}
 
   test:
     runs-on: ubuntu-latest
