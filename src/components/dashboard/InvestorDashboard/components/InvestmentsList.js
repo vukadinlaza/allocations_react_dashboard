@@ -125,9 +125,13 @@ const InvestmentsList = ({
 
     try {
       const zip = new JSZip();
-      const filteredDocs = userDocuments.filter((d) => {
+      const filteredDocs = (userDocuments || []).filter((d) => {
         return d.dealName === dealName;
       });
+
+      if (filteredDocs.length === 0) {
+        return toast.success('There are no documents to download.');
+      }
       console.log('filteredDocs', filteredDocs);
       const files = await Promise.all(
         filteredDocs.map((doc) =>
