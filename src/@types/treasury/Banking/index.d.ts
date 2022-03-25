@@ -9,7 +9,7 @@ interface AllocationsUser {
 
 interface BankingProps {
   deal_id?: string;
-  virtual_account_number?: string;
+  virtual_account_number?: string | null;
   org_slug?: string;
   deal_name?: string;
   high_volume_partner?: boolean;
@@ -19,7 +19,6 @@ interface BankingProps {
 const Banking: React.FC<{
   user: AllocationsUser;
   bankProps: BankingProps;
-  virtual_account_number?: string | null;
 }> = () => JSX.Element;
 
 export default Banking;

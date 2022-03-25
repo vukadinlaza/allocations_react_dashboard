@@ -11,7 +11,7 @@ export default function RemoteBanking({
 }: {
   organizationData: { [key: string]: any };
   dealData: { [key: string]: any };
-  virtual_account_number?: string | null;
+  virtual_account_number: string | null;
 }) {
   const { userProfile } = useAuth();
   const { _id: org_id } = organizationData.deal.organization;
@@ -20,19 +20,12 @@ export default function RemoteBanking({
     org_id,
     deal_id: dealData.deal._id,
     deal_name: dealData.deal.company_name,
+    virtual_account_number,
   };
 
   return (
     <React.Suspense fallback={<Loader />}>
-      <Banking
-        user={userProfile}
-        bankProps={bankProps}
-        virtual_account_number={virtual_account_number}
-      />
+      <Banking user={userProfile} bankProps={bankProps} />
     </React.Suspense>
   );
 }
-
-RemoteBanking.defaultProps = {
-  virtual_account_number: null,
-};
