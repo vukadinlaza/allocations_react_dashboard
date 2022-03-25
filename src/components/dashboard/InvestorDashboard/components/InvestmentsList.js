@@ -11,11 +11,8 @@ import {
   openInNewTab,
   sortByString,
 } from '@allocations/nextjs-common';
-import JSZip from 'jszip';
-import { saveAs } from 'file-saver';
 import 'chartjs-plugin-datalabels';
 import { Grid } from '@material-ui/core';
-import { toast } from 'react-toastify';
 import { useFetchWithEmail } from '../../../../utils/hooks';
 
 const headers = [
@@ -92,7 +89,6 @@ const InvestmentsList = ({
   const [menuOpen, setMenuOpen] = useState(null);
   const [selectedItem, setSelectedItem] = useState('');
   const [userDocuments, setUserDocuments] = useState([]);
-  const [loadingDownloadDocs, setLoadingDownloadDoc] = useState(false);
 
   const itemsPerPage = 5;
 
@@ -120,40 +116,18 @@ const InvestmentsList = ({
     }
   }, [userInvestments]);
 
-  const handleZip = async (dealName) => {
-    setLoadingDownloadDoc(true);
-
-    try {
-      const zip = new JSZip();
-      const filteredDocs = (userDocuments || []).filter((d) => {
+  const downloadDealDocs = (dealName) => {
+    userDocuments
+      .filter((d) => {
         return d.dealName === dealName;
+      })
+      .forEach((document) => {
+        openInNewTab(
+          document.link
+            ? `${document.link.includes('http') ? document.link : `//${document.link}`}`
+            : '',
+        );
       });
-
-      if (filteredDocs.length === 0) {
-        return toast.success('There are no documents to download.');
-      }
-      console.log('filteredDocs', filteredDocs);
-      const files = await Promise.all(
-        filteredDocs.map((doc) =>
-          fetch(doc.link ? `${doc.link.includes('http') ? doc.link : `//${doc.link}`}` : '').then(
-            (res) => res.blob(),
-          ),
-        ),
-      );
-
-      console.log('files', files);
-
-      files.forEach((file, i) =>
-        zip.file(`${filteredDocs[i].documentName.replace('.pdf', '')}.pdf`, file),
-      );
-
-      const content = await zip.generateAsync({ type: 'blob' });
-      saveAs(content, `${dealName}_Investment_Documents.zip`);
-    } catch {
-      toast.error('Error downloading Investment Documents');
-    } finally {
-      setLoadingDownloadDoc(false);
-    }
   };
 
   const handleMenuOpen = (e, index) => {
@@ -182,7 +156,7 @@ const InvestmentsList = ({
         openInNewTab(`/next-steps/${orgSlug}/${dealSlug}`);
         break;
       case 'downloadDocs':
-        loadingDownloadDocs ? console.log('loading') : handleZip(investment.dealName);
+        downloadDealDocs(investment.dealName);
         break;
       case 'fundsInvestments':
         showInvestments(dealId);
