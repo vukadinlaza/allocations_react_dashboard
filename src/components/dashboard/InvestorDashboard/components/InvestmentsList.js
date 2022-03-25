@@ -173,7 +173,7 @@ const InvestmentsList = ({
         openInNewTab(`/next-steps/${orgSlug}/${dealSlug}`);
         break;
       case 'downloadDocs':
-        loadingDownloadDocs ? null : handleZip(investment.dealName);
+        loadingDownloadDocs ? console.log('loading') : handleZip(investment.dealName);
         break;
       case 'fundsInvestments':
         showInvestments(dealId);
