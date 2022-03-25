@@ -136,7 +136,9 @@ const InvestmentsList = ({
         ),
       );
 
-      files.forEach((file, i) => zip.file(`${filteredDocs[i].documentName}.pdf`, file));
+      files.forEach((file, i) =>
+        zip.file(`${filteredDocs[i].documentName.replace('.pdf', '')}.pdf`, file),
+      );
 
       const content = await zip.generateAsync({ type: 'blob' });
       saveAs(content, `${dealName}_Investment_Documents.zip`);
