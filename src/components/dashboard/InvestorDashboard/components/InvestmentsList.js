@@ -135,9 +135,9 @@ const InvestmentsList = ({
       console.log('filteredDocs', filteredDocs);
       const files = await Promise.all(
         filteredDocs.map((doc) =>
-          fetch(doc.link ? `${doc.link.includes('http') ? doc.link : `//${doc.link}`}` : '', {
-            mode: 'no-cors',
-          }).then((res) => res.blob()),
+          fetch(doc.link ? `${doc.link.includes('http') ? doc.link : `//${doc.link}`}` : '').then(
+            (res) => res.blob(),
+          ),
         ),
       );
 
