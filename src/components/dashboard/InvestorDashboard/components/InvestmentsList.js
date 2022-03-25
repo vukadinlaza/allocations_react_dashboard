@@ -15,8 +15,8 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import 'chartjs-plugin-datalabels';
 import { Grid } from '@material-ui/core';
-import { useFetchWithEmail } from '../../../../utils/hooks';
 import { toast } from 'react-toastify';
+import { useFetchWithEmail } from '../../../../utils/hooks';
 
 const headers = [
   {
@@ -173,7 +173,7 @@ const InvestmentsList = ({
         openInNewTab(`/next-steps/${orgSlug}/${dealSlug}`);
         break;
       case 'downloadDocs':
-        handleZip(investment.dealName);
+        loadingDownloadDocs ? null : handleZip(investment.dealName);
         break;
       case 'fundsInvestments':
         showInvestments(dealId);
