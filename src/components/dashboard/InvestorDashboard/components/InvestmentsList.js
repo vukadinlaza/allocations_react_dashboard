@@ -128,6 +128,7 @@ const InvestmentsList = ({
       const filteredDocs = userDocuments.filter((d) => {
         return d.dealName === dealName;
       });
+      console.log('filteredDocs', filteredDocs);
       const files = await Promise.all(
         filteredDocs.map((doc) =>
           fetch(doc.link ? `${doc.link.includes('http') ? doc.link : `//${doc.link}`}` : '', {
@@ -135,6 +136,8 @@ const InvestmentsList = ({
           }).then((res) => res.blob()),
         ),
       );
+
+      console.log('files', files);
 
       files.forEach((file, i) =>
         zip.file(`${filteredDocs[i].documentName.replace('.pdf', '')}.pdf`, file),
