@@ -162,7 +162,7 @@ const TempDealDashboard = ({ classes }) => {
     dealName && `({Deal Name}="${checkedDealName}")`,
   );
 
-  const { data: atFundData, status } = useFetch(
+  const { data: atFundData } = useFetch(
     BASE,
     INVESTMENTS_TABLE,
     `(FIND("${checkedAtDealDataName}", {Deals}))`,
