@@ -5,8 +5,7 @@ import Loader from '../utils/Loader';
 
 const RemotePostBuild = React.lazy(() => import('build/PostBuild'));
 
-export default function PostBuild({ deal_id }) {
-  console.log('deal id', deal_id);
+export default function PostBuild() {
   const { userProfile } = useAuth();
   const { search } = useLocation();
   const history = useHistory();
@@ -16,7 +15,7 @@ export default function PostBuild({ deal_id }) {
     <Suspense fallback={<Loader />}>
       <RemotePostBuild
         user={userProfile}
-        deal_id={params.get('id') || deal_id}
+        deal_id={params.get('id')}
         redirectToDashboard={() => history.push('/')}
       />
     </Suspense>
