@@ -49,9 +49,7 @@ describe('Investing Journey', () => {
       .contains(
         /^(.*)(((1[0-2]|0?[1-9])\/(3[01]|[12][0-9]|0?[1-9])\/(?:[0-9]{2})?[0-9]{2})|((Jan(uary)?|Feb(ruary)?|Mar(ch)?|Apr(il)?|May|Jun(e)?|Jul(y)?|Aug(ust)?|Sep(tember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?)\s+\d{1,2},\s+\d{4}))(.*)/,
       );
-    cy.get(
-      '#root > div:nth-child(2) > div:nth-child(2) > section > div:nth-child(2) > section:nth-child(2)',
-    ).contains('Terms');
+    cy.get('.terms-and-documents').contains('Terms');
     const headers = [];
     const termHeaders = [
       'Manager:',
@@ -60,9 +58,7 @@ describe('Investing Journey', () => {
       'Fee Frequency:',
       'Minimum Investment:',
     ];
-    cy.get(
-      '#root > div:nth-child(2) > div:nth-child(2) > section > div:nth-child(2) > section:nth-child(2) > ul',
-    )
+    cy.get('.terms-and-documents > section > ul')
       .find('li > p')
       .each((p) => {
         headers.push(p.text());
@@ -111,12 +107,7 @@ describe('Investing Journey', () => {
     cy.findByRole('button', { name: /back to deal page/i }).click();
     cy.url().should('include', '/deals/allocations/demo-space-x');
     cy.findByRole('button', { name: /invest/i }).click();
-    cy.findByRole('button', { name: /next steps/i }).click();
-    cy.url().should('include', '/next-steps/allocations/demo-space-x');
-    cy.findByRole('button', { name: /edit investment/i }).click();
     cy.url().should('include', '/invest/allocations/demo-space-x');
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(5000);
     cy.get(
       '#root > div:nth-child(2) > div:nth-child(2) > section > div:nth-child(3) > section:nth-child(3) > div:nth-child(3)',
     )
@@ -142,6 +133,7 @@ describe('Investing Journey', () => {
     cy.findByRole('checkbox', {
       name: /I have read and accept the terms of the investment\./i,
     }).click();
+    cy.findByRole('button', { name: /minimum investment/i }).click();
     cy.findByRole('button', { name: /confirm and submit for final agreement review/i }).click();
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(4000);
