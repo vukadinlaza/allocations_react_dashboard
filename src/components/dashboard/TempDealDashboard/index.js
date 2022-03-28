@@ -365,9 +365,11 @@ const TempDealDashboard = ({ classes }) => {
         );
       case 'Deal Progress':
         return (
-          <Suspense fallback={<Loader />}>
-            <RemotePostBuild user={userProfile} deal_id={deal_id} progressBar={false} />
-          </Suspense>
+          <div style={{ marginTop: '20px' }}>
+            <Suspense fallback={<Loader />}>
+              <RemotePostBuild user={userProfile} deal_id={deal_id} progressBar={false} />
+            </Suspense>
+          </div>
         );
       default:
         return <p>No Data</p>;
