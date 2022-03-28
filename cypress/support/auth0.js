@@ -7,6 +7,6 @@ Cypress.Commands.add('loginAuth0', (username, password) => {
     cy.findByRole('textbox', { name: /email/i }).type(username);
     cy.findByPlaceholderText(/your password/i).type(password);
     cy.findByRole('button', { name: /log in/i }).click();
-    cy.url().should('eq', 'http://localhost:3000/admin/repair-biotechnologies');
+    cy.url().should('eq', 'http://localhost:3000/admin/perpetual-vp');
   });
 });

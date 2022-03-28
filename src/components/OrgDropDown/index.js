@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { useHistory, useLocation, useRouteMatch } from 'react-router';
+import queryString from 'query-string';
 import { useAuth } from '../../auth/useAuth';
 import { useCurrentOrganizationState } from '../../state/current-organization';
 import Loader from '../utils/Loader';
@@ -12,6 +13,7 @@ export default function OrgDropDown({ loading }) {
   const dealRouteMatch = useRouteMatch('/deals/:organization/:slug');
   const wildcardMatch = useRouteMatch('/*/:organization/*');
   const location = useLocation();
+  const parsedLocationQuery = queryString.parse(location.search);
   const history = useHistory();
   const [currentOrganization, setCurrentOrganization] = useCurrentOrganizationState();
 
@@ -25,6 +27,7 @@ export default function OrgDropDown({ loading }) {
         dealRouteMatch={dealRouteMatch}
         wildcardMatch={wildcardMatch}
         locationPath={location.pathname}
+        parsedLocationQuery={parsedLocationQuery}
         reroute={(path) => history.push(`${path}`)}
         setCurrentOrganization={(newOrg) => setCurrentOrganization(newOrg)}
       />

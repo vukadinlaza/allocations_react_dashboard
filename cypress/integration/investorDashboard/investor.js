@@ -21,7 +21,7 @@ describe('Investor Dashboard', () => {
     });
   });
   it('checks if investor highlights exist in the correct formats', () => {
-    cy.findByRole('button', { name: /repair biotechnologies/i }).click();
+    cy.findByRole('button', { name: /perpetual value partners/i }).click();
     cy.findByRole('option', { name: /Aaron Dennis/i }).click();
     cy.url().should('eq', 'http://localhost:3000/');
     cy.get(
@@ -56,7 +56,7 @@ describe('Investor Dashboard', () => {
     ).should('be.visible');
   });
   it('navigates tabs', () => {
-    cy.findByRole('button', { name: /repair biotechnologies/i }).click();
+    cy.findByRole('button', { name: /perpetual value partners/i }).click();
     cy.findByRole('option', { name: /Aaron Dennis/i }).click();
     cy.url().should('eq', 'http://localhost:3000/');
     // eslint-disable-next-line cypress/no-unnecessary-waiting
@@ -75,7 +75,7 @@ describe('Investor Dashboard', () => {
     ).contains('Search');
   });
   it('searches and sorts investments', () => {
-    cy.findByRole('button', { name: /repair biotechnologies/i }).click();
+    cy.findByRole('button', { name: /perpetual value partners/i }).click();
     cy.findByRole('option', { name: /Aaron Dennis/i }).click();
     cy.url().should('eq', 'http://localhost:3000/');
     // eslint-disable-next-line cypress/no-unnecessary-waiting
@@ -107,7 +107,7 @@ describe('Investor Dashboard', () => {
     cy.get('table > tbody').find('tr').first().contains('The Ticket Fairy SPV');
   });
   it('opens the actions menu', () => {
-    cy.findByRole('button', { name: /repair biotechnologies/i }).click();
+    cy.findByRole('button', { name: /perpetual value partners/i }).click();
     cy.findByRole('option', { name: /Aaron Dennis/i }).click();
     cy.url().should('eq', 'http://localhost:3000/');
     // eslint-disable-next-line cypress/no-unnecessary-waiting
@@ -125,7 +125,7 @@ describe('Investor Dashboard', () => {
       .should('eq', 3);
   });
   it('visits the Deal Page in the action menu', () => {
-    cy.findByRole('button', { name: /repair biotechnologies/i }).click();
+    cy.findByRole('button', { name: /perpetual value partners/i }).click();
     cy.findByRole('option', { name: /Aaron Dennis/i }).click();
     cy.url().should('eq', 'http://localhost:3000/');
     // eslint-disable-next-line cypress/no-unnecessary-waiting
@@ -148,7 +148,7 @@ describe('Investor Dashboard', () => {
     cy.findByRole('heading', { name: /space x/i }).contains('Space X');
   });
   it('visits the Next Steps in the action menu', () => {
-    cy.findByRole('button', { name: /repair biotechnologies/i }).click();
+    cy.findByRole('button', { name: /perpetual value partners/i }).click();
     cy.findByRole('option', { name: /Aaron Dennis/i }).click();
     cy.url().should('eq', 'http://localhost:3000/');
     // eslint-disable-next-line cypress/no-unnecessary-waiting
@@ -243,7 +243,7 @@ describe('Investor Dashboard', () => {
     );
   });
   it('searches, sorts and views documents', () => {
-    cy.findByRole('button', { name: /repair biotechnologies/i }).click();
+    cy.findByRole('button', { name: /perpetual value partners/i }).click();
     cy.findByRole('option', { name: /Aaron Dennis/i }).click();
     cy.url().should('eq', 'http://localhost:3000/');
     // eslint-disable-next-line cypress/no-unnecessary-waiting
