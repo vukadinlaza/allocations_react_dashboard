@@ -4,11 +4,20 @@ import { useAuth } from '../auth/useAuth';
 const OrganizationContext = createContext();
 
 export const CurrentAccountProvider = ({ children }) => {
-  const { loading, userProfile } = useAuth();
   const [currentOrganization, setCurrentOrganization] = useState(null);
+  const { loading, userProfile } = useAuth();
 
   useEffect(() => {
-    if (!currentOrganization) setCurrentOrganization(userProfile?.organizations_admin?.[0]);
+    if (!currentOrganization) {
+      if (userProfile?.admin) {
+        const matchedOrg = userProfile?.organizations_admin?.find(
+          (org) => org.slug === 'Allocations-Testing-1641481063461',
+        );
+        if (matchedOrg) setCurrentOrganization(matchedOrg);
+      } else {
+        setCurrentOrganization(userProfile?.organizations_admin?.[0]);
+      }
+    }
   }, [loading]);
 
   return (

@@ -46,6 +46,7 @@ import { useAuth } from './auth/useAuth';
 import TempDealDashboard from './components/dashboard/TempDealDashboard';
 import RemoteFundManagerDashboard from './components/RemoteFundManagerDashboard';
 import RemoteTaxDashboard from './components/TaxDashboard';
+import SidebarOld from './components/SidebarOld';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -57,9 +58,10 @@ Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
  * */
 
 const SideBar = ({ isAuthenticated }) => {
+  const { federatedSidebar } = useFlags();
   return (
     <div className="sidebar" style={{ display: !isAuthenticated && 'none' }}>
-      <Sidebar />
+      {federatedSidebar ? <Sidebar /> : <SidebarOld />}
     </div>
   );
 };
@@ -107,12 +109,9 @@ const MainApp = ({ isAuthenticated }) => {
         {/* Public */}
 
         <Route path="/public/new-build" exact component={Build} />
-        <Route path="/public/:organization/:deal_slug" component={DealOneClick} exact />
-        <Route path="/public/:deal_slug" component={DealOneClick} exact />
 
         {/* Private  */}
         <PrivateRoute path="/new-build/deal" exact component={PostBuild} />
-        <PrivateRoute path="/deals/:deal_slug" component={DealOneClick} exact />
         <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
 
         {/* Prospect deals */}

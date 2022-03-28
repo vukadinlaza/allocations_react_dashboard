@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { List, ListItem, ListItemIcon, ListItemText, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { v4 as uuidv4 } from 'uuid';
@@ -14,7 +14,6 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import BallotIcon from '@material-ui/icons/Ballot';
 import { BsBinocularsFill } from 'react-icons/bs';
 import styles from '../styles';
-import { useCurrentOrganizationState } from '../../../state/current-organization';
 
 const AddBubbleBuildButton = ({ classes }) => (
   <Button
@@ -54,21 +53,13 @@ const AddBuildButton = (props) => {
 const SidebarDrawer = ({
   mobileOpen,
   handleDrawerClose,
-  userProfile,
+  currentHomeUrl,
   logout,
   location,
   classes,
 }) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
   const { prospectDealPage, taxDashboard } = useFlags();
-  const [currentOrganization] = useCurrentOrganizationState();
-  const [currentHomeUrl, setCurrentHomeUrl] = useState('');
-
-  useEffect(() => {
-    const isRealOrg = currentOrganization?.name !== userProfile?.name;
-    const currentHomePath = isRealOrg ? `/admin/${currentOrganization?.slug}` : '/';
-    setCurrentHomeUrl(currentHomePath);
-  }, [currentOrganization, userProfile]);
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
 

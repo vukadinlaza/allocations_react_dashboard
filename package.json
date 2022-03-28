@@ -108,7 +108,7 @@
     "@typescript-eslint/eslint-plugin": "^5.10.0",
     "@typescript-eslint/parser": "^5.10.0",
     "create-react-app": "^3.2.0",
-    "cypress": "9.4.1",
+    "cypress": "9.5.1",
     "cypress-file-upload": "^5.0.8",
     "cypress-wait-until": "^1.7.2",
     "eslint": "^8.7.0",
