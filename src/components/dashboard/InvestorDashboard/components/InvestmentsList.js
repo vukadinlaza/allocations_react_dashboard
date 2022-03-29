@@ -90,8 +90,6 @@ const InvestmentsList = ({
   const [selectedItem, setSelectedItem] = useState('');
   const [userDocuments, setUserDocuments] = useState([]);
 
-  const itemsPerPage = 5;
-
   useEffect(() => {
     const userDocs = [];
     if (userInvestments) {
@@ -367,8 +365,6 @@ const InvestmentsList = ({
           customSort={handleSort}
           sortBy="amount"
           sortDirection="desc"
-          withPagination={!(filteredData.length < itemsPerPage)}
-          itemsPerPage={itemsPerPage}
         />
       </Grid>
       <Grid item xs={false} md={1} />

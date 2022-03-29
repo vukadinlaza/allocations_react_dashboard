@@ -11,7 +11,7 @@ const InvestorHighlights = ({ classes, userInvestments }) => {
     const multipleMap = ['', 'k', 'm', 'b'];
     const amountLength = amount.toString().length;
     const thousandsMultiple = Math.floor((amountLength - 1) / 3);
-    const abbreviated = Math.round(amount / (1000 ** thousandsMultiple || 1));
+    const abbreviated = Math.round(amount / (1000 ** thousandsMultiple || 1)).toFixed(2);
     return `${abbreviated}${multipleMap[thousandsMultiple]}`;
   };
 
