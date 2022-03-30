@@ -21,7 +21,7 @@ const InvestorHighlights = ({ classes, userInvestments }) => {
         ?.map((investment) => investment.amount * Number(investment.dealMultiple))
         .reduce((acc, n) => acc + n, 0) || 0;
     const totalInvested = userInvestments.map((i) => i.amount).reduce((acc, n) => acc + n, 0);
-    const estimatedMultiple = Math.round(portfolioValue / (totalInvested || 1)).toFixed(2);
+    const estimatedMultiple = (portfolioValue / (totalInvested || 1)).toFixed(2);
     const totalInvestments = userInvestments.length;
 
     const dashboardBoxes = [
