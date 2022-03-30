@@ -109,7 +109,7 @@ function BasicInfoSettings({ formData, setFormData }) {
         }}
       />
 
-      <div className="form-fields">
+      <div className={styles.formFields}>
         <FormControl className={styles.field}>
           <FormLabel className={styles.fieldLabel}>
             Company name
