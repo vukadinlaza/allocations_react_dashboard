@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { FormControl, TextField, Button, FormLabel } from '@material-ui/core';
-import './styles.scss';
+import useStyles from './styles';
 
 function FundTerms({ formData, setFormData }) {
+  const styles = useStyles();
   const [feeType, setFeeType] = useState(null);
   const [setupCostType, setSetupCostType] = useState(null);
 
@@ -130,18 +131,18 @@ function FundTerms({ formData, setFormData }) {
   };
 
   return (
-    <section className="FundTerms">
+    <section className={styles.fundTerms}>
       <h2>Fund Terms</h2>
 
-      <div className="form-fields">
-        <FormControl className="field">
-          <FormLabel className="field-label">
+      <div className={styles.formFields}>
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Management fee
-            <div className="management-fee">
+            <div className={styles.managementFee}>
               <TextField
                 onChange={handleFeeChange}
                 value={getManagementFee()}
-                className="fee-input"
+                className={styles.feeInput}
                 variant="outlined"
               />
               <Button
@@ -156,7 +157,7 @@ function FundTerms({ formData, setFormData }) {
                     },
                   }));
                 }}
-                className={`percentage ${feeType === 'percentage' && 'selected'}`}
+                className={`${styles.percentage} ${feeType === 'percentage' && styles.selected}`}
                 variant="outlined"
               >
                 %
@@ -173,7 +174,7 @@ function FundTerms({ formData, setFormData }) {
                     },
                   }));
                 }}
-                className={`fixed ${feeType === 'fixed' && 'selected'}`}
+                className={`${styles.fixed} ${feeType === 'fixed' && styles.selected}`}
                 variant="outlined"
               >
                 $
@@ -182,20 +183,24 @@ function FundTerms({ formData, setFormData }) {
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Fee type
-            <div className="button-options">
+            <div className={styles.buttonOptions}>
               <Button
                 onClick={() => changeFundFeeType('Annual')}
-                className={`option-button ${fundManagementFeeType === 'Annual' && 'selected'}`}
+                className={`${styles.optionButton} ${
+                  fundManagementFeeType === 'Annual' && styles.selected
+                }`}
                 variant="outlined"
               >
                 Annual
               </Button>
               <Button
                 onClick={() => changeFundFeeType('One-Time')}
-                className={`option-button ${fundManagementFeeType === 'One-Time' && 'selected'}`}
+                className={`${styles.optionButton} ${
+                  fundManagementFeeType === 'One-Time' && styles.selected
+                }`}
                 variant="outlined"
               >
                 One-time
@@ -204,52 +209,54 @@ function FundTerms({ formData, setFormData }) {
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Total carry (%)
             <TextField
               onChange={handleFormChange}
               value={fundTotalCarry || ''}
               name="fundTotalCarry"
-              className="text-input"
+              className={styles.textInput}
               variant="outlined"
             />
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             General partner
             <TextField
               onChange={handleFormChange}
               value={fundGeneralPartner || ''}
               name="fundGeneralPartner"
-              className="text-input"
+              className={styles.textInput}
               variant="outlined"
             />
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Estimated setup cost ($)
-            <div className="management-fee">
+            <div className={styles.managementFee}>
               <TextField
                 onChange={handleSetupCostChange}
                 value={getSetupCosts()}
-                className="fee-input"
+                className={styles.feeInput}
                 variant="outlined"
               />
               <Button
                 onClick={() => setSetupCostType('percentage')}
-                className={`percentage ${setupCostType === 'percentage' && 'selected'}`}
+                className={`${styles.percentage} ${
+                  setupCostType === 'percentage' && styles.selected
+                }`}
                 variant="outlined"
               >
                 %
               </Button>
               <Button
                 onClick={() => setSetupCostType('fixed')}
-                className={`percentage ${setupCostType === 'fixed' && 'selected'}`}
+                className={`${styles.percentage} ${setupCostType === 'fixed' && styles.selected}`}
                 variant="outlined"
               >
                 $
@@ -258,14 +265,14 @@ function FundTerms({ formData, setFormData }) {
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Estimated term
             <TextField
               onChange={handleFormChange}
               value={fundEstimatedTerm || ''}
               name="fundEstimatedTerm"
-              className="text-input"
+              className={styles.textInput}
               variant="outlined"
             />
           </FormLabel>
