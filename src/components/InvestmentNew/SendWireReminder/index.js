@@ -16,10 +16,19 @@ function SendWireReminder({ signedInvestors, deal }) {
     ...signedInvestors.map((investment) => investment.investmentId),
   ]);
   const [sendWireReminders] = useMutation(SEND_WIRE_REMINDERS, {
-    onError: () =>
-      toast.error(
-        'Sorry, something went wrong. Try again or contact support at support@allocations.com',
-      ),
+    onError: (error) => {
+      const errorsLength = error?.graphQLErrors?.length || 0;
+      if (
+        JSON.stringify(error).includes('Wire reminders already sent today.') &&
+        errorsLength === 1
+      ) {
+        toast.error('Wire reminders were already sent today.');
+      } else {
+        toast.error(
+          'Sorry, something went wrong. Try again or contact support at support@allocations.com',
+        );
+      }
+    },
     onCompleted: () => {
       toast.success('Wire reminders sent.');
     },

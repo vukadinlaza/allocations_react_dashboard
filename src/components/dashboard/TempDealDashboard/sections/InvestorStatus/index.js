@@ -434,7 +434,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType })
           isOpen={reminderModalOpen}
           onClose={() => setReminderModalOpen(false)}
         >
-          <SendWireReminder signedInvestors={signedInvestors} deal={data} />
+          <SendWireReminder signedInvestors={signedInvestors} deal={data.deal} />
         </AppModal>
       </Grid>
     </>

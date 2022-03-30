@@ -4,7 +4,6 @@ import { gql, useQuery } from '@apollo/client';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { useFlags } from 'launchdarkly-react-client-sdk';
-import { Typography as AllocationsTypography } from '@allocations/design-system';
 import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
@@ -20,9 +19,11 @@ import DocumentsTab from './sections/DocumentsTab';
 import DealTypeSelector from './DealType';
 import DealPage from '../Common/DealPage';
 import HighlightedTabs from '../../utils/HighlightedTabs';
-import { phone } from '../../../utils/helpers';
+import Loader from '../../utils/Loader';
 
 const RemoteInvestors = React.lazy(() => import('invest/Investors'));
+const ProgressBar = React.lazy(() => import('build/ProgressBar'));
+const RemotePostBuild = React.lazy(() => import('build/PostBuild'));
 
 const GET_DEAL = gql`
   query GetDeal($_id: String!) {
@@ -103,12 +104,12 @@ const fundTabs = [
   'Deal Page',
 ];
 
-const spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
-
 // Base here is OPS_ACCOUNTING
 let BASE = 'app3m4OJvAWUg0hng';
 const INVESTMENTS_TABLE = 'Investments';
 const DEALS_TABLE = 'Deals';
+
+let spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
 
 const TempDealDashboard = ({ classes }) => {
   const { width } = useViewport();
@@ -126,6 +127,7 @@ const TempDealDashboard = ({ classes }) => {
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
+  const [serviceDeal, setServiceDeal] = useState(null);
   const [dealName, setDealName] = useState('');
   const [dashboardTabs, setDashboardTabs] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -160,27 +162,58 @@ const TempDealDashboard = ({ classes }) => {
     dealName && `({Deal Name}="${checkedDealName}")`,
   );
 
-  const { data: atFundData, status } = useFetch(
+  const { data: atFundData } = useFetch(
     BASE,
-    atDealData?.name && INVESTMENTS_TABLE,
-    atDealData?.name && `(FIND("${checkedAtDealDataName}", {Deals}))`,
+    INVESTMENTS_TABLE,
+    `(FIND("${checkedAtDealDataName}", {Deals}))`,
   );
 
   useEffect(() => {
-    setDealName(dealData?.deal?.company_name);
+    spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
+    (async () => {
+      try {
+        const res = await fetch(`${process.env.REACT_APP_BUILD_FRONTEND_URL}/api/deals/${deal_id}`);
+        const deal = await res.json();
+        if (deal?.phases?.length === 6) {
+          spvTabs = [
+            'Deal Progress',
+            'Investor Onboarding Status',
+            'Investors',
+            'Documents',
+            'Deal Page',
+          ];
+        }
+        setServiceDeal(deal);
+        setDealName(deal?.name);
+      } catch (e) {
+        console.log('ERROR:', e);
+      }
+    })();
+  }, [deal_id]);
+
+  useEffect(() => {
+    if (dealData?.deal?.company_name) {
+      setDealName(dealData?.deal?.company_name);
+    }
   }, [dealData]);
 
   useEffect(() => {
     if (dealData && Object.keys(dealData).length) {
       const newTabs = dealData.deal.investmentType === 'fund' ? fundTabs : spvTabs;
-      const newTabIndex = newTabs.indexOf(tabName);
-      const newIndex = newTabIndex < 0 ? 0 : newTabIndex;
-      const newTabName = newTabs[newIndex];
-      setTabIndex(newIndex);
+
+      if (newTabs.includes('Deal Progress')) {
+        setTabIndex(newTabs.indexOf('Deal Progress'));
+        setTabName('Deal Progress');
+      } else {
+        const newTabIndex = newTabs.indexOf(tabName);
+        const newIndex = newTabIndex < 0 ? 0 : newTabIndex;
+        const newTabName = newTabs[newIndex];
+        setTabIndex(newIndex);
+        setTabName(newTabName);
+      }
       setDashboardTabs(newTabs);
-      setTabName(newTabName);
     }
-  }, [dealData]);
+  }, [dealData, serviceDeal]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -312,9 +345,8 @@ const TempDealDashboard = ({ classes }) => {
       case 'Banking':
         return (
           <Banking
-            organizationData={dealData}
-            dealData={dealData}
-            deal_id={dealData.deal._id}
+            dealData={serviceDeal}
+            deal_id={serviceDeal._id}
             virtual_account_number={dealData.deal.virtual_account_number || null}
             classes={classes}
           />
@@ -330,40 +362,54 @@ const TempDealDashboard = ({ classes }) => {
             handleTooltip={handleTooltip}
           />
         );
+      case 'Deal Progress':
+        return (
+          <div style={{ marginTop: '20px' }}>
+            <Suspense fallback={<Loader />}>
+              <RemotePostBuild user={userProfile} deal_id={deal_id} progressBar={false} />
+            </Suspense>
+          </div>
+        );
       default:
         return <p>No Data</p>;
     }
   };
 
+  const getTotalRaiseAmount = (total, progress) => {
+    if (progress > total) return 100;
+    if (progress === 0) return 0;
+    return (progress / total) * 100;
+  };
+
   const [openModal, setOpenModal] = useState(false);
-
-  const typographyVariant = width > phone ? 'heading2' : 'heading4';
-
+  if (!dealData || !atFundData || loading)
+    return (
+      <div className={classes.loaderContainer}>
+        <AllocationsLoader />
+      </div>
+    );
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
+      <Suspense fallback={<Loader />}>
+        <ProgressBar
+          deal={serviceDeal || { name: '' }}
+          progress={getTotalRaiseAmount(
+            serviceDeal?.target_raise_goal || 0,
+            dealData?.deal?.raised,
+          )}
+          currentAmount={dealData?.deal?.raised}
+          goalAmount={serviceDeal?.target_raise_goal || 0}
+        />
+      </Suspense>
       <div style={{ margin: '1rem 0' }}>
         <div style={{ position: 'relative' }}>
-          <div className={classes.titleContainer}>
-            <AllocationsTypography
-              component="div"
-              content={dealName}
-              fontWeight={700}
-              variant={typographyVariant}
-            />
-          </div>
           <HighlightedTabs
             tabs={dashboardTabs}
             tabIndex={tabIndex}
             handleTabChange={handleTabChange}
             rootStyle={{ padding: '0 8px' }}
           />
-          {!dealData || !dealData || !atFundData || status === 'fetching' || loading ? (
-            <div className={classes.loaderContainer}>
-              <AllocationsLoader />
-            </div>
-          ) : (
-            getTabContent()
-          )}
+          {getTabContent()}
         </div>
       </div>
       <DealTypeSelector isOpen={openModal} onClose={() => setOpenModal(false)} />
