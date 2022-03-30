@@ -10,7 +10,7 @@ import SPVTermSettings from './SPVTermSettings';
 import DealSettings from './DealSettings';
 import PortfolioCompanySettings from './PortfolioCompanySettings';
 import FundTerms from './FundTermSettings';
-import './styles.scss';
+import useStyles from './styles';
 
 const validInputs = [
   '_id',
@@ -249,6 +249,7 @@ const DELETE_DEAL = gql`
 `;
 
 function DealEditNew() {
+  const styles = useStyles();
   const { id, organization } = useParams();
   const history = useHistory();
   const [errorMessage, setErrorMessage] = useState(null);
@@ -291,7 +292,7 @@ function DealEditNew() {
     setActiveTab(tab);
   };
 
-  const getTabClassName = (tab) => `tab-button ${activeTab === tab && 'active'}`;
+  const getTabClassName = (tab) => `${styles.tabButton} ${activeTab === tab && styles.active}`;
 
   const handleContinueClick = () => {
     window.scrollTo({
@@ -336,6 +337,7 @@ function DealEditNew() {
   };
 
   const handleDeleteDeal = () => {
+    // eslint-disable-next-line no-alert
     if (window.confirm(`Are you sure you'd like to delete ${formData.company_name}`)) {
       deleteDeal();
     }
@@ -356,18 +358,18 @@ function DealEditNew() {
     portfolio: <PortfolioCompanySettings formData={formData} setFormData={setFormData} />,
   };
 
-  if (errorMessage) return <div className="Error">{errorMessage}</div>;
+  if (errorMessage) return <div>{errorMessage}</div>;
 
   const dealPageUrl = formData.slug ? `/deals/${organization}/${formData.slug}` : '';
 
   return (
-    <section className="DealEditNew">
-      <Button onClick={() => history.push(dealPageUrl)} className="view-deal-page-button">
+    <section className={styles.dealEditNew}>
+      <Button onClick={() => history.push(dealPageUrl)} className={styles.viewDealPageButton}>
         View Deal Page
       </Button>
-      <div className="section-header">
+      <div className={styles.sectionHeader}>
         <h1>Edit Deal</h1>
-        <div className="tabs-container">
+        <div className={styles.tabsContainer}>
           <button
             onClick={() => handleTabClick('basic')}
             className={getTabClassName('basic')}
@@ -422,21 +424,21 @@ function DealEditNew() {
         </div>
       </div>
 
-      <div className="content">{settingsComponentMap[activeTab]}</div>
+      <div className={styles.content}>{settingsComponentMap[activeTab]}</div>
 
-      <div className={`save-changes ${activeTab === 'deal' && 'lastPage'}`}>
+      <div className={`${styles.saveChanges} ${activeTab === 'deal' && styles.lastPage}`}>
         {activeTab !== 'deal' && (
-          <Button onClick={handleContinueClick} className="continue">
+          <Button onClick={handleContinueClick} className={styles.continue}>
             Next
           </Button>
         )}
 
-        <Button onClick={handleFormSubmit} className="save-and-exit">
+        <Button onClick={handleFormSubmit} className={styles.saveAndExit}>
           Save
         </Button>
 
         {activeTab === 'deal' && (
-          <Button onClick={handleDeleteDeal} className="delete-deal">
+          <Button onClick={handleDeleteDeal} className={styles.deleteDeal}>
             Delete deal
           </Button>
         )}

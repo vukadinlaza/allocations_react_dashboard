@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FormControl, TextField, Button, FormLabel } from '@material-ui/core';
-import './styles.scss';
+import useStyles from './styles';
 
 function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
+  const styles = useStyles();
   const [feeType, setFeeType] = useState(null);
   const {
     _id,
@@ -99,16 +100,16 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
   };
 
   return (
-    <section className="SPVTermSettings">
+    <section className={styles.spvTermSettings}>
       <h2>SPV Terms</h2>
 
-      <div className="form-fields">
-        <FormControl className="field">
-          <FormLabel className="field-label">
+      <div className={styles.formFields}>
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Management fee
-            <div className="management-fee">
+            <div className={styles.managementFee}>
               <TextField
-                className="fee-input"
+                className={styles.feeInput}
                 name={feeType === 'percentage' ? 'managementFees' : 'managementFeesDollar'}
                 variant="outlined"
                 onChange={handleFeeChange}
@@ -126,7 +127,9 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
                     },
                   }));
                 }}
-                className={`percentage ${feeType === 'percentage' ? 'selected' : ''}`}
+                className={`${styles.percentage} ${
+                  feeType === 'percentage' ? styles.selected : ''
+                }`}
                 name="managementFeeType"
                 variant="outlined"
               >
@@ -144,7 +147,7 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
                     },
                   }));
                 }}
-                className={`fixed ${feeType === 'fixed' ? 'selected' : ''}`}
+                className={`${styles.fixed} ${feeType === 'fixed' ? styles.selected : ''}`}
                 name="managementFeeType"
                 variant="outlined"
               >
@@ -154,20 +157,24 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Fee type
-            <div className="button-options">
+            <div className={styles.buttonOptions}>
               <Button
                 onClick={() => changeFeeType('Annual')}
-                className={`option-button ${managementFeeType === 'Annual' && 'selected'}`}
+                className={`${styles.optionButton} ${
+                  managementFeeType === 'Annual' && styles.selected
+                }`}
                 variant="outlined"
               >
                 Annual
               </Button>
               <Button
                 onClick={() => changeFeeType('One-Time')}
-                className={`option-button ${managementFeeType === 'One-Time' && 'selected'}`}
+                className={`${styles.optionButton} ${
+                  managementFeeType === 'One-Time' && styles.selected
+                }`}
                 variant="outlined"
               >
                 One-time
@@ -176,74 +183,74 @@ function SPVTermSettings({ formData, setFormData, toggleDifferentSPVTerms }) {
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Estimated setup cost ($)
             <TextField
               onChange={handleFormChange}
               value={estimatedSetupCosts}
-              className="text-input"
+              className={styles.textInput}
               variant="outlined"
               name="estimatedSetupCosts"
             />
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Total carry (%)
             <TextField
               value={totalCarry || ''}
               name="totalCarry"
               onChange={handleFormChange}
-              className="text-input"
+              className={styles.textInput}
               variant="outlined"
             />
           </FormLabel>
         </FormControl>
 
         {/* TODO: deal_lead or organizer? */}
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Organizer
             <TextField
               value={deal_lead || ''}
               onChange={handleFormChange}
               name="deal_lead"
-              className="text-input"
+              className={styles.textInput}
               variant="outlined"
             />
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Estimated term
             <TextField
               value={estimatedTerm || ''}
               name="estimatedTerm"
               onChange={handleFormChange}
-              className="text-input"
+              className={styles.textInput}
               variant="outlined"
               placeholder="10 years"
             />
           </FormLabel>
         </FormControl>
 
-        <FormControl className="wide-field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.wideField}>
+          <FormLabel className={styles.fieldLabel}>
             Does your portfolio company have different terms than your SPV? (SPV into an SPV)
-            <div className="button-options">
+            <div className={styles.buttonOptions}>
               <Button
                 onClick={() => toggleDifferentSPVTerms(true)}
-                className={`option-button ${differentPortfolioTerms && 'selected'}`}
+                className={`${styles.optionButton} ${differentPortfolioTerms && styles.selected}`}
                 variant="outlined"
               >
                 Yes
               </Button>
               <Button
                 onClick={() => toggleDifferentSPVTerms(false)}
-                className={`option-button ${!differentPortfolioTerms && 'selected'}`}
+                className={`${styles.optionButton} ${!differentPortfolioTerms && styles.selected}`}
                 variant="outlined"
               >
                 No

@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import ReactCrop from 'react-image-crop';
 import { useMutation, gql } from '@apollo/client';
 import 'react-image-crop/lib/ReactCrop.scss';
+import useStyles from 'styles';
 import CopyIcon from '../../../assets/copy-icon.svg';
 import DocumentIcon from '../../../assets/document-icon.svg';
 import DocumentMenuIcon from '../../../assets/document-menu-icon.svg';
@@ -42,6 +43,7 @@ const RM_LOGO = gql`
 `;
 
 function DealSettings({ formData, setFormData, refetch }) {
+  const styles = useStyles();
   const [addDoc] = useMutation(ADD_DOC, {
     onCompleted: () => {
       toast.success('Success! Your document has been added');
@@ -86,18 +88,18 @@ function DealSettings({ formData, setFormData, refetch }) {
     };
 
     return (
-      <li className="document-item">
+      <li className={styles.documentItem}>
         <a
-          className="document-link"
+          className={styles.documentLink}
           href={`https://${document.link}`}
           target="_blank"
           rel="noopener noreferrer"
         >
           <img src={DocumentIcon} alt="document icon" />
-          <p className="document-title">{document.path}</p>
+          <p className={styles.documentTitle}>{document.path}</p>
         </a>
         <Button
-          className="document-menu-button"
+          className={styles.documentMenuButton}
           aria-controls="simple-menu"
           aria-haspopup="true"
           onClick={handleDocumentMenuClick}
@@ -106,7 +108,7 @@ function DealSettings({ formData, setFormData, refetch }) {
         </Button>
 
         <Menu
-          className="document-menu"
+          className={styles.documentMenu}
           id="simple-path"
           anchorEl={documentMenuAnchorEl}
           keepMounted
@@ -265,17 +267,17 @@ function DealSettings({ formData, setFormData, refetch }) {
     }, [completedCrop]);
 
     return (
-      <div className="banner-upload" style={{ width: '100%' }}>
-        <FormControl className="upload">
-          <FormLabel className="field-label">
+      <div className={styles.bannerUpload} style={{ width: '100%' }}>
+        <FormControl className={styles.uploadInBanner}>
+          <FormLabel className={styles.fieldLabel}>
             Upload cover photo
-            <div className="upload-container">
-              <div className="button-container">
-                <Button className="attach-button" variant="contained" component="label">
+            <div className={styles.uploadContainer}>
+              <div className={styles.buttonContainer}>
+                <Button className={styles.attachButton} variant="contained" component="label">
                   Attach
                   <input type="file" hidden accept="image/*" onChange={onSelectFile} />
                 </Button>
-                <p>
+                <p className={styles.pStyle}>
                   {dealCoverImageKey
                     ? 'dealCoverImage.png'
                     : croppedImage?.title || 'No image selected'}
@@ -287,30 +289,30 @@ function DealSettings({ formData, setFormData, refetch }) {
           <Button
             disabled={completedCrop === null}
             onClick={submitLogo}
-            className={`upload-button ${completedCrop === null ? 'disabled' : ''}`}
+            className={`${styles.uploadButton} ${completedCrop === null ? 'disabled' : ''}`}
           >
             Upload to deal
           </Button>
         </FormControl>
 
         {dealCoverImageKey && (
-          <div className="image-preview-container">
-            <img className="image-preview" alt={slug} src={imgSrc} />
-            <Button onClick={removeLogo} className="delete-image">
+          <div className={styles.imagePreviewContainer}>
+            <img className={styles.imagePreview} alt={slug} src={imgSrc} />
+            <Button onClick={removeLogo} className={styles.deleteImage}>
               Delete Image
             </Button>
           </div>
         )}
 
         {cropperOpen && (
-          <div className="image-crop-container">
+          <div className={styles.imageCropContainer}>
             <ReactCrop
               src={upImg}
               onImageLoaded={onImageLoaded}
               crop={crop}
               onChange={(c) => setCrop(c)}
               onComplete={(c) => setCompletedCrop(c)}
-              className="image-cropper"
+              className={styles.imageCropper}
             />
 
             <canvas
@@ -324,7 +326,7 @@ function DealSettings({ formData, setFormData, refetch }) {
             />
 
             <Button
-              className="crop-button"
+              className={styles.cropButton}
               onClick={() => {
                 submitCrop(previewCanvasRef.current, completedCrop);
                 setCropperOpen(false);
@@ -339,53 +341,53 @@ function DealSettings({ formData, setFormData, refetch }) {
   }
 
   return (
-    <section className="DealSettings">
+    <section>
       <h2>Deal Settings</h2>
 
-      <div className="form-fields">
-        <FormControl className="field">
-          <FormLabel className="field-label">
+      <div className={styles.formFields}>
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Last valuation ($)
             <TextField
               value={last_valuation || ''}
               name="last_valuation"
               onChange={handleFormChange}
-              className="text-input"
+              className={styles.textInput}
               variant="outlined"
             />
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             DocSpring Template ID
             <TextField
               name="docSpringTemplateId"
               onChange={handleFormChange}
               value={docSpringTemplateId || ''}
-              className="text-input"
+              className={styles.textInput}
               variant="outlined"
             />
           </FormLabel>
         </FormControl>
 
         {documents && (
-          <div className="deal-documents">
-            <FormLabel className="field-label">
+          <div className={styles.dealDocuments}>
+            <FormLabel className={styles.fieldLabel}>
               Deal Documents
-              <ul className="document-list">{dealDocumentItems}</ul>
+              <ul className={styles.documentList}>{dealDocumentItems}</ul>
             </FormLabel>
           </div>
         )}
 
         <AddDealLogo />
 
-        <FormControl className="upload">
-          <FormLabel className="field-label">
+        <FormControl className={styles.uploadInBanner}>
+          <FormLabel className={styles.fieldLabel}>
             Upload wire instructions
-            <div className="upload-container">
-              <div className="button-container">
-                <Button className="attach-button" variant="contained" component="label">
+            <div className={styles.uploadContainer}>
+              <div className={styles.buttonContainer}>
+                <Button className={styles.attachButton} variant="contained" component="label">
                   Attach
                   <input
                     type="file"
@@ -409,18 +411,18 @@ function DealSettings({ formData, setFormData, refetch }) {
           <Button
             disabled={wireInstructions === null}
             onClick={submitWireInstructions}
-            className={`upload-button ${wireInstructions === null ? 'disabled' : ''}`}
+            className={`${styles.uploadButton} ${wireInstructions === null ? 'disabled' : ''}`}
           >
             Upload to deal
           </Button>
         </FormControl>
 
-        <FormControl className="upload">
-          <FormLabel className="field-label">
+        <FormControl className={styles.uploadInBanner}>
+          <FormLabel className={styles.fieldLabel}>
             Upload documents
-            <div className="upload-container">
-              <div className="button-container">
-                <Button className="attach-button" variant="contained" component="label">
+            <div className={styles.uploadContainer}>
+              <div className={styles.buttonContainer}>
+                <Button className={styles.attachButton} variant="contained" component="label">
                   Attach
                   <input
                     type="file"
@@ -443,29 +445,29 @@ function DealSettings({ formData, setFormData, refetch }) {
           <Button
             disabled={doc === null}
             onClick={submitDoc}
-            className={`upload-button ${doc === null ? 'disabled' : ''}`}
+            className={`${styles.uploadButton} ${doc === null ? 'disabled' : ''}`}
           >
             Upload to deal
           </Button>
         </FormControl>
 
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Deal ID
-            <TextField disabled value={_id || ''} className="text-input" variant="outlined" />
+            <TextField disabled value={_id || ''} className={styles.textInput} variant="outlined" />
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Live deal link
             <TextField
-              className="text-input"
+              className={styles.textInput}
               value={formData.appLink ? window.origin + (formData.appLink || '') : ''}
               variant="outlined"
               InputProps={{
                 endAdornment: (
-                  <Button onClick={handleLinkCopy} className="copy-button">
+                  <Button onClick={handleLinkCopy} className={styles.copyButton}>
                     <img src={CopyIcon} alt="Copy Icon" />
                   </Button>
                 ),

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FormControl, TextField, Button, FormLabel } from '@material-ui/core';
-import './styles.scss';
+import useStyles from './styles';
 
 function PortfolioCompanySettings({ formData, setFormData }) {
+  const styles = useStyles();
   const [feeType, setFeeType] = useState('percentage');
   const [setupCostType, setSetupCostType] = useState('percentage');
 
@@ -125,18 +126,18 @@ function PortfolioCompanySettings({ formData, setFormData }) {
   };
 
   return (
-    <section className="PortfolioCompanySettings">
+    <section className={styles.PortfolioCompanySettings}>
       <h2>SPV Terms</h2>
 
-      <div className="form-fields">
-        <FormControl className="field">
-          <FormLabel className="field-label">
+      <div className={styles.formFields}>
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Portfolio management fee
-            <div className="management-fee">
+            <div className={styles.managementFee}>
               <TextField
                 onChange={handleFeeChange}
                 value={getManagementFee()}
-                className="fee-input"
+                className={styles.feeInput}
                 variant="outlined"
               />
               <Button
@@ -151,7 +152,7 @@ function PortfolioCompanySettings({ formData, setFormData }) {
                     },
                   }));
                 }}
-                className={`percentage ${feeType === 'percentage' && 'selected'}`}
+                className={`${styles.percentage} ${feeType === 'percentage' && styles.selected}`}
                 variant="outlined"
               >
                 %
@@ -168,7 +169,7 @@ function PortfolioCompanySettings({ formData, setFormData }) {
                     },
                   }));
                 }}
-                className={`fixed ${feeType === 'fixed' && 'selected'}`}
+                className={`${styles.fixed} ${feeType === 'fixed' && styles.selected}`}
                 variant="outlined"
               >
                 $
@@ -177,21 +178,23 @@ function PortfolioCompanySettings({ formData, setFormData }) {
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Fee type
-            <div className="button-options">
+            <div className={styles.buttonOptions}>
               <Button
                 onClick={() => changeFeeType('Annual')}
-                className={`option-button ${portfolioManagementFeeType === 'Annual' && 'selected'}`}
+                className={`${styles.optionButton} ${
+                  portfolioManagementFeeType === 'Annual' && styles.selected
+                }`}
                 variant="outlined"
               >
                 Annual
               </Button>
               <Button
                 onClick={() => changeFeeType('One-Time')}
-                className={`option-button ${
-                  portfolioManagementFeeType === 'One-Time' && 'selected'
+                className={`${styles.optionButton} ${
+                  portfolioManagementFeeType === 'One-Time' && styles.selected
                 }`}
                 variant="outlined"
               >
@@ -201,39 +204,41 @@ function PortfolioCompanySettings({ formData, setFormData }) {
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Portfolio carry fee (%)
             <TextField
               onChange={handleFormChange}
               value={portfolioTotalCarry}
               name="portfolioTotalCarry"
-              className="text-input"
+              className={styles.textInput}
               variant="outlined"
             />
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Estimated setup cost
-            <div className="management-fee">
+            <div className={styles.managementFee}>
               <TextField
                 onChange={handleSetupCostChange}
                 value={getSetupCosts()}
-                className="fee-input"
+                className={styles.feeInput}
                 variant="outlined"
               />
               <Button
                 onClick={() => setSetupCostType('percentage')}
-                className={`percentage ${setupCostType === 'percentage' && 'selected'}`}
+                className={`${styles.percentage} ${
+                  setupCostType === 'percentage' && styles.selected
+                }`}
                 variant="outlined"
               >
                 %
               </Button>
               <Button
                 onClick={() => setSetupCostType('fixed')}
-                className={`fixed ${setupCostType === 'fixed' && 'selected'}`}
+                className={`${styles.fixed} ${setupCostType === 'fixed' && styles.selected}`}
                 variant="outlined"
               >
                 $

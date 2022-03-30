@@ -1,8 +1,9 @@
 import React from 'react';
 import { FormControl, TextField, FormLabel } from '@material-ui/core';
-import './styles.scss';
+import useStyles from './styles';
 
 function DeadlineSettings({ formData, setFormData }) {
+  const styles = useStyles();
   const {
     dealParams: { signDeadline, wireDeadline },
   } = formData;
@@ -18,33 +19,33 @@ function DeadlineSettings({ formData, setFormData }) {
   };
 
   return (
-    <section className="DeadlineSettings">
+    <section className={styles.deadlineSettings}>
       <h2>Deadlines</h2>
 
-      <div className="form-fields">
-        <FormControl className="field">
-          <FormLabel className="field-label">
+      <div className={styles.formFields}>
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Signing deadline
             <TextField
               onChange={handleFormChange}
               name="signDeadline"
               value={signDeadline}
               type="datetime-local"
-              className="text-input"
+              className={styles.textInput}
               variant="outlined"
             />
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Wiring deadline
             <TextField
               onChange={handleFormChange}
               name="wireDeadline"
               value={wireDeadline}
               type="datetime-local"
-              className="text-input"
+              className={styles.textInput}
               variant="outlined"
             />
           </FormLabel>

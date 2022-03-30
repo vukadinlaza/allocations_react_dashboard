@@ -6,8 +6,10 @@ import CurrencyTextField from '@unicef/material-ui-currency-textfield';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import { nWithCommas } from '../../../utils/numbers';
+import useStyles from './styles';
 
 function BasicInfoSettings({ formData, setFormData }) {
+  const styles = useStyles();
   const handleFormChange = ({ target }) => {
     const dealParamFields = ['dealType', 'minimumInvestment'];
 
@@ -54,11 +56,11 @@ function BasicInfoSettings({ formData, setFormData }) {
       : '1,000';
 
   return (
-    <section className="BasicInfoSettings">
-      <h2 className="key-highlights">Key highlights</h2>
+    <section className={styles.basicInfoSettings}>
+      <h2 className={styles.keyHighlights}>Key highlights</h2>
 
       <Editor
-        className="memo-editor"
+        className={styles.memoEditor}
         value={formData.memo || ''}
         apiKey="jlbrhzgo0m2myqdmbhaav8a0971vomza2smty20fpq6fs47j"
         init={{
@@ -108,37 +110,37 @@ function BasicInfoSettings({ formData, setFormData }) {
       />
 
       <div className="form-fields">
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Company name
             <TextField
               name="company_name"
               onChange={handleFormChange}
               value={formData.company_name || ''}
-              className="text-input"
+              className={styles.textInput}
               variant="outlined"
             />
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Company description
             <TextField
               name="company_description"
               onChange={handleFormChange}
               value={formData.company_description || ''}
-              className="text-input"
+              className={styles.textInput}
               variant="outlined"
             />
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Target raise
             <TextField
-              className="currency-text-input"
+              className={styles.currencyTextField}
               value={formData.target || ''}
               name="target"
               onChange={handleFormChange}
@@ -154,12 +156,12 @@ function BasicInfoSettings({ formData, setFormData }) {
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field field-buttons">
-          <FormLabel className="field-label">
-            <div className="button-options">
+        <FormControl className={`${styles.field} ${styles.fieldButton}`}>
+          <FormLabel className={styles.fieldLabel}>
+            <div className={styles.buttonOptions}>
               <Button
                 onClick={() => handleButtonClick('investmentType', 'spv')}
-                className={`option-button ${investmentType === 'spv' && 'selected'}`}
+                className={`${styles.optionButton} ${investmentType === 'spv' && 'selected'}`}
                 name="investmentType"
                 value="fund"
                 variant="outlined"
@@ -168,7 +170,7 @@ function BasicInfoSettings({ formData, setFormData }) {
               </Button>
               <Button
                 onClick={() => handleButtonClick('investmentType', 'fund')}
-                className={`option-button ${investmentType === 'fund' && 'selected'}`}
+                className={`${styles.optionButton} ${investmentType === 'fund' && 'selected'}`}
                 name="investmentType"
                 value="fund"
                 variant="outlined"
@@ -179,11 +181,11 @@ function BasicInfoSettings({ formData, setFormData }) {
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field">
-          <FormLabel className="field-label">
+        <FormControl className={styles.field}>
+          <FormLabel className={styles.fieldLabel}>
             Minimum investment
             <CurrencyTextField
-              className="currency-text-input"
+              className={styles.currencyTextInput}
               variant="outlined"
               value={dealParams.minimumInvestment}
               placeholder={minimumInvestmentPlaceholder}
@@ -214,19 +216,19 @@ function BasicInfoSettings({ formData, setFormData }) {
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field field-buttons">
-          <FormLabel className="field-label">
-            <div className="button-options">
+        <FormControl className={`${styles.field} ${styles.fieldButton}`}>
+          <FormLabel className={styles.fieldLabel}>
+            <div className={styles.buttonOptions}>
               <Button
                 onClick={() => handleButtonClick('dealType', '506b')}
-                className={`option-button ${dealParams.dealType === '506b' && 'selected'}`}
+                className={`${styles.optionButton} ${dealParams.dealType === '506b' && 'selected'}`}
                 variant="outlined"
               >
                 506b
               </Button>
               <Button
                 onClick={() => handleButtonClick('dealType', '506c')}
-                className={`option-button ${dealParams.dealType === '506c' && 'selected'}`}
+                className={`${styles.optionButton} ${dealParams.dealType === '506c' && 'selected'}`}
                 variant="outlined"
               >
                 506c
@@ -235,9 +237,9 @@ function BasicInfoSettings({ formData, setFormData }) {
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field field-buttons">
-          <FormLabel className="field-label">
-            <div className="button-options">
+        <FormControl className={`${styles.field} ${styles.fieldButton}`}>
+          <FormLabel className={styles.fieldLabel}>
+            <div className={styles.buttonOptions}>
               <Button
                 onClick={() =>
                   handleButtonClick(
@@ -245,7 +247,7 @@ function BasicInfoSettings({ formData, setFormData }) {
                     dealParams.is3c7 === null ? true : dealParams.is3c7 === false,
                   )
                 }
-                className={`option-button ${dealParams.is3c7 === true && 'selected'}`}
+                className={`${styles.optionButton} ${dealParams.is3c7 === true && 'selected'}`}
                 variant="outlined"
               >
                 3(c)(7)
@@ -254,19 +256,19 @@ function BasicInfoSettings({ formData, setFormData }) {
           </FormLabel>
         </FormControl>
 
-        <FormControl className="field field-buttons">
-          <FormLabel className="field-label">
-            <div className="button-options">
+        <FormControl className={`${styles.fieldButton} ${styles.field}`}>
+          <FormLabel className={styles.fieldLabel}>
+            <div className={styles.buttonOptions}>
               <Button
                 onClick={() => handleButtonClick('status', 'onboarding')}
-                className={`option-button ${status === 'onboarding' && 'selected'}`}
+                className={`${styles.optionButton} ${status === 'onboarding' && 'selected'}`}
                 variant="outlined"
               >
                 Onboarding
               </Button>
               <Button
                 onClick={() => handleButtonClick('status', 'closed')}
-                className={`option-button ${status === 'closed' && 'selected'}`}
+                className={`${styles.optionButton} ${status === 'closed' && 'selected'}`}
                 variant="outlined"
               >
                 Closed
