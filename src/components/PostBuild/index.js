@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { useHistory, useLocation } from 'react-router';
+import { Redirect, useHistory, useLocation } from 'react-router';
 import { useAuth } from '../../auth/useAuth';
 import Loader from '../utils/Loader';
 
@@ -17,6 +17,7 @@ export default function PostBuild() {
         user={userProfile}
         deal_id={params.get('id')}
         redirectToDashboard={() => history.push('/')}
+        redirectTo404={() => <Redirect to="/404" />}
       />
     </Suspense>
   );
