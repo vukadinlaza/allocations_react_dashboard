@@ -174,7 +174,7 @@ const TempDealDashboard = ({ classes }) => {
       try {
         const res = await fetch(`${process.env.REACT_APP_BUILD_FRONTEND_URL}/api/deals/${deal_id}`);
         const deal = await res.json();
-        if (deal?.phases?.length) {
+        if (deal?.phases?.length === 6) {
           spvTabs = [
             'Deal Progress',
             'Investor Onboarding Status',
@@ -382,7 +382,7 @@ const TempDealDashboard = ({ classes }) => {
   };
 
   const [openModal, setOpenModal] = useState(false);
-
+  console.log(serviceDeal, 'SERVICE DEAL');
   if (!dealData || !atFundData || loading)
     return (
       <div className={classes.loaderContainer}>
@@ -398,6 +398,8 @@ const TempDealDashboard = ({ classes }) => {
             serviceDeal?.target_raise_goal || 0,
             dealData?.deal?.raised,
           )}
+          currentAmount={dealData?.deal?.raised}
+          goalAmount={serviceDeal?.target_raise_goal || 0}
         />
       </Suspense>
       <div style={{ margin: '1rem 0' }}>
