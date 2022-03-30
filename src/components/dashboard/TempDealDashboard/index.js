@@ -382,7 +382,6 @@ const TempDealDashboard = ({ classes }) => {
   };
 
   const [openModal, setOpenModal] = useState(false);
-  console.log(serviceDeal, 'SERVICE DEAL');
   if (!dealData || !atFundData || loading)
     return (
       <div className={classes.loaderContainer}>
