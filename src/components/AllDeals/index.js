@@ -21,7 +21,7 @@ import CapitalAccount from './CapitalAccount';
 
 import { nWithCommas, formatDate } from '../../utils/numbers';
 
-import './style.scss';
+import useStyles from './styles';
 
 /** *
  *
@@ -86,6 +86,7 @@ function DealProgress({ deal }) {
 }
 
 export default function Deals({ showClosed }) {
+  const styles = useStyles();
   const { organization } = useParams();
   const [page, setPage] = useState(0);
 
@@ -125,11 +126,11 @@ export default function Deals({ showClosed }) {
 
   const maxPages = Math.ceil(data.organization.n_deals / OFFSET);
   return (
-    <div className="AllDeals">
+    <div>
       {!showClosed && (
         <Row>
           <Col sm={{ size: 12 }}>
-            <Paper className="deal-data">
+            <Paper className={styles.dealData}>
               <Button variant="contained" color="secondary">
                 <Link to={`/admin/${organization}/deal/new`}>Create New Deal</Link>
               </Button>
@@ -140,22 +141,22 @@ export default function Deals({ showClosed }) {
       {!showClosed && (
         <>
           <h5>
-            Open Deals <span className="deals-length">{(open || []).length}</span>
+            Open Deals <span className={styles.dealsLength}>{(open || []).length}</span>
           </h5>
           <Paper>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Deal</TableCell>
-                  <TableCell>Description</TableCell>
+                  <TableCell className={styles.th}>Deal</TableCell>
+                  <TableCell className={styles.th}>Description</TableCell>
                   <Hidden only="xs">
-                    <TableCell>Closing</TableCell>
+                    <TableCell className={styles.th}>Closing</TableCell>
                   </Hidden>
-                  <TableCell>Lead</TableCell>
+                  <TableCell className={styles.th}>Lead</TableCell>
                   <Hidden only="xs">
-                    <TableCell>Progress</TableCell>
+                    <TableCell className={styles.th}>Progress</TableCell>
                   </Hidden>
-                  <TableCell />
+                  <TableCell className={styles.th} />
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -185,8 +186,8 @@ export default function Deals({ showClosed }) {
         </>
       )}
       <>
-        <Paper style={{ marginTop: 16 }}>
-          <Grid container style={{ padding: '16px' }}>
+        <Paper className={styles.closedDealsPaper}>
+          <Grid container className={styles.closedDealsGrid}>
             <Typography variant="h6" gutterBottom>
               Closed Deals: {data?.organization?.n_deals}
             </Typography>
@@ -194,14 +195,16 @@ export default function Deals({ showClosed }) {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Deal</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Lead</TableCell>
+                <TableCell className={styles.th}>Deal</TableCell>
+                <TableCell className={styles.th}>Description</TableCell>
+                <TableCell className={styles.th}>Lead</TableCell>
                 <Hidden only="xs">
                   <TableCell>Closed</TableCell>
-                  <TableCell>Size</TableCell>
-                  <TableCell className="text-center">Investors</TableCell>
-                  <TableCell />
+                  <TableCell className={styles.th}>Size</TableCell>
+                  <TableCell className={styles.th} align="center">
+                    Investors
+                  </TableCell>
+                  <TableCell className={styles.th} />
                 </Hidden>
               </TableRow>
             </TableHead>
@@ -225,7 +228,7 @@ export default function Deals({ showClosed }) {
                   <Fragment key={deal._id}>
                     <TableRow
                       onClick={() => toggleCapitalAccount(deal._id)}
-                      className="closed-deal-row"
+                      className={styles.closedDealRow}
                     >
                       <TableCell>{deal.company_name}</TableCell>
                       <TableCell>{deal.company_description}</TableCell>
@@ -233,7 +236,7 @@ export default function Deals({ showClosed }) {
                       <Hidden only="xs">
                         <TableCell>{formatDate(deal.dealParams.wireDeadline)}</TableCell>
                         <TableCell>${nWithCommas(totalRaised)}</TableCell>
-                        <TableCell className="text-center">{deal.investments.length}</TableCell>
+                        <TableCell align="center">{deal.investments.length}</TableCell>
                         <TableCell align="center">
                           <Link to={`/admin/${organization}/deals/${deal._id}/edit`}>edit</Link>
                         </TableCell>
@@ -257,11 +260,11 @@ export default function Deals({ showClosed }) {
               })}
             </TableBody>
           </Table>
-          <Grid style={{ margin: '1rem', display: 'flex', justifyContent: 'flex-end' }}>
+          <Grid className={styles.paginationGrid}>
             <Button
               color="primary"
               variant="contained"
-              style={{ marginLeft: '1rem', marginRight: '1rem' }}
+              className={styles.prevButton}
               onClick={() => {
                 setPage(page - 1);
               }}
@@ -269,13 +272,13 @@ export default function Deals({ showClosed }) {
             >
               Previous
             </Button>
-            <Typography style={{ fontSize: '1.25rem', marginLeft: '1rem', marginRight: '1rem' }}>
+            <Typography className={styles.paginationText}>
               {page + 1} / {maxPages}
             </Typography>
             <Button
               color="primary"
               variant="contained"
-              style={{ marginLeft: '1rem', marginRight: '1rem' }}
+              className={styles.nextButton}
               onClick={() => {
                 setPage(page + 1);
               }}
