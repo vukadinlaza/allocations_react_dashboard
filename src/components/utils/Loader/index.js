@@ -1,10 +1,9 @@
 import React from 'react';
 import { CircularProgress } from '@material-ui/core';
-import './style.scss';
 
 export default function Loader() {
   return (
-    <div className="Loader">
+    <div style={{ textAlign: 'center', paddingTop: '3rem' }}>
       <CircularProgress />
     </div>
   );
