@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import BN from 'bignumber.js';
 import _ from 'lodash';
 import { ResponsivePie } from '@nivo/pie';
 import randomColor from 'randomcolor';
-
 import { Table, TableBody, TableCell, TableRow, TableHead, Paper } from '@material-ui/core';
+import useStyles from './styles';
+
 import { nWithCommas } from '../../../utils/numbers';
 
 function percentageOfSPV(investment, total) {
@@ -47,10 +49,11 @@ function CapitalAccountPie({ investments }) {
 
 // eslint-disable-next-line no-unused-vars
 export default function CapitalAccount({ deal, investments, totalRaised, useInvestingAs }) {
+  const styles = useStyles();
   return (
     <TableRow>
-      <TableCell colSpan={7} className="CapitalAccount">
-        <Paper className="CapitalAccount-table">
+      <TableCell colSpan={7} className={styles.capitalAccount}>
+        <Paper className={styles.capitalAccountTable}>
           <Table size="small">
             <TableHead>
               <TableRow>
@@ -67,18 +70,16 @@ export default function CapitalAccount({ deal, investments, totalRaised, useInve
                       ? investment?.investor?.investingAs
                       : investment?.investor?.name}
                   </TableCell>
-                  <TableCell className="text-center">
-                    {percentageOfSPV(investment, totalRaised)}%
-                  </TableCell>
-                  <TableCell className="text-center">${nWithCommas(investment.amount)}</TableCell>
+                  <TableCell align="center">{percentageOfSPV(investment, totalRaised)}%</TableCell>
+                  <TableCell align="center">${nWithCommas(investment.amount)}</TableCell>
                 </TableRow>
               ))}
               <TableRow>
                 <TableCell />
-                <TableCell className="text-center">
+                <TableCell align="center">
                   <b>Total</b>
                 </TableCell>
-                <TableCell className="text-center">
+                <TableCell align="center">
                   <b>${nWithCommas(_.sumBy(investments, 'amount'))}</b>
                 </TableCell>
               </TableRow>
