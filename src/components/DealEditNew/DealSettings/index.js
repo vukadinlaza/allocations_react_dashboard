@@ -1,11 +1,10 @@
 import { FormControl, TextField, Button, Menu, MenuItem, FormLabel } from '@material-ui/core';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import './styles.scss';
 import { toast } from 'react-toastify';
 import ReactCrop from 'react-image-crop';
 import { useMutation, gql } from '@apollo/client';
 import 'react-image-crop/lib/ReactCrop.scss';
-import useStyles from 'styles';
+import useStyles from './styles';
 import CopyIcon from '../../../assets/copy-icon.svg';
 import DocumentIcon from '../../../assets/document-icon.svg';
 import DocumentMenuIcon from '../../../assets/document-menu-icon.svg';
