@@ -3,9 +3,10 @@ import { Button, Tooltip } from '@material-ui/core';
 import { useLocation } from 'react-router-dom';
 import KYCModal from '../DealNextSteps/KYCModal';
 import DocIcon from '../../assets/buildDoc.svg';
-import './styles.scss';
+import styles from './styles';
 
 function SubmitTaxDocs() {
+  const classes = styles();
   const useQuery = () => new URLSearchParams(useLocation().search);
   const query = useQuery();
   const form = query.get('form')?.toUpperCase();
@@ -48,12 +49,12 @@ function SubmitTaxDocs() {
 
   const buttonItems = Object.entries(templateMap).map(([key, value]) => {
     return (
-      <div className="button-container">
+      <div className={classes.buttonContainer}>
         <Tooltip title={value.tooltipContent} styles={{ fontSize: '16px' }} arrow>
-          <Button key={key} onClick={() => handleClick(key)} className="form-select-button">
-            <div className="button-content">
-              <img className="button-img" src={DocIcon} alt="document icon" />
-              <p className="button-text">{value.name}</p>
+          <Button key={key} onClick={() => handleClick(key)} className={classes.formSelectButton}>
+            <div className={classes.buttonContent}>
+              <img src={DocIcon} alt="document icon" />
+              <p className={classes.buttonText}>{value.name}</p>
             </div>
           </Button>
         </Tooltip>
@@ -62,18 +63,18 @@ function SubmitTaxDocs() {
   });
 
   return (
-    <section className="SubmitTaxDocs">
-      <div className="section-header">
-        <div className="text">
+    <section>
+      <div className={classes.sectionHeader}>
+        <div className={classes.text}>
           <p>Investor</p>
           <p>/</p>
-          <p className="page">Submit Tax Documents</p>
+          <p className={classes.page}>Submit Tax Documents</p>
         </div>
       </div>
 
-      <div className="select-form">
+      <div className={classes.selectForm}>
         <h2>Select Tax Document:</h2>
-        <div className="options-container">{buttonItems}</div>
+        <div className={classes.optionsContainer}>{buttonItems}</div>
       </div>
 
       <KYCModal
