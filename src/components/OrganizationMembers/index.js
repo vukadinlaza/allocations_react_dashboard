@@ -6,7 +6,7 @@ import { Paper, Table, TableBody, TableCell, TextField, TableRow, Button } from 
 import { Col, Row } from 'reactstrap';
 import * as API from '../../api';
 import Loader from '../utils/Loader';
-import './style.scss';
+import styles from './styles';
 
 /** *
  *
@@ -37,18 +37,22 @@ const ADD_MEMBERSHIP = gql`
     }
   }
 `;
-function Member({ org, member, sendAdminInvite, revokeMembership }) {
+function Member({ org, member, sendAdminInvite, revokeMembership, classes }) {
   const invite = org.adminInvites.filter((i) => i).find((i) => i.to === member.email);
 
   const inviteArea = invite ? (
-    <Button size="small" className="no-outline" endIcon={<FontAwesomeIcon icon="paper-plane" />}>
+    <Button
+      size="small"
+      className={classes.noOutline}
+      endIcon={<FontAwesomeIcon icon="paper-plane" />}
+    >
       Sent{' '}
     </Button>
   ) : (
     <Button
       color="secondary"
       size="small"
-      className="no-outline"
+      className={classes.noOutline}
       variant="contained"
       onClick={() => sendAdminInvite({ variables: { user_id: member._id } })}
       endIcon={<FontAwesomeIcon icon="envelope" />}
@@ -71,7 +75,7 @@ function Member({ org, member, sendAdminInvite, revokeMembership }) {
         <Button
           color="secondary"
           variant="contained"
-          className="no-outline"
+          className={classes.noOutline}
           onClick={() => revokeMembership({ variables: { user_id: member._id } })}
         >
           Revoke
@@ -81,7 +85,7 @@ function Member({ org, member, sendAdminInvite, revokeMembership }) {
   );
 }
 
-function UserSearch({ refetch }) {
+function UserSearch({ refetch, classes }) {
   const { organization } = useParams();
   const [q, setQ] = useState('');
   const [records, setRecords] = useState([]);
@@ -102,7 +106,7 @@ function UserSearch({ refetch }) {
   }, [searchRes.data]);
 
   return (
-    <div className="assoc-search">
+    <div>
       <TextField
         style={{ width: '100%' }}
         required
@@ -111,13 +115,13 @@ function UserSearch({ refetch }) {
         variant="filled"
         onChange={(e) => setQ(e.target.value)}
       />
-      <Paper className="assoc-search-results">
+      <Paper>
         <Table>
           <TableBody>
             {records.map((record) => (
               <TableRow
                 key={record._id}
-                className="assoc-option"
+                className={classes.assocOption}
                 onClick={() => addMembership({ variables: { user_id: record._id } })}
               >
                 <TableCell>
@@ -137,6 +141,7 @@ function UserSearch({ refetch }) {
 }
 
 export default function OrganizationMembers({ data, refetch }) {
+  const classes = styles();
   const { organization } = useParams();
   const [revokeMembership] = useMutation(REVOKE_MEMBERSHIP, {
     variables: { slug: organization },
@@ -151,11 +156,11 @@ export default function OrganizationMembers({ data, refetch }) {
   if (!data) return <Loader />;
 
   return (
-    <div className="OrganizationMembers">
+    <div>
       <Row>
         <Col sm={{ size: 8, offset: 1 }}>
           <Paper style={{ margin: '10px 0px' }}>
-            <UserSearch refetch={refetch} />
+            <UserSearch refetch={refetch} classes={classes} />
           </Paper>
           <Paper style={{ marginTop: '15px' }}>
             <Table>
@@ -167,6 +172,7 @@ export default function OrganizationMembers({ data, refetch }) {
                     member={member}
                     sendAdminInvite={sendAdminInvite}
                     revokeMembership={revokeMembership}
+                    classes={classes}
                   />
                 ))}
               </TableBody>
