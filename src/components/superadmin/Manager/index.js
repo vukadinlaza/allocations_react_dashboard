@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom';
 import { Col, Row, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
 import OrganizationMembers from '../../OrganizationMembers';
-import './style.scss';
 
 const ORG_SUPERADMIN = gql`
   query GetMembers($slug: String!) {
