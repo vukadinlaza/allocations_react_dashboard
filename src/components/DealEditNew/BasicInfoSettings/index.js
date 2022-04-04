@@ -194,6 +194,7 @@ function BasicInfoSettings({ formData, setFormData }) {
               decimalCharacter="."
               decimalPlaces={0}
               digitGroupSeparator=","
+              modifyValueOnWheel="false"
               onChange={(event, value) => {
                 setFormData((prev) => ({
                   ...prev,

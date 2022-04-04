@@ -29,6 +29,7 @@ const InvestmentAmountPanel = ({ setAmount, amount, minimumInvestment, isFromMod
             decimalPlaces={2}
             digitGroupSeparator=","
             onChange={(_, value) => setAmount(value.toString())}
+            modifyValueOnWheel="false"
           />
         </Grid>
 
