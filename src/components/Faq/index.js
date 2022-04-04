@@ -1,12 +1,13 @@
 import React from 'react';
 import { Paper } from '@material-ui/core';
-import './style.scss';
+import styles from './styles';
 
 export default function Faq() {
+  const classes = styles();
   return (
-    <div className="Faq">
-      <div className="Faq-title">Getting Started</div>
-      <Paper className="Faq-entry">
+    <div>
+      <div className={classes.faqTitle}>Getting Started</div>
+      <Paper className={classes.faqEntry}>
         <h5>What is an SPV?</h5>
         <div>
           An SPV is a special purpose vehicle commonly used for group investment. It is a fenced
@@ -21,13 +22,13 @@ export default function Faq() {
           </a>
         </div>
       </Paper>
-      <Paper className="Faq-entry">
+      <Paper className={classes.faqEntry}>
         <h5>How do I get paid out from the SPV upon acquisition / IPO / sale?</h5>
         <div>
           You are investing in a USA Series LLC which is investing in the portfolio company.
         </div>
       </Paper>
-      <Paper className="Faq-entry">
+      <Paper className={classes.faqEntry}>
         <h5>What do I need to sign?</h5>
         <div>
           You will receive a DocuSign SPV contract with the following documents in one agreement
@@ -38,21 +39,21 @@ export default function Faq() {
           </ul>
         </div>
       </Paper>
-      <Paper className="Faq-entry">
+      <Paper className={classes.faqEntry}>
         <h5>What is the process for wiring with crypto?</h5>
         <div>
           We accept stablecoins including TUSD, USDC and USDT. Needs to be settled within 10 mins of
           quoting
         </div>
       </Paper>
-      <Paper className="Faq-entry">
+      <Paper className={classes.faqEntry}>
         <h5>What are the fees for wiring with crypto?</h5>
         <div>
           We use QCP brokerage for crypto wires, who charge a 0.5%-1% fee inclusive of their costs +
           wire fee.
         </div>
       </Paper>
-      <Paper className="Faq-entry">
+      <Paper className={classes.faqEntry}>
         <h5>How does tax work for these investments?</h5>
         <div>
           <ul>
@@ -100,7 +101,7 @@ export default function Faq() {
           </ul>
         </div>
       </Paper>
-      <Paper className="Faq-entry">
+      <Paper className={classes.faqEntry}>
         <h5>What are the expenses on the SPV?</h5>
         <div>
           The SPV may retain amounts contributed by the subscribers toward expenses of the SPV
@@ -110,7 +111,7 @@ export default function Faq() {
           disbursements
         </div>
       </Paper>
-      <Paper className="Faq-entry">
+      <Paper className={classes.faqEntry}>
         <h5>Am I directly investing in the portfolio company?</h5>
         <div>
           You are investing in a fund investing in the company, not directly in the company. You do
@@ -118,7 +119,7 @@ export default function Faq() {
           able to participate in future rounds)
         </div>
       </Paper>
-      <Paper className="Faq-entry">
+      <Paper className={classes.faqEntry}>
         <h5>Have you done due diligence on the company?</h5>
         <div>
           I understand that I must do my own diligence, read the investment documents and ask any
@@ -128,7 +129,7 @@ export default function Faq() {
           of diligence has been performed
         </div>
       </Paper>
-      <Paper className="Faq-entry">
+      <Paper className={classes.faqEntry}>
         <h5>How is the SPV governed?</h5>
         <div>
           When direct investors in the company must vote or give legal approval, the SPV organiser
@@ -137,7 +138,7 @@ export default function Faq() {
           you and other investors in making decisions on behalf of the fund
         </div>
       </Paper>
-      <Paper className="Faq-entry">
+      <Paper className={classes.faqEntry}>
         <h5>What are some of the risks associated with the investment?</h5>
         <div>
           While venture capital investments offer the opportunity for significant gains, those
