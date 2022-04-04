@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { nWithCommas } from '../../../utils/numbers';
-import '../style.scss';
+import styles from '../styles';
 
 const SEND_WIRE_REMINDERS = gql`
   mutation SendWireReminders($investment_ids: [String], $deal_id: String!) {
@@ -12,6 +12,7 @@ const SEND_WIRE_REMINDERS = gql`
 `;
 
 function SendWireReminder({ signedInvestors, deal }) {
+  const classes = styles();
   const [selectedInvestors, setSelectedInvestors] = useState([
     ...signedInvestors.map((investment) => investment.investmentId),
   ]);
@@ -62,9 +63,7 @@ function SendWireReminder({ signedInvestors, deal }) {
 
   const SelectButton = () => {
     return selectedInvestors.length > 0 ? (
-      <Button className="deselect-all" onClick={deselectAll}>
-        Deselect All
-      </Button>
+      <Button onClick={deselectAll}>Deselect All</Button>
     ) : (
       <Button onClick={selectAll}>Select All</Button>
     );
@@ -73,9 +72,9 @@ function SendWireReminder({ signedInvestors, deal }) {
   const InvestorList = () => {
     const investorItems = signedInvestors.map((investor, i) => {
       return (
-        <li key={i} className="investor-item">
+        <li key={i} className={classes.investorItem}>
           <FormControlLabel
-            className="investor-label"
+            className={classes.investorLabel}
             label={investor.name}
             control={
               <Checkbox
@@ -85,25 +84,25 @@ function SendWireReminder({ signedInvestors, deal }) {
               />
             }
           />
-          <p className="investor-amount">${nWithCommas(investor.amount)}</p>
+          <p className={classes.investorAmount}>${nWithCommas(investor.amount)}</p>
         </li>
       );
     });
 
-    return <ul className="investor-list">{investorItems}</ul>;
+    return <ul className={classes.investorList}>{investorItems}</ul>;
   };
 
   return (
-    <div className="SendWireReminder">
-      <div className="container">
-        <div className="investors">
-          <p className="title">Investors</p>
+    <div className={classes.SendWireReminder}>
+      <div className={classes.container}>
+        <div className={classes.investors}>
+          <p className={classes.title}>Investors</p>
           <SelectButton />
           <InvestorList />
         </div>
 
-        <div className="message">
-          <p className="title">Message</p>
+        <div className={classes.message}>
+          <p className={classes.title}>Message</p>
           <img
             src="https://allocations-public.s3.us-east-2.amazonaws.com/WireReminderTemplate.png"
             alt="wire reminder template"
@@ -111,7 +110,7 @@ function SendWireReminder({ signedInvestors, deal }) {
         </div>
       </div>
 
-      <Button className="send-button" onClick={handleSubmit}>
+      <Button className={classes.sendButton} onClick={handleSubmit}>
         Send Wire Reminder
       </Button>
     </div>

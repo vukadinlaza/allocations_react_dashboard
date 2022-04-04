@@ -14,7 +14,6 @@ import Deals from './components/AllDeals';
 import DealNew from './components/DealNew';
 import DealEditNew from './components/DealEditNew';
 import Sidebar from './components/Sidebar';
-import Investors from './components/Investors';
 import InvestmentNew from './components/InvestmentNew';
 import ProfilePage from './components/Profile/ProfilePage';
 import Profile from './components/Profile';
@@ -132,7 +131,6 @@ const MainApp = ({ isAuthenticated }) => {
 
         {/** Whitelabel Routes * */}
         <PrivateRoute path="/organizations/:org_slug/deals" component={DealsTable} exact />
-        <PrivateRoute path="/investors" component={Investors} exact />
         <PrivateRoute path="/identity" component={Identity} />
         <PrivateRoute path="/spv-onboarding" component={FreeSPVOnboarding} exact />
 

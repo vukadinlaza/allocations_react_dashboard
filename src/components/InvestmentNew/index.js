@@ -18,7 +18,7 @@ import { useLazyQuery, useMutation, gql } from '@apollo/client';
 import * as API from '../../api';
 
 import InvestorNew from '../InvestorNew';
-import './style.scss';
+import styles from './styles';
 
 /** *
  *
@@ -42,7 +42,7 @@ function validate({ investment, user, deal }) {
   return errors;
 }
 
-export function UserSearch({ user, setUser, errors, deal_id }) {
+export function UserSearch({ user, setUser, errors, deal_id, classes }) {
   const [q, setQ] = useState('');
   const [records, setRecords] = useState([]);
   const [search, searchRes] = useLazyQuery(API.users.search);
@@ -59,7 +59,7 @@ export function UserSearch({ user, setUser, errors, deal_id }) {
 
   if (user) {
     return (
-      <Paper className="assoc-value">
+      <Paper>
         <Table>
           <TableBody>
             <TableRow>
@@ -94,11 +94,15 @@ export function UserSearch({ user, setUser, errors, deal_id }) {
         variant="outlined"
         onChange={(e) => setQ(e.target.value)}
       />
-      <Paper className="assoc-search-results">
+      <Paper>
         <Table>
           <TableBody>
             {records.map((record) => (
-              <TableRow key={record._id} className="assoc-option" onClick={() => setUser(record)}>
+              <TableRow
+                key={record._id}
+                className={classes.assocOption}
+                onClick={() => setUser(record)}
+              >
                 <TableCell>
                   {record.first_name} {record.last_name}
                 </TableCell>
@@ -112,7 +116,7 @@ export function UserSearch({ user, setUser, errors, deal_id }) {
   );
 }
 
-function DealSearch({ deal, setDeal, errors }) {
+function DealSearch({ deal, setDeal, errors, classes }) {
   const [q, setQ] = useState('');
   const [records, setRecords] = useState([]);
   const [search, searchRes] = useLazyQuery(API.deals.search);
@@ -129,7 +133,7 @@ function DealSearch({ deal, setDeal, errors }) {
 
   if (deal) {
     return (
-      <Paper className="assoc-value">
+      <Paper>
         <Table>
           <TableBody>
             <TableRow>
@@ -162,11 +166,15 @@ function DealSearch({ deal, setDeal, errors }) {
         error={errors.includes('user')}
         onChange={(e) => setQ(e.target.value)}
       />
-      <Paper className="assoc-search-results">
+      <Paper>
         <Table>
           <TableBody>
             {records.map((record) => (
-              <TableRow key={record._id} className="assoc-option" onClick={() => setDeal(record)}>
+              <TableRow
+                key={record._id}
+                className={classes.assocOption}
+                onClick={() => setDeal(record)}
+              >
                 <TableCell>{record.company_name}</TableCell>
                 <TableCell>{record.company_description}</TableCell>
               </TableRow>
@@ -185,6 +193,7 @@ export default function InvestmentNew() {
   const [newUser, setNewUser] = useState(false);
   const [user, setUser] = useState(null);
   const [deal, setDeal] = useState(null);
+  const classes = styles();
 
   const updateInvestmentProp = ({ prop, newVal }) => {
     setInvestment((prev) => ({ ...prev, [prop]: newVal }));
@@ -225,13 +234,13 @@ export default function InvestmentNew() {
         />
       )}
       <Paper>
-        <div className="InvestmentEdit form-wrapper">
+        <div>
           <Row>
             <Col sm={{ size: 8, offset: 1 }}>
-              <div className="form-title">Create Investment</div>
+              <div>Create Investment</div>
             </Col>
           </Row>
-          <form className="form" noValidate autoComplete="off">
+          <form noValidate autoComplete="off">
             <Row>
               <Col sm={{ size: 8, offset: 1 }}>
                 <TextField
@@ -252,10 +261,11 @@ export default function InvestmentNew() {
                   setUser={setUser}
                   errors={errors}
                   deal_id={get(deal, '_id', '')}
+                  classes={classes}
                 />
               </Col>
               <Col sm={{ size: 4 }}>
-                <DealSearch deal={deal} setDeal={setDeal} errors={errors} />
+                <DealSearch deal={deal} setDeal={setDeal} errors={errors} classes={classes} />
               </Col>
             </Row>
             <Row>

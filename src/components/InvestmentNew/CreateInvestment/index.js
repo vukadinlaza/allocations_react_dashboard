@@ -13,7 +13,7 @@ import {
   InputLabel,
   InputAdornment,
 } from '@material-ui/core';
-import '../style.scss';
+import styles from '../styles';
 import { UserSearch } from '..';
 
 const CREATE_INVESTMENT = gql`
@@ -34,6 +34,7 @@ function validate({ investment, user, deal }) {
 }
 
 export default function CreateInvestment({ deal, handleUpdate }) {
+  const classes = styles();
   const [investment, setInvestment] = useState({});
   const [errors, setErrors] = useState([]);
   const [user, setUser] = useState();
@@ -72,9 +73,9 @@ export default function CreateInvestment({ deal, handleUpdate }) {
   };
 
   return (
-    <div className="InvestmentEdit form-wrapper">
-      <div className="title">Create Investment</div>
-      <form className="form" noValidate autoComplete="off">
+    <div>
+      <div className={classes.title}>Create Investment</div>
+      <form noValidate autoComplete="off">
         <Grid container spacing={3} direction="row" justifyContent="flex-end">
           <Grid item xs={12} sm={12} md={6}>
             <FormControl required disabled variant="outlined" style={{ width: '100%' }}>
