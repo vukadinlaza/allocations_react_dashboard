@@ -24,7 +24,7 @@ import Loader from '../../utils/Loader';
 import { destroy } from '../../../api/investments';
 import CrossOrPlusIcon from '../../svg/CrossOrPlusIcon';
 import DocumentIcon from '../../../assets/document-icon.svg';
-import '../style.scss';
+import styles from '../styles';
 
 /** *
  *
@@ -228,6 +228,7 @@ export default function InvestmentEdit({
   isK1 = false,
   handleUpdate = false,
 }) {
+  const classes = styles();
   const params = useParams();
   const [investment, setInvestment] = useState(null);
   const [user, setUser] = useState();
@@ -392,9 +393,9 @@ export default function InvestmentEdit({
   };
 
   return (
-    <div className="InvestmentEdit form-wrapper">
-      <div className="title">Update Investment</div>
-      <form className="form" noValidate autoComplete="off">
+    <div className={classes.investmentEdit}>
+      <div className={classes.title}>Update Investment</div>
+      <form noValidate autoComplete="off">
         <Grid container spacing={3}>
           {/* investor name */}
           <Grid item xs={12} md={6}>
@@ -518,7 +519,7 @@ export default function InvestmentEdit({
           )}
         </Grid>
 
-        <div className="title">Update Investor Accreditation</div>
+        <div className={classes.title}>Update Investor Accreditation</div>
 
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <FormControl
@@ -576,7 +577,7 @@ export default function InvestmentEdit({
         </Grid>
 
         <Grid container>
-          <div className="title" style={{ color: '#2A2B54', margin: '15px 0' }}>
+          <div className={classes.title} style={{ color: '#2A2B54', margin: '15px 0' }}>
             Documents
           </div>
         </Grid>

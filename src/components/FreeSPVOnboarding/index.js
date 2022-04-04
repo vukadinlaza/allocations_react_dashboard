@@ -3,7 +3,6 @@ import { isEqual } from 'lodash';
 import { useHistory } from 'react-router-dom';
 import { Paper, TextField, Button } from '@material-ui/core';
 import { useMutation, gql } from '@apollo/client';
-import './style.scss';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
