@@ -66,6 +66,7 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts }) => {
   const capitalPDF = get(capRes, 'createCapPDF.documents', []).find((d) =>
     d.path.includes('Capital_Account_Statement'),
   );
+
   return (
     <>
       <Modal
@@ -126,7 +127,7 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts }) => {
                     <Typography variant="subtitle2">(Amount wired into Private Fund)</Typography>
                   </div>
                   <Typography className={classes.rightValue}>
-                    ${amountFormat(data.subscriptionAmount)}
+                    ${amountFormat(data.currentAmountContributed)}
                   </Typography>
                 </Grid>
                 <hr className="solid" />
@@ -148,7 +149,7 @@ export default ({ showCapitalAccounts, setShowCapitalAccounts }) => {
                     <Typography variant="subtitle2">(Pro rata share of management fee) </Typography>
                   </div>
                   <Typography className={classes.rightValue}>
-                    ${nWithCommas(data.managementFee$)}
+                    ${nWithCommas(data.managementFees$)}
                   </Typography>
                 </Grid>
                 <hr className="solid" />

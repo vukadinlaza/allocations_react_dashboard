@@ -1,6 +1,5 @@
 import React from 'react';
 import { Editor } from '@tinymce/tinymce-react';
-import './styles.scss';
 import { FormControl, TextField, Button, FormLabel } from '@material-ui/core';
 import CurrencyTextField from '@unicef/material-ui-currency-textfield';
 import InputAdornment from '@material-ui/core/InputAdornment';
