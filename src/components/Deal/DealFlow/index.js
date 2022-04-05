@@ -19,7 +19,7 @@ import {
 } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import ReactHtmlParser from 'react-html-parser';
-import { makeStyles } from '@material-ui/core/styles';
+import useStyles from '../styles';
 import DocusignKYCEmbeddedForm from '../../forms/KYCTab';
 import { nWithCommas } from '../../../utils/numbers';
 import Loader from '../../utils/Loader';
@@ -69,41 +69,10 @@ function getOnboardingLinkType(link) {
   }
 }
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: theme.spacing(2),
-    backgroundColor: '#f9fbfb',
-  },
-  divider: {
-    margin: '16px -16px',
-  },
-  tabs: {
-    borderTop: '1px solid #dfe3e9',
-    borderBottom: '1px solid #dfe3e9',
-    background: '#f7f9fa',
-    minHeight: 44,
-    margin: '40px 0',
-  },
-  text: {
-    color: '#7f8ea3',
-  },
-  tab: {
-    height: 75,
-    width: '100%',
-  },
-  activeTab: {
-    height: 75,
-    width: '100%',
-    borderBottom: '3px solid #205DF5',
-    outline: '0 !important',
-  },
-  button: {
-    margin: '.5rem',
-  },
-}));
 function DataRoom({ deal }) {
+  const classes = useStyles();
   return (
-    <div className="deal-data-room">
+    <div className={classes.dealDataRoom}>
       {(deal.documents || [])
         .filter((d) => d.path !== 'wire-instructions' && !d.path.includes('s-'))
         .map((doc) => (
@@ -113,12 +82,13 @@ function DataRoom({ deal }) {
             </a>
           </span>
         ))}
-      {deal.memo && <div className="deal-memo">{ReactHtmlParser(deal.memo)}</div>}
+      {deal.memo && <div className={classes.dealMemo}>{ReactHtmlParser(deal.memo)}</div>}
     </div>
   );
 }
 
 function Wire({ deal }) {
+  const classes = useStyles();
   const link =
     deal.documents && deal.documents.find((d) => d.path === 'wire-instructions')
       ? `https://${deal.documents.find((d) => d.path === 'wire-instructions').link}`
@@ -126,18 +96,18 @@ function Wire({ deal }) {
 
   if (!link) {
     return (
-      <div className="wire" style={{ padding: '20px' }}>
+      <div className={classes.wire} style={{ padding: '20px' }}>
         Contact For Wire Details
       </div>
     );
   }
 
   return (
-    <div className="wire" style={{ textAlign: 'center' }}>
-      <div className="banner same-user-warning">
+    <div className={classes.wire} style={{ textAlign: 'center' }}>
+      <div className={`${classes.banner} ${classes.sameUserWarning}`}>
         Please ensure to wire from the same entity you have signed from.
       </div>
-      <div className="wire-link">
+      <div className={classes.wireLink}>
         <div style={{ marginBottom: '15px' }}>
           <FontAwesomeIcon icon={['far', 'file-pdf']} />
           <a href={link} target="_blank" rel="noopener noreferrer">
@@ -145,9 +115,13 @@ function Wire({ deal }) {
             Wire Instructions
           </a>
         </div>
-        <div className="wire-doc-iframe">
-          <div className="embed-responsive embed-responsive-1by1">
-            <iframe className="embed-responsive-item" title="Onboarding Document" src={link} />
+        <div className={classes.wireDocIframe}>
+          <div className={`${classes.embedResponsive} ${classes.embedResponsive1by1}`}>
+            <iframe
+              className={classes.embedResponsiveItem}
+              title="Onboarding Document"
+              src={link}
+            />
           </div>
         </div>
       </div>
@@ -214,11 +188,12 @@ function PledgesViz({ deal }) {
 }
 
 function HelloSignOnboarding({ deal, investor, status }) {
+  const classes = useStyles();
   if (!investor) return <Loader />;
 
   return (
     <div className={status === 'pledged' ? 'document-iframe' : 'document-iframe hide'}>
-      <div className="external-sign-link">
+      <div className={classes.externalSignLink}>
         <a href={deal.onboarding_link} target="_blank" rel="noopener noreferrer">
           <FontAwesomeIcon icon="signature" /> Onboarding Document
         </a>
@@ -376,20 +351,20 @@ function Onboarding({ dealInvestments, deal, investor, status, hasSigned, refetc
   return (
     <div className={status === 'pledged' ? 'document-iframe' : 'document-iframe hide'}>
       {loading && (
-        <div className="temp-loader">
+        <div className={classes.tempLoader}>
           <Loader />
         </div>
       )}
-      <div className="external-sign-link">
+      <div className={classes.externalSignLink}>
         <a href={link} target="_blank" rel="noopener noreferrer">
           <h3>
             <FontAwesomeIcon icon="signature" /> Open Directly
           </h3>
         </a>
       </div>
-      <div className="embed-responsive embed-responsive-1by1">
+      <div className={`${classes.embedResponsive} ${classes.embedResponsive1by1}`}>
         <iframe
-          className="embed-responsive-item"
+          className={classes.embedResponsiveItem}
           title="Wire Instructions"
           data-hj-allow-iframe=""
           src={link}
@@ -414,7 +389,7 @@ function PledgesTable({ deal }) {
               <TableCell>${nWithCommas(pledge.amount)}</TableCell>
             </TableRow>
           ))}
-          <TableRow className="total">
+          <TableRow className={classes.total}>
             <TableCell>Total</TableCell>
             <TableCell>${nWithCommas(_.sumBy(deal.pledges, 'amount'))}</TableCell>
           </TableRow>
@@ -454,11 +429,11 @@ function KYCDocusign({ deal, investor, status, hasKyc }) {
     <Paper className={classes.paper}>
       <div className={status === 'kyc' ? 'document-iframe' : 'document-iframe hide'}>
         {loading && (
-          <div className="temp-loader">
+          <div className={classes.tempLoader}>
             <Loader />
           </div>
         )}
-        <div className="external-sign-link">
+        <div className={classes.externalSignLink}>
           <Typography variant="h4" align="center">
             {link.formName}
           </Typography>
@@ -468,9 +443,9 @@ function KYCDocusign({ deal, investor, status, hasKyc }) {
             </h3>
           </a>
         </div>
-        <div className="embed-responsive embed-responsive-1by1">
+        <div className={`${classes.embedResponsive} ${classes.embedResponsive1by1}`}>
           <iframe
-            className="embed-responsive-item"
+            className={classes.embedResponsiveItem}
             title="Wire Instructions"
             src={link.redirectUrl}
           />
@@ -535,7 +510,7 @@ function Pledging({ investment, deal, refetch, investor }) {
   const oldDeal = !deal.created_at || deal.created_at < 1588334400000;
   if (oldDeal) {
     return (
-      <div className="pledging">
+      <div className={classes.Pledging}>
         <PledgingLegacy deal={deal} />
       </div>
     );
@@ -543,8 +518,8 @@ function Pledging({ investment, deal, refetch, investor }) {
 
   if (noInvestor) {
     return (
-      <div className="pledging">
-        <div className="pledge-data">
+      <div className={classes.pledging}>
+        <div className={classes.pledgeData}>
           <PledgesViz deal={deal} />
           <PledgesTable deal={deal} />
         </div>
@@ -588,7 +563,7 @@ function Pledging({ investment, deal, refetch, investor }) {
                 <TextField
                   fullWidth
                   variant="outlined"
-                  className="pledge-amount"
+                  className={classes.pledgeAmount}
                   label="Pledge Amount"
                   value={amount}
                   onChange={updateAmount}
@@ -703,7 +678,7 @@ export default function InvestmentFlow({ deal, investor, refetch }) {
       </div>
 
       <>
-        {status === 'invited' && <DataRoom deal={deal} />}
+        {status === 'invited' && <DataRoom deal={deal} classes={classes} />}
         {status === 'pledging' && (
           <Pledging investment={investment} investor={investor} deal={deal} refetch={refetch} />
         )}

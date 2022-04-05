@@ -12,7 +12,7 @@ import { useAuth } from '../../auth/useAuth';
 import InvestmentFlow from './DealFlow';
 import Pledge from './Pledge';
 import Loader from '../utils/Loader';
-import './style.scss';
+import styles from './styles';
 
 /** *
  *
@@ -465,7 +465,7 @@ export function DealParams({ deal, deal_slug }) {
 function InvestorData({ investor }) {
   if (!investor)
     return (
-      <Paper className="tile">
+      <Paper>
         <Loader />
       </Paper>
     );
@@ -594,8 +594,8 @@ export default function Deal() {
       <div style={{ width: mobile ? '100%' : 'calc(100% - 300px)' }}>
         <Grid container justify="space-between" alignItems="flex-end">
           <Grid item>
-            <h2 className="deal-header">{deal.company_name}</h2>
-            <h4 className="deal-description">{deal.company_description}</h4>
+            <h2>{deal.company_name}</h2>
+            <h4>{deal.company_description}</h4>
           </Grid>
           {investment?._id && (
             <Pledge investment={investment} refetch={refetch} allowEdit={allowEdit} />
