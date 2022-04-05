@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const styles = makeStyles((theme) => ({
+const styles = makeStyles(() => ({
   addDoc: {
     display: 'inline-block',
     height: '90px',
