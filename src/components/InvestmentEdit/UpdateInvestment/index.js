@@ -5,7 +5,7 @@ import { useParams, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import moment from 'moment';
-
+import { Icon } from '@allocations/design-system';
 import {
   Button,
   TextField,
@@ -22,7 +22,6 @@ import {
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Loader from '../../utils/Loader';
 import { destroy } from '../../../api/investments';
-import CrossOrPlusIcon from '../../svg/CrossOrPlusIcon';
 import DocumentIcon from '../../../assets/document-icon.svg';
 import styles from '../styles';
 
@@ -133,7 +132,7 @@ function Doc({ doc, investment, getInvestment, matches }) {
       </Grid>
       <Grid item>
         <Box onClick={rmDoc} style={{ cursor: 'pointer' }}>
-          <CrossOrPlusIcon type="cross" />
+          <Icon iconColor="#EF4444" iconName="clear" />
         </Box>
       </Grid>
     </Grid>
@@ -215,7 +214,7 @@ function Docs({ investment, getInvestment, isK1 }) {
           />
 
           <Box>
-            <CrossOrPlusIcon />
+            <Icon iconColor="#10B981" iconName="add" />
           </Box>
         </InputLabel>
       </Grid>
