@@ -12,7 +12,6 @@ import { useAuth } from '../../auth/useAuth';
 import InvestmentFlow from './DealFlow';
 import Pledge from './Pledge';
 import Loader from '../utils/Loader';
-import styles from './styles';
 
 /** *
  *
