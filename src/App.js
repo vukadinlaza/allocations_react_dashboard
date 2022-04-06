@@ -21,8 +21,6 @@ import OrganizationNew from './components/OrganizationNew';
 import OrganizationMembers from './components/OrganizationMembers';
 import DealsTable from './components/dashboard/FundManagerDashboard/FundManagerDealsTable/DealsTablePage';
 import NotFound from './components/NotFound';
-import Prospect from './components/Prospect/Prospect';
-import ProspectDealPage from './components/Prospect/ProspectDealPage/ProspectDealPage';
 import SubmitTaxDocs from './components/SubmitTaxDocs';
 import Demo from './components/Demo';
 // admin
@@ -112,14 +110,6 @@ const MainApp = ({ isAuthenticated }) => {
         {/* Private  */}
         <PrivateRoute path="/new-build/deal" exact component={PostBuild} />
         <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
-
-        {/* Prospect deals */}
-        <PrivateRoute path="/prospects" component={Prospect} exact />
-        <PrivateRoute
-          path="/prospects/:organization/:deal_slug"
-          component={ProspectDealPage}
-          exact
-        />
 
         {/* Invest */}
         <PrivateRoute path="/invest/:deal_slug" component={InvestmentPage} exact />
