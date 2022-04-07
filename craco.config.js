@@ -16,6 +16,7 @@ module.exports = {
           treasury: `treasury@[window.treasuryModuleFederationURL]`,
           blockchain: `blockchain@[window.cryptoModuleFederationURL]`,
           taxdashboard: `taxdashboard@[window.taxdashboardModuleFerederationURL]`,
+          tax: `tax@[window.taxModuleFerederationURL]`,
         },
         shared: {
           react: {
