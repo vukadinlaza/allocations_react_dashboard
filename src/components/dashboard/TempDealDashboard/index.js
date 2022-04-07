@@ -181,19 +181,23 @@ const TempDealDashboard = ({ classes }) => {
     spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
     (async () => {
       try {
-        const res = await fetch(`${process.env.REACT_APP_BUILD_FRONTEND_URL}/api/deals/${deal_id}`);
-        const deal = await res.json();
-        if (deal?.phases?.length === 6) {
-          spvTabs = [
-            'Deal Progress',
-            'Investor Onboarding Status',
-            'Investors',
-            'Documents',
-            'Deal Page',
-          ];
+        if (remoteFundManagerDashboard) {
+          const res = await fetch(
+            `${process.env.REACT_APP_BUILD_FRONTEND_URL}/api/deals/${deal_id}`,
+          );
+          const deal = await res.json();
+          if (deal?.phases?.length === 6) {
+            spvTabs = [
+              'Deal Progress',
+              'Investor Onboarding Status',
+              'Investors',
+              'Documents',
+              'Deal Page',
+            ];
+          }
+          setServiceDeal(deal);
+          setDealName(deal?.name);
         }
-        setServiceDeal(deal);
-        setDealName(deal?.name);
       } catch (e) {
         console.log('ERROR:', e);
       }
