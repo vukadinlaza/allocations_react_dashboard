@@ -22,8 +22,6 @@ export default function RemoteBanking({
     virtual_account_number,
   };
 
-  console.log(bankProps);
-
   return (
     <React.Suspense fallback={<Loader />}>
       <Banking user={userProfile} bankProps={bankProps} />
