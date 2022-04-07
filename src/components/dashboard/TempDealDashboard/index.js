@@ -123,7 +123,12 @@ const TempDealDashboard = ({ classes }) => {
     // INVESTMENTS_TABLE = 'Sales Demo';
   }
 
-  const { fundManagerBankingTab, capitalCallsDealSpecific, cryptoPaymentInBuild } = useFlags();
+  const {
+    fundManagerBankingTab,
+    capitalCallsDealSpecific,
+    cryptoPaymentInBuild,
+    remoteFundManagerDashboard,
+  } = useFlags();
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
@@ -390,17 +395,19 @@ const TempDealDashboard = ({ classes }) => {
     );
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
-      <Suspense fallback={<Loader />}>
-        <ProgressBar
-          deal={serviceDeal || { name: '' }}
-          progress={getTotalRaiseAmount(
-            serviceDeal?.target_raise_goal || 0,
-            dealData?.deal?.raised,
-          )}
-          currentAmount={dealData?.deal?.raised}
-          goalAmount={serviceDeal?.target_raise_goal || 0}
-        />
-      </Suspense>
+      {remoteFundManagerDashboard && (
+        <Suspense fallback={<Loader />}>
+          <ProgressBar
+            deal={serviceDeal || { name: '' }}
+            progress={getTotalRaiseAmount(
+              serviceDeal?.target_raise_goal || 0,
+              dealData?.deal?.raised,
+            )}
+            currentAmount={dealData?.deal?.raised}
+            goalAmount={serviceDeal?.target_raise_goal || 0}
+          />
+        </Suspense>
+      )}
       <div style={{ margin: '1rem 0' }}>
         <div style={{ position: 'relative' }}>
           <HighlightedTabs
