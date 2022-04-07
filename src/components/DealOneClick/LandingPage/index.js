@@ -133,7 +133,7 @@ function DealLandingPage() {
         <CoinvestorsPanel deal={deal} />
         <KeyHighlights deal={deal} />
         <TermsPanel deal={deal} />
-        <CryptoDisclosure deal={deal} />
+        {deal.accept_crypto ? <CryptoDisclosure deal={deal} /> : null}
       </div>
     </section>
   );
