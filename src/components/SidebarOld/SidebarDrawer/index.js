@@ -97,7 +97,7 @@ const SidebarDrawer = ({
           ]
         : [
             {
-              to: currentHomeUrl,
+              to: currentHomeUrl === '/admin/' ? '/' : currentHomeUrl,
               title: 'Dashboard',
               icon: <HomeIcon fontSize="medium" />,
             },
