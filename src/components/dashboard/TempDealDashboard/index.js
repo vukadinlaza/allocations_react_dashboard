@@ -358,8 +358,8 @@ const TempDealDashboard = ({ classes }) => {
       case 'Banking':
         return (
           <Banking
-            dealData={serviceDeal}
-            deal_id={serviceDeal._id}
+            dealData={remoteFundManagerDashboard ? serviceDeal : dealData}
+            deal_id={remoteFundManagerDashboard ? serviceDeal._id : dealData.deal._id}
             virtual_account_number={dealData.deal.virtual_account_number || null}
             classes={classes}
           />
