@@ -80,7 +80,7 @@ const SidebarDrawer = ({
       menu: prospectDealPage
         ? [
             {
-              to: currentHomeUrl,
+              to: currentHomeUrl === '/admin/' ? '/' : currentHomeUrl,
               title: 'Dashboard',
               icon: <HomeIcon fontSize="medium" />,
             },
@@ -172,7 +172,7 @@ const SidebarDrawer = ({
               <ListItemIcon className={classes.icon}>
                 <BallotIcon fontSize="medium" />
               </ListItemIcon>
-              <ListItemText primary="Tax Activity" />
+              <ListItemText primary="Tax Dashboard" />
             </ListItem>
           </div>
         </Link>
