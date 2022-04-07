@@ -4,6 +4,7 @@ import { gql, useQuery } from '@apollo/client';
 import { useParams, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { useFlags } from 'launchdarkly-react-client-sdk';
+import { Typography as AllocationsTypography } from '@allocations/design-system';
 import Setup from './sections/Setup';
 import Highlights from './sections/Highlights';
 import InvestorStatus from './sections/InvestorStatus';
@@ -20,6 +21,7 @@ import DealTypeSelector from './DealType';
 import DealPage from '../Common/DealPage';
 import HighlightedTabs from '../../utils/HighlightedTabs';
 import Loader from '../../utils/Loader';
+import { phone } from '../../../utils/helpers';
 
 const RemoteInvestors = React.lazy(() => import('invest/Investors'));
 const ProgressBar = React.lazy(() => import('build/ProgressBar'));
@@ -117,13 +119,20 @@ const TempDealDashboard = ({ classes }) => {
   const { deal_id } = params;
   const { organization: orgSlug } = params;
 
+  const typographyVariant = width > phone ? 'heading2' : 'heading4';
+
   if (orgSlug === 'demo-fund') {
     // BASE HERE IS Demo Fund
     BASE = 'app53fOK2CmyuzKXK';
     // INVESTMENTS_TABLE = 'Sales Demo';
   }
 
-  const { fundManagerBankingTab, capitalCallsDealSpecific, cryptoPaymentInBuild } = useFlags();
+  const {
+    fundManagerBankingTab,
+    capitalCallsDealSpecific,
+    cryptoPaymentInBuild,
+    remoteFundManagerDashboard,
+  } = useFlags();
   const { userProfile } = useAuth();
   const [tabIndex, setTabIndex] = useState(0);
   const [tabName, setTabName] = useState(fundTabs[0]);
@@ -172,19 +181,23 @@ const TempDealDashboard = ({ classes }) => {
     spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
     (async () => {
       try {
-        const res = await fetch(`${process.env.REACT_APP_BUILD_FRONTEND_URL}/api/deals/${deal_id}`);
-        const deal = await res.json();
-        if (deal?.phases?.length === 6) {
-          spvTabs = [
-            'Deal Progress',
-            'Investor Onboarding Status',
-            'Investors',
-            'Documents',
-            'Deal Page',
-          ];
+        if (remoteFundManagerDashboard) {
+          const res = await fetch(
+            `${process.env.REACT_APP_BUILD_FRONTEND_URL}/api/deals/${deal_id}`,
+          );
+          const deal = await res.json();
+          if (deal?.phases?.length === 6) {
+            spvTabs = [
+              'Deal Progress',
+              'Investor Onboarding Status',
+              'Investors',
+              'Documents',
+              'Deal Page',
+            ];
+          }
+          setServiceDeal(deal);
+          setDealName(deal?.name);
         }
-        setServiceDeal(deal);
-        setDealName(deal?.name);
       } catch (e) {
         console.log('ERROR:', e);
       }
@@ -345,8 +358,8 @@ const TempDealDashboard = ({ classes }) => {
       case 'Banking':
         return (
           <Banking
-            dealData={serviceDeal}
-            deal_id={serviceDeal._id}
+            dealData={remoteFundManagerDashboard ? serviceDeal : dealData}
+            deal_id={remoteFundManagerDashboard ? serviceDeal._id : dealData.deal._id}
             virtual_account_number={dealData.deal.virtual_account_number || null}
             classes={classes}
           />
@@ -390,17 +403,28 @@ const TempDealDashboard = ({ classes }) => {
     );
   return (
     <div className={`${classes.dashboardContainer} FundManagerDashboard`}>
-      <Suspense fallback={<Loader />}>
-        <ProgressBar
-          deal={serviceDeal || { name: '' }}
-          progress={getTotalRaiseAmount(
-            serviceDeal?.target_raise_goal || 0,
-            dealData?.deal?.raised,
-          )}
-          currentAmount={dealData?.deal?.raised}
-          goalAmount={serviceDeal?.target_raise_goal || 0}
-        />
-      </Suspense>
+      {remoteFundManagerDashboard ? (
+        <Suspense fallback={<Loader />}>
+          <ProgressBar
+            deal={serviceDeal || { name: '' }}
+            progress={getTotalRaiseAmount(
+              serviceDeal?.target_raise_goal || 0,
+              dealData?.deal?.raised,
+            )}
+            currentAmount={dealData?.deal?.raised}
+            goalAmount={serviceDeal?.target_raise_goal || 0}
+          />
+        </Suspense>
+      ) : (
+        <div className={classes.titleContainer}>
+          <AllocationsTypography
+            component="div"
+            content={dealName}
+            fontWeight={700}
+            variant={typographyVariant}
+          />
+        </div>
+      )}
       <div style={{ margin: '1rem 0' }}>
         <div style={{ position: 'relative' }}>
           <HighlightedTabs

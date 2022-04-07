@@ -65,7 +65,7 @@ const SidebarDrawer = ({
   const [currentHomeUrl, setCurrentHomeUrl] = useState('');
 
   useEffect(() => {
-    const isRealOrg = currentOrganization?.name !== userProfile?.name;
+    const isRealOrg = currentOrganization?.slug && currentOrganization?.name !== userProfile?.name;
     const currentHomePath = isRealOrg ? `/admin/${currentOrganization?.slug}` : '/';
     setCurrentHomeUrl(currentHomePath);
   }, [currentOrganization, userProfile]);
@@ -181,7 +181,7 @@ const SidebarDrawer = ({
               <ListItemIcon className={classes.icon}>
                 <BallotIcon fontSize="medium" />
               </ListItemIcon>
-              <ListItemText primary="Tax Activity" />
+              <ListItemText primary="Tax Dashboard" />
             </ListItem>
           </div>
         </Link>
