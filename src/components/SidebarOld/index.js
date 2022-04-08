@@ -100,7 +100,7 @@ function Sidebar(props) {
     const userIsOrgAdmin = userProfile?.organizations_admin?.length;
     let defaultUrl;
     if (userProfile?.admin) {
-      defaultUrl = userIsOrgAdmin ? '/admin/Allocations-Testing-1641481063461' : '/';
+      defaultUrl = userIsOrgAdmin ? '/admin/allocations' : '/';
     } else {
       defaultUrl = userIsOrgAdmin ? `/admin/${userProfile.organizations_admin[0].slug}` : '/';
     }
