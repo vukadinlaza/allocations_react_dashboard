@@ -160,7 +160,7 @@ function BasicInfoSettings({ formData, setFormData }) {
             <div className={styles.buttonOptions}>
               <Button
                 onClick={() => handleButtonClick('investmentType', 'spv')}
-                className={`${styles.optionButton} ${investmentType === 'spv' && 'selected'}`}
+                className={`${styles.optionButton} ${investmentType === 'spv' && styles.selected}`}
                 name="investmentType"
                 value="fund"
                 variant="outlined"
@@ -169,7 +169,7 @@ function BasicInfoSettings({ formData, setFormData }) {
               </Button>
               <Button
                 onClick={() => handleButtonClick('investmentType', 'fund')}
-                className={`${styles.optionButton} ${investmentType === 'fund' && 'selected'}`}
+                className={`${styles.optionButton} ${investmentType === 'fund' && styles.selected}`}
                 name="investmentType"
                 value="fund"
                 variant="outlined"
@@ -221,14 +221,18 @@ function BasicInfoSettings({ formData, setFormData }) {
             <div className={styles.buttonOptions}>
               <Button
                 onClick={() => handleButtonClick('dealType', '506b')}
-                className={`${styles.optionButton} ${dealParams.dealType === '506b' && 'selected'}`}
+                className={`${styles.optionButton} ${
+                  dealParams.dealType === '506b' && styles.selected
+                }`}
                 variant="outlined"
               >
                 506b
               </Button>
               <Button
                 onClick={() => handleButtonClick('dealType', '506c')}
-                className={`${styles.optionButton} ${dealParams.dealType === '506c' && 'selected'}`}
+                className={`${styles.optionButton} ${
+                  dealParams.dealType === '506c' && styles.selected
+                }`}
                 variant="outlined"
               >
                 506c
@@ -247,7 +251,7 @@ function BasicInfoSettings({ formData, setFormData }) {
                     dealParams.is3c7 === null ? true : dealParams.is3c7 === false,
                   )
                 }
-                className={`${styles.optionButton} ${dealParams.is3c7 === true && 'selected'}`}
+                className={`${styles.optionButton} ${dealParams.is3c7 === true && styles.selected}`}
                 variant="outlined"
               >
                 3(c)(7)
@@ -261,14 +265,14 @@ function BasicInfoSettings({ formData, setFormData }) {
             <div className={styles.buttonOptions}>
               <Button
                 onClick={() => handleButtonClick('status', 'onboarding')}
-                className={`${styles.optionButton} ${status === 'onboarding' && 'selected'}`}
+                className={`${styles.optionButton} ${status === 'onboarding' && styles.selected}`}
                 variant="outlined"
               >
                 Onboarding
               </Button>
               <Button
                 onClick={() => handleButtonClick('status', 'closed')}
-                className={`${styles.optionButton} ${status === 'closed' && 'selected'}`}
+                className={`${styles.optionButton} ${status === 'closed' && styles.selected}`}
                 variant="outlined"
               >
                 Closed
