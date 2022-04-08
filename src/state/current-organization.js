@@ -11,7 +11,7 @@ export const CurrentAccountProvider = ({ children }) => {
     if (!currentOrganization) {
       if (userProfile?.admin) {
         const matchedOrg = userProfile?.organizations_admin?.find(
-          (org) => org.slug === 'Allocations-Testing-1641481063461',
+          (org) => org.slug === 'allocations',
         );
         if (matchedOrg) setCurrentOrganization(matchedOrg);
       } else {
