@@ -142,6 +142,12 @@ const LayOut = () => {
     gridTemplateColumns: 'auto',
     gridTemplateAreas: `'mainRoute'`,
   };
+
+  if (isAuthenticated) {
+    window.DD_RUM.setUser({ email: userProfile.email });
+    window.DD_RUM.startSessionReplayRecording();
+  }
+
   return (
     <CurrentAccountProvider>
       <div className="App" style={!isAuthenticated ? { unAuthenticatedStyle } : {}}>
