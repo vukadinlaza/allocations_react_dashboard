@@ -39,6 +39,10 @@ module.exports = {
             singleton: true,
             requiredVersion: false,
           },
+          'launchdarkly-react-client-sdk': {
+            singleton: true,
+            requiredVersion: false,
+          },
         },
       }),
       new ExternalTemplateRemotesPlugin(),

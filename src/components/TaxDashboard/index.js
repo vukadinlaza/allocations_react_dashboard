@@ -1,6 +1,6 @@
-import { useFlags } from 'launchdarkly-react-client-sdk';
 import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useCurrentOrganization } from '../../state/current-organization';
 import Loader from '../utils/Loader';
 
