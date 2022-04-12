@@ -18,8 +18,6 @@ export default function RemoteTaxDashboard() {
   const [viewInvestor, setViewInvestor] = useState(params.get('email') || null);
   const { taxActivity, taxActivityManage } = useFlags();
 
-  if (!currentOrganization) return null;
-
   if (taxActivity === 'tax-dashboard') {
     return (
       <React.Suspense fallback={<Loader />}>
@@ -76,7 +74,11 @@ export default function RemoteTaxDashboard() {
     <React.Suspense fallback={<Loader />}>
       <TaxDashboard
         onManage={taxActivityManage ? handleManage : undefined}
-        defaultView={currentOrganization.name.includes('@') ? 'investor' : 'fund-manager'}
+        defaultView={
+          !currentOrganization || currentOrganization.name.includes('@')
+            ? 'investor'
+            : 'fund-manager'
+        }
       />
     </React.Suspense>
   );
