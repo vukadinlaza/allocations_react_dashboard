@@ -288,7 +288,7 @@ function DealSettings({ formData, setFormData, refetch }) {
           <Button
             disabled={completedCrop === null}
             onClick={submitLogo}
-            className={`${styles.uploadButton} ${completedCrop === null ? 'disabled' : ''}`}
+            className={`${styles.uploadButton} ${completedCrop === null ? styles.disabled : ''}`}
           >
             Upload to deal
           </Button>
@@ -410,7 +410,7 @@ function DealSettings({ formData, setFormData, refetch }) {
           <Button
             disabled={wireInstructions === null}
             onClick={submitWireInstructions}
-            className={`${styles.uploadButton} ${wireInstructions === null ? 'disabled' : ''}`}
+            className={`${styles.uploadButton} ${wireInstructions === null ? styles.disabled : ''}`}
           >
             Upload to deal
           </Button>
@@ -444,7 +444,7 @@ function DealSettings({ formData, setFormData, refetch }) {
           <Button
             disabled={doc === null}
             onClick={submitDoc}
-            className={`${styles.uploadButton} ${doc === null ? 'disabled' : ''}`}
+            className={`${styles.uploadButton} ${doc === null ? styles.disabled : ''}`}
           >
             Upload to deal
           </Button>
