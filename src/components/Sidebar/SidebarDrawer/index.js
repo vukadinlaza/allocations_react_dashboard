@@ -16,41 +16,6 @@ import { BsBinocularsFill } from 'react-icons/bs';
 import styles from '../styles';
 import { useCurrentOrganizationState } from '../../../state/current-organization';
 
-const AddBubbleBuildButton = ({ classes }) => (
-  <Button
-    variant="contained"
-    className={classes.addButton}
-    target="_blank"
-    href="https://build.allocations.com"
-  >
-    <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
-    Add
-  </Button>
-);
-
-const AddInAppBuildButton = ({ classes }) => {
-  const history = useHistory();
-
-  return (
-    <Button
-      variant="contained"
-      className={classes.addButton}
-      onClick={() => {
-        history.push('/public/new-build');
-      }}
-    >
-      <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
-      Add
-    </Button>
-  );
-};
-
-const AddBuildButton = (props) => {
-  const { useInAppBuild } = useFlags();
-  if (useInAppBuild) return <AddInAppBuildButton {...props} />;
-  return <AddBubbleBuildButton {...props} />;
-};
-
 const SidebarDrawer = ({
   mobileOpen,
   handleDrawerClose,
@@ -63,6 +28,7 @@ const SidebarDrawer = ({
   const { prospectDealPage, taxDashboard } = useFlags();
   const [currentOrganization] = useCurrentOrganizationState();
   const [currentHomeUrl, setCurrentHomeUrl] = useState('');
+  const history = useHistory();
 
   useEffect(() => {
     const isRealOrg = currentOrganization?.slug && currentOrganization?.name !== userProfile?.name;
@@ -121,7 +87,16 @@ const SidebarDrawer = ({
 
   return (
     <div className={classes.sidebarDrawer}>
-      <AddBuildButton classes={classes} />
+      <Button
+        variant="contained"
+        className={classes.addButton}
+        onClick={() => {
+          history.push('/public/new-build');
+        }}
+      >
+        <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
+        Add
+      </Button>
       <List>
         {menuSections.map(({ sectionTitle, menu }) => (
           <React.Fragment key={uuidv4()}>

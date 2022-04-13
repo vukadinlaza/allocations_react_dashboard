@@ -15,41 +15,6 @@ import BallotIcon from '@material-ui/icons/Ballot';
 import { BsBinocularsFill } from 'react-icons/bs';
 import styles from '../styles';
 
-const AddBubbleBuildButton = ({ classes }) => (
-  <Button
-    variant="contained"
-    className={classes.addButton}
-    target="_blank"
-    href="https://build.allocations.com"
-  >
-    <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
-    Add
-  </Button>
-);
-
-const AddInAppBuildButton = ({ classes }) => {
-  const history = useHistory();
-
-  return (
-    <Button
-      variant="contained"
-      className={classes.addButton}
-      onClick={() => {
-        history.push('/public/new-build');
-      }}
-    >
-      <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
-      Add
-    </Button>
-  );
-};
-
-const AddBuildButton = (props) => {
-  const { useInAppBuild } = useFlags();
-  if (useInAppBuild) return <AddInAppBuildButton {...props} />;
-  return <AddBubbleBuildButton {...props} />;
-};
-
 const SidebarDrawer = ({
   mobileOpen,
   handleDrawerClose,
@@ -60,6 +25,7 @@ const SidebarDrawer = ({
 }) => {
   const [openSubMenu, setOpenSubMenu] = useState([]);
   const { prospectDealPage, taxDashboard } = useFlags();
+  const history = useHistory();
 
   const logoutWithRedirect = () => logout({ returnTo: process.env.REACT_APP_URL });
 
@@ -112,7 +78,16 @@ const SidebarDrawer = ({
 
   return (
     <div className={classes.sidebarDrawer}>
-      <AddBuildButton classes={classes} />
+      <Button
+        variant="contained"
+        className={classes.addButton}
+        onClick={() => {
+          history.push('/public/new-build');
+        }}
+      >
+        <FontAwesomeIcon icon="plus" style={{ margin: '0 .5rem 0 0' }} />
+        Add
+      </Button>
       <List>
         {menuSections.map(({ sectionTitle, menu }) => (
           <React.Fragment key={uuidv4()}>
