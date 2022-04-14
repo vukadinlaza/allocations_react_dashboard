@@ -460,20 +460,24 @@ function DealNextSteps() {
           docs={docs}
         />
 
-        {investmentData ? (
-          <React.Suspense fallback={<div>Loading</div>}>
-            <CryptoPaymentModalRemote
-              open={cryptoPaymentOpen}
-              setOpen={setCryptoPaymentOpen}
-              deal_name={dealData?.deal?.name ?? dealData?.deal?.company_name}
-              deal_id={dealData?.deal?._id}
-              investor_name={`${data?.investor.first_name} ${data?.investor.last_name}`}
-              investment_amount={investmentData.investment.amount}
-              investment_id={investmentData.investment._id}
-              user_id={data._id}
-            />
-          </React.Suspense>
-        ) : null}
+        <React.Suspense fallback={<div>Loading</div>}>
+          <CryptoPaymentModalRemote
+            open={cryptoPaymentOpen}
+            setOpen={setCryptoPaymentOpen}
+            deal_name={dealData?.deal?.name ?? dealData?.deal?.company_name}
+            deal_id={dealData?.deal?._id}
+            investor_name={`${data?.investor.first_name} ${data?.investor.last_name}`}
+            investment_amount={
+              investmentData ? investmentData.investment.amount : history?.location?.state?.amount
+            }
+            investment_id={
+              investmentData
+                ? investmentData.investment._id
+                : history?.location?.state?.investmentId ?? history?.location?.state.id
+            }
+            user_id={data._id}
+          />
+        </React.Suspense>
 
         <AllocationsRocket />
         <Confetti className={`confetti ${!confetti && 'hidden'}`} />
