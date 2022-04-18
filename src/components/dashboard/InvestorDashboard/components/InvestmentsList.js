@@ -94,8 +94,6 @@ const InvestmentsList = ({
   const [userDocuments, setUserDocuments] = useState([]);
   const [loadingDownloadDocs, setLoadingDownloadDoc] = useState(false);
 
-  const itemsPerPage = 5;
-
   useEffect(() => {
     const userDocs = [];
     if (userInvestments) {
