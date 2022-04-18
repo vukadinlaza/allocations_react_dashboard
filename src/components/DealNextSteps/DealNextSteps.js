@@ -236,6 +236,7 @@ function DealNextSteps() {
     }) || showTaxAsCompleted;
 
   const docs = dealData?.deal?.documents;
+  const currentInvestment = data?.investor?.investments.find((inv) => inv.deal.slug === deal_slug);
 
   return (
     <>
@@ -468,13 +469,9 @@ function DealNextSteps() {
             deal_id={dealData?.deal?._id}
             investor_name={`${data?.investor.first_name} ${data?.investor.last_name}`}
             investment_amount={
-              investmentData ? investmentData.investment.amount : history?.location?.state?.amount
+              investmentData ? investmentData.investment.amount : currentInvestment.amount
             }
-            investment_id={
-              investmentData
-                ? investmentData.investment._id
-                : history?.location?.state?.investmentId ?? history?.location?.state.id
-            }
+            investment_id={investmentData ? investmentData.investment._id : currentInvestment._id}
             user_id={data._id}
           />
         </React.Suspense>
