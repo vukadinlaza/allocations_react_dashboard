@@ -132,7 +132,6 @@ const InvestmentsList = ({
       if (filteredDocs.length === 0) {
         return toast.success('There are no documents to download.');
       }
-      console.log('filteredDocs', filteredDocs);
       const files = await Promise.all(
         filteredDocs.map((doc) =>
           fetch(doc.link.includes('https') ? doc.link : `https://${doc.link}`).then((res) =>
@@ -140,8 +139,6 @@ const InvestmentsList = ({
           ),
         ),
       );
-
-      console.log('files', files);
 
       files.forEach((file, i) =>
         zip.file(`${filteredDocs[i].documentName.replace('.pdf', '')}.pdf`, file),
@@ -393,8 +390,6 @@ const InvestmentsList = ({
           customSort={handleSort}
           sortBy="amount"
           sortDirection="desc"
-          withPagination={!(filteredData.length < itemsPerPage)}
-          itemsPerPage={itemsPerPage}
         />
       </Grid>
       <Grid item xs={false} md={1} />
