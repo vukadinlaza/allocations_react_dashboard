@@ -42,7 +42,8 @@ function validate({ investment, user, deal }) {
   return errors;
 }
 
-export function UserSearch({ user, setUser, errors, deal_id, classes }) {
+export function UserSearch({ user, setUser, errors, deal_id }) {
+  const classes = styles();
   const [q, setQ] = useState('');
   const [records, setRecords] = useState([]);
   const [search, searchRes] = useLazyQuery(API.users.search);
