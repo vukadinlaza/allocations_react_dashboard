@@ -242,7 +242,7 @@ function BasicInfoSettings({ formData, setFormData }) {
         </FormControl>
 
         <FormControl className={`${styles.field} ${styles.fieldButton}`}>
-          <FormLabel className={styles.fieldLabel}>
+          <FormLabel className={styles.fieldLabelNarrow}>
             <div className={styles.buttonOptions}>
               <Button
                 onClick={() =>

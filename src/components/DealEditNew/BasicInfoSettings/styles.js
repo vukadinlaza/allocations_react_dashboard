@@ -36,6 +36,13 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '1.2rem',
     fontWeight: '500',
   },
+  fieldLabelNarrow: {
+    display: 'flex',
+    flexDirection: 'column',
+    fontSize: '1.2rem',
+    fontWeight: '500',
+    width: 'fit-content',
+  },
   formFields: {
     display: 'flex',
     flexWrap: 'wrap',
