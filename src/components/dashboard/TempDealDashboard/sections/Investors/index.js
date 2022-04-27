@@ -19,7 +19,7 @@ const Investors = ({ classes, data, orgSlug, userProfile }) => {
       case 'taxLink':
         return row._id ? (
           <a
-            href={`https://tax2021.allocations.com/home/${row.email}`}
+            href={`https://tax.allocations.com/admin/investor/${row.email}`}
             target="_blank"
             rel="noopener noreferrer"
           >
