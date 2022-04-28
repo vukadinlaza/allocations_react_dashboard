@@ -44,6 +44,7 @@ import TempDealDashboard from './components/dashboard/TempDealDashboard';
 import RemoteFundManagerDashboard from './components/RemoteFundManagerDashboard';
 import RemoteTaxDashboard from './components/TaxDashboard';
 import SidebarOld from './components/SidebarOld';
+import RemoteTaxBanner from './components/RemoteTaxBanner';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -67,6 +68,7 @@ const MainApp = ({ isAuthenticated }) => {
   const { remoteFundManagerDashboard } = useFlags();
   return (
     <div className="mainRoute" style={{ justifyContent: !isAuthenticated && 'center' }}>
+      <RemoteTaxBanner />
       <Switch>
         {/* Allocations Admin Routes */}
         <AdminRoute path="/admin/:organization/manager" component={SuperAdminManager} exact />
