@@ -9,6 +9,7 @@ import {
   Button as AllocationsButton,
   List as AllocationsList,
   Icon as AllocationsIcon,
+  colors,
 } from '@allocations/design-system';
 import { v4 as uuidv4 } from 'uuid';
 import { Box, BigBox } from '../Common/components';
@@ -324,7 +325,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
           {dashboardBoxes.map((box) => (
             <Grid container spacing={2} key={uuidv4()} className={classes.box}>
               <Grid item xs={1} />
-              <Box box={box} />
+              <Box key={uuidv4()} box={box} />
               <Grid item xs={1} />
             </Grid>
           ))}
@@ -341,7 +342,7 @@ const FundManagerDashboard: React.FC<Props & RouteComponentProps> = ({ classes, 
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <AllocationsIcon iconColor="#64748B" iconName="search" />
+                    <AllocationsIcon iconColor={colors.gray[500]} iconName="search" />
                   </InputAdornment>
                 ),
                 classes: { input: classes.input, root: classes.inputRoot },

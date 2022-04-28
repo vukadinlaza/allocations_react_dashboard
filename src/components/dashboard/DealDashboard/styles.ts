@@ -5,14 +5,14 @@ const styles: any = (theme: Theme) => ({
   avatarBackground: {
     width: '48px',
     height: '48px',
-    background: '#ECF3FF',
+    background: theme.colors.primary[50],
     borderRadius: '24px',
     padding: '12px',
   },
   backButton: {
     paddingLeft: '12.5%',
     paddingBottom: '24px',
-    color: '#64748B',
+    color: theme.colors.gray[500],
     fontWeight: 500,
     cursor: 'pointer',
   },
@@ -22,7 +22,7 @@ const styles: any = (theme: Theme) => ({
   boardBox: {
     height: '160px',
     width: '100%',
-    background: '#FFFFFF',
+    background: theme.colors.white[100],
     borderRadius: '8px',
     marginBottom: '8px',
     padding: '16px 24px',
@@ -30,7 +30,7 @@ const styles: any = (theme: Theme) => ({
   boardBoxMainText: {
     fontSize: '12px',
     fontWeight: 400,
-    color: '#2A2B54',
+    color: theme.colors.black[50],
     margin: 0,
     marginBottom: '4px',
     lineHeight: '16px',
@@ -38,7 +38,7 @@ const styles: any = (theme: Theme) => ({
   boardBoxText: {
     fontSize: '12px',
     fontWeight: 400,
-    color: '#64748B',
+    color: theme.colors.gray[500],
     margin: 0,
     marginBottom: '4px',
     lineHeight: '16px',
@@ -46,7 +46,7 @@ const styles: any = (theme: Theme) => ({
   boardBoxTitle: {
     fontSize: '12px',
     fontWeight: 700,
-    color: '#64748B',
+    color: theme.colors.gray[500],
     margin: 0,
     marginBottom: '4px',
     lineHeight: '16px',
@@ -58,12 +58,12 @@ const styles: any = (theme: Theme) => ({
   boxTitle: {
     fontWeight: 500,
     fontSize: '16px',
-    color: '#64748B',
+    color: theme.colors.gray[500],
   },
   boxValue: {
     fontWeight: 700,
     fontSize: '20px',
-    color: '#2A2B54',
+    color: theme.colors.black[50],
   },
   cellValue: {
     margin: '0',
@@ -77,7 +77,7 @@ const styles: any = (theme: Theme) => ({
     padding: '3.5vh 5.5vw',
     width: '100%',
     margin: '10px 0px',
-    backgroundColor: '#ffffff',
+    backgroundColor: theme.colors.white[100],
     borderRadius: '8px',
   },
   completedTaskCheckImageContainer: {
@@ -87,20 +87,20 @@ const styles: any = (theme: Theme) => ({
     marginRight: '15px',
     fontFamily: 'roboto',
     fontSize: '18px',
-    color: '#94A3B8',
+    color: theme.colors.gray[400],
   },
   completedTaskToggle: {
-    color: '#0F172A',
+    color: theme.colors.gray[900],
     fontWeight: '500',
     cursor: 'pointer',
   },
   closeModal: {
-    color: 'white',
+    color: theme.colors.white[100],
     cursor: 'pointer',
   },
   containedButton: {
-    background: '#186EFF',
-    color: '#FFFFFF',
+    background: theme.colors.primary[500],
+    color: theme.colors.white[100],
     borderRadius: '8px',
     padding: '6px 16px',
     fontSize: '12px',
@@ -110,18 +110,18 @@ const styles: any = (theme: Theme) => ({
     height: '48px',
     fontWeight: 500,
     fontSize: '16px',
-    color: '#64748B',
+    color: theme.colors.gray[500],
     textTransform: 'none',
     padding: '12px',
     marginTop: '8px',
     '&:hover, &:focus': {
-      color: '#334155',
-      background: 'rgba(0,0,0,0)',
+      color: theme.colors.gray[700],
+      background: theme.colors.white[100],
       outline: 'none',
     },
     '&:active': {
-      color: '#0F172A',
-      background: 'rgba(0,0,0,0)',
+      color: theme.colors.gray[900],
+      background: theme.colors.white[100],
     },
   },
   emailsContainer: {
@@ -138,9 +138,9 @@ const styles: any = (theme: Theme) => ({
   },
   emailTag: {
     height: '32px',
-    background: '#ECF3FF',
+    background: theme.colors.primary[50],
     borderRadius: '16px',
-    color: '#0558E7',
+    color: theme.colors.primary[700],
     padding: '8px 12px',
     display: 'flex',
     alignItems: 'center',
@@ -150,16 +150,16 @@ const styles: any = (theme: Theme) => ({
   emailTagText: {
     fontSize: '12px',
     fontWeight: 500,
-    color: '#0558E7',
+    color: theme.colors.primary[700],
   },
   emailTagCancel: {
-    color: '#0558E7',
+    color: theme.colors.primary[700],
     fontSize: '14px',
     marginLeft: '8px',
     cursor: 'pointer',
   },
   error: {
-    color: 'red',
+    color: theme.colors.error[500],
     width: '100%',
     fontSize: '12px',
     margin: '0',
@@ -169,13 +169,13 @@ const styles: any = (theme: Theme) => ({
   headerLabel: {
     fontSize: '12px',
     fontWeight: 700,
-    color: '#2A2B54',
+    color: theme.colors.black[50],
     marginBottom: '16px',
   },
   input: {
-    color: '#2A2B54',
+    color: theme.colors.black[50],
     '&::placeholder': {
-      color: '#94A3B8',
+      color: theme.colors.gray[400],
       fontSize: '14px',
       opacity: 1,
       fontWeight: 'normal',
@@ -183,31 +183,31 @@ const styles: any = (theme: Theme) => ({
   },
   inputRoot: {
     borderRadius: '8px',
-    background: 'white',
-    color: '#64748B',
+    background: theme.colors.white[100],
+    color: theme.colors.gray[500],
   },
   inviteButton: {
     width: '88px',
     height: '48px',
-    background: '#186EFF',
+    background: theme.colors.primary[500],
     borderRadius: '8px',
-    color: 'white',
+    color: theme.colors.white[100],
     textTransform: 'none',
     fontSize: '16px',
     fontWeight: 500,
     '&:hover': {
-      background: '#0558E7',
+      background: theme.colors.primary[700],
     },
     '&:active': {
-      background: '#0444B4',
+      background: theme.colors.primary[800],
     },
   },
   inviteButtonDisabled: {
     width: '88px',
     height: '48px',
-    background: '#CBD5E1',
+    background: theme.colors.gray[300],
     borderRadius: '8px',
-    color: '#64748B',
+    color: theme.colors.gray[500],
     textTransform: 'none',
     fontSize: '16px',
     fontWeight: 500,
@@ -252,45 +252,45 @@ const styles: any = (theme: Theme) => ({
   },
   modalListItem: {
     display: 'flex',
-    fill: 'black',
+    fill: theme.colors.black[100],
     alignItems: 'center',
     '&:hover, &:focus, &active': {
-      background: '#ECF3FF',
-      color: '#186EFF',
+      background: theme.colors.primary[50],
+      color: theme.colors.primary[500],
       '& svg': {
-        fill: '#186EFF',
+        fill: theme.colors.primary[500],
       },
     },
   },
   modalSubtitle: {
     fontSize: '20px',
     fontWeight: 500,
-    color: '#2A2B54',
+    color: theme.colors.black[50],
     lineHeight: '24px',
     margin: '16px 0 40px 0',
   },
   modalSVG: {
-    fill: '#2A2B54',
+    fill: theme.colors.black[50],
     width: '15px',
     margin: '10px',
   },
   modalTitle: {
     fontSize: '24px',
     fontWeight: 500,
-    color: 'white',
+    color: theme.colors.white[100],
   },
   modalTitleContainer: {
     height: '64px',
-    background: '#186EFF',
+    background: theme.colors.primary[500],
     padding: '16px 24px',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   outlinedButton: {
-    border: '1px solid #CBD5E1',
+    border: `1px solid ${theme.colors.gray[300]}`,
     borderRadius: '8px',
-    color: '#64748B',
+    color: theme.colors.gray[500],
     padding: '6px 16px',
     fontSize: '12px',
   },
@@ -306,7 +306,7 @@ const styles: any = (theme: Theme) => ({
   },
   personAdd: {
     fontSize: '22px',
-    color: '#186EFF',
+    color: theme.colors.primary[500],
   },
   placeholderItem: {
     boxShadow: 'none !important',
@@ -341,7 +341,7 @@ const styles: any = (theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    background: '#FFFFFF',
+    background: theme.colors.white[100],
     height: '68px',
     borderRadius: '8px',
     [theme.breakpoints.down(phone)]: {
@@ -358,7 +358,7 @@ const styles: any = (theme: Theme) => ({
   toast: {
     width: '344px',
     height: '56px',
-    background: '#FBFCFF',
+    background: theme.colors.primary[25],
     boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.11)',
     borderRadius: '8px',
     '& .Toastify__close-button > svg': {
@@ -373,7 +373,7 @@ const styles: any = (theme: Theme) => ({
   toastBody: {
     fontWeight: 400,
     fontSize: '16px',
-    color: '#334155',
+    color: theme.colors.gray[700],
   },
   tabsContainer: {
     [theme.breakpoints.down(phone)]: {
@@ -382,34 +382,34 @@ const styles: any = (theme: Theme) => ({
     },
   },
   textBottom: {
-    color: '#64748B',
+    color: theme.colors.gray[500],
   },
   textFieldRoot: {
     width: '100%',
     '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: '#186EFF',
+      borderColor: theme.colors.primary[500],
     },
   },
   textTop: {
-    color: '#2A2B54',
+    color: theme.colors.black[50],
   },
   viewButton: {
     fontSize: '16px',
     textTransform: 'none',
     padding: '1px 15px',
     fontWeight: 500,
-    border: '1px solid #64748B',
+    border: `1px solid ${theme.colors.gray[500]}`,
     marginLeft: '8px',
     height: '32px',
-    color: '#64748B',
+    color: theme.colors.gray[500],
     boxSizing: 'border-box',
     transition: '0s',
     '& svg': {
       marginRight: '8px',
     },
     '&:hover': {
-      backgroundColor: '#ECF3FF',
-      border: '1px solid #CBD5E1',
+      backgroundColor: theme.colors.primary[50],
+      border: `1px solid ${theme.colors.gray[300]}`,
       outline: 'none',
     },
     '&:focus': {
@@ -422,12 +422,12 @@ const styles: any = (theme: Theme) => ({
     justifyContent: 'center',
   },
   viewButtonSelected: {
-    border: '2px solid #186EFF',
+    border: `2px solid ${theme.colors.primary[500]}`,
     color: theme.palette.primary.main,
-    backgroundColor: '#ECF3FF',
+    backgroundColor: theme.colors.primary[50],
     transition: '0s',
     '&:hover, &:focus': {
-      border: '2px solid #186EFF',
+      border: `2px solid ${theme.colors.primary[500]}`,
     },
   },
   '@keyframes load': {

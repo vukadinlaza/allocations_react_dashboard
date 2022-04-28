@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { InputAdornment, InputBase } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import { colors } from '@allocations/design-system';
 import { nWithCommas } from '../../../../../utils/numbers';
 import AllocationsTable from '../../../../utils/AllocationsTable';
 import Loader from '../../../../utils/Loader';
@@ -130,7 +131,7 @@ const InvestorsCapitalCall = ({ classes, orgSlug, userProfile, dealName }) => {
   return (
     <div className={classes.section}>
       <div className={classes.searchContainer}>
-        <SearchIcon style={{ color: '#7688A0' }} />
+        <SearchIcon style={{ color: colors.gray[500] }} />
         <InputBase
           label="Search"
           placeholder="Search by investor name"
@@ -141,7 +142,7 @@ const InvestorsCapitalCall = ({ classes, orgSlug, userProfile, dealName }) => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon style={{ color: 'rgba(0, 0, 0, 0.54)' }} />
+                <SearchIcon style={{ color: colors.gray[500] }} />
               </InputAdornment>
             ),
           }}

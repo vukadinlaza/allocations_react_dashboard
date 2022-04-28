@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { every } from 'lodash';
 import moment from 'moment';
 import { Typography, LinearProgress, Grid } from '@material-ui/core';
+import { colors } from '@allocations/design-system';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import { dealSteps } from '../dealSteps';
@@ -24,7 +25,10 @@ const StepsContainer = ({
         title={title}
         titleData={
           <CheckCircleIcon
-            style={{ color: '#39C522', opacity: every(steps, { checked: true }) ? '100%' : '25%' }}
+            style={{
+              color: colors.success[500],
+              opacity: every(steps, { checked: true }) ? '100%' : '25%',
+            }}
           />
         }
         autoHeight
@@ -51,7 +55,7 @@ const StepsContainer = ({
               >
                 <CheckCircleIcon
                   style={{
-                    color: '#0461FF',
+                    color: colors.primary[600],
                     opacity: step.checked ? '100%' : '25%',
                     marginRight: '0.5em',
                   }}

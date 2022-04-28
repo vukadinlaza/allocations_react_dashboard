@@ -2,7 +2,6 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { toast } from 'react-toastify';
 import { gql, useQuery } from '@apollo/client';
 import { useParams, withRouter } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
 import { useFlags } from 'launchdarkly-react-client-sdk';
 import { Typography as AllocationsTypography } from '@allocations/design-system';
 import Setup from './sections/Setup';
@@ -15,7 +14,7 @@ import Investors from './sections/Investors';
 import { useFetch, useViewport } from '../../../utils/hooks';
 import { useAuth } from '../../../auth/useAuth';
 import AllocationsLoader from '../../utils/AllocationsLoader';
-import styles from './styles';
+import useStyles from './styles';
 import DocumentsTab from './sections/DocumentsTab';
 import DealTypeSelector from './DealType';
 import DealPage from '../Common/DealPage';
@@ -113,11 +112,12 @@ const DEALS_TABLE = 'Deals';
 
 let spvTabs = ['Investor Onboarding Status', 'Investors', 'Documents', 'Deal Page'];
 
-const TempDealDashboard = ({ classes }) => {
+const TempDealDashboard = () => {
   const { width } = useViewport();
   const params = useParams();
   const { deal_id } = params;
   const { organization: orgSlug } = params;
+  const classes = useStyles();
 
   const typographyVariant = width > phone ? 'heading2' : 'heading4';
 
@@ -441,4 +441,4 @@ const TempDealDashboard = ({ classes }) => {
   );
 };
 
-export default withStyles(styles)(withRouter(TempDealDashboard));
+export default withRouter(TempDealDashboard);

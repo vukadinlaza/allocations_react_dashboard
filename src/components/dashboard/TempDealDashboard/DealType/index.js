@@ -4,6 +4,7 @@ import { useMutation, gql } from '@apollo/client';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
+import { colors } from '@allocations/design-system';
 import { useHistory } from 'react-router';
 import spvIcon from '../../../../assets/spv-icon.svg';
 import fundIcon from '../../../../assets/fund-icon.svg';
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     // margin: '0px 0px 15px 0px',
     borderRadius: '48px',
     padding: '12px',
-    backgroundColor: '#ECF3FF',
+    backgroundColor: theme.colors.primary[50],
   },
   warningIcon: {
     height: '72px',
@@ -46,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     margin: '0px 0px 15px 0px',
     borderRadius: '48px',
     padding: '12px',
-    backgroundColor: '#F2CECC',
+    backgroundColor: theme.colors.error[200],
   },
   modal: {
     display: 'flex',
@@ -79,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '8px',
     boxShadow: 'none !important',
     cursor: 'pointer',
-    border: 'solid #E5E5E5 1px',
+    border: `1px solid ${theme.colors.gray[200]}`,
     '&:hover': {
       boxShadow: '0px 5px 10px 2px rgba(225, 225, 225, .8) !important',
     },
@@ -98,16 +99,16 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '1rem 1rem 0 0 ',
     padding: '18px 29px',
     maxHeight: 'calc(100% - 8vh)',
-    borderBottom: 'solid #E5E5E5 1px',
+    borderBottom: `1px solid ${theme.colors.gray[200]}`,
   },
 
   label: {
-    color: '#2A2B54',
+    color: theme.colors.black[50],
     fontWeight: 'bold',
   },
   typeBadge: {
-    backgroundColor: '#ECF3FF',
-    color: '#0461FF',
+    backgroundColor: theme.colors.primary[50],
+    color: theme.colors.primary[600],
     fontSize: '13px',
     lineHeight: '16.41px',
     borderRadius: '4px',
@@ -128,7 +129,7 @@ const useStyles = makeStyles((theme) => ({
   deleteButton: {
     width: '70%',
     borderRadius: '8px',
-    backgroundColor: '#186EFF',
+    backgroundColor: theme.colors.primary[500],
     [theme.breakpoints.down(phone)]: {
       padding: '10px',
       width: '90%',
@@ -160,7 +161,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   typeTitle: {
-    color: '#000',
+    color: theme.colors.black[100],
     fontSize: '18px',
     fontWeight: '500',
   },
@@ -175,20 +176,23 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
       <Container style={{ width: '650px' }}>
         <Grid container className={classes.modalBox}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
-            <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#186EFF' }}>
+            <Paper
+              className={classes.modalPaperTitle}
+              style={{ backgroundColor: colors.primary[500] }}
+            >
               <Grid container justifyContent="space-between">
-                <Typography variant="h6" style={{ color: '#fff' }}>
+                <Typography variant="h6" style={{ color: colors.white[100] }}>
                   Create New Build?
                 </Typography>
                 <Box onClick={closeModal} style={{ cursor: 'pointer' }}>
-                  <CloseIcon htmlColor="#fff" />
+                  <CloseIcon htmlColor={colors.white[100]} />
                 </Box>
               </Grid>
             </Paper>
 
             <Paper
               style={{
-                backgroundColor: '#FBFCFF',
+                backgroundColor: colors.primary[25],
                 borderRadius: '0 0 1rem 1rem',
               }}
             >
@@ -256,7 +260,7 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                             style={{
                               width: '100%',
                               borderRadius: '8px',
-                              backgroundColor: '#186EFF',
+                              backgroundColor: colors.primary[500],
                             }}
                             onClick={() => {
                               closeModal();
@@ -313,7 +317,7 @@ export const NewOrCurrentBuild = ({ isOpen, closeModal, setPage }) => {
                             style={{
                               width: '100%',
                               borderRadius: '8px',
-                              backgroundColor: '#186EFF',
+                              backgroundColor: colors.primary[500],
                             }}
                             onClick={() => {
                               setPage('final_warning');
@@ -355,9 +359,12 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
       <Container style={{ width: '650px' }}>
         <Grid container className={classes.modalBox}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
-            <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#186EFF' }}>
+            <Paper
+              className={classes.modalPaperTitle}
+              style={{ backgroundColor: colors.primary[500] }}
+            >
               <Grid container justifyContent="space-between">
-                <Typography variant="h6" style={{ color: '#fff' }}>
+                <Typography variant="h6" style={{ color: colors.white[100] }}>
                   Warning
                 </Typography>
                 <Box
@@ -366,14 +373,14 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
                     closeModal();
                   }}
                 >
-                  <CloseIcon htmlColor="#fff" />
+                  <CloseIcon htmlColor={colors.white[100]} />
                 </Box>
               </Grid>
             </Paper>
 
             <Paper
               style={{
-                backgroundColor: '#FBFCFF',
+                backgroundColor: colors.primary[25],
                 borderRadius: '0 0 1rem 1rem',
               }}
             >
@@ -403,7 +410,7 @@ export const NewBuildFinalWarning = ({ isOpen, closeModal, setPage }) => {
                       <Paper
                         styles={{
                           ...classes.modalPaperBody,
-                          border: width >= 650 ? 'solid #E5E5E5 1px' : 'none',
+                          border: width >= 650 ? `1px solid ${colors.gray[200]}` : 'none',
                         }}
                       >
                         <Grid
@@ -504,20 +511,23 @@ export default function DealTypeSelector({
       <Container style={{ width: '650px' }}>
         <Grid container style={{ height: '100%' }}>
           <Grid item xs={12} sm={12} md={12} lg={12} style={{ height: '100%' }}>
-            <Paper className={classes.modalPaperTitle} style={{ backgroundColor: '#186EFF' }}>
+            <Paper
+              className={classes.modalPaperTitle}
+              style={{ backgroundColor: colors.primary[500] }}
+            >
               <Grid container justifyContent="space-between">
-                <Typography variant="h6" style={{ color: '#fff' }}>
+                <Typography variant="h6" style={{ color: colors.white[100] }}>
                   Add New
                 </Typography>
                 <Box onClick={onClose} style={{ cursor: 'pointer' }}>
-                  <CloseIcon htmlColor="#fff" />
+                  <CloseIcon htmlColor={colors.white[100]} />
                 </Box>
               </Grid>
             </Paper>
 
             <Paper
               style={{
-                backgroundColor: '#FBFCFF',
+                backgroundColor: colors.primary[25],
                 borderRadius: '0 0 1rem 1rem',
               }}
             >
@@ -564,7 +574,7 @@ export default function DealTypeSelector({
                             style={{
                               width: '70%',
                               borderRadius: '8px',
-                              backgroundColor: '#186EFF',
+                              backgroundColor: colors.primary[500],
                             }}
                             onClick={() => {
                               setDealType('spv');
@@ -607,7 +617,7 @@ export default function DealTypeSelector({
                             style={{
                               width: '70%',
                               borderRadius: '8px',
-                              backgroundColor: '#186EFF',
+                              backgroundColor: colors.primary[500],
                             }}
                             onClick={() => {
                               setDealType('fund');

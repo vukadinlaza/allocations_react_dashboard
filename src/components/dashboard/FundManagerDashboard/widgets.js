@@ -1,17 +1,17 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Tooltip, Button } from '@material-ui/core';
 import HelpIcon from '@material-ui/icons/Help';
 import CloseIcon from '@material-ui/icons/Close';
 import { phone, tablet } from '../../../utils/helpers';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   box: {
     width: '100%',
     height: '199px',
-    background: '#FBFCFF 0% 0% no-repeat padding-box',
+    background: `${theme.colors.primary[25]} 0% 0% no-repeat padding-box`,
     boxShadow: '0px 3px 6px #00000029',
-    border: '1px solid #8493A640',
+    border: `1px solid ${theme.colors.gray[200]}`,
     borderRadius: '10px',
     [theme.breakpoints.down(phone)]: {
       minWidth: '0 !important',
@@ -27,8 +27,8 @@ const styles = (theme) => ({
   boxTitleContainer: {
     width: '100%',
     height: '71px',
-    background: '#FFFFFF 0% 0% no-repeat padding-box',
-    borderBottom: '1px solid #8493A640',
+    background: `${theme.colors.white[100]} 0% 0% no-repeat padding-box`,
+    borderBottom: `1px solid ${theme.colors.gray[200]}`,
     borderRadius: '10px 10px 0px 0px',
     display: 'flex',
     alignItems: 'center',
@@ -91,12 +91,12 @@ const styles = (theme) => ({
   infoIcon: {
     marginLeft: '0.5em',
     cursor: 'pointer',
-    color: '#205DF5',
+    color: theme.colors.primary[600],
     fontSize: '20px',
   },
   listButton: {
-    backgroundColor: '#2A2B54',
-    color: 'white',
+    backgroundColor: theme.colors.black[50],
+    color: theme.colors.white[100],
     width: '100%',
     textTransform: 'none',
     bottom: '3rem',
@@ -137,107 +137,115 @@ const styles = (theme) => ({
   tooltip: {
     fontSize: '14px',
     zIndex: '2000',
-    background: 'white',
-    color: 'black',
+    background: theme.colors.white[100],
+    color: theme.colors.black[100],
   },
-});
+}));
 
-export const ModalTooltip = withStyles(styles)(
-  ({ classes, children, title, handleTooltip, tooltipContent, openTooltip, id }) => {
-    return (
-      <>
-        {openTooltip === id && (
-          <div className={classes.modalBackground} onClick={() => handleTooltip('')} />
-        )}
-        <Tooltip
-          interactive
-          title={
-            <div className={classes.modal}>
-              <div className={classes.modalTitleContainer}>
-                <Typography className={classes.modalTitle}>{title}</Typography>
-                <Typography className={classes.closeModal} onClick={() => handleTooltip('')}>
-                  Close
-                  <CloseIcon style={{ fontSize: '14px' }} />
-                </Typography>
-              </div>
-              {tooltipContent}
+export const ModalTooltip = ({
+  children,
+  title,
+  handleTooltip,
+  tooltipContent,
+  openTooltip,
+  id,
+}) => {
+  const classes = useStyles();
+
+  return (
+    <>
+      {openTooltip === id && (
+        <div className={classes.modalBackground} onClick={() => handleTooltip('')} />
+      )}
+      <Tooltip
+        interactive
+        title={
+          <div className={classes.modal}>
+            <div className={classes.modalTitleContainer}>
+              <Typography className={classes.modalTitle}>{title}</Typography>
+              <Typography className={classes.closeModal} onClick={() => handleTooltip('')}>
+                Close
+                <CloseIcon style={{ fontSize: '14px' }} />
+              </Typography>
             </div>
-          }
-          open={openTooltip === id}
-          disableHoverListener
-          classes={{
-            popper: classes.popper,
-            tooltip: classes.tooltip,
-          }}
-        >
-          {children}
-        </Tooltip>
-      </>
-    );
-  },
-);
-
-export const SimpleBox = withStyles(styles)(
-  ({
-    classes,
-    title,
-    autoHeight,
-    titleData,
-    fontSize,
-    buttonAction,
-    buttonText,
-    fullWidthContent,
-    children,
-    openTooltip,
-    handleTooltip,
-    id,
-    tooltipContent,
-  }) => {
-    return (
-      <div className={`${classes.box} ${autoHeight ? classes.dynamicHeight : ''}`}>
-        <div className={classes.boxTitleContainer} style={{ justifyContent: 'space-between' }}>
-          <div className={classes.boxTitleText}>
-            <Typography
-              className={classes.boxTitle}
-              style={fontSize === 'small' ? { fontSize: '14px' } : {}}
-            >
-              {title}
-            </Typography>
-            {tooltipContent && (
-              <ModalTooltip
-                title={title}
-                handleTooltip={handleTooltip}
-                tooltipContent={tooltipContent}
-                openTooltip={openTooltip}
-                id={id}
-              >
-                <HelpIcon className={classes.infoIcon} onClick={() => handleTooltip(id)} />
-              </ModalTooltip>
-            )}
+            {tooltipContent}
           </div>
-          <div>{titleData}</div>
-        </div>
-        <div
-          className={`${classes.boxContent} ${
-            autoHeight ? classes.dynamicBoxContent : classes.fixedBoxContent
-          }`}
-          style={fullWidthContent ? { padding: 0 } : {}}
-        >
-          {children}
-        </div>
-        {buttonText ? (
-          <Button variant="contained" className={classes.listButton} onClick={buttonAction}>
-            {buttonText}
-          </Button>
-        ) : (
-          ''
-        )}
-      </div>
-    );
-  },
-);
+        }
+        open={openTooltip === id}
+        disableHoverListener
+        classes={{
+          popper: classes.popper,
+          tooltip: classes.tooltip,
+        }}
+      >
+        {children}
+      </Tooltip>
+    </>
+  );
+};
 
-export const ChartBox = withStyles(styles)(({ classes, title, info, children }) => {
+export const SimpleBox = ({
+  title,
+  autoHeight,
+  titleData,
+  fontSize,
+  buttonAction,
+  buttonText,
+  fullWidthContent,
+  children,
+  openTooltip,
+  handleTooltip,
+  id,
+  tooltipContent,
+}) => {
+  const classes = useStyles();
+
+  return (
+    <div className={`${classes.box} ${autoHeight ? classes.dynamicHeight : ''}`}>
+      <div className={classes.boxTitleContainer} style={{ justifyContent: 'space-between' }}>
+        <div className={classes.boxTitleText}>
+          <Typography
+            className={classes.boxTitle}
+            style={fontSize === 'small' ? { fontSize: '14px' } : {}}
+          >
+            {title}
+          </Typography>
+          {tooltipContent && (
+            <ModalTooltip
+              title={title}
+              handleTooltip={handleTooltip}
+              tooltipContent={tooltipContent}
+              openTooltip={openTooltip}
+              id={id}
+            >
+              <HelpIcon className={classes.infoIcon} onClick={() => handleTooltip(id)} />
+            </ModalTooltip>
+          )}
+        </div>
+        <div>{titleData}</div>
+      </div>
+      <div
+        className={`${classes.boxContent} ${
+          autoHeight ? classes.dynamicBoxContent : classes.fixedBoxContent
+        }`}
+        style={fullWidthContent ? { padding: 0 } : {}}
+      >
+        {children}
+      </div>
+      {buttonText ? (
+        <Button variant="contained" className={classes.listButton} onClick={buttonAction}>
+          {buttonText}
+        </Button>
+      ) : (
+        ''
+      )}
+    </div>
+  );
+};
+
+export const ChartBox = ({ title, info, children }) => {
+  const classes = useStyles();
+
   return (
     <div className={`${classes.box} ${classes.chartBox}`}>
       <div className={classes.boxTitleContainer}>
@@ -256,9 +264,11 @@ export const ChartBox = withStyles(styles)(({ classes, title, info, children }) 
       <div className={`${classes.boxContent} ${classes.chartBoxContent}`}>{children}</div>
     </div>
   );
-});
+};
 
-export const FlatBox = withStyles(styles)(({ classes, title, info, children }) => {
+export const FlatBox = ({ title, info, children }) => {
+  const classes = useStyles();
+
   return (
     <div className={classes.box} style={{ width: '100%', height: 'auto', minHeight: '120px' }}>
       <div className={classes.boxTitleContainer} style={{ height: '60px' }}>
@@ -281,46 +291,45 @@ export const FlatBox = withStyles(styles)(({ classes, title, info, children }) =
       <div className={`${classes.boxContent} ${classes.flatBoxContent}`}>{children}</div>
     </div>
   );
-});
+};
 
-export const ScrollableBox = withStyles(styles)(
-  ({
-    classes,
-    title,
-    titleData,
-    fontSize,
-    buttonAction,
-    buttonText,
-    fullWidthContent,
-    children,
-  }) => {
-    return (
-      <div className={`${classes.box} ${classes.scrollableBox}`}>
-        <div className={classes.boxTitleContainer} style={{ justifyContent: 'space-between' }}>
-          <div className={classes.boxTitleText}>
-            <Typography
-              className={classes.boxTitle}
-              style={fontSize === 'small' ? { fontSize: '14px' } : {}}
-            >
-              {title}
-            </Typography>
-          </div>
-          <div>{titleData}</div>
+export const ScrollableBox = ({
+  title,
+  titleData,
+  fontSize,
+  buttonAction,
+  buttonText,
+  fullWidthContent,
+  children,
+}) => {
+  const classes = useStyles();
+
+  return (
+    <div className={`${classes.box} ${classes.scrollableBox}`}>
+      <div className={classes.boxTitleContainer} style={{ justifyContent: 'space-between' }}>
+        <div className={classes.boxTitleText}>
+          <Typography
+            className={classes.boxTitle}
+            style={fontSize === 'small' ? { fontSize: '14px' } : {}}
+          >
+            {title}
+          </Typography>
         </div>
-        <div
-          className={`${classes.boxContent} ${classes.scrollableBoxContent}`}
-          style={fullWidthContent ? { padding: 0 } : {}}
-        >
-          {children}
-        </div>
-        {buttonText ? (
-          <Button variant="contained" className={classes.listButton} onClick={buttonAction}>
-            {buttonText}
-          </Button>
-        ) : (
-          ''
-        )}
+        <div>{titleData}</div>
       </div>
-    );
-  },
-);
+      <div
+        className={`${classes.boxContent} ${classes.scrollableBoxContent}`}
+        style={fullWidthContent ? { padding: 0 } : {}}
+      >
+        {children}
+      </div>
+      {buttonText ? (
+        <Button variant="contained" className={classes.listButton} onClick={buttonAction}>
+          {buttonText}
+        </Button>
+      ) : (
+        ''
+      )}
+    </div>
+  );
+};

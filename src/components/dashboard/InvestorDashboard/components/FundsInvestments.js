@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import { Input, List, Typography } from '@allocations/design-system';
+import { Input, List, Typography, colors } from '@allocations/design-system';
 import {
   nWithCommas,
   sortByNumber,
@@ -90,7 +90,7 @@ const FundsInvestments = ({ classes, fundInvestments, showInvestments, dealName 
             <Typography
               component="div"
               content="Dashboard"
-              fontColor="#94A3B8"
+              fontColor={colors.gray[400]}
               fontWeight={500}
               variant="button"
               onClick={() => showInvestments(false)}
@@ -100,7 +100,7 @@ const FundsInvestments = ({ classes, fundInvestments, showInvestments, dealName 
             <Typography
               component="div"
               content="/"
-              fontColor="#94A3B8"
+              fontColor={colors.gray[400]}
               fontWeight={500}
               variant="button"
             />
@@ -108,7 +108,7 @@ const FundsInvestments = ({ classes, fundInvestments, showInvestments, dealName 
           <Typography
             component="div"
             content={`${dealName} Investments`}
-            fontColor="#2A2B54"
+            fontColor={colors.black[50]}
             fontWeight={500}
             variant="button"
           />

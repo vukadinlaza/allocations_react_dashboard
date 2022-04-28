@@ -14,9 +14,9 @@ const styles = (theme: Theme) => ({
     },
   },
   input: {
-    color: '#2A2B54',
+    color: theme.colors.black[50],
     '&::placeholder': {
-      color: '#94A3B8',
+      color: theme.colors.gray[400],
       fontSize: '14px',
       opacity: 1,
       fontWeight: 'normal',
@@ -24,8 +24,8 @@ const styles = (theme: Theme) => ({
   },
   inputRoot: {
     borderRadius: '8px',
-    background: 'white',
-    color: '#64748B',
+    background: theme.colors.white[100],
+    color: theme.colors.gray[500],
     marginTop: '20px',
   },
   list: {
@@ -58,7 +58,7 @@ const styles = (theme: Theme) => ({
   textFieldRoot: {
     width: '100%',
     '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: '#186EFF',
+      borderColor: theme.colors.primary[500],
     },
   },
   titleContainer: {

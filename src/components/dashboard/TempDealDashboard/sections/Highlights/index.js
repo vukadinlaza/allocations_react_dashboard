@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import moment from 'moment';
 import { Typography, Grid } from '@material-ui/core';
+import { colors as allocationsColors } from '@allocations/design-system';
 import { DefaultChartTable, DoughnutChart, LineChart } from '../../../../utils/charts';
 import { SimpleBox, ChartBox } from '../../widgets';
 import { nWithCommas } from '../../../../../utils/numbers';
@@ -10,7 +11,12 @@ import Loader from '../../../../utils/Loader';
 import 'chartjs-plugin-datalabels';
 
 export function getColor(i) {
-  const colors = ['#A6CEE3', '#1F78B4', '#B2DF8A', '#33A02C'];
+  const colors = [
+    allocationsColors.primary[100],
+    allocationsColors.primary[400],
+    allocationsColors.success[300],
+    allocationsColors.success[600],
+  ];
   const modulo = i % colors.length;
   const color = colors[modulo];
   return color;

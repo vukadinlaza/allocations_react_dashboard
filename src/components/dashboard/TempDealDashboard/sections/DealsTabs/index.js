@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Tabs, Tab, Button, Menu, MenuItem, Typography } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -8,13 +8,14 @@ import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRocket } from '@fortawesome/free-solid-svg-icons';
+import { colors } from '@allocations/design-system';
 import { phone } from '../../../../../utils/helpers';
 import Loader from '../../../../utils/Loader';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   dealTag: {
     borderRadius: '20px',
-    color: 'white',
+    color: theme.colors.white[100],
     fontSize: '10px',
     padding: '0px 10px',
     marginLeft: '5px',
@@ -28,7 +29,7 @@ const styles = (theme) => ({
   },
   item: {
     '&:hover': {
-      backgroundColor: '#8493A61A',
+      backgroundColor: theme.colors.gray[100],
     },
     '& *': {
       fontSize: '14px',
@@ -44,7 +45,7 @@ const styles = (theme) => ({
     width: 'fit-content',
     textTransform: 'none',
     '&:hover': {
-      backgroundColor: '#8493A61A',
+      backgroundColor: theme.colors.gray[100],
     },
     '&:focus': {
       outline: 'none',
@@ -56,7 +57,7 @@ const styles = (theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    color: '#2A2B54',
+    color: theme.colors.black[50],
     fontWeight: 'bold',
     marginBottom: '15px',
     [theme.breakpoints.down('1280')]: {
@@ -97,14 +98,15 @@ const styles = (theme) => ({
   tabWrapper: {
     padding: '0 10px',
   },
-});
+}));
 
-const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
+const DealsTabs = ({ data, tabIndex, setTabIndex }) => {
   const { deals = [] } = data?.organization || {};
   const isMobile = useMediaQuery('(max-width:600px)');
   const [titleContainer, setTitleContainer] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [dropdownSelected, setDropdownSelected] = useState(false);
+  const classes = useStyles();
 
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
@@ -142,7 +144,7 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
             {deal.company_name}
             {deal.company_name !== 'All' && (
               <span
-                style={{ backgroundColor: isFund ? '#2A2B54' : '#0461FF' }}
+                style={{ backgroundColor: isFund ? colors.black[50] : colors.primary[600] }}
                 className={classes.dealTag}
               >
                 {isFund ? (
@@ -152,7 +154,10 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
                 )}
                 {isFund ? 'FUND' : 'SPV'}
                 <FiberManualRecordIcon
-                  style={{ color: closed ? '#d0d0d0' : '#39C522', marginLeft: '2px' }}
+                  style={{
+                    color: closed ? colors.gray[300] : colors.success[500],
+                    marginLeft: '2px',
+                  }}
                 />
               </span>
             )}
@@ -190,7 +195,9 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
               onClick={handleClick}
               className={classes.moreButton}
               style={
-                dropdownSelected ? { borderBottom: 'solid 2px #205df5', borderRadius: '0' } : {}
+                dropdownSelected
+                  ? { borderBottom: `2px solid ${colors.primary[600]}`, borderRadius: '0' }
+                  : {}
               }
             >
               <Typography>
@@ -204,7 +211,9 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
                         <span
                           style={{
                             backgroundColor:
-                              deals[tabIndex].investmentType === 'fund' ? '#2A2B54' : '#0461FF',
+                              deals[tabIndex].investmentType === 'fund'
+                                ? colors.black[50]
+                                : colors.primary[600],
                           }}
                           className={classes.dealTag}
                         >
@@ -216,7 +225,10 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
                           {deals[tabIndex].investmentType === 'fund' ? 'FUND' : 'SPV'}
                           <FiberManualRecordIcon
                             style={{
-                              color: deals[tabIndex].status === 'closed' ? '#d0d0d0' : '#39C522',
+                              color:
+                                deals[tabIndex].status === 'closed'
+                                  ? colors.gray[300]
+                                  : colors.success[500],
                               marginLeft: '2px',
                             }}
                           />
@@ -231,7 +243,7 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      color: '#205df5',
+                      color: colors.primary[600],
                       fontWeight: 'bold',
                     }}
                   >
@@ -240,7 +252,9 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
                       <span
                         style={{
                           backgroundColor:
-                            deals[tabIndex].investmentType === 'fund' ? '#2A2B54' : '#0461FF',
+                            deals[tabIndex].investmentType === 'fund'
+                              ? colors.black[50]
+                              : colors.primary[600],
                         }}
                         className={classes.dealTag}
                       >
@@ -252,7 +266,10 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
                         {deals[tabIndex].investmentType === 'fund' ? 'FUND' : 'SPV'}
                         <FiberManualRecordIcon
                           style={{
-                            color: deals[tabIndex].status === 'closed' ? '#d0d0d0' : '#39C522',
+                            color:
+                              deals[tabIndex].status === 'closed'
+                                ? colors.gray[300]
+                                : colors.success[500],
                             marginLeft: '2px',
                           }}
                         />
@@ -306,4 +323,4 @@ const DealsTabs = ({ classes, data, tabIndex, setTabIndex }) => {
   );
 };
 
-export default withStyles(styles)(withRouter(DealsTabs));
+export default withRouter(DealsTabs);

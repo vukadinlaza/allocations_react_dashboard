@@ -1,4 +1,6 @@
-const styles = () => ({
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
   bigBox: {
     height: '342px',
     width: '100%',
@@ -14,17 +16,17 @@ const styles = () => ({
   bigBoxTitle: {
     fontWeight: 500,
     fontSize: '16px',
-    color: '#94A3B8',
+    color: theme.colors.gray[400],
   },
   boxTitle: {
     fontWeight: 500,
     fontSize: '16px',
-    color: '#64748B',
+    color: theme.colors.gray[500],
   },
   boxValue: {
     fontWeight: 700,
     fontSize: '40px',
-    color: '#2A2B54',
+    color: theme.colors.black[50],
   },
   smallBox: {
     height: '116px',
@@ -33,6 +35,6 @@ const styles = () => ({
     boxShadow: 'none !important',
     padding: '18px 24px',
   },
-});
+}));
 
-export default styles;
+export default useStyles;

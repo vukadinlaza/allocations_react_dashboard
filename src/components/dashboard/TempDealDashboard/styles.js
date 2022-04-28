@@ -1,9 +1,10 @@
+import { makeStyles } from '@material-ui/core/styles';
 import { phone, tablet } from '../../../utils/helpers';
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   accredited: {
     borderRadius: '20px',
-    background: '#39C522',
+    background: theme.colors.success[500],
     marginLeft: '0.5em',
     display: 'flex',
     alignItems: 'center',
@@ -19,7 +20,7 @@ const styles = (theme) => ({
     },
   },
   avatar: {
-    background: '#0461FF',
+    background: theme.colors.primary[600],
     fontSize: '14px',
     width: '30px',
     height: '30px',
@@ -28,18 +29,18 @@ const styles = (theme) => ({
   badgeComplete: {
     borderRadius: '100px',
     padding: '14px 18px',
-    color: '#10C600',
-    background: 'rgba(181, 241, 172, 1)',
+    color: theme.colors.success[700],
+    background: theme.colors.success[100],
   },
   badgeIncomplete: {
     borderRadius: '100px',
     padding: '14px',
-    color: '#ff0404',
-    background: 'rgba(255, 163, 163, 1)',
+    color: theme.colors.error[600],
+    background: theme.colors.error[300],
   },
   bar: {
     borderRadius: 5,
-    backgroundColor: '#39C522',
+    backgroundColor: theme.colors.success[500],
   },
   buttonContainer: {
     display: 'flex',
@@ -55,21 +56,21 @@ const styles = (theme) => ({
     },
   },
   containedButton: {
-    background: '#186EFF',
-    color: '#FFFFFF',
+    background: theme.colors.primary[500],
+    color: theme.colors.white[100],
     borderRadius: '8px',
     padding: '6px 16px',
     fontSize: '12px',
   },
   createButton: {
-    backgroundColor: '#39C522',
+    backgroundColor: theme.colors.success[500],
     display: 'flex',
     alignItems: 'center',
-    color: 'white',
+    color: theme.colors.white[100],
     textTransform: 'none',
     cursor: 'pointer',
     '&:hover': {
-      backgroundColor: '#56db40',
+      backgroundColor: theme.colors.success[400],
     },
     '&:focus': {
       outline: 'none',
@@ -101,7 +102,7 @@ const styles = (theme) => ({
     width: '100%',
     left: '0',
     top: '0',
-    background: '#f8fafc',
+    background: theme.colors.gray[50],
     [theme.breakpoints.down(phone)]: {
       maxWidth: '100vw',
     },
@@ -111,7 +112,7 @@ const styles = (theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    background: 'white',
+    background: theme.colors.white[100],
     height: '68px',
     borderRadius: '8px',
     margin: '30px',
@@ -129,7 +130,7 @@ const styles = (theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    background: '#ffffff',
+    background: theme.colors.white[100],
     marginBottom: '10px',
     borderRadius: '10px',
     padding: '10px',
@@ -137,7 +138,7 @@ const styles = (theme) => ({
     maxWidth: '100%',
     overflowX: 'hidden',
     '&:hover': {
-      backgroundColor: '#edf1f4',
+      backgroundColor: theme.colors.gray[100],
     },
   },
   investorBoxAmount: {
@@ -226,15 +227,15 @@ const styles = (theme) => ({
     fill: 'black',
     alignItems: 'center',
     '&:hover, &:focus, &active': {
-      background: '#ECF3FF',
-      color: '#186EFF',
+      background: theme.colors.primary[50],
+      color: theme.colors.primary[500],
       '& svg': {
-        fill: '#186EFF',
+        fill: theme.colors.primary[500],
       },
     },
   },
   modalSVG: {
-    fill: '#2A2B54',
+    fill: theme.colors.black[50],
     width: '15px',
     margin: '10px',
   },
@@ -247,7 +248,7 @@ const styles = (theme) => ({
     height: 'calc(100vh - 140px)',
     fontSize: '26px',
     fontWeight: 600,
-    color: '#c3c3c3',
+    color: theme.colors.gray[300],
     [theme.breakpoints.down(phone)]: {
       width: '80vw',
       margin: 'auto',
@@ -255,9 +256,9 @@ const styles = (theme) => ({
     },
   },
   outlinedButton: {
-    border: '1px solid #CBD5E1',
+    border: `1px solid ${theme.colors.gray[300]}`,
     borderRadius: '8px',
-    color: '#64748B',
+    color: theme.colors.gray[500],
     padding: '6px 16px',
     fontSize: '12px',
   },
@@ -267,7 +268,7 @@ const styles = (theme) => ({
     justifyContent: 'space-evenly',
   },
   pageIcon: {
-    backgroundColor: '#0461FF',
+    backgroundColor: theme.colors.primary[600],
     borderRadius: '100%',
     width: '30px',
     height: '30px',
@@ -276,7 +277,7 @@ const styles = (theme) => ({
     alignItems: 'center',
     cursor: 'pointer',
     '& *': {
-      color: 'white',
+      color: theme.colors.white[100],
       fontSize: '18px',
     },
     [theme.breakpoints.down(phone)]: {
@@ -287,11 +288,11 @@ const styles = (theme) => ({
   },
   playIcon: {
     '&:hover': {
-      color: '#3f85f9',
+      color: theme.colors.primary[300],
     },
   },
   playIconDisabled: {
-    color: '#205df5',
+    color: theme.colors.primary[600],
     opacity: '0.25',
   },
   progress: {
@@ -317,7 +318,7 @@ const styles = (theme) => ({
     alignItems: 'center',
     width: '100%',
     marginBottom: '25px',
-    background: 'white',
+    background: theme.colors.white[100],
     padding: '15px 20px',
     border: 'none',
     boxShadow: 'none',
@@ -334,7 +335,7 @@ const styles = (theme) => ({
   selectedTab: {
     fontWeight: 'bold !important',
     '& $tabWrapper': {
-      backgroundColor: 'rgb(32 93 245 / 16%)',
+      backgroundColor: theme.colors.primary[600] + '25',
       borderRadius: '10px',
     },
   },
@@ -344,7 +345,7 @@ const styles = (theme) => ({
     padding: '8px 10px',
     cursor: 'pointer',
     '&:not(:first-child)': {
-      borderTop: '1px solid #8493A640',
+      borderTop: `1px solid ${theme.colors.gray[200]}`,
     },
     '&>*': {
       fontSize: '18px',
@@ -353,7 +354,7 @@ const styles = (theme) => ({
       fontSize: '14px',
     },
     '&:hover': {
-      backgroundColor: '#edf1fb',
+      backgroundColor: theme.colors.primary[50],
     },
   },
   simpleBoxDataRow: {
@@ -435,10 +436,10 @@ const styles = (theme) => ({
   },
   bankingAllocateWrapper: {
     width: '100%',
-    border: 'solid 1px #dadada',
+    border: `1px solid ${theme.colors.gray[200]}`,
     display: 'flex',
     padding: '15px 20px',
-    background: 'white',
+    background: theme.colors.white[100],
     boxShadow: '0px 3px 5px -5px',
     alignItems: 'center',
     borderRadius: '3px',
@@ -448,9 +449,9 @@ const styles = (theme) => ({
   titleDataText: {
     margin: '0',
     fontSize: '14px',
-    color: '#39C522',
+    color: theme.colors.success[500],
     fontWeight: 'bold',
   },
-});
+}));
 
-export default styles;
+export default useStyles;

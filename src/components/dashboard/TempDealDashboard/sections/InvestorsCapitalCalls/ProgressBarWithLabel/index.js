@@ -1,13 +1,13 @@
 import React from 'react';
 import { Box, Typography, LinearProgress, withStyles } from '@material-ui/core';
 
-const BorderLinearProgress = withStyles(() => ({
+const BorderLinearProgress = withStyles((theme) => ({
   root: {
     height: 6,
     borderRadius: 10,
   },
   colorPrimary: {
-    backgroundColor: '#E8E8E8',
+    backgroundColor: theme.colors.gray[200],
   },
   bar: {
     borderRadius: 5,

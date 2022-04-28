@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
-import { Chip, Icon, Input, List, Menu, Typography } from '@allocations/design-system';
+import { Chip, Icon, Input, List, Menu, Typography, colors } from '@allocations/design-system';
 import {
   nWithCommas,
   getMomentFromId,
@@ -200,7 +200,7 @@ const InvestmentsList = ({
         label: 'Deal Page',
         startIcon: {
           iconName: 'dashboard',
-          iconColor: '#64748B',
+          iconColor: colors.gray[500],
         },
       },
       {

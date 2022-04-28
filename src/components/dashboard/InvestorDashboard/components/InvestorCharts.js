@@ -3,13 +3,17 @@
 import React from 'react';
 import moment from 'moment';
 import { Paper, Grid } from '@material-ui/core';
-import { Typography } from '@allocations/design-system';
+import { Typography, colors as allocationsColors } from '@allocations/design-system';
 import { getMomentFromId, sortByNumber } from '@allocations/nextjs-common';
 import 'chartjs-plugin-datalabels';
 import { DoughnutChart, LineChart, DefaultChartTable } from '../../../utils/charts';
 
 export function getColor(i) {
-  const colors = ['#68EE76', '#186EFF', '#7BCAEB'];
+  const colors = [
+    allocationsColors.success[300],
+    allocationsColors.primary[500],
+    allocationsColors.brand[100],
+  ];
   const modulo = i % colors.length;
   const color = colors[modulo];
   return color;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, InputAdornment } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import { colors } from '@allocations/design-system';
 import AllocationsTable from '../../../../utils/AllocationsTable';
 import Loader from '../../../../utils/Loader';
 
@@ -84,7 +85,7 @@ const Investors = ({ classes, data, orgSlug, userProfile }) => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon style={{ color: 'rgba(0, 0, 0, 0.54)' }} />
+                <SearchIcon style={{ color: colors.gray[500] }} />
               </InputAdornment>
             ),
           }}

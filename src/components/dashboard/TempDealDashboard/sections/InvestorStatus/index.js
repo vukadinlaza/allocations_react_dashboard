@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 import Select from '@material-ui/core/Select';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
+import { colors } from '@allocations/design-system';
 import { ScrollableBox } from '../../widgets';
 import { nWithCommas } from '../../../../../utils/numbers';
 import Loader from '../../../../utils/Loader';
@@ -109,25 +110,14 @@ const InvestorBox = ({
       <div className={classes.investorBoxName} style={{ display: 'flex' }}>
         <Avatar className={classes.avatar}>{investor.name.charAt(0).toUpperCase()}</Avatar>
         <Typography className={classes.investorName}>{investor.name}</Typography>
-        {dealType === '506c' ? (
-          <div
-            className={classes.accredited}
-            style={investor.accredidation_status ? {} : { background: '#bbc5ba' }}
-          >
-            <Tooltip
-              title={
-                investor.accredidation_status
-                  ? 'This investor is accredited for 506c deals'
-                  : 'This investor is not accredited for 506c deals'
-              }
-            >
-              <Typography style={{ color: 'white', fontSize: '12px' }}>
+        {dealType === '506c' && investor.accredidation_status && (
+          <div className={classes.accredited}>
+            <Tooltip title="This investor is accredited for 506c deals">
+              <Typography style={{ color: colors.white[100], fontSize: '12px' }}>
                 <VerifiedUserIcon /> 506c
               </Typography>
             </Tooltip>
           </div>
-        ) : (
-          ''
         )}
       </div>
       {investor.amount && investor.status !== 'invited' ? (
@@ -150,7 +140,7 @@ const InvestorBox = ({
         <Typography className={classes.investorName}>{investor.name}</Typography>
         {investor.accredidation_status ? (
           <div className={classes.accredited}>
-            <Typography style={{ color: 'white', fontSize: '12px' }}>
+            <Typography style={{ color: colors.white[100], fontSize: '12px' }}>
               <VerifiedUserIcon /> 506c
             </Typography>
           </div>
@@ -307,7 +297,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType })
                 ''
               ) : (
                 <div>
-                  <MailIcon style={{ color: 'white', marginRight: '0.5em' }} />
+                  <MailIcon style={{ color: colors.white[100], marginRight: '0.5em' }} />
                   Send Reminder
                 </div>
               )
@@ -361,7 +351,7 @@ const InvestorStatus = ({ classes, width, data, superAdmin, refetch, dealType })
                 ''
               ) : (
                 <div>
-                  <MailIcon style={{ color: 'white', marginRight: '0.5em' }} />
+                  <MailIcon style={{ color: colors.white[100], marginRight: '0.5em' }} />
                   Send Wire Reminder
                 </div>
               )

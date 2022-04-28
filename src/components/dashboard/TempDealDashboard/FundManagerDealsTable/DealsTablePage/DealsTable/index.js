@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { colors } from '@allocations/design-system';
 import moment from 'moment';
 import { useHistory, useParams } from 'react-router';
 import AllocationsTable from '../../../../../utils/AllocationsTable';
@@ -53,25 +54,25 @@ const spvHeaders = [
 const getStatusColors = (status) => {
   switch (status) {
     case 'build':
-      return { backgroundColor: '#C9EEC8', color: '#58CE46' };
+      return { backgroundColor: colors.success[200], color: colors.success[500] };
     case 'post-build':
-      return { backgroundColor: '#C9EEC8', color: '#58CE46' };
+      return { backgroundColor: colors.success[200], color: colors.success[500] };
     case 'entity':
-      return { backgroundColor: '#C9EEC8', color: '#58CE46' };
+      return { backgroundColor: colors.success[200], color: colors.success[500] };
     case 'post-entity':
-      return { backgroundColor: '#C9EEC8', color: '#58CE46' };
+      return { backgroundColor: colors.success[200], color: colors.success[500] };
     case 'pre-onboarding':
-      return { backgroundColor: '#C9EEC8', color: '#58CE46' };
+      return { backgroundColor: colors.success[200], color: colors.success[500] };
     case 'Onboarding':
     case 'onboarding':
-      return { backgroundColor: 'rgb(4, 97, 255, .25)', color: '#0461FF' };
+      return { backgroundColor: colors.primary[100], color: colors.primary[600] };
     case 'Closed':
     case 'closed':
-      return { backgroundColor: 'rgb(255, 4, 4, .20)', color: '#FF0404' };
+      return { backgroundColor: colors.error[200], color: colors.error[600] };
     case 'Complete':
-      return { backgroundColor: '#C9EEC8', color: '#58CE46' };
+      return { backgroundColor: colors.success[200], color: colors.success[500] };
     default:
-      return { backgroundColor: 'rgba(0,0,0,0)', color: 'red' };
+      return { backgroundColor: colors.white[100], color: colors.error[500] };
   }
 };
 
