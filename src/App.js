@@ -45,6 +45,7 @@ import RemoteFundManagerDashboard from './components/RemoteFundManagerDashboard'
 import RemoteTaxDashboard from './components/TaxDashboard';
 import SidebarOld from './components/SidebarOld';
 import RemoteTaxBanner from './components/RemoteTaxBanner';
+import RemoteInvest from './components/RemoteInvest';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -65,7 +66,8 @@ const SideBar = ({ isAuthenticated }) => {
 };
 
 const MainApp = ({ isAuthenticated }) => {
-  const { remoteFundManagerDashboard } = useFlags();
+  const { remoteFundManagerDashboard, remoteInvestPage } = useFlags();
+
   return (
     <div className="mainRoute" style={{ justifyContent: !isAuthenticated && 'center' }}>
       <RemoteTaxBanner />
@@ -114,7 +116,11 @@ const MainApp = ({ isAuthenticated }) => {
         <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
 
         {/* Invest */}
-        <PrivateRoute path="/invest/:deal_slug" component={InvestmentPage} exact />
+        <PrivateRoute
+          path={`/invest/${remoteInvestPage ? ':deal_id' : ':deal_slug'}`}
+          component={remoteInvestPage ? RemoteInvest : InvestmentPage}
+          exact
+        />
         <PrivateRoute path="/invest/:organization/:deal_slug" component={InvestmentPage} exact />
 
         {/* Next Steps page */}

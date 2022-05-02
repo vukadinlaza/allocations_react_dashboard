@@ -16,7 +16,7 @@ export default function RemoteDealPage() {
         dealSlug={deal_slug}
         pathname={pathname}
         pushToDealPage={() => history.push(`/admin/${organization}/${deal_id}`)}
-        goToInvestPage={(dealSlug) => history.push(`/invest/${organization}/${dealSlug}`)}
+        goToInvestPage={() => history.push(`/invest/${deal_id}}`)}
         redirectTo404={() => <Redirect to="/404" />}
       />
     </Suspense>
