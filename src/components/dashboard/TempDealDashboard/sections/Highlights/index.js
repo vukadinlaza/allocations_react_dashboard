@@ -33,7 +33,7 @@ export function formatDoughnutSeries(series) {
 }
 
 const Highlights = ({ classes, data, dealData, openTooltip, handleTooltip }) => {
-  const dealMultiple = _.toNumber(dealData?.dealParams?.dealMultiple || 1);
+  const dealMultiple = _.toNumber(dealData?.deal?.dealParams?.dealMultiple || 1);
 
   const setMonthsToShow = (data) => {
     const monthsArray = [];
