@@ -46,6 +46,7 @@ import RemoteTaxDashboard from './components/TaxDashboard';
 import SidebarOld from './components/SidebarOld';
 import RemoteTaxBanner from './components/RemoteTaxBanner';
 import RemoteInvest from './components/RemoteInvest';
+import RemoteNextSteps from './components/RemoteNextSteps';
 
 Cohere.init('Ywm0QKbP1exHuFEdx62GynbW');
 
@@ -113,7 +114,11 @@ const MainApp = ({ isAuthenticated }) => {
 
         {/* Private  */}
         <PrivateRoute path="/new-build/deal" exact component={PostBuild} />
-        <PrivateRoute path="/deals/:organization/:deal_slug" component={DealOneClick} exact />
+        <PrivateRoute
+          path={`/deals/:organization/${remoteInvestPage ? ':deal_id' : ':deal_slug'}`}
+          component={DealOneClick}
+          exact
+        />
 
         {/* Invest */}
         <PrivateRoute
@@ -121,10 +126,20 @@ const MainApp = ({ isAuthenticated }) => {
           component={remoteInvestPage ? RemoteInvest : InvestmentPage}
           exact
         />
-        <PrivateRoute path="/invest/:organization/:deal_slug" component={InvestmentPage} exact />
+        <PrivateRoute
+          path={`/invest/${remoteInvestPage ? ':deal_id' : ':organization'}/${
+            remoteInvestPage ? ':investment_id' : ':deal_slug'
+          }`}
+          component={remoteInvestPage ? RemoteInvest : InvestmentPage}
+          exact
+        />
 
         {/* Next Steps page */}
-        <PrivateRoute path="/next-steps/:deal_slug" component={DealNextSteps} exact />
+        <PrivateRoute
+          path={`/next-steps/${remoteInvestPage ? ':investment_id' : ':deal_slug'}`}
+          component={remoteInvestPage ? RemoteNextSteps : DealNextSteps}
+          exact
+        />
         <PrivateRoute path="/next-steps/:organization/:deal_slug" component={DealNextSteps} exact />
 
         {/** Whitelabel Routes * */}
