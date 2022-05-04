@@ -16,6 +16,7 @@ import { saveAs } from 'file-saver';
 import 'chartjs-plugin-datalabels';
 import { Grid } from '@material-ui/core';
 import { toast } from 'react-toastify';
+import { useFlags } from 'launchdarkly-react-client-sdk';
 import { useFetchWithEmail } from '../../../../utils/hooks';
 
 const headers = [
@@ -93,6 +94,7 @@ const InvestmentsList = ({
   const [selectedItem, setSelectedItem] = useState('');
   const [userDocuments, setUserDocuments] = useState([]);
   const [loadingDownloadDocs, setLoadingDownloadDoc] = useState(false);
+  const { remoteInvestPage } = useFlags();
 
   useEffect(() => {
     const userDocs = [];
@@ -171,10 +173,14 @@ const InvestmentsList = ({
     const { orgSlug, dealSlug, dealId } = metadata;
     switch (id) {
       case 'dealPage':
-        openInNewTab(`/deals/${orgSlug}/${dealSlug}`);
+        openInNewTab(`/deals/${orgSlug}/${remoteInvestPage ? dealId : dealSlug}`);
         break;
       case 'nextSteps':
-        openInNewTab(`/next-steps/${orgSlug}/${dealSlug}?investmentId=${investment._id}`);
+        openInNewTab(
+          `/next-steps/${orgSlug}/${remoteInvestPage ? dealId : dealSlug}?investmentId=${
+            investment._id
+          }`,
+        );
         break;
       case 'downloadDocs':
         loadingDownloadDocs ? console.log('loading') : handleZip(investment.dealName);
