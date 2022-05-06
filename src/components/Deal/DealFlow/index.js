@@ -17,6 +17,7 @@ import {
   TableRow,
   Typography,
 } from '@material-ui/core';
+import { colors } from '@allocations/design-system';
 import CheckIcon from '@material-ui/icons/Check';
 import ReactHtmlParser from 'react-html-parser';
 import useStyles from '../styles';
@@ -138,18 +139,18 @@ function PledgingLegacy({ deal }) {
         viewBox="0 0 3800 4800"
       >
         <g>
-          <path fill="#0F9D57" d="M0 4800h3800V840L2960 0H0" />
-          <path fill="#57BB8A" d="M2960 840h840L2960 0" />
-          <path fill="#098540" d="M3800 1680V840h-840" />
+          <path fill={colors.success[600]} d="M0 4800h3800V840L2960 0H0" />
+          <path fill={colors.success[300]} d="M2960 840h840L2960 0" />
+          <path fill={colors.success[700]} d="M3800 1680V840h-840" />
         </g>
         <g>
           <path
-            fill="#FFF"
+            fill={colors.white[100]}
             d="M1695 2822h1023v424H1695v-424zm-635 0h459v424h-459v-424zm635-635h1023v459H1695v-459zm-635 0h459v459h-459v-459zm635-599h1023v458H1695v-458zm-635 0h459v458h-459v-458zM884 3422h2011V1411H884v2011z"
           />
         </g>
       </svg>
-      <strong style={{ color: '#4bc076' }}>Pledge Document</strong>
+      <strong style={{ color: colors.success[400] }}>Pledge Document</strong>
     </a>
   );
 }

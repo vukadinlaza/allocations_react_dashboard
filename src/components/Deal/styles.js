@@ -2,9 +2,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   bankWarning: {
-    color: '#856404',
-    backgroundColor: '#fff3cd',
-    border: '1px solid #ffeeba',
+    color: theme.colors.warning[800],
+    backgroundColor: theme.colors.warning[100],
+    border: `1px solid ${theme.colors.warning[200]}`,
   },
   banner: {
     minWidth: '100%',
@@ -27,13 +27,13 @@ const useStyles = makeStyles((theme) => ({
   },
   deal: {
     '& h2': { textAlign: 'center', marginBottom: '25px' },
-    '& h4': { textAlign: 'center', color: '#5a5a5a', marginBottom: '20px' },
+    '& h4': { textAlign: 'center', color: theme.colors.gray[600], marginBottom: '20px' },
   },
   dealDataRoom: {
     padding: '25px',
     '&>span': {
       display: 'inline-block',
-      backgroundColor: '$softblue',
+      backgroundColor: theme.colors.primary[100],
       padding: '10px 15px',
       fontSize: '1.2em',
       marginRight: '10px',
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   dealLead: {
     padding: '10px 15px',
     fontSize: '1.3em',
-    color: '#333',
+    color: theme.colors.gray[700],
     '& span': { paddingLeft: '15px' },
   },
   dealMemo: {
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '15px',
     borderRadius: '5px',
     fontSize: '1.1em',
-    backgroundColor: '$softblue',
+    backgroundColor: theme.colors.primary[100],
   },
   dealParams: {
     marginTop: '10px',
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
       display: 'flex',
       justifyContent: 'space-between',
       padding: '5px 0px',
-      borderBottom: '1px dotted lightgray',
+      borderBottom: `1px dotted ${theme.colors.gray[300]}`,
     },
   },
   documentIframe: {
@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
     margin: '10px',
   },
   embedResponsive: {
-    boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
+    boxShadow: `0 4px 8px 0 ${theme.colors.black[100]}33`,
     position: 'relative',
     display: 'block',
     width: '100%',
@@ -104,7 +104,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: '15px',
     fontSize: '1.3em',
   },
-  faClock: { color: '#ffc107' },
+  faClock: { color: theme.colors.warning[400] },
   fileLabel: { marginRight: '10px' },
   flow: {
     padding: '10px 0px',
@@ -123,7 +123,7 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     paddingTop: '56.25%',
     position: 'relative',
-    boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
+    boxShadow: `0 4px 8px 0 ${theme.colors.black[100]}33`,
     '& iframe': {
       border: '0',
       height: '100%',
@@ -139,8 +139,8 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: '10px',
   },
   investmentComplete: {
-    backgroundColor: '$green',
-    color: '#fff',
+    backgroundColor: theme.colors.success[500],
+    color: theme.colors.white[100],
   },
   investmentFlow: {
     [theme.breakpoints.down('xs')]: {
@@ -152,16 +152,16 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '10px',
     textAlign: 'center',
     fontSize: '1.1em',
-    color: '#404040',
-    backgroundColor: '#eaeffc',
+    color: theme.colors.gray[700],
+    backgroundColor: theme.colors.primary[100],
   },
   investmentOnboarded: {
-    backgroundColor: '$brandblue',
-    color: '#fff',
+    backgroundColor: theme.colors.primary[500],
+    color: theme.colors.white[100],
   },
   investmentPledged: {
-    backgroundColor: '#ffc107',
-    color: '#333',
+    backgroundColor: theme.colors.warning[400],
+    color: theme.colors.gray[700],
   },
   investmentStatus: {
     display: 'inline-block',
@@ -171,7 +171,7 @@ const useStyles = makeStyles((theme) => ({
   },
   investorDetails: {
     margin: '10px 0px',
-    '&>div': { marginBottom: '5px', '& input': { color: '#333' } },
+    '&>div': { marginBottom: '5px', '& input': { color: theme.colors.gray[700] } },
   },
   kyc: {
     padding: '20px 50px',
@@ -182,7 +182,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
   },
   noPledges: {
-    backgroundColor: '$graygreen',
+    backgroundColor: theme.colors.success[50],
     '& p': { padding: '10px 10px 0px 10px' },
   },
   paperContainer: {
@@ -193,16 +193,16 @@ const useStyles = makeStyles((theme) => ({
   },
   pledgeBtn: {
     margin: '10px 5px',
-    backgroundColor: '$softgreen',
+    backgroundColor: theme.colors.success[400],
   },
   pledgeLink: {
-    boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
+    boxShadow: `0 4px 8px 0 ${theme.colors.black[100]}33`,
     borderRadius: '5px',
     padding: '10px 25px',
     margin: '25px 40px',
     fontSize: '1.3em',
     textAlign: 'center',
-    '& a': { marginLeft: '15px', color: '#333' },
+    '& a': { marginLeft: '15px', color: theme.colors.gray[700] },
   },
   pledgesTable: {
     display: 'inline-block',
@@ -223,42 +223,42 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
   },
   sameUserWarning: {
-    color: '#721c24',
-    backgroundColor: '#f8d7da',
-    border: '1px solid #f5c6cb',
+    color: theme.colors.warning[900],
+    backgroundColor: theme.colors.warning[100],
+    border: `1px solid ${theme.colors.warning[200]}`,
   },
   smallHeader: {
     textAlign: 'left',
-    color: '#5a5a5a',
+    color: theme.colors.gray[600],
   },
   step: {
     display: 'inline-block',
     padding: '10px 20px',
-    color: '#a7a7a7',
+    color: theme.colors.gray[400],
     cursor: 'pointer',
     [theme.breakpoints.down('xs')]: {
       padding: '6px 12px',
     },
   },
   stepActive: {
-    backgroundColor: '$brandblue',
-    color: '#fff',
+    backgroundColor: theme.colors.primary[500],
+    color: theme.colors.white[100],
   },
   stepDataRoom: {
-    border: '1px solid #a7a7a7',
+    border: `1px solid ${theme.colors.gray[400]}`,
     borderRadius: '5px 0px 0px 5px',
     marginRight: '-1px',
   },
   stepOnboard: {
-    borderTop: '1px solid #a7a7a7',
-    borderBottom: '1px solid #a7a7a7',
+    borderTop: `1px solid ${theme.colors.gray[400]}`,
+    borderBottom: `1px solid ${theme.colors.gray[400]}`,
   },
   stepPledge: {
-    border: '1px solid #a7a7a7',
+    border: `1px solid ${theme.colors.gray[400]}`,
     marginRight: '-1px',
   },
   stepWire: {
-    border: '1px solid #a7a7a7',
+    border: `1px solid ${theme.colors.gray[400]}`,
     borderRadius: '0px 5px 5px 0px',
     marginLeft: '-0px',
   },
@@ -270,15 +270,15 @@ const useStyles = makeStyles((theme) => ({
   },
   total: {
     '& td': {
-      color: '$softgreen !important',
+      color: `${theme.colors.success[400]} !important`,
     },
   },
   waiting: {
     margin: '10px 30px',
     textAlign: 'center',
     fontSize: '1.3em',
-    color: '#333',
-    backgroundColor: '#fcfcfc',
+    color: theme.colors.gray[700],
+    backgroundColor: theme.colors.primary[25],
   },
   wire: {
     textAlign: 'center',
@@ -291,20 +291,20 @@ const useStyles = makeStyles((theme) => ({
 
   paper: {
     padding: theme.spacing(2),
-    backgroundColor: '#f9fbfb',
+    backgroundColor: theme.colors.primary[25],
   },
   divider: {
     margin: '16px -16px',
   },
   tabs: {
-    borderTop: '1px solid #dfe3e9',
-    borderBottom: '1px solid #dfe3e9',
-    background: '#f7f9fa',
+    borderTop: `1px solid ${theme.colors.gray[200]}`,
+    borderBottom: `1px solid ${theme.colors.gray[200]}`,
+    background: theme.colors.gray[50],
     minHeight: 44,
     margin: '40px 0',
   },
   text: {
-    color: '#7f8ea3',
+    color: theme.colors.gray[400],
   },
   tab: {
     height: 75,
@@ -313,7 +313,7 @@ const useStyles = makeStyles((theme) => ({
   activeTab: {
     height: 75,
     width: '100%',
-    borderBottom: '3px solid #205DF5',
+    borderBottom: `3px solid ${theme.colors.primary[600]}`,
     outline: '0 !important',
   },
   button: {
