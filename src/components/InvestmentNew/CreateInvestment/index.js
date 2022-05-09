@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { get } from 'lodash';
 import { toast } from 'react-toastify';
 import { gql, useMutation } from '@apollo/client';
-
 import {
   Button,
   TextField,
@@ -13,6 +12,7 @@ import {
   InputLabel,
   InputAdornment,
 } from '@material-ui/core';
+import { colors } from '@allocations/design-system';
 import styles from '../styles';
 import { UserSearch } from '..';
 
@@ -174,7 +174,7 @@ export default function CreateInvestment({ deal, handleUpdate }) {
           >
             <Button
               variant="contained"
-              style={{ backgroundColor: '#2A2B54' }}
+              style={{ backgroundColor: colors.black[50] }}
               onClick={handleCreateInvestment}
               color="primary"
             >

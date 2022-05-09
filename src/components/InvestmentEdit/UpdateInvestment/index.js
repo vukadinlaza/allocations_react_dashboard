@@ -5,7 +5,7 @@ import { useParams, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import moment from 'moment';
-import { Icon } from '@allocations/design-system';
+import { Icon, colors } from '@allocations/design-system';
 import {
   Button,
   TextField,
@@ -132,7 +132,7 @@ function Doc({ doc, investment, getInvestment, matches }) {
       </Grid>
       <Grid item>
         <Box onClick={rmDoc} style={{ cursor: 'pointer' }}>
-          <Icon iconColor="#EF4444" iconName="clear" />
+          <Icon iconColor={colors.error[500]} iconName="clear" />
         </Box>
       </Grid>
     </Grid>
@@ -202,8 +202,11 @@ function Docs({ investment, getInvestment, isK1 }) {
             alignItems: 'center',
             justifyContent: 'space-evenly',
           }}
+          shrink={false}
         >
-          <Typography style={{ color: '#2A2B54', fontSize: '14px' }}>Add New Document</Typography>
+          <Typography style={{ color: colors.black[50], fontSize: '14px' }}>
+            Add New Document
+          </Typography>
           <input
             id="fileUpload"
             type="file"
@@ -214,7 +217,7 @@ function Docs({ investment, getInvestment, isK1 }) {
           />
 
           <Box>
-            <Icon iconColor="#10B981" iconName="add" />
+            <Icon iconColor={colors.success[500]} iconName="add" />
           </Box>
         </InputLabel>
       </Grid>
@@ -555,14 +558,14 @@ export default function InvestmentEdit({
             <Button
               disabled={!hasInvestmentChanges && !hasUserChanges}
               variant="contained"
-              style={{ backgroundColor: '#2A2B54' }}
+              style={{ backgroundColor: colors.black[50] }}
               onClick={handleInvestmentEdit}
               color="primary"
             >
               UPDATE
             </Button>
             <Button
-              style={{ marginTop: '5px', color: '#FF0404' }}
+              style={{ marginTop: '5px', color: colors.error[600] }}
               onClick={() => {
                 // eslint-disable-next-line no-alert
                 if (window.confirm('Are you sure you want to delete this investment?')) {
@@ -576,7 +579,7 @@ export default function InvestmentEdit({
         </Grid>
 
         <Grid container>
-          <div className={classes.title} style={{ color: '#2A2B54', margin: '15px 0' }}>
+          <div className={classes.title} style={{ color: colors.black[50], margin: '15px 0' }}>
             Documents
           </div>
         </Grid>
