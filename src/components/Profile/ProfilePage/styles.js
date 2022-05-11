@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
   avatar: {
     marginTop: 108,
     width: theme.spacing(18),
@@ -22,3 +22,5 @@ export const useStyles = makeStyles((theme) => ({
     marginTop: 100,
   },
 }));
+
+export default useStyles;
